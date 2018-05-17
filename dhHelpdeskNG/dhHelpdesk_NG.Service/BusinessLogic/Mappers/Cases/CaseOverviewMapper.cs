@@ -52,6 +52,27 @@
             return res;
         }
 
+        private static string GetCategoryFullName(string strCategoryId, IList<Category> categories)
+        {
+            var res = string.Empty;
+            if (!string.IsNullOrEmpty(strCategoryId))
+            {
+                var categoryId = 0;
+                if (int.TryParse(strCategoryId, out categoryId))
+                {
+                    var category = categories.Where(p => p.Id == categoryId).FirstOrDefault();
+                    if (category != null)
+                    {
+                        if (category.Parent_Category_Id.HasValue)
+                            res = GetCategoryFullName(category.Parent_Category_Id.Value.ToString(), categories) + " - " + category.Name;
+                        else
+                            res = category.Name;
+                    }
+                }
+            }
+            return res;
+        }
+
         public static string GetOUFullName(this string strOUId, IQueryable<OU> organizationUnitQuery)
         {            
             var res = string.Empty;
@@ -98,7 +119,8 @@
                                                                 IQueryable<CaseType> caseTypes, 
                                                                 IQueryable<ProductArea> productAreas, 
                                                                 IQueryable<OU> ous,
-                                                                IQueryable<FinishingCause> finishingCauses)
+                                                                IQueryable<FinishingCause> finishingCauses,
+                                                                IQueryable<Category> categoryies)
         {
             var ret = new List<FullCaseOverview>();
             var caseTypeFullNames = new Dictionary<int, string>();
@@ -124,13 +146,20 @@
 
             var closingReasonFullNames = new Dictionary<string, string>();
             var availableClosingReasons = query.Where(c=> c.LogData != null )
-                                               .Select(c => (c.LogData.FinishingType.HasValue? c.LogData.FinishingType.Value.ToString(): string.Empty))
+                                               .Select(c => c.LogData.FinishingType?.ToString() ?? string.Empty)
                                                .Distinct()
                                                .ToList();
 
             foreach (var cr in availableClosingReasons)
             {
                 closingReasonFullNames.Add(cr, cr.GetClosingReasonFullName(finishingCauses));
+            }
+
+            var categoriesFullNames = new Dictionary<string, string>();
+            var availablecategories = query.Select(c => c.Category).Distinct().ToList();
+            foreach (var c in availablecategories)
+            {
+                categoriesFullNames.Add(c, GetCategoryFullName(c, categoryies.ToList()));
             }
 
             ret = query.Select(q => new FullCaseOverview(
@@ -149,7 +178,7 @@
                                 new CaseInfoOverview(q.Case, q.RegistrationDate, q.ChangeDate, q.RegistratedBy,
                                                      caseTypeFullNames[q.CaseType],
                                                      productAreaFullNames[q.ProductArea], 
-                                                     q.System, q.UrgentDegree, q.Impact, q.Category,
+                                                     q.System, q.UrgentDegree, q.Impact, categoriesFullNames[q.Category],
                                                      q.Supplier, q.InvoiceNumber, q.ReferenceNumber, q.Caption, q.Description,
                                                      q.Other, Convert.ToBoolean(q.PhoneContact), Convert.ToBoolean(q.Sms), q.AgreedDate, q.Available, q.Cost, 
                                                      string.Empty, q.RegistrationSource, q.SolvedInTime),
@@ -165,6 +194,7 @@
            
             return ret;
         }
+
 
         private static FullCaseOverview CreateFullOverview(Case entity, CaseStatistic caseStatistic)
         {                        

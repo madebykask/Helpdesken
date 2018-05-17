@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <options>
   <option value=""></option>
-  <option value="Advanced Hrly">Advanced Hrly</option>
+  <option value="Advanced Hrly" disabled="1">Advanced Hrly</option>
   <option value="Car Allowance">Car Allowance</option>
   <option value="Cash Adjustment">Cash Adjustment</option>
   <option value="Commission">Commission</option>

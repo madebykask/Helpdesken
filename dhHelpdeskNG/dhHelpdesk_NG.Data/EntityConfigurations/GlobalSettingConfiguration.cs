@@ -42,7 +42,11 @@
             this.Property(x => x.ExtendedCasePath).IsOptional().HasMaxLength(500);
             this.Property(x => x.MultiCustomersSearch).IsRequired();
 
-            this.ToTable("tblglobalsettings");
+			this.Property(x => x.PerformanceLogActive).IsRequired();
+			this.Property(x => x.PerformanceLogFrequency).IsRequired();
+			this.Property(x => x.PerformanceLogSettingsCache).IsRequired();
+
+			this.ToTable("tblglobalsettings");
         }
     }
 }

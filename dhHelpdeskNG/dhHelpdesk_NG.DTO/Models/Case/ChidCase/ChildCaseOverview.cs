@@ -29,5 +29,12 @@
         public int ParentId { get; set; }
 
         public bool Indepandent { get; set; }
+
+        // used for linq queries to avoid type casting in sql
+        public decimal CaseNoDecimal
+        {
+            get { return Convert.ToDecimal(CaseNo); }
+            set { CaseNo = Convert.ToInt32(value); }
+        }
     }
 }

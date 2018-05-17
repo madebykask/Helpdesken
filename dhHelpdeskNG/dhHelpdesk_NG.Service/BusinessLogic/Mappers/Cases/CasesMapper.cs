@@ -61,7 +61,7 @@
             return entities.Select(c => c.Id).ToList();
         } 
 
-        private static GlobalEnums.CaseIcon GetCaseIcon(
+        public static GlobalEnums.CaseIcon GetCaseIcon(
                                             DateTime? finishingDate,
                                             DateTime? approvedDate,
                                             int requireApproving)

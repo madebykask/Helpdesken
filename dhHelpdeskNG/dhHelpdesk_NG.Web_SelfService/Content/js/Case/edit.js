@@ -38,7 +38,7 @@
                 var fieldStandardName = $(needToApplyAttrs[i]).attr(attrFieldNameHolder);                
                 var fs = getFieldSetting(fieldStandardName);
                 if (fs != null) {
-                    applySettingOnElement($(needToApplyAttrs[i]), fs)
+                    applySettingOnElement($(needToApplyAttrs[i]), fs);
                 }
             }
         }

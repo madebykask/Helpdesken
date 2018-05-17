@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Contract
 {
-    using DH.Helpdesk.BusinessData.Models.Shared;
+    
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using System;
     using System.Collections.Generic;
@@ -30,8 +30,8 @@
                 DateTime? noticeDate,
                 DateTime createdDate,
                 DateTime changedDate,
-                Guid contractGuid
-            )
+                Guid contractGuid, 
+                List<string> files)
         {
             this.CustomerId = customerId;
             this.Id = id;
@@ -53,6 +53,7 @@
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
             this.ContractGUID = contractGuid;
+            this.Files = files;
         }
 
         public int Id { get; set; }
@@ -94,6 +95,8 @@
         public DateTime ChangedDate { get; set; }
 
         public Guid ContractGUID { get; set; }
+
+        public List<string> Files { get; set; }
 
     }
 }

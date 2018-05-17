@@ -40,7 +40,7 @@
                 .HasForeignKey(x => x.Room_Id)
                 .WillCascadeOnDelete(false);
 
-            this.Property(x => x.ServerName).IsRequired().HasMaxLength(50);
+            this.Property(x => x.ServerName).IsRequired().HasMaxLength(60);
             this.Property(x => x.ServerDescription).IsRequired().HasMaxLength(200);
             this.Property(x => x.ServerModel).IsRequired().HasMaxLength(50);
             this.Property(x => x.Manufacturer).IsRequired().HasMaxLength(100);

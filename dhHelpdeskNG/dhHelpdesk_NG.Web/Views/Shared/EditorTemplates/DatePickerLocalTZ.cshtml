@@ -51,10 +51,12 @@
         <script type="text/javascript">
             $(function() {
                 $('#@controlId').datepicker({
-                    format: '@Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
-            clearBtn: true,
-            autoclose: true,
-            weekStart: 1
+                    //format: '@Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
+                    clearBtn: true,
+                    autoclose: true,
+                    weekStart: 1,
+                    todayHighlight: true,
+                    format: 'yyyy-mm-dd'
                 });
             });
         </script>

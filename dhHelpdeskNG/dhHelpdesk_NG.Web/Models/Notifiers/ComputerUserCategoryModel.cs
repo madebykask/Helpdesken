@@ -5,21 +5,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using DH.Helpdesk.BusinessData.Models;
 
 namespace DH.Helpdesk.Web.Models.Notifiers
 {
 	public class ComputerUserCategoryModel
 	{
 
-		public ComputerUserCategoryModel(List<ComputerUserCategory> notReadOnlyCategories)
+		public ComputerUserCategoryModel(List<ComputerUserCategoryOverview> notReadOnlyCategories)
 		{
 			ExtendedCaseFormID = null;
 			Name = "";
 			IsReadOnly = false;
 			ComputerUserCategoryID = null;
-			ComputerUserCategories = new List<ComputerUserCategory>();
+			ComputerUserCategories = new List<ComputerUserCategoryOverview>();
 
-			var dropDownItems = ComputerUserCategories.Select(o => new DropDownItem(o.Name, o.ID.ToString())).ToList();
+			var dropDownItems = ComputerUserCategories.Select(o => new DropDownItem(o.Name, o.Id.ToString())).ToList();
 
 			// Todo: translation of non-categories computer users
 			dropDownItems.Insert(0, new DropDownItem(Translation.Get("Employee", DH.Helpdesk.Web.Infrastructure.Enums.TranslationSource.TextTranslation), "0"));
@@ -27,7 +28,8 @@ namespace DH.Helpdesk.Web.Models.Notifiers
 			ComputerUserCategoryDropDownContent = new DropDownContent(dropDownItems, ComputerUserCategoryID.HasValue ?
 				ComputerUserCategoryID.Value.ToString() : "0");
 		}
-		public ComputerUserCategoryModel(ComputerUserCategory category, List<ComputerUserCategory> notReadOnlyCategories)
+
+		public ComputerUserCategoryModel(ComputerUserCategory category, List<ComputerUserCategoryOverview> notReadOnlyCategories)
 		{
 			ExtendedCaseFormID = category.ExtendedCaseFormID; // 2003
 			Name = category.Name; //"Vendor";
@@ -39,7 +41,7 @@ namespace DH.Helpdesk.Web.Models.Notifiers
 		});*/
 			ExtendedCasePath = string.Format("/ExtendedCase/?formId={0}&autoLoad=true", ExtendedCaseFormID);
 
-			var dropDownItems = ComputerUserCategories.Select(o => new DropDownItem(o.Name, o.ID.ToString())).ToList();
+			var dropDownItems = ComputerUserCategories.Select(o => new DropDownItem(o.Name, o.Id.ToString())).ToList();
 
 			// Todo: translation of non-categories computer users
 			dropDownItems.Insert(0, new DropDownItem(Translation.Get("Employee", DH.Helpdesk.Web.Infrastructure.Enums.TranslationSource.TextTranslation), "0"));
@@ -55,7 +57,7 @@ namespace DH.Helpdesk.Web.Models.Notifiers
 		public string Name { get; set; }
 
 		public int? ComputerUserCategoryID { get; set; }
-		public List<ComputerUserCategory> ComputerUserCategories { get; set; }
+		public List<ComputerUserCategoryOverview> ComputerUserCategories { get; set; }
 		public DropDownContent ComputerUserCategoryDropDownContent { get; set; }
 	}
 }

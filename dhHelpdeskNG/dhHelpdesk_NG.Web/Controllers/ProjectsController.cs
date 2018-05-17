@@ -115,7 +115,7 @@
 
             projects = SetNameOriation(projects, isFirstName);
             
-            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs);
+            var users = this.userService.GetCustomerUsers(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs);
            
             var viewModel = this.indexProjectViewModelFactory.Create(projects, users, filter);
             return this.View(viewModel);
@@ -215,10 +215,9 @@
         public ActionResult NewProject()
         {
             var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
-            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs);           
+            var users = this.userService.GetCustomerUsers(SessionFacade.CurrentCustomer.Id);
 
-            var viewModel = this.newProjectViewModelFactory.Create(users, Guid.NewGuid().ToString());
-
+            var viewModel = this.newProjectViewModelFactory.Create(users.MapToSelectList(cs), Guid.NewGuid().ToString());
             return this.View(viewModel);
         }
 
@@ -229,8 +228,8 @@
             if (!this.ModelState.IsValid)
             {
                 var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
-                var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs);
-                var model = this.newProjectViewModelFactory.Create(users, guid);
+                var users = this.userService.GetCustomerUsers(SessionFacade.CurrentCustomer.Id);
+                var model = this.newProjectViewModelFactory.Create(users.MapToSelectList(cs), guid);
                 model.ProjectEditModel = projectEditModel;
                 return this.View(model);
             }
@@ -438,12 +437,12 @@
             
             var cases = this.caseService.GetProjectCases(SessionFacade.CurrentCustomer.Id, id).ToList();            
             var cs = this.settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
-            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).MapToSelectList(cs);
+            var users = this.userService.GetCustomerUsers(SessionFacade.CurrentCustomer.Id);
             var isFirstName = (cs.IsUserFirstLastNameRepresentation == 1);
 
             var viewModel = this.updatedProjectViewModelFactory.Create(
                 project,
-                users,
+                users.MapToSelectList(cs),
                 projectCollaborators,
                 projectSchedules,
                 projectLogs,

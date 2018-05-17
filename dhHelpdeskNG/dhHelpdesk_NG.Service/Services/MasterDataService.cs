@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DH.Helpdesk.BusinessData.Enums.Admin.Users;
+using DH.Helpdesk.BusinessData.Models.Customer.Input;
+using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+
 namespace DH.Helpdesk.Services.Services
 {
     using DH.Helpdesk.BusinessData.Models;
@@ -19,11 +23,11 @@ namespace DH.Helpdesk.Services.Services
 
     public interface IMasterDataService
     {
-        IList<Customer> GetCustomers(int userId);
+        IList<CustomerOverview> GetCustomers(int userId);
         Customer GetCustomer(int customerId);
+        Setting GetCustomerSettings(int customerId);
         bool IsCustomerUser(int customerId, int userId);
         User GetUser(int userId);
-        Setting GetCustomerSetting(int customerId);
         IList<Language> GetLanguages();
         IList<Text> GetTranslationTexts();
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId);
@@ -42,6 +46,7 @@ namespace DH.Helpdesk.Services.Services
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
         EmployeeModel GetEmployee(int customerId, string employeeNumber, bool useApi = false, WebApiCredentialModel credentialModel = null);
         void UpdateUserLogin(LogProgram logProgram);
+        IList<UserPermission> GetUserPermissions(int userId);
     }
 
     public class MasterDataService : IMasterDataService
@@ -59,12 +64,14 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICustomerUserRepository _customerUserRepository;
         private readonly IEmployeeService _employeeService;
         private readonly ILogProgramService _logProgramService;
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
 
+        private Dictionary<int, Setting> _customersSettingsCache = new Dictionary<int, Setting>();
 
         public MasterDataService(
             ICustomerRepository customerRepository,
             ILanguageRepository languageRepository,
-            ISettingRepository settingRepository,
+            ISettingRepository settingRepository, //todo
             ITextRepository textRepository,
             IUserRepository userRepository,
             ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository,
@@ -74,7 +81,8 @@ namespace DH.Helpdesk.Services.Services
             INotifierRepository computerUserRepository,
             ICustomerUserRepository customerUserRepository,
             IEmployeeService employeeService,
-            ILogProgramService logProgramService)
+            ILogProgramService logProgramService,
+            IUserPermissionsChecker userPermissionsChecker)
         {
             this._customerRepository = customerRepository;
             this._languageRepository = languageRepository;
@@ -89,11 +97,20 @@ namespace DH.Helpdesk.Services.Services
             _customerUserRepository = customerUserRepository;
             _employeeService = employeeService;
             _logProgramService = logProgramService;
+            _userPermissionsChecker = userPermissionsChecker;
         }
 
-        public IList<Customer> GetCustomers(int userId)
+        public IList<CustomerOverview> GetCustomers(int userId)
         {
-            return this._customerRepository.CustomersForUser(userId);
+            var items =
+                this._customerRepository.CustomersForUser(userId)
+                    .Select(cus => new CustomerOverview
+                    {
+                        Id = cus.Id,
+                        Name = cus.Name
+                    }).ToList();
+
+            return items;
         }
 
         public int? GetCustomerIdByEMailGUID(Guid GUID)
@@ -116,9 +133,16 @@ namespace DH.Helpdesk.Services.Services
             return this._userRepository.GetById(userId); 
         }
 
-        public Setting GetCustomerSetting(int customerId)
+        public Setting GetCustomerSettings(int customerId)
         {
-            return this._settingRepository.GetCustomerSetting(customerId);  
+            // store settings to be used during request processing
+            if (!_customersSettingsCache.ContainsKey(customerId))
+            {
+                var settings = this._settingRepository.GetCustomerSetting(customerId);
+                _customersSettingsCache.Add(customerId, settings);
+            }
+
+            return _customersSettingsCache[customerId];
         }
 
         public IList<GlobalSetting> GetGlobalSettings()
@@ -237,6 +261,12 @@ namespace DH.Helpdesk.Services.Services
         public void UpdateUserLogin(LogProgram logProgram)
         {
             _logProgramService.UpdateUserLogin(logProgram);
+        }
+
+        public IList<UserPermission> GetUserPermissions(int userId)
+        {
+            var user = GetUser(userId);
+            return _userPermissionsChecker.GetUserPermissions(user);
         }
     }
 }

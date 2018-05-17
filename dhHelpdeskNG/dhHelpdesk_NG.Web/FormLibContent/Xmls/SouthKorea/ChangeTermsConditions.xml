@@ -3,27 +3,17 @@
     <!ENTITY languages SYSTEM "Templates/Languages.xml">
     <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
     <!ENTITY state SYSTEM "Templates/ChangeTermsConditionsState.xml">
-
-    <!ENTITY dat_country SYSTEM "Data/Data_Country.xml">
-    <!ENTITY dat_costcentres SYSTEM "Data/Data_CostCentres.xml">
-    <!ENTITY dat_primarysite SYSTEM "Data/Data_PrimarySite.xml">
-    <!ENTITY dat_jobtitle SYSTEM "Data/Data_JobTitle.xml">
-    <!ENTITY dat_positiontitle SYSTEM "Data/Data_PositionTitle.xml">
-    <!ENTITY dat_linemanagers SYSTEM "Data/Data_LineManager.xml">
     <!ENTITY dat_allowance SYSTEM "Data/Data_AllowanceType.xml">
     <!ENTITY dat_deduction SYSTEM "Data/Data_DeductionType.xml">
     <!ENTITY dat_allowanceChangeType SYSTEM "Data/Data_ChangeType.xml">
-
-
+    <!ENTITY data_costcentre SYSTEM "Data/Data_CostCentre.xml">
 ]>
 
 <form id="229" guid="122574FC-9E3E-4571-BA32-DA4E090DDA81" customerId="32">
     &languages;
     &regexs;
     &state;
-
     <fields>
-
         <!--Tab ServiceRequestDetails-->
         <tab name="#ServiceRequestDetails" label="Service Request Details">
             <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
@@ -36,15 +26,12 @@
             </element>
             <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1"></element>
             <element name="Company" type="text" label="Company"></element>
-            <element name="BusinessUnit" type="text" label="Business Unit"></element>
+            <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element> <!--#58799 mandatory-->
             <element name="ServiceArea" type="text" label="Function"></element>
             <element name="Department" type="text" label="Department"></element>
             <element name="TypeOfChange" type="select" label="Type of Change" mandatory="1">
                 <options>
-                    <option value=""></option>
-                    <!--<option value="Change of working hours only">Change of working hours only</option>
-          <option value="Change of basic pay only">Change of basic pay only</option>
-          <option value="Change of employment terms and conditions">Change of employment terms and conditions</option>-->
+                  <option value=""></option>
                   <option value="Department Transfer">Department Transfer</option>
                   <option value="Contractual Hour Change">Contractual Hour Change</option>
                   <option value="Full time to part time">Full time to part time</option>
@@ -75,14 +62,12 @@
                     <option value="Standard">Standard</option>
                 </options>
             </element>
-
             <element type="textarea" name="InternalLogNote" label="Comment"></element>
         </tab>
 
         <!--Tab OrganisationalAssignment-->
         <tab name="#OrganisationalAssignment" label="Organisational Assignment" >
-            <element name="OrganisationCountry" label="Organisation Country" type="text" default="South Korea" disabled="1" formfieldidentifier="E1P0006.LAND1:1">
-                &dat_country;
+            <element name="OrganisationCountry" label="Organisation Country" type="select" source="database" cssclass="autocomplete-country selectize" default="South Korea" disabled="1" formfieldidentifier="E1P0006.LAND1:1">
             </element>
             <element name="NewCompany" label="Company" source="database" type="select" formfieldidentifier="E1P0001.BUKRS" >
             </element>
@@ -101,49 +86,35 @@
                     <option value=""></option>
                 </options>
             </element>
-
             <element type="hidden" name="MultiCostcentres" label="CostCentres" default="1"></element>
-            <element name="CostCentre" label="Cost Centre" type="select" formfieldidentifier="E1P0001.KOSTL" >
-                &dat_costcentres;
+            <element type="select" source="database" cssclass="autocomplete-costcentre selectize" name="CostCentre" label="Cost Centre" formfieldidentifier="E1P0001.KOSTL" >
+              &data_costcentre;
             </element>
             <element name="Costallocation" label="Cost allocation %" type="text"  default="100">
                 <regex inherit="unsignednum" pattern="" message=""></regex>
                 <regex inherit="numFrom0To100" pattern="" message=""></regex>
-
-                <groupSum name="Costallocation,Costallocation2,Costallocation3"
-                                    message="Cost allocation % (in all the fields) must always equal 100.">100</groupSum>
+                <groupSum name="Costallocation,Costallocation2,Costallocation3" message="Cost allocation % (in all the fields) must always equal 100.">100</groupSum>
             </element>
-            <element name="CostCentre2" label="Cost Centre" type="select" formfieldidentifier="E1P0027.KST01">
-                &dat_costcentres;
+            <element type="select" source="database" cssclass="autocomplete-costcentre selectize" name="CostCentre2" label="Cost Centre" formfieldidentifier="E1P0027.KST01">
+              &data_costcentre;
             </element>
             <element name="Costallocation2" label="Cost allocation %" type="text" >
                 <mandatoryIfNotEmpty name="CostCentre2"></mandatoryIfNotEmpty>
                 <regex inherit="unsignednum" pattern="" message=""></regex>
                 <regex inherit="numFrom1To100" pattern="" message=""></regex>
             </element>
-            <element name="CostCentre3" label="Cost Centre" type="select">
-                &dat_costcentres;
+            <element type="select" source="database" cssclass="autocomplete-costcentre selectize" name="CostCentre3" label="Cost Centre">
+              &data_costcentre;
             </element>
             <element name="Costallocation3" label="Cost allocation %" type="text" >
                 <mandatoryIfNotEmpty name="CostCentre3"></mandatoryIfNotEmpty>
                 <regex inherit="unsignednum" pattern="" message=""></regex>
                 <regex inherit="numFrom1To100" pattern="" message=""></regex>
             </element>
-
-            <!--<element name="PositionTitle" label="Position Title" type="search-select">
-        &dat_positiontitle;
-      </element>
-      <element name="JobTitle" label="Job Title" type="search-select" >
-        &dat_jobtitle;
-      </element>-->
-
-            <element name="PositionTitle" label="Position Title" type="search-select" formfieldidentifier="E1P0001.PLANS">
-                &dat_positiontitle;
+            <element type="select" source="database" cssclass="autocomplete-relation-positiontitle selectize" name="PositionTitle" label="Position Title" formfieldidentifier="E1P0001.PLANS">
             </element>
-            <element name="JobTitle" label="Job Title" type="search-select" formfieldidentifier="E1P0001.STELL">
-                &dat_jobtitle;
+            <element type="select" source="database" cssclass="autocomplete-jobtitle selectize" name="JobTitle" label="Job Title" formfieldidentifier="E1P0001.STELL">
             </element>
-
             <element name="ShortSortjobdescription" label="Short job description" type="textarea"></element>
             <element name="NewPosition" label="New position?" type="select">
                 <options>
@@ -152,8 +123,7 @@
                     <option value="Fill Vacant Position">Fill Vacant Position</option>
                 </options>
             </element>
-            <element name="ReportsToLineManager" label="Reports to line manager" type="search-select" formfieldidentifier="E1P0001_AF.OMNGR_NR">
-                &dat_linemanagers;
+            <element type="select" source="database" cssclass="autocomplete-linemanager selectize" name="ReportsToLineManager" label="Reports to line manager" formfieldidentifier="E1P0001_AF.OMNGR_NR">
             </element>
             <element name="LocalApprover" type="text" label="Local approver (TK)">
                 <regex inherit="employeeno" pattern="" message=""></regex>
@@ -164,7 +134,7 @@
                     <option value="Permanent">Permanent</option>
                     <option value="Temporary">Temporary</option>
                     <option value="Trainee">Trainee</option>
-                    <option value="Transferred Employee">Transferred Employee</option>
+                    <option value="Inpat">Inpat</option>
                 </options>
             </element>
             <element name="ContractedHours" label="Contracted hours " type="select">
@@ -184,6 +154,8 @@
                     <option value=""></option>
                     <option value="Part time">Part time</option>
                     <option value="Full Time">Full Time</option>
+                    <option value="Inpat">Inpat</option>
+                    <option value="Expat">Expat</option>
                 </options>
             </element>
             <element name="ContractEndDate" label="Contract end date:" type="date" format="dd.MM.yyyy">
@@ -201,14 +173,11 @@
                 <mandatoryIf name="ProbationPeriod">Yes</mandatoryIf>
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-            <element name="Primarysite" label="Primary side " type="select" default="SOMEDEFAULTVAL" >
-                &dat_primarysite;
+            <element type="select" source="database" cssclass="autocomplete-primarysite selectize" name="Primarysite" label="Primary site">
             </element>
-            <element name="TECapprover" label="TEC approver " type="select" default="SOMEDEFAULTVAL" >
-                &dat_linemanagers;
+            <element type="select" source="database" cssclass="autocomplete-linemanager selectize" name="TECapprover" label="TEC approver">
             </element>
             <element name="HelpDesk" label="Help desk" type="text"  default="ICC3 SNG Retail" ></element>
-
         </tab>
 
         <!--Tab: Payment Information-->
@@ -216,11 +185,13 @@
             <element name="PayrollCategory" label="Payroll category " type="select">
                 <options>
                     <option value=""></option>
+                    <option value="Dual Payroll (ZY)">Dual Payroll (ZY)</option>
                     <option value="Exempted">Exempted</option>
                     <option value="Salaried - Monthly">Salaried - Monthly</option>
                     <option value="Salaried - Hourly">Salaried - Hourly</option>
                     <option value="Flex - Monthly">Flex - Monthly</option>
                     <option value="Flex - Hourly">Flex - Hourly</option>
+                    <option value="Flex Hourly (N)">Flex Hourly (N)</option>
                 </options>
             </element>
             <element name="JobGrade" label="Job Grade" type="select">

@@ -18,6 +18,16 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
     using DH.Helpdesk.Dal.Infrastructure;
 
     using ComputerFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.WorkstationFields;
+    using DateFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.DateFields;
+    using MemoryFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Shared.MemoryFields;
+    using ProcessorFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Shared.ProcessorFields;
+    using SoundFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.SoundFields;
+    using GraphicsFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.GraphicsFields;
+    using CommunicationFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.CommunicationFields;
+    using ContractFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.ContractFields;
+    using OtherFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.OtherFields;
+    using ContactInformationFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.ContactInformationFields;
+    using StateFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.StateFields;
 
     public class ComputerRepository : Repository<Domain.Computers.Computer>, IComputerRepository
     {
@@ -429,6 +439,58 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                     {
                         query = query.OrderBy(x => x.ComputerType.Name);
                     }
+                    else if (sortOptions.Name == DateFields.CreatedDate)
+                    {
+                        query = query.OrderBy(x => x.CreatedDate);
+                    }
+                    else if (sortOptions.Name == MemoryFields.RAM)
+                    {
+                        query = query.OrderBy(x => x.RAM.Name);
+                    }
+                    else if (sortOptions.Name == ProcessorFields.ProccesorName)
+                    {
+                        query = query.OrderBy(x => x.Processor.Name);
+                    }
+                    else if (sortOptions.Name == SoundFields.SoundCard)
+                    {
+                        query = query.OrderBy(x => x.SoundCard);
+                    }
+                    else if (sortOptions.Name == GraphicsFields.VideoCard)
+                    {
+                        query = query.OrderBy(x => x.VideoCard);
+                    }
+                    else if (sortOptions.Name == ContractFields.ContractStatusName)
+                    {
+                        query = query.OrderBy(x => x.ContractStatus_Id.Value);
+                    }
+                    else if (sortOptions.Name == ContractFields.PurchasePrice)
+                    {
+                        query = query.OrderBy(x => x.Price);
+                    }
+                    else if (sortOptions.Name == OtherFields.Info)
+                    {
+                        query = query.OrderBy(x => x.Info);
+                    }
+                    else if (sortOptions.Name == ContactInformationFields.UserId)
+                    {
+                        query = query.OrderBy(x => x.User_Id);
+                    }
+                    else if (sortOptions.Name == StateFields.State)
+                    {
+                        query = query.OrderBy(x => x.Status);
+                    }
+                    else if (sortOptions.Name == DateFields.ChangedDate)
+                    {
+                        query = query.OrderBy(x => x.ChangedDate);
+                    }
+                    else if (sortOptions.Name == DateFields.SynchronizeDate)
+                    {
+                        query = query.OrderBy(x => x.SyncChangedDate);
+                    }
+                    else if (sortOptions.Name == CommunicationFields.NetworkAdapter)
+                    {
+                        query = query.OrderBy(x => x.NIC.Name);
+                    }
                 }
                 else
                 {
@@ -472,10 +534,62 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                     {
                         query = query.OrderByDescending(x => x.ComputerType.Name);
                     }
+                    else if (sortOptions.Name == DateFields.CreatedDate)
+                    {
+                        query = query.OrderByDescending(x => x.CreatedDate);
+                    }
+                    else if (sortOptions.Name == MemoryFields.RAM)
+                    {
+                        query = query.OrderByDescending(x => x.RAM.Name);
+                    }
+                    else if (sortOptions.Name == ProcessorFields.ProccesorName)
+                    {
+                        query = query.OrderByDescending(x => x.Processor.Name);
+                    }
+                    else if (sortOptions.Name == SoundFields.SoundCard)
+                    {
+                        query = query.OrderByDescending(x => x.SoundCard);
+                    }
+                    else if (sortOptions.Name == GraphicsFields.VideoCard)
+                    {
+                        query = query.OrderByDescending(x => x.VideoCard);
+                    }
+                    else if (sortOptions.Name == ContractFields.ContractStatusName)
+                    {
+                        query = query.OrderByDescending(x => x.ContractStatus_Id.Value);
+                    }
+                    else if (sortOptions.Name == ContractFields.PurchasePrice)
+                    {
+                        query = query.OrderByDescending(x => x.Price);
+                    }
+                    else if (sortOptions.Name == OtherFields.Info)
+                    {
+                        query = query.OrderByDescending(x => x.Info);
+                    }
+                    else if (sortOptions.Name == ContactInformationFields.UserId)
+                    {
+                        query = query.OrderByDescending(x => x.User_Id);
+                    }
+                    else if (sortOptions.Name == StateFields.State)
+                    {
+                        query = query.OrderByDescending(x => x.Status);
+                    }
+                    else if (sortOptions.Name == DateFields.ChangedDate)
+                    {
+                        query = query.OrderByDescending(x => x.ChangedDate);
+                    }
+                    else if (sortOptions.Name == DateFields.SynchronizeDate)
+                    {
+                        query = query.OrderByDescending(x => x.SyncChangedDate);
+                    }
+                    else if (sortOptions.Name == CommunicationFields.NetworkAdapter)
+                    {
+                        query = query.OrderByDescending(x => x.NIC.Name);
+                    }
                 }
             }
             if (recordsCount.HasValue)
-                query = query.OrderBy(x => x.ComputerName).Take(recordsCount.Value);
+                query = query.Take(recordsCount.Value);
             var overviews = MapToComputerOverview(query);
             return overviews;
         }
@@ -643,7 +757,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         x.User.UserId,
                         UserDepartmentName = x.User.Department.DepartmentName,
                         UserUnitName = x.User.OU.Name
-                    }).ToList().OrderBy(x => x.Entity.ComputerName);
+                    }).ToList();
 
             var overviewAggregates = anonymus.Select(x =>
                     new ComputerOverview(

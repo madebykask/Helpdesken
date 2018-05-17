@@ -285,11 +285,13 @@ EditPage.prototype.loadExtendedSectionsIfNeeded = function () {
 
     // Todo refactor and automate all sections
     //  if (self.extendedSections.length > 0) {
-    if (self.extendedSections.Initiator != null) {
-        self.loadExtendedSection(self.extendedSections.Initiator);
-    }
-    if (self.extendedSections.Regarding != null) {
-        self.loadExtendedSection(self.extendedSections.Regarding);
+    if (self.extendedSections) {
+        if (self.extendedSections.Initiator != null) {
+            self.loadExtendedSection(self.extendedSections.Initiator);
+        }
+        if (self.extendedSections.Regarding != null) {
+            self.loadExtendedSection(self.extendedSections.Regarding);
+        }
     }
 }
 
@@ -608,12 +610,18 @@ EditPage.prototype.refreshCasePage = function (updatedInfo) {
     $('#' + _caseFields.PersonsName).val(updatedInfo.PersonsName);
     $('#' + _caseFields.PersonsPhone).val(updatedInfo.PersonsPhone);
 
+
     $('#' + _caseFields.CaseTypeId).val(updatedInfo.CaseType_Id).change();
     $('#' + _caseFields.ProductAreaId).val(updatedInfo.ProductArea_Id).change();
-    $('#' + _caseFields.WorkingGroupId).val(updatedInfo.WorkingGroup_Id).change();
+
+    //trigger change only if value has been changed
+    var workingGroupId$ = $('#' + _caseFields.WorkingGroupId);
+    if (workingGroupId$.val() != updatedInfo.WorkingGroup_Id) {
+        workingGroupId$.val(updatedInfo.WorkingGroup_Id).change();
+    } 
+
     $('#' + _caseFields.WorkingGroupName).val(updatedInfo.WorkingGroupName);
     $('#' + _caseFields.PriorityId).val(updatedInfo.Priority_Id).change();
-
     $('#' + _caseFields.PersonsEmail).val(updatedInfo.PersonsEmail);
     $('#' + _caseFields.PersonsCellphone).val(updatedInfo.PersonsCellphone);
     $('#' + _caseFields.Place).val(updatedInfo.Place);
@@ -646,7 +654,7 @@ EditPage.prototype.refreshCasePage = function (updatedInfo) {
         $("#CaseTemplate_OU_Id").val(updatedInfo.OU_Id);
     }
 
-    $('#' + _caseFields.Region_Id).val(updatedInfo.Region_Id).change();
+    $('#' + _caseFields.RegionId).val(updatedInfo.Region_Id).change();
     $('#' + _caseFields.RegionName).val(updatedInfo.RegionName);
     $('#' + _caseFields.DepartmentName).val(updatedInfo.DepartmentName);
     $('#' + _caseFields.OUName).val(updatedInfo.OUName);
@@ -1338,6 +1346,34 @@ EditPage.prototype.getLanguage = function () {
     }
 }
 
+EditPage.prototype.moveCaseToCustomer = function (caseId, customerId, isExternal) {
+    var self = this;
+    if (isExternal) {
+        //move case to external customer
+        var inputData = { caseId: caseId, customerId: customerId };
+        $.post('/Cases/MoveCaseToExternalCustomer', inputData, function (result) {
+            if (result.Success) {
+                window.location.href = result.Location || '/Cases/';
+            } else {
+                self.enableMoveCaseControls(true);
+                ShowToastMessage(result.Error, "error", true);
+            }
+        }).fail(function (err) {
+            self.enableMoveCaseControls(true);
+            ShowToastMessage('Case move failed.', "error", true);
+        });
+    } else {
+        //do normal case move
+        var url = '/cases/edit/' + caseId + '?moveToCustomerId=' + customerId;
+        window.location.href = url;
+    }
+};
+
+EditPage.prototype.enableMoveCaseControls = function(state) {
+    this.$moveCaseCustomerSelect.prop('disabled', !state);
+    this.$moveCaseButton.prop('disabled', !state);
+};
+
 /***** Initiator *****/
 EditPage.prototype.init = function (p) {
     var self = this;
@@ -1351,7 +1387,6 @@ EditPage.prototype.init = function (p) {
     EditPage.prototype.Current_EC_LanguageId = p.extendedCaseLanguageId;
     EditPage.prototype.Current_EC_Path = p.extendedCasePath;
     
-
     EditPage.prototype.extendedSections = p.extendedSections;
 
 
@@ -1373,7 +1408,8 @@ EditPage.prototype.init = function (p) {
     self.$productAreaObj = $('#divProductArea');
     self.$productAreaChildObj = $('#ProductAreaHasChild');
     self.productAreaErrorMessage = self.p.productAreaErrorMessage;
-    self.$moveCaseButton = $("#btnMoveCase");    
+    self.$moveCaseButton = $("#btnMoveCase");
+    self.$moveCaseCustomerSelect = $('#moveCaseToCustomerId');
     self.$btnSave = $('.btn.save');
     self.$btnSaveClose = $('.btn.save-close');
     self.$btnSaveNew = $('.btn.save-new');
@@ -1395,7 +1431,7 @@ EditPage.prototype.init = function (p) {
 
     self.$selectListStep = $("#steps");
     self.$btnGo = $('#btnGo');
-
+    self.isRelated = self.p.isRelated;
     self.isCaseFileMandatory = self.p.isCaseFileMandatory;
 
     var invoiceElm = $('#CustomerSettings_ModuleCaseInvoice').val();
@@ -1449,24 +1485,61 @@ EditPage.prototype.init = function (p) {
 
         return false;
     });
-    
+
+    $("#divMoveCase").on('shown', function () {
+        self.$moveCaseCustomerSelect.change();
+    });
+
+    self.$moveCaseCustomerSelect.change(function (e) {
+        var $selectedOption = $("option:selected", this);
+        if ($selectedOption && !self.isNullOrEmpty($selectedOption.val())) {
+
+            var isExternal = (+($selectedOption.data('external') || 0)) > 0;
+            var hasExtendedCase =
+                !self.isNullOrEmpty(self.Current_EC_FormId || '') || !self.isNullOrEmpty(self.extendedSections || '');
+            var isRelated = self.p.isRelated == 'true';
+
+            // disable move and show warning if has Child-Parent
+            if (isExternal && isRelated) {
+                $('#extendedCaseNote').hide();
+                $('#externalCustomerNote').hide();
+                $('#childParentNote').show();
+                self.$moveCaseButton.prop("disabled", true);
+                return;
+            }
+
+            //allow move but show warnings
+            $('#childParentNote').hide();
+            $('#externalCustomerNote').toggle(isExternal);
+            $('#extendedCaseNote').toggle(hasExtendedCase);
+            self.$moveCaseButton.prop("disabled", false);
+        }
+    });
+
     self.$moveCaseButton.click(function (e) {
         e.preventDefault();
-        $.post(p.caseLockChecker,
-            {
-                caseId: p.currentCaseId,
-                caseChangedTime: p.caseChangedTime,
-                lockGuid: p.caseLockGuid
-            },
-            function (data) {
-                if (data == true) {
-                    window.moveCase(p.currentCaseId);
-                } else {
-                    ShowToastMessage(p.moveLockedCaseMessage, "error", true);
-                }
-        });
+
+        var customerId = +$('#moveCaseToCustomerId').val() || 0;
+        if (customerId > 0) {
+            self.enableMoveCaseControls(false);
+            $.post(p.caseLockChecker,
+                {
+                    caseId: p.currentCaseId,
+                    caseChangedTime: p.caseChangedTime,
+                    lockGuid: p.caseLockGuid
+                },
+                function (data) {
+                    if (data) {
+                        var isExternal = +($('#moveCaseToCustomerId').find(':selected').data('external') || 0);
+                        self.moveCaseToCustomer(p.currentCaseId, customerId, isExternal > 0);
+                    } else {
+                        ShowToastMessage(p.moveLockedCaseMessage, "error", true);
+                        self.enableMoveCaseControls(true);
+                    }
+                });
+        }
     });
-    
+
     $('.date').each(function () {
         var $this = $(this);
         var errorLabel = $this.find('label.error:visible');

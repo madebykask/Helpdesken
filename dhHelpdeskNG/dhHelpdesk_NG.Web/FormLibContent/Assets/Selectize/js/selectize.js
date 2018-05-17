@@ -1038,6 +1038,12 @@
 	
 				return;
 			}
+			else if (!self.ignoreBlur && document.activeElement === self.$dropdown_content[0].parentElement) {
+			    self.ignoreBlur = true;
+			    self.onFocus(e);
+
+			    return;
+			}
 	
 			if (self.settings.create && self.settings.createOnBlur) {
 				self.createItem(false);

@@ -13,9 +13,9 @@
             this.HasKey(x => x.Id);
 
             this.HasRequired(x => x.Customer)
-               .WithMany()
-               .HasForeignKey(x => x.Customer_Id)
-               .WillCascadeOnDelete(false);
+                .WithMany()
+                .HasForeignKey(x => x.Customer_Id)
+                .WillCascadeOnDelete(false);
 
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.IsDefault).IsRequired().HasColumnName("isDefault");

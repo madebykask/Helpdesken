@@ -1,4 +1,6 @@
 ﻿
+using DH.Helpdesk.BusinessData.Models.User;
+
 namespace DH.Helpdesk.Web.Controllers
 {
     using System.Collections.Generic;
@@ -432,11 +434,12 @@ namespace DH.Helpdesk.Web.Controllers
             foreach (string s in selectedSplit)
             {
                 string[] cap = s.Split(':');
-                string text = cap[0].ToString();
+                var text = cap[0].StartsWith("_") ? cap[0].Substring(1, cap[0].Length - 1) : cap[0];
+
                 string values = string.Empty;
-                if (cap.Count() > 1)
+                if (cap.Length > 1)
                 {
-                    values = cap[1].ToString();
+                    values = cap[1];
                 }
                 bool exists = false;
 
@@ -1083,6 +1086,12 @@ namespace DH.Helpdesk.Web.Controllers
                 int UpdateNotifierInformation = Convert.ToInt32(collection["CaseSolution.UpdateNotifierInformation"].ToString());
                 caseSolutionInputViewModel.CaseSolution.UpdateNotifierInformation = UpdateNotifierInformation;
             }
+
+            if (collection["CaseSolution.AddFollowersBtn"].Trim() != string.Empty)
+            {
+                caseSolutionInputViewModel.CaseSolution.AddFollowersBtn = Convert.ToBoolean(collection["CaseSolution.AddFollowersBtn"]);
+            }
+
             if (collection["CaseSolution.Urgency_Id"].ToString().Trim() != string.Empty)
             {
                 int Urgency_Id = Convert.ToInt32(collection["CaseSolution.Urgency_Id"].ToString());
@@ -1265,6 +1274,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.Place,
                     caseSolution.UserCode,
                     UpdateNotifierInformation = caseSolution.UpdateNotifierInformation.ToBool().ToString(),
+                    AddFollowersBtn = caseSolution.AddFollowersBtn.ToString(),
 
                     caseSolution.IsAbout_ReportedBy,
                     caseSolution.IsAbout_PersonsName,
@@ -1471,21 +1481,12 @@ namespace DH.Helpdesk.Web.Controllers
             foreach (string s in selectedSplit)
             {
                 string[] cap = s.Split(':');
-                string text = string.Empty;
-                if (cap[0].ToString().Substring (0,1)=="_")
-                {
-                    int len = cap[0].ToString().Length;
-                    text = cap[0].ToString().Substring(1, (len-1));
-                }
-                else
-                {
-                    text = cap[0].ToString();
-                }
-                
+                var text = cap[0].StartsWith("_") ? cap[0].Substring(1, cap[0].Length - 1) : cap[0];
+
                 string values = string.Empty;
-                if (cap.Count() > 1)
+                if (cap.Length > 1)
                 {
-                    values = cap[1].ToString();
+                    values = cap[1];
                 }
                 bool exists = false;
 
@@ -2238,6 +2239,12 @@ namespace DH.Helpdesk.Web.Controllers
                 int UpdateNotifierInformation = Convert.ToInt32(collection["CaseSolution.UpdateNotifierInformation"].ToString());
                 caseSolutionInputViewModel.CaseSolution.UpdateNotifierInformation = UpdateNotifierInformation;
             }
+
+            if (collection["CaseSolution.AddFollowersBtn"].Trim() != string.Empty)
+            {
+                caseSolutionInputViewModel.CaseSolution.AddFollowersBtn = Convert.ToBoolean(collection["CaseSolution.AddFollowersBtn"]);
+            }
+
             if (collection["CaseSolution.Urgency_Id"].ToString().Trim() != string.Empty)
             {
                 int Urgency_Id = Convert.ToInt32(collection["CaseSolution.Urgency_Id"].ToString());
@@ -2418,7 +2425,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult ChangeWorkingGroupFilterUser(int? id, int customerId)
         {
-            IList<User> performersList;
+            IList<CustomerUserInfo> performersList;
             var customerSettings = this._settingService.GetCustomerSetting(customerId);
             if (customerSettings.DontConnectUserToWorkingGroup == 0 && id > 0)
             {
@@ -2429,7 +2436,7 @@ namespace DH.Helpdesk.Web.Controllers
                 performersList = this._userService.GetAvailablePerformersOrUserId(customerId);
             }
 
-            var currentUser = new User() { Id = -1, FirstName = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION)) };
+            var currentUser = new CustomerUserInfo() { Id = -1, FirstName = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION)) };
             performersList.Insert(0, currentUser);
             if (customerSettings.IsUserFirstLastNameRepresentation == 1)
             {
@@ -2538,6 +2545,7 @@ namespace DH.Helpdesk.Web.Controllers
             currentData.Text_External = templateModel.Text_External;
             currentData.Text_Internal = templateModel.Text_Internal;
             currentData.UpdateNotifierInformation = templateModel.UpdateNotifierInformation;
+            currentData.AddFollowersBtn = templateModel.AddFollowersBtn;
             currentData.Urgency_Id = templateModel.Urgency_Id;
             currentData.UserCode = templateModel.UserCode;
             currentData.Verified = templateModel.Verified;
@@ -2873,14 +2881,12 @@ namespace DH.Helpdesk.Web.Controllers
             if (caseSolution.SetCurrentUsersWorkingGroup == 1)
                 caseSolution.CaseWorkingGroup_Id = -1;
 
-            var performersList = isCreatingNew ?
-                                     this._userService.GetAvailablePerformersOrUserId(curCustomerId)
-                                         .MapToSelectList(cs, true, true)
-                                     : this._userService.GetAvailablePerformersForWorkingGroup(
-                                         curCustomerId,
-                                         caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true, true);
-            const bool TakeOnlyActive = true;
+            var performersList = 
+                    isCreatingNew 
+                        ? this._userService.GetAvailablePerformersOrUserId(curCustomerId).MapToSelectList(cs, true, true)
+                        : this._userService.GetAvailablePerformersForWorkingGroup(curCustomerId, caseSolution.CaseWorkingGroup_Id).MapToSelectList(cs, true, true);
 
+            const bool TakeOnlyActive = true;
 
             var workingGroupList = this._workingGroupService.GetAllWorkingGroupsForCustomer(curCustomerId).Select(x => new SelectListItem
             {
@@ -2966,13 +2972,13 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                CaseTypes = this._caseTypeService.GetCaseTypes(curCustomerId, TakeOnlyActive),
+                CaseTypes = this._caseTypeService.GetCaseTypesOverviewWithChildren(curCustomerId, TakeOnlyActive),
 
                 CaseWorkingGroups = workingGroupList,
 
-                Categories = this._categoryService.GetActiveParentCategories(curCustomerId),
+                Categories = this._categoryService.GetActiveParentCategoriesOverviews(curCustomerId),
 
-                FinishingCauses = this._finishingCauseService.GetFinishingCauses(curCustomerId),
+                FinishingCauses = this._finishingCauseService.GetFinishingCausesWithChilds(curCustomerId),
 
                 PerformerUsers = performersList,
 
@@ -2982,7 +2988,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                ProductAreas = this._productAreaService.GetTopProductAreasForUser(curCustomerId, SessionFacade.CurrentUser),
+                ProductAreas = this._productAreaService.GetProductAreasOverviewWithChildren(curCustomerId),
 
                 WorkingGroups = this._workingGroupService.GetWorkingGroups(curCustomerId).Select(x => new SelectListItem
                 {

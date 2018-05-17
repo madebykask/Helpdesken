@@ -39,6 +39,8 @@
 
         public ConfigurableFieldModel<DateTime> ChangedDate { get; set; }
 
+        public ConfigurableFieldModel<DateTime?> SyncDate { get; set; }
+
         [NotNull]
         public GeneralFieldsModel GeneralFieldsModel { get; set; }
 
@@ -59,8 +61,6 @@
 
         [NotNull]
         public StateFieldsModel StateFieldsModel { get; set; }
-
-        public bool UserHasInventoryAdminPermission { get; set; }
 
         public bool IsForDialog { get; set; }
     }

@@ -61,6 +61,11 @@
                 .HasForeignKey(x => x.ProductArea_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.StateSecondary)
+                .WithMany()
+                .HasForeignKey(x => x.StateSecondary_Id)
+                .WillCascadeOnDelete(false);
+
             this.HasOptional(x => x.Project)
                 .WithMany()
                 .HasForeignKey(x => x.Project_Id)
@@ -71,8 +76,12 @@
                 .HasForeignKey(x => x.WorkingGroup_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.StateSecondary)
+                .WithMany()
+                .HasForeignKey(x => x.StateSecondary_Id)
+                .WillCascadeOnDelete(false);
 
-			this.HasOptional(x => x.SplitToCaseSolution)
+            this.HasOptional(x => x.SplitToCaseSolution)
 				.WithMany()
 				.HasForeignKey(x => x.SplitToCaseSolution_Id)
 				.WillCascadeOnDelete(false);
@@ -83,6 +92,10 @@
                  m.MapRightKey("ExtendedCaseForms_Id");
                  m.ToTable("tblCaseSolution_ExtendedCaseForms");
              });
+
+            this.HasMany(x => x.Conditions)
+                .WithOptional(x => x.CaseSolution)
+                .HasForeignKey(x => x.CaseSolution_Id);
 
             this.Property(x => x.Caption).IsRequired().HasMaxLength(60);
             this.Property(x => x.CaseSolutionCategory_Id).IsOptional();
@@ -146,6 +159,7 @@
             this.Property(x => x.FinishingDate);
             this.Property(x => x.FinishingDescription);
             this.Property(x => x.UpdateNotifierInformation).IsOptional();
+            this.Property(x => x.AddFollowersBtn).IsOptional();
             this.Property(x => x.Status).IsRequired();
             this.Property(x => x.CostCentre).IsOptional();
 

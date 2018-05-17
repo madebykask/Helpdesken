@@ -3,6 +3,7 @@ using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Services.Services.Feedback;
 using DH.Helpdesk.Services.Services.Invoice;
 using DH.Helpdesk.Web.Infrastructure.Authentication;
+using DH.Helpdesk.Web.Infrastructure.Utilities;
 using Ninject.Web.Common;
 using Ninject.Web.Mvc.FilterBindingSyntax;
 
@@ -162,7 +163,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<ICaseDocumentService>().To<CaseDocumentService>();
 
             this.Bind<IConditionService>().To<ConditionService>();
-
+            this.Bind<IGDPROperationsService, IGDPRDataPrivacyAccessService, IGDPRFavoritesService>().To<GDPRService>();
+            this.Bind<IGDPRTasksService>().To<GDPRTasksService>();
 
             // Survey service
             this.Bind<ISurveyService>().To<SurveyService>();
@@ -185,6 +187,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             Bind<IMetaDataService>().To<MetaDataService>();
             Bind<IEmployeeService>().To<EmployeeService>();
             Bind<IWebApiService>().To<WebApiService>();
+
+            Bind<ICaseDiagnosticService>().To<CaseDiagnosticService>().InRequestScope();
         }
 
         #endregion

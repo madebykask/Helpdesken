@@ -42,6 +42,10 @@
 
 </script>
 
+@section Styles {
+    <link href="@Url.Content("~/Content/css/case-mobile.css")" rel="stylesheet" type="text/css" />
+}
+
 @*<script src="~/Content/js/Case/edit.js"></script>*@
 @Scripts.Render("~/Content/js/Case/edit")
 
@@ -193,8 +197,8 @@
                                                     <span class="case-div-width90em">
                                                         @Html.HiddenFor(model => Model.FollowerUsers, new { @readonly = "true", id = "caseFollowerUsersInput" })
                                                         @Html.Partial("_CaseAddFollowers", Model.SendToDialogModel)
-                                                        <a href="#case_add_followers_btn" role="button" class="btn btn-default case-usersearch-btn hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Persons_Name.ToString()">@Translation.Get("Add followers", Enums.TranslationSource.TextTranslation)</a>
-                                                        @Html.TextAreaFor(model => model.FollowerUsers, new { id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString() })
+                                                        <a href="#case_add_followers_btn" role="button" class="btn btn-default case-usersearch-btn hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()">@Translation.Get("Add followers", Enums.TranslationSource.TextTranslation)</a>
+                                                        @Html.TextAreaFor(model => model.FollowerUsers, new { id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea hasAttribute", standardName = GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString() })
                                                     </span>
                                                 }
                                             </div>
@@ -351,7 +355,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.InventoryNumber)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(i => Model.NewCase.InventoryNumber, new { @class = "hasAttribute", maxlength = "20", standardName = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), autocomplete = "off" })
+                                                @Html.TextBoxFor(i => Model.NewCase.InventoryNumber, new { @class = "hasAttribute", maxlength = "60", standardName = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), autocomplete = "off" })
                                             </div>
                                         </div>
                                     }

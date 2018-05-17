@@ -1,4 +1,7 @@
 ﻿using DH.Helpdesk.BusinessData.Enums.Case;
+using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.BusinessData.Models.FinishingCause;
+using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 
 namespace DH.Helpdesk.Web.Models.Case.Output
 {
@@ -21,9 +24,9 @@ namespace DH.Helpdesk.Web.Models.Case.Output
         public IList<Region> filterRegion { get; set; }
         public IList<Department> filterDepartment { get; set; }
 
-        public IList<CaseType> filterCaseType { get; set; }
-        public IList<ProductArea> filterProductArea { get; set; }
-        public IList<Category> filterCategory { get; set; }
+        public IList<CaseTypeOverview> filterCaseType { get; set; }
+        public IList<ProductAreaOverview> filterProductArea { get; set; }
+        public IList<CategoryOverview> filterCategory { get; set; }
         public IList<WorkingGroupEntity> filterWorkingGroup { get; set; }
         public IList<Priority> filterPriority { get; set; }
         public IList<Status> filterStatus { get; set; }
@@ -49,7 +52,7 @@ namespace DH.Helpdesk.Web.Models.Case.Output
 
         public DateTime? CaseClosingDateEndFilter { get; set; }
 
-        public IList<FinishingCause> ClosingReasons { get; set; }
+        public IList<FinishingCauseOverview> ClosingReasons { get; set; }
 
         /// <summary>
         /// Preset string in "filter by intitator" filter field on case overview page
@@ -114,7 +117,7 @@ namespace DH.Helpdesk.Web.Models.Case.Output
 
         public string FilteredDepartment { get; set; }
 
-        public IList<CaseType> CaseTypeList { get; set; }
+        public IList<CaseTypeOverview> CaseTypeList { get; set; }
 
         public int FilteredCaseType { get; set; }
 
@@ -136,7 +139,7 @@ namespace DH.Helpdesk.Web.Models.Case.Output
 
         public string FilteredStateSecondary { get; set; }
 
-        public IList<FinishingCause> ClosingReasonList { get; set; }
+        public IList<FinishingCauseOverview> ClosingReasonList { get; set; }
 
         public string FilteredClosingReason { get; set; }
 

@@ -1,3 +1,5 @@
+using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
+
 namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 {
     using System.Collections.Generic;
@@ -23,8 +25,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 Id = businessModel.Id,
                 Name = businessModel.Name,
                 CreatedDate = businessModel.CreatedDate,
-                ChangedDate = businessModel.CreatedDate, // todo
-                ComputerTypeDescription = string.Empty,
+                ChangedDate = businessModel.CreatedDate, 
+                ComputerTypeDescription = businessModel.Description,
                 Customer_Id = customerId
             };
             this.DbSet.Add(entity);
@@ -35,7 +37,17 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
             var entity = this.DbSet.Find(businessModel.Id);
             entity.Name = businessModel.Name;
+            entity.ComputerTypeDescription = businessModel.Description;
             entity.ChangedDate = businessModel.ChangedDate;
+        }
+
+        public ComputerTypeOverview Get(int id)
+        {
+            var item = DbSet.Single(x => x.Id == id);
+            return new ComputerTypeOverview(item.Id, item.Name)
+            {
+                Description = item.ComputerTypeDescription
+            };
         }
 
         public List<ItemOverview> FindOverviews(int customerId)

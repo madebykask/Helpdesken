@@ -1,6 +1,7 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
+
 <div class="tab-pane" id="OrganisationalAssignment">
     <div class="span6">
         <table class="table">
@@ -8,7 +9,7 @@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Organisation")</h4>
-                    </td>
+                    </td>                   
                 </tr>
                 <tr>
                     <td class="tdstrong">@Model.Label("OrganisationCountry")</td>
@@ -84,7 +85,7 @@
                     <td>@Model.Element("ContractType")</td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("EmploymentPercentage")</td>
+                    <td class="tdstrong" style="vertical-align:top !important;">@Model.Label("EmploymentPercentage")</td>
                     <td>@Model.Element("EmploymentPercentage")</td>
                 </tr>
                 <tr>

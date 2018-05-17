@@ -64,7 +64,6 @@
                         @Model.Element("Department")
                     </td>
                 </tr>
-
                 <tr>
                     <td class="tdstrong">@Model.Label("ChangeValidFrom")</td>
                     <td>
@@ -113,11 +112,6 @@
                     <td>
                         @Model.Element("PermanentAddressLine2")</td>
                 </tr>
-                 @*<tr>
-                    <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
-                    <td>
-                        @Model.Element("PermanentAddressLine3")</td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
                     <td>
@@ -133,10 +127,7 @@
                     <td>
                         @Model.Element("PermanentCountry")</td>
                 </tr>
-
                 @Html.Partial("_InternalLogNoteV2", Model)
-
-
             </tbody>
         </table>
     </div>
@@ -151,18 +142,12 @@
     </div>
     <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
     <input type="hidden" id="formGuid" value="@Model.FormGuid" />
-
 </div>
-
-
 <script>
-
-
     var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
     $('#date_ChangeValidTo').datepicker("destroy");
-
 
     var noticeOldDate = $('#notice_OldDate');
     $('#date_ChangeValidFrom').not(".disabled").datepicker({

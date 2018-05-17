@@ -21,7 +21,8 @@
             InventoryFieldSettingModel workstationFieldSettingModel,
             InventoryFieldSettingModel infoFieldSettingModel,
             InventoryFieldSettingModel createdDateFieldSettingModel,
-            InventoryFieldSettingModel changedDateFieldSettingModel)
+            InventoryFieldSettingModel changedDateFieldSettingModel,
+            InventoryFieldSettingModel syncDateFieldSettingModel)
         {
             this.DepartmentFieldSettingModel = departmentFieldSettingModel;
             this.NameFieldSettingModel = nameFieldSettingModel;
@@ -36,6 +37,7 @@
             this.InfoFieldSettingModel = infoFieldSettingModel;
             this.CreatedDateFieldSettingModel = createdDateFieldSettingModel;
             this.ChangedDateFieldSettingModel = changedDateFieldSettingModel;
+            this.SyncDateFieldSettingModel = syncDateFieldSettingModel;
         }
 
         [NotNull]
@@ -76,5 +78,8 @@
 
         [NotNull]
         public InventoryFieldSettingModel ChangedDateFieldSettingModel { get; set; }
+
+        [NotNull]
+        public InventoryFieldSettingModel SyncDateFieldSettingModel { get; set; }
     }
 }

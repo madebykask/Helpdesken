@@ -46,7 +46,7 @@
                     }
                     else
                     {
-                        if (!string.IsNullOrEmpty(Model.CaseRegistrationMessage) && Model.ShowRegistringMessage)
+                        if (Model.ShowRegistringMessage && !string.IsNullOrEmpty(Model.CaseRegistrationMessage))
                         {
                             <div class="alert alert-success">
                                 @Html.Raw(Model.CaseRegistrationMessage.SetHtmlParameters())

@@ -51,6 +51,7 @@
             this.Property(x => x.EMailSubjectPattern).IsRequired().HasMaxLength(100);
             //this.Property(x => x.InventoryDays2WaitBeforeDelete).IsOptional();
             this.Property(x => x.InvoiceType).IsRequired();
+            this.Property(x => x.IntegrationType).IsRequired();
             this.Property(x => x.LDAPAllUsers).IsRequired();
             this.Property(x => x.LDAPAuthenticationType).IsRequired();
             this.Property(x => x.LDAPBase).IsRequired().HasMaxLength(200);
@@ -58,6 +59,7 @@
             this.Property(x => x.LDAPLogLevel).IsRequired();
             this.Property(x => x.LDAPPassword).IsRequired().HasMaxLength(20);
             this.Property(x => x.LDAPSyncType).IsRequired();
+            this.Property(x => x.LDAPCreateOrganization).IsRequired();
             this.Property(x => x.LDAPUserName).IsRequired().HasMaxLength(100);
             this.Property(x => x.LeadTimeFromProductAreaSetDate).IsRequired();
             this.Property(x => x.LogLevel).IsRequired();
@@ -145,6 +147,7 @@
             this.Property(x => x.M2TNewCaseMailTo).IsRequired();
             this.Property(x => x.DefaultCaseTemplateId).IsRequired();
             this.Property(x => x.QuickLinkWGRestriction).IsRequired();
+            this.Property(x => x.AllowMoveCaseToAnyCustomer).IsRequired();
 
             this.ToTable("tblsettings");
         }

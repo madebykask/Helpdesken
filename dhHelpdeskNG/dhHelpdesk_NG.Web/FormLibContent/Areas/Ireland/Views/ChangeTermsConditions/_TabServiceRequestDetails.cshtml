@@ -16,7 +16,6 @@
                     <td class="tdstrong">@Model.Label("Co-WorkerGlobalviewID")</td>
                     <td>
                         @Model.Element("Co-WorkerGlobalviewID", false)
-
                     </td>
                 </tr>
                 <tr>
@@ -64,12 +63,6 @@
                         @Model.Element("Department")
                     </td>
                 </tr>
-                @*<tr>
-                    <td class="tdstrong">@Model.Label("ChangeType")</td>
-                    <td>
-                        @Model.Element("ChangeType")
-                    </td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("ChangeValidFrom")</td>
                     <td>
@@ -103,29 +96,6 @@
                     </td>
                 </tr>
                 }
-               @* <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Permanent Address")</h4>
-                    </td>
-                    <td class="tdstrong" ><h4>@Model.Translate("Current record")</h4></td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("PermanentAddressLine1")</td>
-                    <td>@Model.Element("PermanentAddressLine1")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("PermanentAddressLine2")</td>
-                    <td>@Model.Element("PermanentAddressLine2")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("PermanentCity")</td>
-                    <td>@Model.Element("PermanentCity")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("PermanentCountry")</td>
-                    <td>@Model.Element("PermanentCountry")</td>
-                </tr>*@
-
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Country Specifics")</h4>
@@ -153,6 +123,8 @@
 </div>
 
 <script>
+
+    var ect = new Ect();
 
     var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);

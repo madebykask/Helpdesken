@@ -4,30 +4,23 @@
   <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
   <!ENTITY state SYSTEM "Templates/HiringBasicState.xml">
   <!ENTITY pre_payrollcategory_allowancestype SYSTEM "Templates/Predefined_PayrollCategory_AllowancesType.xml">
-  <!ENTITY dat_country SYSTEM "Templates/Data_Country.xml">
   <!ENTITY dat_postalcode SYSTEM "Templates/Data_PostalCode.xml">
-      <!ENTITY dat_gmemployeedocumenttype SYSTEM "Templates/Data_GM_EmployeeDocumentType.xml">
-    <!ENTITY dat_gmdependantdocumenttype SYSTEM "Templates/Data_GM_DependantDocumentType.xml">
-    <!ENTITY dat_nationality SYSTEM "Templates/Data_Nationality.xml">
-    <!ENTITY dat_language SYSTEM "Templates/Data_Language.xml">
+  <!ENTITY dat_gmemployeedocumenttype SYSTEM "Templates/Data_GM_EmployeeDocumentType.xml">
+  <!ENTITY dat_gmdependantdocumenttype SYSTEM "Templates/Data_GM_DependantDocumentType.xml">
 ]>
-
-<!-- Dev/Prod/Test -->
 <form id="159" guid="365A7A0C-9042-4AB3-B6E6-31A17DE34D48" customerId="31">
   &languages;
   &regexs;
   &state;
-
   <fields>
- 
-    <!--Service Request Details-->
     <tab name="#servicerequestdetails" label="Service Request Details">
       <element type="select" name="NewToIKEA" mandatory="1" label="New to IKEA?">
         <options>
           <option value=""></option>
           <option value="New Hire">New Hire</option>
-          <option value="International Transfer">International Transfer</option>
-          <option value="Re-Hire">Re-Hire</option>
+          <option value="International Transfer (LTA, STA, Commuter)">International Transfer (LTA, STA, Commuter)</option>
+          <option value="International Relocation">International Relocation</option>
+          <option value="Re-Hire">Re-instating</option>
           <option value="Transfer Between Business Units">Transfer Between Business Units</option>
         </options>
       </element>
@@ -44,12 +37,10 @@
         <regex inherit="timestamp" pattern="" message=""></regex>
         <mandatoryIf name="LengthOfInductionInDays">2 days,3 days,4 days</mandatoryIf>
       </element>
-
       <element type="text" name="InductionEndTime2"  label="Induction End Time - Day 2">
         <regex inherit="timestamp" pattern="" message=""></regex>
         <mandatoryIf name="LengthOfInductionInDays">2 days,3 days,4 days</mandatoryIf>
       </element>
-
       <element type="select" name="LengthOfInductionInDays" mandatory="1" label="Length of Induction in days" default="2 days">
         <options>
           <option value=""></option>
@@ -72,13 +63,14 @@
           <option value="Standard">Standard</option>
         </options>
       </element>
-
       <element type="text" name="Co-WorkerID" label="Co-Worker ID">
-        <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
+        <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
+        <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
         <mandatoryIf name="NewToIKEA">Transfer Between Business Units</mandatoryIf>
       </element>
       <element type="text" name="GlobalHRID" label="Global HR ID">
-        <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
+        <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
+        <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
         <regex inherit="unsignednum" pattern="" message=""></regex>
       </element>
       <element type="select" name="Title" label="Title" mandatory="1">
@@ -103,32 +95,26 @@
         &dat_postalcode;
       </element>
       <element type="text" name="PermanentCity" label="City" mandatory="1"></element>
-      <element type="search-select" source="1" name="PermanentCountry" label="Country" mandatory="1" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="PermanentCountry" label="Country" mandatory="1" default="Ireland">
       </element>
-
       <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
     </tab>
-
     <tab name="#personal" label="Personal Information">
       <element type="text" name="TelephoneNumber" label="Telephone Number"></element>
       <element type="text" name="MobilePhoneNumber" label="Mobile Phone Number"></element>
       <element type="text" name="ContactEMailAddress" label="Contact e-mail address">
         <regex inherit="email" pattern="" message=""></regex>
       </element>
-
       <element type="text" name="EmergencyAddressLine1" label="Address line 1" mandatory="1"></element>
       <element type="text" name="EmergencyAddressLine2" label="Address line 2"></element>
       <element type="text" name="EmergencyPostalCode" label="Postal Code"></element>
       <element type="text" name="EmergencyCity" label="City" mandatory="1"></element>
-      <element type="search-select" source="1" name="EmergencyCountry" label="Country" default="Ireland" mandatory="1">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmergencyCountry" label="Country" default="Ireland" mandatory="1">
       </element>
       <element type="text" name="EmergencyContactNumber" label="Emergency contact number"></element>
       <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship">
         <mandatoryIfNotEmpty name="EmergencyAddressLine1"></mandatoryIfNotEmpty>
       </element>
-
       <!--Family Member/Dependents-->
       <element type="hidden" name="FamilyMembers" default="1"></element>
       <element type="select" name="FamilyMember" label="Family Member">
@@ -152,8 +138,6 @@
       <element type="date" name="FamilyMemberDateOfBirth" label="Date of Birth" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
-
       <element type="select" name="FamilyMember2" label="Family Member">
         <options>
           <option value=""></option>
@@ -175,7 +159,6 @@
       <element type="date" name="FamilyMemberDateOfBirth2" label="Date of Birth" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
       <element type="select" name="FamilyMember3" label="Family Member">
         <options>
           <option value=""></option>
@@ -197,7 +180,6 @@
       <element type="date" name="FamilyMemberDateOfBirth3" label="Date of Birth" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
       <element type="select" name="FamilyMember4" label="Family Member">
         <options>
           <option value=""></option>
@@ -219,7 +201,6 @@
       <element type="date" name="FamilyMemberDateOfBirth4" label="Date of Birth" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
       <!--5-->
       <element type="select" name="FamilyMember5" label="Family Member">
         <options>
@@ -242,89 +223,72 @@
       <element type="date" name="FamilyMemberDateOfBirth5" label="Date of Birth" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      <!--5-->
-      
-      <!--Global mobility Employee Documents-->
+      <!--5-->  
       <element type="hidden" name="EmployeeDocuments" default="1"></element>
       <element type="select" name="EmployeeDocumentType" label="Document Type">
         &dat_gmemployeedocumenttype;
       </element>
-      <element type="search-select" source="1" name="EmployeeDocumentCountry" label="Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry" label="Country" default="Ireland">       
       </element>
       <element type="text" name="EmployeeDocumentNo" label="Document No."></element>
       <element type="date" name="EmployeeDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place"></element>
-      <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="Ireland">       
       </element>
-
       <element type="select" name="EmployeeDocumentType2" label="Document Type">
         &dat_gmemployeedocumenttype;
       </element>
-      <element type="search-select" source="1" name="EmployeeDocumentCountry2" label="Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry2" label="Country" default="Ireland">
       </element>
       <element type="text" name="EmployeeDocumentNo2" label="Document No."></element>
       <element type="date" name="EmployeeDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="EmployeeDocumentIssuePlace2" label="Issue Place"></element>
-      <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="Ireland">
       </element>
-
       <element type="select" name="EmployeeDocumentType3" label="Document Type">
         &dat_gmemployeedocumenttype;
       </element>
-      <element type="search-select" source="1" name="EmployeeDocumentCountry3" label="Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry3" label="Country" default="Ireland">
       </element>
       <element type="text" name="EmployeeDocumentNo3" label="Document No."></element>
       <element type="date" name="EmployeeDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="EmployeeDocumentIssuePlace3" label="Issue Place"></element>
-      <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="Ireland">
       </element>
-
       <!--4-->
         <element type="select" name="EmployeeDocumentType4" label="Document Type">
           &dat_gmemployeedocumenttype;
       </element>
-      <element type="search-select" source="1" name="EmployeeDocumentCountry4" label="Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry4" label="Country" default="Ireland">
       </element>
       <element type="text" name="EmployeeDocumentNo4" label="Document No."></element>
       <element type="date" name="EmployeeDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="EmployeeDocumentIssuePlace4" label="Issue Place"></element>
-      <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry4" label="Issue Place Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry4" label="Issue Place Country" default="Ireland">
       </element>
       <!--4-->
-
       <!--5-->
       <element type="select" name="EmployeeDocumentType5" label="Document Type">
         &dat_gmemployeedocumenttype;
       </element>
-      <element type="search-select" source="1" name="EmployeeDocumentCountry5" label="Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry5" label="Country" default="Ireland">
       </element>
       <element type="text" name="EmployeeDocumentNo5" label="Document No."></element>
       <element type="date" name="EmployeeDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="EmployeeDocumentIssuePlace5" label="Issue Place"></element>
-      <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry5" label="Issue Place Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry5" label="Issue Place Country" default="Ireland">
       </element>
       <!--5-->
-      
       <!--Global mobility Dependants-->
       <element type="hidden" name="DependantFamilyMembers" default="1"></element>
       <element type="select" name="DependantFamilyMember" label="Dependant Family Member">
@@ -390,7 +354,6 @@
       <element type="date" name="DependantsDateOfBirth3" label="Dependant's Date of birth" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-      
       <!--4-->
       <element type="select" name="DependantFamilyMember4" label="Dependant Family Member">
         <options>
@@ -414,7 +377,6 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--4-->
-
       <!--5-->
       <element type="select" name="DependantFamilyMember5" label="Dependant Family Member">
         <options>
@@ -438,97 +400,74 @@
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <!--5-->
-
-      <!--Global Mobility Dependants Documents-->
       <element type="hidden" name="DependantsDocuments" default="1"></element>
       <element type="select" name="DependantsDocumentType" label="Document Type">
         &dat_gmdependantdocumenttype;
       </element>
-      <element type="search-select" source="1" name="DependantsDocumentCountry" label="Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry" label="Country" default="Ireland">
       </element>
       <element type="text" name="DependantsDocumentNo" label="Document No."></element>
       <element type="date" name="DependantsDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place" ></element>
-      <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="Ireland">
       </element>
-
       <element type="select" name="DependantsDocumentType2" label="Document Type">
         &dat_gmdependantdocumenttype;
       </element>
-      <element type="search-select" source="1" name="DependantsDocumentCountry2" label="Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry2" label="Country" default="Ireland">
       </element>
       <element type="text" name="DependantsDocumentNo2" label="Document No."></element>
       <element type="date" name="DependantsDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="DependantsDocumentIssuePlace2" label="Issue Place"></element>
-      <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="Ireland">
       </element>
-
       <element type="select" name="DependantsDocumentType3" label="Document Type">
         &dat_gmdependantdocumenttype;
       </element>
-      <element type="search-select" source="1" name="DependantsDocumentCountry3" label="Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry3" label="Country" default="Ireland">
       </element>
       <element type="text" name="DependantsDocumentNo3" label="Document No"></element>
       <element type="date" name="DependantsDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="DependantsDocumentIssuePlace3" label="Issue Place"></element>
-      <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="Ireland">
       </element>
-
-      
+     
       <!--4-->
       <element type="select" name="DependantsDocumentType4" label="Document Type">
         &dat_gmdependantdocumenttype;
       </element>
-      <element type="search-select" source="1" name="DependantsDocumentCountry4" label="Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry4" label="Country" default="Ireland">       
       </element>
       <element type="text" name="DependantsDocumentNo4" label="Document No"></element>
       <element type="date" name="DependantsDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="DependantsDocumentIssuePlace4" label="Issue Place"></element>
-      <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry4" label="Issue Place Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry4" label="Issue Place Country" default="Ireland">
       </element>
       <!--4-->
-
-
       <!--5-->
       <element type="select" name="DependantsDocumentType5" label="Document Type">
         &dat_gmdependantdocumenttype;
       </element>
-      <element type="search-select" source="1" name="DependantsDocumentCountry5" label="Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry5" label="Country" default="Ireland">
       </element>
       <element type="text" name="DependantsDocumentNo5" label="Document No"></element>
       <element type="date" name="DependantsDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
       <element type="text" name="DependantsDocumentIssuePlace5" label="Issue Place"></element>
-      <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry5" label="Issue Place Country" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry5" label="Issue Place Country" default="Ireland">
       </element>
       <!--5-->
-
-
-      <!--Bank Account Details-->
-
-
       <element type="text" name="Payee" label="Payee" mandatory="1"></element>
-      <element type="search-select" source="1" name="BankCountry" label="Bank Country" mandatory="1" default="Ireland">
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="BankCountry" label="Bank Country" mandatory="1" default="Ireland">
       </element>
       <element type="text" name="BankKey" label="Bank Key" mandatory="1">
         <regex inherit="bankKey" pattern="" message=""></regex>
@@ -542,7 +481,6 @@
       <element type="text" name="PaymentCurrency" label="Payment Currency" mandatory="1" default="EUR">
         <regex inherit="currency" pattern="" message=""></regex>
       </element>
-      <!--FISCAL DATA and SOCIAL INSURANCE -->
       <element type="select" name="TaxInformation" label="Tax Information" mandatory="1">
         <options>
           <option value=""></option>
@@ -550,31 +488,39 @@
           <option value="P45 to follow">P45 to follow</option>
         </options>
       </element>
-
       <element type="text" name="PPSNumber" label="PPS Number">
-        
       </element>
-
-
-      <!--Nationality / Language-->
-      <element type="search-select" source="1" name="Nationality" label="Nationality" default="Irish">
-        &dat_nationality;
-      </element>
-      <element type="search-select" source="1" name="Language" label="Language" default="English">
-        &dat_language;
-      </element>
-
-
-      <element type="select" name="MaritalStatus" label="Marital Status">
+      <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="Nationality" label="Nationality" default="Irish"></element>
+      <element type="select" source="database" cssclass="autocomplete-language selectize" name="Language" label="Language" default="English"></element>
+      <element type="select" name="EthnicOrigin" label="Ethnic Origin">
         <options>
           <option value=""></option>
-          <option value="Single">Single</option>
-          <option value="Married">Married</option>
-          <option value="Divorced">Divorced</option>
-          <option value="Civil partnership">Civil partnership</option>
+          <option value="White">White</option>
+          <option value="Pakistani">Pakistani</option>
+          <option value="Black – Other">Black – Other</option>
+          <option value="Black – British">Black – British</option>
+          <option value="Chinese">Chinese</option>
+          <option value="Other Asian">Other Asian</option>
+          <option value="Indian">Indian</option>
+          <option value="Black African">Black African</option>
+          <option value="Black Caribbean">Black Caribbean</option>
+          <option value="Asian – British">Asian – British</option>
+          <option value="Irish">Irish</option>
+          <option value="Bangladeshi">Bangladeshi</option>
+          <option value="Mixed Race">Mixed Race</option>
+          <option value="Other">Other</option>
         </options>
       </element>
-
+      <element type="select" name="CivilStatus" label="Civil Status">  <!--Changed name from Marital to Civil WU #60213 -->
+        <options>    <!--New options due to WU #60213 -->
+          <option value=""></option>
+          <option value="Single">Single</option>
+          <option value="WidowedSurvivingCivilPartner">Widowed or Surviving Civil Partner</option>
+          <option value="MarriedCivilPartnership">Married or Civil Partnership</option>
+          <option value="MarriedCivilPartnershipLivingApart">Married or Civil Partnership but living apart</option>
+          <option value="DivorcedDissolvedPartnership">Divorced or Dissolved Partnership</option>
+        </options>
+      </element>
       <element type="select" name="DocumentType" label="Document Type">
         <options>
           <option value=""></option>
@@ -583,12 +529,10 @@
           <option value="Work Permit">Work Permit</option>
         </options>
       </element>
-      <element type="search-select" source="1" name="DocumentCountryOfIssue" default="Ireland" label="Country of issue" >
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" name="DocumentCountryOfIssue" default="Ireland" label="Country of issue" >       
       </element>
-      <element type="search-select" source="1" default="Ireland" name="DocumentCountryOfUse" label="Country of use">
-        <mandatoryIf name="DocumentType">VISA</mandatoryIf>
-        &dat_country;
+      <element type="select" source="database" cssclass="autocomplete-country selectize" default="Ireland" name="DocumentCountryOfUse" label="Country of use">
+        <mandatoryIf name="DocumentType">VISA</mandatoryIf>       
       </element>
       <element type="text" name="DocumentNO" label="Document No.">
         <mandatoryIf name="DocumentType">Passport</mandatoryIf>
@@ -596,9 +540,6 @@
       <element type="date" name="DocumentValidUntil" label="Document Valid Until:" format="dd.MM.yyyy" future="1">
         <regex inherit="date" pattern="" message=""></regex>
       </element>
-
-
     </tab>
-
   </fields>
 </form>

@@ -47,7 +47,7 @@
         closeBtn: '@Html.Raw(Translation.GetForJS("Stäng"))',
         selectedLabel: '@Translation.GetForJS("vald")',
         noResultLabel: '@Translation.GetForJS("Inga resultat matchar")',
-
+        isRelated: '@Model.IsRelatedCase.ToJavaScriptBool()',
         fileNameError: '@Translation.GetForJS("Filnamn är inte giltigt. Special tecken (!@#=$&?*) är inte tillåtna")',
         containsExtendedCase: '@Model.ContainsExtendedCase',
         containsEForm: '@(Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)',
@@ -55,6 +55,8 @@
         extendedCaseGuid: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().ExtendedCaseGuid.ToString() : "" )',
         extendedCaseLanguageId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().LanguageId.ToString() : "" )',
         extendedCasePath: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Path.ToString() : "" )',
+        extendedSections: @Html.Raw(Model.ExtendedSectionsToJS()),
+        computerUserCategories: @Html.Raw(Json.Encode(Model.ComputerUserCategories != null ? Model.ComputerUserCategories.Select(o => new { o.Name, o.IsReadOnly, o.Id }).ToDictionary(o => o.Id.ToString(), o => o) : null)),
         fileExistError: '@Translation.GetForJS("Bifogad fil är borttagen från ärendet")',
         applicationType: '@ApplicationTypes.Helpdesk',
         caseFieldIds: {
@@ -96,6 +98,7 @@
             WatchDate: "case__WatchDate",
             log_InternalText: "CaseLog_TextInternal",
             CaseRelationType: "CaseRelationType",
+            ExtendedInitiatiorGUID: "ExtendedInitiatorGUID",
             CostCentre: "case__CostCentre"
         },
 
@@ -120,7 +123,7 @@
             PersonsEmail: @Html.Raw(Json.Encode(Model.case_.PersonsEmail)),
             PersonsCellphone: @Html.Raw(Json.Encode(Model.case_.PersonsCellphone)),
             Place: @Html.Raw(Json.Encode(Model.case_.Place)),
-            CostCentre: '@Model.case_.CostCentre'
+            CostCentre: '@Html.Raw(Json.Encode(Model.case_.CostCentre))'
         },
 
         casesScopeInitParameters: {

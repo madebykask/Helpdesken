@@ -1,0 +1,280 @@
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.DataPrivacyModel
+@{
+    Layout = null;
+ }
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            @using (Html.BeginForm(null, null, null, FormMethod.Post, new {id = "privacyForm", @action = "", texttypeid = 0, compareMethod = 1 }))
+            {
+                <table class="tableform" id="privacyForm">
+                    <tr>
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Välj favorit")
+                        </td>
+                        <td class="span9">
+                            @Html.DropDownListFor(m => m.SelectedFavoriteId, Model.Favorites, new { id = "favoritesSelect", @class = "chosen-single-select" })
+                            <i id="favoritesLoader" class="gif-loader" style="display:none">&nbsp;</i>
+                            <a id="btnLock" style="display:none" class="lock-icon" href="#">&nbsp;</a>
+                            <a id="btnUnLock" style="display:none" class="unlock-icon" href="#">&nbsp;</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Kund")<span class="mandatorystar"> * </span>
+                        </td>
+                        <td class="span9">
+                            @Html.DropDownListFor(m => m.SelectedCustomerId, Model.Customers, string.Empty, new {id = "customerSelect", @class= "chosen-single-select" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Bevarandeperiod")
+                        </td>
+                        <td class="span9">
+                            @Html.TextBoxFor(m => m.RetentionPeriod, new { id = "retentionPeriod", maxlength="3", style="width:100px" })
+                            @Translation.GetCoreTextTranslation("dagar")
+                            <div id="retentionDaysError"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                        </td>
+                        <td class="span9">
+                            @Html.CheckBoxFor(m => m.CalculateRegistrationDate) @Translation.GetCoreTextTranslation("Räkna ut registreringsdatum (till)")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Registreringsdatum")<span class="mandatorystar"> * </span>
+                        </td>
+                        <td class="span9">
+                            @Html.EditorFor(m => m.RegisterDateFrom, "DatePicker", new {id = "regCaseFrom", type = "text" })
+                            @Html.EditorFor(m => m.RegisterDateTo, "DatePicker", new {id = "regCaseTo", type = "text" })
+                            <div id="datesErrorLabel"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Status")
+                        </td>
+                        <td class="span9">
+                            @Html.CheckBoxFor(m => m.ClosedOnly) @Translation.GetCoreTextTranslation("Endast avslutade ärenden")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Fält")<span class="mandatorystar"> * </span>
+                        </td>
+                        <td class="span9">
+                            @Html.DropDownListFor(m => m.FieldsNames, Model.Fields,
+                                new
+                                {
+                                    id = "lstFilterFields",
+                                    multiple = "multiple",
+                                    @class = "chosen-select",
+                                    placeholder = Translation.GetCoreTextTranslation("Välj en eller flera"),
+                                    style = "width: 300px"
+                                })
+                            <i id="fieldsLoader" class="gif-loader" style="display:none">&nbsp;</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                        </td>
+                        <td class="span9">
+                            @Html.CheckBoxFor(m => m.ReplaceEmails) @Translation.GetCoreTextTranslation("Ta bort e-mail adresser i ärendelogg och historik")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Ersätt data med")
+                        </td>
+                        <td class="span9">
+                            @Html.EditorFor(m => m.ReplaceDataWith)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Ersätt datum med")
+                        </td>
+                        <td class="span9">
+                            @Html.EditorFor(m => m.ReplaceDatesWith, "DatePicker", new {id = "replacedDate"})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Bifogade filer")
+                        </td>
+                        <td class="span9">
+                            @Html.CheckBoxFor(m => m.RemoveCaseAttachments) @Translation.GetCoreTextTranslation("Ta bort bifogade filer i ärenden")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                        </td>
+                        <td class="span9">
+                            @Html.CheckBoxFor(m => m.RemoveLogAttachments) @Translation.GetCoreTextTranslation("Ta bort bifogade filer i ärendelogg")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">
+                            @Translation.GetCoreTextTranslation("Spara/uppdatera")
+                        </td>
+                        <td class="span9">
+                            <button class="btn btn-small" id="btnFavorite" type="button">
+                                <i class="icon-star"></i> @Translation.GetCoreTextTranslation("Favorit")
+                            </button>
+                            <i id="saveFavoritesLoader" class="gif-loader" style="display:none">&nbsp;</i>
+                        </td>
+                    </tr>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+<div id="favoritesSaveModal" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <i class="icon-star"></i>&nbsp;<strong>
+            <span id="fm_header_new">@Translation.GetCoreTextTranslation("Ny Favorit")</span>
+            <span id="fm_header_update">@Translation.GetCoreTextTranslation("Redigera favorit") &ndash; </span>
+            <span id="selectedFavoriteText"></span>
+        </strong>
+    </div>
+    <div class="modal-body">
+        <p id="fm_body_new">@Translation.GetCoreTextTranslation("Skriv in ett namn på din nya favorit").</p>
+        <p id="fm_body_update">@Translation.GetCoreTextTranslation("Redigera favorit eller ändra namn för att spara som en ny favorit").</p>
+        <div>
+            <div class="input-prepend input-append">
+                <span class="add-on">@Translation.GetCoreTextTranslation("Namn")</span>
+                <input class="span2" type="text" id="fm_name" />
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button id="btnSaveFav" class="btn" data-dismiss="modal" aria-hidden="true">@Translation.GetCoreTextTranslation("Spara")</button>
+        <button id="btnDeleteFav" class="btn" data-dismiss="modal" aria-hidden="true">@Translation.GetCoreTextTranslation("Ta bort")</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.GetCoreTextTranslation("Avbryt")</button>
+    </div>
+</div>
+
+<div id="operationProgress" class="loading-msg" style="display:none">
+    <div class="content-wrapper">
+        <div id="gdprTask" class="loader">@Translation.GetCoreTextTranslation("Löpande")...<span id="taskProgress">0</span>%</div>
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/admindataprivacy")
+<script type="text/javascript">
+
+    var confirmationDialog = {
+        showConfirmation: function (text, onOk, onCancel) {
+            var d = $('<div class="modal fade">' +
+                '<div class="modal-dialog">' +
+                '<form method="post" id="deleteDialogForm" class="modal-content">' +
+                '<div class="modal-body">' +
+                '<button type="button" class="close" data-dismiss="modal">&times;</button>' +
+                '<p class="alert alert-info infop">' +
+                text +
+                '</p>' +
+                '</div>' +
+                '<div class="modal-footer">' +
+                '<button type="button" class="btn btn-ok">' +
+                '@Translation.GetCoreTextTranslation("Ja")' +
+                '</button>' +
+                '<button type="button" class="btn btn-cancel">' +
+                '@Translation.GetCoreTextTranslation("Nej")' +
+                '</button>' +
+                '</div>' +
+                '</form>' +
+                '</div>' +
+                '</div>');
+
+            d.on("show",
+                function () {
+                    d.find(".btn-cancel").on("click",
+                        function (e) {
+                            onCancel();
+                            d.modal('hide');
+                        });
+
+                    d.find(".btn-ok").on("click",
+                        function (e) {
+                            onOk();
+                            d.modal('hide');
+                        });
+                });
+
+            d.on("hide",
+                function () {
+                    d.find(".btn-ok").off("click");
+                    d.find(".btn-cancel").off("click");
+                });
+
+            d.on("hidden",
+                function () {
+                    d.remove();
+                });
+
+            d.modal({
+                "backdrop": "static",
+                "keyboard": true,
+                "show": true
+            });
+        }
+    };
+
+    // JQuery load
+    $(function() {
+        //disable datepicker on disabled controls
+        $("#regCaseFrom, #regCaseTo, #replacedDate").datepicker().on('show', function (e) {
+            var input = $(e.target).find('input');
+            if (input && input.length) {
+                if (input.prop('readonly') || input.prop('disabled')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).datepicker('hide');
+                }
+            }
+        });
+
+        $("#retentionPeriod").on("keypress keyup blur", function (event) {
+            $(this).val($(this).val().replace(/[^\d].+/, ""));
+            if ((event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        });
+
+        var settings = {
+            dateformat: '@System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower()',
+            urls: {
+                DataPrivacyAction: '@Url.Action("DataPrivacy")',
+                LoadFavoriteDataAction: '@Url.Action("LoadDataPrivacyFavorite")',
+                SaveFavoritesAction: '@Url.Action("SaveDataPrivacyFavorites")',
+                GetCustomerCaseFieldsAction: '@Url.Action("GetCustomerCaseFields")',
+                DeleteFavoriteAction: '@Url.Action("DeleteDataPrivacyFavorite")',
+                GetTaskProgressAction: '@Url.Action("GetTaskProgress", "GDPRProgress")',
+                GetRunningDataPrivacyTasksAction: '@Url.Action("GetRunningDataPrivacyTasks")'
+            },
+            translations:
+            {
+                dataPrivacyConfirmation: '@Translation.GetForJS("Är du säker på att du vill ersätta informationen i utvalda ärenden?")',
+                operationSuccessMessage: '@Translation.GetForJS("Klar")',
+                createNewFavorite: '@Translation.GetForJS("Skapa ny")',
+                favoritesUnlockWarning: '@Translation.GetForJS("Favoriten körs och kan därför ej ändras")',
+
+                //validation messages
+                SelectedCustomerIdRequired: '@Translation.GetForJS("Kund") @Translation.GetForJS("måste anges")',
+                FieldsNamesRequired: '@Translation.GetForJS("Fält") @Translation.GetForJS("måste anges")',
+                RegisterDateFromRequired: '@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")',
+                RegisterDateToRequired: '@Translation.GetForJS("Registreringsdatum") @Translation.GetForJS("måste anges")',
+                InvalidDateRange: '@Translation.GetForJS("Valt datumintervall är ogiltigt")',
+                MaxLength: '@Translation.GetForJS("Ange högst {0} tecken")'
+            },
+            confirmDialog: confirmationDialog
+        };
+
+        window.DataPrivacyForm.Init(settings);
+    });
+</script>

@@ -13,6 +13,27 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
 	public static class SelectExtensions
 	{
+	    public static List<SelectListItem> ToSelectList<K,V>(this IDictionary<K,V> dic, SelectListItem defaultItem = null)
+	    {
+	        if (dic == null)
+	            return null;
+
+            var listItems = new List<SelectListItem>();
+	        if (defaultItem != null)
+	        {
+	            listItems.Add(defaultItem);
+	        }
+
+	        listItems.AddRange(
+	            dic.Select(kv => new SelectListItem()
+	            {
+	                Value = kv.Key.ToString(),
+	                Text = kv.Value?.ToString() ?? string.Empty,
+	            }));
+
+	        return listItems;
+	    }
+
 		[SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "This is an appropriate nesting of generic types")]
 		public static MvcHtmlString ListBoxExtendedOptionsFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
 			Expression<Func<TModel, TProperty>> expression,

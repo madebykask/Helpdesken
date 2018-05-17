@@ -3,6 +3,7 @@ using System.Data;
 using System.Globalization;
 using DH.Helpdesk.BusinessData.Models.Case.CaseIntLog;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.BusinessData.Models.Email;
 using DH.Helpdesk.BusinessData.Models.ProductArea;
 using DH.Helpdesk.BusinessData.Models.Shared.Output;
 using DH.Helpdesk.BusinessData.Models.WorktimeCalculator;
@@ -65,7 +66,7 @@ namespace DH.Helpdesk.Services.Services
             string relatedCasesUserId = null,
             int[] caseIds = null);
 
-        List<CaseEmailSendOverview> GetUserEmailsForCaseSend(int customerId, string query, bool searchInWorkingGrs, bool searchInInitiators, bool searchInAdmins, bool searchInEmailGrs, bool isInternalLog = false);
+        IList<CaseEmailSendOverview> GetUserEmailsForCaseSend(int customerId, string query, IEmailSearchScope searchScope);
     }
 
     public class CaseSearchService : ICaseSearchService
@@ -111,15 +112,10 @@ namespace DH.Helpdesk.Services.Services
 
         #region GetUserEmailsForCaseSend
 
-        public List<CaseEmailSendOverview> GetUserEmailsForCaseSend(int customerId, string query, bool searchInWorkingGrs, bool searchInInitiators, bool searchInAdmins, bool searchInEmailGrs, bool isInternalLog = false)
+        public IList<CaseEmailSendOverview> GetUserEmailsForCaseSend(int customerId, string query, IEmailSearchScope searchScope)
         {
-            return _userEmailRepository.GetUserEmailsListForCaseSend(
-                customerId,
-                query, 
-                searchInWorkingGrs, 
-                searchInInitiators, 
-                searchInAdmins, searchInEmailGrs, 
-                isInternalLog);
+            var res = _userEmailRepository.GetUserEmailsListForCaseSend(customerId, query,  searchScope);
+            return res;
         }
 
         #endregion

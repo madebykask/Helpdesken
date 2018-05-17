@@ -62,5 +62,7 @@
             </div>
         </div>
     </div>
-    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />    
+    <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 }
+@Html.Partial("_Scripts", Model)

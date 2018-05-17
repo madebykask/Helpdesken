@@ -34,6 +34,9 @@ namespace DH.Helpdesk.Web.Infrastructure
 
         private readonly IMasterDataService _masterDataService;
 
+        // store settings for customer for all controller to use 
+        private Domain.Setting CurrentCustomerSettings { get; set; }
+
         #endregion
 
         #region Constructors and Destructors
@@ -67,30 +70,18 @@ namespace DH.Helpdesk.Web.Infrastructure
         //called after a controller action is executed, that is after ~/UserController/index 
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            this.SetMasterPageModel(filterContext);
-            this.AutoDetectTimeZoneMessageCheck();
+            if (!ControllerContext.HttpContext.Request.IsAjaxRequest())
+            {
+                    //do not use for ajax requests
+                this.SetMasterPageModel(filterContext);
+                this.AutoDetectTimeZoneMessageCheck();
+            }
 
             base.OnActionExecuted(filterContext);
         }
 
-        private void SetCurrentLoginMode()
-        {
-            if (SessionFacade.CurrentLoginMode == LoginMode.None)
-            {
-                var loginMode = LoginMode.Application; //default
-                var val = ConfigurationManager.AppSettings[AppSettingsKey.LoginMode];
-                if (!string.IsNullOrWhiteSpace(val))
-                {
-                    loginMode = (LoginMode)Enum.Parse(typeof(LoginMode), val, true);
-                }
-                SessionFacade.CurrentLoginMode = loginMode;
-            }
-        }
-
         private void SessionCheck(ActionExecutingContext filterContext)
         {
-            SetCurrentLoginMode();
-
             if (SessionFacade.CurrentUser != null)
             {
                 SessionFacade.CurrentCustomer =
@@ -104,6 +95,7 @@ namespace DH.Helpdesk.Web.Infrastructure
             var masterViewModel = new MasterPageViewModel();
             masterViewModel.Languages = this._masterDataService.GetLanguages();
             masterViewModel.SelectedLanguageId = SessionFacade.CurrentLanguageId;
+            masterViewModel.UserPermissions = _masterDataService.GetUserPermissions(SessionFacade.CurrentUser.Id);
 
             masterViewModel.GlobalSettings = this._masterDataService.GetGlobalSettings();
 
@@ -114,8 +106,7 @@ namespace DH.Helpdesk.Web.Infrastructure
             if (SessionFacade.CurrentCustomer != null)
             {
                 masterViewModel.SelectedCustomerId = SessionFacade.CurrentCustomer.Id;
-                masterViewModel.CustomerSetting =
-                    this._masterDataService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+                masterViewModel.CustomerSetting = GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
             }
             this.ViewData[Constants.ViewData.MasterViewData] = masterViewModel;
         }
@@ -136,6 +127,12 @@ namespace DH.Helpdesk.Web.Infrastructure
                 //_cache.GetTextTranslations();
                 //_cache.GetCaseTranslations();
             }
+        }
+
+        protected Domain.Setting GetCustomerSettings(int customerId)
+        {
+            var settings = _masterDataService.GetCustomerSettings(customerId);
+            return settings;
         }
 
         #region Protected Methods

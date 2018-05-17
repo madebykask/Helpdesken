@@ -9,6 +9,7 @@
             var trans_yes = '@Translation.GetForJS("Ja", Enums.TranslationSource.TextTranslation)';
             var trans_no = '@Translation.GetForJS("Nej", Enums.TranslationSource.TextTranslation)';
             var placeholder_text_multiple = '@Html.Raw(Translation.Get("Välj en eller flera"))';
+            var placeholder_text_single = '@Html.Raw(Translation.GetForJS("Välj ett av alternativen"))';
             var no_results_text = '@Translation.GetForJS("Inga resultat matchar")';
         </script>
         @Styles.Render("~/Content/css/popup")

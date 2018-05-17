@@ -15,7 +15,6 @@
     <!ENTITY data_global_linemanagersjobtitle SYSTEM "Data/Data_Global_LineManagersJobTitle.xml">
 
     <!--COMMON DATA-->
-    <!ENTITY data_country SYSTEM "Data/Data_Common_Country.xml">
     <!ENTITY data_common_servicerequestpriority SYSTEM "Data/Data_Common_ServiceRequestPriority.xml">
     <!ENTITY data_common_noyes SYSTEM "Data/Data_Common_NoYes.xml">
     <!ENTITY data_common_yesno SYSTEM "Data/Data_Common_YesNo.xml">
@@ -121,7 +120,7 @@
             <element type="select" name="ContractType" label="Contract type" formfieldidentifier="P0001.PERSG" HCMData="1" SortOrder="22">
               &data_change_contracttype;
             </element>
-            <element name="EmploymentPercentage" type="text" label="Employment percentage (%)" mandatory="1" defaultbyformfieldidentifier="0" formfieldidentifier="P0008.BSGRD" HCMData="1" SortOrder="23">
+            <element name="EmploymentPercentage" type="text" label="Employment percentage (%)" mandatory="1" helptext="When you choose contract type «Permanent» or «Seasonal co-worker» the employment percentage must be between 20 and 100%." defaultbyformfieldidentifier="0" formfieldidentifier="P0008.BSGRD" HCMData="1" SortOrder="23">
               <regex inherit="unsignednum" pattern="" message=""></regex>
               <regex inherit="num100" pattern="" message=""></regex>
             </element>

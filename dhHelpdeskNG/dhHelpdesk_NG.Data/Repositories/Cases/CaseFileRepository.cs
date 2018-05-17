@@ -18,7 +18,7 @@ using System;
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
         void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath);
         int GetCaseNumberForUploadedFile(int caseId);
-        CaseFileModel[] GetCaseFiles(int caseId, bool canDelete);
+        List<CaseFileModel> GetCaseFiles(int caseId, bool canDelete);
         List<CaseFile> GetCaseFilesByDate(DateTime? fromDate, DateTime? toDate);
         void DeleteFileViewLogs(int caseId);
     }
@@ -96,17 +96,15 @@ using System;
             int ret;
             var caseNo = (from c in this.DataContext.Cases
                           where c.Id == caseId
-                          select c.CaseNumber
-                        ).FirstOrDefault();
+                          select c.CaseNumber).FirstOrDefault();
 
             if (int.TryParse(caseNo.ToString(), out ret))
                 return ret;
             else
                 return caseId;
-
         }
 
-        public CaseFileModel[] GetCaseFiles(int caseId, bool canDelete)
+        public List<CaseFileModel> GetCaseFiles(int caseId, bool canDelete)
         {
             var entities = (from f in this.DataContext.CaseFiles
                             join u in this.DataContext.Users on f.UserId equals u.Id into uj
@@ -128,8 +126,7 @@ using System;
                                         f.FileName,
                                         f.CreatedDate,
                                         f.UserName,
-                                        canDelete))
-                                        .ToArray();
+                                        canDelete)).ToList();
         }
 
         public void DeleteFileViewLogs(int caseId)

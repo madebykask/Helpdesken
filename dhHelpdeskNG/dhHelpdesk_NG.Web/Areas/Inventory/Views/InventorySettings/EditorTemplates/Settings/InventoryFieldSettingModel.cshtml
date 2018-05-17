@@ -1,14 +1,16 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.InventoryDynamicFieldSettingViewModel
-<td>@Html.DropDownListFor(m => m.InventoryDynamicFieldSettingModel.InventoryTypeGroupId, Model.InventoryTypeGroups)
+<td>@Html.DropDownListFor(m => m.InventoryDynamicFieldSettingModel.InventoryTypeGroupId, Model.InventoryTypeGroups, new { @class = "inputw300" })
     @Html.HiddenFor(m => m.InventoryDynamicFieldSettingModel.Id)
 </td>
 <td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.Caption)</td>
 <td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.Position, new { style = "width:50px;" })</td>
-<td>@Html.DropDownListFor(x => x.InventoryDynamicFieldSettingModel.FieldType, Model.FieldTypes, new { @class = "inventory_field_type_class" })
+<td>@Html.DropDownListFor(x => x.InventoryDynamicFieldSettingModel.FieldType, Model.FieldTypes, new { @class = "inventory_field_type_class inputw300" })
 </td>
-<td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.PropertySize, new { @class = "inventory_property_size_class" })</td>
+<td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.PropertySize, new { @class = "inventory_property_size_class inputw50" })</td>
 <td>@Html.CheckBoxFor(m => m.InventoryDynamicFieldSettingModel.ShowInDetails, new { @class = "switchcheckbox" })</td>
-<td>@Html.CheckBoxFor(m => m.InventoryDynamicFieldSettingModel.ShowInList, new { @class = "switchcheckbox" })</td>
+<td>@Html.CheckBoxFor(m => m.InventoryDynamicFieldSettingModel.ShowInList, new {@class = "switchcheckbox"})</td>
+<td>@Html.TextBoxFor(m => m.InventoryDynamicFieldSettingModel.XMLTag)</td>
+<td>@Html.CheckBoxFor(m => m.InventoryDynamicFieldSettingModel.ReadOnly, new { @class = "switchcheckbox" })</td>
 <td>@Ajax.ActionLink(Translation.Get("Ta bort"), "DeleteDynamicSetting", new { id = Model.InventoryDynamicFieldSettingModel.Id, inventoryTypeId = Model.InventoryDynamicFieldSettingModel.InventoryTypeId }, new AjaxOptions { UpdateTargetId = "settings_container", OnSuccess = "updateForm(); onSettingsSavedSuccessfully();" }, new { @class = "btn" })
 </td>

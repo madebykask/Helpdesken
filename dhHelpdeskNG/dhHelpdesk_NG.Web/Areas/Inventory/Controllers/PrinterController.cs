@@ -116,10 +116,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                     SessionFacade.CurrentLanguageId, readOnly);
 
             PrinterViewModel printerEditModel = this.printerViewModelBuilder.BuildViewModel(model, options, settings);
-            printerEditModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
             printerEditModel.IsForDialog = dialog;
 
-            return this.View("Edit", printerEditModel);
+            var viewModel = new PrinterEditViewModel(id, printerEditModel)
+            {
+                UserHasInventoryAdminPermission = userHasInventoryAdminPermission,
+                IsForDialog = dialog
+            };
+
+            return this.View("Edit", viewModel);
         }
 
         [HttpPost]
@@ -198,14 +203,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         private InventoryGridModel CreateInventoryGridModel(PrinterSearchFilter filter)
         {
-            PrinterFieldsSettingsOverview settings =
+            var settings = 
                 this.inventorySettingsService.GetPrinterFieldSettingsOverview(
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
-            List<PrinterOverview> models =
+
+            var models =
                 this.inventoryService.GetPrinters(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
-            InventoryGridModel viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
+            var viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
             return viewModel;
         }
     }

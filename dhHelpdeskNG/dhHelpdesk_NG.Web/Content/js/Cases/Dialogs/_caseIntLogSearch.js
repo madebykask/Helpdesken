@@ -88,9 +88,9 @@
 
     popupIntLogInput.typeahead(getCasesIntLogEmailSearchOptions());
 
-    popupIntLogInput.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.keyCode === 32) {
+    popupIntLogInput.keypress(function (e) {
+        if (e.which === 13 || e.which === 186 ||
+            e.which === 59) {
             if (dialogType === 1) {
                 processEmails(e, popupIntLogInput, mainIntLogInputTo);
             }
@@ -101,7 +101,7 @@
     });
 
     popupIntLogInput.keydown(function (e) {
-        if (e.keyCode === 8 || e.keyCode === 46) {
+        if (e.which === 8 || e.which === 46) {
             if (dialogType === 1) {
                 onRemoveKeyDown(e, popupIntLogInput, mainIntLogInputTo);
             }
@@ -113,49 +113,58 @@
 
     popupIntLogInput.on('blur',
         function (e) {
-            processEmails(e, popupIntLogInput, dialogType === toType ? mainIntLogInputTo : mainIntLogInputCc);
+            var relatedTarget = e.relatedTarget || document.activeElement;
+            if ($(relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
+                processEmails(e, popupIntLogInput, dialogType === toType ? mainIntLogInputTo : mainIntLogInputCc);
+            }
         });
 
     fakeInputTo.typeahead(getCasesIntLogEmailSearchOptions());
 
-    fakeInputTo.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.keyCode === 32) {
+    fakeInputTo.keypress(function (e) {
+        if (e.which === 13 || e.which === 186 ||
+            e.which === 59) {
             processEmails(e, fakeInputTo, mainIntLogInputTo);
         }
     });
 
     fakeInputTo.keydown(function (e) {
         dialogType = toType;
-        if (e.keyCode === 8 || e.keyCode === 46) {
+        if (e.which === 8 || e.which === 46) {
             onRemoveKeyDown(e, fakeInputTo, mainIntLogInputTo);
         }
     });
 
-    fakeInputTo.on('focusout',
-        function(e) {
-            processEmails(e, fakeInputTo, mainIntLogInputTo);
+    fakeInputTo.on('blur',
+        function (e) {
+            var relatedTarget = e.relatedTarget || document.activeElement;
+            if ($(relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
+                processEmails(e, fakeInputTo, mainIntLogInputTo);
+            }
         });
 
     fakeInputCc.typeahead(getCasesIntLogEmailSearchOptions());
 
-    fakeInputCc.keydown(function (e) {
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.keyCode === 32) {
+    fakeInputCc.keypress(function (e) {
+        if (e.which === 13 || e.which === 186 ||
+            e.which === 59) {
             processEmails(e, fakeInputCc, mainIntLogInputCc);
         }
     });
 
     fakeInputCc.keydown(function (e) {
         dialogType = ccType;
-        if (e.keyCode === 8 || e.keyCode === 46) {
+        if (e.which === 8 || e.which === 46) {
             onRemoveKeyDown(e, fakeInputCc, mainIntLogInputCc);
         }
     });
 
-    fakeInputCc.on('focusout',
+    fakeInputCc.on('blur',
         function (e) {
-            processEmails(e, fakeInputCc, mainIntLogInputCc);
+            var relatedTarget = e.relatedTarget || document.activeElement;
+            if ($(relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
+                processEmails(e, fakeInputCc, mainIntLogInputCc);
+            }
         });
 
     function isNewEmail(newEmail, mainInput) {
@@ -164,12 +173,12 @@
     }
 
     function processEmails(e, fakeInput, mainInput) {
-        if (e.keyCode === 13 && searchSelected)
+        if (e.which === 13 && searchSelected)
             return;
         e.preventDefault();
         e.stopImmediatePropagation();
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            (e.type === 'focusout' && $(e.relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) || e.keyCode === 32) {
+        if (e.which === 13 || e.which === 186 ||
+            e.type === 'blur' || e.which === 59) {
             var emails = $(e.target).html();
             var arr = getEmailsFromHtml(emails);
             for (var i = 0; i < arr.length; i++) {
@@ -179,7 +188,7 @@
                 }
             }
             fakeInput.html(getHtmlFromEmails(mainInput.val()));
-            if (e.type !== 'focusout') placeCaretAtEnd(fakeInput);
+            if (e.type !== 'blur') placeCaretAtEnd(fakeInput);
         }
     }
 
@@ -235,8 +244,7 @@
                                 process(resultList);
                             }
                         });    
-                    },
-                    300);
+                    }, 300);
                 }
                 return;
             },
@@ -291,6 +299,9 @@
                     grType = document.parameters.wgLabel + ": ";
                 if (item.groupType === 3)
                     grType = document.parameters.emailLabel + ": ";
+                if (item.groupType === 4)
+                    grType = document.parameters.usersLabel + ": ";
+
                 var userId = item.userId != null ? item.userId + ' - ' : "";
                 var query = getSimpleQuery(this.query);
                 var result = item.name + " - " + userId + item.email + " - " + item.departmentname;

@@ -105,6 +105,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                     anonymus.Entity.Location),
                 anonymus.Entity.CreatedDate,
                 anonymus.Entity.ChangedDate,
+                anonymus.Entity.SyncChangedDate,
                 new StateFields(
                     !string.IsNullOrWhiteSpace(anonymus.UserFirstName)
                         ? new UserName(anonymus.UserFirstName, anonymus.UserSurName)
@@ -152,6 +153,7 @@ namespace DH.Helpdesk.Dal.Repositories.Printers.Concrete
                         x.Entity.Customer_Id,
                         x.Entity.CreatedDate,
                         x.Entity.ChangedDate,
+                        x.Entity.SyncChangedDate,
                         new BusinessData.Models.Inventory.Output.Printer.GeneralFields(
                         x.Entity.PrinterName,
                         x.Entity.Manufacturer,

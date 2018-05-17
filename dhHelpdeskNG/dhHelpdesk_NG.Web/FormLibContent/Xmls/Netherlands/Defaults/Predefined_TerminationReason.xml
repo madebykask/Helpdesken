@@ -19,7 +19,7 @@
     </dependent>
   <dependent>
         <selected>Resignation</selected>
-        <show>Resignation</show>
+        <show>Resignation,International Transfer Begins</show>
   </dependent>
   <dependent>
         <selected>Redundancy</selected>

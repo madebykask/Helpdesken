@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+
 namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
 {
     using System.Linq;
@@ -36,19 +38,42 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
                 return null;
             }
 
+            var causingPart = CreateCausingPartOverview(entity);
+            causingPart.Parent = entity.ParentId.HasValue ? CreateCausingPartOverview(entity.Parent) : null;
+            causingPart.Children = this.MapChildren(causingPart, entity.Children);
+
+            return causingPart;
+        }
+
+        private IList<CausingPartOverview> MapChildren(CausingPartOverview parent, IEnumerable<CausingPart> children)
+        {
+            var res = new List<CausingPartOverview>();
+            if (children != null && children.Any())
+            {
+                foreach (var entity in children)
+                {
+                    var item = CreateCausingPartOverview(entity);
+                    item.Parent = parent;
+                    item.Children = MapChildren(item, entity.Children);
+                    res.Add(item);
+                }
+            }
+            return res;
+        }
+
+        private CausingPartOverview CreateCausingPartOverview(CausingPart entity)
+        {
             return new CausingPartOverview
-                       {
-                           Id = entity.Id,
-                           Description = entity.Description,
-                           IsActive = entity.Status.ToBool(),
-                           Name = entity.Name,
-                           ParentId = entity.ParentId,
-                           CustomerId = entity.CustomerId,
-                           Parent = this.Map(entity.Parent),
-                           Children = entity.Children.Select(this.Map),
-                           CreatedDate = entity.CreatedDate,
-                           ChangedDate = entity.ChangedDate
-                       };
+            {
+                Id = entity.Id,
+                ParentId = entity.ParentId,
+                Description = entity.Description,
+                IsActive = entity.Status.ToBool(),
+                Name = entity.Name,
+                CustomerId = entity.CustomerId,
+                CreatedDate = entity.CreatedDate,
+                ChangedDate = entity.ChangedDate
+            };
         }
     }
 }

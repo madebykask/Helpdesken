@@ -315,7 +315,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Total records:</Value>
+                <Value>Total:</Value>
                 <Style />
               </TextRun>
             </TextRuns>

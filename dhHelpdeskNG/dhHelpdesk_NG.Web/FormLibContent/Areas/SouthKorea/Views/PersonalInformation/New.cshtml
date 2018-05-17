@@ -8,25 +8,17 @@
 
 @section Script {
     <script type="text/javascript">      
-
-        //$('#TECoWorker').change(function () {
-        //    $(".globalmobility").show();
-        //    if ($(this).val() == 'No')
-        //        $(".globalmobility").hide();
-        //});
-
+        var ect = new Ect();
 
         $(document).on('click', '#btnHomeAddress, #btnEmergencyAddress', function (e) {
             e.preventDefault();
 
             var prefix = $(this).attr('data-prefix');
-            document.getElementById(prefix + "Addressline1").value = document.getElementById('PermanentAddressLine1').value;
-            document.getElementById(prefix + "Addressline2").value = document.getElementById('PermanentAddressLine2').value;
-   
-            document.getElementById(prefix + "PostalCode").value = document.getElementById('PermanentPostalCode').value;
-            document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
-            document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
-
+            ect.copyValueFrom($('#PermanentAddressLine1'), $('#' + prefix + 'Addressline1'));
+            ect.copyValueFrom($('#PermanentAddressLine2'), $('#' + prefix + 'Addressline2'));
+            ect.copyValueFrom($('#PermanentPostalCode'), $('#' + prefix + 'PostalCode'));
+            ect.copyValueFrom($('#PermanentCity'), $('#' + prefix + 'City'));
+            ect.copyValueFrom($('#PermanentCountry'), $('#' + prefix + 'Country'));
         });
 
         validate.run($('#actionState').val());
@@ -96,3 +88,4 @@
     </div>
     <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />    
 }
+@Html.Partial("_Scripts", Model)

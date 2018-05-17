@@ -234,7 +234,7 @@
                         model.DailyReportOverviews = this.dailyReportService.GetDailyReportOverviews(customerIdsAll, module.NumberOfRows);
                         break;
                     case Module.Documents:
-                        model.DocumentOverviews = this.documentService.GetDocumentOverviews(customerIdsAll, module.NumberOfRows, true);
+                        model.DocumentOverviews = this.documentService.GetDocumentOverviews(customerIdsAll, module.NumberOfRows, true).OrderByDescending(d => d.ChangedDate);
                         break;
                     case Module.Faq:
                         model.FaqOverviews = this.faqService.GetFaqByCustomers(customerIdsAll, module.NumberOfRows, true);

@@ -1,4 +1,6 @@
-﻿using DH.Helpdesk.Domain;
+﻿using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+using DH.Helpdesk.Domain;
+using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Areas.Reports.Models.Reports;
 using DH.Helpdesk.Web.Infrastructure.Attributes;
 
@@ -56,7 +58,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
         private readonly ISettingService _customerSettingService;
 
-        private readonly IReportServiceService _ReportServiceService;
+        private readonly IReportServiceService _reportServiceService;
+
+        private readonly ICaseSectionService _caseSectionService;
 
         private const string _reportFolderName = "Reports";
 
@@ -74,7 +78,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             IPrintBuilder printBuilder,
             IExcelBuilder excelBuilder,
             IReportGeneratorModelFactory reportGeneratorModelFactory,
-            IReportServiceService reportServiceService)
+            IReportServiceService reportServiceService,
+            ICaseSectionService caseSectionService)
             : base(masterDataService)
         {
             this.reportModelFactory = reportModelFactory;
@@ -84,7 +89,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             this.excelBuilder = excelBuilder;
             this.reportGeneratorModelFactory = reportGeneratorModelFactory;
             this._customerSettingService = customerSettingService;
-            this._ReportServiceService = reportServiceService;
+            this._reportServiceService = reportServiceService;
+            _caseSectionService = caseSectionService;
 
             _reportTypeNames = new Dictionary<string, string>
             {
@@ -597,13 +603,17 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         public ReportGeneratorOptions TranslateReportFields(ReportGeneratorOptions reportOptions)
         {
             var translatedFields = new List<ItemOverview>();
-            foreach (ItemOverview f in reportOptions.Fields)
+            foreach (var f in reportOptions.Fields)
+            {
+                var sectionInfo = _caseSectionService.GetSectionInfoByField(f.Name);
+                var caseSectionName = sectionInfo != null ?  Translation.GetCoreTextTranslation(sectionInfo.DefaultName) : "";
+                var fieldName = string.IsNullOrWhiteSpace(caseSectionName) ? Translation.GetCoreTextTranslation(f.Name) : Translation.GetForCase(f.Name, SessionFacade.CurrentCustomer.Id);
                 translatedFields.Add(new ItemOverview
-                                            (
-                                                Translation.GetCoreTextTranslation(f.Name),
-                                                f.Value
-                                            ));
-
+                (
+                    fieldName,
+                    f.Value
+                ));
+            }
 
             var ret = new ReportGeneratorOptions
                             (
@@ -684,7 +694,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             var customerSettings = this._customerSettingService.GetCustomerSetting(customerId);
 
             var addOUToDep = (customerSettings != null && customerSettings.ShowOUsOnDepartmentFilter != 0) ? true : false;
-            var reportFilter = _ReportServiceService.GetReportFilter(customerId, curUserId, addOUToDep);
+            var reportFilter = _reportServiceService.GetReportFilter(customerId, curUserId, addOUToDep);
 
             var model = new ReportFilterModel()
             {
@@ -775,7 +785,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
         private ReportPresentationModel GetReportViewerData(string reportName, ReportSelectedFilter reportSelectedFilter)
         {
-            var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter, this.OperationContext.UserId,
+            var reportData = _reportServiceService.GetReportData(reportName, reportSelectedFilter, this.OperationContext.UserId,
                     OperationContext.CustomerId);
 
             ReportPresentationModel model = new ReportPresentationModel();

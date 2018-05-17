@@ -1,12 +1,14 @@
 ﻿using System;
+using DH.Helpdesk.Common.Enums.Cases;
 
 namespace DH.Helpdesk.BusinessData.Models.Case
 {
-     /*TODO: Needs refactoring */
+    /*TODO: Needs refactoring */
     public class ExtendedCaseFormModel
     {
         public int CaseId { get; set; }
         public int Id { get; set; }
+        public CaseSectionType SectionType { get; set; }
         public string Path { get; set; }
         public string Name { get; set; }
         public int UserRole { get; set; } //Case.Working group

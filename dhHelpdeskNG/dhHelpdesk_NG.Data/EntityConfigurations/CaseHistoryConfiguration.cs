@@ -44,8 +44,12 @@
 
 
             this.HasOptional(c => c.Problem)
-                              .WithMany()
-                              .HasForeignKey(c => c.Problem_Id);
+                            .WithMany()
+                            .HasForeignKey(c => c.Problem_Id);
+
+            this.HasOptional(c => c.Project)
+                            .WithMany()
+                            .HasForeignKey(c => c.Project_Id);
 
             this.HasRequired(x => x.CaseType)
                             .WithMany()
@@ -55,6 +59,11 @@
             this.HasOptional(x => x.ProductArea)
                             .WithMany()
                             .HasForeignKey(x => x.ProductArea_Id)
+                            .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.CausingPart)
+                            .WithMany()
+                            .HasForeignKey(x => x.CausingPartId)
                             .WillCascadeOnDelete(false);
 
             this.HasOptional(x => x.UserPerformer)
@@ -100,7 +109,7 @@
             this.Property(x => x.FinishingDescription).IsOptional().HasMaxLength(200);
             this.Property(x => x.FollowUpDate).IsOptional();
             this.Property(x => x.InventoryLocation).IsRequired().HasMaxLength(100);
-            this.Property(x => x.InventoryNumber).IsRequired().HasMaxLength(20);
+            this.Property(x => x.InventoryNumber).IsRequired().HasMaxLength(60);
             this.Property(x => x.InventoryType).IsRequired().HasMaxLength(50);
             this.Property(x => x.InvoiceNumber).IsRequired().HasMaxLength(50);
             this.Property(x => x.IpAddress).IsRequired().HasMaxLength(15);
@@ -122,7 +131,7 @@
             this.Property(x => x.SMS).IsRequired();
             this.Property(x => x.SolutionRate).IsOptional().HasMaxLength(10);
             this.Property(x => x.UserCode).IsOptional().HasMaxLength(50);
-            this.Property(x => x.Verified).IsRequired();
+            this.Property(x => x.Verified).IsOptional();
             this.Property(x => x.VerifiedDescription).IsOptional().HasMaxLength(200);
             this.Property(x => x.WatchDate).IsOptional();
             this.Property(x => x.CreatedDate).IsRequired();
@@ -135,6 +144,7 @@
             this.Property(x => x.LogFile).IsOptional();
             this.Property(x => x.CaseLog).IsOptional();
             this.Property(x => x.ClosingReason).IsOptional();
+            this.Property(x => x.CostCentre).IsOptional().HasMaxLength(50);
             this.Property(x => x.IsAbout_Persons_Name).IsOptional().HasMaxLength(50);
             this.Property(x => x.IsAbout_ReportedBy).IsOptional().HasMaxLength(40);
             this.Property(x => x.IsAbout_Persons_Phone).IsOptional().HasMaxLength(40);

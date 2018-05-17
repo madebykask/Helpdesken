@@ -37,6 +37,7 @@ namespace DH.Helpdesk.Dal.Mappers.Documents.EntityToBusinessModel
             return new DocumentOverview
                        {
                            CreatedDate = entity.CreatedDate,
+                           ChangedDate = entity.ChangedDate,
                            CustomerId = entity.Customer_Id,
                            Description = entity.Description,
                            Id = entity.Id,

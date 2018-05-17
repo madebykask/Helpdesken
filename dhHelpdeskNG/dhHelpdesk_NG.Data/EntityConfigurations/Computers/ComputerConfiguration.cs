@@ -72,7 +72,7 @@
 
             this.Property(x => x.ComputerGUID).IsRequired().HasMaxLength(100);
             this.Property(x => x.ComputerModelName).HasColumnName("ComputerModel").IsRequired().HasMaxLength(50);
-            this.Property(x => x.ComputerName).IsRequired().HasMaxLength(50);
+            this.Property(x => x.ComputerName).IsRequired().HasMaxLength(60);
             this.Property(x => x.Manufacturer).IsRequired().HasMaxLength(50);
             this.Property(x => x.SerialNumber).IsRequired().HasMaxLength(60);
             this.Property(x => x.BIOSVersion).IsRequired().HasMaxLength(30);
@@ -97,7 +97,6 @@
             this.Property(x => x.MonitorModel).IsRequired().HasMaxLength(50);
             this.Property(x => x.MonitorSerialnumber).IsRequired().HasMaxLength(50);
             this.Property(x => x.MonitorTheftMark).HasColumnName("MonitortheftMark").IsRequired().HasMaxLength(50);
-            this.Property(x => x.ComputerName).IsRequired().HasMaxLength(50);
 
             this.Property(x => x.ContractStartDate).IsOptional();
             this.Property(x => x.ContractEndDate).IsOptional();

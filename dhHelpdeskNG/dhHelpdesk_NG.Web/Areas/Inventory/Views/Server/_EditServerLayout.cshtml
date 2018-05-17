@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.Web.Areas.Inventory.Models
+﻿@using DH.Helpdesk.BusinessData.Enums.Inventory
+@using DH.Helpdesk.Web.Areas.Inventory.Models
 @using DH.Helpdesk.Web.Infrastructure
 @model BaseEditServerModel
 @{
@@ -28,8 +29,14 @@
                 @Html.ActionLink(Translation.GetCoreTextTranslation("Hotfix"), "HotFixes", "Server", new { serverId = Model.Id, dialog = Model.IsForDialog }, new { })
             </li>
             <li class="@GetIsActive(ServerEditTabs.OperationLog)">
-                @Html.ActionLink(Translation.GetCoreTextTranslation("Logg"), "Logs", "Server", new { serverId = Model.Id, dialog = Model.IsForDialog }, new { })
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Logg"), "Logs", "Server", new {serverId = Model.Id, dialog = Model.IsForDialog}, new {})
             </li>
+            @if (!Model.IsForDialog)
+            {
+                <li class="@GetIsActive(ServerEditTabs.Cases)">
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ärenden"), "RelatedCases", "Inventory", new { inventoryId = Model.Id, inventoryType = CurrentModes.Servers }, new { })
+                </li>
+            }
         </ul>
         <div class="tab-content overflow-visible">
             <div class="tab-pane tab-pane-border active">

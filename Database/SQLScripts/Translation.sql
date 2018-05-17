@@ -6362,21 +6362,6 @@ If not exists (select * from tblTextTranslation where text_id = 1876 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1876, 2, 'Employee')
 GO
 
-
-If not exists (select * from tbltext where id = 1875)
-	insert into tbltext (id, TextString) VALUES (1875, 'Denna kategori kan inte aktiveras, eftersom huvudnivån är inaktiv')
-GO
-If not exists (select * from tblTextTranslation where text_id = 1875 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1875, 2, 'This category can not be activated, because the main level is inactive')
-GO
-
-If not exists (select * from tbltext where id = 1876)
-	insert into tbltext (id, TextString) VALUES (1876, 'Antal svar')
-GO
-If not exists (select * from tblTextTranslation where text_id = 1876 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1876, 2, 'Number of answers')
-GO
-
 If not exists (select * from tbltext where id = 1877)
 	insert into tbltext (id, TextString) VALUES (1877, 'Är du säker på att du vill ta bort aktuell FAQ')
 GO
@@ -6810,6 +6795,417 @@ If not exists (select * from tblTextTranslation where text_id = 1931 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1931, 2, 'Limit permission to send orders for')
 GO
 
+If not exists (select * from tbltext where id = 1932)
+	insert into tbltext (id, TextString) VALUES (1932, 'Visa tid')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1932 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1932, 2, 'Show time')
+GO
 
+If not exists (select * from tbltext where id = 1933)
+	insert into tbltext (id, TextString) VALUES (1933, 'Visa övertid')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1933 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1933, 2, 'Show overtime')
+GO
+
+If not exists (select * from tbltext where id = 1934)
+	insert into tbltext (id, TextString) VALUES (1934, 'Visa Material')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1934 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1934, 2, 'Show Material')
+GO
+
+If not exists (select * from tbltext where id = 1935)
+	insert into tbltext (id, TextString) VALUES (1935, 'Visa Pris')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1935 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1935, 2, 'Show Price')
+GO
+
+If not exists (select * from tbltext where id = 1936)
+	insert into tbltext (id, TextString) VALUES (1936, 'Är du säker på att du vill ersätta informationen i utvalda ärenden?')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1936 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1936, 2, 'Are you sure you want to replace data in selected cases?')
+GO
+
+If not exists (select * from tbltext where id = 1937)
+	insert into tbltext (id, TextString) VALUES (1937, 'Endast avslutade ärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1937 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1937, 2, 'Closed cases only')
+GO
+
+If not exists (select * from tbltext where id = 1938)
+	insert into tbltext (id, TextString) VALUES (1938, 'Ärendehistorik')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1938 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1938, 2, 'Case history')
+GO
+
+If not exists (select * from tbltext where id = 1939)
+	insert into tbltext (id, TextString) VALUES (1939, 'Ta bort bifogade filer i ärenden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1939 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1939, 2, 'Remove attachments belonging to case')
+GO
+
+If not exists (select * from tbltext where id = 1940)
+	insert into tbltext (id, TextString) VALUES (1940, 'Ta bort bifogade filer i ärendeloggen')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1940 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1940, 2, 'Remove attachments belonging to log posts')
+GO
+
+If not exists (select * from tbltext where id = 1941)
+	insert into tbltext (id, TextString) VALUES (1941, 'Dataintegritet')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1941 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1941, 2, 'Data privacy')
+GO
+
+If not exists (select * from tbltext where id = 1942)
+	insert into tbltext (id, TextString) VALUES (1942, 'Ersätt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1942 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1942, 2, 'Replace')
+GO
+
+If not exists (select * from tbltext where id = 1943)
+	insert into tbltext (id, TextString) VALUES (1943, 'Ersätt data med')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1943 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1943, 2, 'Replace data with')
+GO
+
+If not exists (select * from tbltext where id = 1944)
+	insert into tbltext (id, TextString) VALUES (1944, 'Ersätt datum med')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1944 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1944, 2, 'Replace date with')
+GO
+
+If not exists (select * from tbltext where id = 1945)
+	insert into tbltext (id, TextString) VALUES (1945, 'Tillåt åtgärder för användare utan rättighet till denna kund')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1945 and Language_Id=2)
+  insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1945, 'Allow actions for users without permissions to this customer', 2)
+GO
+
+If not exists (select * from tbltext where id = 1946)
+	insert into tbltext (id, TextString) VALUES (1946, 'Flytta ärende till denna kund')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1946 and Language_Id=2)
+  insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1946, 'Move case to this customer', 2)
+GO
+
+If not exists (select * from tbltext where id = 1947)
+  insert into tbltext (id, TextString) VALUES (1947, 'Obs! Ärendet kommer att flyttas till kund som du saknar rättighet till. Du kommer inte åt ärendet efter flytten. Vill du flytta ärendet ändå, eller avbryta?')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1947 and Language_Id=2)
+  insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1947, 'Note: Case will be moved to customer without access rights for you. After move, you will not have access to the case. Do you want to move anyway, or cancel?', 2)
+GO
+
+If not exists (select * from tbltext where id = 1948)
+  insert into tbltext (id, TextString) VALUES (1948, 'Ärendet har ett kopplat Utökat ärende. Endast Ärendet kommer att flyttas.')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1948 and Language_Id=2)
+  insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1948, 'Case has linked Extended case. Only Case will be moved.', 2)
+GO
+
+If not exists (select * from tbltext where id = 1949)
+  insert into tbltext (id, TextString) VALUES (1949, 'Ärendet kan inte flyttas. Matchande ärendetyp eller standard ärendetyp kan inte hittas.')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1949 and Language_Id=2)
+  insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1949, 'Case can not be moved. No matching or default case type can be found.', 2)
+GO
+
+If not exists (select * from tbltext where id = 1950)
+  insert into tbltext (id, TextString) VALUES (1950, 'Ärendet har en relation, huvudärende/underärende. Ärendet kan inte flyttas till kund där behörighet saknas.')
+GO
+If not exists (select * from tblTextTranslation where Text_Id = 1950 and Language_Id=2)
+  insert into tblTextTranslation (Text_Id, TextTranslation, Language_Id) VALUES (1950, 'Case has parent/child relation. Case can not be moved to customer without user rights.', 2)
+GO
+
+
+If not exists (select * from tbltext where id = 1951)
+	insert into tbltext (id, TextString) VALUES (1951, 'Välj Favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1951 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1951, 2, 'Select Favorite')
+GO
+
+If not exists (select * from tbltext where id = 1952)
+	insert into tbltext (id, TextString) VALUES (1952, 'Bevarandeperiod')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1952 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1952, 2, 'Retention period')
+GO
+
+If not exists (select * from tbltext where id = 1953)
+	insert into tbltext (id, TextString) VALUES (1953, 'Räkna ut Registreringsdatum (Till)')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1953 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1953, 2, 'Calculate Registration date (To)')
+GO
+
+If not exists (select * from tbltext where id = 1954)
+	insert into tbltext (id, TextString) VALUES (1954, 'Ny/Redigera Favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1954 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1954, 2, 'New/Edit Favorite')
+GO
+
+If not exists (select * from tbltext where id = 1955)
+	insert into tbltext (id, TextString) VALUES (1955, 'Skapa Ny')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1955 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1955, 2, 'Create New')
+GO
+
+If not exists (select * from tbltext where id = 1956)
+	insert into tbltext (id, TextString) VALUES (1956, 'Ny Favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1956 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1956, 2, 'New favorite')
+GO
+
+If not exists (select * from tbltext where id = 1957)
+	insert into tbltext (id, TextString) VALUES (1957, 'Redigera favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1957 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1957, 2, 'Update favorite')
+GO
+
+If not exists (select * from tbltext where id = 1958)
+	insert into tbltext (id, TextString) VALUES (1958, 'Skriv in ett namn på din nya favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1958 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1958, 2, 'Enter a name for your new favorite')
+GO
+
+If not exists (select * from tbltext where id = 1959)
+	insert into tbltext (id, TextString) VALUES (1959, 'Redigera favorit eller ändra namn för att spara som en ny favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1959 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1959, 2, 'Update your favorite or change the name to save it as a new favorite')
+GO
+
+If not exists (select * from tbltext where id = 1960)
+	insert into tbltext (id, TextString) VALUES (1960, 'Favorit')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1960 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1960, 2, 'Favorite')
+GO
+if not exists (select * from tbltext where id = 1961)
+	insert into tbltext (id, TextString) values (1961, 'Spara i favoriter för att aktivera')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1961 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1961, 2, 'Save to favorites to enable')
+GO
+
+-- fixes required for dev. can be removed in the new sprint.
+UPDATE tblText Set TextString = 'Välj favorit' WHERE Id=1951;
+UPDATE tblText Set TextString = 'Skapa ny' WHERE Id=1955;
+UPDATE tblTextTranslation Set TextTranslation = 'Replace date with' WHERE Text_Id=1944 AND Language_Id=2;
+GO
+
+-- duplicate of 1936 ?
+If not exists (select * from tbltext where id = 1962)
+	insert into tbltext (id, TextString) VALUES (1962, 'Är du säker på att du vill ersätta informationen i utvalda ärenden?')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1962 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1962, 2, 'Are you sure you want to replace data in selected cases?')
+GO
+
+if not exists (select * from tbltext where id = 1963)
+	insert into tbltext (id, TextString) values (1963, 'Valt datumintervall är ogiltigt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1963 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1963, 2, 'Selected date range is invalid')
+GO
+
+-- SPRINT 11:
+if not exists (select * from tbltext where id = 1964)
+	insert into tbltext (id, TextString) values (1964, 'Ärendelogg')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1964 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1964, 2, 'Case log')
+GO
+
+if not exists (select * from tbltext where id = 1965)
+	insert into tbltext (id, TextString) values (1965, 'Utförd')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1965 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1965, 2, 'Executed')
+GO
+
+if exists (select * from tbltext where id = 1954)
+	update tbltext set TextString = N'Spara/uppdatera' where id = 1954
+GO
+If exists (select * from tblTextTranslation where text_id = 1954 and Language_Id = 2)
+	update tblTextTranslation set TextTranslation = N'Save/update' where Text_Id = 1954
+GO
+
+
+if not exists (select * from tbltext where id = 1966)
+	insert into tbltext (id, TextString) values (1966, 'Välj ett av alternativen')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1966 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1966, 2, 'Select one of the options')
+GO
+
+
+if not exists (select * from tbltext where id = 1967)
+	insert into tbltext (id, TextString) values (1967, 'Ta bort e-mail adresser i ärendelogg och historik')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1967 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1967, 2, 'Remove e-mail addresses in case log and history')
+GO
+
+if not exists (select * from tbltext where id = 1968)
+	insert into tbltext (id, TextString) values (1968, 'Datortyp beskrivning')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1968 and Language_Id = 2)
+     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1968, 2, 'Computer type description')
+GO
+
+UPDATE tblText Set TextString = 'Räkna ut registreringsdatum (till)' WHERE Id=1953;
+If exists (select * from tblTextTranslation where text_id = 1953 and Language_Id = 2)
+	update tblTextTranslation set TextTranslation = 'Calculate registration date (to)' where Text_Id = 1953
+GO
+
+UPDATE tblText Set TextString = 'Ta bort bifogade filer i ärendelogg' WHERE Id=1940;
+If exists (select * from tblTextTranslation where text_id = 1940 and Language_Id = 2)
+	update tblTextTranslation set TextTranslation = 'Remove attachments belonging to case log' where Text_Id = 1940
+GO
+
+If exists (select * from tblTextTranslation where text_id = 1951 and Language_Id = 2)
+	update tblTextTranslation set TextTranslation = 'Select favorite' where Text_Id = 1951
+GO
+
+If exists (select * from tblTextTranslation where text_id = 1955 and Language_Id = 2)
+	update tblTextTranslation set TextTranslation = 'Create new' where Text_Id = 1955
+GO
+
+if not exists (select * from tbltext where id = 1969)
+	insert into tbltext (id, TextString) values (1969, 'Sökväg')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1969 and Language_Id = 2)
+     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1969, 2, 'Path')
+GO
+
+If not exists (select * from tbltext where id = 1970)
+	insert into tbltext (id, TextString) VALUES (1970, 'Denna kategori kan inte aktiveras, eftersom huvudnivån är inaktiv')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1970 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1970, 2, 'This category can not be activated, because the main level is inactive')
+GO
+
+If not exists (select * from tbltext where id = 1971)
+	insert into tbltext (id, TextString) VALUES (1971, 'Antal svar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1971 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1971, 2, 'Number of answers')
+GO
+
+If not exists (select * from tbltext where id = 1972)
+	insert into tbltext (id, TextString) VALUES (1972, 'Integration - Anmälare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1972 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1972, 2, 'Integration - Initiator')
+GO
+
+If not exists (select * from tbltext where id = 1973)
+	insert into tbltext (id, TextString) VALUES (1973, 'Användaren har administratörsbehörighet till internt kontrakt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1973 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1973, 2, 'User has admin permission to Internal Contract')
+
+GO
+
+If not exists (select * from tbltext where id = 1974)
+	insert into tbltext (id, TextString) VALUES (1974, 'fältet är obligatoriskt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1974 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1974, 2, 'Field is required')
+
+GO
+
+If not exists (select * from tbltext where id = 1975)
+	insert into tbltext (id, TextString) VALUES (1975, 'Du måste ange ett svar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1975 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1975, 2, 'You have to type an answer')
+
+GO
+
+If not exists (select * from tbltext where id = 1976)
+	insert into tbltext (id, TextString) VALUES (1976, 'måste vara ett heltal')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1976 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1976, 2, 'must be an integer')
+
+GO
+
+If not exists (select * from tbltext where id = 1977)
+	insert into tbltext (id, TextString) VALUES (1977, 'Nytt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1977 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1977, 2, 'New')
+
+GO
+
+If not exists (select * from tbltext where id = 1978)
+	insert into tbltext (id, TextString) VALUES (1978, 'Favoriten körs och kan därför ej ändras')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1978 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1978, 2, 'The favorite is running and cannot be changed')
+GO
+
+If not exists (select * from tbltext where id = 1979)
+	insert into tbltext (id, TextString) VALUES (1979, 'före uppsägningsdatum')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1979 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1979, 2, 'before notice date')
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to close cases' WHERE Text_Id=1002 AND Language_Id=2;
+GO 
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to case templates' WHERE Text_Id=818 AND Language_Id=2;
+GO 
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to FAQ' WHERE Text_Id=1004 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to Calendar' WHERE Text_Id=1331 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Bulletin board' WHERE Text_Id=1017 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Document' WHERE Text_Id=1587 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Inventory' WHERE Text_Id=1598 AND Language_Id=2;
+GO
+
+update tbltext set TextString = 'Användaren har rättighet till avtal' where id = 1973
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to Contract' WHERE Text_Id=1973 AND Language_Id=2;
+GO
+
+update tbltext set TextString = 'Användaren har rättighet till aktuellt' where id = 1331
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to Calendar' WHERE Text_Id=1001 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to Invoice article' WHERE Text_Id=1724 AND Language_Id=2;
+GO
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
+

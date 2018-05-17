@@ -3,7 +3,6 @@
     var mainInput = $("#extraEmailsInput");
     var mainFakeInput = $("#fakeExtraEmailsInput");
     var popupInput = $("#extraEmailsModalInput");
-    var searchSelected = false;
 
     initEditableDiv();
 
@@ -60,19 +59,23 @@
     mainFakeInput.html(getHtmlFromEmails(mainInput.val()));
 
     mainFakeInput.typeahead(getUserSearchOptions(mainInput, mainFakeInput, popupInput));
-
-    mainFakeInput.keydown(function (e) {
-        if (e.keyCode === 8 || e.keyCode === 46) {
+    mainFakeInput.keydown(function(e) {
+        if (e.which === 8 || e.which === 46) {
             onRemoveKeyDown(e, mainFakeInput, mainInput);
         }
-        if (e.keyCode === 13 || e.keyCode === 186 || e.keyCode === 32) {
+    });
+
+    mainFakeInput.keypress(function (e) {
+        if (e.which === 13 || e.which === 186 ||
+            e.which === 59) {
             processEmails(e, mainFakeInput, mainInput);
         }
     });
 
-    mainFakeInput.on('focusout',
+    mainFakeInput.on('blur',
         function (e) {
-            if ($(e.relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
+            var relatedTarget = e.relatedTarget || document.activeElement;
+            if ($(relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
                 processEmails(e, mainFakeInput, mainInput);
             }
         });
@@ -80,17 +83,22 @@
     popupInput.typeahead(getUserSearchOptions(mainInput, mainFakeInput, popupInput));
 
     popupInput.keydown(function (e) {
-        if (e.keyCode === 8 || e.keyCode === 46) {
+        if (e.which === 8 || e.which === 46) {
             onRemoveKeyDown(e, popupInput, mainInput);
         }
-        if (e.keyCode === 13 || e.keyCode === 186 || e.keyCode === 32) {
+    });
+
+    popupInput.keypress(function(e) {
+        if (e.which === 13 || e.which === 186 ||
+            e.which === 59) {
             processEmails(e, popupInput, mainInput);
         }
     });
 
-    popupInput.on('focusout',
+    popupInput.on('blur',
         function (e) {
-            if ($(e.relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
+            var relatedTarget = e.relatedTarget || document.activeElement;
+            if ($(relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
                 processEmails(e, popupInput, mainInput);
             }
         });
@@ -121,12 +129,12 @@
     }
 
     function processEmails(e, fakeInput, mainInput) {
-        if (e.keyCode === 13 && searchSelected)
+        if (e.which === 13 && searchSelected)
             return;
         e.preventDefault();
         e.stopImmediatePropagation();
-        if (e.keyCode === 13 || e.keyCode === 186 ||
-            e.type === 'focusout' || e.keyCode === 32) {
+        if (e.which === 13 || e.which === 186 ||
+            e.type === 'blur' || e.which === 59) {
             var emails = $(e.target).html();
             var arr = getEmailsFromHtml(emails);
             for (var i = 0; i < arr.length; i++) {
@@ -136,19 +144,21 @@
                 }
             }
             fakeInput.html(getHtmlFromEmails(mainInput.val()));
-            if (e.type !== 'focusout') placeCaretAtEnd(fakeInput);
+            if (e.type !== 'blur') placeCaretAtEnd(fakeInput);
         }
     }
 
 
 }
 
+var searchSelected = false;
+
 function onRemoveKeyDown(e, fakeInput, mainInput) {
     e.stopImmediatePropagation();
     var text = mainInput.val();
     var email = getEmailsToRemove();
     if (email === "&nbsp;" || email.trim() === "") {
-        if (e.keyCode !== 46) {
+        if (e.which !== 46) {
             var arr = text.split(";");
             var lastEmail = arr[arr.length - 2];
             if (lastEmail) {
@@ -244,7 +254,7 @@ function getEmailsFromHtml(html) {
 function placeCaretAtEnd(node) {
     node[0].focus();
     var textNode = node[0].lastChild;
-    if (textNode) {
+    if (textNode && $(textNode).text().length) {
         var range = document.createRange();
         range.setStart(textNode, 1);
         range.setEnd(textNode, 1);
@@ -377,6 +387,9 @@ function getUserSearchOptions(mainInput, mainFakeInput, popupInput) {
                 grType = document.parameters.wgLabel + ": ";
             if (item.groupType === 3)
                 grType = document.parameters.emailLabel + ": ";
+            if (item.groupType === 4)
+                grType = document.parameters.usersLabel + ": ";
+
             var userId = item.userId != null ? item.userId + ' - ' : "";
             var query = getSimpleQuery(this.query);
             var result = item.name + " - " + userId + item.email + " - " + item.departmentname;

@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
+
 namespace DH.Helpdesk.Dal.Infrastructure
 {
     using System;
@@ -125,7 +128,12 @@ namespace DH.Helpdesk.Dal.Infrastructure
                     }
                 }
 
-                throw new Exception(sb.ToString());
+                throw new Exception(sb.ToString(), ex);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                throw;
             }
 
             foreach (var initializeAfterCommit in this.initializeAfterCommitActions)

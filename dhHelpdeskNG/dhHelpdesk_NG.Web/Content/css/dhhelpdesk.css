@@ -1115,6 +1115,14 @@ table th.thpointer {
             filter: alpha(opacity=75);
         }
 
+
+.w10 { width: 10% }
+.w15 { width: 15% }
+.w20 { width: 20% }
+.w30 { width: 30% }
+.w40 { width: 40% }
+.w50 { width: 50% }
+
 .tableform {
     width: 100%;
     margin-bottom: 10px;
@@ -1738,6 +1746,11 @@ table th.thpointer {
     -ms-border-radius: 3px;
     border-radius: 3px;
     line-height: 3;
+}
+
+#gdprTask {
+    width: 160px!important;
+    background-position: 128px center;
 }
 
 .error-msg,
@@ -3990,4 +4003,58 @@ th.sorting_disabled
     overflow-x: hidden;
     overflow-y: auto;
     direction: rtl;
+    text-align: left;
+}
+
+div.chosen-container.chosen-container-multi.error,
+div.chosen-container.chosen-container-single.error {
+    border: 1px solid #ff0000;
+    border-radius: 4px;
+    background-color: #ffeeee;
+}
+
+div.chosen-container.chosen-container-single.error .chosen-single {
+    background-color: #ffeeee;
+    background: -webkit-linear-gradient(top, #ffeeee 20%, #ffeeee 50%, #ffeeee 52%, #ffeeee 100%);
+}
+
+.dh-success {
+    background: #dff0d8;
+    border-color: #d6e9c6;
+    color: #3c763d;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.dh-error {
+    background: #f2dede;
+    border-color: #ebccd1;
+    color: #a94442;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+.dh-note {
+    font-weight: bold;
+    color: #a94442;
+}
+
+.lock-icon, .unlock-icon {
+    width: 20px !important;
+    height: 20px !important;
+    border: none;
+    display: inline-block;
+}
+
+.lock-icon {
+    background: url('/content/icons/lock.png');
+}
+
+.unlock-icon {
+    background: url('/content/icons/unlock.png');    
+}
+
+#tooltip-button-wrapper .btn[disabled] {
+    pointer-events: none;
 }

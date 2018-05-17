@@ -51,7 +51,7 @@
                            .HasForeignKey(c => c.ChangeByUser_Id)
                            .WillCascadeOnDelete(false);
 
-            this.HasRequired(c => c.Administrator)
+            this.HasOptional(c => c.Administrator)
                            .WithMany()
                            .HasForeignKey(c => c.Performer_User_Id)
                            .WillCascadeOnDelete(false);
@@ -104,7 +104,7 @@
             this.Property(x => x.FinishingDescription).IsOptional().HasMaxLength(200);
             this.Property(x => x.FollowUpDate).IsOptional();
             this.Property(x => x.InventoryLocation).IsRequired().HasMaxLength(100);
-            this.Property(x => x.InventoryNumber).IsRequired().HasMaxLength(20);
+            this.Property(x => x.InventoryNumber).IsRequired().HasMaxLength(60);
             this.Property(x => x.InventoryType).IsRequired().HasMaxLength(50);
             this.Property(x => x.InvoiceNumber).IsRequired().HasMaxLength(50);
             this.Property(x => x.IpAddress).IsOptional().HasMaxLength(15);
@@ -216,19 +216,19 @@
 			   .HasForeignKey(x => x.CurrentCaseSolution_Id)
 			   .WillCascadeOnDelete(false);
 
-			//this.Property(x => x.ActiveTab).IsOptional().HasMaxLength(100);
+            //this.Property(x => x.ActiveTab).IsOptional().HasMaxLength(100);
 
-			//this.HasMany(c => c.ExtendedCaseDatas)
-			//    .WithMany(ecd => ecd.Cases)                
-			//    .Map(m =>
-			// {
-			//     m.MapLeftKey("Case_Id");
-			//     m.MapRightKey("ExtendedCaseData_Id");
-			//     m.ToTable("tblCase_ExtendedCaseData");
-			// });
+            //this.HasMany(c => c.ExtendedCaseDatas)
+            //    .WithMany(ecd => ecd.Cases)                
+            //    .Map(m =>
+            // {
+            //     m.MapLeftKey("Case_Id");
+            //     m.MapRightKey("ExtendedCaseData_Id");
+            //     m.ToTable("tblCase_ExtendedCaseData");
+            // });
 
 
-			this.ToTable("tblcase");
+            this.ToTable("tblcase");
         }
     }
 }

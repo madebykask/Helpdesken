@@ -101,13 +101,6 @@
 <script>
 
     function changeFunctionsCallback() {
-
-
-        GetXML('predefined_function_jobtitleIE_outs.xml', setLineManagerDefault);
-
-        //setTimeout(function () { GetXML('predefined_function_department_linemanager_outs.xml', setLineManagerAndCostCentre); }, 1);
-
-
-        //setTimeout(function () { GetXML('predefined_function_jobtitleIE_outs.xml', setLineManagerJobTitle); }, 1);
+        ect.getRelations('Relation_Function_JobTitle.xml', '', $('#ServiceArea'), $('#JobTitle'));
     }
 </script>

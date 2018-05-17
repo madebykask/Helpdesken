@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.DisplayValues
 {
-    public sealed class StringDisplayValue : DisplayValue<string>
+    public class StringDisplayValue : DisplayValue<string>
     {
         public StringDisplayValue(string value)
             : base(value)
@@ -19,4 +19,6 @@
             return this.Value;
         }
     }
+
+
 }

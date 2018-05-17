@@ -15,6 +15,16 @@ namespace DH.Helpdesk.BusinessData.Models.CaseSolution
         public string CategoryName { get; set; }
         public bool IsRootTemplate { get; set; }
         public List<CaseTemplateNode> CaseTemplates { get; set; }
+
+        public static CaseTemplateCategoryNode CreateRoot(int id, string name)
+        {
+            return new CaseTemplateCategoryNode
+            {
+                CategoryId = id,
+                CategoryName = name,
+                IsRootTemplate = true
+            };
+        }
     }    
 
 }

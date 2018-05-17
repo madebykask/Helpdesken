@@ -11,14 +11,19 @@
 
 		}
 
-		public HelpdeskSqlServerDbContext(DbConnection connection) : base(connection)
-		{
+        public HelpdeskSqlServerDbContext(int timeout) : base()
+        {
+            Database.CommandTimeout = timeout;
+        }
 
+        public HelpdeskSqlServerDbContext(DbConnection connection) : base(connection)
+		{
 		}
+
         static HelpdeskSqlServerDbContext()
         {
             //  Database initialization strategies:
-            System.Data.Entity.Database.SetInitializer<HelpdeskSqlServerDbContext>(null);
+            Database.SetInitializer<HelpdeskSqlServerDbContext>(null);
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

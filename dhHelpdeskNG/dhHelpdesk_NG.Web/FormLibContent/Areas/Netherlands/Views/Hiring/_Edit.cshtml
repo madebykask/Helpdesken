@@ -101,7 +101,8 @@
 }
 <script>
     function changeBusinessUnitCallback() {
-        GetXML('Predefined_BusinessUnit_LineManager.xml', narrowDownBusinessUnitLineManager);
-        GetXML('Predefined_BusinessUnit_LocalJobTitle.xml', narrowDownBusinessUnitLocalJobTitle);
+        //var ect = new Ect();
+        ect.getRelations('Relation_BusinessUnit_LineManager.xml', '', $('#BusinessUnit'), $('#ReportsToLineManager'));
+        ect.getRelations('Relation_BusinessUnit_PositionTitle.xml', '', $('#BusinessUnit'), $('#LocalJobTitle'));
     }
 </script>

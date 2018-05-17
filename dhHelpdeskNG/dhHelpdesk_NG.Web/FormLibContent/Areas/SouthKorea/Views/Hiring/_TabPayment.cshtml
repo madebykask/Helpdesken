@@ -59,9 +59,6 @@
                     <td class="tdstrong">@Model.Label("AllowanceValidto")</td>
                     <td>@Model.Element("AllowanceValidto")</td>
                 </tr>
-
-
-
                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="allowance@(i.ToString())" id="allowance@(i.ToString())">
@@ -104,9 +101,7 @@
             </tbody>
         </table>
     </div>
-
     <div class="span6">
-
         <table class="table">
             <tbody>
                 <tr>
@@ -134,8 +129,6 @@
                     <td class="tdstrong">@Model.Label("DeductionValidto")</td>
                     <td>@Model.Element("DeductionValidto")</td>
                 </tr>
-
-
                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
@@ -147,12 +140,7 @@
                         <td class="tdstrong">@Model.Label("DeductionType" + i.ToString())</td>
                         <td>
                             @Model.Element("DeductionType" + i.ToString())</td>
-                    </tr>@*
-                    <tr class="deduction@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("DeductionsPaymentType" + i.ToString())</td>
-                        <td>
-                            @Model.Element("DeductionsPaymentType" + i.ToString())</td>
-                    </tr>*@
+                    </tr>
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionAmountUnits" + i.ToString())</td>
                         <td>
@@ -179,9 +167,6 @@
                         @Model.Element("Deductions")
                         <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
                 </tr>
-
-
-
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Bonus Eligibility")</h4>
@@ -207,6 +192,4 @@
             </tbody>
         </table>
     </div>
-
 </div>
-

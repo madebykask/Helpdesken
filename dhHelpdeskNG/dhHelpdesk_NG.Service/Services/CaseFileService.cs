@@ -22,7 +22,7 @@ namespace DH.Helpdesk.Services.Services
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
 
-        CaseFileModel[] GetCaseFiles(int caseId, bool canDelete);
+        List<CaseFileModel> GetCaseFiles(int caseId, bool canDelete);
         List<CaseFileDate> FindFileNamesAndDatesByCaseId(int caseId);
     }
 
@@ -83,7 +83,7 @@ namespace DH.Helpdesk.Services.Services
             this._caseFileRepository.DeleteByCaseIdAndFileName(caseId, basePath, fileName);  
         }
 
-        public CaseFileModel[] GetCaseFiles(int caseId, bool canDelete)
+        public List<CaseFileModel> GetCaseFiles(int caseId, bool canDelete)
         {
             return this._caseFileRepository.GetCaseFiles(caseId, canDelete);
         }

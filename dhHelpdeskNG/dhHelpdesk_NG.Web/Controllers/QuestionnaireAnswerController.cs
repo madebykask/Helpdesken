@@ -81,7 +81,10 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ViewResult QuestionnaireCompleted(int customerId, int languageId)
         {
-            var html = _infoService.GetInfoText(4, customerId, languageId).Name;
+            var html = "Thank you";
+            var infoText = _infoService.GetInfoText(4, customerId, languageId);
+            if (infoText != null)
+                html = infoText.Name;
             return View("QuestionnaireCompleted", model: html);
         }
     }

@@ -1,15 +1,12 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Shared.Input;
 using System;
 using System.Collections.Generic;
+using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.BusinessData.Models.CaseDocument
 {
     public class CaseDocumentModel: INewBusinessModel
     {
-        public CaseDocumentModel()
-        {
-        }
-
         public int Id { get; set; }
         public int CaseDocumentTemplate_Id { get; set; }
         public Guid CaseDocumentGUID { get; set; }
@@ -27,15 +24,14 @@ namespace DH.Helpdesk.BusinessData.Models.CaseDocument
         public DateTime ChangedDate { get; set; }
         public int? ChangedByUser_Id { get; set; }
 
-        //TODO: use model instead
-        public ICollection<DH.Helpdesk.Domain.CaseDocument_CaseDocumentParagraphEntity> CaseDocumentParagraphs { get; set; }
-        public DH.Helpdesk.Domain.CaseDocumentTemplateEntity CaseDocumentTemplate { get; set; }
+        public IList<CaseDocumentParagraphModel> CaseDocumentParagraphs { get; set; }
+
+        //todo: replace with model
+        public CaseDocumentTemplateEntity CaseDocumentTemplate { get; set; }
 
 
 		// Invalid Fields
 		public string Errors { get; set; }
     }
-
-
   
 }

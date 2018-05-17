@@ -35,6 +35,10 @@
                         (int)CaseRegistrationSource.Contract,
                         "Avtal"
                     },
+                    {
+                        (int)CaseRegistrationSource.Order,
+                        "Beställning"
+                    },
                 };
 
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;

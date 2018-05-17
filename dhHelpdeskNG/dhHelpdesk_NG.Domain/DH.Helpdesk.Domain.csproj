@@ -168,8 +168,16 @@
     <Compile Include="ExtendedCaseEntity\ExtendedCaseValue.cs" />
     <Compile Include="ExtendedCaseEntity\ExtendedCaseData.cs" />
     <Compile Include="ExtendedCaseEntity\ExtendedCaseForm.cs" />
+    <Compile Include="FormFieldValueHistory.cs" />
+    <Compile Include="GDPR\GDPRDataPrivacyAccess.cs" />
+    <Compile Include="GDPR\GDPRDataPrivacyFavorite.cs" />
+    <Compile Include="GDPR\GDPROperationsAudit.cs" />
+    <Compile Include="GDPR\GDPRTask.cs" />
+    <Compile Include="GDPR\Enums\GDPRTaskStatus.cs" />
     <Compile Include="Invoice\InvoiceArticleProductAreaEntity.cs" />
+    <Compile Include="Invoice\InvoiceChargeType.cs" />
     <Compile Include="Invoice\InvoiceStatus.cs" />
+    <Compile Include="Interfaces\IUserCommon.cs" />
     <Compile Include="LogFileExisting.cs" />
     <Compile Include="Mail2Ticket.cs" />
     <Compile Include="FormUrl.cs" />

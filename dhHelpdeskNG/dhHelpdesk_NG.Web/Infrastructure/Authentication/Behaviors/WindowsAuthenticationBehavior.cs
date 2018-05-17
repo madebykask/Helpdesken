@@ -21,9 +21,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
                 
                 //var initiator = _notifierRepository.GetInitiatorByUserId(userId, customerId, true);
 
-                userIdentity = new UserIdentity
+                userIdentity = new UserIdentity(userId)
                 {
-                    UserId = userId,
                     Domain = userDomain,
                     //FirstName = initiator?.FirstName,
                     //LastName = initiator?.LastName,

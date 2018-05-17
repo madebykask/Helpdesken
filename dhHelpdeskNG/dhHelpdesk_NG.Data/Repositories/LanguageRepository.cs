@@ -37,6 +37,9 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The <see cref="string"/>.
         /// </returns>
         string GetLanguageTextIdById(int languageId);
+        int GetLanguageIdByText(string languageName);
+
+
 
         /// <summary>
         /// The find active.
@@ -134,6 +137,11 @@ namespace DH.Helpdesk.Dal.Repositories
                             LanguageId = l.LanguageID,
                             Name = l.Name
                         });
+        }
+
+        public int GetLanguageIdByText(string languageName)
+        {
+            return this.DataContext.Languages.Find(languageName).Id;
         }
     }
 }

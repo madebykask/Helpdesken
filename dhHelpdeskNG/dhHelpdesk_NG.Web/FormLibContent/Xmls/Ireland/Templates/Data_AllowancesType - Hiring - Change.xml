@@ -4,7 +4,7 @@
   <option value="Car Allowance">Car Allowance</option>
   <option value="Cash Adjustment">Cash Adjustment</option>
   <option value="Commission">Commission</option>
-  <option value="Competance Pay">Competance Pay</option>
+  <option value="Competance Pay" disabled="1">Competance Pay</option>
   <option value="First Aid Allowance">First Aid Allowance</option>
   <option value="Fork Lift Truck Allowance">Fork Lift Truck Allowance</option>
   <option value="Housing Allowance">Housing Allowance</option>
@@ -12,7 +12,7 @@
   <option value="IKEA2 Skills">IKEA2 Skills</option>
   <option value="Kitchen Skills">Kitchen Skills</option>
   <option value="Mortgage Subsidy">Mortgage Subsidy</option>
-  <!--<option value="Night Shift">Night Shift</option>-->
+  <option value="Night Shift" disabled="1">Night Shift</option>
   <option value="NTG Double Housing">NTG Double Housing</option>
   <option value="NTG Housing Costs">NTG Housing Costs</option>
   <option value="NTG Relocation Allow">NTG Relocation Allow</option>

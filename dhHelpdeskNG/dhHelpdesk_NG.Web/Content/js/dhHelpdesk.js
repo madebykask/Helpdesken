@@ -291,13 +291,13 @@ function PluploadTranslation(languageId) {
     if (languageId == 1) {
         plupload.addI18n({
             'Select files': 'Välj filer',
-            'Add files to the upload queue and click start upload.': 'Lägg till filer till kön och tryck på lägg till.',
+            'Add files to the upload queue and click start upload.': 'Lägg till filer i kön och tryck på Ladda upp.',
             'Filename': 'Filnamn',
             'Status': 'Status',
             'Size': 'Storlek',
             'Add files': 'Lägg till filer',
-            'Add Files': 'Ladda upp',
-            'Start Upload': 'Lägg till',
+            'Add Files': 'Lägg till',
+            'Start Upload': 'Ladda upp',
             'Stop current upload': 'Stoppa uppladdningen',
             'Start uploading queue': 'Starta uppladdningen',
             'Drag files here.': 'Dra filer hit'
@@ -415,14 +415,6 @@ function NewNotifierEvent(id) {
 
         }
     }, 'json');
-}
-
-function moveCase(id) {
-    var customerId = $('#moveCaseToCustomerId').val();
-    if (customerId.length > 0) {
-        var url = '/cases/edit/' + id + '?moveToCustomerId=' + customerId;
-        window.location.href = url;
-    }
 }
 
 function copyCase(id, customerId) {
@@ -651,7 +643,81 @@ $(".chosen-select").chosen({
 
 $(".chosen-single-select").chosen({
     width: "315px",
-    'placeholder_text_multiple': placeholder_text_multiple,
+    'placeholder_text_single': placeholder_text_single,
     'no_results_text': no_results_text
 });
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// Button Dropdown Menu fixes
+function setDynamicDropDowns() {
+    var dynamicDropDownClass = '.DynamicDropDown';
+    var fixedArea = 90;
+    var pageSize = $(window).height() - fixedArea;
+    var scrollPos = $(window).scrollTop();
+    var elementToTop = $(dynamicDropDownClass).offset().top - scrollPos - fixedArea;
+    var elementToDown = pageSize - elementToTop;
+    if (elementToTop < -$(dynamicDropDownClass).height())
+        $(dynamicDropDownClass).removeClass('open');
+
+    if (elementToTop <= elementToDown) {
+        $(dynamicDropDownClass).removeClass('dropup');
+    } else {
+        $(dynamicDropDownClass).addClass('dropup');
+    }
+}
+
+function getObjectPosInView(objectId) {
+    var fixedArea = 90;
+    var pageSize = $(window).height() - fixedArea;
+    var scrollPos = $(window).scrollTop();
+    var elementToTop = $('#' + objectId).offset().top - scrollPos - fixedArea;
+    var elementToDown = pageSize - elementToTop;
+    return { ToTop: elementToTop, ToDown: elementToDown };
+}
+
+function dynamicDropDownBehaviorOnMouseMove(event) {
+    var target$ = $(event.target.parentElement);
+    if (target$ != undefined && target$.hasClass('DynamicDropDown_Up') && target$.index(0) !== -1) {
+        var objPos = getObjectPosInView(target$[0].id);
+        var subMenu$ = $('#subDropDownMenu_' + target$[0].id);
+        var targetPos = target$[0].getBoundingClientRect();
+
+        subMenu$.css({
+            bottom: "auto",
+            position: "fixed",
+            top: $(window).height() - objPos.ToDown + "px",
+            left: targetPos.left + target$.width() + "px",
+            'max-height': $(window).innerHeight() - objPos.ToDown + "px"
+        });
+
+        target$.children(".subddMenu").children(".dropdown-submenu").css("position", "static");
+
+        var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (isChrome) {
+            if (target$.parent().hasClass("parentddMenu") === false && subMenu$.get(0).scrollHeight <= subMenu$.innerHeight())
+                subMenu$.css("left", targetPos.left + target$.innerWidth() - target$.position().left + "px");
+        }
+
+        var submenuPos = subMenu$[0].getBoundingClientRect();
+        if ((submenuPos.top + submenuPos.height) > window.innerHeight) {
+            var offset = (submenuPos.top + submenuPos.height) - window.innerHeight;
+            if (offset > 0) {
+                var top = $(window).height() - objPos.ToDown - offset;
+                subMenu$.css("top", top);
+            }
+        }
+    }
+}
+/////////////////////////////////////////////////////////////////////////////////////////
+
+$.fn.checkUrlFileExists = function () {
+    "use strict";
+    var url = $(this)[0].href;
+    var http = new XMLHttpRequest();
+    http.open("HEAD", url, false);
+    http.send();
+    return http.status === 200;
+};
+
 

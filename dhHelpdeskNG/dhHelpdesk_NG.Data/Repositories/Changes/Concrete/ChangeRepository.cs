@@ -144,9 +144,17 @@
                     .ToList();
         }
 
-        public IList<ChangeEntity> GetChanges(int customer)
+        public IList<ChangeOverview> GetChanges(int customer)
         {
-            return (from w in this.DbContext.Set<ChangeEntity>() where w.Customer_Id == customer select w).ToList();
+            var query = from c in this.DbContext.Changes
+                        where c.Customer_Id == customer
+                        orderby c.OrdererName
+                        select new ChangeOverview()
+                        {
+                            Id = c.Id,
+                            ChangeTitle = c.ChangeTitle
+                        };
+            return query.ToList();
         }
 
         public SearchResult Search(SearchParameters parameters)

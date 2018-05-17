@@ -6,7 +6,7 @@
     using global::System;
     using global::System.Collections.Generic;
 
-    public class User : Entity, ICustomerEntity, IActiveEntity
+    public class User : Entity, ICustomerEntity, IActiveEntity, IUserCommon
     {
         public int AccountType { get; set; }
         public int ActivateCasePermission { get; set; }
@@ -26,6 +26,8 @@
         public int DocumentPermission { get; set; }
 
         public int InventoryPermission { get; set; }
+
+        public int ContractPermission { get; set; }
         /// <summary>
         /// Allows user to manage events in calendar    
         /// </summary>

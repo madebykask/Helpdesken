@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete
+﻿using DH.Helpdesk.BusinessData.Models.User;
+using DH.Helpdesk.Domain;
+using DH.Helpdesk.Services.Services;
+
+namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Common.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -42,6 +46,35 @@
                 workingGroupList,
                 workingGroupEmails,
                 administratorList);
+        }
+
+        public SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<CustomerUserInfo> users, Setting customerSetting,
+            IEmailGroupService emailGroupService, IWorkingGroupService workingGroupService, IEmailService emailService, bool includeAdmins = true)
+        {
+            var emailGroups = emailGroupService.GetEmailGroupsWithEmails(customerId);
+            var workingGroups = workingGroupService.GetWorkingGroupsWithActiveEmails(customerId, includeAdmins);
+            var administrators = new List<ItemOverview>();
+
+            if (users != null)
+            {
+                var filteredUsers =
+                    users.Where(u => u.IsActive == 1 && 
+                                     u.Performer == 1 && 
+                                     u.UserGroupId > 1 && // exclude users
+                                     emailService.IsValidEmail(u.Email) && 
+                                     !string.IsNullOrWhiteSpace(u.Email)).ToList();
+
+                administrators =
+                    customerSetting.IsUserFirstLastNameRepresentation == 1
+                        ? filteredUsers.OrderBy(it => it.FirstName)
+                            .ThenBy(it => it.SurName)
+                            .Select(u => new ItemOverview($"{u.FirstName} {u.SurName}", u.Email)).ToList()
+                        : filteredUsers.OrderBy(it => it.SurName)
+                            .ThenBy(it => it.FirstName)
+                            .Select(u => new ItemOverview($"{u.SurName} {u.FirstName}", u.Email)).ToList();
+            }
+
+            return Create(emailGroups, workingGroups, administrators);
         }
     }
 }

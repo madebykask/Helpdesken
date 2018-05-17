@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure
+﻿using DH.Helpdesk.BusinessData.Models.User;
+using DH.Helpdesk.BusinessData.Models.User.Interfaces;
+using DH.Helpdesk.Domain.Interfaces;
+
+namespace DH.Helpdesk.Web.Infrastructure
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -13,8 +17,18 @@
     {
         private static readonly string CURRENT_USER_ITEM_CAPTION = "Inloggad användare";
 
+        #region IdName
+
+        private class IdName
+        {
+            public string Id { get; set; }
+            public string Name { get; set; }
+        }
+
+        #endregion
+
         public static SelectList MapToSelectList(
-            this IEnumerable<User> userCollection,
+            this IEnumerable<IUserCommon> userCollection,
             Setting customerSettings,
             bool addEmpty = false,
             bool addCurrentUser = false)
@@ -41,7 +55,7 @@
 
             if (addCurrentUser)
             {
-                options.Insert(0, new IdName() { Id = "-1", Name = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION))});
+                options.Insert(0, new IdName() { Id = "-1", Name = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_ITEM_CAPTION)) });
             }
 
             if (addEmpty)
@@ -85,16 +99,8 @@
             return new SelectList(options, "Id", "Name");
         }
 
-        private class IdName
-        {
-            public string Id { get; set; }
-            
-            public string Name { get; set; }
-        }
-
-
         public static CustomSelectList MapToCustomSelectList(
-            this IEnumerable<User> userCollection,
+            this IEnumerable<IUserCommon> userCollection,
             string selectedItems,
             Setting customerSettings,
             bool addEmpty = false)
@@ -123,7 +129,7 @@
 
             if (addEmpty)
             {
-                list.Items.AddItem(new ListItem("0", string.Empty, true ));
+                list.Items.AddItem(new ListItem("0", string.Empty, true));
             }
 
             return list;

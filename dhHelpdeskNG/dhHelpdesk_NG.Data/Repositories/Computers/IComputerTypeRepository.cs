@@ -1,3 +1,5 @@
+using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
+
 namespace DH.Helpdesk.Dal.Repositories.Computers
 {
     using System.Collections.Generic;
@@ -15,5 +17,6 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
         void Update(ComputerModule businessModel);
 
         List<ItemOverview> FindOverviews(int customerId);
+        ComputerTypeOverview Get(int id);
     }
 }

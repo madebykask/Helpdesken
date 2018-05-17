@@ -87,8 +87,10 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
 
         private readonly IWorkingGroupService _workingGroupService;
 
+        private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
 
-		public OrdersService(
+
+        public OrdersService(
                 IUnitOfWorkFactory unitOfWorkFactory, 
                 IOrderFieldSettingsService orderFieldSettingsService, 
                 IWorkingGroupRepository workingGroupRepository, 
@@ -114,7 +116,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                 ICaseExtraFollowersService caseExtraFollowersService,
                 IPriorityService priorityService,
                 IMasterDataService masterDataService,
-                IWorkingGroupService workingGroupService)
+                IWorkingGroupService workingGroupService,
+                IRegistrationSourceCustomerService registrationSourceCustomerService)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _orderFieldSettingsService = orderFieldSettingsService;
@@ -142,6 +145,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
             _priorityService = priorityService;
             _masterDataService = masterDataService;
             _workingGroupService = workingGroupService;
+            _registrationSourceCustomerService = registrationSourceCustomerService;
         }
 
         public OrdersFilterData GetOrdersFilterData(int customerId, int userId, out int[] selectedStatuses)
@@ -525,6 +529,11 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                         var casetype = this._caseTypeRepository.GetAll().Where(x => x.Customer_Id == entity.Customer_Id && x.IsActive == 1).FirstOrDefault();
                         newCase.CaseType_Id = casetype.Id;                    //get another id
                     }
+
+                    var registrationSource = _registrationSourceCustomerService.GetCustomersActiveRegistrationSources(request.CustomerId)
+                            .FirstOrDefault(x => x.SystemCode == (int)CaseRegistrationSource.Order);
+                    if (registrationSource != null)
+                        newCase.RegistrationSourceCustomer_Id = registrationSource.Id;
 
                     if (!string.IsNullOrEmpty(entity.UserId))
                     {

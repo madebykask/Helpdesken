@@ -513,12 +513,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 				Text = Translation.Get("Prioritet", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Grunddata", Enums.TranslationSource.TextTranslation) + ")",
 				Value = "13",
 			});
+            _regularCase.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Påminnelse", Enums.TranslationSource.TextTranslation) + " (" + Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation) + ")",
+                Value = "17",
+            });
+            #endregion
 
-			#endregion
+            #region CaseSMS
 
-			#region CaseSMS
-
-			List<SelectListItem> _caseSMS = new List<SelectListItem>();
+            List<SelectListItem> _caseSMS = new List<SelectListItem>();
 
 			_caseSMS.Add(new SelectListItem()
 			{

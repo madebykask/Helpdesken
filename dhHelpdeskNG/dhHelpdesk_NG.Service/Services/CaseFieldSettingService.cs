@@ -25,6 +25,7 @@
         IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int languageId);
 
         CaseFieldSettingLanguage GetCaseFieldSettingLanguage(int id, int languageId);
+        IList<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettings(int customerId, int languageId);
     }
 
     public class CaseFieldSettingService : ICaseFieldSettingService
@@ -88,6 +89,11 @@
         public IList<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettingsWithLanguages(int? customerId, int languageId)
         {
             return this._caseFieldSettingLanguageRepository.GetAllCaseFieldSettingsWithLanguages(customerId, languageId).ToList();
+        }
+
+        public IList<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettings(int customerId, int languageId)
+        {
+            return this._caseFieldSettingLanguageRepository.GetAllCaseFieldSettings(customerId, languageId).ToList();
         }
 
         public IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int languageId)

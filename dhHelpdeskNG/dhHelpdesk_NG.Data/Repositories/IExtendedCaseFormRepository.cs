@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Cases
+﻿using System;
+
+namespace DH.Helpdesk.Dal.Repositories.Cases
 {
 	using System.Collections.Generic;
 	using DH.Helpdesk.Dal.Infrastructure;
@@ -8,16 +10,15 @@
 	using Common.Enums.Cases;
 
 	public interface IExtendedCaseFormRepository : IRepository<ExtendedCaseFormEntity>
-    {
-        ExtendedCaseFormModel GetExtendedCaseFormForCaseSolution(int caseSolutionId);
+	{
+	    Guid CreateExtendedCaseData(int formId, string userGuid);
 
-        IList<ExtendedCaseFormModel> GetExtendedCaseForm(int caseSolutionId, int customerId, int caseId, int userLanguageId, string userGuid, int caseStateSecondaryId, int caseWorkingGroupId, string extendedCasePath, int? userId, string userName, ApplicationType applicationType, int userWorkingGroupId);
+	    ExtendedCaseDataOverview GetExtendedCaseFormForCase(int caseId, int customerId);
+	    ExtendedCaseDataOverview GetExtendedCaseFormForSolution(int caseSolutionId, int customerId);
 
-		ExtendedCaseFormModel GetExtendedCaseSectionForm(int caseID, int customerID, CaseSectionType caseSection, int userLanguageId, string userGuid, int caseStateSecondaryId, int caseWorkingGroupId, int userWorkingGroupId, string extendedCasePath);
+        ExtendedCaseDataOverview GetCaseSectionExtendedCaseFormForCase(int caseId, int customerId);
+        ExtendedCaseDataOverview GetCaseSectionExtendedCaseFormForSolution(int caseSolutionId, int customerId, int sectionType);
+        List<ExtendedCaseDataOverview> GetExtendedCaseFormsForSections(int caseId, int customerId);
 
-		ExtendedCaseFormModel GetExtendedCaseSectionForm(int caseSolutionId, int customerId,
-													   int caseId, int caseSectionType, int userLanguageId, string userGuid,
-													   int caseStateSecondaryId, int caseWorkingGroupId,
-													   string extendedCasePath, int userWorkingGroupId);
-	}
+    }
 }

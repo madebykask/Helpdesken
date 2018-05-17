@@ -5,7 +5,6 @@
 @{
     const string Level = "Level 1";
 }
-
 <div class="tab-pane" id="Payment">
     <div class="span8">
         <table class="table">
@@ -42,7 +41,6 @@
                         @Model.Element("BasicPayChangeReason")
                     </td>
                 </tr>
-
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Allowances")</h4>
@@ -63,12 +61,6 @@
                         @Model.Element("AllowancesType")
                     </td>
                 </tr>
-@*                <tr>
-                    <td class="tdstrong">@Model.Label("AllowancesPaymentType")</td>
-                    <td>
-                        @Model.Element("AllowancesPaymentType")
-                    </td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesAmountUnits")</td>
                     <td>
@@ -81,12 +73,6 @@
                         @Model.Element("AllowancesPaidPer")
                     </td>
                 </tr>
-@*                <tr>
-                    <td class="tdstrong">@Model.Label("AllowancesNetGross")</td>
-                    <td>
-                        @Model.Element("AllowancesNetGross")
-                    </td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesValidFrom")</td>
                     <td>
@@ -99,7 +85,6 @@
                         @Model.Element("AllowancesValidTo")
                     </td>
                 </tr>
-
                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="allowance@(i.ToString())" id="allowance@(i.ToString())">
@@ -118,15 +103,8 @@
                         <td class="tdstrong">@Model.Label("AllowancesType" + i.ToString())</td>
                         <td>
                             @Model.Element("AllowancesType" + i.ToString())
-
                         </td>
                     </tr>
-                    @*
-                    <tr class="allowance@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("AllowancesPaymentType" + i.ToString())</td>
-                        <td>
-                            @Model.Element("AllowancesPaymentType" + i.ToString())</td>
-                    </tr>*@
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesAmountUnits" + i.ToString())</td>
                         <td>
@@ -137,12 +115,6 @@
                         <td>
                             @Model.Element("AllowancesPaidPer" + i.ToString())</td>
                     </tr>
-                    @*
-                    <tr class="allowance@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("AllowancesNetGross" + i.ToString())</td>
-                        <td>
-                            @Model.Element("AllowancesNetGross" + i.ToString())</td>
-                    </tr>*@
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesValidFrom" + i.ToString())</td>
                         <td>
@@ -159,13 +131,6 @@
                         @Model.Element("Allowances")
                         <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Allowance")</a></td>
                 </tr>
-
-                @*     </tbody>
-        </table>
-    </div>
-    <div class="span6">
-        <table class="table">
-            <tbody>*@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Deductions")</h4>
@@ -186,12 +151,6 @@
                         @Model.Element("DeductionsType")
                     </td>
                 </tr>
-@*                <tr>
-                    <td class="tdstrong">@Model.Label("DeductionsPaymentType")</td>
-                    <td>
-                        @Model.Element("DeductionsPaymentType")
-                    </td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsAmountUnits")</td>
                     <td>
@@ -204,12 +163,6 @@
                         @Model.Element("DeductedPer")
                     </td>
                 </tr>
-@*                <tr>
-                    <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
-                    <td>
-                        @Model.Element("DeductionsNetGross")
-                    </td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsValidFrom")</td>
                     <td>
@@ -222,7 +175,6 @@
                         @Model.Element("DeductionsValidTo")
                     </td>
                 </tr>
-
                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
@@ -240,12 +192,6 @@
                         <td>
                             @Model.Element("DeductionsType" + i.ToString())</td>
                     </tr>
-                    @*
-                    <tr class="deduction@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("DeductionsPaymentType" + i.ToString())</td>
-                        <td>
-                            @Model.Element("DeductionsPaymentType" + i.ToString())</td>
-                    </tr>*@
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsAmountUnits" + i.ToString())</td>
                         <td>
@@ -256,12 +202,6 @@
                         <td>
                             @Model.Element("DeductedPer" + i.ToString())</td>
                     </tr>
-                    @*
-                    <tr class="deduction@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("DeductionsNetGross" + i.ToString())</td>
-                        <td>
-                            @Model.Element("DeductionsNetGross" + i.ToString())</td>
-                    </tr>*@
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsValidFrom" + i.ToString())</td>
                         <td>
@@ -317,13 +257,10 @@
             </tbody>
         </table>
     </div>
-        <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
-
+    <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
 </div>
 
 <script>
-
-
     function setPaymentDatePickersBehavior() {
 
         $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
@@ -349,8 +286,6 @@
         $('#AllowancesValidFrom,#AllowancesValidFrom2,#AllowancesValidFrom3,#AllowancesValidFrom4,#AllowancesValidFrom5,' +
   '#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5').val(startDate);
     }
-
-    // setPaymentDatePickersBehavior();
 
     $('#date_ChangeValidFrom').on('changeDate', function (ev) {
         setPaymentDatePickersBehavior();
@@ -408,56 +343,11 @@
 
     function setDatePickerBehavior(id) {
         var input = $('#' + id);
-
-        //if (value == 'One Time') {
-        //    disableDatePicker(id);
-        //} else {
-        //    enableDatePicker(id);
-        //}
     }
 
     function setDefaultDatePickerBehavior(id) {
         var input = $('#' + id);
-
-        //if (value == 'One Time') {
-        //    disableDatePicker(id);
-        //} else {
-        //    setDefaultDate(id);
-        //}
     }
-
-    //$('#AllowancesPaymentType').change(function () {
-    //    setDatePickerBehavior('AllowancesValidTo');
-    //});
-    //setDefaultDatePickerBehavior('AllowancesValidTo');
-
-    ////$('#AllowancesPaymentType2').change(function () {
-    ////    setDatePickerBehavior('AllowancesValidTo2', $(this).val());
-    ////});
-    ////setDefaultDatePickerBehavior('AllowancesValidTo2', $('#AllowancesPaymentType2').val());
-
-    ////$('#AllowancesPaymentType3').change(function () {
-    ////    setDatePickerBehavior('AllowancesValidTo3', $(this).val());
-    ////});
-    ////setDefaultDatePickerBehavior('AllowancesValidTo3', $('#AllowancesPaymentType3').val());
-
-    //$('#DeductionsPaymentType').change(function () {
-    //    setDatePickerBehavior('DeductionsValidTo');
-    //});
-    //setDefaultDatePickerBehavior('DeductionsValidTo');
-
-    ////$('#DeductionsPaymentType2').change(function () {
-    ////    setDatePickerBehavior('DeductionsValidTo2', $(this).val());
-    ////});
-    ////setDefaultDatePickerBehavior('DeductionsValidTo2', $('#DeductionsPaymentType2').val());
-
-    ////$('#DeductionsPaymentType3').change(function () {
-    ////    setDatePickerBehavior('DeductionsValidTo3', $(this).val());
-    ////});
-    ////setDefaultDatePickerBehavior('DeductionsValidTo3', $('#DeductionsPaymentType3').val());
-
-
-
 
     function setOneIKEABonusLevel(value) {
         if (!value) {
@@ -475,11 +365,7 @@
     setOneIKEABonusLevel($('#JobTitle').val());
 
     $('#PayScaleGroup').change(function () {
-        //////////
-        //pay scale group change functon to set basic pay amount
-        //////////
         setBasicPayAmount();
-
     });
 
     $('#AllowancesType5').change(function () {
@@ -503,7 +389,6 @@
     });
 
     function setAllowanceType() {
-
         GetXML('predefined_allowancetype_units_payment_IE_outs.xml', setAllowanceTypeXML);
     }
 
@@ -524,10 +409,6 @@
     }
 
     function GetXML(xmlFile, url) {
-        //////////
-        //Gets XML File
-        //////////
-
         var path = window.location.protocol + '//';
         path = path + window.location.host + '/';
 
@@ -550,22 +431,14 @@
     }
 
     $('#PayrollCategory').change(function () {
-        //////////
-        //PAyroll category change function
-        //////////
         addPayScaleOnPayroll();
         setPayrollCategory();
-        //setBasicPayAmount();
         addDeductionTypes();
         addAllowanceTypes();
         setBasicPayAmount();
-
     });
 
     function setAllowanceTypeXML5(xml) {
-           //////////
-           //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
-           //////////
            var show = ''
            var show2 = ''
 
@@ -630,10 +503,6 @@
        }
 
     function setAllowanceTypeXML4(xml) {
-          //////////
-          //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
-          //////////
-
           var show = ''
           var show2 = ''
 
@@ -698,10 +567,6 @@
       }
 
     function setAllowanceTypeXML3(xml) {
-        //////////
-        //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
-        //////////
-
         var show = ''
         var show2 = ''
 
@@ -766,10 +631,6 @@
     }
 
     function setAllowanceTypeXML2(xml) {
-        //////////
-        //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
-        //////////
-
         var show = ''
         var show2 = ''
         if (document.getElementById('AllowancesAmountUnits2')) {
@@ -832,19 +693,12 @@
     }
 
     function setAllowanceTypeXML(xml) {
-        //////////
-        //Sets allowance type units from predefined_allowancetype_units_outs.XML based on Allowance type
-        //////////
-
         var show = ''
         var show2 = ''
         if (document.getElementById('AllowancesAmountUnits')) {
             document.getElementById('AllowancesAmountUnits').value = '';
         }
-        //document.getElementById('AllowancesAmountUnits').value = '';
-        //document.getElementById('AllowancesAmountUnits').value = '';
 
-        //AllowancesAmountUnits3
         if (document.getElementById('AllowancesNetGross')) {
             document.getElementById('AllowancesNetGross').value = '';
         }
@@ -856,11 +710,7 @@
             dep = document.getElementById('AllowancesType').value;
         }
 
-
-
         $(xml).find('dependent').each(function () {
-
-
             var $sel = $(this);
             show = '';
             show2 = '';

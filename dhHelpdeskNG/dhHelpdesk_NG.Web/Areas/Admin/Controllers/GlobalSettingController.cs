@@ -1,4 +1,19 @@
 ﻿
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+using DH.Helpdesk.BusinessData.Models.Gdpr;
+using DH.Helpdesk.BusinessData.Models.Grid;
+using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Common.Enums.Settings;
+using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Dal.Infrastructure.Context;
+using DH.Helpdesk.Domain.GDPR;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Models.Gdpr;
+
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System;
@@ -9,7 +24,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services;
+
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
 
@@ -24,6 +39,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ILanguageService _languageService;
         private readonly ITextTranslationService _textTranslationService;
         private readonly IWatchDateCalendarService _watchDateCalendarService;
+        private readonly ICustomerUserService _customerUserService;
+        private readonly ICaseFieldSettingService _caseFieldSettingService;
+        private readonly IGDPRDataPrivacyAccessService _gdprDataPrivacyAccessService;
+        private readonly IGDPROperationsService _gdprOperationsService;
+        private readonly IGDPRFavoritesService _gdprFavoritesService;
+        private readonly IUserContext _userContext;
+        private readonly IGDPRTasksService _gdprTasksService;
 
         public GlobalSettingController(
             IGlobalSettingService globalSettingService,
@@ -31,14 +53,29 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             ILanguageService languageService,
             ITextTranslationService textTranslationService,
             IWatchDateCalendarService watchDateCalendarService,
-            IMasterDataService masterDataService)
+            ICustomerUserService customerUserService,
+            ICaseFieldSettingService caseFieldSettingService,
+            ICaseService caseService,
+            IGDPROperationsService gdprOperationsService,
+            IGDPRDataPrivacyAccessService gdprDataPrivacyAccessService,
+            IMasterDataService masterDataService,
+            IGDPRFavoritesService gdprFavoritesService,
+            IGDPRTasksService gdprTasksService,
+            IUserContext userContext)
             : base(masterDataService)
         {
+            this._gdprTasksService = gdprTasksService;
+            this._gdprFavoritesService = gdprFavoritesService;
             this._globalSettingService = globalSettingService;
             this._holidayService = holidayService;
             this._languageService = languageService;
             this._textTranslationService = textTranslationService;
             this._watchDateCalendarService = watchDateCalendarService;
+            this._customerUserService = customerUserService;
+            this._caseFieldSettingService = caseFieldSettingService;
+            this._gdprDataPrivacyAccessService = gdprDataPrivacyAccessService;
+            this._userContext = userContext;
+            this._gdprOperationsService = gdprOperationsService;
         }
 
         public ActionResult Index(int texttypeid, string textSearch, int compareMethod)
@@ -130,11 +167,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 SessionFacade.ActiveTab = coll["activeTab"];
 
                return this.View(model);
-            
               
             }
-
-          
         }
 
         public ActionResult EditHoliday(int id, DateTime? holidayDate = null)
@@ -409,7 +443,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             SessionFacade.ActiveTab = coll["activeTab"];
             return this.RedirectToAction("index", "globalsetting", new { texttypeid = texttypeid, compareMethod = 1 });
         }
-
         
         private GlobalSettingIndexViewModel GetGSIndexViewModel( int holidayheaderid, int languageId, SearchOption searchOption)
         {
@@ -446,6 +479,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }
             }
 
+            var dataPrivacyAccess = _gdprDataPrivacyAccessService.GetByUserId(SessionFacade.CurrentUser.Id);
 
             var model = new GlobalSettingIndexViewModel
             {
@@ -460,17 +494,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 GridModel = gridModel,
                 TextTypes = this._textTranslationService.GetTextTypes().Select(x => new SelectListItem
                 {
-                    Text = Translation.Get(x.Name),
+                    Text = Translation.GetCoreTextTranslation(x.Name),
                     Value = x.Id.ToString()
                 }).ToList(),
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
-                    Text = Translation.Get(x.Name),
+                    Text = Translation.GetCoreTextTranslation(x.Name),
                     Value = x.Id.ToString()
                 }).ToList(),
                 HolidayHeaders = this._holidayService.GetHolidayHeaders().Select(x => new SelectListItem
                 {
-                    Text = x.Id == DEFAULT_HOLIDAYS_CALENDAR_ID ? string.Format("{0} ({1})", Translation.Get(x.Name), Translation.Get("standardkalender")) : Translation.Get(x.Name),
+                    Text = x.Id == DEFAULT_HOLIDAYS_CALENDAR_ID ? string.Format("{0} ({1})", Translation.GetCoreTextTranslation(x.Name), Translation.GetCoreTextTranslation("standardkalender")) : Translation.GetCoreTextTranslation(x.Name),
                     Value = x.Id.ToString()
                 }).ToList(),
                 WatchDateCalendars = this._watchDateCalendarService.GetAllWatchDateCalendars().Select(x => new SelectListItem
@@ -478,11 +512,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
+                HasDataPrivacyAccess = dataPrivacyAccess != null
             };
 
             model.SearchConditions = new List<SelectListItem>();
-            model.SearchConditions.Add(new SelectListItem { Text = Translation.Get("Börjar med"), Value = "1"});
-            model.SearchConditions.Add(new SelectListItem { Text = Translation.Get("Innehåller"), Value = "2"});
+            model.SearchConditions.Add(new SelectListItem { Text = Translation.GetCoreTextTranslation("Börjar med"), Value = "1"});
+            model.SearchConditions.Add(new SelectListItem { Text = Translation.GetCoreTextTranslation("Innehåller"), Value = "2"});
 
             ViewBag.SelectedSearchCondition = searchOption.CompareMethod.ToString();
 
@@ -500,7 +535,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 GlobalSetting = globalSetting,
                 Languages = this._languageService.GetLanguages().Select(x => new SelectListItem
                 {
-                    Text = Translation.Get(x.Name),
+                    Text = Translation.GetCoreTextTranslation(x.Name),
                     Value = x.Id.ToString()
                 }).ToList()
             };
@@ -1025,24 +1060,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return model;
         }
 
-        private Holiday returnWorkingHoursForNewSave(GlobalSettingHolidayViewModel viewModel)
-        {
-            var holiday = viewModel.Holiday;
-
-            if (viewModel.TimeFrom == 0)
-            {
-                holiday.TimeFrom = 0;
-                holiday.TimeUntil = 0;
-            }
-            else
-            {
-                holiday.TimeFrom = viewModel.TimeFrom;
-                holiday.TimeUntil = viewModel.TimeTil;
-            }
-
-            return holiday;
-        }
-
         public string ChangeHolidayHeader(int id)
         {
             var headerNameToChange = this._holidayService.GetHolidayHeader(id);
@@ -1053,13 +1070,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return headerNameToChange.Name;
         }
 
-        //public string ChangeHolidayList(int id)
-        //{
-        //    var list = this._holidayService.GetAll().Where(x => x.HolidayHeader_Id == id);
-        //    var str = this.RenderRazorViewToString("_HolidayList", list.ToList());
-
-        //    return str;
-        //}
 
         public string ChangeWatchDate(int id)
         {
@@ -1442,6 +1452,251 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             var res = new { Success = true };
             return Json(res);
+        }
+
+        public JsonResult LoadDataPrivacyFavorite(int id)
+        {
+            var data = _gdprFavoritesService.GetFavorite(id);
+            return Json(new { data }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteDataPrivacyFavorite(int id)
+        {
+            _gdprFavoritesService.DeleteFavorite(id);
+
+            var items = GetDataPrivacyFavorites();
+            return Json(new { Success = true, Favorites = items });
+        }
+
+        [HttpPost]
+        public JsonResult SaveDataPrivacyFavorites(GdprFavoriteModel model)
+        {
+            if (!ModelState.IsValid)
+                return Json(new {Success = false, Error = "Invalid parameters"});
+            
+            model.Id = _gdprFavoritesService.SaveFavorite(model, _userContext.UserId);
+            var items = GetDataPrivacyFavorites();
+            return Json(new {Success = true, FavoriteId = model.Id, Favorites = items});
+        }
+
+        private object GetDataPrivacyFavorites()
+        {
+            var favorites = _gdprFavoritesService.ListFavorites();
+            var items = favorites.ToSelectList().Select(x => new
+            {
+                value = x.Value,
+                text = x.Text
+            }).ToList();
+
+            return items;
+        }
+
+        [GdprAccess]
+        [ChildActionOnly]
+        public ActionResult DataPrivacy()
+        {
+            var model = GetDataPrivacyModel();
+            return View(model);
+        }
+        
+        [HttpPost]
+        [GdprAccess]
+        public ActionResult DataPrivacy(DataPrivacyParameters model)
+        {
+            SessionFacade.ActiveTab = "#fragment-6";
+            if (model.SelectedCustomerId > 0)
+            {
+                //schedule new data privacy job
+                var taskInfo = new GDPRTask
+                {
+                    CustomerId = model.SelectedCustomerId,
+                    UserId = _userContext.UserId,
+                    FavoriteId = model.SelectedFavoriteId ?? 0,
+                    AddedDate = DateTime.UtcNow,
+                    Status = GDPRTaskStatus.None
+                };
+
+                var taskId = _gdprTasksService.AddNewTask(taskInfo);
+                return Json(new { success = true, taskId = taskId });
+            }
+
+            return Json(new { success = false, taskId = 0 });
+        }
+
+        private DataPrivacyModel GetDataPrivacyModel()
+        {
+            var userAccess = _gdprDataPrivacyAccessService.GetByUserId(SessionFacade.CurrentUser.Id);
+            if (userAccess == null)
+                return new DataPrivacyModel();
+
+            var customers = _customerUserService.GetCustomerUsersForUser(SessionFacade.CurrentUser.Id);
+            var availableCustomers = customers.OrderBy(x => x.Customer.Name).Select(x => new SelectListItem
+            {
+                Value = x.Customer.Id.ToString(),
+                Text = x.Customer.Name
+            }).ToList();
+
+            var favorites = _gdprFavoritesService.ListFavorites();
+
+            var model = new DataPrivacyModel
+            {
+                IsAvailable = true,
+                Customers = availableCustomers,
+                Favorites = favorites.ToSelectList(new SelectListItem() { Value = "0", Text = Translation.GetCoreTextTranslation("Skapa ny") } )
+            };
+            return model;
+        }
+
+        [HttpGet]
+        public JsonResult GetRunningDataPrivacyTasks(int favoriteId)
+        {
+            var tasks = _gdprTasksService.GetPendingTasksByFavorite(favoriteId);
+            if (tasks.Any())
+            {
+                var taskIds = tasks.Select(t => t.Id).ToArray();
+                return Json(new { count = taskIds.Length, ids = taskIds }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { count = 0 }, JsonRequestBehavior.AllowGet);
+        }
+
+        [ChildActionOnly]
+        public PartialViewResult DataPrivacyHistory()
+        {
+            var customers = _gdprOperationsService.GetOperationAuditCustomers();
+            var model = new DataPrivacyHistoryViewModel
+            {
+                SelectedCustomerId = customers.Any() ? customers.First().Key : 0,
+                Customers = customers.ToSelectList()
+            };
+
+            return PartialView("_DataPrivacyHistory", model);
+        }
+
+        [GdprAccess]
+        [NoCache]
+        public JsonResult GetDataPrivacyHistoryTable(int? customerId)
+        {
+            var data = _gdprOperationsService.ListGdprOperationsAuditItems(customerId);
+
+            var closedText = Translation.GetCoreTextTranslation("Avslutade");
+            var openedText = Translation.GetCoreTextTranslation("Öppna");
+            var caseText = Translation.GetCoreTextTranslation("Ärende");
+            var logPostsText = Translation.GetCoreTextTranslation("Ärendelogg");
+
+            var model = new List<GdprOperationsHistoryListItem>();
+
+            //replace field names with field labels
+            foreach (var item in data)
+            {
+                var attachedFilesFormatted = new StringBuilder();
+                if (item.RemoveCaseAttachments)
+                    attachedFilesFormatted.AppendFormat(caseText);
+
+                if (item.RemoveLogAttachments)
+                    attachedFilesFormatted.AppendFormat(", {0}", logPostsText);
+
+                var formattedFields = item.Fields.Select(x => FormatFieldLabel(x, null, customerId ?? 0)).ToList();
+
+                var modelItem = new GdprOperationsHistoryListItem
+                {
+                    RegistrationDate = $"{item.RegDateFrom.Value.ToShortDateString()} - {item.RegDateTo.Value.ToShortDateString()}",
+                    Cases = item.ClosedOnly ? closedText : $"{closedText}, {openedText}",
+                    Data = formattedFields.Any() ? string.Join(", ", formattedFields) : "",
+                    AttachedFiles = attachedFilesFormatted.ToString().Trim(',').Trim(),
+                    Executed = item.ExecutedDate.ToString("yyyy-MM-dd HH:mm:ss")
+                };
+
+                model.Add(modelItem);
+            }
+
+            var viewPath = "~/Areas/Admin/Views/GlobalSetting/_DataPrivacyHistoryTable.cshtml";
+            var content = RenderRazorViewToString(viewPath, model);
+            return Json(new {Success = true, Content = content}, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult GetCustomerCaseFields(int? customerId)
+        {
+            if (customerId.HasValue && customerId > 0)
+            {
+                var exceptionList = new List<string>
+                {
+                    //GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString(),
+                    GlobalEnums.TranslationCaseFields.AddUserBtn.ToString(),
+                    GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString(),
+                    GlobalEnums.TranslationCaseFields.Filename.ToString(),
+                    "tblLog.Charge",
+                    "tblLog.Filename",
+                    GlobalEnums.TranslationCaseFields.FinishingDate.ToString(),
+                    GlobalEnums.TranslationCaseFields.Verified.ToString(), //mandatory
+                    GlobalEnums.TranslationCaseFields.SMS.ToString(),
+                    GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(),
+                    //GlobalEnums.TranslationCaseFields.User_Id.ToString(), //because included in registeredBy
+                    GlobalEnums.TranslationCaseFields.RegTime.ToString(),
+                    GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
+                    GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), //mandatory
+                    GlobalEnums.TranslationCaseFields.CaseNumber.ToString(),
+                    GlobalEnums.TranslationCaseFields.Customer_Id.ToString(),
+                    GlobalEnums.TranslationCaseFields.Cost.ToString()
+                };
+
+                var additionalFields = new List<CaseFieldSettingsWithLanguage>
+                {
+                    new CaseFieldSettingsWithLanguage
+                    {
+                        Label = Translation.GetCoreTextTranslation("Ändring"),
+                        Name = CaseSolutionFields.Change.ToString()
+                    },
+                    new CaseFieldSettingsWithLanguage()
+                    {
+                        Label = "SelfService - RegUser",
+                        Name = AdditionalDataPrivacyFields.SelfService_RegUser.ToString()
+                    }
+                };
+
+                var fields =
+                    _caseFieldSettingService.GetCaseFieldSettings(customerId.Value)
+                        .Where(f => FieldSettingsUiNames.Names.ContainsKey(f.Name) &&
+                                    !exceptionList.Any(o => o.Equals(f.Name, StringComparison.OrdinalIgnoreCase)))
+                        .Select(f => new CaseFieldSettingsWithLanguage
+                        {
+                            Name = f.Name
+                        }).ToList(); 
+
+                // add additional fields
+                fields.AddRange(additionalFields);
+
+                var data =
+                    fields.Select(f => new SelectListItem
+                    {
+                        Value = f.Name,
+                        Text = FormatFieldLabel(f.Name, f.Label, customerId.Value)
+                    })
+                    .OrderBy(f => f.Text)
+                    .ToList();
+                
+                return Json(new { success = true, data });
+            }
+
+            return Json(new { success = false });
+        }
+
+        private string FormatFieldLabel(string fieldName, string label, int customerId)
+        {
+            if (string.IsNullOrEmpty(label) && FieldSettingsUiNames.Names.ContainsKey(fieldName))
+            {
+                label = Translation.GetForCase(fieldName, customerId);
+            }
+
+            // prefix IsAbout section fields ony if they were translated
+            if (fieldName.IndexOf("IsAbout_", StringComparison.OrdinalIgnoreCase) != -1 && !string.IsNullOrEmpty(label))
+            {
+                var regardingHeader = Translation.GetCoreTextTranslation(CaseSections.RegardingHeader);
+                label = $"{regardingHeader} - {label}";
+            }
+
+            return string.IsNullOrEmpty(label) ? fieldName : label;
         }
     }
 }

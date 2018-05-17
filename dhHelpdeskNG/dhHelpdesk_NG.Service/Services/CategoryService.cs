@@ -9,14 +9,19 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Services.utils;
+    using CategoryOverview = DH.Helpdesk.BusinessData.Models.Case.CategoryOverview;
 
     public interface ICategoryService
     {
         IDictionary<string, string> Validate(Category categoryToValidate);
         IList<Category> GetCategories(int customerId);
         IList<Category> GetAllCategories(int customerId);
+        IList<CategoryOverview> GetParentCategoriesWithChildren(int customerId, bool activeOnly);
         IList<Category> GetActiveCategories(int customerId);
+
+        IList<CategoryOverview> GetActiveParentCategoriesOverviews(int customerId);
         IList<Category> GetActiveParentCategories(int customerId);
+
         Category GetCategory(int id, int customerId);
         Category GetCategoryById(int id);
         DeleteMessage DeleteCategory(int id);
@@ -96,10 +101,49 @@
             return this._categoryRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_Category_Id == null).OrderBy(x => x.Name).ToList();
         }
 
+        public IList<CategoryOverview> GetParentCategoriesWithChildren(int customerId, bool activeOnly)
+        {
+            var categories = _categoryRepository.GetCategoriesOverview(customerId, activeOnly);
+
+            var parentCategories = categories.Where(x => x.ParentId == null).OrderBy(x => x.Name).ToList();
+
+            foreach (var parent in parentCategories)
+            {
+                BuildCategoryChildTree(parent, categories);
+            }
+
+
+            return parentCategories;
+        }
+
+        private void BuildCategoryChildTree(CategoryOverview parent, IList<CategoryOverview> categories)
+        {
+            var childs = categories.Where(x => x.ParentId == parent.Id).OrderBy(x => x.Name).ToList();
+            if (childs.Any())
+            {
+                parent.SubCategories.AddRange(childs);
+                foreach (var child in childs)
+                {
+                    BuildCategoryChildTree(child, categories);
+                }
+            }
+        }
+
+        public IList<CategoryOverview> GetActiveParentCategoriesOverviews(int customerId)
+        {
+            return this.GetParentCategoriesWithChildren(customerId, true).ToList();
+        }
+
+        //todo: use overview method instead
         public IList<Category> GetActiveParentCategories(int customerId)
         {
-            return this._categoryRepository.GetMany(x => x.Customer_Id == customerId && x.Parent_Category_Id == null && x.IsActive == 1).OrderBy(x => x.Name).ToList();
-        }
+			return this._categoryRepository
+				.GetManyWithSubCategories(x => x.Customer_Id == customerId && x.IsActive == 1)
+				.OrderBy(x => x.Name)
+				.ToList()
+				.Where(x => x.Parent_Category_Id == null)
+				.ToList();
+		}
 
         public IList<Category> GetActiveCategories(int customerId)
         {

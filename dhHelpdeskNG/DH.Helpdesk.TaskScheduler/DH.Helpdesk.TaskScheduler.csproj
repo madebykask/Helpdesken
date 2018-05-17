@@ -53,6 +53,14 @@
       <HintPath>..\packages\CsvHelper.6.0.0\lib\net45\CsvHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -78,6 +86,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
@@ -91,21 +100,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\FileDownloader.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="DI\NinjectJobFactory.cs" />
+    <Compile Include="DI\Modules\DatabaseModule.cs" />
+    <Compile Include="DI\Modules\InfrastructureModule.cs" />
+    <Compile Include="DI\Modules\JobsModule.cs" />
+    <Compile Include="DI\Modules\NinjectJobFactory.cs" />
     <Compile Include="DI\NinjectSchedulerFactory.cs" />
-    <Compile Include="DI\QuartzNinjectModule.cs" />
-    <Compile Include="DI\ServiceModule.cs" />
+    <Compile Include="DI\Modules\QuartzNinjectModule.cs" />
+    <Compile Include="DI\Modules\ServiceModule.cs" />
+    <Compile Include="Dto\CompuerUsersFieldSetting.cs" />
+    <Compile Include="Dto\CsvInputData.cs" />
+    <Compile Include="Dto\DataLogModel.cs" />
+    <Compile Include="Dto\ImportInitiator_JobSettings.cs" />
     <Compile Include="Dto\JobSettings.cs" />
-    <Compile Include="Jobs\DailyReportJob.cs" />
-    <Compile Include="Jobs\SettingsTrackerJob.cs" />
-    <Compile Include="Managers\ServiceConfigurationManager.cs" />
+    <Compile Include="Enums\FieldLenght.cs" />
+    <Compile Include="Helpers\PropertyHelper.cs" />
+    <Compile Include="Infrastructure\Configuration\ApplicationSettingsProvider.cs" />
+    <Compile Include="Jobs\DailReport\DailyReportJobInitializer.cs" />
+    <Compile Include="Jobs\Gdpr\GdprDataPrivacyJob.cs" />
+    <Compile Include="Jobs\Gdpr\GdprJobInitializer.cs" />
+    <Compile Include="Jobs\Gdpr\GdprTasksManagerJob.cs" />
+    <Compile Include="Jobs\IJobInitializer.cs" />
+    <Compile Include="Jobs\Import\ImportJobInitializer.cs" />
+    <Compile Include="Jobs\Import\ImportInitiatorJob.cs" />
+    <Compile Include="Jobs\DailReport\DailyReportJob.cs" />
+    <Compile Include="Jobs\DailReport\SettingsTrackerJob.cs" />
+    <Compile Include="Infrastructure\Configuration\ServiceConfigurationManager.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ProjectInstaller.Designer.cs">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\ImportInitiatorService.cs" />
     <Compile Include="Services\DailyReportService.cs" />
     <Compile Include="TaskScheduler.cs">
       <SubType>Component</SubType>
@@ -142,9 +170,25 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
+      <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
+      <Name>DH.Helpdesk.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Data\DH.Helpdesk.Dal.csproj">
       <Project>{a8f6b7b8-8055-4bb7-82c4-85004f52e6ef}</Project>
       <Name>DH.Helpdesk.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Domain\DH.Helpdesk.Domain.csproj">
+      <Project>{5BD5F918-3BE4-474D-AC30-9DBD02FC385D}</Project>
+      <Name>DH.Helpdesk.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.DTO\DH.Helpdesk.BusinessData.csproj">
+      <Project>{c4520e52-cb9e-4fd6-bee9-92aa532685a2}</Project>
+      <Name>DH.Helpdesk.BusinessData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Service\DH.Helpdesk.Services.csproj">
+      <Project>{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}</Project>
+      <Name>DH.Helpdesk.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

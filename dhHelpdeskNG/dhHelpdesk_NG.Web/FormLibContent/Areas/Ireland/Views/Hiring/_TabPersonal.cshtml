@@ -3,7 +3,8 @@
 @using ECT.FormLib.Models;
 
 @{
-    const string IsTeWorker = "International Transfer";
+    const string IsTeWorker = "International Transfer (LTA, STA, Commuter)";
+    const string IsTeWorkerI = "International Relocation";
     const string DefaultCountry = "Ireland";
 }
 <div class="tab-pane" id="personal">
@@ -28,38 +29,6 @@
                     <td class="tdstrong">@Model.Label("ContactEMailAddress")</td>
                     <td>@Model.Element("ContactEMailAddress")</td>
                 </tr>
-
-                <!-- MAILING ADDRESS -->
-                @*<tr class="mailingaddress" id="mailingaddress">
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Mailing Address")
-                            <button class="btn btn-mini pull-right" id="btnMailingAddress" data-prefix="Mailing">
-                                <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from Permanent Address")
-                            </button>
-                        </h4>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("MailingAddressLine1")</td>
-                    <td>@Model.Element("MailingAddressLine1")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("MailingAddressLine2")</td>
-                    <td>@Model.Element("MailingAddressLine2")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("MailingPostalCode")</td>
-                    <td>@Model.Element("MailingPostalCode")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("MailingCity")</td>
-                    <td>@Model.Element("MailingCity")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("MailingCountry")</td>
-                    <td>@Model.Element("MailingCountry")</td>
-                </tr>*@
-
                 <!-- EMERGENCY ADDRESS -->
                 <tr class="emergencyaddress" id="emergencyaddress">
                     <td class="tdstrong" colspan="2">
@@ -98,8 +67,6 @@
                     <td class="tdstrong">@Model.Label("EmergencyContactRelationship")</td>
                     <td>@Model.Element("EmergencyContactRelationship")</td>
                 </tr>
-
-                <!-- FAMILY MEMBER / DEPENDENTS -->
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Family Member / Dependents")</h4>
@@ -125,8 +92,6 @@
                     <td class="tdstrong">@Model.Label("FamilyMemberDateOfBirth")</td>
                     <td>@Model.Element("FamilyMemberDateOfBirth")</td>
                 </tr>
-
-
                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="familyMember@(i.ToString())" id="familyMember@(i.ToString())">
@@ -160,18 +125,11 @@
                             @Model.Element("FamilyMemberDateOfBirth" + i.ToString())</td>
                     </tr>
                 }
-
                 <tr id="addFamilyMemberTrr">
                     <td colspan="2">
                         @Model.Element("FamilyMembers")
                         <a id="addFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another family member")</a></td>
                 </tr>
-
-
-
-
-
-                                <!-- Global Mobility Employee Documents -->
                 <tr class="globalmobility-first">
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Global Mobility - Employee Documents")</h4>
@@ -201,7 +159,6 @@
                     <td class="tdstrong">@Model.Label("EmployeeDocumentIssuePlaceCountry")</td>
                     <td>@Model.Element("EmployeeDocumentIssuePlaceCountry")</td>
                 </tr>
-
                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="employeeDocument@(i.ToString()) globalmobility" id="employeeDocument@(i.ToString())">
@@ -234,14 +191,11 @@
                         <td>@Model.Element("EmployeeDocumentIssuePlaceCountry" + i.ToString())</td>
                     </tr>
                 }
-
                 <tr class="globalmobility-first" id="addEmployeeDocumentTrr">
                     <td colspan="2">
                       @Model.Element("EmployeeDocuments")
                         <a id="addEmployeeDocument" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another employee documents")</a></td>
                 </tr>
-
-                <!-- Global Mobility Dependants -->
                 <tr class="globalmobility-first">
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Global Mobility - Dependants")</h4>
@@ -267,7 +221,6 @@
                     <td class="tdstrong">@Model.Label("DependantsDateOfBirth")</td>
                     <td>@Model.Element("DependantsDateOfBirth")</td>
                 </tr>
-
                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="dependantFamilyMember@(i.ToString()) globalmobility" id="dependantFamilyMember@(i.ToString())">
@@ -296,14 +249,11 @@
                         <td>@Model.Element("DependantsDateOfBirth" + i.ToString())</td>
                     </tr>
                 }
-
                 <tr class="globalmobility-first" id="addDependantFamilyMembersTrr">
                     <td colspan="2">
                         @Model.Element("DependantFamilyMembers")
                         <a id="addDependantFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another global mobility dependant")</a></td>
                 </tr>
-
-                <!-- Global Mobility Dependants Documents -->
                 <tr class="globalmobility-first">
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Global Mobility - Dependants Documents")</h4>
@@ -333,7 +283,6 @@
                     <td class="tdstrong">@Model.Label("DependantsDocumentIssuePlaceCountry")</td>
                     <td>@Model.Element("DependantsDocumentIssuePlaceCountry")</td>
                 </tr>
-
                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="globalMobilityDependantDocument@(i.ToString()) globalmobility" id="globalMobilityDependantDocument@(i.ToString())">
@@ -366,7 +315,6 @@
                         <td>@Model.Element("DependantsDocumentIssuePlaceCountry" + i.ToString())</td>
                     </tr>
                 }
-
                 <tr class="globalmobility-first" id="addGlobalMobilityDependantDocumentTrr">
                     <td colspan="2">
                         @Model.Element("DependantsDocuments")
@@ -378,7 +326,6 @@
     <div class="span6">
         <table class="table">
             <tbody>
-                <!-- Bank Account Details -->
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Bank Account Details")</h4>
@@ -438,8 +385,6 @@
                     <td class="tdstrong">@Model.Label("PPSNumber")</td>
                     <td>@Model.Element("PPSNumber")</td>
                 </tr>
-
-                <!-- Nationality / Language -->
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Nationality / Language")</h4>
@@ -454,13 +399,17 @@
                     <td>@Model.Element("Language")</td>
                 </tr>
                 <tr>
+                    <td class="tdstrong">@Model.Label("EthnicOrigin")</td>
+                    <td>@Model.Element("EthnicOrigin")</td>
+                </tr>
+                <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Country Specifics")</h4>
                     </td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("MaritalStatus")</td>
-                    <td>@Model.Element("MaritalStatus")</td>
+                    <td class="tdstrong">@Model.Label("CivilStatus")</td> <!--Changed from Marital to Civil WU #60213 -->
+                    <td>@Model.Element("CivilStatus")</td>
                 </tr>
 
                 <tr>
@@ -480,7 +429,6 @@
                     <td class="tdstrong">@Model.Label("DocumentCountryOfUse")</td>
                     <td>@Model.Element("DocumentCountryOfUse")</td>
                 </tr>
-
                 <tr>
                     <td class="tdstrong">@Model.Label("DocumentNO")</td>
                     <td>@Model.Element("DocumentNO")</td>
@@ -497,14 +445,11 @@
         </table>
     </div>
 </div>
-
 <script>
-
     $(function () {
-
         function setGlobalMobilityBehavior(value) {
 
-            if (!(value == '@IsTeWorker')) {
+            if (!(value == '@IsTeWorker' || value == '@IsTeWorkerI')) {
                 $("[class*=globalmobility]").hide();
                 $("[class*=globalmobility] input:not(input[type=hidden])").val("");
                 $("[class*=globalmobility] input[type=text][name*='Country']").val('@DefaultCountry');
@@ -517,7 +462,7 @@
 
         }
 
-            if (!($('#NewToIKEA').val() == '@IsTeWorker')) {
+        if (!($('#NewToIKEA').val() == '@IsTeWorker' || $('#NewToIKEA').val() == '@IsTeWorkerI')) {
                 $(".globalmobility-first").hide();
                 $(".globalmobility").hide();
             }
@@ -543,8 +488,6 @@
         }
     });
 
-
-
     function setTaxInformationBehavior(value)
     {
         if (value == 'P45 attached') {
@@ -560,8 +503,4 @@
     $('#TaxInformation').change(function () {
         setTaxInformationBehavior($(this).val());
     });
-
-   
-
-
 </script>

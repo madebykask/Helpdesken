@@ -12,7 +12,7 @@
         {
             HasKey(e => e.Id);
             Property(e => e.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            Property(e => e.CaseSolution_Id).IsRequired();
+            Property(e => e.CaseSolution_Id).IsOptional();
             Property(e => e.CaseSolutionConditionGUID).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             Property(e => e.Property_Name).IsRequired().HasMaxLength(100);
             Property(e => e.Values).IsRequired();
@@ -25,6 +25,11 @@
 
             Property(e => e.SortOrder).IsRequired();
             Property(e => e.Name).IsOptional().HasMaxLength(200);
+
+            HasOptional(c => c.CaseSolution)
+                .WithMany(cs => cs.Conditions)
+                .HasForeignKey(x => x.CaseSolution_Id)
+                .WillCascadeOnDelete(false);
 
             ToTable("tblCaseSolutionCondition");
         }

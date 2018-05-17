@@ -16,10 +16,10 @@
         }
 
         public int Id { get; set; }
-        public string Rule { get; set; } 
+        public string Rule { get; set; }
         public string Answer { get; set; }
-        
-     }
+
+    }
 
     public List<Tuple<int, string>> GetContentText(string Answer)
     {
@@ -39,16 +39,16 @@
         {
 
             case "permanent":
-                
-                Content4 = Model.Translate(Model.GetDocumentAnswer("PositionTitle", true));
+
+                Content4 = Model.GetDocumentAnswer("PositionTitle", true);
                 Content5 = Model.Translate(Model.GetDocumentAnswer("ContractStartDate", true));
 
-                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if PM.CS.1.1 = Kokk med Fagbrev, Kokk uten Fagbrev, Øvrig Restaurantarb. med Fagbrev, Øvrig Restaurantarb. uten Fagbrev, Under 20 år, Over 18 or Under 18
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee and if PM.CS.1.1 = Kokk med Fagbrev, Kokk uten Fagbrev, Øvrig Restaurantarb. med Fagbrev, Øvrig Restaurantarb. uten Fagbrev, Under 20 år, Over 18 or Under 18
                 if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() != "INDIVID".ToLower()){
                     Content16 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingsstørrelse: " + Model.Translate(Model.GetDocumentAnswer("EmploymentPercentage", true)) + " % stilling. Arbeidstiden følger den til enhver tid gjeldende arbeidstidsordning.</p>";
                 }
 
-                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and If PM.CS.1.1 PS Group = INDIVID and PM.CS.3.1 Overtime included in the salary? = No                
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee and If PM.CS.1.1 PS Group = INDIVID and PM.CS.3.1 Overtime included in the salary? = No                
                 if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "INDIVID".ToLower() && Model.GetDocumentAnswer("Overtime", false).ToLower() == "No".ToLower()){
                     Content16 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingsstørrelse: " + Model.Translate(Model.GetDocumentAnswer("EmploymentPercentage", true)) + " % stilling.</p>";
                     Content16 += "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingen er individuelt avlønnet og har rett til UB-tillegg og overtidsgodtgjørelse når overtid er pålagt av/avtalt med leder/jour. Arbeidstaker kan i stor grad planlegge gjennomføring av arbeidet. Det må påregnes uregelmessig arbeidstid i arbeidsforholdet.</p>";
@@ -62,8 +62,17 @@
                 //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker
                 Content17 = "<p style=\"page-break-inside: avoid;margin-top:0;\">I samråd med nærmeste overordnede og etter vedlagte jobb & kompetanseprofil / stillingsbeskrivelse. Arbeidstaker er kjent med at det kan bli nødvendig med omorganisering og omfordeling av arbeidsoppgavene. Arbeidstakerens arbeidsoppgaver kan således endres av arbeidsgiver. Arbeidsgiver har rett til å benytte arbeidstakeren til oppgaver i andre avdelinger. Dette gjelder også i en eventuell oppsigelsesperiode.</p>";
 
-                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes
-                if (!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()){
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes and Probation Length is equal to 1 month
+                //Added condition for probation length #58824
+                if ((!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && !string.IsNullOrEmpty(Model.GetAnswer("ProbationLength"))) && ((Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()) && (Model.GetDocumentAnswer("ProbationLength", true) == "1")))
+                {
+                    Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Den første måneden av ansettelsesforholdet er å anse som prøvetid med en gjensidig oppsigelsesfrist på 1 måned fra oppsigelsesdato. Dersom arbeidstaker er fraværende fra arbeidet i prøvetiden og fraværet skyldes den ansatte, kan arbeidsgiver forlenge den avtalte prøvetiden med en periode tilsvarende lengden av fraværet. Arbeidsgiver skal skriftlig orientere arbeidstaker om forlengelsen innen utløpet av prøvetiden.</p>";
+                }
+
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes and Probation Length > 1 month
+                //Added condition for probation length #58824
+                if ((!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && !string.IsNullOrEmpty(Model.GetAnswer("ProbationLength"))) && ((Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()) && (Model.GetDocumentAnswer("ProbationLength", true) != "1")))
+                {
                     Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">De første " + Model.Translate(Model.GetDocumentAnswer("ProbationLength", true)) + " månedene av ansettelsesforholdet er å anse som prøvetid med en gjensidig oppsigelsesfrist på 1 måned fra oppsigelsesdato. Dersom arbeidstaker er fraværende fra arbeidet i prøvetiden og fraværet skyldes den ansatte, kan arbeidsgiver forlenge den avtalte prøvetiden med en periode tilsvarende lengden av fraværet. Arbeidsgiver skal skriftlig orientere arbeidstaker om forlengelsen innen utløpet av prøvetiden.</p>";
                 }
 
@@ -71,33 +80,46 @@
                 if (!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "No".ToLower())
                     Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Ingen prøvetid.</p>";
 
-                Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Gjensidig oppsigelsestid etter endt prøvetid/ fast ansettelse er " + Model.Translate(Model.GetDocumentAnswer("NoticePeriod", true)) + " måneder regnet fra den 1. i påfølgende måned. Forøvrig viser vi til Arbeidsmiljølovens § 15-3 for lengre oppsigelsesfrister.</p>"
-                            + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Seasonal co-worker and OA.CS.18.2 Notice period = 1 month
+                //Added condition for notice period #58824
+                if (!string.IsNullOrEmpty(Model.GetAnswer("NoticePeriod")) && (Model.GetDocumentAnswer("NoticePeriod", true) == "1"))
+                {
+                    Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Gjensidig oppsigelsestid etter endt prøvetid/ fast ansettelse er " + Model.GetDocumentAnswer("NoticePeriod", true) + " måned regnet fra den 1. i påfølgende måned. Forøvrig viser vi til Arbeidsmiljølovens § 15-3 for lengre oppsigelsesfrister.</p>"
+                      + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+                }
+
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Seasonal co-worker and OA.CS.18.2 Notice period > 1 month
+                //Added condition for notice period #58824
+                if (!string.IsNullOrEmpty(Model.GetAnswer("NoticePeriod")) && (Model.GetDocumentAnswer("NoticePeriod", true) != "1"))
+                {
+                    Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Gjensidig oppsigelsestid etter endt prøvetid/ fast ansettelse er " + Model.GetDocumentAnswer("NoticePeriod", true) + " måneder regnet fra den 1. i påfølgende måned. Forøvrig viser vi til Arbeidsmiljølovens § 15-3 for lengre oppsigelsesfrister.</p>"
+                  + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+                }
 
                 Content28 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidstaker skal ved fratreden slette datafiler som han eller hun har lagret på sitt eget område. Arbeidstaker som har tilgang til mail, skal også slette mailer i sin mailbox.</p>";
-                
+
                 break;
 
             case "temporary":
 
-                Content4 = Model.Translate(Model.GetDocumentAnswer("PositionTitle", true));
+                Content4 = Model.GetDocumentAnswer("PositionTitle", true);
 
                 if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "INDIVID".ToLower() && Model.GetDocumentAnswer("Overtime", false).ToLower() == "No".ToLower())
                     Content5 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidet tiltres " + Model.GetDocumentAnswer("ContractStartDate", true) + " og varer til stillingsinnehaver igjen inntrer i arbeidet, eller fratre etter oppsigelse. Det forventes at stillingsinnehaver gjeninntrer i stillingen " + Model.GetDocumentAnswer("ContractEndDate", true) + ".</p>";
                 else
                     Content5 = string.Empty;
-                                               
+
                 if (!string.IsNullOrEmpty(Model.GetAnswer("MidlertidigKarakter")) && Model.GetDocumentAnswer("MidlertidigKarakter", false).ToLower() == "f".ToLower()){
                     Content5 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidet tiltres " + Model.GetDocumentAnswer("ContractStartDate", true) + " og varer til " + Model.GetDocumentAnswer("ContractEndDate", true) + ".<br/></p>" +
                                "<p style=\"page-break-inside: avoid;margin-top:0;\">Ansettelsen er av midlertidig karakter med bakgrunn i AML §14,9 bokstav f.</p>";
                 }
-              
+
                 if (!string.IsNullOrEmpty(Model.GetAnswer("MidlertidigKarakter")) && Model.GetDocumentAnswer("MidlertidigKarakter", false).ToLower() == "a".ToLower()){
                     Content5 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidet tiltres " + Model.GetDocumentAnswer("ContractStartDate", true) + " og varer til " + Model.GetDocumentAnswer("ContractEndDate", true) + ".<br/></p>" +
                                    "<p style=\"page-break-inside: avoid;margin-top:0;\">Ansettelsen er av midlertidig karakter med bakgrunn i AML §14,9 bokstav a grunnet (" + Model.Translate(Model.GetDocumentAnswer("ProjectName", true)) + ").</p>";
                 }
-                
-                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if PM.CS.1.1 = Kokk med Fagbrev, Kokk uten Fagbrev, Øvrig Restaurantarb. med Fagbrev, Øvrig Restaurantarb. uten Fagbrev, Under 20 år, Over 18 or Under 18
+
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee and if PM.CS.1.1 = Kokk med Fagbrev, Kokk uten Fagbrev, Øvrig Restaurantarb. med Fagbrev, Øvrig Restaurantarb. uten Fagbrev, Under 20 år, Over 18 or Under 18
                 if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() != "INDIVID".ToLower()){
                     Content16 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingsstørrelse: " + Model.Translate(Model.GetDocumentAnswer("EmploymentPercentage", true)) + " % stilling. Arbeidstiden følger den til enhver tid gjeldende arbeidstidsordning.</p>";
                 }
@@ -111,12 +133,21 @@
                 if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "INDIVID".ToLower() && Model.GetDocumentAnswer("Overtime", false).ToLower() == "Yes".ToLower()){
                     Content16 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingen er selvstendig med stor grad av mulighet til å påvirke arbeidsinnhold og arbeidsutførelse, jf arbeidsmiljølovens§ 10-12, og faller utenfor arbeidstidsbestemmelsene i arbeidsmiljølovens kap. 10 med unntak av § 10-2 første, andre og fjerde ledd. Arbeidstaker kan selv planlegge gjennomføring av arbeidet. Det må påregnes uregelmessig arbeidstid i arbeidsforholdet. Ulempen som følger av dette, er medtatt i lønnsgrunnlaget. Stillingen har ikke rett til overtidsgodtgjørelse. </p>";
                 }
-                
+
                 //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker
                 Content17 = "<p style=\"page-break-inside: avoid;margin-top:0;\">I samråd med nærmeste overordnede og etter vedlagte jobb & kompetanseprofil / stillingsbeskrivelse. Arbeidstaker er kjent med at det kan bli nødvendig med omorganisering og omfordeling av arbeidsoppgavene. Arbeidstakerens arbeidsoppgaver kan således endres av arbeidsgiver. Arbeidsgiver har rett til å benytte arbeidstakeren til oppgaver i andre avdelinger. Dette gjelder også i en eventuell oppsigelsesperiode.</p>";
 
-                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes
-                if (!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()){
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes and Probation Length is equal to 1 month
+                //Added condition for probation length #58824
+                if ((!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && !string.IsNullOrEmpty(Model.GetAnswer("ProbationLength"))) && ((Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()) && (Model.GetDocumentAnswer("ProbationLength", true) == "1")))
+                {
+                    Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Den første måneden av ansettelsesforholdet er å anse som prøvetid med en gjensidig oppsigelsesfrist på 1 måned fra oppsigelsesdato. Dersom arbeidstaker er fraværende fra arbeidet i prøvetiden og fraværet skyldes den ansatte, kan arbeidsgiver forlenge den avtalte prøvetiden med en periode tilsvarende lengden av fraværet. Arbeidsgiver skal skriftlig orientere arbeidstaker om forlengelsen innen utløpet av prøvetiden.</p>";
+                }
+
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes and Probation Length > 1 month
+                //Added condition for probation length #58824
+                if ((!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && !string.IsNullOrEmpty(Model.GetAnswer("ProbationLength"))) && ((Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()) && (Model.GetDocumentAnswer("ProbationLength", true) != "1")))
+                {
                     Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">De første " + Model.Translate(Model.GetDocumentAnswer("ProbationLength", true)) + " månedene av ansettelsesforholdet er å anse som prøvetid med en gjensidig oppsigelsesfrist på 1 måned fra oppsigelsesdato. Dersom arbeidstaker er fraværende fra arbeidet i prøvetiden og fraværet skyldes den ansatte, kan arbeidsgiver forlenge den avtalte prøvetiden med en periode tilsvarende lengden av fraværet. Arbeidsgiver skal skriftlig orientere arbeidstaker om forlengelsen innen utløpet av prøvetiden.</p>";
                 }
 
@@ -124,34 +155,48 @@
                 if (!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "No".ToLower()){
                     Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Ingen prøvetid.</p>";
                 }
-                Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Gjensidig oppsigelsestid etter endt prøvetid/ fast ansettelse er " + Model.Translate(Model.GetDocumentAnswer("NoticePeriod", true)) + " måneder regnet fra den 1. i påfølgende måned. Forøvrig viser vi til Arbeidsmiljølovens § 15-3 for lengre oppsigelsesfrister.</p>"
-                            + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Seasonal co-worker and OA.CS.18.2 Notice period = 1 month
+                //Added condition for notice period #58824
+                if (!string.IsNullOrEmpty(Model.GetAnswer("NoticePeriod")) && (Model.GetDocumentAnswer("NoticePeriod", true) == "1"))
+                {
+                    Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Gjensidig oppsigelsestid etter endt prøvetid/ fast ansettelse er " + Model.GetDocumentAnswer("NoticePeriod", true) + " måned regnet fra den 1. i påfølgende måned. Forøvrig viser vi til Arbeidsmiljølovens § 15-3 for lengre oppsigelsesfrister.</p>"
+                      + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+                }
+
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Seasonal co-worker and OA.CS.18.2 Notice period > 1 month
+                //Added condition for notice period #58824
+                if (!string.IsNullOrEmpty(Model.GetAnswer("NoticePeriod")) && (Model.GetDocumentAnswer("NoticePeriod", true) != "1"))
+                {
+                    Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Gjensidig oppsigelsestid etter endt prøvetid/ fast ansettelse er " + Model.GetDocumentAnswer("NoticePeriod", true) + " måneder regnet fra den 1. i påfølgende måned. Forøvrig viser vi til Arbeidsmiljølovens § 15-3 for lengre oppsigelsesfrister.</p>"
+                  + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+                }
 
                 Content28 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidstaker skal ved fratreden slette datafiler som han eller hun har lagret på sitt eget område. Arbeidstaker som har tilgang til mail, skal også slette mailer i sin mailbox.</p>";
-                
-                
+
+
                 break;
-                
+
             case "replacement":
 
                 if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "INDIVID".ToLower()){
-                Content4 = "Vikarierende, " + Model.Translate(Model.GetDocumentAnswer("PositionTitle", true)) + " ";
+                    Content4 = "Vikarierende, " + Model.GetDocumentAnswer("PositionTitle", true) + " ";
                 }
                 else{
                     if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() != "INDIVID".ToLower()){
-                    Content4 = "Vikarierende medarbeider ";
+                        Content4 = "Vikarierende medarbeider ";
                     }
                 }
                 Content4 += "For " + Model.Translate(Model.GetDocumentAnswer("PersonReplaced", true));
 
                 Content5 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidet tiltres " + Model.GetDocumentAnswer("ContractStartDate", true) + " og varer til stillingsinnehaver igjen inntrer i arbeidet, eller fratreretter oppsigelse. Det forventes at stillingsinnehaver gjeninntrer i stillingen " + Model.GetDocumentAnswer("ContractEndDate", true) + ".<br/>" + "Ansettelsen er av midlertidig karakter med bakgrunn i AML §14,9 bokstav b.</p>";
 
-                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if PM.CS.1.1 = Kokk med Fagbrev, Kokk uten Fagbrev, Øvrig Restaurantarb. med Fagbrev, Øvrig Restaurantarb. uten Fagbrev, Under 20 år, Over 18 or Under 18
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee and if PM.CS.1.1 = Kokk med Fagbrev, Kokk uten Fagbrev, Øvrig Restaurantarb. med Fagbrev, Øvrig Restaurantarb. uten Fagbrev, Under 20 år, Over 18 or Under 18
                 if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() != "INDIVID".ToLower()){
                     Content16 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingsstørrelse: " + Model.Translate(Model.GetDocumentAnswer("EmploymentPercentage", true)) + " % stilling. Arbeidstiden følger den til enhver tid gjeldende arbeidstidsordning.</p>";
                 }
 
-                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and If PM.CS.1.1 PS Group = INDIVID and PM.CS.3.1 Overtime included in the salary? = No                
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee and If PM.CS.1.1 PS Group = INDIVID and PM.CS.3.1 Overtime included in the salary? = No                
                 if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "INDIVID".ToLower() && Model.GetDocumentAnswer("Overtime", false).ToLower() == "No".ToLower()){
                     Content16 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingsstørrelse: " + Model.Translate(Model.GetDocumentAnswer("EmploymentPercentage", true)) + " % stilling.</p>";
                     Content16 += "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingen er individuelt avlønnet og har rett til UB-tillegg og overtidsgodtgjørelse når overtid er pålagt av/avtalt med leder/jour. Arbeidstaker kan i stor grad planlegge gjennomføring av arbeidet. Det må påregnes uregelmessig arbeidstid i arbeidsforholdet.</p>";
@@ -161,13 +206,21 @@
                 if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "INDIVID".ToLower() && Model.GetDocumentAnswer("Overtime", false).ToLower() == "Yes".ToLower()){
                     Content16 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingen er selvstendig med stor grad av mulighet til å påvirke arbeidsinnhold og arbeidsutførelse, jf arbeidsmiljølovens§ 10-12, og faller utenfor arbeidstidsbestemmelsene i arbeidsmiljølovens kap. 10 med unntak av § 10-2 første, andre og fjerde ledd. Arbeidstaker	kan selv planlegge gjennomføring av arbeidet. Det må påregnes uregelmessig arbeidstid i arbeidsforholdet. Ulempen som følger av dette, er medtatt i lønnsgrunnlaget. Stillingen har ikke rett til overtidsgodtgjørelse. </p>";
                 }
-                
+
                 //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker
                 Content17 = "<p style=\"page-break-inside: avoid;margin-top:0;\">I samråd med nærmeste overordnede og etter vedlagte jobb & kompetanseprofil / stillingsbeskrivelse. Arbeidstaker er kjent med at det kan bli nødvendig med omorganisering og omfordeling av arbeidsoppgavene. Arbeidstakerens arbeidsoppgaver kan således endres av arbeidsgiver. Arbeidsgiver har rett til å benytte arbeidstakeren til oppgaver i andre avdelinger. Dette gjelder også i en eventuell oppsigelsesperiode.</p>";
 
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes and Probation Length is equal to 1 month
+                //Added condition for probation length #58824
+                if ((!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && !string.IsNullOrEmpty(Model.GetAnswer("ProbationLength"))) && ((Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()) && (Model.GetDocumentAnswer("ProbationLength", true) == "1")))
+                {
+                    Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Den første måneden av ansettelsesforholdet er å anse som prøvetid med en gjensidig oppsigelsesfrist på 1 måned fra oppsigelsesdato. Dersom arbeidstaker er fraværende fra arbeidet i prøvetiden og fraværet skyldes den ansatte, kan arbeidsgiver forlenge den avtalte prøvetiden med en periode tilsvarende lengden av fraværet. Arbeidsgiver skal skriftlig orientere arbeidstaker om forlengelsen innen utløpet av prøvetiden.</p>";
+                }
 
-                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes
-                if (!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()){
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes and Probation Length > 1 month
+                //Added condition for probation length #58824
+                if ((!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && !string.IsNullOrEmpty(Model.GetAnswer("ProbationLength"))) && ((Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()) && (Model.GetDocumentAnswer("ProbationLength", true) != "1")))
+                {
                     Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">De første " + Model.Translate(Model.GetDocumentAnswer("ProbationLength", true)) + " månedene av ansettelsesforholdet er å anse som prøvetid med en gjensidig oppsigelsesfrist på 1 måned fra oppsigelsesdato. Dersom arbeidstaker er fraværende fra arbeidet i prøvetiden og fraværet skyldes den ansatte, kan arbeidsgiver forlenge den avtalte prøvetiden med en periode tilsvarende lengden av fraværet. Arbeidsgiver skal skriftlig orientere arbeidstaker om forlengelsen innen utløpet av prøvetiden.</p>";
                 }
 
@@ -176,19 +229,33 @@
                     Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Ingen prøvetid.</p>";
                 }
 
-                Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Ansettelsesforholdet opphører ved ovennevnte sluttdato forutgående oppsigelse, eller når stillingsinnehaver igjen inntrer i arbeidet. Hvis vikariatet varer mer enn 1 år, må arbeidsgiver gi skriftlig varsel om tidspunkt for fratreden, senest 1 måned før fratredelsespunktet.</p>"
-                          + "<p style=\"page-break-inside: avoid;margin-top:0;\">I ansettelsesperioden gjelder en gjensidig oppsigelsestid på " + Model.GetDocumentAnswer("NoticePeriod", true) + "  måneder regnet fra den 1. i påfølgende måned. For øvrig viser vi til Arbeidsmiljølovens § 15-3 for lengre oppsigelsesfrister.</p>"
-                          + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+                //If OA15 Contract Type = Replacement and OA.CS.18.2 Notice period = 1 month
+                //Added condition for notice period #58824
+                if (!string.IsNullOrEmpty(Model.GetAnswer("NoticePeriod")) && (Model.GetDocumentAnswer("NoticePeriod", true) == "1"))
+                {
+                    Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Ansettelsesforholdet opphører ved ovennevnte sluttdato forutgående oppsigelse, eller når stillingsinnehaver igjen inntrer i arbeidet. Hvis vikariatet varer mer enn 1 år, må arbeidsgiver gi skriftlig varsel om tidspunkt for fratreden, senest 1 måned før fratredelsespunktet.</p>"
+                      + "<p style=\"page-break-inside: avoid;margin-top:0;\">I ansettelsesperioden gjelder en gjensidig oppsigelsestid på " + Model.GetDocumentAnswer("NoticePeriod", true) + "  måned regnet fra den 1. i påfølgende måned. For øvrig viser vi til Arbeidsmiljølovens § 15-3 for lengre oppsigelsesfrister.</p>"
+                      + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+                }
+
+                //If OA15 Contract Type = Replacement and OA.CS.18.2 Notice period > 1 month
+                //Added condition for notice period #58824
+                if (!string.IsNullOrEmpty(Model.GetAnswer("NoticePeriod")) && (Model.GetDocumentAnswer("NoticePeriod", true) != "1"))
+                {
+                    Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Ansettelsesforholdet opphører ved ovennevnte sluttdato forutgående oppsigelse, eller når stillingsinnehaver igjen inntrer i arbeidet. Hvis vikariatet varer mer enn 1 år, må arbeidsgiver gi skriftlig varsel om tidspunkt for fratreden, senest 1 måned før fratredelsespunktet.</p>"
+                  + "<p style=\"page-break-inside: avoid;margin-top:0;\">I ansettelsesperioden gjelder en gjensidig oppsigelsestid på " + Model.GetDocumentAnswer("NoticePeriod", true) + "  måneder regnet fra den 1. i påfølgende måned. For øvrig viser vi til Arbeidsmiljølovens § 15-3 for lengre oppsigelsesfrister.</p>"
+                  + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+                }
 
                 Content28 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidstaker skal ved fratreden slette datafiler som han eller hun har lagret på sitt eget område. Arbeidstaker som har tilgang til mail, skal også slette mailer i sin mailbox.</p>";
-                
+
                 break;
 
             case "casual":
 
                 Content4 = "Ekstrahjelp";
                 Content5 = Model.GetDocumentAnswer("ContractStartDate", true);
-                
+
                 //If OA15 Contract type = Casual
                 Content16 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Etter avtale. Arbeidsgiver tilkaller ekstrahjelp ved behov. Ekstrahjelp står fritt til å akseptere eller avslå tilbudet. Hvert engasjement ved virksomheten anses som en avsluttet arbeidsperiode. <br/> Arbeidsforholdet er forpliktende for begge parter når ekstrahjelp har akseptert tilbudet. Arbeidet anses som avsluttet uten varsel eller oppsigelse når avtalt arbeidsperiode er avsluttet.</p>";
 
@@ -199,47 +266,74 @@
             case "trainee":
 
                 Content4 = "Lærling";
-                Content5 = Model.GetDocumentAnswer("ContractStartDate", true);
+
+                //If OA15 Contract type = Trainee (Add text for trainee #58824)
+                Content5 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidet tiltres " + Model.Translate(Model.GetDocumentAnswer("ContractStartDate", true)) + " og varer til " + Model.Translate(Model.GetDocumentAnswer("ContractEndDate", true)) + ". Ansettelsen er midlertidig pga at det er en lærlingestilling, dette i hht Arbeidsmiljøloven § 14-9. pkt (1) bokstav c.</p>";
 
                 //If OA15 Contract type = Trainee                
-                Content16 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingsstørrelse: " + Model.Translate(Model.GetDocumentAnswer("EmploymentPercentage", true)) + " % stilling. Arbeidstiden følger den til enhver tid gjeldende arbeidstidsordning.</p>";                 
+                Content16 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingsstørrelse: " + Model.Translate(Model.GetDocumentAnswer("EmploymentPercentage", true)) + " % stilling. Arbeidstiden følger den til enhver tid gjeldende arbeidstidsordning.</p>";
 
                 //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker
                 Content17 = "<p style=\"page-break-inside: avoid;margin-top:0;\">I samråd med nærmeste overordnede og etter vedlagte jobb & kompetanseprofil / stillingsbeskrivelse. Arbeidstaker er kjent med at det kan bli nødvendig med omorganisering og omfordeling av arbeidsoppgavene. Arbeidstakerens arbeidsoppgaver kan således endres av arbeidsgiver. Arbeidsgiver har rett til å benytte arbeidstakeren til oppgaver i andre avdelinger. Dette gjelder også i en eventuell oppsigelsesperiode.</p>";
 
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes and Probation Length is equal to 1 month
+                //Added condition for probation length #58824
+                if ((!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && !string.IsNullOrEmpty(Model.GetAnswer("ProbationLength"))) && ((Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()) && (Model.GetDocumentAnswer("ProbationLength", true) == "1")))
+                {
+                    Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Den første måneden av ansettelsesforholdet er å anse som prøvetid med en gjensidig oppsigelsesfrist på 1 måned fra oppsigelsesdato. Dersom arbeidstaker er fraværende fra arbeidet i prøvetiden og fraværet skyldes den ansatte, kan arbeidsgiver forlenge den avtalte prøvetiden med en periode tilsvarende lengden av fraværet. Arbeidsgiver skal skriftlig orientere arbeidstaker om forlengelsen innen utløpet av prøvetiden.</p>";
+                }
 
-                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes
-                if (!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()){
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes and Probation Length > 1 month
+                //Added condition for probation length #58824
+                if ((!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && !string.IsNullOrEmpty(Model.GetAnswer("ProbationLength"))) && ((Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()) && (Model.GetDocumentAnswer("ProbationLength", true) != "1")))
+                {
                     Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">De første " + Model.Translate(Model.GetDocumentAnswer("ProbationLength", true)) + " månedene av ansettelsesforholdet er å anse som prøvetid med en gjensidig oppsigelsesfrist på 1 måned fra oppsigelsesdato. Dersom arbeidstaker er fraværende fra arbeidet i prøvetiden og fraværet skyldes den ansatte, kan arbeidsgiver forlenge den avtalte prøvetiden med en periode tilsvarende lengden av fraværet. Arbeidsgiver skal skriftlig orientere arbeidstaker om forlengelsen innen utløpet av prøvetiden.</p>";
                 }
+
                 //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = No
                 if (!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "No".ToLower()){
                     Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Ingen prøvetid.</p>";
                 }
-                Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Gjensidig oppsigelsestid er " + Model.Translate(Model.GetDocumentAnswer("NoticePeriod", true)) + " måned regnet fra den 1. i påfølgende måned. Forøvrig opphører ansettelsesforholdet uten forutgående oppsigelse ved ovennevnte sluttdato.</p>"
-                            + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+
+                //If OA15 Contract Type = Trainee and OA.CS.18.2 Notice period = 1 month
+                //Added condition for notice period #58824
+                if (!string.IsNullOrEmpty(Model.GetAnswer("NoticePeriod")) && (Model.GetDocumentAnswer("NoticePeriod", true) == "1"))
+                {
+                    Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Gjensidig oppsigelsestid er " + Model.GetDocumentAnswer("NoticePeriod", true) + " måned regnet fra den 1. i påfølgende måned. Forøvrig opphører ansettelsesforholdet uten forutgående oppsigelse ved ovennevnte sluttdato.</p>"
+                      + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+                }
+
+                //If OA15 Contract Type = Trainee and OA.CS.18.2 Notice period > 1 month
+                //Added condition for notice period #58824
+                if (!string.IsNullOrEmpty(Model.GetAnswer("NoticePeriod")) && (Model.GetDocumentAnswer("NoticePeriod", true) != "1"))
+                {
+                    Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Gjensidig oppsigelsestid er " + Model.GetDocumentAnswer("NoticePeriod", true) + " måneder regnet fra den 1. i påfølgende måned. Forøvrig opphører ansettelsesforholdet uten forutgående oppsigelse ved ovennevnte sluttdato.</p>"
+                  + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+                }
 
                 Content28 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidstaker skal ved fratreden slette datafiler som han eller hun har lagret på sitt eget område. Arbeidstaker som har tilgang til mail, skal også slette mailer i sin mailbox.</p>";
-                
-                
+
+
                 break;
 
             case "seasonal co-worker":
 
-                Content4 = "Ferievikar";
+                //Content4 = "Ferievikar"; -  Changed, Weekly update #60314
+                Content4 = "Midlertidig sesongmedarbeider";
                 Content5 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidet tiltres " + Model.GetDocumentAnswer("ContractStartDate", true) + " og varer til " + Model.GetDocumentAnswer("ContractEndDate", true) + ".<br/></p>" +
-                           "<p style=\"page-break-inside: avoid;margin-top:0;\">Ansettelsen er av midlertidig karakter med bakgrunn i AML §14,9 bokstav a grunnet behov for ekstrabemanning  i høysesong / ferieavvikling.</p>";
+                       "<p style=\"page-break-inside: avoid;margin-top:0;\">Ansettelsen er av midlertidig karakter med bakgrunn i AML §14,9 bokstav a grunnet behov for ekstrabemanning  i høysesong / ferieavvikling.</p>";
 
-                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if PM.CS.1.1 = Kokk med Fagbrev, Kokk uten Fagbrev, Øvrig Restaurantarb. med Fagbrev, Øvrig Restaurantarb. uten Fagbrev, Under 20 år, Over 18 or Under 18                
-                if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() != "INDIVID".ToLower()){
-                    Content16 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingsstørrelse: " + Model.Translate(Model.GetDocumentAnswer("EmploymentPercentage", true)) + " % stilling. Arbeidstiden følger den til enhver tid gjeldende arbeidstidsordning.</p>";
+                //If OA15 Contract Type = Seasonal co-worker  / Only check for contract type, which text for "Stillingstørrelse" that will be printed #60314              
+                if (!string.IsNullOrEmpty(Model.GetAnswer("ContractType")) && (Model.GetDocumentAnswer("ContractType", false).ToLower() == "Seasonal co-worker".ToLower()))
+                {
+                    Content16 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingsstørrelse: Minimum " + Model.Translate(Model.GetDocumentAnswer("EmploymentPercentage", true)) + " % stilling i perioden. Gjelder ikke i opplæringsperioden. Arbeidstiden følger den til enhver tid gjeldende arbeidstidsordning.</p>";
                 }
 
                 //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and If PM.CS.1.1 PS Group = INDIVID and PM.CS.3.1 Overtime included in the salary? = No
-                if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "INDIVID".ToLower() && Model.GetDocumentAnswer("Overtime", false).ToLower() == "No".ToLower()){
-                    Content16 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingsstørrelse: " + Model.Translate(Model.GetDocumentAnswer("EmploymentPercentage", true)) + " % stilling.</p>";
-                    Content16 += "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingen er individuelt avlønnet og har rett til UB-tillegg og overtidsgodtgjørelse når overtid er pålagt av/avtalt med leder/jour. Arbeidstaker kan i stor grad planlegge gjennomføring av arbeidet. Det må påregnes uregelmessig arbeidstid i arbeidsforholdet.</p>";
-                }
+                //if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "INDIVID".ToLower() && Model.GetDocumentAnswer("Overtime", false).ToLower() == "No".ToLower()){
+                //    Content16 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingsstørrelse: " + Model.Translate(Model.GetDocumentAnswer("EmploymentPercentage", true)) + " % stilling.</p>";
+                //    Content16 += "<p style=\"page-break-inside: avoid;margin-top:0;\">Stillingen er individuelt avlønnet og har rett til UB-tillegg og overtidsgodtgjørelse når overtid er pålagt av/avtalt med leder/jour. Arbeidstaker kan i stor grad planlegge gjennomføring av arbeidet. Det må påregnes uregelmessig arbeidstid i arbeidsforholdet.</p>";
+                //}
 
                 //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and If PM.CS.1.1 PS Group = INDIVID and PM.CS.3.1 		Overtime included in the salary? = Yes                
                 if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "INDIVID".ToLower() && Model.GetDocumentAnswer("Overtime", false).ToLower() == "Yes".ToLower()){
@@ -248,9 +342,17 @@
                 //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker
                 Content17 = "<p style=\"page-break-inside: avoid;margin-top:0;\">I samråd med nærmeste overordnede og etter vedlagte jobb & kompetanseprofil / stillingsbeskrivelse. Arbeidstaker er kjent med at det kan bli nødvendig med omorganisering og omfordeling av arbeidsoppgavene. Arbeidstakerens arbeidsoppgaver kan således endres av arbeidsgiver. Arbeidsgiver har rett til å benytte arbeidstakeren til oppgaver i andre avdelinger. Dette gjelder også i en eventuell oppsigelsesperiode.</p>";
 
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes and Probation Length is equal to 1 month
+                //Added condition for probation length #58824
+                if ((!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && !string.IsNullOrEmpty(Model.GetAnswer("ProbationLength"))) && ((Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()) && (Model.GetDocumentAnswer("ProbationLength", true) == "1")))
+                {
+                    Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Den første måneden av ansettelsesforholdet er å anse som prøvetid med en gjensidig oppsigelsesfrist på 1 måned fra oppsigelsesdato. Dersom arbeidstaker er fraværende fra arbeidet i prøvetiden og fraværet skyldes den ansatte, kan arbeidsgiver forlenge den avtalte prøvetiden med en periode tilsvarende lengden av fraværet. Arbeidsgiver skal skriftlig orientere arbeidstaker om forlengelsen innen utløpet av prøvetiden.</p>";
+                }
 
-                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes
-                if (!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()){
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Trainee, Seasonal co-worker and if OA17 Probation period? = Yes and Probation Length > 1 month
+                //Added condition for probation length #58824
+                if ((!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && !string.IsNullOrEmpty(Model.GetAnswer("ProbationLength"))) && ((Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "Yes".ToLower()) && (Model.GetDocumentAnswer("ProbationLength", true) != "1")))
+                {
                     Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">De første " + Model.Translate(Model.GetDocumentAnswer("ProbationLength", true)) + " månedene av ansettelsesforholdet er å anse som prøvetid med en gjensidig oppsigelsesfrist på 1 måned fra oppsigelsesdato. Dersom arbeidstaker er fraværende fra arbeidet i prøvetiden og fraværet skyldes den ansatte, kan arbeidsgiver forlenge den avtalte prøvetiden med en periode tilsvarende lengden av fraværet. Arbeidsgiver skal skriftlig orientere arbeidstaker om forlengelsen innen utløpet av prøvetiden.</p>";
                 }
 
@@ -258,15 +360,29 @@
                 if (!string.IsNullOrEmpty(Model.GetAnswer("ProbationPeriod")) && Model.GetDocumentAnswer("ProbationPeriod", false).ToLower() == "No".ToLower()){
                     Content18 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Ingen prøvetid.</p>";
                 }
-                Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Gjensidig oppsigelsestid etter endt prøvetid/ fast ansettelse er " + Model.Translate(Model.GetDocumentAnswer("NoticePeriod", true)) + " måneder regnet fra den 1. i påfølgende måned. Forøvrig viser vi til Arbeidsmiljølovens § 15-3 for lengre oppsigelsesfrister.</p>"
-                            + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Seasonal co-worker and OA.CS.18.2 Notice period = 1 month
+                //Added condition for notice period #58824
+                if (!string.IsNullOrEmpty(Model.GetAnswer("NoticePeriod")) && (Model.GetDocumentAnswer("NoticePeriod", true) == "1"))
+                {
+                    Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Gjensidig oppsigelsestid etter endt prøvetid/ fast ansettelse er " + Model.GetDocumentAnswer("NoticePeriod", true) + " måned regnet fra den 1. i påfølgende måned. Forøvrig viser vi til Arbeidsmiljølovens § 15-3 for lengre oppsigelsesfrister.</p>"
+                      + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+                }
+
+                //If OA15 Contract Type = Permanent, Temporary, Replacement, Seasonal co-worker and OA.CS.18.2 Notice period > 1 month
+                //Added condition for notice period #58824
+                if (!string.IsNullOrEmpty(Model.GetAnswer("NoticePeriod")) && (Model.GetDocumentAnswer("NoticePeriod", true) != "1"))
+                {
+                    Content19 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Gjensidig oppsigelsestid etter endt prøvetid/ fast ansettelse er " + Model.GetDocumentAnswer("NoticePeriod", true) + " måneder regnet fra den 1. i påfølgende måned. Forøvrig viser vi til Arbeidsmiljølovens § 15-3 for lengre oppsigelsesfrister.</p>"
+                  + "<p style=\"page-break-inside: avoid;margin-top:0;\">Dersom du sier opp din stilling for å arbeide hos en konkurrerende virksomhet, vil IKEA forbeholde seg retten til å vurdere fratredelse med umiddelbar virkning, dog slik at lønnsforpliktelsen opprettholdes i oppsigelsesperioden.</p>";
+                }
 
                 Content28 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidstaker skal ved fratreden slette datafiler som han eller hun har lagret på sitt eget område. Arbeidstaker som har tilgang til mail, skal også slette mailer i sin mailbox.</p>";
-                
-                
+
+
                 break;
 
-            case "transferred employee":
+            case "inpat":
 
                 Content4 = string.Empty;
 
@@ -274,43 +390,43 @@
         }
 
         if (Content4 != string.Empty)
-        {            
-            results.Add(new Tuple<int, string>(4, Content4));     
+        {
+            results.Add(new Tuple<int, string>(4, Content4));
         }
 
         if (Content5 != string.Empty)
         {
-            results.Add(new Tuple<int, string>(5, Content5)); 
+            results.Add(new Tuple<int, string>(5, Content5));
         }
 
         if (Content16 != string.Empty)
         {
-            results.Add(new Tuple<int, string>(16, Content16)); 
-            
+            results.Add(new Tuple<int, string>(16, Content16));
+
         }
 
         if (Content17 != string.Empty)
-        {       
-            results.Add(new Tuple<int, string>(17, Content17)); 
-            
+        {
+            results.Add(new Tuple<int, string>(17, Content17));
+
         }
 
         if (Content18 != string.Empty)
         {
-            results.Add(new Tuple<int, string>(18, Content18)); 
+            results.Add(new Tuple<int, string>(18, Content18));
         }
 
         if (Content19 != string.Empty)
-        {            
-            results.Add(new Tuple<int, string>(19, Content19)); 
-            
+        {
+            results.Add(new Tuple<int, string>(19, Content19));
+
         }
 
         if (Content28 != string.Empty)
         {
             results.Add(new Tuple<int, string>(28, Content28));
         }
-        
+
         return results;
 
     }
@@ -324,8 +440,8 @@
         }
         return currencySign;
     }
-   
- }
+
+        }
 
 @{
     Layout = null;
@@ -360,21 +476,21 @@
         <p>Det er inngått avtale om ansettelse mellom @Model.GetDocumentAnswer("Company", true) og<br /></p>
         
         @{
-                                               
+
             var list = new List<PdfListItem>();
-            var pdfList = new List<PdfListItem>();            
-            int Number = 1;  
-            var results = GetContentText(Model.GetAnswer("ContractType")).ToList();                
-            
-            
+            var pdfList = new List<PdfListItem>();
+            int Number = 1;
+            var results = GetContentText(Model.GetAnswer("ContractType")).ToList();
+
+
             //1
             string text1 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Navn:</b> </p>";
             string MiddleName = Model.GetDocumentAnswer("MiddleName", false);
-            
+
             string content1 = Model.GetDocumentAnswer("FirstName", true) +  (MiddleName.Any() ? " " + MiddleName + " " : " ") + Model.GetDocumentAnswer("LastName", true);
             list.Add(new PdfListItem { Text = text1, Number = Number.ToString()});
-            pdfList.Add(new PdfListItem { Text = content1, Number = Number.ToString() });    
-                    
+            pdfList.Add(new PdfListItem { Text = content1, Number = Number.ToString() });
+
             Number = Number + 1;
 
             //2
@@ -383,20 +499,33 @@
             string AddressLine1 = Model.GetDocumentAnswer("PermanentAddressLine1", false);
             string AddressLine2 = Model.GetDocumentAnswer("PermanentAddressLine2", false);
 
-            content2 += (AddressLine1.Any() ? AddressLine1 + " " : "") + (AddressLine2.Any() ? AddressLine2 + "<br />" : "");       
+            if (AddressLine1.Any() && AddressLine2.Any())
+            {
+                content2 += AddressLine1 + " " + AddressLine2 + "," + "<br />";
+            }
+            if (AddressLine1.Any() && !AddressLine2.Any())
+            {
+                content2 += AddressLine1 + "," + "<br />";
+            }
+            if (!AddressLine1.Any() && AddressLine2.Any())
+            {
+                content2 += AddressLine2 + "," + "<br />";
+            }
+
+            //content2 += (AddressLine1.Any() ? AddressLine1 + " " : "") + (AddressLine2.() ? AddressLine2 : "") + "," + "<br />"; //Added comma #58824   
             content2 += Model.GetDocumentAnswer("PermanentPostalCode", true) + " " + Model.GetDocumentAnswer("PermanentCity", true).ToUpper();
             list.Add(new PdfListItem { Text = text2, Number = Number.ToString() });
-            pdfList.Add(new PdfListItem { Text = content2, Number = Number.ToString() });            
-            
+            pdfList.Add(new PdfListItem { Text = content2, Number = Number.ToString() });
+
             Number = Number + 1;
 
             //3            
             string text3 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Fødselsdato:</b> </p>";
-            string content3 = Model.GetDocumentAnswer("DateOfBirth", true);            
+            string content3 = Model.GetDocumentAnswer("DateOfBirth", true);
             list.Add(new PdfListItem { Text = text3, Number = Number.ToString() });
-            pdfList.Add(new PdfListItem { Text = content3, Number = Number.ToString() });            
-            
-            Number = Number + 1;                     
+            pdfList.Add(new PdfListItem { Text = content3, Number = Number.ToString() });
+
+            Number = Number + 1;
 
             //4    
             if (results.Any(t => t.Item1 == 4))
@@ -406,16 +535,16 @@
                 {
                     string text4 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Stilling:</b> </p>";
                     string content4 = string.Empty;
-                    content4 = c4.Item2;  
+                    content4 = c4.Item2;
                     list.Add(new PdfListItem { Text = text4, Number = Number.ToString() });
                     pdfList.Add(new PdfListItem { Text = content4, Number = Number.ToString() });
 
                     Number = Number + 1;
                 }
-             }
+            }
 
             //5                  
-          
+
             if (results.Any(t => t.Item1 == 5))
             {
                 string text5 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Tiltredelse:</b></p>";
@@ -423,7 +552,7 @@
                 var c5 = results.Where(t => t.Item1 == 5).FirstOrDefault();
                 if (c5 != null)
                 {
-                    content5 = c5.Item2;                
+                    content5 = c5.Item2;
                     list.Add(new PdfListItem { Text = text5, Number = Number.ToString() });
                     pdfList.Add(new PdfListItem { Text = content5, Number = Number.ToString() });
 
@@ -434,23 +563,31 @@
             //6
             string text6 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Arbeidssted:<b/></p>";
             string content6 = string.Empty;
-            
+
             //If Company = IKEA Eiendom Holding AS
             if (Model.GetDocumentAnswer("Company").ToLower() == "IKEA Eiendom Holding AS".ToLower())
             {
-                content6 = "IKEA Service Office";                
+                content6 = "IKEA Service Office";
             }
-            
+
             //IF Comany = IKEA AS
             if (Model.GetDocumentAnswer("Company").ToLower() == "IKEA AS".ToLower())
             {
-                content6 = "IKEA AS, " + Model.GetDocumentAnswer("BusinessUnit",true);
-                
+                //If Company = IKEA AS and Function = IKEA AS Tromsø, IKEA AS Ålesund or IKEA AS Skøyen  -- changed text #58824
+                if ((Model.GetDocumentAnswer("ServiceArea").ToLower() == "IKEA AS TROMSØ".ToLower()) || (Model.GetDocumentAnswer("ServiceArea").ToLower() == "IKEA AS ÅLESUND".ToLower()) || (Model.GetDocumentAnswer("ServiceArea").ToLower() == "IKEA AS SKØYEN".ToLower()))
+                {
+                    content6 = "IKEA Service and Pick-Up Point " + Model.GetDocumentAnswer("ServiceArea", true).Substring(8);
+                }
+                else
+                {
+                    content6 = "IKEA AS, " + Model.GetDocumentAnswer("BusinessUnit",true);
+                }
             }
-            if(!string.IsNullOrEmpty(content6)){
-            list.Add(new PdfListItem { Text = text6, Number = Number.ToString() });            
-            pdfList.Add(new PdfListItem { Text = content6, Number = Number.ToString() });  
-            Number = Number + 1;
+
+            if (!string.IsNullOrEmpty(content6)){
+                list.Add(new PdfListItem { Text = text6, Number = Number.ToString() });
+                pdfList.Add(new PdfListItem { Text = content6, Number = Number.ToString() });
+                Number = Number + 1;
             }
 
 
@@ -458,16 +595,16 @@
             string text7 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Instansforhold:</b> </p>";
             string content7 = "Rapporterer til " + Model.GetDocumentAnswer("LineManagersJobTitle", true);
             if(!string.IsNullOrEmpty(content7)){
-            list.Add(new PdfListItem { Text = text7, Number = Number.ToString() });
-            pdfList.Add(new PdfListItem { Text = content7, Number = Number.ToString() });
+                list.Add(new PdfListItem { Text = text7, Number = Number.ToString() });
+                pdfList.Add(new PdfListItem { Text = content7, Number = Number.ToString() });
 
-            Number = Number + 1;
+                Number = Number + 1;
             }
 
             //8
             string text8 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Lønn:</b></p>";
             string content8 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Kr " + Model.GetDocumentAnswer("BasicPayAmount", true) + CurrencySignIfApplicable(Model.GetAnswer("BasicPayAmount")) + " pr. " + Model.Translate(Model.GetDocumentAnswer("PaidPer", true)) + "<br/></p>";
-           // string psGroupText = string.Empty;
+            // string psGroupText = string.Empty;
 
             ////If PM.CS.1.1PS Group = INDIVID:
             //if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && (Model.GetDocumentAnswer("PSGroup", false).ToLower() == "INDIVID".ToLower()))
@@ -476,21 +613,51 @@
             //}
 
             //If PM.CS.1.1PS Group = OVER 18
-            if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && (Model.GetDocumentAnswer("PSGroup", false).ToLower() == "Over 18".ToLower()))
+            if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && (Model.GetDocumentAnswer("PSGroup", false)).ToLower() == "Over 18".ToLower())
             {
-                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(" + Model.Translate(Model.GetDocumentAnswer("Level", true)) + ")<br/></p>";
+                //Changed text shown in contract depending on level #58824 
+                string conditionalContentT = string.Empty;
+                var level = Model.GetDocumentAnswer("Level", true);
+                switch (level)
+                {
+                    case "TRINN 1     18år":
+                        conditionalContentT = "trinn 1";
+                        break;
+                    case "TRINN 2":
+                        conditionalContentT = "trinn 2";
+                        break;
+                    case "TRINN 3     25år":
+                        conditionalContentT = "trinn 3";
+                        break;
+                    case "TRINN 4":
+                        conditionalContentT = "trinn 4";
+                        break;
+                    case "TRINN 5":
+                        conditionalContentT = "trinn 5";
+                        break;
+                    case "TRINN 6":
+                        conditionalContentT = "trinn 6";
+                        break;
+                    case "TRINN 7- IKEA SPESIAL":
+                        conditionalContentT = "trinn 7";
+                        break;
+                }
+                if (!string.IsNullOrEmpty(conditionalContentT))
+                {
+                    content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(" + conditionalContentT + ")<br/></p>";
+                }
             }
 
             //If PM.CS.1.1PS Group = TRINN Under 16 år
             if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && (Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Under 16 år".ToLower()))
             {
-                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(Trinn Under 16 år)<br/></p>";
+                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(trinn under 16 år)<br/></p>";
             }
 
             //If PM.CS.1.1PS Group = TRINN Under 18 år
             if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && (Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Under 18 år".ToLower()))
             {
-                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(Trinn Under 18 år)<br/></p>";
+                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(trinn under 18 år)<br/></p>";
             }
 
             //IF PS Group = TRINN Kokk med Fagbrev and PS Level = Ansatt over 15 år sammenhengende IKEA Food, Ansatte over 20 år sammenhengende IKEA Food, Etter 10 års praksis som kokk, Etter 4. års praksis som kokk, Etter 6. års praksis som kokk, Etter 8. års praksis som kokk, Etter 2. års praksis som kokk
@@ -498,7 +665,7 @@
             {
                 var condition = false;
                 string conditionalContent8 = string.Empty;
-                
+
 
                 if (string.IsNullOrEmpty(Model.GetAnswer("Level")))
                 {
@@ -507,43 +674,43 @@
                 }
                 else
                 {
-                
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Ansatt over 15 år sammenhengende IKEA Food".ToLower())
-                    { conditionalContent8 += "Level 15"; condition = true; } 
-                
+                    { conditionalContent8 += "15 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Ansatte over 20 år sammenhengende IKEA Food".ToLower())
-                    { conditionalContent8 += "Level 20"; condition = true; } 
-                
+                    { conditionalContent8 += "20 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 10 års praksis som kokk".ToLower())
-                    { conditionalContent8 += "Level 10"; condition = true; } 
-                
+                    { conditionalContent8 += "10 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 4. års praksis som kokk".ToLower())
-                    { conditionalContent8 += "Level 4"; condition = true; } 
-                
+                    { conditionalContent8 += "4 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 6. års praksis som kokk".ToLower())
-                    { conditionalContent8 += "Level 6"; condition = true; } 
-                
+                    { conditionalContent8 += "6 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 8. års praksis som kokk".ToLower())
-                    { conditionalContent8 += "Level 8"; condition = true; }
+                    { conditionalContent8 += "8 "; condition = true; }
 
                     if (Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 2. års praksis som kokk".ToLower())
-                    { conditionalContent8 += "Level 2"; condition = true; }                                       
-                    
+                    { conditionalContent8 += "2 "; condition = true; }
+
                 }
-                
+
                 if (condition)
                 {
-                    content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(Trinn Kokk med Fagbrev, " + conditionalContent8 + ")<br/></p>";
+                    content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(kokk med fagbrev, " + conditionalContent8 +  " års praksis)<br/></p>";
                 }
             }
 
             //IF PS Group = TRINN Kokk uten Fagbrev and PS Level = Ansatt over 15 år sammenhengende IKEA Food, Ansatte over 20 år sammenhengende IKEA Food, Etter 10 års praksis som kokk, Etter 2. års praksis som kokk, Etter 4. års praksis som kokk, Etter 6. års praksis som kokk, Etter 8. års praksis som kokk
             if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Kokk uten Fagbrev".ToLower())
             {
-                
+
                 var condition = false;
                 string conditionalContent8 = string.Empty;
-                
+
 
                 if (string.IsNullOrEmpty(Model.GetAnswer("Level")))
                 {
@@ -551,60 +718,60 @@
                     conditionalContent8 += Model.GetDocumentAnswer("Level", true);
                 }
                 else
-                {                
-            
+                {
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Ansatt over 15 år sammenhengende IKEA Food".ToLower())
-                    { conditionalContent8 += "Level 15"; condition = true; }
-                
+                    { conditionalContent8 += "15 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Ansatte over 20 år sammenhengende IKEA Food".ToLower())
-                    { conditionalContent8 += "Level 20"; condition = true; }
-                
+                    { conditionalContent8 += "20 "; condition = true; }
+
                     if( Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 10 års praksis som kokk".ToLower())
-                    { conditionalContent8 += "Level 10"; condition = true; }
-                
+                    { conditionalContent8 += "10 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 2. års praksis som kokk".ToLower())
-                    { conditionalContent8 += "Level 2"; condition = true; }
-                
+                    { conditionalContent8 += "2 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 4. års praksis som kokk".ToLower())
-                    { conditionalContent8 += "Level 4"; condition = true; }
-                
+                    { conditionalContent8 += "4 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 6. års praksis som kokk".ToLower())
-                    { conditionalContent8 += "Level 6"; condition = true; }
-                
+                    { conditionalContent8 += "6 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 8. års praksis som kokk".ToLower())
-                    { conditionalContent8 += "Level 8"; condition = true; }
-                                        
+                    { conditionalContent8 += "8 "; condition = true; }
+
                 }
 
                 if (condition)
                 {
-                    content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(Trinn Kokk uten Fagbrev, " + conditionalContent8 + ")<br/></p>";
+                    content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(kokk uten fagbrev, " + conditionalContent8 + " års praksis)<br/></p>";
                 }
-            
+
             }
 
             //IF PS Group = TRINN Kokk med Fagbrev and PS Level = Beg.lønn (fra fylte 18 år)
             if ((!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Kokk med Fagbrev".ToLower())
                 && (Model.GetDocumentAnswer("Level", false).ToLower() == "Beg.lønn (fra fylte 18 år)".ToLower()))
             {
-                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(Trinn Kokk med Fagbrev)<br/></p>";
+                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(kokk med fagbrev)<br/></p>";
             }
 
-            //IF PS Group = TRINN Kokk uten Fagbrev and PS Level = Beg.lønn (fra fylte 18 år)
+            //IF PS Group = TRINN Kokk uten Fagbrev and PS Level = Begynnerlønn for arbeidstakere over 20 år / etter 4 mnd. Praksis over 18 år
             if ((!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Kokk uten Fagbrev".ToLower())
                 && (Model.GetDocumentAnswer("Level", false).ToLower() == "Begynnerlønn for arbeidstakere over 20 år / etter 4 mnd. Praksis over 18 år".ToLower()))
             {
-                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(Trinn Kokk uten Fagbrev)<br/></p>";
+                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(kokk uten fagbrev)<br/></p>";
             }
 
 
             //IF PS Group = TRINN Øvrig Restaurantarb. med Fagbrev and PS Level = Ansatt over 15 år sammenhengende IKEA Food, Ansatte over 20 år sammenhengende IKEA Food, Etter 10 års praksis i bransjen, Etter 2. års praksis i bransjen, Etter 4. års praksis i bransjen, Etter 6. års praksis i bransjen, Etter 8. års praksis i bransjen
             if(!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Øvrig Restaurantarb. med Fagbrev".ToLower())
             {
-                
+
                 var condition = false;
                 string conditionalContent8 = string.Empty;
-                
+
 
                 if (string.IsNullOrEmpty(Model.GetAnswer("Level")))
                 {
@@ -612,34 +779,34 @@
                     conditionalContent8 += Model.GetDocumentAnswer("Level", true);
                 }
                 else
-                {     
-                
+                {
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Ansatt over 15 år sammenhengende IKEA Food".ToLower())
-                    { conditionalContent8 += "Level 15"; condition = true; }
-                
+                    { conditionalContent8 += "15 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Ansatte over 20 år sammenhengende IKEA Food".ToLower())
-                    { conditionalContent8 += "Level 20"; condition = true; }
-                
+                    { conditionalContent8 += "20 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 10 års praksis i bransjen".ToLower())
-                    { conditionalContent8 += "Level 10"; condition = true; }
-                
+                    { conditionalContent8 += "10 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 2. års praksis i bransjen".ToLower())
-                    { conditionalContent8 += "Level 2"; condition = true; }
-                
+                    { conditionalContent8 += "2 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 4. års praksis i bransjen".ToLower())
-                    { conditionalContent8 += "Level 4"; condition = true; }
-                
+                    { conditionalContent8 += "4 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 6. års praksis i bransjen".ToLower())
-                    { conditionalContent8 += "Level 6"; condition = true; }
-                
+                    { conditionalContent8 += "6 "; condition = true; }
+
                     if(Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 8. års praksis i bransjen".ToLower())
-                    { conditionalContent8 += "Level 8"; condition = true; }
-                   
+                    { conditionalContent8 += "8 "; condition = true; }
+
                 }
 
                 if (condition)
                 {
-                    content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(Trinn Øvrig Restaurantarb. med Fagbrev, " + conditionalContent8 + ")<br/></p>";
+                    content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(øvrig restaurantarb. med fagbrev, " + conditionalContent8 + " års praksis)<br/></p>";
                 }
             }
 
@@ -647,10 +814,10 @@
             //IF PS Group = TRINN Øvrig Restaurantarb. uten Fagbrev and PS Level = Ansatt over 15 år sammenhengende IKEA Food, Ansatte over 20 år sammenhengende IKEA Food, Etter 10 års praksis i bransjen, Etter 2. års praksis i bransjen, Etter 4. års praksis i bransjen, Etter 6. års praksis i bransjen, Etter 8. års praksis i bransjen        
             if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Øvrig Restaurantarb. uten Fagbrev".ToLower())
             {
-                
+
                 var condition = false;
                 string conditionalContent8 = string.Empty;
-                
+
 
                 if (string.IsNullOrEmpty(Model.GetAnswer("Level")))
                 {
@@ -658,34 +825,34 @@
                     conditionalContent8 += Model.GetDocumentAnswer("Level", true);
                 }
                 else
-                {                    
+                {
 
                     if (Model.GetDocumentAnswer("Level", false).ToLower() == "Ansatt over 15 år sammenhengende IKEA Food".ToLower())
-                    { conditionalContent8 += "Level 15"; condition = true; }
+                    { conditionalContent8 += "15 "; condition = true; }
 
                     if (Model.GetDocumentAnswer("Level", false).ToLower() == "Ansatte over 20 år sammenhengende IKEA Food".ToLower())
-                    { conditionalContent8 += "Level 20"; condition = true; }
+                    { conditionalContent8 += "20 "; condition = true; }
 
                     if (Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 10 års praksis i bransjen".ToLower())
-                    { conditionalContent8 += "Level 10"; condition = true; }
+                    { conditionalContent8 += "10 "; condition = true; }
 
                     if (Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 2. års praksis i bransjen".ToLower())
-                    { conditionalContent8 += "Level 2"; condition = true; }
+                    { conditionalContent8 += "2 "; condition = true; }
 
                     if (Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 4. års praksis i bransjen".ToLower())
-                    { conditionalContent8 += "Level 4"; condition = true; }
+                    { conditionalContent8 += "4 "; condition = true; }
 
                     if (Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 6. års praksis i bransjen".ToLower())
-                    { conditionalContent8 += "Level 6"; condition = true; }
+                    { conditionalContent8 += "6 "; condition = true; }
 
                     if (Model.GetDocumentAnswer("Level", false).ToLower() == "Etter 8. års praksis i bransjen".ToLower())
-                    { conditionalContent8 += "Level 8"; condition = true; }
-                    
+                    { conditionalContent8 += "8 "; condition = true; }
+
                 }
-                
+
                 if (condition)
                 {
-                    content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(Trinn Øvrig Restaurantarb. uten Fagbrev, " + conditionalContent8 + ")<br/></p>";
+                    content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(øvrig restaurantarb. uten fagbrev, " + conditionalContent8 + " års praksis)<br/></p>";
                 }
 
             }
@@ -695,32 +862,32 @@
             if ((!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Øvrig Restaurantarb. med Fagbrev".ToLower())
                 && (Model.GetDocumentAnswer("Level", false).ToLower() == "Beg.lønn (fra fylte 18 år)".ToLower()))
             {
-                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(Trinn Øvrig Restaurantarb. med Fagbrev)<br/></p>";
+                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(øvrig restaurantarb. med fagbrev)<br/></p>";
             }
 
             //IF PS Group = TRINN Øvrig Restaurantarb. uten Fagbrev and PS Level = Begynnerlønn for arbeidstakere over 20 år / etter 4 mnd. Praksis over 18år
             if ((!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Øvrig Restaurantarb. uten Fagbrev".ToLower())
                 && (Model.GetDocumentAnswer("Level", false).ToLower() == "Begynnerlønn for arbeidstakere over 20 år / etter 4 mnd. Praksis over 18 år".ToLower()))
             {
-                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(Trinn Øvrig Restaurantarb. uten Fagbrev)<br/></p>";
+                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(øvrig restaurantarb. uten fagbrev)<br/></p>";
             }
 
             //IF PS Group = TRINN Fra fylte 16 år
             if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Fra fylte 16 år".ToLower())
             {
-                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(Trinn Fra fylte 16 år)<br/></p>";
+                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(trinn fra fylte 16 år)<br/></p>";
             }
 
             //IF PS Group = TRINN Fra fylte 17 år
             if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Fra fylte 17 år".ToLower())
             {
-                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(Trinn Fra fylte 17 år)<br/></p>";
+                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(trinn fra fylte 17 år)<br/></p>";
             }
 
             //IF PS Group = TRINN Fra fylte 18 år
             if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Fra fylte 18 år".ToLower())
             {
-                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(Trinn Fra fylte 18 år)<br/></p>";
+                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">(trinn fra fylte 18 år)<br/></p>";
             }
 
             //IF PS Group = Trainee 40% o Trainee 60%
@@ -728,9 +895,9 @@
             {
                 content8 = string.Empty;
                 content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">1.år: 40% av lønnssatsen for det 1. året som faglært.<br/></p>";
-                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">2.år: 60% av lønnssatsen for det 1. året som faglært Lønnssatsen for 1. året som faglært er kr " + Model.GetDocumentAnswer("BasicPayAmount", true) + CurrencySignIfApplicable(Model.GetAnswer("BasicPayAmount")) + " pr. time (Trinn 6)<br/></p>";
+                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">2.år: 60% av lønnssatsen for det 1. året som faglært Lønnssatsen for 1. året som faglært er kr " + Model.GetDocumentAnswer("BasicPayAmount", true) + CurrencySignIfApplicable(Model.GetAnswer("BasicPayAmount")) + " pr. time (trinn 6)<br/></p>";
             }
-            
+
             ////If OA4 Function = Cafe and PM.CS.1.1PS Group = TRINN Kokk med Fagbrev or TRINN Kokk uten Fagbrev or TRINN Øvrig Restaurantarb. med Fagbrev or TRINN Øvrig Restaurantarb. uten Fagbrev:
             //if (Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "Cafe".ToLower() && !string.IsNullOrEmpty(Model.GetAnswer("PSGroup"))
             //    && (Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Kokk med Fagbrev".ToLower() || Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Kokk uten Fagbrev".ToLower() || Model.GetDocumentAnswer("PSGroup", false).ToLower() == "TRINN Øvrig Restaurantarb. uten Fagbrev".ToLower()))                
@@ -744,7 +911,7 @@
             //{
             //    content8 += "(" + Model.Translate(Model.GetDocumentAnswer("Level", true)) + ")<br/>";
             //}
-           
+
             ////If OA4 Function = Hjemme or IKEA AS Tromsø or Service Office or Varehus and PM.CS.1.1PS Group =Over 18 or Under 18
             //if (
             //    (Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "Hjemme".ToLower() || Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "IKEA AS Tromsø".ToLower()
@@ -766,7 +933,7 @@
 
             var usedItems = new List<string>();
             var allRules8 = new List<ContractItems>();
-            var hasText8a = false;           
+            var hasText8a = false;
 
             for (int i = 1; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
             {
@@ -775,7 +942,7 @@
                 {
                     MultipleNr = "";
                 }
-                
+
                 var rule1 = "AllowancesType";
                 var curAllowancesTypeAnswer = Model.GetDocumentAnswer(rule1 + MultipleNr).ToLower();
                 if (!string.IsNullOrEmpty(curAllowancesTypeAnswer))
@@ -785,10 +952,10 @@
             }
 
 
-            string text8a = "";            
+            string text8a = "";
 
             //8a
-     
+
             //Paragraph appears if PM5 Allowance Type= Shiftleader 
             var shiftlederAnswers = allRules8.Where(r => r.Rule == "AllowancesType" && r.Answer == "Shiftleader".ToLower())
                                             .ToList()
@@ -878,15 +1045,19 @@
             // SG. CR 16 #54327 this changed from == INDIVID TO If PM.CS.1.1PS Group OTHER THAN INDIVID and if PM4 Allowances Type = Shiftleder or Specialist Allowance or SIK Allowance or Certificate of Apprenticeship Allowance:
             if (!string.IsNullOrEmpty(Model.GetAnswer("PSGroup")) && (Model.GetDocumentAnswer("PSGroup", false).ToLower() != "INDIVID".ToLower()) && !string.IsNullOrEmpty(text8a))
             {
-                content8 += text8a;              
-            } 
-            
+                content8 += text8a;
+            }
+
 
             // END Multiple entries
 
-
-            content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">Utbetalingen skjer ved overføring til konto i en norsk bank. Lønn utbetales den 20. i hver måned. Et fast forskudd begrenset oppad til 50% av netto månedslønn kan etter avtale utbetales den 04. i måneden.<br/></p>";
-
+            if (!string.IsNullOrEmpty(Model.GetAnswer("ContractType")) && (Model.GetDocumentAnswer("ContractType", false).ToLower() == "Seasonal co-worker".ToLower()))
+            {
+                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">Utbetalingen skjer ved overføring til konto i en norsk bank. Lønn utbetales etterskuddsvis den 20. i hver måned.<br/></p>";
+            }
+            else { 
+                content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">Utbetalingen skjer ved overføring til konto i en norsk bank. Lønn utbetales den 20. i hver måned. Et fast forskudd begrenset oppad til 50% av netto månedslønn kan etter avtale utbetales den 04. i måneden.<br/></p>";
+            }
             //If PM.CS.3.2 Next Tariff/Salary review field is not filled in with the year – SECTION NOT APPLICABLE:
             if (!string.IsNullOrEmpty(Model.GetAnswer("NextTariff_Year")))
             {
@@ -895,19 +1066,19 @@
                 {
                     content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">Lønnen revurderes normalt en gang i året p.t. pr. 1. april. Første gang pr. " + Model.Translate(Model.GetDocumentAnswer("NextTariff", true)) + ".<br/></p>";
                 }
-                
+
                 //If PM.CS.3.2 Next Tariff/Salary review field is 01.09.  year (fileld in):
                 if (!string.IsNullOrEmpty(Model.GetAnswer("NextTariff")) && (Model.GetDocumentAnswer("NextTariff", false).Substring(0, 5) == "01.09"))
                 {
                     content8 += "<p style=\"page-break-inside: avoid;margin-top:0;\">Lønnen revurderes normalt en gang i året p.t. pr. 1. september. Første gang pr. " + Model.Translate(Model.GetDocumentAnswer("NextTariff", true)) + ".<br/></p>";
-                }              
+                }
             }// END
-                 
-            if(!string.IsNullOrEmpty(content8)){
-            list.Add(new PdfListItem { Text = text8, Number = Number.ToString() });
-            pdfList.Add(new PdfListItem { Text = content8, Number = Number.ToString() });
 
-            Number = Number + 1;
+            if(!string.IsNullOrEmpty(content8)){
+                list.Add(new PdfListItem { Text = text8, Number = Number.ToString() });
+                pdfList.Add(new PdfListItem { Text = content8, Number = Number.ToString() });
+
+                Number = Number + 1;
             }
 
 
@@ -927,7 +1098,7 @@
                 string MultipleNr = functionAnswer.Id == 1 ? string.Empty : functionAnswer.Id.ToString();
 
                 content9 = "Kr " + Model.GetDocumentAnswer("AllowancesAmountUnits" + MultipleNr, true) + CurrencySignIfApplicable(Model.GetDocumentAnswer("AllowancesAmountUnits" + MultipleNr, true)) + " pr. "
-                         + Model.Translate(Model.GetDocumentAnswer("AllowancesPaidPer" + MultipleNr, true)) + "<br/>" + "(endres ikke ved lønnsoppgjør)";
+                                     + Model.Translate(Model.GetDocumentAnswer("AllowancesPaidPer" + MultipleNr, true)) + "<br/>" + "(endres ikke ved lønnsoppgjør)";
 
                 if (!usedItems.Contains(content9))
                 {
@@ -938,7 +1109,7 @@
             }//Additional Project Allowance
             if (!string.IsNullOrEmpty(content9))
             {
-            
+
                 list.Add(new PdfListItem { Text = text9, Number = Number.ToString() });
                 pdfList.Add(new PdfListItem { Text = content9, Number = Number.ToString() });
 
@@ -952,7 +1123,7 @@
                 string content10 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Mobiltelefon dekkes i henhold til den enhver tid gjeldende policy ved IKEA.</p>";
                 list.Add(new PdfListItem { Text = text10, Number = Number.ToString() });
                 pdfList.Add(new PdfListItem { Text = content10, Number = Number.ToString() });
-                
+
                 Number = Number + 1;
             }
 
@@ -1021,14 +1192,14 @@
             {
                 participating = "<p style=\"page-break-inside: avoid;margin-top:0;\">Deltagelse i varehusets til enhver tid gjeldende Jour (vakthavende) ordning. Varehussjef avgjør hvem som går Jour.</p>";
             }
-                    
-            if (results.Any(t => t.Item1 == 16))          
+
+            if (results.Any(t => t.Item1 == 16))
             {
                 var c16 = results.Where(t => t.Item1 == 16).FirstOrDefault();
                 if (c16 != null)
                 {
                     content16 = c16.Item2;
-                    content16 += participating;                
+                    content16 += participating;
                     list.Add(new PdfListItem { Text = text16, Number = Number.ToString() });
                     pdfList.Add(new PdfListItem { Text = content16, Number = Number.ToString() });
 
@@ -1044,27 +1215,27 @@
                     pdfList.Add(new PdfListItem { Text = content16, Number = Number.ToString() });
 
                     Number = Number + 1;
-                    
+
                 }
-                
+
             }
 
             //17  
             string text17 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Stillingens innhold:</b></p>";
             string content17 = string.Empty;
-            
-            if (results.Any(t => t.Item1 == 17))    
+
+            if (results.Any(t => t.Item1 == 17))
             {
                 var c17 = results.Where(t => t.Item1 == 17).FirstOrDefault();
                 if (c17 != null)
                 {
-                    content17 = c17.Item2;                         
+                    content17 = c17.Item2;
                     list.Add(new PdfListItem { Text = text17, Number = Number.ToString() });
                     pdfList.Add(new PdfListItem { Text = content17, Number = Number.ToString() });
 
                     Number = Number + 1;
                 }
-            }            
+            }
 
             //18  
             string text18 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Prøvetid:</b></p>";
@@ -1074,14 +1245,14 @@
                 var c18 = results.Where(t => t.Item1 == 18).FirstOrDefault();
                 if (c18 != null)
                 {
-                    content18 = c18.Item2;    
+                    content18 = c18.Item2;
                     list.Add(new PdfListItem { Text = text18, Number = Number.ToString() });
                     pdfList.Add(new PdfListItem { Text = content18, Number = Number.ToString() });
 
                     Number = Number + 1;
                 }
-            
-           
+
+
             }
 
             //19  
@@ -1092,55 +1263,60 @@
                 var c19 = results.Where(t => t.Item1 == 19).FirstOrDefault();
                 if (c19 != null)
                 {
-                    content19 = c19.Item2;    
+                    content19 = c19.Item2;
                     list.Add(new PdfListItem { Text = text19, Number = Number.ToString() });
                     pdfList.Add(new PdfListItem { Text = content19, Number = Number.ToString() });
 
                     Number = Number + 1;
                 }
-            
+
             }
-            
+
             //20 
             string text20 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Tariffavtaler:</b></p>";
             string content20 = string.Empty;
 
-            // If OA4 Function = IKEA AS Tromsø
-            if (!string.IsNullOrEmpty(Model.GetAnswer("ServiceArea")) && Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "IKEA AS Tromsø".ToLower())
+            // If OA3 BU = Netthandel or OA4 Function = IKEA AS Skøyen, IKEA AS Ålesund or IKEA AS Tromsø, 
+            if ((!string.IsNullOrEmpty(Model.GetAnswer("BusinessUnit")) && Model.GetDocumentAnswer("BusinessUnit", false).ToLower() == "Netthandel".ToLower())
+                || (!string.IsNullOrEmpty(Model.GetAnswer("ServiceArea")) && Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "IKEA AS Skøyen".ToLower()
+                || Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "IKEA AS Ålesund".ToLower() || Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "IKEA AS Tromsø".ToLower()))
             {
-                content20 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Bedriften følger delvis Landsoverenskomsten mellom Handel & Kontor og Virke.</p>";
+                content20 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Bedriften er ikke bundet av tariffavtale, men praktiser lønn- og/eller arbeidstidsbesetemmelsene i følgende tafirravtale: Landsoverenskomsten Virke og Handel og Kontor.</p>";
             }
 
-            // If OA4 Function = Varehus, Hjemme, Service Office, Holding
-            if (!string.IsNullOrEmpty(Model.GetAnswer("ServiceArea")) && (Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "Varehus".ToLower() || Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "Hjemme".ToLower()
+            // If OA3 BU not equal to Netthandel and OA4 Function = Varehus, Hjemme, Service Office, Holding  #58824 (Added condition BU: not Netthandel + new text to this paragraph)
+            if ((!string.IsNullOrEmpty(Model.GetAnswer("BusinessUnit")) && !string.IsNullOrEmpty(Model.GetAnswer("ServiceArea"))) && ((Model.GetDocumentAnswer("BusinessUnit", true).ToLower()) != "Netthandel".ToLower() && (Model.GetDocumentAnswer("ServiceArea", false).ToLower()) == "Varehus".ToLower() || Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "Hjemme".ToLower()
                  || Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "Service Office".ToLower() || Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "Holding".ToLower()))
             {
-                content20 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Bedriften er bundet av Landsoverenskomsten mellom Handel & Kontor og Virke.</p>";
-            }
-            
-            // If OA4 Function = Café
-            if (!string.IsNullOrEmpty(Model.GetAnswer("ServiceArea")) && Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "Cafe".ToLower())
-            {
-                content20 = "<p style=\"page-break-inside: avoid;margin-top:0;\">For ansatte i IKEA Food gjelder tariffavtalen for Hotell- og restaurantvirksomhet mellom Virke og Fellesforbundet.</p>";
+                content20 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Bedriften er bundet av følgende tariffavtale: Landsoverenskomsten Virke og Handel og Kontor.</p>";
             }
 
-            // If OA3 Business Unit = Store Kristiansand Sorlandet 007 or Store Ringsaker 390 and OA4 Function = Café 
-            if (!string.IsNullOrEmpty(Model.GetAnswer("BusinessUnit")) && (Model.GetDocumentAnswer("BusinessUnit", false).ToLower() == "Sørlandet".ToLower()
-                || Model.GetDocumentAnswer("BusinessUnit", false).ToLower() == "Ringsaker".ToLower()) 
+            // If OA4 Function = Café and OA3 BU = Slependen, Leangen or Furuset  #58824 (Added condition for BU = Slependen, Leangen or Furuset + new text to this paragraph)
+            if (!string.IsNullOrEmpty(Model.GetAnswer("BusinessUnit")) && (Model.GetDocumentAnswer("BusinessUnit", false).ToLower() == "Slependen".ToLower()
+                || Model.GetDocumentAnswer("BusinessUnit", false).ToLower() == "Leangen".ToLower() || Model.GetDocumentAnswer("BusinessUnit", false).ToLower() == "Furuset".ToLower())
                 && (!string.IsNullOrEmpty(Model.GetAnswer("ServiceArea")) && Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "Cafe".ToLower()))
             {
-                content20 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Bedriften følger delvis tariffavtalen for Hotell- og restaurantvirksomhet mellom Virke og Fellesforbundet.</p>";
+                content20 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Bedriften er bundet av følgende tariffavtale: Landsoverenskomsten Hotell og Restaurant - Virke og Fellesforbundet</p>";
             }
-            
-            else {
 
-                // If OA4 Function = Café
-                if (!string.IsNullOrEmpty(Model.GetAnswer("ServiceArea")) && Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "Cafe".ToLower())
-                {
-                    content20 = "<p style=\"page-break-inside: avoid;margin-top:0;\">For ansatte i IKEA Food gjelder tariffavtalen for Hotell- og restaurantvirksomhet mellom Virke og Fellesforbundet.</p>";
-                }
+            // If OA3 Business Unit = Store Kristiansand Sorlandet 007, Store Ringsaker 390, Forus or Åsane and OA4 Function = Café 
+            if (!string.IsNullOrEmpty(Model.GetAnswer("BusinessUnit")) && (Model.GetDocumentAnswer("BusinessUnit", false).ToLower() == "Sørlandet".ToLower()
+                || Model.GetDocumentAnswer("BusinessUnit", false).ToLower() == "Ringsaker".ToLower() || Model.GetDocumentAnswer("BusinessUnit", false).ToLower() == "Forus".ToLower()
+                || Model.GetDocumentAnswer("BusinessUnit", false).ToLower() == "Åsane".ToLower())
+                && (!string.IsNullOrEmpty(Model.GetAnswer("ServiceArea")) && Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "Cafe".ToLower()))
+            {
+                content20 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Bedriften er ikke bundet av tariffavtale, men praktiser lønn- og/eller arbeidstidsbesetemmelsene i følgende tafirravtale: Landsoverenskomsten Hotell og Restaurant - Virke og Fellesforbundet.</p>";
             }
-            
+
+            //else {
+
+            //    // If OA4 Function = Café
+            //    if (!string.IsNullOrEmpty(Model.GetAnswer("ServiceArea")) && Model.GetDocumentAnswer("ServiceArea", false).ToLower() == "Cafe".ToLower())
+            //    {
+            //        content20 = "<p style=\"page-break-inside: avoid;margin-top:0;\">For ansatte i IKEA Food gjelder tariffavtalen for Hotell- og restaurantvirksomhet mellom Virke og Fellesforbundet.</p>";
+            //    }
+            //}
+
 
             if (content20 != string.Empty)
             {
@@ -1155,14 +1331,14 @@
             //21 
             string text21 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Reise og diettutgifter:</b></p>";
             string content21 = string.Empty;
-            content21 = "<p style=\"page-break-inside: avoid;margin-top:0;\">I henhold til den enhver tid gjeldende praksis hos IKEA; for tiden følges Statens diettsatser.</p>";    
+            content21 = "<p style=\"page-break-inside: avoid;margin-top:0;\">I henhold til den enhver tid gjeldende praksis hos IKEA; for tiden følges Statens diettsatser.</p>";
 
             list.Add(new PdfListItem { Text = text21, Number = Number.ToString() });
             pdfList.Add(new PdfListItem { Text = content21, Number = Number.ToString() });
 
             Number = Number + 1;
 
-            
+
             // 22 - If in PM.CS.16.1 Benefits One Week is not marked as applicable
             if (Model.GetDocumentAnswer("Benefit_OneWeek") == "0")
             {
@@ -1170,29 +1346,29 @@
                 string text22 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Ferie og sykdom:</b></p>";
                 string content22 = string.Empty;
                 content22 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidstakers rett til ferie og feriepenger reguleres av Ferieloven og gjeldende avtaler. Partenes rettigheter og forpliktelser i forbindelse med sykdom fremgår av Folketrygdloven. Arbeidsgiver utbetaler sykelønn og lønn under foreldrepermisjon/lønn under fedrekvoten/ og adopsjon som overstiger Folketrygdens grunnbeløp. <br/>"
-                          + "Feriepengegrunnlaget ved sykdom/ svangerskapspermisjon/ adopsjon begrenses til Folketrygdens bestemmelser. </p>";                                          
+                                      + "Feriepengegrunnlaget ved sykdom/ svangerskapspermisjon/ adopsjon begrenses til Folketrygdens bestemmelser. </p>";
                 list.Add(new PdfListItem { Text = text22, Number = Number.ToString() });
                 pdfList.Add(new PdfListItem { Text = content22, Number = Number.ToString() });
 
-                Number = Number + 1;                
+                Number = Number + 1;
             }
 
             //Always applicable
             //23 
             string text23 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Pensjonsalder:</b></p>";
             string content23 = string.Empty;
-            content23 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Den generelle pensjonsalder er 67 år.</p>"; 
+            content23 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Den generelle pensjonsalder er 67 år.</p>";
             list.Add(new PdfListItem { Text = text23, Number = Number.ToString() });
             pdfList.Add(new PdfListItem { Text = content23, Number = Number.ToString() });
 
             Number = Number + 1;
-     
+
 
             //24 
             string text24 = string.Empty;
             string content24 = string.Empty;
             //If OA15 Contract Type = Permanent, Temporary, Replacement, Casual, Seasonal co-worker
-            if (Model.GetDocumentAnswer("ContractType").ToLower() != "trainee".ToLower() && Model.GetDocumentAnswer("ContractType").ToLower() != "transferred employee".ToLower())
+            if (Model.GetDocumentAnswer("ContractType").ToLower() != "trainee".ToLower() && Model.GetDocumentAnswer("ContractType").ToLower() != "inpat".ToLower())
             {
                 text24 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Pensjons- og for- sikringsordninger:</b></p>";
                 content24 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidstaker blir medlem av gjeldende forsikringsordninger dersom kriteriene for innmelding er oppfylt. <br/>"
@@ -1202,18 +1378,18 @@
 
                 Number = Number + 1;
             }
-                
-            else{
-                   // If OA15 Contract Type =Trainee
-                    if (Model.GetDocumentAnswer("ContractType").ToLower() == "trainee".ToLower())
-                    {
-                        text24 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Forsikrings- ordninger:</b></p>";
-                        content24 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Bedriften etablerer den/de lovbestemte ansvars-/ arbeidsgiverforsikringer man har plikt til etter norsk lov.</p>";
-                        list.Add(new PdfListItem { Text = text24, Number = Number.ToString() });
-                        pdfList.Add(new PdfListItem { Text = content24, Number = Number.ToString() });
 
-                        Number = Number + 1;
-                    }
+            else{
+                // If OA15 Contract Type =Trainee
+                if (Model.GetDocumentAnswer("ContractType").ToLower() == "trainee".ToLower())
+                {
+                    text24 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Forsikrings- ordninger:</b></p>";
+                    content24 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Bedriften etablerer den/de lovbestemte ansvars-/ arbeidsgiverforsikringer man har plikt til etter norsk lov.</p>";
+                    list.Add(new PdfListItem { Text = text24, Number = Number.ToString() });
+                    pdfList.Add(new PdfListItem { Text = content24, Number = Number.ToString() });
+
+                    Number = Number + 1;
+                }
             }
             //25 
             string text25 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Personalkjøp:</b></p>";
@@ -1242,7 +1418,7 @@
 
             Number = Number + 1;
             // END ALWAYS APPLICABLE
-            
+
 
             //28  
 
@@ -1253,7 +1429,7 @@
                 {
                     string text28 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>PC-basert informasjon:</b></p>";
                     string content28 = string.Empty;
-                    content28 = c28.Item2; 
+                    content28 = c28.Item2;
 
                     list.Add(new PdfListItem { Text = text28, Number = Number.ToString() });
                     pdfList.Add(new PdfListItem { Text = content28, Number = Number.ToString() });
@@ -1268,7 +1444,7 @@
             string text29 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Trekk i lønn:</b></p>";
             string content29 = string.Empty;
             content29 = "<p style=\"page-break-inside: avoid;margin-top:0;\">IKEA kan ved feil utlønning (for mye lønn, for mye feriepenger, for mye forskutterte fødselspenger, og/eller feriepenger av fødselspenger som IKEA ikke får refundert) foreta nødvendige justeringer neste lønningsdag. Bedriften kan ved feil utlønning trekke utestående beløp av ordinær lønn og feriepenger. </p>"
-                      + "<p style=\"page-break-inside: avoid;margin-top:0;\">Lønnstrekk kan bare skje iht. Arbeidsmiljøloven § 14-15 (2) og Landsoverenskomsten § 14.2/ Landsoverenskomsten for hotell og restaurantvirksomhet § 9).</p>";
+                              + "<p style=\"page-break-inside: avoid;margin-top:0;\">Lønnstrekk kan bare skje iht. Arbeidsmiljøloven § 14-15 (2) og Landsoverenskomsten § 14.2/ Landsoverenskomsten for hotell og restaurantvirksomhet § 9).</p>";
             list.Add(new PdfListItem { Text = text29, Number = Number.ToString() });
             pdfList.Add(new PdfListItem { Text = content29, Number = Number.ToString() });
 
@@ -1278,10 +1454,10 @@
             string text30 = "<p style=\"page-break-inside: avoid;margin-top:0;\"><b>Alminnelige bestemmelser:</b></p>";
             string content30 = string.Empty;
             content30 = "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidstaker er pliktet til å gjøre seg kjent med IKEA sitt til enhver tid gjeldende arbeidsreglement og følge bestemmelsene i arbeidsreglementet. Arbeidstaker plikter også å gjøre seg kjent med og følge ”Code of Conduct” <br/>"
-                      + "som beskriver IKEA sine etiske retningslinjer. Videre er arbeidstaker forpliktet til å følge instruksene som til enhver tid gjelder for stillingen og arbeidets utførelse.</p>"
-                      + "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidstaker er dessuten pliktet til å gjøre seg kjent med til enhver tid gjeldende personal-, leder- og HMS -håndbok. <br/>"
-                      + "Arbeidstaker må etterkomme de pålegg som bedriften i medhold av arbeidsmiljøloven § 9-4 måtte gi om legeundersøkelse eller andre helsehygieniske tiltak.</p>"
-                      + "<p style=\"page-break-inside: avoid;margin-top:0;\">Bedriftens arbeidsreglement og etiske retningslinjer inngår som en del av denne avtalen og henger ved arbeidskontrakten.</p>";
+                              + "som beskriver IKEA sine etiske retningslinjer. Videre er arbeidstaker forpliktet til å følge instruksene som til enhver tid gjelder for stillingen og arbeidets utførelse.</p>"
+                              + "<p style=\"page-break-inside: avoid;margin-top:0;\">Arbeidstaker er dessuten pliktet til å gjøre seg kjent med til enhver tid gjeldende personal-, leder- og HMS -håndbok. <br/>"
+                              + "Arbeidstaker må etterkomme de pålegg som bedriften i medhold av arbeidsmiljøloven § 9-4 måtte gi om legeundersøkelse eller andre helsehygieniske tiltak.</p>"
+                              + "<p style=\"page-break-inside: avoid;margin-top:0;\">Bedriftens arbeidsreglement og etiske retningslinjer inngår som en del av denne avtalen og henger ved arbeidskontrakten.</p>";
             list.Add(new PdfListItem { Text = text30, Number = Number.ToString() });
             pdfList.Add(new PdfListItem { Text = content30, Number = Number.ToString() });
 
@@ -1294,33 +1470,33 @@
             list.Add(new PdfListItem { Text = text31, Number = Number.ToString() });
             pdfList.Add(new PdfListItem { Text = content31, Number = Number.ToString() });
 
-            Number = Number + 1;          
-            
+            Number = Number + 1;
+
         }
 
 
         @if (list.Count > 1 && pdfList.Count >1)
-        {
+    {
             <table border="0">
                 @for (int i = 0; i < list.Count ; i++)
-                {      
-                   if (!string.IsNullOrEmpty(list[i].Number))
-                   {
-                       var curItemNumber = list[i].Number;
-                       var itemContent = pdfList.Where(x => x.Number == curItemNumber).FirstOrDefault();
+                {
+            if (!string.IsNullOrEmpty(list[i].Number))
+            {
+                var curItemNumber = list[i].Number;
+                var itemContent = pdfList.Where(x => x.Number == curItemNumber).FirstOrDefault();
                        <tr>
-                            <td style="vertical-align:text-top; width:28%; padding:5px;">                           
+                            <td style="vertical-align:text-top; width:28%; padding:5px;">
                                  @Html.Raw(list[i].Text)
-                            </td>                         
+                            </td>
                             <td style="vertical-align:text-top; width:82%; padding:5px;">
                                 @if (itemContent != null)
                                 {
-                                    @Html.Raw(itemContent.Text);
-                                }
-                            </td>                       
+                    @Html.Raw(itemContent.Text);
+                }
+                            </td>
                        </tr>
                     }
-                }                   
+        }
             </table>
          }
 
@@ -1334,8 +1510,8 @@
                                 <br />
                                 <br />
                                 <br />
-                                Jeg er inneforstått med mine ansettelsesvilkår.  
-                                <br />  
+                                Jeg er inneforstått med mine ansettelsesvilkår.
+                                <br />
                                 @Html.Partial("../Shared/Pdfs/_CityDate", Model)
                             </td>
                         </tr>
@@ -1353,7 +1529,7 @@
             {
               <div style="page-break-before: always;">
                    @Html.Partial("../Shared/Pdfs/_AppendixForm", Model)
-              </div>                          
+              </div>
             }
   </div>
    

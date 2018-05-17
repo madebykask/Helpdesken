@@ -318,20 +318,37 @@
     <Compile Include="App_Start\NinjectModules\Modules\AuthenticationModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\EFormModule.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\Admin\Controllers\GDPRProgressController.cs" />
     <Compile Include="Areas\Admin\Controllers\ExtendedCaseController.cs" />
+    <Compile Include="Areas\Inventory\Controllers\InventoryController.cs" />
+    <Compile Include="Areas\Inventory\Models\BaseEditCustomInventoryModel.cs" />
+    <Compile Include="Areas\Inventory\Models\BaseEditPrinterModel.cs" />
+    <Compile Include="Areas\Inventory\Models\EditModel\Printer\PrinterEditViewModel.cs" />
+    <Compile Include="Areas\Inventory\Models\RelatedCasesModels\CustomInventoryRelatedCasesModel.cs" />
+    <Compile Include="Areas\Inventory\Models\RelatedCasesModels\PrinterRelatedCasesModel.cs" />
+    <Compile Include="Areas\Inventory\Models\RelatedCasesModels\WorkstationRelatedCasesModel.cs" />
+    <Compile Include="Areas\Inventory\Models\RelatedCasesModel.cs" />
+    <Compile Include="Areas\Inventory\Models\RelatedCasesModels\ServerRelatedCasesModel.cs" />
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
+    <Compile Include="Components\Contracts\ContractHistoryFormatter.cs" />
+    <Compile Include="Components\Contracts\ContractHistoryMarkupBuilder.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
     <Compile Include="Controllers\QuestionnaireAnswerController.cs" />
     <Compile Include="Enums\ReportItemNames.cs" />
+    <Compile Include="Infrastructure\Attributes\GdprAccessAttribute.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\AdfsAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\AdfsClaimsUserTransformer.cs" />
     <Compile Include="Infrastructure\Authentication\AuthenticationService.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\AuthenticationServiceBehaviorFactory.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\WindowsAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\ClaimsExtensions.cs" />
-    <Compile Include="Infrastructure\Authentication\Behaviors\FormsAuthenticationBehavior.cs" />
+    <Compile Include="Infrastructure\Authentication\Behaviors\ApplicationAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\FederatedAuthenticationConfiguration.cs" />
     <Compile Include="Infrastructure\Authentication\HelpdeskAuthenticationFilter.cs" />
+    <Compile Include="Infrastructure\Binders\DecimalModelBinder.cs" />
+    <Compile Include="Infrastructure\Case\CaseHistoryBuilder.cs" />
+    <Compile Include="Infrastructure\UrlBuilder.cs" />
+    <Compile Include="Infrastructure\Utilities\CaseDiagnosticService.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\SessionContext.cs" />
     <Compile Include="Infrastructure\Configuration\Concrete\AdfsConfiguration.cs" />
     <Compile Include="Infrastructure\Cryptography\AESCryptoProvider.cs" />
@@ -342,7 +359,12 @@
     <Compile Include="Infrastructure\Helpers\CommonHelper.cs" />
     <Compile Include="Infrastructure\WebApi\WebApiService.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\ApplicationContext.cs" />
+    <Compile Include="Models\Case\CaseMoveModel.cs" />
+    <Compile Include="Models\Case\CaseOperationResult.cs" />
     <Compile Include="Models\Case\InvoiceTimeModel.cs" />
+    <Compile Include="Models\Contract\ContractHistoryFieldsDiff.cs" />
+    <Compile Include="Models\Gdpr\DataPrivacyHistoryViewModel.cs" />
+    <Compile Include="Models\Gdpr\GdprOperationsHistoryListItem.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
     <Compile Include="Models\JsonModels\Case\CaseJsonModel.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireAnswerParams.cs" />
@@ -372,9 +394,11 @@
     <Compile Include="Areas\Invoices\InvoicesAreaRegistration.cs" />
     <Compile Include="Areas\Invoices\Models\InvoiceListItemViewModel.cs" />
     <Compile Include="Areas\Invoices\Models\LogInvoiceItemViewModel.cs" />
+    <Content Include="Areas\Admin\Content\js\DataPrivacy\_dataPrivacyForm.js" />
+    <Content Include="Areas\Inventory\Content\js\relatedCases.js" />
     <Content Include="Areas\Admin\Content\js\OrderType\index.logic.js" />
     <Content Include="Areas\Admin\Content\js\QuickLinks\index.logic.js" />
-    <Content Include="Areas\Inventory\Scripts\inventoryOverview.js" />
+    <Content Include="Areas\Inventory\Content\js\inventoryOverview.js" />
     <Content Include="Areas\Orders\Views\OrderFieldSettings\Partials\OrderFieldWebTypes.cshtml" />
     <Content Include="Areas\Invoices\Scripts\Pages\invoiceFiles.js" />
     <Content Include="Areas\Invoices\Views\Overview\Files.cshtml" />
@@ -625,6 +649,8 @@
     </Content>
     <Content Include="Content\icons\case_locked.png" />
     <Content Include="Content\icons\case_log_new.png" />
+    <Content Include="Content\icons\lock.png" />
+    <Content Include="Content\icons\unlock.png" />
     <Content Include="Content\img\ajax-loader.GIF" />
     <Content Include="Content\img\clickmultimenu-1.png" />
     <Content Include="Content\img\clickmultimenu-2.png" />
@@ -1083,6 +1109,8 @@
     <Content Include="Content\js\Feedback\feedback.edit.js" />
     <Content Include="Content\js\Feedback\feedbackStatisticsCases.js" />
     <Content Include="Content\js\Inventory\inventory.search.js" />
+    <Content Include="Content\js\moment.js" />
+    <Content Include="Content\js\moment.min.js" />
     <Content Include="Content\js\Shared\commonUtils.js" />
     <Content Include="Content\js\Shared\errors.js" />
     <Content Include="Content\js\Shared\jquery.customAjax.js" />
@@ -3324,6 +3352,22 @@
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\Fields\ListInt.cshtml" />
     <Content Include="Areas\Admin\Views\ExtendedCase\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\ExtendedCase\_Input.cshtml" />
+    <Content Include="Areas\Inventory\Views\Shared\RelatedCasesFull.cshtml" />
+    <Content Include="Areas\Inventory\Views\Workstation\WorkstationRelatedCases.cshtml" />
+    <Content Include="Areas\Inventory\Views\Server\ServerRelatedCases.cshtml" />
+    <Content Include="Areas\Inventory\Views\Printer\_EditPrinterLayout.cshtml" />
+    <Content Include="Areas\Inventory\Views\Printer\PrinterRelatedCases.cshtml" />
+    <Content Include="Areas\Inventory\Views\CustomInventory\_EditCustomInventoryLayout.cshtml" />
+    <Content Include="Areas\Inventory\Views\CustomInventory\CustomInventoryRelatedCases.cshtml" />
+    <Content Include="Areas\Orders\Views\OrderFieldSettings\EditorTemplates\OrderFieldTypeSettingsModel.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\AccountInfoEditModel.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\ContactEditModel.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\Flag.cshtml" />
+    <Content Include="Areas\Orders\Views\Orders\EditorTemplates\Fields\MultiSelectList.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\_DataPrivacyHistory.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\_DataPrivacyHistoryTable.cshtml" />
+    <Content Include="Areas\Admin\Views\GlobalSetting\DataPrivacy.cshtml" />
+    <Content Include="Areas\Inventory\Views\ComputerType\_Input.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx" />
     <Content Include="Content\js\Shared\custom.validation.reuiredifnotempty.js" />
@@ -3426,7 +3470,7 @@
     <Content Include="Areas\Inventory\Views\Server\OperationLogGrid.cshtml" />
     <Content Include="Areas\Inventory\Views\Server\EditorTemplates\CommunicationFieldsViewModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Server\EditorTemplates\GeneralFieldsModel.cshtml" />
-    <Content Include="Areas\Inventory\Views\Server\EditorTemplates\StateModel.cshtml" />
+    <Content Include="Areas\Inventory\Views\Server\EditorTemplates\StateFieldsModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Server\EditorTemplates\StorageFieldsModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Server\EditorTemplates\OtherFieldsModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Shared\EditorTemplates\ChassisFieldsModel.cshtml" />
@@ -3978,6 +4022,8 @@
     <Content Include="Views\QuestionnaireAnswer\QuestionnaireCompleted.cshtml" />
     <Content Include="Views\QuestionnaireAnswer\Quiestionnaire.cshtml" />
     <Content Include="Views\Cases\ModalDialogs\_ExtraEmails.cshtml" />
+    <Content Include="Views\Cases\CaseOperationResult.cshtml" />
+    <Content Include="Views\Contracts\ContractHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">
@@ -4695,6 +4741,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Inventory\Infrastucture\" />
+    <Folder Include="Areas\Inventory\Scripts\" />
     <Folder Include="FormLibContent\Xmls\Norway\Data\AdditionalPaymentsDeductions\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
     <Folder Include="rss\" />

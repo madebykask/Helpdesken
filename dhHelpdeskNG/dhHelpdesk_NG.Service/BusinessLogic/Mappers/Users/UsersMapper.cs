@@ -87,6 +87,7 @@
                 StartPage = overview.StartPage,
                 DocumentPermission = overview.DocumentPermission,
                 InventoryPermission = overview.InventoryPermission,
+                ContractPermission = overview.ContractPermission,
                 CaseUnlockPermission = overview.CaseUnlockPermission,
                 CaseInternalLogPermission = overview.CaseInternalLogPermission
             };
@@ -119,6 +120,7 @@
                 user.BulletinBoardPermission,
                 user.DocumentPermission,
                 user.InventoryPermission,
+                user.ContractPermission,
                 user.SetPriorityPermission,
                 user.InvoicePermission,
                 user.DataSecurityPermission,

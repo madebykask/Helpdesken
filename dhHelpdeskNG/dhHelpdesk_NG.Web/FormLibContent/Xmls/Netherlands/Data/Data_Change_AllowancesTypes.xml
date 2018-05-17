@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <options>
   <option value=""></option>
+  <option value="Allowance day responsible">Allowance day responsible</option>
   <option value="ATMP Allowance">ATMP Allowance</option>
   <option value="Telephone Allowance">Telephone Allowance</option>
   <option value="Building Supplement">Building Supplement</option>

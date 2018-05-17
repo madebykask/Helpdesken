@@ -38,8 +38,6 @@
                     <td class="tdstrong">@Model.Label("Costallocation")</td>
                     <td>@Model.Element("Costallocation")</td>
                 </tr>
-
-
                 @for (int i = 2; i <= 3; i++)
                 {
                     <tr class="costcentres@(i.ToString())">
@@ -58,16 +56,12 @@
                         <td>
                             @Model.Element("Costallocation" + i.ToString())</td>
                     </tr>
-                      
-                    
                 }
                 <tr id="addCostcentresTrr">
                     <td colspan="2">
                         @Model.Element("MultiCostcentres")
                         <a id="addCostCentre" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Cost Centre")</a></td>
                 </tr>
-
-
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Job")</h4>
@@ -97,13 +91,10 @@
                     <td class="tdstrong">@Model.Label("LocalApprover")</td>
                     <td>@Model.Element("LocalApprover")</td>
                 </tr>
-
             </tbody>
         </table>
     </div>
-
     <div class="span6">
-
         <table class="table">
             <tbody>
                 <tr>
@@ -131,10 +122,6 @@
                     <td class="tdstrong">@Model.Label("Probationperiod")</td>
                     <td>@Model.Element("Probationperiod")</td>
                 </tr>
-@*                <tr>
-                    <td class="tdstrong">@Model.Label("Probationenddate")</td>
-                    <td>@Model.Element("Probationenddate")</td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("CDS")</h4>
@@ -152,60 +139,7 @@
                     <td class="tdstrong">@Model.Label("Helpdesk")</td>
                     <td>@Model.Element("Helpdesk")</td>
                 </tr>
-
-             @*   <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Work Address")</h4>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkTelephone")</td>
-                    <td>@Model.Element("WorkTelephone")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkCommunicationtype")</td>
-                    <td>@Model.Element("WorkCommunicationtype")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkCommunicationcontent")</td>
-                    <td>@Model.Element("WorkCommunicationcontent")</td>
-                </tr>
-                @for (int i = 2; i <= 4; i++)
-                {
-                    <tr class="WorkCommunicationType@(i.ToString())" id="WorkCommunicationType@(i.ToString())">
-                        <td class="tdstrong" colspan="2">
-                            <h4>@Model.Translate("Communication") @i.ToString()</h4>
-                        </td>
-                    </tr>
-                    <tr class="WorkCommunicationType@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("WorkCommunicationtype" + i.ToString())</td>
-                        <td>
-                            @Model.Element("WorkCommunicationtype" + i.ToString())
-                        </td>
-                    </tr>
-                    <tr class="WorkCommunicationType@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("WorkCommunicationcontent" + i.ToString())</td>
-                        <td>
-                            @Model.Element("WorkCommunicationcontent" + i.ToString())
-                        </td>
-                    </tr>
-                }
-                <tr id="addWorkCommunicationtypesTrr">
-                    <td colspan="2">
-                        @Model.Element("WorkCommunicationtypes")
-                        <a id="addWorkCommunicationType" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another communication type")</a></td>
-                </tr>*@
             </tbody>
         </table>
     </div>
-
-@*    @Model.Element("WorkAddressline1")
-    @Model.Element("WorkAddressline2")
-    @Model.Element("WorkAddressline3")
-    @Model.Element("WorkAddressline4")
-    @Model.Element("WorkPostalCode")
-    @Model.Element("WorkCity")
-    @Model.Element("WorkCountry")*@
 </div>
-

@@ -1,4 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Enums.Users;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -24,7 +26,9 @@ namespace DH.Helpdesk.Services.Services
 
         IList<WorkingGroupEntity> GetWorkingGroups(int customerId, int userId, bool isTakeOnlyActive = true, bool caseOverviewFilter = false);
 
-        IList<WorkingGroupEntity> GetWorkingGroupsAdmin(int customerId, int userId, bool isTakeOnlyActive = true, bool caseOverviewFilter = false);
+        IList<int> ListWorkingGroupsForUser(int userId);
+
+        IList<WorkingGroupInfo> GetWorkingGroupsAdmin(int customerId, int userId, bool isTakeOnlyActive = true, bool caseOverviewFilter = false);
 
         IList<WorkingGroupEntity> GetAllWorkingGroupsForCustomer(int customerId, bool isTakeOnlyActive = true);
 
@@ -92,6 +96,11 @@ namespace DH.Helpdesk.Services.Services
             return this.workingGroupRepository.ListUserForWorkingGroup(workingGroupId);
         }
 
+        public IList<int> ListWorkingGroupsForUser(int userId)
+        {
+            return this.workingGroupRepository.ListWorkingGroupsForUser(userId);
+        }
+
         public IList<WorkingGroupEntity> GetAllWorkingGroupsForCustomer(int customerId, bool isTakeOnlyActive = true)
         {
             return this.workingGroupRepository
@@ -121,32 +130,38 @@ namespace DH.Helpdesk.Services.Services
             IEnumerable<int> userWorkingGroups;
             if (caseOverviewFilter)
             {
-                userWorkingGroups = userWorkingGroupRepository.GetAll()
-                .Where(uw => uw.User_Id == userId && uw.UserRole != 0).Select(uw => uw.WorkingGroup_Id);
+                userWorkingGroups = 
+                    userWorkingGroupRepository.GetMany(uw => uw.User_Id == userId && uw.UserRole != 0).Select(uw => uw.WorkingGroup_Id);
             }
             else
             {
-                userWorkingGroups = userWorkingGroupRepository.GetAll()
-                .Where(uw => uw.User_Id == userId && uw.UserRole != 0).Select(uw => uw.WorkingGroup_Id);
+                userWorkingGroups = 
+                    userWorkingGroupRepository.GetMany(uw => uw.User_Id == userId && uw.UserRole != 0).Select(uw => uw.WorkingGroup_Id);
             }
             return  this.workingGroupRepository
-                    .GetMany(x => x.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && x.IsActive == 1)))
-                    .Where(w=> userWorkingGroups.Contains(w.Id))
+                    .GetMany(x => x.Customer_Id == customerId && 
+                                  (!isTakeOnlyActive || x.IsActive == 1) &&
+                                  userWorkingGroups.Contains(x.Id))
                     .OrderBy(x => x.WorkingGroupName).ToList();
 
         }
 
-        public IList<WorkingGroupEntity> GetWorkingGroupsAdmin(int customerId, int userId, bool isTakeOnlyActive = true, bool caseOverviewFilter = false)
+        public IList<WorkingGroupInfo> GetWorkingGroupsAdmin(int customerId, int userId, bool isTakeOnlyActive = true, bool caseOverviewFilter = false)
         {
-            IEnumerable<int> userWorkingGroups;
-                userWorkingGroups = userWorkingGroupRepository.GetAll()
-                .Where(uw => uw.User_Id == userId && uw.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).Select(uw => uw.WorkingGroup_Id);
-         
-            return this.workingGroupRepository
-                    .GetMany(x => x.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && x.IsActive == 1)))
-                    .Where(w => userWorkingGroups.Contains(w.Id))
-                    .OrderBy(x => x.WorkingGroupName).ToList();
+            var userWorkingGroupsIds =
+                userWorkingGroupRepository.GetMany(uw => uw.User_Id == userId && uw.UserRole == WorkingGroupUserPermission.ADMINSTRATOR)
+                    .Select(uw => uw.WorkingGroup_Id);
 
+            return this.workingGroupRepository
+                    .GetMany(x => x.Customer_Id == customerId && 
+                                 (!isTakeOnlyActive || x.IsActive == 1) &&
+                                 userWorkingGroupsIds.Contains(x.Id))
+                    .Select(x => new WorkingGroupInfo
+                    {
+                        Id = x.Id,
+                        WorkingGroupId = x.WorkingGroupId,
+                        WorkingGroupGuid = x.WorkingGroupGUID
+                    }).ToList();
         }
 
         public IList<WorkingGroupForSMS> GetWorkingGroupsForSMS(int customerId, bool isTakeOnlyActive = true)
@@ -154,16 +169,19 @@ namespace DH.Helpdesk.Services.Services
             var cs = this.settingService.GetCustomerSetting(customerId);
 
             var ret = new List<WorkingGroupForSMS>();
-            var userWorkingGroups = this.userWorkingGroupRepository.GetAll()
-                                                                   .Select(uw => uw.WorkingGroup_Id);
-            var workingGroups =  this.workingGroupRepository
-                    .GetMany(x => x.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && x.IsActive == 1)))
-                    .Where(w => userWorkingGroups.Contains(w.Id)).ToList();
+            //todo: check why condition is missing?
+            var userWorkingGroups = this.userWorkingGroupRepository.GetMany(x => true).Select(uw => uw.WorkingGroup_Id);
+            var workingGroups =  
+                this.workingGroupRepository
+                    .GetMany(x => x.Customer_Id == customerId && 
+                                  (!isTakeOnlyActive || x.IsActive == 1) &&
+                                  userWorkingGroups.Contains(x.Id)).ToList();
                     
 
             var selectedWGId = workingGroups.Select(w=> w.Id).ToList();
-            var userWorkingGroup = this.userWorkingGroupRepository.GetAll().Where(uw => selectedWGId.Contains(uw.WorkingGroup_Id))
-                                                                 .ToList();
+            var userWorkingGroup =
+                this.userWorkingGroupRepository.GetMany(uw => selectedWGId.Contains(uw.WorkingGroup_Id)).ToList();
+                                                                 
             
             foreach(var wg in workingGroups)
             {
@@ -193,10 +211,10 @@ namespace DH.Helpdesk.Services.Services
 
         public List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId, bool includeAdmins = true)
         {
-            var workingGroups = this.workingGroupRepository.GetMany(w => w.Customer_Id == customerId).OrderBy(w => w.WorkingGroupName).ToList();
+            var workingGroups = this.workingGroupRepository.GetMany(w => w.Customer_Id == customerId && w.IsActive == 1).OrderBy(w => w.WorkingGroupName).ToList();
             var workingGroupIds = workingGroups.Select(g => g.Id).ToList();
 
-            var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds, includeAdmins, true);
+            var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds, includeAdmins, true, true);
             
             var userIds = workingGroupsUserIds.SelectMany(g => g.UserIds).Distinct().ToList();
 

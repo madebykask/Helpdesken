@@ -20,6 +20,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
         {
             return DataContext.CaseSections
                 .Include(x => x.CaseSectionFields)
+                .Include(x =>x.CaseSectionLanguages)   
                 .Where(x => x.Customer_Id == customerId).OrderBy(x => x.SectionType).ToList();
         }
 

@@ -9,9 +9,7 @@
   &languages;
   &regexs;
   &state;
-
   <fields>
-
     <!--Tab ServiceRequestDetails-->
     <tab name="#ServiceRequestDetails" label="Service Request Details">
       <element name="Co-WorkerGlobalviewID" type="text" label="Co-Worker Globalview ID" mandatory="1">
@@ -24,7 +22,7 @@
       </element>
       <element name="IKEANetworkID" type="text" label="IKEA Network ID" mandatory="1">      </element>
       <element name="Company" type="text" label="Company"></element>
-      <element name="BusinessUnit" type="text" label="Business Unit"></element>
+      <element name="BusinessUnit" type="text" label="Business Unit" mandatory="1"></element> <!--#58799 mandatory-->
       <element name="ServiceArea" type="text" label="Function"></element>
       <element name="Department" type="text" label="Department"></element>
       <element name="ServiceRequestPriority" type="select" label="Service Request Priority" mandatory="1" default="Standard">
@@ -46,7 +44,7 @@
         </options>
       </element>
       <element type="text" name="Amount" label="Amount" mandatory="1">
-        <regex inherit="amount3" pattern="" message=""></regex>
+        <regex inherit="allowNegativeAmount" pattern="" message=""></regex>   <!--#58799-->
       </element>
       <element type="select" name="PaymentMethod" label="Payment Method" mandatory="1">
         <options>
@@ -72,7 +70,7 @@
         <mandatoryIf name="PaymentType">Loan</mandatoryIf>
       </element>
       <element type="text" name="LoanRepaymentAmountUnits" label="Loan Re-payment Amount/Units">
-        <regex inherit="amount3" pattern="" message=""></regex>
+        <regex inherit="allowNegativeAmount" pattern="" message=""></regex> <!--#58799-->
         <mandatoryIf name="PaymentType">Loan</mandatoryIf>
       </element>
       <element type="text" name="Numberofinstalments" label="Number of instalments">

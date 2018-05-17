@@ -1,4 +1,8 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+﻿using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Domain.Cases;
 
@@ -42,9 +46,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return new WorkingGroupEntity { Id = int.MinValue, WorkingGroupName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", IsActive = 1 };
         }
 
-        public static User notAssignedPerformer()
+        public static CustomerUserInfo notAssignedPerformer()
         {
-            return new User { Id = int.MinValue, FirstName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", SurName="", IsActive = 1 , Performer = 1};
+            return new CustomerUserInfo { Id = int.MinValue, FirstName = "-- " + Translation.Get("Ej Tilldelade", Enums.TranslationSource.TextTranslation) + " --", SurName="", IsActive = 1 , Performer = 1};
         }
 
         public static IList<Field> GetFilterForCases(int followUpPermission, int customerId)
@@ -139,6 +143,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return fields.getCaseSettingsValue(field.ToString()).Locked == 1;
         }
 
+        public static bool ShowOnPage(this IList<CaseFieldSetting> cfs, GlobalEnums.TranslationCaseFields field)
+        {
+            var fieldSettings = cfs.getCaseSettingsValue(field.ToString());
+            return (fieldSettings?.ShowOnStartPage ?? 0) == 1;
+        }
+
         public static CaseFieldSetting getCaseSettingsValue(this IList<CaseFieldSetting> cfs, string valueToFind)
         {
             var ret = new CaseFieldSetting();  
@@ -167,14 +177,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 {
                     if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
                     {
-						if (isCaseReopend && c.RequiredIfReopened == 1 && c.ShowOnStartPage == 1)
-						{
-							ret = 2;
-						}
-						else if ((c.Required == 1 || (isCaseReopend && c.RequiredIfReopened == 1)) && c.ShowOnStartPage == 1)
-						{
-							ret = 1;
-						}
+                        if (isCaseReopend && c.RequiredIfReopened == 1 && c.ShowOnStartPage == 1)
+                        {
+                            ret = 2;
+                        }
+                        else if ((c.Required == 1 || (isCaseReopend && c.RequiredIfReopened == 1)) && c.ShowOnStartPage == 1)
+                        {
+                            ret = 1;
+                        }
                         break;
                     }
                 }
@@ -843,20 +853,20 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return ret;
         }
 
-		public static bool GetIsAboutEnabled(this IList<CaseFieldSetting> cfs)
-		{
-			return getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()).ShowOnStartPage == 1
-			        || getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()).ShowOnStartPage == 1
-					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()).ShowOnStartPage == 1
-					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()).ShowOnStartPage == 1
-					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()).ShowOnStartPage == 1
-					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString()).ShowOnStartPage == 1
-					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()).ShowOnStartPage == 1
-					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString()).ShowOnStartPage == 1
-					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString()).ShowOnStartPage == 1
-					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString()).ShowOnStartPage == 1
-					|| getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString()).ShowOnStartPage == 1;
-		}
+        public static bool GetIsAboutEnabled(this IList<CaseFieldSetting> cfs)
+        {
+            return getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()).ShowOnStartPage == 1
+                    || getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()).ShowOnStartPage == 1
+                    || getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()).ShowOnStartPage == 1
+                    || getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()).ShowOnStartPage == 1
+                    || getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()).ShowOnStartPage == 1
+                    || getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString()).ShowOnStartPage == 1
+                    || getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()).ShowOnStartPage == 1
+                    || getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString()).ShowOnStartPage == 1
+                    || getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString()).ShowOnStartPage == 1
+                    || getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString()).ShowOnStartPage == 1
+                    || getCaseSettingsValue(cfs, GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString()).ShowOnStartPage == 1;
+        }
 
         public static CaseSectionModel GetCaseSection(this IEnumerable<CaseSectionModel> lst, CaseSectionType type)
         {
@@ -1131,7 +1141,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     {
                         if (model.case_.ProductArea_Id.HasValue)
                         {
-                            var curPa = GetProductArea(model.productAreas, model.case_.ProductArea_Id.Value);
+                            var curPa = GetProductAreaOverview(model.productAreas, model.case_.ProductArea_Id.Value);
                             if (curPa != null)
                             {
                                 result.Add(curPa.Name);
@@ -1340,6 +1350,29 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return result;
         }
 
+        private static ProductAreaOverview GetProductAreaOverview(IList<ProductAreaOverview> productAreas, int productAreaId)
+        {
+            ProductAreaOverview pa = null;
+            foreach (var productArea in productAreas)
+            {
+                if (productArea.SubProductAreas != null && productArea.SubProductAreas.Any())
+                {
+                    var childs = productArea.SubProductAreas;
+                    pa = childs.SingleOrDefault(x => x.Id == productAreaId);
+                    if (pa != null)
+                        return pa;
+                    if (childs.Count > 0)
+                    {
+                        var sortedChildren = childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
+                        pa = GetProductAreaOverview(sortedChildren, productAreaId);
+                    }
+                }
+            }
+
+            return pa;
+        }
+
+        [Obsolete("Use GetProductAreaOverview")]
         private static ProductArea GetProductArea(IList<ProductArea> productAreas, int productAreaId)
         {
             ProductArea pa = null;
@@ -1351,6 +1384,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     pa = childs.SingleOrDefault(x => x.Id == productAreaId);
                     if (pa != null)
                         return pa;
+
                     if (childs.Count > 0)
                     {
                         pa = GetProductArea(childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), productAreaId);
@@ -1360,9 +1394,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return pa;
         }
 
-        private static CaseType GetCaseType(IList<CaseType> list, int id)
+        private static CaseTypeOverview GetCaseType(IList<CaseTypeOverview> list, int id)
         {
-            CaseType item = null;
+            CaseTypeOverview item = null;
             foreach (var it in list)
             {
                 if (it.SubCaseTypes != null && it.SubCaseTypes.Any())
@@ -1371,6 +1405,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     item = childs.SingleOrDefault(x => x.Id == id);
                     if (item != null)
                         return item;
+
                     if (childs.Count > 0)
                     {
                         item = GetCaseType(childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), id);
@@ -1380,9 +1415,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return item;
         }
 
-        private static Category GetCategory(IList<Category> list, int id)
+        private static CategoryOverview GetCategory(IList<CategoryOverview> list, int id)
         {
-            Category item = null;
+            CategoryOverview item = null;
             foreach (var it in list)
             {
                 if (it.SubCategories != null && it.SubCategories.Any())

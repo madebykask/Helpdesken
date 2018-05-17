@@ -9,7 +9,6 @@ namespace DH.Helpdesk.Domain
         public string Description { get; set; }
         public int ParagraphType { get; set; }
 
-        public virtual ICollection<CaseDocument_CaseDocumentParagraphEntity> CaseDocumentParagraphs { get; set; }
         public virtual ICollection<CaseDocumentTextEntity> CaseDocumentTexts { get; set; }
     }
 }

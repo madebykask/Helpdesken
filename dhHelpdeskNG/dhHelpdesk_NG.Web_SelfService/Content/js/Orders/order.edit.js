@@ -1,29 +1,29 @@
 ﻿(function($) {
     "use strict";
-
     window.EditOrder = function (options) {
         this._options = $.extend({
             statuses: []
-        }, options);
+        }, options);       
     }
-
-    window.EditOrder.prototype = {
+    
+    window.EditOrder.prototype = {        
         init: function () {
             var that = this;
 
             ///////////////////////////////////////////////////////////////////////////////Old code
             var lastInitiatorSearchKey = "";
 
-            PluploadTranslation($("#order_languageId").val());
+            
 
             $("#fileName_files_uploader").pluploadQueue({
+
                 url: that._options.uploadFileUrl,
                 multipart_params: { entityId: that._options.id, subtopic: that._options.fileNameSubtopic },
                 max_file_size: "10mb",
                 multi_selection: false,
                 max_files: 1,
                 multiple_queues: true,
-
+                
                 init: {
                     FilesAdded: function(up, files) {
                         if (up.files.length >= up.settings.max_files) {
@@ -58,6 +58,7 @@
                 $("#log_send_to_dialog").dialog("open");
             });
 
+          
             window.deleteFile = function (subtopic, fileName, filesContainerId) {
                 $.post(that._options.deleteFileUrl, { entityId: that._options.id, subtopic: subtopic, fileName: fileName }, function (markup) {
                     $("#" + filesContainerId).html(markup);

@@ -19,7 +19,7 @@
          }
 
         //This template is applicable only if <Contract Type/OA14> = “Zero Hour”
-        if (Model.GetAnswer("ContractType").ToLower() == "Zero Hours".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "IKEA Delivery Centre Doncaster".ToLower())
+        if (Model.GetAnswer("ContractType").ToLower() == "Peak Trading Contract".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "IKEA Delivery Centre Doncaster".ToLower())
         {
             return "ZeroHour";
         }

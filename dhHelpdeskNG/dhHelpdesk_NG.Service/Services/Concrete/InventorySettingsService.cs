@@ -142,14 +142,12 @@
         public PrinterFieldsSettingsOverview GetPrinterFieldSettingsOverview(int customerId, int languageId)
         {
             var models = this.printerFieldSettingsRepository.GetFieldSettingsOverview(customerId, languageId);
-
             return models;
         }
 
         public PrinterFieldsSettingsOverviewForFilter GetPrinterFieldSettingsOverviewForFilter(int customerId, int languageId)
         {
             var models = this.printerFieldSettingsRepository.GetFieldSettingsOverviewForFilter(customerId, languageId);
-
             return models;
         }
 
@@ -193,11 +191,9 @@
         public InventoryFieldSettingsForEditResponse GetInventoryFieldSettingsForEdit(int inventoryTypeId)
         {
             var setings = this.inventoryFieldSettingsRepository.GetFieldSettingsForEdit(inventoryTypeId);
-            var dynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsForEdit(
-                inventoryTypeId);
+            var dynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsForEdit(inventoryTypeId);
 
             var response = new InventoryFieldSettingsForEditResponse(setings, dynamicSettings);
-
             return response;
         }
 
@@ -207,7 +203,6 @@
             var dynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsForModelEdit(inventoryTypeId, isReadonly);
 
             var response = new InventoryFieldSettingsForModelEditResponse(setings, dynamicSettings);
-
             return response;
         }
 

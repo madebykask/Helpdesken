@@ -1,4 +1,9 @@
-﻿namespace DH.Helpdesk.Web.Models.Case
+﻿using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.BusinessData.Models.FinishingCause;
+using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+
+namespace DH.Helpdesk.Web.Models.Case
 {
     using System;
     using System.Collections.Generic;
@@ -166,17 +171,17 @@
 
         public int CaseTypeId { get; set; }
 
-        public IList<CaseType> CaseTypes { get; set; }
+        public IList<CaseTypeOverview> CaseTypes { get; set; }
 
         public bool ProductAreaCheck { get; set; }
         public string ProductAreaPath { get; set; }
         public int ProductAreaId { get; set; }
-        public IList<ProductArea> ProductAreas { get; set; }
+        public IList<ProductAreaOverview> ProductAreas { get; set; }
         public bool CategoryCheck { get; set; }
 
         public string CategoryPath { get; set; }
         public int CategoryId { get; set; }
-        public IList<Category> Categories { get; set; }
+        public IList<CategoryOverview> Categories { get; set; }
         //public string SelectedCategory { get; set; }
         public bool WorkingGroupCheck { get; set; }
         public IList<WorkingGroupEntity> WorkingGroups { get; set; }
@@ -217,7 +222,7 @@
 
         public bool ClosingReasonCheck { get; set; }
 
-        public IList<FinishingCause> ClosingReasons { get; set; }
+        public IList<FinishingCauseOverview> ClosingReasons { get; set; }
 
         public int ClosingReasonId { get; set; }
 

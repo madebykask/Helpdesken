@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IdentityModel.Tokens;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.Feedback;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
+using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -46,10 +49,10 @@ namespace DH.Helpdesk.Services.Services
     using BusinessData.Models.MailTemplates;
     using DH.Helpdesk.Domain.ExtendedCaseEntity;
     using System.Linq.Expressions;
-	using Common.Enums.Cases;
+    using Common.Enums.Cases;
     using Common.Extensions.String;
 
-	public interface ICaseService
+    public interface ICaseService
     {
         IList<Case> GetProjectCases(int customerId, int projectId);
         IList<Case> GetProblemCases(int customerId, int problemId);
@@ -79,12 +82,14 @@ namespace DH.Helpdesk.Services.Services
         List<DynamicCase> GetAllDynamicCases(int customerId, int[] caseIds);
         DynamicCase GetDynamicCase(int id);
         IList<Case> GetProblemCases(int problemId);
-        IList<ExtendedCaseFormModel> GetExtendedCaseForm(int? caseSolutionId, int customerId, int? caseId, int userLanguageId, string userGuid, int? caseStateSecondaryId, int? caseWorkingGroupId, string extendedCasePath, int? userId, string userName, ApplicationType applicationType, int userWorkingGroupId);
-		ExtendedCaseFormModel GetExtendedCaseSectionForm(int caseID, int customerID, CaseSectionType caseSection, int userLanguageId, string userGuid, int caseStateSecondaryId, int caseWorkingGroupId, int userWorkingGroupId, string extendedCasePath);
+        
+        ExtendedCaseDataOverview GetCaseExtendedCaseForm(int caseSolutionId, int customerId, int caseId, string userGuid, int caseStateSecondaryId);
+        ExtendedCaseDataOverview GetCaseSectionExtendedCaseForm(int caseSolutionId, int customerId, int caseId, int caseSectionType, string userGuid, int caseStateSecondaryId);
+        List<ExtendedCaseDataOverview> GetExtendedCaseSectionForms(int caseId, int customerId);
+        bool HasExtendedCase(int caseId, int customerId);
 
-		ExtendedCaseFormModel GetExtendedCaseSectionForm(int caseSolutionId, int customerId, int caseId, int caseSectionType, int userLanguageId, string userGuid, int caseStateSecondaryId, int caseWorkingGroupId, string extendedCasePath, int userWorkingGroupId);
-
-		ExtendedCaseDataEntity GetExtendedCaseData(Guid extendedCaseGuid);
+        //todo:review
+        ExtendedCaseDataEntity GetExtendedCaseData(Guid extendedCaseGuid);
 
         bool AddChildCase(int childCaseId, int parentCaseId, out IDictionary<string, string> errors);
 
@@ -155,7 +160,7 @@ namespace DH.Helpdesk.Services.Services
 
         bool IsRelated(int caseId);
 
-        ChildCaseOverview[] GetChildCasesFor(int caseId);
+        List<ChildCaseOverview> GetChildCasesFor(int caseId);
 
         ParentCaseInfo GetParentInfo(int caseId);
 
@@ -172,14 +177,15 @@ namespace DH.Helpdesk.Services.Services
         bool AddParentCase(int id, int parentId, bool independent = false);
         void SetIndependentChild(int caseID, bool independentChild);
 
-		void CreateExtendedCaseSectionRelationship(int caseID, int extendedCaseDataID, CaseSectionType sectionType, int customerID);
-		void CheckAndUpdateExtendedCaseSectionData(int extendedCaseDataID, int caseID, int customerID, CaseSectionType sectionType);
-		void RemoveAllExtendedCaseSectionData(int caseID, int customerID, CaseSectionType initiator);
+        void CreateExtendedCaseSectionRelationship(int caseID, int extendedCaseDataID, CaseSectionType sectionType, int customerID);
+        void CheckAndUpdateExtendedCaseSectionData(int extendedCaseDataID, int caseID, int customerID, CaseSectionType sectionType);
+        void RemoveAllExtendedCaseSectionData(int caseID, int customerID, CaseSectionType initiator);
 
-		IList<Case> GetTop100CasesForTest();
+        IList<Case> GetTop100CasesForTest();
         int GetCaseRelatedInventoryCount(int customerId, string userId, UserOverview currentUser);
         int GetCaseQuickOpen(UserOverview user, string searchFor);
         void SendProblemLogEmail(Case cs, CaseMailSetting caseMailSetting, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, bool isClosedCaseSending);
+        int GetCaseCustomerId(int caseId);
     }
 
     public class CaseService : ICaseService
@@ -206,10 +212,10 @@ namespace DH.Helpdesk.Services.Services
         private readonly ILogFileRepository _logFileRepository;
         private readonly IFormFieldValueRepository _formFieldValueRepository;
         private readonly IFeedbackTemplateService _feedbackTemplateService;
-		private readonly ICaseSectionsRepository _caseSectionsRepository;
+        private readonly ICaseSectionsRepository _caseSectionsRepository;
 
 
-		private readonly ICaseMailer caseMailer;
+        private readonly ICaseMailer caseMailer;
 
         private readonly IInvoiceArticleService invoiceArticleService;
 
@@ -232,7 +238,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly IExtendedCaseFormRepository _extendedCaseFormRepository;
         private readonly IExtendedCaseDataRepository _extendedCaseDataRepository;
         private readonly ICaseFollowUpService _caseFollowUpService;
-
+        private readonly ICaseSolutionRepository _caseSolutionRepository;
+        private readonly IStateSecondaryRepository _stateSecondaryRepository;
+        private readonly ICustomerRepository _customerRepository;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -275,11 +283,11 @@ namespace DH.Helpdesk.Services.Services
             IExtendedCaseFormRepository extendedCaseFormRepository,
             IExtendedCaseDataRepository extendedCaseDataRepository,
             ICaseFollowUpService caseFollowUpService,
-			ICaseSectionsRepository caseSectionsRepository
-
-			)
-
-		{
+            ICaseSectionsRepository caseSectionsRepository,
+            ICaseSolutionRepository caseSolutionRepository,
+            IStateSecondaryRepository stateSecondaryRepository,
+            ICustomerRepository customerRepository)
+        {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
             this._caseRepository = caseRepository;
@@ -315,19 +323,27 @@ namespace DH.Helpdesk.Services.Services
             this._emailGroupService = emailGroupService;
             this._userService = userService;
             this._emailSendingSettingsProvider = emailSendingSettingsProvider;
-            _caseExtraFollowersService = caseExtraFollowersService;
-            _feedbackTemplateService = feedbackTemplateService;
-            _productAreaService = productAreaService;
+            this._caseExtraFollowersService = caseExtraFollowersService;
+            this._feedbackTemplateService = feedbackTemplateService;
+            this._productAreaService = productAreaService;
             this._extendedCaseFormRepository = extendedCaseFormRepository;
             this._extendedCaseDataRepository = extendedCaseDataRepository;
             this._caseFollowUpService = caseFollowUpService;
-			this._caseSectionsRepository = caseSectionsRepository;
+            this._caseSectionsRepository = caseSectionsRepository;
+            this._caseSolutionRepository = caseSolutionRepository;
+            this._stateSecondaryRepository = stateSecondaryRepository;
+            this._customerRepository = customerRepository;
+        }
 
-		}
-
-		public Case GetCaseById(int id, bool markCaseAsRead = false)
+        public Case GetCaseById(int id, bool markCaseAsRead = false)
         {
             return this._caseRepository.GetCaseById(id, markCaseAsRead);
+        }
+
+        public int GetCaseCustomerId(int caseId)
+        {
+            var customerId = this._caseRepository.GetCaseCustomerId(caseId);
+            return customerId;
         }
 
         public Case GetDetachedCaseById(int id)
@@ -365,23 +381,106 @@ namespace DH.Helpdesk.Services.Services
             return _caseRepository.GetDynamicCase(id);
         }
 
-        public IList<ExtendedCaseFormModel> GetExtendedCaseForm(int? caseSolutionId, int customerId, int? caseId, int userLanguageId, string userGuid, int? caseStateSecondaryId, int? caseWorkingGroupId, string extendedCasePath, int? userId, string userName, ApplicationType applicationType, int userWorkingGroupId)
+        // retrieve extended case form for case 
+        public ExtendedCaseDataOverview GetCaseExtendedCaseForm(int caseSolutionId, int customerId, int caseId, string userGuid, int caseStateSecondaryId)
         {
-            return _extendedCaseFormRepository.GetExtendedCaseForm((caseSolutionId.HasValue ? caseSolutionId.Value: 0), customerId, (caseId.HasValue ? caseId.Value : 0), userLanguageId, userGuid, (caseStateSecondaryId.HasValue ? caseStateSecondaryId.Value : 0), (caseWorkingGroupId.HasValue ? caseWorkingGroupId.Value : 0), extendedCasePath, userId, userName, applicationType, userWorkingGroupId);
+            if (caseSolutionId == 0)
+                return null;
+
+            var caseSolution = _caseSolutionRepository.GetGetSolutionInfo(caseSolutionId, customerId);
+
+            if (caseSolution == null)
+                return null;
+
+            if (caseSolutionId > 0)
+            {
+                //fallback to casesolution.StateSecondaryId if case is new
+                if (caseStateSecondaryId == 0 && caseSolution.StateSecondaryId > 0)
+                {
+                    caseStateSecondaryId = _stateSecondaryRepository.GetById(caseSolution.StateSecondaryId).StateSecondaryId;
+                }
+            }
+
+            var extendedCaseFormData =
+                caseId == 0
+                    ? _extendedCaseFormRepository.GetExtendedCaseFormForSolution(caseSolutionId, customerId)
+                    : _extendedCaseFormRepository.GetExtendedCaseFormForCase(caseId, customerId);
+
+            if (extendedCaseFormData != null)
+            {
+                extendedCaseFormData.StateSecondaryId = caseStateSecondaryId;
+                if (string.IsNullOrWhiteSpace(extendedCaseFormData.ExtendedCaseFormName))
+                {
+                    extendedCaseFormData.ExtendedCaseFormName = caseSolution.Name;
+                }
+
+                //create extendedcase empty record
+                if (caseId == 0)
+                {
+                    extendedCaseFormData.ExtendedCaseGuid =
+                        _extendedCaseFormRepository.CreateExtendedCaseData(extendedCaseFormData.ExtendedCaseFormId, userGuid);
+                }
+            }
+
+            return extendedCaseFormData;
         }
 
-		public ExtendedCaseFormModel GetExtendedCaseSectionForm(int caseSolutionId, int customerId, int caseId, int caseSectionType, int userLanguageId, string userGuid, int caseStateSecondaryId, int caseWorkingGroupId, string extendedCasePath, int userWorkingGroupId)
-		{
-			return _extendedCaseFormRepository.GetExtendedCaseSectionForm(caseSolutionId, customerId, caseId, caseSectionType, userLanguageId, userGuid, caseStateSecondaryId, caseWorkingGroupId, extendedCasePath, userWorkingGroupId);
-		}
+        public bool HasExtendedCase(int caseId, int customerId)
+        {
+            var data = _extendedCaseFormRepository.GetExtendedCaseFormForCase(caseId, customerId);
+            return data != null && data.ExtendedCaseFormId > 0;
+        }
 
-		public ExtendedCaseFormModel GetExtendedCaseSectionForm(int caseID, int customerID, CaseSectionType caseSection, int userLanguageId, string userGuid, int caseStateSecondaryId, int caseWorkingGroupId, int userWorkingGroupId, string extendedCasePath)
-		{
-			return _extendedCaseFormRepository.GetExtendedCaseSectionForm(caseID, customerID, caseSection, userLanguageId, userGuid, caseStateSecondaryId, caseWorkingGroupId, userWorkingGroupId, extendedCasePath);
-		}
+        // retrieve extended case forms for case sections
+        public ExtendedCaseDataOverview GetCaseSectionExtendedCaseForm(int caseSolutionId, int customerId, int caseId, int caseSectionType, string userGuid, int caseStateSecondaryId)
+        {
+            if (caseSolutionId == 0)
+                return null;
 
+            var caseSolution = _caseSolutionRepository.GetGetSolutionInfo(caseSolutionId, customerId);
 
-		public ExtendedCaseDataEntity GetExtendedCaseData(Guid extendedCaseGuid)
+            if (caseSolution == null)
+                return null;
+
+            if (caseSolutionId > 0)
+            {
+                //fallback to casesolution.StateSecondaryId if case is new
+                if (caseStateSecondaryId == 0 && caseSolution.StateSecondaryId > 0)
+                {
+                    caseStateSecondaryId = _stateSecondaryRepository.GetById(caseSolution.StateSecondaryId).StateSecondaryId;
+                }
+            }
+
+            var extendedCaseFormData = 
+                caseId == 0
+                    ? _extendedCaseFormRepository.GetCaseSectionExtendedCaseFormForSolution(caseSolutionId, customerId, caseSectionType)
+                    : _extendedCaseFormRepository.GetCaseSectionExtendedCaseFormForCase(caseId, customerId);
+
+            if (extendedCaseFormData != null)
+            {
+                extendedCaseFormData.StateSecondaryId = caseStateSecondaryId; 
+                if (string.IsNullOrWhiteSpace(extendedCaseFormData.ExtendedCaseFormName))
+                {
+                    extendedCaseFormData.ExtendedCaseFormName = caseSolution.Name;
+                }
+
+                //create extendedcase empty record
+                if (caseId == 0)
+                {
+                    extendedCaseFormData.ExtendedCaseGuid = 
+                        _extendedCaseFormRepository.CreateExtendedCaseData(extendedCaseFormData.ExtendedCaseFormId, userGuid);
+                }
+            }
+
+            return extendedCaseFormData;
+        }
+
+        public List<ExtendedCaseDataOverview> GetExtendedCaseSectionForms(int caseId, int customerId)
+        {
+            return _extendedCaseFormRepository.GetExtendedCaseFormsForSections(caseId, customerId);
+        }
+
+        public ExtendedCaseDataEntity GetExtendedCaseData(Guid extendedCaseGuid)
         {
             return _extendedCaseDataRepository.GetExtendedCaseData(extendedCaseGuid);
         }
@@ -550,11 +649,11 @@ namespace DH.Helpdesk.Services.Services
 
             var c = this._caseRepository.GetById(id);
 
-			if (c.CaseSectionExtendedCaseDatas != null && c.CaseSectionExtendedCaseDatas.Any())
-			{
-				c.CaseSectionExtendedCaseDatas.Clear();
-			}
-			
+            if (c.CaseSectionExtendedCaseDatas != null && c.CaseSectionExtendedCaseDatas.Any())
+            {
+                c.CaseSectionExtendedCaseDatas.Clear();
+            }
+            
             ret = c.CaseGUID;
 
             DeleteCaseById(id);
@@ -723,6 +822,9 @@ namespace DH.Helpdesk.Services.Services
         
         public bool IsRelated(int caseId)
         {
+            if (caseId <= 0)
+                return false;
+
             var isParentCase = GetChildCasesFor(caseId);
 
             if (isParentCase != null && isParentCase.Count() > 0)
@@ -739,209 +841,16 @@ namespace DH.Helpdesk.Services.Services
 
             return false;
         }
-
-        //TODO: Extremely needs to be refactored
-        public ChildCaseOverview[] GetChildCasesFor(int caseId)
+        
+        public List<ChildCaseOverview> GetChildCasesFor(int caseId)
         {
-            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
-            {
-                var childCaseRelations = uow.GetRepository<ParentChildRelation>().GetAll();
-                var allCases = uow.GetRepository<Case>().GetAll();
-                var allSecStates = uow.GetRepository<StateSecondary>().GetAll();
-                var allPerformers = uow.GetRepository<User>().GetAll();
-                var caseTypes = uow.GetRepository<CaseType>().GetAll();
-                var res =
-                    childCaseRelations.Where(it => it.AncestorId == caseId)
-                        .Select(it => new { id = it.DescendantId, parentId = it.AncestorId, independent = it.Independent })
-                        .GroupJoin(
-                            allCases,
-                            it => it.id,
-                            case_ => case_.Id,
-                            (parentChild, case_) => new { parentChild, case_ })
-                        .SelectMany(
-                            t => t.case_.DefaultIfEmpty(),
-                            (t, case_) =>
-                            new
-                            {
-                                id = t.parentChild.id,
-                                parentId = t.parentChild.parentId,
-                                independent = t.parentChild.independent,
-                                caseNumber = case_.CaseNumber,
-                                subject = case_.Caption,
-                                performerId = case_.Performer_User_Id,
-                                substateId = case_.StateSecondary_Id,
-                                caseTypeId = case_.CaseType_Id,
-                                registrationDate = case_.RegTime,
-                                closingDate = case_.FinishingDate,
-                                approvedDate = case_.ApprovedDate,
-                                priority = case_.Priority.Name
-                            })
-                        .GroupJoin(
-                            allPerformers,
-                            tempParentChildStruct => tempParentChildStruct.performerId,
-                            performer => performer.Id,
-                            (tmpParentChild, performer) => new { tmpParentChild, performer })
-                        .SelectMany(
-                            t => t.performer.DefaultIfEmpty(),
-                            (t, performer) =>
-                            new
-                            {
-                                id = t.tmpParentChild.id,
-                                parentId = t.tmpParentChild.parentId,
-                                independent = t.tmpParentChild.independent,
-                                caseNumber = t.tmpParentChild.caseNumber,
-                                subject = t.tmpParentChild.subject,
-                                performerFirstName = performer == null ? string.Empty : performer.FirstName,
-                                performerLastName = performer == null ? string.Empty : performer.SurName,
-                                substateId = t.tmpParentChild.substateId,
-                                caseTypeId = t.tmpParentChild.caseTypeId,
-                                registrationDate = t.tmpParentChild.registrationDate,
-                                closingDate = t.tmpParentChild.closingDate,
-                                approvedDate = t.tmpParentChild.approvedDate,
-                                priority = t.tmpParentChild.priority
-                            })
-                        .GroupJoin(
-                            allSecStates,
-                            tempParentCildStruct => tempParentCildStruct.substateId,
-                            subState => subState.Id,
-                            (tmpParentChild, subState) => new { tmpParentChild, subState })
-                        .SelectMany(
-                            t => t.subState.DefaultIfEmpty(),
-                            (t, subState) =>
-                            new
-                            {
-                                id = t.tmpParentChild.id,
-                                parentId = t.tmpParentChild.parentId,
-                                independent = t.tmpParentChild.independent,
-                                subject = t.tmpParentChild.subject,
-                                caseNumber = t.tmpParentChild.caseNumber,
-                                performerFirstName = t.tmpParentChild.performerFirstName,
-                                performerLastName = t.tmpParentChild.performerLastName,
-                                subState = subState == null ? string.Empty : subState.Name,
-                                priority = t.tmpParentChild.priority,
-                                caseTypeId = t.tmpParentChild.caseTypeId,
-                                registrationDate = t.tmpParentChild.registrationDate,
-                                closingDate = t.tmpParentChild.closingDate,
-                                approvedDate = t.tmpParentChild.approvedDate
-                            })
-                        .GroupJoin(
-                            caseTypes,
-                            tempParentCildStruct => tempParentCildStruct.caseTypeId,
-                            subState => subState.Id,
-                            (tmpParentChild, casetType) => new { tmpParentChild, casetType })
-                        .SelectMany(
-                            t => t.casetType.DefaultIfEmpty(),
-                            (t, caseType) =>
-                            new
-                            {
-                                id = t.tmpParentChild.id,
-                                parentId = t.tmpParentChild.parentId,
-                                independent = t.tmpParentChild.independent,
-                                caseNumber = t.tmpParentChild.caseNumber,
-                                subject = t.tmpParentChild.subject,
-                                performerFirstName = t.tmpParentChild.performerFirstName,
-                                performerLastName = t.tmpParentChild.performerLastName,
-                                subState = t.tmpParentChild.subState,
-                                priority = t.tmpParentChild.priority,
-                                caseType = caseType == null ? string.Empty : caseType.Name,
-                                IsApprovingRequired = caseType != null && caseType.RequireApproving == 1,
-                                registrationDate = t.tmpParentChild.registrationDate,
-                                closingDate = t.tmpParentChild.closingDate,                                
-                                t.tmpParentChild.approvedDate
-                            })
-                        .AsQueryable();
-                return res.Select(it => new ChildCaseOverview()
-                {
-                    Id = it.id,
-                    CaseNo = (int)it.caseNumber,
-                    Subject = it.subject,
-                    CasePerformer = new UserNamesStruct()
-                    {
-                        FirstName = it.performerFirstName,
-                        LastName = it.performerLastName
-                    },
-                    CaseType = it.caseType,
-                    SubStatus = it.subState,
-                    Priority = it.priority,
-                    RegistrationDate = it.registrationDate,
-                    ClosingDate = it.closingDate,
-                    ApprovedDate = it.approvedDate,
-                    IsRequriedToApprive = it.IsApprovingRequired,
-                    ParentId = it.parentId,
-                    Indepandent = it.independent
-                }).ToArray();
-            }
+            return _caseRepository.GetChildCasesFor(caseId);
         }
-
-        //TODO: Extremely needs to be refactored
+        
         public ParentCaseInfo GetParentInfo(int caseId)
         {
-            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
-            {
-                var allCases = uow.GetRepository<Case>().GetAll();
-                var allRelations = uow.GetRepository<ParentChildRelation>().GetAll();
-                var allPerformers = uow.GetRepository<User>().GetAll();
-                var relationInfo = allRelations
-                    .Where(it => it.DescendantId == caseId)
-                    .Select(it => new { id = it.DescendantId, parentId = it.AncestorId, independent = it.Independent })
-                    .GroupJoin(
-                            allCases,
-                            it => it.parentId,
-                            case_ => case_.Id,
-                            (parentChild, case_) => new { parentChild, case_ })
-                        .SelectMany(
-                            t => t.case_.DefaultIfEmpty(),
-                            (t, case_) =>
-                            new
-                            {
-                                id = t.parentChild.id,
-                                parentId = t.parentChild.parentId,
-                                independent = t.parentChild.independent,
-                                caseNumber = case_.CaseNumber,
-                                subject = case_.Caption,
-                                performerId = case_.Performer_User_Id,
-                                substateId = case_.StateSecondary_Id,
-                                caseTypeId = case_.CaseType_Id,
-                                registrationDate = case_.RegTime,
-                                finishingDate = case_.FinishingDate
-                            })
-                        .GroupJoin(
-                            allPerformers,
-                            tempParentChildStruct => tempParentChildStruct.performerId,
-                            performer => performer.Id,
-                            (tmpParentChild, performer) => new { tmpParentChild, performer })
-                        .SelectMany(
-                            t => t.performer.DefaultIfEmpty(),
-                            (t, performer) =>
-                            new
-                            {
-                                parentId = t.tmpParentChild.parentId,
-                                caseNumber = t.tmpParentChild.caseNumber,
-                                finishingDate = t.tmpParentChild.finishingDate,
-                                performerFirstName = performer == null ? string.Empty : performer.FirstName,
-                                performerLastName = performer == null ? string.Empty : performer.SurName,
-                                isChildIndependent = t.tmpParentChild.independent
-                            })
-                        .FirstOrDefault();
-                if (relationInfo != null)
-                {
-                    return new ParentCaseInfo()
-                    {
-                        ParentId = relationInfo.parentId,
-                        CaseNumber = relationInfo.caseNumber,
-                        IsChildIndependent = relationInfo.isChildIndependent,
-                        CaseAdministrator =
-                                       new UserNamesStruct()
-                                       {
-                                           FirstName = relationInfo.performerFirstName,
-                                           LastName = relationInfo.performerLastName
-                                       },
-                        FinishingDate = relationInfo.finishingDate
-                    };
-                }
-            }
-
-            return null;
+            var parentCaseInfo = _caseRepository.GetParentInfo(caseId);
+            return parentCaseInfo;
         }
 
         public int? SaveInternalLogMessage(int id, string textInternal, out IDictionary<string, string> errors)
@@ -1005,6 +914,7 @@ namespace DH.Helpdesk.Services.Services
 
         public Case InitCase(int customerId, int userId, int languageId, string ipAddress, CaseRegistrationSource source, Setting customerSetting, string adUser)
         {
+            var customerDefaults = _customerRepository.GetCustomerDefaults(customerId);
             var c = new Case
             {
                 Customer_Id = customerId,
@@ -1015,11 +925,11 @@ namespace DH.Helpdesk.Services.Services
                 RegLanguage_Id = languageId,
                 RegistrationSource = (int)source,
                 Deleted = 0,
-                Region_Id = this._regionService.GetDefaultId(customerId),
-                CaseType_Id = this._caseTypeService.GetDefaultId(customerId),
-                Supplier_Id = this._supplierServicee.GetDefaultId(customerId),
-                Priority_Id = this._priorityService.GetDefaultId(customerId),
-                Status_Id = this._statusService.GetDefaultId(customerId),
+                Region_Id = customerDefaults.RegionId,
+                CaseType_Id = customerDefaults.CaseTypeId,
+                Supplier_Id = customerDefaults.SupplierId,
+                Priority_Id = customerDefaults.PriorityId,
+                Status_Id = customerDefaults.StatusId,
                 WorkingGroup_Id = this._userRepository.GetUserDefaultWorkingGroupId(userId, customerId),
                 RegUserId = adUser.GetUserFromAdPath(),
                 RegUserDomain = adUser.GetDomainFromAdPath()
@@ -1132,8 +1042,6 @@ namespace DH.Helpdesk.Services.Services
                     if (log.SendMailAboutCaseToNotifier && newCase.FinishingDate == null && externalUpdateMail == 1)
                     {
                         var to = performerUserEmail.Split(';', ',').ToList();
-                        var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
-                        to.AddRange(extraFollowers);
                         foreach (var t in to)
                         {
                             var curMail = t.Trim();
@@ -1257,8 +1165,7 @@ namespace DH.Helpdesk.Services.Services
 
                 this._caseRepository.Update(c);
             }
-
-
+            
             this._caseRepository.Commit();
             this._caseStatService.UpdateCaseStatistic(c);
 
@@ -3197,101 +3104,94 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-		public ExtendedCaseFormModel GetExtendedCaseSectionFormForSolution(int caseSolutionId, int customerId, int caseId, int caseSectionType, int userLanguageId, string userGuid, int caseStateSecondaryId, int caseWorkingGroupId, string extendedCasePath, int userWorkingGroupId)
-		{
-			var formModel = _extendedCaseFormRepository.GetExtendedCaseSectionForm(caseSolutionId, customerId, caseId, caseSectionType, userLanguageId, userGuid, caseStateSecondaryId, caseWorkingGroupId, extendedCasePath, userWorkingGroupId);
+        public void CreateExtendedCaseSectionRelationship(int caseID, int extendedCaseDataID, CaseSectionType sectionType, int customerID)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var caseSections = _caseSectionsRepository.GetCaseSections(customerID);
+                var caseSection = caseSections.Single(o => o.SectionType == (int)sectionType);
 
-			return formModel;
-		}
+                var rep = uow.GetRepository<Case_CaseSection_ExtendedCase>();
 
-		public void CreateExtendedCaseSectionRelationship(int caseID, int extendedCaseDataID, CaseSectionType sectionType, int customerID)
-		{
-			using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
-			{
-				var caseSections = _caseSectionsRepository.GetCaseSections(customerID);
-				var caseSection = caseSections.Single(o => o.SectionType == (int)sectionType);
+                // Other relation on section and case and remove
+                var otherRelation = rep.Find(it => it.Case_Id == caseID && it.ExtendedCaseData_Id != extendedCaseDataID && it.CaseSection_Id == caseSection.Id).FirstOrDefault();
 
-				var rep = uow.GetRepository<Case_CaseSection_ExtendedCase>();
+                if (otherRelation != null)
+                {
+                    rep.Delete(otherRelation);
+                }
 
-				// Other relation on section and case and remove
-				var otherRelation = rep.Find(it => it.Case_Id == caseID && it.ExtendedCaseData_Id != extendedCaseDataID && it.CaseSection_Id == caseSection.Id).FirstOrDefault();
+                var relation = rep.Find(it => it.Case_Id == caseID && it.ExtendedCaseData_Id == extendedCaseDataID && it.CaseSection_Id == caseSection.Id).ToList();
 
-				if (otherRelation != null)
-				{
-					rep.Delete(otherRelation);
-				}
+                // If already exist do nothing
+                if (!relation.Any())
+                {
+                    rep.Add(new Case_CaseSection_ExtendedCase() { Case_Id = caseID, ExtendedCaseData_Id = extendedCaseDataID, CaseSection_Id = caseSection.Id });
 
-				var relation = rep.Find(it => it.Case_Id == caseID && it.ExtendedCaseData_Id == extendedCaseDataID && it.CaseSection_Id == caseSection.Id).ToList();
+                }
+                uow.Save();
+            }
+        }
 
-				// If already exist do nothing
-				if (!relation.Any())
-				{
-					rep.Add(new Case_CaseSection_ExtendedCase() { Case_Id = caseID, ExtendedCaseData_Id = extendedCaseDataID, CaseSection_Id = caseSection.Id });
+        public void RemoveAllExtendedCaseSectionData(int caseID, int customerID, CaseSectionType sectionType)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var caseSections = _caseSectionsRepository.GetCaseSections(customerID);
+                var caseSection = caseSections.SingleOrDefault(o => o.SectionType == (int)sectionType);
 
-				}
-				uow.Save();
-			}
-		}
+                if (caseSection != null)
+                {
 
-		public void RemoveAllExtendedCaseSectionData(int caseID, int customerID, CaseSectionType sectionType)
-		{
-			using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
-			{
-				var caseSections = _caseSectionsRepository.GetCaseSections(customerID);
-				var caseSection = caseSections.SingleOrDefault(o => o.SectionType == (int)sectionType);
+                    var rep = uow.GetRepository<Case_CaseSection_ExtendedCase>();
 
-				if (caseSection != null)
-				{
+                    var all = rep.Find(o => o.Case_Id == caseID && o.CaseSection_Id == caseSection.Id);
 
-					var rep = uow.GetRepository<Case_CaseSection_ExtendedCase>();
+                    foreach (var r in all)
+                    {
+                        rep.Delete(r);
+                    }
+                    uow.Save();
+                }
+            }
+        }
 
-					var all = rep.Find(o => o.Case_Id == caseID && o.CaseSection_Id == caseSection.Id);
+        public void CheckAndUpdateExtendedCaseSectionData(int extendedCaseDataID, int caseID, int customerID, CaseSectionType sectionType)
+        {
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            {
+                var caseSections = _caseSectionsRepository.GetCaseSections(customerID);
+                var caseSection = caseSections.SingleOrDefault(o => o.SectionType == (int)sectionType);
 
-					foreach (var r in all)
-					{
-						rep.Delete(r);
-					}
-					uow.Save();
-				}
-			}
-		}
+                if (caseSection != null)
+                {
+                    var rep = uow.GetRepository<Case_CaseSection_ExtendedCase>();
 
-		public void CheckAndUpdateExtendedCaseSectionData(int extendedCaseDataID, int caseID, int customerID, CaseSectionType sectionType)
-		{
-			using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
-			{
-				var caseSections = _caseSectionsRepository.GetCaseSections(customerID);
-				var caseSection = caseSections.SingleOrDefault(o => o.SectionType == (int)sectionType);
+                    var all = rep.Find(o => o.Case_Id == caseID && o.CaseSection_Id == caseSection.Id).ToList();
 
-				if (caseSection != null)
-				{
-					var rep = uow.GetRepository<Case_CaseSection_ExtendedCase>();
+                    var toRemove = all.Where(o => o.ExtendedCaseData_Id != extendedCaseDataID).ToList();
 
-					var all = rep.Find(o => o.Case_Id == caseID && o.CaseSection_Id == caseSection.Id).ToList();
+                    foreach (var r in toRemove)
+                    {
+                        rep.Delete(r);
+                    }
 
-					var toRemove = all.Where(o => o.ExtendedCaseData_Id != extendedCaseDataID).ToList();
+                    // If there isn't already a connection
+                    if (!all.Any(o => o.ExtendedCaseData_Id == extendedCaseDataID))
+                    {
+                        rep.Add(new Case_CaseSection_ExtendedCase
+                        {
+                            Case_Id = caseID,
+                            CaseSection_Id = caseSection.Id,
+                            ExtendedCaseData_Id = extendedCaseDataID
+                        });
+                    }
 
-					foreach (var r in toRemove)
-					{
-						rep.Delete(r);
-					}
+                    uow.Save();
+                }
+            }
 
-					// If there isn't already a connection
-					if (!all.Any(o => o.ExtendedCaseData_Id == extendedCaseDataID))
-					{
-						rep.Add(new Case_CaseSection_ExtendedCase
-						{
-							Case_Id = caseID,
-							CaseSection_Id = caseSection.Id,
-							ExtendedCaseData_Id = extendedCaseDataID
-						});
-					}
-
-					uow.Save();
-				}
-			}
-
-		}
+        }
 
         #endregion
     }

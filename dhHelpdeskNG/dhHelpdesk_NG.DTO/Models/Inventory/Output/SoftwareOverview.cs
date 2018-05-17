@@ -31,7 +31,7 @@
         [NotNull]
         public string Manufacturer { get; set; }
 
-        [NotNullAndEmpty]
+        
         public string Name { get; set; }
 
         public string ProductKey { get; set; }

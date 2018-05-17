@@ -23,6 +23,7 @@
         DocumentPermission,
         BulletinBoardPermission,
         InventoryPermission,
+        ContractPermission,
         InvoicePermission,
         CaseUnlockPermission,
         CaseInternalLogPermission

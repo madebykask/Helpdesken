@@ -42,8 +42,13 @@
                .HasForeignKey(x => x.FollowUpResponsibleUser_Id)
                .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.CreatedByUser)
+                .WithMany()
+                .HasForeignKey(x => x.CreatedByUser_Id)
+                .WillCascadeOnDelete(false);
+
             Property(x => x.Contract_Id).IsRequired();
-            this.Property(x => x.CreatedByUser_Id).IsRequired();
+            this.Property(x => x.CreatedByUser_Id).IsOptional();
             this.Property(x => x.ContractCategory_Id).IsRequired();
             this.Property(x => x.ContractEndDate).IsOptional();
             this.Property(x => x.ContractStartDate).IsOptional();
@@ -57,8 +62,10 @@
             this.Property(x => x.NoticeTime).IsRequired();
             this.Property(x => x.Running).IsRequired();
             this.Property(x => x.Info).IsOptional();
+            this.Property(x => x.Files).IsOptional();
             this.Property(x => x.ContractNumber).IsRequired();
             this.Property(x => x.CreatedDate);
+
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             this.ToTable("tblContractHistory");

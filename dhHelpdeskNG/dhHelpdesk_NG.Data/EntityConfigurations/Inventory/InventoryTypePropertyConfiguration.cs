@@ -28,6 +28,8 @@
             this.Property(x => x.Show).IsRequired();
             this.Property(x => x.ShowInList).IsRequired();
             this.Property(x => x.PropertyPos).IsRequired();
+            this.Property(x => x.XMLTag).IsOptional().HasMaxLength(200);
+            this.Property(x => x.ReadOnly).IsRequired();
 
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();

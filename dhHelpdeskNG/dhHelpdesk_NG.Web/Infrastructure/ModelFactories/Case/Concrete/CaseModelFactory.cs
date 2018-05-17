@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
+﻿using System;
+using DH.Helpdesk.BusinessData.Models.Paging;
+using DH.Helpdesk.Web.Models;
+
+namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 {
     using System.Collections.Generic;
 
@@ -52,6 +56,41 @@
                                 bool sortByAsc)
         {
             return new RelatedCasesFullViewModel(searchResult, userId, caseId, sortBy, sortByAsc);
+        }
+
+        public CaseSearchModel InitEmptySearchModel(int customerId, int userId)
+        {
+            ISearch s = new Search();
+            var f = new CaseSearchFilter
+            {
+                CustomerId = customerId,
+                UserId = userId,
+                CaseType = 0,
+                Category = null,
+                Priority = null,
+                ProductArea = null,
+                Region = null,
+                StateSecondary = null,
+                Status = null,
+                User = null,
+                UserPerformer = null,
+                UserResponsible = null,
+                WorkingGroup = null,
+                CaseProgress = CaseSearchFilter.InProgressCases,
+                CaseRegistrationDateStartFilter = null,
+                CaseRegistrationDateEndFilter = null,
+                CaseWatchDateStartFilter = null,
+                CaseWatchDateEndFilter = null,
+                CaseClosingDateStartFilter = null,
+                CaseClosingDateEndFilter = null,
+                CaseClosingReasonFilter = null,
+                PageInfo = new PageInfo()
+            };
+
+            s.SortBy = "CaseNumber";
+            s.Ascending = true;
+
+            return new CaseSearchModel() { caseSearchFilter = f, Search = s };
         }
     }
 }

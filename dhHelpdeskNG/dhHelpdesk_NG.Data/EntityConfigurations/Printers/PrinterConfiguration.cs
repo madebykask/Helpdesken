@@ -30,7 +30,7 @@
                 .HasForeignKey(x => x.ChangedByUser_Id)
                 .WillCascadeOnDelete(false);
 
-            this.Property(x => x.PrinterName).IsRequired().HasMaxLength(50);
+            this.Property(x => x.PrinterName).IsRequired().HasMaxLength(60);
             this.Property(x => x.PrinterType).IsRequired().HasMaxLength(50);
             this.Property(x => x.PrinterServer).IsRequired().HasMaxLength(50);
             this.Property(x => x.NumberOfTrays).IsRequired().HasMaxLength(20);
@@ -50,6 +50,7 @@
 
             this.Property(x => x.CreatedDate).IsRequired();
             this.Property(x => x.ChangedDate).IsRequired();
+            this.Property(x => x.SyncChangedDate).IsOptional();
 
             this.ToTable("tblPrinter");
         }

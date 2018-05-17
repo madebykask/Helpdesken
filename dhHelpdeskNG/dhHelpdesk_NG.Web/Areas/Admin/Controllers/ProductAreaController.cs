@@ -214,7 +214,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }).ToList(),
                 CanAddChild = level < MAX_LEVEL_DEEP,
                 CaseType_Id = connectedCaseType?.CaseType_Id ?? 0,
-                CaseTypes = _caseTypeService.GetCaseTypes(customer.Id, true),
+                CaseTypes = _caseTypeService.GetCaseTypesOverviewWithChildren(customer.Id, true),
                 ParentPath_CaseType = "--"
             };
             if ( model.CaseType_Id > 0)

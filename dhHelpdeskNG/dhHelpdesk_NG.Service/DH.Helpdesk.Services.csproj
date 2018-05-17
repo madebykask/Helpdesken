@@ -154,12 +154,17 @@
     <Compile Include="BusinessLogic\CaseDocument\CaseDocumentConditionResult.cs" />
     <Compile Include="BusinessLogic\CaseDocument\CaseDocumentReplacePropertiesResult.cs" />
     <Compile Include="BusinessLogic\Cases\CaseHelper.cs" />
+    <Compile Include="BusinessLogic\Cases\CaseProcessor.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionPropertyException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionResult.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionParseException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionBaseException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionEvaluator.cs" />
+    <Compile Include="BusinessLogic\Contracts\ContractHistoryFieldsDiffBuilder.cs" />
+    <Compile Include="BusinessLogic\Contracts\IContractHistoryFormatter.cs" />
+    <Compile Include="BusinessLogic\Gdpr\DataPrivacyTaskProgress.cs" />
+    <Compile Include="BusinessLogic\Gdpr\GDPRDataPrivacyProcessor.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\MailTemplateFormatterNew.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\OrderMailTemplateFormatter.cs" />
     <Compile Include="BusinessLogic\MailTools\TemplateFormatters\SurveyTemplate1.cs">
@@ -293,6 +298,7 @@
     <Compile Include="DisplayValues\Questionnaire\CircularStatesDisplayValue.cs" />
     <Compile Include="DisplayValues\StringDisplayValue.cs" />
     <Compile Include="DisplayValues\StringsDisplayValue.cs" />
+    <Compile Include="DisplayValues\Reports\TimeDisplayValue.cs" />
     <Compile Include="DisplayValues\UserNameDisplayValue.cs" />
     <Compile Include="Enums\ExtendedCasePathTokens.cs" />
     <Compile Include="Exceptions\BusinessLogicException.cs" />
@@ -332,6 +338,8 @@
     <Compile Include="Services\EmployeeService\IEmployeeService.cs" />
     <Compile Include="Services\ExtendedCase\ExtendedCaseService.cs" />
     <Compile Include="Services\Cases\CaseSectionService.cs" />
+    <Compile Include="Services\GDPRService.cs" />
+    <Compile Include="Services\GDPRTasksService.cs" />
     <Compile Include="Services\IExtendedCaseService.cs" />
     <Compile Include="Services\IMetaDataService.cs" />
     <Compile Include="Services\UniversalCase\IUniversalCaseService.cs" />

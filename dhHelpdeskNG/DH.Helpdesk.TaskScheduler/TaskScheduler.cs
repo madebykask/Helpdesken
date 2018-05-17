@@ -1,21 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Data;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 using Common.Logging;
 using DH.Helpdesk.TaskScheduler.Jobs;
-using DH.Helpdesk.TaskScheduler.Managers;
-using DH.Helpdesk.TaskScheduler.Services;
-using log4net.Config;
 using Ninject;
 using Quartz;
+using DH.Helpdesk.TaskScheduler.Infrastructure.Configuration;
 
 namespace DH.Helpdesk.TaskScheduler
 {
@@ -24,47 +14,40 @@ namespace DH.Helpdesk.TaskScheduler
         private static IKernel _diContainer;
         private static ILog _logger;
         private readonly IScheduler _sched;
+        private readonly IApplicationSettings _applicationSettings;
+
+        #region ctor()
 
         public TaskScheduler(IKernel diContainer)
         {
             _diContainer = diContainer;
-            InitializeComponent();
             _logger = LogManager.GetLogger<TaskScheduler>();
+            _applicationSettings = _diContainer.Get<IServiceConfigurationManager>().AppSettings;
 
-            var envName = _diContainer.Get<IServiceConfigurationManager>().EnvName;
+            var envName = _applicationSettings.EnvName;
             ServiceName = string.IsNullOrEmpty(envName) ? "DH.TaskScheduler" : $"DH.TaskScheduler.{envName}";
-
             _sched = _diContainer.Get<IScheduler>();
+
+            InitializeComponent();
         }
+
+        #endregion
 
         protected override void OnStart(string[] args)
         {
-            //_logger.InfoFormat("Starting service {0}", ServiceName);
+            _logger.InfoFormat("Starting service {0}", ServiceName);
 
-            var job = JobBuilder.Create<DailyReportJob>()
-                .WithIdentity(Constants.DailyReportJobName)
-                .Build();
-            var trigger = _diContainer.Get<IDailyReportService>().GetTrigger();
+            //Debugger.Launch();
 
-            _sched.ScheduleJob(job, trigger);
-
-            var trackerJob = JobBuilder.Create<SettingsTrackerJob>()
-                .WithIdentity("SettingsTrackerJob")
-                .Build();
-
-            // set up a job to track db starttime change of 'DailyReportJob'
-            var trackerSettingsTrigger = TriggerBuilder.Create()
-                .WithIdentity("SettingsTrackerJobTrigger")
-                .StartNow()
-                .ForJob("SettingsTrackerJob")
-                .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(60)
-                    .RepeatForever())
-                .Build();
-            _sched.ScheduleJob(trackerJob, trackerSettingsTrigger);
+            var initializers = _diContainer.GetAll<IJobInitializer>();
+            foreach (var initializer in initializers)
+            {
+                initializer.Run();
+            }
 
             if (_sched.GetJobGroupNames().Count > 0)
                 _sched.Start();
+                
         }
 
         protected override void OnStop()

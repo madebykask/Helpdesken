@@ -28,10 +28,8 @@ namespace DH.Helpdesk.Services.Services
 
         IList<ProductAreaEntity> GetTopProductAreasForUser(int customerId, UserOverview user, bool isOnlyActive = true);
 
-        IList<ProductAreaEntity> GetTopProductAreasForUserOnCase(
-            int customerId,
-            int? productAreaIdToInclude,
-            UserOverview user);
+        IList<ProductAreaOverview> GetTopProductAreasForUserOnCase(int customerId, int? productAreaIdToInclude, UserOverview user);
+        IList<ProductAreaOverview> GetTopProductAreasForUserOnCase(int customerId, int? productAreaIdToInclude, int? caseTypeId, UserOverview user);
 
         IList<ProductAreaEntity> GetAllProductAreas(int customerId);
 
@@ -40,7 +38,7 @@ namespace DH.Helpdesk.Services.Services
         IList<ProductAreaEntity> GetWithHierarchy(int customerId);
 
         ProductAreaEntity GetProductArea(int id);
-
+        
         string GetProductAreaWithChildren(int id, string separator, string valueToReturn);
         string GetProductAreaChildren(int id, string separator, string valueToReturn);
         DeleteMessage DeleteProductArea(int id);
@@ -101,6 +99,7 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId);
 
+        IList<ProductAreaOverview> GetProductAreasOverviewWithChildren(int customerId, bool isActiveOnly = false);
         int SaveProductArea(ProductAreaOverview productArea);
     }
 
@@ -162,22 +161,23 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<ProductAreaEntity> GetTopProductAreasForUser(int customerId, UserOverview user, bool isOnlyActive = true)
         {
-            var res =
-                this.productAreaRepository.GetMany(
-                    x =>
-                    x.Customer_Id == customerId && x.Parent_ProductArea_Id == null
-                    && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive));
+			var res =
+				this.productAreaRepository.GetManyWithSubProductAreas(
+					x => x.Customer_Id == customerId && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive))
+					.OrderBy(x => x.Name)
+					.ToList()
+					.Where(x => x.Parent_ProductArea_Id == null);
 
-            return res.OrderBy(x => x.Name).ToList();
+			return res.ToList();
         }
 
-        private ProductAreaEntity GetTopMostAreaForChild(int id)
+        private ProductAreaOverview GetTopMostAreaForChildNew(int id, IList<ProductAreaOverview> items)
         {
-            var areas = this.productAreaRepository.GetAll()
-                .Where(it => it.IsActive == 1)
-                .ToDictionary(it => it.Id, it => it);
-            var areaIdParentIdMap = areas.ToDictionary(kv => kv.Key, kv => kv.Value.Parent_ProductArea_Id);
+            var areas = items.Where(it => it.IsActive == 1).ToDictionary(it => it.Id, it => it);
+
+            var areaIdParentIdMap = areas.ToDictionary(kv => kv.Key, kv => kv.Value.ParentId);
             var topMostId = id;
+
             while (areaIdParentIdMap.ContainsKey(topMostId) && areaIdParentIdMap[topMostId].HasValue)
             {
                 var removeId = topMostId;
@@ -193,26 +193,56 @@ namespace DH.Helpdesk.Services.Services
             return null;
         }
 
-        public IList<ProductAreaEntity> GetTopProductAreasForUserOnCase(int customerId, int? productAreaIdToInclude, UserOverview user)
+        private ProductAreaEntity GetTopMostAreaForChild(int id)
         {
-            var res =
-                this.productAreaRepository.GetMany(
-                    x =>
-                    x.Customer_Id == customerId && x.Parent_ProductArea_Id == null
-                    && x.IsActive != 0);
+            var areas = this.productAreaRepository.GetAll()
+                .Where(it => it.IsActive == 1)
+                .ToDictionary(it => it.Id, it => it);
 
+            var areaIdParentIdMap = areas.ToDictionary(kv => kv.Key, kv => kv.Value.Parent_ProductArea_Id);
+            var topMostId = id;
+
+            while (areaIdParentIdMap.ContainsKey(topMostId) && areaIdParentIdMap[topMostId].HasValue)
+            {
+                var removeId = topMostId;
+                topMostId = areaIdParentIdMap[removeId].Value;
+                areaIdParentIdMap.Remove(removeId);
+            }
+
+            if (areaIdParentIdMap.ContainsKey(topMostId) && areaIdParentIdMap[topMostId] == null && areas.ContainsKey(topMostId))
+            {
+                return areas[topMostId];
+            }
+
+            return null;
+        }
+
+        #region GetTopProductAreasForUserOnCase
+
+        public IList<ProductAreaOverview> GetTopProductAreasForUserOnCase(int customerId, int? productAreaIdToInclude, UserOverview user)
+        {
+            return GetTopProductAreasForUserOnCase(customerId, productAreaIdToInclude, (int?)null, user);
+        }
+
+        public IList<ProductAreaOverview> GetTopProductAreasForUserOnCase(int customerId, int? productAreaIdToInclude, int? caseTypeId, UserOverview user)
+        {
+            var allAreas = this.productAreaRepository.GetProductAreasWithWorkingGroups(customerId, true);
+            var topAreas = allAreas.Where(pa => pa.ParentId == null).ToList();
+
+            //filter top areas by user group
             if (user.UserGroupId < (int)UserGroup.CustomerAdministrator)
-            { 
+            {
                 var groupsMap = user.UserWorkingGroups.Where(it => it.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToDictionary(it => it.WorkingGroup_Id, it => true);
-                res = res.Where(
-                    it => it.WorkingGroups.Count == 0 || it.WorkingGroups.Any(productAreaWorkingGroup => groupsMap.ContainsKey(productAreaWorkingGroup.Id)));
+                topAreas =
+                    topAreas.Where(it => it.WorkingGroups.Count() == 0 ||
+                                         it.WorkingGroups.Any(productAreaWorkingGroup => groupsMap.ContainsKey(productAreaWorkingGroup.Id))).ToList();
 
-                var resultMap = res.ToDictionary(it => it.Id, it => it);
+                var resultMap = topAreas.ToDictionary(it => it.Id, it => it);
                 if (productAreaIdToInclude.HasValue)
                 {
                     if (!resultMap.ContainsKey(productAreaIdToInclude.Value))
                     {
-                        var productAreaToInclude = this.GetTopMostAreaForChild(productAreaIdToInclude.Value);
+                        var productAreaToInclude = this.GetTopMostAreaForChildNew(productAreaIdToInclude.Value, topAreas);
                         if (productAreaToInclude != null && !resultMap.ContainsKey(productAreaToInclude.Id))
                         {
                             resultMap.Add(productAreaToInclude.Id, productAreaToInclude);
@@ -220,11 +250,67 @@ namespace DH.Helpdesk.Services.Services
                     }
                 }
 
-                return resultMap.Values.OrderBy(x => x.Name).ToList();
+                topAreas = resultMap.Values.OrderBy(x => x.Name).ToList();
             }
-          
-            return res.OrderBy(x => x.Name).ToList();
+
+            if (topAreas.Any())
+            {
+                foreach (var topArea in topAreas)
+                {
+                    BuildProductAreaTree(topArea, allAreas);
+                }
+
+                if (caseTypeId.HasValue)
+                {
+                    var ctProductAreas = FilterProductAreasByCaseType(caseTypeId, topAreas);
+                    if (ctProductAreas.Any())
+                        return ctProductAreas; //todo: check if we shall always return filtered product areas even if empty?
+                }
+            }
+
+            return topAreas.ToList();
         }
+
+        private IList<ProductAreaOverview> FilterProductAreasByCaseType(int? caseTypeId, List<ProductAreaOverview> productAreas)
+        {
+            var ctProductAreas = new List<ProductAreaOverview>();
+            if (caseTypeId == null)
+                return ctProductAreas;
+
+            //select top product areas that have case typeId mappings 
+            var ctProductAreasIds = productAreaRepository.GetCaseTypeProductAreas(caseTypeId.Value).Select(pa => pa.Id).ToList();
+            ctProductAreas = productAreas.Where(pa => IsInProductAreaIds(pa, ctProductAreasIds)).ToList();
+
+            // select product areas which do not have CaseTypeProduct areas mappings
+            var paNoCaseTypeIds = this.productAreaRepository.GetProductAreasWithoutCaseTypes(productAreas.Select(c => c.Id).ToList());
+            if (paNoCaseTypeIds.Any())
+            {
+                var paNoCaseType = productAreas.Where(x => paNoCaseTypeIds.Contains(x.Id)).ToList();
+                ctProductAreas.AddRange(paNoCaseType.Where(p => !ctProductAreas.Select(c => c.Id).Contains(p.Id)));
+            }
+
+            return ctProductAreas;
+        }
+
+
+        private bool IsInProductAreaIds(ProductAreaOverview productArea, List<int> ids)
+        {
+            if (ids.Contains(productArea.Id))
+                return true;
+
+            if (productArea.SubProductAreas.Any())
+            {
+                foreach (var paChild in productArea.SubProductAreas)
+                {
+                    if (IsInProductAreaIds(paChild, ids))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        #endregion
 
         public IList<ProductAreaEntity> GetAllProductAreas(int customerId)
         {
@@ -239,6 +325,31 @@ namespace DH.Helpdesk.Services.Services
         public ProductAreaEntity GetProductArea(int id)
         {
             return this.productAreaRepository.GetById(id);
+        }
+
+        public IList<ProductAreaOverview> GetProductAreasOverviewWithChildren(int customerId, bool isActiveOnly = false)
+        {
+            var productAreas = this.productAreaRepository.GetProductAreasWithWorkingGroups(customerId, isActiveOnly);
+            var parentItems = productAreas.Where(pa => pa.ParentId == null).OrderBy(pa => pa.Name).ToList();
+            foreach(var pa in parentItems)
+            {
+                BuildProductAreaTree(pa, productAreas);
+            }
+
+            return parentItems;
+        }
+
+        private void BuildProductAreaTree(ProductAreaOverview parentItem, IList<ProductAreaOverview> productAreas)
+        {
+            var childItems = productAreas.Where(pa => pa.ParentId == parentItem.Id).OrderBy(pa => pa.Name).ToList();
+            if (childItems.Any())
+            {
+                parentItem.SubProductAreas.AddRange(childItems);
+                foreach (var childItem in childItems)
+                {
+                    BuildProductAreaTree(childItem, productAreas);
+                }
+            }
         }
 
         public string GetProductAreaWithChildren(int id, string separator, string valueToReturn)

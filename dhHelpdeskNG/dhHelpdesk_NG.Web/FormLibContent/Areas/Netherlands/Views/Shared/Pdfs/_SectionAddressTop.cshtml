@@ -4,11 +4,17 @@
 @using ECT.FormLib.Pdfs;
 @{
     Layout = null;
+    var extraline = string.Empty;        
+    if (ViewData["HeaderName"] != null)
+    {
+      extraline = ViewData["HeaderName"].ToString();
+    }
 }
 
 <div style="padding-top:20px;">
 <div style="float: left;"></div><br />
-<div style="float: right; width: 260px;">@Model.GetDocumentAnswer("FirstName", true)@if (!string.IsNullOrEmpty(Model.GetAnswer("Prefixes")))
+<div style="float: right; width: 260px;">@if(string.Empty != extraline ){<i>@extraline</i> <br /><br />}
+    @Model.GetDocumentAnswer("FirstName", true)@if (!string.IsNullOrEmpty(Model.GetAnswer("Prefixes")))
                                                                                     {<text>&nbsp;</text>@Model.GetAnswer("Prefixes")} @Model.GetDocumentAnswer("LastName", true)<br />
 
     @*@Model.GetDocumentAnswer("PermanentAddressLine1", true)<br />@Model.GetDocumentAnswer("PermanentAddressLine2") @Model.GetDocumentAnswer("PermanentAddressLine3")@if (Model.GetAnswer("PermanentAddressLine2").Length > 0 | Model.GetAnswer("PermanentAddressLine3").Length > 0){<text><br /></text>}*@

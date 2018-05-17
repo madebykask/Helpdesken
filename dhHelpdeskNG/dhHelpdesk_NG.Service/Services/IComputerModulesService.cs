@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System.Collections.Generic;
 
@@ -27,6 +29,8 @@
         List<ItemOverview> GetOperatingSystems();
 
         List<ItemOverview> GetComputerTypes(int customerId);
+
+        ComputerTypeOverview GetComputerType(int id);
 
         List<ItemOverview> GetComputerModels();
 

@@ -9,9 +9,14 @@
 
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
+using DH.Helpdesk.BusinessData.Models.Gdpr;
+using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.DbQueryExecutor;
 using DH.Helpdesk.Dal.Mappers.ExternalInvoice.BusinessModelToEntity;
 using DH.Helpdesk.Dal.Mappers.ExternalInvoice.EntityToBusinessModel;
+using DH.Helpdesk.Dal.Mappers.Gdpr.BusinessModelToEntity;
+using DH.Helpdesk.Dal.Mappers.Gdpr.EntityToBusinessModel;
+using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Web.Infrastructure.Cache;
 
 namespace DH.Helpdesk.Web.NinjectModules.Common
@@ -55,6 +60,27 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
         /// </summary>
         public override void Load()
         {
+            RegisterMappers();
+
+            this.Bind<ICacheService>()
+                .To<WebCacheService>();
+
+            this.Bind<IHelpdeskCache>()
+                .To<HelpdeskCache>();
+
+            this.Bind<IModulesInfoFactory>().To<ModulesInfoFactory>().InSingletonScope();
+
+            this.Bind<IDbQueryExecutorFactory>()
+                .To<SqlDbQueryExecutorFactory>()
+                .InSingletonScope();
+
+            this.Bind<IJsonSerializeService>()
+                .To<JsonSerializeService>()
+                .InSingletonScope();
+        }
+
+        private void RegisterMappers()
+        {
             this.Bind<IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview>>()
                 .To<ProductAreaToOverviewMapper>()
                 .InSingletonScope();
@@ -93,30 +119,18 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
                 .To<CustomerToBusinessModel>()
                 .InSingletonScope();
 
-			this.Bind<IBusinessModelToEntityMapper<ExternalInvoice, CaseInvoiceRow>>()
-				.To<ExternalInvoiceToEntityMapper>()
-				.InSingletonScope();
+            this.Bind<IBusinessModelToEntityMapper<ExternalInvoice, CaseInvoiceRow>>()
+                .To<ExternalInvoiceToEntityMapper>()
+                .InSingletonScope();
 
-			this.Bind<IEntityToBusinessModelMapper<CaseInvoiceRow, ExternalInvoice>>()
-				.To<CaseInvoiceRowToBusinessModel>()
-				.InSingletonScope();
+            this.Bind<IEntityToBusinessModelMapper<CaseInvoiceRow, ExternalInvoice>>()
+                .To<CaseInvoiceRowToBusinessModel>()
+                .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<CaseExtraFollower, ExtraFollower>>()
                 .To<CaseExtraFollowersToBusinessModelMapper>()
                 .InSingletonScope();
 
-            this.Bind<ICacheService>()
-                .To<WebCacheService>();
-
-            this.Bind<IHelpdeskCache>()
-                .To<HelpdeskCache>();
-
-            this.Bind<IModulesInfoFactory>().To<ModulesInfoFactory>().InSingletonScope();
-
-            this.Bind<IDbQueryExecutorFactory>()
-                .To<SqlDbQueryExecutorFactory>()
-                .InSingletonScope();
-                
             this.Bind<IBusinessModelToEntityMapper<CaseSolutionConditionModel, CaseSolutionConditionEntity>>()
                 .To<CaseSolutionConditionToEntityMapper>()
                 .InSingletonScope();
@@ -135,16 +149,16 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
                 .InSingletonScope();
 
             this.Bind<IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity>>()
-            .To<ExtendedCaseDataToEntityMapper>()
-            .InSingletonScope();
+                .To<ExtendedCaseDataToEntityMapper>()
+                .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel>>()
                 .To<ExtendedCaseDataToBusinessModelMapper>()
                 .InSingletonScope();
 
             this.Bind<IBusinessModelToEntityMapper<CaseDocumentModel, CaseDocumentEntity>>()
-            .To<CaseDocumentToEntityMapper>()
-            .InSingletonScope();
+                .To<CaseDocumentToEntityMapper>()
+                .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<CaseDocumentEntity, CaseDocumentModel>>()
                 .To<CaseDocumentToBusinessModelMapper>()
@@ -159,8 +173,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
                 .InSingletonScope();
 
             this.Bind<IBusinessModelToEntityMapper<ExtendedCaseValueModel, ExtendedCaseValueEntity>>()
-           .To<ExtendedCaseValueToEntityMapper>()
-           .InSingletonScope();
+                .To<ExtendedCaseValueToEntityMapper>()
+                .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<ExtendedCaseValueEntity, ExtendedCaseValueModel>>()
                 .To<ExtendedCaseValueToBusinessModelMapper>()
@@ -175,32 +189,32 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
                 .InSingletonScope();
 
             this.Bind<IBusinessModelToEntityMapper<CaseDocumentTextConditionModel, CaseDocumentTextConditionEntity>>()
-            .To<CaseDocumentTextConditionToEntityMapper>()
-            .InSingletonScope();
+                .To<CaseDocumentTextConditionToEntityMapper>()
+                .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<CaseDocumentTextConditionEntity, CaseDocumentTextConditionModel>>()
                 .To<CaseDocumentTextConditionToBusinessModelMapper>()
                 .InSingletonScope();
 
             this.Bind<IBusinessModelToEntityMapper<CaseDocumentTemplateModel, CaseDocumentTemplateEntity>>()
-           .To<CaseDocumentTemplateToEntityMapper>()
-           .InSingletonScope();
+                .To<CaseDocumentTemplateToEntityMapper>()
+                .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<CaseDocumentTemplateEntity, CaseDocumentTemplateModel>>()
                 .To<CaseDocumentTemplateToBusinessModelMapper>()
                 .InSingletonScope();
 
             this.Bind<IBusinessModelToEntityMapper<CaseDocumentTextIdentifierModel, CaseDocumentTextIdentifierEntity>>()
-            .To<CaseDocumentTextIdentifierToEntityMapper>()
-            .InSingletonScope();
+                .To<CaseDocumentTextIdentifierToEntityMapper>()
+                .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<CaseDocumentTextIdentifierEntity, CaseDocumentTextIdentifierModel>>()
                 .To<CaseDocumentTextIdentifierToBusinessModelMapper>()
                 .InSingletonScope();
 
             this.Bind<IBusinessModelToEntityMapper<CaseDocumentTextConditionIdentifierModel, CaseDocumentTextConditionIdentifierEntity>>()
-            .To<CaseDocumentTextConditionIdentifierToEntityMapper>()
-            .InSingletonScope();
+                .To<CaseDocumentTextConditionIdentifierToEntityMapper>()
+                .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<CaseDocumentTextConditionIdentifierEntity, CaseDocumentTextConditionIdentifierModel>>()
                 .To<CaseDocumentTextConditionIdentifierToBusinessModelMapper>()
@@ -208,13 +222,21 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 
 
             this.Bind<IBusinessModelToEntityMapper<ConditionModel, ConditionEntity>>()
-            .To<ConditionToEntityMapper>()
-            .InSingletonScope();
+                .To<ConditionToEntityMapper>()
+                .InSingletonScope();
 
             this.Bind<IEntityToBusinessModelMapper<ConditionEntity, ConditionModel>>()
                 .To<ConditionToBusinessModelMapper>()
                 .InSingletonScope();
 
+            this.Bind<IBusinessModelToEntityMapper<GdprFavoriteModel, GDPRDataPrivacyFavorite>>()
+                .To<GdprFavoriteModelToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<GDPRDataPrivacyFavorite, GdprFavoriteModel>>()
+                .To<GdprFavoriteEntityToModelMapper>()
+                .InSingletonScope();
+            
         }
     }
 }

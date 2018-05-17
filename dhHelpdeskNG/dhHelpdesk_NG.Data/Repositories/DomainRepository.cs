@@ -13,6 +13,9 @@ namespace DH.Helpdesk.Dal.Repositories
         List<ItemOverview> FindByCustomerId(int customerId);
 
         string GetDomainPassword(int domain_id);
+
+        int GetDomainId(string domainName, int customerId);
+
     }
 
     public class DomainRepository : RepositoryBase<Domain.Domain>, IDomainRepository
@@ -42,6 +45,12 @@ namespace DH.Helpdesk.Dal.Repositories
                         select d.Password).First().ToString();
 
             return password;
+        }
+
+        public int GetDomainId(string domainName , int customerId)
+        {
+            return this.DataContext.Domains.Where(d => d.Name == domainName & d.Customer_Id == customerId).Select(d=> d.Id).FirstOrDefault();
+
         }
     }
 }

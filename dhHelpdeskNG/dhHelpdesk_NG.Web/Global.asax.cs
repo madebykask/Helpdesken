@@ -1,11 +1,17 @@
-﻿using System.IdentityModel.Services;
+﻿using System.Configuration;
+using System.IdentityModel.Services;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Web.Http;
+using System.Web.Security;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Services.Services.Authentication;
 using DH.Helpdesk.Web.Infrastructure.Authentication;
 using DH.Helpdesk.Web.Infrastructure.Configuration.Concrete;
+using DH.Helpdesk.Web.Infrastructure.Utilities;
 
 namespace DH.Helpdesk.Web
 {
@@ -33,12 +39,14 @@ namespace DH.Helpdesk.Web
     using Infrastructure;
     using Services.Services.Concrete;
     using BusinessData.Models.LogProgram;
+	using System.Collections.Concurrent;
 
-    public class MvcApplication : HttpApplication
+	public class MvcApplication : HttpApplication
     {
         private readonly IConfiguration configuration = ManualDependencyResolver.Get<IConfiguration>();
-        
-        protected void Application_Start()
+		private readonly IGlobalSettingService globalSettingsService = ManualDependencyResolver.Get<IGlobalSettingService>();
+
+		protected void Application_Start()
         {
             //Debugger.Launch();
 
@@ -80,6 +88,9 @@ namespace DH.Helpdesk.Web
             {
                 FederatedAuthenticationConfiguration.Configure();
             }
+
+			SetPerformanceLogSettings();
+            //DumpModules();
         }
 
         private void ViewEngineInit()
@@ -114,8 +125,35 @@ namespace DH.Helpdesk.Web
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
-            LogSession("Application.BeginRequest", Context);
+            LogSession("Application.BeginRequest.", Context);
         }
+
+        protected void Application_EndRequest(object sender, EventArgs e)
+        {
+            LogSession($"Application.EndRequest. Status: {Response.Status}, StatusCode: {Response.StatusCode}, RedirectLocation: {Response.RedirectLocation}", Context);
+        }
+
+        #region Authentication Events 
+
+        protected void WindowsAuthentication_OnAuthenticate(object sender, WindowsAuthenticationEventArgs args)
+        {
+            var identity = args.Identity;
+            LogSession($">>>WindowsAuthentication.OnAuthentication event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, IsAnonymous: {identity?.IsAnonymous ?? false}", Context);
+        }
+
+        protected void FormsAuthentication_OnAuthenticate(object sender, FormsAuthenticationEventArgs args)
+        {
+            var identity = args.User?.Identity;
+            LogSession($">>>FormsAuthentication.OnAuthenticate event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
+        }
+
+        protected void Application_PostAuthenticateRequest(object sender, EventArgs args)
+        {
+            var identity = Context.User?.Identity;
+            LogSession($">>>Application.PostAuthenticateRequest event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
+        }
+
+        #endregion
 
         #region ADFS Module Events 
 
@@ -123,9 +161,25 @@ namespace DH.Helpdesk.Web
         {
             var sessionId = Session.SessionID;
             LogSession("Session.Start: " + sessionId, Context);
+
+
         }
 
-        protected void WSFederationAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
+		void Session_End(object sender, EventArgs e)
+		{
+			if (Application[ApplicationFacade._USER_LOGGED_IN] != null)
+			{
+				var sessionID = this.Session.SessionID;
+				var loggedInUsers = (ConcurrentDictionary<string, LoggedInUsers>)Application[ApplicationFacade._USER_LOGGED_IN];
+				if (loggedInUsers.ContainsKey(sessionID))
+				{
+					LoggedInUsers user;
+					loggedInUsers.TryRemove(sessionID, out user);
+				}
+			}
+		}
+
+		protected void WSFederationAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
         {
             LogSession($"WSFederationAuthenticationModule.SessionSecurityTokenCreated: token created.", Context);
         }
@@ -201,135 +255,39 @@ namespace DH.Helpdesk.Web
 
         #endregion
 
-        private void LogSession(string msg, HttpContext ctx)
+        private void DumpSessionState(HttpContext ctx)
         {
-            var request = ctx.Request;
-            var identity = ctx.User?.Identity;
-            var isAuthenticated = identity?.IsAuthenticated ?? false;
-            var contextInfo = $"Authenticated: {isAuthenticated}, User: {identity?.Name}, Request: {request.Url}";
+            try
+            {
+                var session = ctx.Session;
+                if (!string.IsNullOrEmpty(session?.SessionID))
+                {
+                    Trace.WriteLine($">>> [{DateTime.Now}] Helpdesk.Session. Id: {session.SessionID}.Request: {ctx.Request.Url}");
 
-            var logger = LogManager.Session;
-            logger.Debug($"{msg} {contextInfo}");
+                    var logSessionKeys = ConfigurationManager.AppSettings["helpdesk.logsessionkeys"];
+                    if (!string.IsNullOrEmpty(logSessionKeys))
+                    {
+                        var strBld = new StringBuilder();
+                        foreach (string key in session.Keys)
+                        {
+                            if (logSessionKeys == "*" || logSessionKeys.Equals(key, StringComparison.OrdinalIgnoreCase))
+                            {
+                                strBld.AppendFormat("\t- {0}: {1}{2}", key, session[key], Environment.NewLine);
+                            }
+                        }
+
+                        Trace.WriteLine(strBld.ToString());
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Trace.TraceError($"DumpSessionState: Unknown error. Error: {ex.Message}" );
+            }
         }
 
         #endregion
 
-        protected void Application_AcquireRequestState(object sender, EventArgs e)
-        {
-            LogSession("Application.AcquireRequestState called.", Context);
-            try
-            {
-                var session = HttpContext.Current.Session;
-
-                // Check can be null in some request (static)
-                if (session != null)
-                {
-                    var sessionStatus = session["SessionStatus"] as SessionStatus;
-
-                    var currentUser = SessionFacade.CurrentUser;
-                    var userID = currentUser != null ? currentUser.Id : (int?)null;
-
-                    // No user session status exist, create new one
-                    if (sessionStatus == null)
-                    {
-                        int responseTime = CheckResponseTime();
-                        sessionStatus = new SessionStatus
-                        {
-                            LastSessionStatusUpdate = DateTime.Now,
-                            Guid = Guid.NewGuid()
-                        };
-                        session["SessionStatus"] = sessionStatus;
-
-                        using (var p = Process.GetCurrentProcess())
-                        {
-                            // Start log for session
-                            Log(userID, responseTime, sessionStatus.Guid, p.WorkingSet64);
-                        }
-                    }
-                    else // A status session item does already exist
-                    {
-                        var now = DateTime.Now;
-
-                        // Check if is time to make update
-                        var expires = sessionStatus.LastSessionStatusUpdate.AddSeconds(SessionStatus.SessionRefreshTime);
-                        if (now >= expires)
-                        {
-                            // Updates sesstion status with current status information
-                            var responseTime = CheckResponseTime();
-                            sessionStatus.LastSessionStatusUpdate = now;
-
-                            using (var p = Process.GetCurrentProcess())
-                            {                                
-                                Log(userID, responseTime, sessionStatus.Guid, p.WorkingSet64);
-                            }
-
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Ignore all errors here
-            }
-        }
-
-        private void Log(int? userId, int responseTime, Guid guid, long memoryUsage)
-        {
-            try
-            {
-                var _logProgramService = ManualDependencyResolver.Get<ILogProgramService>();
-                var data = $"{{ \"Topic\": \"Top 100 tblCases\", \"ResponseTime\": {responseTime}, \"Memory\": {memoryUsage}, \"Guid\": \"{guid}\" }}";
-
-                var logProgramModel = new LogProgram
-                {
-                    CaseId = 0,
-                    CustomerId = SessionFacade.CurrentCustomer != null ? SessionFacade.CurrentCustomer.Id : 0,
-                    LogType = 99, // New Type for test purpose 
-                    LogText = data,
-                    New_Performer_user_Id = 0,
-                    Old_Performer_User_Id = "0",
-                    RegTime = DateTime.UtcNow,
-                    UserId = userId,
-                    ServerNameIP = $"{Environment.MachineName} ({Request.ServerVariables["LOCAL_ADDR"]})",
-                    NumberOfUsers = null
-                };
-
-                _logProgramService.UpdateUserLogin(logProgramModel);            
-            }   
-            catch (Exception ex)
-            {
-                
-            }    
-        }
-
-        protected int CheckResponseTime()
-        {            
-            var sw = new Stopwatch();
-
-            try
-            {
-                sw.Start();
-                var _caseService = ManualDependencyResolver.Get<ICaseService>();
-                _caseService.GetTop100CasesForTest();
-                sw.Stop();
-                return sw.Elapsed.Milliseconds;
-            }
-            catch (Exception ex)
-            {
-                return -1;
-            }
-        }
-
-        class SessionStatus
-        {
-            // Seconds between refreshes, suggestion each 30 minutes, add to some config
-            public const int SessionRefreshTime = 1800;
-            public DateTime LastSessionStatusUpdate { get; set; }
-            public Guid Guid { get; internal set; }
-        }
-
-
-#if !DEBUG
         protected void Application_Error(object sender, EventArgs e)
         {
             var httpContext = ((MvcApplication)sender).Context;
@@ -400,7 +358,6 @@ namespace DH.Helpdesk.Web
             controller.ViewData.Model = new DH.Helpdesk.Web.Models.Error.HandleErrorInfoGuid(ex, currentController, currentAction, guid);
             ((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
         }
-#endif
 
         /// <summary>
         /// The register binders.
@@ -409,6 +366,7 @@ namespace DH.Helpdesk.Web
         {
             ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
             ModelBinders.Binders.Add(typeof(DateTime?), new NullableDateTimeBinder());
+            ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinder());
         }
 
         private static void RegisterLocalizedAttributes()
@@ -444,23 +402,202 @@ namespace DH.Helpdesk.Web
             }
         }
 
+        #region Helper Methods
+
         private static bool IsSsoMode()
         {
             var appSettingsProvider = new ApplicationConfiguration();
             return appSettingsProvider.LoginMode == LoginMode.SSO;
         }
+
+
+        private void LogSession(string msg, HttpContext ctx)
+        {
+            var request = ctx.Request;
+            var identity = ctx.User?.Identity;
+            var isAuthenticated = identity?.IsAuthenticated ?? false;
+            var contextInfo = $"Authenticated: {isAuthenticated}, User: {identity?.Name}, Request: {request.Url}";
+
+            var logger = LogManager.Session;
+            logger.Debug($"{msg} {contextInfo}");
+        }
+
         private static void LogIdentityClaims(HttpContext ctx)
         {
-            var log = LogManager.Session;
-            var claimsIdentity = ctx.User.Identity as ClaimsIdentity;
-            if (claimsIdentity != null && claimsIdentity.Claims.Any())
-            {
-                log.Debug(">>> Claims found:");
-                foreach (var claim in claimsIdentity.Claims)
-                {
-                    log.Debug($"Claim: {claim.Type}, value: {claim.Value}, Issuer: {claim.Issuer}");
-                }
-            }
+            #if DEBUG // should meet GDPR requirements
+
+            //var log = LogManager.Session;
+            //var claimsIdentity = ctx.User.Identity as ClaimsIdentity;
+            //if (claimsIdentity != null && claimsIdentity.Claims.Any())
+            //{
+            //    log.Debug(">>> Claims found:");
+            //    foreach (var claim in claimsIdentity.Claims)
+            //    {
+            //        log.Debug($"Claim: {claim.Type}, value: {claim.Value}, Issuer: {claim.Issuer}");
+            //    }
+            //}
+
+            #endif
         }
-    }
+
+        //keep for diagnostic purposes
+        private void DumpModules()
+        {
+            var logger = LogManager.Session;
+
+            //Get List of modules in module collections
+            var httpModuleCollections = Modules;
+            logger.Debug("----------------------------------------------------");
+            logger.Debug("Total Number Active HttpModule : " + httpModuleCollections.Count.ToString() + "</br>");
+            logger.Debug("<b>List of Active Modules</b>" + "</br>");
+            foreach (string activeModule in httpModuleCollections.AllKeys)
+            {
+                logger.Debug(activeModule + "</br>");
+            }
+            logger.Debug("----------------------------------------------------");
+        }
+
+		#endregion
+
+
+
+		protected void Application_AcquireRequestState(object sender, EventArgs e)
+		{
+			try
+			{
+				// PREV DEV; POST EACH TIME A REQUEST IS MADE???
+				//LogSession("Application.AcquireRequestState called.", Context);
+				//var contextBase = new HttpContextWrapper(Context);
+				//DependencyResolver.Current.GetService<ICaseDiagnosticService>().MakeTestSnapShot(contextBase);
+				//LogSession($"Application.AcquireRequestState called. IsCaseDataChanged: {SessionFacade.IsCaseDataChanged}", Context);
+
+
+
+				var session = HttpContext.Current.Session;
+
+				// Check can be null in some request (static)
+				if (session != null)
+				{
+					if (ApplicationFacade.HasPerformanceLogSettingsCacheExpired())
+					{
+						SetPerformanceLogSettings();
+					}
+					if (ApplicationFacade.IsPerformanceLogActive())
+					{
+						int freq = ApplicationFacade.GetPerformanceLogFrequency();
+						if (freq > 0)
+						{
+							var sessionStatus = session["SessionStatus"] as SessionStatus;
+
+							var currentUser = SessionFacade.CurrentUser;
+							var userID = currentUser != null ? currentUser.Id : (int?)null;
+
+							// No user session status exist, create new one
+							if (sessionStatus == null)
+							{
+								int responseTime = CheckResponseTime();
+								sessionStatus = new SessionStatus
+								{
+									LastSessionStatusUpdate = DateTime.Now,
+									Guid = Guid.NewGuid()
+								};
+								session["SessionStatus"] = sessionStatus;
+
+								using (var p = Process.GetCurrentProcess())
+								{
+									// Start log for session
+									Log(userID, responseTime, sessionStatus.Guid, p.WorkingSet64);
+								}
+							}
+							else // A status session item does already exist
+							{
+								var now = DateTime.Now;
+
+								// Check if is time to make update
+								var expires = sessionStatus.LastSessionStatusUpdate.AddSeconds(freq);
+								if (now >= expires)
+								{
+									// Updates sesstion status with current status information
+									var responseTime = CheckResponseTime();
+									sessionStatus.LastSessionStatusUpdate = now;
+
+									using (var p = Process.GetCurrentProcess())
+									{
+										Log(userID, responseTime, sessionStatus.Guid, p.WorkingSet64);
+									}
+
+								}
+							}
+
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				// Ignore all errors here
+			}
+		}
+
+		protected int CheckResponseTime()
+		{
+			var sw = new Stopwatch();
+
+			try
+			{
+				sw.Start();
+				var _caseService = ManualDependencyResolver.Get<ICaseService>();
+				_caseService.GetTop100CasesForTest();
+				sw.Stop();
+				return sw.Elapsed.Milliseconds;
+			}
+			catch (Exception ex)
+			{
+				return -1;
+			}
+		}
+
+		class SessionStatus
+		{
+			public DateTime LastSessionStatusUpdate { get; set; }
+			public Guid Guid { get; internal set; }
+		}
+
+		private void Log(int? userId, int responseTime, Guid guid, long memoryUsage)
+		{
+			try
+			{
+				var _logProgramService = ManualDependencyResolver.Get<ILogProgramService>();
+				var data = $"{{ \"Topic\": \"Top 100 tblCases\", \"ResponseTime\": {responseTime}, \"Memory\": {memoryUsage}, \"Guid\": \"{guid}\" }}";
+
+				var logProgramModel = new LogProgram
+				{
+					CaseId = 0,
+					CustomerId = SessionFacade.CurrentCustomer != null ? SessionFacade.CurrentCustomer.Id : 0,
+					LogType = 99, // New Type for test purpose 
+					LogText = data,
+					New_Performer_user_Id = 0,
+					Old_Performer_User_Id = "0",
+					RegTime = DateTime.UtcNow,
+					UserId = userId,
+					ServerNameIP = $"{Environment.MachineName} ({Request.ServerVariables["LOCAL_ADDR"]})",
+					NumberOfUsers = ApplicationFacade.LoggedInUsers != null ? ApplicationFacade.LoggedInUsers.Count : (int?)null
+				};
+
+				_logProgramService.UpdateUserLogin(logProgramModel);
+			}
+			catch (Exception ex)
+			{
+
+			}
+		}
+
+		private void SetPerformanceLogSettings()
+		{
+			var settings = globalSettingsService.GetGlobalSettings();
+			ApplicationFacade.SetPerformanceLogActive(settings[0].PerformanceLogActive);
+			ApplicationFacade.SetPerformanceLogFrequency(settings[0].PerformanceLogFrequency);
+			ApplicationFacade.SetPerformanceLogSettingsCache(settings[0].PerformanceLogSettingsCache);
+		}
+	}
 }

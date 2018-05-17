@@ -15,11 +15,18 @@ using DH.Helpdesk.Web.Infrastructure.Tools;
 using System.Net;
 using DH.Helpdesk.Dal.Enums;
 using System.IO;
+using System.Web.UI;
+using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.Web.Infrastructure.Mvc;
 using DH.Helpdesk.BusinessData.Models.Shared.Input;
 using DH.Helpdesk.Web.Enums;
 using DH.Helpdesk.BusinessData.Models.Shared;
-
+using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+using DH.Helpdesk.Services.BusinessLogic.Contracts;
+using DH.Helpdesk.Web.Components.Contracts;
+using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
+using DH.Helpdesk.Web.Infrastructure.Attributes;
 
 
 namespace DH.Helpdesk.Web.Controllers
@@ -32,8 +39,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IContractService _contractService;
         private readonly ISupplierService _supplierService;
         private readonly IDepartmentService _departmentService;
-        private readonly ITemporaryFilesCache userTemporaryFilesStorage;
-        private readonly ISettingService _settingService;
+        private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
 
         public ContractsController(
             IUserService userService,
@@ -43,9 +49,7 @@ namespace DH.Helpdesk.Web.Controllers
             ISupplierService supplierService,
             IDepartmentService departmentService,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
-            IMasterDataService masterDataService,
-            ISettingService settingService)
-
+            IMasterDataService masterDataService)
 
             : base(masterDataService)
         {
@@ -55,15 +59,14 @@ namespace DH.Helpdesk.Web.Controllers
             this._customerService = customerService;
             this._supplierService = supplierService;
             this._departmentService = departmentService;
-            this._settingService = settingService;
-            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Contracts);
+            this._userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Contracts);
         }
 
 
         //
         // GET: /Contract/
-
         [HttpGet]
+        [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult Index()
         {
             var customer = _customerService.GetCustomer(SessionFacade.CurrentCustomer.Id);
@@ -84,8 +87,8 @@ namespace DH.Helpdesk.Web.Controllers
             model.Suppliers = suppliers.OrderBy(s => s.Name).ToList();
             model.Setting = GetSettingsModel(customer.Id);
             model.TotalCases = model.Rows.Data.Count();
-            model.OnGoingCases = model.Rows.Data.Where(z => z.Finished == 0).Count();
-            model.FinishedCases = model.Rows.Data.Where(z => z.Finished == 1).Count();
+            model.OnGoingCases = model.Rows.Data.Count(z => z.Finished == 0);
+            model.FinishedCases = model.Rows.Data.Count(z => z.Finished == 1);
 
             int iContractNoticeOfRemovalCount = 0;
             foreach (ContractsIndexRowModel ci in model.Rows.Data)
@@ -108,7 +111,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
             model.ContractFollowUpCount = iContractFollowUpCount;
 
-            model.RunningCases = model.Rows.Data.Where(z => z.Running == 1).Count();
+            model.RunningCases = model.Rows.Data.Count(z => z.Running == 1);
 
 
 
@@ -117,6 +120,7 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
+        [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult New(int customerId)
         {
             var customer = this._customerService.GetCustomer(customerId);
@@ -318,21 +322,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             }
 
-
             return flag;
-
-        }
-
-
-
-        public bool ParseDate(string value)
-        {
-
-            string text1 = value;
-            DateTime dt1;
-            bool res = DateTime.TryParse(value, out dt1);
-            return res;
-
         }
 
         private ContractViewInputModel CreateInputViewModel(int customerId)
@@ -350,11 +340,11 @@ namespace DH.Helpdesk.Web.Controllers
             //if (contractFields != null)
             //{          
             //model.NoticeTime.Insert(0, emptyChoice);
-            model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = "1 månad", Value = "1" });
+            model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = "1 " + Translation.GetCoreTextTranslation("månad"), Value = "1" });
 
             for (int i = 2; i <= 12; i++)
             {
-                model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = i.ToString() + " månader", Value = i.ToString() });
+                model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = i.ToString() + " " + Translation.GetCoreTextTranslation("månader"), Value = i.ToString() });
             }
 
             model.SettingsModel = contractFields.SettingRows.Select(conf => new ContractsSettingRowViewModel
@@ -387,6 +377,7 @@ namespace DH.Helpdesk.Web.Controllers
             }).ToList();
             model.Suppliers.Insert(0, emptyChoice);
 
+            //Departments
             model.Departments = departments.Select(x => new SelectListItem
             {
                 Selected = (x.Id == model.DepartmentId ? true : false),
@@ -394,8 +385,8 @@ namespace DH.Helpdesk.Web.Controllers
                 Value = x.Id.ToString()
             }).ToList();
             model.Departments.Insert(0, emptyChoice);
-
-
+            
+            //ResponsibleUsers
             model.ResponsibleUsers = users.Select(x => new SelectListItem
             {
                 Selected = (x.Id == model.ResponsibleUserId ? true : false),
@@ -404,15 +395,12 @@ namespace DH.Helpdesk.Web.Controllers
             }).ToList();
             model.ResponsibleUsers.Insert(0, emptyChoice);
 
+            //FollowUpIntervals
+            var followUpIntervals = GetFollowUpIntervals();
+            model.FollowUpIntervals.AddRange(followUpIntervals.ToSelectList());
             model.FollowUpIntervals.Insert(0, emptyChoice);
-            model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "månadsvis", Value = "1" });
-            model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "kvartalsvis", Value = "3" });
-            model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "tertialvis", Value = "4" });
-            model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "halvårsvis", Value = "6" });
-            model.FollowUpIntervals.Add(new SelectListItem() { Selected = false, Text = "årsvis", Value = "12" });
 
-
-
+            //FollowUpResponsibleUsers
             model.FollowUpResponsibleUsers = users.Select(x => new SelectListItem
             {
                 Selected = (x.Id == model.FollowUpResponsibleUserId ? true : false),
@@ -421,23 +409,36 @@ namespace DH.Helpdesk.Web.Controllers
             }).ToList();
             model.FollowUpResponsibleUsers.Insert(0, emptyChoice);
 
-            //}
-
-
             return model;
         }
 
+        private IDictionary<int, string> GetFollowUpIntervals()
+        {
+            return new Dictionary<int, string>
+            {
+                {1,  "månadsvis"},
+                {3,  "kvartalsvis"},
+                {4,  "tertialvis"},
+                {6,  "halvårsvis"},
+                {12,  "årsvis"}
+            };
+        }
+
         [HttpPost]
+        [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult New(ContractViewInputModel contractInput, string actiontype, string contractFileKey)
         {
-            var cId = this.SaveContract(contractInput);
-            var temporaryFiles = userTemporaryFilesStorage.FindFiles(contractFileKey.ToString());
+            var temporaryFiles = _userTemporaryFilesStorage.FindFiles(contractFileKey);
+            
+            var files = temporaryFiles.Select(f => $"{StringTags.Add}{f.Name}").ToList();
+            var cId = this.SaveContract(contractInput, files);
+
             var contractFiles = temporaryFiles.Select(f => new ContractFileModel(0, cId, f.Content, null, MimeMapping.GetMimeMapping(f.Name), f.Name, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid())).ToList();
 
             foreach (var contractFile in contractFiles)
             {
                 this._contractService.SaveContracFile(contractFile);
-                userTemporaryFilesStorage.DeleteFile(contractFile.FileName, contractInput.ContractFileKey);
+                _userTemporaryFilesStorage.DeleteFile(contractFile.FileName, contractInput.ContractFileKey);
             }
 
             if (actiontype != "Spara och stäng")
@@ -449,6 +450,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
+        [UserPermissions(UserPermission.ContractPermission)]
         public JsonResult SaveContractFieldsSetting(JSContractsSettingRowViewModel[] contractSettings)
         {
             int currentCustomerId;
@@ -627,7 +629,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 
 
-            model.Columns = settings.SettingRows.Where(s => s.ShowInList == true)
+            model.Columns = settings.SettingRows.Where(s => s.ShowInList)
                                                 .ToList();
 
             foreach (var col in model.Columns)
@@ -639,11 +641,21 @@ namespace DH.Helpdesk.Web.Controllers
 
             foreach (var con in allContracts)
             {
+                var latestLog = con.ContractLogs.Any(x => x.Case_Id.HasValue)
+                    ? con.ContractLogs.Where(x => x.Case_Id.HasValue).OrderByDescending(l => l.CreatedDate).FirstOrDefault()
+                    : null;
+                var hasMultiplyCases = con.ContractLogs.Count(x => x.Case_Id.HasValue) > 1;
+                var latestCase = latestLog?.Case;
                 model.Data.Add(new ContractsIndexRowModel
                 {
                     ContractId = con.Id,
                     ContractNumber = con.ContractNumber,
                     ContractEndDate = con.ContractEndDate,
+                    ContractCase = latestCase != null ?  new ContractCase {
+                        CaseNumber = (int)latestCase.CaseNumber,
+                        CaseIcon = CasesMapper.GetCaseIcon(latestCase.FinishingDate, latestCase.ApprovedDate, latestCase.CaseType.RequireApproving),
+                        HasMultiplyCases = hasMultiplyCases
+                    } : new ContractCase { CaseNumber = 0 },
                     ContractStartDate = con.ContractStartDate,
                     Finished = con.Finished,
                     Running = con.Running,
@@ -667,6 +679,62 @@ namespace DH.Helpdesk.Web.Controllers
             return model;
         }
 
+        [HttpGet]
+        public ActionResult ContractHistory(int id)
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+            var settings = GetCustomerSettings(customerId);
+            var fieldSettings = _contractService.GetContractsSettingRows(customerId);
+            var contractHistory = _contractService.GetContractractHistoryList(id);
+            var followUpIntervals = GetFollowUpIntervals();
+
+            var model = GetHistoryDiff(contractHistory, userTimeZone, settings, fieldSettings, followUpIntervals);
+
+            return PartialView(model);
+        }
+
+        private IList<ContractHistoryFieldsDiff> GetHistoryDiff(IList<ContractHistoryFull> items,
+            TimeZoneInfo userTimeZone, Setting settings, IList<ContractsSettingRowModel> fieldSettings,
+            IDictionary<int, string> followUpIntervals)
+        {
+            var diffList = new List<ContractHistoryFieldsDiff>();
+            var isUserFirstLastNameRepresentation = settings.IsUserFirstLastNameRepresentation == 1;
+
+            var formatter = new ContractHistoryFormatter(userTimeZone, followUpIntervals, isUserFirstLastNameRepresentation);
+            var historyBuilder =
+                new ContractHistoryFieldsDiffBuilder(formatter, fieldSettings, SessionFacade.CurrentLanguageId);
+
+            ContractHistoryFull prev = null;
+            foreach (var item in items)
+            {
+                var firstName = item.CreatedByUser.FirstName;
+                var lastName = item.CreatedByUser.SurName;
+                var registeredBy = isUserFirstLastNameRepresentation
+                    ? $"{firstName} {lastName}"
+                    : $"{lastName} {firstName}";
+
+                var historyDiff = historyBuilder.BuildHistoryDiff(prev, item);
+
+                var diff = new ContractHistoryFieldsDiff()
+                {
+                    Modified = TimeZoneInfo.ConvertTimeFromUtc(item.CreatedAt, userTimeZone),
+                    RegisteredBy = registeredBy,
+                    FieldsDiff = historyDiff,
+                    //Emails = //todo: log emails
+                };
+
+                if (diff.FieldsDiff.Any())
+                {
+                    diffList.Add(diff);
+                    prev = item;
+                }
+            }
+
+            diffList.Reverse();
+            return diffList;
+        }
+
         private List<ContractsIndexRowModel> SortData(List<ContractsIndexRowModel> data, ColSortModel sort)
         {
             switch (sort.ColumnName)
@@ -675,7 +743,7 @@ namespace DH.Helpdesk.Web.Controllers
                     return sort.IsAsc ? data.OrderBy(d => d.ContractNumber).ToList() : data.OrderByDescending(d => d.ContractNumber).ToList();
 
                 case EnumContractFieldSettings.CaseNumber:
-                    return sort.IsAsc ? data.OrderBy(d => d.CaseNumber).ToList() : data.OrderByDescending(d => d.CaseNumber).ToList();
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractCase.CaseNumber).ToList() : data.OrderByDescending(d => d.ContractCase.CaseNumber).ToList();
 
                 case EnumContractFieldSettings.Category:
                     return sort.IsAsc ? data.OrderBy(d => d.ContractCategory.Name).ToList() : data.OrderByDescending(d => d.ContractCategory.Name).ToList();
@@ -754,12 +822,10 @@ namespace DH.Helpdesk.Web.Controllers
             //settingsRows.Add(
             model.SettingRows = settingsRows;
             return model;
-
-
         }
 
-
         [HttpPost]
+        [UserPermissions(UserPermission.ContractPermission)]
         public void UploadContractFile(string id, string name)
         {
             var uploadedFile = this.Request.Files[0];
@@ -768,22 +834,23 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (GuidHelper.IsGuid(id))
             {
-                if (this.userTemporaryFilesStorage.FileExists(name, id))
+                if (this._userTemporaryFilesStorage.FileExists(name, id))
                 {
-                    userTemporaryFilesStorage.DeleteFile(name, id);
+                    _userTemporaryFilesStorage.DeleteFile(name, id);
                     //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
                 }
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id);
+                this._userTemporaryFilesStorage.AddFile(uploadedData, name, id);
             }
         }
 
 
         [HttpGet]
+        [UserPermissions(UserPermission.ContractPermission)]
         public UnicodeFileContentResult DownloadFile(string id, string fileName, string filePlace)
         {
             byte[] fileContent;
             if (id == "0")
-                fileContent = userTemporaryFilesStorage.GetFileContent(fileName.Trim(), filePlace, "");
+                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName.Trim(), filePlace, "");
             else
             {
                 fileContent = _contractService.GetContractFile(int.Parse(id)).Content;
@@ -796,16 +863,27 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
+        [UserPermissions(UserPermission.ContractPermission)]
         public JsonResult DeleteContractFile(string id, string fileName, string filePlace)
         {
             try
             {
                 if (id == "0")
-                    userTemporaryFilesStorage.DeleteFile(fileName.Trim(), filePlace);
+                {
+                    _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), filePlace);
+                }
                 else
                 {
-                    this._contractService.DeleteContractFile(int.Parse(id));
+                    var fileId = int.Parse(id);
+                    var fileInfo = _contractService.GetContractFile(fileId);
+
+                    this._contractService.DeleteContractFile(fileId);
+                    
+                    //save contract history 
+                    var contract = _contractService.GetContract(fileInfo.Contract_Id);
+                    _contractService.SaveContractHistory(contract, new List<string> { StringTags.Delete + fileInfo.FileName });
                 }
+
                 return Json(new { result = true, message = string.Empty }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -816,10 +894,11 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
+        [UserPermissions(UserPermission.ContractPermission)]
         public JsonResult GetAllFiles(string id, int cId)
         {
             string[] fileNames = { };
-            var tempFiles = userTemporaryFilesStorage.FindFiles(id);
+            var tempFiles = _userTemporaryFilesStorage.FindFiles(id);
 
             if (tempFiles.Any())
             {
@@ -829,7 +908,7 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(fileNames, JsonRequestBehavior.AllowGet);
         }
 
-        private int SaveContract(ContractViewInputModel contractInput)
+        private int SaveContract(ContractViewInputModel contractInput, List<string> files)
         {
             var cId = 0;
             if (contractInput != null)
@@ -855,8 +934,8 @@ namespace DH.Helpdesk.Web.Controllers
                      contractInput.NoticeDate,
                      DateTime.Now,
                      DateTime.Now,
-                     Guid.Empty
-                    );
+                     Guid.Empty,
+                     files);
 
                 cId = this._contractService.SaveContract(contractInputToSave);
             }
@@ -909,7 +988,7 @@ namespace DH.Helpdesk.Web.Controllers
                 foreach (var f in contractFiles)
                 {
                     filesToAdd.Add(new WebTemporaryFile(f.Content, f.FileName));
-                    this.userTemporaryFilesStorage.AddFile(f.Content, f.FileName, contractFilesKey);
+                    this._userTemporaryFilesStorage.AddFile(f.Content, f.FileName, contractFilesKey);
                 }
             }
             return filesToAdd;
@@ -950,7 +1029,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         //
         // GET: /Contract/Edit/5
-
+        [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult Edit(int id)
         {
             var contractFields = this.GetSettingsModel(SessionFacade.CurrentCustomer.Id);
@@ -995,19 +1074,23 @@ namespace DH.Helpdesk.Web.Controllers
         // POST: /Contract/Edit/5
 
         [HttpPost]
+        [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult Edit(int id, ContractViewInputModel contractInput, string actiontype, string contractFileKey)
         {
             try
             {
-                var cId = SaveContract(contractInput);
-                var temporaryFiles = userTemporaryFilesStorage.FindFiles(contractFileKey);
+                var temporaryFiles = _userTemporaryFilesStorage.FindFiles(contractFileKey);
+                var files = temporaryFiles.Select(f => $"{StringTags.Add}{f.Name}").ToList();
+
+                var cId = SaveContract(contractInput, files);
+                
                 var contractsExistingFiles = this._contractService.GetContractFiles(id);
                 var contractFiles = temporaryFiles.Select(f => new ContractFileModel(0, cId, f.Content, null, MimeMapping.GetMimeMapping(f.Name), f.Name, DateTime.UtcNow, DateTime.UtcNow, Guid.NewGuid())).ToList();
 
                 foreach (var contractFile in contractFiles)
                 {
                     this._contractService.SaveContracFile(contractFile);
-                    userTemporaryFilesStorage.DeleteFile(contractFile.FileName, contractInput.ContractFileKey);
+                    _userTemporaryFilesStorage.DeleteFile(contractFile.FileName, contractInput.ContractFileKey);
                 }
 
                 if (actiontype != "Spara och stäng")
@@ -1036,6 +1119,7 @@ namespace DH.Helpdesk.Web.Controllers
         // POST: /Contract/Delete/5
 
         [HttpPost]
+        [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult Delete(int id, FormCollection collection)
         {
             try
@@ -1053,5 +1137,16 @@ namespace DH.Helpdesk.Web.Controllers
                 return View();
             }
         }
+
+        #region Helper Methods
+
+        private bool ParseDate(string value)
+        {
+            DateTime dt1;
+            bool res = DateTime.TryParse(value, out dt1);
+            return res;
+        }
+
+        #endregion
     }
 }

@@ -35,6 +35,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public int? UpdateNotifierInformation { get; set; }
 
+        public bool? AddFollowersBtn { get; set; }
+
         public int? Region_Id { get; set; }
 
         public int? Department_Id { get; set; }

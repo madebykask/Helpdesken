@@ -2,7 +2,8 @@
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
 @{
-    const string IsTeWorker = "International Transfer";
+    const string IsTeWorker = "International Transfer (LTA, STA, Commuter)";
+    const string IsTeWorkerI = "International Relocation";
     const string DefaultCountry = "United Kingdom";
 }
 <div class="tab-pane" id="personal">
@@ -437,10 +438,23 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="tdstrong">@Model.Label("StudentLoanNotFullyRePaid")</td>
-                    <td>@Model.Element("StudentLoanNotFullyRePaid")
+                    <td class="tdstrong">@Model.Label("DoYouHaveAStudentLoan")</td>
+                    <td>
+                        @Model.Element("DoYouHaveAStudentLoan")
+                    </td>
+                </tr>
+                <!--<tr>
+                    <td class="tdstrong">Model.Label("StudentLoanNotFullyRePaid")</td>
+                    <td>Model.Element("StudentLoanNotFullyRePaid")
                         <div class="notice">
-                            @Model.Translate("Please select \"Yes\" if co-worker left a course of UK higher education before last 6 April and received his first Student Loan instalment on or after 1 September 1998")
+                            Model.Translate("Please select \"Yes\" if co-worker left a course of UK higher education before last 6 April and received his first Student Loan instalment on or after 1 September 1998")
+                        </div>
+                    </td>
+                </tr>-->
+                <tr>
+                    <td class="tdstrong">@Model.Label("TypeOfStudentLoan")</td>
+                    <td>@Model.Element("TypeOfStudentLoan")
+                        <div id="typeOfStudentLoanNotice" class="notice">
                         </div>
                     </td>
                 </tr>
@@ -520,112 +534,182 @@
 
     //setTaxInformationBehavior($('#TaxInformation').val());
 
-    $(function () {
+        $(function () {
 
-        function setGlobalMobilityBehavior(value) {
-            if (!(value == '@IsTeWorker')) {
-                $("[class*=globalmobility]").hide();
-                $("[class*=globalmobility] input:not(input[type=hidden])").val("");
-                $("[class*=globalmobility] input[type=text][name*='Country']").val('@DefaultCountry');
-                $("[class*=globalmobility] select option:not([value])").prop('selected', true);
-            } else {
-                $(".globalmobility-first").show();
+            function setGlobalMobilityBehavior(value) {
+                if (!(value == '@IsTeWorker' || value == '@IsTeWorkerI')) {
+                    $("[class*=globalmobility]").hide();
+                    $("[class*=globalmobility] input:not(input[type=hidden])").val("");
+                    $("[class*=globalmobility] input[type=text][name*='Country']").val('@DefaultCountry');
+                    $("[class*=globalmobility] select option:not([value])").prop('selected', true);
+                } else {
+                    $(".globalmobility-first").show();
+                }
+
+                $("[class*=globalmobility-first] input[type=hidden]").val("1");
             }
 
-            $("[class*=globalmobility-first] input[type=hidden]").val("1");
-        }
+            if (!($('#NewToIKEA').val() == '@IsTeWorker' || $('#NewToIKEA').val() == '@IsTeWorkerI')) {
+                $(".globalmobility-first").hide();
+                $(".globalmobility").hide();
+            }
 
-        if (!($('#NewToIKEA').val() == '@IsTeWorker')) {
-            $(".globalmobility-first").hide();
-            $(".globalmobility").hide();
-        }
-
-        $('#NewToIKEA').change(function () {
-            setGlobalMobilityBehavior($(this).val());
+            $('#NewToIKEA').change(function () {
+                setGlobalMobilityBehavior($(this).val());
+            });
         });
-    });
 
+    var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
+    if ("@Model.ReadOnlyTab("#personal")" == 'False' && lockedbyUserGroup == 'False') {
 
-    $('#ContractStartDate').change(function () {
-        var startDate = $('#DocumentValidUntil').val();
-        var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
-        var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
-        var nowTemp = new Date();
-        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        $('#ContractStartDate').change(function () {
+            var startDate = $('#DocumentValidUntil').val();
+            var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+            var dstartDate = APIGlobal.DateTime.parseDate(startDate, format);
+            var nowTemp = new Date();
+            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
-        var noticeValidUntilDate = $('#notice_ValidUntilDate');
-        noticeValidUntilDate.hide();
+            var noticeValidUntilDate = $('#notice_ValidUntilDate');
+            noticeValidUntilDate.hide();
 
-        if (dstartDate.valueOf() < now.valueOf()) {
-            noticeHiringDate.show();
+            if (dstartDate.valueOf() < now.valueOf()) {
+                noticeHiringDate.show();
+            }
+        });
+
+        $('#Institution').change(function () {
+            var payee = $('#FirstName').val() + " " + $('#LastName').val();
+            $('#Payee').val(payee);
+
+            value = $(this).val();
+
+            if (value != 'Building Society') {
+                $("#BuildingSocietyRollNo").val("");
+                $('#BuildingSocietyRollNo').prop('disabled', true);
+            }
+            else {
+                $('#BuildingSocietyRollNo').prop('disabled', false);
+            }
+        });
+
+        function setTaxInformationBehavior(value) {
+            if ($('#TaxInformation').val() != 'P45 attached') {
+                $('#taxInformationNotice').hide();
+                $('#StatementDetails').prop('disabled', false);
+            }
+            else {
+                $('#taxInformationNotice').show();
+                $('#StatementDetails').prop('disabled', true);
+                $('#StatementDetails').val("");
+                $('#statementDetailsNotice').empty();
+                $('#hidden_StatementDetails').val("");
+            }
+
+            //if (value != 'Statement A/B or C') {
+            //    $('#StatementDetails option:not([value])').prop('selected', true);
+            //    $("#statementDetailsNotice").hide();
+            //    document.getElementById('StatementDetails').disabled = true;
+
+            //}
+            //else {
+            //    $("#StatementDetails").show();
+            //    document.getElementById('StatementDetails').disabled = false;
+            //}
+
         }
-    });
 
-    $('#Institution').change(function () {
-        var payee = $('#FirstName').val() + " " + $('#LastName').val();
-        $('#Payee').val(payee);
 
-        value = $(this).val();
 
-        if (value != 'Building Society') {
-            $("#BuildingSocietyRollNo").val("");
-            $('#BuildingSocietyRollNo').prop('disabled', true);
+        $('#TaxInformation').change(function () {
+
+            setTaxInformationBehavior($(this).val());
+        });
+
+        $('#StatementDetails').change(function () {
+            value = $(this).val();
+
+            switch (value) {
+                case "A":
+                    $("#statementDetailsNotice").html("1st job since last 6 April and no taxable Jobseeker’s Allowance, Employment and Support Allowance, taxable Incapacity Benefit, State or Occupational Pension.");
+                    $("#statementDetailsNotice").show();
+                    break;
+                case "B":
+                    $("#statementDetailsNotice").html("The only job but another job since last 6 April, or taxable Jobseeker’s Allowance of taxable Incapacity Benefit. No State or Occupational Pension.");
+                    $("#statementDetailsNotice").show();
+                    break;
+                case "C":
+                    $("#statementDetailsNotice").html("Another job / receive State or Occupational Pension.");
+                    $("#statementDetailsNotice").show();
+                    break;
+                default:
+                    $("#statementDetailsNotice").empty();
+                    $("#statementDetailsNotice").hide();
+                    break;
+            }
+        });
+
+        function setTypeOfStudentLoanBehavior(value) {
+
+            if ($('#DoYouHaveAStudentLoan').val() == 'Yes') {
+
+                if ($('#hidden_TypeOfStudentLoan').val() == "" && $('#hidden_TypeOfStudentLoan').val() != "Plan 2") {
+                    $('#TypeOfStudentLoan').prop('disabled', false);
+                    var defaultVal = $('#TypeOfStudentLoan').val("Plan 1");
+                    showNoticeMessage($('#TypeOfStudentLoan').val());
+                }
+            }
+            else {
+                $('#TypeOfStudentLoan').prop('disabled', true);
+                $('#TypeOfStudentLoan').val("");
+                $('#typeOfStudentLoanNotice').empty();
+                $('#hidden_TypeOfStudentLoan').val("");
+            }
         }
-        else {
-            $('#BuildingSocietyRollNo').prop('disabled', false);
-        }
-    });
 
-    function setTaxInformationBehavior(value) {
-        if (value == 'P45 attached') {
-            $('#taxInformationNotice').show();
-        }
-        else {
-            $('#taxInformationNotice').hide();
+
+        $('#DoYouHaveAStudentLoan').change(function () {
+            setTypeOfStudentLoanBehavior($(this).val());
+        });
+
+
+        $('#TypeOfStudentLoan').change(function () {
+            value = $(this).val();
+            showNoticeMessage($('#TypeOfStudentLoan').val());
+        });
+
+        function showNoticeMessage(value) {
+            switch (value) {
+                case "Plan 1":
+                    $("#typeOfStudentLoanNotice").html("Plan 1 is for:" + "\<br>" + "- English and Welsh students who started before 1 September 2012" + "\<br>" + "- all Scottish and Northern Irish students");
+                    $("#typeOfStudentLoanNotice").show();
+                    break;
+                case "Plan 2":
+                    $("#typeOfStudentLoanNotice").html("Plan 2 is for English and Welsh students who started on or after 1 September 2012");
+                    $("#typeOfStudentLoanNotice").show();
+                    break;
+                default:
+                    $("#typeOfStudentLoanNotice").empty();
+                    $("#typeOfStudentLoanNotice").hide();
+                    break;
+            }
         }
 
-        if (value != 'Statement A/B or C') {
-            $('#StatementDetails option:not([value])').prop('selected', true);
-            $("#statementDetailsNotice").hide();
-            document.getElementById('StatementDetails').disabled = true;
-
-        }
-        else {
-            $("#StatementDetails").show();
-            document.getElementById('StatementDetails').disabled = false;
-        }
-
+        setTypeOfStudentLoanBehavior($('#DoYouHaveAStudentLoan').val());
+        showNoticeMessage($('#TypeOfStudentLoan').val());
+        setTaxInformationBehavior($('#TaxInformation').val());
     }
 
-
-
-    $('#TaxInformation').change(function () {
-
-        setTaxInformationBehavior($(this).val());
-    });
-
-    $('#StatementDetails').change(function () {
-        value = $(this).val();
-
-        switch (value) {
-            case "A":
-                $("#statementDetailsNotice").html("1st job since last 6 April and no taxable Jobseeker’s Allowance, Employment and Support Allowance, taxable Incapacity Benefit, State or Occupational Pension.");
-                $("#statementDetailsNotice").show();
-                break;
-            case "B":
-                $("#statementDetailsNotice").html("The only job but another job since last 6 April, or taxable Jobseeker’s Allowance of taxable Incapacity Benefit. No State or Occupational Pension.");
-                $("#statementDetailsNotice").show();
-                break;
-            case "C":
-                $("#statementDetailsNotice").html("Another job / receive State or Occupational Pension.");
-                $("#statementDetailsNotice").show();
-                break;
-            default:
-                $("#statementDetailsNotice").empty();
-                $("#statementDetailsNotice").hide();
-                break;
+    else {
+        if ($('#TaxInformation').val() == "P45 attached") {
+            $('#StatementDetails').val("");
+            $('#hidden_StatementDetails').val("");
         }
-    });
-
-
+        if ($('#DoYouHaveAStudentLoan').val() == "No") {
+            $('#TypeOfStudentLoan').val("");
+            $('#hidden_TypeOfStudentLoan').val("");
+        }
+        if ($('#TaxInformation').val() != "P45 attached") {
+            $('#taxInformationNotice').hide();
+        }
+    }
 </script>

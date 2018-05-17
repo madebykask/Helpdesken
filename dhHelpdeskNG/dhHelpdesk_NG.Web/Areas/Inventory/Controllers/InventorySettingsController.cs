@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
+
+namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -188,14 +190,12 @@
         public PartialViewResult PrinterSettings(int languageId)
         {
             var settings =
-                this.inventorySettingsService.GetPrinterFieldSettingsForEdit(
-                    SessionFacade.CurrentCustomer.Id,
-                    languageId);
+                this.inventorySettingsService.GetPrinterFieldSettingsForEdit(SessionFacade.CurrentCustomer.Id, languageId);
+
             var langauges = this.languageService.GetActiveOverviews();
-            var viewModel = this.printerFieldsSettingsViewModelBuilder.BuildViewModel(
-                settings,
-                langauges,
-                languageId);
+
+            var viewModel = 
+                this.printerFieldsSettingsViewModelBuilder.BuildViewModel(settings, langauges, languageId);
 
             return this.PartialView("PrinterSettings", viewModel);
         }
@@ -204,9 +204,8 @@
         [BadRequestOnNotValid]
         public void PrinterSettings(PrinterFieldsSettingsViewModel model)
         {
-            var businessModel = this.printerFieldsSettingsBuilder.BuildViewModel(
-                model,
-                SessionFacade.CurrentCustomer.Id);
+            var businessModel = 
+                this.printerFieldsSettingsBuilder.BuildViewModel(model, SessionFacade.CurrentCustomer.Id);
 
             this.inventorySettingsService.UpdatePrinterFieldsSettings(businessModel);
         }
@@ -263,21 +262,17 @@
         [BadRequestOnNotValid]
         public RedirectToRouteResult NewInventorySettings(InventoryFieldSettingsEditViewModel model)
         {
-            // todo
-            var inventoryTypeBusinessModel = InventoryType.CreateNew(
-                SessionFacade.CurrentCustomer.Id,
-                model.InventoryTypeModel.Name,
-                DateTime.Now);
+            var inventoryTypeBusinessModel = 
+                InventoryType.CreateNew(SessionFacade.CurrentCustomer.Id, model.InventoryTypeModel.Name, DateTime.Now);
+
             this.inventoryService.AddInventoryType(inventoryTypeBusinessModel);
 
-            var defaultSettingsBusinessModel = this.inventoryFieldsSettingsBuilder.BuildBusinessModelForAdd(
-                inventoryTypeBusinessModel.Id,
-                model.InventoryFieldSettingsViewModel.DefaultSettings);
+            var defaultSettingsBusinessModel = 
+                this.inventoryFieldsSettingsBuilder.BuildBusinessModelForAdd(inventoryTypeBusinessModel.Id, model.InventoryFieldSettingsViewModel.DefaultSettings);
+            
             this.inventorySettingsService.AddInventoryFieldsSettings(defaultSettingsBusinessModel);
 
-            this.AddDynamicFieldSetting(
-                inventoryTypeBusinessModel.Id,
-                model.InventoryFieldSettingsViewModel.NewDynamicFieldViewModel.InventoryDynamicFieldSettingModel);
+            this.AddDynamicFieldSetting(inventoryTypeBusinessModel.Id, model.InventoryFieldSettingsViewModel.NewDynamicFieldViewModel.InventoryDynamicFieldSettingModel);
 
             return this.RedirectToAction("EditSettings", new { inventoryTypeId = inventoryTypeBusinessModel.Id });
         }
@@ -315,7 +310,9 @@
                         x.InventoryDynamicFieldSettingModel.PropertySize,
                         x.InventoryDynamicFieldSettingModel.ShowInDetails,
                         x.InventoryDynamicFieldSettingModel.ShowInList,
-                        DateTime.Now)).ToList();
+                        DateTime.Now,
+                        x.InventoryDynamicFieldSettingModel.XMLTag,
+                        x.InventoryDynamicFieldSettingModel.ReadOnly)).ToList();
 
             this.inventorySettingsService.UpdateDynamicFieldsSettings(dynamicFieldsSettings);
         }
@@ -339,16 +336,18 @@
                 newSetting.PropertySize,
                 newSetting.ShowInDetails,
                 newSetting.ShowInList,
-                DateTime.Now);
+                DateTime.Now,
+                newSetting.XMLTag,
+                newSetting.ReadOnly);
 
             this.inventorySettingsService.AddDynamicFieldSetting(dynamicFieldSetting);
         }
 
         private void UpdateInventoryFieldsSettings(int inventoryTypeId, DefaultFieldSettingsModel defaultFieldSettingsModel)
         {
-            var defaultSettingsBusinessModel = this.inventoryFieldsSettingsBuilder.BuildBusinessModelForUpdate(
-                inventoryTypeId,
-                defaultFieldSettingsModel);
+            var defaultSettingsBusinessModel = 
+                this.inventoryFieldsSettingsBuilder.BuildBusinessModelForUpdate(inventoryTypeId, defaultFieldSettingsModel);
+
             this.inventorySettingsService.UpdateInventoryFieldsSettings(defaultSettingsBusinessModel);
         }
 

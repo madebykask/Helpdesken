@@ -137,6 +137,10 @@ namespace DH.Helpdesk.Services.Services
                 this._logFileRepository.Commit();
             }
 
+            //remove reference from parent in child records
+            var referencedFiles = this._logFileRepository.GetReferencedFiles(id);
+            referencedFiles?.ForEach(x => x.ParentLog_Id = null);
+
             this._mail2TicketRepository.DeleteByLogId(id);
             this._mail2TicketRepository.Commit();
 
@@ -415,6 +419,8 @@ namespace DH.Helpdesk.Services.Services
                     }).ToArray();
             caseLogs.ForEach(this._logRepository.Add);
             this._logRepository.Commit();
+
+            caseRepository.MarkCaseAsUnread(parentCaseId);
         }
         public void AddParentCaseLogToChildCases(int[] caseIds, CaseLog parentCaseLog)
         {
@@ -555,6 +561,8 @@ namespace DH.Helpdesk.Services.Services
                         }).ToArray();
             caseLogs.ForEach(this._logRepository.Add);
             this._logRepository.Commit();
+
+            caseIds.ForEach(id => caseRepository.MarkCaseAsUnread(id));
         }
 
 	    public void UpdateLogInvoices(List<CaseLog> logs)

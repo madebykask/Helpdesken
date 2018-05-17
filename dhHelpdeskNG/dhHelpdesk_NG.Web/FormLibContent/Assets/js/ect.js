@@ -8,6 +8,9 @@ var site = site || {};
 site.baseUrl = "";
 var disableTypeahead = 1;
 
+var core2 = core2 || {};
+
+
 // stolen from boostrap-datepicker.js DL...
 // Extend for general functions
 var APIGlobal = {
@@ -107,6 +110,10 @@ var reload = function (cancelCase) {
         jump = true;
 
     // DL: used with iframeResizer.contentWindow.min.js
+    //if (jump && cancelCase) {
+    //    window.parentIFrame.sendMessage('cancelCase');
+    //}
+
     if (jump) {
         if (cancelCase) {
             window.parentIFrame.sendMessage({ type: 'cancelCase' });
@@ -2582,7 +2589,7 @@ function Indicator() {
             shadow: false, // Whether to render a shadow
             hwaccel: false, // Whether to use hardware acceleration
             className: 'spinner', // The CSS class to assign to the spinner
-            zIndex: 2e9, // The z-index (defaults to 2000000000)
+            zIndex: 2000000000, // The z-index (defaults to 2000000000)
             top: '50%', // Top position relative to parent
             left: '50%' // Left position relative to parent
         };
@@ -2657,9 +2664,26 @@ var setActiveTab = function () {
         $('.nav-tabs a[href="' + activeTab.val() + '"]').click();
 };
 
+var initAutoComplete = function () 
+{
+    var ect = new Ect();
+    ect.getAutoComplete('Country');
+    ect.getAutoComplete('Nationality');
+    ect.getAutoComplete('LineManager');
+    ect.getAutoComplete('PositionTitle');
+    ect.getAutoComplete('PrimarySite');
+    ect.getAutoComplete('CostCentre');
+    ect.getAutoComplete('JobTitle');
+    ect.getAutoComplete('Language');
+    ect.getAutoComplete('TecApprover');
+    ect.getAutoComplete('LineManagerJobTitle');
+}
+
 var init = function () {
     // Initiate globalspinner for ajax requests
     globalSpinner.stop();
+
+    initAutoComplete();
 
     // Prevent submit form on enter
     $(window).keydown(function (event) {
@@ -2805,8 +2829,13 @@ var init = function () {
     var LastDayOfEmployment = $('#date_LastDayOfEmployment');
     LastDayOfEmployment.not(".disabled").datepicker()
             .on('changeDate', function (e) {
-                document.getElementById('LockCDSAccountFrom').value = document.getElementById('LastDayOfEmployment').value;
 
+                if (document.getElementById('LockCDSAccountFrom')) {
+                    document.getElementById('LockCDSAccountFrom').value = document.getElementById('LastDayOfEmployment').value;
+                }
+                if (document.getElementById('LockCDSAccountFrom')) {
+                    document.getElementById('LastDayWorked').value = document.getElementById('LastDayOfEmployment').value;
+                }
                 if (document.getElementById('PaymentDate')) {
                     document.getElementById('PaymentDate').value = document.getElementById('LastDayOfEmployment').value;
 
@@ -2825,8 +2854,9 @@ var init = function () {
                         for (var i = 2; i <= 3; i++) {
                             var PaymentDate = "TerminationPaymentDate" + [i].toString();
 
-
-                            document.getElementById(PaymentDate).value = document.getElementById('LastDayOfEmployment').value;
+                            if (document.getElementById(PaymentDate)) {
+                                document.getElementById(PaymentDate).value = document.getElementById('LastDayOfEmployment').value;
+                            }
 
                         }
                     }
@@ -3562,3 +3592,381 @@ $(document).ready(function () {
     });
 
 });
+
+
+function Ect() {
+    core2.baseUrl = $("#core_baseUrl").val();
+    core2.area = $("#core_area").val();
+    core2.controller = $("#core_controller").val();
+    core2.formGuid = $("#formGuid").val();
+};
+
+Ect.prototype.getRelations = function (xmlFile, xmlFileAllOptions, $baseSelector, $targetSelector) {
+
+    var path = window.location.protocol + '//';
+    path = path + window.location.host + '/';
+    path = core2.baseUrl + '/FormLibContent/Xmls/' + core2.area + "/Relations/" + xmlFile;
+
+    var self = this;
+
+    $.ajax({
+        type: "GET",
+        url: path,
+        dataType: "xml",
+        success: function (xml) {
+
+            var show = '';
+
+            var baseIsSelectize = $baseSelector[0].selectize; //$baseSelector.hasClass('selectize');
+            var targetIsSelectize = $targetSelector[0].selectize; // $targetSelector.hasClass('selectize');
+
+            
+
+            
+            var base = '';
+            if (baseIsSelectize) {
+                base = $($baseSelector[0].selectize.getOption($baseSelector[0].selectize.getValue())).text().toLowerCase();
+            }
+            else {
+                base = $baseSelector.find('option:selected').text().toLowerCase();
+            }
+
+            var targetValue;
+            var selectize_tags;
+
+            targetValue = $targetSelector.val();
+            //clear list
+            $targetSelector.val('');
+            //console.log('clear' + $targetSelector.attr('id'));
+
+            //Clear list
+            if (targetIsSelectize) {
+                selectize_tags = $targetSelector[0].selectize
+                selectize_tags.clearOptions();
+            }
+            else {
+                $targetSelector.find('option').remove();
+            }
+            var foundMatch = false;
+
+            $(xml).find('dependent').each(function () {
+                var $sel = $(this);
+                show = '';
+
+                var baseCompare = $sel.find('selected').text().toLowerCase();
+                show = $sel.find('show').text();
+                
+                if (baseCompare == base) {
+                    if (show != '') {
+                        
+                        foundMatch = true;
+
+                        //temp, replace spaces that occours in the beginning of comma separation.
+                        show = show.replace(/\, /g, ",");
+
+                        var optionsarray = show.split(',');
+                        optionsarray.unshift('');
+
+                        $.each(optionsarray, function (key, val) {
+                            // search for value and replace it
+                            // optionsarray[key] = val.replace('[COMMA]', '&#44;');
+                            optionsarray[key] = val.replace('[COMMA]', ',');
+                        })
+
+                        var items = optionsarray.map(function (x) { return { text: x, value: x }; });
+
+                        if (targetIsSelectize) {
+                            selectize_tags.addOption(items);
+                            if (targetValue != '') {
+                                selectize_tags.setValue(targetValue);
+                            }
+                            else
+                                selectize_tags.setValue('');
+                            return;
+                        }
+                        else {
+
+                            $.each(items, function (key, item) {
+                                $targetSelector
+                                    .append($("<option></option>")
+                                    .attr("value", item.value)
+                                    .text(item.text));
+                            });
+
+                            //set value
+                            try {
+                                var attrId = $targetSelector.attr('id');
+                                var selectedValue = $('#hidden_' + attrId);
+
+                                //First time
+                                if (selectedValue.val() != '') {
+                                    $targetSelector.val(selectedValue.val());
+                                    selectedValue.val('');
+                                }
+
+                            } catch (e) {
+                            }
+
+                            return;
+                        }
+                    }
+
+                }
+            });
+
+            //Get all options if there is no options in select/search-select
+            if (xmlFileAllOptions != '' && foundMatch == false) {
+
+                console.log('no match, fetch all');
+                
+                if (targetIsSelectize) {
+                    var options = $targetSelector[0].selectize.options;
+                    var optionsLength = Object.keys(options).length;
+                    if (optionsLength == 0) {
+                        self.getAll(xmlFileAllOptions, $targetSelector, targetValue);
+                    }
+                }
+                else {
+                    var optionsLength = $targetSelector.find('option').length;
+                    if (optionsLength == 0) {
+                        self.getAll(xmlFileAllOptions, $targetSelector, targetValue);
+                    }
+                }
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.responseText);
+            alert(textStatus);
+            alert(errorThrown);
+        }
+    });
+}
+
+Ect.prototype.getAll = function (xmlFile, $targetSelector, targetValue) {
+    
+    var path = window.location.protocol + '//';
+    path = path + window.location.host + '/';
+    path = core2.baseUrl + '/FormLibContent/Xmls/' + core2.area + '/Data/' + xmlFile;
+    $.ajax({
+        type: "GET",
+        url: path,
+        dataType: "xml",
+        success: function (xml) {
+
+            var targetIsSelectize = $targetSelector.hasClass('selectize');
+            var optionsArray = [''];
+
+            //var items = data.map(function (x) { return { text: x.Name, value: x.Id }; });
+            $(xml).find('option').each(function () {
+                var a = $(this).text();
+                if (!(a == 'undefined' || a == '')) {
+                    optionsArray.push($(this).text());
+                }
+            });
+            var items = optionsArray.map(function (x) { return { text: x, value: x }; });
+            
+            if (targetIsSelectize) {
+                var selectize_tags = $targetSelector[0].selectize;
+                selectize_tags.addOption(items);
+
+                if (targetValue != '') {
+                    selectize_tags.setValue(targetValue);
+                }
+                else
+                    selectize_tags.setValue('');
+                return;
+            }
+            else {
+                //ADD OPTIONS TO SELECT
+                $.each(items, function (key, item) {
+                    $targetSelector
+                        .append($("<option></option>")
+                        .attr("value", item.value)
+                        .text(item.text));
+                });
+
+                //set value
+                try {
+                    var attrId = $targetSelector.attr('id');
+                    var selectedValue = $('#hidden_' + attrId);
+
+                    //First time
+                    if (selectedValue.val() != '') {
+                        $targetSelector.val(selectedValue.val());
+                        selectedValue.val('');
+                    }
+
+                } catch (e) {
+                }
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(jqXHR.responseText);
+            alert(textStatus);
+            alert(errorThrown);
+        }
+    });
+
+}
+
+Ect.prototype.getAutoComplete = function (entityName) {
+    
+    entityName = entityName.toLowerCase();
+
+    if ($('.autocomplete-' + entityName)[0]) {
+    
+        var selectize_options_primarysite = {
+            sortField: [{ field: 'value', direction: 'asc' }, { field: '$score' }],
+            persist: false,
+            valueField: 'value',
+            labelField: 'text',
+            searchField: 'text',
+            create: false,
+            preload: false,
+            render: {
+                option: function (item, escape) {
+
+                    return '<div data-value="' + escape(item.value) + '" data-selectable="" class="option">' + escape(item.text) + '</div>';
+                }
+            },
+            load: function (query, callback) {
+                    if (!query.length && query.length > 1) return callback();
+
+                    var url = core2.baseUrl + "/" + core2.area + "/" + core2.controller;
+
+                    $.ajax({
+                        url: url + '/AutoComplete?entityName=' + entityName + '&query=&formGuid=' + encodeURIComponent(core2.formGuid) + '&=' + Math.random(),
+                        type: 'GET',
+                        error: function () {
+                            callback();
+                        },
+                        success: function (res) {
+                            callback(res);
+                        }
+                    });
+            }
+        };
+
+        $('.autocomplete-' + entityName)
+            .each(function (e, i) {
+                var _this = $(this);
+                if (!_this[0].selectize) {
+                    _this.selectize(selectize_options_primarysite);
+                }
+            });
+        var url = core2.baseUrl + "/" + core2.area + "/" + core2.controller;
+        $.ajax({
+            url: url + '/AutoComplete?entityName=' + entityName + '&query=&formGuid=' + encodeURIComponent(core2.formGuid) + '&=' + Math.random(),
+            type: 'GET',
+            error: function () {
+            },
+            success: function (res) {
+                $('.autocomplete-' + entityName)
+                    .each(function (e, i) {
+                        if (i.selectize) {
+                            i.selectize.addOption(res);
+                        }
+                    });
+            }
+        });
+    }
+   
+    if ($('.autocomplete-relation-' + entityName)[0]) {
+    
+        var selectize_options_primarysite = {
+            sortField: [{ field: 'value', direction: 'asc' }, { field: '$score' }],
+            persist: false,
+            valueField: 'value',
+            labelField: 'text',
+            searchField: 'text',
+            create: false,
+            preload: false,
+            render: {
+                option: function (item, escape) {
+                    return '<div data-value="' + escape(item.value) + '" data-selectable="" class="option">' + escape(item.text) + '</div>';
+                }
+            }
+        };
+
+        $('.autocomplete-relation-' + entityName)
+            .each(function (e, i) {
+                var _this = $(this);
+                if (!_this[0].selectize) {
+                    _this.selectize(selectize_options_primarysite);
+                }
+            });
+
+    }
+}
+
+Ect.prototype.copyValueFrom = function ($baseSelector, $targetSelector) {
+
+    //check that they exist
+    if ($baseSelector[0] && $targetSelector[0]) {
+
+        //Set same value in target as selected in base
+        var value = $baseSelector.val();
+
+        var selectedText = '';
+
+        if ($baseSelector[0].selectize) {
+            selectedText = $baseSelector[0].selectize.getItem(value).text();
+        }
+        else if ($baseSelector.is('select')) {
+            selectedText = $baseSelector.find('option:selected').text();
+        }
+        else {
+            //Assume that is a text for now
+            selectedText = $baseSelector.val();
+        }
+
+        selectedText = $.trim(selectedText);
+
+        if ($baseSelector[0].selectize) {
+
+
+            if ($targetSelector[0].selectize) {
+                $targetSelector[0].selectize.setValue(selectedText);
+            }
+            else {
+                $targetSelector.val(selectedText);
+            }
+        } else {
+
+            if ($targetSelector[0].selectize) {
+                $targetSelector[0].selectize.setValue(selectedText);
+            }
+            else {
+                $targetSelector.val(selectedText);
+            }
+        }
+
+    }
+
+}
+
+
+Ect.prototype.setValue = function (value, $targetSelector) {
+    
+    //check that they exist
+    if ($targetSelector[0]) {
+
+            if ($targetSelector[0].selectize) {
+                var valueExist = $targetSelector[0].selectize.getItem(value).text();
+
+                //Add value if it doesent exist                
+                if (valueExist == '')
+                    {
+                    $targetSelector[0].selectize.addOption({
+                        text: value,
+                        value: value
+                    });
+                }
+
+                $targetSelector[0].selectize.setValue(value);
+            }
+            else {
+                $targetSelector.val(value);
+            }
+    }
+}

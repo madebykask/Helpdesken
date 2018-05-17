@@ -41,8 +41,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                                  PropertyDefault = PropertyDefaultValue,
                                  Show = businessModel.ShowInDetails.ToInt(),
                                  ShowInList = businessModel.ShowInList.ToInt(),
-                                 InventoryTypeGroup_Id =
-                                     businessModel.InventoryTypeGroupId,
+                                 InventoryTypeGroup_Id = businessModel.InventoryTypeGroupId,
+                                 XMLTag = businessModel.XMLTag,
+                                 ReadOnly = businessModel.ReadOnly.ToInt()
                              };
 
             this.DbSet.Add(entity);
@@ -66,6 +67,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             entity.Show = businessModel.ShowInDetails.ToInt();
             entity.ShowInList = businessModel.ShowInList.ToInt();
             entity.InventoryTypeGroup_Id = businessModel.InventoryTypeGroupId;
+            entity.XMLTag = businessModel.XMLTag;
+            entity.ReadOnly = businessModel.ReadOnly.ToInt();
         }
 
         public void Update(List<InventoryDynamicFieldSetting> businessModels)
@@ -80,10 +83,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
         {
             var settings = this.GetSettings(inventoryTypeId);
 
-            var mapperData =
-                settings.Select(
-                    x =>
-                    new
+            var mapperData = settings.Select(x => new
                         {
                             x.Id,
                             x.InventoryTypeGroup_Id,
@@ -92,13 +92,12 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             x.PropertyType,
                             x.PropertySize,
                             x.Show,
-                            x.ShowInList
+                            x.ShowInList,
+                            x.XMLTag,
+                            x.ReadOnly
                         }).ToList();
 
-            var data =
-                mapperData.Select(
-                    x =>
-                    InventoryDynamicFieldSetting.CreateForEdit(
+            var data = mapperData.Select(x => InventoryDynamicFieldSetting.CreateForEdit(
                         x.Id,
                         x.InventoryTypeGroup_Id,
                         x.PropertyValue,
@@ -106,7 +105,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         (FieldTypes)x.PropertyType,
                         x.PropertySize,
                         x.Show.ToBool(),
-                        x.ShowInList.ToBool())).ToList();
+                        x.ShowInList.ToBool(),
+                        x.XMLTag,
+                        x.ReadOnly.ToBool())).ToList();
 
             return data;
         }
@@ -123,7 +124,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             x.PropertyValue,
                             x.PropertyPos,
                             x.PropertyType,
-                            x.PropertySize
+                            x.PropertySize,
+                            x.ReadOnly
                         }).ToList();
 
             var data = mapperData.Select(x =>
@@ -133,7 +135,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         x.PropertyValue,
                         x.PropertyPos,
                         (FieldTypes)x.PropertyType,
-                        x.PropertySize, isReadonly)).ToList();
+                        x.PropertySize, 
+                        isReadonly ? isReadonly : x.ReadOnly.ToBool())).ToList();
 
             return data;
         }

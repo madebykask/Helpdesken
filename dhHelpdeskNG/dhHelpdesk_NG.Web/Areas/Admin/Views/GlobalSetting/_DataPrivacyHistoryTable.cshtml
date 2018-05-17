@@ -1,0 +1,15 @@
+﻿@model IList<DH.Helpdesk.Web.Models.Gdpr.GdprOperationsHistoryListItem>
+
+@{ Layout = null; }
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.RegistrationDate</td>
+        <td>@item.Cases</td>
+        <td>@item.Data</td>
+        <td>@item.AttachedFiles</td>
+        <td>@item.Executed</td>
+    </tr>
+}
+

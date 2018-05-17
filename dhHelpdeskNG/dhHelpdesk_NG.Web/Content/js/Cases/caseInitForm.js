@@ -37,19 +37,26 @@ function SetFocusToReportedByOnCase() {
 
 $(document).ready(function () {
     var initiatorID = $('#InitiatorCategory').val()
-    var initiatorCategory = window.parameters.computerUserCategories[initiatorID];
-    intiatorReadOnly = initiatorCategory == null ? false : initiatorCategory.IsReadOnly;
-    applyReadOnlyOn(readOnlyExpressions['initiator'], intiatorReadOnly);
 
-    $('#AddNotifier')[0].prevState = $('#AddNotifier').is(':visible');
-    if (intiatorReadOnly) {
-        $('#AddNotifier').hide();
+    if (initiatorID) {
+        var initiatorCategory = window.parameters.computerUserCategories[initiatorID];
+        intiatorReadOnly = initiatorCategory == null ? false : initiatorCategory.IsReadOnly;
+        applyReadOnlyOn(readOnlyExpressions['initiator'], intiatorReadOnly);
+
+        $('#AddNotifier')[0].prevState = $('#AddNotifier').is(':visible');
+
+        if (intiatorReadOnly) {
+            $('#AddNotifier').hide();
+        }
     }
 
     var regardingID = $('#IsAboutCategory').val()
-    var regardingCategory = window.parameters.computerUserCategories[regardingID];
-    regardingReadOnly = regardingCategory == null ? false : regardingCategory.IsReadOnly;
-    applyReadOnlyOn(readOnlyExpressions['regarding'], regardingReadOnly);
+
+    if (regardingID) {
+        var regardingCategory = window.parameters.computerUserCategories[regardingID];
+        regardingReadOnly = regardingCategory == null ? false : regardingCategory.IsReadOnly;
+        applyReadOnlyOn(readOnlyExpressions['regarding'], regardingReadOnly);
+    }
 });
 
 
@@ -276,7 +283,7 @@ function refreshIsAboutDepartment(regionId, departmentFilterFormat, selectedDepa
 function IsInitiatorCategoryReadOnly() {
     var categoryID, category;
     categoryID = $('#InitiatorCategory').val();
-    if (categoryID != 'null') {
+    if (categoryID) {
         category = window.parameters.computerUserCategories[categoryID];
     }
     if (category != null && category.IsReadOnly)
@@ -611,13 +618,13 @@ function GetComputerUserSearchOptionsForIsAbout() {
 
                 var categoryID = null;
                 var isAboutCategory = $('#IsAboutCategory');
-                if (isAboutCategory.length > 0)
-                    categoryID = isAboutCategory.val()
+                    if (isAboutCategory.length > 0)
+                        categoryID = isAboutCategory.val();
 
                 $.ajax({
                     url: '/cases/search_user',
                     type: 'post',
-                    data: { query: query, customerId: $('#case__Customer_Id').val(), searchKey: lastIsAboutSearchKey, categoryID },
+                    data: { query: query, customerId: $('#case__Customer_Id').val(), searchKey: lastIsAboutSearchKey, categoryID: categoryID },
                     dataType: 'json',
                     success: function (result) {
                         if (result.searchKey != lastIsAboutSearchKey)
@@ -933,7 +940,12 @@ function CaseInitForm() {
         $(invoiceFields).hide();
         $.get("/Cases/GetDepartmentInvoiceParameters/", { departmentId: departmentId, ouId: _ouId }, function (data) {
             if (data) {
+
+                //update values required for EditPage.js
                 _parameters.departmentInvoiceMandatory = data.ChargeMandatory;
+                _parameters.showInvoiceTime = data.ShowInvoiceTime;
+                _parameters.showInvoiceOvertime = data.ShowInvoiceOvertime;
+                
                 if (data.Charge) {
                     $(invoiceSelector).show();
                 }
@@ -1023,64 +1035,7 @@ function CaseInitForm() {
         resetProductareaByCaseType(caseTypeId);
     });
 
-    function setDynamicDropDowns() {
-        var dynamicDropDownClass = '.DynamicDropDown';
-        var fixedArea = 90;
-        var pageSize = $(window).height() - fixedArea;
-        var scrollPos = $(window).scrollTop();
-        var elementToTop = $(dynamicDropDownClass).offset().top - scrollPos - fixedArea;
-        var elementToDown = pageSize - elementToTop;
-        if (elementToTop < -$(dynamicDropDownClass).height())
-            $(dynamicDropDownClass).removeClass('open');
-
-        if (elementToTop <= elementToDown) {
-            $(dynamicDropDownClass).removeClass('dropup');
-        } else {
-            $(dynamicDropDownClass).addClass('dropup');
-        }
-    }
-
-    function getObjectPosInView(objectId) {
-        var fixedArea = 90;
-        var pageSize = $(window).height() - fixedArea;
-        var scrollPos = $(window).scrollTop();
-        var elementToTop = $('#' + objectId).offset().top - scrollPos - fixedArea;
-        var elementToDown = pageSize - elementToTop;
-        return { ToTop: elementToTop, ToDown: elementToDown };
-    }
-
-    function dynamicDropDownBehaviorOnMouseMove(event) {
-        var target = $(event.target.parentElement);
-        if (target != undefined && target.hasClass('DynamicDropDown_Up') && target.index(0) !== -1) {
-            var objPos = getObjectPosInView(target[0].id);
-            var subMenu = '#subDropDownMenu_' + target[0].id;
-            $(subMenu).css('bottom', 'auto');
-            $(subMenu).css({
-                position: "fixed",
-                top: $(window).height() - objPos.ToDown + "px"
-            });
-
-            var targetPos = $(target)[0].getBoundingClientRect();
-            $(subMenu).css("left", targetPos.left + $(target).width() + "px");
-            $(subMenu).css("max-height", $(window).innerHeight() - objPos.ToDown + "px");
-            $(target).children(".subddMenu").children(".dropdown-submenu").css("position", "static");
-
-            var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-            if (isChrome) {
-                if ($(target).parent().hasClass("parentddMenu") === false && $(subMenu).get(0).scrollHeight <= $(subMenu).innerHeight())
-                    $(subMenu).css("left", targetPos.left + $(target).innerWidth() - $(target).position().left + "px");
-            }
-
-            var submenuPos = $(subMenu)[0].getBoundingClientRect();
-            if ((submenuPos.top + submenuPos.height) > window.innerHeight) {
-                var offset = (submenuPos.top + submenuPos.height) - window.innerHeight;
-                if (offset > 0) {
-                    var top = $(window).height() - objPos.ToDown - offset;
-                    $(subMenu).css("top", top);
-                }
-            }
-        }
-    }
+   
 
     $("ul.dropdown-menu.subddMenu.parentddMenu").on("mouseenter", function () {
         var html = $("html");
@@ -1377,6 +1332,7 @@ function CaseInitForm() {
         e.stopPropagation();
     });
 
+    // TODO: CHECK IF COMPATIBLE WITH ALL DropDown buttons and if should be moved to a separate file
     $("button.dropdown-toggle[data-toggle=dropdown]").on("click", function (e) {
         $(this).parent().find("li.dropdown-submenu > ul").css("display", "");
     });
@@ -1440,6 +1396,7 @@ function CaseInitForm() {
         return true;
     });
 
+    //todo: check CaseTemplae
     $("ul.dropdown-menu li a").click(function(e) {
         //var toggler = $(this).parents("ul.dropdown-menu").prevAll("button.dropdown-toggle[data-toggle=dropdown]");
         var toggler = $(this).closest(".btn-group.open").find("button.dropdown-toggle[data-toggle=dropdown]");

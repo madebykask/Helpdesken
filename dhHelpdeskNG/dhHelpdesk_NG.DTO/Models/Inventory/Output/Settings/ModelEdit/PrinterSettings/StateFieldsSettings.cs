@@ -4,10 +4,13 @@
 
     public class StateFieldsSettings
     {
-        public StateFieldsSettings(ModelEditFieldSetting createdDateFieldSetting, ModelEditFieldSetting changedDateFieldSetting)
+        public StateFieldsSettings(ModelEditFieldSetting createdDateFieldSetting, 
+                                   ModelEditFieldSetting changedDateFieldSetting,
+                                   ModelEditFieldSetting syncDateFieldSetting)
         {
             this.CreatedDateFieldSetting = createdDateFieldSetting;
             this.ChangedDateFieldSetting = changedDateFieldSetting;
+            this.SyncDateFieldSetting = syncDateFieldSetting;
         }
 
         [NotNull]
@@ -15,5 +18,8 @@
 
         [NotNull]
         public ModelEditFieldSetting ChangedDateFieldSetting { get; set; }
+
+        [NotNull]
+        public ModelEditFieldSetting SyncDateFieldSetting { get; }
     }
 }

@@ -567,7 +567,7 @@
             if (copy.CustomerUsers != null)
             {
                 tempCustomerUser = copy.CustomerUsers.ToList();
-                copy.CustomerUsers.Clear();                
+                copy.CustomerUsers.Clear();
             }
 
             if (userModel.UserRights.HasValue)
@@ -580,8 +580,7 @@
 
                 copy.UserRoles.Add(userRight);
             }
-
-            
+  
             this._userService.SaveNewUser(copy, AAsSelected, CsSelected, OTsSelected, UserWorkingGroups, Departments, out errors, ConfirmPassword);
 
             if (errors.Count > 0)
@@ -658,6 +657,12 @@
                 }
                
                 cu.CasePerformerFilter = "0";
+
+                cu.PriorityPermission = ccu.PriorityPermission;
+                cu.CaptionPermission = ccu.CaptionPermission;
+                cu.ContactBeforeActionPermission = ccu.ContactBeforeActionPermission;
+                cu.StateSecondaryPermission = ccu.StateSecondaryPermission;
+                cu.WatchDatePermission = ccu.WatchDatePermission;
 
                 this._customerUserService.SaveCustomerUser(cu, out errors);
 

@@ -23,6 +23,8 @@
             validate.run(val);
         });
     </script>
+    <input type="hidden" id="formGuid" value="@Model.FormGuid" />
 }
 
 @Html.Partial("_Edit", Model)
+@Html.Partial("_Scripts", Model)

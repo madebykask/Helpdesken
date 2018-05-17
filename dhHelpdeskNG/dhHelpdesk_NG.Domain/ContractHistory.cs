@@ -16,12 +16,12 @@
         public int? Supplier_Id { get; set; }
         public string ContractNumber { get; set; }
         public string Info { get; set; }
+        public string Files { get; set; }
         public DateTime? ContractStartDate { get; set; }
         public DateTime? ContractEndDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? NoticeDate { get; set; }
         public int NoticeTime { get; set; }
-
 
         public virtual Contract Contract { get; set; }
         public virtual ContractCategory ContractCategory { get; set; }
@@ -29,5 +29,6 @@
         public virtual Supplier Supplier { get; set; }
         public virtual User FollowUpResponsibleUser { get; set; }
         public virtual User ResponsibleUser { get; set; }
+        public virtual User CreatedByUser { get; set; }
     }
 }

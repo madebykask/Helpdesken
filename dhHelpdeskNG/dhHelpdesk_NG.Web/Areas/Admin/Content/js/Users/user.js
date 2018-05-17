@@ -69,6 +69,7 @@ $(function () {
         invoicePermission: 'invoicePermission',
         documentPermission: 'documentPermission',
         inventoryPermission: 'inventoryPermission',
+        contractPermission: 'contractPermission',
         caseUnlockPermission: 'caseUnlockPermission',
         caseInternalLogPermission: 'caseInternalLogPermission'
     }
@@ -159,6 +160,7 @@ $(function () {
         var invoicePermissions = spec.invoicePermissions || [];
         var documentPermissions = spec.documentPermissions || [];
         var inventoryPermissions = spec.inventoryPermissions || [];
+        var contractPermissions = spec.contractPermissions || [];
         var caseUnlockPermissions = spec.caseUnlockPermissions || [];
         var caseInternalLogPermissions = spec.caseInternalLogPermissions || [];
         /**
@@ -177,6 +179,7 @@ $(function () {
                             invoicePermissions,
                             documentPermissions,
                             inventoryPermissions,
+                            contractPermissions,
                             caseUnlockPermissions,
                             caseInternalLogPermissions];
 
@@ -330,6 +333,10 @@ $(function () {
             return inventoryPermissions;
         }
 
+        var getContractPermissions = function () {
+            return contractPermissions;
+        }
+
         var getCaseUnlockPermissions = function () {
             return caseUnlockPermissions;
         }
@@ -350,6 +357,7 @@ $(function () {
         that.getInvoicePermissions = getInvoicePermissions;
         that.getDocumentPermissions = getDocumentPermissions;
         that.getInventoryPermissions = getInventoryPermissions;
+        that.getContractPermissions = getContractPermissions;
         that.getCaseUnlockPermissions = getCaseUnlockPermissions;
         that.getCaseInternalLogPermissions = getCaseInternalLogPermissions;
 
@@ -548,6 +556,9 @@ $(function () {
         var inventoryPermissions = [];
         inventoryPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="inventoryPermission"]'), type: dhHelpdesk.admin.users.permissionType.inventoryPermission }));
 
+        var contractPermissions = [];
+        contractPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="contractPermission"]'), type: dhHelpdesk.admin.users.permissionType.contractPermission }));
+
         var caseUnlockPermissions = [];
         caseUnlockPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="caseUnlockPermission"]'), type: dhHelpdesk.admin.users.permissionType.caseUnlockPermission }));
 
@@ -567,6 +578,7 @@ $(function () {
             invoicePermissions: invoicePermissions,
             documentPermissions: documentPermissions,
             inventoryPermissions: inventoryPermissions,
+            contractPermissions: contractPermissions,
             caseUnlockPermissions: caseUnlockPermissions,
             caseInternalLogPermissions: caseInternalLogPermissions
         });

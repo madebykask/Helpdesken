@@ -44,6 +44,7 @@ namespace DH.Helpdesk.Domain
         public int LDAPAuthenticationType { get; set; }
         public int LDAPLogLevel { get; set; }
         public int LDAPSyncType { get; set; }
+        public int LDAPCreateOrganization { get; set; }
         public int LeadTimeFromProductAreaSetDate { get; set; }
         public int LogLevel { get; set; }
         public int LogNoteFormat { get; set; }
@@ -102,6 +103,7 @@ namespace DH.Helpdesk.Domain
         public string DSN_Sync { get; set; }
         public string EMailAnswerSeparator { get; set; }
         public string EMailSubjectPattern { get; set; }
+        public int IntegrationType { get; set; }
         public string LDAPBase { get; set; }
         public string LDAPFilter { get; set; }
         public string LDAPPassword { get; set; }
@@ -147,5 +149,6 @@ namespace DH.Helpdesk.Domain
         public string QuickNewCaseLinkUrl { get; set; }
         public int DefaultCaseTemplateId { get; set; }
         public bool QuickLinkWGRestriction { get; set; }
+        public bool AllowMoveCaseToAnyCustomer { get; set; }
     }
 }

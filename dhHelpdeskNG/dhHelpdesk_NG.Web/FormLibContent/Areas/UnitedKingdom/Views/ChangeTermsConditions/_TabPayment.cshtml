@@ -37,6 +37,12 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="tdstrong">@Model.Label("PayScaleArea")</td>
+                    <td>
+                        @Model.Element("PayScaleArea")
+                    </td>
+                </tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("BasicPayAmount")</td>
                     <td>
                         @Model.Element("BasicPayAmount")
@@ -320,7 +326,8 @@
 </div>
 
 <script>
-    
+    var ect = new Ect();
+
     var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');
     
     if ("@Model.ReadOnlyTab("#Payment")" == 'False' && lockedbyUserGroup == 'False') {
@@ -355,10 +362,15 @@
 
         $('#date_ChangeValidFrom').on('changeDate', function (ev) {
             setPaymentDatePickersBehavior();
+            setSlaryReviewDatePickersValue();
+            setSlaryReviewDatePickersBehavior();
         }).data('datepicker');
 
         $('#ChangeValidFrom').change(function () {
             setPaymentDatePickersBehavior();
+            setSlaryReviewDatePickersValue();
+            setSlaryReviewDatePickersBehavior();
+
         });
 
         $('#DeductionsValidFrom,#DeductionsValidFrom2,#DeductionsValidFrom3,#DeductionsValidFrom4,#DeductionsValidFrom5').change(function () {
@@ -417,45 +429,91 @@
             //}
         }
 
-        //function setDefaultDatePickerBehavior(id) {
-        //    var input = $('#' + id);
+        function setSlaryReviewDatePickersBehavior() {
 
-        //    //if (value == 'One Time') {
-        //    //    disableDatePicker(id);
-        //    //} else {
-        //    //    setDefaultDate(id);
-        //    //}
-        //}
+            var startDate = $('#ChangeValidFrom').val();
+            if (startDate != '') {
+                var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+                var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+                var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+                forcePicker.setFullYear(dStart.getFullYear());
+                forcePicker.setMonth(0);
+                forcePicker.setDate(1);
 
-        //$('#ChangeValidFrom').change(function () {
-        //    setDatePickerBehavior('AllowancesValidTo');
-        //});
-        // setDefaultDatePickerBehavior('AllowancesValidTo');
 
-        //$('#AllowancesPaymentType2').change(function () {
-        //    setDatePickerBehavior('AllowancesValidTo2', $(this).val());
-        //});
-        //setDefaultDatePickerBehavior('AllowancesValidTo2', $('#AllowancesPaymentType2').val());
+                var nowTemp = new Date();
+                var specialDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+                specialDate.setFullYear(dStart.getFullYear());
+                specialDate.setMonth(0);
+                specialDate.setDate(1);
+                var month = dStart.getMonth() + 1;
 
-        //$('#AllowancesPaymentType3').change(function () {
-        //    setDatePickerBehavior('AllowancesValidTo3', $(this).val());
-        //});
-        //setDefaultDatePickerBehavior('AllowancesValidTo3', $('#AllowancesPaymentType3').val());
+                if (month >= 6) {
 
-        //$('#DeductionsPaymentType').change(function () {
-        //    setDatePickerBehavior('DeductionsValidTo', $(this).val());
-        //});
-        //setDefaultDatePickerBehavior('DeductionsValidTo', $('#DeductionsPaymentType').val());
+                    forcePicker.setFullYear(specialDate.getFullYear() + 1);
+                    $('#date_DateOfNextSalaryReview').not(".disabled").datepicker(
+                    {
+                        onRender: function (ev) {
+                            return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+                        },
+                    });
+                }
 
-        //$('#DeductionsPaymentType2').change(function () {
-        //    setDatePickerBehavior('DeductionsValidTo2', $(this).val());
-        //});
-        //setDefaultDatePickerBehavior('DeductionsValidTo2', $('#DeductionsPaymentType2').val());
+                else {
 
-        //$('#DeductionsPaymentType3').change(function () {
-        //    setDatePickerBehavior('DeductionsValidTo3', $(this).val());
-        //});
-        //setDefaultDatePickerBehavior('DeductionsValidTo3', $('#DeductionsPaymentType3').val());
+                    $('#date_DateOfNextSalaryReview').not(".disabled").datepicker(
+                    {
+                        onRender: function (ev) {
+                            return ev.valueOf() < forcePicker.valueOf() ? 'disabled' : '';
+                        },
+                    });
+                }
+            }
+
+        }
+
+
+        function setSlaryReviewDatePickersValue() {
+
+            var startDate = $('#ChangeValidFrom').val();
+            if (startDate != '') {
+                var format = APIGlobal.DateTime.parseFormat('dd.mm.yyyy');
+                var dStart = APIGlobal.DateTime.parseDate(startDate, format);
+                var forcePicker = new Date(dStart.getFullYear(), dStart.getMonth(), dStart.getDate(), 0, 0, 0, 0);
+                forcePicker.setFullYear(dStart.getFullYear() + 1);
+                // Oktober 2017 - Case 59121 : Contract Start Date’ date is earlier than 01.01.2018 (all dates up to: 31.12.2017 (included))
+                //Then:
+                //  New default value in ‘Date of next salary review’ should be: 01.01.2019
+
+                forcePicker.setMonth(0);
+                forcePicker.setDate(1);
+                var visibleDate = APIGlobal.DateTime.formatDate(forcePicker, format);
+
+                var nowTemp = new Date();
+                var specialDate = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+                specialDate.setFullYear(dStart.getFullYear() + 1);
+                specialDate.setMonth(0);
+                specialDate.setDate(1);
+                var month = dStart.getMonth() + 1;
+
+                // Oktober 2017 - Case 59121 : And if in field ‘Contract Start Date’ date is later than 01.01.2018 but earlier than 01.06.2018 (all dates up to: 31.05.2018 (included))
+                //Then: 
+                //    New default value in ‘Date of next salary review’ should be: 01.01.2019 and anyone whose start date is later than 01.06.2018 date of next salary review will be 01.01.2020
+
+                if (month >= 6) {
+                    forcePicker.setFullYear(specialDate.getFullYear() + 1);
+                    visibleDate = APIGlobal.DateTime.formatDate(forcePicker, format);
+                    $('#DateOfNextSalaryReview').val(visibleDate);
+                }
+                else {
+
+
+                    $('#DateOfNextSalaryReview').val(visibleDate);
+
+                }
+
+            }
+        }
 
         function setOneIKEABonusLevel(value) {
             if (!value) {
@@ -466,23 +524,33 @@
             }
         };
 
+        var maxJobTitleDefCount = 2;
+        var setDefCount;
+
+        $(function () {
+
+            if ($('#JobTitle').val() != '')
+                setDefCount = 0;
+            else
+                setDefCount = maxJobTitleDefCount;
+        });
+
         $('#JobTitle').change(function () {
-            setOneIKEABonusLevel($(this).val());
 
-            setDefaultPayroll();
+            setDefCount += 1;
+            if (setDefCount <= maxJobTitleDefCount)
+                return;
 
-            AllowanceType = 1;
-            setTimeout(function(){setAllowances()}, 30);
-            
+                setOneIKEABonusLevel($(this).val());
+
+                setDefaultPayroll();
+
+                AllowanceType = 1;
+                setTimeout(function(){setAllowances()}, 30);
             
         });
 
-        //setOneIKEABonusLevel($('#JobTitle').val());
-
-        //From OrganisationalAssignment
-
         var AllowanceType = 0; // Global
-
 
         function setEmployeeBehavior(value) {
             if (value == '@ContractType') {
@@ -572,7 +640,8 @@
 
             var bus = $("#NewBusinessUnit option:selected").text();
 
-            if (bus == 'IKEA Distribution Services Uni' | bus == 'IKEA Property Investments Ltd' | bus == 'IKEA Contact Centre' | bus == 'IKEA Service Office' | bus == 'IKEA Customer Delivery Centre') {
+            //SG : Week 10 - 2018 bus == 'IKEA Distribution Services Uni' |
+            if ( bus == 'IKEA Property Investments Ltd' | bus == 'IKEA Contact Centre' | bus == 'IKEA Service Office' | bus == 'IKEA Customer Delivery Centre') {
                 var line = document.getElementById('ReportsToLineManager').value;
 
                 var tec = $("#TECApprover option:selected").text();
@@ -640,33 +709,7 @@
             setAllowances();
             AllowanceType = 5;
             setAllowances();
-            //setAllowanceType2();
-            //setAllowanceType();
-            //setAllowanceType3();
-
-
-
-            var value = $(this).val();
-            if ($('#NewBusinessUnit')[0].selectize) {
-                var selectedText = $('#NewBusinessUnit')[0].selectize.getItem(value).text();
-
-                if ($('#PrimarySite')[0].selectize) {
-                    $('#PrimarySite')[0].selectize.setValue(selectedText);
-                }
-                else {
-                    $('#PrimarySite').val(selectedText);
-                }
-            }
-            else {
-                var selectedText = $('#NewBusinessUnit').find('option:selected').text();
-                if ($('#PrimarySite')[0].selectize) {
-                    $('#PrimarySite')[0].selectize.setValue(selectedText);
-                }
-                else {
-                    var selectedText = $('#NewBusinessUnit').find('option:selected').text();
-                    $('#PrimarySite').val(selectedText);
-                }
-            }
+            ect.copyValueFrom($('#NewBusinessUnit'), $('#PrimarySite'));
         });
 
         $('#AllowancesType').change(function () {
@@ -676,8 +719,6 @@
             //////////
             AllowanceType = 1;
             setAllowances();
-            //setAllowanceType();
-
         });
 
         $('#AllowancesType2').change(function () {
@@ -761,29 +802,16 @@
             //PayScaleGroup change function
             //Calls functions to set basic pay amount
             //////////
-
             setBasicPayAmount();
-
         });
-
-
 
         $('#NewServiceArea').change(function () {
             //////////
             //NewServiceArea change function
             //Calls functions to set job titles
             //////////
-
-            //GetXML('predefined_function_jobtitleUK_outs.xml', setLineManagerJobTitle);
-
-
             //department, Line manager, cost centre NEW
             setTimeout(function () { GetXML('predefined_function_department_linemanager_outs.xml', setLineManagerAndCostCentre); }, 1);
-
-            setTimeout(function () { GetXML('predefined_function_jobtitleUK_outs.xml', setLineManagerJobTitle); }, 1);
-
-
-
         });
 
         $('#NewDepartment').change(function () {
@@ -791,34 +819,10 @@
             //NewDepartment change function
             //Calls functions to set cost centre, linemanager
             //////////
-
-            //GetXML('predefined_department_costcentre_change_outs.xml', setCostCentre);
-
-
-
-            //GetXML('predefined_linemanager_department_outs_UK.xml', setLineManager);
-
-
-
-            ////Line manager jobtitle
-
-            //GetXML('predefined_department_jobtitle_UK_outs.xml', setLineManagerJob);
-
-
-
-
             //department, Line manager, cost centre NEW
             GetXML('predefined_function_department_linemanager_outs.xml', setLineManagerAndCostCentre);
-
-
             //Line manager jobtitle
-
             setTimeout(function () { GetXML('predefined_department_jobtitle_UK_outs.xml', setLineManagerJob); }, 30);
-
-
-
-
-
         });
 
         $('#ReportsToLineManager').change(function () {
@@ -1450,7 +1454,11 @@
                                     //}
                                 }
                                 else if (dep.toString().trim() == 'Fork Lift Truck Allowance') {
-                                    if (bus.toString().trim() != 'IKEA Milton Keynes') {
+
+                                    //Oktober 2017 : Case 59121 : If the co-worker is from business unit IKEA Milton Keynes, the default ‘Amount/Units’ for Allowance Type ‘Fork Lift Truck Allowance’ should be 0.92 just like in other business units, not 1.72.
+
+
+                                    //if (bus.toString().trim() != 'IKEA Milton Keynes') {
                                         if (AllowanceType == 1) {
                                             if (document.getElementById('AllowancesAmountUnits')) {
                                                 document.getElementById('AllowancesAmountUnits').value = show;
@@ -1461,19 +1469,19 @@
                                                 document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = show;
                                             }
                                         }
-                                    }
-                                    else {
-                                        if (AllowanceType == 1) {
-                                            if (document.getElementById('AllowancesAmountUnits')) {
-                                                document.getElementById('AllowancesAmountUnits').value = '1.72';
-                                            }
-                                        }
-                                        else {
-                                            if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
-                                                document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '1.72';
-                                            }
-                                        }
-                                    }
+                                    //}
+                                    //else {
+                                    //    if (AllowanceType == 1) {
+                                    //        if (document.getElementById('AllowancesAmountUnits')) {
+                                    //            document.getElementById('AllowancesAmountUnits').value = '1.72';
+                                    //        }
+                                    //    }
+                                    //    else {
+                                    //        if (document.getElementById('AllowancesAmountUnits' + AllowanceType.toString())) {
+                                    //            document.getElementById('AllowancesAmountUnits' + AllowanceType.toString()).value = '1.72';
+                                    //        }
+                                    //    }
+                                    //}
                                 }
                                 else if (dep.toString().trim() == 'Kitchen Skills') {
                                     if (bus.toString().trim() == 'IKEA Edinburgh') {
@@ -1664,11 +1672,11 @@
                         }
                     }
 
-                    if (bus.toString().trim() == 'IKEA Contact Centre' | bus.toString().trim() == 'IKEA Belfast' | bus.toString().trim() == 'IKEA Birmingham' | bus.toString().trim() == 'IKEA Bristol' | bus.toString().trim() == 'IKEA Cardiff' | bus.toString().trim() == 'IKEA Coventry' | bus.toString().trim() == 'IKEA Edinburgh' | bus.toString().trim() == 'IKEA Gateshead' | bus.toString().trim() == 'IKEA Glasgow' | bus.toString().trim() == 'IKEA Leeds' | bus.toString().trim() == 'IKEA Lakeside' | bus.toString().trim() == 'IKEA Manchester' | bus.toString().trim() == 'IKEA Milton Keynes' | bus.toString().trim() == 'IKEA Nottingham' | bus.toString().trim() == 'IKEA Reading' | bus.toString().trim() == 'IKEA Sheffield' | bus.toString().trim() == 'IKEA Southampton' | bus.toString().trim() == 'IKEA Warrington') {
+                    if (bus.toString().trim() == 'IKEA Contact Centre' | bus.toString().trim() == 'IKEA Belfast' | bus.toString().trim() == 'IKEA Birmingham' | bus.toString().trim() == 'IKEA Bristol' | bus.toString().trim() == 'IKEA Cardiff' | bus.toString().trim() == 'IKEA Coventry' | bus.toString().trim() == 'IKEA Edinburgh' | bus.toString().trim() == 'IKEA Gateshead' | bus.toString().trim() == 'IKEA Glasgow' | bus.toString().trim() == 'IKEA Leeds' | bus.toString().trim() == 'IKEA Lakeside' | bus.toString().trim() == 'IKEA Manchester' | bus.toString().trim() == 'IKEA Milton Keynes' | bus.toString().trim() == 'IKEA Nottingham' | bus.toString().trim() == 'IKEA Reading' | bus.toString().trim() == 'IKEA Sheffield' | bus.toString().trim() == 'IKEA Southampton' | bus.toString().trim() == 'IKEA Warrington' | bus.toString().trim() == 'IKEA Exeter') {
                         if (grp.toString().trim() == 'STARTUK') {
 
                             if (document.getElementById('BasicPayAmount')) {
-                                document.getElementById('BasicPayAmount').value = '8.45'
+                                document.getElementById('BasicPayAmount').value = '8.75'
                             }
                         }
 
@@ -1752,7 +1760,7 @@
                         if (grp.toString().trim() == 'STARTUK') {
                                                         
                                 if (document.getElementById('BasicPayAmount')) {
-                                    document.getElementById('BasicPayAmount').value = '8.25'
+                                    document.getElementById('BasicPayAmount').value = '8.75'
                                 }
                         }
                         else if (grp.toString().trim() == 'FOUNDUK') {
@@ -1820,7 +1828,7 @@
                 bus = $("#NewBusinessUnit option:selected").text();
             }
 
-            if (sal == 'Salaried' | sal == 'Salaried Management' | sal == 'Salaried Senior Management') {
+            if (sal == 'Salaried' | sal == 'Salaried Management' | sal == 'Salaried Senior Management' | sal == 'Dual Payroll (ZY)') {
 
 
                 var path = window.location.protocol + '//';
@@ -2102,7 +2110,7 @@
 
                 if (department.toString().trim() == dep.toString().trim()) {
 
-                    if (bus == 'IKEA Manchester' | bus == 'IKEA Belfast' | bus == 'IKEA Cardiff' | bus == 'IKEA Edinburgh' | bus == 'IKEA Gateshead' | bus == 'IKEA Milton Keynes' | bus == 'IKEA Coventry') {
+                    if (bus == 'IKEA Manchester' | bus == 'IKEA Belfast' | bus == 'IKEA Cardiff' | bus == 'IKEA Edinburgh' | bus == 'IKEA Gateshead' | bus == 'IKEA Milton Keynes' | bus == 'IKEA Coventry' | bus == 'IKEA Exeter') {
                         res = '1';
                         if (show != '') {
                             var n = show.indexOf(",");
@@ -2270,7 +2278,8 @@
                 line = document.getElementById('ReportsToLineManager').value;
             }
 
-            if (dep == 'IKEA Distribution Services Uni' | dep == 'IKEA Property Investments Ltd' | dep == 'IKEA Contact Centre' | dep == 'IKEA Service Office' | dep == 'IKEA Customer Delivery Centre' | dep == 'IKEA E-Commerce') {
+            // SG: Week 47 - 2017  removed this from condition:  | dep == 'IKEA Service Office'  SG : Week 10 2018 bus == 'IKEA Distribution Services Uni' |
+            if (dep == 'IKEA Property Investments Ltd' | dep == 'IKEA Contact Centre' | dep == 'IKEA Customer Delivery Centre' | dep == 'IKEA E-Commerce') {
 
                 if (document.getElementById('TECApprover')) {
                     $('#TECApprover')[0].selectize.setValue(line);

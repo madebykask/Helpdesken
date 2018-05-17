@@ -25,7 +25,8 @@ using System;
     {
         string GetCustomerName(int customerId);
 
-        IList<Customer> CustomersForUser(int userId);
+        IQueryable<Customer> CustomersForUser(int userId);
+        IQueryable<Customer> GetAllowCaseMoveCustomers();
 
         CustomerOverview FindById(int id);
 
@@ -36,7 +37,8 @@ using System;
         int? GetCustomerIdByEMailGUID(Guid GUID);
 
         int GetCustomerLanguage(int customerid);
-     
+
+        CaseDefaultsInfo GetCustomerDefaults(int customerId);
     }
 
     public sealed class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
@@ -72,16 +74,28 @@ using System;
 
             return ret;
         }
-
-
-        public IList<Customer> CustomersForUser(int userId)
+        
+        public IQueryable<Customer> CustomersForUser(int userId)
         {
-            var query = from customer in this.DataContext.Set<Customer>()
-                         join customerUser in this.DataContext.Set<CustomerUser>().Where(o => o.User_Id == userId) on customer.Id equals customerUser.Customer_Id
-                         orderby customer.Name
-                         select customer;
+            var query = 
+                from cus in this.Table
+                where cus.Users.Any(u => u.Id == userId)
+                orderby cus.Name
+                select cus;
 
-            return query.ToList();
+            return query;
+        }
+
+        public IQueryable<Customer> GetAllowCaseMoveCustomers()
+        {
+            var query =
+                from cus in this.Table
+                from cusSettings in DataContext.Settings.Where(x => x.Customer_Id == cus.Id).DefaultIfEmpty()
+                where cusSettings.AllowMoveCaseToAnyCustomer
+                orderby cus.Name
+                select cus;
+
+            return query;
         }
 
         public CustomerOverview FindById(int id)
@@ -121,6 +135,32 @@ using System;
             return entities
                     .Select(c => new ItemOverview(c.Name, c.Value.ToString(CultureInfo.InvariantCulture)))
                     .FirstOrDefault();                        
+        }
+
+        public CaseDefaultsInfo GetCustomerDefaults(int customerId)
+        {
+            var res =
+                (from customer in this.Table
+                where customer.Id == customerId
+                select new 
+                {
+                    RegionId = this.DataContext.Regions.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                    CaseTypeId = this.DataContext.CaseTypes.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                    SupplierId = this.DataContext.Suppliers.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                    PriorityId = this.DataContext.Priorities.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                    StatusId = this.DataContext.Statuses.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                }).FirstOrDefault();
+
+            //its important to return null for nullable values
+            return res != null
+                ? new CaseDefaultsInfo
+                {
+                    RegionId = res.RegionId == 0 ? null : (int?) res.RegionId,
+                    CaseTypeId = res.CaseTypeId,
+                    SupplierId = res.SupplierId == 0 ? null : (int?) res.SupplierId,
+                    PriorityId = res.PriorityId == 0 ? null : (int?) res.PriorityId,
+                    StatusId = res.StatusId == 0 ? null : (int?) res.StatusId
+                } : new CaseDefaultsInfo();
         }
     }
 

@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE form [
     <!ENTITY languages SYSTEM "Templates/Languages.xml">
-    <!ENTITY data_language SYSTEM "Data/Data_Languages.xml">
     <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
     <!ENTITY state SYSTEM "Templates/HiringState.xml">
     <!ENTITY pre_payscaletype_payscalelevel SYSTEM "Defaults/Predefined_PayScaleType_PayScaleLevel.xml">
-    <!ENTITY data_country SYSTEM "Data/Data_Country.xml">
     <!ENTITY data_hiring_allowancestypes SYSTEM "Data/Data_Hiring_AllowancesTypes.xml">
     <!ENTITY data_costcentre SYSTEM "Data/Data_CostCentre.xml">
-    <!ENTITY data_nationality SYSTEM "Data/Data_Nationality.xml">
-    <!ENTITY data_jobtitle SYSTEM "Data/Data_JobTitle.xml">
-    <!ENTITY data_localjobtitle SYSTEM "Data/Data_LocalJobTitle.xml">
-    <!ENTITY data_linemanager SYSTEM "Data/Data_LineManager.xml">
-    <!ENTITY data_primarysite SYSTEM "Data/Data_PrimarySite.xml">
 ]>
 
 <form id="48" guid="0BCB0E6B-245E-49C5-8E0C-B3661D3A0A09" customerId="29">
@@ -25,7 +18,8 @@
             <element type="select" name="NewToIKEA" mandatory="1" label="New to IKEA?" HcmData="1" SortOrder="1" ParentGVFields="1">
                 <options>
                     <option value=""></option>
-                    <option value="International Transfer">International Transfer</option>
+                  <option value="International Transfer (LTA, STA, Commuter)">International Transfer (LTA, STA, Commuter)</option>
+                  <option value="International Relocation">International Relocation</option>
                     <option value="New-Hire">New-Hire</option>
                     <option value="Re-Hire">Re-Hire</option>
                     <option value="Transfer Between Business Units">Transfer Between Business Units</option>
@@ -47,7 +41,13 @@
                 <regex inherit="employeeno" pattern="" message=""></regex>
             </element>
             <element type="text" name="GlobalHRID" label="Global HR ID" formfieldidentifier="E1P0709.PERSONID_EXT" HcmData="1" SortOrder="3" ParentGVFields="1">
-                <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
+                <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
+                <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
+            </element>
+            <element type="date" name="PreviousContractStartDate" label="Previous Contract Start Date" format="dd.MM.yyyy" casefield="" HcmData="1" SortOrder="" ParentGVFields="1">
+                <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
+                <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
+                <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element type="select" name="Title" label="Title" mandatory="1" HcmData="1" SortOrder="5" ParentGVFields="1">
                 <options>
@@ -71,8 +71,7 @@
                 <validateIf name="PermanentCountry">Netherlands</validateIf>
             </element>
             <element type="text" name="PermanentCity" label="City" mandatory="1" formfieldidentifier="E1P0006.ORT01:1" HcmData="1" SortOrder="31" ParentGVFields="1"></element>
-            <element type="search-select" source="1" name="PermanentCountry" label="Country" mandatory="1" default="Netherlands" formfieldidentifier="E1P0006.LAND1:1" HcmData="1" SortOrder="32" ParentGVFields="1">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="PermanentCountry" label="Country" mandatory="1" default="Netherlands" formfieldidentifier="E1P0006.LAND1:1" HcmData="1" SortOrder="32" ParentGVFields="1">
             </element>
             <element type="select" name="MaritalStatus" label="Marital Status" mandatory="1" HcmData="1" SortOrder="26" ParentGVFields="1">
                 <options>
@@ -89,8 +88,7 @@
                     <option value="Widowed">Widowed</option>
                 </options>
             </element>
-            <element type="search-select" source="1" name="Nationality" label="Nationality" default="Dutch" mandatory="1" HcmData="1" SortOrder="25" ParentGVFields="1">
-                &data_nationality;
+            <element type="select" source="database" cssclass="autocomplete-nationality selectize" name="Nationality" label="Nationality" default="Dutch" mandatory="1" HcmData="1" SortOrder="25" ParentGVFields="1">
             </element>
             <element type="text" name="BSNCSN" label="BSN/CSN" mandatory="1" HcmData="1" SortOrder="22" ParentGVFields="1">
                 <regex inherit="bsn" pattern="" message=""></regex>
@@ -99,29 +97,26 @@
             <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>
         </tab>
         <tab name="#OrganisationalAssignment" label="Organisational Assignment">
-            <element type="search-select" source="1" name="OrganisationCountry" label="Country" default="Netherlands" HcmData="1" SortOrder="0" ParentGVFields="1">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="OrganisationCountry" label="Country" default="Netherlands" HcmData="1" SortOrder="0" ParentGVFields="1">
             </element>
             <element type="select" source="database" name="Company" label="Company" mandatory="1" casefield="region_id" HcmData="1" SortOrder="11" ParentGVFields="1"></element>
             <element type="select" source="database" name="BusinessUnit" label="Business Unit" mandatory="1" casefield="department_id" HcmData="1" SortOrder="12" ParentGVFields="1"></element>
             <element type="select" source="database" name="ServiceArea" label="Function" mandatory="1" HcmData="1" SortOrder="13" ParentGVFields="1"></element>
             <element type="select" source="database" name="Department" label="Department" mandatory="1" casefield="ou_id" HcmData="1" SortOrder="15" ParentGVFields="1"></element>
-            <element type="search-select" source="1" name="HomeCostCentre" label="Cost Centre" mandatory="1" HcmData="1" SortOrder="14" ParentGVFields="1">
-                &data_costcentre;
+            <element type="select" source="database" cssclass="autocomplete-costcentre selectize" name="HomeCostCentre" label="Cost Centre" mandatory="1" HcmData="1" SortOrder="14" ParentGVFields="1">
+              &data_costcentre;
             </element>
             <element type="text" name="CostAllocation" label="Cost Allocation" mandatory="1" default="100" HcmData="1" SortOrder="266" ParentGVFields="1">
               <regex inherit="amountwithdelimiter" pattern="" message=""></regex>
               <regex inherit="num100" pattern="" message=""></regex>
             </element>
-            <element type="search-select" name="CrossChargeCostCentre" source="1" label="Cost Centre" HcmData="1" SortOrder="267" ParentGVFields="1">
-                &data_costcentre;
-                <mandatoryIfNotEqual name="CostAllocation">100</mandatoryIfNotEqual>
+            <element type="select" source="database" cssclass="autocomplete-costcentre selectize" name="CrossChargeCostCentre" label="Cost Centre" HcmData="1" SortOrder="267" ParentGVFields="1">
+              &data_costcentre;
+              <mandatoryIfNotEqual name="CostAllocation">100</mandatoryIfNotEqual>
             </element>
-            <element type="search-select" name="JobTitle" label="Job Title (Global Catalogue)" mandatory="1" HcmData="1" SortOrder="10" ParentGVFields="1">
-                &data_jobtitle;
+            <element type="select" source="database" cssclass="autocomplete-jobtitle selectize" name="JobTitle" label="Job Title (Global Catalogue)" mandatory="1" HcmData="1" SortOrder="10" ParentGVFields="1">
             </element>
-            <element type="search-select" name="LocalJobTitle" label="Position Title (Local Job Name)" mandatory="1" HcmData="1" SortOrder="9" ParentGVFields="1">
-                &data_localjobtitle;
+            <element type="select" source="database" cssclass="autocomplete-relation-positiontitle selectize" name="LocalJobTitle" label="Position Title (Local Job Name)" mandatory="1" HcmData="1" SortOrder="9" ParentGVFields="1">
             </element>
             <element type="select" name="NewPosition" label="New Position?" mandatory="1" default="Fill Vacant Position" HcmData="1" SortOrder="258" ParentGVFields="1">
                 <options>
@@ -131,8 +126,7 @@
                     <option value="New Position for VAP store?">New Position for VAP store?</option>
                 </options>
             </element>
-            <element type="search-select" name="ReportsToLineManager" source="1" label="Reports to Line Manager" mandatory="1" HcmData="1" SortOrder="259" ParentGVFields="1">
-                &data_linemanager;
+            <element type="select" source="database" cssclass="autocomplete-relation-linemanager selectize" name="ReportsToLineManager" label="Reports to Line Manager" mandatory="1" HcmData="1" SortOrder="259" ParentGVFields="1">
             </element>
             <element type="select" name="AcknowledgedManagerInCLA" label="Acknowledged as managers in terms of CLA" mandatory="1" HcmData="1" SortOrder="260" ParentGVFields="1">
                 <options>
@@ -149,7 +143,8 @@
                     <option value="Apprentice">Apprentice</option>
                     <option value="Holiday Co-Worker">Holiday Co-Worker</option>
                     <option value="Detached">Detached</option>
-                    <option value="Expat (TE)">Expat (TE)</option>
+                    <option value="Detached">Inpat</option>
+                    <!--<option value="Expat (TE)">Expat (TE)</option>-->
                 </options>
             </element>
             <element type="text" name="ContractedHours" label="Contracted Hours" mandatory="1" HcmData="1" SortOrder="38" ParentGVFields="1">
@@ -157,7 +152,7 @@
             </element>
             <element type="date" name="ContractEndDate" label="Contract End Date" format="dd.MM.yyyy" HcmData="1" SortOrder="34" ParentGVFields="1">
                 <laterThanOrEqual name="ContractStartDate" message="This date cannot be earlier than Contract start date."></laterThanOrEqual>
-                <mandatoryIf name="EmploymentCategory">Temporary,Apprentice,Holiday Co-Worker,Detached,Expat (TE),Transferred Employee</mandatoryIf>
+                <mandatoryIf name="EmploymentCategory">Temporary,Apprentice,Holiday Co-Worker,Detached,Transferred Employee</mandatoryIf>
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element type="select" name="ContractType" label="Contract Type" mandatory="1" HcmData="1" SortOrder="17" ParentGVFields="1">
@@ -178,11 +173,9 @@
                 <mandatoryIf name="ProbationPeriod">Yes</mandatoryIf>
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
-            <element name="PrimarySite" type="search-select" label="Primary Site" mandatory="1">
-                &data_primarysite;
+            <element type="select" source="database" cssclass="autocomplete-primarysite selectize" name="PrimarySite" label="Primary Site" mandatory="1">
             </element>
-            <element name="TECApprover" type="search-select" label="TEC Approver" mandatory="1">
-                &data_linemanager;
+            <element type="select" source="database" cssclass="autocomplete-linemanager selectize" name="TECApprover" label="TEC Approver" mandatory="1">
             </element>
             <element name="HelpDesk" type="text" label="Help Desk" default="ICC3 HBG Retail" mandatory="1"></element>
             <element type="text" name="NameOfSchool" label="Name Of School" HcmData="1" SortOrder="261" ParentGVFields="1">
@@ -205,6 +198,7 @@
             <element type="select" name="PayrollCategory" label="Payroll Category" mandatory="1" HcmData="1" SortOrder="37" ParentGVFields="1">
                 <options>
                     <option value=""></option>
+                  <option value="Dual Payroll (ZY)">Dual Payroll (ZY)</option>
                     <option value="Hourly">Hourly</option>
                     <option value="Monthly">Monthly</option>
                     <option value="Juvenile Hourly">Juvenile Hourly</option>
@@ -625,7 +619,8 @@
                 </options>
             </element>
             <element type="select" name="TaxAssignment" label="Tax Assignment" HcmData="1" SortOrder="293" ParentGVFields="1">
-              <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>
+              <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
+              <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
                 <options>
                     <option value=""></option>
                     <option value="Home Country">Home Country</option>
@@ -633,7 +628,8 @@
                 </options>
             </element>
             <element type="select" name="SocialInsuranceAssignment" label="Social Insurance Assignment" HcmData="1" SortOrder="294" ParentGVFields="1">
-              <mandatoryIf name="NewToIKEA">International Transfer</mandatoryIf>              
+              <mandatoryIf name="NewToIKEA">International Transfer (LTA, STA, Commuter)</mandatoryIf>
+              <mandatoryIf name="NewToIKEA">International Relocation</mandatoryIf>
                 <options>
                     <option value=""></option>
                     <option value="Home Country">Home Country</option>
@@ -662,8 +658,9 @@
                 <mandatoryIf name="TypeOfBenefit">Company Car</mandatoryIf>
                 <options>
                     <option value=""></option>
-                    <option value="necessity car without the option to drive privately">necessity car without the option to drive privately</option>
-                    <option value="necessity car with the option to drive privately by paying € 250,- net a month">necessity car with the option to drive privately by paying € 250,- net a month</option>
+                    <option value="necessity car without the option to drive privately" disabled="1">necessity car without the option to drive privately</option>
+                    <option value="necessity car with the option to drive privately by paying € 250,- net a month" disabled="1">necessity car with the option to drive privately by paying € 250,- net a month</option>
+                    <option value="Necessity car">Necessity car</option>
                     <option value="benefit car, for business and private use">benefit car, for business and private use</option>
                 </options>
             </element>
@@ -823,9 +820,8 @@
             <element type="text" name="MailingCity" label="City" mandatory="1" HcmData="1" SortOrder="138" ParentGVFields="0">
                 <mandatoryIfNotEmpty name="MailingAddressLine1"></mandatoryIfNotEmpty>
             </element>
-            <element type="search-select" source="1" name="MailingCountry" label="Country" default="Netherlands" mandatory="1" HcmData="1" SortOrder="139" ParentGVFields="0">
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="MailingCountry" label="Country" default="Netherlands" mandatory="1" HcmData="1" SortOrder="139" ParentGVFields="0">
                 <mandatoryIfNotEmpty name="MailingAddressLine1"></mandatoryIfNotEmpty>
-                &data_country;
             </element>
             <element type="text" name="EmergencyAddressLine1" label="Address line 1" mandatory="1" HcmData="1" SortOrder="140" ParentGVFields="0"></element>
             <element type="text" name="EmergencyAddressLine2" label="Address line 2" HcmData="1" SortOrder="141" ParentGVFields="0"></element>
@@ -835,8 +831,7 @@
                 <validateIf name="EmergencyCountry">Netherlands</validateIf>
             </element>
             <element type="text" name="EmergencyCity" label="City" mandatory="1" HcmData="1" SortOrder="144" ParentGVFields="0"></element>
-            <element type="search-select" source="1" name="EmergencyCountry" label="Country" default="Netherlands" mandatory="1" HcmData="1" SortOrder="145" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmergencyCountry" label="Country" default="Netherlands" mandatory="1" HcmData="1" SortOrder="145" ParentGVFields="0">
             </element>
             <element type="text" name="EmergencyContactNumber" label="Emergency contact number" HcmData="1" SortOrder="146" ParentGVFields="0"></element>
             <element type="text" name="EmergencyContactRelationship" label="Emergency contact/relationship" mandatory="1" HcmData="1" SortOrder="147" ParentGVFields="0"></element>
@@ -958,16 +953,14 @@
                     <option value="Work Permit">Work Permit</option>
                 </options>
             </element>
-            <element type="search-select" source="1" name="EmployeeDocumentCountry" label="Country" default="Netherlands" HcmData="1" SortOrder="174" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry" label="Country" default="Netherlands" HcmData="1" SortOrder="174" ParentGVFields="0">
             </element>
             <element type="text" name="EmployeeDocumentNo" label="Document No" HcmData="1" SortOrder="175" ParentGVFields="0"></element>
             <element type="date" name="EmployeeDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="176" ParentGVFields="0">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element type="text" name="EmployeeDocumentIssuePlace" label="Issue Place" HcmData="1" SortOrder="177" ParentGVFields="0"></element>
-            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="178" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="178" ParentGVFields="0">
             </element>
             <element type="select" name="EmployeeDocumentType2" label="Document Type" HcmData="1" SortOrder="179" ParentGVFields="0">
                 <options>
@@ -978,16 +971,14 @@
                     <option value="Work Permit">Work Permit</option>
                 </options>
             </element>
-            <element type="search-select" source="1" name="EmployeeDocumentCountry2" label="Country" default="Netherlands" HcmData="1" SortOrder="180" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry2" label="Country" default="Netherlands" HcmData="1" SortOrder="180" ParentGVFields="0">
             </element>
             <element type="text" name="EmployeeDocumentNo2" label="Document No" HcmData="1" SortOrder="181" ParentGVFields="0"></element>
             <element type="date" name="EmployeeDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="182" ParentGVFields="0">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element type="text" name="EmployeeDocumentIssuePlace2" label="Issue Place" HcmData="1" SortOrder="183" ParentGVFields="0"></element>
-            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="184" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry2" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="184" ParentGVFields="0">
             </element>
             <element type="select" name="EmployeeDocumentType3" label="Document Type" HcmData="1" SortOrder="185" ParentGVFields="0">
                 <options>
@@ -998,16 +989,14 @@
                     <option value="Work Permit">Work Permit</option>
                 </options>
             </element>
-            <element type="search-select" source="1" name="EmployeeDocumentCountry3" label="Country" default="Netherlands" HcmData="1" SortOrder="186" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry3" label="Country" default="Netherlands" HcmData="1" SortOrder="186" ParentGVFields="0">
             </element>
             <element type="text" name="EmployeeDocumentNo3" label="Document No" HcmData="1" SortOrder="187" ParentGVFields="0"></element>
             <element type="date" name="EmployeeDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="188" ParentGVFields="0">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element type="text" name="EmployeeDocumentIssuePlace3" label="Issue Place" HcmData="1" SortOrder="189" ParentGVFields="0"></element>
-            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="190" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry3" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="190" ParentGVFields="0">
             </element>
             <element type="select" name="EmployeeDocumentType4" label="Document Type" HcmData="1" SortOrder="191" ParentGVFields="0">
                 <options>
@@ -1018,16 +1007,14 @@
                     <option value="Work Permit">Work Permit</option>
                 </options>
             </element>
-            <element type="search-select" source="1" name="EmployeeDocumentCountry4" label="Country" default="Netherlands" HcmData="1" SortOrder="192" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry4" label="Country" default="Netherlands" HcmData="1" SortOrder="192" ParentGVFields="0">
             </element>
             <element type="text" name="EmployeeDocumentNo4" label="Document No" HcmData="1" SortOrder="193" ParentGVFields="0"></element>
             <element type="date" name="EmployeeDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="194" ParentGVFields="0">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element type="text" name="EmployeeDocumentIssuePlace4" label="Issue Place" HcmData="1" SortOrder="195" ParentGVFields="0"></element>
-            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry4" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="196" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry4" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="196" ParentGVFields="0">
             </element>
             <element type="select" name="EmployeeDocumentType5" label="Document Type" HcmData="1" SortOrder="197" ParentGVFields="0">
                 <options>
@@ -1038,16 +1025,14 @@
                     <option value="Work Permit">Work Permit</option>
                 </options>
             </element>
-            <element type="search-select" source="1" name="EmployeeDocumentCountry5" label="Country" default="Netherlands" HcmData="1" SortOrder="198" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentCountry5" label="Country" default="Netherlands" HcmData="1" SortOrder="198" ParentGVFields="0">
             </element>
             <element type="text" name="EmployeeDocumentNo5" label="Document No" HcmData="1" SortOrder="199" ParentGVFields="0"></element>
             <element type="date" name="EmployeeDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="200" ParentGVFields="0">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element type="text" name="EmployeeDocumentIssuePlace5" label="Issue Place" HcmData="1" SortOrder="201" ParentGVFields="0"></element>
-            <element type="search-select" source="1" name="EmployeeDocumentIssuePlaceCountry5" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="202" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="EmployeeDocumentIssuePlaceCountry5" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="202" ParentGVFields="0">
             </element>
             <!--Global mobility Dependants-->
             <element type="hidden" name="DependantFamilyMembers"></element>
@@ -1166,16 +1151,14 @@
                     <option value="Work permit">Work permit</option>
                 </options>
             </element>
-            <element type="search-select" source="1" name="DependantsDocumentCountry" label="Country" default="Netherlands" HcmData="1" SortOrder="229" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry" label="Country" default="Netherlands" HcmData="1" SortOrder="229" ParentGVFields="0">
             </element>
             <element type="text" name="DependantsDocumentNo" label="Document No" HcmData="1" SortOrder="230" ParentGVFields="0"></element>
             <element type="date" name="DependantsDocumentIssueDate" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="231" ParentGVFields="0">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element type="text" name="DependantsDocumentIssuePlace" label="Issue Place"  HcmData="1" SortOrder="232" ParentGVFields="0"></element>
-            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="233" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="233" ParentGVFields="0">
             </element>
             <element type="select" name="DependantsDocumentType2" label="Document Type" HcmData="1" SortOrder="234" ParentGVFields="0">
                 <options>
@@ -1185,16 +1168,14 @@
                     <option value="Work permit">Work permit</option>
                 </options>
             </element>
-            <element type="search-select" source="1" name="DependantsDocumentCountry2" label="Country" default="Netherlands" HcmData="1" SortOrder="235" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry2" label="Country" default="Netherlands" HcmData="1" SortOrder="235" ParentGVFields="0">
             </element>
             <element type="text" name="DependantsDocumentNo2" label="Document No" HcmData="1" SortOrder="236" ParentGVFields="0"></element>
             <element type="date" name="DependantsDocumentIssueDate2" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="237" ParentGVFields="0">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element type="text" name="DependantsDocumentIssuePlace2" label="Issue Place" HcmData="1" SortOrder="238" ParentGVFields="0"></element>
-            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="239" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry2" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="239" ParentGVFields="0">
             </element>
             <element type="select" name="DependantsDocumentType3" label="Document Type" HcmData="1" SortOrder="240" ParentGVFields="0">
                 <options>
@@ -1204,16 +1185,14 @@
                     <option value="Work permit">Work permit</option>
                 </options>
             </element>
-            <element type="search-select" source="1" name="DependantsDocumentCountry3" label="Country" default="Netherlands" HcmData="1" SortOrder="241" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry3" label="Country" default="Netherlands" HcmData="1" SortOrder="241" ParentGVFields="0">
             </element>
             <element type="text" name="DependantsDocumentNo3" label="Document No" HcmData="1" SortOrder="242" ParentGVFields="0"></element>
             <element type="date" name="DependantsDocumentIssueDate3" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="243" ParentGVFields="0">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element type="text" name="DependantsDocumentIssuePlace3" label="Issue Place" HcmData="1" SortOrder="244" ParentGVFields="0"></element>
-            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="245" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry3" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="245" ParentGVFields="0">
             </element>
             <element type="select" name="DependantsDocumentType4" label="Document Type" HcmData="1" SortOrder="246" ParentGVFields="0">
                 <options>
@@ -1223,16 +1202,14 @@
                     <option value="Work permit">Work permit</option>
                 </options>
             </element>
-            <element type="search-select" source="1" name="DependantsDocumentCountry4" label="Country" default="Netherlands" HcmData="1" SortOrder="247" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry4" label="Country" default="Netherlands" HcmData="1" SortOrder="247" ParentGVFields="0">
             </element>
             <element type="text" name="DependantsDocumentNo4" label="Document No" HcmData="1" SortOrder="248" ParentGVFields="0"></element>
             <element type="date" name="DependantsDocumentIssueDate4" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="249" ParentGVFields="0">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element type="text" name="DependantsDocumentIssuePlace4" label="Issue Place" HcmData="1" SortOrder="250" ParentGVFields="0"></element>
-            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry4" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="251" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry4" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="251" ParentGVFields="0">
             </element>
             <element type="select" name="DependantsDocumentType5" label="Document Type" HcmData="1" SortOrder="252" ParentGVFields="0">
                 <options>
@@ -1242,16 +1219,14 @@
                     <option value="Work permit">Work permit</option>
                 </options>
             </element>
-            <element type="search-select" source="1" name="DependantsDocumentCountry5" label="Country" default="Netherlands" HcmData="1" SortOrder="253" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentCountry5" label="Country" default="Netherlands" HcmData="1" SortOrder="253" ParentGVFields="0">
             </element>
             <element type="text" name="DependantsDocumentNo5" label="Document No" HcmData="1" SortOrder="254" ParentGVFields="0"></element>
             <element type="date" name="DependantsDocumentIssueDate5" label="Issue Date" format="dd.MM.yyyy" HcmData="1" SortOrder="255" ParentGVFields="0">
                 <regex inherit="date" pattern="" message=""></regex>
             </element>
             <element type="text" name="DependantsDocumentIssuePlace5" label="Issue Place" HcmData="1" SortOrder="256" ParentGVFields="0"></element>
-            <element type="search-select" source="1" name="DependantsDocumentIssuePlaceCountry5" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="257" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="DependantsDocumentIssuePlaceCountry5" label="Issue Place Country" default="Netherlands" HcmData="1" SortOrder="257" ParentGVFields="0">
             </element>
             <!--Bank Account Details-->
             <element type="hidden" name="BankAccounts" default="1"> </element>
@@ -1260,8 +1235,7 @@
                 <regexIf inherit="iban" pattern="" message="" name="BankCountry">Netherlands</regexIf>
               <mandatoryIfNotEqual name="PayrollCategory">No Salary</mandatoryIfNotEqual>
             </element>
-            <element type="search-select" name="BankCountry" label="Bank Country" mandatory="1" default="Netherlands" HcmData="1" SortOrder="105" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="BankCountry" label="Bank Country" mandatory="1" default="Netherlands" HcmData="1" SortOrder="105" ParentGVFields="0">
             </element>
             <element type="text" name="PaymentCurrency" label="Payment Currency" mandatory="1" default="EUR" HcmData="1" SortOrder="107" ParentGVFields="0">
                 <regex inherit="currency" pattern="" message=""></regex>
@@ -1270,8 +1244,7 @@
             <element type="text" name="IBAN2" label="IBAN" HcmData="1" SortOrder="110" ParentGVFields="0">
                 <regexIf inherit="iban" pattern="" message="" name="BankCountry2">Netherlands</regexIf>         
             </element>
-            <element type="search-select" name="BankCountry2" label="Bank Country" default="Netherlands" HcmData="1" SortOrder="109" ParentGVFields="0">
-                &data_country;
+            <element type="select" source="database" cssclass="autocomplete-country selectize" name="BankCountry2" label="Bank Country" default="Netherlands" HcmData="1" SortOrder="109" ParentGVFields="0">
             </element>
             <element type="text" name="PaymentCurrency2" label="Payment Currency" default="EUR" HcmData="1" SortOrder="111" ParentGVFields="0">
                 <regex inherit="currency" pattern="" message=""></regex>
@@ -1289,8 +1262,7 @@
                 </options>
             </element>
             <!--Nationality / Language-->
-            <element type="search-select" name="Language" label="Language" default="Dutch" HcmData="1" SortOrder="24" ParentGVFields="0">
-                &data_language;
+            <element type="select" source="database" cssclass="autocomplete-language selectize" name="Language" label="Language" default="Dutch" HcmData="1" SortOrder="24" ParentGVFields="0">
             </element>
           <element type="hidden" name="Documents" default="1"></element>
           <element type="select" name="DocumentType" label="Document Type" mandatory="1" default="ID/passport" HcmData="1" SortOrder="113" ParentGVFields="0">
@@ -1302,8 +1274,7 @@
               <option value="Work Permit">Work Permit</option>
             </options>
           </element>
-          <element type="search-select" source="1" name="DocumentCountry" label="Country" mandatory="1" default="Netherlands" HcmData="1" SortOrder="116" ParentGVFields="0">
-            &data_country;
+          <element type="select" source="database" cssclass="autocomplete-country selectize" name="DocumentCountry" label="Country" mandatory="1" default="Netherlands" HcmData="1" SortOrder="116" ParentGVFields="0">
             <mandatoryIfNotEmpty name="DocumentType"></mandatoryIfNotEmpty>
           </element>
           <element type="text" name="DocumentNO" label="Document no." mandatory="1" HcmData="1" SortOrder="114" ParentGVFields="0">
@@ -1323,8 +1294,7 @@
               <option value="Work Permit">Work Permit</option>
             </options>
           </element>
-          <element type="search-select" source="1" name="DocumentCountry2" label="Country" default="Netherlands" HcmData="1" SortOrder="120" ParentGVFields="0">
-            &data_country;
+          <element type="select" source="database" cssclass="autocomplete-country selectize" name="DocumentCountry2" label="Country" default="Netherlands" HcmData="1" SortOrder="120" ParentGVFields="0">
             <mandatoryIfNotEmpty name="DocumentType2"></mandatoryIfNotEmpty>
           </element>
           <element type="text" name="DocumentNO2" label="Document no." HcmData="1" SortOrder="118" ParentGVFields="0">
@@ -1344,8 +1314,7 @@
               <option value="Work Permit">Work Permit</option>
             </options>
           </element>
-          <element type="search-select" source="1" name="DocumentCountry3" label="Country" default="Netherlands" HcmData="1" SortOrder="124" ParentGVFields="0">
-            &data_country;
+          <element type="select" source="database" cssclass="autocomplete-country selectize" name="DocumentCountry3" label="Country" default="Netherlands" HcmData="1" SortOrder="124" ParentGVFields="0">
             <mandatoryIfNotEmpty name="DocumentType3"></mandatoryIfNotEmpty>
           </element>
           <element type="text" name="DocumentNO3" label="Document no." HcmData="1" SortOrder="122" ParentGVFields="0">
@@ -1365,8 +1334,7 @@
               <option value="Work Permit">Work Permit</option>
             </options>
           </element>
-          <element type="search-select" source="1" name="DocumentCountry4" label="Country" default="Netherlands" HcmData="1" SortOrder="128" ParentGVFields="0">
-            &data_country;
+          <element type="select" source="database" cssclass="autocomplete-country selectize" name="DocumentCountry4" label="Country" default="Netherlands" HcmData="1" SortOrder="128" ParentGVFields="0">
             <mandatoryIfNotEmpty name="DocumentType4"></mandatoryIfNotEmpty>
           </element>
           <element type="text" name="DocumentNO4" label="Document no." HcmData="1" SortOrder="126" ParentGVFields="0">
@@ -1386,8 +1354,7 @@
               <option value="Work Permit">Work Permit</option>
             </options>
           </element>
-          <element type="search-select" source="1" name="DocumentCountry5" label="Country" default="Netherlands" HcmData="1" SortOrder="132" ParentGVFields="0">
-            &data_country;
+          <element type="select" source="database" cssclass="autocomplete-country selectize" name="DocumentCountry5" label="Country" default="Netherlands" HcmData="1" SortOrder="132" ParentGVFields="0">
             <mandatoryIfNotEmpty name="DocumentType5"></mandatoryIfNotEmpty>
           </element>
           <element type="text" name="DocumentNO5" label="Document no." HcmData="1" SortOrder="130" ParentGVFields="0">

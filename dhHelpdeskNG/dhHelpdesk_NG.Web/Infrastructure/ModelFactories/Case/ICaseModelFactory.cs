@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case
+﻿using DH.Helpdesk.Web.Models;
+
+namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case
 {
     using System.Collections.Generic;
 
@@ -30,6 +32,7 @@
                                     int caseId,
                                     string sortBy,
                                     bool sortByAsc);
-        
+
+        CaseSearchModel InitEmptySearchModel(int customerId, int userId);
     }
 }

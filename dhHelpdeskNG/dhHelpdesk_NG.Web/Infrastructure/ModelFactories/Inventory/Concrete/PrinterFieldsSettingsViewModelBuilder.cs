@@ -58,12 +58,14 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var createdDate = this.settingModelBuilder.MapFieldSetting(settings.StateFieldsSettings.CreatedDateFieldSetting);
             var changedDate = this.settingModelBuilder.MapFieldSetting(settings.StateFieldsSettings.ChangedDateFieldSetting);
+            var syncDate = this.settingModelBuilder.MapFieldSetting(settings.StateFieldsSettings.SyncDateFieldSetting);
+
             var stateFieldsSettingsModel = new StateFieldsSettingsModel(
                 createdDate,
-                changedDate);
+                changedDate,
+                syncDate);
 
-            var localizedLanguages =
-                langauges.Select(l => new ItemOverview(Translation.Get(l.Name), l.Value)).ToList();
+            var localizedLanguages = langauges.Select(l => new ItemOverview(Translation.Get(l.Name), l.Value)).ToList();
 
             var langaugesSelectList = new SelectList(localizedLanguages, "Value", "Name");
 

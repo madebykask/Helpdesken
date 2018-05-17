@@ -38,7 +38,8 @@ namespace DH.Helpdesk.Dal.Mappers.ProductArea.EntityToBusinessModel
                            Id = entity.Id,
                            ParentId = entity.Parent_ProductArea_Id,
                            Name = entity.Name,
-                           Description = entity.Description
+                           Description = entity.Description,
+                           IsActive = entity.IsActive
                        };
         }
     }

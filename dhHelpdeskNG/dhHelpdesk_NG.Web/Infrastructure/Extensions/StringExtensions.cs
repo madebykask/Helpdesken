@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.User.Interfaces;
+﻿using System.Web;
+using DH.Helpdesk.BusinessData.Models.User.Interfaces;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
@@ -477,6 +478,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return newStr;
         }
 
+        public static string GetYesNoText(this bool val)
+        {
+            return val ? Translation.GetCoreTextTranslation("Ja") : Translation.GetCoreTextTranslation("Nej");
+        }
+
         public static IEnumerable<String> SplitInParts(this String s, Int32 partLength)
         {
             if (s == null)
@@ -486,6 +492,15 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
             for (var i = 0; i < s.Length; i += partLength)
                 yield return s.Substring(i, Math.Min(partLength, s.Length - i));
+        }
+
+        public static string ToHtmlString(this String s, bool replaceLineBreaks = true)
+        {
+            if (string.IsNullOrEmpty(s))
+                return s;
+
+            var encodedString = HttpUtility.HtmlEncode(s);
+            return encodedString.Replace(Environment.NewLine, "<br />");
         }
     }
 }

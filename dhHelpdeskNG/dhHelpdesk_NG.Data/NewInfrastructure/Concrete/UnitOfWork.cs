@@ -1,3 +1,5 @@
+using System.Data.Entity.Infrastructure;
+
 namespace DH.Helpdesk.Dal.NewInfrastructure.Concrete
 {
     using System;
@@ -28,6 +30,17 @@ namespace DH.Helpdesk.Dal.NewInfrastructure.Concrete
             var repository = new GenericRepository<TSet>(this.context);
             this.repositories.Add(typeof(TSet), repository);
             return repository;
+        }
+
+        public bool AutoDetectChangesEnabled
+        {
+            get { return context.Configuration.AutoDetectChangesEnabled; }
+            set { context.Configuration.AutoDetectChangesEnabled = value; }
+        }
+
+        public void DetectChanges()
+        {
+            this.context.ChangeTracker.DetectChanges();
         }
 
         public void Save()

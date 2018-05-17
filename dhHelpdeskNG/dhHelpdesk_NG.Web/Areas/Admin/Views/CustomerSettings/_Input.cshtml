@@ -13,37 +13,55 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
-                <div class="container">
-                    <h4>@Translation.Get("LDAP", Enums.TranslationSource.TextTranslation)</h4>
+                <h4>@Translation.Get("Integration - Anmälare", Enums.TranslationSource.TextTranslation)</h4>
+                <div class="container">                    
                     <div class="row">
-                        <div class="span12">
-                            <table class="tableform" id="customerSync">
+                        <div class="span12">                                                    
+                            <table class="tableform" id="customerSync">       
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("Server", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Format", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="span9">
+                                        <input type="radio" name="Setting.IntegrationType" @(Model.Setting.IntegrationType == 1 ? "checked='checked'" : "") id="Customer_Setting_IntegrationType1" onclick="ShowRelatedFields()" value="1" />
+                                        @Translation.Get("LDAP", Enums.TranslationSource.TextTranslation)
+                                        <br />
+                                        <input type="radio" name="Setting.IntegrationType" @(Model.Setting.IntegrationType == 0 ? "checked='checked'" : "") id="Customer_Setting_IntegrationType2" onclick="ShowRelatedFields()" value="0" />
+                                        @Translation.Get("CSV", Enums.TranslationSource.TextTranslation)                                       
+                                    </td>
+                                </tr>                                            
+                                <tr>                                    
+                                    <td class="customerSync">
+                                        @Translation.Get("Server", Enums.TranslationSource.TextTranslation)
+                                    </td>                                 
+                                    <td class="customerSync">
                                         @Html.TextBoxFor(model => model.Customer.NDSPath, new { maxlength = "200", style = "width: 400px;" })
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td class="customerSync">
                                         @Translation.Get("Base DN", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="CSVSync">
+                                        @Translation.Get("Sökväg", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.Setting.LDAPBase, new { maxlength = "200", style = "width: 400px;" })
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td class="customerSync">
                                         @Translation.Get("Filter", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="CSVSync">
+                                        @Translation.Get("Filnamn", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(model => model.Setting.LDAPFilter, new { maxlength = "150", style = "width: 400px;" })
-                                        &nbsp;@Translation.Get("(mail=*@datahalland.se)", Enums.TranslationSource.TextTranslation)
+                                        <span class="customerSync">&nbsp;@Translation.Get("(mail=*@datahalland.se)", Enums.TranslationSource.TextTranslation)</span>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr class="customerSync">
                                     <td>
                                         @Translation.Get("Användar Id", Enums.TranslationSource.TextTranslation)
                                     </td>
@@ -51,7 +69,7 @@
                                         @Html.TextBoxFor(model => model.Setting.LDAPUserName, new { maxlength = "100", style = "width: 400px;" })
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr class="customerSync">
                                     <td>
                                         @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)
                                     </td>
@@ -434,55 +452,63 @@
                 </div>
 
                 <h4>@Translation.Get("Ärendeöversikt", Enums.TranslationSource.TextTranslation)</h4>
-                <div class="container">
-                    <div class="row">
-                        <div class="span15">
-                            <table>
-                                <tr>
-                                    <td style="width:150px">
-                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        <input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 0 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource1" value="0" />
-                                        @Translation.Get("visa endast värde om användarens standarddriftgrupp (fält för andra driftgrupper visas som tomma)", Enums.TranslationSource.TextTranslation)
-                                        <br />
-                                        <input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 1 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource2" value="1" />
-                                        @Translation.Get("visa alltid värde", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="width:150px">
-                                        @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation) -<br />
-                                        @Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        <input type="checkbox" name="setting.ShowOUsOnDepartmentFilter" @(Model.Setting.ShowOUsOnDepartmentFilter == 1 ? "checked=checked" : "") value="1" />
-                                        <input type="hidden" name="setting.ShowOUsOnDepartmentFilter" value="0" />
-                                        @Translation.Get("Visa Organisationsenhet i Avdelning filter", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+            <div class="container">
+                <div class="row">
+                    <div class="span15">
+                        <table>
+                            <tr>
+                                <td style="width:150px">
+                                    @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td>
+                                    <input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 0 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource1" value="0" />
+                                    @Translation.Get("visa endast värde om användarens standarddriftgrupp (fält för andra driftgrupper visas som tomma)", Enums.TranslationSource.TextTranslation)
+                                    <br />
+                                    <input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 1 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource2" value="1" />
+                                    @Translation.Get("visa alltid värde", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width:150px">
+                                    @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation) -<br />
+                                    @Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="setting.ShowOUsOnDepartmentFilter" @(Model.Setting.ShowOUsOnDepartmentFilter == 1 ? "checked=checked" : "") value="1" />
+                                    <input type="hidden" name="setting.ShowOUsOnDepartmentFilter" value="0" />
+                                    @Translation.Get("Visa Organisationsenhet i Avdelning filter", Enums.TranslationSource.TextTranslation)
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
-                <h4>@Translation.Get("Avancerad sökning", Enums.TranslationSource.TextTranslation)</h4>
+            </div>
+                
+                <h4>@Translation.GetCoreTextTranslation("Tillåt åtgärder för användare utan rättighet till denna kund")</h4>
                 <div class="container">
                     <div class="row">
                         <div class="span15">
                             <table>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="setting.AllowMoveCaseToAnyCustomer" @(Model.Setting.AllowMoveCaseToAnyCustomer ? "checked=checked" : "") value="true" />
+                                        <input type="hidden" name="setting.AllowMoveCaseToAnyCustomer" value="false" />
+                                        @Translation.GetCoreTextTranslation("Flytta ärende till denna kund")
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td>
                                         <input type="checkbox" name="setting.CustomerInExtendedSearch" @(Model.Setting.CustomerInExtendedSearch == 1 ? "checked=checked" : "") value="1" />
                                         <input type="hidden" name="setting.CustomerInExtendedSearch" value="0" />
-                                        @Translation.GetCoreTextTranslation("Inkludera kund i Utökad sökning")
+                                        @Translation.GetCoreTextTranslation("Utökad sökning")
                                     </td>
                                 </tr>
-
                             </table>
                         </div>
                     </div>
                 </div>
 
+                <!-- CASE -->
                 <h4>@Translation.GetCoreTextTranslation("Ärende")</h4>
 
                 @*Hide temporary this release - Stina*@
@@ -739,5 +765,25 @@
 
         }
     });
+ 
+    
+
+    $(".CSVSync").hide();
+
+    ShowRelatedFields();
+
+    function ShowRelatedFields()
+    {                          
+        if (document.getElementById('Customer_Setting_IntegrationType2').checked)
+        {
+            $(".CSVSync").show();
+            $(".customerSync").hide();
+        }
+        else {
+            $(".customerSync").show();
+            $(".CSVSync").hide();
+        }       
+    }        
+        
 
 </script>

@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Shared.Input;
+﻿using System.Collections.Generic;
+using DH.Helpdesk.BusinessData.Models.Shared.Input;
 
 namespace DH.Helpdesk.BusinessData.Models.CaseDocument
 {
@@ -16,6 +17,7 @@ namespace DH.Helpdesk.BusinessData.Models.CaseDocument
         public string Description { get; set; }
         public string Headline { get; set; }
         public string Text { get; set; } 
-
+        
+        public IList<CaseDocumentTextConditionModel> Conditions { get; set; }
     }
 }

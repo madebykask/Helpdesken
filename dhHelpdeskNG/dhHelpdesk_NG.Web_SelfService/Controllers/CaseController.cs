@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading;
 using System.Web.SessionState;
+using DH.Helpdesk.BusinessData.Models.Email;
 using DH.Helpdesk.BusinessData.Models.WorktimeCalculator;
 using DH.Helpdesk.SelfService.Controllers.Behaviors;
 using DH.Helpdesk.SelfService.Entites;
@@ -98,6 +99,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly OrganizationJsonService _orgJsonService;
         private readonly char[] EMAIL_SEPARATOR = new char[] { ';' };
         private readonly CaseControllerBehavior _caseControllerBehavior;
+        private const string ShowRegistrationMessageKey = "showRegistrationMessage";
 
         public CaseController(
             ICaseService caseService,
@@ -203,9 +205,11 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var caseId = 0;
+            var allowAnonymousAccess = false;
 
             if (id.Is<Guid>())
             {
+                allowAnonymousAccess = true;
                 var guid = new Guid(id);
                 caseId = _caseService.GetCaseIdByEmailGUID(guid);
                 if (caseId == 0)
@@ -235,29 +239,29 @@ namespace DH.Helpdesk.SelfService.Controllers
                     }
                 }
             }
-            else
+            else if (!int.TryParse(id, out caseId))
             {
-                if (!int.TryParse(id, out caseId))
-                {
-                    ErrorGenerator.MakeError("Case Id is not valid!");
-                    return RedirectToAction("Index", "Error");
-                }
+                ErrorGenerator.MakeError("Case Id is not valid!");
+                return RedirectToAction("Index", "Error");
             }
             
-            var currentCase = _caseService.GetCaseById(caseId);                
-                currentCase = _caseService.GetCaseById(_intCaseId);
-
+            var currentCase = _caseService.GetCaseById(caseId);
             if (currentCase == null)
             {
                 ErrorGenerator.MakeError("Case not found!");
                 return RedirectToAction("Index", "Error");
             }
 
+            //check if case is among customer cases only if its not anonymous access and not opened via link in email
             var isAnonymousMode = ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous;
-            if (!isAnonymousMode && !UserHasAccessToCase(currentCase))
+            if (!isAnonymousMode && !allowAnonymousAccess)
             {
-                ErrorGenerator.MakeError("Case not found among your cases!");
-                return RedirectToAction("Index", "Error");
+                var hasAccess = UserHasAccessToCase(currentCase);
+                if (!hasAccess)
+                {
+                    ErrorGenerator.MakeError("Case not found among your cases!");
+                    return RedirectToAction("Index", "Error");
+                }
             }
 
             if (currentCase.CaseExtendedCaseDatas.Any())
@@ -283,7 +287,6 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             currentCase.Customer = currentCustomer;
 
-
             var languageId = SessionFacade.CurrentLanguageId;
             var caseReceipt = GetCaseReceiptModel(currentCase, languageId);
 
@@ -306,13 +309,9 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
             else
             {
-                var htmlFooterData = string.Empty;
-                var registrationInfoText = _infoService.GetInfoText((int)InfoTextType.SelfServiceRegistrationMessage, SessionFacade.CurrentCustomer.Id, languageId);
+                if (showRegistrationMessage)
+                    caseReceipt.CaseRegistrationMessage = GetCaseRegistrationMessage(languageId);
 
-                if (registrationInfoText != null && !string.IsNullOrEmpty(registrationInfoText.Name))
-                    htmlFooterData = registrationInfoText.Name;
-
-                caseReceipt.CaseRegistrationMessage = htmlFooterData;
                 caseReceipt.CanAddExternalNote = false;
             }
 
@@ -322,6 +321,12 @@ namespace DH.Helpdesk.SelfService.Controllers
 
 
             return View(caseReceipt);
+        }
+
+        private string GetCaseRegistrationMessage(int languageId)
+        {
+            var registrationInfoText = _infoService.GetInfoText((int)InfoTextType.SelfServiceRegistrationMessage, SessionFacade.CurrentCustomer.Id, languageId);
+            return registrationInfoText?.Name ?? string.Empty;
         }
 
         [HttpGet]
@@ -630,11 +635,20 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpGet]
         public ActionResult ExtendedCase(int? caseTemplateId = null, int? caseId = null)
         {
-
             var model = GetExtendedCaseViewModel(caseTemplateId, caseId);
             if (ErrorGenerator.HasError())
                 return RedirectToAction("Index", "Error");
-            
+
+            if (!caseId.IsNew())
+            {
+                var showRegistrationMessage = TempData.GetSafe<bool>(ShowRegistrationMessageKey);
+                if (showRegistrationMessage)
+                {
+                    model.ShowRegistrationMessage = true;
+                    model.CaseRegistrationMessage = GetCaseRegistrationMessage(SessionFacade.CurrentLanguageId);
+                }
+            }
+
             return View("ExtendedCase", model);
         }
 
@@ -751,6 +765,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                 ErrorGenerator.MakeError(lastError);
                 return null;
             }
+            var isRelatedCase = caseId > 0 && _caseService.IsRelated(caseId ?? 0);
+            var customerCaseSolutions =
+                _caseSolutionService.GetCustomerCaseSolutionsOverview(customerId, userId: null);
 
             var model = new ExtendedCaseViewModel
             {
@@ -763,7 +780,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 UserRole = initData.UserRole,
                 StateSecondaryId = caseStateSecondaryId,
                 CaseOU = caseModel.OU_Id.HasValue ? _ouService.GetOU(caseModel.OU_Id.Value) : null,
-                WorkflowSteps = GetWorkflowStepModel(customerId, caseId ?? 0, caseTemplateId ?? 0).ToList(),
+                WorkflowSteps = GetWorkflowStepModel(customerId, caseId ?? 0, caseTemplateId ?? 0, customerCaseSolutions, isRelatedCase),
                 CaseDataModel = caseModel
             };
 
@@ -777,7 +794,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             if (!caseId.IsNew() && !model.CaseDataModel.FinishingDate.HasValue)
-                ViewBag.CurrentCaseId = caseId.Value;
+            ViewBag.CurrentCaseId = caseId.Value;
 
             model.StatusBar = caseId.IsNew() ? new Dictionary<string, string>() : GetStatusBar(model);
 
@@ -838,6 +855,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
                 else
                 {
+                    TempData[ShowRegistrationMessageKey] = isNewCase;
+
                     //return RedirectToAction("UserCases", new { customerId = model.CustomerId });
                     if (string.IsNullOrEmpty(returnUrl))
                         return RedirectToAction("ExtendedCase", new { caseId = caseId });
@@ -1293,7 +1312,11 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpPost]
         public ActionResult CaseSearchUserEmails(string query, string searchKey)
         {
-            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, false, true, false, false);
+            var searchScope = new EmailSearchScope()
+            {
+                SearchInInitiators = true
+            };
+            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, searchScope);
             return Json(new { searchKey = searchKey, result = models });
         }
 
@@ -2382,8 +2405,9 @@ namespace DH.Helpdesk.SelfService.Controllers
             return model;
         }
 
-        private IList<WorkflowStepModel> GetWorkflowStepModel(int customerId, int caseId, int templateId)
-        {            
+        private List<WorkflowStepModel> GetWorkflowStepModel(int customerId, int caseId, int templateId, IList<CaseSolutionOverview> customerCaseSolutions, bool isRealtedCase)
+        {
+            IList<WorkflowStepModel> res = new List<WorkflowStepModel>();
             Case caseEntity = null;
             if (caseId == 0)
             {
@@ -2408,14 +2432,10 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             if (caseEntity != null)
-                return _caseSolutionService.GetGetWorkflowSteps(
-                                        customerId, caseEntity, null, 
-                                        ApplicationType.LineManager, templateId);            
-            return null;
+                res = _caseSolutionService.GetWorkflowSteps(customerId, caseEntity, customerCaseSolutions, isRealtedCase, null, ApplicationType.LineManager, templateId);            
 
-        }                  
-
-       
+            return res.ToList();
+        }
 
         #region Helper Methods
 
@@ -2449,24 +2469,18 @@ namespace DH.Helpdesk.SelfService.Controllers
             };
         }
 
-        
-        // keep for diagnostic purposes
-        private void LogWithContext(string msg)
-        {
-            var customerId = SessionFacade.CurrentCustomerID;
-            var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
-            var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
-            var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
-            var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
-            var localUserId = SessionFacade.CurrentLocalUser?.UserId;
+
+		// keep for diagnostic purposes
+		private void LogWithContext(string msg)
+		{
+			var customerId = SessionFacade.CurrentCustomerID;
+			var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
+			var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
+			var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
+			var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
+			var localUserId = SessionFacade.CurrentLocalUser?.UserId;
+		}        
 
         #endregion
-                        -customerId: {customerId}, 
-                        -userIdentityEmail = {userIdentityEmail},
-                        -userIdentityEmployeeNumber = {userIdentityEmployeeNumber},
-                        -userIdentityUserId = {userIdentityUserId},
-                        -localUserPkId = {localUserPkId},
-                        -localUserId = {localUserId}");
-        }
     }
 }

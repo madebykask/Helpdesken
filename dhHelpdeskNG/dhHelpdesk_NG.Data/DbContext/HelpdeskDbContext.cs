@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Dal.DbContext
+﻿using DH.Helpdesk.Dal.EntityConfigurations.GDPR;
+using DH.Helpdesk.Domain.GDPR;
+
+namespace DH.Helpdesk.Dal.DbContext
 {
     using System.Data.Common;
     using System.Data.Entity;
@@ -300,6 +303,8 @@
 
         public DbSet<FormFieldValue> FormFieldValue { get; set; }
 
+        public DbSet<FormFieldValueHistory> FormFieldValueHistory { get; set; }
+
         public DbSet<Form> Forms { get; set; }
 
         public DbSet<FormUrlEntity> FormUrls { get; set; }
@@ -590,8 +595,7 @@
 
         public DbSet<CaseDocumentConditionEntity> CaseDocumentConditions { get; set; }
         public DbSet<CaseDocumentParagraphEntity> CaseDocumentParagraphs { get; set; }
-
-        public DbSet<CaseDocument_CaseDocumentParagraphEntity> CaseDocument_CaseDocumentParagraphs { get; set; }
+        public DbSet<CaseDocument_CaseDocumentParagraphEntity> CaseDocumentParagraphsRel { get; set; }
         public DbSet<CaseDocumentTextEntity> CaseDocumentTexts { get; set; }
 
         public DbSet<CaseDocumentParagraphConditionEntity> CaseDocumentParagraphConditions { get; set; }
@@ -601,16 +605,23 @@
         public DbSet<CaseDocumentTextIdentifierEntity> CaseDocumentTextIdentifiers { get; set; }
         public DbSet<CaseDocumentTextConditionIdentifierEntity> CaseDocumentTextConditionIdentifiers { get; set; }
 
-       public DbSet<CaseSolution_SplitToCaseSolutionEntity> CaseSolution_SplitToCaseSolutions { get; set; }
+        public DbSet<CaseSolution_SplitToCaseSolutionEntity> CaseSolution_SplitToCaseSolutions { get; set; }
 		public DbSet<ComputerUserCategory> ComputerUserCategories { get; set; }
 
         public DbSet<ConditionEntity> Conditions { get; set; }
 
-		#endregion
+        public DbSet<ParentChildRelation> ParentChildRelations { get; set; }
 
-		#region Public Methods and Operators
+        public DbSet<GDPRDataPrivacyAccess> GDPRDataPrivacyAccess { get; set; }
+        public DbSet<GDPROperationsAudit> GDPROperationsAudit { get; set; }
+        public DbSet<GDPRDataPrivacyFavorite> GDPRDataPrivacyFavorites { get; set; }
+        public DbSet<GDPRTask> GDPRTasks { get; set; }
 
-		public virtual void Commit()
+        #endregion
+
+        #region Public Methods and Operators
+
+        public virtual void Commit()
         {
             try
             {
@@ -717,6 +728,7 @@
             modelBuilder.Configurations.Add(new ContractCategoryConfiguration());
             modelBuilder.Configurations.Add(new ContractConfiguration());
             modelBuilder.Configurations.Add(new ContractHistoryConfiguration());
+            modelBuilder.Configurations.Add(new ContractLogConfiguration());
             modelBuilder.Configurations.Add(new ContractFieldSettingConfiguration());
             modelBuilder.Configurations.Add(new ContractFileConfiguration());
             modelBuilder.Configurations.Add(new CountryConfiguration());            
@@ -747,6 +759,7 @@
             modelBuilder.Configurations.Add(new FormConfiguration());
             modelBuilder.Configurations.Add(new FormFieldConfiguration());
             modelBuilder.Configurations.Add(new FormFieldValueConfiguration());
+            modelBuilder.Configurations.Add(new FormFieldValueHistoryConfiguration());
             modelBuilder.Configurations.Add(new FormUrlConfiguration());
             modelBuilder.Configurations.Add(new FloorConfiguration());
             modelBuilder.Configurations.Add(new GlobalSettingConfiguration());
@@ -916,9 +929,14 @@
 			modelBuilder.Configurations.Add(new ComputerUserCategoryConfiguration());
 			modelBuilder.Configurations.Add(new CaseSolution_CaseSection_ExtendedCaseFormConfiguration());
 
-			#endregion
+            modelBuilder.Configurations.Add(new GDPRDataPrivacyAccessConfiguration());
+            modelBuilder.Configurations.Add(new GDPROperationsAuditConfiguration());
+            modelBuilder.Configurations.Add(new GDPRDataPrivacyFavoriteConfiguration());
+            modelBuilder.Configurations.Add(new GDPRTaskConfiguration());
 
-			base.OnModelCreating(modelBuilder);
+            #endregion
+
+            base.OnModelCreating(modelBuilder);
         }
 
         #endregion

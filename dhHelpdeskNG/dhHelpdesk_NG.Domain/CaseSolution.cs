@@ -80,6 +80,7 @@ namespace DH.Helpdesk.Domain
         public string FinishingDescription { get; set; }
         public int SMS { get; set; }
         public int? UpdateNotifierInformation { get; set; }
+        public bool? AddFollowersBtn { get; set; }
         public DateTime? PlanDate { get; set; }
         public int? CausingPartId { get; set; }
         public int? RegistrationSource { get; set; }
@@ -129,6 +130,7 @@ namespace DH.Helpdesk.Domain
         public virtual User PerformerUser { get; set; }
         public virtual WorkingGroupEntity CaseWorkingGroup { get; set; }
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
+        public virtual StateSecondary StateSecondary { get; set; }
         //public virtual Problem Problem { get; set; }
         public int SortOrder { get; set; }
 
@@ -142,6 +144,8 @@ namespace DH.Helpdesk.Domain
         public virtual ICollection<CaseSolution_SplitToCaseSolutionEntity> SplitToCaseSolutionAnsestors { get; set; }
 
         public virtual ICollection<CaseSolution_SplitToCaseSolutionEntity> SplitToCaseSolutionDescendants { get; set; }
+
+        public virtual ICollection<CaseSolutionConditionEntity> Conditions { get; set; }
 
     }
 }

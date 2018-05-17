@@ -15,12 +15,16 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings
             string caption,
             int? propertySize,
             bool showInDetails,
-            bool showInList)
+            bool showInList,
+            string xml,
+            bool readOnly)
         {
             this.Caption = caption;
             this.PropertySize = propertySize;
             this.ShowInDetails = showInDetails;
             this.ShowInList = showInList;
+            this.XMLTag = xml;
+            this.ReadOnly = readOnly;
         }
 
         private InventoryFieldSettingModel(int? propertySize, string caption)
@@ -36,13 +40,23 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings
         [Max(0)]
         public int? PropertySize { get; set; }
 
+        public string XMLTag { get; set; }
+
+        public bool ReadOnly { get; set; }
+
         public bool ShowInDetails { get; set; }
 
         public bool ShowInList { get; set; }
+
+        public bool? HideXml { get; set; }
+
+        #region Factory Methods
 
         public static InventoryFieldSettingModel GetDefault(int? propertySize, string caption)
         {
             return new InventoryFieldSettingModel(propertySize, caption);
         }
+
+        #endregion
     }
 }

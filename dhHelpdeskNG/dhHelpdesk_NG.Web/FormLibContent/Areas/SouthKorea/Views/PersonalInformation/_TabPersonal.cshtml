@@ -69,18 +69,6 @@
                     <td class="tdstrong">@Model.Label("Maritalstatus")</td>
                     <td>@Model.Element("Maritalstatus")</td>
                 </tr>
-                @*<tr>
-                    <td class="tdstrong">@Model.Label("JoinKRIKEAdate")</td>
-                    <td>@Model.Element("JoinKRIKEAdate")</td>                         
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("JoinIKEAGlobal")</td>
-                    <td>@Model.Element("JoinIKEAGlobal")</td>                         
-                </tr>*@
-                <tr>
-                    <td class="tdstrong">@Model.Label("RegistrationNumber")</td>
-                    <td>@Model.Element("RegistrationNumber")</td>
-                </tr>
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Contact Details")</h4>
@@ -97,7 +85,10 @@
                         <em class="muted" id="emOLD_Contacte-mailaddress">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_Contacte-mailaddress").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
-
+                <tr>
+                    <td class="tdstrong">@Model.Label("RegistrationId")</td>
+                    <td>@Model.Element("RegistrationId")</td>
+                </tr>
                 <!-- Permanent ADDRESS -->
                 <tr>
                     <td class="tdstrong" colspan="2">
@@ -124,22 +115,6 @@
                         <em class="muted" id="emOLD_PermanentAddressLine2">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine2").Select(x => x.Value).FirstOrDefault() : "")</em>
                     </td>
                 </tr>
-                @*                <tr>
-                    <td class="tdstrong">@Model.Label("PermanentAddressLine3")</td>
-                    <td>@Model.Element("PermanentAddressLine3")</td>
-                                        <td>
-                        <input type="hidden" class="oldValue"  id="OLD_PermanentAddressLine3" name="OLD_PermanentAddressLine3" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine3").Select(x => x.Value).FirstOrDefault() : "")"/>
-                        <em class="muted" id="emOLD_PermanentAddressLine3">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine3").Select(x => x.Value).FirstOrDefault() : "")</em>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("PermanentAddressLine4")</td>
-                    <td>@Model.Element("PermanentAddressLine4")</td>
-                                        <td>
-                        <input type="hidden" class="oldValue"  id="OLD_PermanentAddressLine4" name="OLD_PermanentAddressLine4" value="@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine4").Select(x => x.Value).FirstOrDefault() : "")"/>
-                        <em class="muted" id="emOLD_PermanentAddressLine4">@((newfill != null) ? newfill.Where(x => x.Key == "OLD_PermanentAddressLine4").Select(x => x.Value).FirstOrDefault() : "")</em>
-                    </td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentPostalCode")</td>
                     <td>@Model.Element("PermanentPostalCode")</td>
@@ -168,8 +143,6 @@
                     <td class="tdstrong">@Model.Label("PermanentTelephone")</td>
                     <td>@Model.Element("PermanentTelephone")</td>
                 </tr>
-
-
                 <tr>
                     <td class="tdstrong">@Model.Label("PermanentCommunicationtype")</td>
                     <td>@Model.Element("PermanentCommunicationtype")</td>
@@ -178,7 +151,6 @@
                     <td class="tdstrong">@Model.Label("PermanentCommunicationcontent")</td>
                     <td>@Model.Element("PermanentCommunicationcontent")</td>
                 </tr>
-
                 @for(int i = 2; i <= 4; i++)
                 {
                     <tr class="PermanentCommunicationType@(i.ToString())" id="allowance@(i.ToString())">
@@ -204,8 +176,6 @@
                         @Model.Element("PermanentCommunicationtypes")
                         <a id="addPermanentCommunicationType" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another communication type")</a></td>
                 </tr>
-
-
                 <!-- EMERGENCY ADDRESS -->
                 <tr class="emergencyaddress" id="emergencyaddress">
                     <td class="tdstrong" colspan="2">
@@ -216,14 +186,6 @@
                         </h4>
                     </td>
                 </tr>
-                @*<tr>
-                    <td class="tdstrong">@Model.Label("Emergencycontactname")</td>
-                    <td>@Model.Element("Emergencycontactname")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("Emergencycontactrelationship")</td>
-                    <td>@Model.Element("Emergencycontactrelationship")</td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("EmergencyAddressline1")</td>
                     <td>@Model.Element("EmergencyAddressline1")</td>
@@ -232,14 +194,6 @@
                     <td class="tdstrong">@Model.Label("EmergencyAddressline2")</td>
                     <td>@Model.Element("EmergencyAddressline2")</td>
                 </tr>
-                @*                <tr>
-                    <td class="tdstrong">@Model.Label("EmergencyAddressline3")</td>
-                    <td>@Model.Element("EmergencyAddressline3")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("EmergencyAddressline4")</td>
-                    <td>@Model.Element("EmergencyAddressline4")</td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("EmergencyPostalCode")</td>
                     <td>@Model.Element("EmergencyPostalCode")</td>
@@ -252,10 +206,6 @@
                     <td class="tdstrong">@Model.Label("EmergencyCountry")</td>
                     <td>@Model.Element("EmergencyCountry")</td>
                 </tr>
-                @*<tr>
-                    <td class="tdstrong">@Model.Label("EmergencyTelephone")</td>
-                    <td>@Model.Element("EmergencyTelephone")</td>
-                </tr>    *@
                 <tr>
                     <td class="tdstrong">@Model.Label("EmergencyCommunicationtype")</td>
                     <td>@Model.Element("EmergencyCommunicationtype")</td>
@@ -308,14 +258,6 @@
                     <td class="tdstrong">@Model.Label("HomeAddressline2")</td>
                     <td>@Model.Element("HomeAddressline2")</td>
                 </tr>
-                @*                 <tr>
-                    <td class="tdstrong">@Model.Label("HomeAddressline3")</td>
-                    <td>@Model.Element("HomeAddressline3")</td>
-                </tr>
-                 <tr>
-                    <td class="tdstrong">@Model.Label("HomeAddressline4")</td>
-                    <td>@Model.Element("HomeAddressline4")</td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("HomePostalCode")</td>
                     <td>@Model.Element("HomePostalCode")</td>
@@ -365,156 +307,6 @@
                         @Model.Element("HomeCommunicationtypes")
                         <a id="addHomeCommunicationType" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another communication type")</a></td>
                 </tr>
-
-
-                @*  <tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Home Address in EN")
-                            <button class="btn btn-mini pull-right" id="btnHomeAddressEN" data-prefix="Home">
-                                <i class="icon-share"></i>&nbsp;@Model.Translate("Copy from Permanent Address")
-                            </button>
-                        </h4>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ENHomeAddressline1")</td>
-                    <td>@Model.Element("ENHomeAddressline1")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ENHomeAddressline2")</td>
-                    <td>@Model.Element("ENHomeAddressline2")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ENHomeAddressline3")</td>
-                    <td>@Model.Element("ENHomeAddressline3")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ENHomeAddressline4")</td>
-                    <td>@Model.Element("ENHomeAddressline4")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ENHomePostalCode")</td>
-                    <td>@Model.Element("ENHomePostalCode")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ENHomeCity")</td>
-                    <td>@Model.Element("ENHomeCity")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ENHomeCountry")</td>
-                    <td>@Model.Element("ENHomeCountry")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ENHomeTelephone")</td>
-                    <td>@Model.Element("ENHomeTelephone")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ENHomeCommunicationtype")</td>
-                    <td>@Model.Element("ENHomeCommunicationtype")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("ENHomeCommunicationcontent")</td>
-                    <td>@Model.Element("ENHomeCommunicationcontent")</td>
-                </tr>
-                @for (int i = 2; i <= 4; i++)
-                {
-                    <tr class="ENHomeCommunicationType@(i.ToString())" id="ENHomeCommunicationType@(i.ToString())">
-                        <td class="tdstrong" colspan="2">
-                            <h4>@Model.Translate("Communication") @i.ToString()</h4>
-                        </td>
-                    </tr>
-                    <tr class="ENHomeCommunicationType@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("ENHomeCommunicationtype" + i.ToString())</td>
-                        <td>
-                            @Model.Element("ENHomeCommunicationtype" + i.ToString())
-                        </td>
-                    </tr>
-                      <tr class="ENHomeCommunicationType@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("ENHomeCommunicationcontent" + i.ToString())</td>
-                        <td>
-                            @Model.Element("ENHomeCommunicationcontent" + i.ToString())
-                        </td>
-                    </tr>
-                  }
-                <tr id="addENHomeCommunicationtypesTrr">
-                    <td colspan="2">
-                        @Model.Element("ENHomeCommunicationtypes")
-                        <a id="addENHomeCommunicationType" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another communication type")</a></td>
-                </tr>*@
-
-
-                @*       <!-- Work ADDRESS -->
-                <tr class="workaddress" id="workaddress">
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Work Address")</h4>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkAddressline1")</td>
-                    <td>@Model.Element("WorkAddressline1")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkAddressline2")</td>
-                    <td>@Model.Element("WorkAddressline2")</td>
-                </tr>
-                 <tr>
-                    <td class="tdstrong">@Model.Label("WorkAddressline3")</td>
-                    <td>@Model.Element("WorkAddressline3")</td>
-                </tr>
-                 <tr>
-                    <td class="tdstrong">@Model.Label("WorkAddressline4")</td>
-                    <td>@Model.Element("WorkAddressline4")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkPostalCode")</td>
-                    <td>@Model.Element("WorkPostalCode")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkCity")</td>
-                    <td>@Model.Element("WorkCity")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkCountry")</td>
-                    <td>@Model.Element("WorkCountry")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkTelephone")</td>
-                    <td>@Model.Element("WorkTelephone")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkCommunicationtype")</td>
-                    <td>@Model.Element("WorkCommunicationtype")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("WorkCommunicationcontent")</td>
-                    <td>@Model.Element("WorkCommunicationcontent")</td>
-                </tr>
-                @for (int i = 2; i <= 4; i++)
-                {
-                    <tr class="WorkCommunicationType@(i.ToString())" id="WorkCommunicationType@(i.ToString())">
-                        <td class="tdstrong" colspan="2">
-                            <h4>@Model.Translate("Communication") @i.ToString()</h4>
-                        </td>
-                    </tr>
-                    <tr class="WorkCommunicationType@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("WorkCommunicationtype" + i.ToString())</td>
-                        <td>
-                            @Model.Element("WorkCommunicationtype" + i.ToString())
-                        </td>
-                    </tr>
-                      <tr class="WorkCommunicationType@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("WorkCommunicationcontent" + i.ToString())</td>
-                        <td>
-                            @Model.Element("WorkCommunicationcontent" + i.ToString())
-                        </td>
-                    </tr>
-                  }
-                <tr id="addWorkCommunicationtypesTrr">
-                    <td colspan="2">
-                        @Model.Element("WorkCommunicationtypes")
-                        <a id="addWorkCommunicationType" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another communication type")</a></td>
-                </tr>*@
-
                 <!-- FAMILY MEMBER / DEPENDENTS -->
                 <tr>
                     <td class="tdstrong" colspan="2">
@@ -573,7 +365,6 @@
                     <td class="tdstrong">@Model.Label("adoptionfosterdate")</td>
                     <td>@Model.Element("adoptionfosterdate")</td>
                 </tr>
-
                 @for(int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="familyMember@(i.ToString())" id="familyMember@(i.ToString())">
@@ -682,7 +473,6 @@
                     <td class="tdstrong">@Model.Label("EmployeeIssuePlaceCountry")</td>
                     <td>@Model.Element("EmployeeIssuePlaceCountry")</td>
                 </tr>
-
                 @for(int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="employeeDocument@(i.ToString()) globalmobility" id="employeeDocument@(i.ToString())">
@@ -783,7 +573,6 @@
                         @Model.Element("DependantFamilyMembers")
                         <a id="addDependantFamilyMember" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another global mobility dependant")</a></td>
                 </tr>
-
                 <!-- Global Mobility Dependants Documents -->
                 <tr class="globalmobility-first">
                     <td class="tdstrong" colspan="2">
@@ -853,7 +642,6 @@
                         @Model.Element("DependantsDocuments")
                         <a id="addGlobalMobilityDependantDocument" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another global mobility dependant document")</a></td>
                 </tr>
-
                 <!-- Bank Account Details -->
                 <tr>
                     <td class="tdstrong" colspan="2">
@@ -918,79 +706,7 @@
                     <td>@Model.Element("OtherBankPercentageorAmount")</td>
                 </tr>
                 <!-- FISCAL DATA -->
-                @*<tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Fiscal Data")</h4>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("Personneltaxstatus")</td>
-                    <td>@Model.Element("Personneltaxstatus")</td>
-                </tr>*@
-                @*                <tr>
-                    <td class="tdstrong">@Model.Label("Taxationinformation")</td>
-                    <td>@Model.Element("Taxationinformation")</td>
-                </tr>
-                 <tr>
-                    <td class="tdstrong">@Model.Label("Calculationmethod")</td>
-                    <td>@Model.Element("Calculationmethod")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("Calculationrule")</td>
-                    <td>@Model.Element("Calculationrule")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("Submitted")</td>
-                    <td>@Model.Element("Submitted")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("Recieved")</td>
-                    <td>@Model.Element("Recieved")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("Exempt.StartDate")</td>
-                    <td>@Model.Element("Exempt.StartDate")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("Exmpt.EndData")</td>
-                    <td>@Model.Element("Exmpt.EndData")</td>
-                </tr>*@
-                <!-- Social Insurance  -->
-                @*<tr>
-                    <td class="tdstrong" colspan="2">
-                        <h4>@Model.Translate("Social Insurance")</h4>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("SocialInsurance")</td>
-                    <td>@Model.Element("SocialInsurance")</td>
-                </tr>   *@
-                @*<tr>
-                    <td class="tdstrong">@Model.Label("Entitlementreason")</td>
-                    <td>@Model.Element("Entitlementreason")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("SIContributionStartDate")</td>
-                    <td>@Model.Element("SIContributionStartDate")</td>
-                </tr>
-
-                <tr>
-                    <td class="tdstrong">@Model.Label("OverseasWorkerWCI")</td>
-                    <td>@Model.Element("OverseasWorkerWCI")</td>
-                </tr>
-                <tr>
-                    <td class="tdstrong">@Model.Label("EEover65Nocontribution")</td>
-                    <td>@Model.Element("EEover65Nocontribution")</td>
-                </tr>
-
-                <tr>
-                    <td class="tdstrong">@Model.Label("SocialInsurancePremium")</td>
-                    <td>@Model.Element("SocialInsurancePremium")</td>
-                </tr>
-                 <tr>
-                    <td class="tdstrong">@Model.Label("MonthlyCompensationAmount")</td>
-                    <td>@Model.Element("MonthlyCompensationAmount")</td>
-                </tr>*@
+ 
                 <!-- Nationality/Language  -->
                 <tr>
                     <td class="tdstrong" colspan="2">
@@ -1089,22 +805,18 @@
                             @Model.Element("Educationenddate" + i.ToString())</td>
                     </tr>
                 }
-
                 <tr id="addEducationTrr">
                     <td colspan="2">
                         @Model.Element("Educations")
                         <a id="addEducation" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another education")</a></td>
                 </tr>
-
             </tbody>
         </table>
     </div>
-
     <input type="hidden" id="CustomerId" value="@Model.Form.CustomerId" />
     <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
     <input type="hidden" id="BusinessUnitId" name="BusinessUnitId" value="0" />
 </div>
-
 <script>
 
     var lockedbyUserGroup = document.getElementById('LockedByUserGroup').getAttribute('status');

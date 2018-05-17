@@ -4,6 +4,8 @@
     {
         IDbContext GetSession();
 
+        IDbContext GetSession(int timeout);
+
         IDbContext GetSessionWithDisabledLazyLoading();
     }
 }

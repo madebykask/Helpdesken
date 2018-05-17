@@ -14,7 +14,9 @@
         var downloadContractFileUrl = window.appParameters.downloadContractFileUrl;
         var downloadContractFileParamUrl = window.appParameters.downloadContractFileParamUrl;
         var deleteContractFileUrl = window.appParameters.deleteContractFileUrl;
+        var loadHistoryUrl = window.appParameters.loadHistoryUrl;
         
+        PluploadTranslation($("#contract_languageId").val());
         
         var customerId;
         var alreadyExistFileIds = [];
@@ -28,7 +30,7 @@
 
         var $deleteButtons = $('.deleteContractFile');
 
-        Application.contract.init = function () {
+        Application.contract.init = function () {           
             $deleteButtons.bind("click", function () {
                 Application.contract.deleteFile($(this));
             });
@@ -56,6 +58,23 @@
                 } else {
                     alert('Unexpected error!');
                 }
+            });
+        };
+        
+        Application.contract.loadHistory = function(contractId) {
+            var progressLoader$ = $("#globalProgress");
+            progressLoader$.show();
+
+            $.ajax({
+                url: loadHistoryUrl,
+                cache: 'false',
+                type: 'GET',
+                data: $.param({ id: contractId }),
+                dataType: 'html'
+            }).done(function(res) {
+                $("#contractHistory").html(res);
+            }).always(function(res) {
+                progressLoader$.hide();
             });
         };
 

@@ -8,12 +8,16 @@
             string caption,
             int? propertySize,
             bool showInDetails,
-            bool showInList)
+            bool showInList,
+            string xml,
+            bool readOnly)
         {
             this.Caption = caption;
             this.PropertySize = propertySize;
             this.ShowInDetails = showInDetails;
             this.ShowInList = showInList;
+            this.XMLTag = xml;
+            this.ReadOnly = readOnly;
         }
 
         [NotNullAndEmpty]
@@ -24,5 +28,9 @@
         public bool ShowInDetails { get; private set; }
 
         public bool ShowInList { get; private set; }
+
+        public string XMLTag { get; set; }
+
+        public bool ReadOnly { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Services.Services
 
         IList<CustomerUser> GetCustomerUsersForUser(int userId);
 
-        CustomerUser GetCustomerSettings(int customer, int user);
+        CustomerUser GetCustomerUserSettings(int customer, int user);
 
         UserCaseSetting GetUserCaseSettings(int customerId, int userId);
 
@@ -71,7 +71,7 @@ namespace DH.Helpdesk.Services.Services
             return _customerUserRepository.GetCustomerUsersForStartFinal(userId);
         }
 
-        public CustomerUser GetCustomerSettings(int customer, int user)
+        public CustomerUser GetCustomerUserSettings(int customer, int user)
         {
             return _customerUserRepository.GetCustomerSettings(customer, user);
         }

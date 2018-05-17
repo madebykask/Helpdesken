@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -65,6 +64,11 @@ namespace DH.Helpdesk.Dal.Repositories
                 public const string Text_External = "Text_External";
             }
 
+            public static class Region
+            {
+                public const string RegionName = "Region";
+            }
+
             public static class Department
             {
                 public const string DepartmentId = "DepartmentId";
@@ -81,7 +85,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         #region FreeText Search Condition Fields
 
-        private string[] _initiatorCaseConditionFields = new string[]
+        private readonly string[] _initiatorCaseConditionFields = new string[]
         {
             Tables.Case.ReportedBy,
             Tables.Case.Persons_Name,
@@ -92,7 +96,7 @@ namespace DH.Helpdesk.Dal.Repositories
             Tables.Case.Persons_Phone
         };
 
-        private string[] _freeTextCaseConditionFields = new string[]
+        private readonly string[] _freeTextCaseConditionFields = new string[]
         {
             Tables.Case.ReportedBy,
             Tables.Case.Persons_Name,
@@ -109,7 +113,7 @@ namespace DH.Helpdesk.Dal.Repositories
             Tables.Case.InventoryNumber
         };
 
-        private string[] _freeTextCaseIsAboutConditionFields = new string[]
+        private readonly string[] _freeTextCaseIsAboutConditionFields = new string[]
         {
             Tables.CaseIsAbout.ReportedBy,
             Tables.CaseIsAbout.Person_Name,
@@ -120,13 +124,18 @@ namespace DH.Helpdesk.Dal.Repositories
             Tables.CaseIsAbout.Person_Phone
         };
 
-        private string[] _freeTextLogConditionFields = new string[]
+        private readonly string[] _freeTextLogConditionFields = new string[]
         {
             Tables.Log.Text_Internal,
             Tables.Log.Text_External
         };
 
-        private string[] _freeTextDepartmentConditionFields = new string[]
+        private readonly string[] _freeTextRegionConditionFields = new string[]
+        {
+            Tables.Region.RegionName
+        };
+
+        private readonly string[] _freeTextDepartmentConditionFields = new string[]
         {
             Tables.Department.DepartmentId,
             Tables.Department.DepartmentName
@@ -136,7 +145,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public string BuildCaseSearchSql(SearchQueryBuildContext ctx)
         {
-            
             _useFts = ctx.UseFullTextSearch;
 
             var search = ctx.Criterias.Search;
@@ -443,9 +451,10 @@ namespace DH.Helpdesk.Dal.Repositories
                     var items = new List<string>
                     {
                         BuildCaseFreeTextSearchQueryCte(freeText, filter),
+                        //BuildRegionFreeTextSearchQueryCte(freeText, filter),
+                        BuildDepartmentFreeTextSearchQueryCte(freeText, filter),
                         BuildCaseIsAboutFreeTextSearchQueryCte(freeText, filter),
                         BuildLogFreeTextSearchQueryCte(freeText, filter),
-                        BuildDepartmentFreeTextSearchQueryCte(freeText, filter),
                         BuilFormFieldValueFreeTextSearchQueryCte(freeText, filter)
                     };
 
@@ -469,7 +478,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
-            strBld.AppendLine(@"SELECT _case.Id FROM tblCase _case  WITH (NOLOCK, INDEX(IX_tblCase_Customer_Id)) ");
+            strBld.AppendLine(@"SELECT _case.Id FROM tblCase _case  WITH (NOLOCK) ");
             strBld.AppendLine(@"  INNER JOIN tblCustomer ON tblCustomer.Id = _case.Customer_Id ");
             strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
             strBld.AppendFormat("WHERE _case.Customer_Id = {0} ", customerId).AppendLine();
@@ -497,7 +506,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var strBld = new StringBuilder();
 
             strBld.AppendLine(@"SELECT Case_Id FROM tblCaseIsAbout caseIsAbout ");
-            strBld.AppendLine(@"  INNER JOIN tblCase ON tblCase.Id = caseIsAbout.Case_Id ");
+            strBld.AppendLine(@"  INNER JOIN tblCase WITH (nolock) ON tblCase.Id = caseIsAbout.Case_Id ");
             strBld.AppendFormat("WHERE tblCase.Customer_Id = {0} ", customerId).AppendLine();
             strBld.AppendLine(" AND (");
 
@@ -515,8 +524,8 @@ namespace DH.Helpdesk.Dal.Repositories
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
-            strBld.AppendLine(@"SELECT Case_Id FROM tblLog WITH (NOLOCK, INDEX(IX_tblLog_Case_Id))");
-            strBld.AppendLine(@"  INNER JOIN tblCase ON tblLog.Case_Id = tblCase.Id ");
+            strBld.AppendLine(@"SELECT Case_Id FROM tblLog WITH (NOLOCK)");
+            strBld.AppendLine(@"  INNER JOIN tblCase WITH (nolock) ON tblLog.Case_Id = tblCase.Id ");
             strBld.AppendLine(@"  INNER JOIN tblCustomer ON tblCustomer.Id = tblCase.Customer_Id ");
             strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
             strBld.AppendLine("WHERE ");
@@ -539,13 +548,31 @@ namespace DH.Helpdesk.Dal.Repositories
             return strBld.ToString();
         }
 
+        private string BuildRegionFreeTextSearchQueryCte(string freeText, CaseSearchFilter filter)
+        {
+            var customerId = filter.CustomerId;
+            var strBld = new StringBuilder();
+
+            strBld.AppendLine(@"SELECT caseReg.Id FROM tblRegion reg ");
+            strBld.AppendLine("  INNER JOIN tblCase caseReg WITH (nolock) ON reg.Id = caseReg.Region_Id ");
+            strBld.AppendFormat("WHERE caseReg.Customer_Id = {0} ", customerId).AppendLine();
+            strBld.AppendLine(" AND (");
+            var items = BuildFreeTextConditionsFor(freeText, _freeTextRegionConditionFields);
+            var formattedConditions = ConcatConditionsToString(items);
+            strBld.AppendLine(formattedConditions);
+
+            strBld.AppendLine(" )");
+            strBld.AppendLine(@"GROUP BY caseReg.Id");
+            return strBld.ToString();
+        }
+
         private string BuildDepartmentFreeTextSearchQueryCte(string freeText, CaseSearchFilter filter)
         {
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
             strBld.AppendLine(@"SELECT caseDep.Id FROM tblDepartment dep ");
-            strBld.AppendLine("  INNER JOIN tblCase caseDep ON dep.Id = caseDep.Department_Id ");
+            strBld.AppendLine("  INNER JOIN tblCase caseDep WITH (nolock) ON dep.Id = caseDep.Department_Id ");
             strBld.AppendFormat("WHERE caseDep.Customer_Id = {0} ", customerId).AppendLine();
             strBld.AppendLine(" AND (");
             var items = BuildFreeTextConditionsFor(freeText, _freeTextDepartmentConditionFields);
@@ -562,8 +589,8 @@ namespace DH.Helpdesk.Dal.Repositories
             var customerId = filter.CustomerId;
             var strBld = new StringBuilder();
 
-            strBld.AppendLine(@"select tblCase.Id from tblCase WITH (NOLOCK, INDEX(IX_tblCase_Customer_Id)) ");
-            strBld.AppendLine(@"  INNER JOIN tblFormFieldValue WITH (NOLOCK, FORCESEEK, INDEX([IX_tblFormFieldValue_Case_Id])) ON tblCase.Id = tblFormFieldValue.Case_Id ");
+            strBld.AppendLine(@"select tblCase.Id from tblCase WITH (NOLOCK) ");
+            strBld.AppendLine(@"  INNER JOIN tblFormFieldValue WITH (NOLOCK) ON tblCase.Id = tblFormFieldValue.Case_Id ");
             strBld.AppendLine(@"  INNER JOIN tblCustomer ON tblCustomer.Id = tblCase.Customer_Id ");
             strBld.AppendLine(@"  INNER JOIN tblCustomerUser ON tblCustomerUser.Customer_Id = tblCustomer.Id");
             strBld.AppendLine("WHERE ");
@@ -604,7 +631,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
             #region adding tables into FROM section
 
-            tables.Add("from tblCase WITH ( NOLOCK, INDEX(IX_tblCase_Customer_Id)) ");
+            tables.Add("from tblCase WITH (NOLOCK) ");
             tables.Add("inner join tblCustomer on tblCase.Customer_Id = tblCustomer.Id ");
             
             if (ctx.Criterias.SearchFilter.IsExtendedSearch == false)
@@ -612,8 +639,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
             if (ctx.UseFreeTextCaseSearchCTE)
             {
-                tables.Add("LEFT JOIN (SELECT DISTINCT TOP(2000000) sfr.CaseId " +
-                           "           FROM SearchFreeTextFilter sfr ORDER BY sfr.CaseId) freeTextSearchResults ON tblCase.Id = freeTextSearchResults.CaseId");
+                tables.Add("LEFT JOIN (SELECT DISTINCT sfr.CaseId " +
+                           "           FROM SearchFreeTextFilter sfr) freeTextSearchResults ON tblCase.Id = freeTextSearchResults.CaseId");
             }
 
             tables.Add("left outer join tblDepartment on tblDepartment.Id = tblCase.Department_Id ");
@@ -854,7 +881,7 @@ namespace DH.Helpdesk.Dal.Repositories
             if (searchCriteria.CaseIds != null && searchCriteria.CaseIds.Any())
             {
                 sb.AppendFormat(" AND ([tblCase].[Id] IN ({0})) ", string.Join(",", searchCriteria.CaseIds));
-                return sb.ToString();
+                //return sb.ToString();
             }
 
             // Related cases list http://redmine.fastdev.se/issues/11257
@@ -1062,22 +1089,10 @@ namespace DH.Helpdesk.Dal.Repositories
             // region
             if (!string.IsNullOrWhiteSpace(searchFilter.Region))
             {
-                switch (searchFilter.InitiatorSearchScope)
-                {
-                    case CaseInitiatorSearchScope.UserAndIsAbout:
-                        sb.Append(" and (tblDepartment.Region_Id in (" + searchFilter.Region.SafeForSqlInject() + ")" + " or tblCaseIsAbout.Region_Id in (" + searchFilter.Region.SafeForSqlInject() + "))");
-                        break;
-                    case CaseInitiatorSearchScope.User:
-                        sb.Append(" and (tblDepartment.Region_Id in (" + searchFilter.Region.SafeForSqlInject() + "))");
-                        break;
-                    case CaseInitiatorSearchScope.IsAbout:
-                        sb.Append(" and (tblCaseIsAbout.Region_Id in (" + searchFilter.Region.SafeForSqlInject() + "))");
-                        break;
-                    default:
-                        sb.Append(" and (tblDepartment.Region_Id in (" + searchFilter.Region.SafeForSqlInject() + ")" + " or tblCaseIsAbout.Region_Id in (" + searchFilter.Region.SafeForSqlInject() + "))");
-                        break;
-                }
+                var regionCondition = BuildRegionSearchCondition(searchFilter);
+                sb.Append(regionCondition);
             }
+
             // prio
             if (!string.IsNullOrWhiteSpace(searchFilter.Priority))
                 sb.Append(" and (tblcase.Priority_Id in (" + searchFilter.Priority.SafeForSqlInject() + "))");
@@ -1239,6 +1254,35 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             return sb.ToString();
+        }
+
+        private string BuildRegionSearchCondition(CaseSearchFilter searchFilter)
+        {
+            var condition = string.Empty;
+            var searchScope = searchFilter.InitiatorSearchScope;
+            var regions = searchFilter.Region.SafeForSqlInject();
+
+            var conditions = new List<string>();
+
+            // add case search condition
+            if (searchScope == CaseInitiatorSearchScope.User || searchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+            {
+                conditions.Add($" tblCase.Region_Id in ({regions})");
+                conditions.Add($" tblDepartment.Region_Id in ({regions})");
+            }
+
+            //add isAbout search condition
+            if (searchScope == CaseInitiatorSearchScope.IsAbout || searchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+            {
+                conditions.Add($"tblCaseIsAbout.Region_Id in ({regions})");
+            }
+
+            if (conditions.Any())
+            {
+                condition = ConcatConditionsToString(conditions, CaseSearchConstants.Combinator_OR);
+            }
+
+            return !string.IsNullOrEmpty(condition) ? $" AND ( {condition} )" : string.Empty;
         }
 
         private string BuildCaseFreeTextSearchConditions(string text)

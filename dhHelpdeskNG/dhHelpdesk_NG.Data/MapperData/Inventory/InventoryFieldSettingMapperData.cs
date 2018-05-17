@@ -16,6 +16,10 @@
 
         public int Position { get; set; }
 
+        public string XMLTag { get; set; }
+
+        public int ReadOnly { get; set; }
+
         public string GetName()
         {
             return this.FieldName;

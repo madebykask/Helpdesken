@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Models
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace DH.Helpdesk.Web.Areas.Admin.Models
 {
     using System.Collections.Generic;
     using System.Web.Mvc;
@@ -33,6 +36,8 @@
         public string SearchTextTr { get; set; }
         public IList<SelectListItem> SearchConditions { get; set; }
 
+        public bool HasDataPrivacyAccess { get; set; }
+
     }
 
     public class TranslationGridModel
@@ -47,6 +52,35 @@
         public int TextType {get; set;}
         public string TextSearch {get; set;}
         public int CompareMethod {get; set;}
+    }
+
+    public class DataPrivacyModel
+    {
+        public DataPrivacyModel()
+        {
+            IsAvailable = false;
+            ClosedOnly = true;
+            ReplaceEmails = true;
+            Fields = new List<SelectListItem>();
+        }
+
+        public bool IsAvailable { get; set; }
+        public int SelectedCustomerId { get; set; }
+        public List<SelectListItem> Customers { get; set; }
+        public int SelectedFavoriteId { get; set; }
+        public List<SelectListItem> Favorites { get; set; }
+        public int? RetentionPeriod { get; set; }
+        public DateTime? RegisterDateFrom { get; set; }
+        public DateTime? RegisterDateTo { get; set; }
+        public bool ClosedOnly { get; set; }
+        public bool CalculateRegistrationDate { get; set; }
+        public List<SelectListItem> Fields { get; set; }
+        public List<string> FieldsNames { get; set; }
+        public bool ReplaceEmails { get; set; }
+        public string ReplaceDataWith { get; set; }
+        public DateTime? ReplaceDatesWith { get; set; }
+        public bool RemoveCaseAttachments { get; set; }
+        public bool RemoveLogAttachments { get; set; }
     }
 
     public class GlobalSettingInputViewModel : BaseTabInputViewModel

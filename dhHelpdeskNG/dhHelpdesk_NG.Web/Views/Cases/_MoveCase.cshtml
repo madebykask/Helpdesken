@@ -1,29 +1,33 @@
-﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
-@using DH.Helpdesk.BusinessData.OldComponents
+﻿@model DH.Helpdesk.Web.Models.Case.CaseMoveModel
+
 <div class="modal-header">
-<strong>@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation) @Translation.Get("ärende", Enums.TranslationSource.TextTranslation)</strong>
+    <strong>@Translation.GetCoreTextTranslation("Flytta") @Translation.GetCoreTextTranslation("ärende")</strong>
 </div>
 <div class="modal-body">
+    <p>@Translation.GetCoreTextTranslation("Eventuella ändringar måste sparas innan du flyttar ärendet. Vill du flytta ärendet nu eller avbryta")?</p>
     <p>
-        @Translation.Get("Eventuella ändringar måste sparas innan du flyttar ärendet. Vill du flytta ärendet nu eller avbryta", Enums.TranslationSource.TextTranslation)?                
-    </p>
-    <p>
-        @Translation.Get("Kund", Enums.TranslationSource.TextTranslation): 
-        <select id="moveCaseToCustomerId" name="moveCaseToCustomerId" >
-        @if (Html.MasterModel().Customers != null)
-        {
-            foreach (var cus in Html.MasterModel().Customers)
+        @Translation.GetCoreTextTranslation("Kund"):
+        <select id="moveCaseToCustomerId" name="moveCaseToCustomerId">
+            @if (Model.Customers.Any())
             {
-                if (cus.Id != Model.case_.Customer_Id)
+                foreach (var cus in Model.Customers)
                 {
-                <option value="@cus.Id">@cus.Name</option>                    
+                    <option data-external="@(cus.IsUserCustomer ? "0" : "1")" value="@cus.Id">@cus.Name</option>
                 }
             }
-        }  
         </select>
     </p>
+    <div id="extendedCaseNote"  style="display:none">
+        <p class="dh-note">@Translation.GetCoreTextTranslation("Ärendet har ett kopplat Utökat ärende. Endast Ärendet kommer att flyttas.")</p>
+    </div>
+    <div id="externalCustomerNote" style="display:none">
+        <p class="dh-note">@Translation.GetCoreTextTranslation("Obs! Ärendet kommer att flyttas till kund som du saknar rättighet till. Du kommer inte åt ärendet efter flytten. Vill du flytta ärendet ändå, eller avbryta?")</p>
+    </div>
+    <div id="childParentNote" style="display:none">
+        <p class="dh-note">@Translation.GetCoreTextTranslation("Ärendet har en relation, huvudärende/underärende. Ärendet kan inte flyttas till kund där behörighet saknas.")</p>
+    </div>
 </div>
 <div class="modal-footer">
-    <button id="btnMoveCase"  class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Flytta", Enums.TranslationSource.TextTranslation)</button>
-    <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)</button>
+    <button id="btnMoveCase" class="btn">@Translation.GetCoreTextTranslation("Flytta")</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">@Translation.GetCoreTextTranslation("Avbryt")</button>
 </div>

@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Inventory.InventoryEditViewModel
 @{
-    Layout = "~/Areas/Inventory/Views/Shared/_EditPopupLayout.cshtml";
+    Layout = "~/Areas/Inventory/Views/CustomInventory/_EditCustomInventoryLayout.cshtml";
 }
 
 @section Actions
@@ -27,13 +27,6 @@
     </ul>
 }
 
-@section Title
-{
-    @Translation.Get(Model.InventoryViewModel.Name)
-}
-
-@section Content
-{
     @using (Html.BeginForm("Edit", "CustomInventory", FormMethod.Post, new { id = "inventory_edit_form" }))
     {
         @Html.EditorFor(m => m)
@@ -56,32 +49,53 @@
             </div>
         </div>
         }
-        <h4>@Translation.GetCoreTextTranslation("Status")</h4>
 
-        <div class="row">
-            <div class="span12">
-                <table class="tableform">
-                    <tr>
-                        <td class="span3">
-                            <label>@Translation.GetCoreTextTranslation("Skapad datum")</label>
-                        </td>
-                        <td class="span9">
-                            @Html.DisplayFor(m => m.InventoryViewModel.CreatedDate, "Date")
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            <label>@Translation.GetCoreTextTranslation("Senast ändrad datum")</label>
-                        </td>
-                        <td class="span9">
-                            @Html.DisplayFor(m => m.InventoryViewModel.ChangeDate, "Date")
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.CreatedDate.Show ||
+            Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ChangedDate.Show ||
+            Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.SyncDate.Show)
+         {
+             <h4>@Translation.GetCoreTextTranslation("Status")</h4>     
+             <div class="row">
+                 <div class="span12">
+                     <table class="tableform">
+                         @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.CreatedDate.Show)
+                         {
+                             <tr>
+                                 <td class="span3">
+                                     <label>@Translation.GetCoreTextTranslation(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.CreatedDate.Caption)</label>
+                                 </td>
+                                 <td class="span9">
+                                     @Html.DisplayFor(m => m.InventoryViewModel.CreatedDate, "Date")
+                                 </td>
+                             </tr>
+                         }
+                         @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ChangedDate.Show)
+                         {
+                             <tr>
+                                 <td class="span3">
+                                     <label>@Translation.GetCoreTextTranslation(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.ChangedDate.Caption)</label>
+                                 </td>
+                                 <td class="span9">
+                                     @Html.DisplayFor(m => m.InventoryViewModel.ChangeDate, "Date")
+                                 </td>
+                             </tr>
+                         }
+                         @if (Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.SyncDate.Show)
+                         {
+                             <tr>
+                                 <td class="span3">
+                                     <label>@Translation.GetCoreTextTranslation(Model.InventoryViewModel.DefaultFieldsViewModel.DefaultFieldsModel.SyncDate.Caption)</label>
+                                 </td>
+                                 <td class="span9">
+                                     @Html.DisplayFor(m => m.InventoryViewModel.SyncDate, "Date")
+                                 </td>
+                             </tr>    
+                         }
+                     </table>
+                 </div>
+             </div>
+         }
         @Html.HiddenFor(m => m.InventoryViewModel.Id)
         @Html.HiddenFor(m => m.InventoryViewModel.InventoryTypeId)
         @Html.HiddenFor(m => m.InventoryViewModel.IsForDialog)
     }
-}

@@ -9,52 +9,23 @@
 @section Validation {
 
     @Html.Partial("_Validate", Model)
-
 }
 
 @section Script {
 
     <script>
 
+        var ect = new Ect();
+
         $(document).on('click', '#btnMailingAddress, #btnEmergencyAddress', function (e) {
             e.preventDefault();
 
             var prefix = $(this).attr('data-prefix');
-            document.getElementById(prefix + "AddressLine1").value = document.getElementById('PermanentAddressLine1').value;
-            document.getElementById(prefix + "AddressLine2").value = document.getElementById('PermanentAddressLine2').value;
-
-
-            document.getElementById(prefix + "City").value = document.getElementById('PermanentCity').value;
-            //document.getElementById(prefix + "Country").value = document.getElementById('PermanentCountry').value;
-
-            var value = document.getElementById('PermanentCountry').value;
-
-            if ($('#PermanentCountry')[0].selectize) {
-
-                var selectedText = $('#PermanentCountry')[0].selectize.getItem(value).text();
-
-                if ($('#' + prefix + 'Country')[0].selectize) {
-                    $('#' + prefix + 'Country')[0].selectize.setValue(selectedText);
-                }
-                else {
-                    $('#' + prefix + 'Country').val(selectedText);
-                }
-            }
-            else {
-
-                var selectedText = $('#PermanentCountry').find('option:selected').text();
-                if ($('#' + prefix + 'Country')[0].selectize) {
-                    $('#' + prefix + 'Country')[0].selectize.setValue(selectedText);
-                }
-                else {
-                    var selectedText = $('#PermanentCountry').find('option:selected').text();
-                    $('#' + prefix + 'Country').val(selectedText);
-                }
-            }
-
-            var selectedTextPostal = $('#PermanentPostalCode').find('option:selected').text();
-            $('#' + prefix + 'PostalCode').val(selectedTextPostal);
-
+            ect.copyValueFrom($('#PermanentAddressLine1'), $('#' + prefix + 'AddressLine1'));
+            ect.copyValueFrom($('#PermanentAddressLine2'), $('#' + prefix + 'AddressLine2'));
+            ect.copyValueFrom($('#PermanentCity'), $('#' + prefix + 'City'));
+            ect.copyValueFrom($('#PermanentPostalCode'), $('#' + prefix + 'PostalCode'));
+            ect.copyValueFrom($('#PermanentCountry'), $('#' + prefix + 'Country'));
         });
 
         validate.run($('#actionState').val());
@@ -63,13 +34,8 @@
             var val = $(this).val();
             validate.run(val);
         });
-
     </script>
-
 }
 
 @Html.Partial("_Edit", Model)
-
-<script>
-    //InitIntegration();
-</script>
+@Html.Partial("_Scripts", Model)

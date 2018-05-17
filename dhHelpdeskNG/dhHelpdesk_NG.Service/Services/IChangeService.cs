@@ -49,7 +49,7 @@
 
         ChangeOverviewSettings GetChangeOverviewSettings(int customerId, int languageId, bool onlyListSettings);
 
-        IList<ChangeEntity> GetChanges(int customerId);
+        IList<ChangeOverview> GetChanges(int customerId);
 
         byte[] GetFileContent(int changeId, Subtopic subtopic, string fileName);
 

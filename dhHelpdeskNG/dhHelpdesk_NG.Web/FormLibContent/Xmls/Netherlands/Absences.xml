@@ -3,7 +3,6 @@
     <!ENTITY languages SYSTEM "Templates/Languages.xml">
     <!ENTITY regexs SYSTEM "Templates/Regexs.xml">
     <!ENTITY state SYSTEM "Templates/AbsencesState.xml">
-    <!ENTITY data_country SYSTEM "Data/Data_Country.xml">
 ]>
 
 <form id="52" guid="5FE55FF9-E1CC-4ACE-B331-6E6F94C983F0" customerId="29">
@@ -47,8 +46,7 @@
               <validateIf name="PermanentCountry">Netherlands</validateIf>
             </element>
             <element type="text" name="PermanentCity" label="City" formfieldidentifier="E1P0006.ORT01:1"></element>
-            <element type="search-select" name="PermanentCountry" label="Country"  default="Netherlands">
-                &data_country;
+            <element  type="select" source="database" cssclass="autocomplete-country selectize" name="PermanentCountry" label="Country"  default="Netherlands">
             </element>
             <!--Internal Log Note-->
             <element type="textarea" name="InternalLogNote" label="Internal Log Note"></element>

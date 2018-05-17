@@ -1,3 +1,5 @@
+using DH.Helpdesk.BusinessData.Enums.Inventory;
+
 namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 {
     using System.Collections.Generic;
@@ -30,8 +32,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             entity.CreatedDate = businessModel.CreatedDate;
             entity.ChangedByUser_Id = businessModel.ChangeByUserId;
 
-            entity.ChangedDate = businessModel.CreatedDate; // todo
-            entity.SyncChangedDate = null; // todo
+            entity.ChangedDate = businessModel.CreatedDate; 
+            entity.SyncChangedDate = null; // todo?
 
             this.DbSet.Add(entity);
             this.InitializeAfterCommit(businessModel, entity);
@@ -123,7 +125,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             entity.Info,
                             Worstations = computerName,
                             entity.CreatedDate,
-                            entity.ChangedDate
+                            entity.ChangedDate,
+                            entity.SyncChangedDate
                         }).GroupBy(x => x.InventoryTypeId).ToList();
 
             foreach (var item in anonymus)
@@ -146,7 +149,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             a.Worstations,
                             a.Info,
                             a.CreatedDate,
-                            a.ChangedDate)).ToList();
+                            a.ChangedDate,
+                            a.SyncChangedDate)).ToList();
 
                 var overviewWithType = new InventoryOverviewWithType(item.Key, overviews);
                 overviewsWithType.Add(overviewWithType);
@@ -170,9 +174,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                query =
-                    query.Where(
-                        x =>
+                query = query.Where( x =>
                         x.InventoryName == searchString || x.InventoryModel == searchString
                         || x.Manufacturer == searchString || x.SerialNumber == searchString);
             }
@@ -184,68 +186,66 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             const string Delimeter = "; ";
 
             var anonymus = (from i in query
-                            join ci in DbContext.ComputerInventories on i.Id equals ci.Inventory_Id into res
-                            from k in res.DefaultIfEmpty()
-                            select
-                                new
-                                    {
-                                        i.Id,
-                                        i.Department.DepartmentName,
-                                        RoomName = i.Room.Name,
-                                        UserFirstName = i.ChangedByUser.FirstName,
-                                        UserLastName = i.ChangedByUser.SurName,
-                                        i.InventoryName,
-                                        i.InventoryModel,
-                                        i.Manufacturer,
-                                        i.SerialNumber,
-                                        i.TheftMark,
-                                        i.BarCode,
-                                        i.PurchaseDate,
-                                        i.Info,
-                                        WorkstationName = k.Computer.ComputerName,
-                                        i.CreatedDate,
-                                        i.ChangedDate
-                                    }).ToList()
-                .GroupBy(
-                    x =>
-                    new
-                        {
-                            x.Id,
-                            x.DepartmentName,
-                            x.RoomName,
-                            x.UserFirstName,
-                            x.UserLastName,
-                            x.InventoryName,
-                            x.InventoryModel,
-                            x.Manufacturer,
-                            x.SerialNumber,
-                            x.TheftMark,
-                            x.BarCode,
-                            x.PurchaseDate,
-                            x.Info,
-                            x.CreatedDate,
-                            x.ChangedDate
-                        });
+                join ci in DbContext.ComputerInventories on i.Id equals ci.Inventory_Id into res
+                from k in res.DefaultIfEmpty()
+                select new
+                {
+                    i.Id,
+                    DepartmentName = i.Department != null ? i.Department.DepartmentName : string.Empty,
+                    RoomName = i.Room != null ? i.Room.Name : string.Empty,
+                    UserFirstName = i.ChangedByUser != null ? i.ChangedByUser.FirstName : string.Empty,
+                    UserLastName = i.ChangedByUser != null ? i.ChangedByUser.SurName : string.Empty,
+                    i.InventoryName,
+                    i.InventoryModel,
+                    i.Manufacturer,
+                    i.SerialNumber,
+                    i.TheftMark,
+                    i.BarCode,
+                    i.PurchaseDate,
+                    i.Info,
+                    WorkstationName = k.Computer != null ? k.Computer.ComputerName : string.Empty,
+                    i.CreatedDate,
+                    i.ChangedDate,
+                    i.SyncChangedDate
+                }).ToList()
+                .GroupBy(x => new
+                {
+                    x.Id,
+                    x.DepartmentName,
+                    x.RoomName,
+                    x.UserFirstName,
+                    x.UserLastName,
+                    x.InventoryName,
+                    x.InventoryModel,
+                    x.Manufacturer,
+                    x.SerialNumber,
+                    x.TheftMark,
+                    x.BarCode,
+                    x.PurchaseDate,
+                    x.Info,
+                    x.CreatedDate,
+                    x.ChangedDate,
+                    x.SyncChangedDate
+                });
 
-            var overviews =
-                anonymus.Select(
-                    a =>
-                    new InventoryOverview(
-                        a.Key.Id,
-                        a.Key.DepartmentName,
-                        a.Key.RoomName,
-                        new UserName(a.Key.UserFirstName, a.Key.UserLastName),
-                        a.Key.InventoryName,
-                        a.Key.InventoryModel,
-                        a.Key.Manufacturer,
-                        a.Key.SerialNumber,
-                        a.Key.TheftMark,
-                        a.Key.BarCode,
-                        a.Key.PurchaseDate,
-                        string.Join(Delimeter, a.Select(x => x.WorkstationName)), // todo change to array
-                        a.Key.Info,
-                        a.Key.CreatedDate,
-                        a.Key.ChangedDate)).ToList();
+            var overviews = anonymus.Select(a =>
+                new InventoryOverview(
+                    a.Key.Id,
+                    a.Key.DepartmentName,
+                    a.Key.RoomName,
+                    new UserName(a.Key.UserFirstName, a.Key.UserLastName),
+                    a.Key.InventoryName,
+                    a.Key.InventoryModel,
+                    a.Key.Manufacturer,
+                    a.Key.SerialNumber,
+                    a.Key.TheftMark,
+                    a.Key.BarCode,
+                    a.Key.PurchaseDate,
+                    string.Join(Delimeter, a.Select(x => x.WorkstationName)), // todo change to array
+                    a.Key.Info,
+                    a.Key.CreatedDate,
+                    a.Key.ChangedDate,
+                    a.Key.SyncChangedDate)).ToList();
 
             return overviews;
         }
@@ -339,7 +339,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                     Id = c.Id,
                     Name = c.ComputerName,
                     Location = c.Location,
-                    TypeDescription = k.ComputerTypeDescription,
+                    TypeDescription = k.ComputerTypeDescription, //Computer Type
                     TypeName = "Arbetsstation",
                     NeedTranslate = true
                 };
@@ -380,6 +380,35 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             result.AddRange(customInventories);
 
             return result;
+        }
+
+        public List<int> GetRelatedCaseIds(CurrentModes inventoryType, int inventoryId, int customerId)
+        {
+            var caseIds = new List<int>();
+            string inventoryName;
+            switch (inventoryType)
+            {
+                case CurrentModes.Workstations:
+                    inventoryName = DbContext.Computers.Single(x => x.Id == inventoryId).ComputerName;
+                    break;
+                case CurrentModes.Servers:
+                    inventoryName = DbContext.Servers.Single(x => x.Id == inventoryId).ServerName;
+                    break;
+                case CurrentModes.Printers:
+                    inventoryName = DbContext.Printers.Single(x => x.Id == inventoryId).PrinterName;
+                    break;
+
+                default:
+                    inventoryName = DbContext.Inventories.Single(x => x.Id == inventoryId).InventoryName;
+                    break;
+            }
+            if (!string.IsNullOrEmpty(inventoryName))
+            {
+                caseIds = DbContext.Cases.Where(x => x.Customer_Id == customerId && x.InventoryNumber.Equals(inventoryName))
+                            .Select(x => x.Id)
+                            .ToList();
+            }
+            return caseIds;
         }
 
         private void Map(Inventory businessModel, Domain.Inventory.Inventory entity)

@@ -1,0 +1,39 @@
+﻿@using DH.Helpdesk.Web.Components.Contracts
+@model IList<DH.Helpdesk.Web.Models.Contract.ContractHistoryFieldsDiff>
+
+<table class="table table-striped table-bordered table-hover tableintableform">
+    <thead>
+    <tr>
+        <th>@Translation.Get("Datum", Enums.TranslationSource.TextTranslation)</th>
+        <th>@Translation.Get("Registrerad av", Enums.TranslationSource.TextTranslation)</th>
+        <th>@Translation.Get("Historik", Enums.TranslationSource.TextTranslation)</th>
+        @*<th>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</th>*@
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var historyRecord in Model)
+    {
+        <tr>
+            <td class="tdpointer">
+                @historyRecord.Modified.ToShortDateString()
+            </td>
+            <td class="tdpointer">
+                @historyRecord.RegisteredBy
+            </td>
+            <td class="tdpointer">
+                <table class="tableintable">
+                    @Html.Raw(ContractHistoryMarkupBuilder.Build(historyRecord.FieldsDiff, SessionFacade.CurrentCustomer.Id))
+                </table>
+            </td>
+            @*
+                <td class="tdpointer">
+                    @foreach (var email in Model.Emails)
+                    {
+                        <div>@email</div>
+                    }
+                </td>
+            *@
+        </tr>
+    }
+    </tbody>
+</table>

@@ -14,7 +14,6 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
     using System.Collections.Generic;
 
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
-    using DH.Helpdesk.BusinessData.Models.Faq.Output;
     using DH.Helpdesk.BusinessData.Models.Impact.Output;
     using DH.Helpdesk.BusinessData.Models.Logs.Output;
     using DH.Helpdesk.BusinessData.Models.Problem.Output;

@@ -1,39 +1,52 @@
 ﻿@using System.Linq;
-@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Admin.Models.GlobalSettingIndexViewModel
 @{
     ViewBag.Title = "Global Settings";
- 
-}
+ }
 
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav" id="myButton">
             <li id="menu1" style="display: block">
-                @Html.ActionLink(Translation.Get("Ändra", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("inställningar", Enums.TranslationSource.TextTranslation), "change", null, new { @class = "btn" })
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Ändra") + " " + Translation.GetCoreTextTranslation("inställningar"), "change", null, new { @class = "btn" })
             </li>
             <li id="menu2" style="display: none">
-                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Kalender helgdagar", Enums.TranslationSource.TextTranslation), "newholiday", new { newholiday = 1 }, new { @class = "btn" })
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Lägg till") + " " + Translation.GetCoreTextTranslation("Kalender helgdagar"), "newholiday", new { newholiday = 1 }, new { @class = "btn" })
             </li>
             <li id="menu3" style="display: none">
-                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation), "newwatchdate", new { newwdc = 1 }, new { @class = "btn" })
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Lägg till") + " " + Translation.GetCoreTextTranslation("Kalender bevakningsdatum"), "newwatchdate", new { newwdc = 1 }, new { @class = "btn" })
             </li>
             <li id="menu4" style="display: none">
-                @Html.ActionLink(Translation.Get("Lägg till", Enums.TranslationSource.TextTranslation) + " " + Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation), "newtranslation", new { newtext = 1, texttypeid = Model.TextType.Id }, new { @class = "btn" })
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Lägg till") + " " + Translation.GetCoreTextTranslation("Översättningar"), "newtranslation", new { newtext = 1, texttypeid = Model.TextType.Id }, new { @class = "btn" })
             </li>
             <li id="menu5" style="display: none"></li>
+            <li id="menu6" style="display: none">
+                <span id="tooltip-button-wrapper" data-title='@Translation.GetCoreTextTranslation("Spara i favoriter för att aktivera")'>
+                    <button class="btn" id="privacyRunBtn">@Translation.GetCoreTextTranslation("Kör")</button>
+                    <i id="inProcessLoader" class="gif-loader" style="display: none">&nbsp;</i>
+                </span>
+            </li>
         </ul>
     </div>
 </div>
 <div class="content">
     <div class="container">
-
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active" id="tab1" onclick="toggleMenuItems(1)"><a href="#fragment-1">@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</a></li>
-            <li id="tab2" onclick="toggleMenuItems(2)"><a href="#fragment-2">@Translation.Get("Kalender helgdagar", Enums.TranslationSource.TextTranslation)</a></li>
-            <li id="tab3" onclick="toggleMenuItems(3)"><a href="#fragment-3">@Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation)</a></li>
-            <li id="tab4" onclick="toggleMenuItems(4)"><a href="#fragment-4">@Translation.Get("Översättningar", Enums.TranslationSource.TextTranslation)</a></li>
-            <li id="tab5" onclick="toggleMenuItems(5)"><a href="#fragment-5">@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)</a></li>
+            <li class="active" id="tab1" onclick="toggleMenuItems(1)"><a href="#fragment-1">@Translation.GetCoreTextTranslation("Allmänt")</a></li>
+            <li id="tab2" onclick="toggleMenuItems(2)"><a href="#fragment-2">@Translation.GetCoreTextTranslation("Kalender helgdagar")</a></li>
+            <li id="tab3" onclick="toggleMenuItems(3)"><a href="#fragment-3">@Translation.GetCoreTextTranslation("Kalender bevakningsdatum")</a></li>
+            <li id="tab4" onclick="toggleMenuItems(4)"><a href="#fragment-4">@Translation.GetCoreTextTranslation("Översättningar")</a></li>
+            <li id="tab5" onclick="toggleMenuItems(5)"><a href="#fragment-5">@Translation.GetCoreTextTranslation("Självservice")</a></li>
+            @if (Model.HasDataPrivacyAccess)
+            {
+                <li id="tab6" onclick="toggleMenuItems(6)">
+                    <a href="#fragment-6">@Translation.GetCoreTextTranslation("Dataintegritet")</a>
+                </li>
+
+                <li id="tab7" onclick="toggleMenuItems(7)">
+                    <a href="#fragment-7">@Translation.GetCoreTextTranslation("Dataintegritet") &ndash; @Translation.GetCoreTextTranslation("Historik")</a>
+                </li>
+            }
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment-1">
@@ -41,16 +54,16 @@
                     <thead>
                         <tr>
                             <th>
-                                @Translation.Get("Applikationsnamn", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Applikationsnamn")
                             </th>
                             <th>
-                                @Translation.Get("Standard", Enums.TranslationSource.TextTranslation) @Translation.Get("Språk", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Standard") @Translation.GetCoreTextTranslation("Språk")
                             </th>
                             <th>
-                                @Translation.Get("Version", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Version")
                             </th>
                             <th>
-                                @Translation.Get("Tid", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Tid")
                             </th>
                         </tr>
                     </thead>
@@ -80,7 +93,7 @@
                     <thead>
                         <tr>
                             <th>
-                                @Translation.Get("Kalender", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Kalender")
                             </th>
                         </tr>
                     </thead>
@@ -101,7 +114,7 @@
                             <table class="tableform" id="tblHoliday">
                                 <tr>
                                     <td>
-                                        @Translation.Get("Kalender", Enums.TranslationSource.TextTranslation)
+                                        @Translation.GetCoreTextTranslation("Kalender", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
                                         @Html.DropDownListFor(model => model.HolidayHeader.Id, Model.HolidayHeaders, new { style = "width: auto;", id = "HolidayHeaderId", onchange = "changeHoliday(this.options[this.selectedIndex].value);" })
@@ -123,7 +136,7 @@
                     <thead>
                         <tr>
                             <th>
-                                @Translation.Get("Kalender bevakningsdatum", Enums.TranslationSource.TextTranslation)
+                                @Translation.GetCoreTextTranslation("Kalender bevakningsdatum")
                             </th>
                         </tr>
                     </thead>
@@ -148,7 +161,7 @@
                                 <table class="tableform" id="tblText">
                                     <tr>
                                         <td style="width:50px">
-                                            &nbsp;&nbsp;@Translation.Get("Typ", Enums.TranslationSource.TextTranslation)
+                                            &nbsp;&nbsp;@Translation.GetCoreTextTranslation("Typ")
                                         </td>
                                         <td style="width:200px">
                                             @Html.DropDownListFor(model => model.TextType.Id, Model.TextTypes, new { style = "width: auto;", id = "TextTypeId", onchange = "changeTextType(this.options[this.selectedIndex].value);" })                                            
@@ -156,7 +169,7 @@
                                         <td>
                                             @Html.TextBoxFor(model => model.SearchTextTr, new { maxlength = "50"})
                                             @Html.DropDownListFor(model => model.SearchConditions, Model.SearchConditions, new { style = "width: auto;", id = "SearchId", onchange = "" })
-                                            <input type="button" id="searchQueryBtn" onclick ="DoSearch();" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" class="btn" onclick="submit();" />
+                                            <input type="button" id="searchQueryBtn" onclick ="DoSearch();" value="@Translation.GetCoreTextTranslation("Sök")" class="btn" onclick="submit();" />
                                         </td>
                                     </tr>
                                 </table>
@@ -167,18 +180,31 @@
                     </div>
                 </div>
             </div>
-           
+
             <div class="tab-pane tab-pane-border" id="fragment-5">
-                <div id="selfServiceError" class="alert alert-error alert-dismissable" style="display:none"></div>
+                <div id="selfServiceError" class="alert alert-error alert-dismissable" style="display: none"></div>
                 <table class="tableform">
                     <tbody>
                     <tr>
-                        <td class="span4">@Translation.Get("Visa alla kunder på Ärendeöversikten")</td>
+                        <td class="span4">@Translation.GetCoreTextTranslation("Visa alla kunder på Ärendeöversikten")</td>
                         <td>@Html.CheckBox("multiCustomersSearch", Model.GlobalSettings.FirstOrDefault().MultiCustomersSearch == 1, new {@class = "switchcheckbox"})</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
+            
+            @if (Model.HasDataPrivacyAccess)
+            {
+                <!-- Data Privacy  -->
+                <div class="tab-pane tab-pane-border" id="fragment-6">
+                        @Html.Action("DataPrivacy")
+                </div> 
+
+                <!-- Data Privacy History -->
+                <div class="tab-pane tab-pane-border" id="fragment-7">
+                        @Html.Action("DataPrivacyHistory")
+                </div>
+            }
 
             <input type="hidden" name="activeTab" id="activeTab" value="@SessionFacade.ActiveTab" />
         </div>
@@ -188,28 +214,41 @@
 
 @section Scripts {
     <script type="text/javascript">
-        $(function() {
+        $(function () {
+
+            window.dataPrivacyHistory.Init();
+            
+            //handle tabs switching 
+            $('#myTab a').on('shown.bs.tab', function (event) {
+                //var prevTab = $(event.relatedTarget);  
+                var activeTab = $(event.target).parent();
+
+                if (activeTab[0].id === 'tab7') {
+                    window.dataPrivacyHistory.RefreshHistory();
+                }
+            });
+
             $('#SearchId').val(@ViewBag.SelectedSearchCondition);
 
-            $("#multiCustomersSearch").on('switchChange.bootstrapSwitch',
-                function () {
+            $("#multiCustomersSearch").on('switchChange.bootstrapSwitch', function () {
 
-                    $("#selfServiceError").text('').hide();
+                $("#selfServiceError").text('').hide();
 
-                    var res = $(this).is(':checked');
-                    var data = {
-                        val: res ? 'true' : 'false'
-                    };
+                var res = $(this).is(':checked');
+                var data = {
+                    val: res ? 'true' : 'false'
+                };
 
-                    $.post('@Url.Action("UpdateMultiCustomersSearch", "GlobalSetting", new { Area = "Admin" })',
-                        data,
-                        function (response) {
-                            if (!response.Success && response.ErrorMessage) {
-                                $("#selfServiceError").text(response.ErrorMessage).show();
-                            }
-                        });
-                });
-        });
+                $.post('@Url.Action("UpdateMultiCustomersSearch", "GlobalSetting", new {Area = "Admin"})',
+                    data,
+                    function (response) {
+                        if (!response.Success && response.ErrorMessage) {
+                            $("#selfServiceError").text(response.ErrorMessage).show();
+                        }
+                    });
+            });
+
+        }); //end of jquery load
 
         var texttypeId = $("#TextTypeId").val();
 
@@ -223,7 +262,7 @@
             list.html('');
             if (id != '') {
                 $.get('/GlobalSetting/ChangeTextType/' + id,
-                    function(result) {
+                    function (result) {
                         list.html($(result).html());
                     });
             }
@@ -234,7 +273,7 @@
             list.html('');
             if (id != '') {
                 $.get('/GlobalSetting/ChangeHoliday/' + id,
-                    function(result) {
+                    function (result) {
                         list.html(result);
                     });
             }
@@ -244,7 +283,7 @@
             return $("#TextTypeId").val();
         }
 
-        function toggleMenuItems(number){
+        function toggleMenuItems(number) {
             $('ul.secnav > li').hide();
             var menuId = '#menu' + number;
             $(menuId).show();

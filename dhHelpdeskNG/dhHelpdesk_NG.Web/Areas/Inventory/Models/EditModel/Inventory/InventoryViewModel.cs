@@ -19,11 +19,13 @@
         [IsId]
         public int Id { get; set; }
 
-        public string Name { get; set; }
+//        public string Name { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
         public DateTime ChangeDate { get; set; }
+
+        public DateTime? SyncDate { get; set; }
 
         [IsId]
         public int InventoryTypeId { get; set; }

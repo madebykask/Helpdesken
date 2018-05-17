@@ -34,7 +34,7 @@
             ModelMetadata metadata,
             ControllerContext context)
         {
-            var errorMessage = Translation.Get("required");
+            var errorMessage = Translation.GetCoreTextTranslation("fältet är obligatoriskt");
             return new List<ModelClientValidationRule> { new ModelClientValidationRequiredFromRule(errorMessage) };
         }
 

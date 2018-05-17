@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <options>
   <option value=""></option>
+  <option value="Customer Support Center">Customer Support Center</option>
+  <option value="Distribution Support Unit">Distribution Support Unit</option>
   <option value="Gwangmyeong Store">Gwangmyeong Store</option>
   <option value="Service Office">Service Office</option>
   <option value="Goyang Store">Goyang Store</option>

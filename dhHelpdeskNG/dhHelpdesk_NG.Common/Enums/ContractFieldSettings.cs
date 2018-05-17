@@ -8,15 +8,12 @@
  
         public const string Supplier = "supplier_id";
  
-        public const string Responsible = "responsibleusername";
  
         public const string StartDate = "contractstartdate";
  
         public const string EndDate = "contractenddate";
  
         public const string NoticeDate = "noticedate";
- 
-        public const string WatchDate = "watchdate";
  
         public const string Filename = "filename";
  
@@ -35,6 +32,5 @@
         public const string ResponsibleFollowUpField = "followupresponsibleuser_id";
  
         public const string CaseNumber = "casenumber";
-
     }
 }

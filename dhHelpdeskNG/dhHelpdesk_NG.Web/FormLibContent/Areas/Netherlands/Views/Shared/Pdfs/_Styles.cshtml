@@ -70,8 +70,8 @@ table {
 .table-full-width {
     width: 100%;
     min-width: 100%;
-     margin:0 !important; 
-    padding:0 !important; 
+     margin:0 !important;
+    padding:0 !important;
 }
 .table {
     width: 100%;
@@ -98,7 +98,7 @@ table tr td {
 }
 .form-personal-data tr td {
     vertical-align: top;
-    padding: 5px;
+    padding-left: 5px;  @*Ändrat från padding till padding-left*@
 }
 .td-bold {
     font-weight: bold;
@@ -136,8 +136,10 @@ ul {
 }
 .form-personal-data-page {
     margin: 0 auto;
-    width: 713px;
-    max-width: 713px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: 609px;  @*Tidigare 713px*@
+    max-width: 609px; @*Tidigare 713px*@
 }
 .draft {
      /* IE 8 */
@@ -150,5 +152,17 @@ ul {
         -khtml-opacity: 0.5;
         /* Good browsers */
         opacity: 0.5;
+}
+.tablePhoneBU {
+    float: right;
+    page-break-after: always;
+    page-break-inside: avoid;
+}
+#h1NotBoldAndUnderline {
+    text-decoration: underline;
+    font-size: 11pt;
+    font-family: Verdana;
+    line-height: 24px;
+    font-weight: normal;
 }
 </style>

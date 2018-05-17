@@ -1,8 +1,9 @@
 ﻿@model ECT.FormLib.Models.FormModel
 @using ECT.FormLib;
 @using ECT.FormLib.Models;
-
 <script>
+   var ect = new Ect();
+
     var timeIt = function() {
         var o = $("#ContractedHours");
 
@@ -88,10 +89,6 @@
                 setdeductionvalidto();
             });
 
-            //$("#NewBusinessUnit").change(function () {
-              
-            //    setTimeout(function () { GetXML('Predefined_BusinessUnit_LocalJobTitle.xml', narrowDownBusinessUnitLocalJobTitle); }, 1);
-            //});
 
 
         }); // END Function
@@ -100,11 +97,6 @@
             document.getElementById('TECApprover').value = document.getElementById('ReportsToLineManager').value;
         }
         document.getElementById('ReportsToLineManager').onchange = selectIndexChangeLineManagertoTECApprover;
-
-        //function selectIndexChangeBusinessUnittoPrimarySite() {
-        //    document.getElementById('PrimarySite').value = document.getElementById('NewBusinessUnit').value;
-        //}
-        //document.getElementById('NewBusinessUnit').onchange = selectIndexChangeBusinessUnittoPrimarySite;
 
         var changeType = document.getElementById('ChangeType').value;
         if (changeType == 'ONLY extend temporary contract') {
@@ -115,16 +107,11 @@
         }
 
         $('#NewBusinessUnit').change(function () {
-            setDefaultPrimarySite();
-            GetXML('Predefined_BusinessUnit_LineManager.xml', narrowDownBusinessUnitLineManager);
-            GetXML('Predefined_BusinessUnit_LocalJobTitle.xml', narrowDownBusinessUnitLocalJobTitle);
+
+            ect.getRelations('Relation_BusinessUnit_LineManager.xml', '', $('#NewBusinessUnit'), $('#ReportsToLineManager'));
+            ect.getRelations('Relation_BusinessUnit_PositionTitle.xml', '', $('#NewBusinessUnit'), $('#LocalJobTitle'));
+            ect.copyValueFrom($('#NewBusinessUnit'), $('#PrimarySite'));
         });
-
-        var setDefaultPrimarySite = function () {
-            var bu = $("#NewBusinessUnit option:selected").text();
-            $('#PrimarySite').val(bu)
-        }
-
 
         $('#ReportsToLineManager').change(function () {
             var value = $(this).val();
@@ -186,153 +173,7 @@
                 }
             });
         }
-
-        function narrowDownBusinessUnitLineManager(xml) {
-            var show = '';
-            var baseNewBusinessUnit = '';
-
-            if (document.getElementById('NewBusinessUnit')) {
-                baseNewBusinessUnit = $("#NewBusinessUnit option:selected").text();
-            }
-
-            var report_value;
-            report_value = $('#ReportsToLineManager').val();
-
-            $('#ReportsToLineManager').val('');
-
-            var selectize_tags = $("#ReportsToLineManager")[0].selectize
-            selectize_tags.clearOptions();
-
-
-            $(xml).find('dependent').each(function () {
-                var $sel = $(this);
-                show = '';
-                var newBusinessUnit = $sel.find('selected').text();
-                show = $sel.find('show').text();
-
-                if (newBusinessUnit == baseNewBusinessUnit) {
-                    if (show != '') {
-                        //show = ' ,' + show;
-
-                        //temp, replace spaces that occours in the beginning of comma separation.
-                        show = show.replace(/\, /g, ",");
-
-                        var optionsarray = show.split(',');
-                        optionsarray.unshift('');
-
-                        var items = optionsarray.map(function (x) { return { text: x, value: x }; });
-                        selectize_tags.addOption(items);
-                        if (report_value != '') {
-                            selectize_tags.setValue(report_value);
-
-                        }
-                        else
-                            selectize_tags.setValue('');
-                        return;
-                    }
-                }
-            });
-        }       
-
-        function narrowDownBusinessUnitLocalJobTitle(xml) {           
-
-            var show = '';
-            var baseBusinessUnit = '';
-
-            if (document.getElementById('NewBusinessUnit')) {
-                baseBusinessUnit = $("#NewBusinessUnit option:selected").text();
-            }
-
-            //var selectize_tags;
-
-            //selectize_tags = $('#LocalJobTitle')[0].selectize;
-            //selectize_tags.clearOptions();
-
-            //$(xml).find('dependent').each(function () {
-
-            //    var $book = $(this);
-            //    show = '';
-            //    var businessUnit = $book.find('selected').text();
-            //    show = $book.find('show').text();
-
-            //    if (businessUnit == baseBusinessUnit) {
-            //        if (show != '') {
-            //            show = ' ,' + show;
-
-            //            //temp, replace spaces that occours in the beginning of comma separation.
-            //            show = show.replace(/\, /g, ",");
-
-            //            var optionsarray = show.split(',');
-            //            optionsarray.unshift('');
-
-            //            var items = optionsarray.map(function (x) { return { text: x, value: x }; });
-            //            selectize_tags.addOption(items);
-            //            selectize_tags.setValue('');
-            //            return;
-            //        }
-            //    }
-            //});
-
-            var jobtitle_value;
-            jobtitle_value = $('#LocalJobTitle').val();
-
-            //if (document.getElementById('LocalJobTitle')) {
-            //    $('#LocalJobTitle').val("");
-            //}
-
-            $('#LocalJobTitle').val("");
-
-            var selectize_tags = $("#LocalJobTitle")[0].selectize
-            selectize_tags.clearOptions();
-
-
-
-            $(xml).find('dependent').each(function () {
-
-
-                var $sel = $(this);
-                show = '';
-
-                var businessunit = $sel.find('selected').text();
-
-                show = $sel.find('show').text();
-
-                if (businessunit == baseBusinessUnit) {
-
-                    if (show != '') {
-
-                        //show = ' ,' + show;
-
-                        //temp, replace spaces that occours in the beginning of comma separation.
-                        show = show.replace(/\, /g, ",");
-
-                        var optionsarray = show.split(',');
-                        optionsarray.unshift('');
-
-                        //TEMP for Steering Group_Doncaster, Sales (problem with commas in the name) so we use  #
-                        if (show.indexOf("#") > -1) {
-                            $.each(optionsarray, function (i) {
-                                optionsarray[i] = optionsarray[i].replace(/\#/g, ",");
-                            });
-                        }
-
-                        var items = optionsarray.map(function (x) { return { text: x, value: x }; });
-
-                        selectize_tags.addOption(items);
-
-
-                        if (jobtitle_value != '') {
-                            selectize_tags.setValue(jobtitle_value);
-
-                        }
-                        else
-                            selectize_tags.setValue('');
-                        return;
-                    }
-                }
-            });
-        }
-
+    
         function setLocalJobTitle(xml) {
             SetDefCount += 1;
             if (SetDefCount <= maxLocalJobTitleDefCount)

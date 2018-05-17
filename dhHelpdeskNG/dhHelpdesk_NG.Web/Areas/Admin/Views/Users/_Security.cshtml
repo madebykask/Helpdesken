@@ -202,7 +202,7 @@
             <td>
                 <input data-field="calendarPermission" type="checkbox" name="User.CalendarPermission" @(Model.User.CalendarPermission == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.CalendarPermission" value="0" />
-                &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera Aktuellt", Enums.TranslationSource.TextTranslation)
+                &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till aktuellt", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
@@ -326,6 +326,16 @@
                 <input data-field="inventoryPermission" type="checkbox" name="User.InventoryPermission" @(Model.User.InventoryPermission == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.InventoryPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera inventarier", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Translation.GetCoreTextTranslation("Avtal")
+            </td>
+            <td>
+                <input data-field="contractPermission" type="checkbox" name="User.ContractPermission" @(Model.User.ContractPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input type="hidden" name="User.ContractPermission" value="0" />
+                &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har rättighet till avtal")
             </td>
         </tr>
         <tr>

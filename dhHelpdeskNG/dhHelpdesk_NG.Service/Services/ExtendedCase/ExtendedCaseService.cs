@@ -54,10 +54,10 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                     return null;
                 }               
 
-                var extendedCaseForm = _extendedCaseFormRepository.GetExtendedCaseFormForCaseSolution(initData.CaseSolutionId.Value);
+                var extendedCaseForm = _extendedCaseFormRepository.GetExtendedCaseFormForSolution(initData.CaseSolutionId.Value, initData.CustomerId);
                 if (extendedCaseForm != null)
                 {
-                    extendedCaseData = _extendedCaseDataRepository.CreateTemporaryExtendedCaseData(extendedCaseForm.Id, initData.UserName);                    
+                    extendedCaseData = _extendedCaseDataRepository.CreateTemporaryExtendedCaseData(extendedCaseForm.ExtendedCaseFormId, initData.UserName);                    
                 }
             }
             else
@@ -74,7 +74,7 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
             //TODO: After refactoring needs to be changed
             extendedCaseData.FormModel.CaseId = initData.CaseId;            
             extendedCaseData.FormModel.LanguageId = initData.LanguageId;
-            extendedCaseData.FormModel.Path = ExpandExtendedCasePath(globalSetting.ExtendedCasePath, extendedCaseData.FormModel.Id, initData);
+            extendedCaseData.FormModel.Path = ExpandExtendedCasePath(globalSetting.ExtendedCasePath, extendedCaseData.ExtendedCaseFormId, initData);
 
             return extendedCaseData;
         }

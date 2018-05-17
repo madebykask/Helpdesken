@@ -26,17 +26,13 @@
 @section Content
 {
     <h4>@Translation.Get("Allmänt")</h4>
+    
     <div class="row">
-    <div class="span3">
-        @Translation.Get("Datortyp")
-    </div>
-    <div class="span9">
-    @using (Html.BeginForm("Edit", "ComputerType", FormMethod.Post, new { id = "computerModule_edit_form" }))
-    {
-        @Html.EditorFor(m => m.Name)
-        @Html.ValidationMessageFor(m => m.Name)
-        @Html.HiddenFor(m => m.Id)
-    }
-    </div>
+        <div class="span12">
+            @using (Html.BeginForm("Edit", "ComputerType", FormMethod.Post, new { id = "computerModule_edit_form" }))
+            {
+                @Html.Partial("_Input", Model)
+            }
+        </div>
     </div>
 }

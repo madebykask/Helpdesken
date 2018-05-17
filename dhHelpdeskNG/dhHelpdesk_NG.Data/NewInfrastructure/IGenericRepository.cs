@@ -23,6 +23,8 @@ namespace DH.Helpdesk.Dal.NewInfrastructure
 
         void Delete(TEntity entity);
 
+        void DeleteRange(IEnumerable<TEntity> entities);
+
         TEntity GetById(long id);
 
         IQueryable<TEntity> GetAll();

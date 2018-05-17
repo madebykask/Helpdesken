@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace DH.Helpdesk.Dal.Mappers.CaseDocument
 {
@@ -12,6 +13,7 @@ namespace DH.Helpdesk.Dal.Mappers.CaseDocument
             if (entity == null)
                 return null;
 
+            var paragraphMapper = new CaseDocumentParagraphToBusinessModelMapper();
             var model = new CaseDocumentModel
             {
                 Id = entity.Id,
@@ -27,9 +29,9 @@ namespace DH.Helpdesk.Dal.Mappers.CaseDocument
                 CreatedByUser_Id = entity.CreatedByUser_Id,
                 ChangedDate = entity.ChangedDate,
                 ChangedByUser_Id = entity.ChangedByUser_Id,
-                CaseDocumentParagraphs = entity.CaseDocumentParagraphs,
-                CaseDocumentTemplate = entity.CaseDocumentTemplate
                 
+                CaseDocumentParagraphs = entity.CaseDocumentParagraphsKeys.Select(m => paragraphMapper.Map(m.CaseDocumentParagraph)).ToList(),
+                CaseDocumentTemplate = entity.CaseDocumentTemplate
             };
 
             return model;

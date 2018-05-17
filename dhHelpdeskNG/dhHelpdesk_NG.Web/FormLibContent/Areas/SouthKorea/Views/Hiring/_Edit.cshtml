@@ -106,12 +106,15 @@
         </div>
     </div>
     <input type="hidden" id="activeTab" name="activeTab" value="@Model.ActiveTab" />  
-    <script>
-        function changeBusinessUnitCallback() {
-            GetXML('Predefined_BusinessUnit_PositionTitle.xml', narrowDownPositionTitle);
-        }
-    </script>
 }
 
+<script>
+    function changeBusinessUnitCallback() {
+     
 
+        ect.getRelations('Relation_BusinessUnit_PositionTitle.xml', '', $('#BusinessUnit'), $('#PositionTitle'));
+        }
 
+     
+
+</script>

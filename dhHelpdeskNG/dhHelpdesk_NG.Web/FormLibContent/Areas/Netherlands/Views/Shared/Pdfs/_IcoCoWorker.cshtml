@@ -20,7 +20,7 @@
 </head>
 <body>
     <div class="default-page">
-        <img style="border: none; max-width: 609px;" src="@Model.Contract.BaseUrl/FormLibContent/Assets/img/icocoworker.png" />
+        <img style="border: none; max-width: 609px; margin-top: 70px;" src="@Model.Contract.BaseUrl/FormLibContent/Assets/img/icocoworker.png" />
 
         @Html.Partial("../Shared/Pdfs/_CityDate", Model)
 
@@ -38,39 +38,27 @@
             Op <strong>ico-worker.com/nl</strong> vind je een link naar Employee Self Service (ESS). In dit systeem kan je je persoonlijke gegevens zoals naam, adres en bankgegevens bekijken en wijzigen en je kan je salarisstrook bekijken en printen.
         </p>
 
-        <table class="table-full-width">
-            <tr>
-                <td style="width:30%;"><strong>Gebruiker-ID:</strong></td>
-                <td>@Model.GetDocumentAnswer("Co-WorkerID", true)</td>
-            </tr>
-            <tr>
-                <td><strong>password:</strong></td>
-                <td>ontvang je per e-mail</td>
-            </tr>
-        </table>
+        <p>Je kunt op dit systeem inloggen met je IKEA Netwerk ID en wachtwoord, die je van je manager krijgt.</p>
 
-        <p>Zodra je je e-mailadres aan ons hebt doorgegeven via het bijgesloten “formulier persoonsgegevens” en wij het in het HR-systeem hebben gezet, ontvang je je password automatisch per e-mail.</p>
+        @if (Model.GetDocumentAnswer("BusinessUnit").ToLower() != "Service Office Netherlands".ToLower())
+        {
+            <p>
+                <strong style="text-decoration: underline;">Planningsmodule</strong>
+                <br />
+                Om je rooster te bekijken, tijdregistratie te zien of verlof aan te vragen ga je naar de planningsmodule op <strong>ico-worker.com/nl</strong>.
+            </p>
 
-        <p>Omdat je de salarisstrook digitaal kan raadplegen, krijg je die normaal gesproken niet via de post verstuurd. Als je de papieren versie wel wilt ontvangen, stuur dan een e-mail naar het Shared Service Centre: ASKSSC.HR.NL@IKEA.COM, vermeld hierin het onderwerp, je naam en je personeelsnummer.</p>
-
-
-        <p>
-            <strong style="text-decoration: underline;">Planningsmodule</strong>
-            <br />
-            Om je rooster te bekijken, tijdregistratie te zien of verlof aan te vragen ga je naar de planningsmodule op <strong>ico-worker.com/nl</strong>.
-        </p>
-
-        <table class="table-full-width">
-            <tr>
-                <td style="width:30%;"><strong>Gebruikersnaam:</strong></td>
-                <td>@Model.GetDocumentAnswer("Co-WorkerID", true)</td>
-            </tr>
-            <tr>
-                <td><strong>Wachtwoord:</strong></td>
-                <td>ikea123!</td>
-            </tr>
-        </table>
-
+            <table class="table-full-width">
+                <tr>
+                    <td style="width:30%;"><strong>Gebruikersnaam:</strong></td>
+                    <td>@Model.GetDocumentAnswer("Co-WorkerID", true)</td>
+                </tr>
+                <tr>
+                    <td><strong>Wachtwoord:</strong></td>
+                    <td>ikea123!</td>
+                </tr>
+            </table>
+        }
         @if (Model.GetDocumentAnswer("ServiceArea").ToLower() != "IKEA Food".ToLower() && Model.GetDocumentAnswer("BusinessUnit").ToLower() != "CSC".ToLower())
         {
           
@@ -92,6 +80,10 @@
          
         }
 
+        <p>
+            <strong style="text-decoration: underline;">Speakap</strong><br />
+            De app voor IKEA medewerkers heet Speakap. In deze app vind je het nieuws en updates van jouw winkel of je team. Je kunt de app voor IOS en Android downloaden of je bekijkt Speakap op je computer via ikeanederland.speakap.nl. De uitnodiging hiervan ontvang je via je IKEA mailadres.
+        </p>
 
         <p>
             <strong style="text-decoration: underline;">Hulp nodig?</strong><br />

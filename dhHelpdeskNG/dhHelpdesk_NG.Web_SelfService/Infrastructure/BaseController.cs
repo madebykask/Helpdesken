@@ -658,7 +658,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             if(SessionFacade.CurrentCustomer != null)
             {
                 masterViewModel.SelectedCustomerId = SessionFacade.CurrentCustomer.Id;
-                masterViewModel.CustomerSetting = this._masterDataService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
+                masterViewModel.CustomerSetting = this._masterDataService.GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
             }
             this.ViewData[Constants.ViewData.MasterViewData] = masterViewModel;
         }

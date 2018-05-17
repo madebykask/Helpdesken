@@ -225,6 +225,12 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = GetFieldStatusType(ruleMode, TranslationCaseFields.UpdateNotifierInformation, caseFieldSettings, CaseSolutionFields.UpdateNotifierInformation, templateSettingModel.ToList())
             };
 
+            caseBasicInfo.AddFollowersBtn = new BasicSingleItemField()
+            {
+                Selected = new FieldItem(currentData.AddFollowersBtn.ToString(), string.Empty),
+                StatusType = GetFieldStatusType(ruleMode, TranslationCaseFields.AddFollowersBtn, caseFieldSettings, CaseSolutionFields.AddFollowersBtn, templateSettingModel.ToList())
+            };
+
             var regions = _regionService.GetRegions(customerId);
             var defaultRegion = regions.FirstOrDefault(r => r.IsDefault != 0 && r.IsActive != 0);
             caseBasicInfo.Regions = new BasicMultiItemField()
@@ -556,7 +562,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 
             caseBasicInfo.WorkingGroups.Items.Insert(0, new FieldItem("-1", string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_WORKINGGROUP_CAPTION))));
 
-            var admins = _userService.GetAvailablePerformersOrUserId(customerId);
+            var admins = _userService.GetAvailablePerformersOrUserId(customerId, null, true);
             caseBasicInfo.Administrators = new BasicMultiItemField()
             {
                 Selected = new FieldItem(currentData.PerformerUser_Id?.ToString(), string.Empty),
@@ -568,8 +574,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                                                                 string.Format("{0} {1}", a.FirstName, a.SurName) : string.Format("{0} {1}", a.SurName, a.FirstName)),
                                                          a.IsActive != 0)
                               {
-                                  ForeignKeyValue1 = string.Join(",", a.UserWorkingGroups.Where(w => w.UserRole == WorkingGroupUserPermission.ADMINSTRATOR && w.IsMemberOfGroup)
-                                                                                        .Select(w => w.WorkingGroup_Id)
+                                  ForeignKeyValue1 = string.Join(",", a.WorkingGroups.Where(w => w.UserRole == WorkingGroupUserPermission.ADMINSTRATOR && w.IsMemberOfGroup)
+                                                                                        .Select(w => w.WorkingGroupId)
                                                                                         .ToArray())
                               })
                               .OrderBy(i => i.ItemText).ToList()
@@ -1077,7 +1083,25 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = basicInformation.UpdateUserInfo.StatusType
             };
             ret.Add(attrUpdateUserInfo);
+            #endregion
 
+            #region AddFollowersBtn
+
+            curField = TranslationCaseFields.AddFollowersBtn.ToString();
+            var attrAddFollowersBtn = new FieldAttributeModel()
+            {
+                FieldId = curField,
+                FieldName = curField,
+                FieldCaption = Translation.Get(curField, Enums.TranslationSource.CaseTranslation, customerId),
+                FieldType = CaseFieldType.CheckBox,
+                DefaultItem = new FieldItem(string.Empty, string.Empty, true),
+                Selected = basicInformation.AddFollowersBtn.Selected,
+                IsAvailableOnHelpdesk = caseFieldSettings.getShowOnStartPage(curField).ToBool(),
+                IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
+                IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
+                StatusType = basicInformation.AddFollowersBtn.StatusType
+            };
+            ret.Add(attrAddFollowersBtn);
             #endregion
 
             #region Region

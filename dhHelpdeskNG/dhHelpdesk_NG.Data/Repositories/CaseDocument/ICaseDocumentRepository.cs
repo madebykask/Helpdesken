@@ -8,8 +8,7 @@
 
     public interface ICaseDocumentRepository : IRepository<CaseDocumentEntity>
     {
-        CaseDocumentModel GetCaseDocument(Guid caseDocumentGUID);
-
-        IEnumerable<CaseDocumentModel> GetCaseDocumentsByCustomer(int customerId);
+        CaseDocumentModel GetCaseDocumentFull(Guid caseDocumentGUID);
+        IList<CaseDocumentOverview> GetCustomerCaseDocumentsWithConditions(int caseId, int customerId);
     }
 }

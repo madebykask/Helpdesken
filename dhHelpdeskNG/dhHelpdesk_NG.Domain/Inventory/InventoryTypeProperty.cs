@@ -17,6 +17,8 @@
         public string PropertyValue { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string XMLTag { get; set; }
+        public int ReadOnly { get; set; }
 
         public virtual InventoryType InventoryType { get; set; }
 

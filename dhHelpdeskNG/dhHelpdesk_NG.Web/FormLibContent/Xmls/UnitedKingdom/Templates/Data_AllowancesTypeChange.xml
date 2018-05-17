@@ -2,6 +2,7 @@
 <options>
   <option value=""></option>
   <option value="Annualised Hours Allowance">Annualised Hours Allowance</option>
+  <option value="Buyout Hourly Allowance">Buyout Hourly Allowance</option>
   <option value="Car Allowance">Car Allowance</option>
   <option value="Cash Adjustment">Cash Adjustment</option>
   <option value="Commission">Commission</option>
@@ -12,18 +13,19 @@
   <option value="Electricity Home Workers">Electricity Home Workers</option>
   <option value="First Aid Allowance">First Aid Allowance</option>
   <option value="Fork Lift Truck Allowance">Fork Lift Truck Allowance</option>
-  <option value="Hourly ACE">Hourly ACE</option>
-  <option value="Hourly AHP">Hourly AHP</option>
+  <option value="Fork Lift Truck Allowance Distribution">Fork Lift Truck Allowance Distribution</option>
+  <option value="Hourly ACE" disabled="1">Hourly ACE</option>
+  <option value="Hourly AHP" disabled="1">Hourly AHP</option>
   <option value="Hourly Day">Hourly Day</option>
   <option value="Hourly Rate Deputy Team Leader">Hourly Rate Deputy Team Leader</option>
   <option value="Housing Allowance">Housing Allowance</option>
   <option value="IKEA1 Skills">IKEA1 Skills</option>
   <option value="IKEA2 Skills">IKEA2 Skills</option>
   <option value="Kitchen Skills">Kitchen Skills</option>
-  <option value="Loaders">Loaders</option>
-  <option value="Manual Hand">Manual Hand</option>
+  <option value="Loaders" disabled="1">Loaders</option>
+  <option value="Manual Hand" disabled="1">Manual Hand</option>
   <option value="MHE Trainer Allowance">MHE Trainer Allowance</option>
-  <option value="MHS/H&amp;S">MHS/H&amp;S</option>
+  <option value="MHS/H&amp;S" disabled="1">MHS/H&amp;S</option>
   <option value="Mortgage Subsidy">Mortgage Subsidy</option>
   <option value="Night Shift (Distribution Only)">Night Shift (Distribution Only)</option>
   <option value="NTG Double Housing">NTG Double Housing</option>
@@ -38,6 +40,6 @@
   <option value="Salary Day Shift">Salary Day Shift</option>
   <option value="Salary Nightshift">Salary Nightshift</option>
   <option value="Secondment">Secondment</option>
-  <option value="Shunter Allow">Shunter Allow</option>
+  <option value="Shunter Allow" disabled="1">Shunter Allow</option>
   <option value="Stand By Allowance">Stand By Allowance</option>
 </options>

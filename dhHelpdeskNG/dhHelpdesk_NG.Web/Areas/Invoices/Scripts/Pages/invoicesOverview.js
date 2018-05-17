@@ -48,6 +48,7 @@ InvoicesOverview.prototype = {
                 ajax: {
                     url: self.options.getListUrl,
                     type: "GET",
+                    cache: false,
                     data: function (data) {
                         var params = self._getInvoicesGridParams();
                         //params.push({ name: "start", value: data.start });

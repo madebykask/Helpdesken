@@ -69,7 +69,7 @@
 <body>
         <div class="default-page">
 @Html.Partial("../Shared/Pdfs/_Debug", Model)
-    @Html.Partial("../Shared/Pdfs/_SectionAddressTop", Model)
+    @Html.Partial("../Shared/Pdfs/_SectionAddressTop", Model , new ViewDataDictionary { { "HeaderName", "Persoonlijk/Vertrouwelijk" }})
     <p>Betreft: arbeidsovereenkomst<br />
         <br />
         Beste @Model.GetDocumentAnswer("FirstName", true),
@@ -80,15 +80,18 @@
 
     Verder vind je nog de volgende zaken bijgesloten:
     <ul class="nomargin_ul">
-        <li>Een toelichting op je salarisbetaling bij IKEA.</li>
+        @*SG . commented because WO #57242*@
+        @*<li>Een toelichting op je salarisbetaling bij IKEA.</li>*@
         <li>IKEA wil graag weten of je loonheffingskorting wilt toepassen over het salaris dat je ontvangt. Je kan dit aangeven op de bijgevoegde loonbelastingverklaring.</li>
-        <li>Wij sturen je tevens de omschrijving van je nieuwe functie (een functieprofiel) toe. We adviseren je deze door te lezen en mee te nemen op je eerste werkdag. Aan de hand van dit functieprofiel worden ook het afspraken- en beoordelingsgesprek gevoerd.</li>
+        @*<li>Wij sturen je tevens de omschrijving van je nieuwe functie (een functieprofiel) toe. We adviseren je deze door te lezen en mee te nemen op je eerste werkdag. Aan de hand van dit functieprofiel worden ook het afspraken- en beoordelingsgesprek gevoerd.</li>*@
         <li>Bijlage ‘Altijd toegang tot jouw IKEA’, hier kan je onderstaande zaken bekijken, wijzigen en aanvragen.</li>
             <ul class="dash_ul">
                 <li>&nbsp;&nbsp;HR gerelateerde informatie, waaronder de IKEA CAO</li>
                 <li>&nbsp;&nbsp;Salarisstrook en persoonsgegevens</li>
                 <li>&nbsp;&nbsp;Rooster en verlofaanvragen</li>
                 <li>&nbsp;&nbsp;Bestellen van je bedrijfskleding</li>
+                <li>&nbsp;&nbsp;De omschrijving van je nieuwe functie (functieprofiel). Aan de hand van dit<br />
+                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;functieprofiel worden ook het afspraken- en beoordelingsgesprek gevoerd</li>
             </ul>
     </ul>
     <br />
@@ -120,7 +123,7 @@
         {
 
             <p>
-                Voor het regelen van je leaseauto kan je contact opnemen met Marion Blankenzee, General Accounting Co-worker, per telefoonnummer 020-5643888 of per e-mail: <a href="mailto:marion.blankenzee@IKEA.com">marion.blankenzee@IKEA.com</a>. 
+                Voor het regelen van je leaseauto kan je contact opnemen met de HR Business Partners van het Service Office, per telefoonnummer 020-5643888 of per e-mail: <a href="mailto:HRSO.NL@IKEA.com">HRSO.NL@IKEA.com</a>. 
             </p>
 
             @*Paragraph appears if PM.CS.18 Type of car= "necessity car without the option to drive privately"*@
@@ -134,7 +137,7 @@
         }
     }
 
-    <p>Om alvast kennis te maken met je nieuwe vestiging nodigen we je uit om met je familie en/of vrienden een dagje te komen winkelen. Daarom ontvang je hierbij  een tegoedbon voor het IKEA restaurant om deze dag iets te eten en te drinken en een IKEA cadeaupas om een artikel naar keuze te kopen. Op IKEA.com/nl kan je alvast inspiratie opdoen. Veel plezier!</p>
+    <p>Om alvast kennis te maken met je nieuwe vestiging nodigen we je uit om met je familie en/of vrienden een dagje te komen winkelen. Daarom ontvang je hierbij een IKEA cadeaupas om een artikel naar keuze te kopen. Op IKEA.com/nl kan je alvast inspiratie opdoen. Veel plezier!</p>
 
     <p>We hopen je hiermee voldoende te hebben geïnformeerd. Heb je vragen over je contract of over de andere documenten dan kan je contact opnemen met je manager of de HR afdeling van jouw vestiging.</p>
 
@@ -168,7 +171,7 @@
         Number = Number + 1;
         
         //2
-        string text2 = "De werknemer wordt aangesteld in de functie van " + Model.GetDocumentAnswer("LocalJobTitle", true) + " op het Service Office. Deze functie is ingedeeld in functieschaal " + Model.GetDocumentAnswer("PayScaleLevel", true) + ".";
+        string text2 = "De medewerker wordt aangesteld in de functie van " + Model.GetDocumentAnswer("LocalJobTitle", true) + " op het Service Office. Deze functie is ingedeeld in functieschaal " + Model.GetDocumentAnswer("PayScaleLevel", true) + ".";
         list.Add(new PdfListItem { Text = text2, Number = Number.ToString() });
         Number = Number + 1;
         
@@ -198,7 +201,7 @@
      
         //5
         //Number = list.Count() + 1;
-        string text5 = "Het dienstverband tussen werkgever en medewerker eindigt in ieder geval van rechtswege bij het bereiken van de pensioengerechtigde leeftijd door medewerker.";
+        string text5 = "Het dienstverband tussen werkgever en medewerker eindigt in ieder geval op de dag waarop de medewerker de AOW-gerechtigde leeftijd heeft bereikt.";
         list.Add(new PdfListItem { Text = text5, Number = Number.ToString() });
         Number = Number + 1;
 
@@ -395,7 +398,7 @@
                 @*Paragraph appears if PM.CS.18 Type of car= "necessity car without the option to drive privately"*@
                 if (Model.GetDocumentAnswer("TypeOfCar" + MultipleNr).ToLower() == "necessity car without the option to drive privately".ToLower())
                 {
-                    text8c += "<br /> De medewerker kan de lease-auto alleen gebruiken voor zakelijke doeleinden. Medewerker dient hiervoor een verklaring “geen privégebruik auto” aan te vragen bij de belastingdienst.";
+                    text8c += "<br /> De medewerker rijdt de leaseauto alleen voor zakelijke doeleinden. Medewerker dient hiervoor een verklaring “geen privégebruik auto” aan te vragen bij de belastingdienst.";
                 }
                 
                 @*Paragraph appears if PM.CS.18 Type of car= "benefit car, for business and private use"*@
@@ -685,8 +688,8 @@
         if( Model.GetDocumentAnswer("PayScaleType").ToLower() == "IKEA NL CAO".ToLower())
         {
             //Number = list.Count() + 1;
-            
-            string text10 = "Op deze arbeidsovereenkomst is de laatst overeengekomen IKEA CAO van toepassing, ook als de looptijd daarvan is verstreken en nog geen nieuwe cao tot stand is gekomen. Indien de IKEA CAO wijzigt en dit van invloed is op de bovenstaande bepalingen dan geldt voor beide partijen de nieuwe CAO regel en komt de relevante bovenstaande bepaling te vervallen. Verder dient de werknemer de huisregels in acht te nemen. De IKEA Group Code of Conduct en de regels die zijn opgenomen in Mijn IKEA van toepassing. De IKEA CAO en de IKEA Group Code of Conduct zijn te raadplegen op en downloaden via de internetsite ico-worker.com/nl. De inloggegevens voor deze site vind je in de bijgesloten brief. Op verzoek van de medewerker stuurt IKEA een digitale versie per e-mail of een geprinte versie per gewone post toe van de toepasselijke regels. Het boekje Mijn IKEA ontvangt de medewerker tegelijk met deze arbeidsovereenkomst.";
+
+            string text10 = "Op deze arbeidsovereenkomst is de laatst overeengekomen IKEA CAO van toepassing, ook als de looptijd daarvan is verstreken en nog geen nieuwe CAO tot stand is gekomen. Indien de IKEA CAO wijzigt en dit van invloed is op de bovenstaande bepalingen dan geldt voor beide partijen de nieuwe CAO regel en komt de relevante bovenstaande bepaling te vervallen. Verder dient de medewerker de huisregels in acht te nemen. De IKEA Group Code of Conduct en de regels die zijn opgenomen in Mijn IKEA zijn van toepassing. De IKEA CAO en de IKEA Group Code of Conduct zijn te raadplegen op en te downloaden via de internetsite ico-worker.com/nl. De inloggegevens voor deze site vind je in de bijgesloten brief. Op verzoek van de medewerker stuurt IKEA een digitale versie per e-mail of een geprinte versie per gewone post toe van de toepasselijke regels. Het boekje Mijn IKEA ontvangt de medewerker tegelijk met deze arbeidsovereenkomst.";
             list.Add(new PdfListItem { Text = text10, Number = Number.ToString() });
             Number = Number + 1;
         }
@@ -696,7 +699,7 @@
            
             string text10 = "Hoewel de IKEA CAO niet op deze arbeidsovereenkomst van toepassing is, worden de artikelen met de volgende onderwerpen uit de laatst overeengekomen IKEA CAO door ondertekening van deze arbeidsovereenkomst op de arbeidsovereenkomst van toepassing en worden die geacht daarvan onderdeel uit te maken, ook als de looptijd van deze CAO is verstreken en nog geen nieuwe CAO tot stand is gekomen:";
 
-            text10 += "<br /><ul class=\"dash_ul\"><li> Ontwikkel- en beoordelingscyclus (II, artikel 4)</li><li> Beloningssysteem (II, artikel 5)</li><li> Personeelskorting (II, artikel 9)</li><li> Pensioen (II, artikel 10)</li><li> Vergoedingen incidentele dienstreizen binnen- en buitenland (II, artikel 30)</li>";
+            text10 += "<br /><ul class=\"dash_ul\"><li> Ontwikkel- en beoordelingscyclus (II, artikel 4)</li><li> Beloningssysteem (II, artikel 5)</li><li> Personeelskorting (II, artikel 9)</li><li> Pensioen (II, artikel 10)</li><li> Vergoedingen incidentele dienstreizen binnen- en buitenland (IV, artikel 30)</li>";
             text10 += "<li> Algemeen (wettelijk) verlof (VI, artikel 41)</li><li> Bijzonder verlof met behoud van salaris (VI, artikel 42)</li><li> Gezondheidsbeleid (VII, artikel 45 t/m 52)</li><li> Verzekeringen (VIII, artikel 55 t/m 59).</li></ul>";
 
             text10 += "De tussen haakjes vermelde artikelen verwijzen naar de desbetreffende bepalingen van de IKEA CAO zoals deze luidde ten tijde van het aangaan van de arbeidsovereenkomst. Indien een of meer van de bovengenoemde bepalingen of de nummering ervan in een latere IKEA CAO wijzigen, treden deze gewijzigde bepalingen in de plaats van die bepalingen.";

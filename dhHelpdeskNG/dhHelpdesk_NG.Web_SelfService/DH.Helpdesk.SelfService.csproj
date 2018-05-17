@@ -320,6 +320,7 @@
     <Compile Include="Infrastructure\Extensions\ObjectExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\RequestExtension.cs" />
     <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\TempDataExtensions.cs" />
     <Compile Include="Infrastructure\Filters\Notifiers\NotifierFilters.cs" />
     <Compile Include="Infrastructure\Helpers\ModelStateExtensions.cs" />
     <Compile Include="Infrastructure\Helpers\UrlsHelper.cs" />
@@ -439,6 +440,7 @@
     <Content Include="Content\css\bootstrap-datepicker3.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\case-mobile.css" />
     <Content Include="Content\css\chosen-sprite%402x.png" />
     <Content Include="Content\css\chosen-sprite.png" />
     <Content Include="Content\css\chosen.css" />

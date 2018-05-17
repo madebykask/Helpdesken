@@ -153,6 +153,7 @@
             this.Property(u => u.ShowCaseStatistics).IsRequired();
             this.Property(x => x.DocumentPermission).IsRequired();
             this.Property(x => x.InventoryPermission).IsRequired();
+            this.Property(x => x.ContractPermission).IsRequired();
             this.Property(x => x.SettingForNoMail).IsRequired();
 
             this.Property(x => x.UserGUID).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);

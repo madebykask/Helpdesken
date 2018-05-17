@@ -59,13 +59,17 @@
                 if (this.WorkContext.User != null && !this.WorkContext.User.IsUserEmpty())
                 {
                     res.AppendLine(string.Format("UserId: {0}", this.WorkContext.User.UserId));
-                    res.AppendLine(string.Format("User: {0}", string.Format("{0} {1}", this.WorkContext.User.FirstName, this.WorkContext.User.LastName)));
+                    
+                    // was commented to meet GDPR requirements
+                    //res.AppendLine(string.Format("User: {0}", string.Format("{0} {1}", this.WorkContext.User.FirstName, this.WorkContext.User.LastName)));
                 }
 
                 if (this.WorkContext.Customer != null && !this.WorkContext.Customer.IsCutomerEmpty())
                 {
                     res.AppendLine(string.Format("CustomerId: {0}", this.WorkContext.Customer.CustomerId));
-                    res.AppendLine(string.Format("Customer: {0}", this.WorkContext.Customer.CustomerName));
+                    
+                    // was commented to meet GDPR requirements
+                    //res.AppendLine(string.Format("Customer: {0}", this.WorkContext.Customer.CustomerName));
                 }
             }
 

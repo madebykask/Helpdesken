@@ -1,0 +1,23 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.ComputerModuleEditModel
+
+<table class="tableform">
+    <tr>
+        <td class="span3">
+            <label>@Translation.Get("Datortyp")</label>
+        </td>
+        <td class="span9">
+            @Html.EditorFor(m => m.Name)
+            @Html.ValidationMessageFor(m => m.Name)
+        </td>
+    </tr>
+    <tr>
+        <td class="span3">
+            <label>@Translation.Get("Beskrivning")</label>
+        </td>
+        <td class="span9">
+            @Html.EditorFor(m => m.Description, new {maxlength = 50})
+            @Html.ValidationMessageFor(m => m.Description)
+        </td>
+    </tr>
+</table>

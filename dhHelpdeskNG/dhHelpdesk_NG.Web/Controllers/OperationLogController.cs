@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Common.Extensions.Integer;
+﻿using DH.Helpdesk.BusinessData.Models.User;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -201,6 +202,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 this._operationLogService.SendOperationLogSMS(operationlog, SMSRecipients, txtSMS, customer);
             }
+
+            SaveRssFeed(operationlog.Customer_Id);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("index", "operationlog");
@@ -442,7 +445,7 @@ namespace DH.Helpdesk.Web.Controllers
             return model;
         }
 
-        private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<DHDomain.User> users, Setting customerSetting)
+        private SendToDialogModel CreateNewSendToDialogModel(int customerId, IList<CustomerUserInfo> users, Setting customerSetting)
         {
             var emailGroups = _emailGroupService.GetEmailGroupsWithEmails(customerId);
             var workingGroups = _workingGroupService.GetWorkingGroupsWithActiveEmails(customerId);

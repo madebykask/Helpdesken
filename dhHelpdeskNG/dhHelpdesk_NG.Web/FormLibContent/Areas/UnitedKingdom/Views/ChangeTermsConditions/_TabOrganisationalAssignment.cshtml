@@ -98,6 +98,10 @@
                     <td>@Model.Element("NewPosition")</td>
                 </tr>
                 <tr>
+                    <td class="tdstrong">@Model.Label("CoworkerApprentice")</td>
+                    <td>@Model.Element("CoworkerApprentice")</td>
+                </tr>
+                <tr>
                     <td class="tdstrong">@Model.Label("ReportsToLineManager")</td>
                     <td>@Model.Element("ReportsToLineManager")</td>
                     <td>
@@ -113,7 +117,7 @@
                     <td class="tdstrong">@Model.Label("ChiefPosition")</td>
                     <td>@Model.Element("ChiefPosition")
                         <div id="notice_ChiefPosition" style="display:inline-block; color:black;" class="notice">
-                                @Model.Translate("Indicate if Manager/TL should have a Chief Position in GlobalView")
+                                @Model.Translate("Mark chief position: “yes” if the co-worker is to take chief position")
                         </div>
                     </td>
                 </tr>

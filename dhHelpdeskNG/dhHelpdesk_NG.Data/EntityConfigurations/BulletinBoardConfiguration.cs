@@ -32,7 +32,7 @@
             this.Property(x => x.ShowOnStartPage).IsRequired();
             this.Property(x => x.ShowUntilDate).IsOptional();
             this.Property(x => x.Text).IsRequired().HasMaxLength(4000).HasColumnName("BulletinBoardText");
-            this.Property(x => x.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(x => x.ChangedDate).IsRequired();
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 

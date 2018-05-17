@@ -427,9 +427,9 @@
             }
         }
 
-        public IList<ChangeEntity> GetChanges(int customerId)
+        public IList<ChangeOverview> GetChanges(int customerId)
         {
-            return this.changeRepository.GetChanges(customerId).OrderBy(x => x.OrdererName).ToList();
+            return this.changeRepository.GetChanges(customerId).ToList();
         }
 
         public byte[] GetFileContent(int changeId, Subtopic subtopic, string fileName)

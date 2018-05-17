@@ -5,8 +5,6 @@
     <div class="span6">
         <table class="table">
             <tbody>
-
-
                 <tr>
                     <td class="tdstrong" colspan="2">
                         <h4>@Model.Translate("Allowances")</h4>
@@ -24,30 +22,18 @@
                         @Model.Element("AllowancesType")
                     </td>
                 </tr>
-@*                <tr>
-                    <td class="tdstrong">@Model.Label("AllowancesPaymentType")</td>
-                    <td>
-                        @Model.Element("AllowancesPaymentType")
-                    </td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesAmountUnits")</td>
                     <td>
                         @Model.Element("AllowancesAmountUnits")
                     </td>
                 </tr>
-                                <tr>
+                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesPaidPer")</td>
                     <td>
                         @Model.Element("AllowancesPaidPer")
                     </td>
                 </tr>
-@*                <tr>
-                    <td class="tdstrong">@Model.Label("AllowancesNetGross")</td>
-                    <td>
-                        @Model.Element("AllowancesNetGross")
-                    </td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("AllowancesValidFrom")</td>
                     <td>
@@ -60,7 +46,6 @@
                         @Model.Element("AllowancesValidTo")
                     </td>
                 </tr>
-
                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="allowance@(i.ToString())" id="allowance@(i.ToString())">
@@ -78,12 +63,6 @@
                         <td>
                             @Model.Element("AllowancesType" + i.ToString())</td>
                     </tr>
-                    @*
-                    <tr class="allowance@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("AllowancesPaymentType" + i.ToString())</td>
-                        <td>
-                            @Model.Element("AllowancesPaymentType" + i.ToString())</td>
-                    </tr>*@
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesAmountUnits" + i.ToString())</td>
                         <td>
@@ -94,12 +73,6 @@
                         <td>
                             @Model.Element("AllowancesPaidPer" + i.ToString())</td>
                     </tr>
-                    @*
-                    <tr class="allowance@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("AllowancesNetGross" + i.ToString())</td>
-                        <td>
-                            @Model.Element("AllowancesNetGross" + i.ToString())</td>
-                    </tr>*@
                     <tr class="allowance@(i.ToString())">
                         <td class="tdstrong">@Model.Label("AllowancesValidFrom" + i.ToString())</td>
                         <td>
@@ -116,7 +89,6 @@
                         @Model.Element("Allowances")
                         <a id="addAllowance" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Allowance")</a></td>
                 </tr>
-
             </tbody>
         </table>
     </div>
@@ -140,12 +112,6 @@
                         @Model.Element("DeductionsType")
                     </td>
                 </tr>
-@*                <tr>
-                    <td class="tdstrong">@Model.Label("DeductionsPaymentType")</td>
-                    <td>
-                        @Model.Element("DeductionsPaymentType")
-                    </td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsAmountUnits")</td>
                     <td>
@@ -158,12 +124,6 @@
                         @Model.Element("DeductedPer")
                     </td>
                 </tr>
-@*                <tr>
-                    <td class="tdstrong">@Model.Label("DeductionsNetGross")</td>
-                    <td>
-                        @Model.Element("DeductionsNetGross")
-                    </td>
-                </tr>*@
                 <tr>
                     <td class="tdstrong">@Model.Label("DeductionsValidFrom")</td>
                     <td>
@@ -176,7 +136,6 @@
                         @Model.Element("DeductionsValidTo")
                     </td>
                 </tr>
-
                 @for (int i = 2; i <= FormLibConstants.FormField.MultipleEntrySectionsNr; i++)
                 {
                     <tr class="deduction@(i.ToString())" id="deduction@(i.ToString())">
@@ -194,12 +153,6 @@
                         <td>
                             @Model.Element("DeductionsType" + i.ToString())</td>
                     </tr>
-                    @*
-                    <tr class="deduction@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("DeductionsPaymentType" + i.ToString())</td>
-                        <td>
-                            @Model.Element("DeductionsPaymentType" + i.ToString())</td>
-                    </tr>*@
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsAmountUnits" + i.ToString())</td>
                         <td>
@@ -210,12 +163,6 @@
                         <td>
                             @Model.Element("DeductedPer" + i.ToString())</td>
                     </tr>
-                    @*
-                    <tr class="deduction@(i.ToString())">
-                        <td class="tdstrong">@Model.Label("DeductionsNetGross" + i.ToString())</td>
-                        <td>
-                            @Model.Element("DeductionsNetGross" + i.ToString())</td>
-                    </tr>*@
                     <tr class="deduction@(i.ToString())">
                         <td class="tdstrong">@Model.Label("DeductionsValidFrom" + i.ToString())</td>
                         <td>
@@ -232,30 +179,13 @@
                         @Model.Element("Deductions")
                         <a id="addDeduction" class="btn btn-link btn-mini pull-right">@Model.Translate("Add another Deduction")</a></td>
                 </tr>
-
             </tbody>
         </table>
     </div>
     <input type="hidden" id="MultipleEntrySectionsNr" value="@FormLibConstants.FormField.MultipleEntrySectionsNr" />
-
 </div>
 
-
 <script>
-
-
-
-    @*  if (document.getElementById('DeductionsValidFrom').value == ''){
-                document.getElementById('DeductionsValidFrom').value = '@Model.GetAnswer("ChangeValidFrom")';
-            for (var i = 2; i <= 3; i++) {
-            
-                var DeductionsValidFrom = "DeductionsValidFrom" + [i].toString();
-            
-                document.getElementById(DeductionsValidFrom).value = '@Model.GetAnswer("ChangeValidFrom")';
-                
-            }
-        }*@
-
     function setPaymentDatePickersBehavior() {
 
         $('#date_AllowancesValidFrom,#date_AllowancesValidFrom2,#date_AllowancesValidFrom3,#date_AllowancesValidFrom4,#date_AllowancesValidFrom5,' +
@@ -301,54 +231,6 @@
 
         $('#date_' + $(this).attr("id")).datepicker("setValue", $(this).val());
     });
-
-    //function setDefaultDate(id) {
-    //    var input = $('#' + id);
-
-    //    if (input.val() == '') {
-    //        input.val('31.12.9999');
-    //    }
-    //}
-
-    //function disableDatePicker(id) {
-    //    var input = $('#' + id);
-    //    var datePicker = $('#date_' + id);
-
-    //    datePicker.datepicker("destroy");
-    //    datePicker.addClass("disabled");
-    //    input.val("");
-    //    document.getElementById(id).disabled = true;
-    //}
-
-    //function enableDatePicker(id) {
-    //    var input = $('#' + id);
-    //    var datePicker = $('#date_' + id);
-
-    //    datePicker.removeClass("disabled");
-    //    document.getElementById(id).disabled = false;
-    //    setDefaultDate(id);
-    //    datePicker.datepicker();
-    //}
-
-    //function setDatePickerBehavior(id) {
-    //    var input = $('#' + id);
-
-    //    //if (value == 'One Time') {
-    //    //    disableDatePicker(id);
-    //    //} else {
-    //    //    enableDatePicker(id);
-    //    //}
-    //}
-
-    //function setDefaultDatePickerBehavior(id) {
-    //    var input = $('#' + id);
-
-    //    //if (value == 'One Time') {
-    //    //    disableDatePicker(id);
-    //    //} else {
-    //    //    setDefaultDate(id);
-    //    //}
-    //}
 
     $('#AllowancesType').change(function () {
         setAllowanceType();
@@ -759,39 +641,4 @@
 
         });
     }
-
-
-    //$('#AllowancesPaymentType').change(function () {
-    //    setDatePickerBehavior('AllowancesValidTo');
-    //});
-    //setDefaultDatePickerBehavior('AllowancesValidTo');
-
-    ////$('#AllowancesPaymentType2').change(function () {
-    ////    setDatePickerBehavior('AllowancesValidTo2', $(this).val());
-    ////});
-    ////setDefaultDatePickerBehavior('AllowancesValidTo2', $('#AllowancesPaymentType2').val());
-
-    ////$('#AllowancesPaymentType3').change(function () {
-    ////    setDatePickerBehavior('AllowancesValidTo3', $(this).val());
-    ////});
-    ////setDefaultDatePickerBehavior('AllowancesValidTo3', $('#AllowancesPaymentType3').val());
-
-    //$('#DeductionsPaymentType').change(function () {
-    //    setDatePickerBehavior('DeductionsValidTo');
-    //});
-    //setDefaultDatePickerBehavior('DeductionsValidTo');
-
-    ////$('#DeductionsPaymentType2').change(function () {
-    ////    setDatePickerBehavior('DeductionsValidTo2', $(this).val());
-    ////});
-    ////setDefaultDatePickerBehavior('DeductionsValidTo2', $('#DeductionsPaymentType2').val());
-
-    ////$('#DeductionsPaymentType3').change(function () {
-    ////    setDatePickerBehavior('DeductionsValidTo3', $(this).val());
-    ////});
-    ////setDefaultDatePickerBehavior('DeductionsValidTo3', $('#DeductionsPaymentType3').val());
-
 </script>
-
-
-

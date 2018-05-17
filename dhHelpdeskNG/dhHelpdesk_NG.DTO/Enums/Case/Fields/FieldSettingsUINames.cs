@@ -9,7 +9,7 @@ namespace DH.Helpdesk.BusinessData.Enums.Case.Fields
 {
     public static class FieldSettingsUiNames
     {
-        public static Dictionary<string, string> Names = new Dictionary<string, string>
+        public static Dictionary<string, string> Names = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             { GlobalEnums.TranslationCaseFields.ReportedBy.ToString(), "Användar ID"},
             { GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), "Anmälare"},
@@ -37,7 +37,7 @@ namespace DH.Helpdesk.BusinessData.Enums.Case.Fields
             { GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString(), "Placering"},
             { GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString(), "Ansvarskod"},
             { GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), "PC Nummer"},
-            { GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), "Datortyp"},
+            { GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), "Datortyp beskrivning"},
             { GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), "Placering"},
             { GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), "Ärende"},
             { GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), "Källa"},
@@ -80,6 +80,10 @@ namespace DH.Helpdesk.BusinessData.Enums.Case.Fields
             { GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), "Extern notering"},
             { GlobalEnums.TranslationCaseFields.tblLog_Charge.ToString(), "Debitering"},
             { GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), "Bifogad fil"},
+            { "tblLog.Text_Internal", "Intern notering"}, //Those names are different from GlobalEnums.TranslationCaseFields
+            { "tblLog.Text_External", "Extern notering"},
+            { "tblLog.Charge", "Debitering"},
+            { "tblLog.Filename", "Bifogad fil"},
             { GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), "Avslutsbeskrivning"},
             { GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), "Avslutsdatum"},
             { GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), "Avslutsorsak"},

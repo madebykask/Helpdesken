@@ -5,6 +5,13 @@
 
 @{
     Layout = null;
+    var txt = string.Empty;
+    var txt2 = "medewerker";
+    if (ViewData["SignatureText"] != null)
+    {
+        txt = ViewData["SignatureText"].ToString();
+    }
+    txt = (txt == string.Empty) ? txt2 : txt;
 }
 <!DOCTYPE html>
 <html>
@@ -14,12 +21,12 @@
     @Html.Partial("../Shared/Pdfs/_Styles", Model)
     @Model.GetStyleAnswer("GetStyles")
 
-    <style>
+    @*<style>
         table, p {
             font-size: 10pt !important; 
             line-height: normal !important;
         }
-    </style>
+    </style>*@
 
 </head>
 <body>
@@ -29,19 +36,19 @@
         </tr>
     </table>
     <div class="default-page">
-        <p>
+        <p style="line-height: normal !important; font-size: 10pt !important">
             <strong>Bijlage bij het contract betreffende Protocol 4</strong><br />
         </p>
-        <p>
+        <p style="line-height: normal !important; font-size: 10pt !important">
            Aansluitend op de afspraken, zoals deze zijn vastgelegd in de CAO, kan IKEA gebruik maken van de mogelijkheid om de medewerker extra in te roosteren op inconveniënte uren. Dit is conform artikel 19C betreffende protocol 4. 
         </p>
-        <p>Het inroosteren van de inconveniënte uren zal zoveel mogelijk in overleg met de medewerker gebeuren.</p>
+        <p style="line-height: normal !important; font-size: 10pt !important">Het inroosteren van de inconveniënte uren zal zoveel mogelijk in overleg met de medewerker gebeuren.</p>
 
-        <p>In onderstaande tabel wordt aangegeven binnen welke kaders afspraken kunnen worden gemaakt ten aanzien van extra in te roosteren inconveniënte uren.</p>
-        <p>Tabel 1: Aanvullende afspraken inconveniënte uren:</p>
+        <p style="line-height: normal !important; font-size: 10pt !important">In onderstaande tabel wordt aangegeven binnen welke kaders afspraken kunnen worden gemaakt ten aanzien van extra in te roosteren inconveniënte uren.</p>
+        <p style="line-height: normal !important; font-size: 10pt !important">Tabel 1: Aanvullende afspraken inconveniënte uren:</p>
 
         
-            <table class="table-full-width table-bordered table-appendix">
+            <table style="line-height: normal !important; font-size: 10pt !important" class="table-full-width table-bordered table-appendix">
                 <tr>
                     <th style="border:none !important;"></th>
                     <th style="border:none !important;" colspan="4"><strong>aantal contracturen</strong></th>
@@ -90,13 +97,11 @@
         <br />
         <table>
             <tr>
-                <td>*&nbsp;&nbsp;</td>
-                <td style="font-size:9pt !important;">Vestigingen die meer dan 12 koopzondagen/feestdagen per jaar geopend zijn, kunnen in overleg met de medewerker tot een maximum van 50% van het aantal openstellingen, contractuele afspraken maken over het extra inroosteren op deze zondagen/feestdagen.</td>
+                <td style="line-height: normal !important; font-size:9pt !important;">*&nbsp;&nbsp;</td>
+                <td style="line-height: normal !important; font-size:9pt !important;">Vestigingen die meer dan 12 koopzondagen/feestdagen per jaar geopend zijn, kunnen in overleg met de medewerker tot een maximum van 50% van het aantal openstellingen, contractuele afspraken maken over het extra inroosteren op deze zondagen/feestdagen.</td>
             </tr>
         </table>
-        <br />
-        <br />
-        <br />
+       
          @Html.Partial("../Shared/Pdfs/_CityDate", Model)
         <br />
 <table class="table-full-width">
@@ -104,7 +109,7 @@
         <td style="width: 50%; min-width: 50%;">Met vriendelijke groet,<br />IKEA B.V. Nederland
            
         </td>
-        <td style="width: 50%; min-width: 50%;vertical-align:bottom;">Handtekening medewerker
+        <td style="width: 50%; min-width: 50%;vertical-align:bottom;">Handtekening @txt
         </td>
     </tr>
   

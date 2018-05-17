@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.Domain.Invoice;
+using LinqLib.Sort;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -41,7 +44,7 @@
         IEnumerable<Department> GetDepartmentsByIds(int[] departmentsIds);
 
         IList<Department> GetChargedDepartments(int customerId);
-        bool CanShowInvoice(int departmentId, int? ouId = null);
+        bool CheckIfOUsRequireDebit(int departmentId, int? ouId = null);
 
         int? GetDepartmentIdByCustomerAndName(int customerId, string name);
 
@@ -83,7 +86,12 @@
         public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool isOnlyActive = true)
         {
             var departments = _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive);
-            return departments.Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0) && (isOnlyActive? d.IsActive !=0: true)).ToList();
+            var res = departments.Where(d => d.Region_Id == null ||
+                                             (d.Region != null && d.Region.IsActive != 0) &&
+                                             (!isOnlyActive || d.IsActive != 0))
+                                 .OrderBy(d => d.DepartmentName)
+                                 .ToList();
+            return res;
         }
 
         public List<ItemOverview> GetUserDepartments(int customerId, int? userId, int? regionId, int departmentFilterFormat)
@@ -299,9 +307,8 @@
             return this._departmentRepository.GetMany(x => x.Customer_Id == customerId && x.Charge == 1)
                 .OrderBy(x => x.DepartmentName).ToList();
         }
-
         
-        public bool CanShowInvoice(int departmentId, int? ouId = null)
+        public bool CheckIfOUsRequireDebit(int departmentId, int? ouId = null)
         {
             var ous = _ouRepository.GetMany(o => o.Department_Id.HasValue && o.Department_Id == departmentId);
             if (!ous.Any(o => o.ShowInvoice))
@@ -310,8 +317,8 @@
             if (!ouId.HasValue)
                 return false;
 
-            var ou = ous.FirstOrDefault(o=> o.Id == ouId.Value && o.ShowInvoice);
-            return ou != null;            
+            var res = ous.Any(o => o.Id == ouId.Value && o.ShowInvoice);
+            return res;            
         }
     }
 }

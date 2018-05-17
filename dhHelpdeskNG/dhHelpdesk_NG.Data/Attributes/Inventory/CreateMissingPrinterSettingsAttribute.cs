@@ -143,6 +143,7 @@
         {
             CreateSettingIfNeeded(StateFields.CreatedDate, customerId, settingNames, settings);
             CreateSettingIfNeeded(StateFields.ChangedDate, customerId, settingNames, settings);
+            CreateSettingIfNeeded(StateFields.SyncDate, customerId, settingNames, settings);
         }
 
         private static void CreateSettingIfNeeded(

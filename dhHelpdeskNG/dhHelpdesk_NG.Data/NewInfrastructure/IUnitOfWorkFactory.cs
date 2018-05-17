@@ -4,6 +4,8 @@ namespace DH.Helpdesk.Dal.NewInfrastructure
     {
         IUnitOfWork Create();
 
+        IUnitOfWork Create(int timeout);
+
         IUnitOfWork CreateWithDisabledLazyLoading();
     }
 }

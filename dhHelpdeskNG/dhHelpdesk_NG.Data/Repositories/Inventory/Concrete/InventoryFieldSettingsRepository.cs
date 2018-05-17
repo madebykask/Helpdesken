@@ -52,6 +52,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Info, businessModel.DefaultSettings.InfoFieldSetting, businessModel.CreatedDate, this.DbSet);
             AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.CreatedDate, businessModel.DefaultSettings.CreatedDateFieldSetting, businessModel.CreatedDate, this.DbSet);
             AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.ChangedDate, businessModel.DefaultSettings.ChangedDateFieldSetting, businessModel.CreatedDate, this.DbSet);
+            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.SyncDate, businessModel.DefaultSettings.SyncDateFieldSetting, businessModel.CreatedDate, this.DbSet);
         }
 
         public void Update(InventoryFieldSettings businessModel)
@@ -72,13 +73,14 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             MapFieldSetting(businessModel.DefaultSettings.InfoFieldSetting, fieldSettingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)), businessModel.ChangedDate);
             MapFieldSetting(businessModel.DefaultSettings.CreatedDateFieldSetting, fieldSettingCollection.FindByName(InventoryFields.CreatedDate.ToString(CultureInfo.InvariantCulture)), businessModel.ChangedDate);
             MapFieldSetting(businessModel.DefaultSettings.ChangedDateFieldSetting, fieldSettingCollection.FindByName(InventoryFields.ChangedDate.ToString(CultureInfo.InvariantCulture)), businessModel.ChangedDate);
+            MapFieldSetting(businessModel.DefaultSettings.SyncDateFieldSetting, fieldSettingCollection.FindByName(InventoryFields.SyncDate.ToString(CultureInfo.InvariantCulture)), businessModel.ChangedDate);
         }
 
         public InventoryFieldSettings GetFieldSettingsForEdit(int inventoryTypeId)
         {
             var settings = this.GetSettings(inventoryTypeId);
 
-            var anonymus = settings.Select(s => new { s.PropertyValue, s.PropertyType, s.Show, s.ShowInList, s.PropertySize, s.PropertyPos }).ToList();
+            var anonymus = settings.Select(s => new { s.PropertyValue, s.PropertyType, s.Show, s.ShowInList, s.PropertySize, s.PropertyPos, s.XMLTag, s.ReadOnly }).ToList();
 
             var mapperData = anonymus.Select(s =>
                     new InventoryFieldSettingMapperData
@@ -89,7 +91,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                             ShowInDetails = s.Show,
                             ShowInList = s.ShowInList,
                             PropertySize = s.PropertySize,
-                            Position = s.PropertyPos
+                            Position = s.PropertyPos,
+                            XMLTag = s.XMLTag,
+                            ReadOnly = s.ReadOnly
                         }).ToList();
 
             var settingCollection = new NamedObjectCollection<InventoryFieldSettingMapperData>(mapperData);
@@ -106,6 +110,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var info = CreateFieldSetting(settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
             var createdDate = CreateFieldSetting(settingCollection.FindByName(InventoryFields.CreatedDate.ToString(CultureInfo.InvariantCulture)));
             var changedDate = CreateFieldSetting(settingCollection.FindByName(InventoryFields.ChangedDate.ToString(CultureInfo.InvariantCulture)));
+            var syncDate = CreateFieldSetting(settingCollection.FindByName(InventoryFields.SyncDate.ToString(CultureInfo.InvariantCulture)));
 
             var settingAgregate = InventoryFieldSettings.CreateForEdit(
                     new BusinessData.Models.Inventory.Edit.Settings.InventorySettings.DefaultFieldSettings(
@@ -121,7 +126,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         workstation,
                         info,
                         createdDate,
-                        changedDate));
+                        changedDate,
+                        syncDate));
 
             return settingAgregate;
         }
@@ -136,7 +142,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         Caption = s.PropertyValue,
                         FieldName = s.PropertyType,
                         s.Show,
-                        s.PropertySize
+                        s.PropertySize,
+                        s.ReadOnly
                     }).ToList();
 
             var mapperData = anonymus.Select(s =>
@@ -145,7 +152,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         Caption = s.Caption,
                         FieldName = s.FieldName.ToString(CultureInfo.InvariantCulture),
                         Show = s.Show,
-                        ReadOnly = isReadonly ? 1 : 0,
+                        ReadOnly = isReadonly ? 1 : s.ReadOnly,
                         PropertySize = s.PropertySize
                     }).ToList();
 
@@ -161,6 +168,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var place = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.Place.ToString(CultureInfo.InvariantCulture)));
             var workstation = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.Workstation.ToString(CultureInfo.InvariantCulture)));
             var info = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
+            var createdDate = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.CreatedDate.ToString(CultureInfo.InvariantCulture)));
+            var changedDate = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.ChangedDate.ToString(CultureInfo.InvariantCulture)));
+            var syncDate = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.SyncDate.ToString(CultureInfo.InvariantCulture)));
 
             var settingAgregate = new InventoryFieldSettingsForModelEdit(
                     new BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings.DefaultFieldSettings(
@@ -174,7 +184,10 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         purchaseDate,
                         place,
                         workstation,
-                        info));
+                        info,
+                        createdDate,
+                        changedDate,
+                        syncDate));
 
             return settingAgregate;
         }
@@ -348,6 +361,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var info = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
             var createdDate = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.CreatedDate.ToString(CultureInfo.InvariantCulture)));
             var changedDate = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.ChangedDate.ToString(CultureInfo.InvariantCulture)));
+            var syncDate = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.SyncDate.ToString(CultureInfo.InvariantCulture)));
 
             var settingAgregate =
                     new BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings.DefaultFieldSettings(
@@ -363,7 +377,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         workstation,
                         info,
                         createdDate,
-                        changedDate);
+                        changedDate,
+                        syncDate);
 
             return new InventoryFieldSettingsOverview(settingAgregate);
         }
@@ -390,7 +405,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                 fieldSetting.Caption,
                 fieldSetting.PropertySize,
                 fieldSetting.ShowInDetails.ToBool(),
-                fieldSetting.ShowInList.ToBool());
+                fieldSetting.ShowInList.ToBool(),
+                fieldSetting.XMLTag,
+                fieldSetting.ReadOnly.ToBool());
         }
 
         private static InventoryFieldSetting CreateFieldSettingWithDefaultPropertySize(InventoryFieldSettingMapperData fieldSetting)
@@ -399,7 +416,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                 fieldSetting.Caption,
                 null,
                 fieldSetting.ShowInDetails.ToBool(),
-                fieldSetting.ShowInList.ToBool());
+                fieldSetting.ShowInList.ToBool(),
+                fieldSetting.XMLTag,
+                fieldSetting.ReadOnly.ToBool());
         }
 
         private static void MapFieldSetting(
@@ -411,6 +430,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             fieldSetting.Show = updatedSetting.ShowInDetails.ToInt();
             fieldSetting.ShowInList = updatedSetting.ShowInList.ToInt();
             fieldSetting.PropertyValue = updatedSetting.Caption;
+            fieldSetting.XMLTag = updatedSetting.XMLTag;
+            fieldSetting.ReadOnly = updatedSetting.ReadOnly.ToInt();
         }
 
         private static void AddFieldSetting(
@@ -431,7 +452,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                            PropertySize = newSetting.PropertySize ?? DefaultPropertySize,
                            PropertyPos = DefaultPosition,
                            PropertyType = propertyType,
-                           PropertyDefault = PropertyDefaultValue
+                           PropertyDefault = PropertyDefaultValue,
+                           XMLTag = newSetting.XMLTag,
+                           ReadOnly = newSetting.ReadOnly.ToInt()
                        };
 
             settings.Add(setting);

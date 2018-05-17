@@ -40,7 +40,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult GetRegions(int customerId)
         {
-            var regions = _regionService.GetRegions(customerId).Select(r => new { Id = r.Id, Name = r.Name, IsActive= r.IsActive.ToBool() });            
+            var regions = _regionService.GetRegionsOverview(customerId);            
             return Json(new { regions }, JsonRequestBehavior.AllowGet);
         }
 

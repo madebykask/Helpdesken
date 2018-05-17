@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Dal.Mappers.CaseDocument
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace DH.Helpdesk.Dal.Mappers.CaseDocument
 {
     using BusinessData.Models.CaseDocument;
     using DH.Helpdesk.Domain;
@@ -25,7 +28,20 @@
             entity.CreatedByUser_Id = businessModel.CreatedByUser_Id;
             entity.ChangedDate = businessModel.ChangedDate;
             entity.ChangedByUser_Id = businessModel.ChangedByUser_Id;
-            entity.CaseDocumentParagraphs = businessModel.CaseDocumentParagraphs;
+
+            if (businessModel.CaseDocumentParagraphs != null && businessModel.CaseDocumentParagraphs.Any())
+            {
+                entity.CaseDocumentParagraphsKeys = new List<CaseDocument_CaseDocumentParagraphEntity>();
+                foreach (var paragModel in businessModel.CaseDocumentParagraphs)
+                {
+                    entity.CaseDocumentParagraphsKeys.Add(new CaseDocument_CaseDocumentParagraphEntity()
+                    {
+                        CaseDocument_Id = businessModel.Id,
+                        CaseDocumentParagraph_Id = paragModel.Id
+                    });
+                }
+            }
+
             entity.CaseDocumentTemplate = businessModel.CaseDocumentTemplate;
             
         }

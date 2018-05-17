@@ -1,3 +1,6 @@
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+
 namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections;
@@ -13,13 +16,14 @@ namespace DH.Helpdesk.Dal.Repositories
     using System.Data.SqlClient;
     using System.Data;
     using System;
+	using System.Linq.Expressions;
 
-    #region PRODUCTAREA
+	#region PRODUCTAREA
 
-    /// <summary>
-    /// The ProductAreaRepository interface.
-    /// </summary>
-    public interface IProductAreaRepository : IRepository<ProductAreaEntity>
+	/// <summary>
+	/// The ProductAreaRepository interface.
+	/// </summary>
+	public interface IProductAreaRepository : IRepository<ProductAreaEntity>
     {
         /// <summary>
         /// The get product area overview.
@@ -71,11 +75,17 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         IEnumerable<ProductAreaOverview> GetProductAreaOverviews(int customerId);
 
+        IList<ProductAreaOverview> GetProductAreasWithWorkingGroups(int customerId, bool isActiveOnly);
+        IList<ProductAreaOverview> GetCaseTypeProductAreas(int caseTypeId);
+        IList<int> GetProductAreasWithoutCaseTypes(IList<int> paIds);
+
         int SaveProductArea(ProductAreaOverview productArea);
 
 
         IList<ProductAreaEntity> GetWithHierarchy(int customerId);
-    }
+
+		IQueryable<ProductAreaEntity> GetManyWithSubProductAreas(Expression<Func<ProductAreaEntity, bool>> where);
+	}
 
     /// <summary>
     /// The product area repository.
@@ -225,6 +235,68 @@ namespace DH.Helpdesk.Dal.Repositories
             return entities.Select(this.productAreaEntityToBusinessModelMapper.Map);
         }
 
+        public IList<ProductAreaOverview> GetProductAreasWithWorkingGroups(int customerId, bool isActiveOnly)
+        {
+            //note please do not use mapper since more fields will be read from database ... for correct sql projection with required fields 
+            var productAreas = 
+                from pa in DataContext.ProductAreas
+                where pa.Customer_Id == customerId && 
+                      (!isActiveOnly || pa.IsActive > 0)
+                select new ProductAreaOverview
+                {
+                    Id = pa.Id,
+                    ParentId = pa.Parent_ProductArea_Id,
+                    Name = pa.Name,
+                    IsActive = pa.IsActive,
+                    Description = pa.Description,
+                    WorkingGroups =
+                        pa.WorkingGroups.Select(wg => new WorkingGroupOverview
+                        {
+                            Id = wg.Id,
+                            Code = wg.Code,
+                            WorkingGroupName = wg.WorkingGroupName
+                        }
+                        ).ToList()
+                };
+
+            return productAreas.ToList();
+        }
+
+        public IList<int> GetProductAreasWithoutCaseTypes(IList<int> paIds)
+        {
+            var items = (from pa in Table
+                         where paIds.Contains(pa.Id) &&
+                         pa.CaseTypeProductAreas.Any() == false
+                         select pa.Id).ToList();
+
+            return items;
+        }
+
+		public IQueryable<ProductAreaEntity> GetManyWithSubProductAreas(Expression<Func<ProductAreaEntity, bool>> where)
+		{
+			return this.DataContext.ProductAreas.Include("SubProductAreas").Where(where);
+		}
+
+		public IList<ProductAreaOverview> GetCaseTypeProductAreas(int caseTypeId)
+        {
+            var query =
+                from ct in DataContext.CaseTypes
+                from ctpa in ct.CaseTypeProductAreas
+                where ct.Id == caseTypeId
+                let pa = ctpa.ProductArea
+                select new ProductAreaOverview()
+                {
+                    Id = pa.Id,
+                    ParentId = pa.Parent_ProductArea_Id,
+                    Name = pa.Name,
+                    IsActive = pa.IsActive,
+                    Description = pa.Description,
+                };
+
+            var items = query.ToList();
+            return items;
+        }
+
         /// <summary>
         /// The get product area overviews.
         /// </summary>
@@ -244,6 +316,8 @@ namespace DH.Helpdesk.Dal.Repositories
             return entities
                 .Select(this.productAreaEntityToBusinessModelMapper.Map);
         }
+
+
 
         public int SaveProductArea(ProductAreaOverview productArea)
         {

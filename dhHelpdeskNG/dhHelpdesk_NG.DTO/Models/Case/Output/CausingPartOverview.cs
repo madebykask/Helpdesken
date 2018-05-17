@@ -21,6 +21,11 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
     /// </summary>
     public sealed class CausingPartOverview : IHierarchyItem
     {
+        public CausingPartOverview()
+        {
+             Children = new List<CausingPartOverview>();
+        }
+
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
@@ -66,6 +71,6 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// <summary>
         /// Gets or sets the children.
         /// </summary>
-        public IEnumerable<CausingPartOverview> Children { get; set; }
+        public IList<CausingPartOverview> Children { get; set; }
     }
 }
