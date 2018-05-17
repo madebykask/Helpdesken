@@ -625,6 +625,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         }
 
         private static string BuildProductAreaDropdownButtonString(
+            //TODO: should generate unique id. Now possible situation when 2 dropdowns will have the same ids for li and ul. But before update, check if no js code uses those ids as product area value.
             IList<ProductAreaOverview> pal,
             bool isTakeOnlyActive = true,
             Dictionary<int, bool> userGroupDictionary = null,
@@ -671,9 +672,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 if (childs.Any())
                 {
                     var sortedChilds = childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
+                    //strBld.Append("<div class='subMenuWrapper'>");
                     strBld.AppendFormat("<ul class='dropdown-menu subddMenu' id=\"subDropDownMenu_{0}\" >", pa.Id);
                     strBld.Append(BuildProductAreaDropdownButtonString(sortedChilds, isTakeOnlyActive, userGroupDictionary));
                     strBld.Append("</ul>");
+                    //strBld.Append("</div>");
                 }
 
                 strBld.Append("</li>");

@@ -1035,28 +1035,6 @@ function CaseInitForm() {
         resetProductareaByCaseType(caseTypeId);
     });
 
-   
-
-    $("ul.dropdown-menu.subddMenu.parentddMenu").on("mouseenter", function () {
-        var html = $("html");
-        html.data('previous-overflow', html.css('overflow'));
-        html.css("overflow", "hidden");
-    });
-
-    $("ul.dropdown-menu.subddMenu.parentddMenu").on("mouseleave", function () {
-        var html = $("html");
-        html.css('overflow', html.data('previous-overflow'));
-    });
-
-    $("#dropDownBtn").on("click", function() {
-                var objPos = getObjectPosInView(this.id);
-                if (objPos.ToTop < objPos.ToDown) {
-                    $(".dropdown-menu.subddMenu").css("max-height", objPos.ToDown - 50 + "px");
-                } else {
-                    $(".dropdown-menu.subddMenu").css("max-height", objPos.ToTop + "px");
-                }
-            });
-
     function resetProductareaByCaseType(caseTypeId) {
         var paId = parseInt($('#case__ProductArea_Id').val());
         $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: caseTypeId, customerId: publicCustomerId, myTime: Date.now(), productAreaIdToInclude: paId }, function (result) {
@@ -1418,20 +1396,6 @@ function CaseInitForm() {
         var val = $(this).attr('value');
         $("#divBreadcrumbs_OU").text(getBreadcrumbs(this));
         $(publicOUControlName).val(val).trigger('change');
-    });
-
-    $('.dropdown-submenu.DynamicDropDown_Up').on('mousemove', function (event) {
-        dynamicDropDownBehaviorOnMouseMove(event);
-    });
-
-    $(window).scroll(function () {
-        setDynamicDropDowns();
-    });
-
-    setDynamicDropDowns();
-
-    $('.dropdown-submenu.DynamicDropDown_Up').on('mousemove', function (event) {
-        dynamicDropDownBehaviorOnMouseMove(event);
     });
 
     $(window).scroll(function () {
