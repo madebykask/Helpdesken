@@ -449,7 +449,12 @@ ExtendedCasePage.prototype.onSaveClick = function (sender) {
         }
 
         var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
-        return promise.then(self.doSaveCase(url), self.onSaveError);
+        promise.then(function(res) {
+             self.doSaveCase(url);
+        }, function (err) {
+            self.onSaveError(err);
+        });
+        return true;
     } else {
         self.setCaseStatus(self.CASE_IN_IDLE);
         ShowToastMessage("Can not find Extended Case form!", "error", true);
