@@ -7,46 +7,45 @@ using System.Web.Mvc;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.BusinessData.OldComponents;
+using PostSharp.Reflection.Syntax;
 
 
 namespace DH.Helpdesk.Web.Models.Contract
 {
-
     public class ContractIndexViewModel
     {
         public ContractIndexViewModel(Customer customer)
         {
             Customer = customer;
-            Rows = new ContractsIndexRowsModel(customer);
             Columns = new ContractsIndexColumnsModel(customer);
+            Rows = new ContractsIndexRowsModel(customer);
         }
         
-        public int SelectedState { get; set; }
-        public List<SelectListItem> ShowContracts { get; set; }
-
         public Customer Customer { get; private set; }
-        public List<ContractCategory> ContractCategories { get; set; }
-        public IList<User> Users { get; set; }
-
-        public IList<Department> Departments { get; set; }
-
-        public List<Supplier> Suppliers { get; set; }
-        public ContractsIndexRowsModel Rows { get; set; }
+        
         public ContractsSettingViewModel Setting { get; set; }
         public ContractsIndexColumnsModel Columns { get; set; }
+        public ContractsIndexRowsModel Rows { get; set; }
 
-        public string SearchText { get; set; }
+        public ContractsSearchFilterViewModel SearchFilterModel { get; set; }
+        public ContractsSearchSummary SearchSummaryModel { get; set; }
+    }
 
-        public int TotalCases { get; set; }
-        public int OnGoingCases { get; set; }
+    public class ContractsSearchFilterViewModel
+    {
+        public ContractsSearchFilterViewModel()
+        {
+            SelectedContractCategories = new List<int>();
+            SelectedSuppliers = new List<int>();
+            SelectedResponsibleUsers = new List<int>();
+            SelectedDepartments = new List<int>();
+        }
 
-        public int FinishedCases { get; set; }
-
-        public int ContractNoticeOfRemovalCount { get; set; }
-
-        public int ContractFollowUpCount { get; set; }
-
-        public int RunningCases { get; set; }
+        public IList<SelectListItem> ContractCategories { get; set; }
+        public IList<SelectListItem> Suppliers { get; set; }
+        public IList<SelectListItem> ResponsibleUsers { get; set; }
+        public IList<SelectListItem> Departments { get; set; }
+        public IList<SelectListItem> ShowContracts { get; set; }
 
         public DateTime? NoticeDateFrom { get; set; }
         public DateTime? NoticeDateTo { get; set; }
@@ -56,11 +55,29 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public DateTime? EndDateFrom { get; set; }
         public DateTime? EndDateTo { get; set; }
+
+        public string SearchText { get; set; }
+        
+        //selected dropdown values
+        public List<int> SelectedContractCategories { get; set; }
+        public List<int> SelectedSuppliers { get; set; }
+        public List<int> SelectedResponsibleUsers { get; set; }
+        public List<int> SelectedDepartments { get; set; }
+        public int SelectedState { get; set; }
+    }
+
+    public class ContractsSearchSummary
+    {
+        public int TotalCases { get; set; }
+        public int OnGoingCases { get; set; }
+        public int FinishedCases { get; set; }
+        public int ContractNoticeOfRemovalCount { get; set; }
+        public int ContractFollowUpCount { get; set; }
+        public int RunningCases { get; set; }
     }
 
     public sealed class ContractsIndexRowModel
     {
-
         public ContractsIndexRowModel()
         {
             SelectedShowStatus = 10;
@@ -121,9 +138,6 @@ namespace DH.Helpdesk.Web.Models.Contract
         public ColSortModel SortBy { get; set; }
 
         public int SelectedShowStatus { get; set; }
-
-        
-
     }
 
     public sealed class ColSortModel

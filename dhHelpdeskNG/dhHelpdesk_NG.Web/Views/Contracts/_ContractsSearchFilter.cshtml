@@ -1,0 +1,107 @@
+﻿@using DH.Helpdesk.BusinessData.Enums.Contracts
+@model DH.Helpdesk.Web.Models.Contract.ContractsSearchFilterViewModel
+
+<div class="span8">
+    <table class="tableform">
+        <tr>
+            <td>@Translation.GetCoreTextTranslation("Kategori")</td>
+            <td>
+                @Html.DropDownListFor(m => m.SelectedContractCategories, Model.ContractCategories,
+                     new { id= "lstContractCategories", @data_placeholder = @Translation.GetCoreTextTranslation("Välj en eller flera"), multiple = "multiple", @class = "chosen-select" })
+            </td>
+        </tr>
+        <tr>
+            <td>@Translation.GetCoreTextTranslation("Leverantör")</td>
+            <td>
+                @Html.DropDownListFor(m => m.SelectedSuppliers,
+                    Model.Suppliers,
+                    new { id= "lstSuppliers", @data_placeholder = @Translation.GetCoreTextTranslation("Välj en eller flera"), multiple = "multiple", @class = "chosen-select" })
+            </td>
+        </tr>
+        <tr>
+            <td>@Translation.GetCoreTextTranslation("Ansvarig uppföljning")</td>
+            <td>
+                @Html.DropDownListFor(m => m.SelectedResponsibleUsers,
+                    Model.ResponsibleUsers,
+                    new { id = "lstResponsible", @data_placeholder = @Translation.GetCoreTextTranslation("Välj en eller flera"), multiple = "multiple", @class = "chosen-select" })
+            </td>
+        </tr>
+        <tr>
+            <td>@Translation.GetCoreTextTranslation("Avdelning")</td>
+            <td>
+                @Html.DropDownListFor(m => m.SelectedDepartments,
+                    Model.Departments,
+                    new { id = "lstDepartment", @data_placeholder = @Translation.GetCoreTextTranslation("Välj en eller flera"), multiple = "multiple", @class = "chosen-select" })
+            </td>
+        </tr>
+        <tr>
+            <td>@Translation.GetCoreTextTranslation("Visa")</td>
+            <td>
+                @Html.DropDownListFor(m => m.SelectedState,
+                    Model.ShowContracts,
+                    new { id = "lstShow", @data_placeholder = @Translation.GetCoreTextTranslation("Välj"), @class = "inputw300" })
+            </td>
+        </tr>
+        <tr>
+            <td class="span3">@Translation.GetCoreTextTranslation("Sök")</td>
+            <td>
+                @Html.TextBoxFor(m => m.SearchText, new { style = "width:285px", id = "txtSearch"})
+                <input type="submit" class="btn" id="searchQueryBtn" value="@Translation.GetCoreTextTranslation("Sök")"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                &nbsp;
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="span5">
+    <table class="tableform">
+        <tr class="date-block">
+            <td>
+                @Translation.GetCoreTextTranslation(ContractFieldLabels.ContractStartDate)
+            </td>
+            <td>
+                @Html.EditorFor(m => Model.StartDateFrom, "DatePicker", new {id = "divSearch_StartDateFrom"})
+                @Html.EditorFor(m => Model.StartDateTo, "DatePicker", new {id = "divSearch_StartDateTo"})
+            </td>
+        </tr>
+        <tr class="date-block">
+            <td>
+                @Translation.GetCoreTextTranslation(ContractFieldLabels.ContractEndDate)
+            </td>
+            <td>
+                @Html.EditorFor(m => Model.EndDateFrom, "DatePicker", new {id = "divSearch_EndDateFrom"})
+                @Html.EditorFor(m => Model.EndDateTo, "DatePicker", new {id = "divSearch_EndDateTo"})
+            </td>
+        </tr>
+        <tr class="date-block">
+            <td>
+                @Translation.GetCoreTextTranslation(ContractFieldLabels.Noticedate)
+            </td>
+            <td>
+                @Html.EditorFor(m => Model.NoticeDateFrom, "DatePicker", new {id = "divSearch_NoticeDateFrom"})
+                @Html.EditorFor(m => Model.NoticeDateTo, "DatePicker", new {id = "divSearch_NoticeDateTo"})
+            </td>
+        </tr>
+
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        BindChosenSelect('lstContractCategories', @Model.SelectedContractCategories.ToJavaScriptObject());
+        BindChosenSelect('lstSuppliers', @Model.SelectedSuppliers.ToJavaScriptObject());
+        BindChosenSelect('lstResponsible', @Model.SelectedResponsibleUsers.ToJavaScriptObject());
+        BindChosenSelect('lstDepartment', @Model.SelectedDepartments.ToJavaScriptObject());
+    });
+
+    function BindChosenSelect(controlId, items) {
+        var chosen$ = $("#" + controlId);
+        if (items && items.length) {
+            chosen$.val(items);
+            chosen$.trigger("chosen:updated");
+        }
+    }
+</script>

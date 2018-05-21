@@ -73,6 +73,73 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
+        private ContractsSearchFilterViewModel GetContractsSearchFilterModel(Customer customer)
+        {
+            var filter = SessionFacade.CurrentContractsSearch;
+
+            if (filter == null)
+            {
+                //set filter default values
+                filter = new ContractsSearchFilter()
+                {
+                    CustomerId = customer.Id,
+                    State = 10 //todo:enum or const -> Change default to ACTIVE
+                };
+
+                SessionFacade.CurrentContractsSearch = filter;
+            }
+
+            var contractCategories = _contractCategoryService.GetContractCategories(customer.Id);
+
+            var model = new ContractsSearchFilterViewModel()
+            {
+                ContractCategories = contractCategories.Select(c => new SelectListItem()
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                }).ToList(),
+
+                Suppliers = _supplierService.GetActiveSuppliers(customer.Id).Select(s => new SelectListItem()
+                {
+                    Value = s.Id.ToString(),
+                    Text =  s.Name
+                }).ToList(),
+
+                ResponsibleUsers = _userService.GetUsers(customer.Id).Select(u => new SelectListItem()
+                {
+                    Value = u.Id.ToString(),
+                    Text = $"{u.SurName} {u.FirstName}"
+                }).ToList(),
+
+                Departments = _departmentService.GetDepartments(customer.Id, ActivationStatus.Active).Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.DepartmentName
+                }).ToList(),
+
+                ShowContracts = GetContractStatuses().ToSelectList(),
+
+                SelectedContractCategories = filter.SelectedContractCategories,
+                SelectedSuppliers = filter.SelectedSuppliers,
+                SelectedResponsibleUsers = filter.SelectedResponsibles, 
+                SelectedDepartments = filter.SelectedDepartments, 
+                SelectedState = filter.State,
+
+                NoticeDateFrom = filter.NoticeDateFrom,
+                NoticeDateTo = filter.NoticeDateTo,
+
+                StartDateFrom = filter.StartDateFrom,
+                StartDateTo = filter.StartDateTo, 
+                 
+                EndDateFrom = filter.EndDateFrom,
+                EndDateTo = filter.EndDateTo,
+                 
+                SearchText = filter.SearchText
+            };
+            
+            return model;
+        }
+
         //
         // GET: /Contract/
         [HttpGet]
@@ -82,31 +149,16 @@ namespace DH.Helpdesk.Web.Controllers
             var customer = _customerService.GetCustomer(SessionFacade.CurrentCustomer.Id);
 
             var model = CreateContractIndexViewModel(customer);
-            var contractcategories = _contractCategoryService.GetContractCategories(customer.Id);
-            var suppliers = _supplierService.GetActiveSuppliers(customer.Id);
-            var users = _userService.GetUsers(customer.Id);
-            var departments = _departmentService.GetDepartments(customer.Id, ActivationStatus.Active);
-            
-            var filter = new ContractsSearchFilter()
-            {
-                CustomerId = customer.Id,
-                State = 10 //todo:enum or const
-            };
 
-            SessionFacade.CurrentContractsSearch = filter;
-            model.SelectedState = filter.State;
-            model.Rows = GetIndexRowModel(filter, new ColSortModel(EnumContractFieldSettings.Number, true));
-            model.SearchText = string.Empty;
-            model.Departments = departments;
-            model.Users = users;
-            model.ContractCategories = contractcategories.OrderBy(a => a.Name).ToList();
-            model.Suppliers = suppliers.OrderBy(s => s.Name).ToList();
+            model.SearchFilterModel = GetContractsSearchFilterModel(customer);
+
             model.Setting = GetSettingsModel(customer.Id);
-            model.TotalCases = model.Rows.Data.Count();
-            model.OnGoingCases = model.Rows.Data.Count(z => z.Finished == 0);
-            model.FinishedCases = model.Rows.Data.Count(z => z.Finished == 1);
 
-            int iContractNoticeOfRemovalCount = 0;
+            model.Rows = GetIndexRowModel(SessionFacade.CurrentContractsSearch, new ColSortModel(EnumContractFieldSettings.Number, true));
+            
+            #region Search Summary
+
+            var iContractNoticeOfRemovalCount = 0;
             foreach (var rowModel in model.Rows.Data)
             {
                 if (IsInNoticeOfRemoval(rowModel.Finished, rowModel.NoticeDate))
@@ -115,9 +167,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
-            model.ContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount;
-
-            int iContractFollowUpCount = 0;
+            var iContractFollowUpCount = 0;
             foreach (var rowModel in model.Rows.Data)
             {
                 if (isInFollowUp(rowModel.Finished, rowModel.ContractStartDate.ToString(), rowModel.ContractEndDate.ToString(), rowModel.FollowUpInterval))
@@ -126,8 +176,17 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
-            model.ContractFollowUpCount = iContractFollowUpCount;
-            model.RunningCases = model.Rows.Data.Count(z => z.Running == 1);
+            model.SearchSummaryModel = new ContractsSearchSummary
+            {
+                TotalCases = model.Rows.Data.Count(),
+                OnGoingCases = model.Rows.Data.Count(z => z.Finished == 0),
+                FinishedCases = model.Rows.Data.Count(z => z.Finished == 1),
+                ContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount,
+                ContractFollowUpCount = iContractFollowUpCount,
+                RunningCases = model.Rows.Data.Count(z => z.Running == 1)
+            };
+
+            #endregion
 
             return this.View(model);
         }
@@ -215,11 +274,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private ContractIndexViewModel CreateContractIndexViewModel(Customer customer)
         {
-            var contractStatues = GetContractStatuses().ToSelectList();
-            return new ContractIndexViewModel(customer)
-            {
-                ShowContracts = contractStatues
-            };
+            return new ContractIndexViewModel(customer);
         }
 
         private ContractsIndexRowsModel GetIndexRowModel(ContractsSearchFilter selectedFilter, ColSortModel sort)

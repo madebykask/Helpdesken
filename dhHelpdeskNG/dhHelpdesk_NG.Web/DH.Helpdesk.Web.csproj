@@ -4027,6 +4027,8 @@
     <Content Include="Views\Cases\ModalDialogs\_ExtraEmails.cshtml" />
     <Content Include="Views\Cases\CaseOperationResult.cshtml" />
     <Content Include="Views\Contracts\ContractHistory.cshtml" />
+    <Content Include="Views\Contracts\_ContractsSearchSummary.cshtml" />
+    <Content Include="Views\Contracts\_ContractsSearchFilter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

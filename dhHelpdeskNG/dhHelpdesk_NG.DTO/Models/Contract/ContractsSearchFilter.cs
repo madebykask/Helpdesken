@@ -2,9 +2,7 @@
 
 namespace DH.Helpdesk.BusinessData.Models.Contract
 {
-    using DH.Helpdesk.BusinessData.Models.Shared;
     using System.Collections.Generic;
-    
 
     public class ContractsSearchFilter
     {
@@ -47,6 +45,5 @@ namespace DH.Helpdesk.BusinessData.Models.Contract
         public DateTime? NoticeDateFrom { get; set; }
 
         public string SearchText { get; set; }
-
     }
 }
