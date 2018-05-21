@@ -124,6 +124,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var customerToSave = this._customerService.GetCustomer(id);
             customerToSave.PasswordRequiredOnExternalPage = vmodel.Customer.PasswordRequiredOnExternalPage;
             customerToSave.ShowBulletinBoardOnExtPage = vmodel.Customer.ShowBulletinBoardOnExtPage;
+            customerToSave.ShowCalenderOnExtPage = vmodel.Customer.ShowCalenderOnExtPage;
+            customerToSave.ShowOperationalLogOnExtPage = vmodel.Customer.ShowOperationalLogOnExtPage;
             customerToSave.ShowDashboardOnExternalPage = vmodel.Customer.ShowDashboardOnExternalPage;
             customerToSave.ShowFAQOnExternalPage = vmodel.Customer.ShowFAQOnExternalPage;
             customerToSave.ShowDocumentsOnExternalPage = vmodel.Customer.ShowDocumentsOnExternalPage;

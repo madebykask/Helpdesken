@@ -175,6 +175,20 @@ BEGIN
 END
 GO 
 
+RAISERROR ('Adding column ShowCalenderOnExtPage on table tblCustomer', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowCalenderOnExtPage' and sysobjects.name = N'tblCustomer')
+BEGIN
+   ALTER TABLE dbo.tblCustomer ADD ShowCalenderOnExtPage INT NOT NULL  Default(0)
+END
+GO
+
+RAISERROR ('Adding column ShowOperationalLogOnExtPage on table tblCustomer', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowOperationalLogOnExtPage' and sysobjects.name = N'tblCustomer')
+BEGIN
+   ALTER TABLE dbo.tblCustomer ADD ShowOperationalLogOnExtPage INT NOT NULL  Default(0)
+END
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.37'
 --ROLLBACK --TMP
