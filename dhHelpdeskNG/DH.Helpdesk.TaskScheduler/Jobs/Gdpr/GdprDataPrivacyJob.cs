@@ -107,7 +107,7 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
                 RegisterDateFrom = favoriteData.RegisterDateFrom,
                 ClosedOnly = favoriteData.ClosedOnly,
                 ReplaceEmails  = favoriteData.ReplaceEmails,
-                FieldsNames = favoriteData.FieldsNames?.Split(new [] {';'}, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                FieldsNames = favoriteData.FieldsNames?.Split(new [] {','}, StringSplitOptions.RemoveEmptyEntries).ToList(),
                 ReplaceDataWith = favoriteData.ReplaceDataWith,
                 ReplaceDatesWith = favoriteData.ReplaceDatesWith,
                 RemoveCaseAttachments = favoriteData.RemoveCaseAttachments,
