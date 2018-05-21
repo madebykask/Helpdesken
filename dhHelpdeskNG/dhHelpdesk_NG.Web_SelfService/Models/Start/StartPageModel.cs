@@ -14,6 +14,7 @@ namespace DH.Helpdesk.SelfService.Models.Start
         }
 
         public List<BulletinBoard> BulletinBoard { get; set; }
+        public IList<OperationLog> OperationLog { get; set; }
 
         public string WelcomeHtml { get; set; }     
 

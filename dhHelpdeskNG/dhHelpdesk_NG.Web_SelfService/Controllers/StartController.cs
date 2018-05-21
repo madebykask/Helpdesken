@@ -28,6 +28,7 @@ namespace DH.Helpdesk.SelfService.Controllers
     public class StartController : BaseController
     {
         private readonly ICustomerService _customerService;                
+        private readonly IOperationLogService _operationLogService;
         private readonly IBulletinBoardService _bulletinBoardService;
         private readonly IInfoService _infoService;
         private readonly ISettingService _settingService;
@@ -36,7 +37,8 @@ namespace DH.Helpdesk.SelfService.Controllers
         public StartController(IMasterDataService masterDataService,
                                ICustomerService customerService,
                                ICaseSolutionService caseSolutionService,
-                               IInfoService infoService,                               
+                               IInfoService infoService,
+                               IOperationLogService operationLogService,
                                IBulletinBoardService bulletinBoardService,
                                ISettingService settingService,
                                IUserService userService,
@@ -45,6 +47,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         {
             
             this._customerService = customerService;
+            this._operationLogService = operationLogService;
             this._bulletinBoardService = bulletinBoardService;
             this._infoService = infoService;
             this._settingService = settingService;
@@ -59,6 +62,12 @@ namespace DH.Helpdesk.SelfService.Controllers
             var htmlData = _infoService.GetInfoText((int)InfoTextType.SelfServiceWelcome, SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
             var model = new StartPageModel(htmlData == null ? string.Empty : htmlData.Name);
             var customerSetting = this._settingService.GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
+
+            var ops = _operationLogService.GetRssOperationLogs(SessionFacade.CurrentCustomer.Id);
+            model.OperationLog = ops.Where(op => op.PublicInformation != 0 &&
+                                                op.ShowDate <= DateTime.Now.Date && op.ShowUntilDate >= DateTime.Now.Date)
+                                    .OrderByDescending(op => op.ShowDate)
+                                    .ToList();
 
             var bb = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id, false);
             model.BulletinBoard = bb.Where(b => b.PublicInformation != 0 &&

@@ -23,6 +23,24 @@
                 </div>
             </div>
         </div>
+        @if (SessionFacade.CurrentCustomer.ShowOperationalLogOnExtPage != 0 && Model.OperationLog != null && Model.OperationLog.Any())
+        {
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading phselfservice">@Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation) </div>
+                    <div class="panel-body">
+                        @if (Model.OperationLog != null)
+                        {
+                            foreach (var o in Model.OperationLog)
+                            {
+                                <p> <strong> @Html.DisplayFor(m => o.ChangedDate, "DateAndTime")  </strong> <br /> @Html.Raw(o.LogTextExternal) </p>
+                                <br />
+                            }
+                        }                        
+                    </div>
+                </div>
+            </div>
+        }
         @if (SessionFacade.CurrentCustomer.ShowBulletinBoardOnExtPage != 0 && Model.BulletinBoard != null && Model.BulletinBoard.Any())
         {
             <div class="col-md-4">

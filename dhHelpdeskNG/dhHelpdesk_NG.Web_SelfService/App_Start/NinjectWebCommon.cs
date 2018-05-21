@@ -344,6 +344,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ILinkService>().To<LinkService>();
             kernel.Bind<ICaseLockService>().To<CaseLockService>();
             kernel.Bind<ICaseInvoiceSettingsService>().To<CaseInvoiceSettingsService>();
+            kernel.Bind<IOperationLogService>().To<OperationLogService>();
             kernel.Bind<IBusinessRuleService>().To<BusinessRuleService>();
             kernel.Bind<IEmailGroupService>().To<EmailGroupService>();
             kernel.Bind<IFaqService>().To<FaqService>();
