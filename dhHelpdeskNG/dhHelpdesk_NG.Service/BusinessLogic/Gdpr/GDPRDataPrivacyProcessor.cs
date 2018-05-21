@@ -193,8 +193,9 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 if (cases.Any())
                 {
                     DeleteCaseFiles(customerId, filesToDelete);
-                    SaveSuccessOperationAudit(customerId, userId, p, cases.Select(c => c.Id).ToList());
                 }
+
+                SaveSuccessOperationAudit(customerId, userId, p, cases.Select(c => c.Id).ToList());
             }
             catch (Exception e)
             {
