@@ -346,7 +346,9 @@
     <Compile Include="Infrastructure\Authentication\FederatedAuthenticationConfiguration.cs" />
     <Compile Include="Infrastructure\Authentication\HelpdeskAuthenticationFilter.cs" />
     <Compile Include="Infrastructure\Binders\DecimalModelBinder.cs" />
+    <Compile Include="Infrastructure\Binders\CommaSeparatedListsBinder.cs" />
     <Compile Include="Infrastructure\Case\CaseHistoryBuilder.cs" />
+    <Compile Include="Infrastructure\Extensions\ReflectionExtensions.cs" />
     <Compile Include="Infrastructure\UrlBuilder.cs" />
     <Compile Include="Infrastructure\Utilities\CaseDiagnosticService.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\SessionContext.cs" />
@@ -363,6 +365,7 @@
     <Compile Include="Models\Case\CaseOperationResult.cs" />
     <Compile Include="Models\Case\InvoiceTimeModel.cs" />
     <Compile Include="Models\Contract\ContractHistoryFieldsDiff.cs" />
+    <Compile Include="Models\Contract\ContractsSearchInputData.cs" />
     <Compile Include="Models\Gdpr\DataPrivacyHistoryViewModel.cs" />
     <Compile Include="Models\Gdpr\GdprOperationsHistoryListItem.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />

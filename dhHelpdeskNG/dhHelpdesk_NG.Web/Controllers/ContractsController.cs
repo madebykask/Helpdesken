@@ -26,6 +26,7 @@ using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
 using DH.Helpdesk.Services.BusinessLogic.Contracts;
 using DH.Helpdesk.Web.Components.Contracts;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
+using DH.Helpdesk.Web.Infrastructure.ActionFilters;
 using DH.Helpdesk.Web.Infrastructure.Attributes;
 
 
@@ -62,6 +63,15 @@ namespace DH.Helpdesk.Web.Controllers
             this._userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Contracts);
         }
 
+        [UserPermissions(UserPermission.ContractPermission)]
+        public ActionResult New(int customerId)
+        {
+            var customer = this._customerService.GetCustomer(customerId);
+            //var accountAcctivity = new AccountActivity { Customer_Id = customer.Id };
+            var model = this.CreateInputViewModel(customerId);
+
+            return this.View(model);
+        }
 
         //
         // GET: /Contract/
@@ -70,16 +80,22 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Index()
         {
             var customer = _customerService.GetCustomer(SessionFacade.CurrentCustomer.Id);
-            var model = new ContractIndexViewModel(customer);
+
+            var model = CreateContractIndexViewModel(customer);
             var contractcategories = _contractCategoryService.GetContractCategories(customer.Id);
             var suppliers = _supplierService.GetActiveSuppliers(customer.Id);
             var users = _userService.GetUsers(customer.Id);
             var departments = _departmentService.GetDepartments(customer.Id, ActivationStatus.Active);
-            //IList<User> GetUsers(int customerId);
+            
+            var filter = new ContractsSearchFilter()
+            {
+                CustomerId = customer.Id,
+                State = 10 //todo:enum or const
+            };
 
-            var filter = new ContractSelectedFilter();
-
-            model.Rows = GetIndexRowModel(customer.Id, filter, new ColSortModel(EnumContractFieldSettings.Number, true), 10);
+            SessionFacade.CurrentContractsSearch = filter;
+            model.SelectedState = filter.State;
+            model.Rows = GetIndexRowModel(filter, new ColSortModel(EnumContractFieldSettings.Number, true));
             model.SearchText = string.Empty;
             model.Departments = departments;
             model.Users = users;
@@ -91,128 +107,85 @@ namespace DH.Helpdesk.Web.Controllers
             model.FinishedCases = model.Rows.Data.Count(z => z.Finished == 1);
 
             int iContractNoticeOfRemovalCount = 0;
-            foreach (ContractsIndexRowModel ci in model.Rows.Data)
+            foreach (var rowModel in model.Rows.Data)
             {
-                if (isInNoticeOfRemoval(ci.Finished, ci.NoticeDate.ToString()))
+                if (IsInNoticeOfRemoval(rowModel.Finished, rowModel.NoticeDate))
                 {
                     iContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount + 1;
                 }
             }
+
             model.ContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount;
 
-
             int iContractFollowUpCount = 0;
-            foreach (ContractsIndexRowModel ci in model.Rows.Data)
+            foreach (var rowModel in model.Rows.Data)
             {
-                if (isInFollowUp(ci.Finished, ci.ContractStartDate.ToString(), ci.ContractEndDate.ToString(), ci.FollowUpInterval))
+                if (isInFollowUp(rowModel.Finished, rowModel.ContractStartDate.ToString(), rowModel.ContractEndDate.ToString(), rowModel.FollowUpInterval))
                 {
                     iContractFollowUpCount = iContractFollowUpCount + 1;
                 }
             }
-            model.ContractFollowUpCount = iContractFollowUpCount;
 
+            model.ContractFollowUpCount = iContractFollowUpCount;
             model.RunningCases = model.Rows.Data.Count(z => z.Running == 1);
 
-
-
-
-
             return this.View(model);
         }
 
-        [UserPermissions(UserPermission.ContractPermission)]
-        public ActionResult New(int customerId)
+        [HttpPost]
+        public ActionResult SortBy(int customerId, string colName, bool isAsc)
         {
-            var customer = this._customerService.GetCustomer(customerId);
-            //var accountAcctivity = new AccountActivity { Customer_Id = customer.Id };
-            var model = this.CreateInputViewModel(customerId);
+            var filterModel = SessionFacade.CurrentContractsSearch;
+            if (filterModel == null)
+            {
+                filterModel = new ContractsSearchFilter
+                {
+                    CustomerId = customerId,
 
-            return this.View(model);
+                };
+            }
+
+            var sortModel = new ColSortModel(colName, isAsc);
+
+            var model = GetIndexRowModel(filterModel, sortModel);
+            return PartialView("_ContractsIndexRows", model);
         }
 
-
-        [HttpGet]
-        public PartialViewResult Search(int id, string Categories, string Suppliers, string Responsible, string Department, string Show, string Search)
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public PartialViewResult Search(ContractsSearchInputData data)
         {
-            Categories = Categories.Replace("'", "");
-            Suppliers = Suppliers.Replace("'", "");
-            Responsible = Responsible.Replace("'", "");
-            Department = Department.Replace("'", "");
-            Show = Show.Replace("'", "");
-            Search = Search.Replace("'", "");
-
-            SelectedItems itemsCat = new SelectedItems();
-            string[] words = Categories.Split(',');
-            foreach (string word in words)
+            var filter = new ContractsSearchFilter
             {
-                if (word != string.Empty)
-                {
-                    itemsCat.AddItems(word);
-                }
+                CustomerId = data.CustomerId,
+                SelectedContractCategories = data.Categories,
+                SelectedSuppliers = data.Suppliers,
+                SelectedResponsibles = data.ResponsibleUsers,
+                SelectedDepartments = data.Departments,
+                State = data.ShowContracts,
 
-            }
+                StartDateTo = data.StartDateTo,
+                StartDateFrom = data.StartDateFrom,
 
-            SelectedItems itemsSup = new SelectedItems();
-            words = Suppliers.Split(',');
-            foreach (string word in words)
-            {
-                if (word != string.Empty)
-                {
-                    itemsSup.AddItems(word);
-                }
+                EndDateTo = data.EndDateTo,
+                EndDateFrom = data.EndDateFrom,
 
-            }
+                NoticeDateTo = data.NoticeDateTo,
+                NoticeDateFrom = data.NoticeDateFrom,
 
-            SelectedItems itemsResp = new SelectedItems();
-            words = Responsible.Split(',');
-            foreach (string word in words)
-            {
-                if (word != string.Empty)
-                {
-                    itemsResp.AddItems(word);
-                }
+                SearchText = data.SearchText
+            };
+            
+            //save filter in session
+            SessionFacade.CurrentContractsSearch = filter;
 
-            }
+            var customer = _customerService.GetCustomer(data.CustomerId);
+            var model = CreateContractIndexViewModel(customer);
 
-            SelectedItems itemsDep = new SelectedItems();
-            words = Department.Split(',');
-            foreach (string word in words)
-            {
-                if (word != string.Empty)
-                {
-                    itemsDep.AddItems(word);
-                }
+            var sortMode = new ColSortModel(EnumContractFieldSettings.Number, true);
+            model.Rows = GetIndexRowModel(filter, sortMode);
+            
 
-            }
-
-            SelectedItems itemsState = new SelectedItems();
-            words = Show.Split(',');
-            int selectedstatus = 0;
-            foreach (string word in words)
-            {
-                itemsState.AddItems(word);
-
-                selectedstatus = Convert.ToInt32(word);
-                break;
-                //Inactive = 0,
-                //Active = 1,
-                //All = 2
-            }
-
-            var filter = new ContractSelectedFilter();
-            filter.CustomerId = id;
-            filter.SelectedContractCategories = itemsCat;
-            filter.SelectedSuppliers = itemsSup;
-            filter.SelectedResponsibles = itemsResp;
-            filter.SelectedDepartments = itemsDep;
-            filter.SearchText = Search;
-            filter.ShowState = itemsState;
-
-            var customer = _customerService.GetCustomer(id);
-            var model = new ContractIndexViewModel(customer);
-
-
-            model.Rows = GetIndexRowModel(id, filter, new ColSortModel(EnumContractFieldSettings.Number, true), selectedstatus);
             //model.TotalCases = model.Rows.Data.Count();
             //model.OnGoingCases = model.Rows.Data.Where(z => z.Finished == 0).Count();
             //model.FinishedCases = model.Rows.Data.Where(z => z.Finished == 1).Count();
@@ -240,6 +213,211 @@ namespace DH.Helpdesk.Web.Controllers
             return this.PartialView("_ContractsIndexRows", model.Rows);
         }
 
+        private ContractIndexViewModel CreateContractIndexViewModel(Customer customer)
+        {
+            var contractStatues = GetContractStatuses().ToSelectList();
+            return new ContractIndexViewModel(customer)
+            {
+                ShowContracts = contractStatues
+            };
+        }
+
+        private ContractsIndexRowsModel GetIndexRowModel(ContractsSearchFilter selectedFilter, ColSortModel sort)
+        {
+            var customerId = selectedFilter.CustomerId;
+            var customer = _customerService.GetCustomer(customerId);
+
+            var model = new ContractsIndexRowsModel(customer);
+
+            //run search
+            var allContracts = SearchContracts(selectedFilter);
+         
+            var settings = GetSettingsModel(customer.Id);
+
+            model.Columns = settings.SettingRows.Where(s => s.ShowInList).ToList();
+            foreach (var col in model.Columns)
+            {
+                col.SetOrder();
+            }
+            model.Columns = model.Columns.OrderBy(s => s.VirtualOrder).ToList();
+            model.SelectedShowStatus = selectedFilter.State;
+
+            foreach (var con in allContracts)
+            {
+                var latestLog = con.ContractLogs.Any(x => x.Case_Id.HasValue)
+                    ? con.ContractLogs.Where(x => x.Case_Id.HasValue).OrderByDescending(l => l.CreatedDate).FirstOrDefault()
+                    : null;
+
+                var hasMultiplyCases = con.ContractLogs.Count(x => x.Case_Id.HasValue) > 1;
+                var latestCase = latestLog?.Case;
+
+                model.Data.Add(new ContractsIndexRowModel
+                {
+                    ContractId = con.Id,
+                    ContractNumber = con.ContractNumber,
+                    ContractEndDate = con.ContractEndDate,
+                    ContractCase = latestCase != null ? new ContractCase
+                    {
+                        CaseNumber = (int)latestCase.CaseNumber,
+                        CaseIcon = CasesMapper.GetCaseIcon(latestCase.FinishingDate, latestCase.ApprovedDate, latestCase.CaseType.RequireApproving),
+                        HasMultiplyCases = hasMultiplyCases
+                    } : new ContractCase { CaseNumber = 0 },
+                    ContractStartDate = con.ContractStartDate,
+                    Finished = con.Finished,
+                    Running = con.Running,
+                    FollowUpInterval = con.FollowUpInterval,
+                    Info = con.Info,
+                    NoticeDate = con.NoticeDate,
+                    Supplier = con.Supplier,
+                    ContractCategory = con.ContractCategory,
+                    Department = con.Department,
+                    ResponsibleUser = con.ResponsibleUser,
+                    FollowUpResponsibleUser = con.FollowUpResponsibleUser,
+                    SelectedShowStatus = selectedFilter.State, //todo: move to hidden field
+                    IsInNoticeOfRemoval = IsInNoticeOfRemoval(con.Finished, con.NoticeDate),
+                    IsInFollowUp = isInFollowUp(con.Finished, con.ContractStartDate.ToString(), con.ContractEndDate.ToString(), con.FollowUpInterval),
+                });
+            }
+
+            model.Data = SortData(model.Data, sort);
+            model.SortBy = sort;
+
+            return model;
+        }
+
+        //todo: implement searching in db with filter instead of code
+        private List<Contract> SearchContracts(ContractsSearchFilter filter)
+        {
+            var customerId = filter.CustomerId;
+            var allContracts = _contractService.GetContractsNotFinished(customerId);
+            var selectedStatus = filter.State; 
+
+            if (filter.SelectedContractCategories.Any())
+                allContracts = allContracts.Where(t => filter.SelectedContractCategories.Contains(t.ContractCategory_Id)).ToList();
+
+            if (filter.SelectedDepartments.Any())
+                allContracts = allContracts.Where(t => filter.SelectedDepartments.Contains(t.Department_Id ?? 0)).ToList();
+
+            if (filter.SelectedResponsibles.Any())
+                allContracts = allContracts.Where(t => filter.SelectedResponsibles.Contains(t.ResponsibleUser_Id ?? 0)).ToList();
+
+            if (filter.SelectedSuppliers.Any())
+                allContracts = allContracts.Where(t => filter.SelectedSuppliers.Contains(t.Supplier_Id ?? 0)).ToList();
+
+            //filter by state //todo: use enums or consts
+            if (selectedStatus == 9) // completed
+            {
+                allContracts = allContracts.Where(t => t.Finished == 1).ToList();
+            }
+            else if (selectedStatus == 4) // running
+            {
+                allContracts = allContracts.Where(t => t.Running == 1).ToList();
+            }
+            else if (selectedStatus != 10)
+            {
+                allContracts = allContracts.Where(t => t.Finished == 0).ToList();
+            }
+
+            if (filter.StartDateFrom.HasValue)
+            {
+                allContracts = allContracts.Where(t => t.ContractStartDate >= filter.StartDateFrom.Value).ToList();
+            }
+
+            if (filter.StartDateTo.HasValue)
+            {
+                allContracts = allContracts.Where(t => t.ContractStartDate <= filter.StartDateTo.Value).ToList();
+            }
+
+            if (filter.EndDateFrom.HasValue)
+            {
+                allContracts = allContracts.Where(t => t.ContractEndDate >= filter.EndDateFrom.Value).ToList();
+            }
+
+            if (filter.EndDateTo.HasValue)
+            {
+                allContracts = allContracts.Where(t => t.ContractEndDate <= filter.EndDateTo.Value).ToList();
+            }
+
+            if (filter.NoticeDateFrom.HasValue)
+            {
+                allContracts = allContracts.Where(t => t.NoticeDate >= filter.NoticeDateFrom.Value).ToList();
+            }
+
+            if (filter.NoticeDateTo.HasValue)
+            {
+                allContracts = allContracts.Where(t => t.NoticeDate <= filter.NoticeDateTo.Value).ToList();
+            }
+
+            //search text
+            if (!string.IsNullOrEmpty(filter.SearchText)) //todo: sql injection
+                allContracts = allContracts.Where(t => t.ContractNumber.Contains(filter.SearchText)).ToList();
+
+            return allContracts;
+        }
+
+        private List<ContractsIndexRowModel> SortData(List<ContractsIndexRowModel> data, ColSortModel sort)
+        {
+            switch (sort.ColumnName)
+            {
+                case EnumContractFieldSettings.Number:
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractNumber).ToList() : data.OrderByDescending(d => d.ContractNumber).ToList();
+
+                case EnumContractFieldSettings.CaseNumber:
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractCase.CaseNumber).ToList() : data.OrderByDescending(d => d.ContractCase.CaseNumber).ToList();
+
+                case EnumContractFieldSettings.Category:
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractCategory.Name).ToList() : data.OrderByDescending(d => d.ContractCategory.Name).ToList();
+
+                case EnumContractFieldSettings.Supplier:
+                    return sort.IsAsc ? data.OrderBy(t => t.Supplier != null && t.Supplier.Name != null
+                            ? t.Supplier.Name : string.Empty).ToList() :
+                        data.OrderByDescending(t => t.Supplier != null && t.Supplier.Name != null
+                            ? t.Supplier.Name : string.Empty).ToList();
+
+                case EnumContractFieldSettings.Department:
+                    return sort.IsAsc ? data.OrderBy(d => d.Department.DepartmentName).ToList() : data.OrderByDescending(d => d.Department.DepartmentName).ToList();
+
+                case EnumContractFieldSettings.ResponsibleUser:
+                    return sort.IsAsc ? data.OrderBy(t => t.ResponsibleUser != null && t.ResponsibleUser.SurName != null
+                            ? t.ResponsibleUser.SurName : string.Empty).ToList() :
+                        data.OrderByDescending(t => t.ResponsibleUser != null && t.ResponsibleUser.SurName != null
+                            ? t.ResponsibleUser.SurName : string.Empty).ToList();
+
+                case EnumContractFieldSettings.StartDate:
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractStartDate).ToList() : data.OrderByDescending(d => d.ContractStartDate).ToList();
+
+                case EnumContractFieldSettings.EndDate:
+                    return sort.IsAsc ? data.OrderBy(d => d.ContractEndDate).ToList() : data.OrderByDescending(d => d.ContractEndDate).ToList();
+
+                case EnumContractFieldSettings.NoticeDate:
+                    return sort.IsAsc ? data.OrderBy(d => d.NoticeDate).ToList() : data.OrderByDescending(d => d.NoticeDate).ToList();
+
+                //case EnumContractFieldSettings.Filename:
+                //    return sort.IsAsc ? data.OrderBy(d => d.).ToList() : data.OrderByDescending(d => d.).ToList();
+
+                case EnumContractFieldSettings.Other:
+                    return sort.IsAsc ? data.OrderBy(d => d.Info).ToList() : data.OrderByDescending(d => d.Info).ToList();
+
+                case EnumContractFieldSettings.Running:
+                    return sort.IsAsc ? data.OrderBy(d => d.Running).ToList() : data.OrderByDescending(d => d.Running).ToList();
+
+                case EnumContractFieldSettings.Finished:
+                    return sort.IsAsc ? data.OrderBy(d => d.Finished).ToList() : data.OrderByDescending(d => d.Finished).ToList();
+
+                case EnumContractFieldSettings.FollowUpField:
+                    return sort.IsAsc ? data.OrderBy(d => d.FollowUpInterval).ToList() : data.OrderByDescending(d => d.FollowUpInterval).ToList();
+
+                case EnumContractFieldSettings.ResponsibleFollowUpField:
+                    //return sort.IsAsc ? data.OrderBy(d => d.FollowUpResponsibleUser).ToList() : data.OrderByDescending(d => d.FollowUpResponsibleUser).ToList();
+                    return sort.IsAsc ? data.OrderBy(t => t.FollowUpResponsibleUser != null && t.FollowUpResponsibleUser.SurName != null
+                            ? t.FollowUpResponsibleUser.SurName : string.Empty).ToList() :
+                        data.OrderByDescending(t => t.FollowUpResponsibleUser != null && t.FollowUpResponsibleUser.SurName != null
+                            ? t.FollowUpResponsibleUser.SurName : string.Empty).ToList();
+            }
+
+            return data;
+        }
+
         private bool isInFollowUp(int Finished, string ContractStartDate, string ContractEndDate, int FollowUpInterval)
         {
 
@@ -250,7 +428,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (Finished == 0 && Convert.ToInt32(FollowUpInterval) > 0)
             {
-                if (ParseDate(ContractEndDate) == false)
+                if (TryParseDate(ContractEndDate) == false)
                 {
                     DateTime endDate = Convert.ToDateTime(DateTime.Now.AddMonths(1).ToShortDateString());
                     sContractEndDate = endDate.ToShortDateString();
@@ -287,42 +465,22 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             return flag;
-
-
         }
 
-        private bool isInNoticeOfRemoval(int Finished, string NoticeDate)
+        private bool IsInNoticeOfRemoval(int finished, DateTime? noticeDateTime)
         {
-
-            bool flag = false;
-            string sDate = string.Empty;
-
-
-            if (Finished == 0 && ParseDate(NoticeDate) == true)
+            var today = DateTime.Today;
+            
+            if (finished == 0 && noticeDateTime.HasValue)
             {
-
-                if (Convert.ToDateTime(Convert.ToDateTime(NoticeDate).ToShortDateString()) < Convert.ToDateTime(DateTime.Now.ToShortDateString()))
+                var noticeDate = noticeDateTime.Value.Date;
+                
+                if (noticeDate < today || noticeDate <= today.AddMonths(1))
                 {
-                    sDate = DateTime.Now.ToShortDateString();
+                    return true;
                 }
-                else
-                {
-                    sDate = NoticeDate;
-
-                }
-
-                DateTime endDate = Convert.ToDateTime(DateTime.Now.AddMonths(1).ToShortDateString());
-
-                if (endDate >= Convert.ToDateTime(Convert.ToDateTime(sDate).ToShortDateString()) && Convert.ToDateTime(Convert.ToDateTime(sDate).ToShortDateString()) >= Convert.ToDateTime(DateTime.Now.ToShortDateString()))
-                {
-
-                    flag = true;
-
-                }
-
             }
-
-            return flag;
+            return false;
         }
 
         private ContractViewInputModel CreateInputViewModel(int customerId)
@@ -424,6 +582,20 @@ namespace DH.Helpdesk.Web.Controllers
             };
         }
 
+        private IDictionary<int, string> GetContractStatuses()
+        {
+            var dic = new Dictionary<int, string>
+            {
+                {1, $"  {Translation.GetCoreTextTranslation("Pågående")}"},
+                {2, $"  {Translation.GetCoreTextTranslation("För uppföljning")}"},
+                {3, $"  {Translation.GetCoreTextTranslation("För uppsägning")}"},
+                {4, $"  {Translation.GetCoreTextTranslation("Löpande")}"},
+                {9, $"  {Translation.GetCoreTextTranslation("Avslutade")}"},
+                {10, $"  {Translation.GetCoreTextTranslation("Alla")}"}
+            };
+            return dic;
+        }
+
         [HttpPost]
         [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult New(ContractViewInputModel contractInput, string actiontype, string contractFileKey)
@@ -499,186 +671,6 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(new { state = true, message = Translation.GetCoreTextTranslation("Saved success!") }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult SortBy(int customerId, string colName, bool isAsc, int ShowStatus)
-        {
-            var model = GetIndexRowModel(customerId, null, new ColSortModel(colName, isAsc), ShowStatus);
-            return PartialView("_ContractsIndexRows", model);
-        }
-
-        private ContractsIndexRowsModel GetIndexRowModel(int customerId, ContractSelectedFilter selectedFilter, ColSortModel sort, int showstatus)
-        {
-            var customer = _customerService.GetCustomer(customerId);
-            var model = new ContractsIndexRowsModel(customer);
-            var allContracts = _contractService.GetContractsNotFinished(customerId);
-            var settings = GetSettingsModel(customer.Id);
-            var selectedContracts = new List<Contract>();
-
-
-
-            int z = 0;
-            if (selectedFilter != null)
-            {
-                //Categories
-                if (selectedFilter.SelectedContractCategories.Any())
-                {
-                    var idList = new int[selectedFilter.SelectedContractCategories.Count()];
-
-                    foreach (object i in selectedFilter.SelectedContractCategories)
-                    {
-                        idList[z] = Convert.ToInt32(i.ToString());
-                        z = z + 1;
-
-                    }
-                    //allContracts = allContracts.Where(c => c.ContractCategory_Id.ToString().Contains(search)).ToList();
-
-
-                    allContracts = allContracts.Where(t => idList.Contains(t.ContractCategory_Id)).ToList();
-                }
-
-                //Department                
-                z = 0;
-                if (selectedFilter.SelectedDepartments.Any())
-                {
-                    var idList = new int?[selectedFilter.SelectedDepartments.Count()];
-                    foreach (object i in selectedFilter.SelectedDepartments)
-                    {
-                        idList[z] = Convert.ToInt32(i.ToString());
-                        z = z + 1;
-
-                    }
-
-                    allContracts = allContracts.Where(t => idList.Contains(t.Department_Id)).ToList();
-                }
-
-
-                //Responsibles                
-                z = 0;
-                if (selectedFilter.SelectedResponsibles.Any())
-                {
-                    var idList = new int?[selectedFilter.SelectedResponsibles.Count()];
-                    foreach (object i in selectedFilter.SelectedResponsibles)
-                    {
-                        idList[z] = Convert.ToInt32(i.ToString());
-                        z = z + 1;
-
-                    }
-
-                    allContracts = allContracts.Where(t => idList.Contains(t.ResponsibleUser_Id)).ToList();
-                }
-
-
-                //Suppliers                
-                z = 0;
-                if (selectedFilter.SelectedSuppliers.Any())
-                {
-                    var idList = new int?[selectedFilter.SelectedSuppliers.Count()];
-                    foreach (object i in selectedFilter.SelectedSuppliers)
-                    {
-                        idList[z] = Convert.ToInt32(i.ToString());
-                        z = z + 1;
-
-                    }
-
-                    allContracts = allContracts.Where(t => idList.Contains(t.Supplier_Id)).ToList();
-                }
-
-
-                //State
-                z = 0;
-                if (selectedFilter.ShowState.Any())
-                {
-                    var idList = new int?[selectedFilter.ShowState.Count()];
-                    foreach (object i in selectedFilter.ShowState)
-                    {
-                        idList[z] = Convert.ToInt32(i.ToString());
-                        z = z + 1;
-
-                    }
-
-                    string[] arr = new string[idList.Count()];
-                    int p = 0;
-                    foreach (object d in idList)
-                    {
-                        arr[p] = d.ToString();
-                        p = p + 1;
-                    }
-
-                    if (arr.Contains("9"))
-                    {
-                        allContracts = allContracts.Where(t => t.Finished == 1).ToList();
-                    }
-                    else if (!arr.Contains("10"))
-                    {
-                        allContracts = allContracts.Where(t => t.Finished == 0).ToList();
-                    }
-
-                    if (arr.Contains("4"))
-                    {
-                        allContracts = allContracts.Where(t => t.Running == 1).ToList();
-                    }
-                }
-
-                //Text                
-                z = 0;
-                if (selectedFilter.SearchText.Any())
-                {
-
-                    allContracts = allContracts.Where(t => t.ContractNumber.Contains(selectedFilter.SearchText)).ToList();
-                }
-            }
-
-
-
-            model.Columns = settings.SettingRows.Where(s => s.ShowInList)
-                                                .ToList();
-
-            foreach (var col in model.Columns)
-                col.SetOrder();
-
-            model.Columns = model.Columns.OrderBy(s => s.VirtualOrder).ToList();
-            model.SelectedShowStatus = showstatus;
-
-
-            foreach (var con in allContracts)
-            {
-                var latestLog = con.ContractLogs.Any(x => x.Case_Id.HasValue)
-                    ? con.ContractLogs.Where(x => x.Case_Id.HasValue).OrderByDescending(l => l.CreatedDate).FirstOrDefault()
-                    : null;
-                var hasMultiplyCases = con.ContractLogs.Count(x => x.Case_Id.HasValue) > 1;
-                var latestCase = latestLog?.Case;
-                model.Data.Add(new ContractsIndexRowModel
-                {
-                    ContractId = con.Id,
-                    ContractNumber = con.ContractNumber,
-                    ContractEndDate = con.ContractEndDate,
-                    ContractCase = latestCase != null ?  new ContractCase {
-                        CaseNumber = (int)latestCase.CaseNumber,
-                        CaseIcon = CasesMapper.GetCaseIcon(latestCase.FinishingDate, latestCase.ApprovedDate, latestCase.CaseType.RequireApproving),
-                        HasMultiplyCases = hasMultiplyCases
-                    } : new ContractCase { CaseNumber = 0 },
-                    ContractStartDate = con.ContractStartDate,
-                    Finished = con.Finished,
-                    Running = con.Running,
-                    FollowUpInterval = con.FollowUpInterval,
-                    Info = con.Info,
-                    NoticeDate = con.NoticeDate,
-                    Supplier = con.Supplier,
-                    ContractCategory = con.ContractCategory,
-                    Department = con.Department,
-                    ResponsibleUser = con.ResponsibleUser,
-                    FollowUpResponsibleUser = con.FollowUpResponsibleUser,
-                    SelectedShowStatus = showstatus,
-                    IsInNoticeOfRemoval = isInNoticeOfRemoval(con.Finished, con.NoticeDate.ToString()),
-                    IsInFollowUp = isInFollowUp(con.Finished, con.ContractStartDate.ToString(), con.ContractEndDate.ToString(), con.FollowUpInterval),
-                });
-            }
-
-            model.Data = SortData(model.Data, sort);
-            model.SortBy = sort;
-
-            return model;
-        }
-
         [HttpGet]
         public ActionResult ContractHistory(int id)
         {
@@ -734,70 +726,6 @@ namespace DH.Helpdesk.Web.Controllers
             diffList.Reverse();
             return diffList;
         }
-
-        private List<ContractsIndexRowModel> SortData(List<ContractsIndexRowModel> data, ColSortModel sort)
-        {
-            switch (sort.ColumnName)
-            {
-                case EnumContractFieldSettings.Number:
-                    return sort.IsAsc ? data.OrderBy(d => d.ContractNumber).ToList() : data.OrderByDescending(d => d.ContractNumber).ToList();
-
-                case EnumContractFieldSettings.CaseNumber:
-                    return sort.IsAsc ? data.OrderBy(d => d.ContractCase.CaseNumber).ToList() : data.OrderByDescending(d => d.ContractCase.CaseNumber).ToList();
-
-                case EnumContractFieldSettings.Category:
-                    return sort.IsAsc ? data.OrderBy(d => d.ContractCategory.Name).ToList() : data.OrderByDescending(d => d.ContractCategory.Name).ToList();
-
-                case EnumContractFieldSettings.Supplier:
-                    return sort.IsAsc ? data.OrderBy(t => t.Supplier != null && t.Supplier.Name != null
-                                         ? t.Supplier.Name : string.Empty).ToList() :
-                                        data.OrderByDescending(t => t.Supplier != null && t.Supplier.Name != null
-                                         ? t.Supplier.Name : string.Empty).ToList();
-
-                case EnumContractFieldSettings.Department:
-                    return sort.IsAsc ? data.OrderBy(d => d.Department.DepartmentName).ToList() : data.OrderByDescending(d => d.Department.DepartmentName).ToList();
-
-                case EnumContractFieldSettings.ResponsibleUser:
-                    return sort.IsAsc ? data.OrderBy(t => t.ResponsibleUser != null && t.ResponsibleUser.SurName != null
-                                         ? t.ResponsibleUser.SurName : string.Empty).ToList() :
-                                        data.OrderByDescending(t => t.ResponsibleUser != null && t.ResponsibleUser.SurName != null
-                                         ? t.ResponsibleUser.SurName : string.Empty).ToList();
-
-                case EnumContractFieldSettings.StartDate:
-                    return sort.IsAsc ? data.OrderBy(d => d.ContractStartDate).ToList() : data.OrderByDescending(d => d.ContractStartDate).ToList();
-
-                case EnumContractFieldSettings.EndDate:
-                    return sort.IsAsc ? data.OrderBy(d => d.ContractEndDate).ToList() : data.OrderByDescending(d => d.ContractEndDate).ToList();
-
-                case EnumContractFieldSettings.NoticeDate:
-                    return sort.IsAsc ? data.OrderBy(d => d.NoticeDate).ToList() : data.OrderByDescending(d => d.NoticeDate).ToList();
-
-                //case EnumContractFieldSettings.Filename:
-                //    return sort.IsAsc ? data.OrderBy(d => d.).ToList() : data.OrderByDescending(d => d.).ToList();
-
-                case EnumContractFieldSettings.Other:
-                    return sort.IsAsc ? data.OrderBy(d => d.Info).ToList() : data.OrderByDescending(d => d.Info).ToList();
-
-                case EnumContractFieldSettings.Running:
-                    return sort.IsAsc ? data.OrderBy(d => d.Running).ToList() : data.OrderByDescending(d => d.Running).ToList();
-
-                case EnumContractFieldSettings.Finished:
-                    return sort.IsAsc ? data.OrderBy(d => d.Finished).ToList() : data.OrderByDescending(d => d.Finished).ToList();
-
-                case EnumContractFieldSettings.FollowUpField:
-                    return sort.IsAsc ? data.OrderBy(d => d.FollowUpInterval).ToList() : data.OrderByDescending(d => d.FollowUpInterval).ToList();
-
-                case EnumContractFieldSettings.ResponsibleFollowUpField:
-                    //return sort.IsAsc ? data.OrderBy(d => d.FollowUpResponsibleUser).ToList() : data.OrderByDescending(d => d.FollowUpResponsibleUser).ToList();
-                    return sort.IsAsc ? data.OrderBy(t => t.FollowUpResponsibleUser != null && t.FollowUpResponsibleUser.SurName != null
-                                        ? t.FollowUpResponsibleUser.SurName : string.Empty).ToList() :
-                                        data.OrderByDescending(t => t.FollowUpResponsibleUser != null && t.FollowUpResponsibleUser.SurName != null
-                                        ? t.FollowUpResponsibleUser.SurName : string.Empty).ToList();
-            }
-
-            return data;
-        }
-
         private ContractsSettingViewModel GetSettingsModel(int customerId)
         {
             var model = new ContractsSettingViewModel();
@@ -1140,7 +1068,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         #region Helper Methods
 
-        private bool ParseDate(string value)
+        private bool TryParseDate(string value)
         {
             DateTime dt1;
             bool res = DateTime.TryParse(value, out dt1);

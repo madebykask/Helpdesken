@@ -19,33 +19,10 @@ namespace DH.Helpdesk.Web.Models.Contract
             Customer = customer;
             Rows = new ContractsIndexRowsModel(customer);
             Columns = new ContractsIndexColumnsModel(customer);
-
-            var selectListItems = new List<SelectListItem>();
-
-            selectListItems.AddRange(GetSelectListItem());
-            
-            ShowContracts = GetSelectListItem();
-        }
-
-        private static IEnumerable<SelectListItem> GetSelectListItem()
-        {
-            var dic = new Dictionary<int, string>
-            {
-                { 1, $"  {Translation.GetCoreTextTranslation("Pågående")}" },
-                { 2, $"  {Translation.GetCoreTextTranslation("För uppföljning")}" },
-                { 3, $"  {Translation.GetCoreTextTranslation("För uppsägning")}" },
-                { 4, $"  {Translation.GetCoreTextTranslation("Löpande")}" },
-                { 9, $"  {Translation.GetCoreTextTranslation("Avslutade")}" },
-                { 10, $"  {Translation.GetCoreTextTranslation("Alla")}" }
-            };
-
-            var items = dic.ToSelectList();
-            items.Single(x => x.Value == "10").Selected = true;
-
-            return items;
         }
         
-        public IEnumerable<SelectListItem> ShowContracts { get; private set; }
+        public int SelectedState { get; set; }
+        public List<SelectListItem> ShowContracts { get; set; }
 
         public Customer Customer { get; private set; }
         public List<ContractCategory> ContractCategories { get; set; }
@@ -70,6 +47,15 @@ namespace DH.Helpdesk.Web.Models.Contract
         public int ContractFollowUpCount { get; set; }
 
         public int RunningCases { get; set; }
+
+        public DateTime? NoticeDateFrom { get; set; }
+        public DateTime? NoticeDateTo { get; set; }
+
+        public DateTime? StartDateFrom { get; set; }
+        public DateTime? StartDateTo { get; set; }
+
+        public DateTime? EndDateFrom { get; set; }
+        public DateTime? EndDateTo { get; set; }
     }
 
     public sealed class ContractsIndexRowModel
@@ -149,9 +135,7 @@ namespace DH.Helpdesk.Web.Models.Contract
         }
 
         public string ColumnName { get; private set; }
-
         public bool IsAsc { get; private set; }
-
     }
 
     public sealed class ContractCase

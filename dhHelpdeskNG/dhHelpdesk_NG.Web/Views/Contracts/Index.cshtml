@@ -1,197 +1,228 @@
-﻿@using System.Web.Optimization
-@using System.Web.Script.Serialization
+﻿@using DH.Helpdesk.BusinessData.Enums.Contracts
 @model DH.Helpdesk.Web.Models.Contract.ContractIndexViewModel
 
-@Scripts.Render("~/bundles/contract")
+@section Scripts
+{
+    @Scripts.Render("~/bundles/contract")
 
-@{
-    var jsSerializer = new JavaScriptSerializer();
+    <script type="text/javascript">
+
+        $(function () {
+            var settings = {
+                SearchActionUrl: '@Url.Action("Search", "Contracts")',
+                SortActionUrl: '@Url.Action("SortBy", "Contracts")',
+                SaveContractFieldsSettings: '@Url.Action("SaveContractFieldsSetting", "Contracts", "")',
+                IndexUrl: '@Url.Action("index", "Contracts", null)'
+            };
+
+            window.ContractsPage = createContractsPage($);
+            window.ContractsPage.Init(settings);
+        });
+
+        function SortCol(colName) {
+            window.ContractsPage.Sort(colName);
+        }
+    </script>    
 }
-<script type="text/javascript">
-    window.Params = {
-        ShowSearchResult: '@Url.Action("_ContractsIndexRows", "Contracts", "")',
-        SaveContractFieldsSettings: '@Url.Action("SaveContractFieldsSetting", "Contracts", "")',
-        IndexUrl: '@Url.Action("index", "Contracts", null)'
-    };
 
-
-</script>
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Nytt avtal", Enums.TranslationSource.TextTranslation), "new", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
+            <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Nytt avtal"), "new", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
             @Html.HiddenFor(x => Model.Setting)
         </ul>
     </div>
 </div>
 <div class="content">
     <div class="container">
+        <div id="globalProgress" class="loading-msg" style="display:none">
+            <div class="content-wrapper">
+                <div class="loader">@Translation.GetCoreTextTranslation("Laddar...")</div>
+            </div>
+        </div>
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active" id="overview_Tab"><a href="#fragment-1">@Translation.Get("Avtal")</a></li>
+            <li class="active" id="overview_Tab"><a href="#fragment-1">@Translation.GetCoreTextTranslation("Avtal")</a></li>
             <li id="settings_tab">
-                <a href="#fragment-2">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-2">@Translation.GetCoreTextTranslation("Inställningar")</a>
             </li>
         </ul>
-
         <div class="tab-content">
-
             <div class="tab-pane tab-pane-border active" id="fragment-1">
-
                 <div>
-                    @*<div align="right">
-
-
-                        </div>*@
-
-                    @using (Html.BeginForm("Search", "Contracts", FormMethod.Post, new { id = "search_form" }))
+                    @using (Html.BeginForm("Search", "Contracts", FormMethod.Post, new {id = "search_form"}))
                     {
+                        <input type="hidden" id="currentCustomerId" name="CustomerId" value="@Model.Customer.Id" />
+                        <div class="row">
+                            <div class="span8">
+                                <table class="tableform">
+                                    <tr>
+                                        <td style="width: 100px">@Translation.GetCoreTextTranslation("Kategori")</td>
+                                        <td>
+                                            <select id="lstContractCategories" name="Categories" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                                @foreach (var a in Model.ContractCategories)
+                                                {
+                                                    <option value="@a.Id">@a.Name</option>
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 100px">@Translation.GetCoreTextTranslation("Leverantör")</td>
+                                        <td>
+                                            <select id="lstSuppliers" name="Suppliers" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                                @foreach (var s in Model.Suppliers)
+                                                {
+                                                    <option value="@s.Id">@s.Name</option>
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 100px">@Translation.GetCoreTextTranslation("Ansvarig uppföljning")</td>
+                                        <td>
+                                            <select id="lstResponsible" name="ResponsibleUsers" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                                @foreach (var s in Model.Users)
+                                                {
+                                                    <option value="@s.Id">@s.SurName @s.FirstName</option>
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 100px">@Translation.GetCoreTextTranslation("Avdelning")</td>
+                                        <td>
+                                            <select id="lstDepartment" name="Departments" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                                @foreach (var s in Model.Departments)
+                                                {
+                                                    <option value="@s.Id">@s.DepartmentName</option>
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 100px">@Translation.GetCoreTextTranslation("Visa")</td>
+                                        <td>
+                                            <select id="lstShow" name="ShowContracts" data-field="region" data-placeholder="@Translation.GetCoreTextTranslation("Välj")" class="inputw300">
+                                                @foreach (var s in Model.ShowContracts)
+                                                {
+                                                    <option selected="@s.Value.Equals(Model.SelectedState.ToString(), StringComparison.OrdinalIgnoreCase)" value="@s.Value">@s.Text</option>
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">@Translation.GetCoreTextTranslation("Sök")</td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.SearchText, new { @style = "width:285px", @id = "txtSearch" })
+                                            @*<input type="submit" value="@Translation.Get("Sök")" class="btn" />*@
+                                            @*<input type="button" class="btn" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" onclick="submit();" />*@
+                                            <input type="submit" class="btn" id="searchQueryBtn" value="@Translation.GetCoreTextTranslation("Sök")" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="span5">
+                                <table class="tableform">
+                                    <tr class="date-block">
+                                        <td>
+                                            @Translation.GetCoreTextTranslation(ContractFieldLabels.ContractStartDate)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => Model.StartDateFrom, "DatePicker", new { id = "divSearch_StartDateFrom" })
+                                            @Html.EditorFor(m => Model.StartDateTo, "DatePicker", new { id = "divSearch_StartDateTo" })
+                                        </td>
+                                    </tr>
+                                    <tr class="date-block">
+                                        <td>
+                                            @Translation.GetCoreTextTranslation(ContractFieldLabels.ContractEndDate)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => Model.EndDateFrom, "DatePicker", new { id = "divSearch_EndDateFrom" })
+                                            @Html.EditorFor(m => Model.EndDateTo, "DatePicker", new { id = "divSearch_EndDateTo" })
+                                        </td>
+                                    </tr>
+                                    <tr class="date-block">
+                                        <td>
+                                            @Translation.GetCoreTextTranslation(ContractFieldLabels.Noticedate)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => Model.NoticeDateFrom, "DatePicker", new { id = "divSearch_NoticeDateFrom" })
+                                            @Html.EditorFor(m => Model.NoticeDateTo, "DatePicker", new { id = "divSearch_NoticeDateTo" })
+                                        </td>
+                                    </tr>
 
-                        @*@using (Ajax.BeginForm("Search", null, new AjaxOptions { UpdateTargetId = "contracts_grid" }, new { id = "search_form" }))
-                            {*@
+                                </table>
+                            </div>
+                            <div class="pull-right">
+                                <div align="right">
+                                    <table style="border-style: solid; border-width: thin; color: gray; font-weight: bold; font-size: 11px; border-color: #E0E0E0; font-family: Helvetica Neue, Helvetica, Arial, sans-serif">
+                                        <tr style="border-style: solid; border-width: thin">
+                                            <td colspan="2" style="color: black; background-color: #f9f9f9; padding-left: 5px">
+                                                @Translation.GetCoreTextTranslation("Avtal")
+                                            </td>
+                                        </tr>
+                                        <tr style="border-style: solid; border-width: thin; border-color: #E0E0E0">
+                                            <td style="border-style: solid; border-width: thin; border-color: #E0E0E0; padding-left: 5px">
+                                                @Translation.GetCoreTextTranslation("Antal")
+                                            </td>
 
+                                            <td style="border-style: solid; border-width: thin; text-align: right; width: 100px; border-color: #E0E0E0; padding-right: 5px">
+                                                @Model.TotalCases
+                                            </td>
+                                        </tr>
+                                        <tr style="border-style: solid; border-width: thin; border-color: #E0E0E0">
+                                            <td style="border-style: solid; border-width: thin; padding-right: 100px; border-color: #E0E0E0; padding-left: 5px">
+                                                @Translation.GetCoreTextTranslation("Pågående")
+                                            </td>
 
-                        <input type="hidden" id="currentCustomerId" value="@Model.Customer.Id" />
-                        <table style="width:100%">
-                            <tr>
-                                <td style="width:100px">@Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)</td>&nbsp;
+                                            <td style="border-style: solid; border-width: thin; text-align: right; border-color: #E0E0E0; padding-right: 5px">
+                                                @Model.OnGoingCases
+                                            </td>
+                                        </tr>
+                                        <tr style="border-style: solid; border-width: thin; border-color: #E0E0E0">
+                                            <td style="border-style: solid; border-width: thin; border-color: #E0E0E0; padding-left: 5px">
+                                                @Translation.GetCoreTextTranslation("Avslutade")
+                                            </td>
 
-                                <td>
-                                    <select id="lstContractCategories" name="lstContractCategories" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                        @foreach (var a in Model.ContractCategories)
-                                        {
-                                            <option value="@a.Id">@a.Name</option>
-                                        }
-                                    </select>
-                                </td>
-                                
-                                <td rowspan="4" align="right" colspan="10">
-                                    <div align="right">
-                                        <table style="border-style:solid;border-width:thin;color:gray;font-weight:bold;font-size:11px;border-color:#E0E0E0; font-family: Helvetica Neue, Helvetica, Arial, sans-serif">
-                                            <tr style="border-style:solid;border-width:thin">
-                                                <td colspan="2" style="color:black; background-color:#f9f9f9; padding-left:5px">
-                                                    @Translation.GetCoreTextTranslation("Avtal")
-                                                </td>
-                                            </tr>
-                                            <tr style="border-style:solid;border-width:thin;border-color:#E0E0E0">
-                                                <td style="border-style:solid;border-width:thin;border-color:#E0E0E0;padding-left:5px">
-                                                    @Translation.GetCoreTextTranslation("Antal")
-                                                </td>
+                                            <td style="border-style: solid; border-width: thin; text-align: right; border-color: #E0E0E0; padding-right: 5px">
+                                                @Model.FinishedCases
+                                            </td>
+                                        </tr>
+                                        <tr style="border-style: solid; border-width: thin; border-color: #E0E0E0">
+                                            <td style="border-style: solid; border-width: thin; border-color: #E0E0E0; padding-left: 5px">
+                                                <span>@Translation.GetCoreTextTranslation("För uppsägning")</span>
+                                            </td>
+                                            <td style="border-style: solid; border-width: thin; text-align: right; border-color: #E0E0E0; padding-right: 5px">
+                                                <span> @Model.ContractNoticeOfRemovalCount </span>
+                                            </td>
+                                        </tr>
+                                        <tr style="border-style: solid; border-width: thin; border-color: #E0E0E0">
+                                            <td style="border-style: solid; border-width: thin; border-color: #E0E0E0; padding-left: 5px">
+                                                <span>@Translation.GetCoreTextTranslation("För uppföljning")</span>
+                                            </td>
 
-                                                <td style="border-style:solid;border-width:thin;text-align:right; width:100px;border-color:#E0E0E0;padding-right:5px">
-                                                    @Model.TotalCases
-                                                </td>
-                                            </tr>
-                                            <tr style="border-style:solid;border-width:thin;border-color:#E0E0E0">
-                                                <td style="border-style:solid;border-width:thin;padding-right:100px;border-color:#E0E0E0;padding-left:5px">
-                                                    @Translation.GetCoreTextTranslation("Pågående")
-                                                </td>
+                                            <td style="border-style: solid; border-width: thin; text-align: right; border-color: #E0E0E0; padding-right: 5px">
+                                                <span> @Model.ContractFollowUpCount </span>
+                                            </td>
+                                        </tr>
+                                        <tr style="border-style: solid; border-width: thin; border-color: #E0E0E0">
+                                            <td style="border-style: solid; border-width: thin; border-color: #E0E0E0; padding-left: 5px">
+                                                <span>@Translation.GetCoreTextTranslation("Löpande")</span>
+                                            </td>
 
-                                                <td style="border-style:solid;border-width:thin;text-align:right;border-color:#E0E0E0;padding-right:5px">
-                                                    @Model.OnGoingCases
-                                                </td>
-                                            </tr>
-                                            <tr style="border-style:solid;border-width:thin;border-color:#E0E0E0">
-                                                <td style="border-style:solid;border-width:thin;border-color:#E0E0E0;padding-left:5px">
-                                                    @Translation.GetCoreTextTranslation("Avslutade")
-                                                </td>
-
-                                                <td style="border-style:solid;border-width:thin;text-align:right;border-color:#E0E0E0;padding-right:5px">
-                                                    @Model.FinishedCases
-                                                </td>
-                                            </tr>
-                                            <tr style="border-style:solid;border-width:thin;border-color:#E0E0E0">
-                                                <td style="border-style: solid; border-width: thin; border-color: #E0E0E0; padding-left: 5px">
-                                                    <span>@Translation.GetCoreTextTranslation("För uppsägning")</span>
-                                                </td>
-                                                <td style="border-style:solid;border-width:thin;text-align:right;border-color:#E0E0E0;padding-right:5px">
-                                                    <span > @Model.ContractNoticeOfRemovalCount </span>
-                                                </td>
-                                            </tr>
-                                            <tr style="border-style:solid;border-width:thin;border-color:#E0E0E0">
-                                                <td style="border-style:solid;border-width:thin;border-color:#E0E0E0;padding-left:5px">
-                                                    <span>@Translation.GetCoreTextTranslation("För uppföljning")</span>
-                                                </td>
-
-                                                <td style="border-style:solid;border-width:thin;text-align:right;border-color:#E0E0E0;padding-right:5px">
-                                                    <span> @Model.ContractFollowUpCount </span>
-                                                </td>
-                                            </tr>
-                                            <tr style="border-style:solid;border-width:thin;border-color:#E0E0E0">
-                                                <td style="border-style:solid;border-width:thin;border-color:#E0E0E0;padding-left:5px">
-                                                    <span>@Translation.GetCoreTextTranslation("Löpande")</span>
-                                                </td>
-
-                                                <td style="border-style:solid;border-width:thin;text-align:right;border-color:#E0E0E0;padding-right:5px">
-                                                    <span > @Model.RunningCases</span>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width:100px">@Translation.Get("Leverantör", Enums.TranslationSource.TextTranslation)</td>&nbsp;
-                                <td>
-                                    <select id="lstSuppliers" name="lstSuppliers" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                        @foreach (var s in Model.Suppliers)
-                                        {
-                                            <option value="@s.Id">@s.Name</option>
-                                        }
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width:100px">@Translation.Get("Ansvarig uppföljning", Enums.TranslationSource.TextTranslation)</td>&nbsp;
-                                <td>
-                                    <select id="lstResponsible" name="lstResponsible" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                        @foreach (var s in Model.Users)
-                                        {
-                                            <option value="@s.Id">@s.SurName @s.FirstName</option>
-                                        }
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width:100px">@Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)</td>&nbsp;
-                                <td>
-                                    <select id="lstDepartment" name="lstDepartment" data-field="region" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                        @foreach (var s in Model.Departments)
-                                        {
-                                            <option value="@s.Id">@s.DepartmentName</option>
-                                        }
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width:100px">@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)</td>&nbsp;
-                                <td>
-                                    <select id="lstShow" name="lstShow" data-field="region" data-placeholder="@Translation.Get("Välj", Enums.TranslationSource.TextTranslation)" class="inputw300">
-                                        @foreach (var s in Model.ShowContracts)
-                                        {
-                                            <option selected="@s.Selected" value="@s.Value">@s.Text</option>
-                                        }
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="span3">@Translation.GetCoreTextTranslation("Sök")</td>
-                                <td>
-                                    @Html.TextBoxFor(m => m.SearchText, new { @style = "width:285px", @id = "txtSearch" })
-                                    @*<input type="submit" value="@Translation.Get("Sök")" class="btn" />*@
-
-                                    @*<input type="button" class="btn" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" onclick="submit();" />*@
-
-                                    <input type="button" class="btn" id="searchQueryBtn" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)" onclick="commit();" />
-
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="3">
-                                    &nbsp;
-                                </td>
-                            </tr>
-                        </table>
+                                            <td style="border-style: solid; border-width: thin; text-align: right; border-color: #E0E0E0; padding-right: 5px">
+                                                <span> @Model.RunningCases</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     }
                 </div>
                 <div id="contracts_grid">
@@ -210,64 +241,6 @@
                     @Html.Partial("_Settings", Model.Setting)
                 }
             </div>
-
-
-
         </div>
     </div>
-
-
-
-    <script type="text/javascript">
-
-        function commit(id, lunch) {
-
-            var customer = document.getElementById('currentCustomerId').value;
-
-            var categories = $('select#lstContractCategories').val();
-
-            var suppliers = $('select#lstSuppliers').val();
-
-            var responsible = $('select#lstResponsible').val();
-
-            var department = $('select#lstDepartment').val();
-
-            var show = $('select#lstShow').val();
-            //alert(show);
-
-            //alert(document.getElementById('lstShow').value);
-
-            var search = document.getElementById('txtSearch').value;
-
-            if (customer == null) {
-                customer = '';
-            }
-            if (categories == null) {
-                categories = '';
-            }
-            if (suppliers == null) {
-                suppliers = '';
-            }
-            if (responsible == null) {
-                responsible = '';
-            }
-            if (department == null) {
-                department = '';
-            }
-            if (show == null) {
-                show = '';
-            }
-            if (search == null) {
-                search = '';
-            }
-
-            $.get("/Contracts/Search/" + customer + "", { Categories: "'" + categories.toString() + "'", Suppliers: "'" + suppliers.toString() + "'", Responsible: "'" + responsible.toString() + "'", Department: "'" + department.toString() + "'", Show: "'" + show.toString() + "'", Search: "'" + search.toString() + "'" }, function (returnHtml) {
-                $('#contracts_grid').html($(returnHtml));
-            });
-
-
-        }
-
-
-
-    </script>
+</div>
