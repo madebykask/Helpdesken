@@ -458,6 +458,7 @@
     <Compile Include="NewInfrastructure\Concrete\UnitOfWorkFactory.cs" />
     <Compile Include="NewInfrastructure\DynamicTypeBuilder.cs" />
     <Compile Include="NewInfrastructure\IDbContext.cs" />
+    <Compile Include="Interceptors\OptionHintScope.cs" />
     <Compile Include="NewInfrastructure\QueryableExtensions.cs" />
     <Compile Include="NewInfrastructure\ISessionFactory.cs" />
     <Compile Include="NewInfrastructure\IGenericRepository.cs" />

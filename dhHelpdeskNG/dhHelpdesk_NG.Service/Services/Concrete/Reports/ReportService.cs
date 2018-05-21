@@ -360,6 +360,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
         {
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
+                uow.AutoDetectChangesEnabled = false;
                 var categoryRep = uow.GetRepository<Category>();
                 var caseTypeRep = uow.GetRepository<CaseType>();
                 var productAreaRep = uow.GetRepository<ProductArea>();
