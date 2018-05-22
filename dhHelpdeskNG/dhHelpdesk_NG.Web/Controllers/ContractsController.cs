@@ -72,14 +72,18 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Index()
         {
             var customer = _customerService.GetCustomer(SessionFacade.CurrentCustomer.Id);
+            var sortModel = new ColSortModel(EnumContractFieldSettings.Number, true);
 
-            var model = CreateContractIndexViewModel(customer);
+            var filterModel = GetSearchFilter(customer.Id);
+            var searchResults = GetSearchResultsModel(filterModel, sortModel);
 
-            model.SearchFilterModel = GetContractsSearchFilterModel(customer);
-
-            model.Setting = GetSettingsModel(customer.Id);
-
-            model.SearchResults = GetSearchResultsModel(SessionFacade.CurrentContractsSearch, new ColSortModel(EnumContractFieldSettings.Number, true));
+            var model =
+                new ContractIndexViewModel(customer)
+                {
+                    SearchFilterModel = GetContractsSearchFilterModel(customer),
+                    Setting = GetSettingsModel(customer.Id),
+                    SearchResults = searchResults
+                };
 
             return this.View(model);
         }
@@ -87,18 +91,9 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public ActionResult SortBy(int customerId, string colName, bool isAsc)
         {
-            var filterModel = SessionFacade.CurrentContractsSearch;
-            if (filterModel == null)
-            {
-                filterModel = new ContractsSearchFilter
-                {
-                    CustomerId = customerId,
-
-                };
-            }
+            var filterModel = GetSearchFilter(customerId);
 
             var sortModel = new ColSortModel(colName, isAsc);
-
             var model = GetSearchResultsModel(filterModel, sortModel);
 
             return PartialView("_ContractsIndexRows", model);
@@ -108,9 +103,8 @@ namespace DH.Helpdesk.Web.Controllers
         [BadRequestOnNotValid]
         public PartialViewResult Search(ContractsSearchInputData data)
         {
-            var filter = new ContractsSearchFilter
+            var filter = new ContractsSearchFilter(data.CustomerId)
             {
-                CustomerId = data.CustomerId,
                 SelectedContractCategories = data.Categories,
                 SelectedSuppliers = data.Suppliers,
                 SelectedResponsibles = data.ResponsibleUsers,
@@ -132,45 +126,29 @@ namespace DH.Helpdesk.Web.Controllers
             //save filter in session
             SessionFacade.CurrentContractsSearch = filter;
 
-            var customer = _customerService.GetCustomer(data.CustomerId);
-            var model = CreateContractIndexViewModel(customer);
+            var sortModel =
+                string.IsNullOrEmpty(data.SortColName)
+                    ? new ColSortModel(EnumContractFieldSettings.Number, true)
+                    : new ColSortModel(data.SortColName, data.SortAsc);
 
-            var sortMode = new ColSortModel(EnumContractFieldSettings.Number, true);
-            model.SearchResults = GetSearchResultsModel(filter, sortMode);
+            var searchResults = GetSearchResultsModel(filter, sortModel);
 
-            
-
-            //model.TotalCases = model.Rows.Data.Count();
-            //model.OnGoingCases = model.Rows.Data.Where(z => z.Finished == 0).Count();
-            //model.FinishedCases = model.Rows.Data.Where(z => z.Finished == 1).Count();
-            //int iContractNoticeOfRemovalCount = 0;
-            //foreach (ContractsIndexRowModel ci in model.Rows.Data)
-            //{
-            //    if (isInNoticeOfRemoval(ci.Finished, ci.NoticeDate.ToString()))
-            //    {
-            //        iContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount + 1;
-            //    }
-            //}
-            //model.ContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount;
-
-            //int iContractFollowUpCount = 0;
-            //foreach (ContractsIndexRowModel ci in model.Rows.Data)
-            //{
-            //    if (isInFollowUp(ci.Finished, ci.ContractStartDate.ToString(), ci.ContractEndDate.ToString(), ci.FollowUpInterval))
-            //    {
-            //        iContractFollowUpCount = iContractFollowUpCount + 1;
-            //    }
-            //}
-            //model.ContractFollowUpCount = iContractFollowUpCount;
-            //model.RunningCases = model.Rows.Data.Where(z => z.Running == 1).Count();
-
-            //TODO: Extend Model with Search Summary and update summary on client on success from Hidden fields!!!!
-            return this.PartialView("_ContractsIndexRows", model.SearchResults);
+            return PartialView("_ContractsIndexRows", searchResults);
         }
 
-        private ContractIndexViewModel CreateContractIndexViewModel(Customer customer)
+        private ContractsSearchFilter GetSearchFilter(int customerId)
         {
-            return new ContractIndexViewModel(customer);
+            var filterModel = SessionFacade.CurrentContractsSearch;
+            if (filterModel == null)
+            {
+                filterModel = new ContractsSearchFilter(customerId)
+                {
+                    State = ContractStatuses.Active
+                };
+
+                SessionFacade.CurrentContractsSearch = filterModel;
+            }
+            return filterModel;
         }
 
         private ContractsSearchResultsModel GetSearchResultsModel(ContractsSearchFilter selectedFilter, ColSortModel sort)
@@ -193,43 +171,54 @@ namespace DH.Helpdesk.Web.Controllers
             model.Columns = model.Columns.OrderBy(s => s.VirtualOrder).ToList();
             model.SelectedShowStatus = selectedFilter.State;
 
+            var showStatus = selectedFilter.State;
+            
             foreach (var con in allContracts)
             {
-                var latestLog = con.ContractLogs.Any(x => x.Case_Id.HasValue)
-                    ? con.ContractLogs.Where(x => x.Case_Id.HasValue).OrderByDescending(l => l.CreatedDate).FirstOrDefault()
-                    : null;
+                var isInNoticeOfRemoval = IsInNoticeOfRemoval(con.Finished, con.NoticeDate);
+                var isInFollowUp = IsInFollowUp(con.Finished, con.ContractStartDate, con.ContractEndDate, con.FollowUpInterval);
 
-                var hasMultiplyCases = con.ContractLogs.Count(x => x.Case_Id.HasValue) > 1;
-                var latestCase = latestLog?.Case;
-
-                model.Data.Add(new ContractsIndexRowModel
+                if ((showStatus == ContractStatuses.All) ||
+                    (showStatus != ContractStatuses.InNoticeOfRemoval && showStatus != ContractStatuses.ToFollowUp) ||
+                    (showStatus == ContractStatuses.InNoticeOfRemoval && isInNoticeOfRemoval) ||
+                    (showStatus == ContractStatuses.ToFollowUp && isInFollowUp))
                 {
-                    ContractId = con.Id,
-                    ContractNumber = con.ContractNumber,
-                    ContractEndDate = con.ContractEndDate,
-                    ContractCase = latestCase != null ? new ContractCase
+                    var latestLog = con.ContractLogs.Any(x => x.Case_Id.HasValue)
+                        ? con.ContractLogs.Where(x => x.Case_Id.HasValue).OrderByDescending(l => l.CreatedDate).FirstOrDefault()
+                        : null;
+
+                    var hasMultipleCases = con.ContractLogs.Count(x => x.Case_Id.HasValue) > 1;
+                    var latestCase = latestLog?.Case;
+
+                    model.Data.Add(new ContractsSearchRowModel
                     {
-                        CaseNumber = (int)latestCase.CaseNumber,
-                        CaseIcon = CasesMapper.GetCaseIcon(latestCase.FinishingDate, latestCase.ApprovedDate, latestCase.CaseType.RequireApproving),
-                        HasMultiplyCases = hasMultiplyCases
-                    } : new ContractCase { CaseNumber = 0 },
-                    ContractStartDate = con.ContractStartDate,
-                    Finished = con.Finished,
-                    Running = con.Running,
-                    FollowUpInterval = con.FollowUpInterval,
-                    Info = con.Info,
-                    NoticeDate = con.NoticeDate,
-                    Supplier = con.Supplier,
-                    ContractCategory = con.ContractCategory,
-                    Department = con.Department,
-                    ResponsibleUser = con.ResponsibleUser,
-                    FollowUpResponsibleUser = con.FollowUpResponsibleUser,
-                    SelectedShowStatus = selectedFilter.State, //todo: move to hidden field
-                    IsInNoticeOfRemoval = IsInNoticeOfRemoval(con.Finished, con.NoticeDate),
-                    IsInFollowUp = IsInFollowUp(con.Finished, con.ContractStartDate, con.ContractEndDate, con.FollowUpInterval),
-                });
+                        ContractId = con.Id,
+                        ContractNumber = con.ContractNumber,
+                        ContractEndDate = con.ContractEndDate,
+                        ContractCase = latestCase != null ? new ContractCase
+                        {
+                            CaseNumber = (int)latestCase.CaseNumber,
+                            CaseIcon = CasesMapper.GetCaseIcon(latestCase.FinishingDate, latestCase.ApprovedDate, latestCase.CaseType.RequireApproving),
+                            HasMultiplyCases = hasMultipleCases
+                        } : new ContractCase { CaseNumber = 0 },
+                        ContractStartDate = con.ContractStartDate,
+                        Finished = con.Finished,
+                        Running = con.Running,
+                        FollowUpInterval = con.FollowUpInterval,
+                        Info = con.Info,
+                        NoticeDate = con.NoticeDate,
+                        Supplier = con.Supplier,
+                        ContractCategory = con.ContractCategory,
+                        Department = con.Department,
+                        ResponsibleUser = con.ResponsibleUser,
+                        FollowUpResponsibleUser = con.FollowUpResponsibleUser,
+                        IsInFollowUp = isInFollowUp,
+                        IsInNoticeOfRemoval = isInNoticeOfRemoval
+                    });
+                }
             }
 
+            model.TotalRowsCount = model.Data.Count();
             model.Data = SortData(model.Data, sort);
             model.SearchSummary = BuildSearchSummary(model.Data);
             model.SortBy = sort;
@@ -256,16 +245,16 @@ namespace DH.Helpdesk.Web.Controllers
             if (filter.SelectedSuppliers.Any())
                 allContracts = allContracts.Where(t => filter.SelectedSuppliers.Contains(t.Supplier_Id ?? 0)).ToList();
 
-            //filter by state //todo: use enums or consts
-            if (selectedStatus == 9) // completed
+            //filter by state 
+            if (selectedStatus == ContractStatuses.Closed) 
             {
                 allContracts = allContracts.Where(t => t.Finished == 1).ToList();
             }
-            else if (selectedStatus == 4) // running
+            else if (selectedStatus == ContractStatuses.Running) 
             {
                 allContracts = allContracts.Where(t => t.Running == 1).ToList();
             }
-            else if (selectedStatus != 10)
+            else if (selectedStatus != ContractStatuses.All)
             {
                 allContracts = allContracts.Where(t => t.Finished == 0).ToList();
             }
@@ -307,7 +296,8 @@ namespace DH.Helpdesk.Web.Controllers
             return allContracts;
         }
 
-        private List<ContractsIndexRowModel> SortData(List<ContractsIndexRowModel> data, ColSortModel sort)
+        //todo: refactor with a generic approach
+        private List<ContractsSearchRowModel> SortData(List<ContractsSearchRowModel> data, ColSortModel sort)
         {
             switch (sort.ColumnName)
             {
@@ -372,19 +362,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private ContractsSearchFilterViewModel GetContractsSearchFilterModel(Customer customer)
         {
-            var filter = SessionFacade.CurrentContractsSearch;
-
-            if (filter == null)
-            {
-                //set filter default values
-                filter = new ContractsSearchFilter()
-                {
-                    CustomerId = customer.Id,
-                    State = 10 //todo:enum or const -> Change default to ACTIVE
-                };
-
-                SessionFacade.CurrentContractsSearch = filter;
-            }
+            var filter = GetSearchFilter(customer.Id);
 
             var contractCategories = _contractCategoryService.GetContractCategories(customer.Id);
 
@@ -437,7 +415,7 @@ namespace DH.Helpdesk.Web.Controllers
             return model;
         }
 
-        private ContractsSearchSummary BuildSearchSummary(List<ContractsIndexRowModel> rows)
+        private ContractsSearchSummary BuildSearchSummary(List<ContractsSearchRowModel> rows)
         {
             var summary = new ContractsSearchSummary
             {
@@ -508,7 +486,6 @@ namespace DH.Helpdesk.Web.Controllers
 
         private ContractViewInputModel CreateInputViewModel(int customerId)
         {
-            var customer = _customerService.GetCustomer(customerId);
             var model = new ContractViewInputModel();
             var contractFields = this.GetSettingsModel(customerId);
             var contractcategories = _contractCategoryService.GetContractCategories(customerId).OrderBy(a => a.Name).ToList();
@@ -597,11 +574,11 @@ namespace DH.Helpdesk.Web.Controllers
         {
             return new Dictionary<int, string>
             {
-                {1,  "månadsvis"},
-                {3,  "kvartalsvis"},
-                {4,  "tertialvis"},
-                {6,  "halvårsvis"},
-                {12,  "årsvis"}
+                {1,  Translation.GetCoreTextTranslation("månadsvis")},
+                {3,  Translation.GetCoreTextTranslation("kvartalsvis")},
+                {4,  Translation.GetCoreTextTranslation("tertialvis")},
+                {6,  Translation.GetCoreTextTranslation("halvårsvis")},
+                {12, Translation.GetCoreTextTranslation("årsvis")}
             };
         }
 
@@ -609,12 +586,12 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var dic = new Dictionary<int, string>
             {
-                {1, $"  {Translation.GetCoreTextTranslation("Pågående")}"},
-                {2, $"  {Translation.GetCoreTextTranslation("För uppföljning")}"},
-                {3, $"  {Translation.GetCoreTextTranslation("För uppsägning")}"},
-                {4, $"  {Translation.GetCoreTextTranslation("Löpande")}"},
-                {9, $"  {Translation.GetCoreTextTranslation("Avslutade")}"},
-                {10, $"  {Translation.GetCoreTextTranslation("Alla")}"}
+                {ContractStatuses.Active, $"  {Translation.GetCoreTextTranslation("Pågående")}"},
+                {ContractStatuses.ToFollowUp, $"  {Translation.GetCoreTextTranslation("För uppföljning")}"},
+                {ContractStatuses.InNoticeOfRemoval, $"  {Translation.GetCoreTextTranslation("För uppsägning")}"},
+                {ContractStatuses.Running, $"  {Translation.GetCoreTextTranslation("Löpande")}"},
+                {ContractStatuses.Closed, $"  {Translation.GetCoreTextTranslation("Avslutade")}"},
+                {ContractStatuses.All, $"  {Translation.GetCoreTextTranslation("Alla")}"}
             };
             return dic;
         }
@@ -646,14 +623,19 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpPost]
         [UserPermissions(UserPermission.ContractPermission)]
-        public JsonResult SaveContractFieldsSetting(JSContractsSettingRowViewModel[] contractSettings)
+        [BadRequestOnNotValid]
+        public JsonResult SaveContractFieldsSetting(List<ContractsSettingRowData> data)
         {
-            int currentCustomerId;
             if (SessionFacade.CurrentCustomer == null)
-                return Json(new { state = false, message = "Session Timeout. Please refresh the page!" }, JsonRequestBehavior.AllowGet);
-            else
-                currentCustomerId = SessionFacade.CurrentCustomer.Id;
+            {
+                return Json(new
+                {
+                    state = false,
+                    message = "Session Timeout. Please refresh the page!"
+                });
+            }
 
+            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var allFieldsSettingRows = _contractService.GetContractsSettingRows(currentCustomerId);
 
             try
@@ -661,37 +643,34 @@ namespace DH.Helpdesk.Web.Controllers
                 var contractSettingModels = new List<ContractsSettingRowModel>();
                 var now = DateTime.Now;
 
-                for (int i = 0; i < contractSettings.Length; i++)
+                foreach (var rowData in data)
                 {
-                    var oldRow = allFieldsSettingRows.Where(s => s.ContractField.ToLower() == contractSettings[i].ContractField).FirstOrDefault();
-                    var createdDate = oldRow == null ? now : oldRow.CreatedDate;
-                    var id = oldRow == null ? 0 : oldRow.Id;
-                    var contractSettingModel = new ContractsSettingRowModel
-                    (
-                        id,
-                        currentCustomerId,
-                        contractSettings[i].ContractField,
-                        Convert.ToBoolean(contractSettings[i].Show),
-                        Convert.ToBoolean(contractSettings[i].ShowInList),
-                        contractSettings[i].Caption_Sv != null ? contractSettings[i].Caption_Sv : string.Empty,
-                        contractSettings[i].Caption_Eng != null ? contractSettings[i].Caption_Eng : string.Empty,
-                        Convert.ToBoolean(contractSettings[i].Required),
-                        createdDate,
-                        now
-                   );
+                    var oldRow = allFieldsSettingRows.FirstOrDefault(s => s.ContractField.ToLower() == rowData.ContractField);
+                    var createdDate = oldRow?.CreatedDate ?? now;
+                    var id = oldRow?.Id ?? 0;
+                    var contractSettingModel = new ContractsSettingRowModel(
+                                                    id,
+                                                    currentCustomerId,
+                                                    rowData.ContractField,
+                                                    rowData.Show,
+                                                    rowData.ShowInList,
+                                                    rowData.CaptionSv ?? string.Empty,
+                                                    rowData.CaptionEng ?? string.Empty,
+                                                    rowData.Required,
+                                                    createdDate,
+                                                    now);
 
                     contractSettingModels.Add(contractSettingModel);
                 }
 
-                this._contractService.SaveContractSettings(contractSettingModels);
-
+                _contractService.SaveContractSettings(contractSettingModels);
             }
             catch (Exception ex)
             {
-                return Json(new { state = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { state = false, message = ex.Message });
             }
 
-            return Json(new { state = true, message = Translation.GetCoreTextTranslation("Saved success!") }, JsonRequestBehavior.AllowGet);
+            return Json(new { state = true, message = Translation.GetCoreTextTranslation("Saved success!") });
         }
 
         [HttpGet]
@@ -749,29 +728,29 @@ namespace DH.Helpdesk.Web.Controllers
             diffList.Reverse();
             return diffList;
         }
+
         private ContractsSettingViewModel GetSettingsModel(int customerId)
         {
-            var model = new ContractsSettingViewModel();
-            model.customer_id = customerId;
-            model.language_id = SessionFacade.CurrentLanguageId;
-
-            model.Languages.Add(new SelectListItem() { Selected = true, Text = "SV", Value = "1" });
-            model.Languages.Add(new SelectListItem() { Selected = false, Text = "EN", Value = "2" });
-
-            var settingsRows = new List<ContractsSettingRowViewModel>();
             var allFieldsSettingRows = _contractService.GetContractsSettingRows(customerId);
-            settingsRows = allFieldsSettingRows.Select(s => new ContractsSettingRowViewModel
+
+            var model = new ContractsSettingViewModel
             {
-                Id = s.Id,
-                ContractField = s.ContractField.ToLower(),
-                ContractFieldLable = s.ContractFieldLable,
-                ContractFieldLable_Eng = s.ContractFieldLable_Eng,
-                Show = s.show,
-                ShowInList = s.showInList,
-                Required = s.reguired
-            }).ToList();
-            //settingsRows.Add(
-            model.SettingRows = settingsRows;
+                CustomerId = customerId,
+                CurrentLanguage = SessionFacade.CurrentLanguageId,
+                Languages = new Dictionary<int, string> {{1, "SV"}, {2, "EN"}}.ToSelectList(),
+                SettingRows =
+                    allFieldsSettingRows.Select(s => new ContractsSettingRowViewModel
+                        {
+                            Id = s.Id,
+                            ContractField = s.ContractField.ToLower(),
+                            ContractFieldLable = s.ContractFieldLable,
+                            ContractFieldLable_Eng = s.ContractFieldLable_Eng,
+                            Show = s.show,
+                            ShowInList = s.showInList,
+                            Required = s.reguired
+                        }).ToList()
+            };
+
             return model;
         }
 

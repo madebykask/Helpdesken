@@ -1,20 +1,15 @@
 ﻿using System;
 
+
 namespace DH.Helpdesk.BusinessData.Models.Contract
 {
     using System.Collections.Generic;
 
     public class ContractsSearchFilter
     {
-        public enum Show : int
+        public ContractsSearchFilter(int customerId)
         {
-            Inactive = 0,
-            Active = 1,
-            All = 2
-        }
-
-        public ContractsSearchFilter()
-        {
+            this.CustomerId = customerId;
             this.SelectedContractCategories = new List<int>();
             this.SelectedSuppliers = new List<int>();
             this.SelectedResponsibles = new List<int>();
@@ -23,7 +18,7 @@ namespace DH.Helpdesk.BusinessData.Models.Contract
             this.SearchText = string.Empty;
         }
 
-        public int CustomerId { get; set; }
+        public int CustomerId { get; private set; }
 
         public List<int> SelectedContractCategories { get; set; }
 

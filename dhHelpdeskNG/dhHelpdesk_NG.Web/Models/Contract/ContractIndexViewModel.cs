@@ -70,11 +70,10 @@ namespace DH.Helpdesk.Web.Models.Contract
         public int RunningCases { get; set; }
     }
 
-    public sealed class ContractsIndexRowModel
+    public sealed class ContractsSearchRowModel
     {
-        public ContractsIndexRowModel()
+        public ContractsSearchRowModel()
         {
-            SelectedShowStatus = 10;
             IsInNoticeOfRemoval = false;
             IsInFollowUp = false;
             ContractCase = new ContractCase();
@@ -83,6 +82,7 @@ namespace DH.Helpdesk.Web.Models.Contract
         public bool IsInNoticeOfRemoval { get; set; }
 
         public bool IsInFollowUp { get; set; }
+
         public int SelectedShowStatus { get; set; }
 
         public int ContractId { get; set; }
@@ -120,19 +120,19 @@ namespace DH.Helpdesk.Web.Models.Contract
     {
         public ContractsSearchResultsModel(Customer customer)
         {
-            Data = new List<ContractsIndexRowModel>();
+            Data = new List<ContractsSearchRowModel>();
             Customer = customer;
             Columns = new List<ContractsSettingRowViewModel>();
             SelectedShowStatus = 10;
         }
 
         public Customer Customer { get; private set; }
-        public List<ContractsIndexRowModel> Data { get; set; }
+        public List<ContractsSearchRowModel> Data { get; set; }
         public List<ContractsSettingRowViewModel> Columns { get; set; }
         public ColSortModel SortBy { get; set; }
 
         public int SelectedShowStatus { get; set; }
-
+        public int TotalRowsCount { get; set; }
         public ContractsSearchSummary SearchSummary { get; set; }
     }
 

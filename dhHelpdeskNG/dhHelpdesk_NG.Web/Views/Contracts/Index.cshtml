@@ -10,8 +10,8 @@
             var settings = {
                 SearchActionUrl: '@Url.Action("Search", "Contracts")',
                 SortActionUrl: '@Url.Action("SortBy", "Contracts")',
-                SaveContractFieldsSettings: '@Url.Action("SaveContractFieldsSetting", "Contracts", "")',
-                IndexUrl: '@Url.Action("index", "Contracts", null)'
+                SaveSettingsActionUrl: '@Url.Action("SaveContractFieldsSetting", "Contracts")',
+                IndexUrl: '@Url.Action("Index", "Contracts")'
             };
 
             window.ContractsPage = createContractsPage($);

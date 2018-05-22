@@ -366,6 +366,7 @@
     <Compile Include="Models\Case\InvoiceTimeModel.cs" />
     <Compile Include="Models\Contract\ContractHistoryFieldsDiff.cs" />
     <Compile Include="Models\Contract\ContractsSearchInputData.cs" />
+    <Compile Include="Models\Contract\ContractStatuses.cs" />
     <Compile Include="Models\Gdpr\DataPrivacyHistoryViewModel.cs" />
     <Compile Include="Models\Gdpr\GdprOperationsHistoryListItem.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />

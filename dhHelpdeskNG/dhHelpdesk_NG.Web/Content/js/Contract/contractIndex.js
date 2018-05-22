@@ -30,8 +30,7 @@ function createContractsPage(JQuery) {
             return filters;
         };
 
-        this.changeLanguage = function () {
-            var curLang = $(this).val();
+        this.changeLanguage = function (curLang) {
             for (var i = 0; i < rowIds.length; i++) {
                 this.setFieldCaption(rowIds[i], curLang);
             }
@@ -40,10 +39,9 @@ function createContractsPage(JQuery) {
         this.setFieldCaption = function(fieldId, languageId) {
             var ret = "";
             $('.' + fieldId).each(function() {
-                var _id = $(this).attr("id");
-
-                if (_id == 'fieldCaption') {
-                    if (languageId == 1)
+                var id = $(this).attr("id");
+                if (id === 'fieldCaption') {
+                    if (languageId === 1)
                         $(this).val($(this).attr("swedishLable"));
                     else
                         $(this).val($(this).attr("englishLable"));
@@ -157,7 +155,7 @@ function createContractsPage(JQuery) {
 
             $.ajax({
                 type: "POST",
-                url: self.settings.saveContractFieldsSettings,
+                url: self.settings.SaveSettingsActionUrl,
                 datatype: "json",
                 traditional: true,
                 data: JSON.stringify(allData),
@@ -165,7 +163,7 @@ function createContractsPage(JQuery) {
                 success: function (result) {
                     if (result.state) {
                         //ShowToastMessage(result.message, "success");
-                        window.location.href = self.settings.indexUrl;
+                        window.location.href = self.settings.IndexUrl;
                     } else {
                         ShowToastMessage("Unexpected error! <br/>" + result.message, "error");
                     }
@@ -175,6 +173,11 @@ function createContractsPage(JQuery) {
             });
         };
 
+        this.getSelectedLanguageId = function() {
+            var curLanguageId = +$('#CurrentLanguage').val();
+            return curLanguageId;
+        };
+
         this.getRowData = function (fieldId) {
             var show = false;
             var caption_Sv = "";
@@ -182,46 +185,45 @@ function createContractsPage(JQuery) {
             var showInList = false;
             var required = false;
             var dataId = 0;
-            var curLanguageId = $('#Languages').val();
+            var curLanguageId = this.getSelectedLanguageId();
 
-            $('.' + fieldId).each(function(){
-                var _id = $(this).attr("id");
-                dataId = $(this).attr("dataId");
+            $('.' + fieldId).each(function (index, el) {
+                var el$ = $(this);
+                var _id = el$.attr("id");
+                dataId = el$.attr("dataId");
 
                 switch (_id) {
-                case 'fieldShow':
-                    show = $(this).is(":checked");
-                    break;
-                case 'fieldCaption':
-                    if (curLanguageId == 1) {
-                        caption_Sv = $(this).val();
-                        caption_Eng = $(this).attr("englishLable");
-                    } else {
-                        caption_Eng = $(this).val();
-                        caption_Sv = $(this).attr("swedishLable");
-                    }
-
-                    break;
-                case 'fieldMandatory':
-                    required = $(this).is(":checked");
-                    break;
-                case 'fieldShowInList':
-                    showInList = $(this).is(":checked");
-                    break;
+                    case 'fieldShow':
+                        show = el$.is(":checked");
+                        break;
+                    case 'fieldCaption':
+                        if (curLanguageId === 1) {
+                            caption_Sv = el$.val();
+                            caption_Eng = el$.attr("englishLable");
+                        } else {
+                            caption_Eng = el$.val();
+                            caption_Sv = el$.attr("swedishLable");
+                        }
+                        break;
+                    case 'fieldMandatory':
+                        required = el$.is(":checked");
+                        break;
+                    case 'fieldShowInList':
+                        showInList = el$.is(":checked");
+                        break;
                 }
             });
 
             var ret = {
                 Id: dataId,
                 ContractField: fieldId,
-                Caption_Eng: caption_Eng,
-                Caption_Sv: caption_Sv,
+                CaptionEng: caption_Eng,
+                CaptionSv: caption_Sv,
                 Required: required,
                 ShowInList: showInList,
                 Show: show,
                 LanguageId: curLanguageId
             };
-
             return ret;
         }
 
@@ -271,8 +273,11 @@ function createContractsPage(JQuery) {
                 return false;
             });
 
-            $('#Languages').change(function () {
-                self.changeLanguage();
+            $('#CurrentLanguage').change(function (e) {
+                var langId = self.getSelectedLanguageId();
+                self.changeLanguage(langId);
+                e.preventDefault();
+                return false;
             });
 
             $('#ShowSearchResult').click(function (e) {
@@ -280,6 +285,9 @@ function createContractsPage(JQuery) {
                 e.preventDefault();
                 return false;
             });
+
+            //update language in settings
+            $('#CurrentLanguage').trigger('change');
         };
 
         return {

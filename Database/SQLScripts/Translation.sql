@@ -7213,6 +7213,41 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Orders' WHERE Text_Id=701 AND Language_Id=2;
 GO
 
+If not exists (select * from tbltext where id = 1980)
+	insert into tbltext (id, TextString) VALUES (1980, 'månadsvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1980 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1980, 2, 'monthly')
+GO
+
+If not exists (select * from tbltext where id = 1981)
+	insert into tbltext (id, TextString) VALUES (1981, 'kvartalsvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1981 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1981, 2, 'quarterly')
+GO
+
+If not exists (select * from tbltext where id = 1982)
+	insert into tbltext (id, TextString) VALUES (1982, 'tertialvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1982 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1982, 2, 'tertially')
+GO
+
+If not exists (select * from tbltext where id = 1983)
+	insert into tbltext (id, TextString) VALUES (1983, 'halvårsvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1983 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1983, 2, 'half yearly')
+GO
+
+If not exists (select * from tbltext where id = 1984)
+	insert into tbltext (id, TextString) VALUES (1984, 'årsvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1984 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1984, 2, 'yearly')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
