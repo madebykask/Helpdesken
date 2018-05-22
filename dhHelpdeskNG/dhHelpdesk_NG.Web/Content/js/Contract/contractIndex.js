@@ -80,6 +80,7 @@ function createContractsPage(JQuery) {
                 dataType: 'html'
             }).done(function (res) {
                 $('#contracts_grid').html(res);
+                self.updateSearchSummary();
             }).always(function() {
                 self.showProgress(false);
             });
@@ -119,9 +120,28 @@ function createContractsPage(JQuery) {
                 dataType: 'html'
             }).done(function(res) {
                 $('#contracts_grid').html(res);
+                self.updateSearchSummary();
             }).always(function() {
                 self.showProgress(false);
             });
+        };
+
+        this.updateSearchSummary = function () {
+            var summary = {
+                totalCases: $('#search_totalCases').val() || 0,
+                ongoingCases: $('#search_ongoingCases').val() || 0,
+                finishedCases: $('#search_finishedCases').val() || 0,
+                noticeOfRemovalCount: $('#search_noticeOfRemovalCount').val() || 0,
+                followUpCount: $('#search_followUpCount').val() || 0,
+                runningCases: $('#search_runningCases').val() || 0
+        };
+
+            $('#totalCases').html(summary.totalCases);
+            $('#ongoingCases').html(summary.ongoingCases);
+            $('#fishishedCases').html(summary.finishedCases);
+            $('#noticeOfRemoval').html(summary.noticeOfRemovalCount);
+            $('#followUp').html(summary.followUpCount);
+            $('#runningCases').html(summary.runningCases);
         };
 
         this.saveSettings = function() {
@@ -193,8 +213,12 @@ function createContractsPage(JQuery) {
 
             var ret = {
                 Id: dataId,
-                ContractField: fieldId, Caption_Eng: caption_Eng, Caption_Sv: caption_Sv,
-                Required: required, ShowInList: showInList, Show: show,
+                ContractField: fieldId,
+                Caption_Eng: caption_Eng,
+                Caption_Sv: caption_Sv,
+                Required: required,
+                ShowInList: showInList,
+                Show: show,
                 LanguageId: curLanguageId
             };
 

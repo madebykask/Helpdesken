@@ -1,13 +1,12 @@
 ﻿@using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web.Infrastructure.Extensions;
-@model DH.Helpdesk.Web.Models.Contract.ContractsIndexRowsModel
+@model DH.Helpdesk.Web.Models.Contract.ContractsSearchResultsModel
 
+@{
+    var searchSummary = Model.SearchSummary;   
+ }
 
 <div id="ContractIndexRows">
-
-    @Html.Hidden("currentSortCol", Model.SortBy.ColumnName)
-    @Html.Hidden("currentSortOrder", Model.SortBy.IsAsc ? "asc" : "dsc")
-
     <table class="table table-striped table-bordered table-hover" id="contractOverview">
         <thead>
             <tr>
@@ -32,7 +31,6 @@
                                 }
                             }
                         </th>
-
                     }
                     else
                     {
@@ -81,7 +79,7 @@
                                         <td>
                                             <a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@Html.Raw(string.Format("<img title='{0}' alt='{0}' src='/Content/icons/{1}' />", row.ContractCase.CaseIcon.CaseIconTitle(), row.ContractCase.CaseIcon.CaseIconSrc()))&nbsp;@row.ContractCase.CaseNumber</a>&nbsp;
                                             @if (row.ContractCase.HasMultiplyCases)
-                                {
+                                            {
                                                 <i class="icon-plus-sign cursor-pointer"></i>
                                             }
                                         </td>
@@ -243,10 +241,18 @@
                                     }
                                 }
                             }
-                            @Html.HiddenFor(r => row.ContractId)
+                            @*@Html.HiddenFor(r => row.ContractId)*@
                         </tr>
                         }
                     }
                 }
         </table>
+        @Html.Hidden("currentSortCol", Model.SortBy.ColumnName)
+        @Html.Hidden("currentSortOrder", Model.SortBy.IsAsc ? "asc" : "dsc")
+        @Html.Hidden("search_totalCases", searchSummary.TotalCases)
+        @Html.Hidden("search_ongoingCases", searchSummary.OnGoingCases)
+        @Html.Hidden("search_finishedCases", searchSummary.FinishedCases)
+        @Html.Hidden("search_noticeOfRemovalCount", searchSummary.ContractNoticeOfRemovalCount)
+        @Html.Hidden("search_followUpCount", searchSummary.ContractFollowUpCount)
+        @Html.Hidden("search_runningCases", searchSummary.RunningCases)
     </div>

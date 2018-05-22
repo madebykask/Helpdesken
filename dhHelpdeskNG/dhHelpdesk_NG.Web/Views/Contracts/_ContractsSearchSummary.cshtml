@@ -14,7 +14,7 @@
             </td>
 
             <td style="border-style: solid; border-width: thin; text-align: right; width: 100px; border-color: #E0E0E0; padding-right: 5px">
-                @Model.TotalCases
+                <span id="totalCases">@Model.TotalCases</span>
             </td>
         </tr>
         <tr style="border-style: solid; border-width: thin; border-color: #E0E0E0">
@@ -23,7 +23,7 @@
             </td>
 
             <td style="border-style: solid; border-width: thin; text-align: right; border-color: #E0E0E0; padding-right: 5px">
-                @Model.OnGoingCases
+                <span id="ongoingCases">@Model.OnGoingCases</span>
             </td>
         </tr>
         <tr style="border-style: solid; border-width: thin; border-color: #E0E0E0">
@@ -32,7 +32,7 @@
             </td>
 
             <td style="border-style: solid; border-width: thin; text-align: right; border-color: #E0E0E0; padding-right: 5px">
-                @Model.FinishedCases
+                <span id="fishishedCases">@Model.FinishedCases</span>
             </td>
         </tr>
         <tr style="border-style: solid; border-width: thin; border-color: #E0E0E0">
@@ -40,7 +40,7 @@
                 <span>@Translation.GetCoreTextTranslation("För uppsägning")</span>
             </td>
             <td style="border-style: solid; border-width: thin; text-align: right; border-color: #E0E0E0; padding-right: 5px">
-                <span> @Model.ContractNoticeOfRemovalCount </span>
+                <span id="noticeOfRemoval">@Model.ContractNoticeOfRemovalCount</span>
             </td>
         </tr>
         <tr style="border-style: solid; border-width: thin; border-color: #E0E0E0">
@@ -49,7 +49,7 @@
             </td>
 
             <td style="border-style: solid; border-width: thin; text-align: right; border-color: #E0E0E0; padding-right: 5px">
-                <span> @Model.ContractFollowUpCount </span>
+                <span id="followUp">@Model.ContractFollowUpCount </span>
             </td>
         </tr>
         <tr style="border-style: solid; border-width: thin; border-color: #E0E0E0">
@@ -58,7 +58,7 @@
             </td>
 
             <td style="border-style: solid; border-width: thin; text-align: right; border-color: #E0E0E0; padding-right: 5px">
-                <span> @Model.RunningCases</span>
+                <span id="runningCases"> @Model.RunningCases</span>
             </td>
         </tr>
     </table>

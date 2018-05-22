@@ -28,7 +28,7 @@
     <div class="pull-left">
         <ul class="secnav">
             <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Nytt avtal"), "new", new { customerId = Model.Customer.Id }, new { @class = "btn" })</li>
-            @Html.HiddenFor(x => Model.Setting)
+            @*@Html.HiddenFor(x => Model.Setting)*@
         </ul>
     </div>
 </div>
@@ -56,18 +56,18 @@
                                 @Html.Partial("_ContractsSearchFilter", Model.SearchFilterModel)
                             </div>
                             <div class="pull-right">
-                                @Html.Partial("_ContractsSearchSummary", Model.SearchSummaryModel)
+                                @Html.Partial("_ContractsSearchSummary", Model.SearchResults.SearchSummary)
                             </div>
                         </div>
                     }
                 </div>
                 <div id="contracts_grid">
-                    @Html.Partial("_ContractsIndexRows", Model.Rows)
+                    @Html.Partial("_ContractsIndexRows", Model.SearchResults)
                 </div>
 
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
-                @using (Html.BeginForm("Settings", "Contracts", FormMethod.Post, new { id = "contractSetting" }))
+                @using (Html.BeginForm("SaveContractFieldsSetting", "Contracts", FormMethod.Post, new { id = "contractSetting" }))
                 {
                     @Html.Partial("_Settings", Model.Setting)
                 }

@@ -1,13 +1,8 @@
 ﻿using DH.Helpdesk.Domain;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using DH.Helpdesk.Web.Infrastructure;
-using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.BusinessData.OldComponents;
-using PostSharp.Reflection.Syntax;
 
 
 namespace DH.Helpdesk.Web.Models.Contract
@@ -18,17 +13,16 @@ namespace DH.Helpdesk.Web.Models.Contract
         {
             Customer = customer;
             Columns = new ContractsIndexColumnsModel(customer);
-            Rows = new ContractsIndexRowsModel(customer);
+            SearchResults = new ContractsSearchResultsModel(customer);
         }
         
         public Customer Customer { get; private set; }
         
         public ContractsSettingViewModel Setting { get; set; }
         public ContractsIndexColumnsModel Columns { get; set; }
-        public ContractsIndexRowsModel Rows { get; set; }
+        public ContractsSearchResultsModel SearchResults { get; set; }
 
         public ContractsSearchFilterViewModel SearchFilterModel { get; set; }
-        public ContractsSearchSummary SearchSummaryModel { get; set; }
     }
 
     public class ContractsSearchFilterViewModel
@@ -122,9 +116,9 @@ namespace DH.Helpdesk.Web.Models.Contract
         public User FollowUpResponsibleUser { get; set; }
     }
 
-    public sealed class ContractsIndexRowsModel
+    public sealed class ContractsSearchResultsModel
     {
-        public ContractsIndexRowsModel(Customer customer)
+        public ContractsSearchResultsModel(Customer customer)
         {
             Data = new List<ContractsIndexRowModel>();
             Customer = customer;
@@ -138,6 +132,8 @@ namespace DH.Helpdesk.Web.Models.Contract
         public ColSortModel SortBy { get; set; }
 
         public int SelectedShowStatus { get; set; }
+
+        public ContractsSearchSummary SearchSummary { get; set; }
     }
 
     public sealed class ColSortModel

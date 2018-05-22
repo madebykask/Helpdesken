@@ -12,17 +12,9 @@ using DH.Helpdesk.Domain;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Web.Infrastructure.Tools;
-using System.Net;
 using DH.Helpdesk.Dal.Enums;
-using System.IO;
-using System.Web.UI;
 using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.Web.Infrastructure.Mvc;
-using DH.Helpdesk.BusinessData.Models.Shared.Input;
-using DH.Helpdesk.Web.Enums;
-using DH.Helpdesk.BusinessData.Models.Shared;
-using DH.Helpdesk.BusinessData.OldComponents;
-using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
 using DH.Helpdesk.Services.BusinessLogic.Contracts;
 using DH.Helpdesk.Web.Components.Contracts;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
@@ -73,73 +65,6 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
-        private ContractsSearchFilterViewModel GetContractsSearchFilterModel(Customer customer)
-        {
-            var filter = SessionFacade.CurrentContractsSearch;
-
-            if (filter == null)
-            {
-                //set filter default values
-                filter = new ContractsSearchFilter()
-                {
-                    CustomerId = customer.Id,
-                    State = 10 //todo:enum or const -> Change default to ACTIVE
-                };
-
-                SessionFacade.CurrentContractsSearch = filter;
-            }
-
-            var contractCategories = _contractCategoryService.GetContractCategories(customer.Id);
-
-            var model = new ContractsSearchFilterViewModel()
-            {
-                ContractCategories = contractCategories.Select(c => new SelectListItem()
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name
-                }).ToList(),
-
-                Suppliers = _supplierService.GetActiveSuppliers(customer.Id).Select(s => new SelectListItem()
-                {
-                    Value = s.Id.ToString(),
-                    Text =  s.Name
-                }).ToList(),
-
-                ResponsibleUsers = _userService.GetUsers(customer.Id).Select(u => new SelectListItem()
-                {
-                    Value = u.Id.ToString(),
-                    Text = $"{u.SurName} {u.FirstName}"
-                }).ToList(),
-
-                Departments = _departmentService.GetDepartments(customer.Id, ActivationStatus.Active).Select(d => new SelectListItem
-                {
-                    Value = d.Id.ToString(),
-                    Text = d.DepartmentName
-                }).ToList(),
-
-                ShowContracts = GetContractStatuses().ToSelectList(),
-
-                SelectedContractCategories = filter.SelectedContractCategories,
-                SelectedSuppliers = filter.SelectedSuppliers,
-                SelectedResponsibleUsers = filter.SelectedResponsibles, 
-                SelectedDepartments = filter.SelectedDepartments, 
-                SelectedState = filter.State,
-
-                NoticeDateFrom = filter.NoticeDateFrom,
-                NoticeDateTo = filter.NoticeDateTo,
-
-                StartDateFrom = filter.StartDateFrom,
-                StartDateTo = filter.StartDateTo, 
-                 
-                EndDateFrom = filter.EndDateFrom,
-                EndDateTo = filter.EndDateTo,
-                 
-                SearchText = filter.SearchText
-            };
-            
-            return model;
-        }
-
         //
         // GET: /Contract/
         [HttpGet]
@@ -154,39 +79,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             model.Setting = GetSettingsModel(customer.Id);
 
-            model.Rows = GetIndexRowModel(SessionFacade.CurrentContractsSearch, new ColSortModel(EnumContractFieldSettings.Number, true));
-            
-            #region Search Summary
-
-            var iContractNoticeOfRemovalCount = 0;
-            foreach (var rowModel in model.Rows.Data)
-            {
-                if (IsInNoticeOfRemoval(rowModel.Finished, rowModel.NoticeDate))
-                {
-                    iContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount + 1;
-                }
-            }
-
-            var iContractFollowUpCount = 0;
-            foreach (var rowModel in model.Rows.Data)
-            {
-                if (isInFollowUp(rowModel.Finished, rowModel.ContractStartDate.ToString(), rowModel.ContractEndDate.ToString(), rowModel.FollowUpInterval))
-                {
-                    iContractFollowUpCount = iContractFollowUpCount + 1;
-                }
-            }
-
-            model.SearchSummaryModel = new ContractsSearchSummary
-            {
-                TotalCases = model.Rows.Data.Count(),
-                OnGoingCases = model.Rows.Data.Count(z => z.Finished == 0),
-                FinishedCases = model.Rows.Data.Count(z => z.Finished == 1),
-                ContractNoticeOfRemovalCount = iContractNoticeOfRemovalCount,
-                ContractFollowUpCount = iContractFollowUpCount,
-                RunningCases = model.Rows.Data.Count(z => z.Running == 1)
-            };
-
-            #endregion
+            model.SearchResults = GetSearchResultsModel(SessionFacade.CurrentContractsSearch, new ColSortModel(EnumContractFieldSettings.Number, true));
 
             return this.View(model);
         }
@@ -206,7 +99,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             var sortModel = new ColSortModel(colName, isAsc);
 
-            var model = GetIndexRowModel(filterModel, sortModel);
+            var model = GetSearchResultsModel(filterModel, sortModel);
+
             return PartialView("_ContractsIndexRows", model);
         }
 
@@ -242,7 +136,8 @@ namespace DH.Helpdesk.Web.Controllers
             var model = CreateContractIndexViewModel(customer);
 
             var sortMode = new ColSortModel(EnumContractFieldSettings.Number, true);
-            model.Rows = GetIndexRowModel(filter, sortMode);
+            model.SearchResults = GetSearchResultsModel(filter, sortMode);
+
             
 
             //model.TotalCases = model.Rows.Data.Count();
@@ -269,7 +164,8 @@ namespace DH.Helpdesk.Web.Controllers
             //model.ContractFollowUpCount = iContractFollowUpCount;
             //model.RunningCases = model.Rows.Data.Where(z => z.Running == 1).Count();
 
-            return this.PartialView("_ContractsIndexRows", model.Rows);
+            //TODO: Extend Model with Search Summary and update summary on client on success from Hidden fields!!!!
+            return this.PartialView("_ContractsIndexRows", model.SearchResults);
         }
 
         private ContractIndexViewModel CreateContractIndexViewModel(Customer customer)
@@ -277,12 +173,12 @@ namespace DH.Helpdesk.Web.Controllers
             return new ContractIndexViewModel(customer);
         }
 
-        private ContractsIndexRowsModel GetIndexRowModel(ContractsSearchFilter selectedFilter, ColSortModel sort)
+        private ContractsSearchResultsModel GetSearchResultsModel(ContractsSearchFilter selectedFilter, ColSortModel sort)
         {
             var customerId = selectedFilter.CustomerId;
             var customer = _customerService.GetCustomer(customerId);
 
-            var model = new ContractsIndexRowsModel(customer);
+            var model = new ContractsSearchResultsModel(customer);
 
             //run search
             var allContracts = SearchContracts(selectedFilter);
@@ -330,18 +226,19 @@ namespace DH.Helpdesk.Web.Controllers
                     FollowUpResponsibleUser = con.FollowUpResponsibleUser,
                     SelectedShowStatus = selectedFilter.State, //todo: move to hidden field
                     IsInNoticeOfRemoval = IsInNoticeOfRemoval(con.Finished, con.NoticeDate),
-                    IsInFollowUp = isInFollowUp(con.Finished, con.ContractStartDate.ToString(), con.ContractEndDate.ToString(), con.FollowUpInterval),
+                    IsInFollowUp = IsInFollowUp(con.Finished, con.ContractStartDate, con.ContractEndDate, con.FollowUpInterval),
                 });
             }
 
             model.Data = SortData(model.Data, sort);
+            model.SearchSummary = BuildSearchSummary(model.Data);
             model.SortBy = sort;
 
             return model;
         }
 
         //todo: implement searching in db with filter instead of code
-        private List<Contract> SearchContracts(ContractsSearchFilter filter)
+        private IList<Contract> SearchContracts(ContractsSearchFilter filter)
         {
             var customerId = filter.CustomerId;
             var allContracts = _contractService.GetContractsNotFinished(customerId);
@@ -473,41 +370,112 @@ namespace DH.Helpdesk.Web.Controllers
             return data;
         }
 
-        private bool isInFollowUp(int Finished, string ContractStartDate, string ContractEndDate, int FollowUpInterval)
+        private ContractsSearchFilterViewModel GetContractsSearchFilterModel(Customer customer)
         {
+            var filter = SessionFacade.CurrentContractsSearch;
 
-            bool flag = false;
-            string sDate = string.Empty;
-            int i = 0;
-            string sContractEndDate = string.Empty;
-
-            if (Finished == 0 && Convert.ToInt32(FollowUpInterval) > 0)
+            if (filter == null)
             {
-                if (TryParseDate(ContractEndDate) == false)
+                //set filter default values
+                filter = new ContractsSearchFilter()
                 {
-                    DateTime endDate = Convert.ToDateTime(DateTime.Now.AddMonths(1).ToShortDateString());
-                    sContractEndDate = endDate.ToShortDateString();
-                }
-                else
-                {
-                    sContractEndDate = ContractEndDate;
-                }
+                    CustomerId = customer.Id,
+                    State = 10 //todo:enum or const -> Change default to ACTIVE
+                };
 
-                if (ContractStartDate != string.Empty)
-                {
-                    sDate = Convert.ToDateTime(ContractStartDate).ToShortDateString();
+                SessionFacade.CurrentContractsSearch = filter;
+            }
 
+            var contractCategories = _contractCategoryService.GetContractCategories(customer.Id);
+
+            var model = new ContractsSearchFilterViewModel()
+            {
+                ContractCategories = contractCategories.Select(c => new SelectListItem()
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                }).ToList(),
+
+                Suppliers = _supplierService.GetActiveSuppliers(customer.Id).Select(s => new SelectListItem()
+                {
+                    Value = s.Id.ToString(),
+                    Text = s.Name
+                }).ToList(),
+
+                ResponsibleUsers = _userService.GetUsers(customer.Id).Select(u => new SelectListItem()
+                {
+                    Value = u.Id.ToString(),
+                    Text = $"{u.SurName} {u.FirstName}"
+                }).ToList(),
+
+                Departments = _departmentService.GetDepartments(customer.Id, ActivationStatus.Active).Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.DepartmentName
+                }).ToList(),
+
+                ShowContracts = GetContractStatuses().ToSelectList(),
+
+                SelectedContractCategories = filter.SelectedContractCategories,
+                SelectedSuppliers = filter.SelectedSuppliers,
+                SelectedResponsibleUsers = filter.SelectedResponsibles,
+                SelectedDepartments = filter.SelectedDepartments,
+                SelectedState = filter.State,
+
+                NoticeDateFrom = filter.NoticeDateFrom,
+                NoticeDateTo = filter.NoticeDateTo,
+
+                StartDateFrom = filter.StartDateFrom,
+                StartDateTo = filter.StartDateTo,
+
+                EndDateFrom = filter.EndDateFrom,
+                EndDateTo = filter.EndDateTo,
+
+                SearchText = filter.SearchText
+            };
+
+            return model;
+        }
+
+        private ContractsSearchSummary BuildSearchSummary(List<ContractsIndexRowModel> rows)
+        {
+            var summary = new ContractsSearchSummary
+            {
+                TotalCases = rows.Count(),
+                RunningCases = rows.Count(z => z.Running == 1),
+                OnGoingCases = rows.Count(z => z.Finished == 0),
+                FinishedCases = rows.Count(z => z.Finished == 1),
+                ContractNoticeOfRemovalCount = rows.Count(row => IsInNoticeOfRemoval(row.Finished, row.NoticeDate)),
+                ContractFollowUpCount = rows.Count(row => IsInFollowUp(row.Finished, row.ContractStartDate, row.ContractEndDate, row.FollowUpInterval))
+
+            };
+            return summary;
+        }
+
+        private bool IsInFollowUp(int finished, DateTime? contractStartDate, DateTime? contractEndDate, int followUpInterval)
+        {
+            var flag = false;
+            var i = 0;
+            
+            var today = DateTime.Today;
+
+            if (finished == 0 && followUpInterval > 0)
+            {
+                var endDate = (contractEndDate ?? today.AddMonths(1)).Date;
+                
+                if (contractStartDate.HasValue)
+                {
+                    var startDate = contractStartDate.Value.Date;
+                    
                     do
                     {
-
-                        DateTime endDate = Convert.ToDateTime(DateTime.Now.AddMonths(1).ToShortDateString());
-
-                        if (Convert.ToDateTime(Convert.ToDateTime(endDate).ToShortDateString()) > Convert.ToDateTime(Convert.ToDateTime(sDate).ToShortDateString()) && Convert.ToDateTime(Convert.ToDateTime(sDate).ToShortDateString()) < Convert.ToDateTime(Convert.ToDateTime(DateTime.Now).ToShortDateString()))
+                        if (today.AddMonths(1) > startDate && startDate < today)
                         {
                             flag = true;
                             break;
                         }
-                        sDate = Convert.ToDateTime(Convert.ToDateTime(sDate).AddMonths(FollowUpInterval).ToShortDateString()).ToString();
+
+                        startDate = startDate.AddMonths(followUpInterval).Date;
 
                         i = i + 1;
                         if (i > 100)
@@ -515,7 +483,7 @@ namespace DH.Helpdesk.Web.Controllers
                             break;
                         }
 
-                    } while (Convert.ToDateTime(Convert.ToDateTime(sDate).ToShortDateString()) < Convert.ToDateTime(Convert.ToDateTime(sContractEndDate).ToShortDateString()));
+                    } while (startDate < endDate);
                 }
             }
 
