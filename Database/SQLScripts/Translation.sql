@@ -7206,6 +7206,13 @@ GO
 
 UPDATE tblTextTranslation Set TextTranslation = 'User has permission to Invoice article' WHERE Text_Id=1724 AND Language_Id=2;
 GO
+
+update tbltext set TextString = 'Användaren har rättighet att administrera beställningar' where id = 701
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Orders' WHERE Text_Id=701 AND Language_Id=2;
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
