@@ -1455,6 +1455,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return Json(res);
         }
 
+        [NoCache]
+        [HttpGet]
         public JsonResult LoadDataPrivacyFavorite(int id)
         {
             var data = _gdprFavoritesService.GetFavorite(id);
