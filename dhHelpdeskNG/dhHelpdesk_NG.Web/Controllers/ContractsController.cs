@@ -1022,7 +1022,7 @@ namespace DH.Helpdesk.Web.Controllers
                     _userTemporaryFilesStorage.DeleteFile(contractFile.FileName, contractInput.ContractFileKey);
                 }
 
-                if (actiontype != "Spara och stäng")
+                if (actiontype == null)
                 {
                     return this.RedirectToAction("Edit", "Contracts", new { id = cId });
                 }
