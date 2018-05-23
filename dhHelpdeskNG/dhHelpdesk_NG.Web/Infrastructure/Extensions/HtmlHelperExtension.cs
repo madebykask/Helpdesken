@@ -644,7 +644,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 var childs = new List<ProductAreaOverview>();
                 if (pa.SubProductAreas != null)
                 {
-                    childs = pa.SubProductAreas.Where(p => !isTakeOnlyActive || p.IsActive >= 0).ToList();
+                    childs = pa.SubProductAreas.Where(p => !isTakeOnlyActive || p.IsActive > 0).ToList();
 
                     if (user.UserGroupId < (int)UserGroup.CustomerAdministrator)
                     {
@@ -660,20 +660,20 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 var cls = pa.IsActive == 1 ? string.Empty : "inactive";
                 if (childs.Any())
                 {
-                    strBld.AppendFormat("<li class=\"dropdown-submenu {0} {1}\" id=\"{2}\">", cls, "DynamicDropDown_Up", pa.Id);
+                    strBld.AppendFormat("<li class='dropdown-submenu {0} DynamicDropDown_Up' id='{1}'>", cls, pa.Id);
                 }
                 else
                 {
-                    strBld.AppendFormat("<li class=\"{0} \" >", cls);
+                    strBld.AppendFormat("<li class='{0}' >", cls);
                 }
 
-                strBld.AppendFormat("<a href='#' value=\"{0}\">{1}</a>", pa.Id, Translation.GetMasterDataTranslation(pa.Name));
+                strBld.AppendFormat("<a href='#' value='{0}'>{1}</a>", pa.Id, Translation.GetMasterDataTranslation(pa.Name));
 
                 if (childs.Any())
                 {
                     var sortedChilds = childs.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList();
                     //strBld.Append("<div class='subMenuWrapper'>");
-                    strBld.AppendFormat("<ul class='dropdown-menu subddMenu' id=\"subDropDownMenu_{0}\" >", pa.Id);
+                    strBld.AppendFormat("<ul class='dropdown-menu subddMenu' id='subDropDownMenu_{0}' >", pa.Id);
                     strBld.Append(BuildProductAreaDropdownButtonString(sortedChilds, isTakeOnlyActive, userGroupDictionary));
                     strBld.Append("</ul>");
                     //strBld.Append("</div>");
@@ -682,8 +682,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 strBld.Append("</li>");
             }
 
-            var htmlOutput = strBld.ToString();
-            return htmlOutput;
+            return strBld.ToString();
         }
 
         private static MvcHtmlString BuildCategoryDropdownButton(IList<CategoryOverview> cats, bool activeOnly = true)

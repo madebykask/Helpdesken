@@ -1039,15 +1039,14 @@ function CaseInitForm() {
         var paId = parseInt($('#case__ProductArea_Id').val());
         $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: caseTypeId, customerId: publicCustomerId, myTime: Date.now(), productAreaIdToInclude: paId }, function (result) {
             if (result.success) {
-                $('#divProductArea.DynamicDropDown > ul.dropdown-menu')
+                $('#divProductArea > ul.dropdown-menu')
                     .html("<li><a href='#'>--</a></li>" + result.data);
                 paId = parseInt($('#case__ProductArea_Id').val());
                 if (result.paIds && result.paIds.indexOf(paId) < 0) {
-                    var emptyElement = $('#divProductArea.DynamicDropDown > ul.dropdown-menu').children().first();
+                    var emptyElement = $('#divProductArea > ul.dropdown-menu').children().first();
                     $('#divBreadcrumbs_ProductArea').text(getBreadcrumbs(emptyElement));
                     $('#case__ProductArea_Id').val('').trigger('change');
                 }
-                setDynamicDropDowns();
                 bindProductAreasEvents();
 
             }
@@ -1399,10 +1398,8 @@ function CaseInitForm() {
     });
 
     $(window).scroll(function () {
-        setDynamicDropDowns();
+        updateDropdownPosition($('#divProductArea')[0]);
     });
-
-    setDynamicDropDowns();
 
     bindProductAreasEvents();
 
