@@ -444,8 +444,8 @@ namespace DH.Helpdesk.Web.Controllers
                 if (contractStartDate.HasValue)
                 {
                     var startDate = contractStartDate.Value.Date;
-                    
-                    do
+
+                    while (startDate < endDate) 
                     {
                         if (today.AddMonths(1) > startDate && startDate < today)
                         {
@@ -460,8 +460,7 @@ namespace DH.Helpdesk.Web.Controllers
                         {
                             break;
                         }
-
-                    } while (startDate < endDate);
+                    } 
                 }
             }
 
