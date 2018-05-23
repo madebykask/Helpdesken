@@ -32,7 +32,7 @@
                             @Translation.GetCoreTextTranslation("Bevarandeperiod")
                         </td>
                         <td class="span9">
-                            @Html.TextBoxFor(m => m.RetentionPeriod, new { id = "retentionPeriod", maxlength="3", style="width:100px" })
+                            @Html.TextBoxFor(m => m.RetentionPeriod, new { id = "retentionPeriod", maxlength="4", @class="inputw50" })
                             @Translation.GetCoreTextTranslation("dagar")
                             <div id="retentionDaysError"></div>
                         </td>
