@@ -192,8 +192,10 @@ CaseCharge.prototype = {
             var rowString =
             "<tr>" +
 		    "<td>" + "<input type=hidden id='Id' value='" + externalInvoices[i].Id + "'/>" + $("<span/>").text(externalInvoices[i].Name).html() + "</td>" +
-		    "<td class='align-right'>" + (isRowReadOnly ? self._formatNumber(externalInvoices[i].Amount, 2, 3, " ", ",") : self._getTextBox(externalInvoices[i].Amount, "txtExternalAmount")) + "</td>" +
-		    "<td class='align-center'>" + self._getChargeBox(isRowReadOnly, externalInvoices[i].Charge) + "</td>" +
+            //make external invoices readonly in Charge popup (#61991)
+            //"<td class='align-right'>" + (isRowReadOnly ? self._formatNumber(externalInvoices[i].Amount, 2, 3, " ", ",") : self._getTextBox(externalInvoices[i].Amount, "txtExternalAmount")) + "</td>" + 
+            "<td class='align-right'>" + self._formatNumber(externalInvoices[i].Amount, 2, 3, " ", ",") + "</td>" +
+            "<td class='align-center'>" + self._getChargeBox(isRowReadOnly, externalInvoices[i].Charge) + "</td>" +
 		    "<td>" + self._getStatusText(externalInvoices[i].InvoiceRow.Status) + "</td>" +
             "</tr>";
             var row = $(rowString);
