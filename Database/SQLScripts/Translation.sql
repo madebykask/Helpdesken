@@ -7248,6 +7248,13 @@ If not exists (select * from tblTextTranslation where text_id = 1984 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1984, 2, 'yearly')
 GO
 
+If not exists (select * from tbltext where id = 1985)
+	insert into tbltext (id, TextString) VALUES (1985, 'Pågår')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1985 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1985, 2, 'Running')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
