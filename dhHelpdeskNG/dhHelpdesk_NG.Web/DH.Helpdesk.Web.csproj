@@ -1104,6 +1104,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
     <Content Include="Content\js\Common\userSearchCommon.js" />
+    <Content Include="Content\js\Contract\contractCases.js" />
     <Content Include="Content\js\Contract\contractIndex.js" />
     <Content Include="Content\js\Contract\edit.js" />
     <Content Include="Content\js\DynamicCase\ie8.polyfils.min.js" />
@@ -4030,6 +4031,7 @@
     <Content Include="Views\Contracts\ContractHistory.cshtml" />
     <Content Include="Views\Contracts\_ContractsSearchSummary.cshtml" />
     <Content Include="Views\Contracts\_ContractsSearchFilter.cshtml" />
+    <Content Include="Views\Contracts\_ContractCases.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

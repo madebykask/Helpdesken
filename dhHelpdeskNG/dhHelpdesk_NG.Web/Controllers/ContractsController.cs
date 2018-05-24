@@ -2,6 +2,7 @@
 using DH.Helpdesk.Web.Models.Contract;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -14,12 +15,18 @@ using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Web.Infrastructure.Tools;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.BusinessData.Enums.Admin.Users;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Web.Infrastructure.Mvc;
 using DH.Helpdesk.Services.BusinessLogic.Contracts;
 using DH.Helpdesk.Web.Components.Contracts;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
+using DH.Helpdesk.Services.Services.Grid;
 using DH.Helpdesk.Web.Infrastructure.ActionFilters;
 using DH.Helpdesk.Web.Infrastructure.Attributes;
+using DH.Helpdesk.Web.Infrastructure.CaseOverview;
+using DH.Helpdesk.Web.Infrastructure.Grid;
+using DH.Helpdesk.Web.Models.Case;
+using DH.Helpdesk.Web.Models.Case.Output;
 
 
 namespace DH.Helpdesk.Web.Controllers
@@ -33,6 +40,9 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ISupplierService _supplierService;
         private readonly IDepartmentService _departmentService;
         private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
+        private readonly GridSettingsService _gridSettingsService;
+        private readonly ICaseFieldSettingService _caseFieldSettingService;
+        private readonly CaseOverviewGridSettingsService _caseOverviewSettingsService;
 
         public ContractsController(
             IUserService userService,
@@ -42,6 +52,9 @@ namespace DH.Helpdesk.Web.Controllers
             ISupplierService supplierService,
             IDepartmentService departmentService,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
+            GridSettingsService gridSettingsService,
+            ICaseFieldSettingService caseFieldSettingService,
+            CaseOverviewGridSettingsService caseOverviewSettingsService,
             IMasterDataService masterDataService)
 
             : base(masterDataService)
@@ -53,6 +66,9 @@ namespace DH.Helpdesk.Web.Controllers
             this._supplierService = supplierService;
             this._departmentService = departmentService;
             this._userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Contracts);
+            _gridSettingsService = gridSettingsService;
+            _caseFieldSettingService = caseFieldSettingService;
+            _caseOverviewSettingsService = caseOverviewSettingsService;
         }
 
         [UserPermissions(UserPermission.ContractPermission)]
@@ -158,6 +174,56 @@ namespace DH.Helpdesk.Web.Controllers
 
             var model = new ContractsSearchResultsModel(customer);
 
+            //Configuring Contract cases popup
+            var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+            var columnsSettingsModel = _caseOverviewSettingsService.GetSettings(
+                customerId,
+                SessionFacade.CurrentUser.UserGroupId,
+                SessionFacade.CurrentUser.Id,
+                GridSettingsService.CASE_CONTRACT_CASES_GRID,
+                caseFieldSettings);
+            var gridSettings = _gridSettingsService.GetForCustomerUserGrid(
+                customerId,
+                SessionFacade.CurrentUser.UserGroupId,
+                SessionFacade.CurrentUser.Id,
+                GridSettingsService.CASE_CONTRACT_CASES_GRID);
+            model.ContractCases = new JsonCaseIndexViewModel
+            {
+                PageSettings = new PageSettingsModel
+                {
+                    gridSettings = JsonGridSettingsMapper.ToJsonGridSettingsModel(
+                        gridSettings,
+                        SessionFacade.CurrentCustomer.Id,
+                        columnsSettingsModel.AvailableColumns.Count(),
+                        new[] {"5", "10", "15"}),
+                    messages = new Dictionary<string, string>()
+                    {
+                        {"information", Translation.GetCoreTextTranslation("Information")},
+                        {
+                            "records_limited_msg",
+                            Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500.")
+                        },
+                    }
+                },
+                // default values for search filter
+                CaseSearchFilterData = new CaseSearchFilterData
+                {
+                    filterCustomerId = SessionFacade.CurrentCustomer.Id,
+                    caseSearchFilter = new CaseSearchFilter
+                    {
+                        CaseType = 0,
+                        ProductArea = string.Empty,
+                        Category = string.Empty,
+                        CaseFilterFavorite = string.Empty,
+                        FreeTextSearch = string.Empty,
+                        CaseProgress = "-1"
+                    },
+                    CaseInitiatorFilter = string.Empty,
+                    lstfilterPerformer = new int[0],
+                    SearchInMyCasesOnly = false
+                }
+            };
+
             //run search
             var allContracts = SearchContracts(selectedFilter);
          
@@ -187,7 +253,9 @@ namespace DH.Helpdesk.Web.Controllers
                         ? con.ContractLogs.Where(x => x.Case_Id.HasValue).OrderByDescending(l => l.CreatedDate).FirstOrDefault()
                         : null;
 
-                    var hasMultipleCases = con.ContractLogs.Count(x => x.Case_Id.HasValue) > 1;
+                    var caseNumbers = con.ContractLogs.Where(x => x.Case_Id.HasValue).Select(c => c.Case.CaseNumber)
+                        .ToList();
+                    var hasMultipleCases = caseNumbers.Count > 1;
                     var latestCase = latestLog?.Case;
 
                     model.Data.Add(new ContractsSearchRowModel
@@ -197,9 +265,11 @@ namespace DH.Helpdesk.Web.Controllers
                         ContractEndDate = con.ContractEndDate,
                         ContractCase = latestCase != null ? new ContractCase
                         {
+                            CaseId = latestCase.Id,
                             CaseNumber = (int)latestCase.CaseNumber,
                             CaseIcon = CasesMapper.GetCaseIcon(latestCase.FinishingDate, latestCase.ApprovedDate, latestCase.CaseType.RequireApproving),
-                            HasMultiplyCases = hasMultipleCases
+                            HasMultiplyCases = hasMultipleCases,
+                            CaseNumbers = caseNumbers.Select(c => c.ToString(CultureInfo.InvariantCulture)).ToList()
                         } : new ContractCase { CaseNumber = 0 },
                         ContractStartDate = con.ContractStartDate,
                         Finished = con.Finished,

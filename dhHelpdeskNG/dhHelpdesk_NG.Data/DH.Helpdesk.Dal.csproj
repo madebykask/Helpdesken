@@ -91,7 +91,6 @@
     <Compile Include="Attributes\Inventory\CreateMissingPrinterSettingsAttribute.cs" />
     <Compile Include="Attributes\Inventory\CreateMissingServerSettingsAttribute.cs" />
     <Compile Include="Attributes\Inventory\CreateMissingComputerSettingsAttribute.cs" />
-    <Compile Include="CaseSearch\CaseSearchConstants.cs" />
     <Compile Include="CaseSearch\CaseSearchCriterias.cs" />
     <Compile Include="CaseSearch\CaseSearchQueryBuilder.cs" />
     <Compile Include="CaseSearch\Interfaces\ICaseSearchCriterias.cs" />

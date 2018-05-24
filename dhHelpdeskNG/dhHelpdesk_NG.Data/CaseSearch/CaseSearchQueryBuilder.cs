@@ -9,6 +9,7 @@ using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Common.Extensions.String;
@@ -1140,21 +1141,29 @@ namespace DH.Helpdesk.Dal.Repositories
 
             if (!string.IsNullOrWhiteSpace(searchFilter.FreeTextSearch))
             {
-                if (searchFilter.FreeTextSearch[0] == '#')
+                if (searchFilter.FreeTextSearch[0] == CaseSearchConstants.CaseNumberSearchPrefix)
                 {
                     var text = searchFilter.FreeTextSearch.Substring(1, searchFilter.FreeTextSearch.Length - 1);
-                    int res = 0;
-                    if (int.TryParse(text, out res))
+                    var texts = text.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+                    if (texts.Length > 1)
                     {
-                        sb.Append(" AND (");
-                        sb.Append("[tblCase].[CaseNumber] = " + text.SafeForSqlInject());
-                        sb.Append(") ");
+                        sb.AppendFormat(" AND [tblCase].[CaseNumber] In ({0}) ", text.SafeForSqlInject());
                     }
                     else
                     {
-                        sb.Append(" AND (");
-                        sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text.SafeForSqlInject()));
-                        sb.Append(") ");
+                        int res = 0;
+                        if (int.TryParse(text, out res))
+                        {
+                            sb.Append(" AND (");
+                            sb.Append("[tblCase].[CaseNumber] = " + text.SafeForSqlInject());
+                            sb.Append(") ");
+                        }
+                        else
+                        {
+                            sb.Append(" AND (");
+                            sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text.SafeForSqlInject()));
+                            sb.Append(") ");
+                        }
                     }
                 }
                 else
@@ -1315,7 +1324,7 @@ namespace DH.Helpdesk.Dal.Repositories
         private bool IsFreeTextSearch(CaseSearchFilter searchFilter)
         {
             return !string.IsNullOrWhiteSpace(searchFilter.FreeTextSearch) &&
-                   searchFilter.FreeTextSearch[0] != '#';
+                   searchFilter.FreeTextSearch[0] != CaseSearchConstants.CaseNumberSearchPrefix;
         }
 
         private bool IsHelpdeskApplication(ICaseSearchCriterias searchCriterias)

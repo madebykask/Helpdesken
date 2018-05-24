@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Web.Models.Case;
 
 
 namespace DH.Helpdesk.Web.Models.Contract
@@ -123,6 +124,10 @@ namespace DH.Helpdesk.Web.Models.Contract
             Data = new List<ContractsSearchRowModel>();
             Customer = customer;
             Columns = new List<ContractsSettingRowViewModel>();
+            ContractCases = new JsonCaseIndexViewModel()
+            {
+                PageSettings = new PageSettingsModel()
+            };
             SelectedShowStatus = 10;
         }
 
@@ -134,6 +139,8 @@ namespace DH.Helpdesk.Web.Models.Contract
         public int SelectedShowStatus { get; set; }
         public int TotalRowsCount { get; set; }
         public ContractsSearchSummary SearchSummary { get; set; }
+
+        public JsonCaseIndexViewModel ContractCases { get; set; }
     }
 
     public sealed class ColSortModel
@@ -150,8 +157,10 @@ namespace DH.Helpdesk.Web.Models.Contract
 
     public sealed class ContractCase
     {
+        public int CaseId { get; set; }
         public int CaseNumber { get; set; }
         public GlobalEnums.CaseIcon CaseIcon { get; set; }
         public bool HasMultiplyCases { get; set; }
+        public List<string> CaseNumbers { get; set; }
     }
 }

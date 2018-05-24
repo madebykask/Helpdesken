@@ -37,7 +37,6 @@ function createContractsPage(JQuery) {
         };
 
         this.setFieldCaption = function(fieldId, languageId) {
-            var ret = "";
             $('.' + fieldId).each(function() {
                 var id = $(this).attr("id");
                 if (id === 'fieldCaption') {
