@@ -29,6 +29,7 @@ namespace DH.Helpdesk.SelfService.Controllers
     {
         private readonly ICustomerService _customerService;                
         private readonly IOperationLogService _operationLogService;
+        private readonly ICalendarService _calendarService;
         private readonly IBulletinBoardService _bulletinBoardService;
         private readonly IInfoService _infoService;
         private readonly ISettingService _settingService;
@@ -39,6 +40,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                                ICaseSolutionService caseSolutionService,
                                IInfoService infoService,
                                IOperationLogService operationLogService,
+                               ICalendarService calendarService,
                                IBulletinBoardService bulletinBoardService,
                                ISettingService settingService,
                                IUserService userService,
@@ -48,6 +50,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             
             this._customerService = customerService;
             this._operationLogService = operationLogService;
+            this._calendarService = calendarService;
             this._bulletinBoardService = bulletinBoardService;
             this._infoService = infoService;
             this._settingService = settingService;
@@ -67,6 +70,12 @@ namespace DH.Helpdesk.SelfService.Controllers
             model.OperationLog = ops.Where(op => op.PublicInformation != 0 &&
                                                 op.ShowDate <= DateTime.Now.Date && op.ShowUntilDate >= DateTime.Now.Date)
                                     .OrderByDescending(op => op.ShowDate)
+                                    .ToList();
+
+            var cc = _calendarService.GetCalendarsByCustomerId(SessionFacade.CurrentCustomer.Id);
+            model.Calendar = cc.Where(c => c.PublicInformation != 0 &&
+                                                c.ShowFromDate <= DateTime.Now.Date && c.ShowUntilDate >= DateTime.Now.Date)
+                                    .OrderByDescending(c => c.CalendarDate)
                                     .ToList();
 
             var bb = _bulletinBoardService.GetBulletinBoards(SessionFacade.CurrentCustomer.Id, false);

@@ -72,6 +72,9 @@ namespace DH.Helpdesk.SelfService
     using Services.Services.WebApi;
     using Dal.Repositories.Condition;
     using Dal.Repositories.Condition.Concrete;
+    using Dal.Mappers;
+    using BusinessData.Models.Calendar.Output;
+    using Dal.Mappers.Calendars.EntityToBusinessModel;
 
     public static class NinjectWebCommon 
     {
@@ -229,6 +232,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IDomainRepository>().To<DomainRepository>();
             kernel.Bind<ILinkRepository>().To<LinkRepository>();
             kernel.Bind<ICaseLockRepository>().To<CaseLockRepository>();
+            kernel.Bind<ICalendarRepository>().To<CalendarRepository>();
             kernel.Bind<ILinkGroupRepository>().To<LinkGroupRepository>();
             kernel.Bind<IUsersPasswordHistoryRepository>().To<UsersPasswordHistoryRepository>();
             kernel.Bind<ICaseFilterFavoriteRepository>().To<CaseFilterFavoriteRepository>();
@@ -313,6 +317,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IEmailService>().To<EmailService>();
             kernel.Bind<IFeedbackTemplateService>().To<FeedbackTemplateService>();
             kernel.Bind<ICaseSettingsService>().To<CaseSettingsService>();
+            kernel.Bind<ICalendarService>().To<CalendarService>();
             kernel.Bind<IInfoService>().To<InfoService>();
             kernel.Bind<ICaseFileService>().To<CaseFileService>();
             kernel.Bind<ILogFileService>().To<LogFileService>();
@@ -373,7 +378,6 @@ namespace DH.Helpdesk.SelfService
 
             // Cache
             kernel.Bind<ICacheProvider>().To<CacheProvider>();
-
 
             // FormLib
             var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DSN"].ConnectionString;

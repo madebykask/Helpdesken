@@ -41,6 +41,24 @@
                 </div>
             </div>
         }
+        @if (SessionFacade.CurrentCustomer.ShowCalenderOnExtPage != 0 && Model.Calendar != null && Model.Calendar.Any())
+        {
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading phselfservice">@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation) </div>
+                    <div class="panel-body">
+                        @if (Model.Calendar != null)
+                        {
+                            foreach (var c in Model.Calendar)
+                            {
+                                <p> <strong> @Html.DisplayFor(m => c.CalendarDate, "Date")  </strong> <br /> @Html.Raw(c.Text) </p>
+                                <br />
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        }
         @if (SessionFacade.CurrentCustomer.ShowBulletinBoardOnExtPage != 0 && Model.BulletinBoard != null && Model.BulletinBoard.Any())
         {
             <div class="col-md-4">
@@ -54,9 +72,7 @@
                                 <p> <strong> @Html.DisplayFor(m=> b.ChangedDate , "DateAndTime")  </strong> <br /> @Html.Raw(b.Text) </p>
                                 <br />
                             }
-                        }                    
-                        <div class="bulletinimg">
-                        </div>                    
+                        }                                                           
                     </div>
                 </div>
             </div>
