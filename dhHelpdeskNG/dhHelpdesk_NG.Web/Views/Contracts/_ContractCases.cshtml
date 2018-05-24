@@ -1,0 +1,73 @@
+﻿
+@using System.Web.Script.Serialization
+@using DH.Helpdesk.Common.Constants
+@using DH.Helpdesk.Web.Enums
+@model DH.Helpdesk.Web.Models.Case.JsonCaseIndexViewModel
+@{
+    var jsSerializer = new JavaScriptSerializer();
+    var perPageText = Translation.GetForJS("Antal per sida");
+    var perShowingText = Translation.GetForJS("Visar sida");
+}
+<script type="text/javascript">
+    $(function () {
+        var pageSettings = @Html.Raw(jsSerializer.Serialize(Model.PageSettings));
+        pageSettings.perPageText = '@perPageText';
+        pageSettings.perShowingText = '@perShowingText';
+        pageSettings.curUserId = '@(SessionFacade.CurrentUser != null ? SessionFacade.CurrentUser.UserId.ToLower(): string.Empty)';
+        pageSettings.caseNumberSearchPrefix = '@CaseSearchConstants.CaseNumberSearchPrefix';
+        pageSettings.initialized = false;
+
+        $('i[openCases]').on('click', function(e) {
+            var $src = $(this);
+            var $target = $('#divContractCases');
+            pageSettings.caseNumbers = $src.data('casenumbers');
+            //$target.attr("data-src", $src.attr("data-src"));
+            $target.modal('show');
+            if (!pageSettings.initialized) {
+                ContractCases(pageSettings);
+                pageSettings.initialized = true;
+            } else {
+                window.ctp.setCaseNumbers($src.data('casenumbers'));
+                window.ctp.reload();
+            }
+        });
+    });
+</script>
+
+<button type="button" class="close" data-dismiss="modal" style="margin-right: 5px;">&times;</button>
+<div id="contract_cases_popup">
+    <div class="content modalpopup">
+        <div>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                        <form id="frmCaseSearch" name="frmCaseSearch">
+                            @Html.HiddenFor(m => m.CaseSearchFilterData.filterCustomerId, new { Name = CaseFilterFields.CustomerId, id = "hidFilterCustomer_Id" })
+                            @Html.HiddenFor(m => m.CaseSearchFilterData.CaseInitiatorFilter, new { Name = CaseFilterFields.InitiatorNameAttribute, id = "caseInitiatorText" })
+                            <input type="hidden" class="hidden" value="@Model.CaseSearchFilterData.caseSearchFilter.CaseType.supressZero()" id="hidFilterCaseTypeId" name="@CaseFilterFields.CaseTypeIdNameAttribute" />
+                            @Html.HiddenFor(m => m.CaseSearchFilterData.caseSearchFilter.ProductArea, new { Name = CaseFilterFields.ProductAreaIdNameAttribute, id = "hidFilterProductAreaId" })
+                            @Html.HiddenFor(m => m.CaseSearchFilterData.caseSearchFilter.Category, new { Name = CaseFilterFields.CategoryNameAttribute, id = "hidFilterCategoryId" })
+                            @Html.HiddenFor(m => m.CaseSearchFilterData.SearchInMyCasesOnly, new { Name = "SearchInMyCasesOnly", id = "SearchInMyCasesOnly" })
+                            @Html.HiddenFor(m => m.CaseSearchFilterData.caseSearchFilter.CaseFilterFavorite, new { Name = CaseFilterFields.CaseFilterFavoriteNameAttribute, id = "lstMyFavorites" })
+                            @Html.HiddenFor(m => m.CaseSearchFilterData.caseSearchFilter.FreeTextSearch, new { Name = CaseFilterFields.FreeTextSearchNameAttribute, id = "txtFreeTextSearch" })
+                            @Html.HiddenFor(m => m.CaseSearchFilterData.caseSearchFilter.CaseProgress, new { Name = CaseFilterFields.FilterCaseProgressNameAttribute, id = "lstfilterCaseProgress" })
+                        </form>
+                        <div>
+                            @Translation.GetCoreTextTranslation("Poster i sökresultat"): <span data-field="TotalAmountCases"></span><span id="caseLimitInfo" style="display: none;">&nbsp;(@Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500."))</span>
+                        </div>
+                        <div class="container" id="search_result">
+                            <table id="caseResults" class="table table-striped table-bordered table-hover table-cases"><thead></thead><tbody></tbody></table>
+                            <div class="nofields-msg">@Translation.GetCoreTextTranslation("Inga standardkolumner har valts för din användare på denna kund, för att visa kolumner, klicka på fliken Inställningar och gå till Filter Ärendeöversikt")</div>
+                            <div class="noavailablefields-msg">@Translation.GetCoreTextTranslation("Inga ärendefält har valts för denna kund, kontakta systemadministratören.")</div>
+                            <div class="loading-msg">
+                                <div class="content-wrapper">
+                                    <div class="loader">@Translation.GetCoreTextTranslation("Laddar...")</div>
+                                </div>
+                            </div>
+                            <div class="no-data-msg">&nbsp;</div>
+                            <div class="error-msg">@Html.Raw(string.Format(Translation.GetCoreTextTranslation("Ett fel inträffade, klicka") + " {0}" + Translation.GetCoreTextTranslation("här") + "{1} " + Translation.GetCoreTextTranslation("för att ladda om sidan."), "<a href=\"#refresh\" class=\"refresh-grid\">", "</a>"))</div>
+                        </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>

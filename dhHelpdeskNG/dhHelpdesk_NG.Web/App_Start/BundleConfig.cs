@@ -184,7 +184,8 @@ namespace DH.Helpdesk.Web
                         "~/Content/js/AdvancedSearch/index.specialfilter.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/contract").Include(
-                           "~/Content/js/contract/contractIndex.js"));
+                           "~/Content/js/contract/contractIndex.js",
+                           "~/Content/js/contract/contractCases.js"));
 
             #region Case editing
             bundles.Add(new StyleBundle("~/cases/dynamic-cases").Include(
