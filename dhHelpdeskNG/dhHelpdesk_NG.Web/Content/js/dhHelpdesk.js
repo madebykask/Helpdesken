@@ -732,16 +732,16 @@ $.fn.checkUrlFileExists = function () {
 };
 
 $(function() {
-    //$('ul.dropdown-menu.subddMenu.parentddMenu').on('mouseenter', function () {
-    //    var $html = $('html');
-    //    $html.data('previous-overflow', $html.css('overflow'));
-    //    $html.css('overflow', 'hidden');
-    //});
+    $('ul.dropdown-menu.subddMenu.parentddMenu').on('mouseenter', function () {
+        var $html = $('html');
+        $html.data('previous-overflow', $html.css('overflow'));
+        $html.css('overflow', 'hidden');
+    });
 
-    //$('ul.dropdown-menu.subddMenu.parentddMenu').on('mouseleave', function () {
-    //    var $html = $('html');
-    //    $html.css('overflow', $html.data('previous-overflow'));
-    //});
+    $('ul.dropdown-menu.subddMenu.parentddMenu').on('mouseleave', function () {
+        var $html = $('html');
+        $html.css('overflow', $html.data('previous-overflow'));
+    });
 
     $('.dropdown-submenu.DynamicDropDown_Up').on('mousemove', function (event) {
         dynamicDropDownBehaviorOnMouseMove(event);

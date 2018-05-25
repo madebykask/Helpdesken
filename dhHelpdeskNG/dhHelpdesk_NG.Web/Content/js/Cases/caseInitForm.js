@@ -1399,6 +1399,12 @@ function CaseInitForm() {
 
     $(window).scroll(function () {
         updateDropdownPosition($('#divProductArea')[0]);
+        var objPos = getObjectPosInView($('#divProductArea')[0]);;
+        if (objPos.ToTop <= objPos.ToDown) {
+                $('#divProductArea').removeClass('dropup');
+            } else {
+                $('#divProductArea').addClass('dropup');
+            }
     });
 
     bindProductAreasEvents();
