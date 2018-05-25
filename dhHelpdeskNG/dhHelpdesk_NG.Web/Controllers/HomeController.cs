@@ -222,9 +222,11 @@
                     case Module.Calendar:
                         if (SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.User ||
                             SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.Administrator)
-                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true, true, calendarWGRestriction);
+                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true, true, calendarWGRestriction)
+                                                      .OrderByDescending(c => c.CalendarDate);
                         else
-                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true);
+                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true)
+                                                      .OrderByDescending(c => c.CalendarDate);
                         break;
                     case Module.Customers:
                         var customerCases = this.caseService.GetCustomersCases(customersIds, this.workContext.User.UserId);                        
