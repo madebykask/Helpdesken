@@ -287,6 +287,11 @@ namespace DH.Helpdesk.Web
             bundles.Add(new ScriptBundle("~/bundles/contracts/edit").Include(
                "~/Content/js/Contract/edit.js"));
 
+
+            bundles.Add(new ScriptBundle("~/bundles/changepassword").Include(
+                "~/Content/js/ChangePassword/PasswordValidator.js",
+                "~/Content/js/ChangePassword/_changePasswordDialog.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
 #if DEBUG
                 "~/Scripts/knockout-3.4.0.debug.js"

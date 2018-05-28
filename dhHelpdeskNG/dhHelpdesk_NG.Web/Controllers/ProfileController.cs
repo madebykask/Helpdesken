@@ -170,63 +170,28 @@
                                     UserModulesViewModel modules = null, 
                                     UserCustomersSettingsViewModel customersSettings = null)
         {
-            var sli = new List<SelectListItem>();
-            sli.Add(new SelectListItem
-            {
-                Text = string.Empty,
-                Value = "0",
-                Selected = false
-            });
-            sli.Add(new SelectListItem
-            {
-                Text = "1",
-                Value = "60",
-                Selected = false
-            });
-            sli.Add(new SelectListItem
-            {
-                Text = "2",
-                Value = "120",
-                Selected = false
-            });
-            sli.Add(new SelectListItem
-            {
-                Text = "3",
-                Value = "180",
-                Selected = false
-            });
-            sli.Add(new SelectListItem
-            {
-                Text = "4",
-                Value = "240",
-                Selected = false
-            });
-            sli.Add(new SelectListItem
-            {
-                Text = "5",
-                Value = "300",
-                Selected = false
-            });
-            sli.Add(new SelectListItem
-            {
-                Text = "10",
-                Value = "600",
-                Selected = false
-            });
-            sli.Add(new SelectListItem
-            {
-                Text = "15",
-                Value = "900",
-                Selected = false
-            });
+            var intervals = new List<int> { 0, 1, 2, 3, 4, 5, 10, 15 };
 
             var model = new ProfileInputViewModel
             {
                 User = user,
-                RefreshInterval = sli,
+
+                RefreshInterval = intervals.Select(x => new SelectListItem()
+                {
+                    Text = x.ToString(),
+                    Value =  (x * 60).ToString()
+                }).ToList(),
+
                 Modules = modules,
                 CustomersSettings = customersSettings,
-                AvailvableTimeZones = TimeZoneInfo.GetSystemTimeZones().Select(it => new SelectListItem() { Value = it.Id, Text = it.DisplayName, Selected = user.TimeZoneId == it.Id }),
+
+                AvailvableTimeZones = TimeZoneInfo.GetSystemTimeZones().Select(it => new SelectListItem()
+                {
+                    Value = it.Id,
+                    Text = it.DisplayName,
+                    Selected = user.TimeZoneId == it.Id
+                }),
+
                 SelectedTimeZone = user.TimeZoneId
             };
 

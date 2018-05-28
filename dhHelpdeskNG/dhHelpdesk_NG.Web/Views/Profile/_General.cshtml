@@ -110,7 +110,7 @@
                 </td>
                 <td>
                     <input type="button" value="@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword btn"
-                        onclick="ChangePassword()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
+                           data-toggle="modal" data-target="#divPasswordDialog" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
                 </td>
             </tr>
         }
@@ -165,18 +165,11 @@
     </table>
 
 </div>
-<div id="divPasswordDialog" class="modal hide fade">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)</h3>
-    </div>
-    <div class="modal-body">
-        @Html.Partial("_ChangePassword", Model)
-    </div>
-</div>
+
+
 
 <script type="text/javascript">
-   
+
     var validator = $("#target").validate({
         ignore: "",
         rules: {
@@ -190,48 +183,17 @@
                 required: true
             }
         },
-        invalidHandler: function (form, validator) {            
-            
-
+        invalidHandler: function (form, validator) {
             var errors = validator.numberOfInvalids();
             if (errors) {
                 var message = 'Please fill required fields!';                  
                 ShowToastMessage(message, "error");
             } 
             //$('#fragment-1').class("active");
-
         }
     });
 
-    function ChangePassword() {
-
-        var mod = $('#divPasswordDialog').modal('show');
-
-        mod.find("#btnClose").on("click", function (e) {
-            mod.modal('hide');
-        });
-
-        mod.find("#btnSavePassword").on("click", function (e) {
-            if ($('#NewPassword').val() != $('#ConfirmPassword').val()) {
-                var e = '@passChangeError';
-                ShowToastMessage(e, "Error");                
-            } else {
-                $.post('/profile/EditUserPassword/', { id: $('#id_user').val(), newPassword: $('#NewPassword').val(), confirmPassword: $('#ConfirmPassword').val() }, function (data) {                    
-                    var e = '@passChangeText';                    
-                    ShowToastMessage(e, "alert");
-
-                    $('#NewPassword').val('');
-                    $('#ConfirmPassword').val('');
-                });
-                }
-            mod.modal('hide');
-        });
-
-            mod.on("hide", function () {
-                $("#divPasswordDialog #btnSavePassword").off("click");
-                $("#divPasswordDialog #btnClose").off("click");
-            });
-    }
+    
 
 
     function ShowToastMessage(message, msgType) {
