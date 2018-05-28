@@ -316,20 +316,22 @@ CaseCharge.prototype = {
         $("#externalInvoiceGrid tbody tr").each(function (i, row) {
             var externalId = Number($("#Id", row).val());
             var amountControl = $("#txtExternalAmount", row);
-            var amount = Number($("#txtExternalAmount", row).val());
-            if (amountControl.length) {
-                var externalInvoice = {
-                    Id: externalId,
-                    Amount: amount,
-                    Charge: $("#cbCharge", row).is(':checked')
-                };
-                externalInvoices.push(externalInvoice);
+
+            var data = self._getExternalInvoiceData(externalId);
+            if (data) {
+                data.Charge = $("#cbCharge", row).is(':checked');
+                if (amountControl.length) {
+                    var amount = Number($("#txtExternalAmount", row).val());
+                    data.Amount = amount;
+                }
+
+                externalInvoices.push(data);
 
                 //refresh data;
-                self._refreshExternalData(externalInvoice);
+                self._refreshExternalData(data);
             }
-
         });
+
 
         if (logInvoices.length || externalInvoices.length) {
             $("#caseChargePopup #btnSave").prop('disabled', true);
@@ -380,6 +382,20 @@ CaseCharge.prototype = {
             dataEntry.Material = logInvoice.Material;
             dataEntry.Price = logInvoice.Price;
         }
+    },
+
+    _getExternalInvoiceData: function (id) {
+        "use strict";
+        var self = this;
+
+        var dataEntry = null;
+        for (var i = 0; i < self.data.ExternalInvoices.length; i++) {
+            if (self.data.ExternalInvoices[i].Id === id) {
+                dataEntry = self.data.ExternalInvoices[i];
+                break;
+            }
+        }
+        return dataEntry;
     },
 
     _refreshExternalData: function (externalInvoice) {
