@@ -528,7 +528,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.ShowCaseStatistics.ToBool(),
                         x.TimeZoneId,
                         x.UserGUID,
-                        x.CaseInternalLogPermission
+                        x.CaseInternalLogPermission,
+                        x.InvoiceTimePermission
                         )).FirstOrDefault();
 
             return ret;
@@ -581,7 +582,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         x.ShowCaseStatistics.ToBool(),
                         x.TimeZoneId,
                         x.UserGUID,
-                        x.CaseInternalLogPermission
+                        x.CaseInternalLogPermission,
+                        x.InvoiceTimePermission
                         )).SingleOrDefault();
             return u;
         }

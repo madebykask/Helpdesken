@@ -157,6 +157,11 @@
                 permissions.Add(UserPermission.CaseInternalLogPermission);
             }
 
+            if (user.InvoiceTimePermission.ToBool())
+            {
+                permissions.Add(UserPermission.InvoiceTimePermission);
+            }
+
             return permissions;
         }
 

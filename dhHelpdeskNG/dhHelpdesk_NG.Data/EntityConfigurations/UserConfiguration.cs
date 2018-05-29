@@ -160,6 +160,7 @@
 
             this.Property(x => x.CaseUnlockPermission).IsRequired();
             this.Property(x => x.CaseInternalLogPermission).IsRequired();
+            this.Property(x => x.InvoiceTimePermission).IsRequired();
 
             this.ToTable("tblUsers");
         }

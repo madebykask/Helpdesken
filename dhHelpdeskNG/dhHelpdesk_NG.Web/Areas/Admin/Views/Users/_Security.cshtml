@@ -348,6 +348,16 @@
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till fakturering artikel", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
+        <tr>
+            <td>
+                @Translation.Get("Fakturering tid", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                <input data-field="invoiceTimePermission" type="checkbox" name="User.InvoiceTimePermission" @(Model.User.InvoiceTimePermission == 1 ? "checked=checked" : "") value="1" />
+                <input type="hidden" name="User.InvoiceTimePermission" value="0" />
+                &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till fakturering tid", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
     <tr>
         <td>
             @Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)

@@ -160,10 +160,10 @@ namespace DH.Helpdesk.Web.Models
 
 		public bool IsInvoicesVisible()
 		{
-			return CustomerSetting.ModuleInvoice.ToBool() && this.IsCustomerOrSystemAdministrator();
+			return CustomerSetting.ModuleInvoice.ToBool() && UserPermissions.Contains(UserPermission.InvoiceTimePermission);
 		}
 
-		public bool IsSettingsModulesVisible()
+        public bool IsSettingsModulesVisible()
         {
             return                 
                 this.IsCheckListVisuble() ||

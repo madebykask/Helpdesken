@@ -189,6 +189,12 @@ BEGIN
 END
 GO
 
+
+-- New field in tblusers
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InvoiceTimePermission' and sysobjects.name = N'tblUsers')
+   ALTER TABLE tblUsers ADD InvoiceTimePermission int NOT NULL Default(0)
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.37'
 --ROLLBACK --TMP

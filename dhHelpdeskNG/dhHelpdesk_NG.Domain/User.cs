@@ -101,7 +101,7 @@
         public Guid UserGUID { get; set; }
         public int CaseUnlockPermission { get; set; }
         public int CaseInternalLogPermission { get; set; }
-
+        public int InvoiceTimePermission { get; set; }
         /// <summary>
         /// Flag to display "Solution time" grid on case overview page
         /// </summary>

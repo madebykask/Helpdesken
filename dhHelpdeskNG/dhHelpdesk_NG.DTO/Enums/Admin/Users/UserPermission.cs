@@ -26,6 +26,7 @@
         ContractPermission,
         InvoicePermission,
         CaseUnlockPermission,
-        CaseInternalLogPermission
+        CaseInternalLogPermission,
+        InvoiceTimePermission
     }
 }
