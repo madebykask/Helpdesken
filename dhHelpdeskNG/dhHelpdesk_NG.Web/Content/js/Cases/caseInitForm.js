@@ -1039,16 +1039,13 @@ function CaseInitForm() {
         var paId = parseInt($('#case__ProductArea_Id').val());
         $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: caseTypeId, customerId: publicCustomerId, myTime: Date.now(), productAreaIdToInclude: paId }, function (result) {
             if (result.success) {
-                $('#divProductArea > ul.dropdown-menu')
-                    .html("<li><a href='#'>--</a></li>" + result.data);
-                paId = parseInt($('#case__ProductArea_Id').val());
-                if (result.paIds && result.paIds.indexOf(paId) < 0) {
+                $('#divProductArea > ul.dropdown-menu').html("<li><a href='#'>--</a></li>" + result.data);
+                if (result.praIds && result.praIds.indexOf(paId) < 0) {
                     var emptyElement = $('#divProductArea > ul.dropdown-menu').children().first();
                     $('#divBreadcrumbs_ProductArea').text(getBreadcrumbs(emptyElement));
                     $('#case__ProductArea_Id').val('').trigger('change');
                 }
                 bindProductAreasEvents();
-
             }
         }, 'json');
     }
@@ -1173,7 +1170,7 @@ function CaseInitForm() {
 
     $('#case__ProductArea_Id').change(function () {
         var $workingGroup = $("#case__WorkingGroup_Id");       
-
+        
         $("#ProductAreaHasChild").val(0);        
         document.getElementById("divProductArea").classList.remove("error");
         if ($(this).val() > 0 ) {

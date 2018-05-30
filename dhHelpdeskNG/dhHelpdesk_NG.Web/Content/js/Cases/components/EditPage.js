@@ -611,17 +611,28 @@ EditPage.prototype.refreshCasePage = function (updatedInfo) {
     $('#' + _caseFields.PersonsPhone).val(updatedInfo.PersonsPhone);
 
 
-    $('#' + _caseFields.CaseTypeId).val(updatedInfo.CaseType_Id).change();
-    $('#' + _caseFields.ProductAreaId).val(updatedInfo.ProductArea_Id).change();
+    var caseTypeId$ = $('#' + _caseFields.CaseTypeId);
+    if (caseTypeId$.val() != updatedInfo.CaseType_Id) {
+        caseTypeId$.val(updatedInfo.CaseType_Id).change();
+    }
+
+    var productAreaId$ = $('#' + _caseFields.ProductAreaId);
+    if (productAreaId$.val() != updatedInfo.ProductArea_Id) {
+        productAreaId$.val(updatedInfo.ProductArea_Id).change();
+    }
 
     //trigger change only if value has been changed
     var workingGroupId$ = $('#' + _caseFields.WorkingGroupId);
     if (workingGroupId$.val() != updatedInfo.WorkingGroup_Id) {
         workingGroupId$.val(updatedInfo.WorkingGroup_Id).change();
-    } 
+    }
+
+    var priorityId$ = $('#' + _caseFields.PriorityId);
+    if (priorityId$.val() != updatedInfo.Priority_Id) {
+        priorityId$.val(updatedInfo.Priority_Id).change();
+    }
 
     $('#' + _caseFields.WorkingGroupName).val(updatedInfo.WorkingGroupName);
-    $('#' + _caseFields.PriorityId).val(updatedInfo.Priority_Id).change();
     $('#' + _caseFields.PersonsEmail).val(updatedInfo.PersonsEmail);
     $('#' + _caseFields.PersonsCellphone).val(updatedInfo.PersonsCellphone);
     $('#' + _caseFields.Place).val(updatedInfo.Place);
@@ -654,7 +665,11 @@ EditPage.prototype.refreshCasePage = function (updatedInfo) {
         $("#CaseTemplate_OU_Id").val(updatedInfo.OU_Id);
     }
 
-    $('#' + _caseFields.RegionId).val(updatedInfo.Region_Id).change();
+    var regionId$ = $('#' + _caseFields.RegionId);
+    if (regionId$.val() != updatedInfo.Region_Id) {
+        regionId$.val(updatedInfo.Region_Id).change();
+    }
+
     $('#' + _caseFields.RegionName).val(updatedInfo.RegionName);
     $('#' + _caseFields.DepartmentName).val(updatedInfo.DepartmentName);
     $('#' + _caseFields.OUName).val(updatedInfo.OUName);
