@@ -7262,6 +7262,20 @@ If not exists (select * from tblTextTranslation where text_id = 1988 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1988, 2, 'User has permission to Invoice Time')
 GO
 
+If not exists (select * from tbltext where id = 1989)
+	insert into tbltext (id, TextString) VALUES (1989, 'Visa Driftlogg på startsidan')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1989 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1989, 2, 'Show Operational log on start page')
+GO
+
+If not exists (select * from tbltext where id = 1990)
+	insert into tbltext (id, TextString) VALUES (1990, 'Visa Aktuellt på startsidan')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1990 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1990, 2, 'Show Calendar on start page')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
