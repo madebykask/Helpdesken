@@ -133,6 +133,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             vmodel.Setting.InvoiceType = setting.InvoiceType;
             vmodel.Setting.CaseSMS = setting.CaseSMS;
 
+            //keep original value
+            if (vmodel.Setting.ComplexPassword > 0)
+            {
+                vmodel.Setting.MinPasswordLength = setting.MinPasswordLength;
+            }
+
             if (customerToSave == null)
                 throw new Exception("No customer found...");
 
