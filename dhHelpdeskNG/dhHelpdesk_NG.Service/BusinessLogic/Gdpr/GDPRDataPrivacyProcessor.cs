@@ -17,6 +17,7 @@ using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Domain.ExtendedCaseEntity;
 using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Services.Services;
+using log4net;
 
 namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 {
@@ -27,6 +28,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
     public class GDPRDataPrivacyProcessor : IGDPRDataPrivacyProcessor
     {
+        private readonly ILog _log = LogManager.GetLogger(typeof(GDPRDataPrivacyProcessor));
         private readonly IFilesStorage _filesStorage;
         private readonly IGDPROperationsAuditRespository _gdprOperationsAuditRespository;
         private readonly ISettingRepository _settingRepository;
@@ -102,6 +104,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             var filesToDelete = new List<CaseFileEntity>();
             var sqlTimeout = 300; //seconds
 
+            _log.Debug($"GDPR process has been called. CustomerId: {customerId}, FavoriteId: {p.SelectedFavoriteId}, TaskId: {p.TaskId}");
+
             try
             {
                 using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
@@ -169,6 +173,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
                     if (cases.Any())
                     {
+                        _log.Debug($"{cases.Count} cases has been found. TaskId: {p.TaskId}.");
+
                         var pos = 1;
                         var count = cases.Count;
                         p.ReplaceDataWith = p.ReplaceDataWith ?? string.Empty;
@@ -183,19 +189,30 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                             pos++;
                         }
 
+                        _log.Debug($"{cases.Count} cases has been processed. TaskId: {p.TaskId}.");
+
                         ProccessFormPlusCaseData(cases.Select(c => c.Id).ToList(), formFieldValueHistoryRep, formFieldValueRep);
 
+
+                        _log.Debug($"Detecting cases changes. TaskId: {p.TaskId}.");
                         uow.DetectChanges();
+
+                        _log.Debug($"Saving cases changes. TaskId: {p.TaskId}.");
                         uow.Save();
+
+                        _log.Debug($"Cases changes have been saved sucessfully. TaskId: {p.TaskId}.");
                     }
                 }
 
                 if (cases.Any())
                 {
+                    _log.Debug($"Deleting cases files.");
                     DeleteCaseFiles(customerId, filesToDelete);
                 }
 
                 SaveSuccessOperationAudit(customerId, userId, p, cases.Select(c => c.Id).ToList());
+
+                _log.Debug($"Processing has been completed successfully. TaskId: {p.TaskId}.");
             }
             catch (Exception e)
             {
