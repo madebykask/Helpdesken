@@ -118,7 +118,10 @@ namespace DH.Helpdesk.Web
                             "~/Content/js/snippets/clickmultimenu_dropdown.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/common/login").Include(
+                            "~/Content/js/Shared/errors.js",
                             "~/Scripts/jquery-1.8.3.min.js",
+                            "~/Content/js/jquery.validate.min.js",
+                            "~/Content/js/jquery.toastmessage.js",
                             "~/Content/js/bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common/popup").Include(

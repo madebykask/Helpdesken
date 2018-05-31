@@ -15,7 +15,10 @@
     @Html.Partial("_Input", Model)
 }
 
-@Html.Partial("_ChangePassword", Model)
+@if (Model.ChangePasswordModel != null)
+{
+    @Html.Partial("_ChangePassword", Model.ChangePasswordModel)    
+}
 
 @section Scripts {
     <script type="text/javascript">

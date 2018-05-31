@@ -20,11 +20,12 @@
                 var isValid = self.form$.valid();
                 if (isValid) {
                     self.changePassword();
-                } 
+                }
+                return false;
             });
 
             //set up validation
-            self.passwordValidator = new PasswordValidator(settings.passwordRules);
+            self.passwordValidator = new PasswordValidator(settings.ComplexPasswordRules);
             self.validator$ = self._setupValidation();
 
             //reset form on show
@@ -40,35 +41,67 @@
         };
 
         this.changePassword = function () {
-
             var self = this;
+            
             $.post(self.settings.PasswordChangeActionUrl,
                 {
-                    id: $('#id_user').val(),
+                    id: self.settings.UserId,
                     newPassword: self.newPasswordField$.val(),
                     confirmPassword: self.confirmNewPasswordField$.val()
                 },
                 function (data) {
-                    ShowToastMessage(self.settings.translations.PasswordChangedConfirmMessage, "alert");
-                    self.dialogDiv$.modal('hide');
+                    if (data.isSuccess) {
+                        self.dialogDiv$.modal('hide');
+                        self.ShowToastMessage(self.settings.Translations.PasswordChangedConfirmMessage, "alert");
+
+                        if (self.successCallback) {
+                            setTimeout(function() {
+                                var pwd = self.newPasswordField$.val();
+                                self.successCallback(pwd);
+                            }, 500);
+                        }
+                    } else {
+                        $('#validation-summary').html(self.settings.Translations.PasswordChangeErrorMessage);
+                    }
                 });
         };
 
         this._setupValidation = function () {
             var self = this;
-
-            //$.validator.messages.required = function (param, input) {
-            //    var label = $('label[for=' + input.id + ']');
-            //    var template = $.validator.format(self.settings.translations.FieldsNamesRequired);
-            //    return template(label.text());
-            //}
-
+            
+            //check password strong policy
             $.validator.addMethod("pwdcheck", function (value, element) {
                 var res = self.passwordValidator.Validate(value);
                 return res.isValid;
             });
 
-            //remove default validator
+            //check if new password is different from the existing
+            $.validator.addMethod("checkUnique", function (value, element) {
+
+                var isUnique = false;
+
+                var data = {
+                    userId: self.settings.UserId,
+                    pwd: value
+                };
+                
+                //run sync to get validation result 
+                $.ajax({
+                    url: self.settings.CheckPasswordUniqueActionUrl,
+                    type: 'POST',
+                    data: $.param(data),
+                    dataType: "json",
+                    async: false
+                }).done(function(res) {
+                    //console.log('>> ajax.isUnique: ' + (res.isUnique ? 'true' : 'false'));
+                    isUnique = res.isUnique;
+                });
+                
+                //console.log('>> func.result: ' + (isUnique ? 'true' : 'false'));
+                return isUnique;
+            });
+
+            //remove default validator - issue with default unobtrusive valdiator. 
             self.form$.data('validator', null);
             
             var validator = self.form$.validate({
@@ -76,8 +109,9 @@
                 rules: {
                     NewPassword: {
                         required: true,
-                        minlength: 8,
-                        pwdcheck: true
+                        minlength: self.settings.PasswordMinLength,
+                        pwdcheck: self.settings.UseComplexPassword,
+                        checkUnique: true
                     },
 
                     ConfirmPassword: {
@@ -88,14 +122,15 @@
 
                 messages: {
                     NewPassword: {
-                        required: self.settings.translations.PasswordRequiredValMessage,
-                        minlength: $.validator.format(self.settings.translations.PasswordMinLengthValMessage),
-                        pwdcheck: self.settings.translations.StrongPasswordValMessage
+                        required: self.settings.Translations.PasswordRequiredValMessage,
+                        minlength: $.validator.format(self.settings.Translations.PasswordMinLengthValMessage),
+                        pwdcheck: self.settings.Translations.StrongPasswordValMessage,
+                        checkUnique: self.settings.Translations.PasswordEqualsExistingValMessage
                     },
 
                     ConfirmPassword: {
-                        required: self.settings.translations.ConfirmPasswordRequiredValMessage,
-                        equalTo: self.settings.translations.ConfirmPasswordMatchValMessage
+                        required: self.settings.Translations.ConfirmPasswordRequiredValMessage,
+                        equalTo: self.settings.Translations.ConfirmPasswordMatchValMessage
                     }
                 },
 
@@ -106,27 +141,34 @@
                 unhighlight: function(element, errorClass, validClass) {
                     $(element).removeClass(errorClass).addClass(validClass);
                 }
-
-                // the errorPlacement has to take the table layout into account
-                //errorPlacement: function (error, element) {
-                //    error.appendTo($('#validation-summary'));
-                //}
-
-                //submitHandler: function () {
-                //    var isValid = self.form$.valid();
-                //    if (isValid) {
-                //        self.changePassword();
-                //    }
-                //    return false;
-                //}
             });
 
             return validator;
         };
 
+
+        this.ShowToastMessage = function(message, msgType) {
+            $().toastmessage('showToast', {
+                text: message,
+                sticky: false,
+                position: 'top-center',
+                type: msgType,
+                closeText: '',
+                stayTime: 3000,
+                inEffectDuration: 1000,
+                close: function () {
+                    //console.log("toast is closed ...");
+                }
+            });
+        }
+
         return {
             Init: function (settings) {
                 _self._init(settings);
+            },
+
+            SetSuccessCallback : function(callback) {
+                _self.successCallback = callback;
             },
 
             Show: function () {

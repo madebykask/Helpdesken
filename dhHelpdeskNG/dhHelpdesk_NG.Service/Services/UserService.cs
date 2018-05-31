@@ -111,6 +111,7 @@ namespace DH.Helpdesk.Services.Services
         void Commit();
 
         UserOverview Login(string name, string password);
+        DateTime GetUserPasswordChangedDate(int id);
 
         /// <summary>
         /// The get modules.
@@ -1014,6 +1015,11 @@ namespace DH.Helpdesk.Services.Services
             var user = this._userRepository.Login(name, password);
             
             return user;
+        }
+
+        public DateTime GetUserPasswordChangedDate(int id)
+        {
+            return _userRepository.GetPasswordChangedDate(id);
         }
 
         /// <summary>

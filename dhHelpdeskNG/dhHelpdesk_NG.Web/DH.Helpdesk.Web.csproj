@@ -333,6 +333,7 @@
     <Compile Include="Components\Contracts\ContractHistoryFormatter.cs" />
     <Compile Include="Components\Contracts\ContractHistoryMarkupBuilder.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
+    <Compile Include="Controllers\PasswordController.cs" />
     <Compile Include="Controllers\QuestionnaireAnswerController.cs" />
     <Compile Include="Enums\ReportItemNames.cs" />
     <Compile Include="Infrastructure\Attributes\GdprAccessAttribute.cs" />
@@ -371,6 +372,7 @@
     <Compile Include="Models\Gdpr\GdprOperationsHistoryListItem.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
     <Compile Include="Models\JsonModels\Case\CaseJsonModel.cs" />
+    <Compile Include="Models\Shared\ChangePasswordModel.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireAnswerParams.cs" />
     <Compile Include="Models\Notifiers\ComputerUserCategoryModel.cs" />
     <Compile Include="Models\WebApi\TokenModel.cs" />
@@ -3878,7 +3880,6 @@
     <Content Include="Views\Profile\Edit.cshtml" />
     <Content Include="Views\Profile\_Input.cshtml" />
     <Content Include="Views\Profile\_General.cshtml" />
-    <Content Include="Views\Profile\_ChangePassword.cshtml" />
     <Content Include="Views\Shared\CalendarsInfo.cshtml" />
     <Content Include="Views\Shared\DailyReportsInfo.cshtml" />
     <Content Include="Views\Shared\LinksInfo.cshtml" />
@@ -4034,6 +4035,7 @@
     <Content Include="Views\Contracts\_ContractsSearchSummary.cshtml" />
     <Content Include="Views\Contracts\_ContractsSearchFilter.cshtml" />
     <Content Include="Views\Contracts\_ContractCases.cshtml" />
+    <Content Include="Views\Shared\_ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">
@@ -4755,6 +4757,7 @@
     <Folder Include="FormLibContent\Xmls\Norway\Data\AdditionalPaymentsDeductions\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
     <Folder Include="rss\" />
+    <Folder Include="Views\Password\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Login\Login.cshtml" />

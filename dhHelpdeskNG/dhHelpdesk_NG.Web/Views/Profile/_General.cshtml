@@ -86,20 +86,12 @@
         @if (Model.User.Id == null || Model.User.Id == 0 || Model.User.Id == -1)
         {
             <tr>
-                <td>
-                    @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)
-                </td>
-                <td>
-                    @Html.PasswordFor(model => model.NewPassword, new { maxlength = "20" })
-                </td>
+                <td>@Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.PasswordFor(model => model.NewPassword, new { maxlength = "20" })</td>
             </tr>
             <tr>
-                <td>
-                    @Translation.Get("Bekräfta lösenord", Enums.TranslationSource.TextTranslation)
-                </td>
-                <td>
-                    @Html.PasswordFor(model => model.ConfirmPassword, new { maxlength = "20" })
-                </td>
+                <td>@Translation.Get("Bekräfta lösenord", Enums.TranslationSource.TextTranslation)</td>
+                <td>@Html.PasswordFor(model => model.ConfirmPassword, new { maxlength = "20" })</td>
             </tr>
         }
         else
@@ -192,9 +184,6 @@
             //$('#fragment-1').class("active");
         }
     });
-
-    
-
 
     function ShowToastMessage(message, msgType) {
         $().toastmessage('showToast', {

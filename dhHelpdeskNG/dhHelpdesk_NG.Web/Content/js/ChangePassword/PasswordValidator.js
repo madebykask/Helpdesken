@@ -16,7 +16,7 @@
         MinLowerCase: 1,
         MinDigits: 1,
         MinSpecial: 1,
-        SpecialChars: '!@#=$&?*/' 
+        SpecialChars: '!@#=$&?*' 
     };
 
     this.options = $.extend({}, defaults, opt || {});

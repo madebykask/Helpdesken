@@ -51,6 +51,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<User> GetUsersForUserSettingListByUserGroup(UserSearch searchUser);
         UserOverview Login(string uId, string pwd);
         Task<UserOverview> GetByUserIdAsync(string userId, string passw);
+        DateTime GetPasswordChangedDate(int id);
 
         CustomerUserInfo GetUserInfo(int userId); //basic information - good perf
         UserOverview GetUser(int userid); // full information
@@ -426,6 +427,11 @@ namespace DH.Helpdesk.Dal.Repositories
             return query.OrderByDescending(x => x.LoggedOnLastTime).ToList();
         }
 
+        public DateTime GetPasswordChangedDate(int id)
+        {
+            return DataContext.Users.Where(x => x.Id == id).Select(x => x.PasswordChangedDate).FirstOrDefault();
+        }
+
         public UserOverview Login(string uId, string pwd)
         {
             var user = this.GetUser(x => x.UserID == uId && x.IsActive == 1 && x.Password == pwd);
@@ -540,7 +546,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var u = this.DataContext.Users
                     .Where(expression)
-                    .ToList()
+                    .ToList() 
                     .Select(x => new UserOverview(
                         x.Id,
                         x.UserID,
