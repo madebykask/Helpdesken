@@ -7276,6 +7276,15 @@ If not exists (select * from tblTextTranslation where text_id = 1990 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1990, 2, 'Show Calendar on start page')
 GO
 
+If not exists (select * from tbltext where id = 1991)
+	insert into tbltext (id, TextString) VALUES (1991, 'Nytt lösenord kan inte vara samma som nuvarande lösenord')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1991 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1991, 2, 'New password shall not match existing password')
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
+
+
 
