@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Web.Models.Shared;
+
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -993,13 +996,16 @@
 
             #region Model
 
+            var customerUsers = user.CustomerUsers ?? 
+                    this._userService.GetCustomerUserForUser(user.Id);
+
             var model = new UserInputViewModel
             {
                 User = user,
                 CaseInfoMailList = li,
                 RefreshInterval = sli,
                 StartPageShowList = lis,
-                CustomerUsers = user.CustomerUsers ?? this._userService.GetCustomerUserForUser(user.Id),
+                CustomerUsers = customerUsers.Where(x => x.Customer != null),
                 Departments = this._userService.GetDepartmentsForUser(user.Id),
                 ListWorkingGroupsForUser = this._userService.GetListToUserWorkingGroup(user.Id),
                 AvailvableTimeZones = TimeZoneInfo.GetSystemTimeZones().Select(it => new SelectListItem() { Value = it.Id, Text = it.DisplayName, Selected = user.TimeZoneId == it.Id }),
@@ -1116,8 +1122,13 @@
             if (user.Id > 0)
             {
                 var userCustomerSetting = this._settingService.GetCustomerSetting(user.Customer_Id);
-                model.UserCustomerMinPassWordLength = userCustomerSetting.MinPasswordLength;
-                model.CustomerComplexPassword = userCustomerSetting.ComplexPassword;
+
+                model.ChangePasswordModel = new ChangePasswordModel()
+                {
+                    UserId = user.Id,
+                    MinPasswordLength = userCustomerSetting.MinPasswordLength,
+                    UseComplexPassword = userCustomerSetting.ComplexPassword.ToBool()
+                };
             }
 
             #endregion
