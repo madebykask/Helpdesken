@@ -122,6 +122,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (user != null)
                 {
+                    //set user preferred language for UI translation
+                    SessionFacade.CurrentLanguageId = user.LanguageId;
+
                     //check if password has expired 
                     var passwordChangedDate = userService.GetUserPasswordChangedDate(user.Id);
                     var settings = _settingService.GetCustomerSetting(user.CustomerId);
