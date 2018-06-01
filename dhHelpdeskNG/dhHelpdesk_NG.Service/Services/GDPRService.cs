@@ -146,7 +146,9 @@ namespace DH.Helpdesk.Services.Services
             var res = new List<GdprOperationsAuditOverview>();
 
             var cusId = customerId ?? 0;
-            var query = _gdprOperationsAuditRespository.GetMany(x => cusId == 0 || x.Customer_Id == cusId);
+            var operationName = GDPROperations.DataPrivacy.ToString();
+            var query = _gdprOperationsAuditRespository.GetMany(x =>  (cusId == 0 || x.Customer_Id == cusId) && x.Operation == operationName);
+            
 
             if (successOnly)
             {
