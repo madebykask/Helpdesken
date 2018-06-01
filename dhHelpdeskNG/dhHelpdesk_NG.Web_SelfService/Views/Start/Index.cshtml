@@ -12,73 +12,80 @@
 
 <div class="container-fluid dh-container">
     <div class="row">
-        <div class="col-md-6">            
-            <div class="row">            
-               <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-body">                              
-                             @Html.Raw(welcomePart)                                                                                                         
+        <table class="tableform">          
+            <tr>
+                <td class="span8" style="float: left;">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        @Html.Raw(welcomePart)
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        @if (SessionFacade.CurrentCustomer.ShowOperationalLogOnExtPage != 0 && Model.OperationLog != null && Model.OperationLog.Any())
-        {
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading phselfservice">@Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation) </div>
-                    <div class="panel-body">
-                        @if (Model.OperationLog != null)
-                        {
-                            foreach (var o in Model.OperationLog)
-                            {
-                                <p> <strong> @Html.DisplayFor(m => o.ChangedDate, "DateAndTime")  </strong> <br /> @Html.Raw(o.LogTextExternal) </p>
-                                <br />
-                            }
-                        }                        
-                    </div>
-                </div>
-            </div>
-        }
-        @if (SessionFacade.CurrentCustomer.ShowCalenderOnExtPage != 0 && Model.Calendar != null && Model.Calendar.Any())
-        {
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading phselfservice">@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation) </div>
-                    <div class="panel-body">
-                        @if (Model.Calendar != null)
-                        {
-                            foreach (var c in Model.Calendar)
-                            {
-                                <p> <strong> @Html.DisplayFor(m => c.CalendarDate, "Date")  </strong> <br /> @Html.Raw(c.Text) </p>
-                                <br />
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-        }
-        @if (SessionFacade.CurrentCustomer.ShowBulletinBoardOnExtPage != 0 && Model.BulletinBoard != null && Model.BulletinBoard.Any())
-        {
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading phselfservice">@Translation.Get("Bulletin Board", Enums.TranslationSource.TextTranslation) </div>
-                    <div class="panel-body">                    
-                        @if (Model.BulletinBoard != null)
-                        {
-                            foreach (var b in Model.BulletinBoard)
-                            {                                                                                   
-                                <p> <strong> @Html.DisplayFor(m=> b.ChangedDate , "DateAndTime")  </strong> <br /> @Html.Raw(b.Text) </p>
-                                <br />
-                            }
-                        }                                                           
-                    </div>
-                </div>
-            </div>
-        }
-        <!--ON GOING--->
-       
-    </div>
+                </td>
+                <td class="span4" style="float: left;">
+                 @if (SessionFacade.CurrentCustomer.ShowOperationalLogOnExtPage != 0 && Model.OperationLog != null && Model.OperationLog.Any())
+                 {
+                        <div class="col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading phselfservice">@Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation) </div>
+                                <div class="panel-body">
+                                    @if (Model.OperationLog != null)
+                                    {
+                                        foreach (var o in Model.OperationLog)
+                                        {
+                                            <p> <strong> @Html.DisplayFor(m => o.ChangedDate, "DateAndTime")  </strong> <br /> @Html.Raw(o.LogTextExternal) </p>
+                                            <br />
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                   @if (SessionFacade.CurrentCustomer.ShowCalenderOnExtPage != 0 && Model.Calendar != null && Model.Calendar.Any())
+                   {
+                        <div class="col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading phselfservice">@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation) </div>
+                                <div class="panel-body">
+                                    @if (Model.Calendar != null)
+                                    {
+                                        foreach (var c in Model.Calendar)
+                                        {
+                                            <p> <strong> @Html.DisplayFor(m => c.CalendarDate, "Date")  </strong> <br /> @Html.Raw(c.Text) </p>
+                                            <br />
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                   @if (SessionFacade.CurrentCustomer.ShowBulletinBoardOnExtPage != 0 && Model.BulletinBoard != null && Model.BulletinBoard.Any())
+                    {
+                        <div class="col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading phselfservice">@Translation.Get("Bulletin Board", Enums.TranslationSource.TextTranslation) </div>
+                                <div class="panel-body">
+                                    @if (Model.BulletinBoard != null)
+                                    {
+                                        foreach (var b in Model.BulletinBoard)
+                                        {
+                                            <p> <strong> @Html.DisplayFor(m => b.ChangedDate, "DateAndTime")  </strong> <br /> @Html.Raw(b.Text) </p>
+                                            <br />
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <!--ON GOING--->
+                </td>
+            </tr>
+          </table>                       
+</div>
     
 </div>
