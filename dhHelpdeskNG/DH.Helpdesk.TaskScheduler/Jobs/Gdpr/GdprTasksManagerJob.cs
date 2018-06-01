@@ -3,20 +3,23 @@ using System.Linq;
 using Common.Logging;
 using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.TaskScheduler.Infrastructure.Configuration;
 using Quartz;
 
 namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
 {
     [DisallowConcurrentExecution]
-    public class GdprTasksManagerJob : IJob
+    internal class GdprTasksManagerJob : IJob
     {
         private readonly ILog _log = LogManager.GetLogger(typeof(GdprTasksManagerJob));
+        private readonly IGDPRJobSettings _settings;
         private readonly IGDPRTasksService _gdprTasksService;
 
         #region ctor()
 
-        public GdprTasksManagerJob(IGDPRTasksService gdprTasksService)
+        public GdprTasksManagerJob(IGDPRJobSettings settings, IGDPRTasksService gdprTasksService)
         {
+            _settings = settings;
             _gdprTasksService = gdprTasksService;
         }
 

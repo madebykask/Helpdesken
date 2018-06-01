@@ -6,12 +6,13 @@ using DH.Helpdesk.Dal.Repositories.GDPR;
 using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Services.BusinessLogic.Gdpr;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.TaskScheduler.Infrastructure.Configuration;
 using Quartz;
 
 namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
 {
     [DisallowConcurrentExecution]
-    public class GdprDataPrivacyJob : IJob
+    internal class GdprDataPrivacyJob : IJob
     {
         public const string DataMapKey = "data";
 
@@ -19,16 +20,19 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
         private readonly IGDPRTasksService _gdprTasksService;
         private readonly IGDPRDataPrivacyFavoriteRepository _dataPrivacyFavoriteRepository;
         private readonly IGDPRDataPrivacyProcessor _dataPrivacyProcessor;
+        private readonly IGDPRJobSettings _settings;
 
         #region ctor()
 
         public GdprDataPrivacyJob(IGDPRTasksService gdprTasksService, 
-            IGDPRDataPrivacyFavoriteRepository dataPrivacyFavoriteRepository,
-            IGDPRDataPrivacyProcessor dataPrivacyProcessor)
+                                  IGDPRDataPrivacyFavoriteRepository dataPrivacyFavoriteRepository,
+                                  IGDPRDataPrivacyProcessor dataPrivacyProcessor,
+                                  IGDPRJobSettings settings)
         {
             _gdprTasksService = gdprTasksService;
             _dataPrivacyFavoriteRepository = dataPrivacyFavoriteRepository;
             _dataPrivacyProcessor = dataPrivacyProcessor;
+            _settings = settings;
         }
 
         #endregion
@@ -64,7 +68,7 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
                 try
                 {
                     _log.Debug($"Executing data privacy operation. TaskId: {taskId}");
-                    _dataPrivacyProcessor.Process(taskInfo.CustomerId, taskInfo.UserId, parameters);
+                    _dataPrivacyProcessor.Process(taskInfo.CustomerId, taskInfo.UserId, parameters, _settings.GDPRBatchSize);
                     _log.Debug($"Data privacy operation has completed successfully. TaskId: {taskId})");
                 }
                 catch (Exception e)

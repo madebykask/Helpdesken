@@ -11,7 +11,7 @@ namespace DH.Helpdesk.TaskScheduler.DI.Modules
         public override void Load()
         {
             // configuration
-            Bind<IApplicationSettings>().To<ApplicationSettingsProvider>().InSingletonScope();
+            Bind<IApplicationSettings, IGDPRJobSettings>().To<ApplicationSettingsProvider>().InSingletonScope();
             Bind<IServiceConfigurationManager>().To<ServiceConfigurationManager>().InSingletonScope();
             
             Bind<IFilesStorage>().To<FilesStorage>().InSingletonScope();
