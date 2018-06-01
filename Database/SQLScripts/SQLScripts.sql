@@ -195,6 +195,18 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
    ALTER TABLE tblUsers ADD InvoiceTimePermission int NOT NULL Default(0)
 GO
 
+--Alter table Global settings
+IF COLUMNPROPERTY(OBJECT_ID('tblGlobalSettings', 'U'), 'AttachedFileFolder', 'AllowsNull')= 0
+BEGIN
+    ALTER TABLE [tblGlobalSettings]
+        ALTER COLUMN [AttachedFileFolder] Nvarchar(200) NOT NULL
+END
+ELSE 
+BEGIN       
+    ALTER TABLE [tblGlobalSettings]
+        ALTER COLUMN [AttachedFileFolder] Nvarchar(200) NULL
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.37'
 --ROLLBACK --TMP

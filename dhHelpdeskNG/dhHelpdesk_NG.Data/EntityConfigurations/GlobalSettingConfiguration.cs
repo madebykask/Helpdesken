@@ -18,7 +18,7 @@
                 .WillCascadeOnDelete(false);
 
             this.Property(x => x.ApplicationName).IsRequired().HasMaxLength(50);
-            this.Property(x => x.AttachedFileFolder).IsRequired().HasMaxLength(50);
+            this.Property(x => x.AttachedFileFolder).IsRequired().HasMaxLength(200);
             this.Property(x => x.DBType).IsRequired();
             this.Property(x => x.DBVersion).IsRequired().HasMaxLength(10);
             this.Property(x => x.HelpdeskDBVersion).IsOptional().HasMaxLength(20);
