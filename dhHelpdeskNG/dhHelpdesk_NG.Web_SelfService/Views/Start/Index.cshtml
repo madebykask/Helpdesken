@@ -30,7 +30,7 @@
                 <td class="span4" style="float: left;">
                  @if (SessionFacade.CurrentCustomer.ShowOperationalLogOnExtPage != 0 && Model.OperationLog != null && Model.OperationLog.Any())
                  {
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <div class="panel panel-default">
                                 <div class="panel-heading phselfservice">@Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation) </div>
                                 <div class="panel-body">
@@ -48,7 +48,7 @@
                     }
                    @if (SessionFacade.CurrentCustomer.ShowCalenderOnExtPage != 0 && Model.Calendar != null && Model.Calendar.Any())
                    {
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <div class="panel panel-default">
                                 <div class="panel-heading phselfservice">@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation) </div>
                                 <div class="panel-body">
@@ -66,7 +66,7 @@
                     }
                    @if (SessionFacade.CurrentCustomer.ShowBulletinBoardOnExtPage != 0 && Model.BulletinBoard != null && Model.BulletinBoard.Any())
                     {
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <div class="panel panel-default">
                                 <div class="panel-heading phselfservice">@Translation.Get("Bulletin Board", Enums.TranslationSource.TextTranslation) </div>
                                 <div class="panel-body">
