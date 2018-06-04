@@ -2,19 +2,19 @@
 
 @{
     ViewBag.Title = "Index";
-          
+
     var welcomePart = "";
-    if (Model.WelcomeHtml != null) 
-    {   
-        welcomePart = Model.WelcomeHtml.SetHtmlParameters();            
+    if (Model.WelcomeHtml != null)
+    {
+        welcomePart = Model.WelcomeHtml.SetHtmlParameters();
     }
 }
 
 <div class="container-fluid dh-container">
     <div class="row">
-        <table class="tableform">          
+        <table class="tableform" border="0">
             <tr>
-                <td class="span8" style="float: left;">
+                <td align="left" valign="top">
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-12">
@@ -27,9 +27,9 @@
                         </div>
                     </div>
                 </td>
-                <td class="span4" style="float: left;">
-                 @if (SessionFacade.CurrentCustomer.ShowOperationalLogOnExtPage != 0 && Model.OperationLog != null && Model.OperationLog.Any())
-                 {
+                <td valign="top">
+                    @if (SessionFacade.CurrentCustomer.ShowOperationalLogOnExtPage != 0 && Model.OperationLog != null && Model.OperationLog.Any())
+                    {
                         <div class="col-md-8">
                             <div class="panel panel-default">
                                 <div class="panel-heading phselfservice">@Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation) </div>
@@ -46,8 +46,8 @@
                             </div>
                         </div>
                     }
-                   @if (SessionFacade.CurrentCustomer.ShowCalenderOnExtPage != 0 && Model.Calendar != null && Model.Calendar.Any())
-                   {
+                    @if (SessionFacade.CurrentCustomer.ShowCalenderOnExtPage != 0 && Model.Calendar != null && Model.Calendar.Any())
+                    {
                         <div class="col-md-8">
                             <div class="panel panel-default">
                                 <div class="panel-heading phselfservice">@Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation) </div>
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                     }
-                   @if (SessionFacade.CurrentCustomer.ShowBulletinBoardOnExtPage != 0 && Model.BulletinBoard != null && Model.BulletinBoard.Any())
+                    @if (SessionFacade.CurrentCustomer.ShowBulletinBoardOnExtPage != 0 && Model.BulletinBoard != null && Model.BulletinBoard.Any())
                     {
                         <div class="col-md-8">
                             <div class="panel panel-default">
@@ -85,7 +85,7 @@
                     <!--ON GOING--->
                 </td>
             </tr>
-          </table>                       
-</div>
-    
+        </table>
+    </div>
+
 </div>
