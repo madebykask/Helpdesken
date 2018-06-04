@@ -119,7 +119,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 while (fetchNext)
                 {
                     step++;
-                    var processed = processedCasesIds.Count();
+                    var processed = processedCasesIds.Count;
                     var take = processed + batchSize > totalCount ? totalCount - processed : batchSize;
 
                     _log.Debug($"Step {step}. Fetching next {take} cases. Skip: {processed}. TaskId: {p.TaskId}.");
@@ -141,7 +141,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                             _log.Debug($"{cases.Count} cases will be processed. TaskId: {p.TaskId}.");
 
                             var pos = 1;
-                            var count = cases.Count;
+                            //var count = cases.Count;
                             p.ReplaceDataWith = p.ReplaceDataWith ?? string.Empty;
 
                             foreach (var c in cases)
@@ -150,7 +150,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                                 ProcessReplaceCasesHistoryData(c, p);
                                 ProcessExtededCaseData(c, p, uow);
 
-                                UpdateProgress(p.TaskId, pos, count);
+                                UpdateProgress(p.TaskId, processed + pos, totalCount);
                                 pos++;
                             }
 
@@ -257,7 +257,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
         private void UpdateProgress(int taskId, int pos, int totalCount)
         {
-            var step = totalCount > 1000 ? 100 : totalCount > 100 ? 10 : 5; 
+            var step = totalCount / 100;// take 1 percent as step
             if (pos % step == 0)
             {
                 var progress = Math.Ceiling(((float)pos / (float)totalCount) * 100);
