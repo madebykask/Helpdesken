@@ -258,6 +258,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
         private void UpdateProgress(int taskId, int pos, int totalCount)
         {
             var step = totalCount / 100;// take 1 percent as step
+            step = step == 0 ? 10 : step;
             if (pos % step == 0)
             {
                 var progress = Math.Ceiling(((float)pos / (float)totalCount) * 100);
