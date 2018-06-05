@@ -34,7 +34,7 @@
             this.Property(x => x.PDFPrintUserName).IsOptional().HasMaxLength(50);
             this.Property(x => x.ServerName).IsRequired().HasMaxLength(50);
             this.Property(x => x.ServerPort).IsRequired();
-            this.Property(x => x.SMTPServer).IsRequired().HasMaxLength(20);
+            this.Property(x => x.SMTPServer).IsRequired().HasMaxLength(50);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.CaseLockTimer).IsRequired();
             this.Property(x => x.CaseLockBufferTime).IsRequired();

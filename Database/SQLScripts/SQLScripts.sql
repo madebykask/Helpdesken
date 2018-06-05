@@ -212,6 +212,18 @@ BEGIN
         ALTER COLUMN [AttachedFileFolder] Nvarchar(200) NULL
 END
 
+--Alter table Global settings
+IF COLUMNPROPERTY(OBJECT_ID('tblGlobalSettings', 'U'), 'SMTPServer', 'AllowsNull')= 0
+BEGIN
+    ALTER TABLE [tblGlobalSettings]
+        ALTER COLUMN [SMTPServer] Nvarchar(50) NOT NULL
+END
+ELSE 
+BEGIN       
+    ALTER TABLE [tblGlobalSettings]
+        ALTER COLUMN [SMTPServer] Nvarchar(50) NULL
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.37'
 --ROLLBACK --TMP
