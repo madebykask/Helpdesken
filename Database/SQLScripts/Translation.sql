@@ -7283,6 +7283,12 @@ If not exists (select * from tblTextTranslation where text_id = 1991 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1991, 2, 'New password shall not match existing password')
 GO
 
+update tbltext set TextString = 'Användaren har rättighet att administrera aktuellt' where id = 1331
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Calendar' WHERE Text_Id=1331 AND Language_Id=2;
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 

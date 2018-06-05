@@ -202,7 +202,7 @@
             <td>
                 <input data-field="calendarPermission" type="checkbox" name="User.CalendarPermission" @(Model.User.CalendarPermission == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.CalendarPermission" value="0" />
-                &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till aktuellt", Enums.TranslationSource.TextTranslation)
+                &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera aktuellt", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
