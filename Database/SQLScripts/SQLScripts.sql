@@ -195,6 +195,11 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
    ALTER TABLE tblUsers ADD InvoiceTimePermission int NOT NULL Default(0)
 GO
 
+RAISERROR ('Updating InvoiceTimePermission field settings data for tblUsers', 10, 1) WITH NOWAIT
+UPDATE tblUsers set InvoiceTimePermission = 1
+   where UserGroup_Id in (Select Id from tblUsergroups where UserGroup = N'Administratör' or UserGroup = N'Kundadministratör' )
+GO
+
 --Alter table Global settings
 IF COLUMNPROPERTY(OBJECT_ID('tblGlobalSettings', 'U'), 'AttachedFileFolder', 'AllowsNull')= 0
 BEGIN
