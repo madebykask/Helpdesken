@@ -291,13 +291,13 @@ function PluploadTranslation(languageId) {
     if (languageId == 1) {
         plupload.addI18n({
             'Select files': 'Välj filer',
-            'Add files to the upload queue and click start upload.': 'Lägg till filer till kön och tryck på lägg till.',
+            'Add files to the upload queue and click start upload.': 'Lägg till filer i kön och tryck på Ladda upp.',
             'Filename': 'Filnamn',
             'Status': 'Status',
             'Size': 'Storlek',
             'Add files': 'Lägg till filer',
-            'Add Files': 'Ladda upp',
-            'Start Upload': 'Lägg till',
+            'Add Files': 'Lägg till',
+            'Start Upload': 'Ladda upp',
             'Stop current upload': 'Stoppa uppladdningen',
             'Start uploading queue': 'Starta uppladdningen',
             'Drag files here.': 'Dra filer hit'
@@ -647,3 +647,107 @@ $(".chosen-single-select").chosen({
     'no_results_text': no_results_text
 });
 
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// Button Dropdown Menu fixes
+//function setDynamicDropDowns() {
+//    var dynamicDropDownClass = '.DynamicDropDown';
+//    var fixedArea = 90;
+//    var pageSize = $(window).height() - fixedArea;
+//    var scrollPos = $(window).scrollTop();
+//    var elementToTop = $(dynamicDropDownClass).offset().top - scrollPos - fixedArea;
+//    var elementToDown = pageSize - elementToTop;
+//    if (elementToTop < -$(dynamicDropDownClass).height())
+//        $(dynamicDropDownClass).removeClass('open');
+
+//    if (elementToTop <= elementToDown) {
+//        $(dynamicDropDownClass).removeClass('dropup');
+//    } else {
+//        $(dynamicDropDownClass).addClass('dropup');
+//    }
+//}
+
+function getObjectPosInView(element) {
+    var fixedArea = 90;
+    var pageSize = $(window).height() - fixedArea;
+    var scrollPos = $(window).scrollTop();
+    var elementToTop = $(element).offset().top - scrollPos - fixedArea;
+    var elementToDown = pageSize - elementToTop;
+    return { ToTop: elementToTop, ToDown: elementToDown };
+}
+
+function updateDropdownPosition(element) {
+    var objPos = getObjectPosInView(element);
+    if (objPos.ToTop < objPos.ToDown) {
+        $('.dropdown-menu.subddMenu').css('max-height', objPos.ToDown - 50 + 'px');
+    } else {
+        $('.dropdown-menu.subddMenu').css('max-height', objPos.ToTop + 'px');
+    }
+}
+
+function dynamicDropDownBehaviorOnMouseMove(event) {
+    var target$ = $(event.target.parentElement);
+    if (target$ != undefined && target$.hasClass('DynamicDropDown_Up') && target$.index(0) !== -1) {
+        var objPos = getObjectPosInView(target$[0]);
+        var subMenu$ = $(target$[0]).children('ul');
+        var targetPos = target$[0].getBoundingClientRect();
+
+        subMenu$.css({
+            bottom: 'auto',
+            position: 'fixed',
+            top: $(window).height() - objPos.ToDown + 'px',
+            left: targetPos.left + target$.width() + 'px',
+            'max-height': $(window).innerHeight() - objPos.ToDown + 'px'
+        });
+
+
+        target$.children('.subddMenu').children('.dropdown-submenu').css('position', 'static');
+
+        var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+        if (isChrome) {
+            if (target$.parent().hasClass('parentddMenu') === false && subMenu$.get(0).scrollHeight <= subMenu$.innerHeight())
+                subMenu$.css('left', targetPos.left + target$.innerWidth() - target$.position().left + 'px');
+        }
+
+        var submenuPos = subMenu$[0].getBoundingClientRect();
+        if ((submenuPos.top + submenuPos.height) > window.innerHeight) {
+            var offset = (submenuPos.top + submenuPos.height) - window.innerHeight;
+            if (offset > 0) {
+                var top = $(window).height() - objPos.ToDown - offset;
+                subMenu$.css('top', top);
+            }
+        }
+    }
+
+}
+/////////////////////////////////////////////////////////////////////////////////////////
+
+$.fn.checkUrlFileExists = function () {
+    "use strict";
+    var url = $(this)[0].href;
+    var http = new XMLHttpRequest();
+    http.open("HEAD", url, false);
+    http.send();
+    return http.status === 200;
+};
+
+$(function() {
+    $('ul.dropdown-menu.subddMenu.parentddMenu').on('mouseenter', function () {
+        var $html = $('html');
+        $html.data('previous-overflow', $html.css('overflow'));
+        $html.css('overflow', 'hidden');
+    });
+
+    $('ul.dropdown-menu.subddMenu.parentddMenu').on('mouseleave', function () {
+        var $html = $('html');
+        $html.css('overflow', $html.data('previous-overflow'));
+    });
+
+    $('.dropdown-submenu.DynamicDropDown_Up').on('mousemove', function (event) {
+        dynamicDropDownBehaviorOnMouseMove(event);
+    });
+
+    $('ul.dropdown-menu.subddMenu.parentddMenu').prev('button').on('click', function () {
+        updateDropdownPosition(this);
+    });
+});

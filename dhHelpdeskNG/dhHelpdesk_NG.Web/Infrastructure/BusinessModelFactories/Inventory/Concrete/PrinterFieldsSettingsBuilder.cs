@@ -15,9 +15,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             this.settingBuilder = settingBuilder;
         }
 
-        public PrinterFieldsSettings BuildViewModel(
-            PrinterFieldsSettingsViewModel settings,
-            int customerId)
+        public PrinterFieldsSettings BuildViewModel(PrinterFieldsSettingsViewModel settings, int customerId)
         {
             var name = this.settingBuilder.MapFieldSetting(settings.GeneralFieldsSettingsModel.NameFieldSettingModel);
             var manufacturer = this.settingBuilder.MapFieldSetting(settings.GeneralFieldsSettingsModel.ManufacturerFieldSettingModel);
@@ -57,9 +55,9 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
             var createdDate = this.settingBuilder.MapFieldSetting(settings.StateFieldsSettingsModel.CreatedDateFieldSettingModel);
             var changedDate = this.settingBuilder.MapFieldSetting(settings.StateFieldsSettingsModel.ChangedDateFieldSettingModel);
-            var stateFieldsSettings = new StateFieldsSettings(
-                createdDate,
-                changedDate);
+            var syncDate = this.settingBuilder.MapFieldSetting(settings.StateFieldsSettingsModel.SyncDateFieldSettingModel);
+
+            var stateFieldsSettings = new StateFieldsSettings(createdDate, changedDate, syncDate);
 
             var businessModel = PrinterFieldsSettings.CreateUpdated(
                 customerId,

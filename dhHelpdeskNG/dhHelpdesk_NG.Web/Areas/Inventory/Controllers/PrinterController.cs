@@ -203,14 +203,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         private InventoryGridModel CreateInventoryGridModel(PrinterSearchFilter filter)
         {
-            PrinterFieldsSettingsOverview settings =
+            var settings = 
                 this.inventorySettingsService.GetPrinterFieldSettingsOverview(
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
-            List<PrinterOverview> models =
+
+            var models =
                 this.inventoryService.GetPrinters(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
-            InventoryGridModel viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
+            var viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
             return viewModel;
         }
     }

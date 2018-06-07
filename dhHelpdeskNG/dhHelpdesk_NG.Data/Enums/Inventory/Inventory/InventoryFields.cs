@@ -27,5 +27,7 @@
         public static readonly int CreatedDate = -12;
 
         public static readonly int ChangedDate = -13;
+
+        public static readonly int SyncDate = -15;
     }
 }

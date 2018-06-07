@@ -434,11 +434,12 @@ namespace DH.Helpdesk.Web.Controllers
             foreach (string s in selectedSplit)
             {
                 string[] cap = s.Split(':');
-                string text = cap[0].ToString();
+                var text = cap[0].StartsWith("_") ? cap[0].Substring(1, cap[0].Length - 1) : cap[0];
+
                 string values = string.Empty;
-                if (cap.Count() > 1)
+                if (cap.Length > 1)
                 {
-                    values = cap[1].ToString();
+                    values = cap[1];
                 }
                 bool exists = false;
 
@@ -1085,6 +1086,12 @@ namespace DH.Helpdesk.Web.Controllers
                 int UpdateNotifierInformation = Convert.ToInt32(collection["CaseSolution.UpdateNotifierInformation"].ToString());
                 caseSolutionInputViewModel.CaseSolution.UpdateNotifierInformation = UpdateNotifierInformation;
             }
+
+            if (collection["CaseSolution.AddFollowersBtn"].Trim() != string.Empty)
+            {
+                caseSolutionInputViewModel.CaseSolution.AddFollowersBtn = Convert.ToBoolean(collection["CaseSolution.AddFollowersBtn"]);
+            }
+
             if (collection["CaseSolution.Urgency_Id"].ToString().Trim() != string.Empty)
             {
                 int Urgency_Id = Convert.ToInt32(collection["CaseSolution.Urgency_Id"].ToString());
@@ -1267,6 +1274,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.Place,
                     caseSolution.UserCode,
                     UpdateNotifierInformation = caseSolution.UpdateNotifierInformation.ToBool().ToString(),
+                    AddFollowersBtn = caseSolution.AddFollowersBtn.ToString(),
 
                     caseSolution.IsAbout_ReportedBy,
                     caseSolution.IsAbout_PersonsName,
@@ -1473,21 +1481,12 @@ namespace DH.Helpdesk.Web.Controllers
             foreach (string s in selectedSplit)
             {
                 string[] cap = s.Split(':');
-                string text = string.Empty;
-                if (cap[0].ToString().Substring (0,1)=="_")
-                {
-                    int len = cap[0].ToString().Length;
-                    text = cap[0].ToString().Substring(1, (len-1));
-                }
-                else
-                {
-                    text = cap[0].ToString();
-                }
-                
+                var text = cap[0].StartsWith("_") ? cap[0].Substring(1, cap[0].Length - 1) : cap[0];
+
                 string values = string.Empty;
-                if (cap.Count() > 1)
+                if (cap.Length > 1)
                 {
-                    values = cap[1].ToString();
+                    values = cap[1];
                 }
                 bool exists = false;
 
@@ -2240,6 +2239,12 @@ namespace DH.Helpdesk.Web.Controllers
                 int UpdateNotifierInformation = Convert.ToInt32(collection["CaseSolution.UpdateNotifierInformation"].ToString());
                 caseSolutionInputViewModel.CaseSolution.UpdateNotifierInformation = UpdateNotifierInformation;
             }
+
+            if (collection["CaseSolution.AddFollowersBtn"].Trim() != string.Empty)
+            {
+                caseSolutionInputViewModel.CaseSolution.AddFollowersBtn = Convert.ToBoolean(collection["CaseSolution.AddFollowersBtn"]);
+            }
+
             if (collection["CaseSolution.Urgency_Id"].ToString().Trim() != string.Empty)
             {
                 int Urgency_Id = Convert.ToInt32(collection["CaseSolution.Urgency_Id"].ToString());
@@ -2540,6 +2545,7 @@ namespace DH.Helpdesk.Web.Controllers
             currentData.Text_External = templateModel.Text_External;
             currentData.Text_Internal = templateModel.Text_Internal;
             currentData.UpdateNotifierInformation = templateModel.UpdateNotifierInformation;
+            currentData.AddFollowersBtn = templateModel.AddFollowersBtn;
             currentData.Urgency_Id = templateModel.Urgency_Id;
             currentData.UserCode = templateModel.UserCode;
             currentData.Verified = templateModel.Verified;

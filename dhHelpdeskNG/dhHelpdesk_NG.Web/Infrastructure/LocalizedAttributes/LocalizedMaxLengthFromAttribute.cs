@@ -43,8 +43,8 @@
         {
             var maxLength = this.GetInstancePropertyValue<int>(context, this.dependencyPropertyName);
 
-            var errorMessage = Translation.Get("maximum length is ", Enums.TranslationSource.TextTranslation)
-                               + maxLength + Translation.Get(" character(s)", Enums.TranslationSource.TextTranslation);
+            var errorMessage = Translation.GetCoreTextTranslation("maximum length is ")
+                               + maxLength + Translation.GetCoreTextTranslation(" character(s)");
 
             return new List<ModelClientValidationRule>
                    {

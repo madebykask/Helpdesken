@@ -505,7 +505,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 var servers = repository.GetAll()
                     .Search(computersFilter.CustomerId, computersFilter.SearchFor, computersFilter.SortField);
                 if (computersFilter.RecordsCount.HasValue)
-                    servers = servers.OrderBy(x => x.ServerName).Take(computersFilter.RecordsCount.Value);
+                    servers = servers.Take(computersFilter.RecordsCount.Value);
                 var overviews = servers.MapToFullOverviews();
                 return overviews;
             }

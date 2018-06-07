@@ -17,7 +17,7 @@
 
     public static class CaseOverviewMapper
     {
-        public static string GetCaseTypeFullName(this int caseTypeId, IQueryable<CaseType> caseTypeQuery)
+        private static string GetCaseTypeFullName(this int caseTypeId, IList<CaseType> caseTypeQuery)
         {
             var res = string.Empty;
             var ct = caseTypeQuery.Where(c => c.Id == caseTypeId).FirstOrDefault();
@@ -31,66 +31,76 @@
             return res;
         }
 
-        public static string GetProductAreaFullName(string strProductId, List<ProductArea> productAreaQuery)
+        private static string GetProductAreaFullName(this int? productId, IList<ProductArea> productAreaQuery)
         {                        
             var res = string.Empty;
-            if (!string.IsNullOrEmpty(strProductId))
+
+            if (!productId.HasValue) return res;
+            
+            var pa = productAreaQuery.Where(p => p.Id == productId).FirstOrDefault();
+            if (pa != null)
             {
-                int productId = 0;
-                if (int.TryParse(strProductId, out productId))
-                {
-                    var pa = productAreaQuery.Where(p => p.Id == productId).FirstOrDefault();
-                    if (pa != null)
-                    {
-                        if (pa.Parent_ProductArea_Id.HasValue)
-                            res = GetProductAreaFullName(pa.Parent_ProductArea_Id.Value.ToString(), productAreaQuery) + " - " + pa.Name;
-                        else
-                            res = pa.Name;
-                    }
-                }
+                if (pa.Parent_ProductArea_Id.HasValue)
+                    res = pa.Parent_ProductArea_Id.GetProductAreaFullName(productAreaQuery) + " - " + pa.Name;
+                else
+                    res = pa.Name;
             }
+          
+
             return res;
         }
 
-        public static string GetOUFullName(this string strOUId, IQueryable<OU> organizationUnitQuery)
+        private static string GetCategoryFullName(this int? categoryId, IList<Category> categories)
+        {
+            var res = string.Empty;
+
+            if (!categoryId.HasValue) return res;
+
+            var category = categories.Where(p => p.Id == categoryId).FirstOrDefault();
+            if (category != null)
+            {
+                if (category.Parent_Category_Id.HasValue)
+                    res = category.Parent_Category_Id.GetCategoryFullName(categories) + " - " + category.Name;
+                else
+                    res = category.Name;
+            }
+
+            return res;
+        }
+
+        private static string GetOUFullName(this int? ouId, IList<OU> organizationUnitQuery)
         {            
             var res = string.Empty;
-            if (!string.IsNullOrEmpty(strOUId))
+
+            if (!ouId.HasValue) return res;
+
+            var ou = organizationUnitQuery.Where(o => o.Id == ouId).FirstOrDefault();
+            if (ou != null)
             {
-                int ouId = 0;
-                if (int.TryParse(strOUId, out ouId))
-                {
-                    var ou = organizationUnitQuery.Where(o => o.Id == ouId).FirstOrDefault();
-                    if (ou != null)
-                    {
-                        if (ou.Parent_OU_Id.HasValue)
-                            res = ou.Parent_OU_Id.ToString().GetOUFullName(organizationUnitQuery) + " - " + ou.Name;
-                        else
-                            res = ou.Name;
-                    }
-                }
+                if (ou.Parent_OU_Id.HasValue)
+                    res = ou.Parent_OU_Id.GetOUFullName(organizationUnitQuery) + " - " + ou.Name;
+                else
+                    res = ou.Name;
             }
+            
             return res;
         }
 
-        public static string GetClosingReasonFullName(this string strClosingReasonId, IQueryable<FinishingCause> finishingCauseQuery)
+        private static string GetClosingReasonFullName(this int? closingReasonId, IList<FinishingCause> finishingCauseQuery)
         {           
-             var res = string.Empty;
-             if (!string.IsNullOrEmpty(strClosingReasonId))
-             {
-                int closingReasonId = 0;
-                if (int.TryParse(strClosingReasonId, out closingReasonId))
-                {
-                    var cr = finishingCauseQuery.Where(c => c.Id == closingReasonId).FirstOrDefault();
-                    if (cr != null)
-                    {
-                        if (cr.Parent_FinishingCause_Id.HasValue)
-                            res = cr.Parent_FinishingCause_Id.ToString().GetClosingReasonFullName(finishingCauseQuery) + " - " + cr.Name;
-                        else
-                            res = cr.Name;
-                    }
-                }
-             }
+            var res = string.Empty;
+
+            if (!closingReasonId.HasValue) return res;
+
+            var cr = finishingCauseQuery.Where(c => c.Id == closingReasonId).FirstOrDefault();
+            if (cr != null)
+            {
+                if (cr.Parent_FinishingCause_Id.HasValue)
+                    res = cr.Parent_FinishingCause_Id.GetClosingReasonFullName(finishingCauseQuery) + " - " + cr.Name;
+                else
+                    res = cr.Name;
+            }
+
             return res;
         }             
 
@@ -98,40 +108,38 @@
                                                                 IQueryable<CaseType> caseTypes, 
                                                                 IQueryable<ProductArea> productAreas, 
                                                                 IQueryable<OU> ous,
-                                                                IQueryable<FinishingCause> finishingCauses)
+                                                                IQueryable<FinishingCause> finishingCauses,
+                                                                IQueryable<Category> categories)
         {
             var ret = new List<FullCaseOverview>();
-            var caseTypeFullNames = new Dictionary<int, string>();
             var availableCaseTypes = query.Select(c=> c.CaseType).Distinct().ToList();
-            foreach (var ct in availableCaseTypes)
-            {
-                caseTypeFullNames.Add(ct, ct.GetCaseTypeFullName(caseTypes));
-            }
+            var caseTypesList = caseTypes.Where(c => availableCaseTypes.Contains(c.Id)).ToList();
+            var caseTypeFullNames = availableCaseTypes.ToDictionary(ct => ct, ct => ct.GetCaseTypeFullName(caseTypesList));
 
-            var productAreaFullNames = new Dictionary<string, string>();
-            var availableProductAreas = query.Select(c => c.ProductArea).Distinct().ToList();
-            foreach (var pa in availableProductAreas)
-            {                
-                productAreaFullNames.Add(pa, GetProductAreaFullName(pa, productAreas.ToList()));
-            }
+            var availableProductAreas = query
+                .Select(c => string.IsNullOrEmpty(c.ProductArea) ? new int?() : int.Parse(c.ProductArea))
+                .Distinct().ToList();
+            var productAreasList = productAreas.Where(p => availableProductAreas.Contains(p.Id)).ToList();
+            var productAreaFullNames = availableProductAreas.ToDictionary(pa => pa.HasValue ? pa.ToString() : string.Empty, pa => pa.GetProductAreaFullName(productAreasList));
 
-            var ouFullNames = new Dictionary<string, string>();
-            var availableOUs = query.Select(c => c.Unit).Distinct().ToList();
-            foreach (var ou in availableOUs)
-            {
-                ouFullNames.Add(ou, ou.GetOUFullName(ous));
-            }
+            var availableOUs = query
+                .Select(c => string.IsNullOrEmpty(c.Unit) ? new int?() : int.Parse(c.Unit))
+                .Distinct().ToList();
+            var ousList = ous.Where(c => availableOUs.Contains(c.Id)).ToList();
+            var ouFullNames = availableOUs.ToDictionary(ou => ou.HasValue ? ou.ToString() : string.Empty, ou => ou.GetOUFullName(ousList));
 
-            var closingReasonFullNames = new Dictionary<string, string>();
-            var availableClosingReasons = query.Where(c=> c.LogData != null )
-                                               .Select(c => (c.LogData.FinishingType.HasValue? c.LogData.FinishingType.Value.ToString(): string.Empty))
+            var availableClosingReasons = query.Where(c=> c.LogData != null)
+                                               .Select(c => c.LogData.FinishingType)
                                                .Distinct()
                                                .ToList();
+            var finishingCausesList = finishingCauses.Where(f => availableClosingReasons.Contains(f.Id)).ToList();
+            var closingReasonFullNames = availableClosingReasons.ToDictionary(cr => cr.HasValue ? cr.ToString() : string.Empty, cr => cr.GetClosingReasonFullName(finishingCausesList));
 
-            foreach (var cr in availableClosingReasons)
-            {
-                closingReasonFullNames.Add(cr, cr.GetClosingReasonFullName(finishingCauses));
-            }
+            var availablecategories = query
+                .Select(c => string.IsNullOrEmpty(c.Category) ? new int?() : int.Parse(c.Category))
+                .Distinct().ToList();
+            var availableCategoriesList = categories.Where(c => availablecategories.Contains(c.Id)).ToList();
+            var categoriesFullNames = availablecategories.ToDictionary(c => c.HasValue ? c.ToString() : string.Empty, c => c.GetCategoryFullName(availableCategoriesList));
 
             ret = query.Select(q => new FullCaseOverview(
                                 q.Id,
@@ -149,7 +157,7 @@
                                 new CaseInfoOverview(q.Case, q.RegistrationDate, q.ChangeDate, q.RegistratedBy,
                                                      caseTypeFullNames[q.CaseType],
                                                      productAreaFullNames[q.ProductArea], 
-                                                     q.System, q.UrgentDegree, q.Impact, q.Category,
+                                                     q.System, q.UrgentDegree, q.Impact, categoriesFullNames[q.Category],
                                                      q.Supplier, q.InvoiceNumber, q.ReferenceNumber, q.Caption, q.Description,
                                                      q.Other, Convert.ToBoolean(q.PhoneContact), Convert.ToBoolean(q.Sms), q.AgreedDate, q.Available, q.Cost, 
                                                      string.Empty, q.RegistrationSource, q.SolvedInTime),
@@ -166,23 +174,6 @@
             return ret;
         }
 
-        private static FullCaseOverview CreateFullOverview(Case entity, CaseStatistic caseStatistic)
-        {                        
-            var id = entity.Id;
-            var user = CreateUserOverview(entity);
-            var computer = CreateComputerOverview(entity);
-            var caseInfo = CreateCaseInfoOverview(entity, caseStatistic);
-            var other = CreateOtherOverview(entity);
-            var log = CreateLogOverview(entity);
-
-            return new FullCaseOverview(
-                        id,
-                        user,
-                        computer,
-                        caseInfo,
-                        other,
-                        log);
-        }
 
         private static UserOverview CreateUserOverview(Case entity)
         {
@@ -295,19 +286,5 @@
             return new LogsOverview(string.Empty, null, string.Empty, null, null);
         }
 
-        private static LogsOverview GetLogOverview(string finishingCause, DateTime? closingDate)
-        {
-            var logs = new List<LogOverview>();
-            var logOverview = new LogOverview(
-                                            string.Empty,
-                                            string.Empty,
-                                            false,
-                                            string.Empty,
-                                            string.Empty,
-                                            closingDate,                                            
-                                            finishingCause);
-            logs.Add(logOverview);           
-            return new LogsOverview("", null, "", null, null);
-        }
     }
 }

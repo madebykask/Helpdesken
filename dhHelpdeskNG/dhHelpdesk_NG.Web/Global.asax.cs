@@ -15,155 +15,155 @@ using DH.Helpdesk.Web.Infrastructure.Utilities;
 
 namespace DH.Helpdesk.Web
 {
-	using System;
-	using System.Threading;
-	using System.Web;
-	using System.Web.Mvc;
-	using System.Web.Optimization;
-	using System.Web.Routing;
+    using System;
+    using System.Threading;
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Optimization;
+    using System.Web.Routing;
 
-	using DH.Helpdesk.Common.Logger;
-	using DH.Helpdesk.Dal.Infrastructure.Context;
-	using DH.Helpdesk.Services.Exceptions;
-	using DH.Helpdesk.Services.Infrastructure;
-	using DH.Helpdesk.Services.Services;
-	using DH.Helpdesk.Web.Controllers;
-	using DH.Helpdesk.Web.Infrastructure.Attributes;
-	using DH.Helpdesk.Web.Infrastructure.Binders;
-	using DH.Helpdesk.Web.Infrastructure.Configuration;
-	using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
-	using DH.Helpdesk.Web.Infrastructure.Logger;
+    using DH.Helpdesk.Common.Logger;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Services.Exceptions;
+    using DH.Helpdesk.Services.Infrastructure;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Controllers;
+    using DH.Helpdesk.Web.Infrastructure.Attributes;
+    using DH.Helpdesk.Web.Infrastructure.Binders;
+    using DH.Helpdesk.Web.Infrastructure.Configuration;
+    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using DH.Helpdesk.Web.Infrastructure.Logger;
 
-	using Microsoft.Practices.ServiceLocation;
-	using System.Diagnostics;
-	using Infrastructure;
-	using Services.Services.Concrete;
-	using BusinessData.Models.LogProgram;
+    using Microsoft.Practices.ServiceLocation;
+    using System.Diagnostics;
+    using Infrastructure;
+    using Services.Services.Concrete;
+    using BusinessData.Models.LogProgram;
 	using System.Collections.Concurrent;
 
 	public class MvcApplication : HttpApplication
-	{
-		private readonly IConfiguration configuration = ManualDependencyResolver.Get<IConfiguration>();
+    {
+        private readonly IConfiguration configuration = ManualDependencyResolver.Get<IConfiguration>();
 		private readonly IGlobalSettingService globalSettingsService = ManualDependencyResolver.Get<IGlobalSettingService>();
 
 		protected void Application_Start()
-		{
-			//Debugger.Launch();
+        {
+            //Debugger.Launch();
 
-			AreaRegistration.RegisterAllAreas();
-			//MARK: Remove old Api
-			//GlobalConfiguration.Configure(WebApiConfig.Register);
+            AreaRegistration.RegisterAllAreas();
+            //MARK: Remove old Api
+            //GlobalConfiguration.Configure(WebApiConfig.Register);
 
-			ViewEngineInit();
+            ViewEngineInit();
 
-			RegisterLocalizedAttributes();
-			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-			//MARK: Remove old Api
-			//FilterConfig.RegisterWebApiGlobalFilters(GlobalConfiguration.Configuration.Filters);
-			RouteConfig.RegisterRoutes(RouteTable.Routes);
-			RegisterBinders();
-			ProcessStartupTasks();
-			BundleConfig.RegisterBundles(BundleTable.Bundles);
+            RegisterLocalizedAttributes();
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            //MARK: Remove old Api
+            //FilterConfig.RegisterWebApiGlobalFilters(GlobalConfiguration.Configuration.Filters);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            RegisterBinders();
+            ProcessStartupTasks();
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-			JsonFormatConfig.ConfigWebApi();
-			JsonFormatConfig.ConfigMVC();
+            JsonFormatConfig.ConfigWebApi();
+            JsonFormatConfig.ConfigMVC();
 
-			ECT.FormLib.FormLibSetup.Setup();
-			ECT.FormLib.FormLibSetup.SetupRoutes(RouteTable.Routes);
+            ECT.FormLib.FormLibSetup.Setup();
+            ECT.FormLib.FormLibSetup.SetupRoutes(RouteTable.Routes);
 
-			MvcHandler.DisableMvcResponseHeader = true;
-			//System.Web.Helpers.AntiForgeryConfig.SuppressXFrameOptionsHeader = true;//uncomment this if XFrameOptions is added in web.config headers            
-			// ECT.FormLib.FormLibSetup.Setup(); todo
+            MvcHandler.DisableMvcResponseHeader = true;
+            //System.Web.Helpers.AntiForgeryConfig.SuppressXFrameOptionsHeader = true;//uncomment this if XFrameOptions is added in web.config headers            
+            // ECT.FormLib.FormLibSetup.Setup(); todo
 
-#if DEBUG
-			BundleTable.EnableOptimizations = false;
-#else
+            #if DEBUG
+                BundleTable.EnableOptimizations = false;
+            #else
                 BundleTable.EnableOptimizations = true;
-#endif
+            #endif
 
-			//fix for adfs(sso) claims-based identity
-			System.Web.Helpers.AntiForgeryConfig.UniqueClaimTypeIdentifier = System.Security.Claims.ClaimTypes.Name;
+            //fix for adfs(sso) claims-based identity
+            System.Web.Helpers.AntiForgeryConfig.UniqueClaimTypeIdentifier = System.Security.Claims.ClaimTypes.Name;
 
-			if (IsSsoMode())
-			{
-				FederatedAuthenticationConfiguration.Configure();
-			}
+            if (IsSsoMode())
+            {
+                FederatedAuthenticationConfiguration.Configure();
+            }
 
 			SetPerformanceLogSettings();
-			//DumpModules();
-		}
+            //DumpModules();
+        }
 
-		private void ViewEngineInit()
-		{
-			// Clear all registered view engines
-			ViewEngines.Engines.Clear();
+        private void ViewEngineInit()
+        {
+            // Clear all registered view engines
+            ViewEngines.Engines.Clear();
 
-			// Add back in just the Razor view engine
-			var viewEngine = new RazorViewEngine
-			{
-				ViewLocationCache = new DefaultViewLocationCache(TimeSpan.FromHours(24))
-			};
+            // Add back in just the Razor view engine
+            var viewEngine = new RazorViewEngine
+            {
+                ViewLocationCache = new DefaultViewLocationCache(TimeSpan.FromHours(24))
+            };
 
-			ViewEngines.Engines.Add(viewEngine);
-		}
+            ViewEngines.Engines.Add(viewEngine);
+        }
 
-		protected void Application_PostAuthorizeRequest()
-		{
-			//MARK: Remove old Api
-			//if (IsWebApiRequest())
-			//{
-			//	HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
-			//}
-		}
+        protected void Application_PostAuthorizeRequest()
+        {
+            //MARK: Remove old Api
+            //if (IsWebApiRequest())
+            //{
+            //	HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
+            //}
+        }
 
-		//MARK: Remove old Api
-		//private bool IsWebApiRequest()
-		//{
-		//	return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.Contains(@"/" + WebApiConfig.UrlPrefixRelative + @"/");
-		//}        
+        //MARK: Remove old Api
+        //private bool IsWebApiRequest()
+        //{
+        //	return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.Contains(@"/" + WebApiConfig.UrlPrefixRelative + @"/");
+        //}        
 
-		protected void Application_BeginRequest(object sender, EventArgs e)
-		{
-			Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
-			LogSession("Application.BeginRequest.", Context);
-		}
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
+            LogSession("Application.BeginRequest.", Context);
+        }
 
-		protected void Application_EndRequest(object sender, EventArgs e)
-		{
-			LogSession($"Application.EndRequest. Status: {Response.Status}, StatusCode: {Response.StatusCode}, RedirectLocation: {Response.RedirectLocation}", Context);
-		}
+        protected void Application_EndRequest(object sender, EventArgs e)
+        {
+            LogSession($"Application.EndRequest. Status: {Response.Status}, StatusCode: {Response.StatusCode}, RedirectLocation: {Response.RedirectLocation}", Context);
+        }
 
-		#region Authentication Events 
+        #region Authentication Events 
 
-		protected void WindowsAuthentication_OnAuthenticate(object sender, WindowsAuthenticationEventArgs args)
-		{
-			var identity = args.Identity;
-			LogSession($">>>WindowsAuthentication.OnAuthentication event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, IsAnonymous: {identity?.IsAnonymous ?? false}", Context);
-		}
+        protected void WindowsAuthentication_OnAuthenticate(object sender, WindowsAuthenticationEventArgs args)
+        {
+            var identity = args.Identity;
+            LogSession($">>>WindowsAuthentication.OnAuthentication event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, IsAnonymous: {identity?.IsAnonymous ?? false}", Context);
+        }
 
-		protected void FormsAuthentication_OnAuthenticate(object sender, FormsAuthenticationEventArgs args)
-		{
-			var identity = args.User?.Identity;
-			LogSession($">>>FormsAuthentication.OnAuthenticate event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
-		}
+        protected void FormsAuthentication_OnAuthenticate(object sender, FormsAuthenticationEventArgs args)
+        {
+            var identity = args.User?.Identity;
+            LogSession($">>>FormsAuthentication.OnAuthenticate event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
+        }
 
-		protected void Application_PostAuthenticateRequest(object sender, EventArgs args)
-		{
-			var identity = Context.User?.Identity;
-			LogSession($">>>Application.PostAuthenticateRequest event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
-		}
+        protected void Application_PostAuthenticateRequest(object sender, EventArgs args)
+        {
+            var identity = Context.User?.Identity;
+            LogSession($">>>Application.PostAuthenticateRequest event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
+        }
 
-		#endregion
+        #endregion
 
-		#region ADFS Module Events 
+        #region ADFS Module Events 
 
-		protected void Session_Start(object sender, EventArgs e)
-		{
-			var sessionId = Session.SessionID;
-			LogSession("Session.Start: " + sessionId, Context);
+        protected void Session_Start(object sender, EventArgs e)
+        {
+            var sessionId = Session.SessionID;
+            LogSession("Session.Start: " + sessionId, Context);
 
 
-		}
+        }
 
 		void Session_End(object sender, EventArgs e)
 		{
@@ -180,285 +180,284 @@ namespace DH.Helpdesk.Web
 		}
 
 		protected void WSFederationAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs e)
-		{
-			LogSession($"WSFederationAuthenticationModule.SessionSecurityTokenCreated: token created.", Context);
-		}
+        {
+            LogSession($"WSFederationAuthenticationModule.SessionSecurityTokenCreated: token created.", Context);
+        }
+        
+        protected void WSFederationAuthenticationModule_SecurityTokenValidated(object sender, SecurityTokenValidatedEventArgs e)
+        {
+            LogSession($"WSFederationAuthenticationModule.SecurityTokenValidated: token has been validated. {e.ClaimsPrincipal}", Context);
+        }
 
-		protected void WSFederationAuthenticationModule_SecurityTokenValidated(object sender, SecurityTokenValidatedEventArgs e)
-		{
-			LogSession($"WSFederationAuthenticationModule.SecurityTokenValidated: token has been validated. {e.ClaimsPrincipal}", Context);
-		}
+        protected void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
+        {
+            LogIdentityClaims(Context);
+            LogSession($"WSFederationAuthenticationModule.SignedIn: user signed In.", Context);
+        }
 
-		protected void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
-		{
-			LogIdentityClaims(Context);
-			LogSession($"WSFederationAuthenticationModule.SignedIn: user signed In.", Context);
-		}
+        protected void WSFederationAuthenticationModule_RedirectingToIdentityProvider(object sender, RedirectingToIdentityProviderEventArgs e)
+        {
+            var redirectUrl = e.SignInRequestMessage.WriteQueryString();
+            LogSession($"WSFederationAuthenticationModule.RedirectingToIdentityProvider. Redirect to sts - {redirectUrl}", Context);
+        }
 
-		protected void WSFederationAuthenticationModule_RedirectingToIdentityProvider(object sender, RedirectingToIdentityProviderEventArgs e)
-		{
-			var redirectUrl = e.SignInRequestMessage.WriteQueryString();
-			LogSession($"WSFederationAuthenticationModule.RedirectingToIdentityProvider. Redirect to sts - {redirectUrl}", Context);
-		}
+        protected void WSFederationAuthenticationModule_SignInError(object sender, ErrorEventArgs e)
+        {
+            LogSession($"WSFederationAuthenticationModule.SignInError: sign in error. {e.Exception?.Message ?? "Unknown"}", Context);
+        }
 
-		protected void WSFederationAuthenticationModule_SignInError(object sender, ErrorEventArgs e)
-		{
-			LogSession($"WSFederationAuthenticationModule.SignInError: sign in error. {e.Exception?.Message ?? "Unknown"}", Context);
-		}
+        protected void WSFederationAuthenticationModule_AuthorizationFailed(object sender, AuthorizationFailedEventArgs e)
+        {
+            LogSession($"WSFederationAuthenticationModule.AuthorizationFailed. Authorisation failed.", Context);
+        }
+        
+        #region SessionAuthenticationModule events
 
-		protected void WSFederationAuthenticationModule_AuthorizationFailed(object sender, AuthorizationFailedEventArgs e)
-		{
-			LogSession($"WSFederationAuthenticationModule.AuthorizationFailed. Authorisation failed.", Context);
-		}
+        protected void SessionAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs args)
+        {
+            var sessionToken = args.SessionToken;
+            LogSession($"SessionAuthenticationModule.SessionSecurityTokenCreated. Token valid: {sessionToken.ValidFrom} - {sessionToken.ValidTo}.", Context);
+        }
 
-		#region SessionAuthenticationModule events
+        protected void SessionAuthenticationModule_SessionSecurityTokenReceived(object sender, SessionSecurityTokenReceivedEventArgs args)
+        {
+            var token = args.SessionToken;
+            LogSession($"SessionAuthenticationModule.SessionSecurityTokenReceived. Token valid: {token.ValidFrom} - {token.ValidTo}.", Context);
+            
+            var configuration = ManualDependencyResolver.Get<IAdfsConfiguration>();
+            var federationAuthenticationService = ManualDependencyResolver.Get<IFederatedAuthenticationService>();
 
-		protected void SessionAuthenticationModule_SessionSecurityTokenCreated(object sender, SessionSecurityTokenCreatedEventArgs args)
-		{
-			var sessionToken = args.SessionToken;
-			LogSession($"SessionAuthenticationModule.SessionSecurityTokenCreated. Token valid: {sessionToken.ValidFrom} - {sessionToken.ValidTo}.", Context);
-		}
+            //check if token has expired:
+            if (token.ValidTo < DateTime.UtcNow)
+            {
+                LogSession($"Security token lifetime has been expired: ValidTo: {token.ValidTo}, UtcNow: {DateTime.UtcNow}. Signing out.", Context);
+                SessionFacade.ClearSession();
+                federationAuthenticationService.SignOut(null);
+                return;
+            }
 
-		protected void SessionAuthenticationModule_SessionSecurityTokenReceived(object sender, SessionSecurityTokenReceivedEventArgs args)
-		{
-			var token = args.SessionToken;
-			LogSession($"SessionAuthenticationModule.SessionSecurityTokenReceived. Token valid: {token.ValidFrom} - {token.ValidTo}.", Context);
+            if (configuration.EnableSlidingExpiration)
+            {
+                LogSession("Try to refresh adfs Token lifetime.", Context);
 
-			var configuration = ManualDependencyResolver.Get<IAdfsConfiguration>();
-			var federationAuthenticationService = ManualDependencyResolver.Get<IFederatedAuthenticationService>();
+                var sam = (SessionAuthenticationModule)sender;
+                var refreshedToken =
+                    federationAuthenticationService.RefreshSecurityTokenLifeTime(sam, args.SessionToken, configuration.SecurityTokenMaxDuration);
 
-			//check if token has expired:
-			if (token.ValidTo < DateTime.UtcNow)
-			{
-				LogSession($"Security token lifetime has been expired: ValidTo: {token.ValidTo}, UtcNow: {DateTime.UtcNow}. Signing out.", Context);
-				SessionFacade.ClearSession();
-				federationAuthenticationService.SignOut(null);
-				return;
-			}
+                if (refreshedToken != null)
+                {
+                    args.SessionToken = refreshedToken;
+                    args.ReissueCookie = true;
+                    LogSession($"Adfs Token lifetime has been refreshed to: {refreshedToken.ValidTo},", Context);
+                }
+            }
+        }
 
-			if (configuration.EnableSlidingExpiration)
-			{
-				LogSession("Try to refresh adfs Token lifetime.", Context);
+        #endregion
 
-				var sam = (SessionAuthenticationModule)sender;
-				var refreshedToken =
-					federationAuthenticationService.RefreshSecurityTokenLifeTime(sam, args.SessionToken, configuration.SecurityTokenMaxDuration);
+        private void DumpSessionState(HttpContext ctx)
+        {
+            try
+            {
+                var session = ctx.Session;
+                if (!string.IsNullOrEmpty(session?.SessionID))
+                {
+                    Trace.WriteLine($">>> [{DateTime.Now}] Helpdesk.Session. Id: {session.SessionID}.Request: {ctx.Request.Url}");
 
-				if (refreshedToken != null)
-				{
-					args.SessionToken = refreshedToken;
-					args.ReissueCookie = true;
-					LogSession($"Adfs Token lifetime has been refreshed to: {refreshedToken.ValidTo},", Context);
-				}
-			}
-		}
+                    var logSessionKeys = ConfigurationManager.AppSettings["helpdesk.logsessionkeys"];
+                    if (!string.IsNullOrEmpty(logSessionKeys))
+                    {
+                        var strBld = new StringBuilder();
+                        foreach (string key in session.Keys)
+                        {
+                            if (logSessionKeys == "*" || logSessionKeys.Equals(key, StringComparison.OrdinalIgnoreCase))
+                            {
+                                strBld.AppendFormat("\t- {0}: {1}{2}", key, session[key], Environment.NewLine);
+                            }
+                        }
+
+                        Trace.WriteLine(strBld.ToString());
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Trace.TraceError($"DumpSessionState: Unknown error. Error: {ex.Message}" );
+            }
+        }
+
+        #endregion
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            var httpContext = ((MvcApplication)sender).Context;
+
+            var currentRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
+            var currentController = " ";
+            var currentAction = " ";
+
+            if (currentRouteData != null)
+            {
+                if (currentRouteData.Values["controller"] != null && !string.IsNullOrEmpty(currentRouteData.Values["controller"].ToString()))
+                {
+                    currentController = currentRouteData.Values["controller"].ToString();
+                }
+
+                if (currentRouteData.Values["action"] != null && !string.IsNullOrEmpty(currentRouteData.Values["action"].ToString()))
+                {
+                    currentAction = currentRouteData.Values["action"].ToString();
+                }
+            }
+
+            var ex = Server.GetLastError();
+
+            var controller = new ErrorController(ManualDependencyResolver.Get<IMasterDataService>());
+            var routeData = new RouteData();
+            var action = "Index";
+
+            if (ex is HttpException)
+            {
+                var httpEx = ex as HttpException;
+
+                switch (httpEx.GetHttpCode())
+                {
+                    case 404:
+                        action = "NotFound";
+                        break;
+
+                    // others if any
+                    default:
+                        action = "Index";
+                        break;
+                }
+            }
+
+            if (ex is BusinessLogicException)
+            {
+                action = "BusinessLogicError";
+            }
+
+            var workContext = ManualDependencyResolver.Get<IWorkContext>();
+            var guid = Guid.NewGuid();
+            LogManager.Error.Error(new ErrorContext(
+                                        guid,
+                                        ex,
+                                        currentController,
+                                        currentAction,
+                                        httpContext,
+                                        workContext).ToString());
+
+
+            httpContext.ClearError();
+            httpContext.Response.Clear();
+            httpContext.Response.StatusCode = ex is HttpException ? ((HttpException)ex).GetHttpCode() : 500;
+            httpContext.Response.TrySkipIisCustomErrors = true;
+            routeData.Values["controller"] = "Error";
+            routeData.Values["action"] = action;
+
+            controller.ViewData.Model = new DH.Helpdesk.Web.Models.Error.HandleErrorInfoGuid(ex, currentController, currentAction, guid);
+            ((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
+        }
+
+        /// <summary>
+        /// The register binders.
+        /// </summary>
+        private static void RegisterBinders()
+        {
+            ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
+            ModelBinders.Binders.Add(typeof(DateTime?), new NullableDateTimeBinder());
+            ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinder());
+        }
+
+        private static void RegisterLocalizedAttributes()
+        {
+            DataAnnotationsModelValidatorProvider.RegisterAdapter(
+                typeof(LocalizedRequiredAttribute),
+                typeof(RequiredAttributeAdapter));
+
+            DataAnnotationsModelValidatorProvider.RegisterAdapter(
+                typeof(LocalizedStringLengthAttribute),
+                typeof(StringLengthAttributeAdapter));
+        }
+
+        /// <summary>
+        /// process startup tasks.
+        /// </summary>
+        private static void ProcessStartupTasks()
+        {
+            ILoggerService errorLoggerService = LogManager.Error;
+            foreach (var task in ServiceLocator.Current.GetAllInstances<IStartUpTask>())
+            {
+                try
+                {
+                    if (task != null && task.IsEnabled)
+                    {
+                        task.Configure();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    errorLoggerService.Error(ex);
+                }
+            }
+        }
+
+        #region Helper Methods
+
+        private static bool IsSsoMode()
+        {
+            var appSettingsProvider = new ApplicationConfiguration();
+            return appSettingsProvider.LoginMode == LoginMode.SSO;
+        }
+
+
+        private void LogSession(string msg, HttpContext ctx)
+        {
+            var request = ctx.Request;
+            var identity = ctx.User?.Identity;
+            var isAuthenticated = identity?.IsAuthenticated ?? false;
+            var contextInfo = $"Authenticated: {isAuthenticated}, User: {identity?.Name}, Request: {request.Url}";
+
+            var logger = LogManager.Session;
+            logger.Debug($"{msg} {contextInfo}");
+        }
+
+        private static void LogIdentityClaims(HttpContext ctx)
+        {
+            #if DEBUG // should meet GDPR requirements
+
+            //var log = LogManager.Session;
+            //var claimsIdentity = ctx.User.Identity as ClaimsIdentity;
+            //if (claimsIdentity != null && claimsIdentity.Claims.Any())
+            //{
+            //    log.Debug(">>> Claims found:");
+            //    foreach (var claim in claimsIdentity.Claims)
+            //    {
+            //        log.Debug($"Claim: {claim.Type}, value: {claim.Value}, Issuer: {claim.Issuer}");
+            //    }
+            //}
+
+            #endif
+        }
+
+        //keep for diagnostic purposes
+        private void DumpModules()
+        {
+            var logger = LogManager.Session;
+
+            //Get List of modules in module collections
+            var httpModuleCollections = Modules;
+            logger.Debug("----------------------------------------------------");
+            logger.Debug("Total Number Active HttpModule : " + httpModuleCollections.Count.ToString() + "</br>");
+            logger.Debug("<b>List of Active Modules</b>" + "</br>");
+            foreach (string activeModule in httpModuleCollections.AllKeys)
+            {
+                logger.Debug(activeModule + "</br>");
+            }
+            logger.Debug("----------------------------------------------------");
+        }
 
 		#endregion
-
-		private void DumpSessionState(HttpContext ctx)
-		{
-			try
-			{
-				var session = ctx.Session;
-				if (!string.IsNullOrEmpty(session?.SessionID))
-				{
-					Trace.WriteLine($">>> [{DateTime.Now}] Helpdesk.Session. Id: {session.SessionID}.Request: {ctx.Request.Url}");
-
-					var logSessionKeys = ConfigurationManager.AppSettings["helpdesk.logsessionkeys"];
-					if (!string.IsNullOrEmpty(logSessionKeys))
-					{
-						var strBld = new StringBuilder();
-						foreach (string key in session.Keys)
-						{
-							if (logSessionKeys == "*" || logSessionKeys.Equals(key, StringComparison.OrdinalIgnoreCase))
-							{
-								strBld.AppendFormat("\t- {0}: {1}{2}", key, session[key], Environment.NewLine);
-							}
-						}
-
-						Trace.WriteLine(strBld.ToString());
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				Trace.TraceError($"DumpSessionState: Unknown error. Error: {ex.Message}");
-			}
-		}
-
-		#endregion
-
-#if !DEBUG
-		protected void Application_Error(object sender, EventArgs e)
-		{
-			var httpContext = ((MvcApplication)sender).Context;
-
-			var currentRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
-			var currentController = " ";
-			var currentAction = " ";
-
-			if (currentRouteData != null)
-			{
-				if (currentRouteData.Values["controller"] != null && !string.IsNullOrEmpty(currentRouteData.Values["controller"].ToString()))
-				{
-					currentController = currentRouteData.Values["controller"].ToString();
-				}
-
-				if (currentRouteData.Values["action"] != null && !string.IsNullOrEmpty(currentRouteData.Values["action"].ToString()))
-				{
-					currentAction = currentRouteData.Values["action"].ToString();
-				}
-			}
-
-			var ex = Server.GetLastError();
-
-			var controller = new ErrorController(ManualDependencyResolver.Get<IMasterDataService>());
-			var routeData = new RouteData();
-			var action = "Index";
-
-			if (ex is HttpException)
-			{
-				var httpEx = ex as HttpException;
-
-				switch (httpEx.GetHttpCode())
-				{
-					case 404:
-						action = "NotFound";
-						break;
-
-					// others if any
-					default:
-						action = "Index";
-						break;
-				}
-			}
-
-			if (ex is BusinessLogicException)
-			{
-				action = "BusinessLogicError";
-			}
-
-			var workContext = ManualDependencyResolver.Get<IWorkContext>();
-			var guid = Guid.NewGuid();
-			LogManager.Error.Error(new ErrorContext(
-										guid,
-										ex,
-										currentController,
-										currentAction,
-										httpContext,
-										workContext).ToString());
-
-
-			httpContext.ClearError();
-			httpContext.Response.Clear();
-			httpContext.Response.StatusCode = ex is HttpException ? ((HttpException)ex).GetHttpCode() : 500;
-			httpContext.Response.TrySkipIisCustomErrors = true;
-			routeData.Values["controller"] = "Error";
-			routeData.Values["action"] = action;
-
-			controller.ViewData.Model = new DH.Helpdesk.Web.Models.Error.HandleErrorInfoGuid(ex, currentController, currentAction, guid);
-			((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
-		}
-#endif
-
-		/// <summary>
-		/// The register binders.
-		/// </summary>
-		private static void RegisterBinders()
-		{
-			ModelBinders.Binders.Add(typeof(DateTime), new DateTimeBinder());
-			ModelBinders.Binders.Add(typeof(DateTime?), new NullableDateTimeBinder());
-		}
-
-		private static void RegisterLocalizedAttributes()
-		{
-			DataAnnotationsModelValidatorProvider.RegisterAdapter(
-				typeof(LocalizedRequiredAttribute),
-				typeof(RequiredAttributeAdapter));
-
-			DataAnnotationsModelValidatorProvider.RegisterAdapter(
-				typeof(LocalizedStringLengthAttribute),
-				typeof(StringLengthAttributeAdapter));
-		}
-
-		/// <summary>
-		/// process startup tasks.
-		/// </summary>
-		private static void ProcessStartupTasks()
-		{
-			ILoggerService errorLoggerService = LogManager.Error;
-			foreach (var task in ServiceLocator.Current.GetAllInstances<IStartUpTask>())
-			{
-				try
-				{
-					if (task != null && task.IsEnabled)
-					{
-						task.Configure();
-					}
-				}
-				catch (Exception ex)
-				{
-					errorLoggerService.Error(ex);
-				}
-			}
-		}
-
-#region Helper Methods
-
-		private static bool IsSsoMode()
-		{
-			var appSettingsProvider = new ApplicationConfiguration();
-			return appSettingsProvider.LoginMode == LoginMode.SSO;
-		}
-
-
-		private void LogSession(string msg, HttpContext ctx)
-		{
-			var request = ctx.Request;
-			var identity = ctx.User?.Identity;
-			var isAuthenticated = identity?.IsAuthenticated ?? false;
-			var contextInfo = $"Authenticated: {isAuthenticated}, User: {identity?.Name}, Request: {request.Url}";
-
-			var logger = LogManager.Session;
-			logger.Debug($"{msg} {contextInfo}");
-		}
-
-		private static void LogIdentityClaims(HttpContext ctx)
-		{
-#if DEBUG // should meet GDPR requirements
-
-			//var log = LogManager.Session;
-			//var claimsIdentity = ctx.User.Identity as ClaimsIdentity;
-			//if (claimsIdentity != null && claimsIdentity.Claims.Any())
-			//{
-			//    log.Debug(">>> Claims found:");
-			//    foreach (var claim in claimsIdentity.Claims)
-			//    {
-			//        log.Debug($"Claim: {claim.Type}, value: {claim.Value}, Issuer: {claim.Issuer}");
-			//    }
-			//}
-
-#endif
-		}
-
-		//keep for diagnostic purposes
-		private void DumpModules()
-		{
-			var logger = LogManager.Session;
-
-			//Get List of modules in module collections
-			var httpModuleCollections = Modules;
-			logger.Debug("----------------------------------------------------");
-			logger.Debug("Total Number Active HttpModule : " + httpModuleCollections.Count.ToString() + "</br>");
-			logger.Debug("<b>List of Active Modules</b>" + "</br>");
-			foreach (string activeModule in httpModuleCollections.AllKeys)
-			{
-				logger.Debug(activeModule + "</br>");
-			}
-			logger.Debug("----------------------------------------------------");
-		}
-
-#endregion
 
 
 

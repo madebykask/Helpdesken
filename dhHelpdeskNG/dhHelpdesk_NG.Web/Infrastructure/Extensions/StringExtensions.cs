@@ -478,6 +478,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return newStr;
         }
 
+        public static string GetYesNoText(this bool val)
+        {
+            return val ? Translation.GetCoreTextTranslation("Ja") : Translation.GetCoreTextTranslation("Nej");
+        }
+
         public static IEnumerable<String> SplitInParts(this String s, Int32 partLength)
         {
             if (s == null)

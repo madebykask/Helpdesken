@@ -22,7 +22,8 @@
             string workstationName,
             string info,
             DateTime createdDate,
-            DateTime changedDate)
+            DateTime changedDate,
+            DateTime? syncChangeDate)
         {
             this.Id = id;
             this.DepartmentName = departmentName;
@@ -39,6 +40,7 @@
             this.Info = info;
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
+            this.SyncChangedDate = syncChangeDate;
         }
 
         [IsId]
@@ -76,5 +78,7 @@
         public DateTime CreatedDate { get; private set; }
 
         public DateTime ChangedDate { get; private set; }
+
+        public DateTime? SyncChangedDate { get; private set; }
     }
 }

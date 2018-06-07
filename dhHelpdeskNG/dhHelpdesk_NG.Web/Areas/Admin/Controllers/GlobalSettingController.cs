@@ -1,4 +1,5 @@
 ﻿
+using System.Globalization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.Settings;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Infrastructure.Context;
+using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Models.Gdpr;
 
@@ -44,6 +46,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IGDPROperationsService _gdprOperationsService;
         private readonly IGDPRFavoritesService _gdprFavoritesService;
         private readonly IUserContext _userContext;
+        private readonly IGDPRTasksService _gdprTasksService;
 
         public GlobalSettingController(
             IGlobalSettingService globalSettingService,
@@ -58,10 +61,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IGDPRDataPrivacyAccessService gdprDataPrivacyAccessService,
             IMasterDataService masterDataService,
             IGDPRFavoritesService gdprFavoritesService,
+            IGDPRTasksService gdprTasksService,
             IUserContext userContext)
             : base(masterDataService)
         {
-            _gdprFavoritesService = gdprFavoritesService;
+            this._gdprTasksService = gdprTasksService;
+            this._gdprFavoritesService = gdprFavoritesService;
             this._globalSettingService = globalSettingService;
             this._holidayService = holidayService;
             this._languageService = languageService;
@@ -1450,6 +1455,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return Json(res);
         }
 
+        [NoCache]
+        [HttpGet]
         public JsonResult LoadDataPrivacyFavorite(int id)
         {
             var data = _gdprFavoritesService.GetFavorite(id);
@@ -1495,17 +1502,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var model = GetDataPrivacyModel();
             return View(model);
         }
-
-        [HttpGet]
-        [GdprAccess]
-        public JsonResult CreateDataPrivacyOperationAudit(int customerId)
-        {
-            var userId = _userContext.UserId;
-            var url = ControllerContext.RequestContext.HttpContext.Request.Url?.ToString();
-            var auditOperationId = _gdprOperationsService.CreateDataPrivacyOperationAudit(userId, customerId, url);
-            return Json(new { id = auditOperationId }, JsonRequestBehavior.AllowGet);
-        }
-
+        
         [HttpPost]
         [GdprAccess]
         public ActionResult DataPrivacy(DataPrivacyParameters model)
@@ -1513,11 +1510,21 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             SessionFacade.ActiveTab = "#fragment-6";
             if (model.SelectedCustomerId > 0)
             {
-                var success = _gdprOperationsService.RemoveDataPrivacyFromCase(model);
-                return Json(new { success });
+                //schedule new data privacy job
+                var taskInfo = new GDPRTask
+                {
+                    CustomerId = model.SelectedCustomerId,
+                    UserId = _userContext.UserId,
+                    FavoriteId = model.SelectedFavoriteId ?? 0,
+                    AddedDate = DateTime.UtcNow,
+                    Status = GDPRTaskStatus.None
+                };
+
+                var taskId = _gdprTasksService.AddNewTask(taskInfo);
+                return Json(new { success = true, taskId = taskId });
             }
 
-            return Json(new { success = true });
+            return Json(new { success = false, taskId = 0 });
         }
 
         private DataPrivacyModel GetDataPrivacyModel()
@@ -1543,7 +1550,19 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             };
             return model;
         }
-        
+
+        [HttpGet]
+        public JsonResult GetRunningDataPrivacyTasks(int favoriteId)
+        {
+            var tasks = _gdprTasksService.GetPendingTasksByFavorite(favoriteId);
+            if (tasks.Any())
+            {
+                var taskIds = tasks.Select(t => t.Id).ToArray();
+                return Json(new { count = taskIds.Length, ids = taskIds }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { count = 0 }, JsonRequestBehavior.AllowGet);
+        }
+
         [ChildActionOnly]
         public PartialViewResult DataPrivacyHistory()
         {
@@ -1568,6 +1587,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var caseText = Translation.GetCoreTextTranslation("Ärende");
             var logPostsText = Translation.GetCoreTextTranslation("Ärendelogg");
 
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+
             var model = new List<GdprOperationsHistoryListItem>();
 
             //replace field names with field labels
@@ -1588,7 +1609,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Cases = item.ClosedOnly ? closedText : $"{closedText}, {openedText}",
                     Data = formattedFields.Any() ? string.Join(", ", formattedFields) : "",
                     AttachedFiles = attachedFilesFormatted.ToString().Trim(',').Trim(),
-                    Executed = item.ExecutedDate.ToString("yyyy-MM-dd HH:mm:ss")
+                    Executed = TimeZoneInfo.ConvertTimeFromUtc(item.ExecutedDate, userTimeZone).ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)
                 };
 
                 model.Add(modelItem);

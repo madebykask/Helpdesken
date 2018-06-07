@@ -23,7 +23,10 @@
             ConfigurableFieldModel<string> barCode,
             ConfigurableFieldModel<DateTime?> purchaseDate,
             ConfigurableFieldModel<string> computerName,
-            ConfigurableFieldModel<string> info)
+            ConfigurableFieldModel<string> info,
+            ConfigurableFieldModel<DateTime?> createdDate,
+            ConfigurableFieldModel<DateTime?> changedDate,
+            ConfigurableFieldModel<DateTime?> syncDate)
         {
             this.DepartmentId = departmentId;
             this.BuildingId = buildingId;
@@ -38,6 +41,9 @@
             this.PurchaseDate = purchaseDate;
             this.ComputerName = computerName;
             this.Info = info;
+            this.CreatedDate = createdDate;
+            this.ChangedDate = changedDate;
+            this.SyncDate = syncDate;
         }
 
         public ConfigurableFieldModel<int?> DepartmentId { get; set; }
@@ -72,5 +78,11 @@
         public ConfigurableFieldModel<string> ComputerName { get; set; }
 
         public ConfigurableFieldModel<string> Info { get; set; }
+
+        public ConfigurableFieldModel<DateTime?> CreatedDate { get; }
+
+        public ConfigurableFieldModel<DateTime?> ChangedDate { get; }
+
+        public ConfigurableFieldModel<DateTime?> SyncDate { get; }
     }
 }

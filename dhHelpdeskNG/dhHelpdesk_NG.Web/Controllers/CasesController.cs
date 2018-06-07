@@ -1365,7 +1365,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
                 else
                 {
-                    err = Translation.Get("Du kan inte ta bort noteringen, eftersom du saknar behörighet att ta bort bifogade filer") + ".";
+                    err = Translation.GetCoreTextTranslation("Du kan inte ta bort noteringen, eftersom du saknar behörighet att ta bort bifogade filer") + ".";
                     TempData["PreventError"] = err;
                     return this.RedirectToAction("editlog", "cases", new { id = id, customerId = SessionFacade.CurrentCustomer.Id });
                 }
@@ -1920,12 +1920,20 @@ namespace DH.Helpdesk.Web.Controllers
             return userRole;
         }
 
-
         [ValidateInput(false)]
         [HttpPost]
         public ActionResult CaseSearchUserEmails(string query, string searchKey, bool isInternalLog = false)
         {
-            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, true, true, true, true, isInternalLog);
+            var searchScope = new BusinessData.Models.Email.EmailSearchScope()
+            {
+                SearchInInitiators = true,
+                SearchInAdmins = true,
+                SearchInUsers = true,
+                SearchInEmailGrs = true,
+                SearchInWorkingGrs = true
+            };
+
+            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, searchScope);
             return Json(new { searchKey = searchKey, result = models });
         }
 
@@ -2536,8 +2544,8 @@ namespace DH.Helpdesk.Web.Controllers
             return new UnicodeFileContentResult(fileContent, fileName);
         }
 
-        [HttpGet]
-        public UnicodeFileContentResult DownloadLogFile(string id, string fileName)
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)] // do not replace with [HttpGet, HttpHead]
+        public ActionResult DownloadLogFile(string id, string fileName)
         {
             byte[] fileContent;
 
@@ -2554,8 +2562,16 @@ namespace DH.Helpdesk.Web.Controllers
                         basePath = _masterDataService.GetFilePath(c.Customer_Id);
                 }
 
-                fileContent = this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+                try
+                {
+                    fileContent = this._logFileService.GetFileContentByIdAndFileName(int.Parse(id), basePath, fileName);
+                }
+                catch (FileNotFoundException e)
+                {
+                    return HttpNotFound("File not found");
+                }
             }
+
             var defaultFileName = GetDefaultFileName(fileName);
             Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", defaultFileName));
 
@@ -5271,18 +5287,18 @@ namespace DH.Helpdesk.Web.Controllers
                 var canDelete = (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1);
                 m.SavedFiles = canDelete ? string.Empty : m.CaseFileNames;
 
-                m.CaseFilesModel = new CaseFilesModel(caseId.ToString(global::System.Globalization.CultureInfo.InvariantCulture), this._caseFileService.GetCaseFiles(caseId, canDelete).OrderBy(x => x.CreatedDate).ToArray(), m.SavedFiles, UseVD);
+                var caseFiles = _caseFileService.GetCaseFiles(caseId, canDelete).OrderBy(x => x.CreatedDate);
 
-                m.CaseAttachedExFiles =
-                    _caseFileService.GetCaseFiles(caseId, canDelete)
-                        .OrderBy(x => x.CreatedDate)
-                        .Select(x => new CaseAttachedExFileModel
-                                    {
-                                        Id = x.Id,
-                                        FileName = x.FileName,
-                                        IsCaseFile = true,
-                                        CaseId = caseId
-                                    }).ToList();
+                m.CaseFilesModel = new CaseFilesModel(caseId.ToString(), caseFiles.ToArray(), m.SavedFiles, UseVD);
+
+                m.CaseAttachedExFiles = 
+                    caseFiles.Select(x => new CaseAttachedExFileModel
+                                            {
+                                                Id = x.Id,
+                                                FileName = x.FileName,
+                                                IsCaseFile = true,
+                                                CaseId = caseId
+                                            }).ToList();
 
                 var exLogFiles = _logFileService.GetLogFilesByCaseId(caseId).Select(x => new CaseAttachedExFileModel
                 {
@@ -5586,6 +5602,11 @@ namespace DH.Helpdesk.Web.Controllers
                         if (caseTemplate.UpdateNotifierInformation.HasValue)
                         {
                             m.UpdateNotifierInformation = caseTemplate.UpdateNotifierInformation.Value.ToBool();
+                        }
+
+                        if (caseTemplate.AddFollowersBtn.HasValue)
+                        {
+                            m.AddFollowersBtn = caseTemplate.AddFollowersBtn.Value;
                         }
 
                         if (caseTemplate.Supplier_Id != null)
@@ -7874,7 +7895,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.FreeTextSearch))
             {
-                if (sm.caseSearchFilter.FreeTextSearch[0] == '#')
+                if (sm.caseSearchFilter.FreeTextSearch[0] == CaseSearchConstants.CaseNumberSearchPrefix)
                     sm.caseSearchFilter.FreeTextSearch = string.Empty;
             }
 
@@ -8053,6 +8074,78 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         #endregion
+
+
+#if DEBUG
+
+        #region Test Actions 
+
+        [HttpGet]
+        public JsonResult GenerateCaseLogFiles(int caseId, int count)
+        {
+            var customerId = workContext.Customer.CustomerId;
+            var basePath = _masterDataService.GetFilePath(customerId);
+
+            var dummyContent = GenerateDummyFileContent(1);
+
+            var @case = _caseService.GetCaseById(caseId);
+            var lastLogNote = @case.Logs.OrderByDescending(l => l.Id).FirstOrDefault();
+
+            if (lastLogNote == null)
+                return Json(new { Success = false, Error = "Case doesn't have log notes." }, JsonRequestBehavior.AllowGet);
+
+            try
+            {
+                foreach (var pos in Enumerable.Range(0, count))
+                {
+                    var fileName = $"file_{Guid.NewGuid()}";
+                    var logFile = new CaseFileDto(dummyContent, basePath, fileName, DateTime.UtcNow, lastLogNote.Id, this.workContext.User?.UserId);
+                    this._logFileService.AddFile(logFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, Error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GenerateCaseFiles(int caseId, int count)
+        {
+            var customerId = workContext.Customer.CustomerId;
+            var basePath = _masterDataService.GetFilePath(customerId);
+
+            var dummyContent = GenerateDummyFileContent(1);
+
+            try
+            {
+                foreach (var pos in Enumerable.Range(0, count))
+                {
+                    var fileName = $"file_{Guid.NewGuid()}";
+                    var caseFile = new CaseFileDto(dummyContent, basePath, fileName, DateTime.UtcNow, caseId, this.workContext.User?.UserId);
+                    _caseFileService.AddFile(caseFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, Error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { Success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        private byte[] GenerateDummyFileContent(int sizeInMb)
+        {
+            byte[] data = new byte[sizeInMb * 1024];
+            Random rng = new Random();
+            rng.NextBytes(data);
+            return data;
+        }
+
+        #endregion
+#endif
     }
 
 

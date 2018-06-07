@@ -222,9 +222,11 @@
                     case Module.Calendar:
                         if (SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.User ||
                             SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.Administrator)
-                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true, true, calendarWGRestriction);
+                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true, true, calendarWGRestriction)
+                                                      .OrderByDescending(c => c.CalendarDate);
                         else
-                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true);
+                            model.CalendarOverviews = this.calendarService.GetCalendarOverviews(customerIdsAll, module.NumberOfRows, true, true)
+                                                      .OrderByDescending(c => c.CalendarDate);
                         break;
                     case Module.Customers:
                         var customerCases = this.caseService.GetCustomersCases(customersIds, this.workContext.User.UserId);                        
@@ -234,7 +236,7 @@
                         model.DailyReportOverviews = this.dailyReportService.GetDailyReportOverviews(customerIdsAll, module.NumberOfRows);
                         break;
                     case Module.Documents:
-                        model.DocumentOverviews = this.documentService.GetDocumentOverviews(customerIdsAll, module.NumberOfRows, true);
+                        model.DocumentOverviews = this.documentService.GetDocumentOverviews(customerIdsAll, module.NumberOfRows, true).OrderByDescending(d => d.ChangedDate);
                         break;
                     case Module.Faq:
                         model.FaqOverviews = this.faqService.GetFaqByCustomers(customerIdsAll, module.NumberOfRows, true);
@@ -248,7 +250,8 @@
                     case Module.QuickLinks:
                         if (SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.User ||
                             SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.Administrator)
-                            model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviewsForStartPage(customerIdsAll, module.NumberOfRows, true, currentCustomerSettings.QuickLinkWGRestriction));
+                            model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviewsForStartPage(customerIdsAll, module.NumberOfRows, true, 
+                                customersSettings.Where(c => c.QuickLinkWGRestriction).Select(c => c.CustomerId).ToArray()));
                         else
                             model.LinksInfo = this.linkModelFactory.GetLinksViewModel(this.linkService.GetLinkOverviewsForStartPage(customerIdsAll, module.NumberOfRows, true));
                         break;

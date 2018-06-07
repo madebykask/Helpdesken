@@ -37,6 +37,10 @@
                .HasForeignKey(x => x.FollowUpResponsibleUser_Id)
                .WillCascadeOnDelete(false);
 
+            this.HasMany(x => x.ContractLogs)
+                .WithRequired(x => x.Contract)
+                .HasForeignKey(x => x.Contract_Id);
+
             this.Property(x => x.ContractGUID).IsRequired();
             this.Property(x => x.ChangedByUser_Id).IsRequired();
             this.Property(x => x.ContractCategory_Id).IsRequired();

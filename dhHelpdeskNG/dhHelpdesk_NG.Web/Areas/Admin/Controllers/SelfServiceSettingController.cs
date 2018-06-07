@@ -66,14 +66,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Text = x.getCaseTypeParentPath(),
                 Value = x.Id.ToString(),
                 Disabled = x.IsActive == 0
-            }).ToList();
+            }).OrderBy(a => a.Text).ToList();
 
             var selectedCaseTypes = allCaseTypes.Where(c => c.ShowOnExtPageCases == 1).Select(x => new SelectListItem
             {
                 Text = x.getCaseTypeParentPath(),
                 Value = x.Id.ToString(),
                 Disabled = x.IsActive == 0
-            }).ToList();
+            }).OrderBy(a => a.Text).ToList();
 
             var allProductAreas = _productAreaService.GetProductAreasForSetting(customerId, false);
             var availableProductAreas = allProductAreas.Where(p => p.ShowOnExtPageCases == 0).Select(x => new SelectListItem
@@ -81,14 +81,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Text = x.getProductAreaParentPath(),
                 Value = x.Id.ToString(),
                 Disabled = x.IsActive == 0
-            }).ToList();
+            }).OrderBy(a => a.Text).ToList();
 
             var selectedProductAreas = allProductAreas.Where(p => p.ShowOnExtPageCases == 1).Select(x => new SelectListItem
             {
                 Text = x.getProductAreaParentPath(),
                 Value = x.Id.ToString(),
                 Disabled = x.IsActive == 0
-            }).ToList();
+            }).OrderBy(a => a.Text).ToList();
 
             var selectedNum = 0;
             if (customer.ShowFAQOnExternalStartPage.HasValue)
@@ -124,6 +124,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var customerToSave = this._customerService.GetCustomer(id);
             customerToSave.PasswordRequiredOnExternalPage = vmodel.Customer.PasswordRequiredOnExternalPage;
             customerToSave.ShowBulletinBoardOnExtPage = vmodel.Customer.ShowBulletinBoardOnExtPage;
+            customerToSave.ShowCalenderOnExtPage = vmodel.Customer.ShowCalenderOnExtPage;
+            customerToSave.ShowOperationalLogOnExtPage = vmodel.Customer.ShowOperationalLogOnExtPage;
             customerToSave.ShowDashboardOnExternalPage = vmodel.Customer.ShowDashboardOnExternalPage;
             customerToSave.ShowFAQOnExternalPage = vmodel.Customer.ShowFAQOnExternalPage;
             customerToSave.ShowDocumentsOnExternalPage = vmodel.Customer.ShowDocumentsOnExternalPage;

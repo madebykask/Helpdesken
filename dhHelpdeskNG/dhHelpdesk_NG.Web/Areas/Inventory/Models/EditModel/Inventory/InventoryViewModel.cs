@@ -25,6 +25,8 @@
 
         public DateTime ChangeDate { get; set; }
 
+        public DateTime? SyncDate { get; set; }
+
         [IsId]
         public int InventoryTypeId { get; set; }
 

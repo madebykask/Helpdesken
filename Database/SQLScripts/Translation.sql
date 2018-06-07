@@ -6362,21 +6362,6 @@ If not exists (select * from tblTextTranslation where text_id = 1876 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1876, 2, 'Employee')
 GO
 
-
-If not exists (select * from tbltext where id = 1875)
-	insert into tbltext (id, TextString) VALUES (1875, 'Denna kategori kan inte aktiveras, eftersom huvudnivån är inaktiv')
-GO
-If not exists (select * from tblTextTranslation where text_id = 1875 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1875, 2, 'This category can not be activated, because the main level is inactive')
-GO
-
-If not exists (select * from tbltext where id = 1876)
-	insert into tbltext (id, TextString) VALUES (1876, 'Antal svar')
-GO
-If not exists (select * from tblTextTranslation where text_id = 1876 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1876, 2, 'Number of answers')
-GO
-
 If not exists (select * from tbltext where id = 1877)
 	insert into tbltext (id, TextString) VALUES (1877, 'Är du säker på att du vill ta bort aktuell FAQ')
 GO
@@ -7103,6 +7088,209 @@ GO
 If exists (select * from tblTextTranslation where text_id = 1955 and Language_Id = 2)
 	update tblTextTranslation set TextTranslation = 'Create new' where Text_Id = 1955
 GO
+
+if not exists (select * from tbltext where id = 1969)
+	insert into tbltext (id, TextString) values (1969, 'Sökväg')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1969 and Language_Id = 2)
+     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1969, 2, 'Path')
+GO
+
+If not exists (select * from tbltext where id = 1970)
+	insert into tbltext (id, TextString) VALUES (1970, 'Denna kategori kan inte aktiveras, eftersom huvudnivån är inaktiv')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1970 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1970, 2, 'This category can not be activated, because the main level is inactive')
+GO
+
+If not exists (select * from tbltext where id = 1971)
+	insert into tbltext (id, TextString) VALUES (1971, 'Antal svar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1971 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1971, 2, 'Number of answers')
+GO
+
+If not exists (select * from tbltext where id = 1972)
+	insert into tbltext (id, TextString) VALUES (1972, 'Integration - Anmälare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1972 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1972, 2, 'Integration - Initiator')
+GO
+
+If not exists (select * from tbltext where id = 1973)
+	insert into tbltext (id, TextString) VALUES (1973, 'Användaren har administratörsbehörighet till internt kontrakt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1973 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1973, 2, 'User has admin permission to Internal Contract')
+
+GO
+
+If not exists (select * from tbltext where id = 1974)
+	insert into tbltext (id, TextString) VALUES (1974, 'fältet är obligatoriskt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1974 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1974, 2, 'Field is required')
+
+GO
+
+If not exists (select * from tbltext where id = 1975)
+	insert into tbltext (id, TextString) VALUES (1975, 'Du måste ange ett svar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1975 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1975, 2, 'You have to type an answer')
+
+GO
+
+If not exists (select * from tbltext where id = 1976)
+	insert into tbltext (id, TextString) VALUES (1976, 'måste vara ett heltal')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1976 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1976, 2, 'must be an integer')
+
+GO
+
+If not exists (select * from tbltext where id = 1977)
+	insert into tbltext (id, TextString) VALUES (1977, 'Nytt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1977 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1977, 2, 'New')
+
+GO
+
+If not exists (select * from tbltext where id = 1978)
+	insert into tbltext (id, TextString) VALUES (1978, 'Favoriten körs och kan därför ej ändras')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1978 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1978, 2, 'The favorite is running and cannot be changed')
+GO
+
+If not exists (select * from tbltext where id = 1979)
+	insert into tbltext (id, TextString) VALUES (1979, 'före uppsägningsdatum')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1979 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1979, 2, 'before notice date')
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to close cases' WHERE Text_Id=1002 AND Language_Id=2;
+GO 
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to case templates' WHERE Text_Id=818 AND Language_Id=2;
+GO 
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to FAQ' WHERE Text_Id=1004 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to Calendar' WHERE Text_Id=1331 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Bulletin board' WHERE Text_Id=1017 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Document' WHERE Text_Id=1587 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Inventory' WHERE Text_Id=1598 AND Language_Id=2;
+GO
+
+update tbltext set TextString = 'Användaren har rättighet till avtal' where id = 1973
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to Contract' WHERE Text_Id=1973 AND Language_Id=2;
+GO
+
+update tbltext set TextString = 'Användaren har rättighet till aktuellt' where id = 1331
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to Calendar' WHERE Text_Id=1001 AND Language_Id=2;
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has permission to Invoice article' WHERE Text_Id=1724 AND Language_Id=2;
+GO
+
+update tbltext set TextString = 'Användaren har rättighet att administrera beställningar' where id = 701
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Orders' WHERE Text_Id=701 AND Language_Id=2;
+GO
+
+If not exists (select * from tbltext where id = 1980)
+	insert into tbltext (id, TextString) VALUES (1980, 'månadsvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1980 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1980, 2, 'monthly')
+GO
+
+If not exists (select * from tbltext where id = 1981)
+	insert into tbltext (id, TextString) VALUES (1981, 'kvartalsvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1981 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1981, 2, 'quarterly')
+GO
+
+If not exists (select * from tbltext where id = 1982)
+	insert into tbltext (id, TextString) VALUES (1982, 'tertialvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1982 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1982, 2, 'tertially')
+GO
+
+If not exists (select * from tbltext where id = 1983)
+	insert into tbltext (id, TextString) VALUES (1983, 'halvårsvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1983 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1983, 2, 'half yearly')
+GO
+
+If not exists (select * from tbltext where id = 1984)
+	insert into tbltext (id, TextString) VALUES (1984, 'årsvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1984 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1984, 2, 'yearly')
+GO
+
+If not exists (select * from tbltext where id = 1985)
+	insert into tbltext (id, TextString) VALUES (1985, 'Pågår')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1985 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1985, 2, 'Running')
+GO
+
+If not exists (select * from tbltext where id = 1988)
+	insert into tbltext (id, TextString) VALUES (1988, 'Användaren har rättighet till fakturering tid')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1988 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1988, 2, 'User has permission to Invoice time')
+GO
+
+If not exists (select * from tbltext where id = 1989)
+	insert into tbltext (id, TextString) VALUES (1989, 'Visa Driftlogg på startsidan')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1989 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1989, 2, 'Show Operational log on start page')
+GO
+
+If not exists (select * from tbltext where id = 1990)
+	insert into tbltext (id, TextString) VALUES (1990, 'Visa Aktuellt på startsidan')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1990 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1990, 2, 'Show Calendar on start page')
+GO
+
+If not exists (select * from tbltext where id = 1991)
+	insert into tbltext (id, TextString) VALUES (1991, 'Nytt lösenord kan inte vara samma som nuvarande lösenord')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1991 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1991, 2, 'New password shall not match existing password')
+GO
+
+update tbltext set TextString = 'Användaren har rättighet att administrera aktuellt' where id = 1331
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Calendar' WHERE Text_Id=1331 AND Language_Id=2;
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
+
+
 

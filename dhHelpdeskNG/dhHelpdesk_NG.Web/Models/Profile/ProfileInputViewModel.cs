@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.Profile
+﻿using DH.Helpdesk.Web.Models.Shared;
+
+namespace DH.Helpdesk.Web.Models.Profile
 {
     using System;
     using System.Collections.Generic;
@@ -9,17 +11,7 @@
     using DH.Helpdesk.BusinessData.Models.Users.Input;
     using DH.Helpdesk.Domain;
 
-    public class ChangeUserPasswordModel
-    {
-        public int UserId { get; set; }
 
-        public string NewPassword { get; set; }
-
-        public string ConfirmPassword { get; set; }
-
-        public User User { get; set; }
-    }
-    
     public class ProfileInputViewModel
     {
         private UserModulesViewModel modules = new UserModulesViewModel();
@@ -27,6 +19,8 @@
         private UserCustomersSettingsViewModel customersSettings = new UserCustomersSettingsViewModel();
 
         public User User { get; set; }
+
+        public ChangePasswordModel ChangePasswordModel { get; set; }
 
         public string ConfirmPassword { get; set; }
 

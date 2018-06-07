@@ -48,9 +48,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings
 
         public bool ShowInList { get; set; }
 
+        public bool? HideXml { get; set; }
+
+        #region Factory Methods
+
         public static InventoryFieldSettingModel GetDefault(int? propertySize, string caption)
         {
             return new InventoryFieldSettingModel(propertySize, caption);
         }
+
+        #endregion
     }
 }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
+using DH.Helpdesk.BusinessData.Models.Problem.Output;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+using DH.Helpdesk.BusinessData.Models.Projects.Output;
 using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.BusinessData.Models.Case.CaseHistory
@@ -111,6 +113,9 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseHistory
         public RegistrationSourceCustomerOverview RegistrationSourceCustomer { get; set; }
         public CaseTypeOverview  CaseType { get; set; }
         public ProductAreaOverview ProductArea { get; set; }
+        public ProblemOverview Problem { get; set; }
+        public ProjectOverview Project { get; set; }
+        public CausingPartOverview  CausingPart { get; set; }
         public UserBasicOvierview UserPerformer { get; set; }
         public UserBasicOvierview UserResponsible { get; set; }
         public PriorityOverview Priority { get; set; }

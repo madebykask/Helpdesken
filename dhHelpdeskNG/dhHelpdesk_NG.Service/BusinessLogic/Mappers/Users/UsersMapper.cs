@@ -87,8 +87,10 @@
                 StartPage = overview.StartPage,
                 DocumentPermission = overview.DocumentPermission,
                 InventoryPermission = overview.InventoryPermission,
+                ContractPermission = overview.ContractPermission,
                 CaseUnlockPermission = overview.CaseUnlockPermission,
-                CaseInternalLogPermission = overview.CaseInternalLogPermission
+                CaseInternalLogPermission = overview.CaseInternalLogPermission,
+                InvoiceTimePermission = overview.InvoiceTimePermission
             };
         }
 
@@ -119,6 +121,7 @@
                 user.BulletinBoardPermission,
                 user.DocumentPermission,
                 user.InventoryPermission,
+                user.ContractPermission,
                 user.SetPriorityPermission,
                 user.InvoicePermission,
                 user.DataSecurityPermission,
@@ -134,7 +137,8 @@
                 user.ShowCaseStatistics.ToBool(),
                 user.TimeZoneId,
                 user.UserGUID,
-                user.CaseInternalLogPermission
+                user.CaseInternalLogPermission,
+                user.InvoiceTimePermission
                 );
         }
 

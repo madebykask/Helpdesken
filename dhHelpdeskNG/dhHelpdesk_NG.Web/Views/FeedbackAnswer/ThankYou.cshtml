@@ -21,7 +21,19 @@
                     @Html.HiddenFor(m => m.LanguageId)
                     @Html.HiddenFor(m => m.QuestionId)
                     <br/>
-                    <a href="#" id="btnSaveComment" class="btn templateQuickButton"> Save </a>
+                    @if (Model.LanguageId == 1)
+                    {
+                        <a href="#" id="btnSaveComment" class="btn templateQuickButton"> Spara </a>
+                    }
+                    else if (Model.LanguageId == 2)
+                    {
+                        <a href="#" id="btnSaveComment" class="btn templateQuickButton"> Save </a>
+                    }
+                    else
+                    {
+                        <a href="#" id="btnSaveComment" class="btn templateQuickButton">@Translation.GetCoreTextTranslation("Spara")</a>
+                    }
+
                 </div>
             }
         }

@@ -2,6 +2,10 @@
 {
     public class EmailLogsOverview
     {
+        public EmailLogsOverview()
+        {
+        }
+
         public EmailLogsOverview(int id, int mailId, string emailAddress)
         {
             Id = id;
@@ -9,8 +13,8 @@
             EmailAddress = emailAddress;
         }
 
-        public int Id { get; }
-        public int MailId { get; }
-        public string EmailAddress { get; }
+        public int Id { get; set; }
+        public int MailId { get; set; }
+        public string EmailAddress { get; set; }
     }
 }

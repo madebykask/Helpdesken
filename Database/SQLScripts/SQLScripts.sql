@@ -1,343 +1,97 @@
-﻿--update DB from 5.3.35 to 5.3.36 version
+﻿--update DB from 5.3.36 to 5.3.37 version
 
-
-
- 
--- DROP Foreign key FK_tblCaseFile_tblUser
-
-IF NOT EXISTS (
-    SELECT *
-    FROM sys.indexes AS si
-    JOIN sys.objects AS so on si.object_id=so.object_id
-    JOIN sys.schemas AS sc on so.schema_id=sc.schema_id
-    WHERE 
-        sc.name='dbo' /* Schema */
-        AND so.name ='tblEMailLog' /* Table */
-        AND si.name='FK_tblCaseHistory' /* Index */)
-BEGIN
-	RAISERROR('Create index tblEMailLog.CaseHistory_Id', 10, 1) WITH NOWAIT
-	CREATE NONCLUSTERED INDEX [FK_tblCaseHistory] ON [dbo].[tblEMailLog]
-	(
-		[CaseHistory_Id] ASC
-	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
-END
+-- New field in tblSettings
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IntegrationType' and sysobjects.name = N'tblSettings')
+   ALTER TABLE tblSettings ADD IntegrationType int NOT NULL Default(1)
 GO
 
-RAISERROR('Foreign key tblProject_tblUsers_ProjectManager', 10, 1) WITH NOWAIT
-IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblProject_tblUsers') AND type = 'F')
-BEGIN
-	ALTER TABLE [dbo].[tblProject] WITH NOCHECK 
-	ADD CONSTRAINT [FK_tblProject_tblUsers] FOREIGN KEY ([ProjectManager]) REFERENCES [dbo].[tblUsers] ([Id]);
-END
+-- Add tblRegion to FTS catalog
+IF EXISTS (SELECT * FROM sys.fulltext_indexes fti WHERE fti.object_id = OBJECT_ID(N'[dbo].[tblRegion]'))
+	DROP FULLTEXT INDEX ON [dbo].[tblRegion]
 GO
 
-RAISERROR ('Update column InventoryNumber on table tblCase', 10, 1) WITH NOWAIT
-IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'InventoryNumber' and sysobjects.name = N'tblCase')
-BEGIN
-	ALTER FULLTEXT INDEX ON [dbo].[tblCase] DROP ([InventoryNumber])
-    ALTER TABLE [dbo].[tblCase]
-	ALTER COLUMN [InventoryNumber] nvarchar(60)
-	ALTER FULLTEXT INDEX ON [dbo].[tblCase] ADD ([InventoryNumber])
-END
-
--- set NOCHECK constraint for Foreign Key FK_tblQuestionnaireCircularParticipant_tblCase
-IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblQuestionnaireCircularParticipant_tblCase') AND type = 'F')
-BEGIN    
-    ALTER TABLE [dbo].[tblQuestionnaireCircularPart] NOCHECK CONSTRAINT [FK_tblQuestionnaireCircularParticipant_tblCase]
-END
-GO
- 
--- DROP Foreign key FK_tblCaseFile_tblUser
-IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblCaseFile_tblUser') AND type = 'F')
-BEGIN    
-    ALTER TABLE [dbo].[tblCaseFile] DROP CONSTRAINT [FK_tblCaseFile_tblUser]
-END
-GO  
-
-
-
-RAISERROR('Foreign key tblProject_tblUsers_ProjectManager', 10, 1) WITH NOWAIT
-IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblProject_tblUsers') AND type = 'F')
-BEGIN
-	ALTER TABLE [dbo].[tblProject] WITH NOCHECK 
-	ADD CONSTRAINT [FK_tblProject_tblUsers] FOREIGN KEY ([ProjectManager]) REFERENCES [dbo].[tblUsers] ([Id]);
-END
+CREATE FULLTEXT INDEX ON [dbo].[tblRegion] (Region)  
+    KEY INDEX [PK_tblRegion]
+ON SearchCasesFTS  
+WITH STOPLIST = SYSTEM
 GO
 
-RAISERROR ('Update column InventoryNumber on table tblCaseHistory', 10, 1) WITH NOWAIT
-IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'InventoryNumber' and sysobjects.name = N'tblCaseHistory')
-BEGIN
-    ALTER TABLE [dbo].[tblCaseHistory]
-	ALTER COLUMN [InventoryNumber] nvarchar(60)
-END
-GO
-
-RAISERROR ('Update column ComputerName on table tblComputer', 10, 1) WITH NOWAIT
-IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'ComputerName' and sysobjects.name = N'tblComputer')
-BEGIN
-    ALTER TABLE [dbo].[tblComputer]
-	ALTER COLUMN [ComputerName] nvarchar(60) NOT NULL
-END
-GO
-
-RAISERROR ('Update column PrinterName on table tblPrinter', 10, 1) WITH NOWAIT
-IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'PrinterName' and sysobjects.name = N'tblPrinter')
-BEGIN
-    ALTER TABLE [dbo].[tblPrinter]
-	ALTER COLUMN [PrinterName] nvarchar(60) NOT NULL
-END
-GO
-
-RAISERROR ('Update column ServerName on table tblServer', 10, 1) WITH NOWAIT
-IF EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'ServerName' and sysobjects.name = N'tblServer')
-BEGIN
-    ALTER TABLE [dbo].[tblServer]
-	ALTER COLUMN [ServerName] nvarchar(60) NOT NULL
-END
-GO
-
--- AllowMoveCaseToAnyCustomer
-RAISERROR ('Add column AllowMoveCaseToAnyCustomer to tblSettings', 10, 1) WITH NOWAIT
-IF not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id  where syscolumns.name = N'AllowMoveCaseToAnyCustomer' and	 sysobjects.name = N'tblSettings')
-BEGIN
-    -- add column
-    ALTER TABLE [dbo].[tblSettings] ADD AllowMoveCaseToAnyCustomer bit NOT NULL DEFAULT(0)
-END
-
--- GDPR Privacy Access table
-RAISERROR('Create table tblGDPRDataPrivacyAccess', 10, 1) WITH NOWAIT
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblGDPRDataPrivacyAccess' AND type='U')
-BEGIN
-
-    CREATE TABLE dbo.tblGDPRDataPrivacyAccess(
-	    [Id] int IDENTITY(1,1) NOT NULL,
-	    [User_Id] int NULL,
-	    [CreatedDate] datetime NOT NULL,
-	CONSTRAINT PK_tblGDPRDataPrivacyAccess PRIMARY KEY CLUSTERED (Id ASC) ON [PRIMARY]
-    ) ON [PRIMARY]
-
-    -- CreatedDate default value
-    ALTER TABLE dbo.tblGDPRDataPrivacyAccess 
-    ADD CONSTRAINT DF_tblGDPRDataPrivacyAccess_CreatedDate DEFAULT (getdate()) FOR CreatedDate
-
-    -- FK: Users
-    ALTER TABLE dbo.tblGDPRDataPrivacyAccess WITH NOCHECK 
-    ADD CONSTRAINT FK_tblGDPRDataPrivacyAccess_tblUsers FOREIGN KEY(User_Id) REFERENCES dbo.tblUsers (Id)
-
-END
-GO
-
-RAISERROR('Create table tblGDPROperationsAudit', 10, 1) WITH NOWAIT
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblGDPROperationsAudit' AND type='U')
-BEGIN
-
-    CREATE TABLE [dbo].[tblGDPROperationsAudit](
-	    [Id] [int] IDENTITY(1,1) NOT NULL,
-	    [User_Id] [int] NOT NULL,
-	    [Operation] [nvarchar](50) NOT NULL,
-	    [Parameters] [nvarchar](max) NULL,
-	    [Result] [nvarchar](max) NULL,
-	    [Url] [nvarchar](256) NOT NULL,
-	    [Application] [nvarchar](50) NOT NULL,
-	    [Success] [bit] NOT NULL,
-	    [Error] [nvarchar](max) NULL,
-	    [CreatedDate] [datetime] NOT NULL CONSTRAINT [DF_tblGDPROperationsAudit_CreatedDate]  DEFAULT (getdate()),
-	CONSTRAINT [PK_tblGDPROperationsAudit] PRIMARY KEY CLUSTERED ([Id] ASC) ON [PRIMARY]
-    ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-    ALTER TABLE [dbo].[tblGDPROperationsAudit]  WITH CHECK 
-    ADD CONSTRAINT [FK_tblGDPROperationsAudit_tblUsers] FOREIGN KEY([User_Id]) REFERENCES [dbo].[tblUsers] ([Id])	 
-
-    ALTER TABLE [dbo].[tblGDPROperationsAudit] CHECK CONSTRAINT [FK_tblGDPROperationsAudit_tblUsers]
-
-END
-GO
-
-RAISERROR('Create table tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblGDPRDataPrivacyFavorite' AND type='U')
-BEGIN
-   CREATE TABLE [dbo].[tblGDPRDataPrivacyFavorite](
-	    [Id] [int] IDENTITY(1,1) NOT NULL,
-	    [Name] [nvarchar](256) NOT NULL,
-	    [CustomerId] [int] NOT NULL,
-	    [RetentionPeriod] [int] NOT NULL,
-	    [CalculateRegistrationDate] [bit] NOT NULL,
-	    [RegisterDateFrom] [datetime] NOT NULL,
-	    [RegisterDateTo] [datetime] NOT NULL,
-	    [ClosedOnly] [bit] NOT NULL,
-	    [FieldsNames] [nvarchar](1024) NOT NULL,
-	    [ReplaceDataWith] [nvarchar](256) NOT NULL,
-	    [ReplaceDatesWith] [datetime] NULL,
-	    [RemoveCaseAttachments] [bit] NOT NULL,
-	    [RemoveLogAttachments] [bit] NOT NULL,
-	    CONSTRAINT [PK_tblGDPRDataPrivacyFavorite] PRIMARY KEY CLUSTERED 
-	   (
-		   [Id] ASC
-	   ) ON [PRIMARY]
-    ) ON [PRIMARY]
-END
-GO
-
---SPINT 11: 
-RAISERROR('Add Customer_Id column to tblGDPROperationsAudit', 10, 1) WITH NOWAIT
-IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Customer_Id' and sysobjects.name = N'tblGDPROperationsAudit')
-BEGIN
-    ALTER TABLE tblGDPROperationsAudit
-    ADD Customer_Id int NULL 
-END
-GO
-
-RAISERROR('Add FK_tblGDPROperationsAudit_tblCustomer FK to tblGDPROperationsAudit', 10, 1) WITH NOWAIT
-IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblGDPROperationsAudit_tblCustomer') AND type = 'F')
-BEGIN
-    ALTER TABLE [dbo].[tblGDPROperationsAudit]  WITH CHECK 
-    ADD CONSTRAINT [FK_tblGDPROperationsAudit_tblCustomer] FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
-END
-
-RAISERROR('Add ReplaceEmails column to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
-IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ReplaceEmails' and sysobjects.name = N'tblGDPRDataPrivacyFavorite')
-BEGIN
-    ALTER TABLE tblGDPRDataPrivacyFavorite
-    ADD ReplaceEmails bit NOT NULL DEFAULT(1)
-END
-GO
-
-RAISERROR('Add InvoiceChargeType column to tblDepartment', 10, 1) WITH NOWAIT
-IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InvoiceChargeType' and sysobjects.name = N'tblDepartment')
-BEGIN
-    ALTER TABLE [dbo].[tblDepartment]
-    ADD InvoiceChargeType INT NOT NULL DEFAULT(0)
-END
-GO
-
-RAISERROR('Add Changed/Created columns to tblGDPRDataPrivacyFavorite', 10, 1) WITH NOWAIT
-IF NOT EXISTS (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ChangedByUser_Id' and sysobjects.name = N'tblGDPRDataPrivacyFavorite')
-BEGIN
-    
-    ALTER TABLE tblGDPRDataPrivacyFavorite
-    ADD [CreatedDate] [datetime] NULL
-
-    ALTER TABLE tblGDPRDataPrivacyFavorite
-    ADD [CreatedByUser_Id] [int] NULL
-          
-    ALTER TABLE tblGDPRDataPrivacyFavorite
-    ADD [ChangedDate] [datetime] NULL	
-          
-    ALTER TABLE tblGDPRDataPrivacyFavorite
-    ADD [ChangedByUser_Id] [int] NULL    
-
-    ALTER TABLE [dbo].[tblGDPRDataPrivacyFavorite] ADD  CONSTRAINT [DF_tblGDPRDataPrivacyFavorite_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
-    ALTER TABLE [dbo].[tblGDPRDataPrivacyFavorite] ADD  CONSTRAINT [DF_tblGDPRDataPrivacyFavorite_ChangedDate]  DEFAULT (getdate()) FOR [ChangedDate]
-END
-GO
-
-
--- Search fix
--- .176
-RAISERROR('Creating index IX_tblCase_Customer', 10, 1) WITH NOWAIT
-if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer')
-	DROP INDEX [IX_tblCase_Customer] ON [dbo].[tblCase]
-GO
-CREATE NONCLUSTERED INDEX [IX_tblCase_Customer] ON [dbo].[tblCase]
-(
-	[Customer_Id] ASC
-)
-INCLUDE ( 	[Id]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-
-RAISERROR('Creating index IX_tblCase_Customer_Department', 10, 1) WITH NOWAIT
-if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Department')
-	DROP INDEX [IX_tblCase_Customer_Department] ON [dbo].[tblCase]
-GO
-CREATE NONCLUSTERED INDEX [IX_tblCase_Customer_Department] ON [dbo].[tblCase]
-(
-	[Customer_Id] ASC
-)
-INCLUDE ( 	[Id],
-	[Department_Id]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-GO
-
-
-RAISERROR('Creating index IX_tblCase_Customer_Id', 10, 1) WITH NOWAIT
+-- IX_tblCase_Customer_Id: recreate to add new columns to index - Region_Id, User_Id
 if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id')
 	DROP INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
 GO
-CREATE NONCLUSTERED INDEX [IX_tblCase_Customer_Id] ON [dbo].[tblCase]
-(
-	[Customer_Id] ASC,
-	[FinishingDate] ASC,
-	[WorkingGroup_Id] ASC,
-	[Deleted] ASC,
-	[Department_Id] ASC,
-	[Id] ASC,
-	[RegTime] ASC
-)
-INCLUDE ( 	[Casenumber],
-	[Place],
-	[UserCode]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-	
-RAISERROR('Creating index IX_tblCase_Id_DepartmentId', 10, 1) WITH NOWAIT
-if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Id_DepartmentId')
-	DROP INDEX [IX_tblCase_Id_DepartmentId] ON [dbo].[tblCase]
-GO	
-/****** Object:  Index [IX_tblCase_Id_DepartmentId]    Script Date: 2018-03-20 12:46:29 ******/
-CREATE NONCLUSTERED INDEX [IX_tblCase_Id_DepartmentId] ON [dbo].[tblCase]
-(
-	[Id] ASC,
-	[Department_Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+if not exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCase_Customer_Id')
+	CREATE NONCLUSTERED INDEX [IX_tblCase_Customer_Id] 
+	   ON [dbo].[tblCase] (
+		   [Customer_Id] ASC,		  
+		   [Region_Id] ASC,
+		   [Department_Id] ASC,
+		   [User_Id] ASC,
+		   [WorkingGroup_Id] ASC,
+		   [FinishingDate] ASC,		   
+		   [Deleted] ASC,
+		   [RegTime] ASC)
+	   INCLUDE (
+		  [Id],
+		  [Casenumber],
+		  [Place],
+		  [UserCode]) 
 GO
 
-RAISERROR('Creating index IX_tblCustomer_new', 10, 1) WITH NOWAIT
-if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblCustomer_new')
-	DROP INDEX [IX_tblCustomer_new] ON [dbo].[tblCustomer]
-GO	
-/****** Object:  Index [IX_tblCustomer_new]    Script Date: 2018-03-20 12:42:18 ******/
-CREATE NONCLUSTERED INDEX [IX_tblCustomer_new] ON [dbo].[tblCustomer]
-(
-	[Id] ASC,
-	[Name] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 95) ON [PRIMARY]
+
+RAISERROR ('Adding column AddFollowersBtn on table tblCaseSolution', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'AddFollowersBtn' and sysobjects.name = N'tblCaseSolution')
+   ALTER TABLE tblCaseSolution ADD AddFollowersBtn bit NULL
+
+   INSERT INTO tblCaseSolutionFieldSettings (CaseSolution_Id, FieldName_Id, Mode, CreatedDate, ChangedDate)
+		SELECT cs2.CaseSolution_Id, 67, cs2.Mode, GETDATE(), GETDATE()		
+		FROM tblCaseSolutionFieldSettings as cs2
+		LEFT JOIN tblCaseSolutionFieldSettings as cs1 on cs2.CaseSolution_Id = cs1.CaseSolution_Id AND cs1.FieldName_Id = 67
+		WHERE cs2.FieldName_Id = 17 AND cs1.FieldName_Id is NULL
 GO
 
-RAISERROR('Creating index IX_tblDepartment_new', 10, 1) WITH NOWAIT
-if exists (SELECT name FROM sysindexes WHERE name = 'IX_tblDepartment_new')
-	DROP INDEX [IX_tblDepartment_new] ON [dbo].[tblDepartment]
-GO	
-/****** Object:  Index [IX_tblDepartment_new]    Script Date: 2018-03-20 13:06:57 ******/
-CREATE NONCLUSTERED INDEX [IX_tblDepartment_new] ON [dbo].[tblDepartment]
-(
-	[Id] ASC,
-	[DepartmentId] ASC,
-	[Department] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+RAISERROR ('Adding column SyncChangedDate on table tblPrinter', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'SyncChangedDate' and sysobjects.name = N'tblPrinter')
+   ALTER TABLE dbo.tblPrinter ADD SyncChangedDate datetime NULL
 GO
 
---GDPR Audit table chagnes
-RAISERROR ('Add column Status on table tblGDPROperationsAudit', 10, 1) WITH NOWAIT
-IF NOT EXISTS (select 1 from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'Status' and sysobjects.name = N'tblGDPROperationsAudit')
-BEGIN 
-	 DECLARE @cmd nvarchar(1000)
+---------------------------------------------------------------
+-- Adding new SyncChangedDate field settings in InventoryTypes 
+---------------------------------------------------------------
+RAISERROR ('Adding SyncChangedDate field settings for InventoryTypes', 10, 1) WITH NOWAIT
+DECLARE @CustomInventoryTypes TABLE (Id int) 
+DECLARE @inventoryTypeId int = 0,
+	   @itemsCount int = 0
 
-	 -- add status: 1 - Running, 2 - Complete
-	 ALTER TABLE [dbo].[tblGDPROperationsAudit]
-	 ADD [Status] int NULL
+-- fill temp table with inventory types that don't have SyncDate field settings
+INSERT INTO @CustomInventoryTypes(Id)
+select inv.Id
+from tblInventoryType inv 
+  LEFT JOIN tblInventoryTypeProperty inv_p on inv_p.InventoryType_Id = inv.Id AND PropertyType = -15
+WHERE inv_p.Id IS NULL
 
-	 SET @cmd = N'UPDATE tblGDPROperationsAudit SET [Status] = 2' 
-	 exec (@cmd)
-	 
-	 SET @cmd = N'ALTER TABLE tblGDPROperationsAudit ALTER COLUMN [Status] int NOT NULL' 	 
-	 exec (@cmd)	 
+SET @itemsCount = ISNULL((SELECT Count(*) from @CustomInventoryTypes),0)
+
+-- add new SyncDate field settings for each inventory type
+while (@itemsCount > 0)
+BEGIN
+    SELECT TOP 1 @inventoryTypeId = Id FROM @CustomInventoryTypes
+
+    IF (NOT EXISTS(SELECT * FROM tblInventoryTypeProperty WHERE InventoryType_Id = @inventoryTypeId AND PropertyType = -15))
+    BEGIN	   
+	   --select @inventoryTypeId, NULL, 'Synkroniserad datum', 0, '', -15, 1000, 0,  0, 0, NULL, 0, GETDATE(), GETDATE()
+	   INSERT INTO dbo.tblInventoryTypeProperty (InventoryType_Id, InventoryTypeGroup_Id, PropertyValue, PropertyPos, PropertyDefault, PropertyType, PropertySize, ShowInList,  Show, [ReadOnly], XMLTag, [Unique], ChangedDate, CreatedDate)
+	   VALUES (@inventoryTypeId, NULL, 'Synkroniserad datum', 0, '', -15, 1000, 0,  0, 0, NULL, 0, GETDATE(), GETDATE())
+    END
+
+    DELETE FROM @CustomInventoryTypes WHERE Id = @inventoryTypeId
+    SET @itemsCount = ISNULL((SELECT Count(*) from @CustomInventoryTypes),0)
 END
-GO
+------------------------------------------------------------
 
--- Performance log controls 
+
+---------------------------------------------------------------------------------
+
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
                where syscolumns.name = N'PerformanceLogActive' and sysobjects.name = N'tblGlobalSettings')
 BEGIN
@@ -347,10 +101,131 @@ BEGIN
 		[PerformanceLogSettingsCache] INT NOT NULL DEFAULT(0);
 END
 
+--tblCustomerUser
+ALTER TABLE tblCustomerUser
+ALTER COLUMN CaseRegionFilter NVARCHAR(100)
 
+RAISERROR ('Adding ContractPermission field settings for tblUsers', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ContractPermission' and sysobjects.name = N'tblUsers')
+BEGIN
+   ALTER TABLE tblUsers ADD ContractPermission INT NOT NULL Default(0)  
+END
+GO
+
+RAISERROR ('Updating ContractPermission field settings data for tblUsers', 10, 1) WITH NOWAIT
+UPDATE tblUsers set ContractPermission = 1
+   where UserGroup_Id in (Select Id from tblUsergroups where UserGroup = N'Administratör')
+GO
+
+-- tblGDPRTask
+RAISERROR ('Create table tblGDPRTask', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblGDPRTask' AND type='U')
+BEGIN
+    CREATE TABLE [dbo].[tblGDPRTask](
+	    [Id] [int] IDENTITY(1,1) NOT NULL,
+	    [CustomerId] [int] NOT NULL,
+	    [UserId] [int] NOT NULL,
+	    [FavoriteId] [int] NOT NULL,
+	    [Status] [int] NOT NULL,
+	    [AddedDate] [datetime] NOT NULL CONSTRAINT [DF_tblGDPRTask_AddedDate]  DEFAULT (getdate()),
+	    [Progress] [int] NOT NULL,
+	    [StartedAt] [datetime] NULL,
+	    [EndedAt] [datetime] NULL,
+	    [Success] [bit] NOT NULL CONSTRAINT [DF_tblGDPRTask_Success]  DEFAULT ((0)),
+	    [Error] [nvarchar](512) NULL,
+	CONSTRAINT [PK_tblGDPRTask] PRIMARY KEY CLUSTERED 
+    (
+	    [Id] ASC
+    ) ON [PRIMARY]
+    ) ON [PRIMARY]
+
+    ALTER TABLE [dbo].[tblGDPRTask]  WITH NOCHECK ADD  CONSTRAINT [FK_tblGDPRTask_tblCustomer] FOREIGN KEY([CustomerId])
+    REFERENCES [dbo].[tblCustomer] ([Id])
+    
+    ALTER TABLE [dbo].[tblGDPRTask]  WITH NOCHECK ADD  CONSTRAINT [FK_tblGDPRTask_tblGDPRDataPrivacyFavorite] FOREIGN KEY([FavoriteId])
+    REFERENCES [dbo].[tblGDPRDataPrivacyFavorite] ([Id])
+
+    ALTER TABLE [dbo].[tblGDPRTask]  WITH NOCHECK ADD  CONSTRAINT [FK_tblGDPRTask_tblUsers] FOREIGN KEY([UserId])
+    REFERENCES [dbo].[tblUsers] ([Id])
+END
+GO
+
+RAISERROR('DROP Status column in [dbo].[tblGDPROperationsAudit]', 10, 1) WITH NOWAIT
+IF EXISTS (select 1 from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+           where syscolumns.name = N'Status' and sysobjects.name = N'tblGDPROperationsAudit')
+BEGIN
+     ALTER TABLE tblGDPROperationsAudit DROP COLUMN [Status]    
+END
+GO
+
+RAISERROR('DROP Url column in [dbo].[tblGDPROperationsAudit]', 10, 1) WITH NOWAIT
+IF EXISTS (select 1 from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+           where syscolumns.name = N'Url' and sysobjects.name = N'tblGDPROperationsAudit')
+BEGIN
+     ALTER TABLE tblGDPROperationsAudit DROP COLUMN [Url]    
+END
+GO
+
+RAISERROR('Add Files column in [dbo].[tblContractHistory]', 10, 1) WITH NOWAIT
+IF NOT EXISTS (select 1 from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'Files' and sysobjects.name = N'tblContractHistory')
+BEGIN
+     ALTER TABLE tblContractHistory
+     ADD Files nvarchar(1024) NULL
+END
+GO 
+
+RAISERROR ('Adding column ShowCalenderOnExtPage on table tblCustomer', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowCalenderOnExtPage' and sysobjects.name = N'tblCustomer')
+BEGIN
+   ALTER TABLE dbo.tblCustomer ADD ShowCalenderOnExtPage INT NOT NULL  Default(0)
+END
+GO
+
+RAISERROR ('Adding column ShowOperationalLogOnExtPage on table tblCustomer', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowOperationalLogOnExtPage' and sysobjects.name = N'tblCustomer')
+BEGIN
+   ALTER TABLE dbo.tblCustomer ADD ShowOperationalLogOnExtPage INT NOT NULL  Default(0)
+END
+GO
+
+
+-- New field in tblusers
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InvoiceTimePermission' and sysobjects.name = N'tblUsers')
+   ALTER TABLE tblUsers ADD InvoiceTimePermission int NOT NULL Default(0)
+GO
+
+RAISERROR ('Updating InvoiceTimePermission field settings data for tblUsers', 10, 1) WITH NOWAIT
+UPDATE tblUsers set InvoiceTimePermission = 1
+   where UserGroup_Id in (Select Id from tblUsergroups where UserGroup = N'Administratör' or UserGroup = N'Kundadministratör' )
+GO
+
+--Alter table Global settings
+IF COLUMNPROPERTY(OBJECT_ID('tblGlobalSettings', 'U'), 'AttachedFileFolder', 'AllowsNull')= 0
+BEGIN
+    ALTER TABLE [tblGlobalSettings]
+        ALTER COLUMN [AttachedFileFolder] Nvarchar(200) NOT NULL
+END
+ELSE 
+BEGIN       
+    ALTER TABLE [tblGlobalSettings]
+        ALTER COLUMN [AttachedFileFolder] Nvarchar(200) NULL
+END
+
+--Alter table Global settings
+IF COLUMNPROPERTY(OBJECT_ID('tblGlobalSettings', 'U'), 'SMTPServer', 'AllowsNull')= 0
+BEGIN
+    ALTER TABLE [tblGlobalSettings]
+        ALTER COLUMN [SMTPServer] Nvarchar(50) NOT NULL
+END
+ELSE 
+BEGIN       
+    ALTER TABLE [tblGlobalSettings]
+        ALTER COLUMN [SMTPServer] Nvarchar(50) NULL
+END
 
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.36'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.37'
 --ROLLBACK --TMP
 
 

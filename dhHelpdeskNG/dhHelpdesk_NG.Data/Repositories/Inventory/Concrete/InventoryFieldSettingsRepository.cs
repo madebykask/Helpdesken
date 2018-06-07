@@ -52,6 +52,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.Info, businessModel.DefaultSettings.InfoFieldSetting, businessModel.CreatedDate, this.DbSet);
             AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.CreatedDate, businessModel.DefaultSettings.CreatedDateFieldSetting, businessModel.CreatedDate, this.DbSet);
             AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.ChangedDate, businessModel.DefaultSettings.ChangedDateFieldSetting, businessModel.CreatedDate, this.DbSet);
+            AddFieldSetting(businessModel.InventoryTypeId, InventoryFields.SyncDate, businessModel.DefaultSettings.SyncDateFieldSetting, businessModel.CreatedDate, this.DbSet);
         }
 
         public void Update(InventoryFieldSettings businessModel)
@@ -72,6 +73,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             MapFieldSetting(businessModel.DefaultSettings.InfoFieldSetting, fieldSettingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)), businessModel.ChangedDate);
             MapFieldSetting(businessModel.DefaultSettings.CreatedDateFieldSetting, fieldSettingCollection.FindByName(InventoryFields.CreatedDate.ToString(CultureInfo.InvariantCulture)), businessModel.ChangedDate);
             MapFieldSetting(businessModel.DefaultSettings.ChangedDateFieldSetting, fieldSettingCollection.FindByName(InventoryFields.ChangedDate.ToString(CultureInfo.InvariantCulture)), businessModel.ChangedDate);
+            MapFieldSetting(businessModel.DefaultSettings.SyncDateFieldSetting, fieldSettingCollection.FindByName(InventoryFields.SyncDate.ToString(CultureInfo.InvariantCulture)), businessModel.ChangedDate);
         }
 
         public InventoryFieldSettings GetFieldSettingsForEdit(int inventoryTypeId)
@@ -108,6 +110,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var info = CreateFieldSetting(settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
             var createdDate = CreateFieldSetting(settingCollection.FindByName(InventoryFields.CreatedDate.ToString(CultureInfo.InvariantCulture)));
             var changedDate = CreateFieldSetting(settingCollection.FindByName(InventoryFields.ChangedDate.ToString(CultureInfo.InvariantCulture)));
+            var syncDate = CreateFieldSetting(settingCollection.FindByName(InventoryFields.SyncDate.ToString(CultureInfo.InvariantCulture)));
 
             var settingAgregate = InventoryFieldSettings.CreateForEdit(
                     new BusinessData.Models.Inventory.Edit.Settings.InventorySettings.DefaultFieldSettings(
@@ -123,7 +126,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         workstation,
                         info,
                         createdDate,
-                        changedDate));
+                        changedDate,
+                        syncDate));
 
             return settingAgregate;
         }
@@ -164,6 +168,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var place = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.Place.ToString(CultureInfo.InvariantCulture)));
             var workstation = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.Workstation.ToString(CultureInfo.InvariantCulture)));
             var info = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
+            var createdDate = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.CreatedDate.ToString(CultureInfo.InvariantCulture)));
+            var changedDate = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.ChangedDate.ToString(CultureInfo.InvariantCulture)));
+            var syncDate = CreateFieldSettingForModelEdit(settingCollection.FindByName(InventoryFields.SyncDate.ToString(CultureInfo.InvariantCulture)));
 
             var settingAgregate = new InventoryFieldSettingsForModelEdit(
                     new BusinessData.Models.Inventory.Output.Settings.ModelEdit.InventorySettings.DefaultFieldSettings(
@@ -177,7 +184,10 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         purchaseDate,
                         place,
                         workstation,
-                        info));
+                        info,
+                        createdDate,
+                        changedDate,
+                        syncDate));
 
             return settingAgregate;
         }
@@ -351,6 +361,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var info = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.Info.ToString(CultureInfo.InvariantCulture)));
             var createdDate = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.CreatedDate.ToString(CultureInfo.InvariantCulture)));
             var changedDate = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.ChangedDate.ToString(CultureInfo.InvariantCulture)));
+            var syncDate = CreateFieldSettingOverview(settingCollection.FindByName(InventoryFields.SyncDate.ToString(CultureInfo.InvariantCulture)));
 
             var settingAgregate =
                     new BusinessData.Models.Inventory.Output.Settings.ModelOverview.InventoryFieldSettings.DefaultFieldSettings(
@@ -366,7 +377,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                         workstation,
                         info,
                         createdDate,
-                        changedDate);
+                        changedDate,
+                        syncDate);
 
             return new InventoryFieldSettingsOverview(settingAgregate);
         }

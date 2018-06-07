@@ -250,6 +250,7 @@ FilterForm.prototype.init = function (opt) {
         favoriteId = me.$myFavorites.attr("selectedItem");
     }
     me.setMyFavorites(favoriteId);
+
 };
 
 /**

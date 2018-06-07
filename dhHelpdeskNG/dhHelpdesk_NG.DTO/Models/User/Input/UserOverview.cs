@@ -35,6 +35,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             int bulletinBoardPermission,
             int documentPermission,
             int inventoryPermission,
+            int contractPermission,
             int setPriorityPermission,
             int invoicePermission,
             int dataSecurityPermission,
@@ -50,7 +51,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             bool showCaseStatistics,
             string timeZoneId,
             Guid? userGuid,
-            int caseInternalLogPermission)
+            int caseInternalLogPermission,
+            int invoiceTimePermission)
         {
             this.StartPage = startPage;
             this.Id = id;
@@ -77,6 +79,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.BulletinBoardPermission = bulletinBoardPermission;
             this.DocumentPermission = documentPermission;
             this.InventoryPermission = inventoryPermission;
+            this.ContractPermission = contractPermission;
             this.SetPriorityPermission = setPriorityPermission;
             this.InvoicePermission = invoicePermission;
             this.DataSecurityPermission = dataSecurityPermission;
@@ -92,6 +95,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.TimeZoneId = timeZoneId;
             this.UserGUID = userGuid;
             this.CaseInternalLogPermission = caseInternalLogPermission;
+            this.InvoiceTimePermission = invoiceTimePermission;
         }
 
         [IsId]
@@ -178,9 +182,12 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
 
         public int InventoryPermission { get; set; }
 
+        public int ContractPermission { get; set; }
+
         public int CaseUnlockPermission { get; set; }
 
         public int CaseInternalLogPermission { get; set; }
+        public int InvoiceTimePermission { get; set; }
 
         public bool IsAdministrator()
         {

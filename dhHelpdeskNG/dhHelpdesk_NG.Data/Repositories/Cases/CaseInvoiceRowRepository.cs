@@ -38,7 +38,9 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 								a.InvoicePrice = b.InvoicePrice;
 							}
 						});
-		}
+
+		    Commit();
+        }
 
 	    public void UpdateExternalInvoiceValues(List<CaseInvoiceRow> rows)
 	    {

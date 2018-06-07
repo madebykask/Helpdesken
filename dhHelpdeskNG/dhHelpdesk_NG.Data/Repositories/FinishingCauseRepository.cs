@@ -9,9 +9,10 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
 
-	#region FINISHINGCAUSE
 	using System.Linq.Expressions;
 	using System;
+
+	#region FINISHINGCAUSE
 
 	public interface IFinishingCauseRepository : IRepository<FinishingCause>
     {

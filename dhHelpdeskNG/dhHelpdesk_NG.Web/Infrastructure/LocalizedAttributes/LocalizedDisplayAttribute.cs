@@ -14,7 +14,7 @@
         {
             get
             {
-                return Translation.Get(this.DisplayNameValue, Enums.TranslationSource.TextTranslation);
+                return Translation.GetCoreTextTranslation(this.DisplayNameValue);
             }
         }
     }

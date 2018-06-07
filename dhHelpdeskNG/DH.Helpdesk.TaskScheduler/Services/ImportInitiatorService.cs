@@ -14,8 +14,8 @@ using System.Configuration;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.TaskScheduler.Enums;
 using System.ComponentModel.DataAnnotations;
-using DH.Helpdesk.TaskScheduler.Helper;
 using System.Threading;
+using DH.Helpdesk.TaskScheduler.Helpers;
 
 namespace DH.Helpdesk.TaskScheduler.Services
 {
@@ -95,30 +95,31 @@ namespace DH.Helpdesk.TaskScheduler.Services
         }
 
         public IList<ImportInitiator_JobSettings> GetJobSettings(ref DataLogModel logs)
-        {           
-            var customers = _customerRepository.GetMany(c => !string.IsNullOrEmpty(c.NDSPath) && c.NDSPath == "CSV").ToList();
-            var customerIds = customers.Select(c=> c.Id).ToArray();
+        {                       
+            var CSVcustomers = _settingRepository.GetMany(c => c.IntegrationType == 0).ToList();
+            var customerIds = CSVcustomers.Select(c=> c.Customer_Id).ToArray();
             var customerSettings = _settingRepository.GetMany(c => customerIds.Contains(c.Customer_Id)).ToList();
                         
             var ret = new List<ImportInitiator_JobSettings>();
-            if (customers != null)
+            if (CSVcustomers != null)
             {
-                foreach (var customer in customers)
+                foreach (var customer in CSVcustomers)
                 {
                     try
                     {
-                        var _cs = customerSettings.FirstOrDefault(s => s.Customer_Id == customer.Id);
-                        var _r = _regionRepository.GetDefaultRegion(customer.Id);
+                        var _cs = customerSettings.FirstOrDefault(s => s.Customer_Id == customer.Customer_Id);
+                        var _r = _regionRepository.GetDefaultRegion(customer.Customer_Id);
+                        var this_Customer = _customerRepository.GetById(customer.Customer_Id);
+
                         if (_cs != null)
                         {
                             var jobSetting = new ImportInitiator_JobSettings()
                             {
-                                CustomerId = customer.Id,
+                                CustomerId = customer.Customer_Id,
                                 Url = _cs.LDAPBase,
-                                InputFilename = _cs.LDAPFilter,
-                                //Filter = _cs.LDAPFilter,
-                                OverwriteFromMasterDirectory = customer.OverwriteFromMasterDirectory,
-                                Days2WaitBeforeDelete = customer.Days2WaitBeforeDelete,
+                                InputFilename = _cs.LDAPFilter,                                
+                                OverwriteFromMasterDirectory = this_Customer.OverwriteFromMasterDirectory,
+                                Days2WaitBeforeDelete = this_Customer.Days2WaitBeforeDelete,
                                 UserName = _cs.LDAPUserName,
                                 Password = _cs.LDAPPassword,
                                 Logging = _cs.LDAPLogLevel,

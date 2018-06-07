@@ -9,9 +9,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
 
     public class InventoryFieldsSettingsBuilder : IInventoryFieldsSettingsBuilder
     {
-        public InventoryFieldSettings BuildBusinessModelForUpdate(
-            int inventoryTypeId,
-            DefaultFieldSettingsModel defaultFieldSettingsModel)
+        public InventoryFieldSettings BuildBusinessModelForUpdate(int inventoryTypeId, DefaultFieldSettingsModel defaultFieldSettingsModel)
         {
             var defaultFieldSettings = CreateDefaultFieldSettings(defaultFieldSettingsModel);
 
@@ -23,9 +21,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return businessModel;
         }
 
-        public InventoryFieldSettings BuildBusinessModelForAdd(
-            int inventoryTypeId,
-            DefaultFieldSettingsModel defaultFieldSettingsModel)
+        public InventoryFieldSettings BuildBusinessModelForAdd(int inventoryTypeId, DefaultFieldSettingsModel defaultFieldSettingsModel)
         {
             var defaultFieldSettings = CreateDefaultFieldSettings(defaultFieldSettingsModel);
 
@@ -52,6 +48,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             var info = MapInventoryFieldSettingModel(defaultFieldSettingsModel.InfoFieldSettingModel);
             var createdDate = MapInventoryFieldSettingModel(defaultFieldSettingsModel.CreatedDateFieldSettingModel);
             var changedDate = MapInventoryFieldSettingModel(defaultFieldSettingsModel.ChangedDateFieldSettingModel);
+            var syncDate = MapInventoryFieldSettingModel(defaultFieldSettingsModel.SyncDateFieldSettingModel); 
 
             var defaultFieldSettings = new DefaultFieldSettings(
                 department,
@@ -66,7 +63,9 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 workstation,
                 info,
                 createdDate,
-                changedDate);
+                changedDate,
+                syncDate);
+
             return defaultFieldSettings;
         }
 

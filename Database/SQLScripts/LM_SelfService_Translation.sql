@@ -689,3 +689,16 @@ If not exists (select * from tblTextTranslation where text_id = 1881 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1881, 1, 'Bilagor')
 GO
 
+If not exists (select * from tbltext where id = 1986)
+	insert into tbltext (id, TextString, TextType) VALUES (1986, 'Calendar', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1986 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1986, 1, 'Aktuellt')
+GO
+
+If not exists (select * from tbltext where id = 1987)
+	insert into tbltext (id, TextString, TextType) VALUES (1987, 'Operational log', 300)
+GO
+If not exists (select * from tblTextTranslation where text_id = 1987 and Language_Id = 1)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1987, 1, 'Driftlogg')
+GO

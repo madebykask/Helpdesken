@@ -19,6 +19,7 @@ using DH.Helpdesk.Web.Areas.Invoices.Models;
 using DH.Helpdesk.Web.Areas.OrderAccounts.Models.Order;
 using DH.Helpdesk.Web.Enums;
 using DH.Helpdesk.Web.Infrastructure;
+using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Models.Invoice;
 using DH.Helpdesk.Web.Models.Shared;
@@ -126,10 +127,11 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
                 new GridColumnHeaderModel ("5", Translation.GetCoreTextTranslation("Avslutsdatum")),
                 new GridColumnHeaderModel ("6", Translation.GetCoreTextTranslation("Avdelning")),
                 new GridColumnHeaderModel ("7", Translation.GetCoreTextTranslation("Arbete")),
-                new GridColumnHeaderModel ("8", $"{Translation.GetCoreTextTranslation("Arbete")} {Translation.GetCoreTextTranslation("belopp")}"),
-                new GridColumnHeaderModel ("9", Translation.GetCoreTextTranslation("Material")),
-                new GridColumnHeaderModel ("10", Translation.GetCoreTextTranslation("Pris")),
-                new GridColumnHeaderModel ("11", Translation.GetCoreTextTranslation("Fakturor"))
+                new GridColumnHeaderModel ("8", Translation.GetCoreTextTranslation("Övertid")),
+                new GridColumnHeaderModel ("9", $"{Translation.GetCoreTextTranslation("Arbete")} {Translation.GetCoreTextTranslation("belopp")}"),
+                new GridColumnHeaderModel ("10", Translation.GetCoreTextTranslation("Material")),
+                new GridColumnHeaderModel ("11", Translation.GetCoreTextTranslation("Pris")),
+                new GridColumnHeaderModel ("12", Translation.GetCoreTextTranslation("Fakturor"))
             };
 
             var rows = new List<RowModel>();
@@ -143,11 +145,12 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
                     new NewGridRowCellValueModel("4", new StringDisplayValue(inv.Category)),
                     new NewGridRowCellValueModel("5", new StringDisplayValue(inv.FinishingDate?.ToString("yyyy-MM-dd") ?? "")),
                     new NewGridRowCellValueModel("6", new StringDisplayValue(inv.Department)),
-                    new NewGridRowCellValueModel("7", new StringDisplayValue($"{inv.LogInvoices.Sum(x => x.WorkingTime)} / {inv.LogInvoices.Sum(x => x.Overtime)}")),
-                    new NewGridRowCellValueModel("8", new StringDisplayValue(((decimal)inv.LogInvoices.Sum(x => x.WorkingTime) / 60 * inv.WorkingHourRate + (decimal)inv.LogInvoices.Sum(x => x.Overtime) / 60 * inv.OvertimeHourRate).ToString("F"))),
-                    new NewGridRowCellValueModel("9", new StringDisplayValue(inv.LogInvoices.Sum(x => x.Price).ToString("F0"))),
-                    new NewGridRowCellValueModel("10", new StringDisplayValue(inv.LogInvoices.Sum(x => x.EquipmentPrice).ToString("F0"))),
-                    new NewGridRowCellValueModel("11", new StringDisplayValue(inv.ExternalInvoices.Sum(x => x.InvoicePrice).ToString("F0")))
+                    new NewGridRowCellValueModel("7", new StringDisplayValue($"{inv.LogInvoices.Sum(x => x.WorkingTime)}")),
+                    new NewGridRowCellValueModel("8", new StringDisplayValue($"{inv.LogInvoices.Sum(x => x.Overtime)}")),
+                    new NewGridRowCellValueModel("9", new StringDisplayValue(((decimal)inv.LogInvoices.Sum(x => x.WorkingTime) / 60 * inv.WorkingHourRate + (decimal)inv.LogInvoices.Sum(x => x.Overtime) / 60 * inv.OvertimeHourRate).ToString("F"))),
+                    new NewGridRowCellValueModel("10", new StringDisplayValue(inv.LogInvoices.Sum(x => x.Price).ToString("F0"))),
+                    new NewGridRowCellValueModel("11", new StringDisplayValue(inv.LogInvoices.Sum(x => x.EquipmentPrice).ToString("F0"))),
+                    new NewGridRowCellValueModel("12", new StringDisplayValue(inv.ExternalInvoices.Sum(x => x.InvoicePrice).ToString("F0")))
                 };
                 rows.Add(new RowModel(i, fields));
                 i++;
@@ -171,6 +174,7 @@ namespace DH.Helpdesk.Web.Areas.Invoices.Controllers
 			return File(Path.Combine(globalSetting.InvoiceFileFolder, file.Name), "text/plain", file.Name);
 	    }
 
+        [OutputCache(NoStore = true, Duration = 0)]
         [System.Web.Mvc.HttpGet]
         public ActionResult GetInvoicesOverviewList(InvoiceOverviewFilterModel filter)
         {

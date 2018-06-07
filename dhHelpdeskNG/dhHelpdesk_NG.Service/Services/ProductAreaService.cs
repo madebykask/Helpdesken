@@ -169,7 +169,7 @@ namespace DH.Helpdesk.Services.Services
 					.Where(x => x.Parent_ProductArea_Id == null);
 
 			return res.ToList();
-		}
+        }
 
         private ProductAreaOverview GetTopMostAreaForChildNew(int id, IList<ProductAreaOverview> items)
         {

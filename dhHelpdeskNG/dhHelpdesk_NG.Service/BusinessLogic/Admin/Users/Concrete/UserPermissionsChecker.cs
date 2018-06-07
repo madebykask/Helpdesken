@@ -137,6 +137,11 @@
                 permissions.Add(UserPermission.InventoryPermission);
             }
 
+            if (user.ContractPermission.ToBool())
+            {
+                permissions.Add(UserPermission.ContractPermission);
+            }
+
             if (user.InvoicePermission.ToBool())
             {
                 permissions.Add(UserPermission.InvoicePermission);
@@ -150,6 +155,11 @@
             if (user.CaseInternalLogPermission.ToBool())
             {
                 permissions.Add(UserPermission.CaseInternalLogPermission);
+            }
+
+            if (user.InvoiceTimePermission.ToBool())
+            {
+                permissions.Add(UserPermission.InvoiceTimePermission);
             }
 
             return permissions;

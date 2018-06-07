@@ -44,8 +44,12 @@
 
 
             this.HasOptional(c => c.Problem)
-                              .WithMany()
-                              .HasForeignKey(c => c.Problem_Id);
+                            .WithMany()
+                            .HasForeignKey(c => c.Problem_Id);
+
+            this.HasOptional(c => c.Project)
+                            .WithMany()
+                            .HasForeignKey(c => c.Project_Id);
 
             this.HasRequired(x => x.CaseType)
                             .WithMany()
@@ -55,6 +59,11 @@
             this.HasOptional(x => x.ProductArea)
                             .WithMany()
                             .HasForeignKey(x => x.ProductArea_Id)
+                            .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.CausingPart)
+                            .WithMany()
+                            .HasForeignKey(x => x.CausingPartId)
                             .WillCascadeOnDelete(false);
 
             this.HasOptional(x => x.UserPerformer)

@@ -77,21 +77,22 @@
         <tr>
             <td colspan="10" class="header">@Translation.GetCoreTextTranslation("Tillbehör")</td>
         </tr>
-    <tr>
-        @Html.EditorFor(m => m.DefaultSettings.WorkstationFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
-    </tr>
-
+        <tr>
+            @Html.EditorFor(m => m.DefaultSettings.WorkstationFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
+        </tr>
         <tr>
             <td colspan="10" class="header">@Translation.GetCoreTextTranslation("Status")</td>
         </tr>
-    <tr>
-        @Html.EditorFor(m => m.DefaultSettings.CreatedDateFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
-    </tr>
+        <tr>
+            @Html.EditorFor(m => m.DefaultSettings.CreatedDateFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
+        </tr>
         <tr>
             @Html.EditorFor(m => m.DefaultSettings.ChangedDateFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
         </tr>
-
-    <tr>
+        <tr>
+            @Html.EditorFor(m => m.DefaultSettings.SyncDateFieldSettingModel, "Settings/InventoryFieldSettingModelDefault")
+        </tr>
+        <tr>
             <td colspan="10" class="header">@Translation.GetCoreTextTranslation("Tillägg")</td>
         </tr>
         @{

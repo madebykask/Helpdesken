@@ -1,4 +1,5 @@
 ﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web.Models.Shared
 @{
     ViewBag.Title = "Login";
     Layout = null;
@@ -24,11 +25,9 @@
                 <div class="alert alert-error">
                     @TempData["LoginFailed"]; 
                 </div>
-            }            
-            
-
+            }
             @(Translation.Get("Username") + ":")<br />
-            <input type="text" maxlength="50" name="txtUid" id="txtUid" class="input-block-level" placeholder="Username" />
+            <input type="text" maxlength="50" name="txtUid" id="txtUid" class="input-block-level" placeholder="Username" value='@(ViewBag.UserId != null ? ViewBag.UserId : "")' />
             <br />
             @(Translation.Get("Password") + ":")<br />
             <input type="password" maxlength="50" name="txtPwd" id="txtPwd" class="input-block-level" placeholder="Password" />
@@ -55,9 +54,26 @@
         <p>@Translation.Get("version")&nbsp;@ApplicationFacade.Version</p>
         <a href="http://www.dhsolutions.se" target="_blank">www.dhsolutions.se</a>
     </div>
-</body>
 
+    @if (ViewBag.ChangePasswordModel != null)
+    {
+        @Html.Partial("_ChangePassword", (ChangePasswordModel)ViewBag.ChangePasswordModel)
+    }
+    
 <script type="text/javascript">
+
+    $(function () {
+        if (window.ChangePasswordDialog) {
+            window.ChangePasswordDialog.SetSuccessCallback(window.onPasswordChanged);
+            window.ChangePasswordDialog.Show();
+        }
+    });
+
+    function onPasswordChanged(pwd) {
+        $('#txtPwd').val(pwd);
+        $('#frmLogin').submit();
+    }
+
     function catchTime() {
         var Jan1 = new Date(2015, 0, 1);
         var Jul1 = new Date(2015, 6, 1);
@@ -90,10 +106,10 @@
 
     function getToken() {        
         $.post("@Url.Content("~/token")",
-                "username=admin" +
-                "&password=3edc4rfv" +
-                "&grant_type=password",
-                { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }                
+            "username=admin" +
+            "&password=3edc4rfv" +
+            "&grant_type=password",
+            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }                
         ).success(function (data) {
             if (data == null)
                 alert("Error occurred!");
@@ -107,9 +123,9 @@
     function refreshToken() {
         var _reftoken = localStorage.getItem('RefreshToken');
         $.post("@Url.Content("~/token")",
-                "grant_type=refresh_token" +
-                "&refresh_token=" + _reftoken,
-                { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+            "grant_type=refresh_token" +
+            "&refresh_token=" + _reftoken,
+            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
         ).success(function (data) {
             if (data == null)
                 alert("Error occurred!");
@@ -163,4 +179,5 @@
         });
     };
 </script>
+</body>
 </html>

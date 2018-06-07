@@ -110,6 +110,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             vmodel.Setting.EMailSubjectPattern = setting.EMailSubjectPattern.ToString();
             vmodel.Setting.LDAPSyncType = setting.LDAPSyncType;
             vmodel.Setting.LDAPCreateOrganization = setting.LDAPCreateOrganization;
+           // vmodel.Setting.IntegrationType = setting.IntegrationType;
             vmodel.Setting.PhysicalFilePath = setting.PhysicalFilePath;
             vmodel.Setting.VirtualFilePath = setting.VirtualFilePath;
             vmodel.Setting.CaseComplaintDays = setting.CaseComplaintDays;
@@ -130,7 +131,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             vmodel.Setting.IsSMTPSecured = setting.IsSMTPSecured;
             vmodel.Setting.BatchEmail = setting.BatchEmail;
             vmodel.Setting.InvoiceType = setting.InvoiceType;
+            vmodel.Setting.CaseSMS = setting.CaseSMS;
 
+            //keep original value
+            if (vmodel.Setting.ComplexPassword > 0)
+            {
+                vmodel.Setting.MinPasswordLength = setting.MinPasswordLength;
+            }
 
             if (customerToSave == null)
                 throw new Exception("No customer found...");

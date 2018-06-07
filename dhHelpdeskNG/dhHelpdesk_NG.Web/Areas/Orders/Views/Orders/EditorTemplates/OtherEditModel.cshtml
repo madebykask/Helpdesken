@@ -2,6 +2,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.OtherEditModel
 
+
 <h4>@Model.Header</h4>
 <table class="tableform">
     <tbody>
@@ -56,3 +57,39 @@
         @Html.EditorFor(m => m.Info, "Fields/WideText", new { inputAttributes = new Dictionary<string, object> { { "maxlength", "200" } } })               
     </tbody>
 </table>
+@Html.Hidden("order_languageId", SessionFacade.CurrentLanguageId)
+<script type="text/javascript">
+    PluploadTranslation($("#Other_order_languageId").val());
+    function PluploadTranslation(languageId) {
+        if (languageId == 1) {
+            plupload.addI18n({
+                'Select files': 'Välj filer',
+                'Add files to the upload queue and click start upload.': 'Lägg till filer i kön och tryck på Ladda upp.',
+                'Filename': 'Filnamn',
+                'Status': 'Status',
+                'Size': 'Storlek',
+                'Add files': 'Lägg till filer',
+                'Add Files': 'Lägg till',
+                'Start Upload': 'Ladda upp',
+                'Stop current upload': 'Stoppa uppladdningen',
+                'Start uploading queue': 'Starta uppladdningen',
+                'Drag files here.': 'Dra filer hit'
+            });
+        }
+
+        if (languageId == 2) {
+            plupload.addI18n({
+                'Select files': 'Select files',
+                'Add files to the upload queue and click start upload.': 'Add files to the upload queue and click start upload.',
+                'Filename': 'Filename',
+                'Status': 'Status',
+                'Size': 'Size',
+                'Add files': 'Add files',
+                'Stop current upload': 'Stop current upload',
+                'Start uploading queue': 'Start uploading queue',
+                'Drag files here.': 'Drag files here.'
+            });
+        }
+
+    }
+</script>

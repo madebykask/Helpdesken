@@ -38,7 +38,7 @@ namespace DH.Helpdesk.Web.Infrastructure.LocalizedAttributes
             ModelMetadata metadata,
             ControllerContext context)
         {
-            var errorMessage = Translation.Get("Max size was exceeded");
+            var errorMessage = Translation.GetCoreTextTranslation("Max size was exceeded");
             return new List<ModelClientValidationRule> { new ModelClientValidationMaxSizeFromRule(errorMessage) };
         }
 

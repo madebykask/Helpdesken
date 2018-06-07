@@ -28,7 +28,7 @@ function PluploadTranslation(languageId) {
     if (languageId == 1) {
         plupload.addI18n({
             'Select files': 'Välj filer',
-            'Add files to the upload queue and click start upload.': 'Lägg till filer till kön och tryck på lägg till.',
+            'Add files to the upload queue and click start upload.': 'Lägg till filer i kön och tryck på Ladda upp.',
             'Filename': 'Filnamn',
             'Status': 'Status',
             'Size': 'Storlek',

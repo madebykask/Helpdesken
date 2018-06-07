@@ -1,3 +1,6 @@
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Shared;
+
 namespace DH.Helpdesk.Dal.Repositories
 {
     using DH.Helpdesk.BusinessData.Models.Contract;
@@ -7,20 +10,21 @@ namespace DH.Helpdesk.Dal.Repositories
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
+    using System.Data;
     using System.Linq;
 
     #region CONTRACT
 
-    public interface IContractRepository : INewRepository
+    public interface IContractRepository : IRepository<Contract>
     {
         IList<Contract> GetContracts(int customerId);
         Contract GetContract(int contractId);
-        void SaveContract(ContractInputModel contractModel);
+        int SaveContract(ContractInputModel contractModel);
         void DeleteContract(Contract contract);
         IList<Contract> GetContractsNotFinished(int customerId);
     }
 
-    public class ContractRepository : Repository, IContractRepository
+    public class ContractRepository : RepositoryBase<Contract>, IContractRepository
     {
         public ContractRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
@@ -29,79 +33,69 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IList<Contract> GetContracts(int customerId)
         {
-            var query = this.DbContext.Contracts.Where(c => c.Finished == 0 && c.ContractCategory.Customer_Id == customerId);
+            var query = this.Table.Where(c => c.Finished == 0 && c.ContractCategory.Customer_Id == customerId);
             return query.ToList();
         }
 
         public IList<Contract> GetContractsNotFinished(int customerId)
         {
-            var query = this.DbContext.Contracts.Where(c => c.ContractCategory.Customer_Id == customerId);
+            var query = this.Table
+                .Include(x => x.ContractLogs)
+                .Include(x => x.ContractLogs.Select(l => l.Case))
+                .Where(c => c.ContractCategory.Customer_Id == customerId);
             return query.ToList();
         }
 
         public Contract GetContract(int contractId)
         {
-            var query = this.DbContext.Contracts.Where(c => c.Id == contractId).FirstOrDefault();
+            var query = this.Table.Where(c => c.Id == contractId).FirstOrDefault();
             return query;
         }
 
-        public void SaveContract(ContractInputModel contractModel)
+        public int SaveContract(ContractInputModel contractModel)
         {
+            Contract contractEntity = null;
 
             if (contractModel.Id == 0)
             {
-                var contractEntity = new Contract()
+                contractEntity = new Contract
                 {
-                    Id = contractModel.Id,
-                    ChangedByUser_Id = contractModel.ChangedByUser_Id,
-                    ContractCategory_Id = contractModel.CategoryId,
-                    Department_Id = contractModel.DepartmentId,
-                    Finished = contractModel.Finished ? 1 : 0,
-                    FollowUpInterval = contractModel.FollowUpInterval,
-                    FollowUpResponsibleUser_Id = contractModel.FollowUpResponsibleUserId,
-                    ResponsibleUser_Id = contractModel.ResponsibleUserId,
-                    Running = contractModel.Running ? 1 : 0,
-                    Supplier_Id = contractModel.SupplierId,
-                    NoticeTime = contractModel.NoticeTime,
-                    ContractNumber = contractModel.ContractNumber,
-                    Info = contractModel.Other,
-                    ContractStartDate = contractModel.ContractStartDate,
-                    ContractEndDate = contractModel.ContractEndDate,
-                    NoticeDate = contractModel.NoticeDate,
-                    CreatedDate = contractModel.CreatedDate,
-                    ChangedDate = contractModel.ChangedDate,
-                    ContractGUID = contractModel.ContractGUID
+                    CreatedDate = DateTime.UtcNow,
+                    ContractGUID = Guid.NewGuid()
                 };
-
-                this.DbContext.Contracts.Add(contractEntity);
+                this.Add(contractEntity);
                 this.InitializeAfterCommit(contractModel, contractEntity);
             }
             else
             {
-                var contractEntity = this.DbContext.Contracts.Find(contractModel.Id);
-
-                contractEntity.ChangedByUser_Id = contractModel.ChangedByUser_Id;
-                contractEntity.ContractCategory_Id = contractModel.CategoryId;
-                contractEntity.Department_Id = contractModel.DepartmentId;
-                contractEntity.Finished = contractModel.Finished ? 1 : 0;
-                contractEntity.FollowUpInterval = contractModel.FollowUpInterval;
-                contractEntity.FollowUpResponsibleUser_Id = contractModel.FollowUpResponsibleUserId;
-                contractEntity.ResponsibleUser_Id = contractModel.ResponsibleUserId;
-                contractEntity.Running = contractModel.Running ? 1 : 0;
-                contractEntity.Supplier_Id = contractModel.SupplierId;
-                contractEntity.NoticeTime = contractModel.NoticeTime;
-                contractEntity.ContractNumber = contractModel.ContractNumber;
-                contractEntity.Info = contractModel.Other;
-                contractEntity.ContractStartDate = contractModel.ContractStartDate;
-                contractEntity.ContractEndDate = contractModel.ContractEndDate;
-                contractEntity.NoticeDate = contractModel.NoticeDate;
-                contractEntity.ChangedDate = contractModel.ChangedDate;
-
+                contractEntity = this.Table.Find(contractModel.Id);
             }
+            
+            contractEntity.ContractCategory_Id = contractModel.CategoryId;
+            contractEntity.Department_Id = contractModel.DepartmentId;
+            contractEntity.Finished = contractModel.Finished ? 1 : 0;
+            contractEntity.FollowUpInterval = contractModel.FollowUpInterval;
+            contractEntity.FollowUpResponsibleUser_Id = contractModel.FollowUpResponsibleUserId;
+            contractEntity.ResponsibleUser_Id = contractModel.ResponsibleUserId;
+            contractEntity.Running = contractModel.Running ? 1 : 0;
+            contractEntity.Supplier_Id = contractModel.SupplierId;
+            contractEntity.NoticeTime = contractModel.NoticeTime;
+            contractEntity.ContractNumber = contractModel.ContractNumber;
+            contractEntity.Info = contractModel.Other;
+            contractEntity.ContractStartDate = contractModel.ContractStartDate;
+            contractEntity.ContractEndDate = contractModel.ContractEndDate;
+            contractEntity.NoticeDate = contractModel.NoticeDate;
+            contractEntity.ChangedDate = DateTime.UtcNow;
+            contractEntity.ChangedByUser_Id = contractModel.ChangedByUser_Id;
+
+            Commit();
+
+            return contractEntity.Id;
         }
+
         public void DeleteContract(Contract contract)
         {
-            this.DbContext.Contracts.Remove(contract);
+            this.Table.Remove(contract);
         }
     }
 
@@ -251,53 +245,82 @@ namespace DH.Helpdesk.Dal.Repositories
 
     #region CONTRACTHISTORY
 
-    public interface IContractHistoryRepository : INewRepository
+    public interface IContractHistoryRepository : IRepository<ContractHistory>
     {
-        void SaveContractHistory(ContractInputModel contract);
-        void DeleteContractHistory(Contract contract);
+        IList<ContractHistoryFull> GetContractractHistoryList(int contractId);
     }
 
-    public class ContractHistoryRepository : Repository, IContractHistoryRepository
+    public class ContractHistoryRepository : RepositoryBase<ContractHistory>, IContractHistoryRepository
     {
         public ContractHistoryRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
         }
 
-        public void SaveContractHistory(ContractInputModel contract)
+        public IList<ContractHistoryFull> GetContractractHistoryList(int contractId)
         {
-            var contractHistoryEntity = new ContractHistory()
-            {
-                Contract_Id = contract.Id,
-                ContractNumber = contract.ContractNumber,
-                ContractCategory_Id = contract.CategoryId,
-                ResponsibleUser_Id = contract.ResponsibleUserId,
-                Supplier_Id = contract.SupplierId,
-                Department_Id = contract.DepartmentId,
-                ContractStartDate = contract.ContractStartDate,
-                ContractEndDate = contract.ContractEndDate,
-                NoticeDate = contract.NoticeDate,
-                NoticeTime = contract.NoticeTime,
-                Finished = contract.Finished ? 1 : 0,
-                FollowUpInterval = contract.FollowUpInterval,
-                FollowUpResponsibleUser_Id = contract.FollowUpResponsibleUserId,
-                Running = contract.Running ? 1 : 0,
-                Info = contract.Other,
-                CreatedDate = DateTime.UtcNow,
-                CreatedByUser_Id = contract.ChangedByUser_Id
-            };
+            var query = from ch in Table
+                where ch.Contract_Id == contractId
+                select new ContractHistoryFull
+                {
+                    ContractId = ch.Contract_Id,
+                    ContractNumber = ch.ContractNumber,
+                    Finished = ch.Finished,
+                    FollowUpInterval = ch.FollowUpInterval,
+                    Running = ch.Running,
+                    Info = ch.Info,
+                    Files = ch.Files,
+                    StartDate = ch.ContractStartDate,
+                    EndDate = ch.ContractEndDate,
+                    NoticeDate = ch.NoticeDate,
+                    NoticeTime = ch.NoticeTime,
+                    CreatedAt = ch.CreatedDate,
 
-            this.DbContext.ContractHistories.Add(contractHistoryEntity);
-            this.InitializeAfterCommit(contract, contractHistoryEntity);
-        }
+                    CreatedByUser = new UserBasicOvierview
+                    {
+                        Id = ch.CreatedByUser_Id,
+                        UserID = ch.CreatedByUser.UserID,
+                        FirstName = ch.CreatedByUser.FirstName,
+                        SurName = ch.CreatedByUser.SurName
+                    },
 
-        public void DeleteContractHistory(Contract contract)
-        {
-            var contractHistories = this.DbContext.ContractHistories.Where(c => c.Contract_Id == contract.Id).ToList();
-            foreach (var contractHistory in contractHistories)
-            {
-                this.DbContext.ContractHistories.Remove(contractHistory);
-            }
+                    Department = ch.Department_Id != null ? new EntityOverview
+                    {
+                        Id = ch.Department_Id.Value,
+                        Name = ch.Department.DepartmentName
+                    } : null,
+
+                    ContractCategory = new EntityOverview
+                    {
+                        Id = ch.ContractCategory_Id,
+                        Name = ch.ContractCategory.Name
+                    },
+
+                    ResponsibleUser = ch.ResponsibleUser_Id != null ? new UserBasicOvierview
+                    {
+                        Id = ch.ResponsibleUser_Id.Value,
+                        UserID = ch.ResponsibleUser.UserID,
+                        FirstName = ch.ResponsibleUser.FirstName,
+                        SurName = ch.ResponsibleUser.SurName
+                    } : null,
+
+                    FollowUpResponsibleUser = ch.FollowUpResponsibleUser_Id != null ? new UserBasicOvierview
+                    {
+                        Id = ch.FollowUpResponsibleUser_Id.Value,
+                        UserID = ch.FollowUpResponsibleUser.UserID,
+                        FirstName = ch.FollowUpResponsibleUser.FirstName,
+                        SurName = ch.FollowUpResponsibleUser.SurName
+                    } : null,
+
+                    Supplier = ch.Supplier_Id != null ? new EntityOverview
+                    {
+                        Id = ch.Supplier_Id.Value,
+                        Name = ch.Supplier.Name
+                    } : null,
+                };
+
+            var list = query.ToList();
+            return list.ToList();
         }
     }
 

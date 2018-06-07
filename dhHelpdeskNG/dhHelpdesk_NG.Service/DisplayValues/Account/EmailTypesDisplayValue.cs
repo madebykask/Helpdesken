@@ -25,8 +25,8 @@ namespace DH.Helpdesk.Services.DisplayValues.Account
         {
             switch (this.Value)
             {
-                case EMailTypes.Standart:
-                    return Translator.Translate(EMailTypes.Standart.ToString());
+                case EMailTypes.Standard:
+                    return Translator.Translate(EMailTypes.Standard.ToString());
                 case EMailTypes.NoEmail:
                     return Translator.Translate(EMailTypes.NoEmail.ToString());
                 case EMailTypes.Expanded:

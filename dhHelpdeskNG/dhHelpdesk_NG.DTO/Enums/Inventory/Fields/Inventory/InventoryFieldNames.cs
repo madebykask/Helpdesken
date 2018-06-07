@@ -27,5 +27,7 @@
         public static readonly string CreatedDate = "Skapad datum";
 
         public static readonly string ChangedDate = "Ändrad datum";
+
+        public static readonly string SyncDate = "Synkroniserad datum";
     }
 }

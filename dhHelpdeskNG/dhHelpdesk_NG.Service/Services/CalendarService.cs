@@ -94,6 +94,8 @@ namespace DH.Helpdesk.Services.Services
         void Commit();
 
         IEnumerable<CalendarOverview> GetCalendarOverviews(int[] customers, int? count, bool forStartPage, bool untilTodayOnly, bool secure = false, bool calendarWGRestriction = false);
+
+        IList<Calendar> GetCalendarsByCustomerId(int customerId);
     }
 
     /// <summary>
@@ -339,6 +341,23 @@ namespace DH.Helpdesk.Services.Services
                 
                 return query.GetForStartPage(customers, count, forStartPage)
                         .MapToOverviews().OrderBy(x => x.CalendarDate).ThenBy(x => x.CustomerName);
+            }
+        }
+
+        public IList<Calendar> GetCalendarsByCustomerId(int customerId)
+        {
+            using (var uow = this.unitOfWorkFactory.Create())
+            {
+                var calendarRep = uow.GetRepository<Calendar>();
+                var currDate = DateTime.UtcNow;
+                var untilDate = currDate.AddDays(-1);
+
+                return calendarRep.GetAll()
+                    .GetByCustomer(customerId)
+                    .Where(l => l.PublicInformation == 1 &&
+                            (string.IsNullOrEmpty(l.ShowUntilDate.ToString()) || l.ShowUntilDate >= untilDate) &&
+                            (!l.ShowFromDate.HasValue || l.ShowFromDate <= currDate))
+                    .ToList();
             }
         }
     }

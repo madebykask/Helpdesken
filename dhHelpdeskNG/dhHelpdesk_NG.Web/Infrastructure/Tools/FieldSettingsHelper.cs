@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Enums.Orders.FieldNames;
+using DH.Helpdesk.Services.DisplayValues.Report;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Infrastructure.Tools
@@ -168,12 +169,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Tools
                 return;
             }
 
-            var tempValue = string.Empty;
-
-            if (value.HasValue && value.Value > 0)
-                tempValue = string.Format("{0} {1} {2} {3}", value.Value / 60, Translation.GetCoreTextTranslation(TOTAL_HOUR), value.Value % 60, Translation.GetCoreTextTranslation(TOTAL_MINUTE));
-
-            var fieldValue = new NewGridRowCellValueModel(fieldName, new StringDisplayValue(tempValue));
+            var fieldValue = new NewGridRowCellValueModel(fieldName, new TimeDisplayValue(value, Translation.GetCoreTextTranslation(TOTAL_HOUR), Translation.GetCoreTextTranslation(TOTAL_MINUTE)));
             values.Add(fieldValue);
         }
     }

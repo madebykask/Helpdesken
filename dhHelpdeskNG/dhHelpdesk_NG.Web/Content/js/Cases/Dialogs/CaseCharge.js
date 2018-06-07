@@ -37,6 +37,7 @@ CaseCharge.prototype = {
 
         $.ajax({
             url: self.options.getListUrl,
+            cache: false,
             data: {
                 CaseId: self.options.caseId,
                 DepartmentCharge: false
@@ -191,8 +192,10 @@ CaseCharge.prototype = {
             var rowString =
             "<tr>" +
 		    "<td>" + "<input type=hidden id='Id' value='" + externalInvoices[i].Id + "'/>" + $("<span/>").text(externalInvoices[i].Name).html() + "</td>" +
-		    "<td class='align-right'>" + (isRowReadOnly ? self._formatNumber(externalInvoices[i].Amount, 2, 3, " ", ",") : self._getTextBox(externalInvoices[i].Amount, "txtExternalAmount")) + "</td>" +
-		    "<td class='align-center'>" + self._getChargeBox(isRowReadOnly, externalInvoices[i].Charge) + "</td>" +
+            //make external invoices readonly in Charge popup (#61991)
+            //"<td class='align-right'>" + (isRowReadOnly ? self._formatNumber(externalInvoices[i].Amount, 2, 3, " ", ",") : self._getTextBox(externalInvoices[i].Amount, "txtExternalAmount")) + "</td>" + 
+            "<td class='align-right'>" + self._formatNumber(externalInvoices[i].Amount, 2, 3, " ", ",") + "</td>" +
+            "<td class='align-center'>" + self._getChargeBox(isRowReadOnly, externalInvoices[i].Charge) + "</td>" +
 		    "<td>" + self._getStatusText(externalInvoices[i].InvoiceRow.Status) + "</td>" +
             "</tr>";
             var row = $(rowString);
@@ -313,20 +316,22 @@ CaseCharge.prototype = {
         $("#externalInvoiceGrid tbody tr").each(function (i, row) {
             var externalId = Number($("#Id", row).val());
             var amountControl = $("#txtExternalAmount", row);
-            var amount = Number($("#txtExternalAmount", row).val());
-            if (amountControl.length) {
-                var externalInvoice = {
-                    Id: externalId,
-                    Amount: amount,
-                    Charge: $("#cbCharge", row).is(':checked')
-                };
-                externalInvoices.push(externalInvoice);
+
+            var data = self._getExternalInvoiceData(externalId);
+            if (data) {
+                data.Charge = $("#cbCharge", row).is(':checked');
+                if (amountControl.length) {
+                    var amount = Number($("#txtExternalAmount", row).val());
+                    data.Amount = amount;
+                }
+
+                externalInvoices.push(data);
 
                 //refresh data;
-                self._refreshExternalData(externalInvoice);
+                self._refreshExternalData(data);
             }
-
         });
+
 
         if (logInvoices.length || externalInvoices.length) {
             $("#caseChargePopup #btnSave").prop('disabled', true);
@@ -377,6 +382,20 @@ CaseCharge.prototype = {
             dataEntry.Material = logInvoice.Material;
             dataEntry.Price = logInvoice.Price;
         }
+    },
+
+    _getExternalInvoiceData: function (id) {
+        "use strict";
+        var self = this;
+
+        var dataEntry = null;
+        for (var i = 0; i < self.data.ExternalInvoices.length; i++) {
+            if (self.data.ExternalInvoices[i].Id === id) {
+                dataEntry = self.data.ExternalInvoices[i];
+                break;
+            }
+        }
+        return dataEntry;
     },
 
     _refreshExternalData: function (externalInvoice) {

@@ -19,7 +19,6 @@ namespace DH.Helpdesk.Dal.Repositories.GDPR
         public GDPROperationsAuditRespository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
-
         }
 
         #endregion

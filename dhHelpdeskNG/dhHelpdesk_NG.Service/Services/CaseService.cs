@@ -1042,8 +1042,6 @@ namespace DH.Helpdesk.Services.Services
                     if (log.SendMailAboutCaseToNotifier && newCase.FinishingDate == null && externalUpdateMail == 1)
                     {
                         var to = performerUserEmail.Split(';', ',').ToList();
-                        var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
-                        to.AddRange(extraFollowers);
                         foreach (var t in to)
                         {
                             var curMail = t.Trim();

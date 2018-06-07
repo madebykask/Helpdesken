@@ -9,6 +9,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using System.Web.Script.Serialization
 @using DH.Helpdesk.Common.Enums.CaseSolution
+@using DH.Helpdesk.BusinessData.Enums.Case.Fields
 
 @{
     var saveDropDownText = Html.Raw(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + " - " +
@@ -643,6 +644,27 @@
                                             </td>
                                         </tr>
                                         }
+                                    @if (Model.CaseFieldSettings.Count() != 0)
+                                    {
+                                        <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString())">
+                                            <td>
+                                                @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()])
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="CaseSolution.AddFollowersBtn" value="false" />
+                                            </td>
+                                            <td>
+                                                <table>
+                                                    <tr id="stateIconPlace_@GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()">
+                                                        @*State icons will be added Here*@
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td>
+                                                @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.AddFollowersBtn, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.AddFollowersBtn)
+                                            </td>
+                                        </tr>
+                                    }
                                 </table>
                             </div>
                         </div>
@@ -1088,7 +1110,7 @@
                                                     <button class="btn dropdown-toggle" data-toggle="dropdown">
                                                         <span class="caret"></span>
                                                     </button>
-                                                    <ul class="dropdown-menu">
+                                                    <ul class="dropdown-menu subddMenu parentddMenu">
                                                         <li><a href="#">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
                                                         @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
                                                     </ul>

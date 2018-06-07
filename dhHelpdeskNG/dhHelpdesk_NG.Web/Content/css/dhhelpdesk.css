@@ -1748,6 +1748,11 @@ table th.thpointer {
     line-height: 3;
 }
 
+#gdprTask {
+    width: 160px!important;
+    background-position: 128px center;
+}
+
 .error-msg,
 .no-data-msg {
     position: static;
@@ -3994,11 +3999,50 @@ th.sorting_disabled
     display: inline-block;
 }
 
+/*************************** bootstrap dropdown updated css for product area control***************************/
 .subddMenu {
     overflow-x: hidden;
     overflow-y: auto;
     direction: rtl;
+    text-align: left;
 }
+
+
+.dropdown-menu.modified .dropdown-submenu:hover > .subMenuWrapper > .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu.modified > li,
+.dropdown-menu.modified .dropdown-menu > li {  
+    position: static;  
+}
+
+.dropdown-menu.modified > li > .subMenuWrapper,
+.dropdown-menu.modified .dropdown-menu > li > .subMenuWrapper {
+    position: absolute;
+    z-index: 10;
+    left:100%;
+}
+
+.dropdown-menu.modified > li > .subMenuWrapper > .subddMenu,
+.dropdown-menu.modified .dropdown-menu > li > .subMenuWrapper > .subddMenu {
+    position: static;
+}
+
+/*.dropdown-menu.modified .dropup .dropdown-submenu > .subMenuWrapper > .dropdown-menu {
+    top: auto;
+    bottom: 0;
+    margin-top: 0;
+    margin-bottom: -2px;
+    -webkit-border-radius: 5px 5px 5px 0;
+    -moz-border-radius: 5px 5px 5px 0;
+    border-radius: 5px 5px 5px 0;
+}*/
+
+/*.subMenuWrapper {
+    position: relative;
+}*/
+/************************************************************************************/
 
 div.chosen-container.chosen-container-multi.error,
 div.chosen-container.chosen-container-single.error {

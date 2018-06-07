@@ -1,24 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Data;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 using Common.Logging;
 using DH.Helpdesk.TaskScheduler.Jobs;
-using DH.Helpdesk.TaskScheduler.Managers;
-using DH.Helpdesk.TaskScheduler.Services;
-using log4net.Config;
 using Ninject;
 using Quartz;
-using DH.Helpdesk.TaskScheduler.Dto;
-using Quartz.Listener;
-using Quartz.Impl.Matchers;
+using DH.Helpdesk.TaskScheduler.Infrastructure.Configuration;
 
 namespace DH.Helpdesk.TaskScheduler
 {
@@ -27,104 +14,40 @@ namespace DH.Helpdesk.TaskScheduler
         private static IKernel _diContainer;
         private static ILog _logger;
         private readonly IScheduler _sched;
+        private readonly IApplicationSettings _applicationSettings;
+
+        #region ctor()
 
         public TaskScheduler(IKernel diContainer)
         {
             _diContainer = diContainer;
-            InitializeComponent();
             _logger = LogManager.GetLogger<TaskScheduler>();
+            _applicationSettings = _diContainer.Get<IServiceConfigurationManager>().AppSettings;
 
-            var envName = _diContainer.Get<IServiceConfigurationManager>().EnvName;
+            var envName = _applicationSettings.EnvName;
             ServiceName = string.IsNullOrEmpty(envName) ? "DH.TaskScheduler" : $"DH.TaskScheduler.{envName}";
-
-            var customers = _diContainer.Get<IServiceConfigurationManager>().Customers;            
-
             _sched = _diContainer.Get<IScheduler>();
+
+            InitializeComponent();
         }
+
+        #endregion
 
         protected override void OnStart(string[] args)
         {
             _logger.InfoFormat("Starting service {0}", ServiceName);
 
-            var dailyReport = Convert.ToInt32(ConfigurationManager.AppSettings["DailyReport"]);
-            var initiatoImport = Convert.ToInt32(ConfigurationManager.AppSettings["InitiatorImport"]);
+            //Debugger.Launch();
 
-            /*Daily Report*/
-            if (dailyReport == 1)
+            var initializers = _diContainer.GetAll<IJobInitializer>();
+            foreach (var initializer in initializers)
             {
-                var job = JobBuilder.Create<DailyReportJob>()
-                    .WithIdentity(Constants.DailyReportJobName)
-                    .Build();
-                var trigger = _diContainer.Get<IDailyReportService>().GetTrigger();
-
-                _sched.ScheduleJob(job, trigger);
+                initializer.Run();
             }
-
-            var _logs = new DataLogModel();
-
-            /*Import Initiator*/
-            if (initiatoImport == 1)
-            {
-                var _initiatorImportService = _diContainer.Get<IImportInitiatorService>();
-                var initiatorTriggers = _initiatorImportService.GetTriggers(ref _logs).ToList();
-
-
-                var i = 0;
-                var firstJob = JobBuilder.Create<ImportInitiatorJob>().Build();
-                ITrigger firstTrigger = null;
-                JobKey lastJobKey = null;
-                JobChainingJobListener listener = new JobChainingJobListener("Pipeline Chain");
-                IList<IJobDetail> jobs = new List<IJobDetail>();
-                foreach (var initTrigger in initiatorTriggers)
-                {                   
-                    var initiatorJob =
-                        JobBuilder.Create<ImportInitiatorJob>()
-                                  .WithIdentity($"{Constants.ImportInitiator_JobName}_{i}")
-                                  .Build();
-                    
-                    if (i == 0)
-                    {
-                        firstJob = initiatorJob;
-                        firstTrigger = initTrigger;                        
-                    }
-                    else
-                    {
-                        jobs.Add(initiatorJob);
-                        listener.AddJobChainLink(lastJobKey, initiatorJob.Key);
-                    }
-
-                    lastJobKey = initiatorJob.Key;
-                    i++;
-                }
-
-                _sched.ListenerManager.AddJobListener(listener, GroupMatcher<JobKey>.GroupEquals("Pipeline"));
-
-                _sched.ScheduleJob(firstJob, firstTrigger);
-                foreach(var _job in jobs)
-                {
-                    _sched.AddJob(_job, false, true);
-                }
-                
-            }
-
-            /*Job Tracker*/
-            var trackerJob = JobBuilder.Create<SettingsTrackerJob>()
-               .WithIdentity("SettingsTrackerJob")
-               .Build();
-
-            // set up a job to track db starttime change of 'DailyReportJob'
-            var trackerSettingsTrigger = TriggerBuilder.Create()
-                .WithIdentity("SettingsTrackerJobTrigger")
-                .StartNow()
-                .ForJob("SettingsTrackerJob")
-                .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(60)
-                    .RepeatForever())
-                .Build();
-            _sched.ScheduleJob(trackerJob, trackerSettingsTrigger);
 
             if (_sched.GetJobGroupNames().Count > 0)
                 _sched.Start();
+                
         }
 
         protected override void OnStop()

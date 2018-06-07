@@ -91,7 +91,6 @@
     <Compile Include="Attributes\Inventory\CreateMissingPrinterSettingsAttribute.cs" />
     <Compile Include="Attributes\Inventory\CreateMissingServerSettingsAttribute.cs" />
     <Compile Include="Attributes\Inventory\CreateMissingComputerSettingsAttribute.cs" />
-    <Compile Include="CaseSearch\CaseSearchConstants.cs" />
     <Compile Include="CaseSearch\CaseSearchCriterias.cs" />
     <Compile Include="CaseSearch\CaseSearchQueryBuilder.cs" />
     <Compile Include="CaseSearch\Interfaces\ICaseSearchCriterias.cs" />
@@ -132,6 +131,7 @@
     <Compile Include="EntityConfigurations\ContractHistoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractFieldSettingConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ContractLogConfiguration.cs" />
     <Compile Include="EntityConfigurations\EmailLogAttemptConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\Case_CaseSection_ExtendedCaseConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\Case_ExtendedCaseDataConfiguration.cs" />
@@ -142,6 +142,7 @@
     <Compile Include="EntityConfigurations\GDPR\GDPRDataPrivacyAccessConfiguration.cs" />
     <Compile Include="EntityConfigurations\GDPR\GDPRDataPrivacyFavoriteConfiguration.cs" />
     <Compile Include="EntityConfigurations\GDPR\GDPROperationsAuditConfiguration.cs" />
+    <Compile Include="EntityConfigurations\GDPR\GDPRTaskConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleProductAreaConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceRowConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceHeaderConfiguration.cs" />
@@ -456,6 +457,7 @@
     <Compile Include="NewInfrastructure\Concrete\UnitOfWorkFactory.cs" />
     <Compile Include="NewInfrastructure\DynamicTypeBuilder.cs" />
     <Compile Include="NewInfrastructure\IDbContext.cs" />
+    <Compile Include="Interceptors\OptionHintScope.cs" />
     <Compile Include="NewInfrastructure\QueryableExtensions.cs" />
     <Compile Include="NewInfrastructure\ISessionFactory.cs" />
     <Compile Include="NewInfrastructure\IGenericRepository.cs" />
@@ -503,6 +505,7 @@
     <Compile Include="Repositories\GDPR\GDPRDataPrivacyAccessRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPRDataPrivacyFavortieRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPROperationsAuditRespository.cs" />
+    <Compile Include="Repositories\GDPR\GDPRTaskRepository.cs" />
     <Compile Include="Repositories\IComputerUserCategoryRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseValueRepository.cs" />
     <Compile Include="Repositories\IExtendedCaseDataRepository.cs" />

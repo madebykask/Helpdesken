@@ -1,274 +1,256 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@using DH.Helpdesk.Common.Enums
-@using DH.Helpdesk.Web.Models.Contract
-@model DH.Helpdesk.Web.Models.Contract.ContractsIndexRowsModel
+﻿@using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Web.Infrastructure.Extensions;
+@model DH.Helpdesk.Web.Models.Contract.ContractsSearchResultsModel
 
+@{
+    var searchSummary = Model.SearchSummary;   
+ }
 
+<div>@Translation.GetCoreTextTranslation("Poster i sökresultat"): @Model.TotalRowsCount</div>
 <div id="ContractIndexRows">
-    
-    <table class="table table-striped table-bordered table-hover" id="contractOverview">
-        <thead>
-            <tr>
-                @foreach (var c in Model.Columns)
+<table class="table table-striped table-bordered table-hover" id="contractOverview">
+<thead>
+<tr>
+@foreach (var c in Model.Columns)
+{
+    if (SessionFacade.CurrentLanguageId == 2)
+    {
+        <th onclick="SortCol('@c.ContractField');" style="cursor: pointer;">
+            @c.ContractFieldLable_Eng
+            @if (Model.SortBy != null && c.ContractField == Model.SortBy.ColumnName)
+            {
+                switch (Model.SortBy.IsAsc)
                 {
+                    case true:
+                        <i class="icon-chevron-down "></i>
+                        break;
+                    case false:
+                        <i class="icon-chevron-up"></i>
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        </th>
+    }
+    else
+    {
+        <th onclick="SortCol('@c.ContractField');" style="cursor: pointer;">
+            @c.ContractFieldLable
+            @if (Model.SortBy != null && c.ContractField == Model.SortBy.ColumnName)
+            {
+                switch (Model.SortBy.IsAsc)
+                {
+                    case true:
+                        <i class="icon-chevron-down"></i>
+                        break;
+                    case false:
+                        <i class="icon-chevron-up"></i>
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        </th>
+    }
+}
 
+@{
+    foreach (var row in Model.Data)
+    {
+        <tr class="@(row.IsInNoticeOfRemoval ? "textred" : "")">
+            @foreach (var s in Model.Columns)
+            {
+                if (s.ContractField == EnumContractFieldSettings.Number)
+                {
+                    <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@row.ContractNumber</a></td>
+                }
 
-
-
-                    if (SessionFacade.CurrentLanguageId == 2)
+                if (s.ContractField == EnumContractFieldSettings.CaseNumber)
+                {
+                    if (row.ContractCase.CaseNumber != 0)
                     {
-                        <th onclick="SortCol('@c.ContractField', '@Model.SortBy.IsAsc', '@Model.SelectedShowStatus');" style="cursor: pointer;" class="MyTest">
-                            @c.ContractFieldLable_Eng
-                            @if (Model.SortBy != null && c.ContractField == Model.SortBy.ColumnName)
+                        <td>
+                            <a href="@Url.Action("Edit", "Cases", new {Id = row.ContractCase.CaseId})">@Html.Raw(string.Format("<img title='{0}' alt='{0}' src='/Content/icons/{1}' />", row.ContractCase.CaseIcon.CaseIconTitle(), row.ContractCase.CaseIcon.CaseIconSrc()))&nbsp;@row.ContractCase.CaseNumber</a>&nbsp;
+                            @if (row.ContractCase.HasMultiplyCases)
                             {
-                                switch (Model.SortBy.IsAsc)
-                                {
-                                    case true:
-                                        <i class="icon-chevron-down "></i>
-                                        break;
-                                    case false:
-                                        <i class="icon-chevron-up"></i>
-                                        break;
-                                    default:
-                                        throw new ArgumentOutOfRangeException();
-                                }
+                                <i class="icon-plus-sign cursor-pointer" data-caseNumbers="@string.Join(",", row.ContractCase.CaseNumbers)" openCases></i>
                             }
-                        </th>
-
+                        </td>
                     }
                     else
                     {
-                        <th onclick="SortCol('@c.ContractField', '@Model.SortBy.IsAsc', '@Model.SelectedShowStatus');" style="cursor: pointer;" class="MyTest">
-                            @c.ContractFieldLable
-                            @if (Model.SortBy != null && c.ContractField == Model.SortBy.ColumnName)
-                            {
-                                switch (Model.SortBy.IsAsc)
-                                {
-                                    case true:
-                                        <i class="icon-chevron-down"></i>
-                                        break;
-                                    case false:
-                                        <i class="icon-chevron-up"></i>
-                                        break;
-                                    default:
-                                        throw new ArgumentOutOfRangeException();
-                                }
-                            }
-                        </th>
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})"></a></td>
                     }
                 }
-                
-                @{
-                    foreach (var row in Model.Data)
+
+                if (s.ContractField == EnumContractFieldSettings.Category)
+                {
+                    <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@row.ContractCategory.Name</a></td>
+                }
+
+                if (s.ContractField == EnumContractFieldSettings.Supplier)
+                {
+                    if (row.Supplier != null)
                     {
-
-                        //If(iStatus = 10) Or(iStatus <> 3 And iStatus <> 2) Or(iStatus = 3 And CBool(isInNoticeOfRemoval(rsDH_Support("Finished"), rsDH_Support("NoticeDate"))) = True)
-                        //Or(iStatus = 2 And CBool(isInFollowUp(rsDH_Support("Finished"), rsDH_Support("ContractStartDate"), rsDH_Support("ContractEndDate"), rsDH_Support("FollowUpInterval"))) = True) Then
-                      
-                        if ((Model.SelectedShowStatus == 10) || (Model.SelectedShowStatus != 3 && Model.SelectedShowStatus != 2) || (Model.SelectedShowStatus == 3 && row.IsInNoticeOfRemoval == true) || (Model.SelectedShowStatus == 2 && row.IsInFollowUp == true))
-                        {
-                        <tr>
-                            @foreach (var s in Model.Columns)
-                            {
-                                if (s.ContractField == EnumContractFieldSettings.Number)
-                                {
-                                    <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@row.ContractNumber</a></td>
-                                }
-
-                                if (s.ContractField == EnumContractFieldSettings.CaseNumber)
-                                {
-                                    if (row.CaseNumber != 0)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@row.CaseNumber</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })"></a></td>
-                                    }
-                                }
-
-                                if (s.ContractField == EnumContractFieldSettings.Category)
-                                {
-                                    <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@row.ContractCategory.Name</a></td>
-                                }
-
-                                if (s.ContractField == EnumContractFieldSettings.Supplier)
-                                {
-                                    if (row.Supplier != null)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@row.Supplier.Name</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })"></a></td>
-                                    }
-                                }
-
-                                if (s.ContractField == EnumContractFieldSettings.Department)
-                                {
-                                    if (row.Department != null)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@row.Department.DepartmentName</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })"></a></td>
-                                    }
-                                }
-
-                                if (s.ContractField == EnumContractFieldSettings.ResponsibleUser)
-                                {
-                                    if (row.ResponsibleUser != null)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@row.ResponsibleUser.SurName @row.ResponsibleUser.FirstName</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })"></a></td>
-                                    }
-                                }
-
-                                if (s.ContractField == EnumContractFieldSettings.StartDate)
-                                {
-                                    if (row.ContractStartDate.HasValue)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@row.ContractStartDate.Value.ToShortDateString()</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })"></a></td>
-                                    }
-                                }
-
-                                if (s.ContractField == EnumContractFieldSettings.EndDate)
-                                {
-                                    if (row.ContractEndDate.HasValue)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@row.ContractEndDate.Value.ToShortDateString()</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })"></a></td>
-                                    }
-                                }
-
-                                if (s.ContractField == EnumContractFieldSettings.Filename)
-                                {
-                                    <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })"></a></td>
-                                }
-
-                                if (s.ContractField == EnumContractFieldSettings.NoticeDate)
-                                {
-                                    if (row.NoticeDate.HasValue)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@row.NoticeDate.Value.ToShortDateString()</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })"></a></td>
-                                    }
-                                }
-
-                                if (s.ContractField == EnumContractFieldSettings.Other)
-                                {
-                                    <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@row.Info</a></td>
-                                }
-
-                                if (s.ContractField == EnumContractFieldSettings.Running)
-                                {
-                                    if (row.Running == 0)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@Translation.Get("Nej", Enums.TranslationSource.TextTranslation)</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@Translation.Get("Ja", Enums.TranslationSource.TextTranslation)</a></td>
-                                    }
-                                }
-
-                                if (s.ContractField == EnumContractFieldSettings.Finished)
-                                {
-                                    if (row.Finished == 0)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@Translation.Get("Nej", Enums.TranslationSource.TextTranslation)</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@Translation.Get("Ja", Enums.TranslationSource.TextTranslation)</a></td>
-                                    }
-                                }
-
-                                if (s.ContractField == EnumContractFieldSettings.FollowUpField)
-                                {
-                                    if (row.FollowUpInterval == 0)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })"></a></td>
-                                    }
-                                    else if (row.FollowUpInterval == 1)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@Translation.Get("Månadsvis", Enums.TranslationSource.TextTranslation)</a></td>
-                                    }
-                                    else if (row.FollowUpInterval == 3)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@Translation.Get("Kvartalsvis", Enums.TranslationSource.TextTranslation)</a></td>
-                                    }
-                                    else if (row.FollowUpInterval == 4)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@Translation.Get("Tertialvis", Enums.TranslationSource.TextTranslation)</a></td>
-                                    }
-                                    else if (row.FollowUpInterval == 6)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@Translation.Get("Halvårsvis", Enums.TranslationSource.TextTranslation)</a></td>
-                                    }
-                                    else if (row.FollowUpInterval == 12)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@Translation.Get("Årsvis", Enums.TranslationSource.TextTranslation)</a></td>
-                                    }
-                                }
-
-                                if (s.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField)
-                                {
-                                    if (row.FollowUpResponsibleUser != null)
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })">@row.FollowUpResponsibleUser.SurName @row.FollowUpResponsibleUser.FirstName</a></td>
-                                    }
-                                    else
-                                    {
-                                        <td><a href="@Url.Action("edit", "Contracts", new { Id = row.ContractId })"></a></td>
-                                    }
-                                }
-                            }
-                            @Html.HiddenFor(r => row.ContractId)
-                        </tr>
-                        }
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@row.Supplier.Name</a></td>
                     }
-
+                    else
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})"></a></td>
+                    }
                 }
-        </table>
-    </div>
-    <script type="text/javascript">
 
-        function GetField() {
-            return "hello1";
-        }
-        function SortCol(colName, isAsc, showstatus) {
-            var curAsc = isAsc.toLowerCase() == "true";
-            var newIsAsc = colName == '@Model.SortBy.ColumnName' ? !curAsc : curAsc;
-
-            $.ajax({
-                type: 'GET',
-                url: "@Url.Content("/Contracts/SortBy/")",
-                data: {
-                    customerId: '@Model.Customer.Id',
-                    colName: colName,
-                    isAsc: newIsAsc,
-                    ShowStatus: showstatus
-                },
-                dataType: 'html', //dataType - html
-                success: function (result) {
-                    $('#ContractIndexRows').html(result);
+                if (s.ContractField == EnumContractFieldSettings.Department)
+                {
+                    if (row.Department != null)
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@row.Department.DepartmentName</a></td>
+                    }
+                    else
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})"></a></td>
+                    }
                 }
-            });
-        }
 
-    </script>
+                if (s.ContractField == EnumContractFieldSettings.ResponsibleUser)
+                {
+                    if (row.ResponsibleUser != null)
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@row.ResponsibleUser.SurName @row.ResponsibleUser.FirstName</a></td>
+                    }
+                    else
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})"></a></td>
+                    }
+                }
+
+                if (s.ContractField == EnumContractFieldSettings.StartDate)
+                {
+                    if (row.ContractStartDate.HasValue)
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@row.ContractStartDate.Value.ToShortDateString()</a></td>
+                    }
+                    else
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})"></a></td>
+                    }
+                }
+
+                if (s.ContractField == EnumContractFieldSettings.EndDate)
+                {
+                    if (row.ContractEndDate.HasValue)
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@row.ContractEndDate.Value.ToShortDateString()</a></td>
+                    }
+                    else
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})"></a></td>
+                    }
+                }
+
+                if (s.ContractField == EnumContractFieldSettings.Filename)
+                {
+                    <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})"></a></td>
+                }
+
+                if (s.ContractField == EnumContractFieldSettings.NoticeDate)
+                {
+                    if (row.NoticeDate.HasValue)
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@row.NoticeDate.Value.ToShortDateString()</a></td>
+                    }
+                    else
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})"></a></td>
+                    }
+                }
+
+                if (s.ContractField == EnumContractFieldSettings.Other)
+                {
+                    <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@row.Info</a></td>
+                }
+
+                if (s.ContractField == EnumContractFieldSettings.Running)
+                {
+                    if (row.Running == 0)
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@Translation.Get("Nej", Enums.TranslationSource.TextTranslation)</a></td>
+                    }
+                    else
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@Translation.Get("Ja", Enums.TranslationSource.TextTranslation)</a></td>
+                    }
+                }
+
+                if (s.ContractField == EnumContractFieldSettings.Finished)
+                {
+                    if (row.Finished == 0)
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@Translation.Get("Nej", Enums.TranslationSource.TextTranslation)</a></td>
+                    }
+                    else
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@Translation.Get("Ja", Enums.TranslationSource.TextTranslation)</a></td>
+                    }
+                }
+
+                if (s.ContractField == EnumContractFieldSettings.FollowUpField)
+                {
+                    if (row.FollowUpInterval == 0)
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})"></a></td>
+                    }
+                    else if (row.FollowUpInterval == 1)
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@Translation.Get("Månadsvis", Enums.TranslationSource.TextTranslation)</a></td>
+                    }
+                    else if (row.FollowUpInterval == 3)
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@Translation.Get("Kvartalsvis", Enums.TranslationSource.TextTranslation)</a></td>
+                    }
+                    else if (row.FollowUpInterval == 4)
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@Translation.Get("Tertialvis", Enums.TranslationSource.TextTranslation)</a></td>
+                    }
+                    else if (row.FollowUpInterval == 6)
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@Translation.Get("Halvårsvis", Enums.TranslationSource.TextTranslation)</a></td>
+                    }
+                    else if (row.FollowUpInterval == 12)
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@Translation.Get("Årsvis", Enums.TranslationSource.TextTranslation)</a></td>
+                    }
+                }
+
+                if (s.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField)
+                {
+                    if (row.FollowUpResponsibleUser != null)
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@row.FollowUpResponsibleUser.SurName @row.FollowUpResponsibleUser.FirstName</a></td>
+                    }
+                    else
+                    {
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})"></a></td>
+                    }
+                }
+            }
+            @*@Html.HiddenFor(r => row.ContractId)*@
+        </tr>
+    }
+}
+</table>
+@Html.Hidden("currentSortCol", Model.SortBy.ColumnName)
+@Html.Hidden("currentSortOrder", Model.SortBy.IsAsc ? "asc" : "dsc")
+@Html.Hidden("search_totalCases", searchSummary.TotalCases)
+@Html.Hidden("search_ongoingCases", searchSummary.OnGoingCases)
+@Html.Hidden("search_finishedCases", searchSummary.FinishedCases)
+@Html.Hidden("search_noticeOfRemovalCount", searchSummary.ContractNoticeOfRemovalCount)
+@Html.Hidden("search_followUpCount", searchSummary.ContractFollowUpCount)
+@Html.Hidden("search_runningCases", searchSummary.RunningCases)
+</div>
+
+<div id="divContractCases" role="dialog" class="modal hide fade modal-wide" aria-labelledby="myModalLabel" aria-hidden="true">
+    @Html.Partial("_ContractCases", Model.ContractCases)
+</div>
+

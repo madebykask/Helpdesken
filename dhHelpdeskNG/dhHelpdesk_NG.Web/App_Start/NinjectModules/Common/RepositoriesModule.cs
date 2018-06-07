@@ -303,6 +303,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IGDPRDataPrivacyAccessRepository>().To<GDPRDataPrivacyAccessRepository>();
             this.Bind<IGDPROperationsAuditRespository>().To<GDPROperationsAuditRespository>();
             this.Bind<IGDPRDataPrivacyFavoriteRepository>().To<GDPRDataPrivacyFavoriteRepository>();
+            this.Bind<IGDPRTaskRepository>().To<GDPRTaskRepository>();
         }
 
         #endregion

@@ -317,7 +317,7 @@
                                                 </td>
                                                 @if (Model.caseFieldSettings.IsFieldVisible(GlobalEnums.TranslationCaseFields.AddFollowersBtn))
                                                 {
-                                                    <td>
+                                                    <td style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn)">
                                                         @Html.HiddenFor(model => model.FollowerUsers, new { @readonly = "true", id = "extraEmailsInput" })
                                                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseSolutionFields.AddFollowersBtn))
                                                         {
@@ -1067,7 +1067,7 @@
                                                 <span id="ProductAreaFieldCaption"> @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ProductArea_Id, "Produktområde") </span>
                                             </td>
                                             <td colspan="2">
-                                                <div id="divProductArea" class="btn-group DynamicDropDown">
+                                                <div id="divProductArea" class="btn-group">
                                                     @{
                                                         string disabledProductArea = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea);
                                                     }
@@ -1496,14 +1496,14 @@
                                                 <span class="lbl">@Translation.Get("Skicka SMS när ärendet avslutas", SessionFacade.CurrentLanguageId).</span>
                                             </td>
                                         </tr>
-                                        <tr class="displaytr" style="@Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())">
+                                        <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.AgreedDate, CaseSolutionFields.AgreedDate)">
                                             <td>
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.AgreedDate, "Överenskommet datum")
                                             </td>
                                             <td colspan="2">
                                                 @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.AgreedDate, CaseSolutionFields.AgreedDate))
                                                 {
-                                                    @Html.EditorFor(m => m.case_.AgreedDate, "DatePicker", new { id = "divCase__AgreedDate", disabled = "disabled" })
+                                                    @Html.EditorFor(m => m.case_.AgreedDate, "DateReadOnly", new { id = "divCase__AgreedDate", @class = "readonlyAgreedDate" })
                                                 }
                                                 else
                                                 {
@@ -2199,7 +2199,7 @@
                                                         </td>
                                                         <td>
                                                             @readonlyExternalInvoices[i].Amount.ToString("#.##")
-                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@readonlyExternalInvoices[i].Amount.ToString("#.##")" placeholder="0.00">
+                                                            <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@readonlyExternalInvoices[i].AmountValue" placeholder="0.00">
                                                             <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="@readonlyExternalInvoices[i].Id">
                                                         </td>
                                                         <td>
@@ -2212,29 +2212,77 @@
                                                 {
                                                     <tr>
                                                         <td>
-                                                            <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@editableExternalInvoices[i].Name">
+                                                                @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                                {
+                                                                    <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@editableExternalInvoices[i].Name" disabled="disabled">
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@editableExternalInvoices[i].Name">
+                                                                }
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@editableExternalInvoices[i].Amount.ToString("#.##")" placeholder="0.00">
+                                                            @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                            {
+                                                                <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@editableExternalInvoices[i].AmountValue" placeholder="0.00" disabled="disabled">
+                                                            }
+                                                            else
+                                                            {
+                                                                <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@editableExternalInvoices[i].AmountValue" placeholder="0.00">
+                                                            }
+                                                            
                                                             <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="@editableExternalInvoices[i].Id">
                                                         </td>
                                                         <td>
-                                                            <a id="btnDeleteExternalInvoice0" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount"><i class="icon-remove"></i></a>
+                                                            @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                            {
+                                                                <a id="btnDeleteExternalInvoice0" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount" disabled="disabled"><i class="icon-remove"></i></a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a id="btnDeleteExternalInvoice0" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount"><i class="icon-remove"></i></a>
+                                                            }
+                                                            
                                                         </td>
                                                     </tr>
                                                     extInvoicesCount++;
                                                 }
                                                 <tr>
                                                     <td>
-                                                        <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name">
+                                                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                        {
+                                                            <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" disabled="disabled">
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name">
+                                                        }
+                                                        
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" placeholder="0.00">
+                                                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                        {
+                                                            <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" placeholder="0.00" disabled="disabled">
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" placeholder="0.00">
+                                                        }
+                                                        
                                                         <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="0">
                                                     </td>
                                                     <td>
-                                                        <a id="@("btnDeleteExternalInvoice" + extInvoicesCount)" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount"><i class="icon-remove"></i></a>
-                                                        <a id="btnAddExternalInvoice" class="btn bt-small" title="Add"><i class="icon-plus"></i></a>
+                                                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                        {
+                                                            <a id="@("btnDeleteExternalInvoice" + extInvoicesCount)" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount" disabled="disabled"><i class="icon-remove"></i></a>
+                                                            
+                                                        }
+                                                        else
+                                                        {
+                                                            <a id="@("btnDeleteExternalInvoice" + extInvoicesCount)" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount"><i class="icon-remove"></i></a>
+                                                            <a id="btnAddExternalInvoice" class="btn bt-small" title="Add"><i class="icon-plus"></i></a>
+                                                        }
+                                                        
                                                     </td>
                                                 </tr>
                                             </table>

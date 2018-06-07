@@ -20,10 +20,13 @@
         List<ContractsSettingRowModel> GetContractsSettingRows(int customerId);
         void SaveContractSettings(List<ContractsSettingRowModel> ContractSettings);
         int SaveContract(ContractInputModel contract);
-        void SaveContractHistory(ContractInputModel contract);
+        void SaveContractHistory(Contract contract, List<string> files);
         void SaveContracFile(ContractFileModel contractFile);
         List<ContractFileModel> GetContractFiles(int contractId);
         ContractFileModel GetContractFile(int fileId);
+
+        IList<ContractHistoryFull> GetContractractHistoryList(int contractId);
+
         void DeleteContract(Contract contract);
         void DeleteContractFile(int fileId);
 
@@ -119,7 +122,6 @@
 
         public int SaveContract(ContractInputModel contract)
         {
-
             if (contract == null)
                 throw new ArgumentNullException("Contract");
 
@@ -138,36 +140,42 @@
             if (contract.FollowUpResponsibleUserId == 0)
                 contract.FollowUpResponsibleUserId = null;
 
-            if (contract.Id == 0)            
-                contract.ContractGUID = Guid.NewGuid();
+            var contractId = this._contractRepository.SaveContract(contract);
+            
+            var entity = _contractRepository.GetById(contractId);
 
-            this._contractRepository.SaveContract(contract);
-            this._contractRepository.Commit();           
-
+            SaveContractHistory(entity, contract.Files);
             return contract.Id;
         }
 
-        public void SaveContractHistory(ContractInputModel contract)
+        public void SaveContractHistory(Contract contract, List<string> files)
         {
             if (contract == null)
                 throw new ArgumentNullException("Contract");
 
-            if (contract.ContractNumber == null)
-                contract.ContractNumber = string.Empty;
+            var contractHistory = new ContractHistory()
+            {
+                Contract_Id = contract.Id,
+                ContractCategory_Id = contract.ContractCategory_Id,
+                Department_Id = contract.Department_Id,
+                Finished = contract.Finished,
+                FollowUpInterval = contract.FollowUpInterval,
+                FollowUpResponsibleUser_Id = contract.FollowUpResponsibleUser_Id,
+                ResponsibleUser_Id = contract.ResponsibleUser_Id,
+                Running = contract.Running,
+                Supplier_Id = contract.Supplier_Id,
+                ContractNumber = contract.ContractNumber,
+                Info = contract.Info,
+                Files = files.Any() ? string.Join(";", files) : string.Empty,
+                ContractStartDate = contract.ContractStartDate,
+                ContractEndDate = contract.ContractEndDate,
+                NoticeDate = contract.NoticeDate,
+                NoticeTime = contract.NoticeTime,
+                CreatedDate = DateTime.UtcNow,
+                CreatedByUser_Id = contract.ChangedByUser_Id
+            };
 
-            if (contract.SupplierId == 0)
-                contract.SupplierId = null;
-
-            if (contract.DepartmentId == 0)
-                contract.DepartmentId = null;
-
-            if (contract.ResponsibleUserId == 0)
-                contract.ResponsibleUserId = null;
-
-            if (contract.FollowUpResponsibleUserId == 0)
-                contract.FollowUpResponsibleUserId = null;
-
-            this._contractHistoryRepository.SaveContractHistory(contract);
+            this._contractHistoryRepository.Add(contractHistory);
             this._contractHistoryRepository.Commit();
         }
 
@@ -218,9 +226,14 @@
             return contractFileModule;
         }
 
+        public IList<ContractHistoryFull> GetContractractHistoryList(int contractId)
+        {
+            return _contractHistoryRepository.GetContractractHistoryList(contractId);
+        }
+
         public void DeleteContract(Contract contract)
         {
-            this._contractHistoryRepository.DeleteContractHistory(contract);
+            this._contractHistoryRepository.Delete(c => c.Contract_Id == contract.Id);
             this._contractHistoryRepository.Commit();
 
             this.DeleteAllContractFiles(contract.Id);

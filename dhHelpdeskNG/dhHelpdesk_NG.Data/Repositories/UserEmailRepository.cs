@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Data.Entity;
+using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Enums.Users;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.Models.Case.CaseIntLog;
+using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;
+using DH.Helpdesk.BusinessData.Models.Email;
 using DH.Helpdesk.Dal.Repositories.Notifiers;
 
 namespace DH.Helpdesk.Dal.Repositories
@@ -41,11 +46,50 @@ namespace DH.Helpdesk.Dal.Repositories
                 .ToList();
         }
 
-        public List<CaseEmailSendOverview> GetUserEmailsListForCaseSend(int customerId, string searchText, bool searchInWorkingGrs, bool searchInInitiators, bool searchInAdmins, bool searchInEmailGrs, bool isInternalLog = false)
+        private List<UserBasicOvierview> SearchUsersEmails(string searchText, int customerId, bool performersOnly, bool usersOnly)
+        {
+            var query = DbContext.Users
+                .Where(x => x.IsActive == 1 && x.CustomerUsers.Any(cu => cu.Customer_Id == customerId))
+                .Where(x => x.UserID.Contains(searchText) || x.FirstName.Contains(searchText) ||
+                            x.SurName.Contains(searchText) || x.Email.Contains(searchText)
+                            || (x.SurName + " " + x.FirstName).Contains(searchText)
+                            || (x.FirstName + " " + x.SurName).Contains(searchText))
+                .Where(x => !string.IsNullOrEmpty(x.Email));
+
+            if (performersOnly)
+            {
+                var usersGroupId = (int)UserGroup.User;
+                query = query.Where(x => x.Performer == 1 && x.UserGroup_Id > usersGroupId);
+            }
+
+            if (usersOnly)
+            {
+                var usersGroupId = (int)UserGroup.User;
+                query = query.Where(x => x.UserGroup_Id == usersGroupId);
+            }
+
+            var items = query
+                .OrderBy(x => x.FirstName)
+                .ThenBy(x => x.SurName)
+                .ThenBy(x => x.Id)
+                .Select(x => new UserBasicOvierview()
+                {
+                    UserID = x.UserID,
+                    FirstName = x.FirstName,
+                    SurName = x.SurName,
+                    Email = x.Email
+                })
+                .Take(25)
+                .ToList();
+
+            return items;
+        }
+
+        public List<CaseEmailSendOverview> GetUserEmailsListForCaseSend(int customerId, string searchText, IEmailSearchScope searchScope)
         {
             var result = new List<CaseEmailSendOverview>();
 
-            if (searchInInitiators)
+            if (searchScope.SearchInInitiators)
             {
                 var inits = _notifierRepository.Search(customerId, searchText).Where(x => !string.IsNullOrEmpty(x.Email)).Select(x => new CaseEmailSendOverview
                 {
@@ -59,34 +103,46 @@ namespace DH.Helpdesk.Dal.Repositories
                     GroupType = CaseUserSearchGroup.Initiator,
                     DepartmentName = string.IsNullOrEmpty(x.DepartmentName) ? string.Empty : x.DepartmentName
                 }).ToList();
+
                 result.AddRange(inits);
             }
 
-            if (searchInAdmins)
+            if (searchScope.SearchInAdmins)
             {
-                var admins = DbContext.Users
-                    .Where(x => x.Performer == 1)
-                    .Where(x => x.IsActive == 1 && x.CustomerUsers.Any(cu => cu.Customer_Id == customerId))
-                    .Where(x => x.UserID.Contains(searchText) || x.FirstName.Contains(searchText) || x.SurName.Contains(searchText) || x.Email.Contains(searchText)
-                            || (x.SurName + " " + x.FirstName).Contains(searchText)
-                            || (x.FirstName + " " + x.SurName).Contains(searchText))
-                    .Where(x => !string.IsNullOrEmpty(x.Email))
-                    .OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ThenBy(x => x.Id).Take(25)
+                //admin
+                var items = SearchUsersEmails(searchText, customerId, true, false);
+                var admins = items// todo: shall we exclude Users?
                     .Select(x => new CaseEmailSendOverview
                     {
                         UserId = x.UserID,
                         FirstName = x.FirstName,
                         SurName = x.SurName,
-                        Emails = new List<string>
-                        {
-                            x.Email
-                        },
+                        Emails = new List<string> {x.Email},
                         GroupType = CaseUserSearchGroup.Administaror,
                         DepartmentName = string.Empty
                     }).ToList();
+
                 result.AddRange(admins);
             }
-            if (searchInWorkingGrs)
+
+            if (searchScope.SearchInUsers)
+            {
+                var items = SearchUsersEmails(searchText, customerId, false, true);
+                var users = items // todo: shall we exclude performers?
+                    .Select(x => new CaseEmailSendOverview
+                    {
+                        UserId = x.UserID,
+                        FirstName = x.FirstName,
+                        SurName = x.SurName,
+                        Emails = new List<string> { x.Email },
+                        GroupType = CaseUserSearchGroup.Users,
+                        DepartmentName = string.Empty
+                    }).ToList();
+
+                result.AddRange(users);
+            }
+
+            if (searchScope.SearchInWorkingGrs)
             {
                 var wgs = DbContext.WorkingGroups.Where(x => x.IsActive == 1 && x.Customer_Id == customerId && x.WorkingGroupName.Contains(searchText)).AsQueryable();
 
@@ -114,7 +170,8 @@ namespace DH.Helpdesk.Dal.Repositories
                 .OrderBy(x => x.FirstName).ToList();
                 result.AddRange(newList);
             }
-            if (searchInEmailGrs)
+
+            if (searchScope.SearchInEmailGrs)
             {
                 var emailGroups = DbContext.EMailGroups
                     .Where(x => x.IsActive == 1 && x.Customer_Id == customerId && (x.Members.Contains(searchText) || x.Name.Contains(searchText))).ToList();

@@ -76,6 +76,8 @@
             this.Property(x => x.ResponsibleReminderControlTime).IsRequired();
             this.Property(x => x.ResponsibleReminderEmailList).IsRequired().HasMaxLength(400);
             this.Property(x => x.ShowBulletinBoardOnExtPage).IsRequired();
+            this.Property(x => x.ShowCalenderOnExtPage).IsRequired();
+            this.Property(x => x.ShowOperationalLogOnExtPage).IsRequired();
             this.Property(x => x.ShowCaseOnExternalPage).IsRequired();
             this.Property(x => x.ShowDashboardOnExternalPage).IsRequired();
             this.Property(x => x.ShowFAQOnExternalPage).IsRequired();

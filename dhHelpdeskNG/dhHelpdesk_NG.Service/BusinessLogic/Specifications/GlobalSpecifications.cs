@@ -89,7 +89,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Specifications
                 query = query.Where(x => x.ShowOnStartPage == 1);
             }
 
-            query = query.SortByCreated();
+            query = query.SortByChangedDate();
 
             if (count.HasValue)
             {
@@ -258,7 +258,15 @@ namespace DH.Helpdesk.Services.BusinessLogic.Specifications
             query = query.OrderByDescending(x => x.CreatedDate);
 
             return query;
-        }  
+        }
+
+        public static IQueryable<T> SortByChangedDate<T>(this IQueryable<T> query)
+            where T : class, IDatedEntity
+        {
+            query = query.OrderByDescending(x => x.ChangedDate);
+
+            return query;
+        }
 
         public static IQueryable<T> GetActive<T>(this IQueryable<T> query)
             where T : class, IActiveEntity

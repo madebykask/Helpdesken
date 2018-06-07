@@ -32,8 +32,15 @@
             var place = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.PlaceFieldSetting);
             var workstation = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.WorkstationFieldSetting);
             var info = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.InfoFieldSetting);
+
             var createdDate = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.CreatedDateFieldSetting);
             var changedDate = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.ChangedDateFieldSetting);
+            var syncDate = MapInventoryFieldSetting(response.InventoryFieldSettings.DefaultSettings.SyncDateFieldSetting);
+
+            //hide xml for date fields
+            createdDate.HideXml = true;
+            changedDate.HideXml = true;
+            syncDate.HideXml = true;
 
             var defaultFieldSettingsModel = new DefaultFieldSettingsModel(
                 department,
@@ -48,20 +55,27 @@
                 workstation,
                 info,
                 createdDate,
-                changedDate);
+                changedDate,
+                syncDate);
 
-            var inventoryDynamicFieldSettings = response.InventoryDynamicFieldSettings.Select(
-                    dynamicSetting => MapInventoryDynamicFieldSetting(dynamicSetting, groupModels, inventoryType.Id)).ToList();
+            var inventoryDynamicFieldSettings =
+                response.InventoryDynamicFieldSettings
+                    .Select(dynamicSetting => MapInventoryDynamicFieldSetting(dynamicSetting, groupModels, inventoryType.Id))
+                    .ToList();
 
             var inventoryTypeModel = new InventoryTypeModel(inventoryType.Id, inventoryType.Name);
             var newDynamicFieldSettingViewModel = CreateNewInventoryDynamicFieldSettingViewModel(groupModels);
 
-            var viewModel = new InventoryFieldSettingsEditViewModel(inventoryTypeModel,
-                new InventoryFieldSettingsViewModel(newDynamicFieldSettingViewModel, defaultFieldSettingsModel, inventoryDynamicFieldSettings));
+            var settingsViewModel = new InventoryFieldSettingsViewModel(newDynamicFieldSettingViewModel,
+                                                                        defaultFieldSettingsModel,
+                                                                        inventoryDynamicFieldSettings);
 
+            var viewModel = new InventoryFieldSettingsEditViewModel(inventoryTypeModel, settingsViewModel);
             return viewModel;
         }
 
+        // Build view model for New Inventory Settings
+        //todo: check state for SyncDate!!!
         public InventoryFieldSettingsEditViewModel BuildDefaultViewModel(List<TypeGroupModel> groupModels)
         {
             var department = InventoryFieldSettingModel.GetDefault(null, InventoryFieldNames.Department);
@@ -77,6 +91,12 @@
             var info = InventoryFieldSettingModel.GetDefault(1000, InventoryFieldNames.Info);
             var createdDate = InventoryFieldSettingModel.GetDefault(12, InventoryFieldNames.CreatedDate);
             var changedDate = InventoryFieldSettingModel.GetDefault(12, InventoryFieldNames.ChangedDate);
+            var syncDate = InventoryFieldSettingModel.GetDefault(12, InventoryFieldNames.SyncDate);
+
+            //hide xml for date fields
+            createdDate.HideXml = true;
+            changedDate.HideXml = true;
+            syncDate.HideXml = true;
 
             var defaultFieldSettingsModel = new DefaultFieldSettingsModel(
                 department,
@@ -91,23 +111,21 @@
                 workstation,
                 info,
                 createdDate,
-                changedDate);
+                changedDate,
+                syncDate);
 
             var inventoryTypeModel = InventoryTypeModel.CreateDefault();
             var newDynamicFieldSettingViewModel = CreateNewInventoryDynamicFieldSettingViewModel(groupModels);
 
-            var viewModel = new InventoryFieldSettingsEditViewModel(
-                inventoryTypeModel,
-                new InventoryFieldSettingsViewModel(
-                    newDynamicFieldSettingViewModel,
-                    defaultFieldSettingsModel,
-                    new List<InventoryDynamicFieldSettingViewModel>()));
+            var fieldsSettingsViewModel = new InventoryFieldSettingsViewModel(newDynamicFieldSettingViewModel,
+                                                                              defaultFieldSettingsModel,
+                                                                              new List<InventoryDynamicFieldSettingViewModel>());
 
+            var viewModel = new InventoryFieldSettingsEditViewModel(inventoryTypeModel,fieldsSettingsViewModel);
             return viewModel;
         }
 
-        private static NewInventoryDynamicFieldSettingViewModel CreateNewInventoryDynamicFieldSettingViewModel(
-            List<TypeGroupModel> groupModels)
+        private static NewInventoryDynamicFieldSettingViewModel CreateNewInventoryDynamicFieldSettingViewModel(List<TypeGroupModel> groupModels)
         {
             var fieldTypesSelectList = CreateFieldTypesSelectList(null);
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -10,6 +9,7 @@ using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Common.Extensions.String;
@@ -65,6 +65,11 @@ namespace DH.Helpdesk.Dal.Repositories
                 public const string Text_External = "Text_External";
             }
 
+            public static class Region
+            {
+                public const string RegionName = "Region";
+            }
+
             public static class Department
             {
                 public const string DepartmentId = "DepartmentId";
@@ -81,7 +86,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         #region FreeText Search Condition Fields
 
-        private string[] _initiatorCaseConditionFields = new string[]
+        private readonly string[] _initiatorCaseConditionFields = new string[]
         {
             Tables.Case.ReportedBy,
             Tables.Case.Persons_Name,
@@ -92,7 +97,7 @@ namespace DH.Helpdesk.Dal.Repositories
             Tables.Case.Persons_Phone
         };
 
-        private string[] _freeTextCaseConditionFields = new string[]
+        private readonly string[] _freeTextCaseConditionFields = new string[]
         {
             Tables.Case.ReportedBy,
             Tables.Case.Persons_Name,
@@ -109,7 +114,7 @@ namespace DH.Helpdesk.Dal.Repositories
             Tables.Case.InventoryNumber
         };
 
-        private string[] _freeTextCaseIsAboutConditionFields = new string[]
+        private readonly string[] _freeTextCaseIsAboutConditionFields = new string[]
         {
             Tables.CaseIsAbout.ReportedBy,
             Tables.CaseIsAbout.Person_Name,
@@ -120,13 +125,18 @@ namespace DH.Helpdesk.Dal.Repositories
             Tables.CaseIsAbout.Person_Phone
         };
 
-        private string[] _freeTextLogConditionFields = new string[]
+        private readonly string[] _freeTextLogConditionFields = new string[]
         {
             Tables.Log.Text_Internal,
             Tables.Log.Text_External
         };
 
-        private string[] _freeTextDepartmentConditionFields = new string[]
+        private readonly string[] _freeTextRegionConditionFields = new string[]
+        {
+            Tables.Region.RegionName
+        };
+
+        private readonly string[] _freeTextDepartmentConditionFields = new string[]
         {
             Tables.Department.DepartmentId,
             Tables.Department.DepartmentName
@@ -136,7 +146,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public string BuildCaseSearchSql(SearchQueryBuildContext ctx)
         {
-            
             _useFts = ctx.UseFullTextSearch;
 
             var search = ctx.Criterias.Search;
@@ -443,9 +452,10 @@ namespace DH.Helpdesk.Dal.Repositories
                     var items = new List<string>
                     {
                         BuildCaseFreeTextSearchQueryCte(freeText, filter),
+                        //BuildRegionFreeTextSearchQueryCte(freeText, filter),
+                        BuildDepartmentFreeTextSearchQueryCte(freeText, filter),
                         BuildCaseIsAboutFreeTextSearchQueryCte(freeText, filter),
                         BuildLogFreeTextSearchQueryCte(freeText, filter),
-                        BuildDepartmentFreeTextSearchQueryCte(freeText, filter),
                         BuilFormFieldValueFreeTextSearchQueryCte(freeText, filter)
                     };
 
@@ -536,6 +546,24 @@ namespace DH.Helpdesk.Dal.Repositories
 
             strBld.AppendLine(" )");
             strBld.AppendLine(@"GROUP BY tblLog.Case_Id");
+            return strBld.ToString();
+        }
+
+        private string BuildRegionFreeTextSearchQueryCte(string freeText, CaseSearchFilter filter)
+        {
+            var customerId = filter.CustomerId;
+            var strBld = new StringBuilder();
+
+            strBld.AppendLine(@"SELECT caseReg.Id FROM tblRegion reg ");
+            strBld.AppendLine("  INNER JOIN tblCase caseReg WITH (nolock) ON reg.Id = caseReg.Region_Id ");
+            strBld.AppendFormat("WHERE caseReg.Customer_Id = {0} ", customerId).AppendLine();
+            strBld.AppendLine(" AND (");
+            var items = BuildFreeTextConditionsFor(freeText, _freeTextRegionConditionFields);
+            var formattedConditions = ConcatConditionsToString(items);
+            strBld.AppendLine(formattedConditions);
+
+            strBld.AppendLine(" )");
+            strBld.AppendLine(@"GROUP BY caseReg.Id");
             return strBld.ToString();
         }
 
@@ -1062,22 +1090,10 @@ namespace DH.Helpdesk.Dal.Repositories
             // region
             if (!string.IsNullOrWhiteSpace(searchFilter.Region))
             {
-                switch (searchFilter.InitiatorSearchScope)
-                {
-                    case CaseInitiatorSearchScope.UserAndIsAbout:
-                        sb.Append(" and (tblDepartment.Region_Id in (" + searchFilter.Region.SafeForSqlInject() + ")" + " or tblCaseIsAbout.Region_Id in (" + searchFilter.Region.SafeForSqlInject() + "))");
-                        break;
-                    case CaseInitiatorSearchScope.User:
-                        sb.Append(" and (tblDepartment.Region_Id in (" + searchFilter.Region.SafeForSqlInject() + "))");
-                        break;
-                    case CaseInitiatorSearchScope.IsAbout:
-                        sb.Append(" and (tblCaseIsAbout.Region_Id in (" + searchFilter.Region.SafeForSqlInject() + "))");
-                        break;
-                    default:
-                        sb.Append(" and (tblDepartment.Region_Id in (" + searchFilter.Region.SafeForSqlInject() + ")" + " or tblCaseIsAbout.Region_Id in (" + searchFilter.Region.SafeForSqlInject() + "))");
-                        break;
-                }
+                var regionCondition = BuildRegionSearchCondition(searchFilter);
+                sb.Append(regionCondition);
             }
+
             // prio
             if (!string.IsNullOrWhiteSpace(searchFilter.Priority))
                 sb.Append(" and (tblcase.Priority_Id in (" + searchFilter.Priority.SafeForSqlInject() + "))");
@@ -1125,21 +1141,29 @@ namespace DH.Helpdesk.Dal.Repositories
 
             if (!string.IsNullOrWhiteSpace(searchFilter.FreeTextSearch))
             {
-                if (searchFilter.FreeTextSearch[0] == '#')
+                if (searchFilter.FreeTextSearch[0] == CaseSearchConstants.CaseNumberSearchPrefix)
                 {
                     var text = searchFilter.FreeTextSearch.Substring(1, searchFilter.FreeTextSearch.Length - 1);
-                    int res = 0;
-                    if (int.TryParse(text, out res))
+                    var texts = text.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+                    if (texts.Length > 1)
                     {
-                        sb.Append(" AND (");
-                        sb.Append("[tblCase].[CaseNumber] = " + text.SafeForSqlInject());
-                        sb.Append(") ");
+                        sb.AppendFormat(" AND [tblCase].[CaseNumber] In ({0}) ", text.SafeForSqlInject());
                     }
                     else
                     {
-                        sb.Append(" AND (");
-                        sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text.SafeForSqlInject()));
-                        sb.Append(") ");
+                        int res = 0;
+                        if (int.TryParse(text, out res))
+                        {
+                            sb.Append(" AND (");
+                            sb.Append("[tblCase].[CaseNumber] = " + text.SafeForSqlInject());
+                            sb.Append(") ");
+                        }
+                        else
+                        {
+                            sb.Append(" AND (");
+                            sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text.SafeForSqlInject()));
+                            sb.Append(") ");
+                        }
                     }
                 }
                 else
@@ -1241,6 +1265,35 @@ namespace DH.Helpdesk.Dal.Repositories
             return sb.ToString();
         }
 
+        private string BuildRegionSearchCondition(CaseSearchFilter searchFilter)
+        {
+            var condition = string.Empty;
+            var searchScope = searchFilter.InitiatorSearchScope;
+            var regions = searchFilter.Region.SafeForSqlInject();
+
+            var conditions = new List<string>();
+
+            // add case search condition
+            if (searchScope == CaseInitiatorSearchScope.User || searchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+            {
+                conditions.Add($" tblCase.Region_Id in ({regions})");
+                conditions.Add($" tblDepartment.Region_Id in ({regions})");
+            }
+
+            //add isAbout search condition
+            if (searchScope == CaseInitiatorSearchScope.IsAbout || searchScope == CaseInitiatorSearchScope.UserAndIsAbout)
+            {
+                conditions.Add($"tblCaseIsAbout.Region_Id in ({regions})");
+            }
+
+            if (conditions.Any())
+            {
+                condition = ConcatConditionsToString(conditions, CaseSearchConstants.Combinator_OR);
+            }
+
+            return !string.IsNullOrEmpty(condition) ? $" AND ( {condition} )" : string.Empty;
+        }
+
         private string BuildCaseFreeTextSearchConditions(string text)
         {
             var items = BuildFreeTextConditionsFor(text, _freeTextCaseConditionFields, "tblCase");
@@ -1271,7 +1324,7 @@ namespace DH.Helpdesk.Dal.Repositories
         private bool IsFreeTextSearch(CaseSearchFilter searchFilter)
         {
             return !string.IsNullOrWhiteSpace(searchFilter.FreeTextSearch) &&
-                   searchFilter.FreeTextSearch[0] != '#';
+                   searchFilter.FreeTextSearch[0] != CaseSearchConstants.CaseNumberSearchPrefix;
         }
 
         private bool IsHelpdeskApplication(ICaseSearchCriterias searchCriterias)

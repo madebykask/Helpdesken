@@ -50,6 +50,9 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
     using Domain.ExtendedCaseEntity;
     using BusinessData.Models.Condition;
     using Dal.Mappers.Condition;
+    using Dal.Mappers.Calendars.EntityToBusinessModel;
+    using BusinessData.Models.Calendar.Output;
+    using Dal.Mappers.Calendars.BusinessModelToEntity;
 
     /// <summary>
     /// The common module.
@@ -141,6 +144,14 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
 
             this.Bind<IEntityToBusinessModelMapper<CaseLockEntity, CaseLock>>()
                 .To<CaseLockToBusinessModelMapper>()
+                .InSingletonScope();
+
+            this.Bind<IBusinessModelToEntityMapper<CalendarOverview, Calendar>>()
+                .To<CalendarToEntityMapper>()
+                .InSingletonScope();
+
+            this.Bind<IEntityToBusinessModelMapper<Calendar, CalendarOverview>>()
+                .To<CalendarToBusinessModelMapper>()
                 .InSingletonScope();
 
             this.Bind<IBusinessModelToEntityMapper<CaseFilterFavorite, CaseFilterFavoriteEntity>>()

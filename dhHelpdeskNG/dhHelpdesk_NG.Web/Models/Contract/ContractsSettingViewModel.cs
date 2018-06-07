@@ -20,8 +20,8 @@ namespace DH.Helpdesk.Web.Models.Contract
             Languages = new List<SelectListItem>();
         }
 
-        public int customer_id { get; set; }
-        public int language_id { get; set; }
+        public int CustomerId { get; set; }
+        public int CurrentLanguage { get; set; }
         public List<SelectListItem> Languages { get; set; }
         public List<ContractsSettingRowViewModel> SettingRows { get; set; }
     }
@@ -140,26 +140,23 @@ namespace DH.Helpdesk.Web.Models.Contract
         public List<ContractsSettingRowViewModel> Columns { get; set; }
     }
 
-    public sealed class JSContractsSettingRowViewModel
+    public sealed class ContractsSettingRowData
     {
-
-        public JSContractsSettingRowViewModel()
-        { }
         public string Id { get; set; }
 
         public string ContractField { get; set; }
 
-        public string Show { get; set; }
+        public bool Show { get; set; }
 
-        public string ShowInList { get; set; }
+        public bool ShowInList { get; set; }
 
-        public string Caption_Eng { get; set; }
+        public string CaptionEng { get; set; }
 
-        public string Caption_Sv { get; set; }
+        public string CaptionSv { get; set; }
 
-        public string Required { get; set; }
+        public bool Required { get; set; }
 
-        public string LanguageId { get; set; }
+        public int LanguageId { get; set; }
     }
 
 }

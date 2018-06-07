@@ -210,6 +210,8 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public bool UpdateNotifierInformation { get; set; }
 
+        public bool AddFollowersBtn { get; set; }
+
         public string FinishingCause { get; set; }
      
         public CaseInvoiceModel InvoiceModel { get; set; }

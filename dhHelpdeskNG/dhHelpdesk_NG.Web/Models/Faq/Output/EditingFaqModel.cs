@@ -69,7 +69,7 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
 
         public string Id { get; private set; }
 
-        [LocalizedRequired]
+        [LocalizedRequired("Du måste ange ett svar")]
         public string Answer { get; private set; }
 
         public DropDownWithSubmenusContent Category { get; private set; }

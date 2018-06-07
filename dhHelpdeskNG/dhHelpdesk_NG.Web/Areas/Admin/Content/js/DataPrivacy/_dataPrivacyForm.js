@@ -128,16 +128,30 @@ window.DataPrivacyForm =
              }
          };
 
-         this.togglePrivacyRunBtn = function (enable) {
-             var wrapper$ = $('#tooltip-button-wrapper');
-             if (enable) {
-                 wrapper$.tooltip('destroy');
-             } else {
-                 wrapper$.tooltip({container: 'body'});
-             }
+        this.togglePrivacyRunBtn = function(enable) {
+            var wrapper$ = $('#tooltip-button-wrapper');
+            if (enable) {
+                wrapper$.tooltip('destroy');
+            } else {
+                wrapper$.tooltip({ container: 'body' });
+            }
             _self.enableControl(_self.privacyRunBtn$, enable);
 
-        }
+        };
+
+        this.unlockFormFields = function () {
+            var self = this;
+            var favoriteId = self.getSelectedFavoriteId();
+            $.getJSON(self.urls.GetRunningDataPrivacyTasksAction, $.param({ favoriteId: favoriteId }), function (res) {
+                var count = +res.count || 0;
+                if (count > 0) {
+                    window.ShowToastMessage( self.translations.favoritesUnlockWarning, 'warning');
+                    return;
+                } else {
+                    self.lockFormFields(false);
+                }
+            });
+        };
 
         this.lockFormFields = function (lock) {
             var self = this;
@@ -445,24 +459,14 @@ window.DataPrivacyForm =
                  this.confirmationDialog.showConfirmation(
                      this.translations.dataPrivacyConfirmation,
                      function () {
-                         self.createOperationAudit().done(function (res) {
-                             if (res.id)
-                                 self.execDataPrivacyRequest(res.id);
-                             else
-                                 window.ShowToastMessage("Operation has failed.", "error");
-                         });
+                        self.execDataPrivacyRequest();
                      },
                      function() {
                  });
              }
          };
 
-         this.createOperationAudit = function () {
-             return $.getJSON(self.urls.CreateOperationAuditAction,
-                              $.param({ customerId: this.customerSelect$.val() }));
-        };
-
-         this.execDataPrivacyRequest = function(operationId) {
+         this.execDataPrivacyRequest = function() {
              
              var filter = this.getFilterData();
 
@@ -478,11 +482,8 @@ window.DataPrivacyForm =
                  ReplaceDatesWith: filter.replaceDatesWith,
                  RemoveCaseAttachments: filter.removeCaseAttachments,
                  RemoveLogAttachments: filter.removeLogAttachments,
-                 ReplaceEmails: filter.replaceEmails,
-                 OperationAuditId: operationId
+                 ReplaceEmails: filter.replaceEmails
              };
-
-             self.startOperationProgress(operationId);
 
              $.ajax({
                  url: self.urls.DataPrivacyAction,
@@ -491,12 +492,11 @@ window.DataPrivacyForm =
                  dataType: "json"
              }).done(function(result) {
                  if (result.success) {
-                     window.ShowToastMessage(self.translations.operationSuccessMessage, "success");
+                     self.startOperationProgress(result.taskId);
                  } else {
                      window.ShowToastMessage("Operation has failed.", "error");
                  }
              }).always(function () {
-                 self.stopOperationProgress();
                  //todo: add ajax time out error  handling
              });
          };
@@ -511,14 +511,14 @@ window.DataPrivacyForm =
             console.log(">>> start operation polling. Id = " + operationId);
             self.progressIntervalId =
                 setInterval(function() {
-                     self.pollOperationProgress(operationId);
+                     self.pollTaskProgress(operationId);
                 }, 1000);
 
              self.enableControl(self.privacyRunBtn$, false);
              self.showGlobalProgress(true);
          };
 
-         this.stopOperationProgress = function() {
+         this.stopTaskProgress = function() {
             var self = this;
             console.log(">>> stop operation polling.");
             self.enableControl(self.privacyRunBtn$, true);
@@ -526,17 +526,27 @@ window.DataPrivacyForm =
             clearInterval(self.progressIntervalId);
         };
         
-         this.pollOperationProgress = function (operationId) {
+         this.pollTaskProgress = function (taskId) {
              var self = _self;
              if (self.pollingRequest)
                  return;
 
-            //console.log("pollOperationProgress: " + operationId);
+            console.log("pollOperationProgress: " + taskId);
             
-            this.pollingRequest = $.getJSON(self.urls.GetOperationProgressAction, $.param({ id: operationId })).done(function (res) {
-                //console.log(">>> Operation poll result. Complete: " + (res.isComplete ? 'true' : 'false'));
+            this.pollingRequest =
+                $.getJSON(self.urls.GetTaskProgressAction, $.param({ id: taskId })).done(function (res) {
+                //console.log(">>> Task poll result. Complete: " + (res.isComplete ? 'true' : 'false'));
                 if (res.isComplete) {
-                    self.stopOperationProgress();
+                    self.stopTaskProgress();
+                    if (res.Success) {
+                        window.ShowToastMessage(self.translations.operationSuccessMessage, "success");
+                    } else {
+                        var err = res.Error || '';
+                        window.ShowToastMessage('Operation has failed. ' + err, "error");
+                    }
+                } else {
+                    var progress = res.Progress || 0;
+                    $("#taskProgress").text(progress);
                 }
             }).always(function() {
                 self.pollingRequest = null;
@@ -950,8 +960,7 @@ window.DataPrivacyForm =
                 });
 
                 _self.btnLock$.on('click', function () {
-                    _self.lockFormFields(false);
-
+                    _self.unlockFormFields();
                 });
 
                 _self.btnUnLock$.on('click', function () {

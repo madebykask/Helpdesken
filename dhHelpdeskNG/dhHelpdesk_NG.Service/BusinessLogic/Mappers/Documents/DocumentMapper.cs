@@ -14,6 +14,7 @@
                                             d.Id,
                                             d.Name,
                                             d.CreatedDate,
+                                            d.ChangedDate,
                                             d.Size,
                                             d.Customer
                                         }).ToArray();
@@ -23,6 +24,7 @@
                                             Id = d.Id,
                                             Name = d.Name,
                                             CreatedDate = d.CreatedDate,
+                                            ChangedDate = d.ChangedDate,
                                             Size = d.Size,
                                             CustomerName = d.Customer.Name
                                         }).ToArray();

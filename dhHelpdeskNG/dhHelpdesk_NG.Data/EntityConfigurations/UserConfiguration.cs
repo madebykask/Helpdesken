@@ -153,12 +153,14 @@
             this.Property(u => u.ShowCaseStatistics).IsRequired();
             this.Property(x => x.DocumentPermission).IsRequired();
             this.Property(x => x.InventoryPermission).IsRequired();
+            this.Property(x => x.ContractPermission).IsRequired();
             this.Property(x => x.SettingForNoMail).IsRequired();
 
             this.Property(x => x.UserGUID).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
 
             this.Property(x => x.CaseUnlockPermission).IsRequired();
             this.Property(x => x.CaseInternalLogPermission).IsRequired();
+            this.Property(x => x.InvoiceTimePermission).IsRequired();
 
             this.ToTable("tblUsers");
         }

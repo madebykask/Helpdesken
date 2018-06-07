@@ -172,7 +172,7 @@ var GRID_STATE = {
         out.push('<table class="table table-striped table-bordered table-hover table-cases customer' + customerTableId + '">');
         out.push('<thead>');                                      
 
-        out.push('<tr><th style="width:2%;" ></th>');
+        out.push('<tr><th style="min-width: 18px;width:18px;" ></th>');
         if (me.gridSettings.availableColumns == 0) {
             me.showMsg(BADCONFIG_MSG_TYPE);
             me.setGridState(GRID_STATE.BAD_CONFIG);
@@ -310,9 +310,9 @@ var GRID_STATE = {
         if (data && data.length > 0) {            
             $.each(data, function (idx, record) {
                 var url = encodeURIComponent(strJoin('/Cases/AdvancedSearch?', 'doSearchAtBegining=true', "&isExtSearch=", isExtendedSearch));
-                var firstCell = strJoin('<td style="width:2%"> <a href="/Cases/Edit/', record.case_id, '?backUrl=', url, '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');;
+                var firstCell = strJoin('<td > <a href="/Cases/Edit/', record.case_id, '?backUrl=', url, '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');;
                 if (isExtendedSearch && !record.ExtendedAvailable) {
-                    firstCell = strJoin('<td style="width:2%"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></td>');
+                    firstCell = strJoin('<td ><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></td>');
                 }
                 var rowClass = me.getClsRow(record);
                 var rowOut = [strJoin('<tr class="', rowClass, '" caseid="', record.case_id, '">'), firstCell];

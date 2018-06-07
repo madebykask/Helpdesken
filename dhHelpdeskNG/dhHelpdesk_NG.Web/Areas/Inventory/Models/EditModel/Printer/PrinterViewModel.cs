@@ -39,6 +39,8 @@
 
         public ConfigurableFieldModel<DateTime> ChangedDate { get; set; }
 
+        public ConfigurableFieldModel<DateTime?> SyncDate { get; set; }
+
         [NotNull]
         public GeneralFieldsModel GeneralFieldsModel { get; set; }
 

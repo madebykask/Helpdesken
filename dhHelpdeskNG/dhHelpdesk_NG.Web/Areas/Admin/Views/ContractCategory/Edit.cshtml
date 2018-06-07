@@ -1,5 +1,4 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Areas.Admin.Models.ContractCategoryInputViewModel
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.ContractCategoryInputViewModel
 @{
     ViewBag.Title = "Edit";
 }
@@ -19,24 +18,24 @@
 }
 @section Scripts {
     <script type="text/javascript">
-
-        $(function () {
-            var validator = $("#target").validate({
+        $(function() {
+            $("#target").validate({
                 rules: {
-                    "ContractCategory.Name": {
-                        required: true
-                    }
+                    "ContractCategory.Name": "required",
+                    "ContractCategory.CaseType_Id": "required"
                 },
                 messages: {
+                    "ContractCategory.CaseType_Id": {
+                        required: '@Translation.GetForJS("Ärendetyp") @Translation.GetForJS("måste anges")'
+                    },
                     "ContractCategory.Name": {
-                        required: "@Translation.GetForJS("Du måste ange en avtalskategori", Enums.TranslationSource.TextTranslation)"
+                        required: '@Translation.GetForJS("Avtalskategori")  @Translation.GetForJS("måste anges")'
+                    }
+                },
+                submitHandler: function(form) {
+                    form.submit();
                 }
-            },
-            submitHandler: function (form) {
-                form.submit();
-            }
+            });
         });
-    });
-
-</script>
+    </script>
 }

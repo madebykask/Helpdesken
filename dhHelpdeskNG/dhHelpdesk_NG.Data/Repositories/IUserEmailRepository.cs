@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Case.CaseIntLog;
+using DH.Helpdesk.BusinessData.Models.Email;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -10,6 +11,6 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IUserEmailRepository : INewRepository
     {
         List<MailAddress> FindUserEmails(int userId);
-        List<CaseEmailSendOverview> GetUserEmailsListForCaseSend(int customerId, string searchText, bool searchInWorkingGrs, bool searchInInitiators, bool searchInAdmins, bool searchInEmailGrs, bool isInternalLog = false);
+        List<CaseEmailSendOverview> GetUserEmailsListForCaseSend(int customerId, string searchText, IEmailSearchScope searchScope);
     }
 }

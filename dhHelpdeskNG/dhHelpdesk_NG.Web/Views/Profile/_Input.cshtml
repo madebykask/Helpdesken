@@ -17,7 +17,6 @@
             <div class="tab-pane tab-pane-border active" id="fragment-1">
                 <div class="container" id="subTabContainer">
                     @Html.Partial("_General", Model)
-
                 </div>
                 <div>
                     @Html.HiddenFor(model => model.User.Customer_Id)
@@ -26,24 +25,14 @@
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
                 <div class="container" id="subTabContainer2">
-                    @{ Html.RenderPartial("Modules", Model.Modules); }
+                    @Html.Partial("Modules", Model.Modules)
                 </div>
             </div>
             <div class="tab-pane tab-pane-border" id="fragment-3">
                 <div class="container" id="subTabContainer3">
-                    @{ Html.RenderPartial("CustomersSettings", Model.CustomersSettings); }
+                    @Html.Partial("CustomersSettings", Model.CustomersSettings); 
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript">
-
-    function submitForm() {
-
-
-    }
-
-
-</script>
-

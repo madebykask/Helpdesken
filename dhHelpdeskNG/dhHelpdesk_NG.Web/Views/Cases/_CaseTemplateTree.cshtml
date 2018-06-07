@@ -17,7 +17,7 @@
              @Translation.Get("Ärendemall")
             <span class="caret"> </span>
         </button>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu subddMenu parentddMenu" style="z-index: 99999999999; max-height: 704px;">
             @Html.CaseSolutionDropdownButtonString(Model.CaseTemplateCategoryTree, Model.CustomerId, isJS)
         </ul>    
     }

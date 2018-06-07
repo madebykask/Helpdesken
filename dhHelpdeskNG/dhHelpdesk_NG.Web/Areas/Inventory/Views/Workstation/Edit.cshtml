@@ -52,8 +52,9 @@
     @Html.EditorFor(m => m.ComputerViewModel.PlaceFieldsViewModel)
     @Html.EditorFor(m => m.ComputerViewModel.ContactFieldsModel)
     @Html.EditorFor(m => m.ComputerViewModel.StateFieldsViewModel)
-    @Html.EditorFor(m => m.ComputerViewModel.DateFieldsModel)
-    if (Model.ComputerViewModel.CreatedDate.Show || Model.ComputerViewModel.ChangedDate.Show)
+    
+    if (Model.ComputerViewModel.CreatedDate.Show || Model.ComputerViewModel.ChangedDate.Show || Model.ComputerViewModel.DateFieldsModel.ScanDate.Show ||
+            Model.ComputerViewModel.DateFieldsModel.SynchronizeDate.Show || Model.ComputerViewModel.DateFieldsModel.PathDirectory.Show)
     {
         <h4>@Translation.Get("Status")</h4>
     }
@@ -96,6 +97,7 @@
             </table>
         </div>
     </div>
+    @Html.EditorFor(m => m.ComputerViewModel.DateFieldsModel)
 }
 
 

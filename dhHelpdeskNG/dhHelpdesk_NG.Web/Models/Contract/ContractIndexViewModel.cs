@@ -1,131 +1,94 @@
 ﻿using DH.Helpdesk.Domain;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Web.Models.Case;
 
 
 namespace DH.Helpdesk.Web.Models.Contract
 {
-
     public class ContractIndexViewModel
     {
-       
-
         public ContractIndexViewModel(Customer customer)
         {
             Customer = customer;
-            Rows = new ContractsIndexRowsModel(customer);
             Columns = new ContractsIndexColumnsModel(customer);
-
-            var selectListItems = new List<SelectListItem>();
-
-
-            selectListItems.AddRange(GetSelectListItem());
-
-            
-            ShowContracts = GetSelectListItem();
-
-
-        }
-
-        private static IEnumerable<SelectListItem> GetSelectListItem()
-        {
-            var items = new List<SelectListItem>();
-
-            items.Add(new SelectListItem
-            {
-                Text = string.Format("{0} {1}", "", "Pågående"),
-                Value = "1",
-                Selected = false
-            });
-
-            items.Add(new SelectListItem
-            {
-                Text = string.Format("{0} {1}", "", "För uppföljning"),
-                Value = "2",
-                Selected = false
-            });
-
-            items.Add(new SelectListItem
-            {
-                Text = string.Format("{0} {1}", "", "För uppsägning"),
-                Value = "3",
-                Selected = false
-            });
-
-            items.Add(new SelectListItem
-            {
-                Text = string.Format("{0} {1}", "", "Löpande"),
-                Value = "4",
-                Selected = false
-            });
-
-            items.Add(new SelectListItem
-            {
-                Text = string.Format("{0} {1}", "", "Avslutade"),
-                Value = "9",
-                Selected = false
-            });
-
-            items.Add(new SelectListItem
-            {
-                Text = string.Format("{0} {1}", "", "Alla"),
-                Value = "10",
-                Selected = true
-            });
-
-            return items;
+            SearchResults = new ContractsSearchResultsModel(customer);
         }
         
-        public IEnumerable<SelectListItem> ShowContracts { get; private set; }
-
         public Customer Customer { get; private set; }
-        public List<ContractCategory> ContractCategories { get; set; }
-        public IList<User> Users { get; set; }
-
-        public IList<Department> Departments { get; set; }
-
-        public List<Supplier> Suppliers { get; set; }
-        public ContractsIndexRowsModel Rows { get; set; }
+        
         public ContractsSettingViewModel Setting { get; set; }
         public ContractsIndexColumnsModel Columns { get; set; }
+        public ContractsSearchResultsModel SearchResults { get; set; }
+
+        public ContractsSearchFilterViewModel SearchFilterModel { get; set; }
+    }
+
+    public class ContractsSearchFilterViewModel
+    {
+        public ContractsSearchFilterViewModel()
+        {
+            SelectedContractCategories = new List<int>();
+            SelectedSuppliers = new List<int>();
+            SelectedResponsibleUsers = new List<int>();
+            SelectedDepartments = new List<int>();
+        }
+
+        public IList<SelectListItem> ContractCategories { get; set; }
+        public IList<SelectListItem> Suppliers { get; set; }
+        public IList<SelectListItem> ResponsibleUsers { get; set; }
+        public IList<SelectListItem> Departments { get; set; }
+        public IList<SelectListItem> ShowContracts { get; set; }
+
+        public DateTime? NoticeDateFrom { get; set; }
+        public DateTime? NoticeDateTo { get; set; }
+
+        public DateTime? StartDateFrom { get; set; }
+        public DateTime? StartDateTo { get; set; }
+
+        public DateTime? EndDateFrom { get; set; }
+        public DateTime? EndDateTo { get; set; }
 
         public string SearchText { get; set; }
+        
+        //selected dropdown values
+        public List<int> SelectedContractCategories { get; set; }
+        public List<int> SelectedSuppliers { get; set; }
+        public List<int> SelectedResponsibleUsers { get; set; }
+        public List<int> SelectedDepartments { get; set; }
+        public int SelectedState { get; set; }
+    }
 
+    public class ContractsSearchSummary
+    {
         public int TotalCases { get; set; }
         public int OnGoingCases { get; set; }
-
         public int FinishedCases { get; set; }
-
         public int ContractNoticeOfRemovalCount { get; set; }
-
         public int ContractFollowUpCount { get; set; }
-
         public int RunningCases { get; set; }
     }
 
-    
-
-    public sealed class ContractsIndexRowModel
+    public sealed class ContractsSearchRowModel
     {
-
-        public ContractsIndexRowModel()
+        public ContractsSearchRowModel()
         {
-            SelectedShowStatus = 10;
             IsInNoticeOfRemoval = false;
             IsInFollowUp = false;
+            ContractCase = new ContractCase();
         }
 
         public bool IsInNoticeOfRemoval { get; set; }
 
         public bool IsInFollowUp { get; set; }
+
         public int SelectedShowStatus { get; set; }
 
         public int ContractId { get; set; }
 
-        public int CaseNumber { get; set; }
+        public ContractCase ContractCase { get; set; }
 
         public string ContractNumber { get; set; }
 
@@ -154,25 +117,30 @@ namespace DH.Helpdesk.Web.Models.Contract
         public User FollowUpResponsibleUser { get; set; }
     }
 
-    public sealed class ContractsIndexRowsModel
+    public sealed class ContractsSearchResultsModel
     {
-        public ContractsIndexRowsModel(Customer customer)
+        public ContractsSearchResultsModel(Customer customer)
         {
-            Data = new List<ContractsIndexRowModel>();
+            Data = new List<ContractsSearchRowModel>();
             Customer = customer;
             Columns = new List<ContractsSettingRowViewModel>();
+            ContractCases = new JsonCaseIndexViewModel()
+            {
+                PageSettings = new PageSettingsModel()
+            };
             SelectedShowStatus = 10;
         }
 
         public Customer Customer { get; private set; }
-        public List<ContractsIndexRowModel> Data { get; set; }
+        public List<ContractsSearchRowModel> Data { get; set; }
         public List<ContractsSettingRowViewModel> Columns { get; set; }
         public ColSortModel SortBy { get; set; }
 
         public int SelectedShowStatus { get; set; }
+        public int TotalRowsCount { get; set; }
+        public ContractsSearchSummary SearchSummary { get; set; }
 
-        
-
+        public JsonCaseIndexViewModel ContractCases { get; set; }
     }
 
     public sealed class ColSortModel
@@ -184,8 +152,15 @@ namespace DH.Helpdesk.Web.Models.Contract
         }
 
         public string ColumnName { get; private set; }
-
         public bool IsAsc { get; private set; }
+    }
 
+    public sealed class ContractCase
+    {
+        public int CaseId { get; set; }
+        public int CaseNumber { get; set; }
+        public GlobalEnums.CaseIcon CaseIcon { get; set; }
+        public bool HasMultiplyCases { get; set; }
+        public List<string> CaseNumbers { get; set; }
     }
 }
