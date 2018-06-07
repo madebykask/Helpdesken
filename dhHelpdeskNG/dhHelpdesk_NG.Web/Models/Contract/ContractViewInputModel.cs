@@ -1,22 +1,16 @@
-﻿using DH.Helpdesk.Domain;
-using DH.Helpdesk.Web.Models.Contract;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+
 namespace DH.Helpdesk.Web.Models.Contract
 {   
     public sealed class ContractViewInputModel
     {
-    
         public ContractViewInputModel()
         {
             NoticeTimes = new List<SelectListItem>();
             FollowUpIntervals = new List<SelectListItem>();
-
         }
-
 
         public List<ContractsSettingRowViewModel> SettingsModel { get; set; }
 

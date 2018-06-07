@@ -1,4 +1,5 @@
 ﻿
+using System.Globalization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -1454,6 +1455,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             return Json(res);
         }
 
+        [NoCache]
+        [HttpGet]
         public JsonResult LoadDataPrivacyFavorite(int id)
         {
             var data = _gdprFavoritesService.GetFavorite(id);
@@ -1584,6 +1587,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var caseText = Translation.GetCoreTextTranslation("Ärende");
             var logPostsText = Translation.GetCoreTextTranslation("Ärendelogg");
 
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+
             var model = new List<GdprOperationsHistoryListItem>();
 
             //replace field names with field labels
@@ -1604,7 +1609,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Cases = item.ClosedOnly ? closedText : $"{closedText}, {openedText}",
                     Data = formattedFields.Any() ? string.Join(", ", formattedFields) : "",
                     AttachedFiles = attachedFilesFormatted.ToString().Trim(',').Trim(),
-                    Executed = item.ExecutedDate.ToString("yyyy-MM-dd HH:mm:ss")
+                    Executed = TimeZoneInfo.ConvertTimeFromUtc(item.ExecutedDate, userTimeZone).ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)
                 };
 
                 model.Add(modelItem);

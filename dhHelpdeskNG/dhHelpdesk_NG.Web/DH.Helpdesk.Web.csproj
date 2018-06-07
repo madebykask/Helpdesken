@@ -333,6 +333,7 @@
     <Compile Include="Components\Contracts\ContractHistoryFormatter.cs" />
     <Compile Include="Components\Contracts\ContractHistoryMarkupBuilder.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
+    <Compile Include="Controllers\PasswordController.cs" />
     <Compile Include="Controllers\QuestionnaireAnswerController.cs" />
     <Compile Include="Enums\ReportItemNames.cs" />
     <Compile Include="Infrastructure\Attributes\GdprAccessAttribute.cs" />
@@ -346,7 +347,9 @@
     <Compile Include="Infrastructure\Authentication\FederatedAuthenticationConfiguration.cs" />
     <Compile Include="Infrastructure\Authentication\HelpdeskAuthenticationFilter.cs" />
     <Compile Include="Infrastructure\Binders\DecimalModelBinder.cs" />
+    <Compile Include="Infrastructure\Binders\CommaSeparatedListsBinder.cs" />
     <Compile Include="Infrastructure\Case\CaseHistoryBuilder.cs" />
+    <Compile Include="Infrastructure\Extensions\ReflectionExtensions.cs" />
     <Compile Include="Infrastructure\UrlBuilder.cs" />
     <Compile Include="Infrastructure\Utilities\CaseDiagnosticService.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\SessionContext.cs" />
@@ -363,10 +366,13 @@
     <Compile Include="Models\Case\CaseOperationResult.cs" />
     <Compile Include="Models\Case\InvoiceTimeModel.cs" />
     <Compile Include="Models\Contract\ContractHistoryFieldsDiff.cs" />
+    <Compile Include="Models\Contract\ContractsSearchInputData.cs" />
+    <Compile Include="Models\Contract\ContractStatuses.cs" />
     <Compile Include="Models\Gdpr\DataPrivacyHistoryViewModel.cs" />
     <Compile Include="Models\Gdpr\GdprOperationsHistoryListItem.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
     <Compile Include="Models\JsonModels\Case\CaseJsonModel.cs" />
+    <Compile Include="Models\Shared\ChangePasswordModel.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireAnswerParams.cs" />
     <Compile Include="Models\Notifiers\ComputerUserCategoryModel.cs" />
     <Compile Include="Models\WebApi\TokenModel.cs" />
@@ -769,6 +775,7 @@
     <Content Include="Content\js\CaseRules\case.rule.logics.js" />
     <Content Include="Content\js\CaseTemplates\index.logic.js" />
     <Content Include="Content\js\CaseTemplates\edit.logic.js" />
+    <Content Include="Content\js\ChangePassword\_changePasswordDialog.js" />
     <Content Include="Content\js\Changes\inventoryDialog.js" />
     <Compile Include="Areas\Admin\Controllers\BusinessRuleController.cs" />
     <Compile Include="Areas\Inventory\Controllers\ComputerInventoryBaseController.cs" />
@@ -1100,6 +1107,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
     <Content Include="Content\js\Common\userSearchCommon.js" />
+    <Content Include="Content\js\Contract\contractCases.js" />
     <Content Include="Content\js\Contract\contractIndex.js" />
     <Content Include="Content\js\Contract\edit.js" />
     <Content Include="Content\js\DynamicCase\ie8.polyfils.min.js" />
@@ -1111,6 +1119,7 @@
     <Content Include="Content\js\Inventory\inventory.search.js" />
     <Content Include="Content\js\moment.js" />
     <Content Include="Content\js\moment.min.js" />
+    <Content Include="Content\js\ChangePassword\PasswordValidator.js" />
     <Content Include="Content\js\Shared\commonUtils.js" />
     <Content Include="Content\js\Shared\errors.js" />
     <Content Include="Content\js\Shared\jquery.customAjax.js" />
@@ -3749,9 +3758,6 @@
     <Content Include="Content\js\plupload\plupload.js" />
     <Content Include="Content\js\plupload\plupload.silverlight.js" />
     <Content Include="Content\js\plupload\plupload.silverlight.xap" />
-    <Content Include="Areas\Admin\Views\Users\_ChangePassword.cshtml">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -3871,7 +3877,6 @@
     <Content Include="Views\Profile\Edit.cshtml" />
     <Content Include="Views\Profile\_Input.cshtml" />
     <Content Include="Views\Profile\_General.cshtml" />
-    <Content Include="Views\Profile\_ChangePassword.cshtml" />
     <Content Include="Views\Shared\CalendarsInfo.cshtml" />
     <Content Include="Views\Shared\DailyReportsInfo.cshtml" />
     <Content Include="Views\Shared\LinksInfo.cshtml" />
@@ -4024,6 +4029,10 @@
     <Content Include="Views\Cases\ModalDialogs\_ExtraEmails.cshtml" />
     <Content Include="Views\Cases\CaseOperationResult.cshtml" />
     <Content Include="Views\Contracts\ContractHistory.cshtml" />
+    <Content Include="Views\Contracts\_ContractsSearchSummary.cshtml" />
+    <Content Include="Views\Contracts\_ContractsSearchFilter.cshtml" />
+    <Content Include="Views\Contracts\_ContractCases.cshtml" />
+    <Content Include="Views\Shared\_ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">
@@ -4745,6 +4754,7 @@
     <Folder Include="FormLibContent\Xmls\Norway\Data\AdditionalPaymentsDeductions\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
     <Folder Include="rss\" />
+    <Folder Include="Views\Password\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Login\Login.cshtml" />

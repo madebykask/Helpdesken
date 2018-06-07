@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
@@ -17,16 +16,20 @@ using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Domain.ExtendedCaseEntity;
 using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Services.Services;
+using log4net;
+using IUnitOfWork = DH.Helpdesk.Dal.NewInfrastructure.IUnitOfWork;
 
 namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 {
     public interface IGDPRDataPrivacyProcessor
     {
-        void Process(int customerId, int userId, DataPrivacyParameters p);
+        void Process(int customerId, int userId, DataPrivacyParameters p, int batchSize);
     }
 
     public class GDPRDataPrivacyProcessor : IGDPRDataPrivacyProcessor
     {
+        private readonly ILog _log = LogManager.GetLogger("DataPrivacyLogger");
+
         private readonly IFilesStorage _filesStorage;
         private readonly IGDPROperationsAuditRespository _gdprOperationsAuditRespository;
         private readonly ISettingRepository _settingRepository;
@@ -34,6 +37,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IJsonSerializeService _jsonSerializeService;
         private readonly IDataPrivacyTaskProgress _taskProgress;
+
+        const int sqlTimeout = 300; //seconds
 
         #region CaseFileEntity
 
@@ -95,106 +100,89 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
         #endregion
         
-        public void Process(int customerId, int userId, DataPrivacyParameters p)
+        public void Process(int customerId, int userId, DataPrivacyParameters p, int batchSize)
         {
             bool res = true;
-            var cases = new List<Case>();
+            var processedCasesIds = new List<int>();
             var filesToDelete = new List<CaseFileEntity>();
-            var sqlTimeout = 300; //seconds
+
+            _log.Debug($"GDPR process has been called. CustomerId: {customerId}, FavoriteId: {p.SelectedFavoriteId}, TaskId: {p.TaskId}");
 
             try
             {
-                using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
+                var totalCount = GetCasesCount(customerId, p);
+                var fetchNext = totalCount > 0;
+                var step = 0;
+
+                _log.Debug($"Total cases found to process: {totalCount}. TaskId: {p.TaskId}.");
+
+                while (fetchNext)
                 {
-                    uow.AutoDetectChangesEnabled = false;
+                    step++;
+                    var processed = processedCasesIds.Count;
+                    var take = processed + batchSize > totalCount ? totalCount - processed : batchSize;
 
-                    var rep = uow.GetRepository<Case>();
-                    var caseFiles = uow.GetRepository<CaseFile>();
-                    var followers = uow.GetRepository<CaseExtraFollower>();
-                    var logFiles = uow.GetRepository<LogFile>();
-                    var extendedCaseValuesRep = uow.GetRepository<ExtendedCaseValueEntity>();
-                    var formFieldValueRep = uow.GetRepository<FormFieldValue>();
-                    var formFieldValueHistoryRep = uow.GetRepository<FormFieldValueHistory>();
-                    var caseExtendedCaseRep = uow.GetRepository<Case_ExtendedCaseEntity>();
-                    var caseSectionExtendedCaseRep = uow.GetRepository<Case_CaseSection_ExtendedCase>();
+                    _log.Debug($"Step {step}. Fetching next {take} cases. Skip: {processed}. TaskId: {p.TaskId}.");
 
-                    var casesQueryable = rep.GetAll()
-                        .IncludePath(c => c.CaseHistories)
-                        .IncludePath(c => c.CaseExtendedCaseDatas.Select(ec => ec.ExtendedCaseData.ExtendedCaseValues))
-                        .IncludePath(c => c.CaseExtendedCaseDatas.Select(ec => ec.ExtendedCaseForm))
-                        .IncludePath(
-                            c => c.CaseSectionExtendedCaseDatas.Select(esc => esc.ExtendedCaseData.ExtendedCaseValues))
-                        .Where(x => x.Customer_Id == customerId);
+                    var casesIds = new List<int>();
 
-                    if (p.RemoveCaseAttachments)
+                    using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
                     {
-                        casesQueryable = casesQueryable.IncludePath(x => x.CaseFiles);
-                    }
+                        uow.AutoDetectChangesEnabled = false;
+                        
+                        //GET query
+                        var casesQueryable = GetCasesQuery(customerId, p, uow);
 
-                    if (p.RemoveLogAttachments || p.FieldsNames.Contains("tblLog.Text_External") ||
-                        p.FieldsNames.Contains("tblLog.Text_Internal") ||
-                        p.FieldsNames.Contains(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()))
-                    {
-                        casesQueryable = casesQueryable.IncludePath(x => x.Logs.Select(f => f.LogFiles));
-                    }
+                        //fetch next cases
+                        var cases = casesQueryable.Skip(processed).Take(take).ToList();
 
-                    if (p.FieldsNames.Contains(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()))
-                    {
-                        casesQueryable = casesQueryable.IncludePath(x => x.CaseFollowers);
-                    }
-
-                    if (p.ReplaceEmails)
-                    {
-                        casesQueryable = casesQueryable.IncludePath(x => x.Mail2Tickets);
-                        casesQueryable = casesQueryable.IncludePath(x => x.CaseHistories.Select(y => y.Emaillogs));
-                    }
-
-                    if (p.ClosedOnly)
-                        casesQueryable = casesQueryable.Where(x => x.FinishingDate.HasValue);
-
-                    if (p.RegisterDateFrom.HasValue)
-                    {
-                        p.RegisterDateFrom = p.RegisterDateFrom.Value.Date;
-                        casesQueryable = casesQueryable.Where(x => x.RegTime >= p.RegisterDateFrom.Value);
-                    }
-
-                    if (p.RegisterDateTo.HasValue)
-                    {
-                        //fix date
-                        p.RegisterDateTo = p.RegisterDateTo.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
-                        casesQueryable = casesQueryable.Where(x => x.RegTime <= p.RegisterDateTo.Value);
-                    }
-
-                    cases = casesQueryable.ToList();
-
-                    if (cases.Any())
-                    {
-                        var pos = 1;
-                        var count = cases.Count;
-                        p.ReplaceDataWith = p.ReplaceDataWith ?? string.Empty;
-
-                        foreach (var c in cases)
+                        if (cases.Any())
                         {
-                            ProcessReplaceCasesData(c, caseFiles, logFiles, followers, p, filesToDelete);
-                            ProcessReplaceCasesHistoryData(c, p);
-                            ProcessExtededCaseData(c, caseExtendedCaseRep, caseSectionExtendedCaseRep, extendedCaseValuesRep, p);
+                            _log.Debug($"{cases.Count} cases will be processed. TaskId: {p.TaskId}.");
 
-                            UpdateProgress(p.TaskId, pos, count);
-                            pos++;
+                            var pos = 1;
+                            //var count = cases.Count;
+                            p.ReplaceDataWith = p.ReplaceDataWith ?? string.Empty;
+
+                            foreach (var c in cases)
+                            {
+                                ProcessReplaceCasesData(c, p, uow, filesToDelete);
+                                ProcessReplaceCasesHistoryData(c, p);
+                                ProcessExtededCaseData(c, p, uow);
+
+                                UpdateProgress(p.TaskId, processed + pos, totalCount);
+                                pos++;
+                            }
+
+                            _log.Debug($"{cases.Count} cases has been processed. TaskId: {p.TaskId}.");
+                            ProccessFormPlusCaseData(cases.Select(c => c.Id).ToList(), uow);
+
+                            _log.Debug($"Saving cases changes. TaskId: {p.TaskId}.");
+                            uow.DetectChanges();
+                            uow.Save();
+
+                            _log.Debug($"Cases changes have been saved sucessfully. TaskId: {p.TaskId}.");
+
+                            _log.Debug($"Deleting cases files.");
+                            DeleteCaseFiles(customerId, filesToDelete);
                         }
 
-                        ProccessFormPlusCaseData(cases.Select(c => c.Id).ToList(), formFieldValueHistoryRep, formFieldValueRep);
-
-                        uow.DetectChanges();
-                        uow.Save();
+                        casesIds = cases.Select(c => c.Id).ToList();
                     }
+
+                    //save processed cases
+                    processedCasesIds.AddRange(casesIds);
+
+                    //save step audit
+                    SaveStepSuccessOperationAudit(customerId, userId, p, casesIds, step);
+
+                    if (processedCasesIds.Count() >= totalCount)
+                        fetchNext = false;
                 }
 
-                if (cases.Any())
-                {
-                    DeleteCaseFiles(customerId, filesToDelete);
-                    SaveSuccessOperationAudit(customerId, userId, p, cases.Select(c => c.Id).ToList());
-                }
+                SaveSuccessOperationAudit(customerId, userId, p, processedCasesIds);
+
+                _log.Debug($"Processing has been completed successfully. TaskId: {p.TaskId}.");
             }
             catch (Exception e)
             {
@@ -204,9 +192,73 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             }
         }
 
+        private int GetCasesCount(int customerId, DataPrivacyParameters p)
+        {
+            using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
+            {
+                uow.AutoDetectChangesEnabled = false;
+                var casesQueryable = GetCasesQuery(customerId, p, uow);
+                return casesQueryable.Count();
+            }
+        }
+
+        private IQueryable<Case> GetCasesQuery(int customerId, DataPrivacyParameters p, IUnitOfWork uow)
+        {
+            var caseRepository = uow.GetRepository<Case>();
+            var casesQueryable = caseRepository.GetAll()
+                .IncludePath(c => c.CaseHistories)
+                .IncludePath(c => c.CaseExtendedCaseDatas.Select(ec => ec.ExtendedCaseData.ExtendedCaseValues))
+                .IncludePath(c => c.CaseExtendedCaseDatas.Select(ec => ec.ExtendedCaseForm))
+                .IncludePath(c => c.CaseSectionExtendedCaseDatas.Select(esc => esc.ExtendedCaseData.ExtendedCaseValues))
+                .Where(x => x.Customer_Id == customerId);
+
+            if (p.RemoveCaseAttachments)
+            {
+                casesQueryable = casesQueryable.IncludePath(x => x.CaseFiles);
+            }
+
+            if (p.RemoveLogAttachments || p.FieldsNames.Contains("tblLog.Text_External") ||
+                p.FieldsNames.Contains("tblLog.Text_Internal") ||
+                p.FieldsNames.Contains(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()))
+            {
+                casesQueryable = casesQueryable.IncludePath(x => x.Logs.Select(f => f.LogFiles));
+            }
+
+            if (p.FieldsNames.Contains(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()))
+            {
+                casesQueryable = casesQueryable.IncludePath(x => x.CaseFollowers);
+            }
+
+            if (p.ReplaceEmails)
+            {
+                casesQueryable = casesQueryable.IncludePath(x => x.Mail2Tickets);
+                casesQueryable = casesQueryable.IncludePath(x => x.CaseHistories.Select(y => y.Emaillogs));
+            }
+
+            if (p.ClosedOnly)
+                casesQueryable = casesQueryable.Where(x => x.FinishingDate.HasValue);
+
+            if (p.RegisterDateFrom.HasValue)
+            {
+                p.RegisterDateFrom = p.RegisterDateFrom.Value.Date;
+                casesQueryable = casesQueryable.Where(x => x.RegTime >= p.RegisterDateFrom.Value);
+            }
+
+            if (p.RegisterDateTo.HasValue)
+            {
+                //fix date
+                p.RegisterDateTo = p.RegisterDateTo.Value.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+                casesQueryable = casesQueryable.Where(x => x.RegTime <= p.RegisterDateTo.Value);
+            }
+
+            casesQueryable = casesQueryable.OrderBy(x => x.Id);
+            return casesQueryable;
+        }
+
         private void UpdateProgress(int taskId, int pos, int totalCount)
         {
-            var step = totalCount > 1000 ? 100 : totalCount > 100 ? 10 : 5; 
+            var step = totalCount / 100;// take 1 percent as step
+            step = step == 0 ? 10 : step;
             if (pos % step == 0)
             {
                 var progress = Math.Ceiling(((float)pos / (float)totalCount) * 100);
@@ -257,18 +309,14 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
         #region Replace case data
 
-        private void ProcessReplaceCasesData(
-            Case c,
-            Dal.NewInfrastructure.IRepository<CaseFile> caseFiles,
-            Dal.NewInfrastructure.IRepository<LogFile> logFiles,
-            Dal.NewInfrastructure.IRepository<CaseExtraFollower> followers,
-            DataPrivacyParameters parameters,
-            List<CaseFileEntity> caseFilesToDelete)
+        private void ProcessReplaceCasesData(Case c, DataPrivacyParameters parameters, IUnitOfWork uow, List<CaseFileEntity> caseFilesToDelete)
         {
-
             var replaceDataWith = parameters.ReplaceDataWith;
             var replaceDatesWith = parameters.ReplaceDatesWith;
 
+            var caseFiles = uow.GetRepository<CaseFile>();
+            var logFiles = uow.GetRepository<LogFile>();
+            var followers = uow.GetRepository<CaseExtraFollower>();
 
             foreach (var fieldName in parameters.FieldsNames)
             {
@@ -292,7 +340,6 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                     if (property == null) throw new PropertyNotFoundException("Property not found", fieldName);
 
                     property.SetValue(c, replaceDataWith);
-
                 }
                 else if (fieldName == GlobalEnums.TranslationCaseFields.Region_Id.ToString() ||
                          fieldName == GlobalEnums.TranslationCaseFields.Department_Id.ToString() ||
@@ -716,14 +763,14 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             return resetValue;
         }
 
-        private void ProcessExtededCaseData(Case c,
-            Dal.NewInfrastructure.IRepository<Case_ExtendedCaseEntity> caseExtendedCaseRep,
-            Dal.NewInfrastructure.IRepository<Case_CaseSection_ExtendedCase> caseSectionExtendedCaseRep,
-            Dal.NewInfrastructure.IRepository<ExtendedCaseValueEntity> extendedCaseValuesRep,
-            DataPrivacyParameters parameters)
+        private void ProcessExtededCaseData(Case c, DataPrivacyParameters parameters, IUnitOfWork uow)
         {
             var replaceDataWith = parameters.ReplaceDataWith;
             var replaceDatesWith = parameters.ReplaceDatesWith;
+
+            var caseExtendedCaseRep = uow.GetRepository<Case_ExtendedCaseEntity>();
+            var caseSectionExtendedCaseRep = uow.GetRepository<Case_CaseSection_ExtendedCase>();
+            var extendedCaseValuesRep = uow.GetRepository<ExtendedCaseValueEntity>();
 
             if (c.CaseExtendedCaseDatas != null && c.CaseExtendedCaseDatas.Any())
             {
@@ -770,11 +817,12 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             }
         }
 
-        private void ProccessFormPlusCaseData(IList<int> casesIds,
-            Dal.NewInfrastructure.IRepository<FormFieldValueHistory> formFieldValueHistoryRep,
-            Dal.NewInfrastructure.IRepository<FormFieldValue> formFieldValueRep)
+        private void ProccessFormPlusCaseData(IList<int> casesIds, IUnitOfWork uow)
         {
             if (!casesIds.Any()) return;
+
+            var formFieldValueHistoryRep = uow.GetRepository<FormFieldValueHistory>();
+            var formFieldValueRep = uow.GetRepository<FormFieldValue>();
 
             formFieldValueRep.DeleteWhere(x => casesIds.Contains(x.Case_Id));
             formFieldValueHistoryRep.DeleteWhere(x => casesIds.Contains(x.Case_Id));
@@ -786,12 +834,24 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
         private void SaveSuccessOperationAudit(int customerId, int userId, DataPrivacyParameters dataPrivacyParameters, IList<int> caseIds)
         {
+            var operationName = GDPROperations.DataPrivacy.ToString();
+            SaveSuccessOperationAuditInner(customerId, userId, operationName, dataPrivacyParameters, caseIds);
+        }
+
+        private void SaveStepSuccessOperationAudit(int customerId, int userId, DataPrivacyParameters dataPrivacyParameters, IList<int> caseIds, int step)
+        {
+            var operationName = $"{GDPROperations.DataPrivacy}_{step}";
+            SaveSuccessOperationAuditInner(customerId, userId, operationName, dataPrivacyParameters, caseIds);
+        }
+
+        private void SaveSuccessOperationAuditInner(int customerId, int userId, string operationName, DataPrivacyParameters dataPrivacyParameters, IList<int> caseIds)
+        {
             var audiData = new GDPROperationsAudit()
             {
                 User_Id = userId,
                 Customer_Id = customerId,
                 Parameters = _jsonSerializeService.Serialize(dataPrivacyParameters),
-                Operation = GDPROperations.DataPrivacy.ToString(),
+                Operation = operationName,
                 Application = ApplicationType.Helpdesk.ToString(),
                 CreatedDate = DateTime.UtcNow,
                 Result = caseIds.Any() ? string.Join(",", caseIds.ToArray()) : null,

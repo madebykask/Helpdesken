@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.Dal.Repositories.GDPR;
 using DH.Helpdesk.Domain.GDPR;
@@ -56,6 +57,8 @@ namespace DH.Helpdesk.Services.Services
         {
             var task = _taskRepository.GetById(taskId);
             task.Status = status;
+            if(status == GDPRTaskStatus.Scheduled)
+                task.StartedAt = DateTime.UtcNow;
             _taskRepository.Update(task);
             _taskRepository.Commit();
         }

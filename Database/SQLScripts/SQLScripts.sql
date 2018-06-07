@@ -175,6 +175,55 @@ BEGIN
 END
 GO 
 
+RAISERROR ('Adding column ShowCalenderOnExtPage on table tblCustomer', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowCalenderOnExtPage' and sysobjects.name = N'tblCustomer')
+BEGIN
+   ALTER TABLE dbo.tblCustomer ADD ShowCalenderOnExtPage INT NOT NULL  Default(0)
+END
+GO
+
+RAISERROR ('Adding column ShowOperationalLogOnExtPage on table tblCustomer', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'ShowOperationalLogOnExtPage' and sysobjects.name = N'tblCustomer')
+BEGIN
+   ALTER TABLE dbo.tblCustomer ADD ShowOperationalLogOnExtPage INT NOT NULL  Default(0)
+END
+GO
+
+
+-- New field in tblusers
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'InvoiceTimePermission' and sysobjects.name = N'tblUsers')
+   ALTER TABLE tblUsers ADD InvoiceTimePermission int NOT NULL Default(0)
+GO
+
+RAISERROR ('Updating InvoiceTimePermission field settings data for tblUsers', 10, 1) WITH NOWAIT
+UPDATE tblUsers set InvoiceTimePermission = 1
+   where UserGroup_Id in (Select Id from tblUsergroups where UserGroup = N'Administratör' or UserGroup = N'Kundadministratör' )
+GO
+
+--Alter table Global settings
+IF COLUMNPROPERTY(OBJECT_ID('tblGlobalSettings', 'U'), 'AttachedFileFolder', 'AllowsNull')= 0
+BEGIN
+    ALTER TABLE [tblGlobalSettings]
+        ALTER COLUMN [AttachedFileFolder] Nvarchar(200) NOT NULL
+END
+ELSE 
+BEGIN       
+    ALTER TABLE [tblGlobalSettings]
+        ALTER COLUMN [AttachedFileFolder] Nvarchar(200) NULL
+END
+
+--Alter table Global settings
+IF COLUMNPROPERTY(OBJECT_ID('tblGlobalSettings', 'U'), 'SMTPServer', 'AllowsNull')= 0
+BEGIN
+    ALTER TABLE [tblGlobalSettings]
+        ALTER COLUMN [SMTPServer] Nvarchar(50) NOT NULL
+END
+ELSE 
+BEGIN       
+    ALTER TABLE [tblGlobalSettings]
+        ALTER COLUMN [SMTPServer] Nvarchar(50) NULL
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.37'
 --ROLLBACK --TMP

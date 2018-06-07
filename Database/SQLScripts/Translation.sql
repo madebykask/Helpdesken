@@ -7206,6 +7206,91 @@ GO
 
 UPDATE tblTextTranslation Set TextTranslation = 'User has permission to Invoice article' WHERE Text_Id=1724 AND Language_Id=2;
 GO
+
+update tbltext set TextString = 'Användaren har rättighet att administrera beställningar' where id = 701
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Orders' WHERE Text_Id=701 AND Language_Id=2;
+GO
+
+If not exists (select * from tbltext where id = 1980)
+	insert into tbltext (id, TextString) VALUES (1980, 'månadsvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1980 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1980, 2, 'monthly')
+GO
+
+If not exists (select * from tbltext where id = 1981)
+	insert into tbltext (id, TextString) VALUES (1981, 'kvartalsvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1981 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1981, 2, 'quarterly')
+GO
+
+If not exists (select * from tbltext where id = 1982)
+	insert into tbltext (id, TextString) VALUES (1982, 'tertialvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1982 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1982, 2, 'tertially')
+GO
+
+If not exists (select * from tbltext where id = 1983)
+	insert into tbltext (id, TextString) VALUES (1983, 'halvårsvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1983 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1983, 2, 'half yearly')
+GO
+
+If not exists (select * from tbltext where id = 1984)
+	insert into tbltext (id, TextString) VALUES (1984, 'årsvis')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1984 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1984, 2, 'yearly')
+GO
+
+If not exists (select * from tbltext where id = 1985)
+	insert into tbltext (id, TextString) VALUES (1985, 'Pågår')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1985 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1985, 2, 'Running')
+GO
+
+If not exists (select * from tbltext where id = 1988)
+	insert into tbltext (id, TextString) VALUES (1988, 'Användaren har rättighet till fakturering tid')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1988 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1988, 2, 'User has permission to Invoice time')
+GO
+
+If not exists (select * from tbltext where id = 1989)
+	insert into tbltext (id, TextString) VALUES (1989, 'Visa Driftlogg på startsidan')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1989 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1989, 2, 'Show Operational log on start page')
+GO
+
+If not exists (select * from tbltext where id = 1990)
+	insert into tbltext (id, TextString) VALUES (1990, 'Visa Aktuellt på startsidan')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1990 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1990, 2, 'Show Calendar on start page')
+GO
+
+If not exists (select * from tbltext where id = 1991)
+	insert into tbltext (id, TextString) VALUES (1991, 'Nytt lösenord kan inte vara samma som nuvarande lösenord')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1991 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1991, 2, 'New password shall not match existing password')
+GO
+
+update tbltext set TextString = 'Användaren har rättighet att administrera aktuellt' where id = 1331
+GO
+
+UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Calendar' WHERE Text_Id=1331 AND Language_Id=2;
+GO
+
 -- *** Run this last when put translation script above this line **--
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
+
+
 

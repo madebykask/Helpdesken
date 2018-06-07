@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure
+﻿using DH.Helpdesk.BusinessData.Models.Contract;
+
+namespace DH.Helpdesk.Web.Infrastructure
 {
     using System;
     using System.Collections.Generic;
@@ -128,6 +130,8 @@
         private const string _REPORT_SERVICE_SESSION_MODEL = "REPORT_SERVICE_SESSION_MODEL";
 
         private const string _IS_CASE_DATA_CHANGED = "IS_CASE_DATA_CHANGED";
+
+        private const string _CURRENT_CONTRACTS_SEARCH = "CURRENT_CONTRACTS_SEARCH";
 
         #endregion
 
@@ -1091,7 +1095,21 @@
             }
         }
 
-
+        public static ContractsSearchFilter CurrentContractsSearch
+        {
+            get
+            {
+                if (HttpContext.Current.Session[_CURRENT_CONTRACTS_SEARCH] == null)
+                {
+                    return null;
+                }
+                return (ContractsSearchFilter)HttpContext.Current.Session[_CURRENT_CONTRACTS_SEARCH];
+            }
+            set
+            {
+                SaveSetKeyValue(_CURRENT_CONTRACTS_SEARCH, value);
+            }
+        }
 
         private static void SaveSetKeyValue(string key, object value)
         {

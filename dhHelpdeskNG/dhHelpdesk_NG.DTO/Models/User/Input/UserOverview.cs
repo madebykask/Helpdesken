@@ -51,7 +51,8 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             bool showCaseStatistics,
             string timeZoneId,
             Guid? userGuid,
-            int caseInternalLogPermission)
+            int caseInternalLogPermission,
+            int invoiceTimePermission)
         {
             this.StartPage = startPage;
             this.Id = id;
@@ -94,6 +95,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
             this.TimeZoneId = timeZoneId;
             this.UserGUID = userGuid;
             this.CaseInternalLogPermission = caseInternalLogPermission;
+            this.InvoiceTimePermission = invoiceTimePermission;
         }
 
         [IsId]
@@ -185,6 +187,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         public int CaseUnlockPermission { get; set; }
 
         public int CaseInternalLogPermission { get; set; }
+        public int InvoiceTimePermission { get; set; }
 
         public bool IsAdministrator()
         {

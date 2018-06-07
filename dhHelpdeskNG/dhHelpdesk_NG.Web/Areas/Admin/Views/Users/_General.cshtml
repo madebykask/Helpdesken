@@ -1,215 +1,69 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
-
-@{
-    var passChangeText = Translation.GetForJS("Lösenordet har ändrats", Enums.TranslationSource.TextTranslation);
-
-    //var passChangeError = Translation.GetForJS("Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens", Enums.TranslationSource.TextTranslation);
-
-    //var passLengthError = Translation.GetForJS("Lösenord är inte giltigt. Minst antal tecken är: ", Enums.TranslationSource.TextTranslation) + Model.UserCustomerMinPassWordLength;
-
-    //var passComplexError = Translation.GetForJS("Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav, en siffra och ett special tecken (!@#=$&?*).", Enums.TranslationSource.TextTranslation);
-}
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
 
 <div class="formContainer">
     <table class="tableform">
         <tr>
-            <td class="span3">
-                @Translation.Get("Förnamn", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
-            </td>
-            <td>
-                @Html.TextBoxFor(model => model.User.FirstName, new { maxlength = "20" })
-            </td>
+            <td class="span3">@Translation.GetCoreTextTranslation("Förnamn") <span class="mandatorystar">*</span></td>
+            <td>@Html.TextBoxFor(model => model.User.FirstName, new { maxlength = "20" })</td>
         </tr>
         <tr>
-            <td>
-                @Translation.Get("Efternamn", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
-            </td>
-            <td>
-                @Html.TextBoxFor(model => model.User.SurName, new { maxlength = "30" })
-            </td>
+            <td>@Translation.GetCoreTextTranslation("Efternamn") <span class="mandatorystar">*</span></td>
+            <td>@Html.TextBoxFor(model => model.User.SurName, new { maxlength = "30" })</td>
         </tr>
         <tr>
-            <td>
-                @Translation.Get("Adress", Enums.TranslationSource.TextTranslation)
-            </td>
-            <td>
-                @Html.TextBoxFor(model => model.User.Address, new { maxlength = "50" })
-            </td>
+            <td>@Translation.GetCoreTextTranslation("Adress")</td>
+            <td>@Html.TextBoxFor(model => model.User.Address, new { maxlength = "50" })</td>
         </tr>
         <tr>
-            <td>
-                @Translation.Get("Postadress", Enums.TranslationSource.TextTranslation)
-            </td>
+            <td>@Translation.GetCoreTextTranslation("Postadress")</td>
             <td>
                 @Html.TextBoxFor(model => model.User.PostalCode, new { maxlength = "5", style = "width: 60px;" })
                 @Html.TextBoxFor(model => model.User.PostalAddress, new { maxlength = "30", style = "width: 222px;" })
             </td>
         </tr>
         <tr>
-            <td>
-                @Translation.Get("Telefon", Enums.TranslationSource.TextTranslation)
-            </td>
-            <td>
-                @Html.TextBoxFor(model => model.User.Phone, new { maxlength = "20" })
-            </td>
+            <td>@Translation.GetCoreTextTranslation("Telefon")</td>
+            <td>@Html.TextBoxFor(model => model.User.Phone, new { maxlength = "20" })</td>
         </tr>
         <tr>
-            <td>
-                @Translation.Get("Mobil", Enums.TranslationSource.TextTranslation)
-            </td>
-            <td>
-                @Html.TextBoxFor(model => model.User.CellPhone, new { maxlength = "20" })
-            </td>
+            <td>@Translation.GetCoreTextTranslation("Mobil")</td>
+            <td>@Html.TextBoxFor(model => model.User.CellPhone, new { maxlength = "20" })</td>
         </tr>
         <tr>
-            <td>
-                @Translation.Get("E-post", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
-            </td>
-            <td>
-                @Html.TextBoxFor(model => model.User.Email, new { maxlength = "50" })
-            </td>
+            <td>@Translation.GetCoreTextTranslation("E-post") <span class="mandatorystar">*</span></td>
+            <td>@Html.TextBoxFor(model => model.User.Email, new { maxlength = "50" })</td>
         </tr>
         <tr>
-            <td>
-                @Translation.Get("Time zone", Enums.TranslationSource.TextTranslation) <span class="mandatorystar">*</span>
-            </td>
-            <td>
-                @Html.DropDownListFor(model => model.SelectedTimeZone, Model.AvailvableTimeZones,  new { style = "width: auto;" })
-            </td>
+            <td>@Translation.GetCoreTextTranslation("Time zone") <span class="mandatorystar">*</span></td>
+            <td>@Html.DropDownListFor(model => model.SelectedTimeZone, Model.AvailvableTimeZones,  new { style = "width: auto;" })</td>
         </tr>
         <tr>
-            <td>
-                @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
-            </td>
+            <td>@Translation.GetCoreTextTranslation("Aktiv")</td>
             <td>
                 <input type="checkbox" name="User.IsActive" @(Model.User.IsActive == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="User.IsActive" value="0" />
             </td>
         </tr>
-        @if (Model.User.Id == null || Model.User.Id == 0 || Model.User.Id == -1)
+        @if (Model.User.Id > 0)
         {
             <tr>
+                <td>@Translation.GetCoreTextTranslation("Byt lösenord")</td>
                 <td>
-                    @Translation.Get("Lösenord", Enums.TranslationSource.TextTranslation)
-                </td>
-                <td>
-                    @Html.PasswordFor(model => model.NewPassword, new { maxlength = "20" })
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Translation.Get("Bekräfta lösenord", Enums.TranslationSource.TextTranslation)
-                </td>
-                <td>
-                    @Html.PasswordFor(model => model.ConfirmPassword, new { maxlength = "20" })
+                    <input type="button" value="@Translation.GetCoreTextTranslation("Byt lösenord")" name="changePassword" class="changePassword btn"
+                           data-toggle="modal" data-target="#divPasswordDialog" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
                 </td>
             </tr>
         }
         else
         {
             <tr>
-                <td>
-                    @Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)
-                </td>
-                <td>
-                    <input type="button" value="@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword btn"
-                        onclick="ChangePassword()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';"/>
-                </td>
+                <td>@Translation.GetCoreTextTranslation("Lösenord")</td>
+                <td>@Html.PasswordFor(model => model.NewPassword, new { maxlength = "20" })</td>
+            </tr>
+            <tr>
+                <td>@Translation.GetCoreTextTranslation("Bekräfta lösenord")</td>
+                <td>@Html.PasswordFor(model => model.ConfirmPassword, new { maxlength = "20" })</td>
             </tr>
         }
     </table>
-
 </div>
-<div id="divPasswordDialog" class="modal hide fade">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)</h3>
-    </div>
-    <div class="modal-body">
-        @Html.Partial("_ChangePassword", Model)
-    </div>
-</div>
-<script type="text/javascript">
-
-    function ChangePassword() {
-
-        var mod = $('#divPasswordDialog').modal('show');
-        //$("#passConfirmError").addAttr("hidden");
-
-        mod.find("#btnClose").on("click", function (e) {
-            mod.modal('hide');
-        });
-
-        mod.find("#btnSavePassword").on("click", function (e) {    
-            var newPassword = $('#NewPassword').val();
-            var confirmPassword= $('#ConfirmPassword').val();
-          
-            var validationPass = validatePassword(newPassword, confirmPassword);
-            if (validationPass.Result) {
-                mod.modal('hide');
-                $.post('/users/EditUserPassword/', { id: $('#id_user').val(), newPassword: newPassword, confirmPassword: confirmPassword },
-                    function (data) {
-                        var e = '@passChangeText';
-                        ShowToastMessage(e, "success");
-                    });
-                
-            }
-            else {
-                if (validationPass.Message == '1') {
-                    $("#passConfirmError").show();
-                } else if (validationPass.Message == '2') {
-                    $("#passComplexError").show();
-                } else {
-                    $("#passLengthError").show();
-                }
-                
-                //ShowToastMessage(validationPass.Message, "error");
-            }
-           
-            $('#NewPassword').val('');
-            $('#ConfirmPassword').val('');
-
-           //mod.modal('hide');
-        });
-
-        mod.on("hide", function () {
-            $("#divPasswordDialog #btnSavePassword").off("click");
-            $("#divPasswordDialog #btnClose").off("click");
-            $("#passConfirmError").hide();
-            $("#passComplexError").hide();
-            $("#passLengthError").hide();
-        });
-    }
-
-    
-    function validatePassword(password, confirmPassword) {
-        var isComplexPassword= $('#customer_complexpassword').val() != 0;
-        var minPasswordLength = $('#customer_passwordlength').val();
-
-        var isValid = true;
-        var lastMessage = '';
-        if (password !== confirmPassword) {
-            isValid = false;
-            lastMessage = '1';
-        }
-        else if (isComplexPassword) {
-            //var complexPasswordRule = "^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{8,}$";
-            var complexPasswordRule = /^(?=.*[A-Z])(?=.*[!@@#=$&?*])(?=.*[0-9])(?=.*[a-z]).{8,}$/;
-            
-            if (!password.match(complexPasswordRule)) {
-                isValid = false;
-                lastMessage = '2';
-            };
-        } else {
-            var passLen = parseInt(minPasswordLength);
-            if (passLen > 0 && password.length < passLen) {
-                isValid = false;
-                lastMessage = '3';
-            }
-        }
-
-        return { Result: isValid, Message: lastMessage };
-    }
-
-</script>

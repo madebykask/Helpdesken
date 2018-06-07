@@ -6,12 +6,13 @@ using DH.Helpdesk.Dal.Repositories.GDPR;
 using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Services.BusinessLogic.Gdpr;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.TaskScheduler.Infrastructure.Configuration;
 using Quartz;
 
 namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
 {
     [DisallowConcurrentExecution]
-    public class GdprDataPrivacyJob : IJob
+    internal class GdprDataPrivacyJob : IJob
     {
         public const string DataMapKey = "data";
 
@@ -19,24 +20,25 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
         private readonly IGDPRTasksService _gdprTasksService;
         private readonly IGDPRDataPrivacyFavoriteRepository _dataPrivacyFavoriteRepository;
         private readonly IGDPRDataPrivacyProcessor _dataPrivacyProcessor;
+        private readonly IGDPRJobSettings _settings;
 
         #region ctor()
 
         public GdprDataPrivacyJob(IGDPRTasksService gdprTasksService, 
-            IGDPRDataPrivacyFavoriteRepository dataPrivacyFavoriteRepository,
-            IGDPRDataPrivacyProcessor dataPrivacyProcessor)
+                                  IGDPRDataPrivacyFavoriteRepository dataPrivacyFavoriteRepository,
+                                  IGDPRDataPrivacyProcessor dataPrivacyProcessor,
+                                  IGDPRJobSettings settings)
         {
             _gdprTasksService = gdprTasksService;
             _dataPrivacyFavoriteRepository = dataPrivacyFavoriteRepository;
             _dataPrivacyProcessor = dataPrivacyProcessor;
+            _settings = settings;
         }
 
         #endregion
 
         public void Execute(IJobExecutionContext context)
         {
-            _log.Debug("Starting data privacy job...");
-
             var isSuccess = true;
             var errorMsg = string.Empty;
 
@@ -46,6 +48,8 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
                 var taskId = Convert.ToInt32(jobDataMap[DataMapKey]);
                 var taskInfo = _gdprTasksService.GetById(taskId);
 
+                _log.Debug($"Starting data privacy job. TaskId: {taskId}");
+
                 //run only scheduled tasks 
                 if (taskInfo.Status != GDPRTaskStatus.Scheduled)
                 {
@@ -53,25 +57,26 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
                     return;
                 }
 
-                _log.Debug("Executing data privacy action.");
-
                 var parameters = CreateParameters(taskInfo);
 
                 //update status before running 
                 var startedAt = DateTime.UtcNow;
+
+                _log.Debug($"Set task to running. TaskId: {taskId}");
                 _gdprTasksService.UpdateTaskStatus(taskInfo.Id, GDPRTaskStatus.Running);
 
                 try
                 {
-                    _dataPrivacyProcessor.Process(taskInfo.CustomerId, taskInfo.UserId, parameters);
-                    _log.Debug($"Data privacy task (id={taskInfo.Id}) has completed successfully.");
-                    
+                    _log.Debug($"Executing data privacy operation. TaskId: {taskId}");
+                    _dataPrivacyProcessor.Process(taskInfo.CustomerId, taskInfo.UserId, parameters, _settings.GDPRBatchSize);
+                    _log.Debug($"Data privacy operation has completed successfully. TaskId: {taskId})");
                 }
                 catch (Exception e)
                 {
-                    _log.Error($"Data privacy task (Id={taskInfo.Id}) failed with error.", e);
                     isSuccess = false;
-                    errorMsg = "Unknow error. " + e.Message;
+                    var errorGuid = Guid.NewGuid();
+                    _log.Error($"Data privacy operation failed with error. ErrorId: {errorGuid}. TaskId: {taskId}.", e);
+                    errorMsg = $"ErrorId: {errorGuid}. " + e.Message;
                 }
 
                 //update task info
@@ -81,16 +86,15 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
                 taskInfo.Success = isSuccess;
                 taskInfo.Error = errorMsg;
                 taskInfo.Status = GDPRTaskStatus.Complete;
-                taskInfo.Progress = 100;
+
                 _gdprTasksService.UpdateTask(taskInfo);
-                
+
+                _log.Debug($"Ending data privacy job. TaskId: {taskId}");
             }
             else
             {
                 throw new Exception("Invalid data"); //todo: handle 
             }
-
-            _log.Debug("Ending data privacy job.");
         }
 
         private DataPrivacyParameters CreateParameters(GDPRTask taskInfo)
@@ -107,7 +111,7 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
                 RegisterDateFrom = favoriteData.RegisterDateFrom,
                 ClosedOnly = favoriteData.ClosedOnly,
                 ReplaceEmails  = favoriteData.ReplaceEmails,
-                FieldsNames = favoriteData.FieldsNames?.Split(new [] {';'}, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                FieldsNames = favoriteData.FieldsNames?.Split(new [] {','}, StringSplitOptions.RemoveEmptyEntries).ToList(),
                 ReplaceDataWith = favoriteData.ReplaceDataWith,
                 ReplaceDatesWith = favoriteData.ReplaceDatesWith,
                 RemoveCaseAttachments = favoriteData.RemoveCaseAttachments,

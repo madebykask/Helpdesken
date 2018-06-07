@@ -1,7 +1,10 @@
 ﻿using DH.Helpdesk.BusinessData.Models.User.Input;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Types;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services.Authentication;
 using DH.Helpdesk.Web.Infrastructure.Configuration;
+using DH.Helpdesk.Web.Models.Shared;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -41,6 +44,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private readonly IUserService userService;
         private readonly ICustomerService customerService;
+        private readonly ISettingService _settingService;
         private readonly ILanguageService languageService;
         private readonly IUsersPasswordHistoryService usersPasswordHistoryService;
         private readonly ICaseLockService _caseLockService;
@@ -55,6 +59,7 @@ namespace DH.Helpdesk.Web.Controllers
         public LoginController(
                 IUserService userService, 
                 ICustomerService customerService, 
+                ISettingService settingService, 
                 IUsersPasswordHistoryService usersPasswordHistoryService,
                 ICaseLockService caseLockService,
                 ILanguageService languageService, 
@@ -66,6 +71,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             this.userService = userService;
             this.customerService = customerService;
+            _settingService = settingService;
             this.usersPasswordHistoryService = usersPasswordHistoryService;
             this._caseLockService = caseLockService;
             this.languageService = languageService;
@@ -116,6 +122,20 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (user != null)
                 {
+                    //set user preferred language for UI translation
+                    SessionFacade.CurrentLanguageId = user.LanguageId;
+
+                    //check if password has expired 
+                    var passwordChangedDate = userService.GetUserPasswordChangedDate(user.Id);
+                    var settings = _settingService.GetCustomerSetting(user.CustomerId);
+
+                    if (settings.MaxPasswordAge > 0 && DateTime.Now > passwordChangedDate.AddDays(settings.MaxPasswordAge))
+                    {
+                        ViewBag.UserId = userName;
+                        ViewBag.ChangePasswordModel = GetPasswordChangeModel(user, settings);
+                        return this.View("Login");
+                    }
+
                     var redirectTo = string.Empty;
                     if (!string.IsNullOrEmpty(returnUrl) 
                         && HttpContext.Request.IsAbsoluteUrlLocalToHost(returnUrl)
@@ -124,8 +144,7 @@ namespace DH.Helpdesk.Web.Controllers
                         redirectTo = Server.UrlDecode(returnUrl);
                     }
 
-                    if (!string.IsNullOrEmpty(redirectTo) 
-                        && redirectTo.ToLower().Contains("login"))
+                    if (!string.IsNullOrEmpty(redirectTo) && redirectTo.ToLower().Contains("login"))
                     {
                         redirectTo = Root;
                     }
@@ -245,6 +264,16 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             return this.View("Login");
+        }
+
+        private ChangePasswordModel GetPasswordChangeModel(UserOverview user, Setting settings)
+        {
+            return new ChangePasswordModel()
+            {
+                UserId = user.Id,
+                MinPasswordLength = settings.MinPasswordLength > 0 ? settings.MinPasswordLength : 5,
+                UseComplexPassword = settings.ComplexPassword.ToBool()
+            };
         }
 
         private int GetLiveUserCount()

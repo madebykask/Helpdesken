@@ -118,7 +118,10 @@ namespace DH.Helpdesk.Web
                             "~/Content/js/snippets/clickmultimenu_dropdown.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/common/login").Include(
+                            "~/Content/js/Shared/errors.js",
                             "~/Scripts/jquery-1.8.3.min.js",
+                            "~/Content/js/jquery.validate.min.js",
+                            "~/Content/js/jquery.toastmessage.js",
                             "~/Content/js/bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/common/popup").Include(
@@ -184,7 +187,8 @@ namespace DH.Helpdesk.Web
                         "~/Content/js/AdvancedSearch/index.specialfilter.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/contract").Include(
-                           "~/Content/js/contract/contractIndex.js"));
+                           "~/Content/js/contract/contractIndex.js",
+                           "~/Content/js/contract/contractCases.js"));
 
             #region Case editing
             bundles.Add(new StyleBundle("~/cases/dynamic-cases").Include(
@@ -285,6 +289,11 @@ namespace DH.Helpdesk.Web
 
             bundles.Add(new ScriptBundle("~/bundles/contracts/edit").Include(
                "~/Content/js/Contract/edit.js"));
+
+
+            bundles.Add(new ScriptBundle("~/bundles/changepassword").Include(
+                "~/Content/js/ChangePassword/PasswordValidator.js",
+                "~/Content/js/ChangePassword/_changePasswordDialog.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
 #if DEBUG

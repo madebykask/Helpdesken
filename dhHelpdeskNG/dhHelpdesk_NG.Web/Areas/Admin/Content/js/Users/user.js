@@ -71,7 +71,8 @@ $(function () {
         inventoryPermission: 'inventoryPermission',
         contractPermission: 'contractPermission',
         caseUnlockPermission: 'caseUnlockPermission',
-        caseInternalLogPermission: 'caseInternalLogPermission'
+        caseInternalLogPermission: 'caseInternalLogPermission',
+        invoiceTimePermission: 'invoiceTimePermission'
     }
 
     dhHelpdesk.admin.users.object = function (spec, my) {
@@ -163,6 +164,7 @@ $(function () {
         var contractPermissions = spec.contractPermissions || [];
         var caseUnlockPermissions = spec.caseUnlockPermissions || [];
         var caseInternalLogPermissions = spec.caseInternalLogPermissions || [];
+        var invoiceTimePermissions = spec.invoiceTimePermissions || [];
         /**
         * @param { fn } walk
         */
@@ -181,7 +183,8 @@ $(function () {
                             inventoryPermissions,
                             contractPermissions,
                             caseUnlockPermissions,
-                            caseInternalLogPermissions];
+                            caseInternalLogPermissions,
+                            invoiceTimePermissions];
 
             for (var i = 0; i < allPermissions.length; i++) {
                 var permissions = allPermissions[i];
@@ -344,6 +347,9 @@ $(function () {
             return caseInternalLogPermissions;
         }
 
+        var getInvoiceTimePermissions = function () {
+            return invoiceTimePermissions;
+        }
         that.getUserGroup = getUserGroup;
         that.setUserGroup = setUserGroup;
         that.getCasePermissions = getCasePermissions;
@@ -360,6 +366,7 @@ $(function () {
         that.getContractPermissions = getContractPermissions;
         that.getCaseUnlockPermissions = getCaseUnlockPermissions;
         that.getCaseInternalLogPermissions = getCaseInternalLogPermissions;
+        that.getInvoiceTimePermissions = getInvoiceTimePermissions;
 
         var uge = my.element.find('[data-field="userGroup"]');
         var onChangeUserGroup = function (setPermissions) {
@@ -565,6 +572,9 @@ $(function () {
         var caseInternalLogPermissions = [];
         caseInternalLogPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="caseInternalLogPermission"]'), type: dhHelpdesk.admin.users.permissionType.caseInternalLogPermission }));
 
+        var invoiceTimePermissions = [];
+        invoiceTimePermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="invoiceTimePermission"]'), type: dhHelpdesk.admin.users.permissionType.invoiceTimePermission }));
+
         var security = dhHelpdesk.admin.users.security({
             element: $('[data-user="security"]'),
             casePermissions: casePermissions,
@@ -580,7 +590,8 @@ $(function () {
             inventoryPermissions: inventoryPermissions,
             contractPermissions: contractPermissions,
             caseUnlockPermissions: caseUnlockPermissions,
-            caseInternalLogPermissions: caseInternalLogPermissions
+            caseInternalLogPermissions: caseInternalLogPermissions,
+            invoiceTimePermissions: invoiceTimePermissions,
         });
 
         var wGs = [];

@@ -7895,7 +7895,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.FreeTextSearch))
             {
-                if (sm.caseSearchFilter.FreeTextSearch[0] == '#')
+                if (sm.caseSearchFilter.FreeTextSearch[0] == CaseSearchConstants.CaseNumberSearchPrefix)
                     sm.caseSearchFilter.FreeTextSearch = string.Empty;
             }
 

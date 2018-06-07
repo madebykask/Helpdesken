@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Web.Models.Shared;
+
+namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -94,7 +97,7 @@
             var customerSettings = this.userService.GetUserProfileCustomersSettings(user.Id);
             var customerSettingsModel = new UserCustomersSettingsViewModel(customerSettings);
             var model = this.CreateInputViewModel(user, modules, customerSettingsModel);
-
+            
             return this.View(model);
         }
 
@@ -151,84 +154,47 @@
 
             return this.View(model);
         }
-
-        [HttpPost]
-        public void EditUserPassword(int id, string newPassword, string confirmPassword)
-        {
-            if (newPassword == confirmPassword)
-            {
-                this.userService.SavePassword(id, newPassword);
-            }
-            else
-            {
-                throw new ArgumentNullException("The password fields do not  match, please re-type them...");
-            }
-        }
-
+        
         private ProfileInputViewModel CreateInputViewModel(
                                     User user, 
                                     UserModulesViewModel modules = null, 
                                     UserCustomersSettingsViewModel customersSettings = null)
         {
-            var sli = new List<SelectListItem>();
-            sli.Add(new SelectListItem
-            {
-                Text = string.Empty,
-                Value = "0",
-                Selected = false
-            });
-            sli.Add(new SelectListItem
-            {
-                Text = "1",
-                Value = "60",
-                Selected = false
-            });
-            sli.Add(new SelectListItem
-            {
-                Text = "2",
-                Value = "120",
-                Selected = false
-            });
-            sli.Add(new SelectListItem
-            {
-                Text = "3",
-                Value = "180",
-                Selected = false
-            });
-            sli.Add(new SelectListItem
-            {
-                Text = "4",
-                Value = "240",
-                Selected = false
-            });
-            sli.Add(new SelectListItem
-            {
-                Text = "5",
-                Value = "300",
-                Selected = false
-            });
-            sli.Add(new SelectListItem
-            {
-                Text = "10",
-                Value = "600",
-                Selected = false
-            });
-            sli.Add(new SelectListItem
-            {
-                Text = "15",
-                Value = "900",
-                Selected = false
-            });
+            var intervals = new List<int> { 0, 1, 2, 3, 4, 5, 10, 15 };
 
             var model = new ProfileInputViewModel
             {
                 User = user,
-                RefreshInterval = sli,
+                
+                RefreshInterval = intervals.Select(x => new SelectListItem()
+                {
+                    Text = x.ToString(),
+                    Value =  (x * 60).ToString()
+                }).ToList(),
+
                 Modules = modules,
                 CustomersSettings = customersSettings,
-                AvailvableTimeZones = TimeZoneInfo.GetSystemTimeZones().Select(it => new SelectListItem() { Value = it.Id, Text = it.DisplayName, Selected = user.TimeZoneId == it.Id }),
+
+                AvailvableTimeZones = TimeZoneInfo.GetSystemTimeZones().Select(it => new SelectListItem()
+                {
+                    Value = it.Id,
+                    Text = it.DisplayName,
+                    Selected = user.TimeZoneId == it.Id
+                }),
+
                 SelectedTimeZone = user.TimeZoneId
             };
+
+            if (user.Id > 0)
+            {
+                var settings = GetCustomerSettings(user.Customer_Id);
+                model.ChangePasswordModel = new ChangePasswordModel()
+                {
+                    UserId = user.Id,
+                    UseComplexPassword = settings.ComplexPassword.ToBool(),
+                    MinPasswordLength = settings.MinPasswordLength > 0 ? settings.MinPasswordLength : 5 
+                };
+            }
 
             return model;
         }

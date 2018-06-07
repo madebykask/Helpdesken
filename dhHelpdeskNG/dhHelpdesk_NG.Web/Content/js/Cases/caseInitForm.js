@@ -1035,43 +1035,17 @@ function CaseInitForm() {
         resetProductareaByCaseType(caseTypeId);
     });
 
-   
-
-    $("ul.dropdown-menu.subddMenu.parentddMenu").on("mouseenter", function () {
-        var html = $("html");
-        html.data('previous-overflow', html.css('overflow'));
-        html.css("overflow", "hidden");
-    });
-
-    $("ul.dropdown-menu.subddMenu.parentddMenu").on("mouseleave", function () {
-        var html = $("html");
-        html.css('overflow', html.data('previous-overflow'));
-    });
-
-    $("#dropDownBtn").on("click", function() {
-                var objPos = getObjectPosInView(this.id);
-                if (objPos.ToTop < objPos.ToDown) {
-                    $(".dropdown-menu.subddMenu").css("max-height", objPos.ToDown - 50 + "px");
-                } else {
-                    $(".dropdown-menu.subddMenu").css("max-height", objPos.ToTop + "px");
-                }
-            });
-
     function resetProductareaByCaseType(caseTypeId) {
         var paId = parseInt($('#case__ProductArea_Id').val());
         $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: caseTypeId, customerId: publicCustomerId, myTime: Date.now(), productAreaIdToInclude: paId }, function (result) {
             if (result.success) {
-                $('#divProductArea.DynamicDropDown > ul.dropdown-menu')
-                    .html("<li><a href='#'>--</a></li>" + result.data);
-                paId = parseInt($('#case__ProductArea_Id').val());
-                if (result.paIds && result.paIds.indexOf(paId) < 0) {
-                    var emptyElement = $('#divProductArea.DynamicDropDown > ul.dropdown-menu').children().first();
+                $('#divProductArea > ul.dropdown-menu').html("<li><a href='#'>--</a></li>" + result.data);
+                if (result.praIds && result.praIds.indexOf(paId) < 0) {
+                    var emptyElement = $('#divProductArea > ul.dropdown-menu').children().first();
                     $('#divBreadcrumbs_ProductArea').text(getBreadcrumbs(emptyElement));
                     $('#case__ProductArea_Id').val('').trigger('change');
                 }
-                setDynamicDropDowns();
                 bindProductAreasEvents();
-
             }
         }, 'json');
     }
@@ -1196,7 +1170,7 @@ function CaseInitForm() {
 
     $('#case__ProductArea_Id').change(function () {
         var $workingGroup = $("#case__WorkingGroup_Id");       
-
+        
         $("#ProductAreaHasChild").val(0);        
         document.getElementById("divProductArea").classList.remove("error");
         if ($(this).val() > 0 ) {
@@ -1420,25 +1394,15 @@ function CaseInitForm() {
         $(publicOUControlName).val(val).trigger('change');
     });
 
-    $('.dropdown-submenu.DynamicDropDown_Up').on('mousemove', function (event) {
-        dynamicDropDownBehaviorOnMouseMove(event);
-    });
-
     $(window).scroll(function () {
-        setDynamicDropDowns();
+        updateDropdownPosition($('#divProductArea')[0]);
+        var objPos = getObjectPosInView($('#divProductArea')[0]);;
+        if (objPos.ToTop <= objPos.ToDown) {
+                $('#divProductArea').removeClass('dropup');
+            } else {
+                $('#divProductArea').addClass('dropup');
+            }
     });
-
-    setDynamicDropDowns();
-
-    $('.dropdown-submenu.DynamicDropDown_Up').on('mousemove', function (event) {
-        dynamicDropDownBehaviorOnMouseMove(event);
-    });
-
-    $(window).scroll(function () {
-        setDynamicDropDowns();
-    });
-
-    setDynamicDropDowns();
 
     bindProductAreasEvents();
 

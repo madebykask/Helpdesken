@@ -10,24 +10,15 @@
     }
 }
 
-<div id="divCaseTemplate" class="btn-group DynamicDropDown">
+<div id="divCaseTemplate" class="btn-group">
     @if (Model.CaseTemplateCategoryTree != null && Model.CaseTemplateCategoryTree.Count > 0)
     {
         <button class="btn dropdown-toggle" data-toggle="dropdown" id="btnCaseTemplateTree" >
              @Translation.Get("Ärendemall")
             <span class="caret"> </span>
         </button>
-        <ul class="dropdown-menu parentddMenu subddMenu" style="z-index: 99999999999; max-height: 704px;">
+        <ul class="dropdown-menu subddMenu parentddMenu" style="z-index: 99999999999; max-height: 704px;">
             @Html.CaseSolutionDropdownButtonString(Model.CaseTemplateCategoryTree, Model.CustomerId, isJS)
         </ul>    
     }
 </div>
-
-<script type="text/javascript">
-    $(function() {
-        $('#divCaseTemplate .dropdown-submenu.DynamicDropDown_Up').off('mousemove');
-        $('#divCaseTemplate .dropdown-submenu.DynamicDropDown_Up').on('mousemove', function (event) {
-            dynamicDropDownBehaviorOnMouseMove(event);
-        });
-    })
-</script>

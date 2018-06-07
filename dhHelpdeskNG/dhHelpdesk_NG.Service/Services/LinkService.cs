@@ -50,7 +50,7 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         IEnumerable<LinkOverview> GetLinkOverviews(int[] customers, int? count, bool forStartPage);
 
-        IEnumerable<LinkOverview> GetLinkOverviewsForStartPage(int[] customers, int? count, bool forStartPage, bool workGroupRestriction = false);
+        IEnumerable<LinkOverview> GetLinkOverviewsForStartPage(int[] customers, int? count, bool forStartPage, int[] customerIdRestrictions = null);
 
         IList<Link> SearchLinks(int customerId, string searchText, List<int> groupIds);
     }
@@ -86,7 +86,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<LinkGroup> GetLinkGroups(int customerId)
         {
-            return _linkGroupRepository.GetAll().Where(it => it.Customer_Id == customerId).OrderBy(x => x.LinkGroupName).ToList();
+            return _linkGroupRepository.GetMany(it => it.Customer_Id == customerId).OrderBy(x => x.LinkGroupName).ToList();
         }
 
         public Link GetLink(int id)
@@ -222,11 +222,12 @@ namespace DH.Helpdesk.Services.Services
 
 
 
-        public IEnumerable<LinkOverview> GetLinkOverviewsForStartPage(int[] customers, int? count, bool forStartPage, bool workGroupRestriction = false)
+        public IEnumerable<LinkOverview> GetLinkOverviewsForStartPage(int[] customers, int? count, bool forStartPage, int[] customerIdRestrictions = null)
         {
+            customerIdRestrictions = customerIdRestrictions ?? new int[0];
             var userid = _workContext.User.UserId;
 
-            return _linkRepository.GetLinkOverviewsToStartPage(customers, count, forStartPage, userid, workGroupRestriction);
+            return _linkRepository.GetLinkOverviewsToStartPage(customers, count, forStartPage, userid, customerIdRestrictions);
 
         }
 

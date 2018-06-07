@@ -32,7 +32,7 @@
                             @Translation.GetCoreTextTranslation("Bevarandeperiod")
                         </td>
                         <td class="span9">
-                            @Html.TextBoxFor(m => m.RetentionPeriod, new { id = "retentionPeriod", maxlength="3", style="width:100px" })
+                            @Html.TextBoxFor(m => m.RetentionPeriod, new { id = "retentionPeriod", maxlength="4", @class="inputw50" })
                             @Translation.GetCoreTextTranslation("dagar")
                             <div id="retentionDaysError"></div>
                         </td>
@@ -161,7 +161,7 @@
 
 <div id="operationProgress" class="loading-msg" style="display:none">
     <div class="content-wrapper">
-        <div id="gdprTask" class="loader">@Translation.GetCoreTextTranslation("Löpande")...<span id="taskProgress">0</span>%</div>
+        <div id="gdprTask" class="loader">@Translation.GetCoreTextTranslation("Pågår")...<span id="taskProgress">0</span>%</div>
     </div>
 </div>
 

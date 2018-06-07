@@ -17,6 +17,7 @@
     {
         public const int CASE_OVERVIEW_GRID_ID = 1;
         public const int CASE_CONNECTPARENT_GRID_ID = 2;
+        public const int CASE_CONTRACT_CASES_GRID = 3;
 
         #region Constants for default values
 
@@ -103,6 +104,7 @@
 
                     return res;
                 case CASE_CONNECTPARENT_GRID_ID:
+                case CASE_CONTRACT_CASES_GRID:
                     using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
                     {
                         var repository = uow.GetRepository<GridSettingsEntity>();
@@ -158,6 +160,7 @@
                                     })
                             .ToList();
                 case CASE_CONNECTPARENT_GRID_ID:
+                case CASE_CONTRACT_CASES_GRID:
                     return
                         this.caseSettingsService.GetConnectToParentGridColumnSettings(customerId, userGroupId)
                             .Select(it => new GridColumnDef

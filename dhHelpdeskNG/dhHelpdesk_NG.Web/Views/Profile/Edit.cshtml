@@ -1,11 +1,8 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@using OfficeOpenXml.FormulaParsing.Excel.Functions.Math
-@model DH.Helpdesk.Web.Models.Profile.ProfileInputViewModel
+﻿@model DH.Helpdesk.Web.Models.Profile.ProfileInputViewModel
 @{
     ViewBag.Title = "Edit";
-}
-@using (Html.BeginForm("edit", "profile", new { id = Model.User.Id }, FormMethod.Post, new { id = "target" }))
-{
+ }
+
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
@@ -13,12 +10,20 @@
         </ul>
     </div>
 </div>
-@Html.Partial("_Input", Model)
-
+@using (Html.BeginForm("edit", "profile", new { id = Model.User.Id }, FormMethod.Post, new { id = "target" }))
+{
+    @Html.Partial("_Input", Model)
 }
+
+@if (Model.ChangePasswordModel != null)
+{
+    @Html.Partial("_ChangePassword", Model.ChangePasswordModel)    
+}
+
 @section Scripts {
     <script type="text/javascript">
-        $(function() {
+        $(function () {
+
             var validator = $("#target").validate({
                 rules: {
                     "User.UserID": {
@@ -49,7 +54,6 @@
                     }
                 },
                 submitHandler: function(form) {
-                    submitForm();
                     form.submit();
                 }
             });           

@@ -135,14 +135,11 @@
         public int CopyUserid { get; set; }
         public List<SelectListItem> CaseInfoMailList { get; set; }
 
-        public UserInputViewModel() { }
-
         public string SelectedTimeZone { get; set; }
 
         public IEnumerable<SelectListItem> AvailvableTimeZones { get; set; }
 
-        public int UserCustomerMinPassWordLength { get; set; }
-        public int CustomerComplexPassword { get; set; }
+        public ChangePasswordModel ChangePasswordModel { get; set; }
     }
 
     public class UserSaveViewModel

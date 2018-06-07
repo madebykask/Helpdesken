@@ -21,6 +21,8 @@
         public int PasswordRequiredOnExternalPage { get; set; }
         public int ResponsibleReminderControlTime { get; set; }
         public int ShowBulletinBoardOnExtPage { get; set; }
+        public int ShowCalenderOnExtPage { get; set; }
+        public int ShowOperationalLogOnExtPage { get; set; }
         public int ShowCaseOnExternalPage { get; set; }
         public int ShowDashboardOnExternalPage { get; set; }
         public int ShowFAQOnExternalPage { get; set; }

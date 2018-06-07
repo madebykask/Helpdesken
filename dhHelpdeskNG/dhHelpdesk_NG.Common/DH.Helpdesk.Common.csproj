@@ -70,6 +70,7 @@
     <Compile Include="Collections\INamedObject.cs" />
     <Compile Include="Collections\NamedObjectCollection.cs" />
     <Compile Include="Configuration\AppConfigHelper.cs" />
+    <Compile Include="Constants\CaseSearchConstants.cs" />
     <Compile Include="Constants\CaseSections.cs" />
     <Compile Include="Constants\Shared.cs" />
     <Compile Include="Constants\DataTypeValue.cs" />

@@ -1,57 +1,51 @@
 ﻿
-@using System.Web.Optimization
 @model DH.Helpdesk.Web.Models.Contract.ContractsSettingViewModel
            
 <script type="text/javascript">
-    var settingsViewParameters = { settingsUrl: '@Url.Action("Settings")' };
-
     $(function () {
-
         // YES and NO SWITCH FOR CHECKBOXES
         $('.switchcheckbox').bootstrapSwitch('onText', trans_yes);
         $('.switchcheckbox').bootstrapSwitch('offText', trans_no);
         $('.switchcheckbox').bootstrapSwitch('size', 'small');
         $('.switchcheckbox').bootstrapSwitch('onColor', 'success');
     });
-
 </script>
 
 <div class="secnavs fixed">
     <div class="pull-left">                
             <ul class="secnav">
-                <li >                    
+                <li>                    
                    <a href="" id="btnSave" class = "btn"> @Translation.Get("Spara", Enums.TranslationSource.TextTranslation) </a>
-                   @Html.HiddenFor(x => Model.SettingRows)                                      
                 </li> 
             </ul>                            
         </div>   
 </div>
 
- <table id="Contract_Table" class="table table-striped table-bordered table-hover table-cases">
+ <table id="contractSettings" class="table table-striped table-bordered table-hover table-cases">
         <thead>
             <tr>
                 <th style="width:8%">
-                    @Translation.Get("Fält", Enums.TranslationSource.TextTranslation)
+                    @Translation.GetCoreTextTranslation("Fält")
                 </th>
                 <th style="width:6%">
-                    @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
+                    @Translation.GetCoreTextTranslation("Visa")
                 </th>
                 <th  style="width:8%">
-                    @Translation.Get("Rubrik", Enums.TranslationSource.TextTranslation)                   
-                    @Html.DropDownList("Languages", null, new {style="width: auto;"})
+                    @Translation.GetCoreTextTranslation("Rubrik")
+                    @Html.DropDownListFor(m => m.CurrentLanguage, Model.Languages, new { style="width: auto;"})
                 </th>
                 <th style="width:8%">
-                    @Translation.Get("Obligatorisk", Enums.TranslationSource.TextTranslation)
+                    @Translation.GetCoreTextTranslation("Obligatorisk")
                 </th>    
                 <th style="width:6%">
-                    @Translation.Get("Lista", Enums.TranslationSource.TextTranslation)
+                    @Translation.GetCoreTextTranslation("Lista")
                 </th>                
             </tr>
         </thead>
         <tbody> 
-             @using (Html.BeginForm("SaveContractFieldsSetting", "Contracts", FormMethod.Post, new { id = "contractSettingRows" }))
-                        {
-                         @Html.Partial("_ContractsFieldsSettings", Model.SettingRows)                                                    
-                        }         
+             @using (Html.BeginForm("SaveContractFieldsSetting", "Contracts", FormMethod.Post, new {id = "contractSettingRows"}))
+             {
+                 @Html.Partial("_ContractsFieldsSettings", Model.SettingRows)
+             }
         </tbody>
     </table>

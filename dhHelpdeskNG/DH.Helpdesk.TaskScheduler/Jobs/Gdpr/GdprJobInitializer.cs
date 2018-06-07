@@ -27,8 +27,9 @@ namespace DH.Helpdesk.TaskScheduler.Jobs.Gdpr
 
             var job = JobBuilder.Create<GdprTasksManagerJob>()
                 .WithIdentity(jobId, "GDPR_mngr")
+                .RequestRecovery(true)
                 .Build();
-
+            
             var trigger =
                 TriggerBuilder.Create()
                     .WithIdentity($"{jobId}_trigger", "GDPR_mngr")

@@ -43,6 +43,8 @@
         public const string IsConnectToParent = "IsConnectToParent";
         public const string IsExtendedSearch = "extendedSearchEnabled";
         public const string CurrentCaseId = "currentCaseId";
+        public const string CustomerId = "hidFilterCustomerId";
+
 
 
     }

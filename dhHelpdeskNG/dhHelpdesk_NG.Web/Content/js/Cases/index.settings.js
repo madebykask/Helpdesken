@@ -83,6 +83,7 @@ $(document).ready(function () {
                 }
             });
         });
+
     });
 
     $('#divProductAreaSetting ul.dropdown-menu li a').click(function (e) {
@@ -142,4 +143,5 @@ $(document).ready(function () {
         var tr = $(this).closest('tr');
         tr.remove();
     });
+
 });

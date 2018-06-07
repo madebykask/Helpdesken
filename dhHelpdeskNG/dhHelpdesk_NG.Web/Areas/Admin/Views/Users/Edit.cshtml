@@ -7,24 +7,29 @@
 }
 @using (Html.BeginForm("edit", "users", new { id = Model.User.Id }, FormMethod.Post, new { id = "target" }))
 {
-<div class="secnavs fixed">
-    <div class="pull-left">
-        <ul class="secnav">
-            <li>@Html.ActionLink(Translation.Get("Spara"), "edit", new { id = Model.User.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>@Html.ActionLink(Translation.Get("Spara"), "edit", new { id = Model.User.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
             
-            <li>@Html.ActionLink(Translation.Get("Ta bort"), "delete", new { id = Model.User.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post") })</li>
+                <li>@Html.ActionLink(Translation.Get("Ta bort"), "delete", new { id = Model.User.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post") })</li>
            
-            @if (copy !=  "1")
-            {
-                <li>@Html.ActionLink(Translation.Get("Kopiera"), "edit", new { id = Model.User.Id, copy = 1 }, new { @class = "btn" })</li>
-            }
-            <li>@Html.ActionLink(Translation.Get("Avbryt"), "index", null, new { @class = "btn" })</li>
-        </ul>
+                @if (copy !=  "1")
+                {
+                    <li>@Html.ActionLink(Translation.Get("Kopiera"), "edit", new { id = Model.User.Id, copy = 1 }, new { @class = "btn" })</li>
+                }
+                <li>@Html.ActionLink(Translation.Get("Avbryt"), "index", null, new { @class = "btn" })</li>
+            </ul>
+        </div>
     </div>
-</div>
-@Html.Partial("_Input", Model)
-
+    @Html.Partial("_Input", Model)
 }
+
+@if (Model.ChangePasswordModel != null)
+{
+    @Html.Partial("~/Views/Shared/_ChangePassword.cshtml", Model.ChangePasswordModel)
+}
+
 @section Scripts {
     @Scripts.Render("~/bundles/admin/users")
 
