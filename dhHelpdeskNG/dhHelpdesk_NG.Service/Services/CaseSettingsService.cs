@@ -220,7 +220,7 @@
                 .ToList();
 
 			var hasNewSetting = false;
-            if (csl.Count == 0)
+			if (csl.Count == 0)
             {
                 csl = this.GetCaseSettingsByUserGroup(customerId, userGroupId);
 
@@ -241,15 +241,15 @@
                     this.SaveCaseSetting(newCaseSetting, out errors);
 
 					hasNewSetting = true;
-                }
+				}
             }
 
 			// If new settings have been added retrieve them again (performance check).
 			if (hasNewSetting)
 				csl = this._caseSettingRepository.GetMany(x => x.Customer_Id == customerId && x.User_Id == userId).OrderBy(x => x.ColOrder).ToList();
 
-            //// we does not support multiline in cases overview grid
-            return csl.Where(it => it.Line == 1).ToList();
+			//// we does not support multiline in cases overview grid
+			return csl.Where(it => it.Line == 1).ToList();
         }
         
         public CaseSettings GetCaseSetting(int id)
