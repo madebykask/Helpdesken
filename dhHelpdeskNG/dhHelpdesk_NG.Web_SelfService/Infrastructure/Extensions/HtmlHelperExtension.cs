@@ -845,22 +845,19 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
 
         private static string BuildProcuctAreaDropdownButtonString(IList<ProductArea> pal)
         {
-            string htmlOutput = string.Empty;
+            var htmlOutput = string.Empty;
 
-            foreach (ProductArea pa in pal)
+            foreach (var pa in pal)
             {
 
-                bool hasChild = false;
-                if (pa.SubProductAreas != null)
-                    if (pa.SubProductAreas.Where(s => s.IsActive != 0 && s.ShowOnExternalPage != 0).ToList().Count > 0)
-                        hasChild = true;
+                var hasChild = pa.SubProductAreas?.Count(s => s.IsActive != 0 && s.ShowOnExternalPage != 0) > 0;
 
                 if (hasChild)
                     htmlOutput += "<li class='dropdown-submenu'>";
                 else
                     htmlOutput += "<li>";
 
-                htmlOutput += "<a href='#' value=" + pa.Id.ToString() + ">" + pa.Name + "</a>";
+                htmlOutput += "<a href='#' value=" + pa.Id + ">" + pa.Name + "</a>";
                 if (hasChild)
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";

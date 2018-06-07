@@ -1369,7 +1369,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         [HttpPost]
         public JsonResult GetProductAreaByCaseType(int? caseTypeId)
         {
-            var pa = _productAreaService.GetTopProductAreas(SessionFacade.CurrentCustomer.Id).ToList();
+            var pa = _productAreaService.GetTopProductAreas(SessionFacade.CurrentCustomer.Id).Where(p => p.ShowOnExternalPage != 0).ToList();
 
             /*TODO: This part does not cover all states and needs to be fixed*/
             if (caseTypeId.HasValue)
@@ -1990,7 +1990,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             caseTypes = CaseTypeTreeTranslation(caseTypes).ToList();
 
             //Product Area tree            
-            var productAreas = _productAreaService.GetTopProductAreas(customerId).Where(p=> p.IsActive != 0 && p.ShowOnExternalPage != 0).ToList();
+            var productAreas = _productAreaService.GetTopProductAreas(customerId).Where(p=> p.ShowOnExternalPage != 0).ToList();
             var traversedData = ProductAreaTreeTranslation(productAreas);
             productAreas = traversedData.Item1.ToList();
 
