@@ -861,7 +861,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
                 if (hasChild)
                 {
                     htmlOutput += "<ul class='dropdown-menu'>";
-                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.Where(s => s.IsActive != 0 && s.ShowOnExternalPage != 0).ToList());
+                    htmlOutput += BuildProcuctAreaDropdownButton(pa.SubProductAreas.Where(s => s.IsActive != 0 && s.ShowOnExternalPage != 0).OrderBy(s => s.Name).ToList());
                     htmlOutput += "</ul>";
                 }
                 htmlOutput += "</li>";
