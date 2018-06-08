@@ -8,6 +8,7 @@ using DH.Helpdesk.SelfService.Entites;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using log4net;
 using log4net.Core;
+using WebGrease.Css.Extensions;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
@@ -1370,6 +1371,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         public JsonResult GetProductAreaByCaseType(int? caseTypeId)
         {
             var pa = _productAreaService.GetTopProductAreas(SessionFacade.CurrentCustomer.Id).Where(p => p.ShowOnExternalPage != 0).ToList();
+            TranslateProductArea(pa);
 
             /*TODO: This part does not cover all states and needs to be fixed*/
             if (caseTypeId.HasValue)
@@ -1377,7 +1379,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 var ctProductAreas = _caseTypeService.GetCaseType(caseTypeId.Value).CaseTypeProductAreas.Select(x => x.ProductArea.GetParent()).ToList();
                 var paNoCaseType = pa.Where(x => x.CaseTypeProductAreas == null || !x.CaseTypeProductAreas.Any()).ToList();
                 ctProductAreas.AddRange(paNoCaseType.Where(p => !ctProductAreas.Select(c => c.Id).Contains(p.Id)));
-                ctProductAreas = ctProductAreas.OrderBy(p => Translation.Get(p.Name)).ToList();
+                ctProductAreas = ctProductAreas.OrderBy(p => p.Name).ToList();
 
                 if (ctProductAreas.Any())
                 {
@@ -1391,7 +1393,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
 
-            pa = pa.OrderBy(p => Translation.Get(p.Name)).ToList();
+            pa = pa.OrderBy(p => p.Name).ToList();
             var praIds = pa.Select(x => x.Id).ToList();
             foreach (var ctProductArea in pa)
             {
@@ -1399,6 +1401,16 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
             var dropString = HtmlHelperExtension.ProductAreaDropdownString(pa);
             return Json(new { success = true, data = dropString, praIds });
+        }
+
+        private void TranslateProductArea(ICollection<ProductArea> pa)
+        {
+            pa.ForEach(p =>
+            {
+                p.Name = Translation.Get(p.Name);
+                if(p.SubProductAreas != null && p.SubProductAreas.Any())
+                    TranslateProductArea(p.SubProductAreas);
+            });
         }
 
         private Dictionary<string, string> GetStatusBar(ExtendedCaseViewModel model)
@@ -1990,7 +2002,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             caseTypes = CaseTypeTreeTranslation(caseTypes).ToList();
 
             //Product Area tree            
-            var productAreas = _productAreaService.GetTopProductAreas(customerId).Where(p=> p.ShowOnExternalPage != 0).ToList();
+            var productAreas = _productAreaService.GetTopProductAreas(customerId).Where(p=> p.ShowOnExternalPage != 0).OrderBy(s => s.Name).ToList();
             var traversedData = ProductAreaTreeTranslation(productAreas);
             productAreas = traversedData.Item1.ToList();
 

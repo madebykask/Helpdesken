@@ -147,7 +147,8 @@ namespace DH.Helpdesk.Services.Services
                 this.productAreaRepository.GetMany(
                     x =>
                     x.Customer_Id == customerId && x.Parent_ProductArea_Id == null
-                    && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive)).OrderBy(x => x.Name).ToList();
+                    && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive))
+                    .OrderBy(x => x.Name).ToList();
         }
 
         public IList<ProductAreaEntity> GetProductAreasForSetting(int customerId, bool isOnlyActive = true)
