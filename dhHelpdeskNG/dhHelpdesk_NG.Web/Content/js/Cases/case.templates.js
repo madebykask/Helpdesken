@@ -61,7 +61,7 @@ function SetValueToBtnGroup(domContainer, domText, domValue, value, doOverwrite)
     if (el && (doOverwrite || oldValue == '')) {
         $(domText).text(getBreadcrumbs(el));
         $domValue.val(value);
-        if (oldValue !== value) {
+        if (oldValue != value) {
             $domValue.trigger('change');
         }
     }
@@ -996,13 +996,16 @@ function GetTemplateData(id) {
                 return;
             }
 
-            for (var field in caseTemplate) {                
-                if (window.IsValueApplicableFor(field, caseTemplate[field]) && window.IsWillBeOverwritten(field, caseTemplate[field])) {
-                    showOverwriteWarning = true;                    
-                    break;
+            for (var field in caseTemplate) {
+                if (caseTemplate.hasOwnProperty(field)) {
+                    if (window.IsValueApplicableFor(field, caseTemplate[field]) &&
+                        window.IsWillBeOverwritten(field, caseTemplate[field])) {
+                        showOverwriteWarning = true;
+                        break;
+                    }
                 }
             }
-            
+
             var overwriteDirectly = caseTemplate["OverWritePopUp"];            
             if (overwriteDirectly != undefined && overwriteDirectly != null && overwriteDirectly != 0)
                 window.ApplyTemplate(caseTemplate, true);
