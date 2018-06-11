@@ -1040,7 +1040,7 @@ function CaseInitForm() {
         $.post('/Cases/GetProductAreaByCaseType/', { caseTypeId: caseTypeId, customerId: publicCustomerId, myTime: Date.now(), productAreaIdToInclude: paId }, function (result) {
             if (result.success) {
                 $('#divProductArea > ul.dropdown-menu').html("<li><a href='#'>--</a></li>" + result.data);
-                if (result.praIds && result.praIds.indexOf(paId) < 0) {
+                if (result.praIds && result.praIds.indexOf(parseInt($('#case__ProductArea_Id').val())) < 0) {
                     var emptyElement = $('#divProductArea > ul.dropdown-menu').children().first();
                     $('#divBreadcrumbs_ProductArea').text(getBreadcrumbs(emptyElement));
                     $('#case__ProductArea_Id').val('').trigger('change');
