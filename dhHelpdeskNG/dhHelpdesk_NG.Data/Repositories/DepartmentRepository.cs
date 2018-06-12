@@ -16,7 +16,8 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IDepartmentRepository : IRepository<Department>
     {
         IEnumerable<Department> GetDepartmentsForUser(int userId, int customerId = 0);
-        IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool activeOnly = true);
+        IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool activeOnly = true, bool excludeInactiveRegion = false);
+
         void ResetDefault(int exclude);
 
         List<ItemOverview> FindActiveOverviews(int customerId);
@@ -54,20 +55,17 @@ namespace DH.Helpdesk.Dal.Repositories
             return query.OrderBy(x => x.DepartmentName);
         }
 
-        public IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool activeOnly = true)
+        public IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool activeOnly = true, bool excludeInactiveRegion = false)
         {
-            var query = from d in Table
-                        from du in d.Users
-                        where d.Customer_Id == customerId && du.Id == userId
-                        select d;
-
-            query.IncludePath(d => d.Country);
-
-            return activeOnly
-                ? query.Where(d => d.IsActive > 0).ToList()
-                : query.ToList();
+            if (excludeInactiveRegion)
+            {
+                return GetDepartmentsByUserPermissionsQuery(userId, customerId, activeOnly)
+                    .Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
+                    .ToList();
+            }
+            return GetDepartmentsByUserPermissionsQuery(userId, customerId, activeOnly).ToList();
         }
-        
+
         public void ResetDefault(int exclude)
         {
             foreach (var obj in this.GetMany(s => s.IsEMailDefault == 1 && s.Id != exclude))
@@ -169,7 +167,23 @@ namespace DH.Helpdesk.Dal.Repositories
             return this.DataContext.Departments.Where(d => d.DepartmentName.ToLower() == departmentName.ToLower() 
                                                       & d.Customer_Id == customerId).Select(d => d.Id).FirstOrDefault();           
         }
+
+        private IQueryable<Department> GetDepartmentsByUserPermissionsQuery(int userId, int customerId,
+            bool activeOnly = true)
+        {
+            var query = from d in Table
+                from du in d.Users
+                where d.Customer_Id == customerId && du.Id == userId
+                select d;
+
+            query.IncludePath(d => d.Country);
+
+            return activeOnly
+                ? query.Where(d => d.IsActive > 0)
+                : query;
+        }
     }
+
 
     #endregion
 
