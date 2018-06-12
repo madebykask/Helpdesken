@@ -23,22 +23,19 @@
 
         public IdName[] GetActiveOUForDepartmentAsIdName(int? departmentId, int customerId)
         {
-            var prelist = departmentId.HasValue ? this.ouService.GetOUs(customerId).Where(e => e.IsActive == 1 && departmentId.GetValueOrDefault() == e.Department_Id) : null;
+            var prelist = departmentId.HasValue ? ouService.GetOUs(customerId, departmentId.Value, true) : null;
 
-            var unionList = new Dictionary<int, string>();
+            var unionList = new List<IdName>();
             if (prelist != null)
-            {
+            { 
                 foreach (var ou in prelist)
                 {
-                    unionList.Add(ou.Id, ou.Name);
-                    foreach (var s in ou.SubOUs.Where(e => e.IsActive == 1))
-                    {
-                        unionList.Add(s.Id, ou.Name + " - " + s.Name);
-                    }
+                    unionList.Add(new IdName { id = ou.Id, name = ou.Name });
+                    unionList.AddRange(ou.SubOUs.Where(e => e.IsActive == 1).Select(s => new IdName {id = s.Id, name = ou.Name + " - " + s.Name}));
                 }
             }
             
-            return unionList.Select(x => new IdName(){ id = x.Key, name = x.Value }).ToArray();
+            return unionList.ToArray();
         }
 
         /// <summary>
@@ -54,8 +51,7 @@
             var dep = this.departmentService.GetDepartmentsByUserPermissions(userId, customerId);
             if (!dep.Any())
             {
-                dep = this.departmentService.GetDepartments(customerId)
-                                             .Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
+                dep = this.departmentService.GetDepartmentsWithRegion(customerId)
                                              .ToList();
             }
 

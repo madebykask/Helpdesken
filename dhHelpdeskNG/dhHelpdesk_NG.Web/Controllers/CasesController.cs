@@ -1981,11 +1981,11 @@ namespace DH.Helpdesk.Web.Controllers
         {
             if (SessionFacade.CurrentUser == null)
             {
-                return this.Json(new { success = false, message = "Access denied" });
+                return this.Json(new { success = false, message = "Access denied" }, JsonRequestBehavior.AllowGet);
             }
 
             var list = this._orgJsonService.GetActiveDepartmentForUserByRegion(id, SessionFacade.CurrentUser.Id, customerId, departmentFilterFormat);
-            return this.Json(new { list });
+            return this.Json(new { list }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult ChangeWorkingGroupFilterUser(int? id, int customerId)

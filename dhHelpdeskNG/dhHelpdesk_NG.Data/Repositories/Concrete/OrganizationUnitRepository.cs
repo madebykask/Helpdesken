@@ -1,8 +1,12 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Concrete
+﻿using System.Security.Cryptography.X509Certificates;
+using DH.Helpdesk.Common.Extensions.Boolean;
+
+namespace DH.Helpdesk.Dal.Repositories.Concrete
 {
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Data.Entity;
 
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.Shared.Output;
@@ -104,6 +108,21 @@
 
             return
                 organizationUnitOverviews.ToList();
+        }
+
+        public List<OU> GetOUs(int customerId, int departmentId, bool? isActive = null)
+        {
+            var query = DataContext.OUs.Include(x => x.SubOUs)
+                .Where(x => x.Parent_OU_Id == null &&
+                        x.Department.Customer_Id == customerId &&
+                        x.Department_Id == departmentId);
+            if (isActive.HasValue)
+            {
+                var isActiveInt = isActive.Value.ToInt();
+                query = query.Where(x => x.IsActive == isActiveInt);
+            }
+
+            return query.ToList();
         }
 
         public IEnumerable<OU> GetActiveAndShowable()

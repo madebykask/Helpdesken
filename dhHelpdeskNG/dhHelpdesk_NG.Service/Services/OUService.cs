@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.Common.Extensions.Boolean;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -14,6 +16,8 @@
         IList<OU> GetThemAllOUs(int customerId);
         IList<OU> GetOuForDepartment(int departmentId);
         IList<OU> GetOUs(int customerId);
+
+        IList<OU> GetOUs(int customerId, int departmentId, bool? isActive = null);
         OU GetOU(int id);
 
         OU GetOUIdByName(string oUName);
@@ -59,6 +63,13 @@
         public IList<OU> GetOUs(int customerId)
         {
             return this._ouRepository.GetMany(x => x.Parent_OU_Id == null && x.Department.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<OU> GetOUs(int customerId, int departmentId, bool? isActive = null)
+        {
+            return _ouRepository.GetOUs(customerId, departmentId, isActive)
+                    .OrderBy(x => x.Name)
+                    .ToList();
         }
 
         public OU GetOU(int id)
