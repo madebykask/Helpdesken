@@ -47,6 +47,7 @@ namespace DH.Helpdesk.Services.Services
         bool CheckIfOUsRequireDebit(int departmentId, int? ouId = null);
 
         int? GetDepartmentIdByCustomerAndName(int customerId, string name);
+        IList<Department> GetDepartmentsWithRegion(int customerId, ActivationStatus isActive = ActivationStatus.Active);
 
     }
 
@@ -79,19 +80,29 @@ namespace DH.Helpdesk.Services.Services
             {
                 return this._departmentRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.DepartmentName).ToList();
             }
-               
+
             return this._departmentRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == (int)isActive).OrderBy(x => x.DepartmentName).ToList();
+        }
+
+        public IList<Department> GetDepartmentsWithRegion(int customerId, ActivationStatus isActive = ActivationStatus.Active)
+        {
+            if (isActive == ActivationStatus.All)
+            {
+                return _departmentRepository.GetMany(d => d.Customer_Id == customerId && (d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0)))
+                    .OrderBy(d => d.DepartmentName)
+                    .ToList();
+            }
+
+            return _departmentRepository.GetMany(d => d.Customer_Id == customerId && d.IsActive == (int)isActive && (d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0)))
+                .OrderBy(x => x.DepartmentName)
+                .ToList();
         }
 
         public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool isOnlyActive = true)
         {
-            var departments = _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive);
-            var res = departments.Where(d => d.Region_Id == null ||
-                                             (d.Region != null && d.Region.IsActive != 0) &&
-                                             (!isOnlyActive || d.IsActive != 0))
-                                 .OrderBy(d => d.DepartmentName)
-                                 .ToList();
-            return res;
+            return _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive, true)
+                .OrderBy(d => d.DepartmentName)
+                .ToList();
         }
 
         public List<ItemOverview> GetUserDepartments(int customerId, int? userId, int? regionId, int departmentFilterFormat)

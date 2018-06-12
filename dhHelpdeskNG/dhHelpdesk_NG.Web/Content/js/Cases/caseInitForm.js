@@ -137,24 +137,22 @@ function GetComputerSearchOptions() {
 }
 
 
-function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {        
-    $(publicOUControlName).val('');
-    $(publicReadOnlyOUName).val('');
+function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {
+    var $publicOuControlName = $(publicOUControlName);
+    $publicOuControlName.val('');
     var ctlOption = publicOUControlName + ' option';        
-    $.post(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {                
+    $.get(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {                
         $(ctlOption).remove();
-        $(publicOUControlName).append('<option value="">&nbsp;</option>');
+        $publicOuControlName.append('<option value="">&nbsp;</option>');
         if (data != undefined) {
+            var options = "";
             for (var i = 0; i < data.list.length; i++) {
                 var item = data.list[i];
-                var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
-                if (option.val() == selectedOrganizationUnitId) {
-                    $(publicOUControlName).val(selectedOrganizationUnitId);
-                    $(publicReadOnlyOUName).val(item.name);
-                    option.prop("selected", true);
-                }
-                $(publicOUControlName).append(option);
+                options += "<option value='" + item.id + "'>" + item.name + "</option>";
             }
+            $publicOuControlName.append(options);
+            $publicOuControlName.val(selectedOrganizationUnitId);
+            $(publicReadOnlyOUName).val($publicOuControlName.find("option:selected").text());
         }
     }, 'json').always(function () {
        // $(publicOUControlName).prop('disabled', false);
@@ -165,7 +163,7 @@ function refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat, se
     $(publicIsAboutOUControlName).val('');
     $(publicIsAboutReadOnlyOUName).val('');
     var ctlOption = publicIsAboutOUControlName + ' option';    
-    $.post(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
+    $.get(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
         $(ctlOption).remove();
         $(publicIsAboutOUControlName).append('<option value="">&nbsp;</option>');
         if (data != undefined) {
@@ -186,45 +184,38 @@ function refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat, se
 }
 
 function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentId, selectedOU) {
-    $(publicDepartmentControlName).val('');
-    $(publicReadOnlyDepartmentName).val('');
+    var $publicDepartmentControlName = $(publicDepartmentControlName);
+    var $publicReadOnlyDepartmentName = $(publicReadOnlyDepartmentName);
+    $publicDepartmentControlName.val('');
+    $publicReadOnlyDepartmentName.val('');
     var ctlOption = publicDepartmentControlName + ' option';    
-    $(publicDepartmentControlName).prop('disabled', true);
+    $publicDepartmentControlName.prop('disabled', true);
     $(publicOUControlName).prop('disabled', true);
-    $.post(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
+    $.get(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
         $(ctlOption).remove();
 
         // Don't disable the dropdown only disable non selected options
         if (IsInitiatorCategoryReadOnly()) {
-            $(publicDepartmentControlName).removeAttr('disabled');
+            $publicDepartmentControlName.removeAttr('disabled');
         }
 
-        $(publicDepartmentControlName).append('<option value="">&nbsp;</option>');
+        $publicDepartmentControlName.append('<option value="">&nbsp;</option>');
         if (data != undefined) {
+            var options = "";
             for (var i = 0; i < data.list.length; i++) {
                 var item = data.list[i];
-                var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
-                if (option.val() == selectedDepartmentId) {
-                    $(publicDepartmentControlName).val(selectedDepartmentId);
-                    $(publicReadOnlyDepartmentName).val(item.name);
-                    option.prop("selected", true);
-                    $(publicDepartmentControlName).append(option);
-                    skipRefreshOU = true;
-                    $(publicDepartmentControlName).trigger('change');                    
-                }
-                else
-                    $(publicDepartmentControlName).append(option);                
+                options += "<option value='" + item.id + "'>" + item.name + "</option>";
             }
-
-            //if (IsInitiatorCategoryReadOnly()) {
-            //    $(publicDepartmentControlName).find('option:not(:selected)').attr('disabled', 'disabled');
-            //}
-            //else {
-            //    $(publicDepartmentControlName).find('option').removeAttr('disabled');
-            //}
+            $publicDepartmentControlName.append(options);
+            $publicDepartmentControlName.val(selectedDepartmentId);
+            if ($publicDepartmentControlName.val() !== '') {
+                $publicReadOnlyDepartmentName.val($publicDepartmentControlName.find("option:selected").text());
+                skipRefreshOU = true;
+                $publicDepartmentControlName.trigger('change');
+            }
         }
     }, 'json').always(function () {
-        $(publicDepartmentControlName).prop('disabled', false);
+        $publicDepartmentControlName.prop('disabled', false);
         skipRefreshOU = false;
         refreshOrganizationUnit(selectedDepartmentId, departmentFilterFormat, selectedOU);
     }).done(function () {
@@ -238,7 +229,7 @@ function refreshIsAboutDepartment(regionId, departmentFilterFormat, selectedDepa
     var ctlOption = publicIsAboutDepartmentControlName + ' option';
     $(publicIsAboutDepartmentControlName).prop('disabled', true);
     $(publicIsAboutOUControlName).prop('disabled', true);
-    $.post(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
+    $.get(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
         $(ctlOption).remove();
         if (IsAboutCategoryReadOnly()) {
             $(publicIsAboutDepartmentControlName).removeAttr('disabled');
