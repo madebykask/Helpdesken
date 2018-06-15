@@ -29,7 +29,6 @@ dhHelpdeskNG/dhHelpdesk_NG.Web/App_Data/Uploaded Files/Reports/
 dhHelpdeskNG/dhHelpdesk_NG.Web/log4net.config
 dhHelpdeskNG/packages/*
 dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/Web.config
-dhHelpdeskNG/CommonAssembly/SharedAssemblyInfo.cs
 dhHelpdeskNG/.vs/config/applicationhost.config
 
 dhHelpdeskNG/dhHelpdesk_NG.Web/Logs/
