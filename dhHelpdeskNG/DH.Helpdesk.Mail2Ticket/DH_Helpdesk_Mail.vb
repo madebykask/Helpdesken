@@ -1130,7 +1130,7 @@ Module DH_Helpdesk_Mail
 
         MyWebBrowser.ScriptErrorsSuppressed = True
 
-        While (MyWebBrowser.ReadyState <> Windows.Forms.WebBrowserReadyState.Complete Or MyWebBrowser.IsBusy = True) And DateDiff(DateInterval.Second, startTime, DateTime.Now()) < 10
+        While (MyWebBrowser.ReadyState <> System.Windows.Forms.WebBrowserReadyState.Complete Or MyWebBrowser.IsBusy = True) And DateDiff(DateInterval.Second, startTime, DateTime.Now()) < 10
             System.Windows.Forms.Application.DoEvents()
         End While
 
