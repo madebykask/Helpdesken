@@ -11,8 +11,8 @@ using DH.Helpdesk.Services.Services.Authentication;
 using DH.Helpdesk.Services.Services.Feedback;
 using DH.Helpdesk.Common.Logger;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
-[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
+[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
 
 namespace DH.Helpdesk.SelfService
 {
