@@ -5,7 +5,6 @@ namespace DH.Helpdesk.Domain
     using global::System.Collections.Generic;
     using DH.Helpdesk.Domain.Projects;
     using global::System;
-    using global::System.Web.Mvc;
     using Common.Enums.CaseSolution;
 	using ExtendedCaseEntity;
 

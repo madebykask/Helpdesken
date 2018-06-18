@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
 
 namespace DH.Helpdesk.Domain.Cases
 {
@@ -16,14 +14,19 @@ namespace DH.Helpdesk.Domain.Cases
 
         public string Text { get; set; }
 
-        //public string[] SelectedValues { get; set; }
-
         public List<string> SelectedValues  { get;set;}
 
-        public List<SelectListItem> SelectList { get; set; }
+        public List<CaseSolutionFieldItem> SelectList { get; set; }
 
         public string Table { get; set; }
+    }
 
+    public class CaseSolutionFieldItem
+    {
+        public string Name { get; set; }
+        public string FieldGuid { get; set; }
+        public bool Selected { get; set; }
+        public bool Status { get; set; }
     }
 }
     

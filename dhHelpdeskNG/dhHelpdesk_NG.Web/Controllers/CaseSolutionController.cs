@@ -1115,9 +1115,8 @@ namespace DH.Helpdesk.Web.Controllers
             }
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
-            CaseSettingsSolutionAggregate settingsSolutionAggregate = this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
+            var settingsSolutionAggregate = this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
             this.caseSolutionSettingService.AddCaseSolutionSettings(settingsSolutionAggregate);
-
 
             int casesoilutionid = caseSolutionInputViewModel.CaseSolution.Id;
 
@@ -1132,8 +1131,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 
             //Get not selected case solution conditions
-            IEnumerable<CaseSolutionSettingsField> lFieldSetting = new List<CaseSolutionSettingsField>();
-            lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(caid));
+            var lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(caid));
 
             List<SelectListItem> feildSettings = null;
             feildSettings = lFieldSetting
@@ -1146,24 +1144,18 @@ namespace DH.Helpdesk.Web.Controllers
             //Get not selected case solution conditions
 
             //Get selected case solution conditions
-            IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
             int Cust = Convert.ToInt32(collection["CaseSolution.Customer_Id"].ToString());
-            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid), Cust);
+            var lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid), Cust);
 
 
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolutionFieldSettings = feildSettings,
-                CSSelectedSettingsField = lFieldSettingSelected.ToList()
+                CSSelectedSettingsField = lFieldSettingSelected.Select(CaseSolutionSettingsFieldModel.Create).ToList()
             };
 
             TempData["NewOrOld"] = caid.ToString();
             return PartialView("/Views/CaseSolution/_Conditions.cshtml", model);
-
-
-
-
-
 
             //int? backToPageId = null; 
             //if (backToPageId == null)
@@ -1337,13 +1329,12 @@ namespace DH.Helpdesk.Web.Controllers
 
         public PartialViewResult RemoveCondition(string condition, string casesolutionid)
         {
-            string condid = condition.Replace("'", "");
-            string caid = casesolutionid.Replace("'", "");
+            var condid = condition.Replace("'", "");
+            var caid = casesolutionid.Replace("'", "");
             this._caseSolutionConditionService.Remove(Convert.ToString(condid), Convert.ToInt32(caid));
 
             //Get not selected case solution conditions
-            IEnumerable<CaseSolutionSettingsField> lFieldSetting = new List<CaseSolutionSettingsField>();
-            lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(caid));
+            var lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(caid));
 
             List<SelectListItem> feildSettings = null;
             feildSettings = lFieldSetting
@@ -1356,16 +1347,15 @@ namespace DH.Helpdesk.Web.Controllers
             //Get not selected case solution conditions
 
             //Get selected case solution conditions
-            IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
             int cust = SessionFacade.CurrentCustomer.Id;
-            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid), cust);
+            var lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid), cust);
 
             //Get selected case solution conditions
 
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolutionFieldSettings = feildSettings,
-                CSSelectedSettingsField = lFieldSettingSelected.ToList()
+                CSSelectedSettingsField = lFieldSettingSelected.Select(CaseSolutionSettingsFieldModel.Create).ToList()
             };
 
             return PartialView("_Conditions", model);
@@ -1381,8 +1371,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 
             //Get not selected case solution conditions
-            IEnumerable<CaseSolutionSettingsField> lFieldSetting = new List<CaseSolutionSettingsField>();
-            lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(caid));
+            var lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(Convert.ToInt32(caid));
 
             List<SelectListItem> feildSettings = null;
             feildSettings = lFieldSetting
@@ -1395,16 +1384,15 @@ namespace DH.Helpdesk.Web.Controllers
             //Get not selected case solution conditions
 
             //Get selected case solution conditions
-            IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
             int cust = SessionFacade.CurrentCustomer.Id;
-            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid), cust);
+            var lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(Convert.ToInt32(caid), cust);
 
             //Get selected case solution conditions
 
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolutionFieldSettings = feildSettings,
-                CSSelectedSettingsField = lFieldSettingSelected.ToList()
+                CSSelectedSettingsField = lFieldSettingSelected.Select(CaseSolutionSettingsFieldModel.Create).ToList()
             };
 
             return PartialView("/Views/CaseSolution/_Conditions.cshtml", model);
@@ -1415,12 +1403,9 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Edit(
             CaseSolutionInputViewModel caseSolutionInputViewModel,
             CaseSolutionSettingModel[] CaseSolutionSettingModels,
-            int PageId, string selectedValues)
+            int PageId, 
+            string selectedValues)
         {
-
-
-
-
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
             this.TempData["RequiredFields"] = null;
@@ -2749,7 +2734,7 @@ namespace DH.Helpdesk.Web.Controllers
             //Get not selected case solution conditions
             IEnumerable<CaseSolutionSettingsField> lFieldSetting = new List<CaseSolutionSettingsField>();
             //lFieldSetting = _caseSolutionConditionService.GetCaseSolutionFieldSetting(caseSolution.Id);
-            List<SelectListItem> feildSettings = null;
+            List<SelectListItem> fieldSettings = null;
             //feildSettings = lFieldSetting
             //      .Select(x => new SelectListItem
             //      {
@@ -2760,15 +2745,14 @@ namespace DH.Helpdesk.Web.Controllers
             //Get not selected case solution conditions
 
             //Get selected case solution conditions
-            IEnumerable<CaseSolutionSettingsField> lFieldSettingSelected = new List<CaseSolutionSettingsField>();
-            lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(caseSolution.Id, Convert.ToInt32(curCustomerId));
+            var lFieldSettingSelected = _caseSolutionConditionService.GetSelectedCaseSolutionFieldSetting(caseSolution.Id, Convert.ToInt32(curCustomerId));
             foreach (var k in lFieldSettingSelected)
             {
                 if (k.SelectList != null)
                 {
                     foreach (var l in k.SelectList)
                     {
-                        l.Text = Translation.Get(l.Text, Enums.TranslationSource.TextTranslation);
+                        l.Name = Translation.GetCoreTextTranslation(l.Name);
                     }
                 }
             }
@@ -3056,9 +3040,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                 ActionList = actionList,
 
-                CaseSolutionFieldSettings = feildSettings,
+                CaseSolutionFieldSettings = fieldSettings,
                 CSSettingsField = lFieldSetting.ToList(),
-                CSSelectedSettingsField = lFieldSettingSelected.ToList(),
+                CSSelectedSettingsField = lFieldSettingSelected.Select(CaseSolutionSettingsFieldModel.Create).ToList(),
                 SplitToCaseSolutions = splitToCaseSolutions,
                 SplitToAllCaseSolutions = splitToAllCaseSolutions
 

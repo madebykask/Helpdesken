@@ -277,15 +277,16 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 }
 
 
-                string ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+                var connectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
                 DataTable dt = null;
 
-                using (var connection = new SqlConnection(ConnectionString))
+                using (var connection = new SqlConnection(connectionString))
                 {
                     if (connection.State == ConnectionState.Closed)
                     {
                         connection.Open();
                     }
+
                     using (var command = new SqlCommand { Connection = connection, CommandType = CommandType.StoredProcedure, CommandTimeout = 0 })
                     {
                         command.CommandType = CommandType.Text;
@@ -296,28 +297,15 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                     }
                 }
 
-                if (dt != null)
+                if (dt.Rows.Count > 0)
                 {
-                    if (dt.Rows.Count > 0)
+                    c.SelectList = dt.AsEnumerable().Select(x => new CaseSolutionFieldItem
                     {
-                        //var result="";
-                        //result.Add(1);
-                        List<DataRow> result = dt.AsEnumerable().ToList();
-
-                        List<SelectListItem> ls = null;
-                        ls = result
-                          .Select(x => new SelectListItem
-                          {
-                              Text = x[1].ToString(),
-                              Value = x[2].ToString(),
-                              Selected = Convert.ToBoolean(x[3].ToString()),
-                              Disabled = !Convert.ToBoolean(x[4].ToString())
-                          }).ToList();
-
-
-                        c.SelectList = ls;
-
-                    }
+                        Name = x[1].ToString(),
+                        FieldGuid = x[2].ToString(),
+                        Selected = Convert.ToBoolean(x[3].ToString()),
+                        Status = Convert.ToBoolean(x[4].ToString())
+                    }).ToList();
                 }
 
                 list.Add(c);

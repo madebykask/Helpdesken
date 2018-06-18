@@ -106,7 +106,7 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
         /// </summary>
         public List<CaseSolutionSettingsField> CSSettingsField { get; set; }
 
-        public List<CaseSolutionSettingsField> CSSelectedSettingsField { get; set; }
+        public List<CaseSolutionSettingsFieldModel> CSSelectedSettingsField { get; set; }
 		public IList<CaseSolution> SplitToCaseSolutions { get; internal set; }
 
 

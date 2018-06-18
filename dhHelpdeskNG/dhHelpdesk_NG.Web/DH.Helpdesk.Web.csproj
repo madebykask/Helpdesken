@@ -363,6 +363,7 @@
     <Compile Include="Infrastructure\Helpers\CommonHelper.cs" />
     <Compile Include="Infrastructure\WebApi\WebApiService.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\ApplicationContext.cs" />
+    <Compile Include="Models\CaseSolution\CaseSolutionSettingsFieldModel.cs" />
     <Compile Include="Models\Case\CaseMoveModel.cs" />
     <Compile Include="Models\Case\CaseOperationResult.cs" />
     <Compile Include="Models\Case\InvoiceTimeModel.cs" />
