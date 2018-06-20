@@ -15,7 +15,6 @@ namespace DH.Helpdesk.Dal.Repositories.Condition.Concrete
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain;
-    using System.Web.Mvc;
 
     public sealed class ConditionRepository : RepositoryBase<ConditionEntity>, IConditionRepository
     {

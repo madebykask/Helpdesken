@@ -5,11 +5,11 @@ using DH.Helpdesk.Dal.Repositories.Printers.Concrete;
 using DH.Helpdesk.Dal.Repositories.Servers;
 using DH.Helpdesk.Dal.Repositories.Servers.Concrete;
 using DH.Helpdesk.SelfService;
-using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.Services.Services.Authentication;
 using DH.Helpdesk.Services.Services.Feedback;
 using DH.Helpdesk.Common.Logger;
+using Ninject.Web.Common.WebHost;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(NinjectWebCommon), "Stop")]
@@ -72,13 +72,10 @@ namespace DH.Helpdesk.SelfService
     using Services.Services.WebApi;
     using Dal.Repositories.Condition;
     using Dal.Repositories.Condition.Concrete;
-    using Dal.Mappers;
-    using BusinessData.Models.Calendar.Output;
-    using Dal.Mappers.Calendars.EntityToBusinessModel;
 
     public static class NinjectWebCommon 
     {
-        private static readonly Bootstrapper bootstrapper = new Bootstrapper();
+        private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
 
         /// <summary>
         /// Starts the application
@@ -87,7 +84,7 @@ namespace DH.Helpdesk.SelfService
         {
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
             DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
-            bootstrapper.Initialize(CreateKernel);
+            Bootstrapper.Initialize(CreateKernel);
         }
         
         /// <summary>
@@ -95,7 +92,7 @@ namespace DH.Helpdesk.SelfService
         /// </summary>
         public static void Stop()
         {
-            bootstrapper.ShutDown();
+            Bootstrapper.ShutDown();
         }
         
         /// <summary>
