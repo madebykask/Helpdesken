@@ -374,6 +374,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public Dictionary<string, string> StatusBar { get; internal set; }
         public bool HasExtendedComputerUsers { get; internal set; }
         public IList<ComputerUserCategoryOverview> ComputerUserCategories { get; internal set; }
+        public string EmptyComputerCategoryName { get; set; }
         public ComputerUserCategory InitiatorComputerUserCategory { get; internal set; }
         public bool InitiatorReadOnly { get; set; }
         public IDictionary<CaseSectionType, ExtendedCaseFormModel> ExtendedCaseSections { get; internal set; }

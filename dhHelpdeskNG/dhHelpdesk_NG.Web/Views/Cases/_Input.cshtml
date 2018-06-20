@@ -270,7 +270,17 @@
                                                 <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">
                                                     <td>Search category</td>
                                                     <td>
-                                                        @Html.DropDownList("InitiatorCategory", Model.ComputerUserCategories.Select(o => new SelectListItem() { Text = o.Name, Value = o.Id.ToString(), Selected = Model.InitiatorComputerUserCategory == null ? false : o.Id == Model.InitiatorComputerUserCategory.ID }).ToList().Use(o => { o.Insert(0, new SelectListItem() { Text = Translation.Get("Employee", Enums.TranslationSource.TextTranslation), Value = "null" }); return o; }))
+                                                        @Html.DropDownList("InitiatorCategory",
+                                                            Model.ComputerUserCategories.Select(o => new SelectListItem()
+                                                            {
+                                                                Text = o.Name,
+                                                                Value = o.Id.ToString(),
+                                                                Selected = Model.InitiatorComputerUserCategory != null && o.Id == Model.InitiatorComputerUserCategory.ID
+                                                            }).ToList().Use(o =>
+                                                            {
+                                                                o.Insert(0, new SelectListItem() { Text = Translation.GetCoreTextTranslation(Model.EmptyComputerCategoryName), Value = "null" });
+                                                                return o;
+                                                            }))
                                                     </td>
                                                 </tr>
                                             }
@@ -607,7 +617,22 @@
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, CaseSolutionFields.IsAbout_ReportedBy)">
                                                 <td>Search category</td>
                                                 <td>
-                                                    @Html.DropDownList("IsAboutCategory", Model.ComputerUserCategories.Select(o => new SelectListItem() { Text = o.Name, Value = o.Id.ToString(), Selected = Model.RegardingComputerUserCategory == null ? false : o.Id == Model.RegardingComputerUserCategory.ID }).ToList().Use(o => { o.Insert(0, new SelectListItem() { Text = Translation.Get("Employee", Enums.TranslationSource.TextTranslation), Value = "null" }); return o; }))
+                                                    @Html.DropDownList("IsAboutCategory",
+                                                        Model.ComputerUserCategories.Select(o => new SelectListItem()
+                                                        {
+                                                            Text = o.Name,
+                                                            Value = o.Id.ToString(),
+                                                            Selected = Model.RegardingComputerUserCategory != null && o.Id == Model.RegardingComputerUserCategory.ID
+                                                        }).ToList()
+                                                        .Use(o =>
+                                                        {
+                                                            o.Insert(0, new SelectListItem()
+                                                            {
+                                                                Text = Translation.GetCoreTextTranslation(Model.EmptyComputerCategoryName),
+                                                                Value = "null"
+                                                            });
+                                                            return o;
+                                                        }))
                                                 </td>
                                             </tr>
                                         }

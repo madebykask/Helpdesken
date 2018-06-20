@@ -313,15 +313,13 @@
                                 CostCentre = cu.CostCentre,
                                 Region_Id = k.Region_Id,
                                 UserCode = cu.UserCode,
-                                UserId = (cu.UserId != null ? cu.UserId : string.Empty),
+                                UserId = cu.UserId ?? string.Empty,
                                 RegionName = k.Region.Name,
                                 DepartmentName = cu.Department.DepartmentName,
                                 OUName = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name,
 								CategoryID = cu.ComputerUsersCategoryID,
 								CategoryName = cu.ComputerUserCategory == null ? null : cu.ComputerUserCategory.Name,
-								IsReadOnly = cu.ComputerUserCategory != null ?
-									 cu.ComputerUserCategory.IsReadOnly :
-									 false
+								IsReadOnly = cu.ComputerUserCategory != null && cu.ComputerUserCategory.IsReadOnly
 
 							};
 
@@ -359,7 +357,14 @@
                 requestBuilder.FilterByPharse(parameters.Pharse);
             }
 
-			requestBuilder.FilterByComputerUserCategoryID(parameters.ComputerUserCategoryID);
+            if (parameters.ComputerUserCategoryID.HasValue)
+            {
+                var categoryId = parameters.ComputerUserCategoryID.Value == 0
+                    ? null
+                    : parameters.ComputerUserCategoryID;
+
+                requestBuilder.FilterByComputerUserCategoryID(categoryId);
+            }
 
 			var countingRequest = requestBuilder.Build();
 

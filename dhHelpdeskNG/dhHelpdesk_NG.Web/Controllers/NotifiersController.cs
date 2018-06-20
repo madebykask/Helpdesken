@@ -250,18 +250,12 @@ namespace DH.Helpdesk.Web.Controllers
                     searchDivisions = this.divisionRepository.FindByCustomerId(currentCustomerId);
                 }
 
-				var computerUserCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId);
-				if (computerUserCategories.Any())
-				{
-					searchComputerUserCategories = computerUserCategories.Select(o => new ItemOverview(o.Name, o.Id.ToString())).ToList();
-					searchComputerUserCategories.Insert(0, new ItemOverview(Translation.Get("Employee", Enums.TranslationSource.TextTranslation), "0"));
-				}
+                searchComputerUserCategories = GetUserCategoriesList(currentCustomerId);
 
-				if (filters.ComputerUserCategoryID.HasValue && filters.ComputerUserCategoryID.Value == 0)
-				{
-					filters.ComputerUserCategoryID = (int?)null;
-				}
-
+				//if (filters.ComputerUserCategoryID.HasValue && filters.ComputerUserCategoryID.Value == 0)
+				//{
+				//	filters.ComputerUserCategoryID = (int?)null;
+				//}
 
 				var sortField = !string.IsNullOrEmpty(filters.SortByField)
                     ? new SortField(filters.SortByField, filters.SortBy)
@@ -294,9 +288,24 @@ namespace DH.Helpdesk.Web.Controllers
                      searchResult);
             }
 
-
-
             return this.View(model);
+        }
+
+        private List<ItemOverview> GetUserCategoriesList(int customerId)
+        {
+            List<ItemOverview> searchComputerUserCategories = new List<ItemOverview>();
+
+            var computerUserCategories = computerService.GetComputerUserCategoriesByCustomerID(customerId, true);
+            if (computerUserCategories.Any())
+            {
+                searchComputerUserCategories = computerUserCategories.Where(o => !o.IsEmpty)
+                    .Select(o => new ItemOverview(o.Name, o.Id.ToString()))
+                    .ToList();
+
+                var emptyCategoryName = computerUserCategories.FirstOrDefault(x => x.IsEmpty)?.Name ?? "Employee";
+                searchComputerUserCategories.Insert(0, new ItemOverview(Translation.GetCoreTextTranslation(emptyCategoryName), "0"));
+            }
+            return searchComputerUserCategories;
         }
 
         [HttpPost]
@@ -331,8 +340,12 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
 			var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-			var nonReadOnlyCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
-				.Where(o => !o.IsReadOnly).ToList();
+
+            var nonReadOnlyCategories =
+                computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
+                    .Where(o => !o.IsReadOnly)
+                    .ToList();
+
 			model.ComputerUserCategoryModel = new ComputerUserCategoryModel(nonReadOnlyCategories);
 
 			var newNotifier = this.newNotifierFactory.Create(model, currentCustomerId, DateTime.Now);
@@ -488,8 +501,10 @@ namespace DH.Helpdesk.Web.Controllers
             if (!string.IsNullOrEmpty(costcentre))
                 inputParams.Add("CostCentre", costcentre);
 
-			var nonReadOnlyCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
-				.Where(o => !o.IsReadOnly).ToList();
+            var nonReadOnlyCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
+                .Where(o => !o.IsReadOnly)
+                .ToList();
+
 			var categoryModel = new ComputerUserCategoryModel(nonReadOnlyCategories);
 
 			var model = this.newNotifierModelFactory.Create(
@@ -601,8 +616,10 @@ namespace DH.Helpdesk.Web.Controllers
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
-			var nonReadOnlyCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
-				.Where(o => !o.IsReadOnly).ToList();
+            var nonReadOnlyCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
+                .Where(o => !o.IsReadOnly)
+                .ToList();
+
 			var categoryModel = new ComputerUserCategoryModel(nonReadOnlyCategories);
 
 			var model = this.newNotifierModelFactory.Create(
@@ -724,8 +741,10 @@ namespace DH.Helpdesk.Web.Controllers
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
-			var nonReadOnlyCategories = 
-                computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId).Where(o => !o.IsReadOnly).ToList();
+            var nonReadOnlyCategories =
+                computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
+                    .Where(o => !o.IsReadOnly)
+                    .ToList();
 
 			var computerUser = computerService.GetComputerUser(notifier.Id);
 			var categoryModel = computerUser.ComputerUserCategory == null ?
@@ -829,10 +848,7 @@ namespace DH.Helpdesk.Web.Controllers
                 filters.RecordsOnPage,
                 null);
 
-			searchComputerUserCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
-				.Select(o => new ItemOverview(o.Name, o.Id.ToString()))
-				.ToList();
-
+            searchComputerUserCategories = GetUserCategoriesList(currentCustomerId);
 
 			var searchResult = this.notifierRepository.Search(parameters);
 
@@ -855,11 +871,6 @@ namespace DH.Helpdesk.Web.Controllers
         [BadRequestOnNotValid]
         public PartialViewResult Search(SearchInputModel inputModel)
         {
-			if (inputModel.ComputerUserCategoryID.HasValue && inputModel.ComputerUserCategoryID.Value == 0)
-			{
-				inputModel.ComputerUserCategoryID = (int?)null;
-			}
-
 			var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
             var filters = inputModel.ExtractFilters();

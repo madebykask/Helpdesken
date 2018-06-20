@@ -6055,8 +6055,10 @@ namespace DH.Helpdesk.Web.Controllers
                 : templateId ?? 0;
 
             // Computer user categories
-            m.ComputerUserCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId);
-            
+            var computerCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId, true);
+            m.ComputerUserCategories = computerCategories.Where(o => !o.IsEmpty).ToList();
+            m.EmptyComputerCategoryName = computerCategories.FirstOrDefault(o => o.IsEmpty)?.Name ?? "Employee";
+
             m.HasExtendedComputerUsers =
                 _caseSolutionService.CheckIfExtendedFormExistForSolutionsInCategories(customerId, m.ComputerUserCategories.Select(c => c.Id).ToList());
 

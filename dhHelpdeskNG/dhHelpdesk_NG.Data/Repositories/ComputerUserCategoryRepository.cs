@@ -24,9 +24,9 @@ namespace DH.Helpdesk.Dal.Repositories
                         Name = x.Name,
                         CustomerId =  customerID,
                         ComputerUsersCategoryGuid = x.ComputerUsersCategoryGuid,
-                        IsReadOnly = x.IsReadOnly
-                    })
-                .ToList();
+                        IsReadOnly = x.IsReadOnly,
+                        IsEmpty = x.IsEmpty
+                    }).ToList();
 
 			return all;
 		}
