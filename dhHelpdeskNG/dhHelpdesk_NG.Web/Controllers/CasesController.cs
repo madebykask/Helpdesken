@@ -3717,7 +3717,8 @@ namespace DH.Helpdesk.Web.Controllers
                         this.User.Identity.Name,
                         ei,
                         out errors,
-                        parentCase, m.FollowerUsers);
+                        parentCase, 
+                        m.FollowerUsers);
 
             if (isItChildCase)
             {

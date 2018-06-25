@@ -65,7 +65,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IWatchDateCalendarService _watchDateCalendarService;
         private readonly ICacheProvider _cache;
         private readonly ICaseSolutionConditionService _caseSolutionConditionService;
-
+        private IComputerService _computerService;
 
 
         private const int MAX_QUICK_BUTTONS_COUNT = 5;
@@ -106,9 +106,11 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseRuleFactory caseRuleFactory,
             IWatchDateCalendarService watchDateCalendarService,
             ICacheProvider cache,
-            ICaseSolutionConditionService caseSolutionConditionService)
+            ICaseSolutionConditionService caseSolutionConditionService,
+            IComputerService computerService)
             : base(masterDataService)
         {
+            _computerService = computerService;
             this._caseFieldSettingService = caseFieldSettingService;
             this._caseSolutionService = caseSolutionService;
             this._caseTypeService = caseTypeService;
@@ -340,19 +342,20 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult New(int? backToPageId)
         {
             // Positive: Send Mail to...
-            var caseSolution = new CaseSolution() { Customer_Id = SessionFacade.CurrentCustomer.Id, NoMailToNotifier = 1, Status = 1, ShowOnCaseOverview = 1, ShowInsideCase = 1, OverWritePopUp = 1 };
+            var caseSolution = new CaseSolution()
+            {
+                Customer_Id = SessionFacade.CurrentCustomer.Id,
+                NoMailToNotifier = 1,
+                Status = 1,
+                ShowOnCaseOverview = 1,
+                ShowInsideCase = 1,
+                OverWritePopUp = 1
+            };
 
-            if (backToPageId == null)
-                ViewBag.PageId = 0;
-            else
-                ViewBag.PageId = backToPageId;
-
-
-            if (caseSolution == null)
-                return new HttpNotFoundResult("No case solution found...");
-
+            ViewBag.PageId = backToPageId ?? 0;
             TempData["NewOrOld"] = "0";
             //ViewBag.IdVal = 0;
+
             var model = this.CreateInputViewModel(caseSolution);
 
             return this.View(model);
@@ -713,9 +716,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (caseSolutionInputViewModel.CaseSolution.Text_Internal != null && caseSolutionInputViewModel.CaseSolution.Text_Internal.Length > 3000)
                 caseSolutionInputViewModel.CaseSolution.Text_Internal = caseSolutionInputViewModel.CaseSolution.Text_Internal.Substring(0, 3000);
-
-
-
+            
             if (collection["CaseSolution.AgreedDate"].ToString().Trim() != string.Empty)
             {
                 string AgreedDate = Convert.ToString(collection["CaseSolution.AgreedDate"].ToString());
@@ -780,10 +781,7 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSolutionInputViewModel.CaseSolution.CostCentre = CostCentre;
             }
 
-
-
             caseSolutionInputViewModel.CaseSolution.CreatedDate = DateTime.Now;
-
 
             if (collection["CaseSolution.Customer_Id"].ToString().Trim() != string.Empty)
             {
@@ -880,6 +878,12 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSolutionInputViewModel.CaseSolution.IsAbout_Place = IsAbout_Place.ToString();
             }
 
+            if (collection["CaseSolution.IsAbout_UserSearchCategory_Id"].ToString().Trim() != string.Empty)
+            {
+                int IsAbout_UserSearchCategory_Id = Convert.ToInt32(collection["CaseSolution.IsAbout_UserSearchCategory_Id"].ToString());
+                caseSolutionInputViewModel.CaseSolution.IsAbout_UserSearchCategory_Id = IsAbout_UserSearchCategory_Id;
+            }
+
             if (collection["CaseSolution.IsAbout_Region_Id"].ToString().Trim() != string.Empty)
             {
                 int IsAbout_Region_Id = Convert.ToInt32(collection["CaseSolution.IsAbout_Region_Id"].ToString());
@@ -965,6 +969,12 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 int Project_Id = Convert.ToInt32(collection["CaseSolution.Project_Id"].ToString());
                 caseSolutionInputViewModel.CaseSolution.Project_Id = Project_Id;
+            }
+
+            if (collection["CaseSolution.UserSearchCategory_Id "].ToString().Trim() != string.Empty)
+            {
+                int UserSearchCategory_Id = Convert.ToInt32(collection["CaseSolution.UserSearchCategory_Id "].ToString());
+                caseSolutionInputViewModel.CaseSolution.UserSearchCategory_Id = UserSearchCategory_Id;
             }
 
             if (collection["CaseSolution.Region_Id"].ToString().Trim() != string.Empty)
@@ -1170,10 +1180,7 @@ namespace DH.Helpdesk.Web.Controllers
             //var model = this.CreateInputViewModel(caseSolution);
 
             //return this.View("/Views/CaseSolution/Edit.cshtml", model);
-
-
         }
-
 
         public ActionResult Edit(int id, int? backToPageId)
         {
@@ -1451,10 +1458,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
-            CaseSettingsSolutionAggregate settingsSolutionAggregate =
-                this.CreateCaseSettingsSolutionAggregate(
-                    caseSolutionInputViewModel.CaseSolution.Id,
-                    CaseSolutionSettingModels);
+            var settingsSolutionAggregate =
+                this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, CaseSolutionSettingModels);
+
             this.caseSolutionSettingService.UpdateCaseSolutionSettings(settingsSolutionAggregate);
 
             List<CaseSolitionConditionListEntity> cse = new List<CaseSolitionConditionListEntity>();
@@ -2799,11 +2805,6 @@ namespace DH.Helpdesk.Web.Controllers
             ViewBag.selectedValues = bagresult;
             //Get selected case solution conditions
 
-
-
-
-
-
             regions = regionList.Select(x => new SelectListItem
             {
                 Text = x.Name,
@@ -2944,6 +2945,13 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = (caseSolution.SplitToCaseSolutionDescendants != null ? (caseSolution.SplitToCaseSolutionDescendants.Where(a => a.SplitToCaseSolution_Id == x.Id).Any() == true ? true : false) : false)
              }).ToList();
 
+            var userSearchCategories =
+                _computerService.GetComputerUserCategoriesByCustomerID(curCustomerId).Select(x => new SelectListItem()
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.Name
+                }).ToList();
+
             var model = new CaseSolutionInputViewModel
             {
                 CaseSolution = caseSolution,
@@ -2981,6 +2989,8 @@ namespace DH.Helpdesk.Web.Controllers
                 }).ToList(),
 
                 Regions = regions,
+
+                UserSearchCategories = userSearchCategories,
 
                 Departments = departments,
 

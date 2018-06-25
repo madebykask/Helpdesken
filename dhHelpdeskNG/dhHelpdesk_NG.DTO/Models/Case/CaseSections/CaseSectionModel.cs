@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace DH.Helpdesk.BusinessData.Models.Case.CaseSections
 {
@@ -19,6 +15,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseSections
         public bool IsNewCollapsed { get; set; }
 
         public bool IsEditCollapsed { get; set; }
+
+        public int? DefaultUserSearchCategory { get;set; }
+
+        public bool ShowUserSearchCategory { get; set; }
 
         public List<int> CaseSectionFields { get; set; }
     }

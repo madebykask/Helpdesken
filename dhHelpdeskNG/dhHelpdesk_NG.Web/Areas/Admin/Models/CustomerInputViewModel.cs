@@ -105,5 +105,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
 
         public IList<int> ShowStatusBarIds { get; set; }
         public IList<int> ShowExternalStatusBarIds { get; set; }
+
+        public IList<SelectListItem> SearchCategories { get; set; }
     }
 }

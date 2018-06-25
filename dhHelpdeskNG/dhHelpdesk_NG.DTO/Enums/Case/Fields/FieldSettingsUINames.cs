@@ -87,8 +87,8 @@ namespace DH.Helpdesk.BusinessData.Enums.Case.Fields
             { GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), "Avslutsbeskrivning"},
             { GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), "Avslutsdatum"},
             { GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), "Avslutsorsak"},
-
-
+            { GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString(), "Sök kategori"},
+            { GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString(), "Sök kategori"}
         };
     }
 }

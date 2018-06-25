@@ -41,23 +41,25 @@ namespace DH.Helpdesk.Services.Services.Cases
         public CaseSectionModel GetCaseSection(int sectionId, int customerId, int languageId)
         {
             var section = _caseSectionsRepository.GetCaseSection(sectionId, customerId);
-            return section != null
-                ? new CaseSectionModel
+            
+            if (section != null)
+            {
+                var sectionWithLang = section.CaseSectionLanguages.SingleOrDefault(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId);
+                return new CaseSectionModel
                 {
                     Id = section.Id,
                     SectionType = section.SectionType,
                     IsEditCollapsed = section.IsEditCollapsed,
                     IsNewCollapsed = section.IsNewCollapsed,
-                    SectionHeader = section.CaseSectionLanguages.SingleOrDefault(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId) != null
-                    ? section.CaseSectionLanguages.Single(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId).Label
-                    : string.Empty,
+                    SectionHeader = sectionWithLang != null ? sectionWithLang.Label : string.Empty,
                     CustomerId = section.Customer_Id,
-                    CaseSectionFields = section.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList()
-                }
-                : new CaseSectionModel
-                {
-                    CustomerId = customerId
+                    CaseSectionFields = section.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList(),
+                    DefaultUserSearchCategory = section.DefaultUserSearchCategory,
+                    ShowUserSearchCategory = section.ShowUserSearchCategory
                 };
+            }
+
+            return new CaseSectionModel { CustomerId = customerId };
         }
 
         public int SaveCaseSection(CaseSectionModel caseSection)
@@ -71,6 +73,8 @@ namespace DH.Helpdesk.Services.Services.Cases
                     cs.IsNewCollapsed = caseSection.IsNewCollapsed;
                     cs.SectionType = caseSection.SectionType;
                     cs.UpdatedDate = DateTime.Now;
+                    cs.ShowUserSearchCategory = caseSection.ShowUserSearchCategory;
+                    cs.DefaultUserSearchCategory = caseSection.DefaultUserSearchCategory;
 
                     var existFieldsIds = cs.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList();
                     var toDel = existFieldsIds.Except(caseSection.CaseSectionFields).ToList();

@@ -69,6 +69,8 @@
         IsAbout_ReportedBy = 65,
         IsAbout_UserCode = 66,
         AddFollowersBtn = 67,
-        AgreedDate = 68
+        AgreedDate = 68,
+        UserSearchCategory = 69,
+        IsAbout_UserSearchCategory = 70
     }
 }

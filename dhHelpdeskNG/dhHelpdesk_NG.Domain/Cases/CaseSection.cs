@@ -18,6 +18,10 @@ namespace DH.Helpdesk.Domain.Cases
 
         public DateTime? UpdatedDate { get; set; }
 
+        public int? DefaultUserSearchCategory { get; set; }
+
+        public bool ShowUserSearchCategory { get; set; }
+
         public virtual Customer Customer { get; set; }
 
         public virtual List<CaseSectionField> CaseSectionFields { get; set; }

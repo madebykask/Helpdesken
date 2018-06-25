@@ -106,6 +106,8 @@ $(function () {
                     $("#isNewCollapsed").val(result.isNewCollapsed);
                     $("#isEditCollapsed").val(result.isEditCollapsed);
                     $("#modal_header").text(result.sectionHeader);
+                    $('#showUserSearchCategorySelect').val(result.showUserSearchCategory ? '1' : '0');
+                    $('#defaultUserSearchCategorySelect').val((result.defaultUserSearchCategory || ''));
                     $("#sectionDrop" + sectionType).val(result.sectionFields);
                     $("#sectionDrop" + sectionType).trigger("chosen:updated");
                     $("#sectionDiv" + sectionType).removeClass("hidden-desktop");
@@ -124,25 +126,30 @@ $(function () {
         var customerId = $("#customerId").val();
         var sectionDrop = $("#sectionDrop" + sectionType).val();
         var languageId = $("#LanguageId").val();
-        $.ajax({
-            url: "/customercasefieldsettings/SaveCaseSectionOptions",
-            type: "post",
-            data: {
-                sectionId: sectionElement.val(),
-                customerId: customerId,
-                isNewCollapsed: isNewCollapsed,
-                isEditCollapsed: isEditCollapsed,
-                sectionType: sectionType,
-                selectedFields: sectionDrop,
-                languageId: languageId
-            },
+        var showUserSearchCategory = $('#showUserSearchCategorySelect').val();
+        var defaultUserSearchCategory = $('#defaultUserSearchCategorySelect').val();
+
+            $.ajax({
+                url: "/customercasefieldsettings/SaveCaseSectionOptions",
+                type: "post",
+                data: {
+                    SectionId: sectionElement.val(),
+                    CustomerId: customerId,
+                    IsNewCollapsed: isNewCollapsed,
+                    IsEditCollapsed: isEditCollapsed,
+                    SectionType: sectionType,
+                    SelectedFields: sectionDrop,
+                    LanguageId: languageId,
+                    DefaultUserSearchCategory: defaultUserSearchCategory,
+                    ShowUserSearchCategory: showUserSearchCategory ? 'true' : 'false'
+                },
             dataType: "json",
             success: function (result) {
                 if (result.success) {
                     sectionElement.val(result.sectionId);
                     return;
                 } else {
-                    ShowToastMessage("Bad", "error");
+                    ShowToastMessage("Operation failed", "error");
                 }
                 return;
             }

@@ -370,6 +370,7 @@
     <Compile Include="Models\CaseSolution\CaseSolutionSettingsFieldModel.cs" />
     <Compile Include="Models\Case\CaseMoveModel.cs" />
     <Compile Include="Models\Case\CaseOperationResult.cs" />
+    <Compile Include="Models\Case\CaseSectionInputData.cs" />
     <Compile Include="Models\Case\InvoiceTimeModel.cs" />
     <Compile Include="Models\Contract\ContractHistoryFieldsDiff.cs" />
     <Compile Include="Models\Contract\ContractsSearchInputData.cs" />

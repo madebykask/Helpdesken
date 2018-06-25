@@ -63,6 +63,7 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
         //public IList<ProjectOverview> Projects { get; set; }
         public IList<SelectListItem> WorkingGroups { get; set; }
         public IList<SelectListItem> Regions { get; set; }
+        public IList<SelectListItem> UserSearchCategories{ get; set; }
         public IList<SelectListItem> OUs { get; set; }
         public IList<SelectListItem> Systems { get; set; }
         public IList<SelectListItem> Urgencies { get; set; }

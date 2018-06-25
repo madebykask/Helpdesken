@@ -268,7 +268,7 @@
                                             @if (Model.ComputerUserCategories.Any())
                                             {
                                                 <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">
-                                                    <td>Search category</td>
+                                                    <td>@Translation.GetCoreTextTranslation("Sök kategori")</td>
                                                     <td>
                                                         @Html.DropDownList("InitiatorCategory",
                                                             Model.ComputerUserCategories.Select(o => new SelectListItem()
