@@ -5717,8 +5717,8 @@ namespace DH.Helpdesk.Web.Controllers
                         if (!string.IsNullOrEmpty(caseTemplate.InventoryNumber))
                             m.case_.InvoiceNumber = caseTemplate.InvoiceNumber;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.InventoryNumber))
-                            m.case_.ReferenceNumber = caseTemplate.InventoryNumber;
+                        if (!string.IsNullOrEmpty(caseTemplate.ReferenceNumber))
+                            m.case_.ReferenceNumber = caseTemplate.ReferenceNumber;
 
                         if (caseTemplate.Status_Id.HasValue)
                             m.case_.Status_Id = caseTemplate.Status_Id;
