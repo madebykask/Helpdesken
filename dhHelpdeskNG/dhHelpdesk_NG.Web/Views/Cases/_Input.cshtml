@@ -265,10 +265,10 @@
                                                     <th class="span5"></th>
                                                 </tr>
                                             </thead>
-                                            @if (Model.ComputerUserCategories.Any())
+                                            @if (@Model.ComputerUserCategories.Any())
                                             {
-                                                <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">
-                                                    <td>@Translation.GetCoreTextTranslation("Sök kategori")</td>
+                                                <tr class="displaytr" style="@(Model.InitiatorUserCategoryVisible ? "" : "display:none")">
+                                                    <td>@CaseFieldCaption(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, "Sök kategori")</td>
                                                     <td>
                                                         @Html.DropDownList("InitiatorCategory",
                                                             Model.ComputerUserCategories.Select(o => new SelectListItem()
@@ -614,8 +614,8 @@
                                         </thead>
                                         @if (Model.ComputerUserCategories.Any())
                                         {
-                                            <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, CaseSolutionFields.IsAbout_ReportedBy)">
-                                                <td>Search category</td>
+                                            <tr class="displaytr" style="@(Model.RegardingUserCategoryVisible ? "" : "display:none")">
+                                                <td>@CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, "Sök kategori")</td>
                                                 <td>
                                                     @Html.DropDownList("IsAboutCategory",
                                                         Model.ComputerUserCategories.Select(o => new SelectListItem()

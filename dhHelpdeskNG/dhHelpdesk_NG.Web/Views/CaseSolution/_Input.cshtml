@@ -382,7 +382,7 @@
                                                 </table>
                                             </td>
                                             <td>
-                                                @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.UserSearchCategory, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id)
+                                                @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.UserSearchCategory_Id, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id)
                                             </td>
                                         </tr>
                                     }
@@ -719,6 +719,25 @@
                                     <tr></tr>
                                     @if (Model.CaseFieldSettings.Count() != 0)
                                     {
+                                        <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString())">
+                                            <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString(), Model.CaseSolution.Customer_Id)</td>
+                                            <td>
+                                                @Html.DropDownListFor(model => model.CaseSolution.IsAbout_UserSearchCategory_Id, Model.UserSearchCategories, "",
+                                                    new { id = "IsAbout_UserSearchCategory", @*class = "acceptRules",*@ standardId = GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString() })
+                                            </td>
+                                            <td>
+                                                <table>
+                                                    <tr id="stateIconPlace_@GlobalEnums.TranslationCaseFields.Region_Id.ToString()">
+                                                        @*State icons will be added Here*@
+                                                    </tr>
+                                                </table>
+                                            </td>
+
+                                            <td>
+                                                @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.IsAbout_UserSearchCategory_Id, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id)
+                                            </td>
+                                        </tr>
+
                                         <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString())">
                                             <td>
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
@@ -735,25 +754,6 @@
                                             </td>
                                             <td>
                                                 @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.IsAbout_ReportedBy, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy)
-                                            </td>
-                                        </tr>
-
-                                        <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString())">
-                                            <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString(), Model.CaseSolution.Customer_Id)</td>
-                                            <td>
-                                                @Html.DropDownListFor(model => model.CaseSolution.IsAbout_UserSearchCategory_Id, Model.UserSearchCategories, "",
-                                                    new { id = "IsAbout_UserSearchCategory", @*class = "acceptRules",*@ standardId = GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString() })
-                                            </td>
-                                            <td>
-                                                <table>
-                                                    <tr id="stateIconPlace_@GlobalEnums.TranslationCaseFields.Region_Id.ToString()">
-                                                        @*State icons will be added Here*@
-                                                    </tr>
-                                                </table>
-                                            </td>
-
-                                            <td>
-                                                @Html.CaseSolutionSettingsFor(x => x.CaseSolutionSettingModels, CaseSolutionFields.IsAbout_UserSearchCategory, Model.CaseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id)
                                             </td>
                                         </tr>
                                     }

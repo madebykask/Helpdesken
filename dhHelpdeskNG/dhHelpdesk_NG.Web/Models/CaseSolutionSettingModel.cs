@@ -50,6 +50,10 @@ namespace DH.Helpdesk.Web.Models
             return settings;
         }
 
+        public bool IsFieldVisible()
+        {
+            return CaseSolutionMode != CaseSolutionModes.Hide;
+        }
         public static bool IsFieldAlwaysVisible(CaseSolutionFields fieldId)
         {
             return fieldId == CaseSolutionFields.CaseType || fieldId == CaseSolutionFields.Administrator

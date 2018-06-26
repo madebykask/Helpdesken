@@ -141,7 +141,7 @@ $(function () {
                     SelectedFields: sectionDrop,
                     LanguageId: languageId,
                     DefaultUserSearchCategory: defaultUserSearchCategory,
-                    ShowUserSearchCategory: showUserSearchCategory ? 'true' : 'false'
+                    ShowUserSearchCategory: showUserSearchCategory === '1' ? 'true' : 'false'
                 },
             dataType: "json",
             success: function (result) {

@@ -70,7 +70,7 @@
         IsAbout_UserCode = 66,
         AddFollowersBtn = 67,
         AgreedDate = 68,
-        UserSearchCategory = 69,
-        IsAbout_UserSearchCategory = 70
+        UserSearchCategory_Id = 69,
+        IsAbout_UserSearchCategory_Id = 70
     }
 }

@@ -375,11 +375,16 @@ namespace DH.Helpdesk.Web.Models.Case
         public bool HasExtendedComputerUsers { get; internal set; }
         public IList<ComputerUserCategoryOverview> ComputerUserCategories { get; internal set; }
         public string EmptyComputerCategoryName { get; set; }
+
         public ComputerUserCategory InitiatorComputerUserCategory { get; internal set; }
         public bool InitiatorReadOnly { get; set; }
+        public bool InitiatorUserCategoryVisible { get; set; }
+
+
         public IDictionary<CaseSectionType, ExtendedCaseFormModel> ExtendedCaseSections { get; internal set; }
         public ComputerUserCategory RegardingComputerUserCategory { get; internal set; }
         public bool RegardingReadOnly { get; internal set; }
+        public bool RegardingUserCategoryVisible { get; set; }
     }
 
     public class CaseIndexViewModel

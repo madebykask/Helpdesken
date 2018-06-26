@@ -7289,7 +7289,28 @@ GO
 UPDATE tblTextTranslation Set TextTranslation = 'User has admin permission to Calendar' WHERE Text_Id=1331 AND Language_Id=2;
 GO
 
--- *** Run this last when put translation script above this line **--
+If not exists (select * from tbltext where id = 1992)
+	insert into tbltext (id, TextString) VALUES (1992, 'Standard sök kategori')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1992 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1992, 2, 'Default search category')
+GO
+
+If not exists (select * from tbltext where id = 1993)
+	insert into tbltext (id, TextString) VALUES (1993, 'Visa sök kategori')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1993 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1993, 2, 'Show search category')
+GO
+
+If not exists (select * from tbltext where id = 1994)
+	insert into tbltext (id, TextString) VALUES (1994, 'Sök kategori')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1994 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1994, 2, 'Search category')
+GO
+
+-- *** Run this last when put translation script above this line *** --
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 
 
