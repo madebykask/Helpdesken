@@ -32,6 +32,7 @@ GO
 
 RAISERROR ('Adding column UserSearchCategory_Id to tblCaseSolution', 10, 1) WITH NOWAIT
 IF not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserSearchCategory_Id' and sysobjects.name = N'tblCaseSolution')
+BEGIN
    
   ALTER TABLE tblCaseSolution
   ADD UserSearchCategory_Id int NULL
@@ -43,11 +44,14 @@ IF not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
   LEFT JOIN tblCaseSolutionFieldSettings as cs1 on cs2.CaseSolution_Id = cs1.CaseSolution_Id AND cs1.FieldName_Id = 69
   WHERE cs2.FieldName_Id = 17 
   AND   cs1.FieldName_Id is NULL
+
+END
 GO
 
 RAISERROR ('Adding column IsAbout_UserSearchCategory_Id to tblCaseSolution', 10, 1) WITH NOWAIT
-IF not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IsAbout_UserSearchCategory_Id' and sysobjects.name = N'tblCaseSolution')
-   
+IF not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IsAbout_UserSearchCategory_Id' and sysobjects.name = N'tblCaseSolution')   
+BEGIN
+
   ALTER TABLE tblCaseSolution
   ADD IsAbout_UserSearchCategory_Id int NULL
   
@@ -58,7 +62,23 @@ IF not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
   LEFT JOIN tblCaseSolutionFieldSettings as cs1 on cs2.CaseSolution_Id = cs1.CaseSolution_Id AND cs1.FieldName_Id = 70
   WHERE cs2.FieldName_Id = 17 
   AND   cs1.FieldName_Id is NULL
+
+END
 GO
+
+
+RAISERROR ('Updating tblCaseSolution.Caption column to nvarchar(100)', 10, 1) WITH NOWAIT
+IF exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Caption' and sysobjects.name = N'tblCaseSolution')   
+BEGIN
+
+  ALTER TABLE tblCaseSolution
+  ALTER COLUMN Caption nvarchar(100) NOT NULL
+
+END
+GO
+
+
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.38'
