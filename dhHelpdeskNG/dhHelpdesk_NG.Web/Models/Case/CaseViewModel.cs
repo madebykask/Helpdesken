@@ -72,7 +72,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public int ShowInvoiceFields { get; set; }
         public int ShowExternalInvoiceFields { get; set; }
         public bool TimeRequired { get; set; }
-    public CaseLockModel CaseLock { get; set; }
+        public CaseLockModel CaseLock { get; set; }
         public int MinWorkingTime { get; set; }        
         public Infrastructure.Enums.AccessMode EditMode { get; set; } //(-1,0,1)
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }

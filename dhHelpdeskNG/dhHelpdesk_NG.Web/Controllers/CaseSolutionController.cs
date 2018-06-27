@@ -2945,12 +2945,7 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = (caseSolution.SplitToCaseSolutionDescendants != null ? (caseSolution.SplitToCaseSolutionDescendants.Where(a => a.SplitToCaseSolution_Id == x.Id).Any() == true ? true : false) : false)
              }).ToList();
 
-            var userSearchCategories =
-                _computerService.GetComputerUserCategoriesByCustomerID(curCustomerId).Select(x => new SelectListItem()
-                {
-                    Value = x.Id.ToString(),
-                    Text = x.Name
-                }).ToList();
+            var userSearchCategories = _computerService.GetComputerUserCategoriesByCustomerID(curCustomerId);
 
             var model = new CaseSolutionInputViewModel
             {
@@ -2990,7 +2985,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                 Regions = regions,
 
-                UserSearchCategories = userSearchCategories,
+                UserSearchCategories = userSearchCategories.Where(x => !x.IsEmpty).ToList(),
+                EmptyUserCategoryName = userSearchCategories.FirstOrDefault(x => x.IsEmpty)?.Name,
 
                 Departments = departments,
 

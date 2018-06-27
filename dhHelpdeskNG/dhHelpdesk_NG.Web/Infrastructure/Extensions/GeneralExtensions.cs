@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
+﻿using DH.Helpdesk.BusinessData.Models;
+
+namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -107,20 +109,41 @@
             return "display:none";
         }
 
-        public static string GetFieldStyle(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName)
+        public static IList<SelectListItem> BuildComputerCategoriesSelectList(this CaseInputViewModel model, int? selectedCategoryId)
         {
-            //var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
+            var computerCategoriesSelectList =
+                BuildComputerCategoriesSelectListInner(model.ComputerUserCategories, selectedCategoryId, model.EmptyComputerCategoryName);
 
-            //// if (!model.caseFieldSettings.IsFieldRequired(caseFieldName) && fieldSetting != null && fieldSetting.CaseSolutionMode == CaseSolutionModes.Hide)
-            //if (fieldSetting != null && fieldSetting.CaseSolutionMode == CaseSolutionModes.Hide)
-            //    return "display:none";
+            return computerCategoriesSelectList;
+        }
 
-            if ((model.caseFieldSettings.IsFieldVisible(caseFieldName)))
+        public static IList<SelectListItem> BuildComputerCategoriesSelectList(this CaseSolutionInputViewModel model, int? selectedCategoryId)
+        {
+            var computerCategoriesSelectList =
+                BuildComputerCategoriesSelectListInner(model.UserSearchCategories, selectedCategoryId, model.EmptyUserCategoryName);
+
+            return computerCategoriesSelectList;
+        }
+
+        private static IList<SelectListItem> BuildComputerCategoriesSelectListInner(IList<ComputerUserCategoryOverview> categories, int? selectedCategoryId, string emptyCategoryName)
+        {
+            var computerCategoriesSelectList = new List<SelectListItem>
             {
-                return string.Empty;
-            }
+                new SelectListItem()
+                {
+                    Text = Translation.GetCoreTextTranslation(emptyCategoryName ?? "Employee"),
+                    Value = "null"
+                }
+            };
 
-            return "display:none";
+            computerCategoriesSelectList.AddRange(categories.Select(o => new SelectListItem()
+            {
+                Text = o.Name,
+                Value = o.Id.ToString(),
+                Selected = selectedCategoryId.HasValue && o.Id == selectedCategoryId.Value
+            }));;
+            
+            return computerCategoriesSelectList.ToList();
         }
 
         public static string GetCaseTemplateFieldStyle(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
