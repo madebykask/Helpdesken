@@ -97,7 +97,7 @@
                 .WithOptional(x => x.CaseSolution)
                 .HasForeignKey(x => x.CaseSolution_Id);
 
-            this.Property(x => x.Caption).IsRequired().HasMaxLength(60);
+            this.Property(x => x.Caption).IsRequired().HasMaxLength(100);
             this.Property(x => x.CaseSolutionCategory_Id).IsOptional();
             this.Property(x => x.CaseWorkingGroup_Id).IsOptional();
             this.Property(x => x.CaseType_Id).IsOptional();

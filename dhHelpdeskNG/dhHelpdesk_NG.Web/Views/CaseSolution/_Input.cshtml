@@ -1338,7 +1338,7 @@
                                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Caption.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                             </td>
                                             <td>
-                                                @Html.TextBoxFor(model => model.CaseSolution.Caption, new { id = "Caption", maxlength = "60", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.Caption.ToString() })
+                                                @Html.TextBoxFor(model => model.CaseSolution.Caption, new { id = "Caption", maxlength = "100", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.Caption.ToString() })
                                             </td>
                                             <td>
                                                 <table>
