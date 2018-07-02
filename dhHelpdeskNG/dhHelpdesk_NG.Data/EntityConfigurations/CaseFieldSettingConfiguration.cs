@@ -23,6 +23,7 @@
             this.Property(x => x.ListEdit).IsRequired();
             this.Property(x => x.Name).IsRequired().HasMaxLength(50).HasColumnName("CaseField");
             //this.Property(x => x.NameOrigin).IsRequired().HasMaxLength(50).HasColumnName("CaseFieldName");
+            this.Property(x => x.Active).IsRequired();
             this.Property(x => x.Required).IsRequired();
             this.Property(x => x.RequiredIfReopened).IsRequired();
             this.Property(x => x.ShowOnStartPage).IsRequired().HasColumnName("Show");

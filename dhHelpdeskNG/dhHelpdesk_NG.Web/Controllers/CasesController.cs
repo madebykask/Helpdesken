@@ -5141,20 +5141,10 @@ namespace DH.Helpdesk.Web.Controllers
             var userHasInvoicePermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InvoicePermission);
 
             // Establish current solution and set split option if available
-            CaseSolution caseTemplate = null;
             if (templateId.HasValue)
             {
-                caseTemplate = this._caseSolutionService.GetCaseSolution(templateId.Value);
-                m.CurrentCaseSolution = caseTemplate;
+                m.CurrentCaseSolution = this._caseSolutionService.GetCaseSolution(templateId.Value);
                 m.CaseTemplateSplitToCaseSolutionID = m.CurrentCaseSolution.SplitToCaseSolution_Id;
-
-                var caseTemplateSettings =
-                    this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);
-
-                if (caseTemplateSettings.Any())
-                {
-                    m.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateModel(caseTemplateSettings);
-                }
             }
 
             if (!isCreateNewCase)
@@ -5189,7 +5179,8 @@ namespace DH.Helpdesk.Web.Controllers
                 var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(caseId);
                 m.MapToFollowerUsers(caseFolowerUsers);
             }
-
+            
+            
             m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
 
             var customerUserSetting = this._customerUserService.GetCustomerUserSettings(customerId, userId);
@@ -5227,20 +5218,22 @@ namespace DH.Helpdesk.Web.Controllers
 
             #region User Search Category
 
-            m.InitiatorUserCategoryVisible = CheckIfFieldVisible(customerFieldSettings, TranslationCaseFields.UserSearchCategory_Id, CaseSolutionFields.UserSearchCategory_Id);
+            var initiatorFieldSettings 
+                = customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.UserSearchCategory_Id.ToString());
 
-            //get visibility from section settings if exists
-            var initiatorSectionModel = m.CaseSectionModels.FirstOrDefault(x => x.SectionType == (int)CaseSectionType.Initiator);
-            if (initiatorSectionModel != null)
+            m.InitiatorUserCategoryVisible 
+                = initiatorFieldSettings.Active || customerFieldSettings.IsFieldRequiredOrVisible(TranslationCaseFields.UserSearchCategory_Id);
+
+            if (isCreateNewCase && initiatorFieldSettings.Active)
             {
-                if (!initiatorSectionModel.ShowUserSearchCategory)
-                    m.InitiatorUserCategoryVisible = false;
-
+                var defaultCategoryId = 0;
+                
                 //set default value only for new case
-                if (isCreateNewCase && initiatorSectionModel.DefaultUserSearchCategory.HasValue)
+                if (Int32.TryParse(initiatorFieldSettings.DefaultValue, out defaultCategoryId))
                 {
-                    m.InitiatorComputerUserCategory =
-                        _computerService.GetComputerUserCategoryByID(initiatorSectionModel.DefaultUserSearchCategory.Value);
+                    var category = _computerService.GetComputerUserCategoryByID(defaultCategoryId);
+                    if (category != null)
+                        m.InitiatorComputerUserCategory = category;
                 }
             }
 
@@ -5248,21 +5241,23 @@ namespace DH.Helpdesk.Web.Controllers
 
             #region IsAbout - User Search Category
 
-            //set visibility from case field settings
-            m.RegardingUserCategoryVisible = CheckIfFieldVisible(customerFieldSettings, TranslationCaseFields.IsAbout_UserSearchCategory_Id, CaseSolutionFields.IsAbout_UserSearchCategory_Id);
+            var regFieldSettings = 
+                customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString());
 
-            var regardingSectionModel = m.CaseSectionModels.FirstOrDefault(x => x.SectionType == (int)CaseSectionType.Regarding);
-            if (regardingSectionModel != null)
+            m.RegardingUserCategoryVisible = 
+                regFieldSettings.Active || customerFieldSettings.IsFieldRequiredOrVisible(TranslationCaseFields.IsAbout_UserSearchCategory_Id);
+
+
+            if (isCreateNewCase && regFieldSettings.Active)
             {
-                //override visibility from section settings 
-                if (!regardingSectionModel.ShowUserSearchCategory)
-                    m.RegardingUserCategoryVisible = false;
+                var defaultCategoryId = 0;
 
                 //set default value only for new case
-                if (isCreateNewCase && regardingSectionModel.DefaultUserSearchCategory.HasValue)
+                if (Int32.TryParse(regFieldSettings.DefaultValue, out defaultCategoryId))
                 {
-                    m.RegardingComputerUserCategory =
-                        _computerService.GetComputerUserCategoryByID(regardingSectionModel.DefaultUserSearchCategory.Value);
+                    var category = _computerService.GetComputerUserCategoryByID(defaultCategoryId);
+                    if (category != null)
+                        m.RegardingComputerUserCategory = category;
                 }
             }
 
@@ -5367,32 +5362,6 @@ namespace DH.Helpdesk.Web.Controllers
                 if (m.case_.User_Id.HasValue)
                 {
                     m.RegByUser = this._userService.GetUser(m.case_.User_Id.Value);
-                }
-
-                if (m.case_.ReportedBy != null)
-                {
-                    var reportedByUser = this._computerService.GetComputerUserByUserID(m.case_.ReportedBy);
-                    if (reportedByUser != null && reportedByUser.ComputerUsersCategoryID.HasValue)
-                    {
-                        m.InitiatorComputerUserCategory = _computerService.GetComputerUserCategoryByID(reportedByUser.ComputerUsersCategoryID.Value);
-                        if (m.InitiatorComputerUserCategory != null)
-                        {
-                            m.InitiatorReadOnly = m.InitiatorComputerUserCategory.IsReadOnly;
-                        }
-                    }
-                }
-
-                if (m.case_.IsAbout != null && m.case_.IsAbout.ReportedBy != null)
-                {
-                    var reportedByUser = this._computerService.GetComputerUserByUserID(m.case_.IsAbout.ReportedBy);
-                    if (reportedByUser != null && reportedByUser.ComputerUsersCategoryID.HasValue)
-                    {
-                        m.RegardingComputerUserCategory = _computerService.GetComputerUserCategoryByID(reportedByUser.ComputerUsersCategoryID.Value);
-                        if (m.RegardingComputerUserCategory != null)
-                        {
-                            m.RegardingReadOnly = m.RegardingComputerUserCategory.IsReadOnly;
-                        }
-                    }
                 }
 
                 if (m.Logs != null)
@@ -5604,14 +5573,28 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CountryId = sup?.Country_Id.GetValueOrDefault();
             }
 
-            if (caseTemplate != null) 
+            // load template settings 
+            if (m.CurrentCaseSolution != null)
             {
-                #region New case initialize
+                var caseTemplate = m.CurrentCaseSolution;
+                var caseTemplateSettings =
+                    this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(m.CurrentCaseSolution.Id);
+
+                if (caseTemplateSettings.Any())
+                {
+                    m.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateModel(caseTemplateSettings);
+                }
+            }
+
+
+            if (m.CurrentCaseSolution != null) 
+            {
+                var caseTemplate = m.CurrentCaseSolution;
+
+                #region New case initialize form template
 
                 if (isCreateNewCase)
                 {
-                    #region new case from template
-
                     if (caseTemplate.CaseType_Id != null)
                     {
                         m.case_.CaseType_Id = caseTemplate.CaseType_Id.Value;
@@ -5907,45 +5890,84 @@ namespace DH.Helpdesk.Web.Controllers
                     if (caseTemplate.SMS != 0)
                         m.case_.SMS = caseTemplate.SMS;
 
-                    #region User Search Categories
-                     
-
-                    //override default value from case section settings
-                    if (caseTemplate.UserSearchCategory_Id.HasValue)
-                    {
-                        m.InitiatorComputerUserCategory = 
-                            _computerService.GetComputerUserCategoryByID(caseTemplate.UserSearchCategory_Id.Value);
-                    }
-
-                    if (caseTemplate.IsAbout_UserSearchCategory_Id.HasValue)
-                    {
-                        m.RegardingComputerUserCategory =
-                            _computerService.GetComputerUserCategoryByID(caseTemplate.IsAbout_UserSearchCategory_Id.Value);
-                    }
-
-                    #endregion
-
                     // This is used for hide fields(which are not in casetemplate) in new case input
                     m.templateistrue = templateistrue;
                     var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
                     m.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCauses.ToArray(), caseTemplate.FinishingCause_Id);
-                        
-                    #endregion
                 }
-
 
                 #endregion
 
-                var sfs = m.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == CaseSolutionFields.UserSearchCategory_Id);
-                if (sfs != null && !sfs.IsFieldVisible())
+                //todo: check if value from template should be set on NewCase only but value from db used for existing case! 
+                #region User Search Categories
+
+                //set default values only if active = true
+                if (initiatorFieldSettings.Active && caseTemplate.UserSearchCategory_Id.HasValue)
                 {
-                    m.InitiatorUserCategoryVisible = false;
+                    m.InitiatorComputerUserCategory =
+                        _computerService.GetComputerUserCategoryByID(caseTemplate.UserSearchCategory_Id.Value);
                 }
 
-                sfs = m.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == CaseSolutionFields.IsAbout_UserSearchCategory_Id);
-                if (sfs != null && !sfs.IsFieldVisible())
+                //set default values only if active = true
+                if (regFieldSettings.Active && caseTemplate.IsAbout_UserSearchCategory_Id.HasValue)
                 {
-                    m.RegardingUserCategoryVisible = false;
+                    m.RegardingComputerUserCategory =
+                        _computerService.GetComputerUserCategoryByID(caseTemplate.IsAbout_UserSearchCategory_Id.Value);
+                }
+
+                #endregion
+            }
+
+            #region User Search Categories
+
+
+
+            if (m.CaseSolutionSettingModels != null)
+            {
+                if (initiatorFieldSettings.Active && m.InitiatorUserCategoryVisible)
+                {
+                    var sfs = m.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == CaseSolutionFields.UserSearchCategory_Id);
+                    if (sfs != null && !sfs.IsFieldVisible())
+                    {
+                        m.InitiatorUserCategoryVisible = false;
+                    }
+                }
+
+                if (regFieldSettings.Active && m.RegardingUserCategoryVisible)
+                {
+                    var sfs = m.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == CaseSolutionFields.IsAbout_UserSearchCategory_Id);
+                    if (sfs != null && !sfs.IsFieldVisible())
+                    {
+                        m.RegardingUserCategoryVisible = false;
+                    }
+                }
+            }
+
+            #endregion
+
+            if (m.case_.ReportedBy != null)
+            {
+                var reportedByUser = this._computerService.GetComputerUserByUserID(m.case_.ReportedBy);
+                if (reportedByUser != null && reportedByUser.ComputerUsersCategoryID.HasValue)
+                {
+                    m.InitiatorComputerUserCategory = _computerService.GetComputerUserCategoryByID(reportedByUser.ComputerUsersCategoryID.Value);
+                    if (m.InitiatorComputerUserCategory != null)
+                    {
+                        m.InitiatorReadOnly = m.InitiatorComputerUserCategory.IsReadOnly;
+                    }
+                }
+            }
+
+            if (m.case_.IsAbout != null && m.case_.IsAbout.ReportedBy != null)
+            {
+                var reportedByUser = this._computerService.GetComputerUserByUserID(m.case_.IsAbout.ReportedBy);
+                if (reportedByUser != null && reportedByUser.ComputerUsersCategoryID.HasValue)
+                {
+                    m.RegardingComputerUserCategory = _computerService.GetComputerUserCategoryByID(reportedByUser.ComputerUsersCategoryID.Value);
+                    if (m.RegardingComputerUserCategory != null)
+                    {
+                        m.RegardingReadOnly = m.RegardingComputerUserCategory.IsReadOnly;
+                    }
                 }
             }
 

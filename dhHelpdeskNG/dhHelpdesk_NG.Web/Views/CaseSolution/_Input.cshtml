@@ -364,7 +364,7 @@
 
                                     @if (Model.CaseFieldSettings.Count() != 0)
                                     {
-                                        <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString())">
+                                        <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString(), true)">
                                             <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString(), Model.CaseSolution.Customer_Id)</td>
                                             <td>
                                                 @Html.DropDownListFor(model => model.CaseSolution.UserSearchCategory_Id, Model.BuildComputerCategoriesSelectList(Model.CaseSolution.UserSearchCategory_Id), 
@@ -718,7 +718,7 @@
                                     <tr></tr>
                                     @if (Model.CaseFieldSettings.Count() != 0)
                                     {
-                                        <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString())">
+                                        <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString(), true)">
                                             <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString(), Model.CaseSolution.Customer_Id)</td>
                                             <td>
                                                 @Html.DropDownListFor(model => model.CaseSolution.IsAbout_UserSearchCategory_Id, Model.BuildComputerCategoriesSelectList(Model.CaseSolution.IsAbout_UserSearchCategory_Id), 
@@ -915,9 +915,7 @@
                                     @if (Model.CaseFieldSettings.Count() != 0)
                                     {
                                         <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())">
-                                            <td>
-                                                @Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
-                                            </td>
+                                            <td>@Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)</td>
                                             <td>
                                                 @Html.TextBoxFor(model => model.CaseSolution.IsAbout_Place, new { id = "IsAbout_Place", maxlength = "100", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString() })
                                             </td>

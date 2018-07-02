@@ -127,22 +127,21 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         private static IList<SelectListItem> BuildComputerCategoriesSelectListInner(IList<ComputerUserCategoryOverview> categories, int? selectedCategoryId, string emptyCategoryName)
         {
-            var computerCategoriesSelectList = new List<SelectListItem>
-            {
-                new SelectListItem()
-                {
-                    Text = Translation.GetCoreTextTranslation(emptyCategoryName ?? "Employee"),
-                    Value = "null"
-                }
-            };
-
-            computerCategoriesSelectList.AddRange(categories.Select(o => new SelectListItem()
+            var computerCategoriesSelectList = categories.Select(o => new SelectListItem()
             {
                 Text = o.Name,
                 Value = o.Id.ToString(),
                 Selected = selectedCategoryId.HasValue && o.Id == selectedCategoryId.Value
-            }));;
-            
+            }).ToList();
+
+            var selectEmpty = !computerCategoriesSelectList.Any(x => x.Selected);
+            computerCategoriesSelectList.Insert(0, new SelectListItem()
+            {
+                Text = Translation.GetCoreTextTranslation(emptyCategoryName ?? "Employee"),
+                Value = "",
+                Selected = selectEmpty
+            });
+
             return computerCategoriesSelectList.ToList();
         }
 

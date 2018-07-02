@@ -29,8 +29,6 @@ namespace DH.Helpdesk.Services.Services.Cases
                 SectionType = section.SectionType,
                 IsEditCollapsed = section.IsEditCollapsed,
                 IsNewCollapsed = section.IsNewCollapsed,
-                ShowUserSearchCategory = section.ShowUserSearchCategory,
-                DefaultUserSearchCategory = section.DefaultUserSearchCategory,
                 SectionHeader = 
                         section.CaseSectionLanguages.SingleOrDefault(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId) != null
                             ? section.CaseSectionLanguages.Single(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId).Label
@@ -55,9 +53,7 @@ namespace DH.Helpdesk.Services.Services.Cases
                     IsNewCollapsed = section.IsNewCollapsed,
                     SectionHeader = sectionWithLang != null ? sectionWithLang.Label : string.Empty,
                     CustomerId = section.Customer_Id,
-                    CaseSectionFields = section.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList(),
-                    DefaultUserSearchCategory = section.DefaultUserSearchCategory,
-                    ShowUserSearchCategory = section.ShowUserSearchCategory
+                    CaseSectionFields = section.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList()
                 };
             }
 
@@ -75,8 +71,6 @@ namespace DH.Helpdesk.Services.Services.Cases
                     cs.IsNewCollapsed = caseSection.IsNewCollapsed;
                     cs.SectionType = caseSection.SectionType;
                     cs.UpdatedDate = DateTime.Now;
-                    cs.ShowUserSearchCategory = caseSection.ShowUserSearchCategory;
-                    cs.DefaultUserSearchCategory = caseSection.DefaultUserSearchCategory;
 
                     var existFieldsIds = cs.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList();
                     var toDel = existFieldsIds.Except(caseSection.CaseSectionFields).ToList();
@@ -103,8 +97,6 @@ namespace DH.Helpdesk.Services.Services.Cases
                     IsEditCollapsed = caseSection.IsEditCollapsed,
                     IsNewCollapsed = caseSection.IsNewCollapsed,
                     SectionType = caseSection.SectionType,
-                    ShowUserSearchCategory = caseSection.ShowUserSearchCategory,
-                    DefaultUserSearchCategory = caseSection.DefaultUserSearchCategory,
                     CaseSectionFields = caseSection.CaseSectionFields != null ? caseSection.CaseSectionFields.Select(x => new CaseSectionField
                     {
                         CaseFieldSetting_Id = x

@@ -4,6 +4,7 @@ using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain.Cases;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
@@ -211,11 +212,19 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return ret;
         }
 
-        public static string displayHtml(this IList<CaseFieldSetting> cfs, string valueToFind)
+        public static string displayHtml(this IList<CaseFieldSetting> cfs, string valueToFind, bool useActive = false)
         {
-            if (cfs.getCaseSettingsValue(valueToFind).ShowOnStartPage == 0)
-                return "display:none";
-            return string.Empty;
+            var isVisible =
+                useActive
+                    ? cfs.getCaseSettingsValue(valueToFind).Active
+                    : cfs.getCaseSettingsValue(valueToFind).ShowOnStartPage.ToBool();
+
+            return !isVisible ? "display:none" : string.Empty;
+        }
+
+        public static bool getActive(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        {
+            return cfs.ToList().getCaseSettingsValue(valueToFind).Active;
         }
 
         public static int getShowOnStartPage(this IList<CaseFieldSetting> cfs, string valueToFind)
@@ -237,7 +246,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         {
             return cfs.ToList().getCaseSettingsValue(valueToFind).Required;
         }
-
+        
         public static int getRequiredIfReopened(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
         {
             return cfs.ToList().getCaseSettingsValue(valueToFind).RequiredIfReopened;

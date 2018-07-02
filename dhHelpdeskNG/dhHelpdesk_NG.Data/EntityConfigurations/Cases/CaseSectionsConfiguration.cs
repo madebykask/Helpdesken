@@ -15,9 +15,6 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Cases
             this.Property(x => x.SectionType).IsRequired();
             this.Property(x => x.UpdatedDate).IsOptional();
 
-            this.Property(x => x.DefaultUserSearchCategory).IsOptional();
-            this.Property(x => x.ShowUserSearchCategory).IsRequired();
-
             this.HasRequired(x => x.Customer)
                 .WithMany()
                 .HasForeignKey(x => x.Customer_Id)

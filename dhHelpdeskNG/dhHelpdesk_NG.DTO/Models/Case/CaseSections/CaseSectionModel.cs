@@ -16,10 +16,6 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseSections
 
         public bool IsEditCollapsed { get; set; }
 
-        public int? DefaultUserSearchCategory { get;set; }
-
-        public bool ShowUserSearchCategory { get; set; }
-
         public List<int> CaseSectionFields { get; set; }
     }
 }

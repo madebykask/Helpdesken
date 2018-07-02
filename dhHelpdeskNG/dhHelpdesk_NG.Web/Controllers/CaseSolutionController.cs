@@ -2945,7 +2945,7 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = (caseSolution.SplitToCaseSolutionDescendants != null ? (caseSolution.SplitToCaseSolutionDescendants.Where(a => a.SplitToCaseSolution_Id == x.Id).Any() == true ? true : false) : false)
              }).ToList();
 
-            var userSearchCategories = _computerService.GetComputerUserCategoriesByCustomerID(curCustomerId);
+            var userSearchCategories = _computerService.GetComputerUserCategoriesByCustomerID(curCustomerId, true);
 
             var model = new CaseSolutionInputViewModel
             {

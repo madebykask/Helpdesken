@@ -12,24 +12,6 @@ BEGIN
 END
 GO
 
-RAISERROR ('Adding column DefaultUserSearchCategory on table tblCaseSections', 10, 1) WITH NOWAIT
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'DefaultUserSearchCategory' and sysobjects.name = N'tblCaseSections')
-BEGIN
-    ALTER TABLE tblCaseSections
-    ADD DefaultUserSearchCategory int NULL     
-END
-GO
-
-RAISERROR ('Adding column ShowUserSearchCategory on table tblCaseSections', 10, 1) WITH NOWAIT
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'ShowUserSearchCategory' and sysobjects.name = N'tblCaseSections')
-BEGIN
-    ALTER TABLE tblCaseSections
-    ADD ShowUserSearchCategory bit NOT NULL DEFAULT(0)
-END
-GO
-
 RAISERROR ('Adding column UserSearchCategory_Id to tblCaseSolution', 10, 1) WITH NOWAIT
 IF not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserSearchCategory_Id' and sysobjects.name = N'tblCaseSolution')
 BEGIN
@@ -66,7 +48,6 @@ BEGIN
 END
 GO
 
-
 RAISERROR ('Updating tblCaseSolution.Caption column to nvarchar(100)', 10, 1) WITH NOWAIT
 IF exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Caption' and sysobjects.name = N'tblCaseSolution')   
 BEGIN
@@ -77,10 +58,50 @@ BEGIN
 END
 GO
 
+RAISERROR ('Add column Active on table tblCaseFieldSettings', 10, 1) WITH NOWAIT
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'Active' and sysobjects.name = N'tblCaseFieldSettings')
+BEGIN 
+  ALTER TABLE [dbo].[tblCaseFieldSettings]
+  ADD Active bit NULL  
+  
+  ALTER TABLE [dbo].[tblCaseFieldSettings] 
+  ADD CONSTRAINT [DF_tblCaseFieldSettings_Active]  DEFAULT(0) FOR [Active]
+  
+  EXEC('UPDATE [dbo].[tblCaseFieldSettings] SET Active = 0')
 
+  ALTER TABLE [dbo].[tblCaseFieldSettings]
+  ALTER COLUMN Active bit NOT NULL 
 
+END
+GO 
+
+RAISERROR ('Remove column DefaultUserSearchCategory on table tblCaseSections', 10, 1) WITH NOWAIT
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+           where syscolumns.name = N'DefaultUserSearchCategory' and sysobjects.name = N'tblCaseSections')
+BEGIN
+    ALTER TABLE tblCaseSections
+    DROP COLUMN DefaultUserSearchCategory
+END
+GO
+
+RAISERROR ('Remove column ShowUserSearchCategory on table tblCaseSections', 10, 1) WITH NOWAIT
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+           where syscolumns.name = N'ShowUserSearchCategory' and sysobjects.name = N'tblCaseSections')
+BEGIN
+    -- DROP DEFAULT CONSTRAINT FIRST
+    DECLARE @ObjectName NVARCHAR(100)
+    SELECT @ObjectName = OBJECT_NAME([default_object_id]) FROM SYS.COLUMNS
+    WHERE [object_id] = OBJECT_ID('[dbo].[tblCaseSections]') AND [name] = 'ShowUserSearchCategory';
+    EXEC('ALTER TABLE [dbo].[tblCaseSections] DROP CONSTRAINT ' + @ObjectName)
+
+    ALTER TABLE tblCaseSections
+    DROP COLUMN ShowUserSearchCategory
+END
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.38'
 --ROLLBACK --TMP
 
+  

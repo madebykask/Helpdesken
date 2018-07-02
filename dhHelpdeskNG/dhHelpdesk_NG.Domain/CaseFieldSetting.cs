@@ -17,8 +17,8 @@
         /// <summary>
         /// Now used as "available" field for this customer 
         /// </summary>
+        public bool Active { get; set; }
         public int ShowOnStartPage { get; set; }
-
         public int ShowExternal { get; set; }
         public bool ShowStatusBar { get; set; }
         public bool ShowExternalStatusBar { get; set; }

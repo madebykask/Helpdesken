@@ -133,9 +133,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 isNewCollapsed = cs.IsNewCollapsed.ToInt(),
                 isEditCollapsed = cs.IsEditCollapsed.ToInt(),
                 sectionFields = cs.CaseSectionFields,
-                sectionHeader = !string.IsNullOrEmpty(cs.SectionHeader) ? cs.SectionHeader : string.Empty,
-                defaultUserSearchCategory = cs.DefaultUserSearchCategory,
-                showUserSearchCategory = cs.ShowUserSearchCategory
+                sectionHeader = !string.IsNullOrEmpty(cs.SectionHeader) ? cs.SectionHeader : string.Empty
             });
         }
 
@@ -155,8 +153,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 caseSection.CustomerId = inputData.CustomerId;
                 caseSection.SectionType = inputData.SectionType;
                 caseSection.Id = inputData.SectionId;
-                caseSection.ShowUserSearchCategory = inputData.ShowUserSearchCategory;
-                caseSection.DefaultUserSearchCategory = inputData.DefaultUserSearchCategory;
                 sectionId = _caseSectionService.SaveCaseSection(caseSection);
             }
             else

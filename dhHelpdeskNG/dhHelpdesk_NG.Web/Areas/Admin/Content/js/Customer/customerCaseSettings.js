@@ -3,70 +3,99 @@
 var properties = window.fieldProperties;
 
 var input = "input[name$='].";
+
+var activeSelector = '[name$=".Active"]:checkbox';
+var requiredSelector = 'input[name$=".Required"]:checkbox';
+var requiredOnReopenSelector = 'input[name$=".RequiredIfReopened"]:checkbox';
+var showSelector = 'input[name$=".ShowOnStartPage"]:checkbox';
+var showExternalSelector = 'input[name$=".ShowExternal"]:checkbox';
+var lockedSelector = 'select[name$=".Locked"]';
+
 $(function () {
-    $(input + properties.ShowOnStartPage).click(function () {
-        var elementName = this.name.replace(properties.ShowOnStartPage, properties.ShowExternal);
-        var curElement = jQuery('[name="' + elementName + '"]');
-        console.log('catch me');
-        var $requiredElement = $(this).parents('tr').find('[name$="Required"]:checkbox').not(':disabled');
-        var $requiredIfReopendElement = $(this).parents('tr').find('[name$="RequiredIfReopened"]:checkbox').not(':disabled');
-        var visibleElement = curElement.filter(':visible').get(0);
-        if (this.checked == false && visibleElement != undefined) {
-            visibleElement.checked = false;
-            $requiredElement.prop('checked', false);
-            $requiredIfReopendElement.prop('checked', false);
-        }
-    });
 
-    $(input + properties.ShowOnStartPage).click(function () {
-        var _this = $(this);
-        var elemLocked = _this.closest('tr').find('select[name$=".Locked"]');
-        if (!_this[0].checked) {
-            elemLocked.prop('disabled', true);
-            elemLocked.find('option:eq(0)').prop('selected', true);
+    $(activeSelector).on('click', function (e) {
+        var $this = $(this);
+        var $parent = $this.parents('tr');
+
+        if (!this.checked) {
+            resetFieldControls($parent, true);
         } else {
-            elemLocked.prop('disabled', false);
+            $parent.find(lockedSelector).prop('disabled', false);
         }
     });
 
-    $('select[name$=".Locked"]').each(function (i, e) {
-        var _this = $(this);
-        var elemShowOnstartPage = _this.closest('tr').find('input[name$=".ShowOnStartPage"]');
-        if (!elemShowOnstartPage[0].checked) {
-            _this.prop('disabled', true);
-            _this.find('option:eq(0)').prop('selected', true);
+    $(showSelector).on('click', function (e) {
+
+        var $this = $(this);
+        var $parent = $this.parents('tr');
+
+        //check if its new mode behavior 
+        if ($parent.hasClass('hasActive')) {
+            if (!isMainChecked($parent)) {
+                $this.prop('checked', false);
+            }
+            return;
+        }
+        
+        if (!this.checked) {
+            resetFieldControls($parent, false);
         } else {
-            _this.prop('disabled', false);
-        }
-
-    });
-
-    $(input + properties.ShowExternal).click(function () {
-        var elementName = this.name.replace(properties.ShowExternal, properties.ShowOnStartPage);
-        var curElement = jQuery('[name="' + elementName + '"]');
-        var visibleElement = curElement.filter(':visible').get(0);
-        if (visibleElement != undefined && visibleElement.checked == false) {
-            this.checked = false;
+            $parent.find(lockedSelector).prop('disabled', false);
         }
     });
 
-    $('input[name$=".Required"]').on('click', function (ev) {
-        var $mainEl = $(this).parents('tr').find('[name$=".ShowOnStartPage"]:checkbox');
-        if (!$mainEl.prop('checked')) {
+    var ctrls = [showExternalSelector, requiredSelector, requiredOnReopenSelector];
+
+    $(ctrls.join(',')).on('click', function (ev) {
+        var $this = $(this);
+        var $parent = $this.parents('tr');
+        if (!isMainChecked($parent)) {
             ev.preventDefault();
             return false;
         }
         return true;
     });
 
-    $('input[name$=".RequiredIfReopened"]').on('click', function (ev) {
-        var $mainEl = $(this).parents('tr').find('[name$=".ShowOnStartPage"]:checkbox');
-        if (!$mainEl.prop('checked')) {
-            ev.preventDefault();
-            return false;
+    $(lockedSelector).each(function (i, e) {
+        var $this = $(this);
+        var $parent = $this.parents('tr');
+
+        if (!isMainChecked($parent)) {
+            $this.find('option:eq(0)').prop('selected', true);
+            $this.prop('disabled', true);
+        } else {
+            $this.prop('disabled', false);
         }
-        return true;
     });
+
+    function isMainChecked($parent) {
+        var mainSelector = $parent.hasClass('hasActive') ? activeSelector : showSelector;
+        var $ctrl = $parent.find(mainSelector);
+        var isChecked = $ctrl[0].checked;
+        return isChecked;
+    }
+
+    function resetFieldControls($parent, isActive) {
+
+        if (isActive) {
+            var $showCtrl = $parent.find(showSelector);
+            $showCtrl.prop('checked', false);
+        }
+
+        var $showExternalCtrl = $parent.find(showExternalSelector);
+        $showExternalCtrl.prop('checked',false);
+
+        var $requiredElement = $parent.find(requiredSelector).not(':disabled');
+        $requiredElement.prop('checked', false);
+
+        var $requiredIfReopendElement = $parent.find(requiredOnReopenSelector).not(':disabled');
+        $requiredIfReopendElement.prop('checked', false);
+
+        //locked:
+        var $lockedControl = $parent.find(lockedSelector).not(':disabled');
+        $lockedControl.find('option:eq(0)').prop('selected', true);
+        $lockedControl.prop('disabled', true);
+    }
 
     $(".header-chosen").chosen({
         width: "315px",
@@ -106,8 +135,6 @@ $(function () {
                     $("#isNewCollapsed").val(result.isNewCollapsed);
                     $("#isEditCollapsed").val(result.isEditCollapsed);
                     $("#modal_header").text(result.sectionHeader);
-                    $('#showUserSearchCategorySelect').val(result.showUserSearchCategory ? '1' : '0');
-                    $('#defaultUserSearchCategorySelect').val((result.defaultUserSearchCategory || ''));
                     $("#sectionDrop" + sectionType).val(result.sectionFields);
                     $("#sectionDrop" + sectionType).trigger("chosen:updated");
                     $("#sectionDiv" + sectionType).removeClass("hidden-desktop");
@@ -126,25 +153,21 @@ $(function () {
         var customerId = $("#customerId").val();
         var sectionDrop = $("#sectionDrop" + sectionType).val();
         var languageId = $("#LanguageId").val();
-        var showUserSearchCategory = $('#showUserSearchCategorySelect').val();
-        var defaultUserSearchCategory = $('#defaultUserSearchCategorySelect').val();
 
-            $.ajax({
-                url: "/customercasefieldsettings/SaveCaseSectionOptions",
-                type: "post",
-                data: {
-                    SectionId: sectionElement.val(),
-                    CustomerId: customerId,
-                    IsNewCollapsed: isNewCollapsed,
-                    IsEditCollapsed: isEditCollapsed,
-                    SectionType: sectionType,
-                    SelectedFields: sectionDrop,
-                    LanguageId: languageId,
-                    DefaultUserSearchCategory: defaultUserSearchCategory,
-                    ShowUserSearchCategory: showUserSearchCategory === '1' ? 'true' : 'false'
-                },
+        $.ajax({
+            url: "/customercasefieldsettings/SaveCaseSectionOptions",
+            type: "post",
+            data: {
+                SectionId: sectionElement.val(),
+                CustomerId: customerId,
+                IsNewCollapsed: isNewCollapsed,
+                IsEditCollapsed: isEditCollapsed,
+                SectionType: sectionType,
+                SelectedFields: sectionDrop,
+                LanguageId: languageId
+            },
             dataType: "json",
-            success: function (result) {
+            success: function(result) {
                 if (result.success) {
                     sectionElement.val(result.sectionId);
                     return;
@@ -159,25 +182,21 @@ $(function () {
     $("#case_header_settings_popup").on("hide", function () {
         $("#sectionDiv" + sectionType).addClass("hidden-desktop");
     });
-
-    $(document).ready(function () {
-        $(".th1").css({ 'width': ($(".tableth2x").width() + 'px') });
-        $(".th2").css({ 'width': ($(".tableth9x").width() + 'px') });
-        $(".th3").css({ 'width': ($(".tableth5x").width() + 'px') });
-        $(".th4").css({ 'width': ($(".tableth8x").width() + 'px') });
-        $(".th5").css({ 'width': ($(".tableth20x").width() + 'px') });
-        $(".th6").css({ 'width': ($(".tableth8x").width() + 'px') });
-        $(".th7").css({ 'width': ($(".tableth8x").width() + 'px') });
-        $(".th8").css({ 'width': ($(".tableth6x").width() + 'px') });
-        $(".th9").css({ 'width': ($(".tableth20x").width() + 'px') });
-        $(".th10").css({ 'width': ($(".tableth18x").width() + 'px') });
-
-        
-    });
 });
 
-$(function () {    
-    $(input + properties.Label).attr('maxlength', '50');    
+$(document).ready(function () {
+    $(".th1").css({ 'width': ($(".tableth2x").width() + 'px') });
+    $(".th2").css({ 'width': ($(".tableth9x").width() + 'px') });
+    $(".th3").css({ 'width': ($(".tableth5x").width() + 'px') });
+    $(".th4").css({ 'width': ($(".tableth5x").width() + 'px') });
+    $(".th5").css({ 'width': ($(".tableth8x").width() + 'px') });
+    $(".th6").css({ 'width': ($(".tableth20x").width() + 'px') });
+    $(".th7").css({ 'width': ($(".tableth8x").width() + 'px') });
+    $(".th8").css({ 'width': ($(".tableth8x").width() + 'px') });
+    $(".th9").css({ 'width': ($(".tableth6x").width() + 'px') });
+    $(".th10").css({ 'width': ($(".tableth20x").width() + 'px') });
+    $(".th11").css({ 'width': ($(".tableth18x").width() + 'px') });
+
+    $(input + properties.Label).attr('maxlength', '50');
     $(input + properties.FieldHelp).attr('maxlength', '200');
 });
-

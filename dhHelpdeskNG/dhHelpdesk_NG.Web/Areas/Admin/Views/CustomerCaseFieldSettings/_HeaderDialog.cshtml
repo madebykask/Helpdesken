@@ -135,28 +135,6 @@
                                 </div>
                             </td>
                         </tr>
-                        @* TODO: add translation *@
-                        @**@
-                        <tr>
-                            <td>
-                                <span>@Translation.GetCoreTextTranslation("Default search category")</span>
-                            </td>
-                            <td>
-                                @Html.DropDownList("defaultUserSearchCategorySelect", @Model.SearchCategories, string.Empty)
-                            </td>
-                        </tr>
-                        @* TODO: add translation *@
-                        <tr>
-                            <td>
-                                <span>@Translation.GetCoreTextTranslation("Show search category")</span>
-                            </td>
-                            <td>
-                                <select id="showUserSearchCategorySelect">
-                                    <option value="0" selected="selected">@Translation.GetCoreTextTranslation("Nej")</option>
-                                    <option value="1">@Translation.GetCoreTextTranslation("Ja")</option>
-                                </select>
-                            </td>
-                        </tr>
                     </table>
                 </div>
             </div>
