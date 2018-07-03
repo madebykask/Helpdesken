@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Inventory;
+﻿using DH.Helpdesk.BusinessData.Models.ComputerUsers;
+using DH.Helpdesk.BusinessData.Models.Inventory;
 using DH.Helpdesk.Dal.Repositories.Inventory;
 
 namespace DH.Helpdesk.Services.Services
@@ -54,8 +55,10 @@ namespace DH.Helpdesk.Services.Services
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
         List<InventorySearchResult> SearchPcNumber(int customerId, string query);
 		ComputerUserCategory GetComputerUserCategoryByID(int computerUserCategoryID);
+        void UpdateComputerUserCategory(ComputerUserCategoryData data);
 
-		void Commit();
+
+        void Commit();
 
 		IList<ComputerUserCategoryOverview> GetComputerUserCategoriesByCustomerID(int customerId, bool includeEmpty = false);
 		ComputerUser GetComputerUserByUserID(string userID);
@@ -470,6 +473,34 @@ namespace DH.Helpdesk.Services.Services
 			var category = _computerUserCategoryRepository.GetByID(computerUserCategoryID);
 			return category;
 		}
+
+        public void UpdateComputerUserCategory(ComputerUserCategoryData data)
+        {
+            ComputerUserCategory entity = null;
+            if (data.Id > 0)
+            {
+                entity = _computerUserCategoryRepository.GetByID(data.Id);
+            }
+            else
+            {
+                entity = new ComputerUserCategory()
+                {
+                    CustomerID = data.CustomerId,
+                    IsEmpty = data.IsEmpty,
+                    ComputerUsersCategoryGuid = Guid.NewGuid()
+                };
+            }
+
+            entity.Name = data.Name;
+            entity.IsReadOnly = data.IsReadOnly;
+
+            if (data.Id > 0)
+                _computerUserCategoryRepository.Update(entity);
+            else
+                _computerUserCategoryRepository.Add(entity);
+
+            _computerUserCategoryRepository.Commit();
+        }
 
 		public void Commit()
         {

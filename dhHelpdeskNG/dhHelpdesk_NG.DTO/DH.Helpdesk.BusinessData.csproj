@@ -186,6 +186,7 @@
     <Compile Include="Models\Case\WorkingGroupInfo.cs" />
     <Compile Include="Models\Changes\ChangeListItem.cs" />
     <Compile Include="Models\ComputerUserCategoryOverview.cs" />
+    <Compile Include="Models\ComputerUsers\ComputerUserCategoryData.cs" />
     <Compile Include="Models\Condition\ConditionModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentTextIdentifierModel.cs" />
     <Compile Include="Models\CaseDocument\CaseDocumentTextConditionModel.cs" />

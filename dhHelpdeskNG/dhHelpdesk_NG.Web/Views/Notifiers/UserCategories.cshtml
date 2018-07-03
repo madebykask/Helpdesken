@@ -1,0 +1,30 @@
+﻿@using DH.Helpdesk.BusinessData.Models
+@model IList<DH.Helpdesk.BusinessData.Models.ComputerUserCategoryOverview>
+
+@functions {
+
+    string BuildEditUrl(ComputerUserCategoryOverview item)
+    {
+        if (item.IsEmpty)
+        {
+            return Url.Action("EditEmptyCategory", "Notifiers", new { id = item.Id });
+        }
+        return Url.Action("EditUserCategory", "Notifiers", new { id = item.Id });
+    }
+
+}
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>@Translation.GetCoreTextTranslation("Kategorier")</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr style="cursor: pointer" onclick="window.location.href = '@BuildEditUrl(item)'">
+            <td>@Html.DisplayFor(x => item.Name)</td>
+        </tr>
+    }
+    </tbody>
+</table>

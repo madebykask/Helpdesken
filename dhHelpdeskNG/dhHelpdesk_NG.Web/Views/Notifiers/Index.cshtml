@@ -33,8 +33,11 @@
                 <li id="notifiers_tab" class="active">
                     <a href="#fragment-1">@Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)</a>
                 </li>
+                <li id="categories_tab">
+                    <a href="#fragment-2">@Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</a>
+                </li>
                 <li id="settings_tab">
-                    <a href="#fragment-2">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a>
+                    <a href="#fragment-3">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -42,6 +45,9 @@
                     @Html.Partial("Notifiers", Model.Notifiers)
                 </div>
                 <div class="tab-pane tab-pane-border" id="fragment-2">
+                    @Html.Action("UserCategories", new { area = string.Empty })
+                </div>
+                <div class="tab-pane tab-pane-border" id="fragment-3">
                     @Html.Action("Settings", new { area = string.Empty })
                 </div>
             </div>

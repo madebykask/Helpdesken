@@ -1,0 +1,37 @@
+﻿@model DH.Helpdesk.Domain.Computers.ComputerUserCategory
+
+<div class="container">
+    <div>
+        <h4>@Translation.GetCoreTextTranslation("Kategori") [Fixed]</h4>
+        <div class="row">
+            <div class="span12">
+                <table class="tableform">
+                    <thead>
+                    <tr>
+                        <th class="span3"></th>
+                        <th class="span4"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>@Translation.GetCoreTextTranslation("Namn")</td>
+                        <td>@Html.EditorFor(x => x.Name)</td>
+                    </tr>
+                    <tr>
+                        <td>@Translation.GetCoreTextTranslation("Skrivskyddad")</td>
+                        <td>
+                            <input type="checkbox" name="IsReadOnly" 
+                                   @(Model.IsReadOnly ? "checked=checked" : "")
+                                   @(Model.IsEmpty ? "readonly=readonly": "") value="true" />
+                            <input type="hidden" name="IsReadOnly" value="false" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Hidden("Id", @Model.ID.ToString())
+@Html.Hidden("CustomerId", @Model.CustomerID.ToString())
+@Html.Hidden("IsEmpty", @Model.IsEmpty ? "true" : "false")

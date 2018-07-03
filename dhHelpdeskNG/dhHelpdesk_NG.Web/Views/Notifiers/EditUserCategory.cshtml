@@ -1,0 +1,51 @@
+﻿@model DH.Helpdesk.Domain.Computers.ComputerUserCategory
+
+<div class="secnavs fixed">
+    <div class="pull-left">
+        <ul class="secnav">
+            <li id="menu1"><a class="btn" id="btnSave" onclick="submitForm()">@Translation.GetCoreTextTranslation("Spara")</a></li>
+            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", null, new { @class = "btn" })</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#fragment-1">@Translation.GetCoreTextTranslation("Kategori")</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                @using (Html.BeginForm("EditUserCategory", "Notifiers", FormMethod.Post, new {id = "editForm"}))
+                {
+                    @Html.Partial("_CategoryInput", Model)
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+    function submitForm() {
+        $('#editForm').submit();
+    }
+
+    $(function () {
+        $('#editForm').data('validator', null);
+        $('#editForm').validate({
+            rules: {
+                Name: "required"
+            },
+            messages: {
+                Name: {
+                    required: 'Name is required'
+                }
+            },
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+    });
+</script>
