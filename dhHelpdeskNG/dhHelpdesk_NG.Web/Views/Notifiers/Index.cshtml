@@ -1,10 +1,9 @@
 ﻿
-@using System.Web.Optimization
 @model DH.Helpdesk.Web.Models.Notifiers.IndexModel
 
 @{
-    ViewBag.Title = Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation);
-}
+    ViewBag.Title = Translation.GetCoreTextTranslation("Anmälare");
+ }
 
     @Scripts.Render("~/bundles/notifiers/index")
 
@@ -16,12 +15,15 @@
 
     <div class="secnavs fixed">
         <div class="pull-left">
-            <ul class="secnav">
-                <li>
-                    @Html.ActionLink(Translation.Get("Ny anmälare", Enums.TranslationSource.TextTranslation), "NewNotifier", "Notifiers", new { id = "new_notifier_button", @class = "btn" })
+            <ul id="nav" class="secnav">
+                <li id="menu1" style="display: none;">
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ny anmälare"), "NewNotifier", "Notifiers", new { id = "new_notifier_button", @class = "btn" })
                 </li>
-                <li>
-                    <a id="save_button" class="btn" style="display: none;">@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)</a>
+                <li id="menu2" style="display: none;">
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ny kategori"), "NewCategory", "Notifiers", new {id = "add_category_btn", @class = "btn"})
+                </li>
+                <li  id="menu3" style="display: none;">
+                    <a id="save_button" class="btn">@Translation.GetCoreTextTranslation("Spara")</a>
                 </li>
             </ul>
         </div>
@@ -30,14 +32,14 @@
     <div class="content">
         <div class="container">
             <ul class="nav nav-tabs">
-                <li id="notifiers_tab" class="active">
-                    <a href="#fragment-1">@Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)</a>
+                <li id="notifiers_tab" class="active" onclick="toggleMenu(1)">
+                    <a href="#fragment-1">@Translation.GetCoreTextTranslation("Anmälare")</a>
                 </li>
-                <li id="categories_tab">
-                    <a href="#fragment-2">@Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</a>
+                <li id="categories_tab" onclick="toggleMenu(2)">
+                    <a href="#fragment-2">@Translation.GetCoreTextTranslation("Kategorier")</a>
                 </li>
-                <li id="settings_tab">
-                    <a href="#fragment-3">@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a>
+                <li id="settings_tab" onclick="toggleMenu(3)">
+                    <a href="#fragment-3">@Translation.GetCoreTextTranslation("Inställningar")</a>
                 </li>
             </ul>
             <div class="tab-content">

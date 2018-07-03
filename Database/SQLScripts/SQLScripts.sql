@@ -8,9 +8,46 @@ BEGIN
 
     -- todo: check if new category should be added for all customers
     --INSERT INTO tblComputerUsersCategory(Name, ComputerUsersCategoryGuid, IsReadOnly, CustomerID, IsEmpty)
-    --VALUES('NULL', newid(), 0, <customer_id>, 1)
+    --VALUES('Employee', newid(), 0, <customer_id>, 1)
 END
 GO
+
+
+RAISERROR ('Adding UserSearchCategory_Id case field setting to tblCaseFieldSettings', 10, 1) WITH NOWAIT
+;WITH cus as 
+(select fs1.Customer_Id as CustomerId
+ from tblCaseFieldSettings fs1
+ where NOT EXISTS
+	  (
+		  select 1 from tblCaseFieldSettings fs2 
+		  where fs2.Customer_Id = fs1.Customer_Id 
+		  AND fs2.CaseField = 'UserSearchCategory_Id'
+	  )
+       AND fs1.Customer_Id IS NOT NULL
+GROUP BY fs1.Customer_Id) 
+INSERT INTO tblCaseFieldSettings (Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, Locked)
+select cus.CustomerId, 'UserSearchCategory_Id', 0, 0, 0, 0, '', null, 0, 0 
+from cus
+GO
+
+RAISERROR ('Adding IsAbout_UserSearchCategory_Id case field setting to tblCaseFieldSettings', 10, 1) WITH NOWAIT
+GO
+;WITH cus as 
+(select fs1.Customer_Id as CustomerId
+ from tblCaseFieldSettings fs1
+ where NOT EXISTS
+	  (
+		  select 1 from tblCaseFieldSettings fs2 
+		  where fs2.Customer_Id = fs1.Customer_Id 
+		  AND fs2.CaseField = 'IsAbout_UserSearchCategory_Id'
+	  )
+       AND fs1.Customer_Id IS NOT NULL
+GROUP BY fs1.Customer_Id) 
+INSERT INTO tblCaseFieldSettings (Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, Locked)
+select cus.CustomerId, 'IsAbout_UserSearchCategory_Id', 0, 0, 0, 0, '', null, 0, 0 
+from cus
+GO
+
 
 RAISERROR ('Adding column UserSearchCategory_Id to tblCaseSolution', 10, 1) WITH NOWAIT
 IF not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserSearchCategory_Id' and sysobjects.name = N'tblCaseSolution')

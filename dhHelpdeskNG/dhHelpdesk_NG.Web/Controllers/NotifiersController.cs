@@ -4,7 +4,9 @@ using System.Linq;
 using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.ComputerUsers;
+using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Domain.Computers;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -75,6 +77,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICustomerService customerService;
 
         private readonly IComputerService computerService;
+        private ICaseFieldSettingService _caseFieldSettingService;
 
         #endregion
 
@@ -103,9 +106,11 @@ namespace DH.Helpdesk.Web.Controllers
             INewNotifierFactory newNotifierFactory,
             IOrganizationService organizationService,
             ICustomerService customerService,
-            IComputerService computerService)
+            IComputerService computerService,
+            ICaseFieldSettingService caseFieldSettingService)
             : base(masterDataService)
         {
+            _caseFieldSettingService = caseFieldSettingService;
             this.departmentRepository = departmentRepository;
             this.divisionRepository = divisionRepository;
             this.domainRepository = domainRepository;
@@ -217,12 +222,25 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpGet]
+        public ViewResult NewCategory()
+        {
+            var category = new ComputerUserCategoryData()
+            {
+                Name = "",
+                CustomerId = SessionFacade.CurrentCustomer.Id,
+            };
+
+            return View("EditUserCategory", category);
+        }
+
+        [HttpGet]
         public ViewResult EditEmptyCategory()
         {
-            var emptyCategory = new ComputerUserCategory()
+            var emptyCategory = new ComputerUserCategoryData()
             {
                 Name = "Employee",
-                IsEmpty = true
+                IsEmpty = true,
+                CustomerId = SessionFacade.CurrentCustomer.Id,
             };
 
             return View("EditUserCategory", emptyCategory);
@@ -231,18 +249,96 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ActionResult EditUserCategory(int id)
         {
-            var data = this.computerService.GetComputerUserCategoryByID(id);
+            var data = GetComputerUserCategoryData(id, SessionFacade.CurrentCustomer.Id);
             if (data == null)
-                return HttpNotFound("Category not found");
+                return HttpNotFound($"Category (Id={id}) was not found");
 
             return View(data);
+        }
+
+        private ComputerUserCategoryData GetComputerUserCategoryData(int categoryId, int customerId)
+        {
+            var category = this.computerService.GetComputerUserCategoryByID(categoryId);
+            if (category == null)
+                return null;
+
+            var customerFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
+
+            var isDefaultInitiator = 
+                CheckIfDefaultCategory(categoryId, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, customerFieldSettings);
+
+            var isDefaultRegarding =
+                CheckIfDefaultCategory(categoryId, GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, customerFieldSettings);
+            
+            var data = new ComputerUserCategoryData()
+            {
+                Id = category.ID,
+                CustomerId = category.CustomerID,
+                Name = category.Name,
+                IsEmpty = category.IsEmpty,
+                IsReadOnly = category.IsReadOnly,
+                DefaultInitiatorCategory = isDefaultInitiator,
+                DefaultRegardingCategory = isDefaultRegarding
+            };
+
+            return data;
+        }
+
+        private bool CheckIfDefaultCategory(int categoryId, GlobalEnums.TranslationCaseFields caseField, IList<CaseFieldSetting> customerFieldSettings)
+        {
+            var defaultValue = 0;
+            var isDefault = false;
+
+            var caseFieldSetting = customerFieldSettings.getCaseSettingsValue(caseField.ToString());
+
+            if (caseFieldSetting != null && Int32.TryParse(caseFieldSetting.DefaultValue, out defaultValue))
+            {
+                isDefault = defaultValue == categoryId;
+            }
+
+            return isDefault;
         }
 
         [HttpPost]
         public ActionResult EditUserCategory(ComputerUserCategoryData data)
         {
-            this.computerService.UpdateComputerUserCategory(data);
+            var categoryId = this.computerService.SaveComputerUserCategory(data);
+
+            //set categories default value
+            var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(data.CustomerId);
+
+            var fs  = caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString());
+            UpdateCategoryFieldDefaultValue(categoryId, fs, data.DefaultInitiatorCategory);
+
+            fs = caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString());
+            UpdateCategoryFieldDefaultValue(categoryId, fs, data.DefaultRegardingCategory);
+            
             return RedirectToAction("Index");
+        }
+
+        private void UpdateCategoryFieldDefaultValue(int categoryId, CaseFieldSetting fs, bool setDefault)
+        {
+            if (fs == null)
+                return;
+
+            var hasChanged = false;
+            string newDefaultValue = null;
+
+            if (setDefault)
+            {
+                newDefaultValue = categoryId.ToString();
+                hasChanged = true;
+            }
+            else if (string.Equals(fs.DefaultValue, categoryId.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
+                newDefaultValue = null;
+                hasChanged = true;
+            }
+
+            if (hasChanged)
+            {
+                _caseFieldSettingService.SaveFieldSettingsDefaultValue(fs.Id, newDefaultValue);
+            }
         }
 
         [HttpGet]
@@ -980,9 +1076,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpGet]
         public string GetLanguageFromDepartment(string departmentid)
-
         {
-
             departmentid = departmentid.Replace("'", "");
             if (departmentid != string.Empty)
             {
@@ -994,9 +1088,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 return string.Empty;
             }
-
         }
-
 
         [HttpGet]
         public string GetLanguageFromRegion(string regionid)

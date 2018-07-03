@@ -55,7 +55,7 @@ namespace DH.Helpdesk.Services.Services
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
         List<InventorySearchResult> SearchPcNumber(int customerId, string query);
 		ComputerUserCategory GetComputerUserCategoryByID(int computerUserCategoryID);
-        void UpdateComputerUserCategory(ComputerUserCategoryData data);
+        int SaveComputerUserCategory(ComputerUserCategoryData data);
 
 
         void Commit();
@@ -474,7 +474,7 @@ namespace DH.Helpdesk.Services.Services
 			return category;
 		}
 
-        public void UpdateComputerUserCategory(ComputerUserCategoryData data)
+        public int SaveComputerUserCategory(ComputerUserCategoryData data)
         {
             ComputerUserCategory entity = null;
             if (data.Id > 0)
@@ -500,6 +500,8 @@ namespace DH.Helpdesk.Services.Services
                 _computerUserCategoryRepository.Add(entity);
 
             _computerUserCategoryRepository.Commit();
+
+            return entity.ID;
         }
 
 		public void Commit()

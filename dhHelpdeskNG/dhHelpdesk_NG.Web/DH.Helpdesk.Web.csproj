@@ -4045,6 +4045,7 @@
     <Content Include="Views\Notifiers\UserCategories.cshtml" />
     <Content Include="Views\Notifiers\EditUserCategory.cshtml" />
     <Content Include="Views\Notifiers\_CategoryInput.cshtml" />
+    <Content Include="Views\Notifiers\NewCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

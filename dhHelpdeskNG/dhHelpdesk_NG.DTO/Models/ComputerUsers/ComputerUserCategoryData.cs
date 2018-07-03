@@ -7,5 +7,7 @@
         public string Name { get; set; }
         public bool IsReadOnly { get; set; }
         public bool IsEmpty { get; set; }
+        public bool DefaultInitiatorCategory { get; set; }
+        public bool DefaultRegardingCategory { get; set; }
     }
 }
