@@ -1871,7 +1871,7 @@ namespace DH.Helpdesk.Web.Controllers
             var userGuid = SessionFacade.CurrentUser.UserGUID.ToString();
 
             var extendedCasePathMask = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
-            if (!string.IsNullOrEmpty(extendedCasePathMask))
+            if (!string.IsNullOrEmpty(extendedCasePathMask) && category.CaseSolutionID.HasValue)
             {
                 var extendedCaseData =
                     _caseService.GetCaseSectionExtendedCaseForm(category.CaseSolutionID.Value, customerId, 0, caseSectionType, userGuid, 0);
@@ -5221,6 +5221,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             #region User Search Category
 
+            // Computer user categories
+            var computerUserCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId, true);
+            m.ComputerUserCategories = computerUserCategories.Where(o => !o.IsEmpty).ToList();
+            m.EmptyComputerCategoryName = computerUserCategories.FirstOrDefault(o => o.IsEmpty)?.Name;
+
             var initiatorFieldSettings 
                 = customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.UserSearchCategory_Id.ToString());
 
@@ -5234,7 +5239,7 @@ namespace DH.Helpdesk.Web.Controllers
                 //set default value only for new case
                 if (Int32.TryParse(initiatorFieldSettings.DefaultValue, out defaultCategoryId))
                 {
-                    var category = _computerService.GetComputerUserCategoryByID(defaultCategoryId);
+                    var category = GetComputerUserCategoryByID(defaultCategoryId);
                     if (category != null)
                         m.InitiatorComputerUserCategory = category;
                 }
@@ -5258,7 +5263,7 @@ namespace DH.Helpdesk.Web.Controllers
                 //set default value only for new case
                 if (Int32.TryParse(regFieldSettings.DefaultValue, out defaultCategoryId))
                 {
-                    var category = _computerService.GetComputerUserCategoryByID(defaultCategoryId);
+                    var category = GetComputerUserCategoryByID(defaultCategoryId);
                     if (category != null)
                         m.RegardingComputerUserCategory = category;
                 }
@@ -5908,14 +5913,14 @@ namespace DH.Helpdesk.Web.Controllers
                 if (initiatorFieldSettings.Active && caseTemplate.UserSearchCategory_Id.HasValue)
                 {
                     m.InitiatorComputerUserCategory =
-                        _computerService.GetComputerUserCategoryByID(caseTemplate.UserSearchCategory_Id.Value);
+                        GetComputerUserCategoryByID(caseTemplate.UserSearchCategory_Id.Value);
                 }
 
                 //set default values only if active = true
                 if (regFieldSettings.Active && caseTemplate.IsAbout_UserSearchCategory_Id.HasValue)
                 {
                     m.RegardingComputerUserCategory =
-                        _computerService.GetComputerUserCategoryByID(caseTemplate.IsAbout_UserSearchCategory_Id.Value);
+                        GetComputerUserCategoryByID(caseTemplate.IsAbout_UserSearchCategory_Id.Value);
                 }
 
                 #endregion
@@ -6158,11 +6163,6 @@ namespace DH.Helpdesk.Web.Controllers
                 ? m.case_.CaseSolution_Id.Value
                 : templateId ?? 0;
 
-            // Computer user categories
-            var computerCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId, true);
-            m.ComputerUserCategories = computerCategories.Where(o => !o.IsEmpty).ToList();
-            m.EmptyComputerCategoryName = computerCategories.FirstOrDefault(o => o.IsEmpty)?.Name;
-
             m.HasExtendedComputerUsers =
                 _caseSolutionService.CheckIfExtendedFormExistForSolutionsInCategories(customerId, m.ComputerUserCategories.Select(c => c.Id).ToList());
 
@@ -6338,6 +6338,22 @@ namespace DH.Helpdesk.Web.Controllers
             m.StatusBar = isCreateNewCase ? new Dictionary<string, string>() : GetStatusBar(m);
 
             return m;
+        }
+
+        public ComputerUserCategory GetComputerUserCategoryByID(int categoryID)
+        {
+            if (categoryID == 0)
+            {
+                return new ComputerUserCategory()
+                {
+                    ID = 0,
+                    IsEmpty = true
+                };
+            }
+            else
+            {
+                return _computerService.GetComputerUserCategoryByID(categoryID);
+            }
         }
 
         public bool CheckIfFieldVisible(IList<CaseFieldSetting> caseFieldSettings, TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)

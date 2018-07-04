@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
+﻿using DH.Helpdesk.Domain.Computers;
+
+namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -119,10 +121,8 @@
 			if (searchComputerUserCategories != null && searchComputerUserCategories.Any())
 			{
 				var items = searchComputerUserCategories.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
-
-				// TODO: Translation
-				//items.Insert(0, new DropDownItem("Employee", "0"));
-				var content = new DropDownContent(items, "0");
+                
+				var content = new DropDownContent(items, ComputerUserCategory.EmptyCategoryId.ToString());
 				computerUserCategories = new SearchDropDownModel(true, content);
 			}
 			else

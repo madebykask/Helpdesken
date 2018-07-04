@@ -17,5 +17,21 @@ namespace DH.Helpdesk.Domain.Computers
         public CaseSolution CaseSolution { get; set; }
 		public ExtendedCaseFormEntity ExtendedCaseForm { get; set; }
 		public Customer Customer { get; set; }
+
+	    #region Empty Category
+
+	    public static int EmptyCategoryId = 0;
+	    public static string EmptyCategoryDefaultName = "Employee";
+	    public static ComputerUserCategory CreateEmptyCategory()
+	    {
+	        return new ComputerUserCategory()
+	        {
+	            ID = EmptyCategoryId,
+	            IsEmpty = true,
+	            Name = EmptyCategoryDefaultName
+	        };
+	    }
+
+	    #endregion
 	}
 }

@@ -280,7 +280,8 @@
 
         public IList<UserSearchResults> Search(int customerId, string searchFor, int? categoryID = null)
 		{
-            var s = searchFor.ToLower();
+            var s = (searchFor?.ToLower() ?? string.Empty).Trim();
+		    var emptyCategoryId = ComputerUserCategory.EmptyCategoryId;
 
             var query = from cu in this.DataContext.ComputerUsers
                         join d in this.DataContext.Departments on cu.Department_Id equals d.Id into res
@@ -288,7 +289,7 @@
                         where
                             cu.Customer_Id == customerId &&
 							(   categoryID == null ||                                        // find all users
-                                (categoryID == 0 && cu.ComputerUsersCategoryID == null) ||   //find user only without category 
+                                (categoryID == emptyCategoryId && cu.ComputerUsersCategoryID == null) ||   //find user only without category 
                                 (categoryID > 0 && cu.ComputerUsersCategoryID == categoryID) // find users of the specified category
                             ) 
                             && cu.Status != 0

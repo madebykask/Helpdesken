@@ -204,9 +204,10 @@ namespace DH.Helpdesk.Web.Controllers
             var emptyCategory = categories.FirstOrDefault(x => x.IsEmpty);
             if (emptyCategory == null)
             {
-                emptyCategory = new ComputerUserCategoryOverview()
+                emptyCategory =  new ComputerUserCategoryOverview()
                 {
-                    Name = "Employee", //todo: const, add translation?
+                    Id = ComputerUserCategory.EmptyCategoryId,
+                    Name = ComputerUserCategory.EmptyCategoryDefaultName,
                     IsEmpty =  true
                 };
             }
@@ -238,7 +239,8 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var emptyCategory = new ComputerUserCategoryData()
             {
-                Name = "Employee",
+                Id = ComputerUserCategory.EmptyCategoryId,
+                Name = Translation.GetCoreTextTranslation(ComputerUserCategory.EmptyCategoryDefaultName),
                 IsEmpty = true,
                 CustomerId = SessionFacade.CurrentCustomer.Id,
             };
@@ -265,10 +267,10 @@ namespace DH.Helpdesk.Web.Controllers
             var customerFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
 
             var isDefaultInitiator = 
-                CheckIfDefaultCategory(categoryId, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, customerFieldSettings);
+                CheckIfDefaultCategory(category, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, customerFieldSettings);
 
             var isDefaultRegarding =
-                CheckIfDefaultCategory(categoryId, GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, customerFieldSettings);
+                CheckIfDefaultCategory(category, GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, customerFieldSettings);
             
             var data = new ComputerUserCategoryData()
             {
@@ -284,7 +286,7 @@ namespace DH.Helpdesk.Web.Controllers
             return data;
         }
 
-        private bool CheckIfDefaultCategory(int categoryId, GlobalEnums.TranslationCaseFields caseField, IList<CaseFieldSetting> customerFieldSettings)
+        private bool CheckIfDefaultCategory(ComputerUserCategory category, GlobalEnums.TranslationCaseFields caseField, IList<CaseFieldSetting> customerFieldSettings)
         {
             var defaultValue = 0;
             var isDefault = false;
@@ -293,7 +295,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (caseFieldSetting != null && Int32.TryParse(caseFieldSetting.DefaultValue, out defaultValue))
             {
-                isDefault = defaultValue == categoryId;
+                isDefault = (category.IsEmpty && defaultValue == ComputerUserCategory.EmptyCategoryId) ||
+                            (!category.IsEmpty && defaultValue == category.ID);
             }
 
             return isDefault;
@@ -302,43 +305,30 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public ActionResult EditUserCategory(ComputerUserCategoryData data)
         {
-            var categoryId = this.computerService.SaveComputerUserCategory(data);
+            data.Id = this.computerService.SaveComputerUserCategory(data);
 
             //set categories default value
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(data.CustomerId);
 
+            
             var fs  = caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString());
-            UpdateCategoryFieldDefaultValue(categoryId, fs, data.DefaultInitiatorCategory);
+            UpdateCategoryFieldDefaultValue(data, fs, data.DefaultInitiatorCategory);
 
             fs = caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString());
-            UpdateCategoryFieldDefaultValue(categoryId, fs, data.DefaultRegardingCategory);
+            UpdateCategoryFieldDefaultValue(data, fs, data.DefaultRegardingCategory);
             
             return RedirectToAction("Index");
         }
 
-        private void UpdateCategoryFieldDefaultValue(int categoryId, CaseFieldSetting fs, bool setDefault)
+        private void UpdateCategoryFieldDefaultValue(ComputerUserCategoryData category, CaseFieldSetting fs, bool setDefault)
         {
             if (fs == null)
                 return;
 
-            var hasChanged = false;
-            string newDefaultValue = null;
+            var categoryId = category.IsEmpty ? ComputerUserCategory.EmptyCategoryId : category.Id;
+            var newDefaultValue = setDefault ? categoryId.ToString() : null;
 
-            if (setDefault)
-            {
-                newDefaultValue = categoryId.ToString();
-                hasChanged = true;
-            }
-            else if (string.Equals(fs.DefaultValue, categoryId.ToString(), StringComparison.OrdinalIgnoreCase))
-            {
-                newDefaultValue = null;
-                hasChanged = true;
-            }
-
-            if (hasChanged)
-            {
-                _caseFieldSettingService.SaveFieldSettingsDefaultValue(fs.Id, newDefaultValue);
-            }
+            _caseFieldSettingService.SaveFieldSettingsDefaultValue(fs.Id, newDefaultValue);
         }
 
         [HttpGet]
@@ -456,8 +446,8 @@ namespace DH.Helpdesk.Web.Controllers
                     .Select(o => new ItemOverview(o.Name, o.Id.ToString()))
                     .ToList();
 
-                var emptyCategoryName = computerUserCategories.FirstOrDefault(x => x.IsEmpty)?.Name ?? "Employee";
-                searchComputerUserCategories.Insert(0, new ItemOverview(Translation.GetCoreTextTranslation(emptyCategoryName), "0"));
+                var emptyCategoryName = computerUserCategories.FirstOrDefault(x => x.IsEmpty)?.Name ?? ComputerUserCategory.EmptyCategoryDefaultName;
+                searchComputerUserCategories.Insert(0, new ItemOverview(Translation.GetCoreTextTranslation(emptyCategoryName), ComputerUserCategory.EmptyCategoryId.ToString()));
             }
             return searchComputerUserCategories;
         }
