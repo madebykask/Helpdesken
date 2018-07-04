@@ -9,8 +9,7 @@
     using DH.Helpdesk.BusinessData.Models.Case.Input;
     using DH.Helpdesk.BusinessData.Models.Notifiers;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
-    using DH.Helpdesk.Common.Extensions.String;
+
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Dal.SearchRequestBuilders.Notifiers;
@@ -75,9 +74,11 @@
                 CostCentre = notifier.CostCentre,
                 ChangeTime = DateTime.Now,
                 LanguageId = notifier.LanguageId,
+                ComputerUsersCategoryID = notifier.CategoryId
             };
 
             this.DataContext.ComputerUsers.Add(notifierEntity);
+
             this.InitializeAfterCommit(notifier, notifierEntity);
         }
 
@@ -205,7 +206,8 @@
                 notifierEntity.RegTime,
                 notifierEntity.ChangeTime,
                 notifierEntity.SyncChangedDate,
-                notifierEntity.LanguageId);
+                notifierEntity.LanguageId,
+                notifierEntity.ComputerUsersCategoryID);
         }
 
         public NotifierDetails FindNotifierDetailsById(int notifierId)
@@ -276,7 +278,7 @@
             return notifierWithUserIdOverviews;
         }
 
-		public IList<UserSearchResults> Search(int customerId, string searchFor, int? categoryID = null)
+        public IList<UserSearchResults> Search(int customerId, string searchFor, int? categoryID = null)
 		{
             var s = searchFor.ToLower();
 
@@ -285,8 +287,11 @@
                         from k in res.DefaultIfEmpty()
                         where
                             cu.Customer_Id == customerId &&
-							(/*categoryID == null || decide how to behave if null*/ cu.ComputerUsersCategoryID == categoryID) &&
-							 cu.Status != 0
+							(   categoryID == null ||                                        // find all users
+                                (categoryID == 0 && cu.ComputerUsersCategoryID == null) ||   //find user only without category 
+                                (categoryID > 0 && cu.ComputerUsersCategoryID == categoryID) // find users of the specified category
+                            ) 
+                            && cu.Status != 0
                             && (cu.UserId.ToLower().Contains(s) || cu.FirstName.ToLower().Contains(s)
                                 || cu.SurName.ToLower().Contains(s) || cu.Phone.ToLower().Contains(s)
                                 || cu.Email.ToLower().Contains(s) || cu.UserCode.ToLower().Contains(s)
@@ -502,24 +507,24 @@
             notifierEntity.Title = notifier.Title ?? string.Empty;
             notifierEntity.SOU = notifier.Unit ?? string.Empty;
             notifierEntity.LanguageId = notifier.LanguageId;
+            notifierEntity.ComputerUsersCategoryID = notifier.CategoryId;
 
             this.Update(notifierEntity);
         }
 
         public Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly)
         {
-            var notifier = DataContext.ComputerUsers
-                                      .Where(cu => cu.Customer_Id == customerId &&
-                                                   cu.LogonName.ToLower() == userId.ToLower() &&
-                                                   (activeOnly ? cu.Status != 0 : true)).FirstOrDefault();
-
+            var notifier =
+                DataContext.ComputerUsers.FirstOrDefault(cu => cu.Customer_Id == customerId &&
+                                                               cu.LogonName.ToLower() == userId.ToLower() &&
+                                                               (!activeOnly || cu.Status != 0));
 
             if (notifier == null)
             {
-                notifier = DataContext.ComputerUsers
-                                      .Where(cu => cu.Customer_Id == customerId &&
-                                                   cu.UserId.ToLower() == userId.ToLower() &&
-                                                   (activeOnly ? cu.Status != 0 : true)).FirstOrDefault();
+                notifier =
+                    DataContext.ComputerUsers.FirstOrDefault(cu => cu.Customer_Id == customerId &&
+                                                                   cu.UserId.ToLower() == userId.ToLower() &&
+                                                                   (!activeOnly || cu.Status != 0));
             }
 
             if (notifier != null)
@@ -552,7 +557,8 @@
                     false,
                     true,
                     notifier.RegTime,
-                    notifier.LanguageId);
+                    notifier.LanguageId,
+                    notifier.ComputerUsersCategoryID);
 
             return null;
         }
@@ -561,8 +567,8 @@
         {
             var initiators = initiatorId > 0 ? DataContext.ComputerUsers.Where(x => x.Id != initiatorId) : DataContext.ComputerUsers;
             var initiator = initiators.FirstOrDefault(cu => cu.Customer_Id == customerId &&
-                                                   cu.UserId.ToLower() == userId.ToLower() &&
-                                                   (activeOnly ? cu.Status != 0 : true));
+                                                            cu.UserId.ToLower() == userId.ToLower() &&
+                                                            (!activeOnly || cu.Status != 0));
             return initiator == null;
         }
 
@@ -573,6 +579,7 @@
                                                    cu.UserId.ToLower() == userId.ToLower())
                                                     .Select(i => i.Id).FirstOrDefault();
         }
+
         #endregion
 
         #region Methods

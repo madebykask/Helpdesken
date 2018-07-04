@@ -3,46 +3,38 @@
 @model DH.Helpdesk.Web.Models.Notifiers.InputModel
 
 <div class="container">
-    <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
+    <h4>@Translation.GetCoreTextTranslation("Allmänt")</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @*@if (Model.IsNew)
-                {
-                    @Html.EditorFor(m => m.UserId, "TextBox")
-                }
-                else
-                {
-                    @Html.DisplayFor(m => m.UserId, "Label")
-                }*@
+                
                 @{ var attributes = Model.ComputerUserCategoryModel.IsReadOnly ? (object)new { htmlAttributes = new { @readonly = "readonly" } } : new { };}
                         
                 @Html.EditorFor(m => m.UserId, "TextBox", attributes) 
 
-                @if (Model.ComputerUserCategoryModel.ComputerUserCategoryDropDownContent.Items.Count > 1)
+                @if (Model.ComputerUserCategoryModel.ComputerUserCategories.Any())
                 {
                     <tr>
+                        <td>@Translation.GetCoreTextTranslation("Kategori")</td>
                         <td>
-                            @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
+                            @Html.DropDownList("CategoryId", Model.ComputerUserCategoryModel.ComputerUserCategories, "",
+                                @Model.ComputerUserCategoryModel.IsReadOnly
+                                    ? (object)new { id = "category_dropdown", disabled = "disabled" } 
+                                    : (object)new { id = "category_dropdown" })
                         </td>
-                        <td>
-                            @Html.DropDown("category_dropdown", "ID", false, Model.ComputerUserCategoryModel.ComputerUserCategoryDropDownContent, false, Model.ComputerUserCategoryModel.IsReadOnly)
-                        </td>
-
                     </tr>
                 }
                            
                 @if (Model.Domain.Show)
                 {
                     <tr>
-                        <td>
-                            @(Translation.Get(Model.Domain.Caption, Enums.TranslationSource.TextTranslation) + (Model.Domain.Required ? "*" : string.Empty))
-                        </td>
+                        <td>@(Translation.GetCoreTextTranslation(Model.Domain.Caption) + (Model.Domain.Required ? "*" : string.Empty))</td>
                         <td>
                             @Html.DropDown("domain_dropdown", "DomainId", !Model.Domain.Required, Model.Domain.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)
                         </td>
                     </tr>
                 }
+
                 @Html.EditorFor(m => m.LoginName, "TextBox", attributes)
                 @Html.EditorFor(m => m.FirstName, "TextBox", attributes)
                 @Html.EditorFor(m => m.Initials, "TextBox", attributes)
@@ -53,18 +45,14 @@
                 @Html.EditorFor(m => m.CellPhone, "TextBox", attributes)
                 @Html.EditorFor(m => m.Email, "TextBox", attributes)
                 @Html.EditorFor(m => m.Code, "TextBox", attributes)
+
                 @if (Model.Language.Show)
                 {
                     <tr>
-                        <td>
-                            @(Translation.Get(Model.Language.Caption, Enums.TranslationSource.TextTranslation) + (Model.Language.Required ? "*" : string.Empty))
-                        </td>
-                        <td>
-                            @Html.DropDown("language_dropdown", "LanguageId", Model.Language.Required, Model.Language.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)
-                        </td>
+                        <td>@(Translation.GetCoreTextTranslation(Model.Language.Caption) + (Model.Language.Required ? "*" : string.Empty))</td>
+                        <td>@Html.DropDown("language_dropdown", "LanguageId", Model.Language.Required, Model.Language.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)</td>
                     </tr>
                 }
-
             </table>
         </div>
     </div>

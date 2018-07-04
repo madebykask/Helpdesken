@@ -495,12 +495,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
-            var nonReadOnlyCategories =
-                computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
-                    .Where(o => !o.IsReadOnly)
-                    .ToList();
-
-            model.ComputerUserCategoryModel = new ComputerUserCategoryModel(nonReadOnlyCategories);
+            var categoriesList = GetCategoriesList(currentCustomerId);
+            model.ComputerUserCategoryModel = new ComputerUserCategoryModel(categoriesList); //todo: check if required for AddNotifier
 
             var newNotifier = this.newNotifierFactory.Create(model, currentCustomerId, DateTime.Now);
 
@@ -655,11 +651,8 @@ namespace DH.Helpdesk.Web.Controllers
             if (!string.IsNullOrEmpty(costcentre))
                 inputParams.Add("CostCentre", costcentre);
 
-            var nonReadOnlyCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
-                .Where(o => !o.IsReadOnly)
-                .ToList();
-
-            var categoryModel = new ComputerUserCategoryModel(nonReadOnlyCategories);
+            var categoriesList = GetCategoriesList(currentCustomerId);
+            var categoryModel = new ComputerUserCategoryModel(categoriesList);
 
             var model = this.newNotifierModelFactory.Create(
                 settings,
@@ -680,14 +673,12 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ViewResult NewNotifier()
         {
-
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+            var langId = SessionFacade.CurrentLanguageId;
             var inputParams = new Dictionary<string, string>();
 
             var settings =
-                this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(
-                    currentCustomerId,
-                    SessionFacade.CurrentLanguageId);
+                this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(currentCustomerId, langId);
 
             List<ItemOverview> domains = null;
             List<ItemOverview> regions = null;
@@ -770,11 +761,10 @@ namespace DH.Helpdesk.Web.Controllers
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
-            var nonReadOnlyCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
-                .Where(o => !o.IsReadOnly)
-                .ToList();
+            //todo: check why if only not readonly should be displayed?
+            var categoriesList = GetCategoriesList(currentCustomerId);
 
-            var categoryModel = new ComputerUserCategoryModel(nonReadOnlyCategories);
+            var categoryModel = new ComputerUserCategoryModel(categoriesList);
 
             var model = this.newNotifierModelFactory.Create(
                 settings,
@@ -790,6 +780,20 @@ namespace DH.Helpdesk.Web.Controllers
                 categoryModel);
 
             return this.View(model);
+        }
+
+        private IList<SelectListItem> GetCategoriesList(int customerId, ComputerUserCategory category = null)
+        {
+            var categoriesList =
+                computerService.GetComputerUserCategoriesByCustomerID(customerId)
+                    .Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Id.ToString(),
+                        Selected = x.Id == category?.ID
+                    }).ToList();
+
+            return categoriesList;
         }
 
         [HttpGet]
@@ -895,15 +899,10 @@ namespace DH.Helpdesk.Web.Controllers
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
-            var nonReadOnlyCategories =
-                computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
-                    .Where(o => !o.IsReadOnly)
-                    .ToList();
-
             var computerUser = computerService.GetComputerUser(notifier.Id);
-            var categoryModel = computerUser.ComputerUserCategory == null ?
-                new ComputerUserCategoryModel(nonReadOnlyCategories) :
-                new ComputerUserCategoryModel(computerUser.ComputerUserCategory, nonReadOnlyCategories);
+
+            var categoriesList = GetCategoriesList(currentCustomerId, computerUser.ComputerUserCategory);
+            var categoryModel = new ComputerUserCategoryModel(categoriesList, computerUser.ComputerUserCategory);
 
             var model = this.notifierModelFactory.Create(
                 displaySettings,

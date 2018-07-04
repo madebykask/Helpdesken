@@ -269,7 +269,7 @@
                                             {
                                                 <tr class="displaytr" style="@(Model.InitiatorUserCategoryVisible ? "" : "display:none")">
                                                     <td>@CaseFieldCaption(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, "Sök kategori")</td>
-                                                    <td>@Html.DropDownList("InitiatorCategory", Model.BuildComputerCategoriesSelectList(Model.InitiatorComputerUserCategory != null ? (int?)Model.InitiatorComputerUserCategory.ID : null))</td>
+                                                    <td>@Html.DropDownList("InitiatorCategory", Model.BuildComputerCategoriesSelectList(Model.InitiatorComputerUserCategory != null ? (int?)Model.InitiatorComputerUserCategory.ID : null), "")</td>
                                                 </tr>
                                             }
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">
@@ -605,7 +605,7 @@
                                             <tr class="displaytr" style="@(Model.RegardingUserCategoryVisible ? "" : "display:none")">
                                                 <td>@CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, "Sök kategori")</td>
                                                 <td>
-                                                    @Html.DropDownList("IsAboutCategory", Model.BuildComputerCategoriesSelectList(Model.RegardingComputerUserCategory != null ? (int?)Model.RegardingComputerUserCategory.ID : null))
+                                                    @Html.DropDownList("IsAboutCategory", Model.BuildComputerCategoriesSelectList(Model.RegardingComputerUserCategory != null ? (int?)Model.RegardingComputerUserCategory.ID : null), "")
                                                 </td>
                                             </tr>
                                         }

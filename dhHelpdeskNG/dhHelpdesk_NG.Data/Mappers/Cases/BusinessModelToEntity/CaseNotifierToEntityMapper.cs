@@ -25,6 +25,7 @@
             entity.UserCode = businessModel.UserCode ?? string.Empty;
             entity.Customer_Id = businessModel.CustomerId;
             entity.LanguageId = businessModel.LanguageId;
+            //entity.ComputerUsersCategoryID = businessModel.CategoryId;
         }
     }
 }

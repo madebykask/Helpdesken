@@ -1829,6 +1829,7 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
         #region --Auto Complete Fields--
+
         [ValidateInput(false)]
         [HttpPost]
         public ActionResult Search_User(string query, int customerId, string searchKey, int? categoryID = null)
@@ -3746,6 +3747,7 @@ namespace DH.Helpdesk.Web.Controllers
                     lName = names[names.Length - 1];
 
                 int lng = case_.RegLanguage_Id;
+                
                 var caseNotifier = this.caseNotifierModelFactory.Create(
                                                             case_.ReportedBy,
                                                             fName,
@@ -3759,6 +3761,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                             case_.UserCode,
                                                             case_.Customer_Id,
                                                             lng);
+                                                            //m.InitiatorCategory); //todo: check if category is required
 
                 this.notifierService.UpdateCaseNotifier(caseNotifier);
             }
