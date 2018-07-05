@@ -121,8 +121,9 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Notifiers.Concrete
 			if (searchComputerUserCategories != null && searchComputerUserCategories.Any())
 			{
 				var items = searchComputerUserCategories.Select(d => new DropDownItem(d.Name, d.Value)).ToList();
-                
-				var content = new DropDownContent(items, ComputerUserCategory.EmptyCategoryId.ToString());
+
+			    var selectedCategoryId = filters.ComputerUserCategoryID ?? ComputerUserCategory.EmptyCategoryId;
+                var content = new DropDownContent(items, selectedCategoryId.ToString());
 				computerUserCategories = new SearchDropDownModel(true, content);
 			}
 			else

@@ -396,11 +396,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                 searchComputerUserCategories = GetUserCategoriesList(currentCustomerId);
 
-                //if (filters.ComputerUserCategoryID.HasValue && filters.ComputerUserCategoryID.Value == 0)
-                //{
-                //	filters.ComputerUserCategoryID = (int?)null;
-                //}
-
                 var sortField = !string.IsNullOrEmpty(filters.SortByField)
                     ? new SortField(filters.SortByField, filters.SortBy)
                     : null;
@@ -751,9 +746,18 @@ namespace DH.Helpdesk.Web.Controllers
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
-            //todo: check why if only not readonly should be displayed?
-            var categoriesList = GetCategoriesList(currentCustomerId);
+            
+            ComputerUserCategory selectedCategory = null;
+            
+            var initiatorFilter = SessionFacade.FindPageFilters<NotifierFilters>(PageName.Notifiers);
+            var categoryId = initiatorFilter?.ComputerUserCategoryID ?? 0;
+            if (categoryId > 0)
+            {
+                selectedCategory = this.computerService.GetComputerUserCategoryByID(categoryId);
+            }
 
+            //todo: check why if only not readonly should be displayed?
+            var categoriesList = GetCategoriesList(currentCustomerId, selectedCategory);
             var categoryModel = new ComputerUserCategoryModel(categoriesList);
 
             var model = this.newNotifierModelFactory.Create(

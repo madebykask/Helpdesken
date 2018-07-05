@@ -1855,6 +1855,12 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public JsonResult GetExtendedCaseUrlForCategoryAndSection(int categoryID, int caseSectionType)
         {
+            string url = null;
+            Guid guid = Guid.Empty;
+            
+            if (categoryID == 0)
+                return Json(new { guid, url });
+
             var category = _computerService.GetComputerUserCategoryByID(categoryID);
             var customerId = SessionFacade.CurrentCustomer.Id;
 
@@ -1866,8 +1872,6 @@ namespace DH.Helpdesk.Web.Controllers
             if (customerId != category.CustomerID)
                 throw new HttpException(403, "Not a valid category for customer");
 
-            string url = null;
-            Guid guid = Guid.Empty;
             var userGuid = SessionFacade.CurrentUser.UserGUID.ToString();
 
             var extendedCasePathMask = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
@@ -6342,18 +6346,18 @@ namespace DH.Helpdesk.Web.Controllers
 
         public ComputerUserCategory GetComputerUserCategoryByID(int categoryID)
         {
-            if (categoryID == 0)
+            if (categoryID == ComputerUserCategory.EmptyCategoryId)
             {
-                return new ComputerUserCategory()
-                {
-                    ID = 0,
-                    IsEmpty = true
-                };
+                return ComputerUserCategory.CreateEmptyCategory();
             }
-            else
+            
+            var category = _computerService.GetComputerUserCategoryByID(categoryID);
+            if (category.IsEmpty)
             {
-                return _computerService.GetComputerUserCategoryByID(categoryID);
+                category.ID = ComputerUserCategory.EmptyCategoryId;
             }
+
+            return category;
         }
 
         public bool CheckIfFieldVisible(IList<CaseFieldSetting> caseFieldSettings, TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)

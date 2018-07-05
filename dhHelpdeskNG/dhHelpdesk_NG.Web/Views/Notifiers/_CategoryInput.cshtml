@@ -1,4 +1,5 @@
-﻿@model DH.Helpdesk.BusinessData.Models.ComputerUsers.ComputerUserCategoryData
+﻿@using DH.Helpdesk.Common.Constants
+@model DH.Helpdesk.BusinessData.Models.ComputerUsers.ComputerUserCategoryData
 
 <div class="container">
     <div>
@@ -37,11 +38,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Initiator default category</td>
+                        <td>@Translation.GetCoreTextTranslation("Standard") @Translation.GetCoreTextTranslation(CaseSections.InitiatorHeader)</td>
                         <td>@Html.CheckBoxFor(m => m.DefaultInitiatorCategory, new { @class = "switchcheckbox" })</td>        
                     </tr>
                     <tr>
-                        <td>Regarding default category</td>
+                        <td>@Translation.GetCoreTextTranslation("Standard") @Translation.GetCoreTextTranslation(CaseSections.RegardingHeader)</td>
                         <td>@Html.CheckBoxFor(m => m.DefaultRegardingCategory, new { @class = "switchcheckbox" })</td>
                     </tr>
                     </tbody>
