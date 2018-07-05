@@ -364,7 +364,7 @@
 
                                     @if (Model.CaseFieldSettings.Count() != 0)
                                     {
-                                        <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString(), true)">
+                                        <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString())">
                                             <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString(), Model.CaseSolution.Customer_Id)</td>
                                             <td>
                                                 @Html.DropDownListFor(model => model.CaseSolution.UserSearchCategory_Id, Model.BuildComputerCategoriesSelectList(Model.CaseSolution.UserSearchCategory_Id), "",
@@ -718,7 +718,7 @@
                                     <tr></tr>
                                     @if (Model.CaseFieldSettings.Count() != 0)
                                     {
-                                        <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString(), true)">
+                                        <tr style="@Model.CaseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString())">
                                             <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString(), Model.CaseSolution.Customer_Id)</td>
                                             <td>
                                                 @Html.DropDownListFor(model => model.CaseSolution.IsAbout_UserSearchCategory_Id, Model.BuildComputerCategoriesSelectList(Model.CaseSolution.IsAbout_UserSearchCategory_Id), "",

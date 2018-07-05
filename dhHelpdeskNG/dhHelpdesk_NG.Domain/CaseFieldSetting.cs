@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Domain
+﻿using DH.Helpdesk.Common.Extensions.Integer;
+
+namespace DH.Helpdesk.Domain
 {
     using DH.Helpdesk.Domain.Interfaces;
 
@@ -17,8 +19,15 @@
         /// <summary>
         /// Now used as "available" field for this customer 
         /// </summary>
-        public bool Active { get; set; }
         public int ShowOnStartPage { get; set; }
+
+        public bool IsActive
+        {
+            get { return ShowOnStartPage.ToBool(); }
+        }
+
+        public bool Hide { get; set; }
+
         public int ShowExternal { get; set; }
         public bool ShowStatusBar { get; set; }
         public bool ShowExternalStatusBar { get; set; }

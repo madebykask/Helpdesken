@@ -36,6 +36,7 @@ namespace DH.Helpdesk.Services.Services.Cases
                 CustomerId = section.Customer_Id,
                 CaseSectionFields = section.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList()
             }).ToList();
+
         }
 
         public CaseSectionModel GetCaseSection(int sectionId, int customerId, int languageId)

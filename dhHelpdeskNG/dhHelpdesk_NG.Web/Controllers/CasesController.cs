@@ -5223,20 +5223,19 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.ActiveTab = activeTab;
 
-            #region User Search Category
-
             // Computer user categories
             var computerUserCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId, true);
             m.ComputerUserCategories = computerUserCategories.Where(o => !o.IsEmpty).ToList();
             m.EmptyComputerCategoryName = computerUserCategories.FirstOrDefault(o => o.IsEmpty)?.Name;
+            
+            #region User Search Category
 
             var initiatorFieldSettings 
                 = customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.UserSearchCategory_Id.ToString());
 
-            m.InitiatorUserCategoryVisible 
-                = initiatorFieldSettings.Active || customerFieldSettings.IsFieldRequiredOrVisible(TranslationCaseFields.UserSearchCategory_Id);
+            m.InitiatorUserCategoryVisible = initiatorFieldSettings.IsActive && !initiatorFieldSettings.Hide;
 
-            if (isCreateNewCase && initiatorFieldSettings.Active)
+            if (isCreateNewCase && initiatorFieldSettings.IsActive)
             {
                 var defaultCategoryId = 0;
                 
@@ -5256,11 +5255,9 @@ namespace DH.Helpdesk.Web.Controllers
             var regFieldSettings = 
                 customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString());
 
-            m.RegardingUserCategoryVisible = 
-                regFieldSettings.Active || customerFieldSettings.IsFieldRequiredOrVisible(TranslationCaseFields.IsAbout_UserSearchCategory_Id);
-
-
-            if (isCreateNewCase && regFieldSettings.Active)
+            m.RegardingUserCategoryVisible = regFieldSettings.IsActive && !regFieldSettings.Hide;
+            
+            if (isCreateNewCase && regFieldSettings.IsActive)
             {
                 var defaultCategoryId = 0;
 
@@ -5914,14 +5911,14 @@ namespace DH.Helpdesk.Web.Controllers
                 #region User Search Categories
 
                 //set default values only if active = true
-                if (initiatorFieldSettings.Active && caseTemplate.UserSearchCategory_Id.HasValue)
+                if (initiatorFieldSettings.IsActive && caseTemplate.UserSearchCategory_Id.HasValue)
                 {
                     m.InitiatorComputerUserCategory =
                         GetComputerUserCategoryByID(caseTemplate.UserSearchCategory_Id.Value);
                 }
 
                 //set default values only if active = true
-                if (regFieldSettings.Active && caseTemplate.IsAbout_UserSearchCategory_Id.HasValue)
+                if (regFieldSettings.IsActive && caseTemplate.IsAbout_UserSearchCategory_Id.HasValue)
                 {
                     m.RegardingComputerUserCategory =
                         GetComputerUserCategoryByID(caseTemplate.IsAbout_UserSearchCategory_Id.Value);
@@ -5931,12 +5928,10 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             #region User Search Categories
-
-
-
+            
             if (m.CaseSolutionSettingModels != null)
             {
-                if (initiatorFieldSettings.Active && m.InitiatorUserCategoryVisible)
+                if (initiatorFieldSettings.IsActive && m.InitiatorUserCategoryVisible)
                 {
                     var sfs = m.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == CaseSolutionFields.UserSearchCategory_Id);
                     if (sfs != null && !sfs.IsFieldVisible())
@@ -5945,7 +5940,7 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                 }
 
-                if (regFieldSettings.Active && m.RegardingUserCategoryVisible)
+                if (regFieldSettings.IsActive && m.RegardingUserCategoryVisible)
                 {
                     var sfs = m.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == CaseSolutionFields.IsAbout_UserSearchCategory_Id);
                     if (sfs != null && !sfs.IsFieldVisible())

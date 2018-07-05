@@ -212,19 +212,15 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return ret;
         }
 
-        public static string displayHtml(this IList<CaseFieldSetting> cfs, string valueToFind, bool useActive = false)
+        public static string displayHtml(this IList<CaseFieldSetting> cfs, string valueToFind)
         {
-            var isVisible =
-                useActive
-                    ? cfs.getCaseSettingsValue(valueToFind).Active
-                    : cfs.getCaseSettingsValue(valueToFind).ShowOnStartPage.ToBool();
-
+            var isVisible = cfs.getCaseSettingsValue(valueToFind).IsActive;
             return !isVisible ? "display:none" : string.Empty;
         }
 
-        public static bool getActive(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        public static bool getHide(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
         {
-            return cfs.ToList().getCaseSettingsValue(valueToFind).Active;
+            return cfs.ToList().getCaseSettingsValue(valueToFind).Hide;
         }
 
         public static int getShowOnStartPage(this IList<CaseFieldSetting> cfs, string valueToFind)

@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Dal.EntityConfigurations
 {
-    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.ModelConfiguration;
 
@@ -23,10 +22,12 @@
             this.Property(x => x.ListEdit).IsRequired();
             this.Property(x => x.Name).IsRequired().HasMaxLength(50).HasColumnName("CaseField");
             //this.Property(x => x.NameOrigin).IsRequired().HasMaxLength(50).HasColumnName("CaseFieldName");
-            this.Property(x => x.Active).IsRequired();
             this.Property(x => x.Required).IsRequired();
             this.Property(x => x.RequiredIfReopened).IsRequired();
+
             this.Property(x => x.ShowOnStartPage).IsRequired().HasColumnName("Show");
+            this.Property(x => x.Hide).IsRequired(); // available only for helpdesk user category fields to control visibility
+
             this.Property(x => x.ShowExternal).IsRequired();
             this.Property(x => x.ShowStatusBar).IsRequired();
             this.Property(x => x.ShowExternalStatusBar).IsRequired();

@@ -4,7 +4,7 @@ var properties = window.fieldProperties;
 
 var input = "input[name$='].";
 
-var activeSelector = '[name$=".Active"]:checkbox';
+var hideSelector = 'input[name$=".Hide"]:checkbox';
 var requiredSelector = 'input[name$=".Required"]:checkbox';
 var requiredOnReopenSelector = 'input[name$=".RequiredIfReopened"]:checkbox';
 var showSelector = 'input[name$=".ShowOnStartPage"]:checkbox';
@@ -12,30 +12,12 @@ var showExternalSelector = 'input[name$=".ShowExternal"]:checkbox';
 var lockedSelector = 'select[name$=".Locked"]';
 
 $(function () {
-
-    $(activeSelector).on('click', function (e) {
-        var $this = $(this);
-        var $parent = $this.parents('tr');
-
-        if (!this.checked) {
-            resetFieldControls($parent, true);
-        } else {
-            $parent.find(lockedSelector).prop('disabled', false);
-        }
-    });
-
+ 
+    //show has meaning of active - resets all other controls 
     $(showSelector).on('click', function (e) {
 
         var $this = $(this);
         var $parent = $this.parents('tr');
-
-        //check if its new mode behavior 
-        if ($parent.hasClass('hasActive')) {
-            if (!isMainChecked($parent)) {
-                $this.prop('checked', false);
-            }
-            return;
-        }
         
         if (!this.checked) {
             resetFieldControls($parent, false);
@@ -44,7 +26,7 @@ $(function () {
         }
     });
 
-    var ctrls = [showExternalSelector, requiredSelector, requiredOnReopenSelector];
+    var ctrls = [hideSelector, showExternalSelector, requiredSelector, requiredOnReopenSelector];
 
     $(ctrls.join(',')).on('click', function (ev) {
         var $this = $(this);
@@ -69,18 +51,15 @@ $(function () {
     });
 
     function isMainChecked($parent) {
-        var mainSelector = $parent.hasClass('hasActive') ? activeSelector : showSelector;
-        var $ctrl = $parent.find(mainSelector);
+        var $ctrl = $parent.find(showSelector);
         var isChecked = $ctrl[0].checked;
         return isChecked;
     }
 
-    function resetFieldControls($parent, isActive) {
-
-        if (isActive) {
-            var $showCtrl = $parent.find(showSelector);
-            $showCtrl.prop('checked', false);
-        }
+    function resetFieldControls($parent) {
+        
+        var $hideCtrl = $parent.find(hideSelector);
+        $hideCtrl.prop('checked', false);
 
         var $showExternalCtrl = $parent.find(showExternalSelector);
         $showExternalCtrl.prop('checked',false);
