@@ -538,7 +538,8 @@ namespace DH.Helpdesk.Web.Controllers
             int? regionId,
             int? departmentId,
             int? organizationUnitId,
-            string costcentre)
+            string costcentre,
+            int? userCategory)
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var inputParams = new Dictionary<string, string>();
@@ -636,7 +637,13 @@ namespace DH.Helpdesk.Web.Controllers
             if (!string.IsNullOrEmpty(costcentre))
                 inputParams.Add("CostCentre", costcentre);
 
-            var categoriesList = GetCategoriesList(currentCustomerId);
+            ComputerUserCategory category = null;
+            if (userCategory.HasValue && userCategory.Value > 0)
+            {
+                category = computerService.GetComputerUserCategoryByID(userCategory.Value);
+            }
+            
+            var categoriesList = GetCategoriesList(currentCustomerId, category);
             var categoryModel = new ComputerUserCategoryModel(categoriesList);
 
             var model = this.newNotifierModelFactory.Create(

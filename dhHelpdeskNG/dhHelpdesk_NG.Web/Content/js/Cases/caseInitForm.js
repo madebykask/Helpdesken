@@ -1446,6 +1446,11 @@ function CaseInitForm() {
             params += "&organizationUnitId=" + $(publicOUControlName).val();
         if ($("#case__CostCentre").val() != '')
             params += "&costcentre=" + $("#case__CostCentre").val();
+                        
+         var userCategory = $("#InitiatorCategory").val() || '';
+         if (userCategory != ''){
+            params += "&userCategory=" + userCategory; 
+         }
 
         var win = window.open('/Notifiers/NewNotifierPopup' + params, '_blank', 'left=100,top=100,width=990,height=480,toolbar=0,resizable=1,menubar=0,status=0,scrollbars=1');
 
