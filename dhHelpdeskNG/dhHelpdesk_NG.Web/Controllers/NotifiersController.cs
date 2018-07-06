@@ -343,21 +343,20 @@ namespace DH.Helpdesk.Web.Controllers
 
 
         [HttpPost]
-        public ActionResult EditUserCategory(ComputerUserCategoryData data)
+        public ActionResult EditUserCategory(ComputerUserCategoryData data, int? activeTab)
         {
             data.Id = this.computerService.SaveComputerUserCategory(data);
 
             //set categories default value
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(data.CustomerId);
 
-            
             var fs  = caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString());
             UpdateCategoryFieldDefaultValue(data, fs, data.DefaultInitiatorCategory);
 
             fs = caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString());
             UpdateCategoryFieldDefaultValue(data, fs, data.DefaultRegardingCategory);
-            
-            return RedirectToAction("Index");
+
+            return RedirectToAction("Index", new { activeTab = "2"});
         }
 
         private void UpdateCategoryFieldDefaultValue(ComputerUserCategoryData category, CaseFieldSetting fs, bool setDefault)
@@ -454,6 +453,8 @@ namespace DH.Helpdesk.Web.Controllers
                     sortField);
 
                 var searchResult = this.notifierRepository.Search(parameters);
+
+                ViewBag.ActiveTab = ControllerContext.HttpContext.Request.QueryString["activeTab"];
 
                 model = this.indexModelFactory.Create(
                      settings,

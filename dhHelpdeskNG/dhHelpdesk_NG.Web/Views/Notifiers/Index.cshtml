@@ -3,26 +3,28 @@
 
 @{
     ViewBag.Title = Translation.GetCoreTextTranslation("Anmälare");
+
+    var activeTab = 1;
+
+    if (ViewBag.ActiveTab != null)
+    {
+        if (!Int32.TryParse(ViewBag.ActiveTab.ToString(), out activeTab))
+        {
+            activeTab = 1;
+        }
+    }
  }
-
-    @Scripts.Render("~/bundles/notifiers/index")
-
-    <script type="text/javascript">
-        $(function () {
-            applyIndexViewBehavior();
-        });
-    </script>
 
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul id="nav" class="secnav">
-                <li id="menu1" style="display: none;">
+                <li id="menu1" style="@(activeTab == 1 ? "" : "display: none;")">
                     @Html.ActionLink(Translation.GetCoreTextTranslation("Ny anmälare"), "NewNotifier", "Notifiers", new { id = "new_notifier_button", @class = "btn" })
                 </li>
-                <li id="menu2" style="display: none;">
+                <li id="menu2" style="@(activeTab == 2 ? "" : "display: none;")">
                     @Html.ActionLink(Translation.GetCoreTextTranslation("Ny kategori"), "NewCategory", "Notifiers", new {id = "add_category_btn", @class = "btn"})
                 </li>
-                <li  id="menu3" style="display: none;">
+                <li  id="menu3" style="@(activeTab == 3 ? "" : "display: none;")">
                     <a id="save_button" class="btn">@Translation.GetCoreTextTranslation("Spara")</a>
                 </li>
             </ul>
@@ -31,27 +33,44 @@
 
     <div class="content">
         <div class="container">
-            <ul class="nav nav-tabs">
-                <li id="notifiers_tab" class="active" onclick="toggleMenu(1)">
+            <ul id="tabs" class="nav nav-tabs">
+                <li id="notifiers" class="@(activeTab == 1 ? "active" : "")" onclick="toggleMenu(1)">
                     <a href="#fragment-1">@Translation.GetCoreTextTranslation("Anmälare")</a>
                 </li>
-                <li id="categories_tab" onclick="toggleMenu(2)">
+                <li id="categories" class="@(activeTab == 2 ? "active" : "")" onclick="toggleMenu(2)">
                     <a href="#fragment-2">@Translation.GetCoreTextTranslation("Kategorier")</a>
                 </li>
-                <li id="settings_tab" onclick="toggleMenu(3)">
+                <li id="settings" class="@(activeTab == 3 ? "active" : "")" onclick="toggleMenu(3)">
                     <a href="#fragment-3">@Translation.GetCoreTextTranslation("Inställningar")</a>
                 </li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <div class="tab-pane tab-pane-border @(activeTab == 1 ? "active" : "")" id="fragment-1">
                     @Html.Partial("Notifiers", Model.Notifiers)
                 </div>
-                <div class="tab-pane tab-pane-border" id="fragment-2">
+                <div class="tab-pane tab-pane-border @(activeTab == 2 ? "active" : "")" id="fragment-2">
                     @Html.Action("UserCategories", new { area = string.Empty })
                 </div>
-                <div class="tab-pane tab-pane-border" id="fragment-3">
+                <div class="tab-pane tab-pane-border @(activeTab == 3 ? "active" : "")" id="fragment-3">
                     @Html.Action("Settings", new { area = string.Empty })
                 </div>
             </div>
         </div>
-    </div>        
+</div>        
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('#save_button').click(function () {
+                $('#settings_form').submit();
+            });
+        });
+
+        function toggleMenu(number) {
+            $('#nav > li').hide();
+            var menuId = '#menu' + number;
+            $(menuId).show();
+        }
+    </script>
+}
