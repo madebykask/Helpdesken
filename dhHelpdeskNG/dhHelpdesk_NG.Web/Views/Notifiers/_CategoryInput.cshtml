@@ -1,41 +1,21 @@
-﻿@using DH.Helpdesk.Common.Constants
-@model DH.Helpdesk.BusinessData.Models.ComputerUsers.ComputerUserCategoryData
+﻿@model DH.Helpdesk.BusinessData.Models.ComputerUsers.ComputerUserCategoryData
 
 <div class="container">
     <div>
-        <h4>@Translation.GetCoreTextTranslation("Kategori") @(Model.IsEmpty ? "[Fixed]" : "")</h4>
+        <h4>@Translation.GetCoreTextTranslation("Kategori") @(Model.IsEmpty ? string.Format("({0})", Translation.GetCoreTextTranslation("Standard")) : "")</h4>
         <div class="row">
             <div class="span12">
                 <table class="tableform">
                     <thead>
                     <tr>
                         <th class="span3"></th>
-                        <th class="span4"></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>@Translation.GetCoreTextTranslation("Namn")</td>
-                        <td>@Html.EditorFor(x => x.Name)</td>
-                    </tr>
-                    <tr>
-                        <td>@Translation.GetCoreTextTranslation("Skrivskyddad")</td>
-                        <td>
-                            @if (Model.IsEmpty)
-                            {
-                                <input type="checkbox" name="IsReadOnly"
-                                       @(Model.IsReadOnly ? "checked=checked" : "")
-                                       readonly="readonly" onclick='return false' 
-                                       value="true"/>
-                            }
-                            else
-                            {
-                                <input type="checkbox" name="IsReadOnly"
-                                       @(Model.IsReadOnly ? "checked=checked" : "")
-                                       value="true"/>
-                            }
-                            <input type="hidden" name="IsReadOnly" value="false"/>
-                        </td>
+                        <td>@Html.TextBoxFor(x => x.Name, new { maxlength = 100 })</td>
                     </tr>
                     <tr>
                         <td>@Translation.GetCoreTextTranslation("Standard") @ViewBag.InitiatorSectionHeader</td>

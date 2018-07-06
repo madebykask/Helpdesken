@@ -205,12 +205,14 @@ namespace DH.Helpdesk.Web.Controllers
         public PartialViewResult UserCategories()
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+
             var categories = this.computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId, true);
 
             var emptyCategory = categories.FirstOrDefault(x => x.IsEmpty);
+            
             if (emptyCategory == null)
             {
-                emptyCategory =  new ComputerUserCategoryOverview()
+                emptyCategory = new ComputerUserCategoryOverview()
                 {
                     Id = ComputerUserCategory.EmptyCategoryId,
                     Name = ComputerUserCategory.EmptyCategoryDefaultName,
@@ -218,16 +220,27 @@ namespace DH.Helpdesk.Web.Controllers
                 };
             }
 
-            var model = new List<ComputerUserCategoryOverview>
-            {
-                emptyCategory
-            };
+            var list = new List<ComputerUserCategoryOverview>(categories.Where(x => !x.IsEmpty));
+            list.Insert(0, emptyCategory);
 
-            model.AddRange(categories.Where(x => !x.IsEmpty));
+            var customerFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(currentCustomerId);
+            var initiatorCaseFieldSettings = customerFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString());
+            var regardingCaseFieldSettings = customerFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString());
+
+            InitSectionHeaders(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
+
+            var model = list.Select(x => new ComputerUserCategoryListItem()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                IsEmpty = x.IsEmpty,
+                IsDefaultInitiator = IsGetDefaultCategory(x.Id, x.IsEmpty, initiatorCaseFieldSettings),
+                IsDefaultRegarding = IsGetDefaultCategory(x.Id, x.IsEmpty, regardingCaseFieldSettings)
+            }).ToList();
 
             return PartialView(model);
         }
-
+        
         [HttpGet]
         public ViewResult NewCategory()
         {
@@ -282,7 +295,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var customerFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
 
-            var isDefaultInitiator = 
+            var isDefaultInitiator =
                 CheckIfDefaultCategory(category, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, customerFieldSettings);
 
             var isDefaultRegarding =
@@ -304,19 +317,30 @@ namespace DH.Helpdesk.Web.Controllers
 
         private bool CheckIfDefaultCategory(ComputerUserCategory category, GlobalEnums.TranslationCaseFields caseField, IList<CaseFieldSetting> customerFieldSettings)
         {
-            var defaultValue = 0;
             var isDefault = false;
 
             var caseFieldSetting = customerFieldSettings.getCaseSettingsValue(caseField.ToString());
-
-            if (caseFieldSetting != null && Int32.TryParse(caseFieldSetting.DefaultValue, out defaultValue))
+            if (caseFieldSetting != null)
             {
-                isDefault = (category.IsEmpty && defaultValue == ComputerUserCategory.EmptyCategoryId) ||
-                            (!category.IsEmpty && defaultValue == category.ID);
+                isDefault = IsGetDefaultCategory(category.ID, category.IsEmpty, caseFieldSetting);
             }
 
             return isDefault;
         }
+
+        private bool IsGetDefaultCategory(int categoryId, bool isEmpty, CaseFieldSetting caseFieldSetting)
+        {
+            var defaultValue = 0;
+            var isDefault = false;
+            if (caseFieldSetting != null && Int32.TryParse(caseFieldSetting.DefaultValue, out defaultValue))
+            {
+                isDefault = (isEmpty && defaultValue == ComputerUserCategory.EmptyCategoryId) ||
+                            (!isEmpty && defaultValue == categoryId);
+            }
+
+            return isDefault;
+        }
+
 
         [HttpPost]
         public ActionResult EditUserCategory(ComputerUserCategoryData data)

@@ -379,6 +379,7 @@
     <Compile Include="Models\Gdpr\GdprOperationsHistoryListItem.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
     <Compile Include="Models\JsonModels\Case\CaseJsonModel.cs" />
+    <Compile Include="Models\Notifiers\ComputerUserCategoryListItem.cs" />
     <Compile Include="Models\Notifiers\UserCategoryInputData.cs" />
     <Compile Include="Models\Shared\ChangePasswordModel.cs" />
     <Compile Include="Models\Questionnaire\Input\QuestionnaireAnswerParams.cs" />
