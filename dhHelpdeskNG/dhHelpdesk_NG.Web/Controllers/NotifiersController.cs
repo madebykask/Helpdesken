@@ -5,7 +5,10 @@ using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.ComputerUsers;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Domain.Computers;
+using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -77,7 +80,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICustomerService customerService;
 
         private readonly IComputerService computerService;
-        private ICaseFieldSettingService _caseFieldSettingService;
+        private readonly ICaseFieldSettingService _caseFieldSettingService;
+        private readonly ICaseSectionService _caseSectionService;
 
         #endregion
 
@@ -107,9 +111,11 @@ namespace DH.Helpdesk.Web.Controllers
             IOrganizationService organizationService,
             ICustomerService customerService,
             IComputerService computerService,
-            ICaseFieldSettingService caseFieldSettingService)
+            ICaseFieldSettingService caseFieldSettingService,
+            ICaseSectionService caseSectionService)
             : base(masterDataService)
         {
+            _caseSectionService = caseSectionService;
             _caseFieldSettingService = caseFieldSettingService;
             this.departmentRepository = departmentRepository;
             this.divisionRepository = divisionRepository;
@@ -245,6 +251,7 @@ namespace DH.Helpdesk.Web.Controllers
                 CustomerId = SessionFacade.CurrentCustomer.Id,
             };
 
+            InitSectionHeaders(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
             return View("EditUserCategory", emptyCategory);
         }
 
@@ -255,7 +262,16 @@ namespace DH.Helpdesk.Web.Controllers
             if (data == null)
                 return HttpNotFound($"Category (Id={id}) was not found");
 
+            InitSectionHeaders(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
             return View(data);
+        }
+
+        private void InitSectionHeaders(int customerId, int languageId)
+        {
+            var initiatorSection = _caseSectionService.GetCaseSectionByType((int)CaseSectionType.Initiator, customerId, languageId);
+            var regardingSection = _caseSectionService.GetCaseSectionByType((int)CaseSectionType.Regarding, customerId, languageId);
+            ViewBag.InitiatorSectionHeader = initiatorSection.SectionHeader ?? Translation.GetCoreTextTranslation(CaseSections.InitiatorHeader);
+            ViewBag.RegardingSectionHeader = regardingSection.SectionHeader ?? Translation.GetCoreTextTranslation(CaseSections.RegardingHeader);
         }
 
         private ComputerUserCategoryData GetComputerUserCategoryData(int categoryId, int customerId)

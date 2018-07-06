@@ -38,11 +38,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>@Translation.GetCoreTextTranslation("Standard") @Translation.GetCoreTextTranslation(CaseSections.InitiatorHeader)</td>
+                        <td>@Translation.GetCoreTextTranslation("Standard") @ViewBag.InitiatorSectionHeader</td>
                         <td>@Html.CheckBoxFor(m => m.DefaultInitiatorCategory, new { @class = "switchcheckbox" })</td>        
                     </tr>
                     <tr>
-                        <td>@Translation.GetCoreTextTranslation("Standard") @Translation.GetCoreTextTranslation(CaseSections.RegardingHeader)</td>
+                        <td>@Translation.GetCoreTextTranslation("Standard") @ViewBag.RegardingSectionHeader</td>
                         <td>@Html.CheckBoxFor(m => m.DefaultRegardingCategory, new { @class = "switchcheckbox" })</td>
                     </tr>
                     </tbody>

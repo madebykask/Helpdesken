@@ -37,13 +37,13 @@ function SetFocusToReportedByOnCase() {
 
 $(document).ready(function () {
     var initiatorID = $('#InitiatorCategory').val()
-
+    
+    $('#AddNotifier')[0].prevState = $('#AddNotifier').is(':visible');
+    
     if (initiatorID) {
         var initiatorCategory = window.parameters.computerUserCategories[initiatorID];
         intiatorReadOnly = initiatorCategory == null ? false : initiatorCategory.IsReadOnly;
         applyReadOnlyOn(readOnlyExpressions['initiator'], intiatorReadOnly);
-
-        $('#AddNotifier')[0].prevState = $('#AddNotifier').is(':visible');
 
         if (intiatorReadOnly) {
             $('#AddNotifier').hide();
