@@ -52,7 +52,8 @@ namespace DH.Helpdesk.Dal.Repositories
         UserOverview Login(string uId, string pwd);
         Task<UserOverview> GetByUserIdAsync(string userId, string passw);
         DateTime GetPasswordChangedDate(int id);
-
+        
+        User GetUserForCopy(int id);
         CustomerUserInfo GetUserInfo(int userId); //basic information - good perf
         UserOverview GetUser(int userid); // full information
 
@@ -234,6 +235,13 @@ namespace DH.Helpdesk.Dal.Repositories
 
            var usersEmails = query.Select(u => new {u.Id, u.Email}).ToList();
            return usersEmails.Select(u => new ItemWithEmail(u.Id, u.Email)).ToList();
+        }
+
+        public User GetUserForCopy(int id)
+        {
+            var user = Table.AsNoTracking().FirstOrDefault(x => x.Id == id);
+            DataContext.Entry(user).State = EntityState.Detached;
+            return user;
         }
 
         public CustomerUserInfo GetUserInfo(int userId)

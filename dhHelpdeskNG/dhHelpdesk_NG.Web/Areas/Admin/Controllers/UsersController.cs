@@ -389,16 +389,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [CustomAuthorize(Roles = "3,4")]
         public ActionResult Edit(int id, int? copy)
         {
-            var user = this._userService.GetUser(id);
+            var user = copy.ToBool() ? _userService.GetUserForCopy(id) : _userService.GetUser(id);
 
             if (user == null)
                 return new HttpNotFoundResult("No user found...");
-
-            IDictionary<string, string> errors = new Dictionary<string, string>();
-
+            
             var model = this.CreateInputViewModel(user);
 
-            if (copy != null)
+            if (copy.ToBool())
             {
                 model.User.Id = -1;
                 model.User.UserID = string.Empty;
