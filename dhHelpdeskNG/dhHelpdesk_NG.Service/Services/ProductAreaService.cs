@@ -234,11 +234,11 @@ namespace DH.Helpdesk.Services.Services
             if (user.UserGroupId < (int)UserGroup.CustomerAdministrator)
             {
                 var groupsMap = user.UserWorkingGroups.Where(it => it.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToDictionary(it => it.WorkingGroup_Id, it => true);
-                topAreas =
+                var topAreasRestricted =
                     topAreas.Where(it => it.WorkingGroups.Count() == 0 ||
                                          it.WorkingGroups.Any(productAreaWorkingGroup => groupsMap.ContainsKey(productAreaWorkingGroup.Id))).ToList();
 
-                var resultMap = topAreas.ToDictionary(it => it.Id, it => it);
+                var resultMap = topAreasRestricted.ToDictionary(it => it.Id, it => it);
                 if (productAreaIdToInclude.HasValue)
                 {
                     if (!resultMap.ContainsKey(productAreaIdToInclude.Value))
