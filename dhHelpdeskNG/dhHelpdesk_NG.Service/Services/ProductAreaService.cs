@@ -234,16 +234,16 @@ namespace DH.Helpdesk.Services.Services
             if (user.UserGroupId < (int)UserGroup.CustomerAdministrator)
             {
                 var groupsMap = user.UserWorkingGroups.Where(it => it.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToDictionary(it => it.WorkingGroup_Id, it => true);
-                var topAreasRestricted =
+                topAreas =
                     topAreas.Where(it => it.WorkingGroups.Count() == 0 ||
                                          it.WorkingGroups.Any(productAreaWorkingGroup => groupsMap.ContainsKey(productAreaWorkingGroup.Id))).ToList();
 
-                var resultMap = topAreasRestricted.ToDictionary(it => it.Id, it => it);
+                var resultMap = topAreas.ToDictionary(it => it.Id, it => it);
                 if (productAreaIdToInclude.HasValue)
                 {
                     if (!resultMap.ContainsKey(productAreaIdToInclude.Value))
                     {
-                        var productAreaToInclude = this.GetTopMostAreaForChildNew(productAreaIdToInclude.Value, topAreas);
+                        var productAreaToInclude = this.GetTopMostAreaForChildNew(productAreaIdToInclude.Value, allAreas);
                         if (productAreaToInclude != null && !resultMap.ContainsKey(productAreaToInclude.Id))
                         {
                             resultMap.Add(productAreaToInclude.Id, productAreaToInclude);
