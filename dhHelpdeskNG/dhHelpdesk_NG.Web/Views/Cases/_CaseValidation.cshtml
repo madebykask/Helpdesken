@@ -99,7 +99,8 @@
             log_InternalText: "CaseLog_TextInternal",
             CaseRelationType: "CaseRelationType",
             ExtendedInitiatiorGUID: "ExtendedInitiatorGUID",
-            CostCentre: "case__CostCentre"
+            CostCentre: "case__CostCentre",
+            InitiatorCategory: "InitiatorCategory"
         },
 
         caseInitValues: {
@@ -177,6 +178,11 @@
             "case_.CostCentre":{
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CostCentre.ToString(), Model.IsCaseReopened)"); }
             },
+
+            "InitiatorCategory": {
+                required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString(), Model.IsCaseReopened)"); }
+            },
+
             "case_.Place": {
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.Place.ToString(), Model.IsCaseReopened)"); }
             },
@@ -348,7 +354,7 @@
                                 var setting = window.parameters.departmentInvoiceMandatory && window.parameters.showInvoiceTime;
                                 var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
                                     || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
-                                                                                
+
                                 return setting && logPopulated;
                             }
                         }
@@ -360,7 +366,7 @@
                                 var setting = window.parameters.departmentInvoiceMandatory && window.parameters.showInvoiceTime;
                                 var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
                                     || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
-                                                                               
+
                                 return setting && logPopulated;
                             }
                         }
@@ -372,7 +378,7 @@
                                 var setting = window.parameters.departmentInvoiceMandatory && window.parameters.showInvoiceOvertime;
                                 var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
                                     || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
-                                        
+
                                 return setting && logPopulated;
                             }
                         }
@@ -384,13 +390,13 @@
                                 var setting = window.parameters.departmentInvoiceMandatory && window.parameters.showInvoiceOvertime;
                                 var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
                                     || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
-                                                                                
+
                                 return setting && logPopulated;
                             }
                         }
                     }
                 }
-        
+
         return rules;
     }
 
@@ -405,14 +411,13 @@
             if (element.hasClass("time-field")) {
                 $("#timeValidationMessage").html(error);
             } else {
-                if (element.is("select.chosen-single-select")) {                                                            
+                if (element.is("select.chosen-single-select")) {
                     error.insertAfter($("#" + element.attr("id") + "_chosen"));
                     error.css("width","315px");
-                } else {                
+                } else {
                     error.insertAfter(element);
-                }                
-            } 
-            
+                }
+            }
         },
         messages: {
             "case_.ReportedBy": {
@@ -442,8 +447,11 @@
             "case_.CostCentre":{
             required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.CostCentre.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
+            "InitiatorCategory": {
+            required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            },
             "case_.Place": {
-            required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
+            required:"@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
             },
             "case_.UserCode": {
             required: "@Translation.GetForJS(GlobalEnums.TranslationCaseFields.UserCode.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) @Translation.Get("måste anges")"
@@ -569,7 +577,7 @@
         if (value == '2'){
             var finnishDateValue = $("#CaseLog_FinishingDate").val();
             var hasCloseDate = finnishDateValue != undefined && finnishDateValue.length > 0;
-            if (hasCloseDate) 
+            if (hasCloseDate)
                 ret = true;
             else
                 ret = false;
