@@ -24,9 +24,9 @@
         @foreach (var item in Model)
         {
             <tr style="cursor: pointer" onclick="window.location.href = '@BuildEditUrl(item)'">
-                <td>@item.Name @(item.IsEmpty ? string.Format("{0} ({1})", item.Name, Translation.GetCoreTextTranslation("Standard")) : "")</td>
-                <td>@Html.CheckBoxFor(m => item.IsDefaultInitiator, new { @class = "switchcheckbox", @readonly = "readonly" }) </td>
-                <td>@Html.CheckBoxFor(m => item.IsDefaultRegarding, new { @class = "switchcheckbox", @readonly = "readonly" }) </td>
+                <td>@(item.IsEmpty ? string.Format("{0} ({1})", item.Name, Translation.GetCoreTextTranslation("Standard")) : @item.Name)</td>
+                <td>@(item.IsDefaultInitiator ? Translation.GetCoreTextTranslation("Ja") : Translation.GetCoreTextTranslation("Nej")) </td>
+                <td>@(item.IsDefaultRegarding ? Translation.GetCoreTextTranslation("Ja") : Translation.GetCoreTextTranslation("Nej")) </td>
             </tr>
         }
         </tbody>

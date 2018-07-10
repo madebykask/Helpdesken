@@ -341,7 +341,6 @@ namespace DH.Helpdesk.Web.Controllers
             return isDefault;
         }
 
-
         [HttpPost]
         public ActionResult EditUserCategory(ComputerUserCategoryData data, int? activeTab)
         {
@@ -365,9 +364,20 @@ namespace DH.Helpdesk.Web.Controllers
                 return;
 
             var categoryId = category.IsEmpty ? ComputerUserCategory.EmptyCategoryId : category.Id;
-            var newDefaultValue = setDefault ? categoryId.ToString() : null;
+            if (setDefault)
+            {
+                _caseFieldSettingService.SaveFieldSettingsDefaultValue(fs.Id, categoryId.ToString());
+                return;
+            }
 
-            _caseFieldSettingService.SaveFieldSettingsDefaultValue(fs.Id, newDefaultValue);
+            if (!string.IsNullOrEmpty(fs.DefaultValue))
+            {
+                var curValue = -1;
+                if (Int32.TryParse(fs.DefaultValue, out curValue) && categoryId == curValue)
+                {
+                    _caseFieldSettingService.SaveFieldSettingsDefaultValue(fs.Id, categoryId.ToString());
+                }
+            }
         }
 
         [HttpGet]

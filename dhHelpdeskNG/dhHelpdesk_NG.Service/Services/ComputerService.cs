@@ -486,6 +486,7 @@ namespace DH.Helpdesk.Services.Services
                 entity = new ComputerUserCategory
                 {
                     CustomerID = data.CustomerId,
+                    ComputerUsersCategoryGuid = Guid.NewGuid(),
                     IsEmpty = data.IsEmpty
                 };
             }
