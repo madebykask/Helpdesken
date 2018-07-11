@@ -243,7 +243,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     if (!resultMap.ContainsKey(productAreaIdToInclude.Value))
                     {
-                        var productAreaToInclude = this.GetTopMostAreaForChildNew(productAreaIdToInclude.Value, topAreas);
+                        var productAreaToInclude = this.GetTopMostAreaForChildNew(productAreaIdToInclude.Value, allAreas);
                         if (productAreaToInclude != null && !resultMap.ContainsKey(productAreaToInclude.Id))
                         {
                             resultMap.Add(productAreaToInclude.Id, productAreaToInclude);
