@@ -483,16 +483,15 @@ namespace DH.Helpdesk.Services.Services
             }
             else
             {
-                entity = new ComputerUserCategory()
+                entity = new ComputerUserCategory
                 {
                     CustomerID = data.CustomerId,
-                    IsEmpty = data.IsEmpty,
-                    ComputerUsersCategoryGuid = Guid.NewGuid()
+                    ComputerUsersCategoryGuid = Guid.NewGuid(),
+                    IsEmpty = data.IsEmpty
                 };
             }
 
             entity.Name = data.Name;
-            entity.IsReadOnly = data.IsReadOnly;
 
             if (data.Id > 0)
                 _computerUserCategoryRepository.Update(entity);

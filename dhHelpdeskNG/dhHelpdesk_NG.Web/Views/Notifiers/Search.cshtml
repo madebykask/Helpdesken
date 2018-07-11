@@ -59,7 +59,7 @@
             @if (Model.ComputerUserCategories.Show)
             {
                 <tr>
-                    <td>Category <!--TODO translate--></td>
+                    <td>@Translation.GetCoreTextTranslation("Kategori")</td>
                     <td>@Html.DropDown("ComputerUserCategoryDropDown", "ComputerUserCategoryID", true, Model.ComputerUserCategories.Content)</td>
                 </tr>
             }

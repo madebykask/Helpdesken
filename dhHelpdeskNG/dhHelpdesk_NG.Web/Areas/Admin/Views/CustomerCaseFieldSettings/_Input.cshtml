@@ -70,10 +70,10 @@
                         @Translation.GetCoreTextTranslation("Fält")
                     </th>
                     <th class="th3">
-                        @Translation.GetCoreTextTranslation("Aktiva")
+                        @Translation.GetCoreTextTranslation("Aktiva")                        
                     </th>
                     <th class="th4">
-                        @Translation.GetCoreTextTranslation("Visa")
+                        @Translation.GetCoreTextTranslation("Dölj")
                     </th>
                     <th class="th5">
                         @Translation.GetCoreTextTranslation("Visa på självservice")
@@ -119,10 +119,6 @@
                     <td class="tableth2x"><i class="dh-icon-select" rel="tooltip" title="@Translation.GetCoreTextTranslation("Vallista - dropdown")"></i></td>
                     <td class="tableth9x">@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString()])</td>
                     <td class="tableth5x">
-                        <input type="checkbox" name="CaseFieldSettings[73].Active" @(Model.CaseFieldSettings.getActive(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString()) ? "checked=checked" : "") value="true" />
-                        <input type="hidden"   name="CaseFieldSettings[73].Active" value="false" />
-                    </td>
-                    <td class="tableth5x">
                         <input type="checkbox" name="CaseFieldSettings[73].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                         <input type="hidden" name="CaseFieldSettings[73].ShowOnStartPage" value="0" />
                         <input type="hidden" name="CaseFieldSettings[73].Name" value="UserSearchCategory_Id" />
@@ -130,6 +126,10 @@
                         <input type="hidden" name="CaseFieldSettings[73].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString())" />
                         <input type="hidden" name="CaseFieldSettings[73].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString())" />
                         <input type="hidden" name="CaseFieldSettings[73].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString())" />
+                    </td>
+                    <td class="tableth5x">
+                        <input type="checkbox" name="CaseFieldSettings[73].Hide" @(Model.CaseFieldSettings.getHide(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString()) ? "checked=checked" : "") value="true" />
+                        <input type="hidden"   name="CaseFieldSettings[73].Hide" value="false" />
                     </td>
                     <td class="tableth8x">
                         <input type="checkbox" name="CaseFieldSettings[73].ShowExternal" disabled="disabled" />
@@ -161,7 +161,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.ReportedBy.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[0].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[0].ShowOnStartPage" value="0" />
@@ -171,6 +170,7 @@
                     <input type="hidden" name="CaseFieldSettings[0].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[0].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.ReportedBy.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[0].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.ReportedBy.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[0].ShowExternal" value="0" />
@@ -200,7 +200,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Persons_Name.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[1].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[1].ShowOnStartPage" value="0" />
@@ -210,6 +209,7 @@
                     <input type="hidden" name="CaseFieldSettings[1].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[1].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[1].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[1].ShowExternal" value="@Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Persons_Name.ToString())" />
@@ -242,7 +242,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[2].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[2].ShowOnStartPage" value="0" />
@@ -252,6 +251,7 @@
                     <input type="hidden" name="CaseFieldSettings[2].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[2].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[2].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[2].ShowExternal" value="0" />
@@ -284,7 +284,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[3].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[3].ShowOnStartPage" value="0" />
@@ -294,6 +293,7 @@
                     <input type="hidden" name="CaseFieldSettings[3].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[3].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[3].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[3].ShowExternal" value="0" />
@@ -326,7 +326,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[4].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[4].ShowOnStartPage" value="0" />
@@ -336,6 +335,7 @@
                     <input type="hidden" name="CaseFieldSettings[4].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[4].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[4].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[4].ShowExternal" value="0" />
@@ -362,13 +362,12 @@
                 <td>@RenderLockedFieldOption("CaseFieldSettings[4].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()))</td>
             </tr>
             @*HD case : #55175 This field used in HD 4 but no usage in HD 5.*@
-                            @*<tr>
+                                    @*<tr>
             <td><i class="dh-icon-select" rel="tooltip" title="@Translation.Get("Vallista - dropdown", Enums.TranslationSource.TextTranslation)"></i>
             </td>
             <td>
                 @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
             </td>
-            <td></td>
             <td>
                 <input type="checkbox" name="CaseFieldSettings[5].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Customer_Id.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="CaseFieldSettings[5].ShowOnStartPage" value="0" />
@@ -377,6 +376,7 @@
                 <input type="hidden" name="CaseFieldSettings[5].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())" />
                 <input type="hidden" name="CaseFieldSettings[5].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Customer_Id.ToString())" />
             </td>
+            <td></td>
             <td>
                 <input type="checkbox" name="CaseFieldSettings[5].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Customer_Id.ToString()) == 1 ? "checked=checked" : "") value="1"/>
                 <input type="hidden" name="CaseFieldSettings[5].ShowExternal" value="0" />
@@ -401,7 +401,6 @@
             <tr>
                 <td><i class="dh-icon-select" rel="tooltip" title="@Translation.GetCoreTextTranslation("Vallista - dropdown")"></i></td>
                 <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Region_Id.ToString()])</td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[6].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Region_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[6].ShowOnStartPage" value="0" />
@@ -411,6 +410,7 @@
                     <input type="hidden" name="CaseFieldSettings[6].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Region_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[6].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Region_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[6].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Region_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[6].ShowExternal" value="0" />
@@ -439,7 +439,6 @@
             <tr>
                 <td><i class="dh-icon-select" rel="tooltip" title="@Translation.GetCoreTextTranslation("Vallista - dropdown")"></i></td>
                 <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Department_Id.ToString()])</td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[7].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Department_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[7].ShowOnStartPage" value="0" />
@@ -449,6 +448,7 @@
                     <input type="hidden" name="CaseFieldSettings[7].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Department_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[7].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Department_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[7].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Department_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[7].ShowExternal" value="0" />
@@ -478,10 +478,7 @@
                 <td>
                     <i class="dh-icon-select" rel="tooltip" title="@Translation.GetCoreTextTranslation("Vallista - dropdown")"></i>
                 </td>
-                <td>
-                    @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.OU_Id.ToString()])
-                </td>
-                <td></td>
+                <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.OU_Id.ToString()])</td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[8].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.OU_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[8].ShowOnStartPage" value="0" />
@@ -491,6 +488,7 @@
                     <input type="hidden" name="CaseFieldSettings[8].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.OU_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[8].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.OU_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[8].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.OU_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[8].ShowExternal" value="0" />
@@ -517,13 +515,8 @@
                 <td>@RenderLockedFieldOption("CaseFieldSettings[8].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.OU_Id.ToString()))</td>
             </tr>
             <tr>
-                <td>
-                    <i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i>
-                </td>
-                <td>
-                    @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.CostCentre.ToString()])
-                </td>
-                <td></td>
+                <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i></td>
+                <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.CostCentre.ToString()])</td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[56].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CostCentre.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[56].ShowOnStartPage" value="0" />
@@ -533,6 +526,7 @@
                     <input type="hidden" name="CaseFieldSettings[56].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.CostCentre.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[56].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.CostCentre.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[56].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.CostCentre.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[56].ShowExternal" value="0" />
@@ -561,7 +555,6 @@
             <tr>
                 <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i></td>
                 <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Place.ToString()])</td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[9].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Place.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[9].ShowOnStartPage" value="0" />
@@ -571,6 +564,7 @@
                     <input type="hidden" name="CaseFieldSettings[9].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Place.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[9].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Place.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[9].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Place.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[9].ShowExternal" value="0" />
@@ -599,7 +593,6 @@
             <tr>
                 <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i></td>
                 <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.UserCode.ToString()])</td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[10].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.UserCode.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[10].ShowOnStartPage" value="0" />
@@ -609,6 +602,7 @@
                     <input type="hidden" name="CaseFieldSettings[10].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.UserCode.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[10].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.UserCode.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[10].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.UserCode.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[10].ShowExternal" value="0" />
@@ -641,7 +635,6 @@
             <tr>
                 <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Knappen")"></i></td>
                 <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.AddUserBtn.ToString()])</td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[57].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.AddUserBtn.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[57].ShowOnStartPage" value="0" />
@@ -654,17 +647,13 @@
                     <input type="hidden" name="CaseFieldSettingWithLangauges[57].FieldHelp" value="0" />
                     <input type="hidden" name="CaseFieldSettings[57].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.AddUserBtn.ToString())" />
                 </td>
+                <td></td>
                 <td colspan="7"></td>
             </tr>
             @*"Save user info" checkbox *@
             <tr>
-                <td>
-                    <i class="dh-icon-checkbox" rel="tooltip" title="@Translation.GetCoreTextTranslation("Checkbox")"></i>
-                </td>
-                <td>
-                    @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString()])
-                </td>
-                <td></td>
+                <td><i class="dh-icon-checkbox" rel="tooltip" title="@Translation.GetCoreTextTranslation("Checkbox")"></i></td>
+                <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString()])</td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[58].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[58].ShowOnStartPage" value="0" />
@@ -678,18 +667,14 @@
                     <input type="hidden" name="CaseFieldSettings[58].RequiredIfReopened" value="0" />                                
                     <input type="hidden" name="CaseFieldSettings[58].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString())" />
                 </td>
+                <td></td>
                 <td colspan="7"></td>
             </tr>
 
             @*"Add followers" checkbox *@
             <tr>
-                <td>
-                    <i class="dh-icon-checkbox" rel="tooltip" title="@Translation.GetCoreTextTranslation("Checkbox")"></i>
-                </td>
-                <td>
-                    @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()])
-                </td>
-                <td></td>
+                <td><i class="dh-icon-checkbox" rel="tooltip" title="@Translation.GetCoreTextTranslation("Checkbox")"></i></td>
+                <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()])</td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[70].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[70].ShowOnStartPage" value="0" />
@@ -702,6 +687,7 @@
                     <input type="hidden" name="CaseFieldSettings[70].RequiredIfReopened" value="0" />                                
                     <input type="hidden" name="CaseFieldSettings[70].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[70].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[70].ShowExternal" value="0" />
@@ -726,10 +712,6 @@
             <tr class="hasActive">
                 <td><i class="dh-icon-select" rel="tooltip" title="@Translation.GetCoreTextTranslation("Vallista - dropdown")"></i></td>
                 <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()])</td>
-                <td class="tableth5x">
-                    <input type="checkbox" name="CaseFieldSettings[74].Active" @(Model.CaseFieldSettings.getActive(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()) ? "checked=checked" : "") value="true" />
-                    <input type="hidden"   name="CaseFieldSettings[74].Active" value="false" />
-                </td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[74].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[74].ShowOnStartPage" value="0" />
@@ -738,6 +720,10 @@
                     <input type="hidden" name="CaseFieldSettings[74].Id" value="@Model.CaseFieldSettings.getCaseFieldSettingId(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[74].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[74].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString())" />
+                </td>
+                <td class="tableth5x">
+                    <input type="checkbox" name="CaseFieldSettings[74].Hide" @(Model.CaseFieldSettings.getHide(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()) ? "checked=checked" : "") value="true" />
+                    <input type="hidden" name="CaseFieldSettings[74].Hide" value="false" />
                 </td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[74].ShowExternal"  disabled="disabled"  />
@@ -768,13 +754,9 @@
             </tr>
 
             <tr>
-                <td>
-                    <i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i>
+                <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i>
                 </td>
-                <td>
-                    @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()])
-                </td>
-                <td></td>
+                <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()])</td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[59].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[59].ShowOnStartPage" value="0" />
@@ -784,6 +766,7 @@
                     <input type="hidden" name="CaseFieldSettings[59].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[59].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[59].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[59].ShowExternal" value="0" />
@@ -810,13 +793,9 @@
                 <td>@RenderLockedFieldOption("CaseFieldSettings[59].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString()))</td>
             </tr>
             <tr>
-                <td>
-                    <i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i>
+                <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i>
                 </td>
-                <td>
-                    @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()])
-                </td>
-                <td></td>
+                <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()])</td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[60].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[60].ShowOnStartPage" value="0" />
@@ -826,6 +805,7 @@
                     <input type="hidden" name="CaseFieldSettings[60].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[60].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[60].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[60].ShowExternal" value="@Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString())" />
@@ -854,13 +834,8 @@
                 <td>@RenderLockedFieldOption("CaseFieldSettings[60].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString()))</td>
             </tr>
             <tr>
-                <td>
-                    <i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i>
-                </td>
-                <td>
-                    @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()])
-                </td>
-                <td></td>
+                <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i></td>
+                <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()])</td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[61].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[61].ShowOnStartPage" value="0" />
@@ -870,6 +845,7 @@
                     <input type="hidden" name="CaseFieldSettings[61].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[61].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[61].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[61].ShowExternal" value="0" />
@@ -898,13 +874,9 @@
                 <td>@RenderLockedFieldOption("CaseFieldSettings[61].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()))</td>
             </tr>
             <tr>
-                <td>
-                    <i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i>
+                <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i>
                 </td>
-                <td>
-                    @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()])
-                </td>
-                <td></td>
+                <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()])</td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[62].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[62].ShowOnStartPage" value="0" />
@@ -914,6 +886,7 @@
                     <input type="hidden" name="CaseFieldSettings[62].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[62].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[62].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[62].ShowExternal" value="0" />
@@ -942,13 +915,9 @@
                 <td>@RenderLockedFieldOption("CaseFieldSettings[62].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString()))</td>
             </tr>
             <tr>
-                <td>
-                    <i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i>
+                <td><i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i>
                 </td>
-                <td>
-                    @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()])
-                </td>
-                <td></td>
+                <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()])</td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[63].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[63].ShowOnStartPage" value="0" />
@@ -958,6 +927,7 @@
                     <input type="hidden" name="CaseFieldSettings[63].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[63].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[63].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[63].ShowExternal" value="0" />
@@ -986,13 +956,8 @@
                 <td>@RenderLockedFieldOption("CaseFieldSettings[63].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString()))</td>
             </tr>
             <tr>
-                <td>
-                    <i class="dh-icon-select" rel="tooltip" title="@Translation.GetCoreTextTranslation("Vallista - dropdown")"></i>
-                </td>
-                <td>
-                    @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString()])
-                </td>
-                <td></td>
+                <td><i class="dh-icon-select" rel="tooltip" title="@Translation.GetCoreTextTranslation("Vallista - dropdown")"></i></td>
+                <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString()])</td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[64].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[64].ShowOnStartPage" value="0" />
@@ -1002,6 +967,7 @@
                     <input type="hidden" name="CaseFieldSettings[64].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[64].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[64].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[64].ShowExternal" value="0" />
@@ -1030,13 +996,8 @@
                 <td>@RenderLockedFieldOption("CaseFieldSettings[64].Locked", Model.CaseFieldSettings.getLocked(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString()))</td>
             </tr>
             <tr>
-                <td>
-                    <i class="dh-icon-select" rel="tooltip" title="@Translation.GetCoreTextTranslation("Vallista - dropdown")"></i>
-                </td>
-                <td>
-                    @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()])
-                </td>
-                <td></td>
+                <td><i class="dh-icon-select" rel="tooltip" title="@Translation.GetCoreTextTranslation("Vallista - dropdown")"></i></td>
+                <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()])</td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[65].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[65].ShowOnStartPage" value="0" />
@@ -1046,6 +1007,7 @@
                     <input type="hidden" name="CaseFieldSettings[65].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[65].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[65].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[65].ShowExternal" value="0" />
@@ -1078,7 +1040,6 @@
                     <i class="dh-icon-select" rel="tooltip" title="@Translation.GetCoreTextTranslation("Vallista - dropdown")"></i>
                 </td>
                 <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString()])</td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[66].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[66].ShowOnStartPage" value="0" />
@@ -1088,6 +1049,7 @@
                     <input type="hidden" name="CaseFieldSettings[66].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[66].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[66].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[66].ShowExternal" value="0" />
@@ -1120,7 +1082,6 @@
                     <i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i>
                 </td>
                 <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString()])</td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[67].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[67].ShowOnStartPage" value="0" />
@@ -1130,6 +1091,7 @@
                     <input type="hidden" name="CaseFieldSettings[67].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[67].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[67].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[67].ShowExternal" value="0" />
@@ -1162,7 +1124,6 @@
                     <i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i>
                 </td>
                 <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString()])</td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[68].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[68].ShowOnStartPage" value="0" />
@@ -1172,6 +1133,7 @@
                     <input type="hidden" name="CaseFieldSettings[68].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[68].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[68].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[68].ShowExternal" value="0" />
@@ -1204,7 +1166,6 @@
                     <i class="dh-icon-textfield" rel="tooltip" title="@Translation.GetCoreTextTranslation("Textfält")"></i>
                 </td>
                 <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString()])</td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[69].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[69].ShowOnStartPage" value="0" />
@@ -1214,6 +1175,7 @@
                     <input type="hidden" name="CaseFieldSettings[69].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[69].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[69].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[69].ShowExternal" value="0" />
@@ -1261,7 +1223,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[11].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[11].ShowOnStartPage" value="0" />
@@ -1271,6 +1232,7 @@
                     <input type="hidden" name="CaseFieldSettings[11].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[11].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[11].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[11].ShowExternal" value="0" />
@@ -1304,7 +1266,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[12].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[12].ShowOnStartPage" value="0" />
@@ -1314,6 +1275,7 @@
                     <input type="hidden" name="CaseFieldSettings[12].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[12].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[12].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[12].ShowExternal" value="0" />
@@ -1346,7 +1308,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[13].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[13].ShowOnStartPage" value="0" />
@@ -1356,6 +1317,7 @@
                     <input type="hidden" name="CaseFieldSettings[13].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[13].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[13].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[13].ShowExternal" value="0" />
@@ -1401,7 +1363,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.CaseNumber.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[14].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CaseNumber.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[14].ShowOnStartPage" value="0" />
@@ -1411,6 +1372,7 @@
                     <input type="hidden" name="CaseFieldSettings[14].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.CaseNumber.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[14].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.CaseNumber.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[14].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[14].ShowExternal" value="0" />
@@ -1444,7 +1406,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[55].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[55].ShowOnStartPage" value="0" />
@@ -1454,6 +1415,7 @@
                     <input type="hidden" name="CaseFieldSettings[55].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[55].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[55].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[55].ShowExternal" value="0" />
@@ -1486,7 +1448,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.RegTime.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[15].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.RegTime.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[15].ShowOnStartPage" value="0" />
@@ -1496,6 +1457,7 @@
                     <input type="hidden" name="CaseFieldSettings[15].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.RegTime.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[15].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.RegTime.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[15].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[15].ShowExternal" value="0" />
@@ -1528,7 +1490,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.ChangeTime.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[16].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ChangeTime.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[16].ShowOnStartPage" value="0" />
@@ -1538,6 +1499,7 @@
                     <input type="hidden" name="CaseFieldSettings[16].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.ChangeTime.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[16].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.ChangeTime.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[16].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[16].ShowExternal" value="0" />
@@ -1570,7 +1532,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.User_Id.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[17].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.User_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[17].ShowOnStartPage" value="0" />
@@ -1580,6 +1541,7 @@
                     <input type="hidden" name="CaseFieldSettings[17].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.User_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[17].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.User_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[17].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[17].ShowExternal" value="0" />
@@ -1612,7 +1574,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[18].ShowOnStartPage" checked="checked" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[18].ShowOnStartPage" value="1" />
@@ -1622,6 +1583,7 @@
                     <input type="hidden" name="CaseFieldSettings[18].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[18].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[18].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[18].ShowExternal" value="0" />
@@ -1654,7 +1616,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[19].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[19].ShowOnStartPage" value="0" />
@@ -1664,6 +1625,7 @@
                     <input type="hidden" name="CaseFieldSettings[19].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[19].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[19].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[19].ShowExternal" value="0" />
@@ -1696,7 +1658,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.System_Id.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[20].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.System_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[20].ShowOnStartPage" value="0" />
@@ -1706,6 +1667,7 @@
                     <input type="hidden" name="CaseFieldSettings[20].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.System_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[20].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.System_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[20].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.System_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[20].ShowExternal" value="0" />
@@ -1738,7 +1700,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[21].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[21].ShowOnStartPage" value="0" />
@@ -1748,6 +1709,7 @@
                     <input type="hidden" name="CaseFieldSettings[21].EailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[21].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[21].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Urgency_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[21].ShowExternal" value="0" />
@@ -1780,7 +1742,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Impact_Id.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[22].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[22].ShowOnStartPage" value="0" />
@@ -1790,6 +1751,7 @@
                     <input type="hidden" name="CaseFieldSettings[22].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[22].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Impact_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[22].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Impact_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[22].ShowExternal" value="0" />
@@ -1822,7 +1784,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Category_Id.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[23].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Category_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[23].ShowOnStartPage" value="0" />
@@ -1832,6 +1793,7 @@
                     <input type="hidden" name="CaseFieldSettings[23].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Category_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[23].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Category_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[23].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Category_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[23].ShowExternal" value="0" />
@@ -1862,7 +1824,6 @@
                     <i class="dh-icon-select" rel="tooltip" title="@Translation.GetCoreTextTranslation("Vallista - dropdown")"></i>
                 </td>
                 <td>@Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()])</td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[24].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[24].ShowOnStartPage" value="0" />
@@ -1872,6 +1833,7 @@
                     <input type="hidden" name="CaseFieldSettings[24].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[24].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[24].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Supplier_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[24].ShowExternal" value="0" />
@@ -1904,7 +1866,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[25].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[25].ShowOnStartPage" value="0" />
@@ -1914,6 +1875,7 @@
                     <input type="hidden" name="CaseFieldSettings[25].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[25].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[25].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[25].ShowExternal" value="0" />
@@ -1946,7 +1908,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[26].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[26].ShowOnStartPage" value="0" />
@@ -1956,6 +1917,7 @@
                     <input type="hidden" name="CaseFieldSettings[26].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[26].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[26].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[26].ShowExternal" value="0" />
@@ -1988,7 +1950,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Caption.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[27].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Caption.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[27].ShowOnStartPage" value="0" />
@@ -1998,6 +1959,7 @@
                     <input type="hidden" name="CaseFieldSettings[27].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Caption.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[27].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Caption.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[27].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Caption.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[27].ShowExternal" value="0" />
@@ -2030,7 +1992,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Description.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[28].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Description.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[28].ShowOnStartPage" value="0" />
@@ -2040,6 +2001,7 @@
                     <input type="hidden" name="CaseFieldSettings[28].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Description.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[28].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Description.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[28].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Description.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[28].ShowExternal" value="0" />
@@ -2072,7 +2034,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[29].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[29].ShowOnStartPage" value="0" />
@@ -2082,6 +2043,7 @@
                     <input type="hidden" name="CaseFieldSettings[29].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[29].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[29].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Miscellaneous.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[29].ShowExternal" value="0" />
@@ -2114,7 +2076,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[30].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[30].ShowOnStartPage" value="0" />
@@ -2124,6 +2085,7 @@
                     <input type="hidden" name="CaseFieldSettings[30].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[30].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[30].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[30].ShowExternal" value="0" />
@@ -2156,7 +2118,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.SMS.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[31].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.SMS.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[31].ShowOnStartPage" value="0" />
@@ -2166,6 +2127,7 @@
                     <input type="hidden" name="CaseFieldSettings[31].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.SMS.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[31].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.SMS.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[31].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.SMS.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[31].ShowExternal" value="0" />
@@ -2198,7 +2160,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.AgreedDate.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[32].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[32].ShowOnStartPage" value="0" />
@@ -2208,6 +2169,7 @@
                     <input type="hidden" name="CaseFieldSettings[32].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[32].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.AgreedDate.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[32].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.AgreedDate.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[32].ShowExternal" value="0" />
@@ -2240,7 +2202,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Available.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[33].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Available.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[33].ShowOnStartPage" value="0" />
@@ -2250,6 +2211,7 @@
                     <input type="hidden" name="CaseFieldSettings[33].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Available.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[33].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Available.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[33].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Available.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[33].ShowExternal" value="0" />
@@ -2282,7 +2244,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Cost.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[34].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Cost.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[34].ShowOnStartPage" value="0" />
@@ -2292,6 +2253,7 @@
                     <input type="hidden" name="CaseFieldSettings[34].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Cost.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[34].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Cost.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[34].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Cost.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[34].ShowExternal" value="0" />
@@ -2324,7 +2286,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Filename.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[35].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Filename.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[35].ShowOnStartPage" value="0" />
@@ -2334,6 +2295,7 @@
                     <input type="hidden" name="CaseFieldSettings[35].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Filename.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[35].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Filename.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[35].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Filename.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[35].ShowExternal" value="0" />
@@ -2379,7 +2341,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[36].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[36].ShowOnStartPage" value="0" />
@@ -2389,6 +2350,7 @@
                     <input type="hidden" name="CaseFieldSettings[36].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[36].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[36].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[36].ShowExternal" value="0" />
@@ -2421,7 +2383,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[37].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[37].ShowOnStartPage" value="0" />
@@ -2431,6 +2392,7 @@
                     <input type="hidden" name="CaseFieldSettings[37].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[37].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[37].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[37].ShowExternal" value="0" />
@@ -2463,7 +2425,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[38].ShowOnStartPage" checked="checked" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[38].ShowOnStartPage" value="1" />
@@ -2473,6 +2434,7 @@
                     <input type="hidden" name="CaseFieldSettings[38].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[38].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[38].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[38].ShowExternal" value="0" />
@@ -2505,7 +2467,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Priority_Id.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[39].ShowOnStartPage" checked="checked" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[39].ShowOnStartPage" value="1" />
@@ -2515,6 +2476,7 @@
                     <input type="hidden" name="CaseFieldSettings[39].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[39].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Priority_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[39].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[39].ShowExternal" value="0" />
@@ -2547,7 +2509,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Status_Id.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[40].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Status_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[40].ShowOnStartPage" value="0" />
@@ -2557,6 +2518,7 @@
                     <input type="hidden" name="CaseFieldSettings[40].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Status_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[40].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Status_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[40].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[40].ShowExternal" value="0" />
@@ -2589,7 +2551,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[41].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[41].ShowOnStartPage" value="0" />
@@ -2599,6 +2560,7 @@
                     <input type="hidden" name="CaseFieldSettings[41].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[41].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[41].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[41].ShowExternal" value="0" />
@@ -2631,7 +2593,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Project.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[71].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Project.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[71].ShowOnStartPage" value="0" />
@@ -2641,6 +2602,7 @@
                     <input type="hidden" name="CaseFieldSettings[71].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Project.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[71].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Project.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[71].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[71].ShowExternal" value="0" />
@@ -2673,7 +2635,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Problem.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[72].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Problem.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[72].ShowOnStartPage" value="0" />
@@ -2683,6 +2644,7 @@
                     <input type="hidden" name="CaseFieldSettings[72].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Problem.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[72].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Problem.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[72].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[72].ShowExternal" value="0" />
@@ -2715,7 +2677,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.PlanDate.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[42].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.PlanDate.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[42].ShowOnStartPage" value="0" />
@@ -2725,6 +2686,7 @@
                     <input type="hidden" name="CaseFieldSettings[42].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.PlanDate.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[42].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.PlanDate.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[42].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.PlanDate.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[42].ShowExternal" value="0" />
@@ -2757,7 +2719,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.WatchDate.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[43].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.WatchDate.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[43].ShowOnStartPage" value="0" />
@@ -2767,6 +2728,7 @@
                     <input type="hidden" name="CaseFieldSettings[43].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.WatchDate.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[43].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.WatchDate.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[43].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.WatchDate.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[43].ShowExternal" value="0" />
@@ -2799,7 +2761,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.Verified.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[44].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.Verified.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[44].ShowOnStartPage" value="0" />
@@ -2809,6 +2770,7 @@
                     <input type="hidden" name="CaseFieldSettings[44].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.Verified.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[44].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.Verified.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[44].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.Verified.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[44].ShowExternal" value="0" />
@@ -2841,7 +2803,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[45].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[45].ShowOnStartPage" value="0" />
@@ -2851,6 +2812,7 @@
                     <input type="hidden" name="CaseFieldSettings[45].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[45].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[45].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[45].ShowExternal" value="0" />
@@ -2883,7 +2845,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.SolutionRate.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[46].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.SolutionRate.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[46].ShowOnStartPage" value="0" />
@@ -2893,6 +2854,7 @@
                     <input type="hidden" name="CaseFieldSettings[46].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.SolutionRate.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[46].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.SolutionRate.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[46].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.SolutionRate.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[46].ShowExternal" value="0" />
@@ -2925,7 +2887,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.CausingPart.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[53].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.CausingPart.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[53].ShowOnStartPage" value="0" />
@@ -2935,6 +2896,7 @@
                     <input type="hidden" name="CaseFieldSettings[53].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.CausingPart.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[53].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.CausingPart.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[53].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.CausingPart.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[53].ShowExternal" value="0" />
@@ -2981,7 +2943,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[47].ShowOnStartPage" disabled="disabled" checked="checked" />
                     <input type="hidden" name="CaseFieldSettings[47].ShowOnStartPage" value="1" />
@@ -2991,6 +2952,7 @@
                     <input type="hidden" name="CaseFieldSettings[47].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[47].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[47].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[47].ShowExternal" value="0" />
@@ -3023,7 +2985,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[48].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[48].ShowOnStartPage" value="0" />
@@ -3033,6 +2994,7 @@
                     <input type="hidden" name="CaseFieldSettings[48].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[48].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[48].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[48].ShowExternal" value="0" />
@@ -3065,7 +3027,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.tblLog_Charge.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[49].ShowOnStartPage" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[49].ShowOnStartPage" value="0" />
@@ -3075,6 +3036,7 @@
                     <input type="hidden" name="CaseFieldSettings[49].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.tblLog_Charge.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[49].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.tblLog_Charge.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[49].ShowExternal" disabled="disabled" />
                     <input type="hidden" name="CaseFieldSettings[49].ShowExternal" value="0" />
@@ -3107,7 +3069,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[50].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[50].ShowOnStartPage" value="0" />
@@ -3117,6 +3078,7 @@
                     <input type="hidden" name="CaseFieldSettings[50].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[50].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[50].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[50].ShowExternal" value="0" />
@@ -3149,7 +3111,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[51].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[51].ShowOnStartPage" value="0" />
@@ -3159,6 +3120,7 @@
                     <input type="hidden" name="CaseFieldSettings[51].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[51].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[51].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.FinishingDescription.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[51].ShowExternal" value="0" />
@@ -3191,7 +3153,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.FinishingDate.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[52].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[52].ShowOnStartPage" value="0" />
@@ -3201,6 +3162,7 @@
                     <input type="hidden" name="CaseFieldSettings[52].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.FinishingDate.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[52].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.FinishingDate.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[52].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[52].ShowExternal" value="0" />
@@ -3233,7 +3195,6 @@
                 <td>
                     @Translation.GetCoreTextTranslation(FieldSettingsUiNames.Names[GlobalEnums.TranslationCaseFields.ClosingReason.ToString()])
                 </td>
-                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[54].ShowOnStartPage" @(Model.CaseFieldSettings.getShowOnStartPage(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[54].ShowOnStartPage" value="0" />
@@ -3243,6 +3204,7 @@
                     <input type="hidden" name="CaseFieldSettings[54].EMailIdentifier" value="@Model.CaseFieldSettings.getEMailIdentifier(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())" />
                     <input type="hidden" name="CaseFieldSettings[54].CaseFieldSettingsGUID" value="@Model.CaseFieldSettings.getCaseFieldSettingsGUID(GlobalEnums.TranslationCaseFields.ClosingReason.ToString())" />
                 </td>
+                <td></td>
                 <td>
                     <input type="checkbox" name="CaseFieldSettings[54].ShowExternal" @(Model.CaseFieldSettings.getShowExternal(GlobalEnums.TranslationCaseFields.ClosingReason.ToString()) == 1 ? "checked=checked" : "") value="1" />
                     <input type="hidden" name="CaseFieldSettings[54].ShowExternal" value="0" />

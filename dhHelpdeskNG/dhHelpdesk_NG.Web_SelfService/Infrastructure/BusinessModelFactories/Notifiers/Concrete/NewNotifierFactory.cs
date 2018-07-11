@@ -39,7 +39,8 @@
                 BooleanFieldModel.GetValueOrDefault(model.Ordered),
                 model.IsActive,
                 createdDateAndTime,
-                model.LanguageId);
+                model.LanguageId,
+                model.CategoryId);
         }
     }
 }

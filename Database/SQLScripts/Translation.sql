@@ -7310,6 +7310,20 @@ If not exists (select * from tblTextTranslation where text_id = 1994 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1994, 2, 'Search category')
 GO
 
+If not exists (select * from tbltext where id = 1995)
+	insert into tbltext (id, TextString) VALUES (1995, 'Dölj')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1995 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1995, 2, 'Hide')
+GO
+
+If not exists (select * from tbltext where id = 1996)
+	insert into tbltext (id, TextString) VALUES (1996, 'Anmälarkategori')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1996 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1996, 2, 'Initiator Category')
+GO
+
 -- *** Run this last when put translation script above this line *** --
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 

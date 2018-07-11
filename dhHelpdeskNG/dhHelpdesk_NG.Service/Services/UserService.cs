@@ -85,6 +85,7 @@ namespace DH.Helpdesk.Services.Services
 
         bool UserHasActiveCase(int customerId, int userId, List<int> workingGroups);
 
+        User GetUserForCopy(int id);
         CustomerUserInfo GetUserInfo(int id);
         User GetUser(int id); //not perf effecient - user info method
         string GetUserTimeZoneId(int userId);
@@ -502,6 +503,11 @@ namespace DH.Helpdesk.Services.Services
         public User GetUser(int id)
         {
             return this._userRepository.GetById(id);
+        }
+
+        public User GetUserForCopy(int id)
+        {
+            return this._userRepository.GetUserForCopy(id);
         }
 
         public string GetUserTimeZoneId(int userId)

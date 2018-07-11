@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.Domain.Computers;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
@@ -133,13 +134,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 Value = o.Id.ToString(),
                 Selected = selectedCategoryId.HasValue && o.Id == selectedCategoryId.Value
             }).ToList();
-
-            var selectEmpty = !computerCategoriesSelectList.Any(x => x.Selected);
+            
             computerCategoriesSelectList.Insert(0, new SelectListItem()
             {
-                Text = Translation.GetCoreTextTranslation(emptyCategoryName ?? "Employee"),
-                Value = "",
-                Selected = selectEmpty
+                Text = Translation.GetCoreTextTranslation(emptyCategoryName ?? ComputerUserCategory.EmptyCategoryDefaultName),
+                Value = ComputerUserCategory.EmptyCategoryId.ToString(),
+                Selected = selectedCategoryId == ComputerUserCategory.EmptyCategoryId //used for empty category
             });
 
             return computerCategoriesSelectList.ToList();

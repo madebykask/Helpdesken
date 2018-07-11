@@ -5,7 +5,10 @@ using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.ComputerUsers;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Domain.Computers;
+using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -77,7 +80,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICustomerService customerService;
 
         private readonly IComputerService computerService;
-        private ICaseFieldSettingService _caseFieldSettingService;
+        private readonly ICaseFieldSettingService _caseFieldSettingService;
+        private readonly ICaseSectionService _caseSectionService;
 
         #endregion
 
@@ -107,9 +111,11 @@ namespace DH.Helpdesk.Web.Controllers
             IOrganizationService organizationService,
             ICustomerService customerService,
             IComputerService computerService,
-            ICaseFieldSettingService caseFieldSettingService)
+            ICaseFieldSettingService caseFieldSettingService,
+            ICaseSectionService caseSectionService)
             : base(masterDataService)
         {
+            _caseSectionService = caseSectionService;
             _caseFieldSettingService = caseFieldSettingService;
             this.departmentRepository = departmentRepository;
             this.divisionRepository = divisionRepository;
@@ -199,28 +205,42 @@ namespace DH.Helpdesk.Web.Controllers
         public PartialViewResult UserCategories()
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+
             var categories = this.computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId, true);
 
             var emptyCategory = categories.FirstOrDefault(x => x.IsEmpty);
+            
             if (emptyCategory == null)
             {
                 emptyCategory = new ComputerUserCategoryOverview()
                 {
-                    Name = "Employee", //todo: const, add translation?
+                    Id = ComputerUserCategory.EmptyCategoryId,
+                    Name = ComputerUserCategory.EmptyCategoryDefaultName,
                     IsEmpty =  true
                 };
             }
 
-            var model = new List<ComputerUserCategoryOverview>
-            {
-                emptyCategory
-            };
+            var list = new List<ComputerUserCategoryOverview>(categories.Where(x => !x.IsEmpty));
+            list.Insert(0, emptyCategory);
 
-            model.AddRange(categories.Where(x => !x.IsEmpty));
+            var customerFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(currentCustomerId);
+            var initiatorCaseFieldSettings = customerFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString());
+            var regardingCaseFieldSettings = customerFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString());
+
+            InitSectionHeaders(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
+
+            var model = list.Select(x => new ComputerUserCategoryListItem()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                IsEmpty = x.IsEmpty,
+                IsDefaultInitiator = IsGetDefaultCategory(x.Id, x.IsEmpty, initiatorCaseFieldSettings),
+                IsDefaultRegarding = IsGetDefaultCategory(x.Id, x.IsEmpty, regardingCaseFieldSettings)
+            }).ToList();
 
             return PartialView(model);
         }
-
+        
         [HttpGet]
         public ViewResult NewCategory()
         {
@@ -238,11 +258,13 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var emptyCategory = new ComputerUserCategoryData()
             {
-                Name = "Employee",
+                Id = ComputerUserCategory.EmptyCategoryId,
+                Name = Translation.GetCoreTextTranslation(ComputerUserCategory.EmptyCategoryDefaultName),
                 IsEmpty = true,
                 CustomerId = SessionFacade.CurrentCustomer.Id,
             };
 
+            InitSectionHeaders(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
             return View("EditUserCategory", emptyCategory);
         }
 
@@ -253,7 +275,16 @@ namespace DH.Helpdesk.Web.Controllers
             if (data == null)
                 return HttpNotFound($"Category (Id={id}) was not found");
 
+            InitSectionHeaders(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
             return View(data);
+        }
+
+        private void InitSectionHeaders(int customerId, int languageId)
+        {
+            var initiatorSection = _caseSectionService.GetCaseSectionByType((int)CaseSectionType.Initiator, customerId, languageId);
+            var regardingSection = _caseSectionService.GetCaseSectionByType((int)CaseSectionType.Regarding, customerId, languageId);
+            ViewBag.InitiatorSectionHeader = initiatorSection.SectionHeader ?? Translation.GetCoreTextTranslation(CaseSections.InitiatorHeader);
+            ViewBag.RegardingSectionHeader = regardingSection.SectionHeader ?? Translation.GetCoreTextTranslation(CaseSections.RegardingHeader);
         }
 
         private ComputerUserCategoryData GetComputerUserCategoryData(int categoryId, int customerId)
@@ -264,11 +295,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             var customerFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
 
-            var isDefaultInitiator = 
-                CheckIfDefaultCategory(categoryId, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, customerFieldSettings);
+            var isDefaultInitiator =
+                CheckIfDefaultCategory(category, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, customerFieldSettings);
 
             var isDefaultRegarding =
-                CheckIfDefaultCategory(categoryId, GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, customerFieldSettings);
+                CheckIfDefaultCategory(category, GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, customerFieldSettings);
             
             var data = new ComputerUserCategoryData()
             {
@@ -284,60 +315,68 @@ namespace DH.Helpdesk.Web.Controllers
             return data;
         }
 
-        private bool CheckIfDefaultCategory(int categoryId, GlobalEnums.TranslationCaseFields caseField, IList<CaseFieldSetting> customerFieldSettings)
+        private bool CheckIfDefaultCategory(ComputerUserCategory category, GlobalEnums.TranslationCaseFields caseField, IList<CaseFieldSetting> customerFieldSettings)
         {
-            var defaultValue = 0;
             var isDefault = false;
 
             var caseFieldSetting = customerFieldSettings.getCaseSettingsValue(caseField.ToString());
+            if (caseFieldSetting != null)
+            {
+                isDefault = IsGetDefaultCategory(category.ID, category.IsEmpty, caseFieldSetting);
+            }
 
+            return isDefault;
+        }
+
+        private bool IsGetDefaultCategory(int categoryId, bool isEmpty, CaseFieldSetting caseFieldSetting)
+        {
+            var defaultValue = 0;
+            var isDefault = false;
             if (caseFieldSetting != null && Int32.TryParse(caseFieldSetting.DefaultValue, out defaultValue))
             {
-                isDefault = defaultValue == categoryId;
+                isDefault = (isEmpty && defaultValue == ComputerUserCategory.EmptyCategoryId) ||
+                            (!isEmpty && defaultValue == categoryId);
             }
 
             return isDefault;
         }
 
         [HttpPost]
-        public ActionResult EditUserCategory(ComputerUserCategoryData data)
+        public ActionResult EditUserCategory(ComputerUserCategoryData data, int? activeTab)
         {
-            var categoryId = this.computerService.SaveComputerUserCategory(data);
+            data.Id = this.computerService.SaveComputerUserCategory(data);
 
             //set categories default value
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(data.CustomerId);
 
             var fs  = caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString());
-            UpdateCategoryFieldDefaultValue(categoryId, fs, data.DefaultInitiatorCategory);
+            UpdateCategoryFieldDefaultValue(data, fs, data.DefaultInitiatorCategory);
 
             fs = caseFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString());
-            UpdateCategoryFieldDefaultValue(categoryId, fs, data.DefaultRegardingCategory);
-            
-            return RedirectToAction("Index");
+            UpdateCategoryFieldDefaultValue(data, fs, data.DefaultRegardingCategory);
+
+            return RedirectToAction("Index", new { activeTab = "2"});
         }
 
-        private void UpdateCategoryFieldDefaultValue(int categoryId, CaseFieldSetting fs, bool setDefault)
+        private void UpdateCategoryFieldDefaultValue(ComputerUserCategoryData category, CaseFieldSetting fs, bool setDefault)
         {
             if (fs == null)
                 return;
 
-            var hasChanged = false;
-            string newDefaultValue = null;
-
+            var categoryId = category.IsEmpty ? ComputerUserCategory.EmptyCategoryId : category.Id;
             if (setDefault)
             {
-                newDefaultValue = categoryId.ToString();
-                hasChanged = true;
-            }
-            else if (string.Equals(fs.DefaultValue, categoryId.ToString(), StringComparison.OrdinalIgnoreCase))
-            {
-                newDefaultValue = null;
-                hasChanged = true;
+                _caseFieldSettingService.SaveFieldSettingsDefaultValue(fs.Id, categoryId.ToString());
+                return;
             }
 
-            if (hasChanged)
+            if (!string.IsNullOrEmpty(fs.DefaultValue))
             {
-                _caseFieldSettingService.SaveFieldSettingsDefaultValue(fs.Id, newDefaultValue);
+                var curValue = -1;
+                if (Int32.TryParse(fs.DefaultValue, out curValue) && categoryId == curValue)
+                {
+                    _caseFieldSettingService.SaveFieldSettingsDefaultValue(fs.Id, categoryId.ToString());
+                }
             }
         }
 
@@ -406,11 +445,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                 searchComputerUserCategories = GetUserCategoriesList(currentCustomerId);
 
-                //if (filters.ComputerUserCategoryID.HasValue && filters.ComputerUserCategoryID.Value == 0)
-                //{
-                //	filters.ComputerUserCategoryID = (int?)null;
-                //}
-
                 var sortField = !string.IsNullOrEmpty(filters.SortByField)
                     ? new SortField(filters.SortByField, filters.SortBy)
                     : null;
@@ -429,6 +463,8 @@ namespace DH.Helpdesk.Web.Controllers
                     sortField);
 
                 var searchResult = this.notifierRepository.Search(parameters);
+
+                ViewBag.ActiveTab = ControllerContext.HttpContext.Request.QueryString["activeTab"];
 
                 model = this.indexModelFactory.Create(
                      settings,
@@ -456,8 +492,8 @@ namespace DH.Helpdesk.Web.Controllers
                     .Select(o => new ItemOverview(o.Name, o.Id.ToString()))
                     .ToList();
 
-                var emptyCategoryName = computerUserCategories.FirstOrDefault(x => x.IsEmpty)?.Name ?? "Employee";
-                searchComputerUserCategories.Insert(0, new ItemOverview(Translation.GetCoreTextTranslation(emptyCategoryName), "0"));
+                var emptyCategoryName = computerUserCategories.FirstOrDefault(x => x.IsEmpty)?.Name ?? ComputerUserCategory.EmptyCategoryDefaultName;
+                searchComputerUserCategories.Insert(0, new ItemOverview(Translation.GetCoreTextTranslation(emptyCategoryName), ComputerUserCategory.EmptyCategoryId.ToString()));
             }
             return searchComputerUserCategories;
         }
@@ -495,12 +531,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
-            var nonReadOnlyCategories =
-                computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
-                    .Where(o => !o.IsReadOnly)
-                    .ToList();
-
-            model.ComputerUserCategoryModel = new ComputerUserCategoryModel(nonReadOnlyCategories);
+            var categoriesList = GetCategoriesList(currentCustomerId);
+            model.ComputerUserCategoryModel = new ComputerUserCategoryModel(categoriesList); //todo: check if required for AddNotifier
 
             var newNotifier = this.newNotifierFactory.Create(model, currentCustomerId, DateTime.Now);
 
@@ -557,7 +589,8 @@ namespace DH.Helpdesk.Web.Controllers
             int? regionId,
             int? departmentId,
             int? organizationUnitId,
-            string costcentre)
+            string costcentre,
+            int? userCategory)
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var inputParams = new Dictionary<string, string>();
@@ -655,11 +688,14 @@ namespace DH.Helpdesk.Web.Controllers
             if (!string.IsNullOrEmpty(costcentre))
                 inputParams.Add("CostCentre", costcentre);
 
-            var nonReadOnlyCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
-                .Where(o => !o.IsReadOnly)
-                .ToList();
-
-            var categoryModel = new ComputerUserCategoryModel(nonReadOnlyCategories);
+            ComputerUserCategory category = null;
+            if (userCategory.HasValue && userCategory.Value > 0)
+            {
+                category = computerService.GetComputerUserCategoryByID(userCategory.Value);
+            }
+            
+            var categoriesList = GetCategoriesList(currentCustomerId, category);
+            var categoryModel = new ComputerUserCategoryModel(categoriesList);
 
             var model = this.newNotifierModelFactory.Create(
                 settings,
@@ -680,14 +716,12 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ViewResult NewNotifier()
         {
-
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+            var langId = SessionFacade.CurrentLanguageId;
             var inputParams = new Dictionary<string, string>();
 
             var settings =
-                this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(
-                    currentCustomerId,
-                    SessionFacade.CurrentLanguageId);
+                this.notifierFieldSettingRepository.FindDisplayFieldSettingsByCustomerIdAndLanguageId(currentCustomerId, langId);
 
             List<ItemOverview> domains = null;
             List<ItemOverview> regions = null;
@@ -770,11 +804,19 @@ namespace DH.Helpdesk.Web.Controllers
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
-            var nonReadOnlyCategories = computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
-                .Where(o => !o.IsReadOnly)
-                .ToList();
+            
+            ComputerUserCategory selectedCategory = null;
+            
+            var initiatorFilter = SessionFacade.FindPageFilters<NotifierFilters>(PageName.Notifiers);
+            var categoryId = initiatorFilter?.ComputerUserCategoryID ?? 0;
+            if (categoryId > 0)
+            {
+                selectedCategory = this.computerService.GetComputerUserCategoryByID(categoryId);
+            }
 
-            var categoryModel = new ComputerUserCategoryModel(nonReadOnlyCategories);
+            //todo: check why if only not readonly should be displayed?
+            var categoriesList = GetCategoriesList(currentCustomerId, selectedCategory);
+            var categoryModel = new ComputerUserCategoryModel(categoriesList);
 
             var model = this.newNotifierModelFactory.Create(
                 settings,
@@ -790,6 +832,20 @@ namespace DH.Helpdesk.Web.Controllers
                 categoryModel);
 
             return this.View(model);
+        }
+
+        private IList<SelectListItem> GetCategoriesList(int customerId, ComputerUserCategory category = null)
+        {
+            var categoriesList =
+                computerService.GetComputerUserCategoriesByCustomerID(customerId)
+                    .Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.Id.ToString(),
+                        Selected = x.Id == category?.ID
+                    }).ToList();
+
+            return categoriesList;
         }
 
         [HttpGet]
@@ -895,15 +951,10 @@ namespace DH.Helpdesk.Web.Controllers
                 groups = this.notifierGroupRepository.FindOverviewsByCustomerId(currentCustomerId);
             }
 
-            var nonReadOnlyCategories =
-                computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId)
-                    .Where(o => !o.IsReadOnly)
-                    .ToList();
-
             var computerUser = computerService.GetComputerUser(notifier.Id);
-            var categoryModel = computerUser.ComputerUserCategory == null ?
-                new ComputerUserCategoryModel(nonReadOnlyCategories) :
-                new ComputerUserCategoryModel(computerUser.ComputerUserCategory, nonReadOnlyCategories);
+
+            var categoriesList = GetCategoriesList(currentCustomerId, computerUser.ComputerUserCategory);
+            var categoryModel = new ComputerUserCategoryModel(categoriesList, computerUser.ComputerUserCategory);
 
             var model = this.notifierModelFactory.Create(
                 displaySettings,

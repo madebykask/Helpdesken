@@ -64,5 +64,7 @@
         public int? CustomerId { get; set; }
 
         public int LanguageId { get; set; }
+
+        //public int? CategoryId { get; set; }
     }
 }

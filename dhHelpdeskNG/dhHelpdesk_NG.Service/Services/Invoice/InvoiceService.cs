@@ -244,7 +244,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
 				              $"{(string.IsNullOrWhiteSpace(externalInvoices) ? "" : $", {translations[2]}: " + externalInvoices)}" +
 				              $"{(referenceNumber == null ? "" : $", {translations[3]}: " + referenceNumber)}\t{translations[4]}\t{caseDate}\t\t{amount:F2}");
 
-				using (var file = new StreamWriter(path))
+				using (var file = new StreamWriter(File.Open(path, FileMode.Create), Encoding.Default))
 				{
 					file.Write(sb.ToString());
 				}

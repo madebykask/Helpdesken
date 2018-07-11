@@ -4,7 +4,7 @@
     <div class="pull-left">
         <ul class="secnav">
             <li id="menu1"><a class="btn" id="btnSave" onclick="submitForm()">@Translation.GetCoreTextTranslation("Spara")</a></li>
-            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", null, new { @class = "btn" })</li>
+            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", new { activeTab = 2}, new { @class = "btn" })</li>
         </ul>
     </div>
 </div>
