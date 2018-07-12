@@ -11,9 +11,11 @@ namespace Helpdesk.WebApi.Config.IdentityServer
 {
     public static class Settings
     {
+        public static string HostUrl = "https://localhost:449";
+
         public static class Authorization
         {
-            public const string AuthorityName = "https://localhost:449";
+            public static string AuthorityName = HostUrl;
 
             public static class Scopes
             {

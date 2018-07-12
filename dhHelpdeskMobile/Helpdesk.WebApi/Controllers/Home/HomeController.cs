@@ -14,7 +14,7 @@ namespace Helpdesk.WebApi.Controllers.Home
     /// </summary>
     [AllowAnonymous]
     [Route("home")]
-    public class HomeController : ControllerBase
+    public class HomeController : Controller
     {
         private readonly IIdentityServerInteractionService _identity;
 
@@ -23,9 +23,15 @@ namespace Helpdesk.WebApi.Controllers.Home
             _identity = identity;
         }
 
-        [HttpGet()]
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            return View();
+        }
+
+        [HttpGet]
         [Route("error")]
-        public async Task<IActionResult> error(string errorId)
+        public async Task<IActionResult> Error(string errorId)
         {
             var errormessage = await _identity.GetErrorContextAsync(errorId);
             return await Task.FromResult(new JsonResult(errormessage));

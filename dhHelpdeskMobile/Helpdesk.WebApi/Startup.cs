@@ -42,7 +42,7 @@ namespace Helpdesk.WebApi
         {
             DependencyInjection.ConfigureDi(services, _loggerFactory);
 
-            services.AddIdentityServer(options => { options.UserInteraction.LoginUrl = "http://localhost:8111/login.html"; })
+            services.AddIdentityServer(options => { options.UserInteraction.LoginUrl = "https://localhost:449/Account/Login"; })
                 .AddDeveloperSigningCredential()
                 //.AddSigningCredential(cert)
                 .AddInMemoryApiResources(Settings.GetApiResources())
@@ -173,7 +173,7 @@ namespace Helpdesk.WebApi
             app.UseCors("all");
             app.UseIdentityServer();
             app.UseHttpsRedirection();
-            //app.UseStaticFiles();
+            app.UseStaticFiles();
             //app.UseCookiePolicy();
 
             app.UseAuthentication();

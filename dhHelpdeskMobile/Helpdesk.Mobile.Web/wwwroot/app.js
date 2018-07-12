@@ -29,6 +29,7 @@ var config = {
     clockSkew: 300,
     // load user info for profile
     loadUserInfo: false,
+    silent_redirect_uri: "https:/localhost:499/silent-renew.html"
 };
 var mgr = new Oidc.UserManager(config);
 
