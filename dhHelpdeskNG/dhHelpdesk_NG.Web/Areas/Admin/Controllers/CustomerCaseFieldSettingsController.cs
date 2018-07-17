@@ -35,7 +35,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IHelpdeskCache _cache;
         private readonly ISettingService _settingService;
         private readonly ICaseSectionService _caseSectionService;
-        private IComputerService _computerService;
+        private readonly IComputerService _computerService;
 
         public CustomerCaseFieldSettingsController(
             ICaseFieldSettingService caseFieldSettingService,

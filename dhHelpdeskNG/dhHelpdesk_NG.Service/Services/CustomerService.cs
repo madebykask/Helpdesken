@@ -347,7 +347,9 @@ namespace DH.Helpdesk.Services.Services
                         _caseFieldSettingRepository.Add(caseFieldSetting);
                     }
                     else
+                    {
                         _caseFieldSettingRepository.Update(caseFieldSetting);
+                    }
                 }
             }
 
