@@ -10,6 +10,7 @@
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
+using DH.Helpdesk.Common;
 using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.DbQueryExecutor;
 using DH.Helpdesk.Dal.Mappers.ExternalInvoice.BusinessModelToEntity;

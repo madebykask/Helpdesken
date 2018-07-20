@@ -497,9 +497,10 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public async Task<UserOverview> GetByUserIdAsync(string userId, string passw)
         {
-            var ret2 = await Task.Run(() =>
-                DataContext.Users.Where(u => u.UserID.Equals(userId, StringComparison.CurrentCultureIgnoreCase) && u.Password == passw).ToListAsync()
-            );
+            var ret2 = await
+                DataContext.Users.Where(u =>
+                    u.UserID.ToLower() == userId.ToLower() && u.Password == passw &&
+                    u.IsActive == 1).ToListAsync();
             
             var ret =  ret2.Select(x => new UserOverview(
                         x.Id,

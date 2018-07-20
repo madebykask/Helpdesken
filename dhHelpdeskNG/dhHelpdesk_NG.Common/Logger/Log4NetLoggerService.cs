@@ -6,106 +6,106 @@
 
     public class Log4NetLoggerService : ILoggerService
     {
-        private readonly ILog logger;
+        private readonly ILog _logger;
 
         public Log4NetLoggerService(string logType)
         {
-            this.logger = log4net.LogManager.GetLogger(logType);
+            _logger = LogManager.GetLogger(logType);
         }
 
         public void Info(string message)
         {
-            if (this.logger.IsInfoEnabled)
+            if (_logger.IsInfoEnabled)
             {
-                this.logger.Info(message);
+                _logger.Info(message);
             }
         }
 
         public void InfoFormat(string message, params object[] args)
         {
-            if (this.logger.IsInfoEnabled)
+            if (_logger.IsInfoEnabled)
             {
-                this.logger.InfoFormat(message, args);
+                _logger.InfoFormat(message, args);
             }
         }
 
         public void Warn(string message)
         {
-            if (this.logger.IsWarnEnabled)
+            if (_logger.IsWarnEnabled)
             {
-                this.logger.Warn(message);
+                _logger.Warn(message);
             }
         }
 
         public void WarnFormat(string message, params object[] args)
         {
-            if (this.logger.IsWarnEnabled)
+            if (_logger.IsWarnEnabled)
             {
-                this.logger.WarnFormat(message, args);
+                _logger.WarnFormat(message, args);
             }
         }
 
         public void Debug(string message)
         {
-            if (this.logger.IsDebugEnabled)
+            if (_logger.IsDebugEnabled)
             {
-                this.logger.Debug(message);
+                _logger.Debug(message);
             }
         }
 
         public void DebugFormat(string message, params object[] args)
         {
-            if (this.logger.IsDebugEnabled)
+            if (_logger.IsDebugEnabled)
             {
-                this.logger.DebugFormat(message, args);
+                _logger.DebugFormat(message, args);
             }
         }
 
         public void Error(string message)
         {
-            if (this.logger.IsErrorEnabled)
+            if (_logger.IsErrorEnabled)
             {
-                this.logger.Error(message);
+                _logger.Error(message);
             }
         }
 
         public void ErrorFormat(string message, params object[] args)
         {
-            if (this.logger.IsErrorEnabled)
+            if (_logger.IsErrorEnabled)
             {
-                this.logger.ErrorFormat(message, args);
+                _logger.ErrorFormat(message, args);
             }
         }
 
         public void Error(Exception ex)
         {
-            if (this.logger.IsErrorEnabled)
+            if (_logger.IsErrorEnabled)
             {
-                this.logger.Error(ex.Message, ex);
+                _logger.Error(ex.Message, ex);
             }
         }
 
         public void Fatal(string message)
         {
-            if (this.logger.IsFatalEnabled)
+            if (_logger.IsFatalEnabled)
             {
-                this.logger.Fatal(message);
+                _logger.Fatal(message);
             }
         }
 
         public void FatalFormat(string message, params object[] args)
         {
-            if (this.logger.IsFatalEnabled)
+            if (_logger.IsFatalEnabled)
             {
-                this.logger.FatalFormat(message, args);
+                _logger.FatalFormat(message, args);
             }
         }
 
         public void Fatal(Exception ex)
         {
-            if (this.logger.IsFatalEnabled)
+            if (_logger.IsFatalEnabled)
             {
-                this.logger.Fatal(ex.Message, ex);
+                _logger.Fatal(ex.Message, ex);
             }
         }
 

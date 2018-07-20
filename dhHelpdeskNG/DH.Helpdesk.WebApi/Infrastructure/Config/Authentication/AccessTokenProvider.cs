@@ -1,0 +1,100 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Web;
+using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Services.Infrastructure;
+using DH.Helpdesk.Services.Services;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.OAuth;
+
+namespace DH.Helpdesk.WebApi.Infrastructure.Config.Authentication
+{
+    public class AccessTokenProvider : OAuthAuthorizationServerProvider
+    {
+        private readonly string _publicClientId;
+
+        public AccessTokenProvider(string clientId)
+        {
+            _publicClientId = clientId;
+        }
+        
+        public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
+        {
+            if(!context.TryGetBasicCredentials(out var clientId, out _))
+                context.TryGetFormCredentials(out clientId, out _);
+            if (clientId.Equals(_publicClientId,
+                StringComparison.InvariantCultureIgnoreCase))
+            {
+                context.OwinContext.Set(ConfigApi.Constants.OwinContext.ClientId, clientId);
+                context.Validated(clientId);
+            }
+            else
+            {
+                context.Rejected();
+            }
+
+            return Task.FromResult(0);
+        }
+
+        public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
+        {
+
+            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
+
+            var userService = ManualDependencyResolver.Get<IUserService>(); //TODO: Get rid of ManualDependencyResolver, replace it with public field injection
+
+            var user = await userService.LoginAsync(context.UserName, context.Password);
+            //var user = context.Password == context.UserName ? new { UserId = "test", Id = 1, UserGroupId = "Admin"} : null;//debug
+
+            if (user != null && !string.IsNullOrEmpty(user.UserId))
+            {
+                var identity = new ClaimsIdentity(context.Options.AuthenticationType);
+                identity.AddClaim(new Claim(ClaimTypes.Sid, user.Id.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, context.UserName));
+                identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
+                identity.AddClaim(new Claim(ClaimTypes.Role, user.UserGroupId.ToString()));
+
+                // create metadata to pass on to refresh token provider
+                var props = new AuthenticationProperties(new Dictionary<string, string>
+                {
+                    { ConfigApi.Constants.OwinContext.ClientId, context.ClientId }
+                });
+
+                var ticket = new AuthenticationTicket(identity, props);
+                context.Validated(ticket);
+            }
+            else
+            {
+                context.SetError("Invalid user!", "The user name or password is incorrect.");
+                context.Rejected();
+            }
+        }
+
+        public override Task GrantRefreshToken(
+            OAuthGrantRefreshTokenContext context)
+
+        {
+            var originalClient = context.Ticket.Properties.Dictionary[ConfigApi.Constants.OwinContext.ClientId];
+            var currentClient = context.OwinContext.Get<string>(ConfigApi.Constants.OwinContext.ClientId);
+
+            // enforce client binding of refresh token
+            if (originalClient != currentClient)
+            {
+                context.Rejected();
+                return Task.FromResult(0);
+            }
+
+            // chance to change authentication ticket for refresh token requests
+            var newIdentity = new ClaimsIdentity(context.Ticket.Identity);
+            //newIdentity.AddClaim(new Claim("newClaim”, "refreshToken"));
+
+            var newTicket = new AuthenticationTicket(newIdentity, context.Ticket.Properties);
+            context.Validated(newTicket);
+
+            return Task.FromResult(0);
+        }
+    }
+}

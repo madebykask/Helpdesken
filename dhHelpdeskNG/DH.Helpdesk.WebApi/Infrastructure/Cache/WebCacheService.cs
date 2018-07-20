@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Web;
 using DH.Helpdesk.Common;
 
-namespace DH.Helpdesk.Web.Infrastructure.Cache
+namespace DH.Helpdesk.WebApi.Infrastructure.Cache
 {
 	public class WebCacheService : ICacheService
 	{
@@ -51,7 +51,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Cache
 
 		public T Get<T>(string cacheKey, Func<T> getItemCallback) where T : class
 		{
-			return this.Get(cacheKey, getItemCallback, TimeSpan.FromMinutes(30));
+			return Get(cacheKey, getItemCallback, TimeSpan.FromMinutes(30)); //TODO: Move default time to config
 		}
 
 		public void Delete(string cacheKey)
@@ -60,15 +60,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Cache
 		}
 
 
-		private bool IsCacheEnabled
-		{
-			get
-			{
-				return true;
-			}
-		}
-
-
+		private bool IsCacheEnabled => true;
 	}
 
 }
