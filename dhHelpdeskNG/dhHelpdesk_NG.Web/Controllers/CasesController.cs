@@ -5235,7 +5235,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.InitiatorUserCategoryVisible = initiatorFieldSettings.IsActive && !initiatorFieldSettings.Hide;
 
-            if (isCreateNewCase && initiatorFieldSettings.IsActive)
+            if (initiatorFieldSettings.IsActive)
             {
                 var defaultCategoryId = 0;
                 
@@ -5257,7 +5257,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             m.RegardingUserCategoryVisible = regFieldSettings.IsActive && !regFieldSettings.Hide;
             
-            if (isCreateNewCase && regFieldSettings.IsActive)
+            if (regFieldSettings.IsActive)
             {
                 var defaultCategoryId = 0;
 
