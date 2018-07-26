@@ -1,0 +1,56 @@
+﻿@using Log = DH.Helpdesk.Domain.Log;
+@model DH.Helpdesk.SelfService.Models.Case.CaseLogModel
+
+@functions
+{
+    string GetLogText(Log item)
+    {
+        var logText =
+            SessionFacade.CurrentCustomer.UseInternalLogNoteOnExternalPage == (int) Enums.LogNote.UseExternalLogNote
+                ? item.Text_External
+                : item.Text_Internal;
+        return (logText ?? string.Empty).Trim();
+    }
+
+    string GetLogUser(Log logItem)
+    {
+        var userName = logItem.User_Id == null
+            ? (logItem.RegUser == SessionFacade.CurrentSystemUser ? Translation.Get("Me") : logItem.RegUser)
+            : logItem.User.FirstName + " " + logItem.User.SurName;
+        return userName;
+    }
+
+    string FormatLogText(Log logItem)
+    {
+        var logText = GetLogText(logItem).AddCharacterInParts(70, Environment.NewLine, Environment.NewLine);
+        var formatted = logText.Replace("<", "").Replace("\n", "<br />");
+        return formatted;
+    }
+}
+
+@if (Model.CaseLogs != null)
+{
+    var logItems = Model.CaseLogs.Where(l => !string.IsNullOrEmpty(GetLogText(l))).ToList();
+
+    foreach (var logItem in logItems)
+    {
+        var regDate = logItem.RegTime.ToLocalTime();
+        <div class="@(!string.IsNullOrEmpty(logItem.RegUser) ? "com-list-hd" : "com-list-com")">
+            <div class="list-arrow"></div>
+            <p>@GetLogUser(logItem) | @Html.DisplayFor(l => regDate)</p>
+            <p>@Html.Raw(FormatLogText(logItem))</p>
+            <p>
+                @if (logItem.LogFiles != null)
+                {
+                    foreach (var f in logItem.LogFiles)
+                    {
+                        <a href="@Url.Action("DownloadLogFile", "Case", new { id = logItem.Id, fileName = f.FileName })">
+                            <i class="glyphicon glyphicon-file"></i>
+                            @f.FileName</a>
+                        <br />
+                    }
+                }
+            </p>
+        </div>
+    }
+}

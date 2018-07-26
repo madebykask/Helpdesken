@@ -1,24 +1,29 @@
-﻿@using DH.Helpdesk.Common.Enums;
-@model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
+﻿@model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
 
+@{
+    var customerLanguageId = Model.CurrentCustomer != null ? Model.CurrentCustomer.Language_Id : 0;
+}
 <div class="container-fluid">
-    <a href="@Url.Action("Index", "Start", new { customerId = Model.CustomerId, area = "" })">
+    <a href="@Url.Action("Index", "Start", new { customerId = Model.CurrentCustomer.Id, area = "" })">
         <div class="pull-left toplogo"></div>
     </a>
     <div class="pull-right small toplogout">        
             <div class="dropdown">
-                <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
-                    @Translation.Get("Select language", Enums.TranslationSource.TextTranslation)<span class="caret"></span>
-                </a>
-                @if (SessionFacade.AllLanguages != null)
+                <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">@Translation.Get("Select language")<span class="caret"></span></a>
+                @if (Model.AllLanguages != null)
                 {
                     <ul class="dropdown-menu" role="menu">
-                        @foreach (var lang in SessionFacade.AllLanguages)
+                        @foreach (var lang in Model.AllLanguages)
                         {
                             <li>
-                                <a href="@Url.Action("ChangeLanguage", "start", new { area = "", language = lang.LanguageId, currentUrl = this.Request.Url.LocalPath, lastParams = HttpContext.Current.Request.QueryString })">
-                                    @Translation.Get(lang.Name, Enums.TranslationSource.TextTranslation, (SessionFacade.CurrentCustomer != null ? SessionFacade.CurrentCustomer.Language_Id : 0)) @(lang.Id == SessionFacade.CurrentLanguageId ? "●" : "")
-                                </a>
+                                <a href="@Url.Action("ChangeLanguage", "start", new
+                                    {
+                                        area = "",
+                                        language = lang.LanguageId,
+                                        currentUrl = Context.Request.Url.LocalPath,
+                                        lastParams = Context.Request.QueryString
+                                    })">
+                                    @Translation.Get(lang.Name, Enums.TranslationSource.TextTranslation, customerLanguageId) @(lang.Id == Model.CurrentLanguageId ? "●" : "")</a>
                             </li>
                         }
                     </ul>
@@ -26,17 +31,14 @@
             </div>
             <span class="toplogout-space"> | </span>
         
-        @if (!string.IsNullOrEmpty(SessionFacade.CurrentSystemUser))
+        @if (!string.IsNullOrEmpty(Model.CurrentSystemUser))
         {
-            <a href="#" title="Employee number: @(SessionFacade.CurrentUserIdentity != null? SessionFacade.CurrentUserIdentity.EmployeeNumber:"")">
-                @Translation.Get("User", Enums.TranslationSource.TextTranslation): @SessionFacade.CurrentSystemUser
-            </a>
+            <a href="#" title="Employee number: @(Model.CurrentUserIdentity != null? Model.CurrentUserIdentity.EmployeeNumber:"")">
+                @Translation.Get("User"): @Model.CurrentSystemUser</a>
         }
         else
         {
-            <a href="#">
-                @Translation.Get("User", Enums.TranslationSource.TextTranslation): ?
-            </a>
+            <a href="#">@Translation.Get("User"): ? </a>
         }
     </div>
 </div>

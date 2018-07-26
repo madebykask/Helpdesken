@@ -325,7 +325,6 @@ img
 }
 .mapText {
   color:#fff;
-
 }
 
 .newcom {
@@ -338,8 +337,7 @@ img
 .siteCom .mapButton {
   display:block;
   color:#fff;
- background-color:#49AD33;
-  
+  background-color:#49AD33;
   padding:8px 5px 5px 5px;
   height:32px;
   width:30px;
@@ -432,8 +430,10 @@ img
   border-width: 10px 10px 10px 0;
   border-right-color: #fff;
 }
-    
-
-
+ 
+table.com-files tr { background-color: #f5f5f5!important; }
+table.com-files a, table.com-files td { color: #428bca;border-bottom: dotted 1px #dddddd}
+table.logFiles td.del, table.com-files td.del { text-align: right; }
+table.com-files .glyphicon-remove   { color: red; }
 
 

@@ -1,5 +1,4 @@
-﻿@using DH.Helpdesk.Common.Enums;
-@using DH.Helpdesk.SelfService.Models.CaseTemplate
+﻿@using DH.Helpdesk.SelfService.Models.CaseTemplate
 @using System.Text
 
 @model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
@@ -10,14 +9,7 @@
     <li class="dropdown blue">
         <a href="#" class="dropdown-toggle blue" data-toggle="dropdown">
             <i class="fa fa-edit mnu-fa"></i><br />
-            @if (Model.AppType == ApplicationTypes.LineManager)
-            {
-                @Translation.Get("Order New Service Request", Enums.TranslationSource.TextTranslation)
-            }
-            else
-            {
-                @Translation.Get("Initiate a case", Enums.TranslationSource.TextTranslation)
-            }
+            @(Model.IsLineManager ? Translation.Get("Order New Service Request") : Translation.Get("Initiate a case"))
         </a>
 
         <ul class="dropdown-menu">

@@ -6,7 +6,7 @@ body {
 
 img
 {
-	max-width: 100%;
+    max-width: 100%;
 }
 
 
@@ -238,8 +238,8 @@ h5 {
 
 .dropdown-menu li a
 {
-	color: #333 !important;
-	text-align: left;
+    color: #333 !important;
+    text-align: left;
 }
 
 .dropdown-menu li a .small {
@@ -248,7 +248,7 @@ h5 {
 
 .navbar-nav
 {
-	border-right: 1px solid #fff;
+    border-right: 1px solid #fff;
 }
 
 .navbar-nav > li {
@@ -345,12 +345,12 @@ h5 {
 
 .secnav
 {
-	background-color: transparent;
-	display: inline-block;
-	line-height: 24px;
-	margin: 0 20px 0 0;
-	padding: 0;
-	color: #333;
+    background-color: transparent;
+    display: inline-block;
+    line-height: 24px;
+    margin: 0 20px 0 0;
+    padding: 0;
+    color: #333;
 }
 .secnav > li {
   display: inline-block;
@@ -437,10 +437,10 @@ table th.thpointer {
 
 .tab-pane
 {
-	border-left: 1px solid #ddd;
-	border-right: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
-	background:#fff;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background:#fff;
 }
 
 .nav-tabs > li > a {
@@ -463,13 +463,13 @@ table th.thpointer {
 
 .dh-container
 {
-	padding-top: 20px;
-	padding-bottom: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .dh-col
 {
-	margin-left:-15px;
+    margin-left:-15px;
 }
 /***FORM TAGS***************/
 @media (min-width: 768px) {
@@ -958,7 +958,7 @@ a.error, input[type=¨button].error .btn
 
 .order-date-search .date
 {
-	width: 140px;
+    width: 140px;
     margin-right: 10px;
 }
 
@@ -1042,12 +1042,12 @@ div .multitext i {
 
 .inputw450
 {
-	width: 450px !important;
+    width: 450px !important;
 }
 
 .inputmh100
 {
-	min-height: 150px !important;
+    min-height: 150px !important;
 }
 
 .dropdown-group{
@@ -1094,4 +1094,3 @@ div .multitext i {
     text-decoration: none;
     outline: 0;
 }
-

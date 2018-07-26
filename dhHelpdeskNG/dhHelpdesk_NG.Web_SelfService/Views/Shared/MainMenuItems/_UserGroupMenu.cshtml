@@ -1,12 +1,11 @@
 ﻿@model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
 
-
 @if (Model.CurrentCustomer != null && Model.CurrentCustomer.ShowCoWorkersOnExternalPage != 0)
 {    
     <li class="blue">
         <a href="@Url.Action("Index", "CoWorkers", new { customerId = Model.CustomerId, area = "" })">
             <i class="fa fa-user mnu-fa"></i><br />
-            @Translation.Get("My Co-Workers", Enums.TranslationSource.TextTranslation)
+            @Translation.Get("My Co-Workers")
         </a>
     </li>    
 }

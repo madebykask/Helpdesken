@@ -807,7 +807,7 @@
     <Content Include="Views\Orders\DisplayTemplates\Fields\DecimalLabel.cshtml" />
     <Content Include="Views\Orders\EditorTemplates\Fields\MultiText.cshtml" />
     <Content Include="Views\Case\ExtendedCase.cshtml" />
-    <Content Include="Views\Shared\_Communication.cshtml" />
+    <Content Include="Views\Case\_Communication.cshtml" />
     <Content Include="Views\Shared\_LogoItems.cshtml" />
     <Content Include="Views\Shared\MainMenuItems\_CaseTemplatesMenu.cshtml" />
     <Content Include="Views\Shared\MainMenuItems\_CaseListMenu.cshtml" />
@@ -822,6 +822,9 @@
     <Content Include="Views\Case\_SearchError.cshtml" />
     <Content Include="Views\Case\_CaseInformation.cshtml" />
     <Content Include="Views\Case\_ExtendedCaseControlPanel.cshtml" />
+    <Content Include="Views\Case\ModalDialogs\_UploadExistingLogFilePopup.cshtml" />
+    <Content Include="Views\Case\ModalDialogs\_UploadLogFileFromClipboard.cshtml" />
+    <Content Include="Views\Shared\_MainMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
@@ -898,7 +901,7 @@
     <Content Include="Views\CoWorkers\Index.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
-    <Content Include="Views\Shared\_CaseLogNote.cshtml" />
+    <Content Include="Views\Case\_CaseLogNote.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\highlighter\" />

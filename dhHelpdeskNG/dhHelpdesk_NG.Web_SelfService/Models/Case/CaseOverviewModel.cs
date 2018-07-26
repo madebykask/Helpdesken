@@ -9,9 +9,6 @@ namespace DH.Helpdesk.SelfService.Models.Case
     using DH.Helpdesk.BusinessData.Models;
 
     using Log = DH.Helpdesk.Domain.Log;
-using System;
-
-    
 
     public class CaseOverviewModel 
     {
@@ -35,6 +32,11 @@ using System;
             this.Systems = systems;
             this.Suppliers = suppliers;
             this.ShowRegistringMessage = showRegistringMessage;
+        }
+
+        public bool IsFinished
+        {
+            get { return CasePreview?.FinishingDate.HasValue ?? false; }
         }
 
         public bool ShowRegistringMessage { get; set; }
@@ -73,6 +75,13 @@ using System;
         public Setting CustomerSettings { get; set; }
         public string FollowerUsers { get; set; }
 
+        public CaseLogModel GetCaseLogModel()
+        {
+            return new CaseLogModel
+            {
+                CaseId = CasePreview?.Id ?? 0,
+                CaseLogs = CaseLogs
+            };
+        }
     }
-  
 }

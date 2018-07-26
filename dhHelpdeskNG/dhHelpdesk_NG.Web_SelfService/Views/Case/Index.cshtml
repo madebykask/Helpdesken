@@ -1,10 +1,22 @@
-﻿@using System.Activities.Statements
-@using DH.Helpdesk.SelfService.Infrastructure
-@using DH.Helpdesk.BusinessData.OldComponents
+﻿@using DH.Helpdesk.BusinessData.OldComponents
 
 @model DH.Helpdesk.SelfService.Models.Case.CaseOverviewModel
+
 @{
     ViewBag.Title = "Index";    
+}
+
+@functions
+{
+    bool CheckField(string fieldName)
+    {
+        var fieldNameToCheck = 
+            fieldName == GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString() 
+            ? fieldName.Replace('_', '.') 
+            : fieldName;
+
+        return Model.FieldSettings.Select(f => f.Name).Contains(fieldNameToCheck);
+    }
 }
 
 <div class="container-fluid dh-container">    
@@ -53,7 +65,7 @@
                             </div>
                         }
                     }
-
+                    
                     @Html.Partial("_CaseReceipt", Model)
 
                 </div>
@@ -63,26 +75,41 @@
             {
                 <div id="attachment-tab" class="tab-pane" style="overflow:hidden;">
                     <div class="container-fluid dh-container">
-                    <table id="case_files_table" class="table table-striped">
-                        @if (Model.CasePreview.CaseFiles != null)
-                        {
-                            foreach (var file in Model.CasePreview.CaseFiles)
+                        <table id="case_files_table" class="table table-striped">
+                            @if (Model.CasePreview.CaseFiles != null)
                             {
-                                <tr>
-                                    <td>
-                                        <a style="color:blue" href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
-                                    </td>
-                                </tr>
+                                foreach (var file in Model.CasePreview.CaseFiles)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a style="color:blue" href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
+                                        </td>
+                                    </tr>
+                                }
                             }
-                        }
-                    </table>
+                        </table>
 
+                    </div>
                 </div>
-            </div>
             }
         }
-
     </div>
+</div>
 
-            </div>
+@section Dialogs {
+    
+    @if (Model.CasePreview.Id > 0 && 
+         !Model.IsFinished && 
+         CheckField(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())) 
+    {
+        @* //todo: add one more condition for COmmunication- Linemanager or enableBubleChat! *@
+        if (ViewBag.IsLineManagerApplication) 
+        {
+             @Html.Partial("_Communication", Model.GetCaseLogModel())
+        }
+
+        @Html.Partial("ModalDialogs/_UploadExistingLogFilePopup")
+        @Html.Partial("ModalDialogs/_UploadLogFileFromClipboard")    
+    }
+}
 

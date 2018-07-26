@@ -1,32 +1,22 @@
-﻿
+﻿var LogModes = {
+    CaseSection: 0,
+    Communication: 1
+};
+
 $(function () {
+
     (function ($) {
 
+        //todo: add case log mode parameter to windows
+
         window.selfService = window.selfService || {};
-        window.selfService.caseLog = window.selfService.caseLog || {};
+        window.selfService.caseLog = window.selfService.caseLog || new CaseLog(window.appParameters);
 
         var uploadLogFileUrl = window.appParameters.uploadLogFileUrl;
         var logFileKey = window.appParameters.logFileKey;
-        var getLogFilesUrl = window.appParameters.getLogFilesUrl; 
         var fileAlreadyExistsMsg = window.appParameters.fileAlreadyExistsMsg;
-        var deleteLogFileUrl = window.appParameters.deleteLogFileUrl; 
-        var downloadLogFileUrl = window.appParameters.downloadLogFileUrl;
-        var downloadLogFileParamUrl = window.appParameters.downloadLogFileParamUrl;        
-        var saveLogMessageUrl = window.appParameters.saveLogMessageUrl; 
-        var casePreviewId = window.appParameters.casePreviewId;       
-        var caseDetailsUrl = window.appParameters.caseDetailsUrl;
-
+        
         var alreadyExistFileIds = [];
-
-        selfService.caseLog.init = function () {
-            this.changeState(false);
-        };
-                
-        selfService.caseLog.reloadLogFiles = function () {     
-            $.get(getLogFilesUrl, { id: logFileKey, myTime: Date.now() }, function (files) {
-                selfService.caseLog.refreshLogFilesTable(files);
-            });
-        };
 
         PluploadTranslation($("#caseLog_languageId").val());
 
@@ -85,42 +75,168 @@ $(function () {
             }
         });
 
-        selfService.caseLog.refreshLogFilesTable = function (files) {
-            $('#LogFile_table > tbody > tr').remove();
-            var fileMarkup;
-            for (var i = 0; i < files.length; i++) {
-                var file = files[i];
-                fileMarkup =
-                    $('<tr>' +
-                        '<td>' +
-                            '<i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href=' + downloadLogFileUrl + '?' + downloadLogFileParamUrl + 'fileName=' + file + '>' + file + '</a>' +
-                        '</td>' +
-                        '<td>' +
-                            '<a id="delete_file_button_' + i + '" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-remove"></span> </a>' +
-                        '</td>' +
-                      '</tr>');
+        function CaseLog(params) {
 
-                $('#LogFile_table > tbody').append(fileMarkup);
+            var currentLogMode = LogModes.CaseSection || 0;
+            
+            var logFileKey = params.logFileKey;
+            var getLogFilesUrl = params.getLogFilesUrl;
+            var deleteLogFileUrl = params.deleteLogFileUrl;
+            var downloadLogFileUrl = params.downloadLogFileUrl;
+            var downloadLogFileParamUrl = params.downloadLogFileParamUrl;
+            var saveLogMessageUrl = params.saveLogMessageUrl;
+            var casePreviewId = params.casePreviewId;
+            var caseDetailsUrl = params.caseDetailsUrl;
+            var logMandatoryText = params.logMandatoryText;
+
+            //public
+            this.init = function (mode) {
+                currentLogMode = mode;
+                this._elements = getLogNoteElementsForMode(mode);
+                changeState.call(this, false);
+            };
+
+            //public
+            this.reloadLogFiles = function () {
+                var self = this;
+                var data = {
+                    id: logFileKey,
+                    myTime: Date.now()
+                };
+
+                $.get(getLogFilesUrl, data,
+                    function (files) {
+                        refreshLogFilesTable(self._elements.logFilesTable, files);
+                    });
+            };
+
+            //public
+            this.saveLogMessage = function () {
+                var self = this;
+                var popup = $(this).closest('#logNotePopup');
+                var isPopup = popup.length > 0;
+
+                console.log('>>> IsPopup: ' + (isPopup ? 'true' : 'false'));
+
+                $("#popupError").css("display", "none");
+
+                var note = self._elements.logNoteInput.val() || '';
+                if (note === '') {
+                    if (isPopup) {
+                        $("#popupError").text(logMandatoryText);
+                        $("#popupError").css("display", "block");
+                    }
+                    else {
+                        ShowToastMessage(logMandatoryText, "warning", false);
+                    }
+                } else {
+                    changeState.call(self, true);
+                    $.get(saveLogMessageUrl,
+                        { caseId: casePreviewId, note: note, logFileGuid: logFileKey },
+                        function(res) {
+                            if (isPopup) {
+                                window.location.href = caseDetailsUrl + "/" + casePreviewId;
+                            } else {
+                                self._elements.logNotesDiv.html(res);
+                                self._elements.logNoteInput.val('');
+                                self.reloadLogFiles();
+                            }
+                        }).fail(function(e) {
+                            console.error(e);
+                            ShowToastMessage('Unknown error.', 'error', false);
+                        }).always(function() {
+                            changeState.call(self, false);
+                    });
+                }
             }
 
-            this.bindDeleteLogFileToDeleteButtons();
-        }
+            //private 
+            function refreshLogFilesTable($table, files) {
+                $table.empty();
 
-        selfService.caseLog.bindDeleteLogFileToDeleteButtons = function () {
-            $('#LogFile_table a[id^="delete_file_button_"]').click(function () {
-                var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
-                var pressedDeleteFileButton = this;
+                var filesMarkup = buildFilesMarkup(files) || '';
+                var markup = '<tbody>' + filesMarkup + '</tbody>';
+                $(markup).appendTo($table);
 
-                $.post(deleteLogFileUrl, { id: logFileKey, fileName: fileName, myTime: Date.now() }, function () {
-                    $(pressedDeleteFileButton).parents('tr:first').remove();
+                bindDeleteLogFileToDeleteButtons($table);
+            }
+
+            //private
+            function getLogNoteElementsForMode(mode) {
+                var $parent = Number(mode) === LogModes.Communication
+                    ? $('#communicationPanel')
+                    : $('#logNotesSection');
+
+                //note: _Communication and _CaseReceipt partial views has same ids for controls below. Its safe since both views cannot be used together.
+                return {
+                    logFilesTable: $('#LogFile_table', $parent),    
+                    logNoteInput: $('#logNote', $parent),
+                    logNotesDiv: $('#CaseLogPartial', $parent),
+                    sendButton: $('#btnSendLog', $parent),
+                    sendInidicator: $('#sendLogIndicator', $parent),
+                    btnLoadFromClipboard: $('#btnLoadFromClipboard', $parent),
+                    btnUploadFile: $('#btnUploadFile', $parent)
+                };
+            };
+
+            //private
+            function buildFilesMarkup(files) {
+                var fileMarkup = '';
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    var row =
+                        '<tr>' +
+                            '   <td><i class="glyphicon glyphicon-file">&nbsp;</i><a style="color:blue" href="' + downloadLogFileUrl + '?' + downloadLogFileParamUrl + 'fileName=' + file + '">' + file + '</a></td>' +
+                            '   <td class="del"><a id="delete_file_button_' + i + '" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove"></span></a></td>' +
+                        '</tr>';
+
+                    fileMarkup += row;
+                }
+
+                return fileMarkup;
+            }
+
+            //private
+            function bindDeleteLogFileToDeleteButtons($table) {
+                //onclick:
+                $table.find('a[id^="delete_file_button_"]').click(function () {
+                    var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
+                    var pressedDeleteFileButton = this;
+
+                    //send request
+                    $.post(deleteLogFileUrl,
+                        {
+                            id: logFileKey,
+                            fileName: fileName,
+                            myTime: Date.now()
+                        },
+                        function () {
+                            $(pressedDeleteFileButton).parents('tr:first').remove();
+                        });
                 });
-            });
-        }        
+            }
 
-        /*********** Paste image from clipboard************/        
+            //private
+            function changeState(locked) {
+                var buttonsToLock = $([this._elements.sendButton, this._elements.btnLoadFromClipboard, this._elements.btnUploadFile]);
+
+                if (locked) {
+                    buttonsToLock.disable(true);
+                    buttonsToLock.css("pointer-events", "none");
+                    this._elements.sendInidicator.css("display", "inline-block");
+                } else {
+                    buttonsToLock.disable(false);
+                    buttonsToLock.css("pointer-events", "");
+                    this._elements.sendInidicator.css("display", "none");
+                }
+            }
+        }; //CaseLog
+
+        /*********** Paste image from clipboard ************/
         var curFileName;
         var globalClipboard;
 
+        //todo: Move to a separate class
         function ClipboardClass() {
             var self = this;
             var ctrlPressed = false;
@@ -173,7 +289,7 @@ $(function () {
                     if (pasteCatcher.children.length === 1) {
                         if (pasteCatcher.firstElementChild.src != undefined) {
                             //image
-                            clearScene();                           
+                            clearScene();
                             self.paste_createImage(pasteCatcher.firstElementChild.src);
                             var blob = self.dataURItoBlob(pasteCatcher.firstElementChild.src);
                             self.allowSave(blob);
@@ -193,6 +309,7 @@ $(function () {
                 $document.off('paste');
                 $("#paste_ff").remove();
             };
+
             //default paste action
             this.paste_auto = function (e) {
                 pasteMode = '';
@@ -274,7 +391,7 @@ $(function () {
 
             //draw image
             this.paste_createImage = function (dataUrl) {
-                
+
                 var $previewPnl = $('#previewPnl');
                 var imgCtrl = $previewPnl.find('img');
                 if (imgCtrl.length === 0) {
@@ -284,7 +401,7 @@ $(function () {
                 imgCtrl[0].src = dataUrl;
             };
 
-            this.allowSave = function (blob) {                
+            this.allowSave = function (blob) {
                 var uploadModal = $('#upload_clipboard_file_popup');
                 var $btnSave = uploadModal.find('#btnSave');
                 var extension = getExtensionByType(blob.type);
@@ -303,7 +420,7 @@ $(function () {
                 }
 
                 if (imgFilename.length === 0) {
-                    imgFilename = 'image_' + selfService.caseLog.generateRandomKey();
+                    imgFilename = 'image_' + generateRandomKey();
                 }
                 if (imgFilename.indexOf('.') === -1) {
                     imgFilename = imgFilename + '.' + extension;
@@ -336,9 +453,14 @@ $(function () {
                 $btnSave.show();
             }
         }
-     
+
+        function resetClipboard() {
+            clearScene();
+            globalClipboard.reset();
+        }
+
         function clearScene() {
-            curFileName = 'image_' + selfService.caseLog.generateRandomKey();
+            curFileName = 'image_' + generateRandomKey();
             $("#previewPnl").empty();
             var $uploadModal = $('#upload_clipboard_file_popup');
             var $btnSave = $uploadModal.find('#btnSave');
@@ -348,18 +470,15 @@ $(function () {
             $('#imageNameRequired').hide();
         }
 
-        function resetClipboard() {
-            clearScene();
-            globalClipboard.reset();
+        function generateRandomKey() {
+            function s4() {
+                return Math.floor((1 + Math.random()) * 0x10000)
+                    .toString(16)
+                    .substring(1);
+            }
+            return s4() + '-' + s4() + '-' + s4();
         }
-
-        $("#imgFilename").on('change', function () {
-            if ($("#imgFilename").val() == "")
-                $('#imageNameRequired').show();
-            else
-                $('#imageNameRequired').hide();
-        });
-
+        
         $("a[href='#upload_clipboard_file_popup']").on('click', function (e) {
             var $src = $(this);
             var $target = $('#upload_clipboard_file_popup');
@@ -367,76 +486,38 @@ $(function () {
             $target.attr('data-src', $src.attr('data-src'));
             globalClipboard = new ClipboardClass();
             resetClipboard();
-            $target.modal('show');            
+            $target.modal('show');
             globalClipboard.init.call(globalClipboard, $(e.target).attr('data-src'));
         });
-        
-        selfService.caseLog.saveLogMessage = function(isPopup, mandatoryMessage) {            
-            var note = $('#logNote').val();
-            $("#popupError").css("display", "none");            
-            if (note == "") {
-                if (isPopup) {
-                    $("#popupError").text(mandatoryMessage);
-                    $("#popupError").css("display", "block");
-                }
-                else
-                    ShowToastMessage(mandatoryMessage, "warning", false);
-            } else {
-                this.changeState(true);
-                $.get(saveLogMessageUrl, { caseId: casePreviewId, note: note, logFileGuid: logFileKey }, function (_CaseLogNoteMarkup) {
-                    if (isPopup) {
-                        selfService.caseLog.changeState(false);
-                        window.location.href = caseDetailsUrl + "/" + casePreviewId;
-                    } else {
-                        $('#Receipt_CaseLogPartial').html(_CaseLogNoteMarkup);
-                        $('#logNote').val('');
-                        selfService.caseLog.reloadLogFiles();
-                        selfService.caseLog.changeState(false);
-                    }
-                });
-            }
-        }
 
-        var buttonsToLock = $('#btnSendLog, #btnLoadFromClipboard, #btnUploadFile');
-
-        selfService.caseLog.changeState = function (locked) {
-            if (locked) {
-                buttonsToLock.addClass("disabled");
-                buttonsToLock.css("pointer-events", "none");
-                $("#sendLogIndicator").css("display", "inline-block");
-            } else {
-                buttonsToLock.removeClass('disabled');
-                buttonsToLock.css("pointer-events", "");
-                $("#sendLogIndicator").css("display", "none");
-            }
-        }
-       
+        /*****************************************************/
     })($);
-    
-    selfService.caseLog.generateRandomKey = function () {
-        function s4() {
-            return Math.floor((1 + Math.random()) * 0x10000)
-              .toString(16)
-              .substring(1);
-        }
-        return s4() + '-' + s4() + '-' + s4();
-    }
+
+    //UI handlers
+    $("#imgFilename").on('change', function () {
+        if ($("#imgFilename").val() == "")
+            $('#imageNameRequired').show();
+        else
+            $('#imageNameRequired').hide();
+    });
+
+    $('#btnSendLog').click(function (e) {
+        e.preventDefault();
+        selfService.caseLog.saveLogMessage();
+    });
 
     $("a[href='#upload_clipboard_file_popup_2']").on('click', function (e) {
         e.preventDefault();
-        var $target = $('#upload_clipboard_file_popup_2');
-        $target.modal('show');
+        $('#upload_clipboard_file_popup_2').modal('show');
     });
-
 
     $('#btnReOpen').click(function (e) {
         e.preventDefault();
-        var $target = $('#logNotePopup');
         $("#logNote").val("");
         $("#popupError").css("display", "none");
-        $target.modal('show');
+        $('#logNotePopup').modal('show');
 
     });
 
-    selfService.caseLog.init();
+    selfService.caseLog.init(LogModes.CaseSection); //TODO: PROVIDE VALID MODE from window parameters!!!!
 });

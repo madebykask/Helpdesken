@@ -268,11 +268,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (currentCase.CaseExtendedCaseDatas.Any())
                 return RedirectToAction("ExtendedCase", new { caseId = currentCase.Id });
 
-            if (currentCase.FinishingDate == null)
-            {
-                ViewBag.CurrentCaseId = currentCase.Id;
-            }
-
             currentCase.Description = currentCase.Description.Replace("\n", EnterMarkup);
             
             Customer currentCustomer;
@@ -795,7 +790,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             if (!caseId.IsNew() && !model.CaseDataModel.FinishingDate.HasValue)
-            ViewBag.CurrentCaseId = caseId.Value;
+                ViewBag.CurrentCaseId = caseId.Value;
 
             model.StatusBar = caseId.IsNew() ? new Dictionary<string, string>() : GetStatusBar(model);
 
@@ -1365,6 +1360,38 @@ namespace DH.Helpdesk.SelfService.Controllers
         public ViewResult AddCommentPopup(int casePreviewId)
         {
             return View("_AddCommentPopup");
+        }
+
+        [HttpGet]
+        [ChildActionOnly]
+        public PartialViewResult Communication(int caseId)
+        {
+            var model = GetCaseLogModel(caseId);
+            return PartialView("_Communication", model);
+        }
+
+        [HttpGet]
+        [ChildActionOnly]
+        public PartialViewResult CaseLogNote(int caseId)
+        {
+            var model = GetCaseLogModel(caseId);
+            return PartialView("_CaseLogNote", model);
+        }
+
+        private CaseLogModel GetCaseLogModel(int? caseId)
+        {
+            var caseLogs = new List<Log>();
+            if (caseId > 0)
+            {
+                caseLogs = _logService.GetLogsByCaseId(caseId.Value).OrderByDescending(l => l.RegTime).ToList();
+            }
+
+            var model = new CaseLogModel
+            {
+                CaseId = caseId ?? 0,
+                CaseLogs = caseLogs
+            };
+            return model;
         }
 
         [HttpPost]
