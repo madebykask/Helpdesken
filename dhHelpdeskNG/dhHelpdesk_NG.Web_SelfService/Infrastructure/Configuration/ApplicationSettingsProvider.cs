@@ -1,7 +1,6 @@
 using System;
 using DH.Helpdesk.Common.Configuration;
 using DH.Helpdesk.Common.Enums;
-using DH.Helpdesk.SelfService.Infrastructure.Helpers;
 
 namespace DH.Helpdesk.SelfService.Infrastructure.Configuration
 {
@@ -11,6 +10,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Configuration
         string HelpdeskPath { get; }
         LoginMode LoginMode { get; }
         bool ShowConfirmAfterCaseRegistration { get; }
+        bool ShowCommunicationForSelfService { get; }
     }
 
     public class ApplicationSettingsProvider : IApplicationSettings
@@ -46,6 +46,15 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Configuration
             get
             {
                 var val = AppConfigHelper.GetBoolean(AppSettingsKey.ConfirmMsgAfterCaseRegistration);
+                return val ?? false;
+            }
+        }
+
+        public bool ShowCommunicationForSelfService
+        {
+            get
+            {
+                var val = AppConfigHelper.GetBoolean(AppSettingsKey.ShowCommunicationForSelfService);
                 return val ?? false;
             }
         }

@@ -17,7 +17,9 @@
         saveLogMessageUrl: '@Url.Content("~/Case/_CaseLogNote")', //todo: check url?
         casePreviewId: '@Model.CasePreview.Id',
         caseDetailsUrl: '@Url.Content("~/Case/Index")',
-        logMandatoryText: '@Translation.Get("Comment is required!")'
+        logMandatoryText: '@Translation.Get("Comment is required!")',
+        isFinished : @Html.Raw(Model.IsFinished ? "true" : "false"),
+        logNotesMode: Number('@(ViewBag.IsLineManagerApplication || ViewBag.ShowCommunicationForSelfService ? 1 : 0)') // LogModes: CaseSection: 0, Communication: 1 (declared in case.log.js)
     };
 </script>
 
@@ -528,14 +530,13 @@
 }
 
 <!-- Case Info Fields -->
-@if (!Model.IsFinished) 
-{
-    <div id="logNotesSection">
-        @* //todo: Remoe ViewBag shall we hide log note section if Balloon setting is enabled in appConfig?  *@
-        @if (ViewBag.ApplicationType == ApplicationTypes.SelfService)
-        {
+
+
+    @if (!Model.IsFinished && ViewBag.ApplicationType == ApplicationTypes.SelfService && !ViewBag.ShowCommunicationForSelfService)
+    {
+        <div id="logNotesSection">
             <h4>@Translation.Get("Communicate") </h4>
-            <div  class="row">
+            <div class="row">
                 <div class="col-md-3 dh-col">
                     <div class="container form-horizontal">
                         <div class="container-fluid">
@@ -565,7 +566,6 @@
                                                 </table>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             }
@@ -586,9 +586,13 @@
                     </div>
                 </div>
             </div>
-        }
-        else
-        {
+        </div>
+    }
+
+    @* //TODO: check if additional conditions shall be used for AppType (LM, SelfService)?*@
+    @if (Model.IsFinished)
+    {
+        <div id="logNotesSectionPopup">
             <h4>@Translation.Get("Communicate") </h4>
             <div class="container-fluid">
                 <div class="row">
@@ -602,13 +606,11 @@
             <div id="logNotePopup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase_1" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-body" style="max-height: 600px; text-align:left;">
+                        <div class="modal-body padding20" style="max-height: 600px; text-align:left;">
                             <form onsubmit="return false;">
                                 <div class="form-group">
                                     <label>@Translation.Get("Add comment")</label><br />
-                                    <div>
-                                        <textarea id="logNote" class="col-md-12" style="height: 100px; margin-bottom: 10px;"></textarea>
-                                    </div>
+                                    <div><textarea id="logNote" class="col-md-12" style="height: 100px; margin-bottom: 10px;"></textarea></div>
                                 </div>
                             </form>
                         </div>
@@ -621,6 +623,7 @@
                     </div>
                 </div>
             </div>
-        }
-    </div>
-}
+        </div>
+    }
+
+

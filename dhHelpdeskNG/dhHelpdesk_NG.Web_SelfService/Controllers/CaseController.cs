@@ -315,6 +315,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             var cs = _settingService.GetCustomerSetting(currentCase.Customer.Id);
             ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
 
+            var appSettings = ConfigurationService.AppSettings;
+            ViewBag.ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService;
 
             return View(caseReceipt);
         }
@@ -351,6 +353,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
 
             var appSettings = ConfigurationService.AppSettings;
+            ViewBag.ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService;
 
             if (SessionFacade.CurrentUserIdentity != null)
             {                

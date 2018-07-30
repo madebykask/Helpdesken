@@ -823,7 +823,7 @@
     <Content Include="Views\Case\_CaseInformation.cshtml" />
     <Content Include="Views\Case\_ExtendedCaseControlPanel.cshtml" />
     <Content Include="Views\Case\ModalDialogs\_UploadExistingLogFilePopup.cshtml" />
-    <Content Include="Views\Case\ModalDialogs\_UploadLogFileFromClipboard.cshtml" />
+    <Content Include="Views\Case\ModalDialogs\_UploadFileFromClipboardPopup.cshtml" />
     <Content Include="Views\Shared\_MainMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>

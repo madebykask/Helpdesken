@@ -77,8 +77,6 @@ $(function () {
 
         function CaseLog(params) {
 
-            var currentLogMode = LogModes.CaseSection || 0;
-            
             var logFileKey = params.logFileKey;
             var getLogFilesUrl = params.getLogFilesUrl;
             var deleteLogFileUrl = params.deleteLogFileUrl;
@@ -88,11 +86,13 @@ $(function () {
             var casePreviewId = params.casePreviewId;
             var caseDetailsUrl = params.caseDetailsUrl;
             var logMandatoryText = params.logMandatoryText;
+            var currentLogMode = params.logNotesMode || 0;
+            var isCaseFinished = params.isFinished;
 
             //public
-            this.init = function (mode) {
-                currentLogMode = mode;
-                this._elements = getLogNoteElementsForMode(mode);
+            this.init = function () {
+                console.log('>>> Current mode: ' + (currentLogMode || 'undefined'));
+                this._elements = getLogNoteElementsForMode(currentLogMode);
                 changeState.call(this, false);
             };
 
@@ -111,11 +111,10 @@ $(function () {
             };
 
             //public
-            this.saveLogMessage = function () {
+            this.saveLogMessage = function (src) {
                 var self = this;
-                var popup = $(this).closest('#logNotePopup');
-                var isPopup = popup.length > 0;
-
+                
+                var isPopup = src && src === "popup";
                 console.log('>>> IsPopup: ' + (isPopup ? 'true' : 'false'));
 
                 $("#popupError").css("display", "none");
@@ -163,9 +162,13 @@ $(function () {
 
             //private
             function getLogNoteElementsForMode(mode) {
-                var $parent = Number(mode) === LogModes.Communication
-                    ? $('#communicationPanel')
-                    : $('#logNotesSection');
+                // if isCaseFinished then use popup elements
+                var $parent =
+                    isCaseFinished
+                        ? $("#logNotesSectionPopup")
+                        : Number(mode) === LogModes.Communication
+                            ? $('#communicationPanel')
+                            : $('#logNotesSection');
 
                 //note: _Communication and _CaseReceipt partial views has same ids for controls below. Its safe since both views cannot be used together.
                 return {
@@ -503,7 +506,8 @@ $(function () {
 
     $('#btnSendLog').click(function (e) {
         e.preventDefault();
-        selfService.caseLog.saveLogMessage();
+        var src = $(this).data('src');
+        selfService.caseLog.saveLogMessage(src);
     });
 
     $("a[href='#upload_clipboard_file_popup_2']").on('click', function (e) {
@@ -519,5 +523,5 @@ $(function () {
 
     });
 
-    selfService.caseLog.init(LogModes.CaseSection); //TODO: PROVIDE VALID MODE from window parameters!!!!
+    selfService.caseLog.init();
 });
