@@ -711,6 +711,9 @@ namespace DH.Helpdesk.SelfService.Controllers
             var cs = _settingService.GetCustomerSetting(customerId);
 
             ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
+            var appSettings = ConfigurationService.AppSettings;
+
+            ViewBag.ShowCommunicationForSelfservice = appSettings.ShowCommunicationForSelfService;
 
             caseModel.FieldSettings = _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId)
                 .Where(c => c.ShowExternal == 1)
@@ -799,7 +802,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             return model;
         }
-
+        
         private void SaveCaseFiles(string caseFileKey, int customerId, int caseId, int userId)
         {
             //Get from baseCase path

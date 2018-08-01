@@ -1,9 +1,10 @@
-﻿@using System.Web.Optimization
-@using DH.Helpdesk.Common.Constants
+﻿@using System.Web.Mvc.Html
+@using System.Web.Optimization
 @using DH.Helpdesk.BusinessData.OldComponents
-@using System.Web.Script.Serialization
+@using DH.Helpdesk.Common.Enums
 
 @model DH.Helpdesk.SelfService.Models.Case.ExtendedCaseViewModel
+
 @{
     var lastErrorMessage = "";
     if (Model.Result != null)
@@ -23,6 +24,19 @@
     var downloadCaseFileCompleteUrl = downloadCaseFileUrl + "?" + "id=" + "{id}" + "&fileName=" + "{name}";
 }
 
+@functions
+{
+    bool CheckField(string fieldName)
+    {
+        var fieldNameToCheck =
+            fieldName == GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()
+                ? fieldName.Replace('_', '.')
+                : fieldName;
+
+        return Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(fieldNameToCheck);
+    }
+}
+
 <script type="text/javascript">
 
     window.appParameters = {
@@ -39,7 +53,23 @@
         fetchDepartmentsUrl: '',
         fetchOUUrl: '',
         setProductAreaByCaseTypeUrl: ''
+
+        // Case log notes params
+        @*
+            uploadLogFileUrl: '@Url.Action("UploadLogFile", "Case")',
+            logFileKey: '@Model.LogFileGuid',
+            getLogFilesUrl: '@Url.Action("GetLogFiles", "Case")',
+            deleteLogFileUrl: '@Url.Action("DeleteLogFile")',
+            downloadLogFileUrl: '@Url.Action("DownloadLogFile")',
+            downloadLogFileParamUrl: '@(!string.IsNullOrEmpty(Model.LogFileGuid) ? "id=" + Model.LogFileGuid + "&" : string.Empty)',
+            saveLogMessageUrl: '@Url.Content("~/Case/_CaseLogNote")',
+            logMandatoryText: '@Translation.Get("Comment is required!")',
+            isFinished : @Html.Raw(Model.IsFinished ? "true" : "false"),
+            logNotesMode: Number('@(ViewBag.IsLineManagerApplication || ViewBag.ShowCommunicationForSelfService ? 1 : 0)')
+        *@
     };
+
+    //Scripts.Render("~/Content/js/Case/log")
 
     window.parameters = {
         saveCaseUrl: '@Url.Content("~/Case/ExtendedCase")',
@@ -335,7 +365,7 @@
             <div id="attachment-tab" class="tab-pane" style="overflow: hidden;">
                 <div>
                     @*///* This copied code from NewCase.cshtml */
-                      TODO: Make partial or shared code *@
+                        TODO: Make partial or shared code *@
 
                     <div class="col-md-12" style="margin-top: 20px; margin-bottom: 0px !important;">
                         @if (Model.CaseId == 0)
@@ -344,20 +374,20 @@
                             <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default hasAttribute" data-src="case" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard")</a>
                         }
                         <table id="NewCasefiles_table" class="table table-striped" style="margin-top: 10px;">
-                        <tbody>
-                            @if (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0)
-                            {
-                                foreach (var item in Model.CaseDataModel.CaseFiles)
+                            <tbody>
+                                @if (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0)
                                 {
-                                    <tr>
-                                        <td>
-                                            <i class="glyphicon glyphicon-file">&nbsp;</i>
-                                            <a style="color: blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
-                                        </td>
-                                    </tr>
+                                    foreach (var item in Model.CaseDataModel.CaseFiles)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <i class="glyphicon glyphicon-file">&nbsp;</i>
+                                                <a style="color: blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
+                                            </td>
+                                        </tr>
+                                    }
                                 }
-                            }
-                        </tbody>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -367,8 +397,8 @@
 
     @*/* only on new for now.. */*@
     @if (ViewBag.AttachmentPlacement == 1 &&
-         Model.CaseId == 0 &&
-         Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+                         Model.CaseId == 0 &&
+                         Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
     {
         <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -388,14 +418,9 @@
         </div>
         @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")
     }
-
 </div>
 
-@section Dialogs {
-    @if (Model.CaseId > 0 && ViewBag.IsLineManagerApplication)
-    {
-        @*//todo: add new model to pass configuration  for balloon-chat log notes*@
-        @Html.Action("Communication", new {caseId = Model.CaseId})
-    }
-}
+
+
+
 

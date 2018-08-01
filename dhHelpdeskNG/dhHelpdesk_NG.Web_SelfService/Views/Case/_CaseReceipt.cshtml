@@ -5,6 +5,7 @@
 
 @model DH.Helpdesk.SelfService.Models.Case.CaseOverviewModel
 
+
 <script type="text/javascript">
     window.appParameters = {
         uploadLogFileUrl: '@Url.Action("UploadLogFile", "Case")',
@@ -22,6 +23,7 @@
         logNotesMode: Number('@(ViewBag.IsLineManagerApplication || ViewBag.ShowCommunicationForSelfService ? 1 : 0)') // LogModes: CaseSection: 0, Communication: 1 (declared in case.log.js)
     };
 </script>
+
 
 @Scripts.Render("~/Content/js/Case/log")
 
