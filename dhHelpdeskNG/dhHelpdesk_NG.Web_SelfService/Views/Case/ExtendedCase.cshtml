@@ -53,26 +53,27 @@
         fetchDepartmentsUrl: '',
         fetchOUUrl: '',
         setProductAreaByCaseTypeUrl: ''
-
-        // Case log notes params
-        @*
-            uploadLogFileUrl: '@Url.Action("UploadLogFile", "Case")',
-            logFileKey: '@Model.LogFileGuid',
-            getLogFilesUrl: '@Url.Action("GetLogFiles", "Case")',
-            deleteLogFileUrl: '@Url.Action("DeleteLogFile")',
-            downloadLogFileUrl: '@Url.Action("DownloadLogFile")',
-            downloadLogFileParamUrl: '@(!string.IsNullOrEmpty(Model.LogFileGuid) ? "id=" + Model.LogFileGuid + "&" : string.Empty)',
-            saveLogMessageUrl: '@Url.Content("~/Case/_CaseLogNote")',
-            logMandatoryText: '@Translation.Get("Comment is required!")',
-            isFinished : @Html.Raw(Model.IsFinished ? "true" : "false"),
-            logNotesMode: Number('@(ViewBag.IsLineManagerApplication || ViewBag.ShowCommunicationForSelfService ? 1 : 0)')
-        *@
     };
 
-    //Scripts.Render("~/Content/js/Case/log")
+    window.caseLogsParameters = {
+        caseDetailsUrl: '@Url.Content("~/Case/Index")',
+        uploadLogFileUrl: '@Url.Action("UploadLogFile", "Case")',
+        getLogFilesUrl: '@Url.Action("GetLogFiles", "Case")',
+        deleteLogFileUrl: '@Url.Action("DeleteLogFile")',
+        downloadLogFileUrl: '@Url.Action("DownloadLogFile")',
+        downloadLogFileParamUrl: '@(!string.IsNullOrEmpty(Model.LogFileGuid) ? "id=" + Model.LogFileGuid + "&" : string.Empty)',
+        saveLogMessageUrl: '@Url.Action("_CaseLogNote", "Case")',
+        fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists", Enums.TranslationSource.TextTranslation))',
+        logMandatoryText: '@Translation.Get("Comment is required!")',
+        //model fields
+        caseId: Number('@Model.CaseId'),
+        logFileKey: '@Model.LogFileGuid',
+        isFinished : @Html.Raw(Model.CaseDataModel.IsFinished ? "true" : "false"),
+        logNotesMode: Number('@(ViewBag.IsLineManagerApplication || ViewBag.ShowCommunicationForSelfService ? 1 : 0)')
+    };
 
     window.parameters = {
-        saveCaseUrl: '@Url.Content("~/Case/ExtendedCase")',
+        saveCaseUrl: '@Url.Action("ExtendedCase", "Case")',
 
         caseFieldIds: {
             CaseId: "CaseDataModel_Id",
@@ -171,12 +172,11 @@
     */
 </script>
 
-@Scripts.Render("~/Content/js/Case/extendedCase")
-@Scripts.Render("~/Content/js/Case/edit")
 @if (Model.CaseId == 0 || (Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
 {
     @Html.Partial("_ExtendedCaseControlPanel", Model)
 }
+
 @using (Html.BeginForm("ExtendedCase", "case", null, FormMethod.Post, new { id = "extendedCaseForm" }))
 {
     // Base
@@ -330,6 +330,7 @@
 
     @Html.Hidden("ReturnUrl", (object)ViewBag.ReturnUrl)
 }
+
 <div class="container-fluid dh-container">
     <ul class="nav nav-tabs" id="tabsArea">
         <li id="extendedcase-tab-@extendedFormId" class="active">
@@ -348,14 +349,21 @@
     <div class="content tab-content">
         <div id="fragment-1" class="tab-pane active">
             <div class="container-fluid dh-container">
-                @if (Model.ShowRegistrationMessage && !string.IsNullOrEmpty(Model.CaseRegistrationMessage))
+                
+                @if (Model.CaseDataModel.FinishingDate != null)
                 {
-                    <div class="alert alert-success">
-                        @Html.Raw(Model.CaseRegistrationMessage.SetHtmlParameters())
-                    </div>
+                    @Html.Partial("_ClosedCaseAlert", Model.GetClosedCaseAlertModel())
                 }
+                else
+                {
+                     if (Model.ShowRegistrationMessage && !string.IsNullOrEmpty(Model.CaseRegistrationMessage))
+                     {
+                         <div class="alert alert-success">@Html.Raw(Model.CaseRegistrationMessage.SetHtmlParameters())</div>
+                     }
+                }
+                
                 <div id="container_@extendedFormId" class="">
-                    @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", Translation.Get(Model.ExtendedCaseDataModel.FormModel.Name) } })
+                    @Html.Partial("_CaseInformation", Model, new ViewDataDictionary {{"Headline", Translation.Get(Model.ExtendedCaseDataModel.FormModel.Name)}})
                     @*Extended case placement*@
                 </div>
             </div>
@@ -375,18 +383,18 @@
                         }
                         <table id="NewCasefiles_table" class="table table-striped" style="margin-top: 10px;">
                             <tbody>
-                                @if (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0)
+                            @if (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0)
+                            {
+                                foreach (var item in Model.CaseDataModel.CaseFiles)
                                 {
-                                    foreach (var item in Model.CaseDataModel.CaseFiles)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <i class="glyphicon glyphicon-file">&nbsp;</i>
-                                                <a style="color: blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
-                                            </td>
-                                        </tr>
-                                    }
+                                    <tr>
+                                        <td>
+                                            <i class="glyphicon glyphicon-file">&nbsp;</i>
+                                            <a style="color: blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
+                                        </td>
+                                    </tr>
                                 }
+                            }
                             </tbody>
                         </table>
                     </div>
@@ -397,8 +405,8 @@
 
     @*/* only on new for now.. */*@
     @if (ViewBag.AttachmentPlacement == 1 &&
-                         Model.CaseId == 0 &&
-                         Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+         Model.CaseId == 0 &&
+         Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
     {
         <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -420,7 +428,31 @@
     }
 </div>
 
+@section Scripts
+{
+    @Scripts.Render("~/Content/js/Case/extendedCase")
+    @Scripts.Render("~/Content/js/Case/edit")
+}
 
-
+@section Dialogs {
+    @* show log notes only for LineManager or if ShowCommunicationForSelfservice is enabled in web.config*@
+    @if (Model.CaseId > 0 && 
+         !Model.CaseDataModel.IsFinished && 
+         CheckField(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())  &&
+         (ViewBag.IsLineManagerApplication || 
+          ViewBag.ApplicationType == ApplicationTypes.SelfService && ViewBag.ShowCommunicationForSelfservice))
+    {
+        @Html.Partial("_Communication", Model.GetCaseLogModel())
+        @Html.Partial("ModalDialogs/_UploadExistingLogFilePopup")
+        @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")    
+        @Scripts.Render("~/Content/js/Case/log")
+    }
+    
+    @if (Model.CaseDataModel.IsFinished)
+    {
+        @Html.Partial("ModalDialogs/_CaseLogNotePopup", Model.GetCaseLogModel())
+        @Scripts.Render("~/Content/js/Case/log")
+    }
+}
 
 

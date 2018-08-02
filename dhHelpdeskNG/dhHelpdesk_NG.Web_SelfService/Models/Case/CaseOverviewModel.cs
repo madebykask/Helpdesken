@@ -83,5 +83,14 @@ namespace DH.Helpdesk.SelfService.Models.Case
                 CaseLogs = CaseLogs
             };
         }
+
+        public ClosedCaseAlertModel GetClosedCaseAlertModel()
+        {
+            return new ClosedCaseAlertModel()
+            {
+                FinishingDate = CasePreview?.FinishingDate,
+                CustomerSettings = CustomerSettings
+            };
+        }
     }
 }

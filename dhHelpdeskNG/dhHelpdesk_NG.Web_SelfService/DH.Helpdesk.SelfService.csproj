@@ -379,6 +379,7 @@
     <Compile Include="Models\Case\CaseFieldSettingJSModel.cs" />
     <Compile Include="Models\Case\CaseOverviewModel.cs" />
     <Compile Include="Models\Case\CaseLogModel.cs" />
+    <Compile Include="Models\Case\ClosedCaseAlertModel.cs" />
     <Compile Include="Models\Case\ExtendedCaseModel.cs" />
     <Compile Include="Models\Case\NewCaseModel.cs" />
     <Compile Include="Models\Case\UserCasesModel.cs" />
@@ -825,6 +826,8 @@
     <Content Include="Views\Case\ModalDialogs\_UploadExistingLogFilePopup.cshtml" />
     <Content Include="Views\Case\ModalDialogs\_UploadFileFromClipboardPopup.cshtml" />
     <Content Include="Views\Shared\_MainMenu.cshtml" />
+    <Content Include="Views\Case\_ClosedCaseAlert.cshtml" />
+    <Content Include="Views\Case\ModalDialogs\_CaseLogNotePopup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

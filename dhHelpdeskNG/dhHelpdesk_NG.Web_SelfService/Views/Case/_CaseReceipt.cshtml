@@ -1,31 +1,28 @@
 ﻿@using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils
 @using DH.Helpdesk.BusinessData.OldComponents
-@using System.Web.Optimization
 @using DH.Helpdesk.Common.Enums
 
 @model DH.Helpdesk.SelfService.Models.Case.CaseOverviewModel
 
 
 <script type="text/javascript">
-    window.appParameters = {
+    window.caseLogsParameters = {
+        caseDetailsUrl: '@Url.Content("~/Case/Index")',
         uploadLogFileUrl: '@Url.Action("UploadLogFile", "Case")',
-        logFileKey: '@Model.LogFileGuid',
         getLogFilesUrl: '@Url.Action("GetLogFiles", "Case")',
-        fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists", Enums.TranslationSource.TextTranslation))',
         deleteLogFileUrl: '@Url.Action("DeleteLogFile")',
         downloadLogFileUrl: '@Url.Action("DownloadLogFile")',
         downloadLogFileParamUrl: '@(!string.IsNullOrEmpty(Model.LogFileGuid) ? "id=" + Model.LogFileGuid + "&" : string.Empty)',
-        saveLogMessageUrl: '@Url.Content("~/Case/_CaseLogNote")', //todo: check url?
-        casePreviewId: '@Model.CasePreview.Id',
-        caseDetailsUrl: '@Url.Content("~/Case/Index")',
+        saveLogMessageUrl: '@Url.Action("_CaseLogNote", "Case")',
+        fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists", Enums.TranslationSource.TextTranslation))',
         logMandatoryText: '@Translation.Get("Comment is required!")',
+        //model fields
+        caseId: Number('@Model.CasePreview.Id'),
+        logFileKey: '@Model.LogFileGuid',
         isFinished : @Html.Raw(Model.IsFinished ? "true" : "false"),
         logNotesMode: Number('@(ViewBag.IsLineManagerApplication || ViewBag.ShowCommunicationForSelfService ? 1 : 0)') // LogModes: CaseSection: 0, Communication: 1 (declared in case.log.js)
-    };
+    }
 </script>
-
-
-@Scripts.Render("~/Content/js/Case/log")
 
 @Html.Hidden("caseLog_languageId", SessionFacade.CurrentLanguageId)
 
@@ -531,7 +528,7 @@
     </div>
 }
 
-<!-- Case Info Fields -->
+<!-- /Case Info Fields -->
 
 
     @if (!Model.IsFinished && ViewBag.ApplicationType == ApplicationTypes.SelfService && !ViewBag.ShowCommunicationForSelfService)
@@ -591,41 +588,19 @@
         </div>
     }
 
-    @* //TODO: check if additional conditions shall be used for AppType (LM, SelfService)?*@
     @if (Model.IsFinished)
     {
-        <div id="logNotesSectionPopup">
-            <h4>@Translation.Get("Communicate") </h4>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-8">
-                        <div id="CaseLogPartial" class="onpage com-list">
-                            @Html.Partial("_CaseLogNote", Model.GetCaseLogModel())
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="logNotePopup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase_1" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-body padding20" style="max-height: 600px; text-align:left;">
-                            <form onsubmit="return false;">
-                                <div class="form-group">
-                                    <label>@Translation.Get("Add comment")</label><br />
-                                    <div><textarea id="logNote" class="col-md-12" style="height: 100px; margin-bottom: 10px;"></textarea></div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <i id="sendLogIndicator" class="gif-loader">&nbsp;</i>
-                            <label id="popupError" class="error pull-left" style="display:none">  </label>
-                            <button id="btnSendLog" data-src="popup" class="btn btn-success">@Translation.Get("Send")</button>
-                            <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel")</button>
-                        </div>
+        <h4>@Translation.Get("Communicate") </h4>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8">
+                    <div id="CaseLogPartial" class="onpage com-list">
+                        @Html.Partial("_CaseLogNote", Model.GetCaseLogModel())
                     </div>
                 </div>
             </div>
         </div>
+        @Html.Partial("ModalDialogs/_CaseLogNotePopup")
     }
 
 

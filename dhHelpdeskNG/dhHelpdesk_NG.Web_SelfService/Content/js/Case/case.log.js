@@ -7,14 +7,13 @@ $(function () {
 
     (function ($) {
 
-        //todo: add case log mode parameter to windows
-
+        var params = window.caseLogsParameters;
         window.selfService = window.selfService || {};
-        window.selfService.caseLog = window.selfService.caseLog || new CaseLog(window.appParameters);
-
-        var uploadLogFileUrl = window.appParameters.uploadLogFileUrl;
-        var logFileKey = window.appParameters.logFileKey;
-        var fileAlreadyExistsMsg = window.appParameters.fileAlreadyExistsMsg;
+        window.selfService.caseLog = window.selfService.caseLog || new CaseLog(params);
+        
+        var uploadLogFileUrl = params.uploadLogFileUrl;
+        var logFileKey = params.logFileKey;
+        var fileAlreadyExistsMsg = params.fileAlreadyExistsMsg;
         
         var alreadyExistFileIds = [];
 
@@ -83,7 +82,7 @@ $(function () {
             var downloadLogFileUrl = params.downloadLogFileUrl;
             var downloadLogFileParamUrl = params.downloadLogFileParamUrl;
             var saveLogMessageUrl = params.saveLogMessageUrl;
-            var casePreviewId = params.casePreviewId;
+            var caseId = params.caseId;
             var caseDetailsUrl = params.caseDetailsUrl;
             var logMandatoryText = params.logMandatoryText;
             var currentLogMode = params.logNotesMode || 0;
@@ -130,22 +129,21 @@ $(function () {
                     }
                 } else {
                     changeState.call(self, true);
-                    $.get(saveLogMessageUrl,
-                        { caseId: casePreviewId, note: note, logFileGuid: logFileKey },
+                    $.get(saveLogMessageUrl, { caseId: caseId, note: note, logFileGuid: logFileKey },
                         function(res) {
                             if (isPopup) {
-                                window.location.href = caseDetailsUrl + "/" + casePreviewId;
+                                window.location.href = caseDetailsUrl + "/" + caseId;
                             } else {
                                 self._elements.logNotesDiv.html(res);
                                 self._elements.logNoteInput.val('');
                                 self.reloadLogFiles();
+                                changeState.call(self, false);
                             }
                         }).fail(function(e) {
                             console.error(e);
                             ShowToastMessage('Unknown error.', 'error', false);
-                        }).always(function() {
                             changeState.call(self, false);
-                    });
+                        });
                 }
             }
 

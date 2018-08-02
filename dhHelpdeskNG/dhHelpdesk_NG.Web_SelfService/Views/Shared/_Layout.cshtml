@@ -78,8 +78,7 @@
 
     <script type="text/javascript">
         window.ShowLanguage = '@layoutModel.ShowLanguage';
-        @*window.CaseId = '@layoutModel.CurrentCase_Id';*@
-        window.SaveMessageUrl = '@Url.Content("~/Case/_CaseLogNote")'; //Todo: check usages
+        window.SaveMessageUrl = '@Url.Action("_CaseLogNote", "Case")'; 
         window.ChangeLanguageUrl = '@Url.Action("ChangeLanguage", "Case")';
         window.no_results_text = '@Translation.GetForJS("Inga resultat matchar")';
         window.placeholder_text_multiple = '@Html.Raw(Translation.GetForJS("Välj en eller flera"))';

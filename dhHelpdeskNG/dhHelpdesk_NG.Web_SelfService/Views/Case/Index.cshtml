@@ -1,4 +1,5 @@
-﻿@using DH.Helpdesk.BusinessData.OldComponents
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Enums
 
 @model DH.Helpdesk.SelfService.Models.Case.CaseOverviewModel
@@ -42,28 +43,13 @@
 
                     @if (Model.CasePreview.FinishingDate != null)
                     {
-                        <div class="alert alert-success">
-                            @if (Model.CustomerSettings.CaseComplaintDays != 0)
-                            {
-                                TimeSpan diff = DateTime.Today - Model.CasePreview.FinishingDate.Value;
-                                if (diff.Days <= Model.CustomerSettings.CaseComplaintDays || Model.CustomerSettings.CaseComplaintDays == 9999)
-                                {
-                                    <a id="btnReOpen" href="#logNotePopup" class="btn btn-success" onclick="">@Translation.Get("Re-open", Enums.TranslationSource.TextTranslation)</a>
-                                }
-                            }
-                            <span class="glyphicon glyphicon-thumbs-up"></span>
-                            @Translation.Get("Closed Case", Enums.TranslationSource.TextTranslation)
-                            @Translation.Get(": ", Enums.TranslationSource.TextTranslation)
-                            @Html.DisplayFor(m => Model.CasePreview.FinishingDate, "Date")
-                        </div>
+                        @Html.Partial("_ClosedCaseAlert", Model.GetClosedCaseAlertModel())
                     }
                     else
                     {
                         if (Model.ShowRegistringMessage && !string.IsNullOrEmpty(Model.CaseRegistrationMessage))
                         {
-                            <div class="alert alert-success">
-                                @Html.Raw(Model.CaseRegistrationMessage.SetHtmlParameters())
-                            </div>
+                            <div class="alert alert-success">@Html.Raw(Model.CaseRegistrationMessage.SetHtmlParameters())</div>
                         }
                     }
                     
@@ -96,6 +82,10 @@
         }
     </div>
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/Content/js/Case/log")    
+}
 
 @section Dialogs {
     
