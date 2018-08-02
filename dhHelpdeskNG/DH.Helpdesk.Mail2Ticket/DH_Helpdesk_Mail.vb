@@ -909,20 +909,26 @@ Module DH_Helpdesk_Mail
         If message.InReplyTo IsNot Nothing AndAlso message.InReplyTo.Count > 0
             Dim messageId = message.InReplyTo(0).ToString()
             If Not String.IsNullOrEmpty(messageId)
-                items.Add(message.MessageId.ToString())
+                items.Add(messageId)
             End If
         End If 
 
         ' 3. References messageId
-        Dim refHeader =  GetMessageHeaderValue(message, "References")
+        Dim refHeader as String = GetMessageHeaderValue(message, "References")
         If Not String.IsNullOrEmpty(refHeader)
-            items.Add(refHeader)
+
+            Dim refMessageIds As String() = refHeader.Split(New Char() { " "c }, StringSplitOptions.RemoveEmptyEntries)
+            If (refMessageIds.Any())
+                items.AddRange(refMessageIds)
+            End If
+
         End If
 
-        Return items.ToList()
+        Return items.Distinct().ToList()
+
     End Function
 
-    Private Function FindCaseByUniqueMessageId(uniqueMessageId as Integer, customer As Customer) As CCase
+    Private Function FindCaseByUniqueMessageId(uniqueMessageId as String, customer As Customer) As CCase
 
         Dim objCase as CCase = Nothing
         Dim objCaseData as CaseData = new CaseData()
@@ -934,8 +940,9 @@ Module DH_Helpdesk_Mail
         Dim logData as Mail2TicketEntity  = objMailTicket.GetByMessageId(uniqueMessageId)
         If (logData IsNot Nothing AndAlso logData.CaseId > 0)
             objCase = objCaseData.getCase(logData.CaseId)
-            If objCase  IsNot Nothing
+            If objCase IsNot Nothing
                 LogToFile(String.Format("Message was found in Mail2Ticket table. CaseId: {0}, MessageId: {1}", objCase.Id, uniqueMessageId), customer.POP3DebugLevel)
+                Return objCase
             End If
         End If
 
@@ -944,6 +951,7 @@ Module DH_Helpdesk_Mail
             objCase = objCaseData.getCaseByMessageID(uniqueMessageId)
             If objCase IsNot Nothing
                 LogToFile(String.Format("Message was found in tblEmailLog table. CaseId: {0}, MessageId: {1}", objCase.Id, uniqueMessageId), customer.POP3DebugLevel)
+                Return objCase
             End If
         End If
 
@@ -952,6 +960,7 @@ Module DH_Helpdesk_Mail
             objCase = objCaseData.getCaseByOrderMessageID(uniqueMessageId)
             If objCase IsNot Nothing
                 LogToFile(String.Format("Message was found in tblOrderEmailLog table. CaseId: {0}, MessageId: {1}", objCase.Id, uniqueMessageId), customer.POP3DebugLevel)
+                Return objCase
             End If
         End If
 
