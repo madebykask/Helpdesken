@@ -149,9 +149,16 @@ BEGIN
 END
 GO
 
+RAISERROR ('Adding column UniqueMessageId to tblMail2Ticket', 10, 1) WITH NOWAIT
+IF not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UniqueMessageId' and sysobjects.name = N'tblMail2Ticket')
+BEGIN
+    ALTER TABLE dbo.tblMail2Ticket
+    ADD UniqueMessageId nvarchar(100) null
+END
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.38'
 --ROLLBACK --TMP
 
   
+
