@@ -54,11 +54,14 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
                 newCaseTypeId = TryMatchCaseTypeForCustomer(caseTypeId, caseCustomerId, newCustomerId);
             }
 
+            // 0 is a default CaseType
+            @case.CaseType_Id = newCaseTypeId > 0 ? newCaseTypeId : 0;
+
             @case.CaseType_Id = newCaseTypeId > 0 ? newCaseTypeId : newCustomerDefaults?.CaseTypeId ?? 0;
-            if (@case.CaseType_Id <= 0)
-            {
-                throw new HelpdeskException("Ärendet kan inte flyttas. Matchande ärendetyp eller standard ärendetyp kan inte hittas.");
-            }
+            //if (@case.CaseType_Id <= 0)
+            //{
+            //    throw new HelpdeskException("Ärendet kan inte flyttas. Matchande ärendetyp eller standard ärendetyp kan inte hittas.");
+            //}
 
             //2. set case default user as an administrator of the case
             @case.Performer_User_Id = newCustomerSettings.DefaultAdministrator;

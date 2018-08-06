@@ -155,7 +155,22 @@ BEGIN
     ALTER TABLE dbo.tblMail2Ticket
     ADD UniqueMessageId nvarchar(100) null
 END
+GO
 
+RAISERROR ('Adding empty CaseType record', 10, 1) WITH NOWAIT
+IF NOT EXISTS (select 1 from tblCaseType where Id = 0)
+BEGIN
+    set identity_insert tblCaseType on
+
+    DECLARE @customerId int
+    SET @customerId = (SELECT TOP 1 Id from tblCustomer ORDER BY Id ASC)
+    
+    INSERT INTO tblCaseType(Id, Customer_Id, CaseType, RequireApproving, isDefault, ShowOnExternalPage, CreatedDate, ChangedDate, Status, Parent_CaseType_Id, RelatedField, ITILProcess, isEMailDefault, AutomaticApproveTime, Form_Id, Selectable, User_Id, CaseTypeGUID, ShowOnExtPageCases)
+    VALUES(0, @customerId, 'Empty', 0, 0, 0, GETDATE(), GETDATE(), 0, NULL, '', 0, 0, 0, NULL, 0, NULL, newid(), 0)
+
+    set identity_insert tblCaseType off
+END
+GO
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.38'
 --ROLLBACK --TMP
