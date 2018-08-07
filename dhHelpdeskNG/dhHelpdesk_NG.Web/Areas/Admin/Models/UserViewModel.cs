@@ -140,6 +140,11 @@
         public IEnumerable<SelectListItem> AvailvableTimeZones { get; set; }
 
         public ChangePasswordModel ChangePasswordModel { get; set; }
+
+        public bool IsUserCopy
+        {
+            get { return CopyUserid > 0; }
+        }
     }
 
     public class UserSaveViewModel

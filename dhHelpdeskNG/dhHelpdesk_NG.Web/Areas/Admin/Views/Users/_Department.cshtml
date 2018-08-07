@@ -1,58 +1,52 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿
 @model DH.Helpdesk.Web.Areas.Admin.Models.UserInputViewModel
+
 <div class="container">
-    <p>@Translation.Get("För att begränsa rättigheter, markera de enheter som användaren endast bör ha tillgång till", Enums.TranslationSource.TextTranslation):</p>
+    <p>@Translation.Get("För att begränsa rättigheter, markera de enheter som användaren endast bör ha tillgång till"):</p>
     <table class="tableform">
         <thead>
             <tr>
-                <th class="span3">
-                    @Translation.Get("Kund", Enums.TranslationSource.TextTranslation)
-                </th>
-                <th>
-                    @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation)
-                </th>
+                <th class="span3">@Translation.Get("Kund")</th>
+                <th>@Translation.Get("Avdelning")</th>
             </tr>
         </thead>
         <tr>
             @foreach (var cu in Model.CustomerUsers)
             {
-                <tr>
-                    <td>@Translation.Get(cu.Customer.Name, Enums.TranslationSource.TextTranslation)</td>
-                    <td>
-                        <table>
-                            @{
-                                int i = 1;
-                            }
-                            <tr>
-                                @foreach (var d in Model.Departments)
+            <tr>
+                <td>@Translation.Get(cu.Customer.Name)</td>
+                <td>
+                    <table>
+                        @{ int i = 1; }
+                        <tr>
+                            @foreach (var d in Model.Departments)
+                            {
+                                if (d.Customer_Id == cu.Customer_Id)
                                 {
-                                    if (d.Customer_Id == cu.Customer_Id)
+                                    <td class="span5">
+                                        <input type="checkbox" name="Departments" @(d.Users.Any(u => u.Id == cu.User_Id) ? "checked=checked" : "") value="@d.Id" />
+                                        @*@Translation.Get(d.DepartmentName, Enums.TranslationSource.TextTranslation)*@
+                                        @d.DepartmentName
+                                    </td>
+
+                                    if (i % 3 == 0)
                                     {
-                                        
-                                    
-                                        <td class="span5">
-                                            <input type="checkbox" name="@string.Format("Departments")" @(d.Users.Contains(cu.User) ? "checked=checked" : "") value="@d.Id" />
-                                            @*@Translation.Get(d.DepartmentName, Enums.TranslationSource.TextTranslation)*@
-                                            @d.DepartmentName
-                                        </td>
-                                    
-                                        if (i % 3 == 0)
-                                        {
-                                            @Html.Raw("</tr><tr>");
-                                            i = 0;
-                                        }
-                                        i++;
-                                    }
-                                    else if (i > 1){
                                         @Html.Raw("</tr><tr>");
-                                        i = 1;
+                                        i = 0;
                                     }
-                                    
+                                    i++;
                                 }
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
+                                else if (i > 1)
+                                {
+                                    @Html.Raw("</tr><tr>");
+                                    i = 1;
+                                }
+
+                            }
+                        </tr>
+                    </table>
+                </td>
+            </tr>
             }
-    </table>
-</div>
+        </table>
+    </div>

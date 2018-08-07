@@ -48,8 +48,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var query = from d in this.DataContext.Departments
                         join cu in this.DataContext.CustomerUsers on d.Customer_Id equals cu.Customer_Id
                         join u in this.DataContext.Users on cu.User_Id equals u.Id
-                        where cu.User_Id == userId && (cu.Customer_Id == customerId || customerId == 0)
-                            && d.IsActive != 0
+                        where cu.User_Id == userId && (cu.Customer_Id == customerId || customerId == 0) && d.IsActive != 0
                         select d;
 
             return query.OrderBy(x => x.DepartmentName);
