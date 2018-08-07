@@ -47,15 +47,15 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
             @case.Customer_Id = newCustomerId;
 
             //1. set case typeId
-            var newCaseTypeId = 0;
-            var caseTypeId = @case.CaseType?.Id ?? 0;
-            if (caseTypeId > 0)
+            var newCaseTypeId = Common.Constants.CaseType.EmptyId;
+            var caseTypeId = @case.CaseType?.Id ?? Common.Constants.CaseType.EmptyId;
+            if (caseTypeId > Common.Constants.CaseType.EmptyId)
             {
                 newCaseTypeId = TryMatchCaseTypeForCustomer(caseTypeId, caseCustomerId, newCustomerId);
             }
 
             // 0 is a fixed emptpy CaseType in the database
-            @case.CaseType_Id = newCaseTypeId > 0 ? newCaseTypeId : newCustomerDefaults?.CaseTypeId ?? 0;
+            @case.CaseType_Id = newCaseTypeId > Common.Constants.CaseType.EmptyId ? newCaseTypeId : newCustomerDefaults?.CaseTypeId ?? Common.Constants.CaseType.EmptyId;
             //if (@case.CaseType_Id <= 0)
             //{
             //    throw new HelpdeskException("Ärendet kan inte flyttas. Matchande ärendetyp eller standard ärendetyp kan inte hittas.");
