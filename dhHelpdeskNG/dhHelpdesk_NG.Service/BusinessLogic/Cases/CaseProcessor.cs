@@ -54,9 +54,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
                 newCaseTypeId = TryMatchCaseTypeForCustomer(caseTypeId, caseCustomerId, newCustomerId);
             }
 
-            // 0 is a default CaseType
-            @case.CaseType_Id = newCaseTypeId > 0 ? newCaseTypeId : 0;
-
+            // 0 is a fixed emptpy CaseType in the database
             @case.CaseType_Id = newCaseTypeId > 0 ? newCaseTypeId : newCustomerDefaults?.CaseTypeId ?? 0;
             //if (@case.CaseType_Id <= 0)
             //{
