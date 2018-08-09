@@ -45,7 +45,7 @@ namespace DH.Helpdesk.Services.Services
 
     public interface IUserService
     {
-        IEnumerable<CustomerUser> GetCustomerUserForUser(int userId);
+        IList<CustomerUser> GetCustomerUserForUser(int userId);
 
         IList<UserLists> GetUserOnCases(int customer, bool isTakeOnlyActive = false);
         IList<CustomerWorkingGroupForUser> GetListToUserWorkingGroup(int userId);
@@ -271,9 +271,9 @@ namespace DH.Helpdesk.Services.Services
             return this._userRepository.UserHasActiveCase(customerId, userId, workingGroups);
         }
 
-        public IEnumerable<CustomerUser> GetCustomerUserForUser(int userId)
+        public IList<CustomerUser> GetCustomerUserForUser(int userId)
         {
-            return this._customerUserRepository.GetAll().Where(x => x.User_Id == userId);
+            return this._customerUserRepository.GetMany(x => x.User_Id == userId).ToList();
         }
 
         public IList<CustomerWorkingGroupForUser> GetListToUserWorkingGroup(int userId)

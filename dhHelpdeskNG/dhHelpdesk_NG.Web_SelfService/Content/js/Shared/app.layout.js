@@ -109,10 +109,11 @@ function ShowToastMessage(message, msgType, isSticky) {
     });
 }
 
+//todo: use selfservice.caseLog.saveLogMessage !!!
 function SaveExternalMessage() {
     if (window.CaseId == null || window.CaseId == "")
         return;
-
+    //this.changeState(true); TODO?
     var note = $('#myNote').val();
     if (note == "") {
         ShowToastMessage('Comment text is empty!', "warning", false);
@@ -130,6 +131,7 @@ $(document).ready(function () {
     });
 
     //COMMUNICATE SCRIPT
+    //todo: move to a separate script!
     $('.mapButton').click(function () {
         var mapPos = parseInt($('.siteCom').css('left'), 10);
         if (mapPos < 0) {
@@ -148,5 +150,22 @@ $(document).ready(function () {
         }
     });
     //END COMMUNICATE SCRIPT
+
+    //handle link buttons with disabled state
+    $('body').on('click', 'a.disabled', function (event) {
+        event.preventDefault();
+    });
+
+    jQuery.fn.extend({
+        disable: function (state) {
+            return this.each(function () {
+                var $this = $(this);
+                if ($this.is('input, button, textarea, select'))
+                    $this.prop("disabled", state);
+                else
+                    $this.toggleClass('disabled', state);
+            });
+        }
+    });
 });
 

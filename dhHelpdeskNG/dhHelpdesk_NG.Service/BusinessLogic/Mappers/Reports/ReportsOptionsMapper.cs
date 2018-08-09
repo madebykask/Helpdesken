@@ -193,6 +193,7 @@
             if (caseTypes != null)
             {
                 IQueryable<UnionItemOverview> union;
+                caseTypes = caseTypes.Where(t => t.Id != Common.Constants.CaseType.EmptyId);
                 if (caseTypeRootsOnly)
                 {
                     union = caseTypes.Select(t => new UnionItemOverview

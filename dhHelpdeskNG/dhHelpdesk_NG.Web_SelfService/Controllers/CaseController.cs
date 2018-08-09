@@ -268,11 +268,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (currentCase.CaseExtendedCaseDatas.Any())
                 return RedirectToAction("ExtendedCase", new { caseId = currentCase.Id });
 
-            if (currentCase.FinishingDate == null)
-            {
-                ViewBag.CurrentCaseId = currentCase.Id;
-            }
-
             currentCase.Description = currentCase.Description.Replace("\n", EnterMarkup);
             
             Customer currentCustomer;
@@ -316,10 +311,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                 caseReceipt.CanAddExternalNote = false;
             }
 
-
             var cs = _settingService.GetCustomerSetting(currentCase.Customer.Id);
             ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
 
+            var appSettings = ConfigurationService.AppSettings;
+            ViewBag.ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService;
 
             return View(caseReceipt);
         }
@@ -356,6 +352,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
 
             var appSettings = ConfigurationService.AppSettings;
+            ViewBag.ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService;
 
             if (SessionFacade.CurrentUserIdentity != null)
             {                
@@ -709,11 +706,13 @@ namespace DH.Helpdesk.SelfService.Controllers
         
             var languageId = SessionFacade.CurrentLanguageId;
             var customerId = SessionFacade.CurrentCustomer.Id;
+            var appSettings = ConfigurationService.AppSettings;
             var globalSettings = _globalSettingService.GetGlobalSettings().First();
             var cs = _settingService.GetCustomerSetting(customerId);
-
+            
             ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
-
+            ViewBag.ShowCommunicationForSelfservice = appSettings.ShowCommunicationForSelfService;
+            
             caseModel.FieldSettings = _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId)
                 .Where(c => c.ShowExternal == 1)
                 .ToList();
@@ -769,20 +768,23 @@ namespace DH.Helpdesk.SelfService.Controllers
             var isRelatedCase = caseId > 0 && _caseService.IsRelated(caseId ?? 0);
             var customerCaseSolutions =
                 _caseSolutionService.GetCustomerCaseSolutionsOverview(customerId, userId: null);
-
+            
             var model = new ExtendedCaseViewModel
             {
                 CaseId = initData.CaseId,
                 CaseTemplateId = initData.CaseSolutionId,
                 CustomerId = initData.CustomerId,
                 LanguageId = initData.LanguageId,
+                CustomerSettings = cs,
                 ExtendedCaseDataModel = extendedCaseDataModel,
                 CurrentUser = SessionFacade.CurrentUserIdentity.EmployeeNumber,
                 UserRole = initData.UserRole,
                 StateSecondaryId = caseStateSecondaryId,
                 CaseOU = caseModel.OU_Id.HasValue ? _ouService.GetOU(caseModel.OU_Id.Value) : null,
                 WorkflowSteps = GetWorkflowStepModel(customerId, caseId ?? 0, caseTemplateId ?? 0, customerCaseSolutions, isRelatedCase),
-                CaseDataModel = caseModel
+                CaseDataModel = caseModel,
+                LogFileGuid = Guid.NewGuid().ToString(),
+                CaseLogs = caseId.HasValue ? _logService.GetLogsByCaseId(caseId.Value).OrderByDescending(l => l.LogDate).ToList() : new List<Log>()
             };
 
             if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
@@ -794,14 +796,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                     model.ExtendedCaseDataModel.FormModel.Name = caseTemplate.Name;
             }
 
-            if (!caseId.IsNew() && !model.CaseDataModel.FinishingDate.HasValue)
-            ViewBag.CurrentCaseId = caseId.Value;
-
             model.StatusBar = caseId.IsNew() ? new Dictionary<string, string>() : GetStatusBar(model);
 
             return model;
         }
-
+        
         private void SaveCaseFiles(string caseFileKey, int customerId, int caseId, int userId)
         {
             //Get from baseCase path
@@ -1367,6 +1366,38 @@ namespace DH.Helpdesk.SelfService.Controllers
             return View("_AddCommentPopup");
         }
 
+        [HttpGet]
+        [ChildActionOnly]
+        public PartialViewResult Communication(int caseId)
+        {
+            var model = GetCaseLogModel(caseId);
+            return PartialView("_Communication", model);
+        }
+
+        [HttpGet]
+        [ChildActionOnly]
+        public PartialViewResult CaseLogNote(int caseId)
+        {
+            var model = GetCaseLogModel(caseId);
+            return PartialView("_CaseLogNote", model);
+        }
+
+        private CaseLogModel GetCaseLogModel(int? caseId)
+        {
+            var caseLogs = new List<Log>();
+            if (caseId > 0)
+            {
+                caseLogs = _logService.GetLogsByCaseId(caseId.Value).OrderByDescending(l => l.RegTime).ToList();
+            }
+
+            var model = new CaseLogModel
+            {
+                CaseId = caseId ?? 0,
+                CaseLogs = caseLogs
+            };
+            return model;
+        }
+
         [HttpPost]
         public JsonResult GetProductAreaByCaseType(int? caseTypeId)
         {
@@ -1786,7 +1817,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (newCase.User_Id <= 0)
                 newCase.User_Id = null;
 
-            var mailSenders = new MailSenders();            
+            var mailSenders = new MailSenders();
             mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
             if (newCase.WorkingGroup_Id.HasValue)
             {
@@ -1795,6 +1826,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                     if (!string.IsNullOrWhiteSpace(curWG.EMail) && _emailService.IsValidEmail(curWG.EMail))
                         mailSenders.WGEmail = curWG.EMail;
             }
+
             caseMailSetting.CustomeMailFromAddress = mailSenders;
 
             var basePath = _masterDataService.GetFilePath(newCase.Customer_Id);

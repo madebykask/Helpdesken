@@ -1,9 +1,10 @@
-﻿@using System.Web.Optimization
-@using DH.Helpdesk.Common.Constants
+﻿@using System.Web.Mvc.Html
+@using System.Web.Optimization
 @using DH.Helpdesk.BusinessData.OldComponents
-@using System.Web.Script.Serialization
+@using DH.Helpdesk.Common.Enums
 
 @model DH.Helpdesk.SelfService.Models.Case.ExtendedCaseViewModel
+
 @{
     var lastErrorMessage = "";
     if (Model.Result != null)
@@ -21,6 +22,19 @@
     var downloadCaseFileUrl = Url.Action("DownloadNewCaseFile");
     var downloadCaseFileParamUrl = (!string.IsNullOrEmpty(Model.CaseDataModel.CaseFileKey) ? "id=" + Model.CaseDataModel.CaseFileKey + "&" : string.Empty);
     var downloadCaseFileCompleteUrl = downloadCaseFileUrl + "?" + "id=" + "{id}" + "&fileName=" + "{name}";
+}
+
+@functions
+{
+    bool CheckField(string fieldName)
+    {
+        var fieldNameToCheck =
+            fieldName == GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()
+                ? fieldName.Replace('_', '.')
+                : fieldName;
+
+        return Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(fieldNameToCheck);
+    }
 }
 
 <script type="text/javascript">
@@ -41,8 +55,25 @@
         setProductAreaByCaseTypeUrl: ''
     };
 
+    window.caseLogsParameters = {
+        caseDetailsUrl: '@Url.Content("~/Case/Index")',
+        uploadLogFileUrl: '@Url.Action("UploadLogFile", "Case")',
+        getLogFilesUrl: '@Url.Action("GetLogFiles", "Case")',
+        deleteLogFileUrl: '@Url.Action("DeleteLogFile")',
+        downloadLogFileUrl: '@Url.Action("DownloadLogFile")',
+        downloadLogFileParamUrl: '@(!string.IsNullOrEmpty(Model.LogFileGuid) ? "id=" + Model.LogFileGuid + "&" : string.Empty)',
+        saveLogMessageUrl: '@Url.Action("_CaseLogNote", "Case")',
+        fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists", Enums.TranslationSource.TextTranslation))',
+        logMandatoryText: '@Translation.Get("Comment is required!")',
+        //model fields
+        caseId: Number('@Model.CaseId'),
+        logFileKey: '@Model.LogFileGuid',
+        isFinished : @Html.Raw(Model.CaseDataModel.IsFinished ? "true" : "false"),
+        logNotesMode: Number('@(ViewBag.IsLineManagerApplication || ViewBag.ShowCommunicationForSelfService ? 1 : 0)')
+    };
+
     window.parameters = {
-        saveCaseUrl: '@Url.Content("~/Case/ExtendedCase")',
+        saveCaseUrl: '@Url.Action("ExtendedCase", "Case")',
 
         caseFieldIds: {
             CaseId: "CaseDataModel_Id",
@@ -141,12 +172,11 @@
     */
 </script>
 
-@Scripts.Render("~/Content/js/Case/extendedCase")
-@Scripts.Render("~/Content/js/Case/edit")
 @if (Model.CaseId == 0 || (Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
 {
     @Html.Partial("_ExtendedCaseControlPanel", Model)
 }
+
 @using (Html.BeginForm("ExtendedCase", "case", null, FormMethod.Post, new { id = "extendedCaseForm" }))
 {
     // Base
@@ -300,6 +330,7 @@
 
     @Html.Hidden("ReturnUrl", (object)ViewBag.ReturnUrl)
 }
+
 <div class="container-fluid dh-container">
     <ul class="nav nav-tabs" id="tabsArea">
         <li id="extendedcase-tab-@extendedFormId" class="active">
@@ -318,12 +349,19 @@
     <div class="content tab-content">
         <div id="fragment-1" class="tab-pane active">
             <div class="container-fluid dh-container">
-                @if (Model.ShowRegistrationMessage && !string.IsNullOrEmpty(Model.CaseRegistrationMessage))
+                
+                @if (Model.CaseDataModel.FinishingDate != null)
                 {
-                    <div class="alert alert-success">
-                        @Html.Raw(Model.CaseRegistrationMessage.SetHtmlParameters())
-                    </div>
+                    @Html.Partial("_ClosedCaseAlert", Model.GetClosedCaseAlertModel())
                 }
+                else
+                {
+                     if (Model.ShowRegistrationMessage && !string.IsNullOrEmpty(Model.CaseRegistrationMessage))
+                     {
+                         <div class="alert alert-success">@Html.Raw(Model.CaseRegistrationMessage.SetHtmlParameters())</div>
+                     }
+                }
+                
                 <div id="container_@extendedFormId" class="">
                     @Html.Partial("_CaseInformation", Model, new ViewDataDictionary {{"Headline", Translation.Get(Model.ExtendedCaseDataModel.FormModel.Name)}})
                     @*Extended case placement*@
@@ -335,13 +373,13 @@
             <div id="attachment-tab" class="tab-pane" style="overflow: hidden;">
                 <div>
                     @*///* This copied code from NewCase.cshtml */
-                        ///* TODO: Make partial or shared code */*@
+                        TODO: Make partial or shared code *@
 
                     <div class="col-md-12" style="margin-top: 20px; margin-bottom: 0px !important;">
                         @if (Model.CaseId == 0)
                         {
-                            <a id="" href="#NewCase_upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>
-                            <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default hasAttribute" data-src="case" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard", Enums.TranslationSource.TextTranslation)</a>
+                            <a href="#NewCase_upload_files_popup" id="" role="button" class="btn btn-default hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add")</a>
+                            <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default hasAttribute" data-src="case" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard")</a>
                         }
                         <table id="NewCasefiles_table" class="table table-striped" style="margin-top: 10px;">
                             <tbody>
@@ -351,7 +389,8 @@
                                 {
                                     <tr>
                                         <td>
-                                            <i class="glyphicon glyphicon-file">&nbsp;</i><a style="color: blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
+                                            <i class="glyphicon glyphicon-file">&nbsp;</i>
+                                            <a style="color: blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
                                         </td>
                                     </tr>
                                 }
@@ -362,12 +401,12 @@
                 </div>
             </div>
         }
-
-
     </div>
 
     @*/* only on new for now.. */*@
-    @if (ViewBag.AttachmentPlacement == 1 && Model.CaseId == 0 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+    @if (ViewBag.AttachmentPlacement == 1 &&
+         Model.CaseId == 0 &&
+         Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
     {
         <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -385,35 +424,35 @@
                 </div>
             </div>
         </div>
-        <div id="upload_clipboard_file_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3>&nbsp;</h3>
-                    </div>
-                    <div class="modal-body" style="max-height: 600px; text-align: center;">
-                        <form onsubmit="return false;">
-                            <div class="form-group">
-                                <label>@Translation.Get("1. Write filename (leave blank for automatic naming)", Enums.TranslationSource.TextTranslation) </label><br/>
-                                <input class="" type="text" id="imgFilename" autocomplete="Off"/>
-                                <span id="imageNameRequired" style="color: red"> @Translation.Get("must be specified", Enums.TranslationSource.TextTranslation) </span>
-                            </div>
-                            <div class="form-group">
-                                <label>@(Translation.Get("2. Press Ctrl+V for inserting picture", Enums.TranslationSource.TextTranslation))</label><br/>
-                                <label>@(Translation.Get("3. Click on Save for adding to case", Enums.TranslationSource.TextTranslation)) </label>
-                                <div id="previewPnl"></div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save", Enums.TranslationSource.TextTranslation)</button>
-                        <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")
     }
-
 </div>
+
+@section Scripts
+{
+    @Scripts.Render("~/Content/js/Case/extendedCase")
+    @Scripts.Render("~/Content/js/Case/edit")
+}
+
+@section Dialogs {
+    @* show log notes only for LineManager or if ShowCommunicationForSelfservice is enabled in web.config*@
+    @if (Model.CaseId > 0 && 
+         !Model.CaseDataModel.IsFinished && 
+         CheckField(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())  &&
+         (ViewBag.IsLineManagerApplication || 
+          ViewBag.ApplicationType == ApplicationTypes.SelfService && ViewBag.ShowCommunicationForSelfservice))
+    {
+        @Html.Partial("_Communication", Model.GetCaseLogModel())
+        @Html.Partial("ModalDialogs/_UploadExistingLogFilePopup")
+        @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")    
+        @Scripts.Render("~/Content/js/Case/log")
+    }
+    
+    @if (Model.CaseDataModel.IsFinished)
+    {
+        @Html.Partial("ModalDialogs/_CaseLogNotePopup", Model.GetCaseLogModel())
+        @Scripts.Render("~/Content/js/Case/log")
+    }
+}
+
 

@@ -232,7 +232,7 @@ namespace DH.Helpdesk.Web.Controllers
             var model = list.Select(x => new ComputerUserCategoryListItem()
             {
                 Id = x.Id,
-                Name = x.Name,
+                Name = Translation.GetMasterDataTranslation(x.Name),
                 IsEmpty = x.IsEmpty,
                 IsDefaultInitiator = IsGetDefaultCategory(x.Id, x.IsEmpty, initiatorCaseFieldSettings),
                 IsDefaultRegarding = IsGetDefaultCategory(x.Id, x.IsEmpty, regardingCaseFieldSettings)
@@ -249,6 +249,8 @@ namespace DH.Helpdesk.Web.Controllers
                 Name = "",
                 CustomerId = SessionFacade.CurrentCustomer.Id,
             };
+
+            InitSectionHeaders(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
 
             return View("EditUserCategory", category);
         }
@@ -285,6 +287,22 @@ namespace DH.Helpdesk.Web.Controllers
             var regardingSection = _caseSectionService.GetCaseSectionByType((int)CaseSectionType.Regarding, customerId, languageId);
             ViewBag.InitiatorSectionHeader = initiatorSection.SectionHeader ?? Translation.GetCoreTextTranslation(CaseSections.InitiatorHeader);
             ViewBag.RegardingSectionHeader = regardingSection.SectionHeader ?? Translation.GetCoreTextTranslation(CaseSections.RegardingHeader);
+        }
+
+        private int? GetInitiatorDefaultCategoryId(int customerId)
+        {
+            int defaultCategoryId = 0;
+            var customerFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
+
+            var initiatorCaseFieldSettings =
+                customerFieldSettings.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString());
+
+            if (Int32.TryParse(initiatorCaseFieldSettings.DefaultValue, out defaultCategoryId))
+            {
+                return defaultCategoryId;
+            }
+
+            return null;
         }
 
         private ComputerUserCategoryData GetComputerUserCategoryData(int categoryId, int customerId)
@@ -386,17 +404,20 @@ namespace DH.Helpdesk.Web.Controllers
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var currentLanguageId = SessionFacade.CurrentLanguageId;
 
-            var filters = SessionFacade.FindPageFilters<NotifierFilters>(PageName.Notifiers);
+            var notifierFilterKey = string.Format(PageName.Notifiers, currentCustomerId);
+            var filters = SessionFacade.FindPageFilters<NotifierFilters>(notifierFilterKey);
             if (filters == null)
             {
                 filters = NotifierFilters.CreateDefault();
-                SessionFacade.SavePageFilters(PageName.Notifiers, filters);
+                filters.ComputerUserCategoryID = GetInitiatorDefaultCategoryId(currentCustomerId);
+                SessionFacade.SavePageFilters(notifierFilterKey, filters);
             }
 
-            var settings = this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(
-                currentCustomerId,
-                currentLanguageId);
+            var settings = 
+                this.notifierFieldSettingRepository.FindByCustomerIdAndLanguageId(currentCustomerId, currentLanguageId);
+
             IndexModel model = null;
+
             if (settings.IsEmpty)
             {
                 model = this.indexModelFactory.CreateEmpty();
@@ -426,9 +447,8 @@ namespace DH.Helpdesk.Web.Controllers
 
                     if (filters.RegionId.HasValue)
                     {
-                        searchDepartments = this.departmentRepository.FindActiveByCustomerIdAndRegionId(
-                            currentCustomerId,
-                            filters.RegionId.Value);
+                        searchDepartments = 
+                            this.departmentRepository.FindActiveByCustomerIdAndRegionId(currentCustomerId, filters.RegionId.Value);
                     }
                     else
                     {
@@ -444,6 +464,14 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 searchComputerUserCategories = GetUserCategoriesList(currentCustomerId);
+                
+                //reset categoryId if its not in the list of user categories of the customer
+                if (filters.ComputerUserCategoryID.HasValue && 
+                    !searchComputerUserCategories.Any(x => x.Value.Equals(filters.ComputerUserCategoryID.ToString(), StringComparison.OrdinalIgnoreCase)))
+                {
+                    filters.ComputerUserCategoryID = null;
+                    SessionFacade.SavePageFilters(notifierFilterKey, filters);
+                }
 
                 var sortField = !string.IsNullOrEmpty(filters.SortByField)
                     ? new SortField(filters.SortByField, filters.SortBy)
@@ -489,11 +517,11 @@ namespace DH.Helpdesk.Web.Controllers
             if (computerUserCategories.Any())
             {
                 searchComputerUserCategories = computerUserCategories.Where(o => !o.IsEmpty)
-                    .Select(o => new ItemOverview(o.Name, o.Id.ToString()))
+                    .Select(o => new ItemOverview(Translation.GetMasterDataTranslation(o.Name), o.Id.ToString()))
                     .ToList();
 
                 var emptyCategoryName = computerUserCategories.FirstOrDefault(x => x.IsEmpty)?.Name ?? ComputerUserCategory.EmptyCategoryDefaultName;
-                searchComputerUserCategories.Insert(0, new ItemOverview(Translation.GetCoreTextTranslation(emptyCategoryName), ComputerUserCategory.EmptyCategoryId.ToString()));
+                searchComputerUserCategories.Insert(0, new ItemOverview(Translation.GetMasterDataTranslation(emptyCategoryName), ComputerUserCategory.EmptyCategoryId.ToString()));
             }
             return searchComputerUserCategories;
         }
@@ -806,8 +834,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             
             ComputerUserCategory selectedCategory = null;
-            
-            var initiatorFilter = SessionFacade.FindPageFilters<NotifierFilters>(PageName.Notifiers);
+
+            var notifierFilterKey = string.Format(PageName.Notifiers, currentCustomerId);
+            var initiatorFilter = SessionFacade.FindPageFilters<NotifierFilters>(notifierFilterKey);
             var categoryId = initiatorFilter?.ComputerUserCategoryID ?? 0;
             if (categoryId > 0)
             {
@@ -993,11 +1022,12 @@ namespace DH.Helpdesk.Web.Controllers
                 currentCustomerId,
                 SessionFacade.CurrentLanguageId);
 
-            var filters = SessionFacade.FindPageFilters<NotifierFilters>(PageName.Notifiers);
+            var notifierFilterKey = string.Format(PageName.Notifiers, currentCustomerId);
+            var filters = SessionFacade.FindPageFilters<NotifierFilters>(notifierFilterKey);
             if (filters == null)
             {
                 filters = NotifierFilters.CreateDefault();
-                SessionFacade.SavePageFilters(PageName.Notifiers, filters);
+                SessionFacade.SavePageFilters(notifierFilterKey, filters);
             }
 
             List<ItemOverview> searchDomains = null;
@@ -1079,7 +1109,8 @@ namespace DH.Helpdesk.Web.Controllers
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
             var filters = inputModel.ExtractFilters();
-            SessionFacade.SavePageFilters(PageName.Notifiers, filters);
+            var notifierFilterKey = string.Format(PageName.Notifiers, currentCustomerId);
+            SessionFacade.SavePageFilters(notifierFilterKey, filters);
 
             var sortField = !string.IsNullOrEmpty(inputModel.SortField.Name)
                 ? new SortField(inputModel.SortField.Name, inputModel.SortField.SortBy.Value)

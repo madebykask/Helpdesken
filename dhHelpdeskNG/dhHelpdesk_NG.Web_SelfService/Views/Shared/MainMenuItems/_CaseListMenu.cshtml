@@ -1,5 +1,4 @@
-﻿@using DH.Helpdesk.Common.Enums;
-@model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
+﻿@model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
 
 @{
     var actionName = Model.IsMultiCustomerSearchEnabled ? "MultiCustomerUserCases" : "UserCases";
@@ -8,15 +7,8 @@
 {
     <li class="blue">
         <a href="@Url.Action(actionName, "case", new { customerId = Model.CustomerId, area = "" })">
-            <i class="fa fa-clock-o mnu-fa"></i><br />            
-            @if (Model.AppType == ApplicationTypes.LineManager)
-            {
-                @Translation.Get("Service Requests", Enums.TranslationSource.TextTranslation)
-            }
-            else
-            {
-                @Translation.Get("Cases", Enums.TranslationSource.TextTranslation)
-            }
+            <i class="fa fa-clock-o mnu-fa"></i><br />
+            @(Model.IsLineManager ? Translation.Get("Service Requests") : Translation.Get("Cases"))
         </a>
     </li>
 }

@@ -108,6 +108,7 @@
     <Compile Include="Log\Log.vb" />
     <Compile Include="Log\LogData.vb" />
     <Compile Include="Mail2Ticket\Mail2TicketData.vb" />
+    <Compile Include="Mail2Ticket\Mail2TicketEntity.vb" />
     <Compile Include="MailTemplate\MailTemplate.vb" />
     <Compile Include="MailTemplate\MailTemplateData.vb" />
     <Compile Include="Mail\Mail.vb" />

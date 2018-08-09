@@ -130,14 +130,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         {
             var computerCategoriesSelectList = categories.Select(o => new SelectListItem()
             {
-                Text = o.Name,
+                Text = Translation.GetMasterDataTranslation(o.Name),
                 Value = o.Id.ToString(),
                 Selected = selectedCategoryId.HasValue && o.Id == selectedCategoryId.Value
             }).ToList();
             
             computerCategoriesSelectList.Insert(0, new SelectListItem()
             {
-                Text = Translation.GetCoreTextTranslation(emptyCategoryName ?? ComputerUserCategory.EmptyCategoryDefaultName),
+                Text = Translation.GetMasterDataTranslation(emptyCategoryName ?? ComputerUserCategory.EmptyCategoryDefaultName),
                 Value = ComputerUserCategory.EmptyCategoryId.ToString(),
                 Selected = selectedCategoryId == ComputerUserCategory.EmptyCategoryId //used for empty category
             });

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
+﻿using DH.Helpdesk.Dal.Repositories;
+
+namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
 {
     using System;
     using System.Collections.Generic;
@@ -105,71 +107,70 @@
         }             
 
         public static List<FullCaseOverview> MapToCaseOverviews(this List<ReportGeneratorFields> query, 
-                                                                IQueryable<CaseType> caseTypes, 
-                                                                IQueryable<ProductArea> productAreas, 
+                                                                ICaseTypeRepository caseTypesRep,
+                                                                IProductAreaRepository productAreasRep, 
                                                                 IQueryable<OU> ous,
                                                                 IQueryable<FinishingCause> finishingCauses,
                                                                 IQueryable<Category> categories)
         {
-            var ret = new List<FullCaseOverview>();
             var availableCaseTypes = query.Select(c=> c.CaseType).Distinct().ToList();
-            var caseTypesList = caseTypes.Where(c => availableCaseTypes.Contains(c.Id)).ToList();
+            var caseTypesList = caseTypesRep.GetWithParents(availableCaseTypes.ToArray()).ToList();
             var caseTypeFullNames = availableCaseTypes.ToDictionary(ct => ct, ct => ct.GetCaseTypeFullName(caseTypesList));
 
             var availableProductAreas = query
                 .Select(c => string.IsNullOrEmpty(c.ProductArea) ? new int?() : int.Parse(c.ProductArea))
                 .Distinct().ToList();
-            var productAreasList = productAreas.Where(p => availableProductAreas.Contains(p.Id)).ToList();
+            var productAreasList = productAreasRep.GetWithParents(availableProductAreas.Where(p => p.HasValue).Select(p => p.Value).ToArray());
             var productAreaFullNames = availableProductAreas.ToDictionary(pa => pa.HasValue ? pa.ToString() : string.Empty, pa => pa.GetProductAreaFullName(productAreasList));
 
             var availableOUs = query
                 .Select(c => string.IsNullOrEmpty(c.Unit) ? new int?() : int.Parse(c.Unit))
                 .Distinct().ToList();
-            var ousList = ous.Where(c => availableOUs.Contains(c.Id)).ToList();
+            var ousList = ous.ToList(); //Can be optimize by using CTE. See CaseType, ProductArea GetWithParents method (now not so many data queried)
             var ouFullNames = availableOUs.ToDictionary(ou => ou.HasValue ? ou.ToString() : string.Empty, ou => ou.GetOUFullName(ousList));
 
             var availableClosingReasons = query.Where(c=> c.LogData != null)
                                                .Select(c => c.LogData.FinishingType)
                                                .Distinct()
                                                .ToList();
-            var finishingCausesList = finishingCauses.Where(f => availableClosingReasons.Contains(f.Id)).ToList();
+            var finishingCausesList = finishingCauses.ToList(); //Can be optimize by using CTE. See CaseType, ProductArea GetWithParents method (now not so many data queried)
             var closingReasonFullNames = availableClosingReasons.ToDictionary(cr => cr.HasValue ? cr.ToString() : string.Empty, cr => cr.GetClosingReasonFullName(finishingCausesList));
 
             var availablecategories = query
                 .Select(c => string.IsNullOrEmpty(c.Category) ? new int?() : int.Parse(c.Category))
                 .Distinct().ToList();
-            var availableCategoriesList = categories.Where(c => availablecategories.Contains(c.Id)).ToList();
+            var availableCategoriesList = categories.ToList(); //Can be optimize by using CTE. See CaseType, ProductArea GetWithParents method (now not so many data queried)
             var categoriesFullNames = availablecategories.ToDictionary(c => c.HasValue ? c.ToString() : string.Empty, c => c.GetCategoryFullName(availableCategoriesList));
 
-            ret = query.Select(q => new FullCaseOverview(
-                                q.Id,
-                                new UserOverview(q.User, q.Notifier, q.Email, q.Phone, q.CellPhone,q.Customer, q.Region, q.Department,
-                                                 ouFullNames[q.Unit], q.Place, q.OrdererCode, q.IsAbout_User, q.IsAbout_Persons_Name,
-                                                 q.IsAbout_Persons_Phone, q.IsAbout_UserCode, q.IsAbout_Persons_Email, q.IsAbout_Persons_CellPhone,
-                                                 q.IsAbout_CostCentre, q.IsAbout_Place, 
-                                                 string.Empty,string.Empty, string.Empty),
-                                                 // Disabled to Release version 5.3.21
-                                                 //q.IsAbout_Department,
-                                                 //ouFullNames[q.IsAbout_OU]"", q.IsAbout_Region),
+            var ret = query.Select(q => new FullCaseOverview(
+                q.Id,
+                new UserOverview(q.User, q.Notifier, q.Email, q.Phone, q.CellPhone,q.Customer, q.Region, q.Department,
+                    ouFullNames[q.Unit], q.Place, q.OrdererCode, q.IsAbout_User, q.IsAbout_Persons_Name,
+                    q.IsAbout_Persons_Phone, q.IsAbout_UserCode, q.IsAbout_Persons_Email, q.IsAbout_Persons_CellPhone,
+                    q.IsAbout_CostCentre, q.IsAbout_Place, 
+                    string.Empty,string.Empty, string.Empty),
+                // Disabled to Release version 5.3.21
+                //q.IsAbout_Department,
+                //ouFullNames[q.IsAbout_OU]"", q.IsAbout_Region),
 
-                                new ComputerOverview(q.PcNumber, q.ComputerType, q.ComputerPlace),
+                new ComputerOverview(q.PcNumber, q.ComputerType, q.ComputerPlace),
 
-                                new CaseInfoOverview(q.Case, q.RegistrationDate, q.ChangeDate, q.RegistratedBy,
-                                                     caseTypeFullNames[q.CaseType],
-                                                     productAreaFullNames[q.ProductArea], 
-                                                     q.System, q.UrgentDegree, q.Impact, categoriesFullNames[q.Category],
-                                                     q.Supplier, q.InvoiceNumber, q.ReferenceNumber, q.Caption, q.Description,
-                                                     q.Other, Convert.ToBoolean(q.PhoneContact), Convert.ToBoolean(q.Sms), q.AgreedDate, q.Available, q.Cost, 
-                                                     string.Empty, q.RegistrationSource, q.SolvedInTime),
+                new CaseInfoOverview(q.Case, q.RegistrationDate, q.ChangeDate, q.RegistratedBy,
+                    caseTypeFullNames[q.CaseType],
+                    productAreaFullNames[q.ProductArea], 
+                    q.System, q.UrgentDegree, q.Impact, categoriesFullNames[q.Category],
+                    q.Supplier, q.InvoiceNumber, q.ReferenceNumber, q.Caption, q.Description,
+                    q.Other, Convert.ToBoolean(q.PhoneContact), Convert.ToBoolean(q.Sms), q.AgreedDate, q.Available, q.Cost, 
+                    string.Empty, q.RegistrationSource, q.SolvedInTime),
 
-                                new OtherOverview (q.WorkingGroup, q.Responsible, q.Administrator, q.Priority, q.State, q.SubState,
-                                                   q.PlannedActionDate, q.WatchDate, Convert.ToBoolean(q.Verified), q.VerifiedDescription,
-                                                   q.SolutionRate, q.CausingPart),
+                new OtherOverview (q.WorkingGroup, q.Responsible, q.Administrator, q.Priority, q.State, q.SubState,
+                    q.PlannedActionDate, q.WatchDate, Convert.ToBoolean(q.Verified), q.VerifiedDescription,
+                    q.SolutionRate, q.CausingPart),
 
-                                q.LogData != null ? new LogsOverview((q.LogData.FinishingType.HasValue && q.FinishingDate.HasValue? closingReasonFullNames[q.LogData.FinishingType.ToString()] : string.Empty), 
-                                                                      q.FinishingDate, q.FinishingDescription, q.AllInternalText, q.AllExtenalText, q.TotalMaterial, q.TotalOverTime, q.TotalPrice, q.TotalWork) : new LogsOverview(string.Empty, null, string.Empty, null, null)
+                q.LogData != null ? new LogsOverview((q.LogData.FinishingType.HasValue && q.FinishingDate.HasValue? closingReasonFullNames[q.LogData.FinishingType.ToString()] : string.Empty), 
+                    q.FinishingDate, q.FinishingDescription, q.AllInternalText, q.AllExtenalText, q.TotalMaterial, q.TotalOverTime, q.TotalPrice, q.TotalWork) : new LogsOverview(string.Empty, null, string.Empty, null, null)
 
-                                )).ToList();
+            )).ToList();
            
             return ret;
         }

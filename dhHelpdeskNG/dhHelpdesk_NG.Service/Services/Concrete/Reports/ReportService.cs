@@ -45,29 +45,32 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
         private readonly ISurveyService sureyService;
         private readonly IReportRepository _reportRepository;
         private readonly IReportFavoriteRepository _reportFavoriteRepository;
-        private readonly ICaseService _caseService;
         private readonly IDepartmentService _departmentService;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IUserService _userService;
+        private readonly IProductAreaRepository _productAreaRepository;
+        private readonly ICaseTypeRepository _caseTypeRepository;
 
         public ReportService(
-                IUnitOfWorkFactory unitOfWorkFactory,                 
+                IUnitOfWorkFactory unitOfWorkFactory,
                 ISurveyService sureyService,
-                ICaseService caseService,
                 IReportRepository reportRepository,
                 IReportFavoriteRepository reportFavoriteRepository,
                 IDepartmentService departmentService,
                 IWorkingGroupService workingGroupService,
-                IUserService userService)
+                IUserService userService,
+                IProductAreaRepository productAreaRepository,
+                ICaseTypeRepository caseTypeRepository)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.sureyService = sureyService;
             this._reportRepository = reportRepository;
-            this._caseService = caseService;
             this._reportFavoriteRepository = reportFavoriteRepository;
             this._departmentService = departmentService;
             this._workingGroupService = workingGroupService;
             this._userService = userService;
+            _productAreaRepository = productAreaRepository;
+            _caseTypeRepository = caseTypeRepository;
         }
 
         #region Reports
@@ -362,8 +365,6 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             {
                 uow.AutoDetectChangesEnabled = false;
                 var categoryRep = uow.GetRepository<Category>();
-                var caseTypeRep = uow.GetRepository<CaseType>();
-                var productAreaRep = uow.GetRepository<ProductArea>();
                 var ouRep = uow.GetRepository<OU>();
                 var finishingCauseRep = uow.GetRepository<FinishingCause>();
                 var fieldRep = uow.GetRepository<CaseFieldSetting>();
@@ -408,8 +409,6 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                     LoadProductAreaChildrenIds(productAreaId, productAreaChainIds, uow);
                 }
 
-                var caseTypes = caseTypeRep.GetAll().GetByCustomer(customerId);
-                var productAreas = productAreaRep.GetAll().GetByCustomer(customerId);
                 var categories = categoryRep.GetAll().GetByCustomer(customerId);
                 var ous = ouRep.GetAll();
                 var finishingCauses = finishingCauseRep.GetAll().GetByCustomer(customerId);
@@ -432,7 +431,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                                                closeFrom,
                                                closeTo);
                 
-                var overviews = caseData.MapToCaseOverviews(caseTypes, productAreas, ous, finishingCauses, categories);
+                var overviews = caseData.MapToCaseOverviews(_caseTypeRepository, _productAreaRepository, ous, finishingCauses, categories);
 
                 var sortedOverviews = Sort(overviews, sort);
                 return new ReportGeneratorData(settings, sortedOverviews);

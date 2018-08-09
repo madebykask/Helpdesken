@@ -42,27 +42,18 @@ namespace DH.Helpdesk.Dal.Repositories
     public class CaseSearchRepository : ICaseSearchRepository
     {
         private readonly ICustomerUserRepository _customerUserRepository;
-
-        private readonly IProductAreaRepository _productAreaRepository;
-
         private readonly ICaseTypeRepository _caseTypeRepository;
-
-        private readonly ILogRepository _logRepository;
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IDbQueryExecutorFactory _queryExecutorFactory;
 
         public CaseSearchRepository(
                 ICustomerUserRepository customerUserRepository,
-                IProductAreaRepository productAreaRepository,
                 ICaseTypeRepository caseTypeRepository,
-                ILogRepository logRepository,
                 IDepartmentRepository departmentRepository,
                 IDbQueryExecutorFactory queryExecutorFactory)
         {
             _customerUserRepository = customerUserRepository;
-            _productAreaRepository = productAreaRepository;
             _caseTypeRepository = caseTypeRepository;
-            _logRepository = logRepository;
             _departmentRepository = departmentRepository;
             _queryExecutorFactory = queryExecutorFactory;
         }

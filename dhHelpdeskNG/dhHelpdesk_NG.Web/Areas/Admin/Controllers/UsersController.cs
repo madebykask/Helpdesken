@@ -994,8 +994,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             #region Model
 
-            var customerUsers = user.CustomerUsers ?? 
-                    this._userService.GetCustomerUserForUser(user.Id);
+            var customerUsers = user.CustomerUsers ?? this._userService.GetCustomerUserForUser(user.Id);
 
             var model = new UserInputViewModel
             {
@@ -1003,7 +1002,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 CaseInfoMailList = li,
                 RefreshInterval = sli,
                 StartPageShowList = lis,
-                CustomerUsers = customerUsers.Where(x => x.Customer != null),
+                CustomerUsers = customerUsers.Where(x => x.Customer_Id > 0).ToList(),
                 Departments = this._userService.GetDepartmentsForUser(user.Id),
                 ListWorkingGroupsForUser = this._userService.GetListToUserWorkingGroup(user.Id),
                 AvailvableTimeZones = TimeZoneInfo.GetSystemTimeZones().Select(it => new SelectListItem() { Value = it.Id, Text = it.DisplayName, Selected = user.TimeZoneId == it.Id }),

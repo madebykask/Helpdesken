@@ -45,9 +45,7 @@
 
         public IndexModel CreateEmpty()
         {
-            var empty = new IndexModel(
-                        this.notifiersModelFactory.CreateEmpty(), 
-                        true);
+            var empty = new IndexModel(this.notifiersModelFactory.CreateEmpty(), true);
             return empty;
         }
     }

@@ -479,7 +479,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         {
             lastError = null;
             UserIdentity userIdentity = null;
-            var user = System.Security.Principal.WindowsIdentity.GetCurrent();
+            //var user = System.Security.Principal.WindowsIdentity.GetCurrent(); // do not use WindowsIdentity!
+            var user = HttpContext.User.Identity; 
             var employeeNum = string.Empty;
 
             string fullName = user.Name;

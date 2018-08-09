@@ -72,6 +72,7 @@
     <Compile Include="Configuration\AppConfigHelper.cs" />
     <Compile Include="Constants\CaseSearchConstants.cs" />
     <Compile Include="Constants\CaseSections.cs" />
+    <Compile Include="Constants\CaseType.cs" />
     <Compile Include="Constants\Shared.cs" />
     <Compile Include="Constants\DataTypeValue.cs" />
     <Compile Include="Constants\BRConstItem.cs" />

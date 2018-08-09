@@ -1,15 +1,11 @@
 ﻿namespace DH.Helpdesk.Dal.Infrastructure.Concrete
 {
-    using System.Configuration;
     using System.Globalization;
     using System.IO;
-
-    using DH.Helpdesk.Common.Enums;
     using System.Collections.Generic;
 
     public sealed class FilesStorage : IFilesStorage
     {
-
         private readonly List<string> FilteredFiles = new List<string>();
 
         public FilesStorage()
@@ -28,7 +24,7 @@
             var saveDirectory = this.ComposeDirectoryPath(basePath, topic, entityId); 
             Directory.CreateDirectory(saveDirectory);
             var savePath = this.ComposeFilePath(topic, entityId, basePath,  fileName);
-
+            
             using (var fileStream = new FileStream(savePath, FileMode.CreateNew))
             {
                 fileStream.Write(content, 0, content.Length);

@@ -247,5 +247,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public string CaseFileKey { get; set; }
         public ICollection<CaseFile> CaseFiles { get; set; }
         #endregion
+
+        public bool IsFinished
+        {
+            get { return FinishingDate.HasValue; }
+        }
     }
 }

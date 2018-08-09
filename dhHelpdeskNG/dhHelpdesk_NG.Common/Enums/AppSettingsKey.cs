@@ -12,6 +12,8 @@
         public static readonly string DefaultUserId = "DefaultUserId";
         public static readonly string DefaultEmployeeNumber = "DefaultEmployeeNumber";
         public static readonly string ConfirmMsgAfterCaseRegistration = "ConfirmMsgAfterCaseRegistration";
+        public static readonly string ShowCommunicationForSelfService = "ShowCommunicationForSelfService";
+
         public static readonly string SSOLog = "SSOLog";
         public static readonly string ApplicationId = "ApplicationId";
         public static readonly string SelfServiceAddress = "dh_selfserviceaddress";

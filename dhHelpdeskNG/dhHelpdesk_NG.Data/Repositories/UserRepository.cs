@@ -239,7 +239,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public User GetUserForCopy(int id)
         {
-            var user = Table.AsNoTracking().FirstOrDefault(x => x.Id == id);
+            var user = Table.AsNoTracking().Include(x => x.CustomerUsers).FirstOrDefault(x => x.Id == id);
             DataContext.Entry(user).State = EntityState.Detached;
             return user;
         }

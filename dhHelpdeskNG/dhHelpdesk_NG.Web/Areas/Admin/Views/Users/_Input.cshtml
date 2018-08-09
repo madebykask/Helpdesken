@@ -78,19 +78,19 @@
                         @Html.Partial("_Other", Model)
                     </div>
                     <div class="tab-pane tab-pane-border" id="subfragment-6">
-                        @if (Model.User.Id != 0)
+                        @if (Model.User.Id != 0 || Model.IsUserCopy)
                         {
                             @Html.Partial("_Customer", Model)
                         }
                     </div>
                     <div class="tab-pane tab-pane-border" id="subfragment-7">
-                        @if (Model.User.Id != 0)
+                        @if (Model.User.Id != 0 || Model.IsUserCopy)
                         {
                             @Html.Partial("_Department", Model)                
                         }
                     </div>
                     <div class="tab-pane tab-pane-border" id="subfragment-8">
-                        @if (Model.User.Id != 0)
+                        @if (Model.User.Id != 0 || Model.IsUserCopy)
                         {
                             @Html.Partial("_WorkingGroups", Model)
                         }

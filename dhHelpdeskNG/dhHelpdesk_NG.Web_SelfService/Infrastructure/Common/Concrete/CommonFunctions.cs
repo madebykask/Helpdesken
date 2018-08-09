@@ -2,16 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DH.Helpdesk.Common.Configuration;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 
 namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
 {
-    using DH.Helpdesk.BusinessData.Models.ActionSetting;    
-    using DH.Helpdesk.SelfService.Models.Case;    
+    using DH.Helpdesk.BusinessData.Models.ActionSetting;
     using Models.Shared;
-    using Helpers;
     using Helpdesk.Common.Enums;
     using Models.CaseTemplate;
 
@@ -118,15 +115,6 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
             return this._actionSettingService.GetActionSettings(customerId);
         }
 
-        public CaseLogModel GetCaseLogs(int caseId)
-        {            
-            var caseLogs = _logService.GetLogsByCaseId(caseId).OrderByDescending(l=> l.RegTime).ToList();
-            
-            var caseLogModel = new CaseLogModel { CaseId = caseId, CaseLogs = caseLogs };
-            
-            return caseLogModel;                            
-        }
-
         public bool IsOrderModuleEnabled(int customerId)
         {
             var settings = _settingService.GetCustomerSettings(customerId);
@@ -139,14 +127,10 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
             return isUserHasOrderTypes;
         }
 
-        public LayoutViewModel GetLayoutViewModel(int? currentCase_Id, object tmpDataLanguge)
+        public LayoutViewModel GetLayoutViewModel(object tmpDataLanguge)
         {
-            var model = new LayoutViewModel();
-            model.AppType = AppConfigHelper.GetAppSetting(AppSettingsKey.CurrentApplicationType);
-
             var globalSettings = _globalSettingService.GetGlobalSettings();
-            model.IsMultiCustomerSearchEnabled = globalSettings.First().MultiCustomersSearch == 1;
-
+            
             int pCustomerId = -1;
             if (SessionFacade.CurrentCustomer != null)
             {
@@ -163,20 +147,29 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
                 }
             }
 
-            model.CustomerId = pCustomerId;
-            model.CurrentCase_Id = currentCase_Id;
-            model.CurrentCustomer = SessionFacade.CurrentCustomer;
-            model.OrderModuleIsEnabled = IsOrderModuleEnabled(pCustomerId);            
-            model.UserHasOrderTypes = (SessionFacade.CurrentLocalUser != null)? 
-                                        IsUserHasOrderTypes(SessionFacade.CurrentLocalUser.Id, pCustomerId) : false;
-            model.HideMenu = !SessionFacade.UserHasAccess;
-            model.LoginMode = _configurationService.AppSettings.LoginMode;
+            var appType = _configurationService.AppSettings.ApplicationType;
+            var model = new LayoutViewModel
+            {
+                AppType = appType,
+                IsLineManager = ApplicationTypes.LineManager.Equals(appType, StringComparison.OrdinalIgnoreCase),
+                IsMultiCustomerSearchEnabled = globalSettings.First().MultiCustomersSearch == 1,
+                CustomerId = pCustomerId,
+                CurrentCustomer = SessionFacade.CurrentCustomer,
+                CurrentSystemUser = SessionFacade.CurrentSystemUser,
+                CurrentUserIdentity = SessionFacade.CurrentUserIdentity,
+                CurrentLocalUser = SessionFacade.CurrentLocalUser,
+                OrderModuleIsEnabled = IsOrderModuleEnabled(pCustomerId),
+                UserHasOrderTypes = SessionFacade.CurrentLocalUser != null &&
+                                    IsUserHasOrderTypes(SessionFacade.CurrentLocalUser.Id, pCustomerId),
+                HideMenu = !SessionFacade.UserHasAccess,
+                LoginMode = _configurationService.AppSettings.LoginMode,
+                ShowLanguage = tmpDataLanguge != null && tmpDataLanguge.ToString().ToLower() == "true",
+                AllLanguages = SessionFacade.AllLanguages,
+                CurrentLanguageId = SessionFacade.CurrentLanguageId,
+                HasError = SessionFacade.LastError != null && !string.IsNullOrEmpty(SessionFacade.LastError.Message)
+            };
 
-            model.ShowLanguage = tmpDataLanguge != null && tmpDataLanguge.ToString().ToLower() == "true";
-            model.CaseLog = (currentCase_Id.HasValue)? GetCaseLogs(currentCase_Id.Value) : null;
-            model.HasError = SessionFacade.LastError != null && !string.IsNullOrEmpty(SessionFacade.LastError.Message);
-            if (!model.HasError && !model.HideMenu &&
-                model.CurrentCustomer != null && model.CurrentCustomer.ShowCaseOnExternalPage != 0)
+            if (!model.HasError && !model.HideMenu && model.CurrentCustomer != null && model.CurrentCustomer.ShowCaseOnExternalPage != 0)
                 model.CaseTemplatesGroups = GetCaseTemplateTreeModel(pCustomerId, model.CurrentCustomer.GroupCaseTemplates != 0);
             else
                 model.CaseTemplatesGroups = null;

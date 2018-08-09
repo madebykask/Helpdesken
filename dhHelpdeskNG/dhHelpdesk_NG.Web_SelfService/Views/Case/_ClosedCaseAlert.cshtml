@@ -1,0 +1,19 @@
+﻿@model DH.Helpdesk.SelfService.Models.Case.ClosedCaseAlertModel
+
+@if (Model.FinishingDate != null)
+{
+    <div class="alert alert-success">
+        @if (Model.CustomerSettings.CaseComplaintDays != 0)
+        {
+            var diff = DateTime.Today - Model.FinishingDate.Value;
+            if (diff.Days <= Model.CustomerSettings.CaseComplaintDays || Model.CustomerSettings.CaseComplaintDays == 9999)
+            {
+                <a id="btnReOpen" href="#logNotePopup" class="btn btn-success" onclick="">@Translation.Get("Re-open")</a>
+            }
+        }
+        <span class="glyphicon glyphicon-thumbs-up"></span>
+        @Translation.Get("Closed Case")
+        @Translation.Get(": ")
+        @Html.DisplayFor(m => m.FinishingDate, "Date")
+    </div>
+}
