@@ -1,5 +1,7 @@
-﻿using DH.Helpdesk.BusinessData.Models.Customer;
+﻿using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.BusinessData.Models.Customer.Input;
+using DH.Helpdesk.BusinessData.OldComponents;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -32,7 +34,7 @@ namespace DH.Helpdesk.Services.Services
         DeleteMessage DeleteCustomer(int id);
 
         //void SaveCaseFieldSettingsForCustomer(Customer customer, Setting setting, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors);
-        void SaveCaseFieldSettingsForCustomer(int customerId, int languageId, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, List<CaseFieldSetting> caseFieldSettings, out IDictionary<string, string> errors);
+        void SaveCaseFieldSettingsForCustomer(int customerId, int languageId, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, IList<CaseFieldSetting> caseFieldSettings, out IDictionary<string, string> errors);
         void SaveCaseFieldSettingsForCustomer(Customer customer, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, int[] us, List<CaseFieldSetting> CaseFieldSettings, int LanguageId, out IDictionary<string, string> errors);
         void SaveCaseFieldSettingsForCustomerCopy(int customerId, int languageId, CaseFieldSetting caseFieldSetting, out IDictionary<string, string> errors);
         void SaveCaseFieldSettingsLangForCustomerCopy(CaseFieldSettingLanguage caseFieldSettingLanguage, out IDictionary<string, string> errors);
@@ -325,35 +327,63 @@ namespace DH.Helpdesk.Services.Services
 
         }
 
-        public void SaveCaseFieldSettingsForCustomer(int customerId, int languageId, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, List<CaseFieldSetting> caseFieldSettings, out IDictionary<string, string> errors)
+        public void SaveCaseFieldSettingsForCustomer(int customerId, int languageId, IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLanguages, IList<CaseFieldSetting> caseFieldSettings, out IDictionary<string, string> errors)
         {
             errors = new Dictionary<string, string>();
-
+         
             if (caseFieldSettings != null)
             {
+                var caseFieldSettingsOld = this._caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId).ToList();
+
                 foreach (var caseFieldSetting in caseFieldSettings)
                 {
-
-                    if (caseFieldSetting.Name.ToLower() == "casetype_id")
+                    CaseFieldSetting cs = null;
+                    if (caseFieldSetting.Id != 0)
                     {
-                        caseFieldSetting.ShowOnStartPage = 1;
-                        caseFieldSetting.Required = 1;
+                        cs = caseFieldSettingsOld.FirstOrDefault(x => x.Id == caseFieldSetting.Id);
                     }
 
-                    caseFieldSetting.ChangedDate = DateTime.UtcNow;
-                    if (caseFieldSetting.Id == 0)
+                    if (cs == null)
                     {
-                        caseFieldSetting.CaseFieldSettingsGUID = Guid.NewGuid();
-                        _caseFieldSettingRepository.Add(caseFieldSetting);
+                        cs = new CaseFieldSetting
+                        {
+                            CaseFieldSettingsGUID = Guid.NewGuid()
+                        };
+                    }
+
+                    //change only required fields. There may be other pages that change other values!
+                    cs.Name = caseFieldSetting.Name;
+                    cs.Customer_Id = caseFieldSetting.Customer_Id;
+                    cs.ShowOnStartPage = caseFieldSetting.ShowOnStartPage;
+                    cs.Hide = caseFieldSetting.Hide;
+                    cs.ShowExternal = caseFieldSetting.ShowExternal;
+                    cs.EMailIdentifier = caseFieldSetting.EMailIdentifier;
+                    cs.CaseFieldSettingsGUID = caseFieldSetting.CaseFieldSettingsGUID;
+                    cs.Locked = caseFieldSetting.Locked;
+                    cs.Required = caseFieldSetting.Required;
+                    cs.RequiredIfReopened = caseFieldSetting.RequiredIfReopened;
+                    cs.ShowStatusBar = caseFieldSetting.ShowStatusBar;
+                    cs.ShowExternalStatusBar = caseFieldSetting.ShowExternalStatusBar;
+                    cs.ChangedDate = DateTime.UtcNow;
+
+                    if (cs.Name.Equals(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), StringComparison.OrdinalIgnoreCase))
+                    {
+                        cs.ShowOnStartPage = 1;
+                        cs.Required = 1;
+                    }
+
+                    if (cs.Id == 0)
+                    {
+                        _caseFieldSettingRepository.Add(cs);
                     }
                     else
                     {
-                        _caseFieldSettingRepository.Update(caseFieldSetting);
+                        _caseFieldSettingRepository.Update(cs);
                     }
                 }
-            }
 
-            _caseFieldSettingRepository.Commit();
+                _caseFieldSettingRepository.Commit();
+            }
 
             if (caseFieldSettingWithLanguages.Any())
             {
@@ -364,7 +394,8 @@ namespace DH.Helpdesk.Services.Services
                 foreach (var caseFieldSetting in newCaseFieldSettings)
                 {
                     var cfsl = caseFieldSettingWithLanguages.FirstOrDefault(x => x.Name == caseFieldSetting.Name);
-                    if (cfsl == null) continue;
+                    if (cfsl == null)
+                        continue;
 
                     var upd = new CaseFieldSettingLanguage
                     {

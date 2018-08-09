@@ -1,6 +1,7 @@
 ﻿using System;
 using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.OldComponents;
@@ -88,6 +89,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 var selected = CaseFieldSettings.Where(c => vmodel.ShowStatusBarIds.Any(m => m == c.Id));
                 selected.ForEach(c => c.ShowStatusBar = true );
             }
+
             if (vmodel.ShowExternalStatusBarIds != null && vmodel.ShowExternalStatusBarIds.Any())
             {
                 var selected = CaseFieldSettings.Where(c => vmodel.ShowExternalStatusBarIds.Any(m => m == c.Id));
