@@ -1,8 +1,8 @@
 ﻿//using DH.Helpdesk.Web.Infrastructure.Authentication;
+
+using Autofac;
 using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.WebApi.Infrastructure.Contexts;
-using Ninject.Modules;
-using Ninject.Web.Common;
 //    using DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete;
 
 namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
@@ -12,15 +12,15 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
     /// <summary>
     /// The work context module.
     /// </summary>
-    public sealed class WorkContextModule : NinjectModule
+    public sealed class WorkContextModule : Module
     {
         /// <summary>
         /// The load.
         /// </summary>
-        public override void Load()
+        protected override void Load(ContainerBuilder builder)
         {
-            Bind<IWorkContext>().To<WorkContext>().InRequestScope();
-            Bind<IUserContext>().To<UserContext>().InRequestScope();
+            builder.RegisterType<WorkContext>().As<IWorkContext>().InstancePerRequest();
+            builder.RegisterType<UserContext>().As<IUserContext>().InstancePerRequest();
             //Bind<ICacheContext>().To<CacheContext>().InRequestScope();
             //Bind<ICustomerContext>().To<CustomerContext>().InRequestScope();
             //Bind<ISessionContext>().To<SessionContext>().InRequestScope();

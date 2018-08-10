@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -22,13 +23,15 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpGet]
-        [AuthorizeApi]
         public async Task<IHttpActionResult> Anyone()
         {
-            return await Task.FromResult(Json("test"));
+            var prev = HttpContext.Current.Session["name"] ?? Guid.NewGuid().ToString();
+            HttpContext.Current.Session["name"] = prev;
+            return await Task.FromResult(Json(prev));
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IHttpActionResult> Error()
         {
             throw new Exception("Exception message");

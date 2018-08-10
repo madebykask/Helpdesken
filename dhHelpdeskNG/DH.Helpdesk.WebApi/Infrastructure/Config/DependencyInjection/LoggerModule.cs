@@ -1,30 +1,30 @@
-﻿using DH.Helpdesk.Common.Logger;
-using Ninject.Modules;
+﻿using Autofac;
+using Autofac.Integration.WebApi;
+using DH.Helpdesk.Common.Logger;
+using DH.Helpdesk.WebApi.Infrastructure.Config.Filters;
 
 namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
 {
-    public class LoggerModule : NinjectModule
+    public class LoggerModule : Module
     {
-        public override void Load()
+        protected override void Load(ContainerBuilder builder)
         {
 
-            //Bind<ILoggerService>()
-            //    .To<Log4NetLoggerService>()
-            //    .InSingletonScope()
-            //    .Named(Log4NetLoggerService.LogType.EMAIL)
-            //    .WithConstructorArgument(Log4NetLoggerService.LogType.EMAIL);
+            builder.RegisterType<Log4NetLoggerService>()
+                .Named<ILoggerService>(Log4NetLoggerService.LogType.ERROR)
+                //.As<IErrorLoggerService>()
+                .WithParameter(new TypedParameter(typeof(string), Log4NetLoggerService.LogType.ERROR))
+                .SingleInstance();
 
-            Bind<ILoggerService>()
-                .To<Log4NetLoggerService>()
-                .InSingletonScope()
-                .Named(Log4NetLoggerService.LogType.ERROR)
-                .WithConstructorArgument(Log4NetLoggerService.LogType.ERROR);
+            builder.RegisterType<Log4NetLoggerService>()
+                .Named<ILoggerService>(Log4NetLoggerService.LogType.Session)
+                //.As<ISessionLoggerService>()
+                .WithParameter(new TypedParameter(typeof(string), Log4NetLoggerService.LogType.Session))
+                .SingleInstance();
 
-            Bind<ILoggerService>()
-                .To<Log4NetLoggerService>()
-                .InSingletonScope()
-                .Named(Log4NetLoggerService.LogType.Session)
-                .WithConstructorArgument(Log4NetLoggerService.LogType.Session);
+            builder.Register(c => new ApiExceptionFilter(c.ResolveKeyed<ILoggerService>(Log4NetLoggerService.LogType.ERROR)))
+                .AsWebApiExceptionFilterFor<BaseApiController>()
+                .InstancePerRequest();
         }
     }
 }

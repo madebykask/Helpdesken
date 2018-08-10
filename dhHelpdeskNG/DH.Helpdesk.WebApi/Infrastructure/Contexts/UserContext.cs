@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using DH.Helpdesk.BusinessData.Models.User.Input;
 using DH.Helpdesk.BusinessData.Models.Users.Output;
@@ -22,7 +23,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Contexts
         private UserOverview _user;
         private int? _userId;
         private ICollection<UserWorkingGroup> _userWorkingGroups;
-        private IEnumerable<UserModuleOverview> _modules;
+        //private IEnumerable<UserModuleOverview> _modules;
 
         public UserContext(IUserService userService)
         {
@@ -122,16 +123,18 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Contexts
         {
             get
             {
-                if (_modules == null)
-                {
-                    _modules = (IEnumerable<UserModuleOverview>)HttpContext.Current.Session[UserModules];
-                    if (_modules == null)
-                    {
-                        HttpContext.Current.Session[UserModules] = _modules = _userService.GetUserModules(UserId);                            
-                    }                    
-                }
+                //TODO: Review if used. Use cache instead of session if used.
+                //if (_modules == null)
+                //{
+                //    _modules = (IEnumerable<UserModuleOverview>)HttpContext.Current.Session[UserModules];
+                //    if (_modules == null)
+                //    {
+                //        HttpContext.Current.Session[UserModules] = _modules = _userService.GetUserModules(UserId);                            
+                //    }                    
+                //} 
+                //return _modules
 
-                return _modules;
+                throw new NotImplementedException();
             }
         }
         
@@ -145,7 +148,9 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Contexts
         /// </summary>
         public void SetCurrentUser(UserOverview userOverview)
         {
-            SessionFacade.CurrentUser = userOverview;
+            //TODO: Review if used. Use cache instead of session if used.
+            //SessionFacade.CurrentUser = userOverview;
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -155,9 +160,12 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Contexts
         {
             _userId = null;
             _userWorkingGroups = null;
-            HttpContext.Current.Session[UserModules] = _modules = null;
+
+            //TODO: Review if used. Use cache instead of session if used.
+            //HttpContext.Current.Session[UserModules] = _modules = null;
             _user = null;
-            SessionFacade.CurrentUser = _userService.GetUserOverview(SessionFacade.CurrentUser.Id);
+            ////TODO: Review if used. Use cache instead of session if used.
+            //SessionFacade.CurrentUser = _userService.GetUserOverview(SessionFacade.CurrentUser.Id);
         }
 
         public bool IsUserEmpty()

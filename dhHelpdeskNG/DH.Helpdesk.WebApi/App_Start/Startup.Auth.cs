@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http.Dependencies;
 using DH.Helpdesk.WebApi;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
 using DH.Helpdesk.WebApi.Infrastructure.Config.Authentication;
 using Microsoft.Owin;
+using Microsoft.Owin.Security.Infrastructure;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
 
@@ -13,7 +15,7 @@ namespace DH.Helpdesk.WebApi
 {
     public partial class Startup
     {
-        private static void ConfigureAuth(IAppBuilder app)
+        private static void ConfigureAuth(IAppBuilder app, IDependencyResolver resolver)
         {
             //using simple bearer token because over https it provides the same security as cookies. if no https is used tokens should be encrypted.
             //for better security we should use dedicated openid/oauth2 middleware (for example identityServer4)
@@ -23,10 +25,9 @@ namespace DH.Helpdesk.WebApi
                 TokenEndpointPath = new PathString(ConfigApi.Constants.TokenEndPoint),
                 AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(20),//TODO: Move to config
                 ApplicationCanDisplayErrors = true,
-                Provider = new AccessTokenProvider(ConfigApi.Constants.PublicClientId),
-                RefreshTokenProvider = new RefreshTokenProvider()
+                Provider = resolver.GetService(typeof(AccessTokenProvider)) as IOAuthAuthorizationServerProvider, //new AccessTokenProvider(ConfigApi.Constants.PublicClientId),
+                RefreshTokenProvider = resolver.GetService(typeof(RefreshTokenProvider)) as IAuthenticationTokenProvider
             };
-            
             app.UseOAuthAuthorizationServer(oAuthServerOptions);
 
             app.UseOAuthBearerAuthentication

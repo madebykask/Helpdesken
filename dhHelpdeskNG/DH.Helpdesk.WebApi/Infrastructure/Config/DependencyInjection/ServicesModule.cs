@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Services.BusinessLogic.Accounts;
+﻿using Autofac;
+using DH.Helpdesk.Services.BusinessLogic.Accounts;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Services.Services.Concrete;
@@ -17,20 +18,19 @@ using DH.Helpdesk.Services.Services.Reports;
 using DH.Helpdesk.Services.Services.UniversalCase;
 using DH.Helpdesk.Services.Services.Users;
 using DH.Helpdesk.Services.Services.WebApi;
-using Ninject.Modules;
 
 namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
 {
-    public sealed class ServicesModule : NinjectModule
+    public sealed class ServicesModule : Module
     {
         #region Public Methods and Operators
 
-        public override void Load()
+        protected override void Load(ContainerBuilder builder)
         {
             //services
-            Bind<IUserService>().To<UserService>();
-            Bind<IHolidayService>().To<HolidayService>();
-            Bind<IDepartmentService>().To<DepartmentService>();
+            builder.RegisterType<UserService>().As<IUserService>();
+            builder.RegisterType<HolidayService>().As<IHolidayService>();
+            builder.RegisterType<DepartmentService>().As<IDepartmentService>();
         }
 
         #endregion

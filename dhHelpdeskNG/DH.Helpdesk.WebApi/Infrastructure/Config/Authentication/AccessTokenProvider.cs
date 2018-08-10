@@ -4,6 +4,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Http;
+using Autofac;
+using Autofac.Integration.Owin;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Services.Infrastructure;
 using DH.Helpdesk.Services.Services;
@@ -41,10 +44,16 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.Authentication
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
+            var requestScope = context.OwinContext.GetAutofacLifetimeScope();
+            var userService = requestScope != null ? requestScope.Resolve<IUserService>() : GlobalConfiguration.Configuration.DependencyResolver.GetService(typeof(IUserService)) as IUserService;
 
-            var userService = ManualDependencyResolver.Get<IUserService>(); //TODO: Get rid of ManualDependencyResolver, replace it with public field injection
+            if (userService == null)
+            {
+                context.SetError("Error!", "Please, try later.");
+                context.Rejected();
+                return;
+            }
 
             var user = await userService.LoginAsync(context.UserName, context.Password);
             //var user = context.Password == context.UserName ? new { UserId = "test", Id = 1, UserGroupId = "Admin"} : null;//debug

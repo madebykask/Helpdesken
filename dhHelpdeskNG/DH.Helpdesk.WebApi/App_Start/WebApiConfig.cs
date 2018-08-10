@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Filters;
+using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
 using DH.Helpdesk.WebApi.Infrastructure.Config.Filters;
 using Microsoft.Owin.Security.OAuth;
@@ -10,9 +11,10 @@ using Newtonsoft.Json.Serialization;
 
 namespace DH.Helpdesk.WebApi
 {
-    public static class WebApiConfig
+    public static partial class WebApiConfig
     {
-        public const string UrlPrefixRelative = "api";
+        public const string UrlPrefix = "api";
+        public const string UrlPrefixRelative = "~/api";
 
         public static void Register(HttpConfiguration config)
         {
@@ -30,9 +32,9 @@ namespace DH.Helpdesk.WebApi
         {
             //filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
-            filters.Add(new ApiExceptionFilter());
+            //filters.Add(new ApiExceptionFilter()); // Using Autofac implementation of ApiExceptionFilter
             filters.Add(new ModelValidationApiActionFilter());
-            //filters.Add(new WebApiAuthorizeAttribute());
+            filters.Add(new AuthorizeApiAttribute());
             //filters.Add(new SessionApiRequiredAttribute());
             //filters.Add(new ValidateApiAntiForgeryTokenAttribute());
 
@@ -44,7 +46,7 @@ namespace DH.Helpdesk.WebApi
 
             config.Routes.MapHttpRoute(
                 name: ConfigApi.Constants.DefaultRouteName,
-                routeTemplate: UrlPrefixRelative + "/{controller}/{action}/{id}",
+                routeTemplate: UrlPrefix + "/{controller}/{action}/{id}",
                 defaults: new {id = RouteParameter.Optional}
             );
         }
