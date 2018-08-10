@@ -940,8 +940,14 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (!res.Valid) return HandleError(res);
 
             var userId = SessionFacade.CurrentUserIdentity.UserId;
-
-            var customers = _customerUserService.ListCustomersByInitiatorCases(userId);
+            var employeeNumber = SessionFacade.CurrentUserIdentity.EmployeeNumber;
+            var employees = SessionFacade.CurrentCoWorkers != null && SessionFacade.CurrentCoWorkers.Any()
+                ? SessionFacade.CurrentCoWorkers.Where(e => !string.IsNullOrEmpty(e.EmployeeNumber))
+                    .Select(e => e.EmployeeNumber)
+                    .ToList()
+                : new List<string>();
+            
+            var customers = _customerUserService.ListCustomersByUserCases(userId, employeeNumber, employees, SessionFacade.CurrentCustomer);
 
             var model = new MultiCustomerUserFilterModel
             {

@@ -125,10 +125,9 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
         public CaseSearchResultModel GetCaseSearchResultsModel(CaseSearchInputParameters searchParams, Customer customer)
         {
             var customerId = customer.Id;
-            //var currentUser = searchParams.IdentityUser;
-
+            
             const int userGroupId = 1;
-            const int userId = -1;
+            var userId = SessionFacade.CurrentLocalUser?.Id ?? -1;
 
             var caseSettings = _caseSettingsService.GetCaseSettingsByUserGroup(customerId, userGroupId);
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(customerId);
@@ -208,6 +207,7 @@ namespace DH.Helpdesk.SelfService.Controllers.Behaviors
                 FreeTextSearch = searchParams.PharasSearch,
                 CaseProgress = searchParams.ProgressId,
                 ReportedBy = "",
+                UserId =  userId,
                 RegUserId = currentUser,
                 CaseOverviewCriteria = GetCaseOverviewCriteria()
             };
