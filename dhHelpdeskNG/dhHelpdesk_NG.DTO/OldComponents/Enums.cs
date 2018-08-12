@@ -114,7 +114,9 @@ namespace DH.Helpdesk.BusinessData.OldComponents
             IsAbout_Place = 73,
             IsAbout_UserCode = 74,
             MailToNotifier = 75,
-            AddFollowersBtn = 76
+            AddFollowersBtn = 76,
+            UserSearchCategory_Id = 77,
+            IsAbout_UserSearchCategory_Id = 78
         }
     }
 

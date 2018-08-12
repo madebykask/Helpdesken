@@ -8,7 +8,7 @@
 
         public static readonly string Inventory = "Inventory";
 
-        public static readonly string Notifiers = "Notifiers";
+        public static readonly string Notifiers = "Notifiers_{0}";
 
         public static readonly string Problems = "Problems";
 
@@ -33,7 +33,7 @@
         public static readonly string DocumentsDocumentsList = "DocumentsDocumentsList";
 
         public static readonly string ReportsReportGenerator = "ReportsReportGenerator";
-
+        
         #endregion
     }
 }

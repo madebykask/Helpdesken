@@ -1036,7 +1036,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 if (f.IsRootTemplate)
                 {
                     sb.AppendFormat(
-                        "<a href='cases/new/?customerId={0}&templateId={1}&templateistrue=1' value={1}>{2}</a>",
+                        "<a href='/cases/new/?customerId={0}&templateId={1}&templateistrue=1' value={1}>{2}</a>",
                         customerId,
                         f.CategoryId,
                         Translation.Get(f.CategoryName));

@@ -1,0 +1,28 @@
+﻿@using System.Web.Mvc.Html
+@using DH.Helpdesk.Common.Enums
+
+@model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
+
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        @if (!Model.HideMenu && Model.LoginMode != LoginMode.Anonymous)
+        {
+            <li class="blue">
+                <a href="@Url.Action("Index", "Start", new { customerId = Model.CustomerId, area = "" })">
+                    <i class="fa fa-home mnu-fa"></i><br />
+                    @Translation.Get("Start")
+                </a>
+            </li>
+            if (!Model.HasError)
+            {
+                @Html.Partial("MainMenuItems/_CaseTemplatesMenu", Model)
+                @Html.Partial("MainMenuItems/_CaseListMenu", Model)
+                @Html.Partial("MainMenuItems/_OrderMenu", Model)
+                @Html.Partial("MainMenuItems/_DocumentMenu", Model)
+                @Html.Partial("MainMenuItems/_FAQMenu", Model)
+                @Html.Partial("MainMenuItems/_UserGroupMenu", Model)
+                @Html.Partial("MainMenuItems/_HelpAboutMenu", Model)
+            }                        
+        }
+    </ul>
+</div>

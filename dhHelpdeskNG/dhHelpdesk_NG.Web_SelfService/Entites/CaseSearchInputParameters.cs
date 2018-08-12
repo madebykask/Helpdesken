@@ -1,3 +1,4 @@
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.SelfService.Infrastructure;
 using DH.Helpdesk.SelfService.Models;
 
@@ -14,13 +15,13 @@ namespace DH.Helpdesk.SelfService.Entites
         public string SortBy { get; set; }
         public bool SortAscending { get; set; }
 
-        public static CaseSearchInputParameters Create(CaseSearchInputModel m)
+        public static CaseSearchInputParameters Create(CaseSearchInputModel m, int languageId, string userId)
         {
             return new CaseSearchInputParameters
             {
                 CustomerId = m.CustomerId,
-                //LanguageId = m.LanguageId,
-                //IdentityUser = m.UserId,
+                LanguageId = languageId,
+                IdentityUser = userId,
                 ProgressId = m.ProgressId,
                 PharasSearch = m.PharasSearch,
                 //MaxRecords = m.MaxRecords,

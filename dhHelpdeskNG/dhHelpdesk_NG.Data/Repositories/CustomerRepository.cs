@@ -181,7 +181,7 @@ using System;
         bool CheckUserCasePermissions(int userId, int caseId, Expression<Func<Case, bool>> casePermissionsFilter = null);
         CustomerUser GetCustomerSettingsByCustomer(int customerId);
 
-        IList<UserCustomerOverview> ListCustomersByInitiatorCases(string userId);
+        IList<UserCustomerOverview> ListCustomersByUserCases(string userId, string employeeNumber, IList<string> employees, Customer customer);
         IList<UserCustomerOverview> GetUserCustomersWithCases(int userId);
 
     }
@@ -205,12 +205,34 @@ using System;
                     .Where(cu => cu.Customer_Id == customerId && cu.User_Id == userId).FirstOrDefault();
         }
 
-        public IList<UserCustomerOverview> ListCustomersByInitiatorCases(string userId)
+        public IList<UserCustomerOverview> ListCustomersByUserCases(string userId, string employeeNumber, IList<string> employees, Customer customer)
         {
+            var findByInitiator = customer.MyCasesInitiator;
+            var findByRegistrator = customer.MyCasesRegistrator;
+            var findByGroupUsers = customer.MyCasesUserGroup;
+
             var queryable = (from _case in DataContext.Cases
-                             where _case.RegUserId == userId && 
-                                   _case.RegUserId != null && 
-                                   _case.Deleted == 0
+                             where  (findByInitiator || findByRegistrator || findByGroupUsers) &&
+                                    (
+                                        (findByRegistrator && (userId != null && userId.Trim() != "") && _case.RegUserId == userId) ||
+                                        (
+                                            findByInitiator &&
+                                            (
+                                                ((userId != null && userId.Trim() != "") && _case.ReportedBy == userId) ||
+                                                ((employeeNumber != null && employeeNumber.Trim() != "") && _case.ReportedBy == employeeNumber)
+                                            )
+
+                                        ) ||
+                                        (
+                                            findByGroupUsers && 
+                                            (
+                                                ((_case.ReportedBy == null || _case.ReportedBy.Trim() == "") && _case.RegUserId == userId) ||
+                                                employees.Contains(_case.ReportedBy)
+                                            )
+                                        )
+                                        
+                                    ) &&
+                                    _case.Deleted == 0
                              group _case by new { CustomerId = _case.Customer_Id, CustomerName = _case.Customer.Name } into grouppedCases
                              select new UserCustomerOverview
                              {

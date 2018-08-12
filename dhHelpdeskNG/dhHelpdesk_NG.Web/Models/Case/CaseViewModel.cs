@@ -72,7 +72,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public int ShowInvoiceFields { get; set; }
         public int ShowExternalInvoiceFields { get; set; }
         public bool TimeRequired { get; set; }
-    public CaseLockModel CaseLock { get; set; }
+        public CaseLockModel CaseLock { get; set; }
         public int MinWorkingTime { get; set; }        
         public Infrastructure.Enums.AccessMode EditMode { get; set; } //(-1,0,1)
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }
@@ -374,11 +374,17 @@ namespace DH.Helpdesk.Web.Models.Case
         public Dictionary<string, string> StatusBar { get; internal set; }
         public bool HasExtendedComputerUsers { get; internal set; }
         public IList<ComputerUserCategoryOverview> ComputerUserCategories { get; internal set; }
+        public string EmptyComputerCategoryName { get; set; }
+
         public ComputerUserCategory InitiatorComputerUserCategory { get; internal set; }
         public bool InitiatorReadOnly { get; set; }
+        public bool InitiatorUserCategoryVisible { get; set; }
+
+
         public IDictionary<CaseSectionType, ExtendedCaseFormModel> ExtendedCaseSections { get; internal set; }
         public ComputerUserCategory RegardingComputerUserCategory { get; internal set; }
         public bool RegardingReadOnly { get; internal set; }
+        public bool RegardingUserCategoryVisible { get; set; }
     }
 
     public class CaseIndexViewModel

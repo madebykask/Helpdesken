@@ -75,5 +75,7 @@ namespace DH.Helpdesk.Web.Models.Case.Input
 		public Guid? ExtendedInitiatorGUID { get; set; }
 		public Guid? ExtendedRegardingGUID { get; set; }
 
-	}
+        public int? InitiatorCategory { get; set; }
+        public int? IsAboutCategory { get; set; }
+    }
 }

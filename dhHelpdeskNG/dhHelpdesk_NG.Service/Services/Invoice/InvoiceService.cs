@@ -194,12 +194,10 @@ namespace DH.Helpdesk.Services.Services.Invoice
 
 		public List<InvoiceFile> GetInvoiceHeaders(int customerId)
 		{
-		    var res = _invoiceHeaderRepository.GetAll()
-                .AsQueryable()
-		        .Where(x => !(x.InvoiceFilename == null || x.InvoiceFilename.Trim() == string.Empty) &&
-                    x.InvoiceRows.Any(y =>
-		                y.CaseInvoiceRows.Any(z => z.Case.Customer_Id == customerId) ||
-		                y.Logs.Any(z => z.Case.Customer_Id == customerId)))
+		    var res = _invoiceHeaderRepository.GetMany(x => !(x.InvoiceFilename == null || x.InvoiceFilename.Trim() == string.Empty) &&
+		                                                   x.InvoiceRows.Any(y =>
+		                                                       y.CaseInvoiceRows.Any(z => z.Case.Customer_Id == customerId) ||
+		                                                       y.Logs.Any(z => z.Case.Customer_Id == customerId)))
 		        .Select(x => new InvoiceFile
 		        {
 		            Guid = x.InvoiceHeaderGUID,
@@ -212,9 +210,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
 
 		public InvoiceFile GetInvoiceHeader(Guid guid)
 		{
-			var res = _invoiceHeaderRepository.GetAll()
-			    .AsQueryable()
-                .Where(x => x.InvoiceHeaderGUID == guid)
+			var res = _invoiceHeaderRepository.GetMany(x => x.InvoiceHeaderGUID == guid)
 				.FirstOrDefault();
 
 			return res == null ? null : new InvoiceFile
@@ -248,7 +244,7 @@ namespace DH.Helpdesk.Services.Services.Invoice
 				              $"{(string.IsNullOrWhiteSpace(externalInvoices) ? "" : $", {translations[2]}: " + externalInvoices)}" +
 				              $"{(referenceNumber == null ? "" : $", {translations[3]}: " + referenceNumber)}\t{translations[4]}\t{caseDate}\t\t{amount:F2}");
 
-				using (var file = new StreamWriter(path))
+				using (var file = new StreamWriter(File.Open(path, FileMode.Create), Encoding.Default))
 				{
 					file.Write(sb.ToString());
 				}

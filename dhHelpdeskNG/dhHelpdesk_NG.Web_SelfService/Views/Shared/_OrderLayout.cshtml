@@ -27,9 +27,9 @@
                 isOrdererUnitVisible: @((Model.UserInfo.Unit.Show && Model.UserInfo.Units != null).ToJavaScriptBool()),
                 isUserDepartmentVisible: @((Model.UserInfo.DepartmentId1.Show).ToJavaScriptBool()),
                 @if (Model.UserInfo.Units != null && Model.UserInfo.Unit.Show)
-                    {
-                        @Html.Raw(string.Format("units: {0},", Html.SerializeObjectToJson(Model.UserInfo.Units.Items)))
-                    }
+                {
+                    @Html.Raw(string.Format("units: {0},", Html.SerializeObjectToJson(Model.UserInfo.Units.Items)))
+                }
                 @if (Model.Statuses != null)
                 {
                     @Html.Raw(string.Format("statuses: {0},", Html.SerializeObjectToJson(Model.Statuses)))

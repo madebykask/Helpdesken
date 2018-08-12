@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case;
+﻿using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.FinishingCause;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
@@ -63,6 +64,7 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
         //public IList<ProjectOverview> Projects { get; set; }
         public IList<SelectListItem> WorkingGroups { get; set; }
         public IList<SelectListItem> Regions { get; set; }
+        public IList<ComputerUserCategoryOverview> UserSearchCategories{ get; set; }
         public IList<SelectListItem> OUs { get; set; }
         public IList<SelectListItem> Systems { get; set; }
         public IList<SelectListItem> Urgencies { get; set; }
@@ -76,6 +78,8 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
         public IList<SelectListItem> changes { get; set; }
         public IList<SelectListItem> CausingParts { get; set; }
         public IList<SelectListItem> RegistrationSources { get; set; }
+
+        public string EmptyUserCategoryName { get; set; }
 
         public Infrastructure.Enums.AccessMode EditMode { get; set; }
         public CaseFilesModel CaseFilesModel { get; set; }
@@ -106,7 +110,7 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
         /// </summary>
         public List<CaseSolutionSettingsField> CSSettingsField { get; set; }
 
-        public List<CaseSolutionSettingsField> CSSelectedSettingsField { get; set; }
+        public List<CaseSolutionSettingsFieldModel> CSSelectedSettingsField { get; set; }
 		public IList<CaseSolution> SplitToCaseSolutions { get; internal set; }
 
 
@@ -115,5 +119,8 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
         public bool isCopy { get; set; }
 
         public int[] SplitToCaseSolutionIds { get; set; }
+
+        public int? UserSearchCategory_Id { get; set; }
+        public int? IsAbout_UserSearchCategory_Id { get; set; }
     }
 }

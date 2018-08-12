@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿using System.Security.Principal;
+using System.Threading;
+
+namespace DH.Helpdesk.Web.Controllers
 {
     using System.Linq;
     using System.Web.Mvc;
@@ -271,6 +274,21 @@
             }
 
             return model;
+        }
+
+        //diagnostic action
+        public JsonResult _Ctx()
+        {
+            var winIdentity = WindowsIdentity.GetCurrent();
+
+            return Json(new
+            {
+                HttpContextUserName = ControllerContext.RequestContext.HttpContext.User.Identity.Name,
+                HttpContextUserType = ControllerContext.RequestContext.HttpContext.User.Identity.GetType().Name,
+                WinIdentity = winIdentity != null ? $"{winIdentity.Name} | {winIdentity.AuthenticationType}" : "None",
+                ThreadUser = Thread.CurrentPrincipal?.Identity?.Name ?? "None"
+            }, JsonRequestBehavior.AllowGet);
+            
         }
     }
 }

@@ -1,0 +1,34 @@
+﻿@using DH.Helpdesk.Web.Models.Notifiers
+@model IList<ComputerUserCategoryListItem>
+
+@functions {
+
+    string BuildEditUrl(ComputerUserCategoryListItem item)
+    {
+        if (item.IsEmpty && item.Id == 0)
+        {
+            return Url.Action("EditEmptyCategory", "Notifiers", new { id = item.Id });
+        }
+        return Url.Action("EditUserCategory", "Notifiers", new { id = item.Id });
+    }
+}
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>@Translation.GetCoreTextTranslation("Kategorier")</th>
+            <th class="span4">@Translation.GetCoreTextTranslation("Standard") @ViewBag.InitiatorSectionHeader</th>
+            <th class="span4">@Translation.GetCoreTextTranslation("Standard") @ViewBag.RegardingSectionHeader</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr style="cursor: pointer" onclick="window.location.href = '@BuildEditUrl(item)'">
+                <td>@(item.IsEmpty ? string.Format("{0} ({1})", item.Name, Translation.GetCoreTextTranslation("Standard")) : @item.Name)</td>
+                <td>@(item.IsDefaultInitiator ? Translation.GetCoreTextTranslation("Ja") : Translation.GetCoreTextTranslation("Nej")) </td>
+                <td>@(item.IsDefaultRegarding ? Translation.GetCoreTextTranslation("Ja") : Translation.GetCoreTextTranslation("Nej")) </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+

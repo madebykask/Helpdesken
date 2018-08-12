@@ -1,4 +1,6 @@
-﻿using DH.Helpdesk.SelfService.Infrastructure.Configuration;
+﻿using System.Security.Principal;
+using System.Threading;
+using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
@@ -22,6 +24,21 @@ namespace DH.Helpdesk.SelfService.Controllers
         public RedirectToRouteResult Index(int customerId = -1)
         {     
            return RedirectToAction("Index", "Start", new { customerId });                      
+        }
+
+        //diagnostic action
+        public JsonResult _Ctx()
+        {
+            var winIdentity = WindowsIdentity.GetCurrent();
+
+            return Json(new
+            {
+                HttpContextUserName = ControllerContext.RequestContext.HttpContext.User.Identity.Name,
+                HttpContextUserType = ControllerContext.RequestContext.HttpContext.User.Identity.GetType().Name,
+                WinIdentity = winIdentity != null ? $"{winIdentity.Name} | {winIdentity.AuthenticationType}" : "None",
+                ThreadUser = Thread.CurrentPrincipal?.Identity?.Name ?? "None"
+            }, JsonRequestBehavior.AllowGet);
+
         }
     }
 }

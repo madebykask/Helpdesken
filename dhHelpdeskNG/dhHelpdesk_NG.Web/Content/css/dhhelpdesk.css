@@ -4007,6 +4007,7 @@ th.sorting_disabled
     text-align: left;
 }
 
+.subddMenu li{ direction: ltr!important; }
 
 .dropdown-menu.modified .dropdown-submenu:hover > .subMenuWrapper > .dropdown-menu {
     display: block;

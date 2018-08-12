@@ -32,6 +32,27 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public bool ShowRegistrationMessage { get; set; }
         public string CaseRegistrationMessage { get; set; }
+
+        public List<Log> CaseLogs { get; set; }
+        public string LogFileGuid { get; set; }
+        public Setting CustomerSettings { get; set; }
+
+        public CaseLogModel GetCaseLogModel()
+        {
+            return new CaseLogModel
+            {
+                CaseId = CaseId,
+                CaseLogs = CaseLogs
+            };
+        }
+
+        public ClosedCaseAlertModel GetClosedCaseAlertModel()
+        {
+            return new ClosedCaseAlertModel()
+            {
+                FinishingDate = CaseDataModel.FinishingDate,
+                CustomerSettings = CustomerSettings
+            };
+        }
     }
-    
 }

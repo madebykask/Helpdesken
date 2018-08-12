@@ -1829,6 +1829,7 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
         #region --Auto Complete Fields--
+
         [ValidateInput(false)]
         [HttpPost]
         public ActionResult Search_User(string query, int customerId, string searchKey, int? categoryID = null)
@@ -1854,6 +1855,12 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public JsonResult GetExtendedCaseUrlForCategoryAndSection(int categoryID, int caseSectionType)
         {
+            string url = null;
+            Guid guid = Guid.Empty;
+            
+            if (categoryID == 0)
+                return Json(new { guid, url });
+
             var category = _computerService.GetComputerUserCategoryByID(categoryID);
             var customerId = SessionFacade.CurrentCustomer.Id;
 
@@ -1865,12 +1872,10 @@ namespace DH.Helpdesk.Web.Controllers
             if (customerId != category.CustomerID)
                 throw new HttpException(403, "Not a valid category for customer");
 
-            string url = null;
-            Guid guid = Guid.Empty;
             var userGuid = SessionFacade.CurrentUser.UserGUID.ToString();
 
             var extendedCasePathMask = this._globalSettingService.GetGlobalSettings().FirstOrDefault().ExtendedCasePath;
-            if (!string.IsNullOrEmpty(extendedCasePathMask))
+            if (!string.IsNullOrEmpty(extendedCasePathMask) && category.CaseSolutionID.HasValue)
             {
                 var extendedCaseData =
                     _caseService.GetCaseSectionExtendedCaseForm(category.CaseSolutionID.Value, customerId, 0, caseSectionType, userGuid, 0);
@@ -3717,7 +3722,8 @@ namespace DH.Helpdesk.Web.Controllers
                         this.User.Identity.Name,
                         ei,
                         out errors,
-                        parentCase, m.FollowerUsers);
+                        parentCase, 
+                        m.FollowerUsers);
 
             if (isItChildCase)
             {
@@ -3745,6 +3751,7 @@ namespace DH.Helpdesk.Web.Controllers
                     lName = names[names.Length - 1];
 
                 int lng = case_.RegLanguage_Id;
+                
                 var caseNotifier = this.caseNotifierModelFactory.Create(
                                                             case_.ReportedBy,
                                                             fName,
@@ -3758,6 +3765,7 @@ namespace DH.Helpdesk.Web.Controllers
                                                             case_.UserCode,
                                                             case_.Customer_Id,
                                                             lng);
+                                                            //m.InitiatorCategory); //todo: check if category is required
 
                 this.notifierService.UpdateCaseNotifier(caseNotifier);
             }
@@ -5140,10 +5148,9 @@ namespace DH.Helpdesk.Web.Controllers
             var userHasInvoicePermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InvoicePermission);
 
             // Establish current solution and set split option if available
-
             if (templateId.HasValue)
             {
-                m.CurrentCaseSolution = _caseSolutionService.GetCaseSolution(templateId.Value);
+                m.CurrentCaseSolution = this._caseSolutionService.GetCaseSolution(templateId.Value);
                 m.CaseTemplateSplitToCaseSolutionID = m.CurrentCaseSolution.SplitToCaseSolution_Id;
             }
 
@@ -5179,7 +5186,8 @@ namespace DH.Helpdesk.Web.Controllers
                 var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(caseId);
                 m.MapToFollowerUsers(caseFolowerUsers);
             }
-
+            
+            
             m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
 
             var customerUserSetting = this._customerUserService.GetCustomerUserSettings(customerId, userId);
@@ -5214,6 +5222,55 @@ namespace DH.Helpdesk.Web.Controllers
             m.LogFileNames = GetLogFileNames(caseId.ToString());
 
             m.ActiveTab = activeTab;
+
+            // Computer user categories
+            var computerUserCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId, true);
+            m.ComputerUserCategories = computerUserCategories.Where(o => !o.IsEmpty).ToList();
+            m.EmptyComputerCategoryName = computerUserCategories.FirstOrDefault(o => o.IsEmpty)?.Name;
+            
+            #region User Search Category
+
+            var initiatorFieldSettings 
+                = customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.UserSearchCategory_Id.ToString());
+
+            m.InitiatorUserCategoryVisible = initiatorFieldSettings.IsActive && !initiatorFieldSettings.Hide;
+
+            if (initiatorFieldSettings.IsActive)
+            {
+                var defaultCategoryId = 0;
+                
+                //set default value only for new case
+                if (Int32.TryParse(initiatorFieldSettings.DefaultValue, out defaultCategoryId))
+                {
+                    var category = GetComputerUserCategoryByID(defaultCategoryId);
+                    if (category != null)
+                        m.InitiatorComputerUserCategory = category;
+                }
+            }
+
+            #endregion
+
+            #region IsAbout - User Search Category
+
+            var regFieldSettings = 
+                customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString());
+
+            m.RegardingUserCategoryVisible = regFieldSettings.IsActive && !regFieldSettings.Hide;
+            
+            if (regFieldSettings.IsActive)
+            {
+                var defaultCategoryId = 0;
+
+                //set default value only for new case
+                if (Int32.TryParse(regFieldSettings.DefaultValue, out defaultCategoryId))
+                {
+                    var category = GetComputerUserCategoryByID(defaultCategoryId);
+                    if (category != null)
+                        m.RegardingComputerUserCategory = category;
+                }
+            }
+
+            #endregion
 
             if (isCreateNewCase)
             {
@@ -5271,6 +5328,9 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     m.case_.StateSecondary_Id = int.Parse(defaultStateSecondary.Value);
                 }
+
+                // todo: Set default search category based on case section settings
+                // set visibility
                 #endregion
             }
             else
@@ -5311,31 +5371,6 @@ namespace DH.Helpdesk.Web.Controllers
                 if (m.case_.User_Id.HasValue)
                 {
                     m.RegByUser = this._userService.GetUser(m.case_.User_Id.Value);
-                }
-
-                if (m.case_.ReportedBy != null)
-                {
-                    var reportedByUser = this._computerService.GetComputerUserByUserID(m.case_.ReportedBy);
-                    if (reportedByUser != null && reportedByUser.ComputerUsersCategoryID.HasValue)
-                    {
-                        m.InitiatorComputerUserCategory = _computerService.GetComputerUserCategoryByID(reportedByUser.ComputerUsersCategoryID.Value);
-                        if (m.InitiatorComputerUserCategory != null)
-                        {
-                            m.InitiatorReadOnly = m.InitiatorComputerUserCategory.IsReadOnly;
-                        }
-                    }
-                }
-                if (m.case_.IsAbout != null && m.case_.IsAbout.ReportedBy != null)
-                {
-                    var reportedByUser = this._computerService.GetComputerUserByUserID(m.case_.IsAbout.ReportedBy);
-                    if (reportedByUser != null && reportedByUser.ComputerUsersCategoryID.HasValue)
-                    {
-                        m.RegardingComputerUserCategory = _computerService.GetComputerUserCategoryByID(reportedByUser.ComputerUsersCategoryID.Value);
-                        if (m.RegardingComputerUserCategory != null)
-                        {
-                            m.RegardingReadOnly = m.RegardingComputerUserCategory.IsReadOnly;
-                        }
-                    }
                 }
 
                 if (m.Logs != null)
@@ -5547,327 +5582,400 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CountryId = sup?.Country_Id.GetValueOrDefault();
             }
 
-            if (isCreateNewCase)
+            // load template settings 
+            if (m.CurrentCaseSolution != null)
             {
-                #region New case initialize
+                var caseTemplate = m.CurrentCaseSolution;
+                var caseTemplateSettings =
+                    this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(m.CurrentCaseSolution.Id);
 
-                // Load template info
-                if (templateId != null)
+                if (caseTemplateSettings.Any())
                 {
-                    var caseTemplate = this._caseSolutionService.GetCaseSolution(templateId.Value);
-                    var caseTemplateSettings =
-                        this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);
+                    m.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateModel(caseTemplateSettings);
+                }
+            }
 
-                    if (caseTemplateSettings.Any())
+
+            if (m.CurrentCaseSolution != null) 
+            {
+                var caseTemplate = m.CurrentCaseSolution;
+
+                #region New case initialize form template
+
+                if (isCreateNewCase)
+                {
+                    if (caseTemplate.CaseType_Id != null)
                     {
-                        m.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateModel(caseTemplateSettings);
+                        m.case_.CaseType_Id = caseTemplate.CaseType_Id.Value;
                     }
 
-                    if (caseTemplate != null)
+                    if (caseTemplate.PerformerUser_Id != null)
                     {
-                        #region new case from template
-                        if (caseTemplate.CaseType_Id != null)
-                        {
-                            m.case_.CaseType_Id = caseTemplate.CaseType_Id.Value;
-                        }
+                        m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
+                    }
+                    else
+                    {
+                        m.case_.Performer_User_Id = 0;
+                    }
 
-                        if (caseTemplate.PerformerUser_Id != null)
+                    if (SessionFacade.CurrentUser != null && caseTemplate.SetCurrentUserAsPerformer == 1)
+                        m.case_.Performer_User_Id = SessionFacade.CurrentUser.Id;
+
+                    if (caseTemplate.Category_Id != null)
+                    {
+                        m.case_.Category_Id = caseTemplate.Category_Id.Value;
+                    }
+
+                    if (caseTemplate.CausingPartId.HasValue)
+                    {
+                        m.case_.CausingPartId = caseTemplate.CausingPartId.Value;
+                        if (m.causingParts != null)
                         {
-                            m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
+                            var templateCausingPart = m.causingParts.Where(c => c.Value == caseTemplate.CausingPartId.Value.ToString()).SingleOrDefault();
+                            if (templateCausingPart != null)
+                                templateCausingPart.Selected = true;
+                        }
+                    }
+
+                    if (caseTemplate.UpdateNotifierInformation.HasValue)
+                    {
+                        m.UpdateNotifierInformation = caseTemplate.UpdateNotifierInformation.Value.ToBool();
+                    }
+
+                    if (caseTemplate.AddFollowersBtn.HasValue)
+                    {
+                        m.AddFollowersBtn = caseTemplate.AddFollowersBtn.Value;
+                    }
+
+                    if (caseTemplate.Supplier_Id != null)
+                        m.case_.Supplier_Id = caseTemplate.Supplier_Id.Value;
+
+                    var isCopy = parentCaseId.HasValue;
+
+                    if (!string.IsNullOrEmpty(caseTemplate.ReportedBy))
+                        m.case_.ReportedBy = caseTemplate.ReportedBy;
+
+                    if (caseTemplate.Department_Id != null)
+                        m.case_.Department_Id = caseTemplate.Department_Id;
+
+                    m.CaseMailSetting.DontSendMailToNotifier = caseTemplate.NoMailToNotifier.ToBool();
+
+                    if (caseTemplate.ProductArea_Id != null)
+                        m.case_.ProductArea_Id = caseTemplate.ProductArea_Id;
+
+                    if (caseTemplate.ProductArea_Id.HasValue)
+                        m.case_.ProductArea = _productAreaService.GetProductArea(caseTemplate.ProductArea_Id.Value);
+
+                    if (!string.IsNullOrEmpty(caseTemplate.Caption))
+                        m.case_.Caption = caseTemplate.Caption;
+
+                    if (!string.IsNullOrEmpty(caseTemplate.Description))
+                        m.case_.Description = caseTemplate.Description;
+
+                    if (!string.IsNullOrEmpty(caseTemplate.Miscellaneous))
+                        m.case_.Miscellaneous = caseTemplate.Miscellaneous;
+
+                    if (caseTemplate.SetCurrentUsersWorkingGroup == 1 && SessionFacade.CurrentUser != null)
+                    {
+                        var userDefaultWGId = this._userService.GetUserDefaultWorkingGroupId(SessionFacade.CurrentUser.Id, customer.Id);
+                        if (userDefaultWGId.HasValue)
+                        {
+                            m.case_.WorkingGroup_Id = userDefaultWGId.Value;
                         }
                         else
                         {
-                            m.case_.Performer_User_Id = 0;
+                            m.case_.WorkingGroup_Id = null;
                         }
+                    }
+                    else if (caseTemplate.CaseWorkingGroup_Id != null)
+                    {
+                        m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
+                    }
 
-                        if (SessionFacade.CurrentUser != null && caseTemplate.SetCurrentUserAsPerformer == 1)
-                            m.case_.Performer_User_Id = SessionFacade.CurrentUser.Id;
+                    if (caseTemplate.Priority_Id != null)
+                        m.case_.Priority_Id = caseTemplate.Priority_Id;
 
-                        if (caseTemplate.Category_Id != null)
-                        {
-                            m.case_.Category_Id = caseTemplate.Category_Id.Value;
-                        }
+                    /*Disabled maybe we need this in the future*/
+                    // 
+                    //if (caseTemplate.Priority_Id.HasValue)
+                    //    m.case_.Priority_Id = caseTemplate.Priority_Id;
+                    //else
+                    //{
+                    //    if (m.case_.ProductArea_Id.HasValue && m.case_.ProductArea != null)
+                    //        m.case_.Priority_Id = m.case_.ProductArea.Priority_Id;
+                    //}
 
-                        if (caseTemplate.CausingPartId.HasValue)
-                        {
-                            m.case_.CausingPartId = caseTemplate.CausingPartId.Value;
-                            if (m.causingParts != null)
-                            {
-                                var templateCausingPart = m.causingParts.Where(c => c.Value == caseTemplate.CausingPartId.Value.ToString()).SingleOrDefault();
-                                if (templateCausingPart != null)
-                                    templateCausingPart.Selected = true;
-                            }
-                        }
+                    if (caseTemplate.Project_Id.HasValue)
+                        m.case_.Project_Id = caseTemplate.Project_Id;
 
-                        if (caseTemplate.UpdateNotifierInformation.HasValue)
-                        {
-                            m.UpdateNotifierInformation = caseTemplate.UpdateNotifierInformation.Value.ToBool();
-                        }
-
-                        if (caseTemplate.AddFollowersBtn.HasValue)
-                        {
-                            m.AddFollowersBtn = caseTemplate.AddFollowersBtn.Value;
-                        }
-
-                        if (caseTemplate.Supplier_Id != null)
-                            m.case_.Supplier_Id = caseTemplate.Supplier_Id.Value;
-
-                        var isCopy = parentCaseId.HasValue;
-
-                        if (!string.IsNullOrEmpty(caseTemplate.ReportedBy))
-                            m.case_.ReportedBy = caseTemplate.ReportedBy;
-
-                        if (caseTemplate.Department_Id != null)
-                            m.case_.Department_Id = caseTemplate.Department_Id;
-
-                        m.CaseMailSetting.DontSendMailToNotifier = caseTemplate.NoMailToNotifier.ToBool();
-
-                        if (caseTemplate.ProductArea_Id != null)
-                            m.case_.ProductArea_Id = caseTemplate.ProductArea_Id;
-
-                        if (caseTemplate.ProductArea_Id.HasValue)
-                            m.case_.ProductArea = _productAreaService.GetProductArea(caseTemplate.ProductArea_Id.Value);
-
-                        if (!string.IsNullOrEmpty(caseTemplate.Caption))
-                            m.case_.Caption = caseTemplate.Caption;
-
-                        if (!string.IsNullOrEmpty(caseTemplate.Description))
-                            m.case_.Description = caseTemplate.Description;
-
-                        if (!string.IsNullOrEmpty(caseTemplate.Miscellaneous))
-                            m.case_.Miscellaneous = caseTemplate.Miscellaneous;
-
-                        if (caseTemplate.SetCurrentUsersWorkingGroup == 1 && SessionFacade.CurrentUser != null)
-                        {
-                            var userDefaultWGId = this._userService.GetUserDefaultWorkingGroupId(SessionFacade.CurrentUser.Id, customer.Id);
-                            if (userDefaultWGId.HasValue)
-                            {
-                                m.case_.WorkingGroup_Id = userDefaultWGId.Value;
-                            }
-                            else
-                            {
-                                m.case_.WorkingGroup_Id = null;
-                            }
-                        }
-                        else if (caseTemplate.CaseWorkingGroup_Id != null)
-                        {
-                            m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
-                        }
-
-                        if (caseTemplate.Priority_Id != null)
-                            m.case_.Priority_Id = caseTemplate.Priority_Id;
-
-                        /*Disabled maybe we need this in the future*/
-                        // 
-                        //if (caseTemplate.Priority_Id.HasValue)
-                        //    m.case_.Priority_Id = caseTemplate.Priority_Id;
-                        //else
-                        //{
-                        //    if (m.case_.ProductArea_Id.HasValue && m.case_.ProductArea != null)
-                        //        m.case_.Priority_Id = m.case_.ProductArea.Priority_Id;
-                        //}
-
-                        if (caseTemplate.Project_Id.HasValue)
-                            m.case_.Project_Id = caseTemplate.Project_Id;
-
-                        if (!string.IsNullOrEmpty(caseTemplate.Text_External))
-                        {
-                            m.CaseLog.TextExternal = caseTemplate.Text_External;
-                            m.CaseLog.SendMailAboutCaseToNotifier = true;
-                        }
+                    if (!string.IsNullOrEmpty(caseTemplate.Text_External))
+                    {
+                        m.CaseLog.TextExternal = caseTemplate.Text_External;
+                        m.CaseLog.SendMailAboutCaseToNotifier = true;
+                    }
                             
 
-                        if (!string.IsNullOrEmpty(caseTemplate.Text_Internal))
-                            m.CaseLog.TextInternal = caseTemplate.Text_Internal;
+                    if (!string.IsNullOrEmpty(caseTemplate.Text_Internal))
+                        m.CaseLog.TextInternal = caseTemplate.Text_Internal;
 
-                        if (caseTemplate.FinishingCause_Id.HasValue)
-                            m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;
+                    if (caseTemplate.FinishingCause_Id.HasValue)
+                        m.CaseLog.FinishingType = caseTemplate.FinishingCause_Id;
 
-                        if (m.CaseLog.FinishingType.HasValue)
-                            m.CaseLog.FinishingDate = DateTime.UtcNow;
+                    if (m.CaseLog.FinishingType.HasValue)
+                        m.CaseLog.FinishingDate = DateTime.UtcNow;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.PersonsName))
-                            m.case_.PersonsName = caseTemplate.PersonsName;
+                    if (!string.IsNullOrEmpty(caseTemplate.PersonsName))
+                        m.case_.PersonsName = caseTemplate.PersonsName;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.PersonsEmail))
-                            m.case_.PersonsEmail = caseTemplate.PersonsEmail;
+                    if (!string.IsNullOrEmpty(caseTemplate.PersonsEmail))
+                        m.case_.PersonsEmail = caseTemplate.PersonsEmail;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.PersonsPhone))
-                            m.case_.PersonsPhone = caseTemplate.PersonsPhone;
+                    if (!string.IsNullOrEmpty(caseTemplate.PersonsPhone))
+                        m.case_.PersonsPhone = caseTemplate.PersonsPhone;
 
-                        if (caseTemplate.Region_Id.HasValue)
-                            m.case_.Region_Id = caseTemplate.Region_Id;
+                    if (caseTemplate.Region_Id.HasValue)
+                        m.case_.Region_Id = caseTemplate.Region_Id;
 
-                        if (caseTemplate.OU_Id.HasValue)
-                            m.case_.OU_Id = caseTemplate.OU_Id;
+                    if (caseTemplate.OU_Id.HasValue)
+                        m.case_.OU_Id = caseTemplate.OU_Id;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.Place))
-                            m.case_.Place = caseTemplate.Place;
+                    if (!string.IsNullOrEmpty(caseTemplate.Place))
+                        m.case_.Place = caseTemplate.Place;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.UserCode))
-                            m.case_.UserCode = caseTemplate.UserCode;
+                    if (!string.IsNullOrEmpty(caseTemplate.UserCode))
+                        m.case_.UserCode = caseTemplate.UserCode;
 
-                        if (caseTemplate.Urgency_Id.HasValue)
-                            m.case_.Urgency_Id = caseTemplate.Urgency_Id;
+                    if (caseTemplate.Urgency_Id.HasValue)
+                        m.case_.Urgency_Id = caseTemplate.Urgency_Id;
 
-                        if (caseTemplate.Impact_Id.HasValue)
-                            m.case_.Impact_Id = caseTemplate.Impact_Id;
+                    if (caseTemplate.Impact_Id.HasValue)
+                        m.case_.Impact_Id = caseTemplate.Impact_Id;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.InventoryNumber))
-                            m.case_.InvoiceNumber = caseTemplate.InvoiceNumber;
+                    if (!string.IsNullOrEmpty(caseTemplate.InventoryNumber))
+                        m.case_.InvoiceNumber = caseTemplate.InvoiceNumber;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.InventoryNumber))
-                            m.case_.ReferenceNumber = caseTemplate.InventoryNumber;
+                        if (!string.IsNullOrEmpty(caseTemplate.ReferenceNumber))
+                            m.case_.ReferenceNumber = caseTemplate.ReferenceNumber;
 
-                        if (caseTemplate.Status_Id.HasValue)
-                            m.case_.Status_Id = caseTemplate.Status_Id;
+                    if (caseTemplate.Status_Id.HasValue)
+                        m.case_.Status_Id = caseTemplate.Status_Id;
 
-                        if (caseTemplate.StateSecondary_Id.HasValue)
-                            m.case_.StateSecondary_Id = caseTemplate.StateSecondary_Id;
+                    if (caseTemplate.StateSecondary_Id.HasValue)
+                        m.case_.StateSecondary_Id = caseTemplate.StateSecondary_Id;
 
-                        // TODO: JWE What is "Verfied"?
-                        m.case_.Verified = caseTemplate.Verified;
+                    // TODO: JWE What is "Verfied"?
+                    m.case_.Verified = caseTemplate.Verified;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.VerifiedDescription))
-                            m.case_.VerifiedDescription = caseTemplate.VerifiedDescription;
+                    if (!string.IsNullOrEmpty(caseTemplate.VerifiedDescription))
+                        m.case_.VerifiedDescription = caseTemplate.VerifiedDescription;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.SolutionRate))
-                            m.case_.SolutionRate = caseTemplate.SolutionRate;
+                    if (!string.IsNullOrEmpty(caseTemplate.SolutionRate))
+                        m.case_.SolutionRate = caseTemplate.SolutionRate;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.InventoryNumber))
-                            m.case_.InventoryNumber = caseTemplate.InventoryNumber;
+                    if (!string.IsNullOrEmpty(caseTemplate.InventoryNumber))
+                        m.case_.InventoryNumber = caseTemplate.InventoryNumber;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.InventoryType))
-                            m.case_.InventoryType = caseTemplate.InventoryType;
+                    if (!string.IsNullOrEmpty(caseTemplate.InventoryType))
+                        m.case_.InventoryType = caseTemplate.InventoryType;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.InventoryLocation))
-                            m.case_.InventoryLocation = caseTemplate.InventoryLocation;
+                    if (!string.IsNullOrEmpty(caseTemplate.InventoryLocation))
+                        m.case_.InventoryLocation = caseTemplate.InventoryLocation;
 
-                        if (caseTemplate.System_Id.HasValue)
-                            m.case_.System_Id = caseTemplate.System_Id;
+                    if (caseTemplate.System_Id.HasValue)
+                        m.case_.System_Id = caseTemplate.System_Id;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.Currency))
-                            m.case_.Currency = caseTemplate.Currency;
+                    if (!string.IsNullOrEmpty(caseTemplate.Currency))
+                        m.case_.Currency = caseTemplate.Currency;
 
-                        if (caseTemplate.Cost != 0)
-                            m.case_.Cost = caseTemplate.Cost;
+                    if (caseTemplate.Cost != 0)
+                        m.case_.Cost = caseTemplate.Cost;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.InventoryNumber))
-                            m.case_.OtherCost = caseTemplate.OtherCost;
+                    if (!string.IsNullOrEmpty(caseTemplate.InventoryNumber))
+                        m.case_.OtherCost = caseTemplate.OtherCost;
 
-                        if (caseTemplate.AgreedDate.HasValue)
-                            m.case_.AgreedDate = caseTemplate.AgreedDate;
+                    if (caseTemplate.AgreedDate.HasValue)
+                        m.case_.AgreedDate = caseTemplate.AgreedDate;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.Available))
-                            m.case_.Available = caseTemplate.Available;
+                    if (!string.IsNullOrEmpty(caseTemplate.Available))
+                        m.case_.Available = caseTemplate.Available;
 
-                        if (caseTemplate.ContactBeforeAction != 0)
-                            m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+                    if (caseTemplate.ContactBeforeAction != 0)
+                        m.case_.ContactBeforeAction = caseTemplate.ContactBeforeAction;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.CostCentre))
-                            m.case_.CostCentre = caseTemplate.CostCentre;
+                    if (!string.IsNullOrEmpty(caseTemplate.CostCentre))
+                        m.case_.CostCentre = caseTemplate.CostCentre;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.PersonsCellPhone))
-                            m.case_.PersonsCellphone = caseTemplate.PersonsCellPhone;
+                    if (!string.IsNullOrEmpty(caseTemplate.PersonsCellPhone))
+                        m.case_.PersonsCellphone = caseTemplate.PersonsCellPhone;
 
-                        if (m.case_.IsAbout == null)
-                            m.case_.IsAbout = new CaseIsAboutEntity();
+                    if (m.case_.IsAbout == null)
+                        m.case_.IsAbout = new CaseIsAboutEntity();
 
-                        m.case_.IsAbout.Id = 0;
+                    m.case_.IsAbout.Id = 0;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.IsAbout_ReportedBy))
-                            m.case_.IsAbout.ReportedBy = caseTemplate.IsAbout_ReportedBy;
+                    if (!string.IsNullOrEmpty(caseTemplate.IsAbout_ReportedBy))
+                        m.case_.IsAbout.ReportedBy = caseTemplate.IsAbout_ReportedBy;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.IsAbout_PersonsName))
-                            m.case_.IsAbout.Person_Name = caseTemplate.IsAbout_PersonsName;
+                    if (!string.IsNullOrEmpty(caseTemplate.IsAbout_PersonsName))
+                        m.case_.IsAbout.Person_Name = caseTemplate.IsAbout_PersonsName;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.IsAbout_PersonsEmail))
-                            m.case_.IsAbout.Person_Email = caseTemplate.IsAbout_PersonsEmail;
+                    if (!string.IsNullOrEmpty(caseTemplate.IsAbout_PersonsEmail))
+                        m.case_.IsAbout.Person_Email = caseTemplate.IsAbout_PersonsEmail;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.IsAbout_PersonsPhone))
-                            m.case_.IsAbout.Person_Phone = caseTemplate.IsAbout_PersonsPhone;
+                    if (!string.IsNullOrEmpty(caseTemplate.IsAbout_PersonsPhone))
+                        m.case_.IsAbout.Person_Phone = caseTemplate.IsAbout_PersonsPhone;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.IsAbout_PersonsCellPhone))
-                            m.case_.IsAbout.Person_Cellphone = caseTemplate.IsAbout_PersonsCellPhone;
+                    if (!string.IsNullOrEmpty(caseTemplate.IsAbout_PersonsCellPhone))
+                        m.case_.IsAbout.Person_Cellphone = caseTemplate.IsAbout_PersonsCellPhone;
 
-                        if (caseTemplate.IsAbout_Region_Id.HasValue)
-                            m.case_.IsAbout.Region_Id = caseTemplate.IsAbout_Region_Id;
+                    if (caseTemplate.IsAbout_Region_Id.HasValue)
+                        m.case_.IsAbout.Region_Id = caseTemplate.IsAbout_Region_Id;
 
-                        if (caseTemplate.IsAbout_Department_Id.HasValue)
-                            m.case_.IsAbout.Department_Id = caseTemplate.IsAbout_Department_Id;
+                    if (caseTemplate.IsAbout_Department_Id.HasValue)
+                        m.case_.IsAbout.Department_Id = caseTemplate.IsAbout_Department_Id;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.Available))
-                            m.case_.IsAbout.OU_Id = caseTemplate.IsAbout_OU_Id;
+                    if (!string.IsNullOrEmpty(caseTemplate.Available))
+                        m.case_.IsAbout.OU_Id = caseTemplate.IsAbout_OU_Id;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.IsAbout_CostCentre))
-                            m.case_.IsAbout.CostCentre = caseTemplate.IsAbout_CostCentre;
+                    if (!string.IsNullOrEmpty(caseTemplate.IsAbout_CostCentre))
+                        m.case_.IsAbout.CostCentre = caseTemplate.IsAbout_CostCentre;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.IsAbout_Place))
-                            m.case_.IsAbout.Place = caseTemplate.IsAbout_Place;
+                    if (!string.IsNullOrEmpty(caseTemplate.IsAbout_Place))
+                        m.case_.IsAbout.Place = caseTemplate.IsAbout_Place;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.UserCode))
-                            m.case_.IsAbout.UserCode = caseTemplate.UserCode;
+                    if (!string.IsNullOrEmpty(caseTemplate.UserCode))
+                        m.case_.IsAbout.UserCode = caseTemplate.UserCode;
 
-                        if (caseTemplate.RegistrationSource.HasValue)
+                    if (caseTemplate.RegistrationSource.HasValue)
+                    {
+                        m.CustomerRegistrationSourceId = caseTemplate.RegistrationSource.Value;
+                        var RegistrationSource = this._registrationSourceCustomerService.GetRegistrationSouceCustomer(caseTemplate.RegistrationSource.Value);
+                        m.SelectedCustomerRegistrationSource = RegistrationSource.SourceName;
+                    }
+
+                    // "watch date" 
+                    if (caseTemplate.WatchDate.HasValue)
+                    {
+                        m.case_.WatchDate = caseTemplate.WatchDate;
+                    }
+                    else
+                    {
+                        if (m.case_.Department_Id.HasValue && m.case_.Priority_Id.HasValue)
                         {
-                            m.CustomerRegistrationSourceId = caseTemplate.RegistrationSource.Value;
-                            var RegistrationSource = this._registrationSourceCustomerService.GetRegistrationSouceCustomer(caseTemplate.RegistrationSource.Value);
-                            m.SelectedCustomerRegistrationSource = RegistrationSource.SourceName;
-                        }
-
-                        // "watch date" 
-                        if (caseTemplate.WatchDate.HasValue)
-                        {
-                            m.case_.WatchDate = caseTemplate.WatchDate;
-                        }
-                        else
-                        {
-                            if (m.case_.Department_Id.HasValue && m.case_.Priority_Id.HasValue)
+                            var dept = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
+                            var priority =
+                                m.priorities.Where(it => it.Id == m.case_.Priority_Id && it.IsActive == 1).FirstOrDefault();
+                            if (dept != null && dept.WatchDateCalendar_Id.HasValue && priority != null && priority.SolutionTime == 0)
                             {
-                                var dept = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
-                                var priority =
-                                    m.priorities.Where(it => it.Id == m.case_.Priority_Id && it.IsActive == 1).FirstOrDefault();
-                                if (dept != null && dept.WatchDateCalendar_Id.HasValue && priority != null && priority.SolutionTime == 0)
-                                {
-                                    m.case_.WatchDate =
+                                m.case_.WatchDate =
                                     this.watchDateCalendarServcie.GetClosestDateTo(
-                                            dept.WatchDateCalendar_Id.Value,
-                                            DateTime.UtcNow);
-                                }
+                                        dept.WatchDateCalendar_Id.Value,
+                                        DateTime.UtcNow);
                             }
                         }
+                    }
 
-                        if (caseTemplate.Project_Id.HasValue)
-                            m.case_.Project_Id = caseTemplate.Project_Id;
+                    if (caseTemplate.Project_Id.HasValue)
+                        m.case_.Project_Id = caseTemplate.Project_Id;
 
-                        if (caseTemplate.Problem_Id.HasValue)
-                            m.case_.Problem_Id = caseTemplate.Problem_Id;
+                    if (caseTemplate.Problem_Id.HasValue)
+                        m.case_.Problem_Id = caseTemplate.Problem_Id;
 
-                        if (caseTemplate.Change_Id.HasValue)
-                            m.case_.Change_Id = caseTemplate.Change_Id;
+                    if (caseTemplate.Change_Id.HasValue)
+                        m.case_.Change_Id = caseTemplate.Change_Id;
 
-                        if (caseTemplate.FinishingDate.HasValue)
-                            m.case_.FinishingDate = caseTemplate.FinishingDate;
+                    if (caseTemplate.FinishingDate.HasValue)
+                        m.case_.FinishingDate = caseTemplate.FinishingDate;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.FinishingDescription))
-                            m.case_.FinishingDescription = caseTemplate.FinishingDescription;
+                    if (!string.IsNullOrEmpty(caseTemplate.FinishingDescription))
+                        m.case_.FinishingDescription = caseTemplate.FinishingDescription;
 
-                        if (caseTemplate.PlanDate.HasValue)
-                            m.case_.PlanDate = caseTemplate.PlanDate;
+                    if (caseTemplate.PlanDate.HasValue)
+                        m.case_.PlanDate = caseTemplate.PlanDate;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.Name))
-                            m.CaseTemplateName = caseTemplate.Name;
+                    if (!string.IsNullOrEmpty(caseTemplate.Name))
+                        m.CaseTemplateName = caseTemplate.Name;
 
-                        if (caseTemplate.SMS != 0)
-                            m.case_.SMS = caseTemplate.SMS;
-                        // This is used for hide fields(which are not in casetemplate) in new case input
-                        m.templateistrue = templateistrue;
-                        var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
-                        m.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCauses.ToArray(), caseTemplate.FinishingCause_Id);
-                        #endregion
+                    if (caseTemplate.SMS != 0)
+                        m.case_.SMS = caseTemplate.SMS;
+
+                    // This is used for hide fields(which are not in casetemplate) in new case input
+                    m.templateistrue = templateistrue;
+                    var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
+                    m.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCauses.ToArray(), caseTemplate.FinishingCause_Id);
+                }
+
+                #endregion
+
+                //todo: check if value from template should be set on NewCase only but value from db used for existing case! 
+                #region User Search Categories
+
+                //set default values only if active = true
+                if (initiatorFieldSettings.IsActive && caseTemplate.UserSearchCategory_Id.HasValue)
+                {
+                    m.InitiatorComputerUserCategory =
+                        GetComputerUserCategoryByID(caseTemplate.UserSearchCategory_Id.Value);
+                }
+
+                //set default values only if active = true
+                if (regFieldSettings.IsActive && caseTemplate.IsAbout_UserSearchCategory_Id.HasValue)
+                {
+                    m.RegardingComputerUserCategory =
+                        GetComputerUserCategoryByID(caseTemplate.IsAbout_UserSearchCategory_Id.Value);
+                }
+
+                #endregion
+            }
+
+            #region User Search Categories
+            
+            if (m.CaseSolutionSettingModels != null)
+            {
+                if (initiatorFieldSettings.IsActive && m.InitiatorUserCategoryVisible)
+                {
+                    var sfs = m.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == CaseSolutionFields.UserSearchCategory_Id);
+                    if (sfs != null && !sfs.IsFieldVisible())
+                    {
+                        m.InitiatorUserCategoryVisible = false;
                     }
                 }
-                #endregion
+
+                if (regFieldSettings.IsActive && m.RegardingUserCategoryVisible)
+                {
+                    var sfs = m.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == CaseSolutionFields.IsAbout_UserSearchCategory_Id);
+                    if (sfs != null && !sfs.IsFieldVisible())
+                    {
+                        m.RegardingUserCategoryVisible = false;
+                    }
+                }
+            }
+
+            #endregion
+
+            if (m.case_.ReportedBy != null)
+            {
+                var reportedByUser = this._computerService.GetComputerUserByUserID(m.case_.ReportedBy);
+                if (reportedByUser != null && reportedByUser.ComputerUsersCategoryID.HasValue)
+                {
+                    m.InitiatorComputerUserCategory = _computerService.GetComputerUserCategoryByID(reportedByUser.ComputerUsersCategoryID.Value);
+                    if (m.InitiatorComputerUserCategory != null)
+                    {
+                        m.InitiatorReadOnly = m.InitiatorComputerUserCategory.IsReadOnly;
+                    }
+                }
+            }
+
+            if (m.case_.IsAbout != null && m.case_.IsAbout.ReportedBy != null)
+            {
+                var reportedByUser = this._computerService.GetComputerUserByUserID(m.case_.IsAbout.ReportedBy);
+                if (reportedByUser != null && reportedByUser.ComputerUsersCategoryID.HasValue)
+                {
+                    m.RegardingComputerUserCategory = _computerService.GetComputerUserCategoryByID(reportedByUser.ComputerUsersCategoryID.Value);
+                    if (m.RegardingComputerUserCategory != null)
+                    {
+                        m.RegardingReadOnly = m.RegardingComputerUserCategory.IsReadOnly;
+                    }
+                }
             }
 
             BusinessData.Models.User.CustomerUserInfo admUser = null;
@@ -6054,9 +6162,6 @@ namespace DH.Helpdesk.Web.Controllers
                 ? m.case_.CaseSolution_Id.Value
                 : templateId ?? 0;
 
-            // Computer user categories
-            m.ComputerUserCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId);
-            
             m.HasExtendedComputerUsers =
                 _caseSolutionService.CheckIfExtendedFormExistForSolutionsInCategories(customerId, m.ComputerUserCategories.Select(c => c.Id).ToList());
 
@@ -6232,6 +6337,31 @@ namespace DH.Helpdesk.Web.Controllers
             m.StatusBar = isCreateNewCase ? new Dictionary<string, string>() : GetStatusBar(m);
 
             return m;
+        }
+
+        public ComputerUserCategory GetComputerUserCategoryByID(int categoryID)
+        {
+            if (categoryID == ComputerUserCategory.EmptyCategoryId)
+            {
+                return ComputerUserCategory.CreateEmptyCategory();
+            }
+            
+            var category = _computerService.GetComputerUserCategoryByID(categoryID);
+            if (category.IsEmpty)
+            {
+                category.ID = ComputerUserCategory.EmptyCategoryId;
+            }
+
+            return category;
+        }
+
+        public bool CheckIfFieldVisible(IList<CaseFieldSetting> caseFieldSettings, TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
+        {
+            var isVisible =
+                CaseSolutionSettingModel.IsFieldAlwaysVisible(caseTemplateFieldName) ||
+                caseFieldSettings.IsFieldRequiredOrVisible(caseFieldName);
+
+            return isVisible;
         }
 
         private List<ExternalInvoiceModel> GetExternalInvoices(int caseId)

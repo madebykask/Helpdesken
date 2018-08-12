@@ -1,5 +1,6 @@
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.Dal.DbQueryExecutor;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -85,7 +86,8 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<ProductAreaEntity> GetWithHierarchy(int customerId);
 
 		IQueryable<ProductAreaEntity> GetManyWithSubProductAreas(Expression<Func<ProductAreaEntity, bool>> where);
-	}
+        IList<ProductAreaEntity> GetWithParents(int[] childProductAreaIds);
+    }
 
     /// <summary>
     /// The product area repository.
@@ -95,9 +97,9 @@ namespace DH.Helpdesk.Dal.Repositories
         /// <summary>
         /// The product area entity to business model mapper.
         /// </summary>
-        private readonly IEntityToBusinessModelMapper<ProductAreaEntity, ProductAreaOverview> productAreaEntityToBusinessModelMapper;
-
-        private readonly IBusinessModelToEntityMapper<ProductAreaOverview, ProductAreaEntity> toEntityMapper;
+        private readonly IEntityToBusinessModelMapper<ProductAreaEntity, ProductAreaOverview> _productAreaEntityToBusinessModelMapper;
+        private readonly IBusinessModelToEntityMapper<ProductAreaOverview, ProductAreaEntity> _toEntityMapper;
+        private readonly IDbQueryExecutorFactory _queryExecutorFactory;
 
 
         /// <summary>
@@ -112,11 +114,13 @@ namespace DH.Helpdesk.Dal.Repositories
         public ProductAreaRepository(
             IDatabaseFactory databaseFactory,
             IEntityToBusinessModelMapper<ProductAreaEntity, ProductAreaOverview> productAreaEntityToBusinessModelMapper,
-            IBusinessModelToEntityMapper<ProductAreaOverview, ProductAreaEntity> toEntityMapper)
+            IBusinessModelToEntityMapper<ProductAreaOverview, ProductAreaEntity> toEntityMapper,
+            IDbQueryExecutorFactory queryExecutorFactory)
             : base(databaseFactory)
         {
-            this.productAreaEntityToBusinessModelMapper = productAreaEntityToBusinessModelMapper;
-            this.toEntityMapper = toEntityMapper;
+            this._productAreaEntityToBusinessModelMapper = productAreaEntityToBusinessModelMapper;
+            this._toEntityMapper = toEntityMapper;
+            _queryExecutorFactory = queryExecutorFactory;
         }
 
 
@@ -136,7 +140,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 .ToList();
 
             return entities
-                .Select(this.productAreaEntityToBusinessModelMapper.Map)
+                .Select(this._productAreaEntityToBusinessModelMapper.Map)
                 .FirstOrDefault();
         }
 
@@ -232,7 +236,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 .OrderBy(p => p.Name)
                 .ToList();
 
-            return entities.Select(this.productAreaEntityToBusinessModelMapper.Map);
+            return entities.Select(this._productAreaEntityToBusinessModelMapper.Map);
         }
 
         public IList<ProductAreaOverview> GetProductAreasWithWorkingGroups(int customerId, bool isActiveOnly)
@@ -314,7 +318,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 .ToList();
 
             return entities
-                .Select(this.productAreaEntityToBusinessModelMapper.Map);
+                .Select(this._productAreaEntityToBusinessModelMapper.Map);
         }
 
 
@@ -325,17 +329,39 @@ namespace DH.Helpdesk.Dal.Repositories
             if (productArea.Id > 0)
             {
                 entity = this.DataContext.ProductAreas.Find(productArea.Id);
-                this.toEntityMapper.Map(productArea, entity);
+                this._toEntityMapper.Map(productArea, entity);
             }
             else
             {
                 entity = new ProductAreaEntity();
-                this.toEntityMapper.Map(productArea, entity);
+                this._toEntityMapper.Map(productArea, entity);
                 this.DataContext.ProductAreas.Add(entity);
             }
 
             this.Commit();
             return entity.Id;
+        }
+
+        public IList<ProductAreaEntity> GetWithParents(int[] childProductAreaIds)
+        {
+            if (childProductAreaIds == null || !childProductAreaIds.Any()) return new List<ProductArea>();
+
+            var ids = string.Join(",", childProductAreaIds);
+            var sql = $@"with parents as (
+                    select id, Parent_ProductArea_Id, ProductArea
+                    from tblProductArea
+                    where id in ({ids})
+                    union all
+                    select c.id, c.Parent_ProductArea_Id, c.ProductArea
+                        from tblProductArea c
+                    join parents p on p.Parent_ProductArea_Id = c.id
+                        ) 
+                    select distinct Id, Parent_ProductArea_Id, ProductArea as Name
+                        from parents";
+            var queryExecutor = _queryExecutorFactory.Create();
+            var productAreas = queryExecutor.QueryList<ProductAreaEntity>(sql);
+
+            return productAreas;
         }
     }
 

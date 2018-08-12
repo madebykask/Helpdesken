@@ -1,14 +1,11 @@
-﻿@using DH.Helpdesk.SelfService.Infrastructure
-@using DH.Helpdesk.SelfService.Infrastructure.Common;
+﻿@using DH.Helpdesk.SelfService.Infrastructure.Common;
 @using DH.Helpdesk.Services.Infrastructure
-@using DH.Helpdesk.Common.Enums;
-@using DH.Helpdesk.SelfService.Models.Shared
 @using System.Web.Optimization
 @using DH.Helpdesk.SelfService
 
  @{     
      var helper = ManualDependencyResolver.Get<ICommonFunctions>();
-     LayoutViewModel layoutModel = helper.GetLayoutViewModel(ViewBag.CurrentCaseId, TempData["ShowLanguageSelect"]);
+     var layoutModel = helper.GetLayoutViewModel(TempData["ShowLanguageSelect"]);
  }
 
 <!DOCTYPE html>
@@ -17,16 +14,7 @@
         <meta content="html/text; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>
-            @if (layoutModel.AppType == ApplicationTypes.LineManager)
-            {
-                @Translation.Get("DH-Line Manager", Enums.TranslationSource.TextTranslation)
-            }
-            else
-            {
-                @Translation.Get("DH-Self Service", Enums.TranslationSource.TextTranslation)
-            }
-        </title>
+        <title>@layoutModel.IsLineManager ? @Translation.Get("DH-Line Manager") :  @Translation.Get("DH-Self Service")</title>
 
         @Styles.Render(BundleConfig.StyleNames.Common)
         @Styles.Render("~/img-profile/css")
@@ -43,86 +31,58 @@
           <script src="@Url.Content("~/Content/js/respond.min.js")"></script>
         <![endif]-->
     </head>
-    <body>
-        @if (layoutModel.CurrentCase_Id != null && layoutModel.AppType == ApplicationTypes.LineManager)
-        {
-            <div class="siteCom">
-                @Html.Partial("_Communication", layoutModel.CaseLog)
+<body>
+    <div class="jumbotron">
+        @Html.Partial("_LogoItems", layoutModel)
+    </div>
+
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
             </div>
-        }
-
-        <div class="jumbotron">
-            @Html.Partial("_LogoItems", layoutModel)
+            @Html.Partial("_MainMenu", layoutModel)
         </div>
+    </div>
 
-        <div class="navbar navbar-default" role="navigation">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">                        
-                        @if (!layoutModel.HideMenu && layoutModel.LoginMode != LoginMode.Anonymous)
-                        {
-                            <li class="blue">
-                                <a href="@Url.Action("Index", "Start", new { customerId = layoutModel.CustomerId, area = "" })">
-                                    <i class="fa fa-home mnu-fa"></i><br />
-                                    @Translation.Get("Start", Enums.TranslationSource.TextTranslation)
-                                </a>
-                            </li>
+    @RenderBody()
 
-                            if (!layoutModel.HasError)
-                            {
-                                @Html.Partial("MainMenuItems/_CaseTemplatesMenu", layoutModel)
-                                @Html.Partial("MainMenuItems/_CaseListMenu", layoutModel)
-                                @Html.Partial("MainMenuItems/_OrderMenu", layoutModel)
-                                @Html.Partial("MainMenuItems/_DocumentMenu", layoutModel)
-                                @Html.Partial("MainMenuItems/_FAQMenu", layoutModel)
-                                @Html.Partial("MainMenuItems/_UserGroupMenu", layoutModel)
-                                @Html.Partial("MainMenuItems/_HelpAboutMenu", layoutModel)
-                            }
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        @RenderBody()
-        <div class="container-fluid dh-container">
-            <div class="row">
-                @if (ViewBag.Title != "MessageDialog")
-                {
-                    <div class="col-md-10 small">
-                        <div class="footerdhhd">
-                            <img src="@Url.Content("~/Content/img/dh_solutions_slogan.png")" />&nbsp;
-                            <br /><i>@Translation.Get("Version")&nbsp;@ApplicationFacade.Version</i>
-                        </div>
+    <div class="container-fluid dh-container">
+        <div class="row">
+            @* A workaround to hide footer at Message/Index *@
+            @if (IsSectionDefined("Footer"))
+            {
+                @RenderSection("Footer")
+            }
+            else
+            {
+                <div class="col-md-10 small">
+                    <div class="footerdhhd">
+                        <img src="@Url.Content("~/Content/img/dh_solutions_slogan.png")" />&nbsp;<br />
+                        <i>@Translation.Get("Version")&nbsp;@ApplicationFacade.Version</i>
                     </div>
-                }
-            </div>
-            @RenderSection("Scripts", false)
-            <input type="hidden" value="@Request.RawUrl" id="rawUrl" />
+                </div>
+            }
         </div>
-        @RenderSection("Dialogs", false)
-        @Scripts.Render("~/Content/js/helpdesk")
+        <input type="hidden" value="@Request.RawUrl" id="rawUrl" />
+    </div>
 
-    </body>
+    @RenderSection("Dialogs", false)
+    @RenderSection("Scripts", false)
+    @Scripts.Render("~/Content/js/helpdesk")
+
+    <script type="text/javascript">
+        window.ShowLanguage = '@layoutModel.ShowLanguage';
+        window.SaveMessageUrl = '@Url.Action("_CaseLogNote", "Case")'; 
+        window.ChangeLanguageUrl = '@Url.Action("ChangeLanguage", "Case")';
+        window.no_results_text = '@Translation.GetForJS("Inga resultat matchar")';
+        window.placeholder_text_multiple = '@Html.Raw(Translation.GetForJS("Välj en eller flera"))';
+    </script>
+</body>
 
 </html>
-
-
-<script type="text/javascript">
-
-    window.ShowLanguage = '@layoutModel.ShowLanguage';
-    window.CaseId = '@layoutModel.CurrentCase_Id';
-    window.SaveMessageUrl = '@Url.Content("~/Case/_CaseLogNote")';
-    window.ChangeLanguageUrl = '@Url.Action("ChangeLanguage", "Case")';
-    window.no_results_text = '@Translation.GetForJS("Inga resultat matchar")';
-    window.placeholder_text_multiple = '@Html.Raw(Translation.GetForJS("Välj en eller flera"))';
-
-</script>

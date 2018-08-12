@@ -1,20 +1,11 @@
-﻿@using DH.Helpdesk.Common.Enums;
-@model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
-
+﻿@model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
 
 @if (Model.CurrentCustomer != null && Model.CurrentCustomer.ShowDocumentsOnExternalPage != 0)
 {
     <li class="blue">
         <a href="@Url.Action("Index", "Documents", new { customerId = Model.CustomerId, area = "" })">
             <i class="fa fa-file-text-o mnu-fa"></i><br />
-            @if (Model.AppType == ApplicationTypes.LineManager)
-            {
-                @Translation.Get("HR Documents", Enums.TranslationSource.TextTranslation)
-            }
-            else
-            {
-                @Translation.Get("Documents", Enums.TranslationSource.TextTranslation)
-            }
+            @(Model.IsLineManager ? Translation.Get("HR Documents") : Translation.Get("Documents"))
         </a>
     </li>
 }

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories
+﻿using DH.Helpdesk.Dal.DbQueryExecutor;
+
+namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
     using System.Globalization;
@@ -26,13 +28,19 @@
         IEnumerable<CaseTypeOverview> GetCaseTypeOverviews(int customerId);
 
 		IQueryable<CaseType> GetManyWithSubCaseTypes(Expression<Func<CaseType, bool>> where);
-	}
+        IList<CaseType> GetWithParents(int[] childIds);
+    }
 
     public class CaseTypeRepository : RepositoryBase<CaseType>, ICaseTypeRepository
     {
-        public CaseTypeRepository(IDatabaseFactory databaseFactory)
+        private readonly IDbQueryExecutorFactory _queryExecutorFactory;
+
+
+        public CaseTypeRepository(IDatabaseFactory databaseFactory,
+            IDbQueryExecutorFactory queryExecutorFactory)
             : base(databaseFactory)
         {
+            _queryExecutorFactory = queryExecutorFactory;
         }
 
         public void ResetDefault(int exclude, int customerId)
@@ -113,6 +121,29 @@
                                          ShowOnExtPageCases = c.ShowOnExtPageCases
                                      });
         }
+
+        public IList<CaseType> GetWithParents(int[] childIds)
+        {
+            if (childIds == null || !childIds.Any()) return new List<CaseType>();
+
+            var ids = string.Join(",", childIds);
+            var sql = $@"  with parents as (
+                           select [Id], [Parent_CaseType_Id], [CaseType]
+                           from [dbo].[tblCaseType]
+                           where [Id] in ({ids})
+                           union all
+                           select c.[Id], c.[Parent_CaseType_Id], c.[CaseType]
+                           from [dbo].[tblCaseType] c
+                             join parents p on p.[Parent_CaseType_Id] = c.id 
+                        ) 
+                        select distinct [Id], [Parent_CaseType_Id], [CaseType] as Name
+                        from parents";
+            var queryExecutor = _queryExecutorFactory.Create();
+            var caseTypes = queryExecutor.QueryList<CaseType>(sql);
+
+            return caseTypes;
+        }
+
 
         private IQueryable<CaseType> GetCustomerCaseTypes(int customerId, bool activeOnly)
         {

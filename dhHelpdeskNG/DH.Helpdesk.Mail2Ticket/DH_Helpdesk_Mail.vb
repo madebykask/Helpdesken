@@ -1,15 +1,11 @@
 ﻿Imports DH.Helpdesk.Mail2Ticket.Library
-Imports System.Configuration
-Imports System.Data.OleDb
 Imports Rebex.Net
 Imports System.IO
-Imports System.Net.Mail
+Imports System.Linq
 Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
-Imports ICSharpCode.SharpZipLib.Zip
-Imports System.Web
 Imports System.Text.RegularExpressions
-Imports System.Text
-Imports System.Reflection
+Imports Rebex.Mail
+Imports Rebex.Mime
 
 Module DH_Helpdesk_Mail
     'Dim msDeniedHtmlBodyString As String
@@ -84,10 +80,11 @@ Module DH_Helpdesk_Mail
         Dim objMailTemplateData As New MailTemplateData
         Dim objMailTemplate As MailTemplate
         Dim objTextTranslationData As New TextTranslationData
+        Dim objMailTicket As New Mail2TicketData
         Dim objLogData As New LogData
         Dim IMAPclient As Imap = Nothing
         Dim IMAPlist As ImapMessageCollection = Nothing ' TODO IMAP
-        Dim message As Rebex.Mail.MailMessage = Nothing
+        Dim message As MailMessage = Nothing
         Dim sFromEMailAddress As String = ""
         Dim sToEMailAddress As String = ""
         Dim sNewCaseToEmailAddress As String = ""
@@ -103,7 +100,7 @@ Module DH_Helpdesk_Mail
         Dim iCaseHistory_Id As Integer
         Dim iFinishingCause_Id As Integer
         Dim sUniqueID As String
-        Dim iMailID As Integer
+        Dim iMailID As Integer = 0
         Dim sMessageId As String = ""
         Dim sRet_SendMail As String = ""
         Dim sSendTime As DateTime
@@ -247,7 +244,7 @@ Module DH_Helpdesk_Mail
                                 sUniqueID = IMAPlist(iListIndex).UniqueId
 
                                 Dim objCase As CCase = Nothing
-                                iCaseHistory_Id = 0
+                                
                                 If objCustomer.MailServerProtocol = 0 Then
                                     ' Inget stöd för POP3 längre
                                 Else
@@ -255,15 +252,12 @@ Module DH_Helpdesk_Mail
                                     message.Silent = True
                                 End If
 
-                                If objCustomer.POP3DebugLevel > 0 Then
-                                    Dim sMID As String = ""
-
-                                    If Not message.MessageId Is Nothing Then
-                                        sMID = message.MessageId.ToString
-                                    End If
-
-                                    objLogFile.WriteLine(Now() & ", Read Mail From " & message.From.ToString & ", To " & message.To.ToString & ", MessageID: " & sMID & ", HasBodyText: " & message.HasBodyText & ", " & message.HasBodyHtml & ", IsSigned: " & message.IsSigned & ", Silent: " & message.Silent)
+                                Dim uniqueMessageId As String = ""
+                                If Not message.MessageId Is Nothing Then
+                                    uniqueMessageId = message.MessageId.ToString
                                 End If
+
+                                LogToFile("Read Mail From " & message.From.ToString & ", To " & message.To.ToString & ", MessageID: " & uniqueMessageId & ", HasBodyText: " & message.HasBodyText & ", " & message.HasBodyHtml & ", IsSigned: " & message.IsSigned & ", Silent: " & message.Silent, objCustomer.POP3DebugLevel)
 
                                 sFromEMailAddress = parseEMailAddress(message.From.ToString())
                                 sToEMailAddress = parseEMailAddress(message.To.ToString())
@@ -311,31 +305,31 @@ Module DH_Helpdesk_Mail
                                         'End If
                                     End If
                                 End If
+                                
+                                iMailID = 0
+                                Dim messageIds as List(Of String) = ExtractMessageIds(message)
+                                
+                                LogToFile(String.Format("MessageIds found: {0}", String.Join(",", messageIds)), objCustomer.POP3DebugLevel)
 
-                                If message.InReplyTo.Count > 0 Then
-                                    If objCustomer.POP3DebugLevel > 0 Then
-                                        objLogFile.WriteLine(Now() & ", getCaseByMessageID")
+                                ' Iterate over all UniqueMessageIds from the email to find matching case
+                                For Each messageId as String In messageIds
+
+                                    ' Find objCase
+                                    objCase = FindCaseByUniqueMessageId(messageId, objCustomer)
+
+                                    If (objCase IsNot Nothing) Then
+                                        
+                                        ' Kontrollera vilket mailID detta är ett svar på | Check which mailID this is an answer to
+                                        iMailID = objCaseData.getMailIDByMessageID(messageId)
+                                        LogToFile(Now() & "getMailIDByMessageID: " & iMailID.ToString(), objCustomer.POP3DebugLevel)
+                                        Exit For
+
                                     End If
-
-                                    objCase = objCaseData.getCaseByMessageID(message.InReplyTo(0).ToString)
-
-                                    If objCase Is Nothing And objCustomer.ModuleOrder = 1 Then
-                                        objCase = objCaseData.getCaseByOrderMessageID(message.InReplyTo(0).ToString)
-                                    End If
-
-                                    If objCustomer.POP3DebugLevel > 0 Then
-                                        objLogFile.WriteLine(Now() & ", Reply From " & message.InReplyTo(0).ToString)
-                                    End If
-
-                                    ' Kontrollera vilket mailID detta är ett svar på
-                                    iMailID = objCaseData.getMailIDByMessageID(message.InReplyTo(0).ToString)
-
-                                Else
-                                    iMailID = 0
-                                End If
-
+                                    
+                                Next
+                                
                                 If objCase Is Nothing Then
-                                    ' Kontrollera om det är svar på ett befintligt ärende
+                                    ' Kontrollera om det är svar på ett befintligt ärende | Check if there is an answer to an existing case
                                     If objCustomer.EMailSubjectPattern <> "" Then
                                         If objCustomer.POP3DebugLevel > 0 Then
                                             objLogFile.WriteLine(Now() & ", Subject " & sSubject)
@@ -485,6 +479,9 @@ Module DH_Helpdesk_Mail
                                     If objCustomer.POP3DebugLevel > 0 Then
                                         objLogFile.WriteLine(Now() & ", Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count)
                                     End If
+
+                                    'Save 
+                                    
 
                                     Dim sHTMLFileName As String = createHtmlFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
 
@@ -832,14 +829,14 @@ Module DH_Helpdesk_Mail
 
                                 End If
 
+                                'here tit
                                 ' spara e-post adresser
                                 If message IsNot Nothing And objCase IsNot Nothing Then
-                                    Dim m2d As New Mail2TicketData
-                                    m2d.Save(objCase.Id, iLog_Id, "to", message.To.ToString())
-                                    m2d.Save(objCase.Id, iLog_Id, "cc", message.CC.ToString())
-                                    m2d.Save(objCase.Id, iLog_Id, "bcc", message.Bcc.ToString())
+                                    Dim messageId As String = message.MessageId.ToString()
+                                    objMailTicket.Save(objCase.Id, iLog_Id, "to", message.To.ToString(), messageId)
+                                    objMailTicket.Save(objCase.Id, iLog_Id, "cc", message.CC.ToString(), messageId)
+                                    objMailTicket.Save(objCase.Id, iLog_Id, "bcc", message.Bcc.ToString(), messageId)
                                 End If
-                                objCase = Nothing
 
                                 If objCustomer.MailServerProtocol = 0 Then
                                     ' Inget stöd för POP3 längre
@@ -882,6 +879,7 @@ Module DH_Helpdesk_Mail
                         End If
                     End Try
 
+
                 End If
 
                 If objCustomer.POP3DebugLevel > 0 Then
@@ -899,6 +897,87 @@ Module DH_Helpdesk_Mail
             Throw
         End Try
     End Function
+
+
+    Private Function ExtractMessageIds(message As MailMessage) As IList(of string)
+        Dim items as List(Of string) = New List(Of string)
+
+        '1. message's messageId
+        items.Add(message.MessageId.ToString())
+        
+        '2 replyTo's messageId 
+        If message.InReplyTo IsNot Nothing AndAlso message.InReplyTo.Count > 0
+            Dim messageId = message.InReplyTo(0).ToString()
+            If Not String.IsNullOrEmpty(messageId)
+                items.Add(messageId)
+            End If
+        End If 
+
+        ' 3. References messageId
+        Dim refHeader as String = GetMessageHeaderValue(message, "References")
+        If Not String.IsNullOrEmpty(refHeader)
+
+            Dim refMessageIds As String() = refHeader.Split(New Char() { " "c }, StringSplitOptions.RemoveEmptyEntries)
+            If (refMessageIds.Any())
+                items.AddRange(refMessageIds)
+            End If
+
+        End If
+
+        Return items.Distinct().ToList()
+
+    End Function
+
+    Private Function FindCaseByUniqueMessageId(uniqueMessageId as String, customer As Customer) As CCase
+
+        Dim objCase as CCase = Nothing
+        Dim objCaseData as CaseData = new CaseData()
+        Dim objMailTicket = new Mail2TicketData()
+
+        LogToFile("Find case by messageId: " & uniqueMessageId, customer.POP3DebugLevel)
+
+        'first check if Mail2Ticket has message record 
+        Dim logData as Mail2TicketEntity  = objMailTicket.GetByMessageId(uniqueMessageId)
+        If (logData IsNot Nothing AndAlso logData.CaseId > 0)
+            objCase = objCaseData.getCase(logData.CaseId)
+            If objCase IsNot Nothing
+                LogToFile(String.Format("Message was found in Mail2Ticket table. CaseId: {0}, MessageId: {1}", objCase.Id, uniqueMessageId), customer.POP3DebugLevel)
+                Return objCase
+            End If
+        End If
+
+        'then try to find case by messageId in tblEmailLog
+        If objCase Is Nothing Then
+            objCase = objCaseData.getCaseByMessageID(uniqueMessageId)
+            If objCase IsNot Nothing
+                LogToFile(String.Format("Message was found in tblEmailLog table. CaseId: {0}, MessageId: {1}", objCase.Id, uniqueMessageId), customer.POP3DebugLevel)
+                Return objCase
+            End If
+        End If
+
+        'then try to find case by messageId among order messageIds
+        If objCase Is Nothing AndAlso customer.ModuleOrder = 1 Then
+            objCase = objCaseData.getCaseByOrderMessageID(uniqueMessageId)
+            If objCase IsNot Nothing
+                LogToFile(String.Format("Message was found in tblOrderEmailLog table. CaseId: {0}, MessageId: {1}", objCase.Id, uniqueMessageId), customer.POP3DebugLevel)
+                Return objCase
+            End If
+        End If
+
+    End Function
+
+
+
+    Private Function GetMessageHeaderValue(message As MailMessage, name as String) As String
+        Dim val as String = ""
+        Dim mimeHeader as MimeHeader = message.Headers.FirstOrDefault(Function(x) x.Name = name)
+        If mimeHeader IsNot Nothing
+            val = mimeHeader.Raw
+        End If    
+        Return val
+    End Function
+
+
 
     Private Function CreateCaseIsAbout(iCustomer_Id As Integer, fields As Dictionary(Of String, String)) As ComputerUser
 
@@ -1130,7 +1209,7 @@ Module DH_Helpdesk_Mail
 
         MyWebBrowser.ScriptErrorsSuppressed = True
 
-        While (MyWebBrowser.ReadyState <> Windows.Forms.WebBrowserReadyState.Complete Or MyWebBrowser.IsBusy = True) And DateDiff(DateInterval.Second, startTime, DateTime.Now()) < 10
+        While (MyWebBrowser.ReadyState <> System.Windows.Forms.WebBrowserReadyState.Complete Or MyWebBrowser.IsBusy = True) And DateDiff(DateInterval.Second, startTime, DateTime.Now()) < 10
             System.Windows.Forms.Application.DoEvents()
         End While
 
@@ -1300,6 +1379,13 @@ Module DH_Helpdesk_Mail
     Private Function ReturnStringForCompare(value As String) As String
         Return value.Replace(" ", "").ToLower
     End Function
+
+    Private Sub LogToFile(msg As String, level As Integer) 
+        If level > 0 Then
+            objLogFile.WriteLine("{0}: {1}", Now(),  msg)
+        End If
+    End Sub
+
 
     Private Function ReturnProductArea(customerid As Integer, value As String) As ProductArea
         Dim ret As ProductArea = Nothing

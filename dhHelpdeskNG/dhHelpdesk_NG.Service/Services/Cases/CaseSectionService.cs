@@ -36,28 +36,45 @@ namespace DH.Helpdesk.Services.Services.Cases
                 CustomerId = section.Customer_Id,
                 CaseSectionFields = section.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList()
             }).ToList();
+
+        }
+
+        public CaseSectionModel GetCaseSectionByType(int sectionTypeId, int customerId, int languageId)
+        {
+            var section = _caseSectionsRepository.GetCaseSectionByType(sectionTypeId, customerId);
+            var model =
+                section != null
+                    ? GetSectionModel(section, languageId)
+                    : new CaseSectionModel { CustomerId = customerId };
+
+            return model;
         }
 
         public CaseSectionModel GetCaseSection(int sectionId, int customerId, int languageId)
         {
             var section = _caseSectionsRepository.GetCaseSection(sectionId, customerId);
-            return section != null
-                ? new CaseSectionModel
-                {
-                    Id = section.Id,
-                    SectionType = section.SectionType,
-                    IsEditCollapsed = section.IsEditCollapsed,
-                    IsNewCollapsed = section.IsNewCollapsed,
-                    SectionHeader = section.CaseSectionLanguages.SingleOrDefault(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId) != null
-                    ? section.CaseSectionLanguages.Single(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId).Label
-                    : string.Empty,
-                    CustomerId = section.Customer_Id,
-                    CaseSectionFields = section.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList()
-                }
-                : new CaseSectionModel
-                {
-                    CustomerId = customerId
-                };
+
+            var model =
+                section != null 
+                    ? GetSectionModel(section, languageId) 
+                    : new CaseSectionModel {CustomerId = customerId};
+
+            return model;
+        }
+
+        private CaseSectionModel GetSectionModel(CaseSection section, int languageId)
+        {
+            var sectionWithLang = section.CaseSectionLanguages.SingleOrDefault(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId);
+            return new CaseSectionModel
+            {
+                Id = section.Id,
+                SectionType = section.SectionType,
+                IsEditCollapsed = section.IsEditCollapsed,
+                IsNewCollapsed = section.IsNewCollapsed,
+                SectionHeader = sectionWithLang != null ? sectionWithLang.Label : string.Empty,
+                CustomerId = section.Customer_Id,
+                CaseSectionFields = section.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList()
+            };
         }
 
         public int SaveCaseSection(CaseSectionModel caseSection)
@@ -277,6 +294,7 @@ namespace DH.Helpdesk.Services.Services.Cases
     {
         List<CaseSectionModel> GetCaseSections(int customerId, int languageId);
         CaseSectionModel GetCaseSection(int sectionId, int customerId, int languageId);
+        CaseSectionModel GetCaseSectionByType(int sectionTypeId, int customerId, int languageId);
         int SaveCaseSection(CaseSectionModel caseSection);
         void SaveCaseSections(int languageId, IEnumerable<CaseSectionModel> caseSections, int customerId);
         CaseSectionInfo GetSectionInfoByField(string fieldName);

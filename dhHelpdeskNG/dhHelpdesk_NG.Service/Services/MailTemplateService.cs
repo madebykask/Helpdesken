@@ -48,17 +48,20 @@
         private readonly IMailTemplateLanguageRepository _mailTemplateLanguageRepository;
         private readonly IMailTemplateIdentifierRepository _mailTemplateIdentifierRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ISettingService _settingService;
 
         public MailTemplateService(
             IMailTemplateRepository mailTemplateRepository,
             IMailTemplateLanguageRepository mailTemplateLanguageRepository,
             IMailTemplateIdentifierRepository mailTemplateIdentifierRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ISettingService settingSevice)
         {
             this._mailTemplateRepository = mailTemplateRepository;
             this._mailTemplateLanguageRepository = mailTemplateLanguageRepository;
             this._mailTemplateIdentifierRepository = mailTemplateIdentifierRepository;
             this._unitOfWork = unitOfWork;
+            this._settingService = settingSevice;
         }
 
         public IDictionary<string, string> Validate(MailTemplateEntity mailTemplateToValidate)
@@ -174,6 +177,23 @@
             {
                 mailtemplatelanguage.MailTemplate.MailTemplateGUID = Guid.NewGuid();
                 update = false;
+            }
+
+            if (mailtemplatelanguage.MailTemplate.MailID == 14)
+            {
+                var customersettings = this._settingService.GetCustomerSetting(mailtemplatelanguage.MailTemplate.Customer_Id.Value);
+
+                if (mailtemplatelanguage.Body != "")
+                {
+                    if (customersettings.CaseSMS == 0)
+                        customersettings.CaseSMS = 1;
+                }
+                else
+                {
+                    customersettings.CaseSMS = 0;
+                }
+                this._settingService.SaveSetting(customersettings, out errors);
+
             }
 
             if (!update)

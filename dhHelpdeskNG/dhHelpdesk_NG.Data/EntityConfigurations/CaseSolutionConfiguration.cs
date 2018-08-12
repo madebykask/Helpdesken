@@ -97,7 +97,7 @@
                 .WithOptional(x => x.CaseSolution)
                 .HasForeignKey(x => x.CaseSolution_Id);
 
-            this.Property(x => x.Caption).IsRequired().HasMaxLength(60);
+            this.Property(x => x.Caption).IsRequired().HasMaxLength(100);
             this.Property(x => x.CaseSolutionCategory_Id).IsOptional();
             this.Property(x => x.CaseWorkingGroup_Id).IsOptional();
             this.Property(x => x.CaseType_Id).IsOptional();
@@ -129,6 +129,7 @@
             this.Property(x => x.PersonsCellPhone);
             this.Property(x => x.PersonsEmail);
             this.Property(x => x.Region_Id).IsOptional();
+            this.Property(x => x.UserSearchCategory_Id).IsOptional();
             this.Property(x => x.OU_Id).IsOptional();
             this.Property(x => x.Place);
             this.Property(x => x.UserCode).IsOptional().HasMaxLength(50);
@@ -171,6 +172,7 @@
             this.Property(x => x.IsAbout_PersonsName).IsOptional();
             this.Property(x => x.IsAbout_PersonsPhone).IsOptional();
             this.Property(x => x.IsAbout_Place).IsOptional();
+            this.Property(x => x.IsAbout_UserSearchCategory_Id).IsOptional();
             this.Property(x => x.IsAbout_Region_Id).IsOptional();
             this.Property(x => x.IsAbout_ReportedBy).IsOptional();
             this.Property(x => x.IsAbout_UserCode).IsOptional().HasMaxLength(50);

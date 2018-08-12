@@ -103,12 +103,11 @@
 
         public string CostCentre { get; set; }
 
-
         public int LanguageId { get; set; }
 
 		public int? ComputerUsersCategoryID { get; set; }
 
-		public ComputerUserCategory ComputerUserCategory { get; set; }
+		public virtual ComputerUserCategory ComputerUserCategory { get; set; }
 
 
 		#endregion

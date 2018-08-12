@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Inventory;
+﻿using DH.Helpdesk.BusinessData.Models.ComputerUsers;
+using DH.Helpdesk.BusinessData.Models.Inventory;
 using DH.Helpdesk.Dal.Repositories.Inventory;
 
 namespace DH.Helpdesk.Services.Services
@@ -54,9 +55,12 @@ namespace DH.Helpdesk.Services.Services
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
         List<InventorySearchResult> SearchPcNumber(int customerId, string query);
 		ComputerUserCategory GetComputerUserCategoryByID(int computerUserCategoryID);
+        int SaveComputerUserCategory(ComputerUserCategoryData data);
 
-		void Commit();
-		IList<ComputerUserCategoryOverview> GetComputerUserCategoriesByCustomerID(int customerId);
+
+        void Commit();
+
+		IList<ComputerUserCategoryOverview> GetComputerUserCategoriesByCustomerID(int customerId, bool includeEmpty = false);
 		ComputerUser GetComputerUserByUserID(string userID);
     }
 
@@ -470,6 +474,35 @@ namespace DH.Helpdesk.Services.Services
 			return category;
 		}
 
+        public int SaveComputerUserCategory(ComputerUserCategoryData data)
+        {
+            ComputerUserCategory entity = null;
+            if (data.Id > 0)
+            {
+                entity = _computerUserCategoryRepository.GetByID(data.Id);
+            }
+            else
+            {
+                entity = new ComputerUserCategory
+                {
+                    CustomerID = data.CustomerId,
+                    ComputerUsersCategoryGuid = Guid.NewGuid(),
+                    IsEmpty = data.IsEmpty
+                };
+            }
+
+            entity.Name = data.Name;
+
+            if (data.Id > 0)
+                _computerUserCategoryRepository.Update(entity);
+            else
+                _computerUserCategoryRepository.Add(entity);
+
+            _computerUserCategoryRepository.Commit();
+
+            return entity.ID;
+        }
+
 		public void Commit()
         {
             this._unitOfWork.Commit();
@@ -480,9 +513,13 @@ namespace DH.Helpdesk.Services.Services
             return _inventoryRepository.SearchPcNumber(customerId, query);
         }
 
-		public IList<ComputerUserCategoryOverview> GetComputerUserCategoriesByCustomerID(int customerID)
+		public IList<ComputerUserCategoryOverview> GetComputerUserCategoriesByCustomerID(int customerId, bool includeEmpty = false)
 		{
-			var categories = _computerUserCategoryRepository.GetAllByCustomerID(customerID);
+			var categories = _computerUserCategoryRepository.GetAllByCustomerID(customerId);
+		    if (!includeEmpty)
+		    {
+		        categories = categories.Where(o => !o.IsEmpty).ToList();
+		    }
             return categories;
 		}
 

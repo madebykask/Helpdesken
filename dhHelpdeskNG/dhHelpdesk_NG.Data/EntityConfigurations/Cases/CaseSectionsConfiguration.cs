@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.Entity.ModelConfiguration;
 using DH.Helpdesk.Domain.Cases;
 
 namespace DH.Helpdesk.Dal.EntityConfigurations.Cases

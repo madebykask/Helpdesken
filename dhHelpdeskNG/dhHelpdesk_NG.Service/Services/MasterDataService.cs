@@ -226,8 +226,7 @@ namespace DH.Helpdesk.Services.Services
 
         public string GetFilePath(int customerId)
         {            
-            var customerFilePath = this._settingRepository.GetAll()
-                                                          .Where(s => s.Customer_Id == customerId)
+            var customerFilePath = this._settingRepository.GetMany(s => s.Customer_Id == customerId)
                                                           .Select(s => s.PhysicalFilePath)
                                                           .FirstOrDefault();
             if (string.IsNullOrEmpty(customerFilePath))

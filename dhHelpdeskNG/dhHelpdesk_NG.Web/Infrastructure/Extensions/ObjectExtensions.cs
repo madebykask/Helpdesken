@@ -4,6 +4,7 @@ using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain.Cases;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
@@ -213,9 +214,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         public static string displayHtml(this IList<CaseFieldSetting> cfs, string valueToFind)
         {
-            if (cfs.getCaseSettingsValue(valueToFind).ShowOnStartPage == 0)
-                return "display:none";
-            return string.Empty;
+            var isVisible = cfs.getCaseSettingsValue(valueToFind).IsActive;
+            return !isVisible ? "display:none" : string.Empty;
+        }
+
+        public static bool getHide(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        {
+            return cfs.ToList().getCaseSettingsValue(valueToFind).Hide;
         }
 
         public static int getShowOnStartPage(this IList<CaseFieldSetting> cfs, string valueToFind)
@@ -237,7 +242,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         {
             return cfs.ToList().getCaseSettingsValue(valueToFind).Required;
         }
-
+        
         public static int getRequiredIfReopened(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
         {
             return cfs.ToList().getCaseSettingsValue(valueToFind).RequiredIfReopened;
@@ -247,14 +252,22 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         {
             return cfs.ToList().getCaseSettingsValue(valueToFind).FieldSize;
         }
+
+        public static string getDefaultValue(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
+        {
+            return cfs.ToList().getCaseSettingsValue(valueToFind).DefaultValue;
+        }
+
         public static string getEMailIdentifier(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
         {
             return cfs.ToList().getCaseSettingsValue(valueToFind).EMailIdentifier;
         }
+
         public static Guid? getCaseFieldSettingsGUID(this IEnumerable<CaseFieldSetting> cfs, string valueToFind)
         {
             return cfs.ToList().getCaseSettingsValue(valueToFind).CaseFieldSettingsGUID;
         }
+
         public static string getLabel(this IEnumerable<CaseFieldSettingsWithLanguage> cfsl, string valueToFind)
         {
             return cfsl.ToList().getCaseFieldSettingsLanguageValue(valueToFind).Label;

@@ -359,7 +359,7 @@ Public Class CaseData
             '    End If
             'End If
 
-            Dim newCase As CCase = getCaseById(objCase.CaseGUID)
+            Dim newCase As CCase = getCaseById(sCaseGUID:=objCase.CaseGUID)
 
             If objCase.Form_Id <> 0 Then
                 sSQL = "INSERT INTO tblFormFieldValue(Case_Id, FormField_Id, FormFieldValue) " & _
@@ -380,6 +380,15 @@ Public Class CaseData
 
             Throw ex
 
+        End Try
+    End Function
+
+
+    Public Function getCase(ByVal caseId As Integer) As CCase
+        Try
+            Return getCaseById(iCaseId := caseId)
+        Catch ex As Exception
+            Throw ex
         End Try
     End Function
 
@@ -423,7 +432,7 @@ Public Class CaseData
         End Try
     End Function
 
-    Private Function getCaseById(Optional ByVal sCaseGUID As String = "", Optional ByVal sMessageId As String = "", Optional ByVal iCaseNumber As Integer = 0, Optional ByVal sOrderMessageId As String = "") As CCase
+    Private Function getCaseById(Optional iCaseId as Integer = 0, Optional ByVal sCaseGUID As String = "", Optional ByVal sMessageId As String = "", Optional ByVal iCaseNumber As Integer = 0, Optional ByVal sOrderMessageId As String = "") As CCase
         Dim sSQL As String = ""
         Dim dt As DataTable
 
@@ -450,8 +459,10 @@ Public Class CaseData
                        "LEFT JOIN tblProductArea ON tblCase.ProductArea_Id=tblProductArea.Id " & _
                        "LEFT JOIN tblDepartment ON tblCase.Department_Id=tblDepartment.Id "
 
-            If sCaseGUID <> "" Then
-                sSQL = sSQL & "WHERE tblCase.CaseGUID='" & sCaseGUID & "'"
+            If iCaseId > 0 Then
+                sSQL = sSQL & "WHERE tblCase.Id=" & iCaseId.ToString() 
+            ElseIf sCaseGUID <> "" Then
+                sSQL = sSQL & " WHERE tblCase.CaseGUID='" & sCaseGUID & "'"
             ElseIf sMessageId <> "" Then
                 sSQL = sSQL & "WHERE tblCase.Id IN (SELECT Case_Id FROM tblCaseHistory WHERE Id IN (SELECT CaseHistory_Id FROM tblEMailLog WHERE MessageId='" & sMessageId & "'))"
             ElseIf iCaseNumber <> 0 Then

@@ -3,9 +3,7 @@
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
     using DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields;
-    using DH.Helpdesk.Domain;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
+    
     public sealed class InputModel
     {
         #region Constructors and Destructors
@@ -47,7 +45,7 @@
             StringFieldModel changedDate,
             StringFieldModel synchronizationDate,
             DropDownFieldModel language,
-			ComputerUserCategoryModel categoryModel)
+            ComputerUserCategoryModel categoryModel)
             : this(
                 userId,
                 domain,
@@ -77,16 +75,16 @@
                 ordered,
                 isActive,
                 language,
-				categoryModel)
+                categoryModel)
         {
             this.Id = id;
             this.IsNew = false;
             this.CreatedDate = createdDate;
             this.ChangedDate = changedDate;
             this.SynchronizationDate = synchronizationDate;
-			this.ComputerUserCategoryModel = categoryModel;
+            this.ComputerUserCategoryModel = categoryModel;
 
-		}
+        }
 
         public InputModel(
             StringFieldModel userId,
@@ -117,7 +115,7 @@
             BooleanFieldModel ordered,
             bool isActive,
             DropDownFieldModel language,
-			ComputerUserCategoryModel categoryModel)
+            ComputerUserCategoryModel categoryModel)
         {
             this.IsNew = true;
             this.UserId = userId;
@@ -148,9 +146,8 @@
             this.Ordered = ordered;
             this.IsActive = isActive;
             this.Language = language;
-			this.ComputerUserCategoryModel = categoryModel;
-
-		}
+            this.ComputerUserCategoryModel = categoryModel;
+        }
 
         #endregion
 
@@ -246,8 +243,10 @@
 
         public DropDownFieldModel Language { get; set; }
 
-		public ComputerUserCategoryModel ComputerUserCategoryModel { get; set; }
-		#endregion
+        public int? CategoryId { get; set; }
 
-	}
+        public ComputerUserCategoryModel ComputerUserCategoryModel { get; set; }
+
+        #endregion
+    }
 }

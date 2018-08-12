@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DH.Helpdesk.Domain.Cases
+﻿namespace DH.Helpdesk.Domain.Cases
 {
     public class CaseSectionField : Entity
     {

@@ -1,7 +1,9 @@
 ﻿using System;
 using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
@@ -10,6 +12,7 @@ using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.Cache;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Models.Case;
 using Microsoft.Ajax.Utilities;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
@@ -33,6 +36,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IHelpdeskCache _cache;
         private readonly ISettingService _settingService;
         private readonly ICaseSectionService _caseSectionService;
+        private readonly IComputerService _computerService;
 
         public CustomerCaseFieldSettingsController(
             ICaseFieldSettingService caseFieldSettingService,
@@ -41,9 +45,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService,
             IHelpdeskCache cache,
             ICaseSectionService caseSectionService,
-            ISettingService settingService)
+            ISettingService settingService,
+            IComputerService  computerService)
             : base(masterDataService)
         {
+            _computerService = computerService;
             this._caseFieldSettingService = caseFieldSettingService;
             this._customerService = customerService;
             this._languageService = languageService;
@@ -83,6 +89,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 var selected = CaseFieldSettings.Where(c => vmodel.ShowStatusBarIds.Any(m => m == c.Id));
                 selected.ForEach(c => c.ShowStatusBar = true );
             }
+
             if (vmodel.ShowExternalStatusBarIds != null && vmodel.ShowExternalStatusBarIds.Any())
             {
                 var selected = CaseFieldSettings.Where(c => vmodel.ShowExternalStatusBarIds.Any(m => m == c.Id));
@@ -123,42 +130,44 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             var cs = _caseSectionService.GetCaseSection(sectionId, customerId, languageId);
             return Json(new
-                    {
-                        success = true,
-                        isNewCollapsed = cs.IsNewCollapsed.ToInt(),
-                        isEditCollapsed = cs.IsEditCollapsed.ToInt(),
-                        sectionFields = cs.CaseSectionFields,
-                        sectionHeader = !string.IsNullOrEmpty(cs.SectionHeader) ? cs.SectionHeader : string.Empty
+            {
+                success = true,
+                isNewCollapsed = cs.IsNewCollapsed.ToInt(),
+                isEditCollapsed = cs.IsEditCollapsed.ToInt(),
+                sectionFields = cs.CaseSectionFields,
+                sectionHeader = !string.IsNullOrEmpty(cs.SectionHeader) ? cs.SectionHeader : string.Empty
             });
         }
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
-        public ActionResult SaveCaseSectionOptions(int sectionId, int customerId, int isNewCollapsed, int isEditCollapsed, int sectionType, List<int> selectedFields, int languageId)
+        public ActionResult SaveCaseSectionOptions(CaseSectionOptionsData inputData)
         {
-            var caseSection = _caseSectionService.GetCaseSection(sectionId, customerId, languageId);
-            var fields = selectedFields.Where(x => x > 0).ToList();
+            var sectionId = inputData.SectionId;
+
+            var caseSection = _caseSectionService.GetCaseSection(inputData.SectionId, inputData.CustomerId, inputData.LanguageId);
+            var fields = inputData.SelectedFields.Where(x => x > 0).ToList();
             if (caseSection != null)
             {
-                caseSection.IsEditCollapsed = isEditCollapsed.ToBool();
-                caseSection.IsNewCollapsed = isNewCollapsed.ToBool();
+                caseSection.IsEditCollapsed = inputData.IsEditCollapsed.ToBool();
+                caseSection.IsNewCollapsed = inputData.IsNewCollapsed.ToBool();
                 caseSection.CaseSectionFields = fields;
-                caseSection.CustomerId = customerId;
-                caseSection.SectionType = sectionType;
-                caseSection.Id = sectionId;
+                caseSection.CustomerId = inputData.CustomerId;
+                caseSection.SectionType = inputData.SectionType;
+                caseSection.Id = inputData.SectionId;
                 sectionId = _caseSectionService.SaveCaseSection(caseSection);
             }
             else
             {
                 return Json(new { success = false, sectionId });
             }
-            return Json(new {success = true, sectionId});
+
+            return Json(new {success = true, sectionId });
         }
 
         private CustomerIndexViewModel IndexViewModel()
         {
             var model = new CustomerIndexViewModel { };
-
             return model;
         }
 
@@ -211,15 +220,26 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }).ToList(),
                 LockedFieldOptions = GetLockedFieldOptions() 
             };
-            ;
-            model.ShowStatusBarIds = model.CaseFieldSettings.Where(m => m.ShowStatusBar).Select(m => m.Id).ToList();
-            model.ShowExternalStatusBarIds = model.CaseFieldSettings.Where(m => m.ShowExternalStatusBar)
-                .Select(m => m.Id).ToList();
-            #endregion
             
+            model.ShowStatusBarIds = model.CaseFieldSettings.Where(m => m.ShowStatusBar).Select(m => m.Id).ToList();
+            model.ShowExternalStatusBarIds = 
+                model.CaseFieldSettings.Where(m => m.ShowExternalStatusBar).Select(m => m.Id).ToList();
+
+            //todo: check if 'empty' category is required
+            model.SearchCategories =
+                _computerService.GetComputerUserCategoriesByCustomerID(customer.Id)
+                    .Select(x =>
+                        new SelectListItem()
+                        {
+                             Value = x.Id.ToString(),
+                             Text = x.Name 
+                        }).ToList();
+
+            #endregion
+
             return model;
         }
-
+      
         [CustomAuthorize(Roles = "3,4")]
         [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
         public string ChangeLabel(int id, int customerId)//, int casefieldSettingLanguageId, int caseFieldSettingId)

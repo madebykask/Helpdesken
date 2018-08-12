@@ -1,0 +1,36 @@
+﻿@model DH.Helpdesk.BusinessData.Models.ComputerUsers.ComputerUserCategoryData
+
+<div class="container">
+    <div>
+        <h4>@Translation.GetCoreTextTranslation("Kategori") @(Model.IsEmpty ? string.Format("({0})", Translation.GetCoreTextTranslation("Standard")) : "")</h4>
+        <div class="row">
+            <div class="span12">
+                <table class="tableform">
+                    <thead>
+                    <tr>
+                        <th class="span3"></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>@Translation.GetCoreTextTranslation("Namn")</td>
+                        <td>@Html.TextBoxFor(x => x.Name, new { maxlength = 100 })</td>
+                    </tr>
+                    <tr>
+                        <td>@Translation.GetCoreTextTranslation("Standard") @ViewBag.InitiatorSectionHeader</td>
+                        <td>@Html.CheckBoxFor(m => m.DefaultInitiatorCategory, new { @class = "switchcheckbox" })</td>        
+                    </tr>
+                    <tr>
+                        <td>@Translation.GetCoreTextTranslation("Standard") @ViewBag.RegardingSectionHeader</td>
+                        <td>@Html.CheckBoxFor(m => m.DefaultRegardingCategory, new { @class = "switchcheckbox" })</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Hidden("Id", @Model.Id.ToString())
+@Html.Hidden("CustomerId", @Model.CustomerId.ToString())
+@Html.Hidden("IsEmpty", @Model.IsEmpty ? "true" : "false")

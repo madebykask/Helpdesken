@@ -159,6 +159,8 @@
 
         public int LanguageId { get; set; }
 
+        public int? CategoryId { get; set; }
+
         public StringFieldModel DisplayName { get; set; }
 
         public DropDownFieldModel Division { get; set; }

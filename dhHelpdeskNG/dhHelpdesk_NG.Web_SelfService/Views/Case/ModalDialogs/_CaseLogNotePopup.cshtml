@@ -1,0 +1,23 @@
+﻿
+<div id="logNotesSectionPopup">
+    <div id="logNotePopup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase_1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body padding20" style="max-height: 600px; text-align:left;">
+                    <form onsubmit="return false;">
+                        <div class="form-group">
+                            <label>@Translation.Get("Add comment")</label><br />
+                            <div><textarea id="logNote" class="col-md-12" style="height: 100px; margin-bottom: 10px;"></textarea></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <i id="sendLogIndicator" class="gif-loader">&nbsp;</i>
+                    <label id="popupError" class="error pull-left" style="display:none">  </label>
+                    <button id="btnSendLog" data-src="popup" class="btn btn-success">@Translation.Get("Send")</button>
+                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

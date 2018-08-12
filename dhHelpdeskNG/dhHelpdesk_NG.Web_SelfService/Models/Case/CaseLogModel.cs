@@ -1,16 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
+using System.Linq;
 
 namespace DH.Helpdesk.SelfService.Models.Case
 {
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.BusinessData.Models;
-
     using Log = DH.Helpdesk.Domain.Log;
-
-    
 
     public class CaseLogModel 
     {
@@ -21,13 +14,17 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public CaseLogModel(int caseId, List<Log> caseLogs)
         {
             this.CaseId = caseId;
-            this.CaseLogs = CaseLogs;
+            this.CaseLogs = caseLogs;
         }
 
         public int CaseId { get; set; }
+        public List<Log> CaseLogs { get; set; }
 
-        public List<Log> CaseLogs { get; set; }       
-                
+        public Log GetLastInteral()
+        {
+            return CaseLogs?.Where(l => !string.IsNullOrEmpty(l.Text_Internal.Trim()))
+                .OrderBy(l => l.RegTime)
+                .LastOrDefault();
+        }
     }
-  
 }

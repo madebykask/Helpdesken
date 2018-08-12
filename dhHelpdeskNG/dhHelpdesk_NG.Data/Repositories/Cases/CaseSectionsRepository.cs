@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.Domain.Cases;
@@ -29,6 +26,13 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
             DataContext.CaseSections.AddRange(caseSections);
             DataContext.SaveChanges();
             return caseSections;
+        }
+
+        public CaseSection GetCaseSectionByType(int caseSectionType, int customerId)
+        {
+            return DataContext.CaseSections
+                .Include(x => x.CaseSectionLanguages)
+                .SingleOrDefault(x => x.Customer_Id == customerId && x.SectionType == caseSectionType);
         }
 
         public CaseSection GetCaseSection(int sectionId, int customerId)
@@ -75,6 +79,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
         List<CaseSection> GetCaseSections(int customerId);
         List<CaseSection> AddCaseSections(List<CaseSection> caseSections);
         CaseSection GetCaseSection(int sectionId, int customerId);
+        CaseSection GetCaseSectionByType(int caseSectionType, int customerId);
         int UpdateCaseSection(CaseSection caseSection);
         int AddCaseSection(CaseSection caseSection);
         void DeleteCaseSectionFields(List<int> ids);

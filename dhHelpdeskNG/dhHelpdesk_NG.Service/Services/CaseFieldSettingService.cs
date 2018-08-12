@@ -26,6 +26,8 @@
 
         CaseFieldSettingLanguage GetCaseFieldSettingLanguage(int id, int languageId);
         IList<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettings(int customerId, int languageId);
+
+        void SaveFieldSettingsDefaultValue(int fieldId, string defaultValue);
     }
 
     public class CaseFieldSettingService : ICaseFieldSettingService
@@ -114,6 +116,16 @@
         public IList<ListCases> ListToShowOnCustomerSettingSummaryPage(int? customerId, int? languageId, int? userGroupId)
         {
             return this._caseFieldSettingRepository.GetCaseFieldSettingsListToCustomerCaseSummary(customerId, languageId, userGroupId).ToList();
+        }
+
+        public void SaveFieldSettingsDefaultValue(int fieldId, string defaultValue)
+        {
+            var fieldSettings = _caseFieldSettingRepository.GetById(fieldId);
+            if (fieldSettings != null)
+                fieldSettings.DefaultValue = defaultValue;
+
+            _caseFieldSettingRepository.Update(fieldSettings);
+            _caseFieldSettingRepository.Commit();
         }
     }
 }
