@@ -50,7 +50,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 return CreateErrorResult(new Error(error));
             }
 
-            var searchParams = CaseSearchInputParameters.Create(inputModel);
+            var searchParams = CaseSearchInputParameters.Create(inputModel, SessionFacade.CurrentLanguageId, SessionFacade.CurrentUserIdentity.UserId);
 
             if (string.IsNullOrEmpty(searchParams.SortBy))
             {
@@ -65,9 +65,11 @@ namespace DH.Helpdesk.SelfService.Controllers
             }
 
             var sessionCustomer = SessionFacade.CurrentCustomer;
-            var customer = sessionCustomer?.Id != searchParams.CustomerId ?
-                _masterDataService.GetCustomer(inputModel.CustomerId) :
-                sessionCustomer;
+            
+            //check if customer Id is current customer otherwise load it (ex: MultiCustomerSearch)
+            var customer = sessionCustomer?.Id != searchParams.CustomerId
+                ? _masterDataService.GetCustomer(inputModel.CustomerId)
+                : sessionCustomer;
 
             Exception ex = null;
             CaseSearchResultModel model = null;

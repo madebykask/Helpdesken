@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Services.Services
 
         void SaveCustomerUserForCopy(CustomerUser customerUser, out IDictionary<string, string> errors);
 
-        IList<UserCustomerOverview> ListCustomersByInitiatorCases(string userId);
+        IList<UserCustomerOverview> ListCustomersByUserCases(string userId, string employeeNumber, IList<string> employees, Customer customer);
 
         IList<UserCustomerOverview> GetUserCustomersWithCases(int userId);
     }
@@ -41,9 +41,9 @@ namespace DH.Helpdesk.Services.Services
             _customerUserRepository = customerUserRepository;
         }
 
-        public IList<UserCustomerOverview> ListCustomersByInitiatorCases(string userId)
+        public IList<UserCustomerOverview> ListCustomersByUserCases(string userId, string employeeNumber, IList<string> employees, Customer customer)
         {
-            return _customerUserRepository.ListCustomersByInitiatorCases(userId);
+            return _customerUserRepository.ListCustomersByUserCases(userId, employeeNumber, employees, customer);
         }
 
         public IList<UserCustomerOverview> GetUserCustomersWithCases(int userId)
