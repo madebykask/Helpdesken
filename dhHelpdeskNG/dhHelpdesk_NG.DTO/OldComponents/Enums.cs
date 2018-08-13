@@ -118,6 +118,12 @@ namespace DH.Helpdesk.BusinessData.OldComponents
             UserSearchCategory_Id = 77,
             IsAbout_UserSearchCategory_Id = 78
         }
+
+        public static TranslationCaseFields[] FieldsWithHide = new[]
+        {
+            TranslationCaseFields.UserSearchCategory_Id,
+            TranslationCaseFields.IsAbout_UserSearchCategory_Id
+        };
     }
 
     public static class TemplateExtenstion
