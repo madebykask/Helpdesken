@@ -179,6 +179,8 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "isabout_costcentre": str = "Kostnad"; break;
                     case "isabout_place": str = "Plats"; break;
                     case "isabout_usercode": str = "Ansvarskod"; break;
+                    case "usersearchcategory_id": str = "Anmälarkategori"; break;
+                    case "isabout_usersearchcategory_id": str = "Anmälarkategori"; break;
                 }
             }
             #endregion 
@@ -264,6 +266,8 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "isabout_costcentre": str = "Cost"; break;
                     case "isabout_place": str = "Placement"; break;
                     case "isabout_usercode": str = "Orderer Code"; break;
+                    case "usersearchcategory_id": str = "Initiator category"; break;
+                    case "isabout_usersearchcategory_id": str = "Initiator category"; break;
                 }
             }
             #endregion 
