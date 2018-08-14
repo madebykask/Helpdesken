@@ -146,6 +146,7 @@ using System;
                 {
                     RegionId = this.DataContext.Regions.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
                     CaseTypeId = this.DataContext.CaseTypes.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                    EmailCaseTypeId = this.DataContext.CaseTypes.Where(x => x.Customer_Id == customer.Id && x.IsEMailDefault == 1).Select(x => x.Id).FirstOrDefault(),
                     SupplierId = this.DataContext.Suppliers.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
                     PriorityId = this.DataContext.Priorities.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
                     StatusId = this.DataContext.Statuses.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
@@ -157,6 +158,7 @@ using System;
                 {
                     RegionId = res.RegionId == 0 ? null : (int?) res.RegionId,
                     CaseTypeId = res.CaseTypeId,
+                    EmailCaseTypeId = res.EmailCaseTypeId,
                     SupplierId = res.SupplierId == 0 ? null : (int?) res.SupplierId,
                     PriorityId = res.PriorityId == 0 ? null : (int?) res.PriorityId,
                     StatusId = res.StatusId == 0 ? null : (int?) res.StatusId

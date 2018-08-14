@@ -34,7 +34,7 @@
             Expression<Func<TModel, IList<CaseSolutionSettingModel>>> expression,
             CaseSolutionFields caseSolutionField,
             IList<CaseFieldSetting> caseFieldSettings,
-            GlobalEnums.TranslationCaseFields caseFields)
+            GlobalEnums.TranslationCaseFields caseField)
         {
             string prefix = ExpressionHelper.GetExpressionText(expression);
             ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
@@ -43,30 +43,27 @@
             for (int i = 0; i < models.Count; i++)
             {
                 CaseSolutionSettingModel model = models[i];
+
                 if (model.CaseSolutionField == caseSolutionField)
                 {
-                    string idPropertyName =
+                    var idPropertyName =
                         Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.Id);
 
-                    string modePropertyName =
-                        Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(
-                            x => x.CaseSolutionMode);
+                    var modePropertyName =
+                        Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.CaseSolutionMode);
 
-                    string fieldNamePropertyName =
-                        Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(
-                            x => x.CaseSolutionField);
+                    var fieldNamePropertyName =
+                        Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.CaseSolutionField);
 
-                    string hiddenName = GetInputName(prefix, i, idPropertyName);
-                    string dropDownName = GetInputName(prefix, i, modePropertyName);
-                    string hiddenFieldName = GetInputName(prefix, i, fieldNamePropertyName);
+                    var hiddenName = GetInputName(prefix, i, idPropertyName);
+                    var dropDownName = GetInputName(prefix, i, modePropertyName);
+                    var hiddenFieldName = GetInputName(prefix, i, fieldNamePropertyName);
 
-                    MvcHtmlString hidden = htmlHelper.Hidden(hiddenName, model.Id);
+                    var hidden = htmlHelper.Hidden(hiddenName, model.Id);
 
-                    SelectList selectList;
-                    selectList = ToSelectList(
-                            model.CaseSolutionMode,
-                            ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture),
-                            false);
+                    var selectList = 
+                        ToSelectList(model.CaseSolutionMode, ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture), false);
+
                     //if (caseFieldSettings.CaseFieldSettingRequiredCheck(caseFields.ToString()) == 1
                     //    || caseSolutionField == CaseSolutionFields.Department)
                     //{
@@ -90,17 +87,31 @@
                     //        false);
                     //}
 
-                    MvcHtmlString dropDown = htmlHelper.DropDownList(dropDownName, selectList, new
-                                                        {
-                                                            @class = "fieldStateChanger",
-                                                            standardId = caseFields,
-                                                            ElementClass = "OptionDropDown",
-                                                            ElementName = model.CaseSolutionField
-                                                        });
+                    var fieldSettings = caseFieldSettings.getCaseSettingsValue(caseField.ToString());
 
-                    MvcHtmlString hiddenForFieldName = htmlHelper.Hidden(hiddenFieldName, model.CaseSolutionField);
+                    var hiddenForFieldName = htmlHelper.Hidden(hiddenFieldName, model.CaseSolutionField);
+                    MvcHtmlString dropDown;
 
-                    //return MvcHtmlString.Create(hidden + dropDown.ToString() + hiddenForFieldName);
+                    var htmlAttributes = new
+                    {
+                        @class = "fieldStateChanger",
+                        standardId = caseField,
+                        ElementClass = "OptionDropDown",
+                        ElementName = model.CaseSolutionField
+                    };
+
+                    var isDisabled = fieldSettings?.Hide ?? false;
+                    if (isDisabled)
+                    {
+                        var htmlAttributesAsDict = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
+                        htmlAttributesAsDict.Add("disabled", "disabled");
+                        dropDown = htmlHelper.DropDownList(dropDownName, selectList, htmlAttributesAsDict);
+                    }
+                    else
+                    {
+                        dropDown = htmlHelper.DropDownList(dropDownName, selectList, htmlAttributes);
+                    }
+                    
                     return MvcHtmlString.Create(dropDown.ToString());
                 }
             }

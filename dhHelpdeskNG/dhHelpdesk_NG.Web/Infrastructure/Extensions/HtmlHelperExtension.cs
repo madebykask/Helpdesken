@@ -1,11 +1,11 @@
-﻿
-
-
+﻿using System.Linq.Expressions;
+using System.Web.Mvc.Html;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.Models.FinishingCause;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
-using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Web.Infrastructure.Case;
+using Html = System.Web.Mvc.Html;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
@@ -1160,6 +1160,45 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 ret = Translation.Get("Ärende", Enums.TranslationSource.TextTranslation);
 
             return ret;
+        }
+
+        public static RouteValueDictionary ConditionalDisable(this HtmlHelper htmlHelper, bool disabled, object htmlAttributes = null)
+        {
+            var dictionary = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
+
+            if (disabled)
+                dictionary.Add("disabled", "disabled");
+
+            return dictionary;
+        }
+
+        public static MvcHtmlString ReadonlyDropDownListFor<TModel, TProperty>(
+            this HtmlHelper<TModel> html, 
+            Expression<Func<TModel, TProperty>> expression, 
+            IEnumerable<SelectListItem> selectList, 
+            object htmlAttributes, 
+            bool isReadonly, 
+            string id = null)
+        {
+            var propertyName = ExpressionHelper.GetExpressionText(expression);
+            var clientId = string.IsNullOrEmpty(id) ? html.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldId(propertyName) : id;
+            var htmlAttributesAsDict = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
+            htmlAttributesAsDict.Add("Name", clientId);
+
+            if (!isReadonly)
+            {
+                htmlAttributesAsDict.Add("id", $"{clientId}");
+                return html.DropDownListFor<TModel,TProperty>(expression, selectList, htmlAttributesAsDict);
+            }
+
+            htmlAttributesAsDict.Add("id", $"{clientId}_disabled");
+            htmlAttributesAsDict.Add("disabled", "disabled");
+
+            //since asp.net doesn't submit disabled controls - generate hidden input with current value
+            var hiddenFieldMarkup = html.HiddenFor<TModel, TProperty>(expression, new { id = clientId, Name = clientId});
+            var selectMarkup = html.DropDownListFor<TModel, TProperty>(expression, selectList, htmlAttributesAsDict);
+
+            return MvcHtmlString.Create(selectMarkup + Environment.NewLine + hiddenFieldMarkup);
         }
     }
 }
