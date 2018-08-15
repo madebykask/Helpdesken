@@ -5,7 +5,7 @@ namespace DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit
 {
     using System.Collections.Generic;
 
-    using Common.ValidationAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
     using FieldModels;
     using Web.Infrastructure.Tools;
 

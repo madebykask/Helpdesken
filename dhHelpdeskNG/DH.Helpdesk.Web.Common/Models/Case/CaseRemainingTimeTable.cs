@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Case
+﻿namespace DH.Helpdesk.Web.Common.Models.Case
 {
     public sealed class CaseRemainingTimeTable
     {
@@ -13,10 +13,10 @@
             int  maxRemaningTime,
             bool isHour)
         {
-            this.RemaningTime = remaningTime;
-            this.RemaningTimeUntil = remaningTimeUntil;
-            this.MaxRemaningTime = maxRemaningTime;
-            this.IsHour = isHour;            
+            RemaningTime = remaningTime;
+            RemaningTimeUntil = remaningTimeUntil;
+            MaxRemaningTime = maxRemaningTime;
+            IsHour = isHour;            
         }
 
         public int RemaningTime { get; private set; }

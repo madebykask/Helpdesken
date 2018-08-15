@@ -125,7 +125,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var search = _caseModelFactory.InitEmptySearchModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
             search.Search.SortBy = sortBy;
             search.Search.Ascending = sortByAsc;
-            search.caseSearchFilter.CaseProgress = CaseProgressFilter.None;
+            search.CaseSearchFilter.CaseProgress = CaseProgressFilter.None;
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
             CaseRemainingTimeData remainingTime;
             CaseAggregateData aggregateData;
@@ -133,7 +133,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             if (relatedCaseIds.Any())
             {
                 searchResult.cases = _caseSearchService.Search(
-                    search.caseSearchFilter,
+                    search.CaseSearchFilter,
                     searchResult.caseSettings,
                     caseFieldSettings,
                     SessionFacade.CurrentUser.Id,

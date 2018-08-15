@@ -23,5 +23,13 @@ namespace DH.Helpdesk.Common.Extensions.Integer
         {
             return value ?? elseValue;
         }
+
+        public static int ConvertStringToInt(this string value)
+        {
+            var ret = 0;
+            if (!int.TryParse(value, out ret))
+                ret = 0;
+            return ret;
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Enums
+﻿namespace DH.Helpdesk.Web.Common.Enums.Case
 {
     public enum RemainingTimes
     {
@@ -19,7 +19,7 @@
     {
         public static string ToStr(this RemainingTimes it)
         {
-            int intIt = (int) it;
+            var intIt = (int) it;
             return intIt.ToString();
         }
     }

@@ -11,22 +11,26 @@ namespace DH.Helpdesk.WebApi.Infrastructure
     /// </summary>
     public static class SessionFacade
     {
-        private const string _CURRENT_USER = "CURRENT_USER";
+        //private const string _CURRENT_USER = "CURRENT_USER";
 
         public static UserOverview CurrentUser
         {
             get
             {
-                if (HttpContext.Current.Session[_CURRENT_USER] == null)
-                    return null;
-                return (UserOverview)HttpContext.Current.Session[_CURRENT_USER];
+                //TODO: Review if used. Use cache/claims instead of session if used.
+                throw new NotImplementedException();
+                //if (HttpContext.Current.Session[_CURRENT_USER] == null)
+                //    return null;
+                //return (UserOverview)HttpContext.Current.Session[_CURRENT_USER];
             }
             set
             {
-                if (HttpContext.Current.Session[_CURRENT_USER] == null)
-                    HttpContext.Current.Session.Add(_CURRENT_USER, value);
-                else
-                    HttpContext.Current.Session[_CURRENT_USER] = value;
+                //TODO: Review if used. Use cache/claims instead of session if used.
+                throw new NotImplementedException();
+                //if (HttpContext.Current.Session[_CURRENT_USER] == null)
+                //    HttpContext.Current.Session.Add(_CURRENT_USER, value);
+                //else
+                //    HttpContext.Current.Session[_CURRENT_USER] = value;
             }
         }
     }

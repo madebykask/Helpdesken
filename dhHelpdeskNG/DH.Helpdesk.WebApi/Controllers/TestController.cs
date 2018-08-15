@@ -25,9 +25,9 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> Anyone()
         {
-            var prev = HttpContext.Current.Session["name"] ?? Guid.NewGuid().ToString();
-            HttpContext.Current.Session["name"] = prev;
-            return await Task.FromResult(Json(prev));
+            //var prev = HttpContext.Current.Session["name"] ?? Guid.NewGuid().ToString();
+            //HttpContext.Current.Session["name"] = prev;
+            return await Task.FromResult(Json("test"));
         }
 
         [HttpGet]

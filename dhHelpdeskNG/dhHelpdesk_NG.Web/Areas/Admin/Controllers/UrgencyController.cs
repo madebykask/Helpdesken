@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Admin.Controllers
+﻿using DH.Helpdesk.Web.Common.Extensions;
+
+namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -122,7 +124,7 @@
                 {
                     Urgency_Id = priorityImpactUrgency.Key.Substring(12, priorityImpactUrgency.Key.IndexOf("_", 12)-12).ToNullableInt32(),
                     Impact_Id = priorityImpactUrgency.Key.Substring(priorityImpactUrgency.Key.IndexOf("_", 12)+1).ToNullableInt32(),
-                    Priority_Id = priorityImpactUrgency.Value.convertStringToInt() 
+                    Priority_Id = priorityImpactUrgency.Value.ConvertStringToInt() 
                 });
             }
 

@@ -76,15 +76,16 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
              builder.RegisterType<UserPermissionsChecker>().As<IUserPermissionsChecker>();
              builder.RegisterType<ApplicationConfiguration>().As<IApplicationConfiguration>().InstancePerRequest();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview>>()
-            //        .As<ProductAreaToOverviewMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<ProductAreaToOverviewMapper>()
+               .As<IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<ProductAreaOverview, ProductArea>>()
-            //        .As<ProductAreaToEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<ProductAreaToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<ProductAreaOverview, ProductArea>>()
+               .SingleInstance();
 
-             builder.RegisterType<CustomerSettingsToBusinessModelMapper>()
+
+            builder.RegisterType<CustomerSettingsToBusinessModelMapper>()
                 .As<IEntityToBusinessModelMapper<Setting, CustomerSettings>>()
                 .SingleInstance();
 
@@ -92,11 +93,11 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
                 .As<IBusinessModelToEntityMapper<UserModule, UserModuleEntity>>()
                 .SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<CaseNotifier, ComputerUser>>()
-            //        .As<CaseNotifierToEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseNotifierToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<CaseNotifier, ComputerUser>>()
+               .SingleInstance();
 
-             builder.RegisterType<Translator>().As<ITranslator>().SingleInstance();
+            builder.RegisterType<Translator>().As<ITranslator>().SingleInstance();
 
             //     builder.RegisterType<IBusinessModelToEntityMapper<InvoiceArticle, InvoiceArticleEntity>>()
             //        .As<InvoiceArticleToEntityMapper>()
@@ -247,9 +248,9 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
             //        .As<CaseHistoryToCaseHistoryOverviewMapper>()
             //        .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<LogMapperData, LogOverview>>()
-            //        .As<LogEntityToBusinessModelMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<LogEntityToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<LogMapperData, LogOverview>>()
+               .SingleInstance();
 
             //     builder.RegisterType<IDbQueryExecutorFactory>()
             //        .As<SqlDbQueryExecutorFactory>()

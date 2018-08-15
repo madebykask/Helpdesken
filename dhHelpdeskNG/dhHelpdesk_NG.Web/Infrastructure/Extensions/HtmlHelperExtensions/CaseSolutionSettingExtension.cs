@@ -46,14 +46,14 @@
                 if (model.CaseSolutionField == caseSolutionField)
                 {
                     string idPropertyName =
-                        Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.Id);
+                        DH.Helpdesk.Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.Id);
 
                     string modePropertyName =
-                        Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(
+                        DH.Helpdesk.Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(
                             x => x.CaseSolutionMode);
 
                     string fieldNamePropertyName =
-                        Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(
+                        DH.Helpdesk.Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(
                             x => x.CaseSolutionField);
 
                     string hiddenName = GetInputName(prefix, i, idPropertyName);

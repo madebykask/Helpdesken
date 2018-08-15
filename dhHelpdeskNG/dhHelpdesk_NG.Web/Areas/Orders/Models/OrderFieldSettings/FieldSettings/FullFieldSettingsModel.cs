@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
-    using Common.ValidationAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
 
     public sealed class FullFieldSettingsModel
     {

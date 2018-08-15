@@ -41,6 +41,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <DontImportPostSharp>True</DontImportPostSharp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -358,6 +359,7 @@
     <Compile Include="Infrastructure\Binders\CommaSeparatedListsBinder.cs" />
     <Compile Include="Infrastructure\Case\CaseHistoryBuilder.cs" />
     <Compile Include="Infrastructure\Extensions\ReflectionExtensions.cs" />
+    <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
     <Compile Include="Infrastructure\UrlBuilder.cs" />
     <Compile Include="Infrastructure\Utilities\CaseDiagnosticService.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\SessionContext.cs" />
@@ -1308,7 +1310,6 @@
     <Compile Include="Controllers\UserInteractionController.cs" />
     <Compile Include="Areas\Inventory\Controllers\WorkstationController.cs" />
     <Compile Include="Enums\Case\CaseFilterFileds.cs" />
-    <Compile Include="Enums\Case\RemainingTimes.cs" />
     <Compile Include="Enums\Case\OverviewType.cs" />
     <Compile Include="Enums\Changes\ChangeDeletedItem.cs" />
     <Compile Include="Enums\Changes\ClickedButton.cs" />
@@ -1588,7 +1589,6 @@
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtension.cs" />
     <Compile Include="Infrastructure\Extensions\IntegerExtensions.cs" />
     <Compile Include="Infrastructure\SessionFacade.cs" />
-    <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
     <Compile Include="Infrastructure\Session\ActiveTab.cs" />
     <Compile Include="Infrastructure\Session\PageFilters.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\DeletedFile.cs" />
@@ -1620,7 +1620,6 @@
     <Compile Include="Models\Case\ChildCase\ChildCaseViewModel.cs" />
     <Compile Include="Models\Case\CaseMasterDataFieldsModel.cs" />
     <Compile Include="Models\Case\ChildCase\ParentCaseInfo.cs" />
-    <Compile Include="Models\Case\CaseRemainingTimeTable.cs" />
     <Compile Include="Models\Case\CaseStatisticsViewModel.cs" />
     <Compile Include="Models\Case\CaseInvoiceModel.cs" />
     <Compile Include="Models\CheckBoxListItem.cs" />
@@ -1812,7 +1811,6 @@
     <Compile Include="Models\Questionnaire\Output\PreviewQuestionnaireModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireQuestionsOverviewModel.cs" />
     <Compile Include="Models\Questionnaire\Output\QuestionnaireOverviewModel.cs" />
-    <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Areas\Admin\Models\UserViewModel.cs" />
     <Compile Include="Models\Shared\SendToDialogModel.cs" />
     <Compile Include="Models\SurveyViewModel.cs" />
@@ -4057,6 +4055,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DH.Helpdesk.Web.Common\DH.Helpdesk.Web.Common.csproj">
+      <Project>{d268e4e5-cd72-45dc-9dc0-9f0ad89f3f6e}</Project>
+      <Name>DH.Helpdesk.Web.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
       <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
       <Name>DH.Helpdesk.Common</Name>

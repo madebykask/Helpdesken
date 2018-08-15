@@ -140,7 +140,12 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Contexts
         
         private UserOverview User
         {
-            get { return _user ?? (_user = SessionFacade.CurrentUser); }
+            get
+            {
+                throw new NotImplementedException();
+                //TODO: Review if used. Use cache/claims instead of session if used.
+                //return _user ?? (_user = SessionFacade.CurrentUser);
+            }
         }
 
         /// <summary>

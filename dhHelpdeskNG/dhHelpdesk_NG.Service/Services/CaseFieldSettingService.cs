@@ -34,16 +34,13 @@
     {
         private readonly ICaseFieldSettingRepository _caseFieldSettingRepository;
         private readonly ICaseFieldSettingLanguageRepository _caseFieldSettingLanguageRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
         public CaseFieldSettingService(
             ICaseFieldSettingRepository caseFieldSettingRepository,
-            ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository,
-            IUnitOfWork unitOfWork)
+            ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository)
         {
             this._caseFieldSettingRepository = caseFieldSettingRepository;
             this._caseFieldSettingLanguageRepository = caseFieldSettingLanguageRepository;
-            this._unitOfWork = unitOfWork;
         }
 
         public IList<CaseListToCase> ListToShowOnCasePage(int customerId, int languageId)

@@ -2,7 +2,7 @@
 
 namespace DH.Helpdesk.Web.Areas.Orders.Models.OrderFieldSettings.FieldSettings
 {
-    using Common.ValidationAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
     using Web.Infrastructure.LocalizedAttributes;
 
     public sealed class DeliveryFieldSettingsModel
