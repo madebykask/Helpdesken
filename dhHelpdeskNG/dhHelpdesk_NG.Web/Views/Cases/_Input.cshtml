@@ -267,9 +267,15 @@
                                             </thead>
                                             @if (@Model.ComputerUserCategories.Any())
                                             {
-                                                <tr class="displaytr" style="@(Model.InitiatorUserCategoryVisible ? "" : "display:none")">
+                                                <tr class="displaytr" style="@(Model.IsCaseFieldVisible(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, CaseSolutionFields.UserSearchCategory_Id) ? "" : "display:none")">
                                                     <td>@CaseFieldCaption(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, "Anmälarkategori")</td>
-                                                    <td>@Html.DropDownList("InitiatorCategory", Model.BuildComputerCategoriesSelectList(Model.InitiatorComputerUserCategory != null ? (int?)Model.InitiatorComputerUserCategory.ID : null), "")</td>
+                                                    <td>
+                                                        @Html.ReadonlyDropDownListFor(x => x.InitiatorCategoryId,
+                                                            Model.BuildComputerCategoriesSelectList(Model.InitiatorCategoryId), null,
+                                                            Model.IsReadOnly(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, CaseSolutionFields.UserSearchCategory_Id),
+                                                            "InitiatorCategory")
+                                                    </td>
+
                                                 </tr>
                                             }
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.ReportedBy, CaseSolutionFields.UserNumber)">
@@ -600,9 +606,13 @@
                                         </thead>
                                         @if (Model.ComputerUserCategories.Any())
                                         {
-                                            <tr class="displaytr" style="@(Model.RegardingUserCategoryVisible ? "" : "display:none")">
+                                            <tr class="displaytr" style="@(Model.IsCaseFieldVisible(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, CaseSolutionFields.IsAbout_UserSearchCategory_Id) ? "" : "display:none")">
                                                 <td>@CaseFieldCaption(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, "Anmälarkategori")</td>
-                                                <td>@Html.DropDownList("IsAboutCategory", Model.BuildComputerCategoriesSelectList(Model.RegardingComputerUserCategory != null ? (int?)Model.RegardingComputerUserCategory.ID : null), "")</td>
+                                                <td>
+                                                    @Html.ReadonlyDropDownListFor(x => x.RegardingCategoryId,
+                                                             Model.BuildComputerCategoriesSelectList(Model.RegardingCategoryId), null,
+                                                             Model.IsReadOnly(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, CaseSolutionFields.IsAbout_UserSearchCategory_Id), "IsAboutCategory")
+                                                </td>
                                             </tr>
                                         }
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, CaseSolutionFields.IsAbout_ReportedBy)">

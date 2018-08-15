@@ -596,7 +596,7 @@ a.error, input[type=¨button].error .btn
   top:0;
   display:block;
   color:#FFF;
-  z-index:1000;
+  z-index:1000!important;
   height:100%;
   border:1px solid #438eb9;
   /*background-color:#fff;*/

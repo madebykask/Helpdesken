@@ -47,19 +47,22 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
             @case.Customer_Id = newCustomerId;
 
             //1. set case typeId
-            var newCaseTypeId = Common.Constants.CaseType.EmptyId;
-            var caseTypeId = @case.CaseType?.Id ?? Common.Constants.CaseType.EmptyId;
-            if (caseTypeId > Common.Constants.CaseType.EmptyId)
+            var newCaseTypeId = 0;
+            var caseTypeId = @case.CaseType?.Id ?? 0;
+            if (caseTypeId > 0)
             {
                 newCaseTypeId = TryMatchCaseTypeForCustomer(caseTypeId, caseCustomerId, newCustomerId);
             }
 
-            // 0 is a fixed emptpy CaseType in the database
-            @case.CaseType_Id = newCaseTypeId > Common.Constants.CaseType.EmptyId ? newCaseTypeId : newCustomerDefaults?.CaseTypeId ?? Common.Constants.CaseType.EmptyId;
-            //if (@case.CaseType_Id <= 0)
-            //{
-            //    throw new HelpdeskException("Ärendet kan inte flyttas. Matchande ärendetyp eller standard ärendetyp kan inte hittas.");
-            //}
+            if (newCaseTypeId == 0)
+                newCaseTypeId = newCustomerDefaults?.CaseTypeId ?? 0;
+
+            if (newCaseTypeId <= 0)
+            {
+                throw new HelpdeskException("Ärendet kan inte flyttas. Matchande ärendetyp eller standard ärendetyp kan inte hittas.");
+            }
+
+            @case.CaseType_Id = newCaseTypeId;
 
             //2. set case default user as an administrator of the case
             @case.Performer_User_Id = newCustomerSettings.DefaultAdministrator;
@@ -97,7 +100,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
                 }
             }
 
-            return -1;
+            return 0;
         }
 
         private void ResetCaseFields(Case curCase)

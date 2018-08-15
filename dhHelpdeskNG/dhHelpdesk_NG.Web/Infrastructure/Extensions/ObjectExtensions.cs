@@ -124,13 +124,22 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         /// </returns>
         public static bool IsFieldVisible(this IList<CaseFieldSetting> fields, GlobalEnums.TranslationCaseFields field)
         {
-            return fields.getCaseSettingsValue(field.ToString()).ShowOnStartPage != 0;
+            var fs = fields.getCaseSettingsValue(field.ToString());
+
+            //some fields have Hide setting available but not all! 
+            if (GlobalEnums.FieldsWithHide.Contains(field))
+            {
+                return fs.IsActive && !fs.Hide;
+            }
+
+            return fs.IsActive;
         }
 
         public static bool IsFieldRequiredOrVisible(this IList<CaseFieldSetting> fields, GlobalEnums.TranslationCaseFields field)
         {
-            var fieldSettings = fields.getCaseSettingsValue(field.ToString());
-            return fieldSettings.ShowOnStartPage != 0 || fieldSettings.Required != 0;
+            var isVisible = fields.IsFieldVisible(field);
+            var isRequired = fields.IsFieldRequired(field);
+            return isVisible || isRequired;
         }
 
         public static bool IsFieldRequired(this IList<CaseFieldSetting> fields, GlobalEnums.TranslationCaseFields field)

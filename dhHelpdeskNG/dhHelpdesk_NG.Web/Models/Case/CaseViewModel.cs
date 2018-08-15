@@ -380,11 +380,20 @@ namespace DH.Helpdesk.Web.Models.Case
         public bool InitiatorReadOnly { get; set; }
         public bool InitiatorUserCategoryVisible { get; set; }
 
-
         public IDictionary<CaseSectionType, ExtendedCaseFormModel> ExtendedCaseSections { get; internal set; }
         public ComputerUserCategory RegardingComputerUserCategory { get; internal set; }
         public bool RegardingReadOnly { get; internal set; }
         public bool RegardingUserCategoryVisible { get; set; }
+
+        public int? InitiatorCategoryId
+        {
+            get { return InitiatorComputerUserCategory?.ID; }
+        }
+
+        public int? RegardingCategoryId
+        {
+            get { return RegardingComputerUserCategory.ID; }
+        }
     }
 
     public class CaseIndexViewModel

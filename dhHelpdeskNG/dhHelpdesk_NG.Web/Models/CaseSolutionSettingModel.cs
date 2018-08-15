@@ -54,10 +54,13 @@ namespace DH.Helpdesk.Web.Models
         {
             return CaseSolutionMode != CaseSolutionModes.Hide;
         }
+
         public static bool IsFieldAlwaysVisible(CaseSolutionFields fieldId)
         {
-            return fieldId == CaseSolutionFields.CaseType || fieldId == CaseSolutionFields.Administrator
-                   || fieldId == CaseSolutionFields.Priority || fieldId == CaseSolutionFields.InternalLogNote;
+            return fieldId == CaseSolutionFields.CaseType || 
+                   fieldId == CaseSolutionFields.Administrator || 
+                   fieldId == CaseSolutionFields.Priority || 
+                   fieldId == CaseSolutionFields.InternalLogNote;
         }
 
         #endregion

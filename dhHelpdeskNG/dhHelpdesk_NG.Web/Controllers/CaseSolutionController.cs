@@ -2724,8 +2724,6 @@ namespace DH.Helpdesk.Web.Controllers
             return model;
         }
 
-
-
         private CaseSolutionInputViewModel CreateInputViewModel(CaseSolution caseSolution)
         {
             var curCustomerId = SessionFacade.CurrentCustomer.Id;
@@ -3051,8 +3049,6 @@ namespace DH.Helpdesk.Web.Controllers
                 CSSelectedSettingsField = lFieldSettingSelected.Select(CaseSolutionSettingsFieldModel.Create).ToList(),
                 SplitToCaseSolutions = splitToCaseSolutions,
                 SplitToAllCaseSolutions = splitToAllCaseSolutions
-
-
             };
 
             model.ParantPath_Category = "--";
