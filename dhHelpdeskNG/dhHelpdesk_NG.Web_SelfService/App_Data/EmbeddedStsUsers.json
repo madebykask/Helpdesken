@@ -1,0 +1,119 @@
+[{
+		"Name": "c4a",
+		"Claims": [{
+			"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname",
+			"Value": "Consult4 Alex"
+		}, {
+			"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname",
+			"Value": "Nagornov"
+		}, {
+			"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+			"Value": "nagornovalex.dev@gmail.com"
+		}, {
+			"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+			"Value": "c4a"
+		}, {
+			"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/EmployeeNumber",
+			"Value": "13106668"
+		}, {
+			"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/authenticationmethod",
+			"Value": "urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport"
+		}, {
+			"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/authenticationinstant",
+			"Value": "2017-10-26T13:57:48.536Z"
+		}]
+	},
+
+	{
+		"Name": "Majid",
+		"Claims": [{
+			"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname",
+			"Value": "Majid"
+		}, {
+			"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname",
+			"Value": "Ghanadi"
+		}, {
+			"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+			"Value": "majid.ghanadi@dhsolutions.se"
+		}, {
+			"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+			"Value": "mg"
+		}, {
+			"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/EmployeeNumber",
+			"Value": "08000424"
+		}, {
+			"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/authenticationmethod",
+			"Value": "urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport"
+		}, {
+			"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/authenticationinstant",
+			"Value": "2017-10-25T09:41:44.701Z"
+		}]
+	}, {
+		"Name": "js",
+		"Claims": [{
+				"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname",
+				"Value": "Jessica"
+			},
+
+			{
+				"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname",
+				"Value": "Skog"
+			},
+
+			{
+				"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+				"Value": "jessica.skog@dhsolutions.se"
+			},
+
+			{
+				"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+				"Value": "js"
+			},
+
+			{
+				"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/EmployeeNumber",
+				"Value": "00125091"
+			}, {
+				"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/authenticationmethod",
+				"Value": "http://schemas.microsoft.com/ws/2008/06/identity/authenticationmethod/windows,"
+			}, {
+				"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/authenticationinstant",
+				"Value": "2017-10-04T11:29:56.748Z"
+			}
+		]
+	},
+	{
+		"Name": "admin",
+		"Claims": [{
+				"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname",
+				"Value": "admin"
+			},
+
+			{
+				"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname",
+				"Value": "admin"
+			},
+
+			{
+				"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+				"Value": "admin@dhsolutions.se"
+			},
+
+			{
+				"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+				"Value": "admin"
+			},
+
+			{
+				"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/EmployeeNumber",
+				"Value": "00125091"
+			}, {
+				"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/authenticationmethod",
+				"Value": "http://schemas.microsoft.com/ws/2008/06/identity/authenticationmethod/windows,"
+			}, {
+				"Type": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/authenticationinstant",
+				"Value": "2017-10-04T11:29:56.748Z"
+			}
+		]
+	}
+]

@@ -378,9 +378,9 @@ namespace DH.Helpdesk.SelfService.Controllers
             model.CaseTypeParantPath = ParentPathDefaultValue;
             model.ProductAreaParantPath = ParentPathDefaultValue;
             model.CategoryParentPath = ParentPathDefaultValue;
-
+            
             // Load template info
-            if(caseTemplateId != null && caseTemplateId.Value > 0)
+            if (caseTemplateId != null && caseTemplateId.Value > 0)
             {
                 var caseTemplate = _caseSolutionService.GetCaseSolution(caseTemplateId.Value);
                 var caseTemplateSettings = _caseSolutionSettingService.GetCaseSolutionSettingOverviews(caseTemplateId.Value).ToList();
@@ -393,11 +393,13 @@ namespace DH.Helpdesk.SelfService.Controllers
                     ErrorGenerator.MakeError("Selected template is not available anymore!");
                     return RedirectToAction("Index", "Error");
                 }
+                
+                //override caseType value from template
                 if(caseTemplate.CaseType_Id != null)
                 {
                     model.NewCase.CaseType_Id = caseTemplate.CaseType_Id.Value;
                 }
-
+                
                 var notifier = _computerService.GetInitiatorByUserId(SessionFacade.CurrentUserIdentity.UserId, customerId);
 
                 model.NewCase.ReportedBy = string.IsNullOrEmpty(caseTemplate.ReportedBy)? notifier?.UserId : caseTemplate.ReportedBy;
@@ -557,10 +559,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 if (model.NewCase.CaseType_Id > 0)
                 {
                     var ct = _caseTypeService.GetCaseType(model.NewCase.CaseType_Id);
-                    var tempCTs = new List<CaseType>();
-                    tempCTs.Add(ct);
+                    var tempCTs = new List<CaseType> { ct };
+
                     tempCTs = CaseTypeTreeTranslation(tempCTs).ToList();
-                    model.CaseTypeParantPath = tempCTs[0].getCaseTypeParentPath();                   
+                    model.CaseTypeParantPath = tempCTs[0].getCaseTypeParentPath();
                 }
 
                 if (model.NewCase.Department_Id.HasValue)
@@ -662,7 +664,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             {
                 RegUserId = SessionFacade.CurrentUserIdentity.UserId,
                 RegUserDomain = SessionFacade.CurrentUserIdentity.Domain,
-                RegUserName = string.Format("{0} {1}", SessionFacade.CurrentUserIdentity.FirstName, SessionFacade.CurrentUserIdentity.LastName),
+                RegUserName = $"{SessionFacade.CurrentUserIdentity.FirstName} {SessionFacade.CurrentUserIdentity.LastName}".Trim(),
                 IpAddress = Request.GetIpAddress(),
                 CaseSolution_Id = caseTemplateId,
                 CaseFileKey = Guid.NewGuid().ToString()
