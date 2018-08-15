@@ -57,12 +57,13 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
             if (newCaseTypeId == 0)
                 newCaseTypeId = newCustomerDefaults?.CaseTypeId ?? 0;
 
-            // not required at the moment but lets keep just in case
-            //if (newCaseTypeId == 0)
-            //    newCaseTypeId = newCustomerDefaults?.EmailCaseTypeId ?? 0;
+            if (newCaseTypeId <= 0)
+            {
+                throw new HelpdeskException("Ärendet kan inte flyttas. Matchande ärendetyp eller standard ärendetyp kan inte hittas.");
+            }
 
-            @case.CaseType_Id = newCaseTypeId > 0 ? newCaseTypeId : Common.Constants.CaseType.EmptyId;
-            
+            @case.CaseType_Id = newCaseTypeId;
+
             //2. set case default user as an administrator of the case
             @case.Performer_User_Id = newCustomerSettings.DefaultAdministrator;
 
