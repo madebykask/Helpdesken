@@ -7614,7 +7614,8 @@ namespace DH.Helpdesk.Web.Controllers
                                         _supplierService, _workingGroupService, _userService,
                                         _priorityService, _statusService, _stateSecondaryService,
                                         _projectService, _problemService, _causingPartService,
-                                        _changeService, _finishingCauseService, watchDateCalendarServcie);
+                                        _changeService, _finishingCauseService, watchDateCalendarServcie, 
+                                        _computerService);
 
             var model = _caseRuleFactory.GetCaseRuleModel(customerId, ruleType, currentData, customerSettings, caseFieldSettings, new List<CaseSolutionSettingModel>());
 
