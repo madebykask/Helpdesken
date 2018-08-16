@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
 
 namespace DH.Helpdesk.Web.Models.CaseRules
 {
@@ -14,6 +12,7 @@ namespace DH.Helpdesk.Web.Models.CaseRules
 
         public decimal CaseNumber { get; set; }
 
+        public int? UserSearchCategory_Id { get; set; } 
 
         public string ReportedBy { get; set; }
 
@@ -46,6 +45,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         #endregion
 
         #region IsAbout
+
+        public int? IsAbout_UserSearchCategory_Id { get; set; }
 
         public string IsAbout_ReportedBy { get; set; }
 

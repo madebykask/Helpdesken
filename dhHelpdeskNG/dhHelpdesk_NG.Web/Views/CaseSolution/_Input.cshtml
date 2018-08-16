@@ -369,12 +369,12 @@
                                                 @Html.DropDownListFor(model => model.CaseSolution.UserSearchCategory_Id, Model.BuildComputerCategoriesSelectList(Model.CaseSolution.UserSearchCategory_Id), "",
                                                 new
                                                 {
-                                                    id = "UserSearchCategory", @*class = "acceptRules",*@ standardId = GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString()
+                                                    id = "UserSearchCategory", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString()
                                                 })
                                             </td>
                                             <td>
                                                 <table>
-                                                    <tr id="stateIconPlace_@GlobalEnums.TranslationCaseFields.Region_Id.ToString()">
+                                                    <tr id="stateIconPlace_@GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString()">
                                                         @*State icons will be added Here*@
                                                     </tr>
                                                 </table>
@@ -721,11 +721,11 @@
                                             <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString(), Model.CaseSolution.Customer_Id)</td>
                                             <td>
                                                 @Html.DropDownListFor(model => model.CaseSolution.IsAbout_UserSearchCategory_Id, Model.BuildComputerCategoriesSelectList(Model.CaseSolution.IsAbout_UserSearchCategory_Id), "",
-                                                    new {id = "IsAbout_UserSearchCategory", @*class = "acceptRules",*@ standardId = GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()})
+                                                    new { id = "IsAbout_UserSearchCategory", @class = "acceptRules", standardId = GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()})
                                             </td>
                                             <td>
                                                 <table>
-                                                    <tr id="stateIconPlace_@GlobalEnums.TranslationCaseFields.Region_Id.ToString()">
+                                                    <tr id="stateIconPlace_@GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString()">
                                                         @*State icons will be added Here*@
                                                     </tr>
                                                 </table>

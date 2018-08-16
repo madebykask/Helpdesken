@@ -299,6 +299,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
     {
         #region Initiator
 
+        public BasicMultiItemField UserSearchCategory { get; set; }
+
         public BasicSingleItemField ReportedBy { get; set; }
 
         public BasicSingleItemField PersonsName { get; set; }
@@ -330,6 +332,8 @@ namespace DH.Helpdesk.Web.Models.CaseRules
         #endregion
 
         #region IsAbout
+
+        public BasicMultiItemField IsAbout_UserSearchCategory { get; set; }
 
         public BasicSingleItemField IsAbout_ReportedBy { get; set; }
 

@@ -38,7 +38,7 @@ using System;
 
         int GetCustomerLanguage(int customerid);
 
-        CaseDefaultsInfo GetCustomerDefaults(int customerId);
+        CaseDefaultsInfo GetCustomerDefaults(int customerId, bool isSelfService = false);
     }
 
     public sealed class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
@@ -137,20 +137,24 @@ using System;
                     .FirstOrDefault();                        
         }
 
-        public CaseDefaultsInfo GetCustomerDefaults(int customerId)
+        public CaseDefaultsInfo GetCustomerDefaults(int customerId, bool isSelfService = false)
         {
+            var caseTypeCondition = 
+                isSelfService 
+                    ? (Expression<Func<CaseType, bool>>)(x => x.Customer_Id == customerId && x.IsActive == 1 && x.IsDefault == 1 && x.ShowOnExternalPage == 1)
+                    : (x => x.Customer_Id == customerId && x.IsDefault == 1 && x.IsActive == 1 && x.Selectable == 1);
+
             var res =
                 (from customer in this.Table
-                where customer.Id == customerId
-                select new 
-                {
-                    RegionId = this.DataContext.Regions.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
-                    CaseTypeId = this.DataContext.CaseTypes.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
-                    EmailCaseTypeId = this.DataContext.CaseTypes.Where(x => x.Customer_Id == customer.Id && x.IsEMailDefault == 1).Select(x => x.Id).FirstOrDefault(),
-                    SupplierId = this.DataContext.Suppliers.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
-                    PriorityId = this.DataContext.Priorities.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
-                    StatusId = this.DataContext.Statuses.Where(x => x.Customer_Id == customer.Id && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
-                }).FirstOrDefault();
+                 where customer.Id == customerId
+                 select new 
+                 {
+                     RegionId = this.DataContext.Regions.Where(x => x.Customer_Id == customer.Id && x.IsActive == 1 && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                     CaseTypeId = this.DataContext.CaseTypes.Where(caseTypeCondition).Select(x => x.Id).FirstOrDefault(),
+                     SupplierId = this.DataContext.Suppliers.Where(x => x.Customer_Id == customer.Id && x.IsActive == 1 && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                     PriorityId = this.DataContext.Priorities.Where(x => x.Customer_Id == customer.Id && x.IsActive == 1 && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                     StatusId = this.DataContext.Statuses.Where(x => x.Customer_Id == customer.Id && x.IsActive == 1 && x.IsDefault == 1).Select(x => x.Id).FirstOrDefault(),
+                 }).FirstOrDefault();
 
             //its important to return null for nullable values
             return res != null
@@ -158,7 +162,6 @@ using System;
                 {
                     RegionId = res.RegionId == 0 ? null : (int?) res.RegionId,
                     CaseTypeId = res.CaseTypeId,
-                    EmailCaseTypeId = res.EmailCaseTypeId,
                     SupplierId = res.SupplierId == 0 ? null : (int?) res.SupplierId,
                     PriorityId = res.PriorityId == 0 ? null : (int?) res.PriorityId,
                     StatusId = res.StatusId == 0 ? null : (int?) res.StatusId

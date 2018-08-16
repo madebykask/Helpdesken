@@ -914,7 +914,8 @@ namespace DH.Helpdesk.Services.Services
 
         public Case InitCase(int customerId, int userId, int languageId, string ipAddress, CaseRegistrationSource source, Setting customerSetting, string adUser)
         {
-            var customerDefaults = _customerRepository.GetCustomerDefaults(customerId);
+            var customerDefaults = _customerRepository.GetCustomerDefaults(customerId, source == CaseRegistrationSource.SelfService);
+
             var c = new Case
             {
                 Customer_Id = customerId,

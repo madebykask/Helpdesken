@@ -46,6 +46,8 @@
 
         public const string IsAbout_Place = "IsAbout_Place";
 
+        public const string UserSearchCategory_Id = "UserSearchCategory_Id";
 
+        public const string IsAbout_UserSearchCategory_Id = "IsAbout_UserSearchCategory_Id";
     }
 }

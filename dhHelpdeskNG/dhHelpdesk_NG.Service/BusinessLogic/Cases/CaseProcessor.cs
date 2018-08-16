@@ -55,7 +55,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
             }
 
             if (newCaseTypeId == 0)
-                newCaseTypeId = newCustomerDefaults?.CaseTypeId ?? 0;
+                newCaseTypeId = newCustomerDefaults?.CaseTypeId ?? 0; 
 
             if (newCaseTypeId <= 0)
             {

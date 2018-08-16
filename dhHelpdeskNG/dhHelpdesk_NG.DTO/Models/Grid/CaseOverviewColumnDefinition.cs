@@ -112,6 +112,8 @@
                                                                            CaseInfoFields.AttachedFile,                                                                           
                                                                            LogFields.Debiting, 
                                                                            LogFields.AttachedFile, 
+                                                                           UserFields.UserSearchCategory_Id,
+                                                                           UserFields.IsAbout_UserSearchCategory_Id,
                                                                            "FinishingCause_Id",
                                                                            "AddUserBtn",
                                                                            "UpdateNotifierInformation",

@@ -2507,6 +2507,7 @@ namespace DH.Helpdesk.Web.Controllers
             currentData.IsAbout_Place = templateModel.IsAbout_Place;
             currentData.IsAbout_Region_Id = templateModel.IsAbout_Region_Id;
             currentData.IsAbout_ReportedBy = templateModel.IsAbout_ReportedBy;
+            currentData.IsAbout_UserSearchCategory_Id = templateModel.IsAbout_UserSearchCategory_Id;
             currentData.IsAbout_UserCode = templateModel.IsAbout_UserCode;
             currentData.Miscellaneous = templateModel.Miscellaneous;
             currentData.NoMailToNotifier = templateModel.NoMailToNotifier;
@@ -2527,6 +2528,7 @@ namespace DH.Helpdesk.Web.Controllers
             currentData.Region_Id = templateModel.Region_Id;
             currentData.RegistrationSource = templateModel.RegistrationSource;
             currentData.ReportedBy = templateModel.ReportedBy;
+            currentData.UserSearchCategory_Id = templateModel.UserSearchCategory_Id;
             currentData.SMS = templateModel.SMS;
             currentData.SolutionRate = templateModel.SolutionRate;
             currentData.StateSecondary_Id = templateModel.StateSecondary_Id;
@@ -2552,7 +2554,7 @@ namespace DH.Helpdesk.Web.Controllers
                                        _supplierService, _workingGroupService, _userService,
                                        _priorityService, _statusService, _stateSecondaryService,
                                        _projectService, _problemService, _causingPartService,
-                                       _changeService, _finishingCauseService, _watchDateCalendarService);
+                                       _changeService, _finishingCauseService, _watchDateCalendarService, _computerService);
 
             var model = _caseRuleFactory.GetCaseRuleModel(customerId, ruleMode, currentData, customerSettings, caseFieldSettings, templateSettingModel);
 
