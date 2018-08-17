@@ -1,3 +1,41 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-DH Helpdesk Mobile 
+ 
+  <div class="container">
+
+      <div class="row">
+        <div>
+          <div class="col-12 col-xs-12">                            
+            <div class="float-right">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">                  
+                    <label *ngFor="let lang of translate.getLangs()" class="btn btn-secondary">
+                        <input type="radio" name="lang_{{lang}}" (click)="switchLanguage(lang)" [(ngModel)]="lang == translate.currentLang" autocomplete="off" [value]="lang"> {{lang}}
+                    </label>                  
+                </div>
+            </div>              
+          </div>          
+        </div>
+      </div>
+
+    
+
+    <div class="jumbotron text-center">
+            <h1 translate>Title</h1>
+            <p>{{'Welcome' | translate: getCurrentUser()}}</p>
+    </div>
+
+    <div class="row">
+      <div class="col-4 col-sm-4">
+          <ul class="list-unstyled">
+            <li>Test: {{testString}}</li>
+            <li>Test2: {{testString2}}</li>
+          </ul>
+          <button (click)="test()">Test</button>
+      </div>
+    
+    </div>
+
+    <router-outlet></router-outlet>
+  </div>
+
+
+
+
