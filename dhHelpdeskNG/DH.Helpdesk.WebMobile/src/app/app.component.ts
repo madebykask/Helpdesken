@@ -1,5 +1,6 @@
 import {TranslateService} from '@ngx-translate/core';
 import { Component } from '@angular/core';
+import {Languages} from './shared/translation/translateLoader';
 
 @Component({
   selector: 'app-root',
@@ -11,9 +12,7 @@ export class AppComponent {
   testString:string  ="";
   testString2:string  ="";
 
-  constructor(private translate: TranslateService) {
-    translate.addLangs(["en", "swd"]);
-    translate.setDefaultLang('en'); //todo: replace with constant and inject
+  constructor(private translate: TranslateService) {    
   }
 
   test(){    
@@ -28,6 +27,10 @@ export class AppComponent {
     this.translate.use(lang);    
   }  
 
+  getDisplayName(langCode:string){
+    return Languages[langCode];
+  }
+  
   getCurrentUser(){
     return {
       name: 'Peter'

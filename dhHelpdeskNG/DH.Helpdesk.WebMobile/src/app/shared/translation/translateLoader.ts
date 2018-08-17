@@ -1,7 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { TranslateLoader } from '@ngx-translate/core'
+import { TranslateService, TranslateLoader } from '@ngx-translate/core'
 import { Observable } from 'rxjs'
+
+export const Languages : { [key: string]: string } = {};
+
+export function initTranslation(translationService: TranslateService) : Function {
+    return () => {  
+    
+     //todo: should be loaded from the database and availiable via shared config
+     Languages['en'] = "English";
+     Languages['swd'] = 'Swedish';
+     
+     translationService.addLangs(Object.keys(Languages)); //add languages to the inner collection - we later can use  it to show it on UI: translationService.lang    
+     translationService.use('en').toPromise(); //todo:replace with constant/config
+   };
+ } 
 
 @Injectable()
 export class CustomTranslateLoader implements TranslateLoader  {
