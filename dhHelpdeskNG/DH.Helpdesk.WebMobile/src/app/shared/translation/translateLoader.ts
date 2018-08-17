@@ -16,7 +16,7 @@ export class CustomTranslateLoader implements TranslateLoader  {
         console.log('>>Loading translations for: ' + lang);
 
         //var apiAddress = AppConfig.API_URL+"/static/i18n/"+ lang+".json";
-        var apiAddress = "http://localhost:8049/Test/Language/" + lang;
+        var apiAddress = "http://localhost:8049/api/Test/Language/" + lang;
         
         return Observable.create(observer => {
             return this.http.get(apiAddress, { headers: this.contentHeader }).subscribe(                
@@ -24,11 +24,9 @@ export class CustomTranslateLoader implements TranslateLoader  {
                     console.log('>>Translations have been loaded successfully for: ' + lang);
                     console.log(res);
                     observer.next(res);
-                    observer.complete();               
+                    observer.complete();
                 },
                 error => {
-                    debugger;
-
                     //  failed to retrieve from api, switch to local
                     console.error("Failed to load translation for lang: " + lang);
 
@@ -36,8 +34,7 @@ export class CustomTranslateLoader implements TranslateLoader  {
                         observer.next(res);
                         observer.complete();
                 })
-            }
-            );
+            });
         }); 
     }
 }
