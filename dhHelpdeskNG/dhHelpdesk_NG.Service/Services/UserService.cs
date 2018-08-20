@@ -80,6 +80,7 @@ namespace DH.Helpdesk.Services.Services
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
+        IList<int> GetUserCustomersIds(int userId);
 
         //IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId, bool includeWorkingGroups = false);
         IList<CustomerUserInfo> GetUsersForWorkingGroup(int workingGroupId);
@@ -1259,6 +1260,15 @@ namespace DH.Helpdesk.Services.Services
                                 customerUsers, 
                                 customerSettings,
                                 this._customerSettingsToBusinessModelMapper);
+            }
+        }
+
+        public IList<int> GetUserCustomersIds(int userId)
+        {
+            using (var uow = this._unitOfWorkFactory.Create())
+            {
+                var customerUserRep = uow.GetRepository<CustomerUser>();
+                return customerUserRep.GetAll().Where(cu => cu.User_Id == userId).Select(cu => cu.Customer_Id).ToList();
             }
         }
 

@@ -14,15 +14,14 @@ namespace DH.Helpdesk.WebApi.Controllers
     public class TestController : BaseApiController
     {
         [HttpGet]
-        [AuthorizeApi(Roles = "Test")]
+        [AuthorizeApi(Roles = "4")]
         public async Task<IHttpActionResult> Admin()
         {
-            return await Task.FromResult(Json("test"));
+            return await Task.FromResult(Json("admin"));
         }
 
         [HttpGet]
-        [AllowAnonymous]
-        public async Task<IHttpActionResult> Anyone()
+        public async Task<IHttpActionResult> AnyRole()
         {
             //var prev = HttpContext.Current.Session["name"] ?? Guid.NewGuid().ToString();
             //HttpContext.Current.Session["name"] = prev;

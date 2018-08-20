@@ -149,6 +149,7 @@
     <Compile Include="Infrastructure\Cache\WebCacheService.cs" />
     <Compile Include="Infrastructure\Config\ApplicationConfiguration.cs" />
     <Compile Include="Infrastructure\Config\Authentication\AccessTokenProvider.cs" />
+    <Compile Include="Infrastructure\Config\Authentication\CustomClaimTypes.cs" />
     <Compile Include="Infrastructure\Config\Authentication\RefreshTokenProvider.cs" />
     <Compile Include="Infrastructure\Config\ConfigApi.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Infrastructure\Config\DependencyInjection\ServicesModule.cs" />
     <Compile Include="Infrastructure\Config\DependencyInjection\WorkContextModule.cs" />
     <Compile Include="Infrastructure\Config\Filters\ApiExceptionFilter.cs" />
+    <Compile Include="Infrastructure\Config\Filters\CustomerAccessValidationFilter.cs" />
     <Compile Include="Infrastructure\Config\Filters\ModelValidationApiActionFilter.cs" />
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
@@ -188,6 +190,10 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DH.Helpdesk.Models\DH.Helpdesk.Models.csproj">
+      <Project>{de589388-2e9b-44c3-bcb7-9d4d051391de}</Project>
+      <Name>DH.Helpdesk.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DH.Helpdesk.Web.Common\DH.Helpdesk.Web.Common.csproj">
       <Project>{d268e4e5-cd72-45dc-9dc0-9f0ad89f3f6e}</Project>
       <Name>DH.Helpdesk.Web.Common</Name>

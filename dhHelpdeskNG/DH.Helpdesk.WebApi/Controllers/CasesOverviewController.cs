@@ -18,6 +18,7 @@ using DH.Helpdesk.Web.Common.Models.Case;
 using DH.Helpdesk.Web.Common.Models.CaseSearch;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Models.CasesOverview;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -40,104 +41,75 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IHttpActionResult> Overview()
+        public async Task<IHttpActionResult> Overview([FromBody]SearchOverviewFilterInputModel input)
         {
             var filter = new CaseSearchFilter();
-            filter.CustomerId = 1;//TODO: from params
+            filter.CustomerId = input.CustomerId;//TODO: 0 check
 
             var claimsIdentity = (ClaimsIdentity)User.Identity;//TODO: Move Claims to context
-            var userId = claimsIdentity.Claims.First(c => c.Type == ClaimTypes.Sid).Value;
-            var userGroupId = 31;//TODO: get real data
-            filter.UserId = int.Parse(userId);
+            var userIdStr = claimsIdentity.Claims.First(c => c.Type == ClaimTypes.Sid).Value;
+            filter.UserId = int.Parse(userIdStr);//TODO: 0 check
+            var userGroupIdStr = claimsIdentity.Claims.First(c => c.Type == ClaimTypes.Role).Value;
+            var userGroupId = int.Parse(userGroupIdStr);//TODO: 0 check
 
-            filter.Initiator = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.InitiatorNameAttribute);
-            //CaseInitiatorSearchScope initiatorSearchScope; //TODO:
-            //if (Enum.TryParse(frm.ReturnFormValue(CaseFilterFields.InitiatorSearchScopeAttribute), out initiatorSearchScope))
-            //{
-            //    filter.InitiatorSearchScope = initiatorSearchScope;
-            //}
+            filter.Initiator = input.Initiator ?? string.Empty;//from params - frm.ReturnFormValue(CaseFilterFields.InitiatorNameAttribute);
+            if (input.InitiatorSearchScope.HasValue) 
+                filter.InitiatorSearchScope = input.InitiatorSearchScope.Value;
 
-            filter.CaseType = 0;//TODO: from params - frm.ReturnFormValue(CaseFilterFields.CaseTypeIdNameAttribute).convertStringToInt();
-            filter.ProductArea = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.ProductAreaIdNameAttribute).ReturnCustomerUserValue();
-            filter.Region = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.RegionNameAttribute);
-            filter.User = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.RegisteredByNameAttribute);
-            filter.Category = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.CategoryNameAttribute);
-            filter.WorkingGroup = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.WorkingGroupNameAttribute);
-            filter.UserResponsible = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.ResponsibleNameAttribute);
-            filter.UserPerformer = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.PerformerNameAttribute);
+            filter.CaseType = input.CaseTypeId ?? 0;//from params - frm.ReturnFormValue(CaseFilterFields.CaseTypeIdNameAttribute).convertStringToInt();
+            filter.ProductArea = input.ProductAreaId.HasValue ? input.ProductAreaId.Value.ToString() : string.Empty;// TODO: Check 0//from params - frm.ReturnFormValue(CaseFilterFields.ProductAreaIdNameAttribute).ReturnCustomerUserValue();
+            filter.Category = input.CategoryId.HasValue ? input.CategoryId.Value.ToString() : string.Empty;//from params - frm.ReturnFormValue(CaseFilterFields.CategoryNameAttribute);
+            filter.Region = input.RegionIds.Any() ? string.Join(",", input.RegionIds) : string.Empty;//from params - frm.ReturnFormValue(CaseFilterFields.RegionNameAttribute);
+            filter.User = input.RegisteredByIds.Any() ? string.Join(",", input.RegisteredByIds) : string.Empty;//from params - frm.ReturnFormValue(CaseFilterFields.RegisteredByNameAttribute);
+            filter.WorkingGroup = input.WorkingGroupIds.Any() ? string.Join(",", input.WorkingGroupIds) : string.Empty;// from params - frm.ReturnFormValue(CaseFilterFields.WorkingGroupNameAttribute);
+            filter.UserResponsible = input.ResponsibleUserIds.Any() ? string.Join(",", input.ResponsibleUserIds) : string.Empty;//from params - frm.ReturnFormValue(CaseFilterFields.ResponsibleNameAttribute);
+            filter.UserPerformer = input.PerfomerUserIds.Any() ? string.Join(",", input.PerfomerUserIds) : string.Empty;//from params - frm.ReturnFormValue(CaseFilterFields.PerformerNameAttribute);
 
-            filter.Priority = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.PriorityNameAttribute);
-            filter.Status = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.StatusNameAttribute);
-            filter.StateSecondary = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.StateSecondaryNameAttribute);
+            filter.Priority = input.PriorityIds.Any() ? string.Join(",", input.PriorityIds) : string.Empty; //from params - frm.ReturnFormValue(CaseFilterFields.PriorityNameAttribute);
+            filter.Status = input.StatusIds.Any() ? string.Join(",", input.StatusIds) : string.Empty;//from params - frm.ReturnFormValue(CaseFilterFields.StatusNameAttribute);
+            filter.StateSecondary = input.StateSecondaryIds.Any() ? string.Join(",", input.StateSecondaryIds) : string.Empty;//from params - frm.ReturnFormValue(CaseFilterFields.StateSecondaryNameAttribute);
 
-            filter.CaseRegistrationDateStartFilter = null;//TODO: from params - frm.GetDate(CaseFilterFields.CaseRegistrationDateStartFilterNameAttribute);
-            filter.CaseRegistrationDateEndFilter = null;//TODO: from paramsfrm.GetDate(CaseFilterFields.CaseRegistrationDateEndFilterFilterNameAttribute).GetEndOfDay();
+            filter.CaseRegistrationDateStartFilter = input.CaseRegistrationDateStartFilter;// from params - frm.GetDate(CaseFilterFields.CaseRegistrationDateStartFilterNameAttribute);
+            filter.CaseRegistrationDateEndFilter = input.CaseRegistrationDateEndFilter;// from paramsfrm.GetDate(CaseFilterFields.CaseRegistrationDateEndFilterFilterNameAttribute).GetEndOfDay();
 
-            filter.CaseWatchDateStartFilter = null;//TODO: from params - frm.GetDate(CaseFilterFields.CaseWatchDateStartFilterNameAttribute);
-            filter.CaseWatchDateEndFilter = null;//TODO: from params - frm.GetDate(CaseFilterFields.CaseWatchDateEndFilterNameAttribute).GetEndOfDay();
-            filter.CaseClosingDateStartFilter = null;//TODO: from params - frm.GetDate(CaseFilterFields.CaseClosingDateStartFilterNameAttribute);
-            filter.CaseClosingDateEndFilter = null;//TODO: from params - frm.GetDate(CaseFilterFields.CaseClosingDateEndFilterNameAttribute).GetEndOfDay();
-            filter.CaseClosingReasonFilter = null;//TODO: from params - frm.ReturnFormValue(CaseFilterFields.ClosingReasonNameAttribute).ReturnCustomerUserValue();
-            filter.SearchInMyCasesOnly = false;//TODO: from params - frm.IsFormValueTrue("SearchInMyCasesOnly");
+            filter.CaseWatchDateStartFilter = input.CaseWatchDateStartFilter;//from params - frm.GetDate(CaseFilterFields.CaseWatchDateStartFilterNameAttribute);
+            filter.CaseWatchDateEndFilter = input.CaseWatchDateEndFilter;// from params - frm.GetDate(CaseFilterFields.CaseWatchDateEndFilterNameAttribute).GetEndOfDay();
+            filter.CaseClosingDateStartFilter = input.CaseClosingDateStartFilter;// from params - frm.GetDate(CaseFilterFields.CaseClosingDateStartFilterNameAttribute);
+            filter.CaseClosingDateEndFilter = input.CaseClosingDateEndFilter;// from params - frm.GetDate(CaseFilterFields.CaseClosingDateEndFilterNameAttribute).GetEndOfDay();
+            filter.CaseClosingReasonFilter = input.CaseClosingReasonId.HasValue ? input.CaseClosingReasonId.Value.ToString() : string.Empty; //TODO: Check 0 // from params - frm.ReturnFormValue(CaseFilterFields.ClosingReasonNameAttribute).ReturnCustomerUserValue();
+            filter.SearchInMyCasesOnly = input.SearchInMyCasesOnly;//from params - frm.IsFormValueTrue("SearchInMyCasesOnly");
 
-            filter.IsConnectToParent = false;//TODO: from params - frm.IsFormValueTrue(CaseFilterFields.IsConnectToParent);
+            filter.IsConnectToParent = input.IsConnectToParent;// from params - frm.IsFormValueTrue(CaseFilterFields.IsConnectToParent);
             if (filter.IsConnectToParent)
-            {
-                var id = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.CurrentCaseId);
-                if (!string.IsNullOrEmpty(id) && int.TryParse(id, out var currentCaseId))
-                {
-                    filter.CurrentCaseId = currentCaseId;
-                }
-            }
+                filter.CurrentCaseId = input.CurrentCaseId;
             
-            filter.CaseProgress = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.FilterCaseProgressNameAttribute);
-            filter.CaseFilterFavorite = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.CaseFilterFavoriteNameAttribute);
-            filter.FreeTextSearch = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.FreeTextSearchNameAttribute);
+            filter.CaseProgress = ((int)input.CaseProgress).ToString();// from params - frm.ReturnFormValue(CaseFilterFields.FilterCaseProgressNameAttribute);
+            filter.CaseFilterFavorite = input.CaseFilterFavoriteId.HasValue ? input.CaseFilterFavoriteId.Value.ToString() : string.Empty;// from params - frm.ReturnFormValue(CaseFilterFields.CaseFilterFavoriteNameAttribute);
+            filter.FreeTextSearch = input.FreeTextSearch;//TODO: remove restricted symbols here. from params - frm.ReturnFormValue(CaseFilterFields.FreeTextSearchNameAttribute);
 
-            var departments_OrganizationUnits = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.DepartmentNameAttribute);
+            filter.Department = input.DepartmentIds.Any() ? string.Join(",", input.DepartmentIds) : string.Empty;// format - GetDepartmentsFrom(departments_OrganizationUnits);
+            filter.OrganizationUnit = input.OrganizationUnitIds.Any() ? string.Join(",", input.OrganizationUnitIds) : string.Empty;// format - GetOrganizationUnitsFrom(departments_OrganizationUnits);
 
-            filter.Department = "";//TODO: format - GetDepartmentsFrom(departments_OrganizationUnits);
-            filter.OrganizationUnit = "";//TODO: format - GetOrganizationUnitsFrom(departments_OrganizationUnits);
-
-            filter.CaseRemainingTime = "";//TODO: from params - frm.ReturnFormValue(CaseFilterFields.CaseRemainingTimeAttribute);
-            if (!string.IsNullOrEmpty(filter.CaseRemainingTime))
+            filter.CaseRemainingTime = input.CaseRemainingTime.HasValue ? ((int)input.CaseRemainingTime.Value).ToString() : string.Empty;//from params - frm.ReturnFormValue(CaseFilterFields.CaseRemainingTimeAttribute);
+            if (input.CaseRemainingTime.HasValue)//TODO: review if really required
             {
-                if (int.TryParse(filter.CaseRemainingTime, out var remainingTimeId))
+                var timeTable = GetRemainigTimeById(input.CaseRemainingTime.Value);
+                if (timeTable != null)
                 {
-                    var timeTable = GetRemainigTimeById((RemainingTimes)remainingTimeId);
-                    if (timeTable != null)
-                    {
-                        filter.CaseRemainingTimeFilter = timeTable.RemaningTime;
-                        filter.CaseRemainingTimeUntilFilter = timeTable.RemaningTimeUntil;
-                        filter.CaseRemainingTimeMaxFilter = timeTable.MaxRemaningTime;
-                        filter.CaseRemainingTimeHoursFilter = timeTable.IsHour;
-                    }
+                    filter.CaseRemainingTimeFilter = timeTable.RemaningTime;
+                    filter.CaseRemainingTimeUntilFilter = timeTable.RemaningTimeUntil;
+                    filter.CaseRemainingTimeMaxFilter = timeTable.MaxRemaningTime;
+                    filter.CaseRemainingTimeHoursFilter = timeTable.IsHour;
                 }
             }
-
-            //int caseRemainingTimeFilter;//TODO: from params - 
-            //if (int.TryParse(frm.ReturnFormValue("CaseRemainingTime"), out caseRemainingTimeFilter))
-            //{
-            //    f.CaseRemainingTimeFilter = caseRemainingTimeFilter;
-            //}
-
-            //int caseRemainingTimeUntilFilter;//TODO: from params - 
-            //if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeUntil"), out caseRemainingTimeUntilFilter))
-            //{
-            //    f.CaseRemainingTimeUntilFilter = caseRemainingTimeUntilFilter;
-            //}
-
-            //int caseRemainingTimeMaxFilter;//TODO: from params - 
-            //if (int.TryParse(frm.ReturnFormValue("CaseRemainingTimeMax"), out caseRemainingTimeMaxFilter))
-            //{
-            //    f.CaseRemainingTimeMaxFilter = caseRemainingTimeMaxFilter;
-            //}
-
-            //bool caseRemainingTimeHoursFilter;//TODO: from params - 
-            //if (bool.TryParse(frm.ReturnFormValue("CaseRemainingTimeHours"), out caseRemainingTimeHoursFilter))
-            //{
-            //    f.CaseRemainingTimeHoursFilter = caseRemainingTimeHoursFilter;
-            //}
+            if (input.CaseRemainingTimeFilter.HasValue)
+                filter.CaseRemainingTimeFilter = input.CaseRemainingTimeFilter.Value;
+            if (input.CaseRemainingTimeUntilFilter.HasValue)
+                filter.CaseRemainingTimeUntilFilter = input.CaseRemainingTimeUntilFilter.Value;
+            if (input.CaseRemainingTimeMaxFilter.HasValue)
+                filter.CaseRemainingTimeMaxFilter = input.CaseRemainingTimeMaxFilter.Value;
+            if (input.CaseRemainingTimeHoursFilter.HasValue)
+                filter.CaseRemainingTimeHoursFilter = input.CaseRemainingTimeHoursFilter.Value;
 
             var sm = InitCaseSearchModel(filter.CustomerId, filter.UserId);
             sm.CaseSearchFilter = filter;
@@ -145,10 +117,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             //TODO: review if it required
             var caseSettings = _caseSettingService.GetCaseSettingsWithUser(filter.CustomerId, filter.UserId, userGroupId);
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(filter.CustomerId).ToArray();
-            //var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
-            CaseRemainingTimeData remainingTimeData;
-            CaseAggregateData aggregateData;
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");//TODO: remove hard code
+            var showRemainingTime = false; //TODO: SessionFacade.CurrentUser.ShowSolutionTime;
+
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");//TODO: remove hard code TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId)
             const int maxTextCharCount = 200;
             filter.MaxTextCharacters = maxTextCharCount;
 
@@ -170,27 +141,33 @@ namespace DH.Helpdesk.WebApi.Controllers
             //}
             filter.PageInfo = new PageInfo
             {
-                PageSize = 10,
-                PageNumber = 1
+                PageSize = input.PageSize ?? 10,
+                PageNumber = input.Page ?? 1
             };
+
+            CaseRemainingTimeData remainingTimeData;
+            CaseAggregateData aggregateData;
 
             var searchResult = _caseSearchService.Search(
                 filter,
                 caseSettings,
                 caseFieldSettings,
                 filter.UserId,
-                User.Identity.Name,
-                0,//TODO: Get real data
+                User.Identity.Name, 
+                0,//TODO: Get real data SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
                 userGroupId,
-                0,//TODO: Get real data
+                0,//TODO: Get real data SessionFacade.CurrentUser.RestrictedCasePermission,
                 sm.Search,
-                8,//TODO: Get real data
-                17,//TODO: Get real data
+                8,//TODO: Get real data workContext.Customer.WorkingDayStart,
+                17,//TODO: Get real data workContext.Customer.WorkingDayEnd,
                 userTimeZone,
                 ApplicationTypes.Helpdesk,//TODO: remove hardcode
-                false,////TODO: Get real data
+                showRemainingTime,//TODO: Get real data
                 out remainingTimeData,
                 out aggregateData);
+
+
+            //searchResults = CommonHelper.TreeTranslate(m.cases, f.CustomerId, _productAreaService);
 
             //var results = _caseSearchService.Search();
             return await Task.FromResult(Json(searchResult));
