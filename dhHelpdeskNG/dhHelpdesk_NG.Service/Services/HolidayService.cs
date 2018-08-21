@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using Ninject.Infrastructure.Language;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -64,7 +66,7 @@
 
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IDepartmentService departmentService;
+        private readonly IDepartmentService _departmentService;
 
         public HolidayService(
             IHolidayRepository holidayRepository,
@@ -75,7 +77,7 @@
             this._holidayRepository = holidayRepository;
             this._holidayHeaderRepository = holidayHeaderRepository;
             this._unitOfWork = unitOfWork;
-            this.departmentService = departmentService;
+            this._departmentService = departmentService;
         }
 
         public IEnumerable<Holiday> GetAll()
@@ -199,18 +201,19 @@
                 throw new ArgumentException("@from date can not be more that to");
             }
 
-            var res = this.departmentService.GetDepartmentsByIds(departmentsIds)
-                    .Where(it => it.HolidayHeader != null && it.HolidayHeader.Holidays.Any() && it.HolidayHeader.Holidays.Any(holiday => holiday.HolidayDate >= from && holiday.HolidayDate <= to))
-                    .SelectMany(
-                        department => department.HolidayHeader.Holidays,
-                        (department, holiday) =>
+            //TODO: query can be optimized by filtering from,to. But departments which have calendar but not in range(from,to) also must be included
+            var res = this._departmentService.GetDepartmentsByIdsWithHolidays(departmentsIds)
+                .Where(d => d.HolidayHeader.Id != DEFAULT_CALENDAR_ID)
+                .SelectMany(
+                    department => department.HolidayHeader.Holidays,
+                    (department, holiday) =>
                         new HolidayOverview()
-                            {
-                                DepartmentId = department.Id,
-                                HolidayDate = holiday.HolidayDate,
-                                TimeFrom = holiday.TimeFrom,
-                                TimeUntil = holiday.TimeUntil
-                            });
+                        {
+                            DepartmentId = department.Id,
+                            HolidayDate = holiday.HolidayDate,
+                            TimeFrom = holiday.TimeFrom,
+                            TimeUntil = holiday.TimeUntil
+                        });
             return res;
         }
 

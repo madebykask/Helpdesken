@@ -14,24 +14,24 @@
     /// </summary>
     public class WorkTimeCalculatorFactory : IWorkTimeCalculatorFactory
     {
-        private readonly IHolidayService holidayService;
+        private readonly IHolidayService _holidayService;
 
-        private readonly int workHourBegin;
+        private readonly int _workHourBegin;
 
-        private readonly int workHourEnd;
+        private readonly int _workHourEnd;
 
-        private readonly TimeZoneInfo companyTimeZone;
+        private readonly TimeZoneInfo _companyTimeZone;
 
         public WorkTimeCalculatorFactory(
-            IHolidayService holidayService, 
+            IHolidayService holidayService,
             int workHourBegin,
             int workHourEnd,
             TimeZoneInfo companyTimeZone)
         {
-            this.holidayService = holidayService;
-            this.workHourBegin = workHourBegin;
-            this.workHourEnd = workHourEnd;
-            this.companyTimeZone = companyTimeZone;
+            _holidayService = holidayService;
+            _workHourBegin = workHourBegin;
+            _workHourEnd = workHourEnd;
+            _companyTimeZone = companyTimeZone;
         }
 
         public WorkTimeCalculator.RangesPerDay CreateWorkDaysSchema(
@@ -100,10 +100,10 @@
                                 stdWorkSchema,
                                 dtCounterLocal,
                                 new TimeRange()
-                                    {
-                                        begin = dtCounterLocal.SetToHour(workHourBegin),
-                                        end = dtCounterLocal.SetToHour(workHourEnd)
-                                    });
+                                {
+                                    begin = dtCounterLocal.SetToHour(workHourBegin),
+                                    end = dtCounterLocal.SetToHour(workHourEnd)
+                                });
                         }
                     }
                 }
@@ -117,32 +117,30 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="workHourEnd"></param>
-        /// <param name="rangeBeginUTC"></param>
-        /// <param name="rangeEndUTC"></param>
+        /// <param name="rangeBeginUtc"></param>
+        /// <param name="rangeEndUtc"></param>
         /// <param name="departmentsIds">list of departments to fetch calendar data for</param>
-        /// <param name="workHourBegin"></param>
-        /// <param name="companyTimeZone"></param>
+        /// <param name="timeDiff"></param>
         /// <returns></returns>
         public WorkTimeCalculator Build(
-            DateTime rangeBeginUTC,
-            DateTime rangeEndUTC,
+            DateTime rangeBeginUtc,
+            DateTime rangeEndUtc,
             int[] departmentsIds,
-            int timeDiff = 0 )
+            int timeDiff = 0)
         {
-            var res = new WorkTimeCalculator(this.companyTimeZone);
-            /// @TODO: Can throw exception when UTC inside daylight saving hour. Fix it
-            var rangeBegin = TimeZoneInfo.ConvertTimeFromUtc(rangeBeginUTC, this.companyTimeZone);
-            var rangeEnd = TimeZoneInfo.ConvertTimeFromUtc(rangeEndUTC, this.companyTimeZone);
+            var res = new WorkTimeCalculator(this._companyTimeZone);
+            // @TODO: Can throw exception when UTC inside daylight saving hour. Fix it
+            var rangeBegin = TimeZoneInfo.ConvertTimeFromUtc(rangeBeginUtc, this._companyTimeZone);
+            var rangeEnd = TimeZoneInfo.ConvertTimeFromUtc(rangeEndUtc, this._companyTimeZone);
 
             if (timeDiff != 0)
             {
-                rangeBegin = rangeBeginUTC.AddMinutes(timeDiff);
-                rangeEnd = rangeEndUTC.AddMinutes(timeDiff);
+                rangeBegin = rangeBeginUtc.AddMinutes(timeDiff);
+                rangeEnd = rangeEndUtc.AddMinutes(timeDiff);
             }
-            /////////////////////
-            /// holidays
-            var departmentsHolidays = this.holidayService.GetHolidayBetweenDatesForDepartments(
+
+            // holidays
+            var departmentsHolidays = _holidayService.GetHolidayBetweenDatesForDepartments(
                 rangeBegin.RoundToDay(),
                 rangeEnd,
                 departmentsIds);
@@ -150,7 +148,7 @@
             var departmentsHolidaysData = new Dictionary<int, Dictionary<DateTime, Tuple<int, int>>>();
             if (departmentsHolidays != null)
             {
-                ///  Dictionary<int, Dictionary<DateTime, TimeRangesHolder>>
+                //  Dictionary<int, Dictionary<DateTime, TimeRangesHolder>>
                 foreach (var deptHoliday in departmentsHolidays)
                 {
                     if (departmentsHolidaysData.ContainsKey(deptHoliday.DepartmentId))
@@ -159,7 +157,7 @@
                         {
                             departmentsHolidaysData[deptHoliday.DepartmentId].Add(
                             deptHoliday.HolidayDate,
-                            new Tuple<int, int>(deptHoliday.TimeFrom, deptHoliday.TimeUntil));   
+                            new Tuple<int, int>(deptHoliday.TimeFrom, deptHoliday.TimeUntil));
                         }
                     }
                     else
@@ -175,18 +173,18 @@
                 }
             }
 
-            var defaultCal = this.holidayService.GetDefaultCalendar()
-                .ToDictionary(it => it.HolidayDate, it => new Tuple<int, int>(it.TimeFrom, it.TimeUntil));
-            var stdWorkSchema = this.CreateWorkDaysSchema(
-                rangeBegin,
-                rangeEnd,
-                workHourBegin,
-                workHourEnd,
-                defaultCal);
+            var defaultCal = _holidayService.GetDefaultCalendar()
+                    .ToDictionary(it => it.HolidayDate, it => new Tuple<int, int>(it.TimeFrom, it.TimeUntil));
+            var stdWorkSchema = CreateWorkDaysSchema(
+                                rangeBegin,
+                                rangeEnd,
+                                _workHourBegin,
+                                _workHourEnd,
+                                defaultCal);
             var deptWorkSchema = new WorkTimeCalculator.DepartmentHolidayWorktimeMap();
-            foreach (var deptHolidayKV in departmentsHolidaysData)
+            foreach (var deptHoliday in departmentsHolidaysData)
             {
-                deptWorkSchema.Add(deptHolidayKV.Key, this.CreateWorkDaysSchema(rangeBegin, rangeEnd, workHourBegin, workHourEnd, deptHolidayKV.Value));
+                deptWorkSchema.Add(deptHoliday.Key, CreateWorkDaysSchema(rangeBegin, rangeEnd, _workHourBegin, _workHourEnd, deptHoliday.Value));
             }
 
             res.SetData(stdWorkSchema, deptWorkSchema);

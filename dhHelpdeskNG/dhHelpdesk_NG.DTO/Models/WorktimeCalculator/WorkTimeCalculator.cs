@@ -43,24 +43,25 @@
         /// <summary>
         /// Calculates work time in minutes on specified time range
         /// </summary>
-        /// <param name="fromUTC"></param>
-        /// <param name="untilUTC"></param>
+        /// <param name="fromUtc"></param>
+        /// <param name="untilUtc"></param>
         /// <param name="caseDepartmentId"></param>
+        /// <param name="timeDiff"></param>
         /// <returns></returns>
         public int CalculateWorkTime(
-            DateTime fromUTC,
-            DateTime untilUTC,
+            DateTime fromUtc,
+            DateTime untilUtc,
             int? caseDepartmentId,
             int timeDiff = 0)
         {
-            /// Achtung! when changing to daylight saving this two strings could throw exception
-            var fetchFromLocal = TimeZoneInfo.ConvertTimeFromUtc(fromUTC, this.companyTimeZone);
-            var fetchUntilLocal = TimeZoneInfo.ConvertTimeFromUtc(untilUTC, this.companyTimeZone);
+            // Achtung! when changing to daylight saving this two strings could throw exception
+            var fetchFromLocal = TimeZoneInfo.ConvertTimeFromUtc(fromUtc, this.companyTimeZone);
+            var fetchUntilLocal = TimeZoneInfo.ConvertTimeFromUtc(untilUtc, this.companyTimeZone);
 
             if (timeDiff != 0)
             {
-                fetchFromLocal = fromUTC.AddMinutes(timeDiff);
-                fetchUntilLocal = untilUTC.AddMinutes(timeDiff);
+                fetchFromLocal = fromUtc.AddMinutes(timeDiff);
+                fetchUntilLocal = untilUtc.AddMinutes(timeDiff);
             }
 
             var calcFromDay = fetchFromLocal.RoundToDay();
@@ -70,9 +71,7 @@
             {
                 var dailyData = this.GetDailyData(calcFromDay, caseDepartmentId);
                 //// calculations requested for the one day
-                return dailyData == null
-                           ? 0
-                           : dailyData.Sum(fetchFromLocal, fetchUntilLocal);
+                return dailyData?.Sum(fetchFromLocal, fetchUntilLocal) ?? 0;
             }
 
             var res = 0;
@@ -115,7 +114,7 @@
         {
             if (departmentId.HasValue && this.departmentsWorkTime.ContainsKey(departmentId.Value))
             {
-                /// checking calendar for specific department
+                // checking calendar for specific department
                 if (this.departmentsWorkTime[departmentId.Value].ContainsKey(onDate))
                 {
                     return this.departmentsWorkTime[departmentId.Value][onDate];
@@ -123,7 +122,7 @@
             }
             else
             {
-                /// checking "default" calendar
+                // checking "default" calendar
                 if (this.dailyWorkTime.ContainsKey(onDate))
                 {
                     return this.dailyWorkTime[onDate];
