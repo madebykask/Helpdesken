@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Dal.Mappers;
+﻿using System.Data.Entity;
+using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.NewInfrastructure;
 
 namespace DH.Helpdesk.Dal.Repositories
@@ -34,6 +35,7 @@ namespace DH.Helpdesk.Dal.Repositories
         void UpdateDeparmentDisabledForOrder(int[] toEnables, int[] toDisable);
 
         int GetDepartmentId(string departmentName, int customerId);
+        IQueryable<Department> GetDepartmentsByIds(int[] ids, bool isNoTracking = false);
     }
 
     public sealed class DepartmentRepository : RepositoryBase<Department>, IDepartmentRepository
@@ -165,6 +167,12 @@ namespace DH.Helpdesk.Dal.Repositories
         {           
             return this.DataContext.Departments.Where(d => d.DepartmentName.ToLower() == departmentName.ToLower() 
                                                       & d.Customer_Id == customerId).Select(d => d.Id).FirstOrDefault();           
+        }
+
+        public IQueryable<Department> GetDepartmentsByIds(int[] ids, bool isNoTracking = false)
+        {
+            var res = Table.Include(d => d.HolidayHeader.Holidays).Where(it => ids.Contains(it.Id));
+            return isNoTracking ? res.AsNoTracking() : res;
         }
 
         private IQueryable<Department> GetDepartmentsByUserPermissionsQuery(int userId, int customerId,
