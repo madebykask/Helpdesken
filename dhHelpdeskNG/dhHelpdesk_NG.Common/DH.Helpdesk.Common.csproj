@@ -121,6 +121,7 @@
     <Compile Include="Exceptions\PropertyNotFoundException.cs" />
     <Compile Include="Extensions\Boolean\BoolExtensions.cs" />
     <Compile Include="Extensions\Boolean\ToIntExtension.cs" />
+    <Compile Include="Extensions\EqualityComparers\LambdaEqualityComparer.cs" />
     <Compile Include="Extensions\DateTime\DateExtensions.cs" />
     <Compile Include="Extensions\GUID\GuidExtension.cs" />
     <Compile Include="Extensions\Decimal\DecimalExtension.cs" />

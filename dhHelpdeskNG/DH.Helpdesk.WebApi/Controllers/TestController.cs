@@ -30,34 +30,16 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IHttpActionResult> Error()
+        public IHttpActionResult Test()
         {
-            throw new Exception("Exception message");
+            return Ok("success");
         }
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("~/api/Test/Language/{lang}")]
-        public async Task<HttpResponseMessage> Language(string lang)
+        public async Task<IHttpActionResult> Error()
         {
-            var filePath = HttpContext.Current.Server.MapPath($"~/App_Data/i18n/{lang}.json");
-
-            if (!File.Exists(filePath)) 
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "File not found");
-
-            string content;
-            using (var reader = File.OpenText(filePath))
-            {
-                content = await reader.ReadToEndAsync();
-            }
-
-            var msg = new HttpResponseMessage()
-            {
-                Content = new StringContent(content, System.Text.Encoding.UTF8, "application/json")
-            };
-
-            return msg;
-
+            throw new Exception("Exception message");
         }
     }
 }
