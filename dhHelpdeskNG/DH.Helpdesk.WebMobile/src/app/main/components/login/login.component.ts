@@ -12,12 +12,20 @@ export class LoginComponent implements OnInit {
     submitted = false;
     returnUrl: string;
     error = '';
+    errorMessages = {
+        username: {
+            required: 'Username required'
+        },
+        password: {
+            required: 'Password required'
+        }
+    }
 
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
-        /*private authenticationService: AuthenticationService*/) {}
+        private authenticationService: AuthenticationService) {}
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
@@ -26,14 +34,27 @@ export class LoginComponent implements OnInit {
         });
 
         // reset login status
-        //this.authenticationService.logout();
+        this.authenticationService.logout();
 
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
-/*
+
     // convenience getter for easy access to form fields
     get f() { return this.loginForm.controls; }
+
+    getError(field: string): string {
+        var ctrl = this.loginForm.get(field);
+        var message = '';
+        if (ctrl.errors) {
+            for(var err in ctrl.errors) {
+                if (ctrl.errors[err]) {
+                    message = this.errorMessages[field][err];
+                }
+            }
+        }
+        return message;
+    }
 
     onSubmit() {
         this.submitted = true;
@@ -54,5 +75,5 @@ export class LoginComponent implements OnInit {
                     this.error = error;
                     this.loading = false;
                 });
-    }*/
+    }
 }

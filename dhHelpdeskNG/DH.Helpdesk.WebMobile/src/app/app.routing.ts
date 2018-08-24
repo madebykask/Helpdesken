@@ -11,4 +11,6 @@ const appRoutes: Routes = [
     { path: '**', redirectTo: '' }
 ];
 
-export const routing = RouterModule.forRoot(appRoutes);
+export const rootRouting = RouterModule.forRoot(appRoutes, 
+    { enableTracing: true } // <-- debugging purposes only
+);

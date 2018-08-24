@@ -11,6 +11,7 @@ export const environment = {
 
 export const config = {
       apiUrl: 'http://localhost:8049',
+      clientId: 'hd'
 }
 
 /*

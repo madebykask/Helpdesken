@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Language } from '../../model/language.model';
+import { Language } from '../../models/language';
 import { Observable } from 'rxjs/Observable';
-import { HttpApiServiceBase } from './htpServiceBase';
+import { HttpApiServiceBase } from '../api/httpServiceBase';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/of';
+import { config } from '../../../environments/environment';
 
 //todo: use config instead!
-export const ApiUrl:string = "http://localhost:8049/api";
+export const ApiUrl:string = `${config.apiUrl}/api`;
 
 @Injectable()
 export class TranslationApiService  extends HttpApiServiceBase {

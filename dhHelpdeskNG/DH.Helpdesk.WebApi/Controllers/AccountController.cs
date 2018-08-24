@@ -46,7 +46,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [Route("Logout")]
         public IHttpActionResult Logout()
         {
-            throw new NotImplementedException();//TODO: Implement after session support added
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,1 +1,8 @@
-Login
+<mbsc-form>
+    <form [formGroup]="loginForm" novalidate (ngSubmit)="onSubmit()">
+        <mbsc-input formControlName="username" [error]="f.username.touched && f.username.dirty && f.username.invalid" [errorMessage]="getError('username')">User</mbsc-input>
+        <mbsc-input formControlName="password" type="password" [error]="f.password.touched && f.password.dirty && f.password.invalid" [errorMessage]="getError('password')">Password</mbsc-input>
+        <mbsc-button type="submit" [disabled]="loginForm.invalid || loading">Login</mbsc-button>
+        <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+    </form>
+</mbsc-form>

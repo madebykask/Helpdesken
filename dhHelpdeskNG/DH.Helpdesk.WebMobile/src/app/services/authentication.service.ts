@@ -8,10 +8,11 @@ export class AuthenticationService {
     constructor(private http: HttpClient) { }
 
     login(username: string, password: string) {
-        return this.http.post<any>(`${config.apiUrl}/api/account/login`, { username, password })
+        var clientId = config.clientId;
+        return this.http.post<any>(`${config.apiUrl}/api/account/login`, { username, password, clientId})
             .pipe(map(user => {
                 // login successful if there's a token in the response
-                if (user && user.token) {
+                if (user && user.access_token) {
                     // store user details and token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));
                 }

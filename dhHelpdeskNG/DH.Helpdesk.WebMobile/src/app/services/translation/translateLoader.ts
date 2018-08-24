@@ -1,7 +1,7 @@
 import { Injectable, Inject, InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs'
 import { TranslateService as NgxTranslateService, TranslateLoader } from '@ngx-translate/core'
-import { TranslationApiService } from '../services/api/translationApiService';
+import { TranslationApiService } from './translationApi.service';
 import { config } from '../../../environments/environment';
 
 export function initTranslation(ngxTranslateService: NgxTranslateService, translationApiService: TranslationApiService) : Function {
