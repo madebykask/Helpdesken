@@ -8,9 +8,10 @@ import { MainModule } from './main/main.module'
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 import {HttpClientModule, HttpClient} from '@angular/common/http'
-import {TranslateModule, TranslateLoader, TranslateService} from '@ngx-translate/core'
+import { TranslateModule, TranslateLoader, TranslateService as NgxTranslateService} from '@ngx-translate/core'
 import { AppComponent } from './app.component';
 import { HttpLoaderFactory, initTranslation } from './shared/translation/translateLoader';
+import { TranslationApiService } from './shared/services/api/translationApiService';
 
 let appRoutes : Routes = [  
   { path: '',  redirectTo: '/main', pathMatch: 'full'},
@@ -29,7 +30,7 @@ let appRoutes : Routes = [
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
+        deps: [TranslationApiService]
       },
       useDefaultLang: true
     }),
@@ -37,10 +38,11 @@ let appRoutes : Routes = [
     RouterModule.forRoot(appRoutes),    
   ],
   providers: [
+    TranslationApiService,
     {
       provide: APP_INITIALIZER,
       useFactory: initTranslation,
-      deps: [TranslateService],
+      deps: [NgxTranslateService, TranslationApiService],
       multi:true
     }
   ]  

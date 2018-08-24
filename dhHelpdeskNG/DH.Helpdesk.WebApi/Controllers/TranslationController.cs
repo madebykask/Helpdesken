@@ -26,6 +26,15 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Route("Languages")]
+        public IHttpActionResult ActiveLanguages()
+        {
+            var languages = _languageService.GetActiveLanguages();
+            return Ok(languages);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
         [Route("{lang}")]
         public IHttpActionResult Get(string lang)
         {

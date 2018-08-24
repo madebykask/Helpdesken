@@ -6,22 +6,20 @@
           <div class="col-12 col-xs-12">                            
             <div class="float-right">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">                  
-                    <label *ngFor="let lang of translate.getLangs()" class="btn btn-secondary">
+                    <label *ngFor="let lang of Languages" class="btn btn-secondary">
                         <input type="radio" name="lang_{{lang}}" autocomplete="off" 
                             (change)="switchLanguage(lang)" 
-                            [checked]="lang == translate.currentLang" [value]="lang"> {{ getDisplayName(lang) }}
+                            [checked]="lang == CurrentLanguage" [value]="lang"> {{ getDisplayName(lang) }}
                     </label>
                 </div>
             </div>              
           </div>          
         </div>
-      </div>
-
-    
+      </div>  
 
     <div class="jumbotron text-center">
-            <h1 translate>Title</h1>
-            <p>{{'Welcome' | translate: getCurrentUser() }}</p>
+            <h1 translate>Applikation</h1>
+            <p>{{'Välkomsttext' | translate: getCurrentUser() }}</p>
     </div>
 
     <div class="row">
