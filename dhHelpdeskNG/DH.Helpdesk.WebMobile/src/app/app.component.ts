@@ -1,47 +1,35 @@
-import {TranslateService as NgxTranslateService } from '@ngx-translate/core';
-import { Component, OnInit } from '@angular/core';
-import { TranslationApiService } from './shared/services/api/translationApiService';
+import {TranslateService} from '@ngx-translate/core';
+import { Component } from '@angular/core';
+import { Languages } from './services';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-  title = 'app';
+export class AppComponent {
+  title = 'DH Helpdesk';
   testString:string  ="";
   testString2:string  ="";
 
-  get CurrentLanguage(){
-    return this.ngxTranslateService.currentLang;
+  constructor() {    
   }
 
-  get Languages() {
-    return this.ngxTranslateService.langs;
-  }
-
-  constructor(private ngxTranslateService: NgxTranslateService, private translationApiService: TranslationApiService) {        
-    console.log('>> AppComponent ctor.');
-  }
-
-  ngOnInit(){
-    console.log('>> AppComponent started.');
-  }
-
+  /*
   test(){    
-     this.testString = this.ngxTranslateService.instant("Alla ärenden");
-     this.ngxTranslateService.get("Nytt ärende").subscribe((res:string) => {
+     this.testString = this.translate.instant("Test");
+     this.translate.get("Test").subscribe((res:string) => {
         this.testString2 = res; 
         console.log("Translation2: " + res);
       });
   }
 
-  switchLanguage(lang: string){    
-    this.ngxTranslateService.use(lang.toLowerCase());    
+  switchLanguage(lang: string){
+    this.translate.use(lang);    
   }  
 
   getDisplayName(langCode:string){
-    return this.translationApiService.Languages[langCode.toLowerCase()];
+    return Languages[langCode];
   }
   
   getCurrentUser(){
@@ -49,4 +37,5 @@ export class AppComponent implements OnInit {
       name: 'Peter'
     }
   }
+  */
 }

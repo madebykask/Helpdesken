@@ -7,17 +7,16 @@ import { APP_INITIALIZER } from '@angular/core'
 import { MainModule } from './main/main.module'
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
-import {HttpClientModule, HttpClient} from '@angular/common/http'
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { TranslateModule, TranslateLoader, TranslateService as NgxTranslateService} from '@ngx-translate/core'
 import { AppComponent } from './app.component';
-import { HttpLoaderFactory, initTranslation } from './shared/translation/translateLoader';
+import { HttpLoaderFactory, initTranslation } from './services/';
 import { TranslationApiService } from './shared/services/api/translationApiService';
 
-let appRoutes : Routes = [  
-  { path: '',  redirectTo: '/main', pathMatch: 'full'},
-  { path: '**', component: PageNotFoundComponent }
-];
 
+import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors'
+
+import { routing } from './app.routing';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -26,6 +25,7 @@ let appRoutes : Routes = [
     BrowserModule,    
     HttpClientModule,
     FormsModule,
+    routing,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -35,10 +35,11 @@ let appRoutes : Routes = [
       useDefaultLang: true
     }),
     MainModule,
-    RouterModule.forRoot(appRoutes),    
   ],
   providers: [
-    TranslationApiService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass1: ErrorInterceptor, multi: true },
+	TranslationApiService,
     {
       provide: APP_INITIALIZER,
       useFactory: initTranslation,

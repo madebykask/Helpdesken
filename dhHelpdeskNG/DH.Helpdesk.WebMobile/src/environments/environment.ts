@@ -9,6 +9,10 @@ export const environment = {
   production: false
 };
 
+export const config = {
+      apiUrl: 'http://localhost:8049',
+}
+
 /*
  * In development mode, to ignore zone related error stack frames such as
  * `zone.run`, `zoneDelegate.invokeTask` for easier debugging, you can
