@@ -824,11 +824,13 @@ namespace DH.Helpdesk.SelfService.Controllers
         {
             var isNewCase = model.CaseDataModel.Id == 0;
 
+            
+
             var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0;
             var auxModel = new AuxCaseModel(model.LanguageId, 
                                             localUserId, 
                                             SessionFacade.CurrentUserIdentity.UserId,
-                                            RequestExtension.GetAbsoluteUrl(),
+                                            ConfigurationService.AppSettings.HelpdeskPath, //RequestExtension.GetAbsoluteUrl(),
                                             CreatedByApplications.ExtendedCase,
                                             TimeZoneInfo.Local);
 
