@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'DH Helpdesk';
@@ -13,28 +13,4 @@ export class AppComponent {
 
   constructor() {    
   }
-
-  /*
-  test(){    
-     this.testString = this.translate.instant("Test");
-     this.translate.get("Test").subscribe((res:string) => {
-        this.testString2 = res; 
-        console.log("Translation2: " + res);
-      });
-  }
-
-  switchLanguage(lang: string){
-    this.translate.use(lang);    
-  }  
-
-  getDisplayName(langCode:string){
-    return Languages[langCode];
-  }
-  
-  getCurrentUser(){
-    return {
-      name: 'Peter'
-    }
-  }
-  */
 }

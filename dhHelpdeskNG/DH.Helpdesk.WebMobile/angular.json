@@ -8,7 +8,11 @@
       "sourceRoot": "src",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -20,11 +24,20 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              { "glob": "**/*", "input": "src/content", "output": "/content" }
+              "src/web.config",
+              {
+                "glob": "**/*",
+                "input": "src/content/icons",
+                "output": "/content/icons"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/content/img",
+                "output": "/content/img"
+              }
             ],
             "styles": [
-              "src/content/styles/styles.css",
-              "./node_modules/@mobiscroll/angular/dist/css/mobiscroll.min.css"
+              "src/content/styles/styles.scss"              
             ],
             "scripts": []
           },
@@ -73,7 +86,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/assets/styles/styles.css"
+              "src/assets/styles/styles.scss"
             ],
             "scripts": [],
             "assets": [
@@ -124,5 +137,5 @@
       }
     }
   },
-  "defaultProject": "web-mobile"
+  "defaultProject": "web-mobile"  
 }
