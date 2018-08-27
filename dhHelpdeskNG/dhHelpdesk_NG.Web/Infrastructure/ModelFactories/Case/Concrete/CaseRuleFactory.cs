@@ -11,6 +11,7 @@ using DH.Helpdesk.Common.Enums.Settings;
 using DH.Helpdesk.Services.Services;
 using System;
 using DH.Helpdesk.BusinessData.Enums.Users;
+using DH.Helpdesk.BusinessData.OldComponents;
 
 namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 {
@@ -37,7 +38,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                     ICausingPartService causingPartService,
                     IChangeService changeService,
                     IFinishingCauseService finishingCauseService,
-                    IWatchDateCalendarService watchDateCalendarService);
+                    IWatchDateCalendarService watchDateCalendarService,
+                    IComputerService computerService);
 
         CaseRuleModel GetCaseRuleModel(int customerId,
                                         CaseRuleMode mode,                                        
@@ -74,7 +76,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
         private IChangeService _changeService;
         private IFinishingCauseService _finishingCauseService;
         private IWatchDateCalendarService _watchDateCalendarService;
-
+        private IComputerService _computerService;
         #endregion
 
         private bool initiated;
@@ -107,7 +109,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                     ICausingPartService causingPartService,
                     IChangeService changeService,
                     IFinishingCauseService finishingCauseService,
-                    IWatchDateCalendarService watchDateCalendarService)
+                    IWatchDateCalendarService watchDateCalendarService,
+                    IComputerService computerService)
         {
             _regionService = regionService;
             _departmentService = departmentService;
@@ -131,6 +134,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             _changeService = changeService;
             _finishingCauseService = finishingCauseService;
             _watchDateCalendarService = watchDateCalendarService;
+            _computerService = computerService;
+
             initiated = true;
         }        
 
@@ -164,6 +169,16 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             var caseBasicInfo = new BasicCaseInformation();
 
             #region Initiator
+
+            var userSearchCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId);
+
+            caseBasicInfo.UserSearchCategory = new BasicMultiItemField()
+            {
+                Selected = new FieldItem(currentData.UserSearchCategory_Id?.ToString(), string.Empty),
+                StatusType = GetFieldStatusType(ruleMode, TranslationCaseFields.UserSearchCategory_Id, caseFieldSettings, CaseSolutionFields.UserSearchCategory_Id, templateSettingModel.ToList()),
+                DefaultItem = FieldItem.CreateEmpty(),
+                Items = userSearchCategories.Where(x => !x.IsEmpty || (currentData.UserSearchCategory_Id.HasValue && currentData.UserSearchCategory_Id.Value == x.Id)).Select(x => new FieldItem(x.Id.ToString(), Translation.GetMasterDataTranslation(x.Name))).OrderBy(r => r.ItemText).ToList()
+            };
 
             caseBasicInfo.ReportedBy = new BasicSingleItemField()
             {
@@ -233,6 +248,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 
             var regions = _regionService.GetRegions(customerId);
             var defaultRegion = regions.FirstOrDefault(r => r.IsDefault != 0 && r.IsActive != 0);
+
             caseBasicInfo.Regions = new BasicMultiItemField()
             {
                 Selected = new FieldItem(currentData.Region_Id?.ToString(), string.Empty),
@@ -270,6 +286,15 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             #endregion
 
             #region IsAbout
+
+            caseBasicInfo.IsAbout_UserSearchCategory = new BasicMultiItemField()
+            {
+                Selected = new FieldItem(currentData.IsAbout_UserSearchCategory_Id?.ToString(), string.Empty),
+                StatusType = GetFieldStatusType(ruleMode, TranslationCaseFields.IsAbout_UserSearchCategory_Id, caseFieldSettings, CaseSolutionFields.IsAbout_UserSearchCategory_Id, templateSettingModel.ToList()),
+                DefaultItem = FieldItem.CreateEmpty(),
+                Items = userSearchCategories.Where(x => !x.IsEmpty || (currentData.IsAbout_UserSearchCategory_Id.HasValue && currentData.IsAbout_UserSearchCategory_Id.Value == x.Id)).Select(x => new FieldItem(x.Id.ToString(), Translation.GetMasterDataTranslation(x.Name))).OrderBy(r => r.ItemText).ToList()
+            };
+
 
             caseBasicInfo.IsAbout_ReportedBy = new BasicSingleItemField()
             {
@@ -790,7 +815,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 
             return caseBasicInfo;
         }
-
+        
         private CaseFieldStatusType GetFieldStatusType(CaseRuleMode ruleMode, 
                                                        TranslationCaseFields caseField, List<CaseFieldSetting> caseFieldSettings,
                                                        CaseSolutionFields templateField, List<CaseSolutionSettingModel> templateFieldSettings)
@@ -886,10 +911,31 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             // *** Initiator ***
             #region Initiator
 
+            #region Initiator Category
+
+            var curField = TranslationCaseFields.UserSearchCategory_Id.ToString();
+            var attrReportedBy = new FieldAttributeModel()
+            {
+                FieldId = curField,
+                FieldName = curField,
+                FieldCaption = Translation.GetForCase(curField, customerId),
+                FieldType = CaseFieldType.SingleSelectField,
+                DefaultItem = new FieldItem(string.Empty, string.Empty),
+                Selected = basicInformation.UserSearchCategory.Selected,
+                IsAvailableOnHelpdesk = caseFieldSettings.getShowOnStartPage(curField).ToBool(),
+                IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
+                IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
+                StatusType = basicInformation.UserSearchCategory.StatusType,
+                Items = basicInformation.UserSearchCategory.Items
+            };
+            ret.Add(attrReportedBy);
+
+            #endregion
+
             #region ReportedBy
 
-            var curField = TranslationCaseFields.ReportedBy.ToString();
-            var attrReportedBy = new FieldAttributeModel()
+            curField = TranslationCaseFields.ReportedBy.ToString();
+            attrReportedBy = new FieldAttributeModel()
             {
                 FieldId = curField,
                 FieldName = curField,
@@ -913,7 +959,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             {
                 FieldId = curField,
                 FieldName = curField,
-                FieldCaption = Translation.Get(curField, Enums.TranslationSource.CaseTranslation, customerId),
+                FieldCaption = Translation.GetForCase(curField, customerId),
                 FieldType = CaseFieldType.TextField,
                 DefaultItem = new FieldItem(string.Empty, string.Empty, true),
                 Selected = basicInformation.PersonsName.Selected,
@@ -1208,6 +1254,27 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
 
             // *** IsAbout ***
             #region IsAbout
+
+            #region IsAbout_UserSearchCategory
+
+            curField = TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString();
+            var attrIsAboutUserCategory = new FieldAttributeModel()
+            {
+                FieldId = curField,
+                FieldName = curField,
+                FieldCaption = Translation.GetForCase(curField, customerId),
+                FieldType = CaseFieldType.SingleSelectField,
+                DefaultItem = new FieldItem(string.Empty, string.Empty),
+                Selected = basicInformation.IsAbout_UserSearchCategory.Selected,
+                IsAvailableOnHelpdesk = caseFieldSettings.getShowOnStartPage(curField).ToBool(),
+                IsAvailableOnSelfService = caseFieldSettings.getShowExternal(curField).ToBool(),
+                IsMandatory = caseFieldSettings.getRequired(curField).ToBool(),
+                StatusType = basicInformation.IsAbout_UserSearchCategory.StatusType,
+                Items = basicInformation.IsAbout_UserSearchCategory.Items
+            };
+            ret.Add(attrIsAboutUserCategory);
+
+            #endregion
 
             #region IsAbout_ReportedBy
 

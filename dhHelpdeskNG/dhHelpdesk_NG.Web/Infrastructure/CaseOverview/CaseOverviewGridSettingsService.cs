@@ -60,7 +60,7 @@
                     UserFields.IsAbout_Region.ToLower(),
                     UserFields.IsAbout_UserCode.ToLower(),
                     LogFields.InternalLogNote.ToLower(),
-                    LogFields.ExternalLogNote.ToLower()                   
+                    LogFields.ExternalLogNote.ToLower()
                 };
 
 

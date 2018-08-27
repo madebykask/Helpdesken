@@ -5148,10 +5148,20 @@ namespace DH.Helpdesk.Web.Controllers
             var userHasInvoicePermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InvoicePermission);
 
             // Establish current solution and set split option if available
+            CaseSolution caseTemplate = null;
             if (templateId.HasValue)
             {
-                m.CurrentCaseSolution = this._caseSolutionService.GetCaseSolution(templateId.Value);
+                caseTemplate = this._caseSolutionService.GetCaseSolution(templateId.Value);
+                m.CurrentCaseSolution = caseTemplate;
                 m.CaseTemplateSplitToCaseSolutionID = m.CurrentCaseSolution.SplitToCaseSolution_Id;
+
+                var caseTemplateSettings =
+                    this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);
+
+                if (caseTemplateSettings.Any())
+                {
+                    m.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateModel(caseTemplateSettings);
+                }
             }
 
             if (!isCreateNewCase)
@@ -5232,9 +5242,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var initiatorFieldSettings 
                 = customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.UserSearchCategory_Id.ToString());
-
-            m.InitiatorUserCategoryVisible = initiatorFieldSettings.IsActive && !initiatorFieldSettings.Hide;
-
+            
             if (initiatorFieldSettings.IsActive)
             {
                 var defaultCategoryId = 0;
@@ -5255,8 +5263,6 @@ namespace DH.Helpdesk.Web.Controllers
             var regFieldSettings = 
                 customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString());
 
-            m.RegardingUserCategoryVisible = regFieldSettings.IsActive && !regFieldSettings.Hide;
-            
             if (regFieldSettings.IsActive)
             {
                 var defaultCategoryId = 0;
@@ -5582,25 +5588,9 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CountryId = sup?.Country_Id.GetValueOrDefault();
             }
 
-            // load template settings 
-            if (m.CurrentCaseSolution != null)
+            if (caseTemplate != null) 
             {
-                var caseTemplate = m.CurrentCaseSolution;
-                var caseTemplateSettings =
-                    this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(m.CurrentCaseSolution.Id);
-
-                if (caseTemplateSettings.Any())
-                {
-                    m.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateModel(caseTemplateSettings);
-                }
-            }
-
-
-            if (m.CurrentCaseSolution != null) 
-            {
-                var caseTemplate = m.CurrentCaseSolution;
-
-                #region New case initialize form template
+                #region New case initialize
 
                 if (isCreateNewCase)
                 {
@@ -5926,31 +5916,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                 #endregion
             }
-
-            #region User Search Categories
-            
-            if (m.CaseSolutionSettingModels != null)
-            {
-                if (initiatorFieldSettings.IsActive && m.InitiatorUserCategoryVisible)
-                {
-                    var sfs = m.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == CaseSolutionFields.UserSearchCategory_Id);
-                    if (sfs != null && !sfs.IsFieldVisible())
-                    {
-                        m.InitiatorUserCategoryVisible = false;
-                    }
-                }
-
-                if (regFieldSettings.IsActive && m.RegardingUserCategoryVisible)
-                {
-                    var sfs = m.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == CaseSolutionFields.IsAbout_UserSearchCategory_Id);
-                    if (sfs != null && !sfs.IsFieldVisible())
-                    {
-                        m.RegardingUserCategoryVisible = false;
-                    }
-                }
-            }
-
-            #endregion
 
             if (m.case_.ReportedBy != null)
             {
@@ -7614,7 +7579,8 @@ namespace DH.Helpdesk.Web.Controllers
                                         _supplierService, _workingGroupService, _userService,
                                         _priorityService, _statusService, _stateSecondaryService,
                                         _projectService, _problemService, _causingPartService,
-                                        _changeService, _finishingCauseService, watchDateCalendarServcie);
+                                        _changeService, _finishingCauseService, watchDateCalendarServcie, 
+                                        _computerService);
 
             var model = _caseRuleFactory.GetCaseRuleModel(customerId, ruleType, currentData, customerSettings, caseFieldSettings, new List<CaseSolutionSettingModel>());
 

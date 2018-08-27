@@ -138,24 +138,26 @@ function GetComputerSearchOptions() {
 
 
 function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {
-    var $publicOuControlName = $(publicOUControlName);
-    $publicOuControlName.val('');
-    var ctlOption = publicOUControlName + ' option';        
-    $.get(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {                
+    $(publicOUControlName).val('');
+    $(publicReadOnlyOUName).val('');
+    var ctlOption = publicOUControlName + ' option';
+    $.get(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
         $(ctlOption).remove();
-        $publicOuControlName.append('<option value="">&nbsp;</option>');
+        $(publicOUControlName).append('<option value="">&nbsp;</option>');
         if (data != undefined) {
-            var options = "";
             for (var i = 0; i < data.list.length; i++) {
                 var item = data.list[i];
-                options += "<option value='" + item.id + "'>" + item.name + "</option>";
+                var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
+                if (option.val() == selectedOrganizationUnitId) {
+                    $(publicOUControlName).val(selectedOrganizationUnitId);
+                    $(publicReadOnlyOUName).val(item.name);
+                    option.prop("selected", true);
+                }
+                $(publicOUControlName).append(option);
             }
-            $publicOuControlName.append(options);
-            $publicOuControlName.val(selectedOrganizationUnitId);
-            $(publicReadOnlyOUName).val($publicOuControlName.find("option:selected").text());
         }
     }, 'json').always(function () {
-       // $(publicOUControlName).prop('disabled', false);
+        //$(publicOUControlName).prop('disabled', false);
     });
 }
 
@@ -198,20 +200,22 @@ function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentI
         if (IsInitiatorCategoryReadOnly()) {
             $publicDepartmentControlName.removeAttr('disabled');
         }
-
+        
         $publicDepartmentControlName.append('<option value="">&nbsp;</option>');
         if (data != undefined) {
-            var options = "";
             for (var i = 0; i < data.list.length; i++) {
                 var item = data.list[i];
-                options += "<option value='" + item.id + "'>" + item.name + "</option>";
-            }
-            $publicDepartmentControlName.append(options);
-            $publicDepartmentControlName.val(selectedDepartmentId);
-            if ($publicDepartmentControlName.val() !== '') {
-                $publicReadOnlyDepartmentName.val($publicDepartmentControlName.find("option:selected").text());
-                skipRefreshOU = true;
-                $publicDepartmentControlName.trigger('change');
+                var option = $("<option value='" + item.id + "'>" + item.name + "</option>");
+                if (option.val() == selectedDepartmentId) {
+                    $(publicDepartmentControlName).val(selectedDepartmentId);
+                    $(publicReadOnlyDepartmentName).val(item.name);
+                    option.prop("selected", true);
+                    $(publicDepartmentControlName).append(option);
+                    skipRefreshOU = true;
+                    $(publicDepartmentControlName).trigger('change');
+                }
+                else
+                    $(publicDepartmentControlName).append(option);
             }
         }
     }, 'json').always(function () {
@@ -502,7 +506,7 @@ function GetComputerUserSearchOptions() {
                     $('#case__Region_Id').val(item.regionid);
                     $('#RegionName').val(item.regionname);
                 }
-
+                
                 if (item.regionid != "" &&
                     item.regionid != null &&
                     item.departmentid != "" &&
@@ -890,7 +894,6 @@ function CaseInitForm() {
             return;
 
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
-        
         var templateOU_Id = $("#CaseTemplate_OU_Id").val();
         $("#CaseTemplate_OU_Id").val('');
         if (templateOU_Id != undefined && templateOU_Id != "") 
