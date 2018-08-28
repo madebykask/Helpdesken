@@ -390,7 +390,7 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public int? RegardingCategoryId
         {
-            get { return RegardingComputerUserCategory.ID; }
+            get { return RegardingComputerUserCategory?.ID; }
         }
     }
 

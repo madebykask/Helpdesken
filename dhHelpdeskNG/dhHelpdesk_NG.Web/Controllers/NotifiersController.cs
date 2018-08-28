@@ -382,18 +382,21 @@ namespace DH.Helpdesk.Web.Controllers
                 return;
 
             var categoryId = category.IsEmpty ? ComputerUserCategory.EmptyCategoryId : category.Id;
+
+            //set category as a default 
             if (setDefault)
             {
                 _caseFieldSettingService.SaveFieldSettingsDefaultValue(fs.Id, categoryId.ToString());
                 return;
             }
 
+            //reset default category only if current default category equals edited category
             if (!string.IsNullOrEmpty(fs.DefaultValue))
             {
                 var curValue = -1;
                 if (Int32.TryParse(fs.DefaultValue, out curValue) && categoryId == curValue)
                 {
-                    _caseFieldSettingService.SaveFieldSettingsDefaultValue(fs.Id, categoryId.ToString());
+                    _caseFieldSettingService.SaveFieldSettingsDefaultValue(fs.Id, string.Empty);
                 }
             }
         }
