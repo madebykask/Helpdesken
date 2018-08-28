@@ -16,6 +16,7 @@ using DH.Helpdesk.TaskScheduler.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using DH.Helpdesk.TaskScheduler.Helpers;
+using DH.Helpdesk.Common.Extensions.String;
 
 namespace DH.Helpdesk.TaskScheduler.Services
 {
@@ -376,8 +377,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
                             delimiter = fieldNames == "" ? "" : ",";
                             fieldNames += $"{delimiter}{_dbFieldName}";
                             fieldValues += (_csvFieldValue == "null") ?
-                                            $"{delimiter}{_csvFieldValue}" :
-                                            $"{delimiter}'{_csvFieldValue}'";
+                                            $"{delimiter}{_csvFieldValue.SafeEncloseQuote()}" :
+                                            $"{delimiter}'{_csvFieldValue.SafeEncloseQuote()}'";
                         }
                         else
                         {
@@ -385,8 +386,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
                             delimiter = string.IsNullOrEmpty(updateQuery) ? "" : ",";
                             var _leftSide = $"{delimiter}{_dbFieldName} = ";
                             var rightSide = (_csvFieldValue == "null") ?
-                                            $"{_csvFieldValue}" :
-                                            $"'{_csvFieldValue}'";
+                                            $"{_csvFieldValue.SafeEncloseQuote()}" :
+                                            $"'{_csvFieldValue.SafeEncloseQuote()}'";
                             updateQuery += (_leftSide + rightSide);
                         }
                     }
@@ -480,45 +481,49 @@ namespace DH.Helpdesk.TaskScheduler.Services
         public void DeleteInitiators(int Days2waitBeforeDelete, int customerId, ref DataLogModel logs)
         {          
             var Initiators = _notifielrRepository.GetMany(n=> n.Customer_Id == customerId).ToList();
-            var InitiatorsToDelete = Initiators.
-                                        Where(i => i.SyncChangedDate.Value.AddDays(Days2waitBeforeDelete) <= 
-                                        DateTime.UtcNow).ToList();
-            // Has Domain Id
-            var hasDomainId = InitiatorsToDelete.Where(i => i.Domain_Id != null).Select(i => i.Id).ToList();            
-            // Has ManagerComputerUserId
-            var hasMCId = InitiatorsToDelete.Where(i => i.ManagerComputerUser_Id != null).Select(i => i.Id).ToList();
-            var InitiatorIds = InitiatorsToDelete.Select(i => i.Id).ToList();
-
-            var dbQueryExecutor = _execFactory.Create();
-            var ret = 0;
-
-            if (hasDomainId.Any())
+            if (Initiators.Any())
             {
-                var InitHasDomainId = String.Join(",", hasDomainId);
-                var query = $"UPDATE tblComputer SET User_Id = Null " + 
-                            $"WHERE User_Id IN ({InitHasDomainId})";               
-                 ret = dbQueryExecutor.ExecQuery(query);
-            }
+                var InitiatorsToDelete = Initiators.
+                                            Where(i => i.SyncChangedDate.Value.ToString() != null && (i.SyncChangedDate.Value.AddDays(Days2waitBeforeDelete) <=
+                                            DateTime.UtcNow)).ToList();
 
-            if (hasMCId.Any())
-            {
-                var InitHasMCUId = String.Join(",", hasMCId);
-                var query = $"UPDATE tblComputerUsers SET ManagerComputerUser_Id=Null " +
-                            $"WHERE ManagerComputerUser_Id IN ({InitHasMCUId})";
-                ret = dbQueryExecutor.ExecQuery(query);
-            }
+                // Has Domain Id
+                var hasDomainId = InitiatorsToDelete.Where(i => i.Domain_Id != null).Select(i => i.Id).ToList();
+                // Has ManagerComputerUserId
+                var hasMCId = InitiatorsToDelete.Where(i => i.ManagerComputerUser_Id != null).Select(i => i.Id).ToList();
+                var InitiatorIds = InitiatorsToDelete.Select(i => i.Id).ToList();
 
-            foreach (var InitiatorId in InitiatorIds)
-            {
-                // ta bort historik
-                var deletequery = $"DELETE FROM tblComputerUserLog WHERE ComputerUser_Id = {InitiatorId};" +
-                            $"DELETE FROM tblComputerUser_tblCUGroup WHERE ComputerUser_Id = {InitiatorId};" +
-                            $"DELETE FROM tblComputerUsers WHERE Id = {InitiatorId};";
-                ret = dbQueryExecutor.ExecQuery(deletequery);                                
-            }
-            if (ret == 1)
-            {
+                var dbQueryExecutor = _execFactory.Create();
+                var ret = 0;
+
+                if (hasDomainId.Any())
+                {
+                    var InitHasDomainId = String.Join(",", hasDomainId);
+                    var query = $"UPDATE tblComputer SET User_Id = Null " +
+                                $"WHERE User_Id IN ({InitHasDomainId})";
+                    ret = dbQueryExecutor.ExecQuery(query);
+                }
+
+                if (hasMCId.Any())
+                {
+                    var InitHasMCUId = String.Join(",", hasMCId);
+                    var query = $"UPDATE tblComputerUsers SET ManagerComputerUser_Id=Null " +
+                                $"WHERE ManagerComputerUser_Id IN ({InitHasMCUId})";
+                    ret = dbQueryExecutor.ExecQuery(query);
+                }
+
+                foreach (var InitiatorId in InitiatorIds)
+                {
+                    // ta bort historik
+                    var deletequery = $"DELETE FROM tblComputerUserLog WHERE ComputerUser_Id = {InitiatorId};" +
+                                $"DELETE FROM tblComputerUser_tblCUGroup WHERE ComputerUser_Id = {InitiatorId};" +
+                                $"DELETE FROM tblComputerUsers WHERE Id = {InitiatorId};";
+                    ret = dbQueryExecutor.ExecQuery(deletequery);
+                }
+                if (ret == 1)
+                {
                     logs.Add(customerId, $"Number of Initiators Deleted : {InitiatorIds.Count()}");
+                }
             }
         }
     
@@ -582,7 +587,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
         public int GetDepartmentId(string departmentName, int customerId, int? regionId, int createOrganisation)
         {
             var depId = _departmentRepository.GetDepartmentId(departmentName.Trim().ToLower(), customerId);
-            if (depId == 0 && createOrganisation != 0)
+            if (depId == 0 && createOrganisation != 0 && (departmentName != "" || !string.IsNullOrEmpty(departmentName)))
             {
                 depId = CreateDepartment(departmentName, customerId, regionId);
             }
@@ -625,7 +630,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
             if (oU != null)
                 ouId = oU.Id;
 
-            if (oU == null && createOrganisation != 0)
+            if (oU == null && createOrganisation != 0 && (OUName != "" || !string.IsNullOrEmpty(OUName)))
             {
                 ouId = CreateOU(OUName);
             }
