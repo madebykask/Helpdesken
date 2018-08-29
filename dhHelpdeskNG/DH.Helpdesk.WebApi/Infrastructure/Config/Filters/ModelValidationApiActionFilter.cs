@@ -28,10 +28,10 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.Filters
 					 .CreateResponse(HttpStatusCode.OK, new
 					 {
 #if DEBUG
-						 ErrorMessage = "Invalid model: " + String.Join("; ", modelState.Where(x => x.Value.Errors.Any()).Select(x =>
-						     $"{x.Key} : {String.Join(",", x.Value.Errors.Select(e => $"Error: {e.ErrorMessage}, Exception: {e.Exception.ToString()}"))}"))
+						 ErrorMessage = "Invalid model: " + string.Join("; ", modelState.Where(x => x.Value.Errors.Any()).Select(x =>
+						     $"{x.Key} : {string.Join(",", x.Value.Errors.Select(e => $"Error: {e.ErrorMessage ?? ""}, Exception: {e.Exception?.ToString() ?? ""}"))}"))
 #else
-					 	 ErrorMessage = String.Join("; ", modelState.Where(x => x.Value.Errors.Any()).Select(x => String.Join(",", x.Value.Errors.Select(e => e.ErrorMessage))))
+					 	 ErrorMessage = string.Join("; ", modelState.Where(x => x.Value.Errors.Any()).Select(x => string.Join(",", x.Value.Errors.Select(e => e.ErrorMessage ?? ""))))
 #endif
 					 });
 		}

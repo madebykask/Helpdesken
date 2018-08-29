@@ -2,9 +2,12 @@ import { Injectable, Inject, InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs'
 import { TranslateService as NgxTranslateService, TranslateLoader } from '@ngx-translate/core'
 import { TranslationApiService } from './translationApi.service';
+import { LoggerService } from '../logging';
 import { config } from '../../../environments/environment';
 
-export function initTranslation(ngxTranslateService: NgxTranslateService, translationApiService: TranslationApiService) : Function {
+export function initTranslation(ngxTranslateService: NgxTranslateService,
+     translationApiService: TranslationApiService,
+     logger: LoggerService) : Function {
     return () =>       
         new Observable(observer => {
             var languages = translationApiService.Languages;
@@ -17,7 +20,7 @@ export function initTranslation(ngxTranslateService: NgxTranslateService, transl
                 ngxTranslateService.addLangs(Object.keys(languages).map(s => s.toLowerCase())); 
 
                 ngxTranslateService.use('en'); //todo:replace with constant/config value
-                console.log(`>> translation has been initialised. Langs: ${JSON.stringify(ngxTranslateService.langs)}` );
+                logger.log(`>> translation has been initialised. Langs: ${JSON.stringify(ngxTranslateService.langs)}` );
                 observer.next(null); 
                 observer.complete();
         });
@@ -28,7 +31,7 @@ export function initTranslation(ngxTranslateService: NgxTranslateService, transl
 export class CustomTranslateLoader implements TranslateLoader  {   
     
     constructor(private translationApiService : TranslationApiService) {        
-        //console.log('CustomTranslateLoader created.')
+        //this.logger.log('CustomTranslateLoader created.')
     }
 
     getTranslation(lang: string): Observable<Object>{

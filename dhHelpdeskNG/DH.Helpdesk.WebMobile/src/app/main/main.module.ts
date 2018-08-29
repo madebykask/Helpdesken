@@ -6,7 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HttpClient } from '@angular/common/http'
 
 import { MainRoutingModule } from './main-routing.module';
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent, CasesOverviewComponent } from './components';
 
 @NgModule({
   imports: [
@@ -19,6 +19,6 @@ import { HomeComponent } from './components/home/home.component';
     ReactiveFormsModule,
   ],
   exports: [],
-  declarations: [HomeComponent]
+  declarations: [HomeComponent, CasesOverviewComponent]
 })
 export class MainModule { }

@@ -74,7 +74,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.Authentication
                     { ConfigApi.Constants.OwinContext.ClientId, context.ClientId }
                 });
 
-                var ticket = new AuthenticationTicket(identity, props);
+                var ticket = new AuthenticationTicket(identity, props);//by default used MachineKeyDataProtector. use IAppBuilder.SetDataProtectionProvider to change it.
                 context.Validated(ticket);
             }
             else

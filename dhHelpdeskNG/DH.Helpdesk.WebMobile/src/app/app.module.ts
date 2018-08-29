@@ -11,7 +11,8 @@ import { PageNotFoundComponent } from './shared/components/page-not-found/page-n
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { TranslateModule, TranslateLoader, TranslateService as NgxTranslateService} from '@ngx-translate/core'
 import { AppComponent } from './app.component';
-import { HttpLoaderFactory, initTranslation, TranslationApiService } from './services/';
+import { HttpLoaderFactory, initTranslation, TranslationApiService } from './services/translation';
+import { LoggerService } from './services/logging';
 
 import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors'
 
@@ -44,7 +45,7 @@ import { rootRouting } from './app.routing';
     {
       provide: APP_INITIALIZER,
       useFactory: initTranslation,
-      deps: [NgxTranslateService, TranslationApiService],
+      deps: [NgxTranslateService, TranslationApiService, LoggerService],
       multi:true
     }
   ]  

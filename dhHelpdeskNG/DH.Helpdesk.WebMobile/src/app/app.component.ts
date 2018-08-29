@@ -7,9 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'DH Helpdesk';
-  testString:string  ="";
-  testString2:string  ="";
+  pageSettings = {
+    theme: 'auto'
+  };
 
   constructor() {    
   }

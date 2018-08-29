@@ -7,6 +7,7 @@ import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/of';
 import { config } from '../../../environments/environment';
 
+
 //todo: use config instead!
 export const ApiUrl:string = `${config.apiUrl}/api`;
 

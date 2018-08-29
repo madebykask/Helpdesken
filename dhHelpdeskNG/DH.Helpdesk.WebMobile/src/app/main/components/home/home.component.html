@@ -1,3 +1,11 @@
-<h1>Home</h1>
-<p>You're logged</p>
-<p><a [routerLink]="['/login']">Logout</a></p>
+<div class="md-hamb mbsc-padding">
+    <mbsc-hamburger-nav [options]="iconMenu">
+        <mbsc-nav-item data-icon="newspaper">News</mbsc-nav-item>
+        <mbsc-nav-item data-icon="material-people">People</mbsc-nav-item>
+        <mbsc-nav-item data-icon="bubble">Messages</mbsc-nav-item>
+        <mbsc-nav-item data-icon="fa-globe">Notifications</mbsc-nav-item>
+        <mbsc-nav-item data-icon="fa-power-off"><a [routerLink]="['/login']">Logout</a></mbsc-nav-item>
+    </mbsc-hamburger-nav>
+</div>
+<app-casesOverview></app-casesOverview>
+    
