@@ -22,6 +22,11 @@
                 .HasForeignKey(x => x.Parent_CaseType_Id)
                 .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.WorkingGroup)
+                .WithMany()
+                .HasForeignKey(x => x.WorkingGroup_Id)
+                .WillCascadeOnDelete(false);
+
             this.Property(x => x.AutomaticApproveTime).IsRequired();
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.Form_Id).IsOptional();
@@ -41,6 +46,7 @@
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity); ;
             this.Property(x => x.CaseTypeGUID).IsOptional();
             this.Property(x => x.ShowOnExtPageCases).IsRequired();
+            this.Property(x => x.WorkingGroup_Id).IsOptional();
 
             this.ToTable("tblcasetype");
         }

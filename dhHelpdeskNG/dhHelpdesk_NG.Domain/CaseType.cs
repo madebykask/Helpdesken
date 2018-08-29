@@ -25,9 +25,11 @@
         public DateTime CreatedDate { get; set; }
         public Guid? CaseTypeGUID { get; set; }
         public int ShowOnExtPageCases { get; set; }
+        public int? WorkingGroup_Id { get; set; }
 
         public virtual CaseType ParentCaseType { get; set; }
         public virtual User Administrator { get; set; }
+        public virtual WorkingGroupEntity WorkingGroup { get; set; }
         public virtual ICollection<CaseType> SubCaseTypes { get; set; }
 
         public virtual ICollection<CaseTypeProductArea> CaseTypeProductAreas { get; set; }
