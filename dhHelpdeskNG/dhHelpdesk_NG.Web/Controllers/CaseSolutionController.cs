@@ -2560,7 +2560,29 @@ namespace DH.Helpdesk.Web.Controllers
 
             return model;
         }
+        public string ChangePerformerUser(int? id)
+        {
+            string ret = null;
+            if (id.HasValue)
+            {
+                var e = _caseTypeService.GetCaseType(id.Value);
+                if (e != null)
+                    ret = e.User_Id.HasValue ? e.User_Id.Value != 0 ? e.User_Id.Value.ToString() : null : null;
+            }
+            return ret;
+        }
 
+        public string ChangeWorkingGroup(int? id)
+        {
+            string ret = null;
+            if (id.HasValue)
+            {
+                var e = _caseTypeService.GetCaseType(id.Value);
+                if (e != null)
+                    ret = e.WorkingGroup_Id.HasValue ? e.WorkingGroup_Id.Value != 0 ? e.WorkingGroup_Id.Value.ToString() : null : null;
+            }
+            return ret;
+        }
         #endregion
 
         #region Category
