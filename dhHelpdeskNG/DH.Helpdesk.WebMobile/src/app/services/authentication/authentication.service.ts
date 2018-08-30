@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpRequest } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { config } from '../../../environments/environment';
-import { User } from '../../models'
+import { CurrentUser, UserAuthenticationData } from '../../models'
+import { LocalStorageService } from '../../services/localStorage'
+import * as moment from 'moment'
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    private currentUserStorageName: string = 'currentUser';
 
-    constructor(private http: HttpClient) { }    
+    constructor(private http: HttpClient, private localStorageService: LocalStorageService) { }    
 
     login(username: string, password: string) {
         let clientId = config.clientId;
@@ -16,8 +17,11 @@ export class AuthenticationService {
             .pipe(map(data => {                
                 // login successful if there's a token in the response
                 if (data && data.access_token) {
+                    let user = new CurrentUser();
+                    UserAuthenticationData.setData(user.authData, data);
+                    user.authData.recievedAt = new Date();
                     // store user details and token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem(this.currentUserStorageName, JSON.stringify(data));
+                    this.localStorageService.setCurrentUser(user);                    
                 }
 
                 return data;
@@ -26,13 +30,14 @@ export class AuthenticationService {
 
     refreshToken() {
         var user = this.getUser();
-        if(user.refresh_token) {
-            var refreshToken = user.refresh_token;
+        if(user.authData.refresh_token) {
+            var refreshToken = user.authData.refresh_token;
             let clientId = config.clientId;
             return this.http.post<any>(`${config.apiUrl}/api/account/refresh`, { refreshToken, clientId })
                 .pipe(map(data => {
-                    user.access_token = data.refresh_token;
-                    user.expires_in = Number(data.expires_in);
+                    user.authData.access_token = data.refresh_token;
+                    user.authData.expires_in = Number(data.expires_in);
+                    user.authData.recievedAt = new Date();
                 }));
         }
         
@@ -40,20 +45,43 @@ export class AuthenticationService {
 
     logout() {
         // remove user from local storage to log user out
-        localStorage.removeItem(this.currentUserStorageName);
+        this.localStorageService.removeCurrentUser();
     }
 
     getAccessToken(): string {
         var user = this.getUser();
-        return user ? user.access_token : null;
+        return user ? user.authData.access_token : null;
     }
 
-    private getUser(): User {
-        let currentUser = localStorage.getItem(this.currentUserStorageName);
-        if(currentUser) {
-            return User.fromJSON(currentUser);
+    setAuthHeader(request: HttpRequest<any>): HttpRequest<any> {
+        // Get access token 
+        const accessToken = this.getAccessToken();
+
+        // If access token is null this means that user is not logged in
+        // And we return the original request
+        if (!accessToken) {
+            return request;
         }
 
-        return null;
+        // We clone the request, because the original request is immutable
+        return request.clone({
+            setHeaders: {
+                Authorization: this.getAccessToken()
+            }
+        });
+    }
+
+    isTokenExpired(): boolean {
+        let user = this.getUser();
+        if(!user.authData.recievedAt || !user.authData.expires_in) return true;//TODO: throw error
+
+        let expiresAt = user.authData.recievedAt.getTime() + user.authData.expires_in * 1000;
+        let now = new Date();
+        return now.getTime() > expiresAt;
+    }
+
+
+    public getUser(): CurrentUser {
+        return this.localStorageService.getCurrentUser();
     }
 }

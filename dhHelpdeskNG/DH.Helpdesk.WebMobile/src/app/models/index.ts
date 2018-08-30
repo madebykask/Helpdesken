@@ -1,2 +1,2 @@
-export * from './user';
-export * from './language';
+export * from './authentication/currentUser.model';
+export * from './translation/language.model';

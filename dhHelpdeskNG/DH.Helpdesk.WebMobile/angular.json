@@ -39,7 +39,9 @@
             "styles": [
               "src/content/styles/styles.scss"              
             ],
-            "scripts": []
+            "scripts": [
+              "src/content/scripts/scripts.js"
+            ]
           },
           "configurations": {
             "production": {

@@ -39,7 +39,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                     .pipe( 
                         filter(result => result !== null),
                         take(1),
-                        switchMap(() => { return next.handle(this.addAuthenticationToken(request)) })
+                        switchMap(() => { return next.handle(this.authenticationService.setAuthHeader(request)) })
                     )
                 //.subscribe(()=> { return next.handle(this.addAuthenticationToken(request)) });
             } else {
@@ -58,7 +58,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                             this.refreshTokenInProgress = false;
                             this.refreshTokenSubject.next(true);
 
-                            return next.handle(this.addAuthenticationToken(request));
+                            return next.handle(this.authenticationService.setAuthHeader(request));
                         }),
                         catchError((err: any) =>  {
                             this.refreshTokenInProgress = false;
@@ -73,22 +73,4 @@ export class ErrorInterceptor implements HttpInterceptor {
             
         }))
     }
-
-    addAuthenticationToken(request: HttpRequest<any>) : HttpRequest<any> {
-        // Get access token from Local Storage
-        const accessToken = this.authenticationService.getAccessToken();
-
-        // If access token is null this means that user is not logged in
-        // And we return the original request
-        if (!accessToken) {
-            return request;
-        }
-
-        // We clone the request, because the original request is immutable
-        return request.clone({
-            setHeaders: {
-                Authorization: this.authenticationService.getAccessToken()
-            }
-        });
-}
 }

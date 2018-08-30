@@ -8,11 +8,13 @@ import { MainModule } from './main/main.module'
 import { LoginComponent } from './shared/components'
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
-import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http'
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { TranslateModule, TranslateLoader, TranslateService as NgxTranslateService} from '@ngx-translate/core'
 import { AppComponent } from './app.component';
 import { HttpLoaderFactory, initTranslation, TranslationApiService } from './services/translation';
+import { LocalStorageService } from './services/localStorage'
 import { LoggerService } from './services/logging';
+import { MomentModule } from 'ngx-moment';
 
 import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors'
 
@@ -36,6 +38,7 @@ import { rootRouting } from './app.routing';
       },
       useDefaultLang: true
     }),
+    MomentModule,
     MainModule,
   ],
   providers: [
@@ -47,7 +50,8 @@ import { rootRouting } from './app.routing';
       useFactory: initTranslation,
       deps: [NgxTranslateService, TranslationApiService, LoggerService],
       multi:true
-    }
+    },
+    LocalStorageService    
   ]  
 })
 export class AppModule { }
