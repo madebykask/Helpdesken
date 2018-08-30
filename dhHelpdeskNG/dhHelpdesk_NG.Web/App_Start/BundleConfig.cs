@@ -348,6 +348,9 @@ namespace DH.Helpdesk.Web
             bundles.Add(new ScriptBundle("~/bundles/admin/users/_input").Include(
                             "~/Areas/Admin/Content/js/Users/_input.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/admin/casetype/_input").Include(
+                            "~/Areas/Admin/Content/js/CaseType/_input.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/admin/users/index_lockedcases").Include(
                            "~/Areas/Admin/Content/js/Users/index.lockedcase.js"));
 

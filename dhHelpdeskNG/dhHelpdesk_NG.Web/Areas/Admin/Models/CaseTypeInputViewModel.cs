@@ -14,5 +14,6 @@
         public Customer Customer { get; set; }
 
         public IList<SelectListItem> SystemOwners { get; set; }
+        public IList<WorkingGroupEntity> WorkingGroups { get; set; }
     }
 }

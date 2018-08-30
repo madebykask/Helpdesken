@@ -124,6 +124,17 @@ $(function () {
     //    CaseCascadingSelectlistChange($(this).val(), $('#CaseSolution_Customer_Id').val(), '/CaseSolution/ChangeWorkingGroupFilterUser/', '#PerformerUser');
     //});
 
+    $('#CaseSolution_CaseType_Id').change(function () {
+        var caseTypeId = $(this).val();
+        if ($('#WorkingGroup').val() == '') {
+            SelectValueInOtherDropdownOnChange(caseTypeId, '/CaseSolution/ChangeWorkingGroup/', '#WorkingGroup');
+        }
+
+        if ($('#PerformerUser').val() == '') {
+            SelectValueInOtherDropdownOnChange(caseTypeId, '/CaseSolution/ChangePerformerUser/', '#PerformerUser');
+        }
+    });
+
     $('#divFinishingCause ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
