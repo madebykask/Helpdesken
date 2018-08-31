@@ -4,6 +4,7 @@ Imports System.IO
 Imports System.Linq
 Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
 Imports System.Text.RegularExpressions
+Imports System.Web.UI
 Imports Rebex.Mail
 Imports Rebex.Mime
 
@@ -131,15 +132,15 @@ Module DH_Helpdesk_Mail
                     objCustomer.PhysicalFilePath = objGlobalSettings.AttachedFileFolder
                 End If
 
-                If objCustomer.POP3DebugLevel > 0 Then
-                    giLoglevel = objCustomer.POP3DebugLevel
+                Dim iPop3DebugLevel = objCustomer.POP3DebugLevel
+                If iPop3DebugLevel > 0 Then
+                    giLoglevel = iPop3DebugLevel
                     openLogFile()
                 End If
 
-                If objCustomer.POP3Server <> "" And objCustomer.POP3UserName <> "" Then
-                    If objCustomer.POP3DebugLevel > 0 Then
-                        objLogFile.WriteLine(Now() & ", M2T for " & objCustomer.Name & ", Nr: " & i & "(" & colCustomer.Count & "), ver " & objGlobalSettings.DBVersion)
-                    End If
+                If Not String.IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not String.IsNullOrEmpty(objCustomer.POP3UserName) Then
+
+                    LogToFile("M2T for " & objCustomer.Name & ", Nr: " & i & "(" & colCustomer.Count & "), ver " & objGlobalSettings.DBVersion, iPop3DebugLevel)
 
                     Try
                         IMAPclient = New Imap()
@@ -151,16 +152,14 @@ Module DH_Helpdesk_Mail
                             ip = host.AddressList(0).ToString()
                         End If
 
-                        If objCustomer.POP3DebugLevel > 0 Then
-                            objLogFile.WriteLine(Now() & ", Connecting to " & objCustomer.POP3Server & " (" + ip + "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName)
-                        End If
+                        LogToFile("Connecting to " & objCustomer.POP3Server & " (" + ip + "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName, iPop3DebugLevel)
 
                         If objCustomer.POP3Port = 993 Then
                             IMAPclient.Connect(objCustomer.POP3Server.ToString(), objCustomer.POP3Port, Nothing, ImapSecurity.Implicit)
                         Else
                             IMAPclient.Connect(objCustomer.POP3Server, objCustomer.POP3Port)
                         End If
-
+                        
                         ' hämta inställningar om e-post texten ska översättas till fält på ärendet
                         Dim fieldsToUpdate As Dictionary(Of String, String)
                         fieldsToUpdate = objCustomerData.GetCaseFieldsSettings(objCustomer.Id)
@@ -191,28 +190,19 @@ Module DH_Helpdesk_Mail
 
                         'End If
 
-                        If objCustomer.POP3UserName = "" Or objCustomer.POP3Password = "" Then
-                            If objCustomer.POP3DebugLevel > 0 Then
-                                objLogFile.WriteLine(Now() & ", Missing UserName OR Password")
-                            End If
-
+                        If String.IsNullOrEmpty(objCustomer.POP3UserName) Or String.IsNullOrEmpty(objCustomer.POP3Password) Then
+                            LogError("Missing UserName OR Password")
                             Exit For
                         ElseIf objCustomer.EMailDefaultCaseType_Id = 0 Then
-                            If objCustomer.POP3DebugLevel > 0 Then
-                                objLogFile.WriteLine(Now() & ", Missing Default Case Type")
-                            End If
-
+                            LogError("Missing Default Case Type")
                             Exit For
                         End If
-
+                        
                         If objCustomer.MailServerProtocol = 0 Then
                             ' Inget stöd för POP3 längre
+                            LogToFile("Pop3 is not supported.", iPop3DebugLevel)
                         Else
-                            If objCustomer.POP3DebugLevel > 0 Then
-                                objLogFile.WriteLine(Now() & ", Login " & objCustomer.POP3UserName)
-
-                            End If
-
+                            LogToFile("Login " & objCustomer.POP3UserName, iPop3DebugLevel)
                             IMAPclient.Login(objCustomer.POP3UserName, objCustomer.POP3Password)
                         End If
 
@@ -220,20 +210,37 @@ Module DH_Helpdesk_Mail
                             ' Inget stöd för POP3 längre
                         ElseIf objCustomer.MailServerProtocol = 1 Then
 
-                            If objCustomer.EMailFolder <> "" Then
-                                IMAPclient.SelectFolder(objCustomer.EMailFolder)
-                            Else
-                                IMAPclient.SelectFolder("Inbox")
+                            Dim emailFolder As String = "Inbox" ' Default email folder
+                            
+                            'Validate email folders
+                            If Not String.IsNullOrEmpty(objCustomer.EMailFolder) Then
+                                If Not CheckEmailFolderExists(IMAPclient, objCustomer.EMailFolder)
+                                    LogError($"EmailFolder '{objCustomer.EMailFolder}' doesn't exist.")
+                                    Exit For
+                                Else 
+                                    emailFolder = objCustomer.EMailFolder
+                                End If
+                            End If
+
+                            If Not String.IsNullOrEmpty(objCustomer.EMailFolderArchive) Then
+                                If Not CheckEmailFolderExists(IMAPclient, objCustomer.EMailFolderArchive)
+                                    LogError($"EmailFolderArchive '{objCustomer.EMailFolderArchive}' doesn't exist.")
+                                    Exit For
+                                End If
+                            End If
+
+                            LogToFile("Connecting to '" & emailFolder & "' email folder.", iPop3DebugLevel)
+                            IMAPclient.SelectFolder(emailFolder)
+
+                            If Not IMAPclient.CurrentFolder.Name.Equals(emailFolder, StringComparison.OrdinalIgnoreCase) Then
+                                LogError($"Failed to connect to '{emailFolder}' email folder")
+                                Exit For
                             End If
 
                             IMAPlist = IMAPclient.GetMessageList()
 
-                            If objCustomer.POP3DebugLevel > 0 Then
-                                objLogFile.WriteLine(Now() & ", IMAPlist,Count " & IMAPlist.Count)
-
-                            End If
-
-                            iListCount = IMAPlist.Count
+                            iListCount = IMAPlist.Count()
+                            LogToFile("IMAPlist.Count: " & iListCount, iPop3DebugLevel)
                         End If
 
                         If iListCount > 0 Then
@@ -253,11 +260,11 @@ Module DH_Helpdesk_Mail
                                 End If
 
                                 Dim uniqueMessageId As String = ""
-                                If Not message.MessageId Is Nothing Then
+                                If message.MessageId IsNot Nothing Then
                                     uniqueMessageId = message.MessageId.ToString
                                 End If
 
-                                LogToFile("Read Mail From " & message.From.ToString & ", To " & message.To.ToString & ", MessageID: " & uniqueMessageId & ", HasBodyText: " & message.HasBodyText & ", " & message.HasBodyHtml & ", IsSigned: " & message.IsSigned & ", Silent: " & message.Silent, objCustomer.POP3DebugLevel)
+                                LogToFile("Read Mail From " & message.From.ToString & ", To " & message.To.ToString & ", MessageID: " & uniqueMessageId & ", HasBodyText: " & message.HasBodyText & ", " & message.HasBodyHtml & ", IsSigned: " & message.IsSigned & ", Silent: " & message.Silent, iPop3DebugLevel)
 
                                 sFromEMailAddress = parseEMailAddress(message.From.ToString())
                                 sToEMailAddress = parseEMailAddress(message.To.ToString())
@@ -265,8 +272,8 @@ Module DH_Helpdesk_Mail
                                 If objCustomer.POP3EMailPrefix <> "" Then
                                     sFromEMailAddress = Replace(sFromEMailAddress, objCustomer.POP3EMailPrefix, "")
                                 End If
-                                sNewCaseToEmailAddress = sFromEMailAddress
 
+                                sNewCaseToEmailAddress = sFromEMailAddress
                                 sSubject = message.Subject.ToString()
 
                                 ' Kontrollera om det är ett beställningsmail
@@ -284,10 +291,8 @@ Module DH_Helpdesk_Mail
                                     If iPos > 0 Then
                                         sUserId = Trim(Left(sSubject, iPos - 1))
                                     End If
-
-                                    If objCustomer.POP3DebugLevel > 0 Then
-                                        objLogFile.WriteLine(Now() & ", Beställning från " & sUserId)
-                                    End If
+                                    
+                                    LogToFile("Beställning från " & sUserId, iPop3DebugLevel)
 
                                     If sUserId <> "" Then
                                         Dim objCU As ComputerUser = objComputerUserData.getComputerUserByUserId(sUserId, objCustomer.Id)
@@ -297,7 +302,6 @@ Module DH_Helpdesk_Mail
                                         End If
 
                                         'Dim objUserData As New UserData
-
                                         'Dim objUser As User = objUserData.getUserByUserId(sUserId)
 
                                         'If Not objUser Is Nothing Then
@@ -354,7 +358,6 @@ Module DH_Helpdesk_Mail
                                     sBodyText = Replace(message.BodyText.ToString(), Chr(10), vbCrLf, 1, -1, CompareMethod.Text)
                                 ElseIf message.HasBodyHtml = True Then
                                     sBodyText = message.BodyHtml.ToString()
-
                                     sBodyText = convertHTMLtoText(sBodyText)
                                 End If
 
@@ -476,16 +479,12 @@ Module DH_Helpdesk_Mail
                                         End If
                                     End If
 
-                                    If objCustomer.POP3DebugLevel > 0 Then
-                                        objLogFile.WriteLine(Now() & ", Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count)
-                                    End If
-
-                                    'Save 
+                                    LogToFile("Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count, iPOP3DebugLevel)
                                     
-
+                                    'Save 
                                     Dim sHTMLFileName As String = createHtmlFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
 
-                                    If sHTMLFileName <> "" Then
+                                    If Not String.IsNullOrEmpty(sHTMLFileName) Then
                                         iHTMLFile = 1
 
                                         ' Lägg in i databasen
@@ -538,9 +537,7 @@ Module DH_Helpdesk_Mail
                                             sFileName = sFileName.Replace(":", "")
                                             sFileName = URLDecode(sFileName)
 
-                                            If objCustomer.POP3DebugLevel > 0 Then
-                                                objLogFile.WriteLine(Now() & ", Filename:" & sFileName)
-                                            End If
+                                            LogToFile("Filename:" & sFileName, iPop3DebugLevel)
 
                                             message.Attachments.Item(j).Save(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\" & sFileName)
 
@@ -574,9 +571,7 @@ Module DH_Helpdesk_Mail
                                             End If
                                         End If
                                     Else
-                                        If objCustomer.POP3DebugLevel > 0 Then
-                                            objLogFile.WriteLine(Now() & ", readMailBox, isValidRecipient " & objCase.Persons_EMail & ", " & objCustomer.AllowedEMailRecipients)
-                                        End If
+                                        LogToFile("readMailBox, isValidRecipient " & objCase.Persons_EMail & ", " & objCustomer.AllowedEMailRecipients, iPop3DebugLevel)
                                     End If
 
                                     If objCustomer.EMailRegistrationMailID <> 0 And objCustomer.NewCaseEMailList <> "" Then
@@ -775,9 +770,7 @@ Module DH_Helpdesk_Mail
                                             sFileName = sFileName.Replace(":", "")
                                             sFileName = URLDecode(sFileName)
 
-                                            If objCustomer.POP3DebugLevel > 0 Then
-                                                objLogFile.WriteLine(Now() & ", Filename:" & sFileName)
-                                            End If
+                                            LogToFile("Filename:" & sFileName, iPop3DebugLevel)
 
                                             message.Attachments.Item(j).Save(objCustomer.PhysicalFilePath & "\L" & iLog_Id & "\" & sFileName)
 
@@ -826,12 +819,11 @@ Module DH_Helpdesk_Mail
 
                                         End If
                                     End If
-
                                 End If
 
                                 'here tit
                                 ' spara e-post adresser
-                                If message IsNot Nothing And objCase IsNot Nothing Then
+                                If message IsNot Nothing AndAlso objCase IsNot Nothing Then
                                     Dim messageId As String = message.MessageId.ToString()
                                     objMailTicket.Save(objCase.Id, iLog_Id, "to", message.To.ToString(), messageId)
                                     objMailTicket.Save(objCase.Id, iLog_Id, "cc", message.CC.ToString(), messageId)
@@ -841,31 +833,28 @@ Module DH_Helpdesk_Mail
                                 If objCustomer.MailServerProtocol = 0 Then
                                     ' Inget stöd för POP3 längre
                                 Else
-                                    If objCustomer.POP3DebugLevel > 0 Then
-                                        objLogFile.WriteLine(Now() & ", Delete Message")
-                                    End If
-
-                                    If objCustomer.EMailFolderArchive <> "" Then
-                                        If objCustomer.POP3DebugLevel > 0 Then
-                                            objLogFile.WriteLine(Now() & ", Move Message")
-                                        End If
-
+                                    If Not String.IsNullOrEmpty(objCustomer.EMailFolderArchive) Then
+                                        LogToFile("Move Message to: " & objCustomer.EMailFolderArchive, iPop3DebugLevel)
                                         IMAPclient.CopyMessage(sUniqueID, objCustomer.EMailFolderArchive)
                                     End If
 
+                                    LogToFile("Deleting Message", iPop3DebugLevel)
                                     IMAPclient.DeleteMessage(sUniqueID)
-
-                                    IMAPclient.Purge()
+                                    
+                                    ' Purge to apply message delete otherwise the message will stay in Inbox
+                                    IMAPclient.Purge() 
                                 End If
                             Next
-                        End If
-
+                        End If 'Messages.Count
+                        
+                    Catch ex As Exception
+                         LogError("Error readMailBox. CurstomerId  Error: " & ex.Message)
+                    Finally
                         If objCustomer.MailServerProtocol = 0 Then
                             ' Inget stöd för POP3 längre
                         Else
-                            If objCustomer.POP3DebugLevel > 0 Then
-                                objLogFile.WriteLine(Now() & ", Disconnect")
-                            End If
+                            
+                            LogToFile("Disconnecting", iPop3DebugLevel)
 
                             IMAPclient.Disconnect()
 
@@ -873,16 +862,11 @@ Module DH_Helpdesk_Mail
 
                             IMAPclient = Nothing
                         End If
-                    Catch ex As Exception
-                        If objCustomer.POP3DebugLevel > 0 Then
-                            objLogFile.WriteLine(Now() & ", Error readMailBox " & ex.Message.ToString)
-                        End If
                     End Try
-
 
                 End If
 
-                If objCustomer.POP3DebugLevel > 0 Then
+                If iPop3DebugLevel > 0 Then
                     closeLogFile()
                 End If
             Next
@@ -898,6 +882,15 @@ Module DH_Helpdesk_Mail
         End Try
     End Function
 
+    Private Function CheckEmailFolderExists(imapClient As IMAP, emailFolder As String) As Boolean
+        Dim isFolderExists as Boolean =  False
+        Try 
+            isFolderExists = imapClient.FolderExists(emailFolder)
+        Catch ex As Exception
+            isFolderExists = False
+        End Try
+        Return isFolderExists
+    End Function
 
     Private Function ExtractMessageIds(message As MailMessage) As IList(of string)
         Dim items as List(Of string) = New List(Of string)
@@ -1384,6 +1377,10 @@ Module DH_Helpdesk_Mail
         If level > 0 Then
             objLogFile.WriteLine("{0}: {1}", Now(),  msg)
         End If
+    End Sub
+
+    Private Sub LogError(msg As String) 
+        objLogFile.WriteLine("{0}: {1}", Now(),  msg)
     End Sub
 
 

@@ -171,6 +171,13 @@ BEGIN
     set identity_insert tblCaseType off
 END
 GO
+
+RAISERROR ('Adding EMailCaseType_Id to table working group', 10, 1) WITH NOWAIT
+IF not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'EMailCaseType_Id' and sysobjects.name = N'tblWorkingGroup')
+BEGIN
+Alter table tblworkinggroup add EMailCaseType_Id int null
+END
+GO
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.38'
 --ROLLBACK --TMP

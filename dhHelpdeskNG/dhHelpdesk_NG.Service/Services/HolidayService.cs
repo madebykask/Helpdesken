@@ -202,9 +202,11 @@ namespace DH.Helpdesk.Services.Services
             }
 
             //TODO: query can be optimized by filtering from,to. But departments which have calendar but not in range(from,to) also must be included
-            var res = this._departmentService.GetDepartmentsByIdsWithHolidays(departmentsIds)
-                .Where(d => d.HolidayHeader.Id != DEFAULT_CALENDAR_ID)
-                .SelectMany(
+            var allDepsWithCalendars = this._departmentService.GetDepartmentsByIdsWithHolidays(departmentsIds)
+                .Where(d => d.HolidayHeader.Id != DEFAULT_CALENDAR_ID).ToArray();
+            var depsWithCalendarsWithNoHolidays = allDepsWithCalendars.Where(d => d.HolidayHeader.Holidays.Count == 0).ToArray();
+
+            var res = allDepsWithCalendars.SelectMany(
                     department => department.HolidayHeader.Holidays,
                     (department, holiday) =>
                         new HolidayOverview()
@@ -213,7 +215,20 @@ namespace DH.Helpdesk.Services.Services
                             HolidayDate = holiday.HolidayDate,
                             TimeFrom = holiday.TimeFrom,
                             TimeUntil = holiday.TimeUntil
-                        });
+                        }).ToList();
+            //adding fake  HolidayOverview for calendars without holidays, because in SelectMany they are not included
+            //TODO: refactor this implementation
+            if (depsWithCalendarsWithNoHolidays.Any())
+            {
+                res.AddRange(depsWithCalendarsWithNoHolidays.Select(d => new HolidayOverview()
+                {
+                    DepartmentId = d.Id,
+                    HolidayDate = new DateTime(1900,1,1),
+                    TimeFrom = 0,
+                    TimeUntil = 0
+                }));
+            }
+
             return res;
         }
 
