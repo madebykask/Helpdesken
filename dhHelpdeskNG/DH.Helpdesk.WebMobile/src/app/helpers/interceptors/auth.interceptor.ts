@@ -8,6 +8,10 @@ export class AuthInterceptor implements HttpInterceptor {
     constructor(private authService: AuthenticationService, ) {}
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // add authorization header with token if available
+        if(request.url.includes('account/refresh') ||
+            request.url.includes('account/login'))
+            return next.handle(request);
+
         let newRequest = this.authService.setAuthHeader(request);
 
         return next.handle(newRequest ? newRequest : request);

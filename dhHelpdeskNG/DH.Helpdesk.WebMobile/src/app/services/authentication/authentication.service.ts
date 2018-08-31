@@ -4,7 +4,6 @@ import { map } from 'rxjs/operators';
 import { config } from '../../../environments/environment';
 import { CurrentUser, UserAuthenticationData } from '../../models'
 import { LocalStorageService } from '../../services/localStorage'
-import * as moment from 'moment'
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -35,9 +34,10 @@ export class AuthenticationService {
             let clientId = config.clientId;
             return this.http.post<any>(`${config.apiUrl}/api/account/refresh`, { refreshToken, clientId })
                 .pipe(map(data => {
-                    user.authData.access_token = data.refresh_token;
+                    user.authData.access_token = data.access_token;
                     user.authData.expires_in = Number(data.expires_in);
                     user.authData.recievedAt = new Date();
+                    this.localStorageService.setCurrentUser(user);
                 }));
         }
         
@@ -66,7 +66,7 @@ export class AuthenticationService {
         // We clone the request, because the original request is immutable
         return request.clone({
             setHeaders: {
-                Authorization: this.getAccessToken()
+                Authorization: `Bearer ${accessToken}`
             }
         });
     }

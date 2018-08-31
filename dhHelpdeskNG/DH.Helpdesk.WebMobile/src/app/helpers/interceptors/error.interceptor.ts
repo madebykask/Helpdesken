@@ -18,18 +18,18 @@ export class ErrorInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(catchError(err => {
-            const error = err.error.message || err.statusText;
+            const errorMsg = err.error.message || err.statusText;
 
             if (request.url.includes("account/refresh")) {
                 this.authenticationService.logout();
                 location.reload(true);
             }
             if (request.url.includes("account/login")) {
-                return throwError(error);
+                return throwError(errorMsg);
             }
 
-            if (error.status !== 401) {
-                return throwError(error);
+            if (err.status !== 401) {
+                return throwError(errorMsg);
             }
 
             if (this.refreshTokenInProgress) {
@@ -64,7 +64,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                             this.refreshTokenInProgress = false;
 
                             this.authenticationService.logout();
-                            return throwError(error);
+                            return throwError(errorMsg);
                         }),
                         //finalize(() => this.stopLoading())
                     )                    
