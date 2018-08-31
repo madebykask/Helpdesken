@@ -227,7 +227,7 @@ namespace DH.Helpdesk.Services.Services
         public IEnumerable<Department> GetDepartmentsByIdsWithHolidays(int[] departmentsIds)
         {
             return _departmentRepository.GetDepartmentsByIds(departmentsIds, true)
-                .Where(it => it.HolidayHeader != null && it.HolidayHeader.Holidays.Any());
+                .Where(it => it.HolidayHeader != null);
         }
 
         public void SaveDepartment(Department department,int[] invoiceOus, out IDictionary<string, string> errors)
