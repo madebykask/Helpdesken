@@ -209,16 +209,6 @@ namespace DH.Helpdesk.Web.Controllers
             var categories = this.computerService.GetComputerUserCategoriesByCustomerID(currentCustomerId, true);
 
             var emptyCategory = categories.FirstOrDefault(x => x.IsEmpty);
-            
-            if (emptyCategory == null)
-            {
-                emptyCategory = new ComputerUserCategoryOverview()
-                {
-                    Id = ComputerUserCategory.EmptyCategoryId,
-                    Name = ComputerUserCategory.EmptyCategoryDefaultName,
-                    IsEmpty =  true
-                };
-            }
 
             var list = new List<ComputerUserCategoryOverview>(categories.Where(x => !x.IsEmpty));
             list.Insert(0, emptyCategory);
@@ -521,6 +511,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 searchComputerUserCategories = computerUserCategories.Where(o => !o.IsEmpty)
                     .Select(o => new ItemOverview(Translation.GetMasterDataTranslation(o.Name), o.Id.ToString()))
+                    .OrderBy(x => x.Name)
                     .ToList();
 
                 var emptyCategoryName = computerUserCategories.FirstOrDefault(x => x.IsEmpty)?.Name ?? ComputerUserCategory.EmptyCategoryDefaultName;
@@ -562,8 +553,14 @@ namespace DH.Helpdesk.Web.Controllers
 
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
-            var categoriesList = GetCategoriesList(currentCustomerId);
+            var categoriesList = GetCategoriesSelectList(currentCustomerId);
             model.ComputerUserCategoryModel = new ComputerUserCategoryModel(categoriesList); //todo: check if required for AddNotifier
+
+            //handle empty virtual cateogry
+            if (model.CategoryId == ComputerUserCategory.EmptyCategoryId)
+            {
+                model.CategoryId = null;
+            }
 
             var newNotifier = this.newNotifierFactory.Create(model, currentCustomerId, DateTime.Now);
 
@@ -725,7 +722,7 @@ namespace DH.Helpdesk.Web.Controllers
                 category = computerService.GetComputerUserCategoryByID(userCategory.Value);
             }
             
-            var categoriesList = GetCategoriesList(currentCustomerId, category);
+            var categoriesList = GetCategoriesSelectList(currentCustomerId, category);
             var categoryModel = new ComputerUserCategoryModel(categoriesList);
 
             var model = this.newNotifierModelFactory.Create(
@@ -847,7 +844,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             //todo: check why if only not readonly should be displayed?
-            var categoriesList = GetCategoriesList(currentCustomerId, selectedCategory);
+            var categoriesList = GetCategoriesSelectList(currentCustomerId, selectedCategory);
             var categoryModel = new ComputerUserCategoryModel(categoriesList);
 
             var model = this.newNotifierModelFactory.Create(
@@ -866,15 +863,23 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
-        private IList<SelectListItem> GetCategoriesList(int customerId, ComputerUserCategory category = null)
+        private IList<SelectListItem> GetCategoriesSelectList(int customerId, ComputerUserCategory category = null)
         {
+            var selectedCateogryId = category?.ID ?? ComputerUserCategory.EmptyCategoryId;
             var categoriesList =
-                computerService.GetComputerUserCategoriesByCustomerID(customerId)
+                computerService.GetComputerUserCategoriesByCustomerID(customerId, true)
+                    .Select(x => new
+                    {
+                        x.Id,
+                        Name = Translation.GetMasterDataTranslation(x.Name),
+                        Order = x.IsEmpty ? 1 : 0 
+                    })
+                    .OrderByDescending(x => x.Order).ThenBy(x => x.Name)
                     .Select(x => new SelectListItem
                     {
-                        Text = x.Name,
                         Value = x.Id.ToString(),
-                        Selected = x.Id == category?.ID
+                        Text = x.Name,
+                        Selected = x.Id == selectedCateogryId
                     }).ToList();
 
             return categoriesList;
@@ -985,7 +990,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var computerUser = computerService.GetComputerUser(notifier.Id);
 
-            var categoriesList = GetCategoriesList(currentCustomerId, computerUser.ComputerUserCategory);
+            var categoriesList = GetCategoriesSelectList(currentCustomerId, computerUser.ComputerUserCategory);
             var categoryModel = new ComputerUserCategoryModel(categoriesList, computerUser.ComputerUserCategory);
 
             var model = this.notifierModelFactory.Create(
@@ -1009,9 +1014,16 @@ namespace DH.Helpdesk.Web.Controllers
         [BadRequestOnNotValid]
         public RedirectToRouteResult Notifier(InputModel model)
         {
+            //handle empty virtual cateogry
+            if (model.CategoryId == ComputerUserCategory.EmptyCategoryId)
+            {
+                model.CategoryId = null;
+            }
+
             var updatedNotifier = this.updatedNotifierFactory.Create(model, DateTime.Now);
             //updatedNotifier.LanguageId = model.LanguageId;
             this.notifierService.UpdateNotifier(updatedNotifier, SessionFacade.CurrentCustomer.Id);
+
             return this.RedirectToAction("Index");
         }
 

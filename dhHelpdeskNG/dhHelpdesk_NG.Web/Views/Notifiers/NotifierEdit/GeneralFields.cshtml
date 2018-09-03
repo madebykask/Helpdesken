@@ -17,7 +17,7 @@
                     <tr>
                         <td>@Translation.GetCoreTextTranslation("Kategori")</td>
                         <td>
-                            @Html.DropDownList("CategoryId", Model.ComputerUserCategoryModel.ComputerUserCategories, "",
+                            @Html.DropDownList("CategoryId", Model.ComputerUserCategoryModel.ComputerUserCategories, 
                                 @Model.ComputerUserCategoryModel.IsReadOnly
                                     ? (object)new { id = "category_dropdown", disabled = "disabled" } 
                                     : (object)new { id = "category_dropdown" })

@@ -520,6 +520,26 @@ namespace DH.Helpdesk.Services.Services
 		    {
 		        categories = categories.Where(o => !o.IsEmpty).ToList();
 		    }
+		    else
+		    {
+                //check if empty category exists and if not create it
+		        var emptyCategory = categories.FirstOrDefault(c => c.IsEmpty);
+		        if (emptyCategory == null)
+		        {
+		            emptyCategory = new ComputerUserCategoryOverview()
+		            {
+		                Id = ComputerUserCategory.EmptyCategoryId,
+		                Name = ComputerUserCategory.EmptyCategoryDefaultName,
+		                IsEmpty = true
+		            };
+		            categories.Insert(0, emptyCategory);
+		        }
+		        
+		        //empty shall always have fixed Id
+		        emptyCategory.Id = ComputerUserCategory.EmptyCategoryId;
+		        
+            }
+
             return categories;
 		}
 

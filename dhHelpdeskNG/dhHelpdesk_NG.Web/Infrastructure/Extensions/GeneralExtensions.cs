@@ -133,7 +133,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 Text = Translation.GetMasterDataTranslation(o.Name),
                 Value = o.Id.ToString(),
                 Selected = selectedCategoryId.HasValue && o.Id == selectedCategoryId.Value
-            }).ToList();
+            }).OrderBy(x => x.Text).ToList();
             
             computerCategoriesSelectList.Insert(0, new SelectListItem()
             {
