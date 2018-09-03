@@ -110,10 +110,19 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return "display:none";
         }
 
-        public static IList<SelectListItem> BuildComputerCategoriesSelectList(this CaseInputViewModel model, int? selectedCategoryId)
+        public static IList<SelectListItem> BuildComputerCategoriesSelectList(this CaseInputViewModel model, int? selectedCategoryId, bool addEmpty = false)
         {
             var computerCategoriesSelectList =
                 BuildComputerCategoriesSelectListInner(model.ComputerUserCategories, selectedCategoryId, model.EmptyComputerCategoryName);
+
+            if (addEmpty)
+            {
+                computerCategoriesSelectList.Insert(0, new SelectListItem()
+                {
+                    Value = "",
+                    Text = ""
+                });
+            }
 
             return computerCategoriesSelectList;
         }
