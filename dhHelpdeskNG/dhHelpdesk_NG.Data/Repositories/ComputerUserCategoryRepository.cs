@@ -1,5 +1,4 @@
-﻿using DH.Helpdesk.Dal.Dal;
-using DH.Helpdesk.Domain.Computers;
+﻿using DH.Helpdesk.Domain.Computers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
@@ -31,7 +30,22 @@ namespace DH.Helpdesk.Dal.Repositories
 			return all;
 		}
 
-		public ComputerUserCategory GetByID(int computerUserCategoryID)
+	    public ComputerUserCategoryOverview GetEmptyCategoryOverview(int customerId)
+	    {
+	        var emptyCategory =
+	            this.Table.Where(o => o.CustomerID == customerId && o.IsEmpty)
+	                .Select(x => new ComputerUserCategoryOverview()
+	                {
+	                    Id = x.ID,
+	                    Name = x.Name,
+	                    IsEmpty = x.IsEmpty
+	                })
+	                .FirstOrDefault();
+
+            return emptyCategory;
+	    }
+
+        public ComputerUserCategory GetByID(int computerUserCategoryID)
 		{
 		    var computerUserCategory = 
                 this.Table.Include(o => o.CaseSolution.ExtendedCaseForms)

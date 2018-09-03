@@ -51,10 +51,10 @@ namespace DH.Helpdesk.Services.Services
         void SaveComputerUserFieldSettingLangForCustomerCopy(ComputerUserFieldSettingsLanguage computerUserFieldSettingLanguage, out IDictionary<string, string> errors);
         void SaveComputerUserGroup(ComputerUserGroup computerUserGroup, int[] ous, out IDictionary<string, string> errors);
         void UpdateComputerUsersBlackList(ComputerUsersBlackList computerUsersBlackList);
-
+        ComputerUserCategoryOverview GetEmptyComputerUserCategory(int customerId);
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
         List<InventorySearchResult> SearchPcNumber(int customerId, string query);
-		ComputerUserCategory GetComputerUserCategoryByID(int computerUserCategoryID);
+        ComputerUserCategory GetComputerUserCategoryByID(int computerUserCategoryID);
         int SaveComputerUserCategory(ComputerUserCategoryData data);
 
 
@@ -513,7 +513,16 @@ namespace DH.Helpdesk.Services.Services
             return _inventoryRepository.SearchPcNumber(customerId, query);
         }
 
-		public IList<ComputerUserCategoryOverview> GetComputerUserCategoriesByCustomerID(int customerId, bool includeEmpty = false)
+        public ComputerUserCategoryOverview GetEmptyComputerUserCategory(int customerId)
+        {
+            var emptyCategory = _computerUserCategoryRepository.GetEmptyCategoryOverview(customerId);
+            if (emptyCategory == null)
+                emptyCategory = CreateEmptyCategory();
+
+            return emptyCategory;
+        }
+
+        public IList<ComputerUserCategoryOverview> GetComputerUserCategoriesByCustomerID(int customerId, bool includeEmpty = false)
 		{
 			var categories = _computerUserCategoryRepository.GetAllByCustomerID(customerId);
 		    if (!includeEmpty)
@@ -526,12 +535,7 @@ namespace DH.Helpdesk.Services.Services
 		        var emptyCategory = categories.FirstOrDefault(c => c.IsEmpty);
 		        if (emptyCategory == null)
 		        {
-		            emptyCategory = new ComputerUserCategoryOverview()
-		            {
-		                Id = ComputerUserCategory.EmptyCategoryId,
-		                Name = ComputerUserCategory.EmptyCategoryDefaultName,
-		                IsEmpty = true
-		            };
+		            emptyCategory = CreateEmptyCategory();
 		            categories.Insert(0, emptyCategory);
 		        }
 		        
@@ -543,7 +547,18 @@ namespace DH.Helpdesk.Services.Services
             return categories;
 		}
 
-		public ComputerUser GetComputerUserByUserID(string reportedBy)
+        private ComputerUserCategoryOverview CreateEmptyCategory()
+        {
+            var emptyCategory = new ComputerUserCategoryOverview()
+            {
+                Id = ComputerUserCategory.EmptyCategoryId,
+                Name = ComputerUserCategory.EmptyCategoryDefaultName,
+                IsEmpty = true
+            };
+            return emptyCategory;
+        }
+
+        public ComputerUser GetComputerUserByUserID(string reportedBy)
 		{
 			var computerUser = _computerUserRepository.Get(o => o.UserId == reportedBy);
 			return computerUser;

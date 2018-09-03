@@ -11,5 +11,6 @@ namespace DH.Helpdesk.Dal.Repositories
 	    bool CheckIfExtendedFormsExistForCategories(int customerId, List<int> ids);
         IList<ComputerUserCategoryOverview> GetAllByCustomerID(int customerID);
         ComputerUserCategory GetByID(int ID);
+	    ComputerUserCategoryOverview GetEmptyCategoryOverview(int customerId);
 	}
 }

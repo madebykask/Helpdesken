@@ -248,16 +248,21 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public ViewResult EditEmptyCategory()
         {
-            var emptyCategory = new ComputerUserCategoryData()
-            {
-                Id = ComputerUserCategory.EmptyCategoryId,
-                Name = Translation.GetCoreTextTranslation(ComputerUserCategory.EmptyCategoryDefaultName),
-                IsEmpty = true,
-                CustomerId = SessionFacade.CurrentCustomer.Id,
-            };
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var emptyCategory = this.computerService.GetEmptyComputerUserCategory(customerId);
 
+            var model = emptyCategory.Id > 0
+                ? GetComputerUserCategoryData(emptyCategory.Id, customerId)
+                : new ComputerUserCategoryData()
+                {
+                    Id = emptyCategory.Id,
+                    CustomerId = customerId,
+                    Name = emptyCategory.Name,
+                    IsEmpty = true
+                };
+            
             InitSectionHeaders(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
-            return View("EditUserCategory", emptyCategory);
+            return View("EditUserCategory", model);
         }
 
         [HttpGet]
@@ -295,9 +300,10 @@ namespace DH.Helpdesk.Web.Controllers
             return null;
         }
 
-        private ComputerUserCategoryData GetComputerUserCategoryData(int categoryId, int customerId)
+        private ComputerUserCategoryData GetComputerUserCategoryData(int categoryId, int customerId, bool isEmpty = false)
         {
             var category = this.computerService.GetComputerUserCategoryByID(categoryId);
+
             if (category == null)
                 return null;
 
