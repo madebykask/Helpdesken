@@ -42,7 +42,8 @@
     </scripting>
   </system.web.extensions>
   <system.web>
-    <compilation debug="true" targetFramework="4.5" />      
+
+    <compilation debug="true" targetFramework="4.5.2" />
     <pages>
       <namespaces>
         <add namespace="System.Web.Helpers"/>
@@ -54,7 +55,7 @@
       </namespaces>
     </pages>
     <!-- 50 mb in kilobytes -->
-    <httpRuntime maxRequestLength="5242880" targetFramework="4.5"/>
+    <httpRuntime maxRequestLength="5242880" targetFramework="4.5.2" encoderType="System.Web.Security.AntiXss.AntiXssEncoder" />
     <authentication mode="Forms">
       <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/"/>
     </authentication>
@@ -63,6 +64,12 @@
     <httpHandlers>
       <add path="Reserved.ReportViewerWebControl.axd" verb="*" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" validate="false"/>
     </httpHandlers>
+
+    <machineKey
+      validationKey="121B090935F6E49C2C797F69BBAAD8402ABD2EE0B667A8B44EA7DD4374267A75D7AD972A119482D15A4127461DB1DC347C1A63AE5F1CCFAACFF1B72A7F0A282C"
+      decryptionKey="CBAB74D7EC5BB56D75D217CECBFB9628819BDB8BF91CFCD64568A145BE59718B"
+      validation="SHA1"
+      decryption="AES"/>
   </system.web>
   <system.webServer>    
     <modules runAllManagedModulesForAllRequests="false"/>    
@@ -125,20 +132,8 @@
         <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
       </dependentAssembly>
       <dependentAssembly>
-        <assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" />
-        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
-      </dependentAssembly>
-      <dependentAssembly>
-        <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
-        <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
-      </dependentAssembly>
-      <dependentAssembly>
         <assemblyIdentity name="System.Web.WebPages.Razor" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
-      </dependentAssembly>
-      <dependentAssembly>
-        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
-        <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="System.Web.Http" publicKeyToken="31bf3856ad364e35" culture="neutral" />
@@ -167,7 +162,23 @@
 	  <dependentAssembly>
         <assemblyIdentity name="itextsharp" publicKeyToken="8354ae6d2174ddca" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-5.5.0.0" newVersion="5.5.0.0" />
-      </dependentAssembly>	  
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Drawing" publicKeyToken="b03f5f7f11d50a3a" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
+      </dependentAssembly>      	  
       <dependentAssembly>
         <assemblyIdentity name="Ninject" publicKeyToken="c7192dc5380945e7" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.3.4.0" newVersion="3.3.4.0" />
