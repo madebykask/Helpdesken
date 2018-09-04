@@ -110,10 +110,19 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return "display:none";
         }
 
-        public static IList<SelectListItem> BuildComputerCategoriesSelectList(this CaseInputViewModel model, int? selectedCategoryId)
+        public static IList<SelectListItem> BuildComputerCategoriesSelectList(this CaseInputViewModel model, int? selectedCategoryId, bool addEmpty = false)
         {
             var computerCategoriesSelectList =
                 BuildComputerCategoriesSelectListInner(model.ComputerUserCategories, selectedCategoryId, model.EmptyComputerCategoryName);
+
+            if (addEmpty)
+            {
+                computerCategoriesSelectList.Insert(0, new SelectListItem()
+                {
+                    Value = "",
+                    Text = ""
+                });
+            }
 
             return computerCategoriesSelectList;
         }
@@ -133,7 +142,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 Text = Translation.GetMasterDataTranslation(o.Name),
                 Value = o.Id.ToString(),
                 Selected = selectedCategoryId.HasValue && o.Id == selectedCategoryId.Value
-            }).ToList();
+            }).OrderBy(x => x.Text).ToList();
             
             computerCategoriesSelectList.Insert(0, new SelectListItem()
             {

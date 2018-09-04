@@ -21,7 +21,7 @@ namespace DH.Helpdesk.Domain.Computers
 	    #region Empty Category
 
 	    public static int EmptyCategoryId = 0;
-	    public static string EmptyCategoryDefaultName = "Employee";
+	    public static string EmptyCategoryDefaultName = "User";
 	    public static ComputerUserCategory CreateEmptyCategory()
 	    {
 	        return new ComputerUserCategory()
