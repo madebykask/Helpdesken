@@ -65,8 +65,8 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.Authentication
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, context.UserName));
                 identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
                 identity.AddClaim(new Claim(ClaimTypes.Role, user.UserGroupId.ToString()));
-                var userCustomerIds = userService.GetUserCustomersIds(user.Id);// if new customer is assigned to user, user will need to relgin
-                identity.AddClaim(new Claim(CustomClaimTypes.CustomerIds, string.Join(",", userCustomerIds)));
+                //var userCustomerIds = userService.GetUserCustomersIds(user.Id);// if new customer is assigned to user, user will need to relgin
+                //identity.AddClaim(new Claim(CustomClaimTypes.CustomerIds, string.Join(",", userCustomerIds)));
 
                 // create metadata to pass on to refresh token provider
                 var props = new AuthenticationProperties(new Dictionary<string, string>

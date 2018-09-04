@@ -7,6 +7,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http'
 
 import { MainRoutingModule } from './main-routing.module';
 import { HomeComponent, CasesOverviewComponent } from './components';
+import { GetByKeyPipe } from '../helpers/pipes/filterCaseOverview.pipe';
 
 @NgModule({
   imports: [

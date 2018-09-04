@@ -19,10 +19,11 @@ import { MomentModule } from 'ngx-moment';
 import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors'
 
 import { rootRouting } from './app.routing';
+import { GetByKeyPipe } from './helpers/pipes/filterCaseOverview.pipe';
 
 @NgModule({
   bootstrap: [ AppComponent],
-  declarations: [AppComponent, PageNotFoundComponent, LoginComponent],
+  declarations: [AppComponent, PageNotFoundComponent, LoginComponent, GetByKeyPipe],
   imports: [ 
     MbscModule,
     BrowserModule,    

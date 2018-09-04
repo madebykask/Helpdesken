@@ -47,8 +47,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             filter.CustomerId = input.CustomerId;//TODO: 0 check
 
             var claimsIdentity = (ClaimsIdentity)User.Identity;//TODO: Move Claims to context
-            var userIdStr = claimsIdentity.Claims.First(c => c.Type == ClaimTypes.Sid).Value;
-            filter.UserId = int.Parse(userIdStr);//TODO: 0 check
+            filter.UserId = UserId;//TODO: 0 check
             var userGroupIdStr = claimsIdentity.Claims.First(c => c.Type == ClaimTypes.Role).Value;
             var userGroupId = int.Parse(userGroupIdStr);//TODO: 0 check
 

@@ -1,1 +1,20 @@
-casesOverview
+<mbsc-form>
+    <div class="mbsc-form-group">
+        <form [formGroup]="filtersForm" novalidate>
+            <div class="mbsc-form-group-title">Free Text Search</div>
+            <mbsc-input formControlName="freeSearch" placeholder="Search" icon="pencil" icon-align="right"></mbsc-input>
+        </form>
+    </div>
+</mbsc-form>
+<mbsc-listview [options]="listviewSettings">
+        <mbsc-listview-item *ngFor="let case of cases">
+                CaseNumber
+                <div>Case Info 2</div>                
+        </mbsc-listview-item>
+</mbsc-listview>
+<div class="mbsc-form-group mbsc-btn-group-block">
+        <mbsc-button color="primary" (click)="search()" [disabled]="loading">
+                <span class="md-btn-icon mbsc-ic mbsc-ic-loop2" [hidden]="!loading"></span>
+                <span class="md-btn-text" [hidden]="loading">Search</span>
+        </mbsc-button>
+</div>

@@ -1,0 +1,39 @@
+export class CasesOverviewFilter {    
+
+        CustomerId: number;
+        Initiator: string;
+        InitiatorSearchScope: number;
+        CaseTypeId: number;
+        ProductAreaId: number;
+        CategoryId: number;
+        RegionIds: number[]= [];
+        RegisteredByIds: number[] = [];
+        WorkingGroupIds: number[] = [];
+        ResponsibleUserIds: number[] = [];
+        PerfomerUserIds: number[] = [];
+        PriorityIds: number[] = [];
+        StatusIds: number[] = [];
+        StateSecondaryIds: number[] = [];
+        CaseRegistrationDateStartFilter: Date;
+        CaseRegistrationDateEndFilter: Date;
+        CaseWatchDateStartFilter: Date;
+        CaseWatchDateEndFilter: Date;
+        CaseClosingDateStartFilter: Date;
+        CaseClosingDateEndFilter: Date;
+        CaseClosingReasonFilter: Date;
+        SearchInMyCasesOnly: boolean = false;
+        IsConnectToParent: boolean = false;
+        CurrentCaseId: number;
+        CaseProgress: number;
+        CaseFilterFavorite: number;
+        FreeTextSearch: string;
+        DepartmentIds: number[] = [];
+        OrganizationUnitIds: number[] = [];
+        RemainingTime: number;
+        CaseRemainingTimeFilter: Date;
+        CaseRemainingTimeUntilFilter: Date;
+        CaseRemainingTimeMaxFilter: Date;
+        CaseRemainingTimeHoursFilter: Date;
+        PageSize: number;
+        Page: number;    
+}

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { config } from '../../../../environments/environment'
 import { map } from 'rxjs/operators';
 
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -21,7 +22,7 @@ export class HomeComponent implements OnInit {
   }
 
   sendTestRequest(event) {
-      this.http.get<any>(`${config.apiUrl}/api/test/anyrole`)
-        .subscribe();
+    this.http.get<any>(`${config.apiUrl}/api/test/anyrole`)
+    .subscribe();
   }
 }

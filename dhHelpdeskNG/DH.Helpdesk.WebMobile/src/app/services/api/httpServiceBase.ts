@@ -1,11 +1,14 @@
 import { Observable } from "rxjs/Observable";
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { config } from "../../../environments/environment";
 
 export abstract class HttpApiServiceBase {
+    private baseApiUrl: string;
 
-    protected constructor(private http: HttpClient,private baseApiUrl: string) { 
+    protected constructor(private http: HttpClient,) { 
+        this.baseApiUrl = config.apiUrl;
     }
 
     protected buildResourseUrl(resourceName: string){
@@ -15,27 +18,30 @@ export abstract class HttpApiServiceBase {
     protected getJson<TResponse>(url: string, headers?:any): Observable<TResponse> {
         return this.http
             .get<TResponse>(url, { headers: this.getHeaders(headers)})
-            .catch((error: any) => {
-                return Observable.throw(error);
-            });
+            .pipe(
+                catchError((error: any) => {
+                    return throwError(error);
+            }));
     }
 
     protected postJson<TResponse>(url: string, data: any, headers?:any): Observable<TResponse> {
 
         return this.http
             .post<TResponse>(url, JSON.stringify(data), { headers: this.getHeaders(headers) })
-            .catch((error: any) => {
-                return Observable.throw(error);
-            });
+            .pipe(
+                catchError((error: any) => {
+                    return throwError(error);
+            }));
     }
 
     protected postJsonNoContent(url: string, data: any, headers?: any): Observable<Object> { // fixed issue https://github.com/angular/angular/issues/18680 - remove after fix
 
         return this.http
             .post(url, JSON.stringify(data), { headers: this.getHeaders(headers), responseType: 'text' })
-            .catch((error: any) => {
-                return Observable.throw(error);
-            });
+            .pipe(
+                catchError((error: any) => {
+                    return throwError(error);
+            }));
     }
     
     private getHeaders(headers?: any): HttpHeaders {

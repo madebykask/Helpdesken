@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CasesOverview\SearchOverviewFilterInputModel.cs" />
+    <Compile Include="CurrentUser\UserSettingsModelOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
