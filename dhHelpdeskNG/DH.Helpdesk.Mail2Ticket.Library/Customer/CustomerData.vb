@@ -370,7 +370,7 @@ Public Class CustomerData
                         "tblSettings.XMLFileFolder, tblCustomer.NDSPath AS LDAPServerName, tblSettings.LDAPAuthenticationType, tblWorkingGroup.Id AS WorkingGroup_Id, " & _
                         "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.EMailImportType, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " & _
                         "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, tblWorkingGroup.WorkingGroupEMail, tblCustomer.CaseStatisticsEMailList, " & _
-                        "'' AS EMailFolder, '' AS EMailFolderArchive, tblSettings.DefaultAdministratorExternal, tblWorkingGroup.EMailCaseType_Id AS WorkingGroupDefaultCaseType_Id, tblCustomer.NewCaseEMailList, " & _
+                        "tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.DefaultAdministratorExternal, tblWorkingGroup.EMailCaseType_Id AS WorkingGroupDefaultCaseType_Id, tblCustomer.NewCaseEMailList, " & _
                         "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization, tblSettings.M2TNewCaseMailTo "
 
             sSQL = sSQL & "FROM tblCustomer " & _

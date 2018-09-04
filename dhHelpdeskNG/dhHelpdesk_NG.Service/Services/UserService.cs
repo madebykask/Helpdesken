@@ -1232,9 +1232,8 @@ namespace DH.Helpdesk.Services.Services
                 var userRep = uow.GetRepository<User>();
 
                 var customers = customerRep.GetAll().GetById(customerId);
-                var customerUsers = customerUserRep.GetAll();
-                var users = userRep.GetAll();
-                //var users = userRep.GetAll().GetActive();
+                var customerUsers = customerUserRep.GetAll();               
+                var users = userRep.GetAll().GetActive();
 
                 return UsersMapper.MapToCustomerUsers(customers, users, customerUsers);
             }

@@ -347,18 +347,17 @@ namespace DH.Helpdesk.Services.Services
                     {
                         cs = new CaseFieldSetting
                         {
+                            Customer_Id =  customerId,
                             CaseFieldSettingsGUID = Guid.NewGuid()
                         };
                     }
 
                     //change only required fields. There may be other pages that change other values!
                     cs.Name = caseFieldSetting.Name;
-                    cs.Customer_Id = caseFieldSetting.Customer_Id;
                     cs.ShowOnStartPage = caseFieldSetting.ShowOnStartPage;
                     cs.Hide = caseFieldSetting.Hide;
                     cs.ShowExternal = caseFieldSetting.ShowExternal;
                     cs.EMailIdentifier = caseFieldSetting.EMailIdentifier;
-                    cs.CaseFieldSettingsGUID = caseFieldSetting.CaseFieldSettingsGUID;
                     cs.Locked = caseFieldSetting.Locked;
                     cs.Required = caseFieldSetting.Required;
                     cs.RequiredIfReopened = caseFieldSetting.RequiredIfReopened;
