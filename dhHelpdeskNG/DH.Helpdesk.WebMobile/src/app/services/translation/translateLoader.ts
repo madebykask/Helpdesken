@@ -10,20 +10,21 @@ export function initTranslation(ngxTranslateService: NgxTranslateService,
      logger: LoggerService) : Function {
     return () =>       
         new Observable(observer => {
-            var languages = translationApiService.Languages;
-            translationApiService.getLanguages().subscribe(langs => {
-                langs.map(lang => {
-                    languages[lang.languageId.toLowerCase()] = lang.name;
+/*             var languages = translationApiService.Languages;
+             translationApiService.getLanguages()
+                .subscribe(langs => {
+                    langs.map(lang => {
+                        languages[lang.languageId.toLowerCase()] = lang.name;
                 });
 
                 //adds languages to the inner collection - we later can use  it to show it on UI: translationService.lang    
-                ngxTranslateService.addLangs(Object.keys(languages).map(s => s.toLowerCase())); 
+                ngxTranslateService.addLangs(Object.keys(languages).map(s => s.toLowerCase()));  
 
                 ngxTranslateService.use('en'); //todo:replace with constant/config value
-                logger.log(`>> translation has been initialised. Langs: ${JSON.stringify(ngxTranslateService.langs)}` );
+                logger.log(`>> translation has been initialised. Langs: ${JSON.stringify(ngxTranslateService.langs)}` ); */
                 observer.next(null); 
                 observer.complete();
-        });
+        //});
     }).toPromise();
  }
 

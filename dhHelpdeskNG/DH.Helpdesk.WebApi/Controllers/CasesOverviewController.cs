@@ -19,6 +19,7 @@ using DH.Helpdesk.Web.Common.Models.CaseSearch;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Models.CasesOverview;
+using DH.Helpdesk.WebApi.Infrastructure.Config.Authentication;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -28,28 +29,34 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICustomerUserService _customerUserService;
         private readonly ICaseSettingsService _caseSettingService;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
+        private readonly IUserService _userSerivice;
+        private readonly ICustomerService _customerService;
 
         public CasesOverviewController(ICaseSearchService caseSearchService,
             ICustomerUserService customerUserService,
             ICaseSettingsService caseSettingService,
-            ICaseFieldSettingService caseFieldSettingService)
+            ICaseFieldSettingService caseFieldSettingService,
+            IUserService userSerivice,
+            ICustomerService customerService)
         {
             _caseSearchService = caseSearchService;
             _customerUserService = customerUserService;
             _caseSettingService = caseSettingService;
             _caseFieldSettingService = caseFieldSettingService;
+            _userSerivice = userSerivice;
+            _customerService = customerService;
         }
 
         [HttpPost]
         public async Task<IHttpActionResult> Overview([FromBody]SearchOverviewFilterInputModel input)
         {
             var filter = new CaseSearchFilter();
-            filter.CustomerId = input.CustomerId;//TODO: 0 check
+            filter.CustomerId = input.CustomerId;
 
-            var claimsIdentity = (ClaimsIdentity)User.Identity;//TODO: Move Claims to context
             filter.UserId = UserId;//TODO: 0 check
-            var userGroupIdStr = claimsIdentity.Claims.First(c => c.Type == ClaimTypes.Role).Value;
-            var userGroupId = int.Parse(userGroupIdStr);//TODO: 0 check
+            var userGroupId = User.Identity.GetGroupId();
+            var userOverview = await Task.FromResult(_userSerivice.GetUserOverview(UserId));//TODO: use cahced version
+            var customerSettings = await Task.FromResult(_customerService.GetCustomer(filter.CustomerId));//TODO: Use cahced version
 
             filter.Initiator = input.Initiator ?? string.Empty;//from params - frm.ReturnFormValue(CaseFilterFields.InitiatorNameAttribute);
             if (input.InitiatorSearchScope.HasValue) 
@@ -116,9 +123,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             //TODO: review if it required
             var caseSettings = _caseSettingService.GetCaseSettingsWithUser(filter.CustomerId, filter.UserId, userGroupId);
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(filter.CustomerId).ToArray();
-            var showRemainingTime = false; //TODO: SessionFacade.CurrentUser.ShowSolutionTime;
 
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");//TODO: remove hard code TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId)
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(userOverview.TimeZoneId);
             const int maxTextCharCount = 200;
             filter.MaxTextCharacters = maxTextCharCount;
 
@@ -152,16 +158,16 @@ namespace DH.Helpdesk.WebApi.Controllers
                 caseSettings,
                 caseFieldSettings,
                 filter.UserId,
-                User.Identity.Name, 
-                0,//TODO: Get real data SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
+                UserName,
+                userOverview.ShowNotAssignedWorkingGroups,
                 userGroupId,
-                0,//TODO: Get real data SessionFacade.CurrentUser.RestrictedCasePermission,
+                userOverview.RestrictedCasePermission,
                 sm.Search,
-                8,//TODO: Get real data workContext.Customer.WorkingDayStart,
-                17,//TODO: Get real data workContext.Customer.WorkingDayEnd,
+                customerSettings.WorkingDayStart,
+                customerSettings.WorkingDayEnd,
                 userTimeZone,
                 ApplicationTypes.Helpdesk,//TODO: remove hardcode
-                showRemainingTime,//TODO: Get real data
+                userOverview.ShowSolutionTime,
                 out remainingTimeData,
                 out aggregateData);
 

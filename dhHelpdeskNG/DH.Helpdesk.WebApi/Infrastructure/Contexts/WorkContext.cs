@@ -18,7 +18,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Contexts
     {
         public WorkContext(IUserContext userContext) //ICacheContext cache, ICustomerContext customer
         {
-            User = userContext;
+            //User = userContext;
             //Cache = cache;
             //Customer = customer;
         }

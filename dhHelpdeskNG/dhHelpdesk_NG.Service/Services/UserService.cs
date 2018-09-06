@@ -1173,15 +1173,15 @@ namespace DH.Helpdesk.Services.Services
         /// <summary>
         /// The get user overview.
         /// </summary>
-        /// <param name="user">
+        /// <param name="userId">
         /// The user.
         /// </param>
         /// <returns>
         /// The <see cref="UserOverview"/>.
         /// </returns>
-        public UserOverview GetUserOverview(int user)
+        public UserOverview GetUserOverview(int userId)
         {
-            return this._userRepository.GetUser(user);
+            return this._userRepository.GetUser(userId);
         }
 
         public List<ItemOverview> FindActiveOverviews(int customerId)

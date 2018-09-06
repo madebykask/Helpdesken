@@ -35,7 +35,7 @@ namespace DH.Helpdesk.WebApi
             //filters.Add(new ApiExceptionFilter()); // Using Autofac implementation of ApiExceptionFilter
             filters.Add(new ModelValidationApiActionFilter());
             filters.Add(new AuthorizeApiAttribute());
-            //filters.Add(new SessionApiRequiredAttribute());
+            filters.Add(new CustomerAccessValidationFilter());
             //filters.Add(new ValidateApiAntiForgeryTokenAttribute());
 
         }

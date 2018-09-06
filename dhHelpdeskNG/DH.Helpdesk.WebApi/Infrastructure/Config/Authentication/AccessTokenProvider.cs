@@ -61,9 +61,9 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.Authentication
             {
                 //System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames - use this one if go to OAuth
                 var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-                identity.AddClaim(new Claim(ClaimTypes.Sid, user.Id.ToString()));
-                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, context.UserName));
-                identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
+                //identity.AddClaim(new Claim(ClaimTypes.Sid, user.Id.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.Name, user.UserId));
                 identity.AddClaim(new Claim(ClaimTypes.Role, user.UserGroupId.ToString()));
                 //var userCustomerIds = userService.GetUserCustomersIds(user.Id);// if new customer is assigned to user, user will need to relgin
                 //identity.AddClaim(new Claim(CustomClaimTypes.CustomerIds, string.Join(",", userCustomerIds)));

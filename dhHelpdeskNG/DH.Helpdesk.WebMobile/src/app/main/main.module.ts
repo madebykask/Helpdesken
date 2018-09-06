@@ -20,6 +20,6 @@ import { GetByKeyPipe } from '../helpers/pipes/filterCaseOverview.pipe';
     ReactiveFormsModule,
   ],
   exports: [],
-  declarations: [HomeComponent, CasesOverviewComponent]
+  declarations: [HomeComponent, CasesOverviewComponent, GetByKeyPipe]
 })
 export class MainModule { }

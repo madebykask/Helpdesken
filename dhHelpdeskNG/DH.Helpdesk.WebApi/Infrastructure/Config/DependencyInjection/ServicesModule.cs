@@ -22,6 +22,8 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
             builder.RegisterType<CustomerUserService>().As<ICustomerUserService>();
             builder.RegisterType<TextTranslationService>().As<ITextTranslationService>();
             builder.RegisterType<LanguageService>().As<ILanguageService>();
+            builder.RegisterType<CustomerService>().As<ICustomerService>();
+            
         }
 
         #endregion

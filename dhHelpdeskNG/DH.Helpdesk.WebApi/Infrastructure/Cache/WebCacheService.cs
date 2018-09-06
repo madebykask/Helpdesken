@@ -12,8 +12,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Cache
 		{
 			if (!IsCacheEnabled)
 				return getItemCallback();
-			var item = HttpRuntime.Cache.Get(cacheKey) as T;
-			if (item == null)
+		    if (!(HttpRuntime.Cache.Get(cacheKey) is T item))
 			{
 				item = getItemCallback();
 				HttpRuntime.Cache.Insert(cacheKey, item, null, System.Web.Caching.Cache.NoAbsoluteExpiration, slidingExpiration);
@@ -25,8 +24,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Cache
 		{
 			if (!IsCacheEnabled)
 				return getItemCallback();
-			var item = HttpRuntime.Cache.Get(cacheKey) as T;
-			if (item == null)
+		    if (!(HttpRuntime.Cache.Get(cacheKey) is T item))
 			{
 				item = getItemCallback();
 
@@ -39,8 +37,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Cache
 		{
 			if (!IsCacheEnabled)
 				return await getItemCallback();
-			var item = await Task.FromResult(HttpRuntime.Cache.Get(cacheKey) as T);
-			if (item == null)
+		    if (!(HttpRuntime.Cache.Get(cacheKey) is T item))
 			{
 				item = await getItemCallback();
 

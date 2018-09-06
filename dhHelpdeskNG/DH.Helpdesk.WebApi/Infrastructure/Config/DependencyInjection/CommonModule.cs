@@ -58,7 +58,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<WebCacheService>()
-                .As<ICacheService>();
+                .As<ICacheService>().SingleInstance();
             
             //this. builder.RegisterType<IHelpdeskCache>()
             //    .As<HelpdeskCache>();
