@@ -391,15 +391,18 @@ namespace DH.Helpdesk.Services.Services
             if (caseSolution == null)
                 return null;
 
-            var stateSecondaryId = 0;
-            
-            if (caseStateSecondaryId > 0)
+            var stateSecondaryId =
+                caseStateSecondaryId > 0
+                    ? _stateSecondaryRepository.GetById(caseSolution.StateSecondaryId).StateSecondaryId
+                    : 0;
+
+            if (caseSolutionId > 0)
             {
-                stateSecondaryId = _stateSecondaryRepository.GetById(caseStateSecondaryId)?.StateSecondaryId ?? 0;
-            }
-            else if (caseSolution.StateSecondaryId > 0)
-            {
-                stateSecondaryId = _stateSecondaryRepository.GetById(caseSolution.StateSecondaryId).StateSecondaryId;
+                //fallback to casesolution.StateSecondaryId if case is new
+                if (caseStateSecondaryId == 0 && caseSolution.StateSecondaryId > 0)
+                {
+                    stateSecondaryId = _stateSecondaryRepository.GetById(caseSolution.StateSecondaryId).StateSecondaryId;
+                }
             }
 
             var extendedCaseFormData =
