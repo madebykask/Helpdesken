@@ -2495,7 +2495,11 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 if (fileId == 0)
                 {
-                    _logFileService.DeleteByFileName(fileName.Trim());
+                    if (GuidHelper.IsGuid(id))
+                    {
+                        this.userTemporaryFilesStorage.DeleteFile(fileName, id, ModuleName.Log);
+                        this.userTemporaryFilesStorage.ResetCacheForObject(id);
+                    }
                 }
                 else
                     _logFileService.DeleteByFileIdAndFileName(fileId.Value, fileName.Trim());
