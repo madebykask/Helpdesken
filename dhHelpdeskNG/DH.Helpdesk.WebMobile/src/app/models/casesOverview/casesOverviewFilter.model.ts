@@ -35,5 +35,7 @@ export class CasesOverviewFilter {
         CaseRemainingTimeMaxFilter: Date;
         CaseRemainingTimeHoursFilter: Date;
         PageSize: number;
-        Page: number;    
+        Page: number;
+        OrderBy: string;
+        Ascending: boolean;    
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { config } from '../../../../environments/environment'
+import { config } from '../../../environments/environment'
 import { map } from 'rxjs/operators';
 
 

@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { APP_INITIALIZER } from '@angular/core'
-import { MainModule } from './main/main.module'
 import { LoginComponent } from './shared/components'
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
@@ -17,12 +16,16 @@ import { LoggerService } from './services/logging';
 import { MomentModule } from 'ngx-moment';
 
 import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors'
+import { HomeComponent, CasesOverviewComponent } from './components';
+import { GetByKeyPipe } from './helpers/pipes/filterCaseOverview.pipe';
 
 import { rootRouting } from './app.routing';
 
 @NgModule({
   bootstrap: [ AppComponent],
-  declarations: [AppComponent, PageNotFoundComponent, LoginComponent],
+  declarations: [AppComponent, PageNotFoundComponent, LoginComponent,
+     HomeComponent, CasesOverviewComponent, 
+     GetByKeyPipe],
   imports: [ 
     MbscModule,
     BrowserModule,    
@@ -39,7 +42,6 @@ import { rootRouting } from './app.routing';
       useDefaultLang: true
     }),
     MomentModule,
-    MainModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

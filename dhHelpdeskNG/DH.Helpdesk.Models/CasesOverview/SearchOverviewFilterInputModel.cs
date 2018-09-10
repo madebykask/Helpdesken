@@ -43,6 +43,8 @@ namespace DH.Helpdesk.Models.CasesOverview
         public bool? CaseRemainingTimeHoursFilter { get; set; }
         public int? PageSize { get; set; }
         public int? Page { get; set; }
+        public string OrderBy { get; set; }
+        public bool? Ascending { get; set; }
 
         public SearchOverviewFilterInputModel()
         {

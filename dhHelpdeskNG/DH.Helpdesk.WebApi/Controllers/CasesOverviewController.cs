@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Grid;
 using DH.Helpdesk.BusinessData.Models.Paging;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
@@ -119,6 +120,8 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             var sm = InitCaseSearchModel(filter.CustomerId, filter.UserId);
             sm.CaseSearchFilter = filter;
+            if (!string.IsNullOrWhiteSpace(input.OrderBy)) sm.Search.SortBy = input.OrderBy;
+            if (input.Ascending.HasValue) sm.Search.Ascending = input.Ascending.Value;
 
             //TODO: review if it required
             var caseSettings = _caseSettingService.GetCaseSettingsWithUser(filter.CustomerId, filter.UserId, userGroupId);

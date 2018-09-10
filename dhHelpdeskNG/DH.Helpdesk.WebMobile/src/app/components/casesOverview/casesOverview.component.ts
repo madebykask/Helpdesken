@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { CaseOverviewItem, CasesOverviewFilter } from '../../../models'
-import { CasesOverviewService } from '../../../services/casesOverview';
+import { CaseOverviewItem, CasesOverviewFilter } from '../../models'
+import { CasesOverviewService } from '../../services/casesOverview';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserSettingsService } from '../../../services/user';
+import { UserSettingsService } from '../../services/user';
 import { map, finalize, catchError } from 'rxjs/operators';
+import { PagingConstants } from '../../helpers/constants';
 
 @Component({
   selector: 'app-casesOverview',
@@ -27,8 +28,9 @@ export class CasesOverviewComponent implements OnInit {
 
   ngOnInit() {
     this.filtersForm = this.formBuilder.group({
-      freeSearch: ['']     
+      freeSearch: ['']      
     });
+    this.search();
   }
 
   search() {
@@ -37,8 +39,10 @@ export class CasesOverviewComponent implements OnInit {
     filter.CustomerId = this.userSettingsService.getUserData().selectedCustomerId
     filter.InitiatorSearchScope = 0;//TODO: use enum
     filter.CaseProgress = -1;//TODO: use enum
-    filter.PageSize = 5;
-    filter.Page = 0;
+    filter.PageSize = PagingConstants.pageSize;
+    filter.Page = PagingConstants.page;
+    filter.Ascending = false;
+    filter.OrderBy = 'CaseNumber';//TODO - remove use hardcode
 
     this.loading = true;
     this.casesOverviewService.searchCases(filter)
