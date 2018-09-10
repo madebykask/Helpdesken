@@ -140,12 +140,12 @@ function GetComputerSearchOptions() {
 function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedOrganizationUnitId) {
     var $publicOUControlName = $(publicOUControlName);
     var $publicReadOnlyOUName = $(publicReadOnlyOUName);
-    $publicOUControlName.val('');
-    $publicReadOnlyOUName.val('');
 
-    var ctlOption = publicOUControlName + ' option';
+    //$publicOUControlName.val(''); // breaks validation on case save
+    $publicReadOnlyOUName.val('');
+    
     $.get(publicChangeDepartment, { 'id': departmentId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
-        $(ctlOption).remove();
+
         var selectedItem = null;
         var options = '<option value="">&nbsp;</option>';
         if (data) {
@@ -161,6 +161,7 @@ function refreshOrganizationUnit(departmentId, departmentFilterFormat, selectedO
             }
         }
 
+        $publicOUControlName.empty();
         $publicOUControlName.append(options);
 
         if (selectedItem) {
@@ -199,16 +200,15 @@ function refreshIsAboutOrganizationUnit(departmentId, departmentFilterFormat, se
 function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentId, selectedOU) {
     var $publicDepartmentControlName = $(publicDepartmentControlName);
     var $publicReadOnlyDepartmentName = $(publicReadOnlyDepartmentName);
-    $publicDepartmentControlName.val('');
-    $publicReadOnlyDepartmentName.val('');
 
-    var ctlOption = publicDepartmentControlName + ' option';
+    $publicDepartmentControlName.val(''); 
+    $publicReadOnlyDepartmentName.val('');
+    
     $publicDepartmentControlName.prop('disabled', true);
     $(publicOUControlName).prop('disabled', true);
 
     $.get(publicChangeRegion, { 'id': regionId, 'customerId': publicCustomerId, 'departmentFilterFormat': departmentFilterFormat }, function (data) {
-        $(ctlOption).remove();
-
+        
         // Don't disable the dropdown only disable non selected options
         if (IsInitiatorCategoryReadOnly()) {
             $publicDepartmentControlName.removeAttr('disabled');
@@ -229,6 +229,7 @@ function refreshDepartment(regionId, departmentFilterFormat, selectedDepartmentI
             }
         }
 
+        $publicDepartmentControlName.empty();
         $publicDepartmentControlName.append(options);
 
         if (selectedItem) {
