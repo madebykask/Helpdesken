@@ -421,7 +421,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 StatusType = GetFieldStatusType(ruleMode, TranslationCaseFields.CaseType_Id, caseFieldSettings, CaseSolutionFields.CaseType, templateSettingModel.ToList()),
                 DefaultItem = defaultCaseType != null ? new FieldItem(defaultCaseType.Id.ToString(), defaultCaseType.Name) : FieldItem.CreateEmpty(),
                 Items = caseTypes.Where(c => c.IsActive != 0 || (currentData.CaseType_Id.HasValue && currentData.CaseType_Id.Value == c.Id))
-                                 .Select(c => new FieldItem(c.Id.ToString(), Translation.GetCoreTextTranslation(c.Name), c.IsActive != 0, c.Parent_CaseType_Id?.ToString()) { ForeignKeyValue1 = c.User_Id?.ToString() })
+                                 .Select(c => new FieldItem(c.Id.ToString(), Translation.GetCoreTextTranslation(c.Name), c.IsActive != 0, c.Parent_CaseType_Id?.ToString())
+                                 { ForeignKeyValue1 = c.User_Id?.ToString(),
+                                   ForeignKeyValue2 = c.WorkingGroup_Id?.ToString()
+                                 })
                                  .OrderBy(i => i.ItemText).ToList()
             };
 
@@ -1634,6 +1637,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                         ActionType = RelationActionType.ValueSetter.ToInt(),
                         FieldId = TranslationCaseFields.Performer_User_Id.ToString(),
                         ForeignKeyNumber = ForeignKeyNum.FKeyNum1.ToInt()
+                    },
+                    new FieldRelation(CaseRuleMode.CaseUserChangeMode) {
+                        SequenceNo = 0,
+                        RelationType = RelationType.OneToOne.ToInt(),
+                        ActionType = RelationActionType.ValueSetter.ToInt(),
+                        FieldId = TranslationCaseFields.WorkingGroup_Id.ToString(),
+                        ForeignKeyNumber = ForeignKeyNum.FKeyNum2.ToInt()
                     }
                 }
 
