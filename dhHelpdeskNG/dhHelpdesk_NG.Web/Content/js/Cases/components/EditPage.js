@@ -1389,6 +1389,51 @@ EditPage.prototype.enableMoveCaseControls = function(state) {
     this.$moveCaseButton.prop('disabled', !state);
 };
 
+
+EditPage.prototype.buildExtendedCasePrintMarkup = function () {
+    var self = this;
+
+    var exContainer = document.getElementById(self.Ex_Container_Prefix + self.Current_EC_FormId);
+    var formData = exContainer.contentWindow.getFormData();
+
+    var printMarkup = '';
+
+    //tabs
+    for (var i = 0; i < formData.tabs.length; i++) {
+
+        var tab = formData.tabs[i];
+        
+        printMarkup +=
+            '<tr><td style="width:20%;word-wrap: break-word; margin-left:20px;line-height:10px;" class="textbold H"><p> ' + tab.name + ' </p></td>' +
+            '<td style="width:80%; word-wrap: break-word;line-height:10px;" class="H"><p> </p></td></tr>';
+
+        // sections 
+        for (var j = 0; j < tab.sections.length; j++) {
+            var section = tab.sections[j];
+            
+            printMarkup += '<tr><td style="width:20%;word-wrap: break-word; margin-left:20px;line-height:10px;" class="textbold G"><p>'  + section.name + '</p></td>' +
+                           '<td style="width:80%; word-wrap: break-word;line-height:10px;" class="G"><p>  </p></td></tr>';
+
+            //section instances
+            for (var k = 0; k < section.instances.length; k++) {
+                var sectionInstance = section.instances[k];
+
+                //fields
+                for (var n = 0; n < sectionInstance.fields.length; n++) {
+                    var field = sectionInstance.fields[n];
+
+                    var fieldValue = (field.secondaryValue || '').length ? field.secondaryValue : field.value;
+
+                    printMarkup +=
+                        '<tr><td style="width:20%;word-wrap: break-word; margin-left:20px;line-height:10px;" class="textbold R"><p>' + field.label + '</p></td>' +
+                        '<td style="width:80%; word-wrap: break-word;line-height:10px;" class="R"><p>' + fieldValue + '</p></td></tr>';
+                }
+            }
+        }
+    }
+    return printMarkup;
+};
+
 /***** Initiator *****/
 EditPage.prototype.init = function (p) {
     var self = this;
@@ -1566,18 +1611,31 @@ EditPage.prototype.init = function (p) {
         }
     });
     
-    self.$btnPrint.click(function (e) {               
-        
-    $.get("/Cases/ShowCasePrintPreview/",
+    self.$btnPrint.click(function (e) {
+
+            $.get("/Cases/ShowCasePrintPreview/",
             {
                 caseId: p.currentCaseId,
                 caseNumber: p.currentCaseNumber,
                 curTime: Date.now()
-            },                
+            },
+            function (reportPresentation) {
 
-            function (_reportPresentation) {
-                self.$printArea.html(_reportPresentation);
-                                        
+                var $reportTable = $(reportPresentation);
+                        
+                //EXTENDED CASE handling
+                if (self.Current_EC_FormId) {
+
+                    var printMarkup = self.buildExtendedCasePrintMarkup();
+               
+                    if (printMarkup && printMarkup.length) {
+                        $reportTable.find('#caseReportContainer table.printcase').append(printMarkup);
+                    }
+                }
+
+                self.$printArea.html('');
+                self.$printArea.append($reportTable);
+
                 $('#PrintCaseDialog').draggable({
                     handle: ".modal-header"
                 });

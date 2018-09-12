@@ -109,6 +109,7 @@
                                 }
                             </tr>
                         }
+                        <tr id="excase"></tr>
                     </table>
                     @{  var invoices = Model.ReportData.Where(d => d.LineType == ReportLineTypes.InvoiceTime ||
                                                                    d.LineType == ReportLineTypes.InvoiceRow).ToList();}
@@ -171,9 +172,11 @@
             $("body").append(printFrame);
             var frameDoc = printFrame[0].contentWindow ? printFrame[0].contentWindow : printFrame[0].contentDocument.document ? printFrame[0].contentDocument.document : printFrame[0].contentDocument;
             frameDoc.document.open();
+
             //new HTML document.
             frameDoc.document.write('<html><head>');
             frameDoc.document.write('</head><body>');
+
             //CSS files.
             var css1 = '@Url.Content("~/Content/css/bootstrap.css")';
             var css2 = '@Url.Content("~/Content/css/print.css")';
