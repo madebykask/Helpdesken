@@ -79,8 +79,8 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.Authentication
             }
             else
             {
-                context.SetError("Invalid user!", "The user name or password is incorrect.");
                 context.Rejected();
+                context.SetError("Invalid user!", "The user name or password is incorrect.");
             }
         }
 

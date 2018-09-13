@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpRequest } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { UserData } from '../../models'
 import { LocalStorageService } from '../localStorage'
 import { HttpApiServiceBase } from '../api'
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserSettingsService extends HttpApiServiceBase {
@@ -13,7 +14,8 @@ export class UserSettingsService extends HttpApiServiceBase {
     }
 
     loadUserSettings() {
-        return this.getJson(this.buildResourseUrl('/api/currentuser/settings'))//TODO: error handling
+        let isLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+        this.getJson(this.buildResourseUrl('/api/currentuser/settings'))//TODO: error handling
             .pipe(
                 map((data: any) => {
                     if(data) {
@@ -30,7 +32,12 @@ export class UserSettingsService extends HttpApiServiceBase {
                         user.currentData.selectedCustomerId = Number(data.selectedCustomerId);
                     // Other settings
                     this.localStorageService.setCurrentUser(user);
+                    isLoaded.next(true);
+                    return this
                 }
+            );
+            return isLoaded.pipe(
+                filter(success => success)
             );
     };
     

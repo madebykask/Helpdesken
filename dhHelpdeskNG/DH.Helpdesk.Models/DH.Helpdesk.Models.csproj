@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,7 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\BaseInputModel.cs" />
     <Compile Include="CasesOverview\SearchOverviewFilterInputModel.cs" />
+    <Compile Include="Case\CaseEditOutputModel.cs" />
+    <Compile Include="Case\GetCaseInputModel.cs" />
     <Compile Include="CurrentUser\UserSettingsModelOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -4,7 +4,7 @@
     using System.Runtime.Caching;
     using System.Collections.Generic;
 
-    public interface ICacheProvider
+    public interface ICacheProvider //TODO: Review if it can be replaced with ICacheService
     {
         object Get(string key);
         void Set(string key, object data, int cacheTime);

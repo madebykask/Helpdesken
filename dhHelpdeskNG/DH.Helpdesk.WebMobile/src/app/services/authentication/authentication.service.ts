@@ -13,17 +13,19 @@ export class AuthenticationService {
     login(username: string, password: string) {
         let clientId = config.clientId;
         return this.http.post<any>(`${config.apiUrl}/api/account/login`, { username, password, clientId})
-            .pipe(map(data => {                
+            .pipe(map(data => {
+                let isSuccess = false;                
                 // login successful if there's a token in the response
                 if (data && data.access_token) {
                     let user = new CurrentUser();
                     UserAuthenticationData.setData(user.authData, data);
                     user.authData.recievedAt = new Date();
                     // store user details and token in local storage to keep user logged in between page refreshes
-                    this.localStorageService.setCurrentUser(user);                    
+                    this.localStorageService.setCurrentUser(user);    
+                    isSuccess = true;                
                 }
 
-                return data;
+                return isSuccess;
             }));
     }
 

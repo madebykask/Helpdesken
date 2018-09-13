@@ -16,6 +16,10 @@ using DH.Helpdesk.BusinessData.Models.Projects.Output;
 using DH.Helpdesk.BusinessData.Models.Users.Input;
 using DH.Helpdesk.Common;
 using DH.Helpdesk.Dal.DbQueryExecutor;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Dal.Infrastructure.Concrete;
+using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email;
+using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email.Concrete;
 using DH.Helpdesk.Dal.Infrastructure.Translate;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.MapperData.Logs;
@@ -42,6 +46,12 @@ using DH.Helpdesk.Domain.Projects;
 using DH.Helpdesk.Domain.Users;
 using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
 using DH.Helpdesk.Services.BusinessLogic.Admin.Users.Concrete;
+using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
+using DH.Helpdesk.Services.Infrastructure;
+using DH.Helpdesk.Services.Infrastructure.Concrete;
+using DH.Helpdesk.Services.Infrastructure.Email;
+using DH.Helpdesk.Services.Infrastructure.Email.Concrete;
+using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.WebApi.Infrastructure.Cache;
 using DH.Helpdesk.WebApi.Infrastructure.Translate;
 
@@ -59,7 +69,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
         {
             builder.RegisterType<WebCacheService>()
                 .As<ICacheService>().SingleInstance();
-            
+
             //this. builder.RegisterType<IHelpdeskCache>()
             //    .As<HelpdeskCache>();
 
@@ -73,8 +83,8 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
             //    .As<JsonSerializeService>()
             //    .SingleInstance();
 
-             builder.RegisterType<UserPermissionsChecker>().As<IUserPermissionsChecker>();
-             builder.RegisterType<ApplicationConfiguration>().As<IApplicationConfiguration>().InstancePerRequest();
+            builder.RegisterType<UserPermissionsChecker>().As<IUserPermissionsChecker>();
+            builder.RegisterType<ApplicationConfiguration>().As<IApplicationConfiguration>().InstancePerRequest();
 
             builder.RegisterType<ProductAreaToOverviewMapper>()
                .As<IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview>>()
@@ -89,9 +99,9 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
                 .As<IEntityToBusinessModelMapper<Setting, CustomerSettings>>()
                 .SingleInstance();
 
-             builder.RegisterType<UpdatedUserModuleToUserModuleEntityMapper>()
-                .As<IBusinessModelToEntityMapper<UserModule, UserModuleEntity>>()
-                .SingleInstance();
+            builder.RegisterType<UpdatedUserModuleToUserModuleEntityMapper>()
+               .As<IBusinessModelToEntityMapper<UserModule, UserModuleEntity>>()
+               .SingleInstance();
 
             builder.RegisterType<CaseNotifierToEntityMapper>()
                .As<IBusinessModelToEntityMapper<CaseNotifier, ComputerUser>>()
@@ -99,204 +109,222 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
 
             builder.RegisterType<Translator>().As<ITranslator>().SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<InvoiceArticle, InvoiceArticleEntity>>()
-            //        .As<InvoiceArticleToEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<InvoiceArticleToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<InvoiceArticle, InvoiceArticleEntity>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<InvoiceArticleUnit, InvoiceArticleUnitEntity>>()
-            //        .As<InvoiceArticleUnitToEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<InvoiceArticleUnitToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<InvoiceArticleUnit, InvoiceArticleUnitEntity>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle>>()
-            //        .As<InvoiceArticleToBusinessModelMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<InvoiceArticleToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<InvoiceArticleEntity, InvoiceArticle>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<InvoiceArticleUnitEntity, InvoiceArticleUnit>>()
-            //        .As<InvoiceArticleUnitToBusinessModelMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<InvoiceArticleUnitToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<InvoiceArticleUnitEntity, InvoiceArticleUnit>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<CaseInvoiceArticleEntity, CaseInvoiceArticle>>()
-            //        .As<CaseInvoiceArticleToBusinessModelMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseInvoiceArticleToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<CaseInvoiceArticleEntity, CaseInvoiceArticle>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity>>()
-            //        .As<CaseInvoiceArticleToEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseInvoiceArticleToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<CaseInvoiceArticle, CaseInvoiceArticleEntity>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<Case, CaseOverview>>()
-            //       .As<CaseToBusinessModelMapper>()
-            //       .SingleInstance();
+            builder.RegisterType<CaseToBusinessModelMapper>()
+              .As<IEntityToBusinessModelMapper<Case, CaseOverview>>()
+              .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<Customer, CustomerOverview>>()
-            //       .As<CustomerToBusinessModel>()
-            //       .SingleInstance();
+            builder.RegisterType<CustomerToBusinessModel>()
+               .As<IEntityToBusinessModelMapper<Customer, CustomerOverview>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<CaseInvoiceEntity, CaseInvoice>>()
-            //       .As<CaseInvoiceToBusinessModelMapper>()               
-            //       .SingleInstance();
+            builder.RegisterType<CaseInvoiceToBusinessModelMapper>()
+              .As<IEntityToBusinessModelMapper<CaseInvoiceEntity, CaseInvoice>>()
+              .SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<CaseInvoice, CaseInvoiceEntity>>()
-            //        .As<CaseInvoiceToEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseInvoiceToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<CaseInvoice, CaseInvoiceEntity>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<CaseInvoiceOrder, CaseInvoiceOrderEntity>>()
-            //        .As<CaseInvoiceOrderToEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseInvoiceOrderToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<CaseInvoiceOrder, CaseInvoiceOrderEntity>>()
+               .SingleInstance();
 
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<CaseInvoiceOrderFileEntity, CaseInvoiceOrderFile>>()
-            //        .As<CaseInvoiceOrderFileToBusinessModelMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseInvoiceOrderFileToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<CaseInvoiceOrderFileEntity, CaseInvoiceOrderFile>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<CaseInvoiceOrderFile, CaseInvoiceOrderFileEntity>>()
-            //        .As<CaseInvoiceOrderFileToEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseInvoiceOrderFileToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<CaseInvoiceOrderFile, CaseInvoiceOrderFileEntity>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<CaseLock, CaseLockEntity>>()
-            //     .As<CaseLockToEntityMapper>()
-            //     .SingleInstance();
+            builder.RegisterType<CaseLockToEntityMapper>()
+                .As<IBusinessModelToEntityMapper<CaseLock, CaseLockEntity>>()
+                .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<CaseLockEntity, CaseLock>>()
-            //        .As<CaseLockToBusinessModelMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseLockToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<CaseLockEntity, CaseLock>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<CalendarOverview, Calendar>>()
-            //        .As<CalendarToEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CalendarToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<CalendarOverview, Calendar>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<Calendar, CalendarOverview>>()
-            //        .As<CalendarToBusinessModelMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CalendarToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<Calendar, CalendarOverview>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<CaseFilterFavorite, CaseFilterFavoriteEntity>>()
-            //        .As<CaseFilterFavoritToEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseFilterFavoritToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<CaseFilterFavorite, CaseFilterFavoriteEntity>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<CaseFilterFavoriteEntity, CaseFilterFavorite>>()
-            //        .As<CaseFilterFavoriteToBusinessModelMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseFilterFavoriteToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<CaseFilterFavoriteEntity, CaseFilterFavorite>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<CaseInvoiceSettingsEntity, CaseInvoiceSettings>>()
-            //        .As<CaseInvoiceSettingsToBusinessModelMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseInvoiceSettingsToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<CaseInvoiceSettingsEntity, CaseInvoiceSettings>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<CaseInvoiceSettings, CaseInvoiceSettingsEntity>>()
-            //        .As<CaseInvoiceSettingsToEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseInvoiceSettingsToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<CaseInvoiceSettings, CaseInvoiceSettingsEntity>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<INewBusinessModelToEntityMapper<NewProject, Project>>()
-            //       .As<NewProjectToProjectEntityMapper>()
-            //       .SingleInstance();
+            builder.RegisterType<NewProjectToProjectEntityMapper>()
+              .As<INewBusinessModelToEntityMapper<NewProject, Project>>()
+              .SingleInstance();
 
-            //     builder.RegisterType<INewBusinessModelToEntityMapper<NewProjectCollaborator, ProjectCollaborator>>()
-            //       .As<NewProjectCollaboratorlToProjectCollaboratorEntityMapper>()
-            //       .SingleInstance();
+            builder.RegisterType<NewProjectCollaboratorlToProjectCollaboratorEntityMapper>()
+              .As<INewBusinessModelToEntityMapper<NewProjectCollaborator, ProjectCollaborator>>()
+              .SingleInstance();
 
-            //     builder.RegisterType<INewBusinessModelToEntityMapper<NewProjectFile, ProjectFile>>()
-            //        .As<NewProjectFileToProjectFileEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<NewProjectFileToProjectFileEntityMapper>()
+               .As<INewBusinessModelToEntityMapper<NewProjectFile, ProjectFile>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<INewBusinessModelToEntityMapper<NewProjectSchedule, ProjectSchedule>>()
-            //        .As<NewProjectScheduleToProjectScheduleEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<NewProjectScheduleToProjectScheduleEntityMapper>()
+               .As<INewBusinessModelToEntityMapper<NewProjectSchedule, ProjectSchedule>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<INewBusinessModelToEntityMapper<NewProjectLog, ProjectLog>>()
-            //        .As<NewProjectLogToProjectLogEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<NewProjectLogToProjectLogEntityMapper>()
+               .As<INewBusinessModelToEntityMapper<NewProjectLog, ProjectLog>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<UpdatedProject, Project>>()
-            //        .As<UpdatedProjectToProjectEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<UpdatedProjectToProjectEntityMapper>()
+               .As<IBusinessModelToEntityMapper<UpdatedProject, Project>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<UpdatedProjectSchedule, ProjectSchedule>>()
-            //        .As<UpdatedProjectScheduleToProjectScheduleEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<UpdatedProjectScheduleToProjectScheduleEntityMapper>()
+               .As<IBusinessModelToEntityMapper<UpdatedProjectSchedule, ProjectSchedule>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<Project, ProjectOverview>>()
-            //        .As<ProjectEntityToProjectOverviewMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<ProjectEntityToProjectOverviewMapper>()
+               .As<IEntityToBusinessModelMapper<Project, ProjectOverview>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<ProjectCollaborator, ProjectCollaboratorOverview>>()
-            //        .As<ProjectCollaboratorEntityToNewProjectCollaboratorMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<ProjectCollaboratorEntityToNewProjectCollaboratorMapper>()
+               .As<IEntityToBusinessModelMapper<ProjectCollaborator, ProjectCollaboratorOverview>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<ProjectFile, ProjectFileOverview>>()
-            //        .As<ProjectFileEntityToProjectFileOverviewMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<ProjectFileEntityToProjectFileOverviewMapper>()
+               .As<IEntityToBusinessModelMapper<ProjectFile, ProjectFileOverview>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<ProjectLog, ProjectLogOverview>>()
-            //        .As<ProjectLogEntityToProjectLogOverviewMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<ProjectLogEntityToProjectLogOverviewMapper>()
+               .As<IEntityToBusinessModelMapper<ProjectLog, ProjectLogOverview>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<ProjectSchedule, ProjectScheduleOverview>>()
-            //        .As<ProjectScheduleEntityToProjectScheduleOverviewMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<ProjectScheduleEntityToProjectScheduleOverviewMapper>()
+               .As<IEntityToBusinessModelMapper<ProjectSchedule, ProjectScheduleOverview>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<CaseExtraFollower, ExtraFollower>>()
-            //        .As<CaseExtraFollowersToBusinessModelMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseExtraFollowersToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<CaseExtraFollower, ExtraFollower>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<CaseSolutionConditionModel, CaseSolutionConditionEntity>>()
-            //        .As<CaseSolutionConditionToEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseSolutionConditionToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<CaseSolutionConditionModel, CaseSolutionConditionEntity>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<CaseSolutionConditionEntity, CaseSolutionConditionModel>>()
-            //        .As<CaseSolutionConditionToBusinessModelMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseSolutionConditionToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<CaseSolutionConditionEntity, CaseSolutionConditionModel>>()
+               .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview>>()
-            //        .As<CaseHistoryToCaseHistoryOverviewMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseHistoryToCaseHistoryOverviewMapper>()
+               .As<IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview>>()
+               .SingleInstance();
 
             builder.RegisterType<LogEntityToBusinessModelMapper>()
                .As<IEntityToBusinessModelMapper<LogMapperData, LogOverview>>()
                .SingleInstance();
 
-            //     builder.RegisterType<IDbQueryExecutorFactory>()
-            //        .As<SqlDbQueryExecutorFactory>()
-            //        .SingleInstance();
+            builder.RegisterType<CaseModelToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<CaseModel, Case>>()
+               .SingleInstance();
+
+            builder.RegisterType<CaseToCaseModelMapper>()
+               .As<IEntityToBusinessModelMapper<Case, CaseModel>>()
+               .SingleInstance();
+
+            builder.RegisterType<ExtendedCaseFormToEntityMapper>()
+              .As<IBusinessModelToEntityMapper<ExtendedCaseFormModel, ExtendedCaseFormEntity>>()
+              .SingleInstance();
+
+            builder.RegisterType<ExtendedCaseFormToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel>>()
+               .SingleInstance();
+
+            builder.RegisterType<ExtendedCaseDataToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity>>()
+               .SingleInstance();
+
+            builder.RegisterType<ExtendedCaseDataToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel>>()
+               .SingleInstance();
+
+            builder.RegisterType<ExtendedCaseValueToEntityMapper>()
+               .As<IBusinessModelToEntityMapper<ExtendedCaseValueModel, ExtendedCaseValueEntity>>()
+               .SingleInstance();
+
+            builder.RegisterType<ExtendedCaseValueToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<ExtendedCaseValueEntity, ExtendedCaseValueModel>>()
+               .SingleInstance();
+
+            builder.RegisterType<ConditionToEntityMapper>()
+                      .As<IBusinessModelToEntityMapper<ConditionModel, ConditionEntity>>()
+                      .SingleInstance();
+
+            builder.RegisterType<ConditionToBusinessModelMapper>()
+               .As<IEntityToBusinessModelMapper<ConditionEntity, ConditionModel>>()
+               .SingleInstance();
+
+            builder.RegisterType<FilesStorage>()
+                .As<IFilesStorage>()
+                .SingleInstance();
+
+            builder.RegisterType<CaseMailer>()
+                .As<ICaseMailer>()
+                .SingleInstance();
+
+            builder.RegisterType<EmailFactory>()
+                .As<IEmailFactory>()
+                .SingleInstance();
 
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<CaseModel, Case>>()
-            //        .As<CaseModelToEntityMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<EmailSendingSettingsProvider>()
+                .As<IEmailSendingSettingsProvider>()
+                .SingleInstance();
 
-            //     builder.RegisterType<IEntityToBusinessModelMapper<Case, CaseModel>>()
-            //        .As<CaseToCaseModelMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<CacheProvider>().
+                As<ICacheProvider>();
 
-            //     builder.RegisterType<IBusinessModelToEntityMapper<ExtendedCaseFormModel, ExtendedCaseFormEntity>>()
-            //       .As<ExtendedCaseFormToEntityMapper>()
-            //       .SingleInstance();
-
-            //     builder.RegisterType<IEntityToBusinessModelMapper<ExtendedCaseFormEntity, ExtendedCaseFormModel>>()
-            //        .As<ExtendedCaseFormToBusinessModelMapper>()
-            //        .SingleInstance();
-
-            //     builder.RegisterType<IBusinessModelToEntityMapper<ExtendedCaseDataModel, ExtendedCaseDataEntity>>()
-            //        .As<ExtendedCaseDataToEntityMapper>()
-            //        .SingleInstance();
-
-            //     builder.RegisterType<IEntityToBusinessModelMapper<ExtendedCaseDataEntity, ExtendedCaseDataModel>>()
-            //        .As<ExtendedCaseDataToBusinessModelMapper>()
-            //        .SingleInstance();
-
-            //     builder.RegisterType<IBusinessModelToEntityMapper<ExtendedCaseValueModel, ExtendedCaseValueEntity>>()
-            //        .As<ExtendedCaseValueToEntityMapper>()
-            //        .SingleInstance();
-
-            //     builder.RegisterType<IEntityToBusinessModelMapper<ExtendedCaseValueEntity, ExtendedCaseValueModel>>()
-            //        .As<ExtendedCaseValueToBusinessModelMapper>()
-            //        .SingleInstance();
-
-
-            //     builder.RegisterType<IBusinessModelToEntityMapper<ConditionModel, ConditionEntity>>()
-            //               .As<ConditionToEntityMapper>()
-            //               .SingleInstance();
-
-            //     builder.RegisterType<IEntityToBusinessModelMapper<ConditionEntity, ConditionModel>>()
-            //        .As<ConditionToBusinessModelMapper>()
-            //        .SingleInstance();
+            builder.RegisterType<MailTemplateFormatterNew>().
+                As<IMailTemplateFormatterNew>()
+                .SingleInstance();
         }
-        }
+    }
 }

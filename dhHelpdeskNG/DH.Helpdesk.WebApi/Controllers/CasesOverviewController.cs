@@ -10,6 +10,7 @@ using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Grid;
 using DH.Helpdesk.BusinessData.Models.Paging;
+using DH.Helpdesk.BusinessData.Models.Shared.Output;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
@@ -49,7 +50,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IHttpActionResult> Overview([FromBody]SearchOverviewFilterInputModel input)
+        public async Task<SearchResult<CaseSearchResult>> Overview([FromBody]SearchOverviewFilterInputModel input)
         {
             var filter = new CaseSearchFilter();
             filter.CustomerId = input.CustomerId;
@@ -178,7 +179,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             //searchResults = CommonHelper.TreeTranslate(m.cases, f.CustomerId, _productAreaService);
 
             //var results = _caseSearchService.Search();
-            return await Task.FromResult(Json(searchResult));
+            return searchResult;
         }
 
         private CaseRemainingTimeTable GetRemainigTimeById(RemainingTimes remainigTimeId)

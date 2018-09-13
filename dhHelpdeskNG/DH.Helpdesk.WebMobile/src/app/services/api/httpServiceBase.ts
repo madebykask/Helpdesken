@@ -11,10 +11,19 @@ export abstract class HttpApiServiceBase {
         this.baseApiUrl = config.apiUrl;
     }
 
-    protected buildResourseUrl(resourceName: string){
-        return this.baseApiUrl + resourceName;
+    protected buildResourseUrl(resourceName: string, params: object = undefined){
+        let urlParams: string = null;
+        if (params) {
+            let str = Object.keys(params).map(function(key) {
+                return key + '=' + encodeURIComponent(params[key]);
+              }).join('&');
+              if(str.length > 0) {
+                  urlParams = "?" + str;
+              }
+        }
+        return `${this.baseApiUrl}${resourceName}${urlParams || ''}`;
     }
-
+    
     protected getJson<TResponse>(url: string, headers?:any): Observable<TResponse> {
         return this.http
             .get<TResponse>(url, { headers: this.getHeaders(headers)})

@@ -18,7 +18,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(catchError(err => {
-            const errorMsg = err.error.message || err.statusText;
+            const errorMsg = err.error.message || err.error.error_description || err.statusText;//TODO: unify errors messages
 
             if (request.url.includes("account/refresh")) {
                 this.authenticationService.logout();

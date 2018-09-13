@@ -1,3 +1,4 @@
+<app-header></app-header>
 <mbsc-form>
     <div class="mbsc-form-group">
         <form [formGroup]="filtersForm" novalidate>
@@ -7,10 +8,10 @@
     </div>
 </mbsc-form>
 <span class="md-btn-icon mbsc-ic mbsc-ic-loop2" [hidden]="!loading"></span><!-- TODO: change to more handsome loader -->  
-<mbsc-listview [options]="listviewSettings" [hidden]="loading">
-        <mbsc-listview-item *ngFor="let case of cases">
+<mbsc-listview [options]="listviewSettings" [hidden]="loading" (onItemTap)="onItemTap($event)">
+        <mbsc-listview-item *ngFor="let case of cases" >
                 #{{case.Columns | getByKey: 'CaseNumber'}}
-                <div>{{case.Columns | getByKey: 'RegTime'}}</div> <!-- TODO: use ISO date instead of string and format -->               
+                <div>{{case.Columns | getByKey: 'RegTime'}}</div> <!-- TODO: use ISO date instead of string and format -->   
         </mbsc-listview-item>
 </mbsc-listview>
 <div class="mbsc-form-group mbsc-btn-group-block">

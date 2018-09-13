@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '../../../services/authentication';
 import { UserSettingsService } from '../../../services/user'
+import { throwError } from 'rxjs';
 
 @Component({templateUrl: 'login.component.html'})
 export class LoginComponent implements OnInit {
@@ -70,9 +71,10 @@ export class LoginComponent implements OnInit {
         this.authenticationService.login(this.f.username.value, this.f.password.value)
             .pipe(first())
             .subscribe(
-                data => {
-                    this.userSettingsService.loadUserSettings();
-                    this.router.navigate([this.returnUrl]);
+                isSuccess => {
+                    if(!isSuccess) throwError('Something wrong.');//TODO: make better reaction
+                    this.userSettingsService.loadUserSettings()
+                        .subscribe(x => this.router.navigate([this.returnUrl]) );
                 },
                 error => {
                     this.error = error;

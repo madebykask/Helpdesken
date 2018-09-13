@@ -5,11 +5,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserSettingsService } from '../../services/user';
 import { map, finalize, catchError } from 'rxjs/operators';
 import { PagingConstants } from '../../helpers/constants';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-casesOverview',
-  templateUrl: './casesOverview.component.html',
-  styleUrls: ['./casesOverview.component.scss']
+  selector: 'app-cases-overview',
+  templateUrl: './cases-overview.component.html',
+  styleUrls: ['./cases-overview.component.scss']
 })
 export class CasesOverviewComponent implements OnInit {
 
@@ -18,13 +19,18 @@ export class CasesOverviewComponent implements OnInit {
   loading: boolean = false;
 
   listviewSettings: any = {
-    theme: 'auto',
-    enhance: true,
-  }
+    theme: 'ios',
+    enhance: false,
+    swipe: false,
+/*     onItemTap: function(event, inst) {
+        if(inst && inst.id) this.goToCase(inst.id);
+    },
+ */  }
 
   constructor(private casesOverviewService: CasesOverviewService,
               private formBuilder: FormBuilder,
-              private userSettingsService: UserSettingsService) { }
+              private userSettingsService: UserSettingsService, 
+              private router: Router) { }
 
   ngOnInit() {
     this.filtersForm = this.formBuilder.group({
@@ -59,6 +65,16 @@ export class CasesOverviewComponent implements OnInit {
           
         } */
       );
+  }
+
+  onItemTap(event, inst) {
+    this.goToCase(this.cases[event.index].Id);
+  }
+
+  private goToCase(caseId: number) {
+    if(caseId <= 0) return;
+
+    this.router.navigate(['/caseedit', caseId ]);
   }
 
 }

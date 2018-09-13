@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { APP_INITIALIZER } from '@angular/core'
-import { LoginComponent } from './shared/components'
+import { LoginComponent, HeaderComponent } from './shared/components'
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
@@ -16,15 +16,16 @@ import { LoggerService } from './services/logging';
 import { MomentModule } from 'ngx-moment';
 
 import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors'
-import { HomeComponent, CasesOverviewComponent } from './components';
-import { GetByKeyPipe } from './helpers/pipes/filterCaseOverview.pipe';
+import { HomeComponent, CasesOverviewComponent, CaseEditComponent } from './components';
+import { GetByKeyPipe } from './helpers/pipes';
 
 import { rootRouting } from './app.routing';
 
 @NgModule({
   bootstrap: [ AppComponent],
-  declarations: [AppComponent, PageNotFoundComponent, LoginComponent,
-     HomeComponent, CasesOverviewComponent, 
+  declarations: [AppComponent, PageNotFoundComponent, HeaderComponent,
+     LoginComponent,
+     HomeComponent, CasesOverviewComponent, CaseEditComponent,
      GetByKeyPipe],
   imports: [ 
     MbscModule,

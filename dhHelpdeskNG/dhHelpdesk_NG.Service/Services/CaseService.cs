@@ -194,13 +194,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseFileRepository _caseFileRepository;
         private readonly ICaseHistoryRepository _caseHistoryRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IRegionService _regionService;
-        private readonly ICaseTypeService _caseTypeService;
-        private readonly ISupplierService _supplierServicee;
         private readonly IPriorityService _priorityService;
-        private readonly IStatusService _statusService;
         private readonly IWorkingGroupService _workingGroupService;
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMailTemplateService _mailTemplateService;
         private readonly IEmailLogRepository _emailLogRepository;
         private readonly IEmailLogAttemptRepository _emailLogAttemptRepository;
@@ -208,7 +204,6 @@ namespace DH.Helpdesk.Services.Services
         private readonly ISettingService _settingService;
         private readonly IFilesStorage _filesStorage;
         private readonly ILogRepository _logRepository;
-        private readonly ILogService _logService;
         private readonly ILogFileRepository _logFileRepository;
         private readonly IFormFieldValueRepository _formFieldValueRepository;
         private readonly IFeedbackTemplateService _feedbackTemplateService;
@@ -248,11 +243,7 @@ namespace DH.Helpdesk.Services.Services
             ICaseHistoryRepository caseHistoryRepository,
             ILogRepository logRepository,
             ILogFileRepository logFileRepository,
-            IRegionService regionService,
-            ICaseTypeService caseTypeService,
-            ISupplierService supplierService,
             IPriorityService priorityService,
-            IStatusService statusService,
             IWorkingGroupService workingGroupService,
             IMailTemplateService mailTemplateService,
             IEmailLogRepository emailLogRepository,
@@ -262,12 +253,11 @@ namespace DH.Helpdesk.Services.Services
             IFilesStorage filesStorage,
             IUnitOfWork unitOfWork,
             IFormFieldValueRepository formFieldValueRepository,
-            UserRepository userRepository,
+            IUserRepository userRepository,
             ICaseMailer caseMailer,
             IInvoiceArticleService invoiceArticleService,
             IUnitOfWorkFactory unitOfWorkFactory,
             ISurveyService surveyService,
-            ILogService logService,
             IFinishingCauseService finishingCauseService,
             ICaseLockService caseLockService,
             CaseStatisticService caseStatService,
@@ -291,11 +281,7 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
             this._caseRepository = caseRepository;
-            this._regionService = regionService;
-            this._caseTypeService = caseTypeService;
-            this._supplierServicee = supplierService;
             this._priorityService = priorityService;
-            this._statusService = statusService;
             this._workingGroupService = workingGroupService;
             this._userRepository = userRepository;
             this.caseMailer = caseMailer;
@@ -313,7 +299,6 @@ namespace DH.Helpdesk.Services.Services
             this._logFileRepository = logFileRepository;
             this._formFieldValueRepository = formFieldValueRepository;
             this.surveyService = surveyService;
-            this._logService = logService;
             this._finishingCauseService = finishingCauseService;
             this._caseLockService = caseLockService;
             this._caseStatService = caseStatService;

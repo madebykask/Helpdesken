@@ -1,1 +1,1 @@
-export * from './userSettings.service'
+export * from './user-settings.service'
