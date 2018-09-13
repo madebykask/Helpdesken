@@ -482,39 +482,60 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     if (_log_textinternal != undefined)
         $('#' + _caseFields.log_InternalText).val(_log_textinternal.Value);
 
-    if (_department_id != undefined) {
-        $("#CaseTemplate_Department_Id").val();
+    if (_region_id != undefined) {
+        $('#' + _caseFields.RegionId).val(_region_id.Value);
+        $('#' + _caseFields.RegionName).val(_region_id.SecondaryValue);
+    }
 
-        if (_department_id != 0) {
+    if (_department_id != undefined) {
+        $("#CaseTemplate_Department_Id").val('');
+
+        if (_department_id != "0") {
             $("#CaseTemplate_Department_Id").val(_department_id.Value);
-        }
+        } 
+
         $('#' + _caseFields.DepartmentId).val(_department_id.Value);
         $('#' + _caseFields.DepartmentName).val(_department_id.SecondaryValue);
     }
     
+    var selectedOU_Id = '';
+    var selectedOU_Name = '';
+
     if (_ou_id_1 != undefined) {
-        $("#CaseTemplate_OU_Id").val();
-        var selectedOU_Id = _ou_id_1.Value;
-        var selectedOU_Name = _ou_id_1.SecondaryValue;
+        selectedOU_Id = _ou_id_1.Value;
+        selectedOU_Name = _ou_id_1.SecondaryValue;
+
         if (selectedOU_Name == null)
             selectedOU_Name = "";
 
-        if (_ou_id_2 != undefined && _ou_id_2.Value != null && _ou_id_2.SecondaryValue != null) {
-            selectedOU_Id = _ou_id_2.Value;
+        var ouId2Val = _ou_id_2 != undefined && _ou_id_2 != null ? _ou_id_2.Value : "";
+        if (ouId2Val != null && ouId2Val != "" && _ou_id_2.SecondaryValue != null) {
+            selectedOU_Id = ouId2Val;
             if (_ou_id_2.SecondaryValue != null)
                 selectedOU_Name = selectedOU_Name + ' - ' + _ou_id_2.SecondaryValue;
         }
 
-        if (selectedOU_Id != 0) {
+        if (selectedOU_Id != "0") {
             $("#CaseTemplate_OU_Id").val(selectedOU_Id);
         }
-        $('#' + _caseFields.OUId).val(selectedOU_Id);
+
+        //console.log(">>> OU changed to: " + selectedOU_Id);
+
+        var $ouSelect = $('#' + _caseFields.OUId);
+        
+        if ($ouSelect.length && selectedOU_Id != "" && selectedOU_Name != "") {
+            //add option to the list if it doesn't exist yet
+            if ($ouSelect.find("option[value=" + selectedOU_Id + "]").length === 0)
+                $ouSelect.append("<option value='" + selectedOU_Id + "' selected>" + selectedOU_Name + "</option>");
+        }
+
+        $ouSelect.val(selectedOU_Id);
         $('#' + _caseFields.OUName).val(selectedOU_Name);
     }
 
-    if (_region_id != undefined) {
-        $('#' + _caseFields.RegionId).val(_region_id.Value);
-        $('#' + _caseFields.RegionName).val(_region_id.SecondaryValue);
+    //trigger department change to load child OUs items
+    if (_department_id != undefined && _department_id != "") {
+        $('#' + _caseFields.DepartmentId).trigger('change');
     }
 
     if (_priority_id != undefined) {
@@ -1389,6 +1410,51 @@ EditPage.prototype.enableMoveCaseControls = function(state) {
     this.$moveCaseButton.prop('disabled', !state);
 };
 
+
+EditPage.prototype.buildExtendedCasePrintMarkup = function () {
+    var self = this;
+
+    var exContainer = document.getElementById(self.Ex_Container_Prefix + self.Current_EC_FormId);
+    var formData = exContainer.contentWindow.getFormData();
+
+    var printMarkup = '';
+
+    //tabs
+    for (var i = 0; i < formData.tabs.length; i++) {
+
+        var tab = formData.tabs[i];
+        
+        printMarkup +=
+            '<tr><td style="width:20%;word-wrap: break-word; margin-left:20px;line-height:10px;" class="textbold H"><p> ' + tab.name + ' </p></td>' +
+            '<td style="width:80%; word-wrap: break-word;line-height:10px;" class="H"><p> </p></td></tr>';
+
+        // sections 
+        for (var j = 0; j < tab.sections.length; j++) {
+            var section = tab.sections[j];
+            
+            printMarkup += '<tr><td style="width:20%;word-wrap: break-word; margin-left:20px;line-height:10px;" class="textbold G"><p>'  + section.name + '</p></td>' +
+                           '<td style="width:80%; word-wrap: break-word;line-height:10px;" class="G"><p>  </p></td></tr>';
+
+            //section instances
+            for (var k = 0; k < section.instances.length; k++) {
+                var sectionInstance = section.instances[k];
+
+                //fields
+                for (var n = 0; n < sectionInstance.fields.length; n++) {
+                    var field = sectionInstance.fields[n];
+
+                    var fieldValue = (field.secondaryValue || '').length ? field.secondaryValue : field.value;
+
+                    printMarkup +=
+                        '<tr><td style="width:20%;word-wrap: break-word; margin-left:20px;line-height:10px;" class="textbold R"><p>' + field.label + '</p></td>' +
+                        '<td style="width:80%; word-wrap: break-word;line-height:10px;" class="R"><p>' + fieldValue + '</p></td></tr>';
+                }
+            }
+        }
+    }
+    return printMarkup;
+};
+
 /***** Initiator *****/
 EditPage.prototype.init = function (p) {
     var self = this;
@@ -1566,18 +1632,31 @@ EditPage.prototype.init = function (p) {
         }
     });
     
-    self.$btnPrint.click(function (e) {               
-        
-    $.get("/Cases/ShowCasePrintPreview/",
+    self.$btnPrint.click(function (e) {
+
+            $.get("/Cases/ShowCasePrintPreview/",
             {
                 caseId: p.currentCaseId,
                 caseNumber: p.currentCaseNumber,
                 curTime: Date.now()
-            },                
+            },
+            function (reportPresentation) {
 
-            function (_reportPresentation) {
-                self.$printArea.html(_reportPresentation);
-                                        
+                var $reportTable = $(reportPresentation);
+                        
+                //EXTENDED CASE handling
+                if (self.Current_EC_FormId) {
+
+                    var printMarkup = self.buildExtendedCasePrintMarkup();
+               
+                    if (printMarkup && printMarkup.length) {
+                        $reportTable.find('#caseReportContainer table.printcase').append(printMarkup);
+                    }
+                }
+
+                self.$printArea.html('');
+                self.$printArea.append($reportTable);
+
                 $('#PrintCaseDialog').draggable({
                     handle: ".modal-header"
                 });
