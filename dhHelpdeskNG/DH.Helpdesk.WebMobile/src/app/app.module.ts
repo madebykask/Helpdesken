@@ -20,15 +20,18 @@ import { HomeComponent, CasesOverviewComponent, CaseEditComponent } from './comp
 import { GetByKeyPipe } from './helpers/pipes';
 
 import { rootRouting } from './app.routing';
+import { FooterComponent } from './shared/components/footer/footer.component';
+import { RequireAuthDirective } from './helpers/directives/require-auth.directive';
 
 @NgModule({
   bootstrap: [ AppComponent],
-  declarations: [AppComponent, PageNotFoundComponent, HeaderComponent,
+  declarations: [AppComponent, PageNotFoundComponent, HeaderComponent, FooterComponent,
      LoginComponent,
      HomeComponent, CasesOverviewComponent, CaseEditComponent,
-     GetByKeyPipe],
+     GetByKeyPipe,
+     RequireAuthDirective],
   imports: [ 
-    MbscModule,
+    MbscModule, 
     BrowserModule,    
     HttpClientModule,
     FormsModule,

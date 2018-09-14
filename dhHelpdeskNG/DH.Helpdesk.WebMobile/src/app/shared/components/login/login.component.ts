@@ -74,11 +74,13 @@ export class LoginComponent implements OnInit {
                 isSuccess => {
                     if(!isSuccess) throwError('Something wrong.');//TODO: make better reaction
                     this.userSettingsService.loadUserSettings()
-                        .subscribe(x => this.router.navigate([this.returnUrl]) );
+                        .subscribe(x => {
+                            this.router.navigateByUrl(this.returnUrl);                            
+                        });
                 },
                 error => {
                     this.error = error;
                     this.loading = false;
                 });
-    }
+    }    
 }
