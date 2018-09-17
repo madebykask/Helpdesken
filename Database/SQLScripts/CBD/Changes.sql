@@ -759,3 +759,12 @@ BEGIN
 */
 END
 GO
+
+-- UPDATE Exported to null to resync Bank accountNo and Phone values
+UPDATE [dbo].[CBD_IN_CEM_BU_BANK_ACCOUNT_T]
+SET [Exported] = null
+ 
+UPDATE [dbo].[CBD_IN_CEM_BU_MEDIA_T]
+SET [Exported] = null
+WHERE [MEDT_TYPE] = 'TEL'
+GO
