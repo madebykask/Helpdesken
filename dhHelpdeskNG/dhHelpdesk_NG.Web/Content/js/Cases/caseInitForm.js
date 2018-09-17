@@ -538,37 +538,8 @@ function GetComputerUserSearchOptions() {
                 // Category marked as readonly (lock part from edit)
                 applyReadOnlyOn(readOnlyExpressions['initiator'], item.isReadOnly);
 
-                if (item.categoryID != null) {
-                    $.ajax({
-                        url: '/cases/GetExtendedCaseUrlForCategoryAndSection',
-                        type: 'post',
-                        data: {
-                            categoryID: item.categoryID,
-                            caseSectionType: 0 // Initiator
-                        },
-                        dataType: 'json',
-                        success: function (ext) {
-                            // TODO: set part dynamically
-                            if (ext.url != null) {
-                                $("#extendedSection-iframe-Initiator").attr('src', ext.url);
-                                $("#ExtendedInitiatorGUID").val(ext.guid)
-                                $("#extendedSection-Initiator").show();
-                                //iFrameResize({ log: true }, '#extended-initiator-frame');
-                            }
-                            else {
-                                $("#extendedSection-iframe-Initiator").attr('src', '');
-                                $("#ExtendedInitiatorGUID").val('');
-                                $("#extendedSection-Initiator").hide();
-                            }
-                        }
-                    });
-                }
-                else {
-                    $("#ExtendedInitiatorGUID").val('');
-                    $("#extendedSection-iframe-Initiator").attr('src', '');
-                    $("#extendedSection-Initiator").hide();
-                }
-
+                var initiatorSectionType = 0;
+                loadExtendedCaseSection(item.categoryID, initiatorSectionType);
 
                 return item.num;
             }
@@ -579,6 +550,78 @@ function GetComputerUserSearchOptions() {
     return options;
 }
 
+function loadExtendedCaseSection(categoryId, sectionType) {
+    
+    var elements = getExCaseSectionElements(sectionType);
+
+    var inputData = {
+        categoryID: categoryId,
+        caseSectionType: sectionType // 0 - Initiator, 1 - Regarding
+    };
+
+    if (categoryId != null) {
+        $.ajax({
+            url: '/cases/GetExtendedCaseUrlForCategoryAndSection',
+            type: 'POST',
+            data: inputData,
+            dataType: 'json',
+            success: function (ext) {
+                // TODO: set part dynamically
+                if (ext.url) {
+                    elements.$frame.css('height', '180px'); // restore orignial height
+                    elements.$userGuidHidden.val(ext.guid);
+                    elements.$frame.attr('src', ext.url);
+                    elements.$exCaseSection.show();
+                }
+                else {
+                    resetExtendedCaseSection(sectionType);
+                }
+            }
+        });
+    }
+    else {
+        resetExtendedCaseSection(sectionType);
+    }
+}
+
+function resetExtendedCaseSection(sectionType) {
+    var elements = getExCaseSectionElements(sectionType);
+    elements.$userGuidHidden.val('');
+    elements.$exCaseSection.hide();
+    elements.$frame.attr('src', '');
+}
+
+function getExCaseSectionElements(sectionType) {
+    // 0 - Initiator, 1 - Regarding
+    var elements = sectionType == 0
+        ? {
+            $exCaseSection: $('#extendedSection-Initiator'),
+            $frame: $('#extendedSection-iframe-Initiator'),
+            $userGuidHidden: $('#ExtendedInitiatorGUID')
+        }
+        : {
+            $exCaseSection: $('#extendedSection-Regarding'),
+            $frame: $('#extendedSection-iframe-Regarding'),
+            $userGuidHidden: $('#ExtendedRegardingGUID')
+        };
+    return elements;
+}
+
+function getExtendedCaseSectionIFrameOptions() {
+    var iframeOptions = {
+        log: true,
+        sizeHeight: true,
+        checkOrigin: false,
+        enablePublicMethods: true,
+        resizedCallback: function(messageData) {
+            console.log('>>>iFrame sesize callback called.!');
+        },
+        bodyMargin: '0 0 0 0',
+        closedCallback: function (id) {},
+        heightCalculationMethod: 'grow'
+    };
+    return iframeOptions;
+}
 
 function applyReadOnlyOn(readOnlyExpressions, readOnly) {
     var combined = readOnlyExpressions.join();
@@ -801,38 +844,8 @@ function GetComputerUserSearchOptionsForIsAbout() {
                 /*if (item.categoryID != null){
                     window.page.loadExtendedInitiator();
                 }*/
-
-                if (item.categoryID != null) {
-                    // DO when changing category instead, EDIT again, this way suites better as no new needs to be made
-                    $.ajax({
-                        url: '/cases/GetExtendedCaseUrlForCategoryAndSection',
-                        type: 'post',
-                        data: {
-                            categoryID: item.categoryID,
-                            caseSectionType: 1 // Regarding
-                        },
-                        dataType: 'json',
-                        success: function (ext) {
-                            // TODO: set part dynamically
-                            if (ext.url != null) {
-                                $("#extendedSection-iframe-Regarding").attr('src', ext.url);
-                                $("#ExtendedRegardingGUID").val(ext.guid)
-                                $("#extendedSection-Regarding").show();
-                                //iFrameResize({ log: true }, '#extended-initiator-frame');
-                            }
-                            else {
-                                $("#extendedSection-iframe-Regarding").attr('src', '');
-                                $("#ExtendedRegardingGUID").val('');
-                                $("#extendedSection-Regarding").hide();
-                            }
-                        }
-                    });
-                }
-                else {
-                    $("#extendedSection-iframe-Regarding").attr('src', '');
-                    $("#extendedSection-Regarding").hide();
-                    $("#ExtendedRegardingGUID").val('');
-                }
+                var regardingSectionType = 1;
+                loadExtendedCaseSection(item.categoryID, regardingSectionType);
 
                 return item.num;
             }
@@ -1007,7 +1020,6 @@ function CaseInitForm() {
 
         clearIsAbout();
 
-
         var category = window.parameters.computerUserCategories[id];
         if (category != null && category.IsReadOnly) {
             readOnlySection('regarding', true);
@@ -1017,6 +1029,10 @@ function CaseInitForm() {
         }
     });
 
+    //init frame resize 
+    var iframeOptions = getExtendedCaseSectionIFrameOptions();
+    $('iframe[id^="extendedSection-iframe"]').iFrameResize(iframeOptions);
+    console.log('>>>caseInit.Set up iframe resize');
 
     $('#case__Status_Id').change(function () {        
 
@@ -1099,9 +1115,9 @@ function CaseInitForm() {
         var query = fields.join();
         $(query).val('');
 
-        // Hide initiator section
-        $("#extendedSection-Initiator").hide();
-        $("#ExtendedInitiatorGUID").val('');
+        // reset initiator extended section
+        var initiatorSectionType = 0;
+        resetExtendedCaseSection(initiatorSectionType);
     }
 
     function clearIsAbout() {
@@ -1118,11 +1134,10 @@ function CaseInitForm() {
         var query = fields.join();
         $(query).val('');
 
-        // Hide extended section
-        $("#extendedSection-Regarding").hide();
-        $("#ExtendedRegardingGUID").val('');
+        // reset initiator extended section
+        var regardingSectionType = 1;
+        resetExtendedCaseSection(regardingSectionType);
     }
-
     
     function onProductAreaChanged(sender) {        
         var me = sender;
