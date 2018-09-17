@@ -2493,8 +2493,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     if (GuidHelper.IsGuid(id))
                     {
-                        this.userTemporaryFilesStorage.DeleteFile(fileName, id, ModuleName.Log);
-                        this.userTemporaryFilesStorage.ResetCacheForObject(id);
+                        this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);
                     }
                 }
                 else
