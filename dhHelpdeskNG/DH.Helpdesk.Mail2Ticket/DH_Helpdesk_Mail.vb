@@ -1,4 +1,5 @@
-﻿Imports DH.Helpdesk.Mail2Ticket.Library
+﻿Imports System.Configuration
+Imports DH.Helpdesk.Mail2Ticket.Library
 Imports Rebex.Net
 Imports System.IO
 Imports System.Linq
@@ -12,6 +13,7 @@ Module DH_Helpdesk_Mail
     'Dim msDeniedHtmlBodyString As String
     Dim iSequenceNumber As ImapMessageSet
     Dim msDeniedHtmlBodyString As String
+    Dim bEnableNewEmailProcessing = False
 
     Public Sub Main()
 
@@ -20,6 +22,11 @@ Module DH_Helpdesk_Mail
         Dim sCommand As String = Command()
         Dim aArguments() As String = sCommand.Split(",")
         Dim sConnectionstring As String = ""
+
+        Dim appVal as String = ConfigurationManager.AppSettings("enableNewEmailProcessing")
+        If (Not String.IsNullOrEmpty(appVal) AndAlso appVal.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase))
+            bEnableNewEmailProcessing = True
+        End If
 
         'msDeniedHtmlBodyString = ConfigurationManager.AppSettings("DeniedHtmlBodyString").ToString()
 
@@ -59,6 +66,11 @@ Module DH_Helpdesk_Mail
             If aArguments.Length > 4 Then
                 gsProductAreaSeperator = aArguments(4).ToString.Trim
             End If
+
+            If aArguments.Length > 4 Then
+                gsProductAreaSeperator = aArguments(4).ToString.Trim
+            End If
+
 
             If aArguments(0).ToString = "5" Then
                 readMailBox(sConnectionstring, SyncType.SyncByWorkingGroup)
@@ -311,26 +323,44 @@ Module DH_Helpdesk_Mail
                                 End If
                                 
                                 iMailID = 0
-                                Dim messageIds as List(Of String) = ExtractMessageIds(message)
-                                
-                                LogToFile(String.Format("MessageIds found: {0}", String.Join(",", messageIds)), objCustomer.POP3DebugLevel)
 
-                                ' Iterate over all UniqueMessageIds from the email to find matching case
-                                For Each messageId as String In messageIds
+                                If bEnableNewEmailProcessing
+                                    'New logic to find existing case by email
+                                    Dim messageIds as List(Of String) = ExtractMessageIds(message)
+                                    LogToFile(String.Format("MessageIds found: {0}", String.Join(",", messageIds)), objCustomer.POP3DebugLevel)
 
-                                    ' Find objCase
-                                    objCase = FindCaseByUniqueMessageId(messageId, objCustomer)
+                                    ' Iterate over all UniqueMessageIds from the email to find matching case
+                                    For Each messageId as String In messageIds
+                                        ' Find objCase
+                                        objCase = FindCaseByUniqueMessageId(messageId, objCustomer)
 
-                                    If (objCase IsNot Nothing) Then
+                                        If (objCase IsNot Nothing) Then
+                                            ' Kontrollera vilket mailID detta är ett svar på | Check which mailID this is an answer to
+                                            iMailID = objCaseData.getMailIDByMessageID(messageId)
+                                            LogToFile(Now() & "getMailIDByMessageID: " & iMailID.ToString(), objCustomer.POP3DebugLevel)
+                                            Exit For
+                                        End If
+                                    Next
+                                Else 
+                                    'old logic 
+                                    If message.InReplyTo.Count > 0 Then
+                                        Dim replyToId As String = message.InReplyTo(0).ToString
+                                        LogToFile(Now() & ", Reply From: " & replyToId, iPop3DebugLevel)
                                         
-                                        ' Kontrollera vilket mailID detta är ett svar på | Check which mailID this is an answer to
-                                        iMailID = objCaseData.getMailIDByMessageID(messageId)
-                                        LogToFile(Now() & "getMailIDByMessageID: " & iMailID.ToString(), objCustomer.POP3DebugLevel)
-                                        Exit For
+                                        LogToFile(Now() & ", getCaseByMessageID. InReplyTo: " & replyToId, iPop3DebugLevel)
+                                        objCase = objCaseData.getCaseByMessageID(replyToId)
 
+                                        If objCase Is Nothing And objCustomer.ModuleOrder = 1 Then
+                                            LogToFile(Now() & ", getCaseByOrderMessageID. InReplyTo: " & replyToId, iPop3DebugLevel)
+                                            objCase = objCaseData.getCaseByOrderMessageID(replyToId)
+                                        End If
+
+                                        ' Kontrollera vilket mailID detta ar ett svar pa
+                                        iMailID = objCaseData.getMailIDByMessageID(replyToId)
+                                    Else
+                                        iMailID = 0
                                     End If
-                                    
-                                Next
+                                End If
                                 
                                 If objCase Is Nothing Then
                                     ' Kontrollera om det är svar på ett befintligt ärende | Check if there is an answer to an existing case
@@ -834,7 +864,7 @@ Module DH_Helpdesk_Mail
                                     objMailTicket.Save(objCase.Id, iLog_Id, "bcc", message.Bcc.ToString(), messageId)
                                 End If
 
-                                If objCustomer.MailServerProtocol = 0 Then
+                                 If objCustomer.MailServerProtocol = 0 Then
                                     ' Inget stöd för POP3 längre
                                 Else
                                     If Not String.IsNullOrEmpty(objCustomer.EMailFolderArchive) Then
