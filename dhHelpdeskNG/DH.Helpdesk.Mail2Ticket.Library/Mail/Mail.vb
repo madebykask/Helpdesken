@@ -350,6 +350,7 @@ Public Class Mail
         End If
 
         Try
+            objLogFile.WriteLine("Send message. To: {0}, Message-ID: {1}", msg.To, sMessageId)            
             smtp.Send(msg)
         Catch ex As Exception
             sRet = ex.Message.ToString()
