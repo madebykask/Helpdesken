@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer.Input;
 using DH.Helpdesk.BusinessData.Models.User;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
 
@@ -392,6 +393,7 @@ namespace DH.Helpdesk.Services.Services
             return this._userRepository.GetUserOnCases(customerId, isTakeOnlyActive);
         }
 
+        // NOTE: do not use if you have conditions!!!
         public IList<User> GetUsers()
         {
             return this._userRepository.GetAll().OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
@@ -842,18 +844,21 @@ namespace DH.Helpdesk.Services.Services
             {
                 errors.Add("User permissions", this.translator.Translate("There are wrong permissions for this user group."));
             }
-
-            var hasDublicate = this.GetUsers().Any(u => u.UserID.EqualWith(user.UserID));
+            
+            var hasDublicate = _userRepository.FindUsersByUserId(user.UserID).Count() > 0;
             if (hasDublicate)
             {
                 errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");
             }
 
-            if (user.Password == confirmpassword)
+            if (!string.IsNullOrEmpty(user.Password) && user.Password.Equals(confirmpassword, StringComparison.OrdinalIgnoreCase))
             {
                 user.Password = user.Password;
-            }else
+            }
+            else
+            {
                 errors.Add("User.Password", "Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens");
+            }
 
             var userEMail = "";
             if (user.Email != null)
@@ -1091,11 +1096,8 @@ namespace DH.Helpdesk.Services.Services
 
         public bool IsUserValidAdmin(string userId, string pass)
         {
-            var entities = _userRepository.GetMany(u => u.UserID.ToLower() == userId.ToLower() &&
-                                                      u.Password == pass &&
-                                                      u.UserGroup_Id == 4)
-                                          .ToList();
-            return entities.Any();
+            var user = this._userRepository.Login(userId, pass);
+            return user != null && user.UserGroupId == UserGroups.SystemAdministrator;
         }
 
         public bool VerifyUserCasePermissions(UserOverview user, int caseId)

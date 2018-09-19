@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using DH.Helpdesk.Services.Services;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -21,7 +22,7 @@ namespace DH.Helpdesk.Web.Controllers
         public JsonResult CheckPasswordUnique(int userId, string pwd)
         {
             var user = _userService.GetUser(userId);
-            return Json(new { isUnique = user.Password != pwd });
+            return Json(new { isUnique = !user.Password.Equals(pwd, StringComparison.OrdinalIgnoreCase) });
         }
 
         [HttpPost]

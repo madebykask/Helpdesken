@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.BusinessData.Models.Users.Input;
+using DH.Helpdesk.Common.Linq;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Users;
 
@@ -66,7 +67,8 @@ namespace DH.Helpdesk.Dal.Repositories
         ItemOverview FindActiveOverview(int userId);
 
         List<ItemOverview> FindUsersWithPermissionsForCustomers(int[] customers);
-
+        
+        IQueryable<User> FindUsersByUserId(string userId);
         IEnumerable<User> FindUsersByName(string name);
 
         bool UserHasActiveCase(int customerId, int userId, List<int> workingGroupIds);
@@ -283,7 +285,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public IQueryable<User> GetUsers(int customerId)
         {
             var query = from u in this.DataContext.Users
-                        where u.CustomerUsers.Any(c => c.Customer_Id == customerId) // u.Customer_Id == customerId &&
+                        where u.CustomerUsers.Any(c => customerId == null || c.Customer_Id == customerId) // u.Customer_Id == customerId &&
                         select u;
 
             return query;
@@ -298,11 +300,16 @@ namespace DH.Helpdesk.Dal.Repositories
             return query;
         }
 
+        public IQueryable<User> FindUsersByUserId(string userId)
+        {
+            var userIdUpper = (userId ?? string.Empty).ToUpper();
+            return DataContext.Users.Where(u => u.UserID.ToUpper() == userIdUpper);
+        }
+
         public IEnumerable<User> FindUsersByName(string name)
         {
             return this.DataContext.Users
-                        .Where(u => u.FirstName.ToLower().Contains(name.ToLower())
-                                || u.SurName.ToLower().Contains(name.ToLower()))
+                        .Where(u => u.FirstName.ToLower().Contains(name.ToLower()) || u.SurName.ToLower().Contains(name.ToLower()))
                         .ToList();
         }
 
@@ -442,13 +449,16 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public UserOverview Login(string uId, string pwd)
         {
-            var user = this.GetUser(x => x.UserID == uId && x.IsActive == 1 && x.Password == pwd);
+            var userIdUpper = (uId ?? string.Empty).ToUpper().Trim();
+            var pwdUpper = (pwd ?? string.Empty).ToUpper().Trim();
+
+            var user = this.GetUser(x => x.UserID.ToUpper() == userIdUpper && x.Password.ToUpper() == pwdUpper && x.IsActive == 1);
             return user;
         }
 
-        public UserOverview GetUser(int userid)
+        public UserOverview GetUser(int userId)
         {
-            var user = this.GetUser(x => x.Id == userid);
+            var user = this.GetUser(x => x.Id == userId);
             return user;
         }
         
@@ -463,11 +473,13 @@ namespace DH.Helpdesk.Dal.Repositories
             return query.ToList();
         }
 
-        public UserOverview GetUserByLogin(string IdName, int? customerId = null)
+        public UserOverview GetUserByLogin(string userId, int? customerId = null)
         {
-            Expression<Func<User, bool>> expression = x => x.UserID == IdName && x.IsActive == 1;
+            var userIdUpper = (userId ?? string.Empty).ToUpper().Trim();
+            Expression<Func<User, bool>> expression = x => x.UserID.ToUpper() == userIdUpper && x.IsActive == 1;
+
             if (customerId.HasValue)
-                expression = x => x.UserID == IdName && x.IsActive == 1 && x.Customer_Id == customerId.Value;
+                expression = PredicateBuilder<User>.AndAlso(expression, x => x.Customer_Id == customerId.Value);
 
             var user = this.GetUser(expression);
             return user;
@@ -497,11 +509,14 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public async Task<UserOverview> GetByUserIdAsync(string userId, string passw)
         {
+            var userIdUpper = (userId ?? string.Empty).ToUpper().Trim();
+            var pwdUpper = (passw ?? string.Empty).ToUpper().Trim();
+
             var ret2 = await Task.Run(() =>
-                DataContext.Users.Where(u => u.UserID.Equals(userId, StringComparison.CurrentCultureIgnoreCase) && u.Password == passw).ToListAsync()
+                DataContext.Users.Where(u => u.UserID.ToUpper() == userIdUpper && u.Password.ToUpper() == pwdUpper).ToListAsync()
             );
             
-            var ret =  ret2.Select(x => new UserOverview(
+            var ret = ret2.Select(x => new UserOverview(
                         x.Id,
                         x.UserID,
                         x.Customer_Id,
