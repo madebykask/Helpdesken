@@ -2131,18 +2131,32 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
-        public string ChangeCaseType(int? id)
+        [HttpPost]
+        public ActionResult ChangeCaseType(int? id)
         {
-            string ret = null;
-            if (id.HasValue)
+            if (id == null)
+                return new HttpNotFoundResult();
+
+            var caseType = _caseTypeService.GetCaseType(id.Value);
+            if (caseType == null)
+                return new HttpNotFoundResult();
+            
+            var userId = caseType.User_Id ?? 0;
+            return Json(new
             {
-                var e = _caseTypeService.GetCaseType(id.Value);
-                if (e != null)
-                    ret = e.User_Id.HasValue ? e.User_Id.Value != 0 ? e.User_Id.Value.ToString() : null : null;
-            }
-            return ret;
+                Id = caseType.Id,
+                Name = caseType.Name,
+                ParentId = caseType.Parent_CaseType_Id,
+                UserId = (int?)(caseType.User_Id > 0 ? caseType.User_Id : null),
+                ShowOnExternalPage = caseType.ShowOnExternalPage,
+                ShowOnExtPageCases = caseType.ShowOnExtPageCases,
+                IsActive = caseType.IsActive,
+                Selectable = caseType.Selectable,
+                WorkingGroupId = caseType.WorkingGroup_Id
+            });
         }
 
+        [HttpPost]
         public string ChangeSystem(int? id)
         {
             string ret = null;
@@ -2155,6 +2169,7 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
+        [HttpPost]
         public JsonResult ChangeProductArea(int? id)
         {
             int workinggroupId = 0;

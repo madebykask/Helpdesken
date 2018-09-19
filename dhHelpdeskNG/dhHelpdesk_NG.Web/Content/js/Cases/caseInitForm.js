@@ -1054,14 +1054,32 @@ function CaseInitForm() {
 
             $('#CaseTemplate_StateSecondary_Id').val("");
         }
-        
-        
-
     });
 
     $('#case__CaseType_Id').change(function () {
         var caseTypeId = $(this).val();
-        SelectValueInOtherDropdownOnChange(caseTypeId, '/Cases/ChangeCaseType/', '#Performer_Id');        
+
+        $.post('/Cases/ChangeCaseType/', { id: caseTypeId })
+            .done(function (res) {
+                debugger;
+                if (res) {
+                    //set performer
+                    SetSelectValue('#Performer_Id', res.UserId);
+
+                    //set working group
+                    var workingGroupId = Number(res.WorkingGroupId);
+                    if (!isNaN(workingGroupId) && workingGroupId > 0) {
+                        $("#case__WorkingGroup_Id").val(res.WorkingGroupId).change();
+                    }
+                }
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                    console.warn('Case type (id=%s) not found.', caseTypeId);
+                    ShowToastMessage('CaseType not found', 'warning', false);
+                }
+            });
+        
         resetProductareaByCaseType(caseTypeId);
     });
 
