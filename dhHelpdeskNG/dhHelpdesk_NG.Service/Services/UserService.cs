@@ -851,7 +851,7 @@ namespace DH.Helpdesk.Services.Services
                 errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");
             }
 
-            if (!string.IsNullOrEmpty(user.Password) && user.Password.Equals(confirmpassword, StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrEmpty(user.Password) && user.Password.Equals(confirmpassword, StringComparison.CurrentCulture))
             {
                 user.Password = user.Password;
             }

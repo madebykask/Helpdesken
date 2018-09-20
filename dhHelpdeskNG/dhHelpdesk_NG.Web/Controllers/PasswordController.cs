@@ -22,19 +22,18 @@ namespace DH.Helpdesk.Web.Controllers
         public JsonResult CheckPasswordUnique(int userId, string pwd)
         {
             var user = _userService.GetUser(userId);
-            return Json(new { isUnique = !user.Password.Equals(pwd, StringComparison.OrdinalIgnoreCase) });
+            return Json(new { isUnique = !user.Password.Equals(pwd, StringComparison.CurrentCulture) });
         }
 
         [HttpPost]
         [AllowAnonymous]
         public JsonResult ChangePassword(int id, string newPassword, string confirmPassword)
         {
-            if (!string.IsNullOrEmpty(newPassword) && newPassword == confirmPassword)
+            if (!string.IsNullOrEmpty(newPassword) && newPassword.Equals(confirmPassword, StringComparison.CurrentCulture))
             {
                 _userService.SavePassword(id, newPassword);
                 return Json(new { isSuccess = true });
             }
-
             return Json(new { isSuccess = false, Error = "Invalid password" });
         }
     }

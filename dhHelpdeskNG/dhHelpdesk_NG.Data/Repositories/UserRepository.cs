@@ -450,9 +450,8 @@ namespace DH.Helpdesk.Dal.Repositories
         public UserOverview Login(string uId, string pwd)
         {
             var userIdUpper = (uId ?? string.Empty).ToUpper().Trim();
-            var pwdUpper = (pwd ?? string.Empty).ToUpper().Trim();
 
-            var user = this.GetUser(x => x.UserID.ToUpper() == userIdUpper && x.Password.ToUpper() == pwdUpper && x.IsActive == 1);
+            var user = this.GetUser(x => x.UserID.ToUpper() == userIdUpper && x.Password == pwd && x.IsActive == 1);
             return user;
         }
 
@@ -510,10 +509,9 @@ namespace DH.Helpdesk.Dal.Repositories
         public async Task<UserOverview> GetByUserIdAsync(string userId, string passw)
         {
             var userIdUpper = (userId ?? string.Empty).ToUpper().Trim();
-            var pwdUpper = (passw ?? string.Empty).ToUpper().Trim();
 
             var ret2 = await Task.Run(() =>
-                DataContext.Users.Where(u => u.UserID.ToUpper() == userIdUpper && u.Password.ToUpper() == pwdUpper).ToListAsync()
+                DataContext.Users.Where(u => u.UserID.ToUpper() == userIdUpper && u.Password == passw).ToListAsync()
             );
             
             var ret = ret2.Select(x => new UserOverview(
