@@ -220,81 +220,62 @@ EditPage.prototype.loadExtendedCaseIfNeeded = function () {
     }
 };
 
-EditPage.prototype.loadExtendedSection = function (extendedSection) {
-    var self = this;
-
-    var frame = $(extendedSection.iframeId);
-
-    var targetUrl = self.getExtendedCaseSectionUrl(extendedSection.path, extendedSection.formId);
-
-    // var $placeHolder = self.getECContainerTemplate(iframeId, targetUrl);
-
-    frame.load(function () {
-        if (frame.attr('src').length > 0) {
-
-            var iframeOptions = {
-                log: false,
-                sizeHeight: true,
-                checkOrigin: false,
-                enablePublicMethods: true,
-                resizedCallback: function (messageData) {
-                },
-                bodyMargin: '0 0 0 0',
-                closedCallback: function (id) {
-                },
-                heightCalculationMethod: 'grow'
-            };
-
-            var formParameters = frame[0].contentWindow.getFormParameters();
-            formParameters.languageId = extendedSection.languageId;
-            formParameters.extendedCaseGuid = extendedSection.guid;
-
-            var isLockedValue = window.parameters.isCaseLocked || '';
-            formParameters.isCaseLocked = isLockedValue.toLowerCase() === 'true'; //important to pass boolean type value
-
-            var fieldValues = self.Case_Field_Init_Values;
-
-            // TODO: Evaluate if required for extended initiator
-            frame[0].contentWindow.setInitialData({ step: 0, isNextValidation: false });
-
-            if (fieldValues != null) {
-                var pr = frame[0].contentWindow.loadExtendedCase(
-                    {
-                        formParameters: formParameters,
-                        caseValues: {
-                            reportedby: { Value: $('#case__ReportedBy').val() },
-                        }
-                    });
-                pr.then(function () {
-                    //frame.iFrameResize(iframeOptions);
-                });
-            }
-
-            $(extendedSection.container).show();
-            //frame[0]
-        }
-    });
-
-    frame[0].src = targetUrl;
-
-
-}
-
 EditPage.prototype.loadExtendedSectionsIfNeeded = function () {
     var self = this;
 
     // Todo refactor and automate all sections
     //  if (self.extendedSections.length > 0) {
     if (self.extendedSections) {
-        if (self.extendedSections.Initiator != null) {
-            self.loadExtendedSection(self.extendedSections.Initiator);
+
+        //initiator
+        var initiatorSection = self.extendedSections.Initiator;
+        if (initiatorSection) {
+            var $initiatorFrame = $(initiatorSection.iframeId);
+            $initiatorFrame.on('load', function () {
+                self.processExtendedSectionLoad($(this), initiatorSection);
+            });
+            $initiatorFrame[0].src = initiatorSection.path;
         }
-        if (self.extendedSections.Regarding != null) {
-            self.loadExtendedSection(self.extendedSections.Regarding);
+
+        //regarding 
+        var regardingSection = self.extendedSections.Regarding;
+        if (regardingSection) {
+            var $regardingFrame = $(regardingSection.iframeId);
+            $regardingFrame.on('load', function () {
+                self.processExtendedSectionLoad($(this), regardingSection);
+            });
+            $regardingFrame[0].src = regardingSection.path;
         }
     }
 }
 
+// This method only processes extended case loading to set helpdesk existing data. 
+// Extended case url and loading is implemented in caseInitForm.js\loadExtendedCaseSection()
+EditPage.prototype.processExtendedSectionLoad = function ($frame, extendedSection) {
+    if ($frame.attr('src').length) {
+        var frame = $frame[0];
+        var isLockedValue = window.parameters.isCaseLocked || '';
+        var formParameters = frame.contentWindow.getFormParameters();
+        formParameters.languageId = extendedSection.languageId;
+        formParameters.extendedCaseGuid = extendedSection.guid;
+        formParameters.isCaseLocked = isLockedValue.toLowerCase() === 'true'; //important to pass boolean type value
+        frame.contentWindow.setInitialData({ step: 0, isNextValidation: false }); //todo: check if required
+
+        var fieldValues = self.Case_Field_Init_Values;
+        if (fieldValues != null) {
+            var pr = frame.contentWindow.loadExtendedCase({
+                formParameters: formParameters,
+                caseValues: {
+                    reportedby: { Value: $('#case__ReportedBy').val() },
+                }
+            });
+            pr.then(function () {
+                frame.iFrameResizer.resize();
+            });
+        }
+        $(extendedSection.container).show();
+    }
+}
 
 EditPage.prototype.loadExtendedCase = function () {
     var self = this;

@@ -125,16 +125,16 @@ BEGIN
 		Unique (CLT_CLASS, CLUT_TYPE, CLU_CODE)
 	)
 	
-	--DECLARE @activeBank TABLE
-	--(
-	--	PK INT NOT NULL,			-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.BUTRGH_TK	
-	--
-	--	CLT_CLASS VARCHAR(2),		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.CLT_CLASS		-- 'BU'
-	--	CLUT_TYPE VARCHAR(3),		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.CLUT_TYPE		-- 'ISV' 
-	--	CLU_CODE VARCHAR(5),		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.CLU_CODE		-- '0012A'
-	--	Exported DATETIME NULL,		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.Exported
-	--	AccountNo VARCHAR(35)		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.ACCOUNT_NO			
-	--)
+	DECLARE @activeBank TABLE
+	(
+		PK INT NOT NULL,			-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.BUTRGH_TK	
+	
+		CLT_CLASS VARCHAR(2),		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.CLT_CLASS		-- 'BU'
+		CLUT_TYPE VARCHAR(3),		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.CLUT_TYPE		-- 'ISV' 
+		CLU_CODE VARCHAR(5),		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.CLU_CODE		-- '0012A'
+		Exported DATETIME NULL,		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.Exported
+		AccountNo VARCHAR(50)		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.ACCOUNT_NO			
+	)
 
 
 	DECLARE @inactiveBU TABLE
@@ -169,14 +169,14 @@ BEGIN
 		MEDT_TYPE varchar(10)	     -- CBD_IN_CEM_BU_MEDIA_T.MEDT_TYPE:     Email|Tel
 	)
 	
-	--DECLARE @inactiveBU_BANK TABLE
-	--(
-	--	PK INT NOT NULL,			-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.BUAH_TK
-	--	CLT_CLASS VARCHAR(2),		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.CLT_CLASS		-- 'BU'
-	--	CLUT_TYPE VARCHAR(3),		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.CLUT_TYPE		-- 'ISV' 
-	--	CLU_CODE VARCHAR(5),		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.CLU_CODE		-- '0012A'
-	--	Deleted DATETIME NULL		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.DELETED_DATE
-	--)	
+	DECLARE @inactiveBU_BANK TABLE
+	(
+		PK INT NOT NULL,			-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.BUAH_TK
+		CLT_CLASS VARCHAR(2),		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.CLT_CLASS		-- 'BU'
+		CLUT_TYPE VARCHAR(3),		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.CLUT_TYPE		-- 'ISV' 
+		CLU_CODE VARCHAR(5),		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.CLU_CODE		-- '0012A'
+		Deleted DATETIME NULL		-- CBD_IN_CEM_BU_BANK_ACCOUNT_T.DELETED_DATE
+	)	
 
 	DECLARE @insertedCU TABLE
 	(
@@ -225,14 +225,14 @@ BEGIN
 		Before_Phone NVARCHAR(50)
 	)
 
-	--DECLARE @updatedCU_ABANK TABLE
-	--(
-	--	ID INT,
-	--	UserId NVARCHAR(50),
-	--	FirstName NVARCHAR(50),
-	--	AccountNo NVARCHAR(100),
-	--	Before_AccountNo NVARCHAR(100)
-	--)
+	DECLARE @updatedCU_ABANK TABLE
+	(
+		ID INT,
+		UserId NVARCHAR(50),
+		FirstName NVARCHAR(50),
+		AccountNo NVARCHAR(50),
+		Before_AccountNo NVARCHAR(50)
+	)
 
 	DECLARE @updatedCU_ADDR TABLE
 	(
@@ -261,7 +261,6 @@ BEGIN
 		Before_Department_Id INT
 	)
 
-
 	DECLARE @deactivatedEmail TABLE
 	(
 		ID INT,
@@ -280,14 +279,14 @@ BEGIN
 		Before_Phone NVARCHAR(100)
 	)  
 
-	--DECLARE @deactivatedBank TABLE
-	--(
-	--	ID INT,
-	--	UserId NVARCHAR(50),
-	--	FirstName NVARCHAR(50),
-	--	Phone NVARCHAR(100),
-	--	Before_Phone NVARCHAR(100)
-	--)
+	DECLARE @deactivatedBank TABLE
+	(
+		ID INT,
+		UserId NVARCHAR(50),
+		FirstName NVARCHAR(50),
+		AccountNo NVARCHAR(50),
+		Before_AccountNo NVARCHAR(50)
+	)
 
 	DECLARE @expiredBU TABLE
 	(
@@ -363,15 +362,15 @@ BEGIN
 		DELETE_DATE DATETIME
 	)
 
-	--DECLARE @exportedBU_BANK TABLE
-	--(
-	--	BUBNKAH_TK INT,
-	--	CLT_CLASS VARCHAR(2),
-	--	CLUT_TYPE VARCHAR(3), 
-	--	CLU_CODE VARCHAR(5),
-	--	ACCOUNT_NO VARCHAR(35),
-	--	DELETE_DATE DATETIME
-	--)
+	DECLARE @exportedBU_BANK TABLE
+	(
+		BUBNKAH_TK INT,
+		CLT_CLASS VARCHAR(2),
+		CLUT_TYPE VARCHAR(3), 
+		CLU_CODE VARCHAR(5),
+		ACCOUNT_NO VARCHAR(35),
+		DELETE_DATE DATETIME
+	)
 		   
 	-- Active business units
 	RAISERROR('Retrieveing active business units', 10, 1) WITH NOWAIT
@@ -382,11 +381,11 @@ BEGIN
 	    -- select only last among duplicate records: R = 1
 	    SELECT *, ROW_NUMBER() OVER (PARTITION BY CLUT_TYPE, CLU_CODE ORDER BY BU_TK DESC) R
 	    FROM CBD_IN_CEM_BUSINESS_UNIT_T
+	    WHERE VALID_FROM <= @today 
+	    AND (VALID_TO IS NULL OR VALID_TO >= @today)      -- valid date range
+	    AND (DELETE_DATE IS NULL OR DELETE_DATE > @today) -- delete day 	
 	) BU	  
 	WHERE BU.R = 1
-	AND BU.VALID_FROM <= @today 
-	AND (BU.VALID_TO IS NULL OR BU.VALID_TO >= @today)
-	AND (BU.DELETE_DATE IS NULL OR BU.DELETE_DATE > @today)
 
 	--test
 	RAISERROR('Retrieveing active business unit addresses', 10, 1) WITH NOWAIT
@@ -394,15 +393,14 @@ BEGIN
 	SELECT ADDR.BUAH_TK, ADDR.VALID_FROM, ADDR.VALID_TO, ADDR.GA_CODE_CTY, ADDR.SEQ_NO, ADDR.ADT_TYPE, ADDR.CLT_CLASS, ADDR.CLUT_TYPE, ADDR.CLU_CODE, ADDR.Exported 
 	FROM 
 	(
-		-- TODO: Check order by SeqNo is correct !!! Shall we get only latest record ORDER by BUAH_TK
-		-- First Select latest record from range and only after apply conditions to it
-		SELECT ADDR.*, ROW_NUMBER() OVER (PARTITION BY  ADDR.CLT_CLASS, ADDR.CLUT_TYPE, ADDR.CLU_CODE  ORDER BY CASE WHEN ADDR.ADT_TYPE = 'MAIN' THEN 1 ELSE 0 END DESC, ADDR.BUAH_TK DESC) R
-		FROM CBD_IN_CEM_BU_ADDRESS_T ADDR
+		-- Select latest record from range 
+		SELECT *, ROW_NUMBER() OVER (PARTITION BY  CLT_CLASS, CLUT_TYPE, CLU_CODE  ORDER BY CASE WHEN ADT_TYPE = 'MAIN' THEN 1 ELSE 0 END DESC, BUAH_TK DESC) R
+		FROM CBD_IN_CEM_BU_ADDRESS_T 
+		WHERE (VALID_TO IS NULL OR VALID_TO >= @today)     -- valid date range
+		AND VALID_FROM <= @today                                  
+		AND (DELETE_DATE IS NULL OR DELETE_DATE > @today)  -- delete date
 	) ADDR
-	WHERE ADDR.R = 1 
-	AND (ADDR.VALID_TO IS NULL OR ADDR.VALID_TO >= @today)       -- valid date range
-     AND ADDR.VALID_FROM <= @today                                  
-     AND (ADDR.DELETE_DATE IS NULL OR ADDR.DELETE_DATE > @today)  -- delete date
+	WHERE ADDR.R = 1 	
      								
 	-- Active business unit emails
 	RAISERROR('Retrieveing active business unit address Email', 10, 1) WITH NOWAIT
@@ -413,13 +411,13 @@ BEGIN
 		SELECT M.BUAH_TK, M.[ADDRESS], M.VALID_FROM, M.VALID_TO, M.SEQ_NO, M.SEQ_NO_ADDR, M.CLT_CLASS, M.CLUT_TYPE, M.CLU_CODE, M.MEDT_TYPE, M.Exported, M.DELETE_DATE,
 		ROW_NUMBER() OVER (PARTITION BY  M.CLT_CLASS, M.CLUT_TYPE, M.CLU_CODE , M.BUAH_TK ORDER BY CASE WHEN M.ADT_TYPE = 'MAIN' THEN 1 ELSE 0 END DESC, M.SEQ_NO DESC) R 
 		FROM CBD_IN_CEM_BU_MEDIA_T M
-		INNER JOIN @activeAddr ADDR ON M.BUAH_TK = ADDR.PK -- -- filters out by latest address record
+		INNER JOIN @activeAddr ADDR ON M.BUAH_TK = ADDR.PK 
 		WHERE M.MEDT_TYPE = 'EMAIL'
+		AND (M.VALID_TO IS NULL OR M.VALID_TO >= @today)
+		AND M.VALID_FROM <= @today
+	     AND (M.DELETE_DATE IS NULL OR M.DELETE_DATE > @today)	
 	) E
-     WHERE E.R = 1
-	AND (E.VALID_TO IS NULL OR E.VALID_TO >= @today)
-     AND E.VALID_FROM <= @today
-     AND (E.DELETE_DATE IS NULL OR E.DELETE_DATE > @today)	
+     WHERE E.R = 1	
 
 	-- Active business unit phones
 	RAISERROR('Retrieveing active business unit address Phone', 10, 1) WITH NOWAIT
@@ -432,28 +430,27 @@ BEGIN
 		FROM CBD_IN_CEM_BU_MEDIA_T M 
 		INNER JOIN @activeAddr ADDR ON M.BUAH_TK = ADDR.PK -- filters out by latest address record
 		WHERE M.MEDT_TYPE = 'TEL'
+		AND (M.VALID_TO IS NULL OR M.VALID_TO >= @today)
+		AND M.VALID_FROM <= @today
+	     AND (M.DELETE_DATE IS NULL OR M.DELETE_DATE > @today)	
 	) E
-	WHERE E.R = 1
-	AND (E.VALID_TO IS NULL OR E.VALID_TO >= @today)
-     AND  E.VALID_FROM <= @today
-	AND (E.DELETE_DATE IS NULL OR E.DELETE_DATE > @today)		
+	WHERE E.R = 1	
 
-	-- not synced
 	-- Active bank account
-	--RAISERROR('Retrieveing active bank account', 10, 1) WITH NOWAIT
-	--INSERT INTO @activeBank(PK, CLT_CLASS, CLUT_TYPE, CLU_CODE, AccountNo, Exported)
-	--SELECT X.BUBNKAH_TK, X.CLT_CLASS, X.CLUT_TYPE, X.CLU_CODE, X.ACCOUNT_NO, X.Exported 
-	--FROM 
-	--(
-	--	SELECT BU.NAME, B.*, ROW_NUMBER() OVER (PARTITION BY B.CLU_CODE ORDER BY B.BUBNKAH_TK DESC) R 
-	--	FROM CBD_IN_CEM_BUSINESS_UNIT_T BU
-	--	JOIN CBD_IN_CEM_BU_BANK_ACCOUNT_T B ON B.CLU_CODE = BU.CLU_CODE
-	--	WHERE (BU.VALID_TO IS NULL OR BU.VALID_TO >= @today)
-	--	AND BU.VALID_FROM <= @today
-	--	AND (BU.DELETE_DATE IS NULL OR BU.DELETE_DATE > @today)
-	--	AND (B.DELETE_DATE IS NULL OR B.DELETE_DATE > @today)
-	--) X
-	--WHERE X.R = 1
+	RAISERROR('Retrieveing active bank account', 10, 1) WITH NOWAIT
+	INSERT INTO @activeBank(PK, CLT_CLASS, CLUT_TYPE, CLU_CODE, AccountNo, Exported)
+	SELECT X.BUBNKAH_TK, X.CLT_CLASS, X.CLUT_TYPE, X.CLU_CODE, X.ACCOUNT_NO, X.Exported 
+	FROM 
+	(
+		SELECT BU.NAME, B.*, ROW_NUMBER() OVER (PARTITION BY B.CLU_CODE ORDER BY B.BUBNKAH_TK DESC) R 
+		FROM CBD_IN_CEM_BUSINESS_UNIT_T BU
+		  INNER JOIN CBD_IN_CEM_BU_BANK_ACCOUNT_T B ON B.CLU_CODE = BU.CLU_CODE
+		WHERE (BU.VALID_TO IS NULL OR BU.VALID_TO >= @today)
+		AND BU.VALID_FROM <= @today
+		AND (BU.DELETE_DATE IS NULL OR BU.DELETE_DATE > @today)
+		AND (B.DELETE_DATE IS NULL OR B.DELETE_DATE > @today)
+	) X
+	WHERE X.R = 1
 
 	-- Get all business unit records that is inactive and not yet marked as expired (having no address equals inactive too)
 	RAISERROR('Retrieveing all business unit records that is inactive and not yet marked as expired (having no address equals inactive too', 10, 1) WITH NOWAIT
@@ -464,10 +461,10 @@ BEGIN
 	    -- select only last BU among duplicate records: R = 1
 	    SELECT *, ROW_NUMBER() OVER (PARTITION BY CLUT_TYPE, CLU_CODE ORDER BY BU_TK DESC) R
 	    FROM CBD_IN_CEM_BUSINESS_UNIT_T 
+	    WHERE (VALID_TO < @today OR DELETE_DATE <= @today)
+	    AND Expired IS NULL
 	) BU	  
-	WHERE BU.R = 1	
-	AND (BU.VALID_TO < @today OR BU.DELETE_DATE <= @today)
-	AND BU.Expired IS NULL
+	WHERE BU.R = 1		
 
 	-- TODO: Check if we shall select only the latest record?!
 	-- Get all address records that is inactive and not yet marked as expired
@@ -512,29 +509,29 @@ BEGIN
 	
 	-- 2. All customers that should be inserted 
 	RAISERROR('Inserting all new business units in tblComputerUser', 10, 1) WITH NOWAIT
-	INSERT INTO tblComputerUsers(UserId, FirstName, Phone, Email, [Status], ComputerUsersCategoryID, Customer_Id, Department_Id, OU_Id)
+	INSERT INTO tblComputerUsers(UserId, FirstName, Phone, Email, [Status], ComputerUsersCategoryID, Customer_Id, Department_Id, OU_Id, UserCode)
 	OUTPUT inserted.UserId, inserted.FirstName, inserted.Phone, inserted.Email, inserted.[Status], inserted.ComputerUsersCategoryID, inserted.Customer_Id, inserted.Department_Id, inserted.OU_Id 
 	INTO @insertedCU(UserId, FirstName, Phone, Email, [Status], ComputerUsersCategoryID, Customer_Id, Department_Id, OU_Id)
 	SELECT ABU.CLUT_TYPE + ' ' + ABU.CLU_CODE, 
 		  SUBSTRING(ISNULL(ABU.[NAME] + ' (' + ABU.CLUT_TYPE + ' ' + ABU.CLU_CODE + ')', ''), 1, 50), -- FIX: substring name to 50! To be removed later after column resize to 100.
-		  ISNULL(AP.Phone, ''), 
-		  ISNULL(AE.Email, ''), 
+		  SUBSTRING(ISNULL(AP.Phone, ''), 0, 50),
+		  SUBSTRING(ISNULL(AE.Email, ''), 0, 100),
 		  1, 
 		  @computerUserCategoryID, 
 		  @customerID, 
 		  D.Id, 
-		  @ouID  
+		  @ouID ,
+		  ISNULL(ABANK.AccountNo, '') -- save in UserCode
 	FROM @activeBU ABU
 	LEFT JOIN tblComputerUsers CU ON (ABU.CLUT_TYPE + ' ' + ABU.CLU_CODE) = CU.UserId
 	LEFT JOIN @activeAddr ADDR ON ADDR.CLT_CLASS = ABU.CLT_CLASS AND ADDR.CLU_CODE = ABU.CLU_CODE AND ADDR.CLUT_TYPE = ABU.CLUT_TYPE
 	LEFT JOIN tblRegion R ON ADDR.Country = R.Region AND R.Customer_Id = @customerID
 	LEFT JOIN tblDepartment D ON D.Region_Id = R.Id AND D.DepartmentId = @departmentId	
-	LEFT JOIN  @activePhone AP ON AP.CLT_CLASS = ABU.CLT_CLASS AND AP.CLU_CODE = ABU.CLU_CODE AND AP.CLUT_TYPE = ABU.CLUT_TYPE	
-	LEFT JOIN  @activeEmail AE ON AE.CLT_CLASS = ABU.CLT_CLASS AND AE.CLU_CODE = ABU.CLU_CODE AND AE.CLUT_TYPE = ABU.CLUT_TYPE
-	--not used in sync anymore
-	--LEFT JOIN  @activeBank ABANK ON ABANK.CLT_CLASS = ABANK.CLT_CLASS AND ABANK.CLU_CODE = ABU.CLU_CODE AND ABANK.CLUT_TYPE = ABU.CLUT_TYPE
+	LEFT JOIN @activePhone AP ON AP.CLT_CLASS = ABU.CLT_CLASS AND AP.CLU_CODE = ABU.CLU_CODE AND AP.CLUT_TYPE = ABU.CLUT_TYPE	
+	LEFT JOIN @activeEmail AE ON AE.CLT_CLASS = ABU.CLT_CLASS AND AE.CLU_CODE = ABU.CLU_CODE AND AE.CLUT_TYPE = ABU.CLUT_TYPE
+	LEFT JOIN  @activeBank ABANK ON ABANK.CLT_CLASS = ABU.CLT_CLASS AND ABANK.CLU_CODE = ABU.CLU_CODE AND ABANK.CLUT_TYPE = ABU.CLUT_TYPE
 	WHERE CU.Id IS NULL 
-	AND ABU.Exported IS NULL
+	AND ABU.Exported IS NULL	
 	---------------------------------------------------------------------------
 
 	-- Set CBD BU data as exported
@@ -618,39 +615,35 @@ BEGIN
 	WHERE AP.Exported IS NULL
 	AND CU.Customer_Id = @customerID
 
-	-- REPLACED WITH Phone from MediaType
-	--RAISERROR('Update bank details to computer user', 10, 1) WITH NOWAIT
-	--UPDATE CU 
-	--SET Phone = ISNULL(BANK.AccountNo, '')
-	--OUTPUT inserted.Id, inserted.UserId, inserted.FirstName, inserted.Phone, deleted.Phone 
-	--INTO @updatedCU_ABANK(ID, UserId, FirstName, AccountNo, Before_AccountNo)
-	--FROM @activeBank BANK
-	--JOIN tblComputerUsers CU ON (BANK.CLUT_TYPE + ' ' + BANK.CLU_CODE) = CU.UserId
-	--WHERE BANK.Exported IS NULL
-	--AND CU.Customer_Id = @customerID
+	RAISERROR('Update bank details to computer user', 10, 1) WITH NOWAIT
+	UPDATE CU SET UserCode = ISNULL(BANK.AccountNo, '')
+	OUTPUT inserted.Id, inserted.UserId, inserted.FirstName, inserted.UserCode, deleted.UserCode 
+	INTO @updatedCU_ABANK(ID, UserId, FirstName, AccountNo, Before_AccountNo)
+	FROM @activeBank BANK
+	JOIN tblComputerUsers CU ON (BANK.CLUT_TYPE + ' ' + BANK.CLU_CODE) = CU.UserId
+	WHERE BANK.Exported IS NULL
+	AND CU.Customer_Id = @customerID
+	    
+	RAISERROR('Deactivating account numbers', 10, 1) WITH NOWAIT
+	UPDATE CU SET UserCode = ''
+	OUTPUT inserted.Id, inserted.UserId, inserted.FirstName, inserted.UserCode, deleted.UserCode 
+	INTO @deactivatedBank(Id, UserId, FirstName, AccountNo, Before_AccountNo)
+	FROM tblComputerUsers CU
+	JOIN @inactiveBU_BANK IBANK ON (IBANK.CLUT_TYPE + ' ' + IBANK.CLU_CODE) = CU.UserId
+	LEFT JOIN @activeBank ABANK ON (ABANK.CLT_CLASS = IBANK.CLT_CLASS AND ABANK.CLU_CODE = IBANK.CLU_CODE AND ABANK.CLUT_TYPE = IBANK.CLUT_TYPE)
+	WHERE ABANK.PK IS NULL
+	AND CU.Customer_Id = @customerID
+	AND CU.[Status] <> 0
 	
-    -- Replaced with Phone data from 
-	--RAISERROR('Deactivating account numbers', 10, 1) WITH NOWAIT
-	--UPDATE CU SET Phone = ''
-	--OUTPUT inserted.Id, inserted.UserId, inserted.FirstName, inserted.Phone, deleted.Phone 
-	--INTO @deactivatedBank(Id, UserId, FirstName, Phone, Before_Phone)
-	--FROM tblComputerUsers CU
-	--JOIN @inactiveBU_BANK IBANK ON (IBANK.CLUT_TYPE + ' ' + IBANK.CLU_CODE) = CU.UserId
-	--LEFT JOIN @activeBank ABANK ON (ABANK.CLT_CLASS = IBANK.CLT_CLASS AND ABANK.CLU_CODE = IBANK.CLU_CODE AND ABANK.CLUT_TYPE = IBANK.CLUT_TYPE)
-	--WHERE ABANK.PK IS NULL
-	--AND CU.Customer_Id = @customerID
-	--AND CU.[Status] <> 0
-	
-    -- NOT REQUIRED since data is not synced anymore	 
-    --RAISERROR('Set CBD bank account as exported', 10, 1) WITH NOWAIT
-    --UPDATE BANK SET Exported = @now 
-    --OUTPUT inserted.BUBNKAH_TK, inserted.CLT_CLASS, inserted.CLU_CODE, inserted.CLUT_TYPE, inserted.DELETE_DATE, inserted.ACCOUNT_NO
-    --INTO @exportedBU_BANK(BUBNKAH_TK, CLT_CLASS, CLU_CODE, CLUT_TYPE, DELETE_DATE, ACCOUNT_NO)
-    --FROM @activeBank ABANK
-    --JOIN CBD_IN_CEM_BU_BANK_ACCOUNT_T BANK ON ABANK.PK = BANK.BUBNKAH_TK
-    --JOIN tblComputerUsers CU ON (BANK.CLUT_TYPE + ' ' + BANK.CLU_CODE) = CU.UserId
-    --WHERE ABANK.Exported IS NULL
-    --AND CU.Customer_Id = @customerID
+    RAISERROR('Set CBD bank account as exported', 10, 1) WITH NOWAIT
+    UPDATE BANK SET Exported = @now 
+    OUTPUT inserted.BUBNKAH_TK, inserted.CLT_CLASS, inserted.CLU_CODE, inserted.CLUT_TYPE, inserted.DELETE_DATE, inserted.ACCOUNT_NO
+    INTO @exportedBU_BANK(BUBNKAH_TK, CLT_CLASS, CLU_CODE, CLUT_TYPE, DELETE_DATE, ACCOUNT_NO)
+    FROM @activeBank ABANK
+    JOIN CBD_IN_CEM_BU_BANK_ACCOUNT_T BANK ON ABANK.PK = BANK.BUBNKAH_TK
+    JOIN tblComputerUsers CU ON (BANK.CLUT_TYPE + ' ' + BANK.CLU_CODE) = CU.UserId
+    WHERE ABANK.Exported IS NULL
+    AND CU.Customer_Id = @customerID
 
 	-- Deactivate computer user
 	RAISERROR('Deactivating users in tblComputerUser', 10, 1) WITH NOWAIT
@@ -725,7 +718,7 @@ BEGIN
 	FROM @inactiveBU_ADDR IADDR
 	JOIN CBD_IN_CEM_BU_ADDRESS_T ADDR ON ADDR.BUAH_TK = IADDR.PK
 
-	---- Deactivate computer user [Not required]
+	---- Deactivate computer user
 	--UPDATE CU SET [Status] = 0 
 	--OUTPUT inserted.Id, inserted.UserId, inserted.FirstName, inserted.[Status], deleted.[Status] 
 	--INTO @deactivatedBU(Id, UserId, FirstName, [Status], Before_Status)
@@ -765,4 +758,13 @@ BEGIN
 	SELECT 'Expired BU_ADDR (addr)' [Inactive BU_ADDR], * FROM @inactiveBU_ADDR ORDER BY CLU_CODE
 */
 END
+GO
+
+-- UPDATE Exported to null to resync Bank accountNo and Phone values
+UPDATE [dbo].[CBD_IN_CEM_BU_BANK_ACCOUNT_T]
+SET [Exported] = null
+ 
+UPDATE [dbo].[CBD_IN_CEM_BU_MEDIA_T]
+SET [Exported] = null
+WHERE [MEDT_TYPE] = 'TEL'
 GO

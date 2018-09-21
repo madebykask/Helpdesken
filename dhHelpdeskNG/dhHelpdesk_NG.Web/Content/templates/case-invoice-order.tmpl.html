@@ -264,11 +264,13 @@
     <div class="row-fluid">
         <div id="orderButtonsArea" class="span12" style="border-top:1px solid #ccc;margin-top:20px; padding-top:20px;">        
             <button id="doInvoiceButton_{{:Id}}" class="btn orderButtons" onclick="dhHelpdesk.CaseArticles.DoOrderInvoice('{{:Id}}'); return false;" data-orderid="{{:Id}}">{{:doInvoiceTitle}}</button>
-            <button class="btn orderButtons" id="actions-credit-order_{{:Id}}" class="actions-credit-order" onclick="dhHelpdesk.CaseArticles.DoOrderCredit('{{:Id}}'); return false;"> {{:doCreditTitle}}</button>                        
-            {{if IsInvoiced }} 
-              <span class="textbold">{{:InvoicedByTitle}}</span> <span>{{:InvoicedByUser}} - {{:InvoiceDate}} {{:InvoiceTime}}</span>
-            {{/if}}
-        </div>            
+                <div id="SelDepMessage" style="color:red; padding-top:5px;" align="right" >               
+                </div>
+                <button class="btn orderButtons" id="actions-credit-order_{{:Id}}" class="actions-credit-order" onclick="dhHelpdesk.CaseArticles.DoOrderCredit('{{:Id}}'); return false;"> {{:doCreditTitle}}</button>
+                {{if IsInvoiced }}
+                <span class="textbold">{{:InvoicedByTitle}}</span> <span>{{:InvoicedByUser}} - {{:InvoiceDate}} {{:InvoiceTime}}</span>
+                {{/if}}
+            </div>            
         
     </div>
     <div class="loading-msg save-invoice" style="display:none">        

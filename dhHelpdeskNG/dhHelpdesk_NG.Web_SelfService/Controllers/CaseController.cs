@@ -1881,6 +1881,27 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
 
+            if (newCase.CaseType_Id > 0)
+            {
+                var caseType = this._caseTypeService.GetCaseType(newCase.CaseType_Id);
+                if (!newCase.WorkingGroup_Id.HasValue)
+                {
+                    if (caseType != null && caseType.WorkingGroup_Id.HasValue)
+                    {
+                        newCase.WorkingGroup_Id = caseType.WorkingGroup_Id;
+                    }
+                }
+
+                if (!newCase.Performer_User_Id.HasValue)
+                {
+                    if (caseType != null && caseType.User_Id.HasValue)
+                    {
+                        newCase.Performer_User_Id = caseType.User_Id;
+                    }
+                }
+
+            }
+
             var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0; 
             int caseHistoryId = _caseService.SaveCase(newCase, caseLog, localUserId, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
 

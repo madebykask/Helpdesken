@@ -479,7 +479,6 @@ $(function () {
             this.Fill = function (customerId, methodUrl) {
                 if (customerId == null)
                     return null;
-
                 var promise = $.ajax(methodUrl, { data: { customerId: customerId } });
                 promise.done(function (data) {
                         _department.Items = [];
@@ -849,14 +848,19 @@ $(function () {
             var department = dhHelpdesk.CaseArticles.OrganizationData.Department.GetById(departmentId);
             if (department != null && department.DisabledForOrder) {
                 $("#doInvoiceButton_" + orderId).attr("disabled", "disabled");
-
-                var _hint = dhHelpdesk.Common.Translate("Vald") + " " + 
-                            dhHelpdesk.Common.TranslateCaseFields("Department_Id") + " " + 
+                var msg = dhHelpdesk.Common.TranslateCaseFields("Department_Id") + " " + 
                             dhHelpdesk.Common.Translate("kan inte faktureras");
+
+                $("#case-invoice-order" + orderId).find('#SelDepMessage').html(msg);
                             
-                $("#doInvoiceButton_" + orderId).attr("title", _hint);
+                //var _hint = dhHelpdesk.Common.Translate("Vald") + " " + 
+                //            dhHelpdesk.Common.TranslateCaseFields("Department_Id") + " " + 
+                //            dhHelpdesk.Common.Translate("kan inte faktureras");
+                            
+                //$("#doInvoiceButton_" + orderId).attr("title", _hint);
             }
             else {
+                $("#case-invoice-order" + orderId).find('#SelDepMessage').html('');
                 $("#doInvoiceButton_" + orderId).removeAttr("disabled");
                 $("#doInvoiceButton_" + orderId).attr("title", "");
             }
@@ -3927,6 +3931,7 @@ $(function () {
             this.doCreditTitle = dhHelpdesk.Common.Translate("Kreditera");
             this.doDeleteTitle = dhHelpdesk.Common.Translate("Ta bort");
             this.SavingMessage = dhHelpdesk.Common.Translate("Spara...");
+
 
             this.FileNameStr = "";
 
