@@ -5606,6 +5606,9 @@ namespace DH.Helpdesk.Web.Controllers
                 m.CountryId = sup?.Country_Id.GetValueOrDefault();
             }
 
+            int? caseTemplateWorkingGroupId = null;
+            int? caseTemplatePerformerUserId = null;
+
             if (caseTemplate != null) 
             {
                 #region New case initialize
@@ -5620,12 +5623,15 @@ namespace DH.Helpdesk.Web.Controllers
                     if (caseTemplate.PerformerUser_Id != null)
                     {
                         m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
+                        caseTemplatePerformerUserId = caseTemplate.PerformerUser_Id.Value;
                     }
                     else
                     {
                         m.case_.Performer_User_Id = 0;
                     }
 
+                    caseTemplatePerformerUserId = m.case_.Performer_User_Id ?? 0;
+                    
                     if (SessionFacade.CurrentUser != null && caseTemplate.SetCurrentUserAsPerformer == 1)
                         m.case_.Performer_User_Id = SessionFacade.CurrentUser.Id;
 
@@ -5686,19 +5692,14 @@ namespace DH.Helpdesk.Web.Controllers
                     if (caseTemplate.SetCurrentUsersWorkingGroup == 1 && SessionFacade.CurrentUser != null)
                     {
                         var userDefaultWGId = this._userService.GetUserDefaultWorkingGroupId(SessionFacade.CurrentUser.Id, customer.Id);
-                        if (userDefaultWGId.HasValue)
-                        {
-                            m.case_.WorkingGroup_Id = userDefaultWGId.Value;
-                        }
-                        else
-                        {
-                            m.case_.WorkingGroup_Id = null;
-                        }
+                        m.case_.WorkingGroup_Id = userDefaultWGId;
                     }
                     else if (caseTemplate.CaseWorkingGroup_Id != null)
                     {
                         m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
                     }
+
+                    caseTemplateWorkingGroupId = m.case_.WorkingGroup_Id ?? 0;
 
                     if (caseTemplate.Priority_Id != null)
                         m.case_.Priority_Id = caseTemplate.Priority_Id;
@@ -5996,18 +5997,23 @@ namespace DH.Helpdesk.Web.Controllers
                 else
                     m.isaboutous = null;
             }
-
+            
             // hämta parent path för casetype
             if (m.case_.CaseType_Id > 0)
             {
-                var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
-                if (c != null)
+                var caseType = _caseTypeService.GetCaseType(m.case_.CaseType_Id);
+                if (caseType != null)
                 {
-                    c = Translation.TranslateCaseType(c);
-                    m.ParantPath_CaseType = c.getCaseTypeParentPath();
-                    if (isCreateNewCase && c.User_Id.HasValue)
+                    caseType = Translation.TranslateCaseType(caseType);
+                    m.ParantPath_CaseType = caseType.getCaseTypeParentPath();
+                    
+                    if (isCreateNewCase)
                     {
-                        m.case_.Performer_User_Id = c.User_Id.Value;
+                        if (!caseTemplateWorkingGroupId.HasValue && caseType.WorkingGroup_Id.HasValue)
+                            m.case_.WorkingGroup_Id = caseType.WorkingGroup_Id;
+
+                        if (!caseTemplatePerformerUserId.HasValue && caseType.User_Id.HasValue)
+                            m.case_.Performer_User_Id = caseType.User_Id.Value;
                     }
                 }
             }
