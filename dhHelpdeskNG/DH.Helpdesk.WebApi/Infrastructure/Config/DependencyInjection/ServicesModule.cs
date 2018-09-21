@@ -53,6 +53,8 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
             builder.RegisterType<CircularService>().As<ICircularService>();
             builder.RegisterType<MailTemplateServiceNew>().As<IMailTemplateServiceNew>();
             builder.RegisterType<CaseService>().As<ICaseService>();
+            builder.RegisterType<ComputerService>().As<IComputerService>();
+            
             
         }
 

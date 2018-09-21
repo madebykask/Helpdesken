@@ -8,18 +8,12 @@ export class CurrentUser {
     authData: UserAuthenticationData;
     currentData: UserData;    
 
-    static fromJSON(data: any) : CurrentUser {
-        var obj = JSON.parse(data);
-        var user = new CurrentUser()
-
-        user.authData.access_token = obj.authData.access_token;
-        user.authData.expires_in = Number(obj.authData.expires_in);
-        user.authData.recievedAt = new Date(obj.authData.recievedAt);
-        user.authData.refresh_token = obj.authData.refresh_token;
-
-        user.currentData.selectedCustomerId = obj.currentData.selectedCustomerId;
-
-        return user;
+    static fromJSON(json: any) : CurrentUser {
+        if (typeof json === 'string') { json = JSON.parse(json); } 
+        return Object.assign(new CurrentUser(), json, {
+            authData: UserAuthenticationData.fromJSON(json.authData),
+            currentData: UserData.fromJSON(json.currentData)
+        });  
     }
 }
 
@@ -36,11 +30,20 @@ export class UserAuthenticationData {
         dest.recievedAt = new Date();
     }
 
-    static fromJSON(data: any) {
-        return Object.assign(new this, data) as UserAuthenticationData;
+    static fromJSON(json: any) : UserAuthenticationData {
+        if (typeof json === 'string') { json = JSON.parse(json); } 
+        return Object.assign(new UserAuthenticationData(), json, {
+            recievedAt: new Date(json.recievedAt)
+        });
     }
 }
 
 export class UserData {
     selectedCustomerId: number;
+    selectedLanguageId: number;
+
+    static fromJSON(json: any) : UserData {
+        if (typeof json === 'string') { json = JSON.parse(json); } 
+        return Object.assign(new UserData(), json, {}); 
+    }
 }

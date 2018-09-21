@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CaseOverviewItem, CasesOverviewFilter } from '../../models'
-import { CasesOverviewService } from '../../services/casesOverview';
+import { CasesOverviewService } from '../../services/cases-overview';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserSettingsService } from '../../services/user';
 import { map, finalize, catchError } from 'rxjs/operators';
@@ -19,7 +19,7 @@ export class CasesOverviewComponent implements OnInit {
   loading: boolean = false;
 
   listviewSettings: any = {
-    theme: 'ios',
+    theme: 'auto',
     enhance: false,
     swipe: false,
 /*     onItemTap: function(event, inst) {

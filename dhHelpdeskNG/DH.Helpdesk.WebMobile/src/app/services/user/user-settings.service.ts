@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { map, filter } from 'rxjs/operators';
 import { UserData } from '../../models'
-import { LocalStorageService } from '../localStorage'
+import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
 import { BehaviorSubject } from 'rxjs';
 
@@ -19,8 +19,9 @@ export class UserSettingsService extends HttpApiServiceBase {
             .pipe(
                 map((data: any) => {
                     if(data) {
-                        var settings = new UserData();
-                        settings.selectedCustomerId = Number(data.CustomerId);
+                        let settings = new UserData();
+                        settings.selectedCustomerId = data.CustomerId;//TODO: if no customer;
+                        settings.selectedLanguageId = data.LanguageId;//TODO: if no language
                         return settings;
                     }
                 }) 
@@ -29,7 +30,9 @@ export class UserSettingsService extends HttpApiServiceBase {
                 data => {
                     var user = this.localStorageService.getCurrentUser();
                     if(data.selectedCustomerId)
-                        user.currentData.selectedCustomerId = Number(data.selectedCustomerId);
+                        user.currentData.selectedCustomerId = data.selectedCustomerId;
+                    if(data.selectedLanguageId)
+                        user.currentData.selectedLanguageId = data.selectedLanguageId;
                     // Other settings
                     this.localStorageService.setCurrentUser(user);
                     isLoaded.next(true);

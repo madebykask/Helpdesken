@@ -1,7 +1,39 @@
-<mbsc-form>
-    Case id: {{this.caseData.Id}}<br/>
-    Case Number: {{this.caseData.CaseNumber}}<br/>
-    <mbsc-button color="primary" (click)="goToCaseOverview()">
-        Back
-    </mbsc-button>
+<mbsc-form *ngIf="isLoaded"> <!-- TODO: add loader -->
+    <mbsc-tab-nav [options]="tabsMenuSettings">
+            <mbsc-nav-item>Case {{caseData.CaseNumber}}</mbsc-nav-item>
+    </mbsc-tab-nav>
+    <!-- <div *ngIf="mainSelected == 'music'"> -->
+    <div>
+        <mbsc-scrollview>
+            <mbsc-scrollview-item id="main">  
+
+                    <form [formGroup]="form" novalidate>
+                        <div class="mbsc-form-group">
+                            <div class="mbsc-form-group-title">Initiator</div>
+                            <!-- TODO: ComputerUserCategories -->
+                            <case-textbox-control *ngIf="hasField('ReportedBy')" [field]="getField('ReportedBy')" [form]="form"></case-textbox-control>
+                            <case-textbox-control *ngIf="hasField('Persons_Name')" [field]="getField('Persons_Name')" [form]="form"></case-textbox-control>
+                            <case-textbox-control *ngIf="hasField('Persons_EMail')" [field]="getField('Persons_EMail')" [form]="form"></case-textbox-control>
+                            <case-textbox-control *ngIf="hasField('Persons_Phone')" [field]="getField('Persons_Phone')" [form]="form"></case-textbox-control>
+                            <case-textbox-control *ngIf="hasField('Persons_CellPhone')" [field]="getField('Persons_CellPhone')" [form]="form"></case-textbox-control>
+
+                            <div class="mbsc-form-group-title">Regarding</div>
+                            <div class="mbsc-form-group-title">ComputerInfo</div>
+                            <div class="mbsc-form-group-title">CaseInfo</div>
+                            <div class="mbsc-form-group-title">CaseManagement</div>
+                            <div class="mbsc-form-group-title">Communication</div>
+                            <div class="mbsc-form-group-title">Status</div>
+                            <div class="mbsc-form-group-title">Invoices</div>
+
+                        </div>
+                    </form>
+
+            </mbsc-scrollview-item>
+        </mbsc-scrollview>
+    </div>
+    <mbsc-bottom-nav [options]="bottomMenuSettings">
+        <mbsc-nav-item (click)="goToCaseOverview()">
+            Back
+        </mbsc-nav-item>
+    </mbsc-bottom-nav>
 </mbsc-form>

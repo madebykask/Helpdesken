@@ -21,8 +21,4 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
   }
 
-  sendTestRequest(event) {
-    this.http.get<any>(`${config.apiUrl}/api/test/anyrole`)
-    .subscribe();
-  }
 }

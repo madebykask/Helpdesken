@@ -20,6 +20,8 @@ using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Infrastructure.Concrete;
 using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email;
 using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email.Concrete;
+using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Notifiers;
+using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Notifiers.Concrete;
 using DH.Helpdesk.Dal.Infrastructure.Translate;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.MapperData.Logs;
@@ -314,7 +316,6 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
                 .As<IEmailFactory>()
                 .SingleInstance();
 
-
             builder.RegisterType<EmailSendingSettingsProvider>()
                 .As<IEmailSendingSettingsProvider>()
                 .SingleInstance();
@@ -324,6 +325,10 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
 
             builder.RegisterType<MailTemplateFormatterNew>().
                 As<IMailTemplateFormatterNew>()
+                .SingleInstance();
+
+            builder.RegisterType<NotifierFieldSettingsFactory>()
+                .As<INotifierFieldSettingsFactory>()
                 .SingleInstance();
         }
     }

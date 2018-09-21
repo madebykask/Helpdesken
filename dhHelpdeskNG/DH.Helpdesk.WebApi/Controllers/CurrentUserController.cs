@@ -26,7 +26,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             var userSettings = await Task.FromResult(_userSerivice.GetUserOverview(UserId));//TODO: create new method to get cached/async result.
             return new UserSettingsModelOutput
             {
-                CustomerId = userSettings.CustomerId
+                CustomerId = userSettings.CustomerId,
+                LanguageId = userSettings.LanguageId
             };
         }
     }

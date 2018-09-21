@@ -9,5 +9,6 @@ namespace DH.Helpdesk.Models.CurrentUser
     public class UserSettingsModelOutput
     {
         public int CustomerId { get; set; }
+        public int LanguageId { get; set; }
     }
 }

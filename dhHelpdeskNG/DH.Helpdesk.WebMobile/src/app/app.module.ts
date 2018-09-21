@@ -11,15 +11,15 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { TranslateModule, TranslateLoader, TranslateService as NgxTranslateService} from '@ngx-translate/core'
 import { AppComponent } from './app.component';
 import { HttpLoaderFactory, initTranslation, TranslationApiService } from './services/translation';
-import { LocalStorageService } from './services/localStorage'
+import { LocalStorageService } from './services/local-storage'
 import { LoggerService } from './services/logging';
 import { MomentModule } from 'ngx-moment';
 
 import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors'
-import { HomeComponent, CasesOverviewComponent, CaseEditComponent } from './components';
+import { HomeComponent, CasesOverviewComponent, CaseEditComponent, CaseTextboxComponent } from './components';
 import { GetByKeyPipe } from './helpers/pipes';
 
-import { rootRouting } from './app.routing';
+import { AppRoutingModule } from './app.routing';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { RequireAuthDirective } from './helpers/directives/require-auth.directive';
 
@@ -28,6 +28,7 @@ import { RequireAuthDirective } from './helpers/directives/require-auth.directiv
   declarations: [AppComponent, PageNotFoundComponent, HeaderComponent, FooterComponent,
      LoginComponent,
      HomeComponent, CasesOverviewComponent, CaseEditComponent,
+     CaseTextboxComponent,
      GetByKeyPipe,
      RequireAuthDirective],
   imports: [ 
@@ -36,7 +37,7 @@ import { RequireAuthDirective } from './helpers/directives/require-auth.directiv
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    rootRouting,
+    AppRoutingModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -48,8 +49,8 @@ import { RequireAuthDirective } from './helpers/directives/require-auth.directiv
     MomentModule,
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
 	TranslationApiService,
     {
       provide: APP_INITIALIZER,

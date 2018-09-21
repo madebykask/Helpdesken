@@ -12,5 +12,6 @@ namespace DH.Helpdesk.Models.Case
     {
         [Required]
         public int CaseId { get; set; }
+        public int LanguageId { get; set; }
     }
 }

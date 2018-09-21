@@ -4,11 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.MailTemplates;
+using DH.Helpdesk.Models.Case;
+using DH.Helpdesk.Models.Case.Field;
 
 namespace DH.Helpdesk.Models.Case
 {
     public class CaseEditOutputModel
     {
+        public List<IBaseCaseField> Fields { get; set; }
+
+        public CaseEditOutputModel()
+        {
+        }
+
         public int Id { get; set; }
         public string BackUrl { get; set; }
         //public bool CanGetRelatedCases { get; set; }
@@ -24,6 +32,7 @@ namespace DH.Helpdesk.Models.Case
         public decimal CaseNumber { get; set; }
         public int? CaseResponsibleUserId { get; set; }
         public string ReportedBy { get; set; }
+        public bool InitiatorReadOnly { get; set; }
         public string PersonsName { get; set; }
         public string PersonsEmail { get; set; }
         public string PersonsPhone { get; set; }

@@ -3,7 +3,7 @@ import { HttpClient, HttpRequest } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { config } from '../../../environments/environment';
 import { CurrentUser, UserAuthenticationData } from '../../models'
-import { LocalStorageService } from '../../services/localStorage'
+import { LocalStorageService } from '../../services/local-storage'
 import { Subject } from 'rxjs/Subject';
 
 @Injectable({ providedIn: 'root' })

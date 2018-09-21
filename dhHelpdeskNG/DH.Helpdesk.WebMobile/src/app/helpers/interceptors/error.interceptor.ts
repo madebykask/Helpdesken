@@ -41,7 +41,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                         take(1),
                         switchMap(() => { return next.handle(this.authenticationService.setAuthHeader(request)) })
                     )
-                //.subscribe(()=> { return next.handle(this.addAuthenticationToken(request)) });
+                    //.subscribe(()=> { return next.handle(this.authenticationService.setAuthHeader(request)) });
             } else {
                 this.refreshTokenInProgress = true;
 
@@ -52,7 +52,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 return this.authenticationService
                     .refreshToken()
                     .pipe(
-                        map(() => {
+                        switchMap(() => {
                             //When the call to refreshToken completes we reset the refreshTokenInProgress to false
                             // for the next time the token needs to be refreshed
                             this.refreshTokenInProgress = false;
@@ -67,7 +67,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                             return throwError(errorMsg);
                         }),
                         //finalize(() => this.stopLoading())
-                    )                    
+                    )
 
             }
             
