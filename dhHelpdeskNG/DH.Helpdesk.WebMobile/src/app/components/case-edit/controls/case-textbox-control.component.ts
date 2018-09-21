@@ -1,4 +1,4 @@
-import { OnInit, OnDestroy, Component, Input } from "@angular/core";
+import { OnInit, OnDestroy, Component, Input, ViewChild } from "@angular/core";
 import { BaseCaseField } from "../../../models";
 import { BaseControl } from "./base-control";
 
@@ -9,8 +9,11 @@ import { BaseControl } from "./base-control";
   })
   export class CaseTextboxComponent extends BaseControl implements OnInit, OnDestroy {
     @Input() field: BaseCaseField<string>;
+    isReadonly = true;
+    myRef: any;
 
     ngOnInit(): void {
+      this.form.get(this.field.Name).disable();//TODO: dynamic
     }
 
     ngOnDestroy(): void {

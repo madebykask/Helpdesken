@@ -7,7 +7,10 @@ import { AuthenticationService } from '../../../services/authentication';
 import { UserSettingsService } from '../../../services/user'
 import { throwError } from 'rxjs';
 
-@Component({templateUrl: 'login.component.html'})
+@Component({
+    templateUrl: 'login.component.html',
+    styleUrls: ['login.component.scss']
+})
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     loading = false;

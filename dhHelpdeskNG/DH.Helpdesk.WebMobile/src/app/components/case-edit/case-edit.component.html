@@ -7,26 +7,70 @@
         <mbsc-scrollview>
             <mbsc-scrollview-item id="main">  
 
-                    <form [formGroup]="form" novalidate>
-                        <div class="mbsc-form-group">
-                            <div class="mbsc-form-group-title">Initiator</div>
-                            <!-- TODO: ComputerUserCategories -->
+                <form [formGroup]="form" novalidate>
+                    <mbsc-form-group collapsible open #initiatorSection>
+                        <mbsc-form-group-title>Initiator</mbsc-form-group-title>
+                        <mbsc-form-group-content>
+            <!-- TODO: ComputerUserCategories -->
                             <case-textbox-control *ngIf="hasField('ReportedBy')" [field]="getField('ReportedBy')" [form]="form"></case-textbox-control>
                             <case-textbox-control *ngIf="hasField('Persons_Name')" [field]="getField('Persons_Name')" [form]="form"></case-textbox-control>
                             <case-textbox-control *ngIf="hasField('Persons_EMail')" [field]="getField('Persons_EMail')" [form]="form"></case-textbox-control>
                             <case-textbox-control *ngIf="hasField('Persons_Phone')" [field]="getField('Persons_Phone')" [form]="form"></case-textbox-control>
                             <case-textbox-control *ngIf="hasField('Persons_CellPhone')" [field]="getField('Persons_CellPhone')" [form]="form"></case-textbox-control>
+                            
+                        </mbsc-form-group-content>
+                    </mbsc-form-group>
 
-                            <div class="mbsc-form-group-title">Regarding</div>
-                            <div class="mbsc-form-group-title">ComputerInfo</div>
-                            <div class="mbsc-form-group-title">CaseInfo</div>
-                            <div class="mbsc-form-group-title">CaseManagement</div>
-                            <div class="mbsc-form-group-title">Communication</div>
-                            <div class="mbsc-form-group-title">Status</div>
-                            <div class="mbsc-form-group-title">Invoices</div>
+                    <mbsc-form-group collapsible open #regardingSection>
+                        <mbsc-form-group-title>Regarding</mbsc-form-group-title>
+                        <mbsc-form-group-content>
 
-                        </div>
-                    </form>
+                        </mbsc-form-group-content>
+                    </mbsc-form-group>                                        
+
+                    <mbsc-form-group collapsible open #ComputerInfoSection>
+                        <mbsc-form-group-title>Computer Info</mbsc-form-group-title>
+                        <mbsc-form-group-content>
+
+                        </mbsc-form-group-content>
+                    </mbsc-form-group>                                        
+    
+                    <mbsc-form-group collapsible open #caseInfoSection>
+                        <mbsc-form-group-title>Case Info</mbsc-form-group-title>
+                        <mbsc-form-group-content>
+
+                        </mbsc-form-group-content>
+                    </mbsc-form-group>                                        
+    
+                    <mbsc-form-group collapsible open #caseManagementSection>
+                        <mbsc-form-group-title>Case Management</mbsc-form-group-title>
+                        <mbsc-form-group-content>
+
+                        </mbsc-form-group-content>
+                    </mbsc-form-group>
+
+                    <mbsc-form-group collapsible open #communicationManagementSection>
+                        <mbsc-form-group-title>Communication Management</mbsc-form-group-title>
+                        <mbsc-form-group-content>
+
+                        </mbsc-form-group-content>
+                    </mbsc-form-group>
+                    
+                    <mbsc-form-group collapsible open #statusSection>
+                        <mbsc-form-group-title>Status</mbsc-form-group-title>
+                        <mbsc-form-group-content>
+
+                        </mbsc-form-group-content>
+                    </mbsc-form-group>
+                    
+                    <mbsc-form-group collapsible open #invoicesSection>
+                        <mbsc-form-group-title>Invoices</mbsc-form-group-title>
+                        <mbsc-form-group-content>
+
+                        </mbsc-form-group-content>
+                    </mbsc-form-group>
+
+                </form>
 
             </mbsc-scrollview-item>
         </mbsc-scrollview>
