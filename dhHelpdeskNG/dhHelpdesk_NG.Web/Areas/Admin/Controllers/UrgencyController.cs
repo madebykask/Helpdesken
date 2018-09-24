@@ -125,7 +125,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 {
                     Urgency_Id = priorityImpactUrgency.Key.Substring(12, priorityImpactUrgency.Key.IndexOf("_", 12)-12).ToNullableInt32(),
                     Impact_Id = priorityImpactUrgency.Key.Substring(priorityImpactUrgency.Key.IndexOf("_", 12)+1).ToNullableInt32(),
-                    Priority_Id = priorityImpactUrgency.Value.ConvertStringToInt() 
+                    Priority_Id = priorityImpactUrgency.Value.ToInt() 
                 });
             }
 

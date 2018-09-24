@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Http;
 using DH.Helpdesk.Models.CurrentUser;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.WebApi.Infrastructure;
+using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
+    [SkipCustomerAuthorization]
     public class CurrentUserController : BaseApiController
     {
         private readonly IUserService _userSerivice;

@@ -11,16 +11,17 @@ export abstract class HttpApiServiceBase {
         this.baseApiUrl = config.apiUrl;
     }
 
-    protected buildResourseUrl(resourceName: string, params: object = undefined){
+    protected buildResourseUrl(resourceName: string, params: object = undefined) {
         let urlParams: string = null;
         if (params) {
             let str = Object.keys(params).map(function(key) {
                 return key + '=' + encodeURIComponent(params[key]);
               }).join('&');
+
               if(str.length > 0) {
                   urlParams = "?" + str;
               }
-        }
+        }        
         return `${this.baseApiUrl}${resourceName}${urlParams || ''}`;
     }
     
@@ -34,7 +35,6 @@ export abstract class HttpApiServiceBase {
     }
 
     protected postJson<TResponse>(url: string, data: any, headers?:any): Observable<TResponse> {
-
         return this.http
             .post<TResponse>(url, JSON.stringify(data), { headers: this.getHeaders(headers) })
             .pipe(
@@ -66,5 +66,10 @@ export abstract class HttpApiServiceBase {
         options = options.set("Access-Control-Allow-Origin", "*");        
 
         return options;
+    }
+
+    protected addQsParam(qsParamMap:any, paramName:string, customerId:number) : any{        
+        let newQsParams = {...qsParamMap, [paramName]: customerId };
+        return newQsParams;
     }
 }

@@ -3,16 +3,19 @@ import { HttpClient, HttpRequest } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 import { CasesOverviewFilter, CaseOverviewItem, CaseOverviewColumn } from '../../models'
 import { HttpApiServiceBase } from '../api'
+import {CommonConstants} from '../../helpers/constants/common.constants'
 
 @Injectable({ providedIn: 'root' })
 export class CasesOverviewService extends HttpApiServiceBase {
     
     protected constructor(http: HttpClient){
         super(http);
-    }
-
-    searchCases(filter: CasesOverviewFilter) {
-        return this.postJson<any>(this.buildResourseUrl('/api/casesoverview/overview'), filter)
+    }   
+   
+    searchCases(filter: CasesOverviewFilter) {        
+        var qsParams = this. addQsParam({}, CommonConstants.CustomerIdQsParamName, filter.CustomerId);
+        let requestUrl = this.buildResourseUrl('/api/casesoverview/overview', qsParams)
+        return this.postJson<any>(requestUrl, filter)
         .pipe(
             //tap(d => console.log('>>searchCases')),
             map(data => {

@@ -252,7 +252,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             filter.CustomerId = customerId;
             filter.UserId = userId;
-            filter.CaseType = cu.CaseCaseTypeFilter.ReturnCustomerUserValue().ConvertStringToInt();
+            filter.CaseType = cu.CaseCaseTypeFilter.ReturnCustomerUserValue().ToInt();
             filter.Category = cu.CaseCategoryFilter.ReturnCustomerUserValue();
             filter.Priority = cu.CasePriorityFilter.ReturnCustomerUserValue();
             filter.ProductArea = cu.CaseProductAreaFilter.ReturnCustomerUserValue();

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Http.Filters;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
 using DH.Helpdesk.WebApi.Infrastructure.Config.Filters;
-using Microsoft.Owin.Security.OAuth;
-using Newtonsoft.Json.Serialization;
 
 namespace DH.Helpdesk.WebApi
 {
@@ -35,7 +31,7 @@ namespace DH.Helpdesk.WebApi
             //filters.Add(new ApiExceptionFilter()); // Using Autofac implementation of ApiExceptionFilter
             filters.Add(new ModelValidationApiActionFilter());
             filters.Add(new AuthorizeApiAttribute());
-            filters.Add(new CustomerAccessValidationFilter());
+            //filters.Add(new CustomerAccessAuthorizationFilter()); //replaced with AutoFac registration
             //filters.Add(new ValidateApiAntiForgeryTokenAttribute());
 
         }
@@ -53,8 +49,9 @@ namespace DH.Helpdesk.WebApi
 
         private static void JsonFormatConfig(HttpConfiguration config)
         {
-            var jsonFormatter = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
-            jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            JsonMediaTypeFormatter jsonFormatter = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
+            jsonFormatter.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
+            jsonFormatter.UseDataContractJsonSerializer = false;
             //By default it is ISO 8601 local time 2012-07-27T11:51:45.53403-07:00
 
             // Convert all dates to UTC 2012-07-27T18:51:45.53403Z

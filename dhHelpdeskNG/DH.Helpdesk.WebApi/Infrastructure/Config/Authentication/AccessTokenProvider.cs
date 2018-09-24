@@ -26,8 +26,11 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.Authentication
         
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
-            if(!context.TryGetBasicCredentials(out var clientId, out _))
-                context.TryGetFormCredentials(out clientId, out _);
+            string clientId;
+            string secret;
+
+            if (!context.TryGetBasicCredentials(out clientId, out secret))
+                context.TryGetFormCredentials(out clientId, out secret);
             if (clientId.Equals(_publicClientId,
                 StringComparison.InvariantCultureIgnoreCase))
             {

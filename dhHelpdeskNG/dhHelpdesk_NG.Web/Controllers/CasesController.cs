@@ -733,7 +733,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 f.InitiatorSearchScope = initiatorSearchScope;
             }
-            f.CaseType = frm.ReturnFormValue(CaseFilterFields.CaseTypeIdNameAttribute).ConvertStringToInt();
+            f.CaseType = frm.ReturnFormValue(CaseFilterFields.CaseTypeIdNameAttribute).ToInt();
             f.ProductArea = frm.ReturnFormValue(CaseFilterFields.ProductAreaIdNameAttribute).ReturnCustomerUserValue();
             f.Region = frm.ReturnFormValue(CaseFilterFields.RegionNameAttribute);
             f.User = frm.ReturnFormValue(CaseFilterFields.RegisteredByNameAttribute);
@@ -4918,7 +4918,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     if (specificFilter.FilteredProductArea != "0")
                     {
-                        var p = this._productAreaService.GetProductArea(specificFilter.FilteredProductArea.ConvertStringToInt());
+                        var p = this._productAreaService.GetProductArea(specificFilter.FilteredProductArea.ToInt());
                         if (p != null)
                         {
                             specificFilter.FilteredProductAreaText = string.Join(
@@ -4935,7 +4935,7 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         var fc =
                             this._finishingCauseService.GetFinishingCause(
-                                specificFilter.FilteredClosingReason.ConvertStringToInt());
+                                specificFilter.FilteredClosingReason.ToInt());
                         if (fc != null)
                         {
                             specificFilter.FilteredClosingReasonText = fc.GetFinishingCauseParentPath();
@@ -5010,7 +5010,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     var p =
                         this._productAreaService.GetProductArea(
-                            f.ProductArea.ConvertStringToInt());
+                            f.ProductArea.ToInt());
                     if (p != null)
                     {
                         f.ParantPath_ProductArea = string.Join(
@@ -5026,7 +5026,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     var c =
                         this._categoryService.GetCategory(
-                            f.Category.ConvertStringToInt(), SessionFacade.CurrentCustomer.Id);
+                            f.Category.ToInt(), SessionFacade.CurrentCustomer.Id);
                     if (c != null)
                     {
                         f.ParantPath_Category = string.Join(
@@ -5042,7 +5042,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     var fc =
                         this._finishingCauseService.GetFinishingCause(
-                            f.CaseClosingReasonFilter.ConvertStringToInt());
+                            f.CaseClosingReasonFilter.ToInt());
                     if (fc != null)
                     {
                         f.ParentPathClosingReason = fc.GetFinishingCauseParentPath();
@@ -6843,7 +6843,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             f.CustomerId = customerId;
             f.UserId = userId;
-            f.CaseType = cu.CaseCaseTypeFilter.ReturnCustomerUserValue().ConvertStringToInt();
+            f.CaseType = cu.CaseCaseTypeFilter.ReturnCustomerUserValue().ToInt();
             f.Category = cu.CaseCategoryFilter.ReturnCustomerUserValue();
             f.Priority = cu.CasePriorityFilter.ReturnCustomerUserValue();
             f.ProductArea = cu.CaseProductAreaFilter.ReturnCustomerUserValue();
@@ -7846,7 +7846,7 @@ namespace DH.Helpdesk.Web.Controllers
                 f.Department = frm.ReturnFormValue("lstfilterDepartment");
                 f.Priority = frm.ReturnFormValue("lstfilterPriority");
                 f.StateSecondary = frm.ReturnFormValue("lstfilterStateSecondary");
-                f.CaseType = frm.ReturnFormValue("hid_CaseTypeDropDown").ConvertStringToInt();
+                f.CaseType = frm.ReturnFormValue("hid_CaseTypeDropDown").ToInt();
                 f.ProductArea = f.ProductArea = frm.ReturnFormValue("hid_ProductAreaDropDown").ReturnCustomerUserValue();
                 f.CaseClosingReasonFilter = frm.ReturnFormValue("hid_ClosingReasonDropDown").ReturnCustomerUserValue();
 
