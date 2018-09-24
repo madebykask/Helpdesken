@@ -834,7 +834,7 @@ namespace DH.Helpdesk.Services.Services
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
 
             errors = new Dictionary<string, string>();
@@ -844,20 +844,21 @@ namespace DH.Helpdesk.Services.Services
             {
                 errors.Add("User permissions", this.translator.Translate("There are wrong permissions for this user group."));
             }
-            
+
             var hasDublicate = _userRepository.FindUsersByUserId(user.UserID).Count() > 0;
             if (hasDublicate)
             {
                 errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");
             }
 
-            if (!string.IsNullOrEmpty(user.Password) && user.Password.Equals(confirmpassword, StringComparison.CurrentCulture))
+            if (string.IsNullOrEmpty(user.Password))
             {
-                user.Password = user.Password;
+                errors.Add("NewPassWord", "Du måste ange ett lösenord");
             }
-            else
+
+            if (user.Password.Equals(confirmpassword, StringComparison.CurrentCulture) && !string.IsNullOrEmpty(user.Password))
             {
-                errors.Add("User.Password", "Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens");
+                errors.Add("NewPassword", "Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens");
             }
 
             var userEMail = "";
@@ -947,10 +948,10 @@ namespace DH.Helpdesk.Services.Services
                     if (customerSetting.ComplexPassword != 0)
                     {
                         if (!PasswordHelper.IsValid(user.Password))
-                            errors.Add("NewPassWord", "Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav, en siffra och ett special tecken (!@#=$&?*).");
+                            errors.Add("NewPassword", "Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav, en siffra och ett special tecken (!@#=$&?*).");
                     }
                     else if (user.Password.Length < MinPasswordLength)
-                        errors.Add("NewPassWord", "Lösenord är inte giltigt. Minst antal tecken är: " + MinPasswordLength);
+                        errors.Add("NewPassword", "Lösenord är inte giltigt. Minst antal tecken är: " + MinPasswordLength);
                 }
             }
 
@@ -971,7 +972,6 @@ namespace DH.Helpdesk.Services.Services
                     }
                 }
             }
-
 
             if (user.OTs != null)
                 foreach (var delete in user.OTs.ToList())
@@ -1023,9 +1023,12 @@ namespace DH.Helpdesk.Services.Services
 
         public UserOverview Login(string name, string password)
         {
-            var user = this._userRepository.Login(name, password);
-            
-            return user;
+            var user = _userRepository.GetUserLoginInfo(name);
+
+            if (user != null && user.Password.Equals(password, StringComparison.CurrentCulture)) // case sensetive
+                return _userRepository.GetUser(user.Id);
+
+            return null;
         }
 
         public DateTime GetUserPasswordChangedDate(int id)
@@ -1096,8 +1099,11 @@ namespace DH.Helpdesk.Services.Services
 
         public bool IsUserValidAdmin(string userId, string pass)
         {
-            var user = this._userRepository.Login(userId, pass);
-            return user != null && user.UserGroupId == UserGroups.SystemAdministrator;
+            var user = this._userRepository.GetUserLoginInfo(userId);
+            if (user != null && user.Password == pass && user.UserGroupId == UserGroups.SystemAdministrator)
+                return true;
+            
+            return false;
         }
 
         public bool VerifyUserCasePermissions(UserOverview user, int caseId)
