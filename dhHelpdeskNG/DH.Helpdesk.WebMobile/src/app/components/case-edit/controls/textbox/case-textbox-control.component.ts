@@ -1,6 +1,6 @@
-import { OnInit, OnDestroy, Component, Input, ViewChild } from "@angular/core";
-import { BaseCaseField } from "../../../models";
-import { BaseControl } from "./base-control";
+import { OnInit, OnDestroy, Component, Input, OnChanges } from "@angular/core";
+import { BaseCaseField } from "../../../../models";
+import { BaseControl } from "../base-control";
 
 @Component({
     selector: 'case-textbox-control',
@@ -13,7 +13,6 @@ import { BaseControl } from "./base-control";
     myRef: any;
 
     ngOnInit(): void {
-      this.form.get(this.field.Name).disable();//TODO: dynamic
     }
 
     ngOnDestroy(): void {

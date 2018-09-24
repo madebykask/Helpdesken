@@ -3,25 +3,30 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { config } from "../../../environments/environment";
+import { LocalStorageService } from "../local-storage";
 
 export abstract class HttpApiServiceBase {
     private baseApiUrl: string;
 
-    protected constructor(private http: HttpClient,) { 
+    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) { 
         this.baseApiUrl = config.apiUrl;
     }
 
-    protected buildResourseUrl(resourceName: string, params: object = undefined) {
+    protected buildResourseUrl(resourceName: string, params: object = undefined, addCustomerId = true) {
         let urlParams: string = null;
+        if(addCustomerId === true) {
+            let userData = this.localStorageService.getCurrentUser();
+            if(userData !== null) {
+                params = Object.assign({}, params || {}, {cid: userData.currentData.selectedCustomerId})
+            }
+        }
         if (params) {
             let str = Object.keys(params).map(function(key) {
                 return key + '=' + encodeURIComponent(params[key]);
               }).join('&');
 
-              if(str.length > 0) {
-                  urlParams = "?" + str;
-              }
-        }        
+              urlParams = (str.length > 0 && resourceName.indexOf("?") < 0) ? "?" + str : "&" + str;
+        }
         return `${this.baseApiUrl}${resourceName}${urlParams || ''}`;
     }
     

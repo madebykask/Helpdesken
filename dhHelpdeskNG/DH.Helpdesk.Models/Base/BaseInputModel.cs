@@ -10,6 +10,6 @@ namespace DH.Helpdesk.Models.Base
     public class BaseInputModel
     {
         [Required]
-        public int CustomerId { get; set; }
+        public int Cid { get; set; } //CustomerId
     }
 }

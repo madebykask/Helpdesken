@@ -11,33 +11,48 @@
                     <mbsc-form-group collapsible open #initiatorSection>
                         <mbsc-form-group-title>Initiator</mbsc-form-group-title>
                         <mbsc-form-group-content>
-            <!-- TODO: ComputerUserCategories -->
+                            <!-- TODO: ComputerUserCategories -->
                             <case-textbox-control *ngIf="hasField('ReportedBy')" [field]="getField('ReportedBy')" [form]="form"></case-textbox-control>
                             <case-textbox-control *ngIf="hasField('Persons_Name')" [field]="getField('Persons_Name')" [form]="form"></case-textbox-control>
                             <case-textbox-control *ngIf="hasField('Persons_EMail')" [field]="getField('Persons_EMail')" [form]="form"></case-textbox-control>
                             <case-textbox-control *ngIf="hasField('Persons_Phone')" [field]="getField('Persons_Phone')" [form]="form"></case-textbox-control>
                             <case-textbox-control *ngIf="hasField('Persons_CellPhone')" [field]="getField('Persons_CellPhone')" [form]="form"></case-textbox-control>
-                            
+
+                            <case-textbox-control *ngIf="hasField('CostCentre')" [field]="getField('CostCentre')" [form]="form"></case-textbox-control>
+                            <case-textbox-control *ngIf="hasField('Place')" [field]="getField('Place')" [form]="form"></case-textbox-control>
+                            <case-textbox-control *ngIf="hasField('UserCode')" [field]="getField('UserCode')" [form]="form"></case-textbox-control>                            
                         </mbsc-form-group-content>
                     </mbsc-form-group>
 
                     <mbsc-form-group collapsible open #regardingSection>
                         <mbsc-form-group-title>Regarding</mbsc-form-group-title>
                         <mbsc-form-group-content>
+                        <!-- TODO: ComputerUserCategories -->
+                            <case-textbox-control *ngIf="hasField('IsAbout_ReportedBy')" [field]="getField('IsAbout_ReportedBy')" [form]="form"></case-textbox-control>
+                            <case-textbox-control *ngIf="hasField('IsAbout_Persons_Name')" [field]="getField('IsAbout_Persons_Name')" [form]="form"></case-textbox-control>
+                            <case-textbox-control *ngIf="hasField('IsAbout_Persons_Email')" [field]="getField('IsAbout_Persons_Email')" [form]="form"></case-textbox-control>
+                            <case-textbox-control *ngIf="hasField('IsAbout_Persons_Phone')" [field]="getField('IsAbout_Persons_Phone')" [form]="form"></case-textbox-control>
+                            <case-textbox-control *ngIf="hasField('IsAbout_Persons_CellPhone')" [field]="getField('IsAbout_Persons_CellPhone')" [form]="form"></case-textbox-control>
 
+                            <case-textbox-control *ngIf="hasField('IsAbout_CostCentre')" [field]="getField('IsAbout_CostCentre')" [form]="form"></case-textbox-control>
+                            <case-textbox-control *ngIf="hasField('IsAbout_Place')" [field]="getField('IsAbout_Place')" [form]="form"></case-textbox-control>
+                            <case-textbox-control *ngIf="hasField('IsAbout_UserCode')" [field]="getField('IsAbout_UserCode')" [form]="form"></case-textbox-control>                            
                         </mbsc-form-group-content>
                     </mbsc-form-group>                                        
 
                     <mbsc-form-group collapsible open #ComputerInfoSection>
                         <mbsc-form-group-title>Computer Info</mbsc-form-group-title>
                         <mbsc-form-group-content>
-
+                                <case-textbox-control *ngIf="hasField('InventoryNumber')" [field]="getField('InventoryNumber')" [form]="form"></case-textbox-control>
+                                <case-textbox-control *ngIf="hasField('ComputerType_Id')" [field]="getField('ComputerType_Id')" [form]="form"></case-textbox-control>
+                                <case-textbox-control *ngIf="hasField('InventoryLocation')" [field]="getField('InventoryLocation')" [form]="form"></case-textbox-control>    
                         </mbsc-form-group-content>
                     </mbsc-form-group>                                        
     
                     <mbsc-form-group collapsible open #caseInfoSection>
                         <mbsc-form-group-title>Case Info</mbsc-form-group-title>
                         <mbsc-form-group-content>
+                                <case-textbox-control *ngIf="hasField('CaseNumber')" [field]="getField('CaseNumber')" [form]="form"></case-textbox-control>
 
                         </mbsc-form-group-content>
                     </mbsc-form-group>                                        

@@ -8,7 +8,6 @@ namespace DH.Helpdesk.Models.CasesOverview
     public class SearchOverviewFilterInputModel
     {
         public int? CurrentCaseId { get; set; }
-        public int CustomerId { get; set; }
         public string Initiator { get; set; }
         public int? CaseTypeId { get; set; }
         public CaseInitiatorSearchScope? InitiatorSearchScope { get; set; }

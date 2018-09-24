@@ -1,6 +1,5 @@
 export class CasesOverviewFilter {    
 
-        CustomerId: number;
         Initiator: string;
         InitiatorSearchScope: number;
         CaseTypeId: number;

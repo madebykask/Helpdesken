@@ -4,17 +4,17 @@ import { map, tap } from 'rxjs/operators';
 import { CasesOverviewFilter, CaseOverviewItem, CaseOverviewColumn } from '../../models'
 import { HttpApiServiceBase } from '../api'
 import {CommonConstants} from '../../helpers/constants/common.constants'
+import { LocalStorageService } from '../local-storage';
 
 @Injectable({ providedIn: 'root' })
 export class CasesOverviewService extends HttpApiServiceBase {
     
-    protected constructor(http: HttpClient){
-        super(http);
+    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService){
+        super(http, localStorageService);
     }   
    
     searchCases(filter: CasesOverviewFilter) {        
-        var qsParams = this. addQsParam({}, CommonConstants.CustomerIdQsParamName, filter.CustomerId);
-        let requestUrl = this.buildResourseUrl('/api/casesoverview/overview', qsParams)
+        let requestUrl = this.buildResourseUrl('/api/casesoverview/overview')
         return this.postJson<any>(requestUrl, filter)
         .pipe(
             //tap(d => console.log('>>searchCases')),

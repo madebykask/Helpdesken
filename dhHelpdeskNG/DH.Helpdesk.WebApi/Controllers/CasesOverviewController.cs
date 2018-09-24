@@ -50,10 +50,10 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<SearchResult<CaseSearchResult>> Overview([FromBody]SearchOverviewFilterInputModel input)
+        public async Task<SearchResult<CaseSearchResult>> Overview([FromUri]int cid, [FromBody]SearchOverviewFilterInputModel input)
         {
             var filter = new CaseSearchFilter();
-            filter.CustomerId = input.CustomerId;
+            filter.CustomerId = cid;
 
             filter.UserId = UserId;//TODO: 0 check
             var userGroupId = User.Identity.GetGroupId();

@@ -9,13 +9,13 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class UserSettingsService extends HttpApiServiceBase {
     
-    protected constructor(http: HttpClient, private localStorageService: LocalStorageService){
-        super(http);
+    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService){
+        super(http, localStorageService);
     }
 
     loadUserSettings() {
         let isLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-        this.getJson(this.buildResourseUrl('/api/currentuser/settings'))//TODO: error handling
+        this.getJson(this.buildResourseUrl('/api/currentuser/settings', undefined, false))//TODO: error handling
             .pipe(
                 map((data: any) => {
                     if(data) {

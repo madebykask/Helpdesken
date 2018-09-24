@@ -42,7 +42,6 @@ export class CasesOverviewComponent implements OnInit {
   search() {
     let filter = new CasesOverviewFilter();
     filter.FreeTextSearch = this.filtersForm.controls.freeSearch.value;
-    filter.CustomerId = this.userSettingsService.getUserData().selectedCustomerId
     filter.InitiatorSearchScope = 0;//TODO: use enum
     filter.CaseProgress = -1;//TODO: use enum
     filter.PageSize = PagingConstants.pageSize;

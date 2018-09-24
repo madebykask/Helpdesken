@@ -5,19 +5,22 @@ import { config } from '../../../environments/environment';
 import { CurrentUser, UserAuthenticationData } from '../../models'
 import { LocalStorageService } from '../../services/local-storage'
 import { Subject } from 'rxjs/Subject';
+import { HttpApiServiceBase } from '../api';
 
 @Injectable({ providedIn: 'root' })
-export class AuthenticationService {
+export class AuthenticationService extends HttpApiServiceBase {
 
     //events
     private authenticationChangedSubj = new Subject<any>();    
     authenticationChanged$ = this.authenticationChangedSubj.asObservable();
 
-    constructor(private http: HttpClient, private localStorageService: LocalStorageService) { }    
+    constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) {
+        super(http, localStorageService)
+     }    
 
     login(username: string, password: string) {
         let clientId = config.clientId;
-        return this.http.post<any>(`${config.apiUrl}/api/account/login`, { username, password, clientId})
+        return this.postJson<any>(this.buildResourseUrl('/api/account/login', undefined, false), { username, password, clientId })
             .pipe(map(data => {
                 let isSuccess = false;                
                 // login successful if there's a token in the response
@@ -48,7 +51,7 @@ export class AuthenticationService {
         if(user.authData.refresh_token) {
             var refreshToken = user.authData.refresh_token;
             let clientId = config.clientId;
-            return this.http.post<any>(`${config.apiUrl}/api/account/refresh`, { refreshToken, clientId })
+            return this.postJson<any>(this.buildResourseUrl('/api/account/refresh', undefined, false), { refreshToken, clientId })
                 .pipe(map(data => {
                     user.authData.access_token = data.access_token;
                     user.authData.expires_in = Number(data.expires_in);
