@@ -41,29 +41,44 @@
                 ,
                 "User.Customer_Id": {
                     required: true
+                },
+
+                "NewPassword": {
+                    required: true
+                },
+
+                "ConfirmPassword": {
+                    equalTo: "#NewPassword"
                 }
             },
             messages: {
                 "User.UserID": {
-                    required: "@Translation.GetForJS("Du måste ange ett Användar ID", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS("Du måste ange ett Användar ID")"
                 },
                 "User.FirstName": {
-                    required: "@Translation.GetForJS("Du måste ange ett förnamn", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS("Du måste ange ett förnamn")"
                 },
                 "User.SurName": {
-                    required: "@Translation.GetForJS("Du måste ange ett efternamn", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS("Du måste ange ett efternamn")"
                 },
                 "User.Email": {
-                    required: "@Translation.GetForJS("Du måste ange en e-post adress", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS("Du måste ange en e-post adress")"
                 }
                 ,
                 "User.Customer_Id": {
-                    required: "@Translation.GetForJS("Du måste ange en standardkund", Enums.TranslationSource.TextTranslation)"
+                    required: "@Translation.GetForJS("Du måste ange en standardkund")"
+                },
+                "NewPassword": {
+                    required: "@Translation.GetForJS("Du måste ange ett lösenord")"
+                },
+
+                "ConfirmPassword": {
+                    equalTo: "@Translation.GetForJS("Kontrollera att lösenord och bekräftat lösenord stämmer överens")"
                 }
            },
             submitHandler: function (form) {
                 submitForm();
-                form.submit();   
+                form.submit();
             }
         });
     });
