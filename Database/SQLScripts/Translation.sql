@@ -7324,6 +7324,25 @@ If not exists (select * from tblTextTranslation where text_id = 1996 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1996, 2, 'Initiator Category')
 GO
 
+If not exists (select * from tbltext where id = 1997)
+	insert into tbltext (id, TextString) VALUES (1997, 'Du måste ange ett lösenord')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1997 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1997, 2, 'You must specify a password')
+GO
+
+
+If not exists (select * from tbltext where id = 1998)
+	insert into tbltext (id, TextString) VALUES (1998, 'Kontrollera att lösenord och bekräftat lösenord stämmer överens')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1998 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1998, 2, 'Password and Confirm Password must match')
+GO
+
+
+
+
+
 -- *** Run this last when put translation script above this line *** --
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 

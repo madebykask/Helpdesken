@@ -43,3 +43,4 @@ dhHelpdeskMobile/.vs/
 **/wwwroot/*
 **/wwwroot-test/*
 **/*.d.ts
+*.npmrc
