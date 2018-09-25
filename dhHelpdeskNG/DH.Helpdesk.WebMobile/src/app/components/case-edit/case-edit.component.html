@@ -53,6 +53,7 @@
                         <mbsc-form-group-title>Case Info</mbsc-form-group-title>
                         <mbsc-form-group-content>
                                 <case-textbox-control *ngIf="hasField('CaseNumber')" [field]="getField('CaseNumber')" [form]="form"></case-textbox-control>
+                                <case-date-control *ngIf="hasField('RegTime')" [field]="getField('RegTime')" [form]="form"></case-date-control>
 
                         </mbsc-form-group-content>
                     </mbsc-form-group>                                        

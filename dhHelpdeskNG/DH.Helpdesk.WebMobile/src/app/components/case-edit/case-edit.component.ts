@@ -31,8 +31,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
 
     constructor(private route: ActivatedRoute,
          private caseService: CaseService,
-         private router: Router, 
-         private formBuilder: FormBuilder) {
+         private router: Router) {
         if(this.route.snapshot.paramMap.has('id')) {
             this.caseId = Number(this.route.snapshot.paramMap.get('id'));
         } else {
@@ -51,7 +50,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
                 let group: any = {};
                 this.caseData = data;
                 data.Fields.forEach(field => {
-                    group[field.Name] = new FormControl(field.Value || '');
+                    group[field.Name] = new FormControl({value: field.Value || '', disabled: true});
                 })
                 this.form = new FormGroup(group);
                 this.isLoaded = true;

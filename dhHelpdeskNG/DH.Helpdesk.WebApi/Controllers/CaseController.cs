@@ -19,6 +19,7 @@ using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Config.Authentication;
 using DH.Helpdesk.WebApi.Infrastructure.Translate;
+using DateTime = System.DateTime;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -454,6 +455,18 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId, input.Cid),
                 Section = CaseSectionType.CaseInfo.ToString(),
                 Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.CaseNumber, caseFieldSettings,
+                    caseFieldSettingsTranslated)
+            };
+            model.Fields.Add(field);
+
+            field = new BaseCaseField<DateTime>()
+            {
+                Name = GlobalEnums.TranslationCaseFields.RegTime.ToString(),
+                Value = currentCase.RegTime,
+                Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.RegTime, caseFieldSettingsTranslated,
+                    languageId, input.Cid),
+                Section = CaseSectionType.CaseInfo.ToString(),
+                Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.RegTime, caseFieldSettings,
                     caseFieldSettingsTranslated)
             };
             model.Fields.Add(field);

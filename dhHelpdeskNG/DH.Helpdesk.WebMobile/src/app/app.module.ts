@@ -13,10 +13,10 @@ import { AppComponent } from './app.component';
 import { HttpLoaderFactory, initTranslation, TranslationApiService } from './services/translation';
 import { LocalStorageService } from './services/local-storage'
 import { LoggerService } from './services/logging';
-import { MomentModule } from 'ngx-moment';
+//import { MomentModule } from 'ngx-moment';
 
 import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors'
-import { HomeComponent, CasesOverviewComponent, CaseEditComponent, CaseTextboxComponent } from './components';
+import { HomeComponent, CasesOverviewComponent, CaseEditComponent, CaseTextboxComponent, CaseDateComponent } from './components';
 import { GetByKeyPipe } from './helpers/pipes';
 
 import { AppRoutingModule } from './app.routing';
@@ -28,15 +28,16 @@ import { RequireAuthDirective } from './helpers/directives/require-auth.directiv
   declarations: [AppComponent, PageNotFoundComponent, HeaderComponent, FooterComponent,
      LoginComponent,
      HomeComponent, CasesOverviewComponent, CaseEditComponent,
-     CaseTextboxComponent,
+     CaseTextboxComponent, CaseDateComponent,
      GetByKeyPipe,
-     RequireAuthDirective],
-  imports: [ 
-    MbscModule, 
+     RequireAuthDirective,
+    ],
+  imports: [  
     BrowserModule,    
-    HttpClientModule,
+    MbscModule,    
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     AppRoutingModule,
     TranslateModule.forRoot({
       loader: {
@@ -46,7 +47,7 @@ import { RequireAuthDirective } from './helpers/directives/require-auth.directiv
       },
       useDefaultLang: true
     }),
-    MomentModule,
+    //MomentModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
