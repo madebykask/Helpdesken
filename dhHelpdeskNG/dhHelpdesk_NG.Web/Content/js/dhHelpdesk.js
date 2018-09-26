@@ -109,12 +109,14 @@ function SetSelectValue(selId, val, readonlyElementId) {
     var exists = $sel.find('option[value=' + val + ']').length > 0;
     if (exists) {
         $sel.val(val);
-        if (readonlyElementId) {
+        if (readonlyElementId && readonlyElementId.length) {
             var $readonlyElement = $(readonlyElementId);
             if ($readonlyElement.length)
                 $readonlyElement.val(val);
         }
+        return true;
     }
+    return false;
 }
 
 function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFilterFormat) {

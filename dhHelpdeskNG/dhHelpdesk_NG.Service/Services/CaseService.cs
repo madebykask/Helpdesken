@@ -936,6 +936,7 @@ namespace DH.Helpdesk.Services.Services
                 Supplier_Id = customerDefaults.SupplierId,
                 Priority_Id = customerDefaults.PriorityId,
                 Status_Id = customerDefaults.StatusId,
+                //State
                 WorkingGroup_Id = this._userRepository.GetUserDefaultWorkingGroupId(userId, customerId),
                 RegUserId = adUser.GetUserFromAdPath(),
                 RegUserDomain = adUser.GetDomainFromAdPath()

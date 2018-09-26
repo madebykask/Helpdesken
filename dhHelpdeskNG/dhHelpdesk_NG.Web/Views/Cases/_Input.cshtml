@@ -211,6 +211,7 @@
                         @Html.Hidden("CaseTemplate_IsAbout_Department_Id", "")
                         @Html.Hidden("CaseTemplate_IsAbout_OU_Id", "")
                         @Html.Hidden("CaseTemplate_ExternalLogNote", "")
+                        @Html.Hidden("CaseTemplate_Performer_Id", "")
                         @Html.Hidden("LastProductAreaId", Model.case_.ProductArea_Id)
                         @Html.Hidden("LastProjectId", Model.case_.Project_Id)
                         @Html.Hidden("CaseHasInvoiceOrder", "")
@@ -1666,7 +1667,7 @@
                                                 {
                                                     if (!Model.case_.WorkingGroup_Id.HasValue)
                                                     {
-                                                        <input type="text" value="" readonly="true" id="workingGroup_Name" />
+                                                        <input type="text" value="" readonly="readonly" id="workingGroup_Name" />
                                                     }
                                                     else
                                                     {
