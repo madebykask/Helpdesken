@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Dal.DbQueryExecutor;
+﻿using System.Data.Entity;
+using DH.Helpdesk.Dal.DbQueryExecutor;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -18,6 +19,8 @@ namespace DH.Helpdesk.Dal.Repositories
         void ResetDefault(int exclude, int customerId);
 
         void ResetEmailDefault(int exclude, int customerId);
+
+        CaseType GetCaseTypeFull(int caseTypeId);
 
         IList<ItemOverview> GetOverviews(int customerId);
 
@@ -45,6 +48,14 @@ namespace DH.Helpdesk.Dal.Repositories
         }
 
         #endregion
+
+        public CaseType GetCaseTypeFull(int caseTypeId)
+        {
+            return Table.Where(x => x.Id == caseTypeId)
+                .Include(x => x.Administrator)
+                .Include(x => x.WorkingGroup)
+                .FirstOrDefault();
+        }
 
         public void ResetDefault(int exclude, int customerId)
         {
@@ -136,7 +147,6 @@ namespace DH.Helpdesk.Dal.Repositories
             return caseTypes;
         }
 
-
         private IQueryable<CaseType> GetCustomerCaseTypes(int customerId, bool activeOnly)
         {
             return Table.Where(g => g.Customer_Id == customerId && (!activeOnly || g.IsActive == 1));
@@ -154,7 +164,6 @@ namespace DH.Helpdesk.Dal.Repositories
                 }
             }            
         }
-
 
         private Expression<Func<CaseType, CaseTypeOverview>> MapToCaseTypeOverview()
         {

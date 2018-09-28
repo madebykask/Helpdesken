@@ -373,22 +373,18 @@ namespace DH.Helpdesk.Services.Services
                 return null;
 
             var caseSolution = _caseSolutionRepository.GetGetSolutionInfo(caseSolutionId, customerId);
-
             if (caseSolution == null)
                 return null;
 
-            var stateSecondaryId =
-                caseStateSecondaryId > 0
-                    ? _stateSecondaryRepository.GetById(caseSolution.StateSecondaryId).StateSecondaryId
-                    : 0;
-
-            if (caseSolutionId > 0)
+            var stateSecondaryId = 0;
+            
+            if (caseStateSecondaryId > 0)
             {
-                //fallback to casesolution.StateSecondaryId if case is new
-                if (caseStateSecondaryId == 0 && caseSolution.StateSecondaryId > 0)
-                {
-                    stateSecondaryId = _stateSecondaryRepository.GetById(caseSolution.StateSecondaryId).StateSecondaryId;
-                }
+                stateSecondaryId = _stateSecondaryRepository.GetById(caseStateSecondaryId)?.StateSecondaryId ?? 0;
+            }
+            else if (caseSolution.StateSecondaryId > 0)
+            {
+                stateSecondaryId = _stateSecondaryRepository.GetById(caseSolution.StateSecondaryId).StateSecondaryId;
             }
 
             var extendedCaseFormData =
@@ -399,6 +395,7 @@ namespace DH.Helpdesk.Services.Services
             if (extendedCaseFormData != null)
             {
                 extendedCaseFormData.StateSecondaryId = stateSecondaryId;
+
                 if (string.IsNullOrWhiteSpace(extendedCaseFormData.ExtendedCaseFormName))
                 {
                     extendedCaseFormData.ExtendedCaseFormName = caseSolution.Name;
@@ -921,6 +918,7 @@ namespace DH.Helpdesk.Services.Services
                 Supplier_Id = customerDefaults.SupplierId,
                 Priority_Id = customerDefaults.PriorityId,
                 Status_Id = customerDefaults.StatusId,
+                //State
                 WorkingGroup_Id = this._userRepository.GetUserDefaultWorkingGroupId(userId, customerId),
                 RegUserId = adUser.GetUserFromAdPath(),
                 RegUserDomain = adUser.GetDomainFromAdPath()

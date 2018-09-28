@@ -96,7 +96,7 @@ namespace DH.Helpdesk.Services.Services
 
         public CaseType GetCaseType(int id)
         {
-            return this.caseTypeRepository.GetById(id);
+            return this.caseTypeRepository.GetCaseTypeFull(id);
         }
 
         public int GetDefaultId(int customerId)

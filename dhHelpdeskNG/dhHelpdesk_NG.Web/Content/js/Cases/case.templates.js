@@ -10,15 +10,20 @@ function SetValueIfElVisible(el, val, opt, forceApply) {
             if (!opt.doNotTriggerEvent) {                
                 $(el).trigger('change');
             }
-            if (el.selector == "#case__WorkingGroup_Id") {
+
+            if (el.selector === "#Performer_Id") {
+                $("#CaseTemplate_Performer_Id").val(val);
+            }
+            
+            if (el.selector === "#case__WorkingGroup_Id") {
                 $("#CaseTemplate_WorkingGroup_Id").val(val);
             }
 
-            if (el.selector == "#case__Priority_Id") {
+            if (el.selector === "#case__Priority_Id") {
                 $("#CaseTemplate_Priority_Id").val(val);
             }
 
-            if (el.selector == "#case__StateSecondary_Id") {
+            if (el.selector === "#case__StateSecondary_Id") {
                 $("#CaseTemplate_StateSecondary_Id").val(val);
             }
         }
@@ -339,14 +344,16 @@ var templateQuickButtonIndicator = '#TemplateQuickButtonIndicator';
 var ApplyTemplate = function (data, doOverwrite) {
     changeCaseButtonsState(false);
 
-    var cfg = { doOverwrite: doOverwrite };
+    
     var dateFormat = data["dateFormat"];
     $('#CaseTemplate_ExternalLogNote').val("True");
+
     for (var fieldId in data) {
-        var val = data[fieldId];
         var el;
+        var val = data[fieldId];
+        var cfg = { doOverwrite: doOverwrite };
+
         if (val != null && val !== '') {
-            
             switch (fieldId) {
                 case 'PersonsName':
                     el = $('#case__PersonsName');
@@ -706,6 +713,12 @@ var ApplyTemplate = function (data, doOverwrite) {
             }
         }
     }
+
+    //reset case template values after loading template
+    $('#CaseTemplate_WorkingGroup_Id').val("");
+    $('#CaseTemplate_Priority_Id').val("");
+    $('#CaseTemplate_StateSecondary_Id').val("");
+    $("#CaseTemplate_Performer_Id").val("");
 
     //TODO: As there are fragmented functiond to execute the Case rules (some here and some are in others .js file) 
     //      we call the FinalAction function after 3 seconds. 

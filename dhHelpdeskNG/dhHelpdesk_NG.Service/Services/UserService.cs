@@ -853,7 +853,7 @@ namespace DH.Helpdesk.Services.Services
                 errors.Add("NewPassWord", "Du måste ange ett lösenord");
             }
 
-            if (user.Password.Equals(confirmpassword, StringComparison.CurrentCulture) && !string.IsNullOrEmpty(user.Password))
+            if (!user.Password.Equals(confirmpassword, StringComparison.CurrentCulture) && !string.IsNullOrEmpty(user.Password))
             {
                 errors.Add("NewPassword", "Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens");
             }

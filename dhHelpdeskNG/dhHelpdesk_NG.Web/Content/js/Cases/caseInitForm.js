@@ -614,7 +614,7 @@ function getExtendedCaseSectionIFrameOptions() {
         checkOrigin: false,
         enablePublicMethods: true,
         resizedCallback: function(messageData) {
-            console.log('>>>iFrame sesize callback called.!');
+            //console.log('>>>iFrame sesize callback called.!');
         },
         bodyMargin: '0 0 0 0',
         closedCallback: function (id) {},
@@ -1032,53 +1032,63 @@ function CaseInitForm() {
     //init frame resize 
     var iframeOptions = getExtendedCaseSectionIFrameOptions();
     $('iframe[id^="extendedSection-iframe"]').iFrameResize(iframeOptions);
-    console.log('>>>caseInit.Set up iframe resize');
 
-    $('#case__Status_Id').change(function () {        
+    $('#case__Status_Id').change(function (e) {        
+        console.log('>>> CaseStatus changed event.');
+        var templateStateSecondartId = $('#CaseTemplate_StateSecondary_Id').val() || '';
+        var templateWgId = $('#CaseTemplate_WorkingGroup_Id').val() || '';
 
         if ($(this).val() > 0) {
             $.post('/Cases/ChangeStatus/', { 'id': $(this).val() }, function (data) {
-                var alreadySetByCaseTemplate = ($('#CaseTemplate_StateSecondary_Id').val() != "");
-                if (data != undefined && !alreadySetByCaseTemplate) {
-                    var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
-                    if (exists > 0 && data.WorkingGroup_Id > 0) {
-                        $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id).change();
+                if (data) {
+                    //check if working group has been set by case template
+                    if (templateWgId === '') {
+                        changeWorkingGroupValue(data.WorkingGroup_Id, null, 'changeStatus');
                     }
-                    exists = $('#case__StateSecondary_Id option[value=' + data.StateSecondary_Id + ']').length;
-                    if (exists > 0 && data.StateSecondary_Id > 0) {
-                        $("#case__StateSecondary_Id").val(data.StateSecondary_Id);
-                        $(".readonlySubstate").val(data.StateSecondary_Id);
+
+                    var stateSecondaryId = Number(data.StateSecondary_Id);
+                    if (stateSecondaryId > 0 && templateStateSecondartId === '') {
+                        var exists = $('#case__StateSecondary_Id option[value=' + data.StateSecondary_Id + ']').length > 0;
+                        if (exists) {
+                            $("#case__StateSecondary_Id").val(data.StateSecondary_Id);
+                            $(".readonlySubstate").val(data.StateSecondary_Id);
+                        }
                     }
                 }
             }, 'json');
-
-            $('#CaseTemplate_StateSecondary_Id').val("");
         }
     });
 
-    $('#case__CaseType_Id').change(function () {
+    $('#case__CaseType_Id').change(function (e, source) {
         var caseTypeId = $(this).val();
+        console.log('>>> CaseType changed event.');
+        var templateWgId = $('#CaseTemplate_WorkingGroup_Id').val() || '';
 
-        $.post('/Cases/ChangeCaseType/', { id: caseTypeId })
-            .done(function (res) {
-                debugger;
-                if (res) {
-                    //set performer
-                    SetSelectValue('#Performer_Id', res.UserId);
+        $.post('/Cases/ChangeCaseType/', { id: caseTypeId }).done(function (res) {
+            if (res) {
+                //set performer only if it was not set by case template before
+                var $performerId = $('#Performer_Id');
+                var performerUserId = Number(res.UserId);
+                var templatePerformerId = $("#CaseTemplate_Performer_Id").val() || '';
+                if (!isNaN(performerUserId) && performerUserId > 0 && templatePerformerId === '') {
+                    var exists = $performerId.find('option[value=' + res.UserId + ']').length > 0;
+                    if (!exists) 
+                        $performerId.append("<option value='" + res.UserId + "'>" + res.UserName + "</option>");
+                    $performerId.val(res.UserId);
+                }
 
-                    //set working group
-                    var workingGroupId = Number(res.WorkingGroupId);
-                    if (!isNaN(workingGroupId) && workingGroupId > 0) {
-                        $("#case__WorkingGroup_Id").val(res.WorkingGroupId).change();
-                    }
+                //chek if workginGroup has already been set by template load
+                if (templateWgId === '') {
+                    changeWorkingGroupValue(res.WorkingGroupId, res.WorkingGroupName, 'changeCaseType');
                 }
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                if (jqXHR.status == 404 || errorThrown == 'Not Found') {
-                    console.warn('Case type (id=%s) not found.', caseTypeId);
-                    ShowToastMessage('CaseType not found', 'warning', false);
-                }
-            });
+            }
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.warn('Case type (id=%s) not found.', caseTypeId);
+                ShowToastMessage('CaseType not found', 'warning', false);
+            }
+        });
         
         resetProductareaByCaseType(caseTypeId);
     });
@@ -1215,59 +1225,71 @@ function CaseInitForm() {
         SetPriority();
     });
 
-    $('#case__ProductArea_Id').change(function () {
-        var $workingGroup = $("#case__WorkingGroup_Id");       
-        
+    // Product Area change
+    $('#case__ProductArea_Id').change(function (e) {
+        console.log('>>> ProductArea changed event.');
         $("#ProductAreaHasChild").val(0);        
         document.getElementById("divProductArea").classList.remove("error");
+
+        var templateWgId = $('#CaseTemplate_WorkingGroup_Id').val() || '';
+        var templatePriorityId = $('#CaseTemplate_Priority_Id').val() || '';
+
         if ($(this).val() > 0 ) {
             $.post('/Cases/ChangeProductArea/', { 'id': $(this).val() }, 'json').done(function (data) {
-                if (data != undefined) {
+                if (data) {
+                    //change only if it wasn't set by a template
+                    if (templateWgId === '') {
+                        changeWorkingGroupValue(data.WorkingGroup_Id, data.WorkingGroup_Name, 'changeProductArea');
+                    }
 
-                    var alreadySetByCaseTemplate = ($('#CaseTemplate_WorkingGroup_Id').val() != "");
-
-                    var exists = $workingGroup.find('option[value=' + data.WorkingGroup_Id + ']').length;
-
-                    if (exists > 0 || $('#workingGroup_Name') != undefined)
-                        if (data.WorkingGroup_Id > 0 && !alreadySetByCaseTemplate) {                            
-                            $workingGroup.val(data.WorkingGroup_Id);                           
-                            $workingGroup.change();
-
-                            if ($('#workingGroup_Name') != undefined && data.WorkingGroup_Name != null)
-                                $('#workingGroup_Name').val(data.WorkingGroup_Name);
+                    var priorityId = Number(data.Priority_Id || '0');
+                    var $casePriorityId = $("#case__Priority_Id");
+                    
+                    if (priorityId > 0 && templatePriorityId === '') {
+                        var exists = $casePriorityId.find('option[value=' + data.Priority_Id + ']').length > 0;
+                        if (exists) {
+                            $casePriorityId.val(data.Priority_Id);
+                            $casePriorityId.attr('data-sla', data.SLA);
+                            $casePriorityId.change();
                         }
 
-                    exists = $('#case__Priority_Id option[value=' + data.Priority_Id + ']').length;
-                    alreadySetByCaseTemplate = ($('#CaseTemplate_Priority_Id').val() != "");
-
-                    if (exists > 0 || $('#priority_Name') != undefined){
-                        if (data.Priority_Id > 0 && !alreadySetByCaseTemplate) {
-                            $("#case__Priority_Id").val(data.Priority_Id);
-                            $("#case__Priority_Id").attr('data-sla', data.SLA);
-                            $("#case__Priority_Id").change();
-
-                            if ($('#priority_Name') != undefined && data.PriorityName != null)
-                                $('#priority_Name').val(data.PriorityName);
-                        }                        
+                        var $priorityName = $('#priority_Name');
+                        if ($priorityName.length && data.PriorityName) {
+                            $priorityName.val(data.PriorityName);
+                        }
                     }
                 
-                    if (data.Priority_Id > 0)
+                    if (priorityId > 0)
                         $(".sla-value").eq(0).val(data.Priority_Id);
+
                     $("#ProductAreaHasChild").val(data.HasChild);
                 }
-
-                $('#CaseTemplate_WorkingGroup_Id').val("");
-                $('#CaseTemplate_Priority_Id').val("");
             });
-            
         }        
     });
 
+    function changeWorkingGroupValue(newWorkingGroupId, newWorkingGroupName, srcName) {
+        console.log('>>> ChangeWorkingGroupValue: wgId %s, wgName: %s, src: %s', newWorkingGroupId, newWorkingGroupName, srcName);
+
+        var $workingGroup = $("#case__WorkingGroup_Id");
+        var exists = $workingGroup.find('option[value=' + newWorkingGroupId + ']').length > 0;
+        if (Number(newWorkingGroupId) > 0 && exists) {
+            $workingGroup.val(newWorkingGroupId);
+            $workingGroup.change();
+        }
+
+        var $workginGroupName = $('#workingGroup_Name');
+        if ($workginGroupName.length) {
+            $workginGroupName.val(newWorkingGroupName || '');
+        }
+    }
+
     $('#case__WorkingGroup_Id').change(function () {
+        console.log('>>> Working group changed event.');
         // Remove after implementing http://redmine.fastdev.se/issues/10995
         // filter administrators
-        var DontConnectUserToWorkingGroup = $('#CaseMailSetting_DontConnectUserToWorkingGroup').val();
-        if (DontConnectUserToWorkingGroup == 0) {
+        var dontConnectUserToWorkingGroup = Number($('#CaseMailSetting_DontConnectUserToWorkingGroup').val() || '0');
+        if (dontConnectUserToWorkingGroup === 0) {
             CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
         }
         //set state secondery
