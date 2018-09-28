@@ -884,6 +884,7 @@ function CaseInitForm() {
     $('#case__Region_Id').change(function () {
         var regionId = $(this).val();
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
+
         var templateDep_Id = $("#CaseTemplate_Department_Id").val();
         $("#CaseTemplate_Department_Id").val('');
 
@@ -929,6 +930,7 @@ function CaseInitForm() {
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
         var templateOU_Id = $("#CaseTemplate_OU_Id").val();
         $("#CaseTemplate_OU_Id").val('');
+
         if (templateOU_Id != undefined && templateOU_Id != "") 
             refreshOrganizationUnit(departmentId, departmentFilterFormat, templateOU_Id);                
         else 
@@ -1062,14 +1064,16 @@ function CaseInitForm() {
     $('#case__CaseType_Id').change(function (e, source) {
         var caseTypeId = $(this).val();
         console.log('>>> CaseType changed event.');
+
         var templateWgId = $('#CaseTemplate_WorkingGroup_Id').val() || '';
+        var templatePerformerId = $("#CaseTemplate_Performer_Id").val() || '';
 
         $.post('/Cases/ChangeCaseType/', { id: caseTypeId }).done(function (res) {
             if (res) {
                 //set performer only if it was not set by case template before
                 var $performerId = $('#Performer_Id');
                 var performerUserId = Number(res.UserId);
-                var templatePerformerId = $("#CaseTemplate_Performer_Id").val() || '';
+                
                 if (!isNaN(performerUserId) && performerUserId > 0 && templatePerformerId === '') {
                     var exists = $performerId.find('option[value=' + res.UserId + ']').length > 0;
                     if (!exists) 
@@ -1199,6 +1203,7 @@ function CaseInitForm() {
             $('#CaseTemplate_ExternalLogNote').val("");
             return;
         }
+
         var textExternalLogNote = $('#CaseLog_TextExternal').val();
   
         $.post('/Cases/ChangePriority/', { 'id': $(this).val(), 'textExternalLogNote': textExternalLogNote }, function (data) {
