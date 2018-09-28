@@ -3,6 +3,7 @@ using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
 using DH.Helpdesk.WebApi.Infrastructure;
+using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection;
 using DH.Helpdesk.WebApi.Infrastructure.Config.Filters;
 
@@ -38,8 +39,11 @@ namespace DH.Helpdesk.WebApi
 
         private static void RegisterFilters(ContainerBuilder builder)
         {
-            //register customer authorization filter
             builder.RegisterType<CustomerAccessAuthorizationFilter>()
+                .AsWebApiAuthorizationFilterFor<BaseApiController>()
+                .InstancePerRequest();
+            
+            builder.RegisterType<UserCasePermissionsFilter>()
                 .AsWebApiAuthorizationFilterFor<BaseApiController>()
                 .InstancePerRequest();
         }

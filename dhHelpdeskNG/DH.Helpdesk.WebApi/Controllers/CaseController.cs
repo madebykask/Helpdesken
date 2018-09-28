@@ -18,6 +18,7 @@ using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Config.Authentication;
+using DH.Helpdesk.WebApi.Infrastructure.Config.Filters;
 using DH.Helpdesk.WebApi.Infrastructure.Translate;
 using DateTime = System.DateTime;
 
@@ -55,7 +56,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpGet]
-        [UserCasePermissions]
+        [CheckUserCasePermissions(CaseIdParamName = "caseId")]
         public async Task<CaseEditOutputModel> Get([FromUri] GetCaseInputModel input)
         {
             var model = new CaseEditOutputModel();

@@ -154,7 +154,8 @@
     </Compile>
     <Compile Include="Infrastructure\Attributes\AuthorizeApiAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\SkipCustomerAuthorization.cs" />
-    <Compile Include="Infrastructure\Attributes\UserCasePermissionsAttribute.cs" />
+    <Compile Include="Infrastructure\Config\Filters\CheckUserCasePermissionsAttribute.cs" />
+    <Compile Include="Infrastructure\Config\Filters\UserCasePermissionsFilter.cs" />
     <Compile Include="Infrastructure\BaseApiController.cs" />
     <Compile Include="Infrastructure\Cache\WebCacheService.cs" />
     <Compile Include="Infrastructure\Config\ApplicationConfiguration.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="Infrastructure\Config\DependencyInjection\ServicesModule.cs" />
     <Compile Include="Infrastructure\Config\DependencyInjection\WorkContextModule.cs" />
     <Compile Include="Infrastructure\Config\Filters\ApiExceptionFilter.cs" />
+    <Compile Include="Infrastructure\Config\Filters\AuthorizationFilterBase.cs" />
     <Compile Include="Infrastructure\Config\Filters\CustomerAccessAuthorizationFilter.cs" />
     <Compile Include="Infrastructure\Config\Filters\ModelValidationApiActionFilter.cs" />
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
