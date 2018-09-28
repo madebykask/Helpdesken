@@ -8,6 +8,25 @@
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
 
+    public interface IOrganizationService
+    {
+        List<ItemOverview> GetRegions(int customerId);
+
+        List<ItemOverview> GetDepartments(int customerId);
+
+        List<ItemOverview> GetDepartments(int customerId, int? regionId);
+
+        List<ItemOverview> GetDomains(int customerId);
+
+        List<ItemOverview> GetOrganizationUnits();
+
+        List<ItemOverview> GetOrganizationUnits(int? departmentId);
+
+        List<OU> GetOUs(int? departmentId);
+
+        List<OU> GetCustomerOUs(int customerId);
+    }
+
     public class OrganizationService : IOrganizationService
     {
         private readonly IRegionRepository regionRepository;
@@ -68,7 +87,7 @@
         public List<OU> GetOUs(int? departmentId)
         {
             var emptyList = new List<OU>();
-            return departmentId == null ?
+            return !departmentId.HasValue ?
                 emptyList :
                 this.organizationUnitRepository.GetOUs(departmentId).OrderBy(o=> o.Name).ToList();
         }

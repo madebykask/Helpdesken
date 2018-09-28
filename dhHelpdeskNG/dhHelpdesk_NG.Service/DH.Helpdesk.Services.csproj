@@ -331,6 +331,7 @@
     <Compile Include="Infrastructure\TimeZoneResolver\TimeZoneResolver.cs" />
     <Compile Include="Response\Questionnaire\OptionNote.cs" />
     <Compile Include="Services\Authentication\FederatedAuthenticationService.cs" />
+    <Compile Include="Services\Concrete\Changes\BaseChangesService.cs" />
     <Compile Include="Services\ConditionService.cs" />
     <Compile Include="Services\CaseExtraFollowersService.cs" />
     <Compile Include="Services\CaseFollowUpService.cs" />
@@ -450,8 +451,6 @@
     <Compile Include="Services\Concrete\Licenses\VendorsService.cs" />
     <Compile Include="Services\Concrete\MailTemplateService.cs" />
     <Compile Include="Services\Concrete\InvoiceArticleService.cs" />
-    <Compile Include="Services\Concrete\IOrganizationService.cs" />
-    <Compile Include="Services\Concrete\IPlaceService.cs" />
     <Compile Include="Services\Concrete\OrganizationService.cs" />
     <Compile Include="Services\Concrete\PlaceService.cs" />
     <Compile Include="Services\ICaseInvoiceSettingsService.cs" />
@@ -488,7 +487,7 @@
     <Compile Include="Services\Concrete\NotifierService.cs" />
     <Compile Include="Services\Concrete\ProblemLogService.cs" />
     <Compile Include="Services\ContractCategoryService.cs" />
-    <Compile Include="Services\Concrete\ChangeService.cs" />
+    <Compile Include="Services\Concrete\Changes\ChangeService.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Notifiers\NotifierRestorer.cs" />
     <Compile Include="Services\IFaqService.cs" />
     <Compile Include="Services\INotifierService.cs" />

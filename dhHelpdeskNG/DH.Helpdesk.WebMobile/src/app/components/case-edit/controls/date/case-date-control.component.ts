@@ -10,6 +10,7 @@ import { MbscDatetimeOptions } from "@mobiscroll/angular";
   })
   export class CaseDateComponent extends BaseControl implements OnInit, OnDestroy {
     @Input() field: BaseCaseField<Date>;
+    @Input() type: string = "datetime";
     options: MbscDatetimeOptions = {
       readOnly: true,
       disabled: true

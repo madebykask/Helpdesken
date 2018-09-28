@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
+﻿using System.Data.Entity;
+using System.Threading.Tasks;
+
+namespace DH.Helpdesk.Dal.Repositories.Changes.Concrete
 {
     using System;
     using System.Collections.Generic;
@@ -13,11 +16,11 @@
     using DH.Helpdesk.BusinessData.Models.Changes.Output;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
     using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
-    using DH.Helpdesk.BusinessData.Models.Shared;
+    using BusinessData.Models.Shared;
     using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Dal.Dal;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Mappers;
+    using Dal;
+    using Infrastructure;
+    using Mappers;
     using DH.Helpdesk.Domain.Changes;
 
     public sealed class ChangeRepository : Repository, IChangeRepository
@@ -25,23 +28,19 @@
         #region Fields
 
         private readonly IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview>
-            changeEntityToChangeDetailedOverviewMapper;
+            _changeEntityToChangeDetailedOverviewMapper; //TODO: Move usage to service
 
-        private readonly IEntityToBusinessModelMapper<ChangeEntity, Change> changeEntityToChangeMapper;
+        private readonly INewBusinessModelToEntityMapper<NewChange, ChangeEntity> _newChangeToChangeEntityMapper;//TODO: Move usage to service
 
-        private readonly INewBusinessModelToEntityMapper<NewChange, ChangeEntity> newChangeToChangeEntityMapper;
+        private readonly IUserRepository _userRepository;
 
-        private readonly IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity> updatedChangeToChangeEntityMapper;
+        private readonly IChangeContactRepository _changeContactRepository;
 
-        private readonly IUserRepository userRepository;
+        private readonly IChangeChangeGroupRepository _changeChangeGroupRepository;
 
-        private readonly IChangeContactRepository changeContactRepository;
+        private readonly IChangeDepartmentRepository _changeDepartmentRepository;
 
-        private readonly IChangeChangeGroupRepository changeChangeGroupRepository;
-
-        private readonly IChangeDepartmentRepository changeDepartmentRepository;
-
-        private readonly IChangeLogRepository changeLogRepository;
+        private readonly IChangeLogRepository _changeLogRepository;
 
         #endregion
 
@@ -50,9 +49,7 @@
         public ChangeRepository(
             IDatabaseFactory databaseFactory,
             IEntityToBusinessModelMapper<ChangeEntity, ChangeDetailedOverview> changeEntityToChangeDetailedOverviewMapper,
-            IEntityToBusinessModelMapper<ChangeEntity, Change> changeEntityToChangeMapper,
             INewBusinessModelToEntityMapper<NewChange, ChangeEntity> newChangeToChangeEntityMapper,
-            IBusinessModelToEntityMapper<UpdatedChange, ChangeEntity> updatedChangeToChangeEntityMapper, 
             IUserRepository userRepository, 
             IChangeContactRepository changeContactRepository, 
             IChangeChangeGroupRepository changeChangeGroupRepository, 
@@ -60,15 +57,13 @@
             IChangeLogRepository changeLogRepository)
             : base(databaseFactory)
         {
-            this.changeEntityToChangeDetailedOverviewMapper = changeEntityToChangeDetailedOverviewMapper;
-            this.changeEntityToChangeMapper = changeEntityToChangeMapper;
-            this.newChangeToChangeEntityMapper = newChangeToChangeEntityMapper;
-            this.updatedChangeToChangeEntityMapper = updatedChangeToChangeEntityMapper;
-            this.userRepository = userRepository;
-            this.changeContactRepository = changeContactRepository;
-            this.changeChangeGroupRepository = changeChangeGroupRepository;
-            this.changeDepartmentRepository = changeDepartmentRepository;
-            this.changeLogRepository = changeLogRepository;
+            _changeEntityToChangeDetailedOverviewMapper = changeEntityToChangeDetailedOverviewMapper;
+            _newChangeToChangeEntityMapper = newChangeToChangeEntityMapper;
+            _userRepository = userRepository;
+            _changeContactRepository = changeContactRepository;
+            _changeChangeGroupRepository = changeChangeGroupRepository;
+            _changeDepartmentRepository = changeDepartmentRepository;
+            _changeLogRepository = changeLogRepository;
         }
 
         #endregion
@@ -77,7 +72,7 @@
 
         public List<CustomerChange> GetCustomersChanges(int[] customersIds)
         {
-            var entities = this.DbContext.Changes.Where(c => c.Customer_Id.HasValue && 
+            var entities = DbContext.Changes.Where(c => c.Customer_Id.HasValue && 
                                             customersIds.Contains(c.Customer_Id.Value))
                                             .Select(c => new
                                             {
@@ -99,32 +94,30 @@
 
         public void AddChange(NewChange change)
         {
-            var entity = this.newChangeToChangeEntityMapper.Map(change);
-            this.DbContext.Changes.Add(entity);
-            this.InitializeAfterCommit(change, entity);
+            var entity = _newChangeToChangeEntityMapper.Map(change);
+            DbContext.Changes.Add(entity);
+            InitializeAfterCommit(change, entity);
         }
 
         public void DeleteById(int changeId)
         {
-            var change = this.DbContext.Changes.Find(changeId);
-            this.DbContext.Changes.Remove(change);
+            var change = DbContext.Changes.Find(changeId);
+            DbContext.Changes.Remove(change);
         }
 
-        public Change FindById(int changeId)
+        public ChangeEntity FindById(int changeId)
         {
-            var change = this.DbContext.Changes.Find(changeId);
-            return this.changeEntityToChangeMapper.Map(change);
+            return DbContext.Changes.Find(changeId);
         }
 
-        public Change GetById(int changeId)
+        public ChangeEntity GetById(int changeId)
         {
-            var change = this.DbContext.Changes.Single(c => c.Id == changeId);
-            return this.changeEntityToChangeMapper.Map(change);
+            return DbContext.Changes.Single(c => c.Id == changeId);
         }
 
         public List<ItemOverview> FindOverviews(int customerId)
         {
-            var changes = this.FindByCustomerIdCore(customerId).Select(c => new { c.Id, c.ChangeTitle }).ToList();
+            var changes = FindByCustomerIdCore(customerId).Select(c => new { c.Id, c.ChangeTitle }).ToList();
 
             return
                 changes.Select(c => new ItemOverview(c.ChangeTitle, c.Id.ToString(CultureInfo.InvariantCulture)))
@@ -134,7 +127,7 @@
         public List<ItemOverview> FindOverviewsExcludeSpecified(int customerId, int changeId)
         {
             var changes =
-                this.DbContext.Changes.Where(c => c.Customer_Id == customerId && c.Id != changeId)
+                DbContext.Changes.Where(c => c.Customer_Id == customerId && c.Id != changeId)
                     .Select(c => new { c.Id, c.ChangeTitle })
                     .OrderBy(c => c.ChangeTitle)
                     .ToList();
@@ -144,22 +137,31 @@
                     .ToList();
         }
 
-        public IList<ChangeOverview> GetChanges(int customer)
+        public IList<ChangeOverview> GetChanges(int customerId)
         {
-            var query = from c in this.DbContext.Changes
-                        where c.Customer_Id == customer
-                        orderby c.OrdererName
-                        select new ChangeOverview()
-                        {
-                            Id = c.Id,
-                            ChangeTitle = c.ChangeTitle
-                        };
-            return query.ToList();
+            return GetChangesQuery(customerId).ToList();
+        }
+
+        public async Task<IList<ChangeOverview>> GetChangesAsync(int customerId)
+        {
+            return await GetChangesQuery(customerId).ToListAsync();
+        }
+
+        private IQueryable<ChangeOverview> GetChangesQuery(int customerId)
+        {
+            return from c in DbContext.Changes.AsNoTracking()
+                where c.Customer_Id == customerId
+                orderby c.OrdererName
+                select new ChangeOverview()
+                {
+                    Id = c.Id,
+                    ChangeTitle = c.ChangeTitle
+                };
         }
 
         public SearchResult Search(SearchParameters parameters)
         {
-            var searchRequest = this.FindByCustomerIdCore(parameters.CustomerId);
+            var searchRequest = FindByCustomerIdCore(parameters.CustomerId);
 
             switch (parameters.Status)
             {
@@ -191,7 +193,7 @@
                 searchRequest =
                     searchRequest.Where(
                         c =>
-                            this.DbContext.ChangeChangeGroups.Where(cg => cg.Change_Id == c.Id)
+                            DbContext.ChangeChangeGroups.Where(cg => cg.Change_Id == c.Id)
                                 .Any(cg => parameters.AffectedProcessIds.Contains(cg.ChangeGroup_Id)));
             }
 
@@ -214,12 +216,12 @@
             {
                 var pharse = parameters.Pharse != null ? parameters.Pharse.Trim() : parameters.Pharse;
 
-                var administrators = this.userRepository.FindUsersByName(pharse).Select(u => u.Id);
-                var responsibles = this.userRepository.FindUsersByName(pharse).Select(u => u.Id);
-                var contacts = this.changeContactRepository.FindChangeContacts(pharse).Select(c => c.ChangeId);
-                var affectedProcesses = this.changeChangeGroupRepository.FindByName(pharse).Select(cg => cg.Change_Id);
-                var affectedDepartments = this.changeDepartmentRepository.FingByName(pharse).Select(d => d.Change_Id);
-                var logs = this.changeLogRepository.FingByText(pharse).Select(l => l.Change_Id);
+                var administrators = _userRepository.FindUsersByName(pharse).Select(u => u.Id);
+                var responsibles = _userRepository.FindUsersByName(pharse).Select(u => u.Id);
+                var contacts = _changeContactRepository.FindChangeContacts(pharse).Select(c => c.ChangeId);
+                var affectedProcesses = _changeChangeGroupRepository.FindByName(pharse).Select(cg => cg.Change_Id);
+                var affectedDepartments = _changeDepartmentRepository.FingByName(pharse).Select(d => d.Change_Id);
+                var logs = _changeLogRepository.FingByText(pharse).Select(l => l.Change_Id);
 
                 searchRequest =
                     searchRequest.Where(
@@ -653,20 +655,14 @@
             searchRequest = searchRequest.Take(parameters.SelectCount);
             var changes = searchRequest.ToList();
             var overviews = new List<ChangeDetailedOverview>(changes.Count);
-            overviews.AddRange(changes.Select(this.changeEntityToChangeDetailedOverviewMapper.Map));
+            overviews.AddRange(changes.Select(_changeEntityToChangeDetailedOverviewMapper.Map));
 
             return new SearchResult(changesFound, overviews);
         }
 
-        public void Update(UpdatedChange change)
-        {
-            var entity = this.FindByIdCore(change.Id);
-            this.updatedChangeToChangeEntityMapper.Map(change, entity);
-        }
-
         public ChangeOverview GetChangeOverview(int id)
         {
-            var entity = this.FindByIdCore(id);
+            var entity = FindById(id);
             if (entity == null)
             {
                 return null;
@@ -683,14 +679,9 @@
 
         #region Methods
 
-        private ChangeEntity FindByIdCore(int id)
-        {
-            return this.DbContext.Changes.Find(id);
-        }
-
         private IQueryable<ChangeEntity> FindByCustomerIdCore(int customerId)
         {
-            return this.DbContext.Changes.Where(c => c.Customer_Id == customerId);
+            return DbContext.Changes.Where(c => c.Customer_Id == customerId);
         }
 
         #endregion

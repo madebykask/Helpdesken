@@ -8,5 +8,9 @@ export class BaseControl {
 
     }
 
-    protected 
+    protected getFormControl(name: string) {
+        if(this.form == null) return null;
+
+        return this.form.get(name);
+    }
 }

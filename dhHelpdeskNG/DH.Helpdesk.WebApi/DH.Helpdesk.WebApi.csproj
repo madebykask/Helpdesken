@@ -144,6 +144,7 @@
     <Compile Include="App_Start\WebApiConfig.Logging.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CaseController.cs" />
+    <Compile Include="Controllers\CaseOptionsController.cs" />
     <Compile Include="Controllers\CasesOverviewController.cs" />
     <Compile Include="Controllers\CurrentUserController.cs" />
     <Compile Include="Controllers\TestController.cs" />
@@ -164,8 +165,10 @@
     <Compile Include="Infrastructure\Config\ConfigApi.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Infrastructure\Config\DependencyInjection\AuthorizationModule.cs" />
+    <Compile Include="Infrastructure\Config\DependencyInjection\ChangesMobule.cs" />
     <Compile Include="Infrastructure\Config\DependencyInjection\CommonModule.cs" />
     <Compile Include="Infrastructure\Config\DependencyInjection\LoggerModule.cs" />
+    <Compile Include="Infrastructure\Config\DependencyInjection\MappersModule.cs" />
     <Compile Include="Infrastructure\Config\DependencyInjection\RepositoriesModule.cs" />
     <Compile Include="Infrastructure\Config\DependencyInjection\ServicesModule.cs" />
     <Compile Include="Infrastructure\Config\DependencyInjection\WorkContextModule.cs" />

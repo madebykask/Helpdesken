@@ -2,6 +2,7 @@
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.CaseStatistic;
 using DH.Helpdesk.Services.Services.Concrete;
+using DH.Helpdesk.Services.Services.Concrete.Changes;
 using DH.Helpdesk.Services.Services.EmployeeService;
 using DH.Helpdesk.Services.Services.EmployeeService.Concrete;
 using DH.Helpdesk.Services.Services.Feedback;
@@ -54,8 +55,20 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
             builder.RegisterType<MailTemplateServiceNew>().As<IMailTemplateServiceNew>();
             builder.RegisterType<CaseService>().As<ICaseService>();
             builder.RegisterType<ComputerService>().As<IComputerService>();
-            
-            
+            builder.RegisterType<SupplierService>().As<ISupplierService>();
+            builder.RegisterType<RegionService>().As<IRegionService>();
+            builder.RegisterType<OrganizationService>().As<IOrganizationService>();
+            builder.RegisterType<RegistrationSourceCustomerService>().As<IRegistrationSourceCustomerService>();
+            builder.RegisterType<SystemService>().As<ISystemService>();
+            builder.RegisterType<UrgencyService>().As<IUrgencyService>();
+            builder.RegisterType<ImpactService>().As<IImpactService>();
+            builder.RegisterType<CountryService>().As<ICountryService>();
+            builder.RegisterType<CurrencyService>().As<ICurrencyService>();
+            builder.RegisterType<StateSecondaryService>().As<IStateSecondaryService>();
+            builder.RegisterType<StatusService>().As<IStatusService>();
+            builder.RegisterType<ProblemService>().As<IProblemService>();
+            //builder.RegisterType<ChangeService>().As<IChangeService>();
+            builder.RegisterType<BaseChangesService>().As<IBaseChangesService>();
         }
 
         #endregion

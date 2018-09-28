@@ -16,7 +16,9 @@ import { LoggerService } from './services/logging';
 //import { MomentModule } from 'ngx-moment';
 
 import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors'
-import { HomeComponent, CasesOverviewComponent, CaseEditComponent, CaseTextboxComponent, CaseDateComponent } from './components';
+import { HomeComponent, CasesOverviewComponent, CaseEditComponent, CaseTextboxComponent,
+   CaseDateComponent, CaseDropdownComponent, CaseMultiDropdownComponent, CaseSwitchComponent,
+   CaseTextareaComponent } from './components';
 import { GetByKeyPipe } from './helpers/pipes';
 
 import { AppRoutingModule } from './app.routing';
@@ -28,7 +30,8 @@ import { RequireAuthDirective } from './helpers/directives/require-auth.directiv
   declarations: [AppComponent, PageNotFoundComponent, HeaderComponent, FooterComponent,
      LoginComponent,
      HomeComponent, CasesOverviewComponent, CaseEditComponent,
-     CaseTextboxComponent, CaseDateComponent,
+     CaseTextboxComponent, CaseDateComponent, CaseDropdownComponent,  CaseMultiDropdownComponent,
+     CaseSwitchComponent, CaseTextareaComponent,
      GetByKeyPipe,
      RequireAuthDirective,
     ],

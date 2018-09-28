@@ -30,6 +30,8 @@ namespace DH.Helpdesk.WebApi
             builder.RegisterModule(new LoggerModule());
             builder.RegisterModule(new WorkContextModule());
             builder.RegisterModule(new CommonModule());
+            builder.RegisterModule(new ChangesMobule());
+            builder.RegisterModule(new MappersModule());
             builder.RegisterModule(new RepositoriesModule());
             builder.RegisterModule(new ServicesModule());
         }

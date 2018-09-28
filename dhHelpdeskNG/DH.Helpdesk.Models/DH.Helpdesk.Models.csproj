@@ -47,6 +47,8 @@
     <Compile Include="Case\CaseEditOutputModel.cs" />
     <Compile Include="Case\Field\BaseCaseField.cs" />
     <Compile Include="Case\GetCaseInputModel.cs" />
+    <Compile Include="Case\Options\CaseOptionsOutputModel.cs" />
+    <Compile Include="Case\Options\GetCaseOptionsInputModel.cs" />
     <Compile Include="CurrentUser\UserSettingsModelOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
