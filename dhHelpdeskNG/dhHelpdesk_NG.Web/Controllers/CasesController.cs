@@ -2138,10 +2138,12 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public ActionResult ChangeCaseType(int? id)
         {
-            if (id == null)
-                return new HttpNotFoundResult();
 
-            var caseType = _caseTypeService.GetCaseType(id.Value);
+            CaseType caseType = new CaseType();
+            if (id.HasValue)
+            {
+                caseType = _caseTypeService.GetCaseType(id.Value);
+            }
             if (caseType == null)
                 return new HttpNotFoundResult();
             
