@@ -145,7 +145,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
             var ret = query.Select(q => new FullCaseOverview(
                 q.Id,
                 new UserOverview(q.User, q.Notifier, q.Email, q.Phone, q.CellPhone,q.Customer, q.Region, q.Department,
-                    ouFullNames[q.Unit], q.Place, q.OrdererCode, q.IsAbout_User, q.IsAbout_Persons_Name,
+                    ouFullNames[q.Unit], q.Place, q.OrdererCode, q.CostCentre, q.IsAbout_User, q.IsAbout_Persons_Name,
                     q.IsAbout_Persons_Phone, q.IsAbout_UserCode, q.IsAbout_Persons_Email, q.IsAbout_Persons_CellPhone,
                     q.IsAbout_CostCentre, q.IsAbout_Place, 
                     string.Empty,string.Empty, string.Empty),
@@ -190,6 +190,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
                         entity.Ou.Name,
                         entity.Place,
                         entity.UserCode,
+                        entity.CostCentre,
                         entity.IsAbout.ReportedBy,
                         entity.IsAbout.UserCode,
                         entity.IsAbout.Person_Name,

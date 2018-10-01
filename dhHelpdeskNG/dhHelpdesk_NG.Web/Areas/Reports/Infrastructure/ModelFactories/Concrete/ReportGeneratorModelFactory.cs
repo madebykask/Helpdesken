@@ -81,6 +81,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Unit, UserFields.Unit, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.Place, UserFields.Place, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.OrdererCode, UserFields.OrdererCode, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.CostCentre, UserFields.CostCentre, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.IsAbout_User, UserFields.IsAbout_User, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.IsAbout_Persons_Name, UserFields.IsAbout_Persons_Name, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.IsAbout_Persons_Phone, UserFields.IsAbout_Persons_Phone, headers);
@@ -190,6 +191,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
             FieldSettingsHelper.CreateValueIfNeeded(settings.Unit, UserFields.Unit, fields.Unit, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.Place, UserFields.Place, fields.Place, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.OrdererCode, UserFields.OrdererCode, fields.OrdererCode, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.CostCentre, UserFields.CostCentre, fields.CostCentre, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_User, UserFields.IsAbout_User, fields.IsAbout_User, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_Persons_Name, UserFields.IsAbout_Persons_Name, fields.IsAbout_Persons_Name, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.IsAbout_Persons_Phone, UserFields.IsAbout_Persons_Phone, fields.IsAbout_Persons_Phone, values);

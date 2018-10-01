@@ -346,7 +346,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         Unit = c.Case.OU_Id.HasValue ? c.Case.OU_Id.ToString() : "",
                         Place = c.Case.Place,
                         OrdererCode = c.Case.UserCode,
-
+                        CostCentre = c.Case.CostCentre,
                         IsAbout_User = c.About.ReportedBy,
                         IsAbout_Persons_Name = c.About.Person_Name,
                         IsAbout_Persons_Phone = c.About.Person_Phone,

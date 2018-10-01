@@ -17,6 +17,7 @@
             FieldOverviewSetting unit, 
             FieldOverviewSetting place, 
             FieldOverviewSetting ordererCode,
+            FieldOverviewSetting costcentre,
             FieldOverviewSetting isabout_user,
             FieldOverviewSetting isabout_persons_name,
             FieldOverviewSetting isabout_persons_phone,
@@ -40,6 +41,7 @@
             this.Email = email;
             this.Notifier = notifier;
             this.User = user;
+            this.CostCentre = costcentre;
             this.IsAbout_User = isabout_user;
             this.IsAbout_Persons_Name = isabout_persons_name;
             this.IsAbout_Persons_Phone = isabout_persons_phone;
@@ -85,6 +87,9 @@
 
         [NotNull]
         public FieldOverviewSetting OrdererCode { get; private set; }
+
+        [NotNull]
+        public FieldOverviewSetting CostCentre { get; private set; }
 
         [NotNull]
         public FieldOverviewSetting IsAbout_User { get; private set; }
