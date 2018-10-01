@@ -4,6 +4,7 @@ using System.Web.Http.Filters;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
 using DH.Helpdesk.WebApi.Infrastructure.Config.Filters;
+using Newtonsoft.Json;
 
 namespace DH.Helpdesk.WebApi
 {
@@ -49,9 +50,15 @@ namespace DH.Helpdesk.WebApi
 
         private static void JsonFormatConfig(HttpConfiguration config)
         {
-            JsonMediaTypeFormatter jsonFormatter = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
+            var jsonFormatter = config.Formatters.JsonFormatter;
             jsonFormatter.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
             jsonFormatter.UseDataContractJsonSerializer = false;
+#if DEBUG
+            // Pretty json for developers.
+            jsonFormatter.SerializerSettings.Formatting = Formatting.Indented;
+#else
+            jsonFormatter.SerializerSettings.Formatting = Formatting.None;
+#endif
             //By default it is ISO 8601 local time 2012-07-27T11:51:45.53403-07:00
 
             // Convert all dates to UTC 2012-07-27T18:51:45.53403Z
