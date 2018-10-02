@@ -39,6 +39,8 @@ using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 
         public string OrdererCode { get; set; }
 
+        public string CostCentre { get; set; }
+
         //--
 
         public string PcNumber { get; set; }
@@ -114,6 +116,8 @@ using DH.Helpdesk.BusinessData.Enums.Case.Fields;
         public string State { get; set; }
 
         public string SubState { get; set; }
+
+        public string Problem { get; set; }
 
         public DateTime? PlannedActionDate { get; set; }
 

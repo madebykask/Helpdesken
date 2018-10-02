@@ -484,7 +484,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
             if (Initiators.Any())
             {
                 var InitiatorsToDelete = Initiators.
-                                            Where(i => i.SyncChangedDate.Value.ToString() != null && (i.SyncChangedDate.Value.AddDays(Days2waitBeforeDelete) <=
+                                            Where(i => i.SyncChangedDate != null && (i.SyncChangedDate.Value.AddDays(Days2waitBeforeDelete) <=
                                             DateTime.UtcNow)).ToList();
 
                 // Has Domain Id

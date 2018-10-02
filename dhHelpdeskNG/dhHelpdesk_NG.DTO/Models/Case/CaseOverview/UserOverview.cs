@@ -14,6 +14,7 @@
                 string unit, 
                 string place, 
                 string ordererCode,
+                string costcentre,
                 string isaboutuser,
                 string isaboutpersonsname,
                 string isaboutpersonsphone,
@@ -37,6 +38,7 @@
             this.Email = email;
             this.Notifier = notifier;
             this.User = user;
+            this.CostCentre = costcentre;
             this.IsAbout_User = isaboutuser;
             this.IsAbout_Persons_Name = isaboutpersonsname;
             this.IsAbout_Persons_Phone = isaboutpersonsphone;
@@ -71,6 +73,8 @@
         public string Place { get; private set; }
 
         public string OrdererCode { get; private set; }
+
+        public string CostCentre { get; set; }
 
         public string IsAbout_User { get; private set; }
 

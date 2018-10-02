@@ -4049,6 +4049,9 @@
     <Content Include="Views\Notifiers\EditUserCategory.cshtml" />
     <Content Include="Views\Notifiers\_CategoryInput.cshtml" />
     <Content Include="Views\Notifiers\NewCategory.cshtml" />
+    <Content Include="Web.config.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

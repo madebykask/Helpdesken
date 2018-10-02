@@ -1,7 +1,7 @@
 ﻿@model DH.Helpdesk.Web.Areas.Admin.Models.CustomerInputViewModel
 <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
 <div class="formContainer">
-    <table class="tableform">
+    <table class="tableform" border="0">
         @if (Model.Customer.Id > 0)
         {
             <tr>
@@ -79,7 +79,7 @@
     <table id="customerUser" class="tableform" border="0">
         <tbody>
             <tr>
-                <td class="span3">
+                <td class="span1">
                     @Translation.Get("Användare", Enums.TranslationSource.TextTranslation)
                 </td>
                 <td class="span5">
@@ -124,10 +124,10 @@
                 </td>
             </tr>
             <tr>
-                <td>
+                <td style="width:220px">
                     @Translation.Get("Användaren är förvald som handläggare på nya externa ärenden", Enums.TranslationSource.TextTranslation)<br />
                 </td>
-                <td>
+                <td colspan="2">
                     <select data-val="true" data-val-number="The field DefaultAdministratorExternal must be a number." id="Setting_DefaultAdministratorExternal" name="Setting.DefaultAdministratorExternal">
                         <option value="" > </option>
                          @foreach (var us in Model.UsMultiSelect.Items)
@@ -140,10 +140,10 @@
                 </td>
             </tr>
             <tr>
-                <td>
+                <td style="width:220px">
                     @Translation.Get("Användaren är förvald som handläggare på nya ärenden", Enums.TranslationSource.TextTranslation)
                 </td>
-                <td>
+                <td colspan="2">
                     <select data-val="true" data-val-number="The field DefaultAdministrator must be a number." id="Setting_DefaultAdministrator" name="Setting.DefaultAdministrator">
                         <option value="" > </option>
                          @foreach (var us in Model.UsMultiSelect.Items)
@@ -156,10 +156,10 @@
                 </td>
             </tr>
             <tr>
-                <td>
+                <td  style="width:220px">
                     @Translation.Get("Lista användaren")
                 </td>
-                <td>
+                <td colspan="2">
                     @Html.DropDownListFor(m => m.UserFirstLastNameRepresentationId, Model.UserFirstLastNameRepresentationList)
                 </td>
             </tr>

@@ -74,6 +74,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
             var unit = CreateFieldSetting(fieldSettings.FindByName(UserFields.Unit));
             var place = CreateFieldSetting(fieldSettings.FindByName(UserFields.Place));
             var ordererCode = CreateFieldSetting(fieldSettings.FindByName(UserFields.OrdererCode));
+            var costcentre = CreateFieldSetting(fieldSettings.FindByName(UserFields.CostCentre));
             var isaboutuser = CreateFieldSetting(fieldSettings.FindByName(UserFields.IsAbout_User));
             var isaboutpersonsname = CreateFieldSetting(fieldSettings.FindByName(UserFields.IsAbout_Persons_Name));
             var isaboutpersonsphone = CreateFieldSetting(fieldSettings.FindByName(UserFields.IsAbout_Persons_Phone));
@@ -98,6 +99,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
                         unit,
                         place,
                         ordererCode,
+                        costcentre,
                         isaboutuser,
                         isaboutpersonsname,
                         isaboutpersonsphone,
@@ -191,6 +193,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
             var verifiedDescription = CreateFieldSetting(fieldSettings.FindByName(OtherFields.VerifiedDescription));
             var solutionRate = CreateFieldSetting(fieldSettings.FindByName(OtherFields.SolutionRate));
             var causingPart = CreateFieldSetting(fieldSettings.FindByName(OtherFields.CausingPart));
+            var problem = CreateFieldSetting(fieldSettings.FindByName(OtherFields.Problem));
 
             return new OtherSettings(
                         workingGroup,
@@ -204,7 +207,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
                         verified,
                         verifiedDescription,
                         solutionRate,
-                        causingPart);
+                        causingPart,
+                        problem);
         }
 
         private static LogSettings CreateLogSettings(NamedObjectCollection<CaseSettingsMapData> fieldSettings)

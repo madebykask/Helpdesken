@@ -16,7 +16,8 @@
             bool verified, 
             string verifiedDescription, 
             string solutionRate, 
-            string causingPart)
+            string causingPart,
+            string problem)
         {
             this.CausingPart = causingPart;
             this.SolutionRate = solutionRate;
@@ -30,6 +31,7 @@
             this.Administrator = administrator;
             this.Responsible = responsible;
             this.WorkingGroup = workingGroup;
+            this.Problem = problem;
         }
 
         public string WorkingGroup { get; private set; }
@@ -55,5 +57,7 @@
         public string SolutionRate { get; private set; }
 
         public string CausingPart { get; private set; }
+
+        public string Problem { get; private set; }
     }
 }
