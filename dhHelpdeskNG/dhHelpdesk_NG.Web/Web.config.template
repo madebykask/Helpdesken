@@ -9,7 +9,7 @@
     <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false"/>
   </configSections>
   <connectionStrings>
-    <!-- Dev -->
+    <!-- Dev --> <!-- Changed template for test --> 
     <add name="HelpdeskOleDbContext" connectionString="Provider=SQLOLEDB;Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};" providerName="System.Data.OleDb"/>
     <add name="HelpdeskSqlServerDbContext" connectionString="Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};MultipleActiveResultSets=True;Connection Lifetime=3;Max Pool Size=3;" providerName="System.Data.SqlClient"/>
     <add name="DSN" connectionString="Password=kgk270;Persist Security Info=True;User ID=web_user;Initial Catalog=dhHelpdesk_IKEA_Merge;Data Source=DHUTVSQL2;MultipleActiveResultSets=True" />
