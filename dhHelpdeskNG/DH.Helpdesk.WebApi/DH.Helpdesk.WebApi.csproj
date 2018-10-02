@@ -138,6 +138,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="App_Start\WebApiConfig.DI.cs" />
     <Compile Include="App_Start\Ninject.Web.Common.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -146,7 +147,12 @@
     <Compile Include="Controllers\CaseController.cs" />
     <Compile Include="Controllers\CaseOptionsController.cs" />
     <Compile Include="Controllers\CasesOverviewController.cs" />
+    <Compile Include="Controllers\CaseTypesController.cs" />
     <Compile Include="Controllers\CurrentUserController.cs" />
+    <Compile Include="Controllers\DepartmentsController.cs" />
+    <Compile Include="Controllers\OrganizationalUnitsController.cs" />
+    <Compile Include="Controllers\ProductAreasController.cs" />
+    <Compile Include="Controllers\RegionsController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\TranslationController.cs" />
     <Compile Include="Global.asax.cs">

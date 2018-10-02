@@ -26,6 +26,8 @@ namespace DH.Helpdesk.Services.Services
 
         void SaveOU(OU ou, out IDictionary<string, string> errors);
         void Commit();
+
+        List<OU> GetActiveOuForDepartment(int? departmentId, int customerId);
     }
 
     public class OUService : IOUService
@@ -134,6 +136,20 @@ namespace DH.Helpdesk.Services.Services
         public OU GetOUIdByName(string oUName)
         {
             return this._ouRepository.Get(x => x.Name.ToLower() == oUName.ToLower());
+        }
+
+        public List<OU> GetActiveOuForDepartment(int? departmentId, int customerId)
+        {
+            var prelist = departmentId.HasValue ? GetOUs(customerId, departmentId.Value, true) : null;
+
+            var unionList = new List<OU>();
+            if (prelist != null && prelist.Any())
+            {
+                unionList = prelist.Select(ou => ou).ToList();
+                unionList.AddRange(prelist.SelectMany(ou => ou.SubOUs.Where(e => e.IsActive == 1)));
+            }
+            
+            return unionList;
         }
     }
    

@@ -9,8 +9,8 @@
 <span class="md-btn-icon mbsc-ic mbsc-ic-loop2" [hidden]="!loading"></span><!-- TODO: change to more handsome loader -->  
 <mbsc-listview [options]="listviewSettings" [hidden]="loading" (onItemTap)="onItemTap($event)">
         <mbsc-listview-item *ngFor="let case of cases" >
-                #{{case.Columns | getByKey: 'CaseNumber'}}
-                <div>{{case.Columns | getByKey: 'RegTime'}}</div> <!-- TODO: use ISO date instead of string and format -->   
+                #{{case.columns | getByKey: 'CaseNumber'}}
+                <div>{{case.columns | getByKey: 'RegTime'}}</div> <!-- TODO: use ISO date instead of string and format -->   
         </mbsc-listview-item>
 </mbsc-listview>
 <div class="mbsc-form-group mbsc-btn-group-block">

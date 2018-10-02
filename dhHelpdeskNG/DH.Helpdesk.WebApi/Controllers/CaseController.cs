@@ -37,11 +37,13 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IWorkingGroupService _workingGroupService;
         private readonly ISupplierService _supplierService;
         private readonly ISettingService _customerSettingsService;
+        private readonly IFinishingCauseService _finishingCauseService;
 
         public CaseController(ICaseService caseService, ICaseFieldSettingService caseFieldSettingService,
             IMailTemplateService mailTemplateService, IUserService userSerivice, IComputerService computerService,
             ICustomerUserService customerUserService, IUserService userService, IWorkingGroupService workingGroupService,
-            ISupplierService supplierService, ISettingService customerSettingsService)
+            ISupplierService supplierService, ISettingService customerSettingsService,
+            IFinishingCauseService finishingCauseService)
         {
             _caseService = caseService;
             _caseFieldSettingService = caseFieldSettingService;
@@ -53,6 +55,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _workingGroupService = workingGroupService;
             _supplierService = supplierService;
             _customerSettingsService = customerSettingsService;
+            _finishingCauseService = finishingCauseService;
         }
 
         [HttpGet]
@@ -62,30 +65,33 @@ namespace DH.Helpdesk.WebApi.Controllers
             var model = new CaseEditOutputModel();
 
             var userId = UserId;
-            var languageId = input.LanguageId;//TODO:
+            var languageId = input.LanguageId; //TODO:
             var currentCase = await Task.FromResult(_caseService.GetCaseById(input.CaseId));
             var currentCid = input.Cid;
             var userGroupId = User.Identity.GetGroupId();
             if (currentCase.Customer_Id != currentCid)
-                throw new Exception($"Case customer({currentCase.Customer_Id}) and current customer({currentCid}) are different");//TODO: how to react?
+                throw new Exception(
+                    $"Case customer({currentCase.Customer_Id}) and current customer({currentCid}) are different"); //TODO: how to react?
 
-            var customerUserSetting = await Task.FromResult(_customerUserService.GetCustomerUserSettings(currentCid, userId));
+            var customerUserSetting =
+                await Task.FromResult(_customerUserService.GetCustomerUserSettings(currentCid, userId));
             if (customerUserSetting == null)
             {
                 throw new Exception(
                     $"No customer settings for this customer '{currentCid}' and user '{userId}'");
             }
 
-            var customerSettings =  await Task.FromResult(_customerSettingsService.GetCustomerSettings(currentCid));
-            //var userOverview = await Task.FromResult(_userSerivice.GetUserOverview(UserId));//TODO: use cahced version
+            var customerSettings = await Task.FromResult(_customerSettingsService.GetCustomerSettings(currentCid));
+            var userOverview = await _userSerivice.GetUserOverviewAsync(UserId);//TODO: use cahced version
             var caseFieldSettings = await Task.FromResult(_caseFieldSettingService.GetCaseFieldSettings(input.Cid));
             var caseFieldSettingsTranslated =
                 await Task.FromResult(
-                    _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(input.Cid, languageId));//TODO: merge with caseFieldSettings to reduce amount of requests;
+                    _caseFieldSettingService.GetCaseFieldSettingsWithLanguages(input.Cid,
+                        languageId)); //TODO: merge with caseFieldSettings to reduce amount of requests;
             //LockCase(id, userId, true, activeTab);//TODO: Mark as locked
 
             //TODO: Move to mapper
-            model.BackUrl = "";//TODO
+            model.BackUrl = ""; //TODO
             //model.CanGetRelatedCases = userGroupId > (int)UserGroup.User;//TODO: Move to helper extension
             //model.CurrentUserRole = userGroupId;//is really required?
             //model.CaseLock = caseLocked;//TODO: lock implementation
@@ -109,6 +115,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             //    }
             //}
             IBaseCaseField field = null;
+
+            #region Initiator
+
             // Initiator
             //displayUserInfoHtml:TODO:see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions.displayUserInfoHtml
             if (customerUserSetting.UserInfoPermission.ToBool())
@@ -310,6 +319,10 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             }
 
+            #endregion
+
+            #region Regarding
+
             // Regarding
             //displayAboutUserInfoHtml:TODO:see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions.displayAboutUserInfoHtml
             if (currentCase.IsAbout != null)
@@ -493,6 +506,10 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             }
 
+            #endregion
+
+            #region ComputerInfo
+
             // ComputerInfo
             //displayComputerInfoHtml //TODO:see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions.displayComputerInfoHtml
             if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.InventoryNumber))
@@ -545,6 +562,10 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field.Options.Add(new KeyValuePair<string, string>("maxlength", "100"));
                 model.Fields.Add(field);
             }
+
+            #endregion
+
+            #region CaseInfo
 
             // CaseInfo
             //displayCaseInfoHtml //TODO:see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions
@@ -672,7 +693,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = new BaseCaseField<int?>()
                 {
                     Name = GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(),
-                    Value = currentCase.CaseType_Id,
+                    Value = currentCase.ProductArea_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.ProductArea_Id, caseFieldSettingsTranslated,
                         languageId, input.Cid),
                     Section = CaseSectionType.CaseInfo.ToString(),
@@ -744,7 +765,9 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Supplier_Id))
             {
-                var supplier = currentCase.Supplier_Id.HasValue ? _supplierService.GetSupplier(currentCase.Supplier_Id.Value) : null;
+                var supplier = currentCase.Supplier_Id.HasValue
+                    ? _supplierService.GetSupplier(currentCase.Supplier_Id.Value)
+                    : null;
                 //if show Supplier_Id
                 field = new BaseCaseField<int?>()
                 {
@@ -966,6 +989,10 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
+            #endregion
+
+            #region CaseManagement
+
             //CaseManagement
             //displayCaseManagementInfoHtml //TODO:see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions
 
@@ -975,7 +1002,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(),
                     Value = currentCase.WorkingGroup_Id,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, caseFieldSettingsTranslated,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.WorkingGroup_Id,
+                        caseFieldSettingsTranslated,
                         languageId, input.Cid),
                     Section = CaseSectionType.CaseManagement.ToString(),
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, caseFieldSettings,
@@ -990,10 +1018,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(),
                     Value = currentCase.CaseResponsibleUser_Id,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id, caseFieldSettingsTranslated,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id,
+                        caseFieldSettingsTranslated,
                         languageId, input.Cid),
                     Section = CaseSectionType.CaseManagement.ToString(),
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id, caseFieldSettings,
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id,
+                        caseFieldSettings,
                         caseFieldSettingsTranslated)
                 };
                 model.Fields.Add(field);
@@ -1005,7 +1035,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(),
                     Value = currentCase.Performer_User_Id,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Performer_User_Id, caseFieldSettingsTranslated,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Performer_User_Id,
+                        caseFieldSettingsTranslated,
                         languageId, input.Cid),
                     Section = CaseSectionType.CaseManagement.ToString(),
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Performer_User_Id, caseFieldSettings,
@@ -1013,7 +1044,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 };
                 model.Fields.Add(field);
             }
-            
+
             if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Priority_Id))
             {
                 field = new BaseCaseField<int?>()
@@ -1050,7 +1081,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(),
                     Value = currentCase.StateSecondary_Id,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.StateSecondary_Id, caseFieldSettingsTranslated,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.StateSecondary_Id,
+                        caseFieldSettingsTranslated,
                         languageId, input.Cid),
                     Section = CaseSectionType.CaseManagement.ToString(),
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.StateSecondary_Id, caseFieldSettings,
@@ -1059,7 +1091,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (customerSettings.ModuleProject && IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Project))
+            if (customerSettings.ModuleProject &&
+                IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Project))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -1074,7 +1107,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (customerSettings.ModuleProblem && IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Problem))
+            if (customerSettings.ModuleProblem &&
+                IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Problem))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -1170,7 +1204,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(),
                     Value = currentCase.VerifiedDescription,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.VerifiedDescription, caseFieldSettingsTranslated,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.VerifiedDescription,
+                        caseFieldSettingsTranslated,
                         languageId, input.Cid),
                     Section = CaseSectionType.CaseManagement.ToString(),
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.VerifiedDescription, caseFieldSettings,
@@ -1194,6 +1229,71 @@ namespace DH.Helpdesk.WebApi.Controllers
                 };
                 model.Fields.Add(field);
             }
+
+            #endregion
+
+            #region Communication Management
+
+            if (userOverview.CloseCasePermission == 1)
+            {
+
+                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.FinishingDescription))
+                {
+                    field = new BaseCaseField<string>()
+                    {
+                        Name = GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(),
+                        Value = currentCase.FinishingDescription,
+                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.FinishingDescription,
+                            caseFieldSettingsTranslated,
+                            languageId, input.Cid),
+                        Section = CaseSectionType.CaseManagement.ToString(),
+                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.FinishingDescription, caseFieldSettings,
+                            caseFieldSettingsTranslated)
+                    };
+                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "200"));
+                    model.Fields.Add(field);
+                }
+
+                int? finishingCause = null;
+                var lastLog = currentCase.Logs?.FirstOrDefault(); //todo: check if its correct - order
+                if (lastLog != null)
+                {
+                    finishingCause = lastLog.FinishingType;
+                }
+                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ClosingReason))
+                {
+                    field = new BaseCaseField<int?>()
+                    {
+                        Name = GlobalEnums.TranslationCaseFields.ClosingReason.ToString(),
+                        Value = finishingCause,
+                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.ClosingReason,
+                            caseFieldSettingsTranslated,
+                            languageId, input.Cid),
+                        Section = CaseSectionType.CaseManagement.ToString(),
+                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.ClosingReason, caseFieldSettings,
+                            caseFieldSettingsTranslated)
+                    };
+                    model.Fields.Add(field);
+                }
+
+                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.FinishingDate))
+                {
+                    field = new BaseCaseField<DateTime?>()
+                    {
+                        Name = GlobalEnums.TranslationCaseFields.FinishingDate.ToString(),
+                        Value = currentCase.FinishingDate,
+                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.FinishingDate, caseFieldSettingsTranslated,
+                            languageId, input.Cid),
+                        Section = CaseSectionType.CaseManagement.ToString(),
+                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.FinishingDate, caseFieldSettings,
+                            caseFieldSettingsTranslated)
+                    };
+                    model.Fields.Add(field);
+                }
+
+            }
+
+            #endregion
 
             return await Task.FromResult(model);
         }

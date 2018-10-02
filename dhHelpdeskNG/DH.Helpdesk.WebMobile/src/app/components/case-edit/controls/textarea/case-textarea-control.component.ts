@@ -1,7 +1,6 @@
 import { OnInit, OnDestroy, Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { BaseCaseField } from "../../../../models";
 import { BaseControl } from "../base-control";
-import { mobiscroll } from "@mobiscroll/angular";
 
 @Component({
     selector: 'case-textarea-control',
@@ -10,6 +9,10 @@ import { mobiscroll } from "@mobiscroll/angular";
   })
   export class CaseTextareaComponent extends BaseControl implements OnChanges, OnInit, OnDestroy {
     @Input() field: BaseCaseField<string>;
+    private options: any = {
+      disabled: true,
+      readonly: true
+    }
 
     ngOnChanges() {
     }

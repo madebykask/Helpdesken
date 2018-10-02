@@ -1,4 +1,4 @@
 <ng-container [formGroup]="form">
-    <mbsc-datetime *ngIf="type==='datetime'" [formControlName]="field.Name" [options]="options">{{field.Label}}</mbsc-datetime>
-    <mbsc-date *ngIf="type==='date'" [formControlName]="field.Name" [options]="options">{{field.Label}}</mbsc-date>
+    <mbsc-datetime *ngIf="type==='datetime'" [formControlName]="field.name" [options]="options">{{field.label}}</mbsc-datetime>
+    <mbsc-date *ngIf="type==='date'" [formControlName]="field.name" [options]="options">{{field.label}}</mbsc-date>
 </ng-container>

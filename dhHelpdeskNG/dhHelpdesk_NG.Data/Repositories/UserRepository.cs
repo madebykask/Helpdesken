@@ -57,6 +57,7 @@ namespace DH.Helpdesk.Dal.Repositories
         User GetUserForCopy(int id);
         CustomerUserInfo GetUserInfo(int userId); //basic information - good perf
         UserOverview GetUser(int userid); // full information
+        Task<UserOverview> GetUserAsync(int userId);
 
         IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false);
 
@@ -470,6 +471,11 @@ namespace DH.Helpdesk.Dal.Repositories
             var user = this.GetUser(x => x.Id == userId);
             return user;
         }
+
+        public async Task<UserOverview> GetUserAsync(int userId)
+        {
+            return await GetUserAsync(x => x.Id == userId);
+        }
         
         public IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false)
         {
@@ -514,7 +520,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public async Task<UserOverview> GetByUserIdAsync(string userId, string passw)
         {
             var userIdUpper = (userId ?? string.Empty).ToUpper().Trim();
-            var selector = GetUserOviewerSelector();
+            var selector = GetUserOverviewSelector();
 
             var res = await DataContext.Users.Where(u => u.UserID.ToUpper() == userIdUpper && u.Password == passw && u.IsActive == 1).Select(selector).ToListAsync();
             return res.FirstOrDefault();
@@ -522,12 +528,21 @@ namespace DH.Helpdesk.Dal.Repositories
         
         private UserOverview GetUser(Expression<Func<User, bool>> expression)
         {
-            var selector = GetUserOviewerSelector();
-            var u = Table.Where(expression).Select(selector).SingleOrDefault();
-            return u;
+            return GetUsertQuery(expression).SingleOrDefault();
         }
 
-        private Expression<Func<User, UserOverview>> GetUserOviewerSelector()
+        private async Task<UserOverview> GetUserAsync(Expression<Func<User, bool>> expression)
+        {
+            return await GetUsertQuery(expression).SingleOrDefaultAsync();
+        }
+
+        private IQueryable<UserOverview> GetUsertQuery(Expression<Func<User, bool>> expression)
+        {
+            var selector = GetUserOverviewSelector();
+            return Table.Where(expression).Select(selector);
+        }
+
+        private Expression<Func<User, UserOverview>> GetUserOverviewSelector()
         {
             Expression<Func<User, UserOverview>> exp =
                 x => new UserOverview()

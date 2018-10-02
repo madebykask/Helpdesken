@@ -9,11 +9,6 @@ namespace DH.Helpdesk.Models.Case.Options
 {
     public class CaseOptionsOutputModel
     {
-        public List<ItemOverview> Regions { get; set; }
-        public List<ItemOverview> Departments { get; set; }
-        public List<ItemOverview> OUs { get; set; }
-        public List<ItemOverview> IsAboutDepartments { get; set; }
-        public List<ItemOverview> IsAboutOUs { get; set; }
         public List<ItemOverview> CustomerRegistrationSources { get; set; }
         public List<ItemOverview> Systems { get; set; }
         public List<ItemOverview> Urgencies { get; set; }

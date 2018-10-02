@@ -2,22 +2,22 @@ export class CaseOverviewItem {
     constructor() {
     }
 
-    Id: number;
-    CaseIcon: number;
-    SortOrder: string;
-    SecSortOrder: string;
-    Tooltip: string;
-    IsUnread: false;
-    IsUrgent: boolean;
-    Columns: CaseOverviewColumn[]
+    id: number;
+    caseIcon: number;
+    sortOrder: string;
+    secSortOrder: string;
+    tooltip: string;
+    isUnread: false;
+    isUrgent: boolean;
+    columns: CaseOverviewColumn[]
 }
 
 export class CaseOverviewColumn {
-    Key: string;
-    StringValue: string;
-    DateTimeValue: Date;
+    key: string;
+    stringValue: string;
+    dateTimeValue: Date;
     FieldType: number;
-    TranslateThis: boolean;
-    TreeTranslation: boolean;
-    Id: number;
+    translateThis: boolean;
+    treeTranslation: boolean;
+    id: number;
 }

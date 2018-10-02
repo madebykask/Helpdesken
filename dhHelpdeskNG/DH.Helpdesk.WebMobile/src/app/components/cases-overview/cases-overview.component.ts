@@ -67,7 +67,7 @@ export class CasesOverviewComponent implements OnInit {
   }
 
   onItemTap(event, inst) {
-    this.goToCase(this.cases[event.index].Id);
+    this.goToCase(this.cases[event.index].id);
   }
 
   private goToCase(caseId: number) {

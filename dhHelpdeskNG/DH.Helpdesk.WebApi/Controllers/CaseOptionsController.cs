@@ -18,9 +18,6 @@ namespace DH.Helpdesk.WebApi.Controllers
     public class CaseOptionsController : BaseApiController
     {
 
-        private readonly IRegionService _regionService;
-        private readonly IDepartmentService _departmentService;
-        private readonly IOrganizationService _organizationService;
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
         private readonly ISystemService _systemService;
         private readonly IUrgencyService _urgencyService;
@@ -37,15 +34,11 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IProblemService _problemService;
         private readonly IBaseChangesService _changeService;
 
-        public CaseOptionsController(IRegionService regionService, IDepartmentService departmentService, IOrganizationService organizationService, 
-            IRegistrationSourceCustomerService registrationSourceCustomerService, ISystemService systemService, IUrgencyService urgencyService,
+        public CaseOptionsController(IRegistrationSourceCustomerService registrationSourceCustomerService, ISystemService systemService, IUrgencyService urgencyService,
             IImpactService impactService, ISupplierService supplierService, ICountryService countryService, ICurrencyService currencyService,
             IWorkingGroupService workingGroupService, IUserService userService, IPriorityService priorityService, IStateSecondaryService stateSecondaryService, 
             IStatusService statusService, IProjectService projectService, IProblemService problemService, IBaseChangesService changeService)
         {
-            _regionService = regionService;
-            _departmentService = departmentService;
-            _organizationService = organizationService;
             _registrationSourceCustomerService = registrationSourceCustomerService;
             _systemService = systemService;
             _urgencyService = urgencyService;
@@ -67,56 +60,45 @@ namespace DH.Helpdesk.WebApi.Controllers
         public async Task<CaseOptionsOutputModel> Bundle([FromUri]int cid, [FromBody]GetCaseOptionsInputModel input)
         {
             var model = new CaseOptionsOutputModel();
-            model.Regions = await Task.FromResult(_regionService.GetRegions(cid)
-                .Where(r => r.IsActive == 1)
-                .Select(r => new ItemOverview(r.Id.ToString(), r.Name)).ToList());
 
-            var userDeps = await Task.FromResult(_departmentService.GetDepartmentsByUserPermissions(UserId, cid));
-            var customerDeps = await Task.FromResult(_departmentService.GetDepartments(cid));
-            var departments = userDeps.Any()//TODO: check GetActiveDepartmentForUserByRegion
-                ? userDeps
-                : customerDeps
-                    .Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
-                    .ToList();
-            model.Departments = departments
-                    .Where(d => !input.RegionId.HasValue || d.Region_Id == input.RegionId.Value)
-                    .Select(d => new ItemOverview(d.Id.ToString(), d.DepartmentName)).ToList();
+            if (input.CustomerRegistrationSources)
+            {
+                model.CustomerRegistrationSources = _registrationSourceCustomerService
+                    .GetCustomersActiveRegistrationSources(cid)
+                    .Select(d => new ItemOverview(d.Id.ToString(), d.SourceName)).ToList();
+            }
 
-            model.OUs = await Task.FromResult(_organizationService.GetOUs(input.DepartmentId)
-                .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList());//TODO: See ChangeDepartments
+            if (input.Systems)
+                model.Systems = _systemService.GetSystems(cid)
+                    .Select(d => new ItemOverview(d.Id.ToString(), d.SystemName)).ToList();
 
-            model.IsAboutDepartments = departments
-                .Where(d => !input.IsAboutRegionId.HasValue || d.Region_Id == input.IsAboutRegionId.Value)
-                .Select(d => new ItemOverview(d.Id.ToString(), d.DepartmentName)).ToList();
+            if (input.Urgencies)
+                model.Urgencies = _urgencyService.GetUrgencies(cid)
+                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+            
+            if (input.Impacts)
+                model.Impacts = _impactService.GetImpacts(cid)
+                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
 
-            model.IsAboutOUs = await Task.FromResult(_organizationService.GetOUs(input.IsAboutDepartmentId)
-                .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList());//TODO: See ChangeDepartments
+            if (input.Suppliers)
+            {
+                model.Suppliers = _supplierService.GetSuppliers(cid)
+                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+                model.Countries = _countryService.GetCountries(cid)
+                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+            }
 
-            model.CustomerRegistrationSources =_registrationSourceCustomerService.GetCustomersActiveRegistrationSources(cid)
-                .Select(d => new ItemOverview(d.Id.ToString(), d.SourceName)).ToList();
+            if (input.Currencies)
+                model.Currencies = _currencyService.GetCurrencies()
+                    .Select(d => new ItemOverview(d.Code, d.Code)).ToList();//TODO: refactor get case to get currencyID instead on Code
 
-            model.Systems = _systemService.GetSystems(cid)
-                .Select(d => new ItemOverview(d.Id.ToString(), d.SystemName)).ToList();
+            if (input.WorkingGroups)
+                model.WorkingGroups = _workingGroupService.GetAllWorkingGroupsForCustomer(cid, false) //TODO: filter active
+                    .Select(d => new ItemOverview(d.Id.ToString(), d.WorkingGroupName)).ToList();
 
-            model.Urgencies = _urgencyService.GetUrgencies(cid)
-                .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
-
-            model.Impacts = _impactService.GetImpacts(cid)
-                .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
-
-            model.Suppliers = _supplierService.GetSuppliers(cid)
-                .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
-            model.Countries = _countryService.GetCountries(cid)
-                .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
-
-            model.Currencies = _currencyService.GetCurrencies()
-                .Select(d => new ItemOverview(d.Code, d.Code)).ToList();//TODO: refactor get case to get currencyID instead on Code
-
-            model.WorkingGroups = _workingGroupService.GetAllWorkingGroupsForCustomer(cid, false) //TODO: filter active
-                .Select(d => new ItemOverview(d.Id.ToString(), d.WorkingGroupName)).ToList();
-
-            model.ResponsibleUsers = _userService.GetAvailablePerformersOrUserId(cid, input.CaseResponsibleUserId)
-                .Select(d => new ItemOverview(d.Id.ToString(), $"{d.FirstName} {d.SurName}")).ToList();//TODO: see responsibleUsersList.MapToSelectList
+            if (input.ResponsibleUsers)
+                model.ResponsibleUsers = _userService.GetAvailablePerformersOrUserId(cid, input.CaseResponsibleUserId)
+                    .Select(d => new ItemOverview(d.Id.ToString(), $"{d.FirstName} {d.SurName}")).ToList();//TODO: see responsibleUsersList.MapToSelectList
 
             //BusinessData.Models.User.CustomerUserInfo admUser = null;
             //if (m.case_.Performer_User_Id.HasValue)
@@ -135,36 +117,44 @@ namespace DH.Helpdesk.WebApi.Controllers
             //    performersList.Insert(0, admUser);
             //}
 
-            model.Performers = model.ResponsibleUsers;// TODO: see above
+            if (input.Performers)
+                model.Performers = model.ResponsibleUsers;// TODO: see above
 
-            model.Priorities = _priorityService.GetPriorities(cid)
-                .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+            if (input.Priorities)
+                model.Priorities = _priorityService.GetPriorities(cid)
+                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
 
-            model.Statuses = _statusService.GetStatuses(cid)
-                .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+            if (input.Statuses)
+                model.Statuses = _statusService.GetStatuses(cid)
+                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
 
-            model.StateSecondaries = _stateSecondaryService.GetStateSecondaries(cid)
-                .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+            if (input.StateSecondaries)
+                model.StateSecondaries = _stateSecondaryService.GetStateSecondaries(cid)
+                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
             //if (customerSetting.ModuleProject == 1)
             //{
+            if (input.Projects)
                 model.Projects = _projectService.GetCustomerProjects(cid)
                     .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
             //}
-            model.Problems =_problemService.GetCustomerProblems(cid, false)
-                .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+            if (input.Problems)
+                model.Problems =_problemService.GetCustomerProblems(cid, false)
+                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
 
             //TODO: see GetCausingPartsModel(int customerId, int? curCausingPartId)
 
             //if (customerSetting.ModuleChangeManagement == 1)
             //{
-            model.Changes = (await _changeService.GetChangesAsync(cid))
-                .Select(d => new ItemOverview(d.Id.ToString(), d.ChangeTitle)).ToList();
+            if (input.Changes)
+                model.Changes = (await _changeService.GetChangesAsync(cid))
+                    .Select(d => new ItemOverview(d.Id.ToString(), d.ChangeTitle)).ToList();
             //}
 
-            for (var i = 10; i < 110; i = i + 10)
+            if (input.SolutionsRates)
             {
                 model.SolutionsRates = new List<ItemOverview>();
-                model.SolutionsRates.Add(new ItemOverview(i.ToString(), i.ToString()));
+                for (var i = 10; i < 110; i = i + 10)
+                    model.SolutionsRates.Add(new ItemOverview(i.ToString(), i.ToString()));
             }
 
             //TODO: CaseType_Id

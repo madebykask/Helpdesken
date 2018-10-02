@@ -13,8 +13,8 @@ import { CaseOverviewColumn } from '../../models';
 export class GetByKeyPipe implements PipeTransform {
   transform(cols: CaseOverviewColumn[], key: string ): string {
     if (key){
-       var items = cols.filter(el => el.Key === key);
-       return items && items.length ? items[0].StringValue : null;
+       var items = cols.filter(el => el.key === key);
+       return items && items.length ? items[0].stringValue : null;
     }    
     return null;
   }

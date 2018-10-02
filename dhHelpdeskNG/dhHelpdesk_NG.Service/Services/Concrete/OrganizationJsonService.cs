@@ -7,35 +7,35 @@
 
     public class OrganizationJsonService
     {
-        private readonly IOUService ouService;
-        private readonly IRegionService regionService;
-        private readonly IDepartmentService departmentService;
+        private readonly IOUService _ouService;
+        private readonly IRegionService _regionService;
+        private readonly IDepartmentService _departmentService;
 
         public OrganizationJsonService(
             IDepartmentService departmentService, 
             IRegionService regionService, 
             IOUService ouService)
         {
-            this.departmentService = departmentService;
-            this.regionService = regionService;
-            this.ouService = ouService;
+            _departmentService = departmentService;
+            _regionService = regionService;
+            _ouService = ouService;
         }
 
         public IdName[] GetActiveOUForDepartmentAsIdName(int? departmentId, int customerId)
         {
-            var prelist = departmentId.HasValue ? ouService.GetOUs(customerId, departmentId.Value, true) : null;
+            var ous = _ouService.GetActiveOuForDepartment(departmentId, customerId);
 
-            var unionList = new List<IdName>();
-            if (prelist != null)
-            { 
-                foreach (var ou in prelist)
+            return ous.Select(ou =>
+            {
+                var name = ou.Name;
+                if (ou.Parent_OU_Id.HasValue)
                 {
-                    unionList.Add(new IdName { id = ou.Id, name = ou.Name });
-                    unionList.AddRange(ou.SubOUs.Where(e => e.IsActive == 1).Select(s => new IdName {id = s.Id, name = ou.Name + " - " + s.Name}));
+                    var parentName = ous.FirstOrDefault(pou => pou.Id == ou.Parent_OU_Id.Value)?.Name;
+                    if(!string.IsNullOrWhiteSpace(parentName)) name = $"{ou.Name} - {parentName}";
                 }
-            }
-            
-            return unionList.ToArray();
+
+                return new IdName {id = ou.Id, name = name};
+            }).ToArray();
         }
 
         /// <summary>
@@ -48,23 +48,9 @@
         /// <returns></returns>
         public IdName[] GetActiveDepartmentForUserByRegion(int? regionId, int userId, int customerId, int departmentFilterFormat)
         {
-            var dep = this.departmentService.GetDepartmentsByUserPermissions(userId, customerId);
-            if (!dep.Any())
-            {
-                dep = this.departmentService.GetDepartmentsWithRegion(customerId)
-                                             .ToList();
-            }
+            var deps = _departmentService.GetActiveDepartmentForUserByRegion(regionId, userId, customerId);
 
-            if (regionId.HasValue)
-            {
-                var curRegion = this.regionService.GetRegion(regionId.Value);
-                if (curRegion != null && curRegion.IsActive != 0)
-                {
-                    dep = dep.Where(x => x.Region_Id == regionId).ToList();
-                }
-            }
-
-            return dep.Select(x => new IdName() { id = x.Id, name = utils.ServiceUtils.departmentDescription(x, departmentFilterFormat) }).ToArray();
+            return deps.Select(x => new IdName() { id = x.Id, name = utils.ServiceUtils.departmentDescription(x, departmentFilterFormat) }).ToArray();
         }
 
         /// <summary>
@@ -74,21 +60,21 @@
         /// <param name="customerId"></param>
         /// <param name="departmentFilterFormat"></param>
         /// <returns></returns>
-        public IdName[] GetActiveDepartmentForRegion(int? regionId, int customerId, int departmentFilterFormat)
+        public IdName[] GetActiveDepartmentForRegion(int? regionId, int customerId, int departmentFilterFormat)//TODO: refactor move code to _departmentService
         {
             var dep = new List<Domain.Department>();
             if (regionId.HasValue)
-                dep = this.departmentService.GetDepartments(customerId)
+                dep = this._departmentService.GetDepartmentsWithRegion(customerId)
                                              .Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
                                              .ToList();
             else
-                dep = this.departmentService.GetDepartments(customerId)
+                dep = this._departmentService.GetDepartmentsWithRegion(customerId)
                                              .Where(d => d.IsActive != 0)
                                              .ToList();
 
             if (regionId.HasValue)
             {
-                var curRegion = this.regionService.GetRegion(regionId.Value);
+                var curRegion = this._regionService.GetRegion(regionId.Value);
                 if (curRegion.IsActive != 0)
                     dep = dep.Where(x => x.Region_Id == regionId).ToList();
             }

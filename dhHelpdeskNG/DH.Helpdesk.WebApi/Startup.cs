@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Web;
-using System.Web.Http;
-using Autofac;
+﻿using System.Web.Http;
 using Autofac.Integration.WebApi;
-using DH.Helpdesk.Services.Infrastructure;
-using DH.Helpdesk.WebApi.App_Start;
 using DH.Helpdesk.WebApi.Infrastructure.Config.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;

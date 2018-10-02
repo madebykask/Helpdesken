@@ -20,8 +20,8 @@ export class UserSettingsService extends HttpApiServiceBase {
                 map((data: any) => {
                     if(data) {
                         let settings = new UserData();
-                        settings.selectedCustomerId = data.CustomerId;//TODO: if no customer;
-                        settings.selectedLanguageId = data.LanguageId;//TODO: if no language
+                        settings.selectedCustomerId = data.customerId;//TODO: if no customer;
+                        settings.selectedLanguageId = data.languageId;//TODO: if no language
                         return settings;
                     }
                 }) 

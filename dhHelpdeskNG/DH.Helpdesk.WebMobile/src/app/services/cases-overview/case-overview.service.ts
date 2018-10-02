@@ -3,7 +3,6 @@ import { HttpClient, HttpRequest } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 import { CasesOverviewFilter, CaseOverviewItem, CaseOverviewColumn } from '../../models'
 import { HttpApiServiceBase } from '../api'
-import {CommonConstants} from '../../helpers/constants/common.constants'
 import { LocalStorageService } from '../local-storage';
 
 @Injectable({ providedIn: 'root' })
@@ -20,22 +19,22 @@ export class CasesOverviewService extends HttpApiServiceBase {
             //tap(d => console.log('>>searchCases')),
             map(data => {
                 let cases: CaseOverviewItem[] = [];
-                if(data && data.Items)
+                if(data && data.items)
                 {
-                    for(let item of data.Items) {
+                    for(let item of data.items) {
                         let _case = new CaseOverviewItem();
-                        _case.CaseIcon = item.CaseIcon;
-                        _case.Id = item.Id;
-                        _case.Columns = new Array<CaseOverviewColumn>();
-                        for(let itemCol of item.Columns) {
+                        _case.caseIcon = item.caseIcon;
+                        _case.id = item.id;
+                        _case.columns = new Array<CaseOverviewColumn>();
+                        for(let itemCol of item.columns) {
                             let col = new CaseOverviewColumn();
-                            col.Id = itemCol.Id;
-                            col.Key = itemCol.Key;
-                            col.StringValue = itemCol.StringValue;
-                            col.DateTimeValue = itemCol.DateTimeValue;
+                            col.id = itemCol.id;
+                            col.key = itemCol.key;
+                            col.stringValue = itemCol.stringValue;
+                            col.dateTimeValue = itemCol.dateTimeValue;
                             //col.TranslateThis
                             //col.TreeTranslation
-                            _case.Columns.push(col);
+                            _case.columns.push(col);
                         }
                         cases.push(_case);                        
                     }

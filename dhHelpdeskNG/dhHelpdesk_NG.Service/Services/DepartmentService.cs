@@ -48,6 +48,7 @@ namespace DH.Helpdesk.Services.Services
 
         int? GetDepartmentIdByCustomerAndName(int customerId, string name);
         IList<Department> GetDepartmentsWithRegion(int customerId, ActivationStatus isActive = ActivationStatus.Active);
+        List<Department> GetActiveDepartmentForUserByRegion(int? regionId, int userId, int customerId);
 
     }
 
@@ -330,6 +331,24 @@ namespace DH.Helpdesk.Services.Services
 
             var res = ous.Any(o => o.Id == ouId.Value && o.ShowInvoice);
             return res;            
+        }
+
+        public List<Department> GetActiveDepartmentForUserByRegion(int? regionId, int userId, int customerId)
+        {
+            var dep = GetDepartmentsByUserPermissions(userId, customerId).ToList();
+            if (!dep.Any())
+            {
+                dep = GetDepartmentsWithRegion(customerId)
+                    .Where(d => !d.Region_Id.HasValue || d.Region.IsActive == 1)
+                    .ToList();
+            }
+
+            if (regionId.HasValue)
+            {
+                dep = dep.Where(x => x.Region_Id == regionId).ToList();
+            }
+
+            return dep;
         }
     }
 }

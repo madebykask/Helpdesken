@@ -1,8 +1,32 @@
-export class CaseOptionsFilterModel {
-    RegionId: any;
-    DepartmentId: any;
-    IsAboutRegionId: any;
-    IsAboutDepartmentId: any;
-    CaseResponsibleUserId: any;
-
+export class BundleOptionsFilter {
+    CaseResponsibleUserId?: number;
+    CustomerRegistrationSources: boolean;
+    Systems: boolean;
+    Urgencies: boolean;
+    Impacts: boolean;
+    Suppliers: boolean;
+    Currencies: boolean;
+    WorkingGroups: boolean;
+    ResponsibleUsers: boolean;
+    Performers: boolean;
+    Priorities: boolean;
+    Statuses: boolean;
+    StateSecondaries: boolean;
+    SolutionsRates: boolean;
+    Changes: boolean;
+    Problems: boolean;
+    Projects: boolean;
  }
+
+export class CaseOptionsFilterModel extends BundleOptionsFilter {
+    RegionId?: any;
+    DepartmentId?: any;
+    IsAboutRegionId?: any;
+    IsAboutDepartmentId?: any;
+    CaseTypes: boolean;
+    CaseTypeId?: any;
+    ProductAreas: boolean;
+    ProductAreaId?: any;
+    Categories: boolean;
+ }
+ 

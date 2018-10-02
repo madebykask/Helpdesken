@@ -52,15 +52,15 @@ export class CaseEditComponent implements OnInit, OnDestroy {
                 let op1 = this.caseService.getCaseOptions(filter);                    
                 let op2 = Observable.create(observer => { 
                     let group: any = {};
-                    data.Fields.forEach(field => {
-                        group[field.Name] = new FormControl({value: field.Value || '', disabled: true});                        
+                    data.fields.forEach(field => {
+                        group[field.name] = new FormControl({value: field.value || '', disabled: true});                        
                     });                    
                     observer.next(new FormGroup(group));
                     observer.complete();                    
-                });
+                }, );
                 forkJoin(op1, op2)
                     .subscribe(([options, formgroup]) => {
-                        this.dataSource = new OptionsDataSource(options as CaseOptions);
+                        this.dataSource = new OptionsDataSource(options);
                         this.form = formgroup as FormGroup;
                         this.isLoaded = true;        
                     })
@@ -77,7 +77,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         if(this.caseData === null) {          
             throw new Error("No Case Data.");
         }
-        return this.caseData.Fields.filter(f => f.Name === name).length > 0;
+        return this.caseData.fields.filter(f => f.name === name).length > 0;
     }
 /* 
     getValue<T>(name: string): T {
@@ -91,8 +91,13 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         if(this.caseData === null) {          
             throw new Error("No Case Data.");
         }
-        const fields = this.caseData.Fields.filter(f => f.Name === name);
+        const fields = this.caseData.fields.filter(f => f.name === name);
         return fields.length <= 0 ? null : fields[0];
+    }
+
+    getValue(name: string) {
+        const field = this.getField(name);
+        return field != null ? field.value || null : undefined;//null - value is null, undefined - no such field
     }
 
     goToCaseOverview() {
@@ -101,13 +106,33 @@ export class CaseEditComponent implements OnInit, OnDestroy {
 
     private getCaseOptionsFilter(data: CaseEditInputModel) {
         let filter = new CaseOptionsFilterModel();
-        filter.RegionId = this.getField("Region_Id").Value || null;
-        filter.DepartmentId = this.getField("Department_Id").Value || null;
-        filter.IsAboutRegionId = this.getField("IsAbout_Region_Id").Value || null;
-        filter.IsAboutDepartmentId = this.getField("IsAbout_Department_Id").Value || null;
-        filter.CaseResponsibleUserId = this.getField("CaseResponsibleUser_Id").Value || null;
+        filter.RegionId = this.getValue("Region_Id");
+        filter.DepartmentId = this.getValue("Department_Id");
+        filter.IsAboutRegionId = this.getValue("IsAbout_Region_Id");
+        filter.IsAboutDepartmentId = this.getValue("IsAbout_Department_Id");
+        filter.CaseResponsibleUserId = this.getValue("CaseResponsibleUser_Id");
+        filter.CaseTypeId = this.getValue("CaseType_Id");
+        filter.ProductAreaId = this.getValue("ProductArea_Id");
+        filter.Changes = this.hasField('Change');
+        filter.Currencies = this.hasField('Cost_Currency');
+        filter.CustomerRegistrationSources = this.hasField('RegistrationSourceCustomer');
+        filter.Impacts = this.hasField('Impact_Id');
+        filter.Performers = this.hasField('Performer_User_Id');
+        filter.Priorities = this.hasField('Priority_Id');
+        filter.Problems = this.hasField('Problem');
+        filter.Projects = this.hasField('Project');
+        filter.ResponsibleUsers = this.hasField('CaseResponsibleUser_Id');
+        filter.SolutionsRates = this.hasField('SolutionRate');
+        filter.StateSecondaries = this.hasField('StateSecondary_Id');
+        filter.Statuses = this.hasField('Status_Id');
+        filter.Suppliers = this.hasField('Supplier_Id');//Supplier_Country_Id
+        filter.Systems = this.hasField('System_Id');
+        filter.Urgencies = this.hasField('Urgency_Id');
+        filter.WorkingGroups = this.hasField('WorkingGroup_Id');
+        filter.CaseTypes = this.hasField('CaseType_Id');
+        filter.ProductAreas = this.hasField('ProductArea_Id');
+        filter.Categories = this.hasField('Category_Id');
 
-        
         return filter;
     }
 }

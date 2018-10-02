@@ -8,10 +8,22 @@ namespace DH.Helpdesk.Models.Case.Options
 {
     public class GetCaseOptionsInputModel
     {
-        public int? RegionId { get; set; }
-        public int? DepartmentId { get; set; }
-        public int? IsAboutRegionId { get; set; }
-        public int? IsAboutDepartmentId { get; set; }
         public int? CaseResponsibleUserId { get; set; }
+        public bool CustomerRegistrationSources { get; set; }
+        public bool Systems { get; set; }
+        public bool Urgencies { get; set; }
+        public bool Impacts { get; set; }
+        public bool Suppliers { get; set; }
+        public bool Currencies { get; set; }
+        public bool WorkingGroups { get; set; }
+        public bool ResponsibleUsers { get; set; }
+        public bool Performers { get; set; }
+        public bool Priorities { get; set; }
+        public bool Statuses { get; set; }
+        public bool StateSecondaries { get; set; }
+        public bool SolutionsRates { get; set; }
+        public bool Changes { get; set; }
+        public bool Problems { get; set; }
+        public bool Projects { get; set; }
     }
 }

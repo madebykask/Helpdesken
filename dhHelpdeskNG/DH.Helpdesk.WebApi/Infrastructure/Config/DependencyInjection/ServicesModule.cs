@@ -67,8 +67,10 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
             builder.RegisterType<StateSecondaryService>().As<IStateSecondaryService>();
             builder.RegisterType<StatusService>().As<IStatusService>();
             builder.RegisterType<ProblemService>().As<IProblemService>();
-            //builder.RegisterType<ChangeService>().As<IChangeService>();
             builder.RegisterType<BaseChangesService>().As<IBaseChangesService>();
+            builder.RegisterType<OUService>().As<IOUService>();
+            builder.RegisterType<CaseTypeService>().As<ICaseTypeService>();
+            builder.RegisterType<CategoryService>().As<ICategoryService>();
         }
 
         #endregion

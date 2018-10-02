@@ -17,9 +17,16 @@ import { MbscSelectOptions } from "@mobiscroll/angular";
     }
 
     ngOnInit(): void {
+      if(this.options.disabled) this.getFormControl(this.field.name).setValue(this.getText(this.field.value));
     }
 
     ngOnDestroy(): void {
+    }
+
+    getText(id: any) {
+      if (this.dataSource == null || this.dataSource.length === 0) return "";
+      let items = this.dataSource.filter((elem: OptionItem) => elem.value == id);
+      return  items.length > 0 ? items[0].text : "";
     }
 
   }

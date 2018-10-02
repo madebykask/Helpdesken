@@ -168,7 +168,8 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The <see cref="UserOverview"/>.
         /// </returns>
-        UserOverview GetUserOverview(int user);
+        UserOverview GetUserOverview(int userId);
+        Task<UserOverview> GetUserOverviewAsync(int userId);
 
         List<ItemOverview> FindActiveOverviews(int customerId);
 
@@ -1190,6 +1191,11 @@ namespace DH.Helpdesk.Services.Services
         public UserOverview GetUserOverview(int userId)
         {
             return this._userRepository.GetUser(userId);
+        }
+
+        public async Task<UserOverview> GetUserOverviewAsync(int userId)
+        {
+            return await _userRepository.GetUserAsync(userId);
         }
 
         public List<ItemOverview> FindActiveOverviews(int customerId)

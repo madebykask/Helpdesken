@@ -1,9 +1,9 @@
 <mbsc-form *ngIf="isLoaded"> <!-- TODO: add loader -->
     <mbsc-tab-nav [options]="tabsMenuSettings">
-            <mbsc-nav-item>Case {{caseData.CaseNumber}}</mbsc-nav-item>
+            <mbsc-nav-item>Case {{caseData.caseNumber}}</mbsc-nav-item>
     </mbsc-tab-nav>
     <!-- <div *ngIf="mainSelected == 'music'"> -->
-    <div>
+    <div class="md-paging">
         <mbsc-scrollview>
             <mbsc-scrollview-item id="main">  
 
@@ -61,12 +61,12 @@
                                 <case-date-control *ngIf="hasField('ChangeTime')" [field]="getField('ChangeTime')" [form]="form"></case-date-control>
                                 <case-textbox-control *ngIf="hasField('User_Id')" [field]="getField('User_Id')" [form]="form"></case-textbox-control>
                                 <case-dropdown-control *ngIf="hasField('RegistrationSourceCustomer')" [field]="getField('RegistrationSourceCustomer')" [form]="form"  [dataSource]="dataSource.options.customerRegistrationSources"></case-dropdown-control>
-                                <case-multi-dropdown-control *ngIf="hasField('CaseType_Id')" [field]="getField('CaseType_Id')" [form]="form"></case-multi-dropdown-control>
-                                <case-multi-dropdown-control *ngIf="hasField('ProductArea_Id')" [field]="getField('ProductArea_Id')" [form]="form"></case-multi-dropdown-control>
+                                <case-multi-dropdown-control *ngIf="hasField('CaseType_Id')" [field]="getField('CaseType_Id')" [form]="form" [dataSource]="dataSource.options.caseTypes"></case-multi-dropdown-control>
+                                <case-multi-dropdown-control *ngIf="hasField('ProductArea_Id')" [field]="getField('ProductArea_Id')" [form]="form" [dataSource]="dataSource.options.productAreas"></case-multi-dropdown-control>
                                 <case-dropdown-control *ngIf="hasField('System_Id')" [field]="getField('System_Id')" [form]="form" [dataSource]="dataSource.options.systems"></case-dropdown-control>
                                 <case-dropdown-control *ngIf="hasField('Urgency_Id')" [field]="getField('Urgency_Id')" [form]="form" [dataSource]="dataSource.options.urgencies"></case-dropdown-control>
                                 <case-dropdown-control *ngIf="hasField('Impact_Id')" [field]="getField('Impact_Id')" [form]="form" [dataSource]="dataSource.options.impacts"></case-dropdown-control>
-                                <case-multi-dropdown-control *ngIf="hasField('Category_Id')" [field]="getField('Category_Id')" [form]="form" ></case-multi-dropdown-control>
+                                <case-multi-dropdown-control *ngIf="hasField('Category_Id')" [field]="getField('Category_Id')" [form]="form" [dataSource]="dataSource.options.categories"></case-multi-dropdown-control>
                                 <case-dropdown-control *ngIf="hasField('Supplier_Id')" [field]="getField('Supplier_Id')" [form]="form" [dataSource]="dataSource.options.suppliers"></case-dropdown-control>
                                 <case-dropdown-control *ngIf="hasField('Supplier_Country_Id')" [field]="getField('Supplier_Country_Id')" [form]="form" [dataSource]="dataSource.options.countries"></case-dropdown-control>
                                 <case-textbox-control *ngIf="hasField('InvoiceNumber')" [field]="getField('InvoiceNumber')" [form]="form"></case-textbox-control>
@@ -88,44 +88,46 @@
                     <mbsc-form-group collapsible open #caseManagementSection>
                         <mbsc-form-group-title>Case Management</mbsc-form-group-title>
                         <mbsc-form-group-content>
-                            <case-dropdown-control *ngIf="hasField('WorkingGroup_Id')" [field]="getField('WorkingGroup_Id')" [form]="form" ></case-dropdown-control>
-                            <case-dropdown-control *ngIf="hasField('CaseResponsibleUser_Id')" [field]="getField('CaseResponsibleUser_Id')" [form]="form" ></case-dropdown-control>
-                            <case-dropdown-control *ngIf="hasField('Performer_User_Id')" [field]="getField('Performer_User_Id')" [form]="form" ></case-dropdown-control>
-                            <case-dropdown-control *ngIf="hasField('Priority_Id')" [field]="getField('Priority_Id')" [form]="form" ></case-dropdown-control>
-                            <case-dropdown-control *ngIf="hasField('Status_Id')" [field]="getField('Status_Id')" [form]="form" ></case-dropdown-control>
-                            <case-dropdown-control *ngIf="hasField('StateSecondary_Id')" [field]="getField('StateSecondary_Id')" [form]="form" ></case-dropdown-control>
-                            <case-dropdown-control *ngIf="hasField('Project')" [field]="getField('Project')" [form]="form" ></case-dropdown-control>
-                            <case-dropdown-control *ngIf="hasField('Problem')" [field]="getField('Problem')" [form]="form" ></case-dropdown-control>
-                            <case-dropdown-control *ngIf="hasField('CausingPart')" [field]="getField('CausingPart')" [form]="form"></case-dropdown-control>
-                            <case-dropdown-control *ngIf="hasField('Change')" [field]="getField('Change')" [form]="form" ></case-dropdown-control>
+                            <case-dropdown-control *ngIf="hasField('WorkingGroup_Id')" [field]="getField('WorkingGroup_Id')" [form]="form" [dataSource]="dataSource.options.workingGroups"></case-dropdown-control>
+                            <case-dropdown-control *ngIf="hasField('CaseResponsibleUser_Id')" [field]="getField('CaseResponsibleUser_Id')" [form]="form" [dataSource]="dataSource.options.responsibleUsers"></case-dropdown-control>
+                            <case-dropdown-control *ngIf="hasField('Performer_User_Id')" [field]="getField('Performer_User_Id')" [form]="form" [dataSource]="dataSource.options.performers"></case-dropdown-control>
+                            <case-dropdown-control *ngIf="hasField('Priority_Id')" [field]="getField('Priority_Id')" [form]="form" [dataSource]="dataSource.options.priorities"></case-dropdown-control>
+                            <case-dropdown-control *ngIf="hasField('Status_Id')" [field]="getField('Status_Id')" [form]="form" [dataSource]="dataSource.options.statuses"></case-dropdown-control>
+                            <case-dropdown-control *ngIf="hasField('StateSecondary_Id')" [field]="getField('StateSecondary_Id')" [form]="form" [dataSource]="dataSource.options.stateSecondaries"></case-dropdown-control>
+                            <case-dropdown-control *ngIf="hasField('Project')" [field]="getField('Project')" [form]="form" [dataSource]="dataSource.options.projects"></case-dropdown-control>
+                            <case-dropdown-control *ngIf="hasField('Problem')" [field]="getField('Problem')" [form]="form" [dataSource]="dataSource.options.problems"></case-dropdown-control>
+                            <case-dropdown-control *ngIf="hasField('CausingPart')" [field]="getField('CausingPart')" [form]="form" ></case-dropdown-control>
+                            <case-dropdown-control *ngIf="hasField('Change')" [field]="getField('Change')" [form]="form" [dataSource]="dataSource.options.changes"></case-dropdown-control>
                             <case-date-control *ngIf="hasField('PlanDate')" [field]="getField('PlanDate')" [form]="form" type="date"></case-date-control>
                             <case-date-control *ngIf="hasField('WatchDate')" [field]="getField('WatchDate')" [form]="form" type="date"></case-date-control>
                             <case-switch-control *ngIf="hasField('Verified')" [field]="getField('Verified')" [form]="form"></case-switch-control>
                             <case-textarea-control *ngIf="hasField('VerifiedDescription')" [field]="getField('VerifiedDescription')" [form]="form"></case-textarea-control>
-                            <case-dropdown-control *ngIf="hasField('SolutionRate')" [field]="getField('SolutionRate')" [form]="form" ></case-dropdown-control>
+                            <case-dropdown-control *ngIf="hasField('SolutionRate')" [field]="getField('SolutionRate')" [form]="form" [dataSource]="dataSource.options.solutionsRates"></case-dropdown-control>
                         </mbsc-form-group-content>
                     </mbsc-form-group>
 
                     <mbsc-form-group collapsible open #communicationManagementSection>
                         <mbsc-form-group-title>Communication Management</mbsc-form-group-title>
                         <mbsc-form-group-content>
-
+                            <case-textarea-control *ngIf="hasField('FinishingDescription')" [field]="getField('FinishingDescription')" [form]="form"></case-textarea-control>
+                            <!-- <case-multi-dropdown-control *ngIf="hasField('ClosingReason')" [field]="getField('ClosingReason')" [form]="form" [dataSource]="dataSource.options.closingReasons"></case-multi-dropdown-control> -->
+                            <case-date-control *ngIf="hasField('FinishingDate')" [field]="getField('FinishingDate')" [form]="form" type="date"></case-date-control>
                         </mbsc-form-group-content>
                     </mbsc-form-group>
                     
-                    <mbsc-form-group collapsible open #statusSection>
+                    <!-- <mbsc-form-group collapsible open #statusSection>
                         <mbsc-form-group-title>Status</mbsc-form-group-title>
                         <mbsc-form-group-content>
 
                         </mbsc-form-group-content>
-                    </mbsc-form-group>
+                    </mbsc-form-group> -->
                     
-                    <mbsc-form-group collapsible open #invoicesSection>
+                    <!-- <mbsc-form-group collapsible open #invoicesSection>
                         <mbsc-form-group-title>Invoices</mbsc-form-group-title>
                         <mbsc-form-group-content>
 
                         </mbsc-form-group-content>
-                    </mbsc-form-group>
+                    </mbsc-form-group> -->
 
                 </form>
 

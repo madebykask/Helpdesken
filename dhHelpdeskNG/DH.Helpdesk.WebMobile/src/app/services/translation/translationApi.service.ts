@@ -18,7 +18,7 @@ export class TranslationApiService  extends HttpApiServiceBase {
 
     getLanguages(): Observable<Language[]> {
         var methodUrl = this.buildResourseUrl('/api/Translation/Languages');
-        return this.getJson<object[]>(methodUrl).mergeMap((res:any[]) => Observable.of(res.map((lang:any) => new Language(lang.LanguageId, lang.Name))));
+        return this.getJson<object[]>(methodUrl).mergeMap((res:any[]) => Observable.of(res.map((lang:any) => new Language(lang.languageId, lang.name))));
     }
 
     getTranslations(lang: string): Observable<any> {
