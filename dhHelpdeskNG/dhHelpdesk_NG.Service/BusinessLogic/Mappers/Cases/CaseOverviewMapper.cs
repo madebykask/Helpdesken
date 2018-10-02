@@ -165,7 +165,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
 
                 new OtherOverview (q.WorkingGroup, q.Responsible, q.Administrator, q.Priority, q.State, q.SubState,
                     q.PlannedActionDate, q.WatchDate, Convert.ToBoolean(q.Verified), q.VerifiedDescription,
-                    q.SolutionRate, q.CausingPart),
+                    q.SolutionRate, q.CausingPart, q.Problem),
 
                 q.LogData != null ? new LogsOverview((q.LogData.FinishingType.HasValue && q.FinishingDate.HasValue? closingReasonFullNames[q.LogData.FinishingType.ToString()] : string.Empty), 
                     q.FinishingDate, q.FinishingDescription, q.AllInternalText, q.AllExtenalText, q.TotalMaterial, q.TotalOverTime, q.TotalPrice, q.TotalWork) : new LogsOverview(string.Empty, null, string.Empty, null, null)
@@ -265,7 +265,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Cases
                         entity.Verified.ToBool(),
                         entity.VerifiedDescription,
                         entity.SolutionRate,
-                        entity.CausingPart.Name);
+                        entity.CausingPart.Name,
+                        entity.Problem.Name);
         }
 
         private static LogsOverview CreateLogOverview(Case entity)

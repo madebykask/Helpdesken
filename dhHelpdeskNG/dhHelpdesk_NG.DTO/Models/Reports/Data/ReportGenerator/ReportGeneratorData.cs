@@ -117,6 +117,8 @@ using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 
         public string SubState { get; set; }
 
+        public string Problem { get; set; }
+
         public DateTime? PlannedActionDate { get; set; }
 
         public DateTime? WatchDate { get; set; }

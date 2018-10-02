@@ -145,6 +145,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.VerifiedDescription, OtherFields.VerifiedDescription, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.SolutionRate, OtherFields.SolutionRate, headers);
             FieldSettingsHelper.CreateHeaderIfNeeded(settings.CausingPart, OtherFields.CausingPart, headers);
+            FieldSettingsHelper.CreateHeaderIfNeeded(settings.Problem, OtherFields.Problem, headers);
         }
 
         private static void CreateLogHeaders(LogSettings settings, List<GridColumnHeaderModel> headers)
@@ -255,6 +256,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.ModelFactories.Concrete
             FieldSettingsHelper.CreateValueIfNeeded(settings.VerifiedDescription, OtherFields.VerifiedDescription, fields.VerifiedDescription, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.SolutionRate, OtherFields.SolutionRate, fields.SolutionRate, values);
             FieldSettingsHelper.CreateValueIfNeeded(settings.CausingPart, OtherFields.CausingPart, fields.CausingPart, values);
+            FieldSettingsHelper.CreateValueIfNeeded(settings.Problem, OtherFields.Problem, fields.Problem, values);
         }
 
         private static void CreateLogValues(LogSettings settings, LogsOverview fields, List<NewGridRowCellValueModel> values)

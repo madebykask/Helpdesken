@@ -25,5 +25,7 @@
         public const string SolutionRate = "SolutionRate";
 
         public const string CausingPart = "CausingPart";
+
+        public const string Problem = "Problem";
     }
 }
