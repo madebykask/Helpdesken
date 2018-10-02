@@ -1,13 +1,11 @@
+DECLARE @metaData nvarchar(max)
 
---first find correct formId for 999 form
---select * from [ExtendedCaseForms]
+--INSERT ExtendedCaseForms([Description], CreatedOn, CreatedBy, UpdatedOn, UpdatedBy, [Status], [Name], MetaData)
+--SELECT 'Vendor case - Initiator', @now,  @createdBy, @now, @createdBy, 1, 'Vendor case - Initiator',
 
-DECLARE @metaData nvarchar(max) 
-
-SET @metaData = 
-'{
-	id: 999,
-	name: "Vendor case",
+SET @metaData = '{
+	id: 997,
+	name: "Vendor Computeruser",
 	localization: {
 		dateFormat: "DD.MM.YYYY", // see https://momentjs.com/docs/#/parsing/string-format/ for available formats
 		decimalSeparator: ","
@@ -70,7 +68,7 @@ SET @metaData =
 						return false;
 					},
 					valueBinding: function(m, log) {
-						return window.parent.document.getElementById(''case__ReportedBy'').value;
+						return window.parent.document.getElementById(''UserId_Value'').value;
 					}
 				}, {
 					id: "Address",
@@ -80,7 +78,7 @@ SET @metaData =
 						return false;
 					},
 					valueBinding: function(m, log) {
-						if (m.dataSources.getCBDAddress.length === 0)
+						if (m.dataSources.getCBDAddress.length == 0)
 							return "-";
 
 						var template = ''{0}, {1}, {2}, {3}'';
@@ -106,46 +104,51 @@ SET @metaData =
 			sections: [{
 				id: "Contact",
 				name: "Contact",
-				column: 1,
 				controls: [{
-						id: "Email",
-						type: "dropdown",
-						label: "Select contact email",
-						dataSource: {
-							type: "custom",
-							id: "getCBDEmails",
-							hiddenBinding: function(m, log) {
-								return false;
-							},
-							parameters: [{
-								name: "cluCode",
-								field: "tabs.Address.sections.Address.controls.BusinessUnit"
-							}],
-							valueField: "ADDRESS",
-							textField: "ADDRESS"
-						},
-						//noDigest: true
-						valueBinding: function(m, log) {
-								if (this.value == '''') {
-									if (m.dataSources.getCBDEmails.length == 0)
-										return "-";
-									return m.dataSources.getCBDEmails[0].ADDRESS;
-								} else {
-									return this.value;
-								}
-							}
-					}, {
-						id: "PhoneEmail",
-						type: "label",
-						label: "Contact",
+					id: "Email",
+					type: "label",
+					label: "Email",
+					dataSource: {
+						type: "custom",
+						id: "getCBDEmails",
 						hiddenBinding: function(m, log) {
 							return false;
 						},
-						valueBinding: function(m, log) {
-							var label = ''Phone: '' + (m.dataSources.getCBDPhone.length == 0 ? ''-'' : m.dataSources.getCBDPhone[0].ADDRESS) + '', Email: '' + m.tabs.Contact.sections.Contact.controls.Email.value;
-							return label;
+						parameters: [{
+							name: "cluCode",
+							field: "tabs.Address.sections.Address.controls.BusinessUnit"
+						}],
+						valueField: "ADDRESS",
+						textField: "ADDRESS"
+					},
+					//noDigest: true
+					valueBinding: function(m, log) {
+						if (m.dataSources.getCBDEmails.length == 0)
+							return "-";
+
+						var emails = [];
+
+						for (var i = 0; i < m.dataSources.getCBDEmails.length; i++) {
+							emails.push(m.dataSources.getCBDEmails[i].ADDRESS);
 						}
-					}]
+
+						var result = emails.join('', '');
+						return result;
+					}
+				}, {
+					id: "Phone",
+					type: "label",
+					label: "Phone",
+					hiddenBinding: function(m, log) {
+						return false;
+					},
+					//noDigest: true
+					valueBinding: function(m, log) {
+						if (m.dataSources.getCBDPhone.length == 0)
+							return "-";
+						return m.dataSources.getCBDPhone[0].ADDRESS;
+					}
+				}]
 			}]
 		}, {
 			id: "TaxReg",
@@ -155,8 +158,8 @@ SET @metaData =
 				name: "Tax registration",
 				controls: [{
 					id: "TaxRegNo",
-					type: "dropdown",
-					label: "Select tax registration number",
+					type: "label",
+					label: "Tax registration number",
 					hiddenBinding: function(m, log) {
 						return false;
 					},
@@ -171,27 +174,19 @@ SET @metaData =
 							field: "tabs.Address.sections.Address.controls.BusinessUnit"
 						}]
 					},
-
 					//noDigest: true
 					valueBinding: function(m, log) {
-						if (this.value == '''') {
-							if (m.dataSources.getCBDTaxReg.length == 0)
-								return "-";
-							return m.dataSources.getCBDTaxReg[0].TAX_REG_NO;
-						} else {
-							return this.value;
-						}
-					}
-				}, {
-					id: "TaxRegNoLabel",
-					type: "label",
-					label: "Tax registration number",
-					hiddenBinding: function(m, log) {
-						return false;
-					},
+						if (m.dataSources.getCBDTaxReg.length == 0)
+							return "-";
 
-					valueBinding: function(m, log) {
-						return m.tabs.TaxReg.sections.TaxReg.controls.TaxRegNo.value;
+						var taxReg = [];
+
+						for (var i = 0; i < m.dataSources.getCBDTaxReg.length; i++) {
+							taxReg.push(m.dataSources.getCBDTaxReg[i].FormattedTax);
+						}
+
+						var result = taxReg.join('', '');
+						return result;
 					}
 				}]
 			}]
@@ -210,6 +205,7 @@ SET @metaData =
 					},
 					//noDigest: true
 					valueBinding: function(m, log) {
+						console.log(m);
 						if (m.dataSources.getCBDBank.length == 0)
 							return "-";
 						return m.dataSources.getCBDBank[0].ACCOUNT_NO;
@@ -226,10 +222,10 @@ SET @metaData =
 						if (m.dataSources.getCBDBank.length == 0)
 							return "-";
 						var bank = m.dataSources.getCBDBank[0];
-						var template = ''{bank-name} (IBAN: {iban}, SWIFT: {swift})'';
+						var template = ''{bank-name} (IBAN: {iban}, SWIFT: {swift})''
 						var str = template.replace(''{bank-name}'', bank.BANK_NAME == '''' || bank.BANK_NAME == null ? ''-'' : bank.BANK_NAME)
 							.replace(''{iban}'', bank.IBAN == '''' || bank.IBAN == null ? ''-'' : bank.IBAN)
-							.replace(''{swift}'', bank.SWIFT == '''' || bank.SWIFT == null ? ''-'' : bank.SWIFT);
+							.replace(''{swift}'', bank.SWIFT == '''' || bank.SWIFT == null ? ''-'' : bank.SWIFT)
 						return str;
 					}
 				}]
@@ -238,7 +234,9 @@ SET @metaData =
 	]
 }'
 
--- Find correct db Id first
+
+--select * from [ExtendedCaseForms]
+
 UPDATE [dbo].[ExtendedCaseForms]
 SET MetaData = @metaData
-WHERE Id = <corrent_form_id>
+WHERE Id = <form_Id>
