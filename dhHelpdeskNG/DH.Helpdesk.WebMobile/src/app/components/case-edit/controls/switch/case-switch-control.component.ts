@@ -12,6 +12,7 @@ import { BaseControl } from "../base-control";
     @Input() description: string = "";
 
     ngOnInit(): void {
+      //if(this.readOnly) set disabled/reaonly mode      
     }
 
     ngOnDestroy(): void {

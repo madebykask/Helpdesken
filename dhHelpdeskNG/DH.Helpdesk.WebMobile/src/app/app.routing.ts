@@ -9,7 +9,7 @@ const appRoutes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'login', component:  LoginComponent},
 
-    { path: 'caseedit/:id', component:  CaseEditComponent, canActivate: [AuthGuard]},
+    { path: 'case/:id', component:  CaseEditComponent, canActivate: [AuthGuard]},
 
     { path: '',   redirectTo: '/', pathMatch: 'full' },
     // otherwise redirect to home

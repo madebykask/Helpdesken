@@ -106,6 +106,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
 
     private getCaseOptionsFilter(data: CaseEditInputModel) {
         let filter = new CaseOptionsFilterModel();
+        //TODO: review and put all field names to constants
         filter.RegionId = this.getValue("Region_Id");
         filter.DepartmentId = this.getValue("Department_Id");
         filter.IsAboutRegionId = this.getValue("IsAbout_Region_Id");
@@ -132,6 +133,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         filter.CaseTypes = this.hasField('CaseType_Id');
         filter.ProductAreas = this.hasField('ProductArea_Id');
         filter.Categories = this.hasField('Category_Id');
+        filter.ClosingReasons = this.hasField('ClosingReason');
 
         return filter;
     }

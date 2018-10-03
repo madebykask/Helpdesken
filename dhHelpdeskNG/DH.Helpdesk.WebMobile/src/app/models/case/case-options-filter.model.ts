@@ -28,5 +28,6 @@ export class CaseOptionsFilterModel extends BundleOptionsFilter {
     ProductAreas: boolean;
     ProductAreaId?: any;
     Categories: boolean;
+    ClosingReasons: boolean;
  }
  

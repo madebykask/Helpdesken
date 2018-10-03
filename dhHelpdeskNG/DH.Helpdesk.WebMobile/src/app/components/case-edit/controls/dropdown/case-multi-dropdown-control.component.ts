@@ -11,13 +11,15 @@ import { BaseControl } from "../base-control";
   export class CaseMultiDropdownComponent extends BaseControl implements OnInit, OnDestroy {
     @Input() field: BaseCaseField<number>;
     @Input() dataSource: MultiLevelOptionItem[] = [];
+    private text: string = "";
     private options: any = {
       readOnly: true,
       disabled: true
     } 
 
     ngOnInit(): void {
-      if(this.options.disabled) this.getFormControl(this.field.name).setValue(this.getText(this.field.value));
+      //if(this.readOnly) set disabled/reaonly mode
+      if(this.options.disabled) this.text = this.getText(this.field.value);
     }
 
     ngOnDestroy(): void {

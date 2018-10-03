@@ -3,6 +3,7 @@ import { Input } from "@angular/core";
 
 export class BaseControl {
     @Input() form: FormGroup;
+    @Input('readonly') readOnly: false;
 
     constructor() {
 

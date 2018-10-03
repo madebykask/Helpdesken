@@ -50,7 +50,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<SearchResult<CaseSearchResult>> Overview([FromUri]int cid, [FromBody]SearchOverviewFilterInputModel input)
+        public async Task<SearchResult<CaseSearchResult>> Get([FromUri]int cid, [FromBody]SearchOverviewFilterInputModel input)
         {
             var filter = new CaseSearchFilter();
             filter.CustomerId = cid;

@@ -19,7 +19,7 @@ import { mobiscroll } from "@mobiscroll/angular";
     }
 
     ngOnInit(): void {
-
+      //if(this.readOnly) set disabled/reaonly mode
     }
 
     ngOnDestroy(): void {

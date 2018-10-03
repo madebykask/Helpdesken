@@ -105,22 +105,24 @@
                             <case-dropdown-control *ngIf="hasField('SolutionRate')" [field]="getField('SolutionRate')" [form]="form" [dataSource]="dataSource.options.solutionsRates"></case-dropdown-control>
                         </mbsc-form-group-content>
                     </mbsc-form-group>
-
+<!-- 
                     <mbsc-form-group collapsible open #communicationManagementSection>
                         <mbsc-form-group-title>Communication Management</mbsc-form-group-title>
                         <mbsc-form-group-content>
                             <case-textarea-control *ngIf="hasField('FinishingDescription')" [field]="getField('FinishingDescription')" [form]="form"></case-textarea-control>
-                            <!-- <case-multi-dropdown-control *ngIf="hasField('ClosingReason')" [field]="getField('ClosingReason')" [form]="form" [dataSource]="dataSource.options.closingReasons"></case-multi-dropdown-control> -->
+                            <case-multi-dropdown-control *ngIf="hasField('ClosingReason')" [field]="getField('ClosingReason')" [form]="form" [dataSource]="dataSource.options.closingReasons"></case-multi-dropdown-control>
                             <case-date-control *ngIf="hasField('FinishingDate')" [field]="getField('FinishingDate')" [form]="form" type="date"></case-date-control>
                         </mbsc-form-group-content>
-                    </mbsc-form-group>
+                    </mbsc-form-group> -->
                     
-                    <!-- <mbsc-form-group collapsible open #statusSection>
+                     <mbsc-form-group collapsible open #statusSection *ngIf="hasField('FinishingDate') && getField('FinishingDate').value != null">
                         <mbsc-form-group-title>Status</mbsc-form-group-title>
                         <mbsc-form-group-content>
-
+                            <case-textarea-control *ngIf="hasField('FinishingDescription')" [field]="getField('FinishingDescription')" [form]="form" [readonly]="true"></case-textarea-control>
+                            <case-multi-dropdown-control *ngIf="hasField('ClosingReason')" [field]="getField('ClosingReason')" [form]="form" [dataSource]="dataSource.options.closingReasons" [readonly]="true"></case-multi-dropdown-control>
+                            <case-date-control *ngIf="hasField('FinishingDate')" [field]="getField('FinishingDate')" [form]="form" type="date" [readonly]="true"></case-date-control>
                         </mbsc-form-group-content>
-                    </mbsc-form-group> -->
+                    </mbsc-form-group>
                     
                     <!-- <mbsc-form-group collapsible open #invoicesSection>
                         <mbsc-form-group-title>Invoices</mbsc-form-group-title>

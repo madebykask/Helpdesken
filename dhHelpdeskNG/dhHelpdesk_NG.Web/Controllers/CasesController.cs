@@ -5370,20 +5370,16 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 #region Existing case model initialization actions
-                m.Logs = this._logService.GetCaseLogOverviews(caseId);
+                m.Logs = this._logService.GetCaseLogOverviews(caseId);_finishingCauseService.GetFinishingCausesWithChilds(customerId);
 
-                bool UseVD = false;
-                if (!string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
-                {
-                    UseVD = true;
-                }
+                var useVd = !string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId));
                 
                 var canDelete = (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1);
                 m.SavedFiles = canDelete ? string.Empty : m.CaseFileNames;
 
                 var caseFiles = _caseFileService.GetCaseFiles(caseId, canDelete).OrderBy(x => x.CreatedDate);
 
-                m.CaseFilesModel = new CaseFilesModel(caseId.ToString(), caseFiles.ToArray(), m.SavedFiles, UseVD);
+                m.CaseFilesModel = new CaseFilesModel(caseId.ToString(), caseFiles.ToArray(), m.SavedFiles, useVd);
 
                 m.CaseAttachedExFiles = 
                     caseFiles.Select(x => new CaseAttachedExFileModel

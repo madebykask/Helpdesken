@@ -1,4 +1,4 @@
-import { OnInit, OnDestroy, Component, Input, OnChanges, ViewChild } from "@angular/core";
+import { OnInit, OnDestroy, Component, Input, OnChanges } from "@angular/core";
 import { BaseCaseField } from "../../../../models";
 import { BaseControl } from "../base-control";
 
@@ -18,7 +18,7 @@ import { BaseControl } from "../base-control";
     }
 
     ngOnInit(): void {
-      
+      //if(this.readOnly) set disabled/reaonly mode
     }
 
     ngOnDestroy(): void {

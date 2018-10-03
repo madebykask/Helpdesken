@@ -7,18 +7,15 @@ import { map } from "rxjs/operators";
 import { MultiLevelOptionItem } from "../../models";
 
 @Injectable({ providedIn: 'root' })
-export class ProductAreasService extends HttpApiServiceBase {
+export class ClosingReasonsService extends HttpApiServiceBase {
 
     protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService, 
         private caseHelper: CaseHelper) {
             super(http, localStorageService);
     }
 
-    getProductAreas(caseTypeId?: number, includeId?: number) {
-        let params = { };
-        if (caseTypeId != null) Object.assign(params, { caseTypeId: caseTypeId });
-        if (includeId != null) Object.assign(params, { includeId: includeId });
-        return this.getJson(this.buildResourseUrl('/api/productareas/getbycasetype', params))
+    getClosingReasons() {
+        return this.getJson(this.buildResourseUrl('/api/closingreasons/get'))
             .pipe(
                 map((jsItems: any) => {
                     let result = new Array<MultiLevelOptionItem>();
@@ -27,8 +24,8 @@ export class ProductAreasService extends HttpApiServiceBase {
 
                     const createOption = (jsItem: any): MultiLevelOptionItem => { //TODO: stop condition
                         let option = new MultiLevelOptionItem(jsItem.id, jsItem.name, jsItem.parentId);
-                        if (jsItem.subProductAreas != null) {
-                            option.childs = (jsItem.subProductAreas as Array<any>).map(createOption);
+                        if (jsItem.childFinishingCauses != null) {
+                            option.childs = (jsItem.childFinishingCauses as Array<any>).map(createOption);
                         }
                         return option;
                     };

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using System.Threading.Tasks;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -14,6 +16,7 @@
         IList<FinishingCauseCategory> GetFinishingCauseCategories(int customerId);
         IList<FinishingCause> GetFinishingCauses(int customerId);
         IList<FinishingCauseOverview> GetFinishingCausesWithChilds(int customerId);
+        Task<IList<FinishingCauseOverview>> GetFinishingCausesWithChildsAsync(int customerId);
 
         FinishingCauseCategory GetFinishingCauseCategory(int id);
         FinishingCause GetFinishingCause(int id);
@@ -78,7 +81,30 @@
 
         public IList<FinishingCauseOverview> GetFinishingCausesWithChilds(int customerId)
         {
-            return this._finishingCauseRepository.GetFinishingCauseOverviews(customerId);
+            var causeEntities = _finishingCauseRepository.GetFinishingCauseOverviews(customerId);
+
+            var parentCauses = causeEntities.Where(c => c.ParentId == null).ToList();
+
+            foreach (var parentCategory in parentCauses)
+            {
+                CreateFinishingCauseOverviewTree(parentCategory, causeEntities);
+            }
+
+            return parentCauses;
+        }
+
+        public async  Task<IList<FinishingCauseOverview>> GetFinishingCausesWithChildsAsync(int customerId)
+        {
+            var causeEntities = await _finishingCauseRepository.GetFinishingCauseOverviewsAsync(customerId);
+
+            var parentCauses = causeEntities.Where(c => c.ParentId == null).ToList();
+
+            foreach (var parentCategory in parentCauses)
+            {
+                CreateFinishingCauseOverviewTree(parentCategory, causeEntities);
+            }
+
+            return parentCauses;
         }
 
         public FinishingCauseCategory GetFinishingCauseCategory(int id)
@@ -194,6 +220,19 @@
         public IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId)
         {
             return this._finishingCauseRepository.GetFinishingCauseInfos(customerId);
+        }
+
+        private void CreateFinishingCauseOverviewTree(FinishingCauseOverview parentCategory, IList<FinishingCauseOverview> allCategories)
+        {
+            var children = allCategories.Where(c => c.ParentId == parentCategory.Id).OrderBy(c => c.Name).ToList();
+            if (children.Any())
+            {
+                parentCategory.ChildFinishingCauses.AddRange(children);
+                foreach (var child in children)
+                {
+                    this.CreateFinishingCauseOverviewTree(child, allCategories);
+                }
+            }
         }
     }
 }

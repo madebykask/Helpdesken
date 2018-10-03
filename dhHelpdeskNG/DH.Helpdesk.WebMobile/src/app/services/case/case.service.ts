@@ -42,7 +42,7 @@ export class CaseService extends HttpApiServiceBase {
         let $caseTypes = fieldExists(filter.CaseTypes) ? this._caseOrganizationService.getCaseTypes() : $empty();
         let $productAreas = fieldExists(filter.ProductAreas) ? this._caseOrganizationService.getProductAreas(filter.CaseTypeId, filter.ProductAreaId) : $empty();
         let $categories = fieldExists(filter.Categories) ? this._caseOrganizationService.getCategories() : $empty();
-        let $closingReasons = $empty(); //fieldExists(filter.ClosingReasons) ? this._caseOrganizationService.getClosingReasons() : $empty();
+        let $closingReasons = fieldExists(filter.ClosingReasons) ? this._caseOrganizationService.getClosingReasons() : $empty();
  
         let $bundledOptions = this._batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
 
@@ -70,27 +70,6 @@ export class CaseService extends HttpApiServiceBase {
 
                             if(bundledOptions != null) {
                                 Object.assign(options, bundledOptions);
-/*                                 if(bundledOptions.customerRegistrationSources != null) {
-                                    options.customerRegistrationSources = bundledOptions.customerRegistrationSources;
-                                }   
-                                if(bundledOptions.systems != null) {
-                                    options.systems = bundledOptions.systems;
-                                }  
-                                if(bundledOptions.urgencies != null) {
-                                    options.urgencies = bundledOptions.urgencies;
-                                }  
-                                if(bundledOptions.impacts != null) {
-                                    options.impacts = bundledOptions.impacts;
-                                }  
-                                if(bundledOptions.suppliers != null) {
-                                    options.suppliers = bundledOptions.suppliers;
-                                }  
-                                if(bundledOptions.countries != null) {
-                                    options.countries = bundledOptions.countries;
-                                }  
-                                if(bundledOptions.currencies != null) {
-                                    options.currencies = bundledOptions.currencies;
-                                }   */
                             }
 
                             if (caseTypes != null) {

@@ -1,4 +1,4 @@
 <ng-container [formGroup]="form">
     <mbsc-select *ngIf="!options.disabled" [formControlName]="field.name" [data]="dataSource" [options]="options">{{field.label}}</mbsc-select>
-    <mbsc-input *ngIf="options.disabled" [formControlName]="field.name" [disabled]="options.disabled">{{field.label}}</mbsc-input> 
 </ng-container>
+<mbsc-input *ngIf="options.disabled" [(ngModel)]="text" [disabled]="true">{{field.label}}</mbsc-input> 

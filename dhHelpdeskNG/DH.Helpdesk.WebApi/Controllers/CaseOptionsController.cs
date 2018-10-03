@@ -56,7 +56,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _changeService = changeService;
         }
 
-        [HttpPost]
+        [HttpPost]//TODO: split this action to different controllers for modularity
         public async Task<CaseOptionsOutputModel> Bundle([FromUri]int cid, [FromBody]GetCaseOptionsInputModel input)
         {
             var model = new CaseOptionsOutputModel();
@@ -131,6 +131,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (input.StateSecondaries)
                 model.StateSecondaries = _stateSecondaryService.GetStateSecondaries(cid)
                     .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+
             //if (customerSetting.ModuleProject == 1)
             //{
             if (input.Projects)
@@ -156,10 +157,6 @@ namespace DH.Helpdesk.WebApi.Controllers
                 for (var i = 10; i < 110; i = i + 10)
                     model.SolutionsRates.Add(new ItemOverview(i.ToString(), i.ToString()));
             }
-
-            //TODO: CaseType_Id
-            //TODO: ProductArea_Id
-            //TODO: Category_Id
 
             return model;
         }

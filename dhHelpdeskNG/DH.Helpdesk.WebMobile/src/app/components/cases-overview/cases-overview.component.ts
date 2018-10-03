@@ -73,7 +73,7 @@ export class CasesOverviewComponent implements OnInit {
   private goToCase(caseId: number) {
     if(caseId <= 0) return;
 
-    this.router.navigate(['/caseedit', caseId ]);
+    this.router.navigate(['/case', caseId ]);
   }
 
 }

@@ -5,6 +5,7 @@ import { OUsService } from "./ous-service";
 import { CaseTypesService } from "./caseTypes-service";
 import { ProductAreasService } from "./productAreas-service";
 import { CategoriesService } from "./categories-service";
+import { ClosingReasonsService } from "./closingReasons-service";
 
 @Injectable({ providedIn: 'root' })
 export class CaseOrganizationService {
@@ -13,7 +14,8 @@ export class CaseOrganizationService {
         private _OUsService: OUsService,
         private _caseTypesService: CaseTypesService,
         private _productAreasService: ProductAreasService,
-        private _categoriesService: CategoriesService) {
+        private _categoriesService: CategoriesService,
+        private _closingReasonsService: ClosingReasonsService) {
     }
 
     getRegions() {
@@ -39,5 +41,11 @@ export class CaseOrganizationService {
     getCategories() {
         return this._categoriesService.getCategories();
     }
+
+    getClosingReasons() {
+        return this._closingReasonsService.getClosingReasons();
+    }
+
+    
 
 }

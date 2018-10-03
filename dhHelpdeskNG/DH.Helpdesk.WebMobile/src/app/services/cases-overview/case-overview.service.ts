@@ -13,7 +13,7 @@ export class CasesOverviewService extends HttpApiServiceBase {
     }   
    
     searchCases(filter: CasesOverviewFilter) {        
-        let requestUrl = this.buildResourseUrl('/api/casesoverview/overview')
+        let requestUrl = this.buildResourseUrl('/api/casesoverview/get')
         return this.postJson<any>(requestUrl, filter)
         .pipe(
             //tap(d => console.log('>>searchCases')),
