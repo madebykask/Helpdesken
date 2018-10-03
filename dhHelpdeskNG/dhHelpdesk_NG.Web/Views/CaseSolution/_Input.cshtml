@@ -43,6 +43,13 @@
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-error">
+                            @Translation.GetCoreTextTranslation("Ärendemall")
+                            @Translation.GetCoreTextTranslation("som används går inte att ta bort")
+                        </div>
+                    }
                     <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
