@@ -606,6 +606,16 @@ namespace DH.Helpdesk.Web.Controllers
                 model.DisplayName = new StringFieldModel(false, "DisplayName", string.Format("{0} {1}", firstName, lastName));
             }
 
+            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+            var categoriesList = GetCategoriesSelectList(currentCustomerId);
+            model.ComputerUserCategoryModel = new ComputerUserCategoryModel(categoriesList);
+
+            //handle empty virtual cateogry
+            if (model.CategoryId == ComputerUserCategory.EmptyCategoryId)
+            {
+                model.CategoryId = null;
+            }
+
             var newNotifier = this.newNotifierFactory.Create(model, SessionFacade.CurrentCustomer.Id, DateTime.Now);
             this.notifierService.AddNotifier(newNotifier);
             return new JsonResult { Data = newNotifier.Id };
