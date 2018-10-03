@@ -225,6 +225,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         #endregion
 
         #region Log
+
         public string Text_External { get; set; }
 
         public string Text_Internal { get; set; }
@@ -234,18 +235,23 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         #region Etc
 
         public int? CaseSolution_Id { get; set; }
+
         #endregion
 
         #region ExtendedCase
+
         public int? ExtendedCaseData_Id { get; set; }
         public int? ExtendedCaseForm_Id { get; set; }
+
         #endregion
 
         public List<CaseListToCase> FieldSettings { get; set; }
 
         #region case files
+
         public string CaseFileKey { get; set; }
-        public ICollection<CaseFile> CaseFiles { get; set; }
+        public IList<CaseFile> CaseFiles { get; set; }
+
         #endregion
 
         public bool IsFinished

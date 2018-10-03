@@ -1873,7 +1873,8 @@ namespace DH.Helpdesk.Services.Services
                 switch (action.ActionType)
                 {
                     case BRActionType.SendEmail:
-                        DoAction_SendEmail(action, currentCase, log, userTimeZone, caseHistoryId, basePath, currentLanguageId, caseMailSetting, logFiles);
+                        if (caseMailSetting != null)
+                            DoAction_SendEmail(action, currentCase, log, userTimeZone, caseHistoryId, basePath, currentLanguageId, caseMailSetting, logFiles);
                         break;
                 }
             }
