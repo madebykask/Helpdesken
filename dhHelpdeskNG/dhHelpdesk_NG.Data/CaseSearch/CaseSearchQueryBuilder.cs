@@ -845,7 +845,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     break;
 
                 default:
-                    condition = $" and ({caseTableNameOrAlias}.FinishingDate is null or {caseTableNameOrAlias}.FinishingDate is not null)";
+                    condition = $" and ({caseTableNameOrAlias}.FinishingDate is null)";
                     break;
             }
 
