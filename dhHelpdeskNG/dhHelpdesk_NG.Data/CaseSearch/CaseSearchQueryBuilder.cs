@@ -844,6 +844,10 @@ namespace DH.Helpdesk.Dal.Repositories
                     condition = $" and ({caseTableNameOrAlias}.FinishingDate is not null)";
                     break;
 
+                case CaseProgressFilter.FeedBack:
+                    condition = $" and ({caseTableNameOrAlias}.FinishingDate is null or {caseTableNameOrAlias}.FinishingDate is not null)";
+                    break;
+
                 default:
                     condition = $" and ({caseTableNameOrAlias}.FinishingDate is null)";
                     break;
