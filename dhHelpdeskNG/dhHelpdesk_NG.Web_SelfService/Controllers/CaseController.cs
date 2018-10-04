@@ -1136,7 +1136,6 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
-        [ValidateInput(false)]
         public ActionResult _CaseLogNote(int caseId, string note, string logFileGuid)
         {
             SaveExternalMessage(caseId, note, logFileGuid);            
@@ -1148,7 +1147,6 @@ namespace DH.Helpdesk.SelfService.Controllers
             return PartialView(model);
         }
 
-        
         private void SaveExternalMessage(int caseId, string extraNote, string logFileGuid) 
         { 
             IDictionary<string, string> errors;            
@@ -1388,7 +1386,6 @@ namespace DH.Helpdesk.SelfService.Controllers
 
         [HttpGet]
         [ChildActionOnly]
-        [ValidateInput(false)]
         public PartialViewResult CaseLogNote(int caseId)
         {
             var model = GetCaseLogModel(caseId);

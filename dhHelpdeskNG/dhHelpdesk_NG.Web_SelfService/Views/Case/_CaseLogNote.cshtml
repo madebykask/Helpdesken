@@ -23,7 +23,7 @@
     string FormatLogText(Log logItem)
     {
         var logText = GetLogText(logItem).AddCharacterInParts(70, Environment.NewLine, Environment.NewLine);
-        var formatted = logText.Replace("\n", "<br />");
+        var formatted = logText.Replace("<", "").Replace("\n", "<br />");
         return formatted;
     }
 }
