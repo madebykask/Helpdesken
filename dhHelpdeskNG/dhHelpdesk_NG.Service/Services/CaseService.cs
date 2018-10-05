@@ -1222,7 +1222,7 @@ namespace DH.Helpdesk.Services.Services
 
         public Dictionary<int, string> GetCaseFiles(List<int> caseIds)
         {
-            var preCaseFiles = this._caseFileRepository.GetAll().Where(f => caseIds.Contains(f.Case_Id)).ToList();
+            var preCaseFiles = this._caseFileRepository.GetMany(f => caseIds.Contains(f.Case_Id)).ToList();
 
             var groupedCaseFiles = preCaseFiles.GroupBy(f => f.Case_Id)
                                                .Select(g => new

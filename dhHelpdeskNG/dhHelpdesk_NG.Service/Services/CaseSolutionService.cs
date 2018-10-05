@@ -483,7 +483,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch searchCaseSolutions, bool isFirstNamePresentation)
         {
-            var query = (from cs in this._caseSolutionRepository.GetAll().Where(x => x.Customer_Id == customerId)
+            var query = (from cs in this._caseSolutionRepository.GetMany(x => x.Customer_Id == customerId)
                          select cs);
 
             #region Search

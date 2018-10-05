@@ -4,10 +4,11 @@ using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.WebApi.Infrastructure;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
-    public class CategoriesController : ApiController
+    public class CategoriesController : BaseApiController
     {
         private readonly ICategoryService _categoryService;
 

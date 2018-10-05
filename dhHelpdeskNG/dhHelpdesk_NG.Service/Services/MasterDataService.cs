@@ -175,6 +175,7 @@ namespace DH.Helpdesk.Services.Services
             return _textRepository.GetAllWithTranslation().ToList();
         }
 
+        // TODO: review how it is used. Now it is put for every user in a session - potential memory leak on high load. Use cache instead
         public IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId)
         {
             return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsForTranslation(userId).ToList();   
@@ -185,6 +186,7 @@ namespace DH.Helpdesk.Services.Services
             return this._caseFieldSettingLanguageRepository.GetCustomerCaseFieldSettingsForTranslation(customerId).ToList();
         }
 
+        // TODO: review how it is used. Now it is put for every user in a session - potential memory leak on high load. Use cache instead
         public IList<CaseFieldSettingsForTranslation> GetCaseTranslations()
         {
             return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsForTranslation().ToList();         

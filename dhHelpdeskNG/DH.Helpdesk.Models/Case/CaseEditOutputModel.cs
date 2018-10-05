@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 using DH.Helpdesk.BusinessData.Models.MailTemplates;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Models.Case.Field;
@@ -18,7 +19,6 @@ namespace DH.Helpdesk.Models.Case
         }
 
         public int Id { get; set; }
-        public string BackUrl { get; set; }
         //public bool CanGetRelatedCases { get; set; }
         public decimal CaseNumber { get; set; }
 

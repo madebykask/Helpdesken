@@ -544,7 +544,8 @@ namespace DH.Helpdesk.Services.Services
                     //    rowCfsl = new CaseFieldSettingLanguage() { CaseFieldSettings_Id = rowCfs.Id };
                     //}
 
-                    foreach (var label in this._caseFieldSettingRepository.GetAll().Where(x => x.Id == rowCfs.Id))
+                    //TODO: too many unnessary requests to db, refactor
+                    foreach (var label in this._caseFieldSettingRepository.GetMany(x => x.Id == rowCfs.Id))
                     {
                         rowCfs.Customer_Id = customer.Id;
                         rowCfs.DefaultValue = change.DefaultValue;
@@ -595,7 +596,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (customer.ReportCustomers != null && ReportCustomers != null)
             {
-                var currentExistReports = this._reportCustomerRepository.GetAll().Where(rc => rc.Customer_Id == customer.Id).ToList();
+                var currentExistReports = this._reportCustomerRepository.GetMany(rc => rc.Customer_Id == customer.Id).ToList();
                 foreach (var change in ReportCustomers)
                 {
                     var existingReport = currentExistReports.Where(r => r.Report_Id == change.Report_Id).FirstOrDefault();

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories
+﻿using System.Threading.Tasks;
+
+namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
 
@@ -20,5 +22,6 @@
         List<OU> GetCustomerOUs(int customerId);
 
         List<OU> GetOUs(int customerId, int departmentId, bool? isActive = null);
+        Task<List<OU>> GetOUsAsync(int customerId, int departmentId, bool? isActive = null);
     }
 }

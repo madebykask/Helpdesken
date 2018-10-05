@@ -70,7 +70,7 @@
 
         public IList<WatchDateCalendarValue> GetWDCalendarValuesByWDCIdAndYearForList(int id, int year)
         {
-            var query = (from cs in this._watchDateCalendarValueRepository.GetAll().Where(x => x.WatchDateCalendar_Id == id && x.WatchDate.Year == year)
+            var query = (from cs in this._watchDateCalendarValueRepository.GetMany(x => x.WatchDateCalendar_Id == id && x.WatchDate.Year == year)
                          select cs);
 
             

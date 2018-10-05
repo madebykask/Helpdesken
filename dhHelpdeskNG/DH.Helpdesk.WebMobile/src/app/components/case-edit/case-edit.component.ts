@@ -2,8 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
-import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseOptions } from '../../models';
+import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseOptions, CaseSectionInputModel, CaseSectionType } from '../../models';
 import { Subscription, of, Observable, zip, forkJoin } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-case-edit',
@@ -13,8 +14,10 @@ import { Subscription, of, Observable, zip, forkJoin } from 'rxjs';
 export class CaseEditComponent implements OnInit, OnDestroy {
     private caseId: number;
     private caseData: CaseEditInputModel;
-    private caseDataSubscription: Subscription;
+    private subscriptions = new Array<Subscription>();    
     private dataSource: OptionsDataSource;
+    private caseSections: CaseSectionInputModel[];
+    private caseSectionTypes = CaseSectionType;
 
     isLoaded: boolean = false;
     form: FormGroup;    
@@ -45,32 +48,37 @@ export class CaseEditComponent implements OnInit, OnDestroy {
 
     loadCaseData(): any {
         this.isLoaded = false;
-        this.caseDataSubscription = this.caseService.getCaseData(this.caseId)
-            .subscribe(data => {//TODO: Error handle
-                this.caseData = data;
-                let filter = this.getCaseOptionsFilter(this.caseData);
-                let op1 = this.caseService.getCaseOptions(filter);                    
-                let op2 = Observable.create(observer => { 
-                    let group: any = {};
-                    data.fields.forEach(field => {
-                        group[field.name] = new FormControl({value: field.value || '', disabled: true});                        
-                    });                    
-                    observer.next(new FormGroup(group));
-                    observer.complete();                    
-                }, );
-                forkJoin(op1, op2)
-                    .subscribe(([options, formgroup]) => {
-                        this.dataSource = new OptionsDataSource(options);
-                        this.form = formgroup as FormGroup;
-                        this.isLoaded = true;        
-                    })
-            });
+        let $caseSections = this.caseService.getCaseSections(); //TODO: error handling
+        let $caseData = this.caseService.getCaseData(this.caseId)
+            .pipe(
+                switchMap(data => { //TODO: Error handle
+                    this.caseData = data;
+                    let filter = this.getCaseOptionsFilter(this.caseData);
+                    let op1 = this.caseService.getCaseOptions(filter);                    
+                    let op2 = Observable.create(observer => { 
+                        let group: any = {};
+                        data.fields.forEach(field => {
+                            group[field.name] = new FormControl({value: field.value || '', disabled: true});                        
+                        });                    
+                        observer.next(new FormGroup(group));
+                        observer.complete();                                        
+                    }) as Observable<FormGroup>;
+                    return forkJoin(op1, op2);
+                })
+            )
+        this.subscriptions.push(forkJoin($caseSections, $caseData)
+            .subscribe(([sectionData, [options, formgroup]]) => {
+                this.caseSections = sectionData;
+                this.dataSource = new OptionsDataSource(options);
+                this.form = formgroup;
+                this.isLoaded = true;        
+            }));
     }
 
     ngOnDestroy() {
-        if(this.caseDataSubscription) {
-            this.caseDataSubscription.unsubscribe();
-        }
+        this.subscriptions.forEach(s => {
+            if(!s.closed) s.unsubscribe();
+        })
     }
 
     hasField(name: string) : boolean {
@@ -102,6 +110,16 @@ export class CaseEditComponent implements OnInit, OnDestroy {
 
     goToCaseOverview() {
         this.router.navigate(['/']);
+    }
+
+    getSectionHeader(type: CaseSectionType): string {
+        if (this.caseSections == null) return "";
+        return this.caseSections.find(s => s.type == type).header;
+    }
+
+    isSectionOpen(type: CaseSectionType) {
+        if (this.caseSections == null) return null
+        return this.caseSections.find(s => s.type == type).isEditCollapsed ? null : "";
     }
 
     private getCaseOptionsFilter(data: CaseEditInputModel) {

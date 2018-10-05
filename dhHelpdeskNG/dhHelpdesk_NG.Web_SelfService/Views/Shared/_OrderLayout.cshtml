@@ -2,6 +2,7 @@
 @using DH.Helpdesk.BusinessData.Enums.Orders
 @using DH.Helpdesk.SelfService
 @using DH.Helpdesk.SelfService.Infrastructure.Extensions.HtmlHelperExtensions
+@using DH.Helpdesk.Common.Extensions.Boolean
 @model DH.Helpdesk.SelfService.Models.Orders.OrderEdit.FullOrderEditModel
 
 @{
@@ -14,7 +15,7 @@
     </div>
 </div>
 <div class="container-fluid dh-container order-edit">
-       @RenderSection("Content")
+    @RenderSection("Content")
 </div>
 @section Scripts {
     @Scripts.Render(BundleConfig.ScriptNames.EditOrder)

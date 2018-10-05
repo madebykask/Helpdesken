@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace DH.Helpdesk.Common
+namespace DH.Helpdesk.Services.Services.Cache
 {
     public interface ICacheService
     {

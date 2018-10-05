@@ -104,6 +104,7 @@ namespace DH.Helpdesk.Web.Controllers
     using Infrastructure.Cryptography;
     using Domain.Computers;
     using BusinessData.Models.ProductArea.Output;
+    using DH.Helpdesk.Common.Extensions.Boolean;
 
     public class CasesController : BaseController
     {
@@ -3197,7 +3198,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ViewResult CaseByIds(string caseIds, string sortBy, string sortByAsc)
         {
             var cases = this.GetUnfilteredCases(sortBy, sortByAsc, null, null, caseIds.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray());
-            var model = new CaseByIdsViewModel(cases, sortBy, sortByAsc.convertStringToBool(), caseIds);
+            var model = new CaseByIdsViewModel(cases, sortBy, sortByAsc.ToBool(), caseIds);
             return this.View(model);
         }
 
@@ -3205,7 +3206,7 @@ namespace DH.Helpdesk.Web.Controllers
         public PartialViewResult CaseByIdsContent(string caseIds, string sortBy, string sortByAsc)
         {
             var cases = this.GetUnfilteredCases(sortBy, sortByAsc, null, null, caseIds.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray());
-            var model = new CaseByIdsViewModel(cases, sortBy, sortByAsc.convertStringToBool(), caseIds);
+            var model = new CaseByIdsViewModel(cases, sortBy, sortByAsc.ToBool(), caseIds);
             return this.PartialView(model);
         }
 
@@ -6801,7 +6802,7 @@ namespace DH.Helpdesk.Web.Controllers
             };
             var search = this.InitEmptySearchModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
             search.Search.SortBy = sortBy ?? string.Empty;
-            search.Search.Ascending = sortByAsc.convertStringToBool();
+            search.Search.Ascending = sortByAsc.ToBool();
             search.CaseSearchFilter.CaseProgress = CaseProgressFilter.None;
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
             CaseRemainingTimeData remainingTime;
@@ -6842,7 +6843,7 @@ namespace DH.Helpdesk.Web.Controllers
                                             string userId)
         {
             var cases = this.GetUnfilteredCases(sortBy, sortByAsc, caseId, userId);
-            var model = this.caseModelFactory.GetRelatedCasesFullModel(cases, userId, caseId, sortBy, sortByAsc.convertStringToBool());
+            var model = this.caseModelFactory.GetRelatedCasesFullModel(cases, userId, caseId, sortBy, sortByAsc.ToBool());
 
             return model;
         }

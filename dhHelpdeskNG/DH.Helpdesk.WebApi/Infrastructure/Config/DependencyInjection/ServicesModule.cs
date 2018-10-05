@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Services.Services.CaseStatistic;
 using DH.Helpdesk.Services.Services.Concrete;
 using DH.Helpdesk.Services.Services.Concrete.Changes;
@@ -71,6 +72,8 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
             builder.RegisterType<OUService>().As<IOUService>();
             builder.RegisterType<CaseTypeService>().As<ICaseTypeService>();
             builder.RegisterType<CategoryService>().As<ICategoryService>();
+            builder.RegisterType<CaseSectionService>().As<ICaseSectionService>();
+            
         }
 
         #endregion

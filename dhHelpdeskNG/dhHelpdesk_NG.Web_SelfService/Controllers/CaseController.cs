@@ -9,6 +9,7 @@ using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using log4net;
 using log4net.Core;
 using WebGrease.Css.Extensions;
+using DH.Helpdesk.Common.Extensions.Boolean;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
@@ -2229,8 +2230,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             var ret = new List<FieldSettingJSModel>();
             foreach (var field in customerFieldSettings)
             {
-                var isVisible = field.ShowExternal.ConvertIntToBool();
-                var isRequired = field.Required.ConvertIntToBool();
+                var isVisible = field.ShowExternal.ToBool();
+                var isRequired = field.Required.ToBool();
                 var isReadonly = false;                
                 
                 if (templateSettings != null && templateSettings.Any())

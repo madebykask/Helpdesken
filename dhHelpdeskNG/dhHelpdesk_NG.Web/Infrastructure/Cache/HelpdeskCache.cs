@@ -6,6 +6,7 @@ using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.Common;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Services.Services.Cache;
 
 namespace DH.Helpdesk.Web.Infrastructure.Cache
 {

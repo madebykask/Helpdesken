@@ -18,6 +18,7 @@ using DH.Helpdesk.Dal.Mappers.ExternalInvoice.EntityToBusinessModel;
 using DH.Helpdesk.Dal.Mappers.Gdpr.BusinessModelToEntity;
 using DH.Helpdesk.Dal.Mappers.Gdpr.EntityToBusinessModel;
 using DH.Helpdesk.Domain.GDPR;
+using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Web.Infrastructure.Cache;
 
 namespace DH.Helpdesk.Web.NinjectModules.Common

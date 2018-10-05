@@ -28,19 +28,6 @@ namespace DH.Helpdesk.Common.Extensions.Integer
             return value != 0;
         }
 
-        /// <summary>
-        /// The integer to boolean.
-        /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public static bool IntToBool(int value)
-        {
-            return value != 0;
-        }
 
         /// <summary>
         /// The to boolean.

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
 import { map, mergeMap, mapTo, defaultIfEmpty } from 'rxjs/operators';
-import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter } from '../../models';
+import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel } from '../../models';
 import { throwError, forkJoin, Observable, empty, zip } from 'rxjs';
 import { OptionItem, CaseOptions } from '../../models/case/case-options.model';
 import { CaseOrganizationService } from '../case-organization';
@@ -86,52 +86,23 @@ export class CaseService extends HttpApiServiceBase {
                             }                             
                             return options;
                     }));
-/*         return this.postJson(this.buildResourseUrl('/api/caseoptions/bundle'), filter)//TODO: error handling
-            .pipe(
-                map((jsOptions: any) => {
-                    if(jsOptions == null) throwError('No options received.')
-                    let options = new CaseOptions();
-                    const mapArray = (arr: any) => (arr as Array<any>).map(jsItem => new OptionItem(jsItem.name, jsItem.value));
-                    
-                    if(jsOptions.regions != null) {                                                
-                        options.regions = mapArray(jsOptions.regions);
-                    }
-                    if(jsOptions.departments != null) {
-                        options.departments = mapArray(jsOptions.departments);
-                    }
-                    if(jsOptions.oUs != null) {
-                        options.oUs = mapArray(jsOptions.oUs);
-                    }
-                    if(jsOptions.isAboutDepartments != null) {
-                        options.isAboutDepartments = mapArray(jsOptions.isAboutDepartments);
-                    }
-                    if(jsOptions.isAboutOUs != null) {
-                        options.isAboutOUs = mapArray(jsOptions.isAboutOUs);
-                    }
-                    if(jsOptions.customerRegistrationSources != null) {
-                        options.customerRegistrationSources = mapArray(jsOptions.customerRegistrationSources);
-                    }   
-                    if(jsOptions.systems != null) {
-                        options.systems = mapArray(jsOptions.systems);
-                    }  
-                    if(jsOptions.urgencies != null) {
-                        options.urgencies = mapArray(jsOptions.urgencies);
-                    }  
-                    if(jsOptions.impacts != null) {
-                        options.impacts = mapArray(jsOptions.impacts);
-                    }  
-                    if(jsOptions.suppliers != null) {
-                        options.suppliers = mapArray(jsOptions.suppliers);
-                    }  
-                    if(jsOptions.countries != null) {
-                        options.countries = mapArray(jsOptions.countries);
-                    }  
-                    if(jsOptions.currencies != null) {
-                        options.currencies = mapArray(jsOptions.currencies);
-                    }  
+    }
 
-                    return options;
-                })  
-            )*/
+    getCaseSections() {
+        var user = this.localStorageService.getCurrentUser();
+        return this.getJson(this.buildResourseUrl('/api/casesections/get',
+                             { langId: user.currentData.selectedLanguageId }))//TODO: error handling
+            .pipe(
+                map((jsCaseSections: any) => {
+                    if (!jsCaseSections) throwError("No data from server.");
+
+                    let sections = (jsCaseSections as Array<any>).map((jsSection: any) => {
+                        return new CaseSectionInputModel(jsSection.id, jsSection.sectionHeader,
+                             jsSection.sectionType, jsSection.isNewCollapsed,
+                             jsSection.isEditCollapsed);
+                    });
+                    return sections;
+                }) 
+            )
     }
 }

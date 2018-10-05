@@ -6,5 +6,20 @@
         {
             return value ? "yes" : "no";
         }
+
+        public static bool ToBool(this string value)
+        {
+            var ret = false;
+
+            if (!string.IsNullOrWhiteSpace(value))
+                bool.TryParse(value, out ret); 
+
+            return ret;
+        }
+
+        public static string ToJavaScriptBool(this bool value)
+        {
+            return value ? "true" : "false";
+        }
     }
 }

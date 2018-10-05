@@ -546,7 +546,7 @@ namespace DH.Helpdesk.Services.Services
                     user.UserRoles.Clear();
 
                     //Remove Case Settings
-                    var userCaseSettings = this._casesettingRepository.GetAll().Where(cs => cs.User_Id == id).ToList();
+                    var userCaseSettings = this._casesettingRepository.GetMany(cs => cs.User_Id == id).ToList();
                     if (userCaseSettings.Any())
                     {
                         foreach (var caseSetting in userCaseSettings)
@@ -554,7 +554,7 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     // Remove User Modules 
-                    var userModules = this._userModuleRepository.GetAll().Where(um => um.User_Id == id).ToList();
+                    var userModules = this._userModuleRepository.GetMany(um => um.User_Id == id).ToList();
                     if (userModules.Any())
                     {
                         foreach (var userModule in userModules)
@@ -562,7 +562,7 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     // Remove User Password History 
-                    var passwordHistories = this._userPasswordHistoryRepository.GetAll().Where(up=> up.User_Id == id).ToList();
+                    var passwordHistories = this._userPasswordHistoryRepository.GetMany(up=> up.User_Id == id).ToList();
                     if (passwordHistories.Any())
                     {
                         foreach (var passHistory in passwordHistories)

@@ -1407,7 +1407,6 @@
     <Compile Include="Infrastructure\RouteValueDictionaryHelper.cs" />
     <Compile Include="Infrastructure\SelectListMapper.cs" />
     <Compile Include="Infrastructure\Enums.cs" />
-    <Compile Include="Infrastructure\Extensions\BooleanExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\ControllerExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\EnumExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\FileExtensions.cs" />

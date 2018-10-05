@@ -5,6 +5,7 @@ using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.Common;
 using DH.Helpdesk.Common.Extensions;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Services.Services.Cache;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {

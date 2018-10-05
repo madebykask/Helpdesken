@@ -53,12 +53,12 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<Language> GetLanguages()
         {
-            return this._languageRepository.GetAll().Where(x => x.IsActive == 1).OrderBy(x => x.Name).ToList();
+            return this._languageRepository.GetMany(x => x.IsActive == 1).OrderBy(x => x.Name).ToList();
         }
 
         public IList<Language> GetLanguagesForGlobalSettings()
         {
-            return this._languageRepository.GetAll().Where(z => z.IsActive == 1).ToList();
+            return this._languageRepository.GetMany(z => z.IsActive == 1).ToList();
         }
 
         public Language GetLanguage(int id)

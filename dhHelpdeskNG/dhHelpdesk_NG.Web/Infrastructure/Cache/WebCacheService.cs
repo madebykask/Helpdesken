@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web;
 using DH.Helpdesk.Common;
+using DH.Helpdesk.Services.Services.Cache;
 
 namespace DH.Helpdesk.Web.Infrastructure.Cache
 {

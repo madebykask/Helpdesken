@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Translate;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
-    public class CaseTypesController : ApiController
+    public class CaseTypesController : BaseApiController
     {
         private readonly ICaseTypeService _caseTypeService;
 

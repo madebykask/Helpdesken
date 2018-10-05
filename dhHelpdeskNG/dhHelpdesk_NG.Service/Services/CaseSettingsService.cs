@@ -77,7 +77,7 @@
 
         public IList<CaseSettings> GetCaseSettingsForDefaultCust()
         {
-            var list = this._caseSettingRepository.GetAll().Where(x => x.Customer_Id == null).ToList();
+            var list = this._caseSettingRepository.GetMany(x => x.Customer_Id == null).ToList();
 
             return list;
         }
@@ -176,7 +176,7 @@
 
         public IList<CaseSettings> GenerateCSFromUGChoice(int customerId, int? UserGroupId)
         {
-            var query = (from cs in this._caseSettingRepository.GetAll().Where(x => x.Customer_Id == customerId && x.Name != null && x.User_Id == null)
+            var query = (from cs in this._caseSettingRepository.GetMany(x => x.Customer_Id == customerId && x.Name != null && x.User_Id == null)
                          select cs);
 
             if (UserGroupId.HasValue)

@@ -3,6 +3,7 @@
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Api.Orders
+@using DH.Helpdesk.Common.Extensions.Boolean
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.FullOrderEditModel
 @{
     Layout = "~/Areas/Orders/Views/Shared/_OrderLayout.cshtml";
@@ -10,38 +11,38 @@
 
 @section Actions
 {
-    <ul class="secnav">               
+    <ul class="secnav">
         <li>
             @Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), null, null, new { id = "btnSave", @class = "btn" })
         </li>
         <li>
-            @Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", "Orders", null, new {@class = "btn" })
+            @Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", "Orders", null, new { @class = "btn" })
         </li>
         <li>
             <i id="actionIndicator" class="gif-loader" style="display: none">&nbsp;</i>
         </li>
-        <li class="secspace"></li>      
+        <li class="secspace"></li>
         <li>
-            @Html.CheckBoxFor(m => m.InformOrderer, new { id = "informOrderer_action"})
+            @Html.CheckBoxFor(m => m.InformOrderer, new { id = "informOrderer_action" })
         </li>
         <li>
             @Html.Label("informOrderer_action", Translation.GetCoreTextTranslation("Informera beställare"))
         </li>
-        <li class="secspace"></li>      
+        <li class="secspace"></li>
         <li>
-            @Html.CheckBoxFor(m => m.InformReceiver, new { id = "informReceiver_action"})
+            @Html.CheckBoxFor(m => m.InformReceiver, new { id = "informReceiver_action" })
         </li>
         <li>
             @Html.Label("informReceiver_action", Translation.GetCoreTextTranslation("Informera mottagare"))
         </li>
-        <li class="secspace"></li>      
+        <li class="secspace"></li>
         <li>
-            @Html.CheckBoxFor(m => m.CreateCase, new { id = "createCase_action"})
+            @Html.CheckBoxFor(m => m.CreateCase, new { id = "createCase_action" })
         </li>
         <li>
             @Html.Label("createCase_action", Translation.GetCoreTextTranslation("Skapa ärende"))
-        </li>        
-    </ul>        
+        </li>
+    </ul>
 }
 @section Content
 {
@@ -86,5 +87,5 @@
             pageObject.init();
             window.scrollTo(0, 0);
         });
-    </script>    
+    </script>
 }

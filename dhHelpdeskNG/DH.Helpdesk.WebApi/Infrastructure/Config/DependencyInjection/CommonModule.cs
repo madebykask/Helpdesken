@@ -15,6 +15,7 @@ using DH.Helpdesk.Services.Infrastructure.Concrete;
 using DH.Helpdesk.Services.Infrastructure.Email;
 using DH.Helpdesk.Services.Infrastructure.Email.Concrete;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.WebApi.Infrastructure.Cache;
 
 namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection

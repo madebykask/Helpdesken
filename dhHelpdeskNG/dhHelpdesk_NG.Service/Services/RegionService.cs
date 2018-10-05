@@ -45,7 +45,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<Region> GetAllRegions()
         {
-            return this._regionRepository.GetAll().Where(x => x.IsActive == 1).OrderBy(x => x.Name).ToList();
+            return this._regionRepository.GetMany(x => x.IsActive == 1).OrderBy(x => x.Name).ToList();
         }
 
         public IList<RegionOverview> GetRegionsOverview(int customerId)

@@ -66,7 +66,7 @@
 
         public IEnumerable<Text> GetAllNewTexts(int texttypeId)
         {
-            return this._textRepository.GetAll().AsQueryable().Where(x => x.Id > 4999 && x.Type == texttypeId).OrderBy(x => x.TextToTranslate);
+            return this._textRepository.GetMany(x => x.Id > 4999 && x.Type == texttypeId).OrderBy(x => x.TextToTranslate);
         }
 
         public IEnumerable<TextList> GetAllTexts(int texttypeId, int? defaultLanguage)

@@ -8,10 +8,11 @@ using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Concrete;
+using DH.Helpdesk.WebApi.Infrastructure;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
-    public class OrganizationalUnitsController : ApiController
+    public class OrganizationalUnitsController : BaseApiController
     {
         private readonly IOUService _ouService;
 
@@ -23,10 +24,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         // GET api/<controller>
         public async Task<IEnumerable<ItemOverview>> Get(int cid, int departmentId)
         {
-            await Task.FromResult(_ouService.GetOUs(departmentId)
-                .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList());
-
-            var ous = await Task.FromResult(_ouService.GetActiveOuForDepartment(departmentId, cid));
+            var ous = await _ouService.GetActiveOuForDepartmentAsync(departmentId, cid);
 
             return ous.Select(ou =>
             {
