@@ -1266,6 +1266,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
         {
             decimal caseNum;
