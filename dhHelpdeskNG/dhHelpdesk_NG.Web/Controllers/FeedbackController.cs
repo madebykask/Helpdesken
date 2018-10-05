@@ -385,6 +385,8 @@ namespace DH.Helpdesk.Web.Controllers
 	            CustomerId = SessionFacade.CurrentCustomer.Id,
 	            UserId = SessionFacade.CurrentUser.Id
 	        };
+            f.CaseProgress = "9";
+        
 	        var caseIds = frm.ReturnFormValue("caseIds").Split(',').Select(int.Parse).ToArray();
 	        var gridSettings = _gridSettingsService.GetForCustomerUserGrid(
 	            SessionFacade.CurrentCustomer.Id,

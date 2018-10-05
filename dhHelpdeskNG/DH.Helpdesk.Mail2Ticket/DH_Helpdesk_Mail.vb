@@ -1,4 +1,5 @@
-﻿Imports DH.Helpdesk.Mail2Ticket.Library
+﻿Imports System.Configuration
+Imports DH.Helpdesk.Mail2Ticket.Library
 Imports Rebex.Net
 Imports System.IO
 Imports System.Linq
@@ -12,6 +13,7 @@ Module DH_Helpdesk_Mail
     'Dim msDeniedHtmlBodyString As String
     Dim iSequenceNumber As ImapMessageSet
     Dim msDeniedHtmlBodyString As String
+    Dim bEnableNewEmailProcessing = False
 
     Public Sub Main()
 
@@ -20,6 +22,14 @@ Module DH_Helpdesk_Mail
         Dim sCommand As String = Command()
         Dim aArguments() As String = sCommand.Split(",")
         Dim sConnectionstring As String = ""
+
+        Dim appVal as String = ConfigurationManager.AppSettings("enableNewEmailProcessing")
+        If (Not String.IsNullOrEmpty(appVal) AndAlso appVal.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase))
+            bEnableNewEmailProcessing = True
+        End If
+
+        'NOTE: USE Command Line Arguements in Project Properties under Debug tab instead of hardcoding values
+        '      Example: 5,Data Source=DHUTVSQL2; Initial Catalog=DH_Support; User Id=sa; Password=;Network Library=dbmssocn;,,,,1
 
         'msDeniedHtmlBodyString = ConfigurationManager.AppSettings("DeniedHtmlBodyString").ToString()
 
@@ -43,31 +53,60 @@ Module DH_Helpdesk_Mail
         'aArguments(2) = "c:\temp"
         'aArguments(3) = "datahalland"
         'aArguments(4) = ";"
-
+        
         If aArguments.Length > 0 Then
-            sConnectionstring = aArguments(1).ToString
+            Dim workingModeArg =  GetCmdArg(aArguments, 0)
+            Dim connStringArg  = GetCmdArg(aArguments, 1)
+            Dim logFolderArg = GetCmdArg(aArguments, 2)
+            Dim logIdentifierArg = GetCmdArg(aArguments, 3)
+            Dim productAreaSepArg = GetCmdArg(aArguments, 4)
+            Dim newModeArg = GetCmdArg(aArguments, 5)
 
-            If aArguments.Length > 2 Then
-                If Not aArguments(2) Is Nothing Then
-                    gsLogPath = aArguments(2).ToString
-                End If
+            Dim workingMode = IIf(workingModeArg = "5", SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
+            sConnectionstring = connStringArg
+
+            If Not String.IsNullOrEmpty(logFolderArg) Then
+                gsLogPath = logFolderArg
             End If
 
-            If aArguments.Length > 3 Then
-                gsInternalLogIdentifier = aArguments(3).ToString.Trim
-            End If
-            If aArguments.Length > 4 Then
-                gsProductAreaSeperator = aArguments(4).ToString.Trim
+            If Not String.IsNullOrEmpty(logIdentifierArg) Then
+                gsInternalLogIdentifier = logIdentifierArg.ToString.Trim
             End If
 
-            If aArguments(0).ToString = "5" Then
-                readMailBox(sConnectionstring, SyncType.SyncByWorkingGroup)
-            Else
-                readMailBox(sConnectionstring, SyncType.SyncByCustomer)
+            If Not String.IsNullOrEmpty(productAreaSepArg) Then
+                gsProductAreaSeperator = productAreaSepArg
             End If
+
+            bEnableNewEmailProcessing = IIf(newModeArg = "1", True, False)
+            
+            'Log cmd line args
+            Try     
+                openLogFile()
+                LogToFile(String.Format(
+                    "Cmd Line Args:"  & vbCrlf & vbTab &
+                    "- WorkingMode: {0}" & vbCrlf & vbTab &
+                    "- ConnectionString: {1}" & vbCrlf & vbTab &
+                    "- Log folder: {2}" & vbCrlf & vbTab &
+                    "- Log identifier: {3}" & vbCrlf & vbTab &
+                    "- ProductArea Separator: {4}" & vbCrlf & vbTab &
+                    "- New email processing: {5}", 
+                    workingModeArg, connStringArg, logFolderArg, logIdentifierArg, productAreaSepArg, newModeArg), 1)
+            Catch ex As Exception
+            Finally
+                closeLogFile()
+            End Try
+
+            readMailBox(sConnectionstring, workingMode)
 
         End If
     End Sub
+    Private Function GetCmdArg(args As String(), index As Int32) As String
+        Dim val as String = ""
+        If args.Length > index Then
+            val = args(index)
+        End If
+        Return val
+    End Function
 
     Public Function readMailBox(ByVal sConnectionstring As String, ByVal iSyncType As SyncType) As Integer
         Dim objGlobalSettingsData As New GlobalSettingsData
@@ -191,7 +230,7 @@ Module DH_Helpdesk_Mail
                         'End If
 
                         If String.IsNullOrEmpty(objCustomer.POP3UserName) Or String.IsNullOrEmpty(objCustomer.POP3Password) Then
-                            LogError("Missing UserName OR Password")
+                            LogError("Missing UserName Or Password")
                             Exit For
                         ElseIf objCustomer.EMailDefaultCaseType_Id = 0 Then
                             LogError("Missing Default Case Type")
@@ -200,7 +239,7 @@ Module DH_Helpdesk_Mail
                         
                         If objCustomer.MailServerProtocol = 0 Then
                             ' Inget stöd för POP3 längre
-                            LogToFile("Pop3 is not supported.", iPop3DebugLevel)
+                            LogToFile("Pop3 Is Not supported.", iPop3DebugLevel)
                         Else
                             LogToFile("Login " & objCustomer.POP3UserName, iPop3DebugLevel)
                             IMAPclient.Login(objCustomer.POP3UserName, objCustomer.POP3Password)
@@ -311,26 +350,44 @@ Module DH_Helpdesk_Mail
                                 End If
                                 
                                 iMailID = 0
-                                Dim messageIds as List(Of String) = ExtractMessageIds(message)
-                                
-                                LogToFile(String.Format("MessageIds found: {0}", String.Join(",", messageIds)), objCustomer.POP3DebugLevel)
 
-                                ' Iterate over all UniqueMessageIds from the email to find matching case
-                                For Each messageId as String In messageIds
+                                If bEnableNewEmailProcessing
+                                    'New logic to find existing case by email
+                                    Dim messageIds as List(Of String) = ExtractMessageIds(message)
+                                    LogToFile(String.Format("MessageIds found: {0}", String.Join(",", messageIds)), objCustomer.POP3DebugLevel)
 
-                                    ' Find objCase
-                                    objCase = FindCaseByUniqueMessageId(messageId, objCustomer)
+                                    ' Iterate over all UniqueMessageIds from the email to find matching case
+                                    For Each messageId as String In messageIds
+                                        ' Find objCase
+                                        objCase = FindCaseByUniqueMessageId(messageId, objCustomer)
 
-                                    If (objCase IsNot Nothing) Then
+                                        If (objCase IsNot Nothing) Then
+                                            ' Kontrollera vilket mailID detta är ett svar på | Check which mailID this is an answer to
+                                            iMailID = objCaseData.getMailIDByMessageID(messageId)
+                                            LogToFile(Now() & "getMailIDByMessageID: " & iMailID.ToString(), objCustomer.POP3DebugLevel)
+                                            Exit For
+                                        End If
+                                    Next
+                                Else 
+                                    'old logic 
+                                    If message.InReplyTo.Count > 0 Then
+                                        Dim replyToId As String = message.InReplyTo(0).ToString
+                                        LogToFile(Now() & ", Reply From: " & replyToId, iPop3DebugLevel)
                                         
-                                        ' Kontrollera vilket mailID detta är ett svar på | Check which mailID this is an answer to
-                                        iMailID = objCaseData.getMailIDByMessageID(messageId)
-                                        LogToFile(Now() & "getMailIDByMessageID: " & iMailID.ToString(), objCustomer.POP3DebugLevel)
-                                        Exit For
+                                        LogToFile(Now() & ", getCaseByMessageID. InReplyTo: " & replyToId, iPop3DebugLevel)
+                                        objCase = objCaseData.getCaseByMessageID(replyToId)
 
+                                        If objCase Is Nothing And objCustomer.ModuleOrder = 1 Then
+                                            LogToFile(Now() & ", getCaseByOrderMessageID. InReplyTo: " & replyToId, iPop3DebugLevel)
+                                            objCase = objCaseData.getCaseByOrderMessageID(replyToId)
+                                        End If
+
+                                        ' Kontrollera vilket mailID detta ar ett svar pa
+                                        iMailID = objCaseData.getMailIDByMessageID(replyToId)
+                                    Else
+                                        iMailID = 0
                                     End If
-                                    
-                                Next
+                                End If
                                 
                                 If objCase Is Nothing Then
                                     ' Kontrollera om det är svar på ett befintligt ärende | Check if there is an answer to an existing case
@@ -834,7 +891,7 @@ Module DH_Helpdesk_Mail
                                     objMailTicket.Save(objCase.Id, iLog_Id, "bcc", message.Bcc.ToString(), messageId)
                                 End If
 
-                                If objCustomer.MailServerProtocol = 0 Then
+                                 If objCustomer.MailServerProtocol = 0 Then
                                     ' Inget stöd för POP3 längre
                                 Else
                                     If Not String.IsNullOrEmpty(objCustomer.EMailFolderArchive) Then
@@ -1131,29 +1188,31 @@ Module DH_Helpdesk_Mail
     End Function
 
     Private Sub openLogFile()
-        Dim sFileName As String
-        Dim sTemp As String
+
+        Dim sLogFolderPath as String
 
         If gsLogPath <> "" Then
-            sFileName = gsLogPath & "\DH_Helpdesk_Mail_" & DatePart(DateInterval.Year, Now())
+            sLogFolderPath = gsLogPath 
         Else
-            sFileName = Environment.CurrentDirectory & "\log\DH_Helpdesk_Mail_" & DatePart(DateInterval.Year, Now())
+            sLogFolderPath = Path.Combine(Environment.CurrentDirectory, "log")
+        End If
+        
+        If Not Directory.Exists(sLogFolderPath) Then 
+            Directory.CreateDirectory(sLogFolderPath)
         End If
 
-        sTemp = DatePart(DateInterval.Month, Now())
-        sTemp = sTemp.PadLeft(2, "0")
-        sFileName = sFileName & sTemp
-
-        sTemp = DatePart(DateInterval.Day, Now())
-        sTemp = sTemp.PadLeft(2, "0")
-        sFileName = sFileName & sTemp & ".log"
-
-        objLogFile = New StreamWriter(sFileName, True)
+        Dim sFileName = "DH_Helpdesk_Mail_" & DatePart(DateInterval.Year, Now()) & 
+                        DatePart(DateInterval.Month, Now()).ToString().PadLeft(2, "0") & 
+                        DatePart(DateInterval.Day, Now()).ToString().PadLeft(2, "0") &
+                        ".log"
+        Dim sFilePath = Path.Combine(sLogFolderPath, sFileName)
+        objLogFile = New StreamWriter(sFilePath, True)
 
     End Sub
-
     Private Sub closeLogFile()
-        objLogFile.Close()
+        If Not objLogFile Is Nothing Then
+            objLogFile.Close()
+        End If
     End Sub
 
     Private Function createZipFile(ByVal sSourceDir As String, ByVal sFileName As String) As String

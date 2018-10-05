@@ -10,9 +10,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Condition
 	{
 		public ConditionEvaluator()
 		{
-
 		}
-
 
 		public bool EvaluateCondition(string value, ConditionOperator conditionOperator, string conditionValues)
 		{

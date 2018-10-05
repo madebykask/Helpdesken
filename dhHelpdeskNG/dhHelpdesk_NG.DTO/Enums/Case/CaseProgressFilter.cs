@@ -19,6 +19,8 @@
         public const string CasesWithWatchDate = "7";
 
         public const string FollowUp = "8";
+
+        public const string FeedBack = "9";
     }
 
     public enum CaseProgressFilterEnum

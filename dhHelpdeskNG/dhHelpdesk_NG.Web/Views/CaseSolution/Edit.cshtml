@@ -34,7 +34,10 @@
 
                 @*<li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.CaseSolution.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>*@
                 <li><a class="btn save" id="SaveCaseSolution">@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)</a></li>
-                <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete", new { id = @Model.CaseSolution.Id, pageId = backPageId }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" }) </li>
+                <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), 
+                   "delete", new { id = @Model.CaseSolution.Id, pageId = backPageId }, 
+                   new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" }) 
+                </li>
                 
 
                 <li><a class="btn save" id="CopyCaseSolution">@Translation.Get("Kopiera", Enums.TranslationSource.TextTranslation)</a></li>
