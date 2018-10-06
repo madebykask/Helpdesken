@@ -8,6 +8,7 @@ using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain.Cases;
+using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.Cache;
@@ -33,7 +34,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ICustomerService _customerService;
         private readonly ILanguageService _languageService;
-        private readonly IHelpdeskCache _cache;
+        private readonly ITranslateCacheService _cacheService;
         private readonly ISettingService _settingService;
         private readonly ICaseSectionService _caseSectionService;
         private readonly IComputerService _computerService;
@@ -43,7 +44,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             ICustomerService customerService,
             ILanguageService languageService,
             IMasterDataService masterDataService,
-            IHelpdeskCache cache,
+            ITranslateCacheService cacheService,
             ICaseSectionService caseSectionService,
             ISettingService settingService,
             IComputerService  computerService)
@@ -53,7 +54,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._caseFieldSettingService = caseFieldSettingService;
             this._customerService = customerService;
             this._languageService = languageService;
-            _cache = cache;
+            _cacheService = cacheService;
             _settingService = settingService;
             _caseSectionService = caseSectionService;
         }
@@ -98,7 +99,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             _customerService.SaveCaseFieldSettingsForCustomer(customerId, languageId, vmodel.CaseFieldSettingWithLangauges, CaseFieldSettings, out errors);
             _caseSectionService.SaveCaseSections(languageId, vmodel.CaseSections, customerId);
-            _cache.ClearCaseTranslations(customerId);
+            _cacheService.ClearCaseTranslations(customerId);
 
             if (errors.Count == 0)
                 return this.RedirectToAction("edit", "customercasefieldsettings", new { customerId = customerId, languageId = languageId });

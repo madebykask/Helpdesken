@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Services.Services.CaseStatistic;
 using DH.Helpdesk.Services.Services.Concrete;
@@ -17,6 +18,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
         protected override void Load(ContainerBuilder builder)
         {
             //services
+            builder.RegisterType<TranslateCacheService>().As<ITranslateCacheService>();
             builder.RegisterType<UserService>().As<IUserService>();
             builder.RegisterType<HolidayService>().As<IHolidayService>();
             builder.RegisterType<DepartmentService>().As<IDepartmentService>();

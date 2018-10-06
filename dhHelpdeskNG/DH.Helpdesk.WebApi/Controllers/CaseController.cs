@@ -9,10 +9,12 @@ using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Models.Case.Field;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Config.Authentication;
@@ -34,11 +36,13 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IWorkingGroupService _workingGroupService;
         private readonly ISupplierService _supplierService;
         private readonly ISettingService _customerSettingsService;
+        private readonly ITranslateCacheService _translateCacheService;
 
         public CaseController(ICaseService caseService, ICaseFieldSettingService caseFieldSettingService,
             IMailTemplateService mailTemplateService, IUserService userSerivice, IComputerService computerService,
             ICustomerUserService customerUserService, IUserService userService, IWorkingGroupService workingGroupService,
-            ISupplierService supplierService, ISettingService customerSettingsService)
+            ISupplierService supplierService, ISettingService customerSettingsService,
+            ITranslateCacheService translateCacheService)
         {
             _caseService = caseService;
             _caseFieldSettingService = caseFieldSettingService;
@@ -49,6 +53,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _workingGroupService = workingGroupService;
             _supplierService = supplierService;
             _customerSettingsService = customerSettingsService;
+            _translateCacheService = translateCacheService;
         }
 
         [HttpGet]
@@ -472,8 +477,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(),
                     Value = currentCase.InventoryNumber,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.InventoryNumber,
-                        languageId, input.Cid, caseFieldTranslations, "PC Nummer"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.InventoryNumber, languageId, input.Cid, caseFieldTranslations, "PC Nummer"),
                     Section = CaseSectionType.Regarding.ToString(),
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.InventoryNumber, caseFieldSettings)
                 };
@@ -487,8 +491,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(),
                     Value = currentCase.InventoryType,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.ComputerType_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Datortyp beskrivning"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.ComputerType_Id, languageId, input.Cid, caseFieldTranslations, "Datortyp beskrivning"),
                     Section = CaseSectionType.Regarding.ToString(),
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.ComputerType_Id, caseFieldSettings)
                 };
@@ -502,8 +505,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(),
                     Value = currentCase.InventoryLocation,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.InventoryLocation,
-                        languageId, input.Cid, caseFieldTranslations, "Placering"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.InventoryLocation, languageId, input.Cid, caseFieldTranslations, "Placering"),
                     Section = CaseSectionType.Regarding.ToString(),
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.InventoryLocation, caseFieldSettings)
                 };
@@ -1232,28 +1234,33 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         private string GetFieldLabel(GlobalEnums.TranslationCaseFields field, int languageId, int customerId, 
-            IList<CaseFieldSettingsForTranslation> caseFieldSettingsForTranslations, string defaultCaption = "")
+                                    IList<CaseFieldSettingsForTranslation> caseFieldSettingsForTranslations, 
+                                    string defaultCaption = "")
         {
             var caption = defaultCaption;
             var fieldName = field.ToString();
 
             var settingEx = caseFieldSettingsForTranslations.FirstOrDefault(x => x.Name.ToLower() == fieldName.Replace("tblLog_", "tblLog.").ToLower() && x.Language_Id == languageId);
-            if (settingEx != null && !string.IsNullOrWhiteSpace(settingEx.Label))
-                caption = settingEx.Label;
-            else
+            if (!string.IsNullOrWhiteSpace(settingEx?.Label))
             {
-                //var translationText = Cache.GetTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == instanceWord.ToLower());
-                //if (translationText != null)
-                //{
-                //    var trans = translationText.TextTranslations.FirstOrDefault(x => x.Language_Id == languageId);
-                //    translateByText = (trans != null ? trans.TextTranslated : string.Empty);
-                //    if (translateByText != string.Empty)
-                //        translate = translateByText;
-                //}
+                caption = settingEx.Label;
+            }
+            else 
+            {
+                var translateByText = string.Empty;
+                //var instanceWord = Translation.GetInstanceWord(translate); // todo: check if required - see Translation.cs\CaseTranslation
+                //if (!string.IsNullOrEmpty(instanceWord))
+                var translation = _translateCacheService.GetTextTranslations().FirstOrDefault(x => string.Compare(x.TextToTranslate, caption, StringComparison.OrdinalIgnoreCase) == 0);
+                if (translation != null)
+                {
+                    var trans = translation.TextTranslations.FirstOrDefault(x => x.Language_Id == languageId);
+                    translateByText = trans?.TextTranslated;
+                    if (!string.IsNullOrEmpty(translateByText))
+                        caption = translateByText;
+                }
 
-                //if (translateByText == string.Empty)
-                //    translate = translate.GetDefaultValue(languageId);
-
+                if (string.IsNullOrEmpty(translateByText))
+                    caption = caption.GetDefaultValue(languageId);
             }
 
             return caption;

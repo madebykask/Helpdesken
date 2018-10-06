@@ -67,8 +67,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<ICacheService>()
                 .To<WebCacheService>();
 
-            this.Bind<IHelpdeskCache>()
-                .To<HelpdeskCache>();
+            this.Bind<ITranslateCacheService>()
+                .To<TranslateCacheService>();
 
             this.Bind<IModulesInfoFactory>().To<ModulesInfoFactory>().InSingletonScope();
 

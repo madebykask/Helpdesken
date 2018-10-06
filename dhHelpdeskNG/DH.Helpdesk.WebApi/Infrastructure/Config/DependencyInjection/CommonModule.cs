@@ -47,7 +47,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
             //    .SingleInstance();
 
             builder.RegisterType<UserPermissionsChecker>().As<IUserPermissionsChecker>();
-            builder.RegisterType<ApplicationConfiguration>().As<IApplicationConfiguration>().InstancePerRequest();
+            builder.RegisterType<ApplicationConfiguration>().As<IApplicationConfiguration>().SingleInstance();
             
 
             builder.RegisterType<FilesStorage>()

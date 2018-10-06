@@ -1,18 +1,36 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web;
-using DH.Helpdesk.Common;
+
 using DH.Helpdesk.Services.Services.Cache;
 
 namespace DH.Helpdesk.WebApi.Infrastructure.Cache
 {
 	public class WebCacheService : ICacheService
 	{
+	    private readonly int _timeOutInMinutes; 
+
+	    private bool IsCacheEnabled => true; // is it required?
+
+        #region ctor()
+
+	    public WebCacheService()
+	    {
+	        _timeOutInMinutes = 30; //TODO: Move default time to config
+        }
+
+        public WebCacheService(int timeOutInMinutes)
+	    {
+	        _timeOutInMinutes = timeOutInMinutes;
+	    }
+
+	    #endregion
 
 		public T Get<T>(string cacheKey, Func<T> getItemCallback, TimeSpan slidingExpiration) where T : class
 		{
 			if (!IsCacheEnabled)
 				return getItemCallback();
+
 		    if (!(HttpRuntime.Cache.Get(cacheKey) is T item))
 			{
 				item = getItemCallback();
@@ -49,7 +67,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Cache
 
 		public T Get<T>(string cacheKey, Func<T> getItemCallback) where T : class
 		{
-			return Get(cacheKey, getItemCallback, TimeSpan.FromMinutes(30)); //TODO: Move default time to config
+			return Get(cacheKey, getItemCallback, TimeSpan.FromMinutes(_timeOutInMinutes)); 
 		}
 
 		public void Delete(string cacheKey)
@@ -58,7 +76,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Cache
 		}
 
 
-		private bool IsCacheEnabled => true;
+		
 	}
 
 }

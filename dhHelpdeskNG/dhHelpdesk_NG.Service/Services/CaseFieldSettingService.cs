@@ -122,8 +122,7 @@ namespace DH.Helpdesk.Services.Services
 
         public async Task<IList<CaseFieldSettingsForTranslation>> GetCustomerCaseTranslationsAsync(int customerId)
         {
-            return await _caseFieldSettingLanguageRepository.GetCustomerCaseFieldSettingsForTranslation(customerId)
-                .AsQueryable().ToListAsync();
+            return await _caseFieldSettingLanguageRepository.GetCustomerCaseFieldSettingsForTranslation(customerId).AsQueryable().ToListAsync();
         }
 
         public IList<ListCases> ListToShowOnCaseSummaryPage(int? customerId, int? languageId, int? userGroupId)
