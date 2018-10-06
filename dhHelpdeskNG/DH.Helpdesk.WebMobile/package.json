@@ -21,14 +21,14 @@
         "@angular/platform-browser-dynamic": "^6.1.4",
         "@angular/platform-server": "^6.1.4",
         "@angular/router": "^6.1.4",
-        "@mobiscroll/angular": "https://npm.mobiscroll.com/@mobiscroll/angular-trial/-/angular-trial-4.3.2.tgz",
+        "@mobiscroll/angular": "https://npm.mobiscroll.com/@mobiscroll/angular-trial/-/angular-trial-4.4.0.tgz",
         "@ngx-translate/core": "^10.0.2",
         "@ngx-translate/http-loader": "^3.0.1",
         "core-js": "^2.5.7",
         "moment": "^2.22.2",
         "ngx-moment": "^3.1.0",
         "rxjs": "^6.2.2",
-        "rxjs-compat": "^6.3.2",
+        "rxjs-compat": "^6.3.3",
         "zone.js": "^0.8.26"
     },
     "devDependencies": {
