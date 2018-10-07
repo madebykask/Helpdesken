@@ -1,21 +1,29 @@
 <mbsc-form>
-    <div class="mbsc-form-group">
-        <form [formGroup]="filtersForm" novalidate>
-            <div class="mbsc-form-group-title">Free Text Search</div>
-            <mbsc-input formControlName="freeSearch" placeholder="Search" icon="pencil" icon-align="right"></mbsc-input>
-        </form>
-    </div>
+        <div class="mbsc-form-group">
+                <form [formGroup]="filtersForm" novalidate>
+                        <div class="mbsc-form-group-title">Free Text Search</div>
+                        <div class="mbsc-grid mbsc-grid-sm">
+                                <div class="mbsc-row">
+                                        <div class="mbsc-col">
+                                                <mbsc-input formControlName="freeSearch"  placeholder="Search"></mbsc-input>
+                                        </div>
+                                        <div class="mbsc-col-sm-auto">
+                                                <mbsc-button icon="material-search" [hidden]="isLoading" (click)="applyFilterAndSearch()"></mbsc-button>
+                                                <mbsc-button flat block icon="loop2" [hidden]="!isLoading"></mbsc-button>                                
+                                        </div>
+                                </div>
+                        </div>
+                </form>
+        </div>
 </mbsc-form>
-<span class="md-btn-icon mbsc-ic mbsc-ic-loop2" [hidden]="!loading"></span><!-- TODO: change to more handsome loader -->  
-<mbsc-listview [options]="listviewSettings" [hidden]="loading" (onItemTap)="onItemTap($event)">
-        <mbsc-listview-item *ngFor="let case of cases" >
-                #{{case.columns | getByKey: 'CaseNumber'}}
-                <div>{{case.columns | getByKey: 'RegTime'}}</div> <!-- TODO: use ISO date instead of string and format -->   
-        </mbsc-listview-item>
-</mbsc-listview>
-<div class="mbsc-form-group mbsc-btn-group-block">
-        <mbsc-button color="primary" (click)="search()" [disabled]="loading">
-                <span class="md-btn-icon mbsc-ic mbsc-ic-loop2" [hidden]="!loading"></span><!-- TODO: change to more handsome loader --> 
-                <span class="md-btn-text" [hidden]="loading">Search</span>
-        </mbsc-button>
+<div class="stickToBottom">
+        <mbsc-listview [options]="listviewSettings" [hidden]="isLoading" (onItemTap)="onItemTap($event)" (touchmove)="checkLoad()">
+                <mbsc-listview-item *ngFor="let case of cases" >
+                        #{{case.columns | getByKey: 'CaseNumber'}}
+                        <div>{{case.columns | getByKey: 'RegTime'}}</div> <!-- TODO: use ISO date instead of string and format -->   
+                </mbsc-listview-item>
+        </mbsc-listview>
+        <mbsc-form #loading class="mbsc-padding md-load-btn md-btn-isLoading" style="display: block">
+                <mbsc-button flat block icon="loop2" [hidden]="!isLoading"></mbsc-button>
+        </mbsc-form>
 </div>

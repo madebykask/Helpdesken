@@ -12,7 +12,6 @@ import { map } from 'rxjs/operators';
 export class HeaderComponent implements OnInit {
 
   hamburgerSettings: any = {
-    theme: 'auto',
     type: 'hamburger'
   };
 

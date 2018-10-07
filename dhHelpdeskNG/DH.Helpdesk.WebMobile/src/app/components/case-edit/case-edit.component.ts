@@ -119,7 +119,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
 
     isSectionOpen(type: CaseSectionType) {
         if (this.caseSections == null) return null
-        return this.caseSections.find(s => s.type == type).isEditCollapsed ? null : "";
+        return this.caseSections.find(s => s.type == type).isEditCollapsed ? null : true;
     }
 
     private getCaseOptionsFilter(data: CaseEditInputModel) {

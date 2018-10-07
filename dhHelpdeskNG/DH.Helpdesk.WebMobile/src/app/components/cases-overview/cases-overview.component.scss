@@ -1,0 +1,30 @@
+mbsc-button {
+    height: 100%;
+    ::ng-deep button {
+        &.mbsc-btn {
+            height: 100%;
+            margin: 0;
+        }
+    }
+}
+
+div {
+    &.mbsc-col-sm-auto {
+        padding-left: 0;
+    }
+}
+
+/* .stickToBottom {
+    overflow-y: auto;
+    min-height: 150px;
+    max-height: 500px;
+} */
+
+mbsc-form {
+    .mbsc-form-group-title {
+        border-bottom: 0;
+    }
+    .mbsc-form-group {
+        margin-top: 0;
+    }
+}

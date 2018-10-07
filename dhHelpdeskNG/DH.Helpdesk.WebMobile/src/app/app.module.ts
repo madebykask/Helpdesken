@@ -35,9 +35,9 @@ import { RequireAuthDirective } from './helpers/directives/require-auth.directiv
      GetByKeyPipe,
      RequireAuthDirective,
     ],
-  imports: [  
+  imports: [ 
+    MbscModule,  
     BrowserModule,    
-    MbscModule,    
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

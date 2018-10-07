@@ -1,5 +1,6 @@
 import {TranslateService} from '@ngx-translate/core';
 import { Component } from '@angular/core';
+import { mobiscroll } from '@mobiscroll/angular';
 
 @Component({
   selector: 'app-root',
@@ -8,9 +9,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   pageSettings = {
-    theme: 'auto'
   };
 
-  constructor() {    
+  constructor() { 
+    mobiscroll.settings = { theme: 'ios', lang: 'en' };   
   }
 }

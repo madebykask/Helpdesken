@@ -16,4 +16,54 @@
     font-size: .75em;
     color: #6d6d6d;
 } */
+@keyframes md-rotating {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
 
+@-webkit-keyframes md-rotating {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+.md-load-btn {
+    display: none;
+    min-height: 0!important;
+}
+
+.md-load-btn .mbsc-ic-loop2 {
+    font-size: 22px;
+    display: none;
+}
+
+.md-load-btn .mbsc-ic-loop2:before {
+    display: inline-block;
+    -webkit-animation: md-rotating .6s linear infinite;
+    animation: md-rotating .6s linear infinite;
+}
+
+.md-btn-loading {
+    display: block;
+}
+
+.md-load-btn.md-btn-loading .mbsc-ic-loop2 {
+    display: inline-block;
+}
+
+.footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+/*     background-color: red;
+    color: white; */
+    text-align: center;
+}
