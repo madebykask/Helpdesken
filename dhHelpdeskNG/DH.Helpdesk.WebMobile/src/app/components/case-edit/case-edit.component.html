@@ -1,3 +1,6 @@
+<mbsc-form class="mbsc-padding md-load-btn md-btn-isLoading">
+    <mbsc-button flat block icon="loop2" [hidden]="isLoaded"></mbsc-button>
+</mbsc-form>
 <mbsc-form *ngIf="isLoaded"> <!-- TODO: add loader -->
     <mbsc-tab-nav [options]="tabsMenuSettings">
             <mbsc-nav-item>Case {{caseData.caseNumber}}</mbsc-nav-item>

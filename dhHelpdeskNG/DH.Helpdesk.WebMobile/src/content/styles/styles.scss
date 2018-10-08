@@ -35,13 +35,11 @@
 }
 
 .md-load-btn {
-    display: none;
     min-height: 0!important;
 }
 
 .md-load-btn .mbsc-ic-loop2 {
     font-size: 22px;
-    display: none;
 }
 
 .md-load-btn .mbsc-ic-loop2:before {
@@ -67,3 +65,13 @@
     color: white; */
     text-align: center;
 }
+
+.stickyTop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #efeff4;
+    z-index: 1000;
+}
+

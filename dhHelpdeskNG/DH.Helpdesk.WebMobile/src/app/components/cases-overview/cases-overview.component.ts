@@ -6,7 +6,7 @@ import { UserSettingsService } from '../../services/user';
 import { map, finalize, catchError } from 'rxjs/operators';
 import { PagingConstants } from '../../helpers/constants';
 import { Router } from '@angular/router';
-import { MbscForm } from '@mobiscroll/angular';
+import { MbscForm, MbscListview } from '@mobiscroll/angular';
 
 @Component({
   selector: 'app-cases-overview',
@@ -15,6 +15,7 @@ import { MbscForm } from '@mobiscroll/angular';
 })
 export class CasesOverviewComponent implements OnInit, OnDestroy {
   @ViewChild('loading') loadingElem: MbscForm; 
+  @ViewChild('listview') listView: MbscListview;
   private filter: CasesOverviewFilter;
   private scrollBindFunc: any;
   private timer: any;
@@ -81,6 +82,10 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     this.timer = timer;
   }
 
+  trackByFn(index, item: CaseOverviewItem) {
+    return item.id;
+  }
+
   private goToCase(caseId: number) {
     if(caseId <= 0) return;
 
@@ -118,7 +123,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   private caclucatePageSize(): number {
     const headerSize = 170;
-    const caseElemSize = 70;
+    const caseElemSize = 86;
     const windowHeight = window.innerHeight;
     const defaultPageSize = 2;
     let size = ((windowHeight - headerSize) / caseElemSize) + 1 || defaultPageSize;

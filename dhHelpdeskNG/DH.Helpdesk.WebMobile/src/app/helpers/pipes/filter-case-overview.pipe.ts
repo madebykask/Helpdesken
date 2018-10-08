@@ -12,10 +12,11 @@ import { CaseOverviewColumn } from '../../models';
 @Pipe({name: 'getByKey'})
 export class GetByKeyPipe implements PipeTransform {
   transform(cols: CaseOverviewColumn[], key: string ): string {
-    if (key){
+    const defaultValue = null;
+    if (key) {
        var items = cols.filter(el => el.key === key);
-       return items && items.length ? items[0].stringValue : null;
+       return items && items.length ? items[0].stringValue : defaultValue;
     }    
-    return null;
+    return defaultValue;
   }
 }
