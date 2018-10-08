@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<!-- testing branching with build server, again -->
+<!-- testing branching with build server, again, again -->
 <log4net>
   <appender name="RollingLogFileAppender" type="log4net.Appender.RollingFileAppender">
     <file value="../Logs/Logs.log" />
