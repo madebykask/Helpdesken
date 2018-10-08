@@ -1,10 +1,9 @@
 export const environment = {
-    production: true,
-    "output-path": "wwwroot/dhdev",
+    production: true
   };
   
   export const config = {
-    apiUrl: 'http://localhost:8049',
+    apiUrl: 'http://dhutvas3.datahalland.se:8049',
     clientId: 'hd',
     enableLog: false,
   }

@@ -36,9 +36,9 @@ export class CaseService extends HttpApiServiceBase {
 
         let $regions = this._caseOrganizationService.getRegions();
         let $departments = fieldExists(filter.RegionId) ? this._caseOrganizationService.getDepartments(filter.RegionId) : $empty();
-        let $oUs = fieldExists(filter.DepartmentId) ? this._caseOrganizationService.getOUs(filter.DepartmentId): $empty();
+        let $oUs = fieldExists(filter.DepartmentId) && filter.DepartmentId != null ? this._caseOrganizationService.getOUs(filter.DepartmentId): $empty();
         let $isAboutDepartments =  fieldExists(filter.IsAboutRegionId) ? this._caseOrganizationService.getDepartments(filter.IsAboutRegionId) : $empty();
-        let $isAboutOUs = fieldExists(filter.IsAboutDepartmentId) ? this._caseOrganizationService.getOUs(filter.IsAboutDepartmentId) : $empty();
+        let $isAboutOUs = fieldExists(filter.IsAboutDepartmentId) && filter.IsAboutDepartmentId != null ? this._caseOrganizationService.getOUs(filter.IsAboutDepartmentId) : $empty();
         let $caseTypes = fieldExists(filter.CaseTypes) ? this._caseOrganizationService.getCaseTypes() : $empty();
         let $productAreas = fieldExists(filter.ProductAreas) ? this._caseOrganizationService.getProductAreas(filter.CaseTypeId, filter.ProductAreaId) : $empty();
         let $categories = fieldExists(filter.Categories) ? this._caseOrganizationService.getCategories() : $empty();

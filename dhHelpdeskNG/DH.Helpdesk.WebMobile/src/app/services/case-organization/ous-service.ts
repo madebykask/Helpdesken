@@ -14,7 +14,7 @@ export class OUsService extends HttpApiServiceBase {
             super(http, localStorageService);
     }
 
-    getOUsByDepartment(departmentId?: number) {
+    getOUsByDepartment(departmentId: number) {
         return this.getJson(this.buildResourseUrl('/api/organizationalunits/get', { departmentId: departmentId }))
         .pipe(
             map((jsItems: any) => {
