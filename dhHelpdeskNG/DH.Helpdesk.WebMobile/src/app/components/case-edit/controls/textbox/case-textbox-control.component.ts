@@ -10,7 +10,7 @@ import { mobiscroll } from "@mobiscroll/angular";
   })
   export class CaseTextboxComponent extends BaseControl implements OnChanges, OnInit, OnDestroy {
     @Input() field: BaseCaseField<string>;
-    private options: any = {
+    options: any = {
       disabled: true,
       readonly: true
     }

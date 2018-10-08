@@ -11,8 +11,8 @@ import { MbscSelectOptions } from "@mobiscroll/angular";
   export class CaseDropdownComponent extends BaseControl implements OnInit, OnDestroy {
     @Input() field: BaseCaseField<number>;
     @Input() dataSource: OptionItem[] = [];
-    private text: string = "";
-    private options: MbscSelectOptions = {
+    text: string = "";
+    options: MbscSelectOptions = {
       readOnly: true,
       disabled: true
     }

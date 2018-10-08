@@ -9,7 +9,7 @@ import { BaseControl } from "../base-control";
   })
   export class CaseTextareaComponent extends BaseControl implements OnChanges, OnInit, OnDestroy {
     @Input() field: BaseCaseField<string>;
-    private options: any = {
+    options: any = {
       disabled: true,
       readonly: true
     }

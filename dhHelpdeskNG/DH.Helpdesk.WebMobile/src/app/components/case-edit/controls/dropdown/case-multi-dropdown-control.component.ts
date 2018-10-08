@@ -11,8 +11,8 @@ import { BaseControl } from "../base-control";
   export class CaseMultiDropdownComponent extends BaseControl implements OnInit, OnDestroy {
     @Input() field: BaseCaseField<number>;
     @Input() dataSource: MultiLevelOptionItem[] = [];
-    private text: string = "";
-    private options: any = {
+    text: string = "";
+    options: any = {
       readOnly: true,
       disabled: true
     } 

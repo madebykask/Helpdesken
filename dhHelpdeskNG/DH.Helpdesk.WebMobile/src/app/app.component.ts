@@ -12,6 +12,6 @@ export class AppComponent {
   };
 
   constructor() { 
-    mobiscroll.settings = { theme: 'ios', lang: 'en' };   
+    mobiscroll.settings = { theme: 'ios', lang: 'en', labelStyle: 'stacked' };   
   }
 }

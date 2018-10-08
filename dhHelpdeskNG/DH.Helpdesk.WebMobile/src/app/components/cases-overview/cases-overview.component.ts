@@ -59,7 +59,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     this.search();
   }
 
-  onItemTap(event, inst) {
+  onItemTap(event) {
     this.goToCase(this.cases[event.index].id);
   }
 
