@@ -393,7 +393,7 @@ namespace DH.Helpdesk.Services.Services
 
             var stateSecondaryId =
                 caseStateSecondaryId > 0
-                    ? _stateSecondaryRepository.GetById(caseSolution.StateSecondaryId).StateSecondaryId
+                    ? _stateSecondaryRepository.GetById(caseStateSecondaryId).StateSecondaryId
                     : 0;
 
             if (caseSolutionId > 0)
