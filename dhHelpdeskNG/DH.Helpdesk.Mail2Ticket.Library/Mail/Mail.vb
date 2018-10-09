@@ -23,7 +23,7 @@ Public Class Mail
             Using factory As DatabaseFactory = New DatabaseFactory(connectionString)
 
                 Dim settingsRepository As New SettingRepository(New DatabaseFactory(connectionString), New CustomerSettingsToBusinessModelMapper())
-                setting = settingsRepository.Get(Function(x) x.Id = objCustomer.Id)
+                setting = settingsRepository.Get(Function(x) x.Customer_Id = objCustomer.Id)
 
             End Using
 
@@ -211,6 +211,8 @@ Public Class Mail
                 sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
             End If
 
+            ' Log sRet result!
+
         Catch ex As Exception
             If giLoglevel > 0 Then
                 objLogFile.WriteLine(Now() & ", ERROR sendMail " & ex.Message.ToString)
@@ -350,10 +352,10 @@ Public Class Mail
         End If
 
         Try
-            objLogFile.WriteLine("Send message. To: {0}, Message-ID: {1}", msg.To, sMessageId)            
             smtp.Send(msg)
         Catch ex As Exception
             sRet = ex.Message.ToString()
+            objLogFile.WriteLine("Smtp error: {0}, Send message. EmailTo: {1}, Message-ID: {2}", sRet, msg.To, sMessageId)            
         End Try
 
         Return sRet

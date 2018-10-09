@@ -82,6 +82,7 @@ Module DH_Helpdesk_Mail
             'Log cmd line args
             Try     
                 openLogFile()
+
                 LogToFile(String.Format(
                     "Cmd Line Args:"  & vbCrlf & vbTab &
                     "- WorkingMode: {0}" & vbCrlf & vbTab &
@@ -96,6 +97,7 @@ Module DH_Helpdesk_Mail
                 closeLogFile()
             End Try
 
+            'start processing
             readMailBox(sConnectionstring, workingMode)
 
         End If
@@ -912,21 +914,24 @@ Module DH_Helpdesk_Mail
                         Else
                             
                             LogToFile("Disconnecting", iPop3DebugLevel)
-
-                            IMAPclient.Disconnect()
-
-                            IMAPclient.Dispose()
-
-                            IMAPclient = Nothing
+                            
+                            If IMAPclient IsNot Nothing Then
+                                IMAPclient.Disconnect()
+                                IMAPclient.Dispose()
+                                IMAPclient = Nothing
+                            End If
+                            
                         End If
                     End Try
 
                 End If
 
-                If iPop3DebugLevel > 0 Then
-                    closeLogFile()
-                End If
+                closeLogFile()
             Next
+
+            ' need to close in case Exit For was called
+            closeLogFile()
+            
 
         Catch ex As Exception
             If Not objLogFile Is Nothing Then
@@ -1206,8 +1211,13 @@ Module DH_Helpdesk_Mail
 
     End Sub
     Private Sub closeLogFile()
-        If Not objLogFile Is Nothing Then
-            objLogFile.Close()
+        If objLogFile IsNot Nothing Then
+            Try
+                objLogFile.Close()
+            Catch ex As Exception
+            Finally
+                objLogFile = Nothing
+            End Try 
         End If
     End Sub
 
