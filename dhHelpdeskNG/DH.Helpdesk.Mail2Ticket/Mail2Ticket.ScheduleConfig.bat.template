@@ -1,2 +1,2 @@
 ﻿@echo off
-"#{ReleaseFolder}\#{FolderName}\DH.Helpdesk.Mail2Ticket.exe" #{WorkingMode}, Data Source=#{DatebaseServer}; Initial Catalog=#{DatabaseName}; User Id=#{DatabaseUsername}; Password=#{DatabasePassword};Network Library=dbmssocn,
+"#{InstallationRoot}\#{FolderName}\DH.Helpdesk.Mail2Ticket.exe" #{WorkingMode}, Data Source=#{DatabaseServer}; Initial Catalog=#{DatabaseName}; User Id=#{DatabaseUsername}; Password=#{DatabasePassword};Network Library=dbmssocn,
