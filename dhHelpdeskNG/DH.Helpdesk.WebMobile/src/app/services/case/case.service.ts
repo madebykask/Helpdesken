@@ -31,22 +31,22 @@ export class CaseService extends HttpApiServiceBase {
     }
 
     getCaseOptions(filter: CaseOptionsFilterModel) {
-        const $empty = () => empty().pipe(defaultIfEmpty(null));
+        const empty$ = () => empty().pipe(defaultIfEmpty(null));
         const fieldExists = (field: any) => field !== undefined;
 
-        let $regions = this._caseOrganizationService.getRegions();
-        let $departments = fieldExists(filter.RegionId) ? this._caseOrganizationService.getDepartments(filter.RegionId) : $empty();
-        let $oUs = fieldExists(filter.DepartmentId) && filter.DepartmentId != null ? this._caseOrganizationService.getOUs(filter.DepartmentId): $empty();
-        let $isAboutDepartments =  fieldExists(filter.IsAboutRegionId) ? this._caseOrganizationService.getDepartments(filter.IsAboutRegionId) : $empty();
-        let $isAboutOUs = fieldExists(filter.IsAboutDepartmentId) && filter.IsAboutDepartmentId != null ? this._caseOrganizationService.getOUs(filter.IsAboutDepartmentId) : $empty();
-        let $caseTypes = fieldExists(filter.CaseTypes) ? this._caseOrganizationService.getCaseTypes() : $empty();
-        let $productAreas = fieldExists(filter.ProductAreas) ? this._caseOrganizationService.getProductAreas(filter.CaseTypeId, filter.ProductAreaId) : $empty();
-        let $categories = fieldExists(filter.Categories) ? this._caseOrganizationService.getCategories() : $empty();
-        let $closingReasons = fieldExists(filter.ClosingReasons) ? this._caseOrganizationService.getClosingReasons() : $empty();
+        let regions$ = this._caseOrganizationService.getRegions();
+        let departments$ = fieldExists(filter.RegionId) ? this._caseOrganizationService.getDepartments(filter.RegionId) : empty$();
+        let oUs$ = fieldExists(filter.DepartmentId) && filter.DepartmentId != null ? this._caseOrganizationService.getOUs(filter.DepartmentId): empty$();
+        let isAboutDepartments$ =  fieldExists(filter.IsAboutRegionId) ? this._caseOrganizationService.getDepartments(filter.IsAboutRegionId) : empty$();
+        let isAboutOUs$ = fieldExists(filter.IsAboutDepartmentId) && filter.IsAboutDepartmentId != null ? this._caseOrganizationService.getOUs(filter.IsAboutDepartmentId) : empty$();
+        let caseTypes$ = fieldExists(filter.CaseTypes) ? this._caseOrganizationService.getCaseTypes() : empty$();
+        let productAreas$ = fieldExists(filter.ProductAreas) ? this._caseOrganizationService.getProductAreas(filter.CaseTypeId, filter.ProductAreaId) : empty$();
+        let categories$ = fieldExists(filter.Categories) ? this._caseOrganizationService.getCategories() : empty$();
+        let closingReasons$ = fieldExists(filter.ClosingReasons) ? this._caseOrganizationService.getClosingReasons() : empty$();
  
-        let $bundledOptions = this._batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
+        let bundledOptions$ = this._batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
 
-        return forkJoin($regions, $departments, $oUs, $isAboutDepartments, $isAboutOUs, $bundledOptions, $caseTypes, $productAreas, $categories, $closingReasons)
+        return forkJoin(regions$, departments$, oUs$, isAboutDepartments$, isAboutOUs$, bundledOptions$, caseTypes$, productAreas$, categories$, closingReasons$)
                     .pipe(
                         map(([regions, departments, oUs, isAboutDepartments, isAboutOUs, bundledOptions, caseTypes, productAreas, categories, closingReasons]) => {
                             let options = new CaseOptions();

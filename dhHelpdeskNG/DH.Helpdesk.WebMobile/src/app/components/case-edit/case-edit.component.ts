@@ -48,8 +48,8 @@ export class CaseEditComponent implements OnInit, OnDestroy {
 
     loadCaseData(): any {
         this.isLoaded = false;
-        let $caseSections = this.caseService.getCaseSections(); //TODO: error handling
-        let $caseData = this.caseService.getCaseData(this.caseId)
+        let caseSections$ = this.caseService.getCaseSections(); //TODO: error handling
+        let caseData$ = this.caseService.getCaseData(this.caseId)
             .pipe(
                 switchMap(data => { //TODO: Error handle
                     this.caseData = data;
@@ -66,7 +66,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
                     return forkJoin(op1, op2);
                 })
             )
-        this.subscriptions.push(forkJoin($caseSections, $caseData)
+        this.subscriptions.push(forkJoin(caseSections$, caseData$)
             .subscribe(([sectionData, [options, formgroup]]) => {
                 this.caseSections = sectionData;
                 this.dataSource = new OptionsDataSource(options);
