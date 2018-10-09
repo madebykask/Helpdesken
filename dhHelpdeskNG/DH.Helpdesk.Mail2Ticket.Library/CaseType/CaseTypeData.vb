@@ -28,6 +28,6 @@ Public Class CaseTypeData
         Catch ex As Exception
             Throw ex
         End Try
-    End Function
+    End Function 
 
 End Class
