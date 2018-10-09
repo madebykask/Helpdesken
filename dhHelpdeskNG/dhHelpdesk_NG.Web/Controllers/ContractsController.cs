@@ -20,6 +20,7 @@ using DH.Helpdesk.Web.Infrastructure.Mvc;
 using DH.Helpdesk.Services.BusinessLogic.Contracts;
 using DH.Helpdesk.Web.Components.Contracts;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
+using DH.Helpdesk.Services.Enums;
 using DH.Helpdesk.Services.Services.Grid;
 using DH.Helpdesk.Web.Infrastructure.ActionFilters;
 using DH.Helpdesk.Web.Infrastructure.Attributes;
@@ -182,11 +183,13 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentUser.Id,
                 GridSettingsService.CASE_CONTRACT_CASES_GRID,
                 caseFieldSettings);
+
             var gridSettings = _gridSettingsService.GetForCustomerUserGrid(
                 customerId,
                 SessionFacade.CurrentUser.UserGroupId,
                 SessionFacade.CurrentUser.Id,
                 GridSettingsService.CASE_CONTRACT_CASES_GRID);
+
             model.ContractCases = new JsonCaseIndexViewModel
             {
                 PageSettings = new PageSettingsModel
@@ -198,13 +201,11 @@ namespace DH.Helpdesk.Web.Controllers
                         new[] {"5", "10", "15"}),
                     messages = new Dictionary<string, string>()
                     {
-                        {"information", Translation.GetCoreTextTranslation("Information")},
-                        {
-                            "records_limited_msg",
-                            Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500.")
-                        },
+                        { "information", Translation.GetCoreTextTranslation("Information") },
+                        { "records_limited_msg", Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500.") },
                     }
                 },
+
                 // default values for search filter
                 CaseSearchFilterData = new CaseSearchFilterData
                 {
@@ -225,7 +226,7 @@ namespace DH.Helpdesk.Web.Controllers
             };
 
             //run search
-            var allContracts = SearchContracts(selectedFilter);
+            var contractsSearchResults = SearchContracts(selectedFilter);
          
             var settings = GetSettingsModel(customer.Id);
 
@@ -239,51 +240,53 @@ namespace DH.Helpdesk.Web.Controllers
 
             var showStatus = selectedFilter.State;
             
-            foreach (var con in allContracts)
+            foreach (var contract in contractsSearchResults)
             {
-                var isInNoticeOfRemoval = IsInNoticeOfRemoval(con.Finished, con.NoticeDate);
-                var isInFollowUp = IsInFollowUp(con.Finished, con.ContractStartDate, con.ContractEndDate, con.FollowUpInterval);
+                
+
+                var isInNoticeOfRemoval = IsInNoticeOfRemoval(contract.Finished, contract.NoticeDate);
+                var isInFollowUp = IsInFollowUp(contract.Finished, contract.ContractStartDate, contract.ContractEndDate, contract.FollowUpInterval);
 
                 if ((showStatus == ContractStatuses.All) ||
                     (showStatus != ContractStatuses.InNoticeOfRemoval && showStatus != ContractStatuses.ToFollowUp) ||
                     (showStatus == ContractStatuses.InNoticeOfRemoval && isInNoticeOfRemoval) ||
                     (showStatus == ContractStatuses.ToFollowUp && isInFollowUp))
                 {
-                    var latestLog = con.ContractLogs.Any(x => x.Case_Id.HasValue)
-                        ? con.ContractLogs.Where(x => x.Case_Id.HasValue).OrderByDescending(l => l.CreatedDate).FirstOrDefault()
+                    var latestLogCase = contract.Cases.Any(x => x.CaseId.HasValue)
+                        ? contract.Cases.Where(x => x.CaseId.HasValue).OrderByDescending(l => l.LogCreatedDate).FirstOrDefault()
                         : null;
 
-                    var caseNumbers = con.ContractLogs.Where(x => x.Case_Id.HasValue).Select(c => c.Case.CaseNumber)
-                        .ToList();
+                    var caseNumbers = contract.Cases.Where(x => x.CaseId.HasValue).Select(c => c.CaseNumber).ToList();
                     var hasMultipleCases = caseNumbers.Count > 1;
-                    var latestCase = latestLog?.Case;
 
                     model.Data.Add(new ContractsSearchRowModel
                     {
-                        ContractId = con.Id,
-                        ContractNumber = con.ContractNumber,
-                        ContractEndDate = con.ContractEndDate,
-                        ContractCase = latestCase != null ? new ContractCase
+                        ContractId = contract.Id,
+                        ContractNumber = contract.ContractNumber,
+                        ContractEndDate = contract.ContractEndDate,
+
+                        ContractCase = latestLogCase != null ? new ContractCase
                         {
-                            CaseId = latestCase.Id,
-                            CaseNumber = (int)latestCase.CaseNumber,
-                            CaseIcon = CasesMapper.GetCaseIcon(latestCase.FinishingDate, latestCase.ApprovedDate, latestCase.CaseType.RequireApproving),
+                            CaseId = (int)latestLogCase.CaseId.Value,
+                            CaseNumber = (int)latestLogCase.CaseNumber,
+                            CaseIcon = CasesMapper.GetCaseIcon(latestLogCase.CaseFinishingDate, latestLogCase.CaseApprovedDate, latestLogCase.CaseTypeRequireApproving),
                             HasMultiplyCases = hasMultipleCases,
                             CaseNumbers = caseNumbers.Select(c => c.ToString(CultureInfo.InvariantCulture)).ToList()
                         } : new ContractCase { CaseNumber = 0 },
-                        ContractStartDate = con.ContractStartDate,
-                        Finished = con.Finished,
-                        Running = con.Running,
-                        FollowUpInterval = con.FollowUpInterval,
-                        Info = con.Info,
-                        NoticeDate = con.NoticeDate,
-                        Supplier = con.Supplier,
-                        ContractCategory = con.ContractCategory,
-                        Department = con.Department,
-                        ResponsibleUser = con.ResponsibleUser,
-                        FollowUpResponsibleUser = con.FollowUpResponsibleUser,
+
+                        ContractStartDate = contract.ContractStartDate,
+                        Finished = contract.Finished,
+                        Running = contract.Running,
+                        FollowUpInterval = contract.FollowUpInterval,
+                        Info = contract.Info,
+                        NoticeDate = contract.NoticeDate,
                         IsInFollowUp = isInFollowUp,
-                        IsInNoticeOfRemoval = isInNoticeOfRemoval
+                        IsInNoticeOfRemoval = isInNoticeOfRemoval,
+                        Supplier = contract.Supplier,
+                        ContractCategory = contract.ContractCategory,
+                        Department = contract.Department,
+                        ResponsibleUser = contract.ResponsibleUser,
+                        FollowUpResponsibleUser = contract.FollowUpResponsibleUser
                     });
                 }
             }
@@ -296,74 +299,10 @@ namespace DH.Helpdesk.Web.Controllers
             return model;
         }
 
-        //todo: implement searching in db with filter instead of code
-        private IList<Contract> SearchContracts(ContractsSearchFilter filter)
+        private IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter)
         {
-            var customerId = filter.CustomerId;
-            var allContracts = _contractService.GetContractsNotFinished(customerId);
-            var selectedStatus = filter.State; 
-
-            if (filter.SelectedContractCategories.Any())
-                allContracts = allContracts.Where(t => filter.SelectedContractCategories.Contains(t.ContractCategory_Id)).ToList();
-
-            if (filter.SelectedDepartments.Any())
-                allContracts = allContracts.Where(t => filter.SelectedDepartments.Contains(t.Department_Id ?? 0)).ToList();
-
-            if (filter.SelectedResponsibles.Any())
-                allContracts = allContracts.Where(t => filter.SelectedResponsibles.Contains(t.ResponsibleUser_Id ?? 0)).ToList();
-
-            if (filter.SelectedSuppliers.Any())
-                allContracts = allContracts.Where(t => filter.SelectedSuppliers.Contains(t.Supplier_Id ?? 0)).ToList();
-
-            //filter by state 
-            if (selectedStatus == ContractStatuses.Closed) 
-            {
-                allContracts = allContracts.Where(t => t.Finished == 1).ToList();
-            }
-            else if (selectedStatus == ContractStatuses.Running) 
-            {
-                allContracts = allContracts.Where(t => t.Running == 1).ToList();
-            }
-            else if (selectedStatus != ContractStatuses.All)
-            {
-                allContracts = allContracts.Where(t => t.Finished == 0).ToList();
-            }
-
-            if (filter.StartDateFrom.HasValue)
-            {
-                allContracts = allContracts.Where(t => t.ContractStartDate >= filter.StartDateFrom.Value).ToList();
-            }
-
-            if (filter.StartDateTo.HasValue)
-            {
-                allContracts = allContracts.Where(t => t.ContractStartDate <= filter.StartDateTo.Value).ToList();
-            }
-
-            if (filter.EndDateFrom.HasValue)
-            {
-                allContracts = allContracts.Where(t => t.ContractEndDate >= filter.EndDateFrom.Value).ToList();
-            }
-
-            if (filter.EndDateTo.HasValue)
-            {
-                allContracts = allContracts.Where(t => t.ContractEndDate <= filter.EndDateTo.Value).ToList();
-            }
-
-            if (filter.NoticeDateFrom.HasValue)
-            {
-                allContracts = allContracts.Where(t => t.NoticeDate >= filter.NoticeDateFrom.Value).ToList();
-            }
-
-            if (filter.NoticeDateTo.HasValue)
-            {
-                allContracts = allContracts.Where(t => t.NoticeDate <= filter.NoticeDateTo.Value).ToList();
-            }
-
-            //search text
-            if (!string.IsNullOrEmpty(filter.SearchText)) //todo: sql injection
-                allContracts = allContracts.Where(t => t.ContractNumber.Contains(filter.SearchText)).ToList();
-
-            return allContracts;
+            var contracts  = _contractService.SearchContracts(filter);
+            return contracts;
         }
 
         //todo: refactor with a generic approach
@@ -387,7 +326,7 @@ namespace DH.Helpdesk.Web.Controllers
                             ? t.Supplier.Name : string.Empty).ToList();
 
                 case EnumContractFieldSettings.Department:
-                    return sort.IsAsc ? data.OrderBy(d => d.Department.DepartmentName).ToList() : data.OrderByDescending(d => d.Department.DepartmentName).ToList();
+                    return sort.IsAsc ? data.OrderBy(d => d.Department.Name).ToList() : data.OrderByDescending(d => d.Department.Name).ToList();
 
                 case EnumContractFieldSettings.ResponsibleUser:
                     return sort.IsAsc ? data.OrderBy(t => t.ResponsibleUser != null && t.ResponsibleUser.SurName != null
@@ -421,10 +360,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                 case EnumContractFieldSettings.ResponsibleFollowUpField:
                     //return sort.IsAsc ? data.OrderBy(d => d.FollowUpResponsibleUser).ToList() : data.OrderByDescending(d => d.FollowUpResponsibleUser).ToList();
-                    return sort.IsAsc ? data.OrderBy(t => t.FollowUpResponsibleUser != null && t.FollowUpResponsibleUser.SurName != null
-                            ? t.FollowUpResponsibleUser.SurName : string.Empty).ToList() :
-                        data.OrderByDescending(t => t.FollowUpResponsibleUser != null && t.FollowUpResponsibleUser.SurName != null
-                            ? t.FollowUpResponsibleUser.SurName : string.Empty).ToList();
+                    return sort.IsAsc
+                        ? data.OrderBy(t => t.FollowUpResponsibleUser?.SurName ?? string.Empty).ToList()
+                        : data.OrderByDescending(t => t.FollowUpResponsibleUser?.SurName ?? string.Empty).ToList();
             }
 
             return data;

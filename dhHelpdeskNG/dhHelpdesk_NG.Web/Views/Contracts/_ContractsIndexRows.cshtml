@@ -105,7 +105,7 @@
                 {
                     if (row.Department != null)
                     {
-                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@row.Department.DepartmentName</a></td>
+                        <td><a href="@Url.Action("edit", "Contracts", new {Id = row.ContractId})">@row.Department.Name</a></td>
                     }
                     else
                     {

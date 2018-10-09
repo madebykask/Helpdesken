@@ -15,14 +15,15 @@
             {
                 cls = srcModel.cls,
                 pageOptions = srcModel.pageOptions,
-				pageSizeList = pageSizeList,
-				sortOptions = srcModel.sortOptions,
+                pageSizeList = pageSizeList,
+                sortOptions = srcModel.sortOptions,
                 HasAvailableColumns = availableColCount > 0,
-                columnDefs = srcModel.columnDefs.Select(it => new JsonGridColumnDef() 
-                                    { cls = it.cls, 
-                                      displayName = Translation.Get(it.name, Enums.TranslationSource.CaseTranslation, customerId), 
-                                      field = it.name
-                                    }).ToList()
+                columnDefs = srcModel.columnDefs.Select(it => new JsonGridColumnDef()
+                {
+                    cls = it.cls,
+                    displayName = Translation.Get(it.name, Enums.TranslationSource.CaseTranslation, customerId),
+                    field = it.name
+                }).ToList()
             };
         }
 

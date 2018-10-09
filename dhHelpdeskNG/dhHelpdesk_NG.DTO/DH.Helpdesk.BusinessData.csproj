@@ -259,6 +259,7 @@
     <Compile Include="Models\CaseOverviewGridColumnSetting.cs" />
     <Compile Include="Models\Contract\ContractFileModel.cs" />
     <Compile Include="Models\Contract\ContractHistoryFull.cs" />
+    <Compile Include="Models\Contract\ContractSearchData.cs" />
     <Compile Include="Models\Contract\ContractsSearchFilter.cs" />
     <Compile Include="Models\Contract\ContractsSettingRowModel.cs" />
     <Compile Include="Models\Contract\ContractInputModel.cs" />
