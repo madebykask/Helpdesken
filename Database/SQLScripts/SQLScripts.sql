@@ -15,6 +15,12 @@ GO
 ALTER TABLE [dbo].tblCaseType CHECK CONSTRAINT [FK_tblCaseType_tblWorkingGroup]
 GO
 
+
+--tblSettings
+ALTER TABLE tblSettings
+ALTER COLUMN POP3UserName NVARCHAR(50) not null
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.39'
 --ROLLBACK --TMP
