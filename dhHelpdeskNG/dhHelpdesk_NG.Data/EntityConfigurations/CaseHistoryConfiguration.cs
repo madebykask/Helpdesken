@@ -37,6 +37,16 @@
                             .HasForeignKey(x => x.Department_Id)
                             .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.Region)
+                            .WithMany()
+                            .HasForeignKey(x => x.Region_Id)
+                            .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.OU)
+                            .WithMany()
+                            .HasForeignKey(x => x.OU_Id)
+                            .WillCascadeOnDelete(false);
+
             this.HasOptional(x => x.IsAbout_Department)
                             .WithMany()
                             .HasForeignKey(x => x.IsAbout_Department_Id)

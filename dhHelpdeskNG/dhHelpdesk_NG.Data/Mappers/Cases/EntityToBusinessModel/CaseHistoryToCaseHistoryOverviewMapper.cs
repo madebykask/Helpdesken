@@ -100,6 +100,7 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
                 ActionLeadTime = entity.ActionLeadTime,
                 ActionExternalTime = entity.ActionExternalTime,
                 CaseExtraFollowers = entity.CaseExtraFollowers,
+                CostCentre = entity.CostCentre,
 
                 Department = data.Department,
 
@@ -131,7 +132,11 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
 
                 IsAbout_Department = data.IsAbout_Department,
 
-                Emaillogs = data.EmailLogs
+                Emaillogs = data.EmailLogs,
+
+                Region = data.Region,
+
+                OU = data.OU
             };
         }
     }

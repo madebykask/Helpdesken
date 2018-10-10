@@ -5,6 +5,7 @@ using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.Problem.Output;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 using DH.Helpdesk.BusinessData.Models.Projects.Output;
+using DH.Helpdesk.BusinessData.Models;
 
 namespace DH.Helpdesk.Dal.MapperData.CaseHistory
 {
@@ -28,5 +29,7 @@ namespace DH.Helpdesk.Dal.MapperData.CaseHistory
         public WorkingGroupOverview WorkingGroup { get; set; }
         public DepartmentOverview IsAbout_Department { get; set; }
         public IList<EmailLogsOverview> EmailLogs { get; set; }
+        public RegionOverview Region { get; set; }
+        public OUOverview OU { get; set; }
     }
 }

@@ -2640,6 +2640,7 @@ namespace DH.Helpdesk.Services.Services
             h.Change_Id = c.Change_Id;
             h.ContactBeforeAction = c.ContactBeforeAction;
             h.Cost = c.Cost;
+            h.CostCentre = c.CostCentre;
             h.CreatedDate = DateTime.UtcNow;
             if (defaultUser != string.Empty)
             {

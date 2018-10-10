@@ -107,6 +107,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseHistory
         public int ActionLeadTime { get; set; }
         public int ActionExternalTime { get; set; }
         public string CaseExtraFollowers { get; set; }
+        public string CostCentre { get; set; }
 
         public CategoryOverview Category { get; set; }
         public DepartmentOverview Department { get; set; }
@@ -120,7 +121,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseHistory
         public UserBasicOvierview UserResponsible { get; set; }
         public PriorityOverview Priority { get; set; }
         public WorkingGroupOverview WorkingGroup { get; set; }
-
+        public RegionOverview Region { get; set; }
+        public OUOverview OU { get; set; }
         public StateSecondaryOverview StateSecondary { get; set; }
         public StatusOverview Status { get; set; }
         public DepartmentOverview IsAbout_Department { get; set; }

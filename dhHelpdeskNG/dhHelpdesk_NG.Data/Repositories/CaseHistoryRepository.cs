@@ -15,6 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+    using BusinessData.Models;
 
     public interface ICaseHistoryRepository : IRepository<CaseHistory>
     {
@@ -100,6 +101,18 @@ namespace DH.Helpdesk.Dal.Repositories
                     {
                         Id = caseHistory.Problem.Id,
                         Name = caseHistory.Problem.Name
+                    } : null,
+
+                    Region = caseHistory.Region_Id != null ? new RegionOverview()
+                    {
+                        Id = caseHistory.Region_Id,
+                        Name = caseHistory.Region.Name
+                    } : null,
+
+                    OU = caseHistory.OU_Id != null ? new OUOverview()
+                    {
+                        Id = caseHistory.OU_Id,
+                        Name = caseHistory.OU.Name
                     } : null,
 
                     Project = caseHistory.Project_Id != null ? new ProjectOverview()  

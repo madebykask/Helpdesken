@@ -108,6 +108,48 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
                     sb.Append("</tr>");
                 }
             }
+            // Region
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Region_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.Region_Id != prev.Region_Id)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Region_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    if (prev.Region != null)
+                        sb.Append(prev.Region.Name.RemoveHTMLTags());
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.Region != null)
+                        sb.Append(cur.Region.Name.RemoveHTMLTags());
+                    else
+                        sb.Append(ey);
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
+            // OU
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.OU_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.OU_Id != prev.OU_Id)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    if (prev.OU != null)
+                        sb.Append(prev.OU.Name.RemoveHTMLTags());
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.OU != null)
+                        sb.Append(cur.OU.Name.RemoveHTMLTags());
+                    else
+                        sb.Append(ey);
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
             // Department
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Department_Id.ToString()).ShowOnStartPage == 1)
             {
@@ -125,6 +167,36 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
                         sb.Append(cur.Department.DepartmentDescription(departmentFilterFormat).RemoveHTMLTags());
                     else
                         sb.Append(ey);
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
+            // CostCentre 
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CostCentre.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.CostCentre != prev.CostCentre)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.CostCentre.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(prev.CostCentre.RemoveHTMLTags());
+                    sb.Append(from);
+                    sb.Append(cur.CostCentre.RemoveHTMLTags());
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
+            // Placement 
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Place.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.Place != prev.Place)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Place.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(prev.Place.RemoveHTMLTags());
+                    sb.Append(from);
+                    sb.Append(cur.Place.RemoveHTMLTags());
                     sb.Append(tdCloseMarkup);
                     sb.Append("</tr>");
                 }

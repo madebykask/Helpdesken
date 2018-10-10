@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models
 {
-    public class RegionOverview
+    public class OUOverview
     {
         public int? Id { get; set; }
         public string Name { get; set; }

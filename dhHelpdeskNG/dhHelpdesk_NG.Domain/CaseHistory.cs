@@ -132,6 +132,8 @@ namespace DH.Helpdesk.Domain
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
         public virtual RegistrationSourceCustomer RegistrationSourceCustomer { get; set; }
         public virtual Department IsAbout_Department { get; set; }
+        public virtual Region Region { get; set; }
+        public virtual OU OU { get; set; }
     }
 }
 
