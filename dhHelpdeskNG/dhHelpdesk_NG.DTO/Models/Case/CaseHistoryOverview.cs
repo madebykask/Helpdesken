@@ -99,9 +99,12 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseHistory
         public int? RegistrationSourceCustomer_Id { get; set; }
         public string IsAbout_Persons_Name { get; set; }
         public string IsAbout_ReportedBy { get; set; }
+        public string IsAbout_Persons_EMail { get; set; }
         public string IsAbout_Persons_Phone { get; set; }
+        public string IsAbout_Persons_CellPhone { get; set; }
         public string IsAbout_UserCode { get; set; }
         public int? IsAbout_Department_Id { get; set; }
+        public int? IsAbout_Region_Id { get; set; }
         public string CreatedByApp { get; set; }
         public DateTime? LatestSLACountDate { get; set; }
         public int ActionLeadTime { get; set; }
@@ -126,6 +129,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseHistory
         public StateSecondaryOverview StateSecondary { get; set; }
         public StatusOverview Status { get; set; }
         public DepartmentOverview IsAbout_Department { get; set; }
+        public RegionOverview IsAbout_Region { get; set; }
 
         public IList<EmailLogsOverview> Emaillogs { get; set; }
     }

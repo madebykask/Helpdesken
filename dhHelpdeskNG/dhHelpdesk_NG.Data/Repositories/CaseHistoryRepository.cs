@@ -168,7 +168,13 @@ namespace DH.Helpdesk.Dal.Repositories
                         SearchKey = caseHistory.IsAbout_Department.SearchKey,
                         CountryName = caseHistory.IsAbout_Department.Country != null ? caseHistory.IsAbout_Department.Country.Name : null
                     } : null,
-                    
+
+                    IsAbout_Region = caseHistory.IsAbout_Region_Id != null ? new RegionOverview
+                    {
+                        Id = caseHistory.IsAbout_Region.Id,
+                        Name = caseHistory.IsAbout_Region.Name,
+                    } : null,
+
                     EmailLogs = emailLogs.Where(t => t.Id > 0).Select(t => new EmailLogsOverview
                     {
                         Id = t.Id,

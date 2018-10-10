@@ -42,6 +42,12 @@
                             .HasForeignKey(x => x.Region_Id)
                             .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.IsAbout_Region)
+                            .WithMany()
+                            .HasForeignKey(x => x.IsAbout_Region_Id)
+                            .WillCascadeOnDelete(false);
+
+
             this.HasOptional(x => x.OU)
                             .WithMany()
                             .HasForeignKey(x => x.OU_Id)
@@ -166,7 +172,10 @@
             this.Property(x => x.ActionLeadTime).IsRequired();
             this.Property(x => x.ActionExternalTime).IsRequired();
             this.Property(x => x.CaseExtraFollowers).IsRequired();
-            
+            this.Property(x => x.IsAbout_Persons_EMail).IsOptional().HasMaxLength(100);
+            this.Property(x => x.IsAbout_Persons_CellPhone).IsOptional().HasMaxLength(50);
+            this.Property(x => x.IsAbout_Region_Id).IsOptional();
+
             this.ToTable("tblcasehistory");
         }
     }

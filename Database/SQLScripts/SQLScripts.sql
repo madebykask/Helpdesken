@@ -20,6 +20,30 @@ GO
 ALTER TABLE tblSettings
 ALTER COLUMN POP3UserName NVARCHAR(50) not null
 
+--tblCaseHistory
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'IsAbout_Persons_EMail' and sysobjects.name = N'tblCaseHistory')
+BEGIN
+    ALTER TABLE tblCaseHistory
+    ADD IsAbout_Persons_EMail NVARCHAR(100)       
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'IsAbout_Persons_CellPhone' and sysobjects.name = N'tblCaseHistory')
+BEGIN
+    ALTER TABLE tblCaseHistory
+    ADD IsAbout_Persons_CellPhone NVARCHAR(50)       
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'IsAbout_Region_Id' and sysobjects.name = N'tblCaseHistory')
+BEGIN
+    ALTER TABLE tblCaseHistory
+    ADD IsAbout_Region_Id INT       
+END
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.39'

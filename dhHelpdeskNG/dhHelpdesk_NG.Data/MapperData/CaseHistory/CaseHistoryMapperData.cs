@@ -31,5 +31,6 @@ namespace DH.Helpdesk.Dal.MapperData.CaseHistory
         public IList<EmailLogsOverview> EmailLogs { get; set; }
         public RegionOverview Region { get; set; }
         public OUOverview OU { get; set; }
+        public RegionOverview IsAbout_Region { get; set; }
     }
 }

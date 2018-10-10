@@ -2732,6 +2732,9 @@ namespace DH.Helpdesk.Services.Services
                 h.IsAbout_ReportedBy = c.IsAbout.ReportedBy;
                 h.IsAbout_Persons_Phone = c.IsAbout.Person_Phone;
                 h.IsAbout_Department_Id = c.IsAbout.Department_Id;
+                h.IsAbout_Persons_EMail = c.IsAbout.Person_Email;
+                h.IsAbout_Persons_CellPhone = c.IsAbout.Person_Cellphone;
+                h.IsAbout_Region_Id = c.IsAbout.Region_Id;
             }
 
             if (extraField != null)
