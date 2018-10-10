@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Models.Contract
+﻿namespace DH.Helpdesk.Services.Enums
 {
     public static class ContractStatuses
     {

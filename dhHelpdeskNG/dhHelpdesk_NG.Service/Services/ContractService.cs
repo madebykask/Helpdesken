@@ -1,4 +1,10 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using System.Linq.Expressions;
+using DH.Helpdesk.BusinessData.Models.Inventory;
+using DH.Helpdesk.Common.Linq;
+using DH.Helpdesk.Services.Enums;
+using ContractStatuses = DH.Helpdesk.Services.Enums.ContractStatuses;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -12,10 +18,9 @@
 
     public interface IContractService
     {
-        List<Contract> GetContracts(int customerId);
+        IList<Contract> GetContracts(int customerId);
+        IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter);
 
-        List<Contract> GetContractsNotFinished(int customerId);
-        
         Contract GetContract(int contractId);
         List<ContractsSettingRowModel> GetContractsSettingRows(int customerId);
         void SaveContractSettings(List<ContractsSettingRowModel> ContractSettings);
@@ -61,17 +66,144 @@
             this._unitOfwork = unitOfWork;
         }
 
-        public List<Contract> GetContracts(int customerId)
+        public IList<Contract> GetContracts(int customerId)
         {
-            return this._contractRepository.GetContracts(customerId).OrderBy(c => c.ContractNumber).ToList();
+            return _contractRepository.GetContracts(customerId).ToList();
         }
 
-        public List<Contract> GetContractsNotFinished(int customerId)
+        public IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter)
         {
-            return this._contractRepository.GetContractsNotFinished(customerId).OrderBy(c => c.ContractNumber).ToList();
+            var selectedStatus = filter.State;
+            var customerId = filter.CustomerId;
+
+            Expression<Func<Contract, bool>> exp = c => c.ContractCategory.Customer_Id == customerId;
+
+            if (filter.SelectedContractCategories.Any())
+                exp = PredicateBuilder<Contract>.AndAlso(exp, c => filter.SelectedContractCategories.Contains(c.ContractCategory_Id));
+
+            if (filter.SelectedDepartments.Any())
+                exp = PredicateBuilder<Contract>.AndAlso(exp, c => filter.SelectedDepartments.Contains(c.Department_Id ?? 0));
+            
+
+            if (filter.SelectedResponsibles.Any())
+                exp = PredicateBuilder<Contract>.AndAlso(exp, c => filter.SelectedResponsibles.Contains(c.ResponsibleUser_Id ?? 0));
+
+            if (filter.SelectedSuppliers.Any())
+                exp = PredicateBuilder<Contract>.AndAlso(exp, c => filter.SelectedSuppliers.Contains(c.Supplier_Id ?? 0));
+
+            //filter by state 
+            if (selectedStatus == ContractStatuses.Closed)
+            {
+                exp = PredicateBuilder<Contract>.AndAlso(exp, c => c.Finished == 1);
+            }
+            else if (selectedStatus == ContractStatuses.Running)
+            {
+                exp = PredicateBuilder<Contract>.AndAlso(exp, c => c.Running == 1);
+            }
+            else if (selectedStatus != ContractStatuses.All)
+            {
+                exp = PredicateBuilder<Contract>.AndAlso(exp, c => c.Finished == 0);
+            }
+
+            if (filter.StartDateFrom.HasValue)
+            {
+                exp = PredicateBuilder<Contract>.AndAlso(exp, t => t.ContractStartDate >= filter.StartDateFrom.Value);
+            }
+
+            if (filter.StartDateTo.HasValue)
+            {
+                exp = PredicateBuilder<Contract>.AndAlso(exp, t => t.ContractStartDate <= filter.StartDateTo.Value);
+            }
+
+            if (filter.EndDateFrom.HasValue)
+            {
+                exp = PredicateBuilder<Contract>.AndAlso(exp, t => t.ContractEndDate >= filter.EndDateFrom.Value);
+            }
+
+            if (filter.EndDateTo.HasValue)
+            {
+                exp = PredicateBuilder<Contract>.AndAlso(exp, t => t.ContractEndDate <= filter.EndDateTo.Value);
+            }
+
+            if (filter.NoticeDateFrom.HasValue)
+            {
+                exp = PredicateBuilder<Contract>.AndAlso(exp, t => t.NoticeDate >= filter.NoticeDateFrom.Value);
+            }
+
+            if (filter.NoticeDateTo.HasValue)
+            {
+                exp = PredicateBuilder<Contract>.AndAlso(exp, t => t.NoticeDate <= filter.NoticeDateTo.Value);
+            }
+
+            //search text
+            //todo: sql injection
+            if (!string.IsNullOrEmpty(filter.SearchText)) 
+                exp = PredicateBuilder<Contract>.AndAlso(exp, t => t.ContractNumber.Contains(filter.SearchText) || t.Info.Contains(filter.SearchText));
+
+            var queryable = _contractRepository.GetContracts(exp).OrderBy(c => c.ContractNumber).AsQueryable();
+
+            var contracts = 
+                queryable.Select(contract => new ContractSearchItemData()
+                {
+                    Id = contract.Id,
+                    ContractGUID = contract.ContractGUID,
+                    ContractNumber = contract.ContractNumber,
+                    Finished = contract.Finished,
+                    NoticeTime = contract.NoticeTime,
+                    NoticeDate = contract.NoticeDate,
+                    ContractStartDate = contract.ContractStartDate,
+                    ContractEndDate = contract.ContractEndDate,
+                    Running = contract.Running,
+                    FollowUpInterval = contract.FollowUpInterval,
+                    Info = contract.Info,
+                    
+                    Supplier = contract.Supplier_Id != null ? new SupplierOverview()
+                    {
+                        Id = contract.Supplier_Id.Value,
+                        Name = contract.Supplier.Name,
+                    } : null,
+
+                    ContractCategory = new ContractCategoryOverview()
+                    {
+                        Id = contract.ContractCategory_Id,
+                        Name = contract.ContractCategory.Name
+                    },
+
+                    Department = contract.Department_Id != null ? new DepartmentOverview()
+                    {
+                        Id = contract.Department_Id.Value,
+                        Name = contract.Department.DepartmentName
+                    }: null,
+
+                    ResponsibleUser = contract.ResponsibleUser_Id != null ? new UserOverview()
+                    {
+                        Id = contract.ResponsibleUser_Id.Value,
+                        FirstName =  contract.ResponsibleUser.FirstName,
+                        SurName = contract.ResponsibleUser.SurName
+                    } : null,
+
+                    FollowUpResponsibleUser = contract.FollowUpResponsibleUser_Id != null ? new UserOverview()
+                    {
+                        Id = contract.FollowUpResponsibleUser_Id.Value,
+                        FirstName = contract.FollowUpResponsibleUser.FirstName,
+                        SurName = contract.FollowUpResponsibleUser.SurName
+                    } : null,
+
+                    Cases = contract.ContractLogs.Where(l => l.Case_Id.HasValue).Select(l => new  ContractCaseData()
+                    {
+                        LogId =  l.Id,
+                        CaseId = l.Case_Id,
+                        CaseNumber = l.Case.CaseNumber,
+                        CaseFinishingDate = l.Case.FinishingDate,
+                        CaseApprovedDate = l.Case.ApprovedDate,
+                        CaseTypeRequireApproving = l.Case.CaseType.RequireApproving,
+
+                    }).ToList()
+                }).ToList();
+
+            return contracts;
         }
 
-        
         public Contract GetContract(int contractId)
         {
             return this._contractRepository.GetContract(contractId);

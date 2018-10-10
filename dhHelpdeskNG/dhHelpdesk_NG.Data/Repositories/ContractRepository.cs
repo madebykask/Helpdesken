@@ -1,3 +1,5 @@
+using System.Data.Entity;
+using System.Linq.Expressions;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Shared;
 
@@ -9,19 +11,18 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Domain;
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Data;
     using System.Linq;
 
     #region CONTRACT
 
     public interface IContractRepository : IRepository<Contract>
     {
-        IList<Contract> GetContracts(int customerId);
+        IQueryable<Contract> GetContracts(int customerId);
+        IQueryable<Contract> GetContracts(Expression<Func<Contract, bool>> filter, bool loadNavigationProps = false);
+
         Contract GetContract(int contractId);
         int SaveContract(ContractInputModel contractModel);
         void DeleteContract(Contract contract);
-        IList<Contract> GetContractsNotFinished(int customerId);
     }
 
     public class ContractRepository : RepositoryBase<Contract>, IContractRepository
@@ -31,19 +32,24 @@ namespace DH.Helpdesk.Dal.Repositories
         {
         }
 
-        public IList<Contract> GetContracts(int customerId)
+        public IQueryable<Contract> GetContracts(int customerId)
         {
-            var query = this.Table.Where(c => c.Finished == 0 && c.ContractCategory.Customer_Id == customerId);
-            return query.ToList();
+            var query = this.Table.Where(c => c.ContractCategory.Customer_Id == customerId);
+            return query;
         }
 
-        public IList<Contract> GetContractsNotFinished(int customerId)
+        public IQueryable<Contract> GetContracts(Expression<Func<Contract, bool>> filter, bool loadNavigationProps = false)
         {
-            var query = this.Table
-                .Include(x => x.ContractLogs)
-                .Include(x => x.ContractLogs.Select(l => l.Case))
-                .Where(c => c.ContractCategory.Customer_Id == customerId);
-            return query.ToList();
+            var query = this.Table.Where(filter);
+
+            if (loadNavigationProps)
+            {
+                query.Include(x => x.ContractCategory)
+                     .Include(x => x.ContractLogs)
+                     .Include(x => x.ContractLogs.Select(l => l.Case));
+            }
+
+            return query.AsNoTracking();
         }
 
         public Contract GetContract(int contractId)

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Models.Contract;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Web.Models.Case;
 
@@ -106,15 +107,15 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public DateTime? NoticeDate { get; set; }
 
-        public ContractCategory ContractCategory { get; set; }
+        public ContractCategoryOverview ContractCategory { get; set; }
 
-        public Supplier Supplier { get; set; }
+        public SupplierOverview Supplier { get; set; }
 
-        public Department Department { get; set; }
+        public DepartmentOverview Department { get; set; }
 
-        public User ResponsibleUser { get; set; }
+        public UserOverview ResponsibleUser { get; set; }
 
-        public User FollowUpResponsibleUser { get; set; }
+        public UserOverview FollowUpResponsibleUser { get; set; }
     }
 
     public sealed class ContractsSearchResultsModel

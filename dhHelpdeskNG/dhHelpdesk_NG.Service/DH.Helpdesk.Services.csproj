@@ -319,6 +319,7 @@
     <Compile Include="DisplayValues\StringsDisplayValue.cs" />
     <Compile Include="DisplayValues\Reports\TimeDisplayValue.cs" />
     <Compile Include="DisplayValues\UserNameDisplayValue.cs" />
+    <Compile Include="Enums\ContractStatuses.cs" />
     <Compile Include="Enums\ExtendedCasePathTokens.cs" />
     <Compile Include="Exceptions\BusinessLogicException.cs" />
     <Compile Include="Exceptions\ElementaryValidationRulesException.cs" />
