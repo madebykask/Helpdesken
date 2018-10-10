@@ -1,6 +1,7 @@
 import {TranslateService} from '@ngx-translate/core';
 import { Component } from '@angular/core';
 import { mobiscroll } from '@mobiscroll/angular';
+import { config } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,7 @@ import { mobiscroll } from '@mobiscroll/angular';
 export class AppComponent {
   pageSettings = {
   };
+  version = config.version;
 
   constructor() { 
     mobiscroll.settings = { theme: 'ios', lang: 'en', labelStyle: 'stacked' };   
