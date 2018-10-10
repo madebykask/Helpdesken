@@ -105,6 +105,10 @@ export class AuthenticationService extends HttpApiServiceBase {
         let now = new Date();
         return now.getTime() > expiresAt;
     }
+
+    hasToken(): boolean {
+        return this.getAccessToken() != null;
+    }
     
     public getUser(): CurrentUser {
         return this.localStorageService.getCurrentUser();

@@ -6,9 +6,12 @@
             <mbsc-input formControlName="password" type="password" password-toggle="true" icon="none" icon-align="right" [error]="f.password.touched && f.password.dirty && f.password.invalid" [errorMessage]="getError('password')">Password</mbsc-input>
             <div *ngIf="error" class="alert alert-danger">{{error}}</div>
         </div>
-        <div class="mbsc-form-group-inset mbsc-padding">
-            <mbsc-button block type="submit" [disabled]="loginForm.invalid || loading">Login</mbsc-button>
+        <div class="mbsc-form-group-inset mbsc-padding md-load-btn">
+            <mbsc-button block type="submit" [disabled]="loginForm.invalid" [hidden]="isLoading">Login</mbsc-button>
+            <mbsc-button flat block icon="loop2" [hidden]="!isLoading"></mbsc-button> 
         </div>
-    </form>
-    
+    </form>    
 </mbsc-form>
+<div class="footer">
+    <app-footer></app-footer>
+</div>    

@@ -7,9 +7,8 @@ export class AuthGuard implements CanActivate {
 
     constructor(private router: Router, private authenticationService: AuthenticationService) { }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        let user = this.authenticationService.getUser();
-        if (user && user.authData.access_token) {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {        
+        if (this.authenticationService.hasToken()) {
             //if(!this.authenticationService.isTokenExpired()) { //TODO: think if refreshing token here is ok, if token is expired.
                 // logged in and not expired so return true
                 return true;

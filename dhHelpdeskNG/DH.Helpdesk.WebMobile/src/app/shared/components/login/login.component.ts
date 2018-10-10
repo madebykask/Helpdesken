@@ -13,7 +13,7 @@ import { throwError } from 'rxjs';
 })
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;
-    loading = false;
+    isLoading = false;
     submitted = false;
     returnUrl: string;
     error = '';
@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit {
             return;
         }
 
-        this.loading = true;
+        this.isLoading = true;
         this.authenticationService.login(this.f.username.value, this.f.password.value)
             .pipe(first())
             .subscribe(
@@ -83,7 +83,7 @@ export class LoginComponent implements OnInit {
                 },
                 error => {
                     this.error = error;
-                    this.loading = false;
+                    this.isLoading = false;
                 });
     }    
 }

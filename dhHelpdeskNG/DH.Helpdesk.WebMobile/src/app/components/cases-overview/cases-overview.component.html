@@ -24,7 +24,8 @@
                         <div>{{(case.columns | getByKey: 'Caption') || '&nbsp;'}}</div>
                 </mbsc-listview-item>
         </mbsc-listview>
-        <mbsc-form #loading class="mbsc-padding md-load-btn md-btn-isLoading" style="display: block">
+        <mbsc-form #loading class="md-load-btn md-btn-isLoading">
+                <div style="height:44px;" [hidden]="isLoading"></div>
                 <mbsc-button flat block icon="loop2" [hidden]="!isLoading"></mbsc-button>
         </mbsc-form>
 </div>

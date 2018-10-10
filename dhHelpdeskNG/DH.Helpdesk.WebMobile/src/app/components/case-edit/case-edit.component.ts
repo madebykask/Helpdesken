@@ -14,17 +14,17 @@ import { switchMap } from 'rxjs/operators';
 export class CaseEditComponent implements OnInit, OnDestroy {
     private caseId: number;
     private caseData: CaseEditInputModel;
-    private subscriptions = new Array<Subscription>();    
-    private dataSource: OptionsDataSource;
+    private subscriptions = new Array<Subscription>();        
     private caseSections: CaseSectionInputModel[];
-    private caseSectionTypes = CaseSectionType;
+    caseSectionTypes = CaseSectionType;
+    dataSource: OptionsDataSource;
 
     isLoaded: boolean = false;
     form: FormGroup;    
 
     bottomMenuSettings = {
         type: 'bottom',
-        display: 'inline'
+        //display: 'inline'
     };
 
     tabsMenuSettings = {

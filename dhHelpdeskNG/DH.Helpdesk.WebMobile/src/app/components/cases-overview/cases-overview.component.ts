@@ -3,10 +3,11 @@ import { CaseOverviewItem, CasesOverviewFilter } from '../../models'
 import { CasesOverviewService } from '../../services/cases-overview';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserSettingsService } from '../../services/user';
-import { map, finalize, catchError } from 'rxjs/operators';
+import { map, finalize, catchError, take, takeUntil } from 'rxjs/operators';
 import { PagingConstants } from '../../helpers/constants';
 import { Router } from '@angular/router';
 import { MbscForm, MbscListview } from '@mobiscroll/angular';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-cases-overview',
@@ -19,6 +20,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   private filter: CasesOverviewFilter;
   private scrollBindFunc: any;
   private timer: any;
+  private _destroyed$ = new Subject();
 
   filtersForm: FormGroup;
   cases: CaseOverviewItem[] = [];
@@ -52,6 +54,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     window.removeEventListener('scroll', this.scrollBindFunc);
+    this._destroyed$.next();
   }
 
   applyFilterAndSearch() {
@@ -100,6 +103,8 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.casesOverviewService.searchCases(this.filter)
       .pipe(
+        take(1),
+        takeUntil(this._destroyed$),
         finalize(() => this.isLoading = false),
         //catchError(err => {})//TODO:
       )
