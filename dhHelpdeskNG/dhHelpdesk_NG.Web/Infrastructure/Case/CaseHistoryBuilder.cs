@@ -63,6 +63,21 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
                     sb.Append("</tr>");
                 }
             }
+            // Persons e-mail
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.PersonsEmail != prev.PersonsEmail)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(prev.PersonsEmail.RemoveHTMLTags());
+                    sb.Append(from);
+                    sb.Append(cur.PersonsEmail.RemoveHTMLTags());
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
             // Persons_phone 
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_Phone.ToString()).ShowOnStartPage == 1)
             {
@@ -74,6 +89,21 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
                     sb.Append(prev.PersonsPhone.RemoveHTMLTags());
                     sb.Append(from);
                     sb.Append(cur.PersonsPhone.RemoveHTMLTags());
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
+            // Persons mobile no 
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.PersonsCellphone != prev.PersonsCellphone)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(prev.PersonsCellphone.RemoveHTMLTags());
+                    sb.Append(from);
+                    sb.Append(cur.PersonsCellphone.RemoveHTMLTags());
                     sb.Append(tdCloseMarkup);
                     sb.Append("</tr>");
                 }
