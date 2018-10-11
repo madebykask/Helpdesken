@@ -2625,6 +2625,7 @@ namespace DH.Helpdesk.Services.Services
             h.Change_Id = c.Change_Id;
             h.ContactBeforeAction = c.ContactBeforeAction;
             h.Cost = c.Cost;
+            h.CostCentre = c.CostCentre;
             h.CreatedDate = DateTime.UtcNow;
             if (defaultUser != string.Empty)
             {
@@ -2716,6 +2717,12 @@ namespace DH.Helpdesk.Services.Services
                 h.IsAbout_ReportedBy = c.IsAbout.ReportedBy;
                 h.IsAbout_Persons_Phone = c.IsAbout.Person_Phone;
                 h.IsAbout_Department_Id = c.IsAbout.Department_Id;
+                h.IsAbout_Persons_EMail = c.IsAbout.Person_Email;
+                h.IsAbout_Persons_CellPhone = c.IsAbout.Person_Cellphone;
+                h.IsAbout_Region_Id = c.IsAbout.Region_Id;
+                h.IsAbout_OU_Id = c.IsAbout.OU_Id;
+                h.IsAbout_CostCentre = c.IsAbout.CostCentre;
+                h.IsAbout_Place = c.IsAbout.Place;
             }
 
             if (extraField != null)

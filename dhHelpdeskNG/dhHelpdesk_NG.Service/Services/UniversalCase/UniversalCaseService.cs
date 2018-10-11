@@ -930,56 +930,61 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             //prevent email notifications from sending for base (multiform) case
             res = SaveCase(baseCaseModel, baseAuxModel, out baseCaseId, out caseNum, false);
 
-            if (baseCaseSolution.SplitToCaseSolutionDescendants != null && baseCaseSolution.SplitToCaseSolutionDescendants.Any())
+            try
             {
-                var caseSolutions = baseCaseSolution.SplitToCaseSolutionDescendants
-                    .Where(x => x.SplitToCaseSolutionDescendant.Status > 0)
-                    .OrderBy(x => x.SplitToCaseSolutionDescendant.SortOrder);
-
-                foreach (var splitToCaseSolutionEntity in caseSolutions)
+                if (baseCaseSolution.SplitToCaseSolutionDescendants != null && baseCaseSolution.SplitToCaseSolutionDescendants.Any())
                 {
-                    var childCaseSolutionId = splitToCaseSolutionEntity.SplitToCaseSolutionDescendant.Id;
-                    var caseTemplate = _caseSolutionService.GetCaseSolution(childCaseSolutionId);
-                    
-                    //TODO: refactor and make a long term solution, this is just for DepartmentId
-                    var departmentId = ChangeDepartmentId(baseCaseModel.Customer_Id, baseCaseModel.Department_Id, caseTemplate.Customer_Id);
-                    
-                    var doSplit = _conditionService.CheckConditions(baseCaseId, childCaseSolutionId, conditionTypeId);
+                    var caseSolutions = baseCaseSolution.SplitToCaseSolutionDescendants
+                        .Where(x => x.SplitToCaseSolutionDescendant.Status > 0)
+                        .OrderBy(x => x.SplitToCaseSolutionDescendant.SortOrder);
 
-                    if (doSplit.Show)
+                    foreach (var splitToCaseSolutionEntity in caseSolutions)
                     {
-                        var descendantCaseModel = caseModel.DeepClone();
-                        descendantCaseModel.Department_Id = departmentId;
+                        var childCaseSolutionId = splitToCaseSolutionEntity.SplitToCaseSolutionDescendant.Id;
+                        var caseTemplate = _caseSolutionService.GetCaseSolution(childCaseSolutionId);
 
-                        //apply values from case solution
-                        descendantCaseModel = ApplyValuesFromCaseSolution(descendantCaseModel, childCaseSolutionId);
+                        //TODO: refactor and make a long term solution, this is just for DepartmentId
+                        var departmentId = ChangeDepartmentId(baseCaseModel.Customer_Id, baseCaseModel.Department_Id, caseTemplate.Customer_Id);
 
-                        // prevent extended case relation creation in SaveCase
-                        descendantCaseModel.ExtendedCaseData_Id = null;
-                        descendantCaseModel.ExtendedCaseForm_Id = null;
+                        var doSplit = _conditionService.CheckConditions(baseCaseId, childCaseSolutionId, conditionTypeId);
 
-                        int childCaseId;
-                        res = SaveCase(descendantCaseModel, baseAuxModel, out childCaseId, out caseNum);
-
-                        if (res.IsSucceed && childCaseId > 0)
+                        if (doSplit.Show)
                         {
-                            if (caseId == -1)
-                                caseId = childCaseId;
+                            var descendantCaseModel = caseModel.DeepClone();
+                            descendantCaseModel.Department_Id = departmentId;
 
-                            if (baseCaseExtendedCaseDataId > 0)
+                            //apply values from case solution
+                            descendantCaseModel = ApplyValuesFromCaseSolution(descendantCaseModel, childCaseSolutionId);
+
+                            // prevent extended case relation creation in SaveCase
+                            descendantCaseModel.ExtendedCaseData_Id = null;
+                            descendantCaseModel.ExtendedCaseForm_Id = null;
+
+                            int childCaseId;
+                            res = SaveCase(descendantCaseModel, baseAuxModel, out childCaseId, out caseNum);
+
+                            if (res.IsSucceed && childCaseId > 0)
                             {
-                                var exCaseForm = caseTemplate.ExtendedCaseForms.FirstOrDefault();
-                                if (exCaseForm != null)
-                                    _extendedCaseService.CopyExtendedCaseToCase(baseCaseExtendedCaseDataId, childCaseId, baseAuxModel.UserIdentityName, exCaseForm.Id);
+                                if (caseId == -1)
+                                    caseId = childCaseId;
+
+                                if (baseCaseExtendedCaseDataId > 0)
+                                {
+                                    var exCaseForm = caseTemplate.ExtendedCaseForms.FirstOrDefault();
+                                    if (exCaseForm != null)
+                                        _extendedCaseService.CopyExtendedCaseToCase(baseCaseExtendedCaseDataId, childCaseId, baseAuxModel.UserIdentityName, exCaseForm.Id);
+                                }
                             }
                         }
                     }
                 }
             }
-
-            //delete base case
-            if (baseCaseId > 0)
-                _caseService.Delete(baseCaseId, "", null);
+            finally
+            {
+                //delete base case
+                if (baseCaseId > 0)
+                    _caseService.Delete(baseCaseId, "", null);
+            }
             
             caseNumber = caseNum;
             return res;
