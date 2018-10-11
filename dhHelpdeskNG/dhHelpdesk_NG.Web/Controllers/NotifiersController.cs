@@ -10,6 +10,7 @@ using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Infrastructure.Logger;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -616,9 +617,15 @@ namespace DH.Helpdesk.Web.Controllers
                 model.CategoryId = null;
             }
 
-            var newNotifier = this.newNotifierFactory.Create(model, SessionFacade.CurrentCustomer.Id, DateTime.Now);
-            this.notifierService.AddNotifier(newNotifier);
-            return new JsonResult { Data = newNotifier.Id };
+                newNotifier = this.newNotifierFactory.Create(model, SessionFacade.CurrentCustomer.Id, DateTime.Now);
+                this.notifierService.AddNotifier(newNotifier);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = $"Operation failed. {ex.Message}." });
+            }
+            
+            return Json(new { success = true,  id = newNotifier.Id });
         }
 
         [ValidateInput(false)]

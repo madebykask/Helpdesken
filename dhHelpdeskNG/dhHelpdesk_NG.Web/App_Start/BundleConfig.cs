@@ -133,6 +133,7 @@ namespace DH.Helpdesk.Web
                             "~/Content/js/additional-methods.min.js",
                             "~/Content/js/jquery.validate.unobtrusive.min.js",
                             "~/Content/js/jquery-ui-1.9.2.min.js",
+                            "~/Content/js/jquery.toastmessage.js",
                             "~/Content/js/bootstrap.js",
                             "~/Content/js/chosen.jquery.min.js",
                             "~/Content/js/bootstrap-multiselect.js",

@@ -57,7 +57,7 @@
         [IsId]
         public int? GroupId { get; internal set; }
 
-        //[IsId]
+        //todo: check if it should be nullable?
         public int LanguageId { get; internal set; }
 
         //[IsId] - should allow 0 since its a valid value

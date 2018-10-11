@@ -43,7 +43,7 @@
                 {
                     <tr>
                         <td>@(Translation.GetCoreTextTranslation(Model.Language.Caption) + (Model.Language.Required ? "*" : string.Empty))</td>
-                        <td>@Html.DropDown("language_dropdown", "LanguageId", !Model.Language.Required, Model.Language.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)</td>
+                        <td>@Html.DropDown("language_dropdown", "LanguageId", Model.Language.Required, Model.Language.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)</td>
                     </tr>
                 }
             </table>
