@@ -60,7 +60,7 @@
         //[IsId]
         public int LanguageId { get; internal set; }
 
-        [IsId]
+        //[IsId] - should allow 0 since its a valid value
         public int? CategoryId { get; internal set; }
 
         [MaxLength(NotifierConstraint.InitialsMaxLength)]

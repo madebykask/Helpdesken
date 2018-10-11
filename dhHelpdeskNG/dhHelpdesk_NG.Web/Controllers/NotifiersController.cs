@@ -859,7 +859,6 @@ namespace DH.Helpdesk.Web.Controllers
                 selectedCategory = this.computerService.GetComputerUserCategoryByID(categoryId);
             }
 
-            //todo: check why if only not readonly should be displayed?
             var categoriesList = GetCategoriesSelectList(currentCustomerId, selectedCategory);
             var categoryModel = new ComputerUserCategoryModel(categoriesList);
 
