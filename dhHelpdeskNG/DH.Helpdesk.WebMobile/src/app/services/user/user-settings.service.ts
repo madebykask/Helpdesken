@@ -1,54 +1,53 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest } from '@angular/common/http';
-import { map, filter } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { map, finalize} from 'rxjs/operators';
 import { UserData } from '../../models'
 import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserSettingsService extends HttpApiServiceBase {
+    isLoadingUserSettings = false; 
     
     protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService){
         super(http, localStorageService);
     }
 
     loadUserSettings() {
-        let isLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-        this.getJson(this.buildResourseUrl('/api/currentuser/settings', undefined, false))//TODO: error handling
+        this.isLoadingUserSettings = true;
+        return this.getJson(this.buildResourseUrl('/api/currentuser/settings', undefined, false))//TODO: error handling
             .pipe(
                 map((data: any) => {
                     if(data) {
-                        let settings = new UserData();
-                        settings.selectedCustomerId = data.customerId;//TODO: if no customer;
-                        settings.selectedLanguageId = data.languageId;//TODO: if no language
-                        return settings;
+                        let user = this.localStorageService.getCurrentUser();
+                        if(data.customerId)
+                            user.currentData.selectedCustomerId = data.customerId;//TODO: if no customer;
+                        if(data.languageId)
+                            user.currentData.selectedLanguageId = data.languageId;//TODO: if no language
+                        // Other settings
+                        this.localStorageService.setCurrentUser(user);
+
+                        return user.currentData;
                     }
-                }) 
+                }),
+                finalize(() => this.isLoadingUserSettings = false )
             )
-            .subscribe(
-                data => {
-                    var user = this.localStorageService.getCurrentUser();
-                    if(data.selectedCustomerId)
-                        user.currentData.selectedCustomerId = data.selectedCustomerId;
-                    if(data.selectedLanguageId)
-                        user.currentData.selectedLanguageId = data.selectedLanguageId;
-                    // Other settings
-                    this.localStorageService.setCurrentUser(user);
-                    isLoaded.next(true);
-                    return this
-                }
-            );
-            return isLoaded.pipe(
-                filter(success => success)
-            );
     };
     
     getUserData(): UserData {
-        var user = this.localStorageService.getCurrentUser();
+        let user = this.localStorageService.getCurrentUser();
         if (!user) return null;
 
         return user.currentData
     }
 
+    getCurrentLanguage(): number {
+        return this.getUserData().selectedLanguageId;
+    }
+
+    setCurrentLanguage(languageId: number) {
+        let user = this.localStorageService.getCurrentUser();
+        user.currentData.selectedLanguageId = languageId;
+        this.localStorageService.setCurrentUser(user);
+    }
 }

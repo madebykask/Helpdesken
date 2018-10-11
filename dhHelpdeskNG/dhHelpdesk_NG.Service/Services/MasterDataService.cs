@@ -170,6 +170,7 @@ namespace DH.Helpdesk.Services.Services
             return _computerUserRepository.GetInitiatorByUserId(userId, customerId, activeOnly);
         }
 
+        // TODO: review how it is used. Now it is put for every user in a session - potential memory leak on high load. Use cache instead
         public IList<Text> GetTranslationTexts()
         {
             return _textRepository.GetAllWithTranslation().ToList();

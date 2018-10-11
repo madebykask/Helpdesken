@@ -7,6 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Data.Entity;
+using System.Threading.Tasks;
+using DH.Helpdesk.Common.Extensions.Boolean;
+
 namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Collections.Generic;
@@ -23,9 +27,10 @@ namespace DH.Helpdesk.Dal.Repositories
     /// <summary>
     /// The LanguageRepository interface.
     /// </summary>
-    public interface ILanguageRepository : IRepository<Language>
+    public interface ILanguageRepository : IRepository<Language>//TODO: needs refactoring
     {
         List<ItemOverview> FindActiveOverviewsByIds(List<int> languageIds);
+        Task<IList<Language>> GetLanguagesAsync(bool active = true);
 
         /// <summary>
         /// The get language text id by id.
@@ -97,6 +102,14 @@ namespace DH.Helpdesk.Dal.Repositories
             return this.DataContext.Languages.Find(languageId).LanguageID;
         }
 
+        public async Task<IList<Language>> GetLanguagesAsync(bool active = true)
+        {
+            var intActive = active.ToInt();
+            return await DataContext.Languages.AsNoTracking()
+                .Where(x => x.IsActive == intActive)
+                .OrderBy(x => x.Name)
+                .ToListAsync();
+        }
 
         
         /// <summary>

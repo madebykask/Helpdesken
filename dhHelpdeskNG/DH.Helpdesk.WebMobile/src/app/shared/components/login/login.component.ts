@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
+import { first, switchMap, takeUntil } from 'rxjs/operators';
 
 import { AuthenticationService } from '../../../services/authentication';
 import { UserSettingsService } from '../../../services/user'
-import { throwError } from 'rxjs';
+import { throwError, Subject } from 'rxjs';
 
 @Component({
     templateUrl: 'login.component.html',
     styleUrls: ['login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+    private _destroy$ = new Subject();
     loginForm: FormGroup;
     isLoading = false;
     submitted = false;
@@ -46,6 +47,10 @@ export class LoginComponent implements OnInit {
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
 
+    ngOnDestroy(): void {
+        this._destroy$.next();
+    }
+
     // convenience getter for easy access to form fields
     get f() { return this.loginForm.controls; }
 
@@ -72,18 +77,20 @@ export class LoginComponent implements OnInit {
 
         this.isLoading = true;
         this.authenticationService.login(this.f.username.value, this.f.password.value)
-            .pipe(first())
-            .subscribe(
-                isSuccess => {
-                    if(!isSuccess) throwError('Something wrong.');//TODO: make better reaction
-                    this.userSettingsService.loadUserSettings()
-                        .subscribe(x => {
-                            this.router.navigateByUrl(this.returnUrl);                            
-                        });
+            .pipe(
+                first(),
+                switchMap(isSuccess => {
+                        if(!isSuccess) throwError('Something wrong.');
+                        return this.userSettingsService.loadUserSettings();
+                }),
+                takeUntil(this._destroy$)
+            )
+            .subscribe(userData => {
+                    this.router.navigateByUrl(this.returnUrl);                                                    
                 },
                 error => {
                     this.error = error;
                     this.isLoading = false;
-                });
+            });
     }    
 }

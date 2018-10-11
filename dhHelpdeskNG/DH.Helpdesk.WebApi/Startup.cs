@@ -31,6 +31,13 @@ namespace DH.Helpdesk.WebApi
 
             app.Use<RequestMiddleware>();
             app.UseWebApi(config);
+            config.AddApiVersioning( o =>
+            {
+                o.AssumeDefaultVersionWhenUnspecified = true;
+                o.ReportApiVersions = true;
+            });
+            //configuration.AddVersionedApiExplorer(//TODO: install nuget and uncomment when ApiExplorer will be used
+
         }
 
 

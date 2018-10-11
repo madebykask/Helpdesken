@@ -2,7 +2,7 @@ import { HttpApiServiceBase } from "../api";
 import { Injectable } from "@angular/core";
 import { LocalStorageService } from "../local-storage";
 import { HttpClient } from "@angular/common/http";
-import { CaseHelper } from "./case-helper";
+import { OptionsHelper } from "../../helpers/options-helper";
 import { map } from "rxjs/operators";
 import { throwError } from "rxjs";
 import { BundleOptionsFilter, BundledCaseOptions, OptionItem } from "../../models";
@@ -11,7 +11,7 @@ import { BundleOptionsFilter, BundledCaseOptions, OptionItem } from "../../model
 export class BundleCaseOptionsService extends HttpApiServiceBase {
 
     protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService, 
-        private caseHelper: CaseHelper) {
+        private caseHelper: OptionsHelper) {
             super(http, localStorageService);
     }
 

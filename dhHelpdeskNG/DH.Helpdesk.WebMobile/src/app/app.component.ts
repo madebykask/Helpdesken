@@ -1,19 +1,31 @@
 import {TranslateService} from '@ngx-translate/core';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { mobiscroll } from '@mobiscroll/angular';
 import { config } from '../environments/environment';
+import { AuthenticationService } from './services/authentication';
+import { LoggerService } from './services/logging';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   pageSettings = {
   };
   version = config.version;
 
-  constructor() { 
+  constructor(private _authenticationService: AuthenticationService, private _logger: LoggerService) { 
     mobiscroll.settings = { theme: 'ios', lang: 'en', labelStyle: 'stacked' };   
   }
+
+  ngOnInit(): void {
+    const isAuthenticated = this._authenticationService.isAuthenticated();
+    const version = this._authenticationService.getVersion();
+    if (isAuthenticated && config.version != version) {
+      this._logger.log('>>>>>>>>>>>>>>>>Logout: version changed')
+      this._authenticationService.logout();
+    }
+  }
+
 }

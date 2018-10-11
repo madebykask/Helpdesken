@@ -20,7 +20,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   private filter: CasesOverviewFilter;
   private scrollBindFunc: any;
   private timer: any;
-  private _destroyed$ = new Subject();
+  private _destroy$ = new Subject();
 
   filtersForm: FormGroup;
   cases: CaseOverviewItem[] = [];
@@ -54,7 +54,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     window.removeEventListener('scroll', this.scrollBindFunc);
-    this._destroyed$.next();
+    this._destroy$.next();
   }
 
   applyFilterAndSearch() {
@@ -104,7 +104,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     this.casesOverviewService.searchCases(this.filter)
       .pipe(
         take(1),
-        takeUntil(this._destroyed$),
+        takeUntil(this._destroy$),
         finalize(() => this.isLoading = false),
         //catchError(err => {})//TODO:
       )

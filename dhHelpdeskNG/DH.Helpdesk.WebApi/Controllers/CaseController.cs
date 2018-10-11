@@ -63,7 +63,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var model = new CaseEditOutputModel();
 
             var userId = UserId;
-            var languageId = input.LanguageId;
+            var languageId = input.LangId;
             var currentCase = _caseService.GetCaseById(input.CaseId);
             var currentCid = input.Cid;
             var userGroupId = User.Identity.GetGroupId();

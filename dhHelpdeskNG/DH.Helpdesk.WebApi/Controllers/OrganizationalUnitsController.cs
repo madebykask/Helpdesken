@@ -35,7 +35,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     if(!string.IsNullOrWhiteSpace(parentName)) name = $"{ou.Name} - {parentName}";
                 }
 
-                return new ItemOverview(ou.Id.ToString(), name);
+                return new ItemOverview(name, ou.Id.ToString());
             }).ToArray();
         }
 

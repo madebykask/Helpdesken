@@ -65,27 +65,27 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 model.CustomerRegistrationSources = _registrationSourceCustomerService
                     .GetCustomersActiveRegistrationSources(cid)
-                    .Select(d => new ItemOverview(d.Id.ToString(), d.SourceName)).ToList();
+                    .Select(d => new ItemOverview(d.SourceName, d.Id.ToString())).ToList();
             }
 
             if (input.Systems)
                 model.Systems = _systemService.GetSystems(cid)
-                    .Select(d => new ItemOverview(d.Id.ToString(), d.SystemName)).ToList();
+                    .Select(d => new ItemOverview(d.SystemName, d.Id.ToString())).ToList();
 
             if (input.Urgencies)
                 model.Urgencies = _urgencyService.GetUrgencies(cid)
-                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+                    .Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
             
             if (input.Impacts)
                 model.Impacts = _impactService.GetImpacts(cid)
-                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+                    .Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
 
             if (input.Suppliers)
             {
                 model.Suppliers = _supplierService.GetSuppliers(cid)
-                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+                    .Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
                 model.Countries = _countryService.GetCountries(cid)
-                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+                    .Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
             }
 
             if (input.Currencies)
@@ -94,11 +94,11 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             if (input.WorkingGroups)
                 model.WorkingGroups = _workingGroupService.GetAllWorkingGroupsForCustomer(cid, false) //TODO: filter active
-                    .Select(d => new ItemOverview(d.Id.ToString(), d.WorkingGroupName)).ToList();
+                    .Select(d => new ItemOverview(d.WorkingGroupName, d.Id.ToString())).ToList();
 
             if (input.ResponsibleUsers)
                 model.ResponsibleUsers = _userService.GetAvailablePerformersOrUserId(cid, input.CaseResponsibleUserId)
-                    .Select(d => new ItemOverview(d.Id.ToString(), $"{d.FirstName} {d.SurName}")).ToList();//TODO: see responsibleUsersList.MapToSelectList
+                    .Select(d => new ItemOverview($"{d.FirstName} {d.SurName}", d.Id.ToString())).ToList();//TODO: see responsibleUsersList.MapToSelectList
 
             //BusinessData.Models.User.CustomerUserInfo admUser = null;
             //if (m.case_.Performer_User_Id.HasValue)
@@ -122,25 +122,25 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             if (input.Priorities)
                 model.Priorities = _priorityService.GetPriorities(cid)
-                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+                    .Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
 
             if (input.Statuses)
                 model.Statuses = _statusService.GetStatuses(cid)
-                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+                    .Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
 
             if (input.StateSecondaries)
                 model.StateSecondaries = _stateSecondaryService.GetStateSecondaries(cid)
-                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+                    .Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
 
             //if (customerSetting.ModuleProject == 1)
             //{
             if (input.Projects)
                 model.Projects = _projectService.GetCustomerProjects(cid)
-                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+                    .Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
             //}
             if (input.Problems)
                 model.Problems =_problemService.GetCustomerProblems(cid, false)
-                    .Select(d => new ItemOverview(d.Id.ToString(), d.Name)).ToList();
+                    .Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
 
             //TODO: see GetCausingPartsModel(int customerId, int? curCausingPartId)
 
@@ -148,7 +148,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             //{
             if (input.Changes)
                 model.Changes = (await _changeService.GetChangesAsync(cid))
-                    .Select(d => new ItemOverview(d.Id.ToString(), d.ChangeTitle)).ToList();
+                    .Select(d => new ItemOverview(d.ChangeTitle, d.Id.ToString())).ToList();
             //}
 
             if (input.SolutionsRates)

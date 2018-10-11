@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
-import { map, mergeMap, mapTo, defaultIfEmpty } from 'rxjs/operators';
+import { map, defaultIfEmpty } from 'rxjs/operators';
 import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel } from '../../models';
-import { throwError, forkJoin, Observable, empty, zip } from 'rxjs';
-import { OptionItem, CaseOptions } from '../../models/case/case-options.model';
+import { throwError, forkJoin, empty, } from 'rxjs';
+import { CaseOptions } from '../../models/case/case-options.model';
 import { CaseOrganizationService } from '../case-organization';
 import { BundleCaseOptionsService } from '../case-organization/bundle-case-options.service';
 
@@ -21,7 +21,7 @@ export class CaseService extends HttpApiServiceBase {
     getCaseData(caseId: number) {
         var user = this.localStorageService.getCurrentUser();
         return this.getJson(this.buildResourseUrl('/api/case/get',
-                             { caseId: caseId, languageId: user.currentData.selectedLanguageId }))//TODO: error handling
+                             { caseId: caseId }, true, true))//TODO: error handling
             .pipe(
                 map((caseData: any) => {
                     let model = CaseEditInputModel.fromJSON(caseData);
@@ -90,8 +90,7 @@ export class CaseService extends HttpApiServiceBase {
 
     getCaseSections() {
         var user = this.localStorageService.getCurrentUser();
-        return this.getJson(this.buildResourseUrl('/api/casesections/get',
-                             { langId: user.currentData.selectedLanguageId }))//TODO: error handling
+        return this.getJson(this.buildResourseUrl('/api/casesections/get', null, true, true))//TODO: error handling
             .pipe(
                 map((jsCaseSections: any) => {
                     if (!jsCaseSections) throwError("No data from server.");

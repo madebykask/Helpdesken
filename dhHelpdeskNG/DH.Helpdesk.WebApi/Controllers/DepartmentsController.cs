@@ -40,7 +40,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 _departmentService.GetActiveDepartmentForUserByRegion(regionId, UserId, cid));
 
             return deps
-                .Select(d => new ItemOverview(d.Id.ToString(), Services.utils.ServiceUtils.departmentDescription(d, 0))).ToList();//TODO: departmentFilterFormat?
+                .Select(d => new ItemOverview(Services.utils.ServiceUtils.departmentDescription(d, 0), d.Id.ToString())).ToList();//TODO: departmentFilterFormat?
         }
     }
 }

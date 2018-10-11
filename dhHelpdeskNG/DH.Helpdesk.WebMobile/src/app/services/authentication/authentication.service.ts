@@ -28,6 +28,7 @@ export class AuthenticationService extends HttpApiServiceBase {
                     let user = new CurrentUser();
                     UserAuthenticationData.setData(user.authData, data);
                     user.authData.recievedAt = new Date();
+                    user.version = config.version;
                     // store user details and token in local storage to keep user logged in between page refreshes
                     this.localStorageService.setCurrentUser(user);    
                     isSuccess = true;                                   
@@ -95,7 +96,7 @@ export class AuthenticationService extends HttpApiServiceBase {
     isTokenExpired(): boolean {
         let user = this.getUser();
         
-        if (user == null || user == undefined)
+        if (user == null)
             return true;
             
         if(!user.authData.recievedAt || !user.authData.expires_in) 
@@ -109,12 +110,19 @@ export class AuthenticationService extends HttpApiServiceBase {
     hasToken(): boolean {
         return this.getAccessToken() != null;
     }
+
+    getVersion(): string {
+        let user = this.getUser();
+        if (user == null) return null;
+
+        return user.version;
+    }
     
     public getUser(): CurrentUser {
         return this.localStorageService.getCurrentUser();
     }
 
-    private raiseAuthenticationChanged(){
+    private raiseAuthenticationChanged() {
         this.authenticationChangedSubj.next(null);
     }
 }

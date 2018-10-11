@@ -12,12 +12,17 @@ export abstract class HttpApiServiceBase {
         this.baseApiUrl = config.apiUrl;
     }
 
-    protected buildResourseUrl(resourceName: string, params: object = undefined, addCustomerId = true) {
+    protected buildResourseUrl(resourceName: string, params: object = undefined, addCustomerId = true, addLanguage = false) {
         let urlParams: string = null;
-        if(addCustomerId === true) {
-            let userData = this.localStorageService.getCurrentUser();
+        let userData = this.localStorageService.getCurrentUser();
+        if (addCustomerId === true) {
             if(userData !== null) {
                 params = Object.assign({}, params || {}, {cid: userData.currentData.selectedCustomerId})
+            }
+        }
+        if (addLanguage === true) {
+            if(userData !== null) {
+                params = Object.assign({}, params || {}, {langid: userData.currentData.selectedLanguageId})
             }
         }
         if (params) {

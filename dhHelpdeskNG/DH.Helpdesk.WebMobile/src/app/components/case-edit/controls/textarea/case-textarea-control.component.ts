@@ -1,6 +1,7 @@
-import { OnInit, OnDestroy, Component, Input, OnChanges } from "@angular/core";
+import { OnInit, OnDestroy, Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { BaseCaseField } from "../../../../models";
 import { BaseControl } from "../base-control";
+import { MbscTextarea } from "@mobiscroll/angular";
 
 @Component({
     selector: 'case-textarea-control',
@@ -8,6 +9,7 @@ import { BaseControl } from "../base-control";
     styleUrls: ['./case-textarea-control.component.scss']
   })
   export class CaseTextareaComponent extends BaseControl implements OnChanges, OnInit, OnDestroy {
+    @ViewChild('input') input: MbscTextarea;
     @Input() field: BaseCaseField<string>;
     options: any = {
       disabled: true,
@@ -18,7 +20,7 @@ import { BaseControl } from "../base-control";
     }
 
     ngOnInit(): void {
-      //if(this.readOnly) set disabled/reaonly mode
+      this.input.disabled = this.options.disabled
     }
 
     ngOnDestroy(): void {

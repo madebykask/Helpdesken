@@ -25,7 +25,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.Filters
 			if (!modelState.IsValid)
 				actionContext.Response =
 					actionContext.Request
-					 .CreateResponse(HttpStatusCode.OK, new
+					 .CreateResponse(HttpStatusCode.BadRequest, new
 					 {
 #if DEBUG
 						 ErrorMessage = "Invalid model: " + string.Join("; ", modelState.Where(x => x.Value.Errors.Any()).Select(x =>

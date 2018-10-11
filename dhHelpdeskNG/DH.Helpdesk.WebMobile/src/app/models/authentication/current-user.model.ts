@@ -5,12 +5,13 @@ export class CurrentUser {
     }
 
     id: number;
+    version: string;
     authData: UserAuthenticationData;
     currentData: UserData;    
 
-    static fromJSON(json: any) : CurrentUser {
+    static fromJSON(json: any) : CurrentUser { //TODO: move mapping to subscribe
         if (typeof json === 'string') { json = JSON.parse(json); } 
-        return Object.assign(new CurrentUser(), json, {
+        return <CurrentUser>Object.assign(new CurrentUser(), json, {
             authData: UserAuthenticationData.fromJSON(json.authData),
             currentData: UserData.fromJSON(json.currentData)
         });  
@@ -30,9 +31,9 @@ export class UserAuthenticationData {
         dest.recievedAt = new Date();
     }
 
-    static fromJSON(json: any) : UserAuthenticationData {
+    static fromJSON(json: any) : UserAuthenticationData {//TODO: move mapping to subscribe
         if (typeof json === 'string') { json = JSON.parse(json); } 
-        return Object.assign(new UserAuthenticationData(), json, {
+        return <UserAuthenticationData>Object.assign(new UserAuthenticationData(), json, {
             recievedAt: new Date(json.recievedAt)
         });
     }
@@ -42,8 +43,8 @@ export class UserData {
     selectedCustomerId: number;
     selectedLanguageId: number;
 
-    static fromJSON(json: any) : UserData {
+    static fromJSON(json: any) : UserData {//TODO: move mapping to subscribe
         if (typeof json === 'string') { json = JSON.parse(json); } 
-        return Object.assign(new UserData(), json, {}); 
+        return <UserData>Object.assign(new UserData(), json, {}); 
     }
 }
