@@ -146,7 +146,13 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
 
                 OU = data.OU,
 
-                IsAbout_OU = data.IsAbout_OU
+                IsAbout_OU = data.IsAbout_OU,
+
+                System = data.System,
+
+                Urgency = data.Urgency,
+
+                Impact = data.Impact
             };
         }
     }

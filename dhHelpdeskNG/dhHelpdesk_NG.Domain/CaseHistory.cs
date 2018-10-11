@@ -142,6 +142,9 @@ namespace DH.Helpdesk.Domain
         public virtual Region IsAbout_Region { get; set; }
         public virtual OU OU { get; set; }
         public virtual OU IsAbout_OU { get; set; }
+        public virtual System System { get; set; }
+        public virtual Urgency Urgency { get; set; }
+        public virtual Impact Impact { get; set; }
     }
 }
 

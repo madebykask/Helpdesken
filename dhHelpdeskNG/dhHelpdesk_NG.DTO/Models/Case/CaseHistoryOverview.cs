@@ -134,6 +134,9 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseHistory
         public DepartmentOverview IsAbout_Department { get; set; }
         public RegionOverview IsAbout_Region { get; set; }
         public OUOverview IsAbout_OU { get; set; }
+        public SystemOverview System { get; set; }
+        public UrgencyOverview Urgency { get; set; }
+        public ImpactOverview Impact { get; set; }
 
         public IList<EmailLogsOverview> Emaillogs { get; set; }
     }

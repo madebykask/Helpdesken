@@ -181,6 +181,24 @@ namespace DH.Helpdesk.Dal.Repositories
                         Name = caseHistory.IsAbout_OU.Name,
                     } : null,
 
+                    System = caseHistory.System_Id != null ? new SystemOverview
+                    {
+                        Id = caseHistory.System.Id,
+                        Name = caseHistory.System.SystemName,
+                    } : null,
+
+                    Urgency = caseHistory.Urgency_Id != null ? new UrgencyOverview
+                    {
+                        Id = caseHistory.Urgency_Id,
+                        Name = caseHistory.Urgency.Name,
+                    } : null,
+
+                    Impact = caseHistory.Impact_Id != null ? new ImpactOverview
+                    {
+                        Id = caseHistory.Impact_Id,
+                        Name = caseHistory.Impact.Name,
+                    } : null,
+
                     EmailLogs = emailLogs.Where(t => t.Id > 0).Select(t => new EmailLogsOverview
                     {
                         Id = t.Id,

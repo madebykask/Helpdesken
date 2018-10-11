@@ -102,6 +102,21 @@
                             .HasForeignKey(x => x.WorkingGroup_Id)
                             .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.System)
+                            .WithMany()
+                            .HasForeignKey(x => x.System_Id)
+                            .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.Urgency)
+                            .WithMany()
+                            .HasForeignKey(x => x.Urgency_Id)
+                            .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.Impact)
+                            .WithMany()
+                            .HasForeignKey(x => x.Impact_Id)
+                            .WillCascadeOnDelete(false);
+
             this.HasOptional(x => x.Status)
                             .WithMany()
                             .HasForeignKey(x => x.Status_Id)
