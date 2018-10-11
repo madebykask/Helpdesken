@@ -32,5 +32,6 @@ namespace DH.Helpdesk.Dal.MapperData.CaseHistory
         public RegionOverview Region { get; set; }
         public OUOverview OU { get; set; }
         public RegionOverview IsAbout_Region { get; set; }
+        public OUOverview IsAbout_OU { get; set; }
     }
 }

@@ -2735,6 +2735,9 @@ namespace DH.Helpdesk.Services.Services
                 h.IsAbout_Persons_EMail = c.IsAbout.Person_Email;
                 h.IsAbout_Persons_CellPhone = c.IsAbout.Person_Cellphone;
                 h.IsAbout_Region_Id = c.IsAbout.Region_Id;
+                h.IsAbout_OU_Id = c.IsAbout.OU_Id;
+                h.IsAbout_CostCentre = c.IsAbout.CostCentre;
+                h.IsAbout_Place = c.IsAbout.Place;
             }
 
             if (extraField != null)

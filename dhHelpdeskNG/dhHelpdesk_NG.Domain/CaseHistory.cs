@@ -107,6 +107,9 @@ namespace DH.Helpdesk.Domain
         public string IsAbout_Persons_EMail { get; set; }
         public string IsAbout_Persons_CellPhone { get; set; }
         public int? IsAbout_Region_Id { get; set; }
+        public int? IsAbout_OU_Id { get; set; }
+        public string IsAbout_CostCentre { get; set; }
+        public String IsAbout_Place { get; set; }
 
         //        /// <summary>
         //        /// Number of parent case (if any)
@@ -138,6 +141,7 @@ namespace DH.Helpdesk.Domain
         public virtual Region Region { get; set; }
         public virtual Region IsAbout_Region { get; set; }
         public virtual OU OU { get; set; }
+        public virtual OU IsAbout_OU { get; set; }
     }
 }
 

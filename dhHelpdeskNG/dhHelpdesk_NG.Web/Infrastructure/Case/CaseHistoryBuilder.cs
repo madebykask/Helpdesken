@@ -620,7 +620,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // IsAbout Persons e-mail
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString()).ShowOnStartPage == 1)
             {
-                if (cur.IsAbout_Persons_EMail != prev.PersonsEmail)
+                if (cur.IsAbout_Persons_EMail != prev.IsAbout_Persons_EMail)
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
@@ -701,6 +701,57 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
                     else
                         sb.Append(ey);
                     sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
+            // IsAbout OU
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.IsAbout_OU_Id != prev.IsAbout_OU_Id)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    if (prev.IsAbout_OU != null)
+                        sb.Append(prev.IsAbout_OU.Name.RemoveHTMLTags());
+                    else
+                        sb.Append(ey);
+                    sb.Append(from);
+                    if (cur.IsAbout_OU != null)
+                        sb.Append(cur.IsAbout_OU.Name.RemoveHTMLTags());
+                    else
+                        sb.Append(ey);
+                    sb.Append(tdCloseMarkup);
+                    sb.Append("</tr>");
+                }
+            }
+            // IsAbout Costcentre
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.IsAbout_CostCentre != prev.IsAbout_CostCentre)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(prev.IsAbout_CostCentre.RemoveHTMLTags());
+                    sb.Append(from);
+                    sb.Append(cur.IsAbout_CostCentre.RemoveHTMLTags());
+                    sb.Append(tdCloseMarkup);//
+                    sb.Append("</tr>");
+                }
+            }
+            // IsAbout Place
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.IsAbout_Place != prev.IsAbout_Place)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(prev.IsAbout_Place.RemoveHTMLTags());
+                    sb.Append(from);
+                    sb.Append(cur.IsAbout_Place.RemoveHTMLTags());
+                    sb.Append(tdCloseMarkup);//
                     sb.Append("</tr>");
                 }
             }

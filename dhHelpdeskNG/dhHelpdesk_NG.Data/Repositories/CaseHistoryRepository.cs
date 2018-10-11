@@ -175,6 +175,12 @@ namespace DH.Helpdesk.Dal.Repositories
                         Name = caseHistory.IsAbout_Region.Name,
                     } : null,
 
+                    IsAbout_OU = caseHistory.IsAbout_OU_Id != null ? new OUOverview
+                    {
+                        Id = caseHistory.IsAbout_OU.Id,
+                        Name = caseHistory.IsAbout_OU.Name,
+                    } : null,
+
                     EmailLogs = emailLogs.Where(t => t.Id > 0).Select(t => new EmailLogsOverview
                     {
                         Id = t.Id,

@@ -45,6 +45,30 @@ BEGIN
 END
 GO
 
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'IsAbout_OU_Id' and sysobjects.name = N'tblCaseHistory')
+BEGIN
+    ALTER TABLE tblCaseHistory
+    ADD IsAbout_OU_Id INT       
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'IsAbout_CostCentre' and sysobjects.name = N'tblCaseHistory')
+BEGIN
+    ALTER TABLE tblCaseHistory
+    ADD IsAbout_CostCentre NVARCHAR(50)      
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'IsAbout_Place' and sysobjects.name = N'tblCaseHistory')
+BEGIN
+    ALTER TABLE tblCaseHistory
+    ADD IsAbout_Place NVARCHAR(100) NOT NULL Default ('')     
+END
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.39'
 --ROLLBACK --TMP

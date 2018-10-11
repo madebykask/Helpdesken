@@ -53,6 +53,11 @@
                             .HasForeignKey(x => x.OU_Id)
                             .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.IsAbout_OU)
+                            .WithMany()
+                            .HasForeignKey(x => x.IsAbout_OU_Id)
+                            .WillCascadeOnDelete(false);
+
             this.HasOptional(x => x.IsAbout_Department)
                             .WithMany()
                             .HasForeignKey(x => x.IsAbout_Department_Id)
@@ -175,6 +180,8 @@
             this.Property(x => x.IsAbout_Persons_EMail).IsOptional().HasMaxLength(100);
             this.Property(x => x.IsAbout_Persons_CellPhone).IsOptional().HasMaxLength(50);
             this.Property(x => x.IsAbout_Region_Id).IsOptional();
+            this.Property(x => x.IsAbout_CostCentre).IsOptional().HasMaxLength(50);
+            this.Property(x => x.IsAbout_Place).IsRequired().HasMaxLength(100);
 
             this.ToTable("tblcasehistory");
         }

@@ -104,6 +104,9 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
                 IsAbout_Persons_EMail = entity.IsAbout_Persons_EMail,
                 IsAbout_Persons_CellPhone = entity.IsAbout_Persons_CellPhone,
                 IsAbout_Region_Id = entity.IsAbout_Region_Id,
+                IsAbout_OU_Id = entity.IsAbout_OU_Id,
+                IsAbout_CostCentre = entity.IsAbout_CostCentre,
+                IsAbout_Place = entity.IsAbout_Place,
 
                 Department = data.Department,
 
@@ -141,7 +144,9 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
 
                 IsAbout_Region = data.IsAbout_Region,
 
-                OU = data.OU
+                OU = data.OU,
+
+                IsAbout_OU = data.IsAbout_OU
             };
         }
     }
