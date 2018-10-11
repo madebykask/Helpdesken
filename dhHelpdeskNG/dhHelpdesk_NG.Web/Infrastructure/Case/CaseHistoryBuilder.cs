@@ -770,6 +770,51 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
                     sb.Append("</tr>");
                 }
             }
+            // Inventory Number
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.InventoryNumber != prev.InventoryNumber)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(prev.InventoryNumber.RemoveHTMLTags());
+                    sb.Append(from);
+                    sb.Append(cur.InventoryNumber.RemoveHTMLTags());
+                    sb.Append(tdCloseMarkup);//
+                    sb.Append("</tr>");
+                }
+            }
+            // Inventory Type
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.InventoryType != prev.InventoryType)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(prev.InventoryType.RemoveHTMLTags());
+                    sb.Append(from);
+                    sb.Append(cur.InventoryType.RemoveHTMLTags());
+                    sb.Append(tdCloseMarkup);//
+                    sb.Append("</tr>");
+                }
+            }
+            // Inventory Location
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.InventoryLocation != prev.InventoryLocation)
+                {
+                    sb.Append("<tr>");
+                    sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
+                    sb.Append(tdOpenMarkup);
+                    sb.Append(prev.InventoryLocation.RemoveHTMLTags());
+                    sb.Append(from);
+                    sb.Append(cur.InventoryLocation.RemoveHTMLTags());
+                    sb.Append(tdCloseMarkup);//
+                    sb.Append("</tr>");
+                }
+            }
             // CaseFile
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Filename.ToString()).ShowOnStartPage == 1)
             {

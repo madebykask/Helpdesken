@@ -181,7 +181,7 @@
             this.Property(x => x.IsAbout_Persons_CellPhone).IsOptional().HasMaxLength(50);
             this.Property(x => x.IsAbout_Region_Id).IsOptional();
             this.Property(x => x.IsAbout_CostCentre).IsOptional().HasMaxLength(50);
-            this.Property(x => x.IsAbout_Place).IsRequired().HasMaxLength(100);
+            this.Property(x => x.IsAbout_Place).IsOptional().HasMaxLength(100);
 
             this.ToTable("tblcasehistory");
         }

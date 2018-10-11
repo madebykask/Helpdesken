@@ -65,7 +65,7 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
                where syscolumns.name = N'IsAbout_Place' and sysobjects.name = N'tblCaseHistory')
 BEGIN
     ALTER TABLE tblCaseHistory
-    ADD IsAbout_Place NVARCHAR(100) NOT NULL Default ('')     
+    ADD IsAbout_Place NVARCHAR(100) NULL    
 END
 GO
 
