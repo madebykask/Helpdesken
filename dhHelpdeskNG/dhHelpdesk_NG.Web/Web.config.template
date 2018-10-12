@@ -21,8 +21,8 @@
     <add key="webpages:Enabled" value="false" />
     <add key="PreserveLoginUrl" value="true" />
     <add key="dh_maskedpassword" value="||||||||"/>
-    <add key="dh_filesDirectory" value="C:\DHHelpdeskUTV_Documents"/>
-    <add key="dh_selfserviceaddress" value="dhHelpdeskUTV/Selfservice/case/Index/"/>
+    <add key="dh_filesDirectory" value="#{FilesDirectory}"/>
+    <add key="dh_selfserviceaddress" value="#{SelfserviceAddress}"/>
     <add key="encryptionkey" value="JRI!8KST3V0E#DS9SU}RFBCGHZL6E4M7" />
     <add key="Application.DefaultCulture" value="sv"/>
     <add key="ClientValidationEnabled" value="true"/>
