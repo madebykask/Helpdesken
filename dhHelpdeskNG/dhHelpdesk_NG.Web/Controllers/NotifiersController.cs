@@ -617,15 +617,9 @@ namespace DH.Helpdesk.Web.Controllers
                 model.CategoryId = null;
             }
 
-                newNotifier = this.newNotifierFactory.Create(model, SessionFacade.CurrentCustomer.Id, DateTime.Now);
-                this.notifierService.AddNotifier(newNotifier);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, error = $"Operation failed. {ex.Message}." });
-            }
-            
-            return Json(new { success = true,  id = newNotifier.Id });
+            var newNotifier = this.newNotifierFactory.Create(model, SessionFacade.CurrentCustomer.Id, DateTime.Now);
+            this.notifierService.AddNotifier(newNotifier);
+            return new JsonResult { Data = newNotifier.Id };
         }
 
         [ValidateInput(false)]
