@@ -57,8 +57,8 @@ namespace DH.Helpdesk.Web
                             "~/Content/css/*.css",
                             "~/Content/themes/base/minified/jquery-ui.min.css",
                             "~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css"));
+
             bundles.Add(new ScriptBundle(ScriptNames.DynamicCase).Include(
-                            "~/Content/js/DynamicCase/iframeResizer.js",
                             "~/Content/js/DynamicCase/container.js"));
 
 			bundles.Add(new ScriptBundle("~/Content/js/iframeResizer").Include(

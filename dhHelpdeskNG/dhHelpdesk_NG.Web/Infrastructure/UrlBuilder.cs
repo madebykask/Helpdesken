@@ -8,20 +8,24 @@ namespace DH.Helpdesk.Web.Infrastructure
     internal class UrlBuilder
     {
         private readonly string _baseUrl;
-        private readonly Dictionary<string, string> _qsParams = null;
+        private readonly Dictionary<string, string> _qsParams = new Dictionary<string, string>();
 
         #region ctor()
 
-        public UrlBuilder(string extendedCaseUrlMask)
+        public UrlBuilder(string urlMask)
         {
-            var extendedCaseUrlMask1 = extendedCaseUrlMask;
+            if (!string.IsNullOrEmpty(urlMask))
+            {
+                //do parsing
+                var index = urlMask.IndexOf('?');
+                if (index != -1)
+                {
+                    _baseUrl = urlMask.Substring(0, index);
+                }
 
-            //do parsing
-            var index = extendedCaseUrlMask1.IndexOf('?');
-            _baseUrl = extendedCaseUrlMask1.Substring(0, index);
-
-            var qs = extendedCaseUrlMask1.Substring(extendedCaseUrlMask1.IndexOf('?'));
-            _qsParams = ParseQueryString(qs);
+                var qs = urlMask.Substring(urlMask.IndexOf('?'));
+                _qsParams = ParseQueryString(qs);
+            }
         }
 
         #endregion

@@ -36,13 +36,13 @@ function SetFocusToReportedByOnCase() {
 }
 
 $(document).ready(function () {
-    var initiatorID = $('#InitiatorCategory').val()
-    
+
     $('#AddNotifier')[0].prevState = $('#AddNotifier').is(':visible');
     
-    if (initiatorID) {
-        var initiatorCategory = window.parameters.computerUserCategories[initiatorID];
-        intiatorReadOnly = initiatorCategory == null ? false : initiatorCategory.IsReadOnly;
+    var initiatorId = $('#InitiatorCategory').val();
+    if (initiatorId) {
+        var initiatorCategory = window.parameters.computerUserCategories[initiatorId];
+        var intiatorReadOnly = initiatorCategory == null ? false : initiatorCategory.IsReadOnly;
         applyReadOnlyOn(readOnlyExpressions['initiator'], intiatorReadOnly);
 
         if (intiatorReadOnly) {
@@ -50,21 +50,19 @@ $(document).ready(function () {
         }
     }
 
-    var regardingID = $('#IsAboutCategory').val()
-
-    if (regardingID) {
-        var regardingCategory = window.parameters.computerUserCategories[regardingID];
-        regardingReadOnly = regardingCategory == null ? false : regardingCategory.IsReadOnly;
+    var regardingId = $('#IsAboutCategory').val();
+    if (regardingId) {
+        var regardingCategory = window.parameters.computerUserCategories[regardingId];
+        var regardingReadOnly = regardingCategory == null ? false : regardingCategory.IsReadOnly;
         applyReadOnlyOn(readOnlyExpressions['regarding'], regardingReadOnly);
+    }
+
+    if (window.parameters.hasExtendedComputerUsers === "True") {
+        initExtendedComputerUserSections();
     }
 });
 
-
-
 function GetComputerSearchOptions() {
-
-    
-
     var options = {
         items: 20,
         minLength: 2,
@@ -539,7 +537,7 @@ function GetComputerUserSearchOptions() {
                 applyReadOnlyOn(readOnlyExpressions['initiator'], item.isReadOnly);
 
                 var initiatorSectionType = 0;
-                loadExtendedCaseSection(item.categoryID, initiatorSectionType);
+                loadExtendedCaseSectionIfExist(item.categoryID, initiatorSectionType);
 
                 return item.num;
             }
@@ -550,10 +548,13 @@ function GetComputerUserSearchOptions() {
     return options;
 }
 
-function loadExtendedCaseSection(categoryId, sectionType) {
-    
-    var elements = getExCaseSectionElements(sectionType);
+function initExtendedComputerUserSections() {
+    var iframeOptions = getExtendedCaseSectionIFrameOptions();
+    $('iframe[id^="extendedSection-iframe"]').iFrameResize(iframeOptions);
+}
 
+function loadExtendedCaseSectionIfExist(categoryId, sectionType) {
+    
     var inputData = {
         categoryID: categoryId,
         caseSectionType: sectionType // 0 - Initiator, 1 - Regarding
@@ -567,11 +568,8 @@ function loadExtendedCaseSection(categoryId, sectionType) {
             dataType: 'json',
             success: function (ext) {
                 // TODO: set part dynamically
-                if (ext.url) {
-                    elements.$frame.css('height', '180px'); // restore orignial height
-                    elements.$userGuidHidden.val(ext.guid);
-                    elements.$frame.attr('src', ext.url);
-                    elements.$exCaseSection.show();
+                if (ext.url && ext.url.length) {
+                    loadExtendedCaseSection(ext.url, ext.guid, sectionType);
                 }
                 else {
                     resetExtendedCaseSection(sectionType);
@@ -584,6 +582,14 @@ function loadExtendedCaseSection(categoryId, sectionType) {
     }
 }
 
+function loadExtendedCaseSection(extendedFormUrl, userGuid, sectionType) {
+    var elements = getExCaseSectionElements(sectionType);
+    elements.$frame.css('height', '180px'); // restore orignial height
+    elements.$userGuidHidden.val(userGuid);
+    elements.$frame.attr('src', extendedFormUrl);
+    elements.$exCaseSection.show();
+}
+
 function resetExtendedCaseSection(sectionType) {
     var elements = getExCaseSectionElements(sectionType);
     elements.$userGuidHidden.val('');
@@ -593,7 +599,7 @@ function resetExtendedCaseSection(sectionType) {
 
 function getExCaseSectionElements(sectionType) {
     // 0 - Initiator, 1 - Regarding
-    var elements = sectionType == 0
+    var elements = Number(sectionType) === 0
         ? {
             $exCaseSection: $('#extendedSection-Initiator'),
             $frame: $('#extendedSection-iframe-Initiator'),
@@ -845,7 +851,7 @@ function GetComputerUserSearchOptionsForIsAbout() {
                     window.page.loadExtendedInitiator();
                 }*/
                 var regardingSectionType = 1;
-                loadExtendedCaseSection(item.categoryID, regardingSectionType);
+                loadExtendedCaseSectionIfExist(item.categoryID, regardingSectionType);
 
                 return item.num;
             }
@@ -1031,10 +1037,7 @@ function CaseInitForm() {
         }
     });
 
-    //init frame resize 
-    var iframeOptions = getExtendedCaseSectionIFrameOptions();
-    $('iframe[id^="extendedSection-iframe"]').iFrameResize(iframeOptions);
-
+    
     $('#case__Status_Id').change(function (e) {        
         console.log('>>> CaseStatus changed event.');
         var templateStateSecondartId = $('#CaseTemplate_StateSecondary_Id').val() || '';
