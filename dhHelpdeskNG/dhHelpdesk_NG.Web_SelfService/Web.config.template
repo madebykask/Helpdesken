@@ -11,12 +11,15 @@
     <section name="system.identityModel" type="System.IdentityModel.Configuration.SystemIdentityModelSection, System.IdentityModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089" />
     <section name="system.identityModel.services" type="System.IdentityModel.Services.Configuration.SystemIdentityModelServicesSection, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089" />
 
+    #{if IsFormLibConfigurable}
     <sectionGroup name="formLibConfigurable">
       <section name="accessManagment" type="ECT.FormLib.Configurable.AccessManagment" allowLocation="true" allowDefinition="Everywhere" />
     </sectionGroup>
+    #{/if}
 
   </configSections>
 
+  #{if IsFormLibConfigurable}
   <formLibConfigurable>
     <accessManagment>
       <api uriPath="http://dhhelpdesk-ikea-bschr-am-dataadminb.datahalland.se/" username="OperatorTest1" password="asd123!" />
@@ -29,6 +32,7 @@
       </countries>
     </accessManagment>
   </formLibConfigurable>
+  #{/if}
 
   <connectionStrings>
     <!--  <add name="DSN" connectionString="Password=;Persist Security Info=True;User ID=SA;Initial Catalog=dhHelpdesk_IKEA_BSCHR;Data Source=dhutvsql1;MultipleActiveResultSets=True" /> -->
@@ -45,8 +49,8 @@
     <add key="dh_helpdeskaddress" value="#{HelpdeskAddress}" />
     <add key="webpages:Version" value="3.0.0.0" />
     <!-- For self/service line manager -->
-    <add key="InitFromSelfService" value="true" />
-    <add key="InitFromSelfServiceWorkflowInitValue" value="10" />
+    <add key="InitFromSelfService" value="#{InitFromSelfService}" />
+    <add key="InitFromSelfServiceWorkflowInitValue" value="#{InitFromSelfServiceWorkflowInitValue}" />
     <add key="ida:FederationMetadataLocation" value="https://fs.dhsolutions.se/federationmetadata/2007-06/federationmetadata.xml" />
     <add key="ida:Issuer" value="https://fs.dhsolutions.se/adfs/ls/" />
     <add key="ida:ProviderSelection" value="productionSTS" />
@@ -56,8 +60,8 @@
     <add key="CaseList" value="manager,coworkers" />
     <add key="CurrentApplication" value="SelfService" />
 
+    #{if IsSingleSignOnConfigurable}
     <!-- Single Sign Keis-->
-
     <add key="ShowCommunicationForSelfService" value="true" />
 
     <add key="ApplicationId" value="Self Service On Acct" />
@@ -70,13 +74,17 @@
     <add key="SSOLog" value="true" />
     <add key="DefaultEmployeeNumber" value="" />
     <add key="LogoutUrl" value="https://fed.apps.ikeadt.com/adfs/ls/?wa=wsignout1.0" />
-
+    #{/if}
+    
+    #{if IsAccessManagementConfigurable}
+    <!-- TODO: -->
     <!-- Access Management API Keis-->
     <add key="AM_Api_UriPath" value="http://dhhelpdesk-ikea-bschr-am-dataadminb.datahalland.se/" />
     <!--<add key="AM_Api_UriPath"  value="http://ptam-portal.ikeadt.com/" />-->
     <add key="AM_Api_UserName" value="OperatorTest1" />
     <add key="AM_Api_Password" value="asd123!" />
 
+    #{/if}
   </appSettings>
 
   <!--
