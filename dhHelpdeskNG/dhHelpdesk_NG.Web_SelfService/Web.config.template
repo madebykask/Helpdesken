@@ -33,7 +33,7 @@
     </accessManagment>
   </formLibConfigurable>
   #{/if}
-  <!-- test ignore -->
+  <!-- test ignore-->
   <connectionStrings>
     <!--  <add name="DSN" connectionString="Password=;Persist Security Info=True;User ID=SA;Initial Catalog=dhHelpdesk_IKEA_BSCHR;Data Source=dhutvsql1;MultipleActiveResultSets=True" /> -->
     <add name="DSN_AM" connectionString="Data Source=dhutvsql2;Initial Catalog=AccessManagementDBDataAdminB;User ID=sa;Password=;" providerName="System.Data.SqlClient" />
