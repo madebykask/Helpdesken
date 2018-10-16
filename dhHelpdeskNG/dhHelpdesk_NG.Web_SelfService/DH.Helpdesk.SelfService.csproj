@@ -828,6 +828,9 @@
     <Content Include="Views\Shared\_MainMenu.cshtml" />
     <Content Include="Views\Case\_ClosedCaseAlert.cshtml" />
     <Content Include="Views\Case\ModalDialogs\_CaseLogNotePopup.cshtml" />
+    <Content Include="Web.config.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">

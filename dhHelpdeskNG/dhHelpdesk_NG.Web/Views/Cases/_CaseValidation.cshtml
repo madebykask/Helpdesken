@@ -51,6 +51,7 @@
         isRelated: '@Model.IsRelatedCase.ToJavaScriptBool()',
         fileNameError: '@Translation.GetForJS("Filnamn är inte giltigt. Special tecken (!@#=$&?*) är inte tillåtna")',
         containsExtendedCase: '@Model.ContainsExtendedCase',
+        hasExtendedComputerUsers: '@Model.HasExtendedComputerUsers',
         containsEForm: '@(Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)',
         extendedCaseFormId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Id.ToString() : "" )',
         extendedCaseGuid: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().ExtendedCaseGuid.ToString() : "" )',

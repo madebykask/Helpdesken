@@ -509,6 +509,9 @@
     <Compile Include="Models\Questionnaire\Write\Answer.cs" />
     <Compile Include="Models\Questionnaire\Write\ParticipantForInsert.cs" />
     <Compile Include="Models\OUOverview .cs" />
+    <Compile Include="Models\ImpactOverview.cs" />
+    <Compile Include="Models\UrgencyOverview.cs" />
+    <Compile Include="Models\SystemOverview.cs" />
     <Compile Include="Models\RegionOverview.cs" />
     <Compile Include="Models\ReportService\ReportData.cs" />
     <Compile Include="Models\ReportService\ReportFilter.cs" />

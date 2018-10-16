@@ -6140,8 +6140,8 @@ namespace DH.Helpdesk.Web.Controllers
             if (m.DynamicCase != null)
             {
                 var l = m.Languages.Where(x => x.Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
-                
-                //todo: use UrlBuilder!
+
+                //ex: unitedkingdom/Hiring/edit/[CaseId]/?UserId=[UserId]&language=[Language]
                 m.DynamicCase.FormPath = m.DynamicCase.FormPath
                     .Replace("[CaseId]", m.case_.Id.ToString())
                     .Replace("[UserId]", HttpUtility.UrlEncode(SessionFacade.CurrentUser.UserId.ToString()))

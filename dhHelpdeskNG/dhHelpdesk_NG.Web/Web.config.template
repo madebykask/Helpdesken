@@ -9,20 +9,19 @@
     <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false"/>
   </configSections>
   <connectionStrings>
-    <!-- Dev --> <!-- Testing releasenotes 4 --> 
+    <!-- Dev --> <!-- test, again --> 
     <add name="HelpdeskOleDbContext" connectionString="Provider=SQLOLEDB;Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};" providerName="System.Data.OleDb"/>
     <add name="HelpdeskSqlServerDbContext" connectionString="Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};MultipleActiveResultSets=True;Connection Lifetime=3;Max Pool Size=3;" providerName="System.Data.SqlClient"/>
-    <add name="DSN" connectionString="Password=kgk270;Persist Security Info=True;User ID=web_user;Initial Catalog=dhHelpdesk_IKEA_Merge;Data Source=DHUTVSQL2;MultipleActiveResultSets=True" />
-    <add name="DSN_AM" connectionString="Password=devtest;Persist Security Info=True;User ID=amUser;Initial Catalog=AccessManagementDBDataAdminB;Data Source=DHUTVSQL2;MultipleActiveResultSets=True" />
     <add name="HelpdeskIndexingService" connectionString="Provider=MSIDXS;"/>
+    <add name="DSN" connectionString="Data Source=dhutvsql2;Initial Catalog=DH_Support;User Id=sa;Password=;" />
   </connectionStrings>
   <appSettings>
     <add key="webpages:Version" value="3.0.0.0" />
     <add key="webpages:Enabled" value="false" />
     <add key="PreserveLoginUrl" value="true" />
     <add key="dh_maskedpassword" value="||||||||"/>
-    <add key="dh_filesDirectory" value="C:\DHHelpdeskUTV_Documents"/>
-    <add key="dh_selfserviceaddress" value="dhHelpdeskUTV/Selfservice/case/Index/"/>
+    <add key="dh_filesDirectory" value="#{FilesDirectory}"/>
+    <add key="dh_selfserviceaddress" value="#{SelfserviceAddress}"/>
     <add key="encryptionkey" value="JRI!8KST3V0E#DS9SU}RFBCGHZL6E4M7" />
     <add key="Application.DefaultCulture" value="sv"/>
     <add key="ClientValidationEnabled" value="true"/>
