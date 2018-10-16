@@ -73,5 +73,6 @@ GO
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.39'
 --ROLLBACK --TMP
 
-  
+RAISERROR('RE: testing output from sql', 0, 1) WITH NOWAIT;
+PRINT 'PRINT: testing output from sql'
 
