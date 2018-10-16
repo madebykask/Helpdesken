@@ -24,7 +24,7 @@ using DateTime = System.DateTime;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
-
+    //[Route( "api/v{version:apiVersion}" )]
     public class CaseController : BaseApiController
     {
         private readonly ICaseService _caseService;
@@ -39,7 +39,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ITranslateCacheService _translateCacheService;
 
         public CaseController(ICaseService caseService, ICaseFieldSettingService caseFieldSettingService,
-            IMailTemplateService mailTemplateService, IUserService userSerivice, IComputerService computerService,
+            IMailTemplateService mailTemplateService, IUserService userSerivice,
             ICustomerUserService customerUserService, IUserService userService, IWorkingGroupService workingGroupService,
             ISupplierService supplierService, ISettingService customerSettingsService,
             ITranslateCacheService translateCacheService)
@@ -892,8 +892,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 };
                 field.Options.Add(new KeyValuePair<string, string>("maxlength", "7"));
                 model.Fields.Add(field);
-
-
+                
                 field = new BaseCaseField<string>()
                 {
                     Name = "Cost_Currency",
@@ -901,6 +900,21 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Label = Translation.Get("Valuta"),
                     Section = CaseSectionType.CaseInfo.ToString(),
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Cost, caseFieldSettings)
+                };
+                model.Fields.Add(field);
+            }
+
+            if (customerSettings.AttachmentPlacement == 1 && IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Filename))
+            {
+                
+                field = new BaseCaseField<string>()
+                {
+                    Name = GlobalEnums.TranslationCaseFields.Filename.ToString(),
+                    Value = "",
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Filename,
+                        languageId, input.Cid, caseFieldTranslations, "Bifogad fil"),
+                    Section = CaseSectionType.CaseInfo.ToString(),
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Filename, caseFieldSettings)
                 };
                 model.Fields.Add(field);
             }

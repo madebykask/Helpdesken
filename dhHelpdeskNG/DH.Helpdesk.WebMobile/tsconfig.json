@@ -9,12 +9,22 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es5",
+    //"strictNullChecks": true,
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "moment": [
+        "node_modules/moment/min/moment.min.js"
+      ],
+      "moment-timezone": [
+        "node_modules/moment-timezone/moment-timezone-utils.js",
+        "node_modules/moment-timezone/builds/moment-timezone.min.js"
+      ]
+    }
   }
 }

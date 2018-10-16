@@ -2611,24 +2611,10 @@ namespace DH.Helpdesk.Web.Controllers
             return new UnicodeFileContentResult(fileContent, fileName);
         }
 
-        private string GetCaseFileNames(string id)
+        private string GetCaseFileNames(int id)
         {
-            var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
-                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
-
-            return String.Join("|", files);
-
-        }
-
-        private string GetLogFileNames(string id)
-        {
-            var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
-                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
-
-            return String.Join("|", files);
-
+            var files = _caseFileService.FindFileNamesByCaseId(id);
+            return string.Join("|", files);
         }
 
         [HttpPost]
@@ -5256,8 +5242,8 @@ namespace DH.Helpdesk.Web.Controllers
             m.MinWorkingTime = customerSetting.MinRegWorkingTime;
             m.CaseFilesModel = new CaseFilesModel();
             m.LogFilesModel = new FilesModel();
-            m.CaseFileNames = GetCaseFileNames(caseId.ToString());
-            m.LogFileNames = GetLogFileNames(caseId.ToString());
+            m.CaseFileNames = GetCaseFileNames(caseId);
+            m.LogFileNames = m.CaseFileNames;
 
             m.ActiveTab = activeTab;
 

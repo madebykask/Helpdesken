@@ -4,6 +4,7 @@ import { map, tap } from 'rxjs/operators';
 import { CasesOverviewFilter, CaseOverviewItem, CaseOverviewColumn } from '../../models'
 import { HttpApiServiceBase } from '../api'
 import { LocalStorageService } from '../local-storage';
+import * as moment from 'moment-timezone';
 
 @Injectable({ providedIn: 'root' })
 export class CasesOverviewService extends HttpApiServiceBase {

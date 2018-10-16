@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
 import { map, defaultIfEmpty } from 'rxjs/operators';
-import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel } from '../../models';
+import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel, BaseCaseField, KeyValue } from '../../models';
 import { throwError, forkJoin, empty, } from 'rxjs';
 import { CaseOptions } from '../../models/case/case-options.model';
 import { CaseOrganizationService } from '../case-organization';
@@ -24,7 +24,7 @@ export class CaseService extends HttpApiServiceBase {
                              { caseId: caseId }, true, true))//TODO: error handling
             .pipe(
                 map((caseData: any) => {
-                    let model = CaseEditInputModel.fromJSON(caseData);
+                    let model = this.fromJSONCaseEditInputModel(caseData);
                     return model;
                 }) 
             )
@@ -103,5 +103,33 @@ export class CaseService extends HttpApiServiceBase {
                     return sections;
                 }) 
             )
+    }
+
+    //TODO: review - not all cases covered
+    private fromJSONCaseEditInputModel(json: any) : CaseEditInputModel {
+        if (typeof json === 'string') { json = JSON.parse(json); } 
+        return Object.assign(new CaseEditInputModel(), json, {
+            fields: (json.fields as any[] || new Array()).map(v => {
+                if (v.JsonType === "string") return this.fromJSONBaseCaseField<string>(v);
+                if (v.JsonType === "date") return this.fromJSONBaseCaseField<string>(v);//TODO: As date
+                if (v.JsonType === "number") return this.fromJSONBaseCaseField<number>(v);
+                return this.fromJSONBaseCaseField<any>(v);
+            })
+        }); 
+    }
+
+    private fromJSONBaseCaseField<T>(json: any) : BaseCaseField<T> {
+        if (typeof json === 'string') { json = JSON.parse(json); } 
+        return Object.assign(new BaseCaseField<T>(), json, {
+            value: json.value,
+            options: (json.options as any[] || new Array()).map(v => {
+                return this.fromJSONKeyValue(v);
+            })
+        });
+    }
+
+    private fromJSONKeyValue(json: any) : KeyValue {
+        if (typeof json === 'string') { json = JSON.parse(json); } 
+        return Object.assign(new KeyValue(), json, {})
     }
 }

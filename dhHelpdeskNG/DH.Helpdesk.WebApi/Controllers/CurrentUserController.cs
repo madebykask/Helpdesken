@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Http;
-using DH.Helpdesk.Models.CurrentUser;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Web.Common.Converters;
+using DH.Helpdesk.Web.Common.Models.CurrentUser;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 
@@ -24,7 +26,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             return new UserSettingsModelOutput
             {
                 CustomerId = userSettings.CustomerId,
-                LanguageId = userSettings.LanguageId
+                LanguageId = userSettings.LanguageId,
+                //note: windows and iana time zones sometimes changes. if unknown timezone is found, update nodatime lib or use other approach.
+                TimeZone = userSettings.TimeZoneId.WindowsToIana() ,
+                TimeZoneMoment = TimeZoneToMomentConverter.GenerateAddMomentZoneScript(userSettings.TimeZoneId, 2000, DateTime.Now.Year)
             };
         }
     }

@@ -4,6 +4,7 @@ import { mobiscroll } from '@mobiscroll/angular';
 import { config } from '../environments/environment';
 import { AuthenticationService } from './services/authentication';
 import { LoggerService } from './services/logging';
+import { UserSettingsService } from './services/user';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ export class AppComponent implements OnInit {
   };
   version = config.version;
 
-  constructor(private _authenticationService: AuthenticationService, private _logger: LoggerService) { 
+  constructor(private _authenticationService: AuthenticationService, private _logger: LoggerService, 
+    private _userSettingsService: UserSettingsService) { 
     mobiscroll.settings = { theme: 'ios', lang: 'en', labelStyle: 'stacked' };   
   }
 
@@ -25,6 +27,9 @@ export class AppComponent implements OnInit {
     if (isAuthenticated && config.version != version) {
       this._logger.log('>>>>>>>>>>>>>>>>Logout: version changed')
       this._authenticationService.logout();
+    }
+    if (isAuthenticated) {
+      this._userSettingsService.tryApplyTimezone();
     }
   }
 

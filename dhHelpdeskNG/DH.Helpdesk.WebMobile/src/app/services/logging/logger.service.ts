@@ -8,7 +8,7 @@ export class LoggerService {
   constructor(private errorHandler: ErrorHandler) {}
 
   log(value: any, ...rest: any[]) {
-    if (!config.enableLog) {
+    if (config.enableLog) {
       console.log(value, ...rest);
     }
   }

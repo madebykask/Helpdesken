@@ -39,8 +39,12 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NodaTime, Version=2.4.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NodaTime.2.4.0\lib\net45\NodaTime.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,10 +53,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\TimeZoneConverter.cs" />
+    <Compile Include="Converters\TimeZoneToMomentConverter.cs" />
     <Compile Include="Enums\Case\RemainingTimes.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Models\CaseSearch\SearchModel.cs" />
     <Compile Include="Models\Case\CaseRemainingTimeTable.cs" />
+    <Compile Include="Models\CurrentUser\UserSettingsModelOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +71,9 @@
       <Project>{c4520e52-cb9e-4fd6-bee9-92aa532685a2}</Project>
       <Name>DH.Helpdesk.BusinessData</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

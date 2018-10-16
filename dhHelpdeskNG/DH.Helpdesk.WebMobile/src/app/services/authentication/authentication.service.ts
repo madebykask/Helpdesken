@@ -6,6 +6,7 @@ import { CurrentUser, UserAuthenticationData } from '../../models'
 import { LocalStorageService } from '../../services/local-storage'
 import { Subject } from 'rxjs/Subject';
 import { HttpApiServiceBase } from '../api';
+import { LoggerService } from '../logging';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService extends HttpApiServiceBase {
@@ -14,7 +15,7 @@ export class AuthenticationService extends HttpApiServiceBase {
     private authenticationChangedSubj = new Subject<any>();    
     authenticationChanged$ = this.authenticationChangedSubj.asObservable();
 
-    constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) {
+    constructor(protected http: HttpClient, protected localStorageService: LocalStorageService, private _logger: LoggerService) {
         super(http, localStorageService)
      }    
 

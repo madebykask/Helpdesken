@@ -26,7 +26,7 @@ namespace DH.Helpdesk.Services.Services
         void SaveLanguage(Language language, out IDictionary<string, string> errors);
         void Commit();
 
-        IList<ItemOverview> GetActiveOverviews();
+        List<ItemOverview> GetActiveOverviews();
 
         /// <summary>
         /// The get active languages.
@@ -54,7 +54,8 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<Language> GetLanguages(bool active = true)
         {
-            return _languageRepository.GetMany(x => x.IsActive == active.ToInt()).OrderBy(x => x.Name).ToList();
+            var intActive = active.ToInt();
+            return _languageRepository.GetMany(x => x.IsActive == intActive).OrderBy(x => x.Name).ToList();
         }
 
         public async Task<IList<Language>> GetLanguagesAsync(bool active = true)
@@ -116,9 +117,9 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork.Commit();
         }
 
-        public IList<ItemOverview> GetActiveOverviews()
+        public List<ItemOverview> GetActiveOverviews()
         {
-            return GetOverviews(true);
+            return GetOverviews(true).ToList();
         }
 
         /// <summary>

@@ -7,15 +7,7 @@ export class CurrentUser {
     id: number;
     version: string;
     authData: UserAuthenticationData;
-    currentData: UserData;    
-
-    static fromJSON(json: any) : CurrentUser { //TODO: move mapping to subscribe
-        if (typeof json === 'string') { json = JSON.parse(json); } 
-        return <CurrentUser>Object.assign(new CurrentUser(), json, {
-            authData: UserAuthenticationData.fromJSON(json.authData),
-            currentData: UserData.fromJSON(json.currentData)
-        });  
-    }
+    currentData: UserData;      
 }
 
 export class UserAuthenticationData {
@@ -30,21 +22,10 @@ export class UserAuthenticationData {
         dest.refresh_token = data.refresh_token;
         dest.recievedAt = new Date();
     }
-
-    static fromJSON(json: any) : UserAuthenticationData {//TODO: move mapping to subscribe
-        if (typeof json === 'string') { json = JSON.parse(json); } 
-        return <UserAuthenticationData>Object.assign(new UserAuthenticationData(), json, {
-            recievedAt: new Date(json.recievedAt)
-        });
-    }
 }
 
 export class UserData {
     selectedCustomerId: number;
     selectedLanguageId: number;
-
-    static fromJSON(json: any) : UserData {//TODO: move mapping to subscribe
-        if (typeof json === 'string') { json = JSON.parse(json); } 
-        return <UserData>Object.assign(new UserData(), json, {}); 
-    }
+    userTimeZone?: string;
 }

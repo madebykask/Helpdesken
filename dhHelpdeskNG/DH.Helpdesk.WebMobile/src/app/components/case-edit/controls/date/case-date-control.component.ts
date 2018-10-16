@@ -1,7 +1,10 @@
-import { OnInit, OnDestroy, Component, Input, OnChanges } from "@angular/core";
+import { OnInit, OnDestroy, Component, Input, ViewChild, Inject, LOCALE_ID } from "@angular/core";
 import { BaseCaseField } from "../../../../models";
 import { BaseControl } from "../base-control";
-import { MbscDatetimeOptions } from "@mobiscroll/angular";
+import { MbscDatetimeOptions, MbscDate } from "@mobiscroll/angular";
+import { FormatWidth, getLocaleDateFormat } from "@angular/common";
+import { UserSettingsService } from "../../../../services/user";
+import * as moment from 'moment-timezone';
 
 @Component({
     selector: 'case-date-control',
@@ -9,15 +12,24 @@ import { MbscDatetimeOptions } from "@mobiscroll/angular";
     styleUrls: ['./case-date-control.component.scss']
   })
   export class CaseDateComponent extends BaseControl implements OnInit, OnDestroy {
-    @Input() field: BaseCaseField<Date>;
-    @Input() type: string = "datetime";
+    @ViewChild('date') control: MbscDate;
+    @Input() field: BaseCaseField<string>;    
+    value: Date;
     options: MbscDatetimeOptions = {
       readOnly: true,
-      disabled: true
+      disabled: true,
+      returnFormat: 'iso8601',
+      //dateFormat: getLocaleDateFormat(this.locale, FormatWidth.Medium)
+    }
+
+    constructor(@Inject(LOCALE_ID) locale: string, private _userSettingsService: UserSettingsService) {
+      super();
+      this.options.dateFormat = getLocaleDateFormat(locale, FormatWidth.Short)
+        .replace(new RegExp('M', 'g'), 'm');//different format letters;
     }
 
     ngOnInit(): void {
-      //if(this.readOnly) set disabled/reaonly mode
+      this.value = new Date(this.field.value);
     }
 
     ngOnDestroy(): void {

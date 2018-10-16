@@ -1,6 +1,7 @@
 import {Directive, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
 import { AuthenticationService } from '../../services/authentication';
 import { Subscription } from 'rxjs';
+import { LoggerService } from '../../services/logging';
 
 @Directive({ selector: '[requireAuth]' })
 export class RequireAuthDirective implements OnInit {
@@ -11,6 +12,7 @@ export class RequireAuthDirective implements OnInit {
     private templateRef: TemplateRef<any>,    
     private viewContainer: ViewContainerRef,
     private authenticationService: AuthenticationService,
+    private _logger: LoggerService
   ) {    
   }
   
@@ -26,7 +28,7 @@ export class RequireAuthDirective implements OnInit {
 
   private updateState(){
     let isAuthenticated = this.authenticationService.isAuthenticated();
-    console.log(">>>authentication changed! IsAuthenticated: " +  isAuthenticated);
+    this._logger.log(">>>authentication changed! IsAuthenticated: " +  isAuthenticated);
     
     if (isAuthenticated && this.viewContainer.length === 0) {
         this.viewContainer.createEmbeddedView(this.templateRef);
