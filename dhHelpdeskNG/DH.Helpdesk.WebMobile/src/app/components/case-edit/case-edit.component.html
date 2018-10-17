@@ -86,6 +86,7 @@
                                 <case-textbox-control *ngIf="hasField('Cost')" [field]="getField('Cost')" [form]="form"></case-textbox-control>
                                 <case-textbox-control *ngIf="hasField('Cost_OtherCost')" [field]="getField('Cost_OtherCost')" [form]="form"></case-textbox-control>
                                 <case-dropdown-control *ngIf="hasField('Cost_Currency')" [field]="getField('Cost_Currency')" [form]="form" [dataSource]="dataSource.options.currencies"></case-dropdown-control>
+                                <case-files-control *ngIf="hasField('Filename')" [field]="getField('Filename')"></case-files-control>
                         </mbsc-form-group-content>
                     </mbsc-form-group>                                        
     

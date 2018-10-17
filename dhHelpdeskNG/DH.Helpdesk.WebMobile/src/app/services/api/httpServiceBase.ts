@@ -1,5 +1,5 @@
 import { Observable } from "rxjs/Observable";
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { config } from "../../../environments/environment";
@@ -10,30 +10,7 @@ export abstract class HttpApiServiceBase {
 
     protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) { 
         this.baseApiUrl = config.apiUrl;
-    }
-
-    protected buildResourseUrl(resourceName: string, params: object = undefined, addCustomerId = true, addLanguage = false) {
-        let urlParams: string = null;
-        let userData = this.localStorageService.getCurrentUser();
-        if (addCustomerId === true) {
-            if(userData !== null) {
-                params = Object.assign({}, params || {}, {cid: userData.currentData.selectedCustomerId})
-            }
-        }
-        if (addLanguage === true) {
-            if(userData !== null) {
-                params = Object.assign({}, params || {}, {langid: userData.currentData.selectedLanguageId})
-            }
-        }
-        if (params) {
-            let str = Object.keys(params).map(function(key) {
-                return key + '=' + encodeURIComponent(params[key]);
-              }).join('&');
-
-              urlParams = (str.length > 0 && resourceName.indexOf("?") < 0) ? "?" + str : "&" + str;
-        }
-        return `${this.baseApiUrl}${resourceName}${urlParams || ''}`;
-    }
+    }   
     
     protected getJson<TResponse>(url: string, headers?:any): Observable<TResponse> {
         return this.http
@@ -62,7 +39,58 @@ export abstract class HttpApiServiceBase {
                     return throwError(error);
             }));
     }
-    
+
+    protected getFileBody(url:string, headers?:any) : Observable<Blob> {
+        return this.http.get(url, { 
+            responseType: 'blob', 
+            observe: 'body', 
+            headers: this.getHeaders(headers) 
+        }).pipe(
+            catchError((error:any) => throwError(error))
+            );
+    }
+
+    protected getFileResponse(url:string, headers?:any) : Observable<any> {
+        return this.http.get(url, { 
+            responseType: 'blob', 
+            observe: 'response', 
+            headers: this.getHeaders(headers) 
+        }).pipe(
+            map(res => {
+                    return {                        
+                        body : res.body,
+                        fileName: res .headers.get('content-filename'),
+                        contentType: res.headers.get('content-type')
+                    };
+            }),
+            catchError((error:any) => {
+                return throwError(error);
+            }));
+    } 
+
+    protected buildResourseUrl(resourceName: string, params: object = undefined, addCustomerId = true, addLanguage = false) {
+        let urlParams: string = null;
+        let userData = this.localStorageService.getCurrentUser();
+        if (addCustomerId === true) {
+            if(userData !== null) {
+                params = Object.assign({}, params || {}, {cid: userData.currentData.selectedCustomerId})
+            }
+        }
+        if (addLanguage === true) {
+            if(userData !== null) {
+                params = Object.assign({}, params || {}, {langid: userData.currentData.selectedLanguageId})
+            }
+        }
+        if (params) {
+            let str = Object.keys(params).map(function(key) {
+                return key + '=' + encodeURIComponent(params[key]);
+              }).join('&');
+
+              urlParams = (str.length > 0 && resourceName.indexOf("?") < 0) ? "?" + str : "&" + str;
+        }
+        return `${this.baseApiUrl}${resourceName}${urlParams || ''}`;
+    }   
+
     private getHeaders(headers?: any): HttpHeaders {
         let options = new HttpHeaders();
         if (headers != null) {

@@ -3,10 +3,12 @@ using DH.Helpdesk.Models.Base;
 
 namespace DH.Helpdesk.Models.Case
 {
-    public class GetCaseInputModel: BaseInputModel
+    public class GetCaseFileInputModel : BaseInputModel
     {
         [Required]
         public int CaseId { get; set; }
-        public int LangId { get; set; }
+
+        [Required]
+        public int FileId { get; set; }
     }
 }

@@ -4,7 +4,7 @@ import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
 import { map, defaultIfEmpty } from 'rxjs/operators';
 import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel, BaseCaseField, KeyValue } from '../../models';
-import { throwError, forkJoin, empty, } from 'rxjs';
+import { throwError, forkJoin, empty } from 'rxjs';
 import { CaseOptions } from '../../models/case/case-options.model';
 import { CaseOrganizationService } from '../case-organization';
 import { BundleCaseOptionsService } from '../case-organization/bundle-case-options.service';
@@ -14,14 +14,13 @@ export class CaseService extends HttpApiServiceBase {
    
     protected constructor(http: HttpClient, localStorageService: LocalStorageService,
          private _caseOrganizationService: CaseOrganizationService,
-         private _batchCaseOptionsService: BundleCaseOptionsService ){
+         private _batchCaseOptionsService: BundleCaseOptionsService ) {
         super(http, localStorageService);
     }
 
     getCaseData(caseId: number) {
         var user = this.localStorageService.getCurrentUser();
-        return this.getJson(this.buildResourseUrl('/api/case/get',
-                             { caseId: caseId }, true, true))//TODO: error handling
+        return this.getJson(this.buildResourseUrl('/api/case/get', { caseId: caseId }, true, true))//TODO: error handling
             .pipe(
                 map((caseData: any) => {
                     let model = this.fromJSONCaseEditInputModel(caseData);
@@ -50,40 +49,49 @@ export class CaseService extends HttpApiServiceBase {
                     .pipe(
                         map(([regions, departments, oUs, isAboutDepartments, isAboutOUs, bundledOptions, caseTypes, productAreas, categories, closingReasons]) => {
                             let options = new CaseOptions();
-                            if(regions != null) {                                                
+                            
+                            if (regions != null) {                                                
                                 options.regions = regions;
                             }
-                            if(departments != null) {                                                
+
+                            if (departments != null) {                                                
                                 options.departments = departments;
                             }
-                            if(oUs != null) {
+
+                            if (oUs != null) {
                                 options.oUs = oUs;
                             }
-                            if(isAboutDepartments != null) {                                                
+
+                            if (isAboutDepartments != null) {                                                
                                 options.isAboutDepartments = isAboutDepartments;
                             }
-                            if(isAboutOUs != null) {
+
+                            if (isAboutOUs != null) {
                                 options.isAboutOUs = isAboutOUs;
                             }
 
                             Object.assign(options, bundledOptions);
 
-                            if(bundledOptions != null) {
+                            if (bundledOptions != null) {
                                 Object.assign(options, bundledOptions);
                             }
 
                             if (caseTypes != null) {
                                 options.caseTypes = caseTypes;
                             }
+
                             if (productAreas != null) {
                                 options.productAreas = productAreas;
                             }
+
                             if (categories != null) {
                                 options.categories = categories;
                             }
+
                             if (closingReasons != null) {
                                 options.closingReasons = closingReasons;
                             }                             
+
                             return options;
                     }));
     }
@@ -105,26 +113,50 @@ export class CaseService extends HttpApiServiceBase {
             )
     }
 
+    buildCaseFileUrl(caseId:number, fileId:number) : string {
+        let url = this.buildResourseUrl(`/api/case/${caseId}/file/${fileId}`, null, true, false)
+        return url;
+    }
+
     //TODO: review - not all cases covered
     private fromJSONCaseEditInputModel(json: any) : CaseEditInputModel {
-        if (typeof json === 'string') { json = JSON.parse(json); } 
+        if (typeof json === 'string') {
+             json = JSON.parse(json); 
+        } 
+        var fields = json.fields as any[] || new Array();
         return Object.assign(new CaseEditInputModel(), json, {
-            fields: (json.fields as any[] || new Array()).map(v => {
-                if (v.JsonType === "string") return this.fromJSONBaseCaseField<string>(v);
-                if (v.JsonType === "date") return this.fromJSONBaseCaseField<string>(v);//TODO: As date
-                if (v.JsonType === "number") return this.fromJSONBaseCaseField<number>(v);
-                return this.fromJSONBaseCaseField<any>(v);
+            fields: fields.map(v => {
+                let field = null;
+                switch (v.JsonType) {
+                    case "string":                        
+                        field = this.fromJSONBaseCaseField<string>(v);
+                        break;                
+                    case "date":
+                        field = this.fromJSONBaseCaseField<string>(v);//TODO: As date                        
+                        break;                
+                    case "number":                        
+                        field = this.fromJSONBaseCaseField<number>(v);
+                        break;                
+                    case "array":              
+                        field = this.fromJSONBaseCaseField<Array<any>>(v);          
+                        break;                
+                    default:
+                        field = this.fromJSONBaseCaseField<any>(v)
+                        break;                           
+                }
+                return field;
             })
         }); 
     }
 
     private fromJSONBaseCaseField<T>(json: any) : BaseCaseField<T> {
-        if (typeof json === 'string') { json = JSON.parse(json); } 
+        if (typeof json === 'string') { 
+            json = JSON.parse(json); 
+        } 
+        var options = json.options as any[] || new Array();
         return Object.assign(new BaseCaseField<T>(), json, {
             value: json.value,
-            options: (json.options as any[] || new Array()).map(v => {
-                return this.fromJSONKeyValue(v);
-            })
+            options: options.map(v => this.fromJSONKeyValue(v))
         });
     }
 

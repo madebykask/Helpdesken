@@ -1,9 +1,7 @@
 export class CaseEditInputModel { 
     id: number;
     caseNumber: number;
-    fields: IBaseCaseField<any>[];
-
-    
+    fields: IBaseCaseField<any>[];    
 }
 
 export class BaseCaseField<T> implements IBaseCaseField<T> {

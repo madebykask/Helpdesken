@@ -102,9 +102,7 @@ namespace DH.Helpdesk.Services.Services
         /// <param name="unitOfWork">
         /// The unit of work.
         /// </param>
-        public SettingService(
-            ISettingRepository settingRepository,
-            IUnitOfWork unitOfWork)
+        public SettingService(ISettingRepository settingRepository, IUnitOfWork unitOfWork)
         {
             this.settingRepository = settingRepository;
             this.unitOfWork = unitOfWork;

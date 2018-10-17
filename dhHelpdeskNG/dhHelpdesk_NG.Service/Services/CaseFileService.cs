@@ -1,96 +1,90 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Dal.Repositories.Cases;
+using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services
 {
-    using System.Collections.Generic;
-
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Repositories.Cases;
-    using DH.Helpdesk.Domain;
-
     public interface ICaseFileService
     {
-        //IList<CaseFile> GetCaseFiles(int caseid);
-        byte[] GetFileContentByIdAndFileName(int caseId,string basePath, string fileName);
-        List<string> FindFileNamesByCaseId(int caseId);
+        CaseFileContent GetCaseFile(int customerId, int caseId, int fileId);
+        byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
+
+        IList<string> FindFileNamesByCaseId(int caseId);
         void AddFile(CaseFileDto caseFileDto);
-        void AddFiles(List<CaseFileDto> caseFileDtos);
+        void AddFiles(IList<CaseFileDto> caseFileDtos);
         void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath);
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
 
-        List<CaseFileModel> GetCaseFiles(int caseId, bool canDelete);
-        List<CaseFileDate> FindFileNamesAndDatesByCaseId(int caseId);
+        IList<CaseFileModel> GetCaseFiles(int caseId, bool canDelete);
+        IList<CaseFileDate> FindFileNamesAndDatesByCaseId(int caseId);
     }
 
     public class CaseFileService : ICaseFileService
     {
-        #region Variables
-
         private readonly ICaseFileRepository _caseFileRepository;
-        private readonly IFilesStorage _filesStorage;
+        private readonly IGlobalSettingRepository _globalSettingRepository;
+        private readonly ISettingRepository _settingRepository;
+
+        #region ctor()
+
+        public CaseFileService(ISettingRepository settingRepository,
+            IGlobalSettingRepository globalSettingRepository,
+            ICaseFileRepository caseFileRepository)
+        {
+            _settingRepository = settingRepository;
+            _globalSettingRepository = globalSettingRepository;
+            _caseFileRepository = caseFileRepository;
+        }
 
         #endregion
 
-        #region Public Methods and Functions
+        #region Public Methods
 
-        public CaseFileService(
-            ICaseFileRepository caseFileRepository, IFilesStorage fileStorage)
+        public CaseFileContent GetCaseFile(int customerId, int caseId, int fileId)
         {
-            this._caseFileRepository = caseFileRepository;
-            this._filesStorage = fileStorage; 
+            var basePath = GetFileAttachFolderPath(customerId);
+            var res = _caseFileRepository.GetCaseFileContent(caseId, fileId, basePath);
+            return res;
         }
-
+        
         public byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName)
         {
-            return this._caseFileRepository.GetFileContentByIdAndFileName(caseId, basePath, fileName);  
+            return _caseFileRepository.GetFileContentByIdAndFileName(caseId, basePath, fileName);
         }
 
-        public void AddFiles(List<CaseFileDto> caseFileDtos)
+        public void AddFiles(IList<CaseFileDto> caseFileDtos)
         {
-            foreach (var f in caseFileDtos)
-            {
-                this.AddFile(f);
-            }
+            caseFileDtos?.ForEach(AddFile);
         }
 
         public void AddFile(CaseFileDto caseFileDto)
         {
-            var caseFile = new CaseFile
-            {
-                CreatedDate = caseFileDto.CreatedDate,
-                Case_Id = caseFileDto.ReferenceId,
-                FileName = caseFileDto.FileName,
-                UserId = caseFileDto.UserId
-            };
-            this._caseFileRepository.Add(caseFile);
-            this._caseFileRepository.Commit();
-
-            int caseNo = this._caseFileRepository.GetCaseNumberForUploadedFile(caseFileDto.ReferenceId);
-            this._filesStorage.SaveFile(caseFileDto.Content, caseFileDto.BasePath, caseFileDto.FileName, ModuleName.Cases, caseNo);
+            _caseFileRepository.SaveCaseFile(caseFileDto);
         }
 
         public void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath)
         {
-            this._caseFileRepository.MoveCaseFiles(caseNumber, fromBasePath, toBasePath); 
+            _caseFileRepository.MoveCaseFiles(caseNumber, fromBasePath, toBasePath);
         }
 
         public void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName)
         {
-            this._caseFileRepository.DeleteByCaseIdAndFileName(caseId, basePath, fileName);  
+            _caseFileRepository.DeleteByCaseIdAndFileName(caseId, basePath, fileName);
         }
 
-        public List<CaseFileModel> GetCaseFiles(int caseId, bool canDelete)
+        public IList<CaseFileModel> GetCaseFiles(int caseId, bool canDelete)
         {
-            return this._caseFileRepository.GetCaseFiles(caseId, canDelete);
+            return _caseFileRepository.GetCaseFiles(caseId, canDelete);
         }
 
-        public List<CaseFileDate> FindFileNamesAndDatesByCaseId(int caseId)
+        public IList<CaseFileDate> FindFileNamesAndDatesByCaseId(int caseId)
         {
-            var files = this._caseFileRepository.GetCaseFilesByCaseId(caseId);
+            var files = _caseFileRepository.GetCaseFilesByCaseId(caseId);
+
             return files.Select(x => new CaseFileDate
             {
                 FileDate = x.CreatedDate,
@@ -98,17 +92,33 @@ namespace DH.Helpdesk.Services.Services
             }).ToList();
         }
 
-        public List<string> FindFileNamesByCaseId(int caseId)
+        public IList<string> FindFileNamesByCaseId(int caseId)
         {
-            return this._caseFileRepository.FindFileNamesByCaseId(caseId);  
+            return _caseFileRepository.FindFileNamesByCaseId(caseId);
         }
 
         public bool FileExists(int caseId, string fileName)
         {
-            return this._caseFileRepository.FileExists(caseId, fileName);  
+            return _caseFileRepository.FileExists(caseId, fileName);
         }
 
         #endregion
 
+        #region Private Methods
+
+        private string GetFileAttachFolderPath(int customerId)
+        {
+            var customerFilePath = _settingRepository.GetMany(s => s.Customer_Id == customerId).Single().PhysicalFilePath;
+            if (string.IsNullOrEmpty(customerFilePath))
+            {
+                var globalSetting = _globalSettingRepository.Get();
+                if (globalSetting != null)
+                    customerFilePath = globalSetting.AttachedFileFolder;
+            }
+
+            return customerFilePath ?? string.Empty;
+        }
+
+        #endregion
     }
 }

@@ -170,6 +170,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\ActionResults\FileResult.cs" />
     <Compile Include="Infrastructure\Attributes\AuthorizeApiAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\SkipCustomerAuthorization.cs" />
     <Compile Include="Infrastructure\Config\Filters\CheckUserCasePermissionsAttribute.cs" />

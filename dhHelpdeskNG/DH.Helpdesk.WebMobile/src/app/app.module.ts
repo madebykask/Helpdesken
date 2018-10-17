@@ -23,6 +23,7 @@ import { GetByKeyPipe, DateTimezonePipe } from './helpers/pipes';
 import { AppRoutingModule } from './app.routing';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { RequireAuthDirective } from './helpers/directives/require-auth.directive';
+import { CaseFilesControlComponent } from './components/case-edit/controls/case-files/case-files-control.component';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -33,6 +34,7 @@ import { RequireAuthDirective } from './helpers/directives/require-auth.directiv
      CaseSwitchComponent, CaseTextareaComponent, CaseDateTimeComponent,
      GetByKeyPipe, DateTimezonePipe,
      RequireAuthDirective,
+     CaseFilesControlComponent,
     ],
   imports: [ 
     MbscModule, 

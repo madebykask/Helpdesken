@@ -1,0 +1,49 @@
+﻿using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Http;
+
+namespace DH.Helpdesk.WebApi.Infrastructure.ActionResults
+{
+    public class FileResult : IHttpActionResult
+    {
+        private const string DefaultContentType = "application/octet-stream";
+        private readonly string _fileName;
+        private readonly byte[] _data;
+        private readonly HttpRequestMessage _request;
+        private readonly string _contentType;
+
+        public FileResult(string fileName, byte[] data, HttpRequestMessage request, string contentType = null)
+        {
+            _fileName = fileName;
+            _data = data;
+            _request = request;
+            _contentType = string.IsNullOrEmpty(contentType) ? GetMimeType(fileName) : contentType;
+        }
+
+        public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
+        {
+            var httpResponseMessage = _request.CreateResponse(HttpStatusCode.OK);
+
+            var ms = new MemoryStream(_data);
+            ms.Position = 0;
+            httpResponseMessage.Content = new StreamContent(ms);
+            
+            var contentDisposition = string.Concat("attachment; filename=", _fileName);
+            httpResponseMessage.Content.Headers.ContentDisposition = ContentDispositionHeaderValue.Parse(contentDisposition);
+            httpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(_contentType);
+
+            return Task.FromResult(httpResponseMessage);
+        }
+
+        private string GetMimeType(string fileName)
+        {
+            var mimeType = MimeMapping.GetMimeMapping(Path.GetExtension(fileName));
+            return string.IsNullOrEmpty(mimeType) ? DefaultContentType :  mimeType;
+        }
+    }
+}

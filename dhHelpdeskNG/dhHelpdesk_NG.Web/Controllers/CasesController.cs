@@ -7027,7 +7027,7 @@ namespace DH.Helpdesk.Web.Controllers
             return li;
         }
 
-        private List<CaseFileModel> MakeCaseFileModel(List<CaseFileDate> files, string savedFiles)
+        private IList<CaseFileModel> MakeCaseFileModel(IList<CaseFileDate> files, string savedFiles)
         {
             var res = new List<CaseFileModel>();
             int i = 0;

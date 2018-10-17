@@ -1,8 +1,6 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Models.Case.Field
 {
@@ -29,9 +27,11 @@ namespace DH.Helpdesk.Models.Case.Field
             {
                 var jsonType = "";
                 var type = typeof(T);
+
                 if (type == typeof(DateTime)) jsonType = "date";
                 if (type == typeof(int) || type == typeof(decimal)) jsonType = "number";
                 if (type == typeof(string)) jsonType = "string";
+                if (type.GetInterface(nameof(IEnumerable)) != null) jsonType = "array";
                 //TODO: add other types
 
                 return jsonType;

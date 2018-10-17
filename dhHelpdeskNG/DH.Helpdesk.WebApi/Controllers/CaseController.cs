@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Common.Extensions.Boolean;
@@ -15,8 +16,8 @@ using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Models.Case.Field;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
-using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.WebApi.Infrastructure;
+using DH.Helpdesk.WebApi.Infrastructure.ActionResults;
 using DH.Helpdesk.WebApi.Infrastructure.Config.Authentication;
 using DH.Helpdesk.WebApi.Infrastructure.Config.Filters;
 using DH.Helpdesk.WebApi.Infrastructure.Translate;
@@ -25,9 +26,11 @@ using DateTime = System.DateTime;
 namespace DH.Helpdesk.WebApi.Controllers
 {
     //[Route( "api/v{version:apiVersion}" )]
+    [RoutePrefix("api/Case")]
     public class CaseController : BaseApiController
     {
         private readonly ICaseService _caseService;
+        private readonly ICaseFileService _caseFileService;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly IMailTemplateService _mailTemplateService;
         private readonly IUserService _userSerivice;
@@ -38,13 +41,16 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ISettingService _customerSettingsService;
         private readonly ITranslateCacheService _translateCacheService;
 
-        public CaseController(ICaseService caseService, ICaseFieldSettingService caseFieldSettingService,
+        #region ctor()
+
+        public CaseController(ICaseService caseService, ICaseFileService caseFileService, ICaseFieldSettingService caseFieldSettingService,
             IMailTemplateService mailTemplateService, IUserService userSerivice,
             ICustomerUserService customerUserService, IUserService userService, IWorkingGroupService workingGroupService,
             ISupplierService supplierService, ISettingService customerSettingsService,
             ITranslateCacheService translateCacheService)
         {
             _caseService = caseService;
+            _caseFileService = caseFileService;
             _caseFieldSettingService = caseFieldSettingService;
             _mailTemplateService = mailTemplateService;
             _userSerivice = userSerivice;
@@ -54,6 +60,18 @@ namespace DH.Helpdesk.WebApi.Controllers
             _supplierService = supplierService;
             _customerSettingsService = customerSettingsService;
             _translateCacheService = translateCacheService;
+        }
+
+            #endregion
+
+        [HttpGet]
+        [CheckUserCasePermissions(CaseIdParamName = "caseId")]
+        [Route("{caseId:int}/File/{fileId:int}")] //ex: /api/Case/123/File/1203?cid=1
+        public Task<IHttpActionResult> File([FromUri]int caseId, [FromUri]int fileId, [FromUri]int? cid = null)
+        {
+            var fileContent = _caseFileService.GetCaseFile(cid.Value, caseId, fileId);
+            IHttpActionResult res = new FileResult(fileContent.FileName, fileContent.Content, this.Request);
+            return Task.FromResult(res);
         }
 
         [HttpGet]
@@ -79,7 +97,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
 
             var customerSettings = _customerSettingsService.GetCustomerSettings(currentCid);
-            var userOverview = await _userSerivice.GetUserOverviewAsync(UserId);//TODO: use cahced version
+            var userOverview = await _userSerivice.GetUserOverviewAsync(UserId);//TODO: use cached version!
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(currentCid);
             var caseFieldTranslations = await _caseFieldSettingService.GetCustomerCaseTranslationsAsync(currentCid);
 
@@ -571,8 +589,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     WorkingGroupEntity caseOwnerDefaultWorkingGroup = null;
                     if (currentCase.DefaultOwnerWG_Id.HasValue && currentCase.DefaultOwnerWG_Id.Value > 0)
                     {
-                        caseOwnerDefaultWorkingGroup =
-                            _workingGroupService.GetWorkingGroup(currentCase.DefaultOwnerWG_Id.Value);
+                        caseOwnerDefaultWorkingGroup = _workingGroupService.GetWorkingGroup(currentCase.DefaultOwnerWG_Id.Value);
                     }
 
                     if (user != null)
@@ -904,18 +921,17 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (customerSettings.AttachmentPlacement == 1 && IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Filename))
+            if (/*customerSettings.AttachmentPlacement == 1 &&*/ IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Filename))
             {
-                
-                field = new BaseCaseField<string>()
+                field = new BaseCaseField<IList<CaseFileModel>>()
                 {
                     Name = GlobalEnums.TranslationCaseFields.Filename.ToString(),
-                    Value = "",
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Filename,
-                        languageId, input.Cid, caseFieldTranslations, "Bifogad fil"),
+                    Value = GetCaseFilesModel(currentCase.Id),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Filename, languageId, input.Cid, caseFieldTranslations, "Bifogad fil"),
                     Section = CaseSectionType.CaseInfo.ToString(),
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Filename, caseFieldSettings)
                 };
+
                 model.Fields.Add(field);
             }
 
@@ -1208,11 +1224,15 @@ namespace DH.Helpdesk.WebApi.Controllers
             return await Task.FromResult(model);
         }
 
+        private IList<CaseFileModel> GetCaseFilesModel(int caseId)
+        {
+            return _caseFileService.GetCaseFiles(caseId, true);
+        }
+
         private bool IsCaseNew(int currentCaseId)
         {
             return currentCaseId < 0;
         }
-
 
         public async Task<CaseEditOutputModel> New()
         {
