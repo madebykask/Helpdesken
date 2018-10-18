@@ -1,5 +1,12 @@
 # DH Helpdesk Mobile Web
 
+## To update mobiscroll package:
+1) make sure that ../src/lib/mobiscroll exists with content
+2) run command: mobiscroll config angular --no-npm
+
+## To install existing mobiscroll:
+1) run command:  mobiscroll config angular --no-npm
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
