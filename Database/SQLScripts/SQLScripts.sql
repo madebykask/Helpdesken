@@ -81,5 +81,4 @@ END
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.39'
 --ROLLBACK --TMP
 
-UPPDATE tbklfsd SET A = 'B' -- Testing failed deployment of DB --ignore
 
