@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case;
+﻿using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.BusinessData.Models.Customer.Input;
 using DH.Helpdesk.BusinessData.OldComponents;
@@ -29,6 +30,7 @@ namespace DH.Helpdesk.Services.Services
         int GetCustomerLanguage(int customerid);
 
         Customer GetCustomer(int id);
+        Task<Customer> GetCustomerAsync(int id);
         ReportCustomer GetReportCustomerById(int customerId, int reportId);
 
         DeleteMessage DeleteCustomer(int id);
@@ -57,7 +59,6 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICustomerRepository _customerRepository;
         private readonly IReportRepository _reportRepository;
         private readonly IReportCustomerRepository _reportCustomerRepository;
-        private readonly ISettingRepository _settingRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICaseSettingRepository _caseSettingRepository;
@@ -73,7 +74,6 @@ namespace DH.Helpdesk.Services.Services
             ICustomerRepository customerRepository,
             IReportRepository reportRepository,
             IReportCustomerRepository reportCustomerRepository,
-            ISettingRepository settingRepository,
             IUserRepository userRepository,
             IUnitOfWork unitOfWork,
             ICaseSettingRepository caseSettingRepository,
@@ -87,7 +87,6 @@ namespace DH.Helpdesk.Services.Services
             this._customerRepository = customerRepository;
             this._reportRepository = reportRepository;
             this._reportCustomerRepository = reportCustomerRepository;
-            this._settingRepository = settingRepository;
             this._userRepository = userRepository;
             this._unitOfWork = unitOfWork;
             this._caseSettingRepository = caseSettingRepository;
@@ -173,6 +172,11 @@ namespace DH.Helpdesk.Services.Services
         public Customer GetCustomer(int id)
         {
             return this._customerRepository.GetById(id);
+        }
+
+        public async Task<Customer> GetCustomerAsync(int id)
+        {
+            return await _customerRepository.GetByIdAsync(id);
         }
 
         public ReportCustomer GetReportCustomerById(int customerId, int reportId)

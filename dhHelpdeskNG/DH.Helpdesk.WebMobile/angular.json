@@ -37,8 +37,8 @@
               }
             ],
             "styles": [
-              "./node_modules/@mobiscroll/angular/dist/css/mobiscroll.min.css",
-              "src/content/styles/styles.scss"
+              "src/content/styles/styles.scss",
+              "./node_modules/@mobiscroll/angular/dist/css/mobiscroll.angular.min.css"
             ],
             "scripts": [
               "src/content/scripts/scripts.js"

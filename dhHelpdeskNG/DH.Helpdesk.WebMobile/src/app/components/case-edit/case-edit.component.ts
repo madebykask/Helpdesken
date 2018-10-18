@@ -22,19 +22,12 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     isLoaded: boolean = false;
     form: FormGroup;    
 
-    bottomMenuSettings = {
-        type: 'bottom',
-        //display: 'inline'
-    };
-
     tabsMenuSettings = {
-        type: 'tab',
-        display: 'inline'
     }
 
     constructor(private route: ActivatedRoute,
          private caseService: CaseService,
-         private router: Router) {
+         public router: Router) {
         if(this.route.snapshot.paramMap.has('id')) {
             this.caseId = Number(this.route.snapshot.paramMap.get('id'));
         } else {
@@ -120,6 +113,10 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     isSectionOpen(type: CaseSectionType) {
         if (this.caseSections == null) return null
         return this.caseSections.find(s => s.type == type).isEditCollapsed ? null : true;
+    }
+
+    saveCase() {
+        return false;
     }
 
     private getCaseOptionsFilter(data: CaseEditInputModel) {

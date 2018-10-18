@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
 using DH.Helpdesk.BusinessData.Enums.Case;
+using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Grid;
 using DH.Helpdesk.BusinessData.Models.Paging;
@@ -55,10 +56,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             var filter = new CaseSearchFilter();
             filter.CustomerId = cid;
 
-            filter.UserId = UserId;//TODO: 0 check
+            filter.UserId = UserId;
             var userGroupId = User.Identity.GetGroupId();
-            var userOverview = await Task.FromResult(_userSerivice.GetUserOverview(UserId));//TODO: use cahced version
-            var customerSettings = await Task.FromResult(_customerService.GetCustomer(filter.CustomerId));//TODO: Use cahced version
+            var userOverview = await _userSerivice.GetUserOverviewAsync(UserId);
+            var customerSettings = await _customerService.GetCustomerAsync(filter.CustomerId);
 
             filter.Initiator = input.Initiator ?? string.Empty;//from params - frm.ReturnFormValue(CaseFilterFields.InitiatorNameAttribute);
             if (input.InitiatorSearchScope.HasValue) 
@@ -126,6 +127,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             //TODO: review if it required
             var caseSettings = _caseSettingService.GetCaseSettingsWithUser(filter.CustomerId, filter.UserId, userGroupId);
+            AddMissingCaseSettingsForMobile(caseSettings);//TODO: Temporary  - remove after mobile case settings is implemented
             var caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(filter.CustomerId).ToArray();
 
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(userOverview.TimeZoneId);
@@ -154,9 +156,6 @@ namespace DH.Helpdesk.WebApi.Controllers
                 PageNumber = input.Page ?? 1
             };
 
-            CaseRemainingTimeData remainingTimeData;
-            CaseAggregateData aggregateData;
-
             var searchResult = _caseSearchService.Search(
                 filter,
                 caseSettings,
@@ -172,14 +171,44 @@ namespace DH.Helpdesk.WebApi.Controllers
                 userTimeZone,
                 ApplicationTypes.Helpdesk,//TODO: remove hardcode
                 userOverview.ShowSolutionTime,
-                out remainingTimeData,
-                out aggregateData);
+                out CaseRemainingTimeData remainingTimeData,
+                out CaseAggregateData aggregateData);
 
 
             //searchResults = CommonHelper.TreeTranslate(m.cases, f.CustomerId, _productAreaService);
 
             //var results = _caseSearchService.Search();
             return searchResult;
+        }
+
+        /// <summary>
+        /// This isa temporary methhod. Adds required fields to Mobile Case Overview page. Remove after Case Mobile settings mage added
+        /// </summary>
+        /// <param name="caseSettings"></param>
+        private void AddMissingCaseSettingsForMobile(IList<CaseSettings> caseSettings)
+        {
+            if (caseSettings.All(cs => cs.Name != CaseInfoFields.Case))
+            {
+                caseSettings.Add(new CaseSettings
+                {
+                    Name = CaseInfoFields.Case,
+                });
+            }
+            if (caseSettings.All(cs => cs.Name != CaseInfoFields.RegistrationDate))
+            {
+                caseSettings.Add(new CaseSettings
+                {
+                    Name = CaseInfoFields.RegistrationDate,
+                });
+            }
+            if (caseSettings.All(cs => cs.Name != CaseInfoFields.Caption))
+            {
+                caseSettings.Add(new CaseSettings
+                {
+                    Name = CaseInfoFields.Caption,
+                });
+            }
+
         }
 
         private CaseRemainingTimeTable GetRemainigTimeById(RemainingTimes remainigTimeId)

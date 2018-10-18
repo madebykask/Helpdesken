@@ -1,6 +1,6 @@
 {
     "name": "web-mobile",
-    "version": "0.1.2",
+    "version": "0.1.4",
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
@@ -22,7 +22,7 @@
         "@angular/platform-browser-dynamic": "^6.1.4",
         "@angular/platform-server": "^6.1.4",
         "@angular/router": "^6.1.4",
-        "@mobiscroll/angular": "https://npm.mobiscroll.com/@mobiscroll/angular-trial/-/angular-trial-4.4.0.tgz",
+        "@mobiscroll/angular": "file:./src/lib/mobiscroll-package/mobiscroll-angular-4.4.1.tgz",
         "@ngx-translate/core": "^10.0.2",
         "@ngx-translate/http-loader": "^3.0.1",
         "core-js": "^2.5.7",

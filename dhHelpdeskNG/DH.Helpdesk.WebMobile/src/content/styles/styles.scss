@@ -84,3 +84,31 @@
 mbsc-textarea textarea:disabled {
     opacity: 0.5;
 }
+
+/* .mbsc-ios.mbsc-page {
+    background: white !important;
+} */
+
+a {
+    &.inactive {
+    color: #ccc;
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+.footer {    
+    .mbsc-ios {
+        &.mbsc-ms-c {
+            background: #428bca;
+        }
+        .mbsc-ms {
+            .mbsc-ms-item {
+                color: black;
+            }        
+            .mbsc-ms-item-sel {
+                color: #ffffff;
+            }
+        }
+    }
+}

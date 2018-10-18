@@ -128,11 +128,11 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.ReportedBy, caseFieldSettings)
                     };
                     field.Options.Add(new KeyValuePair<string, string>("maxlength", "40"));
+                    model.Fields.Add(field);
                 }
 
                 if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_Name))
                 {
-                    model.Fields.Add(field);
                     field = new BaseCaseField<string>()
                     {
                         Name = GlobalEnums.TranslationCaseFields.Persons_Name.ToString(),
@@ -142,11 +142,11 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Persons_Name, caseFieldSettings)
                     };
                     field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                    model.Fields.Add(field);
                 }
 
                 if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_EMail))
                 {
-                    model.Fields.Add(field);
                     field = new BaseCaseField<string>()
                     {
                         Name = GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(),

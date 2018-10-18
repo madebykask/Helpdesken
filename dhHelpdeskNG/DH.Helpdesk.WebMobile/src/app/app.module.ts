@@ -35,7 +35,7 @@ import { RequireAuthDirective } from './helpers/directives/require-auth.directiv
      RequireAuthDirective,
     ],
   imports: [ 
-    MbscModule,  
+    MbscModule, 
     BrowserModule,    
     FormsModule,
     ReactiveFormsModule,

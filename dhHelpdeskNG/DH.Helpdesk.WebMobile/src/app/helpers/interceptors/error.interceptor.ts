@@ -52,7 +52,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 return this.authenticationService
                     .refreshToken()
                     .pipe(
-                        switchMap(() => {
+                        switchMap((r: boolean) => {
                             //When the call to refreshToken completes we reset the refreshTokenInProgress to false
                             // for the next time the token needs to be refreshed
                             this.refreshTokenInProgress = false;

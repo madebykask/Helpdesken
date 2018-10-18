@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpRequest } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { config } from '../../../environments/environment';
 import { CurrentUser, UserAuthenticationData } from '../../models'
 import { LocalStorageService } from '../../services/local-storage'
 import { Subject } from 'rxjs/Subject';
 import { HttpApiServiceBase } from '../api';
 import { LoggerService } from '../logging';
+import { of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService extends HttpApiServiceBase {
@@ -54,14 +55,20 @@ export class AuthenticationService extends HttpApiServiceBase {
             var refreshToken = user.authData.refresh_token;
             let clientId = config.clientId;
             return this.postJson<any>(this.buildResourseUrl('/api/account/refresh', undefined, false), { refreshToken, clientId })
-                .pipe(map(data => {
-                    user.authData.access_token = data.access_token;
-                    user.authData.expires_in = Number(data.expires_in);
-                    user.authData.recievedAt = new Date();
-                    this.localStorageService.setCurrentUser(user);
+                .pipe(
+                    map(data => {
+                        user.authData.access_token = data.access_token;
+                        user.authData.expires_in = Number(data.expires_in);
+                        user.authData.recievedAt = new Date();
+                        this.localStorageService.setCurrentUser(user);
 
-                    this.raiseAuthenticationChanged();
-                }));
+                        this.raiseAuthenticationChanged();
+                        return true;
+                    }),
+                    catchError(err => {
+                        return of(false);
+                    }),
+                );
         }        
     }
 

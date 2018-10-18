@@ -1,9 +1,12 @@
 <mbsc-page [options]="pageSettings">  
-    <div *requireAuth class="stickyTop">
+<!--     <div *requireAuth class="stickyTop">
         <app-header></app-header>
-    </div>
+    </div> -->
     <div class="content">
         <router-outlet></router-outlet>
+    </div>
+    <div *requireAuth class="footer">
+      <app-footer></app-footer>
     </div>
 </mbsc-page>
 <!-- <div class="footer">

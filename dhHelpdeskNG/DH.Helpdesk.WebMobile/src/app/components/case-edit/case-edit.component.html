@@ -3,9 +3,10 @@
 </mbsc-form>
 <mbsc-form *ngIf="isLoaded"> 
     <mbsc-tab-nav [options]="tabsMenuSettings">
-            <mbsc-nav-item>Case {{caseData.caseNumber}}</mbsc-nav-item>
+            <mbsc-nav-item ><a [routerLink]="['/casesoverview']">Cancel</a></mbsc-nav-item>
+            <mbsc-nav-item [selected]="true">Case {{caseData.caseNumber}}</mbsc-nav-item>
+            <mbsc-nav-item><a href='#' (click)="saveCase()" [ngClass]="{'inactive':true}">Save</a></mbsc-nav-item>
     </mbsc-tab-nav>
-    <!-- <div *ngIf="mainSelected == 'music'"> -->
     <div class="md-paging">
         <mbsc-scrollview>
             <mbsc-scrollview-item id="main">  
@@ -139,9 +140,4 @@
             </mbsc-scrollview-item>
         </mbsc-scrollview>
     </div>
-    <mbsc-bottom-nav [options]="bottomMenuSettings">
-        <mbsc-nav-item (click)="goToCaseOverview()">
-            Back
-        </mbsc-nav-item>
-    </mbsc-bottom-nav>
 </mbsc-form>

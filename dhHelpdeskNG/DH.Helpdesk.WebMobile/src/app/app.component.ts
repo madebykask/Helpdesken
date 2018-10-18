@@ -5,6 +5,7 @@ import { config } from '../environments/environment';
 import { AuthenticationService } from './services/authentication';
 import { LoggerService } from './services/logging';
 import { UserSettingsService } from './services/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -14,10 +15,13 @@ import { UserSettingsService } from './services/user';
 export class AppComponent implements OnInit {
   pageSettings = {
   };
+  bottomMenuSettings = {
+    type: 'bottom',
+  };
   version = config.version;
 
   constructor(private _authenticationService: AuthenticationService, private _logger: LoggerService, 
-    private _userSettingsService: UserSettingsService) { 
+    private _userSettingsService: UserSettingsService, private _router: Router) { 
     mobiscroll.settings = { theme: 'ios', lang: 'en', labelStyle: 'stacked' };   
   }
 
@@ -25,12 +29,9 @@ export class AppComponent implements OnInit {
     const isAuthenticated = this._authenticationService.isAuthenticated();
     const version = this._authenticationService.getVersion();
     if (isAuthenticated && config.version != version) {
-      this._logger.log('>>>>>>>>>>>>>>>>Logout: version changed')
-      this._authenticationService.logout();
+      this._logger.log('>>>>>>>>>>>>>>>>Logout: version changed');
+      this._router.navigate(['/login']);
     }
-    if (isAuthenticated) {
-      this._userSettingsService.tryApplyTimezone();
-    }
+    this._userSettingsService.tryApplyTimezone();
   }
-
 }
