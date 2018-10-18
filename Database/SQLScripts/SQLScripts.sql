@@ -74,7 +74,7 @@ if exists (select * from syscolumns inner join sysobjects on sysobjects.id = sys
             where syscolumns.name = N'ContentType' and sysobjects.name = N'tblContractFile')
 BEGIN
     ALTER TABLE tblContractFile
-    ALTER ContentType nvarchar(100) NOT NULL
+    ALTER COLUMN ContentType nvarchar(100) NOT NULL
 END
 
 -- Last Line to update database version
