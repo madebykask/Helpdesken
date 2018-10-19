@@ -491,96 +491,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
                 }
             }
 
-            //Project
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Project.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.Project_Id != prev.Project_Id)
-                {
-                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.Project.ToString(), customerId);
-                    var prevVal = prev.Project != null ? prev.Project.Name : null;
-                    var curVal = cur.Project != null ? cur.Project.Name : null;
-                    var s = FormatChanges(field,  prevVal, curVal);
-                    sb.Append(s);
-                }
-            }
-
-            //Problem
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Problem.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.Problem_Id != prev.Problem_Id)
-                {
-                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.Problem.ToString(), customerId);
-                    var prevVal = prev.Problem?.Name;
-                    var curVal = cur.Problem?.Name;
-                    var s = FormatChanges(field, prevVal, curVal);
-                    sb.Append(s);
-                }
-            }
-
-            // Causing Part
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CausingPart.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.CausingPartId != prev.CausingPartId)
-                {
-                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.CausingPart.ToString(), customerId);
-                    var prevVal = prev.CausingPart?.Name;
-                    var curVal = cur.CausingPart?.Name;
-                    var s = FormatChanges(field, Translation.GetCoreTextTranslation(prevVal), Translation.GetCoreTextTranslation(curVal));
-                    sb.Append(s);
-                }
-            }
-
-            // Planned action date (Planerad åtgärdsdatum)
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.PlanDate.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.PlanDate != prev.PlanDate)
-                {
-                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), customerId);
-                    var s = FormatNullableDate(field, prev.PlanDate, cur.PlanDate, outFormatter);
-                    sb.Append(s);
-                }
-            }
-
-            // Verified (Verifierad)
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Verified.ToString()).ShowOnStartPage == 1)
-            {
-                var oldValue = prev.Verified.HasValue ? prev.Verified.ToBool().GetYesNoText() : "";
-                var newValue = cur.Verified.HasValue ? cur.Verified.ToBool().GetYesNoText() : "";
-
-                if (oldValue != newValue)
-                {
-                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.Verified.ToString(), customerId);
-                    var s = FormatChanges(field, oldValue, newValue);
-                    sb.Append(s);
-                }
-            }
-
-            // Verified description (Verifierad beskrivning)
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.VerifiedDescription != prev.VerifiedDescription)
-                {
-                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(), customerId);
-                    var prevValue = prev.VerifiedDescription.RemoveHTMLTags();
-                    var newValue = cur.VerifiedDescription.RemoveHTMLTags();
-                    var s = FormatChanges(field, prevValue, newValue);
-                    sb.Append(s);
-                }
-            }
-
-            // Resolution rate (Lösningsgrad)
-            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.SolutionRate.ToString()).ShowOnStartPage == 1)
-            {
-                if (cur.SolutionRate != prev.SolutionRate)
-                {
-                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.SolutionRate.ToString(), customerId);
-                    var prevValue = prev.SolutionRate.RemoveHTMLTags();
-                    var newValue = cur.SolutionRate.RemoveHTMLTags();
-                    var s = FormatChanges(field, prevValue, newValue);
-                    sb.Append(s);
-                }
-            }
-
             // ProductArea
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()).ShowOnStartPage == 1)
             {
@@ -938,6 +848,53 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
                     sb.Append("</tr>");
                 }
             }
+            //Project
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Project.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.Project_Id != prev.Project_Id)
+                {
+                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.Project.ToString(), customerId);
+                    var prevVal = prev.Project != null ? prev.Project.Name : null;
+                    var curVal = cur.Project != null ? cur.Project.Name : null;
+                    var s = FormatChanges(field, prevVal, curVal);
+                    sb.Append(s);
+                }
+            }
+
+            //Problem
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Problem.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.Problem_Id != prev.Problem_Id)
+                {
+                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.Problem.ToString(), customerId);
+                    var prevVal = prev.Problem?.Name;
+                    var curVal = cur.Problem?.Name;
+                    var s = FormatChanges(field, prevVal, curVal);
+                    sb.Append(s);
+                }
+            }
+            // Causing Part
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.CausingPart.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.CausingPartId != prev.CausingPartId)
+                {
+                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.CausingPart.ToString(), customerId);
+                    var prevVal = prev.CausingPart?.Name;
+                    var curVal = cur.CausingPart?.Name;
+                    var s = FormatChanges(field, Translation.GetCoreTextTranslation(prevVal), Translation.GetCoreTextTranslation(curVal));
+                    sb.Append(s);
+                }
+            }
+            // Planned action date (Planerad åtgärdsdatum)
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.PlanDate.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.PlanDate != prev.PlanDate)
+                {
+                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.PlanDate.ToString(), customerId);
+                    var s = FormatNullableDate(field, prev.PlanDate, cur.PlanDate, outFormatter);
+                    sb.Append(s);
+                }
+            }
             // Watchdate
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.WatchDate.ToString()).ShowOnStartPage == 1)
             {
@@ -973,6 +930,46 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
                     }
                 }
             }
+            // Verified (Verifierad)
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Verified.ToString()).ShowOnStartPage == 1)
+            {
+                var oldValue = prev.Verified.HasValue ? prev.Verified.ToBool().GetYesNoText() : "";
+                var newValue = cur.Verified.HasValue ? cur.Verified.ToBool().GetYesNoText() : "";
+
+                if (oldValue != newValue)
+                {
+                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.Verified.ToString(), customerId);
+                    var s = FormatChanges(field, oldValue, newValue);
+                    sb.Append(s);
+                }
+            }
+
+            // Verified description (Verifierad beskrivning)
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.VerifiedDescription != prev.VerifiedDescription)
+                {
+                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.VerifiedDescription.ToString(), customerId);
+                    var prevValue = prev.VerifiedDescription.RemoveHTMLTags();
+                    var newValue = cur.VerifiedDescription.RemoveHTMLTags();
+                    var s = FormatChanges(field, prevValue, newValue);
+                    sb.Append(s);
+                }
+            }
+
+            // Resolution rate (Lösningsgrad)
+            if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.SolutionRate.ToString()).ShowOnStartPage == 1)
+            {
+                if (cur.SolutionRate != prev.SolutionRate)
+                {
+                    var field = Translation.GetForCase(GlobalEnums.TranslationCaseFields.SolutionRate.ToString(), customerId);
+                    var prevValue = prev.SolutionRate.RemoveHTMLTags();
+                    var newValue = cur.SolutionRate.RemoveHTMLTags();
+                    var s = FormatChanges(field, prevValue, newValue);
+                    sb.Append(s);
+                }
+            }
+            
             // CaseFile
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Filename.ToString()).ShowOnStartPage == 1)
             {
