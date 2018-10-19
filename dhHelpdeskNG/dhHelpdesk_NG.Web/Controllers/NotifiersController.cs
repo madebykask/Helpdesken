@@ -10,6 +10,7 @@ using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Infrastructure.Logger;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -859,7 +860,6 @@ namespace DH.Helpdesk.Web.Controllers
                 selectedCategory = this.computerService.GetComputerUserCategoryByID(categoryId);
             }
 
-            //todo: check why if only not readonly should be displayed?
             var categoriesList = GetCategoriesSelectList(currentCustomerId, selectedCategory);
             var categoryModel = new ComputerUserCategoryModel(categoriesList);
 

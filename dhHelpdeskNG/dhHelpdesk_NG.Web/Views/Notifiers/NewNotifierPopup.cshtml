@@ -1,19 +1,6 @@
 ﻿@using System.Web.Optimization
 @model DH.Helpdesk.Web.Models.Notifiers.InputModel
 
-@Scripts.Render("~/bundles/notifiers/notifier")    
-<script type="text/javascript">
-    function afterSuccessSubmit(result, state, response) {
-        window.returnValue = result;
-        try {
-            window.opener.NewNotifierEvent(result);
-        }
-        catch (err) { }
-        window.close();
-        return false;
-    }
-</script>
-
 @{
     Layout = "../Shared/_PopupLayout.cshtml";
     ViewBag.Title = Translation.Get("Ny anmälare", Enums.TranslationSource.TextTranslation);
@@ -44,3 +31,15 @@
     @Html.Partial("_Input", Model)   
 }
 
+@Scripts.Render("~/bundles/notifiers/notifier")
+<script type="text/javascript">
+    function afterSuccessSubmit(result, state, response) {
+        window.returnValue = result;
+        try {
+            window.opener.NewNotifierEvent(result);
+        }
+        catch (err) { }
+        window.close();
+        return false;
+    }
+</script>

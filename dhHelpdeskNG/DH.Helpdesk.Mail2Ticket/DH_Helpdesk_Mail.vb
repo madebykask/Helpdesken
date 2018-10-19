@@ -82,6 +82,8 @@ Module DH_Helpdesk_Mail
             'Log cmd line args
             Try     
                 openLogFile()
+                
+                'Log input params
                 LogToFile(String.Format(
                     "Cmd Line Args:"  & vbCrlf & vbTab &
                     "- WorkingMode: {0}" & vbCrlf & vbTab &
@@ -91,12 +93,15 @@ Module DH_Helpdesk_Mail
                     "- ProductArea Separator: {4}" & vbCrlf & vbTab &
                     "- New email processing: {5}", 
                     workingModeArg, connStringArg, logFolderArg, logIdentifierArg, productAreaSepArg, newModeArg), 1)
+
+                'start processing
+                readMailBox(sConnectionstring, workingMode)
+
             Catch ex As Exception
+                LogError(ex.ToString())
             Finally
                 closeLogFile()
             End Try
-
-            readMailBox(sConnectionstring, workingMode)
 
         End If
     End Sub
@@ -172,10 +177,8 @@ Module DH_Helpdesk_Mail
                 End If
 
                 Dim iPop3DebugLevel = objCustomer.POP3DebugLevel
-                If iPop3DebugLevel > 0 Then
-                    giLoglevel = iPop3DebugLevel
-                    openLogFile()
-                End If
+                
+                giLoglevel = iPop3DebugLevel
 
                 If Not String.IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not String.IsNullOrEmpty(objCustomer.POP3UserName) Then
 
@@ -392,15 +395,11 @@ Module DH_Helpdesk_Mail
                                 If objCase Is Nothing Then
                                     ' Kontrollera om det är svar på ett befintligt ärende | Check if there is an answer to an existing case
                                     If objCustomer.EMailSubjectPattern <> "" Then
-                                        If objCustomer.POP3DebugLevel > 0 Then
-                                            objLogFile.WriteLine(Now() & ", Subject " & sSubject)
-                                        End If
+                                        
+                                        LogToFile("Subject: " & sSubject, iPop3DebugLevel)
 
                                         iCaseNumber = extractCaseNumberFromSubject(sSubject, objCustomer.EMailSubjectPattern)
-
-                                        If objCustomer.POP3DebugLevel > 0 Then
-                                            objLogFile.WriteLine(Now() & ", CaseNumber " & iCaseNumber)
-                                        End If
+                                        LogToFile("CaseNumber: " & iCaseNumber, iPop3DebugLevel)
 
                                         If iCaseNumber <> 0 Then
                                             objCase = objCaseData.getCaseByCaseNumber(iCaseNumber)
@@ -916,29 +915,23 @@ Module DH_Helpdesk_Mail
                         Else
                             
                             LogToFile("Disconnecting", iPop3DebugLevel)
-
-                            IMAPclient.Disconnect()
-
-                            IMAPclient.Dispose()
-
-                            IMAPclient = Nothing
+                            
+                            If IMAPclient IsNot Nothing Then
+                                IMAPclient.Disconnect()
+                                IMAPclient.Dispose()
+                                IMAPclient = Nothing
+                            End If
+                            
                         End If
                     End Try
 
                 End If
 
-                If iPop3DebugLevel > 0 Then
-                    closeLogFile()
-                End If
             Next
 
         Catch ex As Exception
-            If Not objLogFile Is Nothing Then
-                objLogFile.WriteLine(Now() & ", Error readMailBox " & ex.Message.ToString)
-
-                objLogFile.Close()
-            End If
-
+            LogError("Error readMailBox: " & ex.Message.ToString)
+            'rethrow
             Throw
         End Try
     End Function
@@ -1175,13 +1168,10 @@ Module DH_Helpdesk_Mail
             End If
 
         Catch ex As Exception
-            If Not objLogFile Is Nothing Then
-                objLogFile.WriteLine(Now() & ", Error createHtmlFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString)
-            End If
-
-            Throw ex
-
-            Return ""
+            LogError("Error createHtmlFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString)
+            
+            'Rethrow
+            Throw
         End Try
 
         Return sFileName
@@ -1189,9 +1179,13 @@ Module DH_Helpdesk_Mail
 
     Private Sub openLogFile()
 
+        If objLogFile IsNot Nothing
+            Return
+        End If
+
         Dim sLogFolderPath as String
 
-        If gsLogPath <> "" Then
+        If Not String.IsNullOrEmpty(gsLogPath) Then
             sLogFolderPath = gsLogPath 
         Else
             sLogFolderPath = Path.Combine(Environment.CurrentDirectory, "log")
@@ -1210,8 +1204,13 @@ Module DH_Helpdesk_Mail
 
     End Sub
     Private Sub closeLogFile()
-        If Not objLogFile Is Nothing Then
-            objLogFile.Close()
+        If objLogFile IsNot Nothing Then
+            Try
+                objLogFile.Close()
+            Catch ex As Exception
+            Finally
+                objLogFile = Nothing
+            End Try 
         End If
     End Sub
 
@@ -1438,12 +1437,16 @@ Module DH_Helpdesk_Mail
 
     Private Sub LogToFile(msg As String, level As Integer) 
         If level > 0 Then
-            objLogFile.WriteLine("{0}: {1}", Now(),  msg)
+            If objLogFile IsNot Nothing 
+                objLogFile.WriteLine("{0}: {1}", Now(),  msg)
+            End If
         End If
     End Sub
 
     Private Sub LogError(msg As String) 
-        objLogFile.WriteLine("{0}: {1}", Now(),  msg)
+        If objLogFile IsNot Nothing 
+            objLogFile.WriteLine("{0}: {1}", Now(),  msg)
+        End If
     End Sub
 
 

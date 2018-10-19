@@ -69,9 +69,16 @@ BEGIN
 END
 GO
 
+-- changing tblContractFile.ContentType size to 100
+if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+            where syscolumns.name = N'ContentType' and sysobjects.name = N'tblContractFile')
+BEGIN
+    ALTER TABLE tblContractFile
+    ALTER COLUMN ContentType nvarchar(100) NOT NULL
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.39'
 --ROLLBACK --TMP
 
-  
 

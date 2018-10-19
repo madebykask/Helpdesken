@@ -6210,7 +6210,7 @@ namespace DH.Helpdesk.Web.Controllers
             catch (Exception)
             {
                 //TODO:
-                //throw;
+                throw;
             }
 
             #endregion //Extended Case

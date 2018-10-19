@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 {
     using System.Text;
     using System.Web.Mvc;
@@ -8,6 +10,18 @@
     public static class DropDownExtension
     {
         #region Public Methods and Operators
+
+        public static MvcHtmlString DropDown(this HtmlHelper htmlHelper,
+            string id,
+            string name,
+            bool allowEmpty,
+            IList<SelectListItem> items,
+            bool required = false,
+            bool disabled = false)
+        {
+            var dropDownContent = new DropDownContent(items);
+            return DropDown(htmlHelper, id, name, allowEmpty, dropDownContent, required, disabled);
+        }
 
         public static MvcHtmlString DropDown(
             this HtmlHelper htmlHelper,

@@ -66,7 +66,8 @@
                         <div class="container">
                             <h4>@Model.ComputerUserCategoryModel.Name details</h4>
                             <div class="row">
-                                <iframe id="extendedComputerUser" style="width:500px; height:280px; margin-left:20px" frameborder="0" src="@Model.ComputerUserCategoryModel.ExtendedCasePath"></iframe>
+                                <iframe id="extendedComputerUser" style="width:500px; height:280px; margin-left:20px" frameborder="0" 
+                                        src="@Model.ComputerUserCategoryModel.ExtendedCasePath"></iframe>
                             </div>
                         </div>
                     }
@@ -79,47 +80,52 @@
 
 <script type="text/javascript">
 
-    $('#department_dropdown').change(function () {
-
-        var selectedVal = $('#department_dropdown option:selected').attr('value');
-        
-        $.get("/notifiers/GetLanguageFromDepartment/", { departmentid: "'" + selectedVal.toString() + "'" }, function (result) {
-
-            if (parseInt(result) > 0) {        
-                $("#language_dropdown").val(result);
-            }
-        });
-    });
-
-
-    $('#region_dropdown').change(function () {
-
-        var selectedVal = $('#region_dropdown option:selected').attr('value');
-        
-
-        $.get("/notifiers/GetLanguageFromRegion/", { regionid: "'" + selectedVal.toString() + "'" }, function (result) {
-
-            if (parseInt(result) > 0) {
-        
-                $("#language_dropdown").val(result);
-            }
-        });
-    });
-
-
-    
-
     var validationTrans = "@Translation.GetForJS("måste anges")";
     var userIdNotUnique = "@Translation.GetForJS("inte unikt")";
 
-    var validator = $("#target").validate({
-        ignore: "",
-        rules: {
-            "UserId.Value": {
-                required: getBoolean("@Model.UserId.Required")
-                @*,
-                remote: {
-                    url: "@Url.Action("CheckUniqueUserId", "Notifiers")",
+    $(function() {
+
+        $('#department_dropdown').change(function () {
+
+            var selectedVal = $('#department_dropdown option:selected').attr('value');
+
+            $.get("/notifiers/GetLanguageFromDepartment/", { departmentid: "'" + selectedVal.toString() + "'" }, function (result) {
+
+                if (parseInt(result) > 0) {
+                    $("#language_dropdown").val(result);
+                }
+            });
+        });
+
+
+        $('#region_dropdown').change(function () {
+
+            var selectedVal = $('#region_dropdown option:selected').attr('value');
+
+
+            $.get("/notifiers/GetLanguageFromRegion/", { regionid: "'" + selectedVal.toString() + "'" }, function (result) {
+
+                if (parseInt(result) > 0) {
+
+                    $("#language_dropdown").val(result);
+                }
+            });
+        });
+
+       SetupValidation();
+    });
+
+    function SetupValidation() {
+
+        $("#target").data('validator', null);
+        var validator = $("#target").validate({
+            ignore: "",
+            rules: {
+                "UserId.Value": {
+                    required: getBoolean("@Model.UserId.Required")
+                    @*,
+                    remote: {
+                        url: "@Url.Action("CheckUniqueUserId", "Notifiers")",
                     type: "GET",
                     data: {
                         userId: function() {
@@ -130,202 +136,209 @@
                         }
                     }
                 }*@
-            },
+                },
 
-            "DomainId": {
-                required: getBoolean("@Model.Domain.Required")
-            },
+                "DomainId": {
+                    required: getBoolean("@Model.Domain.Required")
+                },
 
-            "LoginName.Value": {
-                required: getBoolean("@Model.LoginName.Required")
-            },
+                "LoginName.Value": {
+                    required: getBoolean("@Model.LoginName.Required")
+                },
 
-            "FirstName.Value": {
-                required: getBoolean("@Model.FirstName.Required")
-            },
+                "FirstName.Value": {
+                    required: getBoolean("@Model.FirstName.Required")
+                },
 
-            "Initials.Value": {
-                required: getBoolean("@Model.Initials.Required")
-            },
+                "Initials.Value": {
+                    required: getBoolean("@Model.Initials.Required")
+                },
 
-            "LastName.Value": {
-                required: getBoolean("@Model.LastName.Required")
-            },
+                "LastName.Value": {
+                    required: getBoolean("@Model.LastName.Required")
+                },
 
-            "DisplayName.Value": {
-                required: getBoolean("@Model.DisplayName.Required")
-            },
+                "DisplayName.Value": {
+                    required: getBoolean("@Model.DisplayName.Required")
+                },
 
-            "Place.Value": {
-                required: getBoolean("@Model.Place.Required")
-            },
+                "Place.Value": {
+                    required: getBoolean("@Model.Place.Required")
+                },
 
-            "Phone.Value": {
-                required: getBoolean("@Model.Phone.Required")
-            },
+                "Phone.Value": {
+                    required: getBoolean("@Model.Phone.Required")
+                },
 
-            "CellPhone.Value": {
-                required: getBoolean("@Model.CellPhone.Required")
-            },
+                "CellPhone.Value": {
+                    required: getBoolean("@Model.CellPhone.Required")
+                },
 
-            "Email.Value": {
-                required: getBoolean("@Model.Email.Required")
-            },
+                "Email.Value": {
+                    required: getBoolean("@Model.Email.Required")
+                },
 
-            "Code.Value": {
-                required: getBoolean("@Model.Code.Required")
-            },
+                "Code.Value": {
+                    required: getBoolean("@Model.Code.Required")
+                },
 
-            "PostalAddress.Value": {
-                required: getBoolean("@Model.PostalAddress.Required")
-            },
+                "PostalAddress.Value": {
+                    required: getBoolean("@Model.PostalAddress.Required")
+                },
 
-            "PostalCode.Value": {
-                required: getBoolean("@Model.PostalCode.Required")
-            },
+                "PostalCode.Value": {
+                    required: getBoolean("@Model.PostalCode.Required")
+                },
 
-            "City.Value": {
-                required: getBoolean("@Model.City.Required")
-            },
+                "City.Value": {
+                    required: getBoolean("@Model.City.Required")
+                },
 
-            "Title.Value": {
-                required: getBoolean("@Model.Title.Required")
-            },
+                "Title.Value": {
+                    required: getBoolean("@Model.Title.Required")
+                },
 
-            "RegionId": {
-                required: getBoolean("@Model.Region.Required")
-            },
+                "RegionId": {
+                    required: getBoolean("@Model.Region.Required")
+                },
 
-            "DepartmentId": {
-                required: getBoolean("@Model.Department.Required")
-            },
+                "DepartmentId": {
+                    required: getBoolean("@Model.Department.Required")
+                },
 
-            "OrganizationUnitId": {
-                required: getBoolean("@Model.OrganizationUnit.Required")
-            },
+                "OrganizationUnitId": {
+                    required: getBoolean("@Model.OrganizationUnit.Required")
+                },
 
-            "Unit.Value": {
-                required: getBoolean("@Model.Unit.Required")
-            },
+                "Unit.Value": {
+                    required: getBoolean("@Model.Unit.Required")
+                },
 
-            "DivisionId": {
-                required: getBoolean("@Model.Division.Required")
-            },
+                "DivisionId": {
+                    required: getBoolean("@Model.Division.Required")
+                },
 
-            "Manager": {
-                required: getBoolean("@Model.Managers.Required")
-            },
+                "Manager": {
+                    required: getBoolean("@Model.Managers.Required")
+                },
 
-            "GroupId": {
-                required: getBoolean("@Model.Group.Required")
-            },
+                "GroupId": {
+                    required: getBoolean("@Model.Group.Required")
+                },
 
-            "Other.Value": {
-                required: getBoolean("@Model.Other.Required")
-            },
-        },
-        messages: {
-            "UserId.Value": {
-                required: "@Model.UserId.Caption" + " " + validationTrans
-                @*,
-                remote: "@Model.UserId.Caption" + " " + userIdNotUnique*@
-            },
+                "Other.Value": {
+                    required: getBoolean("@Model.Other.Required")
+                },
 
-            "DomainId": {
-                required: "@Model.Domain.Caption" + " " + validationTrans
+                "LanguageId": {
+                    required: getBoolean("@Model.Language.Required")
+                },
             },
+            messages: {
+                "UserId.Value": {
+                    required: "@Model.UserId.Caption" + " " + validationTrans
+                    @*,
+            remote: "@Model.UserId.Caption" + " " + userIdNotUnique*@
+                },
 
-            "LoginName.Value": {
-                required: "@Model.LoginName.Caption" + " " + validationTrans
-            },
+                "DomainId": {
+                    required: "@Model.Domain.Caption" + " " + validationTrans
+                },
 
-            "FirstName.Value": {
-                required: "@Model.FirstName.Caption" + " " + validationTrans
-            },
+                "LoginName.Value": {
+                    required: "@Model.LoginName.Caption" + " " + validationTrans
+                },
 
-            "Initials.Value": {
-                required: "@Model.Initials.Caption" + " " + validationTrans
-            },
+                "FirstName.Value": {
+                    required: "@Model.FirstName.Caption" + " " + validationTrans
+                },
 
-            "LastName.Value": {
-                required: "@Model.LastName.Caption" + " " + validationTrans
-            },
+                "Initials.Value": {
+                    required: "@Model.Initials.Caption" + " " + validationTrans
+                },
 
-            "DisplayName.Value": {
-                required: "@Model.DisplayName.Caption" + " " + validationTrans
-            },
+                "LastName.Value": {
+                    required: "@Model.LastName.Caption" + " " + validationTrans
+                },
 
-            "Place.Value": {
-                required: "@Model.Place.Caption" + " " + validationTrans
-            },
+                "DisplayName.Value": {
+                    required: "@Model.DisplayName.Caption" + " " + validationTrans
+                },
 
-            "Phone.Value": {
-                required: "@Model.Phone.Caption" + " " + validationTrans
-            },
+                "Place.Value": {
+                    required: "@Model.Place.Caption" + " " + validationTrans
+                },
 
-            "CellPhone.Value": {
-                required: "@Model.CellPhone.Caption" + " " + validationTrans
-            },
+                "Phone.Value": {
+                    required: "@Model.Phone.Caption" + " " + validationTrans
+                },
 
-            "Email.Value": {
-                required: "@Model.Email.Caption" + " " + validationTrans
-            },
+                "CellPhone.Value": {
+                    required: "@Model.CellPhone.Caption" + " " + validationTrans
+                },
 
-            "Code.Value": {
-                required: "@Model.Code.Caption" + " " + validationTrans
-            },
+                "Email.Value": {
+                    required: "@Model.Email.Caption" + " " + validationTrans
+                },
 
-            "PostalAddress.Value": {
-                required: "@Model.PostalAddress.Caption" + " " + validationTrans
-            },
+                "Code.Value": {
+                    required: "@Model.Code.Caption" + " " + validationTrans
+                },
 
-            "PostalCode.Value": {
-                required: "@Model.PostalCode.Caption" + " " + validationTrans
-            },
+                "PostalAddress.Value": {
+                    required: "@Model.PostalAddress.Caption" + " " + validationTrans
+                },
 
-            "City.Value": {
-                required: "@Model.City.Caption" + " " + validationTrans
-            },
+                "PostalCode.Value": {
+                    required: "@Model.PostalCode.Caption" + " " + validationTrans
+                },
 
-            "Title.Value": {
-                required: "@Model.Title.Caption" + " " + validationTrans
-            },
+                "City.Value": {
+                    required: "@Model.City.Caption" + " " + validationTrans
+                },
 
-            "RegionId": {
-                required: "@Model.Region.Caption" + " " + validationTrans
-            },
+                "Title.Value": {
+                    required: "@Model.Title.Caption" + " " + validationTrans
+                },
 
-            "DepartmentId": {
-                required: "@Model.Department.Caption" + " " + validationTrans
-            },
+                "RegionId": {
+                    required: "@Model.Region.Caption" + " " + validationTrans
+                },
 
-            "OrganizationUnitId": {
-                required: "@Model.OrganizationUnit.Caption" + " " + validationTrans
-            },
+                "DepartmentId": {
+                    required: "@Model.Department.Caption" + " " + validationTrans
+                },
 
-            "Unit.Value": {
-                required: "@Model.Unit.Caption" + " " + validationTrans
-            },
+                "OrganizationUnitId": {
+                    required: "@Model.OrganizationUnit.Caption" + " " + validationTrans
+                },
 
-            "DivisionId": {
-                required: "@Model.Division.Caption" + " " + validationTrans
-            },
+                "Unit.Value": {
+                    required: "@Model.Unit.Caption" + " " + validationTrans
+                },
 
-            "Manager": {
-                required: "@Model.Managers.Caption" + " " + validationTrans
-            },
+                "DivisionId": {
+                    required: "@Model.Division.Caption" + " " + validationTrans
+                },
 
-            "GroupId": {
-                required: "@Model.Group.Caption" + " " + validationTrans
-            },
+                "Manager": {
+                    required: "@Model.Managers.Caption" + " " + validationTrans
+                },
 
-            "Other.Value": {
-                required: "@Model.Other.Caption" + " " + validationTrans
-            },
+                "GroupId": {
+                    required: "@Model.Group.Caption" + " " + validationTrans
+                },
 
-        }
+                "Other.Value": {
+                    required: "@Model.Other.Caption" + " " + validationTrans
+                },
 
-    });
+                "LanguageId": {
+                    required: "@Model.Language.Caption" + " " + validationTrans
+                }
+            }
+        });
+    }
 
     function getBoolean(value) {
         var ret = false;
@@ -333,14 +346,14 @@
 
         switch (strVal) {
 
-            case "false":
-            case "0":
-                ret = false;
-                break;
+        case "false":
+        case "0":
+            ret = false;
+            break;
 
-            case 'true':
-                ret = true;
-                break;
+        case 'true':
+            ret = true;
+            break;
         }
 
         return ret;

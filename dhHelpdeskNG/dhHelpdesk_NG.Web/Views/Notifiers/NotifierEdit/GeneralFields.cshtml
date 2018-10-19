@@ -7,31 +7,24 @@
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                
+
                 @{ var attributes = Model.ComputerUserCategoryModel.IsReadOnly ? (object)new { htmlAttributes = new { @readonly = "readonly" } } : new { };}
-                        
-                @Html.EditorFor(m => m.UserId, "TextBox", attributes) 
+
+                @Html.EditorFor(m => m.UserId, "TextBox", attributes)
 
                 @if (Model.ComputerUserCategoryModel.ComputerUserCategories.Any())
                 {
                     <tr>
                         <td>@Translation.GetCoreTextTranslation("Kategori")</td>
-                        <td>
-                            @Html.DropDownList("CategoryId", Model.ComputerUserCategoryModel.ComputerUserCategories, 
-                                @Model.ComputerUserCategoryModel.IsReadOnly
-                                    ? (object)new { id = "category_dropdown", disabled = "disabled" } 
-                                    : (object)new { id = "category_dropdown" })
-                        </td>
+                        <td>@Html.DropDown("category_dropdown", "CategoryId", false, Model.ComputerUserCategoryModel.ComputerUserCategories, false, Model.ComputerUserCategoryModel.IsReadOnly)</td>
                     </tr>
                 }
-                           
+
                 @if (Model.Domain.Show)
                 {
                     <tr>
                         <td>@(Translation.GetCoreTextTranslation(Model.Domain.Caption) + (Model.Domain.Required ? "*" : string.Empty))</td>
-                        <td>
-                            @Html.DropDown("domain_dropdown", "DomainId", !Model.Domain.Required, Model.Domain.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)
-                        </td>
+                        <td>@Html.DropDown("domain_dropdown", "DomainId", !Model.Domain.Required, Model.Domain.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)</td>
                     </tr>
                 }
 
