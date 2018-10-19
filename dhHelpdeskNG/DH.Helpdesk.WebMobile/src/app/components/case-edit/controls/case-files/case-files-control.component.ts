@@ -32,7 +32,7 @@ export class CaseFilesControlComponent implements OnInit  {
     this.fileDownloadService.downloadCaseFile(item.caseId, item.fileId, item.fileName);
   }
  
-  identify(index, item){
+  identify(item) {
     return item.fileId;
   }
 }

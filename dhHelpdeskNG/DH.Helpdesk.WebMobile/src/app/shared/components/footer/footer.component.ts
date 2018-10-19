@@ -78,7 +78,7 @@ export class FooterComponent implements OnInit, OnDestroy {
       })
   }
 
-  goTo(url: string) {
+  goTo(url: string = null) {
     if(url == null) return;
     this._router.navigate([url]);
   }
