@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { NgModule, LOCALE_ID } from '@angular/core';
 
 import { APP_INITIALIZER } from '@angular/core'
-import { LoginComponent, HeaderComponent } from './shared/components'
+import { LoginComponent, HeaderTitleComponent } from './shared/components'
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
@@ -27,7 +27,7 @@ import { CaseFilesControlComponent } from './components/case-edit/controls/case-
 
 @NgModule({
   bootstrap: [ AppComponent],
-  declarations: [AppComponent, PageNotFoundComponent, HeaderComponent, FooterComponent,
+  declarations: [AppComponent, PageNotFoundComponent, HeaderTitleComponent, FooterComponent,
      LoginComponent,
      HomeComponent, CasesOverviewComponent, CaseEditComponent,
      CaseTextboxComponent, CaseDateComponent, CaseDropdownComponent,  CaseMultiDropdownComponent,

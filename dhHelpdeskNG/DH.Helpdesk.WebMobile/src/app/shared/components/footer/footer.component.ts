@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, interval } from 'rxjs';
-import { MbscSelect, MbscSelectOptions } from '@mobiscroll/angular';
+import { MbscSelect, MbscSelectOptions, MbscNavOptions } from '@mobiscroll/angular';
 import { take, takeUntil, filter, map } from 'rxjs/operators';
 import { UserSettingsService } from 'src/app/services/user';
 import { OptionItem } from 'src/app/models';
@@ -19,12 +19,22 @@ export class FooterComponent implements OnInit, OnDestroy {
   languagesSettings: MbscSelectOptions = {
     cssClass: 'languages-list',
     showOnTap: false,
-    display: 'top',
+    display: 'bottom',
     data: [],
     onSet: (event, inst) => {
       const item = (<OptionItem[]>inst.settings.data).find(item => item.text == event.valueText);
       this.setLanguage(item ? +item.value : null);
     }
+
+  }
+
+  bottomMenuSettings: MbscNavOptions = {
+    //layout: 'fixed',
+    type: 'bottom',
+    moreText: null,
+    moreIcon: 'fa-ellipsis-h',
+    menuIcon: null,
+    menuText: null
   }
 
   languageId: number;

@@ -1,15 +1,13 @@
-<mbsc-form>
+<mbsc-form class="case-overview-header">
         <div class="mbsc-form-group">
-                <form [formGroup]="filtersForm" novalidate>
-                        <div class="mbsc-form-group-title">Free Text Search</div>
+                <form [formGroup]="filtersForm" novalidate (ngSubmit)="applyFilterAndSearch()">
                         <div class="mbsc-grid mbsc-grid-sm">
                                 <div class="mbsc-row">
                                         <div class="mbsc-col">
-                                                <mbsc-input formControlName="freeSearch"  placeholder="Search"></mbsc-input>
+                                                <mbsc-input formControlName="freeSearch" icon="fa-search"  placeholder="Search"></mbsc-input>
                                         </div>
                                         <div class="mbsc-col-sm-auto md-load-btn">
-                                                <mbsc-button icon="material-search" [hidden]="isLoading" (click)="applyFilterAndSearch()"></mbsc-button>
-                                                <mbsc-button flat block icon="loop2" [hidden]="!isLoading"></mbsc-button>                                
+                                                <a [ngClass]="{'inactive':isLoading}" (click)="cancelSearch()">Cancel</a>
                                         </div>
                                 </div>
                         </div>

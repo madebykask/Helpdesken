@@ -49,7 +49,8 @@ export class UserSettingsService extends HttpApiServiceBase {
     }
 
     getCurrentLanguage(): number {
-        return this.getUserData().selectedLanguageId;
+        const user = this.getUserData()
+        return user != null ? user.selectedLanguageId : null;
     }
 
     setCurrentLanguage(languageId: number) {
@@ -59,7 +60,8 @@ export class UserSettingsService extends HttpApiServiceBase {
     }
 
     getUserTimezone(): string {
-        return this.getUserData().userTimeZone;
+        const user = this.getUserData()
+        return user != null ? user.userTimeZone : null;
     }
 
     tryApplyTimezone(): boolean {

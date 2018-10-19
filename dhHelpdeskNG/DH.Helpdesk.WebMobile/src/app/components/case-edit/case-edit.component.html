@@ -2,10 +2,10 @@
     <mbsc-button flat block icon="loop2" ></mbsc-button>
 </mbsc-form>
 <mbsc-form *ngIf="isLoaded"> 
-    <mbsc-tab-nav [options]="tabsMenuSettings">
-            <mbsc-nav-item ><a [routerLink]="['/casesoverview']">Cancel</a></mbsc-nav-item>
+    <mbsc-tab-nav [options]="tabsMenuSettings" class="case-header">
+            <mbsc-nav-item (click)="goTo('/casesoverview')">Cancel</mbsc-nav-item>
             <mbsc-nav-item [selected]="true">Case {{caseData.caseNumber}}</mbsc-nav-item>
-            <mbsc-nav-item><a href='#' (click)="saveCase()" [ngClass]="{'inactive':true}">Save</a></mbsc-nav-item>
+            <mbsc-nav-item (click)="saveCase()" [disabled]="true">Done</mbsc-nav-item>
     </mbsc-tab-nav>
     <div class="md-paging">
         <mbsc-scrollview>

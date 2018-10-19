@@ -22,6 +22,15 @@
     font-family: "Font Awesome 5 Free" !important; 
 } */
 
+$primary-color: #428bca;
+
+.mbsc-page {
+    font-family: Helvetica, Arial, sans-serif;
+    h1, h2, h3 {
+        font-family: Helvetica, Arial, sans-serif;
+    }
+}
+
 @keyframes md-rotating {
     from {
         transform: rotate(0deg);
@@ -62,16 +71,6 @@
     display: inline-block;
 }
 
-.footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-/*     background-color: red;
-    color: white; */
-    text-align: center;
-}
-
 .stickyTop {
     position: fixed;
     top: 0;
@@ -97,18 +96,54 @@ a {
   }
 }
 
-.footer {    
+.footer { 
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;   
     .mbsc-ios {
         &.mbsc-ms-c {
-            background: #428bca;
+            background: $primary-color;
         }
         .mbsc-ms {
             .mbsc-ms-item {
                 color: black;
             }        
             .mbsc-ms-item-sel {
-                color: #ffffff;
+                color: black;
             }
+        }
+    }
+}
+
+.case-header {
+    &.mbsc-scv {
+        &.mbsc-comp {
+            background: $primary-color;
+            .mbsc-ms-item {
+                color: white;
+            }
+            .mbsc-ms-item-sel {
+                color: white;
+                font-weight: bold;
+            }
+        
+        }
+    }
+}
+
+.case-overview-header {
+    .mbsc-form {
+        background:$primary-color;
+        .mbsc-form-group {
+            margin: 5px 0 5px 0;
+        }
+        &.md-load-btn {
+            padding-top: 0px;
+        }
+        a {
+            color: white;
         }
     }
 }

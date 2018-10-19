@@ -27,7 +27,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
 
     constructor(private route: ActivatedRoute,
          private caseService: CaseService,
-         public router: Router) {
+         private _router: Router) {
         if(this.route.snapshot.paramMap.has('id')) {
             this.caseId = Number(this.route.snapshot.paramMap.get('id'));
         } else {
@@ -101,9 +101,10 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         return field != null ? field.value || null : undefined;//null - value is null, undefined - no such field
     }
 
-    goToCaseOverview() {
-        this.router.navigate(['/']);
-    }
+    goTo(url: string) {
+        if(url == null) return;
+        this._router.navigate([url]);
+      }
 
     getSectionHeader(type: CaseSectionType): string {
         if (this.caseSections == null) return "";

@@ -63,6 +63,12 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     this.search();
   }
 
+  cancelSearch() {
+    if(this.isLoading) return;
+    this.filtersForm.controls.freeSearch.setValue("");
+    this.applyFilterAndSearch();
+  }
+
   onItemTap(event) {
     this.goToCase(this.cases[event.index].id);
   }
@@ -127,7 +133,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   private caclucatePageSize(): number {
-    const headerSize = 170;
+    const headerSize = 53;
     const caseElemSize = 68;//TODO: get real height from UI
     const windowHeight = window.innerHeight;
     const defaultPageSize = 2;
