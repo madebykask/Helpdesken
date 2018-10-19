@@ -3,14 +3,21 @@
     display:block;
     padding: 10px 20px;
     background: none #fff;    
-    font-family: arial,verdana,sans-serif;
+    font-family: Verdana, Arial, Sans-Serif;
+    border-top:1px solid #ccc;    
 }
 
-ul.nolist { 
-    list-style:  none none; 
-    font-size: 16px;
-    font-weight:400;
-    padding:0xp 0px;
+.case-subsection {
+    .case-subsection-title {        
+        font-size:12px;
+        color: #020202;
+    }
 }
 
+.mbsc-ic:before {   margin-right: 8px; }
 
+ul.filelist { 
+    list-style:  none none;     
+    padding:0px;
+    margin:10px 0px;    
+}
