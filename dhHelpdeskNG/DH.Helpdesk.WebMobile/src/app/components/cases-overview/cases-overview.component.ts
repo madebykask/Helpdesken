@@ -17,9 +17,10 @@ import { Subject } from 'rxjs';
 export class CasesOverviewComponent implements OnInit, OnDestroy {
   @ViewChild('loading') loadingElem: MbscForm; 
   @ViewChild('listview') listView: MbscListview;
-  private filter: CasesOverviewFilter;
-  private scrollBindFunc: any;
-  private timer: any;
+  private _filter: CasesOverviewFilter;
+  private _scrollBindFunc: any;
+  private _timer: any;
+  private _showSearchPanel = false;
   private _destroy$ = new Subject();
 
   filtersForm: FormGroup;
@@ -37,7 +38,6 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   constructor(private casesOverviewService: CasesOverviewService,
               private formBuilder: FormBuilder,
-              private userSettingsService: UserSettingsService, 
               private router: Router) {                
                }
 
@@ -48,12 +48,12 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     this.pageSize = this.caclucatePageSize();
     this.initFilter();
     this.search();
-    this.scrollBindFunc = this.checkLoad.bind(this);
-    window.addEventListener('scroll', this.scrollBindFunc);
+    this._scrollBindFunc = this.checkLoad.bind(this);
+    window.addEventListener('scroll', this._scrollBindFunc);
   }
 
   ngOnDestroy() {
-    window.removeEventListener('scroll', this.scrollBindFunc);
+    window.removeEventListener('scroll', this._scrollBindFunc);
     this._destroy$.next();
   }
 
@@ -65,8 +65,12 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   cancelSearch() {
     if(this.isLoading) return;
-    this.filtersForm.controls.freeSearch.setValue("");
-    this.applyFilterAndSearch();
+    const defaultValue = "";
+    if(this.filtersForm.controls.freeSearch.value != defaultValue) {
+      this.filtersForm.controls.freeSearch.setValue(defaultValue);
+      this.applyFilterAndSearch();
+    }
+    this._showSearchPanel = false;
   }
 
   onItemTap(event) {
@@ -80,15 +84,15 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   checkLoad() {    
-    clearTimeout(this.timer);
+    clearTimeout(this._timer);
     let timer = setTimeout(() => {
         if (!this.isLoading && this.shouldLoad()) {
             this.isLoading = true;
-            this.filter.Page += 1;
+            this._filter.Page += 1;
             this.search();
         }
     }, 250);
-    this.timer = timer;
+    this._timer = timer;
   }
 
   trackByFn(index, item: CaseOverviewItem) {
@@ -107,7 +111,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   private search() {
     this.isLoading = true;
-    this.casesOverviewService.searchCases(this.filter)
+    this.casesOverviewService.searchCases(this._filter)
       .pipe(
         take(1),
         takeUntil(this._destroy$),
@@ -122,14 +126,14 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   private initFilter () {
-    this.filter = new CasesOverviewFilter();
-    this.filter.FreeTextSearch = this.filtersForm.controls.freeSearch.value;
-    this.filter.InitiatorSearchScope = 0;//TODO: use enum
-    this.filter.CaseProgress = -1;//TODO: use enum
-    this.filter.PageSize =  this.pageSize || PagingConstants.pageSize;
-    this.filter.Page = PagingConstants.page;
-    this.filter.Ascending = false;
-    this.filter.OrderBy = 'CaseNumber';//TODO - remove use hardcode
+    this._filter = new CasesOverviewFilter();
+    this._filter.FreeTextSearch = this.filtersForm.controls.freeSearch.value;
+    this._filter.InitiatorSearchScope = 0;//TODO: use enum
+    this._filter.CaseProgress = -1;//TODO: use enum
+    this._filter.PageSize =  this.pageSize || PagingConstants.pageSize;
+    this._filter.Page = PagingConstants.page;
+    this._filter.Ascending = false;
+    this._filter.OrderBy = 'CaseNumber';//TODO - remove use hardcode
   }
 
   private caclucatePageSize(): number {

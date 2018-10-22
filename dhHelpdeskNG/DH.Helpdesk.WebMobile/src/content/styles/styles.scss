@@ -23,6 +23,7 @@
 } */
 
 $primary-color: #428bca;
+$font-header-color: white;
 
 .mbsc-page {
     font-family: Helvetica, Arial, sans-serif;
@@ -122,10 +123,10 @@ a {
         &.mbsc-comp {
             background: $primary-color;
             .mbsc-ms-item {
-                color: white;
+                color: $font-header-color;
             }
             .mbsc-ms-item-sel {
-                color: white;
+                color: $font-header-color;
                 font-weight: bold;
             }
         
@@ -135,15 +136,26 @@ a {
 
 .case-overview-header {
     .mbsc-form {
+        color: $font-header-color;
         background:$primary-color;
         .mbsc-form-group {
             margin: 5px 0 5px 0;
         }
-        &.md-load-btn {
-            padding-top: 0px;
-        }
-        a {
-            color: white;
+        .mbsc-row {
+            min-height: 2.75em;
+            .center {
+                text-align: center;
+                margin: auto;
+            }
+            .bold {
+                font-weight: bold;
+            }
+            &.md-load-btn {
+                padding-top: 0px;
+            }
+            a {
+                color: $font-header-color;
+            }
         }
     }
 }
