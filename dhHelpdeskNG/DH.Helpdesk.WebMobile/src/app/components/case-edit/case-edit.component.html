@@ -4,13 +4,13 @@
 <mbsc-form *ngIf="isLoaded"> 
     <mbsc-tab-nav [options]="tabsMenuSettings" class="case-header">
             <mbsc-nav-item (click)="goTo('/casesoverview')">Cancel</mbsc-nav-item>
-            <mbsc-nav-item [selected]="true">Case {{caseData.caseNumber}}</mbsc-nav-item>
+            <mbsc-nav-item [selected]="true">{{getCaseTitle()}}</mbsc-nav-item>
             <mbsc-nav-item (click)="saveCase()" [disabled]="true">Done</mbsc-nav-item>
     </mbsc-tab-nav>
     <div class="md-paging">
         <mbsc-scrollview>
             <mbsc-scrollview-item id="main">  
-
+                
                 <form [formGroup]="form" novalidate>
                     <mbsc-form-group collapsible open #initiatorSection>
                         <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Initiator)}}</mbsc-form-group-title>

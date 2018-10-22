@@ -75,7 +75,8 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
             builder.RegisterType<CaseTypeService>().As<ICaseTypeService>();
             builder.RegisterType<CategoryService>().As<ICategoryService>();
             builder.RegisterType<CaseSectionService>().As<ICaseSectionService>();
-            
+            builder.RegisterType<BaseCaseSolutionService>().As<IBaseCaseSolutionService>();
+
         }
 
         #endregion

@@ -2,6 +2,13 @@ export class CaseEditInputModel {
     id: number;
     caseNumber: number;
     fields: IBaseCaseField<any>[];    
+    caseSolution: CaseSolution;
+}
+
+export class CaseSolution {
+    caseSolutionId:number;
+    name: string;
+    stateSecondaryId: number;
 }
 
 export class BaseCaseField<T> implements IBaseCaseField<T> {

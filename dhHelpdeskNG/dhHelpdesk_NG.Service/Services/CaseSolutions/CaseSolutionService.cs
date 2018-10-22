@@ -1,27 +1,27 @@
-﻿using DH.Helpdesk.BusinessData.Models.CaseSolution;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
-using System.Linq.Expressions;
+using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.CaseSolution;
+using DH.Helpdesk.BusinessData.Models.User.Input;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Enums.CaseSolution;
+using DH.Helpdesk.Common.Extensions.String;
+using DH.Helpdesk.Dal.NewInfrastructure;
+using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Dal.Repositories.Cases;
+using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Services.Services
 {
-    using DH.Helpdesk.Common.Extensions.String;
-    using DH.Helpdesk.Common.Enums.CaseSolution;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Repositories.Cases;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.BusinessData.Models.User.Input;
-    using System.Data;
-    using System.Configuration;
-    using System.Data.SqlClient;
-    using BusinessData.Models.Case;
-    using Dal.NewInfrastructure;
-    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
+    using IUnitOfWork = Dal.Infrastructure.IUnitOfWork;
 
-    public interface ICaseSolutionService
+
+    public interface ICaseSolutionService : IBaseCaseSolutionService
     {
         IList<CaseSolution> GetCaseSolutions(int customerId);
         IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, int? userId = null);
@@ -31,9 +31,6 @@ namespace DH.Helpdesk.Services.Services
         IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch SearchCaseSolutions, bool isFirstNamePresentation);
 
         //int GetAntal(int customerId, int userid);
-
-        CaseSolution GetCaseSolution(int id);
-        CaseSolutionCategory GetCaseSolutionCategory(int id);
         CaseSolutionSchedule GetCaseSolutionSchedule(int id);
 
         DeleteMessage DeleteCaseSolution(int id, int customerId);
@@ -52,10 +49,9 @@ namespace DH.Helpdesk.Services.Services
         bool CheckIfExtendedFormExistForSolutionsInCategories(int customerId, List<int> list);
     }
 
-    public class CaseSolutionService : ICaseSolutionService
+    public class CaseSolutionService : BaseCaseSolutionService, ICaseSolutionService
     {
         private readonly IApplicationRepository _applicationRepository;
-        private readonly ICaseSolutionRepository _caseSolutionRepository;
         private readonly ICaseSolutionCategoryRepository _caseSolutionCategoryRepository;
         private readonly ICaseSolutionScheduleRepository _caseSolutionScheduleRepository;
 
@@ -77,7 +73,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly Dictionary<string, IList<WorkingGroupEntity>> _adminGroups =
             new Dictionary<string, IList<WorkingGroupEntity>>(StringComparer.OrdinalIgnoreCase);
 
-        private IComputerUserCategoryRepository _computerUserCategoryRepository;
+        private readonly IComputerUserCategoryRepository _computerUserCategoryRepository;
 
         public CaseSolutionService(
             ICaseSolutionRepository caseSolutionRepository,
@@ -95,16 +91,15 @@ namespace DH.Helpdesk.Services.Services
             IStateSecondaryService stateSecondaryService,
             IApplicationRepository applicationRepository,
             IComputerUserCategoryRepository computerUserCategoryRepository,
-            IUnitOfWorkFactory unitOfWorkFactory)
+            IUnitOfWorkFactory unitOfWorkFactory) 
+            : base(caseSolutionRepository, caseSolutionCategoryRepository)
         {
-            _computerUserCategoryRepository = computerUserCategoryRepository;
-            this._caseSolutionRepository = caseSolutionRepository;
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
             this._caseSolutionScheduleRepository = caseSolutionScheduleRepository;
             this.caseSolutionSettingRepository = caseSolutionSettingRepository;
             this._linkRepository = linkRepository;
             this._linkService = linkService;
-            _formRepository = formRepository;
+            this._formRepository = formRepository;
             this._unitOfWork = unitOfWork;
             this._caseSolutionConditionRepository = caseSolutionConditionRepository;
             this._cache = cache;
@@ -115,6 +110,7 @@ namespace DH.Helpdesk.Services.Services
             this._applicationRepository = applicationRepository;
             this.caseSolutionConditionRepository = caseSolutionConditionRepository;
             this.unitOfWorkFactory = unitOfWorkFactory;
+            this._computerUserCategoryRepository = computerUserCategoryRepository;
         }
         
         public IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, int? userId = null)

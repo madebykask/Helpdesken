@@ -34,6 +34,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly IMailTemplateService _mailTemplateService;
         private readonly IUserService _userSerivice;
+        private readonly IBaseCaseSolutionService _caseSolutionService;
         private readonly ICustomerUserService _customerUserService;
         private readonly IUserService _userService;
         private readonly IWorkingGroupService _workingGroupService;
@@ -44,9 +45,9 @@ namespace DH.Helpdesk.WebApi.Controllers
         #region ctor()
 
         public CaseController(ICaseService caseService, ICaseFileService caseFileService, ICaseFieldSettingService caseFieldSettingService,
-            IMailTemplateService mailTemplateService, IUserService userSerivice,
+            IMailTemplateService mailTemplateService, IUserService userSerivice, IBaseCaseSolutionService caseSolutionService,
             ICustomerUserService customerUserService, IUserService userService, IWorkingGroupService workingGroupService,
-            ISupplierService supplierService, ISettingService customerSettingsService,
+            ISupplierService supplierService, ISettingService customerSettingsService, 
             ITranslateCacheService translateCacheService)
         {
             _caseService = caseService;
@@ -60,9 +61,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             _supplierService = supplierService;
             _customerSettingsService = customerSettingsService;
             _translateCacheService = translateCacheService;
+            _caseSolutionService = caseSolutionService;
         }
 
-            #endregion
+        #endregion
 
         [HttpGet]
         [CheckUserCasePermissions(CaseIdParamName = "caseId")]
@@ -113,6 +115,23 @@ namespace DH.Helpdesk.WebApi.Controllers
             //TODO: Move to mapper
             model.Id = currentCase.Id;
             model.CaseNumber = currentCase.CaseNumber;
+            
+            //case solution
+            var caseSolutionId = currentCase.CurrentCaseSolution_Id ?? 0;
+            if (caseSolutionId > 0)
+            {
+                var caseSolution = _caseSolutionService.GetCaseSolution(caseSolutionId);
+                if (caseSolution != null)
+                {
+                    model.CaseSolution = new CaseSolutionInfo()
+                    {
+                        CaseSolutionId = caseSolutionId,
+                        Name = caseSolution.Name,
+                        StateSecondaryId = caseSolution.StateSecondary_Id ?? 0
+                    };
+                }
+            }
+
             //if (!string.IsNullOrWhiteSpace(currentCase.ReportedBy))//TODO:
             //{
             //    var reportedByUser = _computerService.GetComputerUserByUserID(currentCase.ReportedBy);

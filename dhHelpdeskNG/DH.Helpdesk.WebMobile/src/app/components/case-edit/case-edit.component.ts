@@ -39,6 +39,20 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         this.loadCaseData();
     }
 
+    getCaseTitle() {
+        if (this.caseData){
+            if (this.caseData.caseSolution) {
+                return this.caseData.caseSolution.name;
+            }
+            else {
+                return `Case ${this.caseData.caseNumber}`;
+            }
+        }
+        else {
+            return '';
+        }        
+    }
+
     loadCaseData(): any {
         this.isLoaded = false;
         let caseSections$ = this.caseService.getCaseSections(); //TODO: error handling
@@ -80,16 +94,15 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         }
         return this.caseData.fields.filter(f => f.name === name).length > 0;
     }
-/* 
-    getValue<T>(name: string): T {
-        if(this.caseData === null) {          
+    /* getValue<T>(name: string): T {
+        if(this.caseData === null) {
             throw new Error("No Case Data.");
         }
         return this.caseData.Fields.filter(f => f.Name === name)[0].Value as T;
-    } */
+    }*/
 
     getField(name: string): BaseCaseField<any> {
-        if(this.caseData === null) {          
+        if (this.caseData === null) {
             throw new Error("No Case Data.");
         }
         const fields = this.caseData.fields.filter(f => f.name === name);
@@ -102,7 +115,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     }
 
     goTo(url: string) {
-        if(url == null) return;
+        if (url == null) return;
         this._router.navigate([url]);
       }
 
