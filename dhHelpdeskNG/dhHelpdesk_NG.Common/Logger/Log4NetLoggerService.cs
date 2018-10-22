@@ -118,6 +118,8 @@
             public const string DATA_IMPORT = "DataImportLog";
 
             public const string Session = "SessionLog";
+
+            public const string Client = "ClientLog";
         }
     }
 }

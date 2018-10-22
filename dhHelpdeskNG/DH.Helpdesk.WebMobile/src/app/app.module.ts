@@ -1,7 +1,7 @@
 import { MbscModule } from '@mobiscroll/angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
 
 import { APP_INITIALIZER } from '@angular/core';
 import { LoginComponent, HeaderTitleComponent } from './shared/components';
@@ -24,6 +24,8 @@ import { AppRoutingModule } from './app.routing';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { RequireAuthDirective } from './helpers/directives/require-auth.directive';
 import { CaseFilesControlComponent } from './components/case-edit/controls/case-files/case-files-control.component';
+import { GlobalErrorHandler } from './helpers/errors/global-error-handler';
+import { AlertComponent } from './shared/components/alert/alert.component';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -35,6 +37,7 @@ import { CaseFilesControlComponent } from './components/case-edit/controls/case-
      GetByKeyPipe, DateTimezonePipe,
      RequireAuthDirective,
      CaseFilesControlComponent,
+     AlertComponent,
     ],
   imports: [
     MbscModule,
@@ -53,6 +56,7 @@ import { CaseFilesControlComponent } from './components/case-edit/controls/case-
     }),
   ],
   providers: [
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     // { provide: LOCALE_ID, useValue: "sv-SE" },

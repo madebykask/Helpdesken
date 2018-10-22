@@ -59,6 +59,10 @@
     <Reference Include="Autofac.Integration.WebApi.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.WebApi2.Owin.4.0.0\lib\net45\Autofac.Integration.WebApi.Owin.dll</HintPath>
     </Reference>
+    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -110,6 +114,11 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.6\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Cors, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.6\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
@@ -158,6 +167,7 @@
     <Compile Include="Controllers\CaseOptionsController.cs" />
     <Compile Include="Controllers\CasesOverviewController.cs" />
     <Compile Include="Controllers\CaseTypesController.cs" />
+    <Compile Include="Controllers\ClientLogController.cs" />
     <Compile Include="Controllers\ClosingReasonsController.cs" />
     <Compile Include="Controllers\CurrentUserController.cs" />
     <Compile Include="Controllers\DepartmentsController.cs" />
@@ -173,6 +183,11 @@
     <Compile Include="Infrastructure\ActionResults\FileResult.cs" />
     <Compile Include="Infrastructure\Attributes\AuthorizeApiAttribute.cs" />
     <Compile Include="Infrastructure\Attributes\SkipCustomerAuthorization.cs" />
+    <Compile Include="Infrastructure\ClientLogger\ClientLogEntry.cs" />
+    <Compile Include="Infrastructure\ClientLogger\ClientLogMessageFormatter.cs" />
+    <Compile Include="Infrastructure\ClientLogger\Enums\ClientLogLevel.cs" />
+    <Compile Include="Infrastructure\ClientLogger\ClientLogger.cs" />
+    <Compile Include="Infrastructure\Config\DependencyInjection\MapperModule.cs" />
     <Compile Include="Infrastructure\Config\Filters\CheckUserCasePermissionsAttribute.cs" />
     <Compile Include="Infrastructure\Config\Filters\UserCasePermissionsFilter.cs" />
     <Compile Include="Infrastructure\BaseApiController.cs" />
@@ -199,14 +214,18 @@
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Infrastructure\Config\Mapper\MappingConfiguration.cs" />
+    <Compile Include="Infrastructure\Config\Mapper\Profiles\ModelToEntitiesMappingProfile.cs" />
     <Compile Include="Infrastructure\Config\Owin\RequestMiddleware.cs" />
     <Compile Include="Infrastructure\Contexts\CacheContext.cs" />
     <Compile Include="Infrastructure\Contexts\UserContext.cs" />
     <Compile Include="Infrastructure\Contexts\WorkContext.cs" />
+    <Compile Include="Infrastructure\Extensions\ModelStateExtensions.cs" />
     <Compile Include="Infrastructure\Logger\ErrorContext.cs" />
     <Compile Include="Infrastructure\SessionFacade.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
     <Compile Include="Infrastructure\Translate\Translation.cs" />
+    <Compile Include="Models\ClientLogItemModel.cs" />
     <Compile Include="Models\LoginUserInputModel.cs" />
     <Compile Include="Models\RefreshTokenInputModel.cs" />
     <Compile Include="Startup.cs" />

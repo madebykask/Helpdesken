@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Formatting;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Http.Filters;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
@@ -45,6 +44,12 @@ namespace DH.Helpdesk.WebApi
                 name: ConfigApi.Constants.DefaultRouteName,
                 routeTemplate: UrlPrefix + "/{controller}/{action}/{id}",
                 defaults: new {id = RouteParameter.Optional}
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi2",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
             );
         }
 

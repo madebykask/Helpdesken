@@ -1,0 +1,9 @@
+<mbsc-popup [options]="popupSettings" #alertpopup>
+    <div class="mbsc-align-center mbsc-padding">
+        <div *ngFor="let alert of this.alerts">
+          <diV class="alert error">
+              {{alert.message}}
+          </diV>
+        </div>
+    </div>
+</mbsc-popup>

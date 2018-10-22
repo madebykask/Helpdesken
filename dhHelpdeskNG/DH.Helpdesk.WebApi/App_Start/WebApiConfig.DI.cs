@@ -27,6 +27,7 @@ namespace DH.Helpdesk.WebApi
 
         private static void RegisterServices(ContainerBuilder builder)
         {
+            builder.RegisterModule(new MapperModule());
             builder.RegisterModule(new AuthorizationModule());
             builder.RegisterModule(new LoggerModule());
             builder.RegisterModule(new WorkContextModule());
