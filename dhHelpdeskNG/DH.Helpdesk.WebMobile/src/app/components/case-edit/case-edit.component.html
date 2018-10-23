@@ -4,7 +4,7 @@
 <mbsc-form *ngIf="isLoaded"> 
     <mbsc-tab-nav [options]="tabsMenuSettings" class="case-header">
             <mbsc-nav-item (click)="goTo('/casesoverview')">Cancel</mbsc-nav-item>
-            <mbsc-nav-item [selected]="true">{{getCaseTitle()}}</mbsc-nav-item>
+            <mbsc-nav-item [selected]="true">{{ getCaseTitle() }}</mbsc-nav-item>
             <mbsc-nav-item (click)="saveCase()" [disabled]="true">Done</mbsc-nav-item>
     </mbsc-tab-nav>
     <div class="md-paging">
@@ -12,8 +12,8 @@
             <mbsc-scrollview-item id="main">  
                 
                 <form [formGroup]="form" novalidate>
-                    <mbsc-form-group collapsible open #initiatorSection>
-                        <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Initiator)}}</mbsc-form-group-title>
+                    <mbsc-form-group collapsible #initiatorSection>
+                        <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Initiator) }}</mbsc-form-group-title>
                         <mbsc-form-group-content>
                             <!-- TODO: ComputerUserCategories -->
                             <case-textbox-control *ngIf="hasField('ReportedBy')" [field]="getField('ReportedBy')" [form]="form"></case-textbox-control>
@@ -31,7 +31,7 @@
                     </mbsc-form-group>
 
                     <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.Regarding)" #regardingSection>
-                        <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Regarding)}}</mbsc-form-group-title>
+                        <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Regarding) }}</mbsc-form-group-title>
                         <mbsc-form-group-content>
                         <!-- TODO: ComputerUserCategories -->
                             <case-textbox-control *ngIf="hasField('IsAbout_ReportedBy')" [field]="getField('IsAbout_ReportedBy')" [form]="form"></case-textbox-control>
@@ -49,7 +49,7 @@
                     </mbsc-form-group>                                        
 
                     <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.ComputerInfo)" #ComputerInfoSection>
-                        <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.ComputerInfo)}}</mbsc-form-group-title>
+                        <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.ComputerInfo) }}</mbsc-form-group-title>
                         <mbsc-form-group-content>
                                 <case-textbox-control *ngIf="hasField('InventoryNumber')" [field]="getField('InventoryNumber')" [form]="form"></case-textbox-control>
                                 <case-textbox-control *ngIf="hasField('ComputerType_Id')" [field]="getField('ComputerType_Id')" [form]="form"></case-textbox-control>
@@ -58,7 +58,7 @@
                     </mbsc-form-group>                                        
     
                     <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.CaseInfo)" #caseInfoSection>
-                        <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.CaseInfo)}}</mbsc-form-group-title>
+                        <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.CaseInfo) }}</mbsc-form-group-title>
                         <mbsc-form-group-content>
                                 <case-textbox-control *ngIf="hasField('CaseNumber')" [field]="getField('CaseNumber')" [form]="form"></case-textbox-control>
                                 <case-datetime-control *ngIf="hasField('RegTime')" [field]="getField('RegTime')" [form]="form"></case-datetime-control>
@@ -91,7 +91,7 @@
                     </mbsc-form-group>                                        
     
                     <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.CaseManagement)" #caseManagementSection>
-                        <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.CaseManagement)}}</mbsc-form-group-title>
+                        <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.CaseManagement) }}</mbsc-form-group-title>
                         <mbsc-form-group-content>
                             <case-dropdown-control *ngIf="hasField('WorkingGroup_Id')" [field]="getField('WorkingGroup_Id')" [form]="form" [dataSource]="dataSource.options.workingGroups"></case-dropdown-control>
                             <case-dropdown-control *ngIf="hasField('CaseResponsibleUser_Id')" [field]="getField('CaseResponsibleUser_Id')" [form]="form" [dataSource]="dataSource.options.responsibleUsers"></case-dropdown-control>
@@ -121,7 +121,7 @@
                     </mbsc-form-group> -->
                     
                      <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.Status)" #statusSection *ngIf="hasField('FinishingDate') && getField('FinishingDate').value != null">
-                        <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Status)}}</mbsc-form-group-title>
+                        <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Status) }}</mbsc-form-group-title>
                         <mbsc-form-group-content>
                             <case-textarea-control *ngIf="hasField('FinishingDescription')" [field]="getField('FinishingDescription')" [form]="form" [readonly]="true"></case-textarea-control>
                             <case-multi-dropdown-control *ngIf="hasField('ClosingReason')" [field]="getField('ClosingReason')" [form]="form" [dataSource]="dataSource.options.closingReasons" [readonly]="true"></case-multi-dropdown-control>

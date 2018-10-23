@@ -20,15 +20,15 @@ export class AppComponent implements OnInit {
   };
   version = config.version;
 
-  constructor(private _authenticationService: AuthenticationService, private _logger: LoggerService, 
-    private _userSettingsService: UserSettingsService, private _router: Router) { 
-    mobiscroll.settings = { theme: 'ios', lang: 'en', labelStyle: 'stacked' };   
+  constructor(private _authenticationService: AuthenticationService, private _logger: LoggerService,
+    private _userSettingsService: UserSettingsService, private _router: Router) {
+    mobiscroll.settings = { theme: 'ios', lang: 'en', labelStyle: 'stacked' };
   }
 
   ngOnInit(): void {
     const isAuthenticated = this._authenticationService.isAuthenticated();
     const version = this._authenticationService.getVersion();
-    if (isAuthenticated && config.version != version) {
+    if (isAuthenticated && config.version !== version) {
       this._logger.log('>>>>>>>>>>>>>>>>Logout: version changed');
       this._router.navigate(['/login']);
     }

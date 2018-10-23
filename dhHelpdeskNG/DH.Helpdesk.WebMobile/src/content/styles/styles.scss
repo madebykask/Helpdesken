@@ -22,7 +22,7 @@
     font-family: "Font Awesome 5 Free" !important; 
 } */
 
-$primary-color: #428bca;
+$primary-color: #438eb9;
 $font-header-color: white;
 
 .mbsc-page {
@@ -109,10 +109,10 @@ a {
         }
         .mbsc-ms {
             .mbsc-ms-item {
-                color: black;
+                color: $font-header-color;
             }        
             .mbsc-ms-item-sel {
-                color: black;
+                color: $font-header-color;
             }
         }
     }
@@ -137,7 +137,7 @@ a {
 .case-overview-header {
     .mbsc-form {
         color: $font-header-color;
-        background:$primary-color;
+        background: $primary-color;
         .mbsc-form-group {
             margin: 5px 0 5px 0;
         }
@@ -159,3 +159,18 @@ a {
         }
     }
 }
+
+.header {
+    background: $primary-color;
+    .navbar-brand {
+        background: url(../img/dhhelpdesk.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        min-width: 116px;
+        width: 100%;
+        min-height: 25px;
+    }
+}
+

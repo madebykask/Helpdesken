@@ -1,10 +1,10 @@
 <!-- <p style="text-align:center"><img src="/content/img/dh_solutions_version.png" /></p> -->
 <mbsc-bottom-nav [options]="bottomMenuSettings">
-    <mbsc-nav-item data-icon="fa-home" (click)="goTo('/')"></mbsc-nav-item>
-    <mbsc-nav-item data-icon="fa-plus" (click)="goTo()" [disabled]="true"></mbsc-nav-item>
-    <mbsc-nav-item data-icon="fa-list" (click)="goTo('/casesoverview')"></mbsc-nav-item>
-    <mbsc-nav-item data-icon="fa-globe" (click)="openLanguages()"></mbsc-nav-item>
-    <mbsc-nav-item data-icon="fa-power-off" (click)="goTo('/login')"></mbsc-nav-item>
+    <mbsc-nav-item data-icon="fa-home" (click)="goTo('/')">Home</mbsc-nav-item>
+    <mbsc-nav-item data-icon="fa-plus" (click)="goTo()" [disabled]="true">Add</mbsc-nav-item>
+    <mbsc-nav-item data-icon="fa-list" (click)="goTo('/casesoverview')">Overview</mbsc-nav-item>
+    <mbsc-nav-item data-icon="fa-globe" (click)="openLanguages()">Languages</mbsc-nav-item>
+    <mbsc-nav-item data-icon="fa-power-off" (click)="goTo('/login')">Log out</mbsc-nav-item>
 </mbsc-bottom-nav>  
 
 <mbsc-select [(ngModel)]="languageId" [options]="languagesSettings" #languages hidden></mbsc-select>

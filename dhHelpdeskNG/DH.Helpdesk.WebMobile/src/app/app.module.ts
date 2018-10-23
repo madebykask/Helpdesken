@@ -3,18 +3,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { NgModule, LOCALE_ID } from '@angular/core';
 
-import { APP_INITIALIZER } from '@angular/core'
-import { LoginComponent, HeaderTitleComponent } from './shared/components'
+import { APP_INITIALIZER } from '@angular/core';
+import { LoginComponent, HeaderTitleComponent } from './shared/components';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
-import { TranslateModule, TranslateLoader, TranslateService as NgxTranslateService} from '@ngx-translate/core'
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TranslateModule, TranslateLoader, TranslateService as NgxTranslateService} from '@ngx-translate/core';
 import { AppComponent } from './app.component';
 import { HttpLoaderFactory, initTranslation, TranslationApiService } from './services/translation';
-import { LocalStorageService } from './services/local-storage'
+import { LocalStorageService } from './services/local-storage';
 import { LoggerService } from './services/logging';
 
-import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors'
+import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors';
 import { HomeComponent, CasesOverviewComponent, CaseEditComponent, CaseTextboxComponent,
    CaseDateComponent, CaseDropdownComponent, CaseMultiDropdownComponent, CaseSwitchComponent,
    CaseTextareaComponent, CaseDateTimeComponent } from './components';
@@ -36,9 +36,9 @@ import { CaseFilesControlComponent } from './components/case-edit/controls/case-
      RequireAuthDirective,
      CaseFilesControlComponent,
     ],
-  imports: [ 
-    MbscModule, 
-    BrowserModule,    
+  imports: [
+    MbscModule,
+    BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -55,17 +55,17 @@ import { CaseFilesControlComponent } from './components/case-edit/controls/case-
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    //{ provide: LOCALE_ID, useValue: "sv-SE" },
-    //{ provide: LOCALE_ID, deps: [SettingsService], useFactory: (settingsService) => settingsService.getLanguage()},
-	TranslationApiService,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initTranslation,
-      deps: [NgxTranslateService, TranslationApiService, LoggerService],
-      multi:true
-    },
-    LocalStorageService    
-  ]  
+    // { provide: LOCALE_ID, useValue: "sv-SE" },
+    // { provide: LOCALE_ID, deps: [SettingsService], useFactory: (settingsService) => settingsService.getLanguage()},
+    TranslationApiService,
+      {
+        provide: APP_INITIALIZER,
+        useFactory: initTranslation,
+        deps: [NgxTranslateService, TranslationApiService, LoggerService],
+        multi: true
+      },
+    LocalStorageService
+  ]
 })
 export class AppModule { }
 

@@ -23,14 +23,18 @@ export class UserSettingsService extends HttpApiServiceBase {
                 map((data: any) => {
                     if(data) {
                         let user = this.localStorageService.getCurrentUser();
-                        if(data.customerId)
-                            user.currentData.selectedCustomerId = data.customerId;//TODO: if no customer;
-                        if(data.languageId)
+                        if (data.customerId) {
+                            user.currentData.selectedCustomerId = data.customerId;
+                        }//TODO: if no customer; 
+                        if (data.languageId) {
                             user.currentData.selectedLanguageId = data.languageId;//TODO: if no language
-                        if(data.timeZone)
-                            user.currentData.userTimeZone = data.timeZone;
-                        if(data.timeZoneMoment)
+                        }
+                        if (data.timeZone) {
+                            user.currentData.userTimeZone = data.timeZone; 
+                        }
+                        if (data.timeZoneMoment) {
                             this.localStorageService.saveTimezoneInfo(data.timeZoneMoment);
+                        }
                         // Other settings
                         this.localStorageService.setCurrentUser(user);
 
@@ -40,38 +44,38 @@ export class UserSettingsService extends HttpApiServiceBase {
                 finalize(() => this.isLoadingUserSettings = false )
             )
     };
-    
-    getUserData(): UserData {
-        let user = this.localStorageService.getCurrentUser();
-        if (!user) return null;
 
-        return user.currentData
+    getUserData(): UserData {
+        const user = this.localStorageService.getCurrentUser();
+        if (!user) { return null };
+
+        return user.currentData;
     }
 
     getCurrentLanguage(): number {
-        const user = this.getUserData()
+        const user = this.getUserData();
         return user != null ? user.selectedLanguageId : null;
     }
 
     setCurrentLanguage(languageId: number) {
-        let user = this.localStorageService.getCurrentUser();
+        const user = this.localStorageService.getCurrentUser();
         user.currentData.selectedLanguageId = languageId;
         this.localStorageService.setCurrentUser(user);
     }
 
     getUserTimezone(): string {
-        const user = this.getUserData()
+        const user = this.getUserData();
         return user != null ? user.userTimeZone : null;
     }
 
     tryApplyTimezone(): boolean {
         const timezoneInfo = this.localStorageService.getTimezoneInfo();
-        if (timezoneInfo == null) return false;
+        if (timezoneInfo == null) { return false };
         const userTz = this.getUserTimezone();
-        if (userTz == null) return false;
+        if (userTz == null) { return false };
 
         moment.tz.add(timezoneInfo);
-        this._logger.log('>>>>Setting date timezone: ' +userTz)
+        this._logger.log('>>>>Setting date timezone: ' + userTz)
         moment.tz.setDefault(userTz);
         this._logger.log('>>>>Setting datetime L LT format')
         moment.defaultFormat = 'L LT';

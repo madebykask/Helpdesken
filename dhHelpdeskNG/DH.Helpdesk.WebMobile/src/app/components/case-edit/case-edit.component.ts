@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import {  FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
-import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseOptions, CaseSectionInputModel, CaseSectionType } from '../../models';
-import { Subscription, of, Observable, zip, forkJoin } from 'rxjs';
+import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource,
+      CaseSectionInputModel, CaseSectionType } from '../../models';
+import { Subscription, Observable, forkJoin } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 @Component({
@@ -18,20 +19,19 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     private caseSections: CaseSectionInputModel[];
     caseSectionTypes = CaseSectionType;
     dataSource: OptionsDataSource;
-
-    isLoaded: boolean = false;
-    form: FormGroup;    
+    isLoaded = false;
+    form: FormGroup;   
 
     tabsMenuSettings = {
-    }
+    };
 
     constructor(private route: ActivatedRoute,
          private caseService: CaseService,
          private _router: Router) {
-        if(this.route.snapshot.paramMap.has('id')) {
+        if (this.route.snapshot.paramMap.has('id')) {
             this.caseId = Number(this.route.snapshot.paramMap.get('id'));
         } else {
-            //TODO: throw error if caseid is invalid or go back
+            // TODO: throw error if caseid is invalid or go back
         }
     }
 
@@ -40,29 +40,27 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     }
 
     getCaseTitle() {
-        if (this.caseData){
+        if (this.caseData) {
             if (this.caseData.caseSolution) {
                 return this.caseData.caseSolution.name;
-            }
-            else {
+            } else {
                 return `Case ${this.caseData.caseNumber}`;
             }
-        }
-        else {
+        } else {
             return '';
         }        
     }
 
     loadCaseData(): any {
         this.isLoaded = false;
-        let caseSections$ = this.caseService.getCaseSections(); //TODO: error handling
-        let caseData$ = this.caseService.getCaseData(this.caseId)
+        const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
+        const caseData$ = this.caseService.getCaseData(this.caseId)
             .pipe(
-                switchMap(data => { //TODO: Error handle
+                switchMap(data => { // TODO: Error handle
                     this.caseData = data;
-                    let filter = this.getCaseOptionsFilter(this.caseData);
-                    let op1 = this.caseService.getCaseOptions(filter);                    
-                    let op2 = Observable.create(observer => { 
+                    const filter = this.getCaseOptionsFilter(this.caseData);
+                    const op1 = this.caseService.getCaseOptions(filter);                    
+                    const op2 = Observable.create(observer => { 
                         let group: any = {};
                         data.fields.forEach(field => {
                             group[field.name] = new FormControl({value: field.value || '', disabled: true});                        

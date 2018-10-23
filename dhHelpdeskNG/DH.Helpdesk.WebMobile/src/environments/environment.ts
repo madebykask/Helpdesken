@@ -11,7 +11,7 @@ export const environment = {
 };
 
 export const config = {
-      //apiUrl: 'http://dhutvas3.datahalland.se:8049',
+      // apiUrl: 'http://dhutvas3.datahalland.se:8049',
       apiUrl: 'http://localhost:8049',
       clientId: 'hd',
       version: require('../../package.json').version,
