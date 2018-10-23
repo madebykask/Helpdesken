@@ -3,7 +3,6 @@ import { BaseCaseField } from "../../../../models";
 import { BaseControl } from "../base-control";
 import { MbscDatetimeOptions, MbscDatetime } from "@mobiscroll/angular";
 import { getLocaleDateFormat, FormatWidth, getLocaleTimeFormat } from "@angular/common";
-import * as moment from 'moment-timezone';
 
 @Component({
     selector: 'case-datetime-control',
@@ -13,7 +12,7 @@ import * as moment from 'moment-timezone';
   export class CaseDateTimeComponent extends BaseControl implements OnInit, OnDestroy {
     @ViewChild('datetime') control: MbscDatetime
     @Input() field: BaseCaseField<string>;
-    value: Date;
+    value?: Date;
     options: MbscDatetimeOptions = {
       readOnly: true,
       disabled: true,
@@ -32,7 +31,7 @@ import * as moment from 'moment-timezone';
 
     ngOnInit(): void {
       //this.control.instance.setVal(new Date(this.field.value)); 
-      this.value = new Date(this.field.value);
+      this.value = this.field.value == null ? null : new Date(this.field.value);
     }
 
     ngOnDestroy(): void {

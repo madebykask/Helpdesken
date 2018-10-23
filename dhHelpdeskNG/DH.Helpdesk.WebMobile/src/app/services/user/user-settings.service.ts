@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ModuleWithComponentFactories } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, finalize} from 'rxjs/operators';
 import { UserData } from '../../models'
@@ -79,6 +79,15 @@ export class UserSettingsService extends HttpApiServiceBase {
         moment.tz.setDefault(userTz);
         this._logger.log('>>>>Setting datetime L LT format')
         moment.defaultFormat = 'L LT';
+        if (navigator.language != null) {
+            const availableLocales = moment.locales();
+            if ((<Array<string>>availableLocales).filter(l => l == navigator.language).length <= 0) {
+                this._logger.log('>>>>Locale is not supported: ' + navigator.language);
+            } else {
+                this._logger.log('>>>>Setting locale ' + navigator.language);
+                moment.locale(navigator.language);
+            }
+        }
     }
 
 }
