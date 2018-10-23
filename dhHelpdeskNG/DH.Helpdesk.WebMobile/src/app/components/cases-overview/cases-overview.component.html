@@ -1,10 +1,10 @@
 <mbsc-form class="case-overview-header">
         <div class="mbsc-form-group">
-                <form [formGroup]="filtersForm" novalidate (ngSubmit)="applyFilterAndSearch()">
+                <form [formGroup]="filtersForm" novalidate (ngSubmit)="applyFilterAndSearch()" action=".">
                         <div class="mbsc-grid mbsc-grid-sm" >
                                 <div class="mbsc-row" *ngIf="showSearchPanel">
                                         <div class="mbsc-col">
-                                                <mbsc-input formControlName="freeSearch" icon="fa-search"  placeholder="Search"></mbsc-input>
+                                                <mbsc-input type="search" formControlName="freeSearch" icon="fa-search" placeholder="Search"></mbsc-input>
                                         </div>
                                         <div class="mbsc-col-sm-auto">
                                                 <a [ngClass]="{'inactive':isLoading}" (click)="cancelSearch()">Cancel</a>
