@@ -1,3 +1,5 @@
+import { CaseSectionType } from "..";
+
 export class CaseEditInputModel { 
     id: number;
     caseNumber: number;
@@ -16,7 +18,7 @@ export class BaseCaseField<T> implements IBaseCaseField<T> {
     public label: string;
     //public JsonType: string;
     public value?: T;
-    public section?: string;
+    public section?: CaseSectionType;
     public options: KeyValue[]
 }
 
@@ -30,6 +32,6 @@ export interface IBaseCaseField<T> {
     label: string;
     //JsonType: string;
     value?: T;
-    section?: string;
+    section?: CaseSectionType;
     options: KeyValue[]
 }

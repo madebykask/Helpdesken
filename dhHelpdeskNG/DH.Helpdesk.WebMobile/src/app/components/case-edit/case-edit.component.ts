@@ -86,11 +86,18 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         })
     }
 
-    hasField(name: string) : boolean {
+    hasField(name: string): boolean {
         if(this.caseData === null) {          
             throw new Error("No Case Data.");
         }
         return this.caseData.fields.filter(f => f.name === name).length > 0;
+    }
+
+    hasSection(type: CaseSectionType): boolean {
+        if(this.caseData === null) {          
+            throw new Error("No Case Data.");
+        }
+        return this.caseData.fields.filter(f => f.section === type).length > 0;
     }
     /* getValue<T>(name: string): T {
         if(this.caseData === null) {

@@ -20,7 +20,7 @@ export class CaseService extends HttpApiServiceBase {
 
     getCaseData(caseId: number) {
         var user = this.localStorageService.getCurrentUser();
-        return this.getJson(this.buildResourseUrl('/api/case/get', { caseId: caseId }, true, true))//TODO: error handling
+        return this.getJson(this.buildResourseUrl('/api/case/' + caseId, null, true, true))//TODO: error handling
             .pipe(
                 map((caseData: any) => {
                     let model = this.fromJSONCaseEditInputModel(caseData);

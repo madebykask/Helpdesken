@@ -66,6 +66,10 @@
       <Project>{d268e4e5-cd72-45dc-9dc0-9f0ad89f3f6e}</Project>
       <Name>DH.Helpdesk.Web.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
+      <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
+      <Name>DH.Helpdesk.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.DTO\DH.Helpdesk.BusinessData.csproj">
       <Project>{c4520e52-cb9e-4fd6-bee9-92aa532685a2}</Project>
       <Name>DH.Helpdesk.BusinessData</Name>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DH.Helpdesk.Common.Enums.Cases;
 
 namespace DH.Helpdesk.Models.Case.Field
 {
@@ -39,7 +40,7 @@ namespace DH.Helpdesk.Models.Case.Field
         }
 
         public T Value { get; set; }
-        public string Section { get; set; }
+        public CaseSectionType Section { get; set; }
         public List<KeyValuePair<string, string>> Options {get; set;} //TODO: use dictionary
     }
 }
