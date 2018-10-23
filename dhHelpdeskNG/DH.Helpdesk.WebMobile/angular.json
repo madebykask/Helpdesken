@@ -19,7 +19,10 @@
           "options": {
             "customWebpackConfig": {
               "path": "./extra-webpack.config.js",
-              "replaceDuplicatePlugins": true
+              "replaceDuplicatePlugins": true,
+              "mergeStrategies": {
+                "externals": "prepend"
+              }
             },
             "outputPath": "wwwroot/build",
             "index": "src/index.html",

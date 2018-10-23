@@ -6,6 +6,8 @@ import { AuthenticationService } from './services/authentication';
 import { LoggerService } from './services/logging';
 import { UserSettingsService } from './services/user';
 import { Router } from '@angular/router';
+import '../../node_modules/moment-timezone/moment-timezone-utils';
+
 
 @Component({
   selector: 'app-root',
@@ -32,6 +34,6 @@ export class AppComponent implements OnInit {
       this._logger.log('>>>>>>>>>>>>>>>>Logout: version changed');
       this._router.navigate(['/login']);
     }
-    this._userSettingsService.tryApplyTimezone();
+    this._userSettingsService.tryApplyDateTimeSettings();
   }
 }

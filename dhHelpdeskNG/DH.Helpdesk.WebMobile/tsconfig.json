@@ -18,9 +18,7 @@
       "dom"
     ],
     "paths": {
-      "moment-timezone": [
-        "node_modules/moment-timezone/moment-timezone-utils.js"
-      ]
+      
     }
   }
 }

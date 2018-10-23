@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 takeUntil(this._destroy$)
             )
             .subscribe(userData => {
-                    this.userSettingsService.tryApplyTimezone();
+                    this.userSettingsService.tryApplyDateTimeSettings();
                     this.router.navigateByUrl(this.returnUrl);                                                    
                 },
                 error => {

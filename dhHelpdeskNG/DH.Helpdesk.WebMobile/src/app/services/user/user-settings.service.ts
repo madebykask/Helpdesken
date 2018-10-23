@@ -4,7 +4,7 @@ import { map, finalize} from 'rxjs/operators';
 import { UserData } from '../../models'
 import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
-import * as moment from 'moment-timezone/moment-timezone';
+import * as moment from 'moment-timezone';
 import { LoggerService } from '../logging';
 
 @Injectable({ providedIn: 'root' })
@@ -68,25 +68,26 @@ export class UserSettingsService extends HttpApiServiceBase {
         return user != null ? user.userTimeZone : null;
     }
 
-    tryApplyTimezone(): boolean {
+    tryApplyDateTimeSettings(): boolean {
         const timezoneInfo = this.localStorageService.getTimezoneInfo();
         if (timezoneInfo == null) { return false };
         const userTz = this.getUserTimezone();
         if (userTz == null) { return false };
 
         moment.tz.add(timezoneInfo);
-        this._logger.log('>>>>Setting date timezone: ' + userTz)
+        this._logger.log('>>>>Setting date timezone: ' + userTz);
         moment.tz.setDefault(userTz);
-        this._logger.log('>>>>Setting datetime L LT format')
-        moment.defaultFormat = 'L LT';
+        this._logger.log('>>>>Setting datetime L LT format');
+        (<any>moment).defaultFormat = 'L LT';// <any> hack to avoid warning about constant
         if (navigator.language != null) {
             const availableLocales = moment.locales();
-            if ((<Array<string>>availableLocales).filter(l => l == navigator.language).length <= 0) {
+            this._logger.log(availableLocales);
+/*             if (availableLocales.filter(l => l == navigator.language).length <= 0) {
                 this._logger.log('>>>>Locale is not supported: ' + navigator.language);
             } else {
-                this._logger.log('>>>>Setting locale ' + navigator.language);
+ */             this._logger.log('>>>>Setting locale ' + navigator.language);
                 moment.locale(navigator.language);
-            }
+//            }
         }
     }
 

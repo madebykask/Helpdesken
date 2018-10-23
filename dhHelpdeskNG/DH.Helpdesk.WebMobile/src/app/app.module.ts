@@ -74,4 +74,3 @@ import localeSv from '@angular/common/locales/sv';
 
 // the second parameter 'fr' is optional
 registerLocaleData(localeSv, ); */
-

@@ -47,7 +47,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         public CaseController(ICaseService caseService, ICaseFileService caseFileService, ICaseFieldSettingService caseFieldSettingService,
             IMailTemplateService mailTemplateService, IUserService userSerivice, IBaseCaseSolutionService caseSolutionService,
             ICustomerUserService customerUserService, IUserService userService, IWorkingGroupService workingGroupService,
-            ISupplierService supplierService, ISettingService customerSettingsService, 
+            ISupplierService supplierService, ISettingService customerSettingsService,
             ITranslateCacheService translateCacheService)
         {
             _caseService = caseService;
@@ -116,12 +116,13 @@ namespace DH.Helpdesk.WebApi.Controllers
             //TODO: Move to mapper
             model.Id = currentCase.Id;
             model.CaseNumber = currentCase.CaseNumber;
-            
+
             //case solution
-            var caseSolutionId = currentCase.CurrentCaseSolution_Id ?? 0;
-            if (caseSolutionId > 0)
+            if (currentCase.CurrentCaseSolution_Id.HasValue)
             {
+                var caseSolutionId = currentCase.CurrentCaseSolution_Id.Value;
                 var caseSolution = _caseSolutionService.GetCaseSolution(caseSolutionId);
+                //_caseSolutionSettingService.GetCaseSolutionSettingOverviews(caseSolutionId);//TODO: Case solution settings participate in visibility check
                 if (caseSolution != null)
                 {
                     model.CaseSolution = new CaseSolutionInfo()
@@ -334,173 +335,169 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             // Regarding
             //displayAboutUserInfoHtml:TODO:see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions.displayAboutUserInfoHtml
-            if (currentCase.IsAbout != null)
+            //if (Model.ComputerUserCategories.Any())
+            //GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id //TODO: IsAbout_UserSearchCategory_Id
+
+            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy))
             {
-                //if (Model.ComputerUserCategories.Any())
-                //GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id //TODO: IsAbout_UserSearchCategory_Id
-
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy))
+                field = new BaseCaseField<string>()
                 {
-                    field = new BaseCaseField<string>()
-                    {
-                        Name = GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString(),
-                        Value = currentCase.IsAbout.ReportedBy,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy,
-                            languageId, input.Cid, caseFieldTranslations, "Användar ID"),
-                        Section = CaseSectionType.Regarding,
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, caseFieldSettings)
-                    };
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "40"));
-                    model.Fields.Add(field);
-                }
+                    Name = GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString(),
+                    Value = currentCase.IsAbout?.ReportedBy,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy,
+                        languageId, input.Cid, caseFieldTranslations, "Användar ID"),
+                    Section = CaseSectionType.Regarding,
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, caseFieldSettings)
+                };
+                field.Options.Add(new KeyValuePair<string, string>("maxlength", "40"));
+                model.Fields.Add(field);
+            }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name))
+            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name))
+            {
+                field = new BaseCaseField<string>()
                 {
-                    field = new BaseCaseField<string>()
-                    {
-                        Name = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString(),
-                        Value = currentCase.IsAbout.Person_Name,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name,
-                            languageId, input.Cid, caseFieldTranslations, "Anmälare"),
-                        Section = CaseSectionType.Regarding,
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name, caseFieldSettings)
-                    };
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
-                    model.Fields.Add(field);
-                }
+                    Name = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString(),
+                    Value = currentCase.IsAbout?.Person_Name,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name,
+                        languageId, input.Cid, caseFieldTranslations, "Anmälare"),
+                    Section = CaseSectionType.Regarding,
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name, caseFieldSettings)
+                };
+                field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                model.Fields.Add(field);
+            }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail))
+            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail))
+            {
+                field = new BaseCaseField<string>()
                 {
-                    field = new BaseCaseField<string>()
-                    {
-                        Name = GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString(),
-                        Value = currentCase.IsAbout.Person_Email,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail,
-                            languageId, input.Cid, caseFieldTranslations, "E-post"),
-                        Section = CaseSectionType.Regarding,
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail, caseFieldSettings)
-                    };
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
-                    model.Fields.Add(field);
-                }
+                    Name = GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString(),
+                    Value = currentCase.IsAbout?.Person_Email,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail,
+                        languageId, input.Cid, caseFieldTranslations, "E-post"),
+                    Section = CaseSectionType.Regarding,
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail, caseFieldSettings)
+                };
+                field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                model.Fields.Add(field);
+            }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone))
+            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone))
+            {
+                field = new BaseCaseField<string>()
                 {
-                    field = new BaseCaseField<string>()
-                    {
-                        Name = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString(),
-                        Value = currentCase.IsAbout.Person_Phone,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone,
-                            languageId, input.Cid, caseFieldTranslations, "Telefon"),
-                        Section = CaseSectionType.Regarding,
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone, caseFieldSettings)
-                    };
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "40"));
-                    model.Fields.Add(field);
-                }
+                    Name = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString(),
+                    Value = currentCase.IsAbout?.Person_Phone,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone,
+                        languageId, input.Cid, caseFieldTranslations, "Telefon"),
+                    Section = CaseSectionType.Regarding,
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone, caseFieldSettings)
+                };
+                field.Options.Add(new KeyValuePair<string, string>("maxlength", "40"));
+                model.Fields.Add(field);
+            }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone))
+            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone))
+            {
+                field = new BaseCaseField<string>()
                 {
-                    field = new BaseCaseField<string>()
-                    {
-                        Name = GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString(),
-                        Value = currentCase.IsAbout.Person_Cellphone,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone,
-                            languageId, input.Cid, caseFieldTranslations, "Mobil"),
-                        Section = CaseSectionType.Regarding,
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone, caseFieldSettings)
-                    };
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "30"));
-                    model.Fields.Add(field);
-                }
+                    Name = GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString(),
+                    Value = currentCase.IsAbout?.Person_Cellphone,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone,
+                        languageId, input.Cid, caseFieldTranslations, "Mobil"),
+                    Section = CaseSectionType.Regarding,
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone, caseFieldSettings)
+                };
+                field.Options.Add(new KeyValuePair<string, string>("maxlength", "30"));
+                model.Fields.Add(field);
+            }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Region_Id))
+            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Region_Id))
+            {
+                field = new BaseCaseField<int?>()
                 {
-                    field = new BaseCaseField<int?>()
-                    {
-                        Name = GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString(),
-                        Value = currentCase.IsAbout.Region_Id,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id,
-                            languageId, input.Cid, caseFieldTranslations, "Område"),
-                        Section = CaseSectionType.Regarding,
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id, caseFieldSettings)
-                    };
-                    model.Fields.Add(field);
-                }
+                    Name = GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString(),
+                    Value = currentCase.IsAbout?.Region_Id,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id,
+                        languageId, input.Cid, caseFieldTranslations, "Område"),
+                    Section = CaseSectionType.Regarding,
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id, caseFieldSettings)
+                };
+                model.Fields.Add(field);
+            }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Department_Id))
+            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Department_Id))
+            {
+                field = new BaseCaseField<int?>()
                 {
-                    field = new BaseCaseField<int?>()
-                    {
-                        Name = GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString(),
-                        Value = currentCase.IsAbout.Department_Id,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id,
-                            languageId, input.Cid, caseFieldTranslations, "Avdelning"),
-                        Section = CaseSectionType.Regarding,
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id, caseFieldSettings)
-                    };
-                    model.Fields.Add(field);
-                }
+                    Name = GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString(),
+                    Value = currentCase.IsAbout?.Department_Id,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id,
+                        languageId, input.Cid, caseFieldTranslations, "Avdelning"),
+                    Section = CaseSectionType.Regarding,
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id, caseFieldSettings)
+                };
+                model.Fields.Add(field);
+            }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_OU_Id))
+            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_OU_Id))
+            {
+                field = new BaseCaseField<int?>()
                 {
-                    field = new BaseCaseField<int?>()
-                    {
-                        Name = GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString(),
-                        Value = currentCase.IsAbout.OU_Id,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id,
-                            languageId, input.Cid, caseFieldTranslations, "Enhet"),
-                        Section = CaseSectionType.Regarding,
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id, caseFieldSettings)
-                    };
-                    model.Fields.Add(field);
-                }
+                    Name = GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString(),
+                    Value = currentCase.IsAbout?.OU_Id,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id,
+                        languageId, input.Cid, caseFieldTranslations, "Enhet"),
+                    Section = CaseSectionType.Regarding,
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id, caseFieldSettings)
+                };
+                model.Fields.Add(field);
+            }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_CostCentre))
+            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_CostCentre))
+            {
+                field = new BaseCaseField<string>()
                 {
-                    field = new BaseCaseField<string>()
-                    {
-                        Name = GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString(),
-                        Value = currentCase.IsAbout.CostCentre,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre,
-                            languageId, input.Cid, caseFieldTranslations, "Kostnadsställe"),
-                        Section = CaseSectionType.Regarding,
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre, caseFieldSettings)
-                    };
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
-                    model.Fields.Add(field);
-                }
+                    Name = GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString(),
+                    Value = currentCase.IsAbout?.CostCentre,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre,
+                        languageId, input.Cid, caseFieldTranslations, "Kostnadsställe"),
+                    Section = CaseSectionType.Regarding,
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre, caseFieldSettings)
+                };
+                field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                model.Fields.Add(field);
+            }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Place))
+            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Place))
+            {
+                field = new BaseCaseField<string>()
                 {
-                    field = new BaseCaseField<string>()
-                    {
-                        Name = GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString(),
-                        Value = currentCase.IsAbout.Place,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Place,
-                            languageId, input.Cid, caseFieldTranslations, "Placering"),
-                        Section = CaseSectionType.Regarding,
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Place, caseFieldSettings)
-                    };
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "100"));
-                    model.Fields.Add(field);
-                }
+                    Name = GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString(),
+                    Value = currentCase.IsAbout?.Place,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Place,
+                        languageId, input.Cid, caseFieldTranslations, "Placering"),
+                    Section = CaseSectionType.Regarding,
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Place, caseFieldSettings)
+                };
+                field.Options.Add(new KeyValuePair<string, string>("maxlength", "100"));
+                model.Fields.Add(field);
+            }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_UserCode))
+            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_UserCode))
+            {
+                field = new BaseCaseField<string>()
                 {
-                    field = new BaseCaseField<string>()
-                    {
-                        Name = GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString(),
-                        Value = currentCase.IsAbout.UserCode,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_UserCode,
-                            languageId, input.Cid, caseFieldTranslations, "Ansvarskod"),
-                        Section = CaseSectionType.Regarding,
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_UserCode, caseFieldSettings)
-                    };
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
-                    model.Fields.Add(field);
-                }
-
+                    Name = GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString(),
+                    Value = currentCase.IsAbout?.UserCode,
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_UserCode,
+                        languageId, input.Cid, caseFieldTranslations, "Ansvarskod"),
+                    Section = CaseSectionType.Regarding,
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_UserCode, caseFieldSettings)
+                };
+                field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                model.Fields.Add(field);
             }
 
             #endregion
@@ -929,7 +926,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 };
                 field.Options.Add(new KeyValuePair<string, string>("maxlength", "7"));
                 model.Fields.Add(field);
-                
+
                 field = new BaseCaseField<string>()
                 {
                     Name = "Cost_Currency",
@@ -1287,8 +1284,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             return options;
         }
 
-        private string GetFieldLabel(GlobalEnums.TranslationCaseFields field, int languageId, int customerId, 
-                                    IList<CaseFieldSettingsForTranslation> caseFieldSettingsForTranslations, 
+        private string GetFieldLabel(GlobalEnums.TranslationCaseFields field, int languageId, int customerId,
+                                    IList<CaseFieldSettingsForTranslation> caseFieldSettingsForTranslations,
                                     string defaultCaption = "")
         {
             var caption = defaultCaption;
@@ -1299,7 +1296,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 caption = settingEx.Label;
             }
-            else 
+            else
             {
                 var translateByText = string.Empty;
                 //var instanceWord = Translation.GetInstanceWord(translate); // todo: check if required - see Translation.cs\CaseTranslation
@@ -1322,7 +1319,10 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         private static bool IsActive(IList<CaseFieldSetting> caseFieldSettings, GlobalEnums.TranslationCaseFields field)
         {
-            return GetCaseFieldSetting(caseFieldSettings, field.ToString())?.IsActive ?? false;
+            var caseSettings = GetCaseFieldSetting(caseFieldSettings, field.ToString());
+            if (caseSettings == null) return false;
+
+            return (caseSettings.IsActive && !caseSettings.Hide) || caseSettings.Required != 0;
         }
 
         private static CaseFieldSetting GetCaseFieldSetting(IList<CaseFieldSetting> caseFieldSettings, string fieldName)
