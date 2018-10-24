@@ -1,5 +1,5 @@
 import { ErrorHandler, Injectable } from '@angular/core';
-import { config } from '../../../environments/environment';
+import { config } from '@env/environment';
 
 
 @Injectable({ providedIn: 'root' })

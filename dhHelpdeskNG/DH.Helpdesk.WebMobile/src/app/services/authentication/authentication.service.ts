@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
-import { config } from '../../../environments/environment';
+import { config } from '@env/environment';
 import { CurrentUser, UserAuthenticationData } from '../../models'
 import { LocalStorageService } from '../../services/local-storage'
 import { Subject } from 'rxjs/Subject';

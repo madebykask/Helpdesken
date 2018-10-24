@@ -1,7 +1,7 @@
 import {TranslateService} from '@ngx-translate/core';
 import { Component, OnInit } from '@angular/core';
 import { mobiscroll } from '@mobiscroll/angular';
-import { config } from '../environments/environment';
+import { config } from '@env/environment';
 import { AuthenticationService } from './services/authentication';
 import { LoggerService } from './services/logging';
 import { UserSettingsService } from './services/user';

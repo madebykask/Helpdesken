@@ -2,7 +2,7 @@ import { Observable } from "rxjs/Observable";
 import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { config } from "../../../environments/environment";
+import { config } from "@env/environment";
 import { LocalStorageService } from "../local-storage";
 
 export abstract class HttpApiServiceBase {
