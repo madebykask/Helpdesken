@@ -877,6 +877,7 @@ namespace DH.Helpdesk.Services.Services
                 },
                 FinishingDate = c.FinishingDate
             };
+            c.User_Id = userId;
             return InitNewCaseCopy(c, userId, ipAddress, source, adUser);
         }
 
