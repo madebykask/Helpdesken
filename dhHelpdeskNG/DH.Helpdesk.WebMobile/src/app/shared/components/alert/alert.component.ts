@@ -44,11 +44,7 @@ export class AlertComponent implements OnInit {
         let self = this;
         this.alertsService.alerts$.pipe(
                 takeUntil(self._destroy$)
-            ).subscribe(alert => self.processNewAlert2(alert));
-
-        //this.alerts.push(new Alert(AlertType.Error, 'Unknow error1.'));
-        //this.alerts.push(new Alert(AlertType.Error, 'Unknow error2.'));
-        //this.alerts.push(new Alert(AlertType.Error, 'Unknow error3.'));
+            ).subscribe(alert => self.processNewAlert2(alert));     
     }
 
     ngOnDestroy(): void {

@@ -3,6 +3,7 @@ import { HttpApiServiceBase } from "../api";
 import { HttpClient } from "@angular/common/http";
 import { LocalStorageService } from "../local-storage";
 import { saveAs } from "file-saver"
+import { throwError } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class FileDownloadService extends HttpApiServiceBase {
@@ -12,15 +13,8 @@ export class FileDownloadService extends HttpApiServiceBase {
 
     downloadCaseFile(caseId:number, fileId:number,  fileName:string) {
         let url = this.buildResourseUrl(`/api/case/${caseId}/file/${fileId}`, null, true, false);
-        this.getFileBody(url, null).subscribe(
-            data => {
-                // uses file-saver.js
-                saveAs(data, fileName);
-            },
-            err => {
-                //todo: add error handler
-                alert("Unknown error while downloading the file.");
-                console.error(err);
+        this.getFileBody(url, null).subscribe(data => {               
+                saveAs(data, fileName); // uses file-saver.js
             });
     }
 

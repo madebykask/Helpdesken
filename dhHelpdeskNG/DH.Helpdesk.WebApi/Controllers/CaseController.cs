@@ -71,7 +71,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [Route("{caseId:int}/File/{fileId:int}")] //ex: /api/Case/123/File/1203?cid=1
         public Task<IHttpActionResult> File([FromUri]int caseId, [FromUri]int fileId, [FromUri]int cid)
         {
-            var fileContent = _caseFileService.GetCaseFile(cid, caseId, fileId);
+            var fileContent = _caseFileService.GetCaseFile(cid, caseId, fileId, true);
             IHttpActionResult res = new FileResult(fileContent.FileName, fileContent.Content, Request);
             return Task.FromResult(res);
         }

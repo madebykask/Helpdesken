@@ -6,7 +6,7 @@
         <router-outlet></router-outlet>
     </div>
     <div *requireAuth class="footer">
-      <app-footer></app-footer>
+      <app-footer *ngIf="isFooterVisible"></app-footer>
     </div>
     <app-alert></app-alert>
 </mbsc-page>

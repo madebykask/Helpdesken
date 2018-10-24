@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Cases
+﻿using System.IO;
+
+namespace DH.Helpdesk.Dal.Repositories.Cases
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -11,6 +13,7 @@ using System;
 
     public interface ICaseFileRepository : IRepository<CaseFile>
     {
+        string GetCaseFilePath(int caseId, int fileId, string basePath);
         List<string> FindFileNamesByCaseId(int caseid);
         List<CaseFile> GetCaseFilesByCaseId(int caseid);
         CaseFileContent GetCaseFileContent(int caseId, int fileId, string basePath);
@@ -40,21 +43,36 @@ using System;
 
         #endregion
 
+        public string GetCaseFilePath(int caseId, int fileId, string basePath)
+        {
+            var caseFileInfo = Table.Where(f => f.Id == fileId && f.Case_Id == caseId).Select(f => new
+            {
+                FileName = f.FileName,
+                CaseNumber = f.Case.CaseNumber
+            }).Single();
+
+            var filePath = _filesStorage.GetCaseFilePath(ModuleName.Cases, Convert.ToInt32(caseFileInfo.CaseNumber), basePath, caseFileInfo.FileName);
+            return filePath.Replace("/", "\\");
+        }
+
         public CaseFileContent GetCaseFileContent(int caseId, int fileId, string basePath)
         {
             var caseFileInfo = Table.Where(f => f.Id == fileId && f.Case_Id == caseId).Select(f => new
             {
                 FileName = f.FileName,
-                CaseNumber = f.Case.CaseNumber    
+                CaseNumber = f.Case.CaseNumber
             }).Single();
 
+            var caseNumber = Convert.ToInt32(caseFileInfo.CaseNumber);
+
             var content = 
-                _filesStorage.GetFileContent(ModuleName.Cases, Convert.ToInt32(caseFileInfo.CaseNumber), basePath, caseFileInfo.FileName);
+                _filesStorage.GetFileContent(ModuleName.Cases, caseNumber, basePath, caseFileInfo.FileName);
 
             var res = new CaseFileContent()
             {
                 Id = fileId,
-                FileName = caseFileInfo.FileName,
+                CaseNumber = caseNumber,
+                FileName = Path.GetFileName(caseFileInfo.FileName),
                 Content = content
             };
 
