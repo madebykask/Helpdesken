@@ -4,15 +4,16 @@ import { HomeComponent, CaseEditComponent, CasesOverviewComponent } from './comp
 import { LoginComponent, PageNotFoundComponent } from './shared/components';
 import { AuthGuard } from './helpers/guards';
 import { NgModule } from '@angular/core';
+import { ErrorComponent } from './shared/components/error/error.component';
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
-    { path: 'login', component:  LoginComponent},
+    { path: 'login', component:  LoginComponent },
     { path: 'casesoverview', component:  CasesOverviewComponent, canActivate: [AuthGuard]},
-
     { path: 'case/:id', component:  CaseEditComponent, canActivate: [AuthGuard]},
-
+    { path: 'error', component: ErrorComponent },
     { path: '',   redirectTo: '/', pathMatch: 'full' },
+    
     // otherwise redirect to home
     { path: '**', component: PageNotFoundComponent }
 ];

@@ -26,6 +26,7 @@ import { RequireAuthDirective } from './helpers/directives/require-auth.directiv
 import { CaseFilesControlComponent } from './components/case-edit/controls/case-files/case-files-control.component';
 import { GlobalErrorHandler } from './helpers/errors/global-error-handler';
 import { AlertComponent } from './shared/components/alert/alert.component';
+import { ErrorComponent } from './shared/components/error/error.component';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -38,6 +39,7 @@ import { AlertComponent } from './shared/components/alert/alert.component';
      RequireAuthDirective,
      CaseFilesControlComponent,
      AlertComponent,
+     ErrorComponent,
     ],
   imports: [
     MbscModule,

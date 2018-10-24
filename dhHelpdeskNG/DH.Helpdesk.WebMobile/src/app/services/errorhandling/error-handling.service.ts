@@ -6,6 +6,7 @@ import { LoggerService } from '../logging';
 import { AlertsService } from '../../helpers/alerts/alerts.service';
 import 'rxjs/add/operator/catch';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable({providedIn: 'root'})
 export class ErrorHandlingService {
@@ -14,7 +15,8 @@ export class ErrorHandlingService {
         private clientLogApiService: ClientLogApiService,
         private logService: LoggerService,
         private alertsService: AlertsService,
-        private window: WindowWrapper) {
+        private window: WindowWrapper,
+        private router: Router) {
     }
 
     // handles unknown error (system)
@@ -35,25 +37,26 @@ export class ErrorHandlingService {
         //log error to console
         this.logService.error(`Error ${errorGuid}: ${log}`);
 
-        // raise error alert to display user error message on ui 
-        let alertMsg = this.buildErrorAlertMessage(errorGuid);        
-        this.alertsService.error(alertMsg); //todo: implement error alert service
+        //save error to log on server
+        this.saveErrorOnServer(errorGuid, err, log);
 
+        //todo: improve error handling logic below
         if (err instanceof HttpErrorResponse) {
             // Server or connection error happened
             if (!navigator.onLine) {
               // Handle offline error
-              //return notificationService.notify('No Internet Connection');
+              //return this.alertsService.warning('No Internet Connection');
             } else {
-              // Handle Http Error (error.status === 403, 404...)
-              //return notificationService.notify(`${error.status} - ${error.message}`);
-            }
+              // Handle Http Errors (error.status === 403, 404...)                            
+              //let alertMsg = this.buildErrorAlertMessage(errorGuid);        
+              //this.alertsService.error(alertMsg); 
+            }                        
          } else {
              // Handle Client Error (Angular Error, ReferenceError...)
-             //router.navigate(['/error'], { queryParams: {error: error} });           
-         }
-
-         this.saveErrorOnServer(errorGuid, err, log);
+             //this.router.navigate(['/error'], {  queryParams: { errorGuid: errorGuid });           
+         }         
+         
+         this.router.navigate(['/error'], {  queryParams: { errorGuid: errorGuid } });           
     }
 
     private saveErrorOnServer(errorGuid:string, error:any, errorMsg){

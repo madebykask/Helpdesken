@@ -24,7 +24,7 @@ export class LocalStorageService {
 
     saveTimezoneInfo(data: any) {
         const zone = <moment.MomentZone>data;
-        const packed = moment.tz.pack(zone);
+        const packed = (<any>moment.tz).pack(zone);
         localStorage.setItem(StorageNameConstants.timezoneName, packed);
     }
 

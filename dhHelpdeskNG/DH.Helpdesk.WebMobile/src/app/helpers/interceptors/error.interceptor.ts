@@ -30,8 +30,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 }
 
                 if (err.status !== 401) {
-                    //todo:
-                    //this.errorHandlingService.handleError(err, 'Unknown error occured.');
+                    //will be handled by GlobalErrorHandler                    
                     return throwError(errorMsg);
                 }
 
