@@ -1298,20 +1298,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
             else
             {
-                var translateByText = string.Empty;
                 //var instanceWord = Translation.GetInstanceWord(translate); // todo: check if required - see Translation.cs\CaseTranslation
                 //if (!string.IsNullOrEmpty(instanceWord))
-                var translation = _translateCacheService.GetTextTranslations().FirstOrDefault(x => string.Compare(x.TextToTranslate, caption, StringComparison.OrdinalIgnoreCase) == 0);
-                if (translation != null)
-                {
-                    var trans = translation.TextTranslations.FirstOrDefault(x => x.Language_Id == languageId);
-                    translateByText = trans?.TextTranslated;
-                    if (!string.IsNullOrEmpty(translateByText))
-                        caption = translateByText;
-                }
-
-                if (string.IsNullOrEmpty(translateByText))
-                    caption = caption.GetDefaultValue(languageId);
+                var translation = _translateCacheService.GetTextTranslation(caption, languageId);
+                caption = !string.IsNullOrEmpty(translation) ? translation : caption.GetDefaultValue(languageId);
             }
 
             return caption;

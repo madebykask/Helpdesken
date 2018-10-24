@@ -46,7 +46,7 @@ import { BaseControl } from "../base-control";
       }
       this.dataSource.forEach((elem: MultiLevelOptionItem) => searchNode(elem, id))
       texts = texts.reverse();
-      return  texts.length > 0 ? texts.join(" -> ") : "";
+      return  texts.length > 0 ? texts.join(" > ") : "";
     }
 
 

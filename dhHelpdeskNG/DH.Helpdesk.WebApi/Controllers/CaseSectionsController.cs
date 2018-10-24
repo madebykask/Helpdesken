@@ -4,9 +4,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.WebApi.Infrastructure;
 
@@ -15,23 +15,29 @@ namespace DH.Helpdesk.WebApi.Controllers
     public class CaseSectionsController : BaseApiController
     {
         private readonly ICaseSectionService _caseSectionService;
+        private readonly ITranslateCacheService _translateCacheService;
 
-        public CaseSectionsController(ICaseSectionService caseSectionService)
+        public CaseSectionsController(ICaseSectionService caseSectionService, ITranslateCacheService translateCacheService)
         {
             _caseSectionService = caseSectionService;
+            _translateCacheService = translateCacheService;
         }
 
         // GET api/<controller>
-        public async Task<IEnumerable<CaseSectionModel>> Get(int cid, int langId)//TODO: return not CaseSectionModel, but only required fields
+        public async Task<IEnumerable<CaseSectionModel>>
+            Get(int cid, int langId) //TODO: return not CaseSectionModel, but only required fields
         {
-            var sections = _caseSectionService.GetCaseSections(cid, langId);
+            var sections = await _caseSectionService.GetCaseSectionsAsync(cid, langId);
             sections.ForEach(section =>
             {
                 if (string.IsNullOrWhiteSpace(section.SectionHeader))
-                    section.SectionHeader = _caseSectionService.GetDefaultHeaderName((CaseSectionType)section.SectionType);
+                {
+                    var defaultName = _caseSectionService.GetDefaultHeaderName((CaseSectionType)section.SectionType) ?? string.Empty;
+                    section.SectionHeader = _translateCacheService.GetTextTranslation(defaultName, langId);
+                }
             });
 
-            return await Task.FromResult(sections);//TODO: async 
+            return sections;
         }
 
         // GET api/<controller>/5

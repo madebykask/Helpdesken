@@ -120,10 +120,10 @@ namespace DH.Helpdesk.Web.Infrastructure
             {
                 try
                 {
-                    var translation = Cache.GetTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower());
+                    var translation = Cache.GetAllTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower());
                     if (DiffTextType)
                     {
-                        translation = Cache.GetTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower() && x.Type == TextTypeId);
+                        translation = Cache.GetAllTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower() && x.Type == TextTypeId);
                     }
                                                 
                     if (translation != null)
@@ -158,7 +158,7 @@ namespace DH.Helpdesk.Web.Infrastructure
                             var instanceWord = GetInstanceWord(translate);
                             if (instanceWord != string.Empty)
                             {
-                                var translationText = Cache.GetTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == instanceWord.ToLower());
+                                var translationText = Cache.GetAllTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == instanceWord.ToLower());
                                 if (translationText != null)
                                 {
                                     var trans = translationText.TextTranslations.FirstOrDefault(x => x.Language_Id == languageId);

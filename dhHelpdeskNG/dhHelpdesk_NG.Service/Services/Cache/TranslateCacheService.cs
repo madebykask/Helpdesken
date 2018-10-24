@@ -7,7 +7,7 @@ using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Services.Services.Cache
 {
-    public class TranslateCacheService: ITranslateCacheService
+    public class TranslateCacheService : ITranslateCacheService
     {
         private string _caseTranslationsKey = "CaseTranslations";
         private string _caseTranslationsFormat = "{0}_{1}";
@@ -16,21 +16,17 @@ namespace DH.Helpdesk.Services.Services.Cache
         private readonly ICacheService _cacheService;
         private readonly ICaseFieldSettingLanguageRepository _caseFieldSettingLanguageRepository;
         private readonly ITextRepository _textRepository;
+        private readonly ITextTranslationRepository _textTranslationRepository;
 
         #region ctor()
 
-        public TranslateCacheService()
-        {
-            
-        }
-
-        public TranslateCacheService(ICacheService cacheService, 
-                                     ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository,
-                                     ITextRepository textRepository)
+        public TranslateCacheService(ICacheService cacheService, ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository,
+            ITextRepository textRepository, ITextTranslationRepository textTranslationRepository)
         {
             _cacheService = cacheService;
             _caseFieldSettingLanguageRepository = caseFieldSettingLanguageRepository;
             _textRepository = textRepository;
+            _textTranslationRepository = textTranslationRepository;
         }
 
         #endregion
@@ -43,9 +39,29 @@ namespace DH.Helpdesk.Services.Services.Cache
             return _cacheService.Get(cacheKey, () => GetCustomerCaseTranslations(customerId), DateTime.UtcNow.AddMinutes(10));
         }
 
-        public IList<Text> GetTextTranslations()
+        public IList<Text> GetAllTextTranslations()
         {
             return _cacheService.Get(_textTranslationsKey, GetTranslationTexts, DateTime.UtcNow.AddMinutes(10));
+        }
+
+        public IList<CustomKeyValue<string, string>> GetTextTranslationsForLanguage(int languageId, int typeId = 0) // TODO: ClearCache
+        {
+            var cacheKey = $"{ _caseTranslationsKey }_TranslationsForLanguage_ { languageId }_{ typeId }";
+            return _cacheService.Get(cacheKey, () => _textTranslationRepository.GetTextTranslationsFor(languageId, typeId), DateTime.UtcNow.AddMinutes(10));
+        }
+
+        public string GetTextTranslation(string translate, int languageId)
+        {
+            var translation = GetTextTranslationsForLanguage(languageId).FirstOrDefault(x => string.Equals(x.Key, translate, StringComparison.CurrentCultureIgnoreCase));
+            //if (DiffTextType) //TODO: check in old code if it is required
+            //{
+            //    translation = Cache.GetTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower() && x.Type == TextTypeId);
+            //}
+
+            if (translation == null) return translate;
+
+            var text = translation.Value ?? string.Empty;
+            return !string.IsNullOrEmpty(text) ? text : translate;
         }
 
         public void ClearCaseTranslations(int customerId)
@@ -53,7 +69,7 @@ namespace DH.Helpdesk.Services.Services.Cache
             _cacheService.Delete(string.Format(_caseTranslationsFormat, _caseTranslationsKey, customerId));
         }
 
-        public void ClearTextTranslations()
+        public void ClearAllTextTranslations()
         {
             _cacheService.Delete(_textTranslationsKey);
         }
@@ -78,8 +94,10 @@ namespace DH.Helpdesk.Services.Services.Cache
     public interface ITranslateCacheService
     {
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int customerId);
+        IList<CustomKeyValue<string, string>> GetTextTranslationsForLanguage(int languageId, int typeId = 0);
         void ClearCaseTranslations(int customerId);
-        IList<Text> GetTextTranslations();
-        void ClearTextTranslations();
+        IList<Text> GetAllTextTranslations();
+        string GetTextTranslation(string translate, int languageId);
+        void ClearAllTextTranslations();
     }
 }

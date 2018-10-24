@@ -12,22 +12,18 @@ namespace DH.Helpdesk.WebApi.Controllers
     public class TranslationController : ApiController
     {
         private readonly ILanguageService _languageService;
-        private readonly ITextTranslationService _translationService;
-        private readonly ICacheService _cacheService;
+        private readonly ITranslateCacheService _translationService;
 
-        private const string TranslationsCacheKey = "__translations_";
-
-        public TranslationController(ILanguageService languageService, ITextTranslationService translationService, ICacheService cacheService)
+        public TranslationController(ILanguageService languageService, ITranslateCacheService translationService)
         {
             _languageService = languageService;
             _translationService = translationService;
-            _cacheService = cacheService;
         }
 
         [HttpGet]
         [AllowAnonymous]
         [Route("Languages")]
-        public IHttpActionResult ActiveLanguages()
+        public IHttpActionResult ActiveLanguages() //TODO: async
         {
             var languages = _languageService.GetActiveLanguages();
             return Ok(languages);
@@ -36,7 +32,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route("{lang}")]
-        public IHttpActionResult Get(string lang)
+        public IHttpActionResult Get(string lang) //TODO async
         {
             if (string.IsNullOrEmpty(lang))
                 return BadRequest("Language parameter is missing");
@@ -45,14 +41,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (language == null)
                 return NotFound();
 
-            var res = _cacheService.Get($"{TranslationsCacheKey}{lang}", () =>
-            {
-                var translations = _translationService.GetTextTranslationsFor(language.Id);
-                var dic = translations.Distinct(new LambdaEqualityComparer<CustomKeyValue<string, string>>(x => x.Key))
-                                      .ToDictionary(x => x.Key, y => !string.IsNullOrEmpty(y.Value)? y.Value : y.Key);
-                return dic;
-            });
-            
+            var translations = _translationService.GetTextTranslationsForLanguage(language.Id);
+            var res = translations.Distinct(new LambdaEqualityComparer<CustomKeyValue<string, string>>(x => x.Key))
+                                  .ToDictionary(x => x.Key, y => !string.IsNullOrEmpty(y.Value) ? y.Value : y.Key);
+
             return Ok(res);
         }
     }

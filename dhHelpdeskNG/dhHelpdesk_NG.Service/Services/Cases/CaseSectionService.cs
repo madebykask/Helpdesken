@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 using DH.Helpdesk.BusinessData.OldComponents;
@@ -23,20 +24,13 @@ namespace DH.Helpdesk.Services.Services.Cases
         public List<CaseSectionModel> GetCaseSections(int customerId, int languageId)
         {
             var caseSections = _caseSectionsRepository.GetCaseSections(customerId);
-            return caseSections.Select(section => new CaseSectionModel
-            {
-                Id = section.Id,
-                SectionType = section.SectionType,
-                IsEditCollapsed = section.IsEditCollapsed,
-                IsNewCollapsed = section.IsNewCollapsed,
-                SectionHeader = 
-                        section.CaseSectionLanguages.SingleOrDefault(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId) != null
-                            ? section.CaseSectionLanguages.Single(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId).Label
-                            : string.Empty,
-                CustomerId = section.Customer_Id,
-                CaseSectionFields = section.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList()
-            }).ToList();
+            return MapCaseSectionToCaseSectionModel(caseSections, languageId);
+        }
 
+        public async Task<List<CaseSectionModel>> GetCaseSectionsAsync(int customerId, int languageId)
+        {
+            var caseSections = await _caseSectionsRepository.GetCaseSectionsAsync(customerId);
+            return MapCaseSectionToCaseSectionModel(caseSections, languageId);
         }
 
         public CaseSectionModel GetCaseSectionByType(int sectionTypeId, int customerId, int languageId)
@@ -55,9 +49,9 @@ namespace DH.Helpdesk.Services.Services.Cases
             var section = _caseSectionsRepository.GetCaseSection(sectionId, customerId);
 
             var model =
-                section != null 
-                    ? GetSectionModel(section, languageId) 
-                    : new CaseSectionModel {CustomerId = customerId};
+                section != null
+                    ? GetSectionModel(section, languageId)
+                    : new CaseSectionModel { CustomerId = customerId };
 
             return model;
         }
@@ -318,11 +312,29 @@ namespace DH.Helpdesk.Services.Services.Cases
 
             return caseSectionInfo;
         }
-        }
 
-        public interface ICaseSectionService
+        private List<CaseSectionModel> MapCaseSectionToCaseSectionModel(List<CaseSection> caseSections, int languageId)
+        {
+            return caseSections.Select(section => new CaseSectionModel
+            {
+                Id = section.Id,
+                SectionType = section.SectionType,
+                IsEditCollapsed = section.IsEditCollapsed,
+                IsNewCollapsed = section.IsNewCollapsed,
+                SectionHeader = 
+                    section.CaseSectionLanguages.SingleOrDefault(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId) != null
+                        ? section.CaseSectionLanguages.Single(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId).Label
+                        : string.Empty,
+                CustomerId = section.Customer_Id,
+                CaseSectionFields = section.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList()
+            }).ToList();
+        }
+    }
+
+    public interface ICaseSectionService
     {
         List<CaseSectionModel> GetCaseSections(int customerId, int languageId);
+        Task<List<CaseSectionModel>> GetCaseSectionsAsync(int customerId, int languageId);
         CaseSectionModel GetCaseSection(int sectionId, int customerId, int languageId);
         CaseSectionModel GetCaseSectionByType(int sectionTypeId, int customerId, int languageId);
         int SaveCaseSection(CaseSectionModel caseSection);
