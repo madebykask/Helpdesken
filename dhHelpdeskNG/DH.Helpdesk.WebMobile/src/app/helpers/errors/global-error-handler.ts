@@ -3,6 +3,7 @@ import { ErrorHandlingService } from '../../services/errorhandling/error-handlin
 
 export class GlobalErrorHandler implements ErrorHandler {
 
+    // ErrorHandler is created before the providers - need to use the Injector to get it
     constructor(@Inject(forwardRef(() => Injector)) private injector: Injector) {
     }
 

@@ -1,9 +1,17 @@
 <mbsc-popup [options]="popupSettings" #alertpopup>
-    <div class="mbsc-align-center mbsc-padding">
-        <div *ngFor="let alert of this.alerts">
-          <diV class="alert error">
-              {{alert.message}}
-          </diV>
+    <div class="alerts" *ngIf="alerts && alerts.length">
+        <div *ngFor="let alertType of alertTypes">
+            <div *ngTemplateOutlet="alertsTemplate;context:{ alerts: (alerts | alertsFilter:alertType), type: alertType }"></div>
         </div>
-    </div>
+    </div>    
 </mbsc-popup>
+
+<ng-template #alertsTemplate let-items="alerts" let-alertType="type">
+
+    <div *ngIf="items && items.length" class="{{ getCssClass(alertType) }}">
+        <mbsc-button class="close" flat icon="fa-close" (click)="removeAlerts(alertType)"></mbsc-button>        
+        <ul>
+            <li *ngFor="let alert of items">{{ alert.message }}</li>
+        </ul>
+    </div>
+</ng-template>

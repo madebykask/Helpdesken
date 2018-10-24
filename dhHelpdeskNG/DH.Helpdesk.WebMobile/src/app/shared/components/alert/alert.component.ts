@@ -1,9 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { AlertType, Alert } from 'src/app/helpers/alerts/alert-types';
 import { AlertsService } from 'src/app/helpers/alerts/alerts.service';
-import { ChangeDetectionStrategy } from '@angular/compiler/src/core';
+import { ChangeDetectionStrategy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { MbscPopupOptions, MbscPopup } from '@mobiscroll/angular';
+import { takeUntil } from 'rxjs/operators';
+import { mobiscroll } from '@mobiscroll/angular';
 
 @Component({
   selector: 'app-alert',
@@ -24,12 +26,13 @@ export class AlertComponent implements OnInit {
     closeOnOverlayTap	: true,
     animate: 'slidedown',
     theme: 'auto',
-    buttons:  [{ 
-          text: '[x]',
+    cssClass: 'mbsc-no-padding alertspopup',
+    buttons:  [/*{ 
+          text: 'close',
           handler: 'cancel',
           icon: 'close',
           cssClass: 'my-btn'
-        }
+        }*/
       ]
     };
   
@@ -39,25 +42,45 @@ export class AlertComponent implements OnInit {
 
     ngOnInit(): void {
         let self = this;
-        this.alertsService.alerts$.takeUntil(self._destroy$).subscribe(alert => self.processNewAlert(alert));
+        this.alertsService.alerts$.pipe(
+                takeUntil(self._destroy$)
+            ).subscribe(alert => self.processNewAlert2(alert));
+
+        //this.alerts.push(new Alert(AlertType.Error, 'Unknow error1.'));
+        //this.alerts.push(new Alert(AlertType.Error, 'Unknow error2.'));
+        //this.alerts.push(new Alert(AlertType.Error, 'Unknow error3.'));
     }
 
     ngOnDestroy(): void {
-      this._destroy$.next();
+        this._destroy$.next();
     }
 
-    private processNewAlert(alert: Alert) {
+    private processNewAlert2(alert: Alert) {            
+        //todo: support other alert types!
+        mobiscroll.snackbar({
+            color: 'danger',
+            duration: 5000,
+            message: alert.message,
+            button: {
+                icon:'fa-close',
+                action : function(){                    
+                }
+            }               
+        });
+    }
+
+    private processNewAlert(alert: Alert) {        
         if (alert === null) {
             this.alerts = [];
         } else {
             //show only 5 alerts at time - clean previous 
             while (this.alerts.length > 4) {
                 this.alerts.shift();
-            }
+            }            
             this.alerts.push(alert);
         }
-      
-        this.popup.instance.show();
+        
+        this.popup.instance.show();        
 
         // raise change detection event for the component only to update the ui
         this.changeDetector.detectChanges();
@@ -94,5 +117,9 @@ export class AlertComponent implements OnInit {
     removeAlerts(type: string) {
         let alertType = <AlertType>AlertType[type];
         this.alerts = this.alerts.filter(item => item.type !== alertType);
+
+        if (this.alerts.length === 0) {
+            this.popup.instance.hide();
+        }
     }
 }

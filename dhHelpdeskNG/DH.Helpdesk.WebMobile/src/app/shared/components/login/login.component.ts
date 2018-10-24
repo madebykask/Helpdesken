@@ -6,6 +6,7 @@ import { first, switchMap, takeUntil } from 'rxjs/operators';
 import { AuthenticationService } from '../../../services/authentication';
 import { UserSettingsService } from '../../../services/user'
 import { throwError, Subject } from 'rxjs';
+import { ErrorHandlingService } from '../../../services/errorhandling/error-handling.service';
 
 @Component({
     templateUrl: 'login.component.html',
@@ -32,7 +33,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
-        private userSettingsService: UserSettingsService) {}
+        private userSettingsService: UserSettingsService,
+        private errorHandlingService: ErrorHandlingService) {}
 
     ngOnInit() {        
         this.loginForm = this.formBuilder.group({
@@ -90,8 +92,8 @@ export class LoginComponent implements OnInit, OnDestroy {
                     this.router.navigateByUrl(this.returnUrl);                                                    
                 },
                 error => {
-                    this.error = error;
                     this.isLoading = false;
+                    this.errorHandlingService.handleError(error);
             });
     }    
 }

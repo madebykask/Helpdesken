@@ -18,7 +18,7 @@ import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors';
 import { HomeComponent, CasesOverviewComponent, CaseEditComponent, CaseTextboxComponent,
    CaseDateComponent, CaseDropdownComponent, CaseMultiDropdownComponent, CaseSwitchComponent,
    CaseTextareaComponent, CaseDateTimeComponent } from './components';
-import { GetByKeyPipe, DateTimezonePipe } from './helpers/pipes';
+import { GetByKeyPipe, DateTimezonePipe, AlertsFilter } from './helpers/pipes';
 
 import { AppRoutingModule } from './app.routing';
 import { FooterComponent } from './shared/components/footer/footer.component';
@@ -34,7 +34,7 @@ import { AlertComponent } from './shared/components/alert/alert.component';
      HomeComponent, CasesOverviewComponent, CaseEditComponent,
      CaseTextboxComponent, CaseDateComponent, CaseDropdownComponent,  CaseMultiDropdownComponent,
      CaseSwitchComponent, CaseTextareaComponent, CaseDateTimeComponent,
-     GetByKeyPipe, DateTimezonePipe,
+     GetByKeyPipe, DateTimezonePipe, AlertsFilter,
      RequireAuthDirective,
      CaseFilesControlComponent,
      AlertComponent,
