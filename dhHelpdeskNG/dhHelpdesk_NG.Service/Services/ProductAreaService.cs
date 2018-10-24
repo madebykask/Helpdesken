@@ -28,6 +28,9 @@ namespace DH.Helpdesk.Services.Services
 
         IList<ProductAreaEntity> GetTopProductAreasForUser(int customerId, UserOverview user, bool isOnlyActive = true);
 
+        IList<ProductAreaOverview> GetProductAreasFiltered(int customerId, int? productAreaIdToInclude,
+            int? caseTypeId, UserOverview user, bool isOnlyActive = true);
+
         IList<ProductAreaOverview> GetTopProductAreasForUserOnCase(int customerId, int? productAreaIdToInclude, UserOverview user);
         IList<ProductAreaOverview> GetTopProductAreasForUserOnCase(int customerId, int? productAreaIdToInclude, int? caseTypeId, UserOverview user);
 
@@ -272,7 +275,48 @@ namespace DH.Helpdesk.Services.Services
             return topAreas.ToList();
         }
 
-        private IList<ProductAreaOverview> FilterProductAreasByCaseType(int? caseTypeId, List<ProductAreaOverview> productAreas)
+        public IList<ProductAreaOverview> GetProductAreasFiltered(int customerId, int? productAreaIdToInclude,
+            int? caseTypeId, UserOverview user, bool isOnlyActive = true)
+        {
+            var productAreasPlain = productAreaRepository.GetProductAreasWithWorkingGroups(customerId, isOnlyActive);
+            // filter areas by user group
+            if (user.UserGroupId < (int) UserGroup.CustomerAdministrator)
+            {
+                productAreasPlain = FilterProductAreasByUserGroup(productAreaIdToInclude, user, productAreasPlain);
+            }
+
+            // filter all by casetype
+            if (caseTypeId.HasValue)
+            {
+                productAreasPlain = FilterProductAreasByCaseType(caseTypeId, productAreasPlain);
+            }
+            var topAreas = productAreasPlain.Where(pa => pa.ParentId == null).ToList();
+            if (topAreas.Any())
+            {
+                foreach (var topArea in topAreas)
+                {
+                    BuildProductAreaTree(topArea, productAreasPlain);
+                }
+            }
+
+            return topAreas;
+        }
+
+        private IList<ProductAreaOverview> FilterProductAreasByUserGroup(int? productAreaIdToInclude, UserOverview user,
+            IList<ProductAreaOverview> productAreasPlain)
+        {
+            var userGroupDictionary = user.UserWorkingGroups
+                .Where(it => it.UserRole == WorkingGroupUserPermission.ADMINSTRATOR)
+                .ToDictionary(it => it.WorkingGroup_Id, it => true);
+            return productAreasPlain
+                .Where(pa =>
+                    pa.WorkingGroups.Count == 0
+                    || pa.WorkingGroups.Any(wg => userGroupDictionary.ContainsKey(wg.Id))
+                    || (productAreaIdToInclude.HasValue && pa.Id == productAreaIdToInclude.Value))
+                .ToList();
+        }
+
+        private IList<ProductAreaOverview> FilterProductAreasByCaseType(int? caseTypeId, IList<ProductAreaOverview> productAreas)
         {
             var ctProductAreas = new List<ProductAreaOverview>();
             if (caseTypeId == null)

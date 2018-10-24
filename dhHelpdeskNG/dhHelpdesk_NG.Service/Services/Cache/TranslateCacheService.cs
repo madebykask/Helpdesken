@@ -50,13 +50,11 @@ namespace DH.Helpdesk.Services.Services.Cache
             return _cacheService.Get(cacheKey, () => _textTranslationRepository.GetTextTranslationsFor(languageId, typeId), DateTime.UtcNow.AddMinutes(10));
         }
 
-        public string GetTextTranslation(string translate, int languageId)
+        public string GetTextTranslation(string translate, int languageId, int? textTypeId = null)
         {
-            var translation = GetTextTranslationsForLanguage(languageId).FirstOrDefault(x => string.Equals(x.Key, translate, StringComparison.CurrentCultureIgnoreCase));
-            //if (DiffTextType) //TODO: check in old code if it is required
-            //{
-            //    translation = Cache.GetTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower() && x.Type == TextTypeId);
-            //}
+            var translation = textTypeId.HasValue ?
+                GetTextTranslationsForLanguage(languageId, textTypeId.Value).FirstOrDefault(x => string.Equals(x.Key, translate, StringComparison.CurrentCultureIgnoreCase)) :
+                GetTextTranslationsForLanguage(languageId).FirstOrDefault(x => string.Equals(x.Key, translate, StringComparison.CurrentCultureIgnoreCase));
 
             if (translation == null) return translate;
 
@@ -97,7 +95,7 @@ namespace DH.Helpdesk.Services.Services.Cache
         IList<CustomKeyValue<string, string>> GetTextTranslationsForLanguage(int languageId, int typeId = 0);
         void ClearCaseTranslations(int customerId);
         IList<Text> GetAllTextTranslations();
-        string GetTextTranslation(string translate, int languageId);
+        string GetTextTranslation(string translate, int languageId, int? textTypeId = null);
         void ClearAllTextTranslations();
     }
 }

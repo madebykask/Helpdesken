@@ -9,9 +9,8 @@ using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.WebApi.Infrastructure;
-using DH.Helpdesk.WebApi.Infrastructure.Config.Authentication;
-using DH.Helpdesk.WebApi.Infrastructure.Translate;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -19,51 +18,44 @@ namespace DH.Helpdesk.WebApi.Controllers
     {
         private readonly IProductAreaService _productAreaService;
         private readonly IUserService _userSerivice;
+        private readonly ITranslateCacheService _translateCacheService;
 
-        public ProductAreasController(IProductAreaService productAreaService, IUserService userSerivice)
+        public ProductAreasController(IProductAreaService productAreaService, IUserService userSerivice,
+            ITranslateCacheService translateCacheService)
         {
             _productAreaService = productAreaService;
             _userSerivice = userSerivice;
+            _translateCacheService = translateCacheService;
         }
 
         // GET api/<controller>
-        public async Task<IEnumerable<ProductAreaOverview>> GetByCaseType(int cid, int? caseTypeId = null, int? includeId = null)
+        public async Task<IEnumerable<ProductAreaOverview>> GetByCaseType(int cid, int langId, int? caseTypeId = null, int? includeId = null)
         {
-            var user = await _userSerivice.GetUserOverviewAsync(UserId);//TODO: Use cached version?
-            var productAreas = 
-                _productAreaService.GetTopProductAreasForUserOnCase(cid, includeId, caseTypeId, user)
-                    .OrderBy(p => p.Name)
-                    .ToList();//TODO: Async
+            var user = await _userSerivice.GetUserOverviewAsync(UserId);
+            var productAreas =
+                _productAreaService.GetProductAreasFiltered(cid, includeId, caseTypeId, user)
+                    .ToList(); //TODO: async
+            const int maxDepth = 20;
+            var depth = 0;
+            Translate(productAreas);
 
-            //sort
-            //productAreas = productAreas.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(); //TODO: translation for top and childs and order
+            return productAreas.OrderBy(p => p.Name);
 
-            //var isTakeOnlyActive = true;
-            //var userGroupId = User.Identity.GetGroupId();
-            //var  userGroupDictionary = user.UserWorkingGroups.Where(it => it.UserRole == WorkingGroupUserPermission.ADMINSTRATOR).ToDictionary(it => it.WorkingGroup_Id, it => true);
-
-            ////build tree with Ids
-            //foreach (var pa in productAreas.Where(x => !isTakeOnlyActive || x.IsActive > 0))
-            //{
-            //    var childs = new List<ProductAreaOverview>();
-            //    if (pa.SubProductAreas != null)
-            //    {
-            //        childs = pa.SubProductAreas.Where(p => !isTakeOnlyActive || p.IsActive > 0).ToList();
-
-            //        if (userGroupId < (int) UserGroup.CustomerAdministrator)
-            //        {
-            //            childs =
-            //                childs.Where(
-            //                        it =>
-            //                            it.WorkingGroups.Count == 0
-            //                            || it.WorkingGroups.Any(wg => userGroupDictionary.ContainsKey(wg.Id))
-            //                            || (includeId.HasValue && it.Id == includeId.Value))
-            //                    .ToList();
-            //        }
-            //    }
-            //}
-
-            return productAreas;
+            void Translate(List<ProductAreaOverview> products)
+            {
+                if (depth >= maxDepth)
+                    throw new Exception("Iteration depth exceeded. Suspicion of infinte loop.");
+                depth++;
+                products
+                    .ForEach(p =>
+                    {
+                        p.Name = _translateCacheService.GetTextTranslation(p.Name, langId, 1);
+                        if (p.SubProductAreas != null && p.SubProductAreas.Any())
+                        {
+                            Translate(p.SubProductAreas);
+                        }
+                    });
+            };
         }
 
         // GET api/<controller>/5

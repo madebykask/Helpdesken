@@ -15,7 +15,7 @@ export class CaseTypesService extends HttpApiServiceBase {
     }
 
     getCaseTypes() {
-        return this.getJson(this.buildResourseUrl('/api/casetypes/get'))
+        return this.getJson(this.buildResourseUrl('/api/casetypes/get', null, true, true))
         .pipe(
             map((jsItems: any) => {
                 let result = new Array<MultiLevelOptionItem>();
