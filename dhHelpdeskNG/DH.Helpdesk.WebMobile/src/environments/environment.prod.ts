@@ -1,3 +1,4 @@
+import { VERSION } from './version'
 declare const require: any;
 
 export const environment = {
@@ -7,6 +8,7 @@ export const environment = {
 export const config = {
   apiUrl: 'http://localhost:8049',
   clientId: 'hd',
-  version: require('../../package.json').version,
+  version: VERSION.fullVersion,
+  internalVersion: require('../../package.json').version,
   enableLog: false,
 }

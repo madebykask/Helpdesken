@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { config } from '@env/environment';
 
 @Component({
   selector: 'app-home',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  version = config.version;
 
   hamburgerSettings: any = {
     type: 'hamburger'
