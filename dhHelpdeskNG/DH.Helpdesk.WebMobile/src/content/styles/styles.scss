@@ -25,6 +25,12 @@
 $primary-color: #438eb9;
 $font-header-color: white;
 
+.login {
+    .mbsc-page {
+        background: $primary-color; 
+    }
+}
+
 .mbsc-page {
     font-family: Helvetica, Arial, sans-serif;
     h1, h2, h3 {
@@ -143,6 +149,14 @@ a {
         }
         .mbsc-row {
             min-height: 2.75em;
+            mbsc-input {
+                label {
+                    &.mbsc-input {
+                        margin: 0;
+                        border: 0;
+                    }
+                }
+            }
             .center {
                 text-align: center;
                 margin: auto;
@@ -180,3 +194,22 @@ a {
     text-overflow: ellipsis;
 }
 
+.mbsc-input-wrap { // hack to remove chrome autofill changes input background
+    input {
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus,
+        &t:-webkit-autofill:active {
+            -webkit-transition-delay: 99999s;
+            transition-delay: 99999s;
+        }
+    }
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
