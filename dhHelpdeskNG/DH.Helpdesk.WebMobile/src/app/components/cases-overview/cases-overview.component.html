@@ -26,9 +26,8 @@
 <div class="stickToBottom">
         <mbsc-listview #listview [options]="listviewSettings" [hidden]="isLoading" (onItemTap)="onItemTap($event)" (touchmove)="checkLoad()">
                 <mbsc-listview-item *ngFor="let case of cases; trackBy: trackByFn" >
-                        #{{ (case.columns | getByKey: 'CaseNumber') || '&nbsp;' }}
-                        <span>{{ (case.columns | getByKey: 'RegTime' | dateTz) || '&nbsp;' }}</span> 
-                        <div>{{ (case.columns | getByKey: 'Caption') || '&nbsp;' }}</div>
+                        <div class="ellipsis">{{ (case.columns | getByKey: 'Caption') || '&nbsp;' }}</div>
+                        <div class="secondary">{{ (case.columns | getByKey: 'CaseNumber') || '&nbsp;' }} {{ (case.columns | getByKey: 'RegTime' | dateTz: 'L') || '&nbsp;' }}</div>
                 </mbsc-listview-item>
         </mbsc-listview>
         <mbsc-form #loading class="md-load-btn md-btn-isLoading">

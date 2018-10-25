@@ -20,4 +20,11 @@ div {
     min-height: 150px;
     max-height: 500px;
 } */
-
+mbsc-listview {
+    mbsc-listview-item {
+        .secondary {
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+    }
+}
