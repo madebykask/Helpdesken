@@ -7,6 +7,7 @@ import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataS
 import { Subscription, Observable, forkJoin } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
+
 @Component({
   selector: 'app-case-edit',
   templateUrl: './case-edit.component.html',
@@ -23,6 +24,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     form: FormGroup;   
 
     tabsMenuSettings = {
+        
     };
 
     constructor(private route: ActivatedRoute,
