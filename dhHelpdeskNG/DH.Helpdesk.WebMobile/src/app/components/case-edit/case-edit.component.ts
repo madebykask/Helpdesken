@@ -58,16 +58,9 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         const caseData$ = 
             this.caseService.getCaseData(this.caseId)
                 .pipe( 
-                    take(1),
-                    tap(data => {
-                        this.caseData = data;
-                        let controls: any = {};
-                            data.fields.forEach(field => {
-                                controls[field.name] = new FormControl({value: field.value || '', disabled: true});                        
-                            });           
-                        this.form = new FormGroup(controls);
-                    }),         
+                    take(1),                    
                     switchMap(data => { // TODO: Error handle                    
+                        this.processCaseDataResponse(data);
                         const filter = this.getCaseOptionsFilter(this.caseData);
                         return this.caseService.getCaseOptions(filter);
                     })
@@ -79,6 +72,15 @@ export class CaseEditComponent implements OnInit, OnDestroy {
                     this.dataSource = new OptionsDataSource(options);                    
                     this.isLoaded = true;        
                 }));       
+    }
+
+    private processCaseDataResponse(data){
+        this.caseData = data;
+        let controls: any = {};
+            data.fields.forEach(field => {
+                controls[field.name] = new FormControl({value: field.value || '', disabled: true});                        
+            });           
+        this.form = new FormGroup(controls);
     }
 
     ngOnDestroy() {
