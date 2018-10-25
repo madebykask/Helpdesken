@@ -7533,7 +7533,6 @@ namespace DH.Helpdesk.Web.Controllers
             ret = parentRet.OrderBy(p => p.Text).Union(childrenRet.OrderBy(c => c.Text)).ToList();
 
             return ret.GroupBy(r => r.Value).Select(g => g.First()).ToList();
-
         }
 
         private List<SelectListItem> GetProductAreasModel(int customerId, int? curProductAreaId)

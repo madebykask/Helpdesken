@@ -29,10 +29,18 @@ namespace DH.Helpdesk.Models.Case.Field
                 var jsonType = "";
                 var type = typeof(T);
 
-                if (type == typeof(DateTime)) jsonType = "date";
-                if (type == typeof(int) || type == typeof(decimal)) jsonType = "number";
-                if (type == typeof(string)) jsonType = "string";
-                if (type.GetInterface(nameof(IEnumerable)) != null) jsonType = "array";
+                if (type == typeof(DateTime))
+                    return "date";
+
+                if (type == typeof(int) || type == typeof(decimal))
+                    return "number";
+
+                if (type == typeof(string))
+                    return "string";
+
+                if (type.GetInterface(nameof(IEnumerable)) != null)
+                    return "array";
+                
                 //TODO: add other types
 
                 return jsonType;

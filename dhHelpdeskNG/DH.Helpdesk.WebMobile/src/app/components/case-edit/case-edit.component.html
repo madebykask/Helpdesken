@@ -36,7 +36,7 @@
                         <!-- TODO: ComputerUserCategories -->
                             <case-textbox-control *ngIf="hasField('IsAbout_ReportedBy')" [field]="getField('IsAbout_ReportedBy')" [form]="form"></case-textbox-control>
                             <case-textbox-control *ngIf="hasField('IsAbout_Persons_Name')" [field]="getField('IsAbout_Persons_Name')" [form]="form"></case-textbox-control>
-                            <case-textbox-control *ngIf="hasField('IsAbout_Persons_Email')" [field]="getField('IsAbout_Persons_Email')" [form]="form"></case-textbox-control>
+                            <case-textbox-control *ngIf="hasField('IsAbout_Persons_EMail')" [field]="getField('IsAbout_Persons_EMail')" [form]="form"></case-textbox-control>
                             <case-textbox-control *ngIf="hasField('IsAbout_Persons_Phone')" [field]="getField('IsAbout_Persons_Phone')" [form]="form"></case-textbox-control>
                             <case-textbox-control *ngIf="hasField('IsAbout_Persons_CellPhone')" [field]="getField('IsAbout_Persons_CellPhone')" [form]="form"></case-textbox-control>
                             <case-dropdown-control *ngIf="hasField('IsAbout_Region_Id')" [field]="getField('IsAbout_Region_Id')" [form]="form" [dataSource]="dataSource.options.regions"></case-dropdown-control>
@@ -101,7 +101,7 @@
                             <case-dropdown-control *ngIf="hasField('StateSecondary_Id')" [field]="getField('StateSecondary_Id')" [form]="form" [dataSource]="dataSource.options.stateSecondaries"></case-dropdown-control>
                             <case-dropdown-control *ngIf="hasField('Project')" [field]="getField('Project')" [form]="form" [dataSource]="dataSource.options.projects"></case-dropdown-control>
                             <case-dropdown-control *ngIf="hasField('Problem')" [field]="getField('Problem')" [form]="form" [dataSource]="dataSource.options.problems"></case-dropdown-control>
-                            <case-dropdown-control *ngIf="hasField('CausingPart')" [field]="getField('CausingPart')" [form]="form" ></case-dropdown-control>
+                            <case-dropdown-control *ngIf="hasField('CausingPart')" [field]="getField('CausingPart')" [form]="form" [dataSource]="dataSource.options.causingParts"></case-dropdown-control>
                             <case-dropdown-control *ngIf="hasField('Change')" [field]="getField('Change')" [form]="form" [dataSource]="dataSource.options.changes"></case-dropdown-control>
                             <case-datetime-control *ngIf="hasField('PlanDate')" [field]="getField('PlanDate')" [form]="form"></case-datetime-control>
                             <case-datetime-control *ngIf="hasField('WatchDate')" [field]="getField('WatchDate')" [form]="form"></case-datetime-control>

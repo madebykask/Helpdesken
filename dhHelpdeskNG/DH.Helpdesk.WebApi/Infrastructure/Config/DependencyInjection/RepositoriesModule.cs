@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Autofac;
+﻿using Autofac;
 using DH.Helpdesk.Dal.DbQueryExecutor;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.NewInfrastructure;
@@ -70,6 +66,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
             builder.RegisterType<QuestionnaireQuestionRepository>().As<IQuestionnaireQuestionRepository>();
             builder.RegisterType<QuestionnaireRepository>().As<IQuestionnaireRepository>();
 
+            builder.RegisterType<CausingPartRepository>().As<ICausingPartRepository>();
             builder.RegisterType<CustomerRepository>().As<ICustomerRepository>();
             builder.RegisterType<TextRepository>().As<ITextRepository>();
             builder.RegisterType<LanguageRepository>().As<ILanguageRepository>();
@@ -235,9 +232,6 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
             builder.RegisterType<ChangePriorityRepository>().As<IChangePriorityRepository>();
             builder.RegisterType<ChangeRepository>().As<IChangeRepository>();
             builder.RegisterType<ChangeStatusRepository>().As<IChangeStatusRepository>();
-
-
-
         }
     }
 }

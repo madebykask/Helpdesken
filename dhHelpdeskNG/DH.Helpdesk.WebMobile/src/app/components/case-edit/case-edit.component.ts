@@ -5,7 +5,7 @@ import { CaseService } from '../../services/case/case.service';
 import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource,
       CaseSectionInputModel, CaseSectionType } from '../../models';
 import { Subscription, Observable, forkJoin } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, take, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -51,32 +51,34 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     }
 
     loadCaseData(): any {
+        
         this.isLoaded = false;
+        
         const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
-        const caseData$ = this.caseService.getCaseData(this.caseId)
-            .pipe(
-                switchMap(data => { // TODO: Error handle
-                    this.caseData = data;
-                    const filter = this.getCaseOptionsFilter(this.caseData);
-                    const op1 = this.caseService.getCaseOptions(filter);                    
-                    const op2 = Observable.create(observer => { 
-                        let group: any = {};
-                        data.fields.forEach(field => {
-                            group[field.name] = new FormControl({value: field.value || '', disabled: true});                        
-                        });                    
-                        observer.next(new FormGroup(group));
-                        observer.complete();                                        
-                    }) as Observable<FormGroup>;
-                    return forkJoin(op1, op2);
-                })
-            )
-        this.subscriptions.push(forkJoin(caseSections$, caseData$)
-            .subscribe(([sectionData, [options, formgroup]]) => {
-                this.caseSections = sectionData;
-                this.dataSource = new OptionsDataSource(options);
-                this.form = formgroup;
-                this.isLoaded = true;        
-            }));
+        const caseData$ = 
+            this.caseService.getCaseData(this.caseId)
+                .pipe( 
+                    take(1),
+                    tap(data => {
+                        this.caseData = data;
+                        let controls: any = {};
+                            data.fields.forEach(field => {
+                                controls[field.name] = new FormControl({value: field.value || '', disabled: true});                        
+                            });           
+                        this.form = new FormGroup(controls);
+                    }),         
+                    switchMap(data => { // TODO: Error handle                    
+                        const filter = this.getCaseOptionsFilter(this.caseData);
+                        return this.caseService.getCaseOptions(filter);
+                    })
+                );
+            
+                this.subscriptions.push(forkJoin(caseSections$, caseData$)
+                .subscribe(([sectionData, options]) => {
+                    this.caseSections = sectionData;
+                    this.dataSource = new OptionsDataSource(options);                    
+                    this.isLoaded = true;        
+                }));       
     }
 
     ngOnDestroy() {
@@ -86,9 +88,10 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     }
 
     hasField(name: string): boolean {
-        if(this.caseData === null) {          
+        if (this.caseData === null) {          
             throw new Error("No Case Data.");
         }
+        //console.log('hasField: ' + name);
         return this.caseData.fields.filter(f => f.name === name).length > 0;
     }
 
@@ -145,10 +148,14 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         filter.IsAboutRegionId = this.getValue("IsAbout_Region_Id");
         filter.IsAboutDepartmentId = this.getValue("IsAbout_Department_Id");
         filter.CaseResponsibleUserId = this.getValue("CaseResponsibleUser_Id");
+        filter.CaseWorkingGroupId = this.getValue("WorkingGroup_Id");
+        filter.CasePerformerUserId = this.getValue("Performer_User_Id");
+        filter.CaseCausingPartId = this.getValue("CausingPart");
         filter.CaseTypeId = this.getValue("CaseType_Id");
         filter.ProductAreaId = this.getValue("ProductArea_Id");
         filter.Changes = this.hasField('Change');
         filter.Currencies = this.hasField('Cost_Currency');
+        filter.CausingParts  = this.hasField('CausingPart');
         filter.CustomerRegistrationSources = this.hasField('RegistrationSourceCustomer');
         filter.Impacts = this.hasField('Impact_Id');
         filter.Performers = this.hasField('Performer_User_Id');

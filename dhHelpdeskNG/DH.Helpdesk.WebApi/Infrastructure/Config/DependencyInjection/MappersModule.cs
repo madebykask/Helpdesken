@@ -54,6 +54,14 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<CausingPartToOverviewMapper>()
+                .As<IEntityToBusinessModelMapper<CausingPart, CausingPartOverview>>()
+                .SingleInstance();
+
+            builder.RegisterType<CausingPartToEntityMapper>()
+                .As<IBusinessModelToEntityMapper<CausingPartOverview, CausingPart>>()
+                .SingleInstance();
+
             builder.RegisterType<ProductAreaToOverviewMapper>()
                 .As<IEntityToBusinessModelMapper<ProductArea, ProductAreaOverview>>()
                 .SingleInstance();

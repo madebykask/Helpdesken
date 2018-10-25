@@ -169,6 +169,7 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
         /// </summary>
         public int AttachmentPlacement { get; set; }
         public int M2TNewCaseMailTo { get; set; }
+        public int DontConnectUserToWorkingGroup { get; set; }
 
         /// <summary>
         /// The is module on.

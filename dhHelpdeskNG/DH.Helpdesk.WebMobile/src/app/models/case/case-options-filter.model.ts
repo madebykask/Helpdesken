@@ -1,10 +1,14 @@
 export class BundleOptionsFilter {
     CaseResponsibleUserId?: number;
+    CasePerformerUserId?: number;
+    CaseWorkingGroupId?:number;
+    CaseCausingPartId?: number;
     CustomerRegistrationSources: boolean;
     Systems: boolean;
     Urgencies: boolean;
     Impacts: boolean;
     Suppliers: boolean;
+    CausingParts: boolean;
     Currencies: boolean;
     WorkingGroups: boolean;
     ResponsibleUsers: boolean;

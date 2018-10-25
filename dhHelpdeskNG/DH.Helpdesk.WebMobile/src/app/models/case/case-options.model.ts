@@ -18,6 +18,7 @@ export class BundledCaseOptions {
     problems: OptionItem[];
     changes: OptionItem[];
     solutionsRates: OptionItem[];
+    causingParts: OptionItem[];
 }
 
 export class CaseOptions extends BundledCaseOptions {

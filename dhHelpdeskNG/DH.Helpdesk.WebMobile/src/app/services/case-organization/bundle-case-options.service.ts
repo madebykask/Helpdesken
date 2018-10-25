@@ -19,65 +19,64 @@ export class BundleCaseOptionsService extends HttpApiServiceBase {
         return this.postJson(this.buildResourseUrl('/api/caseoptions/bundle'), filter)
         .pipe(
             map((jsOptions: any) => {
-                if(jsOptions == null) throwError('No options received.')
+                if (jsOptions == null) throwError('No options received.')
                 const mapArray = (arr: any) => this.caseHelper.toOptionItems(arr as Array<any>) || new Array<OptionItem>();
 
                 let options = new BundledCaseOptions();
-                if(jsOptions.customerRegistrationSources != null) {
+                if (jsOptions.customerRegistrationSources != null) {
                     options.customerRegistrationSources = mapArray(jsOptions.customerRegistrationSources);
                 }   
-                if(jsOptions.systems != null) {
+                if (jsOptions.systems != null) {
                     options.systems = mapArray(jsOptions.systems);
                 }  
-                if(jsOptions.urgencies != null) {
+                if (jsOptions.urgencies != null) {
                     options.urgencies = mapArray(jsOptions.urgencies);
                 }  
-                if(jsOptions.impacts != null) {
+                if (jsOptions.impacts != null) {
                     options.impacts = mapArray(jsOptions.impacts);
                 }  
-                if(jsOptions.suppliers != null) {
+                if (jsOptions.suppliers != null) {
                     options.suppliers = mapArray(jsOptions.suppliers);
                 }  
-                if(jsOptions.countries != null) {
+                if (jsOptions.countries != null) {
                     options.countries = mapArray(jsOptions.countries);
                 }  
-                if(jsOptions.currencies != null) {
+                if (jsOptions.currencies != null) {
                     options.currencies = mapArray(jsOptions.currencies);
                 }
-                if(jsOptions.workingGroups != null) {
+                if (jsOptions.workingGroups != null) {
                     options.workingGroups = mapArray(jsOptions.workingGroups);
                 }  
-                if(jsOptions.responsibleUsers != null) {
+                if (jsOptions.responsibleUsers != null) {
                     options.responsibleUsers = mapArray(jsOptions.responsibleUsers);
                 }  
-                if(jsOptions.performers != null) {
+                if (jsOptions.performers != null) {
                     options.performers = mapArray(jsOptions.performers);
                 }  
-                if(jsOptions.priorities != null) {
+                if (jsOptions.priorities != null) {
                     options.priorities = mapArray(jsOptions.priorities);
                 }  
-                if(jsOptions.statuses != null) {
+                if (jsOptions.statuses != null) {
                     options.statuses = mapArray(jsOptions.statuses);
                 }  
-                if(jsOptions.stateSecondaries != null) {
+                if (jsOptions.stateSecondaries != null) {
                     options.stateSecondaries = mapArray(jsOptions.stateSecondaries);
                 }  
-                if(jsOptions.projects != null) {
+                if (jsOptions.projects != null) {
                     options.projects = mapArray(jsOptions.projects);
                 }  
-                if(jsOptions.problems != null) {
+                if (jsOptions.problems != null) {
                     options.problems = mapArray(jsOptions.problems);
                 }    
-                if(jsOptions.changes != null) {
+                if (jsOptions.changes != null) {
                     options.changes = mapArray(jsOptions.changes);
                 }    
-                if(jsOptions.solutionsRates != null) {
+                if (jsOptions.solutionsRates != null) {
                     options.solutionsRates = mapArray(jsOptions.solutionsRates);
-                }    
-/*                 if(jsOptions.causingParts != null) {
+                }                    
+                if (jsOptions.causingParts != null) {
                     options.causingParts = mapArray(jsOptions.causingParts);
-                }  */
-
+                } 
                 return options;
             }));//TODO: error handling
     }

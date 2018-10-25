@@ -45,9 +45,9 @@ export class CaseService extends HttpApiServiceBase {
  
         let bundledOptions$ = this._batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
 
-        return forkJoin(regions$, departments$, oUs$, isAboutDepartments$, isAboutOUs$, bundledOptions$, caseTypes$, productAreas$, categories$, closingReasons$)
+        return forkJoin(bundledOptions$, regions$, departments$, oUs$, isAboutDepartments$, isAboutOUs$, caseTypes$, productAreas$, categories$, closingReasons$)
                     .pipe(
-                        map(([regions, departments, oUs, isAboutDepartments, isAboutOUs, bundledOptions, caseTypes, productAreas, categories, closingReasons]) => {
+                        map(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes, productAreas, categories, closingReasons]) => {
                             let options = new CaseOptions();
                             
                             if (regions != null) {                                                

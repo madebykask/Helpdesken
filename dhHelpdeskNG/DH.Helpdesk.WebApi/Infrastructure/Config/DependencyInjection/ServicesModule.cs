@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Services.Services.Cases;
@@ -76,7 +77,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
             builder.RegisterType<CategoryService>().As<ICategoryService>();
             builder.RegisterType<CaseSectionService>().As<ICaseSectionService>();
             builder.RegisterType<BaseCaseSolutionService>().As<IBaseCaseSolutionService>();
-
+            builder.RegisterType<CausingPartService>().As<ICausingPartService>();
         }
 
         #endregion
