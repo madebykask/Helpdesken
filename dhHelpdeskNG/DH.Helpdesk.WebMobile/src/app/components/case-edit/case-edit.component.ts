@@ -45,12 +45,9 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         if (this.caseData) {
             if (this.caseData.caseSolution) {
                 return this.caseData.caseSolution.name;
-            } else {
-                return `Case ${this.caseData.caseNumber}`;
-            }
-        } else {
-            return '';
-        }        
+            } 
+        }
+        return null;
     }
 
     loadCaseData(): any {
