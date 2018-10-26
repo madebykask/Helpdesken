@@ -16,7 +16,7 @@ import { mobiscroll } from '@mobiscroll/angular';
 export class AlertComponent implements OnInit {
 
   private _destroy$ = new Subject();
-  private alerts: Alert[] = [];   
+  alerts: Alert[] = [];   
     
   @ViewChild('alertpopup')
   popup: MbscPopup;
