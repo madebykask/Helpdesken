@@ -57,6 +57,14 @@ namespace DH.Helpdesk.WebApi.Controllers
             _changeService = changeService;
         }
 
+        /// <summary>
+        /// Use to get bundle of options united in one request.
+        /// Systems, Urgencies, Impacts, Suppliers, Currencies, Currencies, WorkingGroups, ResponsibleUsers,
+        /// Performers, Priorities, Statuses, StateSecondaries, Projects, Problems, CausingParts, Changes, SolutionsRates
+        /// </summary>
+        /// <param name="cid"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
         [HttpPost]//TODO: split this action to different controllers for modularity
         public async Task<CaseOptionsOutputModel> Bundle([FromUri]int cid, [FromBody]GetCaseOptionsInputModel input)
         {

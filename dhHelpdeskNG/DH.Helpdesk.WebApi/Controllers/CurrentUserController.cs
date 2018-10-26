@@ -19,6 +19,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             _userSerivice = userSerivice;
         }
 
+        /// <summary>
+        /// Current user settings.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<UserSettingsModelOutput> Settings()
         {

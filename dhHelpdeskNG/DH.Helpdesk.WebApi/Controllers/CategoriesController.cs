@@ -16,23 +16,15 @@ namespace DH.Helpdesk.WebApi.Controllers
             _categoryService = categoryService;
         }
 
-        // GET api/<controller>
+        /// <summary>
+        /// List of categories.
+        /// </summary>
+        /// <param name="cid"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<CategoryOverview>> Get(int cid)
         {
             return await Task.FromResult(_categoryService.GetParentCategoriesWithChildren(cid, true));
         }
 
-        // GET api/<controller>/5
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
     }
 }

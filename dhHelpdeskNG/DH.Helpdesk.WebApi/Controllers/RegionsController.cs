@@ -20,6 +20,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             _regionService = regionService;
         }
 
+        /// <summary>
+        /// List of regions.
+        /// </summary>
+        /// <param name="cid"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IList<ItemOverview>> Get(int cid)
         {

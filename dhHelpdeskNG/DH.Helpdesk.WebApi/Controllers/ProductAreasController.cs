@@ -28,7 +28,14 @@ namespace DH.Helpdesk.WebApi.Controllers
             _translateCacheService = translateCacheService;
         }
 
-        // GET api/<controller>
+        /// <summary>
+        /// Tree of product areas fiters by casetype
+        /// </summary>
+        /// <param name="cid"></param>
+        /// <param name="langId"></param>
+        /// <param name="caseTypeId"></param>
+        /// <param name="includeId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<ProductAreaOverview>> GetByCaseType(int cid, int langId, int? caseTypeId = null, int? includeId = null)
         {
             var user = await _userSerivice.GetUserOverviewAsync(UserId);
@@ -57,37 +64,5 @@ namespace DH.Helpdesk.WebApi.Controllers
                     });
             };
         }
-
-        // GET api/<controller>/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        //private IEnumerable<int> GetSubProductAreasIds(ProductAreaOverview ctProductArea)
-        //{
-        //    var result = new List<int>();
-        //    if (ctProductArea.SubProductAreas != null && ctProductArea.SubProductAreas.Any())
-        //    {
-        //        foreach (var subProductArea in ctProductArea.SubProductAreas)
-        //        {
-        //            if (subProductArea.IsActive == 1)
-        //            {
-        //                result.Add(subProductArea.Id);
-        //                if (subProductArea.SubProductAreas != null && subProductArea.SubProductAreas.Any())
-        //                {
-        //                    var subAreaIds = GetSubProductAreasIds(subProductArea);
-        //                    result.AddRange(subAreaIds);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return result;
-        //}
     }
 }

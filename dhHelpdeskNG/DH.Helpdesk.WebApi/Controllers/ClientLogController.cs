@@ -14,10 +14,6 @@ namespace DH.Helpdesk.WebApi.Controllers
         
         #region ctor()
 
-        public ClientLogController()
-        {
-        }
-
         public ClientLogController(IClientLogger clientLogger, IMapper mapper)
         {
             _clientLogger = clientLogger;
@@ -26,6 +22,11 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         #endregion
         
+        /// <summary>
+        /// Gets errors from client and stores it.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         [SkipCustomerAuthorization]
         [AllowAnonymous]

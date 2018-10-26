@@ -24,7 +24,12 @@ namespace DH.Helpdesk.WebApi.Controllers
             _translateCacheService = translateCacheService;
         }
 
-        // GET api/<controller>
+        /// <summary>
+        /// List of case types.
+        /// </summary>
+        /// <param name="cid"></param>
+        /// <param name="langId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<CaseTypeOverview>> Get(int cid, int langId)
         {
             const bool takeOnlyActive = true;//TODO: move to filter?
@@ -51,17 +56,6 @@ namespace DH.Helpdesk.WebApi.Controllers
                         }
                     });
             };
-        }
-
-        // GET api/<controller>/5
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
         }
 
     }

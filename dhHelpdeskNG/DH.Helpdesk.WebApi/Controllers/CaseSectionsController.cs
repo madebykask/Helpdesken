@@ -23,7 +23,12 @@ namespace DH.Helpdesk.WebApi.Controllers
             _translateCacheService = translateCacheService;
         }
 
-        // GET api/<controller>
+        /// <summary>
+        /// Case sections list
+        /// </summary>
+        /// <param name="cid"></param>
+        /// <param name="langId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<CaseSectionModel>>
             Get(int cid, int langId) //TODO: return not CaseSectionModel, but only required fields
         {
@@ -39,13 +44,5 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             return sections;
         }
-
-        // GET api/<controller>/5
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-
     }
 }

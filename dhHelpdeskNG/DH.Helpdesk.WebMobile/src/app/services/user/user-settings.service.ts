@@ -80,8 +80,8 @@ export class UserSettingsService extends HttpApiServiceBase {
         this._logger.log('>>>>Setting datetime L LT format');
         (<any>moment).defaultFormat = 'L LT';// <any> hack to avoid warning about constant
         if (navigator.language != null) {
-            const availableLocales = moment.locales();
-            this._logger.log(availableLocales);
+/*             const availableLocales = moment.locales();
+            this._logger.log(availableLocales); */
 /*             if (availableLocales.filter(l => l == navigator.language).length <= 0) {
                 this._logger.log('>>>>Locale is not supported: ' + navigator.language);
             } else {

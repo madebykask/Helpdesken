@@ -20,6 +20,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             _finishingCauseService = finishingCauseService;
         }
 
+        /// <summary>
+        /// List of Finishing causes
+        /// </summary>
+        /// <param name="cid"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IEnumerable<FinishingCauseOverview>> Get(int cid)
         {
@@ -27,17 +32,5 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             return closingReasons;
         }
-
-        //// GET api/<controller>/5
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
     }
 }

@@ -36,6 +36,7 @@ namespace DH.Helpdesk.WebApi
                 o.AssumeDefaultVersionWhenUnspecified = true;
                 o.ReportApiVersions = true;
             });
+            SwaggerConfig.Register(config);
             //configuration.AddVersionedApiExplorer(//TODO: install nuget and uncomment when ApiExplorer will be used
 
         }

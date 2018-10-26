@@ -21,7 +21,12 @@ namespace DH.Helpdesk.WebApi.Controllers
             _ouService = ouService;
         }
 
-        // GET api/<controller>
+        /// <summary>
+        /// List of Organizational Units filterd by department
+        /// </summary>
+        /// <param name="cid"></param>
+        /// <param name="departmentId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<ItemOverview>> Get(int cid, int departmentId)
         {
             var ous = await _ouService.GetActiveOuForDepartmentAsync(departmentId, cid);
@@ -38,17 +43,5 @@ namespace DH.Helpdesk.WebApi.Controllers
                 return new ItemOverview(name, ou.Id.ToString());
             }).ToArray();
         }
-
-        // GET api/<controller>/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
     }
 }

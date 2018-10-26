@@ -32,6 +32,12 @@ namespace DH.Helpdesk.WebApi.Controllers
         //        .ToList();
         //}
 
+        /// <summary>
+        /// List of departments filtered by region.
+        /// </summary>
+        /// <param name="cid"></param>
+        /// <param name="regionId"></param>
+        /// <returns></returns>
         [HttpGet]
         //[Route("getitemsbyregion/{cid:int}/{regionId:int?}")]
         public async Task<IList<ItemOverview>> GetByRegion(int cid, int? regionId = null)

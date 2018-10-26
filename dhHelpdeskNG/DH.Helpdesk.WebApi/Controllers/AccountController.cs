@@ -13,8 +13,16 @@ using DH.Helpdesk.WebApi.Models;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
+    /// <summary>
+    /// Contains Authentication/Authorization
+    /// </summary>
     public class AccountController : BaseApiController
     {
+        /// <summary>
+        /// User Authentication.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns> Returns access token, type, expiration date, refresh token </returns>
         [HttpPost]
         [AllowAnonymous]
         public async Task<HttpResponseMessage> Login([FromBody]LoginUserInputModel model)
@@ -42,6 +50,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates new access token from refresh token
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>Access token</returns>
         [HttpPost]
         [AllowAnonymous]
         public async Task<HttpResponseMessage> Refresh([FromBody]RefreshTokenInputModel model)
@@ -68,6 +81,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Not implemented
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("Logout")]
         public IHttpActionResult Logout()

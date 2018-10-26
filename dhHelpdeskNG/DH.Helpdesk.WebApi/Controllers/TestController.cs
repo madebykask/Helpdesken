@@ -10,7 +10,9 @@ using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
-    
+    /// <summary>
+    /// Ignore - Test controller.
+    /// </summary>
     public class TestController : BaseApiController
     {
         [HttpGet]

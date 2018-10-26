@@ -26,6 +26,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             _translateCacheService = translateCacheService;
         }
 
+        /// <summary>
+        /// List of available languages.
+        /// </summary>
+        /// <param name="langId"></param>
+        /// <returns></returns>
         [HttpGet]
         [SkipCustomerAuthorization]
         // GET api/<controller>

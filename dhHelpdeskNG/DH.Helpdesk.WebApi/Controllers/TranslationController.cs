@@ -20,6 +20,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             _translationService = translationService;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
         [Route("Languages")]
@@ -29,6 +33,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             return Ok(languages);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lang"></param>
+        /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
         [Route("{lang}")]

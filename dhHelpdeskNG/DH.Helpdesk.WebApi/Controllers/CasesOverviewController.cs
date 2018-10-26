@@ -50,6 +50,13 @@ namespace DH.Helpdesk.WebApi.Controllers
             _customerService = customerService;
         }
 
+        /// <summary>
+        /// List of filtered cases.
+        /// Contains data only for case overview.
+        /// </summary>
+        /// <param name="cid"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<SearchResult<CaseSearchResult>> Get([FromUri]int cid, [FromBody]SearchOverviewFilterInputModel input)
         {
