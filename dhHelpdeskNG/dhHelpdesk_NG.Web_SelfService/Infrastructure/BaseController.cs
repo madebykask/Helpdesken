@@ -89,6 +89,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             }
             customerId = SessionFacade.CurrentCustomerID;
 
+
+
             SetLanguage(filterContext);
 
             if (SessionFacade.CurrentUserIdentity == null)
@@ -289,14 +291,19 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             if (SessionFacade.AllLanguages == null)            
                 SessionFacade.AllLanguages = GetActiveLanguages();
 
-            var curUri = filterContext.HttpContext.Request.Url;
-            var passedLanguageId = HttpUtility.ParseQueryString(curUri.Query).Get("languageId");
+            SessionFacade.CurrentLanguageId = 0;
 
-            if (!string.IsNullOrEmpty(passedLanguageId))
+            var curUri = filterContext.HttpContext.Request.Url;
+            var passedLanguagetext = HttpUtility.ParseQueryString(curUri.Query).Get("language");
+
+            if (!string.IsNullOrEmpty(passedLanguagetext))
             {
                 int langId = -1;
-                if (int.TryParse(passedLanguageId, out langId))
-                    SessionFacade.CurrentLanguageId = langId;
+                var languages = _masterDataService.GetLanguages();
+                var passedLanguageId = languages.FirstOrDefault(l => l.LanguageID.ToLower() == passedLanguagetext.ToLower());
+                if (passedLanguageId != null)
+                langId = passedLanguageId.Id;
+                SessionFacade.CurrentLanguageId = langId;
             }
             else
             {
