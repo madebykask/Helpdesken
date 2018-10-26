@@ -91,30 +91,30 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpGet]
         [CheckUserCasePermissions(CaseIdParamName = "caseId")]
         [Route("{caseId:int}")]
-        public async Task<CaseEditOutputModel> Get([FromUri] GetCaseInputModel input)
+        public async Task<CaseEditOutputModel> Get([FromUri]int langId, [FromUri]int caseId, [FromUri]int cid)
         {
             var model = new CaseEditOutputModel();
 
             var userId = UserId;
-            var languageId = input.LangId;
-            var currentCase = _caseService.GetCaseById(input.CaseId);
-            var currentCid = input.Cid;
+            var languageId = langId;
+            var currentCase = _caseService.GetCaseById(caseId);
+            var currentcid = cid;
             var userGroupId = User.Identity.GetGroupId();
-            if (currentCase.Customer_Id != currentCid)
+            if (currentCase.Customer_Id != currentcid)
                 throw new Exception(
-                    $"Case customer({currentCase.Customer_Id}) and current customer({currentCid}) are different"); //TODO: how to react?
+                    $"Case customer({currentCase.Customer_Id}) and current customer({currentcid}) are different"); //TODO: how to react?
 
-            var customerUserSetting = _customerUserService.GetCustomerUserSettings(currentCid, userId);
+            var customerUserSetting = _customerUserService.GetCustomerUserSettings(currentcid, userId);
             if (customerUserSetting == null)
             {
                 throw new Exception(
-                    $"No customer settings for this customer '{currentCid}' and user '{userId}'");
+                    $"No customer settings for this customer '{currentcid}' and user '{userId}'");
             }
 
-            var customerSettings = _customerSettingsService.GetCustomerSettings(currentCid);
+            var customerSettings = _customerSettingsService.GetCustomerSettings(currentcid);
             var userOverview = await _userSerivice.GetUserOverviewAsync(UserId);//TODO: use cached version!
-            var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(currentCid);
-            var caseFieldTranslations = await _caseFieldSettingService.GetCustomerCaseTranslationsAsync(currentCid);
+            var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(currentcid);
+            var caseFieldTranslations = await _caseFieldSettingService.GetCustomerCaseTranslationsAsync(currentcid);
 
             //LockCase(id, userId, true, activeTab);//TODO: Mark as locked
             //model.CanGetRelatedCases = userGroupId > UserGroup.User;//TODO: Move to helper extension
@@ -174,7 +174,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     {
                         Name = GlobalEnums.TranslationCaseFields.ReportedBy.ToString(),
                         Value = currentCase.ReportedBy,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.ReportedBy, languageId, input.Cid, caseFieldTranslations, "Användar ID"),
+                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.ReportedBy, languageId, cid, caseFieldTranslations, "Användar ID"),
                         Section = CaseSectionType.Initiator,
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.ReportedBy, caseFieldSettings)
                     };
@@ -189,7 +189,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 //    {
                 //        Name = GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString(),
                 //        Value = //todo:  set default value from field settings?
-                //        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, languageId, input.Cid, caseFieldTranslations, "Anmälarkategori"),
+                //        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, languageId, cid, caseFieldTranslations, "Anmälarkategori"),
                 //        Section = CaseSectionType.Initiator,
                 //        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, caseFieldSettings)
                 //    };
@@ -202,7 +202,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     {
                         Name = GlobalEnums.TranslationCaseFields.Persons_Name.ToString(),
                         Value = currentCase.PersonsName,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Persons_Name, languageId, input.Cid, caseFieldTranslations, "Anmälare"),
+                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Persons_Name, languageId, cid, caseFieldTranslations, "Anmälare"),
                         Section = CaseSectionType.Initiator,
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Persons_Name, caseFieldSettings)
                     };
@@ -216,7 +216,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     {
                         Name = GlobalEnums.TranslationCaseFields.Persons_EMail.ToString(),
                         Value = currentCase.PersonsEmail,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Persons_EMail, languageId, input.Cid, caseFieldTranslations, "E-post"),
+                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Persons_EMail, languageId, cid, caseFieldTranslations, "E-post"),
                         Section = CaseSectionType.Initiator,
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Persons_EMail, caseFieldSettings)
                     };
@@ -230,7 +230,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     {
                         Name = GlobalEnums.TranslationCaseFields.Persons_Phone.ToString(),
                         Value = currentCase.PersonsPhone,
-                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Persons_Phone, languageId, input.Cid, caseFieldTranslations, "Telefon"),
+                        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Persons_Phone, languageId, cid, caseFieldTranslations, "Telefon"),
                         Section = CaseSectionType.Initiator,
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Persons_Phone, caseFieldSettings)
                     };
@@ -245,7 +245,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Name = GlobalEnums.TranslationCaseFields.Persons_CellPhone.ToString(),
                         Value = currentCase.PersonsCellphone,
                         Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Persons_CellPhone,
-                            languageId, input.Cid, caseFieldTranslations, "Mobil"),
+                            languageId, cid, caseFieldTranslations, "Mobil"),
                         Section = CaseSectionType.Initiator,
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Persons_CellPhone, caseFieldSettings)
                     };
@@ -260,7 +260,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Name = GlobalEnums.TranslationCaseFields.Region_Id.ToString(),
                         Value = currentCase.Region_Id,
                         Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Region_Id,
-                            languageId, input.Cid, caseFieldTranslations, "Område"),
+                            languageId, cid, caseFieldTranslations, "Område"),
                         Section = CaseSectionType.Initiator,
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Region_Id, caseFieldSettings)
                     };
@@ -274,7 +274,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Name = GlobalEnums.TranslationCaseFields.Department_Id.ToString(),
                         Value = currentCase.Department_Id,
                         Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Department_Id,
-                            languageId, input.Cid, caseFieldTranslations, "Avdelning"),
+                            languageId, cid, caseFieldTranslations, "Avdelning"),
                         Section = CaseSectionType.Initiator,
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Department_Id, caseFieldSettings)
                     };
@@ -288,7 +288,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Name = GlobalEnums.TranslationCaseFields.OU_Id.ToString(),
                         Value = currentCase.OU_Id,
                         Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.OU_Id,
-                            languageId, input.Cid, caseFieldTranslations, "Enhet"),
+                            languageId, cid, caseFieldTranslations, "Enhet"),
                         Section = CaseSectionType.Initiator,
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.OU_Id, caseFieldSettings)
                     };
@@ -302,7 +302,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Name = GlobalEnums.TranslationCaseFields.CostCentre.ToString(),
                         Value = currentCase.CostCentre,
                         Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.CostCentre,
-                            languageId, input.Cid, caseFieldTranslations, "Kostnadsställe"),
+                            languageId, cid, caseFieldTranslations, "Kostnadsställe"),
                         Section = CaseSectionType.Initiator,
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.CostCentre, caseFieldSettings)
                     };
@@ -317,7 +317,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Name = GlobalEnums.TranslationCaseFields.Place.ToString(),
                         Value = currentCase.Place,
                         Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Place,
-                            languageId, input.Cid, caseFieldTranslations, "Placering"),
+                            languageId, cid, caseFieldTranslations, "Placering"),
                         Section = CaseSectionType.Initiator,
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Place, caseFieldSettings)
                     };
@@ -332,7 +332,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Name = GlobalEnums.TranslationCaseFields.UserCode.ToString(),
                         Value = currentCase.UserCode,
                         Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.UserCode,
-                            languageId, input.Cid, caseFieldTranslations, "Ansvarskod"),
+                            languageId, cid, caseFieldTranslations, "Ansvarskod"),
                         Section = CaseSectionType.Initiator,
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.UserCode, caseFieldSettings)
                     };
@@ -345,7 +345,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 //    Name = GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString(),
                 //    Value = true,
                 //    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation, 
-                //        languageId, input.Cid, caseFieldTranslations, ""),
+                //        languageId, cid, caseFieldTranslations, ""),
                 //    Section = CaseSectionType.Initiator,
                 //    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.UpdateNotifierInformation, caseFieldSettings//        )
                 //};
@@ -369,7 +369,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             //    {
             //        Name = GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString(),
             //        Value = //todo:  set default value from field settings?
-            //        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, languageId, input.Cid, caseFieldTranslations, "Anmälarkategori"),
+            //        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, languageId, cid, caseFieldTranslations, "Anmälarkategori"),
             //        Section = CaseSectionType.Regarding,
             //        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, caseFieldSettings)
             //    };
@@ -383,7 +383,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString(),
                     Value = currentCase.IsAbout?.ReportedBy,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy,
-                        languageId, input.Cid, caseFieldTranslations, "Användar ID"),
+                        languageId, cid, caseFieldTranslations, "Användar ID"),
                     Section = CaseSectionType.Regarding,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy, caseFieldSettings)
                 };
@@ -398,7 +398,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name.ToString(),
                     Value = currentCase.IsAbout?.Person_Name,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name,
-                        languageId, input.Cid, caseFieldTranslations, "Anmälare"),
+                        languageId, cid, caseFieldTranslations, "Anmälare"),
                     Section = CaseSectionType.Regarding,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name, caseFieldSettings)
                 };
@@ -412,7 +412,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail.ToString(),
                     Value = currentCase.IsAbout?.Person_Email,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail, languageId, input.Cid, caseFieldTranslations, "E-post"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail, languageId, cid, caseFieldTranslations, "E-post"),
                     Section = CaseSectionType.Regarding,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail, caseFieldSettings)
                 };
@@ -427,7 +427,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone.ToString(),
                     Value = currentCase.IsAbout?.Person_Phone,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone,
-                        languageId, input.Cid, caseFieldTranslations, "Telefon"),
+                        languageId, cid, caseFieldTranslations, "Telefon"),
                     Section = CaseSectionType.Regarding,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone, caseFieldSettings)
                 };
@@ -442,7 +442,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone.ToString(),
                     Value = currentCase.IsAbout?.Person_Cellphone,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone,
-                        languageId, input.Cid, caseFieldTranslations, "Mobil"),
+                        languageId, cid, caseFieldTranslations, "Mobil"),
                     Section = CaseSectionType.Regarding,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone, caseFieldSettings)
                 };
@@ -457,7 +457,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.IsAbout_Region_Id.ToString(),
                     Value = currentCase.IsAbout?.Region_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Område"),
+                        languageId, cid, caseFieldTranslations, "Område"),
                     Section = CaseSectionType.Regarding,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Region_Id, caseFieldSettings)
                 };
@@ -471,7 +471,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.IsAbout_Department_Id.ToString(),
                     Value = currentCase.IsAbout?.Department_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Avdelning"),
+                        languageId, cid, caseFieldTranslations, "Avdelning"),
                     Section = CaseSectionType.Regarding,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Department_Id, caseFieldSettings)
                 };
@@ -485,7 +485,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.IsAbout_OU_Id.ToString(),
                     Value = currentCase.IsAbout?.OU_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Enhet"),
+                        languageId, cid, caseFieldTranslations, "Enhet"),
                     Section = CaseSectionType.Regarding,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_OU_Id, caseFieldSettings)
                 };
@@ -499,7 +499,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.IsAbout_CostCentre.ToString(),
                     Value = currentCase.IsAbout?.CostCentre,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre,
-                        languageId, input.Cid, caseFieldTranslations, "Kostnadsställe"),
+                        languageId, cid, caseFieldTranslations, "Kostnadsställe"),
                     Section = CaseSectionType.Regarding,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_CostCentre, caseFieldSettings)
                 };
@@ -514,7 +514,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString(),
                     Value = currentCase.IsAbout?.Place,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_Place,
-                        languageId, input.Cid, caseFieldTranslations, "Placering"),
+                        languageId, cid, caseFieldTranslations, "Placering"),
                     Section = CaseSectionType.Regarding,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_Place, caseFieldSettings)
                 };
@@ -529,7 +529,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString(),
                     Value = currentCase.IsAbout?.UserCode,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_UserCode,
-                        languageId, input.Cid, caseFieldTranslations, "Ansvarskod"),
+                        languageId, cid, caseFieldTranslations, "Ansvarskod"),
                     Section = CaseSectionType.Regarding,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_UserCode, caseFieldSettings)
                 };
@@ -549,7 +549,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.InventoryNumber.ToString(),
                     Value = currentCase.InventoryNumber,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.InventoryNumber, languageId, input.Cid, caseFieldTranslations, "PC Nummer"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.InventoryNumber, languageId, cid, caseFieldTranslations, "PC Nummer"),
                     Section = CaseSectionType.ComputerInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.InventoryNumber, caseFieldSettings)
                 };
@@ -563,7 +563,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString(),
                     Value = currentCase.InventoryType,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.ComputerType_Id, languageId, input.Cid, caseFieldTranslations, "Datortyp beskrivning"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.ComputerType_Id, languageId, cid, caseFieldTranslations, "Datortyp beskrivning"),
                     Section = CaseSectionType.ComputerInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.ComputerType_Id, caseFieldSettings)
                 };
@@ -577,7 +577,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.InventoryLocation.ToString(),
                     Value = currentCase.InventoryLocation,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.InventoryLocation, languageId, input.Cid, caseFieldTranslations, "Placering"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.InventoryLocation, languageId, cid, caseFieldTranslations, "Placering"),
                     Section = CaseSectionType.ComputerInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.InventoryLocation, caseFieldSettings)
                 };
@@ -599,7 +599,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.CaseNumber.ToString(),
                     Value = currentCase.CaseNumber.ToString(CultureInfo.InvariantCulture),
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.CaseNumber,
-                        languageId, input.Cid, caseFieldTranslations, "Ärende"),
+                        languageId, cid, caseFieldTranslations, "Ärende"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.CaseNumber, caseFieldSettings)
                 };
@@ -613,7 +613,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.RegTime.ToString(),
                     Value = currentCase.RegTime,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.RegTime,
-                        languageId, input.Cid, caseFieldTranslations, "Registreringsdatum"),
+                        languageId, cid, caseFieldTranslations, "Registreringsdatum"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.RegTime, caseFieldSettings)
                 };
@@ -627,7 +627,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.ChangeTime.ToString(),
                     Value = currentCase.ChangeTime,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.ChangeTime,
-                        languageId, input.Cid, caseFieldTranslations, "Ändringsdatum"),
+                        languageId, cid, caseFieldTranslations, "Ändringsdatum"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.ChangeTime, caseFieldSettings)
                 };
@@ -666,7 +666,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.User_Id.ToString(),
                     Value = userIdValue,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.User_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Registrerad av"),
+                        languageId, cid, caseFieldTranslations, "Registrerad av"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.User_Id, caseFieldSettings)
                 };
@@ -681,7 +681,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Value = currentCase.RegistrationSourceCustomer_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer,
 
-                        languageId, input.Cid, caseFieldTranslations, "Källa"),
+                        languageId, cid, caseFieldTranslations, "Källa"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer, caseFieldSettings)
                 };
@@ -695,7 +695,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(),
                     Value = currentCase.CaseType_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.CaseType_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Ärendetyp"),
+                        languageId, cid, caseFieldTranslations, "Ärendetyp"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.CaseType_Id, caseFieldSettings)
                 };
@@ -709,7 +709,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(),
                     Value = currentCase.ProductArea_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.ProductArea_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Produktområde"),
+                        languageId, cid, caseFieldTranslations, "Produktområde"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.ProductArea_Id, caseFieldSettings)
                 };
@@ -723,7 +723,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.System_Id.ToString(),
                     Value = currentCase.System_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.System_Id,
-                        languageId, input.Cid, caseFieldTranslations, "System"),
+                        languageId, cid, caseFieldTranslations, "System"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.System_Id, caseFieldSettings)
                 };
@@ -737,7 +737,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.Urgency_Id.ToString(),
                     Value = currentCase.Urgency_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Urgency_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Brådskandegrad"),
+                        languageId, cid, caseFieldTranslations, "Brådskandegrad"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Urgency_Id, caseFieldSettings)
                 };
@@ -751,7 +751,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.Impact_Id.ToString(),
                     Value = currentCase.Impact_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Impact_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Påverkan"),
+                        languageId, cid, caseFieldTranslations, "Påverkan"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Impact_Id, caseFieldSettings)
                 };
@@ -765,7 +765,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.Category_Id.ToString(),
                     Value = currentCase.Category_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Category_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Kategori"),
+                        languageId, cid, caseFieldTranslations, "Kategori"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Category_Id, caseFieldSettings)
                 };
@@ -783,7 +783,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.Supplier_Id.ToString(),
                     Value = currentCase.Supplier_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Supplier_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Leverantör"),
+                        languageId, cid, caseFieldTranslations, "Leverantör"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Supplier_Id, caseFieldSettings)
                 };
@@ -794,7 +794,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = "Supplier_Country_Id", //TODO: Naming
                     Value = supplier?.Country_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Supplier_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Leverantör"),
+                        languageId, cid, caseFieldTranslations, "Leverantör"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Supplier_Id, caseFieldSettings)
                 };
@@ -808,7 +808,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.InvoiceNumber.ToString(),
                     Value = currentCase.InvoiceNumber,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.InvoiceNumber,
-                        languageId, input.Cid, caseFieldTranslations, "Fakturanummer"),
+                        languageId, cid, caseFieldTranslations, "Fakturanummer"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.InvoiceNumber, caseFieldSettings)
                 };
@@ -823,7 +823,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.ReferenceNumber.ToString(),
                     Value = currentCase.ReferenceNumber,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.ReferenceNumber,
-                        languageId, input.Cid, caseFieldTranslations, "Referensnummer"),
+                        languageId, cid, caseFieldTranslations, "Referensnummer"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.ReferenceNumber, caseFieldSettings)
                 };
@@ -838,7 +838,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.Caption.ToString(),
                     Value = currentCase.Caption,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Caption,
-                        languageId, input.Cid, caseFieldTranslations, "Rubrik"),
+                        languageId, cid, caseFieldTranslations, "Rubrik"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Caption, caseFieldSettings)
                 };
@@ -858,7 +858,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.Description.ToString(),
                     Value = currentCase.Description,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Description,
-                        languageId, input.Cid, caseFieldTranslations, "Beskrivning"),
+                        languageId, cid, caseFieldTranslations, "Beskrivning"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Description, caseFieldSettings)
                 };
@@ -873,7 +873,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.Miscellaneous.ToString(),
                     Value = currentCase.Miscellaneous,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Miscellaneous,
-                        languageId, input.Cid, caseFieldTranslations, "Övrigt"),
+                        languageId, cid, caseFieldTranslations, "Övrigt"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Miscellaneous, caseFieldSettings)
                 };
@@ -888,7 +888,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString(),
                     Value = currentCase.ContactBeforeAction.ToBool(),
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.ContactBeforeAction,
-                        languageId, input.Cid, caseFieldTranslations, "Telefonkontakt"),
+                        languageId, cid, caseFieldTranslations, "Telefonkontakt"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.ContactBeforeAction, caseFieldSettings)
                 };
@@ -902,7 +902,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.SMS.ToString(),
                     Value = currentCase.SMS.ToBool(),
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.SMS,
-                        languageId, input.Cid, caseFieldTranslations, "SMS"),
+                        languageId, cid, caseFieldTranslations, "SMS"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.SMS, caseFieldSettings)
                 };
@@ -916,7 +916,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.AgreedDate.ToString(),
                     Value = currentCase.AgreedDate,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.AgreedDate,
-                        languageId, input.Cid, caseFieldTranslations, "Överenskommet datum"),
+                        languageId, cid, caseFieldTranslations, "Överenskommet datum"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.AgreedDate, caseFieldSettings)
                 };
@@ -930,7 +930,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.Available.ToString(),
                     Value = currentCase.Available,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Available,
-                        languageId, input.Cid, caseFieldTranslations, "Anträffbar"),
+                        languageId, cid, caseFieldTranslations, "Anträffbar"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Available, caseFieldSettings)
                 };
@@ -946,7 +946,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.Cost.ToString(),
                     Value = currentCase.Cost,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Cost,
-                        languageId, input.Cid, caseFieldTranslations, "Kostnad"),
+                        languageId, cid, caseFieldTranslations, "Kostnad"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Cost, caseFieldSettings)
                 };
@@ -981,7 +981,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.Filename.ToString(),
                     Value = GetCaseFilesModel(currentCase.Id),
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Filename, languageId, input.Cid, caseFieldTranslations, "Bifogad fil"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Filename, languageId, cid, caseFieldTranslations, "Bifogad fil"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Filename, caseFieldSettings)
                 };
@@ -1002,7 +1002,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(),
                     Value = currentCase.WorkingGroup_Id,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, languageId, input.Cid, caseFieldTranslations, "Driftgrupp"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, languageId, cid, caseFieldTranslations, "Driftgrupp"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, caseFieldSettings)
                 };
@@ -1016,7 +1016,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(),
                     Value = currentCase.CaseResponsibleUser_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Ansvarig"),
+                        languageId, cid, caseFieldTranslations, "Ansvarig"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id, caseFieldSettings)
                 };
@@ -1030,7 +1030,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(),
                     Value = currentCase.Performer_User_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Performer_User_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Handläggare"),
+                        languageId, cid, caseFieldTranslations, "Handläggare"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Performer_User_Id, caseFieldSettings)
                 };
@@ -1045,7 +1045,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.Priority_Id.ToString(),
                     Value = currentCase.Priority_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Priority_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Prioritet"),
+                        languageId, cid, caseFieldTranslations, "Prioritet"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Priority_Id, caseFieldSettings,
                         !IsCaseNew(currentCase.Id) && !customerUserSetting.PriorityPermission.ToBool())
@@ -1060,7 +1060,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.Status_Id.ToString(),
                     Value = currentCase.Status_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Status_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Status"),
+                        languageId, cid, caseFieldTranslations, "Status"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Status_Id, caseFieldSettings)
                 };
@@ -1074,7 +1074,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(),
                     Value = currentCase.StateSecondary_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.StateSecondary_Id,
-                        languageId, input.Cid, caseFieldTranslations, "Understatus"),
+                        languageId, cid, caseFieldTranslations, "Understatus"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.StateSecondary_Id, caseFieldSettings,
                         !IsCaseNew(currentCase.Id) && !customerUserSetting.StateSecondaryPermission.ToBool())
@@ -1089,7 +1089,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.Project.ToString(),
                     Value = currentCase.Project_Id,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Project, languageId, input.Cid, caseFieldTranslations, "Projekt"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Project, languageId, cid, caseFieldTranslations, "Projekt"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Project, caseFieldSettings)
                 };
@@ -1103,7 +1103,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.Problem.ToString(),
                     Value = currentCase.Problem_Id,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Problem, languageId, input.Cid, caseFieldTranslations, "ITIL Problem"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Problem, languageId, cid, caseFieldTranslations, "ITIL Problem"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Problem, caseFieldSettings)
                 };
@@ -1116,7 +1116,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.CausingPart.ToString(),
                     Value = currentCase.CausingPartId,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.CausingPart, languageId, input.Cid, caseFieldTranslations, "Rotorsak"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.CausingPart, languageId, cid, caseFieldTranslations, "Rotorsak"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.CausingPart, caseFieldSettings)
                 };
@@ -1129,7 +1129,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.Change.ToString(),
                     Value = currentCase.Change_Id,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Change, languageId, input.Cid, caseFieldTranslations, "Ändring"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Change, languageId, cid, caseFieldTranslations, "Ändring"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Change, caseFieldSettings)
                 };
@@ -1142,7 +1142,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.PlanDate.ToString(),
                     Value = currentCase.PlanDate,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.PlanDate, languageId, input.Cid, caseFieldTranslations, "Planerad åtgärdsdatum"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.PlanDate, languageId, cid, caseFieldTranslations, "Planerad åtgärdsdatum"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.PlanDate, caseFieldSettings)
                 };
@@ -1156,7 +1156,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.WatchDate.ToString(),
                     Value = currentCase.WatchDate,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.WatchDate,
-                        languageId, input.Cid, caseFieldTranslations, "Bevakningsdatum"),
+                        languageId, cid, caseFieldTranslations, "Bevakningsdatum"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.WatchDate, caseFieldSettings)
                 };
@@ -1170,7 +1170,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.Verified.ToString(),
                     Value = currentCase.Verified.ToBool(),
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Verified,
-                        languageId, input.Cid, caseFieldTranslations, "Verifierad"),
+                        languageId, cid, caseFieldTranslations, "Verifierad"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Verified, caseFieldSettings)
                 };
@@ -1185,7 +1185,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Value = currentCase.VerifiedDescription,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.VerifiedDescription,
 
-                        languageId, input.Cid, caseFieldTranslations, "Verifierad beskrivning"),
+                        languageId, cid, caseFieldTranslations, "Verifierad beskrivning"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.VerifiedDescription, caseFieldSettings)
                 };
@@ -1200,7 +1200,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Name = GlobalEnums.TranslationCaseFields.SolutionRate.ToString(),
                     Value = currentCase.SolutionRate,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.SolutionRate,
-                        languageId, input.Cid, caseFieldTranslations, "Lösningsgrad"),
+                        languageId, cid, caseFieldTranslations, "Lösningsgrad"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.SolutionRate, caseFieldSettings)
                 };
@@ -1222,7 +1222,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Value = currentCase.FinishingDescription,
                         Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.FinishingDescription,
 
-                            languageId, input.Cid, caseFieldTranslations, "Avslutsbeskrivning"),
+                            languageId, cid, caseFieldTranslations, "Avslutsbeskrivning"),
                         Section = CaseSectionType.Communication,
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.FinishingDescription, caseFieldSettings)
                     };
@@ -1244,7 +1244,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Value = finishingCause,
                         Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.ClosingReason,
 
-                            languageId, input.Cid, caseFieldTranslations, "Avslutsorsak"),
+                            languageId, cid, caseFieldTranslations, "Avslutsorsak"),
                         Section = CaseSectionType.Communication,
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.ClosingReason, caseFieldSettings)
                     };
@@ -1258,7 +1258,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Name = GlobalEnums.TranslationCaseFields.FinishingDate.ToString(),
                         Value = currentCase.FinishingDate,
                         Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.FinishingDate,
-                            languageId, input.Cid, caseFieldTranslations, "Avslutsdatum"),
+                            languageId, cid, caseFieldTranslations, "Avslutsdatum"),
                         Section = CaseSectionType.Communication,
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.FinishingDate, caseFieldSettings)
                     };

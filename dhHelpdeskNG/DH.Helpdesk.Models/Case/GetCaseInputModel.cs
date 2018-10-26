@@ -7,6 +7,7 @@ namespace DH.Helpdesk.Models.Case
     {
         [Required]
         public int CaseId { get; set; }
+        [Required]
         public int LangId { get; set; }
     }
 }

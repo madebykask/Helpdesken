@@ -1,7 +1,8 @@
 using System.Web.Http;
-using WebActivatorEx;
-using DH.Helpdesk.WebApi;
+using System;
+using System.Net.Http;
 using Swashbuckle.Application;
+using DH.Helpdesk.WebApi.Infrastructure.Swagger;
 
 namespace DH.Helpdesk.WebApi
 {
@@ -19,6 +20,9 @@ namespace DH.Helpdesk.WebApi
                         // resolve correctly. You can workaround this by providing your own code to determine the root URL.
                         //
                         //c.RootUrl(req => GetRootUrlFromAppConfig());
+                        c.RootUrl(req =>
+                            req.RequestUri.GetLeftPart(UriPartial.Authority) +
+                            req.GetRequestContext().VirtualPathRoot.TrimEnd('/'));
 
                         // If schemes are not explicitly provided in a Swagger 2.0 document, then the scheme used to access
                         // the docs is taken as the default. If your API supports multiple schemes and you want to be explicit
@@ -173,6 +177,7 @@ namespace DH.Helpdesk.WebApi
                         // before using this option.
                         //
                         //c.DocumentFilter<ApplyDocumentVendorExtensions>();
+                        c.OperationFilter<GetOperationFilter>();
 
                         // In contrast to WebApi, Swagger 2.0 does not include the query string component when mapping a URL
                         // to an action. As a result, Swashbuckle will raise an exception if it encounters multiple actions
