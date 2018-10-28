@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.Owin;
-using DH.Helpdesk.Dal.Repositories;
-using DH.Helpdesk.Services.Infrastructure;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.WebApi.Infrastructure.Config;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.Authentication
+namespace DH.Helpdesk.WebApi.Infrastructure.Authentication
 {
     public class AccessTokenProvider : OAuthAuthorizationServerProvider
     {

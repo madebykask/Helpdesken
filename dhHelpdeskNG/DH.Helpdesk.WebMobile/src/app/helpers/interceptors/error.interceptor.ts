@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from '../../services/authentication';
 import { ErrorHandlingService } from 'src/app/services/errorhandling/error-handling.service';
 
@@ -19,7 +19,17 @@ export class ErrorInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(
             catchError(err => {
+
                 const errorMsg = err.error.message || err.error.error_description || err.statusText;//TODO: unify errors messages
+
+                if (err instanceof HttpErrorResponse) {
+                    
+                    console.log('>>http error. Error: %s, Status: %s', errorMsg, err.status);
+
+                    //handle different http statuses:                    
+                    if (err.status == 400)                    
+                        return throwError(err);
+                }
 
                 if (request.url.includes("account/refresh")) {
                     this.authenticationService.logout();

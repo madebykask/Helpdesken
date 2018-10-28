@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
 using Autofac.Integration.WebApi;
-using DH.Helpdesk.WebApi.Infrastructure.Config.Owin;
+using DH.Helpdesk.WebApi.Infrastructure.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Owin;
@@ -38,10 +38,6 @@ namespace DH.Helpdesk.WebApi
             });
             SwaggerConfig.Register(config);
             //configuration.AddVersionedApiExplorer(//TODO: install nuget and uncomment when ApiExplorer will be used
-
         }
-
-
-
     }
 }

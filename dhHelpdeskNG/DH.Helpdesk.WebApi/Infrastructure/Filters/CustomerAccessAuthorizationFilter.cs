@@ -9,7 +9,7 @@ using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using Microsoft.AspNet.Identity;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.Filters
+namespace DH.Helpdesk.WebApi.Infrastructure.Filters
 {
     public class CustomerAccessAuthorizationFilter : AuthorizationFilterBase, IAutofacAuthorizationFilter
     {

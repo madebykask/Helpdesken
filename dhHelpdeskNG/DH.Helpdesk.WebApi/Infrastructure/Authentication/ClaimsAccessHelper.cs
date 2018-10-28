@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
-using System.Web;
-using DH.Helpdesk.Common.Types;
 using Microsoft.AspNet.Identity;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.Authentication
+namespace DH.Helpdesk.WebApi.Infrastructure.Authentication
 {
     public static class ClaimsAccessHelpder
     {

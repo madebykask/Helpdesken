@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using DH.Helpdesk.WebApi.Infrastructure.Config.Mapper.Profiles;
+using DH.Helpdesk.WebApi.Infrastructure.Mapper.Profiles;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.Mapper
+namespace DH.Helpdesk.WebApi.Infrastructure.Mapper
 {
     public static class MappingConfiguration
     {

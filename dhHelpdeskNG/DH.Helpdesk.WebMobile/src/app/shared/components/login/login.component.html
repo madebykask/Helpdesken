@@ -14,5 +14,6 @@
             <mbsc-button flat icon="loop2" [hidden]="!isLoading" class="float-right"></mbsc-button> 
         </div>
     </form>    
+    <mbsc-note color="danger" *ngIf="showLoginError" #loginError>User or Password is incorrect.</mbsc-note>
 </mbsc-form>
 

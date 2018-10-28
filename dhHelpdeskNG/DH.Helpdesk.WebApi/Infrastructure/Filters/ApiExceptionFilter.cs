@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http.Filters;
 using Autofac.Features.AttributeFilters;
 using Autofac.Integration.WebApi;
 using DH.Helpdesk.Common.Logger;
-using DH.Helpdesk.Dal.Infrastructure.Context;
-using DH.Helpdesk.Services.Infrastructure;
-using DH.Helpdesk.Services.Services;
-using Microsoft.Owin;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.Filters
+namespace DH.Helpdesk.WebApi.Infrastructure.Filters
 {
     public class ApiExceptionFilter : IAutofacExceptionFilter
     {

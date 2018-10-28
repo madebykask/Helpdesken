@@ -6,49 +6,49 @@ using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Dal.Repositories.ActionSetting;
 using DH.Helpdesk.Dal.Repositories.ActionSetting.Concrete;
+using DH.Helpdesk.Dal.Repositories.ADFS;
+using DH.Helpdesk.Dal.Repositories.ADFS.Concrete;
+using DH.Helpdesk.Dal.Repositories.BusinessRules;
+using DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete;
+using DH.Helpdesk.Dal.Repositories.Cases;
+using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
+using DH.Helpdesk.Dal.Repositories.Changes;
+using DH.Helpdesk.Dal.Repositories.Changes.Concrete;
 using DH.Helpdesk.Dal.Repositories.Computers;
 using DH.Helpdesk.Dal.Repositories.Computers.Concrete;
+using DH.Helpdesk.Dal.Repositories.Concrete;
+using DH.Helpdesk.Dal.Repositories.Condition;
+using DH.Helpdesk.Dal.Repositories.Condition.Concrete;
+using DH.Helpdesk.Dal.Repositories.Faq;
+using DH.Helpdesk.Dal.Repositories.Faq.Concrete;
+using DH.Helpdesk.Dal.Repositories.Inventory;
+using DH.Helpdesk.Dal.Repositories.Inventory.Concrete;
+using DH.Helpdesk.Dal.Repositories.Invoice;
+using DH.Helpdesk.Dal.Repositories.Invoice.Concrete;
 using DH.Helpdesk.Dal.Repositories.MailTemplates;
 using DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete;
+using DH.Helpdesk.Dal.Repositories.MetaData;
+using DH.Helpdesk.Dal.Repositories.MetaData.Concrete;
 using DH.Helpdesk.Dal.Repositories.Notifiers;
 using DH.Helpdesk.Dal.Repositories.Notifiers.Concrete;
+using DH.Helpdesk.Dal.Repositories.Printers;
+using DH.Helpdesk.Dal.Repositories.Printers.Concrete;
 using DH.Helpdesk.Dal.Repositories.Problem;
+using DH.Helpdesk.Dal.Repositories.Problem.Concrete;
 using DH.Helpdesk.Dal.Repositories.Projects;
 using DH.Helpdesk.Dal.Repositories.Projects.Concrete;
+using DH.Helpdesk.Dal.Repositories.Questionnaire;
+using DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete;
+using DH.Helpdesk.Dal.Repositories.Servers;
+using DH.Helpdesk.Dal.Repositories.Servers.Concrete;
 using DH.Helpdesk.Dal.Repositories.Users;
 using DH.Helpdesk.Dal.Repositories.Users.Concrete;
 using DH.Helpdesk.Dal.Repositories.WorkstationModules;
 using DH.Helpdesk.Dal.Repositories.WorkstationModules.Concrete;
-using DH.Helpdesk.Dal.Repositories.ADFS;
-using DH.Helpdesk.Dal.Repositories.ADFS.Concrete;
-using DH.Helpdesk.Dal.Repositories.Concrete;
-using DH.Helpdesk.Dal.Repositories.Problem.Concrete;
-using DH.Helpdesk.Dal.Repositories.Invoice;
-using DH.Helpdesk.Dal.Repositories.Invoice.Concrete;
-using DH.Helpdesk.Dal.Repositories.Cases;
-using DH.Helpdesk.Dal.Repositories.Cases.Concrete;
-using DH.Helpdesk.Dal.Repositories.BusinessRules;
-using DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete;
-using DH.Helpdesk.Dal.Repositories.Changes;
-using DH.Helpdesk.Dal.Repositories.Changes.Concrete;
-using DH.Helpdesk.Dal.Repositories.Faq;
-using DH.Helpdesk.Dal.Repositories.Faq.Concrete;
-using DH.Helpdesk.Dal.Repositories.Questionnaire;
-using DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete;
-using DH.Helpdesk.Dal.Repositories.MetaData;
-using DH.Helpdesk.Dal.Repositories.MetaData.Concrete;
-using DH.Helpdesk.Dal.Repositories.Condition;
-using DH.Helpdesk.Dal.Repositories.Condition.Concrete;
-using DH.Helpdesk.Dal.Repositories.Inventory;
-using DH.Helpdesk.Dal.Repositories.Inventory.Concrete;
-using DH.Helpdesk.Dal.Repositories.Servers;
-using DH.Helpdesk.Dal.Repositories.Servers.Concrete;
-using DH.Helpdesk.Dal.Repositories.Printers;
-using DH.Helpdesk.Dal.Repositories.Printers.Concrete;
 using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 using UnitOfWork = DH.Helpdesk.Dal.Infrastructure.UnitOfWork;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
+namespace DH.Helpdesk.WebApi.DependencyInjection
 {
     public class RepositoriesModule : Module
     {
@@ -232,6 +232,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
             builder.RegisterType<ChangePriorityRepository>().As<IChangePriorityRepository>();
             builder.RegisterType<ChangeRepository>().As<IChangeRepository>();
             builder.RegisterType<ChangeStatusRepository>().As<IChangeStatusRepository>();
+            builder.RegisterType<TextTypeRepository>().As<ITextTypeRepository>();
         }
     }
 }

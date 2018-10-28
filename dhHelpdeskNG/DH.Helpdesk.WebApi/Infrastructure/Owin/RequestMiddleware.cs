@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.Owin;
+using DH.Helpdesk.WebApi.Infrastructure.Config;
 using Microsoft.Owin;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.Owin
+namespace DH.Helpdesk.WebApi.Infrastructure.Owin
 {
     public class RequestMiddleware : OwinMiddleware
     {

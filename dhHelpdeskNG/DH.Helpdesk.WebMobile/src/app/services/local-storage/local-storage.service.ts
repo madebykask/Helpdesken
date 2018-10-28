@@ -1,4 +1,4 @@
-import { CurrentUser, UserAuthenticationData, UserData, TimeZoneInfo } from '../../models'
+import { CurrentUser, UserAuthenticationData, UserData, TimeZoneInfo, Language } from '../../models'
 import { StorageNameConstants } from '../../helpers/constants'
 import * as moment from 'moment-timezone';
 
@@ -22,6 +22,17 @@ export class LocalStorageService {
         localStorage.removeItem(StorageNameConstants.userDataStorageName);
     }
 
+    getLanguages() : Language[] {        
+        let json = localStorage.getItem(StorageNameConstants.languages);
+        let data= JSON.parse(json);  
+        return data;
+    }
+
+    saveLanguages(languages: Language[]) {        
+        let json = JSON.stringify(languages);
+        localStorage.setItem(StorageNameConstants.languages, json);
+    }
+
     saveTimezoneInfo(data: any) {
         const zone = <moment.MomentZone>data;
         const packed = (<any>moment.tz).pack(zone);
@@ -29,7 +40,7 @@ export class LocalStorageService {
     }
 
     getTimezoneInfo(): string {
-        let data = localStorage.getItem(StorageNameConstants.timezoneName);
+        let data = localStorage.getItem(StorageNameConstants.timezoneName);        
         return data;
     }
 

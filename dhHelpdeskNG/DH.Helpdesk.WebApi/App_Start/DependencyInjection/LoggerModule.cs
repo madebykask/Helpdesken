@@ -1,10 +1,11 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
 using DH.Helpdesk.Common.Logger;
+using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.ClientLogger;
-using DH.Helpdesk.WebApi.Infrastructure.Config.Filters;
+using DH.Helpdesk.WebApi.Infrastructure.Filters;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
+namespace DH.Helpdesk.WebApi.DependencyInjection
 {
     public class LoggerModule : Module
     {
@@ -42,7 +43,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
             builder.RegisterType<ClientLogMessageFormatter>().As<IClientLogMessageFormatter>().SingleInstance();
 
             builder.Register(c =>
-                    new ClientLogger.ClientLogger(
+                    new Infrastructure.ClientLogger.ClientLogger(
                         c.Resolve<IClientLogMessageFormatter>(),
                         c.ResolveKeyed<ILoggerService>(Log4NetLoggerService.LogType.Client)))
                 .As<IClientLogger>()

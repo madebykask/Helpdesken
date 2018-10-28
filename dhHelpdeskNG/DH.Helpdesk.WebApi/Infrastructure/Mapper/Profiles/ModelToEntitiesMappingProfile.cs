@@ -2,7 +2,7 @@
 using DH.Helpdesk.WebApi.Infrastructure.ClientLogger;
 using DH.Helpdesk.WebApi.Models;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.Mapper.Profiles
+namespace DH.Helpdesk.WebApi.Infrastructure.Mapper.Profiles
 {
     public class ModelToEntitiesMappingProfile : Profile
     {

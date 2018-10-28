@@ -4,16 +4,14 @@
                         <div class="mbsc-grid mbsc-grid-sm" >
                                 <div class="mbsc-row" *ngIf="showSearchPanel">
                                         <div class="mbsc-col">
-                                                <mbsc-input type="search" formControlName="freeSearch" icon="fa-search" placeholder="Search" input-style="box"></mbsc-input>
+                                                <mbsc-input type="search" formControlName="freeSearch" icon="fa-search" placeholder="{{'Sök' | translate }}" input-style="box"></mbsc-input>
                                         </div>
                                         <div class="mbsc-col-sm-auto">
-                                                <a [ngClass]="{'inactive':isLoading}" (click)="cancelSearch()">Cancel</a>
+                                                <a [ngClass]="{'inactive':isLoading}" (click)="cancelSearch()" translate>Avbryt</a>
                                         </div>
                                 </div>
                                 <div class="mbsc-row" *ngIf="!showSearchPanel">
-                                        <div class="mbsc-col center bold">
-                                                Case overview
-                                        </div>  
+                                        <div class="mbsc-col center bold" translate>Ärendeöversikt</div> <!-- case overview-->
                                         <div class="mbsc-col-sm-auto">
                                                  <div class="mbsc-ic mbsc-ic-fa-search" (click)="showSearchPanel=true">
                                                  </div>        

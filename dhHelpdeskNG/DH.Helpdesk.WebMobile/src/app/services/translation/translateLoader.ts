@@ -1,30 +1,40 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs'
+import { Observable, throwError } from 'rxjs'
 import { TranslateService as NgxTranslateService, TranslateLoader } from '@ngx-translate/core'
 import { TranslationApiService } from './translationApi.service';
 import { LoggerService } from '../logging';
+import { LocalStorageService } from '../local-storage';
+import { Language } from 'src/app/models';
+import { take, switchMap } from 'rxjs/operators';
 
-export function initTranslation(ngxTranslateService: NgxTranslateService,
+export function initTranslation(
+     ngxTranslateService: NgxTranslateService,
      translationApiService: TranslationApiService,
+     localStorage: LocalStorageService,
      logger: LoggerService) : Function {
-    return () =>       
-        new Observable(observer => {
-/*             var languages = translationApiService.Languages;
-             translationApiService.getLanguages()
-                .subscribe(langs => {
-                    langs.map(lang => {
-                        languages[lang.languageId.toLowerCase()] = lang.name;
-                });
+    return () =>               
+       translationApiService.getLanguages().pipe(
+            take(1),
+            switchMap((langs: Language[]) => {
 
-                //adds languages to the inner collection - we later can use  it to show it on UI: translationService.lang    
-                ngxTranslateService.addLangs(Object.keys(languages).map(s => s.toLowerCase()));  
-
-                ngxTranslateService.use('en'); //todo:replace with constant/config value
-                logger.log(`>> translation has been initialised. Langs: ${JSON.stringify(ngxTranslateService.langs)}` ); */
-                observer.next(null); 
-                observer.complete();
-        //});
-    }).toPromise();
+                //add languages to the inner collection of supported languages to switch into
+                ngxTranslateService.addLangs(langs.map(s => s.languageId.toLowerCase()));  
+        
+                //save existing languages to the storage
+                localStorage.saveLanguages(langs);
+        
+                let languageKey = 'en'; //default language
+                let curUser = localStorage.getCurrentUser();
+                if (curUser && curUser.currentData && langs.length) {
+                    let currentLangId = curUser.currentData.selectedLanguageId;
+                    let lang = langs.filter((l:Language) => l.id === currentLangId);
+                    languageKey = lang.length ? lang[0].languageId : languageKey;
+                }
+            
+                // load translations for language
+                return ngxTranslateService.use(languageKey);        
+            })
+        ).toPromise();    
  }
 
 @Injectable()
@@ -35,7 +45,7 @@ export class CustomTranslateLoader implements TranslateLoader  {
     }
 
     getTranslation(lang: string): Observable<Object>{
-        //console.log('>>Loading translations for: ' + lang);
+        console.log('>>>Loading translations for: ' + lang);
         return this.translationApiService.getTranslations(lang);         
     }
 }

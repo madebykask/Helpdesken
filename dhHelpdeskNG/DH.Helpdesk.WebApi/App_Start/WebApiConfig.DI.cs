@@ -2,10 +2,10 @@
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
+using DH.Helpdesk.WebApi.DependencyInjection;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
-using DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection;
-using DH.Helpdesk.WebApi.Infrastructure.Config.Filters;
+using DH.Helpdesk.WebApi.Infrastructure.Filters;
 
 namespace DH.Helpdesk.WebApi
 {
@@ -32,7 +32,7 @@ namespace DH.Helpdesk.WebApi
             builder.RegisterModule(new LoggerModule());
             builder.RegisterModule(new WorkContextModule());
             builder.RegisterModule(new CommonModule());
-            builder.RegisterModule(new ChangesMobule());
+            builder.RegisterModule(new ChangesModule());
             builder.RegisterModule(new MappersModule());
             builder.RegisterModule(new RepositoriesModule());
             builder.RegisterModule(new ServicesModule());

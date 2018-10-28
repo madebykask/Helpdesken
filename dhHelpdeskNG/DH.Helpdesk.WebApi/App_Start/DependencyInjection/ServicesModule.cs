@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Services.Services.Cases;
@@ -10,7 +9,7 @@ using DH.Helpdesk.Services.Services.EmployeeService;
 using DH.Helpdesk.Services.Services.EmployeeService.Concrete;
 using DH.Helpdesk.Services.Services.Feedback;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
+namespace DH.Helpdesk.WebApi.DependencyInjection
 {
     public sealed class ServicesModule : Module
     {

@@ -17,12 +17,14 @@ namespace DH.Helpdesk.Services.Services.Cache
         private readonly ICaseFieldSettingLanguageRepository _caseFieldSettingLanguageRepository;
         private readonly ITextRepository _textRepository;
         private readonly ITextTranslationRepository _textTranslationRepository;
+        private ITextTypeRepository _textTypeRepository;
 
         #region ctor()
 
         public TranslateCacheService(ICacheService cacheService, ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository,
-            ITextRepository textRepository, ITextTranslationRepository textTranslationRepository)
+            ITextRepository textRepository, ITextTranslationRepository textTranslationRepository, ITextTypeRepository textTypeRepository)
         {
+            _textTypeRepository = textTypeRepository;
             _cacheService = cacheService;
             _caseFieldSettingLanguageRepository = caseFieldSettingLanguageRepository;
             _textRepository = textRepository;
@@ -42,6 +44,12 @@ namespace DH.Helpdesk.Services.Services.Cache
         public IList<Text> GetAllTextTranslations()
         {
             return _cacheService.Get(_textTranslationsKey, GetTranslationTexts, DateTime.UtcNow.AddMinutes(10));
+        }
+
+        public TextType GetTextType(string texttype)
+        {
+            var item = _textTypeRepository.GetTextTypeByName(texttype);
+            return item;
         }
 
         public IList<CustomKeyValue<string, string>> GetTextTranslationsForLanguage(int languageId, int typeId = 0) // TODO: ClearCache
@@ -94,6 +102,7 @@ namespace DH.Helpdesk.Services.Services.Cache
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int customerId);
         IList<CustomKeyValue<string, string>> GetTextTranslationsForLanguage(int languageId, int typeId = 0);
         void ClearCaseTranslations(int customerId);
+        TextType GetTextType(string texttype);
         IList<Text> GetAllTextTranslations();
         string GetTextTranslation(string translate, int languageId, int? textTypeId = null);
         void ClearAllTextTranslations();

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Autofac;
+﻿using Autofac;
 using DH.Helpdesk.BusinessData.Models.Calendar.Output;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
@@ -48,7 +44,7 @@ using DH.Helpdesk.Domain.Projects;
 using DH.Helpdesk.Domain.Users;
 using DH.Helpdesk.WebApi.Infrastructure.Translate;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
+namespace DH.Helpdesk.WebApi.DependencyInjection
 {
     public class MappersModule : Module
     {

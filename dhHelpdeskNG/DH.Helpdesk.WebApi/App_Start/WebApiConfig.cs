@@ -2,7 +2,7 @@
 using System.Web.Http.Filters;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
-using DH.Helpdesk.WebApi.Infrastructure.Config.Filters;
+using DH.Helpdesk.WebApi.Infrastructure.Filters;
 using Newtonsoft.Json;
 
 namespace DH.Helpdesk.WebApi

@@ -6,6 +6,7 @@ import { take, takeUntil, filter, map } from 'rxjs/operators';
 import { UserSettingsService } from 'src/app/services/user';
 import { OptionItem } from 'src/app/models';
 import { LanguagesService } from 'src/app/services/language/languages.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-footer',
@@ -21,11 +22,17 @@ export class FooterComponent implements OnInit, OnDestroy {
     showOnTap: false,
     display: 'bottom',
     data: [],
+    buttons: [
+      'set',
+      { 
+          text: this.getCancelText(),
+          handler: 'cancel',          
+      }
+    ],
     onSet: (event, inst) => {
       const item = (<OptionItem[]>inst.settings.data).find(item => item.text == event.valueText);
       this.setLanguage(item ? +item.value : null);
     }
-
   }
 
   bottomMenuSettings: MbscNavOptions = {
@@ -34,12 +41,21 @@ export class FooterComponent implements OnInit, OnDestroy {
     moreText: null,
     moreIcon: 'fa-ellipsis-h',
     menuIcon: null,
-    menuText: null
+    menuText: null,    
   }
 
   languageId: number;
   isLoadingLanguage: boolean = true;
-  constructor(private _router: Router, private _userSettingsService : UserSettingsService, private _languagesService: LanguagesService) { }
+  
+  constructor(private _router: Router, 
+              private _userSettingsService : UserSettingsService, 
+              private _languagesService: LanguagesService, 
+              private ngxTranslateService: TranslateService) {     
+  }
+
+  getCancelText() : string{    
+    return this.ngxTranslateService.instant("Avbryt");
+  }
 
   ngOnInit() {
     let until$ = new Subject();
@@ -79,7 +95,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   goTo(url: string = null) {
-    if(url == null) return;
+    if (url == null) return;
     this._router.navigate([url]);
   }
 

@@ -67,7 +67,7 @@ import { ErrorComponent } from './shared/components/error/error.component';
       {
         provide: APP_INITIALIZER,
         useFactory: initTranslation,
-        deps: [NgxTranslateService, TranslationApiService, LoggerService],
+        deps: [NgxTranslateService, TranslationApiService, LocalStorageService, LoggerService],
         multi: true
       },
     LocalStorageService

@@ -154,7 +154,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         TextType GetTextTypeById(int id);
         string GetTextTypeName(int id);
-        
+        TextType GetTextTypeByName(string name);
     }
 
     public class TextTypeRepository : RepositoryBase<TextType>, ITextTypeRepository
@@ -173,9 +173,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public string GetTextTypeName(int id)
         {
-
             return this.DataContext.TextTypes.Where(x => x.Id == id).Select(tt => tt.Name).SingleOrDefault();
+        }
 
+        public TextType GetTextTypeByName(string name)
+        {
+            return Table.Where(x => x.Name.ToLower() == name.ToLower()).FirstOrDefault();
         }
     }
 

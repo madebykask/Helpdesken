@@ -1,6 +1,6 @@
 using System;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.Filters
+namespace DH.Helpdesk.WebApi.Infrastructure.Filters
 {
     /// <summary>
     /// Attribute is processed by UserCasePermissionsFilter authorization filter

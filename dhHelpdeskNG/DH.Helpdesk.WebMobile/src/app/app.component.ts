@@ -41,6 +41,7 @@ export class AppComponent implements OnInit {
       this._logger.log('>>>>>>>>>>>>>>>>Logout: version changed');
       this._router.navigate(['/login']);
     }
+    
     this._userSettingsService.tryApplyDateTimeSettings();
   }
 }

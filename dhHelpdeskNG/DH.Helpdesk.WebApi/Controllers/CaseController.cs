@@ -18,8 +18,8 @@ using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.ActionResults;
-using DH.Helpdesk.WebApi.Infrastructure.Config.Authentication;
-using DH.Helpdesk.WebApi.Infrastructure.Config.Filters;
+using DH.Helpdesk.WebApi.Infrastructure.Authentication;
+using DH.Helpdesk.WebApi.Infrastructure.Filters;
 using DH.Helpdesk.WebApi.Infrastructure.Translate;
 using DateTime = System.DateTime;
 

@@ -4,5 +4,6 @@
 
 export const StorageNameConstants = {
     userDataStorageName: 'userData',
-    timezoneName: 'timezoneinfo'
+    timezoneName: 'timezoneinfo',
+    languages: 'languages'
 }

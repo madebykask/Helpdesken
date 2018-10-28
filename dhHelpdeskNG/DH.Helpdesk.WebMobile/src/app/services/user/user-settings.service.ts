@@ -1,9 +1,10 @@
 import { Injectable, ModuleWithComponentFactories } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, finalize} from 'rxjs/operators';
-import { UserData } from '../../models'
+import { UserData, Language } from '../../models'
 import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
+import { TranslateService as NgxTranslateService, TranslateLoader } from '@ngx-translate/core'
 import * as moment from 'moment-timezone';
 import { LoggerService } from '../logging';
 
@@ -11,7 +12,10 @@ import { LoggerService } from '../logging';
 export class UserSettingsService extends HttpApiServiceBase {
     isLoadingUserSettings = false; 
     
-    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService,
+    protected constructor(
+        protected http: HttpClient, 
+        protected localStorageService: LocalStorageService,
+        private ngxTranslationService: NgxTranslateService,
         private _logger: LoggerService) {
         super(http, localStorageService);
     }
@@ -66,6 +70,18 @@ export class UserSettingsService extends HttpApiServiceBase {
     getUserTimezone(): string {
         const user = this.getUserData();
         return user != null ? user.userTimeZone : null;
+    }
+
+    tryLoadTranslations() {
+        const currentLangId = this.getCurrentLanguage();
+        const languages = this.localStorageService.getLanguages();
+        const lang = languages.filter((l:Language) => l.id === currentLangId);
+
+        let languageKey  = lang.length ? lang[0].languageId : 'en';
+
+        //change translations        
+        console.log('>>> Settings translation language to: ' + languageKey);
+        this.ngxTranslationService.use(languageKey);         
     }
 
     tryApplyDateTimeSettings(): boolean {

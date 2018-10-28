@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using DH.Helpdesk.Common;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Infrastructure.Concrete;
 using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email;
@@ -17,8 +16,9 @@ using DH.Helpdesk.Services.Infrastructure.Email.Concrete;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.WebApi.Infrastructure.Cache;
+using DH.Helpdesk.WebApi.Infrastructure.Config;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
+namespace DH.Helpdesk.WebApi.DependencyInjection
 {
     /// <summary>
     /// The common module.

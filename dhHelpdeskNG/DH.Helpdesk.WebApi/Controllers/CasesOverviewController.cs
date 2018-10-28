@@ -22,7 +22,7 @@ using DH.Helpdesk.Web.Common.Models.CaseSearch;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Models.CasesOverview;
-using DH.Helpdesk.WebApi.Infrastructure.Config.Authentication;
+using DH.Helpdesk.WebApi.Infrastructure.Authentication;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {

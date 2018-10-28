@@ -9,7 +9,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using Autofac.Integration.WebApi;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.Filters
+namespace DH.Helpdesk.WebApi.Infrastructure.Filters
 {
 
     public abstract class AuthorizationFilterBase : IAutofacAuthorizationFilter

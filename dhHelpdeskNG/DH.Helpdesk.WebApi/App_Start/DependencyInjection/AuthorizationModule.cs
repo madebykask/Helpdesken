@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Autofac;
-using DH.Helpdesk.WebApi.Infrastructure.Config.Authentication;
-using Microsoft.Owin.Security.OAuth;
+﻿using Autofac;
+using DH.Helpdesk.WebApi.Infrastructure.Authentication;
+using DH.Helpdesk.WebApi.Infrastructure.Config;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
+namespace DH.Helpdesk.WebApi.DependencyInjection
 {
     public class AuthorizationModule : Module
     {

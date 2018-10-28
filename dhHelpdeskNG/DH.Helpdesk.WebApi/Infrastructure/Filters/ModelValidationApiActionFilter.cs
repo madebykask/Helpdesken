@@ -4,7 +4,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using DH.Helpdesk.WebApi.Infrastructure.Extensions;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.Filters
+namespace DH.Helpdesk.WebApi.Infrastructure.Filters
 {
     /// <summary>
     /// Filter checks if model is valid.

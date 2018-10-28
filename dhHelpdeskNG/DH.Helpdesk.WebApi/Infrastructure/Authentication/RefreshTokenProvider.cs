@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
-using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Infrastructure;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.Authentication
+namespace DH.Helpdesk.WebApi.Infrastructure.Authentication
 {
     public class RefreshTokenProvider : AuthenticationTokenProvider
     {

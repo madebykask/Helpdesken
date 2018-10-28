@@ -7,7 +7,7 @@ using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Services.Services;
 using Microsoft.AspNet.Identity;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.Filters
+namespace DH.Helpdesk.WebApi.Infrastructure.Filters
 {
     public class UserCasePermissionsFilter: AuthorizationFilterBase, IAutofacAuthorizationFilter
     {

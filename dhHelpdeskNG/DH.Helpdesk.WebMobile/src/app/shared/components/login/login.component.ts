@@ -1,12 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first, switchMap, takeUntil } from 'rxjs/operators';
+import { first, switchMap, takeUntil, finalize } from 'rxjs/operators';
 
 import { AuthenticationService } from '../../../services/authentication';
 import { UserSettingsService } from '../../../services/user'
 import { throwError, Subject } from 'rxjs';
 import { ErrorHandlingService } from '../../../services/errorhandling/error-handling.service';
+
+import {mobiscroll, MbscNote } from '@mobiscroll/angular'
 
 @Component({
     templateUrl: 'login.component.html',
@@ -27,6 +29,11 @@ export class LoginComponent implements OnInit, OnDestroy {
             required: 'Password required'
         }
     }
+
+    @ViewChild("logineError")
+    loginError : MbscNote;
+
+    showLoginError = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -70,13 +77,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     onSubmit() {
+        
         this.submitted = true;
 
         // stop here if form is invalid
         if (this.loginForm.invalid) {
             return;
         }
-
+        
+        this.showLoginError = false;
         this.isLoading = true;
         this.authenticationService.login(this.f.username.value, this.f.password.value)
             .pipe(
@@ -85,15 +94,21 @@ export class LoginComponent implements OnInit, OnDestroy {
                         if(!isSuccess) throwError('Something wrong.');
                         return this.userSettingsService.loadUserSettings();
                 }),
+                finalize(() => this.isLoading = false),
                 takeUntil(this._destroy$)
             )
             .subscribe(userData => {
                     this.userSettingsService.tryApplyDateTimeSettings();
+                    this.userSettingsService.tryLoadTranslations();
                     this.router.navigateByUrl(this.returnUrl);                                                    
                 },
-                error => {
-                    this.isLoading = false;
-                    this.errorHandlingService.handleError(error);
+                error => {                    
+                    if (error.status && error.status === 400)
+                    {   
+                        this.showLoginError = true;
+                    } else {
+                        this.errorHandlingService.handleError(error);
+                    }
             });
     }    
 }

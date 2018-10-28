@@ -5,6 +5,7 @@ using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.Common.Extensions;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
+using DH.Helpdesk.WebApi.Infrastructure.Filters;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -40,8 +41,9 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        [Route("{lang}")]
-        public IHttpActionResult Get(string lang) //TODO async
+        [NoCamelCasingFilter]
+        [Route("{texttype}/{lang}")] //ex: api/translation/mobile/en
+        public IHttpActionResult Get(string texttype, string lang) //TODO async
         {
             if (string.IsNullOrEmpty(lang))
                 return BadRequest("Language parameter is missing");
@@ -50,7 +52,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (language == null)
                 return NotFound();
 
-            var translations = _translationService.GetTextTranslationsForLanguage(language.Id);
+            //todo: review texttype resolving
+            var textTypeEntity = _translationService.GetTextType(texttype);
+            var textTypeId = textTypeEntity?.Id ?? 0;
+
+            var translations = _translationService.GetTextTranslationsForLanguage(language.Id, textTypeId);
             var res = translations.Distinct(new LambdaEqualityComparer<CustomKeyValue<string, string>>(x => x.Key))
                                   .ToDictionary(x => x.Key, y => !string.IsNullOrEmpty(y.Value) ? y.Value : y.Key);
 

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
-using DH.Helpdesk.WebApi.Infrastructure.Config.Authentication;
 using Microsoft.AspNet.Identity;
 
 namespace DH.Helpdesk.WebApi.Infrastructure

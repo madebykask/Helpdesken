@@ -3,9 +3,10 @@
 using Autofac;
 using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.WebApi.Infrastructure.Contexts;
+
 //    using DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
+namespace DH.Helpdesk.WebApi.DependencyInjection
 {
 
 

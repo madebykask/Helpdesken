@@ -1,38 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Autofac;
-using DH.Helpdesk.BusinessData.Models.Changes;
+﻿using Autofac;
 using DH.Helpdesk.BusinessData.Models.Changes.Input.NewChange;
-using DH.Helpdesk.BusinessData.Models.Changes.Input.UpdatedChange;
-using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
 using DH.Helpdesk.BusinessData.Models.Changes.Output.ChangeDetailedOverview;
-using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeEdit;
-using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeOverview;
-using DH.Helpdesk.BusinessData.Models.Changes.Output.Settings.ChangeProcessing;
-using DH.Helpdesk.BusinessData.Models.Changes.Settings.SettingsEdit;
-using DH.Helpdesk.Common.Collections;
-using DH.Helpdesk.Dal.MapperData.Changes;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.Mappers.Changes.BusinessModelToEntity;
 using DH.Helpdesk.Dal.Mappers.Changes.EntityToBusinessModel;
 using DH.Helpdesk.Domain.Changes;
-using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors;
-using DH.Helpdesk.Services.BusinessLogic.BusinessModelAuditors.Changes;
-using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
-using DH.Helpdesk.Services.BusinessLogic.BusinessModelMappers;
-using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Changes;
-using DH.Helpdesk.Services.BusinessLogic.BusinessModelRestorers.Changes.Concrete;
-using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Changes;
-using DH.Helpdesk.Services.BusinessLogic.BusinessModelValidators.Changes.Concrete;
-using DH.Helpdesk.Services.BusinessLogic.Changes;
-using DH.Helpdesk.Services.BusinessLogic.Changes.Concrete;
-using DH.Helpdesk.Services.Requests.Changes;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
+namespace DH.Helpdesk.WebApi.DependencyInjection
 {
-    public class ChangesMobule : Module
+    public class ChangesModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

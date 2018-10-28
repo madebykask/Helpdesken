@@ -1,7 +1,7 @@
 ﻿using Autofac;
-using DH.Helpdesk.WebApi.Infrastructure.Config.Mapper;
+using DH.Helpdesk.WebApi.Infrastructure.Mapper;
 
-namespace DH.Helpdesk.WebApi.Infrastructure.Config.DependencyInjection
+namespace DH.Helpdesk.WebApi.DependencyInjection
 {
     public class MapperModule : Module
     {
