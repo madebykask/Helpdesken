@@ -290,6 +290,10 @@ function IsWillBeOverwritten(fieldId, val) {
             return IsWillBeOverwrittenByValue('#case__SolutionRate', '#case__SolutionRate', val);
             break;
 
+        case 'Verified':
+            return IsWillBeOverwrittenByValue('#case__Verified', '#case__Verified', val);
+            break;
+
     }
     return false;
 }
@@ -761,6 +765,12 @@ var ApplyTemplate = function (data, doOverwrite) {
         SetValueIfElVisible(el, val, cfg);
     }
 
+    if (!isNullOrEmpty(data.Verified)) {
+        val = data.Verified || '';
+        el = $("#case__Verified");
+        SetCheckboxValueIfElVisible(el, val);
+    }
+
     //reset case template values after loading template data. Added 3sec delay in case some UI events are not complete...
     setTimeout(function() {
             $("#CaseTemplate_Performer_Id").val("");
@@ -1015,6 +1025,10 @@ function IsValueApplicableFor(templateFieldId, val) {
         case 'SolutionRate':
             return $("#case__SolutionRate").is(':visible');
             break;
+
+        case 'Verified':
+            return $("#case__Verified").is(':visible');
+            break;
     }
     return false;
 }
@@ -1090,6 +1104,7 @@ function GetTemplateData(id) {
                     window.ApplyTemplate(caseTemplate);
                 }
             }
+ 
             return caseTemplate;
         }
     );

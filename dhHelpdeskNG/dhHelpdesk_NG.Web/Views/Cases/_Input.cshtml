@@ -2028,11 +2028,11 @@
                                             <td>
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Verified, CaseSolutionFields.Verified))
                                                 {
-                                                    <input type="checkbox" name="case_.Verified" @(Model.case_.Verified == 1 ? "checked=checked" : "") value="1" />
+                                                    <input type="checkbox" id="case__Verified" name="case_.Verified" @(Model.case_.Verified == 1 ? "checked=checked" : "") value="0" />
                                                 }
                                                 else
                                                 {
-                                                    <input type="checkbox" name="case_.Verified" @(Model.case_.Verified == 1 ? "checked=checked" : "") value="1" disabled="disabled" />
+                                                    <input type="checkbox" id="case__Verified" name="case_.Verified" @(Model.case_.Verified == 1 ? "checked=checked" : "") value="0" disabled="disabled" />
                                                 }
                                                 <input type="hidden" name="case_.Verified" value="0" />
                                             </td>
