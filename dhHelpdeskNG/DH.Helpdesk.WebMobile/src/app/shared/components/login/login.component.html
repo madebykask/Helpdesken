@@ -8,12 +8,12 @@
                  icon-align="right" [error]="f.password.touched && f.password.dirty && f.password.invalid" [errorMessage]="getError('password')"
                     input-style="outline" class="margin">Password</mbsc-input>
             <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+            <mbsc-note color="danger" *ngIf="showLoginError" #loginError>User or Password is incorrect.</mbsc-note>
         </div>
         <div class="mbsc-form-group-inset mbsc-padding md-load-btn">
             <mbsc-button flat type="submit" [disabled]="loginForm.invalid" [hidden]="isLoading" class="float-right">Login</mbsc-button>
             <mbsc-button flat icon="loop2" [hidden]="!isLoading" class="float-right"></mbsc-button> 
         </div>
-    </form>    
-    <mbsc-note color="danger" *ngIf="showLoginError" #loginError>User or Password is incorrect.</mbsc-note>
+    </form>        
 </mbsc-form>
 

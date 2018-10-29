@@ -33,7 +33,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.ActionResults
             ms.Position = 0;
             httpResponseMessage.Content = new StreamContent(ms);
             
-            var contentDisposition = string.Concat("attachment; filename=", _fileName);
+            var contentDisposition = $"attachment; filename=\"{_fileName}\"";
             httpResponseMessage.Content.Headers.ContentDisposition = ContentDispositionHeaderValue.Parse(contentDisposition);
             httpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(_contentType);
 

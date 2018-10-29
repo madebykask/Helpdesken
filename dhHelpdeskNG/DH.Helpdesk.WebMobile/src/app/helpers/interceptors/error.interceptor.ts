@@ -51,8 +51,8 @@ export class ErrorInterceptor implements HttpInterceptor {
                         .pipe( 
                             filter(result => result !== null),
                             take(1),
-                            switchMap(() => { return next.handle(this.authenticationService.setAuthHeader(request)) })
-                        )
+                            switchMap(() => next.handle(this.authenticationService.setAuthHeader(request)) )
+                        );
                         //.subscribe(()=> { return next.handle(this.authenticationService.setAuthHeader(request)) });
                 } else {
                     this.refreshTokenInProgress = true;
@@ -62,21 +62,20 @@ export class ErrorInterceptor implements HttpInterceptor {
 
                     // Call authenticationService.refreshToken(this is an Observable that will be returned)
                     return this.authenticationService.refreshToken().pipe(
-                            switchMap((r: boolean) => {
-                                //When the call to refreshToken completes we reset the refreshTokenInProgress to false
-                                // for the next time the token needs to be refreshed
-                                this.refreshTokenInProgress = false;
-                                this.refreshTokenSubject.next(true);
+                        switchMap((r: boolean) => {
+                            //When the call to refreshToken completes we reset the refreshTokenInProgress to false
+                            // for the next time the token needs to be refreshed
+                            this.refreshTokenInProgress = false;
+                            this.refreshTokenSubject.next(true);
 
-                                return next.handle(this.authenticationService.setAuthHeader(request));
-                            }),
-                            catchError((err: any) =>  {
-                                this.refreshTokenInProgress = false;
+                            return next.handle(this.authenticationService.setAuthHeader(request));
+                        }),
+                        catchError((err: any) =>  {
+                            this.refreshTokenInProgress = false;
 
-                                this.authenticationService.logout();
-                                return throwError(errorMsg);
-                            }
-                        ) //finalize(() => this.stopLoading())
+                            this.authenticationService.logout();
+                            return throwError(errorMsg);
+                        }) //finalize(() => this.stopLoading())
                     );
                 }
             }

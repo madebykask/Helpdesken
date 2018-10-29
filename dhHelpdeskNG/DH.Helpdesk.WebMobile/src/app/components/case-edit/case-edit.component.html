@@ -3,9 +3,9 @@
 </mbsc-form>
 <mbsc-form *ngIf="isLoaded"> 
     <mbsc-tab-nav [options]="tabsMenuSettings" class="case-header">
-            <mbsc-nav-item (click)="goTo('/casesoverview')">Cancel</mbsc-nav-item>
-            <mbsc-nav-item [selected]="true"><div class="ellipsis">{{ getCaseTitle() || 'Case' }}</div></mbsc-nav-item>
-            <mbsc-nav-item (click)="saveCase()" [disabled]="true">Done</mbsc-nav-item>
+            <mbsc-nav-item (click)="goTo('/casesoverview')" translate>Avbryt</mbsc-nav-item>
+            <mbsc-nav-item [selected]="true"><div class="ellipsis">{{ getCaseTitle() }}</div></mbsc-nav-item>
+            <mbsc-nav-item (click)="saveCase()" [disabled]="true" translate>Klar</mbsc-nav-item>
     </mbsc-tab-nav>
     <div class="md-paging">
         <mbsc-scrollview>

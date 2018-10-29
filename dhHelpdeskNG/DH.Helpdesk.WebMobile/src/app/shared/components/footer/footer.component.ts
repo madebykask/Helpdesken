@@ -2,11 +2,12 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, interval } from 'rxjs';
 import { MbscSelect, MbscSelectOptions, MbscNavOptions } from '@mobiscroll/angular';
-import { take, takeUntil, filter, map } from 'rxjs/operators';
+import { take, takeUntil, filter, map, finalize } from 'rxjs/operators';
 import { UserSettingsService } from 'src/app/services/user';
 import { OptionItem } from 'src/app/models';
 import { LanguagesService } from 'src/app/services/language/languages.service';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthenticationService } from 'src/app/services/authentication';
 
 @Component({
   selector: 'app-footer',
@@ -15,24 +16,16 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class FooterComponent implements OnInit, OnDestroy {
   private _destroy$ = new Subject();
-  @ViewChild('languages') languagesCtrl: MbscSelect;
-
+  
+  @ViewChild('languages') 
+  languagesCtrl: MbscSelect;
+  
   languagesSettings: MbscSelectOptions = {
     cssClass: 'languages-list',
     showOnTap: false,
     display: 'bottom',
     data: [],
-    buttons: [
-      'set',
-      { 
-          text: this.getCancelText(),
-          handler: 'cancel',          
-      }
-    ],
-    onSet: (event, inst) => {
-      const item = (<OptionItem[]>inst.settings.data).find(item => item.text == event.valueText);
-      this.setLanguage(item ? +item.value : null);
-    }
+    onSet: (event, inst) => this.onLanguageChange(event, inst)
   }
 
   bottomMenuSettings: MbscNavOptions = {
@@ -44,35 +37,38 @@ export class FooterComponent implements OnInit, OnDestroy {
     menuText: null,    
   }
 
-  languageId: number;
+  languageId: number = 0;
   isLoadingLanguage: boolean = true;
   
   constructor(private _router: Router, 
               private _userSettingsService : UserSettingsService, 
+              private _authenticationService: AuthenticationService,
               private _languagesService: LanguagesService, 
-              private ngxTranslateService: TranslateService) {     
-  }
-
-  getCancelText() : string{    
-    return this.ngxTranslateService.instant("Avbryt");
+              private _ngxTranslateService: TranslateService) {           
   }
 
   ngOnInit() {
-    let until$ = new Subject();
-    let timer = interval(500);
-    timer.pipe( //TODO: this is hack to wait untill usersettings are loaded. otherwise cid ang langid is undefined. Refactor
-      filter(() => this._userSettingsService.isLoadingUserSettings == false),
-      map(() => {
-          this.languageId = this._userSettingsService.getCurrentLanguage();
-          this.getLanguages();        
-          until$.next();
-      }),
-      takeUntil(until$)
-    ).subscribe();
+
+      this.applyTranslations();
+      this.loadLanguages();
+      
+      //subsribe on changes
+      this._userSettingsService.userSettingsLoaded$.pipe(        
+        takeUntil(this._destroy$)
+      ).subscribe(_ => {
+        this.loadLanguages();
+      });
   }
 
   ngOnDestroy(): void {
     this._destroy$.next();
+  }
+
+  private onLanguageChange(event, inst) {
+    const item = (<OptionItem[]>inst.settings.data).find(item => item.text == event.valueText);
+    let selectedLanguage = item.value;
+    //console.log('>>> change language to: ' + selectedLanguage);
+    this.setLanguage(item ? +item.value : null);
   }
 
   openLanguages() {
@@ -81,17 +77,34 @@ export class FooterComponent implements OnInit, OnDestroy {
     }
   }
 
-  getLanguages() {
+  private loadLanguages() {
+    this.languageId = this._userSettingsService.getCurrentLanguage() || 0;
+    if (this.languageId === 0)
+       return;
+
+    console.log('>>> footer: loading languages')
     this.isLoadingLanguage = true;
     this._languagesService.getLanguages()
       .pipe(
         take(1),
-        takeUntil(this._destroy$)
+        finalize(() => this.isLoadingLanguage = false)        
       )
       .subscribe((data) => {
-        this.languagesCtrl.instance.refresh(data); 
-        this.isLoadingLanguage = false;
-      })
+          console.log('>>> footer: languages loaded')
+          this.applyTranslations();
+          this.languagesCtrl.instance.refresh(data);
+
+      });
+  }
+  
+  private applyTranslations() {    
+      this.languagesCtrl.setText = this._ngxTranslateService.instant("Välj");
+      this.languagesCtrl.cancelText  = this._ngxTranslateService.instant("Avbryt");    
+  }
+
+  logout() {    
+    this._authenticationService.logout();
+    this.goTo('/login');
   }
 
   goTo(url: string = null) {
@@ -99,11 +112,13 @@ export class FooterComponent implements OnInit, OnDestroy {
     this._router.navigate([url]);
   }
 
-  private setLanguage(languageId: number) {
-    if (languageId == null) return;
+  setLanguage(languageId: number) {
+    if (languageId) {
+      this._userSettingsService.setCurrentLanguage(languageId);
 
-    this._userSettingsService.setCurrentLanguage(languageId);
-    window.location.reload(true);    
+      // reload will reopen the app
+      window.location.reload(true);    
+    }
   }
 }
 

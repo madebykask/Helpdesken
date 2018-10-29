@@ -14,11 +14,12 @@ import '../../node_modules/moment-timezone/moment-timezone-utils';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  pageSettings = {
-  };
+  pageSettings = {};
+
   bottomMenuSettings = {
     type: 'bottom',
   };
+  
   version = config.version;
   isFooterVisible = true;
 
@@ -35,13 +36,13 @@ export class AppComponent implements OnInit {
         this.isFooterVisible = !/\/error/ig.test(e.url)
       }
     });
-    const isAuthenticated = this._authenticationService.isAuthenticated();
+
     const version = this._authenticationService.getVersion();
+    const isAuthenticated = this._authenticationService.isAuthenticated();    
+    
     if (isAuthenticated && config.version !== version) {
       this._logger.log('>>>>>>>>>>>>>>>>Logout: version changed');
       this._router.navigate(['/login']);
     }
-    
-    this._userSettingsService.tryApplyDateTimeSettings();
   }
 }

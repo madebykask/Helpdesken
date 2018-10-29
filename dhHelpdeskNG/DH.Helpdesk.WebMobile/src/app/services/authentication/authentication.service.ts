@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpRequest } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, take } from 'rxjs/operators';
 import { config } from '@env/environment';
 import { CurrentUser, UserAuthenticationData } from '../../models'
 import { LocalStorageService } from '../../services/local-storage'
@@ -17,24 +17,25 @@ export class AuthenticationService extends HttpApiServiceBase {
     authenticationChanged$ = this.authenticationChangedSubj.asObservable();
 
     constructor(protected http: HttpClient, protected localStorageService: LocalStorageService, private _logger: LoggerService) {
-        super(http, localStorageService)
+        super(http, localStorageService)        
      }    
 
     login(username: string, password: string) {
         let clientId = config.clientId;
         return this.postJson<any>(this.buildResourseUrl('/api/account/login', undefined, false), { username, password, clientId })
-            .pipe(map(data => {
+            .pipe(
+                take(1),
+                map(data => {
                 let isSuccess = false;                
                 // login successful if there's a token in the response
                 if (data && data.access_token) {
-                    let user = new CurrentUser();
-                    UserAuthenticationData.setData(user.authData, data);
-                    user.authData.recievedAt = new Date();
+                    let user = CurrentUser.createAuthenticated(data);                    
                     user.version = config.version;
+
                     // store user details and token in local storage to keep user logged in between page refreshes
                     this.localStorageService.setCurrentUser(user);    
                     isSuccess = true;                                   
-                }
+                } 
 
                 this.raiseAuthenticationChanged();
                 return isSuccess;
@@ -42,16 +43,15 @@ export class AuthenticationService extends HttpApiServiceBase {
     }
 
     isAuthenticated() : Boolean {
-     if (this.isTokenExpired())   
-        return false;
+     if (this.isTokenExpired()) return false;
     
         let token = this.getAccessToken();
-        return token !== null && token.length > 0;
+        return token && token.length > 0;
     }
 
     refreshToken() {
         var user = this.getUser();
-        if(user.authData.refresh_token) {
+        if (user.authData && user.authData.refresh_token) {
             var refreshToken = user.authData.refresh_token;
             let clientId = config.clientId;
             return this.postJson<any>(this.buildResourseUrl('/api/account/refresh', undefined, false), { refreshToken, clientId })
@@ -80,7 +80,7 @@ export class AuthenticationService extends HttpApiServiceBase {
 
     getAccessToken(): string {
         var user = this.getUser();
-        return user ? user.authData.access_token : null;
+        return user && user.authData && user.authData.access_token ? user.authData.access_token : null;
     }
 
     setAuthHeader(request: HttpRequest<any>): HttpRequest<any> {
@@ -104,10 +104,10 @@ export class AuthenticationService extends HttpApiServiceBase {
     isTokenExpired(): boolean {
         let user = this.getUser();
         
-        if (user == null)
-            return true;
+        if (user == null || user.authData == null)
+            return true;            
             
-        if(!user.authData.recievedAt || !user.authData.expires_in) 
+        if (!user.authData.recievedAt || !user.authData.expires_in) 
             return true;//TODO: throw error
 
         let expiresAt = user.authData.recievedAt.getTime() + user.authData.expires_in * 1000;

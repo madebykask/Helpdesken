@@ -1,14 +1,12 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first, switchMap, takeUntil, finalize } from 'rxjs/operators';
+import { switchMap, finalize, take } from 'rxjs/operators';
 
 import { AuthenticationService } from '../../../services/authentication';
 import { UserSettingsService } from '../../../services/user'
 import { throwError, Subject } from 'rxjs';
 import { ErrorHandlingService } from '../../../services/errorhandling/error-handling.service';
-
-import {mobiscroll, MbscNote } from '@mobiscroll/angular'
 
 @Component({
     templateUrl: 'login.component.html',
@@ -28,10 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         password: {
             required: 'Password required'
         }
-    }
-
-    @ViewChild("logineError")
-    loginError : MbscNote;
+    };   
 
     showLoginError = false;
 
@@ -87,28 +82,29 @@ export class LoginComponent implements OnInit, OnDestroy {
         
         this.showLoginError = false;
         this.isLoading = true;
+
         this.authenticationService.login(this.f.username.value, this.f.password.value)
             .pipe(
-                first(),
+                take(1),
                 switchMap(isSuccess => {
-                        if(!isSuccess) throwError('Something wrong.');
-                        return this.userSettingsService.loadUserSettings();
+                    if (!isSuccess) throwError('Something wrong.');
+                    return this.userSettingsService.loadUserSettings();
                 }),
-                finalize(() => this.isLoading = false),
-                takeUntil(this._destroy$)
-            )
-            .subscribe(userData => {
-                    this.userSettingsService.tryApplyDateTimeSettings();
-                    this.userSettingsService.tryLoadTranslations();
+                finalize(() => this.isLoading = false) 
+            ).subscribe(
+                userData => {
+                    //console.log('>>> login: user setttings have been loaded! Lang: ' + userData.selectedLanguageId);
+                    this.showLoginError = false;
+                    
+                    this.userSettingsService.applyUserSettings();
                     this.router.navigateByUrl(this.returnUrl);                                                    
                 },
                 error => {                    
-                    if (error.status && error.status === 400)
-                    {   
+                    if (error.status && error.status === 400) {                           
                         this.showLoginError = true;
                     } else {
                         this.errorHandlingService.handleError(error);
                     }
-            });
+                });
     }    
 }

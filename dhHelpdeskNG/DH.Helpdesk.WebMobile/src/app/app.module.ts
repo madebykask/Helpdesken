@@ -27,6 +27,8 @@ import { CaseFilesControlComponent } from './components/case-edit/controls/case-
 import { GlobalErrorHandler } from './helpers/errors/global-error-handler';
 import { AlertComponent } from './shared/components/alert/alert.component';
 import { ErrorComponent } from './shared/components/error/error.component';
+import { UserSettingsService, initUserData } from './services/user';
+import { AuthenticationService } from './services/authentication';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -63,13 +65,19 @@ import { ErrorComponent } from './shared/components/error/error.component';
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     // { provide: LOCALE_ID, useValue: "sv-SE" },
     // { provide: LOCALE_ID, deps: [SettingsService], useFactory: (settingsService) => settingsService.getLanguage()},
-    TranslationApiService,
-      {
-        provide: APP_INITIALIZER,
-        useFactory: initTranslation,
-        deps: [NgxTranslateService, TranslationApiService, LocalStorageService, LoggerService],
-        multi: true
-      },
+    TranslationApiService,      
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initUserData,
+      deps: [UserSettingsService, AuthenticationService, LoggerService],
+      multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initTranslation,
+      deps: [NgxTranslateService, TranslationApiService, LocalStorageService, LoggerService],
+      multi: true
+    },
     LocalStorageService
   ]
 })

@@ -1,17 +1,23 @@
 import { Injectable, ModuleWithComponentFactories } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, finalize} from 'rxjs/operators';
+import { map, finalize, take} from 'rxjs/operators';
 import { UserData, Language } from '../../models'
 import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
 import { TranslateService as NgxTranslateService, TranslateLoader } from '@ngx-translate/core'
-import * as moment from 'moment-timezone';
 import { LoggerService } from '../logging';
+import * as moment from 'moment-timezone';
+import { Subject } from 'rxjs/Subject';
+
+
 
 @Injectable({ providedIn: 'root' })
 export class UserSettingsService extends HttpApiServiceBase {
     isLoadingUserSettings = false; 
     
+    private userSettingsLoadedSubject = new Subject();
+    userSettingsLoaded$ = this.userSettingsLoadedSubject.asObservable();
+
     protected constructor(
         protected http: HttpClient, 
         protected localStorageService: LocalStorageService,
@@ -24,8 +30,9 @@ export class UserSettingsService extends HttpApiServiceBase {
         this.isLoadingUserSettings = true;
         return this.getJson(this.buildResourseUrl('/api/currentuser/settings', undefined, false))//TODO: error handling
             .pipe(
+                take(1),
                 map((data: any) => {
-                    if(data) {
+                    if (data) {
                         let user = this.localStorageService.getCurrentUser();
                         if (data.customerId) {
                             user.currentData.selectedCustomerId = data.customerId;
@@ -40,9 +47,16 @@ export class UserSettingsService extends HttpApiServiceBase {
                             this.localStorageService.saveTimezoneInfo(data.timeZoneMoment);
                         }
                         // Other settings
+                        //console.log('>>> user data loaded sucessfully');
                         this.localStorageService.setCurrentUser(user);
+                        
+                        //raise load event
+                        this.userSettingsLoadedSubject.next();
 
                         return user.currentData;
+                    }
+                    else {
+                        return null;
                     }
                 }),
                 finalize(() => this.isLoadingUserSettings = false )
@@ -51,9 +65,7 @@ export class UserSettingsService extends HttpApiServiceBase {
 
     getUserData(): UserData {
         const user = this.localStorageService.getCurrentUser();
-        if (!user) { return null };
-
-        return user.currentData;
+        return user && user.currentData ? user.currentData : null;
     }
 
     getCurrentLanguage(): number {
@@ -72,7 +84,12 @@ export class UserSettingsService extends HttpApiServiceBase {
         return user != null ? user.userTimeZone : null;
     }
 
-    tryLoadTranslations() {
+    applyUserSettings(){
+        this.tryApplyDateTimeSettings();
+        this.tryLoadTranslations();
+    }
+    
+    private tryLoadTranslations() {
         const currentLangId = this.getCurrentLanguage();
         const languages = this.localStorageService.getLanguages();
         const lang = languages.filter((l:Language) => l.id === currentLangId);
@@ -80,11 +97,12 @@ export class UserSettingsService extends HttpApiServiceBase {
         let languageKey  = lang.length ? lang[0].languageId : 'en';
 
         //change translations        
-        console.log('>>> Settings translation language to: ' + languageKey);
+        //console.log('>>> Settings translation language to: ' + languageKey);
         this.ngxTranslationService.use(languageKey);         
     }
 
-    tryApplyDateTimeSettings(): boolean {
+    private tryApplyDateTimeSettings(): boolean {
+        //console.log('>>> tryApplyDateTimeSettings: called');
         const timezoneInfo = this.localStorageService.getTimezoneInfo();
         if (timezoneInfo == null) { return false };
         const userTz = this.getUserTimezone();
@@ -106,5 +124,4 @@ export class UserSettingsService extends HttpApiServiceBase {
 //            }
         }
     }
-
 }

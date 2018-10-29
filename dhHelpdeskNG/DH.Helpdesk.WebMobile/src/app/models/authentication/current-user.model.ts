@@ -8,20 +8,26 @@ export class CurrentUser {
     version: string;
     authData: UserAuthenticationData;
     currentData: UserData;      
+
+    static createAuthenticated(data: any) : CurrentUser {
+        let authData = new UserAuthenticationData()
+        authData.access_token = data.access_token;
+        authData.refresh_token = data.refresh_token;
+        authData.expires_in = data.expires_in;
+        authData.recievedAt = new Date();
+        
+        let user = new CurrentUser();
+        user.authData = authData;
+
+        return user;        
+    }
 }
 
 export class UserAuthenticationData {
     access_token: string;
     refresh_token: string;
     expires_in: number; // in seconds - not updated once recieved
-    recievedAt: Date;
-
-    static setData(dest: UserAuthenticationData, data: any) {
-        dest.access_token = data.access_token;
-        dest.expires_in = data.expires_in;
-        dest.refresh_token = data.refresh_token;
-        dest.recievedAt = new Date();
-    }
+    recievedAt: Date;   
 }
 
 export class UserData {

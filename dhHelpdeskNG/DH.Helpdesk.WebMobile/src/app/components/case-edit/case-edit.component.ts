@@ -2,11 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import {  FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
-import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource,
-      CaseSectionInputModel, CaseSectionType } from '../../models';
+import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType } from '../../models';
 import { Subscription, Observable, forkJoin } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
-
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-case-edit',
@@ -23,15 +22,15 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     isLoaded = false;
     form: FormGroup;   
 
-    tabsMenuSettings = {
-        
-    };
+    tabsMenuSettings = {};
 
-    constructor(private route: ActivatedRoute,
-         private caseService: CaseService,
-         private _router: Router) {
+    //ctor
+    constructor(private route: ActivatedRoute, 
+                private caseService: CaseService, 
+                private _router: Router, 
+                private translateService: TranslateService) {                    
         if (this.route.snapshot.paramMap.has('id')) {
-            this.caseId = Number(this.route.snapshot.paramMap.get('id'));
+            this.caseId = +this.route.snapshot.paramMap.get('id');
         } else {
             // TODO: throw error if caseid is invalid or go back
         }
@@ -41,13 +40,14 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         this.loadCaseData();
     }
 
-    getCaseTitle() {
+    getCaseTitle() : string {
+        let title = this.translateService.instant('Case');
         if (this.caseData) {
             if (this.caseData.caseSolution) {
-                return this.caseData.caseSolution.name;
+                title = this.caseData.caseSolution.name;
             } 
         }
-        return null;
+        return title;
     }
 
     loadCaseData(): any {
