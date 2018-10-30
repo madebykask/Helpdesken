@@ -1,4 +1,3 @@
-import {TranslateService} from '@ngx-translate/core';
 import { Component, OnInit } from '@angular/core';
 import { mobiscroll } from '@mobiscroll/angular';
 import { config } from '@env/environment';
@@ -24,8 +23,7 @@ export class AppComponent implements OnInit {
   isFooterVisible = true;
 
   constructor(private _authenticationService: AuthenticationService, 
-    private _logger: LoggerService,
-    private _userSettingsService: UserSettingsService, 
+    private _logger: LoggerService,    
     private _router: Router) {
     mobiscroll.settings = { theme: 'ios', lang: 'en', labelStyle: 'stacked' };
   }

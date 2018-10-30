@@ -59,14 +59,14 @@ export abstract class HttpApiServiceBase {
             map(res => {
                     return {                        
                         body : res.body,
-                        fileName: res .headers.get('content-filename'),
+                        fileName: res.headers.get('content-filename'),
                         contentType: res.headers.get('content-type')
                     };
             }),
             catchError((error:any) => {
                 return throwError(error);
             }));
-    } 
+    }
 
     protected buildResourseUrl(resourceName: string, params: object = undefined, addCustomerId = true, addLanguage = false) {
         let urlParams: string = null;

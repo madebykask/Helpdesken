@@ -12,16 +12,17 @@ export class FileDownloadService extends HttpApiServiceBase {
     }
 
     downloadCaseFile(caseId:number, fileId:number,  fileName:string) {
-        let url = this.buildResourseUrl(`/api/case/${caseId}/file/${fileId}`, null, true, false);
-        this.getFileBody(url, null).subscribe(data => {               
-                saveAs(data, fileName); // uses file-saver.js
-            });
+        let url = this.buildResourseUrl(`/api/case/${caseId}/file/${fileId}`, { inline: true }, true, false);
+        this.getFileBody(url, null).subscribe(data => {
+            //saveAs(data, fileName); // uses file-saver.js
+            this.openFile(data);            
+        });
     }
 
     //alternative approach  
-    saveFile(blob){
+    openFile(blob){
         var url = window.URL.createObjectURL(blob);
-        var pwa = window.open(url);
+        var pwa = window.open(url, "_blank");
         if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
             alert( 'Please disable your Pop-up blocker and try again.');
         }

@@ -76,10 +76,12 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpGet]
         [CheckUserCasePermissions(CaseIdParamName = "caseId")]
         [Route("{caseId:int}/File/{fileId:int}")] //ex: /api/Case/123/File/1203?cid=1
-        public Task<IHttpActionResult> File([FromUri]int caseId, [FromUri]int fileId, [FromUri]int cid)
+        public Task<IHttpActionResult> File([FromUri]int caseId, [FromUri]int fileId, [FromUri]int cid, bool? inline = false)
         {
             var fileContent = _caseFileService.GetCaseFile(cid, caseId, fileId, true);
-            IHttpActionResult res = new FileResult(fileContent.FileName, fileContent.Content, Request);
+            
+            IHttpActionResult res = new FileResult(fileContent.FileName, fileContent.Content, Request, inline ?? false);
+
             return Task.FromResult(res);
         }
 
