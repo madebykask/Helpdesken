@@ -483,8 +483,10 @@ Module DH_Helpdesk_Mail
                                                 objCase.Performer_User_Id = ct.User_Id
                                             End If
 
-                                            If ct.WorkingGroup_Id <> 0 Then
-                                                objCase.WorkingGroup_Id = ct.WorkingGroup_Id
+                                            If iSyncType <> SyncType.SyncByWorkingGroup Then
+                                                If ct.WorkingGroup_Id <> 0 Then
+                                                    objCase.WorkingGroup_Id = ct.WorkingGroup_Id
+                                                End If
                                             End If
                                         End If
                                     End If
