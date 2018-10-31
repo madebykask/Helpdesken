@@ -1,4 +1,4 @@
-import { OnInit, OnDestroy, Component, Input, OnChanges } from "@angular/core";
+import { OnInit, OnDestroy, Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { BaseCaseField } from "../../../../models";
 import { BaseControl } from "../base-control";
 
@@ -8,11 +8,12 @@ import { BaseControl } from "../base-control";
     styleUrls: ['./case-switch-control.component.scss']
   })
   export class CaseSwitchComponent extends BaseControl implements OnInit, OnDestroy {
+    @ViewChild('control') control: any;
     @Input() field: BaseCaseField<boolean>;
     @Input() description: string = "";
 
     ngOnInit(): void {
-      //if(this.readOnly) set disabled/reaonly mode      
+      this.control.disabled = true;
     }
 
     ngOnDestroy(): void {

@@ -1,4 +1,4 @@
-import { OnInit, OnDestroy, Component, Input, OnChanges } from "@angular/core";
+import { OnInit, OnDestroy, Component, Input, OnChanges, ViewChild } from "@angular/core";
 import { BaseCaseField, OptionItem } from "../../../../models";
 import { BaseControl } from "../base-control";
 import { MbscSelectOptions } from "@mobiscroll/angular";
@@ -9,6 +9,7 @@ import { MbscSelectOptions } from "@mobiscroll/angular";
     styleUrls: ['./case-dropdown-control.component.scss']
   })
   export class CaseDropdownComponent extends BaseControl implements OnInit, OnDestroy {
+    @ViewChild('control') control: any;
     @Input() field: BaseCaseField<number>;
     @Input() dataSource: OptionItem[] = [];
     text: string = "";
@@ -19,7 +20,8 @@ import { MbscSelectOptions } from "@mobiscroll/angular";
 
     ngOnInit(): void {
       //if(this.readOnly) set disabled/reaonly mode      
-      if(this.options.disabled) this.text = this.getText(this.field.value);
+      this.text = this.getText(this.field.value);
+      this.control.disabled = true;
     }
 
     ngOnDestroy(): void {

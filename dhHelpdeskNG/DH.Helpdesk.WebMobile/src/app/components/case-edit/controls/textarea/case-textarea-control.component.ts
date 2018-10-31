@@ -8,12 +8,14 @@ import { BaseControl } from "../base-control";
     styleUrls: ['./case-textarea-control.component.scss']
   })
   export class CaseTextareaComponent extends BaseControl implements OnChanges, OnInit, OnDestroy {
+    @ViewChild('input') control: any;
     @Input() field: BaseCaseField<string>;
 
     ngOnChanges() {
     }
 
     ngOnInit(): void {
+      this.control.disabled = true;
     }
 
     ngOnDestroy(): void {

@@ -8,12 +8,14 @@ import { BaseControl } from "../base-control";
     styleUrls: ['./case-textbox-control.component.scss']
   })
   export class CaseTextboxComponent extends BaseControl implements OnChanges, OnInit, OnDestroy {
+    @ViewChild('input') control: any;
     @Input() field: BaseCaseField<string>;
 
     ngOnChanges() {
     }
 
     ngOnInit(): void {
+      this.control.disabled = true;
     }
 
     ngOnDestroy(): void {

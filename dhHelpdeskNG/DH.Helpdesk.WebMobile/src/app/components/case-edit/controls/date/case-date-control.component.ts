@@ -11,7 +11,8 @@ import { UserSettingsService } from "../../../../services/user";
     styleUrls: ['./case-date-control.component.scss']
   })
   export class CaseDateComponent extends BaseControl implements OnInit, OnDestroy {
-    @ViewChild('date') control: MbscDate;
+    @ViewChild('control') control: any;
+    //@ViewChild('date') control: MbscDate;
     @Input() field: BaseCaseField<string>;    
     value?: Date;
     options: MbscDatetimeOptions = {
@@ -28,6 +29,7 @@ import { UserSettingsService } from "../../../../services/user";
     }
 
     ngOnInit(): void {
+      this.control.disabled = true;
       this.value = this.field.value == null ? null : new Date(this.field.value);
     }
 

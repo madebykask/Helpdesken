@@ -10,7 +10,8 @@ import { getLocaleDateFormat, FormatWidth, getLocaleTimeFormat } from "@angular/
     styleUrls: ['./case-datetime-control.component.scss']
   })
   export class CaseDateTimeComponent extends BaseControl implements OnInit, OnDestroy {
-    @ViewChild('datetime') control: MbscDatetime
+    @ViewChild('control') control: any;
+    //@ViewChild('datetime') control: MbscDatetime
     @Input() field: BaseCaseField<string>;
     value?: Date;
     options: MbscDatetimeOptions = {
@@ -30,6 +31,7 @@ import { getLocaleDateFormat, FormatWidth, getLocaleTimeFormat } from "@angular/
     }
 
     ngOnInit(): void {
+      this.control.disabled = true;
       //this.control.instance.setVal(new Date(this.field.value)); 
       this.value = this.field.value == null ? null : new Date(this.field.value);
     }
