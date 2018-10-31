@@ -43,23 +43,15 @@ export class FooterComponent implements OnInit, OnDestroy {
               private _userSettingsService : UserSettingsService, 
               private _authenticationService: AuthenticationService,
               private _languagesService: LanguagesService, 
-              private _ngxTranslateService: TranslateService) {           
+              private _ngxTranslateService: TranslateService) {
   }
 
   ngOnInit() {
-      this.applyTranslations();
-      this.loadLanguages();
-      
-      //handles user login - footer component will be created before user settings are loaded.
-/*       this._userSettingsService.userSettingsLoaded$.pipe(
-          takeUntil(this._destroy$)
-      ).subscribe(_ => {        
-        this.loadLanguages()
-      });    */   
+      //apply translations
+      this.languagesCtrl.setText = this._ngxTranslateService.instant("Välj");
+      this.languagesCtrl.cancelText  = this._ngxTranslateService.instant("Avbryt");
 
-      this._ngxTranslateService.onLangChange.pipe(
-          takeUntil(this._destroy$)
-      ).subscribe((e:LangChangeEvent) => this.applyTranslations());
+      this.loadLanguages();
   }
 
   ngOnDestroy(): void {
@@ -67,13 +59,13 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   private onLanguageChange(event, inst) {       
-    let val = inst.getVal();    
-    this.setLanguage(val ? +val : null);
+      let val = inst.getVal();    
+      this.setLanguage(val ? +val : null);
   }
 
   openLanguages() {
     if (!this.isLoadingLanguage) {
-      this.languagesCtrl.instance.show();
+        this.languagesCtrl.instance.show();
     }
   }
 
@@ -89,19 +81,8 @@ export class FooterComponent implements OnInit, OnDestroy {
     ).subscribe((data) => {        
         this.languagesCtrl.refreshData(data);
     });
-  }
+  } 
   
-  private applyTranslations() {          
-      let options = this.languagesCtrl.options;
-      if (this.languagesCtrl.instance) {
-          this.languagesCtrl.instance.buttons.set.text = this._ngxTranslateService.instant("Välj");
-          this.languagesCtrl.instance.buttons.cancel.text = this._ngxTranslateService.instant("Avbryt");
-      } else{
-          this.languagesCtrl.setText = this._ngxTranslateService.instant("Välj");
-          this.languagesCtrl.cancelText  = this._ngxTranslateService.instant("Avbryt");
-      }        
-  }
-
   logout() {
     this._authenticationService.logout();
     this.goTo('/login');
