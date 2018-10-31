@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Services.Services.Cache
         private readonly ICaseFieldSettingLanguageRepository _caseFieldSettingLanguageRepository;
         private readonly ITextRepository _textRepository;
         private readonly ITextTranslationRepository _textTranslationRepository;
-        private ITextTypeRepository _textTypeRepository;
+        private readonly ITextTypeRepository _textTypeRepository;
 
         #region ctor()
 

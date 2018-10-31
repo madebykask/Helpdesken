@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Domain
             this.EmailAddress = email;
         }
 
-        public int CaseHistory_Id { get; set; }
+        public int? CaseHistory_Id { get; set; }
         public int? Log_Id { get; set; }
         public int MailId { get; set; }
         public string EmailAddress { get; set; }

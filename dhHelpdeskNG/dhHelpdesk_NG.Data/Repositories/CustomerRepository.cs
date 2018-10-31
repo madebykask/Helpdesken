@@ -58,7 +58,7 @@ using System;
             return this.DataContext.Customers.Where(c => c.Id == customerId).Select(c => c.Language_Id).Single();
         }
 
-        public int? GetCustomerIdByEMailGUID(Guid GUID)
+        public int? GetCustomerIdByEMailGUID(Guid GUID)// TODO: optimise to 1 query
         {
             int? ret = null;
             var caseHistoryId = DataContext.EmailLogs.Where(e => e.EmailLogGUID == GUID && e.CaseHistory_Id != null)
@@ -67,9 +67,7 @@ using System;
             if (caseHistoryId != null)
             {
                 var caseId = DataContext.CaseHistories.Where(h => h.Id == caseHistoryId).Select(h => h.Case_Id).FirstOrDefault();
-
-                if (caseId != null)
-                    ret = DataContext.Cases.Where(c => c.Id == caseId).Select(c=> c.Customer_Id).FirstOrDefault();
+                ret = DataContext.Cases.Where(c => c.Id == caseId).Select(c=> c.Customer_Id).FirstOrDefault();
             }
 
             return ret;

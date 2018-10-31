@@ -26,7 +26,6 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
     using System.Threading.Tasks;
-    using System.Data.Entity;
 
     #region USER
 
@@ -286,7 +285,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public IQueryable<User> GetUsers(int customerId)
         {
             var query = from u in this.DataContext.Users
-                        where u.CustomerUsers.Any(c => customerId == null || c.Customer_Id == customerId) // u.Customer_Id == customerId &&
+                        where u.CustomerUsers.Any(c => c.Customer_Id == customerId) // u.Customer_Id == customerId &&
                         select u;
 
             return query;

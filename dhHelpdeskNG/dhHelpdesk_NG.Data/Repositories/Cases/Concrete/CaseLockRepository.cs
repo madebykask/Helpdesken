@@ -148,7 +148,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 }
 
             }
-            catch (Exception ex)
+            catch
             {
                 ret = false;
             }

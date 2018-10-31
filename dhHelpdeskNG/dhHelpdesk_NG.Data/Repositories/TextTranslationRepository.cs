@@ -60,9 +60,6 @@ namespace DH.Helpdesk.Dal.Repositories
         }
         public IEnumerable<TextList> GetAllTexts(int texttypeId, int? defaultLanguage)
         {
-            //Might not be needed in future since we have texttype. Earlier versions of DH Helpdesk assigned all core system phrases to id below 5000.
-            const int CoreSystemPhrases = 4999;
-
             IEnumerable<TextList> txt = null;
 
             if (defaultLanguage == null)
@@ -75,7 +72,7 @@ namespace DH.Helpdesk.Dal.Repositories
                    from User1 in Users1.DefaultIfEmpty()
                    join U2 in this.DataContext.Users on T.ChangedByUser_Id equals U2.Id into Users2
                    from User2 in Users2.DefaultIfEmpty()
-                   where (T.Type == texttypeId)  //&& T.Id > CoreSystemPhrases)
+                   where (T.Type == texttypeId)
                    group T by new
                    {
                        T.Id,
@@ -112,7 +109,7 @@ namespace DH.Helpdesk.Dal.Repositories
                        from User1 in Users1.DefaultIfEmpty()
                        join U2 in this.DataContext.Users on T.ChangedByUser_Id equals U2.Id into Users2
                        from User2 in Users2.DefaultIfEmpty()
-                       where (T.Type == texttypeId)  //&& T.Id > CoreSystemPhrases)
+                       where (T.Type == texttypeId)
                        group T by new
                        {
                            T.Id,
