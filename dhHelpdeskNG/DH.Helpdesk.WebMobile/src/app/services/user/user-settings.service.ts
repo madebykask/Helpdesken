@@ -6,7 +6,6 @@ import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
 import { TranslateService as NgxTranslateService } from '@ngx-translate/core'
 import { LoggerService } from '../logging';
-import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment-timezone';
 
@@ -14,9 +13,6 @@ import * as moment from 'moment-timezone';
 export class UserSettingsService extends HttpApiServiceBase {
     isLoadingUserSettings = false; 
     
-    private userSettingsLoadedSubject = new Subject();
-    userSettingsLoaded$ = this.userSettingsLoadedSubject.asObservable();
-
     protected constructor(
         protected http: HttpClient, 
         protected localStorageService: LocalStorageService,
@@ -49,9 +45,6 @@ export class UserSettingsService extends HttpApiServiceBase {
                         //console.log('>>> user data loaded sucessfully');
                         this.localStorageService.setCurrentUser(user);
                         
-                        //raise load event
-                        this.userSettingsLoadedSubject.next();
-
                         return user.currentData;
                     }
                     else {

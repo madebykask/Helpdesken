@@ -51,11 +51,11 @@ export class FooterComponent implements OnInit, OnDestroy {
       this.loadLanguages();
       
       //handles user login - footer component will be created before user settings are loaded.
-      this._userSettingsService.userSettingsLoaded$.pipe(
+/*       this._userSettingsService.userSettingsLoaded$.pipe(
           takeUntil(this._destroy$)
       ).subscribe(_ => {        
         this.loadLanguages()
-      });      
+      });    */   
 
       this._ngxTranslateService.onLangChange.pipe(
           takeUntil(this._destroy$)

@@ -3,8 +3,7 @@ import { mobiscroll } from '@mobiscroll/angular';
 import { config } from '@env/environment';
 import { AuthenticationService } from './services/authentication';
 import { LoggerService } from './services/logging';
-import { UserSettingsService } from './services/user';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import '../../node_modules/moment-timezone/moment-timezone-utils';
 
 @Component({
