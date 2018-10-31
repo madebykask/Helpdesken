@@ -31,10 +31,10 @@
     <add key="log4net.Internal.Debug" value="true"/>
     <add key="SmtpServer" value="smtp.datahalland.se"/>
     <add key="SmtpPort" value="25"/>
-  #{if AuthenticationMode="application"}<add key="LoginMode" value="Application"/>#{/if}
-  #{if AuthenticationMode="windows"}<add key="LoginMode" value="Windows"/>#{/if}
-  #{if AuthenticationMode="sso"}<add key="LoginMode" value="SSO"/>#{/if}
-  #{if AuthenticationMode="anonymous"}<add key="LoginMode" value="Anonymous"/>#{/if}
+  #{if AuthenticationMode == "application"}<add key="LoginMode" value="Application"/>#{/if}
+  #{if AuthenticationMode == "windows"}<add key="LoginMode" value="Windows"/>#{/if}
+  #{if AuthenticationMode == "sso"}<add key="LoginMode" value="SSO"/>#{/if}
+  #{if AuthenticationMode == "anonymous"}<add key="LoginMode" value="Anonymous"/>#{/if}
   </appSettings>
   <system.web.extensions>
     <scripting>
