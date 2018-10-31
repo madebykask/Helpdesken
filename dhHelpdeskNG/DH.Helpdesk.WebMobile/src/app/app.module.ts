@@ -29,10 +29,11 @@ import { AlertComponent } from './shared/components/alert/alert.component';
 import { ErrorComponent } from './shared/components/error/error.component';
 import { UserSettingsService, initUserData } from './services/user';
 import { AuthenticationService } from './services/authentication';
+import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 
 @NgModule({
   bootstrap: [ AppComponent],
-  declarations: [AppComponent, PageNotFoundComponent, HeaderTitleComponent, FooterComponent,
+  declarations: [AppComponent, AppLayoutComponent, PageNotFoundComponent, HeaderTitleComponent, FooterComponent,
      LoginComponent,
      HomeComponent, CasesOverviewComponent, CaseEditComponent,
      CaseTextboxComponent, CaseDateComponent, CaseDropdownComponent,  CaseMultiDropdownComponent,

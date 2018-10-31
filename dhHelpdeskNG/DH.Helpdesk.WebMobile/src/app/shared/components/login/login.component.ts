@@ -1,14 +1,14 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { switchMap, finalize, take, catchError } from 'rxjs/operators';
+import { switchMap, finalize, take } from 'rxjs/operators';
 
 import { AuthenticationService } from '../../../services/authentication';
 import { UserSettingsService } from '../../../services/user'
 import { throwError, Subject } from 'rxjs';
 import { ErrorHandlingService } from '../../../services/errorhandling/error-handling.service';
-import { combineLatest } from 'rxjs-compat/operator/combineLatest';
 import { UserData } from 'src/app/models';
+import { config } from '@env/environment';
 
 @Component({
     templateUrl: 'login.component.html',
@@ -16,6 +16,7 @@ import { UserData } from 'src/app/models';
 })
 export class LoginComponent implements OnInit, OnDestroy {
     private _destroy$ = new Subject();
+    version = config.version;
     loginForm: FormGroup;
     isLoading = false;
     submitted = false;

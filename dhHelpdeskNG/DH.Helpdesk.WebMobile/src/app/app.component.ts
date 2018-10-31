@@ -20,7 +20,6 @@ export class AppComponent implements OnInit {
   };
   
   version = config.version;
-  isFooterVisible = true;
 
   constructor(private _authenticationService: AuthenticationService, 
     private _logger: LoggerService,    
@@ -29,12 +28,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {    
-    this._router.events.subscribe(e => {
-      if (e instanceof NavigationEnd) {
-        this.isFooterVisible = !/\/error/ig.test(e.url)
-      }
-    });
-
     const version = this._authenticationService.getVersion();
     const isAuthenticated = this._authenticationService.isAuthenticated();    
     

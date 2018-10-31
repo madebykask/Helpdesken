@@ -1,0 +1,11 @@
+<mbsc-page [options]="pageSettings">  
+    <div class="content">
+        <router-outlet></router-outlet>
+    </div>
+    <div *requireAuth class="footer">
+      <app-footer></app-footer>
+    </div>
+    <app-alert></app-alert>
+</mbsc-page>
+ <div style="display:none">{{ version }}</div>
+ 

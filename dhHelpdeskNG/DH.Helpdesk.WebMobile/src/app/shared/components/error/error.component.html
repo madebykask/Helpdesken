@@ -1,12 +1,16 @@
-<mbsc-form class="md-login-form">
+<mbsc-page [options]="pageSettings">
   <div class="content">
-        <app-header-title></app-header-title>
-        <div class="mbsc-padding">
-            <h4 style="margin: 10px 0;">Sorry, an error occurred while processing your request.</h4>
-            <p style="margin: 10px 0;">{{ today | date:'dd-MM-yyyy hh:mm:ss' }}</p>
-            <p style="margin: 10px 0;">Please provide Error Id to support team:</p>
-            <p id="exception" style="padding: 10px; background: #ffa;">{{ errorGuid }}</p>      
-            <p><a routerLink="/" >Go to Home page</a></p>
-        </div>
-  </div>  
-</mbsc-form>
+    <mbsc-form class="md-login-form">
+      <div class="content">
+            <app-header-title></app-header-title>
+            <div class="mbsc-padding">
+                <h4 style="margin: 10px 0;">Sorry, an error occurred while processing your request.</h4>
+                <p style="margin: 10px 0;">{{ today | date:'dd-MM-yyyy hh:mm:ss' }}</p>
+                <p style="margin: 10px 0;">Please provide Error Id to support team:</p>
+                <p id="exception" style="padding: 10px; background: #ffa;">{{ errorGuid }}</p>      
+                <p><a routerLink="/" >Go to Home page</a></p>
+            </div>
+      </div>  
+    </mbsc-form>
+  </div>
+</mbsc-page>

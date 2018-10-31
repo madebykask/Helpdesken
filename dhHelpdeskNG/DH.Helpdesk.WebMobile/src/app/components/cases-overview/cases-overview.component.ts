@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { CaseOverviewItem, CasesOverviewFilter } from '../../models'
 import { CasesOverviewService } from '../../services/cases-overview';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserSettingsService } from '../../services/user';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { map, finalize, catchError, take, takeUntil } from 'rxjs/operators';
 import { PagingConstants } from '../../helpers/constants';
 import { Router } from '@angular/router';
