@@ -14,6 +14,7 @@ import { Subject } from 'rxjs';
   styleUrls: ['./cases-overview.component.scss']
 })
 export class CasesOverviewComponent implements OnInit, OnDestroy {
+  @ViewChild('searchInput') searchInput: any;
   @ViewChild('loading') loadingElem: MbscForm; 
   @ViewChild('listview') listView: MbscListview;
   private _filter: CasesOverviewFilter;
@@ -57,6 +58,9 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   applyFilterAndSearch() {
+    if (this.searchInput.element.blur != null) { // on android/ios removing focus from field hides keyboard
+      this.searchInput.element.blur();
+    }
     this.initFilter();
     this.resetCases();
     this.search();
