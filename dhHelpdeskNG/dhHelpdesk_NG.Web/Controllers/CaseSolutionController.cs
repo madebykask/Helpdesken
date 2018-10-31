@@ -1336,7 +1336,8 @@ namespace DH.Helpdesk.Web.Controllers
                     VerifiedDescription = caseSolution.VerifiedDescription,
                     SolutionRate = caseSolution.SolutionRate,
                     caseSolution.OverWritePopUp,
-                    caseSolution.SaveAndClose
+                    caseSolution.SaveAndClose,
+                    Verified = caseSolution.Verified.ToBool()
                 },
                     JsonRequestBehavior.AllowGet);
         }
@@ -2250,22 +2251,32 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
 
+            //if (collection["CaseSolution.Verified"].ToString().Trim() != string.Empty)
+            //{
+            //    string Verified = Convert.ToString(collection["CaseSolution.Verified"].ToString());
+            //    pos = Verified.IndexOf(",");
+            //    if (pos > 0)
+            //    {
+            //        Verified = Verified.Substring(0, pos);
+
+            //        caseSolutionInputViewModel.CaseSolution.Verified = Convert.ToInt32(Verified);
+
+            //    }
+            //}
+
             if (collection["CaseSolution.Verified"].ToString().Trim() != string.Empty)
             {
                 string Verified = Convert.ToString(collection["CaseSolution.Verified"].ToString());
+
                 pos = Verified.IndexOf(",");
                 if (pos > 0)
                 {
                     Verified = Verified.Substring(0, pos);
 
-                    caseSolutionInputViewModel.CaseSolution.Verified = Convert.ToInt32(Verified);
+                    caseSolutionInputViewModel.CaseSolution.Verified = Convert.ToInt32(Verified.Substring(0, pos));
 
                 }
-
-
             }
-
-
 
 
 

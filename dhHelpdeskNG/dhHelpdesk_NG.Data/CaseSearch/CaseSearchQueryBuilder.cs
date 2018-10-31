@@ -375,6 +375,7 @@ namespace DH.Helpdesk.Dal.Repositories
             columns.Add("tblCase.SMS");
             columns.Add("tblCase.Available");
             columns.Add("tblCase.Cost");
+            columns.Add("tblCase.CostCentre");
             columns.Add("tblCase.PlanDate");
 
             if (customerSettings != null)

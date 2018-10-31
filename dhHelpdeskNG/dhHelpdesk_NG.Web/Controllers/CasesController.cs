@@ -5770,7 +5770,7 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.StateSecondary_Id = caseTemplate.StateSecondary_Id;
 
                     // TODO: JWE What is "Verfied"?
-                    m.case_.Verified = caseTemplate.Verified;
+                    //m.case_.Verified = caseTemplate.Verified;
 
                     if (!string.IsNullOrEmpty(caseTemplate.VerifiedDescription))
                         m.case_.VerifiedDescription = caseTemplate.VerifiedDescription;
@@ -5904,6 +5904,9 @@ namespace DH.Helpdesk.Web.Controllers
 
                     if (caseTemplate.SMS != 0)
                         m.case_.SMS = caseTemplate.SMS;
+
+                    if (caseTemplate.Verified != 0)
+                        m.case_.Verified = caseTemplate.Verified;
 
                     // This is used for hide fields(which are not in casetemplate) in new case input
                     m.templateistrue = templateistrue;
