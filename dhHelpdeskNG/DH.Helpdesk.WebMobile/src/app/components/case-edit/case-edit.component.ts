@@ -41,7 +41,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     }
 
     getCaseTitle() : string {
-        let title = this.translateService.instant('Case');
+        let title = this.translateService.instant('Ärende');
         if (this.caseData) {
             if (this.caseData.caseSolution) {
                 title = this.caseData.caseSolution.name;
