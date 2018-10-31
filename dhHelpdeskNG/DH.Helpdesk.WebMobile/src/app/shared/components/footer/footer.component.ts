@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, interval } from 'rxjs';
+import { Subject } from 'rxjs';
 import { MbscSelect, MbscSelectOptions, MbscNavOptions } from '@mobiscroll/angular';
-import { take, takeUntil, filter, map, finalize } from 'rxjs/operators';
+import { take, takeUntil, finalize } from 'rxjs/operators';
 import { UserSettingsService } from 'src/app/services/user';
-import { OptionItem } from 'src/app/models';
 import { LanguagesService } from 'src/app/services/language/languages.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication';
 
 @Component({
@@ -48,27 +47,28 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
       this.applyTranslations();
       this.loadLanguages();
       
-      //subsribe on changes
-      this._userSettingsService.userSettingsLoaded$.pipe(        
-        takeUntil(this._destroy$)
-      ).subscribe(_ => {
-        this.loadLanguages();
-      });
+      //handles user login - footer component will be created before user settings are loaded.
+      this._userSettingsService.userSettingsLoaded$.pipe(
+          takeUntil(this._destroy$)
+      ).subscribe(_ => {        
+        this.loadLanguages()
+      });      
+
+      this._ngxTranslateService.onLangChange.pipe(
+          takeUntil(this._destroy$)
+      ).subscribe((e:LangChangeEvent) => this.applyTranslations());
   }
 
   ngOnDestroy(): void {
     this._destroy$.next();
   }
 
-  private onLanguageChange(event, inst) {
-    const item = (<OptionItem[]>inst.settings.data).find(item => item.text == event.valueText);
-    let selectedLanguage = item.value;
-    //console.log('>>> change language to: ' + selectedLanguage);
-    this.setLanguage(item ? +item.value : null);
+  private onLanguageChange(event, inst) {       
+    let val = inst.getVal();    
+    this.setLanguage(val ? +val : null);
   }
 
   openLanguages() {
@@ -81,28 +81,28 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.languageId = this._userSettingsService.getCurrentLanguage() || 0;
     if (this.languageId === 0)
        return;
-
-    console.log('>>> footer: loading languages')
+    
     this.isLoadingLanguage = true;
-    this._languagesService.getLanguages()
-      .pipe(
+    this._languagesService.getLanguages().pipe(
         take(1),
         finalize(() => this.isLoadingLanguage = false)        
-      )
-      .subscribe((data) => {
-          console.log('>>> footer: languages loaded')
-          this.applyTranslations();
-          this.languagesCtrl.instance.refresh(data);
-
-      });
+    ).subscribe((data) => {        
+        this.languagesCtrl.refreshData(data);
+    });
   }
   
-  private applyTranslations() {    
-      this.languagesCtrl.setText = this._ngxTranslateService.instant("Välj");
-      this.languagesCtrl.cancelText  = this._ngxTranslateService.instant("Avbryt");    
+  private applyTranslations() {          
+      let options = this.languagesCtrl.options;
+      if (this.languagesCtrl.instance) {
+          this.languagesCtrl.instance.buttons.set.text = this._ngxTranslateService.instant("Välj");
+          this.languagesCtrl.instance.buttons.cancel.text = this._ngxTranslateService.instant("Avbryt");
+      } else{
+          this.languagesCtrl.setText = this._ngxTranslateService.instant("Välj");
+          this.languagesCtrl.cancelText  = this._ngxTranslateService.instant("Avbryt");
+      }        
   }
 
-  logout() {    
+  logout() {
     this._authenticationService.logout();
     this.goTo('/login');
   }

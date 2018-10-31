@@ -34,7 +34,7 @@ export class CustomTranslateLoader implements TranslateLoader  {
     }
 
     getTranslation(lang: string): Observable<Object>{
-        console.log('>>>Loading translations for: ' + lang);
+        //console.log('>>>Loading translations for: ' + lang);
         return this.translationApiService.getTranslations(lang);         
     }
 }

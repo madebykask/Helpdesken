@@ -946,9 +946,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = new BaseCaseField<int>()
                 {
                     Name = GlobalEnums.TranslationCaseFields.Cost.ToString(),
-                    Value = currentCase.Cost,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Cost,
-                        languageId, cid, caseFieldTranslations, "Kostnad"),
+                    Value = currentCase.Cost, 
+                    Label = TranslateFieldLabel(languageId, "Artikelkostnad"), //Kostnad
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Cost, caseFieldSettings)
                 };
@@ -959,7 +958,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = "Cost_OtherCost",
                     Value = currentCase.OtherCost,
-                    Label = Translation.Get("Övrig kostnad"),
+                    Label = TranslateFieldLabel(languageId, "Övrig kostnad"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Cost, caseFieldSettings)
                 };
@@ -970,7 +969,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = "Cost_Currency",
                     Value = currentCase.Currency,
-                    Label = Translation.Get("Valuta"),
+                    Label = TranslateFieldLabel(languageId, "Valuta"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Cost, caseFieldSettings)
                 };
@@ -1333,10 +1332,16 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 //var instanceWord = Translation.GetInstanceWord(translate); // todo: check if required - see Translation.cs\CaseTranslation
                 //if (!string.IsNullOrEmpty(instanceWord))
-                var translation = _translateCacheService.GetTextTranslation(caption, languageId);
-                caption = !string.IsNullOrEmpty(translation) ? translation : caption.GetDefaultValue(languageId);
+                caption = TranslateFieldLabel(languageId, caption);
             }
 
+            return caption;
+        }
+
+        private string TranslateFieldLabel(int languageId, string label)
+        {
+            var translation = _translateCacheService.GetTextTranslation(label, languageId);
+            var caption = !string.IsNullOrEmpty(translation) ? translation : label.GetDefaultValue(languageId);
             return caption;
         }
 

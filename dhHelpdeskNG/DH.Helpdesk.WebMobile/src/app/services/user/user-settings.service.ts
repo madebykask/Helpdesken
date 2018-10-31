@@ -1,15 +1,14 @@
-import { Injectable, ModuleWithComponentFactories } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, finalize, take} from 'rxjs/operators';
 import { UserData, Language } from '../../models'
 import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
-import { TranslateService as NgxTranslateService, TranslateLoader } from '@ngx-translate/core'
+import { TranslateService as NgxTranslateService } from '@ngx-translate/core'
 import { LoggerService } from '../logging';
-import * as moment from 'moment-timezone';
 import { Subject } from 'rxjs/Subject';
-
-
+import { Observable } from 'rxjs/Observable';
+import * as moment from 'moment-timezone';
 
 @Injectable({ providedIn: 'root' })
 export class UserSettingsService extends HttpApiServiceBase {
@@ -84,21 +83,24 @@ export class UserSettingsService extends HttpApiServiceBase {
         return user != null ? user.userTimeZone : null;
     }
 
-    applyUserSettings(){
+    applyUserSettings() : Observable<any>{
         this.tryApplyDateTimeSettings();
-        this.tryLoadTranslations();
+        return this.tryLoadTranslations();
     }
     
-    private tryLoadTranslations() {
+    private tryLoadTranslations(): Observable<any> {
         const currentLangId = this.getCurrentLanguage();
         const languages = this.localStorageService.getLanguages();
-        const lang = languages.filter((l:Language) => l.id === currentLangId);
-
-        let languageKey  = lang.length ? lang[0].languageId : 'en';
-
+        let languageKey = 'en'; //todo: use config for default language?
+        if (currentLangId && languages && languages.length )
+        {
+            const lang = languages.filter((l:Language) => l.id === currentLangId);
+            languageKey = lang && lang.length ? lang[0].languageId : languageKey;    
+        }
+        
         //change translations        
-        //console.log('>>> Settings translation language to: ' + languageKey);
-        this.ngxTranslationService.use(languageKey);         
+        this._logger.log('>>> Settings translation language to: ' + languageKey);
+        return this.ngxTranslationService.use(languageKey.toLowerCase());         
     }
 
     private tryApplyDateTimeSettings(): boolean {
@@ -109,18 +111,22 @@ export class UserSettingsService extends HttpApiServiceBase {
         if (userTz == null) { return false };
 
         moment.tz.add(timezoneInfo);
+        
         this._logger.log('>>>>Setting date timezone: ' + userTz);
         moment.tz.setDefault(userTz);
+
         this._logger.log('>>>>Setting datetime L LT format');
         (<any>moment).defaultFormat = 'L LT';// <any> hack to avoid warning about constant
-        if (navigator.language != null) {
+
+        const browserLang = this.ngxTranslationService.getBrowserLang(); //Returns the language code name from the browser, e.g. "de", 'sv' 
+        if (browserLang) {
 /*             const availableLocales = moment.locales();
             this._logger.log(availableLocales); */
-/*             if (availableLocales.filter(l => l == navigator.language).length <= 0) {
-                this._logger.log('>>>>Locale is not supported: ' + navigator.language);
+/*             if (availableLocales.filter(l => l == browserLang).length <= 0) {
+                this._logger.log('>>>>Locale is not supported: ' + browserLang);
             } else {
- */             this._logger.log('>>>>Setting locale ' + navigator.language);
-                moment.locale(navigator.language);
+ */             this._logger.log('>>>>Setting locale:  ' + navigator.language);
+                moment.locale(browserLang.toLowerCase());
 //            }
         }
     }

@@ -68,16 +68,16 @@ import { AuthenticationService } from './services/authentication';
     TranslationApiService,      
     {
       provide: APP_INITIALIZER,
-      useFactory: initUserData,
-      deps: [UserSettingsService, AuthenticationService, LoggerService],
-      multi: true
-    },
-    {
-      provide: APP_INITIALIZER,
       useFactory: initTranslation,
       deps: [NgxTranslateService, TranslationApiService, LocalStorageService, LoggerService],
       multi: true
     },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initUserData,
+      deps: [UserSettingsService, AuthenticationService, LoggerService],
+      multi: true
+    },   
     LocalStorageService
   ]
 })

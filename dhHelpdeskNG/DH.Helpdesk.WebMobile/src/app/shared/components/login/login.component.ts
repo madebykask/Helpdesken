@@ -1,12 +1,14 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { switchMap, finalize, take } from 'rxjs/operators';
+import { switchMap, finalize, take, catchError } from 'rxjs/operators';
 
 import { AuthenticationService } from '../../../services/authentication';
 import { UserSettingsService } from '../../../services/user'
 import { throwError, Subject } from 'rxjs';
 import { ErrorHandlingService } from '../../../services/errorhandling/error-handling.service';
+import { combineLatest } from 'rxjs-compat/operator/combineLatest';
+import { UserData } from 'src/app/models';
 
 @Component({
     templateUrl: 'login.component.html',
@@ -85,18 +87,19 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.authenticationService.login(this.f.username.value, this.f.password.value)
             .pipe(
-                take(1),
-                switchMap(isSuccess => {
+                take(1),                
+                switchMap(isSuccess => {                    
                     if (!isSuccess) throwError('Something wrong.');
-                    return this.userSettingsService.loadUserSettings();
-                }),
+                    return this.userSettingsService.loadUserSettings().pipe(
+                        take(1),
+                        switchMap((userData:UserData) =>{
+                            return this.userSettingsService.applyUserSettings();
+                        })
+                    );
+                }),                
                 finalize(() => this.isLoading = false) 
-            ).subscribe(
-                userData => {
-                    //console.log('>>> login: user setttings have been loaded! Lang: ' + userData.selectedLanguageId);
+            ).subscribe(res => {                
                     this.showLoginError = false;
-                    
-                    this.userSettingsService.applyUserSettings();
                     this.router.navigateByUrl(this.returnUrl);                                                    
                 },
                 error => {                    
