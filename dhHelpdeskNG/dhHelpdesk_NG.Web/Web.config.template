@@ -31,10 +31,10 @@
     <add key="log4net.Internal.Debug" value="true"/>
     <add key="SmtpServer" value="smtp.datahalland.se"/>
     <add key="SmtpPort" value="25"/>
-    #{if AuthenticationMode="application"}<add key="LoginMode" value="Application"/>#{/if}
-	#{else if AuthenticationMode="windows"}<add key="LoginMode" value="Windows"/>#{/if}
-	#{else if AuthenticationMode="sso"}<add key="LoginMode" value="SSO"/>#{/if}
-	#{else if AuthenticationMode="anonymous"}<add key="LoginMode" value="Anonymous"/>#{/if}
+  #{if AuthenticationMode="application"}<add key="LoginMode" value="Application"/>#{/if}
+  #{if AuthenticationMode="windows"}<add key="LoginMode" value="Windows"/>#{/if}
+  #{if AuthenticationMode="sso"}<add key="LoginMode" value="SSO"/>#{/if}
+  #{if AuthenticationMode="anonymous"}<add key="LoginMode" value="Anonymous"/>#{/if}
   </appSettings>
   <system.web.extensions>
     <scripting>
@@ -57,12 +57,12 @@
     </pages>
     <!-- 50 mb in kilobytes -->
     <httpRuntime maxRequestLength="5242880" targetFramework="4.5"/>
-	 #{if AuthenticationMode="application"}
+	 #{if AuthenticationMode == "application"}
     <authentication mode="Forms">
       <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/"/>
     </authentication>
-	#{/if}
-	#{if AuthenticationMode="windows"}
+  #{/if}
+	#{if AuthenticationMode == "windows"}
     <authentication mode="Windows">
     </authentication>
 	#{/if}
