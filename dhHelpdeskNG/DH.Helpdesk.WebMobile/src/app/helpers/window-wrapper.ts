@@ -14,6 +14,6 @@ export class WindowWrapper {
     }
 }
 
-function getWindow (): any {
+function getWindow(): any {
     return window;
 }
