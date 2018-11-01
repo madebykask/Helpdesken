@@ -1,19 +1,21 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { MbscSelect, MbscSelectOptions, MbscNavOptions } from '@mobiscroll/angular';
-import { take, takeUntil, finalize } from 'rxjs/operators';
+import { take, finalize, takeUntil, switchMap } from 'rxjs/operators';
 import { UserSettingsService } from 'src/app/services/user';
 import { LanguagesService } from 'src/app/services/language/languages.service';
-import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication';
+import { CommunicationService, Channels, CommEvent } from 'src/app/services/communication/communication.service';
+import { HeaderEventData } from 'src/app/services/communication/header-event-data';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent implements OnInit, OnDestroy {
+export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
   private _destroy$ = new Subject();
   
   @ViewChild('languages') 
@@ -38,6 +40,7 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   languageId: number = 0;
   isLoadingLanguage: boolean = true;
+  isVisible = true;
   
   constructor(private _router: Router, 
               private _userSettingsService : UserSettingsService, 
@@ -47,11 +50,13 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-      //apply translations
-      this.languagesCtrl.setText = this._ngxTranslateService.instant("Välj");
-      this.languagesCtrl.cancelText  = this._ngxTranslateService.instant("Avbryt");
+    this.loadLanguages();
+  }
 
-      this.loadLanguages();
+  ngAfterViewInit() {
+    //apply translations
+    this.languagesCtrl.setText = this._ngxTranslateService.instant("Välj");
+    this.languagesCtrl.cancelText  = this._ngxTranslateService.instant("Avbryt");
   }
 
   ngOnDestroy(): void {
@@ -59,8 +64,8 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   private onLanguageChange(event, inst) {       
-      let val = inst.getVal();    
-      this.setLanguage(val ? +val : null);
+    let val = inst.getVal();    
+    this.setLanguage(val ? +val : null);
   }
 
   openLanguages() {

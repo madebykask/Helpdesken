@@ -7,6 +7,8 @@ import { Subscription, Observable, forkJoin } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { UserSettingsService } from 'src/app/services/user';
+import { CommunicationService, Channels } from 'src/app/services/communication/communication.service';
+import { HeaderEventData } from 'src/app/services/communication/header-event-data';
 
 @Component({
   selector: 'app-case-edit',
@@ -16,7 +18,6 @@ import { UserSettingsService } from 'src/app/services/user';
 export class CaseEditComponent implements OnInit, OnDestroy {
     private caseId: number;
     private caseData: CaseEditInputModel;
-    private subscriptions = new Array<Subscription>();        
     private caseSections: CaseSectionInputModel[];
     caseSectionTypes = CaseSectionType;
     dataSource: OptionsDataSource;
@@ -30,7 +31,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
                 private caseService: CaseService, 
                 private router: Router, 
                 private translateService: TranslateService, 
-                private userSettingsService: UserSettingsService) {                    
+                private commService: CommunicationService) {                    
         if (this.route.snapshot.paramMap.has('id')) {
             this.caseId = +this.route.snapshot.paramMap.get('id');
         } else {
@@ -40,6 +41,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadCaseData();
+        this.commService.publish(Channels.Header, new HeaderEventData(false));
     }
 
     getCaseTitle() : string {
@@ -68,12 +70,15 @@ export class CaseEditComponent implements OnInit, OnDestroy {
                     })
                 );
             
-                this.subscriptions.push(forkJoin(caseSections$, caseData$)
+                forkJoin(caseSections$, caseData$)
+                .pipe(
+                    take(1)
+                )
                 .subscribe(([sectionData, options]) => {
                     this.caseSections = sectionData;
                     this.dataSource = new OptionsDataSource(options);                    
                     this.isLoaded = true;        
-                }));       
+                });       
     }
 
     private processCaseDataResponse(data){
@@ -86,9 +91,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.subscriptions.forEach(s => {
-            if(!s.closed) s.unsubscribe();
-        })
+        this.commService.publish(Channels.Header, new HeaderEventData(true));
     }
 
     hasField(name: string): boolean {

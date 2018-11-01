@@ -5,30 +5,34 @@ import { filter, map } from "rxjs/operators";
 @Injectable({ providedIn: 'root' })
 export class CommunicationService {
   private publishSubscribeSubject$: Subject<any> = new Subject();
-  emitter$: Observable<any>;
+  emitter$: Observable<CommEvent>;
 
   constructor() {
     this.emitter$ = this.publishSubscribeSubject$.asObservable();
   }
 
-  publish(channel:string, event:any):void {
+  publish(channel: Channels, event: any):void {
     this.publishSubscribeSubject$.next({
       channel: channel,
       event: event
     });
   }
 
-  subscribe(channel:string): Observable<CommEvent> {
+  listen<T>(channel: Channels): Observable<T> {
     return this.emitter$
         .pipe(
-            filter((emission: CommEvent) => emission.channel === channel),
-            map((emission: CommEvent) => emission.event)
+            filter(emission => emission.channel === channel),
+            map(emission => <T>emission.event)
         )
   }
 }
 
 export class CommEvent {
-    channel: string;
+    channel: Channels;
     event: any;
+}
+
+export enum Channels {
+    Header,
 }
 

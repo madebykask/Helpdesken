@@ -2,15 +2,13 @@ import { HttpApiServiceBase } from "../api";
 import { Injectable } from "@angular/core";
 import { LocalStorageService } from "../local-storage";
 import { HttpClient } from "@angular/common/http";
-import { OptionsHelper } from "../../helpers/options-helper";
 import { map } from "rxjs/operators";
 import { MultiLevelOptionItem } from "../../models";
 
 @Injectable({ providedIn: 'root' })
 export class CaseTypesService extends HttpApiServiceBase {
 
-    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService, 
-        private caseHelper: OptionsHelper) {
+    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) {
             super(http, localStorageService);
     }
 
