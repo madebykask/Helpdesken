@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
-import { map, defaultIfEmpty } from 'rxjs/operators';
-import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel, BaseCaseField, KeyValue } from '../../models';
-import { throwError, forkJoin, empty } from 'rxjs';
+import { map, defaultIfEmpty, take } from 'rxjs/operators';
+import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel, BaseCaseField, KeyValue, MailToTicketInfo } from '../../models';
+import { throwError, forkJoin, empty, Observable } from 'rxjs';
 import { CaseOptions } from '../../models/case/case-options.model';
 import { CaseOrganizationService } from '../case-organization';
 import { BundleCaseOptionsService } from '../case-organization/bundle-case-options.service';
@@ -18,10 +18,11 @@ export class CaseService extends HttpApiServiceBase {
         super(http, localStorageService);
     }
 
-    getCaseData(caseId: number) {
+    getCaseData(caseId: number) : Observable<CaseEditInputModel> {
         var user = this.localStorageService.getCurrentUser();
-        return this.getJson(this.buildResourseUrl('/api/case/' + caseId, null, true, true))//TODO: error handling
+        return this.getJson(this.buildResourseUrl('/api/case/' + caseId, null, true, true)) //TODO: error handling
             .pipe(
+                take(1),
                 map((caseData: any) => {
                     let model = this.fromJSONCaseEditInputModel(caseData);
                     return model;

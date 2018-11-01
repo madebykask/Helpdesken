@@ -10,7 +10,7 @@ export class BaseControl {
     }
 
     protected getFormControl(name: string) {
-        if(this.form == null) return null;
+        if (this.form == null) return null;
 
         return this.form.get(name);
     }

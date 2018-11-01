@@ -7,6 +7,7 @@ using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
@@ -680,7 +681,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = new BaseCaseField<int?>()
                 {
                     Name = GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(),
-                    Value = currentCase.RegistrationSourceCustomer_Id,
+                    Value = currentCase.RegistrationSourceCustomer_Id, //todo: check RegistrationSource
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer,
 
                         languageId, cid, caseFieldTranslations, "Källa"),
@@ -849,17 +850,29 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Description))
             {
-                if (currentCase.RegistrationSource == 3)
+                var registrationSourceOptions = currentCase.RegistrationSource == (int) CaseRegistrationSource.Email
+                    ? currentCase.Mail2Tickets.Where(x => x.Log_Id == null)
+                        .GroupBy(x => x.Type)
+                        .Select(gr => new KeyValuePair<string, string>(gr.Key, string.Join(";", gr.Select(x => x.EMailAddress)))).ToList()
+                    : null;
+              
+
+                // Registration source: values 
+                field = new BaseCaseField<int>()
                 {
-                    //TODO: Mail2ticket field data
-                }
+                    Name = "CaseRegistrationSource", //NOTE: should not be mistaken with another field - RegistrationSourceCustomer!
+                    Value = currentCase.RegistrationSource,
+                    Label = TranslateFieldLabel(languageId, "Registration source"),
+                    Section = CaseSectionType.CaseInfo,
+                    Options = registrationSourceOptions
+                };
+                model.Fields.Add(field);
 
                 field = new BaseCaseField<string>()
                 {
                     Name = GlobalEnums.TranslationCaseFields.Description.ToString(),
                     Value = currentCase.Description,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Description,
-                        languageId, cid, caseFieldTranslations, "Beskrivning"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Description, languageId, cid, caseFieldTranslations, "Beskrivning"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Description, caseFieldSettings)
                 };

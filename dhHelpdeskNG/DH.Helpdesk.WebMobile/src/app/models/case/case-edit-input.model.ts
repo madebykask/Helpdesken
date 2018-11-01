@@ -5,6 +5,13 @@ export class CaseEditInputModel {
     caseNumber: number;
     fields: IBaseCaseField<any>[];    
     caseSolution: CaseSolution;
+    mailToTickets: MailToTicketInfo[];
+}
+
+export class MailToTicketInfo{
+    email: string;
+    type: string;
+    isHelpdesk: boolean;
 }
 
 export class CaseSolution {

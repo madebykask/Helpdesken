@@ -195,3 +195,13 @@ a {
 .float-right {
     float: right;
 }
+
+ul.nostyle {
+    margin:0px 0px;
+    list-style-type: none; 
+    li 
+    { 
+        padding:0px 0px;
+        margin:0px;
+    }
+} 

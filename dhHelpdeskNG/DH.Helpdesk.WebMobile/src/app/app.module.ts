@@ -30,6 +30,7 @@ import { ErrorComponent } from './shared/components/error/error.component';
 import { UserSettingsService, initUserData } from './services/user';
 import { AuthenticationService } from './services/authentication';
 import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
+import { MailtoticketControlComponent } from './components/case-edit/controls/mailtoticket-control/mailtoticket-control.component';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -42,7 +43,8 @@ import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
      RequireAuthDirective,
      CaseFilesControlComponent,
      AlertComponent,
-     ErrorComponent,
+     ErrorComponent,     
+     MailtoticketControlComponent,
     ],
   imports: [
     MbscModule,

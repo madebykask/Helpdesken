@@ -77,7 +77,8 @@
                                 <case-textbox-control *ngIf="hasField('ReferenceNumber')" [field]="getField('ReferenceNumber')" [form]="form"></case-textbox-control>
                                 <case-textbox-control *ngIf="hasField('Caption')" [field]="getField('Caption')" [form]="form"></case-textbox-control>
                                 <!-- TODO:<case-xxx-control *ngIf="hasField('Mail2Ticket')" [field]="getField('Mail2Ticket')" [form]="form"></case-xxx-control> -->
-                                <case-textarea-control *ngIf="hasField('Description')" [field]="getField('Description')" [form]="form"></case-textarea-control>
+                                <case-textarea-control *ngIf="hasField('Description')" [field]="getField('Description')" [form]="form"></case-textarea-control>                                
+                                <case-mailtoticket-control  *ngIf="hasField('CaseRegistrationSource') && getField('CaseRegistrationSource').value === 3" [field]="getField('CaseRegistrationSource')"></case-mailtoticket-control>
                                 <case-textarea-control *ngIf="hasField('Miscellaneous')" [field]="getField('Miscellaneous')" [form]="form"></case-textarea-control>
                                 <case-switch-control *ngIf="hasField('ContactBeforeAction')" [field]="getField('ContactBeforeAction')" [form]="form"></case-switch-control>
                                 <case-switch-control *ngIf="hasField('SMS')" [field]="getField('SMS')" [form]="form" description="Send text message when case is closed"></case-switch-control>
