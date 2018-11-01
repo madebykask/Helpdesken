@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.Services.Enums;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.WebApi.Infrastructure;
@@ -41,15 +42,16 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             return await Task.FromResult(caseTypes.OrderBy(p => p.Name));
 
+            //local function
             void Translate(List<CaseTypeOverview> cts)
             {
                 if (depth >= maxDepth)
                     throw new Exception("Iteration depth exceeded. Suspicion of infinte loop.");
+
                 depth++;
-                cts
-                    .ForEach(p =>
+                cts.ForEach(p =>
                     {
-                        p.Name = _translateCacheService.GetTextTranslation(p.Name, langId, 1);
+                        p.Name = _translateCacheService.GetMasterDataTextTranslation(p.Name, langId);
                         if (p.SubCaseTypes != null && p.SubCaseTypes.Any())
                         {
                             Translate(p.SubCaseTypes);

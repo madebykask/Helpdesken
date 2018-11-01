@@ -5,7 +5,9 @@ using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.Models.Case.Options;
+using DH.Helpdesk.Services.Enums;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Services.Services.Concrete.Changes;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Translate;
@@ -31,13 +33,15 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IBaseChangesService _changeService;
         private readonly ISettingService _customerSettingsService;
         private readonly ICausingPartService _causingPartService;
+        private readonly ITranslateCacheService _translateCacheService;
 
         public CaseOptionsController(IRegistrationSourceCustomerService registrationSourceCustomerService, ISystemService systemService, IUrgencyService urgencyService,
             IImpactService impactService, ISupplierService supplierService, ICountryService countryService, ICurrencyService currencyService,
             IWorkingGroupService workingGroupService, IUserService userService, IPriorityService priorityService, IStateSecondaryService stateSecondaryService, 
             IStatusService statusService, IProjectService projectService, IProblemService problemService, IBaseChangesService changeService,
-            ICausingPartService causingPartService, ISettingService customerSettingsService)
+            ICausingPartService causingPartService, ISettingService customerSettingsService, ITranslateCacheService translateCacheService)
         {
+            _translateCacheService = translateCacheService;
             _causingPartService = causingPartService;
             _customerSettingsService = customerSettingsService;
             _registrationSourceCustomerService = registrationSourceCustomerService;
@@ -62,13 +66,15 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// Systems, Urgencies, Impacts, Suppliers, Currencies, Currencies, WorkingGroups, ResponsibleUsers,
         /// Performers, Priorities, Statuses, StateSecondaries, Projects, Problems, CausingParts, Changes, SolutionsRates
         /// </summary>
-        /// <param name="cid"></param>
-        /// <param name="input"></param>
+        /// <param name="cid">CustomerId</param>
+        /// <param name="input">Input model</param>
+        /// /// <param name="langId">Language Id</param>
         /// <returns></returns>
         [HttpPost]//TODO: split this action to different controllers for modularity
-        public async Task<CaseOptionsOutputModel> Bundle([FromUri]int cid, [FromBody]GetCaseOptionsInputModel input)
+        public async Task<CaseOptionsOutputModel> Bundle([FromUri]int cid, [FromBody]GetCaseOptionsInputModel input, [FromUri]int langId)
         {
             var customerId = cid;
+            var languageId = langId;
             var model = new CaseOptionsOutputModel();
 
             var customerSettings = _customerSettingsService.GetCustomerSettings(customerId);
@@ -77,7 +83,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 model.CustomerRegistrationSources =
                     _registrationSourceCustomerService.GetCustomersActiveRegistrationSources(customerId)
-                        .Select(d => new ItemOverview(d.SourceName, d.Id.ToString()))
+                        .Select(d => new ItemOverview(Translate(d.SourceName), d.Id.ToString()))
                         .ToList();
             }
 
@@ -161,21 +167,21 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (input.Priorities)
             {
                 model.Priorities = _priorityService.GetPriorities(customerId)
-                    .Select(d => new ItemOverview(d.Name, d.Id.ToString()))
+                    .Select(d => new ItemOverview(Translate(d.Name), d.Id.ToString()))
                     .ToList();
             }
 
             if (input.Statuses)
             {
                 model.Statuses = _statusService.GetStatuses(customerId)
-                    .Select(d => new ItemOverview(d.Name, d.Id.ToString()))
+                    .Select(d => new ItemOverview(Translate(d.Name, TranslationTextTypes.MasterData), d.Id.ToString()))
                     .ToList();
             }
 
             if (input.StateSecondaries)
             {
                 model.StateSecondaries = _stateSecondaryService.GetStateSecondaries(customerId)
-                    .Select(d => new ItemOverview(d.Name, d.Id.ToString()))
+                    .Select(d => new ItemOverview(Translate(d.Name, TranslationTextTypes.MasterData), d.Id.ToString()))
                     .ToList();
             }
 
@@ -199,7 +205,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             
             if (input.CausingParts)
             {
-                model.CausingParts = BuildCausingPartsList(customerId, input.CaseCausingPartId);
+                model.CausingParts = BuildCausingPartsList(customerId, input.CaseCausingPartId, languageId);
             }
 
             //if (customerSetting.ModuleChangeManagement == 1)
@@ -221,11 +227,13 @@ namespace DH.Helpdesk.WebApi.Controllers
                 }
             }
 
+            string Translate(string translate, int? tt = null) => _translateCacheService.GetTextTranslation(translate, languageId, tt);
+
             return model;
         }
 
         //todo: a copy from Helpdesk.Web\CaseController.cs\GetCausingPartsModel Need to refactor to use one implementation
-        private IList<ItemOverview> BuildCausingPartsList(int customerId, int? causingPartId)
+        private IList<ItemOverview> BuildCausingPartsList(int customerId, int? causingPartId, int languageId)
         {
             var allActiveCausinParts = _causingPartService.GetActiveParentCausingParts(customerId, causingPartId);
             var ret = new List<ItemOverview>();
@@ -237,7 +245,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 if (causingPart.Parent != null && causingPartId.HasValue && causingPart.Id == causingPartId.Value)
                 {
-                    childrenRet.Add(new ItemOverview($"{Translation.Get(causingPart.Parent.Name)} - {Translation.Get(causingPart.Name)}", causingPart.Id.ToString()));
+                    childrenRet.Add(new ItemOverview($"{Translate(causingPart.Parent.Name)} - {Translate(causingPart.Name)}", causingPart.Id.ToString()));
                 }
                 else
                 {
@@ -248,19 +256,22 @@ namespace DH.Helpdesk.WebApi.Controllers
                             if (child.IsActive)
                             {
                                 //var isSelected = (child.Id == curCausingPartId);
-                                childrenRet.Add(new ItemOverview($"{Translation.Get(causingPart.Name)} - {Translation.Get(child.Name)}", child.Id.ToString()));
+                                childrenRet.Add(new ItemOverview($"{Translate(causingPart.Name)} - {Translate(child.Name)}", child.Id.ToString()));
                             }
                         }
                     }
                     else
                     {
                         //var isSelected = (causingPart.Id == curCausingPartId);
-                        parentRet.Add(new ItemOverview(Translation.Get(causingPart.Name), causingPart.Id.ToString()));
+                        parentRet.Add(new ItemOverview(Translate(causingPart.Name), causingPart.Id.ToString()));
                     }
                 }
             }
 
             ret = parentRet.OrderBy(p => p.Name).Union(childrenRet.OrderBy(c => c.Name)).ToList();
+
+            string Translate(string translate) => _translateCacheService.GetTextTranslation(translate, languageId);
+
             return ret.GroupBy(r => r.Value).Select(g => g.First()).ToList();
          }
     }

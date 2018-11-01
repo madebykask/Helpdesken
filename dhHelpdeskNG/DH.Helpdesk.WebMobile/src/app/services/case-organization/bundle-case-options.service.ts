@@ -16,7 +16,7 @@ export class BundleCaseOptionsService extends HttpApiServiceBase {
     }
 
     getOptions(filter: BundleOptionsFilter) {
-        return this.postJson(this.buildResourseUrl('/api/caseoptions/bundle'), filter)
+        return this.postJson(this.buildResourseUrl('/api/caseoptions/bundle', null, true, true), filter)
         .pipe(
             map((jsOptions: any) => {
                 if (jsOptions == null) throwError('No options received.')

@@ -696,8 +696,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(),
                     Value = currentCase.CaseType_Id,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.CaseType_Id,
-                        languageId, cid, caseFieldTranslations, "Ärendetyp"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.CaseType_Id, languageId, cid, caseFieldTranslations, "Ärendetyp"),
                     Section = CaseSectionType.CaseInfo,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.CaseType_Id, caseFieldSettings)
                 };

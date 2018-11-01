@@ -4,6 +4,7 @@ using System.Linq;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.Services.Enums;
 
 namespace DH.Helpdesk.Services.Services.Cache
 {
@@ -58,6 +59,11 @@ namespace DH.Helpdesk.Services.Services.Cache
             return _cacheService.Get(cacheKey, () => _textTranslationRepository.GetTextTranslationsFor(languageId, typeId), DateTime.UtcNow.AddMinutes(10));
         }
 
+        public string GetMasterDataTextTranslation(string translate, int languageId)
+        {
+            return GetTextTranslation(translate, languageId, TranslationTextTypes.MasterData);
+        }
+
         public string GetTextTranslation(string translate, int languageId, int? textTypeId = null)
         {
             var translation = textTypeId.HasValue ?
@@ -104,6 +110,7 @@ namespace DH.Helpdesk.Services.Services.Cache
         void ClearCaseTranslations(int customerId);
         TextType GetTextType(string texttype);
         IList<Text> GetAllTextTranslations();
+        string GetMasterDataTextTranslation(string translate, int languageId);
         string GetTextTranslation(string translate, int languageId, int? textTypeId = null);
         void ClearAllTextTranslations();
     }

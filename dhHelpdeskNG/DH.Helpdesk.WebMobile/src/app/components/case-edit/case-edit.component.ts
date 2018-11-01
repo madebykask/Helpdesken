@@ -6,6 +6,7 @@ import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataS
 import { Subscription, Observable, forkJoin } from 'rxjs';
 import { switchMap, take, tap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
+import { UserSettingsService } from 'src/app/services/user';
 
 @Component({
   selector: 'app-case-edit',
@@ -27,8 +28,9 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     //ctor
     constructor(private route: ActivatedRoute, 
                 private caseService: CaseService, 
-                private _router: Router, 
-                private translateService: TranslateService) {                    
+                private router: Router, 
+                private translateService: TranslateService, 
+                private userSettingsService: UserSettingsService) {                    
         if (this.route.snapshot.paramMap.has('id')) {
             this.caseId = +this.route.snapshot.paramMap.get('id');
         } else {
@@ -125,7 +127,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
 
     goTo(url: string) {
         if (url == null) return;
-        this._router.navigate([url]);
+        this.router.navigate([url]);
       }
 
     getSectionHeader(type: CaseSectionType): string {
@@ -144,7 +146,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
 
     private getCaseOptionsFilter(data: CaseEditInputModel) {
         let filter = new CaseOptionsFilterModel();
-        //TODO: review and put all field names to constants
+        //TODO: review and put all field names to constants        
         filter.RegionId = this.getValue("Region_Id");
         filter.DepartmentId = this.getValue("Department_Id");
         filter.IsAboutRegionId = this.getValue("IsAbout_Region_Id");

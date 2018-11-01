@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Services.Enums
 {
-    public static class TextTypes
+    public static class TranslationTextTypes
     {
         //todo: check values are the same across different envs/ also check if enum is better
         public const int Helpdesk = 0;
