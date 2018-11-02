@@ -7,8 +7,6 @@ import { UserSettingsService } from 'src/app/services/user';
 import { LanguagesService } from 'src/app/services/language/languages.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication';
-import { CommunicationService, Channels, CommEvent } from 'src/app/services/communication/communication.service';
-import { HeaderEventData } from 'src/app/services/communication/header-event-data';
 
 @Component({
   selector: 'app-footer',

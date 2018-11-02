@@ -3,10 +3,9 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
 import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType } from '../../models';
-import { Subscription, Observable, forkJoin } from 'rxjs';
-import { switchMap, take, tap } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
-import { UserSettingsService } from 'src/app/services/user';
 import { CommunicationService, Channels } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/header-event-data';
 

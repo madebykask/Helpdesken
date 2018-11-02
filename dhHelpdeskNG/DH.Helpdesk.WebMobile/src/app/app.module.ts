@@ -17,20 +17,18 @@ import { LoggerService } from './services/logging';
 import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors';
 import { HomeComponent, CasesOverviewComponent, CaseEditComponent, CaseTextboxComponent,
    CaseDateComponent, CaseDropdownComponent, CaseMultiDropdownComponent, CaseSwitchComponent,
-   CaseTextareaComponent, CaseDateTimeComponent } from './components';
+   CaseTextareaComponent, CaseDateTimeComponent, MailtoticketControlComponent, CaseFilesControlComponent } from './components';
 import { GetByKeyPipe, DateTimezonePipe, AlertsFilter } from './helpers/pipes';
 
 import { AppRoutingModule } from './app.routing';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { RequireAuthDirective } from './helpers/directives/require-auth.directive';
-import { CaseFilesControlComponent } from './components/case-edit/controls/case-files/case-files-control.component';
 import { GlobalErrorHandler } from './helpers/errors/global-error-handler';
 import { AlertComponent } from './shared/components/alert/alert.component';
 import { ErrorComponent } from './shared/components/error/error.component';
 import { UserSettingsService, initUserData } from './services/user';
 import { AuthenticationService } from './services/authentication';
 import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
-import { MailtoticketControlComponent } from './components/case-edit/controls/mailtoticket-control/mailtoticket-control.component';
 
 @NgModule({
   bootstrap: [ AppComponent],

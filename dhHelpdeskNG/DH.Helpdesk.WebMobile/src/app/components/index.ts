@@ -8,3 +8,5 @@ export * from './case-edit/controls/dropdown/case-multi-dropdown-control.compone
 export * from './case-edit/controls/switch/case-switch-control.component'
 export * from './case-edit/controls/textarea/case-textarea-control.component'
 export * from './case-edit/controls/date/case-datetime-control.component'
+export * from './case-edit/controls/case-files/case-files-control.component'
+export * from './case-edit/controls/mailtoticket/mailtoticket-control.component'
