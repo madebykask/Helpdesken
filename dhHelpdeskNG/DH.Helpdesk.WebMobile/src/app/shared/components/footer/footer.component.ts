@@ -49,12 +49,12 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.loadLanguages();
+    //apply translations
+    this.languagesCtrl.setText = this._ngxTranslateService.instant("Välj");
+    this.languagesCtrl.cancelText  = this._ngxTranslateService.instant("Avbryt");    
   }
 
   ngAfterViewInit() {
-    //apply translations
-    this.languagesCtrl.setText = this._ngxTranslateService.instant("Välj");
-    this.languagesCtrl.cancelText  = this._ngxTranslateService.instant("Avbryt");
   }
 
   ngOnDestroy(): void {
