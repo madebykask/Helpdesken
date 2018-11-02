@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./error.component.scss']
 })
 export class ErrorComponent implements OnInit {
-  
+  pageSettings = {};
   today:Date = new Date();
   errorGuid: string;
 

@@ -29,6 +29,7 @@ import { ErrorComponent } from './shared/components/error/error.component';
 import { UserSettingsService, initUserData } from './services/user';
 import { AuthenticationService } from './services/authentication';
 import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
+import { AltLayoutComponent } from './_layout/alt-layout/alt-layout.component';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -42,6 +43,7 @@ import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
      CaseFilesControlComponent,
      AlertComponent,
      ErrorComponent,     
+     AltLayoutComponent,
      MailtoticketControlComponent,
     ],
   imports: [

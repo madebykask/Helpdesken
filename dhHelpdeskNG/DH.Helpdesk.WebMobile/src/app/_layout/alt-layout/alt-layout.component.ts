@@ -8,8 +8,10 @@ import { config } from '@env/environment';
 })
 export class AltLayoutComponent implements OnInit {
   version = config.version;
-  constructor() { }
+  pageSettings = {};
 
+  constructor() { }
+  
   ngOnInit() {
   }
 

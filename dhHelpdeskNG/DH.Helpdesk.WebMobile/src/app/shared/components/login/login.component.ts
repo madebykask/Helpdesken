@@ -22,6 +22,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     submitted = false;
     returnUrl: string;
     error = '';
+    pageSettings = {};
+    
     errorMessages = {
         username: {
             required: 'Username required'

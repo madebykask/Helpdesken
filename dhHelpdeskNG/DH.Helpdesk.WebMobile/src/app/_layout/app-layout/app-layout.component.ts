@@ -14,6 +14,8 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
     private _destroy$ = new Subject();
     version = config.version;
     isFooterVisible = true;
+    pageSettings = {};
+    
     constructor(private _commService: CommunicationService) { }
 
     ngOnInit() {
