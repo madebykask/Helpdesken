@@ -30,6 +30,8 @@ import { UserSettingsService, initUserData } from './services/user';
 import { AuthenticationService } from './services/authentication';
 import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 import { AltLayoutComponent } from './_layout/alt-layout/alt-layout.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '@env/environment';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -61,6 +63,7 @@ import { AltLayoutComponent } from './_layout/alt-layout/alt-layout.component';
       },
       useDefaultLang: true
     }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
