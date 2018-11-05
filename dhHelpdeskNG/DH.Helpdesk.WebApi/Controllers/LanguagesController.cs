@@ -38,8 +38,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         {
             var cacheKey = "Languages_true";//TODO: move to LanguagesService.
             var languages = await _cacheService.GetAsync(cacheKey, () => _languageService.GetLanguagesAsync(true), DateTime.UtcNow.AddMinutes(5));
-            //Translation.Get todo: translate language names
-            return languages.Select(l => new ItemOverview(l.Name, l.Id.ToString())).ToList();
+            return languages.Select(l => new ItemOverview(_translateCacheService.GetTextTranslation(l.Name, langId), l.Id.ToString())).ToList();
         }
 
     }
