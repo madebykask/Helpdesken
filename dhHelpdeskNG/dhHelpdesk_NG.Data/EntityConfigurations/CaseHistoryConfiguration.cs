@@ -37,6 +37,27 @@
                             .HasForeignKey(x => x.Department_Id)
                             .WillCascadeOnDelete(false);
 
+            this.HasOptional(x => x.Region)
+                            .WithMany()
+                            .HasForeignKey(x => x.Region_Id)
+                            .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.IsAbout_Region)
+                            .WithMany()
+                            .HasForeignKey(x => x.IsAbout_Region_Id)
+                            .WillCascadeOnDelete(false);
+
+
+            this.HasOptional(x => x.OU)
+                            .WithMany()
+                            .HasForeignKey(x => x.OU_Id)
+                            .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.IsAbout_OU)
+                            .WithMany()
+                            .HasForeignKey(x => x.IsAbout_OU_Id)
+                            .WillCascadeOnDelete(false);
+
             this.HasOptional(x => x.IsAbout_Department)
                             .WithMany()
                             .HasForeignKey(x => x.IsAbout_Department_Id)
@@ -79,6 +100,21 @@
             this.HasOptional(x => x.WorkingGroup)
                             .WithMany()
                             .HasForeignKey(x => x.WorkingGroup_Id)
+                            .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.System)
+                            .WithMany()
+                            .HasForeignKey(x => x.System_Id)
+                            .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.Urgency)
+                            .WithMany()
+                            .HasForeignKey(x => x.Urgency_Id)
+                            .WillCascadeOnDelete(false);
+
+            this.HasOptional(x => x.Impact)
+                            .WithMany()
+                            .HasForeignKey(x => x.Impact_Id)
                             .WillCascadeOnDelete(false);
 
             this.HasOptional(x => x.Status)
@@ -156,7 +192,12 @@
             this.Property(x => x.ActionLeadTime).IsRequired();
             this.Property(x => x.ActionExternalTime).IsRequired();
             this.Property(x => x.CaseExtraFollowers).IsRequired();
-            
+            this.Property(x => x.IsAbout_Persons_EMail).IsOptional().HasMaxLength(100);
+            this.Property(x => x.IsAbout_Persons_CellPhone).IsOptional().HasMaxLength(50);
+            this.Property(x => x.IsAbout_Region_Id).IsOptional();
+            this.Property(x => x.IsAbout_CostCentre).IsOptional().HasMaxLength(50);
+            this.Property(x => x.IsAbout_Place).IsOptional().HasMaxLength(100);
+
             this.ToTable("tblcasehistory");
         }
     }

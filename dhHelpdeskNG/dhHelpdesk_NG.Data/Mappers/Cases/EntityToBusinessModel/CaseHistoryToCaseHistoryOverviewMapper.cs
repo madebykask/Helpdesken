@@ -100,6 +100,13 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
                 ActionLeadTime = entity.ActionLeadTime,
                 ActionExternalTime = entity.ActionExternalTime,
                 CaseExtraFollowers = entity.CaseExtraFollowers,
+                CostCentre = entity.CostCentre,
+                IsAbout_Persons_EMail = entity.IsAbout_Persons_EMail,
+                IsAbout_Persons_CellPhone = entity.IsAbout_Persons_CellPhone,
+                IsAbout_Region_Id = entity.IsAbout_Region_Id,
+                IsAbout_OU_Id = entity.IsAbout_OU_Id,
+                IsAbout_CostCentre = entity.IsAbout_CostCentre,
+                IsAbout_Place = entity.IsAbout_Place,
 
                 Department = data.Department,
 
@@ -131,7 +138,21 @@ namespace DH.Helpdesk.Dal.Mappers.Cases.EntityToBusinessModel
 
                 IsAbout_Department = data.IsAbout_Department,
 
-                Emaillogs = data.EmailLogs
+                Emaillogs = data.EmailLogs,
+
+                Region = data.Region,
+
+                IsAbout_Region = data.IsAbout_Region,
+
+                OU = data.OU,
+
+                IsAbout_OU = data.IsAbout_OU,
+
+                System = data.System,
+
+                Urgency = data.Urgency,
+
+                Impact = data.Impact
             };
         }
     }

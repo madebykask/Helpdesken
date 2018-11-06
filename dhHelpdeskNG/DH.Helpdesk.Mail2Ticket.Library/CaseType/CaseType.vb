@@ -3,6 +3,7 @@
     Private miId As Integer
     Private msCaseType As String = ""
     Private miUser_Id As Integer
+    Private miWorkingGroup_Id As Integer
 #End Region
 
 #Region "Constructors"
@@ -16,6 +17,10 @@
 
         If Not IsDBNull(dr("User_Id")) Then
             miUser_Id = dr("User_Id").ToString
+        End If
+
+        If Not IsDBNull(dr("WorkingGroup_Id")) Then
+            miWorkingGroup_Id = dr("WorkingGroup_Id").ToString
         End If
     End Sub
 #End Region
@@ -45,6 +50,15 @@
         End Get
         Set(ByVal Value As Integer)
             miUser_Id = Value
+        End Set
+    End Property
+
+    Public Property WorkingGroup_Id() As Integer
+        Get
+            Return miWorkingGroup_Id
+        End Get
+        Set(ByVal Value As Integer)
+            miWorkingGroup_Id = Value
         End Set
     End Property
 #End Region

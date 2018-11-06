@@ -375,6 +375,7 @@ namespace DH.Helpdesk.Dal.Repositories
             columns.Add("tblCase.SMS");
             columns.Add("tblCase.Available");
             columns.Add("tblCase.Cost");
+            columns.Add("tblCase.CostCentre");
             columns.Add("tblCase.PlanDate");
 
             if (customerSettings != null)
@@ -842,6 +843,10 @@ namespace DH.Helpdesk.Dal.Repositories
                 case CaseProgressFilter.ClosedCases:
                 case CaseProgressFilter.FinishedNotApproved:
                     condition = $" and ({caseTableNameOrAlias}.FinishingDate is not null)";
+                    break;
+
+                case CaseProgressFilter.FeedBack:
+                    condition = $" and ({caseTableNameOrAlias}.FinishingDate is null or {caseTableNameOrAlias}.FinishingDate is not null)";
                     break;
 
                 default:

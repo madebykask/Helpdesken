@@ -130,6 +130,7 @@
     <Compile Include="Extensions\Object\ObjectExtension.cs" />
     <Compile Include="Extensions\String\SplitExtension.cs" />
     <Compile Include="Extensions\String\StringExtension.cs" />
+    <Compile Include="Linq\PredicateBuilder.cs" />
     <Compile Include="Logger\ILoggerService.cs" />
     <Compile Include="Logger\IStartUpTask.cs" />
     <Compile Include="Logger\Log4NetLoggerService.cs" />

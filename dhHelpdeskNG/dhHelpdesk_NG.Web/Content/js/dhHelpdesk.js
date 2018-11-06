@@ -97,17 +97,26 @@ function close_window() {
 }
 
 function SelectValueInOtherDropdownOnChange(id, postTo, ctl, readonlyElement) {
-    var ctlOption = ctl + ' option';
     return $.post(postTo, { 'id': id }, function (data) {
         if (data != null) {
-            var exists = $(ctlOption + '[value=' + data + ']').length;
-            if (exists > 0) {
-                $(ctl).val(data);
-                if (readonlyElement != undefined && readonlyElement != null)
-                    $(readonlyElement).val(data);
-            }
+            SetSelectValue(ctl, data, readonlyElement);
         }
     }, 'json');
+}
+
+function SetSelectValue(selId, val, readonlyElementId) {
+    var $sel = $(selId);
+    var exists = $sel.find('option[value=' + val + ']').length > 0;
+    if (exists) {
+        $sel.val(val);
+        if (readonlyElementId && readonlyElementId.length) {
+            var $readonlyElement = $(readonlyElementId);
+            if ($readonlyElement.length)
+                $readonlyElement.val(val);
+        }
+        return true;
+    }
+    return false;
 }
 
 function CaseCascadingSelectlistChange(id, customerId, postTo, ctl, departmentFilterFormat) {

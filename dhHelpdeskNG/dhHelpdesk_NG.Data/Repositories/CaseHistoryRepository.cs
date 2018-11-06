@@ -15,6 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
+    using BusinessData.Models;
 
     public interface ICaseHistoryRepository : IRepository<CaseHistory>
     {
@@ -102,6 +103,18 @@ namespace DH.Helpdesk.Dal.Repositories
                         Name = caseHistory.Problem.Name
                     } : null,
 
+                    Region = caseHistory.Region_Id != null ? new RegionOverview()
+                    {
+                        Id = caseHistory.Region_Id,
+                        Name = caseHistory.Region.Name
+                    } : null,
+
+                    OU = caseHistory.OU_Id != null ? new OUOverview()
+                    {
+                        Id = caseHistory.OU_Id,
+                        Name = caseHistory.OU.Name
+                    } : null,
+
                     Project = caseHistory.Project_Id != null ? new ProjectOverview()  
                     {
                         Id = caseHistory.Project.Id,
@@ -155,7 +168,37 @@ namespace DH.Helpdesk.Dal.Repositories
                         SearchKey = caseHistory.IsAbout_Department.SearchKey,
                         CountryName = caseHistory.IsAbout_Department.Country != null ? caseHistory.IsAbout_Department.Country.Name : null
                     } : null,
-                    
+
+                    IsAbout_Region = caseHistory.IsAbout_Region_Id != null ? new RegionOverview
+                    {
+                        Id = caseHistory.IsAbout_Region.Id,
+                        Name = caseHistory.IsAbout_Region.Name,
+                    } : null,
+
+                    IsAbout_OU = caseHistory.IsAbout_OU_Id != null ? new OUOverview
+                    {
+                        Id = caseHistory.IsAbout_OU.Id,
+                        Name = caseHistory.IsAbout_OU.Name,
+                    } : null,
+
+                    System = caseHistory.System_Id != null ? new SystemOverview
+                    {
+                        Id = caseHistory.System.Id,
+                        Name = caseHistory.System.SystemName,
+                    } : null,
+
+                    Urgency = caseHistory.Urgency_Id != null ? new UrgencyOverview
+                    {
+                        Id = caseHistory.Urgency_Id,
+                        Name = caseHistory.Urgency.Name,
+                    } : null,
+
+                    Impact = caseHistory.Impact_Id != null ? new ImpactOverview
+                    {
+                        Id = caseHistory.Impact_Id,
+                        Name = caseHistory.Impact.Name,
+                    } : null,
+
                     EmailLogs = emailLogs.Where(t => t.Id > 0).Select(t => new EmailLogsOverview
                     {
                         Id = t.Id,

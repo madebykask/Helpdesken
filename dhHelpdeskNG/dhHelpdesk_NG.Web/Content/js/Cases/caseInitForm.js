@@ -36,13 +36,13 @@ function SetFocusToReportedByOnCase() {
 }
 
 $(document).ready(function () {
-    var initiatorID = $('#InitiatorCategory').val()
-    
+
     $('#AddNotifier')[0].prevState = $('#AddNotifier').is(':visible');
     
-    if (initiatorID) {
-        var initiatorCategory = window.parameters.computerUserCategories[initiatorID];
-        intiatorReadOnly = initiatorCategory == null ? false : initiatorCategory.IsReadOnly;
+    var initiatorId = $('#InitiatorCategory').val();
+    if (initiatorId) {
+        var initiatorCategory = window.parameters.computerUserCategories[initiatorId];
+        var intiatorReadOnly = initiatorCategory == null ? false : initiatorCategory.IsReadOnly;
         applyReadOnlyOn(readOnlyExpressions['initiator'], intiatorReadOnly);
 
         if (intiatorReadOnly) {
@@ -50,21 +50,19 @@ $(document).ready(function () {
         }
     }
 
-    var regardingID = $('#IsAboutCategory').val()
-
-    if (regardingID) {
-        var regardingCategory = window.parameters.computerUserCategories[regardingID];
-        regardingReadOnly = regardingCategory == null ? false : regardingCategory.IsReadOnly;
+    var regardingId = $('#IsAboutCategory').val();
+    if (regardingId) {
+        var regardingCategory = window.parameters.computerUserCategories[regardingId];
+        var regardingReadOnly = regardingCategory == null ? false : regardingCategory.IsReadOnly;
         applyReadOnlyOn(readOnlyExpressions['regarding'], regardingReadOnly);
+    }
+
+    if (window.parameters.hasExtendedComputerUsers === "True") {
+        initExtendedComputerUserSections();
     }
 });
 
-
-
 function GetComputerSearchOptions() {
-
-    
-
     var options = {
         items: 20,
         minLength: 2,
@@ -538,37 +536,8 @@ function GetComputerUserSearchOptions() {
                 // Category marked as readonly (lock part from edit)
                 applyReadOnlyOn(readOnlyExpressions['initiator'], item.isReadOnly);
 
-                if (item.categoryID != null) {
-                    $.ajax({
-                        url: '/cases/GetExtendedCaseUrlForCategoryAndSection',
-                        type: 'post',
-                        data: {
-                            categoryID: item.categoryID,
-                            caseSectionType: 0 // Initiator
-                        },
-                        dataType: 'json',
-                        success: function (ext) {
-                            // TODO: set part dynamically
-                            if (ext.url != null) {
-                                $("#extendedSection-iframe-Initiator").attr('src', ext.url);
-                                $("#ExtendedInitiatorGUID").val(ext.guid)
-                                $("#extendedSection-Initiator").show();
-                                //iFrameResize({ log: true }, '#extended-initiator-frame');
-                            }
-                            else {
-                                $("#extendedSection-iframe-Initiator").attr('src', '');
-                                $("#ExtendedInitiatorGUID").val('');
-                                $("#extendedSection-Initiator").hide();
-                            }
-                        }
-                    });
-                }
-                else {
-                    $("#ExtendedInitiatorGUID").val('');
-                    $("#extendedSection-iframe-Initiator").attr('src', '');
-                    $("#extendedSection-Initiator").hide();
-                }
-
+                var initiatorSectionType = 0;
+                loadExtendedCaseSectionIfExist(item.categoryID, initiatorSectionType);
 
                 return item.num;
             }
@@ -579,6 +548,86 @@ function GetComputerUserSearchOptions() {
     return options;
 }
 
+function initExtendedComputerUserSections() {
+    var iframeOptions = getExtendedCaseSectionIFrameOptions();
+    $('iframe[id^="extendedSection-iframe"]').iFrameResize(iframeOptions);
+}
+
+function loadExtendedCaseSectionIfExist(categoryId, sectionType) {
+    
+    var inputData = {
+        categoryID: categoryId,
+        caseSectionType: sectionType // 0 - Initiator, 1 - Regarding
+    };
+
+    if (categoryId != null) {
+        $.ajax({
+            url: '/cases/GetExtendedCaseUrlForCategoryAndSection',
+            type: 'POST',
+            data: inputData,
+            dataType: 'json',
+            success: function (ext) {
+                // TODO: set part dynamically
+                if (ext.url && ext.url.length) {
+                    loadExtendedCaseSection(ext.url, ext.guid, sectionType);
+                }
+                else {
+                    resetExtendedCaseSection(sectionType);
+                }
+            }
+        });
+    }
+    else {
+        resetExtendedCaseSection(sectionType);
+    }
+}
+
+function loadExtendedCaseSection(extendedFormUrl, userGuid, sectionType) {
+    var elements = getExCaseSectionElements(sectionType);
+    elements.$frame.css('height', '180px'); // restore orignial height
+    elements.$userGuidHidden.val(userGuid);
+    elements.$frame.attr('src', extendedFormUrl);
+    elements.$exCaseSection.show();
+}
+
+function resetExtendedCaseSection(sectionType) {
+    var elements = getExCaseSectionElements(sectionType);
+    elements.$userGuidHidden.val('');
+    elements.$exCaseSection.hide();
+    elements.$frame.attr('src', '');
+}
+
+function getExCaseSectionElements(sectionType) {
+    // 0 - Initiator, 1 - Regarding
+    var elements = Number(sectionType) === 0
+        ? {
+            $exCaseSection: $('#extendedSection-Initiator'),
+            $frame: $('#extendedSection-iframe-Initiator'),
+            $userGuidHidden: $('#ExtendedInitiatorGUID')
+        }
+        : {
+            $exCaseSection: $('#extendedSection-Regarding'),
+            $frame: $('#extendedSection-iframe-Regarding'),
+            $userGuidHidden: $('#ExtendedRegardingGUID')
+        };
+    return elements;
+}
+
+function getExtendedCaseSectionIFrameOptions() {
+    var iframeOptions = {
+        log: true,
+        sizeHeight: true,
+        checkOrigin: false,
+        enablePublicMethods: true,
+        resizedCallback: function(messageData) {
+            //console.log('>>>iFrame sesize callback called.!');
+        },
+        bodyMargin: '0 0 0 0',
+        closedCallback: function (id) {},
+        heightCalculationMethod: 'grow'
+    };
+    return iframeOptions;
+}
 
 function applyReadOnlyOn(readOnlyExpressions, readOnly) {
     var combined = readOnlyExpressions.join();
@@ -801,38 +850,8 @@ function GetComputerUserSearchOptionsForIsAbout() {
                 /*if (item.categoryID != null){
                     window.page.loadExtendedInitiator();
                 }*/
-
-                if (item.categoryID != null) {
-                    // DO when changing category instead, EDIT again, this way suites better as no new needs to be made
-                    $.ajax({
-                        url: '/cases/GetExtendedCaseUrlForCategoryAndSection',
-                        type: 'post',
-                        data: {
-                            categoryID: item.categoryID,
-                            caseSectionType: 1 // Regarding
-                        },
-                        dataType: 'json',
-                        success: function (ext) {
-                            // TODO: set part dynamically
-                            if (ext.url != null) {
-                                $("#extendedSection-iframe-Regarding").attr('src', ext.url);
-                                $("#ExtendedRegardingGUID").val(ext.guid)
-                                $("#extendedSection-Regarding").show();
-                                //iFrameResize({ log: true }, '#extended-initiator-frame');
-                            }
-                            else {
-                                $("#extendedSection-iframe-Regarding").attr('src', '');
-                                $("#ExtendedRegardingGUID").val('');
-                                $("#extendedSection-Regarding").hide();
-                            }
-                        }
-                    });
-                }
-                else {
-                    $("#extendedSection-iframe-Regarding").attr('src', '');
-                    $("#extendedSection-Regarding").hide();
-                    $("#ExtendedRegardingGUID").val('');
-                }
+                var regardingSectionType = 1;
+                loadExtendedCaseSectionIfExist(item.categoryID, regardingSectionType);
 
                 return item.num;
             }
@@ -871,6 +890,7 @@ function CaseInitForm() {
     $('#case__Region_Id').change(function () {
         var regionId = $(this).val();
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
+
         var templateDep_Id = $("#CaseTemplate_Department_Id").val();
         $("#CaseTemplate_Department_Id").val('');
 
@@ -916,6 +936,7 @@ function CaseInitForm() {
         var departmentFilterFormat = $('#DepartmentFilterFormat').val();
         var templateOU_Id = $("#CaseTemplate_OU_Id").val();
         $("#CaseTemplate_OU_Id").val('');
+
         if (templateOU_Id != undefined && templateOU_Id != "") 
             refreshOrganizationUnit(departmentId, departmentFilterFormat, templateOU_Id);                
         else 
@@ -1007,7 +1028,6 @@ function CaseInitForm() {
 
         clearIsAbout();
 
-
         var category = window.parameters.computerUserCategories[id];
         if (category != null && category.IsReadOnly) {
             readOnlySection('regarding', true);
@@ -1017,35 +1037,66 @@ function CaseInitForm() {
         }
     });
 
-
-    $('#case__Status_Id').change(function () {        
+    
+    $('#case__Status_Id').change(function (e) {        
+        console.log('>>> CaseStatus changed event.');
+        var templateStateSecondartId = $('#CaseTemplate_StateSecondary_Id').val() || '';
+        var templateWgId = $('#CaseTemplate_WorkingGroup_Id').val() || '';
 
         if ($(this).val() > 0) {
             $.post('/Cases/ChangeStatus/', { 'id': $(this).val() }, function (data) {
-                var alreadySetByCaseTemplate = ($('#CaseTemplate_StateSecondary_Id').val() != "");
-                if (data != undefined && !alreadySetByCaseTemplate) {
-                    var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
-                    if (exists > 0 && data.WorkingGroup_Id > 0) {
-                        $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id).change();
+                if (data) {
+                    //check if working group has been set by case template
+                    if (templateWgId === '') {
+                        changeWorkingGroupValue(data.WorkingGroup_Id, null, 'changeStatus');
                     }
-                    exists = $('#case__StateSecondary_Id option[value=' + data.StateSecondary_Id + ']').length;
-                    if (exists > 0 && data.StateSecondary_Id > 0) {
-                        $("#case__StateSecondary_Id").val(data.StateSecondary_Id);
-                        $(".readonlySubstate").val(data.StateSecondary_Id);
+
+                    var stateSecondaryId = Number(data.StateSecondary_Id);
+                    if (stateSecondaryId > 0 && templateStateSecondartId === '') {
+                        var exists = $('#case__StateSecondary_Id option[value=' + data.StateSecondary_Id + ']').length > 0;
+                        if (exists) {
+                            $("#case__StateSecondary_Id").val(data.StateSecondary_Id);
+                            $(".readonlySubstate").val(data.StateSecondary_Id);
+                        }
                     }
                 }
             }, 'json');
-
-            $('#CaseTemplate_StateSecondary_Id').val("");
         }
-        
-        
-
     });
 
-    $('#case__CaseType_Id').change(function () {
+    $('#case__CaseType_Id').change(function (e, source) {
         var caseTypeId = $(this).val();
-        SelectValueInOtherDropdownOnChange(caseTypeId, '/Cases/ChangeCaseType/', '#Performer_Id');        
+        console.log('>>> CaseType changed event.');
+
+        var templateWgId = $('#CaseTemplate_WorkingGroup_Id').val() || '';
+        var templatePerformerId = $("#CaseTemplate_Performer_Id").val() || '';
+
+        $.post('/Cases/ChangeCaseType/', { id: caseTypeId }).done(function (res) {
+            if (res) {
+                //set performer only if it was not set by case template before
+                var $performerId = $('#Performer_Id');
+                var performerUserId = Number(res.UserId);
+                
+                if (!isNaN(performerUserId) && performerUserId > 0 && templatePerformerId === '') {
+                    var exists = $performerId.find('option[value=' + res.UserId + ']').length > 0;
+                    if (!exists) 
+                        $performerId.append("<option value='" + res.UserId + "'>" + res.UserName + "</option>");
+                    $performerId.val(res.UserId);
+                }
+
+                //chek if workginGroup has already been set by template load
+                if (templateWgId === '') {
+                    changeWorkingGroupValue(res.WorkingGroupId, res.WorkingGroupName, 'changeCaseType');
+                }
+            }
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.warn('Case type (id=%s) not found.', caseTypeId);
+                ShowToastMessage('CaseType not found', 'warning', false);
+            }
+        });
+        
         resetProductareaByCaseType(caseTypeId);
     });
 
@@ -1099,9 +1150,9 @@ function CaseInitForm() {
         var query = fields.join();
         $(query).val('');
 
-        // Hide initiator section
-        $("#extendedSection-Initiator").hide();
-        $("#ExtendedInitiatorGUID").val('');
+        // reset initiator extended section
+        var initiatorSectionType = 0;
+        resetExtendedCaseSection(initiatorSectionType);
     }
 
     function clearIsAbout() {
@@ -1118,11 +1169,10 @@ function CaseInitForm() {
         var query = fields.join();
         $(query).val('');
 
-        // Hide extended section
-        $("#extendedSection-Regarding").hide();
-        $("#ExtendedRegardingGUID").val('');
+        // reset initiator extended section
+        var regardingSectionType = 1;
+        resetExtendedCaseSection(regardingSectionType);
     }
-
     
     function onProductAreaChanged(sender) {        
         var me = sender;
@@ -1156,6 +1206,7 @@ function CaseInitForm() {
             $('#CaseTemplate_ExternalLogNote').val("");
             return;
         }
+
         var textExternalLogNote = $('#CaseLog_TextExternal').val();
   
         $.post('/Cases/ChangePriority/', { 'id': $(this).val(), 'textExternalLogNote': textExternalLogNote }, function (data) {
@@ -1182,59 +1233,71 @@ function CaseInitForm() {
         SetPriority();
     });
 
-    $('#case__ProductArea_Id').change(function () {
-        var $workingGroup = $("#case__WorkingGroup_Id");       
-        
+    // Product Area change
+    $('#case__ProductArea_Id').change(function (e) {
+        console.log('>>> ProductArea changed event.');
         $("#ProductAreaHasChild").val(0);        
         document.getElementById("divProductArea").classList.remove("error");
+
+        var templateWgId = $('#CaseTemplate_WorkingGroup_Id').val() || '';
+        var templatePriorityId = $('#CaseTemplate_Priority_Id').val() || '';
+
         if ($(this).val() > 0 ) {
             $.post('/Cases/ChangeProductArea/', { 'id': $(this).val() }, 'json').done(function (data) {
-                if (data != undefined) {
+                if (data) {
+                    //change only if it wasn't set by a template
+                    if (templateWgId === '') {
+                        changeWorkingGroupValue(data.WorkingGroup_Id, data.WorkingGroup_Name, 'changeProductArea');
+                    }
 
-                    var alreadySetByCaseTemplate = ($('#CaseTemplate_WorkingGroup_Id').val() != "");
-
-                    var exists = $workingGroup.find('option[value=' + data.WorkingGroup_Id + ']').length;
-
-                    if (exists > 0 || $('#workingGroup_Name') != undefined)
-                        if (data.WorkingGroup_Id > 0 && !alreadySetByCaseTemplate) {                            
-                            $workingGroup.val(data.WorkingGroup_Id);                           
-                            $workingGroup.change();
-
-                            if ($('#workingGroup_Name') != undefined && data.WorkingGroup_Name != null)
-                                $('#workingGroup_Name').val(data.WorkingGroup_Name);
+                    var priorityId = Number(data.Priority_Id || '0');
+                    var $casePriorityId = $("#case__Priority_Id");
+                    
+                    if (priorityId > 0 && templatePriorityId === '') {
+                        var exists = $casePriorityId.find('option[value=' + data.Priority_Id + ']').length > 0;
+                        if (exists) {
+                            $casePriorityId.val(data.Priority_Id);
+                            $casePriorityId.attr('data-sla', data.SLA);
+                            $casePriorityId.change();
                         }
 
-                    exists = $('#case__Priority_Id option[value=' + data.Priority_Id + ']').length;
-                    alreadySetByCaseTemplate = ($('#CaseTemplate_Priority_Id').val() != "");
-
-                    if (exists > 0 || $('#priority_Name') != undefined){
-                        if (data.Priority_Id > 0 && !alreadySetByCaseTemplate) {
-                            $("#case__Priority_Id").val(data.Priority_Id);
-                            $("#case__Priority_Id").attr('data-sla', data.SLA);
-                            $("#case__Priority_Id").change();
-
-                            if ($('#priority_Name') != undefined && data.PriorityName != null)
-                                $('#priority_Name').val(data.PriorityName);
-                        }                        
+                        var $priorityName = $('#priority_Name');
+                        if ($priorityName.length && data.PriorityName) {
+                            $priorityName.val(data.PriorityName);
+                        }
                     }
                 
-                    if (data.Priority_Id > 0)
+                    if (priorityId > 0)
                         $(".sla-value").eq(0).val(data.Priority_Id);
+
                     $("#ProductAreaHasChild").val(data.HasChild);
                 }
-
-                $('#CaseTemplate_WorkingGroup_Id').val("");
-                $('#CaseTemplate_Priority_Id').val("");
             });
-            
         }        
     });
 
+    function changeWorkingGroupValue(newWorkingGroupId, newWorkingGroupName, srcName) {
+        console.log('>>> ChangeWorkingGroupValue: wgId %s, wgName: %s, src: %s', newWorkingGroupId, newWorkingGroupName, srcName);
+
+        var $workingGroup = $("#case__WorkingGroup_Id");
+        var exists = $workingGroup.find('option[value=' + newWorkingGroupId + ']').length > 0;
+        if (Number(newWorkingGroupId) > 0 && exists) {
+            $workingGroup.val(newWorkingGroupId);
+            $workingGroup.change();
+        }
+
+        var $workginGroupName = $('#workingGroup_Name');
+        if ($workginGroupName.length) {
+            $workginGroupName.val(newWorkingGroupName || '');
+        }
+    }
+
     $('#case__WorkingGroup_Id').change(function () {
+        console.log('>>> Working group changed event.');
         // Remove after implementing http://redmine.fastdev.se/issues/10995
         // filter administrators
-        var DontConnectUserToWorkingGroup = $('#CaseMailSetting_DontConnectUserToWorkingGroup').val();
-        if (DontConnectUserToWorkingGroup == 0) {
+        var dontConnectUserToWorkingGroup = Number($('#CaseMailSetting_DontConnectUserToWorkingGroup').val() || '0');
+        if (dontConnectUserToWorkingGroup === 0) {
             CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
         }
         //set state secondery

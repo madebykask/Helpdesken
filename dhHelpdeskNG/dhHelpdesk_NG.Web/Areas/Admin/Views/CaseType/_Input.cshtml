@@ -1,7 +1,7 @@
 ﻿@using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @model DH.Helpdesk.Web.Areas.Admin.Models.CaseTypeInputViewModel
-
+@Scripts.Render("~/bundles/admin/casetype/_input")
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
@@ -62,6 +62,26 @@
                                         @Translation.GetCoreTextTranslation("Godkänn ärenden automatiskt efter")&nbsp;
                                         @Html.TextBoxFor(model => model.CaseType.AutomaticApproveTime, new { style = "display: inline; width: 30px; text-align: right; margin-left:0;", maxlength = "3" })
                                         &nbsp;@Translation.GetCoreTextTranslation("timmar")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Driftgrupp")
+                                    </td>
+                                    <td>
+                                        <select id="caseType__WorkingGroup_Id" name="caseType.WorkingGroup_Id" data-field="workingGroup" class="working-group">
+                                            <option value="">&nbsp;</option>
+                                            @if (Model.WorkingGroups != null)
+                                            {
+
+                                                foreach (var e in Model.WorkingGroups.Where(e => e.IsActive == 1 || Model.CaseType.WorkingGroup_Id == e.Id))
+                                                {
+                                                    <option value="@e.Id" class="@(e.IsActive != 1 ? "inactive" : string.Empty)" @e.Id.IdIsSelected(Model.CaseType.WorkingGroup_Id.ToString())>@e.WorkingGroupName</option>
+                                                }
+                                            }
+                                        </select>
+
+                                        @*@Html.DropDownListFor(model => model.CaseType.WorkingGroup_Id, Model.WorkingGroups, "")*@
                                     </td>
                                 </tr>
                                 <tr>
@@ -147,6 +167,9 @@
                                         @Translation.GetCoreTextTranslation("Kräver godkännande")
                                     </th>
                                     <th>
+                                        @Translation.GetCoreTextTranslation("Driftgrupp")
+                                    </th>
+                                    <th>
                                         @Translation.GetCoreTextTranslation("Handläggare")
                                     </th>
                                     <th>
@@ -165,3 +188,12 @@
     </div>
 </div>
 
+<script>
+    //$('#caseType__WorkingGroup_Id').on('change', function () {
+    //    alert();
+    //    SelectValueInOtherDropdownOnChange($(this).val(), '/CaseType/ChangeWorkingGroupFilterUser/', '#caseType__WorkingGroup_Id', '#Customer_Id')
+    //        .done(function () {
+    //            $('#CaseType_User_Id').trigger('change', 'caseType__WorkingGroup_Id');
+    //        });
+    //});
+</script>

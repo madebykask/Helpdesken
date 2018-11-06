@@ -83,10 +83,8 @@ namespace DH.Helpdesk.Services.Services
 
             foreach (var condition in conditions)
             {
-
                 var conditionValue = condition.Values.Tidy().ToLower();
                 var conditionKey = condition.Property_Name.Tidy();
-
 
                 try
                 {

@@ -29,9 +29,9 @@ namespace DH.Helpdesk.Services.Services
 
         void Commit();
 
-        IEnumerable<ItemOverview> GetOverviews(int customerId);
+        IList<ItemOverview> GetOverviews(int customerId);
 
-        IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds);
+        IList<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds);
 
         IList<CaseTypeOverview> GetCaseTypesOverviewWithChildren(int customerId, bool activeOnly = false);
 
@@ -96,7 +96,7 @@ namespace DH.Helpdesk.Services.Services
 
         public CaseType GetCaseType(int id)
         {
-            return this.caseTypeRepository.GetById(id);
+            return this.caseTypeRepository.GetCaseTypeFull(id);
         }
 
         public int GetDefaultId(int customerId)
@@ -180,12 +180,12 @@ namespace DH.Helpdesk.Services.Services
             this.unitOfWork.Commit();
         }
 
-        public IEnumerable<ItemOverview> GetOverviews(int customerId)
+        public IList<ItemOverview> GetOverviews(int customerId)
         {
             return this.caseTypeRepository.GetOverviews(customerId);
         }
 
-        public IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds)
+        public IList<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds)
         {
             return this.caseTypeRepository.GetOverviews(customerId, caseTypesIds);
         }

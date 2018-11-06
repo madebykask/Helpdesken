@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer.Input;
 using DH.Helpdesk.BusinessData.Models.User;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
 
@@ -392,6 +393,7 @@ namespace DH.Helpdesk.Services.Services
             return this._userRepository.GetUserOnCases(customerId, isTakeOnlyActive);
         }
 
+        // NOTE: do not use if you have conditions!!!
         public IList<User> GetUsers()
         {
             return this._userRepository.GetAll().OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
@@ -832,7 +834,7 @@ namespace DH.Helpdesk.Services.Services
         {
             if (user == null)
             {
-                throw new ArgumentNullException("user");
+                throw new ArgumentNullException(nameof(user));
             }
 
             errors = new Dictionary<string, string>();
@@ -843,17 +845,21 @@ namespace DH.Helpdesk.Services.Services
                 errors.Add("User permissions", this.translator.Translate("There are wrong permissions for this user group."));
             }
 
-            var hasDublicate = this.GetUsers().Any(u => u.UserID.EqualWith(user.UserID));
+            var hasDublicate = _userRepository.FindUsersByUserId(user.UserID).Count() > 0;
             if (hasDublicate)
             {
                 errors.Add("User.UserID", "Det här användarnamnet är upptaget. Var vänlig använd något annat.");
             }
 
-            if (user.Password == confirmpassword)
+            if (string.IsNullOrEmpty(user.Password))
             {
-                user.Password = user.Password;
-            }else
-                errors.Add("User.Password", "Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens");
+                errors.Add("NewPassWord", "Du måste ange ett lösenord");
+            }
+
+            if (!user.Password.Equals(confirmpassword, StringComparison.CurrentCulture) && !string.IsNullOrEmpty(user.Password))
+            {
+                errors.Add("NewPassword", "Det nya lösenordet bekräftades inte korrekt. Kontrollera att nytt lösenord och bekräftat lösenord stämmer överens");
+            }
 
             var userEMail = "";
             if (user.Email != null)
@@ -942,10 +948,10 @@ namespace DH.Helpdesk.Services.Services
                     if (customerSetting.ComplexPassword != 0)
                     {
                         if (!PasswordHelper.IsValid(user.Password))
-                            errors.Add("NewPassWord", "Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav, en siffra och ett special tecken (!@#=$&?*).");
+                            errors.Add("NewPassword", "Lösenord är inte giltigt. Minst 8 tecken, varav en stor bokstav, en liten bokstav, en siffra och ett special tecken (!@#=$&?*).");
                     }
                     else if (user.Password.Length < MinPasswordLength)
-                        errors.Add("NewPassWord", "Lösenord är inte giltigt. Minst antal tecken är: " + MinPasswordLength);
+                        errors.Add("NewPassword", "Lösenord är inte giltigt. Minst antal tecken är: " + MinPasswordLength);
                 }
             }
 
@@ -966,7 +972,6 @@ namespace DH.Helpdesk.Services.Services
                     }
                 }
             }
-
 
             if (user.OTs != null)
                 foreach (var delete in user.OTs.ToList())
@@ -1018,9 +1023,12 @@ namespace DH.Helpdesk.Services.Services
 
         public UserOverview Login(string name, string password)
         {
-            var user = this._userRepository.Login(name, password);
-            
-            return user;
+            var user = _userRepository.GetUserLoginInfo(name);
+
+            if (user != null && user.Password.Equals(password, StringComparison.CurrentCulture)) // case sensetive
+                return _userRepository.GetUser(user.Id);
+
+            return null;
         }
 
         public DateTime GetUserPasswordChangedDate(int id)
@@ -1091,11 +1099,11 @@ namespace DH.Helpdesk.Services.Services
 
         public bool IsUserValidAdmin(string userId, string pass)
         {
-            var entities = _userRepository.GetMany(u => u.UserID.ToLower() == userId.ToLower() &&
-                                                      u.Password == pass &&
-                                                      u.UserGroup_Id == 4)
-                                          .ToList();
-            return entities.Any();
+            var user = this._userRepository.GetUserLoginInfo(userId);
+            if (user != null && user.Password == pass && user.UserGroupId == UserGroups.SystemAdministrator)
+                return true;
+            
+            return false;
         }
 
         public bool VerifyUserCasePermissions(UserOverview user, int caseId)
@@ -1230,9 +1238,8 @@ namespace DH.Helpdesk.Services.Services
                 var userRep = uow.GetRepository<User>();
 
                 var customers = customerRep.GetAll().GetById(customerId);
-                var customerUsers = customerUserRep.GetAll();
-                var users = userRep.GetAll();
-                //var users = userRep.GetAll().GetActive();
+                var customerUsers = customerUserRep.GetAll();               
+                var users = userRep.GetAll().GetActive();
 
                 return UsersMapper.MapToCustomerUsers(customers, users, customerUsers);
             }

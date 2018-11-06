@@ -120,6 +120,7 @@ $(function () {
     }   
 
     //$('#WorkingGroup').change(function () {
+    //    alert();
     //    // filter administrators
     //    CaseCascadingSelectlistChange($(this).val(), $('#CaseSolution_Customer_Id').val(), '/CaseSolution/ChangeWorkingGroupFilterUser/', '#PerformerUser');
     //});

@@ -28,6 +28,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
             
         public int Selectable { get; set; }
 
+        public int? WorkingGroupId { get; set; }
+
         public List<CaseTypeOverview> SubCaseTypes { get; set; }
     }
 }

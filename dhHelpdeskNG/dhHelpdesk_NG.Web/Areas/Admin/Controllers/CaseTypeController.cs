@@ -8,6 +8,7 @@
     using DH.Helpdesk.Services.Services;
     using DH.Helpdesk.Web.Areas.Admin.Models;
     using DH.Helpdesk.Web.Infrastructure;
+    using BusinessData.Models;
 
     public class CaseTypeController : BaseAdminController
     {
@@ -15,17 +16,20 @@
         private readonly IUserService _userService;
         private readonly ICustomerService _customerService;
         private const int MaxCaseTpyeLevels = 6;
+        private readonly IWorkingGroupService _workingGroupService;
 
         public CaseTypeController(
             ICaseTypeService caseTypeService,
             IUserService userService,
             ICustomerService customerService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IWorkingGroupService workingGroupService)
             : base (masterDataService)
         {
             this._caseTypeService = caseTypeService;
             this._userService = userService;
             this._customerService = customerService;
+            this._workingGroupService = workingGroupService;
         }
 
         public JsonResult SetShowOnlyActiveCaseTypesInAdmin(bool value)
@@ -132,7 +136,8 @@
                 {
                     Text = x.SurName + " " + x.FirstName,
                     Value = x.Id.ToString()
-                }).ToList()
+                }).ToList(),
+                WorkingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customer.Id, true)
             };
 
             return model;
@@ -146,6 +151,53 @@
                 return GetCaseTypeParentsCount(caseType.ParentCaseType) + 1;
         }
 
+        public JsonResult ChangeWorkingGroupFilterUser(int? id, int customerId)
+        {
+            IList<BusinessData.Models.User.CustomerUserInfo> performersList;
+            var customerSettings = GetCustomerSettings(customerId);
+            if (customerSettings.DontConnectUserToWorkingGroup == 0 && id > 0)
+            {
+                performersList = this._userService.GetAvailablePerformersForWorkingGroup(customerId, id);
+            }
+            else
+            {
+                performersList = this._userService.GetAvailablePerformersOrUserId(customerId);
+            }
 
+            if (customerSettings.IsUserFirstLastNameRepresentation == 1)
+            {
+                return
+                    this.Json(
+                        new
+                        {
+                            list =
+                                    performersList.OrderBy(it => it.FirstName)
+                                        .ThenBy(it => it.SurName)
+                                        .Select(
+                                            it =>
+                                            new IdName
+                                            {
+                                                id = it.Id,
+                                                name = string.Format("{0} {1}", it.FirstName, it.SurName)
+                                            })
+                        });
+            }
+
+            return
+                this.Json(
+                    new
+                    {
+                        list =
+                                performersList.OrderBy(it => it.SurName)
+                                    .ThenBy(it => it.FirstName)
+                                    .Select(
+                                        it =>
+                                        new IdName
+                                        {
+                                            id = it.Id,
+                                            name = string.Format("{0} {1}", it.SurName, it.FirstName)
+                                        })
+                    });
+        }
     }
 }

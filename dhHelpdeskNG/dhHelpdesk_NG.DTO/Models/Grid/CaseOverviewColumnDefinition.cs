@@ -29,6 +29,7 @@
             ComputerFields.ComputerType,
             CaseInfoFields.PhoneContact,
             CaseInfoFields.Cost,
+            UserFields.CostCentre,
             UserFields.Customer,
             UserFields.Department,
             CaseInfoFields.Description,

@@ -429,13 +429,17 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 var isInactive = caseType.IsActive != 1 || isParentInactive;
                 var admin = string.Empty;
+                var workingGroup = string.Empty;
                 if (caseType.Administrator != null)
                     admin = string.Format("{0} {1}", caseType.Administrator.FirstName, caseType.Administrator.SurName);
+                if (caseType.WorkingGroup != null)
+                    workingGroup = caseType.WorkingGroup.WorkingGroupName;
                 //htmlOutput += "<tr>";
                 htmlOutput += string.Format("<tr class=\"{0}\">", isInactive ? "inactive" : string.Empty);
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "' style='padding-left: " + iteration + "px'><i class='icon-resize-full icon-dh'></i>" + caseType.Name + "</a></td>";
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + caseType.IsDefault.TranslateBit() + "</a></td>";
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + caseType.RequireApproving.TranslateBit() + "</a></td>";
+                htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + workingGroup + "</a></td>";
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + admin + "</a></td>";
                 htmlOutput += "<td><a href='/admin/casetype/edit/" + caseType.Id + "'>" + caseType.IsActive.TranslateBit() + "</a></td>";
                 htmlOutput += "</tr>";

@@ -1136,6 +1136,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
+        [ValidateInput(false)]
         public ActionResult _CaseLogNote(int caseId, string note, string logFileGuid)
         {
             SaveExternalMessage(caseId, note, logFileGuid);            
@@ -1265,6 +1266,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult NewCase(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog)
         {
             decimal caseNum;
@@ -1879,6 +1881,27 @@ namespace DH.Helpdesk.SelfService.Controllers
                     dept.WatchDateCalendar_Id.Value,
                     DateTime.UtcNow);
                 }
+            }
+
+            if (newCase.CaseType_Id > 0)
+            {
+                var caseType = this._caseTypeService.GetCaseType(newCase.CaseType_Id);
+                if (!newCase.WorkingGroup_Id.HasValue)
+                {
+                    if (caseType != null && caseType.WorkingGroup_Id.HasValue)
+                    {
+                        newCase.WorkingGroup_Id = caseType.WorkingGroup_Id;
+                    }
+                }
+
+                if (!newCase.Performer_User_Id.HasValue)
+                {
+                    if (caseType != null && caseType.User_Id.HasValue)
+                    {
+                        newCase.Performer_User_Id = caseType.User_Id;
+                    }
+                }
+
             }
 
             var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0; 

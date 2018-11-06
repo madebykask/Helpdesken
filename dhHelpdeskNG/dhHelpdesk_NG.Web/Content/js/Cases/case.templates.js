@@ -2,24 +2,14 @@
 
 
 function SetValueIfElVisible(el, val, opt, forceApply) {
+
     opt = opt || { doOverwrite: false, doNotTriggerEvent: false };
 
     if (el && ($(el).is(':visible') || (forceApply && val != null && val != ''))) {
-        if (el.val() == "" || opt.doOverwrite) {
+        if (el.val() === "" || opt.doOverwrite) {
             $(el).val(val);
             if (!opt.doNotTriggerEvent) {                
                 $(el).trigger('change');
-            }
-            if (el.selector == "#case__WorkingGroup_Id") {
-                $("#CaseTemplate_WorkingGroup_Id").val(val);
-            }
-
-            if (el.selector == "#case__Priority_Id") {
-                $("#CaseTemplate_Priority_Id").val(val);
-            }
-
-            if (el.selector == "#case__StateSecondary_Id") {
-                $("#CaseTemplate_StateSecondary_Id").val(val);
             }
         }
     }
@@ -27,7 +17,7 @@ function SetValueIfElVisible(el, val, opt, forceApply) {
 
 function SetSingleSelectValueIfElVisible(el, val, opt) {
     opt = opt || { doOverwrite: false, doNotTriggerEvent: false };   
-        if (el.val() == "" || opt.doOverwrite) {            
+        if (el.val() === "" || opt.doOverwrite) {            
             $(el).val(val);
             $(el).trigger("chosen:updated");            
         }    
@@ -36,14 +26,15 @@ function SetSingleSelectValueIfElVisible(el, val, opt) {
 function SetDateValueIfElVisible(el, val, opt, format) {
     opt = opt || { doOverwrite: false, doNotTriggerEvent: false };
     if (el && $(el).is(':visible')) {
-        if (el.val() == "" || opt.doOverwrite) {            
+        if (el.val() === "" || opt.doOverwrite) {
             $(el).datepicker({
-                format: format.toLowerCase(),
-                autoclose: true
-            }).datepicker('setDate', val);
+                    format: format.toLowerCase(),
+                    autoclose: true
+                })
+                .datepicker('setDate', val);
            
             var readOnly = $(el).attr("readonly");            
-            if (readOnly!= undefined && readOnly.toLowerCase() == 'readonly') {                
+            if (readOnly!= undefined && readOnly.toLowerCase() === 'readonly') {                
                 $(el).val(val);
             }
 
@@ -55,13 +46,14 @@ function SetDateValueIfElVisible(el, val, opt, format) {
 }
 
 function SetValueToBtnGroup(domContainer, domText, domValue, value, doOverwrite) {
+    var newValue = value || '';
     var $domValue = $(domValue);
     var oldValue = $domValue.val();
-    var el = $(domContainer).find('a[value="' + value + '"]');
-    if (el && (doOverwrite || oldValue == '')) {
+    var el = $(domContainer).find('a[value="' + newValue + '"]');
+    if (el && (doOverwrite || oldValue === '')) {
         $(domText).text(getBreadcrumbs(el));
-        $domValue.val(value);
-        if (oldValue != value) {
+        $domValue.val(newValue);
+        if (oldValue !== newValue) {
             $domValue.trigger('change');
         }
     }
@@ -298,6 +290,10 @@ function IsWillBeOverwritten(fieldId, val) {
             return IsWillBeOverwrittenByValue('#case__SolutionRate', '#case__SolutionRate', val);
             break;
 
+        case 'Verified':
+            return IsWillBeOverwrittenByValue('#case__Verified', '#case__Verified', val);
+            break;
+
     }
     return false;
 }
@@ -309,7 +305,7 @@ var overwriteWarning = {
         var me = window.overwriteWarning;
         me.caseTemplateData = data;
         if (me.dlg == null) {
-            me.dlg = $('#overwriteDlg')
+            me.dlg = $('#overwriteDlg');
             $(me.dlg).find('button.btn-ok').on('click', function () {
                 me.dlg.modal('hide');
                 window.ApplyTemplate(me.caseTemplateData, true);
@@ -336,376 +332,457 @@ var caseButtons = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteD
 
 var templateQuickButtonIndicator = '#TemplateQuickButtonIndicator';
 
+function SaveTemplateValue(ctrlId, data, fieldName) {
+   if (data[fieldName] != undefined && data[fieldName] != null) {
+       $(ctrlId).val(data[fieldName]);
+   } else {
+       $(ctrlId).val('');
+   }
+}
+
 var ApplyTemplate = function (data, doOverwrite) {
+
     changeCaseButtonsState(false);
 
-    var cfg = { doOverwrite: doOverwrite };
     var dateFormat = data["dateFormat"];
     $('#CaseTemplate_ExternalLogNote').val("True");
-    for (var fieldId in data) {
-        var val = data[fieldId];
-        var el;
-        if (val != null && val !== '') {
-            
-            switch (fieldId) {
-                case 'PersonsName':
-                    el = $('#case__PersonsName');
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                case 'PersonsPhone':
-                    el = $('#case__PersonsPhone');
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                case 'PersonsCellPhone':
-                    el = $('#case__PersonsCellphone');
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                case 'CaseType_Id':
-                    SetValueToBtnGroup('#divCaseType', "#divBreadcrumbs_CaseType", "#case__CaseType_Id", val, doOverwrite);
-                    break;
-                case 'Category_Id':
-                    SetValueToBtnGroup('#divCategory', "#divBreadcrumbs_Category", "#case__Category_Id", val, doOverwrite);
-                    break;
-                case 'ReportedBy':
-                    el = $('#case__ReportedBy');
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
 
-                case 'Region_Id':
-                    el = $('#case__Region_Id');
-                    var dep_Id = data['Department_Id'];
-                    if (dep_Id != undefined && dep_Id != null) {
-                        $('#CaseTemplate_Department_Id').val(dep_Id);
-                        cfg['doNotTriggerEvent'] = false;
-                    }
-                    else
-                        $('#CaseTemplate_Department_Id').val("");
+    // save template values to hidden fields to make them avaialbe for UI change handlers
+    SaveTemplateValue("#CaseTemplate_Performer_Id", data, 'PerformerUser_Id');
+    SaveTemplateValue('#CaseTemplate_WorkingGroup_Id', data, 'CaseWorkingGroup_Id');
+    SaveTemplateValue('#CaseTemplate_Priority_Id', data, 'Priority_Id');
+    SaveTemplateValue('#CaseTemplate_StateSecondary_Id', data, 'StateSecondary_Id');
 
-                    var ou_Id = data['OU_Id'];
-                    if (ou_Id != undefined && ou_Id != null)
-                        $('#CaseTemplate_OU_Id').val(ou_Id);
-                    else
-                        $('#CaseTemplate_OU_Id').val("");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
+    SaveTemplateValue('#CaseTemplate_Department_Id', data, 'Department_Id');
+    SaveTemplateValue('#CaseTemplate_OU_Id', data, 'OU_Id');
+    SaveTemplateValue('#CaseTemplate_IsAbout_Department_Id', data, 'IsAbout_Department_Id');
+    SaveTemplateValue('#CaseTemplate_IsAbout_OU_Id', data, 'IsAbout_OU_Id');
 
-                case 'Department_Id':
-                    el = $('#case__Department_Id');
+    var el = null;
+    var val = null;
+    var cfg = { doOverwrite: doOverwrite, doNotTriggerEvent: false };
 
-                    var reg_Id = data['Region_Id'];
-                    if (reg_Id != undefined || reg_Id != null) {
-                        cfg['doNotTriggerEvent'] = true;
-                    } else {
-                        var ou_Id = data['OU_Id'];
-                        if (ou_Id != undefined && ou_Id != null)
-                            $('#CaseTemplate_OU_Id').val(ou_Id);
-                        else
-                            $('#CaseTemplate_OU_Id').val("");
-                    }
-                        
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
+    // NOTE: using 'if' instead of 'switch/case' guarantees required processing order.
 
-                case 'OU_Id':
-                    el = $('#case__Ou_Id');
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
+    //region
+    if (!isNullOrEmpty(data.Region_Id)) {
+        val = data.Region_Id || '';
+        el = $('#case__Region_Id');
+        
+        if (!isNullOrEmpty(data.Department_Id)) {
+            cfg.doNotTriggerEvent = false;
+        }
 
-                case 'CostCentre':
-                    el = $("#case__CostCentre");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
+        SetValueIfElVisible(el, val, cfg);
+        cfg.doNotTriggerEvent = false;
+    }
 
-                case 'PersonsEmail':
-                    el = $("#case__PersonsEmail");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
+    //department
+    if (!isNullOrEmpty(data.Department_Id)) {
+        val = data.Department_Id || '';
+        el = $('#case__Department_Id');
+        
+        if (!isNullOrEmpty(data.Region_Id)) {
+            cfg.doNotTriggerEvent = true;
+        }
 
-                case 'Place':
-                    el = $("#case__Place");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
+        SetValueIfElVisible(el, val, cfg);
+        cfg.doNotTriggerEvent = false;
+    }
 
-                case 'UserCode':
-                    el = $("#case__UserCode");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
+    // OU
+    if (!isNullOrEmpty(data.OU_Id)) {
+        val = data.OU_Id || '';
+        el = $('#case__Ou_Id');
+        SetValueIfElVisible(el, val, cfg);
+    }
 
-                case 'UpdateNotifierInformation':
-                    el = $("#UpdateNotifierInformation");
-                    SetBootstrapSwitchIfElVisible(el, val);
-                    break;
+    if (!isNullOrEmpty(data.CostCentre)) {
+        val = data.CostCentre || '';
+        el = $("#case__CostCentre");
+        SetValueIfElVisible(el, val, cfg);
+    }
 
-                case 'NoMailToNotifier':
-                    el = $("#CaseMailSetting_DontSendMailToNotifier");
-                    SetCheckboxValueIfElVisible(el, val);
-                    break;
+    if (!isNullOrEmpty(data.PersonsName)) {
+        val = data.PersonsName || '';
+        el = $('#case__PersonsName');
+        SetValueIfElVisible(el, val, cfg);
+    }
 
-                case 'IsAbout_PersonsName':
-                    el = $('#case__IsAbout_Person_Name');
-                    SetValueIfElVisible(el, val, cfg, true);
-                    break;
-                case 'IsAbout_PersonsPhone':
-                    el = $('#case__IsAbout_Person_Phone');
-                    SetValueIfElVisible(el, val, cfg, true);
-                    break;
-                case 'IsAbout_PersonsCellPhone':
-                    el = $('#case__IsAbout_Person_Cellphone');
-                    SetValueIfElVisible(el, val, cfg, true);
-                    break;
-              
-                case 'IsAbout_ReportedBy':
-                    el = $('#case__IsAbout_ReportedBy');
-                    SetValueIfElVisible(el, val, cfg, true);
-                    break;
-                
-                case 'IsAbout_Region_Id':
-                    el = $('#case__IsAbout_Region_Id');
-                    var dep_Id = data['IsAbout_Department_Id'];
-                    if (dep_Id != undefined && dep_Id != null) {
-                        $('#CaseTemplate_IsAbout_Department_Id').val(dep_Id);
-                        cfg['doNotTriggerEvent'] = false;
-                    }
-                    else
-                        $('#CaseTemplate_IsAbout_Department_Id').val("");
+    if (!isNullOrEmpty(data.PersonsPhone)) {
+        val = data.PersonsPhone || '';
 
-                    var ou_Id = data['IsAbout_OU_Id'];
-                    if (ou_Id != undefined && ou_Id != null)
-                        $('#CaseTemplate_IsAbout_OU_Id').val(ou_Id);
-                    else
-                        $('#CaseTemplate_IsAbout_OU_Id').val("");
-                    SetValueIfElVisible(el, val, cfg, true);
-                    break;
+        el = $('#case__PersonsPhone');
+        SetValueIfElVisible(el, val, cfg);
+    }
+    if (!isNullOrEmpty(data.PersonsCellPhone)) {
+        val = data.PersonsCellPhone || '';
 
-                case 'IsAbout_Department_Id':
-                    el = $('#case__IsAbout_Department_Id');
+        el = $('#case__PersonsCellphone');
+        SetValueIfElVisible(el, val, cfg);
+    }
 
-                    var reg_Id = data['IsAbout_Region_Id'];
-                    if (reg_Id != undefined || reg_Id != null) {
-                        cfg['doNotTriggerEvent'] = true;
-                    } else {
-                        var ou_Id = data['IsAbout_OU_Id'];
-                        if (ou_Id != undefined && ou_Id != null)
-                            $('#CaseTemplate_IsAbout_OU_Id').val(ou_Id);
-                        else
-                            $('#CaseTemplate_IsAbout_OU_Id').val("");
-                    }
+    if (!isNullOrEmpty(data.Category_Id)) {
+        val = data.Category_Id || '';
+        SetValueToBtnGroup('#divCategory', "#divBreadcrumbs_Category", "#case__Category_Id", val, doOverwrite);
+    }
+    if (!isNullOrEmpty(data.ReportedBy)) {
+        val = data.ReportedBy || '';
+        el = $('#case__ReportedBy');
+        SetValueIfElVisible(el, val, cfg);
+    }
 
-                    SetValueIfElVisible(el, val, cfg, true);
-                    break;
+    if (!isNullOrEmpty(data.PersonsEmail)) {
+        val = data.PersonsEmail || '';
+        el = $("#case__PersonsEmail");
+        SetValueIfElVisible(el, val, cfg);
+    }
 
-                case 'IsAbout_OU_Id':
-                    el = $('#case__IsAbout_Ou_Id');
-                    cfg['doNotTriggerEvent'] = false;
-                    SetValueIfElVisible(el, val, cfg, true);
-                    break;               
+    if (!isNullOrEmpty(data.Place)) {
+        val = data.Place || '';
+        el = $("#case__Place");
+        SetValueIfElVisible(el, val, cfg);
+    }
 
-                case 'IsAbout_CostCentre':
-                    el = $("#case__IsAbout_CostCentre");
-                    SetValueIfElVisible(el, val, cfg, true);
-                    break;
+    if (!isNullOrEmpty(data.UserCode)) {
+        val = data.UserCode || '';
+        el = $("#case__UserCode");
+        SetValueIfElVisible(el, val, cfg);
+    }
 
-                case 'IsAbout_PersonsEmail':
-                    el = $("#case__IsAbout_Person_Email");
-                    SetValueIfElVisible(el, val, cfg, true);
-                    break;
+    if (!isNullOrEmpty(data.UpdateNotifierInformation)) {
+        val = data.UpdateNotifierInformation || '';
+        el = $("#UpdateNotifierInformation");
+        SetBootstrapSwitchIfElVisible(el, val);
+    }
 
-                case 'IsAbout_Place':
-                    el = $("#case__IsAbout_Place");
-                    SetValueIfElVisible(el, val, cfg, true);
-                    break;
+    if (!isNullOrEmpty(data.NoMailToNotifier)) {
+        val = data.NoMailToNotifier || '';
+        el = $("#CaseMailSetting_DontSendMailToNotifier");
+        SetCheckboxValueIfElVisible(el, val);
+    }
 
-                case 'IsAbout_UserCode':
-                    el = $("#case__IsAbout_UserCode");
-                    SetValueIfElVisible(el, val, cfg, true);
-                    break;
+    if (!isNullOrEmpty(data.IsAbout_PersonsName)) {
+        val = data.IsAbout_PersonsName || '';
+        el = $('#case__IsAbout_Person_Name');
+        SetValueIfElVisible(el, val, cfg, true);
+    }
+    if (!isNullOrEmpty(data.IsAbout_PersonsPhone)) {
+        val = data.IsAbout_PersonsPhone || '';
+        el = $('#case__IsAbout_Person_Phone');
+        SetValueIfElVisible(el, val, cfg, true);
+    }
+    if (!isNullOrEmpty(data.IsAbout_PersonsCellPhone)) {
+        val = data.IsAbout_PersonsCellPhone || '';
+        el = $('#case__IsAbout_Person_Cellphone');
+        SetValueIfElVisible(el, val, cfg, true);
+    }
 
-                case 'InventoryLocation':
-                    el = $("#case__InventoryLocation");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
+    if (!isNullOrEmpty(data.IsAbout_ReportedBy)) {
+        val = data.IsAbout_ReportedBy || '';
+        el = $('#case__IsAbout_ReportedBy');
+        SetValueIfElVisible(el, val, cfg, true);
+    }
 
-                case 'InventoryNumber':
-                    el = $("#case__InventoryNumber");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                case 'InventoryType':
-                    el = $("#case__InventoryType");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
+    if (!isNullOrEmpty(data.IsAbout_Region_Id)) {
+        val = data.IsAbout_Region_Id || '';
+        el = $('#case__IsAbout_Region_Id');
+        
+        if (!isNullOrEmpty(data.IsAbout_Department_Id)) {
+            cfg.doNotTriggerEvent = false;
+        }
+        
+        SetValueIfElVisible(el, val, cfg, true);
+        cfg.doNotTriggerEvent = false;
+    }
 
-                case 'InvoiceNumber':
-                    el = $("#case__InvoiceNumber");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
+    if (!isNullOrEmpty(data.IsAbout_Department_Id)) {
+        val = data.IsAbout_Department_Id || '';
+        el = $('#case__IsAbout_Department_Id');
+        
+        if (!isNullOrEmpty(data.IsAbout_Region_Id)) {
+            cfg.doNotTriggerEvent = true;
+        } 
 
-                case 'ReferenceNumber':
-                    el = $("#case__ReferenceNumber");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
+        SetValueIfElVisible(el, val, cfg, true);
+        cfg.doNotTriggerEvent = false;
+    }
 
-                case 'System_Id':
-                    el = $("#case__System_Id");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
+    if (!isNullOrEmpty(data.IsAbout_OU_Id)) {
+        val = data.IsAbout_OU_Id || '';
+        el = $('#case__IsAbout_Ou_Id');
+        SetValueIfElVisible(el, val, cfg, true);
+    }
 
-                case 'Urgency_Id':
-                    el = $("#case__Urgency_Id");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                    
-                case 'Impact_Id':
-                    el = $("#case__Impact_Id");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
+    if (!isNullOrEmpty(data.IsAbout_CostCentre)) {
+        val = data.IsAbout_CostCentre || '';
+        el = $("#case__IsAbout_CostCentre");
+        SetValueIfElVisible(el, val, cfg, true);
+    }
 
-                case 'WatchDate':
-                    el = $("#case__WatchDate");
-                    SetDateValueIfElVisible(el, val, cfg, dateFormat);
-                    break;
-                case 'ProductArea_Id':
-                    SetValueToBtnGroup('#divProductArea', "#divBreadcrumbs_ProductArea", "#case__ProductArea_Id", val, doOverwrite);
-                    break;
-                case 'Caption':
-                    el = $("#case__Caption");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                case 'Description':
-                    el = $("#case__Description");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                case 'Miscellaneous':
-                    el = $("#case__Miscellaneous");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                case 'CaseWorkingGroup_Id':
-                    el = $("#case__WorkingGroup_Id");
-                    $("#case__WorkingGroup_Id").val("");
-                    //#13311(redmine) Case template_list of administrators doesn't narrows depending on the choice of working group
-                    //cfg['doNotTriggerEvent'] = true;
-                    SetValueIfElVisible(el, val, cfg);
+    if (!isNullOrEmpty(data.IsAbout_PersonsEmail)) {
+        val = data.IsAbout_PersonsEmail || '';
+        el = $("#case__IsAbout_Person_Email");
+        SetValueIfElVisible(el, val, cfg, true);
+    }
 
-                    if (el && (el.val() == "" || cfg.doOverwrite)) {
-                        //Todo: refactor
-                        //if connected to workflow we need to set the value
-                        if ($('#steps').length) {
-                            el.val(val);
-                        }
-                    }
+    if (!isNullOrEmpty(data.IsAbout_Place)) {
+        val = data.IsAbout_Place || '';
+        el = $("#case__IsAbout_Place");
+        SetValueIfElVisible(el, val, cfg, true);
+    }
 
-                    break;
-                case 'PerformerUser_Id':
-                    el = $('#Performer_Id');
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                case 'Priority_Id':
-                    el = $("#case__Priority_Id");
-                    //Diabled to show WatchDate 
-                    //cfg['doNotTriggerEvent'] = true;
-                    SetValueIfElVisible(el, val, cfg);
-                    
-                    if (el && (el.val() == "" || cfg.doOverwrite)) {
-                        //Todo: refactor
-                        //if connected to workflow we need to set the value
-                        if ($('#steps').length) {
-                            el.val(val);
-                        }
-                    }
+    if (!isNullOrEmpty(data.IsAbout_UserCode)) {
+        val = data.IsAbout_UserCode || '';
+        el = $("#case__IsAbout_UserCode");
+        SetValueIfElVisible(el, val, cfg, true);
+    }
 
-                    break;
-                case 'Project_Id':
-                    el = $("#case__Project_Id");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                case 'Text_External':                    
-                    el = $("#CaseLog_TextExternal");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                case 'Text_Internal':
-                    el = $("#CaseLog_TextInternal");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                case 'FinishingCause_Id':
-                    SetValueToBtnGroup('#divFinishingType', "#divBreadcrumbs_FinishingType", "#CaseLog_FinishingType", val, doOverwrite);
-                    break;
-                case 'RegistrationSource':
-                    el = $("#CustomerRegistrationSourceId");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                case 'StateSecondary_Id':
-                    el = $("#case__StateSecondary_Id");                    
-                    SetValueIfElVisible(el, val, cfg);
-                    if (el && (el.val() == "" || cfg.doOverwrite)) {
-                        $(".reaonlySubstate").val(val);
-                        //Todo: refactor
-                        //if connected to workflow we need to set the value
-                        if ($('#steps').length)
-                        {
-                            el.val(val);
-                        }
-                    }
-                    break;
-                case 'Status_Id':
-                    el = $("#case__Status_Id");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                case 'CausingPartId':
-                    el = $("#case__CausingPartId").chosen();
-                    SetSingleSelectValueIfElVisible(el, val, cfg);
-                    break;
-
-                case 'SMS':
-                    el = $("#case__SMS");
-                    SetCheckboxValueIfElVisible(el, val);
-                    break;
-                
-                case 'Available':
-                    el = $("#case__Available");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-
-                case 'Cost':
-                    el = $("#case__Cost");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-
-                case 'OtherCost':
-                    el = $("#case__OtherCost");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-
-                case 'Currency':
-                    el = $("#case__Currency");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-                    
-                case 'Problem_Id':
-                    el = $("#case__Problem_Id");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-
-                case 'PlanDate':
-                    el = $("#case__PlanDate");
-                    SetDateValueIfElVisible(el, val, cfg, dateFormat);
-                    break;
-
-                case 'AgreedDate':
-                    el = $("#case__AgreedDate");
-                    SetDateValueIfElVisible(el, val, cfg, dateFormat);
-                    break;
-
-                case 'VerifiedDescription':
-                    el = $("#case__VerifiedDescription");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
-
-                case 'SolutionRate':
-                    el = $("#case__SolutionRate");
-                    SetValueIfElVisible(el, val, cfg);
-                    break;
+    if (!isNullOrEmpty(data.Priority_Id)) {
+        val = data.Priority_Id || '';
+        el = $("#case__Priority_Id");
+        SetValueIfElVisible(el, val, cfg);
+        if (el && (el.val() == "" || cfg.doOverwrite)) {
+            //Todo: refactor
+            //if connected to workflow we need to set the value
+            if ($('#steps').length) {
+                el.val(val);
             }
         }
     }
+
+    if (!isNullOrEmpty(data.PerformerUser_Id)) {
+        val = data.PerformerUser_Id || '';
+        el = $('#Performer_Id');
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.CaseWorkingGroup_Id)) {
+        val = data.CaseWorkingGroup_Id || '';
+        el = $("#case__WorkingGroup_Id");
+        $("#case__WorkingGroup_Id").val("");
+        //#13311(redmine) Case template_list of administrators doesn't narrows depending on the choice of working group
+        //cfg['doNotTriggerEvent'] = true;
+        SetValueIfElVisible(el, val, cfg);
+        if (el && (el.val() == "" || cfg.doOverwrite)) {
+            //Todo: refactor
+            //if connected to workflow we need to set the value
+            if ($('#steps').length) {
+                el.val(val);
+            }
+        }
+    }
+
+    if (!isNullOrEmpty(data.ProductArea_Id)) {
+        val = data.ProductArea_Id || '';
+        SetValueToBtnGroup('#divProductArea', "#divBreadcrumbs_ProductArea", "#case__ProductArea_Id", val, doOverwrite);
+    }
+
+    if (!isNullOrEmpty(data.CaseType_Id)) {
+        val = data.CaseType_Id || '';
+        SetValueToBtnGroup('#divCaseType', "#divBreadcrumbs_CaseType", "#case__CaseType_Id", val, doOverwrite);
+    }
+
+    if (!isNullOrEmpty(data.Status_Id)) {
+        val = data.Status_Id || '';
+        el = $("#case__Status_Id");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.StateSecondary_Id)) {
+        val = data.StateSecondary_Id || '';
+        el = $("#case__StateSecondary_Id");
+
+        SetValueIfElVisible(el, val, cfg);
+
+        if (el && (el.val() == "" || cfg.doOverwrite)) {
+            $(".readonlySubstate").val(val);
+            //Todo: refactor
+            //if connected to workflow we need to set the value
+            if ($('#steps').length) {
+                el.val(val);
+            }
+        }
+    }
+
+    if (!isNullOrEmpty(data.InventoryLocation)) {
+        val = data.InventoryLocation || '';
+        el = $("#case__InventoryLocation");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.InventoryNumber)) {
+        val = data.InventoryNumber || '';
+        el = $("#case__InventoryNumber");
+        SetValueIfElVisible(el, val, cfg);
+    }
+    if (!isNullOrEmpty(data.InventoryType)) {
+        val = data.InventoryType || '';
+        el = $("#case__InventoryType");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.InvoiceNumber)) {
+        val = data.InvoiceNumber || '';
+        el = $("#case__InvoiceNumber");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.ReferenceNumber)) {
+        val = data.ReferenceNumber || '';
+        el = $("#case__ReferenceNumber");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.System_Id)) {
+        val = data.System_Id || '';
+        el = $("#case__System_Id");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.Urgency_Id)) {
+        val = data.Urgency_Id || '';
+        el = $("#case__Urgency_Id");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.Impact_Id)) {
+        val = data.Impact_Id || '';
+        el = $("#case__Impact_Id");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.WatchDate)) {
+        val = data.WatchDate || '';
+        el = $("#case__WatchDate");
+        SetDateValueIfElVisible(el, val, cfg, dateFormat);
+    }
+
+    if (!isNullOrEmpty(data.Caption)) {
+        val = data.Caption || '';
+        el = $("#case__Caption");
+        SetValueIfElVisible(el, val, cfg);
+    }
+    if (!isNullOrEmpty(data.Description)) {
+        val = data.Description || '';
+        el = $("#case__Description");
+        SetValueIfElVisible(el, val, cfg);
+    }
+    if (!isNullOrEmpty(data.Miscellaneous)) {
+        val = data.Miscellaneous || '';
+        el = $("#case__Miscellaneous");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.Project_Id)) {
+        val = data.Project_Id || '';
+        el = $("#case__Project_Id");
+        SetValueIfElVisible(el, val, cfg);
+    }
+    if (!isNullOrEmpty(data.Text_External)) {
+        val = data.Text_External || '';
+        el = $("#CaseLog_TextExternal");
+        SetValueIfElVisible(el, val, cfg);
+    }
+    if (!isNullOrEmpty(data.Text_Internal)) {
+        val = data.Text_Internal || '';
+        el = $("#CaseLog_TextInternal");
+        SetValueIfElVisible(el, val, cfg);
+    }
+    if (!isNullOrEmpty(data.FinishingCause_Id)) {
+        val = data.FinishingCause_Id || '';
+        SetValueToBtnGroup('#divFinishingType', "#divBreadcrumbs_FinishingType", "#CaseLog_FinishingType", val, doOverwrite);
+    }
+    if (!isNullOrEmpty(data.RegistrationSource)) {
+        val = data.RegistrationSource || '';
+        el = $("#CustomerRegistrationSourceId");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.CausingPartId)) {
+        val = data.CausingPartId || '';
+        el = $("#case__CausingPartId").chosen();
+        SetSingleSelectValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.SMS)) {
+        val = data.SMS || '';
+        el = $("#case__SMS");
+        SetCheckboxValueIfElVisible(el, val);
+    }
+
+    if (!isNullOrEmpty(data.Available)) {
+        val = data.Available || '';
+        el = $("#case__Available");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.Cost)) {
+        val = data.Cost || '';
+        el = $("#case__Cost");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.OtherCost)) {
+        val = data.OtherCost || '';
+        el = $("#case__OtherCost");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.Currency)) {
+        val = data.Currency || '';
+        el = $("#case__Currency");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.Problem_Id)) {
+        val = data.Problem_Id || '';
+        el = $("#case__Problem_Id");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.PlanDate)) {
+        val = data.PlanDate || '';
+        el = $("#case__PlanDate");
+        SetDateValueIfElVisible(el, val, cfg, dateFormat);
+    }
+
+    if (!isNullOrEmpty(data.AgreedDate)) {
+        val = data.AgreedDate || '';
+        el = $("#case__AgreedDate");
+        SetDateValueIfElVisible(el, val, cfg, dateFormat);
+    }
+
+    if (!isNullOrEmpty(data.VerifiedDescription)) {
+        val = data.VerifiedDescription || '';
+        el = $("#case__VerifiedDescription");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.SolutionRate)) {
+        val = data.SolutionRate || '';
+        el = $("#case__SolutionRate");
+        SetValueIfElVisible(el, val, cfg);
+    }
+
+    if (!isNullOrEmpty(data.Verified)) {
+        val = data.Verified || '';
+        el = $("#case__Verified");
+        SetCheckboxValueIfElVisible(el, val);
+    }
+
+    //reset case template values after loading template data. Added 3sec delay in case some UI events are not complete...
+    setTimeout(function() {
+            $("#CaseTemplate_Performer_Id").val("");
+            $('#CaseTemplate_WorkingGroup_Id').val("");
+            $('#CaseTemplate_Priority_Id').val("");
+            $('#CaseTemplate_StateSecondary_Id').val("");
+            $('#CaseTemplate_Department_Id').val("");
+            $('#CaseTemplate_OU_Id').val("");
+            $('#CaseTemplate_IsAbout_Department_Id').val("");
+            $('#CaseTemplate_IsAbout_OU_Id').val("");
+        },
+        3000);
 
     //TODO: As there are fragmented functiond to execute the Case rules (some here and some are in others .js file) 
     //      we call the FinalAction function after 3 seconds. 
@@ -718,6 +795,13 @@ var ApplyTemplate = function (data, doOverwrite) {
         setTimeout(runFinalAction, 500, false);
     }    
     
+}
+
+function isNullOrEmpty(val) {
+    if (val === null || val === '')
+        return true;
+    else
+        return false;
 }
 
 function IsValueApplicableFor(templateFieldId, val) {
@@ -941,6 +1025,10 @@ function IsValueApplicableFor(templateFieldId, val) {
         case 'SolutionRate':
             return $("#case__SolutionRate").is(':visible');
             break;
+
+        case 'Verified':
+            return $("#case__Verified").is(':visible');
+            break;
     }
     return false;
 }
@@ -1016,6 +1104,7 @@ function GetTemplateData(id) {
                     window.ApplyTemplate(caseTemplate);
                 }
             }
+ 
             return caseTemplate;
         }
     );

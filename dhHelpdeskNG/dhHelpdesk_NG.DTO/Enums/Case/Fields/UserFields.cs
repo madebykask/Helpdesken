@@ -22,7 +22,9 @@
 
         public const string Place = "Place";
 
-        public const string OrdererCode = "UserCode";        
+        public const string OrdererCode = "UserCode";
+
+        public const string CostCentre = "CostCentre";
 
         public const string IsAbout_User = "IsAbout_ReportedBy";
 

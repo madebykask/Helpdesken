@@ -1,16 +1,28 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
-@using System.Web.Optimization
 @using DH.Helpdesk.Web
-@using System
 
-@if (Model.ExtendedCases != null)
+@section Styles
 {
-    @Styles.Render("~/cases/dynamic-cases")
-    @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
+    @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
+    {
+        @Styles.Render("~/cases/dynamic-cases")
+    }
 }
 
-@Scripts.Render("~/bundles/cases/new")
 @section Scripts {
+    
+    @if (Model.DynamicCase != null || Model.ContainsExtendedCase || Model.HasExtendedComputerUsers)
+    {
+        @Scripts.Render("~/Content/js/iframeResizer")
+    }
+    
+    @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
+    {
+        @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
+    }
+
+    @Scripts.Render("~/bundles/cases/new")
+
     <script type="text/javascript">
 
         $(document).ready(function () {

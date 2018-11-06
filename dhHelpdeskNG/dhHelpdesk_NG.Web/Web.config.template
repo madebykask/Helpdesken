@@ -9,22 +9,21 @@
     <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false"/>
   </configSections>
   <connectionStrings>
-    <!-- Dev -->
-    <add name="HelpdeskOleDbContext" connectionString="Provider=SQLOLEDB;Data Source=dhutvsql2;Initial Catalog=DH_Support;User Id=sa;Password=;" providerName="System.Data.OleDb"/>
-    <add name="HelpdeskSqlServerDbContext" connectionString="Data Source=dhutvsql2;Initial Catalog=DH_Support;User Id=sa;Password=;MultipleActiveResultSets=True;Connection Lifetime=3;Max Pool Size=3;" providerName="System.Data.SqlClient"/>    
-	<add name="DSN" connectionString="Password=kgk270;Persist Security Info=True;User ID=web_user;Initial Catalog=dhHelpdesk_IKEA_Merge;Data Source=DHUTVSQL2;MultipleActiveResultSets=True" />
-	<add name="DSN_AM" connectionString="Password=devtest;Persist Security Info=True;User ID=amUser;Initial Catalog=AccessManagementDBDataAdminB;Data Source=DHUTVSQL2;MultipleActiveResultSets=True" />
+    <!-- Dev --> <!-- testing template generation, ignore, ignore --> 
+    <add name="HelpdeskOleDbContext" connectionString="Provider=SQLOLEDB;Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};" providerName="System.Data.OleDb"/>
+    <add name="HelpdeskSqlServerDbContext" connectionString="Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};MultipleActiveResultSets=True;Connection Lifetime=3;Max Pool Size=3;" providerName="System.Data.SqlClient"/>
     <add name="HelpdeskIndexingService" connectionString="Provider=MSIDXS;"/>
+    <add name="DSN" connectionString="Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};" />
   </connectionStrings>
   <appSettings>
     <add key="webpages:Version" value="3.0.0.0" />
-    <add key="webpages:Enabled" value="false" />    
-    <add key="PreserveLoginUrl" value="true" />  
+    <add key="webpages:Enabled" value="false" />
+    <add key="PreserveLoginUrl" value="true" />
     <add key="dh_maskedpassword" value="||||||||"/>
-    <add key="dh_filesDirectory" value="C:\DHHelpdeskUTV_Documents"/>    
-    <add key="dh_selfserviceaddress" value="dhHelpdeskUTV/Selfservice/case/Index/"/>
+    <add key="dh_filesDirectory" value="#{FilesDirectory}"/>
+    <add key="dh_selfserviceaddress" value="#{SelfserviceAddress}"/>
     <add key="encryptionkey" value="JRI!8KST3V0E#DS9SU}RFBCGHZL6E4M7" />
-	<add key="Application.DefaultCulture" value="sv"/>
+    <add key="Application.DefaultCulture" value="sv"/>
     <add key="ClientValidationEnabled" value="true"/>
     <add key="UnobtrusiveJavaScriptEnabled" value="true"/>
     <add key="InitFromSelfService" value="false"/>
@@ -32,7 +31,10 @@
     <add key="log4net.Internal.Debug" value="true"/>
     <add key="SmtpServer" value="smtp.datahalland.se"/>
     <add key="SmtpPort" value="25"/>
-    <add key="LoginMode" value="Application"/> 
+  #{if AuthenticationMode == "application"}<add key="LoginMode" value="Application"/>#{/if}
+  #{if AuthenticationMode == "windows"}<add key="LoginMode" value="Windows"/>#{/if}
+  #{if AuthenticationMode == "sso"}<add key="LoginMode" value="SSO"/>#{/if}
+  #{if AuthenticationMode == "anonymous"}<add key="LoginMode" value="Anonymous"/>#{/if}
   </appSettings>
   <system.web.extensions>
     <scripting>
@@ -42,7 +44,7 @@
     </scripting>
   </system.web.extensions>
   <system.web>
-    <compilation debug="true" targetFramework="4.5" />      
+    <compilation debug="true" targetFramework="4.5.2" />
     <pages>
       <namespaces>
         <add namespace="System.Web.Helpers"/>
@@ -55,17 +57,23 @@
     </pages>
     <!-- 50 mb in kilobytes -->
     <httpRuntime maxRequestLength="5242880" targetFramework="4.5"/>
+	 #{if AuthenticationMode == "application"}
     <authentication mode="Forms">
       <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/"/>
     </authentication>
-       
-    <identity impersonate="true"/>
+  #{/if}
+	#{if AuthenticationMode == "windows"}
+    <authentication mode="Windows">
+    </authentication>
+	#{/if}
+
+    <identity impersonate="false"/>
     <httpHandlers>
       <add path="Reserved.ReportViewerWebControl.axd" verb="*" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" validate="false"/>
     </httpHandlers>
   </system.web>
-  <system.webServer>    
-    <modules runAllManagedModulesForAllRequests="false"/>    
+  <system.webServer>
+    <modules runAllManagedModulesForAllRequests="false"/>
     <security>
       <requestFiltering>
         <!-- for iis 7 >. 50 mb in bytes -->
@@ -76,10 +84,10 @@
     <handlers>
       <add name="ReportViewerWebControlHandler" preCondition="integratedMode" verb="*" path="Reserved.ReportViewerWebControl.axd" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"/>
       <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
-	  <remove name="OPTIONSVerbHandler" />
-	  <remove name="TRACEVerbHandler" />
-	  <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />  
-	  <add name="MiniProfiler" path="mini-profiler-resources/*" verb="*" type="System.Web.Routing.UrlRoutingModule" resourceType="Unspecified" preCondition="integratedMode" />
+      <remove name="OPTIONSVerbHandler" />
+      <remove name="TRACEVerbHandler" />
+      <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
+      <add name="MiniProfiler" path="mini-profiler-resources/*" verb="*" type="System.Web.Routing.UrlRoutingModule" resourceType="Unspecified" preCondition="integratedMode" />
     </handlers>
   </system.webServer>
   <runtime>
@@ -148,14 +156,14 @@
         <assemblyIdentity name="System.Web.Http.WebHost" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
       </dependentAssembly>
-	  <dependentAssembly>
+      <dependentAssembly>
         <assemblyIdentity name="MiniProfiler" publicKeyToken="b44f9351044011a3" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.2.0.157" newVersion="3.2.0.157" />
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="System.Net.Http.Formatting" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
-      </dependentAssembly>      
+      </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.1.0.0" newVersion="3.1.0.0" />
@@ -163,11 +171,11 @@
       <dependentAssembly>
         <assemblyIdentity name="Microsoft.Owin.Security" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.1.0.0" newVersion="3.1.0.0" />
-      </dependentAssembly>	 
-	  <dependentAssembly>
+      </dependentAssembly>
+      <dependentAssembly>
         <assemblyIdentity name="itextsharp" publicKeyToken="8354ae6d2174ddca" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-5.5.0.0" newVersion="5.5.0.0" />
-      </dependentAssembly>	  
+      </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="Ninject" publicKeyToken="c7192dc5380945e7" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.3.4.0" newVersion="3.3.4.0" />
@@ -187,5 +195,5 @@
     <providers>
       <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer"/>
     </providers>
-  </entityFramework>  
+  </entityFramework>
 </configuration>

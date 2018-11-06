@@ -1243,26 +1243,29 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.FinishingCause_Id = null;
             }
 
-            if (SessionFacade.CurrentUser != null && caseSolution.SetCurrentUserAsPerformer == 1)
+            if (caseSolution.SetCurrentUserAsPerformer == 1)
+            {
                 caseSolution.PerformerUser_Id = SessionFacade.CurrentUser.Id;
+            }
 
-            if (SessionFacade.CurrentUser != null && SessionFacade.CurrentCustomer != null && caseSolution.SetCurrentUsersWorkingGroup == 1)
+            if (caseSolution.SetCurrentUsersWorkingGroup == 1)
             {
                 var userDefaultWGId = this._userService.GetUserDefaultWorkingGroupId(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
-                if (userDefaultWGId.HasValue)
-                {
-                    caseSolution.CaseWorkingGroup_Id = userDefaultWGId.Value;
-                }
-                else
-                {
-                    caseSolution.WorkingGroup_Id = null;
-                }
+                caseSolution.CaseWorkingGroup_Id = userDefaultWGId;
+            }
+
+            if (caseSolution.CaseType_Id.HasValue)
+            {
+                caseSolution.WorkingGroup_Id = null;
             }
 
             return this.Json(
                 new
                 {
                     dateFormat = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern,
+
+                    caseSolution.CaseWorkingGroup_Id,
+
                     caseSolution.PersonsName,
                     caseSolution.PersonsPhone,
                     caseSolution.PersonsCellPhone,
@@ -1293,24 +1296,28 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.InventoryLocation,
                     caseSolution.InventoryNumber,
                     caseSolution.InventoryType,
-                    caseSolution.CaseType_Id,
                     caseSolution.PerformerUser_Id,
                     caseSolution.Category_Id,
                     caseSolution.ReportedBy,
                     NoMailToNotifier = caseSolution.NoMailToNotifier.ToBool(),
-                    caseSolution.ProductArea_Id,
                     caseSolution.Caption,
                     caseSolution.Description,
                     caseSolution.Miscellaneous,
-                    caseSolution.CaseWorkingGroup_Id,
+
+                    ///////////////////////////
+                    // keep the order for correct processing in js
+                    caseSolution.ProductArea_Id,
+                    caseSolution.Status_Id,
+                    caseSolution.StateSecondary_Id,
+                    caseSolution.CaseType_Id,
+                    ///////////////////////////
+                    
                     caseSolution.Priority_Id,
                     caseSolution.Project_Id,
                     caseSolution.Text_External,
                     caseSolution.Text_Internal,
                     caseSolution.FinishingCause_Id,
                     caseSolution.RegistrationSource,
-                    caseSolution.Status_Id,
-                    caseSolution.StateSecondary_Id,
                     caseSolution.PersonsEmail,
                     WatchDate = caseSolution.WatchDate.HasValue ? caseSolution.WatchDate.Value.ToShortDateString() : string.Empty,
                     caseSolution.CausingPartId,
@@ -1329,7 +1336,8 @@ namespace DH.Helpdesk.Web.Controllers
                     VerifiedDescription = caseSolution.VerifiedDescription,
                     SolutionRate = caseSolution.SolutionRate,
                     caseSolution.OverWritePopUp,
-                    caseSolution.SaveAndClose
+                    caseSolution.SaveAndClose,
+                    Verified = caseSolution.Verified.ToBool()
                 },
                     JsonRequestBehavior.AllowGet);
         }
@@ -2243,22 +2251,32 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
 
+            //if (collection["CaseSolution.Verified"].ToString().Trim() != string.Empty)
+            //{
+            //    string Verified = Convert.ToString(collection["CaseSolution.Verified"].ToString());
+            //    pos = Verified.IndexOf(",");
+            //    if (pos > 0)
+            //    {
+            //        Verified = Verified.Substring(0, pos);
+
+            //        caseSolutionInputViewModel.CaseSolution.Verified = Convert.ToInt32(Verified);
+
+            //    }
+            //}
+
             if (collection["CaseSolution.Verified"].ToString().Trim() != string.Empty)
             {
                 string Verified = Convert.ToString(collection["CaseSolution.Verified"].ToString());
+
                 pos = Verified.IndexOf(",");
                 if (pos > 0)
                 {
                     Verified = Verified.Substring(0, pos);
 
-                    caseSolutionInputViewModel.CaseSolution.Verified = Convert.ToInt32(Verified);
+                    caseSolutionInputViewModel.CaseSolution.Verified = Convert.ToInt32(Verified.Substring(0, pos));
 
                 }
-
-
             }
-
-
 
 
 
@@ -2560,7 +2578,6 @@ namespace DH.Helpdesk.Web.Controllers
 
             return model;
         }
-
         #endregion
 
         #region Category

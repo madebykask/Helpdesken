@@ -104,16 +104,22 @@ namespace DH.Helpdesk.Domain
         public int ActionLeadTime { get; set; }
         public int ActionExternalTime { get; set; }
         public string CaseExtraFollowers { get; set; }
+        public string IsAbout_Persons_EMail { get; set; }
+        public string IsAbout_Persons_CellPhone { get; set; }
+        public int? IsAbout_Region_Id { get; set; }
+        public int? IsAbout_OU_Id { get; set; }
+        public string IsAbout_CostCentre { get; set; }
+        public String IsAbout_Place { get; set; }
 
-//        /// <summary>
-//        /// Number of parent case (if any)
-//        /// </summary>
-//        public decimal? ParentCaseNumber { get; set; }
-//
-//        /// <summary>
-//        /// Number of child case (if any)
-//        /// </summary>
-//        public decimal? ChildCaseNumber { get; set; }
+        //        /// <summary>
+        //        /// Number of parent case (if any)
+        //        /// </summary>
+        //        public decimal? ParentCaseNumber { get; set; }
+        //
+        //        /// <summary>
+        //        /// Number of child case (if any)
+        //        /// </summary>
+        //        public decimal? ChildCaseNumber { get; set; }
 
         public virtual Case Case { get; set; }
         public virtual Category Category { get; set; }
@@ -132,6 +138,13 @@ namespace DH.Helpdesk.Domain
         public virtual WorkingGroupEntity WorkingGroup { get; set; }
         public virtual RegistrationSourceCustomer RegistrationSourceCustomer { get; set; }
         public virtual Department IsAbout_Department { get; set; }
+        public virtual Region Region { get; set; }
+        public virtual Region IsAbout_Region { get; set; }
+        public virtual OU OU { get; set; }
+        public virtual OU IsAbout_OU { get; set; }
+        public virtual System System { get; set; }
+        public virtual Urgency Urgency { get; set; }
+        public virtual Impact Impact { get; set; }
     }
 }
 

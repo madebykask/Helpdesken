@@ -18,11 +18,6 @@
     @Scripts.Render(BundleConfig.ScriptNames.UserSearchCommon)
 }
 
-@if (Model.HasExtendedComputerUsers)
-{
-    @Scripts.Render("~/Content/js/iframeResizer")
-}
-
 <script type="text/javascript">
     /* CHECK: moved to EditPage.js*/ 
     //function GetLanguage()
@@ -211,6 +206,7 @@
                         @Html.Hidden("CaseTemplate_IsAbout_Department_Id", "")
                         @Html.Hidden("CaseTemplate_IsAbout_OU_Id", "")
                         @Html.Hidden("CaseTemplate_ExternalLogNote", "")
+                        @Html.Hidden("CaseTemplate_Performer_Id", "")
                         @Html.Hidden("LastProductAreaId", Model.case_.ProductArea_Id)
                         @Html.Hidden("LastProjectId", Model.case_.Project_Id)
                         @Html.Hidden("CaseHasInvoiceOrder", "")
@@ -1666,7 +1662,7 @@
                                                 {
                                                     if (!Model.case_.WorkingGroup_Id.HasValue)
                                                     {
-                                                        <input type="text" value="" readonly="true" id="workingGroup_Name" />
+                                                        <input type="text" value="" readonly="readonly" id="workingGroup_Name" />
                                                     }
                                                     else
                                                     {
@@ -2032,11 +2028,11 @@
                                             <td>
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Verified, CaseSolutionFields.Verified))
                                                 {
-                                                    <input type="checkbox" name="case_.Verified" @(Model.case_.Verified == 1 ? "checked=checked" : "") value="1" />
+                                                    <input type="checkbox" id="case__Verified" name="case_.Verified" @(Model.case_.Verified == 1 ? "checked=checked" : "") value="1" />
                                                 }
                                                 else
                                                 {
-                                                    <input type="checkbox" name="case_.Verified" @(Model.case_.Verified == 1 ? "checked=checked" : "") value="1" disabled="disabled" />
+                                                    <input type="checkbox" id="case__Verified" name="case_.Verified" @(Model.case_.Verified == 1 ? "checked=checked" : "") value="1" disabled="disabled" />
                                                 }
                                                 <input type="hidden" name="case_.Verified" value="0" />
                                             </td>

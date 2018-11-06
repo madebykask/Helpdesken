@@ -482,6 +482,12 @@ Module DH_Helpdesk_Mail
                                             If ct.User_Id <> 0 Then
                                                 objCase.Performer_User_Id = ct.User_Id
                                             End If
+
+                                            If iSyncType <> SyncType.SyncByWorkingGroup Then
+                                                If ct.WorkingGroup_Id <> 0 Then
+                                                    objCase.WorkingGroup_Id = ct.WorkingGroup_Id
+                                                End If
+                                            End If
                                         End If
                                     End If
 
@@ -602,29 +608,35 @@ Module DH_Helpdesk_Mail
                                         Next
 
                                     End If
+                                    '#65030
+                                    Dim newcaseEmailTo As String = objCase.Persons_EMail
+                                    If objCustomer.NewCaseMailTo = 1 Then
+                                        newcaseEmailTo = sNewCaseToEmailAddress
+                                    End If
+                                    '#65030
 
-                                    If isValidRecipient(objCase.Persons_EMail, objCustomer.AllowedEMailRecipients) = True Then
+                                    If isValidRecipient(newcaseEmailTo, objCustomer.AllowedEMailRecipients) = True Then
                                         If objCustomer.EMailRegistrationMailID <> 0 And bOrder = False And (message.From.ToString <> message.To.ToString) Then
-                                            If Len(objCase.Persons_EMail) > 6 Then
-                                                objMailTemplate = objMailTemplateData.getMailTemplateById(1, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                            'If Len(objCase.Persons_EMail) > 6 Then  (objCase.Persons_EMail can be empty) #65030
+                                            objMailTemplate = objMailTemplateData.getMailTemplateById(1, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
-                                                If Not objMailTemplate Is Nothing Then
-                                                    Dim objMail As New Mail
+                                            If Not objMailTemplate Is Nothing Then
+                                                Dim objMail As New Mail
 
-                                                    sMessageId = createMessageId(objCustomer.HelpdeskEMail)
-                                                    sSendTime = Date.Now()
+                                                sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                                                sSendTime = Date.Now()
 
-                                                    Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
-                                                    'helpdesk case 58782
-                                                    Dim newcaseEmailTo As String = objCase.Persons_EMail
-                                                    If objCustomer.NewCaseMailTo = 1 Then
-                                                        newcaseEmailTo = sNewCaseToEmailAddress
-                                                    End If
-                                                    'helpdesk case 58782
-                                                    sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, newcaseEmailTo, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
-                                                    objLogData.createEMailLog(iCaseHistory_Id, newcaseEmailTo, 1, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
-                                                End If
+                                                Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+                                                'helpdesk case 58782, #65030
+                                                'Dim newcaseEmailTo As String = objCase.Persons_EMail
+                                                'If objCustomer.NewCaseMailTo = 1 Then
+                                                '    newcaseEmailTo = sNewCaseToEmailAddress
+                                                'End If
+                                                'helpdesk case 58782
+                                                sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, newcaseEmailTo, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
+                                                objLogData.createEMailLog(iCaseHistory_Id, newcaseEmailTo, 1, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             End If
+                                            'End If  #65030
                                         End If
                                     Else
                                         LogToFile("readMailBox, isValidRecipient " & objCase.Persons_EMail & ", " & objCustomer.AllowedEMailRecipients, iPop3DebugLevel)

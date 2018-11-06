@@ -388,7 +388,6 @@ namespace DH.Helpdesk.Services.Services
                 return null;
 
             var caseSolution = _caseSolutionRepository.GetGetSolutionInfo(caseSolutionId, customerId);
-
             if (caseSolution == null)
                 return null;
 
@@ -414,6 +413,7 @@ namespace DH.Helpdesk.Services.Services
             if (extendedCaseFormData != null)
             {
                 extendedCaseFormData.StateSecondaryId = stateSecondaryId;
+
                 if (string.IsNullOrWhiteSpace(extendedCaseFormData.ExtendedCaseFormName))
                 {
                     extendedCaseFormData.ExtendedCaseFormName = caseSolution.Name;
@@ -892,6 +892,7 @@ namespace DH.Helpdesk.Services.Services
                 },
                 FinishingDate = c.FinishingDate
             };
+            c.User_Id = userId;
             return InitNewCaseCopy(c, userId, ipAddress, source, adUser);
         }
 
@@ -936,6 +937,7 @@ namespace DH.Helpdesk.Services.Services
                 Supplier_Id = customerDefaults.SupplierId,
                 Priority_Id = customerDefaults.PriorityId,
                 Status_Id = customerDefaults.StatusId,
+                //State
                 WorkingGroup_Id = this._userRepository.GetUserDefaultWorkingGroupId(userId, customerId),
                 RegUserId = adUser.GetUserFromAdPath(),
                 RegUserDomain = adUser.GetDomainFromAdPath()
@@ -1875,7 +1877,8 @@ namespace DH.Helpdesk.Services.Services
                 switch (action.ActionType)
                 {
                     case BRActionType.SendEmail:
-                        DoAction_SendEmail(action, currentCase, log, userTimeZone, caseHistoryId, basePath, currentLanguageId, caseMailSetting, logFiles);
+                        if (caseMailSetting != null)
+                            DoAction_SendEmail(action, currentCase, log, userTimeZone, caseHistoryId, basePath, currentLanguageId, caseMailSetting, logFiles);
                         break;
                 }
             }
@@ -2638,6 +2641,7 @@ namespace DH.Helpdesk.Services.Services
             h.Change_Id = c.Change_Id;
             h.ContactBeforeAction = c.ContactBeforeAction;
             h.Cost = c.Cost;
+            h.CostCentre = c.CostCentre;
             h.CreatedDate = DateTime.UtcNow;
             if (defaultUser != string.Empty)
             {
@@ -2729,6 +2733,12 @@ namespace DH.Helpdesk.Services.Services
                 h.IsAbout_ReportedBy = c.IsAbout.ReportedBy;
                 h.IsAbout_Persons_Phone = c.IsAbout.Person_Phone;
                 h.IsAbout_Department_Id = c.IsAbout.Department_Id;
+                h.IsAbout_Persons_EMail = c.IsAbout.Person_Email;
+                h.IsAbout_Persons_CellPhone = c.IsAbout.Person_Cellphone;
+                h.IsAbout_Region_Id = c.IsAbout.Region_Id;
+                h.IsAbout_OU_Id = c.IsAbout.OU_Id;
+                h.IsAbout_CostCentre = c.IsAbout.CostCentre;
+                h.IsAbout_Place = c.IsAbout.Place;
             }
 
             if (extraField != null)

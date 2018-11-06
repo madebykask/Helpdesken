@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.BusinessData.Models.Users.Input;
+using DH.Helpdesk.Common.Linq;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Users;
 
@@ -49,10 +50,10 @@ namespace DH.Helpdesk.Dal.Repositories
 
         IList<User> GetUsersForUserSettingList(UserSearch searchUser);
         IList<User> GetUsersForUserSettingListByUserGroup(UserSearch searchUser);
-        UserOverview Login(string uId, string pwd);
+        UserLoginInfo GetUserLoginInfo(string userId);
         Task<UserOverview> GetByUserIdAsync(string userId, string passw);
         DateTime GetPasswordChangedDate(int id);
-        
+
         User GetUserForCopy(int id);
         CustomerUserInfo GetUserInfo(int userId); //basic information - good perf
         UserOverview GetUser(int userid); // full information
@@ -66,7 +67,8 @@ namespace DH.Helpdesk.Dal.Repositories
         ItemOverview FindActiveOverview(int userId);
 
         List<ItemOverview> FindUsersWithPermissionsForCustomers(int[] customers);
-
+        
+        IQueryable<User> FindUsersByUserId(string userId);
         IEnumerable<User> FindUsersByName(string name);
 
         bool UserHasActiveCase(int customerId, int userId, List<int> workingGroupIds);
@@ -283,7 +285,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public IQueryable<User> GetUsers(int customerId)
         {
             var query = from u in this.DataContext.Users
-                        where u.CustomerUsers.Any(c => c.Customer_Id == customerId) // u.Customer_Id == customerId &&
+                        where u.CustomerUsers.Any(c => customerId == null || c.Customer_Id == customerId) // u.Customer_Id == customerId &&
                         select u;
 
             return query;
@@ -298,11 +300,16 @@ namespace DH.Helpdesk.Dal.Repositories
             return query;
         }
 
+        public IQueryable<User> FindUsersByUserId(string userId)
+        {
+            var userIdUpper = (userId ?? string.Empty).ToUpper();
+            return DataContext.Users.Where(u => u.UserID.ToUpper() == userIdUpper);
+        }
+
         public IEnumerable<User> FindUsersByName(string name)
         {
             return this.DataContext.Users
-                        .Where(u => u.FirstName.ToLower().Contains(name.ToLower())
-                                || u.SurName.ToLower().Contains(name.ToLower()))
+                        .Where(u => u.FirstName.ToLower().Contains(name.ToLower()) || u.SurName.ToLower().Contains(name.ToLower()))
                         .ToList();
         }
 
@@ -440,15 +447,27 @@ namespace DH.Helpdesk.Dal.Repositories
             return DataContext.Users.Where(x => x.Id == id).Select(x => x.PasswordChangedDate).FirstOrDefault();
         }
 
-        public UserOverview Login(string uId, string pwd)
+        public UserLoginInfo GetUserLoginInfo(string userId)
         {
-            var user = this.GetUser(x => x.UserID == uId && x.IsActive == 1 && x.Password == pwd);
+            var userIdUpper = (userId ?? string.Empty).ToUpper().Trim();
+
+            var user = 
+                Table.Where(u => u.UserID.ToUpper() == userIdUpper && u.IsActive == 1)
+                .Select(u => new UserLoginInfo()
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    UserId = userId,
+                    Password = u.Password,
+                    UserGroupId = u.UserGroup_Id
+                }).FirstOrDefault();
+
             return user;
         }
-
-        public UserOverview GetUser(int userid)
+        
+        public UserOverview GetUser(int userId)
         {
-            var user = this.GetUser(x => x.Id == userid);
+            var user = this.GetUser(x => x.Id == userId);
             return user;
         }
         
@@ -463,11 +482,13 @@ namespace DH.Helpdesk.Dal.Repositories
             return query.ToList();
         }
 
-        public UserOverview GetUserByLogin(string IdName, int? customerId = null)
+        public UserOverview GetUserByLogin(string userId, int? customerId = null)
         {
-            Expression<Func<User, bool>> expression = x => x.UserID == IdName && x.IsActive == 1;
+            var userIdUpper = (userId ?? string.Empty).ToUpper().Trim();
+            Expression<Func<User, bool>> expression = x => x.UserID.ToUpper() == userIdUpper && x.IsActive == 1;
+
             if (customerId.HasValue)
-                expression = x => x.UserID == IdName && x.IsActive == 1 && x.Customer_Id == customerId.Value;
+                expression = PredicateBuilder<User>.AndAlso(expression, x => x.Customer_Id == customerId.Value);
 
             var user = this.GetUser(expression);
             return user;
@@ -475,10 +496,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public UserName GetUserName(int userId)
         {
-            return
-                this.DataContext.Users.Where(u => u.Id == userId)
-                    .Select(u => new { u.FirstName, u.SurName })
-                    .ToList()
+            return this.DataContext.Users.Where(u => u.Id == userId)
                     .Select(u => new UserName(u.FirstName, u.SurName))
                     .FirstOrDefault();
         }
@@ -486,120 +504,79 @@ namespace DH.Helpdesk.Dal.Repositories
         public ItemOverview FindActiveOverview(int userId)
         {
             var users = this.DataContext.Users
-                        .Where(u => u.Id == userId &&
-                            u.IsActive != 0)
+                        .Where(u => u.Id == userId && u.IsActive != 0)
                         .Select(u => new { Name = u.FirstName + u.SurName, Value = u.Id })
                         .ToList();
 
-            return users.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture)))
-                        .FirstOrDefault();
+            return users.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture))).FirstOrDefault();
         }
-
+        
         public async Task<UserOverview> GetByUserIdAsync(string userId, string passw)
         {
-            var ret2 = await Task.Run(() =>
-                DataContext.Users.Where(u => u.UserID.Equals(userId, StringComparison.CurrentCultureIgnoreCase) && u.Password == passw).ToListAsync()
-            );
-            
-            var ret =  ret2.Select(x => new UserOverview(
-                        x.Id,
-                        x.UserID,
-                        x.Customer_Id,
-                        x.Language_Id,
-                        x.UserGroup_Id,
-                        x.FollowUpPermission,
-                        x.RestrictedCasePermission,
-                        x.ShowNotAssignedWorkingGroups,
-                        x.CreateCasePermission,
-                        x.CreateSubCasePermission,
-                        x.CopyCasePermission,
-                        x.OrderPermission,
-                        x.CaseSolutionPermission,
-                        x.DeleteCasePermission,
-                        x.DeleteAttachedFilePermission,
-                        x.MoveCasePermission,
-                        x.ActivateCasePermission,
-                        x.ReportPermission,
-                        x.CloseCasePermission,
-                        x.CalendarPermission,
-                        x.FAQPermission,
-                        x.BulletinBoardPermission,
-                        x.DocumentPermission,
-                        x.InventoryPermission,
-                        x.ContractPermission,
-                        x.SetPriorityPermission,
-                        x.InvoicePermission,
-                        x.DataSecurityPermission,
-                        x.CaseUnlockPermission,
-                        x.RefreshContent,
-                        x.FirstName,
-                        x.SurName,
-                        x.Phone,
-                        x.Email,
-                        x.UserWorkingGroups,
-                        x.StartPage,
-                        x.ShowSolutionTime.ToBool(),
-                        x.ShowCaseStatistics.ToBool(),
-                        x.TimeZoneId,
-                        x.UserGUID,
-                        x.CaseInternalLogPermission,
-                        x.InvoiceTimePermission
-                        )).FirstOrDefault();
+            var userIdUpper = (userId ?? string.Empty).ToUpper().Trim();
+            var selector = GetUserOviewerSelector();
 
-            return ret;
+            var res = await DataContext.Users.Where(u => u.UserID.ToUpper() == userIdUpper && u.Password == passw).Select(selector).ToListAsync();
+            return res.FirstOrDefault();
         }
-
-        //performance ineffecient approach - mapping is done after query is executed and wrong parameters can be assigned by mistake in ctor
+        
         private UserOverview GetUser(Expression<Func<User, bool>> expression)
         {
-            var u = this.DataContext.Users
-                    .Where(expression)
-                    .ToList() 
-                    .Select(x => new UserOverview(
-                        x.Id,
-                        x.UserID,
-                        x.Customer_Id,
-                        x.Language_Id,
-                        x.UserGroup_Id,
-                        x.FollowUpPermission,
-                        x.RestrictedCasePermission,
-                        x.ShowNotAssignedWorkingGroups,
-                        x.CreateCasePermission,
-                        x.CreateSubCasePermission,
-                        x.CopyCasePermission,
-                        x.OrderPermission,
-                        x.CaseSolutionPermission,
-                        x.DeleteCasePermission,
-                        x.DeleteAttachedFilePermission,
-                        x.MoveCasePermission,
-                        x.ActivateCasePermission,
-                        x.ReportPermission,
-                        x.CloseCasePermission,
-                        x.CalendarPermission,
-                        x.FAQPermission,
-                        x.BulletinBoardPermission,
-                        x.DocumentPermission,
-                        x.InventoryPermission,
-                        x.ContractPermission,
-                        x.SetPriorityPermission,
-                        x.InvoicePermission,
-                        x.DataSecurityPermission,
-                        x.CaseUnlockPermission,
-                        x.RefreshContent,
-                        x.FirstName,
-                        x.SurName,
-                        x.Phone,
-                        x.Email,
-                        x.UserWorkingGroups,
-                        x.StartPage,
-                        x.ShowSolutionTime.ToBool(),
-                        x.ShowCaseStatistics.ToBool(),
-                        x.TimeZoneId,
-                        x.UserGUID,
-                        x.CaseInternalLogPermission,
-                        x.InvoiceTimePermission
-                        )).SingleOrDefault();
+            var selector = GetUserOviewerSelector();
+            var u = Table.Where(expression).Select(selector).SingleOrDefault();
             return u;
+        }
+
+        private Expression<Func<User, UserOverview>> GetUserOviewerSelector()
+        {
+            Expression<Func<User, UserOverview>> exp =
+                x => new UserOverview()
+                {
+                    Id = x.Id,
+                    UserId = x.UserID,
+                    CustomerId = x.Customer_Id,
+                    LanguageId = x.Language_Id,
+                    UserGroupId = x.UserGroup_Id,
+                    FollowUpPermission = x.FollowUpPermission,
+                    RestrictedCasePermission = x.RestrictedCasePermission,
+                    ShowNotAssignedWorkingGroups = x.ShowNotAssignedWorkingGroups,
+                    CreateCasePermission = x.CreateCasePermission,
+                    CreateSubCasePermission = x.CreateSubCasePermission,
+                    CopyCasePermission = x.CopyCasePermission,
+                    OrderPermission = x.OrderPermission,
+                    CaseSolutionPermission = x.CaseSolutionPermission,
+                    DeleteCasePermission = x.DeleteCasePermission,
+                    DeleteAttachedFilePermission = x.DeleteAttachedFilePermission,
+                    MoveCasePermission = x.MoveCasePermission,
+                    ActivateCasePermission = x.ActivateCasePermission,
+                    ReportPermission = x.ReportPermission,
+                    CloseCasePermission = x.CloseCasePermission,
+                    CalendarPermission = x.CalendarPermission,
+                    FAQPermission = x.FAQPermission,
+                    BulletinBoardPermission = x.BulletinBoardPermission,
+                    DocumentPermission = x.DocumentPermission,
+                    InventoryPermission = x.InventoryPermission,
+                    ContractPermission = x.ContractPermission,
+                    SetPriorityPermission = x.SetPriorityPermission,
+                    InvoicePermission = x.InvoicePermission,
+                    DataSecurityPermission = x.DataSecurityPermission,
+                    CaseUnlockPermission = x.CaseUnlockPermission,
+                    RefreshContent = x.RefreshContent,
+                    FirstName = x.FirstName,
+                    SurName = x.SurName,
+                    Phone = x.Phone,
+                    Email = x.Email,
+                    UserWorkingGroups = x.UserWorkingGroups,
+                    StartPage = x.StartPage,
+                    ShowSolutionTime = x.ShowSolutionTime != 0,
+                    ShowCaseStatistics = x.ShowCaseStatistics != 0,
+                    TimeZoneId = x.TimeZoneId,
+                    UserGUID = x.UserGUID,
+                    CaseInternalLogPermission = x.CaseInternalLogPermission,
+                    InvoiceTimePermission = x.InvoiceTimePermission
+                };
+
+            return exp;
         }
     }
 

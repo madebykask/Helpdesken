@@ -134,38 +134,18 @@ SET @metaData =
 									return this.value;
 								}
 							}
-							/*},
-							{
-							id: "EmailLabel",
-							type: "label",
-							label: "",
-							//noDigest: true
-							valueBinding: function(m, log) {
-								return m.tabs.Contact.sections.Contact.controls.Email.value;
-							}
-							}]*/
-					},
-					/*	{
-					id: "Phone",
-					name: "Phone",
-					column: 1,
-					controls: [*/
-					{
+					}, {
 						id: "PhoneEmail",
 						type: "label",
 						label: "Contact",
 						hiddenBinding: function(m, log) {
 							return false;
 						},
-						//noDigest: true
 						valueBinding: function(m, log) {
-							/**if (m.dataSources.getCBDPhone.length == 0)
-								return "-";*/
 							var label = ''Phone: '' + (m.dataSources.getCBDPhone.length == 0 ? ''-'' : m.dataSources.getCBDPhone[0].ADDRESS) + '', Email: '' + m.tabs.Contact.sections.Contact.controls.Email.value;
 							return label;
 						}
-					}
-				]
+					}]
 			}]
 		}, {
 			id: "TaxReg",

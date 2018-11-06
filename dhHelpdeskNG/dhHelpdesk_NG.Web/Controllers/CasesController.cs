@@ -2131,18 +2131,37 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
-        public string ChangeCaseType(int? id)
+        [HttpPost]
+        public ActionResult ChangeCaseType(int? id)
         {
-            string ret = null;
+
+            CaseType caseType = new CaseType();
             if (id.HasValue)
             {
-                var e = _caseTypeService.GetCaseType(id.Value);
-                if (e != null)
-                    ret = e.User_Id.HasValue ? e.User_Id.Value != 0 ? e.User_Id.Value.ToString() : null : null;
+                caseType = _caseTypeService.GetCaseType(id.Value);
             }
-            return ret;
+            if (caseType == null)
+                return new HttpNotFoundResult();
+            
+            int userId = caseType.User_Id ?? 0;
+            var performerUser = caseType.Administrator;
+            return Json(new
+            {
+                Id = caseType.Id,
+                Name = caseType.Name,
+                ParentId = caseType.Parent_CaseType_Id,
+                UserId = userId > 0 ? caseType.User_Id : null,
+                UserName = performerUser != null ? string.Format("{0} {1}", performerUser.FirstName, performerUser.SurName) : "",
+                ShowOnExternalPage = caseType.ShowOnExternalPage,
+                ShowOnExtPageCases = caseType.ShowOnExtPageCases,
+                IsActive = caseType.IsActive,
+                Selectable = caseType.Selectable,
+                WorkingGroupId = caseType.WorkingGroup_Id,
+                WorkingGroupName = caseType.WorkingGroup_Id != null ? caseType.WorkingGroup.WorkingGroupName : null
+            });
         }
 
+        [HttpPost]
         public string ChangeSystem(int? id)
         {
             string ret = null;
@@ -2155,6 +2174,7 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
+        [HttpPost]
         public JsonResult ChangeProductArea(int? id)
         {
             int workinggroupId = 0;
@@ -2491,7 +2511,10 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 if (fileId == 0)
                 {
-                    _logFileService.DeleteByFileName(fileName.Trim());
+                    if (GuidHelper.IsGuid(id))
+                    {
+                        this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);
+                    }
                 }
                 else
                     _logFileService.DeleteByFileIdAndFileName(fileId.Value, fileName.Trim());
@@ -5329,6 +5352,7 @@ namespace DH.Helpdesk.Web.Controllers
                     //        windowsUser);
                 }
 
+                //todo: Move to caseService.Initcase() -> _customerRepository.GetCustomerDefaults ?
                 var defaultStateSecondary = this._stateSecondaryService.GetDefaultOverview(customerId);
                 if (defaultStateSecondary != null)
                 {
@@ -5519,6 +5543,20 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
+            // Set working group and performerId from the case type working group if any for New case only
+            if (isCreateNewCase && m.case_.CaseType_Id > 0)
+            {
+                var caseType = _caseTypeService.GetCaseType(m.case_.CaseType_Id);
+                if (caseType != null)
+                {
+                    if (caseType.WorkingGroup_Id.HasValue)
+                        m.case_.WorkingGroup_Id = caseType.WorkingGroup_Id;
+
+                    if (caseType.User_Id.HasValue)
+                        m.case_.Performer_User_Id = caseType.User_Id.Value;
+                }
+            }
+
             // "RegistrationSourceCustomer" field
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.RegistrationSourceCustomer))
             {
@@ -5587,29 +5625,26 @@ namespace DH.Helpdesk.Web.Controllers
                 var sup = m.suppliers.FirstOrDefault(x => x.Id == m.case_.Supplier_Id.GetValueOrDefault());
                 m.CountryId = sup?.Country_Id.GetValueOrDefault();
             }
-
+            
             if (caseTemplate != null) 
             {
                 #region New case initialize
 
                 if (isCreateNewCase)
                 {
-                    if (caseTemplate.CaseType_Id != null)
+                    if (caseTemplate.CaseType_Id.HasValue)
                     {
                         m.case_.CaseType_Id = caseTemplate.CaseType_Id.Value;
                     }
 
-                    if (caseTemplate.PerformerUser_Id != null)
+                    if (caseTemplate.SetCurrentUserAsPerformer.ToBool())
                     {
-                        m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id.Value;
+                        m.case_.Performer_User_Id = SessionFacade.CurrentUser.Id;
                     }
                     else
                     {
-                        m.case_.Performer_User_Id = 0;
+                        m.case_.Performer_User_Id = caseTemplate.PerformerUser_Id;
                     }
-
-                    if (SessionFacade.CurrentUser != null && caseTemplate.SetCurrentUserAsPerformer == 1)
-                        m.case_.Performer_User_Id = SessionFacade.CurrentUser.Id;
 
                     if (caseTemplate.Category_Id != null)
                     {
@@ -5665,23 +5700,17 @@ namespace DH.Helpdesk.Web.Controllers
                     if (!string.IsNullOrEmpty(caseTemplate.Miscellaneous))
                         m.case_.Miscellaneous = caseTemplate.Miscellaneous;
 
-                    if (caseTemplate.SetCurrentUsersWorkingGroup == 1 && SessionFacade.CurrentUser != null)
+                    // Set WORKING GROUP from Case Template:
+                    if (caseTemplate.SetCurrentUsersWorkingGroup == 1)
                     {
-                        var userDefaultWGId = this._userService.GetUserDefaultWorkingGroupId(SessionFacade.CurrentUser.Id, customer.Id);
-                        if (userDefaultWGId.HasValue)
-                        {
-                            m.case_.WorkingGroup_Id = userDefaultWGId.Value;
-                        }
-                        else
-                        {
-                            m.case_.WorkingGroup_Id = null;
-                        }
+                        var userDefaultWGId = _userService.GetUserDefaultWorkingGroupId(SessionFacade.CurrentUser.Id, customer.Id);
+                        m.case_.WorkingGroup_Id = userDefaultWGId;
                     }
-                    else if (caseTemplate.CaseWorkingGroup_Id != null)
+                    else if (caseTemplate.CaseWorkingGroup_Id.HasValue)
                     {
-                        m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id;
+                        m.case_.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id.Value;
                     }
-
+                    
                     if (caseTemplate.Priority_Id != null)
                         m.case_.Priority_Id = caseTemplate.Priority_Id;
 
@@ -5754,7 +5783,7 @@ namespace DH.Helpdesk.Web.Controllers
                         m.case_.StateSecondary_Id = caseTemplate.StateSecondary_Id;
 
                     // TODO: JWE What is "Verfied"?
-                    m.case_.Verified = caseTemplate.Verified;
+                    //m.case_.Verified = caseTemplate.Verified;
 
                     if (!string.IsNullOrEmpty(caseTemplate.VerifiedDescription))
                         m.case_.VerifiedDescription = caseTemplate.VerifiedDescription;
@@ -5889,10 +5918,27 @@ namespace DH.Helpdesk.Web.Controllers
                     if (caseTemplate.SMS != 0)
                         m.case_.SMS = caseTemplate.SMS;
 
+                    if (caseTemplate.Verified != 0)
+                        m.case_.Verified = caseTemplate.Verified;
+
                     // This is used for hide fields(which are not in casetemplate) in new case input
                     m.templateistrue = templateistrue;
                     var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
                     m.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCauses.ToArray(), caseTemplate.FinishingCause_Id);
+
+                    //set working group and performer from CaseType if they are empty
+                    if (caseTemplate.CaseType_Id.HasValue)
+                    {
+                        var caseType = _caseTypeService.GetCaseType(caseTemplate.CaseType_Id.Value);
+                        if (caseType != null)
+                        {
+                            if (m.case_.WorkingGroup_Id == null && caseType.WorkingGroup_Id.HasValue)
+                                m.case_.WorkingGroup_Id = caseType.WorkingGroup_Id;
+
+                            if (m.case_.Performer_User_Id == null && caseType.User_Id.HasValue)
+                                m.case_.Performer_User_Id = caseType.User_Id.Value;
+                        }
+                    }
                 }
 
                 #endregion
@@ -5978,19 +6024,15 @@ namespace DH.Helpdesk.Web.Controllers
                 else
                     m.isaboutous = null;
             }
-
+            
             // hämta parent path för casetype
             if (m.case_.CaseType_Id > 0)
             {
-                var c = this._caseTypeService.GetCaseType(m.case_.CaseType_Id);
-                if (c != null)
+                var caseType = _caseTypeService.GetCaseType(m.case_.CaseType_Id);
+                if (caseType != null)
                 {
-                    c = Translation.TranslateCaseType(c);
-                    m.ParantPath_CaseType = c.getCaseTypeParentPath();
-                    if (isCreateNewCase && c.User_Id.HasValue)
-                    {
-                        m.case_.Performer_User_Id = c.User_Id.Value;
-                    }
+                    caseType = Translation.TranslateCaseType(caseType);
+                    m.ParantPath_CaseType = caseType.getCaseTypeParentPath();
                 }
             }
 
@@ -6114,8 +6156,8 @@ namespace DH.Helpdesk.Web.Controllers
             if (m.DynamicCase != null)
             {
                 var l = m.Languages.Where(x => x.Id == SessionFacade.CurrentLanguageId).FirstOrDefault();
-                
-                //todo: use UrlBuilder!
+
+                //ex: unitedkingdom/Hiring/edit/[CaseId]/?UserId=[UserId]&language=[Language]
                 m.DynamicCase.FormPath = m.DynamicCase.FormPath
                     .Replace("[CaseId]", m.case_.Id.ToString())
                     .Replace("[UserId]", HttpUtility.UrlEncode(SessionFacade.CurrentUser.UserId.ToString()))

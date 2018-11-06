@@ -223,10 +223,10 @@
                 #endregion
 
                 #region casefiles
-                CaseFiles = entity.CaseFiles
-                #endregion
 
-                
+                CaseFiles = entity.CaseFiles != null ? new List<CaseFile>(entity.CaseFiles) : null
+
+                #endregion
             };
 
             return ret;

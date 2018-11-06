@@ -57,8 +57,8 @@ namespace DH.Helpdesk.Web
                             "~/Content/css/*.css",
                             "~/Content/themes/base/minified/jquery-ui.min.css",
                             "~/Content/js/jquery.plupload.queue/css/jquery.plupload.queue.css"));
+
             bundles.Add(new ScriptBundle(ScriptNames.DynamicCase).Include(
-                            "~/Content/js/DynamicCase/iframeResizer.js",
                             "~/Content/js/DynamicCase/container.js"));
 
 			bundles.Add(new ScriptBundle("~/Content/js/iframeResizer").Include(
@@ -348,6 +348,9 @@ namespace DH.Helpdesk.Web
 
             bundles.Add(new ScriptBundle("~/bundles/admin/users/_input").Include(
                             "~/Areas/Admin/Content/js/Users/_input.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/admin/casetype/_input").Include(
+                            "~/Areas/Admin/Content/js/CaseType/_input.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admin/users/index_lockedcases").Include(
                            "~/Areas/Admin/Content/js/Users/index.lockedcase.js"));

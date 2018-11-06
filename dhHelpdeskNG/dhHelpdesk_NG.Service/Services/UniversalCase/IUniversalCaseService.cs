@@ -7,7 +7,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
     {
         CaseModel GetCase(int id);
 
-        ProcessResult SaveCase(CaseModel caseModel, AuxCaseModel auxModel, out int caseId, out decimal caseNumber);
+        ProcessResult SaveCase(CaseModel caseModel, AuxCaseModel auxModel, out int caseId, out decimal caseNumber, bool sendEmail = true);
 
         CaseTimeMetricsModel ClaculateCaseTimeMetrics(CaseModel caseModel, AuxCaseModel auxModel, CaseModel oldCase = null);
 

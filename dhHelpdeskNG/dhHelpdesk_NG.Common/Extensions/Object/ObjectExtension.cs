@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace DH.Helpdesk.Common.Extensions.Object
 {
@@ -12,5 +9,11 @@ namespace DH.Helpdesk.Common.Extensions.Object
 		{
 			return use(t);
 		}
-	}
+
+	    public static T DeepClone<T>(this T source)
+	    {
+	        var serialized = JsonConvert.SerializeObject(source);
+	        return JsonConvert.DeserializeObject<T>(serialized);
+	    }
+    }
 }

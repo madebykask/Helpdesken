@@ -10,6 +10,10 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
 
     public class UserOverview
     {
+        public UserOverview()
+        {
+        }
+
         public UserOverview(
             int id,
             string userId,
@@ -172,7 +176,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
 
         public ICollection<UserWorkingGroup> UserWorkingGroups { get; set; }
 
-        public int StartPage { get; private set; }
+        public int StartPage { get; set; }
 
         public bool ShowSolutionTime { get; set; }
 

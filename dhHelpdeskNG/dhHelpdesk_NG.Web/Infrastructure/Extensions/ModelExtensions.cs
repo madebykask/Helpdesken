@@ -28,7 +28,5 @@
         {
             return (processRes == null) ? string.Empty : JsonConvert.SerializeObject(processRes);
         }
-
     }
-
 }

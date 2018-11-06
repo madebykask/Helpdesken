@@ -259,6 +259,7 @@
     <Compile Include="Models\CaseOverviewGridColumnSetting.cs" />
     <Compile Include="Models\Contract\ContractFileModel.cs" />
     <Compile Include="Models\Contract\ContractHistoryFull.cs" />
+    <Compile Include="Models\Contract\ContractSearchData.cs" />
     <Compile Include="Models\Contract\ContractsSearchFilter.cs" />
     <Compile Include="Models\Contract\ContractsSettingRowModel.cs" />
     <Compile Include="Models\Contract\ContractInputModel.cs" />
@@ -498,6 +499,10 @@
     <Compile Include="Models\Questionnaire\Read\QuestionnaireQuestionOverview.cs" />
     <Compile Include="Models\Questionnaire\Write\Answer.cs" />
     <Compile Include="Models\Questionnaire\Write\ParticipantForInsert.cs" />
+    <Compile Include="Models\OUOverview .cs" />
+    <Compile Include="Models\ImpactOverview.cs" />
+    <Compile Include="Models\UrgencyOverview.cs" />
+    <Compile Include="Models\SystemOverview.cs" />
     <Compile Include="Models\RegionOverview.cs" />
     <Compile Include="Models\ReportService\ReportData.cs" />
     <Compile Include="Models\ReportService\ReportFilter.cs" />
@@ -958,6 +963,7 @@
     <Compile Include="Models\Systems\Output\SystemOverview.cs" />
     <Compile Include="Models\Translation2.cs" />
     <Compile Include="Models\User\CustomerUserInfo.cs" />
+    <Compile Include="Models\User\UserLoginInfo.cs" />
     <Compile Include="Models\WebApi\WebApiCredentialModel.cs" />
     <Compile Include="Models\WorkflowStepModel.cs" />
     <Compile Include="Models\Users\Input\UserModule.cs" />

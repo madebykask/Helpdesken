@@ -887,6 +887,11 @@
                 ModuleExtendedCase = customerToCopySettings.ModuleExtendedCase,
                 AttachmentPlacement = customerToCopySettings.AttachmentPlacement,
                 M2TNewCaseMailTo = customerToCopySettings.M2TNewCaseMailTo,
+                IntegrationType = customerToCopySettings.IntegrationType,
+                AllowMoveCaseToAnyCustomer = customerToCopySettings.AllowMoveCaseToAnyCustomer,
+                ShowQuickNewCaseLink = customerToCopySettings.ShowQuickNewCaseLink,
+                QuickNewCaseLinkText = customerToCopySettings.QuickNewCaseLinkText,
+                QuickNewCaseLinkUrl = customerToCopySettings.QuickNewCaseLinkUrl,
             };
 
             //Get CaseSettings to copy
@@ -1227,6 +1232,7 @@
                 newCustomerCaseSolution.FinishingCause_Id = cs.FinishingCause_Id;
                 newCustomerCaseSolution.CaseWorkingGroup_Id = cs.CaseWorkingGroup_Id;
                 newCustomerCaseSolution.Category_Id = cs.Category_Id;
+                newCustomerCaseSolution.DefaultTab = cs.DefaultTab;
 
                 this._caseSolutionService.SaveCaseSolution(newCustomerCaseSolution, null, null, out errors);
             }

@@ -377,7 +377,6 @@
     <Compile Include="Models\Case\InvoiceTimeModel.cs" />
     <Compile Include="Models\Contract\ContractHistoryFieldsDiff.cs" />
     <Compile Include="Models\Contract\ContractsSearchInputData.cs" />
-    <Compile Include="Models\Contract\ContractStatuses.cs" />
     <Compile Include="Models\Gdpr\DataPrivacyHistoryViewModel.cs" />
     <Compile Include="Models\Gdpr\GdprOperationsHistoryListItem.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
@@ -412,6 +411,7 @@
     <Compile Include="Areas\Invoices\InvoicesAreaRegistration.cs" />
     <Compile Include="Areas\Invoices\Models\InvoiceListItemViewModel.cs" />
     <Compile Include="Areas\Invoices\Models\LogInvoiceItemViewModel.cs" />
+    <Content Include="Areas\Admin\Content\js\CaseType\_input.js" />
     <Content Include="Areas\Admin\Content\js\DataPrivacy\_dataPrivacyForm.js" />
     <Content Include="Areas\Inventory\Content\js\relatedCases.js" />
     <Content Include="Areas\Admin\Content\js\OrderType\index.logic.js" />
@@ -4050,6 +4050,9 @@
     <Content Include="Views\Notifiers\EditUserCategory.cshtml" />
     <Content Include="Views\Notifiers\_CategoryInput.cshtml" />
     <Content Include="Views\Notifiers\NewCategory.cshtml" />
+    <Content Include="Web.config.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

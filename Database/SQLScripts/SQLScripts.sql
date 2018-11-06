@@ -1,187 +1,84 @@
-﻿--update DB from 5.3.37 to 5.3.38 version
+﻿--update DB from 5.3.38 to 5.3.39 version
+
+-- New column Workinggroup_Id in tblCaseType
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'WorkingGroup_Id' and sysobjects.name = N'tblCaseType')
+ALTER TABLE tblCaseType
+    ADD WorkingGroup_Id INTEGER,
+    FOREIGN KEY(WorkingGroup_Id) REFERENCES tblWorkingGroup(Id)
+GO
+
+IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblCaseType_tblWorkingGroup') AND type = 'F')
+ALTER TABLE [dbo].tblCaseType  WITH NOCHECK ADD  CONSTRAINT [FK_tblCaseType_tblWorkingGroup] FOREIGN KEY([WorkingGroup_Id])
+REFERENCES [dbo].[tblWorkingGroup] ([Id])
+GO
+
+ALTER TABLE [dbo].tblCaseType CHECK CONSTRAINT [FK_tblCaseType_tblWorkingGroup]
+GO
+
+
+--tblSettings
+ALTER TABLE tblSettings
+ALTER COLUMN POP3UserName NVARCHAR(50) not null
+
+--tblCaseHistory
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'IsAbout_Persons_EMail' and sysobjects.name = N'tblCaseHistory')
+BEGIN
+    ALTER TABLE tblCaseHistory
+    ADD IsAbout_Persons_EMail NVARCHAR(100)       
+END
+GO
 
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'IsEmpty' and sysobjects.name = N'tblComputerUsersCategory')
+               where syscolumns.name = N'IsAbout_Persons_CellPhone' and sysobjects.name = N'tblCaseHistory')
 BEGIN
-    ALTER TABLE tblComputerUsersCategory
-    ADD IsEmpty bit NOT NULL DEFAULT(0)        
+    ALTER TABLE tblCaseHistory
+    ADD IsAbout_Persons_CellPhone NVARCHAR(50)       
 END
 GO
 
-RAISERROR ('Adding UserSearchCategory_Id case field setting to tblCaseFieldSettings', 10, 1) WITH NOWAIT
-;WITH cus as 
-(select fs1.Customer_Id as CustomerId
- from tblCaseFieldSettings fs1
- where NOT EXISTS
-	  (
-		  select 1 from tblCaseFieldSettings fs2 
-		  where fs2.Customer_Id = fs1.Customer_Id 
-		  AND fs2.CaseField = 'UserSearchCategory_Id'
-	  )
-       AND fs1.Customer_Id IS NOT NULL
-GROUP BY fs1.Customer_Id) 
-INSERT INTO tblCaseFieldSettings (Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, Locked)
-select cus.CustomerId, 'UserSearchCategory_Id', 0, 0, 0, 0, '', null, 0, 0 
-from cus
-GO
-
-RAISERROR ('Adding IsAbout_UserSearchCategory_Id case field setting to tblCaseFieldSettings', 10, 1) WITH NOWAIT
-GO
-;WITH cus as 
-(select fs1.Customer_Id as CustomerId
- from tblCaseFieldSettings fs1
- where NOT EXISTS
-	  (
-		  select 1 from tblCaseFieldSettings fs2 
-		  where fs2.Customer_Id = fs1.Customer_Id 
-		  AND fs2.CaseField = 'IsAbout_UserSearchCategory_Id'
-	  )
-       AND fs1.Customer_Id IS NOT NULL
-GROUP BY fs1.Customer_Id) 
-INSERT INTO tblCaseFieldSettings (Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, Locked)
-select cus.CustomerId, 'IsAbout_UserSearchCategory_Id', 0, 0, 0, 0, '', null, 0, 0 
-from cus
-GO
-
-
-RAISERROR ('Adding column UserSearchCategory_Id to tblCaseSolution', 10, 1) WITH NOWAIT
-IF not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UserSearchCategory_Id' and sysobjects.name = N'tblCaseSolution')
-BEGIN
-   
-  ALTER TABLE tblCaseSolution
-  ADD UserSearchCategory_Id int NULL
-  
-  -- add case solution setting 
-  INSERT INTO tblCaseSolutionFieldSettings (CaseSolution_Id, FieldName_Id, Mode, CreatedDate, ChangedDate)
-  SELECT cs2.CaseSolution_Id, 69, cs2.Mode, GETDATE(), GETDATE()		
-  FROM tblCaseSolutionFieldSettings as cs2
-  LEFT JOIN tblCaseSolutionFieldSettings as cs1 on cs2.CaseSolution_Id = cs1.CaseSolution_Id AND cs1.FieldName_Id = 69
-  WHERE cs2.FieldName_Id = 17 
-  AND   cs1.FieldName_Id is NULL
-
-END
-GO
-
-RAISERROR ('Adding column IsAbout_UserSearchCategory_Id to tblCaseSolution', 10, 1) WITH NOWAIT
-IF not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'IsAbout_UserSearchCategory_Id' and sysobjects.name = N'tblCaseSolution')   
-BEGIN
-
-  ALTER TABLE tblCaseSolution
-  ADD IsAbout_UserSearchCategory_Id int NULL
-  
-  -- add case solution setting   
-  INSERT INTO tblCaseSolutionFieldSettings (CaseSolution_Id, FieldName_Id, Mode, CreatedDate, ChangedDate)
-  SELECT cs2.CaseSolution_Id, 70, cs2.Mode, GETDATE(), GETDATE()		
-  FROM tblCaseSolutionFieldSettings as cs2
-  LEFT JOIN tblCaseSolutionFieldSettings as cs1 on cs2.CaseSolution_Id = cs1.CaseSolution_Id AND cs1.FieldName_Id = 70
-  WHERE cs2.FieldName_Id = 17 
-  AND   cs1.FieldName_Id is NULL
-
-END
-GO
-
-RAISERROR ('Updating tblCaseSolution.Caption column to nvarchar(100)', 10, 1) WITH NOWAIT
-IF exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'Caption' and sysobjects.name = N'tblCaseSolution')   
-BEGIN
-
-  ALTER TABLE tblCaseSolution
-  ALTER COLUMN Caption nvarchar(100) NOT NULL
-
-END
-GO
-
-RAISERROR ('Add column Hide on table tblCaseFieldSettings', 10, 1) WITH NOWAIT
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'Hide' and sysobjects.name = N'tblCaseFieldSettings')
-BEGIN 
-  ALTER TABLE [dbo].[tblCaseFieldSettings]
-  ADD Hide bit NULL  
-  
-  ALTER TABLE [dbo].[tblCaseFieldSettings] 
-  ADD CONSTRAINT [DF_tblCaseFieldSettings_Hide]  DEFAULT(0) FOR [Hide]
-  
-  EXEC('UPDATE [dbo].[tblCaseFieldSettings] SET Hide = 0')
-
-  ALTER TABLE [dbo].[tblCaseFieldSettings]
-  ALTER COLUMN Hide bit NOT NULL 
-
-END
-GO 
-
--- remove active default constraint
-IF EXISTS (select 1 FROM sys.default_constraints WHERE parent_object_id = OBJECT_ID('tblCaseFieldSettings') and name = 'DF_tblCaseFieldSettings_Active') 
+               where syscolumns.name = N'IsAbout_Region_Id' and sysobjects.name = N'tblCaseHistory')
 BEGIN
-    ALTER TABLE tblCaseFieldSettings
-    DROP CONSTRAINT DF_tblCaseFieldSettings_Active
+    ALTER TABLE tblCaseHistory
+    ADD IsAbout_Region_Id INT       
 END
 GO
 
--- remove  active column
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'IsAbout_OU_Id' and sysobjects.name = N'tblCaseHistory')
+BEGIN
+    ALTER TABLE tblCaseHistory
+    ADD IsAbout_OU_Id INT       
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'IsAbout_CostCentre' and sysobjects.name = N'tblCaseHistory')
+BEGIN
+    ALTER TABLE tblCaseHistory
+    ADD IsAbout_CostCentre NVARCHAR(50)      
+END
+GO
+
+if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
+               where syscolumns.name = N'IsAbout_Place' and sysobjects.name = N'tblCaseHistory')
+BEGIN
+    ALTER TABLE tblCaseHistory
+    ADD IsAbout_Place NVARCHAR(100) NULL    
+END
+GO
+
+-- changing tblContractFile.ContentType size to 100
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-           where syscolumns.name = N'Active' and sysobjects.name = N'tblCaseFieldSettings')
+            where syscolumns.name = N'ContentType' and sysobjects.name = N'tblContractFile')
 BEGIN
-   ALTER TABLE tblCaseFieldSettings
-   DROP COLUMN Active;
+    ALTER TABLE tblContractFile
+    ALTER COLUMN ContentType nvarchar(100) NOT NULL
 END
-GO
-
-RAISERROR ('Remove column DefaultUserSearchCategory on table tblCaseSections', 10, 1) WITH NOWAIT
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-           where syscolumns.name = N'DefaultUserSearchCategory' and sysobjects.name = N'tblCaseSections')
-BEGIN
-    ALTER TABLE tblCaseSections
-    DROP COLUMN DefaultUserSearchCategory
-END
-GO
-
-RAISERROR ('Remove column ShowUserSearchCategory on table tblCaseSections', 10, 1) WITH NOWAIT
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-           where syscolumns.name = N'ShowUserSearchCategory' and sysobjects.name = N'tblCaseSections')
-BEGIN
-    -- DROP DEFAULT CONSTRAINT FIRSTr
-    DECLARE @ObjectName NVARCHAR(100)
-    SELECT @ObjectName = OBJECT_NAME([default_object_id]) FROM SYS.COLUMNS
-    WHERE [object_id] = OBJECT_ID('[dbo].[tblCaseSections]') AND [name] = 'ShowUserSearchCategory';
-    EXEC('ALTER TABLE [dbo].[tblCaseSections] DROP CONSTRAINT ' + @ObjectName)
-
-    ALTER TABLE tblCaseSections
-    DROP COLUMN ShowUserSearchCategory
-END
-GO
-
-RAISERROR ('Adding column UniqueMessageId to tblMail2Ticket', 10, 1) WITH NOWAIT
-IF not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'UniqueMessageId' and sysobjects.name = N'tblMail2Ticket')
-BEGIN
-    ALTER TABLE dbo.tblMail2Ticket
-    ADD UniqueMessageId nvarchar(100) null
-END
-GO
-
-RAISERROR ('Adding empty CaseType record', 10, 1) WITH NOWAIT
-IF NOT EXISTS (select 1 from tblCaseType where Id = 0)
-BEGIN
-    set identity_insert tblCaseType on
-
-    DECLARE @customerId int
-    SET @customerId = (SELECT TOP 1 Id from tblCustomer ORDER BY Id ASC)
-    
-    INSERT INTO tblCaseType(Id, Customer_Id, CaseType, RequireApproving, isDefault, ShowOnExternalPage, CreatedDate, ChangedDate, Status, Parent_CaseType_Id, RelatedField, ITILProcess, isEMailDefault, AutomaticApproveTime, Form_Id, Selectable, User_Id, CaseTypeGUID, ShowOnExtPageCases)
-    VALUES(0, @customerId, 'Empty', 0, 0, 0, GETDATE(), GETDATE(), 0, NULL, '', 0, 0, 0, NULL, 0, NULL, newid(), 0)
-
-    set identity_insert tblCaseType off
-END
-GO
-
-RAISERROR ('Adding EMailCaseType_Id to table working group', 10, 1) WITH NOWAIT
-IF not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'EMailCaseType_Id' and sysobjects.name = N'tblWorkingGroup')
-BEGIN
-Alter table tblworkinggroup add EMailCaseType_Id int null
-END
-GO
 
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.38'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.39'
 --ROLLBACK --TMP
 
-  
 

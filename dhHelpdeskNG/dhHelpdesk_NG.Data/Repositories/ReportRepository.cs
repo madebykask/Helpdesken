@@ -226,7 +226,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     join s in this.DataContext.Systems on c.System_Id equals (int?) s.Id into ss
                     from _s in ss.DefaultIfEmpty()
 
-                    join p in this.DataContext.Priorities on c.Priority_Id equals (int?) p.Id into ps
+                    join p in this.DataContext.Priorities on c.Priority_Id equals (int?)p.Id into ps
                     from _p in ps.DefaultIfEmpty()
 
                     join im in this.DataContext.Impacts on c.Impact_Id equals (int?) im.Id into ims
@@ -264,15 +264,18 @@ namespace DH.Helpdesk.Dal.Repositories
                     join user3 in this.DataContext.Users on c.Performer_User_Id equals (int?) user3.Id into user3s
                     from _u3 in user3s.DefaultIfEmpty()
 
+                    join pr in this.DataContext.Problems on c.Problem_Id equals (int?) pr.Id into prs
+                    from _pr in prs.DefaultIfEmpty()
+
                     where
                         c.Customer_Id == customerId && c.Deleted != 1 &&
                         (DbFunctions.TruncateTime(c.RegTime) >= DbFunctions.TruncateTime(periodFrom) &&
                          DbFunctions.TruncateTime(c.RegTime) <= DbFunctions.TruncateTime(periodUntil))
 
                         && (!closeFrom.HasValue || DbFunctions.TruncateTime(c.FinishingDate) >=
-                            DbFunctions.TruncateTime(closeFrom.Value))
+                         DbFunctions.TruncateTime(closeFrom.Value))
                         && (!closeToEndOfDay.HasValue || DbFunctions.TruncateTime(c.FinishingDate) <=
-                            DbFunctions.TruncateTime(closeToEndOfDay.Value))
+                         DbFunctions.TruncateTime(closeToEndOfDay.Value))
                     select new
                     {
                         Case = c,
@@ -293,7 +296,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         StateSecondary = _sst,
                         CausingParts = _cp,
                         Urgencies = _ur,
-                        PerformerUser = _u3
+                        PerformerUser = _u3,
+                        Problems = _pr
                     };
 
                 if (caseTypeId.Any())
@@ -346,7 +350,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         Unit = c.Case.OU_Id.HasValue ? c.Case.OU_Id.ToString() : "",
                         Place = c.Case.Place,
                         OrdererCode = c.Case.UserCode,
-
+                        CostCentre = c.Case.CostCentre,
                         IsAbout_User = c.About.ReportedBy,
                         IsAbout_Persons_Name = c.About.Person_Name,
                         IsAbout_Persons_Phone = c.About.Person_Phone,
@@ -404,8 +408,9 @@ namespace DH.Helpdesk.Dal.Repositories
                         VerifiedDescription = c.Case.VerifiedDescription,
                         SolutionRate = c.Case.SolutionRate,
                         CausingPart = c.Case.CausingPartId.HasValue ? c.CausingParts.Name : "",
+                        Problem = c.Case.Problem_Id.HasValue ? c.Problems.Name : "",
 
-                        LogData = (from r in this.DataContext.Logs
+                    LogData = (from r in this.DataContext.Logs
                                    where (r.Case_Id == c.Case.Id)
                                    orderby r.LogDate descending
                                    select r).FirstOrDefault(),

@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Dal.DbQueryExecutor;
+﻿using System.Data.Entity;
+using DH.Helpdesk.Dal.DbQueryExecutor;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -19,28 +20,41 @@ namespace DH.Helpdesk.Dal.Repositories
 
         void ResetEmailDefault(int exclude, int customerId);
 
-        IEnumerable<ItemOverview> GetOverviews(int customerId);
+        CaseType GetCaseTypeFull(int caseTypeId);
 
-        IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds);
+        IList<ItemOverview> GetOverviews(int customerId);
 
-        IEnumerable<int> GetChildren(int caseTypeId);
+        IList<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds);
 
-        IEnumerable<CaseTypeOverview> GetCaseTypeOverviews(int customerId);
+        IList<int> GetChildren(int caseTypeId);
+
+        IList<CaseTypeOverview> GetCaseTypeOverviews(int customerId);
 
 		IQueryable<CaseType> GetManyWithSubCaseTypes(Expression<Func<CaseType, bool>> where);
+
         IList<CaseType> GetWithParents(int[] childIds);
     }
 
     public class CaseTypeRepository : RepositoryBase<CaseType>, ICaseTypeRepository
     {
         private readonly IDbQueryExecutorFactory _queryExecutorFactory;
+        
+        #region ctor()
 
-
-        public CaseTypeRepository(IDatabaseFactory databaseFactory,
-            IDbQueryExecutorFactory queryExecutorFactory)
+        public CaseTypeRepository(IDatabaseFactory databaseFactory, IDbQueryExecutorFactory queryExecutorFactory)
             : base(databaseFactory)
         {
             _queryExecutorFactory = queryExecutorFactory;
+        }
+
+        #endregion
+
+        public CaseType GetCaseTypeFull(int caseTypeId)
+        {
+            return Table.Where(x => x.Id == caseTypeId)
+                .Include(x => x.Administrator)
+                .Include(x => x.WorkingGroup)
+                .FirstOrDefault();
         }
 
         public void ResetDefault(int exclude, int customerId)
@@ -65,18 +79,18 @@ namespace DH.Helpdesk.Dal.Repositories
                 this.Update(obj);
             }
         }
-
-        public IEnumerable<ItemOverview> GetOverviews(int customerId)
+        
+        public IList<ItemOverview> GetOverviews(int customerId)
         {
             var entities = GetCustomerCaseTypes(customerId, true)
                     .Select(g => new { Value = g.Id, g.Name })
                     .OrderBy(g => g.Name)
                     .ToList();
 
-            return entities.Select(g => new ItemOverview(g.Name, g.Value.ToString(CultureInfo.InvariantCulture)));            
+            return entities.Select(g => new ItemOverview(g.Name, g.Value.ToString(CultureInfo.InvariantCulture))).ToList();            
         }
 
-        public IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds)
+        public IList<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds)
         {
             var all = caseTypesIds == null || !caseTypesIds.Any();
 
@@ -87,17 +101,17 @@ namespace DH.Helpdesk.Dal.Repositories
                     .OrderBy(g => g.Name)
                     .ToList();
 
-            return entities.Select(g => new ItemOverview(g.Name, g.Value.ToString(CultureInfo.InvariantCulture)));                        
+            return entities.Select(g => new ItemOverview(g.Name, g.Value.ToString(CultureInfo.InvariantCulture))).ToList();
         }
 
-        public IEnumerable<int> GetChildren(int caseTypeId)
+        public IList<int> GetChildren(int caseTypeId)
         {
             var children = new List<int>();
             this.GetChildrenProcess(caseTypeId, children);
-            return children.ToArray();
+            return children.ToList();
         }
 
-        public IEnumerable<CaseTypeOverview> GetCaseTypeOverviews(int customerId)
+        public IList<CaseTypeOverview> GetCaseTypeOverviews(int customerId)
         {
             //var entities =
             //    this.DataContext.CaseTypes.Where(c => c.Customer_Id == customerId && c.IsActive != 0)
@@ -105,21 +119,10 @@ namespace DH.Helpdesk.Dal.Repositories
             //        .OrderBy(c => c.Name)
             //        .ToList();
             //For next release #57742
-            var entities =
-                GetCustomerCaseTypes(customerId, true)
-                    .Select(c => new { c.Id, ParentId = c.Parent_CaseType_Id, c.Name, c.ShowOnExternalPage, c.ShowOnExtPageCases })
-                    .OrderBy(c => c.Name)
-                    .ToList();
 
-            return entities
-                    .Select(c => new CaseTypeOverview
-                                     {
-                                         Id = c.Id,
-                                         ParentId = c.ParentId,
-                                         Name = c.Name,
-                                         ShowOnExternalPage = c.ShowOnExternalPage,
-                                         ShowOnExtPageCases = c.ShowOnExtPageCases
-                                     });
+            var mappingExpr = MapToCaseTypeOverview();
+            var entities = GetCustomerCaseTypes(customerId, true).Select(mappingExpr).OrderBy(c => c.Name).ToList();
+            return entities;
         }
 
         public IList<CaseType> GetWithParents(int[] childIds)
@@ -144,7 +147,6 @@ namespace DH.Helpdesk.Dal.Repositories
             return caseTypes;
         }
 
-
         private IQueryable<CaseType> GetCustomerCaseTypes(int customerId, bool activeOnly)
         {
             return Table.Where(g => g.Customer_Id == customerId && (!activeOnly || g.IsActive == 1));
@@ -162,5 +164,21 @@ namespace DH.Helpdesk.Dal.Repositories
                 }
             }            
         }
+
+        private Expression<Func<CaseType, CaseTypeOverview>> MapToCaseTypeOverview()
+        {
+            Expression<Func<CaseType, CaseTypeOverview>> exp = (c) => new CaseTypeOverview()
+            {
+                Id = c.Id,
+                ParentId = c.Parent_CaseType_Id,
+                Name = c.Name,
+                ShowOnExternalPage = c.ShowOnExternalPage,
+                ShowOnExtPageCases = c.ShowOnExtPageCases,
+                IsActive = c.IsActive,
+                WorkingGroupId = c.WorkingGroup_Id
+            };
+            return exp;
+        }
+
     }
 }

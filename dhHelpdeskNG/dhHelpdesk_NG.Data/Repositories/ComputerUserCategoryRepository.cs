@@ -56,11 +56,12 @@ namespace DH.Helpdesk.Dal.Repositories
 	    
 	    public bool CheckIfExtendedFormsExistForCategories(int customerId, List<int> ids)
 	    {
-	        var query =
-	            from cat in this.Table
-                where ids.Contains(cat.ID) &&
-	                  cat.CaseSolution.ExtendedCaseForms.Any()
-	            select cat.ID;
+	        //var query = Table.Where(cat => ids.Contains(cat.ID) && cat.CaseSolution.ExtendedCaseForms.Any()).Select(cat => cat.ID);
+            var query = 
+	            from cs in DataContext.ComputerUserCategories.Where(c => ids.Contains(c.ID)).Select(c => c.CaseSolution)
+	            from exCaseSec in cs.CaseSectionsExtendedCaseForm
+	            where cs.Customer_Id == customerId
+                select exCaseSec.ExtendedCaseFormID;
 
 	        var items = query.ToList();
 	        return items.Count > 0;

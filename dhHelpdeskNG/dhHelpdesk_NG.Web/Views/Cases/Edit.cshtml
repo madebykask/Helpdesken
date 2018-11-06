@@ -1,29 +1,31 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using DH.Helpdesk.Web
 
-<div id="caseContainer">
-    @{ var t = new ViewDataDictionary();
-        t.Add("isJS", "true");
-    }
+@{ var t = new ViewDataDictionary { { "isJS", "true" } }; }
 
+@section Styles
+{
     @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
     {
         @Styles.Render("~/cases/dynamic-cases")
     }
+}
 
-    @if (Model.ExtendedCases != null)
+@section Scripts {
+    @if (Model.DynamicCase != null || Model.ContainsExtendedCase || Model.HasExtendedComputerUsers)
     {
-        @Styles.Render("~/cases/dynamic-cases")
-        @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
+        @Scripts.Render("~/Content/js/iframeResizer")
     }
 
+    @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
+    {
+        @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)    
+    }
+    
     @Scripts.Render("~/bundles/cases/edit")
 
-    @section Scripts {
-        <script type="text/javascript">
-
-        $(document).ready(function () {
-
+    <script type = "text/javascript">
+        $(document).ready(function() {
             CaseInitForm();
 
             var dc = function(text) {
@@ -53,7 +55,7 @@
                 });
             };
 
-            var messageDialog= function(d) {
+            var messageDialog = function(d) {
                 return d.dialog({
                     title: '@Translation.GetForJS("Meddelande")',
                     buttons: [
@@ -68,31 +70,29 @@
                 });
             };
 
-
-
             var emptyFn = function() {};
 
-            $("#case-action-save").click(function (e) {
-               e.preventDefault();
-               //$('#case__StateSecondary_Id').removeAttr('disabled');
-               $('#ButtonClick').val('save');
+            $("#case-action-save").click(function(e) {
+                e.preventDefault();
+                //$('#case__StateSecondary_Id').removeAttr('disabled');
+                $('#ButtonClick').val('save');
             });
 
-            $("#case-action-save-and-close").click(function (e) {
+            $("#case-action-save-and-close").click(function(e) {
                 e.preventDefault();
                 //$('#case__StateSecondary_Id').removeAttr('disabled');
 
                 $('#ButtonClick').val('save');
             });
 
-            $("#case-action-save-and-new").click(function (e) {
-                
+            $("#case-action-save-and-new").click(function(e) {
+
                 e.preventDefault();
                 $('#ButtonClick').val('save');
                 //$('#case__StateSecondary_Id').removeAttr('disabled');
             });
 
-            $("#case-action-close").click(function (e) {
+            $("#case-action-close").click(function(e) {
                 e.preventDefault();
 
                 $('#ButtonClick').val('save');
@@ -102,7 +102,7 @@
                     UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
             });
 
-            $("#case-action-save-close-and-split").click(function (e) {
+            $("#case-action-save-close-and-split").click(function(e) {
                 e.preventDefault();
                 //$('#case__StateSecondary_Id').removeAttr('disabled');
 
@@ -111,7 +111,7 @@
                 // Todo set new url
             });
 
-             @*$("#case-action-delete").click(function (e) {
+            @*$("#case-action-delete").click(function (e) {
                 if (hasNotInvoicedArticles()) {
                     messageDialog(dc('@Translation.GetForJS("Du får inte ta bort ett ärende som har invalda men ofakturerade artiklar.")'));
                     return false;
@@ -148,8 +148,7 @@
 
         function UnLockCase(lockGuid, url) {
             $.post('@Url.Content("~/Cases/UnLockCase/")', { lockGUID: lockGuid }, function (data) {
-                if (data != "Success")
-                {
+                if (data != "Success") {
                     ShowToastMessage('@Translation.GetForJS("Ett fel inträffade när ärendet skulle låsas upp automatiskt. Var vänlig kontakta systemadministratören.")', "Error");
                 }
                 if (url) {
@@ -157,16 +156,16 @@
                 }
             });
         };
-            function UnLockCaseById(caseId, url) {
-                $.post('@Url.Content("~/Cases/UnLockCaseByCaseId/")', { caseId: caseId }, function (data) {
-                    if (data != "Success") {
-                        ShowToastMessage('@Translation.GetForJS("Ett fel inträffade när ärendet skulle låsas upp automatiskt. Var vänlig kontakta systemadministratören.")', "Error");
-                    }
-                    if (url) {
-                        redirectToUrl(url);
-                    }
-                });
-            };
+        function UnLockCaseById(caseId, url) {
+            $.post('@Url.Content("~/Cases/UnLockCaseByCaseId/")', { caseId: caseId }, function (data) {
+                if (data != "Success") {
+                    ShowToastMessage('@Translation.GetForJS("Ett fel inträffade när ärendet skulle låsas upp automatiskt. Var vänlig kontakta systemadministratören.")', "Error");
+                }
+                if (url) {
+                    redirectToUrl(url);
+                }
+            });
+        };
 
         //HIDE SHOW
         $(".hidebtn").on("click", function (e) {
@@ -183,85 +182,30 @@
             $(this).parent().parent().find("#fake_CaseLog_EmailRecepientsInternalLogTo").removeClass("hidefollowers");
             $(this).parent().parent().find("#fake_CaseLog_EmailRecepientsInternalLogCc").removeClass("hidefollowers");
         });
-        </script>
-    }
-
+    </script>
+    
     @if (Model.DynamicCase != null && Model.DynamicCase.ExternalPage)
     {
-        @Scripts.Render(BundleConfig.ScriptNames.DynamicCase)
-
         <script type="text/javascript">
-        $(function () {
-            @{
-
-                string formUrl = string.Empty;
-
-
-                UriBuilder uriBuilder = new UriBuilder();
-                var queryString = (Model.DynamicCase.FormPath.Contains("?") ? Model.DynamicCase.FormPath.Substring(Model.DynamicCase.FormPath.IndexOf("?")) : "");
-
-
-                //Build URL
-                if (Model.DynamicCase.ExternalSite)
-                {
-
-                    uriBuilder.Scheme = Model.DynamicCase.Scheme;
-                    uriBuilder.Host = Model.DynamicCase.Host;
-
-                    if (!string.IsNullOrEmpty(queryString))
-                    {
-                        uriBuilder.Path = Model.DynamicCase.FormPath.ToLower().Replace(queryString.ToLower(), "");
-                        uriBuilder.Query = (queryString.StartsWith("?") ? queryString.Remove(0, 1) : queryString);
-                    }
-                    else
-                    {
-                        uriBuilder.Path = Model.DynamicCase.FormPath;
-                    }
-
-                    Uri uri = uriBuilder.Uri;
-
-                    formUrl = uri.ToString();
-
-                }
-                //Sub Site
-                else
-                {
-                    if (!string.IsNullOrEmpty(queryString))
-                    {
-                        uriBuilder.Path = Path.Combine(Model.DynamicCase.Host, Model.DynamicCase.FormPath.ToLower().Replace(queryString.ToLower(), ""));
-                        uriBuilder.Query = (queryString.StartsWith("?") ? queryString.Remove(0, 1) : queryString);
-                    }
-                    else
-                    {
-                        uriBuilder.Path = Path.Combine(Model.DynamicCase.Host, Model.DynamicCase.FormPath);
-                    }
-
-                    Uri uri = uriBuilder.Uri;
-
-                    formUrl = (uri.AbsolutePath.EndsWith("/") ? uri.AbsolutePath.Remove(uri.AbsolutePath.LastIndexOf("/"), 1) : "") + uri.Query;
-
-                }
-
-                //string _url = "";
-                //_url = Model.DynamicCase.FormPath.StartsWith("/")? Model.DynamicCase.FormPath : string.Format("/{0}", Model.DynamicCase.FormPath);
-            }
-
-            var urlToSend = '@formUrl'.replace(/\\/g, '&#92;');
-            var currentpage = new dhform({ url: '@formUrl', modal: '@Model.DynamicCase.ViewMode' });
-
-        });
+            $(function () {
+                var currentpage = new dhform({
+                    url: '@Model.DynamicCase.BuildUrl()', 
+                    modal: '@Model.DynamicCase.ViewMode'
+                });
+            });
         </script>
     }
+}
+<div id="caseContainer">
 
     @Html.Partial("_Plupload")
 
-
     @if (Html.MasterModel() != null && SessionFacade.CurrentUser != null && Model != null)
     {
-
         using (Html.BeginForm("edit", "cases", null, FormMethod.Post, new { id = "target" }))
         {
             @Html.HiddenFor(m => m.BackUrl)
+
             <div class="secnavs fixed">
                 <div class="pull-left">
                     <ul class="secnav">
@@ -289,7 +233,7 @@
                                         id = "case-action-delete",
                                         deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill radera detta ärende") + '?'
                                     })
-                            </li>
+                                </li>
                             }
                         }
                         @if (string.IsNullOrEmpty(Model.BackUrl))
@@ -367,12 +311,12 @@
 
                                                             <a id="@langNameId" class="langItem" href="#" onclick="ChangeCaseLanguageTo(@lang.Id,true);">
                                                                 @Translation.GetCoreTextTranslation(lang.Name)
-                                                            @if (lang.Id == curLanguage)
-                                                            {
-                                                                <i class='icon-ok'></i>
-                                                            }
-                                                        </a>
-                                                    </li>
+                                                                @if (lang.Id == curLanguage)
+                                                                {
+                                                                    <i class='icon-ok'></i>
+                                                                }
+                                                            </a>
+                                                        </li>
                                                     }
                                                 </ul>
                                             </li>
@@ -423,18 +367,18 @@
                             if (SessionFacade.CurrentUser.ActivateCasePermission == 1 && Model.case_.FinishingDate.HasValue
                                 && (!Model.IsItChildCase() || (Model.IsItChildCase() && !Model.ParentCaseInfo.IsCaseClosed)))
                             {
-                        <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class = "btn" })</li>
+                                <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Aktivera"), "Activate", "Cases", new { id = Model.case_.Id, backUrl = Model.BackUrl }, new { @class = "btn" })</li>
                             }
 
 
 
                         }
 
-                @*At the moment we do not check access for this /TAN*@
-                @if(!Model.CaseLock.IsLocked)
-                {
-                    @Html.Partial("WorkflowStep", Model.WorkflowSteps)
-                }
+                        @*At the moment we do not check access for this /TAN*@
+                        @if (!Model.CaseLock.IsLocked)
+                        {
+                            @Html.Partial("WorkflowStep", Model.WorkflowSteps)
+                        }
                     </ul>
                 </div>
                 <div class="pull-right">
@@ -449,16 +393,16 @@
 
                         @if (Model.case_.Id > 0)
                     {
-                   <li><a title="@Translation.GetCoreTextTranslation("Skriv ut")" class="btn print-case"><i class="icon-file"></i></a></li>
+                            <li><a title="@Translation.GetCoreTextTranslation("Skriv ut")" class="btn print-case"><i class="icon-file"></i></a></li>
                         }
-                <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases()" title="@Translation.GetCoreTextTranslation("Föregående ärende")" class="btn previous-case"><i class="icon-chevron-left"></i></a></li>
-                <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases(true)"  title="@Translation.GetCoreTextTranslation("Nästa ärende")" class="btn next-case"><i class="icon-chevron-right"></i></a></li>
+                        <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases()" title="@Translation.GetCoreTextTranslation("Föregående ärende")" class="btn previous-case"><i class="icon-chevron-left"></i></a></li>
+                        <li><a onclick="UnLockCase('@Model.CaseLock.LockGUID')" href="@Model.case_.Id.GetUrlForNavigationBetweenCases(true)" title="@Translation.GetCoreTextTranslation("Nästa ärende")" class="btn next-case"><i class="icon-chevron-right"></i></a></li>
                     </ul>
                 </div>
             </div>
-            
-            <div id="casePart001" class="editmode">                              
-                @Html.Partial("_Input", Model)                         
+
+            <div id="casePart001" class="editmode">
+                @Html.Partial("_Input", Model)
             </div>
         }
         <div id="divMoveCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -466,12 +410,12 @@
         </div>
         <div id="divCopyCase" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
             @Html.Partial("_CopyCase", Model)
-    </div>
-    if (!Model.IsItChildCase() && !Model.IsItParentCase())
-    {
-        <div id="divConnectParentToParent" role="dialog" class="modal hide fade case-connect-to-parent" aria-labelledby="myModalLabel" aria-hidden="true">
-            @Html.Partial("_ParentCases", Model.ConnectToParentModel)
         </div>
-    }
+        if (!Model.IsItChildCase() && !Model.IsItParentCase())
+        {
+            <div id="divConnectParentToParent" role="dialog" class="modal hide fade case-connect-to-parent" aria-labelledby="myModalLabel" aria-hidden="true">
+                @Html.Partial("_ParentCases", Model.ConnectToParentModel)
+            </div>
+        }
     }
 </div>

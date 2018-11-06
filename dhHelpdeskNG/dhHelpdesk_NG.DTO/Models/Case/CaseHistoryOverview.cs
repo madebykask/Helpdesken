@@ -99,14 +99,21 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseHistory
         public int? RegistrationSourceCustomer_Id { get; set; }
         public string IsAbout_Persons_Name { get; set; }
         public string IsAbout_ReportedBy { get; set; }
+        public string IsAbout_Persons_EMail { get; set; }
         public string IsAbout_Persons_Phone { get; set; }
+        public string IsAbout_Persons_CellPhone { get; set; }
         public string IsAbout_UserCode { get; set; }
         public int? IsAbout_Department_Id { get; set; }
+        public int? IsAbout_Region_Id { get; set; }
+        public int? IsAbout_OU_Id { get; set; }
         public string CreatedByApp { get; set; }
         public DateTime? LatestSLACountDate { get; set; }
         public int ActionLeadTime { get; set; }
         public int ActionExternalTime { get; set; }
         public string CaseExtraFollowers { get; set; }
+        public string CostCentre { get; set; }
+        public string IsAbout_CostCentre { get; set; }
+        public string IsAbout_Place { get; set; }
 
         public CategoryOverview Category { get; set; }
         public DepartmentOverview Department { get; set; }
@@ -120,10 +127,16 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseHistory
         public UserBasicOvierview UserResponsible { get; set; }
         public PriorityOverview Priority { get; set; }
         public WorkingGroupOverview WorkingGroup { get; set; }
-
+        public RegionOverview Region { get; set; }
+        public OUOverview OU { get; set; }
         public StateSecondaryOverview StateSecondary { get; set; }
         public StatusOverview Status { get; set; }
         public DepartmentOverview IsAbout_Department { get; set; }
+        public RegionOverview IsAbout_Region { get; set; }
+        public OUOverview IsAbout_OU { get; set; }
+        public SystemOverview System { get; set; }
+        public UrgencyOverview Urgency { get; set; }
+        public ImpactOverview Impact { get; set; }
 
         public IList<EmailLogsOverview> Emaillogs { get; set; }
     }
