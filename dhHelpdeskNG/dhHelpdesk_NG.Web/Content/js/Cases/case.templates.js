@@ -457,7 +457,7 @@ var ApplyTemplate = function (data, doOverwrite) {
     }
 
     if (!isNullOrEmpty(data.NoMailToNotifier)) {
-        val = data.NoMailToNotifier || '';
+        val = data.NoMailToNotifier || false;
         el = $("#CaseMailSetting_DontSendMailToNotifier");
         SetCheckboxValueIfElVisible(el, val);
     }
@@ -706,7 +706,7 @@ var ApplyTemplate = function (data, doOverwrite) {
     }
 
     if (!isNullOrEmpty(data.SMS)) {
-        val = data.SMS || '';
+        val = data.SMS || false;
         el = $("#case__SMS");
         SetCheckboxValueIfElVisible(el, val);
     }
@@ -766,7 +766,7 @@ var ApplyTemplate = function (data, doOverwrite) {
     }
 
     if (!isNullOrEmpty(data.Verified)) {
-        val = data.Verified || '';
+        val = data.Verified || false;
         el = $("#case__Verified");
         SetCheckboxValueIfElVisible(el, val);
     }
