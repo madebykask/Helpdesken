@@ -1718,7 +1718,7 @@
                                                         {
                                                             foreach (var e in Model.priorities.Where(e => e.IsActive == 1 || Model.case_.Priority_Id == e.Id))
                                                             {
-                                                                <option value="@e.Id" data-sla="@e.SolutionTime" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString())>@Translation.Get(e.Name)</option>
+                                                                <option value="@e.Id" data-sla="@e.SolutionTime" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString())>@Translation.GetMasterDataTranslation(e.Name)</option>
                                                             }
                                                         }
                                                     </select>

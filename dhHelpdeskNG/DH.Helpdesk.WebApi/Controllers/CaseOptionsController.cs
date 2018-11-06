@@ -10,7 +10,6 @@ using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Services.Services.Concrete.Changes;
 using DH.Helpdesk.WebApi.Infrastructure;
-using DH.Helpdesk.WebApi.Infrastructure.Translate;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -167,7 +166,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (input.Priorities)
             {
                 model.Priorities = _priorityService.GetPriorities(customerId)
-                    .Select(d => new ItemOverview(Translate(d.Name), d.Id.ToString()))
+                    .Select(d => new ItemOverview(Translate(d.Name, TranslationTextTypes.MasterData), d.Id.ToString()))
                     .ToList();
             }
 

@@ -1057,10 +1057,9 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     Name = GlobalEnums.TranslationCaseFields.Priority_Id.ToString(),
                     Value = currentCase.Priority_Id,
-                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Priority_Id,
-                        languageId, cid, caseFieldTranslations, "Prioritet"),
+                    Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Priority_Id, languageId, cid, caseFieldTranslations, "Prioritet"),
                     Section = CaseSectionType.CaseManagement,
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Priority_Id, caseFieldSettings,
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Priority_Id, caseFieldSettings, 
                         !IsCaseNew(currentCase.Id) && !customerUserSetting.PriorityPermission.ToBool())
                 };
                 model.Fields.Add(field);
