@@ -876,6 +876,12 @@ namespace DH.Helpdesk.SelfService.Controllers
             model.Result = res;
             model.StatusBar = isNewCase ? new Dictionary<string, string>() : GetStatusBar(model);
 
+            var appSettings = ConfigurationService.AppSettings;
+            var cs = _settingService.GetCustomerSetting(model.CustomerId);
+            
+            ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
+            ViewBag.ShowCommunicationForSelfservice = appSettings.ShowCommunicationForSelfService;
+
             return View("ExtendedCase", model);
         }
 
