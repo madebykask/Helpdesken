@@ -1,9 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+/* import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { AlertType, Alert } from 'src/app/helpers/alerts/alert-types';
 import { AlertsService } from 'src/app/helpers/alerts/alerts.service';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { MbscPopupOptions, MbscPopup } from '@mobiscroll/angular';
+import { MbscPopupOptions } from '@mobiscroll/angular';
 import { takeUntil } from 'rxjs/operators';
 import { mobiscroll } from '@mobiscroll/angular';
 
@@ -19,7 +19,7 @@ export class AlertComponent implements OnInit {
   alerts: Alert[] = [];   
     
   @ViewChild('alertpopup')
-  popup: MbscPopup;
+  popup: any;
 
   popupSettings: MbscPopupOptions  = {
     display: 'bottom',
@@ -27,13 +27,6 @@ export class AlertComponent implements OnInit {
     animate: 'slidedown',
     theme: 'auto',
     cssClass: 'mbsc-no-padding alertspopup',
-    buttons:  [/*{ 
-          text: 'close',
-          handler: 'cancel',
-          icon: 'close',
-          cssClass: 'my-btn'
-        }*/
-      ]
     };
   
     constructor(private alertsService: AlertsService, 
@@ -119,3 +112,4 @@ export class AlertComponent implements OnInit {
         }
     }
 }
+ */

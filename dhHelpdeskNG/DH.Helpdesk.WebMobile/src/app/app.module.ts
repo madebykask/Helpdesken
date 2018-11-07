@@ -1,7 +1,7 @@
 import { MbscModule } from '@mobiscroll/angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
-import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 
 import { APP_INITIALIZER } from '@angular/core';
 import { LoginComponent, HeaderTitleComponent } from './shared/components';
@@ -24,7 +24,6 @@ import { AppRoutingModule } from './app.routing';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { RequireAuthDirective } from './helpers/directives/require-auth.directive';
 import { GlobalErrorHandler } from './helpers/errors/global-error-handler';
-import { AlertComponent } from './shared/components/alert/alert.component';
 import { ErrorComponent } from './shared/components/error/error.component';
 import { UserSettingsService, initUserData } from './services/user';
 import { AuthenticationService } from './services/authentication';
@@ -43,12 +42,11 @@ import { environment } from '@env/environment';
      GetByKeyPipe, DateTimezonePipe, AlertsFilter,
      RequireAuthDirective,
      CaseFilesControlComponent,
-     AlertComponent,
      ErrorComponent,     
      AltLayoutComponent,
      MailtoticketControlComponent,
     ],
-  imports: [
+  imports: [ 
     MbscModule,
     BrowserModule,
     FormsModule,
