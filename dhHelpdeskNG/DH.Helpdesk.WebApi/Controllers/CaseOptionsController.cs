@@ -36,7 +36,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         public CaseOptionsController(IRegistrationSourceCustomerService registrationSourceCustomerService, ISystemService systemService, IUrgencyService urgencyService,
             IImpactService impactService, ISupplierService supplierService, ICountryService countryService, ICurrencyService currencyService,
-            IWorkingGroupService workingGroupService, IUserService userService, IPriorityService priorityService, IStateSecondaryService stateSecondaryService, 
+            IWorkingGroupService workingGroupService, IUserService userService, IPriorityService priorityService, IStateSecondaryService stateSecondaryService,
             IStatusService statusService, IProjectService projectService, IProblemService problemService, IBaseChangesService changeService,
             ICausingPartService causingPartService, ISettingService customerSettingsService, ITranslateCacheService translateCacheService)
         {
@@ -82,7 +82,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 model.CustomerRegistrationSources =
                     _registrationSourceCustomerService.GetCustomersActiveRegistrationSources(customerId)
-                        .Select(d => new ItemOverview(Translate(d.SourceName), d.Id.ToString()))
+                        .Select(d => new ItemOverview(Translate(d.SourceName, languageId), d.Id.ToString()))
                         .ToList();
             }
 
@@ -95,7 +95,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 model.Urgencies = _urgencyService.GetUrgencies(customerId).Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
             }
-            
+
             if (input.Impacts)
             {
                 model.Impacts = _impactService.GetImpacts(customerId).Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
@@ -103,16 +103,16 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             if (input.Suppliers)
             {
-                model.Suppliers = 
+                model.Suppliers =
                     _supplierService.GetSuppliers(customerId).Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
 
-                model.Countries = 
+                model.Countries =
                     _countryService.GetCountries(customerId).Select(d => new ItemOverview(d.Name, d.Id.ToString())).ToList();
             }
 
             if (input.Currencies)
             {
-                model.Currencies = 
+                model.Currencies =
                     _currencyService.GetCurrencies().Select(d => new ItemOverview(d.Code, d.Code)).ToList(); //TODO: refactor get case to get currencyID instead on Code
             }
 
@@ -166,21 +166,21 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (input.Priorities)
             {
                 model.Priorities = _priorityService.GetPriorities(customerId)
-                    .Select(d => new ItemOverview(Translate(d.Name, TranslationTextTypes.MasterData), d.Id.ToString()))
+                    .Select(d => new ItemOverview(Translate(d.Name, languageId, TranslationTextTypes.MasterData), d.Id.ToString()))
                     .ToList();
             }
 
             if (input.Statuses)
             {
                 model.Statuses = _statusService.GetStatuses(customerId)
-                    .Select(d => new ItemOverview(Translate(d.Name, TranslationTextTypes.MasterData), d.Id.ToString()))
+                    .Select(d => new ItemOverview(Translate(d.Name, languageId, TranslationTextTypes.MasterData), d.Id.ToString()))
                     .ToList();
             }
 
             if (input.StateSecondaries)
             {
                 model.StateSecondaries = _stateSecondaryService.GetStateSecondaries(customerId)
-                    .Select(d => new ItemOverview(Translate(d.Name, TranslationTextTypes.MasterData), d.Id.ToString()))
+                    .Select(d => new ItemOverview(Translate(d.Name, languageId, TranslationTextTypes.MasterData), d.Id.ToString()))
                     .ToList();
             }
 
@@ -201,7 +201,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     .Select(d => new ItemOverview(d.Name, d.Id.ToString()))
                     .ToList();
             }
-            
+
             if (input.CausingParts)
             {
                 model.CausingParts = BuildCausingPartsList(customerId, input.CaseCausingPartId, languageId);
@@ -226,8 +226,6 @@ namespace DH.Helpdesk.WebApi.Controllers
                 }
             }
 
-            string Translate(string translate, int? tt = null) => _translateCacheService.GetTextTranslation(translate, languageId, tt);
-
             return model;
         }
 
@@ -244,7 +242,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 if (causingPart.Parent != null && causingPartId.HasValue && causingPart.Id == causingPartId.Value)
                 {
-                    childrenRet.Add(new ItemOverview($"{Translate(causingPart.Parent.Name)} - {Translate(causingPart.Name)}", causingPart.Id.ToString()));
+                    childrenRet.Add(new ItemOverview($"{Translate(causingPart.Parent.Name, languageId)} - {Translate(causingPart.Name, languageId)}", causingPart.Id.ToString()));
                 }
                 else
                 {
@@ -255,23 +253,27 @@ namespace DH.Helpdesk.WebApi.Controllers
                             if (child.IsActive)
                             {
                                 //var isSelected = (child.Id == curCausingPartId);
-                                childrenRet.Add(new ItemOverview($"{Translate(causingPart.Name)} - {Translate(child.Name)}", child.Id.ToString()));
+                                childrenRet.Add(new ItemOverview($"{Translate(causingPart.Name, languageId)} - {Translate(child.Name, languageId)}", child.Id.ToString()));
                             }
                         }
                     }
                     else
                     {
                         //var isSelected = (causingPart.Id == curCausingPartId);
-                        parentRet.Add(new ItemOverview(Translate(causingPart.Name), causingPart.Id.ToString()));
+                        parentRet.Add(new ItemOverview(Translate(causingPart.Name, languageId), causingPart.Id.ToString()));
                     }
                 }
             }
 
             ret = parentRet.OrderBy(p => p.Name).Union(childrenRet.OrderBy(c => c.Name)).ToList();
 
-            string Translate(string translate) => _translateCacheService.GetTextTranslation(translate, languageId);
-
             return ret.GroupBy(r => r.Value).Select(g => g.First()).ToList();
-         }
+        }
+
+
+        private string Translate(string translate, int languageId, int? tt = null)
+        {
+            return _translateCacheService.GetTextTranslation(translate, languageId, tt);
+        }
     }
 }

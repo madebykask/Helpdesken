@@ -157,11 +157,15 @@ namespace DH.Helpdesk.WebApi.Controllers
             //    if (!f.IsConnectToParent)
             //        SessionFacade.CaseOverviewGridSettings.pageOptions.recPerPage = recPerPage;
             //}
+
             filter.PageInfo = new PageInfo
             {
                 PageSize = input.PageSize ?? 10,
                 PageNumber = input.Page ?? 1
             };
+
+            CaseRemainingTimeData remainingTimeData;
+            CaseAggregateData aggregateData;
 
             var searchResult = _caseSearchService.Search(
                 filter,
@@ -178,8 +182,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 userTimeZone,
                 ApplicationTypes.Helpdesk,//TODO: remove hardcode
                 userOverview.ShowSolutionTime,
-                out CaseRemainingTimeData remainingTimeData,
-                out CaseAggregateData aggregateData);
+                out remainingTimeData,
+                out aggregateData);
 
 
             //searchResults = CommonHelper.TreeTranslate(m.cases, f.CustomerId, _productAreaService);

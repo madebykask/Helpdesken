@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
-using DH.Helpdesk.Services.Enums;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.WebApi.Infrastructure;
-using DH.Helpdesk.WebApi.Infrastructure.Translate;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -36,29 +31,27 @@ namespace DH.Helpdesk.WebApi.Controllers
             const bool takeOnlyActive = true;//TODO: move to filter?
             var caseTypes = _caseTypeService.GetCaseTypesOverviewWithChildren(cid, takeOnlyActive);
 
-            const int maxDepth = 20;
-            var depth = 0;
-            Translate(caseTypes.ToList());
+            Translate(caseTypes.ToList(), langId, 0);
 
             return await Task.FromResult(caseTypes.OrderBy(p => p.Name));
-
-            //local function
-            void Translate(List<CaseTypeOverview> cts)
-            {
-                if (depth >= maxDepth)
-                    throw new Exception("Iteration depth exceeded. Suspicion of infinte loop.");
-
-                depth++;
-                cts.ForEach(p =>
-                    {
-                        p.Name = _translateCacheService.GetMasterDataTextTranslation(p.Name, langId);
-                        if (p.SubCaseTypes != null && p.SubCaseTypes.Any())
-                        {
-                            Translate(p.SubCaseTypes);
-                        }
-                    });
-            };
         }
 
+        private void Translate(List<CaseTypeOverview> caseTypes, int langId, int depth)
+        {
+            if (depth >= 20)
+                throw new Exception("Iteration depth exceeded. Suspicion of infinte loop.");
+
+            depth++;
+
+            caseTypes.ForEach(p => 
+            {
+                p.Name = _translateCacheService.GetMasterDataTextTranslation(p.Name, langId);
+
+                if (p.SubCaseTypes != null && p.SubCaseTypes.Any())
+                {
+                    Translate(p.SubCaseTypes, langId, depth);
+                }
+            });
+        }
     }
 }
