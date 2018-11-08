@@ -526,7 +526,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Orders
                     else
                     {
                         //get customer casetype
-                        var casetype = this._caseTypeRepository.GetAll().Where(x => x.Customer_Id == entity.Customer_Id && x.IsActive == 1).FirstOrDefault();
+                        var customerId = entity.Customer_Id;
+                        var casetype = this._caseTypeRepository.Get(x => x.Customer_Id == customerId && x.IsActive == 1);
                         newCase.CaseType_Id = casetype.Id;                    //get another id
                     }
 

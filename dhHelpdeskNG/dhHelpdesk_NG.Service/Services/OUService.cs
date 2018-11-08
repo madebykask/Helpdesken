@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Common.Extensions.Boolean;
+﻿using System.Threading.Tasks;
+using DH.Helpdesk.Common.Extensions.Boolean;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -18,6 +19,8 @@ namespace DH.Helpdesk.Services.Services
         IList<OU> GetOUs(int customerId);
 
         IList<OU> GetOUs(int customerId, int departmentId, bool? isActive = null);
+        Task<IList<OU>> GetOUsAsync(int customerId, int departmentId, bool? isActive = null);
+
         OU GetOU(int id);
 
         OU GetOUIdByName(string oUName);
@@ -26,6 +29,9 @@ namespace DH.Helpdesk.Services.Services
 
         void SaveOU(OU ou, out IDictionary<string, string> errors);
         void Commit();
+
+        List<OU> GetActiveOuForDepartment(int? departmentId, int customerId);
+        Task<List<OU>> GetActiveOuForDepartmentAsync(int? departmentId, int customerId);
     }
 
     public class OUService : IOUService
@@ -70,6 +76,13 @@ namespace DH.Helpdesk.Services.Services
             return _ouRepository.GetOUs(customerId, departmentId, isActive)
                     .OrderBy(x => x.Name)
                     .ToList();
+        }
+
+        public async Task<IList<OU>> GetOUsAsync(int customerId, int departmentId, bool? isActive = null)
+        {
+            return (await _ouRepository.GetOUsAsync(customerId, departmentId, isActive))
+                .OrderBy(x => x.Name)
+                .ToList();
         }
 
         public OU GetOU(int id)
@@ -134,6 +147,32 @@ namespace DH.Helpdesk.Services.Services
         public OU GetOUIdByName(string oUName)
         {
             return this._ouRepository.Get(x => x.Name.ToLower() == oUName.ToLower());
+        }
+
+        public List<OU> GetActiveOuForDepartment(int? departmentId, int customerId)
+        {
+            var oUs = departmentId.HasValue ? GetOUs(customerId, departmentId.Value, true) : null;
+            
+            return GetOusFlatList(oUs);
+        }
+
+        public async Task<List<OU>> GetActiveOuForDepartmentAsync(int? departmentId, int customerId)
+        {
+            var oUs = departmentId.HasValue ? await GetOUsAsync(customerId, departmentId.Value, true) : null;
+
+            return GetOusFlatList(oUs);
+        }
+
+        private List<OU> GetOusFlatList(IList<OU> oUsTree)
+        {
+            var unionList = new List<OU>();
+            if (oUsTree != null && oUsTree.Any())
+            {
+                unionList.AddRange(oUsTree);
+                unionList.AddRange(oUsTree.SelectMany(ou => ou.SubOUs.Where(e => e.IsActive == 1)));
+            }
+
+            return unionList;
         }
     }
    

@@ -66,7 +66,6 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly IUserWorkingGroupRepository userWorkingGroupRepository;
 
-        private readonly IWorkContext workContext;
 
         private readonly ISettingService settingService;
 
@@ -75,14 +74,12 @@ namespace DH.Helpdesk.Services.Services
             IUserRepository userRepository,
             IUserWorkingGroupRepository userWorkingGroupRepository,
             IWorkingGroupRepository workingGroupRepository,
-            ISettingService settingService,
-            IWorkContext workContext)
+            ISettingService settingService)
         {
             this.unitOfWork = unitOfWork;
             this.workingGroupRepository = workingGroupRepository;
             this.userRepository = userRepository;
             this.userWorkingGroupRepository = userWorkingGroupRepository;
-            this.workContext = workContext;
             this.settingService = settingService;
         }
 

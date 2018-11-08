@@ -486,7 +486,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             {
                 GlobalSettings = this._globalSettingService.GetGlobalSettings(),
                 Holidays = this._holidayService.GetHolidaysByHeaderId(holidayheaderid),
-                LanguagesToTranslateInto = this._languageService.GetLanguagesForGlobalSettings(),
+                LanguagesToTranslateInto = this._languageService.GetLanguages(),
                 Texts = this._textTranslationService.GetAllNewTexts(searchOption.TextType).ToList(),
                 ListForIndex = this._textTranslationService.GetIndexListToTextTranslations(languageId),
                 WatchDateCalendarValues = this._watchDateCalendarService.GetAllWatchDateCalendarValues().ToList(),

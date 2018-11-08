@@ -132,7 +132,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<ComputerUser> SearchSortAndGenerateComputerUsers(int customerId, IComputerUserSearch searchComputerUsers)
         {
-            var query = (from cu in this._computerUserRepository.GetAll().Where(x => x.Customer_Id == customerId && x.Updated != 2)
+            var query = (from cu in this._computerUserRepository.GetMany(x => x.Customer_Id == customerId && x.Updated != 2)
                          select cu);
 
             if (searchComputerUsers.DomainId.HasValue)
@@ -193,7 +193,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<ComputerUserFieldSettings> GetComputerUserFieldSettingsForDefaultCust()
         {
-            var list = this._computerUserFieldSettingsRepository.GetAll().Where(x => x.Customer_Id == null).ToList();
+            var list = this._computerUserFieldSettingsRepository.GetMany(x => x.Customer_Id == null).ToList();
 
             return list;
         }

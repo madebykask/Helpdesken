@@ -1,0 +1,136 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpRequest } from '@angular/common/http';
+import { map, catchError, take } from 'rxjs/operators';
+import { config } from '@env/environment';
+import { CurrentUser, UserAuthenticationData } from '../../models'
+import { LocalStorageService } from '../../services/local-storage'
+import { Subject } from 'rxjs/Subject';
+import { HttpApiServiceBase } from '../api';
+import { LoggerService } from '../logging';
+import { of } from 'rxjs';
+
+@Injectable({ providedIn: 'root' })
+export class AuthenticationService extends HttpApiServiceBase {
+
+    //events
+    private authenticationChangedSubj = new Subject<any>();    
+    authenticationChanged$ = this.authenticationChangedSubj.asObservable();
+
+    constructor(protected http: HttpClient, protected localStorageService: LocalStorageService, private _logger: LoggerService) {
+        super(http, localStorageService)        
+     }    
+
+    login(username: string, password: string) {
+        let clientId = config.clientId;
+        return this.postJson<any>(this.buildResourseUrl('/api/account/login', undefined, false), { username, password, clientId })
+            .pipe(
+                take(1),
+                map(data => {
+                let isSuccess = false;                
+                // login successful if there's a token in the response
+                if (data && data.access_token) {
+                    let user = CurrentUser.createAuthenticated(data);                    
+                    user.version = config.version;
+
+                    // store user details and token in local storage to keep user logged in between page refreshes
+                    this.localStorageService.setCurrentUser(user);    
+                    isSuccess = true;                                   
+                } 
+
+                this.raiseAuthenticationChanged();
+                return isSuccess;
+            }));
+    }
+
+    isAuthenticated() : Boolean {
+     if (this.isTokenExpired()) return false;
+    
+        let token = this.getAccessToken();
+        return token && token.length > 0;
+    }
+
+    refreshToken() {
+        var user = this.getUser();
+        if (user.authData && user.authData.refresh_token) {
+            var refreshToken = user.authData.refresh_token;
+            let clientId = config.clientId;
+            return this.postJson<any>(this.buildResourseUrl('/api/account/refresh', undefined, false), { refreshToken, clientId })
+                .pipe(
+                    map(data => {
+                        user.authData.access_token = data.access_token;
+                        user.authData.expires_in = Number(data.expires_in);
+                        user.authData.recievedAt = new Date();
+                        this.localStorageService.setCurrentUser(user);
+
+                        this.raiseAuthenticationChanged();
+                        return true;
+                    }),
+                    catchError(err => {
+                        return of(false);
+                    }),
+                );
+        }        
+    }
+
+    logout() {
+        // remove user from local storage to log user out
+        this.localStorageService.removeCurrentUser();
+        this.raiseAuthenticationChanged();
+    }
+
+    getAccessToken(): string {
+        var user = this.getUser();
+        return user && user.authData && user.authData.access_token ? user.authData.access_token : null;
+    }
+
+    setAuthHeader(request: HttpRequest<any>): HttpRequest<any> {
+        // Get access token 
+        const accessToken = this.getAccessToken();
+
+        // If access token is null this means that user is not logged in
+        // And we return the original request
+        if (!accessToken) {
+            return request;
+        }
+
+        // We clone the request, because the original request is immutable
+        return request.clone({
+            setHeaders: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+    }
+
+    isTokenExpired(): boolean {
+        let user = this.getUser();
+        
+        if (user == null || user.authData == null)
+            return true;            
+            
+        if (!user.authData.recievedAt || !user.authData.expires_in) 
+            return true;//TODO: throw error
+
+        let expiresAt = user.authData.recievedAt.getTime() + user.authData.expires_in * 1000;
+        let now = new Date();
+        return now.getTime() > expiresAt;
+    }
+
+    hasToken(): boolean {
+        return this.getAccessToken() != null;
+    }
+
+    getVersion(): string {
+        let user = this.getUser();
+        if (user == null) return null;
+
+        return user.version;
+    }
+    
+    public getUser(): CurrentUser {
+        return this.localStorageService.getCurrentUser();
+    }
+
+    private raiseAuthenticationChanged() {
+        this.authenticationChangedSubj.next(null);
+    }
+}

@@ -38,7 +38,7 @@ dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/ExtendedCase/**
 dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/ExtendedCaseApi/**
 dhHelpdeskNG/dhHelpdesk_NG.Web_SelfService/Logs/
 dhHelpdeskNG/.vs/
-
+dhHelpdeskMobile/.vs/
 **/node_modules/*
 **/wwwroot/*
 **/wwwroot-test/*

@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using DH.Helpdesk.Common.Extensions.Boolean;
 
 namespace DH.Helpdesk.Dal.Repositories.Concrete
@@ -112,22 +113,32 @@ namespace DH.Helpdesk.Dal.Repositories.Concrete
 
         public List<OU> GetOUs(int customerId, int departmentId, bool? isActive = null)
         {
+            return GetOUsQuery(customerId, departmentId, isActive).ToList();
+        }
+
+        public async Task<List<OU>> GetOUsAsync(int customerId, int departmentId, bool? isActive = null)
+        {
+            return await GetOUsQuery(customerId, departmentId, isActive).ToListAsync();
+        }
+
+        public IEnumerable<OU> GetActiveAndShowable()
+        {
+            return this.DataContext.OUs.Where(u => u.IsActive != 0 && u.Show != 0);
+        }
+
+        private IQueryable<OU> GetOUsQuery(int customerId, int departmentId, bool? isActive = null)
+        {
             var query = DataContext.OUs.Include(x => x.SubOUs)
                 .Where(x => x.Parent_OU_Id == null &&
-                        x.Department.Customer_Id == customerId &&
-                        x.Department_Id == departmentId);
+                            x.Department.Customer_Id == customerId &&
+                            x.Department_Id == departmentId);
             if (isActive.HasValue)
             {
                 var isActiveInt = isActive.Value.ToInt();
                 query = query.Where(x => x.IsActive == isActiveInt);
             }
 
-            return query.ToList();
-        }
-
-        public IEnumerable<OU> GetActiveAndShowable()
-        {
-            return this.DataContext.OUs.Where(u => u.IsActive != 0 && u.Show != 0);
+            return query;
         }
 
         #endregion

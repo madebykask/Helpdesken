@@ -11,5 +11,7 @@
         string ComposeFilePath(string topic, int entityId, string basePath, string fileName);
 
         void MoveDirectory(string topic, string entityId, string sourceBasePath, string targetBasePath);
+
+        string GetCaseFilePath(string topic, int entityId, string basePath, string fileName);
     }
 }

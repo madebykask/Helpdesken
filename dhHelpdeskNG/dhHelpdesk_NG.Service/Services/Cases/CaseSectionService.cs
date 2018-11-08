@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 using DH.Helpdesk.BusinessData.OldComponents;
@@ -23,20 +24,13 @@ namespace DH.Helpdesk.Services.Services.Cases
         public List<CaseSectionModel> GetCaseSections(int customerId, int languageId)
         {
             var caseSections = _caseSectionsRepository.GetCaseSections(customerId);
-            return caseSections.Select(section => new CaseSectionModel
-            {
-                Id = section.Id,
-                SectionType = section.SectionType,
-                IsEditCollapsed = section.IsEditCollapsed,
-                IsNewCollapsed = section.IsNewCollapsed,
-                SectionHeader = 
-                        section.CaseSectionLanguages.SingleOrDefault(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId) != null
-                            ? section.CaseSectionLanguages.Single(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId).Label
-                            : string.Empty,
-                CustomerId = section.Customer_Id,
-                CaseSectionFields = section.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList()
-            }).ToList();
+            return MapCaseSectionToCaseSectionModel(caseSections, languageId);
+        }
 
+        public async Task<List<CaseSectionModel>> GetCaseSectionsAsync(int customerId, int languageId)
+        {
+            var caseSections = await _caseSectionsRepository.GetCaseSectionsAsync(customerId);
+            return MapCaseSectionToCaseSectionModel(caseSections, languageId);
         }
 
         public CaseSectionModel GetCaseSectionByType(int sectionTypeId, int customerId, int languageId)
@@ -55,9 +49,9 @@ namespace DH.Helpdesk.Services.Services.Cases
             var section = _caseSectionsRepository.GetCaseSection(sectionId, customerId);
 
             var model =
-                section != null 
-                    ? GetSectionModel(section, languageId) 
-                    : new CaseSectionModel {CustomerId = customerId};
+                section != null
+                    ? GetSectionModel(section, languageId)
+                    : new CaseSectionModel { CustomerId = customerId };
 
             return model;
         }
@@ -161,6 +155,36 @@ namespace DH.Helpdesk.Services.Services.Cases
             _caseSectionsRepository.ApplyChanges();
         }
 
+        public string GetDefaultHeaderName(CaseSectionType type)
+        {
+            switch (type)
+            {
+                case CaseSectionType.Initiator:
+                    return CaseSections.InitiatorHeader;
+                case CaseSectionType.Regarding:
+                    return CaseSections.RegardingHeader;
+                case CaseSectionType.ComputerInfo:
+                    return CaseSections.ComputerInfoHeader;
+                case CaseSectionType.CaseInfo:
+                    return CaseSections.CaseInfoHeader;
+                case CaseSectionType.CaseManagement:
+                    return CaseSections.CaseManagementHeader;
+                case CaseSectionType.Communication:
+                    return CaseSections.CommunicationHeader;
+                case CaseSectionType.Status:
+                    return CaseSections.StatusHeader;
+                case CaseSectionType.Invoices:
+                    return CaseSections.InvoicesHeader;
+                case CaseSectionType.Invoicing:
+                    return CaseSections.InvoicingHeader;
+                case CaseSectionType.ExtendedCase:
+                    return CaseSections.ExtendedCaseHeader;
+
+            }
+
+            return "";
+        }
+
         public CaseSectionInfo GetSectionInfoByField(string fieldName)
         {
             var caseSectionInfo = new CaseSectionInfo();
@@ -180,7 +204,7 @@ namespace DH.Helpdesk.Services.Services.Cases
                 fieldName == GlobalEnums.TranslationCaseFields.UpdateNotifierInformation.ToString() ||
                 fieldName == GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString())
             {
-                caseSectionInfo.DefaultName = CaseSections.InitiatorHeader;
+                caseSectionInfo.DefaultName = GetDefaultHeaderName(CaseSectionType.Initiator);
                 caseSectionInfo.Type = CaseSectionType.Initiator;
             }
             else if (fieldName == GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy.ToString() ||
@@ -195,14 +219,14 @@ namespace DH.Helpdesk.Services.Services.Cases
                      fieldName == GlobalEnums.TranslationCaseFields.IsAbout_Place.ToString() ||
                      fieldName == GlobalEnums.TranslationCaseFields.IsAbout_UserCode.ToString())
             {
-                caseSectionInfo.DefaultName = CaseSections.RegardingHeader;
+                caseSectionInfo.DefaultName = GetDefaultHeaderName(CaseSectionType.Regarding);
                 caseSectionInfo.Type = CaseSectionType.Regarding;
             }
             else if (fieldName == GlobalEnums.TranslationCaseFields.InventoryNumber.ToString() ||
                      fieldName == GlobalEnums.TranslationCaseFields.ComputerType_Id.ToString() ||
                      fieldName == GlobalEnums.TranslationCaseFields.InventoryLocation.ToString())
             {
-                caseSectionInfo.DefaultName = CaseSections.ComputerInfoHeader;
+                caseSectionInfo.DefaultName = GetDefaultHeaderName(CaseSectionType.ComputerInfo);
                 caseSectionInfo.Type = CaseSectionType.ComputerInfo;
             }
             else if (fieldName == GlobalEnums.TranslationCaseFields.CaseNumber.ToString() ||
@@ -229,7 +253,7 @@ namespace DH.Helpdesk.Services.Services.Cases
                      fieldName == GlobalEnums.TranslationCaseFields.Cost.ToString() ||
                      fieldName == GlobalEnums.TranslationCaseFields.Filename.ToString())
             {
-                caseSectionInfo.DefaultName = CaseSections.CaseInfoHeader;
+                caseSectionInfo.DefaultName = GetDefaultHeaderName(CaseSectionType.CaseInfo);
                 caseSectionInfo.Type = CaseSectionType.CaseInfo;
             }
             else if (fieldName == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() ||
@@ -247,7 +271,7 @@ namespace DH.Helpdesk.Services.Services.Cases
                      fieldName == GlobalEnums.TranslationCaseFields.SolutionRate.ToString() ||
                      fieldName == GlobalEnums.TranslationCaseFields.CausingPart.ToString())
             {
-                caseSectionInfo.DefaultName = CaseSections.CaseManagementHeader;
+                caseSectionInfo.DefaultName = GetDefaultHeaderName(CaseSectionType.CaseManagement);
                 caseSectionInfo.Type = CaseSectionType.CaseManagement;
             }
             else if (fieldName == "tblLog.Text_External" ||
@@ -258,7 +282,7 @@ namespace DH.Helpdesk.Services.Services.Cases
                      fieldName == GlobalEnums.TranslationCaseFields.FinishingDate.ToString() ||
                      fieldName == GlobalEnums.TranslationCaseFields.ClosingReason.ToString())
             {
-                caseSectionInfo.DefaultName = CaseSections.CommunicationHeader;
+                caseSectionInfo.DefaultName = GetDefaultHeaderName(CaseSectionType.Communication);
                 caseSectionInfo.Type = CaseSectionType.Communication;
             }
             //else if (fieldName == GlobalEnums.TranslationCaseFields.CostCentre.ToString())
@@ -288,15 +312,34 @@ namespace DH.Helpdesk.Services.Services.Cases
 
             return caseSectionInfo;
         }
+
+        private List<CaseSectionModel> MapCaseSectionToCaseSectionModel(List<CaseSection> caseSections, int languageId)
+        {
+            return caseSections.Select(section => new CaseSectionModel
+            {
+                Id = section.Id,
+                SectionType = section.SectionType,
+                IsEditCollapsed = section.IsEditCollapsed,
+                IsNewCollapsed = section.IsNewCollapsed,
+                SectionHeader = 
+                    section.CaseSectionLanguages.SingleOrDefault(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId) != null
+                        ? section.CaseSectionLanguages.Single(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId).Label
+                        : string.Empty,
+                CustomerId = section.Customer_Id,
+                CaseSectionFields = section.CaseSectionFields.Select(x => x.CaseFieldSetting_Id).ToList()
+            }).ToList();
+        }
     }
 
     public interface ICaseSectionService
     {
         List<CaseSectionModel> GetCaseSections(int customerId, int languageId);
+        Task<List<CaseSectionModel>> GetCaseSectionsAsync(int customerId, int languageId);
         CaseSectionModel GetCaseSection(int sectionId, int customerId, int languageId);
         CaseSectionModel GetCaseSectionByType(int sectionTypeId, int customerId, int languageId);
         int SaveCaseSection(CaseSectionModel caseSection);
         void SaveCaseSections(int languageId, IEnumerable<CaseSectionModel> caseSections, int customerId);
         CaseSectionInfo GetSectionInfoByField(string fieldName);
+        string GetDefaultHeaderName(CaseSectionType type);
     }
 }

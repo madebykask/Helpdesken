@@ -10,6 +10,7 @@
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
+using DH.Helpdesk.Common;
 using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.DbQueryExecutor;
 using DH.Helpdesk.Dal.Mappers.ExternalInvoice.BusinessModelToEntity;
@@ -17,6 +18,7 @@ using DH.Helpdesk.Dal.Mappers.ExternalInvoice.EntityToBusinessModel;
 using DH.Helpdesk.Dal.Mappers.Gdpr.BusinessModelToEntity;
 using DH.Helpdesk.Dal.Mappers.Gdpr.EntityToBusinessModel;
 using DH.Helpdesk.Domain.GDPR;
+using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Web.Infrastructure.Cache;
 
 namespace DH.Helpdesk.Web.NinjectModules.Common
@@ -65,8 +67,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<ICacheService>()
                 .To<WebCacheService>();
 
-            this.Bind<IHelpdeskCache>()
-                .To<HelpdeskCache>();
+            this.Bind<ITranslateCacheService>()
+                .To<TranslateCacheService>();
 
             this.Bind<IModulesInfoFactory>().To<ModulesInfoFactory>().InSingletonScope();
 

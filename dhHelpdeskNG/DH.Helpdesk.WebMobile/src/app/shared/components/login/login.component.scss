@@ -1,0 +1,17 @@
+:host ::ng-deep .mbsc-form {
+        background: transparent;
+    }
+
+mbsc-input {
+    &.margin {
+        ::ng-deep label {
+            margin: 16px;
+        }
+    }
+}
+
+mbsc-button {
+    ::ng-deep .mbsc-btn {
+        color: white;
+    }
+}

@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Web.Models;
+﻿using DH.Helpdesk.Web.Common.Models.CaseSearch;
+using DH.Helpdesk.Web.Models;
 
 namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case
 {

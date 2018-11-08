@@ -21,6 +21,7 @@
         IList<TextTranslationLanguageList> GetIndexListToTextTranslations(int languageId);
         IList<TextTranslationList> GetNewListToTextTranslations();
         IList<CustomKeyValue<string, string>> GetTranslationsFor(IList<string> texts, int languageId);
+        IList<CustomKeyValue<string, string>> GetTextTranslationsFor(int languageId, int typeId = 0);
 
         Text GetText(int id);
         TextTranslation GetTextTranslation(int id);
@@ -65,7 +66,7 @@
 
         public IEnumerable<Text> GetAllNewTexts(int texttypeId)
         {
-            return this._textRepository.GetAll().AsQueryable().Where(x => x.Id > 4999 && x.Type == texttypeId).OrderBy(x => x.TextToTranslate);
+            return this._textRepository.GetMany(x => x.Id > 4999 && x.Type == texttypeId).OrderBy(x => x.TextToTranslate);
         }
 
         public IEnumerable<TextList> GetAllTexts(int texttypeId, int? defaultLanguage)
@@ -329,6 +330,11 @@
         {
             //var preparedTexts = texts.Select(t => t.ToLower());
             return _textTranslationRepository.GetTranslationsFor(texts, languageId);
+        }
+
+        public IList<CustomKeyValue<string, string>> GetTextTranslationsFor(int languageId, int typeId = 0)
+        {
+            return _textTranslationRepository.GetTextTranslationsFor(languageId, typeId);
         }
     }
 }

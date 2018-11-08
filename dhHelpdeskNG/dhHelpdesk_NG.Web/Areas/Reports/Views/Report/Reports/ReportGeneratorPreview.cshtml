@@ -1,12 +1,12 @@
 ﻿@using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web.Infrastructure
-@using DH.Helpdesk.Web.Infrastructure.Extensions
+@using DH.Helpdesk.Common.Extensions.Boolean
 @model DH.Helpdesk.Web.Areas.Reports.Models.Reports.ReportGenerator.ReportGeneratorAggregateModel
 
 <div>
     @Translation.Get("Poster i sökresultat"): @Model.CasesFound
 
-    <input type="hidden" id="showrun" value='@((Model.CasesFound <= 1000).ToJavaScriptBool())'/>
+    <input type="hidden" id="showrun" value='@((Model.CasesFound <= 1000).ToJavaScriptBool())' />
     @foreach (var item in Model.Aggregation.OrderBy(x => x.Key))
     {
         <div>

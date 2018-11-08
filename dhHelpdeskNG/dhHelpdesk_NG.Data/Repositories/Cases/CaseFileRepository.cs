@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Cases
+﻿using System.IO;
+
+namespace DH.Helpdesk.Dal.Repositories.Cases
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -11,26 +13,70 @@ using System;
 
     public interface ICaseFileRepository : IRepository<CaseFile>
     {
+        string GetCaseFilePath(int caseId, int fileId, string basePath);
         List<string> FindFileNamesByCaseId(int caseid);
         List<CaseFile> GetCaseFilesByCaseId(int caseid);
+        CaseFileContent GetCaseFileContent(int caseId, int fileId, string basePath);
         byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         bool FileExists(int caseId, string fileName);
+        void SaveCaseFile(CaseFileDto caseFileDto);
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
         void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath);
         int GetCaseNumberForUploadedFile(int caseId);
         List<CaseFileModel> GetCaseFiles(int caseId, bool canDelete);
         List<CaseFile> GetCaseFilesByDate(DateTime? fromDate, DateTime? toDate);
         void DeleteFileViewLogs(int caseId);
+        
     }
 
     public class CaseFileRepository : RepositoryBase<CaseFile>, ICaseFileRepository
     {
         private readonly IFilesStorage _filesStorage;
 
+        #region ctor()
+
         public CaseFileRepository(IDatabaseFactory databaseFactory, IFilesStorage fileStorage)
             : base(databaseFactory)
         {
-            this._filesStorage = fileStorage;
+            _filesStorage = fileStorage;
+        }
+
+        #endregion
+
+        public string GetCaseFilePath(int caseId, int fileId, string basePath)
+        {
+            var caseFileInfo = Table.Where(f => f.Id == fileId && f.Case_Id == caseId).Select(f => new
+            {
+                FileName = f.FileName,
+                CaseNumber = f.Case.CaseNumber
+            }).Single();
+
+            var filePath = _filesStorage.GetCaseFilePath(ModuleName.Cases, Convert.ToInt32(caseFileInfo.CaseNumber), basePath, caseFileInfo.FileName);
+            return filePath.Replace("/", "\\");
+        }
+
+        public CaseFileContent GetCaseFileContent(int caseId, int fileId, string basePath)
+        {
+            var caseFileInfo = Table.Where(f => f.Id == fileId && f.Case_Id == caseId).Select(f => new
+            {
+                FileName = f.FileName,
+                CaseNumber = f.Case.CaseNumber
+            }).Single();
+
+            var caseNumber = Convert.ToInt32(caseFileInfo.CaseNumber);
+
+            var content = 
+                _filesStorage.GetFileContent(ModuleName.Cases, caseNumber, basePath, caseFileInfo.FileName);
+
+            var res = new CaseFileContent()
+            {
+                Id = fileId,
+                CaseNumber = caseNumber,
+                FileName = Path.GetFileName(caseFileInfo.FileName),
+                Content = content
+            };
+
+            return res;
         }
 
         public byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName)
@@ -44,16 +90,34 @@ using System;
             return this.DataContext.CaseFiles.Any(f => f.Case_Id == caseId && f.FileName == fileName.Trim());
         }
 
+        public void SaveCaseFile(CaseFileDto caseFileDto)
+        {
+            var caseFile = new CaseFile
+            {
+                CreatedDate = caseFileDto.CreatedDate,
+                Case_Id = caseFileDto.ReferenceId,
+                FileName = caseFileDto.FileName,
+                UserId = caseFileDto.UserId
+            };
+
+            DataContext.CaseFiles.Add(caseFile);
+            Commit();
+
+            var caseNo = GetCaseNumberForUploadedFile(caseFileDto.ReferenceId);
+            _filesStorage.SaveFile(caseFileDto.Content, caseFileDto.BasePath, caseFileDto.FileName, ModuleName.Cases, caseNo);
+        }
+
         public void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName)
         {
             if (FileExists(caseId, fileName))
             {
                 var cf = this.DataContext.CaseFiles.Single(f => f.Case_Id == caseId && f.FileName == fileName.Trim());
-                this.DataContext.CaseFiles.Remove(cf);
-                this.Commit();
+                DataContext.CaseFiles.Remove(cf);
+                Commit();
             }
-            int id = GetCaseNumberForUploadedFile(caseId);
-            this._filesStorage.DeleteFile(ModuleName.Cases, id, basePath, fileName);
+
+            var id = GetCaseNumberForUploadedFile(caseId);
+            _filesStorage.DeleteFile(ModuleName.Cases, id, basePath, fileName);
         }
 
         public void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath)
@@ -117,8 +181,7 @@ using System;
                                 f.FileName,
                                 f.CreatedDate,
                                 UserName = user != null ? (user.FirstName + " " + user.SurName) : null
-                            })
-                            .ToList();
+                            }).ToList();
 
             return entities.Select(f => new CaseFileModel(
                                         f.Id,
@@ -133,7 +196,9 @@ using System;
         {
             var fileViewLogEntities = this.DataContext.FileViewLogs.Where(f => f.Case_Id == caseId).ToList();
             foreach (var fileViewLogEntity in fileViewLogEntities)
+            {
                 this.DataContext.FileViewLogs.Remove(fileViewLogEntity);
+            }
         }
     }
 }

@@ -892,8 +892,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         public static CaseSectionModel GetCaseSection(this IEnumerable<CaseSectionModel> lst, CaseSectionType type)
         {
-            var secton = lst.SingleOrDefault(x => x.SectionType == (int) type);
-            return secton != null ? secton : new CaseSectionModel
+            var section = lst.SingleOrDefault(x => x.SectionType == (int) type);
+            return section != null ? section : new CaseSectionModel
             {
                 SectionType = (int)type
             };
@@ -901,13 +901,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         public static string getSectionClass(this CaseInputViewModel model, CaseSectionType type)
         {
-            var secton = model.CaseSectionModels.SingleOrDefault(x => x.SectionType == (int)type);
+            var section = model.CaseSectionModels.SingleOrDefault(x => x.SectionType == (int)type);
             var result = string.Empty;
-            if (secton != null)
+            if (section != null)
             {
-                if (model.case_.IsNew() && secton.IsNewCollapsed)
+                if (model.case_.IsNew() && section.IsNewCollapsed)
                     result = "hideshow";
-                if (!model.case_.IsNew() && secton.IsEditCollapsed)
+                if (!model.case_.IsNew() && section.IsEditCollapsed)
                     result = "hideshow";
             }
             return result;
@@ -915,13 +915,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         public static string getSearchEmailClass(this CaseInputViewModel model, CaseSectionType type)
         {
-            var secton = model.CaseSectionModels.SingleOrDefault(x => x.SectionType == (int)type);
+            var section = model.CaseSectionModels.SingleOrDefault(x => x.SectionType == (int)type);
             var result = string.Empty;
-            if (secton != null)
+            if (section != null)
             {
-                if (model.case_.IsNew() && secton.IsNewCollapsed)
+                if (model.case_.IsNew() && section.IsNewCollapsed)
                     result = "hidefollowers";
-                if (!model.case_.IsNew() && secton.IsEditCollapsed)
+                if (!model.case_.IsNew() && section.IsEditCollapsed)
                     result = "hidefollowers";
             }
             return result;
@@ -929,11 +929,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         public static string getSectionHeader(this CaseInputViewModel model, CaseSectionType type, string defaultHeader = "")
         {
-            var secton = model.CaseSectionModels.SingleOrDefault(x => x.SectionType == (int)type);
-            var result = string.Empty;
-            if (secton != null)
+            var section = model.CaseSectionModels.SingleOrDefault(x => x.SectionType == (int)type);
+            string result;
+            if (section != null)
             {
-                result = !string.IsNullOrEmpty(secton.SectionHeader) ? secton.SectionHeader : Translation.GetCoreTextTranslation(defaultHeader);
+                result = !string.IsNullOrEmpty(section.SectionHeader) ? section.SectionHeader : Translation.GetCoreTextTranslation(defaultHeader);
             }
             else
             {
@@ -945,10 +945,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         public static string getSectionHeaderFields(this CaseInputViewModel model, CaseSectionType type)
         {
             var result = new List<string>();
-            var secton = model.CaseSectionModels.SingleOrDefault(x => x.SectionType == (int)type);
-            if (secton != null)
+            var section = model.CaseSectionModels.SingleOrDefault(x => x.SectionType == (int)type);
+            if (section != null)
             {
-                var fields = model.caseFieldSettings.Where(x => secton.CaseSectionFields.Contains(x.Id));
+                var fields = model.caseFieldSettings.Where(x => section.CaseSectionFields.Contains(x.Id));
                 result = GetCaseFieldsValues(model, fields);
             }
             result = result.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();

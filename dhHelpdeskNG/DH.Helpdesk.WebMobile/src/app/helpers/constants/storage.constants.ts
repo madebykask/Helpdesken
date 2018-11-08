@@ -1,0 +1,9 @@
+/* export class AuthConstants {
+    public static readonly userDataStorageName: string = 'userData';
+} */
+
+export const StorageNameConstants = {
+    userDataStorageName: 'userData',
+    timezoneName: 'timezoneinfo',
+    languages: 'languages'
+}

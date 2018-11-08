@@ -1,0 +1,9 @@
+<mbsc-bottom-nav [options]="bottomMenuSettings">
+    <mbsc-nav-item data-icon="fa-home" (click)="goTo('/')" translate>Hem</mbsc-nav-item>
+    <mbsc-nav-item data-icon="fa-plus" (click)="goTo()" [disabled]="true" translate>Lägg till</mbsc-nav-item>
+    <mbsc-nav-item data-icon="fa-list" (click)="goTo('/casesoverview')" translate>Översikt</mbsc-nav-item>
+    <mbsc-nav-item data-icon="fa-globe" [disabled]="!languageId && !isLoadingLanguage" (click)="openLanguages()" translate>Språk</mbsc-nav-item>
+    <mbsc-nav-item data-icon="fa-power-off" (click)="logout()" translate>Logga ut</mbsc-nav-item>
+</mbsc-bottom-nav>  
+
+<mbsc-select [(ngModel)]="languageId" [options]="languagesSettings" #languages hidden></mbsc-select>

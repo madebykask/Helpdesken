@@ -1,0 +1,10 @@
+<div class="case-subsection">
+<span class="mbsc-label case-subsection-title">Files</span>
+  <ul class="filelist">
+      <li *ngFor="let item of getFilesModel(); trackBy: identify">
+        <div class="mbsc-ic mbsc-ic-fa-paperclip">
+            <a (click)="downloadFile(item)">{{ item.fileName }}</a>
+        </div>
+      </li>
+  </ul>
+</div>

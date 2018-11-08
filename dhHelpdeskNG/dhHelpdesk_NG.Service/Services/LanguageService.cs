@@ -1,4 +1,6 @@
 ﻿using System.Globalization;
+using System.Threading.Tasks;
+using DH.Helpdesk.Common.Extensions.Boolean;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -8,15 +10,14 @@ namespace DH.Helpdesk.Services.Services
 
     using DH.Helpdesk.BusinessData.Models.Language.Output;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Domain;
 
     public interface ILanguageService
     {
-        IList<Language> GetLanguages();
-        IList<Language> GetLanguagesForGlobalSettings();
+        IList<Language> GetLanguages(bool active = true);
+        Task<IList<Language>> GetLanguagesAsync(bool active = true);
 
         Language GetLanguage(int id);
 
@@ -35,10 +36,10 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         IEnumerable<LanguageOverview> GetActiveLanguages();
 
-        List<ItemOverview> FindActiveLanguageOverivews();
+        IList<ItemOverview> GetOverviews(bool active = false);
     }
 
-    public class LanguageService : ILanguageService
+    public class LanguageService : ILanguageService //TODO: needs refactoring
     {
         private readonly ILanguageRepository _languageRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -51,14 +52,15 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfWork = unitOfWork;
         }
 
-        public IList<Language> GetLanguages()
+        public IList<Language> GetLanguages(bool active = true)
         {
-            return this._languageRepository.GetAll().Where(x => x.IsActive == 1).OrderBy(x => x.Name).ToList();
+            var intActive = active.ToInt();
+            return _languageRepository.GetMany(x => x.IsActive == intActive).OrderBy(x => x.Name).ToList();
         }
 
-        public IList<Language> GetLanguagesForGlobalSettings()
+        public async Task<IList<Language>> GetLanguagesAsync(bool active = true)
         {
-            return this._languageRepository.GetAll().Where(z => z.IsActive == 1).ToList();
+            return await _languageRepository.GetLanguagesAsync(active);
         }
 
         public Language GetLanguage(int id)
@@ -116,10 +118,8 @@ namespace DH.Helpdesk.Services.Services
         }
 
         public List<ItemOverview> GetActiveOverviews()
-        {            
-            var languagesEntity = this._languageRepository.GetActiveLanguages();
-            var languages = this._languageRepository.FindActiveOverviewsByIds(languagesEntity.Select(l => l.Id).ToList());            
-            return languages;
+        {
+            return GetOverviews(true).ToList();
         }
 
         /// <summary>
@@ -133,10 +133,10 @@ namespace DH.Helpdesk.Services.Services
             return this._languageRepository.GetActiveLanguages();
         }
 
-        public List<ItemOverview> FindActiveLanguageOverivews()
+        public IList<ItemOverview> GetOverviews(bool active = false)
         {
-            var overviews = this._languageRepository.GetAll().Select(l => new { Name = l.Name, Value = l.Id.ToString() }).ToList();
-            return overviews.Select(o => new ItemOverview(o.Name, o.Value.ToString(CultureInfo.InvariantCulture))).ToList();
+            var languages = GetLanguages(active);
+            return languages.Select(o => new ItemOverview(o.Name, o.Id.ToString(CultureInfo.InvariantCulture))).ToList();
         }
     }
 }

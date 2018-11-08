@@ -60,9 +60,6 @@ namespace DH.Helpdesk.Dal.Repositories
         }
         public IEnumerable<TextList> GetAllTexts(int texttypeId, int? defaultLanguage)
         {
-            //Might not be needed in future since we have texttype. Earlier versions of DH Helpdesk assigned all core system phrases to id below 5000.
-            const int CoreSystemPhrases = 4999;
-
             IEnumerable<TextList> txt = null;
 
             if (defaultLanguage == null)
@@ -75,7 +72,7 @@ namespace DH.Helpdesk.Dal.Repositories
                    from User1 in Users1.DefaultIfEmpty()
                    join U2 in this.DataContext.Users on T.ChangedByUser_Id equals U2.Id into Users2
                    from User2 in Users2.DefaultIfEmpty()
-                   where (T.Type == texttypeId)  //&& T.Id > CoreSystemPhrases)
+                   where (T.Type == texttypeId)
                    group T by new
                    {
                        T.Id,
@@ -112,7 +109,7 @@ namespace DH.Helpdesk.Dal.Repositories
                        from User1 in Users1.DefaultIfEmpty()
                        join U2 in this.DataContext.Users on T.ChangedByUser_Id equals U2.Id into Users2
                        from User2 in Users2.DefaultIfEmpty()
-                       where (T.Type == texttypeId)  //&& T.Id > CoreSystemPhrases)
+                       where (T.Type == texttypeId)
                        group T by new
                        {
                            T.Id,
@@ -154,7 +151,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         TextType GetTextTypeById(int id);
         string GetTextTypeName(int id);
-        
+        TextType GetTextTypeByName(string name);
     }
 
     public class TextTypeRepository : RepositoryBase<TextType>, ITextTypeRepository
@@ -173,9 +170,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public string GetTextTypeName(int id)
         {
-
             return this.DataContext.TextTypes.Where(x => x.Id == id).Select(tt => tt.Name).SingleOrDefault();
+        }
 
+        public TextType GetTextTypeByName(string name)
+        {
+            return Table.Where(x => x.Name.ToLower() == name.ToLower()).FirstOrDefault();
         }
     }
 
@@ -195,6 +195,7 @@ namespace DH.Helpdesk.Dal.Repositories
         TextTranslation GetTTById(int textid);
         List<TextTranslationLanguageList> GetTextTranslationByTextId(int textId);
         IList<CustomKeyValue<string, string>> GetTranslationsFor(IList<string> texts, int languageId);
+        IList<CustomKeyValue<string, string>> GetTextTranslationsFor(int languageId, int textTypeId = 0);
     }
 
     public class TextTranslationRepository : RepositoryBase<TextTranslation>, ITextTranslationRepository
@@ -341,6 +342,20 @@ namespace DH.Helpdesk.Dal.Repositories
             return query.ToList();
         }
 
+        public IList<CustomKeyValue<string, string>> GetTextTranslationsFor(int languageId, int textTypeId = 0)
+        {
+            var query = from t in DataContext.Texts
+                         join tt in DataContext.TextTranslations on new { key1 = t.Id, key2 = languageId } equals new { key1 = tt.Text_Id, key2 = tt.Language_Id } into gr
+                         from res in gr.DefaultIfEmpty()
+                         where t.Type == textTypeId
+                         select new CustomKeyValue<string, string>()
+                         {
+                             Key = t.TextToTranslate,
+                             Value = res.TextTranslated ?? t.TextToTranslate
+                         };
+
+            return query.ToList();
+        }
     }
 
     #endregion

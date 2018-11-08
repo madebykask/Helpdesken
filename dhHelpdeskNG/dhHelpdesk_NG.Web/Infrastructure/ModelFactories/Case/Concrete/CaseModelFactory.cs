@@ -1,5 +1,6 @@
 ﻿using System;
 using DH.Helpdesk.BusinessData.Models.Paging;
+using DH.Helpdesk.Web.Common.Models.CaseSearch;
 using DH.Helpdesk.Web.Models;
 
 namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
@@ -90,7 +91,7 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
             s.SortBy = "CaseNumber";
             s.Ascending = true;
 
-            return new CaseSearchModel() { caseSearchFilter = f, Search = s };
+            return new CaseSearchModel() { CaseSearchFilter = f, Search = s };
         }
     }
 }

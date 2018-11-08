@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace DH.Helpdesk.Dal.Repositories.Changes
 {
     using System.Collections.Generic;
@@ -21,17 +23,16 @@ namespace DH.Helpdesk.Dal.Repositories.Changes
 
         void AddChange(NewChange change);
 
-        Change GetById(int changeId);
+        ChangeEntity GetById(int changeId);
 
-        Change FindById(int changeId);
+        ChangeEntity FindById(int changeId);
 
         SearchResult Search(SearchParameters parameters);
 
-        IList<ChangeOverview> GetChanges(int customer);
+        IList<ChangeOverview> GetChanges(int customerId);
+        Task<IList<ChangeOverview>> GetChangesAsync(int customerId);
 
         void DeleteById(int changeId);
-
-        void Update(UpdatedChange change);
 
         /// <summary>
         /// The get change overview.

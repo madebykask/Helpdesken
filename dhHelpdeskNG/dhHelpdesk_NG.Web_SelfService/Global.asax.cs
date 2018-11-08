@@ -89,10 +89,7 @@ namespace DH.Helpdesk.SelfService
             if (configFile.Exists)
             {
                 XmlConfigurator.Configure(configFile);
-                
-                //init sso static logger
-                var ssoLogger = new Log4NetLoggerService(Log4NetLoggerService.LogType.Session);
-                SsoLogger.SetLoggerInstance(ssoLogger);
+               
             }
         }
 

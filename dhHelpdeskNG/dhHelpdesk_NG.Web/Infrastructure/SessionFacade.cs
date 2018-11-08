@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Contract;
+using DH.Helpdesk.Web.Common.Models.CaseSearch;
 
 namespace DH.Helpdesk.Web.Infrastructure
 {

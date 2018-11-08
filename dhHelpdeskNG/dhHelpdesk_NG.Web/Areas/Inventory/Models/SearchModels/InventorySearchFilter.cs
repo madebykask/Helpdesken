@@ -34,7 +34,7 @@
 
         public static InventorySearchFilter CreateDefault(int inventoryTypeId) // todo wtf?
         {
-            return new InventorySearchFilter(Common.Constants.SearchFilter.RecordsOnPage);
+            return new InventorySearchFilter(Helpdesk.Common.Constants.SearchFilter.RecordsOnPage);
         }
 
         public InventoriesFilter CreateRequest(int inventoryTypeId, int? numberOfRecords = null)
