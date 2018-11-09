@@ -77,6 +77,12 @@ BEGIN
     ALTER COLUMN ContentType nvarchar(100) NOT NULL
 END
 
+-- Update Null or empty user pw
+Update tblUsers
+set [Password] = 'DH&HD2018'
+Where ([Password] is null or [Password] = '')
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.39'
 --ROLLBACK --TMP
