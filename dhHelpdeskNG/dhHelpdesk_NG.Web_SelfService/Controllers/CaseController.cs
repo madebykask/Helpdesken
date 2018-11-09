@@ -848,30 +848,36 @@ namespace DH.Helpdesk.SelfService.Controllers
             model.CaseDataModel.ExtendedCaseForm_Id = model.ExtendedCaseDataModel.ExtendedCaseFormId;
             
             var res = _universalCaseService.SaveCaseCheckSplit(model.CaseDataModel, auxModel, out caseId, out caseNum);
-            if (res.IsSucceed && caseId > 0)
+
+            if (res.IsSucceed)
             {
-                var case_ = _universalCaseService.GetCase(caseId);
-
-                SaveCaseFiles(model.CaseDataModel.CaseFileKey, case_.Customer_Id, caseId, localUserId);
-
-                if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
+                if (caseId > 0)
                 {
-                    return RedirectToCaseConfirmation("Your case has been successfully registered.", string.Empty);
-                }
-                else
-                {
-                    TempData[ShowRegistrationMessageKey] = isNewCase;
+                    var case_ = _universalCaseService.GetCase(caseId);
 
-                    //return RedirectToAction("UserCases", new { customerId = model.CustomerId });
-                    if (string.IsNullOrEmpty(returnUrl))
-                        return RedirectToAction("ExtendedCase", new { caseId = caseId });
+                    SaveCaseFiles(model.CaseDataModel.CaseFileKey, case_.Customer_Id, caseId, localUserId);
+
+                    if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
+                    {
+                        return RedirectToCaseConfirmation("Your case has been successfully registered.", string.Empty);
+                    }
                     else
-                        return Redirect(returnUrl);
+                    {
+                        TempData[ShowRegistrationMessageKey] = isNewCase;
+
+                        //return RedirectToAction("UserCases", new { customerId = model.CustomerId });
+                        if (string.IsNullOrEmpty(returnUrl))
+                            return RedirectToAction("ExtendedCase", new { caseId = caseId });
+                        else
+                            return Redirect(returnUrl);
+                    }
                 }
             }
 
-            if (model.CaseDataModel.OU_Id.HasValue)            
+            if (model.CaseDataModel.OU_Id.HasValue)
+            {
                 model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);
+            }
 
             model.Result = res;
             model.StatusBar = isNewCase ? new Dictionary<string, string>() : GetStatusBar(model);
@@ -881,6 +887,9 @@ namespace DH.Helpdesk.SelfService.Controllers
             
             ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
             ViewBag.ShowCommunicationForSelfservice = appSettings.ShowCommunicationForSelfService;
+            model.CaseDataModel.FieldSettings = _caseFieldSettingService.ListToShowOnCasePage(model.CustomerId, model.LanguageId)
+                .Where(c => c.ShowExternal == 1)
+                .ToList();
 
             return View("ExtendedCase", model);
         }
