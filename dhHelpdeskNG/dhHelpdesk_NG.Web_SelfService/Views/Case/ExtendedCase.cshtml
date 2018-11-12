@@ -349,26 +349,28 @@
     <div class="content tab-content">
         <div id="fragment-1" class="tab-pane active">
             <div class="container-fluid dh-container">
-                
+
                 @if (Model.CaseDataModel.FinishingDate != null)
                 {
                     @Html.Partial("_ClosedCaseAlert", Model.GetClosedCaseAlertModel())
                 }
                 else
                 {
-                     if (Model.ShowRegistrationMessage && !string.IsNullOrEmpty(Model.CaseRegistrationMessage))
-                     {
-                         <div class="alert alert-success">@Html.Raw(Model.CaseRegistrationMessage.SetHtmlParameters())</div>
-                     }
+                    if (Model.ShowRegistrationMessage && !string.IsNullOrEmpty(Model.CaseRegistrationMessage))
+                    {
+                        <div class="alert alert-success">@Html.Raw(Model.CaseRegistrationMessage.SetHtmlParameters())</div>
+                    }
                 }
-                
+
                 <div id="container_@extendedFormId" class="">
-                    @Html.Partial("_CaseInformation", Model, new ViewDataDictionary {{"Headline", Translation.Get(Model.ExtendedCaseDataModel.FormModel.Name)}})
+                    @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", Translation.Get(Model.ExtendedCaseDataModel.FormModel.Name) } })
                     @*Extended case placement*@
                 </div>
             </div>
         </div>
-        @if (ViewBag.AttachmentPlacement == 1 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()) && (Model.CaseId == 0 || (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null)))
+        @if (ViewBag.AttachmentPlacement == 1 &&
+             Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()) &&
+             (Model.CaseId == 0 || (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null)))
         {
             <div id="attachment-tab" class="tab-pane" style="overflow: hidden;">
                 <div>
@@ -383,18 +385,18 @@
                         }
                         <table id="NewCasefiles_table" class="table table-striped" style="margin-top: 10px;">
                             <tbody>
-                            @if (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0)
-                            {
-                                foreach (var item in Model.CaseDataModel.CaseFiles)
+                                @if (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0)
                                 {
-                                    <tr>
-                                        <td>
-                                            <i class="glyphicon glyphicon-file">&nbsp;</i>
-                                            <a style="color: blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
-                                        </td>
-                                    </tr>
+                                    foreach (var item in Model.CaseDataModel.CaseFiles)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <i class="glyphicon glyphicon-file">&nbsp;</i>
+                                                <a style="color: blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
+                                            </td>
+                                        </tr>
+                                    }
                                 }
-                            }
                             </tbody>
                         </table>
                     </div>
@@ -405,8 +407,8 @@
 
     @*/* only on new for now.. */*@
     @if (ViewBag.AttachmentPlacement == 1 &&
-         Model.CaseId == 0 &&
-         Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+                                 Model.CaseId == 0 &&
+                                 Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
     {
         <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -436,18 +438,18 @@
 
 @section Dialogs {
     @* show log notes only for LineManager or if ShowCommunicationForSelfservice is enabled in web.config*@
-    @if (Model.CaseId > 0 && 
-         !Model.CaseDataModel.IsFinished && 
-         CheckField(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())  &&
-         (ViewBag.IsLineManagerApplication || 
+    @if (Model.CaseId > 0 &&
+         !Model.CaseDataModel.IsFinished &&
+         CheckField(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()) &&
+         (ViewBag.IsLineManagerApplication ||
           ViewBag.ApplicationType == ApplicationTypes.SelfService && ViewBag.ShowCommunicationForSelfservice))
     {
         @Html.Partial("_Communication", Model.GetCaseLogModel())
         @Html.Partial("ModalDialogs/_UploadExistingLogFilePopup")
-        @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")    
+        @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")
         @Scripts.Render("~/Content/js/Case/log")
     }
-    
+
     @if (Model.CaseDataModel.IsFinished)
     {
         @Html.Partial("ModalDialogs/_CaseLogNotePopup", Model.GetCaseLogModel())
