@@ -60,6 +60,11 @@ $(function () {
             }
         });
 
+        $('#Log_upload_files_popup').on('shown.bs.modal', function () {
+            //refresh required to make file open dlg work correctly 
+            $('#Log_upload_files_popup').pluploadQueue().refresh();
+        });
+
         $('#Log_upload_files_popup').on('hidden.bs.modal', function () {
             if ($('#Log_uploader') != undefined) {
                 if ($('#Log_uploader').pluploadQueue().files.length > 0) {

@@ -407,8 +407,8 @@
 
     @*/* only on new for now.. */*@
     @if (ViewBag.AttachmentPlacement == 1 &&
-                                 Model.CaseId == 0 &&
-                                 Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+         Model.CaseId == 0 &&
+         Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
     {
         <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
