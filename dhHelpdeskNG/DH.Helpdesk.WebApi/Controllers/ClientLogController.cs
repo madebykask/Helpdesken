@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Threading.Tasks;
+using System.Web.Http;
 using AutoMapper;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
@@ -30,10 +31,10 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpPost]
         [SkipCustomerAuthorization]
         [AllowAnonymous]
-        public IHttpActionResult Post([FromBody]ClientLogItemModel model)
+        public async Task<IHttpActionResult> Post([FromBody]ClientLogItemModel model)
         {
             var logEntry = _mapper.Map<ClientLogItemModel, ClientLogEntry>(model);
-            _clientLogger.Log(logEntry);
+            await _clientLogger.LogAsync(logEntry);
             
             return Ok();
         }
