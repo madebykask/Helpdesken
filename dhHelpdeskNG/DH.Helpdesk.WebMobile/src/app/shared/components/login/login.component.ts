@@ -6,7 +6,7 @@ import { switchMap, finalize, take } from 'rxjs/operators';
 import { AuthenticationService } from '../../../services/authentication';
 import { UserSettingsService } from '../../../services/user'
 import { throwError, Subject } from 'rxjs';
-import { ErrorHandlingService } from '../../../services/errorhandling/error-handling.service';
+import { ErrorHandlingService } from '../../../services/logging/error-handling.service';
 import { UserData } from 'src/app/models';
 import { config } from '@env/environment';
 

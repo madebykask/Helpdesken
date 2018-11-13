@@ -1,9 +1,10 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { LocalStorageService } from '../local-storage';
-import { HttpApiServiceBase } from '../api/httpServiceBase';
-import { ClientLogEntryModel } from '../../models/shared/client-log.model';
+import { LocalStorageService } from '../../local-storage';
+import { HttpApiServiceBase } from '../httpServiceBase';
+import { ClientLogEntryModel } from '../../../models/shared/client-log.model';
 import { Observable } from 'rxjs/Rx';
+import { take } from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class ClientLogApiService extends HttpApiServiceBase {
@@ -15,7 +16,10 @@ export class ClientLogApiService extends HttpApiServiceBase {
 
     saveLogEntry(logEntry: ClientLogEntryModel) : Observable<any> {
         let url = this.buildResourseUrl('/api/ClientLog', null, false, false);        
-        return this.postJsonNoContent(url, logEntry);
+        return this.postJsonNoContent(url, logEntry)
+        .pipe(
+          take(1)// unsubscribe
+          );
     }
 }
 

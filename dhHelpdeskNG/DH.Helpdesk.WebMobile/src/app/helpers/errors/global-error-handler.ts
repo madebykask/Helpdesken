@@ -1,5 +1,5 @@
 ﻿import { ErrorHandler, Inject, Injector, forwardRef } from '@angular/core';
-import { ErrorHandlingService } from '../../services/errorhandling/error-handling.service';
+import { ErrorHandlingService } from '../../services/logging/error-handling.service';
 
 export class GlobalErrorHandler implements ErrorHandler {
 

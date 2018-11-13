@@ -34,5 +34,6 @@ export class CommEvent {
 
 export enum Channels {
     Header,
+    AuthenticationChange
 }
 

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using DH.Helpdesk.Common.Logger;
+using DH.Helpdesk.WebApi.Infrastructure.ClientLogger.Enums;
 
 namespace DH.Helpdesk.WebApi.Infrastructure.ClientLogger
 {
@@ -27,13 +28,19 @@ namespace DH.Helpdesk.WebApi.Infrastructure.ClientLogger
         public void Log(IClientLogEntry logEntry)
         {
             var msg = _messageFormatter.Format(logEntry);
-            _loggerService.Error(msg);
+            if(logEntry.Level <= ClientLogLevel.Info)
+                _loggerService.Info(msg);
+            else 
+                _loggerService.Error(msg);
         }
 
         public async Task LogAsync(IClientLogEntry logEntry)
         {
             var msg = _messageFormatter.Format(logEntry);
-            await Task.Run(() => _loggerService.Error(msg)).ConfigureAwait(false);
+            if(logEntry.Level <= ClientLogLevel.Info)
+                await Task.Run(() => _loggerService.Info(msg)).ConfigureAwait(false);
+            else 
+                await Task.Run(() => _loggerService.Error(msg)).ConfigureAwait(false);
         }
     }
 }

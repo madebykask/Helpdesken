@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { UuidGenerator, WindowWrapper } from '../../helpers';
 import { ClientLogEntryModel, ClientLogLevel } from '../../models/shared/client-log.model';
-import { ClientLogApiService } from './client-log-api.service';
-import { LoggerService } from '../logging';
+import { LoggerService } from './logger.service';
 import { AlertsService } from '../../helpers/alerts/alerts.service';
 import 'rxjs/add/operator/catch';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ClientLogApiService } from '../api';
 
 @Injectable({providedIn: 'root'})
 export class ErrorHandlingService {
@@ -61,19 +61,19 @@ export class ErrorHandlingService {
 
     private saveErrorOnServer(errorGuid:string, error:any, errorMsg){
         let logEntry = new ClientLogEntryModel();
-        logEntry.UniqueId = errorGuid;
-        logEntry.Level = ClientLogLevel.Error;
-        logEntry.Url = this.window.nativeWindow.location.href;
-        logEntry.Message = errorMsg;
+        logEntry.uniqueId = errorGuid;
+        logEntry.level = ClientLogLevel.Error;
+        logEntry.url = this.window.nativeWindow.location.href;
+        logEntry.message = errorMsg;
         
         if (error && error instanceof Error && error.stack) {
-            logEntry.Stack = error.stack.toString();
+            logEntry.stack = error.stack.toString();
         }
 
         this.clientLogApiService.saveLogEntry(logEntry)        
             .subscribe(
                 () => { },
-                (e: any) => this.logService.error(`Failed to send error (${logEntry.UniqueId}) to server. error: ${e.toString()}`)
+                (e: any) => this.logService.error(`Failed to send error (${logEntry.uniqueId}) to server. error: ${e.toString()}`)
         );
     }
 

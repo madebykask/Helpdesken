@@ -18,8 +18,10 @@ namespace DH.Helpdesk.WebApi.Infrastructure.ClientLogger
             str.AppendLine(lineSeparator);
             str.AppendLine($"\t{DateTime.Now}");
             str.AppendLine(lineSeparator);
-
+            
             WriteFormatted(str, "UniqueId", entry.UniqueId);
+            WriteFormatted(str, "SessionId", entry.SessionId);
+            WriteFormatted(str, "IsAuthenticated", entry.IsAuthenticated.ToString());
             WriteFormatted(str, "Level", entry.Level.ToString());
             WriteFormatted(str, "Url", entry.Url);
             WriteFormatted(str, "Message", entry.Message);

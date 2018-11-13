@@ -1,12 +1,14 @@
 export class ClientLogEntryModel {
-    UniqueId: string;
-    Url: string;
-    Level: ClientLogLevel;
-    Message: string;
-    Stack: string;
-    Param1: string;
-    Param2: string;
-    Param3: string;
+    uniqueId: string;
+    isAuthenticated: boolean;
+    sessionId: string;
+    url: string;
+    level: ClientLogLevel;
+    message: string;
+    stack: string;
+    param1: string;
+    param2: string;
+    param3: string;
 }
 
 export enum ClientLogLevel {

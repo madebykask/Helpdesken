@@ -5,6 +5,8 @@ namespace DH.Helpdesk.WebApi.Infrastructure.ClientLogger
     public interface IClientLogEntry
     {
         string UniqueId { get; }
+        bool IsAuthenticated { get; }
+        string SessionId { get; }
         string Url { get; }
         ClientLogLevel Level { get; }
         string Message { get; }
@@ -17,6 +19,8 @@ namespace DH.Helpdesk.WebApi.Infrastructure.ClientLogger
     public class ClientLogEntry : IClientLogEntry
     {
         public string UniqueId { get; set; }
+        public bool IsAuthenticated { get; set; }
+        public string SessionId { get; set; }
         public string Url { get; set; }
         public ClientLogLevel Level { get; set; }
         public string Message { get; set; }

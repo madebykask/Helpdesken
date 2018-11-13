@@ -1,5 +1,6 @@
-import { ErrorHandler, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { config } from '@env/environment';
+import { InfoLoggerService } from './info-logger.service';
 
 @Injectable({ providedIn: 'root' })
 export class LoggerService {
@@ -9,6 +10,12 @@ export class LoggerService {
   log(value: any, ...rest: any[]) {
     if (config.enableLog) {
       console.log(value, ...rest);
+    }
+  }
+
+  info(value: string) {
+    if (config.enableLog) {
+      console.log(value);
     }
   }
   

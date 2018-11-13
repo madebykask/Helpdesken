@@ -1,21 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { AuthenticationService } from '../../services/authentication'
-import { takeUntil, switchMap } from 'rxjs/operators';
+import { AuthenticationStateService, AuthenticationService } from '../../services/authentication'
+import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
 
-    constructor(private router: Router, private authenticationService: AuthenticationService) { }
+    constructor(private _router: Router, 
+      private _authService: AuthenticationService,
+      private _authStateService: AuthenticationStateService) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        if (this.authenticationService.hasToken()) {
-            if (this.authenticationService.isTokenExpired()) { 
-                 return this.authenticationService.refreshToken()
+        if (this._authStateService.hasToken()) {
+            if (this._authStateService.isTokenExpired()) { 
+                 return this._authService.refreshToken()
                     .pipe(
                         switchMap((r: boolean) => {                            
-                            if(!r) this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }});                                                
+                            if(!r) this._router.navigate(['/login'], { queryParams: { returnUrl: state.url }});                                                
                             return of(r);
                         }))
             }
@@ -23,7 +25,7 @@ export class AuthGuard implements CanActivate {
         }
 
         // not logged in so redirect to login page with the return url
-        this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }});
+        this._router.navigate(['/login'], { queryParams: { returnUrl: state.url }});
         return of(false);
     }
 }

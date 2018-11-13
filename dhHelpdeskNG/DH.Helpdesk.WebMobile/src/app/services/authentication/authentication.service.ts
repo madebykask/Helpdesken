@@ -1,91 +1,49 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest } from '@angular/common/http';
-import { map, catchError, take } from 'rxjs/operators';
-import { config } from '@env/environment';
-import { CurrentUser, UserAuthenticationData } from '../../models'
+import { HttpRequest } from '@angular/common/http';
+import { finalize, tap } from 'rxjs/operators';
 import { LocalStorageService } from '../../services/local-storage'
-import { Subject } from 'rxjs/Subject';
-import { HttpApiServiceBase } from '../api';
-import { LoggerService } from '../logging';
-import { of } from 'rxjs';
+import { AuthenticationApiService } from '../api';
+import { InfoLoggerService } from '../logging/info-logger.service';
+import { CommunicationService, Channels } from '../communication';
+import { AuthenticationStateService } from './authentication-state.service';
 
 @Injectable({ providedIn: 'root' })
-export class AuthenticationService extends HttpApiServiceBase {
+export class AuthenticationService {
 
-    //events
-    private authenticationChangedSubj = new Subject<any>();    
-    authenticationChanged$ = this.authenticationChangedSubj.asObservable();
-
-    constructor(protected http: HttpClient, protected localStorageService: LocalStorageService, private _logger: LoggerService) {
-        super(http, localStorageService)        
-     }    
+    constructor(protected localStorageService: LocalStorageService,
+      private _logger: InfoLoggerService,
+      private _authStateService: AuthenticationStateService,
+      private _authApiService: AuthenticationApiService,
+      private _commService: CommunicationService) {
+     }
 
     login(username: string, password: string) {
-        let clientId = config.clientId;
-        return this.postJson<any>(this.buildResourseUrl('/api/account/login', undefined, false), { username, password, clientId })
-            .pipe(
-                take(1),
-                map(data => {
-                let isSuccess = false;                
-                // login successful if there's a token in the response
-                if (data && data.access_token) {
-                    let user = CurrentUser.createAuthenticated(data);                    
-                    user.version = config.version;
-
-                    // store user details and token in local storage to keep user logged in between page refreshes
-                    this.localStorageService.setCurrentUser(user);    
-                    isSuccess = true;                                   
-                } 
-
-                this.raiseAuthenticationChanged();
-                return isSuccess;
-            }));
-    }
-
-    isAuthenticated() : Boolean {
-     if (this.isTokenExpired()) return false;
-    
-        let token = this.getAccessToken();
-        return token && token.length > 0;
+        return this._authApiService.login(username, password)
+          .pipe(
+            tap(() => this._logger.log(`Log in action.`)),
+            finalize(() => this.raiseAuthenticationChanged())
+          );
     }
 
     refreshToken() {
-        var user = this.getUser();
-        if (user.authData && user.authData.refresh_token) {
-            var refreshToken = user.authData.refresh_token;
-            let clientId = config.clientId;
-            return this.postJson<any>(this.buildResourseUrl('/api/account/refresh', undefined, false), { refreshToken, clientId })
-                .pipe(
-                    map(data => {
-                        user.authData.access_token = data.access_token;
-                        user.authData.expires_in = Number(data.expires_in);
-                        user.authData.recievedAt = new Date();
-                        this.localStorageService.setCurrentUser(user);
-
-                        this.raiseAuthenticationChanged();
-                        return true;
-                    }),
-                    catchError(err => {
-                        return of(false);
-                    }),
-                );
-        }        
+        var user = this._authStateService.getUser();
+        return this._authApiService.refreshToken(user)
+          .pipe(
+            tap(() => this._logger.log(`Refresh token action.`)),
+            finalize(() => this.raiseAuthenticationChanged())
+          );
     }
 
     logout() {
         // remove user from local storage to log user out
         this.localStorageService.removeCurrentUser();
+        this._logger.log(`Log out action.`);
         this.raiseAuthenticationChanged();
-    }
-
-    getAccessToken(): string {
-        var user = this.getUser();
-        return user && user.authData && user.authData.access_token ? user.authData.access_token : null;
     }
 
     setAuthHeader(request: HttpRequest<any>): HttpRequest<any> {
         // Get access token 
-        const accessToken = this.getAccessToken();
+        const accessToken = this._authStateService.getAccessToken();
 
         // If access token is null this means that user is not logged in
         // And we return the original request
@@ -101,36 +59,9 @@ export class AuthenticationService extends HttpApiServiceBase {
         });
     }
 
-    isTokenExpired(): boolean {
-        let user = this.getUser();
-        
-        if (user == null || user.authData == null)
-            return true;            
-            
-        if (!user.authData.recievedAt || !user.authData.expires_in) 
-            return true;//TODO: throw error
-
-        let expiresAt = user.authData.recievedAt.getTime() + user.authData.expires_in * 1000;
-        let now = new Date();
-        return now.getTime() > expiresAt;
-    }
-
-    hasToken(): boolean {
-        return this.getAccessToken() != null;
-    }
-
-    getVersion(): string {
-        let user = this.getUser();
-        if (user == null) return null;
-
-        return user.version;
-    }
     
-    public getUser(): CurrentUser {
-        return this.localStorageService.getCurrentUser();
-    }
 
     private raiseAuthenticationChanged() {
-        this.authenticationChangedSubj.next(null);
+        this._commService.publish(Channels.AuthenticationChange, {});
     }
 }

@@ -1,3 +1,5 @@
+import { UuidGenerator } from "../../helpers/uuid-generator";
+
 export class CurrentUser {
     constructor() {
         this.authData = new UserAuthenticationData();
@@ -15,6 +17,7 @@ export class CurrentUser {
         authData.refresh_token = data.refresh_token;
         authData.expires_in = data.expires_in;
         authData.recievedAt = new Date();
+        authData.sessionId = UuidGenerator.createUuid();
         
         let user = new CurrentUser();
         user.authData = authData;
@@ -27,7 +30,8 @@ export class UserAuthenticationData {
     access_token: string;
     refresh_token: string;
     expires_in: number; // in seconds - not updated once recieved
-    recievedAt: Date;   
+    recievedAt: Date;
+    sessionId: string;   
 }
 
 export class UserData {

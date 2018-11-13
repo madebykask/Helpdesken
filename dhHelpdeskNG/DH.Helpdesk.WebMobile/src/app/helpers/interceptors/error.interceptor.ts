@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from '../../services/authentication';
-import { ErrorHandlingService } from 'src/app/services/errorhandling/error-handling.service';
 
-import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
-import { catchError, switchMap, filter, take, map } from 'rxjs/operators';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { catchError, switchMap, filter, take } from 'rxjs/operators';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -14,7 +13,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     // available (e.g. refresh pending).
     private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
     
-    constructor(private authenticationService: AuthenticationService, private errorHandlingService: ErrorHandlingService) {}
+    constructor(private authenticationService: AuthenticationService) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(
