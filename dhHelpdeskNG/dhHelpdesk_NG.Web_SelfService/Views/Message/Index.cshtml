@@ -37,7 +37,7 @@
                 <div class="row">
                     <div style="text-align:center;">
                         <div class="messageDialog  alert @_dialogStyle">
-                            <div style="margin-top:15%;">
+                            <div style="margin-top:15%;" class="msgBody">
                                 <img alt="" src="@_iconPath" class="messageIcon" />
                                 <br />
                                 <br />
@@ -47,7 +47,7 @@
                                 }
                                 @if (!string.IsNullOrEmpty(Model.Details))
                                 {
-                                    <p style="font-size:medium"> @Model.Details </p>
+                                    <p style="font-size: medium; word-wrap:break-word;"> @Model.Details </p>
                                 }
                             </div>
                         </div>

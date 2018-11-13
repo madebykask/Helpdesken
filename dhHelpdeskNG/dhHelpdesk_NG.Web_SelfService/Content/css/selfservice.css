@@ -1,5 +1,4 @@
 
-
 body {
   background:#f2f7fe;
 }
@@ -8,8 +7,6 @@ img
 {
     max-width: 100%;
 }
-
-
 
 h4 {
     /*background: #f2f7fe;*/
@@ -1066,6 +1063,17 @@ div .multitext i {
     margin-left: -18em; 
     /*border: 1px solid #45b56d;*/
     background-color: #fff;
+}
+
+
+@media(max-width:767px) {
+   .messageDialog {
+       top: 50%!important;
+       
+   }
+   .messageDialog .msgBody{
+       margin: auto 60px;
+   }
 }
 
 .messageIcon {    
