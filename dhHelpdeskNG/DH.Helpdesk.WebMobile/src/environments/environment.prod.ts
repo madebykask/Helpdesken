@@ -6,7 +6,7 @@ export const environment = {
 };
 
 export const config = {
-  apiUrl: 'http://localhost:8049',
+  apiUrl: 'API.URL',
   clientId: 'hd',
   version: VERSION.fullVersion,
   internalVersion: require('../../package.json').version,

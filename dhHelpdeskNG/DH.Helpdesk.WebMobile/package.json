@@ -1,11 +1,12 @@
 {
     "name": "web-mobile",
-    "version": "0.1.9",
+    "version": "0.2.0",
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
         "build": "ng build",
         "build_dhdev": "ng build --prod --configuration=dhdev",
+        "build_prod": "ng build --prod --configuration=production",
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e"

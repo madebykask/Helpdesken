@@ -259,6 +259,7 @@
     <Content Include="log4net.config" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\DhDev - Local File System.pubxml" />
+    <None Include="Properties\PublishProfiles\Release- local folder.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
