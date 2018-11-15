@@ -1,13 +1,13 @@
-import { HttpApiServiceBase } from "../api";
 import { Injectable } from "@angular/core";
-import { LocalStorageService } from "../local-storage";
 import { HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
-import { OptionItem } from "../../models";
-import { OptionsHelper } from "../../helpers/options-helper";
+import { OptionsHelper } from "src/app/helpers";
+import { HttpApiServiceBase } from "..";
+import { LocalStorageService } from "../../local-storage";
+import { OptionItem } from "src/app/models";
 
 @Injectable({ providedIn: 'root' })
-export class LanguagesService extends HttpApiServiceBase {
+export class LanguagesApiService extends HttpApiServiceBase {
 
     protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService, 
         private optionsHelpder: OptionsHelper) {

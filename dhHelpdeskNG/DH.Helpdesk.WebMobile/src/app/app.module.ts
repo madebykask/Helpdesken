@@ -42,7 +42,7 @@ import { environment } from '@env/environment';
      GetByKeyPipe, DateTimezonePipe, AlertsFilter,
      RequireAuthDirective,
      CaseFilesControlComponent,
-     ErrorComponent,     
+     ErrorComponent,
      AltLayoutComponent,
      MailtoticketControlComponent,
     ],
@@ -69,7 +69,6 @@ import { environment } from '@env/environment';
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     // { provide: LOCALE_ID, useValue: "sv-SE" },
     // { provide: LOCALE_ID, deps: [SettingsService], useFactory: (settingsService) => settingsService.getLanguage()},
-    TranslationApiService,      
     {
       provide: APP_INITIALIZER,
       useFactory: initTranslation,
@@ -81,8 +80,7 @@ import { environment } from '@env/environment';
       useFactory: initUserData,
       deps: [UserSettingsService, AuthenticationService, LoggerService],
       multi: true
-    },   
-    LocalStorageService
+    }
   ]
 })
 export class AppModule { }
@@ -92,3 +90,4 @@ import localeSv from '@angular/common/locales/sv';
 
 // the second parameter 'fr' is optional
 registerLocaleData(localeSv, ); */
+

@@ -15,8 +15,8 @@ export class ClientLogApiService extends HttpApiServiceBase {
     }   
 
     saveLogEntry(logEntry: ClientLogEntryModel) : Observable<any> {
-        let url = this.buildResourseUrl('/api/ClientLog', null, false, false);        
-        return this.postJsonNoContent(url, logEntry)
+        let url = this.buildResourseUrl('/api/ClientLog', null, false, false);
+        return this.postJsonNoContent(url, logEntry, null, true)
         .pipe(
           take(1)// unsubscribe
           );

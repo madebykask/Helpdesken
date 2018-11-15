@@ -1,4 +1,7 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Threading.Tasks;
+using System.Web.Cors;
+using System.Web.Http;
 using Autofac.Integration.WebApi;
 using DH.Helpdesk.WebApi.Infrastructure.Owin;
 using Microsoft.Owin;
@@ -17,7 +20,20 @@ namespace DH.Helpdesk.WebApi
             var container = WebApiConfig.ConfigDiContainer(config);
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
-            app.UseCors(CorsOptions.AllowAll);
+            app.UseCors(new CorsOptions
+            {
+                PolicyProvider = new CorsPolicyProvider
+                {
+                    PolicyResolver = context => Task.FromResult(new CorsPolicy
+                    {
+                        AllowAnyHeader = true,
+                        AllowAnyMethod = true,
+                        AllowAnyOrigin = true,
+                        SupportsCredentials = false,
+                        PreflightMaxAge = 600
+                    })
+                }
+            });
 
             // Register the Autofac middleware FIRST, then the Autofac Web API middleware,
             // and finally the standard Web API middleware.

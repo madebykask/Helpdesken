@@ -1,2 +1,2 @@
 export * from './translateLoader'
-export * from './translationApi.service'
+export * from '../api/translation/translation-api.service'

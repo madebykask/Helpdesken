@@ -1,4 +1,8 @@
 
 export const CommonConstants = {
-    CustomerIdQsParamName : "cid"
-}
+    CustomerIdQsParamName : 'cid'
+};
+
+export const AuthConstants = {
+    NoAuthHeader: 'NoAuth'
+};

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable, throwError, of } from 'rxjs'
+import { Observable } from 'rxjs'
 import { TranslateService as NgxTranslateService, TranslateLoader } from '@ngx-translate/core'
-import { TranslationApiService } from './translationApi.service';
+import { TranslationApiService } from '../api/translation/translation-api.service';
 import { LoggerService } from '../logging';
 import { LocalStorageService } from '../local-storage';
 import { Language } from 'src/app/models';
-import { take, switchMap, map } from 'rxjs/operators';
+import { take, map } from 'rxjs/operators';
 
 export function initTranslation(
      ngxTranslateService: NgxTranslateService,
@@ -18,28 +18,28 @@ export function initTranslation(
             map((langs: Language[]) => {
 
                 //add languages to the inner collection of supported languages to switch into
-                ngxTranslateService.addLangs(langs.map(s => s.languageId.toLowerCase()));  
+                ngxTranslateService.addLangs(langs.map(s => s.languageId.toLowerCase()));
         
                 //save existing languages to the storage
                 localStorage.saveLanguages(langs);
             })
-        ).toPromise();    
+        ).toPromise();
  }
 
 @Injectable()
-export class CustomTranslateLoader implements TranslateLoader  {   
+export class CustomTranslateLoader implements TranslateLoader  {
     
-    constructor(private translationApiService : TranslationApiService) {        
+    constructor(private translationApiService : TranslationApiService) {
         //this.logger.log('CustomTranslateLoader created.')
     }
 
     getTranslation(lang: string): Observable<Object>{
         //console.log('>>>Loading translations for: ' + lang);
-        return this.translationApiService.getTranslations(lang);         
+        return this.translationApiService.getTranslations(lang);
     }
 }
 
 export function HttpLoaderFactory(translationApiService : TranslationApiService) {
     return new CustomTranslateLoader(translationApiService);
-    //return new TranslateHttpLoader(http);  
+    //return new TranslateHttpLoader(http);
 }

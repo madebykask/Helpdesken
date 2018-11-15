@@ -1,45 +1,44 @@
-import { HttpApiServiceBase } from "../httpServiceBase";
-import { Injectable } from "@angular/core";
+import { HttpApiServiceBase } from '../httpServiceBase';
+import { Injectable } from '@angular/core';
 import { config } from '@env/environment';
-import { take, map, catchError } from "rxjs/operators";
-import { CurrentUser } from "src/app/models";
+import { take, map, catchError } from 'rxjs/operators';
+import { CurrentUser } from 'src/app/models';
 import { HttpClient } from '@angular/common/http';
-import { LocalStorageService } from "../../local-storage";
-import { of } from "rxjs";
+import { LocalStorageService } from '../../local-storage';
+import { of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationApiService extends HttpApiServiceBase {
 
-  constructor(protected http: HttpClient, protected localStorageService: LocalStorageService)
-  {
-    super(http, localStorageService);      
+  constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) {
+    super(http, localStorageService);
   }
 
   login(username: string, password: string) {
-    let clientId = config.clientId;
+    const clientId = config.clientId;
     return this.postJson<any>(this.buildResourseUrl('/api/account/login', undefined, false), { username, password, clientId })
         .pipe(
             take(1),
             map(data => {
-            let isSuccess = false;                
+            let isSuccess = false;
             // login successful if there's a token in the response
             if (data && data.access_token) {
-                let user = CurrentUser.createAuthenticated(data);                    
+                const user = CurrentUser.createAuthenticated(data);
                 user.version = config.version;
 
                 // store user details and token in local storage to keep user logged in between page refreshes
-                this.localStorageService.setCurrentUser(user);    
-                isSuccess = true;                                   
-            } 
-            
+                this.localStorageService.setCurrentUser(user);
+                isSuccess = true;
+            }
+
             return isSuccess;
         }));
   }
 
   refreshToken(user: CurrentUser) {
     if (user.authData && user.authData.refresh_token) {
-        var refreshToken = user.authData.refresh_token;
-        let clientId = config.clientId;
+        const refreshToken = user.authData.refresh_token;
+        const clientId = config.clientId;
         return this.postJson<any>(this.buildResourseUrl('/api/account/refresh', undefined, false), { refreshToken, clientId })
             .pipe(
                 map(data => {
@@ -54,6 +53,6 @@ export class AuthenticationApiService extends HttpApiServiceBase {
                     return of(false);
                 }),
             );
-    }        
-}
+    }
+  }
 }

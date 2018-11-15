@@ -1,7 +1,9 @@
 import { CurrentUser, UserAuthenticationData, UserData, TimeZoneInfo, Language } from '../../models'
 import { StorageNameConstants } from '../../helpers/constants'
 import * as moment from 'moment-timezone';
+import { Injectable } from '@angular/core';
 
+@Injectable({providedIn: 'root'})
 export class LocalStorageService {
     constructor() {}
 
@@ -28,7 +30,7 @@ export class LocalStorageService {
         return data;
     }
 
-    saveLanguages(languages: Language[]) {        
+    saveLanguages(languages: Language[]) {
         let json = JSON.stringify(languages);
         localStorage.setItem(StorageNameConstants.languages, json);
     }
@@ -40,12 +42,12 @@ export class LocalStorageService {
     }
 
     getTimezoneInfo(): string {
-        let data = localStorage.getItem(StorageNameConstants.timezoneName);        
+        let data = localStorage.getItem(StorageNameConstants.timezoneName);
         return data;
     }
 
-    private fromJSONCurrentUser(json: any) : CurrentUser { 
-        if (typeof json === 'string') { json = JSON.parse(json); } 
+    private fromJSONCurrentUser(json: any) : CurrentUser {
+        if (typeof json === 'string') { json = JSON.parse(json); }
         return <CurrentUser>Object.assign(new CurrentUser(), json, {
             authData: this.fromJSONUserAuthenticationData(json.authData),
             currentData: this.fromJSONUserData(json.currentData)

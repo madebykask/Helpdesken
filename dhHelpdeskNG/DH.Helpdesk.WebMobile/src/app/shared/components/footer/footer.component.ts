@@ -2,11 +2,11 @@ import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { MbscSelect, MbscSelectOptions, MbscNavOptions } from '@mobiscroll/angular';
-import { take, finalize, takeUntil, switchMap } from 'rxjs/operators';
+import { take, finalize } from 'rxjs/operators';
 import { UserSettingsService } from 'src/app/services/user';
-import { LanguagesService } from 'src/app/services/language/languages.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication';
+import { LanguagesApiService } from 'src/app/services/api/language/languages-api.service';
 
 @Component({
   selector: 'app-footer',
@@ -33,7 +33,7 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
     moreText: null,
     moreIcon: 'fa-ellipsis-h',
     menuIcon: null,
-    menuText: null,    
+    menuText: null,
   }
 
   languageId: number = 0;
@@ -43,7 +43,7 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private _router: Router, 
               private _userSettingsService : UserSettingsService, 
               private _authenticationService: AuthenticationService,
-              private _languagesService: LanguagesService, 
+              private _languagesService: LanguagesApiService, 
               private _ngxTranslateService: TranslateService) {
   }
 
@@ -51,7 +51,7 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadLanguages();
     //apply translations
     this.languagesCtrl.setText = this._ngxTranslateService.instant("Välj");
-    this.languagesCtrl.cancelText  = this._ngxTranslateService.instant("Avbryt");    
+    this.languagesCtrl.cancelText  = this._ngxTranslateService.instant("Avbryt");
   }
 
   ngAfterViewInit() {
@@ -61,8 +61,8 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
     this._destroy$.next();
   }
 
-  private onLanguageChange(event, inst) {       
-    let val = inst.getVal();    
+  private onLanguageChange(event, inst) {
+    let val = inst.getVal();
     this.setLanguage(val ? +val : null);
   }
 
@@ -80,8 +80,8 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isLoadingLanguage = true;
     this._languagesService.getLanguages().pipe(
         take(1),
-        finalize(() => this.isLoadingLanguage = false)        
-    ).subscribe((data) => {        
+        finalize(() => this.isLoadingLanguage = false)
+    ).subscribe((data) => {
         this.languagesCtrl.refreshData(data);
     });
   } 
@@ -101,9 +101,10 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
       this._userSettingsService.setCurrentLanguage(languageId);
 
       // reload will reopen the app
-      window.location.reload(true);    
+      window.location.reload(true);
     }
   }
 }
+
 
 

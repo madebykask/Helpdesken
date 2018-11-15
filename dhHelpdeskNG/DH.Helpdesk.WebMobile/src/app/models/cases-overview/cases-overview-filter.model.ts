@@ -20,8 +20,8 @@ export class CasesOverviewFilter {
         CaseClosingDateStartFilter: Date;
         CaseClosingDateEndFilter: Date;
         CaseClosingReasonFilter: Date;
-        SearchInMyCasesOnly: boolean = false;
-        IsConnectToParent: boolean = false;
+        SearchInMyCasesOnly = false;
+        IsConnectToParent = false;
         CurrentCaseId: number;
         CaseProgress: number;
         CaseFilterFavorite: number;
