@@ -260,6 +260,9 @@
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\DhDev - Local File System.pubxml" />
     <None Include="Properties\PublishProfiles\Release- local folder.pubxml" />
+    <Content Include="Web.config.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -332,7 +335,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>13086</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
