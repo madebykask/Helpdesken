@@ -4,9 +4,11 @@ import { config } from '@env/environment';
 import { AuthenticationStateService } from './services/authentication';
 import { LoggerService } from './services/logging';
 import { Router, NavigationStart } from '@angular/router';
+import { AlertsService } from './helpers/alerts/alerts.service'
 import '../../node_modules/moment-timezone/moment-timezone-utils';
 import { Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
+import { Alert } from './helpers/alerts/alert-types';
 import { InfoLoggerService } from './services/logging/info-logger.service';
 
 @Component({
@@ -17,7 +19,7 @@ import { InfoLoggerService } from './services/logging/info-logger.service';
 export class AppComponent implements OnInit, OnDestroy {
   private _destroy$ = new Subject();
   pageSettings = {};
-
+  
   bottomMenuSettings = {
     type: 'bottom',
   };
@@ -28,7 +30,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private _authenticationService: AuthenticationStateService, 
     private _logger: LoggerService,
     private _infoLogger: InfoLoggerService,    
-    private _router: Router) {
+    private _router: Router,
+    private alertsService: AlertsService) {
     mobiscroll.settings = { theme: 'ios', lang: 'en', labelStyle: 'stacked' };
     this.navStart = _router.events.pipe(
       filter(evt => evt instanceof NavigationStart),
@@ -47,6 +50,10 @@ export class AppComponent implements OnInit, OnDestroy {
       this._router.navigate(['/login']);
     }
 
+    this.alertsService.alerts$.pipe(
+      takeUntil(this._destroy$)
+    ).subscribe(alert => this.processNewAlert(alert));     
+    
     // Checks if should display install popup notification:
 /*     if (this.isIos() && this.isInStandaloneMode()) {
       // logout or refresh token on open.
@@ -56,5 +63,19 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._destroy$.next();
   }
+
+  private processNewAlert(alert: Alert) {
+      //todo: support other alert types!
+      mobiscroll.snackbar({
+      color: 'danger',
+      duration: 10000,
+      message: alert.message,
+      button: {
+          icon:'fa-close',
+          action : function(){                    
+          }
+      }
+      });
+  }  
 }
 

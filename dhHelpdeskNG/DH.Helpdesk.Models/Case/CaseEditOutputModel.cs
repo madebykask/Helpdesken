@@ -8,15 +8,13 @@ namespace DH.Helpdesk.Models.Case
     {
         public List<IBaseCaseField> Fields { get; set; }
 
-        public CaseEditOutputModel()
-        {
-        }
-
         public int Id { get; set; }
         //public bool CanGetRelatedCases { get; set; }
         public decimal CaseNumber { get; set; }
         
         public CaseSolutionInfo CaseSolution { get; set; }
+        public int EditMode { get; set; }
+        public CaseLockModel CaseLock { get; set; }
 
         //public List<CustomMailTemplate> MailTemplates { get; set; }
         //public List<CaseFile> CaseFiles { get; set; }

@@ -54,6 +54,7 @@
     <Compile Include="Base\BaseInputModel.cs" />
     <Compile Include="CasesOverview\SearchOverviewFilterInputModel.cs" />
     <Compile Include="Case\CaseEditOutputModel.cs" />
+    <Compile Include="Case\CaseLockModel.cs" />
     <Compile Include="Case\Field\BaseCaseField.cs" />
     <Compile Include="Case\GetCaseFileInputModel.cs" />
     <Compile Include="Case\GetCaseInputModel.cs" />

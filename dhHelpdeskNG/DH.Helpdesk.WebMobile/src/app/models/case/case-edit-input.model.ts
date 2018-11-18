@@ -6,6 +6,26 @@ export class CaseEditInputModel {
     fields: IBaseCaseField<any>[];    
     caseSolution: CaseSolution;
     mailToTickets: MailToTicketInfo[];
+    editMode: CaseEditMode;
+    caseLock: CaseLockInfo; 
+}
+
+export enum CaseEditMode {
+    NoAccess = 0,
+    ReadOnly = 1,
+    FullAccess = 2
+}
+
+export class CaseLockInfo {
+    isLocked: boolean;
+    userId: number;
+    lockGuid: string;
+    browserSession: string;
+    createdTime: Date;
+    extendedTime: Date;
+    extendValue: number;
+    timerInterval: number;
+    userFullName: string;
 }
 
 export class MailToTicketInfo{

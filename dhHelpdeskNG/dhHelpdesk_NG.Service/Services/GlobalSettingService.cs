@@ -29,7 +29,7 @@
         }
 
         #endregion
-        
+
         public IList<GlobalSetting> GetGlobalSettings()
         {
             return this._globalSettingRepository.GetAll().ToList();

@@ -57,9 +57,7 @@ export class AuthenticationService {
                 Authorization: `Bearer ${accessToken}`
             }
         });
-    }
-
-    
+    }   
 
     private raiseAuthenticationChanged() {
         this._commService.publish(Channels.AuthenticationChange, {});

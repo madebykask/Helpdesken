@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.BusinessData.Models.Case;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -17,9 +19,11 @@
 
         List<LockedCaseOverview> GetLockedCases(int? customerId, string searchText);
 
+        CaseLock GetCaseLock(int caseId);
+
         CaseLock GetCaseLockByGUID(Guid lockGUID);
 
-        ICaseLockOverview GetCaseLockByCaseId(int caseId);
+        ICaseLockOverview GetCaseLockOverviewByCaseId(int caseId);
 
         IDictionary<int, ICaseLockOverview> GetCasesLocks(int[] caseIds);
 
@@ -27,13 +31,17 @@
 
         void CaseLockCleanUp();
 
+        CaseLockSettings GetCaseLockSettings();
+
+        bool TryAcquireCaseLock(int caseId, int userId, string sessionId, out Guid caseLockGuid);
+
         void LockCase(CaseLock caseLock);
 
         bool ReExtendLockCase(Guid lockGUID, int extendedTimeInSecond);
 
         void UnlockCaseByCaseId(int caseId);
 
-        void UnlockCaseByGUID(Guid lockGUID);
+        bool UnlockCaseByGUID(Guid lockGUID);
 
         void DeleteCaseLockByCaseId(int caseId);
     }

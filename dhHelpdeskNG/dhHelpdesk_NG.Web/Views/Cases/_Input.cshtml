@@ -94,7 +94,6 @@
 
                 @if (Model.ContainsExtendedCase)
                 {
-
                     foreach (var extendedCase in Model.ExtendedCases)
                     {
                         <li data-active-tab="@CaseTabs.ExtendedCaseTab" class="@((Model.ActiveTab.StartsWith(CaseTabs.ExtendedCaseTab)) ? "active" : "")">
@@ -110,7 +109,6 @@
                 {
                     <li>
                         <a id="attachment-tab" href="#attachment-container">@(Translation.GetCoreTextTranslation("Bilagor")) <span id="nrOfAttachedFiles">(@(Model.CaseFilesModel.SavedFiles != null ? Model.CaseFilesModel.Files.Count() : 0))</span></a>
-
                     </li>
                 }
 

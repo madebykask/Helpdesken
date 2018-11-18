@@ -46,6 +46,15 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
         #endregion
 
+        public CaseLock GetCaseLockByCaseId(int caseId)
+        {
+            var entity = Table.Where(l => l.Case_Id == caseId).FirstOrDefault();
+            if (entity == null)
+                return null;
+
+            return _caseLockToBusinessModelMapper.Map(entity);
+        }
+
         public CaseLock GetCaseLockByGUID(Guid lockGUID)
         {
             var entity = Table.Where(l => l.LockGUID == lockGUID).FirstOrDefault();
@@ -53,7 +62,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             if (entity == null)
                 return null;
 
-            return this._caseLockToBusinessModelMapper.Map(entity);
+            return _caseLockToBusinessModelMapper.Map(entity);
         }
 
         public void CaseLockCleanUp()
@@ -89,9 +98,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             return resultMap;
         }
 
-     
-
-        public ICaseLockOverview GetCaseLockByCaseId(int caseId)
+        public ICaseLockOverview GetCaseLockOverviewByCaseId(int caseId)
         {
             var item = Table.Where(l => l.Case_Id == caseId)
                             .Select(ProjectToCaseLockOverview())
@@ -165,14 +172,17 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             }
         }
 
-        public void UnlockCaseByGUID(Guid lockGUID)
+        public bool UnlockCaseByGUID(Guid lockGUID)
         {
             var entity = Table.Where(l => l.LockGUID == lockGUID).FirstOrDefault();
             if (entity != null)
             {
                 this.Delete(entity);
                 this.Commit();
+                return true;
             }
+
+            return false;
         }
 
         public void DeleteCaseLockByCaseId(int caseId)

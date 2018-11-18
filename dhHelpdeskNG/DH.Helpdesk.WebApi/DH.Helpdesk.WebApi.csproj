@@ -250,7 +250,10 @@
     <Compile Include="Infrastructure\Swagger\GetParamsFilter.cs" />
     <Compile Include="Infrastructure\Translate\Translator.cs" />
     <Compile Include="Infrastructure\Translate\Translation.cs" />
+    <Compile Include="Models\CaseLockInputModel.cs" />
+    <Compile Include="Models\CaseUnLockInputModel.cs" />
     <Compile Include="Models\ClientLogItemModel.cs" />
+    <Compile Include="Models\ExtendCaseLockInput.cs" />
     <Compile Include="Models\LoginUserInputModel.cs" />
     <Compile Include="Models\RefreshTokenInputModel.cs" />
     <Compile Include="Startup.cs" />

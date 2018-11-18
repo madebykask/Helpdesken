@@ -3,11 +3,15 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
 import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType } from '../../models';
-import { forkJoin } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import { forkJoin, Observable, Subject, Subscription } from 'rxjs';
+import { switchMap, take, takeUntil, map } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, Channels } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/header-event-data';
+import { AlertsService } from 'src/app/helpers/alerts/alerts.service';
+import { interval } from 'rxjs';
+import 'rxjs/add/operator/map'
+import { AuthenticationService, AuthenticationStateService } from 'src/app/services/authentication';
 
 @Component({
   selector: 'app-case-edit',
@@ -22,15 +26,21 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     dataSource: OptionsDataSource;
     isLoaded = false;
     form: FormGroup;   
+    private ownsLock = false;
+    private destroy$ = new Subject();    
 
     tabsMenuSettings = {};
+    private caseLockIntervalSub: Subscription = null;
 
     //ctor
     constructor(private route: ActivatedRoute, 
-                private caseService: CaseService, 
+                private caseService: CaseService,                 
                 private router: Router, 
+                private authenticationService: AuthenticationService,
+                private authStateService:AuthenticationStateService,
                 private translateService: TranslateService, 
-                private commService: CommunicationService) {                    
+                private commService: CommunicationService,
+                private alertService: AlertsService) {
         if (this.route.snapshot.paramMap.has('id')) {
             this.caseId = +this.route.snapshot.paramMap.get('id');
         } else {
@@ -67,7 +77,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
                         const filter = this.getCaseOptionsFilter(this.caseData);
                         return this.caseService.getCaseOptions(filter);
                     })
-                );
+                );        
             
                 forkJoin(caseSections$, caseData$)
                 .pipe(
@@ -81,16 +91,64 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     }
 
     private processCaseDataResponse(data){
+        this.ownsLock = false;
         this.caseData = data;
         let controls: any = {};
-            data.fields.forEach(field => {
-                controls[field.name] = new FormControl({value: field.value || '', disabled: true});                        
-            });           
+        data.fields.forEach(field => {
+            controls[field.name] = new FormControl({value: field.value || '', disabled: true});                        
+        });           
+
         this.form = new FormGroup(controls);
+        
+        let caseLock  = this.caseData.caseLock;
+
+        let currentUser =  this.authStateService.getUser();
+
+        if (this.caseId > 0) {
+            this.ownsLock = !caseLock.isLocked;
+
+            if (caseLock.isLocked) {
+                //todo: translate messages
+                let notice =                    
+                    (caseLock.isLocked && caseLock.userId === currentUser.id) ?
+                        "OBS! Du har redan oppnat detta arende i en annan session." :
+                        `OBS! Detta arende ar oppnat av ${caseLock.userFullName}"`;                
+                this.alertService.warning(notice);
+            } else if (caseLock.timerInterval > 0) { 
+                //run extend case lock at specified interval
+                this.caseLockIntervalSub = 
+                    interval(caseLock.timerInterval * 1000).subscribe(x => {                        
+                        console.log('>>> timer interval called: ' + (x || 0));
+                        this.caseService.ReExtendedCaseLock(caseLock.lockGuid, caseLock.extendValue)
+                            .subscribe(res => {
+                                if (res === false) {
+                                    this.ownsLock = false;
+                                    this.caseLockIntervalSub.unsubscribe();
+                                    this.caseLockIntervalSub = null;
+                                }
+                            }, error => {
+                                //todo: handle error 
+                            });
+                    });
+            }
+        }
     }
 
     ngOnDestroy() {
         this.commService.publish(Channels.Header, new HeaderEventData(true));
+        this.destroy$.next();
+        
+        if (this.caseLockIntervalSub) {
+            this.caseLockIntervalSub.unsubscribe();
+        }
+
+        let caseLock = this.caseData.caseLock;
+        //unlock the case if required
+        if (this.caseId > 0 && this.ownsLock) {
+            //console.log('>>> Unlocking case');
+            this.caseService.UnLockCase(caseLock.lockGuid);
+        }
+        //console.log('>>> case edit: destroy called!');
     }
 
     hasField(name: string): boolean {

@@ -18,9 +18,11 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
         IQueryable<ICaseLockOverview> GetLockedCases(int[] caseIds, int bufferTime);
         CaseLock GetCaseLockByGUID(Guid lockGUID);
 
-        ICaseLockOverview GetCaseLockByCaseId(int caseId);
+        ICaseLockOverview GetCaseLockOverviewByCaseId(int caseId);
 
         IDictionary<int, ICaseLockOverview> GetCasesLock(int[] caseIds);
+
+        CaseLock GetCaseLockByCaseId(int caseId);
 
         void CaseLockCleanUp();
         
@@ -30,7 +32,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 
         void UnlockCaseByCaseId(int caseId);
 
-        void UnlockCaseByGUID(Guid lockGUID);
+        bool UnlockCaseByGUID(Guid lockGUID);
 
         void DeleteCaseLockByCaseId(int caseId);
     }

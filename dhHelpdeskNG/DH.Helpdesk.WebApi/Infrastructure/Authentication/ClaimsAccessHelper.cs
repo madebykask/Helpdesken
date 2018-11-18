@@ -39,7 +39,8 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Authentication
         {
             var userGroupIdStr = identity.GetClaims().FindFirstValue(ClaimTypes.Role);
 
-            if(string.IsNullOrWhiteSpace(userGroupIdStr)) throw new Exception("No UserGroupId/Role claim found.");
+            if (string.IsNullOrWhiteSpace(userGroupIdStr))
+                throw new Exception("No UserGroupId/Role claim found.");
 
             return int.Parse(userGroupIdStr);
         }

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Results;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.OldComponents;
@@ -15,13 +16,14 @@ using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Models.Case.Field;
+using DH.Helpdesk.Services.Enums;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.ActionResults;
 using DH.Helpdesk.WebApi.Infrastructure.Authentication;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
-using DH.Helpdesk.WebApi.Infrastructure.Translate;
+using DH.Helpdesk.WebApi.Models;
 using DateTime = System.DateTime;
 
 namespace DH.Helpdesk.WebApi.Controllers
@@ -42,15 +44,17 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ISupplierService _supplierService;
         private readonly ISettingService _customerSettingsService;
         private readonly ITranslateCacheService _translateCacheService;
+        private readonly ICaseLockService _caseLockService;
 
         #region ctor()
 
         public CaseController(ICaseService caseService, ICaseFileService caseFileService, ICaseFieldSettingService caseFieldSettingService,
             IMailTemplateService mailTemplateService, IUserService userSerivice, IBaseCaseSolutionService caseSolutionService,
             ICustomerUserService customerUserService, IUserService userService, IWorkingGroupService workingGroupService,
-            ISupplierService supplierService, ISettingService customerSettingsService,
+            ISupplierService supplierService, ISettingService customerSettingsService, ICaseLockService caseLockService,
             ITranslateCacheService translateCacheService)
         {
+            _caseLockService = caseLockService;
             _caseService = caseService;
             _caseFileService = caseFileService;
             _caseFieldSettingService = caseFieldSettingService;
@@ -66,6 +70,61 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         #endregion
+        
+        // 
+        // isLocked - already locked by ither
+        //todo: add permissions checks
+        //todo: add sessionId support
+        [HttpPost]
+        [Route("lock")] //ex: /api/Case/lock?cid=1
+        public IHttpActionResult AcquireCaseLock([FromBody]CaseLockInputModel input)
+        {
+            var model = GetCaseLockModel(input.CaseId, input.SessionId);
+            return Ok(model);
+        }
+
+        private CaseLockModel GetCaseLockModel(int caseId, string sessionId)
+        {
+            Guid lockGuid;
+            var isSuccess = _caseLockService.TryAcquireCaseLock(caseId, UserId, sessionId, out lockGuid);
+            var caseLock = _caseLockService.GetCaseLockByGUID(lockGuid);
+            var caseLockSettings = _caseLockService.GetCaseLockSettings();
+
+            var model = new CaseLockModel()
+            {
+                IsLocked = !isSuccess,
+                CaseId = caseId,
+                UserId = caseLock.UserId,
+                LockGuid = caseLock.LockGUID.ToString(),
+                ExtendValue = caseLockSettings.CaseLockExtendTime,
+                ExtendedTime = caseLock.ExtendedTime,
+                TimerInterval = caseLockSettings.CaseLockTimer,
+                BrowserSession = caseLock.BrowserSession ?? "",
+                CreatedTime = caseLock.CreatedTime,
+                UserFullName = caseLock.User != null ? $"{caseLock.User.FirstName} {caseLock.User.SurName}".Trim() : string.Empty,
+            };
+            return model;
+        }
+
+        [HttpPost]
+        //[CheckUserCasePermissions(CaseIdParamName = "caseId")] ?
+        [Route("unlock")] //ex: /api/Case/unlock?cid=1
+        public IHttpActionResult UnlockCase([FromBody]CaseUnLockInputModel input)
+        {
+            //todo: make request async
+            var res =_caseLockService.UnlockCaseByGUID(input.LockGuid);
+            return Ok(res);
+        }
+
+        [HttpPost]
+        //[CheckUserCasePermissions(CaseIdParamName = "caseId")]?
+        [Route("extendlock")]
+        public IHttpActionResult ExtendCaseLock([FromBody] ExtendCaseLockInputModel input)
+        {
+            //todo: make request async
+            var isSuccess = _caseLockService.ReExtendLockCase(input.LockGuid, input.ExtendValue);
+            return Ok(isSuccess);
+        }
 
         /// <summary>
         /// Get files content. Used to download files.
@@ -82,9 +141,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             var fileContent = _caseFileService.GetCaseFile(cid, caseId, fileId, true);
             
             IHttpActionResult res = new FileResult(fileContent.FileName, fileContent.Content, Request, inline ?? false);
-
             return Task.FromResult(res);
         }
+
+       
 
         /// <summary>
         /// Get case data.
@@ -94,36 +154,34 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpGet]
         [CheckUserCasePermissions(CaseIdParamName = "caseId")]
         [Route("{caseId:int}")]
-        public async Task<CaseEditOutputModel> Get([FromUri]int langId, [FromUri]int caseId, [FromUri]int cid)
+        public async Task<CaseEditOutputModel> Get([FromUri]int langId, [FromUri]int caseId, [FromUri]int cid, [FromUri]string sessionId = null)
         {
             var model = new CaseEditOutputModel();
 
             var userId = UserId;
             var languageId = langId;
             var currentCase = _caseService.GetCaseById(caseId);
-            var currentcid = cid;
+            var currentCid = cid;
             var userGroupId = User.Identity.GetGroupId();
-            if (currentCase.Customer_Id != currentcid)
-                throw new Exception(
-                    $"Case customer({currentCase.Customer_Id}) and current customer({currentcid}) are different"); //TODO: how to react?
 
-            var customerUserSetting = _customerUserService.GetCustomerUserSettings(currentcid, userId);
+            if (currentCase.Customer_Id != currentCid)
+                throw new Exception($"Case customer({currentCase.Customer_Id}) and current customer({currentCid}) are different"); //TODO: how to react?
+
+            var customerUserSetting = _customerUserService.GetCustomerUserSettings(currentCid, userId);
             if (customerUserSetting == null)
-            {
-                throw new Exception(
-                    $"No customer settings for this customer '{currentcid}' and user '{userId}'");
-            }
+                throw new Exception($"No customer settings for this customer '{currentCid}' and user '{userId}'");
+            
 
-            var customerSettings = _customerSettingsService.GetCustomerSettings(currentcid);
+            var customerSettings = _customerSettingsService.GetCustomerSettings(currentCid);
             var userOverview = await _userSerivice.GetUserOverviewAsync(UserId);//TODO: use cached version!
-            var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(currentcid);
-            var caseFieldTranslations = await _caseFieldSettingService.GetCustomerCaseTranslationsAsync(currentcid);
+            var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(currentCid);
+            var caseFieldTranslations = await _caseFieldSettingService.GetCustomerCaseTranslationsAsync(currentCid);
 
-            //LockCase(id, userId, true, activeTab);//TODO: Mark as locked
+            model.CaseLock = GetCaseLockModel(caseId, sessionId);
+            //model.CaseUnlockAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);//TODO: lock implementation
+
             //model.CanGetRelatedCases = userGroupId > UserGroup.User;//TODO: Move to helper extension
             //model.CurrentUserRole = userGroupId;//is really required?
-            //model.CaseLock = caseLocked;//TODO: lock implementation
-            //model.CaseUnlockAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);//TODO: lock implementation
             //model.MailTemplates = _mailTemplateService.GetCustomMailTemplatesList(currentCase.Customer_Id).ToList();//TODO:
 
             model.Fields = new List<IBaseCaseField>();
@@ -1281,7 +1339,27 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             #endregion
 
+            //calc case edit mode
+            model.EditMode = (int)CalcCaseEditMode(currentCase,  model.CaseLock);
+
             return await Task.FromResult(model);
+        }
+
+        // todo: Move to separate class or service to be shared across other projects
+        private CaseAccessMode CalcCaseEditMode(Case @case, CaseLockModel lockModel)
+        {
+            //todo: add other logic (deps, wg access checks) from dhHelpdesk_NG.Web\Controllers\CasesController.cs.EDitMode()
+            if (@case.FinishingDate.HasValue)
+            {
+                return CaseAccessMode.ReadOnly;
+            }
+
+            if (lockModel != null && lockModel.IsLocked)
+            {
+                return CaseAccessMode.ReadOnly;
+            }
+
+            return CaseAccessMode.FullAccess;
         }
 
         private IList<CaseFileModel> GetCaseFilesModel(int caseId)

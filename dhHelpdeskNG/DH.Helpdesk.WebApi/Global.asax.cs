@@ -1,16 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
 using System.Web;
-using System.Web.Http;
-using System.Web.Routing;
-using System.Web.SessionState;
-using Autofac;
-using Autofac.Integration.Owin;
-using DH.Helpdesk.Services.Infrastructure;
-using DH.Helpdesk.WebApi.Infrastructure.Config;
 
 namespace DH.Helpdesk.WebApi
 {
@@ -43,9 +32,5 @@ namespace DH.Helpdesk.WebApi
         //{
         //    return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath != null && HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.StartsWith(WebApiConfig.UrlPrefixRelative);
         //}
-        
-
-
     }
-
 }

@@ -1098,20 +1098,23 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult IsCaseAvailable(int caseId, DateTime caseChangedTime, string lockGuid)
         {
-            var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
+            var caseLock = this._caseLockService.GetCaseLockOverviewByCaseId(caseId);
 
 
-            if (caseLock != null && caseLock.LockGUID == new Guid(lockGuid) && caseLock.ExtendedTime >= DateTime.Now)
+            if (caseLock != null && 
+                caseLock.LockGUID == new Guid(lockGuid) && 
+                caseLock.ExtendedTime >= DateTime.Now)
+            {
                 // Case still is locked by me
                 return Json(true);
-            else
-                if (caseLock == null || (caseLock != null && !(caseLock.ExtendedTime >= DateTime.Now)))
+            }
+            else if (caseLock == null || 
+                     (caseLock != null && !(caseLock.ExtendedTime >= DateTime.Now)))
             {
                 //case is not locked by me or is not locked at all 
-                var curCase = this._caseService.GetCaseById(caseId);
+                var curCase = _caseService.GetCaseById(caseId);
                 if (curCase != null && curCase.ChangeTime.RoundTick() == caseChangedTime.RoundTick())
-                    //case is not updated yet by any other
-                    return Json(true);
+                    return Json(true);//case is not updated yet by any other
                 else
                     return Json(false);
             }
@@ -4293,8 +4296,11 @@ namespace DH.Helpdesk.Web.Controllers
         /// The result.
         /// </returns>
         /// 
-        private Enums.AccessMode EditMode(CaseInputViewModel m, string topic, IList<DHDomain.Department> departmensForUser,
-                                          List<CustomerWorkingGroupForUser> accessToWorkinggroups, bool temporaryHasAccessToWG = false)
+        private Enums.AccessMode EditMode(CaseInputViewModel m, 
+                                          string topic, 
+                                          IList<Department> departmensForUser,
+                                          List<CustomerWorkingGroupForUser> accessToWorkinggroups, 
+                                          bool temporaryHasAccessToWG = false)
         {
             var gs = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
@@ -7063,8 +7069,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         private CaseLockModel GetCaseLockModel(int caseId, int userId, bool isNeedLock = true, string activeTab = "")
         {
-            var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
-            var globalSettings = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
+            var caseLock = _caseLockService.GetCaseLockOverviewByCaseId(caseId);
+            var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
 
             return GetCaseLockModel(caseLock, caseId, userId, globalSettings, isNeedLock, activeTab);
         }

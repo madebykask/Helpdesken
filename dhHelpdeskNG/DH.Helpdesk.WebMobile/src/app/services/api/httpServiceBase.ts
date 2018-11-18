@@ -69,19 +69,28 @@ export abstract class HttpApiServiceBase {
         }));
   }
 
-  protected buildResourseUrl(resourceName: string, params: object = null, addCustomerId = true, addLanguage = false) {
+    protected buildResourseUrl(resourceName: string, params: object = null, addCustomerId = true, addLanguage = false, addSessionId = false) {
       let urlParams: string = null;
       const userData = this.localStorageService.getCurrentUser();
+        
       if (addCustomerId === true) {
           if (userData !== null) {
               params = Object.assign({}, params || {}, {cid: userData.currentData.selectedCustomerId});
           }
       }
+
       if (addLanguage === true) {
           if (userData !== null) {
               params = Object.assign({}, params || {}, {langid: userData.currentData.selectedLanguageId});
           }
       }
+
+        if (addSessionId === true) {
+            if (userData !== null) {
+                params = Object.assign({}, params || {}, { sessionId: userData.authData.sessionId })
+            }
+        }
+
       if (params) {
           const str = Object.keys(params).map(function(key) {
               return key + '=' + encodeURIComponent(params[key]);

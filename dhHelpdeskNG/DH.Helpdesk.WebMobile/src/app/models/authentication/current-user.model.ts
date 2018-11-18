@@ -6,7 +6,7 @@ export class CurrentUser {
         this.currentData = new UserData();
     }
 
-    id: number;
+    id: number;    
     version: string;
     authData: UserAuthenticationData;
     currentData: UserData;      
@@ -16,9 +16,8 @@ export class CurrentUser {
         authData.access_token = data.access_token;
         authData.refresh_token = data.refresh_token;
         authData.expires_in = data.expires_in;
-        authData.recievedAt = new Date();
+        authData.recievedAt = new Date();        
         authData.sessionId = UuidGenerator.createUuid();
-        
         let user = new CurrentUser();
         user.authData = authData;
 
