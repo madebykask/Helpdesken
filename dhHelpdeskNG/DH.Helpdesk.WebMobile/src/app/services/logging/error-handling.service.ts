@@ -6,6 +6,7 @@ import { AlertsService } from '../../helpers/alerts/alerts.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ClientLogApiService } from '../api';
+import { AlertType } from 'src/app/helpers/alerts/alert-types';
 
 @Injectable({providedIn: 'root'})
 export class ErrorHandlingService {
@@ -84,7 +85,7 @@ export class ErrorHandlingService {
         this.logService.error(errorMsg);
 
         // raise error alert to display user error message on ui 
-        this.alertsService.error(`${errorMsg}`);
+        this.alertsService.showMessage(`${errorMsg}`, AlertType.Error);
     }
 
     // handles warning
@@ -92,8 +93,8 @@ export class ErrorHandlingService {
 
         this.logService.warn(userMsg);
 
-        // raise error alert to display user error message on ui 
-        this.alertsService.warning(`${userMsg}`);
+        //raise error alert to display user error message on ui 
+        this.alertsService.showMessage(`${userMsg}`, AlertType.Warning);
     }
 
     private buildErrorAlertMessage(errorId:string) : string {

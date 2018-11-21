@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
 import { map, defaultIfEmpty, take, tap, switchMap } from 'rxjs/operators';
-import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel, BaseCaseField, KeyValue, MailToTicketInfo, CaseEditMode, CaseSolution, CaseLockInfo } from '../../models';
+import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel, BaseCaseField, KeyValue, MailToTicketInfo, CaseEditMode, CaseSolution, CaseLockModel } from '../../models';
 import { throwError, forkJoin, empty, Observable, of } from 'rxjs';
 import { CaseOptions } from '../../models/case/case-options.model';
 import { CaseOrganizationService } from '../case-organization';
@@ -103,8 +103,7 @@ export class CaseService extends HttpApiServiceBase {
                     }));
     }
 
-    getCaseSections() {
-        var user = this.localStorageService.getCurrentUser();
+    getCaseSections() {        
         return this.getJson(this.buildResourseUrl('/api/casesections/get', null, true, true)) // TODO: error handling
             .pipe(
                 take(1),
@@ -135,7 +134,7 @@ export class CaseService extends HttpApiServiceBase {
         let fields = json.fields as any[] || new Array();
         let caseSolution = json.caseSolution ? <CaseSolution>json.CaseSolution : null;
         let mailToTickets:MailToTicketInfo = json.mailToTickets ? <MailToTicketInfo>json.mailToTickets : null;
-        let caseLock = <CaseLockInfo>json.caseLock;
+        let caseLock = <CaseLockModel>json.caseLock;
         let editMode = <CaseEditMode>json.editMode;
 
         return Object.assign(new CaseEditInputModel(), json, {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
 using DH.Helpdesk.Models.Case;
@@ -21,12 +20,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             _mapper = mapper;
         }
 
-        // 
         // isLocked - already locked by ither
         //todo: add permissions checks
-        //todo: add sessionId support
         [HttpPost]
-        [Route("lock")] //ex: /api/Case/lock?cid=1
+        [Route("lock")] //ex: /api/case/lock?cid=1
         public async Task<IHttpActionResult> AcquireCaseLock([FromBody]CaseLockInputModel input)
         {
             var model = await GetCaseLockModel(input.CaseId, input.SessionId).ConfigureAwait(false);

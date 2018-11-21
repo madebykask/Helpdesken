@@ -1,34 +1,43 @@
 ﻿import { Injectable} from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { AlertType, Alert } from './alert-types';
+import { AlertType } from './alert-types';
+import { CommunicationService } from 'src/app/services/communication';
+import { mobiscroll } from '@mobiscroll/angular';
 
 @Injectable({providedIn: 'root'})
 export class AlertsService {
-
-    private alertsSubject: Subject<Alert> = new Subject<Alert>();
-    alerts$: Observable<Alert> = this.alertsSubject.asObservable();
-
-    success(msg:string) {
-        this.raiseAlert(msg, AlertType.Success);
+    
+    constructor(private comService:CommunicationService) {        
     }
 
-    info(msg: string) {
-        this.raiseAlert(msg, AlertType.Info);
-    }
-
-    warning(msg: string) {
-        this.raiseAlert(msg, AlertType.Warning);
-    }
-
-    error(msg: string) {
-        this.raiseAlert(msg, AlertType.Error);
-    }
-
-    clear() {
-        this.alertsSubject.next(null);
-    }
-
-    private raiseAlert(msg:string, alertType: AlertType) {
-        this.alertsSubject.next(new Alert(alertType, msg));
+    showMessage(message, alertType:AlertType = AlertType.Info, visibilityTimeoutSec:number = 0) {
+    
+        let alertColor = '';
+        switch (alertType) {
+            case AlertType.Success:
+                alertColor = 'success';
+                break;
+            case AlertType.Warning:
+                alertColor = 'warning';
+                break;
+            case AlertType.Info:        
+                alertColor = 'info';
+                break;
+            case AlertType.Error:
+                alertColor = 'danger';
+                break;
+            default:
+                throw 'AlertType value is not supported';
+        }
+        
+        mobiscroll.snackbar({
+            color: alertColor,
+            duration: visibilityTimeoutSec === 0 ? false: visibilityTimeoutSec * 1000, // the value is Boolean|Number, false for persistent alert
+            message: message,
+            button: {
+                icon:'fa-close',
+                action : function(){
+                }
+            }
+        });
     }
 }

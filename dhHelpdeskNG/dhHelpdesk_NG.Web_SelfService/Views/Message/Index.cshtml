@@ -31,36 +31,30 @@
             break;
     }
 
-    <div class="container-fluid dh-container">
-        <div class="">
-            <div class="container-fluid dh-container">
-                <div class="row">
-                    <div style="text-align:center;">
-                        <div class="messageDialog  alert @_dialogStyle">
-                            <div style="margin-top:15%;" class="msgBody">
-                                <img alt="" src="@_iconPath" class="messageIcon" />
-                                <br />
-                                <br />
-                                @if (!string.IsNullOrEmpty(Model.Title))
-                                {
-                                    <p style="font-size:large"> @Model.Title </p>
-                                }
-                                @if (!string.IsNullOrEmpty(Model.Details))
-                                {
-                                    <p style="font-size: medium; word-wrap:break-word;"> @Model.Details </p>
-                                }
-                            </div>
-                        </div>
-
+    <div class="container dh-container">
+        <div class="row">
+            <div class="messageContainer">
+                <div class="messageDialog alert @_dialogStyle">
+                    <div class="msgBody">
+                        <img alt="" src="@_iconPath" class="messageIcon"/>
+                        <br/>
+                        <br/>
+                        @if (!string.IsNullOrEmpty(Model.Title))
+                        {
+                            <p style="font-size: large"> @Model.Title </p>
+                        }
+                        @if (!string.IsNullOrEmpty(Model.Details))
+                        {
+                            <p style="font-size: medium; word-wrap: break-word;"> @Model.Details </p>
+                        }
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
+}
 
 @section Footer {
     @* This will hide footer section *@
-}
 }
 

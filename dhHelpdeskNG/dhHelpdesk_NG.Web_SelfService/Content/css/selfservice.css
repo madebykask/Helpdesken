@@ -1053,18 +1053,26 @@ div .multitext i {
     margin-top: -2px;
 }
 
+.messageContainer {
+    margin: 20px auto;
+    text-align: center;
+}
+
 .messageDialog {
+    background-color: #fff;
+}
+
+/*.messageDialog {
     position:fixed;
     top: 35%;
     left: 50%;
     width:36em;    
     height:25em;
     margin-top: -12em; 
-    margin-left: -18em; 
-    /*border: 1px solid #45b56d;*/
+    margin-left: -18em;   
     background-color: #fff;
-}
-
+}*/
+  
 
 @media(max-width:767px) {
    .messageDialog {

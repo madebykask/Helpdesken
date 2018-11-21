@@ -13,8 +13,7 @@ namespace DH.Helpdesk.Models.Case
         public decimal CaseNumber { get; set; }
         
         public CaseSolutionInfo CaseSolution { get; set; }
-        public int EditMode { get; set; }
-        public CaseLockModel CaseLock { get; set; }
+        //public int EditMode { get; set; }
 
         //public List<CustomMailTemplate> MailTemplates { get; set; }
         //public List<CaseFile> CaseFiles { get; set; }

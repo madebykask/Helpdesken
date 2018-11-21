@@ -104,7 +104,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(currentCid);
             var caseFieldTranslations = await _caseFieldSettingService.GetCustomerCaseTranslationsAsync(currentCid);
 
-            model.CaseLock = await GetCaseLockModel(caseId, sessionId);
+            //model.CaseLock = await GetCaseLockModel(caseId, sessionId);
             //model.CaseUnlockAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);//TODO: lock implementation
 
             //model.CanGetRelatedCases = userGroupId > UserGroup.User;//TODO: Move to helper extension
@@ -1262,7 +1262,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             #endregion
 
             //calc case edit mode
-            model.EditMode = (int)CalcCaseEditMode(currentCase,  model.CaseLock);
+            //model.EditMode = (int)CalcCaseEditMode(currentCase,  model.CaseLock);
 
             return await Task.FromResult(model);
         }

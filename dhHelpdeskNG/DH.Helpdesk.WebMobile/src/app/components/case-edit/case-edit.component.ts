@@ -2,16 +2,18 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
-import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType } from '../../models';
+import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType, CaseLockModel } from '../../models';
 import { forkJoin, Subject, Subscription, of, zip } from 'rxjs';
 import { switchMap, take, finalize, tap, delay, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, Channels } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/header-event-data';
 import { AlertsService } from 'src/app/helpers/alerts/alerts.service';
-import { interval } from 'rxjs';
 import { AuthenticationStateService } from 'src/app/services/authentication';
 import { CaseLockApiService } from 'src/app/services/api/case-lock/case-lock-api.service';
+import { AlertType } from 'src/app/helpers/alerts/alert-types';
+import { interval } from 'rxjs';
+import 'rxjs/add/operator/map'
 
 @Component({
   selector: 'app-case-edit',
@@ -26,11 +28,12 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     dataSource: OptionsDataSource;
     isLoaded = false;
     form: FormGroup;
+    tabsMenuSettings = {};
+
     private ownsLock = false;
     private destroy$ = new Subject();
-
-    tabsMenuSettings = {};
     private caseLockIntervalSub: Subscription = null;
+    private caseLock: CaseLockModel = null;
 
     constructor(private route: ActivatedRoute,
                 private caseService: CaseService,
@@ -64,7 +67,9 @@ export class CaseEditComponent implements OnInit, OnDestroy {
 
     loadCaseData(): any {
         this.isLoaded = false;
-        
+        const sessionId = this.authStateService.getUser().authData.sessionId;
+
+        const caseLock$ = this.caseLockApiService.acquireCaseLock(this.caseId, sessionId);
         const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
         const caseData$ = 
             this.caseService.getCaseData(this.caseId)
@@ -76,14 +81,14 @@ export class CaseEditComponent implements OnInit, OnDestroy {
                     })
                 );
 
-                forkJoin(caseSections$, caseData$)
-                .pipe(
+                forkJoin(caseSections$, caseData$, caseLock$).pipe(
                     take(1)
-                )
-                .subscribe(([sectionData, options]) => {
+                ).subscribe(([sectionData, options, caseLock]) => {
                     this.caseSections = sectionData;
                     this.dataSource = new OptionsDataSource(options);
+                    this.caseLock = caseLock;
                     this.isLoaded = true;
+                    this.initLock();
                 });
     }
 
@@ -95,11 +100,9 @@ export class CaseEditComponent implements OnInit, OnDestroy {
             this.caseLockIntervalSub.unsubscribe();
         }
 
-        let caseLock = this.caseData.caseLock;
         // unlock the case if required
         if (this.caseId > 0 && this.ownsLock) {
-            this.caseLockApiService.unLockCase(caseLock.lockGuid)
-              .subscribe();
+            this.caseLockApiService.unLockCase(this.caseLock.lockGuid).subscribe();
         }
     }
 
@@ -206,44 +209,38 @@ export class CaseEditComponent implements OnInit, OnDestroy {
           controls[field.name] = new FormControl({value: field.value || '', disabled: true});
       });
 
-      this.form = new FormGroup(controls);
-
-      this.initLock();
+      this.form = new FormGroup(controls);      
   }
 
-  private initLock()
-  {
-    let caseLock  = this.caseData.caseLock;
+  private initLock() {    
     let currentUser =  this.authStateService.getUser();
 
     if (this.caseId > 0) {
-      this.ownsLock = !caseLock.isLocked;
+        this.ownsLock = !this.caseLock.isLocked;
 
-      if (caseLock.isLocked) {
-          // TODO: translate messages
-          let notice =
-              (caseLock.isLocked && caseLock.userId === currentUser.id) ?
-                  'OBS! Du har redan oppnat detta arende i en annan session.' :
-                  `OBS! Detta arende ar oppnat av ${caseLock.userFullName}'`;
-          this.alertService.warning(notice);
-      } else if (caseLock.timerInterval > 0) {
-          // run extend case lock at specified interval
-          this.caseLockIntervalSub =
-              interval(caseLock.timerInterval * 1000).pipe(
-                switchMap(x => {
-                  return this.caseLockApiService.reExtendedCaseLock(caseLock.lockGuid, caseLock.extendValue);
-                },
-                // catchError(err => {})// TODO:
-                )
-              )
-              .subscribe(res => {
-                  if (res === false) {
-                      this.ownsLock = false;
-                      this.caseLockIntervalSub.unsubscribe();
-                      this.caseLockIntervalSub = null;
-                  }
-              });
-      }
+        if (this.caseLock.isLocked) {
+            // TODO: translate messages
+            let notice =
+                (this.caseLock.isLocked && this.caseLock.userId === currentUser.id) ?
+                    'OBS! Du har redan oppnat detta arende i en annan session.' :
+                    `OBS! Detta arende ar oppnat av ${this.caseLock.userFullName}'`;
+            this.alertService.showMessage(notice, AlertType.Warning);
+        } else if (this.caseLock.timerInterval > 0) {
+            // run extend case lock at specified interval
+            this.caseLockIntervalSub =
+                interval(this.caseLock.timerInterval * 1000).subscribe(x => {
+                    console.log('>>> timer interval called: ' + (x || 0));
+                    this.caseLockApiService.reExtendedCaseLock(this.caseLock.lockGuid, this.caseLock.extendValue).subscribe(res => {
+                            if (res === false) {
+                                this.ownsLock = false;
+                                this.caseLockIntervalSub.unsubscribe();
+                                this.caseLockIntervalSub = null;
+                            }
+                        }, error => {
+                            // TODO: handle error 
+                        });
+                });
+        }
     }
   }
 }

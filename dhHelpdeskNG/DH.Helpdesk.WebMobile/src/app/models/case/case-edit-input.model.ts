@@ -5,9 +5,7 @@ export class CaseEditInputModel {
     caseNumber: number;
     fields: IBaseCaseField<any>[];
     caseSolution: CaseSolution;
-    mailToTickets: MailToTicketInfo[];
-    editMode: CaseEditMode;
-    caseLock: CaseLockInfo;
+    mailToTickets: MailToTicketInfo[];    
 }
 
 export enum CaseEditMode {
@@ -16,7 +14,7 @@ export enum CaseEditMode {
     FullAccess = 2
 }
 
-export class CaseLockInfo {
+export class CaseLockModel {
     isLocked: boolean;
     userId: number;
     lockGuid: string;

@@ -4,6 +4,7 @@ import { LocalStorageService } from "../../local-storage";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { take, map } from "rxjs/operators";
+import { CaseLockModel } from "src/app/models";
 
 
 @Injectable({ providedIn: 'root' })
@@ -11,6 +12,15 @@ export class CaseLockApiService extends HttpApiServiceBase {
 
   constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) {
     super(http, localStorageService);
+  }
+
+  acquireCaseLock(caseId: number, sessionId: string): Observable<CaseLockModel> {
+    const data = {
+        caseId: caseId,
+        sessionId: sessionId
+    };
+    const requestUrl = this.buildResourseUrl('/api/case/lock', null, true, false);
+    return this.postJson<CaseLockModel>(requestUrl, data);
   }
 
   reExtendedCaseLock(lockGuid: string, extendValue: number): Observable<Boolean>{
