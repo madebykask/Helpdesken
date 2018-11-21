@@ -29,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private _authenticationService: AuthenticationStateService, 
     private _logger: LoggerService,
-    private _infoLogger: InfoLoggerService,    
+    private _infoLogger: InfoLoggerService,
     private _router: Router,
     private alertsService: AlertsService) {
     mobiscroll.settings = { theme: 'ios', lang: 'en', labelStyle: 'stacked' };
@@ -52,7 +52,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.alertsService.alerts$.pipe(
       takeUntil(this._destroy$)
-    ).subscribe(alert => this.processNewAlert(alert));     
+    ).subscribe(alert => this.processNewAlert(alert));
     
     // Checks if should display install popup notification:
 /*     if (this.isIos() && this.isInStandaloneMode()) {
@@ -72,7 +72,7 @@ export class AppComponent implements OnInit, OnDestroy {
       message: alert.message,
       button: {
           icon:'fa-close',
-          action : function(){                    
+          action : function(){
           }
       }
       });

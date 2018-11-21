@@ -10,12 +10,12 @@ using DH.Helpdesk.WebApi.Models;
 namespace DH.Helpdesk.WebApi.Controllers
 {
     [RoutePrefix("api/case")]
-    public class CaseLockController : BaseApiController
+    public class CaseLocksController : BaseApiController
     {
         private readonly ICaseLockService _caseLockService;
         private readonly IMapper _mapper;
 
-        public CaseLockController(ICaseLockService caseLockService, IMapper mapper)
+        public CaseLocksController(ICaseLockService caseLockService, IMapper mapper)
         {
             _caseLockService = caseLockService;
             _mapper = mapper;

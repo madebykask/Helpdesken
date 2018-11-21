@@ -37,7 +37,6 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseFileService _caseFileService;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly IMailTemplateService _mailTemplateService;
-        private readonly IUserService _userSerivice;
         private readonly IBaseCaseSolutionService _caseSolutionService;
         private readonly ICustomerUserService _customerUserService;
         private readonly IUserService _userService;
@@ -51,7 +50,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         #region ctor()
 
         public CaseController(ICaseService caseService, ICaseFileService caseFileService, ICaseFieldSettingService caseFieldSettingService,
-            IMailTemplateService mailTemplateService, IUserService userSerivice, IBaseCaseSolutionService caseSolutionService,
+            IMailTemplateService mailTemplateService, IBaseCaseSolutionService caseSolutionService,
             ICustomerUserService customerUserService, IUserService userService, IWorkingGroupService workingGroupService,
             ISupplierService supplierService, ISettingService customerSettingsService, ITranslateCacheService translateCacheService,
             ICaseLockService caseLockService,
@@ -61,7 +60,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             _caseFileService = caseFileService;
             _caseFieldSettingService = caseFieldSettingService;
             _mailTemplateService = mailTemplateService;
-            _userSerivice = userSerivice;
             _customerUserService = customerUserService;
             _userService = userService;
             _workingGroupService = workingGroupService;
@@ -74,24 +72,6 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         #endregion
-
-        /// <summary>
-        /// Get files content. Used to download files.
-        /// </summary>
-        /// <param name="caseId"></param>
-        /// <param name="fileId"></param>
-        /// <param name="cid"></param>
-        /// <returns>File</returns>
-        [HttpGet]
-        [CheckUserCasePermissions(CaseIdParamName = "caseId")]
-        [Route("{caseId:int}/File/{fileId:int}")] //ex: /api/Case/123/File/1203?cid=1
-        public Task<IHttpActionResult> File([FromUri]int caseId, [FromUri]int fileId, [FromUri]int cid, bool? inline = false)
-        {
-            var fileContent = _caseFileService.GetCaseFile(cid, caseId, fileId, true);
-            
-            IHttpActionResult res = new FileResult(fileContent.FileName, fileContent.Content, Request, inline ?? false);
-            return Task.FromResult(res);
-        }
 
         /// <summary>
         /// Get case data.
@@ -120,7 +100,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             
 
             var customerSettings = _customerSettingsService.GetCustomerSettings(currentCid);
-            var userOverview = await _userSerivice.GetUserOverviewAsync(UserId);//TODO: use cached version!
+            var userOverview = await _userService.GetUserOverviewAsync(UserId);//TODO: use cached version!
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(currentCid);
             var caseFieldTranslations = await _caseFieldSettingService.GetCustomerCaseTranslationsAsync(currentCid);
 
