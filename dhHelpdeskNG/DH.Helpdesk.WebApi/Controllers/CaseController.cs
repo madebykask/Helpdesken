@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
+using AutoMapper;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.OldComponents;
@@ -45,16 +46,17 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ISettingService _customerSettingsService;
         private readonly ITranslateCacheService _translateCacheService;
         private readonly ICaseLockService _caseLockService;
+        private readonly IMapper _mapper;
 
         #region ctor()
 
         public CaseController(ICaseService caseService, ICaseFileService caseFileService, ICaseFieldSettingService caseFieldSettingService,
             IMailTemplateService mailTemplateService, IUserService userSerivice, IBaseCaseSolutionService caseSolutionService,
             ICustomerUserService customerUserService, IUserService userService, IWorkingGroupService workingGroupService,
-            ISupplierService supplierService, ISettingService customerSettingsService, ICaseLockService caseLockService,
-            ITranslateCacheService translateCacheService)
+            ISupplierService supplierService, ISettingService customerSettingsService, ITranslateCacheService translateCacheService,
+            ICaseLockService caseLockService,
+            IMapper mapper)
         {
-            _caseLockService = caseLockService;
             _caseService = caseService;
             _caseFileService = caseFileService;
             _caseFieldSettingService = caseFieldSettingService;
@@ -67,64 +69,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             _customerSettingsService = customerSettingsService;
             _translateCacheService = translateCacheService;
             _caseSolutionService = caseSolutionService;
+            _caseLockService = caseLockService;
+            _mapper = mapper;
         }
 
         #endregion
-        
-        // 
-        // isLocked - already locked by ither
-        //todo: add permissions checks
-        //todo: add sessionId support
-        [HttpPost]
-        [Route("lock")] //ex: /api/Case/lock?cid=1
-        public IHttpActionResult AcquireCaseLock([FromBody]CaseLockInputModel input)
-        {
-            var model = GetCaseLockModel(input.CaseId, input.SessionId);
-            return Ok(model);
-        }
-
-        private CaseLockModel GetCaseLockModel(int caseId, string sessionId)
-        {
-            Guid lockGuid;
-            var isSuccess = _caseLockService.TryAcquireCaseLock(caseId, UserId, sessionId, out lockGuid);
-            var caseLock = _caseLockService.GetCaseLockByGUID(lockGuid);
-            var caseLockSettings = _caseLockService.GetCaseLockSettings();
-
-            var model = new CaseLockModel()
-            {
-                IsLocked = !isSuccess,
-                CaseId = caseId,
-                UserId = caseLock.UserId,
-                LockGuid = caseLock.LockGUID.ToString(),
-                ExtendValue = caseLockSettings.CaseLockExtendTime,
-                ExtendedTime = caseLock.ExtendedTime,
-                TimerInterval = caseLockSettings.CaseLockTimer,
-                BrowserSession = caseLock.BrowserSession ?? "",
-                CreatedTime = caseLock.CreatedTime,
-                UserFullName = caseLock.User != null ? $"{caseLock.User.FirstName} {caseLock.User.SurName}".Trim() : string.Empty,
-            };
-            return model;
-        }
-
-        [HttpPost]
-        //[CheckUserCasePermissions(CaseIdParamName = "caseId")] ?
-        [Route("unlock")] //ex: /api/Case/unlock?cid=1
-        public IHttpActionResult UnlockCase([FromBody]CaseUnLockInputModel input)
-        {
-            //todo: make request async
-            var res =_caseLockService.UnlockCaseByGUID(input.LockGuid);
-            return Ok(res);
-        }
-
-        [HttpPost]
-        //[CheckUserCasePermissions(CaseIdParamName = "caseId")]?
-        [Route("extendlock")]
-        public IHttpActionResult ExtendCaseLock([FromBody] ExtendCaseLockInputModel input)
-        {
-            //todo: make request async
-            var isSuccess = _caseLockService.ReExtendLockCase(input.LockGuid, input.ExtendValue);
-            return Ok(isSuccess);
-        }
 
         /// <summary>
         /// Get files content. Used to download files.
@@ -143,8 +92,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             IHttpActionResult res = new FileResult(fileContent.FileName, fileContent.Content, Request, inline ?? false);
             return Task.FromResult(res);
         }
-
-       
 
         /// <summary>
         /// Get case data.
@@ -177,7 +124,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(currentCid);
             var caseFieldTranslations = await _caseFieldSettingService.GetCustomerCaseTranslationsAsync(currentCid);
 
-            model.CaseLock = GetCaseLockModel(caseId, sessionId);
+            model.CaseLock = await GetCaseLockModel(caseId, sessionId);
             //model.CaseUnlockAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);//TODO: lock implementation
 
             //model.CanGetRelatedCases = userGroupId > UserGroup.User;//TODO: Move to helper extension
@@ -1447,6 +1394,12 @@ namespace DH.Helpdesk.WebApi.Controllers
             return caseFieldSettings.FirstOrDefault(s => s.Name.Replace("tblLog_", "tblLog.").Equals(fieldName, StringComparison.CurrentCultureIgnoreCase));
         }
 
+        private async Task<CaseLockModel> GetCaseLockModel(int caseId, string sessionId)
+        {
+            var caseLock = await _caseLockService.TryAcquireCaseLockAsync(caseId, UserId, sessionId);
 
+            var model = _mapper.Map<CaseLockModel>(caseLock);
+            return model;
+        }
     }
 }

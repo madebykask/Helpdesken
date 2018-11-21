@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case;
+﻿using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Models.Case;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -21,6 +22,8 @@ namespace DH.Helpdesk.Services.Services
 
         CaseLock GetCaseLock(int caseId);
 
+        Task<CaseLock> GetCaseLockAsync(int caseId);
+
         CaseLock GetCaseLockByGUID(Guid lockGUID);
 
         ICaseLockOverview GetCaseLockOverviewByCaseId(int caseId);
@@ -32,16 +35,19 @@ namespace DH.Helpdesk.Services.Services
         void CaseLockCleanUp();
 
         CaseLockSettings GetCaseLockSettings();
+        Task<CaseLockSettings> GetCaseLockSettingsAsync();
 
-        bool TryAcquireCaseLock(int caseId, int userId, string sessionId, out Guid caseLockGuid);
+        Task<CaseLockInfo> TryAcquireCaseLockAsync(int caseId, int userId, string sessionId);
 
         void LockCase(CaseLock caseLock);
 
         bool ReExtendLockCase(Guid lockGUID, int extendedTimeInSecond);
+        Task<bool> ReExtendLockCaseAsync(Guid lockGUID, int extendedTimeInSecond);
 
         void UnlockCaseByCaseId(int caseId);
 
         bool UnlockCaseByGUID(Guid lockGUID);
+        Task<bool> UnlockCaseByGUIDAsync(Guid lockGUID);
 
         void DeleteCaseLockByCaseId(int caseId);
     }

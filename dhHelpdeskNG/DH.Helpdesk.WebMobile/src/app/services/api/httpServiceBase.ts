@@ -69,7 +69,7 @@ export abstract class HttpApiServiceBase {
         }));
   }
 
-    protected buildResourseUrl(resourceName: string, params: object = null, addCustomerId = true, addLanguage = false, addSessionId = false) {
+    protected buildResourseUrl(resourceName: string, params: object = null, addCustomerId = true, addLanguage = false) {
       let urlParams: string = null;
       const userData = this.localStorageService.getCurrentUser();
         
@@ -84,12 +84,6 @@ export abstract class HttpApiServiceBase {
               params = Object.assign({}, params || {}, {langid: userData.currentData.selectedLanguageId});
           }
       }
-
-        if (addSessionId === true) {
-            if (userData !== null) {
-                params = Object.assign({}, params || {}, { sessionId: userData.authData.sessionId })
-            }
-        }
 
       if (params) {
           const str = Object.keys(params).map(function(key) {

@@ -1,4 +1,6 @@
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -8,6 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IGlobalSettingRepository : IRepository<GlobalSetting>
     {
         GlobalSetting Get();
+        Task<GlobalSetting> GetAsync();
     }
 
 	public class GlobalSettingRepository : RepositoryBase<GlobalSetting>, IGlobalSettingRepository
@@ -20,6 +23,11 @@ namespace DH.Helpdesk.Dal.Repositories
 	    public GlobalSetting Get()
 	    {
 	        return Table.FirstOrDefault();
+	    }
+
+	    public Task<GlobalSetting> GetAsync()
+	    {
+	        return Table.FirstOrDefaultAsync();
 	    }
 	}
 }

@@ -10,6 +10,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Mapper
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<ModelToEntitiesMappingProfile>();
+                cfg.AddProfile<EntitiesToModelMappingProfile>();
             });
 
             return config;

@@ -1,13 +1,13 @@
 import { CaseSectionType } from "..";
 
-export class CaseEditInputModel { 
+export class CaseEditInputModel {
     id: number;
     caseNumber: number;
-    fields: IBaseCaseField<any>[];    
+    fields: IBaseCaseField<any>[];
     caseSolution: CaseSolution;
     mailToTickets: MailToTicketInfo[];
     editMode: CaseEditMode;
-    caseLock: CaseLockInfo; 
+    caseLock: CaseLockInfo;
 }
 
 export enum CaseEditMode {

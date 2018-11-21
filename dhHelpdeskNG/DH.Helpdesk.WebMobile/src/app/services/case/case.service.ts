@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
 import { map, defaultIfEmpty, take, tap } from 'rxjs/operators';
-import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel, BaseCaseField, KeyValue, MailToTicketInfo, CaseEditMode, CaseLockInfo, CaseSolution } from '../../models';
+import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel, BaseCaseField, KeyValue, MailToTicketInfo, CaseEditMode, CaseSolution, CaseLockInfo } from '../../models';
 import { throwError, forkJoin, empty, Observable } from 'rxjs';
 import { CaseOptions } from '../../models/case/case-options.model';
 import { CaseOrganizationService } from '../case-organization';
@@ -11,47 +11,28 @@ import { BundleCaseOptionsService } from '../case-organization/bundle-case-optio
 
 @Injectable({ providedIn: 'root' })
 export class CaseService extends HttpApiServiceBase {
-   
+
     protected constructor(http: HttpClient, localStorageService: LocalStorageService,
          private _caseOrganizationService: CaseOrganizationService,
          private _batchCaseOptionsService: BundleCaseOptionsService ) {
         super(http, localStorageService);
     }
 
-    getCaseData(caseId: number) : Observable<CaseEditInputModel> {
-        var user = this.localStorageService.getCurrentUser();
-        return this.getJson(this.buildResourseUrl('/api/case/' + caseId, null, true, true, true)) //TODO: error handling
-            .pipe(
-                take(1),
-                map((caseData: any) => {
-                    let model = this.fromJSONCaseEditInputModel(caseData);
-                    return model;
-                }) 
-            );
-    }
-
-    ReExtendedCaseLock(lockGuid:string, extendValue:number) : Observable<Boolean>{
-        const data = {
-            lockGuid : lockGuid,
-            extendValue: extendValue
-        };
-        const requestUrl = this.buildResourseUrl('/api/case/extendlock', null, true, false);
-        return this.postJson<Boolean>(requestUrl, data) 
-            .pipe(
-                take(1),
-                //tap(res => console.log('>>>> reexend case lock: ' + res)),
-                map((res: Boolean) => res) 
-            );
-    }
-
-    UnLockCase(lockGuid:string) : Observable<Boolean>{
-        const requestUrl = this.buildResourseUrl('/api/case/unlock', null, true, false);
-        return this.postJson<Boolean>(requestUrl, { lockGuid : lockGuid }) 
-            .pipe(
-                take(1),
-                //tap(res => console.log('>>>> unlock case lock: ' + res)),
-                map((res: Boolean) => res) 
-            );
+    getCaseData(caseId: number): Observable<CaseEditInputModel> {
+      const userData = this.localStorageService.getCurrentUser();
+      let params = null;
+      if (userData !== null) {
+        params = { sessionId: userData.authData.sessionId };
+      }
+      let url = this.buildResourseUrl('/api/case/' + caseId, params, true, true);
+      return this.getJson(url)// TODO: error handling
+          .pipe(
+              take(1),
+              map((caseData: any) => {
+                  let model = this.fromJSONCaseEditInputModel(caseData);
+                  return model;
+              }) 
+          );
     }
 
     getCaseOptions(filter: CaseOptionsFilterModel) {
@@ -75,11 +56,11 @@ export class CaseService extends HttpApiServiceBase {
                         map(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes, productAreas, categories, closingReasons]) => {
                             let options = new CaseOptions();
                             
-                            if (regions != null) {                                                
+                            if (regions != null) {
                                 options.regions = regions;
                             }
 
-                            if (departments != null) {                                                
+                            if (departments != null) {
                                 options.departments = departments;
                             }
 
@@ -87,7 +68,7 @@ export class CaseService extends HttpApiServiceBase {
                                 options.oUs = oUs;
                             }
 
-                            if (isAboutDepartments != null) {                                                
+                            if (isAboutDepartments != null) {
                                 options.isAboutDepartments = isAboutDepartments;
                             }
 
@@ -115,7 +96,7 @@ export class CaseService extends HttpApiServiceBase {
 
                             if (closingReasons != null) {
                                 options.closingReasons = closingReasons;
-                            }                             
+                            }
 
                             return options;
                     }));
@@ -123,7 +104,7 @@ export class CaseService extends HttpApiServiceBase {
 
     getCaseSections() {
         var user = this.localStorageService.getCurrentUser();
-        return this.getJson(this.buildResourseUrl('/api/casesections/get', null, true, true))//TODO: error handling
+        return this.getJson(this.buildResourseUrl('/api/casesections/get', null, true, true)) // TODO: error handling
             .pipe(
                 map((jsCaseSections: any) => {
                     if (!jsCaseSections) throwError("No data from server.");
@@ -138,56 +119,56 @@ export class CaseService extends HttpApiServiceBase {
             )
     }
 
-    buildCaseFileUrl(caseId:number, fileId:number) : string {
+    buildCaseFileUrl(caseId: number, fileId: number): string {
         let url = this.buildResourseUrl(`/api/case/${caseId}/file/${fileId}`, null, true, false)
         return url;
     }
 
-    //TODO: review - not all cases covered
-    private fromJSONCaseEditInputModel(json: any) : CaseEditInputModel {
+    // TODO: review - not all cases covered
+    private fromJSONCaseEditInputModel(json: any): CaseEditInputModel {
         if (typeof json === 'string') {
-             json = JSON.parse(json); 
+             json = JSON.parse(json);
         } 
 
         let fields = json.fields as any[] || new Array();
         let caseSolution = json.caseSolution ? <CaseSolution>json.CaseSolution : null;
         let mailToTickets:MailToTicketInfo = json.mailToTickets ? <MailToTicketInfo>json.mailToTickets : null;
         let caseLock = <CaseLockInfo>json.caseLock;
-        let editMode = <CaseEditMode>json.editMode;                 
+        let editMode = <CaseEditMode>json.editMode;
 
         return Object.assign(new CaseEditInputModel(), json, {
             editMode: editMode,
-            caseSolution: caseSolution,            
+            caseSolution: caseSolution,
             mailToTickets: mailToTickets,
             caseLock: caseLock,
             fields: fields.map(v => {
                 let field = null;
                 switch (v.JsonType) {
-                    case "string":                        
+                    case "string":
                         field = this.fromJSONBaseCaseField<string>(v);
-                        break;                
+                        break;
                     case "date":
-                        field = this.fromJSONBaseCaseField<string>(v);//TODO: As date                        
+                        field = this.fromJSONBaseCaseField<string>(v);// TODO: As date
                         break;
                     case "number":
                         field = this.fromJSONBaseCaseField<number>(v);
                         break;
                     case "array":
-                        field = this.fromJSONBaseCaseField<Array<any>>(v);          
-                        break;                
+                        field = this.fromJSONBaseCaseField<Array<any>>(v);
+                        break;
                     default:
                         field = this.fromJSONBaseCaseField<any>(v)
-                        break;                           
+                        break;
                 }
                 return field;
             })
         });
     }
 
-    private fromJSONBaseCaseField<T>(json: any) : BaseCaseField<T> {
-        if (typeof json === 'string') { 
+    private fromJSONBaseCaseField<T>(json: any): BaseCaseField<T> {
+        if (typeof json === 'string') {
             json = JSON.parse(json); 
-        } 
+        }
         var options = json.options as any[] || new Array();
         return Object.assign(new BaseCaseField<T>(), json, {
             value: json.value,
@@ -195,8 +176,8 @@ export class CaseService extends HttpApiServiceBase {
         });
     }
 
-    private fromJSONKeyValue(json: any) : KeyValue {
-        if (typeof json === 'string') { json = JSON.parse(json); } 
+    private fromJSONKeyValue(json: any): KeyValue {
+        if (typeof json === 'string') { json = JSON.parse(json); }
         return Object.assign(new KeyValue(), json, {})
     }
 }
