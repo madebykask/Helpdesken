@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, NgZone } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-error',
@@ -11,11 +11,15 @@ export class ErrorComponent implements OnInit {
   today:Date = new Date();
   errorGuid: string;
 
-  constructor(private activatedRoute: ActivatedRoute) { 
+  constructor(private ngZone: NgZone, private activatedRoute: ActivatedRoute, private router: Router) { 
   }
 
   ngOnInit() {
       this.errorGuid = this.activatedRoute.snapshot.queryParamMap.get("errorGuid");
   }
 
+  public navigate(url: string) {
+    if(url == null) return;
+    this.ngZone.run(() => this.router.navigate([url])).then();
+  }
 }
