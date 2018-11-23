@@ -140,8 +140,20 @@
         <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
       </dependentAssembly>
       <dependentAssembly>
+        <assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
         <assemblyIdentity name="System.Web.WebPages.Razor" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="System.Web.Http" publicKeyToken="31bf3856ad364e35" culture="neutral" />
@@ -151,6 +163,7 @@
         <assemblyIdentity name="System.Web.Http.WebHost" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
       </dependentAssembly>
+      <!-- ADD 2017-08-17 /TAN -->
       <dependentAssembly>
         <assemblyIdentity name="MiniProfiler" publicKeyToken="b44f9351044011a3" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.2.0.157" newVersion="3.2.0.157" />
@@ -159,6 +172,10 @@
         <assemblyIdentity name="System.Net.Http.Formatting" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
       </dependentAssembly>
+      <!--<dependentAssembly>
+        <assemblyIdentity name="itextsharp" publicKeyToken="8354ae6d2174ddca" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-5.5.0.0" newVersion="5.5.0.0" />
+      </dependentAssembly>-->
       <dependentAssembly>
         <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.1.0.0" newVersion="3.1.0.0" />
@@ -168,8 +185,8 @@
         <bindingRedirect oldVersion="0.0.0.0-3.1.0.0" newVersion="3.1.0.0" />
       </dependentAssembly>
       <dependentAssembly>
-        <assemblyIdentity name="itextsharp" publicKeyToken="8354ae6d2174ddca" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-5.5.0.0" newVersion="5.5.0.0" />
+        <assemblyIdentity name="MiniProfiler" publicKeyToken="b44f9351044011a3" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-3.2.0.157" newVersion="3.2.0.157" />
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="Ninject" publicKeyToken="c7192dc5380945e7" culture="neutral" />
