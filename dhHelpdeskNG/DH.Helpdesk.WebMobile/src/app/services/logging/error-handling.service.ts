@@ -3,7 +3,6 @@ import { UuidGenerator, WindowWrapper } from '../../helpers';
 import { ClientLogEntryModel, ClientLogLevel } from '../../models/shared/client-log.model';
 import { LoggerService } from './logger.service';
 import { AlertsService } from '../../helpers/alerts/alerts.service';
-import 'rxjs/add/operator/catch';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ClientLogApiService } from '../api';
@@ -22,22 +21,22 @@ export class ErrorHandlingService {
     // handles unknown error (system)
     handleError(err: any, errorMsg: string = '') {
         
-        //prepare log text
+        // prepare log text
         let log = errorMsg || 'Unknown Error.';
         
         if (err instanceof Error && err.message) {
-            log +=  ' ' + err.message;            
+            log +=  ' ' + err.message;
         }
         else {
             log += ' ' + (err || '').toString();
         }
-        //send error to server
+        // send error to server
         let errorGuid = UuidGenerator.createUuid();
 
-        //log error to console
+        // log error to console
         this.logService.error(`Error ${errorGuid}: ${log}`);
 
-        //save error to log on server
+        // save error to log on server
         this.saveErrorOnServer(errorGuid, err, log);
 
         //todo: improve error handling logic below
@@ -45,18 +44,18 @@ export class ErrorHandlingService {
             // Server or connection error happened
             if (!navigator.onLine) {
               // Handle offline error
-              //return this.alertsService.warning('No Internet Connection');
+              // return this.alertsService.warning('No Internet Connection');
             } else {
-              // Handle Http Errors (error.status === 403, 404...)                            
-              //let alertMsg = this.buildErrorAlertMessage(errorGuid);        
-              //this.alertsService.error(alertMsg); 
-            }                        
+              // Handle Http Errors (error.status === 403, 404...)
+              // let alertMsg = this.buildErrorAlertMessage(errorGuid);
+              // this.alertsService.error(alertMsg); 
+            }
          } else {
              // Handle Client Error (Angular Error, ReferenceError...)
-             //this.router.navigate(['/error'], {  queryParams: { errorGuid: errorGuid });           
-         }         
+             // this.router.navigate(['/error'], {  queryParams: { errorGuid: errorGuid });
+         }
          
-         this.router.navigate(['/error'], {  queryParams: { errorGuid: errorGuid } });           
+         this.router.navigate(['/error'], {  queryParams: { errorGuid: errorGuid } });
     }
 
     private saveErrorOnServer(errorGuid:string, error:any, errorMsg){
@@ -70,14 +69,14 @@ export class ErrorHandlingService {
             logEntry.stack = error.stack.toString();
         }
 
-        this.clientLogApiService.saveLogEntry(logEntry)        
+        this.clientLogApiService.saveLogEntry(logEntry)
             .subscribe(
                 () => { },
                 (e: any) => this.logService.error(`Failed to send error (${logEntry.uniqueId}) to server. error: ${e.toString()}`)
         );
     }
 
-    //handles user error
+    // handles user error
     handleUserError(userMsg: string) {
 
         let errorMsg = userMsg || 'Unknown Error. ';
@@ -88,12 +87,12 @@ export class ErrorHandlingService {
         this.alertsService.error(`${errorMsg}`);
     }
 
-    //handles warning
+    // handles warning
     handleWarning(userMsg: string) {
 
         this.logService.warn(userMsg);
 
-        //raise error alert to display user error message on ui 
+        // raise error alert to display user error message on ui 
         this.alertsService.warning(`${userMsg}`);
     }
 

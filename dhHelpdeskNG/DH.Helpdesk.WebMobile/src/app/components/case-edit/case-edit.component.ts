@@ -3,14 +3,13 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
 import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType } from '../../models';
-import { forkJoin, Subject, Subscription } from 'rxjs';
-import { switchMap, take, } from 'rxjs/operators';
+import { forkJoin, Subject, Subscription, of, zip } from 'rxjs';
+import { switchMap, take, finalize, tap, delay, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, Channels } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/header-event-data';
 import { AlertsService } from 'src/app/helpers/alerts/alerts.service';
 import { interval } from 'rxjs';
-import 'rxjs/add/operator/map'
 import { AuthenticationStateService } from 'src/app/services/authentication';
 import { CaseLockApiService } from 'src/app/services/api/case-lock/case-lock-api.service';
 
@@ -49,8 +48,8 @@ export class CaseEditComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.loadCaseData();
-        this.commService.publish(Channels.Header, new HeaderEventData(false));
+      this.commService.publish(Channels.Header, new HeaderEventData(false));
+      this.loadCaseData();
     }
 
     getCaseTitle() : string {
@@ -70,7 +69,6 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         const caseData$ = 
             this.caseService.getCaseData(this.caseId)
                 .pipe( 
-                    take(1),
                     switchMap(data => { // TODO: Error handle
                         this.processCaseDataResponse(data);
                         const filter = this.getCaseOptionsFilter(this.caseData);
@@ -100,11 +98,9 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         let caseLock = this.caseData.caseLock;
         // unlock the case if required
         if (this.caseId > 0 && this.ownsLock) {
-            console.log('>>> Unlocking case');
             this.caseLockApiService.unLockCase(caseLock.lockGuid)
               .subscribe();
         }
-        // console.log('>>> case edit: destroy called!');
     }
 
     hasField(name: string): boolean {
@@ -141,10 +137,14 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         return field != null ? field.value || null : undefined; // null - value is null, undefined - no such field
     }
 
-    goTo(url: string) {
-        if (url == null) return;
-        this.router.navigate([url]);
-      }
+    public navigate(url: string) {
+      if(url == null) return;
+      of(true).pipe(
+        delay(200),
+        switchMap(() => of(this.router.navigate([url]))),
+        take(1)
+      ).subscribe();
+    }
 
     getSectionHeader(type: CaseSectionType): string {
         if (this.caseSections == null) return '';
@@ -186,7 +186,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         filter.SolutionsRates = this.hasField('SolutionRate');
         filter.StateSecondaries = this.hasField('StateSecondary_Id');
         filter.Statuses = this.hasField('Status_Id');
-        filter.Suppliers = this.hasField('Supplier_Id');//Supplier_Country_Id
+        filter.Suppliers = this.hasField('Supplier_Id');// Supplier_Country_Id
         filter.Systems = this.hasField('System_Id');
         filter.Urgencies = this.hasField('Urgency_Id');
         filter.WorkingGroups = this.hasField('WorkingGroup_Id');
@@ -229,18 +229,19 @@ export class CaseEditComponent implements OnInit, OnDestroy {
       } else if (caseLock.timerInterval > 0) {
           // run extend case lock at specified interval
           this.caseLockIntervalSub =
-              interval(caseLock.timerInterval * 1000).subscribe(x => {
-                  console.log('>>> timer interval called: ' + (x || 0));
-                  this.caseLockApiService.reExtendedCaseLock(caseLock.lockGuid, caseLock.extendValue)
-                      .subscribe(res => {
-                          if (res === false) {
-                              this.ownsLock = false;
-                              this.caseLockIntervalSub.unsubscribe();
-                              this.caseLockIntervalSub = null;
-                          }
-                      }, error => {
-                          // TODO: handle error 
-                      });
+              interval(caseLock.timerInterval * 1000).pipe(
+                switchMap(x => {
+                  return this.caseLockApiService.reExtendedCaseLock(caseLock.lockGuid, caseLock.extendValue);
+                },
+                // catchError(err => {})// TODO:
+                )
+              )
+              .subscribe(res => {
+                  if (res === false) {
+                      this.ownsLock = false;
+                      this.caseLockIntervalSub.unsubscribe();
+                      this.caseLockIntervalSub = null;
+                  }
               });
       }
     }

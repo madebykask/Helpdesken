@@ -125,12 +125,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 //_caseSolutionSettingService.GetCaseSolutionSettingOverviews(caseSolutionId);//TODO: Case solution settings participate in visibility check
                 if (caseSolution != null)
                 {
-                    model.CaseSolution = new CaseSolutionInfo()
-                    {
-                        CaseSolutionId = caseSolutionId,
-                        Name = caseSolution.Name,
-                        StateSecondaryId = caseSolution.StateSecondary_Id ?? 0
-                    };
+                    model.CaseSolution = _mapper.Map<CaseSolutionInfo>(caseSolution);
                 }
             }
 
@@ -525,7 +520,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            #endregion
+            #endregion 
 
             #region ComputerInfo
 

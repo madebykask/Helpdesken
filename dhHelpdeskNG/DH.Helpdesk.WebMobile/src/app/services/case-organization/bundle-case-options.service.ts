@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { LocalStorageService } from "../local-storage";
 import { HttpClient } from "@angular/common/http";
 import { OptionsHelper } from "../../helpers/options-helper";
-import { map } from "rxjs/operators";
+import { map, take } from "rxjs/operators";
 import { throwError } from "rxjs";
 import { BundleOptionsFilter, BundledCaseOptions, OptionItem } from "../../models";
 
@@ -18,6 +18,7 @@ export class BundleCaseOptionsService extends HttpApiServiceBase {
     getOptions(filter: BundleOptionsFilter) {
         return this.postJson(this.buildResourseUrl('/api/caseoptions/bundle', null, true, true), filter)
         .pipe(
+            take(1),
             map((jsOptions: any) => {
                 if (jsOptions == null) throwError('No options received.')
                 const mapArray = (arr: any) => this.caseHelper.toOptionItems(arr as Array<any>) || new Array<OptionItem>();
@@ -78,6 +79,6 @@ export class BundleCaseOptionsService extends HttpApiServiceBase {
                     options.causingParts = mapArray(jsOptions.causingParts);
                 } 
                 return options;
-            }));//TODO: error handling
+            }));// TODO: error handling
     }
 }

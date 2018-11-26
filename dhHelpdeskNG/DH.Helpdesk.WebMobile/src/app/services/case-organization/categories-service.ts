@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { LocalStorageService } from "../local-storage";
 import { HttpClient } from "@angular/common/http";
 import { OptionsHelper } from "../../helpers/options-helper";
-import { map } from "rxjs/operators";
+import { map, take } from "rxjs/operators";
 import { MultiLevelOptionItem } from "../../models";
 
 @Injectable({ providedIn: 'root' })
@@ -17,12 +17,13 @@ export class CategoriesService extends HttpApiServiceBase {
     getCategories() {
         return this.getJson(this.buildResourseUrl('/api/categories/get'))
         .pipe(
+            take(1),
             map((jsItems: any) => {
                 let result = new Array<MultiLevelOptionItem>();
                 let jsArr = (jsItems as Array<any>);
                 if (jsArr == null) return result;
 
-                const createOption = (jsItem: any): MultiLevelOptionItem => { //TODO: stop condition
+                const createOption = (jsItem: any): MultiLevelOptionItem => { // TODO: stop condition
                     let option = new MultiLevelOptionItem(jsItem.id, jsItem.name, jsItem.parentId);
                     if (jsItem.subCategories != null) {
                         option.childs = (jsItem.subCategories as Array<any>).map(createOption);
@@ -34,6 +35,6 @@ export class CategoriesService extends HttpApiServiceBase {
 
                 return result;
             })
-        );//TODO: error handling
+        );// TODO: error handling
     }
 }

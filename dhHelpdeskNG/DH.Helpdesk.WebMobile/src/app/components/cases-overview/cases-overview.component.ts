@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/co
 import { CaseOverviewItem, CasesOverviewFilter } from '../../models'
 import { CasesOverviewService } from '../../services/cases-overview';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { map, finalize, catchError, take, takeUntil } from 'rxjs/operators';
+import { finalize, take, takeUntil } from 'rxjs/operators';
 import { PagingConstants } from '../../helpers/constants';
 import { Router } from '@angular/router';
 import { MbscForm, MbscListview } from '@mobiscroll/angular';
@@ -38,12 +38,12 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   constructor(private casesOverviewService: CasesOverviewService,
               private formBuilder: FormBuilder,
-              private router: Router) {                
+              private router: Router) {
                }
 
   ngOnInit() {
     this.filtersForm = this.formBuilder.group({
-      freeSearch: ['']      
+      freeSearch: ['']
     });
     this.pageSize = this.caclucatePageSize();
     this.initFilter();
@@ -82,11 +82,11 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   shouldLoad() {
     var el = this.loadingElem.element;
-    //return el.getBoundingClientRect().top + el.clientTop + el.offsetHeight - 1 < (window.innerHeight + window.pageYOffset);
+    // return el.getBoundingClientRect().top + el.clientTop + el.offsetHeight - 1 < (window.innerHeight + window.pageYOffset);
     return el.getBoundingClientRect().top + el.clientTop + el.offsetHeight - 1 < window.innerHeight;
   }
 
-  checkLoad() {    
+  checkLoad() {
     clearTimeout(this._timer);
     let timer = setTimeout(() => {
         if (!this.isLoading && this.shouldLoad()) {
@@ -119,7 +119,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
         take(1),
         takeUntil(this._destroy$),
         finalize(() => this.isLoading = false),
-        //catchError(err => {})//TODO:
+        // catchError(err => {})// TODO:
       )
       .subscribe(
         data => {
@@ -128,20 +128,20 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
         });
   }
 
-  private initFilter () {
+  private initFilter() {
     this._filter = new CasesOverviewFilter();
     this._filter.FreeTextSearch = this.filtersForm.controls.freeSearch.value;
-    this._filter.InitiatorSearchScope = 0;//TODO: use enum
-    this._filter.CaseProgress = -1;//TODO: use enum
+    this._filter.InitiatorSearchScope = 0;// TODO: use enum
+    this._filter.CaseProgress = -1;// TODO: use enum
     this._filter.PageSize =  this.pageSize || PagingConstants.pageSize;
     this._filter.Page = PagingConstants.page;
     this._filter.Ascending = false;
-    this._filter.OrderBy = 'CaseNumber';//TODO - remove use hardcode
+    this._filter.OrderBy = 'CaseNumber';// TODO - remove use hardcode
   }
 
   private caclucatePageSize(): number {
     const headerSize = 53;
-    const caseElemSize = 60;//TODO: get real height from UI
+    const caseElemSize = 60;// TODO: get real height from UI
     const windowHeight = window.innerHeight;
     const defaultPageSize = 2;
     let size = ((windowHeight - headerSize) / caseElemSize) + 1 || defaultPageSize;

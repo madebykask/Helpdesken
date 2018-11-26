@@ -30,7 +30,7 @@ const appRoutes: Routes = [
   { path: 'error', component: ErrorComponent },
   { path: '',   redirectTo: '/', pathMatch: 'full' },
   
-  // otherwise redirect to home
+  // otherwise redirect to PageNotFoundComponent
   { path: '**', component: PageNotFoundComponent }
 ];
 

@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../local-storage'
 import { HttpApiServiceBase } from '../api'
-import { map, defaultIfEmpty, take, tap } from 'rxjs/operators';
+import { map, defaultIfEmpty, take, tap, switchMap } from 'rxjs/operators';
 import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel, BaseCaseField, KeyValue, MailToTicketInfo, CaseEditMode, CaseSolution, CaseLockInfo } from '../../models';
-import { throwError, forkJoin, empty, Observable } from 'rxjs';
+import { throwError, forkJoin, empty, Observable, of } from 'rxjs';
 import { CaseOptions } from '../../models/case/case-options.model';
 import { CaseOrganizationService } from '../case-organization';
 import { BundleCaseOptionsService } from '../case-organization/bundle-case-options.service';
@@ -28,9 +28,9 @@ export class CaseService extends HttpApiServiceBase {
       return this.getJson(url)// TODO: error handling
           .pipe(
               take(1),
-              map((caseData: any) => {
+              switchMap((caseData: any) => {
                   let model = this.fromJSONCaseEditInputModel(caseData);
-                  return model;
+                  return of(model);
               }) 
           );
     }
@@ -53,7 +53,8 @@ export class CaseService extends HttpApiServiceBase {
 
         return forkJoin(bundledOptions$, regions$, departments$, oUs$, isAboutDepartments$, isAboutOUs$, caseTypes$, productAreas$, categories$, closingReasons$)
                     .pipe(
-                        map(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes, productAreas, categories, closingReasons]) => {
+                        take(1),
+                        switchMap(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes, productAreas, categories, closingReasons]) => {
                             let options = new CaseOptions();
                             
                             if (regions != null) {
@@ -98,7 +99,7 @@ export class CaseService extends HttpApiServiceBase {
                                 options.closingReasons = closingReasons;
                             }
 
-                            return options;
+                            return of(options);
                     }));
     }
 
@@ -106,11 +107,12 @@ export class CaseService extends HttpApiServiceBase {
         var user = this.localStorageService.getCurrentUser();
         return this.getJson(this.buildResourseUrl('/api/casesections/get', null, true, true)) // TODO: error handling
             .pipe(
+                take(1),
                 map((jsCaseSections: any) => {
                     if (!jsCaseSections) throwError("No data from server.");
 
                     let sections = (jsCaseSections as Array<any>).map((jsSection: any) => {
-                        return new CaseSectionInputModel(jsSection.id, jsSection.sectionHeader, 
+                        return new CaseSectionInputModel(jsSection.id, jsSection.sectionHeader,
                              jsSection.sectionType, jsSection.isNewCollapsed,
                              jsSection.isEditCollapsed);
                     });

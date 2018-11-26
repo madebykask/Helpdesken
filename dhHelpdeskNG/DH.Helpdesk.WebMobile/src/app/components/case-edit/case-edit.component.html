@@ -3,14 +3,14 @@
 </mbsc-form>
 <mbsc-form *ngIf="isLoaded"> 
     <mbsc-tab-nav [options]="tabsMenuSettings" class="case-header">
-            <mbsc-nav-item (click)="goTo('/casesoverview')" translate>Avbryt</mbsc-nav-item>
-            <mbsc-nav-item [selected]="true"><div class="ellipsis">{{ getCaseTitle() }}</div></mbsc-nav-item>
-            <mbsc-nav-item (click)="saveCase()" [disabled]="true" translate>Klar</mbsc-nav-item>
+            <mbsc-nav-item selected="false" (click)="navigate('/casesoverview')" translate>Avbryt</mbsc-nav-item>
+            <mbsc-nav-item selected="true"><div class="ellipsis">{{ getCaseTitle() }}</div></mbsc-nav-item>
+            <mbsc-nav-item selected="false" (click)="saveCase()" [disabled]="true" translate>Klar</mbsc-nav-item>
     </mbsc-tab-nav>
     <div class="md-paging">
         <mbsc-scrollview>
-            <mbsc-scrollview-item id="main">  
-                
+            <mbsc-scrollview-item id="main">
+
                 <form [formGroup]="form" novalidate>
                     <mbsc-form-group collapsible #initiatorSection *ngIf="hasSection(caseSectionTypes.Initiator)">
                         <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Initiator) }}</mbsc-form-group-title>
@@ -26,7 +26,7 @@
                             <case-dropdown-control *ngIf="hasField('OU_Id')" [field]="getField('OU_Id')" [form]="form" [dataSource]="dataSource.options.oUs"></case-dropdown-control>
                             <case-textbox-control *ngIf="hasField('CostCentre')" [field]="getField('CostCentre')" [form]="form"></case-textbox-control>
                             <case-textbox-control *ngIf="hasField('Place')" [field]="getField('Place')" [form]="form"></case-textbox-control>
-                            <case-textbox-control *ngIf="hasField('UserCode')" [field]="getField('UserCode')" [form]="form"></case-textbox-control>                            
+                            <case-textbox-control *ngIf="hasField('UserCode')" [field]="getField('UserCode')" [form]="form"></case-textbox-control>
                         </mbsc-form-group-content>
                     </mbsc-form-group>
 
@@ -46,7 +46,7 @@
                             <case-textbox-control *ngIf="hasField('IsAbout_Place')" [field]="getField('IsAbout_Place')" [form]="form"></case-textbox-control>
                             <case-textbox-control *ngIf="hasField('IsAbout_UserCode')" [field]="getField('IsAbout_UserCode')" [form]="form"></case-textbox-control>                            
                         </mbsc-form-group-content>
-                    </mbsc-form-group>                                        
+                    </mbsc-form-group>
 
                     <mbsc-form-group collapsible #ComputerInfoSection *ngIf="hasSection(caseSectionTypes.ComputerInfo)">
                         <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.ComputerInfo) }}</mbsc-form-group-title>
@@ -55,7 +55,7 @@
                                 <case-textbox-control *ngIf="hasField('ComputerType_Id')" [field]="getField('ComputerType_Id')" [form]="form"></case-textbox-control>
                                 <case-textbox-control *ngIf="hasField('InventoryLocation')" [field]="getField('InventoryLocation')" [form]="form"></case-textbox-control>    
                         </mbsc-form-group-content>
-                    </mbsc-form-group>                                        
+                    </mbsc-form-group>
     
                     <mbsc-form-group collapsible #caseInfoSection *ngIf="hasSection(caseSectionTypes.CaseInfo)">
                         <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.CaseInfo) }}</mbsc-form-group-title>
@@ -89,7 +89,7 @@
                                 <case-dropdown-control *ngIf="hasField('Cost_Currency')" [field]="getField('Cost_Currency')" [form]="form" [dataSource]="dataSource.options.currencies"></case-dropdown-control>
                                 <case-files-control *ngIf="hasField('Filename')" [field]="getField('Filename')"></case-files-control>
                         </mbsc-form-group-content>
-                    </mbsc-form-group>                                        
+                    </mbsc-form-group>
     
                     <mbsc-form-group collapsible #caseManagementSection *ngIf="hasSection(caseSectionTypes.CaseManagement)">
                         <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.CaseManagement) }}</mbsc-form-group-title>
