@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
-import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType, CaseLockModel, CaseAccessMode } from '../../models';
+import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType, CaseLockModel, CaseAccessMode, CasesSearchType } from '../../models';
 import { forkJoin, Subject, Subscription, of } from 'rxjs';
 import { switchMap, take, finalize, tap, delay, catchError, map, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
@@ -29,7 +29,7 @@ export class CaseEditComponent {
     isLoaded = false;
     form: FormGroup;
     tabsMenuSettings = {};
-
+    private searchType:CasesSearchType = CasesSearchType.All;
     private caseId: number;
     private caseData: CaseEditInputModel;
     private caseSections: CaseSectionInputModel[];
@@ -51,7 +51,7 @@ export class CaseEditComponent {
             this.caseId = +this.route.snapshot.paramMap.get('id');
         } else {
             // TODO: throw error if caseid is invalid or go back
-        }
+        }     
     }
 
     ngOnInit() {
@@ -75,6 +75,7 @@ export class CaseEditComponent {
 
         const caseLock$ = this.caseLockApiService.acquireCaseLock(this.caseId, sessionId);
         const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
+        //todo: apply search type (all, my cases)
         const caseData$ =
             this.caseService.getCaseData(this.caseId)
                 .pipe(

@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { CaseOverviewItem, CasesOverviewFilter } from '../../models'
+import { CaseOverviewItem, CasesOverviewFilter, CasesSearchType } from '../../models'
 import { CasesOverviewService } from '../../services/cases-overview';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { finalize, take, takeUntil } from 'rxjs/operators';
+import { finalize, take, map } from 'rxjs/operators';
 import { PagingConstants } from '../../helpers/constants';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MbscForm, MbscListview } from '@mobiscroll/angular';
 import { Subject } from 'rxjs';
 
@@ -17,7 +17,9 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   @ViewChild('searchInput') searchInput: any;
   @ViewChild('loading') loadingElem: MbscForm; 
   @ViewChild('listview') listView: MbscListview;
+
   private _filter: CasesOverviewFilter;
+  private searchType = CasesSearchType.All;
   private _scrollBindFunc: any;
   private _timer: any;
   private _destroy$ = new Subject();
@@ -27,7 +29,6 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   cases: CaseOverviewItem[] = [];
   isLoading: boolean = false;
   pageSize: number = 10;
-
   listviewSettings: any = {
     enhance: false,
     swipe: false,
@@ -38,10 +39,21 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   constructor(private casesOverviewService: CasesOverviewService,
               private formBuilder: FormBuilder,
+              private route: ActivatedRoute,
               private router: Router) {
-               }
+   
+      route.queryParamMap.pipe(
+          map((x:ParamMap) => +x.get('searchType'))
+      ).subscribe((st:number) => {
+          console.log('>>> st: ' + st);
+          this.searchType = !isNaN(st) ?  <CasesSearchType>st : CasesSearchType.All;        
+          //console.log(`>>>this.searchType: ${this.searchType}`);
+          //run search again
+      })
+  }
 
   ngOnInit() {
+    //console.log('>>> cases-overview: onInit is called!!!')
     this.filtersForm = this.formBuilder.group({
       freeSearch: ['']
     });
@@ -53,6 +65,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    //console.log('>>> cases-overview: destroy is called!!!')
     window.removeEventListener('scroll', this._scrollBindFunc);
     this._destroy$.next();
   }
@@ -67,12 +80,14 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   cancelSearch() {
-    if(this.isLoading) return;
+    if (this.isLoading) return;
     const defaultValue = "";
-    if(this.filtersForm.controls.freeSearch.value != defaultValue) {
-      this.filtersForm.controls.freeSearch.setValue(defaultValue);
-      this.applyFilterAndSearch();
+
+    if (this.filtersForm.controls.freeSearch.value != defaultValue) {
+       this.filtersForm.controls.freeSearch.setValue(defaultValue);
+       this.applyFilterAndSearch();
     }
+
     this.showSearchPanel = false;
   }
 
@@ -103,7 +118,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   private goToCase(caseId: number) {
-    if(caseId <= 0) return;
+    if (caseId <= 0) return;
 
     this.router.navigate(['/case', caseId ]);
   }
@@ -114,14 +129,11 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   private search() {
     this.isLoading = true;
-    this.casesOverviewService.searchCases(this._filter)
-      .pipe(
-        take(1),
-        takeUntil(this._destroy$),
+    this.casesOverviewService.searchCases(this._filter).pipe(
+        take(1),        
         finalize(() => this.isLoading = false),
         // catchError(err => {})// TODO:
-      )
-      .subscribe(
+      ).subscribe(
         data => {
           if(data != null && data.length > 0)
           this.cases = this.cases.concat(data);
@@ -147,5 +159,4 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     let size = ((windowHeight - headerSize) / caseElemSize) + 1 || defaultPageSize;
     return Math.floor(size > defaultPageSize ? size : defaultPageSize);
   }
-
 }

@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { MbscSelect, MbscSelectOptions, MbscNavOptions } from '@mobiscroll/angular';
+import { /*MbscPopup,*/ MbscSelect, MbscSelectOptions, MbscNavOptions, mobiscroll, MbscListviewOptions, MbscOptionlistOptions } from '@mobiscroll/angular';
 import { take, finalize } from 'rxjs/operators';
 import { UserSettingsService } from 'src/app/services/user';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication';
 import { LanguagesApiService } from 'src/app/services/api/language/languages-api.service';
+import {CasesSearchType} from '../../../models/case/case-edit-input.model'
 
 @Component({
   selector: 'app-footer',
@@ -15,9 +16,10 @@ import { LanguagesApiService } from 'src/app/services/api/language/languages-api
 })
 export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
   private _destroy$ = new Subject();
-  
-  @ViewChild('languages') 
-  languagesCtrl: MbscSelect;
+  SearchType = CasesSearchType; // this allows to use enum values in the view
+
+  @ViewChild('caseSearchPopup') caseSearchPopup: any;// MbscPopup;
+  @ViewChild('languages') languagesCtrl: MbscSelect;
   
   languagesSettings: MbscSelectOptions = {
     cssClass: 'languages-list',
@@ -40,6 +42,17 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoadingLanguage: boolean = true;
   isVisible = true;
   
+  listSettings: any = {
+    buttons: [],
+    closeOnOverlayTap: true,
+    display: 'bottom',
+    cssClass: 'mbsc-no-padding'
+  };
+ 
+  lvSettings: MbscListviewOptions = {
+    enhance: true,
+    swipe: false    
+};
   constructor(private _router: Router, 
               private _userSettingsService : UserSettingsService, 
               private _authenticationService: AuthenticationService,
@@ -89,6 +102,13 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
   logout() {
     this._authenticationService.logout();
     this.goTo('/login');
+  }
+
+  goToCases(searchType: CasesSearchType) {
+    this.caseSearchPopup.instance.hide();
+    this._router.navigate(['/casesoverview'], { queryParams: {
+      searchType: <number>searchType
+    }});    
   }
 
   goTo(url: string = null) {

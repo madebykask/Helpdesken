@@ -61,3 +61,8 @@ export interface IBaseCaseField<T> {
     section?: CaseSectionType;
     options: KeyValue[]
 }
+
+export enum CasesSearchType  {
+    All = 0,
+    MyCases = 1
+}
