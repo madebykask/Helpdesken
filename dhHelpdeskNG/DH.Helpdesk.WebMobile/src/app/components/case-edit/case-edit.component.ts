@@ -104,6 +104,8 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         if (this.caseId > 0 && this.ownsLock) {
             this.caseLockApiService.unLockCase(this.caseLock.lockGuid).subscribe();
         }
+
+        //todo: close ALERTS!!!
     }
 
     hasField(name: string): boolean {

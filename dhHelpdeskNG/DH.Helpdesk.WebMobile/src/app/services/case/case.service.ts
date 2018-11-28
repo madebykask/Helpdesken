@@ -132,16 +132,14 @@ export class CaseService extends HttpApiServiceBase {
         } 
 
         let fields = json.fields as any[] || new Array();
-        let caseSolution = json.caseSolution ? <CaseSolution>json.CaseSolution : null;
-        let mailToTickets:MailToTicketInfo = json.mailToTickets ? <MailToTicketInfo>json.mailToTickets : null;
-        let caseLock = <CaseLockModel>json.caseLock;
+        let caseSolution = json.caseSolution ? <CaseSolution>json.caseSolution : null;
+        let mailToTickets:MailToTicketInfo = json.mailToTickets ? <MailToTicketInfo>json.mailToTickets : null;      
         let editMode = <CaseEditMode>json.editMode;
 
         return Object.assign(new CaseEditInputModel(), json, {
             editMode: editMode,
             caseSolution: caseSolution,
-            mailToTickets: mailToTickets,
-            caseLock: caseLock,
+            mailToTickets: mailToTickets,           
             fields: fields.map(v => {
                 let field = null;
                 switch (v.JsonType) {

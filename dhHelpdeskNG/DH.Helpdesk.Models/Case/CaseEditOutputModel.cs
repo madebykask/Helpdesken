@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Models.Case.Field;
+using DH.Helpdesk.Web.Common.Enums.Case;
 
 namespace DH.Helpdesk.Models.Case
 {
@@ -13,7 +14,7 @@ namespace DH.Helpdesk.Models.Case
         public decimal CaseNumber { get; set; }
         
         public CaseSolutionInfo CaseSolution { get; set; }
-        //public int EditMode { get; set; }
+        public AccessMode EditMode { get; set; }
 
         //public List<CustomMailTemplate> MailTemplates { get; set; }
         //public List<CaseFile> CaseFiles { get; set; }

@@ -1,6 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Enums
+﻿namespace DH.Helpdesk.Web.Common.Enums.Case
 {
-    public enum CaseAccessMode
+    public enum AccessMode
     {
         NoAccess = 0,
         ReadOnly = 1,

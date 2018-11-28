@@ -11,6 +11,8 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using DH.Helpdesk.Common.Extensions.Integer
 @using DH.Helpdesk.Common.Extensions.Boolean
+@using DH.Helpdesk.Web.Common.Enums.Case
+@using DH.Helpdesk.Web.Infrastructure
 
 @Html.Partial("~/Views/Cases/_CaseValidation.cshtml", Model)
 @Scripts.Render("~/bundles/cases/_input")
@@ -1218,7 +1220,7 @@
                                             @if (Model.countries != null)
                                             {
                                                 <td>
-                                                    <select id="CountryId" name="CountryId" @(Model.EditMode == Enums.AccessMode.ReadOnly ? "disabled=true" : string.Empty)>
+                                                    <select id="CountryId" name="CountryId" @(Model.EditMode == AccessMode.ReadOnly ? "disabled=true" : string.Empty)>
                                                         <option value="">&nbsp;</option>
                                                         @foreach (var e in Model.countries.Where(e => e.IsActive == 1 || Model.CountryId == e.Id))
                                                         {
@@ -1584,7 +1586,7 @@
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, "Bifogad fil")
                                                 </td>
                                                 <td colspan="2">
-                                                    @if (Model.EditMode == Enums.AccessMode.FullAccess)
+                                                    @if (Model.EditMode == AccessMode.FullAccess)
                                                     {
                                                         <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                                         <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
@@ -1677,7 +1679,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id, "Ansvarig")
                                             </td>
                                             <td>
-                                                @if (Model.EditMode != Enums.AccessMode.ReadOnly)
+                                                @if (Model.EditMode != AccessMode.ReadOnly)
                                                 {
                                                     @Html.DropDownListFor(m => m.ResponsibleUser_Id, Model.ResponsibleUsersAvailable)
                                                 }
@@ -2209,7 +2211,7 @@
                                                 {
                                                     <tr>
                                                         <td>
-                                                            @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                            @if (Model.EditMode == AccessMode.ReadOnly)
                                                             {
                                                                 <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@editableExternalInvoices[i].Name" disabled="disabled">
                                                             }
@@ -2219,7 +2221,7 @@
                                                             }
                                                         </td>
                                                         <td>
-                                                            @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                            @if (Model.EditMode == AccessMode.ReadOnly)
                                                             {
                                                                 <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@editableExternalInvoices[i].AmountValue" placeholder="0.00" disabled="disabled">
                                                             }
@@ -2231,7 +2233,7 @@
                                                             <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="@editableExternalInvoices[i].Id">
                                                         </td>
                                                         <td>
-                                                            @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                            @if (Model.EditMode == AccessMode.ReadOnly)
                                                             {
                                                                 <a id="btnDeleteExternalInvoice0" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount" disabled="disabled"><i class="icon-remove"></i></a>
                                                             }
@@ -2246,7 +2248,7 @@
                                                 }
                                                 <tr>
                                                     <td>
-                                                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                        @if (Model.EditMode == AccessMode.ReadOnly)
                                                         {
                                                             <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" disabled="disabled">
                                                         }
@@ -2257,7 +2259,7 @@
 
                                                     </td>
                                                     <td>
-                                                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                        @if (Model.EditMode == AccessMode.ReadOnly)
                                                         {
                                                             <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" placeholder="0.00" disabled="disabled">
                                                         }
@@ -2269,7 +2271,7 @@
                                                         <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="0">
                                                     </td>
                                                     <td>
-                                                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                        @if (Model.EditMode == AccessMode.ReadOnly)
                                                         {
                                                             <a id="@("btnDeleteExternalInvoice" + extInvoicesCount)" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount" disabled="disabled"><i class="icon-remove"></i></a>
 
@@ -2330,7 +2332,7 @@
                                     <table class="tableform">
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Filename, CaseSolutionFields.FileName)">
                                             <td colspan="3" class="span3">
-                                                @if (Model.EditMode == Enums.AccessMode.FullAccess)
+                                                @if (Model.EditMode == AccessMode.FullAccess)
                                                 {
                                                     <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                                     <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>

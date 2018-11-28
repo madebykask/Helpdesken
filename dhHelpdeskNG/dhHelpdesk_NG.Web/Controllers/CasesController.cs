@@ -1527,7 +1527,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 //if move case always fullaccess
                 if (moveToCustomerId.HasValue)
-                    m.EditMode = Enums.AccessMode.FullAccess;
+                    m.EditMode = AccessMode.FullAccess;
 
                 ApplicationFacade.UpdateLoggedInUser(Session.SessionID, string.Empty);
 
@@ -1550,7 +1550,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 
                 // User has not access to case
-                if (m.EditMode == Enums.AccessMode.NoAccess)
+                if (m.EditMode == AccessMode.NoAccess)
                     return this.RedirectToAction("index", "home");
 
                 // move case to another customer
@@ -1735,7 +1735,7 @@ namespace DH.Helpdesk.Web.Controllers
                     AddViewDataValues();
                     SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
                     // User has not access to case/log
-                    if (m.EditMode == Enums.AccessMode.NoAccess)
+                    if (m.EditMode == AccessMode.NoAccess)
                         return this.RedirectToAction("index", "home");
 
                     m.editLog = editLog;
@@ -4296,7 +4296,7 @@ namespace DH.Helpdesk.Web.Controllers
         /// The result.
         /// </returns>
         /// 
-        private Enums.AccessMode EditMode(CaseInputViewModel m, 
+        private AccessMode EditMode(CaseInputViewModel m, 
                                           string topic, 
                                           IList<Department> departmensForUser,
                                           List<CustomerWorkingGroupForUser> accessToWorkinggroups, 
@@ -4306,17 +4306,17 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m == null)
             {
-                return Enums.AccessMode.NoAccess;
+                return AccessMode.NoAccess;
             }
 
             if (SessionFacade.CurrentUser == null)
             {
-                return Enums.AccessMode.NoAccess;
+                return AccessMode.NoAccess;
             }
 
             if (m.case_ == null)
             {
-                return Enums.AccessMode.NoAccess;
+                return AccessMode.NoAccess;
             }
 
             if (departmensForUser != null)
@@ -4328,7 +4328,7 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         if (!accessToDepartments.Contains(m.case_.Department_Id.Value))
                         {
-                            return Enums.AccessMode.NoAccess;
+                            return AccessMode.NoAccess;
                         }
                     }
                 }
@@ -4349,12 +4349,12 @@ namespace DH.Helpdesk.Web.Controllers
                         var wg = accessToWorkinggroups.FirstOrDefault(w => w.WorkingGroup_Id == m.case_.WorkingGroup_Id.Value);
                         if (wg == null && (gs != null && gs.LockCaseToWorkingGroup == 1))
                         {
-                            return temporaryHasAccessToWG? Enums.AccessMode.ReadOnly : Enums.AccessMode.NoAccess;
+                            return temporaryHasAccessToWG? AccessMode.ReadOnly : AccessMode.NoAccess;
                         }
 
                         if (wg != null && wg.RoleToUWG == 1)
                         {                            
-                            return Enums.AccessMode.ReadOnly;
+                            return AccessMode.ReadOnly;
                         }
                     }
                 }
@@ -4362,22 +4362,22 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.case_.FinishingDate.HasValue)
             {
-                return Enums.AccessMode.ReadOnly;
+                return AccessMode.ReadOnly;
             }
 
             if (m.CaseLock != null && m.CaseLock.IsLocked)
             {
-                return Enums.AccessMode.ReadOnly;
+                return AccessMode.ReadOnly;
             }
 
             if (topic == ModuleName.Log
                 && SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.Administrator
                 && SessionFacade.CurrentUser.Id != m.CaseLog.UserId)
             {
-                return Enums.AccessMode.ReadOnly;
+                return AccessMode.ReadOnly;
             }
 
-            return Enums.AccessMode.FullAccess;
+            return AccessMode.FullAccess;
         }
 
         private string GetIdsFromSearchResult(IList<CaseSearchResult> cases)
@@ -5203,7 +5203,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 
                 var editMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
-                if (m.case_.Unread != 0 && updateState && editMode == Enums.AccessMode.FullAccess)
+                if (m.case_.Unread != 0 && updateState && editMode == AccessMode.FullAccess)
                     this._caseService.MarkAsRead(caseId);
                 
                 //todo: review
@@ -6001,7 +6001,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var temporaryUserHasAccessToWG = redirectFrom.ToLower() == "save";
             m.EditMode = EditMode(m, ModuleName.Cases, deps, acccessToGroups, temporaryUserHasAccessToWG);
-            if (m.EditMode == Enums.AccessMode.FullAccess)
+            if (m.EditMode == AccessMode.FullAccess)
                 _logFileService.ClearExistingAttachedFiles(caseId);
 
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.OU_Id))

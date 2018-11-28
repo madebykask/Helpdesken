@@ -10,6 +10,8 @@
 @using DH.Helpdesk.Web
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Common.Extensions.Boolean
+@using DH.Helpdesk.Web.Common.Enums.Case
+@using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
 @Scripts.Render("~/bundles/Cases/_CaseLogInput")
@@ -18,7 +20,7 @@
 
     var hasReadonlyLog = (ViewData.Keys.Any() && ViewData.Keys.Contains("readonlyLog"));
 
-    if (hasReadonlyLog || Model.EditMode == Enums.AccessMode.ReadOnly)
+    if (hasReadonlyLog || Model.EditMode == AccessMode.ReadOnly)
     {
         readonlyMode = Convert.ToBoolean(ViewData["readonlyLog"]);
     }
@@ -84,7 +86,7 @@
                         }
                         <li>
                             <div class="checkbox">
-                                @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                @if (Model.EditMode == AccessMode.ReadOnly)
                                 {
                                     @Html.CheckBoxFor(model => model.CaseLog.HighPriority, new { @disabled = true })
                                 }
@@ -134,7 +136,7 @@
                     </td>
                     <td>
                         <div class="checkbox commun">
-                            @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == Enums.AccessMode.ReadOnly)
+                            @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == AccessMode.ReadOnly)
                             {
                                 @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
                     new { @disabled = "disabled", InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
@@ -424,13 +426,13 @@
                             @Translation.Get("Tidsåtgång", SessionFacade.CurrentCaseLanguageId)
                         </td>
                         <td>
-                            <select id="CaseLog_WorkingTimeHour" name="CaseLog.WorkingTimeHour" class="inputw100 time-field" @((Model.EditMode == Enums.AccessMode.ReadOnly || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
+                            <select id="CaseLog_WorkingTimeHour" name="CaseLog.WorkingTimeHour" class="inputw100 time-field" @((Model.EditMode == AccessMode.ReadOnly || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
                                 @for (var i = 0; i < 100; i++)
                                 {
                                     <option value="@(i == 0 ? "" : i.ToString())" @i.IdIsSelected(Model.CaseLog.WorkingTimeHour.ToString())>@i.ToString()</option>
                                 }
                             </select>&nbsp;@Translation.Get("Tim")&nbsp;
-                            <select id="CaseLog_WorkingTimeMinute" name="CaseLog.WorkingTimeMinute" class="inputw100 time-field" @((Model.EditMode == Enums.AccessMode.ReadOnly || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
+                            <select id="CaseLog_WorkingTimeMinute" name="CaseLog.WorkingTimeMinute" class="inputw100 time-field" @((Model.EditMode == AccessMode.ReadOnly || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
                                 @for (var i = 0; i < 59; i = i + Model.MinWorkingTime)
                                 {
                                     <option value="@(i == 0 ? "" : i.ToString())" @i.IdIsSelected(Model.CaseLog.WorkingTimeMinute.ToString())>@i.ToString()</option>
@@ -444,13 +446,13 @@
                             @Translation.Get("Övertid", SessionFacade.CurrentCaseLanguageId)
                         </td>
                         <td>
-                            <select id="CaseLog_OvertimeHour" name="CaseLog.OvertimeHour" class="inputw100 time-field" @((Model.EditMode == Enums.AccessMode.ReadOnly || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
+                            <select id="CaseLog_OvertimeHour" name="CaseLog.OvertimeHour" class="inputw100 time-field" @((Model.EditMode == AccessMode.ReadOnly || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
                                 @for (var i = 0; i < 100; i++)
                                 {
                                     <option value="@(i == 0 ? "" : i.ToString())" @i.IdIsSelected(Model.CaseLog.OvertimeHour.ToString())>@i.ToString()</option>
                                 }
                             </select>&nbsp;@Translation.Get("Tim")&nbsp;
-                            <select id="CaseLog_OvertimeMinute" name="CaseLog.OvertimeMinute" class="inputw100 time-field" @((Model.EditMode == Enums.AccessMode.ReadOnly || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
+                            <select id="CaseLog_OvertimeMinute" name="CaseLog.OvertimeMinute" class="inputw100 time-field" @((Model.EditMode == AccessMode.ReadOnly || invoiceClaimed) ? "disabled=\"disabled\"" : "")>
                                 @for (var i = 0; i < 59; i = i + Model.MinWorkingTime)
                                 {
                                     <option value="@(i == 0 ? "" : i.ToString())" @i.IdIsSelected(Model.CaseLog.OvertimeMinute.ToString())>@i.ToString()</option>
@@ -471,7 +473,7 @@
                         <td>
                             @{
                                 //var attribsEquipmentPrice = new Dictionary<string, string> { { "maxlength", "12" } };
-                                if (Model.EditMode == Enums.AccessMode.ReadOnly || invoiceClaimed)
+                                if (Model.EditMode == AccessMode.ReadOnly || invoiceClaimed)
                                 {
                                     @Html.TextBoxFor(model => model.CaseLog.EquipmentPrice, new { disabled = "disabled", @readonly = "readonly", maxlength = 12 })
                                 }
@@ -491,7 +493,7 @@
                         <td>
                             @{
                                 var attribsPrice = new Dictionary<string, string> { { "maxlength", "8" } };
-                                if (Model.EditMode == Enums.AccessMode.ReadOnly || invoiceClaimed)
+                                if (Model.EditMode == AccessMode.ReadOnly || invoiceClaimed)
                                 {
                                     @Html.TextBoxFor(model => model.CaseLog.Price, new { disabled = "disabled", @readonly = "readonly", maxlength = 8 });
                                 }
@@ -513,7 +515,7 @@
                             <div class="checkbox">
                                 <label>
                                     <input name="form-field-checkbox" type="checkbox" />
-                                    @Html.CheckBoxFor(model => Model.CaseLog.Charge, (Model.EditMode == Enums.AccessMode.ReadOnly || invoiceClaimed) ? new { disabled = "disabled" } : null)
+                                    @Html.CheckBoxFor(model => Model.CaseLog.Charge, (Model.EditMode == AccessMode.ReadOnly || invoiceClaimed) ? new { disabled = "disabled" } : null)
                                     <span class="lbl">@Translation.Get("Debitera kunden för genomförd åtgärd", SessionFacade.CurrentCaseLanguageId)</span>
                                 </label>
                             </div>

@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Results;
 using AutoMapper;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Case;
@@ -17,14 +16,12 @@ using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Models.Case.Field;
-using DH.Helpdesk.Services.Enums;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
+using DH.Helpdesk.Web.Common.Enums.Case;
 using DH.Helpdesk.WebApi.Infrastructure;
-using DH.Helpdesk.WebApi.Infrastructure.ActionResults;
 using DH.Helpdesk.WebApi.Infrastructure.Authentication;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
-using DH.Helpdesk.WebApi.Models;
 using DateTime = System.DateTime;
 
 namespace DH.Helpdesk.WebApi.Controllers
@@ -1262,26 +1259,28 @@ namespace DH.Helpdesk.WebApi.Controllers
             #endregion
 
             //calc case edit mode
-            //model.EditMode = (int)CalcCaseEditMode(currentCase,  model.CaseLock);
+            model.EditMode = CalcCaseEditMode(currentCase); // remember to apply isCaseLocked check on client
 
             return await Task.FromResult(model);
         }
 
         // todo: Move to separate class or service to be shared across other projects
-        private CaseAccessMode CalcCaseEditMode(Case @case, CaseLockModel lockModel)
+        private AccessMode CalcCaseEditMode(Case @case)
         {
             //todo: add other logic (deps, wg access checks) from dhHelpdesk_NG.Web\Controllers\CasesController.cs.EDitMode()
+
             if (@case.FinishingDate.HasValue)
             {
-                return CaseAccessMode.ReadOnly;
+                return AccessMode.ReadOnly;
             }
 
-            if (lockModel != null && lockModel.IsLocked)
-            {
-                return CaseAccessMode.ReadOnly;
-            }
+            //will be checked on client
+            //if (lockModel != null && lockModel.IsLocked)
+            //{
+            //    return AccessMode.ReadOnly;
+            //}
 
-            return CaseAccessMode.FullAccess;
+            return AccessMode.FullAccess;
         }
 
         private IList<CaseFileModel> GetCaseFilesModel(int caseId)

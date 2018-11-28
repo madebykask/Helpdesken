@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Converters\TimeZoneConverter.cs" />
     <Compile Include="Converters\TimeZoneToMomentConverter.cs" />
+    <Compile Include="Enums\Case\AccessMode.cs" />
     <Compile Include="Enums\Case\RemainingTimes.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Models\CaseSearch\SearchModel.cs" />
