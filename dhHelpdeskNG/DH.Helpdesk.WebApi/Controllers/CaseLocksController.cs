@@ -26,6 +26,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [Route("lock")] //ex: /api/case/lock?cid=1
         public async Task<IHttpActionResult> AcquireCaseLock([FromBody]CaseLockInputModel input)
         {
+            // TODO: Permission check if user can do lock (has access to case, other?)
             var model = await GetCaseLockModel(input.CaseId, input.SessionId).ConfigureAwait(false);
             return Ok(model);
         }
@@ -35,6 +36,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [Route("unlock")] //ex: /api/Case/unlock?cid=1
         public async Task<IHttpActionResult> UnlockCase([FromBody]CaseUnLockInputModel input)
         {
+            // TODO: Permission check if user can do lock (has access to case, other?)
             var res = await _caseLockService.UnlockCaseByGUIDAsync(input.LockGuid);
             return Ok(res);
         }
@@ -44,6 +46,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [Route("extendlock")]
         public async Task<IHttpActionResult> ExtendCaseLock([FromBody] ExtendCaseLockInputModel input)
         {
+            // TODO: Permission check if user can do lock (has access to case, other?)
             var isSuccess = await _caseLockService.ReExtendLockCaseAsync(input.LockGuid, input.ExtendValue);
             return Ok(isSuccess);
         }

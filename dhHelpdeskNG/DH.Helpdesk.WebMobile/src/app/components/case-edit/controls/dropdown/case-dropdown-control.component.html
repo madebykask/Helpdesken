@@ -1,4 +1,7 @@
-<!-- <ng-container [formGroup]="form">
-    <mbsc-select *ngIf="!options.disabled" [formControlName]="field.name" [data]="dataSource" [options]="options">{{ field.label }}</mbsc-select>
-</ng-container> -->
-<mbsc-input #control [(ngModel)]="text">{{ field.label }}</mbsc-input> 
+<ng-container [formGroup]="form">
+  <mbsc-dropdown [name]="field.name" #control [formControlName]="field.name" [label]="field.label">
+    <option value=""></option>
+    <option *ngFor="let opt of dataSource; trackBy: trackByFn" [value]="opt.value" >{{opt.text}}</option>>
+  </mbsc-dropdown>
+</ng-container>
+<!-- <mbsc-input #control [(ngModel)]="text">{{ field.label }}</mbsc-input> -->

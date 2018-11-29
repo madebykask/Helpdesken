@@ -182,8 +182,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
+    <Compile Include="Infrastructure\BaseCaseController.cs" />
     <Compile Include="Controllers\CaseFilesController.cs" />
     <Compile Include="Controllers\CaseLocksController.cs" />
+    <Compile Include="Controllers\CaseSaveController.cs" />
     <Compile Include="Controllers\CaseSectionsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="App_Start\WebApiConfig.DI.cs" />

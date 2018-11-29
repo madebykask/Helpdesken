@@ -12,7 +12,7 @@ namespace DH.Helpdesk.Models.Case
         public int Id { get; set; }
         //public bool CanGetRelatedCases { get; set; }
         public decimal CaseNumber { get; set; }
-        
+
         public CaseSolutionInfo CaseSolution { get; set; }
         public AccessMode EditMode { get; set; }
 

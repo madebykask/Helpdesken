@@ -69,7 +69,7 @@ export abstract class HttpApiServiceBase {
         }));
   }
 
-    protected buildResourseUrl(resourceName: string, params: object = null, addCustomerId = true, addLanguage = false) {
+    public buildResourseUrl(resourceName: string, params: object = null, addCustomerId = true, addLanguage = false) {
       let urlParams: string = null;
       const userData = this.localStorageService.getCurrentUser();
         

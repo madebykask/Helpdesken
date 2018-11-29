@@ -19,14 +19,14 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   @ViewChild('listview') listView: MbscListview;
   private _filter: CasesOverviewFilter;
   private _scrollBindFunc: any;
-  private _timer: any;  
+  private _timer: any;
   private _destroy$ = new Subject();
 
   showSearchPanel = false;
   filtersForm: FormGroup;
   cases: CaseOverviewItem[] = [];
   isLoading: boolean = false;
-  pageSize:number = 10;
+  pageSize: number = 10;
 
   listviewSettings: any = {
     enhance: false,

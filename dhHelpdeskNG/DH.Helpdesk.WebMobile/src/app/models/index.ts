@@ -3,6 +3,7 @@ export * from './translation/language.model';
 export * from './cases-overview/cases-overview-item.model'
 export * from './cases-overview/cases-overview-filter.model'
 export * from './case/case-edit-input.model'
+export * from './case/case-edit-output.model'
 export * from './case/case-options-filter.model'
 export * from './case/case-options.model'
 export * from './case/case-options-datasource.model'

@@ -1,35 +1,39 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
-import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType, CaseLockModel } from '../../models';
-import { forkJoin, Subject, Subscription, of, zip } from 'rxjs';
-import { switchMap, take, finalize, tap, delay, } from 'rxjs/operators';
+import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, 
+  CaseSectionInputModel, CaseSectionType, CaseLockModel, CaseAccessMode } from '../../models';
+import { forkJoin, Subject, Subscription, of } from 'rxjs';
+import { switchMap, take, finalize, tap, delay, catchError, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, Channels } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/header-event-data';
 import { AlertsService } from 'src/app/helpers/alerts/alerts.service';
-import { AuthenticationStateService } from 'src/app/services/authentication';
-import { CaseLockApiService } from 'src/app/services/api/case-lock/case-lock-api.service';
-import { AlertType } from 'src/app/helpers/alerts/alert-types';
 import { interval } from 'rxjs';
-import 'rxjs/add/operator/map'
+import { AuthenticationStateService } from 'src/app/services/authentication';
+import { CaseLockApiService } from 'src/app/services/api/case/case-lock-api.service';
+import { CaseSaveService } from 'src/app/services/case';
+import { CaseFieldsNames } from '../../helpers/constants';
+import { AlertType } from 'src/app/helpers/alerts/alert-types';
 
 @Component({
   selector: 'app-case-edit',
   templateUrl: './case-edit.component.html',
   styleUrls: ['./case-edit.component.scss']
 })
-export class CaseEditComponent implements OnInit, OnDestroy {
-    private caseId: number;
-    private caseData: CaseEditInputModel;
-    private caseSections: CaseSectionInputModel[];
+export class CaseEditComponent {
     caseSectionTypes = CaseSectionType;
+    caseFieldsNames = CaseFieldsNames;
+    accessModeEnum = CaseAccessMode
     dataSource: OptionsDataSource;
     isLoaded = false;
     form: FormGroup;
     tabsMenuSettings = {};
 
+    private caseId: number;
+    private caseData: CaseEditInputModel;
+    private caseSections: CaseSectionInputModel[];
     private ownsLock = false;
     private destroy$ = new Subject();
     private caseLockIntervalSub: Subscription = null;
@@ -42,7 +46,8 @@ export class CaseEditComponent implements OnInit, OnDestroy {
                 private authStateService:AuthenticationStateService,
                 private translateService: TranslateService,
                 private commService: CommunicationService,
-                private alertService: AlertsService) {
+                private alertService: AlertsService,
+                private caseSaveService: CaseSaveService) {
         if (this.route.snapshot.paramMap.has('id')) {
             this.caseId = +this.route.snapshot.paramMap.get('id');
         } else {
@@ -60,7 +65,7 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         if (this.caseData) {
             if (this.caseData.caseSolution) {
                 title = this.caseData.caseSolution.name;
-            } 
+            }
         }
         return title;
     }
@@ -71,31 +76,38 @@ export class CaseEditComponent implements OnInit, OnDestroy {
 
         const caseLock$ = this.caseLockApiService.acquireCaseLock(this.caseId, sessionId);
         const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
-        const caseData$ = 
+        const caseData$ =
             this.caseService.getCaseData(this.caseId)
-                .pipe( 
+                .pipe(
                     switchMap(data => { // TODO: Error handle
-                        this.processCaseDataResponse(data);
-                        const filter = this.getCaseOptionsFilter(this.caseData);
-                        return this.caseService.getCaseOptions(filter);
+                      this.ownsLock = false;
+                      this.caseData = data;
+                      const filter = this.getCaseOptionsFilter(this.caseData);
+                      return this.caseService.getCaseOptions(filter);
                     })
                 );
 
-                forkJoin(caseSections$, caseData$, caseLock$).pipe(
-                    take(1)
-                ).subscribe(([sectionData, options, caseLock]) => {
-                    this.caseSections = sectionData;
-                    this.dataSource = new OptionsDataSource(options);
-                    this.caseLock = caseLock;
-                    this.isLoaded = true;
-                    this.initLock();
+                forkJoin(caseSections$, caseData$, caseLock$)
+                .pipe(
+                    take(1),
+                    switchMap(([sectionData, options, caseLock]) => {
+                      this.caseSections = sectionData;
+                      this.dataSource = new OptionsDataSource(options);
+                      this.caseLock = caseLock;
+                      this.form = this.createFormGroup(this.caseData);
+                      return of([sectionData, options]);
+                    }),
+                    finalize(() => this.isLoaded = true)
+                )
+                .subscribe(() => {
+                	this.initLock();
                 });
     }
 
     ngOnDestroy() {
         this.commService.publish(Channels.Header, new HeaderEventData(true));
         this.destroy$.next();
-        
+
         if (this.caseLockIntervalSub) {
             this.caseLockIntervalSub.unsubscribe();
         }
@@ -122,12 +134,6 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         }
         return this.caseData.fields.filter(f => f.section === type).length > 0;
     }
-    /* getValue<T>(name: string): T {
-        if(this.caseData === null) {
-            throw new Error('No Case Data.');
-        }
-        return this.caseData.Fields.filter(f => f.Name === name)[0].Value as T;
-    }*/
 
     getField(name: string): BaseCaseField<any> {
         if (this.caseData === null) {
@@ -161,88 +167,107 @@ export class CaseEditComponent implements OnInit, OnDestroy {
         return this.caseSections.find(s => s.type == type).isEditCollapsed ? null : true;
     }
 
+    public get canSave() {
+      return !this.form.disabled || this.caseAccessMode == CaseAccessMode.FullAccess;
+    }
+
     saveCase() {
-        return false;
+      if(!this.canSave) {
+        return;
+      }
+      this.isLoaded = false;
+      this.caseSaveService.saveCase(this.form, this.caseId)
+        .pipe(
+          //catchError()
+        ).subscribe(() => {
+          this.navigate('/casesoverview');
+        });
+    }
+
+    private get caseAccessMode(): CaseAccessMode {
+      return this.caseData.editMode;
     }
 
     private getCaseOptionsFilter(data: CaseEditInputModel) {
         let filter = new CaseOptionsFilterModel();
-        // TODO: review and put all field names to constants
-        filter.RegionId = this.getValue('Region_Id');
-        filter.DepartmentId = this.getValue('Department_Id');
-        filter.IsAboutRegionId = this.getValue('IsAbout_Region_Id');
-        filter.IsAboutDepartmentId = this.getValue('IsAbout_Department_Id');
-        filter.CaseResponsibleUserId = this.getValue('CaseResponsibleUser_Id');
-        filter.CaseWorkingGroupId = this.getValue('WorkingGroup_Id');
-        filter.CasePerformerUserId = this.getValue('Performer_User_Id');
-        filter.CaseCausingPartId = this.getValue('CausingPart');
-        filter.CaseTypeId = this.getValue('CaseType_Id');
-        filter.ProductAreaId = this.getValue('ProductArea_Id');
-        filter.Changes = this.hasField('Change');
-        filter.Currencies = this.hasField('Cost_Currency');
-        filter.CausingParts  = this.hasField('CausingPart');
-        filter.CustomerRegistrationSources = this.hasField('RegistrationSourceCustomer');
-        filter.Impacts = this.hasField('Impact_Id');
-        filter.Performers = this.hasField('Performer_User_Id');
-        filter.Priorities = this.hasField('Priority_Id');
-        filter.Problems = this.hasField('Problem');
-        filter.Projects = this.hasField('Project');
-        filter.ResponsibleUsers = this.hasField('CaseResponsibleUser_Id');
-        filter.SolutionsRates = this.hasField('SolutionRate');
-        filter.StateSecondaries = this.hasField('StateSecondary_Id');
-        filter.Statuses = this.hasField('Status_Id');
-        filter.Suppliers = this.hasField('Supplier_Id');// Supplier_Country_Id
-        filter.Systems = this.hasField('System_Id');
-        filter.Urgencies = this.hasField('Urgency_Id');
-        filter.WorkingGroups = this.hasField('WorkingGroup_Id');
-        filter.CaseTypes = this.hasField('CaseType_Id');
-        filter.ProductAreas = this.hasField('ProductArea_Id');
-        filter.Categories = this.hasField('Category_Id');
-        filter.ClosingReasons = this.hasField('ClosingReason');
+        filter.RegionId = this.getValue(this.caseFieldsNames.RegionId);
+        filter.DepartmentId = this.getValue(this.caseFieldsNames.DepartmentId);
+        filter.IsAboutRegionId = this.getValue(this.caseFieldsNames.IsAbout_RegionId);
+        filter.IsAboutDepartmentId = this.getValue(this.caseFieldsNames.IsAbout_DepartmentId);
+        filter.CaseResponsibleUserId = this.getValue(this.caseFieldsNames.CaseResponsibleUserId);
+        filter.CaseWorkingGroupId = this.getValue(this.caseFieldsNames.WorkingGroupId);
+        filter.CasePerformerUserId = this.getValue(this.caseFieldsNames.PerformerUserId);
+        filter.CaseCausingPartId = this.getValue(this.caseFieldsNames.CausingPart);
+        filter.CaseTypeId = this.getValue(this.caseFieldsNames.CaseTypeId);
+        filter.ProductAreaId = this.getValue(this.caseFieldsNames.ProductAreaId);
+        filter.Changes = this.hasField(this.caseFieldsNames.Change);
+        filter.Currencies = this.hasField(this.caseFieldsNames.Cost_Currency);
+        filter.CausingParts  = this.hasField(this.caseFieldsNames.CausingPart);
+        filter.CustomerRegistrationSources = this.hasField(this.caseFieldsNames.RegistrationSourceCustomer);
+        filter.Impacts = this.hasField(this.caseFieldsNames.ImpactId);
+        filter.Performers = this.hasField(this.caseFieldsNames.PerformerUserId);
+        filter.Priorities = this.hasField(this.caseFieldsNames.PriorityId);
+        filter.Problems = this.hasField(this.caseFieldsNames.Problem);
+        filter.Projects = this.hasField(this.caseFieldsNames.Project);
+        filter.ResponsibleUsers = this.hasField(this.caseFieldsNames.CaseResponsibleUserId);
+        filter.SolutionsRates = this.hasField(this.caseFieldsNames.SolutionRate);
+        filter.StateSecondaries = this.hasField(this.caseFieldsNames.StateSecondaryId);
+        filter.Statuses = this.hasField(this.caseFieldsNames.StatusId);
+        filter.Suppliers = this.hasField(this.caseFieldsNames.SupplierId);// Supplier_Country_Id
+        filter.Systems = this.hasField(this.caseFieldsNames.SystemId);
+        filter.Urgencies = this.hasField(this.caseFieldsNames.UrgencyId);
+        filter.WorkingGroups = this.hasField(this.caseFieldsNames.WorkingGroupId);
+        filter.CaseTypes = this.hasField(this.caseFieldsNames.CaseTypeId);
+        filter.ProductAreas = this.hasField(this.caseFieldsNames.ProductAreaId);
+        filter.Categories = this.hasField(this.caseFieldsNames.CategoryId);
+        filter.ClosingReasons = this.hasField(this.caseFieldsNames.ClosingReason);
 
         return filter;
     }
 
-    private processCaseDataResponse(data) {
-      this.ownsLock = false;
-      this.caseData = data;
-      let controls: any = {};
-      data.fields.forEach(field => {
-          controls[field.name] = new FormControl({value: field.value || '', disabled: true});
-      });
+  private createFormGroup(data: CaseEditInputModel): FormGroup {
+    let controls: { [key: string]: FormControl; } = {};
+    data.fields.forEach(field => {
+        controls[field.name] = new FormControl({
+          value: field.value || '',
+          disabled: this.caseLock.isLocked || this.caseAccessMode != CaseAccessMode.FullAccess
+        });
+    });
 
-      this.form = new FormGroup(controls);      
+    return new FormGroup(controls);
   }
 
-  private initLock() {    
+  private initLock() {
     let currentUser =  this.authStateService.getUser();
 
     if (this.caseId > 0) {
-        this.ownsLock = !this.caseLock.isLocked;
+      this.ownsLock = !this.caseLock.isLocked;
 
-        if (this.caseLock.isLocked) {
-            // TODO: translate messages
-            let notice =
-                (this.caseLock.isLocked && this.caseLock.userId === currentUser.id) ?
-                    'OBS! Du har redan oppnat detta arende i en annan session.' :
-                    `OBS! Detta arende ar oppnat av ${this.caseLock.userFullName}'`;
-            this.alertService.showMessage(notice, AlertType.Warning);
-        } else if (this.caseLock.timerInterval > 0) {
-            // run extend case lock at specified interval
-            this.caseLockIntervalSub =
-                interval(this.caseLock.timerInterval * 1000).subscribe(x => {
-                    console.log('>>> timer interval called: ' + (x || 0));
-                    this.caseLockApiService.reExtendedCaseLock(this.caseLock.lockGuid, this.caseLock.extendValue).subscribe(res => {
-                            if (res === false) {
-                                this.ownsLock = false;
-                                this.caseLockIntervalSub.unsubscribe();
-                                this.caseLockIntervalSub = null;
-                            }
-                        }, error => {
-                            // TODO: handle error 
-                        });
-                });
-        }
+      if (this.caseLock.isLocked) {
+          // TODO: translate messages
+          let notice =
+              (this.caseLock.isLocked && this.caseLock.userId === currentUser.id) ?
+                  'OBS! Du har redan oppnat detta arende i en annan session.' :
+                  `OBS! Detta arende ar oppnat av ${this.caseLock.userFullName}'`;
+          this.alertService.showMessage(notice, AlertType.Warning);
+      } else if (this.caseLock.timerInterval > 0) {
+          // run extend case lock at specified interval
+          this.caseLockIntervalSub =
+              interval(this.caseLock.timerInterval * 1000).pipe(
+                switchMap(x => {
+                  return this.caseLockApiService.reExtendedCaseLock(this.caseLock.lockGuid, this.caseLock.extendValue);
+                },
+                // catchError(err => {})// TODO:
+                )
+              )
+              .subscribe(res => {
+                  if (res === false) {
+                      this.ownsLock = false;
+                      this.caseLockIntervalSub.unsubscribe();
+                      this.caseLockIntervalSub = null;
+                  }
+              });
+      }
     }
   }
 }

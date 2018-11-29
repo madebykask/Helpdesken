@@ -1,4 +1,4 @@
-import { OnInit, OnDestroy, Component, Input, OnChanges, ViewChild } from "@angular/core";
+import { Component, Input, ViewChild } from "@angular/core";
 import { BaseCaseField } from "../../../../models";
 import { BaseControl } from "../base-control";
 
@@ -7,7 +7,7 @@ import { BaseControl } from "../base-control";
     templateUrl: './case-textbox-control.component.html',
     styleUrls: ['./case-textbox-control.component.scss']
   })
-  export class CaseTextboxComponent extends BaseControl implements OnChanges, OnInit, OnDestroy {
+  export class CaseTextboxComponent extends BaseControl {
     @ViewChild('input') control: any;
     @Input() field: BaseCaseField<string>;
 
@@ -15,7 +15,7 @@ import { BaseControl } from "../base-control";
     }
 
     ngOnInit(): void {
-      this.control.disabled = true;
+      this.control.readonly = true;
     }
 
     ngOnDestroy(): void {

@@ -3,6 +3,7 @@ import { CaseFileModel } from 'src/app/models/case/case-file-model';
 import { CaseService } from 'src/app/services/case/case.service';
 import { BaseCaseField, OptionItem } from 'src/app/models';
 import { FileDownloadService } from 'src/app/services/files/file-download.service'
+import { CaseApiService } from 'src/app/services/api/case/case-api.service';
 
 @Component({
   selector: 'case-files-control',
@@ -13,22 +14,23 @@ export class CaseFilesControlComponent implements OnInit  {
 
   @Input() field: BaseCaseField<Array<any>>; 
 
-  constructor(private caseService: CaseService,
+  constructor(private caseApiService: CaseApiService,
               private fileDownloadService: FileDownloadService) { 
   }
 
-  ngOnInit() { }  
+  ngOnInit() { }
    
-  getFilesModel() {        
-    var items = this.field.value || new Array<any>();       
-    return items.map(f => new CaseFileModel(f.caseId, f.id, f.fileName));    
+  getFilesModel() {
+    var items = this.field.value || new Array<any>();
+    return items.map(f => new CaseFileModel(f.caseId, f.id, f.fileName));
   }  
 
-  buildCaseFileUrl(item: CaseFileModel){
-    return this.caseService.buildCaseFileUrl(item.caseId, item.fileId);
-  }  
+  buildCaseFileUrl(item: CaseFileModel) {
+    let url = this.caseApiService.buildResourseUrl(`/api/case/${item.caseId}/file/${item.fileId}`, null, true, false)
+    return url;
+  }
 
-  downloadFile(item: CaseFileModel){
+  downloadFile(item: CaseFileModel) {
     this.fileDownloadService.downloadCaseFile(item.caseId, item.fileId, item.fileName);
   }
  

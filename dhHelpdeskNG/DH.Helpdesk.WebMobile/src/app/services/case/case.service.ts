@@ -1,38 +1,27 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { LocalStorageService } from '../local-storage'
-import { HttpApiServiceBase } from '../api'
-import { map, defaultIfEmpty, take, tap, switchMap } from 'rxjs/operators';
-import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel, BaseCaseField, KeyValue, MailToTicketInfo, CaseEditMode, CaseSolution, CaseLockModel } from '../../models';
+import { defaultIfEmpty, take, switchMap } from 'rxjs/operators';
+import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel, BaseCaseField, KeyValue, MailToTicketInfo, CaseAccessMode, CaseSolution } from '../../models';
 import { throwError, forkJoin, empty, Observable, of } from 'rxjs';
 import { CaseOptions } from '../../models/case/case-options.model';
 import { CaseOrganizationService } from '../case-organization';
 import { BundleCaseOptionsService } from '../case-organization/bundle-case-options.service';
+import { CaseApiService } from '../api/case/case-api.service';
 
 @Injectable({ providedIn: 'root' })
-export class CaseService extends HttpApiServiceBase {
+export class CaseService {
 
-    protected constructor(http: HttpClient, localStorageService: LocalStorageService,
-         private _caseOrganizationService: CaseOrganizationService,
-         private _batchCaseOptionsService: BundleCaseOptionsService ) {
-        super(http, localStorageService);
+    protected constructor(private _caseOrganizationService: CaseOrganizationService,
+         private _batchCaseOptionsService: BundleCaseOptionsService,
+         private _caseApiService: CaseApiService ) {
     }
 
     getCaseData(caseId: number): Observable<CaseEditInputModel> {
-      const userData = this.localStorageService.getCurrentUser();
-      let params = null;
-      if (userData !== null) {
-        params = { sessionId: userData.authData.sessionId };
-      }
-      let url = this.buildResourseUrl('/api/case/' + caseId, params, true, true);
-      return this.getJson(url)// TODO: error handling
-          .pipe(
-              take(1),
-              switchMap((caseData: any) => {
-                  let model = this.fromJSONCaseEditInputModel(caseData);
-                  return of(model);
-              }) 
-          );
+      return this._caseApiService.getCaseData(caseId)
+        .pipe(
+          switchMap((caseData: any) => {
+            let model = this.fromJSONCaseEditInputModel(caseData);
+            return of(model);
+        }))
     }
 
     getCaseOptions(filter: CaseOptionsFilterModel) {
@@ -48,7 +37,7 @@ export class CaseService extends HttpApiServiceBase {
         let productAreas$ = fieldExists(filter.ProductAreas) ? this._caseOrganizationService.getProductAreas(filter.CaseTypeId, filter.ProductAreaId) : empty$();
         let categories$ = fieldExists(filter.Categories) ? this._caseOrganizationService.getCategories() : empty$();
         let closingReasons$ = fieldExists(filter.ClosingReasons) ? this._caseOrganizationService.getClosingReasons() : empty$();
- 
+
         let bundledOptions$ = this._batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
 
         return forkJoin(bundledOptions$, regions$, departments$, oUs$, isAboutDepartments$, isAboutOUs$, caseTypes$, productAreas$, categories$, closingReasons$)
@@ -56,7 +45,7 @@ export class CaseService extends HttpApiServiceBase {
                         take(1),
                         switchMap(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes, productAreas, categories, closingReasons]) => {
                             let options = new CaseOptions();
-                            
+
                             if (regions != null) {
                                 options.regions = regions;
                             }
@@ -103,43 +92,36 @@ export class CaseService extends HttpApiServiceBase {
                     }));
     }
 
-    getCaseSections() {        
-        return this.getJson(this.buildResourseUrl('/api/casesections/get', null, true, true)) // TODO: error handling
-            .pipe(
-                take(1),
-                map((jsCaseSections: any) => {
-                    if (!jsCaseSections) throwError("No data from server.");
+    getCaseSections() {
+        return this._caseApiService.getCaseSections()
+          .pipe(
+            switchMap((jsCaseSections: any) => {
+              if (!jsCaseSections) throwError("No data from server.");
 
-                    let sections = (jsCaseSections as Array<any>).map((jsSection: any) => {
-                        return new CaseSectionInputModel(jsSection.id, jsSection.sectionHeader,
-                             jsSection.sectionType, jsSection.isNewCollapsed,
-                             jsSection.isEditCollapsed);
-                    });
-                    return sections;
-                }) 
-            )
-    }
-
-    buildCaseFileUrl(caseId: number, fileId: number): string {
-        let url = this.buildResourseUrl(`/api/case/${caseId}/file/${fileId}`, null, true, false)
-        return url;
+              let sections = (jsCaseSections as Array<any>).map((jsSection: any) => {
+                  return new CaseSectionInputModel(jsSection.id, jsSection.sectionHeader,
+                       jsSection.sectionType, jsSection.isNewCollapsed,
+                       jsSection.isEditCollapsed);
+              });
+              return of(sections);
+          }));
     }
 
     // TODO: review - not all cases covered
     private fromJSONCaseEditInputModel(json: any): CaseEditInputModel {
         if (typeof json === 'string') {
              json = JSON.parse(json);
-        } 
+        }
 
         let fields = json.fields as any[] || new Array();
         let caseSolution = json.caseSolution ? <CaseSolution>json.caseSolution : null;
-        let mailToTickets:MailToTicketInfo = json.mailToTickets ? <MailToTicketInfo>json.mailToTickets : null;      
-        let editMode = <CaseEditMode>json.editMode;
+        let mailToTickets:MailToTicketInfo = json.mailToTickets ? <MailToTicketInfo>json.mailToTickets : null;
+        let editMode = <CaseAccessMode>json.editMode;
 
         return Object.assign(new CaseEditInputModel(), json, {
             editMode: editMode,
             caseSolution: caseSolution,
-            mailToTickets: mailToTickets,           
+            mailToTickets: mailToTickets,
             fields: fields.map(v => {
                 let field = null;
                 switch (v.JsonType) {
@@ -166,7 +148,7 @@ export class CaseService extends HttpApiServiceBase {
 
     private fromJSONBaseCaseField<T>(json: any): BaseCaseField<T> {
         if (typeof json === 'string') {
-            json = JSON.parse(json); 
+            json = JSON.parse(json);
         }
         var options = json.options as any[] || new Array();
         return Object.assign(new BaseCaseField<T>(), json, {

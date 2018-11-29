@@ -6,7 +6,6 @@ import { Observable } from "rxjs";
 import { take, map } from "rxjs/operators";
 import { CaseLockModel } from "src/app/models";
 
-
 @Injectable({ providedIn: 'root' })
 export class CaseLockApiService extends HttpApiServiceBase {
 
@@ -20,7 +19,10 @@ export class CaseLockApiService extends HttpApiServiceBase {
         sessionId: sessionId
     };
     const requestUrl = this.buildResourseUrl('/api/case/lock', null, true, false);
-    return this.postJson<CaseLockModel>(requestUrl, data);
+    return this.postJson<CaseLockModel>(requestUrl, data)
+      .pipe(
+        take(1)
+      );
   }
 
   reExtendedCaseLock(lockGuid: string, extendValue: number): Observable<Boolean>{
