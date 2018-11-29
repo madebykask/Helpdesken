@@ -84,7 +84,7 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
     ).subscribe((data) => {
         this.languagesCtrl.refreshData(data);
     });
-  } 
+  }
   
   logout() {
     this._authenticationService.logout();

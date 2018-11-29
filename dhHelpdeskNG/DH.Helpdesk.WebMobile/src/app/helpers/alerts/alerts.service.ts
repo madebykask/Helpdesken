@@ -9,6 +9,10 @@ export class AlertsService {
     constructor(private comService:CommunicationService) {        
     }
 
+    clearMessages() {
+      mobiscroll.snackbar({duration:100});
+    }
+
     showMessage(message, alertType:AlertType = AlertType.Info, visibilityTimeoutSec:number = 0) {
     
         let alertColor = '';

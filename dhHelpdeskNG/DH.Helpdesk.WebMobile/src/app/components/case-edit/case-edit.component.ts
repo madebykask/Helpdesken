@@ -117,7 +117,8 @@ export class CaseEditComponent {
             this.caseLockApiService.unLockCase(this.caseLock.lockGuid).subscribe();
         }
 
-        //todo: close ALERTS!!!
+        //shall we do extra checks? 
+        this.alertService.clearMessages();
     }
 
     hasField(name: string): boolean {
@@ -241,9 +242,10 @@ export class CaseEditComponent {
     let currentUser =  this.authStateService.getUser();
 
     if (this.caseId > 0) {
+
       this.ownsLock = !this.caseLock.isLocked;
 
-      if (this.caseLock.isLocked) {
+      if (true) {//(this.caseLock.isLocked) {
           // TODO: translate messages
           let notice =
               (this.caseLock.isLocked && this.caseLock.userId === currentUser.id) ?
