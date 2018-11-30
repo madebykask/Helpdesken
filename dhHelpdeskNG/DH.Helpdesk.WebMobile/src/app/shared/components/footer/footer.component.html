@@ -8,10 +8,10 @@
 
 <mbsc-select [(ngModel)]="languageId" [options]="languagesSettings" #languages hidden></mbsc-select>
 
-<mbsc-popup [options]="listSettings" #caseSearchPopup="mobiscroll">
-    <mbsc-listview [options]="lvSettings">
-        <mbsc-listview-header>Search Cases</mbsc-listview-header>
-        <mbsc-listview-item (click)="goToCases(SearchType.All)" translate>All</mbsc-listview-item>
-        <mbsc-listview-item (click)="goToCases(SearchType.MyCases)" translate>My Cases</mbsc-listview-item>
+<mbsc-popup [options]="popUpLlistSettings" #caseSearchPopup="mobiscroll">
+    <mbsc-listview [options]="popUpLvSettings">
+        <mbsc-listview-header translate>Söka ärenden</mbsc-listview-header>
+        <mbsc-listview-item (click)="goToCases(SearchType.All)" translate>Översikt</mbsc-listview-item>
+        <mbsc-listview-item (click)="goToCases(SearchType.MyCases)" translate>Mina ärenden</mbsc-listview-item>
     </mbsc-listview>
 </mbsc-popup>
