@@ -8,8 +8,8 @@
   <configSections>
     <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
     <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
-    <section name="system.identityModel" type="System.IdentityModel.Configuration.SystemIdentityModelSection, System.IdentityModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089" />
-    <section name="system.identityModel.services" type="System.IdentityModel.Services.Configuration.SystemIdentityModelServicesSection, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089" />
+   <!-- TODO: Parameters <section name="system.identityModel" type="System.IdentityModel.Configuration.SystemIdentityModelSection, System.IdentityModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089" />
+    <section name="system.identityModel.services" type="System.IdentityModel.Services.Configuration.SystemIdentityModelServicesSection, System.IdentityModel.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089" />-->
 
     #{if IsFormLibConfigurable}
     <sectionGroup name="formLibConfigurable">
@@ -51,11 +51,11 @@
     <!-- For self/service line manager -->
     <add key="InitFromSelfService" value="#{InitFromSelfService}" />
     <add key="InitFromSelfServiceWorkflowInitValue" value="#{InitFromSelfServiceWorkflowInitValue}" />
-    <add key="ida:FederationMetadataLocation" value="https://fs.dhsolutions.se/federationmetadata/2007-06/federationmetadata.xml" />
+  <!-- TODO: Parameters   <add key="ida:FederationMetadataLocation" value="https://fs.dhsolutions.se/federationmetadata/2007-06/federationmetadata.xml" />
     <add key="ida:Issuer" value="https://fs.dhsolutions.se/adfs/ls/" />
     <add key="ida:ProviderSelection" value="productionSTS" />
     <add key="SmtpServer" value="smtp.datahalland.se" />
-    <add key="SmtpPort" value="25" />
+    <add key="SmtpPort" value="25" />-->
 
     <add key="CaseList" value="manager,coworkers" />
     <add key="CurrentApplication" value="SelfService" />
@@ -151,6 +151,13 @@
         <requestLimits maxAllowedContentLength="38000000" />
       </requestFiltering>
     </security>
+    <handlers>
+      <add name="ReportViewerWebControlHandler" preCondition="integratedMode" verb="*" path="Reserved.ReportViewerWebControl.axd" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"/>
+      <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
+      <remove name="OPTIONSVerbHandler" />
+      <remove name="TRACEVerbHandler" />
+      <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
+    </handlers>
   </system.webServer>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
@@ -245,6 +252,7 @@
     </providers>
   </entityFramework>
 
+  #{if IsSingleSignOnConfigurable}
   <!--This is for Single Sign-->
   <system.identityModel>
     <identityConfiguration>
@@ -271,6 +279,7 @@
       <wsFederation passiveRedirectEnabled="true" issuer="https://fs.dhsolutions.se/adfs/ls/" realm="http://dhhelpdesk-dh-test/selfservice/" requireHttps="false" />
     </federationConfiguration>
   </system.identityModel.services>
+  #{/if}
 
 
 </configuration>
