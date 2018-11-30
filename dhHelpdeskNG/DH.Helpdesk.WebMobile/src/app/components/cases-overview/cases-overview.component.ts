@@ -40,16 +40,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   constructor(private casesOverviewService: CasesOverviewService,
               private formBuilder: FormBuilder,
               private route: ActivatedRoute,
-              private router: Router) {
-   
-      route.queryParamMap.pipe(
-          map((x:ParamMap) => +x.get('searchType'))
-      ).subscribe((st:number) => {
-          console.log('>>> st: ' + st);
-          this.searchType = !isNaN(st) ?  <CasesSearchType>st : CasesSearchType.All;        
-          //console.log(`>>>this.searchType: ${this.searchType}`);
-          //run search again                 
-      });     
+              private router: Router) {   
   }
 
   ngOnInit() {
@@ -58,8 +49,17 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
       freeSearch: ['']
     });
     this.pageSize = this.caclucatePageSize();
-    this.initFilter();
-    this.search();
+    this.route.queryParamMap.pipe(
+      map((x:ParamMap) => +x.get('searchType'))
+          ).subscribe((st:number) => {
+              console.log('>>> st: ' + st);
+              this.searchType = !isNaN(st) ?  <CasesSearchType>st : CasesSearchType.All;             
+              this.initFilter();
+              this.resetCases();
+              this.search();
+              console.log(`>>>this.searchType: ${this.searchType}`);      
+          });     
+
     this._scrollBindFunc = this.checkLoad.bind(this);
     window.addEventListener('scroll', this._scrollBindFunc);
   }
@@ -135,7 +135,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
         // catchError(err => {})// TODO:
       ).subscribe(
         data => {
-          if(data != null && data.length > 0)
+          if (data != null && data.length > 0)
           this.cases = this.cases.concat(data);
         });
   }

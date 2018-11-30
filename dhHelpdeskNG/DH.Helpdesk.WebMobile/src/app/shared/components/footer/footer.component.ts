@@ -42,14 +42,14 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoadingLanguage: boolean = true;
   isVisible = true;
   
-  listSettings: MbscPopupOptions = {
+  popUpLlistSettings: MbscPopupOptions = {
     buttons: [],
     closeOnOverlayTap: true,
     display: 'bottom',
     cssClass: 'mbsc-no-padding'
   };
  
-  lvSettings: MbscListviewOptions = {
+  popUpLvSettings: MbscListviewOptions = {
     enhance: true,
     swipe: false    
 };
