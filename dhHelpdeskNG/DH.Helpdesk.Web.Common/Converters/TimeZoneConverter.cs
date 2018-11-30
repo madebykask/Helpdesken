@@ -44,7 +44,9 @@ namespace DH.Helpdesk.Web.Common.Converters
             }
             var source = TzdbDateTimeZoneSource.Default;
             // If there's no such mapping, result will be null.
-            source.WindowsMapping.PrimaryMapping.TryGetValue(windowsZoneId, out var result);
+
+            string result;
+            source.WindowsMapping.PrimaryMapping.TryGetValue(windowsZoneId, out result);
             // Canonicalize
             if (result != null)
             {
