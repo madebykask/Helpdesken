@@ -48,8 +48,8 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
           console.log('>>> st: ' + st);
           this.searchType = !isNaN(st) ?  <CasesSearchType>st : CasesSearchType.All;        
           //console.log(`>>>this.searchType: ${this.searchType}`);
-          //run search again
-      })
+          //run search again                 
+      });     
   }
 
   ngOnInit() {
@@ -149,6 +149,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     this._filter.Page = PagingConstants.page;
     this._filter.Ascending = false;
     this._filter.OrderBy = 'CaseNumber';// TODO - remove use hardcode
+    this._filter.SearchInMyCasesOnly = Boolean(this.searchType);
   }
 
   private caclucatePageSize(): number {

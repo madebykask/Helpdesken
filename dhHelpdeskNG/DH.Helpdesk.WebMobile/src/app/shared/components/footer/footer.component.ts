@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { /*MbscPopup,*/ MbscSelect, MbscSelectOptions, MbscNavOptions, mobiscroll, MbscListviewOptions, MbscOptionlistOptions } from '@mobiscroll/angular';
+import { MbscPopup, MbscPopupOptions, MbscSelect, MbscSelectOptions, MbscNavOptions, mobiscroll, MbscListviewOptions, MbscOptionlistOptions } from '@mobiscroll/angular';
 import { take, finalize } from 'rxjs/operators';
 import { UserSettingsService } from 'src/app/services/user';
 import { TranslateService } from '@ngx-translate/core';
@@ -18,7 +18,7 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
   private _destroy$ = new Subject();
   SearchType = CasesSearchType; // this allows to use enum values in the view
 
-  @ViewChild('caseSearchPopup') caseSearchPopup: any;// MbscPopup;
+  @ViewChild('caseSearchPopup') caseSearchPopup: MbscPopup;
   @ViewChild('languages') languagesCtrl: MbscSelect;
   
   languagesSettings: MbscSelectOptions = {
@@ -42,7 +42,7 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoadingLanguage: boolean = true;
   isVisible = true;
   
-  listSettings: any = {
+  listSettings: MbscPopupOptions = {
     buttons: [],
     closeOnOverlayTap: true,
     display: 'bottom',
