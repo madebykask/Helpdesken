@@ -1,0 +1,2 @@
+"c:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MSBuild.exe" DH.Helpdesk.WebApi.csproj /p:Configuration=DhDev /p:DeployOnBuild=true /p:PublishProfile="DhDev - Local File System" 
+pause;
