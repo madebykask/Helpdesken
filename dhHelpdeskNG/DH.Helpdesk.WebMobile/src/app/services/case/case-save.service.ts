@@ -27,7 +27,7 @@ export class CaseSaveService {
   }
 
   private getValue<T>(form: FormGroup, fieldName: string): T {
-    if(this.hasValue(form, fieldName)) {
+    if (this.hasValue(form, fieldName)) {
       return <T>form.controls[fieldName].value;
     }
     return undefined;

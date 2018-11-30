@@ -4,6 +4,7 @@ using AutoMapper;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.WebApi.Infrastructure;
+using DH.Helpdesk.WebApi.Infrastructure.Filters;
 using DH.Helpdesk.WebApi.Models;
 
 namespace DH.Helpdesk.WebApi.Controllers
@@ -14,15 +15,20 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseLockService _caseLockService;
         private readonly IMapper _mapper;
 
+        #region ctor()
+
         public CaseLocksController(ICaseLockService caseLockService, IMapper mapper)
         {
             _caseLockService = caseLockService;
             _mapper = mapper;
         }
 
+            #endregion
+
         // isLocked - already locked by ither
         //todo: add permissions checks
         [HttpPost]
+        [CheckUserCasePermissions(CaseIdParamName = "caseId", CheckBody = true)]
         [Route("lock")] //ex: /api/case/lock?cid=1
         public async Task<IHttpActionResult> AcquireCaseLock([FromBody]CaseLockInputModel input)
         {
@@ -32,7 +38,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpPost]
-        //[CheckUserCasePermissions(CaseIdParamName = "caseId")] ?
+        [CheckUserCasePermissions(CaseIdParamName = "caseId", CheckBody = true)] 
         [Route("unlock")] //ex: /api/Case/unlock?cid=1
         public async Task<IHttpActionResult> UnlockCase([FromBody]CaseUnLockInputModel input)
         {
@@ -42,7 +48,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpPost]
-        //[CheckUserCasePermissions(CaseIdParamName = "caseId")]?
+        [CheckUserCasePermissions(CaseIdParamName = "caseId", CheckBody = true)]
         [Route("extendlock")]
         public async Task<IHttpActionResult> ExtendCaseLock([FromBody] ExtendCaseLockInputModel input)
         {

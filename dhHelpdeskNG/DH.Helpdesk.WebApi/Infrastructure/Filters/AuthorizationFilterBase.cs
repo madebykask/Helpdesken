@@ -11,7 +11,6 @@ using Autofac.Integration.WebApi;
 
 namespace DH.Helpdesk.WebApi.Infrastructure.Filters
 {
-
     public abstract class AuthorizationFilterBase : IAutofacAuthorizationFilter
     {
         #region AttributeCheckScope
@@ -122,7 +121,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
         {
             var queryParams = requestMessage.GetQueryNameValuePairs();
             var param = queryParams.FirstOrDefault(x => x.Key.Equals(paramName, StringComparison.OrdinalIgnoreCase));
-            // no null check requeired since result is a struct        
+            // no null check required since result is a struct        
             return param.Value;
         }
 

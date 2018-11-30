@@ -12,12 +12,19 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
         {
         }
 
-        public CheckUserCasePermissionsAttribute(string paramName)
+        public CheckUserCasePermissionsAttribute(string paramName, bool checkBody = false)
         {
             CaseIdParamName = paramName;
+            CheckBody = checkBody;
         }
 
         public string CaseIdParamName
+        {
+            get;
+            set;
+        }
+
+        public bool CheckBody
         {
             get;
             set;

@@ -19,33 +19,33 @@ export class CaseLockApiService extends HttpApiServiceBase {
         sessionId: sessionId
     };
     const requestUrl = this.buildResourseUrl('/api/case/lock', null, true, false);
-    return this.postJson<CaseLockModel>(requestUrl, data)
-      .pipe(
+    return this.postJson<CaseLockModel>(requestUrl, data).pipe(
         take(1)
-      );
+    );
   }
 
-  reExtendedCaseLock(lockGuid: string, extendValue: number): Observable<Boolean>{
+  reExtendedCaseLock(caseId: number, lockGuid: string, extendValue: number): Observable<Boolean>{
       const data = {
+          caseId: caseId,
           lockGuid : lockGuid,
           extendValue: extendValue
       };
       const requestUrl = this.buildResourseUrl('/api/case/extendlock', null, true, false);
-      return this.postJson<Boolean>(requestUrl, data)
-          .pipe(
-              take(1),
-              // tap(res => console.log('>>>> reexend case lock: ' + res)),
-              map((res: Boolean) => res)
-          );
+      return this.postJson<Boolean>(requestUrl, data).pipe(
+          take(1),              
+          map((res: Boolean) => res)
+      );
   }
 
-  unLockCase(lockGuid: string): Observable<Boolean> {
+  unLockCase(caseId: number, lockGuid: string): Observable<Boolean> {
+      const data = {
+        caseId: caseId, 
+        lockGuid: lockGuid 
+      };
       const requestUrl = this.buildResourseUrl('/api/case/unlock', null, true, false);
-      return this.postJson<Boolean>(requestUrl, { lockGuid: lockGuid })
-          .pipe(
-              take(1),
-              // tap(res => console.log('>>>> unlock case lock: ' + res)),
-              map((res: Boolean) => res)
-          );
+      return this.postJson<Boolean>(requestUrl, data).pipe(
+          take(1),        
+          map((res: Boolean) => res)
+      );
   }
 }

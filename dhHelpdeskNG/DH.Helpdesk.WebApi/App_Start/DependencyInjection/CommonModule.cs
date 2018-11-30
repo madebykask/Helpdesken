@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Infrastructure.Concrete;
 using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email;
@@ -77,8 +78,12 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
                 .As<INotifierFieldSettingsFactory>()
                 .SingleInstance();
 
-            builder.RegisterType<ExcelFileComposer>().
-                As<IExcelFileComposer>()
+            builder.RegisterType<ExcelFileComposer>()
+                .As<IExcelFileComposer>()
+                .SingleInstance();
+
+            builder.RegisterType<JsonSerializeService>()
+                .As<IJsonSerializeService>()
                 .SingleInstance();
         }
     }

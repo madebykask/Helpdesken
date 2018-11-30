@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
-import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, 
-  CaseSectionInputModel, CaseSectionType, CaseLockModel, CaseAccessMode } from '../../models';
+import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType, CaseLockModel, CaseAccessMode } from '../../models';
 import { forkJoin, Subject, Subscription, of } from 'rxjs';
 import { switchMap, take, finalize, tap, delay, catchError, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
@@ -114,7 +113,7 @@ export class CaseEditComponent {
 
         // unlock the case if required
         if (this.caseId > 0 && this.ownsLock) {
-            this.caseLockApiService.unLockCase(this.caseLock.lockGuid).subscribe();
+            this.caseLockApiService.unLockCase(this.caseId, this.caseLock.lockGuid).subscribe();
         }
 
         //shall we do extra checks? 
@@ -245,7 +244,7 @@ export class CaseEditComponent {
 
       this.ownsLock = !this.caseLock.isLocked;
 
-      if (true) {//(this.caseLock.isLocked) {
+      if (this.caseLock.isLocked) {
           // TODO: translate messages
           let notice =
               (this.caseLock.isLocked && this.caseLock.userId === currentUser.id) ?
@@ -257,7 +256,7 @@ export class CaseEditComponent {
           this.caseLockIntervalSub =
               interval(this.caseLock.timerInterval * 1000).pipe(
                 switchMap(x => {
-                  return this.caseLockApiService.reExtendedCaseLock(this.caseLock.lockGuid, this.caseLock.extendValue);
+                  return this.caseLockApiService.reExtendedCaseLock(this.caseId, this.caseLock.lockGuid, this.caseLock.extendValue);
                 },
                 // catchError(err => {})// TODO:
                 )

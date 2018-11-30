@@ -6,6 +6,7 @@ using Autofac.Integration.WebApi;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Services.Services;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json.Linq;
 
 namespace DH.Helpdesk.WebApi.Infrastructure.Filters
 {
@@ -13,10 +14,15 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
     {
         private readonly IUserService _userService;
 
+        #region ctor()
+
         public UserCasePermissionsFilter(IUserService userService)
         {
             _userService = userService;
         }
+
+        #endregion
+
         protected override void AuthorizeRequest(HttpActionContext actionContext)
         {
             var principal = actionContext.RequestContext.Principal as ClaimsPrincipal;
@@ -71,6 +77,29 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
             if (Int32.TryParse(paramValue, out caseId))
                 return caseId;
 
+            //extract from body input in case of json object
+            if (attr.CheckBody)
+            {
+                try
+                {
+                    // it is important to use ReadAsStringAsync to keep the request stream position at 0 
+                    var content = actionContext.Request.Content.ReadAsStringAsync().Result;
+                    
+                    var val = (JToken.Parse(content)
+                                     .Children<JProperty>()
+                                     .FirstOrDefault(x => x.Name.Equals(paramName, StringComparison.OrdinalIgnoreCase))?.Value ?? string.Empty).ToString();
+
+                    if (!string.IsNullOrEmpty(val))
+                    {
+                        if (Int32.TryParse(val, out caseId))
+                            return caseId;
+                    }
+                }
+                catch (Exception e)
+                {
+                }
+            }
+            
             return 0;
         }
 
