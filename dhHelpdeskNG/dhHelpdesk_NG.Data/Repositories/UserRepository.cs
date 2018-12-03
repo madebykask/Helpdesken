@@ -527,15 +527,15 @@ namespace DH.Helpdesk.Dal.Repositories
         
         private UserOverview GetUser(Expression<Func<User, bool>> expression)
         {
-            return GetUsertQuery(expression).SingleOrDefault();
+            return GetUserQuery(expression).SingleOrDefault();
         }
 
         private async Task<UserOverview> GetUserAsync(Expression<Func<User, bool>> expression)
         {
-            return await GetUsertQuery(expression).SingleOrDefaultAsync();
+            return await GetUserQuery(expression).SingleOrDefaultAsync();
         }
 
-        private IQueryable<UserOverview> GetUsertQuery(Expression<Func<User, bool>> expression)
+        private IQueryable<UserOverview> GetUserQuery(Expression<Func<User, bool>> expression)
         {
             var selector = GetUserOverviewSelector();
             return Table.Where(expression).Select(selector);

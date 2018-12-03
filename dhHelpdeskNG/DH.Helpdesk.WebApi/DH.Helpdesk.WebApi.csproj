@@ -262,6 +262,7 @@
     <Compile Include="Models\ExtendCaseLockInput.cs" />
     <Compile Include="Models\LoginUserInputModel.cs" />
     <Compile Include="Models\RefreshTokenInputModel.cs" />
+    <Compile Include="Logic\CaseEditModeCalcStrategy.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

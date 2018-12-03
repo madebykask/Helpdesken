@@ -1734,12 +1734,14 @@ namespace DH.Helpdesk.Web.Controllers
                     m.LogFileNames = string.Join("|", m.LogFilesModel.Files.Select(x => x.Name).ToArray());
                     AddViewDataValues();
                     SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
+                    
                     // User has not access to case/log
                     if (m.EditMode == AccessMode.NoAccess)
                         return this.RedirectToAction("index", "home");
 
                     m.editLog = editLog;
                     m.newLog = newLog;
+
                     if (newLog)
                     {
                         m.CaseLog.OldLog_Id = m.CaseLog.Id;
@@ -1747,8 +1749,6 @@ namespace DH.Helpdesk.Web.Controllers
                     }
 
                     m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
-
-
                 }
             }
 

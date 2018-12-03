@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Results;
 using AutoMapper;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Case;
@@ -21,9 +20,9 @@ using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Web.Common.Constants.Case;
 using DH.Helpdesk.Web.Common.Enums.Case;
-using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Authentication;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
+using DH.Helpdesk.WebApi.Logic;
 using DateTime = System.DateTime;
 
 namespace DH.Helpdesk.WebApi.Controllers
@@ -44,6 +43,9 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ISettingService _customerSettingsService;
         private readonly ITranslateCacheService _translateCacheService;
         private readonly IMapper _mapper;
+        private readonly IDepartmentService _departmentService;
+        private readonly IGlobalSettingService _globalSettingService;
+        private CaseEditModeCalcStrategy _caseEditModeCalcStrategy;
 
         #region ctor()
 
@@ -51,8 +53,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             IMailTemplateService mailTemplateService, IBaseCaseSolutionService caseSolutionService,
             ICustomerUserService customerUserService, IUserService userService, IWorkingGroupService workingGroupService,
             ISupplierService supplierService, ISettingService customerSettingsService, ITranslateCacheService translateCacheService,
+            IDepartmentService departmentService, IGlobalSettingService globalSettingService,
             IMapper mapper)
         {
+            _globalSettingService = globalSettingService;
+            _departmentService = departmentService;
             _caseService = caseService;
             _caseFileService = caseFileService;
             _caseFieldSettingService = caseFieldSettingService;
@@ -65,6 +70,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             _translateCacheService = translateCacheService;
             _caseSolutionService = caseSolutionService;
             _mapper = mapper;
+
+            _caseEditModeCalcStrategy = new CaseEditModeCalcStrategy(globalSettingService, userService, departmentService);
         }
 
         #endregion
@@ -1262,28 +1269,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             #endregion
 
             //calc case edit mode
-            model.EditMode = CalcCaseEditMode(currentCase); // remember to apply isCaseLocked check on client
+            model.EditMode = _caseEditModeCalcStrategy.CalcEditMode(cid, UserId, currentCase); // remember to apply isCaseLocked check on client
 
             return model;
-        }
-
-        // todo: Move to separate class or service to be shared across other projects
-        private AccessMode CalcCaseEditMode(Case @case)
-        {
-            //todo: add other logic (deps, wg access checks) from dhHelpdesk_NG.Web\Controllers\CasesController.cs.EDitMode()
-
-            if (@case.FinishingDate.HasValue)
-            {
-                return AccessMode.ReadOnly;
-            }
-
-            //will be checked on client
-            //if (lockModel != null && lockModel.IsLocked)
-            //{
-            //    return AccessMode.ReadOnly;
-            //}
-
-            return AccessMode.FullAccess;
         }
 
         private IList<CaseFileModel> GetCaseFilesModel(int caseId)
