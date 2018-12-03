@@ -168,7 +168,7 @@ export class CaseEditComponent {
     }
 
     public get canSave() {
-      return !this.form.disabled || this.caseAccessMode == CaseAccessMode.FullAccess;
+      return !this.caseLock.isLocked && this.caseAccessMode == CaseAccessMode.FullAccess;
     }
 
     saveCase() {
@@ -230,7 +230,7 @@ export class CaseEditComponent {
     data.fields.forEach(field => {
         controls[field.name] = new FormControl({
           value: field.value || '',
-          disabled: this.caseLock.isLocked || this.caseAccessMode != CaseAccessMode.FullAccess
+          disabled: !this.canSave
         });
     });
 
