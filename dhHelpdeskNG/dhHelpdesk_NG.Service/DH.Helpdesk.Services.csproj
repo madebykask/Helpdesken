@@ -365,6 +365,7 @@
     <Compile Include="Services\Cases\CaseSectionService.cs" />
     <Compile Include="Services\GDPRService.cs" />
     <Compile Include="Services\GDPRTasksService.cs" />
+    <Compile Include="Services\ICaseService.cs" />
     <Compile Include="Services\IExtendedCaseService.cs" />
     <Compile Include="Services\IMetaDataService.cs" />
     <Compile Include="Services\UniversalCase\IUniversalCaseService.cs" />
@@ -582,6 +583,7 @@
     <Compile Include="Services\Users\IUsersPasswordHistoryService.cs" />
     <Compile Include="Services\WebApi\Concrete\WebApiService.cs" />
     <Compile Include="Services\WebApi\IWebApiService.cs" />
+    <Compile Include="Services\СaseService_Email.cs" />
     <Compile Include="utils\ServiceUtils.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Changes\IUpdateChangeRequestValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Changes\Concrete\UpdateChangeRequestValidator.cs" />
