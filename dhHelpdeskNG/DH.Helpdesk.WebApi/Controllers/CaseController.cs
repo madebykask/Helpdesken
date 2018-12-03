@@ -43,9 +43,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ISettingService _customerSettingsService;
         private readonly ITranslateCacheService _translateCacheService;
         private readonly IMapper _mapper;
-        private readonly IDepartmentService _departmentService;
-        private readonly IGlobalSettingService _globalSettingService;
-        private CaseEditModeCalcStrategy _caseEditModeCalcStrategy;
+        private readonly ICaseEditModeCalcStrategy _caseEditModeCalcStrategy;
 
         #region ctor()
 
@@ -53,11 +51,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             IMailTemplateService mailTemplateService, IBaseCaseSolutionService caseSolutionService,
             ICustomerUserService customerUserService, IUserService userService, IWorkingGroupService workingGroupService,
             ISupplierService supplierService, ISettingService customerSettingsService, ITranslateCacheService translateCacheService,
-            IDepartmentService departmentService, IGlobalSettingService globalSettingService,
+            ICaseEditModeCalcStrategy caseEditModeCalcStrategy,
             IMapper mapper)
         {
-            _globalSettingService = globalSettingService;
-            _departmentService = departmentService;
             _caseService = caseService;
             _caseFileService = caseFileService;
             _caseFieldSettingService = caseFieldSettingService;
@@ -70,8 +66,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _translateCacheService = translateCacheService;
             _caseSolutionService = caseSolutionService;
             _mapper = mapper;
-
-            _caseEditModeCalcStrategy = new CaseEditModeCalcStrategy(globalSettingService, userService, departmentService);
+            _caseEditModeCalcStrategy = caseEditModeCalcStrategy;
         }
 
         #endregion

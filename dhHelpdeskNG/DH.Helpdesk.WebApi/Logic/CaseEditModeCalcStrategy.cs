@@ -5,7 +5,9 @@ using DH.Helpdesk.Web.Common.Enums.Case;
 
 namespace DH.Helpdesk.WebApi.Logic
 {
-    public class CaseEditModeCalcStrategy
+    
+
+    public class CaseEditModeCalcStrategy: ICaseEditModeCalcStrategy
     {
         private readonly IGlobalSettingService _globalSettingService;
         private readonly IUserService _userService;
@@ -82,5 +84,10 @@ namespace DH.Helpdesk.WebApi.Logic
 
             return AccessMode.FullAccess;
         }
+    }
+
+    public interface ICaseEditModeCalcStrategy
+    {
+        AccessMode CalcEditMode(int customerId, int userId, Case @case, bool temporaryHasAccessToWG = false);
     }
 }
