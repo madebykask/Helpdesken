@@ -6,6 +6,7 @@ using System.Web;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Dal.Repositories.Cases;
+using DH.Helpdesk.Services.BusinessLogic.Settings;
 using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services
@@ -29,18 +30,14 @@ namespace DH.Helpdesk.Services.Services
     public class CaseFileService : ICaseFileService
     {
         private readonly ICaseFileRepository _caseFileRepository;
-        private readonly IGlobalSettingRepository _globalSettingRepository;
-        private readonly ISettingRepository _settingRepository;
+        private readonly ISettingsLogic _settingsLogic;
 
         #region ctor()
 
-        public CaseFileService(ISettingRepository settingRepository,
-            IGlobalSettingRepository globalSettingRepository,
-            ICaseFileRepository caseFileRepository)
+        public CaseFileService(ICaseFileRepository caseFileRepository, ISettingsLogic settingsLogic)
         {
-            _settingRepository = settingRepository;
-            _globalSettingRepository = globalSettingRepository;
             _caseFileRepository = caseFileRepository;
+            _settingsLogic = settingsLogic;
         }
 
         #endregion
@@ -175,15 +172,7 @@ namespace DH.Helpdesk.Services.Services
 
         private string GetFileAttachFolderPath(int customerId)
         {
-            var customerFilePath = _settingRepository.GetMany(s => s.Customer_Id == customerId).Single().PhysicalFilePath;
-            if (string.IsNullOrEmpty(customerFilePath))
-            {
-                var globalSetting = _globalSettingRepository.Get();
-                if (globalSetting != null)
-                    customerFilePath = globalSetting.AttachedFileFolder;
-            }
-
-            return customerFilePath ?? string.Empty;
+            return _settingsLogic.GetFilePath(customerId);
         }
 
         #endregion

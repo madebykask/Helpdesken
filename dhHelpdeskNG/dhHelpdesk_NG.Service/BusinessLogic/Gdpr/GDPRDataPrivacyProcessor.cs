@@ -15,6 +15,7 @@ using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Domain.ExtendedCaseEntity;
 using DH.Helpdesk.Domain.GDPR;
+using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
 using log4net;
 using IUnitOfWork = DH.Helpdesk.Dal.NewInfrastructure.IUnitOfWork;
@@ -37,6 +38,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IJsonSerializeService _jsonSerializeService;
         private readonly IDataPrivacyTaskProgress _taskProgress;
+        private readonly ISettingsLogic _settingsLogic;
 
         const int sqlTimeout = 300; //seconds
 
@@ -87,7 +89,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             ISettingRepository settingRepository,
             IJsonSerializeService jsonSerializeService,
             IDataPrivacyTaskProgress taskProgress,
-            IUnitOfWorkFactory unitOfWorkFactory)
+            IUnitOfWorkFactory unitOfWorkFactory,
+            ISettingsLogic settingsLogic)
         {
             _jsonSerializeService = jsonSerializeService;
             _taskProgress = taskProgress;
@@ -96,6 +99,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
             _settingRepository = settingRepository;
             _globalSettingRepository = globalSettingRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
+            _settingsLogic = settingsLogic;
         }
 
         #endregion
@@ -292,19 +296,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
 
         private string GetFilesDirPath(int customerId)
         {
-            var dirPath = string.Empty;
-            var customerSettings = _settingRepository.GetCustomerSetting(customerId);
-            if (!string.IsNullOrEmpty(customerSettings.PhysicalFilePath))
-            {
-                dirPath = customerSettings.PhysicalFilePath;
-            }
-            else
-            {
-                var globalSettings = _globalSettingRepository.Get();
-                dirPath = globalSettings.AttachedFileFolder;
-            }
-
-            return dirPath ?? string.Empty;
+            return _settingsLogic.GetFilePath(customerId);
         }
 
         #region Replace case data

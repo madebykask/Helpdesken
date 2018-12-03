@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Services.Services.Feedback;
 using DH.Helpdesk.Services.Services.Invoice;
@@ -138,6 +139,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IRegistrationSourceCustomerService>().To<RegistrationSourceCustomerService>();
             this.Bind<ICaseLockService>().To<CaseLockService>();
             this.Bind<ICaseSolutionConditionService>().To<CaseSolutionConditionService>();
+            Bind<ISettingsLogic>().To<SettingsLogic>();
 
             // Liceneses module services
             this.Bind<IProductsService>().To<ProductsService>();

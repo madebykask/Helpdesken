@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Services.Services.Cases;
@@ -78,6 +79,7 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<CaseSectionService>().As<ICaseSectionService>();
             builder.RegisterType<BaseCaseSolutionService>().As<IBaseCaseSolutionService>();
             builder.RegisterType<CausingPartService>().As<ICausingPartService>();
+            builder.RegisterType<SettingsLogic>().As<ISettingsLogic>();
 
             builder.RegisterType<CaseEditModeCalcStrategy>().As<ICaseEditModeCalcStrategy>();
         }

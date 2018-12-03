@@ -265,6 +265,7 @@
     <Compile Include="BusinessLogic\Orders\Concrete\OrdersLogic.cs" />
     <Compile Include="BusinessLogic\Orders\IHistoriesComparator.cs" />
     <Compile Include="BusinessLogic\Orders\IOrdersLogic.cs" />
+    <Compile Include="BusinessLogic\Settings\SettingsLogic.cs" />
     <Compile Include="BusinessLogic\Specifications\Accounts\AccountFieldSettingsSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Accounts\AccountSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\BulletinBoards\BulletinBoardsSpecifications.cs" />
