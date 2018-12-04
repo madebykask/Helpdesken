@@ -65,6 +65,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Authentication
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
                 identity.AddClaim(new Claim(ClaimTypes.Name, user.UserId));
                 identity.AddClaim(new Claim(ClaimTypes.Role, user.UserGroupId.ToString()));
+                identity.AddClaim(new Claim(CustomClaimTypes.TimezoneId, user.TimeZoneId));
                 //var userCustomerIds = userService.GetUserCustomersIds(user.Id);// if new customer is assigned to user, user will need to relgin
                 //identity.AddClaim(new Claim(CustomClaimTypes.CustomerIds, string.Join(",", userCustomerIds)));
 

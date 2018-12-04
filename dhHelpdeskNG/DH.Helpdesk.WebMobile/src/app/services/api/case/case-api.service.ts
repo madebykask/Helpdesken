@@ -27,7 +27,7 @@ export class CaseApiService extends HttpApiServiceBase {
   }
 
   saveCaseData(data: CaseEditOutputModel): Observable<any> {
-    const requestUrl = this.buildResourseUrl(`/api/case/save${data.caseId != null ? '/' +data.caseId : '' }`, null, true, false);
+    const requestUrl = this.buildResourseUrl(`/api/case/save${data.caseId != null ? '/' +data.caseId : '' }`, null, true, true);
     return this.postJson<any>(requestUrl, data)
       .pipe(
         take(1)

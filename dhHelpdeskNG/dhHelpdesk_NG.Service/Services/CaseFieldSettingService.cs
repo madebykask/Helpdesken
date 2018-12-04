@@ -25,8 +25,8 @@ namespace DH.Helpdesk.Services.Services
 
         IList<CaseFieldSettingsForTranslation> GetCustomerCaseTranslations(int customerId);
         Task<IList<CaseFieldSettingsForTranslation>> GetCustomerCaseTranslationsAsync(int customerId);
-        IList<ListCases> ListToShowOnCaseSummaryPage(int? customerId, int? languageId, int? UserGroupId);
-        IList<ListCases> ListToShowOnCustomerSettingSummaryPage(int? customerId, int? languageId, int? UserGroupId);
+        IList<ListCases> ListToShowOnCaseSummaryPage(int? customerId, int? languageId, int? userGroupId);
+        IList<ListCases> ListToShowOnCustomerSettingSummaryPage(int? customerId, int? languageId, int? userGroupId);
 
 
         IList<CaseFieldSetting> GetCaseFieldSettingsForDefaultCust();

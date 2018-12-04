@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.Dal.Repositories;
 
 namespace DH.Helpdesk.Services.BusinessLogic.Settings
@@ -11,6 +12,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Settings
     {
         string GetFilePath(int customerId);
         string GetVirtualDirectoryPath(int customerId);
+        string GetFilePath(CustomerSettings customerSettings);
     }
 
     public class SettingsLogic: ISettingsLogic
@@ -29,14 +31,13 @@ namespace DH.Helpdesk.Services.BusinessLogic.Settings
             var customerFilePath = this._settingRepository.GetMany(s => s.Customer_Id == customerId)
                 .Select(s => s.PhysicalFilePath)
                 .FirstOrDefault();
-            if (string.IsNullOrEmpty(customerFilePath))
-            {
-                var globalSetting = this._globalSettingRepository.GetAll().FirstOrDefault();
-                if (globalSetting != null)
-                    customerFilePath = globalSetting.AttachedFileFolder;
-            }
+            return FilePath(customerFilePath);
+        }
 
-            return (string.IsNullOrEmpty(customerFilePath)? string.Empty : customerFilePath);
+        public string GetFilePath(CustomerSettings customerSettings)
+        {
+            var customerFilePath = customerSettings.PhysicalFilePath;
+            return FilePath(customerFilePath);
         }
 
         public string GetVirtualDirectoryPath(int customerId)
@@ -51,5 +52,21 @@ namespace DH.Helpdesk.Services.BusinessLogic.Settings
 
             return virtualDirectoryPath ?? string.Empty;
         }
+
+        #region private
+
+        private string FilePath(string customerFilePath)
+        {
+            if (string.IsNullOrEmpty(customerFilePath))
+            {
+                var globalSetting = this._globalSettingRepository.GetAll().FirstOrDefault();
+                if (globalSetting != null)
+                    customerFilePath = globalSetting.AttachedFileFolder;
+            }
+
+            return (string.IsNullOrEmpty(customerFilePath) ? string.Empty : customerFilePath);
+        }
+
+        #endregion
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
+using Z.EntityFramework.Plus;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -383,11 +384,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private void SetCaseUnreadFlag(int id, int unread = 0)
         {
-            //TODO: refactor to use simple update query without fetching data.
-            var cases = this.DataContext.Cases.Single(c => c.Id == id);
-            cases.Unread = unread;
-            this.Update(cases);
-            this.Commit();
+            this.DataContext.Cases.Where(c => c.Id == id)
+                .Update(c => new Case { Unread = unread });
         }
 
         public Case GetCaseIncluding(int id)

@@ -44,5 +44,15 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Authentication
 
             return int.Parse(userGroupIdStr);
         }
+
+        public static string GetTimezoneId(this IIdentity identity)
+        {
+            var timezoneId = identity.GetClaims().FindFirstValue(CustomClaimTypes.TimezoneId);
+
+            if (string.IsNullOrWhiteSpace(timezoneId))
+                throw new Exception("No timezoneId claim found.");
+
+            return timezoneId;
+        }
     }
 }

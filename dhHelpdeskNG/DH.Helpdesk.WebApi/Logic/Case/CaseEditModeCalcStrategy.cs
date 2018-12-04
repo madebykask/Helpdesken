@@ -1,12 +1,9 @@
 ﻿using System.Linq;
-using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Common.Enums.Case;
 
-namespace DH.Helpdesk.WebApi.Logic
+namespace DH.Helpdesk.WebApi.Logic.Case
 {
-    
-
     public class CaseEditModeCalcStrategy: ICaseEditModeCalcStrategy
     {
         private readonly IGlobalSettingService _globalSettingService;
@@ -26,7 +23,7 @@ namespace DH.Helpdesk.WebApi.Logic
 
         #endregion
 
-        public AccessMode CalcEditMode(int customerId, int userId, Case @case, bool temporaryHasAccessToWG = false)
+        public AccessMode CalcEditMode(int customerId, int userId, Domain.Case @case, bool temporaryHasAccessToWG = false)
         {
             var gs = _globalSettingService.GetGlobalSettings().FirstOrDefault();
             var accessToWorkinggroups = _userService.GetWorkinggroupsForUserAndCustomer(userId, customerId);
@@ -88,6 +85,6 @@ namespace DH.Helpdesk.WebApi.Logic
 
     public interface ICaseEditModeCalcStrategy
     {
-        AccessMode CalcEditMode(int customerId, int userId, Case @case, bool temporaryHasAccessToWG = false);
+        AccessMode CalcEditMode(int customerId, int userId, Domain.Case @case, bool temporaryHasAccessToWG = false);
     }
 }

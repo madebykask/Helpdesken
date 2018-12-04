@@ -869,12 +869,12 @@ namespace DH.Helpdesk.Services.Services
                 Case parentCase = null,
             string caseExtraFollowers = null)
         {
-            int ret = 0;
+            var ret = 0;
 
             if (cases == null)
                 throw new ArgumentNullException("cases");
 
-            Case c = this.ValidateCaseRequiredValues(cases, caseLog);
+            var c = this.ValidateCaseRequiredValues(cases, caseLog);
 
             // unread/status flag update if not case is closed and not changed by adminsitrator 
             //c.Unread = 0;

@@ -16,8 +16,10 @@ using DH.Helpdesk.Services.Infrastructure.Email;
 using DH.Helpdesk.Services.Infrastructure.Email.Concrete;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
+using DH.Helpdesk.WebApi.Controllers;
 using DH.Helpdesk.WebApi.Infrastructure.Cache;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
+using DH.Helpdesk.WebApi.Logic.CaseFieldSettings;
 
 namespace DH.Helpdesk.WebApi.DependencyInjection
 {
@@ -84,6 +86,10 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
 
             builder.RegisterType<JsonSerializeService>()
                 .As<IJsonSerializeService>()
+                .SingleInstance();
+
+            builder.RegisterType<CaseFieldSettingsHelper>()
+                .As<ICaseFieldSettingsHelper>()
                 .SingleInstance();
         }
     }

@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DH.Helpdesk.Dal.Mappers;
+
 namespace DH.Helpdesk.Services.Services
 {
     using System;
@@ -93,6 +95,16 @@ namespace DH.Helpdesk.Services.Services
         /// </summary>
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> _toBusinessModelMapper;
+
+        public SettingService(ISettingRepository settingRepository, IUnitOfWork unitOfWork,
+            IEntityToBusinessModelMapper<Setting, CustomerSettings> businessModelMapper)
+        {
+            _settingRepository = settingRepository;
+            _unitOfWork = unitOfWork;
+            _toBusinessModelMapper = businessModelMapper;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingService"/> class.
         /// </summary>
@@ -102,11 +114,7 @@ namespace DH.Helpdesk.Services.Services
         /// <param name="unitOfWork">
         /// The unit of work.
         /// </param>
-        public SettingService(ISettingRepository settingRepository, IUnitOfWork unitOfWork)
-        {
-            this._settingRepository = settingRepository;
-            this._unitOfWork = unitOfWork;
-        }
+
 
         /// <summary>
         /// The get customer setting.
@@ -261,7 +269,8 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public CustomerSettings GetCustomerSettings(int customerId)
         {
-            return this._settingRepository.GetCustomerSettings(customerId);
+            var setting = _settingRepository.GetCustomerSetting(customerId);
+            return _toBusinessModelMapper.Map(setting);
         }
 
         public List<int> GetExtendedSearchIncludedCustomers()

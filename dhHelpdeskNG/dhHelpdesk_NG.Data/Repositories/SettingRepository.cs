@@ -34,17 +34,6 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         Setting GetCustomerSetting(int id);
 
-        /// <summary>
-        /// The get customer settings.
-        /// </summary>
-        /// <param name="customerId">
-        /// The customer id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="CustomerSettings"/>.
-        /// </returns>
-        CustomerSettings GetCustomerSettings(int customerId);
-
         List<int> GetExtendedSearchIncludedCustomers();
     }
 
@@ -53,10 +42,6 @@ namespace DH.Helpdesk.Dal.Repositories
     /// </summary>
     public class SettingRepository : RepositoryBase<Setting>, ISettingRepository
     {
-        /// <summary>
-        /// The to business model mapper.
-        /// </summary>
-        private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> toBusinessModelMapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingRepository"/> class.
@@ -64,15 +49,10 @@ namespace DH.Helpdesk.Dal.Repositories
         /// <param name="databaseFactory">
         /// The database factory.
         /// </param>
-        /// <param name="toBusinessModelMapper">
-        /// The to Business Model Mapper.
-        /// </param>
         public SettingRepository(
-            IDatabaseFactory databaseFactory, 
-            IEntityToBusinessModelMapper<Setting, CustomerSettings> toBusinessModelMapper)
+            IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
-            this.toBusinessModelMapper = toBusinessModelMapper;
         }
 
         /// <summary>
@@ -87,26 +67,6 @@ namespace DH.Helpdesk.Dal.Repositories
         public Setting GetCustomerSetting(int id)
         {
             return this.Get(x => x.Customer_Id == id);
-        }
-
-        /// <summary>
-        /// The get customer settings.
-        /// </summary>
-        /// <param name="customerId">
-        /// The customer id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="CustomerSettings"/>.
-        /// </returns>
-        public CustomerSettings GetCustomerSettings(int customerId)
-        {
-            var entities = this.Table
-                    .Where(s => s.Customer_Id == customerId)
-                    .ToList();
-
-            return entities
-                .Select(this.toBusinessModelMapper.Map)
-                .FirstOrDefault();
         }
 
         public List<int> GetExtendedSearchIncludedCustomers()

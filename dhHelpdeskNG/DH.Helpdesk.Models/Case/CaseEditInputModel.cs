@@ -10,7 +10,7 @@ namespace DH.Helpdesk.Models.Case
     {
         public int? CaseId { get; set; }
         public int? ResponsibleUserId { get; set; }
-
         public int? PerformerId { get; set; }
+        public int? WorkingGroupId { get; set; }
     }
 }

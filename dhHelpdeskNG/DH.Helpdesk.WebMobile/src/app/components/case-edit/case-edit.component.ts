@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
 import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType, CaseLockModel, CaseAccessMode } from '../../models';
 import { forkJoin, Subject, Subscription, of } from 'rxjs';
-import { switchMap, take, finalize, tap, delay, catchError, } from 'rxjs/operators';
+import { switchMap, take, finalize, tap, delay, catchError, map, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, Channels } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/header-event-data';
@@ -89,12 +89,11 @@ export class CaseEditComponent {
                 forkJoin(caseSections$, caseData$, caseLock$)
                 .pipe(
                     take(1),
-                    switchMap(([sectionData, options, caseLock]) => {
+                    map(([sectionData, options, caseLock]) => {
                       this.caseSections = sectionData;
                       this.dataSource = new OptionsDataSource(options);
                       this.caseLock = caseLock;
                       this.form = this.createFormGroup(this.caseData);
-                      return of([sectionData, options]);
                     }),
                     finalize(() => this.isLoaded = true)
                 )

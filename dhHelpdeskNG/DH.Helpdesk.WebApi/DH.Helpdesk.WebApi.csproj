@@ -182,7 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
-    <Compile Include="Infrastructure\BaseCaseController.cs" />
+    <Compile Include="Logic\CaseFieldSettings\CaseFieldSettingHelper.cs" />
     <Compile Include="Controllers\CaseFilesController.cs" />
     <Compile Include="Controllers\CaseLocksController.cs" />
     <Compile Include="Controllers\CaseSaveController.cs" />
@@ -262,7 +262,7 @@
     <Compile Include="Models\ExtendCaseLockInput.cs" />
     <Compile Include="Models\LoginUserInputModel.cs" />
     <Compile Include="Models\RefreshTokenInputModel.cs" />
-    <Compile Include="Logic\CaseEditModeCalcStrategy.cs" />
+    <Compile Include="Logic\Case\CaseEditModeCalcStrategy.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>

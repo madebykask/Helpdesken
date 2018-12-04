@@ -170,6 +170,8 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
         public int AttachmentPlacement { get; set; }
         public int M2TNewCaseMailTo { get; set; }
         public int DontConnectUserToWorkingGroup { get; set; }
+        public string PhysicalFilePath { get; set; }
+        public string VirtualFilePath { get; set; }
 
         /// <summary>
         /// The is module on.

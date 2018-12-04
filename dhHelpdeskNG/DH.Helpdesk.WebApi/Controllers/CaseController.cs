@@ -19,22 +19,23 @@ using DH.Helpdesk.Models.Case.Field;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Web.Common.Constants.Case;
-using DH.Helpdesk.Web.Common.Enums.Case;
+using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Authentication;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
-using DH.Helpdesk.WebApi.Logic;
+using DH.Helpdesk.WebApi.Logic.Case;
+using DH.Helpdesk.WebApi.Logic.CaseFieldSettings;
 using DateTime = System.DateTime;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
     //[Route( "api/v{version:apiVersion}" )]
     [RoutePrefix("api/Case")]
-    public class CaseController : BaseCaseController
+    public class CaseController : BaseApiController
     {
         private readonly ICaseService _caseService;
         private readonly ICaseFileService _caseFileService;
         private readonly ICaseFieldSettingService _caseFieldSettingService;
-        private readonly IMailTemplateService _mailTemplateService;
+        private readonly ICaseFieldSettingsHelper _caseFieldSettingsHelper;
         private readonly IBaseCaseSolutionService _caseSolutionService;
         private readonly ICustomerUserService _customerUserService;
         private readonly IUserService _userService;
@@ -48,7 +49,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         #region ctor()
 
         public CaseController(ICaseService caseService, ICaseFileService caseFileService, ICaseFieldSettingService caseFieldSettingService,
-            IMailTemplateService mailTemplateService, IBaseCaseSolutionService caseSolutionService,
+            ICaseFieldSettingsHelper caseFieldSettingsHelper, IBaseCaseSolutionService caseSolutionService,
             ICustomerUserService customerUserService, IUserService userService, IWorkingGroupService workingGroupService,
             ISupplierService supplierService, ISettingService customerSettingsService, ITranslateCacheService translateCacheService,
             ICaseEditModeCalcStrategy caseEditModeCalcStrategy,
@@ -57,7 +58,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _caseService = caseService;
             _caseFileService = caseFileService;
             _caseFieldSettingService = caseFieldSettingService;
-            _mailTemplateService = mailTemplateService;
+            _caseFieldSettingsHelper = caseFieldSettingsHelper;
             _customerUserService = customerUserService;
             _userService = userService;
             _workingGroupService = workingGroupService;
@@ -89,7 +90,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             var userId = UserId;
             var languageId = langId;
-            var currentCase = _caseService.GetCaseById(caseId);
+            var currentCase = _caseService.GetDetachedCaseById(caseId);
             var currentCid = cid;
             var userGroupId = User.Identity.GetGroupId();
 
@@ -153,7 +154,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 //if (Model.ComputerUserCategories.Any())
                 //GlobalEnums.TranslationCaseFields.UserSearchCategory_Id//TODO:add UserSearchCategory_Id
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ReportedBy))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ReportedBy))
                 {
                     field = new BaseCaseField<string>()
                     {
@@ -168,7 +169,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 }
 
                 //initiator category Id
-                //if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id))
+                //if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id))
                 //{
                 //    field = new BaseCaseField<string>()
                 //    {
@@ -181,7 +182,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 //    model.Fields.Add(field);
                 //}
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_Name))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_Name))
                 {
                     field = new BaseCaseField<string>()
                     {
@@ -195,7 +196,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_EMail))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_EMail))
                 {
                     field = new BaseCaseField<string>()
                     {
@@ -209,7 +210,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_Phone))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_Phone))
                 {
                     field = new BaseCaseField<string>()
                     {
@@ -223,7 +224,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_CellPhone))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Persons_CellPhone))
                 {
                     field = new BaseCaseField<string>()
                     {
@@ -238,7 +239,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Region_Id))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Region_Id))
                 {
                     field = new BaseCaseField<int?>()
                     {
@@ -252,7 +253,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Department_Id))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Department_Id))
                 {
                     field = new BaseCaseField<int?>()
                     {
@@ -266,7 +267,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.OU_Id))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.OU_Id))
                 {
                     field = new BaseCaseField<int?>()
                     {
@@ -280,7 +281,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.CostCentre))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.CostCentre))
                 {
                     field = new BaseCaseField<string>()
                     {
@@ -295,7 +296,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Place))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Place))
                 {
                     field = new BaseCaseField<string>()
                     {
@@ -310,7 +311,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.UserCode))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.UserCode))
                 {
                     field = new BaseCaseField<string>()
                     {
@@ -348,7 +349,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             //displayAboutUserInfoHtml:TODO:see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions.displayAboutUserInfoHtml
             
             //regarding category Id
-            //if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id))
+            //if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id))
             //{
             //    field = new BaseCaseField<string>()
             //    {
@@ -361,7 +362,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             //    model.Fields.Add(field);
             //}
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -376,7 +377,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -391,7 +392,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -405,7 +406,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -420,7 +421,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -435,7 +436,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Region_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Region_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -449,7 +450,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Department_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Department_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -463,7 +464,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_OU_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_OU_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -477,7 +478,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_CostCentre))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_CostCentre))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -492,7 +493,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Place))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_Place))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -507,7 +508,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_UserCode))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.IsAbout_UserCode))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -528,7 +529,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             // ComputerInfo
             //displayComputerInfoHtml //TODO:see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions.displayComputerInfoHtml
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.InventoryNumber))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.InventoryNumber))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -542,7 +543,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ComputerType_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ComputerType_Id))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -556,7 +557,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.InventoryLocation))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.InventoryLocation))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -577,7 +578,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             // CaseInfo
             //displayCaseInfoHtml //TODO:see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.CaseNumber))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.CaseNumber))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -591,7 +592,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.RegTime))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.RegTime))
             {
                 field = new BaseCaseField<DateTime>()
                 {
@@ -605,7 +606,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ChangeTime))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ChangeTime))
             {
                 field = new BaseCaseField<DateTime>()
                 {
@@ -619,7 +620,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.User_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.User_Id))
             {
                 var userIdValue = "";
                 if (currentCase.User_Id.HasValue)
@@ -658,7 +659,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -673,7 +674,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.CaseType_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.CaseType_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -686,7 +687,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ProductArea_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ProductArea_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -700,7 +701,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.System_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.System_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -714,7 +715,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Urgency_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Urgency_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -728,7 +729,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Impact_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Impact_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -742,7 +743,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Category_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Category_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -756,7 +757,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Supplier_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Supplier_Id))
             {
                 var supplier = currentCase.Supplier_Id.HasValue
                     ? _supplierService.GetSupplier(currentCase.Supplier_Id.Value)
@@ -785,7 +786,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.InvoiceNumber))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.InvoiceNumber))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -800,7 +801,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ReferenceNumber))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ReferenceNumber))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -815,7 +816,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Caption))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Caption))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -830,7 +831,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Description))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Description))
             {
                 var registrationSourceOptions = currentCase.RegistrationSource == (int) CaseRegistrationSource.Email
                     ? currentCase.Mail2Tickets.Where(x => x.Log_Id == null)
@@ -862,7 +863,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Miscellaneous))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Miscellaneous))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -877,7 +878,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ContactBeforeAction))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ContactBeforeAction))
             {
                 field = new BaseCaseField<bool>()
                 {
@@ -891,7 +892,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.SMS))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.SMS))
             {
                 field = new BaseCaseField<bool>()
                 {
@@ -905,7 +906,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.AgreedDate))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.AgreedDate))
             {
                 field = new BaseCaseField<DateTime?>()
                 {
@@ -919,7 +920,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Available))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Available))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -934,7 +935,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Cost))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Cost))
             {
 
                 field = new BaseCaseField<int>()
@@ -970,7 +971,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (/*customerSettings.AttachmentPlacement == 1 &&*/ IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Filename))
+            if (/*customerSettings.AttachmentPlacement == 1 &&*/ _caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Filename))
             {
                 field = new BaseCaseField<IList<CaseFileModel>>()
                 {
@@ -991,7 +992,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             //CaseManagement
             //displayCaseManagementInfoHtml //TODO:see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.WorkingGroup_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.WorkingGroup_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -1004,7 +1005,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -1018,7 +1019,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Performer_User_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Performer_User_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -1033,7 +1034,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
 
             //customerUserSetting.PriorityPermission - if 0 - readonly, else 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Priority_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Priority_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -1047,7 +1048,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Status_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Status_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -1061,7 +1062,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.StateSecondary_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.StateSecondary_Id))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -1077,7 +1078,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
 
             if (customerSettings.ModuleProject &&
-                IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Project))
+                _caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Project))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -1091,7 +1092,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
 
             if (customerSettings.ModuleProblem &&
-                IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Problem))
+                _caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Problem))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -1104,7 +1105,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.CausingPart))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.CausingPart))
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -1117,7 +1118,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Change)) //TODO: && Model.changes.Any()
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Change)) //TODO: && Model.changes.Any()
             {
                 field = new BaseCaseField<int?>()
                 {
@@ -1130,7 +1131,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.PlanDate))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.PlanDate))
             {
                 field = new BaseCaseField<DateTime?>()
                 {
@@ -1143,7 +1144,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.WatchDate))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.WatchDate))
             {
                 field = new BaseCaseField<DateTime?>()
                 {
@@ -1157,7 +1158,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Verified))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Verified))
             {
                 field = new BaseCaseField<bool>()
                 {
@@ -1171,7 +1172,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.VerifiedDescription))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.VerifiedDescription))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -1187,7 +1188,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.SolutionRate))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.SolutionRate))
             {
                 field = new BaseCaseField<string>()
                 {
@@ -1208,7 +1209,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (userOverview.CloseCasePermission == 1)
             {
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.FinishingDescription))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.FinishingDescription))
                 {
                     field = new BaseCaseField<string>()
                     {
@@ -1230,7 +1231,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     finishingCause = lastLog.FinishingType;
                 }
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ClosingReason))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ClosingReason))
                 {
                     field = new BaseCaseField<int?>()
                     {
@@ -1245,7 +1246,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
-                if (IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.FinishingDate))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.FinishingDate))
                 {
                     field = new BaseCaseField<DateTime?>()
                     {
@@ -1266,6 +1267,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             //calc case edit mode
             model.EditMode = _caseEditModeCalcStrategy.CalcEditMode(cid, UserId, currentCase); // remember to apply isCaseLocked check on client
 
+            _caseService.MarkAsRead(caseId);
             return model;
         }
 
@@ -1293,7 +1295,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var fieldName = field.ToString();
 
             //TODO: Move Replace("tblLog_", "tblLog.") to extension
-            var setting = GetCaseFieldSetting(caseFieldSettings, fieldName);
+            var setting = _caseFieldSettingsHelper.GetCaseFieldSetting(caseFieldSettings, fieldName);
             //var settingEx = caseFieldSettingsTranslated.FirstOrDefault(s => s.Name.Replace("tblLog_", "tblLog.").Equals(fieldName, StringComparison.CurrentCultureIgnoreCase));
             if (setting != null && setting.Required.ToBool())
             {
