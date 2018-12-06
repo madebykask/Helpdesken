@@ -20,7 +20,7 @@ export class AuthenticationService {
     login(username: string, password: string) {
         return this._authApiService.login(username, password)
           .pipe(
-            tap(() => this._logger.log(`Log in action.`)),
+            // tap(() => this._logger.log(`Log in action.`)),
             finalize(() => this.raiseAuthenticationChanged())
           );
     }
@@ -29,7 +29,7 @@ export class AuthenticationService {
         var user = this._authStateService.getUser();
         return this._authApiService.refreshToken(user)
           .pipe(
-            tap(() => this._logger.log(`Refresh token action.`)),
+            // tap(() => this._logger.log(`Refresh token action.`)),
             finalize(() => this.raiseAuthenticationChanged())
           );
     }
@@ -37,7 +37,7 @@ export class AuthenticationService {
     logout() {
         // remove user from local storage to log user out
         this.localStorageService.removeCurrentUser();
-        this._logger.log(`Log out action.`);
+        // this._logger.log(`Log out action.`);
         this.raiseAuthenticationChanged();
     }
 

@@ -12,5 +12,6 @@ namespace DH.Helpdesk.Models.Case
         public int? ResponsibleUserId { get; set; }
         public int? PerformerId { get; set; }
         public int? WorkingGroupId { get; set; }
+        public int? StateSecondaryId { get; set; }
     }
 }

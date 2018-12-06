@@ -342,6 +342,8 @@
     <Compile Include="Components\Contracts\ContractHistoryFormatter.cs" />
     <Compile Include="Components\Contracts\ContractHistoryMarkupBuilder.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
+    <Compile Include="Controllers\CasesController_Actions.cs" />
+    <Compile Include="Controllers\CasesController_AdvancedSearch.cs" />
     <Compile Include="Controllers\PasswordController.cs" />
     <Compile Include="Controllers\QuestionnaireAnswerController.cs" />
     <Compile Include="Enums\ReportItemNames.cs" />

@@ -14,6 +14,7 @@ import { FormStatuses } from "src/app/helpers/constants";
     @ViewChild('control') control: any;
     @Input() field: BaseCaseField<number>;
     @Input() dataSource: OptionItem[] = [];
+    @Input() disabled = false;
     text: string = "";
 
     private destroy$ = new Subject();
@@ -22,7 +23,7 @@ import { FormStatuses } from "src/app/helpers/constants";
       // if(this.readOnly) set disabled/reaonly mode
       // this.text = this.getText(this.field.value);
       let formControl = this.getFormControl(this.field.name);
-      this.control.disabled = formControl.disabled;
+      this.control.disabled = formControl.disabled || this.disabled;
       formControl.statusChanges // track disabled state in form
         .pipe(
           switchMap((e: any) => {

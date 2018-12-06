@@ -37,7 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void { 
-    this.navStart.subscribe(evt => this._infoLogger.log(`Navigation started: ${evt.url}`));
+    // this.navStart.subscribe(evt => this._infoLogger.log(`Navigation started: ${evt.url}`));
 
     const version = this._authenticationService.getVersion();
     const isAuthenticated = this._authenticationService.isAuthenticated();

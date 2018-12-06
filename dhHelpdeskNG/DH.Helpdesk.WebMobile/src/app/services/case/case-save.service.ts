@@ -17,6 +17,8 @@ export class CaseSaveService {
     model.caseId = caseId;
     model.performerId = this.getValue<number>(form, CaseFieldsNames.PerformerUserId);
     model.responsibleUserId = this.getValue<number>(form, CaseFieldsNames.CaseResponsibleUserId);
+    model.workingGroupId = this.getValue<number>(form, CaseFieldsNames.WorkingGroupId);
+    model.stateSecondaryId = this.getValue<number>(form, CaseFieldsNames.StateSecondaryId);
 
     return this._caseApiService.saveCaseData(model)
       .pipe(

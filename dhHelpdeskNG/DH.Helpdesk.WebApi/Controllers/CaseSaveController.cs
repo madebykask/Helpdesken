@@ -6,11 +6,13 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.BusinessRule;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Extensions.Object;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
@@ -39,11 +41,14 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IUserService _userService;
         private readonly ISettingsLogic _settingsLogic;
         private readonly ICaseFieldSettingsHelper _caseFieldSettingsHelper;
+        private readonly IWorkingGroupService _workingGroupService;
+        private readonly IEmailService _emailService;
 
         public CaseSaveController(ICaseService caseService, ICaseFieldSettingService caseFieldSettingService,
             ICaseLockService caseLockService, ICustomerService customerService,
             ISettingService customerSettingsService, ICaseEditModeCalcStrategy caseEditModeCalcStrategy,
-            IUserService userService, ISettingsLogic settingsLogic, ICaseFieldSettingsHelper caseFieldSettingsHelper)
+            IUserService userService, ISettingsLogic settingsLogic, ICaseFieldSettingsHelper caseFieldSettingsHelper, 
+            IWorkingGroupService workingGroupService, IEmailService emailService)
         {
             _caseService = caseService;
             _caseFieldSettingService = caseFieldSettingService;
@@ -54,6 +59,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             _userService = userService;
             _settingsLogic = settingsLogic;
             _caseFieldSettingsHelper = caseFieldSettingsHelper;
+            _workingGroupService = workingGroupService;
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -91,7 +98,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             //TODO: validate input -- apply ui validation rules
 
             var utcNow = DateTime.UtcNow;
-            var mailSenders = new MailSenders();
             var currentCase = _caseService.GetDetachedCaseById(caseId.Value); //TODO: try to Copy/Clone from oldCase instead
 
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(cid);
@@ -102,26 +108,24 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Performer_User_Id))
                 currentCase.Performer_User_Id = model.PerformerId;
 
-            //if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.WorkingGroup_Id))
-            //{
-            //    if (model.WorkingGroupId.HasValue)
-            //    {
-            //        var curWg = _workingGroupService.GetWorkingGroup(model.WorkingGroupId.Value);
-            //        if (curWg != null)
-            //            if (!string.IsNullOrWhiteSpace(curWg.EMail) && _emailService.IsValidEmail(curWg.EMail))
-            //                mailSenders.WGEmail = curWg.EMail;
-            //    }
-            //}
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.WorkingGroup_Id))
+            {
+                currentCase.WorkingGroup_Id = model.WorkingGroupId;
+            }
 
-            //if (case_.DefaultOwnerWG_Id.HasValue && case_.DefaultOwnerWG_Id.Value > 0)
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.StateSecondary_Id))
+            {
+                currentCase.StateSecondary_Id = model.StateSecondaryId;
+            }
+
+
+            //if (isNew)
             //{
-            //var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(m.case_.User_Id.Value, m.case_.Customer_Id);
-            //if (userDefaultWorkingGroupId.HasValue)
-            //{
-            //    m.case_.DefaultOwnerWG_Id = userDefaultWorkingGroupId;
-            //}
-            //    var defaultWGEmail = _workingGroupService.GetWorkingGroup(case_.DefaultOwnerWG_Id.Value).EMail;
-            //    mailSenders.DefaultOwnerWGEMail = defaultWGEmail;
+            //    var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(currentCase.User_Id.Value, currentCase.Customer_Id);
+            //    if (userDefaultWorkingGroupId.HasValue)
+            //    {
+            //        currentCase.DefaultOwnerWG_Id = userDefaultWorkingGroupId;
+            //    }
             //}
 
             CaseLog caseLog = null; // TODO: implement
@@ -153,25 +157,18 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             // TODO: LOG - if support added 
 
-            var customer = _customerService.GetCustomer(oldCase.Customer_Id);
             var customerSettings = _customerSettingsService.GetCustomerSettings(oldCase.Customer_Id);
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(User.Identity.GetTimezoneId());
             var basePath = _settingsLogic.GetFilePath(customerSettings);
             var allLogFiles = new List<CaseFileDto>();// TODO: Temparary no files. implement after files upload if needed.
-
-            var caseMailSetting = new CaseMailSetting(
-                customer.NewCaseEmailList,
-                customer.HelpdeskEmail,
-                "",// TODO: get client url or helpdesk url?
-                customerSettings.DontConnectUserToWorkingGroup);
-            caseMailSetting.CustomeMailFromAddress = mailSenders;
-            caseMailSetting.DontSendMailToNotifier = !customer.CommunicateWithNotifier.ToBool();
-
+            var customer = _customerService.GetCustomer(oldCase.Customer_Id);
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(User.Identity.GetTimezoneId());
             var currentUser = _userService.GetUser(UserId);
 
             // send emails
-            _caseService.SendCaseEmail(oldCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, allLogFiles, currentUser); //TODO: async or move to scheduler
+            var caseMailSetting = GetCaseMailSetting(currentCase, customer, customerSettings);
+            _caseService.SendCaseEmail(currentCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, allLogFiles, currentUser); //TODO: async or move to scheduler
 
+            // BRE
             var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, currentCase, oldCase);
             if (actions.Any())
                 _caseService.ExecuteBusinessActions(actions, currentCase, caseLog, userTimeZone, caseHistoryId, basePath, langId,
@@ -180,5 +177,35 @@ namespace DH.Helpdesk.WebApi.Controllers
             // TODO: return errors
             return Ok(oldCase.Id);
         }
+
+        private CaseMailSetting GetCaseMailSetting(Case currentCase, Customer customer, CustomerSettings customerSettings)
+        {
+            var mailSenders = new MailSenders();
+            if (currentCase.WorkingGroup_Id.HasValue)
+            {
+                var curWg = _workingGroupService.GetWorkingGroup(currentCase.WorkingGroup_Id.Value); 
+                if (curWg != null && !string.IsNullOrWhiteSpace(curWg.EMail) && _emailService.IsValidEmail(curWg.EMail))
+                    mailSenders.WGEmail = curWg.EMail;
+            }
+
+            if (currentCase.DefaultOwnerWG_Id.HasValue && currentCase.DefaultOwnerWG_Id.Value > 0)
+            {
+                var defaultWgEmail = _workingGroupService.GetWorkingGroup(currentCase.DefaultOwnerWG_Id.Value);//TODO: check if possible to use curWg to reduce requests
+                if (defaultWgEmail != null && !string.IsNullOrWhiteSpace(defaultWgEmail.EMail) && _emailService.IsValidEmail(defaultWgEmail.EMail))
+                    mailSenders.DefaultOwnerWGEMail = defaultWgEmail.EMail;
+            }
+
+            var caseMailSetting = new CaseMailSetting(
+                customer.NewCaseEmailList,
+                customer.HelpdeskEmail,
+                "",// TODO: get client url or helpdesk url?
+                customerSettings.DontConnectUserToWorkingGroup);
+            caseMailSetting.CustomeMailFromAddress = mailSenders;
+            caseMailSetting.DontSendMailToNotifier = !customer.CommunicateWithNotifier.ToBool();
+            mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
+
+            return caseMailSetting;
+        }
+
     }
 }
