@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Tools
+﻿namespace DH.Helpdesk.Web.Common.Tools.Files
 {
     public interface ITemporaryFilesCacheFactory
     {

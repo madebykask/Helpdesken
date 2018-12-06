@@ -1,7 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Tools
-{
-    using DH.Helpdesk.Common.ValidationAttributes;
+﻿using DH.Helpdesk.Common.ValidationAttributes;
 
+namespace DH.Helpdesk.Web.Common.Tools.Files
+{
     public sealed class WebTemporaryFile
     {
         public WebTemporaryFile(byte[] content, string name)

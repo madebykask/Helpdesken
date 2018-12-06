@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes
+﻿using DH.Helpdesk.Web.Common.Tools.Files;
+
+namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Changes
 {
     using System.Collections.Generic;
 

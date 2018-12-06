@@ -1,9 +1,8 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case;
+﻿using System.Collections.Generic;
+using DH.Helpdesk.BusinessData.Models.Case;
 
-namespace DH.Helpdesk.Web.Infrastructure.Tools
+namespace DH.Helpdesk.Web.Common.Tools.Files
 {
-    using System.Collections.Generic;
-
     public interface ITemporaryFilesCache
     {
         void ResetCacheForObject(string objectId);

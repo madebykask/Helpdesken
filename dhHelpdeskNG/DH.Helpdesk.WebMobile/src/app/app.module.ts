@@ -16,8 +16,8 @@ import { LoggerService } from './services/logging';
 
 import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors';
 import { HomeComponent, CasesOverviewComponent, CaseEditComponent, CaseTextboxComponent,
-   CaseDateComponent, CaseDropdownComponent, CaseMultiDropdownComponent, CaseSwitchComponent,
-   CaseTextareaComponent, CaseDateTimeComponent, MailtoticketControlComponent, CaseFilesControlComponent } from './components';
+         CaseDateComponent, CaseDropdownComponent, CaseMultiDropdownComponent, CaseSwitchComponent,
+         CaseTextareaComponent, CaseDateTimeComponent, MailtoticketControlComponent, CaseFilesControlComponent } from './components';
 import { GetByKeyPipe, DateTimezonePipe, AlertsFilter } from './helpers/pipes';
 
 import { AppRoutingModule } from './app.routing';
@@ -31,7 +31,8 @@ import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 import { AltLayoutComponent } from './_layout/alt-layout/alt-layout.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '@env/environment';
-
+import { FileUploadComponent } from './shared/components/file-upload/file-upload.component';
+import { FileUploadModule } from "ng2-file-upload";   
 @NgModule({
   bootstrap: [ AppComponent],
   declarations: [AppComponent, AppLayoutComponent, PageNotFoundComponent, HeaderTitleComponent, FooterComponent,
@@ -44,8 +45,9 @@ import { environment } from '@env/environment';
      CaseFilesControlComponent,
      ErrorComponent,
      AltLayoutComponent,
-     MailtoticketControlComponent,
-    ],
+     MailtoticketControlComponent,     
+     FileUploadComponent
+  ],
   imports: [ 
     MbscModule,
     BrowserModule,
@@ -53,6 +55,7 @@ import { environment } from '@env/environment';
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
+    FileUploadModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Licenses.Controllers
+﻿using DH.Helpdesk.Web.Common.Tools.Files;
+
+namespace DH.Helpdesk.Web.Areas.Licenses.Controllers
 {
     using System.Collections.Generic;
     using System.Linq;

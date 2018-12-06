@@ -22,6 +22,7 @@ using DH.Helpdesk.Web.Components.Contracts;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
 using DH.Helpdesk.Services.Enums;
 using DH.Helpdesk.Services.Services.Grid;
+using DH.Helpdesk.Web.Common.Tools.Files;
 using DH.Helpdesk.Web.Infrastructure.ActionFilters;
 using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.CaseOverview;

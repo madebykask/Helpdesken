@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
+﻿namespace DH.Helpdesk.Web.Common.Tools.Files
 {
     public sealed class TemporaryFilesCacheFactory : ITemporaryFilesCacheFactory
     {

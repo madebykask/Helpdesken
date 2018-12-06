@@ -2563,16 +2563,16 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
 
-		// keep for diagnostic purposes
-		private void LogWithContext(string msg)
-		{
-			var customerId = SessionFacade.CurrentCustomerID;
-			var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
-			var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
-			var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
-			var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
-			var localUserId = SessionFacade.CurrentLocalUser?.UserId;
-		}        
+        // keep for diagnostic purposes
+        private void LogWithContext(string msg)
+        {
+            var customerId = SessionFacade.CurrentCustomerID;
+            var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
+            var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
+            var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
+            var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
+            var localUserId = SessionFacade.CurrentLocalUser?.UserId;
+        }        
 
         #endregion
     }

@@ -1595,13 +1595,8 @@
     <Compile Include="Infrastructure\Tools\Concrete\DeletedItem.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\EditorStateCache.cs" />
     <Compile Include="Infrastructure\Tools\Concrete\EditorStateCacheFactory.cs" />
-    <Compile Include="Infrastructure\Tools\Concrete\TemporaryFilesCache.cs" />
-    <Compile Include="Infrastructure\Tools\Concrete\TemporaryFilesCacheFactory.cs" />
     <Compile Include="Infrastructure\Tools\IEditorStateCache.cs" />
     <Compile Include="Infrastructure\Tools\IEditorStateCacheFactory.cs" />
-    <Compile Include="Infrastructure\Tools\ITemporaryFilesCache.cs" />
-    <Compile Include="Infrastructure\Tools\ITemporaryFilesCacheFactory.cs" />
-    <Compile Include="Infrastructure\Tools\WebTemporaryFile.cs" />
     <Compile Include="Infrastructure\Translation.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationMaxLengthFromRule.cs" />
     <Compile Include="Infrastructure\LocalizedAttributes\Rules\ModelClientValidationRequiredFromRule.cs" />

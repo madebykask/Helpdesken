@@ -105,6 +105,7 @@ namespace DH.Helpdesk.Web.Controllers
     using Domain.Computers;
     using BusinessData.Models.ProductArea.Output;
     using DH.Helpdesk.Common.Extensions.Boolean;
+    using Common.Tools.Files;
 
     public partial class CasesController : BaseController
     {

@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.NinjectModules.Common
+﻿using DH.Helpdesk.Web.Common.Tools.Files;
+
+namespace DH.Helpdesk.Web.NinjectModules.Common
 {
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Concrete;

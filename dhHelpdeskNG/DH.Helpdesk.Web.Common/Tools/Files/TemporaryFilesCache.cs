@@ -1,16 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Common.Enums;
 
-namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
+namespace DH.Helpdesk.Web.Common.Tools.Files
 {
-    using DH.Helpdesk.Common.Enums;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
-
     public sealed class TemporaryFilesCache : ITemporaryFilesCache
     {
         #region Fields
@@ -165,7 +163,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Tools.Concrete
 
         #endregion
 
-        #region Methods
+        #region Private Methods
 
         private string ComposeDirectoryPath(string objectId, params string[] subtopics)
         {

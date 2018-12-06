@@ -113,6 +113,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\DH.Helpdesk.Web.Common\DH.Helpdesk.Web.Common.csproj">
+      <Project>{D268E4E5-CD72-45DC-9DC0-9F0AD89F3F6E}</Project>
+      <Name>DH.Helpdesk.Web.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
       <Project>{90DEFCB6-E297-4F99-A532-DA1E0522AA49}</Project>
       <Name>DH.Helpdesk.Common</Name>
