@@ -38,6 +38,7 @@
     <CodeAnalysisRuleSet />
     <DocumentationFile>bin\DH.Helpdesk.WebApi.xml</DocumentationFile>
     <LangVersion>default</LangVersion>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

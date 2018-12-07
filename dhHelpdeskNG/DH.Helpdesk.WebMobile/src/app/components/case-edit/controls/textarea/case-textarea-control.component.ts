@@ -15,10 +15,11 @@ import { BaseControl } from "../base-control";
     }
 
     ngOnInit(): void {
+      this.init(this.field.name);
       this.control.disabled = true;
     }
 
     ngOnDestroy(): void {
     }
-         
+
   }

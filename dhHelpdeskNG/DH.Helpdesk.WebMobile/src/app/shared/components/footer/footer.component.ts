@@ -51,12 +51,12 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
  
   popUpLvSettings: MbscListviewOptions = {
     enhance: true,
-    swipe: false    
+    swipe: false
 };
-  constructor(private _router: Router, 
-              private _userSettingsService : UserSettingsService, 
+  constructor(private _router: Router,
+              private _userSettingsService : UserSettingsService,
               private _authenticationService: AuthenticationService,
-              private _languagesService: LanguagesApiService, 
+              private _languagesService: LanguagesApiService,
               private _ngxTranslateService: TranslateService) {
   }
 

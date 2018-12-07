@@ -15,6 +15,7 @@ import { BaseControl } from "../base-control";
     }
 
     ngOnInit(): void {
+      this.init(this.field.name);
       this.control.readonly = true;
     }
 

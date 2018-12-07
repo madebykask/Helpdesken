@@ -3,8 +3,9 @@ import { CaseApiService } from "../api/case/case-api.service";
 import { FormGroup } from "@angular/forms";
 import { CaseEditOutputModel } from "src/app/models";
 import { CaseFieldsNames } from "src/app/helpers/constants";
-import { of } from "rxjs";
+import { of, throwError } from "rxjs";
 import { switchMap } from "rxjs/operators";
+import { isNumeric } from "rxjs/internal/util/isNumeric";
 
 @Injectable({ providedIn: 'root' })
 export class CaseSaveService {
@@ -15,10 +16,10 @@ export class CaseSaveService {
   public saveCase(form: FormGroup, caseId?: number) {
     let model = new CaseEditOutputModel();
     model.caseId = caseId;
-    model.performerId = this.getValue<number>(form, CaseFieldsNames.PerformerUserId);
-    model.responsibleUserId = this.getValue<number>(form, CaseFieldsNames.CaseResponsibleUserId);
-    model.workingGroupId = this.getValue<number>(form, CaseFieldsNames.WorkingGroupId);
-    model.stateSecondaryId = this.getValue<number>(form, CaseFieldsNames.StateSecondaryId);
+    model.performerId = this.getNumericValue(form, CaseFieldsNames.PerformerUserId);
+    model.responsibleUserId = this.getNumericValue(form, CaseFieldsNames.CaseResponsibleUserId);
+    model.workingGroupId = this.getNumericValue(form, CaseFieldsNames.WorkingGroupId);
+    model.stateSecondaryId = this.getNumericValue(form, CaseFieldsNames.StateSecondaryId);
 
     return this._caseApiService.saveCaseData(model)
       .pipe(
@@ -28,9 +29,14 @@ export class CaseSaveService {
         )
   }
 
-  private getValue<T>(form: FormGroup, fieldName: string): T {
-    if (this.hasValue(form, fieldName)) {
-      return <T>form.controls[fieldName].value;
+  private getNumericValue(form: FormGroup, fieldName: string): number {
+    if(this.hasValue(form, fieldName)) {
+      const value = form.controls[fieldName].value;
+      if(!value) return null;
+      if(isNumeric(value)) { 
+        return Number(form.controls[fieldName].value);
+      }
+      throwError(`Not supported value. Expecting number, but recieved ${typeof(value)}.`)
     }
     return undefined;
   }

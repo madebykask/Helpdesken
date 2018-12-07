@@ -75,3 +75,9 @@ export const CaseFieldsNames = {
    SupplierCountryId: "SupplierCountryId",
    CaseRegistrationSource: "CaseRegistrationSource",
 };
+
+export const CaseFieldOptions = {
+  reqiured: 'required',
+  readonly: 'readonly',
+  maxlength: 'maxlength'
+}

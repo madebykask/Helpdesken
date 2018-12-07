@@ -13,16 +13,16 @@ export class MailtoticketControlComponent
 
   @Input() field: BaseCaseField<number>; 
   
-  mailTO: string[];    
+  mailTO: string[];
   mailCC: string[];
 
-  ngOnInit(): void {      
+  ngOnInit(): void {
     //Email
     if (this.field.value == 3) {
         this.mailTO = this.getEmails('to', this.field.options);
         this.mailCC = this.getEmails('cc', this.field.options);
     }
-  }    
+  }
 
   private getEmails(emailType: string, options: KeyValue[]): string[] {
     let emails:string[] = [];
@@ -31,7 +31,7 @@ export class MailtoticketControlComponent
       let val = options.find(m => m.key.toLowerCase() === emailType);
       if (val && val.value.length){
         emails = [...val.value.split(';')];
-      }      
+      }
     }
     return emails;
   }

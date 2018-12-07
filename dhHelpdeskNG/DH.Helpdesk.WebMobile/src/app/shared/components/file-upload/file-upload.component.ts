@@ -15,7 +15,7 @@ export class FileUploadComponent implements OnInit {
       url: config.apiUrl + '/case/uploadfiles'
   });
 
-  constructor() {  
+  constructor() {
   }
 
   ngOnInit() {

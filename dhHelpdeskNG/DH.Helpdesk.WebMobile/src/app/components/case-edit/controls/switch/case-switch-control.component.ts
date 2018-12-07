@@ -13,6 +13,7 @@ import { BaseControl } from "../base-control";
     @Input() description: string = "";
 
     ngOnInit(): void {
+      this.init(this.field.name);
       this.control.disabled = true;
     }
 

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
-import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType, CaseLockModel, CaseAccessMode, CasesSearchType } from '../../models';
+import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType, CaseLockModel, CaseAccessMode, CasesSearchType, IBaseCaseField } from '../../models';
 import { forkJoin, Subject, Subscription, of } from 'rxjs';
 import { switchMap, take, finalize, tap, delay, catchError, map, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,7 +13,7 @@ import { interval } from 'rxjs';
 import { AuthenticationStateService } from 'src/app/services/authentication';
 import { CaseLockApiService } from 'src/app/services/api/case/case-lock-api.service';
 import { CaseSaveService } from 'src/app/services/case';
-import { CaseFieldsNames } from '../../helpers/constants';
+import { CaseFieldsNames, CaseFieldOptions } from '../../helpers/constants';
 import { AlertType } from 'src/app/helpers/alerts/alert-types';
 
 @Component({
@@ -228,13 +228,28 @@ export class CaseEditComponent {
   private createFormGroup(data: CaseEditInputModel): FormGroup {
     let controls: { [key: string]: FormControl; } = {};
     data.fields.forEach(field => {
+        let validators = [];
+
+        if (this.isRequired(field)) {
+            validators.push(Validators.required);
+        }
+
         controls[field.name] = new FormControl({
           value: field.value || '',
           disabled: !this.canSave
-        });
+        }, validators);
     });
 
     return new FormGroup(controls);
+  }
+
+  private isRequired(field: IBaseCaseField<any>): boolean {
+    if (!field.options) {
+      return false;
+    }
+    return field.options.findIndex((value, index) => {
+      return value.key == CaseFieldOptions.reqiured;
+    }) != -1;
   }
 
   private initLock() {
