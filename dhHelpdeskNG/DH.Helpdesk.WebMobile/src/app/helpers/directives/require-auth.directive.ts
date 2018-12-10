@@ -26,6 +26,7 @@ export class RequireAuthDirective implements OnInit {
 
   ngOnDestroy(): void {
     this._destroy$.next();
+    this._destroy$.complete();
   }
 
   private updateState(){

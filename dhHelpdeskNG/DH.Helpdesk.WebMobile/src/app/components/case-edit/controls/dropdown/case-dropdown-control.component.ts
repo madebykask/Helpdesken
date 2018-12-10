@@ -5,8 +5,6 @@ import { takeUntil, switchMap } from "rxjs/operators";
 import { Subject, of } from "rxjs";
 import { FormStatuses } from "src/app/helpers/constants";
 import { MbscSelectOptions } from "@mobiscroll/angular";
-import { TranslateService } from "@ngx-translate/core";
-import { FormControl, AbstractControl } from "@angular/forms";
 
 @Component({
     selector: 'case-dropdown-control',
@@ -19,9 +17,7 @@ import { FormControl, AbstractControl } from "@angular/forms";
     @Input() dataSource: OptionItem[] = [];
     @Input() disabled = false;
     text: string = "";
-    
-    private destroy$ = new Subject();
-    private settings: MbscSelectOptions = {
+    settings: MbscSelectOptions = {
       buttons: ['set'],
       setText: '',
       headerText: () => this.getHeader,
@@ -31,8 +27,10 @@ import { FormControl, AbstractControl } from "@angular/forms";
           }
         }
     }
+    
+    private destroy$ = new Subject();
 
-    constructor(private _ngxTranslateService: TranslateService) {
+    constructor() {
       super();
     }
 
@@ -63,6 +61,7 @@ import { FormControl, AbstractControl } from "@angular/forms";
 
     ngOnDestroy(): void {
       this.destroy$.next();
+      this.destroy$.complete();
     }
 
     addEmptyItem(): any {

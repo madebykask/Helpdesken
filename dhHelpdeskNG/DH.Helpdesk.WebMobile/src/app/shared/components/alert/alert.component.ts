@@ -42,6 +42,7 @@ export class AlertComponent implements OnInit {
 
     ngOnDestroy(): void {
         this._destroy$.next();
+        this._destroy$.complete();
     }
 
     private processNewAlert2(alert: Alert) {            

@@ -43,7 +43,7 @@ export class BaseControl {
       return false;
   }
 
-  protected get requiredSymbol(): string {
+  public get requiredSymbol(): string {
     return this.isRequired ? ' *' : '';
   }
 }
