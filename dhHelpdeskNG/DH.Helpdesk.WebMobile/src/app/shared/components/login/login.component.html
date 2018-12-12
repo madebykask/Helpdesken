@@ -4,8 +4,10 @@
         <mbsc-form class="md-login-form">
             <form [formGroup]="loginForm" novalidate (ngSubmit)="onSubmit()">
                 <div class="mbsc-form-group-inset">
-                    <mbsc-input formControlName="username" [error]="f.username.touched && f.username.dirty && f.username.invalid" [errorMessage]="getError('username')"
-                        input-style="outline" class="margin">User</mbsc-input>
+                    <mbsc-input formControlName="username" 
+                                [error]="f.username.touched && f.username.dirty && f.username.invalid" 
+                                [errorMessage]="getError('username')"
+                                input-style="outline" class="margin">User</mbsc-input>
                     <mbsc-input formControlName="password" type="password" password-toggle="true" icon="none"
                         icon-align="right" [error]="f.password.touched && f.password.dirty && f.password.invalid" [errorMessage]="getError('password')"
                             input-style="outline" class="margin">Password</mbsc-input>

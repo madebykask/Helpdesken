@@ -119,6 +119,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             //TODO: Move to mapper
             model.Id = currentCase.Id;
             model.CaseNumber = currentCase.CaseNumber;
+            model.CaseGuid = currentCase.CaseGUID;
 
             //case solution
             if (currentCase.CurrentCaseSolution_Id.HasValue)

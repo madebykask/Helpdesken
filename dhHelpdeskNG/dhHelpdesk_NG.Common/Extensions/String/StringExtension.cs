@@ -425,5 +425,12 @@ namespace DH.Helpdesk.Common.Extensions.String
             return self.Replace("'", "''");
         }
 
+        public static string Unquote(this string val)
+        {
+            if (string.IsNullOrEmpty(val))
+                return val;
+
+            return val.Trim().Trim('"');
+        }
     }
 }

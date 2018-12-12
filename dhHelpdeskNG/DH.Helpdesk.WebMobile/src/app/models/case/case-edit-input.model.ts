@@ -3,6 +3,7 @@ import { CaseSectionType } from "..";
 export class CaseEditInputModel {
     id: number;
     caseNumber: number;
+    caseGuid: string;
     editMode: CaseAccessMode;
     fields: IBaseCaseField<any>[];
     caseSolution: CaseSolution;

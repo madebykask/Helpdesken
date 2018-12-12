@@ -1,0 +1,17 @@
+
+<mbsc-listview [options]="fileListSettings">       
+  <mbsc-listview-item *ngFor="let item of uploader.queue"
+        icon="fa-paperclip">      
+        <span class="filename" [ngStyle]="getStatusStyles(item)">{{ item?.file?.name }}</span>        
+        <!--
+        <mbsc-progress [value]="item?.progress" max="100" color="primary"></mbsc-progress>
+        -->
+  </mbsc-listview-item>  
+</mbsc-listview>
+
+<div id="upload_button">
+    <label>
+      <input #file type="file" ng2FileSelect [uploader]="uploader" multiple />
+      <mbsc-button flat data-icon="fa-upload" color="primary" (click)="file.click()" translate>Bifoga</mbsc-button>
+  </label>
+</div>

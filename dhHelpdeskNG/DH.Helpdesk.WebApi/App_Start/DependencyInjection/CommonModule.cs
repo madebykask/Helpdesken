@@ -16,7 +16,7 @@ using DH.Helpdesk.Services.Infrastructure.Email;
 using DH.Helpdesk.Services.Infrastructure.Email.Concrete;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
-using DH.Helpdesk.WebApi.Controllers;
+using DH.Helpdesk.Web.Common.Tools.Files;
 using DH.Helpdesk.WebApi.Infrastructure.Cache;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
 using DH.Helpdesk.WebApi.Logic.CaseFieldSettings;
@@ -33,6 +33,10 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //NOTE: When registering a service as a singleton mind its dependicies - they could be of per-request lifetime scope!
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             builder.RegisterType<WebCacheService>()
                 .As<ICacheService>().SingleInstance();
 
@@ -50,11 +54,16 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             //    .SingleInstance();
 
             builder.RegisterType<UserPermissionsChecker>().As<IUserPermissionsChecker>();
+
             builder.RegisterType<ApplicationConfiguration>().As<IApplicationConfiguration>().SingleInstance();
             
 
             builder.RegisterType<FilesStorage>()
                 .As<IFilesStorage>()
+                .SingleInstance();
+
+            builder.RegisterType<TemporaryFilesCacheFactory>()
+                .As<ITemporaryFilesCacheFactory>()
                 .SingleInstance();
 
             builder.RegisterType<CaseMailer>()

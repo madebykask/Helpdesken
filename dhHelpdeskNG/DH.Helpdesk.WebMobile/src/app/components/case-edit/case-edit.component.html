@@ -73,10 +73,14 @@
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.InvoiceNumber)" [field]="getField(caseFieldsNames.InvoiceNumber)" [form]="form"></case-textbox-control>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.ReferenceNumber)" [field]="getField(caseFieldsNames.ReferenceNumber)" [form]="form"></case-textbox-control>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.Caption)" [field]="getField(caseFieldsNames.Caption)" [form]="form"></case-textbox-control>
-                        <!-- TODO:<case-xxx-control *ngIf="hasField(caseFieldsNames.Mail2Ticket)" [field]="getField(caseFieldsNames.Mail2Ticket)" [form]="form"></case-xxx-control> -->
+                        <!-- TODO:
+                        <case-xxx-control *ngIf="hasField(caseFieldsNames.Mail2Ticket)" [field]="getField(caseFieldsNames.Mail2Ticket)" [form]="form"></case-xxx-control> 
+                        -->
                         <case-textarea-control *ngIf="hasField(caseFieldsNames.Description)" [field]="getField(caseFieldsNames.Description)" [form]="form"></case-textarea-control>                                
-<!--                                 <case-mailtoticket-control  *ngIf="hasField(caseFieldsNames.CaseRegistrationSource) && getField(caseFieldsNames.CaseRegistrationSource).value === 3" [field]="getField(caseFieldsNames.CaseRegistrationSource)"></case-mailtoticket-control> -->
-                          <case-textarea-control *ngIf="hasField(caseFieldsNames.Miscellaneous)" [field]="getField(caseFieldsNames.Miscellaneous)" [form]="form"></case-textarea-control>
+                        <!-- TODO:
+                        <case-mailtoticket-control *ngIf="hasField(caseFieldsNames.CaseRegistrationSource) && getField(caseFieldsNames.CaseRegistrationSource).value === 3" [field]="getField(caseFieldsNames.CaseRegistrationSource)"></case-mailtoticket-control> 
+                        -->
+                        <case-textarea-control *ngIf="hasField(caseFieldsNames.Miscellaneous)" [field]="getField(caseFieldsNames.Miscellaneous)" [form]="form"></case-textarea-control>
                         <case-switch-control *ngIf="hasField(caseFieldsNames.ContactBeforeAction)" [field]="getField(caseFieldsNames.ContactBeforeAction)" [form]="form"></case-switch-control>
                         <case-switch-control *ngIf="hasField(caseFieldsNames.Sms)" [field]="getField(caseFieldsNames.Sms)" [form]="form" description="Send text message when case is closed"></case-switch-control>
                         <case-date-control *ngIf="hasField(caseFieldsNames.AgreedDate)" [field]="getField(caseFieldsNames.AgreedDate)" [form]="form"></case-date-control>
@@ -84,10 +88,7 @@
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.Cost)" [field]="getField(caseFieldsNames.Cost)" [form]="form"></case-textbox-control>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.Cost_OtherCost)" [field]="getField(caseFieldsNames.Cost_OtherCost)" [form]="form"></case-textbox-control>
                         <case-dropdown-control *ngIf="hasField(caseFieldsNames.Cost_Currency)" disabled=true [field]="getField(caseFieldsNames.Cost_Currency)" [form]="form" [dataSource]="dataSource.options.currencies"></case-dropdown-control>
-                        <case-files-control *ngIf="hasField(caseFieldsNames.Filename)" [field]="getField(caseFieldsNames.Filename)"></case-files-control>
-                        <!--
-                        <file-upload></file-upload>
-                        -->                        
+                        <case-files-control *ngIf="hasField(caseFieldsNames.Filename)" [field]="getField(caseFieldsNames.Filename)" [caseKey]="caseKey"></case-files-control>
                 </mbsc-form-group-content>
             </mbsc-form-group>
 

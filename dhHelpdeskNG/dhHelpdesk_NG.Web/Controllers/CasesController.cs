@@ -2219,25 +2219,24 @@ namespace DH.Helpdesk.Web.Controllers
             var uploadedData = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
 
+            int caseId = 0;
             if (GuidHelper.IsGuid(id))
             {
-                if (this._userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
+                if (_userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
                 {
                     name = DateTime.Now.ToString() + '-' + name;
                 }
-                this._userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);
+                _userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);
             }
-            else
+            else if (Int32.TryParse(id, out caseId))
             {
-                if (this._caseFileService.FileExists(int.Parse(id), name))
+                if (_caseFileService.FileExists(int.Parse(id), name))
                 {
                     name = DateTime.Now.ToString() + '_' + name;
                 }
-
-                var c = this._caseService.GetCaseById(int.Parse(id));
-                var basePath = string.Empty;
-                if (c != null)
-                    basePath = _masterDataService.GetFilePath(c.Customer_Id);
+                
+                var customerId = _caseService.GetCaseCustomerId(caseId);
+                var basePath = _masterDataService.GetFilePath(customerId);
 
                 var caseFileDto = new CaseFileDto(
                                 uploadedData,
@@ -2245,9 +2244,8 @@ namespace DH.Helpdesk.Web.Controllers
                                 name,
                                 DateTime.Now,
                                 int.Parse(id),
-                                this._workContext.User.UserId);
-                this._caseFileService.AddFile(caseFileDto);
-
+                                _workContext.User.UserId);
+                _caseFileService.AddFile(caseFileDto);
             }
         }
 
@@ -3676,12 +3674,13 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
+
             // save case files
             if (!edit)
             {
                 var temporaryFiles = this._userTemporaryFilesStorage.FindFiles(case_.CaseGUID.ToString(), ModuleName.Cases);
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, case_.Id, this._workContext.User.UserId)).ToList();
-                this._caseFileService.AddFiles(newCaseFiles);
+                _caseFileService.AddFiles(newCaseFiles);
             }
 
             // save log files

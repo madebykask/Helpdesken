@@ -2,6 +2,7 @@
 using System.Web.Http.Filters;
 using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
+using DH.Helpdesk.WebApi.Infrastructure.Cors;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
 using Newtonsoft.Json;
 
@@ -19,6 +20,10 @@ namespace DH.Helpdesk.WebApi
             FiltersConfig(config.Filters);
             RoutesConfig(config);
             JsonFormatConfig(config);
+            
+            //use cors for web api
+            config.SetCorsPolicyProviderFactory(new WebApiCorsPolicyProviderFactory());
+            config.EnableCors();
 
             // make all web-api requests to be sent over https
             //config.MessageHandlers.Add(new EnforceHttpsHandler());

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http.Dependencies;
-using DH.Helpdesk.WebApi;
 using DH.Helpdesk.WebApi.Infrastructure.Authentication;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
 using Microsoft.Owin;

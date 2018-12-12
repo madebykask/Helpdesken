@@ -2,6 +2,6 @@
 
 <Assembly: AssemblyCompany("DH Solutions")>
 <Assembly: AssemblyCopyright("© 2015 DH Solutions")>
-<Assembly: AssemblyVersion("5.3.40.235")>
-<Assembly: AssemblyFileVersion("5.3.40.235")>
-<Assembly: AssemblyInformationalVersion("5.3.40.235-64eb06d2a")>
+<Assembly: AssemblyVersion("5.3.40.243")>
+<Assembly: AssemblyFileVersion("5.3.40.243")>
+<Assembly: AssemblyInformationalVersion("5.3.40.243-5b9211998")>

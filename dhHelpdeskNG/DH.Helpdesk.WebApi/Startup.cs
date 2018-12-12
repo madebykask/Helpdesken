@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Cors;
 using System.Web.Http;
+
 using Autofac.Integration.WebApi;
 using DH.Helpdesk.WebApi.Infrastructure.Owin;
 using Microsoft.Owin;
@@ -19,19 +20,23 @@ namespace DH.Helpdesk.WebApi
 
             var container = WebApiConfig.ConfigDiContainer(config);
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
-
+            
+            //register cors for owin components (auth provider) only 
             app.UseCors(new CorsOptions
             {
-                PolicyProvider = new CorsPolicyProvider
+                PolicyProvider = new CorsPolicyProvider()
                 {
-                    PolicyResolver = context => Task.FromResult(new CorsPolicy
-                    {
-                        AllowAnyHeader = true,
-                        AllowAnyMethod = true,
-                        AllowAnyOrigin = true,
-                        SupportsCredentials = false,
-                        PreflightMaxAge = 600
-                    })
+                    PolicyResolver = request =>
+                        (request.Path.Value ?? string.Empty).Equals("/token", StringComparison.OrdinalIgnoreCase) 
+                            ? Task.FromResult(new CorsPolicy
+                            {
+                                AllowAnyHeader = true,
+                                AllowAnyMethod = true,
+                                AllowAnyOrigin = true,
+                                SupportsCredentials = false,
+                                PreflightMaxAge = 600
+                            })
+                            : Task.FromResult<CorsPolicy>(null)
                 }
             });
 
@@ -47,11 +52,13 @@ namespace DH.Helpdesk.WebApi
 
             app.Use<RequestMiddleware>();
             app.UseWebApi(config);
+
             config.AddApiVersioning( o =>
             {
                 o.AssumeDefaultVersionWhenUnspecified = true;
                 o.ReportApiVersions = true;
             });
+
             SwaggerConfig.Register(config);
             //configuration.AddVersionedApiExplorer(//TODO: install nuget and uncomment when ApiExplorer will be used
         }

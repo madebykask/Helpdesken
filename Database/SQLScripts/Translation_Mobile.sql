@@ -87,10 +87,16 @@ insert into tbltext (id, TextString, TextType) VALUES (10012, 'Alla ärenden', @
 If not exists (select * from tblTextTranslation where text_id = 10012 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10012, 2, 'All cases')
 
-
 -- My Cases
 If not exists (select * from tbltext where id = 10013 )
 insert into tbltext (id, TextString, TextType) VALUES (10013, 'Mina ärenden', @MobileType)
 
 If not exists (select * from tblTextTranslation where text_id = 10013 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10013, 2, 'My cases')
+
+-- Attach
+If not exists (select * from tbltext where id = 10014 )
+insert into tbltext (id, TextString, TextType) VALUES (10014, 'Bifoga', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10014 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10014, 2, 'Attach')

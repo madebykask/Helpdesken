@@ -54,10 +54,15 @@ export class AuthenticationService {
         // We clone the request, because the original request is immutable
         return request.clone({
             setHeaders: {
-                Authorization: `Bearer ${accessToken}`
+                Authorization: this.getAuthorizationHeaderValue()
             }
         });
-    }   
+    }
+
+    getAuthorizationHeaderValue(): string {    
+      const accessToken = this._authStateService.getAccessToken();
+      return `Bearer ${accessToken}`;
+    }
 
     private raiseAuthenticationChanged() {
         this._commService.publish(Channels.AuthenticationChange, {});

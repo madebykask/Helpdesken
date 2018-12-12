@@ -1,10 +1,10 @@
 <div class="case-subsection">
 <span class="mbsc-label case-subsection-title">Files</span>
-  <ul class="filelist">
-      <li *ngFor="let item of getFilesModel(); trackBy: identify">
-        <div class="mbsc-ic mbsc-ic-fa-paperclip">
-            <a (click)="downloadFile(item)">{{ item.fileName }}</a>
-        </div>
-      </li>
-  </ul>
+<br>
+  <mbsc-listview [options]="fileListSettings">       
+      <mbsc-listview-item *ngFor="let item of getFilesModel(); trackBy: identify" 
+          icon="fa-paperclip"
+          (click)="downloadFile(item)">{{ item.fileName }}</mbsc-listview-item>
+  </mbsc-listview>
+  <case-files-upload [caseKey]='caseKey'></case-files-upload>
 </div>

@@ -34,6 +34,7 @@ namespace DH.Helpdesk.Web.Common.Tools.Files
         byte[] GetFileContent(string fileName, int objectId, params string[] subtopics);
 
         string FindFilePath(string fileName, string objectId, params string[] subtopics);
+
         List<CaseFileDate> FindFileNamesAndDates(string id, params string[] subtopics);
     }
 }

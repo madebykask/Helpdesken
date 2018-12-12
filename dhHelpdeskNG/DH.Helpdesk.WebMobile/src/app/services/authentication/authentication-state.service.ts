@@ -44,7 +44,7 @@ export class AuthenticationStateService {
   }
 
   getAccessToken(): string {
-    var user = this.getUser();
+    let user = this.getUser();
     return user && user.authData && user.authData.access_token ? user.authData.access_token : null;
   }
 }

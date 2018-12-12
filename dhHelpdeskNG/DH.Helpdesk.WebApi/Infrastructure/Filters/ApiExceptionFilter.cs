@@ -44,9 +44,9 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
                 .CreateResponse(HttpStatusCode.InternalServerError,
                     context.Exception);
 #else
-			context.Response = context.Request
-					.CreateResponse(HttpStatusCode.InternalServerError,
-					String.Format("Sorry, an error occurred while processing your request.\r\nPlease provide Error Id to support team:\r\n{0}", errorId));
+            context.Response = context.Request
+                    .CreateResponse(HttpStatusCode.InternalServerError,
+                    String.Format("Sorry, an error occurred while processing your request.\r\nPlease provide Error Id to support team:\r\n{0}", errorId));
 #endif
             return Task.FromResult(0);
         }

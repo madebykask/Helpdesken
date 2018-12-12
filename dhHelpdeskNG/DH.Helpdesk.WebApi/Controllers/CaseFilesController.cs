@@ -2,13 +2,17 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Common.Extensions.String;
+using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Enums;
+using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Common.Tools.Files;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.ActionResults;
+using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
 
 namespace DH.Helpdesk.WebApi.Controllers
@@ -18,13 +22,23 @@ namespace DH.Helpdesk.WebApi.Controllers
     {
         private readonly ICaseFileService _caseFileService;
         private readonly ITemporaryFilesCacheFactory _userTemporaryFilesStorageFactory;
+        private readonly ICaseService _caseService;
+        private readonly ISettingsLogic _settingsLogic;
 
-        public CaseFilesController(ICaseFileService caseFileService,
-                                   ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory)
+        #region ctor()
+
+        public CaseFilesController(ICaseService caseService,
+            ICaseFileService caseFileService,
+            ISettingsLogic settingsLogic,
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory)
         {
+            _settingsLogic = settingsLogic;
+            _caseService = caseService;
             _caseFileService = caseFileService;
             _userTemporaryFilesStorageFactory = userTemporaryFilesStorageFactory;
         }
+
+        #endregion
 
         /// <summary>
         /// Get files content. Used to download files.
@@ -45,10 +59,12 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("uploadfiles")]
-        public async Task<IHttpActionResult> UploadFiles(/*string key*/)
+        [Route("{caseKey}/uploadfile")]
+        [SkipCustomerAuthorization]
+        public async Task<IHttpActionResult> UploadFile([FromUri]string caseKey)
         {
-            var tempStorage = _userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
+            if (string.IsNullOrEmpty(caseKey))
+                return BadRequest("caseKey parameter is null or empty");
 
             // Check if the request contains multipart/form-data.
             if (!Request.Content.IsMimeMultipartContent())
@@ -56,24 +72,58 @@ namespace DH.Helpdesk.WebApi.Controllers
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
 
-            var provider = new MultipartMemoryStreamProvider();
+            //await Task.Delay(TimeSpan.FromSeconds(10));
+
+            int caseId;
+            var now = DateTime.Now;
+            var topic = ModuleName.Cases;
+            var filesReadToProvider = await Request.Content.ReadAsMultipartAsync();
+
             try
             {
-                // Read the form data.
-                await Request.Content.ReadAsMultipartAsync(provider);
-
-                foreach (var file in provider.Contents)
+                if (GuidHelper.IsGuid(caseKey))
                 {
-                    var fileName = file.Headers.ContentDisposition.FileName.Trim('\"');
-                    var buffer = await file.ReadAsByteArrayAsync();
-                    //Do whatever you want with filename and its binary data.
+                    var tempStorage = _userTemporaryFilesStorageFactory.CreateForModule(topic);
+                    foreach (var stream in filesReadToProvider.Contents)
+                    {
+                        var fileBytes = await stream.ReadAsByteArrayAsync();
+                        var fileName = stream.Headers.ContentDisposition.FileName.Unquote();
 
-                    tempStorage.AddFile(buffer, fileName, Guid.NewGuid().ToString(), ModuleName.Cases);
+                        //fix name
+                        if (tempStorage.FileExists(fileName, caseKey, topic))
+                            fileName = $"{now}-{fileName}";
+
+                        tempStorage.AddFile(fileBytes, fileName, caseKey, topic);
+                    }
                 }
-             
+                else if (Int32.TryParse(caseKey, out caseId))
+                {
+                    var customerId = _caseService.GetCaseCustomerId(caseId);
+                    var basePath = _settingsLogic.GetFilePath(customerId);
+
+                    foreach (var stream in filesReadToProvider.Contents)
+                    {
+                        var fileBytes = await stream.ReadAsByteArrayAsync();
+                        var fileName = stream.Headers.ContentDisposition.FileName.Unquote();
+
+                        if (_caseFileService.FileExists(caseId, fileName))
+                            fileName = $"{now}-{fileName}";
+
+                        var caseFileDto = new CaseFileDto(
+                            fileBytes,
+                            basePath,
+                            fileName,
+                            now,
+                            caseId,
+                            UserId);
+
+                        _caseFileService.AddFile(caseFileDto);
+                    }
+                }
+
                 return Ok(HttpStatusCode.OK);
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 return BadRequest(e.Message); //todo: check how to return an error
             }

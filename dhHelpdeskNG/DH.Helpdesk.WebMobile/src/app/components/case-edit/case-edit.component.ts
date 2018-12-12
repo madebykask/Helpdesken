@@ -28,9 +28,10 @@ export class CaseEditComponent {
     dataSource: OptionsDataSource;
     isLoaded = false;
     form: FormGroup;
+    caseKey:string = '';
     tabsMenuSettings = {};
     private searchType:CasesSearchType = CasesSearchType.All;
-    private caseId: number;
+    private caseId: number;    
     private caseData: CaseEditInputModel;
     private caseSections: CaseSectionInputModel[];
     private ownsLock = false;
@@ -57,9 +58,9 @@ export class CaseEditComponent {
     ngOnInit() {
       this.commService.publish(Channels.Header, new HeaderEventData(false));
       this.loadCaseData();
-    }
+    }    
 
-    getCaseTitle() : string {
+    getCaseTitle(): string {
         let title = this.translateService.instant('Ärende');
         if (this.caseData) {
             if (this.caseData.caseSolution) {
@@ -80,27 +81,32 @@ export class CaseEditComponent {
             this.caseService.getCaseData(this.caseId)
                 .pipe(
                     switchMap(data => { // TODO: Error handle
-                      this.ownsLock = false;
+                      this.ownsLock = false;                      
                       this.caseData = data;
-                      const filter = this.getCaseOptionsFilter(this.caseData);
+                      const filter = this.getCaseOptionsFilter(data);                      
                       return this.caseService.getCaseOptions(filter);
                     })
                 );
-
+                
                 forkJoin(caseSections$, caseData$, caseLock$)
                 .pipe(
                     take(1),
                     map(([sectionData, options, caseLock]) => {
                       this.caseSections = sectionData;
                       this.dataSource = new OptionsDataSource(options);
-                      this.caseLock = caseLock;
-                      this.form = this.createFormGroup(this.caseData);
+                      this.caseLock = caseLock;                      
+                      this.processCaseData();                                            
                     }),
                     finalize(() => this.isLoaded = true)
                 )
                 .subscribe(() => {
                 	this.initLock();
                 });
+    }
+
+    private processCaseData(){      
+      this.caseKey = this.caseData.id > 0 ? this.caseData.id.toString() : this.caseData.caseGuid.toString();      
+      this.form = this.createFormGroup(this.caseData);
     }
 
     ngOnDestroy() {
@@ -172,7 +178,7 @@ export class CaseEditComponent {
     }
 
     saveCase() {
-      if(!this.canSave) {
+      if (!this.canSave) {
         return;
       }
       this.isLoaded = false;

@@ -12,15 +12,16 @@ using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.BusinessRule;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Extensions.Object;
+using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Common.Enums.Case;
+using DH.Helpdesk.Web.Common.Tools.Files;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Authentication;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
-using DH.Helpdesk.WebApi.Logic;
 using DH.Helpdesk.WebApi.Logic.Case;
 using DH.Helpdesk.WebApi.Logic.CaseFieldSettings;
 
@@ -43,12 +44,17 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseFieldSettingsHelper _caseFieldSettingsHelper;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IEmailService _emailService;
+        private readonly ICaseFileService _caseFileService;
+        private readonly ITemporaryFilesCacheFactory _temporaryFilesStorageFactory;
+
+        #region ctor()
 
         public CaseSaveController(ICaseService caseService, ICaseFieldSettingService caseFieldSettingService,
             ICaseLockService caseLockService, ICustomerService customerService,
             ISettingService customerSettingsService, ICaseEditModeCalcStrategy caseEditModeCalcStrategy,
             IUserService userService, ISettingsLogic settingsLogic, ICaseFieldSettingsHelper caseFieldSettingsHelper, 
-            IWorkingGroupService workingGroupService, IEmailService emailService)
+            IWorkingGroupService workingGroupService, IEmailService emailService, ICaseFileService caseFileService,
+            ITemporaryFilesCacheFactory temporaryFilesCacheFactory)
         {
             _caseService = caseService;
             _caseFieldSettingService = caseFieldSettingService;
@@ -61,7 +67,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             _caseFieldSettingsHelper = caseFieldSettingsHelper;
             _workingGroupService = workingGroupService;
             _emailService = emailService;
+            _caseFileService = caseFileService;
+            _temporaryFilesStorageFactory = temporaryFilesCacheFactory;
         }
+
+        #endregion
 
         /// <summary>
         /// Save Case
@@ -81,7 +91,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 return BadRequest("CaseId is required. Creating new case is not supported.");
             }
-
+            var edit = caseId > 0;
             var lockData = await _caseLockService.GetCaseLockAsync(caseId.Value);
             if (lockData != null && lockData.UserId != UserId)
             {
@@ -117,7 +127,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 currentCase.StateSecondary_Id = model.StateSecondaryId;
             }
-
 
             //if (isNew)
             //{
@@ -156,13 +165,25 @@ namespace DH.Helpdesk.WebApi.Controllers
             // TODO: caseNotifications?
 
             // TODO: LOG - if support added 
-
+            
             var customerSettings = _customerSettingsService.GetCustomerSettings(oldCase.Customer_Id);
             var basePath = _settingsLogic.GetFilePath(customerSettings);
-            var allLogFiles = new List<CaseFileDto>();// TODO: Temparary no files. implement after files upload if needed.
             var customer = _customerService.GetCustomer(oldCase.Customer_Id);
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(User.Identity.GetTimezoneId());
             var currentUser = _userService.GetUser(UserId);
+
+            //case files
+            // todo: Check if new cases should be handled here. Save case files for new cases only!
+            if (!edit)
+            {
+                var tempStorage = _temporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
+                var temporaryFiles = tempStorage.FindFiles(currentCase.CaseGUID.ToString(), ModuleName.Cases);
+                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, currentCase.Id, UserId)).ToList();
+                _caseFileService.AddFiles(newCaseFiles);
+            }
+
+            // save log files
+            var allLogFiles = new List<CaseFileDto>();// TODO: Temparary no files. implement after files upload if needed.
 
             // send emails
             var caseMailSetting = GetCaseMailSetting(currentCase, customer, customerSettings);

@@ -31,8 +31,9 @@ import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 import { AltLayoutComponent } from './_layout/alt-layout/alt-layout.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '@env/environment';
-import { FileUploadComponent } from './shared/components/file-upload/file-upload.component';
+
 import { FileUploadModule } from "ng2-file-upload";   
+import { CaseFilesUploadComponent } from './components/case-edit/controls/case-files-upload/case-files-upload.component';
 @NgModule({
   bootstrap: [ AppComponent],
   declarations: [AppComponent, AppLayoutComponent, PageNotFoundComponent, HeaderTitleComponent, FooterComponent,
@@ -46,7 +47,7 @@ import { FileUploadModule } from "ng2-file-upload";
      ErrorComponent,
      AltLayoutComponent,
      MailtoticketControlComponent,     
-     FileUploadComponent
+     CaseFilesUploadComponent
   ],
   imports: [ 
     MbscModule,

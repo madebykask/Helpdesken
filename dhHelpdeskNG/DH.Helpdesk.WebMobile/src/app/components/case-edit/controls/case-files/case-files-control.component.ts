@@ -1,9 +1,9 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { CaseFileModel } from 'src/app/models/case/case-file-model';
-import { CaseService } from 'src/app/services/case/case.service';
 import { BaseCaseField, OptionItem } from 'src/app/models';
 import { FileDownloadService } from 'src/app/services/files/file-download.service'
 import { CaseApiService } from 'src/app/services/api/case/case-api.service';
+import { MbscListviewOptions } from '@mobiscroll/angular';
 
 @Component({
   selector: 'case-files-control',
@@ -13,6 +13,22 @@ import { CaseApiService } from 'src/app/services/api/case/case-api.service';
 export class CaseFilesControlComponent implements OnInit  {
 
   @Input() field: BaseCaseField<Array<any>>; 
+  @Input() caseKey: string; 
+
+  fileListSettings:MbscListviewOptions = {
+    enhance: true,
+    swipe: true,
+    //todo: add swipe effects for delete
+    stages: [{
+      percent: -25,
+      color: 'red',
+      text: 'Delete',
+      confirm: true,
+      action: (event, inst) => {
+          console.log('delete file');
+      }
+    }]  
+  };
 
   constructor(private caseApiService: CaseApiService,
               private fileDownloadService: FileDownloadService) { 
