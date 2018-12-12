@@ -55,7 +55,7 @@ export const CaseFieldsNames = {
    UpdateNotifierInformation: "UpdateNotifierInformation",
    Change: "Change", 
    Project: "Project",
-   Problem: "Project",
+   Problem: "Problem",
    RegistrationSourceCustomer: "RegistrationSourceCustomer",
    CostCentre: "CostCentre",
    IsAbout_ReportedBy: "IsAbout_ReportedBy",

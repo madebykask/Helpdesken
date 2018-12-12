@@ -4,6 +4,6 @@ export class OptionsDataSource {
     public options: CaseOptions;
 
     constructor(options: CaseOptions) {
-        this.options = options;    
+        this.options = options;
     }
 }

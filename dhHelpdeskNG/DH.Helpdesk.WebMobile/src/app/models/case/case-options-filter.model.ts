@@ -1,37 +1,37 @@
 export class BundleOptionsFilter {
     CaseResponsibleUserId?: number;
-    CasePerformerUserId?: number;
-    CaseWorkingGroupId?:number;
     CaseCausingPartId?: number;
-    CustomerRegistrationSources: boolean;
-    Systems: boolean;
-    Urgencies: boolean;
-    Impacts: boolean;
-    Suppliers: boolean;
-    CausingParts: boolean;
-    Currencies: boolean;
-    WorkingGroups: boolean;
-    ResponsibleUsers: boolean;
-    Performers: boolean;
-    Priorities: boolean;
-    Statuses: boolean;
-    StateSecondaries: boolean;
-    SolutionsRates: boolean;
-    Changes: boolean;
-    Problems: boolean;
-    Projects: boolean;
+    CustomerRegistrationSources?: boolean;
+    Systems?: boolean;
+    Urgencies?: boolean;
+    Impacts?: boolean;
+    Suppliers?: boolean;
+    CausingParts?: boolean;
+    Currencies?: boolean;
+    WorkingGroups?: boolean;
+    ResponsibleUsers?: boolean;
+    Priorities?: boolean;
+    Statuses?: boolean;
+    StateSecondaries?: boolean;
+    SolutionsRates?: boolean;
+    Changes?: boolean;
+    Problems?: boolean;
+    Projects?: boolean;
  }
 
 export class CaseOptionsFilterModel extends BundleOptionsFilter {
     RegionId?: any;
+    CasePerformerUserId?: number;
+    CaseWorkingGroupId?: number;
     DepartmentId?: any;
     IsAboutRegionId?: any;
     IsAboutDepartmentId?: any;
-    CaseTypes: boolean;
+    Performers?: boolean;
+    CaseTypes?: boolean;
     CaseTypeId?: any;
-    ProductAreas: boolean;
+    ProductAreas?: boolean;
     ProductAreaId?: any;
-    Categories: boolean;
-    ClosingReasons: boolean;
+    Categories?: boolean;
+    ClosingReasons?: boolean;
  }
  

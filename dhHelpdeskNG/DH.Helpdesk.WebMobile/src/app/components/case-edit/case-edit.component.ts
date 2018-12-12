@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
-import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType, CaseLockModel, CaseAccessMode, CasesSearchType, IBaseCaseField } from '../../models';
+import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType, CaseLockModel, CaseAccessMode, CasesSearchType, IBaseCaseField, OptionItem } from '../../models';
 import { forkJoin, Subject, Subscription, of } from 'rxjs';
-import { switchMap, take, finalize, tap, delay, catchError, map, } from 'rxjs/operators';
+import { switchMap, take, finalize, tap, delay, catchError, map, takeUntil, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
-import { CommunicationService, Channels } from 'src/app/services/communication/communication.service';
+import { CommunicationService, Channels, DropdownValueChangedEvent } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/header-event-data';
 import { AlertsService } from 'src/app/helpers/alerts/alerts.service';
 import { interval } from 'rxjs';
@@ -15,6 +15,8 @@ import { CaseLockApiService } from 'src/app/services/api/case/case-lock-api.serv
 import { CaseSaveService } from 'src/app/services/case';
 import { CaseFieldsNames, CaseFieldOptions } from '../../helpers/constants';
 import { AlertType } from 'src/app/helpers/alerts/alert-types';
+import { CaseDataStore } from 'src/app/logic/case-edit/case-data.store';
+import { CaseDataReducersFactory, } from 'src/app/logic/case-edit/case-data.reducers';
 
 @Component({
   selector: 'app-case-edit',
@@ -25,13 +27,13 @@ export class CaseEditComponent {
     caseSectionTypes = CaseSectionType;
     caseFieldsNames = CaseFieldsNames;
     accessModeEnum = CaseAccessMode
-    dataSource: OptionsDataSource;
+    dataSource: CaseDataStore;
     isLoaded = false;
     form: FormGroup;
     caseKey:string = '';
     tabsMenuSettings = {};
-    private searchType:CasesSearchType = CasesSearchType.All;
-    private caseId: number;    
+    private searchType: CasesSearchType = CasesSearchType.All;
+    private caseId: number;
     private caseData: CaseEditInputModel;
     private caseSections: CaseSectionInputModel[];
     private ownsLock = false;
@@ -47,20 +49,31 @@ export class CaseEditComponent {
                 private translateService: TranslateService,
                 private commService: CommunicationService,
                 private alertService: AlertsService,
-                private caseSaveService: CaseSaveService) {
+                private caseSaveService: CaseSaveService,
+                private _commService: CommunicationService,
+                private _сaseDataReducersFactory: CaseDataReducersFactory) {
         if (this.route.snapshot.paramMap.has('id')) {
             this.caseId = +this.route.snapshot.paramMap.get('id');
         } else {
             // TODO: throw error if caseid is invalid or go back
-        }     
+        }
+
+        this._commService.listen(Channels.DropdownValueChanged).pipe(
+          switchMap((v: DropdownValueChangedEvent) => {
+            const reducer = this._сaseDataReducersFactory.createCaseDataReducers(this.dataSource);
+            const filters = this.getCaseOptionsFilter((name: string) => this.getFormValue(name));
+            return reducer.caseDataReducer(v.name, filters);
+          }),
+          takeUntil(this.destroy$)
+        ).subscribe();
     }
 
     ngOnInit() {
       this.commService.publish(Channels.Header, new HeaderEventData(false));
       this.loadCaseData();
-    }    
+    }
 
-    getCaseTitle(): string {
+    getCaseTitle() : string {
         let title = this.translateService.instant('Ärende');
         if (this.caseData) {
             if (this.caseData.caseSolution) {
@@ -76,31 +89,32 @@ export class CaseEditComponent {
 
         const caseLock$ = this.caseLockApiService.acquireCaseLock(this.caseId, sessionId);
         const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
-        //todo: apply search type (all, my cases)
+        // todo: apply search type (all, my cases)
         const caseData$ =
             this.caseService.getCaseData(this.caseId)
                 .pipe(
                     switchMap(data => { // TODO: Error handle
-                      this.ownsLock = false;                      
+                      this.ownsLock = false;
                       this.caseData = data;
-                      const filter = this.getCaseOptionsFilter(data);                      
+                      const filter = this.getCaseOptionsFilter((name: string) => this.getValue(name));
                       return this.caseService.getCaseOptions(filter);
                     })
                 );
-                
+
                 forkJoin(caseSections$, caseData$, caseLock$)
                 .pipe(
                     take(1),
                     map(([sectionData, options, caseLock]) => {
                       this.caseSections = sectionData;
-                      this.dataSource = new OptionsDataSource(options);
-                      this.caseLock = caseLock;                      
-                      this.processCaseData();                                            
+                      this.dataSource = new CaseDataStore(options);
+                      this.caseLock = caseLock;
+                      this.processCaseData();
                     }),
-                    finalize(() => this.isLoaded = true)
+                    finalize(() => this.isLoaded = true),
+                    takeUntil(this.destroy$)
                 )
                 .subscribe(() => {
-                	this.initLock();
+                  this.initLock();
                 });
     }
 
@@ -111,7 +125,6 @@ export class CaseEditComponent {
 
     ngOnDestroy() {
         this.commService.publish(Channels.Header, new HeaderEventData(true));
-        this.destroy$.next();
 
         if (this.caseLockIntervalSub) {
             this.caseLockIntervalSub.unsubscribe();
@@ -122,8 +135,11 @@ export class CaseEditComponent {
             this.caseLockApiService.unLockCase(this.caseId, this.caseLock.lockGuid).subscribe();
         }
 
-        //shall we do extra checks? 
+        // shall we do extra checks? 
         this.alertService.clearMessages();
+
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     hasField(name: string): boolean {
@@ -149,9 +165,20 @@ export class CaseEditComponent {
         return fields.length <= 0 ? null : fields[0];
     }
 
+    // returns value from caseData, not formControl
     getValue(name: string) {
         const field = this.getField(name);
         return field != null ? field.value || null : undefined; // null - value is null, undefined - no such field
+    }
+
+    // returns value from formControl, not caseData
+    getFormValue(name: string) {
+      const noField = undefined;
+      if (!this.form.contains(name)) {
+        return noField;
+      }
+      const control = this.form.controls[name];
+      return control != null ? control.value || null : noField; // null - value is null, undefined - no such field
     }
 
     public navigate(url: string) {
@@ -194,18 +221,18 @@ export class CaseEditComponent {
       return this.caseData.editMode;
     }
 
-    private getCaseOptionsFilter(data: CaseEditInputModel) {
+    private getCaseOptionsFilter(getValue: (name: string) => number) {
         let filter = new CaseOptionsFilterModel();
-        filter.RegionId = this.getValue(this.caseFieldsNames.RegionId);
-        filter.DepartmentId = this.getValue(this.caseFieldsNames.DepartmentId);
-        filter.IsAboutRegionId = this.getValue(this.caseFieldsNames.IsAbout_RegionId);
-        filter.IsAboutDepartmentId = this.getValue(this.caseFieldsNames.IsAbout_DepartmentId);
-        filter.CaseResponsibleUserId = this.getValue(this.caseFieldsNames.CaseResponsibleUserId);
-        filter.CaseWorkingGroupId = this.getValue(this.caseFieldsNames.WorkingGroupId);
-        filter.CasePerformerUserId = this.getValue(this.caseFieldsNames.PerformerUserId);
-        filter.CaseCausingPartId = this.getValue(this.caseFieldsNames.CausingPart);
-        filter.CaseTypeId = this.getValue(this.caseFieldsNames.CaseTypeId);
-        filter.ProductAreaId = this.getValue(this.caseFieldsNames.ProductAreaId);
+        filter.RegionId = getValue(this.caseFieldsNames.RegionId);
+        filter.DepartmentId = getValue(this.caseFieldsNames.DepartmentId);
+        filter.IsAboutRegionId = getValue(this.caseFieldsNames.IsAbout_RegionId);
+        filter.IsAboutDepartmentId = getValue(this.caseFieldsNames.IsAbout_DepartmentId);
+        filter.CaseResponsibleUserId = getValue(this.caseFieldsNames.CaseResponsibleUserId);
+        filter.CaseWorkingGroupId = getValue(this.caseFieldsNames.WorkingGroupId);
+        filter.CasePerformerUserId = getValue(this.caseFieldsNames.PerformerUserId);
+        filter.CaseCausingPartId = getValue(this.caseFieldsNames.CausingPart);
+        filter.CaseTypeId = getValue(this.caseFieldsNames.CaseTypeId);
+        filter.ProductAreaId = getValue(this.caseFieldsNames.ProductAreaId);
         filter.Changes = this.hasField(this.caseFieldsNames.Change);
         filter.Currencies = this.hasField(this.caseFieldsNames.Cost_Currency);
         filter.CausingParts  = this.hasField(this.caseFieldsNames.CausingPart);

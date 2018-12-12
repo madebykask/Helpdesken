@@ -2,9 +2,10 @@ import { Component, Input, ViewChild } from "@angular/core";
 import { BaseCaseField, OptionItem } from "../../../../models";
 import { BaseControl } from "../base-control";
 import { takeUntil, switchMap } from "rxjs/operators";
-import { Subject, of } from "rxjs";
+import { Subject, of, BehaviorSubject } from "rxjs";
 import { FormStatuses } from "src/app/helpers/constants";
 import { MbscSelectOptions } from "@mobiscroll/angular";
+import { CommunicationService, Channels, DropdownValueChangedEvent } from "src/app/services/communication";
 
 @Component({
     selector: 'case-dropdown-control',
@@ -14,9 +15,9 @@ import { MbscSelectOptions } from "@mobiscroll/angular";
   export class CaseDropdownComponent extends BaseControl {
     @ViewChild('control') control: any;
     @Input() field: BaseCaseField<number>;
-    @Input() dataSource: OptionItem[] = [];
+    @Input() dataSource: BehaviorSubject<OptionItem[]>;
     @Input() disabled = false;
-    text: string = "";
+    // text: string = '';
     settings: MbscSelectOptions = {
       buttons: ['set'],
       setText: '',
@@ -25,54 +26,40 @@ import { MbscSelectOptions } from "@mobiscroll/angular";
           if (event.selected) {
             inst.select();
           }
-        }
+        },
+      onSet: (event, inst) => {
+        const value = this.getValueByText(event.valueText);
+        this._commService.publish(Channels.DropdownValueChanged, new DropdownValueChangedEvent(value, event.valueText, this.field.name));
+      }
     }
-    
-    private destroy$ = new Subject();
+    localDataSource: OptionItem[] = [];
+    private _destroy$ = new Subject();
 
-    constructor() {
+    constructor(private _commService: CommunicationService) {
       super();
     }
 
     ngOnInit(): void {
-      //apply translations
-      //this.control.setText = this._ngxTranslateService.instant("Välj");
+      // apply translations
+      // this.control.setText = this._ngxTranslateService.instant("Välj");
       // this.control.cancelText  = this._ngxTranslateService.instant("Avbryt");
 
-      if (!this.dataSource) {
-        this.dataSource = [];
-      };
+      this.initDataSource();
       this.init(this.field.name);
-      this.control.disabled = this.formControl.disabled || this.disabled;
-      if (!this.formControl.value || (this.formControl.value && !this.isRequired)) {
-        this.addEmptyItem();
-      }
-      this.formControl.statusChanges // track disabled state in form
-        .pipe(
-          switchMap((e: any) => {
-            if(this.control.disabled != (this.formControl.status == FormStatuses.DISABLED)) {
-              this.control.disabled = this.formControl.status == FormStatuses.DISABLED;
-            }
-            return of(e);
-          }),
-          takeUntil(this.destroy$)
-        ).subscribe();
+      this.updateDisabledState();
+      this.initEvents();
     }
 
     ngOnDestroy(): void {
-      this.destroy$.next();
-      this.destroy$.complete();
-    }
-
-    addEmptyItem(): any {
-      this.dataSource.unshift(new OptionItem('',''));
+      this._destroy$.next();
+      this._destroy$.complete();
     }
 
     getText(id: any) {
-      if (this.dataSource == null || this.dataSource.length === 0) {
+      if (this.dataSource == null || this.localDataSource.length === 0) {
          return ''
         };
-      let items = this.dataSource.filter((elem: OptionItem) => elem.value == id);
+      let items = this.localDataSource.filter((elem: OptionItem) => elem.value == id);
       return  items.length > 0 ? items[0].text : '';
     }
 
@@ -87,4 +74,58 @@ import { MbscSelectOptions } from "@mobiscroll/angular";
       }
       return this.field.label || defaultValue;
     }
+
+    private initDataSource() {
+      if (!this.dataSource) {
+        this.localDataSource = [];
+      };
+    }
+
+    private updateDisabledState() {
+      this.control.disabled = this.formControl.disabled || this.disabled;
+    }
+
+    private get isFormControlDisabled() {
+      return this.formControl.status == FormStatuses.DISABLED;
+    }
+
+    private initEvents() {
+      this.formControl.statusChanges // track disabled state in form
+        .pipe(switchMap((e: any) => {
+            if (this.control.disabled != this.isFormControlDisabled) {
+              this.updateDisabledState();
+            }
+            return of(e);
+          }),
+          takeUntil(this._destroy$)
+        )
+        .subscribe();
+
+        this.dataSource.pipe(
+          switchMap((options) => {
+            options = options || [];
+            if (!this.formControl.value || (this.formControl.value && !this.isRequired)) {
+              this.addEmptyItem(options);
+            }
+            this.localDataSource = options;
+            return of(options);
+          }),
+          takeUntil(this._destroy$)
+        )
+        .subscribe();
+    }
+
+    private addEmptyItem(options: OptionItem[]): any {
+      options.unshift(new OptionItem('',''));
+    }
+
+    private getValueByText(valueText: string): any {
+      if (!valueText || !this.localDataSource) {
+        return '';
+      }
+      return this.localDataSource.filter((v) => {
+        return v.text == valueText;
+      })[0].value;
+    }
+  
 }

@@ -1,5 +1,3 @@
-import { OptionItem } from "../shared/optionItem.model";
-
 export class BundledCaseOptions {
     customerRegistrationSources?: OptionItem[];
     systems?: OptionItem[];
@@ -8,17 +6,17 @@ export class BundledCaseOptions {
     suppliers?: OptionItem[];
     countries?: OptionItem[];
     currencies?: OptionItem[];
-    workingGroups: OptionItem[];
-    responsibleUsers: OptionItem[];
-    performers: OptionItem[];
-    priorities: OptionItem[];
-    statuses: OptionItem[];
-    stateSecondaries: OptionItem[];
-    projects: OptionItem[];
-    problems: OptionItem[];
-    changes: OptionItem[];
-    solutionsRates: OptionItem[];
-    causingParts: OptionItem[];
+    workingGroups?: OptionItem[];
+    responsibleUsers?: OptionItem[];
+    performers?: OptionItem[];
+    priorities?: OptionItem[];
+    statuses?: OptionItem[];
+    stateSecondaries?: OptionItem[];
+    projects?: OptionItem[];
+    problems?: OptionItem[];
+    changes?: OptionItem[];
+    solutionsRates?: OptionItem[];
+    causingParts?: OptionItem[];
 }
 
 export class CaseOptions extends BundledCaseOptions {
@@ -31,16 +29,29 @@ export class CaseOptions extends BundledCaseOptions {
     productAreas?: MultiLevelOptionItem[];
     categories?: MultiLevelOptionItem[];
     closingReasons?: MultiLevelOptionItem[];
-    
 }
 
+export class OptionItem {
+  constructor(value: any, text: string, group:string = null, html: string = null, disabled: boolean = null) {
+      this.value = value;
+      this.text = text;
+      this.group = group;
+      this.html = html;
+      this.disabled = disabled;
+  }
+  public value: any;
+  public text: string; 
+  public group?: string;
+  public html?: string;
+  public disabled?: boolean;
+}
 
 export class MultiLevelOptionItem extends OptionItem {
-    constructor(value: any, text: string, parentValue?: any, group:string = null, html: string = null, disabled: boolean = null) {
-        super(value, text, group, html, disabled);
-        this.parentValue = parentValue;
-    }
+  constructor(value: any, text: string, parentValue?: any, group: string = null, html: string = null, disabled: boolean = null) {
+      super(value, text, group, html, disabled);
+      this.parentValue = parentValue;
+  }
 
-    public parentValue?: any;
-    public childs?: MultiLevelOptionItem[];
+  public parentValue?: any;
+  public childs?: MultiLevelOptionItem[];
 }

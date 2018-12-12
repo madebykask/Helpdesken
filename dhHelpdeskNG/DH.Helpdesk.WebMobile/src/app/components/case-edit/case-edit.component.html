@@ -18,9 +18,9 @@
                     <case-textbox-control *ngIf="hasField(caseFieldsNames.PersonEmail)" [field]="getField(caseFieldsNames.PersonEmail)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="hasField(caseFieldsNames.PersonPhone)" [field]="getField(caseFieldsNames.PersonPhone)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="hasField(caseFieldsNames.PersonCellPhone)" [field]="getField(caseFieldsNames.PersonCellPhone)" [form]="form"></case-textbox-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.RegionId)" disabled=true [field]="getField(caseFieldsNames.RegionId)" [form]="form" [dataSource]="dataSource.options.regions"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.DepartmentId)" disabled=true [field]="getField(caseFieldsNames.DepartmentId)" [form]="form" [dataSource]="dataSource.options.departments"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.OrganizationUnitId)" disabled=true [field]="getField(caseFieldsNames.OrganizationUnitId)" [form]="form" [dataSource]="dataSource.options.oUs"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.RegionId)" disabled=true [field]="getField(caseFieldsNames.RegionId)" [form]="form" [dataSource]="dataSource.regionsStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.DepartmentId)" disabled=true [field]="getField(caseFieldsNames.DepartmentId)" [form]="form" [dataSource]="dataSource.departmentsStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.OrganizationUnitId)" disabled=true [field]="getField(caseFieldsNames.OrganizationUnitId)" [form]="form" [dataSource]="dataSource.oUsStore$"></case-dropdown-control>
                     <case-textbox-control *ngIf="hasField(caseFieldsNames.CostCentre)" [field]="getField(caseFieldsNames.CostCentre)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="hasField(caseFieldsNames.Place)" [field]="getField(caseFieldsNames.Place)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="hasField(caseFieldsNames.UserCode)" [field]="getField(caseFieldsNames.UserCode)" [form]="form"></case-textbox-control>
@@ -36,12 +36,12 @@
                     <case-textbox-control *ngIf="hasField(caseFieldsNames.IsAbout_PersonEmail)" [field]="getField(caseFieldsNames.IsAbout_PersonEmail)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="hasField(caseFieldsNames.IsAbout_PersonPhone)" [field]="getField(caseFieldsNames.IsAbout_PersonPhone)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="hasField(caseFieldsNames.IsAbout_PersonCellPhone)" [field]="getField(caseFieldsNames.IsAbout_PersonCellPhone)" [form]="form"></case-textbox-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.IsAbout_RegionId)" disabled=true [field]="getField(caseFieldsNames.IsAbout_RegionId)" [form]="form" [dataSource]="dataSource.options.regions"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.IsAbout_DepartmentId)" disabled=true [field]="getField(caseFieldsNames.IsAbout_DepartmentId)" [form]="form" [dataSource]="dataSource.options.isAboutDepartments"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.IsAbout_OrganizationUnitId)" disabled=true [field]="getField(caseFieldsNames.IsAbout_OrganizationUnitId)" [form]="form" [dataSource]="dataSource.options.isAboutOUs"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.IsAbout_RegionId)" disabled=true [field]="getField(caseFieldsNames.IsAbout_RegionId)" [form]="form" [dataSource]="dataSource.regionsStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.IsAbout_DepartmentId)" disabled=true [field]="getField(caseFieldsNames.IsAbout_DepartmentId)" [form]="form" [dataSource]="dataSource.isAboutDepartmentsStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.IsAbout_OrganizationUnitId)" disabled=true [field]="getField(caseFieldsNames.IsAbout_OrganizationUnitId)" [form]="form" [dataSource]="dataSource.isAboutOUsStore$"></case-dropdown-control>
                     <case-textbox-control *ngIf="hasField(caseFieldsNames.IsAbout_CostCentre)" [field]="getField(caseFieldsNames.IsAbout_CostCentre)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="hasField(caseFieldsNames.IsAbout_Place)" [field]="getField(caseFieldsNames.IsAbout_Place)" [form]="form"></case-textbox-control>
-                    <case-textbox-control *ngIf="hasField(caseFieldsNames.IsAbout_UserCode)" [field]="getField(caseFieldsNames.IsAbout_UserCode)" [form]="form"></case-textbox-control>                            
+                    <case-textbox-control *ngIf="hasField(caseFieldsNames.IsAbout_UserCode)" [field]="getField(caseFieldsNames.IsAbout_UserCode)" [form]="form"></case-textbox-control>
                 </mbsc-form-group-content>
             </mbsc-form-group>
 
@@ -50,7 +50,7 @@
                 <mbsc-form-group-content>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.InventoryNumber)" [field]="getField(caseFieldsNames.InventoryNumber)" [form]="form"></case-textbox-control>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.ComputerTypeId)" [field]="getField(caseFieldsNames.ComputerTypeId)" [form]="form"></case-textbox-control>
-                        <case-textbox-control *ngIf="hasField(caseFieldsNames.InventoryLocation)" [field]="getField(caseFieldsNames.InventoryLocation)" [form]="form"></case-textbox-control>    
+                        <case-textbox-control *ngIf="hasField(caseFieldsNames.InventoryLocation)" [field]="getField(caseFieldsNames.InventoryLocation)" [form]="form"></case-textbox-control>
                 </mbsc-form-group-content>
             </mbsc-form-group>
 
@@ -61,15 +61,15 @@
                         <case-datetime-control *ngIf="hasField(caseFieldsNames.RegTime)" [field]="getField(caseFieldsNames.RegTime)" [form]="form"></case-datetime-control>
                         <case-datetime-control *ngIf="hasField(caseFieldsNames.ChangeTime)" [field]="getField(caseFieldsNames.ChangeTime)" [form]="form"></case-datetime-control>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.UserId)" [field]="getField(caseFieldsNames.UserId)" [form]="form"></case-textbox-control>
-                        <case-dropdown-control *ngIf="hasField(caseFieldsNames.RegistrationSourceCustomer)" disabled=true [field]="getField(caseFieldsNames.RegistrationSourceCustomer)" [form]="form"  [dataSource]="dataSource.options.customerRegistrationSources"></case-dropdown-control>
-                        <case-multi-dropdown-control *ngIf="hasField(caseFieldsNames.CaseTypeId)" [field]="getField(caseFieldsNames.CaseTypeId)" [form]="form" [dataSource]="dataSource.options.caseTypes"></case-multi-dropdown-control>
-                        <case-multi-dropdown-control *ngIf="hasField(caseFieldsNames.ProductAreaId)" [field]="getField(caseFieldsNames.ProductAreaId)" [form]="form" [dataSource]="dataSource.options.productAreas"></case-multi-dropdown-control>
-                        <case-dropdown-control *ngIf="hasField(caseFieldsNames.SystemId)" disabled=true [field]="getField(caseFieldsNames.SystemId)" [form]="form" [dataSource]="dataSource.options.systems"></case-dropdown-control>
-                        <case-dropdown-control *ngIf="hasField(caseFieldsNames.UrgencyId)" disabled=true [field]="getField(caseFieldsNames.UrgencyId)" [form]="form" [dataSource]="dataSource.options.urgencies"></case-dropdown-control>
-                        <case-dropdown-control *ngIf="hasField(caseFieldsNames.ImpactId)" disabled=true [field]="getField(caseFieldsNames.ImpactId)" [form]="form" [dataSource]="dataSource.options.impacts"></case-dropdown-control>
-                        <case-multi-dropdown-control *ngIf="hasField(caseFieldsNames.CategoryId)" [field]="getField(caseFieldsNames.CategoryId)" [form]="form" [dataSource]="dataSource.options.categories"></case-multi-dropdown-control>
-                        <case-dropdown-control *ngIf="hasField(caseFieldsNames.SupplierId)" disabled=true [field]="getField(caseFieldsNames.SupplierId)" [form]="form" [dataSource]="dataSource.options.suppliers"></case-dropdown-control>
-                        <case-dropdown-control *ngIf="hasField(caseFieldsNames.SupplierCountryId)" disabled=true [field]="getField(caseFieldsNames.SupplierCountryId)" [form]="form" [dataSource]="dataSource.options.countries"></case-dropdown-control>
+                        <case-dropdown-control *ngIf="hasField(caseFieldsNames.RegistrationSourceCustomer)" disabled=true [field]="getField(caseFieldsNames.RegistrationSourceCustomer)" [form]="form"  [dataSource]="dataSource.customerRegistrationSourcesStore$"></case-dropdown-control>
+                        <case-multi-dropdown-control *ngIf="hasField(caseFieldsNames.CaseTypeId)" [field]="getField(caseFieldsNames.CaseTypeId)" [form]="form" [dataSource]="dataSource.caseTypesStore$ | async"></case-multi-dropdown-control>
+                        <case-multi-dropdown-control *ngIf="hasField(caseFieldsNames.ProductAreaId)" [field]="getField(caseFieldsNames.ProductAreaId)" [form]="form" [dataSource]="dataSource.productAreasStore$ | async"></case-multi-dropdown-control>
+                        <case-dropdown-control *ngIf="hasField(caseFieldsNames.SystemId)" disabled=true [field]="getField(caseFieldsNames.SystemId)" [form]="form" [dataSource]="dataSource.systemsStore$"></case-dropdown-control>
+                        <case-dropdown-control *ngIf="hasField(caseFieldsNames.UrgencyId)" disabled=true [field]="getField(caseFieldsNames.UrgencyId)" [form]="form" [dataSource]="dataSource.urgenciesStore$"></case-dropdown-control>
+                        <case-dropdown-control *ngIf="hasField(caseFieldsNames.ImpactId)" disabled=true [field]="getField(caseFieldsNames.ImpactId)" [form]="form" [dataSource]="dataSource.impactsStore$"></case-dropdown-control>
+                        <case-multi-dropdown-control *ngIf="hasField(caseFieldsNames.CategoryId)" [field]="getField(caseFieldsNames.CategoryId)" [form]="form" [dataSource]="dataSource.categoriesStore$ | async"></case-multi-dropdown-control>
+                        <case-dropdown-control *ngIf="hasField(caseFieldsNames.SupplierId)" disabled=true [field]="getField(caseFieldsNames.SupplierId)" [form]="form" [dataSource]="dataSource.suppliersStore$"></case-dropdown-control>
+                        <case-dropdown-control *ngIf="hasField(caseFieldsNames.SupplierCountryId)" disabled=true [field]="getField(caseFieldsNames.SupplierCountryId)" [form]="form" [dataSource]="dataSource.countriesStore$"></case-dropdown-control>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.InvoiceNumber)" [field]="getField(caseFieldsNames.InvoiceNumber)" [form]="form"></case-textbox-control>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.ReferenceNumber)" [field]="getField(caseFieldsNames.ReferenceNumber)" [form]="form"></case-textbox-control>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.Caption)" [field]="getField(caseFieldsNames.Caption)" [form]="form"></case-textbox-control>
@@ -87,7 +87,7 @@
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.Available)" [field]="getField(caseFieldsNames.Available)" [form]="form"></case-textbox-control>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.Cost)" [field]="getField(caseFieldsNames.Cost)" [form]="form"></case-textbox-control>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.Cost_OtherCost)" [field]="getField(caseFieldsNames.Cost_OtherCost)" [form]="form"></case-textbox-control>
-                        <case-dropdown-control *ngIf="hasField(caseFieldsNames.Cost_Currency)" disabled=true [field]="getField(caseFieldsNames.Cost_Currency)" [form]="form" [dataSource]="dataSource.options.currencies"></case-dropdown-control>
+                        <case-dropdown-control *ngIf="hasField(caseFieldsNames.Cost_Currency)" disabled=true [field]="getField(caseFieldsNames.Cost_Currency)" [form]="form" [dataSource]="dataSource.currenciesStore$"></case-dropdown-control>
                         <case-files-control *ngIf="hasField(caseFieldsNames.Filename)" [field]="getField(caseFieldsNames.Filename)" [caseKey]="caseKey"></case-files-control>
                 </mbsc-form-group-content>
             </mbsc-form-group>
@@ -95,21 +95,21 @@
             <mbsc-form-group collapsible #caseManagementSection *ngIf="hasSection(caseSectionTypes.CaseManagement)">
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.CaseManagement) }}</mbsc-form-group-title>
                 <mbsc-form-group-content>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.WorkingGroupId)" [field]="getField(caseFieldsNames.WorkingGroupId)" [form]="form" [dataSource]="dataSource.options.workingGroups"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.CaseResponsibleUserId)" [field]="getField(caseFieldsNames.CaseResponsibleUserId)" [form]="form" [dataSource]="dataSource.options.responsibleUsers"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.PerformerUserId)" [field]="getField(caseFieldsNames.PerformerUserId)" [form]="form" [dataSource]="dataSource.options.performers"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.PriorityId)" disabled=true [field]="getField(caseFieldsNames.PriorityId)" [form]="form" [dataSource]="dataSource.options.priorities"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.StatusId)" disabled=true [field]="getField(caseFieldsNames.StatusId)" [form]="form" [dataSource]="dataSource.options.statuses"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.StateSecondaryId)" [field]="getField(caseFieldsNames.StateSecondaryId)" [form]="form" [dataSource]="dataSource.options.stateSecondaries"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.Project)" disabled=true [field]="getField(caseFieldsNames.Project)" [form]="form" [dataSource]="dataSource.options.projects"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.Problem)" disabled=true [field]="getField(caseFieldsNames.Problem)" [form]="form" [dataSource]="dataSource.options.problems"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.CausingPart)" disabled=true [field]="getField(caseFieldsNames.CausingPart)" [form]="form" [dataSource]="dataSource.options.causingParts"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.Change)" disabled=true [field]="getField(caseFieldsNames.Change)" [form]="form" [dataSource]="dataSource.options.changes"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.WorkingGroupId)" [field]="getField(caseFieldsNames.WorkingGroupId)" [form]="form" [dataSource]="dataSource.workingGroupsStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.CaseResponsibleUserId)" [field]="getField(caseFieldsNames.CaseResponsibleUserId)" [form]="form" [dataSource]="dataSource.responsibleUsersStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.PerformerUserId)" [field]="getField(caseFieldsNames.PerformerUserId)" [form]="form" [dataSource]="dataSource.performersStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.PriorityId)" disabled=true [field]="getField(caseFieldsNames.PriorityId)" [form]="form" [dataSource]="dataSource.prioritiesStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.StatusId)" disabled=true [field]="getField(caseFieldsNames.StatusId)" [form]="form" [dataSource]="dataSource.statusesStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.StateSecondaryId)" [field]="getField(caseFieldsNames.StateSecondaryId)" [form]="form" [dataSource]="dataSource.stateSecondariesStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.Project)" disabled=true [field]="getField(caseFieldsNames.Project)" [form]="form" [dataSource]="dataSource.projectsStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.Problem)" disabled=true [field]="getField(caseFieldsNames.Problem)" [form]="form" [dataSource]="dataSource.problemsStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.CausingPart)" disabled=true [field]="getField(caseFieldsNames.CausingPart)" [form]="form" [dataSource]="dataSource.causingPartsStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.Change)" disabled=true [field]="getField(caseFieldsNames.Change)" [form]="form" [dataSource]="dataSource.changesStore$"></case-dropdown-control>
                     <case-datetime-control *ngIf="hasField(caseFieldsNames.PlanDate)" [field]="getField(caseFieldsNames.PlanDate)" [form]="form"></case-datetime-control>
                     <case-datetime-control *ngIf="hasField(caseFieldsNames.WatchDate)" [field]="getField(caseFieldsNames.WatchDate)" [form]="form"></case-datetime-control>
                     <case-switch-control *ngIf="hasField(caseFieldsNames.Verified)" [field]="getField(caseFieldsNames.Verified)" [form]="form"></case-switch-control>
                     <case-textarea-control *ngIf="hasField(caseFieldsNames.VerifiedDescription)" [field]="getField(caseFieldsNames.VerifiedDescription)" [form]="form"></case-textarea-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.SolutionRate)" disabled=true [field]="getField(caseFieldsNames.SolutionRate)" [form]="form" [dataSource]="dataSource.options.solutionsRates"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.SolutionRate)" disabled=true [field]="getField(caseFieldsNames.SolutionRate)" [form]="form" [dataSource]="dataSource.solutionsRatesStore$"></case-dropdown-control>
                 </mbsc-form-group-content>
             </mbsc-form-group>
 <!-- 
@@ -117,7 +117,7 @@
                 <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Communication)}}</mbsc-form-group-title>
                 <mbsc-form-group-content>
                     <case-textarea-control *ngIf="hasField(caseFieldsNames.FinishingDescription)" [field]="getField(caseFieldsNames.FinishingDescription)" [form]="form"></case-textarea-control>
-                    <case-multi-dropdown-control *ngIf="hasField(caseFieldsNames.ClosingReason)" [field]="getField(caseFieldsNames.ClosingReason)" [form]="form" [dataSource]="dataSource.options.closingReasons"></case-multi-dropdown-control>
+                    <case-multi-dropdown-control *ngIf="hasField(caseFieldsNames.ClosingReason)" [field]="getField(caseFieldsNames.ClosingReason)" [form]="form" [dataSource]="dataSource.closingReasonsStore$"></case-multi-dropdown-control>
                     <case-date-control *ngIf="hasField(caseFieldsNames.FinishingDate)" [field]="getField(caseFieldsNames.FinishingDate)" [form]="form"></case-date-control>
                 </mbsc-form-group-content>
             </mbsc-form-group> -->
@@ -126,7 +126,7 @@
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Status) }}</mbsc-form-group-title>
                 <mbsc-form-group-content>
                     <case-textarea-control *ngIf="hasField(caseFieldsNames.FinishingDescription)" [field]="getField(caseFieldsNames.FinishingDescription)" [form]="form" [readonly]="true"></case-textarea-control>
-                    <case-multi-dropdown-control *ngIf="hasField(caseFieldsNames.ClosingReason)" [field]="getField(caseFieldsNames.ClosingReason)" [form]="form" [dataSource]="dataSource.options.closingReasons" [readonly]="true"></case-multi-dropdown-control>
+                    <case-multi-dropdown-control *ngIf="hasField(caseFieldsNames.ClosingReason)" [field]="getField(caseFieldsNames.ClosingReason)" [form]="form" [dataSource]="dataSource.closingReasonsStore$ | async" [readonly]="true"></case-multi-dropdown-control>
                     <case-date-control *ngIf="hasField(caseFieldsNames.FinishingDate)" [field]="getField(caseFieldsNames.FinishingDate)" [form]="form" [readonly]="true"></case-date-control>
                 </mbsc-form-group-content>
             </mbsc-form-group>

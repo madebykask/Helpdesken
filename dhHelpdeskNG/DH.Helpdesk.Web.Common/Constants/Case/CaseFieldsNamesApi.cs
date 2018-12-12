@@ -63,7 +63,7 @@ namespace DH.Helpdesk.Web.Common.Constants.Case
         public const string ClosingReason = "ClosingReason";
         public const string Change = "Change"; 
         public const string Project = "Project";
-        public const string Problem = "Project";
+        public const string Problem = "Problem";
         public const string RegistrationSourceCustomer = "RegistrationSourceCustomer";
         public const string CostCentre = "CostCentre";
         public const string IsAbout_ReportedBy = "IsAbout_ReportedBy";

@@ -46,7 +46,7 @@ import { CaseFilesUploadComponent } from './components/case-edit/controls/case-f
      CaseFilesControlComponent,
      ErrorComponent,
      AltLayoutComponent,
-     MailtoticketControlComponent,     
+     MailtoticketControlComponent,
      CaseFilesUploadComponent
   ],
   imports: [ 

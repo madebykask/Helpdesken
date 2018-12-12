@@ -124,43 +124,18 @@ namespace DH.Helpdesk.WebApi.Controllers
                         .ToList();
             }
 
-            if (input.ResponsibleUsers || input.Performers)
+            if (input.ResponsibleUsers)
             {
                 var responsibleUsers = _userService.GetAvailablePerformersOrUserId(customerId, input.CaseResponsibleUserId);
-
-                if (input.ResponsibleUsers)
-                {
-                    model.ResponsibleUsers = responsibleUsers
+                model.ResponsibleUsers = customerSettings.IsUserFirstLastNameRepresentation == 1 ?
+                    responsibleUsers
+                        .OrderBy(it => it.FirstName).ThenBy(it => it.SurName)
                         .Select(d => new ItemOverview($"{d.FirstName} {d.SurName}", d.Id.ToString()))//TODO: see responsibleUsersList.MapToSelectList
+                        .ToList() :
+                    responsibleUsers
+                        .OrderBy(it => it.SurName).ThenBy(it => it.FirstName)
+                        .Select(d => new ItemOverview($"{d.SurName} {d.FirstName}", d.Id.ToString()))//TODO: see responsibleUsersList.MapToSelectList
                         .ToList();
-                }
-
-                if (input.Performers)
-                {
-                    CustomerUserInfo admUser = null;
-                    var performerUserId = input.CasePerformerUserId ?? 0;
-                    var caseWorkingGroupId = input.CaseWorkingGroupId ?? 0;
-                    var performersList = responsibleUsers.ToList() as IList<CustomerUserInfo>;
-
-                    if (performerUserId > 0)
-                    {
-                        admUser = this._userService.GetUserInfo(performerUserId);
-                    }
-
-                    if (customerSettings.DontConnectUserToWorkingGroup == 0 && input.CaseWorkingGroupId > 0)
-                    {
-                        performersList = _userService.GetAvailablePerformersForWorkingGroup(customerId, caseWorkingGroupId);
-                    }
-
-                    if (admUser != null && !performersList.Any(u => u.Id == admUser.Id))
-                    {
-                        performersList.Insert(0, admUser);
-                    }
-
-                    model.Performers = performersList.Where(it => it.IsActive == 1 && (it.Performer == 1 || it.Id == performerUserId))
-                        .Select(u => new ItemOverview($"{u.FirstName} {u.SurName}", u.Id.ToString()))
-                        .ToList();
-                }
             }
 
             if (input.Priorities)

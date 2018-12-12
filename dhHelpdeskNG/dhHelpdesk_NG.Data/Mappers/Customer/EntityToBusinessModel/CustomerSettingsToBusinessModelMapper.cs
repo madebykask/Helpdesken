@@ -76,6 +76,7 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            DontConnectUserToWorkingGroup = entity.DontConnectUserToWorkingGroup,
                            PhysicalFilePath = entity.PhysicalFilePath,
                            VirtualFilePath = entity.VirtualFilePath,
+                           IsUserFirstLastNameRepresentation = entity.IsUserFirstLastNameRepresentation
             };
         }
     }

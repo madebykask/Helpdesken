@@ -3,8 +3,6 @@
     public class GetCaseOptionsInputModel
     {
         public int? CaseResponsibleUserId { get; set; }
-        public int? CasePerformerUserId { get; set; }
-        public int? CaseWorkingGroupId { get; set; }
         public int? CaseCausingPartId { get; set; }
 
         public bool CustomerRegistrationSources { get; set; }
@@ -16,7 +14,6 @@
         public bool Currencies { get; set; }
         public bool WorkingGroups { get; set; }
         public bool ResponsibleUsers { get; set; }
-        public bool Performers { get; set; }
         public bool Priorities { get; set; }
         public bool Statuses { get; set; }
         public bool StateSecondaries { get; set; }

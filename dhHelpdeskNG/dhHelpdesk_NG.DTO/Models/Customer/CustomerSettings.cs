@@ -172,7 +172,7 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
         public int DontConnectUserToWorkingGroup { get; set; }
         public string PhysicalFilePath { get; set; }
         public string VirtualFilePath { get; set; }
-
+        public int IsUserFirstLastNameRepresentation { get; set; }
         /// <summary>
         /// The is module on.
         /// </summary>

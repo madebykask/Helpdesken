@@ -37,13 +37,16 @@ export class CaseService {
         let productAreas$ = fieldExists(filter.ProductAreas) ? this._caseOrganizationService.getProductAreas(filter.CaseTypeId, filter.ProductAreaId) : empty$();
         let categories$ = fieldExists(filter.Categories) ? this._caseOrganizationService.getCategories() : empty$();
         let closingReasons$ = fieldExists(filter.ClosingReasons) ? this._caseOrganizationService.getClosingReasons() : empty$();
+        let perfomers$ = fieldExists(filter.Performers) ? this._caseOrganizationService.getPerformers(filter.CasePerformerUserId, filter.CaseWorkingGroupId) : empty$();
 
         let bundledOptions$ = this._batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
 
-        return forkJoin(bundledOptions$, regions$, departments$, oUs$, isAboutDepartments$, isAboutOUs$, caseTypes$, productAreas$, categories$, closingReasons$)
+        return forkJoin(bundledOptions$, regions$, departments$, oUs$, isAboutDepartments$, isAboutOUs$, caseTypes$, 
+          productAreas$, categories$, closingReasons$, perfomers$)
                     .pipe(
                         take(1),
-                        switchMap(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes, productAreas, categories, closingReasons]) => {
+                        switchMap(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes,
+                           productAreas, categories, closingReasons, perfomers]) => {
                             let options = new CaseOptions();
 
                             if (regions != null) {
@@ -66,8 +69,6 @@ export class CaseService {
                                 options.isAboutOUs = isAboutOUs;
                             }
 
-                            Object.assign(options, bundledOptions);
-
                             if (bundledOptions != null) {
                                 Object.assign(options, bundledOptions);
                             }
@@ -86,6 +87,10 @@ export class CaseService {
 
                             if (closingReasons != null) {
                                 options.closingReasons = closingReasons;
+                            }
+
+                            if (perfomers != null) {
+                              options.performers = perfomers;
                             }
 
                             return of(options);

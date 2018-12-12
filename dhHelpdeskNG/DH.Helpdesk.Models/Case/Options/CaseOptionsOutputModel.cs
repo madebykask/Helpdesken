@@ -14,7 +14,6 @@ namespace DH.Helpdesk.Models.Case.Options
         public IList<ItemOverview> Currencies { get; set; }
         public IList<ItemOverview> WorkingGroups { get; set; }
         public IList<ItemOverview> ResponsibleUsers { get; set; }
-        public IList<ItemOverview> Performers { get; set; }
         public IList<ItemOverview> Priorities { get; set; }
         public IList<ItemOverview> Statuses { get; set; }
         public IList<ItemOverview> StateSecondaries { get; set; }
