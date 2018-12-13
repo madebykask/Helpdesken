@@ -114,8 +114,6 @@ ExtendedCasePage.prototype.getDate = function (val) {
     }
 };
 
-
-
 /*** Extended Case Area ***/
 ExtendedCasePage.prototype.getECContainerTemplate = function (objId, target) {
     return $('<iframe id="' + objId + '"  scrolling="no" frameBorder="0" width="100%" src="' + target + '"></iframe>');
@@ -195,7 +193,6 @@ ExtendedCasePage.prototype.loadExtendedCase = function () {
     var self = this;
     var $_ex_Container = self.getExtendedCaseContainer();
 
-
     var formParameters = $_ex_Container.contentWindow.getFormParameters();
     formParameters.languageId = self.Current_EC_LanguageId;
     formParameters.extendedCaseGuid = self.Current_EC_Guid;
@@ -214,6 +211,7 @@ ExtendedCasePage.prototype.loadExtendedCase = function () {
             {
                 formParameters: formParameters,
                 caseValues: {
+                    administrator_id: { Value: fieldValues.AdministratorId },
                     reportedby: { Value: fieldValues.ReportedBy },
                     persons_name: { Value: fieldValues.PersonsName },
                     persons_phone: { Value: fieldValues.PersonsPhone },
@@ -317,6 +315,7 @@ ExtendedCasePage.prototype.syncCaseFromExCaseIfExists = function () {
 
     var _caseFields = self.Case_Field_Ids;
 
+    var _adminstratorId = fieldData.AdministratorId;
     var _reportedby = fieldData.reportedby;
     var _persons_name = fieldData.persons_name;
     var _persons_phone = fieldData.persons_phone;
@@ -335,6 +334,10 @@ ExtendedCasePage.prototype.syncCaseFromExCaseIfExists = function () {
     var _persons_cellphone = fieldData.persons_cellphone;
     var _place = fieldData.place;
     var _costcentre = fieldData.costcentre;
+
+
+    if (_adminstratorId != undefined) 
+        $('#' + _caseFields.AdministratorId).val(_adminstratorId.Value);
 
     if (_reportedby != undefined)
         $('#' + _caseFields.ReportedBy).val(_reportedby.Value);

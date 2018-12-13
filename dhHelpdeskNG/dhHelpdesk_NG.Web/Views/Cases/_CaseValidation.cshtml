@@ -106,6 +106,7 @@
         },
 
         caseInitValues: {
+            AdministratorId: '@Model.Performer_Id',
             CaseId: '@Model.case_.Id',
             CustomerId: '@Model.case_.Customer_Id',
             ReportedBy: @Html.Raw(Json.Encode(Model.case_.ReportedBy)),
