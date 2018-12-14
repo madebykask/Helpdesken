@@ -25,12 +25,17 @@
   
   <system.web>
     <compilation debug="true" targetFramework="4.7.2" />
-    <httpRuntime targetFramework="4.7.2" />
+    <httpRuntime maxRequestLength="102400" targetFramework="4.7.2"  />
     <authentication mode="None" />
     <machineKey validationKey="121B090935F6E49C2C797F69BBAAD8402ABD2EE0B667A8B44EA7DD4374267A75D7AD972A119482D15A4127461DB1DC347C1A63AE5F1CCFAACFF1B72A7F0A282C" decryptionKey="CBAB74D7EC5BB56D75D217CECBFB9628819BDB8BF91CFCD64568A145BE59718B" validation="SHA1" decryption="AES" />
   </system.web>
 
   <system.webServer>
+    <security>
+      <requestFiltering>
+        <requestLimits maxAllowedContentLength="104857600" />
+      </requestFiltering>
+    </security>
     <handlers>
       <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
       <remove name="OPTIONSVerbHandler" />
