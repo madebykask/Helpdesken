@@ -20,10 +20,17 @@
         return userName;
     }
 
-    string FormatLogText(Log logItem)
+    //string FormatLogText(Log logItem)
+    //{
+    //    var logText = GetLogText(logItem).AddCharacterInParts(70, Environment.NewLine, Environment.NewLine);
+    //    var formatted = logText.Replace("\n", "<br />");
+    //    return formatted;
+    //}
+
+    MvcHtmlString FormatLogText(Log logItem)
     {
         var logText = GetLogText(logItem).AddCharacterInParts(70, Environment.NewLine, Environment.NewLine);
-        var formatted = logText.Replace("\n", "<br />");
+        var formatted = MvcHtmlString.Create(Html.Encode(logText).Replace("\n", "<br />").Replace(Environment.NewLine, "<br />"));
         return formatted;
     }
 }
