@@ -75,32 +75,28 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public ViewResult Index()
         {
-            List<ItemOverview> inventoryTypes = this.inventoryService.GetInventoryTypes(
-                SessionFacade.CurrentCustomer.Id);
+            var inventoryTypes = inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id);
 
-            SessionFacade.SavePageFilters(
-                TabName.Inventories,
-                new InventoriesModeFilter((int)CurrentModes.Workstations));
-            WorkstationsSearchFilter currentFilter =
-                SessionFacade.FindPageFilters<WorkstationsSearchFilter>(
-                    this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Workstation.ToString()))
-                ?? WorkstationsSearchFilter.CreateDefault();
+            SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter((int)CurrentModes.Workstations));
 
-            List<ItemOverview> computerTypes =
-                this.computerModulesService.GetComputerTypes(SessionFacade.CurrentCustomer.Id);
-            List<ItemOverview> regions = this.OrganizationService.GetRegions(SessionFacade.CurrentCustomer.Id);
-            List<ItemOverview> departments = this.OrganizationService.GetDepartments(
-                SessionFacade.CurrentCustomer.Id,
-                currentFilter.RegionId);
+            var currentFilter =
+                SessionFacade.FindPageFilters<WorkstationsSearchFilter>(WorkstationsSearchFilter.CreateFilterId()) ?? 
+                WorkstationsSearchFilter.CreateDefault();
 
-            ComputerFieldsSettingsOverviewForFilter settings =
-                this.inventorySettingsService.GetWorkstationFieldSettingsOverviewForFilter(
+            var computerTypes = computerModulesService.GetComputerTypes(SessionFacade.CurrentCustomer.Id);
+
+            var regions = OrganizationService.GetRegions(SessionFacade.CurrentCustomer.Id);
+            var departments = OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id, currentFilter.RegionId);
+
+            var settings =
+                inventorySettingsService.GetWorkstationFieldSettingsOverviewForFilter(
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
 
-            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var userHasInventoryAdminPermission = 
+                _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
 
-            WorkstationSearchViewModel viewModel = WorkstationSearchViewModel.BuildViewModel(
+            var viewModel = WorkstationSearchViewModel.BuildViewModel(
                 currentFilter,
                 regions,
                 departments,
@@ -117,7 +113,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult WorkstationsGrid(WorkstationsSearchFilter filter)
         {
-            SessionFacade.SavePageFilters(CreateFilterId(TabName.Inventories, InventoryFilterMode.Workstation.ToString()), filter);
+            SessionFacade.SavePageFilters(WorkstationsSearchFilter.CreateFilterId(), filter);
             filter.RecordsCount = SearchFilter.RecordsOnPage;
 
             InventoryGridModel viewModel = this.CreateInventoryGridModel(filter);
@@ -336,15 +332,16 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public FileContentResult ExportGridToExcelFile()
         {
-            WorkstationsSearchFilter workstationFilter =
-                SessionFacade.FindPageFilters<WorkstationsSearchFilter>(
-                    this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Workstation.ToString()))
-                ?? WorkstationsSearchFilter.CreateDefault();
+            var workstationFilter =
+                SessionFacade.FindPageFilters<WorkstationsSearchFilter>(WorkstationsSearchFilter.CreateFilterId()) ?? WorkstationsSearchFilter.CreateDefault();
+            
+            //set null to get all records for export but do not save filter to keep limit for UI
+            workstationFilter.RecordsCount = null;
 
-            InventoryGridModel gridModel = this.CreateInventoryGridModel(workstationFilter);
-            string workSheetName = CurrentModes.Workstations.ToString();
+            var gridModel = CreateInventoryGridModel(workstationFilter);
+            var workSheetName = CurrentModes.Workstations.ToString();
 
-            FileContentResult file = this.CreateExcelReport(workSheetName, gridModel.Headers, gridModel.Inventories);
+            var file = this.CreateExcelReport(workSheetName, gridModel.Headers, gridModel.Inventories);
 
             return file;
         }
@@ -370,11 +367,10 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         private InventoryGridModel CreateInventoryGridModel(WorkstationsSearchFilter filter)
         {
-            ComputerFieldsSettingsOverview settings =
-                this.inventorySettingsService.GetWorkstationFieldSettingsOverview(
-                    SessionFacade.CurrentCustomer.Id,
-                    SessionFacade.CurrentLanguageId);
-            List<ComputerOverview> models = this.inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
+            var settings =
+                this.inventorySettingsService.GetWorkstationFieldSettingsOverview(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
+
+            var models = this.inventoryService.GetWorkstations(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
             InventoryGridModel viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
             return viewModel;

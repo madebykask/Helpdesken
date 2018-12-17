@@ -39,5 +39,10 @@
         {
             return new ReportsSearchFilter(ReportDataTypes.Workstation);
         }
+
+        public static string CreateFilterId()
+        {
+            return $"{TabName.Reports}{ReportFilterMode.DefaultReport}";
+        }
     }
 }

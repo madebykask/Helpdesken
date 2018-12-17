@@ -68,9 +68,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
             SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter((int)CurrentModes.Printers));
             PrinterSearchFilter currentFilter =
-                SessionFacade.FindPageFilters<PrinterSearchFilter>(
-                    this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Printer.ToString()))
-                ?? PrinterSearchFilter.CreateDefault();
+                SessionFacade.FindPageFilters<PrinterSearchFilter>(PrinterSearchFilter.CreateFilterId()) ??
+                PrinterSearchFilter.CreateDefault();
 
             List<ItemOverview> departments = this.OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
             PrinterFieldsSettingsOverviewForFilter settings =
@@ -95,9 +94,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult PrintersGrid(PrinterSearchFilter filter)
         {
-            SessionFacade.SavePageFilters(this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Printer.ToString()),filter);
+            SessionFacade.SavePageFilters(PrinterSearchFilter.CreateFilterId(), filter);
             filter.RecordsCount = SearchFilter.RecordsOnPage;
-            InventoryGridModel viewModel = this.CreateInventoryGridModel(filter);
+            var viewModel = this.CreateInventoryGridModel(filter);
 
             return this.PartialView("InventoryGrid", viewModel);
         }
@@ -180,13 +179,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         public FileContentResult ExportGridToExcelFile()
         {
             var printerFilter =
-                SessionFacade.FindPageFilters<PrinterSearchFilter>(
-                    this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Printer.ToString()))
-                ?? PrinterSearchFilter.CreateDefault();
-            var gridModel = this.CreateInventoryGridModel(printerFilter);
-            string workSheetName = CurrentModes.Printers.ToString();
-            FileContentResult file = this.CreateExcelReport(workSheetName, gridModel.Headers, gridModel.Inventories);
+                SessionFacade.FindPageFilters<PrinterSearchFilter>(PrinterSearchFilter.CreateFilterId()) ?? 
+                PrinterSearchFilter.CreateDefault();
 
+            // do not save to keep records limit for UI
+            printerFilter.RecordsCount = null;
+
+            var gridModel = CreateInventoryGridModel(printerFilter);
+            
+            var file = CreateExcelReport(CurrentModes.Printers.ToString(), gridModel.Headers, gridModel.Inventories);
             return file;
         }
 
@@ -204,12 +205,12 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         private InventoryGridModel CreateInventoryGridModel(PrinterSearchFilter filter)
         {
             var settings = 
-                this.inventorySettingsService.GetPrinterFieldSettingsOverview(
+                inventorySettingsService.GetPrinterFieldSettingsOverview(
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
 
             var models =
-                this.inventoryService.GetPrinters(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
+                inventoryService.GetPrinters(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
             var viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
             return viewModel;

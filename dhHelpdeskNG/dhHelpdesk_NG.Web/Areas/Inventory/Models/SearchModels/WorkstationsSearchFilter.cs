@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
+﻿
+using DH.Helpdesk.Web.Enums.Inventory;
+
+namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
 {
     using DataAnnotationsExtensions;
 
@@ -96,6 +99,11 @@
                 this.RecordsOnPage,
                 sf,
                 this.RecordsCount);
+        }
+
+        public static string CreateFilterId()
+        {
+            return $"{TabName.Inventories}{InventoryFilterMode.Workstation}";
         }
     }
 }

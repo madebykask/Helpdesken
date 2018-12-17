@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
+﻿using DH.Helpdesk.Web.Enums.Inventory;
+
+namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
 {
     using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.Enums;
@@ -29,6 +31,11 @@
             }
 
             return new ServersFilter(customerId, this.SearchFor, sf, this.RecordsCount);
+        }
+
+        public static string CreateFilterId()
+        {
+            return $"{TabName.Inventories}{InventoryFilterMode.Server}";
         }
     }
 }

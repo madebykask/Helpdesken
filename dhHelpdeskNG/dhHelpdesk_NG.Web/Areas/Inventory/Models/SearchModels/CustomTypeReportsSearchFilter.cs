@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
+﻿using DH.Helpdesk.Web.Enums.Inventory;
+
+namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
 {
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 
@@ -28,6 +30,11 @@
         public static CustomTypeReportsSearchFilter CreateDefault()
         {
             return new CustomTypeReportsSearchFilter();
+        }
+
+        public static string CreateFilterId()
+        {
+            return $"{TabName.Reports}{ReportFilterMode.CustomType}";
         }
     }
 }

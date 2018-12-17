@@ -80,10 +80,5 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             string fileName = this.ExportFileNameFormatter.Format(Name, "xlsx");
             return this.File(content, MimeType.ExcelFile, fileName);
         }
-
-        protected string CreateFilterId(string tabName, string id)
-        {
-            return string.Format("{0}{1}", tabName, id);
-        }
     }
 }

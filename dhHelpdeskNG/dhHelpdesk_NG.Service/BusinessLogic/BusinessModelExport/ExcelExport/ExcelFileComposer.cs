@@ -15,11 +15,12 @@
             List<ITableHeader> tempHeaders = headers.ToList();
             List<IRow<ICell>> tempItems = items.ToList();
 
-            ExcelPackage excelPackage = CreateExcelPackage(tempHeaders, tempItems, worksheetName);
-
-            AutoFitColumnsWidth(excelPackage, worksheetName, tempHeaders.Count);
-
-            return excelPackage.GetAsByteArray();
+            using (var excelPackage = CreateExcelPackage(tempHeaders, tempItems, worksheetName))
+            {
+                AutoFitColumnsWidth(excelPackage, worksheetName, tempHeaders.Count);
+                var bytes = excelPackage.GetAsByteArray();
+                return bytes;
+            }
         }
 
         #endregion
@@ -28,7 +29,7 @@
 
         private static void AutoFitColumnsWidth(ExcelPackage excelPackage, string worksheetName, int columnCount)
         {
-            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets[worksheetName];
+            var worksheet = excelPackage.Workbook.Worksheets[worksheetName];
 
             for (var i = 1; i < columnCount + 1; i++)
             {
@@ -40,7 +41,8 @@
         {
             var memoryStream = new MemoryStream();
             var excelPackage = new ExcelPackage(memoryStream);
-            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(worksheetName);
+            
+            var worksheet = excelPackage.Workbook.Worksheets.Add(worksheetName);
 
             for (var i = 0; i < headers.Count; i++)
             {

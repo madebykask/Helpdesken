@@ -74,8 +74,7 @@
 
             SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter(inventoryTypeId));
             InventorySearchFilter currentFilter =
-                SessionFacade.FindPageFilters<InventorySearchFilter>(
-                    this.CreateFilterId(TabName.Inventories, InventoryFilterMode.CustomType.ToString()))
+                SessionFacade.FindPageFilters<InventorySearchFilter>(InventorySearchFilter.CreateFilterId())
                 ?? InventorySearchFilter.CreateDefault(inventoryTypeId);
 
             List<ItemOverview> departments = this.OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
@@ -100,9 +99,9 @@
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult InventoriesGrid(InventorySearchFilter filter, int inventoryTypeId)
         {
-            SessionFacade.SavePageFilters(this.CreateFilterId(TabName.Inventories, InventoryFilterMode.CustomType.ToString()), filter);
+            SessionFacade.SavePageFilters(InventorySearchFilter.CreateFilterId(), filter);
 
-            InventoryGridModel viewModel = this.CreateInventoryGridModel(filter, inventoryTypeId);
+            var viewModel = CreateInventoryGridModel(filter, inventoryTypeId);
 
             return this.PartialView("CustomInventoryGrid", viewModel);
         }
@@ -159,17 +158,16 @@
         [HttpGet]
         public FileContentResult ExportGridToExcelFile(int inventoryTypeId)
         {
-            InventorySearchFilter inventoryFilter =
-                SessionFacade.FindPageFilters<InventorySearchFilter>(
-                    this.CreateFilterId(TabName.Inventories, InventoryFilterMode.CustomType.ToString()))
-                ?? InventorySearchFilter.CreateDefault(inventoryTypeId);
-            InventoryGridModel gridModel = this.CreateInventoryGridModel(inventoryFilter, inventoryTypeId, true);
+            var inventoryFilter =
+                SessionFacade.FindPageFilters<InventorySearchFilter>(InventorySearchFilter.CreateFilterId()) ?? 
+                InventorySearchFilter.CreateDefault(inventoryTypeId);
+
+            var gridModel = CreateInventoryGridModel(inventoryFilter, inventoryTypeId, true);
 
             // todo move into invetory overview query
-            InventoryType inventoryType = this.inventoryService.GetInventoryType(inventoryTypeId);
-            string workSheetName = inventoryType.Name;
-            FileContentResult file = this.CreateExcelReport(workSheetName, gridModel.Headers, gridModel.Inventories);
-
+            var inventoryType = inventoryService.GetInventoryType(inventoryTypeId);
+            
+            var file = CreateExcelReport(inventoryType.Name, gridModel.Headers, gridModel.Inventories);
             return file;
         }
 
@@ -228,18 +226,14 @@
 
         private InventoryGridModel CreateInventoryGridModel(InventorySearchFilter filter, int inventoryTypeId, bool takeAllRecords = false)
         {
-            InventoryFieldSettingsOverviewResponse settings =
-                this.inventorySettingsService.GetInventoryFieldSettingsOverview(inventoryTypeId);
+            var settings =
+                inventorySettingsService.GetInventoryFieldSettingsOverview(inventoryTypeId);
 
             /*-1: take all records */
-            var _filter = filter.CreateRequest(inventoryTypeId, takeAllRecords? (int?) -1 :null);
-            InventoriesOverviewResponse models = inventoryService.GetInventories(_filter);
+            var inventoriesFilter = filter.CreateRequest(inventoryTypeId, takeAllRecords);
+            var inventories = inventoryService.GetInventories(inventoriesFilter);
 
-            InventoryGridModel viewModel = InventoryGridModel.BuildModel(
-                models,
-                settings,
-                inventoryTypeId,
-                filter.SortField);
+            var viewModel = InventoryGridModel.BuildModel(inventories, settings, inventoryTypeId, filter.SortField);
             return viewModel;
         }
     }

@@ -499,13 +499,16 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public ServerOverview[] GetServers(ServersFilter computersFilter)
         {
-            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
-                var repository = uow.GetRepository<DH.Helpdesk.Domain.Servers.Server>();
-                var servers = repository.GetAll()
-                    .Search(computersFilter.CustomerId, computersFilter.SearchFor, computersFilter.SortField);
+                var repository = uow.GetRepository<Domain.Servers.Server>();
+
+                var servers = 
+                    repository.GetAll().Search(computersFilter.CustomerId, computersFilter.SearchFor, computersFilter.SortField);
+
                 if (computersFilter.RecordsCount.HasValue)
                     servers = servers.Take(computersFilter.RecordsCount.Value);
+
                 var overviews = servers.MapToFullOverviews();
                 return overviews;
             }
