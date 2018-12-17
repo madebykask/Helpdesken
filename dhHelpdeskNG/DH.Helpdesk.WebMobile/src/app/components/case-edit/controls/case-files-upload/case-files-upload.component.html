@@ -1,4 +1,3 @@
-
 <mbsc-listview [options]="fileListSettings">       
   <mbsc-listview-item *ngFor="let item of uploader.queue"
         icon="fa-paperclip">      
@@ -9,9 +8,13 @@
   </mbsc-listview-item>  
 </mbsc-listview>
 
-<div id="upload_button">
-    <label>
-      <input #file type="file" ng2FileSelect [uploader]="uploader" multiple />
-      <mbsc-button flat data-icon="fa-upload" color="primary" (click)="file.click()" translate>Bifoga</mbsc-button>
-  </label>
+<div id="casefilesupload">    
+    <label for="fileupload">
+        <input type="file"  id="fileupload" name="fileupload" class="fileupload"
+               #fileupload ng2FileSelect [uploader]="uploader" multiple />
+        <span class="mbsc-btn mbsc-btn-ic mbsc-ic mbsc-ic-fa-upload" translate>Bifoga</span>
+    </label>
 </div>
+
+    
+

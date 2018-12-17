@@ -6,6 +6,7 @@ import { AuthGuard } from './helpers/guards';
 import { NgModule } from '@angular/core';
 import { ErrorComponent } from './shared/components/error/error.component';
 import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
+import { TestComponent } from './components/test/test.component';
 
 const appRoutes: Routes = [
   { 
@@ -14,7 +15,8 @@ const appRoutes: Routes = [
     children: [
       { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard]},
       { path: 'casesoverview', component: CasesOverviewComponent, canActivate: [AuthGuard] },
-      { path: 'case/:id', component: CaseEditComponent, canActivate: [AuthGuard] }
+      { path: 'case/:id', component: CaseEditComponent, canActivate: [AuthGuard] },      
+      { path: 'test', component: TestComponent }
     ]
   },
 
@@ -25,7 +27,7 @@ const appRoutes: Routes = [
     ]
   },
  */
-  //no layout routes
+  //no layout routes  
   { path: 'login', component: LoginComponent},
   { path: 'error', component: ErrorComponent },
   { path: '',   redirectTo: '/', pathMatch: 'full' },

@@ -1,6 +1,23 @@
+:host {
+  display: block!important;  
+}
+input.fileupload {  
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;  
+}
 
-#upload_button input[type=file] {
-  display:none;  
+label {
+   font-size: 16px;     
+   display: block;
+   text-align: right;   
+}
+
+.mbsc-ic:before {
+  margin-right:10px;
 }
 
 .progress {

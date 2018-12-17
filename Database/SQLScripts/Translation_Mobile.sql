@@ -94,9 +94,25 @@ insert into tbltext (id, TextString, TextType) VALUES (10013, 'Mina ärenden', @
 If not exists (select * from tblTextTranslation where text_id = 10013 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10013, 2, 'My cases')
 
--- Attach
+-- Lock Message1
 If not exists (select * from tbltext where id = 10014 )
-insert into tbltext (id, TextString, TextType) VALUES (10014, 'Bifoga', @MobileType)
+insert into tbltext (id, TextString, TextType) VALUES (10014, 'OBS! Detta ärende är öppnat av', @MobileType)
 
 If not exists (select * from tblTextTranslation where text_id = 10014 and Language_Id = 2)
-insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10014, 2, 'Attach')
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10014, 2, 'Please note! This case is opened by') 
+
+-- Lock Message2
+If not exists (select * from tbltext where id = 10015 )
+insert into tbltext (id, TextString, TextType) VALUES (10015, 'OBS! Du har redan öppnat detta ärende i en annan session.', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10015 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10015, 2, 'Please note! You have already opened this case in another session.') 
+
+-- Attach
+If not exists (select * from tbltext where id = 10016 )
+insert into tbltext (id, TextString, TextType) VALUES (10016, 'Bifoga', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10016 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10016, 2, 'Attach')
+
+

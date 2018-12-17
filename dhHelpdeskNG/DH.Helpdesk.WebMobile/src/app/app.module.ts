@@ -34,6 +34,7 @@ import { environment } from '@env/environment';
 
 import { FileUploadModule } from "ng2-file-upload";   
 import { CaseFilesUploadComponent } from './components/case-edit/controls/case-files-upload/case-files-upload.component';
+import { TestComponent } from './components/test/test.component';
 @NgModule({
   bootstrap: [ AppComponent],
   declarations: [AppComponent, AppLayoutComponent, PageNotFoundComponent, HeaderTitleComponent, FooterComponent,
@@ -47,7 +48,8 @@ import { CaseFilesUploadComponent } from './components/case-edit/controls/case-f
      ErrorComponent,
      AltLayoutComponent,
      MailtoticketControlComponent,
-     CaseFilesUploadComponent
+     CaseFilesUploadComponent,
+     TestComponent
   ],
   imports: [ 
     MbscModule,
