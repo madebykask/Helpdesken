@@ -315,7 +315,7 @@ ExtendedCasePage.prototype.syncCaseFromExCaseIfExists = function () {
 
     var _caseFields = self.Case_Field_Ids;
 
-    var _adminstratorId = fieldData.AdministratorId;
+    var _adminstratorId = fieldData.administrator_id;
     var _reportedby = fieldData.reportedby;
     var _persons_name = fieldData.persons_name;
     var _persons_phone = fieldData.persons_phone;
@@ -334,7 +334,6 @@ ExtendedCasePage.prototype.syncCaseFromExCaseIfExists = function () {
     var _persons_cellphone = fieldData.persons_cellphone;
     var _place = fieldData.place;
     var _costcentre = fieldData.costcentre;
-
 
     if (_adminstratorId != undefined) 
         $('#' + _caseFields.AdministratorId).val(_adminstratorId.Value);
