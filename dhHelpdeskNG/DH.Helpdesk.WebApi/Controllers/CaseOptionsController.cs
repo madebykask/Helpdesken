@@ -25,7 +25,6 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICurrencyService _currencyService;
         private readonly IUserService _userService;
         private readonly IPriorityService _priorityService;
-        private readonly IStateSecondaryService _stateSecondaryService;
         private readonly IStatusService _statusService;
         private readonly IProjectService _projectService;
         private readonly IProblemService _problemService;
@@ -33,6 +32,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ISettingService _customerSettingsService;
         private readonly ICausingPartService _causingPartService;
         private readonly ITranslateCacheService _translateCacheService;
+        private readonly IStateSecondaryService _stateSecondaryService;
 
         public CaseOptionsController(IRegistrationSourceCustomerService registrationSourceCustomerService, ISystemService systemService, IUrgencyService urgencyService,
             IImpactService impactService, ISupplierService supplierService, ICountryService countryService, ICurrencyService currencyService,
@@ -52,11 +52,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             _currencyService = currencyService;
             _userService = userService;
             _priorityService = priorityService;
-            _stateSecondaryService = stateSecondaryService;
             _statusService = statusService;
             _projectService = projectService;
             _problemService = problemService;
             _changeService = changeService;
+            _stateSecondaryService = stateSecondaryService;
         }
 
         /// <summary>
@@ -144,13 +144,6 @@ namespace DH.Helpdesk.WebApi.Controllers
                     .ToList();
             }
 
-            if (input.StateSecondaries)
-            {
-                model.StateSecondaries = _stateSecondaryService.GetStateSecondaries(customerId)
-                    .Select(d => new ItemOverview(Translate(d.Name, languageId, TranslationTextTypes.MasterData), d.Id.ToString()))
-                    .ToList();
-            }
-
             //if (customerSetting.ModuleProject == 1)
             //{
             if (input.Projects)
@@ -194,6 +187,16 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
 
             return model;
+        }
+
+        [HttpGet]
+        [Route("statesecondaries")]
+        public async Task<IList<ItemOverview>> Get([FromUri]int cid, [FromUri]int langId)
+        {
+            var items = await _stateSecondaryService.GetStateSecondariesAsync(cid).ConfigureAwait(false);
+            return items
+                .Select(d => new ItemOverview(Translate(d.Name, langId, TranslationTextTypes.MasterData), d.Id.ToString()))
+                .ToList();
         }
 
         //todo: a copy from Helpdesk.Web\CaseController.cs\GetCausingPartsModel Need to refactor to use one implementation

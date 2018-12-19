@@ -12,9 +12,9 @@ export class CaseDataReducers {
       case CaseFieldsNames.PerformerUserId: {
         return this._caseDataStore.performersStore$.next(payload.items);
       }
-/*       case CaseFieldsNames.StateSecondaryId: {
-        return this.getWorkingGroups(caseFilters);
-      } */
+      case CaseFieldsNames.WorkingGroupId: {
+        return this._caseDataStore.workingGroupsStore$.next(payload.items);
+      } 
       default:
         return of(null);
        // throw new Error(`Action for case field ${action} is not implemented.`);

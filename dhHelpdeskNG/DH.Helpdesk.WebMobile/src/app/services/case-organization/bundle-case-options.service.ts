@@ -54,9 +54,6 @@ export class BundleCaseOptionsService extends HttpApiServiceBase {
                 if (jsOptions.statuses != null) {
                     options.statuses = mapArray(jsOptions.statuses);
                 }
-                if (jsOptions.stateSecondaries != null) {
-                    options.stateSecondaries = mapArray(jsOptions.stateSecondaries);
-                }
                 if (jsOptions.projects != null) {
                     options.projects = mapArray(jsOptions.projects);
                 }

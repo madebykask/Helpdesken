@@ -191,6 +191,7 @@
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="Controllers\PerfomersController.cs" />
+    <Compile Include="Controllers\StateSecondariesController.cs" />
     <Compile Include="Controllers\WorkingGroupsController.cs" />
     <Compile Include="Infrastructure\ActionResults\ForbiddenResult.cs" />
     <Compile Include="Infrastructure\MultipartProviders\CustomMultipartFormDataStreamProvider.cs" />

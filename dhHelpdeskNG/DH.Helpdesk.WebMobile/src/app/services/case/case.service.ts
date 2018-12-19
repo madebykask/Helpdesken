@@ -39,7 +39,8 @@ export class CaseService {
         getCategories: () => fieldExists(filter.Categories) ? this._caseOrganizationService.getCategories() : empty$(),
         getWorkingGroups: () => fieldExists(filter.WorkingGroups) ? this._caseOrganizationService.getWorkingGroups() : empty$(),
         getClosingReasons: () => fieldExists(filter.ClosingReasons) ? this._caseOrganizationService.getClosingReasons() : empty$(),
-        getPerformers: () => fieldExists(filter.Performers) ? this._caseOrganizationService.getPerformers(filter.CasePerformerUserId, filter.CaseWorkingGroupId) : empty$()
+        getPerformers: () => fieldExists(filter.Performers) ? this._caseOrganizationService.getPerformers(filter.CasePerformerUserId, filter.CaseWorkingGroupId) : empty$(),
+        getStateSecondaries: () => fieldExists(filter.StateSecondaries) ? this._caseOrganizationService.getStateSecondaries() : empty$()
       };
     }
 
@@ -56,15 +57,16 @@ export class CaseService {
         let workingGroups$ = optionsHelper.getWorkingGroups();
         let closingReasons$ = optionsHelper.getClosingReasons();
         let perfomers$ = optionsHelper.getPerformers();
+        let stateSecondaries$ = optionsHelper.getStateSecondaries();
 
         let bundledOptions$ = this._batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
 
         return forkJoin(bundledOptions$, regions$, departments$, oUs$, isAboutDepartments$, isAboutOUs$, caseTypes$, 
-          productAreas$, categories$, closingReasons$, perfomers$, workingGroups$)
+          productAreas$, categories$, closingReasons$, perfomers$, workingGroups$, stateSecondaries$)
                     .pipe(
                         take(1),
                         switchMap(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes,
-                           productAreas, categories, closingReasons, perfomers, workingGroups]) => {
+                           productAreas, categories, closingReasons, perfomers, workingGroups, stateSecondaries]) => {
                             let options = new CaseOptions();
 
                             if (regions != null) {
@@ -114,6 +116,10 @@ export class CaseService {
                             if (workingGroups != null) {
                               options.workingGroups = workingGroups;
                             }
+
+                            if (stateSecondaries != null) {
+                              options.stateSecondaries = stateSecondaries;
+                          }
 
                             return of(options);
                       }),

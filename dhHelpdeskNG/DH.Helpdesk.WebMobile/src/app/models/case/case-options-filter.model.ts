@@ -11,7 +11,6 @@ export class BundleOptionsFilter {
     ResponsibleUsers?: boolean;
     Priorities?: boolean;
     Statuses?: boolean;
-    StateSecondaries?: boolean;
     SolutionsRates?: boolean;
     Changes?: boolean;
     Problems?: boolean;
@@ -33,5 +32,7 @@ export class CaseOptionsFilterModel extends BundleOptionsFilter {
     ProductAreaId?: any;
     Categories?: boolean;
     ClosingReasons?: boolean;
+    StateSecondaries?: boolean;
+
  }
  

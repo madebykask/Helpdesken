@@ -281,6 +281,11 @@ namespace DH.Helpdesk.Dal.Infrastructure
             return this._dbset.Where(where).AsNoTracking<T>().FirstOrDefault<T>();
         }
 
+        public virtual Task<T> GetAsync(Expression<Func<T, bool>> where)
+        {
+            return this._dbset.Where(where).AsNoTracking<T>().FirstOrDefaultAsync<T>();
+        }
+
         /// <summary>
         /// The get.
         /// </summary>

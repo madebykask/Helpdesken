@@ -15,7 +15,6 @@
         public bool ResponsibleUsers { get; set; }
         public bool Priorities { get; set; }
         public bool Statuses { get; set; }
-        public bool StateSecondaries { get; set; }
         public bool SolutionsRates { get; set; }
         public bool Changes { get; set; }
         public bool Problems { get; set; }

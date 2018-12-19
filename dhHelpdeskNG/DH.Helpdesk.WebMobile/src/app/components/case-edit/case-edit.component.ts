@@ -20,6 +20,8 @@ import { CaseDataReducersFactory, } from 'src/app/logic/case-edit/case-data.redu
 import { CaseEditDataHelper } from 'src/app/logic/case-edit/case-editdata.helper';
 import { WorkingGroupsService } from 'src/app/services/case-organization/workingGroups-service';
 import { WorkingGroupInputModel } from 'src/app/models/workinggroups/workingGroup-input.model';
+import { StateSecondariesService } from 'src/app/services/case-organization/stateSecondaries-service';
+import { StateSecondaryInputModel } from 'src/app/models/stateSecondaries/stateSecondaryInputModel';
 
 @Component({
   selector: 'app-case-edit',
@@ -54,7 +56,8 @@ export class CaseEditComponent {
                 private _caseSaveService: CaseSaveService,
                 private _commService: CommunicationService,
                 private _сaseDataReducersFactory: CaseDataReducersFactory, 
-                private _workingGroupsService: WorkingGroupsService) {
+                private _workingGroupsService: WorkingGroupsService,
+                private _stateSecondariesSerive: StateSecondariesService) {
         if (this.route.snapshot.paramMap.has('id')) {
             this.caseId = +this.route.snapshot.paramMap.get('id');
         } else {
@@ -81,18 +84,32 @@ export class CaseEditComponent {
           perfomers$.pipe(
             take(1),
             switchMap((o: OptionItem[]) => {
-                reducer.caseDataReducer(v.name, filters, { items: o});
+                reducer.caseDataReducer(CaseFieldsNames.PerformerUserId, { items: o});
                 return of(o);
               }),
             takeUntil(this.destroy$)
           ).subscribe();
 
-          if (v.value != null) {
+          if (v.value != null && this.form.contains(CaseFieldsNames.StateSecondaryId)) {
             this._workingGroupsService.getWorkingGroup(v.value)
             .pipe(
               switchMap((wg: WorkingGroupInputModel) => {
                 if (wg.stateSecondaryId != null) {
                   this.form.controls[CaseFieldsNames.StateSecondaryId].setValue(wg.stateSecondaryId);
+                }
+                return of(wg);
+              }),
+              takeUntil(this.destroy$)
+            ).subscribe();
+          }
+        }
+        case CaseFieldsNames.StateSecondaryId: {
+          if (v.value != null) {
+            this._stateSecondariesSerive.getStateSecondary(v.value)
+            .pipe(
+              switchMap((wg: StateSecondaryInputModel) => {
+                if (wg.workingGroupId != null && this.form.contains(CaseFieldsNames.WorkingGroupId)) {
+                  this.form.controls[CaseFieldsNames.WorkingGroupId].setValue(wg.workingGroupId);
                 }
                 return of(wg);
               }),

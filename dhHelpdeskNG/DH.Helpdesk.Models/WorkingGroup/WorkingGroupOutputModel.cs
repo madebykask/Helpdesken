@@ -9,8 +9,8 @@ namespace DH.Helpdesk.Models.WorkingGroup
     public class WorkingGroupOutputModel
     {
         public int Id { get; set; }
-        public int IsActive { get; set; }
-        public int IsDefault { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsDefault { get; set; }
         public int CustomerId { get; set; }
         public string Code { get; set; }
         public string WorkingGroupName { get; set; }
