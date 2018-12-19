@@ -17,7 +17,7 @@ export class DepartmentsService extends HttpApiServiceBase {
     getDepartmentsByRegion(regionId?: number) {
         let params = { };
         if (regionId != null) params = { regionId: regionId };
-        return this.getJson(this.buildResourseUrl('/api/departments/getbyregion', params))
+        return this.getJson(this.buildResourseUrl('/api/departments/options', params))
         .pipe(
             take(1),
             map((jsItems: any) => {

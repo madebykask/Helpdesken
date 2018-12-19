@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { defaultIfEmpty, take, switchMap } from 'rxjs/operators';
+import { defaultIfEmpty, take, switchMap, catchError } from 'rxjs/operators';
 import { CaseEditInputModel, CaseOptionsFilterModel, BundleOptionsFilter, CaseSectionInputModel, BaseCaseField, KeyValue, MailToTicketInfo, CaseAccessMode, CaseSolution } from '../../models';
 import { throwError, forkJoin, empty, Observable, of } from 'rxjs';
 import { CaseOptions } from '../../models/case/case-options.model';
@@ -24,29 +24,47 @@ export class CaseService {
         }))
     }
 
-    getCaseOptions(filter: CaseOptionsFilterModel) {
-        const empty$ = () => empty().pipe(defaultIfEmpty(null));
-        const fieldExists = (field: any) => field !== undefined;
+    getOptionsHelper(filter: CaseOptionsFilterModel) {
+      const empty$ = () => empty().pipe(defaultIfEmpty(null));
+      const fieldExists = (field: any) => field !== undefined;
 
-        let regions$ = this._caseOrganizationService.getRegions();
-        let departments$ = fieldExists(filter.RegionId) ? this._caseOrganizationService.getDepartments(filter.RegionId) : empty$();
-        let oUs$ = fieldExists(filter.DepartmentId) && filter.DepartmentId != null ? this._caseOrganizationService.getOUs(filter.DepartmentId): empty$();
-        let isAboutDepartments$ =  fieldExists(filter.IsAboutRegionId) ? this._caseOrganizationService.getDepartments(filter.IsAboutRegionId) : empty$();
-        let isAboutOUs$ = fieldExists(filter.IsAboutDepartmentId) && filter.IsAboutDepartmentId != null ? this._caseOrganizationService.getOUs(filter.IsAboutDepartmentId) : empty$();
-        let caseTypes$ = fieldExists(filter.CaseTypes) ? this._caseOrganizationService.getCaseTypes() : empty$();
-        let productAreas$ = fieldExists(filter.ProductAreas) ? this._caseOrganizationService.getProductAreas(filter.CaseTypeId, filter.ProductAreaId) : empty$();
-        let categories$ = fieldExists(filter.Categories) ? this._caseOrganizationService.getCategories() : empty$();
-        let closingReasons$ = fieldExists(filter.ClosingReasons) ? this._caseOrganizationService.getClosingReasons() : empty$();
-        let perfomers$ = fieldExists(filter.Performers) ? this._caseOrganizationService.getPerformers(filter.CasePerformerUserId, filter.CaseWorkingGroupId) : empty$();
+      return {
+        getRegions: () => this._caseOrganizationService.getRegions(),
+        getDepartments: () => fieldExists(filter.RegionId) ? this._caseOrganizationService.getDepartments(filter.RegionId) : empty$(),
+        getOUs: () => fieldExists(filter.DepartmentId) && filter.DepartmentId != null ? this._caseOrganizationService.getOUs(filter.DepartmentId): empty$(),
+        getIsAboutDepartments: () => fieldExists(filter.IsAboutRegionId) ? this._caseOrganizationService.getDepartments(filter.IsAboutRegionId) : empty$(),
+        getIsAboutOUs: () => fieldExists(filter.IsAboutDepartmentId) && filter.IsAboutDepartmentId != null ? this._caseOrganizationService.getOUs(filter.IsAboutDepartmentId) : empty$(),
+        getCaseTypes: () => fieldExists(filter.CaseTypes) ? this._caseOrganizationService.getCaseTypes() : empty$(),
+        getProductAreas: () => fieldExists(filter.ProductAreas) ? this._caseOrganizationService.getProductAreas(filter.CaseTypeId, filter.ProductAreaId) : empty$(),
+        getCategories: () => fieldExists(filter.Categories) ? this._caseOrganizationService.getCategories() : empty$(),
+        getWorkingGroups: () => fieldExists(filter.WorkingGroups) ? this._caseOrganizationService.getWorkingGroups() : empty$(),
+        getClosingReasons: () => fieldExists(filter.ClosingReasons) ? this._caseOrganizationService.getClosingReasons() : empty$(),
+        getPerformers: () => fieldExists(filter.Performers) ? this._caseOrganizationService.getPerformers(filter.CasePerformerUserId, filter.CaseWorkingGroupId) : empty$()
+      };
+    }
+
+    getCaseOptions(filter: CaseOptionsFilterModel) {
+        var optionsHelper = this.getOptionsHelper(filter);
+        let regions$ = optionsHelper.getRegions();
+        let departments$ = optionsHelper.getDepartments();
+        let oUs$ = optionsHelper.getOUs();
+        let isAboutDepartments$ = optionsHelper.getIsAboutDepartments();
+        let isAboutOUs$ = optionsHelper.getIsAboutOUs();
+        let caseTypes$ = optionsHelper.getCaseTypes();
+        let productAreas$ = optionsHelper.getProductAreas();
+        let categories$ = optionsHelper.getCategories();
+        let workingGroups$ = optionsHelper.getWorkingGroups();
+        let closingReasons$ = optionsHelper.getClosingReasons();
+        let perfomers$ = optionsHelper.getPerformers();
 
         let bundledOptions$ = this._batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
 
         return forkJoin(bundledOptions$, regions$, departments$, oUs$, isAboutDepartments$, isAboutOUs$, caseTypes$, 
-          productAreas$, categories$, closingReasons$, perfomers$)
+          productAreas$, categories$, closingReasons$, perfomers$, workingGroups$)
                     .pipe(
                         take(1),
                         switchMap(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes,
-                           productAreas, categories, closingReasons, perfomers]) => {
+                           productAreas, categories, closingReasons, perfomers, workingGroups]) => {
                             let options = new CaseOptions();
 
                             if (regions != null) {
@@ -93,8 +111,14 @@ export class CaseService {
                               options.performers = perfomers;
                             }
 
+                            if (workingGroups != null) {
+                              options.workingGroups = workingGroups;
+                            }
+
                             return of(options);
-                    }));
+                      }),
+                      catchError((e) => throwError(e))
+                    );
     }
 
     getCaseSections() {
@@ -109,7 +133,9 @@ export class CaseService {
                        jsSection.isEditCollapsed);
               });
               return of(sections);
-          }));
+            }),
+            catchError((e) => throwError(e))
+          );
     }
 
     // TODO: review - not all cases covered

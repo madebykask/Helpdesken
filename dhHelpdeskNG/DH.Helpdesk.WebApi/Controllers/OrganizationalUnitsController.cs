@@ -12,6 +12,7 @@ using DH.Helpdesk.WebApi.Infrastructure;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
+    [RoutePrefix("api/organizationalunits")]
     public class OrganizationalUnitsController : BaseApiController
     {
         private readonly IOUService _ouService;
@@ -27,6 +28,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="cid"></param>
         /// <param name="departmentId"></param>
         /// <returns></returns>
+        [Route("options")]
         public async Task<IEnumerable<ItemOverview>> Get(int cid, int departmentId)
         {
             var ous = await _ouService.GetActiveOuForDepartmentAsync(departmentId, cid);

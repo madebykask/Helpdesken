@@ -12,7 +12,6 @@
         public bool Suppliers { get; set; }
         public bool CausingParts { get; set; }
         public bool Currencies { get; set; }
-        public bool WorkingGroups { get; set; }
         public bool ResponsibleUsers { get; set; }
         public bool Priorities { get; set; }
         public bool Statuses { get; set; }

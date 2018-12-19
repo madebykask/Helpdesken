@@ -8,6 +8,7 @@ using DH.Helpdesk.WebApi.Infrastructure;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
+    [RoutePrefix("api/regions")]
     public class RegionsController : BaseApiController
     {
         private readonly IRegionService _regionService;
@@ -23,6 +24,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="cid"></param>
         /// <returns></returns>
         [HttpGet]
+        [Route("options")]
         public async Task<IList<ItemOverview>> Get(int cid)
         {
             return await Task.FromResult(_regionService.GetActiveRegions(cid)

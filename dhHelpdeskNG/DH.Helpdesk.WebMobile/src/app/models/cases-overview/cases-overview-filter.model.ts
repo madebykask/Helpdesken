@@ -1,4 +1,4 @@
-export class CasesOverviewFilter {    
+export class CasesOverviewFilter {
 
         Initiator: string;
         InitiatorSearchScope: number;

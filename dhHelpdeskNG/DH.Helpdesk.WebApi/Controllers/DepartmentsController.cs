@@ -8,6 +8,7 @@ using DH.Helpdesk.WebApi.Infrastructure;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
+    [RoutePrefix("api/departments")]
     public class DepartmentsController : BaseApiController
     {
         private readonly IDepartmentService _departmentService;
@@ -35,7 +36,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="regionId"></param>
         /// <returns></returns>
         [HttpGet]
-        //[Route("getitemsbyregion/{cid:int}/{regionId:int?}")]
+        [Route("options")]
         public async Task<IList<ItemOverview>> GetByRegion(int cid, int? regionId = null)
         {
             var deps = await Task.FromResult(

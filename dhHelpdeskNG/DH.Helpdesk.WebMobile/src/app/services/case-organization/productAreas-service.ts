@@ -18,7 +18,7 @@ export class ProductAreasService extends HttpApiServiceBase {
         let params = { };
         if (caseTypeId != null) Object.assign(params, { caseTypeId: caseTypeId });
         if (includeId != null) Object.assign(params, { includeId: includeId });
-        return this.getJson(this.buildResourseUrl('/api/productareas/getbycasetype', params, true, true))
+        return this.getJson(this.buildResourseUrl('/api/productareas/options', params, true, true))
             .pipe(
                 take(1),
                 map((jsItems: any) => {

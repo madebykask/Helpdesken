@@ -6,9 +6,7 @@ export class BundledCaseOptions {
     suppliers?: OptionItem[];
     countries?: OptionItem[];
     currencies?: OptionItem[];
-    workingGroups?: OptionItem[];
     responsibleUsers?: OptionItem[];
-    performers?: OptionItem[];
     priorities?: OptionItem[];
     statuses?: OptionItem[];
     stateSecondaries?: OptionItem[];
@@ -29,6 +27,8 @@ export class CaseOptions extends BundledCaseOptions {
     productAreas?: MultiLevelOptionItem[];
     categories?: MultiLevelOptionItem[];
     closingReasons?: MultiLevelOptionItem[];
+    workingGroups?: OptionItem[];
+    performers?: OptionItem[];
 }
 
 export class OptionItem {

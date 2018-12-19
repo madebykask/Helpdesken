@@ -7,6 +7,7 @@ import { ProductAreasService } from "./productAreas-service";
 import { CategoriesService } from "./categories-service";
 import { ClosingReasonsService } from "./closingReasons-service";
 import { PerfomersService } from "./perfomers-service";
+import { WorkingGroupsService } from "./workingGroups-service";
 
 @Injectable({ providedIn: 'root' })
 export class CaseOrganizationService {
@@ -17,7 +18,8 @@ export class CaseOrganizationService {
         private _productAreasService: ProductAreasService,
         private _categoriesService: CategoriesService,
         private _closingReasonsService: ClosingReasonsService,
-        private _perfomersService: PerfomersService) {
+        private _perfomersService: PerfomersService,
+        private _workingGroupsService: WorkingGroupsService) {
     }
 
     getRegions() {
@@ -50,5 +52,9 @@ export class CaseOrganizationService {
 
     getPerformers(performerUserId?: number, workingGroupId?: number) {
       return this._perfomersService.getPerformers(performerUserId, workingGroupId);
+    }
+
+    getWorkingGroups() {
+      return this._workingGroupsService.getWorkingGroups();
     }
 }

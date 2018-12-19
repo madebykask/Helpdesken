@@ -13,6 +13,7 @@ using DH.Helpdesk.WebApi.Infrastructure;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
+    [RoutePrefix("api/caseoptions")]
     public class CaseOptionsController : BaseApiController
     {
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
@@ -22,7 +23,6 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ISupplierService _supplierService;
         private readonly ICountryService _countryService;
         private readonly ICurrencyService _currencyService;
-        private readonly IWorkingGroupService _workingGroupService;
         private readonly IUserService _userService;
         private readonly IPriorityService _priorityService;
         private readonly IStateSecondaryService _stateSecondaryService;
@@ -36,7 +36,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         public CaseOptionsController(IRegistrationSourceCustomerService registrationSourceCustomerService, ISystemService systemService, IUrgencyService urgencyService,
             IImpactService impactService, ISupplierService supplierService, ICountryService countryService, ICurrencyService currencyService,
-            IWorkingGroupService workingGroupService, IUserService userService, IPriorityService priorityService, IStateSecondaryService stateSecondaryService,
+            IUserService userService, IPriorityService priorityService, IStateSecondaryService stateSecondaryService,
             IStatusService statusService, IProjectService projectService, IProblemService problemService, IBaseChangesService changeService,
             ICausingPartService causingPartService, ISettingService customerSettingsService, ITranslateCacheService translateCacheService)
         {
@@ -50,7 +50,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             _supplierService = supplierService;
             _countryService = countryService;
             _currencyService = currencyService;
-            _workingGroupService = workingGroupService;
             _userService = userService;
             _priorityService = priorityService;
             _stateSecondaryService = stateSecondaryService;
@@ -70,6 +69,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// /// <param name="langId">Language Id</param>
         /// <returns></returns>
         [HttpPost]//TODO: split this action to different controllers for modularity
+        [Route("bundle")]
         public async Task<CaseOptionsOutputModel> Bundle([FromUri]int cid, [FromBody]GetCaseOptionsInputModel input, [FromUri]int langId)
         {
             var customerId = cid;
@@ -114,14 +114,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 model.Currencies =
                     _currencyService.GetCurrencies().Select(d => new ItemOverview(d.Code, d.Code)).ToList(); //TODO: refactor get case to get currencyID instead on Code
-            }
-
-            if (input.WorkingGroups)
-            {
-                model.WorkingGroups =
-                    _workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false) //TODO: filter active
-                        .Select(d => new ItemOverview(d.WorkingGroupName, d.Id.ToString()))
-                        .ToList();
             }
 
             if (input.ResponsibleUsers)

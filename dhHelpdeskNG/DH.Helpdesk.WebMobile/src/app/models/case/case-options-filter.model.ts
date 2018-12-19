@@ -8,7 +8,6 @@ export class BundleOptionsFilter {
     Suppliers?: boolean;
     CausingParts?: boolean;
     Currencies?: boolean;
-    WorkingGroups?: boolean;
     ResponsibleUsers?: boolean;
     Priorities?: boolean;
     Statuses?: boolean;
@@ -26,6 +25,7 @@ export class CaseOptionsFilterModel extends BundleOptionsFilter {
     DepartmentId?: any;
     IsAboutRegionId?: any;
     IsAboutDepartmentId?: any;
+    WorkingGroups?: boolean;
     Performers?: boolean;
     CaseTypes?: boolean;
     CaseTypeId?: any;

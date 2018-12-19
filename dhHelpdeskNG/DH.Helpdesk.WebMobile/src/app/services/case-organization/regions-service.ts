@@ -15,7 +15,7 @@ export class RegionsService extends HttpApiServiceBase {
     }
 
     getRegions() {
-        return this.getJson(this.buildResourseUrl('/api/regions/get'))
+        return this.getJson(this.buildResourseUrl('/api/regions/options'))
         .pipe(
             take(1),
             map((jsItems: any) => {

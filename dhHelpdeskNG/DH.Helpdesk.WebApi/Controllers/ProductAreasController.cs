@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
@@ -9,6 +10,7 @@ using DH.Helpdesk.WebApi.Infrastructure;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
+    [RoutePrefix("api/productareas")]
     public class ProductAreasController : BaseApiController
     {
         private readonly IProductAreaService _productAreaService;
@@ -30,7 +32,8 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="caseTypeId"></param>
         /// <param name="includeId"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<ProductAreaOverview>> GetByCaseType(int cid, int langId, int? caseTypeId = null, int? includeId = null)
+        [Route("options")]
+        public async Task<IEnumerable<ProductAreaOverview>> Get(int cid, int langId, int? caseTypeId = null, int? includeId = null)
         {
             var user = await _userSerivice.GetUserOverviewAsync(UserId);
 

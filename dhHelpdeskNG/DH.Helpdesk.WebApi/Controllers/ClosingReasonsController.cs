@@ -7,6 +7,7 @@ using DH.Helpdesk.WebApi.Infrastructure;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
+    [RoutePrefix("api/closingreasons")]
     public class ClosingReasonsController : BaseApiController
     {
         private readonly IFinishingCauseService _finishingCauseService;
@@ -22,6 +23,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="cid"></param>
         /// <returns></returns>
         [HttpGet]
+        [Route("options")]
         public async Task<IEnumerable<FinishingCauseOverview>> Get(int cid)
         {
             var closingReasons = await _finishingCauseService.GetFinishingCausesWithChildsAsync(cid);

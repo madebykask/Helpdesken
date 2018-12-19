@@ -15,7 +15,7 @@ export class ClosingReasonsService extends HttpApiServiceBase {
     }
 
     getClosingReasons() {
-        return this.getJson(this.buildResourseUrl('/api/closingreasons/get'))
+        return this.getJson(this.buildResourseUrl('/api/closingreasons/options'))
             .pipe(
                 take(1),
                 map((jsItems: any) => {

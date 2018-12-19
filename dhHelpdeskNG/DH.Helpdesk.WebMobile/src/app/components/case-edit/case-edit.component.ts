@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
 import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType, CaseLockModel, CaseAccessMode, CasesSearchType, IBaseCaseField, OptionItem } from '../../models';
-import { forkJoin, Subject, Subscription, of } from 'rxjs';
+import { forkJoin, Subject, Subscription, of, throwError } from 'rxjs';
 import { switchMap, take, finalize, tap, delay, catchError, map, takeUntil, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, Channels, DropdownValueChangedEvent } from 'src/app/services/communication/communication.service';
@@ -17,6 +17,9 @@ import { CaseFieldsNames, CaseFieldOptions } from '../../helpers/constants';
 import { AlertType } from 'src/app/helpers/alerts/alert-types';
 import { CaseDataStore } from 'src/app/logic/case-edit/case-data.store';
 import { CaseDataReducersFactory, } from 'src/app/logic/case-edit/case-data.reducers';
+import { CaseEditDataHelper } from 'src/app/logic/case-edit/case-editdata.helper';
+import { WorkingGroupsService } from 'src/app/services/case-organization/workingGroups-service';
+import { WorkingGroupInputModel } from 'src/app/models/workinggroups/workingGroup-input.model';
 
 @Component({
   selector: 'app-case-edit',
@@ -42,16 +45,16 @@ export class CaseEditComponent {
     private caseLock: CaseLockModel = null;
 
     constructor(private route: ActivatedRoute,
-                private caseService: CaseService,
-                private router: Router,
-                private caseLockApiService: CaseLockApiService,
-                private authStateService:AuthenticationStateService,
-                private translateService: TranslateService,
-                private commService: CommunicationService,
-                private alertService: AlertsService,
-                private caseSaveService: CaseSaveService,
+                private _caseService: CaseService,
+                private _router: Router,
+                private _caseLockApiService: CaseLockApiService,
+                private _authStateService:AuthenticationStateService,
+                private _caseDataHelpder: CaseEditDataHelper,
+                private _alertService: AlertsService,
+                private _caseSaveService: CaseSaveService,
                 private _commService: CommunicationService,
-                private _сaseDataReducersFactory: CaseDataReducersFactory) {
+                private _сaseDataReducersFactory: CaseDataReducersFactory, 
+                private _workingGroupsService: WorkingGroupsService) {
         if (this.route.snapshot.paramMap.has('id')) {
             this.caseId = +this.route.snapshot.paramMap.get('id');
         } else {
@@ -61,70 +64,52 @@ export class CaseEditComponent {
         this._commService.listen(Channels.DropdownValueChanged).pipe(
           switchMap((v: DropdownValueChangedEvent) => {
             const reducer = this._сaseDataReducersFactory.createCaseDataReducers(this.dataSource);
-            const filters = this.getCaseOptionsFilter((name: string) => this.getFormValue(name));
-            return reducer.caseDataReducer(v.name, filters);
+            this.runUpdates(reducer, v);
+            return of(v);
           }),
           takeUntil(this.destroy$)
         ).subscribe();
     }
 
+    private runUpdates(reducer, v: DropdownValueChangedEvent) { // TODO: move to new class
+      const filters = this._caseDataHelpder.getCaseOptionsFilter(this.caseData, (name: string) => this.getFormValue(name));
+      const optionsHelper = this._caseService.getOptionsHelper(filters);
+
+      switch (v.name) {
+        case CaseFieldsNames.WorkingGroupId: {
+          let perfomers$ = optionsHelper.getPerformers();
+          perfomers$.pipe(
+            take(1),
+            switchMap((o: OptionItem[]) => {
+                reducer.caseDataReducer(v.name, filters, { items: o});
+                return of(o);
+              }),
+            takeUntil(this.destroy$)
+          ).subscribe();
+
+          if (v.value != null) {
+            this._workingGroupsService.getWorkingGroup(v.value)
+            .pipe(
+              switchMap((wg: WorkingGroupInputModel) => {
+                if (wg.stateSecondaryId != null) {
+                  this.form.controls[CaseFieldsNames.StateSecondaryId].setValue(wg.stateSecondaryId);
+                }
+                return of(wg);
+              }),
+              takeUntil(this.destroy$)
+            ).subscribe();
+          }
+        }
+      }
+    }
+
     ngOnInit() {
-      this.commService.publish(Channels.Header, new HeaderEventData(false));
+      this._commService.publish(Channels.Header, new HeaderEventData(false));
       this.loadCaseData();
     }
 
-    getCaseTitle() : string {
-        let title = this.translateService.instant('Ärende');
-        if (this.caseData) {
-            if (this.caseData.caseSolution) {
-                title = this.caseData.caseSolution.name;
-            }
-        }
-        return title;
-    }
-
-    loadCaseData(): any {
-        this.isLoaded = false;
-        const sessionId = this.authStateService.getUser().authData.sessionId;
-
-        const caseLock$ = this.caseLockApiService.acquireCaseLock(this.caseId, sessionId);
-        const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
-        // todo: apply search type (all, my cases)
-        const caseData$ =
-            this.caseService.getCaseData(this.caseId)
-                .pipe(
-                    switchMap(data => { // TODO: Error handle
-                      this.ownsLock = false;
-                      this.caseData = data;
-                      const filter = this.getCaseOptionsFilter((name: string) => this.getValue(name));
-                      return this.caseService.getCaseOptions(filter);
-                    })
-                );
-
-                forkJoin(caseSections$, caseData$, caseLock$)
-                .pipe(
-                    take(1),
-                    map(([sectionData, options, caseLock]) => {
-                      this.caseSections = sectionData;
-                      this.dataSource = new CaseDataStore(options);
-                      this.caseLock = caseLock;
-                      this.processCaseData();
-                    }),
-                    finalize(() => this.isLoaded = true),
-                    takeUntil(this.destroy$)
-                )
-                .subscribe(() => {
-                  this.initLock();
-                });
-    }
-
-    private processCaseData(){      
-      this.caseKey = this.caseData.id > 0 ? this.caseData.id.toString() : this.caseData.caseGuid.toString();      
-      this.form = this.createFormGroup(this.caseData);
-    }
-
     ngOnDestroy() {
-        this.commService.publish(Channels.Header, new HeaderEventData(true));
+        this._commService.publish(Channels.Header, new HeaderEventData(true));
 
         if (this.caseLockIntervalSub) {
             this.caseLockIntervalSub.unsubscribe();
@@ -132,60 +117,75 @@ export class CaseEditComponent {
 
         // unlock the case if required
         if (this.caseId > 0 && this.ownsLock) {
-            this.caseLockApiService.unLockCase(this.caseId, this.caseLock.lockGuid).subscribe();
+            this._caseLockApiService.unLockCase(this.caseId, this.caseLock.lockGuid).subscribe();
         }
 
         // shall we do extra checks? 
-        this.alertService.clearMessages();
+        this._alertService.clearMessages();
 
         this.destroy$.next();
         this.destroy$.complete();
     }
 
+    loadCaseData(): any {
+      this.isLoaded = false;
+      const sessionId = this._authStateService.getUser().authData.sessionId;
+
+      const caseLock$ = this._caseLockApiService.acquireCaseLock(this.caseId, sessionId);
+      const caseSections$ = this._caseService.getCaseSections(); // TODO: error handling
+      // todo: apply search type (all, my cases)
+      const caseData$ =
+          this._caseService.getCaseData(this.caseId)
+              .pipe(
+                  switchMap(data => { // TODO: Error handle
+                    this.ownsLock = false;
+                    this.caseData = data;
+                    const filter = this._caseDataHelpder.getCaseOptionsFilter(this.caseData,
+                      (name: string) => this._caseDataHelpder.getValue(this.caseData, name));
+                    return this._caseService.getCaseOptions(filter);
+                  }),
+                  catchError((e) => throwError(e)),
+              );
+
+              forkJoin(caseSections$, caseData$, caseLock$)
+              .pipe(
+                  take(1),
+                  map(([sectionData, options, caseLock]) => {
+                    this.caseSections = sectionData;
+                    this.dataSource = new CaseDataStore(options);
+                    this.caseLock = caseLock;
+                    this.processCaseData();
+                  }),
+                  finalize(() => this.isLoaded = true),
+                  catchError((e) => throwError(e)),
+                  takeUntil(this.destroy$)
+              )
+              .subscribe(() => {
+                this.initLock();
+              });
+  }
+
+    getCaseTitle() : string {
+      return this._caseDataHelpder.getCaseTitle(this.caseData);
+    }
+
     hasField(name: string): boolean {
-        if (this.caseData === null) {
-            throw new Error('No Case Data.');
-        }
-        // console.log('hasField: ' + name);
-        return this.caseData.fields.filter(f => f.name === name).length > 0;
+      return this._caseDataHelpder.hasField(this.caseData, name);
     }
 
     hasSection(type: CaseSectionType): boolean {
-        if(this.caseData === null) {
-            throw new Error('No Case Data.');
-        }
-        return this.caseData.fields.filter(f => f.section === type).length > 0;
+      return this._caseDataHelpder.hasSection(this.caseData, type);
     }
 
     getField(name: string): BaseCaseField<any> {
-        if (this.caseData === null) {
-            throw new Error('No Case Data.');
-        }
-        const fields = this.caseData.fields.filter(f => f.name === name);
-        return fields.length <= 0 ? null : fields[0];
-    }
-
-    // returns value from caseData, not formControl
-    getValue(name: string) {
-        const field = this.getField(name);
-        return field != null ? field.value || null : undefined; // null - value is null, undefined - no such field
-    }
-
-    // returns value from formControl, not caseData
-    getFormValue(name: string) {
-      const noField = undefined;
-      if (!this.form.contains(name)) {
-        return noField;
-      }
-      const control = this.form.controls[name];
-      return control != null ? control.value || null : noField; // null - value is null, undefined - no such field
+      return this._caseDataHelpder.getField(this.caseData, name);
     }
 
     public navigate(url: string) {
       if(url == null) return;
       of(true).pipe(
         delay(200),
-        switchMap(() => of(this.router.navigate([url]))),
+        switchMap(() => of(this._router.navigate([url]))),
         take(1)
       ).subscribe();
     }
@@ -209,7 +209,7 @@ export class CaseEditComponent {
         return;
       }
       this.isLoaded = false;
-      this.caseSaveService.saveCase(this.form, this.caseId)
+      this._caseSaveService.saveCase(this.form, this.caseId)
         .pipe(
           //catchError()
         ).subscribe(() => {
@@ -217,45 +217,23 @@ export class CaseEditComponent {
         });
     }
 
-    private get caseAccessMode(): CaseAccessMode {
-      return this.caseData.editMode;
+    // returns value from formControl, not caseData
+    getFormValue(name: string) {
+      const noField = undefined;
+      if (!this.form.contains(name)) {
+        return noField;
+      }
+      const control = this.form.controls[name];
+      return control != null ? control.value || null : noField; // null - value is null, undefined - no such field
     }
 
-    private getCaseOptionsFilter(getValue: (name: string) => number) {
-        let filter = new CaseOptionsFilterModel();
-        filter.RegionId = getValue(this.caseFieldsNames.RegionId);
-        filter.DepartmentId = getValue(this.caseFieldsNames.DepartmentId);
-        filter.IsAboutRegionId = getValue(this.caseFieldsNames.IsAbout_RegionId);
-        filter.IsAboutDepartmentId = getValue(this.caseFieldsNames.IsAbout_DepartmentId);
-        filter.CaseResponsibleUserId = getValue(this.caseFieldsNames.CaseResponsibleUserId);
-        filter.CaseWorkingGroupId = getValue(this.caseFieldsNames.WorkingGroupId);
-        filter.CasePerformerUserId = getValue(this.caseFieldsNames.PerformerUserId);
-        filter.CaseCausingPartId = getValue(this.caseFieldsNames.CausingPart);
-        filter.CaseTypeId = getValue(this.caseFieldsNames.CaseTypeId);
-        filter.ProductAreaId = getValue(this.caseFieldsNames.ProductAreaId);
-        filter.Changes = this.hasField(this.caseFieldsNames.Change);
-        filter.Currencies = this.hasField(this.caseFieldsNames.Cost_Currency);
-        filter.CausingParts  = this.hasField(this.caseFieldsNames.CausingPart);
-        filter.CustomerRegistrationSources = this.hasField(this.caseFieldsNames.RegistrationSourceCustomer);
-        filter.Impacts = this.hasField(this.caseFieldsNames.ImpactId);
-        filter.Performers = this.hasField(this.caseFieldsNames.PerformerUserId);
-        filter.Priorities = this.hasField(this.caseFieldsNames.PriorityId);
-        filter.Problems = this.hasField(this.caseFieldsNames.Problem);
-        filter.Projects = this.hasField(this.caseFieldsNames.Project);
-        filter.ResponsibleUsers = this.hasField(this.caseFieldsNames.CaseResponsibleUserId);
-        filter.SolutionsRates = this.hasField(this.caseFieldsNames.SolutionRate);
-        filter.StateSecondaries = this.hasField(this.caseFieldsNames.StateSecondaryId);
-        filter.Statuses = this.hasField(this.caseFieldsNames.StatusId);
-        filter.Suppliers = this.hasField(this.caseFieldsNames.SupplierId);// Supplier_Country_Id
-        filter.Systems = this.hasField(this.caseFieldsNames.SystemId);
-        filter.Urgencies = this.hasField(this.caseFieldsNames.UrgencyId);
-        filter.WorkingGroups = this.hasField(this.caseFieldsNames.WorkingGroupId);
-        filter.CaseTypes = this.hasField(this.caseFieldsNames.CaseTypeId);
-        filter.ProductAreas = this.hasField(this.caseFieldsNames.ProductAreaId);
-        filter.Categories = this.hasField(this.caseFieldsNames.CategoryId);
-        filter.ClosingReasons = this.hasField(this.caseFieldsNames.ClosingReason);
+    private processCaseData(){
+      this.caseKey = this.caseData.id > 0 ? this.caseData.id.toString() : this.caseData.caseGuid.toString();
+      this.form = this.createFormGroup(this.caseData);
+    }
 
-        return filter;
+    private get caseAccessMode(): CaseAccessMode {
+      return this.caseData.editMode;
     }
 
   private createFormGroup(data: CaseEditInputModel): FormGroup {
@@ -286,7 +264,7 @@ export class CaseEditComponent {
   }
 
   private initLock() {
-    let currentUser =  this.authStateService.getUser();
+    let currentUser =  this._authStateService.getUser();
 
     if (this.caseId > 0) {
 
@@ -298,13 +276,13 @@ export class CaseEditComponent {
               (this.caseLock.isLocked && this.caseLock.userId === currentUser.id) ?
                   'OBS! Du har redan oppnat detta arende i en annan session.' :
                   `OBS! Detta arende ar oppnat av ${this.caseLock.userFullName}'`;
-          this.alertService.showMessage(notice, AlertType.Warning);
+          this._alertService.showMessage(notice, AlertType.Warning);
       } else if (this.caseLock.timerInterval > 0) {
           // run extend case lock at specified interval
           this.caseLockIntervalSub =
               interval(this.caseLock.timerInterval * 1000).pipe(
                 switchMap(x => {
-                  return this.caseLockApiService.reExtendedCaseLock(this.caseId, this.caseLock.lockGuid, this.caseLock.extendValue);
+                  return this._caseLockApiService.reExtendedCaseLock(this.caseId, this.caseLock.lockGuid, this.caseLock.extendValue);
                 },
                 // catchError(err => {})// TODO:
                 )

@@ -15,7 +15,7 @@ export class CategoriesService extends HttpApiServiceBase {
     }
 
     getCategories() {
-        return this.getJson(this.buildResourseUrl('/api/categories/get'))
+        return this.getJson(this.buildResourseUrl('/api/categories/options'))
         .pipe(
             take(1),
             map((jsItems: any) => {

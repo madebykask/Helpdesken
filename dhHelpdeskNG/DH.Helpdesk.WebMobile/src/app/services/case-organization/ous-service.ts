@@ -15,7 +15,7 @@ export class OUsService extends HttpApiServiceBase {
     }
 
     getOUsByDepartment(departmentId: number) {
-        return this.getJson(this.buildResourseUrl('/api/organizationalunits/get', { departmentId: departmentId }))
+        return this.getJson(this.buildResourseUrl('/api/organizationalunits/options', { departmentId: departmentId }))
         .pipe(
             take(1),
             map((jsItems: any) => {

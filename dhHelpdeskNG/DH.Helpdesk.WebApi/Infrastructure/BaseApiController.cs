@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using DH.Helpdesk.WebApi.Infrastructure.ActionResults;
 using Microsoft.AspNet.Identity;
 
 namespace DH.Helpdesk.WebApi.Infrastructure
@@ -32,6 +33,10 @@ namespace DH.Helpdesk.WebApi.Infrastructure
 
                 return userNameStr;
             }
+        }
+
+        protected ForbiddenResult Forbidden(string msg) {
+            return new ForbiddenResult(this.Request, msg);
         }
 
     }

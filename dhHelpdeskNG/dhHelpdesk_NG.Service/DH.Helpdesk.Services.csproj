@@ -584,6 +584,7 @@
     <Compile Include="Services\Users\IUsersPasswordHistoryService.cs" />
     <Compile Include="Services\WebApi\Concrete\WebApiService.cs" />
     <Compile Include="Services\WebApi\IWebApiService.cs" />
+    <Compile Include="Services\WorkingGroupServiceAsync.cs" />
     <Compile Include="Services\СaseService_Email.cs" />
     <Compile Include="utils\ServiceUtils.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Changes\IUpdateChangeRequestValidator.cs" />

@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.Models.WorkingGroup;
 using DH.Helpdesk.WebApi.Infrastructure.ClientLogger;
 using DH.Helpdesk.WebApi.Models;
 
@@ -12,6 +13,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Mapper.Profiles
         public ModelToEntitiesMappingProfile()
         {
             CreateMap<ClientLogItemModel, ClientLogEntry>();
+            CreateMap<WorkingGroupOutputModel, WorkingGroupEntity>();
         }
     }
 

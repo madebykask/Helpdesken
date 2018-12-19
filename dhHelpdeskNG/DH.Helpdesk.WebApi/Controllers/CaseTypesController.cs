@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
@@ -9,6 +10,7 @@ using DH.Helpdesk.WebApi.Infrastructure;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
+    [RoutePrefix("api/casetypes")]
     public class CaseTypesController : BaseApiController
     {
         private readonly ICaseTypeService _caseTypeService;
@@ -26,6 +28,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <param name="cid"></param>
         /// <param name="langId"></param>
         /// <returns></returns>
+        [Route("options")]
         public async Task<IEnumerable<CaseTypeOverview>> Get(int cid, int langId)
         {
             const bool takeOnlyActive = true;//TODO: move to filter?

@@ -13,7 +13,7 @@ export class CaseTypesService extends HttpApiServiceBase {
     }
 
     getCaseTypes() {
-        return this.getJson(this.buildResourseUrl('/api/casetypes/get', null, true, true))
+        return this.getJson(this.buildResourseUrl('/api/casetypes/options', null, true, true))
         .pipe(
             take(1),
             map((jsItems: any) => {

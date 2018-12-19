@@ -12,6 +12,7 @@ using DH.Helpdesk.WebApi.Infrastructure;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
+    [RoutePrefix("api/perfomers")]
     public class PerfomersController : BaseApiController
     {
         private readonly ISettingService _customerSettingsService;
@@ -24,6 +25,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpGet]
+        [Route("options")]
         public async Task<IList<ItemOverview>> Get(int cid, int? performerUserId = null, int? workingGroupId = null)
         {
             var customerSettings = _customerSettingsService.GetCustomerSettings(cid);
