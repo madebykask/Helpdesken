@@ -128,8 +128,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 currentCase.WorkingGroup_Id = model.WorkingGroupId;
             }
 
-            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.StateSecondary_Id) &&
-                !_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.StateSecondary_Id, currentCase.Id, customerUserSetting.StateSecondaryPermission))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.StateSecondary_Id))
             {
                 currentCase.StateSecondary_Id = model.StateSecondaryId;
             }

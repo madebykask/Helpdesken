@@ -81,7 +81,7 @@ export class CaseEditComponent {
 
       switch (v.name) {
         case CaseFieldsNames.WorkingGroupId: {
-          let perfomers$ = optionsHelper.getPerformers();
+          let perfomers$ = optionsHelper.getPerformers(false);
           perfomers$.pipe(
             take(1),
             switchMap((o: OptionItem[]) => {

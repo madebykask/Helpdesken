@@ -113,12 +113,20 @@ import { CommunicationService, Channels, DropdownValueChangedEvent } from "src/a
               this.addEmptyItem(options);
             }
             this.localDataSource = options;
+
+            this.resetValueIfNeeded(options);
             return of(options);
           }),
           takeUntil(this.destroy$)
         )
         .subscribe();
     }
+
+  private resetValueIfNeeded(options: OptionItem[]) {
+    if (options.filter((i) => String(i.value) == String(this.formControl.value)).length == 0) {
+      this.formControl.setValue('');
+    }
+  }
 
     private addEmptyItem(options: OptionItem[]): any {
       options.unshift(new OptionItem('',''));

@@ -39,7 +39,8 @@ export class CaseService {
         getCategories: () => fieldExists(filter.Categories) ? this._caseOrganizationService.getCategories() : empty$(),
         getWorkingGroups: () => fieldExists(filter.WorkingGroups) ? this._caseOrganizationService.getWorkingGroups() : empty$(),
         getClosingReasons: () => fieldExists(filter.ClosingReasons) ? this._caseOrganizationService.getClosingReasons() : empty$(),
-        getPerformers: () => fieldExists(filter.Performers) ? this._caseOrganizationService.getPerformers(filter.CasePerformerUserId, filter.CaseWorkingGroupId) : empty$(),
+        getPerformers: (includePerfomer: boolean) =>
+         fieldExists(filter.Performers) ? this._caseOrganizationService.getPerformers(includePerfomer ? filter.CasePerformerUserId : null, filter.CaseWorkingGroupId) : empty$(),
         getStateSecondaries: () => fieldExists(filter.StateSecondaries) ? this._caseOrganizationService.getStateSecondaries() : empty$()
       };
     }
@@ -56,7 +57,7 @@ export class CaseService {
         let categories$ = optionsHelper.getCategories();
         let workingGroups$ = optionsHelper.getWorkingGroups();
         let closingReasons$ = optionsHelper.getClosingReasons();
-        let perfomers$ = optionsHelper.getPerformers();
+        let perfomers$ = optionsHelper.getPerformers(true);
         let stateSecondaries$ = optionsHelper.getStateSecondaries();
 
         let bundledOptions$ = this._batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
