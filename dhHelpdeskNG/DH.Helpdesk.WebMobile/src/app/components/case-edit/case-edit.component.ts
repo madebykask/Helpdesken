@@ -293,7 +293,7 @@ export class CaseEditComponent {
           let notice =
               this.caseLock.isLocked && this.caseLock.userId === currentUser.id ?
                   this._translateService.instant('OBS! Du har redan öppnat detta ärende i en annan session.') :
-                  this._translateService.instant('OBS! Detta ärende är öppnat av')  + this.caseLock.userFullName;                  
+                  this._translateService.instant('OBS! Detta ärende är öppnat av') + ' ' + this.caseLock.userFullName;
           this._alertService.showMessage(notice, AlertType.Warning);
       } else if (this.caseLock.timerInterval > 0) {
           // run extend case lock at specified interval
