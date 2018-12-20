@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Common.Extensions.String;
-using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
@@ -59,74 +60,130 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("{caseKey}/uploadfile")]
-        [SkipCustomerAuthorization]
-        public async Task<IHttpActionResult> UploadFile([FromUri]string caseKey)
+        [Route("{caseKey:guid}/file")] // remember to update WebApiCorsPolicyProvider if url is changed
+        [SkipCustomerAuthorization] // ignore check for new case
+        public async Task<IHttpActionResult> UploadNewCaseFile([FromUri] Guid caseKey)
         {
-            if (string.IsNullOrEmpty(caseKey))
-                return BadRequest("caseKey parameter is null or empty");
+            // Check if the request contains multipart/form-data.
+            if (!Request.Content.IsMimeMultipartContent())
+            {
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+            }
+            
+            var now = DateTime.Now;
+            var topic = ModuleName.Cases;
 
+            var filesReadToProvider = await Request.Content.ReadAsMultipartAsync();
+            
+            var tempStorage = _userTemporaryFilesStorageFactory.CreateForModule(topic);
+
+            var stream = filesReadToProvider.Contents.FirstOrDefault();
+            if (stream != null)
+            {
+                var fileBytes = await stream.ReadAsByteArrayAsync();
+                var fileName = stream.Headers.ContentDisposition.FileName.Unquote().Trim();
+
+                //fix name
+                if (tempStorage.FileExists(fileName, caseKey.ToString(), topic))
+                {
+                    fileName = $"{now}-{fileName}"; // handle on the client file name change
+                }
+
+                tempStorage.AddFile(fileBytes, fileName, caseKey.ToString(), topic);
+                return Ok(fileName);
+            }
+
+            return BadRequest("Failed to upload a file");
+        }
+
+        [HttpPost]
+        [Route("{caseKey:int}/file")] // remember to update WebApiCorsPolicyProvider if url is changed
+        public async Task<IHttpActionResult> UploadCaseFile([FromUri]int caseKey)
+        {
+            var now = DateTime.Now;
+            
             // Check if the request contains multipart/form-data.
             if (!Request.Content.IsMimeMultipartContent())
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
 
-            //await Task.Delay(TimeSpan.FromSeconds(10));
-
-            int caseId;
-            var now = DateTime.Now;
-            var topic = ModuleName.Cases;
             var filesReadToProvider = await Request.Content.ReadAsMultipartAsync();
+            
+            var customerId = _caseService.GetCaseCustomerId(caseKey);
+            var basePath = GetBasePath(customerId);
 
-            try
+            var stream = filesReadToProvider.Contents.FirstOrDefault();
+
+            if (stream != null)
             {
-                if (GuidHelper.IsGuid(caseKey))
+                var fileBytes = await stream.ReadAsByteArrayAsync();
+                var fileName = stream.Headers.ContentDisposition.FileName.Unquote().Trim();
+
+                if (_caseFileService.FileExists(caseKey, fileName))
                 {
-                    var tempStorage = _userTemporaryFilesStorageFactory.CreateForModule(topic);
-                    foreach (var stream in filesReadToProvider.Contents)
-                    {
-                        var fileBytes = await stream.ReadAsByteArrayAsync();
-                        var fileName = stream.Headers.ContentDisposition.FileName.Unquote();
-
-                        //fix name
-                        if (tempStorage.FileExists(fileName, caseKey, topic))
-                            fileName = $"{now}-{fileName}";
-
-                        tempStorage.AddFile(fileBytes, fileName, caseKey, topic);
-                    }
-                }
-                else if (Int32.TryParse(caseKey, out caseId))
-                {
-                    var customerId = _caseService.GetCaseCustomerId(caseId);
-                    var basePath = _settingsLogic.GetFilePath(customerId);
-
-                    foreach (var stream in filesReadToProvider.Contents)
-                    {
-                        var fileBytes = await stream.ReadAsByteArrayAsync();
-                        var fileName = stream.Headers.ContentDisposition.FileName.Unquote();
-
-                        if (_caseFileService.FileExists(caseId, fileName))
-                            fileName = $"{now}-{fileName}";
-
-                        var caseFileDto = new CaseFileDto(
-                            fileBytes,
-                            basePath,
-                            fileName,
-                            now,
-                            caseId,
-                            UserId);
-
-                        _caseFileService.AddFile(caseFileDto);
-                    }
+                    fileName = $"{now}-{fileName}"; // handle on the client filename change
                 }
 
-                return Ok(HttpStatusCode.OK);
+                var caseFileDto = new CaseFileDto(
+                    fileBytes,
+                    basePath,
+                    fileName,
+                    now,
+                    caseKey,
+                    UserId);
+
+                var fileId = _caseFileService.AddFile(caseFileDto);
+                return Ok(new { id = fileId, name = fileName});
             }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message); //todo: check how to return an error
-            }
+
+            return BadRequest("Failed to upload a file");
         }
+
+        [HttpDelete]
+        [Route("{caseKey:guid}/file")]
+        [SkipCustomerAuthorization] //skip check for new case
+        public IHttpActionResult DeleteNewCaseFile([FromUri]Guid caseKey, [FromUri]string fileName)
+        {
+            //todo: check if UriDecode is required for fileName
+            var fileNameSafe = (fileName ?? string.Empty).Trim();
+            if (!string.IsNullOrEmpty(fileNameSafe))
+            {
+                var tempStorage = _userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
+                tempStorage.DeleteFile(fileNameSafe, caseKey.ToString(), ModuleName.Cases);
+            }
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Route("{caseKey:int}/file/{fileId:int}")]
+        public IHttpActionResult DeleteCaseFile(int caseKey, int fileId)
+        {
+            var c = _caseService.GetCaseById(caseKey);
+            var customerId = c.Customer_Id;
+            var basePath = GetBasePath(customerId);
+
+            var caseFileInfo = _caseFileService.GetCaseFile(caseKey, fileId);
+            _caseFileService.DeleteByCaseIdAndFileName(caseKey, basePath, caseFileInfo.FileName);
+
+            //todo: ?
+            //_invoiceArticleService.DeleteFileByCaseId(int.Parse(id), fileName.Trim());
+
+            IDictionary<string, string> errors;
+            var adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+            _caseService.SaveFileDeleteHistory(c, caseFileInfo.FileName, UserId, adUser, out errors);
+
+            //todo: return  errors?
+            return Ok();
+        }
+
+        #region Private Methods
+
+        private string GetBasePath(int customerId)
+        {
+            return _settingsLogic.GetFilePath(customerId);
+        }
+
+        #endregion
     }
 }

@@ -57,7 +57,8 @@ export class CaseEditComponent {
                 private _commService: CommunicationService,
                 private _сaseDataReducersFactory: CaseDataReducersFactory, 
                 private _workingGroupsService: WorkingGroupsService,
-                private _stateSecondariesSerive: StateSecondariesService) {
+                private _stateSecondariesSerive: StateSecondariesService,
+                private _translateService: TranslateService) {
         if (this.route.snapshot.paramMap.has('id')) {
             this.caseId = +this.route.snapshot.paramMap.get('id');
         } else {
@@ -290,9 +291,9 @@ export class CaseEditComponent {
       if (this.caseLock.isLocked) {
           // TODO: translate messages
           let notice =
-              (this.caseLock.isLocked && this.caseLock.userId === currentUser.id) ?
-                  'OBS! Du har redan oppnat detta arende i en annan session.' :
-                  `OBS! Detta arende ar oppnat av ${this.caseLock.userFullName}'`;
+              this.caseLock.isLocked && this.caseLock.userId === currentUser.id ?
+                  this._translateService.instant('OBS! Du har redan öppnat detta ärende i en annan session.') :
+                  this._translateService.instant('OBS! Detta ärende är öppnat av')  + this.caseLock.userFullName;                  
           this._alertService.showMessage(notice, AlertType.Warning);
       } else if (this.caseLock.timerInterval > 0) {
           // run extend case lock at specified interval
@@ -303,8 +304,7 @@ export class CaseEditComponent {
                 },
                 // catchError(err => {})// TODO:
                 )
-              )
-              .subscribe(res => {
+              ).subscribe(res => {
                   if (res === false) {
                       this.ownsLock = false;
                       this.caseLockIntervalSub.unsubscribe();

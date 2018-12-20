@@ -52,12 +52,12 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     this.route.queryParamMap.pipe(
       map((x:ParamMap) => +x.get('searchType'))
           ).subscribe((st:number) => {
-              console.log('>>> st: ' + st);
+              //console.log('>>> st: ' + st);
               this.searchType = !isNaN(st) ?  <CasesSearchType>st : CasesSearchType.All;             
               this.initFilter();
               this.resetCases();
               this.search();
-              console.log(`>>>this.searchType: ${this.searchType}`);      
+              //console.log(`>>>this.searchType: ${this.searchType}`);      
           });     
 
     this._scrollBindFunc = this.checkLoad.bind(this);

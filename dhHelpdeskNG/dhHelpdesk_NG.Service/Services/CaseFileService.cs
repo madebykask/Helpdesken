@@ -4,10 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using DH.Helpdesk.BusinessData.Models.Case;
-using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Dal.Repositories.Cases;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
-using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -15,10 +13,10 @@ namespace DH.Helpdesk.Services.Services
     {
         CaseFileContent GetCaseFile(int customerId, int caseId, int fileId, bool embedImmges = false);
         byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
-
+        CaseFileModel GetCaseFile(int caseId, int fileId);
         IList<string> FindFileNamesByCaseId(int caseId);
-        void AddFile(CaseFileDto caseFileDto);
-        void AddFiles(IList<CaseFileDto> caseFileDtos);
+        int AddFile(CaseFileDto caseFileDto);
+        IList<int> AddFiles(IList<CaseFileDto> caseFileDtos);
         void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath);
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
@@ -43,6 +41,12 @@ namespace DH.Helpdesk.Services.Services
         #endregion
 
         #region Public Methods
+
+        public CaseFileModel GetCaseFile(int caseId, int fileId)
+        {
+            var fileInfo = _caseFileRepository.GetCaseFileInfo(caseId, fileId);
+            return fileInfo;
+        }
 
         public CaseFileContent GetCaseFile(int customerId, int caseId, int fileId, bool embedImmges = false)
         {
@@ -120,14 +124,20 @@ namespace DH.Helpdesk.Services.Services
             return _caseFileRepository.GetFileContentByIdAndFileName(caseId, basePath, fileName);
         }
 
-        public void AddFiles(IList<CaseFileDto> caseFileDtos)
+        public IList<int> AddFiles(IList<CaseFileDto> caseFileDtos)
         {
-            caseFileDtos?.ForEach(AddFile);
+            var fileIds = new List<int>();
+            foreach (var fileDto in caseFileDtos)
+            {
+                var id = AddFile(fileDto);
+                fileIds.Add(id);
+            }
+            return fileIds;
         }
 
-        public void AddFile(CaseFileDto caseFileDto)
+        public int AddFile(CaseFileDto caseFileDto)
         {
-            _caseFileRepository.SaveCaseFile(caseFileDto);
+            return _caseFileRepository.SaveCaseFile(caseFileDto);
         }
 
         public void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath)

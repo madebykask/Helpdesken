@@ -72,6 +72,8 @@ namespace DH.Helpdesk.Services.Services
             Case parentCase = null,
             string caseExtraFollowers = null);
 
+        int SaveFileDeleteHistory(Case c, string fileName, int userId, string adUser, out IDictionary<string, string> errors, string appName = null);
+
         int SaveCaseHistory(
             Case c,
             int userId,

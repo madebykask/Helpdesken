@@ -1,5 +1,5 @@
 <mbsc-listview [options]="fileListSettings">       
-  <mbsc-listview-item *ngFor="let item of uploader.queue"
+  <mbsc-listview-item *ngFor="let item of fileUploader.queue"
         icon="fa-paperclip">      
         <span class="filename" [ngStyle]="getStatusStyles(item)">{{ item?.file?.name }}</span>        
         <!--
@@ -11,7 +11,7 @@
 <div id="casefilesupload">    
     <label for="fileupload">
         <input type="file"  id="fileupload" name="fileupload" class="fileupload"
-               #fileupload ng2FileSelect [uploader]="uploader" multiple />
+               #fileupload ng2FileSelect [uploader]="fileUploader" multiple />
         <span class="mbsc-btn mbsc-btn-ic mbsc-ic mbsc-ic-fa-upload" translate>Bifoga</span>
     </label>
 </div>

@@ -1,14 +1,13 @@
 import { Injectable } from "@angular/core";
-import { HttpApiServiceBase } from "../api";
+import { HttpApiServiceBase } from "..";
 import { HttpClient } from "@angular/common/http";
-import { LocalStorageService } from "../local-storage";
-import { saveAs } from "file-saver"
-import { throwError } from "rxjs";
-import { take } from "rxjs/operators";
+import { LocalStorageService } from "../../local-storage";
+import { take, catchError } from "rxjs/operators";
 import { WindowWrapper } from "src/app/helpers";
+import { Observable, throwError } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
-export class FileDownloadService extends HttpApiServiceBase {
+export class CaseFilesApiService extends HttpApiServiceBase {
     constructor(httpClient:HttpClient, localStorageService: LocalStorageService, private windowWrapper: WindowWrapper){
         super(httpClient, localStorageService);
     }
@@ -23,4 +22,14 @@ export class FileDownloadService extends HttpApiServiceBase {
             window.location.href = window.URL.createObjectURL(data);
         });
     }
+
+    deleteCaseFile(caseKey:string, fileId:number, fileName:string): Observable<any> {
+        //todo: check when new case is ready        
+        let url = 
+            fileId > 0 ? 
+              this.buildResourseUrl(`/api/case/${caseKey}/file/${fileId}`, { fileName: fileName }, true, false) :
+              this.buildResourseUrl(`/api/case/${caseKey}/file`, { fileName: fileName }, true, false); 
+              
+        return this.deleteResource(url);        
+    } 
 }

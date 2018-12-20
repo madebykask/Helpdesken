@@ -12,7 +12,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Cors
         public Task<CorsPolicy> GetCorsPolicyAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var absolutePath = request.RequestUri.AbsolutePath;
-            if (Regex.IsMatch(absolutePath, "/api/case/({)?[0-9A-Za-z-]+(})?/uploadfile", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline))
+            if (Regex.IsMatch(absolutePath, "/api/case/({)?[0-9A-Za-z-]+(})?/file", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline))
             {
                 return GetCorsPolicyWithCredentials();
             }

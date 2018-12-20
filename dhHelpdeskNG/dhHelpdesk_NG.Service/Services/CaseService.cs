@@ -934,6 +934,12 @@ namespace DH.Helpdesk.Services.Services
             return ret;
         }
 
+        public int SaveFileDeleteHistory(Case c, string fileName, int userId, string adUser, out IDictionary<string, string> errors, string appName = null)
+        {
+            var extraField = new ExtraFieldCaseHistory { CaseFile = StringTags.Delete + fileName };
+            return SaveCaseHistory(c, userId, adUser, appName ?? CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
+        }
+
         public int SaveCaseHistory(
             Case c,
             int userId,
@@ -945,15 +951,15 @@ namespace DH.Helpdesk.Services.Services
             string caseExtraFollowers = null)
         {
             if (c == null)
-                throw new ArgumentNullException("caseHistory");
+                throw new ArgumentNullException("case");
 
             errors = new Dictionary<string, string>();
             var h = this.GenerateHistoryFromCase(c, userId, adUser, defaultUser, extraField, caseExtraFollowers);
             h.CreatedByApp = createdByApp;
-            this._caseHistoryRepository.Add(h);
+            _caseHistoryRepository.Add(h);
 
             if (errors.Count == 0)
-                this._caseHistoryRepository.Commit();
+                _caseHistoryRepository.Commit();
 
             return h.Id;
         }

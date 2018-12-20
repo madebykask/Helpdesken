@@ -19,10 +19,11 @@ using System;
         CaseFileContent GetCaseFileContent(int caseId, int fileId, string basePath);
         byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         bool FileExists(int caseId, string fileName);
-        void SaveCaseFile(CaseFileDto caseFileDto);
+        int SaveCaseFile(CaseFileDto caseFileDto);
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
         void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath);
         int GetCaseNumberForUploadedFile(int caseId);
+        CaseFileModel GetCaseFileInfo(int caseId, int fileId);
         List<CaseFileModel> GetCaseFiles(int caseId, bool canDelete);
         List<CaseFile> GetCaseFilesByDate(DateTime? fromDate, DateTime? toDate);
         void DeleteFileViewLogs(int caseId);
@@ -90,7 +91,7 @@ using System;
             return this.DataContext.CaseFiles.Any(f => f.Case_Id == caseId && f.FileName == fileName.Trim());
         }
 
-        public void SaveCaseFile(CaseFileDto caseFileDto)
+        public int SaveCaseFile(CaseFileDto caseFileDto)
         {
             var caseFile = new CaseFile
             {
@@ -105,13 +106,16 @@ using System;
 
             var caseNo = GetCaseNumberForUploadedFile(caseFileDto.ReferenceId);
             _filesStorage.SaveFile(caseFileDto.Content, caseFileDto.BasePath, caseFileDto.FileName, ModuleName.Cases, caseNo);
+
+            return caseFile.Id;
         }
 
         public void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName)
         {
+            fileName = (fileName ?? string.Empty).Trim();
             if (FileExists(caseId, fileName))
             {
-                var cf = this.DataContext.CaseFiles.Single(f => f.Case_Id == caseId && f.FileName == fileName.Trim());
+                var cf = this.DataContext.CaseFiles.Single(f => f.Case_Id == caseId && f.FileName == fileName);
                 DataContext.CaseFiles.Remove(cf);
                 Commit();
             }
@@ -166,6 +170,31 @@ using System;
                 return ret;
             else
                 return caseId;
+        }
+
+        public CaseFileModel GetCaseFileInfo(int caseId, int fileId)
+        {
+            var res = (
+                from f in this.DataContext.CaseFiles
+                join u in this.DataContext.Users on f.UserId equals u.Id into uj
+                from user in uj.DefaultIfEmpty()
+                where f.Case_Id == caseId && f.Id == fileId
+                select new 
+                {
+                    f.Id,
+                    CaseId = f.Case_Id,
+                    f.FileName,
+                    f.CreatedDate,
+                    UserName = user != null ? (user.FirstName + " " + user.SurName) : null
+                }).FirstOrDefault();
+
+            return new CaseFileModel(
+                res.Id,
+                res.CaseId,
+                res.FileName,
+                res.CreatedDate,
+                res.UserName, 
+                false);
         }
 
         public List<CaseFileModel> GetCaseFiles(int caseId, bool canDelete)

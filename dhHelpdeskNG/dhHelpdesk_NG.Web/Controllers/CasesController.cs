@@ -2272,19 +2272,21 @@ namespace DH.Helpdesk.Web.Controllers
         public void DeleteCaseFile(string id, string fileName)
         {
             if (GuidHelper.IsGuid(id))
-                this._userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Cases);
+            {
+                _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Cases);
+            }
             else
             {
-                var c = this._caseService.GetCaseById(int.Parse(id));
+                var c = _caseService.GetCaseById(int.Parse(id));
                 var basePath = _masterDataService.GetFilePath(c.Customer_Id);
 
-                this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), basePath, fileName.Trim());
-                this._invoiceArticleService.DeleteFileByCaseId(int.Parse(id), fileName.Trim());
+                _caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), basePath, fileName.Trim());
+                _invoiceArticleService.DeleteFileByCaseId(int.Parse(id), fileName.Trim());
 
                 IDictionary<string, string> errors;
                 string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                 var extraField = new ExtraFieldCaseHistory { CaseFile = StringTags.Delete + fileName.Trim() };
-                this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
+                _caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
             }
         }
 

@@ -31,14 +31,26 @@ export abstract class HttpApiServiceBase {
         }));
   }
 
+  protected deleteResource(url: string, headers: any = null, noAuth = false): Observable<any> {
+    // fixed issue https://github.com/angular/angular/issues/18680 - remove after fix
+    return this.http
+        .delete(url, { headers: this.getHeaders(headers, true, noAuth), responseType: 'text' })
+        .pipe(
+            catchError((error: any) => {
+              return throwError(error);
+            })
+        );
+  }
+
   protected postJsonNoContent(url: string, data: any, headers: any = null, noAuth = false): Observable<Object> {
     // fixed issue https://github.com/angular/angular/issues/18680 - remove after fix
     return this.http
         .post(url, JSON.stringify(data), { headers: this.getHeaders(headers, true, noAuth), responseType: 'text' })
         .pipe(
             catchError((error: any) => {
-                return throwError(error);
-        }));
+              return throwError(error);
+            })
+        );
   }
 
   protected getFileBody(url: string, headers?: any): Observable<Blob> {
@@ -48,7 +60,7 @@ export abstract class HttpApiServiceBase {
         headers: this.getHeaders(headers, false)
     }).pipe(
         catchError((error:any) => throwError(error))
-        );
+       );
   }
 
   protected getFileResponse(url: string, headers?: any): Observable<any> {
@@ -69,7 +81,8 @@ export abstract class HttpApiServiceBase {
         }));
   }
 
-    public buildResourseUrl(resourceName: string, params: object = null, addCustomerId = true, addLanguage = false) {
+  //todo: move to a separate class?
+  public buildResourseUrl(resourceName: string, params: object = null, addCustomerId = true, addLanguage = false) {
       let urlParams: string = null;
       const userData = this.localStorageService.getCurrentUser();
         
@@ -97,6 +110,7 @@ export abstract class HttpApiServiceBase {
 
   private getHeaders(headers?: any, addContentType = true, noAuth = false): HttpHeaders {
       let options = new HttpHeaders();
+      
       if (headers != null) {
           Object.getOwnPropertyNames(headers).forEach((v: string) => {
               options.set(v, headers[v]);
@@ -104,11 +118,13 @@ export abstract class HttpApiServiceBase {
       }
 
       options = options.set('Accept', 'application/json');
+
       if (addContentType) {
-        options = options.set('Content-Type', 'application/json; charset=utf-8');
+          options = options.set('Content-Type', 'application/json; charset=utf-8');
       }
+      
       if (noAuth) {
-        options = options.set(AuthConstants.NoAuthHeader, '');
+          options = options.set(AuthConstants.NoAuthHeader, '');
       }
       // options = options.set('Access-Control-Allow-Origin', '*');
 
