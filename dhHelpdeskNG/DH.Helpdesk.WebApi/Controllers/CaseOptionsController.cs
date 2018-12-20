@@ -189,15 +189,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             return model;
         }
 
-        [HttpGet]
-        [Route("statesecondaries")]
-        public async Task<IList<ItemOverview>> Get([FromUri]int cid, [FromUri]int langId)
-        {
-            var items = await _stateSecondaryService.GetStateSecondariesAsync(cid).ConfigureAwait(false);
-            return items
-                .Select(d => new ItemOverview(Translate(d.Name, langId, TranslationTextTypes.MasterData), d.Id.ToString()))
-                .ToList();
-        }
+
 
         //todo: a copy from Helpdesk.Web\CaseController.cs\GetCausingPartsModel Need to refactor to use one implementation
         private IList<ItemOverview> BuildCausingPartsList(int customerId, int? causingPartId, int languageId)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
@@ -10,6 +11,8 @@ namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
     {
         bool IsActive(IList<CaseFieldSetting> caseFieldSettings, GlobalEnums.TranslationCaseFields field);
         CaseFieldSetting GetCaseFieldSetting(IList<CaseFieldSetting> caseFieldSettings, string fieldName);
+        bool IsCaseNew(int currentCaseId);
+        bool IsReadOnly(GlobalEnums.TranslationCaseFields fieldName, int currentCaseId, int permission = 1);
     }
 
     public class CaseFieldSettingsHelper: ICaseFieldSettingsHelper
@@ -25,6 +28,16 @@ namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
         public CaseFieldSetting GetCaseFieldSetting(IList<CaseFieldSetting> caseFieldSettings, string fieldName)
         {
             return caseFieldSettings.FirstOrDefault(s => s.Name.Replace("tblLog_", "tblLog.").Equals(fieldName, StringComparison.CurrentCultureIgnoreCase));
+        }
+
+        public bool IsCaseNew(int currentCaseId)
+        {
+            return currentCaseId < 0;
+        }
+
+        public bool IsReadOnly(GlobalEnums.TranslationCaseFields fieldName, int currentCaseId, int permission = 1)
+        {
+            return !IsCaseNew(currentCaseId) && !permission.ToBool();
         }
     }
 }

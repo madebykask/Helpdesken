@@ -15,7 +15,7 @@ import { BaseControl } from "../base-control";
     }
 
     ngOnInit(): void {
-      this.init(this.field.name);
+      this.init(this.field);
       this.control.disabled = true;
     }
 

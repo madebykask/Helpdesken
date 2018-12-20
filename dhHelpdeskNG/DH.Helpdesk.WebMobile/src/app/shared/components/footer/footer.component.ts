@@ -15,7 +15,7 @@ import {CasesSearchType} from '../../../models/case/case-edit-input.model'
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
-  private _destroy$ = new Subject();
+  private destroy$ = new Subject();
   SearchType = CasesSearchType; // this allows to use enum values in the view
 
   @ViewChild('caseSearchPopup') caseSearchPopup: MbscPopup;
@@ -71,7 +71,7 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._destroy$.next();
+    this.destroy$.next();
   }
 
   private onLanguageChange(event, inst) {

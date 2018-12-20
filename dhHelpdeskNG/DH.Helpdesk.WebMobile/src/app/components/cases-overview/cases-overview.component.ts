@@ -22,7 +22,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   private searchType = CasesSearchType.All;
   private _scrollBindFunc: any;
   private _timer: any;
-  private _destroy$ = new Subject();
+  private destroy$ = new Subject();
 
   showSearchPanel = false;
   filtersForm: FormGroup;
@@ -67,7 +67,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     //console.log('>>> cases-overview: destroy is called!!!')
     window.removeEventListener('scroll', this._scrollBindFunc);
-    this._destroy$.next();
+    this.destroy$.next();
   }
 
   applyFilterAndSearch() {

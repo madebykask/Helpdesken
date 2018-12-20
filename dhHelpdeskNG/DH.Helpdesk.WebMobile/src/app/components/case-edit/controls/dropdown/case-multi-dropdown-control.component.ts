@@ -20,7 +20,7 @@ import { BaseControl } from "../base-control";
 
     ngOnInit(): void {
       //if(this.readOnly) set disabled/reaonly mode
-      this.init(this.field.name);
+      this.init(this.field);
       this.text = this.getText(this.field.value);
       this.control.disabled = true;
     }

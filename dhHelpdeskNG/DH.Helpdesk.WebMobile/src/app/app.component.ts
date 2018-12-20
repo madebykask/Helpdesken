@@ -15,7 +15,7 @@ import '../../node_modules/moment-timezone/moment-timezone-utils';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private _destroy$ = new Subject();
+  private destroy$ = new Subject();
   pageSettings = {};
   
   bottomMenuSettings = {
@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
     mobiscroll.settings = { theme: 'ios', lang: 'en', labelStyle: 'stacked' };
     this.navStart = _router.events.pipe(
       filter(evt => evt instanceof NavigationStart),
-      takeUntil(this._destroy$)
+      takeUntil(this.destroy$)
     ) as Observable<NavigationStart>;
   }
 
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      this._destroy$.next();
-      this._destroy$.complete();
+      this.destroy$.next();
+      this.destroy$.complete();
   }
 }

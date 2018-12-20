@@ -7,7 +7,7 @@ import { AuthenticationStateService } from 'src/app/services/authentication';
 @Directive({ selector: '[requireAuth]' })
 export class RequireAuthDirective implements OnInit {
   
-  private _destroy$ = new Subject();
+  private destroy$ = new Subject();
 
   constructor(
     private templateRef: TemplateRef<any>,    
@@ -20,13 +20,13 @@ export class RequireAuthDirective implements OnInit {
   ngOnInit() {
     this.updateState();
     this._commService.listen(Channels.AuthenticationChange).pipe(
-          takeUntil(this._destroy$)
+          takeUntil(this.destroy$)
     ).subscribe((e:any) => this.updateState());
   }
 
   ngOnDestroy(): void {
-    this._destroy$.next();
-    this._destroy$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private updateState(){

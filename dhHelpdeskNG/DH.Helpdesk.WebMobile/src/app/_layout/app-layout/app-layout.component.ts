@@ -11,7 +11,7 @@ import { Subject } from 'rxjs';
   styleUrls: ['./app-layout.component.scss']
 })
 export class AppLayoutComponent implements OnInit, OnDestroy {
-    private _destroy$ = new Subject();
+    private destroy$ = new Subject();
     version = config.version;
     isFooterVisible = true;
     pageSettings = {};
@@ -22,7 +22,7 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
         this._commService.listen<HeaderEventData>(Channels.Header)
         .pipe(
           delay(0),
-          takeUntil(this._destroy$)
+          takeUntil(this.destroy$)
         )
         .subscribe(e => {
           this.isFooterVisible = e.isVisible;
@@ -30,7 +30,7 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this._destroy$.next();
-        this._destroy$.complete();
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

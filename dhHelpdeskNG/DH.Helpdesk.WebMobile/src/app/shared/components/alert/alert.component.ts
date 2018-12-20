@@ -15,7 +15,7 @@ import { mobiscroll } from '@mobiscroll/angular';
 })
 export class AlertComponent implements OnInit {
 
-  private _destroy$ = new Subject();
+  private destroy$ = new Subject();
   alerts: Alert[] = [];   
     
   @ViewChild('alertpopup')
@@ -36,13 +36,13 @@ export class AlertComponent implements OnInit {
     ngOnInit(): void {
         let self = this;
         this.alertsService.alerts$.pipe(
-                takeUntil(self._destroy$)
+                takeUntil(self.destroy$)
             ).subscribe(alert => self.processNewAlert2(alert));     
     }
 
     ngOnDestroy(): void {
-        this._destroy$.next();
-        this._destroy$.complete();
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     private processNewAlert2(alert: Alert) {            

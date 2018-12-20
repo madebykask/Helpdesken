@@ -1,4 +1,5 @@
 import { CaseSectionType } from "..";
+import { CaseFieldOptions } from "src/app/helpers/constants";
 
 export class CaseEditInputModel {
     id: number;
@@ -47,6 +48,14 @@ export class BaseCaseField<T> implements IBaseCaseField<T> {
     public value?: T;
     public section?: CaseSectionType;
     public options: KeyValue[]
+
+    public get isReadonly(): boolean {
+      return this.options != null && this.options.filter((o) => o.key == CaseFieldOptions.readonly).length > 0;
+    }
+
+    public get isRequired(): boolean {
+      return this.options != null && this.options.filter((o) => o.key == CaseFieldOptions.reqiured).length > 0;
+    }
 }
 
 export class KeyValue {
@@ -61,6 +70,9 @@ export interface IBaseCaseField<T> {
     value?: T;
     section?: CaseSectionType;
     options: KeyValue[]
+
+    isReadonly: boolean;
+    isRequired: boolean;
 }
 
 export enum CasesSearchType  {

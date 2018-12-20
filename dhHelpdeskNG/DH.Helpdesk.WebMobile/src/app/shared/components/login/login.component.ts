@@ -15,7 +15,7 @@ import { config } from '@env/environment';
     styleUrls: ['login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-    private _destroy$ = new Subject();
+    private destroy$ = new Subject();
     version = config.version;
     loginForm: FormGroup;
     isLoading = false;
@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this._destroy$.next();
+        this.destroy$.next();
     }
 
     // convenience getter for easy access to form fields

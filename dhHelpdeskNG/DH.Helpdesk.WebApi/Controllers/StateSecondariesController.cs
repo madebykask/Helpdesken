@@ -42,6 +42,16 @@ namespace DH.Helpdesk.WebApi.Controllers
             return Ok(model);
         }
 
+        [HttpGet]
+        [Route("options")]
+        public async Task<IList<ItemOverview>> Get([FromUri]int cid, [FromUri]int langId)
+        {
+            var items = await _stateSecondaryService.GetStateSecondariesAsync(cid).ConfigureAwait(false);
+            return items
+                .Select(d => new ItemOverview(Translate(d.Name, langId, TranslationTextTypes.MasterData), d.Id.ToString()))
+                .ToList();
+        }
+
         private string Translate(string translate, int languageId, int? tt = null)
         {
             return _translateCacheService.GetTextTranslation(translate, languageId, tt);

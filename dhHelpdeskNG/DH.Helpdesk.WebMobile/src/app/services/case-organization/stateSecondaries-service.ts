@@ -16,7 +16,7 @@ export class StateSecondariesService extends HttpApiServiceBase {
     }
 
     getStateSecondaries() {
-        return this.getJson(this.buildResourseUrl('/api/caseoptions/statesecondaries', null, true, true))
+        return this.getJson(this.buildResourseUrl('/api/statesecondaries/options', null, true, true))
         .pipe(
             take(1),
             map((jsItems: any) => {

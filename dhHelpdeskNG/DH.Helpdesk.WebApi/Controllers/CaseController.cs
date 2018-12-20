@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
@@ -100,19 +101,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             var customerUserSetting = _customerUserService.GetCustomerUserSettings(currentCid, userId);
             if (customerUserSetting == null)
                 throw new Exception($"No customer settings for this customer '{currentCid}' and user '{userId}'");
-            
 
             var customerSettings = _customerSettingsService.GetCustomerSettings(currentCid);
             var userOverview = await _userService.GetUserOverviewAsync(UserId);// TODO: use cached version!
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(currentCid);
             var caseFieldTranslations = await _caseFieldSettingService.GetCustomerCaseTranslationsAsync(currentCid);
-
-            //model.CaseLock = await GetCaseLockModel(caseId, sessionId);
-            //model.CaseUnlockAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);//TODO: lock implementation
-
-            //model.CanGetRelatedCases = userGroupId > UserGroup.User;//TODO: Move to helper extension
-            //model.CurrentUserRole = userGroupId;//is really required?
-            //model.MailTemplates = _mailTemplateService.GetCustomMailTemplatesList(currentCase.Customer_Id).ToList();//TODO:
 
             model.Fields = new List<IBaseCaseField>();
 
@@ -826,7 +819,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Caption,
                         languageId, cid, caseFieldTranslations, "Rubrik"),
                     Section = CaseSectionType.CaseInfo,
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Caption, caseFieldSettings)
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Caption, caseFieldSettings,
+                        _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption, currentCase.Id, customerUserSetting.CaptionPermission))
                 };
                 field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
                 model.Fields.Add(field);
@@ -888,7 +882,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.ContactBeforeAction,
                         languageId, cid, caseFieldTranslations, "Telefonkontakt"),
                     Section = CaseSectionType.CaseInfo,
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.ContactBeforeAction, caseFieldSettings)
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.ContactBeforeAction, caseFieldSettings, 
+                        _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.ContactBeforeAction, currentCase.Id, customerUserSetting.ContactBeforeActionPermission))
                 };
                 model.Fields.Add(field);
             }
@@ -1043,8 +1038,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Value = currentCase.Priority_Id,
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.Priority_Id, languageId, cid, caseFieldTranslations, "Prioritet"),
                     Section = CaseSectionType.CaseManagement,
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Priority_Id, caseFieldSettings, 
-                        !IsCaseNew(currentCase.Id) && !customerUserSetting.PriorityPermission.ToBool())
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Priority_Id, caseFieldSettings,
+                        _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Priority_Id, currentCase.Id, customerUserSetting.PriorityPermission))
                 };
                 model.Fields.Add(field);
             }
@@ -1073,7 +1068,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         languageId, cid, caseFieldTranslations, "Understatus"),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.StateSecondary_Id, caseFieldSettings,
-                        !IsCaseNew(currentCase.Id) && !customerUserSetting.StateSecondaryPermission.ToBool())
+                        _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.StateSecondary_Id, currentCase.Id, customerUserSetting.StateSecondaryPermission))
                 };
                 model.Fields.Add(field);
             }
@@ -1154,7 +1149,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.WatchDate,
                         languageId, cid, caseFieldTranslations, "Bevakningsdatum"),
                     Section = CaseSectionType.CaseManagement,
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.WatchDate, caseFieldSettings)
+                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.WatchDate, caseFieldSettings,
+                        _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.WatchDate, currentCase.Id, customerUserSetting.WatchDatePermission))
                 };
                 model.Fields.Add(field);
             }
@@ -1277,11 +1273,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             return _caseFileService.GetCaseFiles(caseId, true);
         }
 
-        private bool IsCaseNew(int currentCaseId)
-        {
-            return currentCaseId < 0;
-        }
-
         public async Task<CaseEditOutputModel> New()
         {
             var model = new CaseEditOutputModel();
@@ -1300,12 +1291,12 @@ namespace DH.Helpdesk.WebApi.Controllers
             //var settingEx = caseFieldSettingsTranslated.FirstOrDefault(s => s.Name.Replace("tblLog_", "tblLog.").Equals(fieldName, StringComparison.CurrentCultureIgnoreCase));
             if (setting != null && setting.Required.ToBool())
             {
-                options.Add(new KeyValuePair<string, string>("required", "true"));
+                options.Add(new KeyValuePair<string, string>("required", ""));
             }
 
-            if (readOnly.HasValue)
+            if (readOnly.HasValue && readOnly.Value)
             {
-                options.Add(new KeyValuePair<string, string>("readonly", readOnly.Value.ToJavaScriptBool()));
+                options.Add(new KeyValuePair<string, string>("readonly", ""));
             }
             //if (settingEx != null && !string.IsNullOrWhiteSpace(settingEx.FieldHelp))
             //{

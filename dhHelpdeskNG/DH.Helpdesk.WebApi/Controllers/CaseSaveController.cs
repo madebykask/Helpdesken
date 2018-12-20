@@ -43,6 +43,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IEmailService _emailService;
         private readonly ICaseFileService _caseFileService;
         private readonly ITemporaryFilesCacheFactory _temporaryFilesStorageFactory;
+        private readonly ICustomerUserService _customerUserService;
 
         #region ctor()
 
@@ -51,7 +52,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             ISettingService customerSettingsService, ICaseEditModeCalcStrategy caseEditModeCalcStrategy,
             IUserService userService, ISettingsLogic settingsLogic, ICaseFieldSettingsHelper caseFieldSettingsHelper, 
             IWorkingGroupService workingGroupService, IEmailService emailService, ICaseFileService caseFileService,
-            ITemporaryFilesCacheFactory temporaryFilesCacheFactory)
+            ITemporaryFilesCacheFactory temporaryFilesCacheFactory,
+            ICustomerUserService customerUserService)
         {
             _caseService = caseService;
             _caseFieldSettingService = caseFieldSettingService;
@@ -66,6 +68,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _emailService = emailService;
             _caseFileService = caseFileService;
             _temporaryFilesStorageFactory = temporaryFilesCacheFactory;
+            _customerUserService = customerUserService;
         }
 
         #endregion
@@ -102,6 +105,11 @@ namespace DH.Helpdesk.WebApi.Controllers
                 return BadRequest($"No permission to edit case {caseId}.");
             }
 
+            var customerUserSetting = _customerUserService.GetCustomerUserSettings(cid, UserId);
+            if (customerUserSetting == null)
+                throw new Exception($"No customer settings for this customer '{cid}' and user '{UserId}'");
+
+
             //TODO: validate input -- apply ui validation rules
 
             var utcNow = DateTime.UtcNow;
@@ -120,7 +128,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 currentCase.WorkingGroup_Id = model.WorkingGroupId;
             }
 
-            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.StateSecondary_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.StateSecondary_Id) &&
+                !_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.StateSecondary_Id, currentCase.Id, customerUserSetting.StateSecondaryPermission))
             {
                 currentCase.StateSecondary_Id = model.StateSecondaryId;
             }

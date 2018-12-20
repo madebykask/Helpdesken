@@ -22,6 +22,11 @@ import { CommunicationService, Channels, DropdownValueChangedEvent } from "src/a
       buttons: ['set'],
       setText: '',
       headerText: () => this.getHeader,
+      onInit: (event, inst) => {
+        if (this.field.isReadonly) {
+          inst.disable();
+        }
+      },
       onItemTap: (event, inst) => {
           if (event.selected) {
             inst.select();
@@ -29,13 +34,13 @@ import { CommunicationService, Channels, DropdownValueChangedEvent } from "src/a
         },
       onSet: (event, inst) => {
         const value = this.getValueByText(event.valueText);
-        this._commService.publish(Channels.DropdownValueChanged, new DropdownValueChangedEvent(value, event.valueText, this.field.name));
+        this.commService.publish(Channels.DropdownValueChanged, new DropdownValueChangedEvent(value, event.valueText, this.field.name));
       }
     }
     localDataSource: OptionItem[] = [];
-    private _destroy$ = new Subject();
+    private destroy$ = new Subject();
 
-    constructor(private _commService: CommunicationService) {
+    constructor(private commService: CommunicationService) {
       super();
     }
 
@@ -45,14 +50,14 @@ import { CommunicationService, Channels, DropdownValueChangedEvent } from "src/a
       // this.control.cancelText  = this._ngxTranslateService.instant("Avbryt");
 
       this.initDataSource();
-      this.init(this.field.name);
+      this.init(this.field);
       this.updateDisabledState();
       this.initEvents();
     }
 
     ngOnDestroy(): void {
-      this._destroy$.next();
-      this._destroy$.complete();
+      this.destroy$.next();
+      this.destroy$.complete();
     }
 
     getText(id: any) {
@@ -97,20 +102,20 @@ import { CommunicationService, Channels, DropdownValueChangedEvent } from "src/a
             }
             return of(e);
           }),
-          takeUntil(this._destroy$)
+          takeUntil(this.destroy$)
         )
         .subscribe();
 
         this.dataSource.pipe(
           switchMap((options) => {
             options = options || [];
-            if (!this.formControl.value || (this.formControl.value && !this.isRequired)) {
+            if (!this.formControl.value || (this.formControl.value && !this.field.isRequired)) {
               this.addEmptyItem(options);
             }
             this.localDataSource = options;
             return of(options);
           }),
-          takeUntil(this._destroy$)
+          takeUntil(this.destroy$)
         )
         .subscribe();
     }
