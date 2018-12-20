@@ -19,7 +19,7 @@ namespace DH.Helpdesk.WebApi
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString(ConfigApi.Constants.TokenEndPoint),
-                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(20),//TODO: Move to config
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(60),//TODO: Move to config
                 ApplicationCanDisplayErrors = true,
                 Provider = resolver.GetService(typeof(AccessTokenProvider)) as IOAuthAuthorizationServerProvider, //new AccessTokenProvider(ConfigApi.Constants.PublicClientId),
                 RefreshTokenProvider = resolver.GetService(typeof(RefreshTokenProvider)) as IAuthenticationTokenProvider

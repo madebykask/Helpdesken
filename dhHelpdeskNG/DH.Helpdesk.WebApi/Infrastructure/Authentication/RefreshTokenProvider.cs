@@ -16,7 +16,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Authentication
             {
                 var dt = DateTime.Now;
                 context.Ticket.Properties.IssuedUtc = dt;
-                context.Ticket.Properties.ExpiresUtc = new DateTimeOffset(dt.AddHours(8));//TODO:Move to config
+                context.Ticket.Properties.ExpiresUtc = new DateTimeOffset(dt.AddHours(24));//TODO:Move to config
                 context.SetToken(context.SerializeTicket());
             }
         }
