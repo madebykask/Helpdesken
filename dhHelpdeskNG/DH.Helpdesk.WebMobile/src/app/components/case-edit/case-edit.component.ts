@@ -5,7 +5,7 @@ import { CaseService } from '../../services/case/case.service';
 import { CaseEditInputModel, BaseCaseField, CaseOptionsFilterModel, OptionsDataSource, CaseSectionInputModel, CaseSectionType, CaseLockModel, CaseAccessMode, CasesSearchType, IBaseCaseField, OptionItem } from '../../models';
 import { forkJoin, Subject, Subscription, of, throwError } from 'rxjs';
 import { switchMap, take, finalize, tap, delay, catchError, map, takeUntil, } from 'rxjs/operators';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslateLoader } from '@ngx-translate/core';
 import { CommunicationService, Channels, DropdownValueChangedEvent } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/header-event-data';
 import { AlertsService } from 'src/app/helpers/alerts/alerts.service';
@@ -56,9 +56,10 @@ export class CaseEditComponent {
                 private alertService: AlertsService,
                 private caseSaveService: CaseSaveService,
                 private commService: CommunicationService,
-                private сaseDataReducersFactory: CaseDataReducersFactory, 
+                private сaseDataReducersFactory: CaseDataReducersFactory,
                 private workingGroupsService: WorkingGroupsService,
-                private stateSecondariesSerive: StateSecondariesService,
+                private stateSecondariesService: StateSecondariesService,
+                private translateService : TranslateService,
                 private localStorage:  LocalStorageService) {
         if (this.route.snapshot.paramMap.has('id')) {
             this.caseId = +this.route.snapshot.paramMap.get('id');
