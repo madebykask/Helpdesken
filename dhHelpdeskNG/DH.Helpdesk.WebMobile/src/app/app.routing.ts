@@ -15,6 +15,7 @@ const appRoutes: Routes = [
     children: [
       { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard]},
       { path: 'casesoverview', component: CasesOverviewComponent, canActivate: [AuthGuard] },
+      { path: 'casesoverview/:searchType', component: CasesOverviewComponent, canActivate: [AuthGuard] },
       { path: 'case/:id', component: CaseEditComponent, canActivate: [AuthGuard] },      
       { path: 'test', component: TestComponent }
     ]

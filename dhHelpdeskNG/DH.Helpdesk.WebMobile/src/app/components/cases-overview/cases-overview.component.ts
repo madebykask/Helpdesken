@@ -1,3 +1,5 @@
+import { CaseSearchStateModel } from './../../models/cases-overview/case-search-state.model';
+import { LocalStorageService } from './../../services/local-storage/local-storage.service';
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { CaseOverviewItem, CasesOverviewFilter, CasesSearchType } from '../../models'
 import { CasesOverviewService } from '../../services/cases-overview';
@@ -15,11 +17,11 @@ import { Subject } from 'rxjs';
 })
 export class CasesOverviewComponent implements OnInit, OnDestroy {
   @ViewChild('searchInput') searchInput: any;
-  @ViewChild('loading') loadingElem: MbscForm; 
+  @ViewChild('loading') loadingElem: MbscForm;
   @ViewChild('listview') listView: MbscListview;
 
   private _filter: CasesOverviewFilter;
-  private searchType = CasesSearchType.All;
+  private searchType = CasesSearchType.AllCases;
   private _scrollBindFunc: any;
   private _timer: any;
   private destroy$ = new Subject();
@@ -40,7 +42,8 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   constructor(private casesOverviewService: CasesOverviewService,
               private formBuilder: FormBuilder,
               private route: ActivatedRoute,
-              private router: Router) {   
+              private router: Router,
+              private localStorage:  LocalStorageService) {
   }
 
   ngOnInit() {
@@ -49,19 +52,29 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
       freeSearch: ['']
     });
     this.pageSize = this.caclucatePageSize();
-    this.route.queryParamMap.pipe(
-      map((x:ParamMap) => +x.get('searchType'))
-          ).subscribe((st:number) => {
-              //console.log('>>> st: ' + st);
-              this.searchType = !isNaN(st) ?  <CasesSearchType>st : CasesSearchType.All;             
-              this.initFilter();
-              this.resetCases();
-              this.search();
+    this.route.paramMap.pipe(
+            map((x:ParamMap) => x.get('searchType'))
+                ).subscribe((st:string) => {
+                    console.log('>>> st: ' + st);
+                    this.searchType = this.getSearchType(st);
+                    this.initFilter();
+                    this.resetCases();
+                    this.saveSearchState();
+                    this.search();
               //console.log(`>>>this.searchType: ${this.searchType}`);      
-          });     
-
+                });
     this._scrollBindFunc = this.checkLoad.bind(this);
     window.addEventListener('scroll', this._scrollBindFunc);
+  }
+
+  saveSearchState(): any {
+    let state = new CaseSearchStateModel();
+    state.SearchType = this.searchType;
+    this.localStorage.setCaseSearchState(state);
+  }
+
+  private getSearchType(st: string): CasesSearchType {
+   return CasesSearchType [st];
   }
 
   ngOnDestroy() {
@@ -130,7 +143,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   private search() {
     this.isLoading = true;
     this.casesOverviewService.searchCases(this._filter).pipe(
-        take(1),        
+        take(1),
         finalize(() => this.isLoading = false),
         // catchError(err => {})// TODO:
       ).subscribe(

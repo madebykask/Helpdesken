@@ -10,7 +10,7 @@
 
 <mbsc-popup [options]="popUpLlistSettings" #caseSearchPopup="mobiscroll">
     <mbsc-listview [options]="popUpLvSettings">
-        <mbsc-listview-item (click)="goToCases(SearchType.All)" translate>Alla ärenden</mbsc-listview-item>
+        <mbsc-listview-item (click)="goToCases(SearchType.AllCases)" translate>Alla ärenden</mbsc-listview-item>
         <mbsc-listview-item (click)="goToCases(SearchType.MyCases)" translate>Mina ärenden</mbsc-listview-item>
     </mbsc-listview>
 </mbsc-popup>

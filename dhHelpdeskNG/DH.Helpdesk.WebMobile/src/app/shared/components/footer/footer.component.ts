@@ -106,9 +106,7 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   goToCases(searchType: CasesSearchType) {
     this.caseSearchPopup.instance.hide();
-    this._router.navigate(['/casesoverview'], { queryParams: {
-      searchType: <number>searchType
-    }});    
+    this._router.navigate(['/casesoverview', CasesSearchType[searchType]]);    
   }
 
   goTo(url: string = null) {

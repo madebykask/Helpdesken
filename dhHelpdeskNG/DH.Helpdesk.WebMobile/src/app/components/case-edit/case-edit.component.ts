@@ -22,6 +22,7 @@ import { WorkingGroupsService } from 'src/app/services/case-organization/working
 import { WorkingGroupInputModel } from 'src/app/models/workinggroups/workingGroup-input.model';
 import { StateSecondariesService } from 'src/app/services/case-organization/stateSecondaries-service';
 import { StateSecondaryInputModel } from 'src/app/models/stateSecondaries/stateSecondaryInputModel';
+import { LocalStorageService } from 'src/app/services/local-storage';
 
 @Component({
   selector: 'app-case-edit',
@@ -37,7 +38,7 @@ export class CaseEditComponent {
     form: FormGroup;
     caseKey:string = '';
     tabsMenuSettings = {};
-    private searchType: CasesSearchType = CasesSearchType.All;
+    private searchType: CasesSearchType = CasesSearchType.AllCases;
     private caseId: number;
     private caseData: CaseEditInputModel;
     private caseSections: CaseSectionInputModel[];
@@ -57,8 +58,8 @@ export class CaseEditComponent {
                 private commService: CommunicationService,
                 private сaseDataReducersFactory: CaseDataReducersFactory, 
                 private workingGroupsService: WorkingGroupsService,
-                private stateSecondariesService: StateSecondariesService,
-                private translateService: TranslateService) {
+                private stateSecondariesSerive: StateSecondariesService,
+                private localStorage:  LocalStorageService) {
         if (this.route.snapshot.paramMap.has('id')) {
             this.caseId = +this.route.snapshot.paramMap.get('id');
         } else {
@@ -140,7 +141,7 @@ export class CaseEditComponent {
             this.caseLockApiService.unLockCase(this.caseId, this.caseLock.lockGuid).subscribe();
         }
 
-        // shall we do extra checks? 
+        // shall we do extra checks?
         this.alertService.clearMessages();
 
         this.destroy$.next();
@@ -233,7 +234,7 @@ export class CaseEditComponent {
         .pipe(
           //catchError()
         ).subscribe(() => {
-          this.navigate('/casesoverview');
+          this.goToCases();
         });
     }
 
@@ -245,6 +246,18 @@ export class CaseEditComponent {
       }
       const control = this.form.controls[name];
       return control != null ? control.value || null : noField; // null - value is null, undefined - no such field
+    }
+
+    goToCases() {
+      let res = this.localStorage.getCaseSearchState();
+      let searchType: string;
+      if (res) {
+        searchType = CasesSearchType[res.SearchType];
+      }
+      else{
+        searchType = CasesSearchType[CasesSearchType.AllCases];
+      }
+      this.navigate('/casesoverview/' + searchType);
     }
 
     private processCaseData(){

@@ -76,6 +76,6 @@ export interface IBaseCaseField<T> {
 }
 
 export enum CasesSearchType  {
-    All = 0,
+    AllCases = 0,
     MyCases = 1
 }

@@ -1,9 +1,9 @@
 <mbsc-form class="mbsc-padding md-load-btn md-btn-isLoading" [hidden]="isLoaded">
     <mbsc-button flat block icon="loop2" ></mbsc-button>
 </mbsc-form>
-<mbsc-form *ngIf="isLoaded"> 
+<mbsc-form *ngIf="isLoaded">
     <mbsc-tab-nav [options]="tabsMenuSettings" class="case-header">
-            <mbsc-nav-item selected="false" (click)="navigate('/casesoverview')" translate>Avbryt</mbsc-nav-item>
+            <mbsc-nav-item selected="false" (click)="goToCases()" translate>Avbryt</mbsc-nav-item>
             <mbsc-nav-item selected="true"><div class="ellipsis">{{ getCaseTitle() }}</div></mbsc-nav-item>
             <mbsc-nav-item selected="false" (click)="saveCase()" [disabled]="!canSave" translate>{{ canSave ? 'Klar' : '' }}</mbsc-nav-item>
     </mbsc-tab-nav>
@@ -74,11 +74,11 @@
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.ReferenceNumber)" [field]="getField(caseFieldsNames.ReferenceNumber)" [form]="form"></case-textbox-control>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.Caption)" [field]="getField(caseFieldsNames.Caption)" [form]="form"></case-textbox-control>
                         <!-- TODO:
-                        <case-xxx-control *ngIf="hasField(caseFieldsNames.Mail2Ticket)" [field]="getField(caseFieldsNames.Mail2Ticket)" [form]="form"></case-xxx-control> 
+                        <case-xxx-control *ngIf="hasField(caseFieldsNames.Mail2Ticket)" [field]="getField(caseFieldsNames.Mail2Ticket)" [form]="form"></case-xxx-control>
                         -->
-                        <case-textarea-control *ngIf="hasField(caseFieldsNames.Description)" [field]="getField(caseFieldsNames.Description)" [form]="form"></case-textarea-control>                                
+                        <case-textarea-control *ngIf="hasField(caseFieldsNames.Description)" [field]="getField(caseFieldsNames.Description)" [form]="form"></case-textarea-control>
                         <!-- TODO:
-                        <case-mailtoticket-control *ngIf="hasField(caseFieldsNames.CaseRegistrationSource) && getField(caseFieldsNames.CaseRegistrationSource).value === 3" [field]="getField(caseFieldsNames.CaseRegistrationSource)"></case-mailtoticket-control> 
+                        <case-mailtoticket-control *ngIf="hasField(caseFieldsNames.CaseRegistrationSource) && getField(caseFieldsNames.CaseRegistrationSource).value === 3" [field]="getField(caseFieldsNames.CaseRegistrationSource)"></case-mailtoticket-control>
                         -->
                         <case-textarea-control *ngIf="hasField(caseFieldsNames.Miscellaneous)" [field]="getField(caseFieldsNames.Miscellaneous)" [form]="form"></case-textarea-control>
                         <case-switch-control *ngIf="hasField(caseFieldsNames.ContactBeforeAction)" [field]="getField(caseFieldsNames.ContactBeforeAction)" [form]="form"></case-switch-control>
@@ -112,7 +112,7 @@
                     <case-dropdown-control *ngIf="hasField(caseFieldsNames.SolutionRate)" disabled=true [field]="getField(caseFieldsNames.SolutionRate)" [form]="form" [dataSource]="dataSource.solutionsRatesStore$"></case-dropdown-control>
                 </mbsc-form-group-content>
             </mbsc-form-group>
-<!-- 
+<!--
             <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.Communication)" #communicationManagementSection>
                 <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Communication)}}</mbsc-form-group-title>
                 <mbsc-form-group-content>
@@ -121,7 +121,7 @@
                     <case-date-control *ngIf="hasField(caseFieldsNames.FinishingDate)" [field]="getField(caseFieldsNames.FinishingDate)" [form]="form"></case-date-control>
                 </mbsc-form-group-content>
             </mbsc-form-group> -->
-            
+
               <mbsc-form-group collapsible #statusSection *ngIf="hasField(caseFieldsNames.FinishingDate) && getField(caseFieldsNames.FinishingDate).value != null">
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Status) }}</mbsc-form-group-title>
                 <mbsc-form-group-content>
@@ -130,7 +130,7 @@
                     <case-date-control *ngIf="hasField(caseFieldsNames.FinishingDate)" [field]="getField(caseFieldsNames.FinishingDate)" [form]="form" [readonly]="true"></case-date-control>
                 </mbsc-form-group-content>
             </mbsc-form-group>
-            
+
             <!-- <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.Invoices)" #invoicesSection>
                 <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Invoices)}}</mbsc-form-group-title>
                 <mbsc-form-group-content>
