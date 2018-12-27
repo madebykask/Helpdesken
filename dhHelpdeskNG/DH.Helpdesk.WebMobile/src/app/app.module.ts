@@ -52,7 +52,7 @@ import { TestComponent } from './components/test/test.component';
      TestComponent
   ],
   imports: [ 
-    MbscModule,
+    MbscModule, 
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,

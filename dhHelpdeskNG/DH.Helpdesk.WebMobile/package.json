@@ -25,7 +25,7 @@
         "@angular/pwa": "^0.10.4",
         "@angular/router": "^7.1.0",
         "@angular/service-worker": "^7.1.0",
-        "@mobiscroll/angular": "file:./src/lib/mobiscroll-package/mobiscroll-angular-4.4.2.tgz",
+        "@mobiscroll/angular": "file:./src/lib/mobiscroll-package/mobiscroll-angular-4.5.0.tgz",
         "@ngx-translate/core": "^10.0.2",
         "@ngx-translate/http-loader": "^3.0.1",
         "core-js": "^2.5.7",
