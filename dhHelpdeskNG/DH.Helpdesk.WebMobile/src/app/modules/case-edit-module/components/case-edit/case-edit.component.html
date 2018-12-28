@@ -105,8 +105,8 @@
                     <case-dropdown-control *ngIf="hasField(caseFieldsNames.Problem)" disabled=true [field]="getField(caseFieldsNames.Problem)" [form]="form" [dataSource]="dataSource.problemsStore$"></case-dropdown-control>
                     <case-dropdown-control *ngIf="hasField(caseFieldsNames.CausingPart)" disabled=true [field]="getField(caseFieldsNames.CausingPart)" [form]="form" [dataSource]="dataSource.causingPartsStore$"></case-dropdown-control>
                     <case-dropdown-control *ngIf="hasField(caseFieldsNames.Change)" disabled=true [field]="getField(caseFieldsNames.Change)" [form]="form" [dataSource]="dataSource.changesStore$"></case-dropdown-control>
-                    <case-datetime-control *ngIf="hasField(caseFieldsNames.PlanDate)" [field]="getField(caseFieldsNames.PlanDate)" [form]="form"></case-datetime-control>
-                    <case-datetime-control *ngIf="hasField(caseFieldsNames.WatchDate)" [field]="getField(caseFieldsNames.WatchDate)" [form]="form"></case-datetime-control>
+                    <case-date-control *ngIf="hasField(caseFieldsNames.PlanDate)" [field]="getField(caseFieldsNames.PlanDate)" [form]="form"></case-date-control>
+                    <case-date-control *ngIf="hasField(caseFieldsNames.WatchDate)" [field]="getField(caseFieldsNames.WatchDate)" [form]="form"></case-date-control>
                     <case-switch-control *ngIf="hasField(caseFieldsNames.Verified)" [field]="getField(caseFieldsNames.Verified)" [form]="form"></case-switch-control>
                     <case-textarea-control *ngIf="hasField(caseFieldsNames.VerifiedDescription)" [field]="getField(caseFieldsNames.VerifiedDescription)" [form]="form"></case-textarea-control>
                     <case-dropdown-control *ngIf="hasField(caseFieldsNames.SolutionRate)" disabled=true [field]="getField(caseFieldsNames.SolutionRate)" [form]="form" [dataSource]="dataSource.solutionsRatesStore$"></case-dropdown-control>
