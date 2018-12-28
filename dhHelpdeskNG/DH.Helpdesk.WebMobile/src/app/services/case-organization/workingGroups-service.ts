@@ -1,11 +1,11 @@
-import { HttpApiServiceBase } from "../api";
 import { Injectable } from "@angular/core";
 import { LocalStorageService } from "../local-storage";
 import { HttpClient } from "@angular/common/http";
 import { OptionsHelper } from "../../helpers/options-helper";
 import { map, take } from "rxjs/operators";
-import { OptionItem } from "../../models";
 import { WorkingGroupInputModel } from "src/app/models/workinggroups/workingGroup-input.model";
+import { OptionItem } from "src/app/modules/shared-module/models";
+import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
 
 @Injectable({ providedIn: 'root' })
 export class WorkingGroupsService extends HttpApiServiceBase {

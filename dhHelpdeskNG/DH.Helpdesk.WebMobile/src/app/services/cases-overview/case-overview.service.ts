@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 import { CasesOverviewFilter, CaseOverviewItem, CaseOverviewColumn } from '../../models'
-import { HttpApiServiceBase } from '../api'
 import { LocalStorageService } from '../local-storage';
 import * as moment from 'moment-timezone';
+import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
 
 @Injectable({ providedIn: 'root' })
 export class CasesOverviewService extends HttpApiServiceBase {
@@ -13,7 +13,7 @@ export class CasesOverviewService extends HttpApiServiceBase {
         super(http, localStorageService);
     }   
    
-    searchCases(filter: CasesOverviewFilter) {        
+    searchCases(filter: CasesOverviewFilter) {
         let requestUrl = this.buildResourseUrl('/api/casesoverview/get')
         return this.postJson<any>(requestUrl, filter)
         .pipe(
@@ -37,7 +37,7 @@ export class CasesOverviewService extends HttpApiServiceBase {
                             //col.TreeTranslation
                             _case.columns.push(col);
                         }
-                        cases.push(_case);                        
+                        cases.push(_case);
                     }
                 }
                 return cases;

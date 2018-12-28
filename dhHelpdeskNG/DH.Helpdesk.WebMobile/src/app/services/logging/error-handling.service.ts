@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { UuidGenerator, WindowWrapper } from '../../helpers';
 import { ClientLogEntryModel, ClientLogLevel } from '../../models/shared/client-log.model';
 import { LoggerService } from './logger.service';
-import { AlertsService } from '../../helpers/alerts/alerts.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ClientLogApiService } from '../api';
-import { AlertType } from 'src/app/helpers/alerts/alert-types';
+import { AlertsService } from 'src/app/modules/shared-module/alerts/alerts.service';
+import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 
 @Injectable({providedIn: 'root'})
 export class ErrorHandlingService {
@@ -26,11 +26,15 @@ export class ErrorHandlingService {
         let log = errorMsg || 'Unknown Error.';
         
         if (err instanceof Error && err.message) {
-            log +=  ' ' + err.message;
+            log +=  ` ${err.message || ''}`;
+            if (err.stack) {
+              log += ` Stack: ${err.stack || ''}`;
+            }
         }
         else {
             log += ' ' + (err || '').toString();
         }
+
         // send error to server
         let errorGuid = UuidGenerator.createUuid();
 

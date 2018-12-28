@@ -1,7 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../../local-storage';
-import { HttpApiServiceBase } from '../httpServiceBase';
+import { HttpApiServiceBase } from '../../../modules/shared-module/services/api/httpServiceBase';
 import { ClientLogEntryModel } from '../../../models/shared/client-log.model';
 import { Observable } from 'rxjs/Rx';
 import { take } from 'rxjs/operators';

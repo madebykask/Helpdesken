@@ -1,8 +1,7 @@
-import { CurrentUser, UserAuthenticationData, UserData, TimeZoneInfo, Language, CasesOverviewFilter } from '../../models'
-import { StorageNameConstants } from '../../helpers/constants'
+import { CurrentUser, UserAuthenticationData, UserData, Language, CaseSearchStateModel } from '../../models'
 import * as moment from 'moment-timezone';
 import { Injectable } from '@angular/core';
-import { CaseSearchStateModel } from 'src/app/models/cases-overview/case-search-state.model';
+import { StorageNameConstants } from 'src/app/modules/shared-module/constants';
 
 @Injectable({providedIn: 'root'})
 export class LocalStorageService {

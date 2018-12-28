@@ -1,12 +1,10 @@
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
-
-import { HomeComponent, CaseEditComponent, CasesOverviewComponent } from './components';
+import { HomeComponent, CasesOverviewComponent } from './components';
 import { LoginComponent, PageNotFoundComponent } from './shared/components';
 import { AuthGuard } from './helpers/guards';
 import { NgModule } from '@angular/core';
 import { ErrorComponent } from './shared/components/error/error.component';
 import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
-import { TestComponent } from './components/test/test.component';
 
 const appRoutes: Routes = [
   { 
@@ -16,8 +14,9 @@ const appRoutes: Routes = [
       { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard]},
       { path: 'casesoverview', component: CasesOverviewComponent, canActivate: [AuthGuard] },
       { path: 'casesoverview/:searchType', component: CasesOverviewComponent, canActivate: [AuthGuard] },
-      { path: 'case/:id', component: CaseEditComponent, canActivate: [AuthGuard] },      
-      { path: 'test', component: TestComponent }
+      { path: 'case',
+        loadChildren: './modules/case-edit-module/case-edit.module#CaseEditModule',
+        canActivate: [AuthGuard] },
     ]
   },
 

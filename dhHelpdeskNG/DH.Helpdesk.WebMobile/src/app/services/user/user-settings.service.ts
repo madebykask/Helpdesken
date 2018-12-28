@@ -3,11 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { map, finalize, take} from 'rxjs/operators';
 import { UserData, Language } from '../../models'
 import { LocalStorageService } from '../local-storage'
-import { HttpApiServiceBase } from '../api'
 import { TranslateService as NgxTranslateService } from '@ngx-translate/core'
 import { LoggerService } from '../logging';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment-timezone';
+import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
 
 @Injectable({ providedIn: 'root' })
 export class UserSettingsService extends HttpApiServiceBase {

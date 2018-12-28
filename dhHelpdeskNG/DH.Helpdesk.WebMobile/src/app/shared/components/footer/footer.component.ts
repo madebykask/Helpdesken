@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { MbscPopup, MbscPopupOptions, MbscSelect, MbscSelectOptions, MbscNavOptions, mobiscroll, MbscListviewOptions, MbscOptionlistOptions } from '@mobiscroll/angular';
+import { MbscPopup, MbscPopupOptions, MbscSelect, MbscSelectOptions, MbscNavOptions, MbscListviewOptions } from '@mobiscroll/angular';
 import { take, finalize } from 'rxjs/operators';
 import { UserSettingsService } from 'src/app/services/user';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication';
 import { LanguagesApiService } from 'src/app/services/api/language/languages-api.service';
-import {CasesSearchType} from '../../../models/case/case-edit-input.model'
+import { CasesSearchType } from 'src/app/modules/shared-module/constants';
 
 @Component({
   selector: 'app-footer',

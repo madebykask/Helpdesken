@@ -2,24 +2,17 @@ import { MbscModule } from '@mobiscroll/angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { NgModule, ErrorHandler } from '@angular/core';
-
 import { APP_INITIALIZER } from '@angular/core';
 import { LoginComponent, HeaderTitleComponent } from './shared/components';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
-
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateModule, TranslateLoader, TranslateService as NgxTranslateService} from '@ngx-translate/core';
 import { AppComponent } from './app.component';
 import { HttpLoaderFactory, initTranslation, TranslationApiService } from './services/translation';
 import { LocalStorageService } from './services/local-storage';
 import { LoggerService } from './services/logging';
-
 import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors';
-import { HomeComponent, CasesOverviewComponent, CaseEditComponent, CaseTextboxComponent,
-         CaseDateComponent, CaseDropdownComponent, CaseMultiDropdownComponent, CaseSwitchComponent,
-         CaseTextareaComponent, CaseDateTimeComponent, MailtoticketControlComponent, CaseFilesControlComponent } from './components';
-import { GetByKeyPipe, DateTimezonePipe, AlertsFilter } from './helpers/pipes';
-
+import { HomeComponent, CasesOverviewComponent } from './components';
 import { AppRoutingModule } from './app.routing';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { RequireAuthDirective } from './helpers/directives/require-auth.directive';
@@ -31,34 +24,27 @@ import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 import { AltLayoutComponent } from './_layout/alt-layout/alt-layout.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '@env/environment';
+import { SharedModule } from './modules/shared-module/shared.module';
+import { GetByKeyPipe } from './helpers/pipes/filter-case-overview.pipe';
 
-import { FileUploadModule } from "ng2-file-upload";   
-import { CaseFilesUploadComponent } from './components/case-edit/controls/case-files-upload/case-files-upload.component';
-import { TestComponent } from './components/test/test.component';
 @NgModule({
   bootstrap: [ AppComponent],
-  declarations: [AppComponent, AppLayoutComponent, PageNotFoundComponent, HeaderTitleComponent, FooterComponent,
+  declarations: [AppComponent, AppLayoutComponent, PageNotFoundComponent,
+     HeaderTitleComponent, FooterComponent,
      LoginComponent,
-     HomeComponent, CasesOverviewComponent, CaseEditComponent,
-     CaseTextboxComponent, CaseDateComponent, CaseDropdownComponent,  CaseMultiDropdownComponent,
-     CaseSwitchComponent, CaseTextareaComponent, CaseDateTimeComponent,
-     GetByKeyPipe, DateTimezonePipe, AlertsFilter,
+     HomeComponent, CasesOverviewComponent,
+     GetByKeyPipe,
      RequireAuthDirective,
-     CaseFilesControlComponent,
      ErrorComponent,
      AltLayoutComponent,
-     MailtoticketControlComponent,
-     CaseFilesUploadComponent,
-     TestComponent
   ],
-  imports: [ 
-    MbscModule, 
+  imports: [
+    MbscModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    FileUploadModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -67,6 +53,7 @@ import { TestComponent } from './components/test/test.component';
       },
       useDefaultLang: true
     }),
+    SharedModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [

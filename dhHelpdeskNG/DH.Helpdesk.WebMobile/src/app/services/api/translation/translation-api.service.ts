@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Language } from '../../../models';
 import { Observable } from 'rxjs/Observable';
-import { HttpApiServiceBase } from '../httpServiceBase';
+import { HttpApiServiceBase } from '../../../modules/shared-module/services/api/httpServiceBase';
 import { LocalStorageService } from '../../local-storage';
 import { take, map } from 'rxjs/operators';
 

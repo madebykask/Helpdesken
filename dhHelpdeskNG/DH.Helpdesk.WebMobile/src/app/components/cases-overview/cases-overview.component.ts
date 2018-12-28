@@ -1,14 +1,14 @@
 import { CaseSearchStateModel } from './../../models/cases-overview/case-search-state.model';
 import { LocalStorageService } from './../../services/local-storage/local-storage.service';
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { CaseOverviewItem, CasesOverviewFilter, CasesSearchType } from '../../models'
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { CaseOverviewItem, CasesOverviewFilter, } from '../../models'
 import { CasesOverviewService } from '../../services/cases-overview';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { finalize, take, map } from 'rxjs/operators';
-import { PagingConstants } from '../../helpers/constants';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MbscForm, MbscListview } from '@mobiscroll/angular';
 import { Subject } from 'rxjs';
+import { CasesSearchType, PagingConstants } from 'src/app/modules/shared-module/constants';
 
 @Component({
   selector: 'app-cases-overview',

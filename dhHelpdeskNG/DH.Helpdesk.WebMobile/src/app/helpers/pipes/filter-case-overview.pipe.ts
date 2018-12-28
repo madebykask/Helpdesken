@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { CaseOverviewColumn } from '../../models';
+import { CaseOverviewColumn } from 'src/app/models';
 
 @Pipe({name: 'getByKey'})
 export class GetByKeyPipe implements PipeTransform {

@@ -1,5 +1,5 @@
-import { OptionItem } from '../models';
 import { Injectable } from '@angular/core';
+import { OptionItem } from '../modules/shared-module/models';
 
 @Injectable({ providedIn: 'root' })
 export class OptionsHelper {

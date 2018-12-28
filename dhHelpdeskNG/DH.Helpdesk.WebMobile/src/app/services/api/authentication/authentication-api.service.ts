@@ -1,4 +1,4 @@
-import { HttpApiServiceBase } from '../httpServiceBase';
+import { HttpApiServiceBase } from '../../../modules/shared-module/services/api/httpServiceBase';
 import { Injectable } from '@angular/core';
 import { config } from '@env/environment';
 import { take, map, catchError, switchMap } from 'rxjs/operators';
