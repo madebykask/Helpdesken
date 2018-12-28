@@ -1,5 +1,5 @@
 ﻿import { Injectable} from '@angular/core';
-import { AlertType } from './alert-types';
+import { AlertType } from '../../modules/shared-module/alerts/alert-types';
 import { CommunicationService } from 'src/app/services/communication';
 import { mobiscroll } from '@mobiscroll/angular';
 

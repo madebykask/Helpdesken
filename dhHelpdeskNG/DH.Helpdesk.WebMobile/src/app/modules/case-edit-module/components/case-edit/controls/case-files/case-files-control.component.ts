@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { BaseCaseField, CaseFileModel } from 'src/app/modules/case-edit-module/models';
 import { CaseApiService } from 'src/app/modules/case-edit-module/services/api/case/case-api.service';
 import { CaseFilesApiService } from 'src/app/modules/case-edit-module/services/api/case/case-files-api.service';
-import { AlertsService } from 'src/app/modules/shared-module/alerts/alerts.service';
+import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseFilesUploadComponent } from '../case-files-upload/case-files-upload.component';
 

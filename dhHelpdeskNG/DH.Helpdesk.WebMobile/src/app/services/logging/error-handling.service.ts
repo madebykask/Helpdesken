@@ -5,7 +5,7 @@ import { LoggerService } from './logger.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ClientLogApiService } from '../api';
-import { AlertsService } from 'src/app/modules/shared-module/alerts/alerts.service';
+import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 
 @Injectable({providedIn: 'root'})

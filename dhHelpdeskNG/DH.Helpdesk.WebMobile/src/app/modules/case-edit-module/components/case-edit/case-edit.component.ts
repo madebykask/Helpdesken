@@ -22,7 +22,7 @@ import { CaseLockApiService } from '../../services/api/case/case-lock-api.servic
 import { CaseSaveService } from '../../services/case';
 import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel, CaseLockModel, BaseCaseField } from '../../models';
 import { OptionItem } from 'src/app/modules/shared-module/models';
-import { AlertsService } from 'src/app/modules/shared-module/alerts/alerts.service';
+import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 
 @Component({
