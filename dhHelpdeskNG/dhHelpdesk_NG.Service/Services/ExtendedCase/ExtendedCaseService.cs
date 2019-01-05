@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.ExtendedCase;
 using DH.Helpdesk.Dal.Repositories.Cases;
 using DH.Helpdesk.Domain.ExtendedCaseEntity;
+using DH.Helpdesk.Services.BusinessLogic.Cases;
 using DH.Helpdesk.Services.Enums;
 using OfficeOpenXml.Table.PivotTable;
 
@@ -89,6 +91,37 @@ namespace DH.Helpdesk.Services.Services.ExtendedCase
                     .Replace(ExtendedCasePathTokens.CaseStatus, initData.CaseStateSecondaryId.ToString());
 
             return expandedPath;
+        }
+
+        public IList<string> GetTemplateCaseBindingKeys(int formId)
+        {
+            var exCaseForm = _extendedCaseFormRepository.GetById(formId);
+            
+            var templateParser = new ExtendedCaseTemplateParser();
+            var caseBindingFieldsMap = templateParser.ExtractCaseBindingFields(exCaseForm.MetaData);
+            var keys = caseBindingFieldsMap.Keys.ToList();
+            return keys;
+        }
+
+        public IDictionary<string, string> GetTemplateCaseBindingValues(int formId, int extendedCaseDataId)
+        {
+            var exCaseForm = _extendedCaseFormRepository.GetById(formId);
+            
+            var templateParser = new ExtendedCaseTemplateParser();
+            var caseBindingFieldsMap = templateParser.ExtractCaseBindingFields(exCaseForm.MetaData);
+            var extendedCaseFieldValues = _extendedCaseDataRepository.GetById(extendedCaseDataId).ExtendedCaseValues;
+
+            var caseBindingValuesMap = new Dictionary<string, string>();
+            foreach (var caseBindingKV in caseBindingFieldsMap)
+            {
+                var field = extendedCaseFieldValues.FirstOrDefault(x => x.FieldId == caseBindingKV.Value);
+                if (field != null)
+                {
+                    caseBindingValuesMap.Add(caseBindingKV.Key, field.Value);
+                }
+            }
+
+            return caseBindingValuesMap;
         }
 
         public ExtendedCaseDataModel CopyExtendedCaseToCase(int extendedCaseDataID, int caseID, string userID, int? extendedCaseFormId = null)

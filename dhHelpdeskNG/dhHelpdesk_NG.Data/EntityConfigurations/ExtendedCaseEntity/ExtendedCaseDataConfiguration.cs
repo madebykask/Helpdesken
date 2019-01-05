@@ -1,9 +1,9 @@
-﻿namespace DH.Helpdesk.Dal.EntityConfigurations.ADFS
-{    
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.ModelConfiguration;
-    using Domain.ExtendedCaseEntity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
+using DH.Helpdesk.Domain.ExtendedCaseEntity;
 
+namespace DH.Helpdesk.Dal.EntityConfigurations.ExtendedCaseEntity
+{
     internal sealed class ExtendedCaseDataConfiguration : EntityTypeConfiguration<ExtendedCaseDataEntity>
     {
         #region Constructors and Destructors
