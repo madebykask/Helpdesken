@@ -49,15 +49,19 @@
 @*<script src="~/Content/js/Case/edit.js"></script>*@
 @Scripts.Render("~/Content/js/Case/edit")
 
-<div class="jumbotron greybar">
-    <div class="container-fluid">
-        <ul class="secnav">
-            <li>
-                <input type="button" value='@Translation.Get("Save and Send", Enums.TranslationSource.TextTranslation)' onclick="SaveNewCase(); return false;" class="btn btn-default"/>
-            </li>
-        </ul>
-    </div>
-</div>
+
+@if (Model.CurrentCustomer.ShowCaseActionsPanelOnTop)
+{
+    <div class="jumbotron greybar">
+        <div class="container-fluid">
+            <ul class="secnav">
+                <li>
+                    <input type="button" value='@Translation.Get("Save and Send")' onclick="SaveNewCase(); return false;" class="btn btn-default"/>
+                </li>
+            </ul>
+        </div>
+    </div>    
+}
 
 <div class="container-fluid dh-container">
 @if (!string.IsNullOrEmpty(Model.Information))
@@ -956,15 +960,20 @@
         }
     </div>
 </div>
-<div class="jumbotron greybar">
-    <div class="container-fluid">
-        <ul class="secnav">
-            <li>
-                <input type="button" value='@Translation.Get("Save and Send", Enums.TranslationSource.TextTranslation)' onclick="SaveNewCase(); return false;" class="btn btn-default"/>
-            </li>
-        </ul>
+
+@if (Model.CurrentCustomer.ShowCaseActionsPanelAtBottom)
+{
+    <div class="jumbotron greybar">
+        <div class="container-fluid">
+            <ul class="secnav">
+                <li>
+                    <input type="button" value='@Translation.Get("Save and Send")' onclick="SaveNewCase(); return false;" class="btn btn-default"/>
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
+}
+
 <div id="case_urgent_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabelCase" aria-hidden="true" style="display: none">
     <div class="modal-dialog">
         <div class="modal-content">

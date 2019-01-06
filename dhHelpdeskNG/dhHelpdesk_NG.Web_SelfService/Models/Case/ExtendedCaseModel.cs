@@ -22,6 +22,7 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public string UserRole { get; set; }
         public int StateSecondaryId { get; set; }
         public string CurrentUser { get; set; }
+        public Customer CurrentCustomer { get; set; }
         public CaseModel CaseDataModel { get; set; }
         public Dictionary<string, string> StatusBar { get; internal set; }
         public ExtendedCaseDataModel ExtendedCaseDataModel { get; set; }
@@ -54,5 +55,22 @@ namespace DH.Helpdesk.SelfService.Models.Case
                 CustomerSettings = CustomerSettings
             };
         }
+
+        public ExtendedCaseControlsPanelModel CreateExCaseControlsPanelModel(int position = 1)
+        {
+            return new ExtendedCaseControlsPanelModel(position, WorkflowSteps);
+        }
+    }
+
+    public class ExtendedCaseControlsPanelModel
+    {
+        public ExtendedCaseControlsPanelModel(int poisition, List<WorkflowStepModel> workflowSteps)
+        {
+            Poisition = poisition;
+            WorkflowSteps = workflowSteps;
+        }
+
+        public int Poisition { get; }
+        public List<WorkflowStepModel> WorkflowSteps { get; }
     }
 }

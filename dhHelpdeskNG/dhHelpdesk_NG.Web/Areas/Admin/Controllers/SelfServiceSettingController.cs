@@ -145,6 +145,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             customerToSave.GroupCaseTemplates = vmodel.Customer.GroupCaseTemplates;
             customerToSave.FetchPcNumber = vmodel.Customer.FetchPcNumber;
 
+            customerToSave.ShowCaseActionsPanelOnTop = vmodel.Customer.ShowCaseActionsPanelOnTop;
+            customerToSave.ShowCaseActionsPanelAtBottom = vmodel.Customer.ShowCaseActionsPanelAtBottom;
+
+            //keep at least one selected
+            if (!customerToSave.ShowCaseActionsPanelOnTop && !customerToSave.ShowCaseActionsPanelAtBottom)
+                customerToSave.ShowCaseActionsPanelOnTop = true;
+
             var caseType_Id = 0;
             if (customerToSave == null)
                 throw new Exception("No customer found...");

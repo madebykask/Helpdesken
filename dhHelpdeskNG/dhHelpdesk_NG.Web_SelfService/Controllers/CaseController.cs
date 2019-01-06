@@ -781,6 +781,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 CustomerSettings = cs,
                 ExtendedCaseDataModel = extendedCaseDataModel,
                 CurrentUser = SessionFacade.CurrentUserIdentity.EmployeeNumber,
+                CurrentCustomer = SessionFacade.CurrentCustomer,
                 UserRole = initData.UserRole,
                 StateSecondaryId = caseStateSecondaryId,
                 CaseOU = caseModel.OU_Id.HasValue ? _ouService.GetOU(caseModel.OU_Id.Value) : null,
@@ -2138,6 +2139,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                     },
                 caseFieldSettingsWithLanguages);
 
+            model.CurrentCustomer = SessionFacade.CurrentCustomer;
             model.CaseTypeParantPath = "--";
             model.ProductAreaParantPath = "--";
             model.CategoryParentPath = "--";

@@ -1,5 +1,4 @@
 ﻿
-
 UPDATE tblTextTranslation Set TextTranslation = 'Cases on hold' WHERE Text_Id=6 AND Language_Id=2;
 GO
 
@@ -7339,12 +7338,27 @@ If not exists (select * from tblTextTranslation where text_id = 1998 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1998, 2, 'Password and Confirm Password must match')
 GO
 
+If not exists (select * from tbltext where id = 1999)
+	insert into tbltext (id, TextString) VALUES (1999, 'Visa knappar överst')
+GO
+If not exists (select * from tblTextTranslation where text_id = 1999 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(1999, 2, 'Show buttons on top')
+GO
 
+If not exists (select * from tbltext where id = 2000)
+	insert into tbltext (id, TextString) VALUES (2000, 'Visa knappar underst')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2000 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2000, 2, 'Show buttons at bottom')
+GO
 
-
+If not exists (select * from tbltext where id = 2001)
+	insert into tbltext (id, TextString) VALUES (2001, 'Visa kommandoknappar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2001 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2001, 2, 'Show commamnd buttons')
+GO
 
 -- *** Run this last when put translation script above this line *** --
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
-
-
 
