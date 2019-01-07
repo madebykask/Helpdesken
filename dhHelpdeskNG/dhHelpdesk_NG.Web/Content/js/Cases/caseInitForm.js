@@ -1251,26 +1251,26 @@ function CaseInitForm() {
                     }
 
                     var priorityId = Number(data.Priority_Id || '0');
-                    var $casePriorityId = $("#case__Priority_Id");
-                    
+                    var $casePriorityId = $('#case__Priority_Id');
+
                     if (priorityId > 0 && templatePriorityId === '') {
                         var exists = $casePriorityId.find('option[value=' + data.Priority_Id + ']').length > 0;
-                        if (exists) {
+                        var $priorityName = $('#priority_Name');
+                        if (exists || $priorityName.length) {
                             $casePriorityId.val(data.Priority_Id);
                             $casePriorityId.attr('data-sla', data.SLA);
                             $casePriorityId.change();
                         }
-
-                        var $priorityName = $('#priority_Name');
+                        
                         if ($priorityName.length && data.PriorityName) {
                             $priorityName.val(data.PriorityName);
                         }
                     }
                 
                     if (priorityId > 0)
-                        $(".sla-value").eq(0).val(data.Priority_Id);
+                        $('.sla-value').eq(0).val(data.Priority_Id);
 
-                    $("#ProductAreaHasChild").val(data.HasChild);
+                    $('#ProductAreaHasChild').val(data.HasChild);
                 }
             });
         }        
@@ -1279,14 +1279,14 @@ function CaseInitForm() {
     function changeWorkingGroupValue(newWorkingGroupId, newWorkingGroupName, srcName) {
         console.log('>>> ChangeWorkingGroupValue: wgId %s, wgName: %s, src: %s', newWorkingGroupId, newWorkingGroupName, srcName);
 
-        var $workingGroup = $("#case__WorkingGroup_Id");
+        var $workingGroup = $('#case__WorkingGroup_Id');
+        var $workginGroupName = $('#workingGroup_Name');
         var exists = $workingGroup.find('option[value=' + newWorkingGroupId + ']').length > 0;
-        if (Number(newWorkingGroupId) > 0 && exists) {
+        if (Number(newWorkingGroupId) > 0 && (exists || $workginGroupName.length)) {
             $workingGroup.val(newWorkingGroupId);
             $workingGroup.change();
         }
 
-        var $workginGroupName = $('#workingGroup_Name');
         if ($workginGroupName.length) {
             $workginGroupName.val(newWorkingGroupName || '');
         }
