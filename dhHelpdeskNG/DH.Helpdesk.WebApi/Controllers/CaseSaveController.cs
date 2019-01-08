@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -225,7 +226,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var caseMailSetting = new CaseMailSetting(
                 customer.NewCaseEmailList,
                 customer.HelpdeskEmail,
-                "",// TODO: get client url or helpdesk url?
+                ConfigurationManager.AppSettings[AppSettingsKey.HelpdeskPath],
                 customerSettings.DontConnectUserToWorkingGroup);
             caseMailSetting.CustomeMailFromAddress = mailSenders;
             caseMailSetting.DontSendMailToNotifier = !customer.CommunicateWithNotifier.ToBool();

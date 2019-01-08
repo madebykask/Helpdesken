@@ -122,7 +122,7 @@ namespace DH.Helpdesk.Services.Services
                                     fields = GetCaseFieldsForEmail(newCase, log, cms, emailLog.EmailLogGUID.ToString(),
                                         1, userTimeZone);
                                     string siteSelfService =
-                                        ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() +
+                                        ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() +
                                         emailLog.EmailLogGUID.ToString();
                                     var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                     var mailSetting = new EmailSettings(mailResponse, smtpInfo,
@@ -164,7 +164,7 @@ namespace DH.Helpdesk.Services.Services
                                 fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 2,
                                     userTimeZone);
                                 string siteSelfService =
-                                    ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() +
+                                    ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() +
                                     el.EmailLogGUID.ToString();
 
                                 var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
@@ -222,7 +222,7 @@ namespace DH.Helpdesk.Services.Services
                                                 el.EmailLogGUID.ToString(), 1, userTimeZone);
 
                                             string siteSelfService =
-                                                ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() +
+                                                ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() +
                                                 el.EmailLogGUID.ToString();
                                             var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                             var mailSetting = new EmailSettings(mailResponse, smtpInfo,
@@ -352,7 +352,7 @@ namespace DH.Helpdesk.Services.Services
                                                 el.EmailLogGUID.ToString(), 1, userTimeZone);
 
                                             string siteSelfService =
-                                                ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() +
+                                                ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() +
                                                 el.EmailLogGUID.ToString();
                                             var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                             var mailSetting = new EmailSettings(mailResponse, smtpInfo,
@@ -428,7 +428,7 @@ namespace DH.Helpdesk.Services.Services
                                 userTimeZone);
 
                             var siteSelfService =
-                                ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() +
+                                ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() +
                                 el.EmailLogGUID.ToString();
                             var mailResponse = EmailResponse.GetEmptyEmailResponse();
                             var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
@@ -482,7 +482,7 @@ namespace DH.Helpdesk.Services.Services
                                                     el.EmailLogGUID.ToString(), 5, userTimeZone);
 
                                                 string siteSelfService =
-                                                    ConfigurationManager.AppSettings["dh_selfserviceaddress"]
+                                                    ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress]
                                                         .ToString() + el.EmailLogGUID.ToString();
                                                 var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                                 var mailSetting = new EmailSettings(mailResponse, smtpInfo,
@@ -571,7 +571,7 @@ namespace DH.Helpdesk.Services.Services
                                         userTimeZone);
 
                                     var siteSelfService =
-                                        ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() +
+                                        ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() +
                                         el.EmailLogGUID.ToString();
 
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
@@ -628,7 +628,7 @@ namespace DH.Helpdesk.Services.Services
                                 fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 7,
                                     userTimeZone);
                                 var siteSelfService =
-                                    ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() +
+                                    ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() +
                                     el.EmailLogGUID.ToString();
                                 var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                 var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
@@ -813,7 +813,7 @@ namespace DH.Helpdesk.Services.Services
                                         var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                         var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                         var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
-                                        string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+                                        string siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() + el.EmailLogGUID.ToString();
                                         var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
                                         var e_res = _emailService.SendEmail(el, helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, log.HighPriority, files, siteSelfService, siteHelpdesk);
                                         el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
@@ -843,7 +843,7 @@ namespace DH.Helpdesk.Services.Services
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, to[i], _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                 var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                 var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
-                                string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+                                string siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() + el.EmailLogGUID.ToString();
                                 var e_res = _emailService.SendEmail(el, helpdeskMailFromAdress, el.EmailAddress, m.Subject, m.Body, fields, mailSetting, el.MessageId, log.HighPriority, files, siteSelfService);
                                 el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                                 var now = DateTime.Now;
@@ -953,7 +953,7 @@ namespace DH.Helpdesk.Services.Services
 
                 var fields = this.GetCaseFieldsForEmail(case_, log, cms, el.EmailLogGUID.ToString(), 3, userTimeZone);
 
-                var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+                var siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() + el.EmailLogGUID.ToString();
                 //string urlSelfService;
                 //if (m.Body.Contains("[/#98]"))
                 //{
@@ -1030,7 +1030,7 @@ namespace DH.Helpdesk.Services.Services
                             var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                             var fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5, userTimeZone);
 
-                            var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+                            var siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() + el.EmailLogGUID.ToString();
                             var mailResponse = EmailResponse.GetEmptyEmailResponse();
                             var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
                             var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
@@ -1072,7 +1072,7 @@ namespace DH.Helpdesk.Services.Services
                                 var el = new EmailLog(caseHistoryId, mailTemplate.MailId, curMail, _emailService.GetMailMessageId(helpdeskMailFromAdress));
                                 var fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 5, userTimeZone);
 
-                                var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+                                var siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() + el.EmailLogGUID.ToString();
                                 var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                 var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
                                 var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
@@ -1148,7 +1148,7 @@ namespace DH.Helpdesk.Services.Services
                                     }
                                 }
 
-                                string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+                                string siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() + el.EmailLogGUID.ToString();
                                 var mailResponse = EmailResponse.GetEmptyEmailResponse();
                                 var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
                                 var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
@@ -1209,7 +1209,7 @@ namespace DH.Helpdesk.Services.Services
                                     }
                                 }
 
-                                string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + el.EmailLogGUID.ToString();
+                                string siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() + el.EmailLogGUID.ToString();
 
                                 var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
                                 var mailResponse = EmailResponse.GetEmptyEmailResponse();
@@ -1252,7 +1252,7 @@ namespace DH.Helpdesk.Services.Services
 
                                     fields.AddRange(templateFields.Select(tf => tf.MapToFields()));
 
-                                    var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"] + el.EmailLogGUID;
+                                    var siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress] + el.EmailLogGUID;
 
                                     var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
                                     var mailResponse = EmailResponse.GetEmptyEmailResponse();

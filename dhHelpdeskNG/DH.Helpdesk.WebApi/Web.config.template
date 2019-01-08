@@ -14,6 +14,7 @@
     <add key="log4net.Internal.Debug" value="false" />
     <add key="dh_filesDirectory" value="#{FilesDirectory}" />
     <add key="dh_selfserviceaddress" value="#{SelfServiceAddress}" />
+    <add key="dh_helpdeskaddress" value="#{HelpdeskAddress}" />
     <add key="DefaultCulture" value="sv" />
     <add key="SmtpServer" value="smtp.datahalland.se" />
     <add key="SmtpPort" value="25" />
