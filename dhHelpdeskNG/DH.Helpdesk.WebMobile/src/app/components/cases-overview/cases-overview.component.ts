@@ -9,6 +9,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MbscForm, MbscListview } from '@mobiscroll/angular';
 import { Subject } from 'rxjs';
 import { CasesSearchType, PagingConstants } from 'src/app/modules/shared-module/constants';
+import { CaseProgressFilter } from 'src/app/models/cases-overview/enums';
 
 @Component({
   selector: 'app-cases-overview',
@@ -162,7 +163,8 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     this._filter.Page = PagingConstants.page;
     this._filter.Ascending = false;
     this._filter.OrderBy = 'CaseNumber';// TODO - remove use hardcode
-    this._filter.SearchInMyCasesOnly = Boolean(this.searchType);
+    this._filter.SearchInMyCasesOnly = Boolean(this.searchType);    
+    this._filter.CaseProgress = CaseProgressFilter.CasesInProgress;
   }
 
   private caclucatePageSize(): number {
