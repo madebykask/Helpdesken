@@ -8,6 +8,7 @@ import { CaseFilesApiService } from 'src/app/modules/case-edit-module/services/a
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseFilesUploadComponent } from '../case-files-upload/case-files-upload.component';
+import {TranslateService as NgxTranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'case-files-control',
@@ -29,7 +30,7 @@ export class CaseFilesControlComponent implements OnInit  {
     stages: [{
       percent: -25,
       color: 'red',
-      text: 'Delete', //todo: translate
+      icon: 'fa-trash',      
       confirm: true,
       action: this.onFileDelete.bind(this)
     }]  
@@ -39,6 +40,7 @@ export class CaseFilesControlComponent implements OnInit  {
 
   constructor(private caseApiService: CaseApiService,
               private caseFilesApiService: CaseFilesApiService,
+              private translateService: NgxTranslateService,
               private alertsService: AlertsService) {
   }
 
@@ -85,11 +87,11 @@ export class CaseFilesControlComponent implements OnInit  {
               //todo: move confirm to a separate service!
               //todo: add translations!
               mobiscroll.confirm({
-                title: "Confirm",
+                title: "",
                 display: 'bottom',
-                message: 'Do you want to delete the file?', 
-                okText: 'Yes',
-                cancelText: 'No'
+                message: this.translateService.instant('Är du säker på att du vill ta bort bifogad fil') + '?', //do you want to delete attached file?
+                okText: this.translateService.instant('Ja'),
+                cancelText: this.translateService.instant('Nej'),
               }).then(function (result) {
                   if (result) {
                       self.caseFilesApiService.deleteCaseFile(self.caseKey,fileItem.fileId, fileItem.fileName).pipe(
@@ -98,7 +100,7 @@ export class CaseFilesControlComponent implements OnInit  {
                           //remove fileItem from the list on success only
                           self.files = self.files.filter(el => el !== fileItem);
                       }, 
-                      (err) => {
+                      (err) => {                        
                         self.alertsService.showMessage('Failed to delete a file', AlertType.Error);
                         console.error(err);
                       });

@@ -115,4 +115,25 @@ insert into tbltext (id, TextString, TextType) VALUES (10016, 'Bifoga', @MobileT
 If not exists (select * from tblTextTranslation where text_id = 10016 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10016, 2, 'Attach')
 
+-- File delete confirmation
+If not exists (select * from tbltext where id = 10017)
+insert into tbltext (id, TextString, TextType) VALUES (10017, 'Är du säker på att du vill ta bort bifogad fil', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10017 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10017, 2, 'Are you sure you want to delete attached file')
+
+-- yes
+If not exists (select * from tbltext where id = 10018)
+insert into tbltext (id, TextString, TextType) VALUES (10018, 'Ja', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10018 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10018, 2, 'Yes')
+
+-- yes
+If not exists (select * from tbltext where id = 10019)
+insert into tbltext (id, TextString, TextType) VALUES (10019, 'Nej', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10019 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10019, 2, 'No')
+
 
