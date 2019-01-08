@@ -157,30 +157,37 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<WorkingGroupForSMS> GetWorkingGroupsForSMS(int customerId, bool isTakeOnlyActive = true)
         {
-            var cs = this._settingService.GetCustomerSetting(customerId);
+            var cs = _settingService.GetCustomerSetting(customerId);
 
             var ret = new List<WorkingGroupForSMS>();
+            
             //todo: check why condition is missing?
-            var userWorkingGroups = this._userWorkingGroupRepository.GetMany(x => true)
-                .AsQueryable()
+            var userWorkingGroups = 
+                _userWorkingGroupRepository.GetMany(x => true).AsQueryable()
                 .Select(uw => uw.WorkingGroup_Id);
+
             var workingGroups =  
                 GetAllWorkingGroupsForCustomer(customerId, isTakeOnlyActive)
                     .Where(x => userWorkingGroups.Contains(x.Id))
                     .ToList();
 
-            var selectedWGId = workingGroups.Select(w=> w.Id).ToList();
+            var selectedWorkingGroupId = workingGroups.Select(w => w.Id).ToList();
             var userWorkingGroup =
-                this._userWorkingGroupRepository.GetMany(uw => selectedWGId.Contains(uw.WorkingGroup_Id)).ToList();
+                _userWorkingGroupRepository.GetMany(uw => selectedWorkingGroupId.Contains(uw.WorkingGroup_Id)).ToList();
 
             
             foreach(var wg in workingGroups)
             {
-                var phones = userWorkingGroup.Where(uw=> uw.WorkingGroup_Id == wg.Id &&  !string.IsNullOrEmpty(uw.User.CellPhone))
-                                .Select(uw=> new {phone = string.Format("{0}@{1}",uw.User.CellPhone.Replace(" ",""),cs.SMSEMailDomain)})                                
-                                .ToArray();
+                var phones = 
+                    userWorkingGroup.Where(uw => uw.WorkingGroup_Id == wg.Id && 
+                                                 !string.IsNullOrEmpty(uw.User.CellPhone) && 
+                                                 uw.User.IsActive == 1)
+                    .Select(uw => new
+                    {
+                        phone = $"{uw.User.CellPhone.Replace(" ", "")}@{cs.SMSEMailDomain}"
+                    }).ToArray();
 
-                var phone = string.Join(",", phones.Select(p=> p.phone).ToArray());
+                var phone = string.Join(",", phones.Select(p => p.phone).ToArray());
 
                 ret.Add(new WorkingGroupForSMS(wg.Id, wg.WorkingGroupName, phone));
             }
