@@ -94,7 +94,7 @@ export class CaseEditComponent {
             takeUntil(this.destroy$)
           ).subscribe();
 
-          if (v.value != null && this.form.contains(CaseFieldsNames.StateSecondaryId)) {
+          if (!!v.value && this.form.contains(CaseFieldsNames.StateSecondaryId)) {
             this.workingGroupsService.getWorkingGroup(v.value)
             .pipe(
               switchMap((wg: WorkingGroupInputModel) => {

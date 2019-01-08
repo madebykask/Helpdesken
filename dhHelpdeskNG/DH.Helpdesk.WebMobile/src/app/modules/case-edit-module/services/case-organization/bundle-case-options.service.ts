@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { LocalStorageService } from "../local-storage";
+import { LocalStorageService } from "../../../../services/local-storage";
 import { HttpClient } from "@angular/common/http";
-import { OptionsHelper } from "../../helpers/options-helper";
+import { OptionsHelper } from "../../../../helpers/options-helper";
 import { map, take } from "rxjs/operators";
 import { throwError } from "rxjs";
 import { BundleOptionsFilter, BundledCaseOptions, OptionItem } from "src/app/modules/shared-module/models";

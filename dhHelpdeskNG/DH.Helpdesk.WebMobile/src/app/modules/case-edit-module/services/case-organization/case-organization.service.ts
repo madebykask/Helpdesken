@@ -1,14 +1,14 @@
-import { DepartmentsService } from "./departments-service";
-import { RegionsService } from "./regions-service";
+import { DepartmentsService } from "../../../../services/case-organization/departments-service";
+import { RegionsService } from "../../../../services/case-organization/regions-service";
 import { Injectable } from "@angular/core";
-import { OUsService } from "./ous-service";
-import { CaseTypesService } from "./caseTypes-service";
-import { ProductAreasService } from "./productAreas-service";
-import { CategoriesService } from "./categories-service";
-import { ClosingReasonsService } from "./closingReasons-service";
-import { PerfomersService } from "./perfomers-service";
-import { WorkingGroupsService } from "./workingGroups-service";
-import { StateSecondariesService } from "./stateSecondaries-service";
+import { OUsService } from "../../../../services/case-organization/ous-service";
+import { CaseTypesService } from "../../../../services/case-organization/caseTypes-service";
+import { ProductAreasService } from "../../../../services/case-organization/productAreas-service";
+import { CategoriesService } from "../../../../services/case-organization/categories-service";
+import { ClosingReasonsService } from "../../../../services/case-organization/closingReasons-service";
+import { PerfomersService } from "../../../../services/case-organization/perfomers-service";
+import { WorkingGroupsService } from "../../../../services/case-organization/workingGroups-service";
+import { StateSecondariesService } from "../../../../services/case-organization/stateSecondaries-service";
 
 @Injectable({ providedIn: 'root' })
 export class CaseOrganizationService {

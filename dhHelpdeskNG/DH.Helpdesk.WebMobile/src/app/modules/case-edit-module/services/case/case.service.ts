@@ -2,21 +2,21 @@ import { Injectable } from '@angular/core';
 import { defaultIfEmpty, take, switchMap, catchError } from 'rxjs/operators';
 import { throwError, forkJoin, empty, Observable, of } from 'rxjs';
 import { CaseApiService } from '../api/case/case-api.service';
-import { CaseOrganizationService } from 'src/app/services/case-organization';
-import { BundleCaseOptionsService } from 'src/app/services/case-organization/bundle-case-options.service';
+import { BundleCaseOptionsService } from 'src/app/modules/case-edit-module/services/case-organization/bundle-case-options.service';
 import { CaseOptionsFilterModel, BundleOptionsFilter, CaseOptions } from 'src/app/modules/shared-module/models';
 import { CaseEditInputModel, CaseSectionInputModel, CaseSolution, MailToTicketInfo, CaseAccessMode, BaseCaseField, KeyValue } from '../../models';
+import { CaseOrganizationService } from '../case-organization/case-organization.service';
 
 @Injectable({ providedIn: 'root' })
 export class CaseService {
 
-    protected constructor(private _caseOrganizationService: CaseOrganizationService,
-         private _batchCaseOptionsService: BundleCaseOptionsService,
-         private _caseApiService: CaseApiService ) {
+    protected constructor(private caseOrganizationService: CaseOrganizationService,
+         private batchCaseOptionsService: BundleCaseOptionsService,
+         private caseApiService: CaseApiService ) {
     }
 
     getCaseData(caseId: number): Observable<CaseEditInputModel> {
-      return this._caseApiService.getCaseData(caseId)
+      return this.caseApiService.getCaseData(caseId)
         .pipe(
           switchMap((caseData: any) => {
             let model = this.fromJSONCaseEditInputModel(caseData);
@@ -29,19 +29,19 @@ export class CaseService {
       const fieldExists = (field: any) => field !== undefined;
 
       return {
-        getRegions: () => this._caseOrganizationService.getRegions(),
-        getDepartments: () => fieldExists(filter.RegionId) ? this._caseOrganizationService.getDepartments(filter.RegionId) : empty$(),
-        getOUs: () => fieldExists(filter.DepartmentId) && filter.DepartmentId != null ? this._caseOrganizationService.getOUs(filter.DepartmentId): empty$(),
-        getIsAboutDepartments: () => fieldExists(filter.IsAboutRegionId) ? this._caseOrganizationService.getDepartments(filter.IsAboutRegionId) : empty$(),
-        getIsAboutOUs: () => fieldExists(filter.IsAboutDepartmentId) && filter.IsAboutDepartmentId != null ? this._caseOrganizationService.getOUs(filter.IsAboutDepartmentId) : empty$(),
-        getCaseTypes: () => fieldExists(filter.CaseTypes) ? this._caseOrganizationService.getCaseTypes() : empty$(),
-        getProductAreas: () => fieldExists(filter.ProductAreas) ? this._caseOrganizationService.getProductAreas(filter.CaseTypeId, filter.ProductAreaId) : empty$(),
-        getCategories: () => fieldExists(filter.Categories) ? this._caseOrganizationService.getCategories() : empty$(),
-        getWorkingGroups: () => fieldExists(filter.WorkingGroups) ? this._caseOrganizationService.getWorkingGroups() : empty$(),
-        getClosingReasons: () => fieldExists(filter.ClosingReasons) ? this._caseOrganizationService.getClosingReasons() : empty$(),
+        getRegions: () => this.caseOrganizationService.getRegions(),
+        getDepartments: () => fieldExists(filter.RegionId) ? this.caseOrganizationService.getDepartments(filter.RegionId) : empty$(),
+        getOUs: () => fieldExists(filter.DepartmentId) && filter.DepartmentId != null ? this.caseOrganizationService.getOUs(filter.DepartmentId): empty$(),
+        getIsAboutDepartments: () => fieldExists(filter.IsAboutRegionId) ? this.caseOrganizationService.getDepartments(filter.IsAboutRegionId) : empty$(),
+        getIsAboutOUs: () => fieldExists(filter.IsAboutDepartmentId) && filter.IsAboutDepartmentId != null ? this.caseOrganizationService.getOUs(filter.IsAboutDepartmentId) : empty$(),
+        getCaseTypes: () => fieldExists(filter.CaseTypes) ? this.caseOrganizationService.getCaseTypes() : empty$(),
+        getProductAreas: () => fieldExists(filter.ProductAreas) ? this.caseOrganizationService.getProductAreas(filter.CaseTypeId, filter.ProductAreaId) : empty$(),
+        getCategories: () => fieldExists(filter.Categories) ? this.caseOrganizationService.getCategories() : empty$(),
+        getWorkingGroups: () => fieldExists(filter.WorkingGroups) ? this.caseOrganizationService.getWorkingGroups() : empty$(),
+        getClosingReasons: () => fieldExists(filter.ClosingReasons) ? this.caseOrganizationService.getClosingReasons() : empty$(),
         getPerformers: (includePerfomer: boolean) =>
-         fieldExists(filter.Performers) ? this._caseOrganizationService.getPerformers(includePerfomer ? filter.CasePerformerUserId : null, filter.CaseWorkingGroupId) : empty$(),
-        getStateSecondaries: () => fieldExists(filter.StateSecondaries) ? this._caseOrganizationService.getStateSecondaries() : empty$()
+         fieldExists(filter.Performers) ? this.caseOrganizationService.getPerformers(includePerfomer ? filter.CasePerformerUserId : null, filter.CaseWorkingGroupId) : empty$(),
+        getStateSecondaries: () => fieldExists(filter.StateSecondaries) ? this.caseOrganizationService.getStateSecondaries() : empty$()
       };
     }
 
@@ -60,7 +60,7 @@ export class CaseService {
         let perfomers$ = optionsHelper.getPerformers(true);
         let stateSecondaries$ = optionsHelper.getStateSecondaries();
 
-        let bundledOptions$ = this._batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
+        let bundledOptions$ = this.batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
 
         return forkJoin(bundledOptions$, regions$, departments$, oUs$, isAboutDepartments$, isAboutOUs$, caseTypes$, 
           productAreas$, categories$, closingReasons$, perfomers$, workingGroups$, stateSecondaries$)
@@ -129,7 +129,7 @@ export class CaseService {
     }
 
     getCaseSections() {
-        return this._caseApiService.getCaseSections()
+        return this.caseApiService.getCaseSections()
           .pipe(
             switchMap((jsCaseSections: any) => {
               if (!jsCaseSections) throwError("No data from server.");

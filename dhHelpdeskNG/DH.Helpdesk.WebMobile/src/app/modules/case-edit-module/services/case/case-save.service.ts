@@ -10,7 +10,7 @@ import { CaseFieldsNames } from "src/app/modules/shared-module/constants";
 @Injectable({ providedIn: 'root' })
 export class CaseSaveService {
 
-  protected constructor(private _caseApiService: CaseApiService ) {
+  protected constructor(private caseApiService: CaseApiService ) {
   }
 
   public saveCase(form: FormGroup, caseId?: number) {
@@ -21,7 +21,7 @@ export class CaseSaveService {
     model.workingGroupId = this.getNumericValue(form, CaseFieldsNames.WorkingGroupId);
     model.stateSecondaryId = this.getNumericValue(form, CaseFieldsNames.StateSecondaryId);
 
-    return this._caseApiService.saveCaseData(model)
+    return this.caseApiService.saveCaseData(model)
       .pipe(
           switchMap((r: any) => {
             return of(r)
