@@ -261,13 +261,13 @@ namespace DH.Helpdesk.Dal.Repositories
                     join ur in this.DataContext.Urgencies on c.Urgency_Id equals (int?) ur.Id into urs
                     from _ur in urs.DefaultIfEmpty()
 
-                    join user3 in this.DataContext.Users on c.Performer_User_Id equals (int?) user3.Id into user3s
+					join user3 in this.DataContext.Users on c.Performer_User_Id equals (int?) user3.Id into user3s
                     from _u3 in user3s.DefaultIfEmpty()
 
-                    join pr in this.DataContext.Problems on c.Problem_Id equals (int?) pr.Id into prs
-                    from _pr in prs.DefaultIfEmpty()
+					join pr in this.DataContext.Problems on c.Problem_Id equals (int?)pr.Id into prs
+					from _pr in prs.DefaultIfEmpty()
 
-                    where
+					where
                         c.Customer_Id == customerId && c.Deleted != 1 &&
                         (DbFunctions.TruncateTime(c.RegTime) >= DbFunctions.TruncateTime(periodFrom) &&
                          DbFunctions.TruncateTime(c.RegTime) <= DbFunctions.TruncateTime(periodUntil))
@@ -335,6 +335,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         ? query.Where(c => c.Case.FinishingDate.HasValue)
                         : query.Where(c => !c.Case.FinishingDate.HasValue);
                 }
+
+				query = query.Where(o => o.Case.Id > 0);
 
                 var resultQuery = query.Select(c => new ReportGeneratorFields
                     {
