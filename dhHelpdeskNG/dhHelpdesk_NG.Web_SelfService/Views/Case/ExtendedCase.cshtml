@@ -173,6 +173,11 @@
     */
 </script>
 
+@*@section Styles {
+    <link href="@Url.Content("~/Content/css/ex-case-mobile.css")" rel="stylesheet" type="text/css" />
+}*@
+
+
 @if (Model.CurrentCustomer.ShowCaseActionsPanelOnTop && 
     (Model.CaseId == 0 || Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
 {
