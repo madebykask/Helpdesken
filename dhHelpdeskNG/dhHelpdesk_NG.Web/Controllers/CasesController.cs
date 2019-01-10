@@ -1972,17 +1972,17 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (id.HasValue)
             {
-                var e = _productAreaService.GetProductArea(id.Value);
-                if (e != null)
+                var productArea = _productAreaService.GetProductArea(id.Value);
+                if (productArea != null)
                 {
-                    workinggroupId = e.WorkingGroup_Id.HasValue ? e.WorkingGroup_Id.Value : 0;
+                    workinggroupId = productArea.WorkingGroup_Id.HasValue ? productArea.WorkingGroup_Id.Value : 0;
                     if (workinggroupId > 0)
                     {
                         var wg = _workingGroupService.GetWorkingGroup(workinggroupId);
                         workinggroupName = wg != null ? wg.WorkingGroupName : string.Empty;
                     }
 
-                    priorityId = e.Priority_Id.HasValue ? e.Priority_Id.Value : 0;
+                    priorityId = productArea.Priority_Id.HasValue ? productArea.Priority_Id.Value : 0;
                     if (priorityId > 0)
                     {
                         var prio = _priorityService.GetPriority(priorityId);
@@ -1990,7 +1990,7 @@ namespace DH.Helpdesk.Web.Controllers
                         sla = prio.SolutionTime;
                     }
 
-                    if (e.SubProductAreas != null && e.SubProductAreas.Where(s => s.IsActive != 0).Any())
+                    if (productArea.SubProductAreas != null && productArea.SubProductAreas.Where(s => s.IsActive != 0).Any())
                         hasChild = 1;
                 }
             }
@@ -4676,22 +4676,22 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseUnlockAccess = 
                 _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);
 
-            m.MailTemplates = this._mailTemplateService.GetCustomMailTemplatesList(customerId).ToList();
+            m.MailTemplates = _mailTemplateService.GetCustomMailTemplatesList(customerId).ToList();
 
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
 
-            var userHasInvoicePermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InvoicePermission);
+            var userHasInvoicePermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InvoicePermission);
 
             // Establish current solution and set split option if available
             CaseSolution caseTemplate = null;
             if (templateId.HasValue)
             {
-                caseTemplate = this._caseSolutionService.GetCaseSolution(templateId.Value);
+                caseTemplate = _caseSolutionService.GetCaseSolution(templateId.Value);
                 m.CurrentCaseSolution = caseTemplate;
                 m.CaseTemplateSplitToCaseSolutionID = m.CurrentCaseSolution.SplitToCaseSolution_Id;
 
                 var caseTemplateSettings =
-                    this._caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);
+                    _caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);
 
                 if (caseTemplateSettings.Any())
                 {
@@ -5065,6 +5065,24 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
+            //product area should override working group set by case type before
+            if (isCreateNewCase && m.case_.ProductArea_Id.HasValue)
+            {
+                var productArea = _productAreaService.GetProductArea(m.case_.ProductArea_Id.Value);
+                if (productArea != null)
+                {
+                    if (productArea.WorkingGroup_Id.HasValue)
+                    {
+                        m.case_.WorkingGroup_Id = productArea.WorkingGroup_Id.Value;
+                    }
+
+                    if (productArea.Priority_Id.HasValue)
+                    {
+                        m.case_.Priority_Id = productArea.Priority_Id.Value;
+                    }
+                }
+            }
+
             // "RegistrationSourceCustomer" field
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.RegistrationSourceCustomer))
             {
@@ -5240,7 +5258,6 @@ namespace DH.Helpdesk.Web.Controllers
                         m.CaseLog.TextExternal = caseTemplate.Text_External;
                         m.CaseLog.SendMailAboutCaseToNotifier = true;
                     }
-                            
 
                     if (!string.IsNullOrEmpty(caseTemplate.Text_Internal))
                         m.CaseLog.TextInternal = caseTemplate.Text_Internal;
@@ -5389,15 +5406,13 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         if (m.case_.Department_Id.HasValue && m.case_.Priority_Id.HasValue)
                         {
-                            var dept = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
+                            var dept = _departmentService.GetDepartment(m.case_.Department_Id.Value);
                             var priority =
                                 m.priorities.Where(it => it.Id == m.case_.Priority_Id && it.IsActive == 1).FirstOrDefault();
                             if (dept != null && dept.WatchDateCalendar_Id.HasValue && priority != null && priority.SolutionTime == 0)
                             {
                                 m.case_.WatchDate =
-                                    this._watchDateCalendarServcie.GetClosestDateTo(
-                                        dept.WatchDateCalendar_Id.Value,
-                                        DateTime.UtcNow);
+                                    _watchDateCalendarServcie.GetClosestDateTo(dept.WatchDateCalendar_Id.Value, DateTime.UtcNow);
                             }
                         }
                     }
@@ -5431,20 +5446,38 @@ namespace DH.Helpdesk.Web.Controllers
 
                     // This is used for hide fields(which are not in casetemplate) in new case input
                     m.templateistrue = templateistrue;
-                    var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
+
+                    var finishingCauses = _finishingCauseService.GetFinishingCauseInfos(customerId);
                     m.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCauses.ToArray(), caseTemplate.FinishingCause_Id);
 
-                    //set working group and performer from CaseType if they are empty
+                    //save case original working group 
+                    int? caseWorkingGroupId = m.case_.WorkingGroup_Id;
+
+                    //set working group and performer from CaseType if they have not been set before
                     if (caseTemplate.CaseType_Id.HasValue)
                     {
                         var caseType = _caseTypeService.GetCaseType(caseTemplate.CaseType_Id.Value);
                         if (caseType != null)
                         {
-                            if (m.case_.WorkingGroup_Id == null && caseType.WorkingGroup_Id.HasValue)
+                            if (caseWorkingGroupId == null && caseType.WorkingGroup_Id.HasValue)
                                 m.case_.WorkingGroup_Id = caseType.WorkingGroup_Id;
 
                             if (m.case_.Performer_User_Id == null && caseType.User_Id.HasValue)
                                 m.case_.Performer_User_Id = caseType.User_Id.Value;
+                        }
+                    }
+
+                    //set working group and priority from CaseType if they have not been set before
+                    if (caseTemplate.ProductArea_Id.HasValue)
+                    {
+                        var productArea = _productAreaService.GetProductArea(caseTemplate.ProductArea_Id.Value);
+                        if (productArea != null)
+                        {
+                            if (caseWorkingGroupId == null && productArea.WorkingGroup_Id.HasValue)
+                                m.case_.WorkingGroup_Id = productArea.WorkingGroup_Id;
+
+                            if (m.case_.Priority_Id == null && productArea.Priority_Id.HasValue)
+                                m.case_.Priority_Id = productArea.Priority_Id.Value;
                         }
                     }
                 }

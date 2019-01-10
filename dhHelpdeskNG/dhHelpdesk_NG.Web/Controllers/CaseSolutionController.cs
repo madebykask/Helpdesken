@@ -1338,8 +1338,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.OverWritePopUp,
                     caseSolution.SaveAndClose,
                     Verified = caseSolution.Verified.ToBool()
-                },
-                    JsonRequestBehavior.AllowGet);
+                }, JsonRequestBehavior.AllowGet);
         }
 
         public PartialViewResult RemoveCondition(string condition, string casesolutionid)

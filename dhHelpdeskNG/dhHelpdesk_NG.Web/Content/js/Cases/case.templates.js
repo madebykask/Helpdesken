@@ -573,14 +573,14 @@ var ApplyTemplate = function (data, doOverwrite) {
         }
     }
 
-    if (!isNullOrEmpty(data.ProductArea_Id)) {
-        val = data.ProductArea_Id || '';
-        SetValueToBtnGroup('#divProductArea', "#divBreadcrumbs_ProductArea", "#case__ProductArea_Id", val, doOverwrite);
-    }
-
     if (!isNullOrEmpty(data.CaseType_Id)) {
         val = data.CaseType_Id || '';
         SetValueToBtnGroup('#divCaseType', "#divBreadcrumbs_CaseType", "#case__CaseType_Id", val, doOverwrite);
+    }
+
+    if (!isNullOrEmpty(data.ProductArea_Id)) {
+        val = data.ProductArea_Id || '';
+        SetValueToBtnGroup('#divProductArea', "#divBreadcrumbs_ProductArea", "#case__ProductArea_Id", val, doOverwrite);
     }
 
     if (!isNullOrEmpty(data.Status_Id)) {
@@ -1073,10 +1073,10 @@ function LoadTemplate(id) {
 }
 
 function GetTemplateData(id) {
-    
-    return $.get('/CaseSolution/GetTemplate',
-        { 'id': id, myTime: Date.now },
-        function (caseTemplate) {
+
+    var data = { 'id': id, myTime: Date.now };
+
+    return $.get('/CaseSolution/GetTemplate', data, function (caseTemplate) {
 
             finalActionId = caseTemplate["SaveAndClose"];
             var showOverwriteWarning = false;
