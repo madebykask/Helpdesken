@@ -71,7 +71,10 @@
                 .HasForeignKey(c => c.CaseType_Id)
                 .WillCascadeOnDelete(false);
 
-            this.HasOptional(c => c.Problem).WithMany().HasForeignKey(c => c.Problem_Id);
+            this.HasOptional(c => c.Problem)
+                .WithMany()
+                .HasForeignKey(c => c.Problem_Id)
+                .WillCascadeOnDelete(false);
 
             this.HasOptional(c => c.Region)
                 .WithMany()

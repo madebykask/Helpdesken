@@ -1419,10 +1419,7 @@ namespace DH.Helpdesk.Web.Controllers
             AddViewDataValues();
 
             // Positive: Send Mail to...
-            if (m.CaseMailSetting.DontSendMailToNotifier == false)
-                m.CaseMailSetting.DontSendMailToNotifier = true;
-            else
-                m.CaseMailSetting.DontSendMailToNotifier = false;
+            m.CaseMailSetting.DontSendMailToNotifier = m.CaseMailSetting.DontSendMailToNotifier == false;
             m.IsReturnToCase = retToCase;
 
             return this.View(m);
@@ -1452,13 +1449,9 @@ namespace DH.Helpdesk.Web.Controllers
                     m.finishingCauses = this._finishingCauseService.GetFinishingCausesWithChilds(customerId);
                     m.case_ = this._caseService.GetCaseById(m.CaseLog.CaseId);
                     m.IsCaseReopened = isCaseReopened;
-                    bool UseVD = false;
-                    if (!string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
-                    {
-                        UseVD = true;
-                    }
-                                var logFiles = _logFileService.GetLogFileNamesByLogId(id);
-                                m.LogFilesModel = new FilesModel(id.ToString(), logFiles, UseVD);
+                    var useVD = !string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId));
+                    var logFiles = _logFileService.GetLogFileNamesByLogId(id);
+                    m.LogFilesModel = new FilesModel(id.ToString(), logFiles, useVD);
                     const bool isAddEmpty = true;
 
                     var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
@@ -4878,7 +4871,8 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 #region Existing case model initialization actions
-                m.Logs = this._logService.GetCaseLogOverviews(caseId);_finishingCauseService.GetFinishingCausesWithChilds(customerId);
+                m.Logs = this._logService.GetCaseLogOverviews(caseId);
+                _finishingCauseService.GetFinishingCausesWithChilds(customerId);
 
                 var useVd = !string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId));
                 

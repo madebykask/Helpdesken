@@ -28,8 +28,9 @@
                  .WillCascadeOnDelete(false);
 
             this.HasMany(s => s.Cases)
-                .WithRequired(s => s.Problem).HasForeignKey(s => s.Problem_Id);
-
+                .WithOptional(s => s.Problem)
+                .HasForeignKey(s => s.Problem_Id)
+                .WillCascadeOnDelete(false);
             this.Property(x => x.ChangedByUser_Id).IsOptional();
             this.Property(x => x.Customer_Id).IsRequired();
             this.Property(x => x.InventoryNumber).IsRequired().HasMaxLength(20);

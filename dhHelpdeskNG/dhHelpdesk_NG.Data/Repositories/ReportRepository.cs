@@ -211,61 +211,8 @@ namespace DH.Helpdesk.Dal.Repositories
                 var query = from c in this.DataContext.Cases
                     join cu in this.DataContext.Customers on c.Customer_Id equals cu.Id
 
-                    join isAbout in this.DataContext.CaseIsAbout on c.Id equals (int?) isAbout.Id into isabouts
-                    from _isAbout in isabouts.DefaultIfEmpty()
-
-                    join r in this.DataContext.Regions on c.Region_Id equals (int?) r.Id into rs
-                    from _r in rs.DefaultIfEmpty()
-
-                    join d in this.DataContext.Departments on c.Department_Id equals (int?) d.Id into ds
-                    from _d in ds.DefaultIfEmpty()
-
-                    join u1 in this.DataContext.Users on c.User_Id equals (int?) u1.Id into u1s
-                    from _u1 in u1s.DefaultIfEmpty()
-
-                    join s in this.DataContext.Systems on c.System_Id equals (int?) s.Id into ss
-                    from _s in ss.DefaultIfEmpty()
-
-                    join p in this.DataContext.Priorities on c.Priority_Id equals (int?)p.Id into ps
-                    from _p in ps.DefaultIfEmpty()
-
-                    join im in this.DataContext.Impacts on c.Impact_Id equals (int?) im.Id into ims
-                    from _im in ims.DefaultIfEmpty()
-
-                    join sup in this.DataContext.Suppliers on c.Supplier_Id equals (int?) sup.Id into sups
-                    from _sup in sups.DefaultIfEmpty()
-
-                    join regsource in this.DataContext.RegistrationSourceCustomer on c.RegistrationSourceCustomer_Id
-                        equals
-                        (int?) regsource.Id into regsources
-                    from _regsource in regsources.DefaultIfEmpty()
-
                     join caseStatis in this.DataContext.CaseStatistics on c.Id equals caseStatis.CaseId into casestatiss
                     from _caseStatis in casestatiss.DefaultIfEmpty()
-
-                    join wg in this.DataContext.WorkingGroups on c.WorkingGroup_Id equals (int?) wg.Id into wgs
-                    from _wg in wgs.DefaultIfEmpty()
-
-                    join u2 in this.DataContext.Users on c.CaseResponsibleUser_Id equals (int?) u2.Id into u2s
-                    from _u2 in u2s.DefaultIfEmpty()
-
-                    join st in this.DataContext.Statuses on c.Status_Id equals (int?) st.Id into sts
-                    from _st in sts.DefaultIfEmpty()
-
-                    join sst in this.DataContext.StateSecondaries on c.StateSecondary_Id equals (int?) sst.Id into ssts
-                    from _sst in ssts.DefaultIfEmpty()
-
-                    join cp in this.DataContext.CausingParts on c.CausingPartId equals (int?) cp.Id into cps
-                    from _cp in cps.DefaultIfEmpty()
-
-                    join ur in this.DataContext.Urgencies on c.Urgency_Id equals (int?) ur.Id into urs
-                    from _ur in urs.DefaultIfEmpty()
-
-					join user3 in this.DataContext.Users on c.Performer_User_Id equals (int?) user3.Id into user3s
-                    from _u3 in user3s.DefaultIfEmpty()
-
-					join pr in this.DataContext.Problems on c.Problem_Id equals (int?)pr.Id into prs
-					from _pr in prs.DefaultIfEmpty()
 
 					where
                         c.Customer_Id == customerId && c.Deleted != 1 &&
@@ -279,25 +226,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     select new
                     {
                         Case = c,
-                        Customer = cu,
-                        About = _isAbout,
-                        Region = _r,
-                        Department = _d,
-                        User = _u1,
-                        System = _s,
-                        Priority = _p,
-                        Impact = _im,
-                        Supply = _sup,
-                        RegSource = _regsource,
                         CaseStatistic = _caseStatis,
-                        WorkingGroup = _wg,
-                        ResponsibleUser = _u2,
-                        Status = _st,
-                        StateSecondary = _sst,
-                        CausingParts = _cp,
-                        Urgencies = _ur,
-                        PerformerUser = _u3,
-                        Problems = _pr
                     };
 
                 if (caseTypeId.Any())
@@ -336,8 +265,6 @@ namespace DH.Helpdesk.Dal.Repositories
                         : query.Where(c => !c.Case.FinishingDate.HasValue);
                 }
 
-				query = query.Where(o => o.Case.Id > 0);
-
                 var resultQuery = query.Select(c => new ReportGeneratorFields
                     {
                         Id = c.Case.Id,
@@ -346,25 +273,25 @@ namespace DH.Helpdesk.Dal.Repositories
                         Email = c.Case.PersonsEmail,
                         Phone = c.Case.PersonsPhone,
                         CellPhone = c.Case.PersonsCellphone,
-                        Customer = c.Customer.Name,
-                        Region = c.Case.Region_Id.HasValue ? c.Region.Name : "",
-                        Department = c.Case.Department_Id.HasValue ? c.Department.DepartmentName : "",
+                        Customer = c.Case.Customer.Name,
+                        Region = c.Case.Region_Id.HasValue ? c.Case.Region.Name : "",
+                        Department = c.Case.Department_Id.HasValue ? c.Case.Department.DepartmentName : "",
                         Unit = c.Case.OU_Id.HasValue ? c.Case.OU_Id.ToString() : "",
                         Place = c.Case.Place,
                         OrdererCode = c.Case.UserCode,
                         CostCentre = c.Case.CostCentre,
-                        IsAbout_User = c.About.ReportedBy,
-                        IsAbout_Persons_Name = c.About.Person_Name,
-                        IsAbout_Persons_Phone = c.About.Person_Phone,
-                        IsAbout_Persons_CellPhone = c.About.Person_Cellphone,
+                        IsAbout_User = c.Case.IsAbout.ReportedBy,
+                        IsAbout_Persons_Name = c.Case.IsAbout.Person_Name,
+                        IsAbout_Persons_Phone = c.Case.IsAbout.Person_Phone,
+                        IsAbout_Persons_CellPhone = c.Case.IsAbout.Person_Cellphone,
                         IsAbout_Region =
                             "", //_isAbout.Region_Id.HasValue ? _r1.Name : "",   //Disabled for version 5.3.21
                         IsAbout_Department = "", //_isAbout.Department_Id.HasValue ? _d1.DepartmentName : "",
                         IsAbout_OU = "", //_isAbout.OU_Id.HasValue ? _isAbout.OU_Id.ToString() : "",
-                        IsAbout_CostCentre = c.About.CostCentre,
-                        IsAbout_Place = c.About.Place,
-                        IsAbout_UserCode = c.About.UserCode,
-                        IsAbout_Persons_Email = c.About.Person_Email,
+                        IsAbout_CostCentre = c.Case.IsAbout.CostCentre,
+                        IsAbout_Place = c.Case.IsAbout.Place,
+                        IsAbout_UserCode = c.Case.IsAbout.UserCode,
+                        IsAbout_Persons_Email = c.Case.IsAbout.Person_Email,
 
                         PcNumber = c.Case.InventoryNumber,
                         ComputerType = c.Case.InventoryType,
@@ -373,14 +300,14 @@ namespace DH.Helpdesk.Dal.Repositories
                         Case = c.Case.CaseNumber,
                         RegistrationDate = c.Case.RegTime,
                         ChangeDate = c.Case.ChangeTime,
-                        RegistratedBy = c.Case.User_Id.HasValue ? c.User.FirstName + " " + c.User.SurName : "",
+                        RegistratedBy = c.Case.User_Id.HasValue ? c.Case.User.FirstName + " " + c.Case.User.SurName : "",
                         CaseType = c.Case.CaseType_Id,
                         ProductArea = c.Case.ProductArea_Id.HasValue ? c.Case.ProductArea_Id.ToString() : "",
-                        System = c.Case.System_Id.HasValue ? c.System.SystemName : "",
-                        UrgentDegree = c.Case.Urgency_Id.HasValue ? c.Urgencies.Name : "",
-                        Impact = c.Case.Impact_Id.HasValue ? c.Impact.Name : "",
+                        System = c.Case.System_Id.HasValue ? c.Case.System.SystemName : "",
+                        UrgentDegree = c.Case.Urgency_Id.HasValue ? c.Case.Urgency.Name : "",
+                        Impact = c.Case.Impact_Id.HasValue ? c.Case.Impact.Name : "",
                         Category = c.Case.Category_Id.HasValue ? c.Case.Category_Id.ToString() : "",
-                        Supplier = c.Case.Supplier_Id.HasValue ? c.Supply.Name : "",
+                        Supplier = c.Case.Supplier_Id.HasValue ? c.Case.Supplier.Name : "",
                         InvoiceNumber = c.Case.InvoiceNumber,
                         ReferenceNumber = c.Case.ReferenceNumber,
                         Caption = c.Case.Caption,
@@ -395,24 +322,24 @@ namespace DH.Helpdesk.Dal.Repositories
                         FinishingDate = c.Case.FinishingDate,
                         FinishingDescription = c.Case.FinishingDescription,
 
-                        RegistrationSource = c.Case.RegistrationSourceCustomer_Id.HasValue ? c.RegSource.SourceName : "",
+                        RegistrationSource = c.Case.RegistrationSourceCustomer_Id.HasValue ? c.Case.RegistrationSourceCustomer.SourceName : "",
                         SolvedInTime = c.CaseStatistic.WasSolvedInTime,
 
-                        WorkingGroup = c.Case.WorkingGroup_Id.HasValue ? c.WorkingGroup.WorkingGroupName : "",
-                        Responsible = c.Case.CaseResponsibleUser_Id.HasValue ? c.ResponsibleUser.FirstName + " " + c.ResponsibleUser.SurName : "",
-                        Administrator = c.Case.Performer_User_Id.HasValue ? c.PerformerUser.FirstName + " " + c.PerformerUser.SurName : "",
-                        Priority = c.Case.Priority_Id.HasValue ? c.Priority.Name : "",
-                        State = c.Case.Status_Id.HasValue ? c.Status.Name : "",
-                        SubState = c.Case.StateSecondary_Id.HasValue ? c.StateSecondary.Name : "",
+                        WorkingGroup = c.Case.WorkingGroup_Id.HasValue ? c.Case.Workinggroup.WorkingGroupName : "",
+                        Responsible = c.Case.CaseResponsibleUser_Id.HasValue ? c.Case.CaseResponsibleUser.FirstName + " " + c.Case.CaseResponsibleUser.SurName : "",
+                        Administrator = c.Case.Performer_User_Id.HasValue ? c.Case.Administrator.FirstName + " " + c.Case.Administrator.SurName : "",
+                        Priority = c.Case.Priority_Id.HasValue ? c.Case.Priority.Name : "",
+                        State = c.Case.Status_Id.HasValue ? c.Case.Status.Name : "",
+                        SubState = c.Case.StateSecondary_Id.HasValue ? c.Case.StateSecondary.Name : "",
                         PlannedActionDate = c.Case.PlanDate,
                         WatchDate = c.Case.WatchDate,
                         Verified = c.Case.Verified,
                         VerifiedDescription = c.Case.VerifiedDescription,
                         SolutionRate = c.Case.SolutionRate,
-                        CausingPart = c.Case.CausingPartId.HasValue ? c.CausingParts.Name : "",
-                        Problem = c.Case.Problem_Id.HasValue ? c.Problems.Name : "",
+                        CausingPart = c.Case.CausingPartId.HasValue ? c.Case.CausingPart.Name : "",
+                        Problem = c.Case.Problem_Id.HasValue ? c.Case.Problem.Name : "",
 
-                    LogData = (from r in this.DataContext.Logs
+                        LogData = (from r in this.DataContext.Logs
                                    where (r.Case_Id == c.Case.Id)
                                    orderby r.LogDate descending
                                    select r).FirstOrDefault(),
@@ -438,7 +365,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         TotalMaterial = (from r2 in DataContext.Logs
                                          where (r2.Case_Id == c.Case.Id)
                                          select r2.Price).DefaultIfEmpty(0).Sum(),
-                    });
+                });
 
                 result = resultQuery.AsNoTracking()
                     .OrderBy(c => c.Id)
