@@ -109,7 +109,7 @@
   <system.web>
 
     <authorization>
-      <deny users="?" />
+      <allow users="*" />
     </authorization>
     <!--<authentication mode="None" />-->
     <httpRuntime targetFramework="4.5.2" requestValidationMode="4.5" />
