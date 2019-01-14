@@ -1757,6 +1757,13 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(result);
         }
 
+        [HttpPost]
+        public ActionResult Search_PcNumber(int userId, int customerId)
+        {
+            var result = this._computerService.SearchPcNumberByUserId(customerId, userId);          
+            return this.Json(result);
+        }
+
         #endregion
 
         #region --Change Depended Field--

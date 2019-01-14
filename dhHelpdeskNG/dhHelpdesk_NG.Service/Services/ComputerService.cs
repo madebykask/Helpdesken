@@ -54,6 +54,7 @@ namespace DH.Helpdesk.Services.Services
         ComputerUserCategoryOverview GetEmptyComputerUserCategory(int customerId);
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
         List<InventorySearchResult> SearchPcNumber(int customerId, string query);
+        InventorySearchResult SearchPcNumberByUserId(int customerId, int userId);
         ComputerUserCategory GetComputerUserCategoryByID(int computerUserCategoryID);
         int SaveComputerUserCategory(ComputerUserCategoryData data);
 
@@ -511,6 +512,11 @@ namespace DH.Helpdesk.Services.Services
         public List<InventorySearchResult> SearchPcNumber(int customerId, string query)
         {
             return _inventoryRepository.SearchPcNumber(customerId, query);
+        }
+
+        public InventorySearchResult SearchPcNumberByUserId(int customerId, int userId)
+        {
+            return _inventoryRepository.SearchPcNumberByUserId(customerId, userId);
         }
 
         public ComputerUserCategoryOverview GetEmptyComputerUserCategory(int customerId)

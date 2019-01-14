@@ -539,6 +539,12 @@ function GetComputerUserSearchOptions() {
                 var initiatorSectionType = 0;
                 loadExtendedCaseSectionIfExist(item.categoryID, initiatorSectionType);
 
+                //Get PCNumber by UserId
+                if (item.id != null) {
+                    setPcNumber(item.id);
+                }
+                    
+
                 return item.num;
             }
             return this.query;
@@ -860,6 +866,23 @@ function GetComputerUserSearchOptionsForIsAbout() {
     };
 
     return options;
+}
+
+function setPcNumber(userId)
+{       
+    $.ajax({
+        url: '/cases/Search_PcNumber',
+        type: 'post',
+        data: { userId: userId, customerId: $('#case__Customer_Id').val() },
+        dataType: 'json',
+        success: function (result) {
+            if (result != null){
+            if (result.Name != null || result.Name != "")
+                $('#case__InventoryNumber').val(result.Name);
+            }
+        }        
+    });
+ 
 }
 
 /**

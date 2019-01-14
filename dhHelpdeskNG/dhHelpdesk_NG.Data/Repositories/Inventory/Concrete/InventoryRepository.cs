@@ -382,6 +382,28 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             return result;
         }
 
+        public InventorySearchResult SearchPcNumberByUserId(int customerId, int userId)
+        {
+
+            var workstations =
+                from c in this.DbContext.Computers
+                join cu in this.DbContext.ComputerUsers on c.User_Id equals cu.Id into res
+                from k in res.DefaultIfEmpty()
+                where c.Customer_Id == customerId && (k.Id == userId)
+                orderby c.SyncChangedDate descending
+                select new InventorySearchResult
+                {
+                    Id = c.Id,
+                    Name = c.ComputerName,
+                    Location = c.Location,
+                    TypeDescription = "", //Computer Type
+                    TypeName = "Arbetsstation",
+                    NeedTranslate = true
+                };
+            var result = workstations.FirstOrDefault();
+            return result;
+        }
+
         public List<int> GetRelatedCaseIds(CurrentModes inventoryType, int inventoryId, int customerId)
         {
             var caseIds = new List<int>();
