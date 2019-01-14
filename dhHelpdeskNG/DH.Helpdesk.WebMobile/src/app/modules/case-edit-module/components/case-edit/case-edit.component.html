@@ -2,12 +2,35 @@
     <mbsc-button flat block icon="loop2" ></mbsc-button>
 </mbsc-form>
 <mbsc-form *ngIf="isLoaded">
-    <mbsc-tab-nav [options]="tabsMenuSettings" class="case-header">
-            <mbsc-nav-item selected="false" (click)="goToCases()" translate>Avbryt</mbsc-nav-item>
-            <mbsc-nav-item selected="true"><div class="ellipsis">{{ getCaseTitle() }}</div></mbsc-nav-item>
-            <mbsc-nav-item selected="false" (click)="saveCase()" [disabled]="!canSave" translate>{{ canSave ? 'Klar' : '' }}</mbsc-nav-item>
-    </mbsc-tab-nav>
-    <div class="md-paging">
+    <div id="case-header">
+      <mbsc-tab-nav [options]="titleTabsSettings" class="case-header">
+          <mbsc-nav-item selected="false" (click)="goToCases()" translate>Avbryt</mbsc-nav-item>
+          <mbsc-nav-item selected="true"><div class="ellipsis">{{ getCaseTitle() }}</div></mbsc-nav-item>
+          <mbsc-nav-item selected="false" (click)="saveCase()" [disabled]="!canSave" translate>{{ canSave ? 'Klar' : '' }}</mbsc-nav-item>
+      </mbsc-tab-nav>
+    </div>
+    
+    <div id="case-tabs">
+      <mbsc-tab-nav [options]="caseTabsSettings" class="case-sub-header">
+          <mbsc-nav-item selected="currentTab == 'case_details'" (click)="currentTab='case_details'">Case</mbsc-nav-item>
+          <mbsc-nav-item selected="currentTab == 'case_actions'" (click)="currentTab='case_actions'">Actions</mbsc-nav-item>
+          <mbsc-nav-item selected="currentTab == 'case_workflows'" (click)="currentTab='case_workflows'">Workflows</mbsc-nav-item>
+      </mbsc-tab-nav>
+    </div>
+  </mbsc-form>
+
+<mbsc-form *ngIf="isLoaded" class="case-content">  
+
+    <!-- Case Actions -->
+    <div *ngIf="currentTab == 'case_actions'">
+        <div class="md-paging">
+          <case-actions *ngIf="caseActions.length > 0" [items]="caseActions"></case-actions>
+        </div>
+    </div>
+
+    <!-- Case edit fields -->
+    <div *ngIf="currentTab == 'case_details'"> 
+      <div class="md-paging">
         <form [formGroup]="form" novalidate>
             <mbsc-form-group collapsible #initiatorSection *ngIf="hasSection(caseSectionTypes.Initiator)">
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Initiator) }}</mbsc-form-group-title>
@@ -112,7 +135,7 @@
                     <case-dropdown-control *ngIf="hasField(caseFieldsNames.SolutionRate)" disabled=true [field]="getField(caseFieldsNames.SolutionRate)" [form]="form" [dataSource]="dataSource.solutionsRatesStore$"></case-dropdown-control>
                 </mbsc-form-group-content>
             </mbsc-form-group>
-<!--
+    <!--
             <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.Communication)" #communicationManagementSection>
                 <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Communication)}}</mbsc-form-group-title>
                 <mbsc-form-group-content>
@@ -140,4 +163,6 @@
 
         </form>
     </div>
+</div>
+    
 </mbsc-form>

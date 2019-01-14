@@ -26,6 +26,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '@env/environment';
 import { SharedModule } from './modules/shared-module/shared.module';
 import { GetByKeyPipe } from './helpers/pipes/filter-case-overview.pipe';
+import { TestComponent } from './components/test/test.component';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -37,6 +38,7 @@ import { GetByKeyPipe } from './helpers/pipes/filter-case-overview.pipe';
      RequireAuthDirective,
      ErrorComponent,
      AltLayoutComponent,
+     TestComponent,
   ],
   imports: [
     MbscModule,

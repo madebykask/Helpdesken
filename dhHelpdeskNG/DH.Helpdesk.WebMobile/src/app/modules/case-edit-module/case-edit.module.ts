@@ -17,12 +17,13 @@ import { MbscModule } from '@mobiscroll/angular';
 import { HttpClientModule } from '@angular/common/http';
 import { CaseFilesControlComponent } from './components/case-edit/controls/case-files/case-files-control.component';
 import { CommonModule } from '@angular/common';
+import { CaseActionsComponent } from './components/case-actions/case-actions.component';
 
 @NgModule({
   declarations: [ CaseEditComponent,
     CaseTextboxComponent, CaseDateComponent, CaseDropdownComponent,  CaseMultiDropdownComponent,
     CaseSwitchComponent, CaseTextareaComponent, CaseDateTimeComponent, MailtoticketControlComponent,
-    CaseFilesUploadComponent, CaseFilesControlComponent
+    CaseFilesUploadComponent, CaseFilesControlComponent, CaseActionsComponent
 ],
   imports: [
     CommonModule,

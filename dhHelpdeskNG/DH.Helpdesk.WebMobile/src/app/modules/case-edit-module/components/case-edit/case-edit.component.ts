@@ -20,7 +20,7 @@ import { CaseEditDataHelper } from '../../logic/case-edit/case-editdata.helper';
 import { CaseFieldsNames, CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { CaseLockApiService } from '../../services/api/case/case-lock-api.service';
 import { CaseSaveService } from '../../services/case';
-import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel, CaseLockModel, BaseCaseField } from '../../models';
+import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel, CaseLockModel, BaseCaseField, CaseAction, GenericActionData, CaseActionEvents, CaseHistoryActionData, CaseLogActionData } from '../../models';
 import { OptionItem } from 'src/app/modules/shared-module/models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
@@ -38,7 +38,19 @@ export class CaseEditComponent {
     isLoaded = false;
     form: FormGroup;
     caseKey:string = '';
-    tabsMenuSettings = {};
+    
+    titleTabsSettings = {
+      display:"top"
+    }
+
+    caseTabsSettings = {
+      display:"top",
+      layout: "fixed"
+    };
+
+    currentTab:string = 'case_details';
+    caseActions: CaseAction<any>[] = [];
+
     private searchType: CasesSearchType = CasesSearchType.AllCases;
     private caseId: number;
     private caseData: CaseEditInputModel;
@@ -256,7 +268,7 @@ export class CaseEditComponent {
       if (res) {
         searchType = CasesSearchType[res.SearchType];
       }
-      else{
+      else {
         searchType = CasesSearchType[CasesSearchType.AllCases];
       }
       this.navigate('/casesoverview/' + searchType);
@@ -265,7 +277,46 @@ export class CaseEditComponent {
     private processCaseData(){
       this.caseKey = this.caseData.id > 0 ? this.caseData.id.toString() : this.caseData.caseGuid.toString();
       this.form = this.createFormGroup(this.caseData);
+      this.caseActions = this.mockCaseActions();
     }
+
+    private mockCaseActions(){
+        
+        let action = new CaseAction<CaseHistoryActionData>();
+        
+        action.Id = 1;
+        action.Type = CaseActionEvents.AssignedAdministrator;
+        action.CreatedAt = new Date(Date.now() - 5000 * 30);
+        action.CreatedByUserId = 3;
+        action.CreatedByUserName = 'Perer Parker';
+        action.Data = new CaseHistoryActionData('Administrator', "", "Jes Erricson");
+
+        let action1 = new CaseAction<CaseHistoryActionData>();
+        action1.Id = 2;
+        action1.Type = CaseActionEvents.ChangePriority;
+        action1.CreatedAt = new Date(Date.now() - 3000 * 30);
+        action1.CreatedByUserId = 1;
+        action1.CreatedByUserName = 'Glenn Andersson';
+        action1.Data = new CaseHistoryActionData('Priority', "Normal", "High");
+
+        let action2 = new CaseAction<CaseLogActionData>();
+        action2.Id = 3;
+        action2.Type = CaseActionEvents.ChangePriority;
+        action2.CreatedAt = new Date(Date.now() - 2600 * 30);
+        action2.CreatedByUserId = 1;
+        action2.CreatedByUserName = 'Glenn Andersson';
+        action2.Data = new CaseLogActionData('Please check the case! Thanks!');
+
+        let action3 = new CaseAction<CaseLogActionData>();
+        action3.Id = 4;
+        action3.Type = CaseActionEvents.InternalLogNote;
+        action3.CreatedAt = new Date();
+        action3.CreatedByUserId = 2;
+        action3.CreatedByUserName = 'Jes Ericsson';
+        action3.Data = new CaseLogActionData('I will check it now!');
+
+        return [action, action1, action2, action3];
+    }    
 
     private get caseAccessMode(): CaseAccessMode {
       return this.caseData.editMode;
