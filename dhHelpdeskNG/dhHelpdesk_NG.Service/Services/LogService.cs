@@ -1,4 +1,8 @@
-﻿using DH.Helpdesk.Common.Extensions.Boolean;
+﻿using System.Data.Entity;
+using System.Threading.Tasks;
+using DH.Helpdesk.Common.Extensions.Boolean;
+using DH.Helpdesk.Dal.MapperData.Logs;
+using DH.Helpdesk.Dal.Mappers;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -25,6 +29,7 @@ namespace DH.Helpdesk.Services.Services
         int SaveLog(CaseLog caseLog, int noOfAttachedFiles, out IDictionary<string, string> errors);
         CaseLog InitCaseLog(int userId, string regUser);
         IList<Log> GetLogsByCaseId(int caseId);
+        Task<List<Log>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false);
         CaseLog GetLogById(int id);
         Guid Delete(int id, string basePath);
 
@@ -48,18 +53,12 @@ namespace DH.Helpdesk.Services.Services
         private readonly ILogFileRepository _logFileRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFilesStorage _filesStorage;
-        private readonly IFinishingCauseRepository _finishingCauseRepository;
         private readonly IFinishingCauseService _finishingCauseService;
         private readonly IMail2TicketRepository _mail2TicketRepository;
-
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
-
-        /// <summary>
-        /// The case repository.
-        /// </summary>
-        private readonly ICaseRepository caseRepository;
-
-        private readonly IProblemLogService problemLogService;
+        private readonly IEntityToBusinessModelMapper<LogMapperData, LogOverview> _logToLogOverviewMapper;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICaseRepository _caseRepository;
+        private readonly IProblemLogService _problemLogService;
 
         #endregion
 
@@ -91,21 +90,21 @@ namespace DH.Helpdesk.Services.Services
             IUnitOfWork unitOfWork, 
             ICaseRepository caseRepository, 
             IProblemLogService problemLogService,
-            IFinishingCauseRepository finishingCauseRepository,
             IFinishingCauseService finishingCauseService, 
             IMail2TicketRepository mail2TicketRepository,
-            IUnitOfWorkFactory unitOfWorkFactory)
+            IUnitOfWorkFactory unitOfWorkFactory,
+            IEntityToBusinessModelMapper<LogMapperData, LogOverview> logToLogOverviewMapper)
         {
-            this._logRepository = logRepository;
-            this._unitOfWork = unitOfWork;
-            this.caseRepository = caseRepository;
-            this.problemLogService = problemLogService;
-            this._filesStorage = filesStorage;
-            this._logFileRepository = logFileRepository;
-            this._finishingCauseRepository = finishingCauseRepository;
-            this._finishingCauseService = finishingCauseService;
-            this._mail2TicketRepository = mail2TicketRepository;
-            this.unitOfWorkFactory = unitOfWorkFactory;
+            _logRepository = logRepository;
+            _unitOfWork = unitOfWork;
+            _caseRepository = caseRepository;
+            _problemLogService = problemLogService;
+            _filesStorage = filesStorage;
+            _logFileRepository = logFileRepository;
+            _finishingCauseService = finishingCauseService;
+            _mail2TicketRepository = mail2TicketRepository;
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _logToLogOverviewMapper = logToLogOverviewMapper;
         }
 
         #endregion
@@ -171,17 +170,16 @@ namespace DH.Helpdesk.Services.Services
         public IEnumerable<LogOverview> GetCaseLogOverviews(int caseId)
         {
             var result = new List<LogOverview>();
-            var caseLogs = this._logRepository.GetCaseLogOverviews(caseId);
-            if (caseLogs != null)
-            {
-                result.AddRange(caseLogs);
-            }
+            var caseLogsEntities = this._logRepository.GetCaseLogOverviews(caseId);
+            var caseLogs = caseLogsEntities.Select(_logToLogOverviewMapper.Map).ToList();
 
-            var caseOverview = this.caseRepository.GetCaseOverview(caseId);
+            result.AddRange(caseLogs);
+
+            var caseOverview = this._caseRepository.GetCaseOverview(caseId);
 
             if (caseOverview != null && caseOverview.ProblemId.HasValue)
             {
-                var problemLogs = this.problemLogService.GetProblemLogs(caseOverview.ProblemId.Value);
+                var problemLogs = this._problemLogService.GetProblemLogs(caseOverview.ProblemId.Value);
                 if (problemLogs != null)
                 {
                     result.AddRange(problemLogs
@@ -223,7 +221,15 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<Log> GetLogsByCaseId(int caseId)
         {
-            return this._logRepository.GetLogForCase(caseId).ToList();   
+            return this._logRepository.GetLogForCase(caseId, true).ToList();
+        }
+
+        public Task<List<Log>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false)
+        {
+            return _logRepository.GetLogForCase(caseId, includeInternalLogs)
+                .Include(l => l.User)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public CaseLog GetLogById(int id)
@@ -289,7 +295,7 @@ namespace DH.Helpdesk.Services.Services
 
             IDictionary<string, string> errors;
             IEnumerable<CaseHistory> newCaseHistories;
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var caseHistoryRepository = uow.GetRepository<CaseHistory>();
                 var maxCaseHistoryIds =
@@ -420,7 +426,7 @@ namespace DH.Helpdesk.Services.Services
             caseLogs.ForEach(this._logRepository.Add);
             this._logRepository.Commit();
 
-            caseRepository.MarkCaseAsUnread(parentCaseId);
+            _caseRepository.MarkCaseAsUnread(parentCaseId);
         }
         public void AddParentCaseLogToChildCases(int[] caseIds, CaseLog parentCaseLog)
         {
@@ -431,7 +437,7 @@ namespace DH.Helpdesk.Services.Services
 
             IDictionary<string, string> errors;
             IEnumerable<CaseHistory> newCaseHistories;
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var caseHistoryRepository = uow.GetRepository<CaseHistory>();
                 var maxCaseHistoryIds =
@@ -562,7 +568,7 @@ namespace DH.Helpdesk.Services.Services
             caseLogs.ForEach(this._logRepository.Add);
             this._logRepository.Commit();
 
-            caseIds.ForEach(id => caseRepository.MarkCaseAsUnread(id));
+            caseIds.ForEach(id => _caseRepository.MarkCaseAsUnread(id));
         }
 
 	    public void UpdateLogInvoices(List<CaseLog> logs)

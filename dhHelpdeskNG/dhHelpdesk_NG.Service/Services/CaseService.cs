@@ -420,23 +420,20 @@ namespace DH.Helpdesk.Services.Services
             }
 
             // delete logs
-            var logs = this._logRepository.GetLogForCase(id);
-            if (logs != null)
+            var logs = this._logRepository.GetLogForCase(id, true).ToList();
+            // delete Mail2tickets with log
+            foreach (var l in logs)
             {
-                // delete Mail2tickets with log
-                foreach (var l in logs)
-                {
-                    this._mail2TicketRepository.DeleteByLogId(l.Id);
-                }
-                this._mail2TicketRepository.Commit();
-
-
-                foreach (var l in logs)
-                {
-                    this._logRepository.Delete(l);
-                }
-                this._logRepository.Commit();
+                this._mail2TicketRepository.DeleteByLogId(l.Id);
             }
+            this._mail2TicketRepository.Commit();
+
+
+            foreach (var l in logs)
+            {
+                this._logRepository.Delete(l);
+            }
+            this._logRepository.Commit();
 
             //Delete Mail2Tickets by caseId
             this._mail2TicketRepository.DeleteByCaseId(id);

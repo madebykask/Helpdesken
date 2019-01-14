@@ -21,7 +21,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface ILogRepository : IRepository<Log>
     {
         Log GetLogById(int id);
-        IEnumerable<Log> GetLogForCase(int caseId);
+        IQueryable<Log> GetLogForCase(int caseId, bool includeInternalLogs = false);
 
         /// <summary>
         /// The get case log overviews.
@@ -32,7 +32,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// <returns>
         /// The result />.
         /// </returns>
-        IEnumerable<BusinessData.Models.Logs.Output.LogOverview> GetCaseLogOverviews(int caseId);
+        IEnumerable<LogMapperData> GetCaseLogOverviews(int caseId);
         IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate);
 
         Log GetLastLog(int caseId);
@@ -40,13 +40,9 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public class LogRepository : RepositoryBase<Log>, ILogRepository
     {
-        private readonly IEntityToBusinessModelMapper<LogMapperData, LogOverview> _logToLogOverviewMapper;
-
-        public LogRepository(IDatabaseFactory databaseFactory,
-            IEntityToBusinessModelMapper<LogMapperData, LogOverview> logToLogOverviewMapper) 
+        public LogRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
-            _logToLogOverviewMapper = logToLogOverviewMapper;
         }
 
         public Log GetLogById(int id)
@@ -56,27 +52,17 @@ namespace DH.Helpdesk.Dal.Repositories
                     select l).FirstOrDefault();
         }
 
-        public IEnumerable<Log> GetLogForCase(int caseId)
+        public IQueryable<Log> GetLogForCase(int caseId, bool includeInternalLogs = false)
         {
-            var q = (
-                    from l in this.DataContext.Logs
+            var q = from l in this.DataContext.Logs
                     where l.Case_Id == caseId
-                    select l
-                     );
-            return q.OrderByDescending(l => l.LogDate);
+                    select l;
+            if (!includeInternalLogs)
+            {
+                q = q.Where(l => string.IsNullOrEmpty(l.Text_Internal));
+            }
 
-            //// todo join with log from problem module
-            //var q2 =
-            //        (
-            //        from p in this.DataContext.Problems
-            //        join c in DataContext.Cases on p.Id equals c.Problem_Id
-            //        join pl in DataContext.ProblemLogs on p.Id equals pl.Problem_Id
-            //        join u in DataContext.Users on p.ChangedByUser_Id equals u.Id
-            //        where c.Id == caseId && pl.ShowOnCase != 0
-            //        select new Log { Id = pl.Id, LogGUID = pl.ProblemLogGUID, Case_Id = caseId, Text_External = pl.LogText, LogDate = pl.CreatedDate, RegUser = u.FirstName + " " + u.SurName, InformCustomer = 0, WorkingTime = 0, EquipmentPrice = 0, Export = 0, Charge = 0, LogType = 0 }
-            //        );
-            //var combined = q.Concat(q2);
-            //return combined.OrderByDescending(l => l.LogDate);
+            return q.OrderByDescending(l => l.LogDate);
         }
 
 
@@ -89,7 +75,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// <returns>
         /// The result />.
         /// </returns>
-        public IEnumerable<LogOverview> GetCaseLogOverviews(int caseId)
+        public IEnumerable<LogMapperData> GetCaseLogOverviews(int caseId)
         {
             var query = from l in Table
                         where l.Case_Id == caseId
@@ -124,10 +110,7 @@ namespace DH.Helpdesk.Dal.Repositories
                                             })
                         };
 
-            var items = query.ToList();
-
-            var result = items.Select(_logToLogOverviewMapper.Map).ToList();
-            return result;
+            return query.ToList();
         }
 
         public IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate)
