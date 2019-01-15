@@ -1,10 +1,15 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings
 {
     using DH.Helpdesk.Common.ValidationAttributes;
-
+    
     public class WorkstationFieldsSettings
     {
-        public WorkstationFieldsSettings(ModelEditFieldSetting computerNameFieldSetting, ModelEditFieldSetting manufacturerFieldSetting, ModelEditFieldSetting computerModelFieldSetting, ModelEditFieldSetting serialNumberFieldSetting, ModelEditFieldSetting biosVersionFieldSetting, ModelEditFieldSetting biosDateFieldSetting, ModelEditFieldSetting theftmarkFieldSetting, ModelEditFieldSetting carePackNumberFieldSetting, ModelEditFieldSetting computerTypeFieldSetting, ModelEditFieldSetting locationFieldSetting)
+        public WorkstationFieldsSettings(ModelEditFieldSetting computerNameFieldSetting,
+            ModelEditFieldSetting manufacturerFieldSetting, ModelEditFieldSetting computerModelFieldSetting,
+            ModelEditFieldSetting serialNumberFieldSetting, ModelEditFieldSetting biosVersionFieldSetting,
+            ModelEditFieldSetting biosDateFieldSetting, ModelEditFieldSetting theftmarkFieldSetting,
+            ModelEditFieldSetting carePackNumberFieldSetting, ModelEditFieldSetting computerTypeFieldSetting,
+            ModelEditFieldSetting locationFieldSetting)
         {
             this.ComputerNameFieldSetting = computerNameFieldSetting;
             this.ManufacturerFieldSetting = manufacturerFieldSetting;

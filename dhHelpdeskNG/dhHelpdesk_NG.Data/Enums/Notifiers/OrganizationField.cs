@@ -23,7 +23,7 @@
         public static readonly string Other = "Info";
     }
 
-    public static class OrganizationFieldLable
+    public static class OrganizationFieldLabel
     {
         public static readonly string Title = "Titel";
 

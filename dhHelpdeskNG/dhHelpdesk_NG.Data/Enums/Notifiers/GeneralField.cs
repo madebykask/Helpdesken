@@ -31,7 +31,7 @@
         public static readonly string Language = "Language_Id";
     }
 
-    public static class GeneralFieldLable
+    public static class GeneralFieldLabel
     {
         public static readonly string UserId = "Användare";
 

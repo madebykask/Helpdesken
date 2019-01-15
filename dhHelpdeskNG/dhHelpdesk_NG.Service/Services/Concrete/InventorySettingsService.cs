@@ -65,7 +65,6 @@
         public ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false)
         {
             var models = this.computerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId, isReadonly);
-
             return models;
         }
 

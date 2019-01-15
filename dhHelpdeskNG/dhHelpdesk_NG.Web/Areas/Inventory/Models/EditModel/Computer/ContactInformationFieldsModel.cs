@@ -1,6 +1,5 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer
 {
-    using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Common.ValidationAttributes;
 
     public class ContactInformationFieldsModel
@@ -12,15 +11,17 @@
         public ContactInformationFieldsModel(
             int? userId,
             ConfigurableFieldModel<string> userStringId,
-            string department,
-            string unit,
-            UserName userName)
+            ConfigurableFieldModel<string> firstName,
+            ConfigurableFieldModel<string> lastName,
+            ConfigurableFieldModel<string> department,
+            ConfigurableFieldModel<string> unit)
         {
-            this.UserId = userId;
-            this.UserStringId = userStringId;
-            this.Department = department;
-            this.Unit = unit;
-            this.UserName = userName;
+            UserId = userId;
+            UserStringId = userStringId;
+            FirstName = firstName;
+            LastName = lastName;
+            Department = department;
+            Unit = unit;
         }
 
         [IsId]
@@ -28,11 +29,9 @@
 
         [NotNull]
         public ConfigurableFieldModel<string> UserStringId { get; set; }
-
-        public UserName UserName { get; set; }
-
-        public string Department { get; set; }
-
-        public string Unit { get; set; }
+        public ConfigurableFieldModel<string> FirstName { get; set; }
+        public ConfigurableFieldModel<string> LastName { get; set; }
+        public ConfigurableFieldModel<string> Department { get; set; }
+        public ConfigurableFieldModel<string> Unit { get; set; }
     }
 }

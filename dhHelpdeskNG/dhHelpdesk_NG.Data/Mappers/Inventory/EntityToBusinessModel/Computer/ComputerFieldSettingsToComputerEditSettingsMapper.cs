@@ -56,6 +56,24 @@
             return settings;
         }
 
+        private static ContactInformationFieldsSettings CreateContactInformationSettings(NamedObjectCollection<FieldSettingMapperDataForModelEdit> settings)
+        {
+            var userId = CreateFieldSetting(settings.FindByName(ContactInformationFields.UserId));
+            var firstName = CreateFieldSetting(settings.FindByName(ContactInformationFields.FirstName));
+            var lastName = CreateFieldSetting(settings.FindByName(ContactInformationFields.LastName));
+            var department = CreateFieldSetting(settings.FindByName(ContactInformationFields.Department));
+            var unit = CreateFieldSetting(settings.FindByName(ContactInformationFields.Unit));
+
+            var contactSettings = new ContactInformationFieldsSettings(
+                userId,
+                firstName,
+                lastName,
+                department,
+                unit);
+
+            return contactSettings;
+        }
+
         private static WorkstationFieldsSettings CreateWorkstationSettings(NamedObjectCollection<FieldSettingMapperDataForModelEdit> entity)
         {
             var name = CreateFieldSetting(entity.FindByName(WorkstationFields.Name));
@@ -217,14 +235,7 @@
             return settings;
         }
 
-        private static ContactInformationFieldsSettings CreateContactInformationSettings(NamedObjectCollection<FieldSettingMapperDataForModelEdit> entity)
-        {
-            var userId = CreateFieldSetting(entity.FindByName(ContactInformationFields.UserId));
-
-            var settings = new ContactInformationFieldsSettings(userId);
-
-            return settings;
-        }
+      
 
         private static OrganizationFieldsSettings CreateOrganizationSettings(NamedObjectCollection<FieldSettingMapperDataForModelEdit> entity)
         {

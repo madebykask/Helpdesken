@@ -126,11 +126,12 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
             var readOnly = !userHasInventoryAdminPermission && dialog;
             ComputerForRead model = this.inventoryService.GetWorkstation(id);
+
             ComputerEditOptions options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
+
             ComputerFieldsSettingsForModelEdit settings =
-                this.inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
-                    SessionFacade.CurrentCustomer.Id,
-                    SessionFacade.CurrentLanguageId, readOnly);
+                inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
+                    SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId, readOnly);
 
             ComputerViewModel computerEditModel = this.computerViewModelBuilder.BuildViewModel(model, options, settings);
             computerEditModel.IsForDialog = dialog;
