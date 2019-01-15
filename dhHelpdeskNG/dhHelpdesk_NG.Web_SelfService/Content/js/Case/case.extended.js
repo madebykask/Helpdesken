@@ -512,7 +512,7 @@ ExtendedCasePage.prototype.init = function (params) {
     self.loadExtendedCaseIfNeeded();
     
     //SAVE
-    $('input.save-button').on('click', function (e) {
+    $('.save-button').on('click', function (e) {
         e.preventDefault();
 
         if (lastClickTimeStamp == null || lastClickTimeStamp + nextAllowedClickDelay < event.timeStamp) {
@@ -527,7 +527,7 @@ ExtendedCasePage.prototype.init = function (params) {
     });
     
     // Go - Change Workflow
-    $('input.go-button').on("click", function (e) {
+    $('.go-button').on("click", function (e) {
         e.preventDefault();
 
         if (lastClickTimeStamp == null || lastClickTimeStamp + nextAllowedClickDelay < event.timeStamp) {
@@ -563,7 +563,7 @@ ExtendedCasePage.prototype.init = function (params) {
     });
 
     //sync mulitple workflow selects
-    self.$selectListStep.on('change', function () {
+    $("select.workflows-select").on('change', function () {
         var that = this;
         $("select.workflows-select").each(function(item, index) {
             if (that !== this)
