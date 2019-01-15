@@ -60,9 +60,14 @@
     <add key="CaseList" value="manager,coworkers" />
     <add key="CurrentApplication" value="SelfService" />
 
+    #{if ShowCommunication}
+    <add key="ShowCommunicationForSelfService" value="true" />
+    #{else}
+    <add key="ShowCommunicationForSelfService" value="false" />
+    #{/if}
     #{if IsSingleSignOnConfigurable}
     <!-- Single Sign Keis-->
-    <add key="ShowCommunicationForSelfService" value="true" />
+    
 
     <add key="ApplicationId" value="Self Service On Acct" />
     <add key="ClaimDomain" value="DomainName" />
