@@ -256,6 +256,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IServerLogicalDriveRepository>().To<ServerLogicalDriveRepository>();
             this.Bind<IServerRepository>().To<ServerRepository>();
             this.Bind<IServerSoftwareRepository>().To<ServerSoftwareRepository>();
+            Bind<IComputerTabsSettingsRepository>().To<ComputerTabsSettingsRepository>();
             this.Bind<IComputerFieldSettingsRepository>().To<ComputerFieldSettingsRepository>();
             this.Bind<IComputerHistoryRepository>().To<ComputerHistoryRepository>();
             this.Bind<IComputerLogRepository>().To<ComputerLogRepository>();

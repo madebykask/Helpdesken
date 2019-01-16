@@ -28,28 +28,17 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
     public class InventorySettingsController : BaseController
     {
-        private readonly IInventoryService inventoryService;
-
-        private readonly IInventorySettingsService inventorySettingsService;
-
-        private readonly IComputerFieldsSettingsViewModelBuilder computerFieldsSettingsViewModelBuilder;
-
-        private readonly IServerFieldsSettingsViewModelBuilder serverFieldsSettingsViewModelBuilder;
-
-        private readonly IPrinterFieldsSettingsViewModelBuilder printerFieldsSettingsViewModelBuilder;
-
-        private readonly IInventoryFieldSettingsEditViewModelBuilder inventoryFieldSettingsEditViewModelBuilder;
-
-        private readonly IComputerFieldsSettingsBuilder computerFieldsSettingsBuilder;
-
-        private readonly IServerFieldsSettingsBuilder serverFieldsSettingsBuilder;
-
-        private readonly IPrinterFieldsSettingsBuilder printerFieldsSettingsBuilder;
-
-        private readonly IInventoryFieldsSettingsBuilder inventoryFieldsSettingsBuilder;
-
-        private readonly ILanguageService languageService;
-
+        private readonly IInventoryService _inventoryService;
+        private readonly IInventorySettingsService _inventorySettingsService;
+        private readonly IComputerFieldsSettingsViewModelBuilder _computerFieldsSettingsViewModelBuilder;
+        private readonly IServerFieldsSettingsViewModelBuilder _serverFieldsSettingsViewModelBuilder;
+        private readonly IPrinterFieldsSettingsViewModelBuilder _printerFieldsSettingsViewModelBuilder;
+        private readonly IInventoryFieldSettingsEditViewModelBuilder _inventoryFieldSettingsEditViewModelBuilder;
+        private readonly IComputerFieldsSettingsBuilder _computerFieldsSettingsBuilder;
+        private readonly IServerFieldsSettingsBuilder _serverFieldsSettingsBuilder;
+        private readonly IPrinterFieldsSettingsBuilder _printerFieldsSettingsBuilder;
+        private readonly IInventoryFieldsSettingsBuilder _inventoryFieldsSettingsBuilder;
+        private readonly ILanguageService _languageService;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
 
         public InventorySettingsController(
@@ -68,24 +57,24 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             ILanguageService languageService)
             : base(masterDataService)
         {
-            this.inventoryService = inventoryService;
-            this.inventorySettingsService = inventorySettingsService;
-            this.computerFieldsSettingsViewModelBuilder = computerFieldsSettingsViewModelBuilder;
-            this.serverFieldsSettingsViewModelBuilder = serverFieldsSettingsViewModelBuilder;
-            this.printerFieldsSettingsViewModelBuilder = printerFieldsSettingsViewModelBuilder;
-            this.inventoryFieldSettingsEditViewModelBuilder = inventoryFieldSettingsEditViewModelBuilder;
-            this.computerFieldsSettingsBuilder = computerFieldsSettingsBuilder;
-            this.serverFieldsSettingsBuilder = serverFieldsSettingsBuilder;
-            this.printerFieldsSettingsBuilder = printerFieldsSettingsBuilder;
-            this.inventoryFieldsSettingsBuilder = inventoryFieldsSettingsBuilder;
-            this.languageService = languageService;
+            this._inventoryService = inventoryService;
+            this._inventorySettingsService = inventorySettingsService;
+            this._computerFieldsSettingsViewModelBuilder = computerFieldsSettingsViewModelBuilder;
+            this._serverFieldsSettingsViewModelBuilder = serverFieldsSettingsViewModelBuilder;
+            this._printerFieldsSettingsViewModelBuilder = printerFieldsSettingsViewModelBuilder;
+            this._inventoryFieldSettingsEditViewModelBuilder = inventoryFieldSettingsEditViewModelBuilder;
+            this._computerFieldsSettingsBuilder = computerFieldsSettingsBuilder;
+            this._serverFieldsSettingsBuilder = serverFieldsSettingsBuilder;
+            this._printerFieldsSettingsBuilder = printerFieldsSettingsBuilder;
+            this._inventoryFieldsSettingsBuilder = inventoryFieldsSettingsBuilder;
+            this._languageService = languageService;
             this._userPermissionsChecker = userPermissionsChecker;
         }
 
         [HttpGet]
         public ViewResult Index()
         {
-            List<ItemOverview> inventoryTypes = this.inventoryService.GetInventoryTypes(
+            List<ItemOverview> inventoryTypes = this._inventoryService.GetInventoryTypes(
                 SessionFacade.CurrentCustomer.Id);
 
             var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
@@ -119,7 +108,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             switch ((CurrentModes)inventoryTypeId)
             {
                 case CurrentModes.Workstations:
-                    return this.WorkstationSettings(SessionFacade.CurrentLanguageId);
+                    return this.WorkstationSettings(SessionFacade.CurrentLanguageId, SessionFacade.CurrentLanguageId);
 
                 case CurrentModes.Servers:
                     return this.ServerSettings(SessionFacade.CurrentLanguageId);
@@ -133,17 +122,22 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpGet]
-        public PartialViewResult WorkstationSettings(int languageId)
+        public PartialViewResult WorkstationSettings(int languageId, int tabLanguageId)
         {
             var settings =
-                this.inventorySettingsService.GetWorkstationFieldSettingsForEdit(
+                _inventorySettingsService.GetWorkstationFieldSettingsForEdit(
                     SessionFacade.CurrentCustomer.Id,
                     languageId);
-            var langauges = this.languageService.GetActiveOverviews();
-            var viewModel = this.computerFieldsSettingsViewModelBuilder.BuildViewModel(
+            var tabSettings = _inventorySettingsService.GetWorkstationTabsSettingsForEdit(
+                SessionFacade.CurrentCustomer.Id,
+                languageId);
+            var langauges = this._languageService.GetActiveOverviews();
+            var viewModel = this._computerFieldsSettingsViewModelBuilder.BuildViewModel(
                 settings,
+                tabSettings,
                 langauges,
                 languageId);
+                //tabLanguageId);
 
             return this.PartialView("WorkstationSettings", viewModel);
         }
@@ -152,22 +146,25 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [BadRequestOnNotValid]
         public void WorkstationSettings(ComputerFieldsSettingsViewModel model)
         {
-            var businessModel = this.computerFieldsSettingsBuilder.BuildViewModel(
+            var fieldsBusinessModel = _computerFieldsSettingsBuilder.BuildViewModel(
                 model,
                 SessionFacade.CurrentCustomer.Id);
+            var tabsBusinessModel = _computerFieldsSettingsBuilder.BuildTabsViewModel(
+                model.WorkstationTabsSettingsModel,
+                SessionFacade.CurrentCustomer.Id);
 
-            this.inventorySettingsService.UpdateWorkstationFieldsSettings(businessModel);
+            _inventorySettingsService.UpdateWorkstationFieldsSettings(fieldsBusinessModel, tabsBusinessModel);
         }
 
         [HttpGet]
         public PartialViewResult ServerSettings(int languageId)
         {
             var settings =
-                this.inventorySettingsService.GetServerFieldSettingsForEdit(
+                this._inventorySettingsService.GetServerFieldSettingsForEdit(
                     SessionFacade.CurrentCustomer.Id,
                     languageId);
-            var langauges = this.languageService.GetActiveOverviews();
-            var viewModel = this.serverFieldsSettingsViewModelBuilder.BuildViewModel(
+            var langauges = this._languageService.GetActiveOverviews();
+            var viewModel = this._serverFieldsSettingsViewModelBuilder.BuildViewModel(
                 settings,
                 langauges,
                 languageId);
@@ -179,23 +176,23 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [BadRequestOnNotValid]
         public void ServerSettings(ServerFieldsSettingsViewModel model)
         {
-            var businessModel = this.serverFieldsSettingsBuilder.BuildViewModel(
+            var businessModel = this._serverFieldsSettingsBuilder.BuildViewModel(
                 model,
                 SessionFacade.CurrentCustomer.Id);
 
-            this.inventorySettingsService.UpdateServerFieldsSettings(businessModel);
+            this._inventorySettingsService.UpdateServerFieldsSettings(businessModel);
         }
 
         [HttpGet]
         public PartialViewResult PrinterSettings(int languageId)
         {
             var settings =
-                this.inventorySettingsService.GetPrinterFieldSettingsForEdit(SessionFacade.CurrentCustomer.Id, languageId);
+                this._inventorySettingsService.GetPrinterFieldSettingsForEdit(SessionFacade.CurrentCustomer.Id, languageId);
 
-            var langauges = this.languageService.GetActiveOverviews();
+            var langauges = this._languageService.GetActiveOverviews();
 
             var viewModel = 
-                this.printerFieldsSettingsViewModelBuilder.BuildViewModel(settings, langauges, languageId);
+                this._printerFieldsSettingsViewModelBuilder.BuildViewModel(settings, langauges, languageId);
 
             return this.PartialView("PrinterSettings", viewModel);
         }
@@ -205,19 +202,19 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         public void PrinterSettings(PrinterFieldsSettingsViewModel model)
         {
             var businessModel = 
-                this.printerFieldsSettingsBuilder.BuildViewModel(model, SessionFacade.CurrentCustomer.Id);
+                this._printerFieldsSettingsBuilder.BuildViewModel(model, SessionFacade.CurrentCustomer.Id);
 
-            this.inventorySettingsService.UpdatePrinterFieldsSettings(businessModel);
+            this._inventorySettingsService.UpdatePrinterFieldsSettings(businessModel);
         }
 
         [HttpGet]
         public PartialViewResult InventorySettings(int inventoryTypeId)
         {
-            var model = this.inventorySettingsService.GetInventoryFieldSettingsForEdit(inventoryTypeId);
-            var typeGroups = this.inventoryService.GetTypeGroupModels(inventoryTypeId);
-            var inventoryTypeModel = this.inventoryService.GetInventoryType(inventoryTypeId);
+            var model = this._inventorySettingsService.GetInventoryFieldSettingsForEdit(inventoryTypeId);
+            var typeGroups = this._inventoryService.GetTypeGroupModels(inventoryTypeId);
+            var inventoryTypeModel = this._inventoryService.GetInventoryType(inventoryTypeId);
 
-            var viewModel = this.inventoryFieldSettingsEditViewModelBuilder.BuildViewModel(inventoryTypeModel, model, typeGroups);
+            var viewModel = this._inventoryFieldSettingsEditViewModelBuilder.BuildViewModel(inventoryTypeModel, model, typeGroups);
             return this.PartialView("InventorySettings", viewModel);
         }
 
@@ -254,7 +251,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             // todo
             var typeGroups = new List<TypeGroupModel>();
 
-            var viewModel = this.inventoryFieldSettingsEditViewModelBuilder.BuildDefaultViewModel(typeGroups);
+            var viewModel = this._inventoryFieldSettingsEditViewModelBuilder.BuildDefaultViewModel(typeGroups);
             return this.PartialView("EmptyInventorySettings", viewModel);
         }
 
@@ -265,12 +262,12 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var inventoryTypeBusinessModel = 
                 InventoryType.CreateNew(SessionFacade.CurrentCustomer.Id, model.InventoryTypeModel.Name, DateTime.Now);
 
-            this.inventoryService.AddInventoryType(inventoryTypeBusinessModel);
+            this._inventoryService.AddInventoryType(inventoryTypeBusinessModel);
 
             var defaultSettingsBusinessModel = 
-                this.inventoryFieldsSettingsBuilder.BuildBusinessModelForAdd(inventoryTypeBusinessModel.Id, model.InventoryFieldSettingsViewModel.DefaultSettings);
+                this._inventoryFieldsSettingsBuilder.BuildBusinessModelForAdd(inventoryTypeBusinessModel.Id, model.InventoryFieldSettingsViewModel.DefaultSettings);
             
-            this.inventorySettingsService.AddInventoryFieldsSettings(defaultSettingsBusinessModel);
+            this._inventorySettingsService.AddInventoryFieldsSettings(defaultSettingsBusinessModel);
 
             this.AddDynamicFieldSetting(inventoryTypeBusinessModel.Id, model.InventoryFieldSettingsViewModel.NewDynamicFieldViewModel.InventoryDynamicFieldSettingModel);
 
@@ -280,14 +277,14 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public RedirectToRouteResult DeleteDynamicSetting(int id, int inventoryTypeId)
         {
-            this.inventorySettingsService.DeleteDynamicFieldSetting(id);
+            this._inventorySettingsService.DeleteDynamicFieldSetting(id);
             return this.RedirectToAction("InventorySettings", new { inventoryTypeId });
         }
 
         [HttpGet]
         public RedirectToRouteResult DeleteInventoryType(int inventoryTypeId)
         {
-            this.inventoryService.DeleteInventoryType(inventoryTypeId);
+            this._inventoryService.DeleteInventoryType(inventoryTypeId);
             return this.RedirectToAction("Index");
         }
 
@@ -314,7 +311,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                         x.InventoryDynamicFieldSettingModel.XMLTag,
                         x.InventoryDynamicFieldSettingModel.ReadOnly)).ToList();
 
-            this.inventorySettingsService.UpdateDynamicFieldsSettings(dynamicFieldsSettings);
+            this._inventorySettingsService.UpdateDynamicFieldsSettings(dynamicFieldsSettings);
         }
 
         private void AddDynamicFieldSetting(
@@ -340,15 +337,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 newSetting.XMLTag,
                 newSetting.ReadOnly);
 
-            this.inventorySettingsService.AddDynamicFieldSetting(dynamicFieldSetting);
+            this._inventorySettingsService.AddDynamicFieldSetting(dynamicFieldSetting);
         }
 
         private void UpdateInventoryFieldsSettings(int inventoryTypeId, DefaultFieldSettingsModel defaultFieldSettingsModel)
         {
             var defaultSettingsBusinessModel = 
-                this.inventoryFieldsSettingsBuilder.BuildBusinessModelForUpdate(inventoryTypeId, defaultFieldSettingsModel);
+                this._inventoryFieldsSettingsBuilder.BuildBusinessModelForUpdate(inventoryTypeId, defaultFieldSettingsModel);
 
-            this.inventorySettingsService.UpdateInventoryFieldsSettings(defaultSettingsBusinessModel);
+            this._inventorySettingsService.UpdateInventoryFieldsSettings(defaultSettingsBusinessModel);
         }
 
         private void UpdateInventoryType(InventoryTypeModel model)
@@ -357,7 +354,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 model.Name,
                 model.Id,
                 DateTime.Now);
-            this.inventoryService.UpdateInventoryType(inventoryTypeBusinessModel);
+            this._inventoryService.UpdateInventoryType(inventoryTypeBusinessModel);
         }
     }
 }

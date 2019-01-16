@@ -230,6 +230,8 @@ namespace DH.Helpdesk.Dal.DbContext
         public DbSet<ComputerUsersBlackList> ComputerUsersBlackLists { get; set; }
 
         public DbSet<Computer> Computers { get; set; }
+        public DbSet<WorkstationTabSetting> WorkstationTabSettings { get; set; }
+        public DbSet<WorkstationTabSettingLanguage> WorkstationTabSettingLanguages { get; set; }
 
         public DbSet<ContractCategory> ContractCategories { get; set; }
 
@@ -725,6 +727,8 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new ComputerLogConfiguration());
             modelBuilder.Configurations.Add(new ComputerModelConfiguration());
             modelBuilder.Configurations.Add(new ComputerTypeConfiguration());
+            modelBuilder.Configurations.Add(new WorkstationTabSettingConfiguration());
+            modelBuilder.Configurations.Add(new WorkstationTabSettingLanguageConfiguration());
             modelBuilder.Configurations.Add(new ContractCategoryConfiguration());
             modelBuilder.Configurations.Add(new ContractConfiguration());
             modelBuilder.Configurations.Add(new ContractHistoryConfiguration());

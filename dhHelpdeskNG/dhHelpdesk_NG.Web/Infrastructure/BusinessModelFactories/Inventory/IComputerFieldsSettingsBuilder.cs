@@ -8,5 +8,9 @@
         ComputerFieldsSettings BuildViewModel(
             ComputerFieldsSettingsViewModel settings,
             int languageId);
+
+        WorkstationTabsSettings BuildTabsViewModel(
+            WorkstationTabsSettingsModel settings,
+            int customerId);
     }
 }

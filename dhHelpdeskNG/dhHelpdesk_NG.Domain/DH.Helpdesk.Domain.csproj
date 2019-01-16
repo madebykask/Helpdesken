@@ -162,6 +162,8 @@
     <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="CaseSource.cs" />
     <Compile Include="CaseIsAbout.cs" />
+    <Compile Include="Computers\WorkstationTabSettingLanguage.cs" />
+    <Compile Include="Computers\WorkstationTabSettings.cs" />
     <Compile Include="Condition\ConditionEntity.cs" />
     <Compile Include="Computers\ComputerUserCategory.cs" />
     <Compile Include="EmailLogAttempt.cs" />

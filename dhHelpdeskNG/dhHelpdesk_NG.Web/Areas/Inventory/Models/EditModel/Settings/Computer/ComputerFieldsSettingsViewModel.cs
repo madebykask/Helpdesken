@@ -11,7 +11,7 @@
         }
 
         public ComputerFieldsSettingsViewModel(
-            int langaugeId,
+            int languageId,
             SelectList langauges,
             DateFieldsSettingsModel dateFieldsSettingsModel,
             CommunicationFieldsSettingsModel communicationFieldsSettingsModel,
@@ -29,27 +29,29 @@
             OperatingSystemFieldsSettingsModel operatingSystemFieldsSettingsModel,
             OrganizationFieldsSettingsModel organizationFieldsSettingsModel,
             ProccesorFieldsSettingsModel proccesorFieldsSettingsModel,
-            WorkstationFieldsSettingsModel workstationFieldsSettingsModel)
+            WorkstationFieldsSettingsModel workstationFieldsSettingsModel,
+            WorkstationTabsSettingsModel workstationTabsSettingsModel)
         {
-            this.LanguageId = langaugeId;
-            this.Languages = langauges;
-            this.DateFieldsSettingsModel = dateFieldsSettingsModel;
-            this.CommunicationFieldsSettingsModel = communicationFieldsSettingsModel;
-            this.ContactFieldsSettingsModel = contactFieldsSettingsModel;
-            this.ContactInformationFieldsSettingsModel = contactInformationFieldsSettingsModel;
-            this.ContractFieldsSettingsModel = contractFieldsSettingsModel;
-            this.GraphicsFieldsSettingsModel = graphicsFieldsSettingsModel;
-            this.OtherFieldsSettingsModel = otherFieldsSettingsModel;
-            this.PlaceFieldsSettingsModel = placeFieldsSettingsModel;
-            this.SoundFieldsSettingsModel = soundFieldsSettingsModel;
-            this.StateFieldsSettingsModel = stateFieldsSettingsModel;
-            this.ChassisFieldsSettingsModel = chassisFieldsSettingsModel;
-            this.InventoryFieldsSettingsModel = inventoryFieldsSettingsModel;
-            this.MemoryFieldsSettingsModel = memoryFieldsSettingsModel;
-            this.OperatingSystemFieldsSettingsModel = operatingSystemFieldsSettingsModel;
-            this.OrganizationFieldsSettingsModel = organizationFieldsSettingsModel;
-            this.ProccesorFieldsSettingsModel = proccesorFieldsSettingsModel;
-            this.WorkstationFieldsSettingsModel = workstationFieldsSettingsModel;
+            LanguageId = languageId;
+            Languages = langauges;
+            DateFieldsSettingsModel = dateFieldsSettingsModel;
+            CommunicationFieldsSettingsModel = communicationFieldsSettingsModel;
+            ContactFieldsSettingsModel = contactFieldsSettingsModel;
+            ContactInformationFieldsSettingsModel = contactInformationFieldsSettingsModel;
+            ContractFieldsSettingsModel = contractFieldsSettingsModel;
+            GraphicsFieldsSettingsModel = graphicsFieldsSettingsModel;
+            OtherFieldsSettingsModel = otherFieldsSettingsModel;
+            PlaceFieldsSettingsModel = placeFieldsSettingsModel;
+            SoundFieldsSettingsModel = soundFieldsSettingsModel;
+            StateFieldsSettingsModel = stateFieldsSettingsModel;
+            ChassisFieldsSettingsModel = chassisFieldsSettingsModel;
+            InventoryFieldsSettingsModel = inventoryFieldsSettingsModel;
+            MemoryFieldsSettingsModel = memoryFieldsSettingsModel;
+            OperatingSystemFieldsSettingsModel = operatingSystemFieldsSettingsModel;
+            OrganizationFieldsSettingsModel = organizationFieldsSettingsModel;
+            ProccesorFieldsSettingsModel = proccesorFieldsSettingsModel;
+            WorkstationFieldsSettingsModel = workstationFieldsSettingsModel;
+            WorkstationTabsSettingsModel = workstationTabsSettingsModel;
         }
 
         [IsId]
@@ -108,5 +110,7 @@
 
         [NotNull]
         public WorkstationFieldsSettingsModel WorkstationFieldsSettingsModel { get; set; }
+        [NotNull]
+        public WorkstationTabsSettingsModel WorkstationTabsSettingsModel { get; set; }
     }
 }

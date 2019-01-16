@@ -1,4 +1,8 @@
-﻿namespace DH.Helpdesk.Services.Services.Concrete
+﻿using System.Linq;
+using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.Dal.Enums.Inventory.Computer;
+
+namespace DH.Helpdesk.Services.Services.Concrete
 {
     using System.Collections.Generic;
 
@@ -21,70 +25,98 @@
 
     public class InventorySettingsService : IInventorySettingsService
     {
-        private readonly IComputerFieldSettingsRepository computerFieldSettingsRepository;
-
-        private readonly IServerFieldSettingsRepository serverFieldSettingsRepository;
-
-        private readonly IPrinterFieldSettingsRepository printerFieldSettingsRepository;
-
-        private readonly IInventoryFieldSettingsRepository inventoryFieldSettingsRepository;
-
-        private readonly IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository;
-
-        private readonly IInventoryTypePropertyValueRepository inventoryTypePropertyValueRepository;
+        private readonly IComputerFieldSettingsRepository _computerFieldSettingsRepository;
+        private readonly IComputerTabsSettingsRepository _computerTabsSettingsRepository;
+        private readonly IServerFieldSettingsRepository _serverFieldSettingsRepository;
+        private readonly IPrinterFieldSettingsRepository _printerFieldSettingsRepository;
+        private readonly IInventoryFieldSettingsRepository _fieldinventoryFieldSettingsRepository;
+        private readonly IInventoryDynamicFieldSettingsRepository _inventoryDynamicFieldSettingsRepository;
+        private readonly IInventoryTypePropertyValueRepository _inventoryTypePropertyValueRepository;
 
         public InventorySettingsService(
             IComputerFieldSettingsRepository computerFieldSettingsRepository,
+            IComputerTabsSettingsRepository computerTabsSettingsRepository,
             IServerFieldSettingsRepository serverFieldSettingsRepository,
             IPrinterFieldSettingsRepository printerFieldSettingsRepository,
             IInventoryFieldSettingsRepository inventoryFieldSettingsRepository,
             IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository,
             IInventoryTypePropertyValueRepository inventoryTypePropertyValueRepository)
         {
-            this.computerFieldSettingsRepository = computerFieldSettingsRepository;
-            this.serverFieldSettingsRepository = serverFieldSettingsRepository;
-            this.printerFieldSettingsRepository = printerFieldSettingsRepository;
-            this.inventoryFieldSettingsRepository = inventoryFieldSettingsRepository;
-            this.inventoryDynamicFieldSettingsRepository = inventoryDynamicFieldSettingsRepository;
-            this.inventoryTypePropertyValueRepository = inventoryTypePropertyValueRepository;
+            this._computerFieldSettingsRepository = computerFieldSettingsRepository;
+            this._computerTabsSettingsRepository = computerTabsSettingsRepository;
+            this._serverFieldSettingsRepository = serverFieldSettingsRepository;
+            this._printerFieldSettingsRepository = printerFieldSettingsRepository;
+            this._fieldinventoryFieldSettingsRepository = inventoryFieldSettingsRepository;
+            this._inventoryDynamicFieldSettingsRepository = inventoryDynamicFieldSettingsRepository;
+            this._inventoryTypePropertyValueRepository = inventoryTypePropertyValueRepository;
         }
 
         #region WorkstationSettings
 
-        public void UpdateWorkstationFieldsSettings(ComputerFieldsSettings businessModel)
+        public void UpdateWorkstationFieldsSettings(ComputerFieldsSettings businessModel, WorkstationTabsSettings tabsSettings)
         {
-            this.computerFieldSettingsRepository.Update(businessModel);
-            this.computerFieldSettingsRepository.Commit();
+            _computerFieldSettingsRepository.Update(businessModel);
+            _computerTabsSettingsRepository.Update(tabsSettings.ComputersTabSetting, businessModel.CustomerId, businessModel.LanguageId);
+            _computerTabsSettingsRepository.Update(tabsSettings.StorageTabSetting, businessModel.CustomerId, businessModel.LanguageId);
+            _computerTabsSettingsRepository.Update(tabsSettings.SoftwareTabSetting, businessModel.CustomerId, businessModel.LanguageId);
+            _computerTabsSettingsRepository.Update(tabsSettings.HotFixesTabSetting, businessModel.CustomerId, businessModel.LanguageId);
+            _computerTabsSettingsRepository.Update(tabsSettings.AccessoriesTabSetting, businessModel.CustomerId, businessModel.LanguageId);
+            _computerTabsSettingsRepository.Update(tabsSettings.ComputerLogsTabSetting, businessModel.CustomerId, businessModel.LanguageId);
+            _computerTabsSettingsRepository.Update(tabsSettings.RelatedCasesTabSetting, businessModel.CustomerId, businessModel.LanguageId);
+            _computerFieldSettingsRepository.Commit();
         }
 
         public ComputerFieldsSettings GetWorkstationFieldSettingsForEdit(int customerId, int languageId)
         {
-            return this.computerFieldSettingsRepository.GetFieldSettingsForEdit(customerId, languageId);
+            return _computerFieldSettingsRepository.GetFieldSettingsForEdit(customerId, languageId);
+        }
+
+        public WorkstationTabsSettings GetWorkstationTabsSettingsForEdit(int customerId, int languageId)
+        {
+            var tabs = _computerTabsSettingsRepository.GetTabsSettingsForEdit(customerId, languageId);
+
+            var computerTab = tabs.First(t => t.TabField == WorkstationTabs.Workstations);
+            var storagesTab = tabs.First(t => t.TabField == WorkstationTabs.Storages);
+            var softwaresTab = tabs.First(t => t.TabField == WorkstationTabs.Softwares);
+            var hotfixesTab = tabs.First(t => t.TabField == WorkstationTabs.HotFixes);
+            var accessoriesTab = tabs.First(t => t.TabField == WorkstationTabs.Accessories);
+            var computerLogsTab = tabs.First(t => t.TabField == WorkstationTabs.ComputerLogs);
+            var relatedCasesTab = tabs.First(t => t.TabField == WorkstationTabs.RelatedCases);
+
+            return new WorkstationTabsSettings(ModelStates.ForEdit,
+                new TabSetting(computerTab.TabField, computerTab.Show, computerTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? string.Empty),
+                new TabSetting(storagesTab.TabField, storagesTab.Show, storagesTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? string.Empty),
+                new TabSetting(softwaresTab.TabField, softwaresTab.Show, softwaresTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? string.Empty),
+                new TabSetting(hotfixesTab.TabField, hotfixesTab.Show, hotfixesTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? string.Empty),
+                new TabSetting(accessoriesTab.TabField, accessoriesTab.Show, accessoriesTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? string.Empty),
+                new TabSetting(computerLogsTab.TabField, computerLogsTab.Show, computerLogsTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? string.Empty),
+                new TabSetting(relatedCasesTab.TabField, relatedCasesTab.Show, relatedCasesTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? string.Empty));
         }
 
         public ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false)
         {
-            var models = this.computerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId, isReadonly);
+            var models = _computerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId, isReadonly);
+            
             return models;
         }
 
         public ComputerFieldsSettingsOverview GetWorkstationFieldSettingsOverview(int customerId, int languageId)
         {
-            var models = this.computerFieldSettingsRepository.GetFieldSettingsOverview(customerId, languageId);
+            var models = this._computerFieldSettingsRepository.GetFieldSettingsOverview(customerId, languageId);
 
             return models;
         }
 
         public ComputerFieldsSettingsOverviewForFilter GetWorkstationFieldSettingsOverviewForFilter(int customerId, int languageId)
         {
-            var models = this.computerFieldSettingsRepository.GetFieldSettingsOverviewForFilter(customerId, languageId);
+            var models = this._computerFieldSettingsRepository.GetFieldSettingsOverviewForFilter(customerId, languageId);
 
             return models;
         }
 
         public ComputerFieldsSettingsOverviewForShortInfo GetWorkstationFieldSettingsForShortInfo(int customerId, int languageId)
         {
-            var models = this.computerFieldSettingsRepository.GetFieldSettingsOverviewForShortInfo(customerId, languageId);
+            var models = this._computerFieldSettingsRepository.GetFieldSettingsOverviewForShortInfo(customerId, languageId);
 
             return models;
         }
@@ -95,25 +127,25 @@
 
         public void UpdateServerFieldsSettings(ServerFieldsSettings businessModel)
         {
-            this.serverFieldSettingsRepository.Update(businessModel);
-            this.serverFieldSettingsRepository.Commit();
+            this._serverFieldSettingsRepository.Update(businessModel);
+            this._serverFieldSettingsRepository.Commit();
         }
 
         public ServerFieldsSettings GetServerFieldSettingsForEdit(int customerId, int languageId)
         {
-            return this.serverFieldSettingsRepository.GetFieldSettingsForEdit(customerId, languageId);
+            return this._serverFieldSettingsRepository.GetFieldSettingsForEdit(customerId, languageId);
         }
 
         public ServerFieldsSettingsForModelEdit GetServerFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false)
         {
-            var models = this.serverFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId, isReadonly);
+            var models = this._serverFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId, isReadonly);
 
             return models;
         }
 
         public ServerFieldsSettingsOverview GetServerFieldSettingsOverview(int customerId, int languageId)
         {
-            var models = this.serverFieldSettingsRepository.GetFieldSettingsOverview(customerId, languageId);
+            var models = this._serverFieldSettingsRepository.GetFieldSettingsOverview(customerId, languageId);
 
             return models;
         }
@@ -124,29 +156,29 @@
 
         public void UpdatePrinterFieldsSettings(PrinterFieldsSettings businessModel)
         {
-            this.printerFieldSettingsRepository.Update(businessModel);
-            this.printerFieldSettingsRepository.Commit();
+            this._printerFieldSettingsRepository.Update(businessModel);
+            this._printerFieldSettingsRepository.Commit();
         }
 
         public PrinterFieldsSettings GetPrinterFieldSettingsForEdit(int customerId, int languageId)
         {
-            return this.printerFieldSettingsRepository.GetFieldSettingsForEdit(customerId, languageId);
+            return this._printerFieldSettingsRepository.GetFieldSettingsForEdit(customerId, languageId);
         }
 
         public PrinterFieldsSettingsForModelEdit GetPrinterFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false)
         {
-            return this.printerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId, isReadonly);
+            return this._printerFieldSettingsRepository.GetFieldSettingsForModelEdit(customerId, languageId, isReadonly);
         }
 
         public PrinterFieldsSettingsOverview GetPrinterFieldSettingsOverview(int customerId, int languageId)
         {
-            var models = this.printerFieldSettingsRepository.GetFieldSettingsOverview(customerId, languageId);
+            var models = this._printerFieldSettingsRepository.GetFieldSettingsOverview(customerId, languageId);
             return models;
         }
 
         public PrinterFieldsSettingsOverviewForFilter GetPrinterFieldSettingsOverviewForFilter(int customerId, int languageId)
         {
-            var models = this.printerFieldSettingsRepository.GetFieldSettingsOverviewForFilter(customerId, languageId);
+            var models = this._printerFieldSettingsRepository.GetFieldSettingsOverviewForFilter(customerId, languageId);
             return models;
         }
 
@@ -156,41 +188,41 @@
 
         public void AddDynamicFieldSetting(InventoryDynamicFieldSetting businessModel)
         {
-            this.inventoryDynamicFieldSettingsRepository.Add(businessModel);
-            this.inventoryDynamicFieldSettingsRepository.Commit();
+            this._inventoryDynamicFieldSettingsRepository.Add(businessModel);
+            this._inventoryDynamicFieldSettingsRepository.Commit();
         }
 
         public void UpdateDynamicFieldsSettings(List<InventoryDynamicFieldSetting> businessModels)
         {
-            this.inventoryDynamicFieldSettingsRepository.Update(businessModels);
-            this.inventoryDynamicFieldSettingsRepository.Commit();
+            this._inventoryDynamicFieldSettingsRepository.Update(businessModels);
+            this._inventoryDynamicFieldSettingsRepository.Commit();
         }
 
         public void DeleteDynamicFieldSetting(int id)
         {
-            this.inventoryTypePropertyValueRepository.DeleteByInventoryTypePropertyId(id);
-            this.inventoryTypePropertyValueRepository.Commit();
+            this._inventoryTypePropertyValueRepository.DeleteByInventoryTypePropertyId(id);
+            this._inventoryTypePropertyValueRepository.Commit();
 
-            this.inventoryDynamicFieldSettingsRepository.DeleteById(id);
-            this.inventoryDynamicFieldSettingsRepository.Commit();
+            this._inventoryDynamicFieldSettingsRepository.DeleteById(id);
+            this._inventoryDynamicFieldSettingsRepository.Commit();
         }
 
         public void AddInventoryFieldsSettings(InventoryFieldSettings businessModel)
         {
-            this.inventoryFieldSettingsRepository.Add(businessModel);
-            this.inventoryFieldSettingsRepository.Commit();
+            this._fieldinventoryFieldSettingsRepository.Add(businessModel);
+            this._fieldinventoryFieldSettingsRepository.Commit();
         }
 
         public void UpdateInventoryFieldsSettings(InventoryFieldSettings businessModel)
         {
-            this.inventoryFieldSettingsRepository.Update(businessModel);
-            this.inventoryFieldSettingsRepository.Commit();
+            this._fieldinventoryFieldSettingsRepository.Update(businessModel);
+            this._fieldinventoryFieldSettingsRepository.Commit();
         }
 
         public InventoryFieldSettingsForEditResponse GetInventoryFieldSettingsForEdit(int inventoryTypeId)
         {
-            var setings = this.inventoryFieldSettingsRepository.GetFieldSettingsForEdit(inventoryTypeId);
-            var dynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsForEdit(inventoryTypeId);
+            var setings = this._fieldinventoryFieldSettingsRepository.GetFieldSettingsForEdit(inventoryTypeId);
+            var dynamicSettings = this._inventoryDynamicFieldSettingsRepository.GetFieldSettingsForEdit(inventoryTypeId);
 
             var response = new InventoryFieldSettingsForEditResponse(setings, dynamicSettings);
             return response;
@@ -198,8 +230,8 @@
 
         public InventoryFieldSettingsForModelEditResponse GetInventoryFieldSettingsForModelEdit(int inventoryTypeId, bool isReadonly = false)
         {
-            var setings = this.inventoryFieldSettingsRepository.GetFieldSettingsForModelEdit(inventoryTypeId, isReadonly);
-            var dynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsForModelEdit(inventoryTypeId, isReadonly);
+            var setings = this._fieldinventoryFieldSettingsRepository.GetFieldSettingsForModelEdit(inventoryTypeId, isReadonly);
+            var dynamicSettings = this._inventoryDynamicFieldSettingsRepository.GetFieldSettingsForModelEdit(inventoryTypeId, isReadonly);
 
             var response = new InventoryFieldSettingsForModelEditResponse(setings, dynamicSettings);
             return response;
@@ -207,8 +239,8 @@
 
         public InventoryFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(int inventoryTypeId)
         {
-            var setings = this.inventoryFieldSettingsRepository.GetFieldSettingsOverview(inventoryTypeId);
-            var dynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsOverview(
+            var setings = this._fieldinventoryFieldSettingsRepository.GetFieldSettingsOverview(inventoryTypeId);
+            var dynamicSettings = this._inventoryDynamicFieldSettingsRepository.GetFieldSettingsOverview(
                 inventoryTypeId);
 
             var response = new InventoryFieldSettingsOverviewResponse(setings, dynamicSettings);
@@ -218,15 +250,15 @@
 
         public InventoryFieldsSettingsOverviewForFilter GetInventoryFieldSettingsOverviewForFilter(int inventoryTypeId)
         {
-            var models = this.inventoryFieldSettingsRepository.GetFieldSettingsOverviewForFilter(inventoryTypeId);
+            var models = this._fieldinventoryFieldSettingsRepository.GetFieldSettingsOverviewForFilter(inventoryTypeId);
 
             return models;
         }
 
         public InventoriesFieldSettingsOverviewResponse GetInventoryFieldSettingsOverview(List<int> invetoryTypeIds)
         {
-            var inventorySettings = this.inventoryFieldSettingsRepository.GetFieldSettingsOverviews(invetoryTypeIds);
-            var inventoryDynamicSettings = this.inventoryDynamicFieldSettingsRepository.GetFieldSettingsOverviewWithType(invetoryTypeIds);
+            var inventorySettings = this._fieldinventoryFieldSettingsRepository.GetFieldSettingsOverviews(invetoryTypeIds);
+            var inventoryDynamicSettings = this._inventoryDynamicFieldSettingsRepository.GetFieldSettingsOverviewWithType(invetoryTypeIds);
             var inventorySettingsResponse = new InventoriesFieldSettingsOverviewResponse(
                 inventorySettings,
                 inventoryDynamicSettings);

@@ -98,6 +98,7 @@
     <Compile Include="Attributes\Inventory\CreateMissingPrinterSettingsAttribute.cs" />
     <Compile Include="Attributes\Inventory\CreateMissingServerSettingsAttribute.cs" />
     <Compile Include="Attributes\Inventory\CreateMissingComputerSettingsAttribute.cs" />
+    <Compile Include="Attributes\Inventory\CreateMissingWorkstationTabSettingsAttribute.cs" />
     <Compile Include="CaseSearch\CaseSearchCriterias.cs" />
     <Compile Include="CaseSearch\CaseSearchQueryBuilder.cs" />
     <Compile Include="CaseSearch\Interfaces\ICaseSearchCriterias.cs" />
@@ -132,6 +133,8 @@
     <Compile Include="EntityConfigurations\Cases\CaseSectionFieldConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSectionsConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseTypeProductAreaConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Computers\WorkstationTabSettingConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Computers\WorkstationTabSettingLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\Condition\ConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\Computers\ComputerUserCategoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractFileConfiguration.cs" />
@@ -225,6 +228,7 @@
     <Compile Include="Enums\Inventory\Computer\SoundFields.cs" />
     <Compile Include="Enums\Inventory\Computer\StateFields.cs" />
     <Compile Include="Enums\Inventory\Computer\WorkstationFields.cs" />
+    <Compile Include="Enums\Inventory\Computer\WorkstationTabs.cs" />
     <Compile Include="Enums\Inventory\Inventory\InventoryFieldNames.cs" />
     <Compile Include="Enums\Inventory\Inventory\InventoryFields.cs" />
     <Compile Include="Enums\Inventory\Printer\CommunicationFields.cs" />
@@ -478,6 +482,8 @@
     <Compile Include="Repositories\BusinessRules\Concrete\BusinessRuleRepository.cs" />
     <Compile Include="Repositories\BusinessRules\IBusinessRuleRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextConditionIdentifierRepository.cs" />
+    <Compile Include="Repositories\Computers\Concrete\ComputerTabsSettingsRepository.cs" />
+    <Compile Include="Repositories\Computers\IComputerTabsSettingsRepository.cs" />
     <Compile Include="Repositories\Condition\Concrete\ConditionRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextIdentifierRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextConditionRepository.cs" />
