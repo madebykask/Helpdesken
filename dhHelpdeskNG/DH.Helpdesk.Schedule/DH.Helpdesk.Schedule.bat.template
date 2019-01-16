@@ -12,5 +12,5 @@
 :: 11	caseReminder
 :: 12	sendQuestionnaire
 
-:: Test, ingnore
+:: Test, ingnore, ignore
 DH.Helpdesk.Schedule.exe #{WorkMode}, Data Source=#{DatabaseServer}; Initial Catalog=#{DatabaseName}; User Id=#{DatabaseUser}; Password=#{DatabasePassword};Network Library=dbmssocn
