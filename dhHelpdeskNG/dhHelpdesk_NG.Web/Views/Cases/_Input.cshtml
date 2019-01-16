@@ -297,7 +297,11 @@
                                                     {
                                                         <a href="#" data-field="relatedCases" style="display: none;" title="@Translation.GetCoreTextTranslation("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>
                                                     }
-                                                    <a href="#" data-field="relatedInventory" style="display: none;" title="@Translation.GetCoreTextTranslation("Relaterade") @Translation.GetCoreTextTranslation("Inventarie")" class="btn"><i class="icon-th-large"></i></a>
+                                                    @if (Model.CustomerSettings.ModuleInventory)
+                                                    {
+                                                        <a href="#" data-field="relatedInventory" style="display: none;" title="@Translation.GetCoreTextTranslation("Relaterade") @Translation.GetCoreTextTranslation("Inventarie")" class="btn"><i class="icon-th-large"></i></a>
+                                                    }
+                                                    
                                                 </td>
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName)">
