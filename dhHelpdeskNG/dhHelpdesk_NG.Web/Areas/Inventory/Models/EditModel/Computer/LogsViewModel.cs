@@ -5,7 +5,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class LogsViewModel : BaseEditWorkstationModel
+    public class LogsViewModel : BaseViewEditWorkstationModel
     {
         public LogsViewModel(int id, List<ComputerLogOverview> computerLogs, bool dialog = false, string userId = null)
             : base(id)

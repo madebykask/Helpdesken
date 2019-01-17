@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.Web.Areas.Inventory.Models.RelatedCasesModels
 {
-    public class WorkstationRelatedCasesModel : BaseEditWorkstationModel
+    public class WorkstationRelatedCasesModel : BaseViewEditWorkstationModel
     {
         public WorkstationRelatedCasesModel(int id) : base(id)
         {

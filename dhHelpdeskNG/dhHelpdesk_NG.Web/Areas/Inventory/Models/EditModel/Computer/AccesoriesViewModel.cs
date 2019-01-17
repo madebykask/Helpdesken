@@ -6,7 +6,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class AccesoriesViewModel : BaseEditWorkstationModel
+    public class AccesoriesViewModel : BaseViewEditWorkstationModel
     {
         private AccesoriesViewModel(
             int computerId,

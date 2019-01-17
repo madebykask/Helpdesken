@@ -6,7 +6,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class HotfixViewModel : BaseEditWorkstationModel
+    public class HotfixViewModel : BaseViewEditWorkstationModel
     {
         public HotfixViewModel(int id, List<SoftwareOverview> overviews)
             : base(id)

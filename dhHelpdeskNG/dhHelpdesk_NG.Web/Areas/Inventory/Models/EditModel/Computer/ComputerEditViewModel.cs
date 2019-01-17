@@ -1,13 +1,15 @@
+using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
+
 namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer
 {
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class ComputerEditViewModel : BaseEditWorkstationModel
+    public class ComputerEditViewModel : BaseViewEditWorkstationModel
     {
         public ComputerEditViewModel(int id, ComputerViewModel computerViewModel)
             : base(id)
         {
-            this.ComputerViewModel = computerViewModel;
+            ComputerViewModel = computerViewModel;
         }
 
         [NotNull]

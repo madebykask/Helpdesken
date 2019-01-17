@@ -338,6 +338,7 @@
     <Compile Include="Areas\Admin\Controllers\GDPRProgressController.cs" />
     <Compile Include="Areas\Admin\Controllers\ExtendedCaseController.cs" />
     <Compile Include="Areas\Inventory\Controllers\InventoryController.cs" />
+    <Compile Include="Areas\Inventory\Infrastucture\Extensions\TabSettingExtensions.cs" />
     <Compile Include="Areas\Inventory\Models\BaseEditCustomInventoryModel.cs" />
     <Compile Include="Areas\Inventory\Models\BaseEditPrinterModel.cs" />
     <Compile Include="Areas\Inventory\Models\EditModel\Printer\PrinterEditViewModel.cs" />
@@ -4788,7 +4789,6 @@
     <Content Include="Areas\Admin\Views\Users\_Appearance.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Inventory\Infrastucture\" />
     <Folder Include="Areas\Inventory\Scripts\" />
     <Folder Include="FormLibContent\Xmls\Norway\Data\AdditionalPaymentsDeductions\" />
     <Folder Include="Infrastructure\ModelFactories\Problems\Concrete\" />
