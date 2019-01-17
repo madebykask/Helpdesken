@@ -92,6 +92,7 @@ $(function () {
             var logMandatoryText = params.logMandatoryText;
             var currentLogMode = params.logNotesMode || 0;
             var isCaseFinished = params.isFinished;
+            var caseEmailGuid = params.caseEmailGuid;
 
             //public
             this.init = function () {
@@ -137,8 +138,13 @@ $(function () {
                     $.get(saveLogMessageUrl, { caseId: caseId, note: note, logFileGuid: logFileKey },
                         function(res) {
                             if (isPopup) {
-                                window.location.href = caseDetailsUrl + "/" + caseId;
-                            } else {
+                                if (caseEmailGuid == null) {
+                                    window.location.href = caseDetailsUrl + "/" + caseId;
+                                }
+                                else
+                                    window.location.href = caseDetailsUrl + "/" + caseEmailGuid;
+                            }
+                            else {
                                 self._elements.logNotesDiv.html(res);
                                 self._elements.logNoteInput.val('');
                                 self.reloadLogFiles();

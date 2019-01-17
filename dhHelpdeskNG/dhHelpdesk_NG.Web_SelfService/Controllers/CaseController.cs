@@ -317,6 +317,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var appSettings = ConfigurationService.AppSettings;
             ViewBag.ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService;
+            ViewBag.caseEmailGuid = new Guid(id); 
 
             return View(caseReceipt);
         }
