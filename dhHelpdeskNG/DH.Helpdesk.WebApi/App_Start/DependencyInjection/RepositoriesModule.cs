@@ -191,6 +191,7 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<CaseFollowUpRepository>().As<ICaseFollowUpRepository>();
             builder.RegisterType<ConditionRepository>().As<IConditionRepository>();
             builder.RegisterType<InventoryTypeRepository>().As<IInventoryTypeRepository>();
+            builder.RegisterType<InventoryTypeStandardSettingsRepository>().As<IInventoryTypeStandardSettingsRepository>();
             builder.RegisterType<ServerRepository>().As<IServerRepository>();
             builder.RegisterType<PrinterRepository>().As<IPrinterRepository>();
             builder.RegisterType<InventoryRepository>().As<IInventoryRepository>();

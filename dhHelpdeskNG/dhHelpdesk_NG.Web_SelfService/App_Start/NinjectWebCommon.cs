@@ -273,6 +273,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IConditionRepository>().To<ConditionRepository>();
 
             kernel.Bind<IInventoryTypeRepository>().To<InventoryTypeRepository>();
+            kernel.Bind<IInventoryTypeStandardSettingsRepository>().To<InventoryTypeStandardSettingsRepository>();
             kernel.Bind<IServerRepository>().To<ServerRepository>();
             kernel.Bind<IPrinterRepository>().To<PrinterRepository>();
             kernel.Bind<IInventoryRepository>().To<InventoryRepository>();
