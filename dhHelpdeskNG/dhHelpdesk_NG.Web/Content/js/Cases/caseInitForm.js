@@ -879,6 +879,9 @@ function setPcNumber(userId)
             if (result != null){
             if (result.Name != null || result.Name != "")
                 $('#case__InventoryNumber').val(result.Name);
+                $('#case__InventoryType').val(result.TypeDescription);
+                $('#case__InventoryLocation').val(result.Location);
+                $("#ShowInventoryBtn").show();
             }
         }        
     });
