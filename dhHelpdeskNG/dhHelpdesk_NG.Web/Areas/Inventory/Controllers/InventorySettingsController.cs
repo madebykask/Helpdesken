@@ -1,4 +1,9 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
+﻿using System.Net;
+using System.Web;
+using System.Web.Http.Results;
+using DH.Helpdesk.BusinessData.Models.Inventory.Input;
+using DH.Helpdesk.Domain.Inventory;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 
 namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 {
@@ -74,13 +79,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public ViewResult Index()
         {
-            List<ItemOverview> inventoryTypes = this._inventoryService.GetInventoryTypes(
-                SessionFacade.CurrentCustomer.Id);
+            var inventoryTypes = 
+                _inventoryService.GetInventoryTypesWithSettings(SessionFacade.CurrentCustomer.Id);
 
             var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
 
-            var viewModel = new SettingsIndexViewModel(inventoryTypes);
-            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
+            var viewModel = new SettingsIndexViewModel(inventoryTypes)
+            {
+                UserHasInventoryAdminPermission = userHasInventoryAdminPermission
+            };
 
             return this.View(viewModel);
         }
@@ -99,6 +106,23 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
                 default:
                     return this.View("EditInventorySettings", inventoryTypeId);
+            }
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        public ActionResult UpdateStandardTypeSettings(InventoryStandardTypeSettings data)
+        {
+            BusinessData.Enums.Inventory.CurrentModes currentMode;
+            if (Enum.TryParse(data.InventoryType, out currentMode))
+            {
+                _inventoryService.UpdateStandardInventoryTypeSettings(SessionFacade.CurrentCustomer.Id, currentMode,data.IsActive);
+                return Json("success");
+            }
+            else
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json("Invalid data");
             }
         }
 

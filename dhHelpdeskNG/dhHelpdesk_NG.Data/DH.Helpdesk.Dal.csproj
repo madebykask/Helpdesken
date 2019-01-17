@@ -153,6 +153,7 @@
     <Compile Include="EntityConfigurations\GDPR\GDPRDataPrivacyFavoriteConfiguration.cs" />
     <Compile Include="EntityConfigurations\GDPR\GDPROperationsAuditConfiguration.cs" />
     <Compile Include="EntityConfigurations\GDPR\GDPRTaskConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Inventory\InventoryTypeStandardSettingsConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleProductAreaConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceRowConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceHeaderConfiguration.cs" />
@@ -581,6 +582,8 @@
     <Compile Include="Repositories\Changes\IChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFileRepository.cs" />
+    <Compile Include="Repositories\Inventory\Concrete\InventoryTypeStandardSettingsRepository.cs" />
+    <Compile Include="Repositories\Inventory\IInventoryTypeStandardSettingsRepository.cs" />
     <Compile Include="Repositories\Invoice\InvoiceRepository.cs" />
     <Compile Include="Repositories\IOrderEmailLogRepository.cs" />
     <Compile Include="Repositories\MetaData\Concrete\EntityInfoRepository.cs" />

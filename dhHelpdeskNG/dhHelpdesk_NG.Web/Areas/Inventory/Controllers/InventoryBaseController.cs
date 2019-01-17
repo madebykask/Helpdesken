@@ -80,5 +80,12 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             string fileName = this.ExportFileNameFormatter.Format(Name, "xlsx");
             return this.File(content, MimeType.ExcelFile, fileName);
         }
+
+
+
+        protected ItemOverview CreateInventoryTypeSeparatorItem()
+        {
+            return new ItemOverview("-------------", "Separator");
+        }
     }
 }

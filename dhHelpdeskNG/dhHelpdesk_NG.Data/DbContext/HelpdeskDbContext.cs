@@ -331,6 +331,8 @@ namespace DH.Helpdesk.Dal.DbContext
 
         public DbSet<InventoryType> InventoryTypes { get; set; }
 
+        public DbSet<InventoryTypeStandardSettings> InventoryTypeStandardSettings { get; set; }
+
         public DbSet<InvoiceHeader> InvoiceHeaders { get; set; }
 
         public DbSet<InvoiceRow> InvoiceRows { get; set; }
@@ -882,6 +884,7 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new InventoryTypeGroupConfiguration());
             modelBuilder.Configurations.Add(new InventoryTypePropertyConfiguration());
             modelBuilder.Configurations.Add(new InventoryTypePropertyValueConfiguration());
+            modelBuilder.Configurations.Add(new InventoryTypeStandardSettingsConfiguration());
             modelBuilder.Configurations.Add(new ModuleConfiguration());
             modelBuilder.Configurations.Add(new UserModuleConfiguration());
             modelBuilder.Configurations.Add(new CausingPartConfiguration());

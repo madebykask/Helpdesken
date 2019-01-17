@@ -2,7 +2,12 @@
 @model DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels.SettingsIndexViewModel
 @{
     Layout = "~/Areas/Inventory/Views/Shared/_IndexLayout.cshtml";
-}
+
+    var extraData = new ViewDataDictionary
+    {
+        new KeyValuePair<string, object>("InventoryAdminPermission", Model.UserHasInventoryAdminPermission)
+    };
+ }
 
 @section Actions
 {
@@ -15,7 +20,20 @@
         }
     </ul>
 }
-@{ var extraData = new ViewDataDictionary();
-   extraData.Add(new KeyValuePair<string,object>("InventoryAdminPermission", Model.UserHasInventoryAdminPermission));  
- }
+
 @Html.Partial("InventoryTypesGrid", Model.InventoryTypes, extraData)
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function() {
+            $(".isActive").on('switchChange.bootstrapSwitch', function(e) {
+                var data = {
+                    IsActive: $(this).prop('checked'),
+                    InventoryType: $(this).prop('id').replace('chkActive_', '')
+                };
+                $.post('@Url.Action("UpdateStandardTypeSettings", "InventorySettings")', $.param(data));
+            });
+        })
+    </script>
+}

@@ -75,7 +75,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public ViewResult Index()
         {
-            var inventoryTypes = inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id);
+            var inventoryTypes = 
+                inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id, true, CreateInventoryTypeSeparatorItem());
 
             SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter((int)CurrentModes.Workstations));
 
@@ -271,8 +272,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 this.inventorySettingsService.GetInventoryFieldSettingsOverview(invetoryTypeIds);
             List<InventoryGridModel> inventoryGridModels = InventoryGridModel.BuildModels(inventory, settings);
 
-            List<ItemOverview> inventoryTypes = this.inventoryService.GetInventoryTypes(
-                SessionFacade.CurrentCustomer.Id);
+            //todo: Check if standard items and separator item is required 
+            List<ItemOverview> inventoryTypes = this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id, false);
 
             // todo
             int? selected = inventoryTypes.Min(x => x.Value.ToNullableInt32());

@@ -56,7 +56,7 @@
             List<ItemOverview> computerTypesItemOverviews,
             ComputerFieldsSettingsOverviewForFilter settings,
             int currentMode,
-            List<ItemOverview> overviews)
+            List<ItemOverview> inventoryTypes)
         {
             var regions = new SelectList(regionsItemOverviews, "Value", "Name");
             var departments = new SelectList(departmentsItemOverviews, "Value", "Name");
@@ -71,7 +71,7 @@
                 currentFilter,
                 settings,
                 currentMode,
-                overviews);
+                inventoryTypes);
 
             return viewModel;
         }

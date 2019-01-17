@@ -1,7 +1,7 @@
-﻿namespace DH.Helpdesk.Domain.Inventory
-{
-    using global::System;
+﻿using System;
 
+namespace DH.Helpdesk.Domain.Inventory
+{
     public class InventoryType : Entity
     {
         public int Customer_Id { get; set; }

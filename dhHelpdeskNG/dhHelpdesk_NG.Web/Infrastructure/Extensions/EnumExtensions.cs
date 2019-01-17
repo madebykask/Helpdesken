@@ -13,7 +13,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
     public static class EnumExtensions
     {
-
         public static int ToInt(this Enum enumeration)
         {            
             return Convert.ToInt32(enumeration);
@@ -80,7 +79,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 			return GetDisplayName(type, e);
 		}
 
-
 		public static string GetTranslation(this Enum e, bool escapeQuotes = false)
 		{
 			var displyName = e.GetDisplayName();
@@ -134,7 +132,5 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
 			return descriptionAttributes.Length > 0 ? descriptionAttributes[0].Description : Enum.GetName(type, value);
 		}
-
-
 	}
 }

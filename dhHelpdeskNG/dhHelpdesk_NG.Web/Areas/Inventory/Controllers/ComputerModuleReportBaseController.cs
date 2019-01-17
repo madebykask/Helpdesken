@@ -47,17 +47,17 @@
         [HttpGet]
         public ViewResult Index()
         {
-            List<ItemOverview> inventoryTypes = this.inventoryService.GetInventoryTypes(
-                SessionFacade.CurrentCustomer.Id);
+            var inventoryTypes = 
+                this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id);
 
             SessionFacade.SavePageFilters(TabName.Reports, new ReportFilter((int)this.ReportType));
             var currentFilter =
                 SessionFacade.FindPageFilters<ReportsSearchFilter>(ReportsSearchFilter.CreateFilterId()) ?? 
                 ReportsSearchFilter.CreateDefault();
 
-            List<ItemOverview> departments = this.OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+            var departments = this.OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
 
-            ReportsSearchViewModel viewModel = ReportsSearchViewModel.BuildViewModel(
+            var viewModel = ReportsSearchViewModel.BuildViewModel(
                 currentFilter,
                 departments,
                 (int)this.ReportType,

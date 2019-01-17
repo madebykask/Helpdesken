@@ -52,14 +52,12 @@
         {
             var list = new SelectList(departments, "Value", "Name");
 
-            ItemOverview overview =
+            var inventoryType =
                 types.FirstOrDefault(x => x.Value == inventoryTypeId.ToString(CultureInfo.InvariantCulture));
-
-            string name = overview != null ? overview.Name : null;
 
             return new InventorySearchViewModel(list, currentFilter, settings, inventoryTypeId, currentMode, types)
             {
-                Name = name
+                Name = inventoryType?.Name
             };
         }
     }

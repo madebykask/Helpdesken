@@ -1,6 +1,7 @@
 ﻿@using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings
 @using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Inventory.InventoryFieldSettingsEditViewModel
+
 <script type="text/javascript">
     $(function () {
         var parameters = {
@@ -20,6 +21,7 @@
     });
 
 </script>
+
 @using (Ajax.BeginForm("InventorySettings", "InventorySettings", new AjaxOptions { UpdateTargetId = "settings_container", OnSuccess = "updateForm(); onSettingsSavedSuccessfully();", HttpMethod = "POST" }, new { id = "settings_form" }))
 {
     <ul class="nav nav-tabs" id="problem_tab">

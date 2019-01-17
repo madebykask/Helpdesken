@@ -63,15 +63,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public PartialViewResult Index()
         {
-            List<ItemOverview> inventoryTypes = this.inventoryService.GetInventoryTypes(
-                SessionFacade.CurrentCustomer.Id);
+            var inventoryTypes =
+                this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id, true, CreateInventoryTypeSeparatorItem());
 
             SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter((int)CurrentModes.Printers));
             PrinterSearchFilter currentFilter =
                 SessionFacade.FindPageFilters<PrinterSearchFilter>(PrinterSearchFilter.CreateFilterId()) ??
                 PrinterSearchFilter.CreateDefault();
 
-            List<ItemOverview> departments = this.OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+            var departments = this.OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
             PrinterFieldsSettingsOverviewForFilter settings =
                 this.inventorySettingsService.GetPrinterFieldSettingsOverviewForFilter(
                     SessionFacade.CurrentCustomer.Id,

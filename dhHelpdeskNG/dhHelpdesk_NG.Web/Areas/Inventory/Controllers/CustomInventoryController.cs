@@ -69,24 +69,23 @@
         [HttpGet]
         public ViewResult Index(int inventoryTypeId)
         {
-            List<ItemOverview> inventoryTypes = this.inventoryService.GetInventoryTypes(
-                SessionFacade.CurrentCustomer.Id);
+            var inventoryTypes =
+                this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id, true, CreateInventoryTypeSeparatorItem());
 
             SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter(inventoryTypeId));
-            InventorySearchFilter currentFilter =
+            var currentFilter =
                 SessionFacade.FindPageFilters<InventorySearchFilter>(InventorySearchFilter.CreateFilterId())
                 ?? InventorySearchFilter.CreateDefault(inventoryTypeId);
 
-            List<ItemOverview> departments = this.OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
-            InventoryFieldsSettingsOverviewForFilter settings =
-                this.inventorySettingsService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
+            var departments = OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+            var fieldsSettings = inventorySettingsService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
 
-            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var userHasInventoryAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
 
-            InventorySearchViewModel viewModel = InventorySearchViewModel.BuildViewModel(
+            var viewModel = InventorySearchViewModel.BuildViewModel(
                 currentFilter,
                 departments,
-                settings,
+                fieldsSettings,
                 inventoryTypeId,
                 inventoryTypeId,
                 inventoryTypes);

@@ -45,8 +45,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public ViewResult Index(int inventoryTypeId)
         {
-            List<ItemOverview> inventoryTypes = this.inventoryService.GetInventoryTypes(
-                SessionFacade.CurrentCustomer.Id);
+            List<ItemOverview> inventoryTypes = 
+                this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id);
 
             SessionFacade.SavePageFilters(TabName.Reports, new ReportFilter(inventoryTypeId));
             var currentFilter =

@@ -63,12 +63,11 @@
                 if (data !== null && typeof data !== "undefined") {
                     var isError = typeof data.ErrorMessage !== "undefined";
                     if (isError) {
-
                         alert(data.ErrorMessage);
                         return $.Deferred().reject(jqxhr).promise();
                     }
-                    return data;
                 }
+                return data;
             });
 
         return jqxhr;

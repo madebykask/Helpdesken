@@ -32,6 +32,8 @@ namespace DH.Helpdesk.Services.Services
 
         void UpdateInventoryType(InventoryType businessModel);
 
+        void UpdateStandardInventoryTypeSettings(int customerId, CurrentModes modes, bool isActive);
+
         void UpdateWorkstationInfo(int id, string info);
 
         void DeleteInventoryType(int id);
@@ -39,6 +41,10 @@ namespace DH.Helpdesk.Services.Services
         InventoryType GetInventoryType(int id);
 
         List<ItemOverview> GetInventoryTypes(int customerId);
+
+        List<ItemOverview> GetInventoryTypes(int customerId, bool includeStandard, ItemOverview separatorItem = null);
+
+        IList<InventoryTypeOverview> GetInventoryTypesWithSettings(int customerId);
 
         List<ItemOverview> GetNotConnectedInventory(int inventoryType, int computerId);
 

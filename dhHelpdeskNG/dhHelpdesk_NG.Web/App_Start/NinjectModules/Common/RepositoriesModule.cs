@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.Dal.Repositories.GDPR;
+using DH.Helpdesk.Domain.Inventory;
 
 namespace DH.Helpdesk.Web.NinjectModules.Common
 {
@@ -252,6 +253,7 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             this.Bind<IInventoryTypePropertyValueRepository>().To<InventoryTypePropertyValueRepository>();
             this.Bind<IInventoryRepository>().To<InventoryRepository>();
             this.Bind<IInventoryTypeRepository>().To<InventoryTypeRepository>();
+            this.Bind<IInventoryTypeStandardSettingsRepository>().To<InventoryTypeStandardSettingsRepository>();
             this.Bind<IServerFieldSettingsRepository>().To<ServerFieldSettingsRepository>();
             this.Bind<IServerLogicalDriveRepository>().To<ServerLogicalDriveRepository>();
             this.Bind<IServerRepository>().To<ServerRepository>();
