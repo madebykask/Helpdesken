@@ -136,9 +136,3 @@ insert into tbltext (id, TextString, TextType) VALUES (10019, 'Nej', @MobileType
 If not exists (select * from tblTextTranslation where text_id = 10019 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10019, 2, 'No')
 
--- massage the case is open by another user
-If not exists (select * from tbltext where id = 10020)
-	insert into tbltext (id, TextString, TextType) VALUES (10020, 'OBS! Detta ärende är öppnat av', @MobileType)
-
-If not exists (select * from tblTextTranslation where text_id = 10020 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10020, 2, 'Please note! This case is opened by')
