@@ -138,7 +138,7 @@ $(function () {
                     $.get(saveLogMessageUrl, { caseId: caseId, note: note, logFileGuid: logFileKey },
                         function(res) {
                             if (isPopup) {
-                                if (caseEmailGuid == null) {
+                                if (caseEmailGuid == null || caseEmailGuid == "") {
                                     window.location.href = caseDetailsUrl + "/" + caseId;
                                 }
                                 else
