@@ -13,6 +13,7 @@
         public ComputerFieldsSettingsOverviewForFilter Map(NamedObjectCollection<FieldOverviewSettingMapperData> entity)
         {
             var department = CreateFieldSetting(entity.FindByName(OrganizationFields.Department));
+            var contactUserId = CreateFieldSetting(entity.FindByName(ContactInformationFields.UserId));
             var computerType = CreateFieldSetting(entity.FindByName(WorkstationFields.ComputerType));
             var contractStatusName = CreateFieldSetting(entity.FindByName(ContractFields.ContractStatusName));
             var contractStartDate = CreateFieldSetting(entity.FindByName(ContractFields.ContractStartDate));
@@ -20,7 +21,8 @@
             var scanDate = CreateFieldSetting(entity.FindByName(DateFields.ScanDate));
             var scrapDate = CreateFieldSetting(entity.FindByName(StateFields.ScrapDate));
 
-            return new ComputerFieldsSettingsOverviewForFilter(department, computerType, contractStatusName, contractStartDate, contractEndDate, scanDate, scrapDate);
+            return new ComputerFieldsSettingsOverviewForFilter(department, computerType, contractStatusName,
+                contractStartDate, contractEndDate, scanDate, scrapDate, contactUserId);
         }
 
         private static FieldSettingOverview CreateFieldSetting(FieldOverviewSettingMapperData data)

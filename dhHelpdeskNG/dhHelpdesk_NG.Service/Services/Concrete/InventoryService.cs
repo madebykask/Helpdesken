@@ -502,6 +502,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 computersFilter.DepartmentId,
                 computersFilter.ComputerTypeId,
                 computersFilter.ContractStatusId,
+                computersFilter.ContactUserId,
                 computersFilter.ContractStartDateFrom,
                 computersFilter.ContractStartDateTo,
                 computersFilter.ContractEndDateFrom,

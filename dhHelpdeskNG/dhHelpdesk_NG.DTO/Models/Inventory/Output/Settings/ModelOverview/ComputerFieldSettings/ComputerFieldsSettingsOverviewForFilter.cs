@@ -11,19 +11,24 @@
             FieldSettingOverview contractStartDateFieldSetting,
             FieldSettingOverview contractEndDateFieldSetting,
             FieldSettingOverview scanDateFieldSetting,
-            FieldSettingOverview scrapDateFieldSetting)
+            FieldSettingOverview scrapDateFieldSetting,
+            FieldSettingOverview contactUserIdFieldSetting)
         {
-            this.DepartmnetFieldSetting = departmnetFieldSetting;
-            this.ComputerTypeFieldSetting = computerTypeFieldSetting;
-            this.ContractStatusFieldSetting = contractStatusFieldSetting;
-            this.ContractStartDateFieldSetting = contractStartDateFieldSetting;
-            this.ContractEndDateFieldSetting = contractEndDateFieldSetting;
-            this.ScanDateFieldSetting = scanDateFieldSetting;
-            this.ScrapDateFieldSetting = scrapDateFieldSetting;
+            DepartmnetFieldSetting = departmnetFieldSetting;
+            ComputerTypeFieldSetting = computerTypeFieldSetting;
+            ContractStatusFieldSetting = contractStatusFieldSetting;
+            ContractStartDateFieldSetting = contractStartDateFieldSetting;
+            ContractEndDateFieldSetting = contractEndDateFieldSetting;
+            ScanDateFieldSetting = scanDateFieldSetting;
+            ScrapDateFieldSetting = scrapDateFieldSetting;
+            ContactUserIdFieldSetting = contactUserIdFieldSetting;
         }
 
         [NotNull]
         public FieldSettingOverview DepartmnetFieldSetting { get; private set; }
+
+        [NotNull]
+        public FieldSettingOverview ContactUserIdFieldSetting { get; private set; }
 
         [NotNull]
         public FieldSettingOverview ComputerTypeFieldSetting { get; private set; }

@@ -28,12 +28,12 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
 
         List<ComputerResults> Search(int customerId, string searchFor);
 
-        List<ComputerOverview> FindOverviews(
-            int customerId,
+        List<ComputerOverview> FindOverviews(int customerId,
             int? departmentId,
             int? regionId,
             int? computerTypeId,
             int? contractStatusId,
+            string contactUserId,
             DateTime? contractStartDateFrom,
             DateTime? contractStartDateTo,
             DateTime? contractEndDateFrom,

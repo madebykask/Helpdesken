@@ -10,25 +10,25 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
     using DH.Helpdesk.Common.Enums;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.Requests.Inventory;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+    using Infrastructure.LocalizedAttributes;
     using DH.Helpdesk.Web.Models.Shared;
 
     public class WorkstationsSearchFilter
     {
         public WorkstationsSearchFilter()
         {
-            this.ContractStartDate = new DateRange();
-            this.ContractEndDate = new DateRange();
-            this.ScanDate = new DateRange();
-            this.ScrapDate = new DateRange();
+            ContractStartDate = new DateRange();
+            ContractEndDate = new DateRange();
+            ScanDate = new DateRange();
+            ScrapDate = new DateRange();
         }
 
         private WorkstationsSearchFilter(int recordsOnPage)
             : this()
         {
-            this.RecordsOnPage = recordsOnPage;
+            RecordsOnPage = recordsOnPage;
 
-            this.SortField = new SortFieldModel();
+            SortField = new SortFieldModel();
         }
 
         [IsId]
@@ -41,6 +41,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
         public int? ComputerTypeId { get; set; }
 
         public ContractStatuses? ContractStatusId { get; set; }
+
+        public string ContactUserId { get; set; }
 
         [NotNull]
         public DateRange ContractStartDate { get; set; }
@@ -76,29 +78,30 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
         public ComputersFilter CreateRequest(int customerId)
         {
             SortField sf = null;
-            if (!string.IsNullOrEmpty(this.SortField.Name))
+            if (!string.IsNullOrEmpty(SortField.Name))
             {
-                sf = new SortField(this.SortField.Name, this.SortField.SortBy ?? SortBy.Ascending);
+                sf = new SortField(SortField.Name, SortField.SortBy ?? SortBy.Ascending);
             }
             return new ComputersFilter(
                 customerId,
-                this.RegionId,
-                this.DepartmentId,
-                this.ComputerTypeId,
-                (int?)this.ContractStatusId,
-                this.ContractStartDate.DateFrom,
-                this.ContractStartDate.DateTo,
-                this.ContractEndDate.DateFrom,
-                this.ContractEndDate.DateTo,
-                this.ScanDate.DateFrom,
-                this.ScanDate.DateTo,
-                this.ScrapDate.DateFrom,
-                this.ScrapDate.DateTo,
-                this.SearchFor,
-                this.IsShowScrapped,
-                this.RecordsOnPage,
+                RegionId,
+                DepartmentId,
+                ComputerTypeId,
+                (int?)ContractStatusId,
+                ContactUserId,
+                ContractStartDate.DateFrom,
+                ContractStartDate.DateTo,
+                ContractEndDate.DateFrom,
+                ContractEndDate.DateTo,
+                ScanDate.DateFrom,
+                ScanDate.DateTo,
+                ScrapDate.DateFrom,
+                ScrapDate.DateTo,
+                SearchFor,
+                IsShowScrapped,
+                RecordsOnPage,
                 sf,
-                this.RecordsCount);
+                RecordsCount);
         }
 
         public static string CreateFilterId()
