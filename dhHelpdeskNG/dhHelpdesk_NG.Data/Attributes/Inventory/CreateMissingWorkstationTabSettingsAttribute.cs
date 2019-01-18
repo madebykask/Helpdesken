@@ -67,7 +67,7 @@ namespace DH.Helpdesk.Dal.Attributes.Inventory
                 CreatedDate = DateTime.Now,
                 ChangedDate = DateTime.Now,
                 Customer_Id = customerId,
-                Show = false
+                Show = true
             };
         }
 

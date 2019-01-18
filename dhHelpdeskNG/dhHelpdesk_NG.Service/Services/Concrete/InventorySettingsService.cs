@@ -84,13 +84,13 @@ namespace DH.Helpdesk.Services.Services.Concrete
             var relatedCasesTab = tabs.First(t => t.TabField == WorkstationTabs.RelatedCases);
 
             return new WorkstationTabsSettings(ModelStates.ForEdit,
-                new TabSetting(computerTab.TabField, computerTab.Show, computerTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? string.Empty),
-                new TabSetting(storagesTab.TabField, storagesTab.Show, storagesTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? string.Empty),
-                new TabSetting(softwaresTab.TabField, softwaresTab.Show, softwaresTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? string.Empty),
-                new TabSetting(hotfixesTab.TabField, hotfixesTab.Show, hotfixesTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? string.Empty),
-                new TabSetting(computerLogsTab.TabField, computerLogsTab.Show, computerLogsTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? string.Empty),
-                new TabSetting(accessoriesTab.TabField, accessoriesTab.Show, accessoriesTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? string.Empty),
-                new TabSetting(relatedCasesTab.TabField, relatedCasesTab.Show, relatedCasesTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? string.Empty));
+                new TabSetting(computerTab.TabField, computerTab.Show, computerTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? computerTab.TabField),
+                new TabSetting(storagesTab.TabField, storagesTab.Show, storagesTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? storagesTab.TabField),
+                new TabSetting(softwaresTab.TabField, softwaresTab.Show, softwaresTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? softwaresTab.TabField),
+                new TabSetting(hotfixesTab.TabField, hotfixesTab.Show, hotfixesTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? hotfixesTab.TabField),
+                new TabSetting(computerLogsTab.TabField, computerLogsTab.Show, computerLogsTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? computerLogsTab.TabField),
+                new TabSetting(accessoriesTab.TabField, accessoriesTab.Show, accessoriesTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? accessoriesTab.TabField),
+                new TabSetting(relatedCasesTab.TabField, relatedCasesTab.Show, relatedCasesTab.WorkstationTabSettingLanguages?.FirstOrDefault()?.Label ?? relatedCasesTab.TabField));
         }
 
         public ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false)
