@@ -3,7 +3,7 @@
   "short_name": "Helpdesk",
   "theme_color": "#fff",
   "background_color": "#fff",
-  "display": "browser",
+  "display": "standalone",
   "scope": "/",
   "start_url": "/",
   "icons": [
