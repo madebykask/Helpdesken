@@ -401,7 +401,9 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
                     NeedTranslate = true
                 };
             var result = workstations.FirstOrDefault();
-            result.TypeDescription = SearchPcNumber(customerId, result.Name).Select(p => p.TypeDescription).FirstOrDefault();
+            if (result != null)
+                result.TypeDescription = SearchPcNumber(customerId, result.Name).Select(p => p.TypeDescription).FirstOrDefault();
+
             return result;
         }
 
