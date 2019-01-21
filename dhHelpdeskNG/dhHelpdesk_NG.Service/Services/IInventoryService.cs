@@ -68,6 +68,11 @@ namespace DH.Helpdesk.Services.Services
 
         ComputerForRead GetWorkstation(int id);
 
+        ComputerFile GetWorkstationFile(int id);
+
+        void SaveWorkstationFile(int id, string fileName, byte[] data);
+        void DeleteWorkstationFile(int id);
+
         List<ComputerLogOverview> GetWorkstationLogOverviews(int id);
 
         List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter);

@@ -31,6 +31,8 @@
 
         public bool IsReadOnly { get; set; }
 
+        #region Factory Methods
+
         public static ConfigurableFieldModel<TValue> CreateUnshowable()
         {
             return new ConfigurableFieldModel<TValue> { Show = false };
@@ -40,5 +42,7 @@
         {
             return field != null ? field.Value : default(TValue);
         }
+
+        #endregion
     }
 }

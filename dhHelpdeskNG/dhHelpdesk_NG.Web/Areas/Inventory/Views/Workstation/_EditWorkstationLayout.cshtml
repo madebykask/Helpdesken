@@ -2,12 +2,20 @@
 @using DH.Helpdesk.Web.Areas.Inventory.Infrastucture.Extensions
 @using DH.Helpdesk.Web.Areas.Inventory.Models
 @using DH.Helpdesk.Web.Infrastructure
+
 @model BaseViewEditWorkstationModel
+
 @{
     Layout = Model.IsForDialog ? "~/Views/Shared/_PopupLayout.cshtml" : "~/Views/Shared/_Layout.cshtml";
-}
+ }
 
-@RenderSection("Scripts", false)
+@functions    
+{
+    private MvcHtmlString GetIsActive(WorkstationEditTabs tab)
+    {
+        return MvcHtmlString.Create(Model.Tab == tab ? "active" : null);
+    }
+}
 
 <div class="secnavs fixed" style="@(Model.IsForDialog ? "top: 0" : "")">
     <div class="pull-left">
@@ -68,11 +76,4 @@
     </div>
 </div>
 
-@functions    {
-    private MvcHtmlString GetIsActive(WorkstationEditTabs tab)
-    {
-        return MvcHtmlString.Create(Model.Tab == tab ? "active" : null);
-    }
-
-}
-
+@RenderSection("Scripts", false)

@@ -1,3 +1,5 @@
+using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
+
 namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concrete
 {
     using System;
@@ -55,7 +57,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return fieldsModel;
         }
 
-        public ComputerForInsert BuildForAdd(ComputerViewModel model, OperationContext context)
+        public ComputerForInsert BuildForAdd(ComputerViewModel model, OperationContext context, ComputerFile computerFile)
         {
             var workstation = CreateWorkstation(model.WorkstationFieldsViewModel);
             var chassis = CreateChassis(model.ChassisFieldsModel);
@@ -105,6 +107,7 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 processor,
                 workstation,
                 context.CustomerId,
+                computerFile,
                 context.UserId,
                 context.DateAndTime);
 
@@ -301,7 +304,8 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 accountingDimension2,
                 accountingDimension3,
                 accountingDimension4,
-                accountingDimension5);
+                accountingDimension5,
+                null);
 
             return fields;
         }

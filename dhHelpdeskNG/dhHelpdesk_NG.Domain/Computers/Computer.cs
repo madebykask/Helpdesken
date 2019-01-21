@@ -12,7 +12,6 @@ namespace DH.Helpdesk.Domain.Computers
         {
         }
 
-        public byte[] ComputerDocument { get; set; } //Kolla raden
         public int? ChangedByUser_Id { get; set; }
         public int? ComputerModel_Id { get; set; }
         public int ComputerRole { get; set; }
@@ -36,6 +35,7 @@ namespace DH.Helpdesk.Domain.Computers
         public string CarePackNumber { get; set; }
         public string ChassisType { get; set; }
         public string ComputerFileName { get; set; }
+        public byte[] ComputerDocument { get; set; }
         public string ComputerGUID { get; set; }
         public string ComputerModelName { get; set; }
         public string ComputerName { get; set; }

@@ -388,6 +388,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     settings.ContractFieldsSettings.AccountingDimension5FieldSetting,
                     model.ContractFields.AccountingDimension5);
 
+            var document = CreateStringField(settings.ContractFieldsSettings.DocumentFieldSetting, model.ContractFields.Document);
+
             var contractFieldsModel = new ContractFieldsModel(
                 contractStatus,
                 contractNumber,
@@ -398,7 +400,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 accounting2,
                 accounting3,
                 accounting4,
-                accounting5);
+                accounting5, 
+                document);
 
             var contractStatuses =
                 CreateSelectListField(
@@ -522,17 +525,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
         {
             var name = CreateStringField(settings.WorkstationFieldsSettings.ComputerNameFieldSetting, null);
             var manufacturer = CreateStringField(settings.WorkstationFieldsSettings.ManufacturerFieldSetting, null);
-            var computerModel = CreateNullableIntegerField(
-                settings.WorkstationFieldsSettings.ComputerModelFieldSetting,
-                null);
+            var computerModel = CreateNullableIntegerField(settings.WorkstationFieldsSettings.ComputerModelFieldSetting, null);
             var serial = CreateStringField(settings.WorkstationFieldsSettings.SerialNumberFieldSetting, null);
             var biosVersion = CreateStringField(settings.WorkstationFieldsSettings.BIOSVersionFieldSetting, null);
             var biosDate = CreateNullableDateTimeField(settings.WorkstationFieldsSettings.BIOSDateFieldSetting, null);
             var theftMark = CreateStringField(settings.WorkstationFieldsSettings.TheftmarkFieldSetting, null);
             var carePackNumber = CreateStringField(settings.WorkstationFieldsSettings.CarePackNumberFieldSetting, null);
-            var computerType = CreateNullableIntegerField(
-                settings.WorkstationFieldsSettings.ComputerTypeFieldSetting,
-                null);
+            var computerType = CreateNullableIntegerField(settings.WorkstationFieldsSettings.ComputerTypeFieldSetting, null);
             var location = CreateStringField(settings.WorkstationFieldsSettings.LocationFieldSetting, null);
 
             var workstationFieldsModel = new WorkstationFieldsModel(
@@ -678,28 +677,24 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var placeFieldsViewModel = new PlaceFieldsViewModel(placeFieldsModel, buildings, floors, rooms);
 
             var other = CreateStringField(settings.OtherFieldsSettings.InfoFieldSetting, null);
-
             var otherFieldModel = new OtherFieldsModel(other);
 
             var graphics = CreateStringField(settings.GraphicsFieldsSettings.VideoCardFieldSetting, null);
 
             var graphicsFieldModel = new GraphicsFieldsModel(graphics);
 
-            var contractStatus = CreateNullableIntegerField(
-                settings.ContractFieldsSettings.ContractStatusFieldSetting,
-                null);
+            var contractStatus = CreateNullableIntegerField(settings.ContractFieldsSettings.ContractStatusFieldSetting, null);
             var contractNumber = CreateStringField(settings.ContractFieldsSettings.ContractNumberFieldSetting, null);
-            var contractStartDate =
-                CreateNullableDateTimeField(settings.ContractFieldsSettings.ContractStartDateFieldSetting, null);
-            var contractEndDate =
-                CreateNullableDateTimeField(settings.ContractFieldsSettings.ContractEndDateFieldSetting, null);
+            var contractStartDate = CreateNullableDateTimeField(settings.ContractFieldsSettings.ContractStartDateFieldSetting, null);
+            var contractEndDate = CreateNullableDateTimeField(settings.ContractFieldsSettings.ContractEndDateFieldSetting, null);
             var price = CreateIntegerField(settings.ContractFieldsSettings.PurchasePriceFieldSetting, 0);
             var accounting1 = CreateStringField(settings.ContractFieldsSettings.AccountingDimension1FieldSetting, null);
             var accounting2 = CreateStringField(settings.ContractFieldsSettings.AccountingDimension2FieldSetting, null);
             var accounting3 = CreateStringField(settings.ContractFieldsSettings.AccountingDimension3FieldSetting, null);
             var accounting4 = CreateStringField(settings.ContractFieldsSettings.AccountingDimension4FieldSetting, null);
             var accounting5 = CreateStringField(settings.ContractFieldsSettings.AccountingDimension5FieldSetting, null);
-
+            var document = CreateStringField(settings.ContractFieldsSettings.DocumentFieldSetting, null);
+            
             var contractFieldsModel = new ContractFieldsModel(
                 contractStatus,
                 contractNumber,
@@ -710,7 +705,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 accounting2,
                 accounting3,
                 accounting4,
-                accounting5);
+                accounting5,
+                document);
 
             var contractStatuses = CreateSelectListField(
                 settings.StateFieldsSettings.StateFieldSetting,
@@ -775,7 +771,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 processorViewModel,
                 workstationViewModel)
                        {
-                           CustomerId = currentCustomerId
+                           CustomerId = currentCustomerId,
+                           DocumentFileKey = Guid.NewGuid().ToString()
                        };
         }
 

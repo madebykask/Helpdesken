@@ -24,6 +24,12 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
 
         void DeleteById(int id);
 
+        ComputerFile GetFile(int contractId);
+
+        void SaveFile(int id, string fileName, byte[] data);
+
+        void DeleteFile(int id);
+
         ComputerForRead FindById(int id);
 
         List<ComputerResults> Search(int customerId, string searchFor);

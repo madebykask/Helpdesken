@@ -1149,6 +1149,7 @@
     <Content Include="Content\js\Feedback\feedback.edit.js" />
     <Content Include="Content\js\Feedback\feedbackStatisticsCases.js" />
     <Content Include="Content\js\Inventory\inventory.search.js" />
+    <Content Include="Areas\Inventory\Content\js\inventoryFiles.js" />
     <Content Include="Content\js\moment.js" />
     <Content Include="Content\js\moment.min.js" />
     <Content Include="Content\js\ChangePassword\PasswordValidator.js" />
@@ -3409,6 +3410,9 @@
     </Content>
     <Content Include="Areas\Inventory\Views\InventorySettings\EditorTemplates\Settings\ComputerTabFieldsSettingsViewModel.cshtml" />
     <Content Include="Areas\Inventory\Views\InventorySettings\EditorTemplates\Settings\TabSettingForComputerModel.cshtml" />
+    <Content Include="Areas\Inventory\Views\Workstation\_InventoryFiles.cshtml" />
+    <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\OtherFieldsModel - Copy.cshtml" />
+    <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\Documents.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

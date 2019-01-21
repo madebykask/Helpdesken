@@ -429,11 +429,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
         public void AddWorkstation(ComputerForInsert businessModel, OperationContext context)
         {
             var settings = _computerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
-
             _computerValidator.Validate(businessModel, settings);
             _computerRepository.Add(businessModel);
             _computerRepository.Commit();
-
+            
             if (businessModel.ContactInformationFields.UserId.HasValue)
             {
                 this.AddUserHistory(businessModel.Id, businessModel.ContactInformationFields.UserId.Value);
@@ -487,6 +486,21 @@ namespace DH.Helpdesk.Services.Services.Concrete
         public ComputerForRead GetWorkstation(int id)
         {
             return _computerRepository.FindById(id);
+        }
+
+        public ComputerFile GetWorkstationFile(int id)
+        {
+            return _computerRepository.GetFile(id);
+        }
+
+        public void SaveWorkstationFile(int id, string fileName, byte[] data)
+        {
+            _computerRepository.SaveFile(id, fileName, data);
+        }
+
+        public void DeleteWorkstationFile(int id)
+        {
+            _computerRepository.DeleteFile(id);
         }
 
         public List<ComputerLogOverview> GetWorkstationLogOverviews(int id)

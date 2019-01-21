@@ -20,7 +20,8 @@
             ConfigurableFieldModel<string> accountingDimension2,
             ConfigurableFieldModel<string> accountingDimension3,
             ConfigurableFieldModel<string> accountingDimension4,
-            ConfigurableFieldModel<string> accountingDimension5)
+            ConfigurableFieldModel<string> accountingDimension5,
+            ConfigurableFieldModel<string> document)
         {
             this.ContractStatusId = contractStatusId;
             this.ContractNumber = contractNumber;
@@ -32,6 +33,7 @@
             this.AccountingDimension3 = accountingDimension3;
             this.AccountingDimension4 = accountingDimension4;
             this.AccountingDimension5 = accountingDimension5;
+            this.Document = document;
         }
 
         [NotNull]
@@ -63,5 +65,8 @@
 
         [NotNull]
         public ConfigurableFieldModel<string> AccountingDimension5 { get; set; }
+
+        [NotNull]
+        public ConfigurableFieldModel<string> Document { get; set; }
     }
 }

@@ -1,6 +1,10 @@
+using System;
 using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Web.Common.Tools.Files;
+using DH.Helpdesk.Web.Enums;
 using DH.Helpdesk.Web.Models.Shared;
 
 namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
@@ -36,6 +40,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
     using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
     using DH.Helpdesk.BusinessData.Enums.Admin.Users;
+    using Dal.Enums;
 
     public class WorkstationController : InventoryBaseController
     {
@@ -45,6 +50,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         private readonly IComputerViewModelBuilder _computerViewModelBuilder;
         private readonly IComputerBuilder _computerBuilder;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
+        private readonly ITemporaryFilesCache _filesStore;
 
         public WorkstationController(
             IMasterDataService masterDataService,
@@ -57,15 +63,17 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             IComputerBuilder computerBuilder,
             IExportFileNameFormatter exportFileNameFormatter,
             IUserPermissionsChecker userPermissionsChecker,
-            IExcelFileComposer excelFileComposer)
+            IExcelFileComposer excelFileComposer,
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory)
             : base(masterDataService, exportFileNameFormatter, excelFileComposer, organizationService, placeService)
         {
-            this._inventoryService = inventoryService;
-            this._inventorySettingsService = inventorySettingsService;
-            this._computerModulesService = computerModulesService;
-            this._computerViewModelBuilder = computerViewModelBuilder;
-            this._computerBuilder = computerBuilder;
-            this._userPermissionsChecker = userPermissionsChecker;
+            _filesStore = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Inventory);
+            _inventoryService = inventoryService;
+            _inventorySettingsService = inventorySettingsService;
+            _computerModulesService = computerModulesService;
+            _computerViewModelBuilder = computerViewModelBuilder;
+            _computerBuilder = computerBuilder;
+            _userPermissionsChecker = userPermissionsChecker;
         }
 
         [HttpGet]
@@ -123,7 +131,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var tabSettings = _inventorySettingsService.GetWorkstationTabsSettingsForEdit(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
-            if (!tabSettings.ComputersTabSetting.Show) return RedirectToTab(tabSettings.ComputersTabSetting, tabSettings, id, dialog, userId);
+
+           // if (!tabSettings.ComputersTabSetting.Show)
+          //      return RedirectToTab(tabSettings.ComputersTabSetting, tabSettings, id, dialog, userId);
 
             var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
             var readOnly = !userHasInventoryAdminPermission && dialog;
@@ -135,7 +145,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 _inventorySettingsService.GetWorkstationFieldSettingsForModelEdit(
                     SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId, readOnly);
 
-            var computerEditModel = this._computerViewModelBuilder.BuildViewModel(model, options, settings);
+            var computerEditModel = _computerViewModelBuilder.BuildViewModel(model, options, settings);
             computerEditModel.IsForDialog = dialog;
             computerEditModel.UserId = userId;
 
@@ -144,10 +154,85 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 UserHasInventoryAdminPermission = userHasInventoryAdminPermission,
                 IsForDialog = dialog,
                 UserId = userId,
-                TabSettings = tabSettings
+                TabSettings = tabSettings,
+                CurrentLanguageId = SessionFacade.CurrentLanguageId,
+                CustomerId = SessionFacade.CurrentCustomer.Id
             };
 
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public JsonResult UploadFile(string id, string name)
+        {
+            var fileName = Uri.UnescapeDataString(name);
+
+            var uploadedFile = Request.Files[0];
+            if (uploadedFile == null)
+                throw new HttpException((int)HttpStatusCode.NotFound, null);
+            
+            var fileContent = uploadedFile.GetFileContent();
+
+            if (GuidHelper.IsGuid(id))
+            {
+                _filesStore.ResetCacheForObject(id);
+                _filesStore.AddFile(fileContent, name, id);
+            }
+            else
+            {
+                var computerId = Int32.Parse(id);
+                _inventoryService.SaveWorkstationFile(computerId, fileName, fileContent);
+            }
+
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public ActionResult DeleteFile(string id, string name)
+        {
+            var fileName = Uri.UnescapeDataString(name);
+            if (GuidHelper.IsGuid(id))
+            {
+                _filesStore.DeleteFile(fileName, id);
+            }
+            else
+            {
+                _inventoryService.DeleteWorkstationFile(Int32.Parse(id));
+            }
+
+            return Json(new {success = true});
+        }
+
+        //Workstantion/DownloadFile?id=<guid>&fileName=dfdf.jpg
+        //Workstantion/DownloadFile?id=id
+        [HttpGet]
+        public ActionResult DownloadFile(string id, string name)
+        {
+            var fileName = Uri.UnescapeDataString(name);
+            
+            byte[] fileContent;
+            if (GuidHelper.IsGuid(id))
+            {
+                //todo: check file download in IE
+                if (!_filesStore.FileExists(fileName, id))
+                    throw new HttpException((int) HttpStatusCode.NotFound, null);
+
+                fileContent = _filesStore.GetFileContent(fileName, id);
+            }
+            else
+            {
+                var computerId = Int32.Parse(id);
+                var file = _inventoryService.GetWorkstationFile(computerId);
+                fileName = file.FileName;
+                fileContent = file?.Content;
+            }
+
+            if (fileContent == null)
+            {
+                return HttpNotFound();
+            }
+
+            return File(fileContent, MimeType.BinaryFile, Server.UrlEncode(fileName));
         }
 
         [HttpPost]
@@ -176,7 +261,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                     SessionFacade.CurrentCustomer.Id,
                     SessionFacade.CurrentLanguageId);
 
-            ComputerViewModel viewModel = this._computerViewModelBuilder.BuildViewModel(
+            var viewModel = this._computerViewModelBuilder.BuildViewModel(
                 options,
                 settings,
                 SessionFacade.CurrentCustomer.Id);
@@ -188,10 +273,31 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [BadRequestOnNotValid]
         public RedirectToRouteResult New(ComputerViewModel computerViewModel)
         {
-            ComputerForInsert businessModel = this._computerBuilder.BuildForAdd(computerViewModel, this.OperationContext);
-            this._inventoryService.AddWorkstation(businessModel, this.OperationContext);
+            var computerFile = LoadTempFile(computerViewModel.DocumentFileKey); 
+            var businessModel = _computerBuilder.BuildForAdd(computerViewModel, this.OperationContext, computerFile);
+            _inventoryService.AddWorkstation(businessModel, this.OperationContext);
+            
+            return RedirectToAction("Index");
+        }
 
-            return this.RedirectToAction("Index");
+        private ComputerFile LoadTempFile(string documentFileKey, bool deleteTempFile = true)
+        {
+            ComputerFile computerFile = null;
+            if (!string.IsNullOrEmpty(documentFileKey))
+            {
+                var fileName = _filesStore.FindFileNames(documentFileKey).FirstOrDefault();
+                if (!string.IsNullOrEmpty(fileName))
+                {
+                    var fileContent = _filesStore.GetFileContent(fileName, documentFileKey);
+                    computerFile = new ComputerFile(fileName, fileContent);
+                }
+
+                if (deleteTempFile)
+                {
+                    _filesStore.ResetCacheForObject(documentFileKey);
+                }
+            }
+            return computerFile;
         }
 
         [HttpPost]

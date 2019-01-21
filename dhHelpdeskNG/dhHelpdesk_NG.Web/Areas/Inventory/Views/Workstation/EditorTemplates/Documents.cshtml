@@ -1,0 +1,47 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer.ComputerViewModel
+
+@{
+    var computerId = Model.Id;
+    var documentModel = Model.ContractFieldsViewModel.ContractFieldsModel.Document;
+ }
+
+@functions {
+    IHtmlString BuildFileDownloadUrl(string id, string fileName, string fileDownloadUrlMask)
+    {
+        var url = string.Format(@"{0}?id={1}&name={2}", fileDownloadUrlMask, id, Server.UrlEncode(fileName));
+        var link = string.Format(@"<a href=""{0}""><i class=""icon-file""></i>{1}</a>", url, fileName);
+        return new HtmlString(link);
+    }
+}
+
+@if (documentModel.Show)
+{
+    <h4>@Translation.GetCoreTextTranslation("Dokument")</h4>
+    <div class="row">
+        <div class="span12">
+            <div>
+                <table class="tableform">
+                    <tr class="displaytr">
+                        <td colspan="3" class="span3">
+                            <span class="attached-file" id="attached_file">
+                                @if (!string.IsNullOrEmpty(documentModel.Value))
+                                {
+                                    @(BuildFileDownloadUrl(computerId > 0 ? computerId.ToString() : Model.DocumentFileKey, documentModel.Value, Url.Action("DownloadFile", "Workstation")))
+                                }
+                            </span>
+                            <div>
+                                <a id="btnAddFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.GetCoreTextTranslation("Lägg till")</a>
+                                <button id="btnDeleteFile" class="btn"
+                                    style="display: @(!string.IsNullOrEmpty(documentModel.Value) ? "inline-block": "none")">@Translation.GetCoreTextTranslation("Ta bort")</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="displaytr">
+                        <td colspan="3" class="span3"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>    
+}

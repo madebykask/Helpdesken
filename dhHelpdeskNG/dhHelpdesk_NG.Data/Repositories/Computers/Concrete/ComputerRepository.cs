@@ -42,6 +42,14 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
             var entity = new Domain.Computers.Computer();
             Map(entity, businessModel);
+
+            //save file
+            if (businessModel.File != null)
+            {
+                entity.ComputerFileName = businessModel.File.FileName;
+                entity.ComputerDocument = businessModel.File.Content;
+            }
+            
             entity.Customer_Id = businessModel.CustomerId;
             entity.CreatedDate = businessModel.CreatedDate;
             entity.ChangedByUser_Id = businessModel.ChangedByUserId;
@@ -74,6 +82,42 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
             var entity = this.DbSet.Find(id);
             entity.Info = info;
+        }
+
+        public ComputerFile GetFile(int contractId)
+        {
+            var computerFile =
+                DbSet.Where(x => x.Id == contractId).Select(x => new ComputerFile()
+                {
+                    FileName = x.ComputerFileName,
+                    Content = x.ComputerDocument
+                }).FirstOrDefault();
+
+            return computerFile;
+        }
+
+        public void SaveFile(int id, string fileName, byte[] data)
+        {
+            var entity = this.DbSet.Find(id);
+            if (entity != null)
+            {
+                entity.ComputerFileName = fileName;
+                entity.ComputerDocument = data;
+
+                Commit();
+            }
+        }
+
+        public void DeleteFile(int id)
+        {
+            var entity = this.DbSet.Find(id);
+            if (entity != null)
+            {
+                entity.ComputerFileName = null;
+                entity.ComputerDocument = null;
+
+                Commit();
+            }
         }
 
         public ComputerForRead FindById(int id)
@@ -190,7 +234,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                     anonymus.Entity.AccountingDimension2,
                     anonymus.Entity.AccountingDimension3,
                     anonymus.Entity.AccountingDimension4,
-                    anonymus.Entity.AccountingDimension5);
+                    anonymus.Entity.AccountingDimension5,
+                    anonymus.Entity.ComputerFileName);
 
             var contactInfo = new BusinessData.Models.Inventory.Edit.Computer.ContactInformationFields(
                 anonymus.UserId,
@@ -791,7 +836,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.AccountingDimension3 = businessModel.ContractFields.AccountingDimension3;
             entity.AccountingDimension4 = businessModel.ContractFields.AccountingDimension4;
             entity.AccountingDimension5 = businessModel.ContractFields.AccountingDimension5;
-
+            
             entity.User_Id = businessModel.ContactInformationFields.UserId;
 
             entity.ContactName = businessModel.ContactFields.Name;

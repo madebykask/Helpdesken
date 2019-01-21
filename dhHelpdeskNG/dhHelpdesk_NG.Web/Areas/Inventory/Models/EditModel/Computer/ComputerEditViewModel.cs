@@ -12,17 +12,20 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer
             ComputerViewModel = computerViewModel;
         }
 
-        [NotNull]
-        public ComputerViewModel ComputerViewModel { get; set; }
+        public int CustomerId { get; set; }
+
+        public string DocumentFileKey { get; set; }
+
+        public int CurrentLanguageId { get; set; }
 
         public bool UserHasInventoryAdminPermission { get; set; }
 
         public override WorkstationEditTabs Tab
         {
-            get
-            {
-                return WorkstationEditTabs.Workstation;
-            }
+            get { return WorkstationEditTabs.Workstation; }
         }
+
+        [NotNull]
+        public ComputerViewModel ComputerViewModel { get; set; }
     }
 }

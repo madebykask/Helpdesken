@@ -28,8 +28,11 @@ namespace DH.Helpdesk.Web
             public const string FeedbackEdit = "~/bundles/feedback/feedbackedit";
             public const string CaseAttachExistingFiles = "~/bundles/case/attachexfile";
             public const string ConfirmationDialog = "~/bundles/confirmdialog";
+
+            //inventory
             public const string InventoryOverview = "~/bundles/inventory/overview";
             public const string InventoryRelatedCases = "~/bundles/inventory/relatedcases";
+            public const string InventoryFiles = "~/bundles/inventory/files";
         }
 
 
@@ -499,6 +502,8 @@ namespace DH.Helpdesk.Web
                     "~/Areas/Inventory/Content/js/inventoryOverview.js"));
             bundles.Add(new ScriptBundle(ScriptNames.InventoryRelatedCases).Include(
                     "~/Areas/Inventory/Content/js/relatedCases.js"));
+            bundles.Add(new ScriptBundle(ScriptNames.InventoryFiles).Include(
+                "~/Areas/Inventory/Content/js/InventoryFiles.js"));
 
 
 

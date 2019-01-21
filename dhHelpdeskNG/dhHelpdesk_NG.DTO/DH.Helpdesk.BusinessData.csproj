@@ -333,8 +333,10 @@
     <Compile Include="Models\Inventory\Edit\Settings\ComputerSettings\TabSetting.cs" />
     <Compile Include="Models\Inventory\Input\InventoryStandardTypeSettings.cs" />
     <Compile Include="Models\Inventory\InventorySearchResult.cs" />
+    <Compile Include="Models\Inventory\Output\Computer\ComputerFile.cs" />
     <Compile Include="Models\Inventory\Output\Computer\ComputerTypeOverview.cs" />
     <Compile Include="Models\Inventory\Output\InventoryTypeOverview.cs" />
+    <Compile Include="Models\Inventory\Output\Settings\ModelEdit\ComputerSettings\DocumentFieldsSettings.cs" />
     <Compile Include="Models\Invoice\CaseInvoiceOrderFile.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleProductAreaSelectedFilter.cs" />
     <Compile Include="Models\Invoice\InvoiceArticleProductArea.cs" />
