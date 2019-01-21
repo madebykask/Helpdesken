@@ -33,7 +33,6 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
             int? regionId,
             int? computerTypeId,
             int? contractStatusId,
-            string contactUserId,
             DateTime? contractStartDateFrom,
             DateTime? contractStartDateTo,
             DateTime? contractEndDateFrom,

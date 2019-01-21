@@ -11,8 +11,7 @@
             FieldSettingOverview contractStartDateFieldSetting,
             FieldSettingOverview contractEndDateFieldSetting,
             FieldSettingOverview scanDateFieldSetting,
-            FieldSettingOverview scrapDateFieldSetting,
-            FieldSettingOverview contactUserIdFieldSetting)
+            FieldSettingOverview scrapDateFieldSetting)
         {
             DepartmnetFieldSetting = departmnetFieldSetting;
             ComputerTypeFieldSetting = computerTypeFieldSetting;
@@ -21,14 +20,10 @@
             ContractEndDateFieldSetting = contractEndDateFieldSetting;
             ScanDateFieldSetting = scanDateFieldSetting;
             ScrapDateFieldSetting = scrapDateFieldSetting;
-            ContactUserIdFieldSetting = contactUserIdFieldSetting;
         }
 
         [NotNull]
         public FieldSettingOverview DepartmnetFieldSetting { get; private set; }
-
-        [NotNull]
-        public FieldSettingOverview ContactUserIdFieldSetting { get; private set; }
 
         [NotNull]
         public FieldSettingOverview ComputerTypeFieldSetting { get; private set; }

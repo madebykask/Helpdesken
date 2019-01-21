@@ -42,8 +42,6 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
 
         public ContractStatuses? ContractStatusId { get; set; }
 
-        public string ContactUserId { get; set; }
-
         [NotNull]
         public DateRange ContractStartDate { get; set; }
 
@@ -88,7 +86,6 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
                 DepartmentId,
                 ComputerTypeId,
                 (int?)ContractStatusId,
-                ContactUserId,
                 ContractStartDate.DateFrom,
                 ContractStartDate.DateTo,
                 ContractEndDate.DateFrom,

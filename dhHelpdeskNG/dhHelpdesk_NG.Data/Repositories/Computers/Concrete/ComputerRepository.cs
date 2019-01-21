@@ -297,7 +297,6 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             int? departmentId,
             int? computerTypeId,
             int? contractStatusId,
-            string contactUserId,
             DateTime? contractStartDateFrom,
             DateTime? contractStartDateTo,
             DateTime? contractEndDateFrom,
@@ -353,11 +352,6 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             if (scrapDateTo.HasValue)
                 query = query.Where(x => x.ScrapDate <= scrapDateTo);
 
-            if (!string.IsNullOrEmpty(contactUserId))
-            {
-                query = query.Where(x => x.User_Id.HasValue && x.User.UserId.Contains(contactUserId));
-            }
-
             if (!string.IsNullOrEmpty(searchFor))
             {
                 var pharseInLowerCase = searchFor.ToLower();
@@ -373,7 +367,11 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         || c.TheftMark.ToLower().Contains(pharseInLowerCase)
                         || c.CarePackNumber.ToLower().Contains(pharseInLowerCase)
                         || c.ComputerType.Name.ToLower().Contains(pharseInLowerCase)
-                        || c.Location.ToLower().Contains(pharseInLowerCase));
+                        || c.Location.ToLower().Contains(pharseInLowerCase) 
+                        || c.User.UserId.ToLower().Contains(pharseInLowerCase)
+                        || c.User.FirstName.ToLower().Contains(pharseInLowerCase)
+                        || c.User.SurName.ToLower().Contains(pharseInLowerCase)
+                        || c.NIC.Name.ToLower().Contains(pharseInLowerCase));
             }
 
             if (sortOptions != null && sortOptions.Name != null)

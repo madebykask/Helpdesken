@@ -12,7 +12,6 @@
             int? departmentId,
             int? computerTypeId,
             int? contractStatusId,
-            string contactUserId,
             DateTime? contractStartDateFrom,
             DateTime? contractStartDateTo,
             DateTime? contractEndDateFrom,
@@ -33,7 +32,6 @@
             DepartmentId = departmentId;
             ComputerTypeId = computerTypeId;
             ContractStatusId = contractStatusId;
-            ContactUserId = contactUserId;
             ContractStartDateFrom = contractStartDateFrom;
             ContractStartDateTo = contractStartDateTo;
             ContractEndDateFrom = contractEndDateFrom;
@@ -59,8 +57,6 @@
 
         [IsId]
         public int? ComputerTypeId { get; private set; }
-
-        public string ContactUserId { get; private set; }
 
         [IsId]
         public int? ContractStatusId { get; private set; }

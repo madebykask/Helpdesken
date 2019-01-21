@@ -25,13 +25,6 @@
 
 <div class="expanded-search-content">    
     <table class="tableform">
-        @if (Model.Settings.ContactUserIdFieldSetting.IsShow)
-        {
-            <tr>
-                <td class="span3">@Translation.Get(Model.Settings.ContactUserIdFieldSetting.Caption)</td>
-                <td>@Html.TextBoxFor(m => m.Filter.ContactUserId)</td>
-            </tr>
-        }
         @if (Model.Settings.DepartmnetFieldSetting.IsShow)
         {
             <tr>
