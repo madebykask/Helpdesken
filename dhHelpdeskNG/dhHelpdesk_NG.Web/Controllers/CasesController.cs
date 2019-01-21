@@ -2895,7 +2895,9 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public JsonResult RelatedInventoryCount(string userId)
         {
-            var count = _caseService.GetCaseRelatedInventoryCount(_workContext.Customer.CustomerId, userId, SessionFacade.CurrentUser);
+            var count = _workContext.Customer.Settings.ModuleInventory ?
+                _caseService.GetCaseRelatedInventoryCount(_workContext.Customer.CustomerId, userId, SessionFacade.CurrentUser) :
+                0;
             return Json(count, JsonRequestBehavior.AllowGet);
         }
 
