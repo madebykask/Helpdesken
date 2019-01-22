@@ -138,12 +138,12 @@ $(function () {
                     $.get(saveLogMessageUrl, { caseId: caseId, note: note, logFileGuid: logFileKey },
                         function(res) {
                             if (isPopup) {
-                                if (caseEmailGuid == null || caseEmailGuid == "") {
-                                    window.location.href = caseDetailsUrl + "/" + caseId;
+                                if (caseEmailGuid != null || caseEmailGuid != "") {
+                                    window.location.href = caseDetailsUrl + "/" + caseEmailGuid;
                                 }
                                 else
-                                    window.location.href = caseDetailsUrl + "/" + caseEmailGuid;
-                            }
+                                    window.location.href = caseDetailsUrl + "/" + caseId;
+                           }
                             else {
                                 self._elements.logNotesDiv.html(res);
                                 self._elements.logNoteInput.val('');
