@@ -37,7 +37,8 @@ export class CaseLogActionData {
 
 // Generic Action data
 export class GenericActionData {
-  constructor(public text: string) {
+  constructor(public text?:string, 
+              public action?:string) {
   }
 }
 ///////////////////////////////////////////////////

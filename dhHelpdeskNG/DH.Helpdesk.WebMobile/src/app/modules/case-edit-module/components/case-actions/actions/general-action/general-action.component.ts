@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CaseActionBaseComponent } from '../case-action-base.component';
-import { GenericActionData } from 'src/app/modules/case-edit-module/models';
+import { GenericActionData, CaseActionEvents } from 'src/app/modules/case-edit-module/models';
 
 @Component({
   selector: 'app-general-action',
@@ -9,15 +9,15 @@ import { GenericActionData } from 'src/app/modules/case-edit-module/models';
 })
 export class GeneralActionComponent extends CaseActionBaseComponent<GenericActionData> implements OnInit {
 
-    constructor() {
-      super();
-     }
+  constructor() {
+    super();
+  }
 
   ngOnInit() {
   }
   
   get data(): GenericActionData {
-    return this.caseAction != null ? this.caseAction.Data : null;
+     return this.caseAction != null ? this.caseAction.Data : null;
   }
 }
 

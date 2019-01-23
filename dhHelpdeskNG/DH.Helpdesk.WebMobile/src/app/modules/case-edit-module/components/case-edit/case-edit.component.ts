@@ -285,7 +285,7 @@ export class CaseEditComponent {
         let action = new CaseAction<CaseHistoryActionData>();
         
         action.Id = 1;
-        //action.Type = CaseActionEvents.AssignedAdministrator;
+        action.Type = CaseActionEvents.AssignedAdministrator;
         action.CreatedAt = new Date(Date.now() - 5000 * 30);
         action.CreatedByUserId = 761;
         action.CreatedByUserName = 'Peter Parker';
@@ -301,7 +301,7 @@ export class CaseEditComponent {
 
         let action2 = new CaseAction<CaseLogActionData>();
         action2.Id = 3;
-        action2.Type = CaseActionEvents.ChangePriority;
+        action2.Type = CaseActionEvents.ExternalLogNote;
         action2.CreatedAt = new Date(Date.now() - 2600 * 30);
         action2.CreatedByUserId = 1;
         action2.CreatedByUserName = 'Glenn Andersson';
@@ -323,16 +323,23 @@ export class CaseEditComponent {
         action4.CreatedByUserName = 'Jes Ericsson';
         action4.Data = new CaseLogActionData('Issue fixed!');
 
+        let action5 = new CaseAction<GenericActionData>();
+        action5.Id = 6;
+        action5.Type = CaseActionEvents.UploadLogFile;
+        action5.CreatedAt = new Date(Date.now() - 200);
+        action5.CreatedByUserId = 4;
+        action5.CreatedByUserName = 'Mark Andersson';
+        action5.Data = new GenericActionData('File.docx', "Attached file");
 
-        let action5 = new CaseAction<CaseHistoryActionData>();
-        action5.Id = 4;
-        action5.Type = CaseActionEvents.InternalLogNote;
-        action5.CreatedAt = new Date();
-        action5.CreatedByUserId = 2;
-        action5.CreatedByUserName = 'Jes Ericsson';
-        action5.Data = new CaseHistoryActionData('ClosingReason', '', 'Case dev completed');
+        let action6 = new CaseAction<GenericActionData>();
+        action6.Id = 7;
+        action6.Type = CaseActionEvents.ClosedCase;
+        action6.CreatedAt = new Date();
+        action6.CreatedByUserId = 2;
+        action6.CreatedByUserName = 'Jes Ericsson';
+        action6.Data = new GenericActionData('Case dev completed', 'Closing reason');
 
-        return [action, action1, action2, action3, action4, action5];
+        return [action, action1, action2, action3, action4, action5, action6];
     }    
 
     private get caseAccessMode(): CaseAccessMode {

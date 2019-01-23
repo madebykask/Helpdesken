@@ -1,4 +1,4 @@
-<div>
-  <span class="{{ getActionIcon() }}"></span>  
-  <span><b>{{data.fieldName}}:</b> {{data.newValue}}</span>  
+<div *ngIf="data">
+  <span class="{{ getActionIcon() }}"></span>
+  <span><b>{{data.fieldName}}:</b> {{data.newValue}}</span>
 </div>
