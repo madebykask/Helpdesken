@@ -30,7 +30,7 @@ export class CaseOrganizationService {
 
     getDepartments(regionId?: number) {
         return this._departmentService.getDepartmentsByRegion(regionId);
-    }
+    } 
 
     getOUs(departmentId?: number) {
         return this._OUsService.getOUsByDepartment(departmentId);

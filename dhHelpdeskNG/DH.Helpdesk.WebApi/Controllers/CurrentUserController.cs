@@ -29,6 +29,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var userSettings = await _userSerivice.GetUserOverviewAsync(UserId);//TODO: create new method to get cached/async result.
             return new UserSettingsModelOutput
             {
+                Id = UserId,
                 CustomerId = userSettings.CustomerId,
                 LanguageId = userSettings.LanguageId,
                 //note: windows and iana time zones sometimes changes. if unknown timezone is found, update nodatime lib or use other approach.

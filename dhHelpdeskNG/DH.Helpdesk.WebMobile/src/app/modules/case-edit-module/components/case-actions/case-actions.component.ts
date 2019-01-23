@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { CaseAction, CaseActionsGroup, CaseLogActionData, CaseHistoryActionData } from '../../models';
+import { CaseAction, CaseActionsGroup, CaseLogActionData, CaseHistoryActionData, CaseActionDataType } from '../../models';
+import { AuthenticationStateService } from 'src/app/services/authentication';
 
 @Component({
   selector: 'case-actions',
@@ -8,39 +9,26 @@ import { CaseAction, CaseActionsGroup, CaseLogActionData, CaseHistoryActionData 
 })
 export class CaseActionsComponent implements OnInit {
 
-  @Input()
-  items: CaseAction<any>[] = [];
+  @Input() 
+  items: CaseAction<CaseActionDataType>[] = [];
 
   grouppedItems: CaseActionsGroup[];
+  cardSettings = {}
+  actionsListViewSettings = {};
 
-  cardSettings = {
-    theme: 'ios'
+  constructor(private authStateService: AuthenticationStateService) {
   }
 
-  actionsListViewSettings = {
-     
-  };
-
-  constructor() {
+  isActionOwner(userId: number) {
+    return userId === this.authStateService.getUser().id;
   }
 
   ngOnInit() {    
     //todo: move to onchanges?
     this.grouppedItems = this.processGroups(this.items);    
-  }
+  } 
 
-  getActionIcon(caseAction: CaseAction<any>){
-      const actionData = caseAction.Data;
-      if (actionData instanceof CaseLogActionData){
-        return "fa-comment-o";
-      } else if (actionData instanceof CaseHistoryActionData){
-        return "fa-history";
-      } else {
-        return "fa-user-secret";
-      }
-  }
-
-  private processGroups(items: CaseAction<any>[]): CaseActionsGroup[] {
+  private processGroups(items: CaseAction<CaseActionDataType>[]): CaseActionsGroup[] {
     let groups = new Array<CaseActionsGroup>();
 
     if (items != null && items.length > 0) {
@@ -50,7 +38,7 @@ export class CaseActionsComponent implements OnInit {
           if (groupIndex == -1) 
           {
               let newGroup = new CaseActionsGroup(item.CreatedByUserId,  item.CreatedByUserName, item.CreatedAt);
-              newGroup.Actions = new Array<CaseAction<any>>();
+              newGroup.Actions = new Array<CaseAction<CaseActionDataType>>();
               groups.push(newGroup);
               groupIndex = groups.length - 1;
           }
@@ -62,7 +50,7 @@ export class CaseActionsComponent implements OnInit {
     return groups;
   }
 
-  private findGroupIndex(item:CaseAction<any>, groups: CaseActionsGroup[]){
+  private findGroupIndex(item:CaseAction<CaseActionDataType>, groups: CaseActionsGroup[]){
       let userId = item.CreatedByUserId;
       let userGroups = groups.filter(gr => gr.CreatedByUserId === userId);
       //find matching user actions group by time ~1min

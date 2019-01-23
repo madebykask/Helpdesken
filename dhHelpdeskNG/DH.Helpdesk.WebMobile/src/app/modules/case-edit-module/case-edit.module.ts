@@ -18,12 +18,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { CaseFilesControlComponent } from './components/case-edit/controls/case-files/case-files-control.component';
 import { CommonModule } from '@angular/common';
 import { CaseActionsComponent } from './components/case-actions/case-actions.component';
+import { GeneralActionComponent } from './components/case-actions/actions/general-action/general-action.component';
+import { FieldChangeActionComponent } from './components/case-actions/actions/field-change-action/field-change-action.component';
+import { LogNoteActionComponent } from './components/case-actions/actions/log-note-action/log-note-action.component';
+import { CaseActionContainerComponent } from './components/case-actions/case-action-container.component';
+import { CaseActionHostDirective } from './components/case-actions/actions/case-action-host.directive';
 
 @NgModule({
   declarations: [ CaseEditComponent,
     CaseTextboxComponent, CaseDateComponent, CaseDropdownComponent,  CaseMultiDropdownComponent,
     CaseSwitchComponent, CaseTextareaComponent, CaseDateTimeComponent, MailtoticketControlComponent,
-    CaseFilesUploadComponent, CaseFilesControlComponent, CaseActionsComponent
+    CaseFilesUploadComponent, CaseFilesControlComponent, CaseActionsComponent, CaseActionHostDirective, 
+    CaseActionContainerComponent, GeneralActionComponent, FieldChangeActionComponent, LogNoteActionComponent
 ],
   imports: [
     CommonModule,
@@ -35,6 +41,7 @@ import { CaseActionsComponent } from './components/case-actions/case-actions.com
     FileUploadModule,
     CaseEditRoutingModule
   ],
+  entryComponents: [FieldChangeActionComponent, LogNoteActionComponent, GeneralActionComponent],
   exports: [ ]
 })
 export class CaseEditModule { }

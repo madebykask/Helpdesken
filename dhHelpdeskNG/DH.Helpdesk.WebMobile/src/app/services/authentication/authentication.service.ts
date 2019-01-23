@@ -1,33 +1,44 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest } from '@angular/common/http';
-import { finalize, tap } from 'rxjs/operators';
+import { finalize, tap, switchMap, take } from 'rxjs/operators';
 import { LocalStorageService } from '../../services/local-storage'
-import { AuthenticationApiService } from '../api';
+import { AuthenticationApiService } from '../api/authentication/authentication-api.service';
+import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
 import { InfoLoggerService } from '../logging/info-logger.service';
 import { CommunicationService, Channels } from '../communication';
 import { AuthenticationStateService } from './authentication-state.service';
+import { throwError, Observable } from 'rxjs';
+import { UserData, CurrentUser } from 'src/app/models';
+
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-
+    
+    //ctor()
     constructor(protected localStorageService: LocalStorageService,
-      private _logger: InfoLoggerService,
-      private _authStateService: AuthenticationStateService,
-      private _authApiService: AuthenticationApiService,
-      private _commService: CommunicationService) {
+      private logger: InfoLoggerService,
+      private authStateService: AuthenticationStateService,
+      private authApiService: AuthenticationApiService,
+      private userSettingsApiService: UserSettingsApiService,
+      private commService: CommunicationService) {
      }
-
-    login(username: string, password: string) {
-        return this._authApiService.login(username, password)
+     
+    login(username: string, password: string): Observable<CurrentUser> {
+        return this.authApiService.login(username, password)
           .pipe(
-            // tap(() => this._logger.log(`Log in action.`)),
-            finalize(() => this.raiseAuthenticationChanged())
+              take(1),
+              switchMap(isSuccess => {
+                  if (!isSuccess) throwError('Something wrong.');
+                  return this.userSettingsApiService.loadUserSettings()
+              }),
+              // tap(() => this._logger.log(`Log in action.`)),
+              finalize(() => this.raiseAuthenticationChanged())
           );
     }
 
     refreshToken() {
-        var user = this._authStateService.getUser();
-        return this._authApiService.refreshToken(user)
+        var user = this.authStateService.getUser();
+        return this.authApiService.refreshToken(user)
           .pipe(
             // tap(() => this._logger.log(`Refresh token action.`)),
             finalize(() => this.raiseAuthenticationChanged())
@@ -43,7 +54,7 @@ export class AuthenticationService {
 
     setAuthHeader(request: HttpRequest<any>): HttpRequest<any> {
         // Get access token 
-        const accessToken = this._authStateService.getAccessToken();
+        const accessToken = this.authStateService.getAccessToken();
 
         // If access token is null this means that user is not logged in
         // And we return the original request
@@ -60,11 +71,11 @@ export class AuthenticationService {
     }
 
     getAuthorizationHeaderValue(): string {    
-      const accessToken = this._authStateService.getAccessToken();
+      const accessToken = this.authStateService.getAccessToken();
       return `Bearer ${accessToken}`;
     }
 
     private raiseAuthenticationChanged() {
-        this._commService.publish(Channels.AuthenticationChange, {});
+        this.commService.publish(Channels.AuthenticationChange, {});
     }
 }

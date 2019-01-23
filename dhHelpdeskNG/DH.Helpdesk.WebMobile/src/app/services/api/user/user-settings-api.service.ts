@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, finalize, take} from 'rxjs/operators';
-import { UserData, Language } from '../../models'
-import { LocalStorageService } from '../local-storage'
+import { UserData, Language, CurrentUser } from '../../../models'
+import { LocalStorageService } from '../../local-storage'
 import { TranslateService as NgxTranslateService } from '@ngx-translate/core'
-import { LoggerService } from '../logging';
+import { LoggerService } from '../../logging';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment-timezone';
 import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
 
 @Injectable({ providedIn: 'root' })
-export class UserSettingsService extends HttpApiServiceBase {
+export class UserSettingsApiService extends HttpApiServiceBase {
     isLoadingUserSettings = false; 
     
     protected constructor(
@@ -21,7 +21,7 @@ export class UserSettingsService extends HttpApiServiceBase {
         super(http, localStorageService);
     }
 
-    loadUserSettings() {
+    loadUserSettings(): Observable<CurrentUser> {
         this.isLoadingUserSettings = true;
         return this.getJson(this.buildResourseUrl('/api/currentuser/settings', undefined, false))//TODO: error handling
             .pipe(
@@ -29,6 +29,9 @@ export class UserSettingsService extends HttpApiServiceBase {
                 map((data: any) => {
                     if (data) {
                         let user = this.localStorageService.getCurrentUser();
+                        if (data.id){
+                          user.currentData.id = data.id;
+                        }
                         if (data.customerId) {
                             user.currentData.selectedCustomerId = data.customerId;
                         }//TODO: if no customer; 
@@ -43,9 +46,8 @@ export class UserSettingsService extends HttpApiServiceBase {
                         }
                         // Other settings
                         //console.log('>>> user data loaded sucessfully');
-                        this.localStorageService.setCurrentUser(user);
-                        
-                        return user.currentData;
+                        this.localStorageService.setCurrentUser(user);                        
+                        return user;
                     }
                     else {
                         return null;

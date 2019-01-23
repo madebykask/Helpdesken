@@ -206,8 +206,18 @@ ul.nostyle {
     }
 } 
 
-
-
 #case-tabs .mbsc-ms-top.mbsc-ms-c {
   top: 46px!important;
 }  
+
+
+#case-actions {
+  .mbsc-ios.mbsc-card.mbsc-form{ margin: 15px 10px; }
+  .mbsc-lv-item-ic {  left:5px!important; } 
+  .mbsc-lv-ios .mbsc-lv-item-ic-left:before, 
+  .mbsc-lv-ios .mbsc-lv-item-ic-left:after { left:14px!important; }
+  .mbsc-ios.mbsc-card.mbsc-form { border-radius: 0;}
+  .mbsc-lv-item.mbsc-lv-item-ic-left { padding-left: 35px!important; }
+  .mbsc-lv-cont { font-size:14px; } 
+  .action-icon { margin-right:6px; }
+}

@@ -4,6 +4,7 @@ namespace DH.Helpdesk.Web.Common.Models.CurrentUser
 {
     public class UserSettingsModelOutput
     {
+        public int Id { get; set; }
         public int CustomerId { get; set; }
         public int LanguageId { get; set; }
         public string TimeZone { get; set; }

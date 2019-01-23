@@ -18,7 +18,8 @@ import { FooterComponent } from './shared/components/footer/footer.component';
 import { RequireAuthDirective } from './helpers/directives/require-auth.directive';
 import { GlobalErrorHandler } from './helpers/errors/global-error-handler';
 import { ErrorComponent } from './shared/components/error/error.component';
-import { UserSettingsService, initUserData } from './services/user';
+import { initUserData } from './services/user';
+import { UserSettingsApiService } from './services/api/user/user-settings-api.service';
 import { AuthenticationService } from './services/authentication';
 import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 import { AltLayoutComponent } from './_layout/alt-layout/alt-layout.component';
@@ -73,7 +74,7 @@ import { TestComponent } from './components/test/test.component';
     {
       provide: APP_INITIALIZER,
       useFactory: initUserData,
-      deps: [UserSettingsService, AuthenticationService, LoggerService],
+      deps: [UserSettingsApiService, AuthenticationService, LoggerService],
       multi: true
     }
   ]

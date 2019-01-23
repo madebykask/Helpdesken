@@ -1,14 +1,14 @@
-import { UserSettingsService } from '.';
 import { LoggerService } from '../logging';
-import { AuthenticationService } from '../authentication';
+import { AuthenticationService } from '../authentication/';
+import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
 
 export function initUserData(
-  userSettingsService: UserSettingsService, 
+  userSettingsService: UserSettingsApiService, 
   authService: AuthenticationService,
   logger: LoggerService
   ) : Function {
-    return  () => {      
-      return userSettingsService.applyUserSettings().toPromise();        
+    return  () => {
+      return userSettingsService.applyUserSettings().toPromise();
     };    
   }
 

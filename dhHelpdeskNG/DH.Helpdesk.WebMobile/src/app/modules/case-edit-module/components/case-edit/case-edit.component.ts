@@ -20,7 +20,7 @@ import { CaseEditDataHelper } from '../../logic/case-edit/case-editdata.helper';
 import { CaseFieldsNames, CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { CaseLockApiService } from '../../services/api/case/case-lock-api.service';
 import { CaseSaveService } from '../../services/case';
-import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel, CaseLockModel, BaseCaseField, CaseAction, GenericActionData, CaseActionEvents, CaseHistoryActionData, CaseLogActionData } from '../../models';
+import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel, CaseLockModel, BaseCaseField, CaseAction, GenericActionData, CaseActionEvents, CaseHistoryActionData, CaseLogActionData, CaseActionDataType } from '../../models';
 import { OptionItem } from 'src/app/modules/shared-module/models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
@@ -48,8 +48,8 @@ export class CaseEditComponent {
       layout: "fixed"
     };
 
-    currentTab:string = 'case_details';
-    caseActions: CaseAction<any>[] = [];
+    currentTab = 'case_details';
+    caseActions: CaseAction<CaseActionDataType>[] = [];
 
     private searchType: CasesSearchType = CasesSearchType.AllCases;
     private caseId: number;
@@ -285,10 +285,10 @@ export class CaseEditComponent {
         let action = new CaseAction<CaseHistoryActionData>();
         
         action.Id = 1;
-        action.Type = CaseActionEvents.AssignedAdministrator;
+        //action.Type = CaseActionEvents.AssignedAdministrator;
         action.CreatedAt = new Date(Date.now() - 5000 * 30);
-        action.CreatedByUserId = 3;
-        action.CreatedByUserName = 'Perer Parker';
+        action.CreatedByUserId = 761;
+        action.CreatedByUserName = 'Peter Parker';
         action.Data = new CaseHistoryActionData('Administrator', "", "Jes Erricson");
 
         let action1 = new CaseAction<CaseHistoryActionData>();
@@ -310,12 +310,29 @@ export class CaseEditComponent {
         let action3 = new CaseAction<CaseLogActionData>();
         action3.Id = 4;
         action3.Type = CaseActionEvents.InternalLogNote;
-        action3.CreatedAt = new Date();
+        action3.CreatedAt = new Date(Date.now() - 2000);
         action3.CreatedByUserId = 2;
         action3.CreatedByUserName = 'Jes Ericsson';
         action3.Data = new CaseLogActionData('I will check it now!');
 
-        return [action, action1, action2, action3];
+        let action4 = new CaseAction<CaseLogActionData>();
+        action4.Id = 5;
+        action4.Type = CaseActionEvents.InternalLogNote;
+        action4.CreatedAt = new Date(Date.now() - 500);
+        action4.CreatedByUserId = 2;
+        action4.CreatedByUserName = 'Jes Ericsson';
+        action4.Data = new CaseLogActionData('Issue fixed!');
+
+
+        let action5 = new CaseAction<CaseHistoryActionData>();
+        action5.Id = 4;
+        action5.Type = CaseActionEvents.InternalLogNote;
+        action5.CreatedAt = new Date();
+        action5.CreatedByUserId = 2;
+        action5.CreatedByUserName = 'Jes Ericsson';
+        action5.Data = new CaseHistoryActionData('ClosingReason', '', 'Case dev completed');
+
+        return [action, action1, action2, action3, action4, action5];
     }    
 
     private get caseAccessMode(): CaseAccessMode {

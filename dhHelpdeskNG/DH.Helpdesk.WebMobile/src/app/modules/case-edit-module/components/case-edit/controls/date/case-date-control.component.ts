@@ -3,7 +3,7 @@ import { BaseCaseField } from "../../../../models";
 import { BaseControl } from "../base-control";
 import { MbscDatetimeOptions, MbscDate } from "@mobiscroll/angular";
 import { FormatWidth, getLocaleDateFormat } from "@angular/common";
-import { UserSettingsService } from "src/app/services/user";
+import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
 
 @Component({
     selector: 'case-date-control',
@@ -22,10 +22,13 @@ import { UserSettingsService } from "src/app/services/user";
       // dateFormat: getLocaleDateFormat(this.locale, FormatWidth.Medium)
     }
 
-    constructor(@Inject(LOCALE_ID) locale: string, private _userSettingsService: UserSettingsService) {
+    constructor(@Inject(LOCALE_ID) locale: string,
+                private userSettingsService: UserSettingsApiService) {
       super();
-      this.options.dateFormat = getLocaleDateFormat(locale, FormatWidth.Short)
-        .replace(new RegExp('M', 'g'), 'm');// different format letters;
+      
+      this.options.dateFormat = 
+          getLocaleDateFormat(locale, FormatWidth.Short)
+            .replace(new RegExp('M', 'g'), 'm');// different format letters;
     }
 
     ngOnInit(): void {

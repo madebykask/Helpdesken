@@ -136,3 +136,23 @@ insert into tbltext (id, TextString, TextType) VALUES (10019, 'Nej', @MobileType
 If not exists (select * from tblTextTranslation where text_id = 10019 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10019, 2, 'No')
 
+-- Case/Ärende
+If not exists (select * from tbltext where id = 10020)
+insert into tbltext (id, TextString, TextType) VALUES (10020, 'Ärende', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10020 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10020, 2, 'Case')
+
+-- Actions/Händelser
+If not exists (select * from tbltext where id = 10021)
+insert into tbltext (id, TextString, TextType) VALUES (10021, 'Händelser', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10021 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10021, 2, 'Actions')
+
+-- Workflow/Åtgärd
+If not exists (select * from tbltext where id = 10022)
+insert into tbltext (id, TextString, TextType) VALUES (10022, 'Åtgärd', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10022 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10022, 2, 'Workflow')

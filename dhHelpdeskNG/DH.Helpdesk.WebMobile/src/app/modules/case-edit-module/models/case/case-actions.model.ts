@@ -1,8 +1,4 @@
 
-export interface IActionData {
-  getTitle(): string;
-}
-
 export class CaseActionsGroup {
     constructor(public CreatedByUserId: number,
                 public CreatedByUserName: string,
@@ -14,56 +10,37 @@ export class CaseActionsGroup {
 
 export class CaseAction<TData extends CaseHistoryActionData | CaseLogActionData | GenericActionData> {
     Id: number;
-    CreatedAt: Date;
-    Type: CaseActionEvents; // todo: introduce enum ?
+    Type: CaseActionEvents;
+    CreatedAt: Date;    
     CreatedByUserId: number
-    CreatedByUserName: string;
-    Data: TData;    
+    CreatedByUserName: string;    
+    Data: TData;
 }
 
 ///////////////////////////////////////////////////
+// Case Action Data classes
+export type CaseActionDataType = CaseHistoryActionData | CaseLogActionData | GenericActionData;
+
 // Case History
-export class CaseHistoryActionData implements IActionData{
-  constructor(private fieldName:string, 
-              private prevValue: string, 
-              private newValue: string) {
-
+export class CaseHistoryActionData {
+  constructor(public fieldName:string,
+              public prevValue: string, 
+              public newValue: string) {
   }
-  
-  getTitle(): string {
-      //todo: construct title out of fields
-      return `Field <b>'${this.fieldName}'</b> changed`;
-  }
-  
-  // getText() ?
 }
 
-///////////////////////////////////////////////////
 // Case Log Note
-export class CaseLogActionData implements IActionData {
-
-  constructor(private text:string) {
-  }
-  
-  getTitle(): string {
-      //todo: trim text ?
-      return this.text;
-  }
-
-  // getText() ?
+export class CaseLogActionData {
+  constructor(public text:string) {
+  } 
 }
 
-///////////////////////////////////////////////////
 // Generic Action data
-export class GenericActionData implements IActionData{
-  
-  constructor(private title: string) {
-  }
-
-  getTitle(): string {
-    return this.title;
+export class GenericActionData {
+  constructor(public text: string) {
   }
 }
+///////////////////////////////////////////////////
 
 export enum CaseActionEvents {
   ExternalLogNote = 1,
