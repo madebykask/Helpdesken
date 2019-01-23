@@ -25,6 +25,7 @@
         deleteCaseFileUrl: '@Url.Action("DeleteNewCaseFile")',
         searchUserUrl: '@Url.Content("~/Case/SearchUser")',
         seachComputerUrl: '@Url.Content("~/Case/SearchComputer")',
+        changeSystemUrl: '@Url.Content("~/Case/ChangeSystem")',
         saveNewCaseUrl: '@Url.Content("~/Case/NewCase")',
         fetchDepartmentsUrl: '@Url.Content("~/Case/GetDepartmentsByRegion")',
         fetchOUUrl: '@Url.Content("~/Case/GetOrgUnitsByDepartments")',
@@ -1058,14 +1059,16 @@
         }
     }
 
-    $("#case_urgent_popup").on('hidden.bs.modal', function (e) {
-        $('#urgentAcceptChbx').attr('checked', false);
-        $("#btnAccept").attr("disabled", true);
-    });
+    $("#case_urgent_popup").on('hidden.bs.modal',
+        function(e) {
+            $('#urgentAcceptChbx').attr('checked', false);
+            $("#btnAccept").attr("disabled", true);
+        });
 
     $('#urgentAcceptChbx').change(function() {
         $("#btnAccept").attr("disabled", !this.checked);
     });
+
 
     $("#btnAccept").on("click", function() {
         CallSaving();

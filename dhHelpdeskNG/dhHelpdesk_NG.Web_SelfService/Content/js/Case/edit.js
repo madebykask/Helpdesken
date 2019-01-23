@@ -17,6 +17,7 @@
         var deleteCaseFileUrl = window.appParameters.deleteCaseFileUrl;
         var searchUserUrl = window.appParameters.searchUserUrl;
         var seachComputerUrl = window.appParameters.seachComputerUrl;
+        var changeSystemUrl = window.appParameters.changeSystemUrl;
         var saveNewCaseUrl = window.appParameters.saveNewCaseUrl;
         var departmentsUrl = window.appParameters.fetchDepartmentsUrl;
         var OUsUrl = window.appParameters.fetchOUUrl;
@@ -1056,6 +1057,18 @@
                 // Remove after implementing http://redmine.fastdev.se/issues/10995        
                 var departmentId = $(this).val();
                 self.refreshOrganizationUnit(departmentId);
+            });
+
+            $('#NewCase_System_Id').on('change', function () {
+                $.ajax({
+                        url: changeSystemUrl,
+                        type: 'get',
+                        data: { id: $('#NewCase_System_Id').val()},
+                        dataType: 'json'
+                    })
+                    .done((res) => {
+                        $('#NewCase_Urgency_Id').val(res.urgencyId || '').change();
+                    });
             });
 
             self.$caseTypeControl.change(function () {

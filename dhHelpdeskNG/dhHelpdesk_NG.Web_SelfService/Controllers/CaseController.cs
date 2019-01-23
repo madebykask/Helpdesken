@@ -1469,6 +1469,23 @@ namespace DH.Helpdesk.SelfService.Controllers
             return Json(new { success = true, data = dropString, praIds });
         }
 
+        [HttpGet]
+        public ActionResult ChangeSystem(int? id)
+        {
+            var emptyResult = Json(new { }, JsonRequestBehavior.AllowGet);
+            if (!id.HasValue) return emptyResult;
+
+            int? ret = null;
+            var e = _systemService.GetSystem(id.Value);
+            if (e != null)
+                ret = (e.Urgency_Id.HasValue && e.Urgency_Id.Value != 0) ? e.Urgency_Id.Value : new int?();
+            return ret.HasValue ?
+                Json(new { urgencyId = ret.Value }, JsonRequestBehavior.AllowGet) :
+                emptyResult;
+        }
+
+        #region private
+
         private void TranslateProductArea(ICollection<ProductArea> pa)
         {
             pa.ForEach(p =>
@@ -2537,8 +2554,6 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             return res.ToList();
         }
-
-        #region Helper Methods
 
         private CaseSearchInputParameters PrepareCaseSearchInputParameters(string progressId = "")
         {
