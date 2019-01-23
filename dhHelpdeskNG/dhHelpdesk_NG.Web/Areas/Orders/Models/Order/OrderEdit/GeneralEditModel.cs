@@ -3,7 +3,7 @@
     using System;
     using System.Web.Mvc;
 
-    using Common.ValidationAttributes;
+    using DH.Helpdesk.Common.ValidationAttributes;
     using FieldModels;
 
     public sealed class GeneralEditModel

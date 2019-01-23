@@ -47,13 +47,13 @@
                 if (model.CaseSolutionField == caseSolutionField)
                 {
                     var idPropertyName =
-                        Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.Id);
+                        DH.Helpdesk.Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.Id);
 
                     var modePropertyName =
-                        Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.CaseSolutionMode);
+                        DH.Helpdesk.Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.CaseSolutionMode);
 
                     var fieldNamePropertyName =
-                        Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.CaseSolutionField);
+                        DH.Helpdesk.Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.CaseSolutionField);
 
                     var hiddenName = GetInputName(prefix, i, idPropertyName);
                     var dropDownName = GetInputName(prefix, i, modePropertyName);

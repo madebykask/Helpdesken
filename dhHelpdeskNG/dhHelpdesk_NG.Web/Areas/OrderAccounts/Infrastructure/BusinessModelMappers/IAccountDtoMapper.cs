@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.BusinessModelMappers
+﻿using DH.Helpdesk.Web.Common.Tools.Files;
+
+namespace DH.Helpdesk.Web.Areas.OrderAccounts.Infrastructure.BusinessModelMappers
 {
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Accounts.Write;

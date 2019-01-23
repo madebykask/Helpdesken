@@ -3,6 +3,8 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.FinishingCause;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+using DH.Helpdesk.Web.Common.Enums.Case;
+using DH.Helpdesk.Web.Infrastructure;
 
 namespace DH.Helpdesk.Web.Models.CaseSolution
 {
@@ -81,7 +83,7 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
 
         public string EmptyUserCategoryName { get; set; }
 
-        public Infrastructure.Enums.AccessMode EditMode { get; set; }
+        public AccessMode EditMode { get; set; }
         public CaseFilesModel CaseFilesModel { get; set; }
 
         public IList<SelectListItem> IsAbout_Regions { get; set; }

@@ -42,7 +42,22 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DhDev|AnyCPU'">
+    <OutputPath>bin\DhDev\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="EPPlus, Version=4.0.2.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.0.2\lib\net20\EPPlus.dll</HintPath>
       <Private>True</Private>
@@ -159,6 +174,7 @@
     <Compile Include="BusinessLogic\CaseDocument\CaseDocumentReplacePropertiesResult.cs" />
     <Compile Include="BusinessLogic\Cases\CaseHelper.cs" />
     <Compile Include="BusinessLogic\Cases\CaseProcessor.cs" />
+    <Compile Include="BusinessLogic\Cases\ExtendedCaseTemplateParser.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionPropertyException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionResult.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionParseException.cs" />
@@ -250,6 +266,7 @@
     <Compile Include="BusinessLogic\Orders\Concrete\OrdersLogic.cs" />
     <Compile Include="BusinessLogic\Orders\IHistoriesComparator.cs" />
     <Compile Include="BusinessLogic\Orders\IOrdersLogic.cs" />
+    <Compile Include="BusinessLogic\Settings\SettingsLogic.cs" />
     <Compile Include="BusinessLogic\Specifications\Accounts\AccountFieldSettingsSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\Accounts\AccountSpecifications.cs" />
     <Compile Include="BusinessLogic\Specifications\BulletinBoards\BulletinBoardsSpecifications.cs" />
@@ -306,6 +323,7 @@
     <Compile Include="DisplayValues\UserNameDisplayValue.cs" />
     <Compile Include="Enums\ContractStatuses.cs" />
     <Compile Include="Enums\ExtendedCasePathTokens.cs" />
+    <Compile Include="Enums\TranslationTextTypes.cs" />
     <Compile Include="Exceptions\BusinessLogicException.cs" />
     <Compile Include="Exceptions\ElementaryValidationRulesException.cs" />
     <Compile Include="Exceptions\MarksNotFoundException.cs" />
@@ -332,6 +350,10 @@
     <Compile Include="Infrastructure\TimeZoneResolver\TimeZoneResolver.cs" />
     <Compile Include="Response\Questionnaire\OptionNote.cs" />
     <Compile Include="Services\Authentication\FederatedAuthenticationService.cs" />
+    <Compile Include="Services\CaseSolutions\BaseCaseSolutionService.cs" />
+    <Compile Include="Services\Cache\TranslateCacheService.cs" />
+    <Compile Include="Services\Cache\ICacheService.cs" />
+    <Compile Include="Services\Concrete\Changes\BaseChangesService.cs" />
     <Compile Include="Services\ConditionService.cs" />
     <Compile Include="Services\CaseExtraFollowersService.cs" />
     <Compile Include="Services\CaseFollowUpService.cs" />
@@ -345,6 +367,7 @@
     <Compile Include="Services\Cases\CaseSectionService.cs" />
     <Compile Include="Services\GDPRService.cs" />
     <Compile Include="Services\GDPRTasksService.cs" />
+    <Compile Include="Services\ICaseService.cs" />
     <Compile Include="Services\IExtendedCaseService.cs" />
     <Compile Include="Services\IMetaDataService.cs" />
     <Compile Include="Services\UniversalCase\IUniversalCaseService.cs" />
@@ -412,7 +435,7 @@
     <Compile Include="Services\CaseSearchService.cs" />
     <Compile Include="Services\CaseService.cs" />
     <Compile Include="Services\CaseSettingsService.cs" />
-    <Compile Include="Services\CaseSolutionService.cs" />
+    <Compile Include="Services\CaseSolutions\CaseSolutionService.cs" />
     <Compile Include="Services\CheckListsService.cs" />
     <Compile Include="Services\Concrete\CaseInvoiceSettingsService.cs" />
     <Compile Include="Services\Concrete\CaseSolutionSettingService.cs" />
@@ -451,8 +474,6 @@
     <Compile Include="Services\Concrete\Licenses\VendorsService.cs" />
     <Compile Include="Services\Concrete\MailTemplateService.cs" />
     <Compile Include="Services\Concrete\InvoiceArticleService.cs" />
-    <Compile Include="Services\Concrete\IOrganizationService.cs" />
-    <Compile Include="Services\Concrete\IPlaceService.cs" />
     <Compile Include="Services\Concrete\OrganizationService.cs" />
     <Compile Include="Services\Concrete\PlaceService.cs" />
     <Compile Include="Services\ICaseInvoiceSettingsService.cs" />
@@ -489,7 +510,7 @@
     <Compile Include="Services\Concrete\NotifierService.cs" />
     <Compile Include="Services\Concrete\ProblemLogService.cs" />
     <Compile Include="Services\ContractCategoryService.cs" />
-    <Compile Include="Services\Concrete\ChangeService.cs" />
+    <Compile Include="Services\Concrete\Changes\ChangeService.cs" />
     <Compile Include="BusinessLogic\BusinessModelRestorers\Notifiers\NotifierRestorer.cs" />
     <Compile Include="Services\IFaqService.cs" />
     <Compile Include="Services\INotifierService.cs" />
@@ -564,6 +585,8 @@
     <Compile Include="Services\Users\IUsersPasswordHistoryService.cs" />
     <Compile Include="Services\WebApi\Concrete\WebApiService.cs" />
     <Compile Include="Services\WebApi\IWebApiService.cs" />
+    <Compile Include="Services\WorkingGroupServiceAsync.cs" />
+    <Compile Include="Services\СaseService_Email.cs" />
     <Compile Include="utils\ServiceUtils.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Changes\IUpdateChangeRequestValidator.cs" />
     <Compile Include="BusinessLogic\BusinessModelValidators\Changes\Concrete\UpdateChangeRequestValidator.cs" />

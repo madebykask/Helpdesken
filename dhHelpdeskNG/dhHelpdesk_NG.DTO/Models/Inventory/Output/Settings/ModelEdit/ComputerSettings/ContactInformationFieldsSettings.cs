@@ -4,12 +4,30 @@
 
     public class ContactInformationFieldsSettings
     {
-        public ContactInformationFieldsSettings(ModelEditFieldSetting userIdFieldSetting)
+        public ContactInformationFieldsSettings(
+            ModelEditFieldSetting userIdFieldSetting, 
+            ModelEditFieldSetting firstNameFieldSetting,
+            ModelEditFieldSetting lastNameFieldSetting, 
+            ModelEditFieldSetting departmentFieldSetting,
+            ModelEditFieldSetting unitFieldSetting)
         {
-            this.UserIdFieldSetting = userIdFieldSetting;
+            UserIdFieldSetting = userIdFieldSetting;
+            FirstNameFieldSetting = firstNameFieldSetting;
+            LastNameFieldSetting = lastNameFieldSetting;
+            DepartmentFieldSetting = departmentFieldSetting;
+            UnitFieldSetting = unitFieldSetting;
         }
 
         [NotNull]
         public ModelEditFieldSetting UserIdFieldSetting { get; set; }
+
+        public ModelEditFieldSetting FirstNameFieldSetting { get; set; }
+
+        public ModelEditFieldSetting LastNameFieldSetting { get; set; }
+
+        public ModelEditFieldSetting DepartmentFieldSetting { get; set; }
+
+        public ModelEditFieldSetting UnitFieldSetting { get; set; }
+
     }
 }

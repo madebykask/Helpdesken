@@ -10,7 +10,9 @@
         applySettingsBehavior(parameters);
     });
 </script>
-@using (Ajax.BeginForm("WorkstationSettings", "InventorySettings", new AjaxOptions { OnSuccess = "onSettingsSavedSuccessfully", HttpMethod = "POST" }, new { id = "settings_form" }))
+@using (Ajax.BeginForm("WorkstationSettings", new { controller = "InventorySettings" }, new AjaxOptions { OnSuccess = "onSettingsSavedSuccessfully", HttpMethod = "POST" }, new { id = "settings_form" }))
 {
     @Html.EditorFor(m => m, "Settings/ComputerFieldsSettingsViewModel")
+    @*<br/>
+    @Html.EditorFor(m => m, "Settings/ComputerTabFieldsSettingsViewModel")*@
 }

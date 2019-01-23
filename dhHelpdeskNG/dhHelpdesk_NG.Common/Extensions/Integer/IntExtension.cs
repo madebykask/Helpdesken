@@ -23,5 +23,25 @@ namespace DH.Helpdesk.Common.Extensions.Integer
         {
             return value ?? elseValue;
         }
+
+        public static int ToInt(this string value)
+        {
+            var ret = 0;
+            if (!int.TryParse(value, out ret))
+                ret = 0;
+            return ret;
+        }
+
+        public static int? ToNullableInt(this string val)
+        {
+            if (string.IsNullOrEmpty(val))
+                return (int?)null;
+
+            int res;
+            if (!int.TryParse(val, out res))
+                return null;
+
+            return res;
+        }
     }
 }

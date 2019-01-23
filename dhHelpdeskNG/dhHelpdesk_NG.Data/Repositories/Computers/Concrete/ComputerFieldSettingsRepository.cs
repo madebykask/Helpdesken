@@ -1,3 +1,6 @@
+using DH.Helpdesk.Dal.EntityConfigurations.CaseDocument;
+using DH.Helpdesk.Dal.Enums.Notifiers;
+
 namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 {
     using System;
@@ -205,7 +208,57 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             }
 
             var settingCollection = new NamedObjectCollection<FieldSettingMapperDataForModelEdit>(mapperData);
-            return this.entityToBusinessModelMapperForModelEdit.Map(settingCollection);
+
+            //add notifiers field settings
+            var notifierFieldSettings = GetNotifierFieldSettings(customerId, languageId);
+            if (notifierFieldSettings.Any())
+                settingCollection.AddRange(notifierFieldSettings);
+
+            return entityToBusinessModelMapperForModelEdit.Map(settingCollection);
+        }
+
+        private IList<FieldSettingMapperDataForModelEdit> GetNotifierFieldSettings(int customerId, int langId)
+        {
+            var settings = DbContext.ComputerUserFieldSettings.Where(x => x.Customer_Id == customerId).ToList();
+
+            var res = new List<FieldSettingMapperDataForModelEdit>()
+            {
+                MapNotifierFieldSettingsToEditSettings(ContactInformationFields.FirstName, GeneralField.FirstName, GeneralFieldLabel.UserId, settings, langId),
+                MapNotifierFieldSettingsToEditSettings(ContactInformationFields.LastName, GeneralField.LastName, GeneralFieldLabel.LastName, settings, langId),
+                MapNotifierFieldSettingsToEditSettings(ContactInformationFields.Department, OrganizationField.Department, OrganizationFieldLabel.Department, settings, langId),
+                MapNotifierFieldSettingsToEditSettings(ContactInformationFields.Unit, OrganizationField.Unit, OrganizationFieldLabel.Unit, settings, langId)
+            };
+
+            return res;
+        }
+
+        private FieldSettingMapperDataForModelEdit MapNotifierFieldSettingsToEditSettings(string contactField, string notifierField, string label, IList<ComputerUserFieldSettings> settings, int langId)
+        {
+            FieldSettingMapperDataForModelEdit editSettings;
+            var fieldSettings = settings.SingleOrDefault(s => s.ComputerUserField.Equals(notifierField, StringComparison.OrdinalIgnoreCase));
+            if (fieldSettings != null)
+            {
+                var translation = DbContext.ComputerUserFieldSettingsLanguages.SingleOrDefault(
+                        t => t.ComputerUserFieldSettings_Id == fieldSettings.Id && t.Language_Id == langId);
+
+                editSettings = new FieldSettingMapperDataForModelEdit
+                {
+                    Caption = translation == null ? label : translation.Label,
+                    FieldName = contactField,
+                    Show = fieldSettings.Show,
+                    Required = fieldSettings.Required
+                };
+            }
+            else
+            {
+                editSettings = new FieldSettingMapperDataForModelEdit()
+                {
+                    Caption = label,
+                    FieldName = contactField,
+                };
+            }
+
+            return editSettings;
         }
 
         [CreateMissingComputerSettings("customerId")]

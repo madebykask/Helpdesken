@@ -62,7 +62,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 settings = new CaseInvoiceSettings(customerId);
             }
 
-            var departments = departmentService.GetDepartments(customerId, Common.Enums.ActivationStatus.All);
+            var departments = departmentService.GetDepartments(customerId, DH.Helpdesk.Common.Enums.ActivationStatus.All);
             var selectedDepartmentsModel = new CustomSelectList();
             var disabledDepartmentsModel = new CustomSelectList();
             List<ListItem> selectedDepartments;

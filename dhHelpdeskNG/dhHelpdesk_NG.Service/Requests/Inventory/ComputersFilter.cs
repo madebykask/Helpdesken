@@ -7,8 +7,7 @@
 
     public class ComputersFilter
     {
-        public ComputersFilter(
-            int customerId,
+        public ComputersFilter(int customerId,
             int? regionId,
             int? departmentId,
             int? computerTypeId,
@@ -22,29 +21,29 @@
             DateTime? scrapDateFrom,
             DateTime? scrapDateTo,
             string searchFor,
-            bool isShowScrapped, 
+            bool isShowScrapped,
             int recordsOnPage,
             SortField sortField,
             int? recordsCount)
         {
-            this.SortField = sortField;
-            this.CustomerId = customerId;
-            this.RegionId = regionId;
-            this.DepartmentId = departmentId;
-            this.ComputerTypeId = computerTypeId;
-            this.ContractStatusId = contractStatusId;
-            this.ContractStartDateFrom = contractStartDateFrom;
-            this.ContractStartDateTo = contractStartDateTo;
-            this.ContractEndDateFrom = contractEndDateFrom;
-            this.ContractEndDateTo = contractEndDateTo;
-            this.ScanDateFrom = scanDateFrom;
-            this.ScanDateTo = scanDateTo;
-            this.ScrapDateFrom = scrapDateFrom;
-            this.ScrapDateTo = scrapDateTo;
-            this.SearchFor = searchFor;
-            this.IsShowScrapped = isShowScrapped;
-            this.RecordsOnPage = recordsOnPage;
-            this.RecordsCount = recordsCount;
+            SortField = sortField;
+            CustomerId = customerId;
+            RegionId = regionId;
+            DepartmentId = departmentId;
+            ComputerTypeId = computerTypeId;
+            ContractStatusId = contractStatusId;
+            ContractStartDateFrom = contractStartDateFrom;
+            ContractStartDateTo = contractStartDateTo;
+            ContractEndDateFrom = contractEndDateFrom;
+            ContractEndDateTo = contractEndDateTo;
+            ScanDateFrom = scanDateFrom;
+            ScanDateTo = scanDateTo;
+            ScrapDateFrom = scrapDateFrom;
+            ScrapDateTo = scrapDateTo;
+            SearchFor = searchFor;
+            IsShowScrapped = isShowScrapped;
+            RecordsOnPage = recordsOnPage;
+            RecordsCount = recordsCount;
         }
 
         [IsId]

@@ -37,7 +37,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Attributes.Api
                                         actionExecutedContext.ActionContext.ControllerContext.ControllerDescriptor.ControllerName,
                                         actionExecutedContext.ActionContext.ActionDescriptor.ActionName,
                                         httpContext,
-                                        workContext).ToString(), Common.Enums.DataLogTypes.GENERAL);
+                                        workContext).ToString(), DH.Helpdesk.Common.Enums.DataLogTypes.GENERAL);
 
 #if DEBUG
             actionExecutedContext.Response = actionExecutedContext.Request

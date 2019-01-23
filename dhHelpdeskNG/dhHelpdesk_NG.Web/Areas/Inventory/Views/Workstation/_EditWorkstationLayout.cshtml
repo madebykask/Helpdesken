@@ -1,12 +1,21 @@
 ﻿@using DH.Helpdesk.BusinessData.Enums.Inventory
+@using DH.Helpdesk.Web.Areas.Inventory.Infrastucture.Extensions
 @using DH.Helpdesk.Web.Areas.Inventory.Models
 @using DH.Helpdesk.Web.Infrastructure
-@model BaseEditWorkstationModel
+
+@model BaseViewEditWorkstationModel
+
 @{
     Layout = Model.IsForDialog ? "~/Views/Shared/_PopupLayout.cshtml" : "~/Views/Shared/_Layout.cshtml";
-}
+ }
 
-@RenderSection("Scripts", false)
+@functions    
+{
+    private MvcHtmlString GetIsActive(WorkstationEditTabs tab)
+    {
+        return MvcHtmlString.Create(Model.Tab == tab ? "active" : null);
+    }
+}
 
 <div class="secnavs fixed" style="@(Model.IsForDialog ? "top: 0" : "")">
     <div class="pull-left">
@@ -16,28 +25,46 @@
 <div class="content" style="@(Model.IsForDialog ? "margin-top: 50px" : "")">
     <div class="container">
         <ul class="nav nav-tabs nav-tabs-actions">
-            <li class="@GetIsActive(WorkstationEditTabs.Workstation)">
-                @Html.ActionLink(Translation.GetCoreTextTranslation("Arbetsstation"), "Edit", "Workstation", new {id = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId}, new {})
-            </li>
-            <li class="@GetIsActive(WorkstationEditTabs.Storage)">
-                @Html.ActionLink(Translation.GetCoreTextTranslation("Lagring"), "Storage", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new {})
-            </li>
-            <li class="@GetIsActive(WorkstationEditTabs.Programs)">
-                @Html.ActionLink(Translation.GetCoreTextTranslation("Program"), "Software", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new {})
-            </li>
-            <li class="@GetIsActive(WorkstationEditTabs.Hotfix)">
-                @Html.ActionLink(Translation.GetCoreTextTranslation("Hotfix"), "HotFixes", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new {})
-            </li>
-            <li class="@GetIsActive(WorkstationEditTabs.Log)">
-                @Html.ActionLink(Translation.GetCoreTextTranslation("Logg"), "ComputerLogs", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new {})
-            </li>
-            <li class="@GetIsActive(WorkstationEditTabs.Accessories)">
-                @Html.ActionLink(Translation.GetCoreTextTranslation("Tillbehör"), "Accessories", "Workstation", new {computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId}, new {})
-            </li>
-            @if (!Model.IsForDialog)
+            @if (Model.TabSettings.ComputersTabSetting.Show)
+            {
+                <li class="@GetIsActive(WorkstationEditTabs.Workstation)">
+                    @Html.ActionLink(Model.TabSettings.ComputersTabSetting.GetName(Translation.GetCoreTextTranslation("Arbetsstation")), "Edit", "Workstation", new { id = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new { })
+                </li>
+            }
+            @if (Model.TabSettings.StorageTabSetting.Show)
+            {
+                <li class="@GetIsActive(WorkstationEditTabs.Storage)">
+                    @Html.ActionLink(Model.TabSettings.StorageTabSetting.GetName(Translation.GetCoreTextTranslation("Lagring")), "Storage", "Workstation", new { computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new { })
+                </li>
+            }
+            @if (Model.TabSettings.SoftwareTabSetting.Show)
+            {
+                <li class="@GetIsActive(WorkstationEditTabs.Programs)">
+                    @Html.ActionLink(Model.TabSettings.SoftwareTabSetting.GetName(Translation.GetCoreTextTranslation("Program")), "Software", "Workstation", new { computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new { })
+                </li>
+            }
+            @if (Model.TabSettings.HotFixesTabSetting.Show)
+            {
+                <li class="@GetIsActive(WorkstationEditTabs.Hotfix)">
+                    @Html.ActionLink(Model.TabSettings.HotFixesTabSetting.GetName(Translation.GetCoreTextTranslation("Hotfix")), "HotFixes", "Workstation", new { computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new { })
+                </li>
+            }
+            @if (Model.TabSettings.ComputerLogsTabSetting.Show)
+            {
+                <li class="@GetIsActive(WorkstationEditTabs.Log)">
+                    @Html.ActionLink(Model.TabSettings.ComputerLogsTabSetting.GetName(Translation.GetCoreTextTranslation("Logg")), "ComputerLogs", "Workstation", new { computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new { })
+                </li>
+            }
+            @if (Model.TabSettings.AccessoriesTabSetting.Show)
+            {
+                <li class="@GetIsActive(WorkstationEditTabs.Accessories)">
+                    @Html.ActionLink(Model.TabSettings.AccessoriesTabSetting.GetName(Translation.GetCoreTextTranslation("Tillbehör")), "Accessories", "Workstation", new { computerId = Model.Id, dialog = Model.IsForDialog, userId = Model.UserId }, new { })
+                </li>
+            }
+            @if (!Model.IsForDialog && Model.TabSettings.RelatedCasesTabSetting.Show)
             {
                 <li class="@GetIsActive(WorkstationEditTabs.Cases)">
-                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ärenden"), "RelatedCases", "Inventory", new {inventoryId = Model.Id, inventoryType = CurrentModes.Workstations}, new {})
+                    @Html.ActionLink(Model.TabSettings.RelatedCasesTabSetting.GetName(Translation.GetCoreTextTranslation("Ärenden")), "RelatedCases", "Inventory", new { inventoryId = Model.Id, inventoryType = CurrentModes.Workstations }, new { })
                 </li>
             }
         </ul>
@@ -49,11 +76,4 @@
     </div>
 </div>
 
-@functions    {
-    private MvcHtmlString GetIsActive(WorkstationEditTabs tab)
-    {
-        return MvcHtmlString.Create(Model.Tab == tab ? "active" : null);
-    }
-
-}
-
+@RenderSection("Scripts", false)

@@ -15,8 +15,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
     {
         public ComputerFieldsSettingsViewModel BuildViewModel(
             ComputerFieldsSettings settings,
+            WorkstationTabsSettings tabsSettings,
             List<ItemOverview> langauges,
             int langaugeId)
+            //int tabLanguageId)
         {
             var createdDate = MapFieldSetting(settings.DateFieldsSettings.CreatedDateFieldSetting);
             var changedDate = MapFieldSetting(settings.DateFieldsSettings.ChangedDateFieldSetting);
@@ -156,6 +158,17 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 computerType,
                 location);
 
+            var workstationTabsSettingsModel = new WorkstationTabsSettingsModel(
+                //tabLanguageId,
+                MapTabSetting(tabsSettings.ComputersTabSetting),
+                MapTabSetting(tabsSettings.StorageTabSetting),
+                MapTabSetting(tabsSettings.SoftwareTabSetting),
+                MapTabSetting(tabsSettings.HotFixesTabSetting),
+                MapTabSetting(tabsSettings.ComputerLogsTabSetting),
+                MapTabSetting(tabsSettings.AccessoriesTabSetting),
+                MapTabSetting(tabsSettings.RelatedCasesTabSetting)
+            );
+
             var localizedLanguages =
                 langauges.Select(l => new ItemOverview(Translation.Get(l.Name), l.Value)).ToList();
 
@@ -180,7 +193,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 operatingSystemFieldsSettingsModel,
                 organizationFieldsSettingsModel,
                 proccesorFieldsSettingsModel,
-                workstationFieldsSettingsModel);
+                workstationFieldsSettingsModel, 
+                workstationTabsSettingsModel);
 
             return viewModel;
         }
@@ -193,6 +207,15 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 setting.Caption,
                 setting.IsRequired,
                 setting.IsReadOnly);
+
+            return settingModel;
+        }
+
+        private static TabSettingModel MapTabSetting(TabSetting setting)
+        {
+            var settingModel = new TabSettingModel(
+                setting.Show,
+                setting.Caption);
 
             return settingModel;
         }

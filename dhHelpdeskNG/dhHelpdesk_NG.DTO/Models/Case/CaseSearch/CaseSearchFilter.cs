@@ -109,7 +109,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public CaseOverviewCriteriaModel CaseOverviewCriteria { get; set; }
 
         public bool FetchInfoAboutParentChild { get; set; }
-
+        public string SortBy { get; set; }
+        public bool Ascending { get; set; }
 
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {

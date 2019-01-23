@@ -32,22 +32,19 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             ComputerFieldsSettingsForModelEdit settings)
         {
             var createdDate =
-                CreateDateTimeField(
-                    settings.DateFieldsSettings.CreatedDateFieldSetting,
-                    model.CreatedDate);
+                CreateDateTimeField(settings.DateFieldsSettings.CreatedDateFieldSetting, model.CreatedDate);
+
             var changedDate =
-                CreateDateTimeField(
-                    settings.DateFieldsSettings.ChangedDateFieldSetting,
-                    model.ChangedDate);
+                CreateDateTimeField(settings.DateFieldsSettings.ChangedDateFieldSetting, model.ChangedDate);
+
+            #region Workstation Fields
 
             var name =
-                CreateStringField(
-                    settings.WorkstationFieldsSettings.ComputerNameFieldSetting,
-                    model.WorkstationFields.ComputerName);
+                CreateStringField(settings.WorkstationFieldsSettings.ComputerNameFieldSetting, model.WorkstationFields.ComputerName);
+
             var manufacturer =
-                CreateStringField(
-                    settings.WorkstationFieldsSettings.ManufacturerFieldSetting,
-                    model.WorkstationFields.Manufacturer);
+                CreateStringField(settings.WorkstationFieldsSettings.ManufacturerFieldSetting, model.WorkstationFields.Manufacturer);
+
             var computerModel =
                 CreateNullableIntegerField(
                     settings.WorkstationFieldsSettings.ComputerModelFieldSetting,
@@ -91,11 +88,13 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 carePackNumber,
                 computerType,
                 location);
+
             var computerModels =
                 CreateSelectListField(
                     settings.WorkstationFieldsSettings.ComputerModelFieldSetting,
                     options.ComputerModels,
                     model.WorkstationFields.ComputerModelId.ToString());
+
             var computerTypes =
                 CreateSelectListField(
                     settings.WorkstationFieldsSettings.ComputerTypeFieldSetting,
@@ -107,9 +106,12 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 computerModels,
                 computerTypes);
 
-            var processor = CreateNullableIntegerField(
-                settings.ProccesorFieldsSettings.ProccesorFieldSetting,
-                model.ProccesorFields.ProccesorId);
+            #endregion
+
+            #region Processor Fields
+
+            var processor = 
+                CreateNullableIntegerField(settings.ProccesorFieldsSettings.ProccesorFieldSetting,model.ProccesorFields.ProccesorId);
             var proccesorFieldsModel = new ProccesorFieldsModel(processor);
             var processors =
                 CreateSelectListField(
@@ -118,6 +120,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     model.ProccesorFields.ProccesorId.ToString());
 
             var processorViewModel = new ProccesorFieldsViewModel(proccesorFieldsModel, processors);
+
+            #endregion
+
+            #region Organisation Fields
 
             var department = CreateNullableIntegerField(
                 settings.OrganizationFieldsSettings.DepartmentFieldSetting,
@@ -155,6 +161,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 domains,
                 ous);
 
+            #endregion
+
+            #region OS Fields
+
             var operatingSystem = CreateNullableIntegerField(
                 settings.OperatingSystemFieldsSettings.OperatingSystemFieldSetting,
                 model.OperatingSystemFields.OperatingSystemId);
@@ -188,22 +198,25 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     options.OperatingSystems,
                     model.OperatingSystemFields.OperatingSystemId.ToString());
 
-            var operatingSystemsViewModel = new OperatingSystemFieldsViewModel(
-                operatingSystemFieldsModel,
-                operatingSystems);
+            var operatingSystemsViewModel = new OperatingSystemFieldsViewModel(operatingSystemFieldsModel, operatingSystems);
+
+            #endregion
+
+            #region Memory Fields
 
             var memory =
-                CreateNullableIntegerField(
-                    settings.MemoryFieldsSettings.RAMFieldSetting,
-                    model.MemoryFields.RAMId);
+                CreateNullableIntegerField(settings.MemoryFieldsSettings.RAMFieldSetting, model.MemoryFields.RAMId);
+
             var memoryFieldsModel = new MemoryFieldsModel(memory);
+
             var memories =
-                CreateSelectListField(
-                    settings.MemoryFieldsSettings.RAMFieldSetting,
-                    options.Rams,
-                    model.MemoryFields.RAMId.ToString());
+                CreateSelectListField(settings.MemoryFieldsSettings.RAMFieldSetting, options.Rams, model.MemoryFields.RAMId.ToString());
 
             var memoryViewModel = new MemoryFieldsViewModel(memoryFieldsModel, memories);
+
+            #endregion
+
+            #region Inventory Fields
 
             var barCode =
                 CreateStringField(
@@ -216,12 +229,16 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var inventoryFieldModel = new InventoryFieldsModel(barCode, purchaseDate);
 
+            #endregion
+
             var chassis =
                 CreateStringField(
                     settings.ChassisFieldsSettings.ChassisFieldSetting,
                     model.ChassisFields.Chassis);
 
             var chassisFieldModel = new ChassisFieldsModel(chassis);
+
+            #region State Fields
 
             var state = CreateNullableIntegerField(
                 settings.StateFieldsSettings.StateFieldSetting,
@@ -253,12 +270,16 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var stateViewModel = new StateFieldsViewModel(stateFieldsModel, statuses);
 
+            #endregion
+
             var sound =
                 CreateStringField(
                     settings.SoundFieldsSettings.SoundCardFieldSetting,
                     model.SoundFields.SoundCard);
 
             var soundFieldModel = new SoundFieldsModel(sound);
+
+            #region Place fields
 
             var room = CreateNullableIntegerField(
                 settings.PlaceFieldsSettings.RoomFieldSetting,
@@ -310,6 +331,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var placeFieldsViewModel = new PlaceFieldsViewModel(placeFieldsModel, buildings, floors, rooms);
 
+            #endregion
+
             var other = CreateStringField(
                 settings.OtherFieldsSettings.InfoFieldSetting,
                 model.OtherFields.Info);
@@ -322,6 +345,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     model.GraphicsFields.VideoCard);
 
             var graphicsFieldModel = new GraphicsFieldsModel(graphics);
+
+            #region  Contract Fields
 
             var contractStatus = CreateNullableIntegerField(
                 settings.ContractFieldsSettings.ContractStatusFieldSetting,
@@ -363,6 +388,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     settings.ContractFieldsSettings.AccountingDimension5FieldSetting,
                     model.ContractFields.AccountingDimension5);
 
+            var document = CreateStringField(settings.ContractFieldsSettings.DocumentFieldSetting, model.ContractFields.Document);
+
             var contractFieldsModel = new ContractFieldsModel(
                 contractStatus,
                 contractNumber,
@@ -373,7 +400,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 accounting2,
                 accounting3,
                 accounting4,
-                accounting5);
+                accounting5, 
+                document);
 
             var contractStatuses =
                 CreateSelectListField(
@@ -382,6 +410,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     model.ContractFields.ContractStatusId.ToString());
 
             var contractViewModel = new ContractFieldsViewModel(contractFieldsModel, contractStatuses);
+
+            #endregion
+
+            #region Contact Fields
 
             var contactName =
                 CreateStringField(
@@ -397,6 +429,10 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                     model.ContactFields.Email);
 
             var contactFieldsModel = new ContactFieldsModel(contactName, contactPhone, contactEmail);
+
+            #endregion
+
+            #region Communication Fields
 
             var ip =
                 CreateStringField(
@@ -433,6 +469,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var communicationViewModel = new CommunicationFieldsViewModel(communicationFieldsModel, adapters);
 
+            #endregion
+
             var syncDate =
                 CreateNullableDateTimeField(
                     settings.DateFieldsSettings.SyncChangedDateSetting,
@@ -448,17 +486,14 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var dateFieldsModel = new DateFieldsModel(syncDate, scanDate, path);
 
-            var userStringId =
-                CreateStringField(
-                    settings.ContactInformationFieldsSettings.UserIdFieldSetting,
-                    model.ContactInformationFields.UserStringId);
-
-            var contactInformationFieldsModel = new ContactInformationFieldsModel(
-                model.ContactInformationFields.UserId,
-                userStringId,
-                model.ContactInformationFields.Department,
-                model.ContactInformationFields.Unit,
-                model.ContactInformationFields.UserName);
+            var contactInformationFieldsModel =
+                new ContactInformationFieldsModel(
+                    model.ContactInformationFields.UserId,
+                    CreateStringField(settings.ContactInformationFieldsSettings.UserIdFieldSetting, model.ContactInformationFields.UserStringId),
+                    CreateStringField(settings.ContactInformationFieldsSettings.FirstNameFieldSetting, model.ContactInformationFields.UserName?.FirstName),
+                    CreateStringField(settings.ContactInformationFieldsSettings.LastNameFieldSetting, model.ContactInformationFields.UserName?.LastName),
+                    CreateStringField(settings.ContactInformationFieldsSettings.DepartmentFieldSetting, model.ContactInformationFields.Department),
+                    CreateStringField(settings.ContactInformationFieldsSettings.UnitFieldSetting, model.ContactInformationFields.Unit));
 
             return new ComputerViewModel(
                 dateFieldsModel,
@@ -486,24 +521,17 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                        };
         }
 
-        public ComputerViewModel BuildViewModel(
-            ComputerEditOptions options,
-            ComputerFieldsSettingsForModelEdit settings,
-            int currentCustomerId)
+        public ComputerViewModel BuildViewModel(ComputerEditOptions options, ComputerFieldsSettingsForModelEdit settings, int currentCustomerId)
         {
             var name = CreateStringField(settings.WorkstationFieldsSettings.ComputerNameFieldSetting, null);
             var manufacturer = CreateStringField(settings.WorkstationFieldsSettings.ManufacturerFieldSetting, null);
-            var computerModel = CreateNullableIntegerField(
-                settings.WorkstationFieldsSettings.ComputerModelFieldSetting,
-                null);
+            var computerModel = CreateNullableIntegerField(settings.WorkstationFieldsSettings.ComputerModelFieldSetting, null);
             var serial = CreateStringField(settings.WorkstationFieldsSettings.SerialNumberFieldSetting, null);
             var biosVersion = CreateStringField(settings.WorkstationFieldsSettings.BIOSVersionFieldSetting, null);
             var biosDate = CreateNullableDateTimeField(settings.WorkstationFieldsSettings.BIOSDateFieldSetting, null);
             var theftMark = CreateStringField(settings.WorkstationFieldsSettings.TheftmarkFieldSetting, null);
             var carePackNumber = CreateStringField(settings.WorkstationFieldsSettings.CarePackNumberFieldSetting, null);
-            var computerType = CreateNullableIntegerField(
-                settings.WorkstationFieldsSettings.ComputerTypeFieldSetting,
-                null);
+            var computerType = CreateNullableIntegerField(settings.WorkstationFieldsSettings.ComputerTypeFieldSetting, null);
             var location = CreateStringField(settings.WorkstationFieldsSettings.LocationFieldSetting, null);
 
             var workstationFieldsModel = new WorkstationFieldsModel(
@@ -649,28 +677,24 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
             var placeFieldsViewModel = new PlaceFieldsViewModel(placeFieldsModel, buildings, floors, rooms);
 
             var other = CreateStringField(settings.OtherFieldsSettings.InfoFieldSetting, null);
-
             var otherFieldModel = new OtherFieldsModel(other);
 
             var graphics = CreateStringField(settings.GraphicsFieldsSettings.VideoCardFieldSetting, null);
 
             var graphicsFieldModel = new GraphicsFieldsModel(graphics);
 
-            var contractStatus = CreateNullableIntegerField(
-                settings.ContractFieldsSettings.ContractStatusFieldSetting,
-                null);
+            var contractStatus = CreateNullableIntegerField(settings.ContractFieldsSettings.ContractStatusFieldSetting, null);
             var contractNumber = CreateStringField(settings.ContractFieldsSettings.ContractNumberFieldSetting, null);
-            var contractStartDate =
-                CreateNullableDateTimeField(settings.ContractFieldsSettings.ContractStartDateFieldSetting, null);
-            var contractEndDate =
-                CreateNullableDateTimeField(settings.ContractFieldsSettings.ContractEndDateFieldSetting, null);
+            var contractStartDate = CreateNullableDateTimeField(settings.ContractFieldsSettings.ContractStartDateFieldSetting, null);
+            var contractEndDate = CreateNullableDateTimeField(settings.ContractFieldsSettings.ContractEndDateFieldSetting, null);
             var price = CreateIntegerField(settings.ContractFieldsSettings.PurchasePriceFieldSetting, 0);
             var accounting1 = CreateStringField(settings.ContractFieldsSettings.AccountingDimension1FieldSetting, null);
             var accounting2 = CreateStringField(settings.ContractFieldsSettings.AccountingDimension2FieldSetting, null);
             var accounting3 = CreateStringField(settings.ContractFieldsSettings.AccountingDimension3FieldSetting, null);
             var accounting4 = CreateStringField(settings.ContractFieldsSettings.AccountingDimension4FieldSetting, null);
             var accounting5 = CreateStringField(settings.ContractFieldsSettings.AccountingDimension5FieldSetting, null);
-
+            var document = CreateStringField(settings.ContractFieldsSettings.DocumentFieldSetting, null);
+            
             var contractFieldsModel = new ContractFieldsModel(
                 contractStatus,
                 contractNumber,
@@ -681,7 +705,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 accounting2,
                 accounting3,
                 accounting4,
-                accounting5);
+                accounting5,
+                document);
 
             var contractStatuses = CreateSelectListField(
                 settings.StateFieldsSettings.StateFieldSetting,
@@ -718,9 +743,14 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
 
             var dateFieldsModel = new DateFieldsModel(syncDate, scanDate, path);
 
-            var userStringId = CreateStringField(settings.ContactInformationFieldsSettings.UserIdFieldSetting, null);
-
-            var contactInformationFieldsModel = new ContactInformationFieldsModel(null, userStringId, null, null, null);
+            var contactInformationFieldsModel =
+                new ContactInformationFieldsModel(
+                    null, //userId
+                    CreateStringField(settings.ContactInformationFieldsSettings.UserIdFieldSetting, null),
+                    CreateStringField(settings.ContactInformationFieldsSettings.FirstNameFieldSetting, null),
+                    CreateStringField(settings.ContactInformationFieldsSettings.LastNameFieldSetting, null),
+                    CreateStringField(settings.ContactInformationFieldsSettings.DepartmentFieldSetting, null),
+                    CreateStringField(settings.ContactInformationFieldsSettings.UnitFieldSetting, null));
 
             return new ComputerViewModel(
                 dateFieldsModel,
@@ -741,7 +771,8 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory.Concrete
                 processorViewModel,
                 workstationViewModel)
                        {
-                           CustomerId = currentCustomerId
+                           CustomerId = currentCustomerId,
+                           DocumentFileKey = Guid.NewGuid().ToString()
                        };
         }
 

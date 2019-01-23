@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Tests.Web.Infrastructure.Tools
+﻿using DH.Helpdesk.Web.Common.Tools.Files;
+
+namespace DH.Helpdesk.Tests.Web.Infrastructure.Tools
 {
     using System;
 

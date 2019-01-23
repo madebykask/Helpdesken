@@ -1,0 +1,40 @@
+﻿@*@using DH.Helpdesk.Web.Infrastructure
+@model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Settings.Computer.ComputerFieldsSettingsViewModel
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>@Translation.Get("Namn")</th>
+            <th>@Translation.Get("Visa")</th>
+            <th>
+                @Translation.Get("Rubrik")
+                @Html.DropDownListFor(m => m.WorkstationTabsSettingsModel.TabLanguageId, Model.Languages, new { id = "tab_settings_language_dropdown" })
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="3" class="header">@Translation.Get("Tabs")</td>
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationTabsSettingsModel.ComputersTabSettingModel, "Settings/TabSettingForComputerModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationTabsSettingsModel.StorageTabSettingModel, "Settings/TabSettingForComputerModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationTabsSettingsModel.SoftwareTabSettingModel, "Settings/TabSettingForComputerModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationTabsSettingsModel.HotFixesTabSettingModel, "Settings/TabSettingForComputerModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationTabsSettingsModel.ComputerLogsTabSettingModel, "Settings/TabSettingForComputerModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationTabsSettingsModel.AccessoriesTabSettingModel, "Settings/TabSettingForComputerModel")
+        </tr>
+        <tr>
+            @Html.EditorFor(m => m.WorkstationTabsSettingsModel.RelatedCasesTabSettingModel, "Settings/TabSettingForComputerModel")
+        </tr>
+    </tbody>
+</table>*@

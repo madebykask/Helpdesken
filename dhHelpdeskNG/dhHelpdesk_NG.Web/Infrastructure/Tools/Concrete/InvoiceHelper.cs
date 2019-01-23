@@ -11,7 +11,7 @@
     using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.BusinessData.Models.Invoice;
     using DH.Helpdesk.Common.Enums;
-    using Common.Extensions.String;
+    using DH.Helpdesk.Common.Extensions.String;
 
     public sealed class InvoiceHelper : IInvoiceHelper
     {

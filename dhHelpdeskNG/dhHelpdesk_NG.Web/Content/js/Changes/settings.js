@@ -3,11 +3,16 @@
     if (!parameters.settingsSavedSuccessfullyMessage) throw new Error('settingsSavedSuccessfullyMessage must be specified.');
 
     $('#settings_language_dropdown').change(function() {
-        var selectedLanguageId = $(this).val();
-        $.get(parameters.saveSettingsUrl, { languageId: selectedLanguageId }, function(settingsMarkup) {
+        $.get(parameters.saveSettingsUrl, { languageId: $(this).val(), tabLanguageId: $(this).val() }, function(settingsMarkup) {
             $('#settings_container').html(settingsMarkup);
         });
     });
+
+    //$('#tab_settings_language_dropdown').change(function () {
+    //    $.get(parameters.saveSettingsUrl, { languageId: $('#settings_language_dropdown').val(), tabLanguageId: $(this).val() }, function (settingsMarkup) {
+    //        $('#settings_container').html(settingsMarkup);
+    //    });
+    //});
 
     window.onSettingsSavedSuccessfully = function() {
         $().toastmessage('showToast', {

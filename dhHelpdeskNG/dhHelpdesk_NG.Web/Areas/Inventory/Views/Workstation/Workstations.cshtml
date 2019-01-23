@@ -30,7 +30,7 @@
             <tr>
                 <td class="span3">@Translation.Get(Model.Settings.DepartmnetFieldSetting.Caption)</td>
                 <td>
-                    @Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments, string.Empty, new { id = "department_dropdown" })
+                    @Html.DropDownListFor(m => m.Filter.DepartmentId, Model.Departments, string.Empty, new {id = "department_dropdown"})
                 </td>
             </tr>
         }
@@ -52,36 +52,36 @@
         {
             <tr>
                 <td class="span3">@Translation.Get(Model.Settings.ContractStartDateFieldSetting.Caption)</td>
-                <td>@Html.EditorFor(m => m.Filter.ContractStartDate.DateFrom, "DatePicker", new { id = "contractStartDateFrom_datepicker" })
+                <td>@Html.EditorFor(m => m.Filter.ContractStartDate.DateFrom, "DatePicker", new {id = "contractStartDateFrom_datepicker"})
                     -
-                    @Html.EditorFor(m => m.Filter.ContractStartDate.DateTo, "DatePicker", new { id = "contractStartDateTo_datepicker" })</td>
+                    @Html.EditorFor(m => m.Filter.ContractStartDate.DateTo, "DatePicker", new {id = "contractStartDateTo_datepicker"})</td>
             </tr>
         }
         @if (Model.Settings.ContractEndDateFieldSetting.IsShow)
         {
             <tr>
                 <td class="span3">@Translation.Get(Model.Settings.ContractEndDateFieldSetting.Caption)</td>
-                <td>@Html.EditorFor(m => m.Filter.ContractEndDate.DateFrom, "DatePicker", new { id = "contractEndDateFrom_datepicker" })
+                <td>@Html.EditorFor(m => m.Filter.ContractEndDate.DateFrom, "DatePicker", new {id = "contractEndDateFrom_datepicker"})
                     -
-                    @Html.EditorFor(m => m.Filter.ContractEndDate.DateTo, "DatePicker", new { id = "contractEndDateTo_datepicker" })</td>
+                    @Html.EditorFor(m => m.Filter.ContractEndDate.DateTo, "DatePicker", new {id = "contractEndDateTo_datepicker"})</td>
             </tr>
         }
         @if (Model.Settings.ScanDateFieldSetting.IsShow)
         {
             <tr>
                 <td class="span3">@Translation.Get(Model.Settings.ScanDateFieldSetting.Caption)</td>
-                <td>@Html.EditorFor(m => m.Filter.ScanDate.DateFrom, "DatePicker", new { id = "scanDateFrom_datepicker" })
+                <td>@Html.EditorFor(m => m.Filter.ScanDate.DateFrom, "DatePicker", new {id = "scanDateFrom_datepicker"})
                     -
-                    @Html.EditorFor(m => m.Filter.ScanDate.DateTo, "DatePicker", new { id = "scanDateTo_datepicker" })</td>
+                    @Html.EditorFor(m => m.Filter.ScanDate.DateTo, "DatePicker", new {id = "scanDateTo_datepicker"})</td>
             </tr>
         }
         @if (Model.Settings.ScrapDateFieldSetting.IsShow)
         {
             <tr>
                 <td class="span3">@Translation.Get(Model.Settings.ScrapDateFieldSetting.Caption)</td>
-                <td>@Html.EditorFor(m => m.Filter.ScrapDate.DateFrom, "DatePicker", new { id = "scrapDateFrom_datepicker" })
+                <td>@Html.EditorFor(m => m.Filter.ScrapDate.DateFrom, "DatePicker", new {id = "scrapDateFrom_datepicker"})
                     -
-                    @Html.EditorFor(m => m.Filter.ScrapDate.DateTo, "DatePicker", new { id = "scrapDateTo_datepicker" })</td>
+                    @Html.EditorFor(m => m.Filter.ScrapDate.DateTo, "DatePicker", new {id = "scrapDateTo_datepicker"})</td>
             </tr>
         }
         <tr>
@@ -89,10 +89,10 @@
                 @Html.LabelFor(m => m.Filter.IsShowScrapped)
             </td>
             <td>
-                @Html.CheckBoxFor(m => m.Filter.IsShowScrapped, new { @class = "switchcheckbox" })
+                @Html.CheckBoxFor(m => m.Filter.IsShowScrapped, new {@class = "switchcheckbox"})
             </td>
         </tr>
-   </table>
+    </table>
 </div>  
 <div>
     <table class="tableform">

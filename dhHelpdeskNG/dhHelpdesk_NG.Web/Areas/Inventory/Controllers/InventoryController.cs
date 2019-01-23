@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ICaseSearchService _caseSearchService;
         private readonly IProductAreaService _productAreaService;
+        private readonly IInventorySettingsService _inventorySettingsService;
 
         public InventoryController(IMasterDataService masterDataService,
             IInventoryService inventoryService,
@@ -40,27 +41,34 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             ICaseSettingsService caseSettingService,
             ICaseFieldSettingService caseFieldSettingService,
             ICaseSearchService caseSearchService,
-            IProductAreaService productAreaService) : base(masterDataService)
+            IProductAreaService productAreaService,
+            IInventorySettingsService inventorySettingsService) : base(masterDataService)
         {
-            this._inventoryService = inventoryService;
-            this._caseModelFactory = caseModelFactory;
-            this._caseOverviewSettingsService = caseOverviewSettingsService;
-            this._caseSettingService = caseSettingService;
-            this._caseFieldSettingService = caseFieldSettingService;
-            this._caseSearchService = caseSearchService;
-            this._productAreaService = productAreaService;
+            _inventoryService = inventoryService;
+            _caseModelFactory = caseModelFactory;
+            _caseOverviewSettingsService = caseOverviewSettingsService;
+            _caseSettingService = caseSettingService;
+            _caseFieldSettingService = caseFieldSettingService;
+            _caseSearchService = caseSearchService;
+            _productAreaService = productAreaService;
+            _inventorySettingsService = inventorySettingsService;
         }
 
         [HttpGet]
         public ActionResult RelatedCases(int inventoryId, CurrentModes inventoryType)
         {
-            string sortBy = CaseSortField.CaseNumber;
-            bool sortByAsc = true;
+            var tabSettings = _inventorySettingsService.GetWorkstationTabsSettingsForEdit(
+                SessionFacade.CurrentCustomer.Id,
+                SessionFacade.CurrentLanguageId);
+
+            var sortBy = CaseSortField.CaseNumber;
+            var sortByAsc = true;
             if (inventoryType == CurrentModes.Workstations)
             {
                 var model = new WorkstationRelatedCasesModel(inventoryId)
                 {
-                    RelatedCases = GetRelatedCaseModel(inventoryId, sortBy, sortByAsc, inventoryType)
+                    RelatedCases = GetRelatedCaseModel(inventoryId, sortBy, sortByAsc, inventoryType),
+                    TabSettings = tabSettings
                 };
                 return View("~/Areas/Inventory/Views/Workstation/WorkstationRelatedCases.cshtml", model);
             }
@@ -125,7 +133,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var search = _caseModelFactory.InitEmptySearchModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
             search.Search.SortBy = sortBy;
             search.Search.Ascending = sortByAsc;
-            search.caseSearchFilter.CaseProgress = CaseProgressFilter.None;
+            search.CaseSearchFilter.CaseProgress = CaseProgressFilter.None;
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
             CaseRemainingTimeData remainingTime;
             CaseAggregateData aggregateData;
@@ -133,7 +141,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             if (relatedCaseIds.Any())
             {
                 searchResult.cases = _caseSearchService.Search(
-                    search.caseSearchFilter,
+                    search.CaseSearchFilter,
                     searchResult.caseSettings,
                     caseFieldSettings,
                     SessionFacade.CurrentUser.Id,

@@ -12,6 +12,7 @@
 }
 
 @Scripts.Render(BundleConfig.ScriptNames.InventoryUserSearch)
+
 <script>
     $(function () {
         InitInventoryUserSearch();
@@ -24,57 +25,70 @@
                 $('#user_history_select_div').dialog('open');
             });
         });
-
     });
 </script>
 @if (Model.UserStringId.Show)
 {
-    <h4>@Translation.Get("Användarinformation")</h4>
+    <h4>@Translation.GetCoreTextTranslation("Användarinformation")</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
                 @if (Model.UserStringId.Show)
                 {
                     @Html.EditorFor(m => m.UserStringId, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "id", "user_dialog_textbox" }, { "autocomplete", "off" } } })
-                    <tr>
-                        <td class="span3">
-                            <label>@Translation.Get("Förnamn")</label>
-                        </td>
-                        <td class="span9" id="firstname_dialog_td">
-                            @Html.DisplayFor(m => m.UserName.FirstName)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            <label>@Translation.Get("Efternamn")</label>
-                        </td>
-                        <td class="span9" id="surname_dialog_td">
-                            @Html.DisplayFor(m => m.UserName.LastName)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            <label>@Translation.Get("Avdelning")</label>
-                        </td>
-                        <td class="span9" id="department_dialog_td">
-                            @Html.DisplayFor(m => m.Department)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="span3">
-                            <label>@Translation.Get("Enhet")</label>
-                        </td>
-                        <td class="span9" id="unit_dialog_td">
-                            @Html.DisplayFor(m => m.Unit)
-                        </td>
-                    </tr>
+
+                    if (Model.FirstName.Show)
+                    {
+                        <tr>
+                            <td class="span3">
+                                <label>@Translation.GetCoreTextTranslation("Förnamn")</label>
+                            </td>
+                            <td class="span9" id="firstname_dialog_td">
+                                @Html.DisplayFor(m => m.FirstName.Value)
+                            </td>
+                        </tr>
+                    }
+
+                    if (Model.LastName.Show)
+                    {
+                        <tr>
+                            <td class="span3">
+                                <label>@Translation.GetCoreTextTranslation("Efternamn")</label>
+                            </td>
+                            <td class="span9" id="surname_dialog_td">
+                                @Html.DisplayFor(m => m.LastName.Value)
+                            </td>
+                        </tr>
+                    }
+
+                    if (Model.Department.Show)
+                    {
+                        <tr>
+                            <td class="span3">
+                                <label>@Translation.GetCoreTextTranslation("Avdelning")</label>
+                            </td>
+                            <td class="span9" id="department_dialog_td">
+                                @Html.DisplayFor(m => m.Department.Value)
+                            </td>
+                        </tr>
+                    }
+
+                    if (Model.Unit.Show)
+                    {
+                        <tr>
+                            <td class="span3">
+                                <label>@Translation.GetCoreTextTranslation("Enhet")</label>
+                            </td>
+                            <td class="span9" id="unit_dialog_td">
+                                @Html.DisplayFor(m => m.Unit.Value)
+                            </td>
+                        </tr>
+                    }
                 }
             </table>
             @Html.HiddenFor(x => x.UserId, new { id = "user_dialog_userId" })
-            <div id="user_dialog_container">
-            </div>
-            <div id="user_history_dialog_container">
-            </div>
+            <div id="user_dialog_container"></div>
+            <div id="user_history_dialog_container"></div>
         </div>
     </div>
 }

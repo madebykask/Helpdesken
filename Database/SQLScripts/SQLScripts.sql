@@ -1,90 +1,134 @@
-﻿--update DB from 5.3.38 to 5.3.39 version
+﻿--update DB from 5.3.39 to 5.3.40 version
 
--- New column Workinggroup_Id in tblCaseType
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id where syscolumns.name = N'WorkingGroup_Id' and sysobjects.name = N'tblCaseType')
-ALTER TABLE tblCaseType
-    ADD WorkingGroup_Id INTEGER,
-    FOREIGN KEY(WorkingGroup_Id) REFERENCES tblWorkingGroup(Id)
+RAISERROR ('Creating idx_casestatistics_case index in tblCaseStatistics', 10, 1) WITH NOWAIT
+GO
+IF NOT EXISTS(SELECT * FROM sys.indexes WHERE name = 'idx_casestatistics_case' AND object_id = OBJECT_ID('tblCaseStatistics'))
+BEGIN
+	CREATE NONCLUSTERED INDEX idx_casestatistics_case
+	ON [dbo].[tblCaseStatistics] ([Case_Id])
+	INCLUDE ([Id],[WasSolvedInTime])
+END
 GO
 
-IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'FK_tblCaseType_tblWorkingGroup') AND type = 'F')
-ALTER TABLE [dbo].tblCaseType  WITH NOCHECK ADD  CONSTRAINT [FK_tblCaseType_tblWorkingGroup] FOREIGN KEY([WorkingGroup_Id])
-REFERENCES [dbo].[tblWorkingGroup] ([Id])
+RAISERROR ('Adding ShowCaseActionsPanelOnTop column in tblCustomer', 10, 1) WITH NOWAIT
 GO
-
-ALTER TABLE [dbo].tblCaseType CHECK CONSTRAINT [FK_tblCaseType_tblWorkingGroup]
-GO
-
-
---tblSettings
-ALTER TABLE tblSettings
-ALTER COLUMN POP3UserName NVARCHAR(50) not null
-
---tblCaseHistory
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'IsAbout_Persons_EMail' and sysobjects.name = N'tblCaseHistory')
+			where syscolumns.name = N'ShowCaseActionsPanelOnTop' and sysobjects.name = N'tblCustomer')
 BEGIN
-    ALTER TABLE tblCaseHistory
-    ADD IsAbout_Persons_EMail NVARCHAR(100)       
+    ALTER TABLE tblCustomer
+    ADD ShowCaseActionsPanelOnTop bit not null DEFAULT(1)
 END
 GO
 
+RAISERROR ('Adding ShowCaseActionsPanelAtBottom column in tblCustomer', 10, 1) WITH NOWAIT
+GO
 if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'IsAbout_Persons_CellPhone' and sysobjects.name = N'tblCaseHistory')
+			where syscolumns.name = N'ShowCaseActionsPanelAtBottom' and sysobjects.name = N'tblCustomer')
 BEGIN
-    ALTER TABLE tblCaseHistory
-    ADD IsAbout_Persons_CellPhone NVARCHAR(50)       
+    ALTER TABLE tblCustomer
+    ADD ShowCaseActionsPanelAtBottom bit not null DEFAULT(0)
+END
+GO 
+
+RAISERROR ('Create table tblWorkstationTabSettings', 10, 1) WITH NOWAIT
+GO
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblWorkstationTabSettings' AND type='U')
+BEGIN
+	CREATE TABLE [dbo].[tblWorkstationTabSettings] (
+		[Id]                    INT              IDENTITY (1, 1) NOT NULL,
+		[Customer_Id]           INT              NULL,
+		[TabField]              NVARCHAR (50)     CONSTRAINT [DF_tblWorkstationTabSettings_TabField] DEFAULT ('') NOT NULL,
+		[Show]                  BIT              CONSTRAINT [DF_tblWorkstationTabSettings_Show] DEFAULT ((1)) NOT NULL,
+		[CreatedDate]           DATETIME         CONSTRAINT [DF_tblWorkstationTabSettings_CreatedDate] DEFAULT (getdate()) NOT NULL,
+		[ChangedDate]           DATETIME         CONSTRAINT [DF_tblWorkstationTabSettings_ChangedDate] DEFAULT (getdate()) NOT NULL,
+		CONSTRAINT [PK_tblWorkstationTabSettings] PRIMARY KEY CLUSTERED ([Id] ASC),
+		CONSTRAINT [FK_tblWorkstationTabSettings_tblCustomer] FOREIGN KEY ([Customer_Id]) REFERENCES [dbo].[tblCustomer] ([Id])
+	);
+
+	ALTER TABLE [dbo].[tblWorkstationTabSettings] NOCHECK CONSTRAINT [FK_tblWorkstationTabSettings_tblCustomer];
 END
 GO
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'IsAbout_Region_Id' and sysobjects.name = N'tblCaseHistory')
+RAISERROR ('Create table tblWorkstationTabSetting_tblLang', 10, 1) WITH NOWAIT
+GO
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblWorkstationTabSetting_tblLang' AND type='U')
 BEGIN
-    ALTER TABLE tblCaseHistory
-    ADD IsAbout_Region_Id INT       
+	CREATE TABLE [dbo].[tblWorkstationTabSetting_tblLang] (
+		[WorkstationTabSetting_Id] INT            NOT NULL,
+		[Language_Id]          INT            NOT NULL,
+		[Label]                NVARCHAR (50)  NULL,
+		[FieldHelp]            NVARCHAR (200) NULL,
+		CONSTRAINT [PK_tblWorkstationTabSetting_tblLang] PRIMARY KEY CLUSTERED ([WorkstationTabSetting_Id] ASC, [Language_Id] ASC),
+		CONSTRAINT [FK_tblWorkstationTabSetting_tblLang_tblWorkstationTabSettings] FOREIGN KEY ([WorkstationTabSetting_Id]) REFERENCES [dbo].[tblWorkstationTabSettings] ([Id]),
+		CONSTRAINT [FK_tblWorkstationTabSetting_tblLang_tblLanguage] FOREIGN KEY ([Language_Id]) REFERENCES [dbo].[tblLanguage] ([Id])
+	);
+
+	ALTER TABLE [dbo].[tblWorkstationTabSetting_tblLang] NOCHECK CONSTRAINT [FK_tblWorkstationTabSetting_tblLang_tblWorkstationTabSettings];
+	ALTER TABLE [dbo].[tblWorkstationTabSetting_tblLang] NOCHECK CONSTRAINT [FK_tblWorkstationTabSetting_tblLang_tblLanguage];
+
 END
 GO
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'IsAbout_OU_Id' and sysobjects.name = N'tblCaseHistory')
-BEGIN
-    ALTER TABLE tblCaseHistory
-    ADD IsAbout_OU_Id INT       
+RAISERROR ('Creating table tblInventoryTypeStandardSettings', 10, 1) WITH NOWAIT
+GO
+IF NOT EXISTS(select * from sysobjects WHERE Name = N'tblInventoryTypeStandardSettings')
+BEGIN 
+
+    CREATE TABLE [dbo].[tblInventoryTypeStandardSettings](
+	    [Id] [int] IDENTITY(1,1) NOT NULL,
+	    [Customer_Id] [int] NOT NULL,
+	    [ShowPrinters] [bit] NOT NULL,
+	    [ShowWorkstations] [bit] NOT NULL,
+	    [ShowServers] [bit] NOT NULL,
+	CONSTRAINT [PK_tblInventoryTypeStandardSettings] PRIMARY KEY CLUSTERED 
+    (
+	    [Id] ASC
+    ) ON [PRIMARY]
+    ) ON [PRIMARY]        
+
+    ALTER TABLE [dbo].[tblInventoryTypeStandardSettings]  WITH NOCHECK ADD CONSTRAINT [FK_tblInventoryTypeStandardSettings_tblCustomer] FOREIGN KEY([Customer_Id])
+    REFERENCES [dbo].[tblCustomer] ([Id])
+    
+    ALTER TABLE [dbo].[tblInventoryTypeStandardSettings] NOCHECK CONSTRAINT [FK_tblInventoryTypeStandardSettings_tblCustomer]    
 END
 GO
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'IsAbout_CostCentre' and sysobjects.name = N'tblCaseHistory')
+RAISERROR ('Populating tblInventoryTypeStandardSettings with default values', 10, 1) WITH NOWAIT
+GO
+DECLARE @count int
+DECLARE @curRow int
+DECLARE @Customers as Table(RowNumber int, CustomerId int)
+
+INSERT INTO @Customers (RowNumber, CustomerId)
+select (ROW_NUMBER() OVER (Order by cus.Id)) as RowNumber, cus.Id from tblCustomer cus 
+    LEFT JOIN tblInventoryTypeStandardSettings ts ON cus.Id = ts.Customer_Id
+WHERE ts.Id IS NULL
+ORDER BY cus.Id
+
+select @count = COUNT(*) from @Customers
+SET @curRow = 1
+
+while(@curRow <= @count)
 BEGIN
-    ALTER TABLE tblCaseHistory
-    ADD IsAbout_CostCentre NVARCHAR(50)      
-END
+    DECLARE @customerId int = 0	     
+    select @customerId = CustomerId from @Customers where RowNumber = @curRow
+    IF NOT EXISTS (select 1 from tblInventoryTypeStandardSettings where Customer_Id = @customerId)
+    BEGIN	   
+	   INSERT INTO [dbo].[tblInventoryTypeStandardSettings] (Customer_Id, ShowPrinters, ShowWorkstations, ShowServers)
+	   VALUES (@customerId, 1, 1, 1)
+    END
+    SET @curRow += 1
+End;
 GO
 
-if not exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-               where syscolumns.name = N'IsAbout_Place' and sysobjects.name = N'tblCaseHistory')
-BEGIN
-    ALTER TABLE tblCaseHistory
-    ADD IsAbout_Place NVARCHAR(100) NULL    
-END
-GO
-
--- changing tblContractFile.ContentType size to 100
-if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id 
-            where syscolumns.name = N'ContentType' and sysobjects.name = N'tblContractFile')
-BEGIN
-    ALTER TABLE tblContractFile
-    ALTER COLUMN ContentType nvarchar(100) NOT NULL
-END
-
--- Update Null or empty user pw
-Update tblUsers
-set [Password] = 'DH&HD2018'
-Where ([Password] is null or [Password] = '')
-
+--select * from [dbo].[tblInventoryTypeStandardSettings] 
 
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.39'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.40'
 --ROLLBACK --TMP
+
+
+
+
 
 

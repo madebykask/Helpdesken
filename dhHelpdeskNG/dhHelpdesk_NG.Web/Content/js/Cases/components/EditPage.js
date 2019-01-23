@@ -298,6 +298,7 @@ EditPage.prototype.loadExtendedCase = function () {
             {
                 formParameters: formParameters,
                 caseValues: {
+                    administrator_id: { Value: fieldValues.AdministratorId },
                     reportedby: { Value: fieldValues.ReportedBy },
                     persons_name: { Value: fieldValues.PersonsName },
                     persons_phone: { Value: fieldValues.PersonsPhone },
@@ -428,7 +429,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     }
 
     var _caseFields = self.Case_Field_Ids;
-
+    var _administratorId = fieldData.administrator_id;
     var _reportedby = fieldData.reportedby;
     var _persons_name = fieldData.persons_name;
     var _persons_phone = fieldData.persons_phone;
@@ -447,6 +448,9 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     var _persons_cellphone = fieldData.persons_cellphone;
     var _place = fieldData.place;
     var _costcentre = fieldData.costcentre;
+
+    if (_administratorId != undefined)
+        $('#' + _caseFields.AdministratorId).val(_administratorId.Value);
 
     if (_reportedby != undefined)
         $('#' + _caseFields.ReportedBy).val(_reportedby.Value);

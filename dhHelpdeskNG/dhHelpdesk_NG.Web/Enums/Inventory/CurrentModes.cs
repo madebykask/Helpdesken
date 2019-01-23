@@ -2,10 +2,6 @@
 using System;
 using System.Web.Mvc;
 using System.Linq;
-using System.Collections;
-using System.Globalization;
-using System.Collections.Generic;
-using DH.Helpdesk.BusinessData.Models.Shared;
 
 namespace DH.Helpdesk.Web.Enums.Inventory
 {
@@ -31,18 +27,19 @@ namespace DH.Helpdesk.Web.Enums.Inventory
     {
         public static SelectList MapToSelectList(this Enum enumeration, string selected)
         {
-            var list =
-                (from CurrentModes d in Enum.GetValues(enumeration.GetType())
-                 select new { ID = Convert.ToInt32(d), Name = Translation.GetCoreTextTranslation(d.GetCaption()) }).ToList();
+            var list = (from CurrentModes d in Enum.GetValues(enumeration.GetType())
+                        select new
+                        {
+                            ID = Convert.ToInt32(d),
+                            Name = Translation.GetCoreTextTranslation(d.GetCaption())
+                        }).ToList();
+
             return new SelectList(list, "ID", "Name", selected);
-
-
-            
         }
 
-        public static string GetCaption(this CurrentModes module)
+        public static string GetCaption(this CurrentModes mode)
         {
-            switch (module)
+            switch (mode)
             {
                 case CurrentModes.Workstations:
                     return "Arbetsstationer";

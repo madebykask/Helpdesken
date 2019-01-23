@@ -9,6 +9,7 @@ using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using log4net;
 using log4net.Core;
 using WebGrease.Css.Extensions;
+using DH.Helpdesk.Common.Extensions.Boolean;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
@@ -316,6 +317,12 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var appSettings = ConfigurationService.AppSettings;
             ViewBag.ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService;
+            if (id.Is<Guid>())
+            {
+                ViewBag.caseEmailGuid = new Guid(id);
+            }
+            else
+            ViewBag.caseEmailGuid = "";
 
             return View(caseReceipt);
         }
@@ -780,6 +787,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 CustomerSettings = cs,
                 ExtendedCaseDataModel = extendedCaseDataModel,
                 CurrentUser = SessionFacade.CurrentUserIdentity.EmployeeNumber,
+                CurrentCustomer = SessionFacade.CurrentCustomer,
                 UserRole = initData.UserRole,
                 StateSecondaryId = caseStateSecondaryId,
                 CaseOU = caseModel.OU_Id.HasValue ? _ouService.GetOU(caseModel.OU_Id.Value) : null,
@@ -1206,9 +1214,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                                   CaseHistoryId = caseHistoryId,
                                   CaseId = caseId,
                                   LogGuid = Guid.NewGuid(),
-                                  TextExternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseExternalLogNote? extraNote : string.Empty),
+                                  TextExternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseExternalLogNote? extraNote.Replace("\n","\r\n") : string.Empty),
                                   UserId = null,
-                                  TextInternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseInternalLogNote? extraNote : string.Empty),
+                                  TextInternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseInternalLogNote? extraNote.Replace("\n", "\r\n") : string.Empty),
                                   WorkingTime = 0,
                                   EquipmentPrice = 0,
                                   Price = 0,
@@ -2137,6 +2145,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                     },
                 caseFieldSettingsWithLanguages);
 
+            model.CurrentCustomer = SessionFacade.CurrentCustomer;
             model.CaseTypeParantPath = "--";
             model.ProductAreaParantPath = "--";
             model.CategoryParentPath = "--";
@@ -2246,8 +2255,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             var ret = new List<FieldSettingJSModel>();
             foreach (var field in customerFieldSettings)
             {
-                var isVisible = field.ShowExternal.ConvertIntToBool();
-                var isRequired = field.Required.ConvertIntToBool();
+                var isVisible = field.ShowExternal.ToBool();
+                var isRequired = field.Required.ToBool();
                 var isReadonly = false;                
                 
                 if (templateSettings != null && templateSettings.Any())
@@ -2562,16 +2571,16 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
 
-		// keep for diagnostic purposes
-		private void LogWithContext(string msg)
-		{
-			var customerId = SessionFacade.CurrentCustomerID;
-			var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
-			var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
-			var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
-			var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
-			var localUserId = SessionFacade.CurrentLocalUser?.UserId;
-		}        
+        // keep for diagnostic purposes
+        private void LogWithContext(string msg)
+        {
+            var customerId = SessionFacade.CurrentCustomerID;
+            var userIdentityEmail = SessionFacade.CurrentUserIdentity?.Email;
+            var userIdentityEmployeeNumber = SessionFacade.CurrentUserIdentity?.EmployeeNumber;
+            var userIdentityUserId = SessionFacade.CurrentUserIdentity?.UserId;
+            var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
+            var localUserId = SessionFacade.CurrentLocalUser?.UserId;
+        }        
 
         #endregion
     }

@@ -11,6 +11,9 @@ using System.Web.Routing;
 using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
 using DH.Helpdesk.BusinessData.Models.Logs;
 using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Common.Enums.Settings;
+using DH.Helpdesk.Common.Exceptions;
 using DH.Helpdesk.Dal.DbQueryExecutor;
 using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Services.Services.Cases;
@@ -21,8 +24,13 @@ using DH.Helpdesk.Domain.Interfaces;
 using DH.Helpdesk.Domain.Invoice;
 using DH.Helpdesk.Services.BusinessLogic.Cases;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Grid;
+using DH.Helpdesk.Web.Common.Enums.Case;
+using DH.Helpdesk.Web.Common.Extensions;
+using DH.Helpdesk.Web.Common.Models.Case;
+using DH.Helpdesk.Web.Common.Models.CaseSearch;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
+using DH.Helpdesk.Web.Models.Case;
 
 
 namespace DH.Helpdesk.Web.Controllers
@@ -86,7 +94,6 @@ namespace DH.Helpdesk.Web.Controllers
     using BusinessData.Enums.Admin.Users;
     using System.Diagnostics;
     using Models.CaseRules;
-    using Common.Enums.Settings;
     using Infrastructure.ModelFactories.Case.Concrete;
     using static BusinessData.OldComponents.GlobalEnums;
     using System.Threading;
@@ -96,18 +103,16 @@ namespace DH.Helpdesk.Web.Controllers
     using Infrastructure.Helpers;
     using Infrastructure.Cryptography;
     using Domain.Computers;
-    using Common.Enums.Cases;
-    using DH.Helpdesk.Services;
     using BusinessData.Models.ProductArea.Output;
-    using Common.Exceptions;
+    using DH.Helpdesk.Common.Extensions.Boolean;
+    using Common.Tools.Files;
 
-    public class CasesController : BaseController
+    public partial class CasesController : BaseController
     {
         #region ***Constant/Variables***
 
         private const string ParentPathDefaultValue = "--";
         private const string ChildCasesHashTab = "childcases-tab";
-        private const string _reportFolderName = "StaticReports";
         private const int MaxTextCharCount = 200;
 
         private readonly ICaseProcessor _caseProcessor;
@@ -145,7 +150,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IChangeService _changeService;
         private readonly ILogService _logService;
         private readonly ILogFileService _logFileService;
-        private readonly ITemporaryFilesCache userTemporaryFilesStorage;
+        private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
         private readonly IEmailGroupService _emailGroupService;
         private readonly ICaseSolutionService _caseSolutionService;
         private readonly IEmailService _emailService;
@@ -153,62 +158,32 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IGlobalSettingService _globalSettingService;
         private readonly IMailTemplateService _mailTemplateService;
         private readonly ICausingPartService _causingPartService;
-
-        private readonly IInvoiceArticlesModelFactory invoiceArticlesModelFactory;
-
-        private readonly ICaseNotifierModelFactory caseNotifierModelFactory;
-
-        private readonly INotifierService notifierService;
-
-        private readonly IWorkContext workContext;
-
-        private readonly IInvoiceArticleService invoiceArticleService;
-
-        private readonly IConfiguration configuration;
-
-        private readonly ICaseSolutionSettingService caseSolutionSettingService;
-
-        private readonly IInvoiceHelper invoiceHelper;
-
-        private readonly ICaseModelFactory caseModelFactory;
-
-        private readonly CaseOverviewGridSettingsService caseOverviewSettingsService;
-
-        private readonly GridSettingsService gridSettingsService;
-
+        private readonly IInvoiceArticlesModelFactory _invoiceArticlesModelFactory;
+        private readonly ICaseNotifierModelFactory _caseNotifierModelFactory;
+        private readonly INotifierService _notifierService;
+        private readonly IWorkContext _workContext;
+        private readonly IInvoiceArticleService _invoiceArticleService;
+        private readonly ICaseSolutionSettingService _caseSolutionSettingService;
+        private readonly ICaseModelFactory _caseModelFactory;
+        private readonly CaseOverviewGridSettingsService _caseOverviewSettingsService;
+        private readonly GridSettingsService _gridSettingsService;
         private readonly IOrganizationService _organizationService;
-
         private readonly IMasterDataService _masterDataService;
-
         private readonly OrganizationJsonService _orgJsonService;
-
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
-
         private readonly ICaseLockService _caseLockService;
-
         private readonly int _defaultMaxRows;
-
         private readonly int _defaultCaseLockBufferTime;
-
         private readonly int _defaultExtendCaseLockTime;
-
-        private readonly IWatchDateCalendarService watchDateCalendarServcie;
-
-        private readonly ICaseInvoiceSettingsService caseInvoiceSettingsService;
-
-        private readonly IReportServiceService _ReportServiceService;
-
+        private readonly IWatchDateCalendarService _watchDateCalendarServcie;
+        private readonly IReportServiceService _reportServiceService;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
-
         private readonly IExternalInvoiceService _externalInvoiceService;
-
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
-
         private readonly ICaseRuleFactory _caseRuleFactory;
         private readonly IOrderService _orderService;
         private readonly IOrderAccountService _orderAccountService;
         private readonly ICaseSectionService _caseSectionService;
-
         private readonly ICaseDocumentService _caseDocumentService;
         private readonly IExtendedCaseService _extendedCaseService;
         private readonly ISendToDialogModelFactory _sendToDialogModelFactory;
@@ -343,35 +318,32 @@ namespace DH.Helpdesk.Web.Controllers
             this._changeService = changeService;
             this._logService = logService;
             this._logFileService = logFileService;
-            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
+            this._userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
             this._caseSolutionService = caseSolutionService;
             this._emailGroupService = emailGroupService;
             this._emailService = emailService;
             this._languageService = languageService;
             this._globalSettingService = globalSettingService;
-            this.workContext = workContext;
-            this.caseNotifierModelFactory = caseNotifierModelFactory;
-            this.notifierService = notifierService;
-            this.invoiceArticleService = invoiceArticleService;
-            this.configuration = configuration;
-            this.caseSolutionSettingService = caseSolutionSettingService;
-            this.invoiceHelper = invoiceHelper;
-            this.caseModelFactory = caseModelFactory;
-            this.caseInvoiceSettingsService = CaseInvoiceSettingsService;
-            this.caseOverviewSettingsService = caseOverviewSettingsService;
-            this.gridSettingsService = gridSettingsService;
+            this._workContext = workContext;
+            this._caseNotifierModelFactory = caseNotifierModelFactory;
+            this._notifierService = notifierService;
+            this._invoiceArticleService = invoiceArticleService;
+            this._caseSolutionSettingService = caseSolutionSettingService;
+            this._caseModelFactory = caseModelFactory;
+            this._caseOverviewSettingsService = caseOverviewSettingsService;
+            this._gridSettingsService = gridSettingsService;
             this._organizationService = organizationService;
             this._orgJsonService = orgJsonService;
             this._registrationSourceCustomerService = registrationSourceCustomerService;
             this._caseLockService = caseLockService;
-            this.watchDateCalendarServcie = watchDateCalendarServcie;
+            this._watchDateCalendarServcie = watchDateCalendarServcie;
             this._mailTemplateService = mailTemplateService;
             this._defaultMaxRows = 10;
             this._defaultCaseLockBufferTime = 30; // Second
             this._defaultExtendCaseLockTime = 60; // Second
             this._causingPartService = causingPartService;
-            this._ReportServiceService = reportServiceService;
-            this.invoiceArticlesModelFactory = invoiceArticlesModelFactory;
+            this._reportServiceService = reportServiceService;
+            this._invoiceArticlesModelFactory = invoiceArticlesModelFactory;
             this._userPermissionsChecker = userPermissionsChecker;
             this._externalInvoiceService = externalInvoiceService;
             this._caseExtraFollowersService = caseExtraFollowersService;
@@ -387,195 +359,6 @@ namespace DH.Helpdesk.Web.Controllers
         #endregion
 
         #region ***Public Methods***
-
-        #region --Advanced Search--
-        public ActionResult AdvancedSearch(bool? clearFilters = false, bool doSearchAtBegining = false, bool isExtSearch = false)
-        {
-            if (SessionFacade.CurrentUser == null)
-            {
-                return new RedirectResult("~/Error/Unathorized");
-            }
-
-            ApplicationFacade.UpdateLoggedInUser(Session.SessionID, string.Empty);
-
-            if (SessionFacade.CurrentCustomer == null)
-            {
-                return new RedirectResult("~/Error/Unathorized");
-            }
-
-            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-            var currentUserId = SessionFacade.CurrentUser.Id;
-
-            var customers = this._userService.GetUserProfileCustomersSettings(SessionFacade.CurrentUser.Id);
-            var m = new AdvancedSearchIndexViewModel();
-            var availableCustomers = customers.Select(c => new ItemOverview(c.CustomerName, c.CustomerId.ToString())).OrderBy(c => c.Name).ToList();
-
-            m.SelectedCustomers = availableCustomers;
-
-            var extendIncludedCustomerIds = _settingService.GetExtendedSearchIncludedCustomers();
-            var extCustomers = _customerService.GetAllCustomers().Where(x => extendIncludedCustomerIds.Contains(x.Id)).Select(c => new ItemOverview(c.Name, c.Id.ToString())).OrderBy(c => c.Name).ToList();
-            m.ExtendIncludedCustomers = extCustomers;
-
-            CaseSearchModel advancedSearchModel;
-            if ((clearFilters != null && clearFilters.Value)
-                || SessionFacade.CurrentAdvancedSearch == null)
-            {
-                SessionFacade.CurrentAdvancedSearch = null;
-                advancedSearchModel = this.InitAdvancedSearchModel(currentCustomerId, currentUserId);
-                SessionFacade.CurrentAdvancedSearch = advancedSearchModel;
-            }
-            else
-                advancedSearchModel = SessionFacade.CurrentAdvancedSearch;
-
-            m.CaseSearchFilterData = CreateAdvancedSearchFilterData(
-                                                        currentCustomerId,
-                                                        currentUserId,
-                                                        advancedSearchModel,
-                                                        availableCustomers);
-
-            m.SpecificSearchFilterData = CreateAdvancedSearchSpecificFilterData(currentUserId);
-
-            m.CaseSetting = GetCaseSettingModel(currentCustomerId, currentUserId);
-            m.GridSettings = JsonGridSettingsMapper.GetAdvancedSearchGridSettingsModel(currentCustomerId);
-
-            if (advancedSearchModel.Search != null)
-                m.GridSettings.sortOptions = new GridSortOptions
-                {
-                    sortBy = advancedSearchModel.Search.SortBy,
-                    sortDir = advancedSearchModel.Search.Ascending ? SortingDirection.Asc : SortingDirection.Desc
-                };
-
-            m.CaseSearchFilterData.IsAboutEnabled = m.CaseSetting.ColumnSettingModel.CaseFieldSettings.GetIsAboutEnabled();
-
-            m.DoSearchAtBegining = doSearchAtBegining;
-            m.IsExtSearch = isExtSearch;
-            return this.View("AdvancedSearch/Index", m);
-        }
-
-
-
-
-        [HttpGet]
-        public string LookupLanguage(string customerid, string notifier, string region, string department, string notifierid)
-        {
-            //return string.Empty;
-
-            customerid = customerid.Replace("'", "");
-            notifier = notifier.Replace("'", "");
-            region = region.Replace("'", "");
-            department = department.Replace("'", "");
-            notifierid = notifierid.Replace("'", "");
-
-            if ((notifier != string.Empty && notifierid != string.Empty) | customerid != string.Empty | region != string.Empty | department != string.Empty)
-            {
-                int depid = 0;
-                int regid = 0;
-
-                int custid = 0;
-
-                if (customerid != string.Empty)
-                {
-                    custid = Convert.ToInt32(customerid);
-                }
-
-                if (region != string.Empty)
-                {
-                    regid = Convert.ToInt32(region);
-                }
-                if (department != string.Empty)
-                {
-                    depid = Convert.ToInt32(department);
-                }
-                int languageId = this._caseService.LookupLanguage(custid, notifier, regid, depid, notifierid);
-                return languageId.ToString();
-            }
-            else
-            {
-                return string.Empty;
-            }
-
-        }
-
-        [HttpGet]
-        public PartialViewResult GetCustomerSpecificFilter(int selectedCustomerId, bool resetFilter = false)
-        {
-            if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
-            {
-                return PartialView("AdvancedSearch/_SpecificSearchTab", null);
-            }
-            CaseSearchModel csm = null;
-
-            if (!resetFilter)
-                selectedCustomerId = 0;
-
-            var model = CreateAdvancedSearchSpecificFilterData(SessionFacade.CurrentUser.Id, selectedCustomerId);
-            return PartialView("AdvancedSearch/_SpecificSearchTab", model);
-        }
-
-        [ValidateInput(false)]
-        public ActionResult DoAdvancedSearch(FormCollection frm)
-        {
-            if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
-            {
-                return new RedirectResult("~/Error/Unathorized");
-            }
-
-            var customers = frm.ReturnFormValue("currentCustomerId").Split(',').Select(x => Int32.Parse(x)).ToList();
-            var isExtendedSearch = frm.IsFormValueTrue(CaseFilterFields.IsExtendedSearch);
-            var res = new List<Tuple<List<Dictionary<string, object>>, GridSettingsModel>>();
-            var extendedCustomers = new List<int>();
-
-            if (isExtendedSearch)
-            {
-                extendedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
-                foreach (var includedCustomer in extendedCustomers)
-                {
-                    res.Add(AdvancedSearchForCustomer(frm, includedCustomer, isExtendedSearch, extendedCustomers));
-                }
-            }
-
-            foreach (var customer in customers.Except(extendedCustomers))
-            {
-                res.Add(AdvancedSearchForCustomer(frm, customer, false, extendedCustomers));
-            }
-
-            var totalCount = res.Sum(x => x.Item1.Count);
-            var data = res.Select(x => new { data = x.Item1, gridSettings = x.Item2 }).ToList();
-            var ret = new { Items = data, TotalCount = totalCount };
-
-            return this.Json(new { result = "success", data = ret });
-        }
-
-        [ValidateInput(false)]
-        public ActionResult QuickOpen(FormCollection frm)
-        {
-            if (SessionFacade.CurrentUser == null || SessionFacade.CurrentCustomer == null)
-            {
-                return new RedirectResult("~/Error/Unathorized");
-            }
-
-            string searchFor = frm.ReturnFormValue("txtQuickOpen");
-
-            string notFoundText = Translation.GetCoreTextTranslation("Inget ärende tillgängligt");
-
-            int caseId = _caseService.GetCaseQuickOpen(SessionFacade.CurrentUser, searchFor);
-
-            if (caseId > 0)
-            {
-
-                if (_userService.VerifyUserCasePermissions(SessionFacade.CurrentUser, caseId))
-                {
-                    return this.Json(new { result = "success", data = "/Cases/Edit/" + caseId });
-                }
-                else
-                {
-                    notFoundText = Translation.GetCoreTextTranslation("Åtkomst nekad");
-                }
-            }
-
-            return this.Json(new { result = "error", data = notFoundText });
-        }
-        #endregion
 
         #region --Case Overview--
 
@@ -618,28 +401,28 @@ namespace DH.Helpdesk.Web.Controllers
                                           SessionFacade.CurrentUser.Id);
             if (useMyCases.HasValue && useMyCases == true)
             {
-                caseSearchModel.caseSearchFilter.SearchInMyCasesOnly = true;
-                caseSearchModel.caseSearchFilter.UserPerformer = string.Empty;
-                caseSearchModel.caseSearchFilter.CaseProgress = CaseSearchFilter.InProgressCases;
+                caseSearchModel.CaseSearchFilter.SearchInMyCasesOnly = true;
+                caseSearchModel.CaseSearchFilter.UserPerformer = string.Empty;
+                caseSearchModel.CaseSearchFilter.CaseProgress = CaseSearchFilter.InProgressCases;
             }
 
             switch (customFilter)
             {
                 case CasesCustomFilter.UnreadCases:
-                    caseSearchModel.caseSearchFilter.CaseProgress = CaseSearchFilter.UnreadCases;
-                    caseSearchModel.caseSearchFilter.UserPerformer = string.Empty;
+                    caseSearchModel.CaseSearchFilter.CaseProgress = CaseSearchFilter.UnreadCases;
+                    caseSearchModel.CaseSearchFilter.UserPerformer = string.Empty;
                     break;
                 case CasesCustomFilter.HoldCases:
-                    caseSearchModel.caseSearchFilter.CaseProgress = CaseSearchFilter.HoldCases;
-                    caseSearchModel.caseSearchFilter.UserPerformer = string.Empty;
+                    caseSearchModel.CaseSearchFilter.CaseProgress = CaseSearchFilter.HoldCases;
+                    caseSearchModel.CaseSearchFilter.UserPerformer = string.Empty;
                     break;
                 case CasesCustomFilter.InProcessCases:
-                    caseSearchModel.caseSearchFilter.CaseProgress = CaseSearchFilter.InProgressCases;
-                    caseSearchModel.caseSearchFilter.UserPerformer = string.Empty;
+                    caseSearchModel.CaseSearchFilter.CaseProgress = CaseSearchFilter.InProgressCases;
+                    caseSearchModel.CaseSearchFilter.UserPerformer = string.Empty;
                     break;
             }
 
-            caseSearchModel.caseSearchFilter.CustomFilter = customFilter;
+            caseSearchModel.CaseSearchFilter.CustomFilter = customFilter;
             SessionFacade.CurrentCaseSearch = caseSearchModel;
 
             return new RedirectResult("~/cases");
@@ -661,7 +444,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (SessionFacade.CaseOverviewGridSettings == null)
             {
                 SessionFacade.CaseOverviewGridSettings =
-                    this.gridSettingsService.GetForCustomerUserGrid(
+                    this._gridSettingsService.GetForCustomerUserGrid(
                         customerId,
                         SessionFacade.CurrentUser.UserGroupId,
                         userId,
@@ -684,7 +467,7 @@ namespace DH.Helpdesk.Web.Controllers
             var user = this._userService.GetUser(userId);
 
             SessionFacade.CaseOverviewGridSettings.pageOptions.pageIndex =
-                SessionFacade.CurrentCaseSearch.caseSearchFilter.PageInfo.PageNumber;
+                SessionFacade.CurrentCaseSearch.CaseSearchFilter.PageInfo.PageNumber;
 
 
             m.PageSettings = new PageSettingsModel()
@@ -729,7 +512,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 f.InitiatorSearchScope = initiatorSearchScope;
             }
-            f.CaseType = frm.ReturnFormValue(CaseFilterFields.CaseTypeIdNameAttribute).convertStringToInt();
+            f.CaseType = frm.ReturnFormValue(CaseFilterFields.CaseTypeIdNameAttribute).ToInt();
             f.ProductArea = frm.ReturnFormValue(CaseFilterFields.ProductAreaIdNameAttribute).ReturnCustomerUserValue();
             f.Region = frm.ReturnFormValue(CaseFilterFields.RegionNameAttribute);
             f.User = frm.ReturnFormValue(CaseFilterFields.RegisteredByNameAttribute);
@@ -815,27 +598,27 @@ namespace DH.Helpdesk.Web.Controllers
 
             CaseSearchModel sm;
             if (SessionFacade.CurrentCaseSearch == null
-                || SessionFacade.CurrentCaseSearch.caseSearchFilter.CustomerId != f.CustomerId || f.IsConnectToParent)
+                || SessionFacade.CurrentCaseSearch.CaseSearchFilter.CustomerId != f.CustomerId || f.IsConnectToParent)
             {
                 sm = InitCaseSearchModel(f.CustomerId, f.UserId);
             }
             else
             {
                 sm = SessionFacade.CurrentCaseSearch;
-                f.CustomFilter = sm.caseSearchFilter.CustomFilter;
+                f.CustomFilter = sm.CaseSearchFilter.CustomFilter;
             }
 
             ResolveParentPathesForFilter(f);
-            sm.caseSearchFilter = f;
+            sm.CaseSearchFilter = f;
             if (SessionFacade.CaseOverviewGridSettings == null)
             {
                 SessionFacade.CaseOverviewGridSettings = f.IsConnectToParent
-                    ? gridSettingsService.GetForCustomerUserGrid(
+                    ? _gridSettingsService.GetForCustomerUserGrid(
                         SessionFacade.CurrentCustomer.Id,
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id,
                         GridSettingsService.CASE_CONNECTPARENT_GRID_ID)
-                    : gridSettingsService.GetForCustomerUserGrid(
+                    : _gridSettingsService.GetForCustomerUserGrid(
                         SessionFacade.CurrentCustomer.Id,
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id,
@@ -856,7 +639,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     SessionFacade.CaseOverviewGridSettings.sortOptions.sortBy = sortBy;
                     SessionFacade.CaseOverviewGridSettings.sortOptions.sortDir = sortDir;
-                    gridSettingsService.SaveCaseoviewSettings(
+                    _gridSettingsService.SaveCaseoviewSettings(
                         SessionFacade.CaseOverviewGridSettings,
                         SessionFacade.CurrentCustomer.Id,
                         SessionFacade.CurrentUser.Id,
@@ -866,11 +649,11 @@ namespace DH.Helpdesk.Web.Controllers
             var m = new CaseSearchResultModel
             {
                 GridSettings = f.IsConnectToParent
-                    ? caseOverviewSettingsService.GetSettings(
+                    ? _caseOverviewSettingsService.GetSettings(
                         SessionFacade.CurrentCustomer.Id,
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id, GridSettingsService.CASE_CONNECTPARENT_GRID_ID)
-                    : caseOverviewSettingsService.GetSettings(
+                    : _caseOverviewSettingsService.GetSettings(
                         SessionFacade.CurrentCustomer.Id,
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id)
@@ -913,8 +696,8 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentUser.UserGroupId,
                 SessionFacade.CurrentUser.RestrictedCasePermission,
                 sm.Search,
-                workContext.Customer.WorkingDayStart,
-                workContext.Customer.WorkingDayEnd,
+                _workContext.Customer.WorkingDayStart,
+                _workContext.Customer.WorkingDayEnd,
                 userTimeZone,
                 ApplicationTypes.Helpdesk,
                 showRemainingTime,
@@ -932,10 +715,10 @@ namespace DH.Helpdesk.Web.Controllers
                 foreach (var id in ouIds)
                     if (!string.IsNullOrEmpty(id))
                     {
-                        if (string.IsNullOrEmpty(sm.caseSearchFilter.Department))
-                            sm.caseSearchFilter.Department += string.Format("-{0}", id);
+                        if (string.IsNullOrEmpty(sm.CaseSearchFilter.Department))
+                            sm.CaseSearchFilter.Department += string.Format("-{0}", id);
                         else
-                            sm.caseSearchFilter.Department += string.Format(",-{0}", id);
+                            sm.CaseSearchFilter.Department += string.Format(",-{0}", id);
                     }
             }
 
@@ -956,7 +739,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 if (SessionFacade.CurrentUser.ShowSolutionTime)
                 {
-                    remainingView = RenderPartialViewToString("CaseRemainingTime", this.caseModelFactory.GetCaseRemainingTimeModel(remainingTimeData, this.workContext));
+                    remainingView = RenderPartialViewToString("CaseRemainingTime", this._caseModelFactory.GetCaseRemainingTimeModel(remainingTimeData, this._workContext));
                 }
 
                 var statisticsFields = m.GridSettings.CaseFieldSettings.Where(cf => cf.ShowOnStartPage != 0 &&
@@ -1093,20 +876,23 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult IsCaseAvailable(int caseId, DateTime caseChangedTime, string lockGuid)
         {
-            var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
+            var caseLock = this._caseLockService.GetCaseLockOverviewByCaseId(caseId);
 
 
-            if (caseLock != null && caseLock.LockGUID == new Guid(lockGuid) && caseLock.ExtendedTime >= DateTime.Now)
+            if (caseLock != null && 
+                caseLock.LockGUID == new Guid(lockGuid) && 
+                caseLock.ExtendedTime >= DateTime.Now)
+            {
                 // Case still is locked by me
                 return Json(true);
-            else
-                if (caseLock == null || (caseLock != null && !(caseLock.ExtendedTime >= DateTime.Now)))
+            }
+            else if (caseLock == null || 
+                     (caseLock != null && !(caseLock.ExtendedTime >= DateTime.Now)))
             {
                 //case is not locked by me or is not locked at all 
-                var curCase = this._caseService.GetCaseById(caseId);
+                var curCase = _caseService.GetCaseById(caseId);
                 if (curCase != null && curCase.ChangeTime.RoundTick() == caseChangedTime.RoundTick())
-                    //case is not updated yet by any other
-                    return Json(true);
+                    return Json(true);//case is not updated yet by any other
                 else
                     return Json(false);
             }
@@ -1334,7 +1120,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var basePath = this._masterDataService.GetFilePath(customerId);
             var caseGuid = this._caseService.Delete(caseId, basePath, parentCaseId);
-            this.userTemporaryFilesStorage.ResetCacheForObject(caseGuid.ToString());
+            this._userTemporaryFilesStorage.ResetCacheForObject(caseGuid.ToString());
             if (parentCaseId.HasValue)
             {
                 var parentCase = this._caseService.GetCaseById(parentCaseId.Value);
@@ -1374,7 +1160,7 @@ namespace DH.Helpdesk.Web.Controllers
             var c = this._caseService.GetCaseById(caseId);
             var basePath = _masterDataService.GetFilePath(c.Customer_Id);
             var logGuid = this._logService.Delete(id, basePath);
-            this.userTemporaryFilesStorage.ResetCacheForObject(logGuid.ToString());
+            this._userTemporaryFilesStorage.ResetCacheForObject(logGuid.ToString());
 
             IDictionary<string, string> errors;
             string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
@@ -1470,8 +1256,8 @@ namespace DH.Helpdesk.Web.Controllers
                     var moduleCaseInvoice = GetCustomerSettings(customerId.Value).ModuleCaseInvoice;
                     if (moduleCaseInvoice == 1)
                     {
-                        var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(m.case_.Id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-                        var invoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
+                        var caseInvoices = this._invoiceArticleService.GetCaseInvoicesWithTimeZone(m.case_.Id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                        var invoiceArticles = this._invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
                         m.InvoiceModel = new CaseInvoiceModel(customerId.Value, m.case_.Id, invoiceArticles, "", m.CaseKey, m.LogKey);
                     }
 
@@ -1519,7 +1305,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 //if move case always fullaccess
                 if (moveToCustomerId.HasValue)
-                    m.EditMode = Enums.AccessMode.FullAccess;
+                    m.EditMode = AccessMode.FullAccess;
 
                 ApplicationFacade.UpdateLoggedInUser(Session.SessionID, string.Empty);
 
@@ -1542,7 +1328,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 
                 // User has not access to case
-                if (m.EditMode == Enums.AccessMode.NoAccess)
+                if (m.EditMode == AccessMode.NoAccess)
                     return this.RedirectToAction("index", "home");
 
                 // move case to another customer
@@ -1583,12 +1369,12 @@ namespace DH.Helpdesk.Web.Controllers
                 var moduleCaseInvoice = caseCustomerSettings.ModuleCaseInvoice;
                 if (moduleCaseInvoice == 1)
                 {
-                    var caseInvoices = this.invoiceArticleService.GetCaseInvoicesWithTimeZone(id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-                    var invoiceArticles = this.invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
+                    var caseInvoices = this._invoiceArticleService.GetCaseInvoicesWithTimeZone(id, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                    var invoiceArticles = this._invoiceArticlesModelFactory.CreateCaseInvoiceArticlesModel(caseInvoices);
                     m.InvoiceModel = new CaseInvoiceModel(m.case_.Customer_Id, m.case_.Id, invoiceArticles, "", m.CaseKey, m.LogKey);
                 }
 
-                m.CustomerSettings = this.workContext.Customer.Settings; //current customer settings
+                m.CustomerSettings = this._workContext.Customer.Settings; //current customer settings
                 m.CustomerSettings.ModuleCaseInvoice = Convert.ToBoolean(caseCustomerSettings.ModuleCaseInvoice); // TODO FIX
 
                 #region ConnectToParentModel
@@ -1602,7 +1388,7 @@ namespace DH.Helpdesk.Web.Controllers
                     //todo:
                     m.ConnectToParentModel.CaseSetting = this.GetCaseSettingModel(currentCustomerId, userId, GridSettingsService.CASE_CONNECTPARENT_GRID_ID, caseFieldSettings);
 
-                    var gridSettings = this.gridSettingsService.GetForCustomerUserGrid(
+                    var gridSettings = this._gridSettingsService.GetForCustomerUserGrid(
                         customerId,
                         SessionFacade.CurrentUser.UserGroupId,
                         userId,
@@ -1633,10 +1419,7 @@ namespace DH.Helpdesk.Web.Controllers
             AddViewDataValues();
 
             // Positive: Send Mail to...
-            if (m.CaseMailSetting.DontSendMailToNotifier == false)
-                m.CaseMailSetting.DontSendMailToNotifier = true;
-            else
-                m.CaseMailSetting.DontSendMailToNotifier = false;
+            m.CaseMailSetting.DontSendMailToNotifier = m.CaseMailSetting.DontSendMailToNotifier == false;
             m.IsReturnToCase = retToCase;
 
             return this.View(m);
@@ -1666,13 +1449,9 @@ namespace DH.Helpdesk.Web.Controllers
                     m.finishingCauses = this._finishingCauseService.GetFinishingCausesWithChilds(customerId);
                     m.case_ = this._caseService.GetCaseById(m.CaseLog.CaseId);
                     m.IsCaseReopened = isCaseReopened;
-                    bool UseVD = false;
-                    if (!string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
-                    {
-                        UseVD = true;
-                    }
-                                var logFiles = _logFileService.GetLogFileNamesByLogId(id);
-                                m.LogFilesModel = new FilesModel(id.ToString(), logFiles, UseVD);
+                    var useVD = !string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId));
+                    var logFiles = _logFileService.GetLogFileNamesByLogId(id);
+                    m.LogFilesModel = new FilesModel(id.ToString(), logFiles, useVD);
                     const bool isAddEmpty = true;
 
                     var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
@@ -1720,18 +1499,20 @@ namespace DH.Helpdesk.Web.Controllers
                     var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
 
                     // TODO: Should mix CustomerSettings & Setting 
-                    m.CustomerSettings = this.workContext.Customer.Settings;
+                    m.CustomerSettings = this._workContext.Customer.Settings;
                     m.Setting = cs;
                     m.EditMode = EditMode(m, ModuleName.Log, deps, acccessToGroups, true);
                     m.LogFileNames = string.Join("|", m.LogFilesModel.Files.Select(x => x.Name).ToArray());
                     AddViewDataValues();
                     SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
+                    
                     // User has not access to case/log
-                    if (m.EditMode == Enums.AccessMode.NoAccess)
+                    if (m.EditMode == AccessMode.NoAccess)
                         return this.RedirectToAction("index", "home");
 
                     m.editLog = editLog;
                     m.newLog = newLog;
+
                     if (newLog)
                     {
                         m.CaseLog.OldLog_Id = m.CaseLog.Id;
@@ -1739,8 +1520,6 @@ namespace DH.Helpdesk.Web.Controllers
                     }
 
                     m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
-
-
                 }
             }
 
@@ -1978,6 +1757,13 @@ namespace DH.Helpdesk.Web.Controllers
             return this.Json(result);
         }
 
+        [HttpPost]
+        public ActionResult Search_PcNumber(int userId, int customerId)
+        {
+            var result = this._computerService.SearchPcNumberByUserId(customerId, userId);          
+            return this.Json(result);
+        }
+
         #endregion
 
         #region --Change Depended Field--
@@ -2048,7 +1834,7 @@ namespace DH.Helpdesk.Web.Controllers
             DateTime? res = null;
             if (dept != null && dept.WatchDateCalendar_Id.HasValue)
             {
-                res = this.watchDateCalendarServcie.GetClosestDateTo(dept.WatchDateCalendar_Id.Value, DateTime.UtcNow);
+                res = this._watchDateCalendarServcie.GetClosestDateTo(dept.WatchDateCalendar_Id.Value, DateTime.UtcNow);
             }
 
             return this.Json(new { result = "success", data = res }, JsonRequestBehavior.AllowGet);
@@ -2186,17 +1972,17 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (id.HasValue)
             {
-                var e = _productAreaService.GetProductArea(id.Value);
-                if (e != null)
+                var productArea = _productAreaService.GetProductArea(id.Value);
+                if (productArea != null)
                 {
-                    workinggroupId = e.WorkingGroup_Id.HasValue ? e.WorkingGroup_Id.Value : 0;
+                    workinggroupId = productArea.WorkingGroup_Id.HasValue ? productArea.WorkingGroup_Id.Value : 0;
                     if (workinggroupId > 0)
                     {
                         var wg = _workingGroupService.GetWorkingGroup(workinggroupId);
                         workinggroupName = wg != null ? wg.WorkingGroupName : string.Empty;
                     }
 
-                    priorityId = e.Priority_Id.HasValue ? e.Priority_Id.Value : 0;
+                    priorityId = productArea.Priority_Id.HasValue ? productArea.Priority_Id.Value : 0;
                     if (priorityId > 0)
                     {
                         var prio = _priorityService.GetPriority(priorityId);
@@ -2204,7 +1990,7 @@ namespace DH.Helpdesk.Web.Controllers
                         sla = prio.SolutionTime;
                     }
 
-                    if (e.SubProductAreas != null && e.SubProductAreas.Where(s => s.IsActive != 0).Any())
+                    if (productArea.SubProductAreas != null && productArea.SubProductAreas.Where(s => s.IsActive != 0).Any())
                         hasChild = 1;
                 }
             }
@@ -2363,7 +2149,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             //var files = this._caseFileService.GetCaseFiles(int.Parse(id));
             var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNamesAndDates(id, ModuleName.Cases)
+                                ? this._userTemporaryFilesStorage.FindFileNamesAndDates(id, ModuleName.Cases)
                                 : this._caseFileService.FindFileNamesAndDatesByCaseId(int.Parse(id));
 
             var cfs = MakeCaseFileModel(files, savedFiles);
@@ -2389,7 +2175,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult LogFiles(string id, int? caseId = null)
         {
             var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
+                                ? this._userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
                                 : this._logFileService.FindFileNamesByLogId(int.Parse(id));
 
             var existingFiles = new List<LogFileModel>();
@@ -2433,25 +2219,24 @@ namespace DH.Helpdesk.Web.Controllers
             var uploadedData = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
 
+            int caseId = 0;
             if (GuidHelper.IsGuid(id))
             {
-                if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
+                if (_userTemporaryFilesStorage.FileExists(name, id, ModuleName.Cases))
                 {
                     name = DateTime.Now.ToString() + '-' + name;
                 }
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);
+                _userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Cases);
             }
-            else
+            else if (Int32.TryParse(id, out caseId))
             {
-                if (this._caseFileService.FileExists(int.Parse(id), name))
+                if (_caseFileService.FileExists(int.Parse(id), name))
                 {
                     name = DateTime.Now.ToString() + '_' + name;
                 }
-
-                var c = this._caseService.GetCaseById(int.Parse(id));
-                var basePath = string.Empty;
-                if (c != null)
-                    basePath = _masterDataService.GetFilePath(c.Customer_Id);
+                
+                var customerId = _caseService.GetCaseCustomerId(caseId);
+                var basePath = _masterDataService.GetFilePath(customerId);
 
                 var caseFileDto = new CaseFileDto(
                                 uploadedData,
@@ -2459,9 +2244,8 @@ namespace DH.Helpdesk.Web.Controllers
                                 name,
                                 DateTime.Now,
                                 int.Parse(id),
-                                this.workContext.User.UserId);
-                this._caseFileService.AddFile(caseFileDto);
-
+                                _workContext.User.UserId);
+                _caseFileService.AddFile(caseFileDto);
             }
         }
 
@@ -2474,13 +2258,13 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (GuidHelper.IsGuid(id))
             {
-                if (this.userTemporaryFilesStorage.FileExists(name, id, ModuleName.Log))
+                if (this._userTemporaryFilesStorage.FileExists(name, id, ModuleName.Log))
                 {
                     //return;
                     //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Log); 
                     //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
                 }
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Log);
+                this._userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Log);
             }
         }
 
@@ -2488,19 +2272,21 @@ namespace DH.Helpdesk.Web.Controllers
         public void DeleteCaseFile(string id, string fileName)
         {
             if (GuidHelper.IsGuid(id))
-                this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Cases);
+            {
+                _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Cases);
+            }
             else
             {
-                var c = this._caseService.GetCaseById(int.Parse(id));
+                var c = _caseService.GetCaseById(int.Parse(id));
                 var basePath = _masterDataService.GetFilePath(c.Customer_Id);
 
-                this._caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), basePath, fileName.Trim());
-                this.invoiceArticleService.DeleteFileByCaseId(int.Parse(id), fileName.Trim());
+                _caseFileService.DeleteByCaseIdAndFileName(int.Parse(id), basePath, fileName.Trim());
+                _invoiceArticleService.DeleteFileByCaseId(int.Parse(id), fileName.Trim());
 
                 IDictionary<string, string> errors;
                 string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                 var extraField = new ExtraFieldCaseHistory { CaseFile = StringTags.Delete + fileName.Trim() };
-                this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
+                _caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
             }
         }
 
@@ -2513,7 +2299,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     if (GuidHelper.IsGuid(id))
                     {
-                        this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);
+                        this._userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);
                     }
                 }
                 else
@@ -2522,7 +2308,7 @@ namespace DH.Helpdesk.Web.Controllers
             else
             {
                 if (GuidHelper.IsGuid(id))
-                    this.userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);
+                    this._userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);
                 else
                 {
                     var log = this._logService.GetLogById(int.Parse(id));
@@ -2555,7 +2341,7 @@ namespace DH.Helpdesk.Web.Controllers
             byte[] fileContent;
 
             if (GuidHelper.IsGuid(id))
-                fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases);
+                fileContent = this._userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Cases);
             else
             {
                 var c = this._caseService.GetCaseById(int.Parse(id));
@@ -2578,7 +2364,7 @@ namespace DH.Helpdesk.Web.Controllers
             byte[] fileContent;
 
             if (GuidHelper.IsGuid(id))
-                fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Log);
+                fileContent = this._userTemporaryFilesStorage.GetFileContent(fileName, id, ModuleName.Log);
             else
             {
                 var l = this._logService.GetLogById(int.Parse(id));
@@ -2606,24 +2392,10 @@ namespace DH.Helpdesk.Web.Controllers
             return new UnicodeFileContentResult(fileContent, fileName);
         }
 
-        private string GetCaseFileNames(string id)
+        private string GetCaseFileNames(int id)
         {
-            var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Cases)
-                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
-
-            return String.Join("|", files);
-
-        }
-
-        private string GetLogFileNames(string id)
-        {
-            var files = GuidHelper.IsGuid(id)
-                                ? this.userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
-                                : this._caseFileService.FindFileNamesByCaseId(int.Parse(id));
-
-            return String.Join("|", files);
-
+            var files = _caseFileService.FindFileNamesByCaseId(id);
+            return string.Join("|", files);
         }
 
         [HttpPost]
@@ -2684,64 +2456,6 @@ namespace DH.Helpdesk.Web.Controllers
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
             var model = this.GetCaseInputViewModel(userId, customerId, caseId, caseLockModel, caseFieldSettings);
             return PartialView("_CaseHistory", model);
-        }
-
-        #endregion
-
-        #region --Case Actions--
-
-        public JsonResult MarkAsUnread(int id, int customerId)
-        {
-            this._caseService.MarkAsUnread(id);
-            //return this.RedirectToAction("index", "cases", new { customerId = customerId });
-            return Json("Success");
-        }
-
-        public PartialViewResult ShowCasePrintPreview(int caseId, int caseNumber, bool popupShow = false, bool showPrintButton = true)
-        {
-            var model = GetCaseReportViewerData("CaseDetailsList", caseId, caseNumber);
-            model.CanShow = true;
-            model.PopupShow = popupShow;
-            model.ShowPrintButton= showPrintButton;
-            return PartialView("_CasePrint", model);
-        }
-
-        public RedirectToRouteResult Copy(int id, int customerId)
-        {
-            return this.RedirectToAction("new", "cases", new { customerId = customerId, copyFromCaseId = id });
-        }
-
-        public RedirectToRouteResult FollowUpRemove(int id)
-        {
-            if (SessionFacade.CurrentUser != null)
-            {
-                var userId = SessionFacade.CurrentUser.Id;
-                _caseFollowUpService.RemoveFollowUp(userId, id);
-            }
-            //            this._caseService.UpdateFollowUpDate(id, null);
-            return this.RedirectToAction("edit", "cases", new { id = id, redirectFrom = "save" });
-        }
-
-        public RedirectToRouteResult FollowUp(int id)
-        {
-            if (SessionFacade.CurrentUser != null)
-            {
-                var userId = SessionFacade.CurrentUser.Id;
-                _caseFollowUpService.AddUpdateFollowUp(userId, id);
-            }
-            //            this._caseService.UpdateFollowUpDate(id, DateTime.UtcNow);
-            return this.RedirectToAction("edit", "cases", new { id = id, redirectFrom = "save" });
-        }
-
-        public RedirectToRouteResult Activate(int id, string backUrl = null)
-        {
-            IDictionary<string, string> errors;
-            string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-            if (SessionFacade.CurrentUser != null)
-                if (SessionFacade.CurrentUser.ActivateCasePermission == 1)
-                    this._caseService.Activate(id, SessionFacade.CurrentUser.Id, adUser, CreatedByApplications.Helpdesk5, out errors);
-
-            return this.RedirectToAction("edit", "cases", new { id, redirectFrom = "save", backUrl });
         }
 
         #endregion
@@ -2869,7 +2583,7 @@ namespace DH.Helpdesk.Web.Controllers
                 throw new ArgumentException("columns count can not be 0");
             }
 
-            this.gridSettingsService.SaveCaseoviewSettings(
+            this._gridSettingsService.SaveCaseoviewSettings(
                 inputSettings.MapToGridSettingsModel(),
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentUser.Id,
@@ -3125,11 +2839,11 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var relatedCases = this._caseService.GetCaseRelatedCases(
                                                 caseId,
-                                                this.workContext.Customer.CustomerId,
+                                                this._workContext.Customer.CustomerId,
                                                 userId,
                                                 SessionFacade.CurrentUser);
 
-            var model = this.caseModelFactory.GetRelatedCasesModel(relatedCases, this.workContext.Customer.CustomerId, userId);
+            var model = this._caseModelFactory.GetRelatedCasesModel(relatedCases, this._workContext.Customer.CustomerId, userId);
             return this.View(model);
         }
 
@@ -3145,7 +2859,7 @@ namespace DH.Helpdesk.Web.Controllers
                 sortByAsc = SessionFacade.CurrentCaseSearch.Search.Ascending;
             }
 
-            var model = this.caseModelFactory.GetRelatedCasesFullModel(
+            var model = this._caseModelFactory.GetRelatedCasesFullModel(
                                                 null,
                                                 userId,
                                                 caseId,
@@ -3167,7 +2881,7 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var count = this._caseService.GetCaseRelatedCasesCount(
                                                 caseId,
-                                                this.workContext.Customer.CustomerId,
+                                                this._workContext.Customer.CustomerId,
                                                 userId,
                                                 SessionFacade.CurrentUser);
             return this.Json(count, JsonRequestBehavior.AllowGet);
@@ -3181,7 +2895,9 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public JsonResult RelatedInventoryCount(string userId)
         {
-            var count = _caseService.GetCaseRelatedInventoryCount(workContext.Customer.CustomerId, userId, SessionFacade.CurrentUser);
+            var count = _workContext.Customer.Settings.ModuleInventory ?
+                _caseService.GetCaseRelatedInventoryCount(_workContext.Customer.CustomerId, userId, SessionFacade.CurrentUser) :
+                0;
             return Json(count, JsonRequestBehavior.AllowGet);
         }
 
@@ -3193,7 +2909,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ViewResult CaseByIds(string caseIds, string sortBy, string sortByAsc)
         {
             var cases = this.GetUnfilteredCases(sortBy, sortByAsc, null, null, caseIds.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray());
-            var model = new CaseByIdsViewModel(cases, sortBy, sortByAsc.convertStringToBool(), caseIds);
+            var model = new CaseByIdsViewModel(cases, sortBy, sortByAsc.ToBool(), caseIds);
             return this.View(model);
         }
 
@@ -3201,7 +2917,7 @@ namespace DH.Helpdesk.Web.Controllers
         public PartialViewResult CaseByIdsContent(string caseIds, string sortBy, string sortByAsc)
         {
             var cases = this.GetUnfilteredCases(sortBy, sortByAsc, null, null, caseIds.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray());
-            var model = new CaseByIdsViewModel(cases, sortBy, sortByAsc.convertStringToBool(), caseIds);
+            var model = new CaseByIdsViewModel(cases, sortBy, sortByAsc.ToBool(), caseIds);
             return this.PartialView(model);
         }
 
@@ -3376,6 +3092,70 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         #endregion
+
+        public JsonResult MoveCaseToExternalCustomer(int caseId, int customerId)
+        {
+            var userId = this._workContext.User.UserId;
+            try
+            {
+                _caseProcessor.MoveCaseToExternalCustomer(caseId, userId, customerId);
+            }
+            catch (HelpdeskException e)
+            {
+                var err = Translation.GetCoreTextTranslation(e.Message);
+                return Json(new { Success = false, Error = err });
+            }
+            catch (Exception e)
+            {
+                return Json(new { Success = false, Error = $"Unknown error. {e.Message}".ToHtmlString() });
+            }
+ 
+            return Json(new { Success = true, Location = "/Cases/" });
+        }
+
+        [HttpGet]
+        public ActionResult CaseMoveResult(int id)
+        {
+            var @case = _caseService.GetCaseById(id);
+            if (@case == null)
+            {
+                return HttpNotFound($"Case (Id={id}) was not found.");
+            }
+
+            var customer = @case.Customer;
+            var model = new CaseOperationResult
+            {
+                CaseId = id,
+                CaseNumber = @case.CaseNumber.ToString(),
+                Success = true,
+                Message = $"Case has been moved to customer <b>{customer.Name}</b>"
+            };
+
+            return View("CaseOperationResult", model);
+        }
+
+        [ChildActionOnly]
+        public PartialViewResult MoveCaseModal(int caseId, int customerId)
+        {
+            var userId = this._workContext.User.UserId;
+
+            var customers =
+                _customerService.GetCustomersForCaseMove(userId)
+                    .Where(x => x.Id != customerId)
+                    .ToList();
+
+            var hasExtendedCase =
+                _caseService.HasExtendedCase(caseId, customerId);
+            
+            var model = new CaseMoveModel()
+            {
+                CaseCustomerId = customerId,
+                Customers = customers,
+                HasExtendedCase = hasExtendedCase
+            };
+
+            return PartialView("_MoveCase", model);
+        }
 
         #endregion
 
@@ -3775,7 +3555,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 int lng = case_.RegLanguage_Id;
                 
-                var caseNotifier = this.caseNotifierModelFactory.Create(
+                var caseNotifier = this._caseNotifierModelFactory.Create(
                                                             case_.ReportedBy,
                                                             fName,
                                                             lName,
@@ -3790,11 +3570,11 @@ namespace DH.Helpdesk.Web.Controllers
                                                             lng);
                                                             //m.InitiatorCategory); //todo: check if category is required
 
-                this.notifierService.UpdateCaseNotifier(caseNotifier);
+                this._notifierService.UpdateCaseNotifier(caseNotifier);
             }
 
             // save log
-            var temporaryLogFiles = this.userTemporaryFilesStorage.FindFiles(caseLog.LogGuid.ToString(), ModuleName.Log);
+            var temporaryLogFiles = this._userTemporaryFilesStorage.FindFiles(caseLog.LogGuid.ToString(), ModuleName.Log);
             var temporaryExLogFiles = _logFileService.GetExistingFileNamesByCaseId(case_.Id);
             var logFileCount = temporaryLogFiles.Count + temporaryExLogFiles.Count;
             caseLog.CaseId = case_.Id;
@@ -3898,16 +3678,17 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var basePath = _masterDataService.GetFilePath(case_.Customer_Id);
+
             // save case files
             if (!edit)
             {
-                var temporaryFiles = this.userTemporaryFilesStorage.FindFiles(case_.CaseGUID.ToString(), ModuleName.Cases);
-                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, case_.Id, this.workContext.User.UserId)).ToList();
-                this._caseFileService.AddFiles(newCaseFiles);
+                var temporaryFiles = this._userTemporaryFilesStorage.FindFiles(case_.CaseGUID.ToString(), ModuleName.Cases);
+                var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, case_.Id, this._workContext.User.UserId)).ToList();
+                _caseFileService.AddFiles(newCaseFiles);
             }
 
             // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, this.workContext.User.UserId)).ToList();
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, this._workContext.User.UserId)).ToList();
             this._logFileService.AddFiles(newLogFiles, temporaryExLogFiles, caseLog.Id);
             var allLogFiles = temporaryExLogFiles.Select(x => new CaseFileDto(basePath, x.Name, x.IsExistCaseFile ? Convert.ToInt32(case_.CaseNumber) : x.LogId.Value, x.IsExistCaseFile)).ToList();
             allLogFiles.AddRange(newLogFiles);
@@ -3932,7 +3713,7 @@ namespace DH.Helpdesk.Web.Controllers
                         InvoiceNumber = x.Name,
                         InvoicePrice = x.Amount,
                         CreatedDate = DateTime.UtcNow,
-                        CreatedByUserId = workContext.User.UserId,
+                        CreatedByUserId = _workContext.User.UserId,
                         Charge = true
                     }).ToList());
             }
@@ -3945,14 +3726,14 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     followerUsers = m.FollowerUsers.Split(BRConstItem.Email_Char_Separator).Where(s => !string.IsNullOrWhiteSpace(s)).Select(x => x.Trim()).ToList();
                 }
-                _caseExtraFollowersService.SaveExtraFollowers(case_.Id, followerUsers, workContext.User.UserId);
+                _caseExtraFollowersService.SaveExtraFollowers(case_.Id, followerUsers, _workContext.User.UserId);
             }
             else
             {
                 if (!string.IsNullOrEmpty(m.FollowerUsers))
                 {
                     followerUsers = m.FollowerUsers.Split(BRConstItem.Email_Char_Separator).Where(s => !string.IsNullOrWhiteSpace(s)).Select(x => x.Trim()).ToList();
-                    _caseExtraFollowersService.SaveExtraFollowers(case_.Id, followerUsers, workContext.User.UserId);
+                    _caseExtraFollowersService.SaveExtraFollowers(case_.Id, followerUsers, _workContext.User.UserId);
                 }
             }
 
@@ -3973,8 +3754,8 @@ namespace DH.Helpdesk.Web.Controllers
                 this._caseLockService.UnlockCaseByGUID(new Guid(m.caseLock.LockGUID));
 
             // delete temp folders                
-            this.userTemporaryFilesStorage.ResetCacheForObject(case_.CaseGUID.ToString());
-            this.userTemporaryFilesStorage.ResetCacheForObject(caseLog.LogGuid.ToString());
+            this._userTemporaryFilesStorage.ResetCacheForObject(case_.CaseGUID.ToString());
+            this._userTemporaryFilesStorage.ResetCacheForObject(caseLog.LogGuid.ToString());
 
             return case_.Id;
         }
@@ -4269,7 +4050,7 @@ namespace DH.Helpdesk.Web.Controllers
                     else
                     {
                         fileContent = this._logFileService.GetFileContentByIdAndFileName(caseLog.OldLog_Id.Value, basePath, file.Name);
-                        var logNoteFile = new CaseFileDto(fileContent, basePath, file.Name, DateTime.UtcNow, caseLog.Id, this.workContext.User.UserId);
+                        var logNoteFile = new CaseFileDto(fileContent, basePath, file.Name, DateTime.UtcNow, caseLog.Id, this._workContext.User.UserId);
                         newCaseFiles.Add(logNoteFile);
                     }
                 }
@@ -4302,24 +4083,27 @@ namespace DH.Helpdesk.Web.Controllers
         /// The result.
         /// </returns>
         /// 
-        private Enums.AccessMode EditMode(CaseInputViewModel m, string topic, IList<DHDomain.Department> departmensForUser,
-                                          List<CustomerWorkingGroupForUser> accessToWorkinggroups, bool temporaryHasAccessToWG = false)
+        private AccessMode EditMode(CaseInputViewModel m, 
+                                          string topic, 
+                                          IList<Department> departmensForUser,
+                                          List<CustomerWorkingGroupForUser> accessToWorkinggroups, 
+                                          bool temporaryHasAccessToWG = false)
         {
             var gs = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
             if (m == null)
             {
-                return Enums.AccessMode.NoAccess;
+                return AccessMode.NoAccess;
             }
 
             if (SessionFacade.CurrentUser == null)
             {
-                return Enums.AccessMode.NoAccess;
+                return AccessMode.NoAccess;
             }
 
             if (m.case_ == null)
             {
-                return Enums.AccessMode.NoAccess;
+                return AccessMode.NoAccess;
             }
 
             if (departmensForUser != null)
@@ -4331,7 +4115,7 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         if (!accessToDepartments.Contains(m.case_.Department_Id.Value))
                         {
-                            return Enums.AccessMode.NoAccess;
+                            return AccessMode.NoAccess;
                         }
                     }
                 }
@@ -4352,12 +4136,12 @@ namespace DH.Helpdesk.Web.Controllers
                         var wg = accessToWorkinggroups.FirstOrDefault(w => w.WorkingGroup_Id == m.case_.WorkingGroup_Id.Value);
                         if (wg == null && (gs != null && gs.LockCaseToWorkingGroup == 1))
                         {
-                            return temporaryHasAccessToWG? Enums.AccessMode.ReadOnly : Enums.AccessMode.NoAccess;
+                            return temporaryHasAccessToWG? AccessMode.ReadOnly : AccessMode.NoAccess;
                         }
 
                         if (wg != null && wg.RoleToUWG == 1)
                         {                            
-                            return Enums.AccessMode.ReadOnly;
+                            return AccessMode.ReadOnly;
                         }
                     }
                 }
@@ -4365,22 +4149,22 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.case_.FinishingDate.HasValue)
             {
-                return Enums.AccessMode.ReadOnly;
+                return AccessMode.ReadOnly;
             }
 
             if (m.CaseLock != null && m.CaseLock.IsLocked)
             {
-                return Enums.AccessMode.ReadOnly;
+                return AccessMode.ReadOnly;
             }
 
             if (topic == ModuleName.Log
                 && SessionFacade.CurrentUser.UserGroupId == (int)BusinessData.Enums.Admin.Users.UserGroup.Administrator
                 && SessionFacade.CurrentUser.Id != m.CaseLog.UserId)
             {
-                return Enums.AccessMode.ReadOnly;
+                return AccessMode.ReadOnly;
             }
 
-            return Enums.AccessMode.FullAccess;
+            return AccessMode.FullAccess;
         }
 
         private string GetIdsFromSearchResult(IList<CaseSearchResult> cases)
@@ -4689,16 +4473,16 @@ namespace DH.Helpdesk.Web.Controllers
                 fd.ClosingReasons = this._finishingCauseService.GetFinishingCausesWithChilds(cusId);
             }
 
-            fd.caseSearchFilter = sm.caseSearchFilter;
-            fd.CaseClosingDateEndFilter = sm.caseSearchFilter.CaseClosingDateEndFilter;
-            fd.CaseClosingDateStartFilter = sm.caseSearchFilter.CaseClosingDateStartFilter;
-            fd.CaseRegistrationDateEndFilter = sm.caseSearchFilter.CaseRegistrationDateEndFilter;
-            fd.CaseRegistrationDateStartFilter = sm.caseSearchFilter.CaseRegistrationDateStartFilter;
-            fd.CaseWatchDateEndFilter = sm.caseSearchFilter.CaseWatchDateEndFilter;
-            fd.CaseWatchDateStartFilter = sm.caseSearchFilter.CaseWatchDateStartFilter;
-            fd.CaseInitiatorFilter = sm.caseSearchFilter.Initiator;
-            fd.InitiatorSearchScope = sm.caseSearchFilter.InitiatorSearchScope;
-            fd.SearchInMyCasesOnly = sm.caseSearchFilter.SearchInMyCasesOnly;
+            fd.caseSearchFilter = sm.CaseSearchFilter;
+            fd.CaseClosingDateEndFilter = sm.CaseSearchFilter.CaseClosingDateEndFilter;
+            fd.CaseClosingDateStartFilter = sm.CaseSearchFilter.CaseClosingDateStartFilter;
+            fd.CaseRegistrationDateEndFilter = sm.CaseSearchFilter.CaseRegistrationDateEndFilter;
+            fd.CaseRegistrationDateStartFilter = sm.CaseSearchFilter.CaseRegistrationDateStartFilter;
+            fd.CaseWatchDateEndFilter = sm.CaseSearchFilter.CaseWatchDateEndFilter;
+            fd.CaseWatchDateStartFilter = sm.CaseSearchFilter.CaseWatchDateStartFilter;
+            fd.CaseInitiatorFilter = sm.CaseSearchFilter.Initiator;
+            fd.InitiatorSearchScope = sm.CaseSearchFilter.InitiatorSearchScope;
+            fd.SearchInMyCasesOnly = sm.CaseSearchFilter.SearchInMyCasesOnly;
 
             //användare
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseUserFilter))
@@ -4741,212 +4525,6 @@ namespace DH.Helpdesk.Web.Controllers
 
 
             return fd;
-        }
-
-        private CaseSearchFilterData CreateAdvancedSearchFilterData(int cusId, int userId, CaseSearchModel sm, List<ItemOverview> customers)
-        {
-            var fd = new CaseSearchFilterData();
-
-            fd.caseSearchFilter = sm.caseSearchFilter;
-            fd.CaseInitiatorFilter = sm.caseSearchFilter.Initiator;
-            fd.InitiatorSearchScope = sm.caseSearchFilter.InitiatorSearchScope;
-            fd.customerSetting = GetCustomerSettings(cusId);
-            fd.filterCustomers = customers;
-            fd.filterCustomerId = cusId;
-            // Case #53981
-            var userSearch = new UserSearch() { CustomerId = cusId, StatusId = 3 };
-            fd.AvailablePerformersList = 
-                this._userService.SearchSortAndGenerateUsers(userSearch).MapToCustomSelectList(fd.caseSearchFilter.UserPerformer, fd.customerSetting);
-
-            if (!string.IsNullOrEmpty(fd.caseSearchFilter.UserPerformer))
-            {
-                fd.lstfilterPerformer = fd.caseSearchFilter.UserPerformer.Split(',').Select(int.Parse).ToArray();
-            }
-
-            fd.filterCaseProgress = ObjectExtensions.GetFilterForAdvancedSearch();
-
-            //Working group            
-            var gs = _globalSettingService.GetGlobalSettings().FirstOrDefault();
-            const bool IsTakeOnlyActive = false;
-            if (gs.LockCaseToWorkingGroup == 0)
-            {
-                fd.filterWorkingGroup = this._workingGroupService.GetAllWorkingGroupsForCustomer(cusId, IsTakeOnlyActive);
-            }
-            else
-            {
-                if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
-                {
-                    fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, userId, IsTakeOnlyActive, true);
-                }
-                else
-                {
-                    fd.filterWorkingGroup = this._workingGroupService.GetWorkingGroups(cusId, IsTakeOnlyActive);
-                }
-            }
-
-            fd.filterWorkingGroup.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
-
-            //Sub status            
-            fd.filterStateSecondary = this._stateSecondaryService.GetStateSecondaries(cusId);
-            fd.filterMaxRows = GetMaxRowsFilter();
-
-            return fd;
-        }
-
-        private AdvancedSearchSpecificFilterData CreateAdvancedSearchSpecificFilterData(int userId, int customerId = 0)
-        {
-            var csm = new CaseSearchModel();
-
-            // While customer is not changed (cusId == 0), should use session values for default filter
-            if (customerId == 0)
-            {
-                csm = SessionFacade.CurrentAdvancedSearch;
-                if (csm != null && csm.caseSearchFilter != null)
-                    customerId = csm.caseSearchFilter.CustomerId;
-            }
-
-            var customerSetting = GetCustomerSettings(customerId);
-
-            var specificFilter = new AdvancedSearchSpecificFilterData();
-
-            specificFilter.CustomerId = customerId;
-            specificFilter.CustomerSetting = customerSetting;
-
-            specificFilter.FilteredCaseTypeText = ParentPathDefaultValue;
-            specificFilter.FilteredProductAreaText = ParentPathDefaultValue;
-            specificFilter.FilteredClosingReasonText = ParentPathDefaultValue;
-
-
-            specificFilter.NewProductAreaList = GetProductAreasModel(customerId, null).OrderBy(p => p.Text).ToList();
-
-            var customerfieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
-
-            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.Department_Id.ToString() &&
-                                                  fs.ShowOnStartPage != 0).Any())
-            {
-                const bool IsTakeOnlyActive = false;
-                specificFilter.DepartmentList = this._departmentService.GetDepartmentsByUserPermissions(
-                    userId,
-                    customerId,
-                    IsTakeOnlyActive);
-                if (!specificFilter.DepartmentList.Any())
-                {
-                    specificFilter.DepartmentList =
-                        this._departmentService.GetDepartments(customerId, ActivationStatus.All)
-                        .ToList();
-                }
-
-                if (customerSetting != null && customerSetting.ShowOUsOnDepartmentFilter != 0)
-                    specificFilter.DepartmentList = AddOrganizationUnitsToDepartments(specificFilter.DepartmentList);
-            }
-
-            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString() &&
-                                                  fs.ShowOnStartPage != 0).Any())
-            {
-                specificFilter.StateSecondaryList = this._stateSecondaryService.GetStateSecondaries(customerId);
-            }
-
-            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.Priority_Id.ToString() &&
-                                                  fs.ShowOnStartPage != 0).Any())
-            {
-                specificFilter.PriorityList = this._priorityService.GetPriorities(customerId);
-            }
-
-            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.ClosingReason.ToString() &&
-                                                  fs.ShowOnStartPage != 0).Any())
-            {
-                specificFilter.ClosingReasonList = this._finishingCauseService.GetFinishingCausesWithChilds(customerId);
-            }
-
-            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.CaseType_Id.ToString() &&
-                                                  fs.ShowOnStartPage != 0).Any())
-            {
-
-                specificFilter.CaseTypeList = this._caseTypeService.GetCaseTypesOverviewWithChildren(customerId);
-            }
-
-            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() &&
-                                                  fs.ShowOnStartPage != 0).Any())
-            {
-                const bool isTakeOnlyActive = false;
-                specificFilter.ProductAreaList = this._productAreaService.GetTopProductAreasForUser(
-                    customerId,
-                    SessionFacade.CurrentUser,
-                    isTakeOnlyActive);
-            }
-
-            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() &&
-                                                  fs.ShowOnStartPage != 0).Any())
-            {
-                var gs = _globalSettingService.GetGlobalSettings().FirstOrDefault();
-                const bool IsTakeOnlyActive = false;
-                if (gs.LockCaseToWorkingGroup == 0)
-                {
-                    specificFilter.WorkingGroupList = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, IsTakeOnlyActive);
-                }
-                else
-                {
-                    if (SessionFacade.CurrentUser.UserGroupId == 1 || SessionFacade.CurrentUser.UserGroupId == 2)
-                    {
-                        specificFilter.WorkingGroupList = this._workingGroupService.GetWorkingGroups(customerId, userId, IsTakeOnlyActive, true);
-                    }
-                    else
-                    {
-                        specificFilter.WorkingGroupList = this._workingGroupService.GetWorkingGroups(customerId, IsTakeOnlyActive);
-                    }
-
-                }
-
-                specificFilter.WorkingGroupList.Insert(0, ObjectExtensions.notAssignedWorkingGroup());
-            }
-
-            if (csm != null && csm.caseSearchFilter != null)
-            {
-                specificFilter.FilteredDepartment = csm.caseSearchFilter.Department;
-                specificFilter.FilteredPriority = csm.caseSearchFilter.Priority;
-                specificFilter.FilteredStateSecondary = csm.caseSearchFilter.StateSecondary;
-                specificFilter.FilteredCaseType = csm.caseSearchFilter.CaseType;
-                specificFilter.FilteredWorkingGroup = csm.caseSearchFilter.WorkingGroup;
-                if (specificFilter.FilteredCaseType > 0)
-                {
-                    var c = this._caseTypeService.GetCaseType(specificFilter.FilteredCaseType);
-                    if (c != null)
-                        specificFilter.FilteredCaseTypeText = c.getCaseTypeParentPath();
-                }
-
-                specificFilter.FilteredProductArea = csm.caseSearchFilter.ProductArea;
-                if (!string.IsNullOrWhiteSpace(specificFilter.FilteredProductArea))
-                {
-                    if (specificFilter.FilteredProductArea != "0")
-                    {
-                        var p = this._productAreaService.GetProductArea(specificFilter.FilteredProductArea.convertStringToInt());
-                        if (p != null)
-                        {
-                            specificFilter.FilteredProductAreaText = string.Join(
-                                " - ",
-                                this._productAreaService.GetParentPath(p.Id, customerId));
-                        }
-                    }
-                }
-
-                specificFilter.FilteredClosingReason = csm.caseSearchFilter.CaseClosingReasonFilter;
-                if (!string.IsNullOrWhiteSpace(specificFilter.FilteredClosingReason))
-                {
-                    if (specificFilter.FilteredClosingReason != "0")
-                    {
-                        var fc =
-                            this._finishingCauseService.GetFinishingCause(
-                                specificFilter.FilteredClosingReason.convertStringToInt());
-                        if (fc != null)
-                        {
-                            specificFilter.FilteredClosingReasonText = fc.GetFinishingCauseParentPath();
-                        }
-                    }
-                }
-
-            }
-
-            return specificFilter;
         }
 
         #endregion
@@ -5011,7 +4589,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     var p =
                         this._productAreaService.GetProductArea(
-                            f.ProductArea.convertStringToInt());
+                            f.ProductArea.ToInt());
                     if (p != null)
                     {
                         f.ParantPath_ProductArea = string.Join(
@@ -5027,7 +4605,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     var c =
                         this._categoryService.GetCategory(
-                            f.Category.convertStringToInt(), SessionFacade.CurrentCustomer.Id);
+                            f.Category.ToInt(), SessionFacade.CurrentCustomer.Id);
                     if (c != null)
                     {
                         f.ParantPath_Category = string.Join(
@@ -5043,7 +4621,7 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     var fc =
                         this._finishingCauseService.GetFinishingCause(
-                            f.CaseClosingReasonFilter.convertStringToInt());
+                            f.CaseClosingReasonFilter.ToInt());
                     if (fc != null)
                     {
                         f.ParentPathClosingReason = fc.GetFinishingCauseParentPath();
@@ -5064,70 +4642,6 @@ namespace DH.Helpdesk.Web.Controllers
             return defaultFileName;
         }
         #endregion
-        
-        public JsonResult MoveCaseToExternalCustomer(int caseId, int customerId)
-        {
-            var userId = this.workContext.User.UserId;
-            try
-            {
-                _caseProcessor.MoveCaseToExternalCustomer(caseId, userId, customerId);
-            }
-            catch (HelpdeskException e)
-            {
-                var err = Translation.GetCoreTextTranslation(e.Message);
-                return Json(new { Success = false, Error = err });
-            }
-            catch (Exception e)
-            {
-                return Json(new { Success = false, Error = $"Unknown error. {e.Message}".ToHtmlString() });
-            }
- 
-            return Json(new { Success = true, Location = "/Cases/" });
-        }
-
-        [HttpGet]
-        public ActionResult CaseMoveResult(int id)
-        {
-            var @case = _caseService.GetCaseById(id);
-            if (@case == null)
-            {
-                return HttpNotFound($"Case (Id={id}) was not found.");
-            }
-
-            var customer = @case.Customer;
-            var model = new CaseOperationResult
-            {
-                CaseId = id,
-                CaseNumber = @case.CaseNumber.ToString(),
-                Success = true,
-                Message = $"Case has been moved to customer <b>{customer.Name}</b>"
-            };
-
-            return View("CaseOperationResult", model);
-        }
-
-        [ChildActionOnly]
-        public PartialViewResult MoveCaseModal(int caseId, int customerId)
-        {
-            var userId = this.workContext.User.UserId;
-
-            var customers =
-                _customerService.GetCustomersForCaseMove(userId)
-                    .Where(x => x.Id != customerId)
-                    .ToList();
-
-            var hasExtendedCase =
-                _caseService.HasExtendedCase(caseId, customerId);
-            
-            var model = new CaseMoveModel()
-            {
-                CaseCustomerId = customerId,
-                Customers = customers,
-                HasExtendedCase = hasExtendedCase
-            };
-
-            return PartialView("_MoveCase", model);
-        }
 
         #region --Get Models--
 
@@ -5164,22 +4678,22 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseUnlockAccess = 
                 _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);
 
-            m.MailTemplates = this._mailTemplateService.GetCustomMailTemplatesList(customerId).ToList();
+            m.MailTemplates = _mailTemplateService.GetCustomMailTemplatesList(customerId).ToList();
 
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
 
-            var userHasInvoicePermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InvoicePermission);
+            var userHasInvoicePermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InvoicePermission);
 
             // Establish current solution and set split option if available
             CaseSolution caseTemplate = null;
             if (templateId.HasValue)
             {
-                caseTemplate = this._caseSolutionService.GetCaseSolution(templateId.Value);
+                caseTemplate = _caseSolutionService.GetCaseSolution(templateId.Value);
                 m.CurrentCaseSolution = caseTemplate;
                 m.CaseTemplateSplitToCaseSolutionID = m.CurrentCaseSolution.SplitToCaseSolution_Id;
 
                 var caseTemplateSettings =
-                    this.caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);
+                    _caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);
 
                 if (caseTemplateSettings.Any())
                 {
@@ -5206,7 +4720,7 @@ namespace DH.Helpdesk.Web.Controllers
 
 
                 var editMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
-                if (m.case_.Unread != 0 && updateState && editMode == Enums.AccessMode.FullAccess)
+                if (m.case_.Unread != 0 && updateState && editMode == AccessMode.FullAccess)
                     this._caseService.MarkAsRead(caseId);
                 
                 //todo: review
@@ -5251,8 +4765,8 @@ namespace DH.Helpdesk.Web.Controllers
             m.MinWorkingTime = customerSetting.MinRegWorkingTime;
             m.CaseFilesModel = new CaseFilesModel();
             m.LogFilesModel = new FilesModel();
-            m.CaseFileNames = GetCaseFileNames(caseId.ToString());
-            m.LogFileNames = GetLogFileNames(caseId.ToString());
+            m.CaseFileNames = GetCaseFileNames(caseId);
+            m.LogFileNames = m.CaseFileNames;
 
             m.ActiveTab = activeTab;
 
@@ -5367,19 +4881,16 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 #region Existing case model initialization actions
                 m.Logs = this._logService.GetCaseLogOverviews(caseId);
+                _finishingCauseService.GetFinishingCausesWithChilds(customerId);
 
-                bool UseVD = false;
-                if (!string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
-                {
-                    UseVD = true;
-                }
+                var useVd = !string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId));
                 
                 var canDelete = (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1);
                 m.SavedFiles = canDelete ? string.Empty : m.CaseFileNames;
 
                 var caseFiles = _caseFileService.GetCaseFiles(caseId, canDelete).OrderBy(x => x.CreatedDate);
 
-                m.CaseFilesModel = new CaseFilesModel(caseId.ToString(), caseFiles.ToArray(), m.SavedFiles, UseVD);
+                m.CaseFilesModel = new CaseFilesModel(caseId.ToString(), caseFiles.ToArray(), m.SavedFiles, useVd);
 
                 m.CaseAttachedExFiles = 
                     caseFiles.Select(x => new CaseAttachedExFileModel
@@ -5554,6 +5065,24 @@ namespace DH.Helpdesk.Web.Controllers
 
                     if (caseType.User_Id.HasValue)
                         m.case_.Performer_User_Id = caseType.User_Id.Value;
+                }
+            }
+
+            //product area should override working group set by case type before
+            if (isCreateNewCase && m.case_.ProductArea_Id.HasValue)
+            {
+                var productArea = _productAreaService.GetProductArea(m.case_.ProductArea_Id.Value);
+                if (productArea != null)
+                {
+                    if (productArea.WorkingGroup_Id.HasValue)
+                    {
+                        m.case_.WorkingGroup_Id = productArea.WorkingGroup_Id.Value;
+                    }
+
+                    if (productArea.Priority_Id.HasValue)
+                    {
+                        m.case_.Priority_Id = productArea.Priority_Id.Value;
+                    }
                 }
             }
 
@@ -5732,7 +5261,6 @@ namespace DH.Helpdesk.Web.Controllers
                         m.CaseLog.TextExternal = caseTemplate.Text_External;
                         m.CaseLog.SendMailAboutCaseToNotifier = true;
                     }
-                            
 
                     if (!string.IsNullOrEmpty(caseTemplate.Text_Internal))
                         m.CaseLog.TextInternal = caseTemplate.Text_Internal;
@@ -5881,15 +5409,13 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         if (m.case_.Department_Id.HasValue && m.case_.Priority_Id.HasValue)
                         {
-                            var dept = this._departmentService.GetDepartment(m.case_.Department_Id.Value);
+                            var dept = _departmentService.GetDepartment(m.case_.Department_Id.Value);
                             var priority =
                                 m.priorities.Where(it => it.Id == m.case_.Priority_Id && it.IsActive == 1).FirstOrDefault();
                             if (dept != null && dept.WatchDateCalendar_Id.HasValue && priority != null && priority.SolutionTime == 0)
                             {
                                 m.case_.WatchDate =
-                                    this.watchDateCalendarServcie.GetClosestDateTo(
-                                        dept.WatchDateCalendar_Id.Value,
-                                        DateTime.UtcNow);
+                                    _watchDateCalendarServcie.GetClosestDateTo(dept.WatchDateCalendar_Id.Value, DateTime.UtcNow);
                             }
                         }
                     }
@@ -5923,20 +5449,38 @@ namespace DH.Helpdesk.Web.Controllers
 
                     // This is used for hide fields(which are not in casetemplate) in new case input
                     m.templateistrue = templateistrue;
-                    var finishingCauses = this._finishingCauseService.GetFinishingCauseInfos(customerId);
+
+                    var finishingCauses = _finishingCauseService.GetFinishingCauseInfos(customerId);
                     m.FinishingCause = CommonHelper.GetFinishingCauseFullPath(finishingCauses.ToArray(), caseTemplate.FinishingCause_Id);
 
-                    //set working group and performer from CaseType if they are empty
+                    //save case original working group 
+                    int? caseWorkingGroupId = m.case_.WorkingGroup_Id;
+
+                    //set working group and performer from CaseType if they have not been set before
                     if (caseTemplate.CaseType_Id.HasValue)
                     {
                         var caseType = _caseTypeService.GetCaseType(caseTemplate.CaseType_Id.Value);
                         if (caseType != null)
                         {
-                            if (m.case_.WorkingGroup_Id == null && caseType.WorkingGroup_Id.HasValue)
+                            if (caseWorkingGroupId == null && caseType.WorkingGroup_Id.HasValue)
                                 m.case_.WorkingGroup_Id = caseType.WorkingGroup_Id;
 
                             if (m.case_.Performer_User_Id == null && caseType.User_Id.HasValue)
                                 m.case_.Performer_User_Id = caseType.User_Id.Value;
+                        }
+                    }
+
+                    //set working group and priority from CaseType if they have not been set before
+                    if (caseTemplate.ProductArea_Id.HasValue)
+                    {
+                        var productArea = _productAreaService.GetProductArea(caseTemplate.ProductArea_Id.Value);
+                        if (productArea != null)
+                        {
+                            if (caseWorkingGroupId == null && productArea.WorkingGroup_Id.HasValue)
+                                m.case_.WorkingGroup_Id = productArea.WorkingGroup_Id;
+
+                            if (m.case_.Priority_Id == null && productArea.Priority_Id.HasValue)
+                                m.case_.Priority_Id = productArea.Priority_Id.Value;
                         }
                     }
                 }
@@ -6008,7 +5552,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var temporaryUserHasAccessToWG = redirectFrom.ToLower() == "save";
             m.EditMode = EditMode(m, ModuleName.Cases, deps, acccessToGroups, temporaryUserHasAccessToWG);
-            if (m.EditMode == Enums.AccessMode.FullAccess)
+            if (m.EditMode == AccessMode.FullAccess)
                 _logFileService.ClearExistingAttachedFiles(caseId);
 
             if (m.caseFieldSettings.ShowOnPage(TranslationCaseFields.OU_Id))
@@ -6139,7 +5683,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             // TODO: Should mix CustomerSettings & Setting                 
-            m.CustomerSettings = this.workContext.Customer.Settings;
+            m.CustomerSettings = this._workContext.Customer.Settings;
             m.Setting = customerSetting;
 
             // "Responsible"
@@ -6796,7 +6340,7 @@ namespace DH.Helpdesk.Web.Controllers
             var searchResult = new CaseSearchResultModel
             {
                 GridSettings =
-                    this.caseOverviewSettingsService.GetSettings(
+                    this._caseOverviewSettingsService.GetSettings(
                         SessionFacade.CurrentCustomer.Id,
                         SessionFacade.CurrentUser.UserGroupId,
                         SessionFacade.CurrentUser.Id),
@@ -6804,14 +6348,14 @@ namespace DH.Helpdesk.Web.Controllers
             };
             var search = this.InitEmptySearchModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id);
             search.Search.SortBy = sortBy ?? string.Empty;
-            search.Search.Ascending = sortByAsc.convertStringToBool();
-            search.caseSearchFilter.CaseProgress = CaseProgressFilter.None;
+            search.Search.Ascending = sortByAsc.ToBool();
+            search.CaseSearchFilter.CaseProgress = CaseProgressFilter.None;
             var showRemainingTime = SessionFacade.CurrentUser.ShowSolutionTime;
             CaseRemainingTimeData remainingTime;
             CaseAggregateData aggregateData;
             var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id).ToArray();
             searchResult.cases = _caseSearchService.Search(
-                search.caseSearchFilter,
+                search.CaseSearchFilter,
                 searchResult.caseSettings,
                 caseFieldSettings,
                 SessionFacade.CurrentUser.Id,
@@ -6820,8 +6364,8 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentUser.UserGroupId,
                 SessionFacade.CurrentUser.RestrictedCasePermission,
                 search.Search,
-                workContext.Customer.WorkingDayStart,
-                workContext.Customer.WorkingDayEnd,
+                _workContext.Customer.WorkingDayStart,
+                _workContext.Customer.WorkingDayEnd,
                 TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId),
                 ApplicationTypes.Helpdesk,
                 showRemainingTime,
@@ -6845,7 +6389,7 @@ namespace DH.Helpdesk.Web.Controllers
                                             string userId)
         {
             var cases = this.GetUnfilteredCases(sortBy, sortByAsc, caseId, userId);
-            var model = this.caseModelFactory.GetRelatedCasesFullModel(cases, userId, caseId, sortBy, sortByAsc.convertStringToBool());
+            var model = this._caseModelFactory.GetRelatedCasesFullModel(cases, userId, caseId, sortBy, sortByAsc.ToBool());
 
             return model;
         }
@@ -6863,7 +6407,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             f.CustomerId = customerId;
             f.UserId = userId;
-            f.CaseType = cu.CaseCaseTypeFilter.ReturnCustomerUserValue().convertStringToInt();
+            f.CaseType = cu.CaseCaseTypeFilter.ReturnCustomerUserValue().ToInt();
             f.Category = cu.CaseCategoryFilter.ReturnCustomerUserValue();
             f.Priority = cu.CasePriorityFilter.ReturnCustomerUserValue();
             f.ProductArea = cu.CaseProductAreaFilter.ReturnCustomerUserValue();
@@ -6890,18 +6434,13 @@ namespace DH.Helpdesk.Web.Controllers
             s.SortBy = "CaseNumber";
             s.Ascending = true;
 
-            return new CaseSearchModel() { caseSearchFilter = f, Search = s };
+            return new CaseSearchModel() { CaseSearchFilter = f, Search = s };
         }
 
         private CaseSearchModel InitEmptySearchModel(int customerId, int userId)
         {
-            DHDomain.ISearch s = new DHDomain.Search();
+            var s = new Search();
             var f = new CaseSearchFilter();
-            var cu = this._customerUserService.GetCustomerUserSettings(customerId, userId);
-            if (cu == null)
-            {
-                throw new Exception("It looks that something has happened with your session. Refresh page to fix it.");
-            }
 
             f.CustomerId = customerId;
             f.UserId = userId;
@@ -6925,35 +6464,12 @@ namespace DH.Helpdesk.Web.Controllers
             f.CaseClosingDateEndFilter = null;
             f.CaseClosingReasonFilter = null;
             f.PageInfo = new PageInfo();
-            this.ResolveParentPathesForFilter(f);
+            ResolveParentPathesForFilter(f);
 
             s.SortBy = "CaseNumber";
             s.Ascending = true;
 
-            return new CaseSearchModel() { caseSearchFilter = f, Search = s };
-        }
-
-        private CaseSearchModel InitAdvancedSearchModel(int customerId, int userId)
-        {
-            DHDomain.ISearch s = new DHDomain.Search();
-            var f = new CaseSearchFilter
-            {
-                CustomerId = customerId,
-                UserId = userId,
-                UserPerformer = string.Empty,
-                CaseProgress = string.Empty,
-                WorkingGroup = string.Empty,
-                CaseRegistrationDateStartFilter = null,
-                CaseRegistrationDateEndFilter = null,
-                CaseClosingDateStartFilter = null,
-                CaseClosingDateEndFilter = null,
-                Customer = customerId.ToString()
-            };
-
-            s.SortBy = "CaseNumber";
-            s.Ascending = false;
-
-            return new CaseSearchModel() { caseSearchFilter = f, Search = s };
+            return new CaseSearchModel() { CaseSearchFilter = f, Search = s };
         }
 
         private List<MyFavoriteFilterJSModel> GetMyFavorites(int customerId, int userId)
@@ -7048,7 +6564,7 @@ namespace DH.Helpdesk.Web.Controllers
             return li;
         }
 
-        private List<CaseFileModel> MakeCaseFileModel(List<CaseFileDate> files, string savedFiles)
+        private IList<CaseFileModel> MakeCaseFileModel(IList<CaseFileDate> files, string savedFiles)
         {
             var res = new List<CaseFileModel>();
             int i = 0;
@@ -7081,8 +6597,8 @@ namespace DH.Helpdesk.Web.Controllers
 
         private CaseLockModel GetCaseLockModel(int caseId, int userId, bool isNeedLock = true, string activeTab = "")
         {
-            var caseLock = this._caseLockService.GetCaseLockByCaseId(caseId);
-            var globalSettings = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
+            var caseLock = _caseLockService.GetCaseLockOverviewByCaseId(caseId);
+            var globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault();
 
             return GetCaseLockModel(caseLock, caseId, userId, globalSettings, isNeedLock, activeTab);
         }
@@ -7428,84 +6944,13 @@ namespace DH.Helpdesk.Web.Controllers
             ret.ClosingReasons = this._finishingCauseService.GetFinishingCausesWithChilds(customerId);
 
             ret.ColumnSettingModel =
-                this.caseOverviewSettingsService.GetSettings(
+                this._caseOverviewSettingsService.GetSettings(
                     customerId,
                     SessionFacade.CurrentUser.UserGroupId, userId,
                     gridId,
                     customerCaseFieldSettings);
 
             return ret;
-        }
-
-        private ReportModel GetCaseReportViewerData(string reportName, int caseId, int caseNumber)
-        {
-            var reportSelectedFilter = new ReportSelectedFilter();
-            reportSelectedFilter.SelectedCustomers.Add(SessionFacade.CurrentCustomer.Id);
-
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
-            var localNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, userTimeZone);
-
-            var ad = userTimeZone.GetAdjustmentRules();
-
-            //TimeZone.CurrentTimeZone.
-
-            var userTimeOffset = Convert.ToInt32((DateTime.UtcNow - localNow).TotalMinutes);
-            userTimeOffset = userTimeOffset == 0 ? 0 : -userTimeOffset;
-
-            reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@CaseId", caseId));
-            reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@LanguageId", SessionFacade.CurrentLanguageId));
-            reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@UserId", SessionFacade.CurrentUser.Id));
-            reportSelectedFilter.GeneralParameter.Add(new GeneralParameter("@UserTimeOffset", userTimeOffset));
-
-            var reportData = _ReportServiceService.GetReportData(reportName, reportSelectedFilter, SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
-
-            ReportModel model = new ReportModel();
-
-            if (reportData == null || (reportData != null && !reportData.DataSets.Any()))
-            {
-                model = null;
-            }
-            else
-            {
-                var reportDataModel = new List<ReportDataModel>();
-                if (reportData.DataSets[0].DataSet.Rows.Count > 0)
-                {
-                    foreach (DataRow r in reportData.DataSets[0].DataSet.Rows)
-                    {
-                        var row = new ReportDataModel(int.Parse(r.ItemArray[0].ToString()), r.ItemArray[1].ToString(), r.ItemArray[2].ToString(),
-                                                      r.ItemArray[3].ToString(), int.Parse(r.ItemArray[4].ToString()), r.ItemArray[5].ToString());
-                        reportDataModel.Add(row);
-                    }
-                }
-
-                ReportViewer reportViewer = new ReportViewer();
-
-                //Use Html view by data 
-                /*var basePath = Request.MapPath(Request.ApplicationPath);
-                var fileLocation = Path.Combine(_reportFolderName, string.Format("{0}.rdl", reportData.ReportName));
-                var reportFile = Path.Combine(basePath, fileLocation);
-                
-                reportViewer.ProcessingMode = ProcessingMode.Local;
-                reportViewer.SizeToReportContent = true;
-                reportViewer.ShowZoomControl = false;                
-                reportViewer.LocalReport.ReportPath = reportFile;
-                reportViewer.LocalReport.DisplayName = caseNumber.ToString();
-
-                var parameters = new List<ReportParameter>();
-                parameters.Add(new ReportParameter("CaseId", caseId.ToString()));
-                parameters.Add(new ReportParameter("LanguageId", SessionFacade.CurrentLanguageId.ToString()));
-                parameters.Add(new ReportParameter("UserId", SessionFacade.CurrentUser.Id.ToString()));
-                reportViewer.LocalReport.SetParameters(parameters);
-                
-                reportViewer.LocalReport.Refresh();
-                foreach (var dataSet in reportData.DataSets)
-                    reportViewer.LocalReport.DataSources.Add(new ReportDataSource(dataSet.DataSetName, dataSet.DataSet));
-
-                model.Report = reportViewer;*/
-                model.ReportData = reportDataModel;
-            }
-
-            return model;
         }
 
         private List<SelectListItem> GetCausingPartsModel(int customerId, int? curCausingPartId)
@@ -7554,7 +6999,6 @@ namespace DH.Helpdesk.Web.Controllers
             ret = parentRet.OrderBy(p => p.Text).Union(childrenRet.OrderBy(c => c.Text)).ToList();
 
             return ret.GroupBy(r => r.Value).Select(g => g.First()).ToList();
-
         }
 
         private List<SelectListItem> GetProductAreasModel(int customerId, int? curProductAreaId)
@@ -7621,7 +7065,7 @@ namespace DH.Helpdesk.Web.Controllers
                                         _supplierService, _workingGroupService, _userService,
                                         _priorityService, _statusService, _stateSecondaryService,
                                         _projectService, _problemService, _causingPartService,
-                                        _changeService, _finishingCauseService, watchDateCalendarServcie, 
+                                        _changeService, _finishingCauseService, _watchDateCalendarServcie, 
                                         _computerService);
 
             var model = _caseRuleFactory.GetCaseRuleModel(customerId, ruleType, currentData, customerSettings, caseFieldSettings, new List<CaseSolutionSettingModel>());
@@ -7833,345 +7277,6 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion
 
-        private Tuple<List<Dictionary<string, object>>, GridSettingsModel> AdvancedSearchForCustomer(FormCollection frm, int customerId, bool isExtendedSearch = false, List<int> extendedCustomers = null)
-        {
-            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
-
-            #region Code from old method. TODO: code review wanted
-            var f = new CaseSearchFilter();
-
-            var m = new CaseSearchResultModel();
-
-            f.IsExtendedSearch = isExtendedSearch;
-            f.CustomerId = customerId;//int.Parse(frm.ReturnFormValue("currentCustomerId"));
-            f.Customer = frm.ReturnFormValue("lstfilterCustomers");
-            f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");
-            f.UserPerformer = frm.ReturnFormValue("lstFilterPerformer");
-            f.Initiator = frm.ReturnFormValue("CaseInitiatorFilter");
-            CaseInitiatorSearchScope initiatorSearchScope;
-            if (Enum.TryParse(frm.ReturnFormValue("CaseSearchFilterData.InitiatorSearchScope"), out initiatorSearchScope))
-            {
-                f.InitiatorSearchScope = initiatorSearchScope;
-            }
-            f.CaseRegistrationDateStartFilter = frm.GetDate("CaseRegistrationDateStartFilter");
-            f.CaseRegistrationDateEndFilter = frm.GetDate("CaseRegistrationDateEndFilter");
-            f.CaseClosingDateStartFilter = frm.GetDate("CaseClosingDateStartFilter");
-            f.CaseClosingDateEndFilter = frm.GetDate("CaseClosingDateEndFilter");
-
-            if (f.CaseRegistrationDateEndFilter != null)
-                f.CaseRegistrationDateEndFilter = f.CaseRegistrationDateEndFilter.Value.AddDays(1);
-
-            if (f.CaseClosingDateEndFilter != null)
-                f.CaseClosingDateEndFilter = f.CaseClosingDateEndFilter.Value.AddDays(1);
-
-            //Apply & save specific filters only when user has selected one customer 
-            if (!string.IsNullOrEmpty(f.Customer) && !f.Customer.Contains(","))
-            {
-                f.WorkingGroup = frm.ReturnFormValue("lstFilterWorkingGroup");
-                f.Department = frm.ReturnFormValue("lstfilterDepartment");
-                f.Priority = frm.ReturnFormValue("lstfilterPriority");
-                f.StateSecondary = frm.ReturnFormValue("lstfilterStateSecondary");
-                f.CaseType = frm.ReturnFormValue("hid_CaseTypeDropDown").convertStringToInt();
-                f.ProductArea = f.ProductArea = frm.ReturnFormValue("hid_ProductAreaDropDown").ReturnCustomerUserValue();
-                f.CaseClosingReasonFilter = frm.ReturnFormValue("hid_ClosingReasonDropDown").ReturnCustomerUserValue();
-
-
-                var departments_OrganizationUnits = frm.ReturnFormValue(CaseFilterFields.DepartmentNameAttribute);
-
-                f.Department = GetDepartmentsFrom(departments_OrganizationUnits);
-                f.OrganizationUnit = GetOrganizationUnitsFrom(departments_OrganizationUnits);
-            }
-            else
-            {
-                f.Department = string.Empty;
-                f.WorkingGroup = string.Empty;
-                f.Priority = string.Empty;
-                f.StateSecondary = string.Empty;
-                f.CaseType = 0;
-                f.ProductArea = string.Empty;
-                f.CaseClosingReasonFilter = string.Empty;
-            }
-
-            f.UserId = SessionFacade.CurrentUser.Id;
-
-            if (!string.IsNullOrEmpty(frm.ReturnFormValue("txtCaseNumberSearch")))
-            {
-                f.FreeTextSearch = string.Format("#{0}", frm.ReturnFormValue("txtCaseNumberSearch"));
-                f.CaseNumber = frm.ReturnFormValue("txtCaseNumberSearch");
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(frm.ReturnFormValue("txtCaptionSearch")))
-                    f.CaptionSearch = frm.ReturnFormValue("txtCaptionSearch");
-                else
-                {
-                    f.FreeTextSearch = frm.ReturnFormValue("txtFreeTextSearch");
-                    f.SearchThruFiles = frm.IsFormValueTrue("searchThruFiles");
-                }
-            }
-
-            var maxRecords = this._defaultMaxRows;
-            int.TryParse(frm.ReturnFormValue("lstfilterMaxRows"), out maxRecords);
-            f.MaxRows = maxRecords.ToString();
-
-
-            if (string.IsNullOrEmpty(f.CaseProgress))
-                f.CaseProgress = CaseProgressFilter.None;
-
-            CaseSearchModel sm;
-            sm = this.InitAdvancedSearchModel(f.CustomerId, f.UserId);
-            sm.caseSearchFilter = f;
-
-            var jsonGridSettings = JsonGridSettingsMapper.GetAdvancedSearchGridSettingsModel(SessionFacade.CurrentCustomer.Id);
-
-            // Convert Json Model to Business Model
-            var colDefs = jsonGridSettings.columnDefs.Select(c => new GridColumnDef
-            {
-                id = GridColumnsDefinition.GetFieldId(c.field),
-                cls = c.cls,
-                name = c.field,
-                isExpandable = c.isExpandable,
-                width = c.width
-            }).ToList();
-
-            var gridSettings =
-                new GridSettingsModel()
-                {
-                    CustomerId = f.CustomerId,
-                    cls = jsonGridSettings.cls,
-                    pageOptions = jsonGridSettings.pageOptions,
-                    sortOptions = jsonGridSettings.sortOptions,
-                    columnDefs = colDefs
-                };
-
-            gridSettings.sortOptions.sortBy = frm.ReturnFormValue("sortBy");
-            var sortDir = 0;
-            gridSettings.sortOptions.sortDir = (!string.IsNullOrEmpty(frm.ReturnFormValue("sortDir"))
-                               && int.TryParse(frm.ReturnFormValue("sortDir"), out sortDir)
-                               && sortDir == (int)SortingDirection.Asc) ? SortingDirection.Asc : SortingDirection.Desc;
-
-            SessionFacade.AdvancedSearchOverviewGridSettings = gridSettings;
-
-            sm.Search.SortBy = gridSettings.sortOptions.sortBy;
-            sm.Search.Ascending = gridSettings.sortOptions.sortDir == SortingDirection.Asc;
-            m.caseSettings = new List<DHDomain.CaseSettings>();
-            foreach (var col in colDefs)
-            {
-                var curSetting = new DHDomain.CaseSettings()
-                {
-                    Id = col.id,
-                    Name = col.name
-                };
-                m.caseSettings.Add(curSetting);
-            }
-
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
-            var caseFieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(f.CustomerId).ToArray();
-            f.MaxTextCharacters = 0;
-
-            var normalSearchResultIds = new List<int>();
-            if (f.IsExtendedSearch)
-            {
-                if (!extendedCustomers.Contains(customerId))
-                {
-                    f.IsExtendedSearch = false;
-                    normalSearchResultIds = _caseSearchService.Search(
-                        f,
-                        m.caseSettings,
-                        caseFieldSettings,
-                        SessionFacade.CurrentUser.Id,
-                        SessionFacade.CurrentUser.UserId,
-                        SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
-                        SessionFacade.CurrentUser.UserGroupId,
-                        SessionFacade.CurrentUser.RestrictedCasePermission,
-                        sm.Search,
-                        0,
-                        0,
-                        userTimeZone,
-                        ApplicationTypes.Helpdesk
-                        ).Items.Select(x => x.Id).ToList();
-                    f.IsExtendedSearch = true;
-                }
-
-                m.cases = _caseSearchService.Search(
-                f,
-                m.caseSettings,
-                caseFieldSettings,
-                SessionFacade.CurrentUser.Id,
-                SessionFacade.CurrentUser.UserId,
-                SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
-                SessionFacade.CurrentUser.UserGroupId,
-                SessionFacade.CurrentUser.RestrictedCasePermission,
-                sm.Search,
-                0,
-                0,
-                userTimeZone,
-                ApplicationTypes.Helpdesk
-                ).Items.Take(maxRecords).ToList();
-            }
-            else
-            {
-                m.cases = _caseSearchService.Search(
-                f,
-                m.caseSettings,
-                caseFieldSettings,
-                SessionFacade.CurrentUser.Id,
-                SessionFacade.CurrentUser.UserId,
-                SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups,
-                SessionFacade.CurrentUser.UserGroupId,
-                SessionFacade.CurrentUser.RestrictedCasePermission,
-                sm.Search,
-                0,
-                0,
-                userTimeZone,
-                ApplicationTypes.Helpdesk
-                ).Items.Take(maxRecords).ToList();
-            }
-
-            m.cases = CommonHelper.TreeTranslate(m.cases, currentCustomerId, _productAreaService);
-            sm.Search.IdsForLastSearch = this.GetIdsFromSearchResult(m.cases);
-
-            if (!string.IsNullOrWhiteSpace(sm.caseSearchFilter.FreeTextSearch))
-            {
-                if (sm.caseSearchFilter.FreeTextSearch[0] == CaseSearchConstants.CaseNumberSearchPrefix)
-                    sm.caseSearchFilter.FreeTextSearch = string.Empty;
-            }
-
-            if (!string.IsNullOrEmpty(f.OrganizationUnit))
-            {
-                var ouIds = f.OrganizationUnit.Split(',');
-                if (ouIds.Any())
-                {
-                    foreach (var id in ouIds)
-                        if (!string.IsNullOrEmpty(id))
-                        {
-                            if (string.IsNullOrEmpty(sm.caseSearchFilter.Department))
-                                sm.caseSearchFilter.Department += string.Format("-{0}", id);
-                            else
-                                sm.caseSearchFilter.Department += string.Format(",-{0}", id);
-                        }
-                }
-            }
-
-            SessionFacade.CurrentAdvancedSearch = sm;
-            #endregion
-            
-            var availableDepIds = new List<int>();
-            bool accessToAllDepartments = false;
-            var availableWgIds = new List<int>();
-            var availableCustomerIds = new List<int> { 0 };
-            if (isExtendedSearch)
-            {
-                var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
-                if (user != null)
-                {
-                    availableCustomerIds.AddRange(user.Cs.Select(x => x.Id));
-                    availableDepIds.AddRange(user.Departments.Where(x => x.Customer_Id == customerId).Select(x => x.Id));
-                    availableWgIds.AddRange(user.UserWorkingGroups.Select(x => x.WorkingGroup_Id));
-
-                    //Department, If 0 selected you should have access to all departments
-                    if(availableDepIds.Count() == 0)
-                    {
-                        availableDepIds.Add(0);
-                        accessToAllDepartments = true;
-                    }
-
-                    //ShowNotAssignedWorkingGroups
-                    if (SessionFacade.CurrentUser.ShowNotAssignedWorkingGroups == 1)
-                    {
-                        availableWgIds.Add(0);
-                    }
-                }
-            }
-
-            var data = new List<Dictionary<string, object>>();
-            var customerSettings = GetCustomerSettings(f.CustomerId);
-            var outputFormatter = new OutputFormatter(customerSettings.IsUserFirstLastNameRepresentation == 1, userTimeZone);
-            foreach (var searchRow in m.cases)
-            {
-                var jsRow = new Dictionary<string, object>
-                                {
-                                    { "case_id", searchRow.Id },
-                                    { "caseIconTitle", searchRow.CaseIcon.CaseIconTitle() },
-                                    {
-                                        "caseIconUrl",
-                                        string.Format(
-                                            "/Content/icons/{0}",
-                                            searchRow.CaseIcon.CaseIconSrc())
-                                    },
-                                    { "isUnread", searchRow.IsUnread },
-                                    { "isUrgent", searchRow.IsUrgent },
-                                    { "isClosed", searchRow.IsClosed},
-                                };
-                if (isExtendedSearch)
-                {
-                    var infoAvailableInExtended = false;
-                    if (normalSearchResultIds.Contains(searchRow.Id))
-                    {
-                        infoAvailableInExtended = true;
-                    }
-                    else
-                    {
-                        if (SessionFacade.CurrentUser.UserGroupId == UserGroups.User || SessionFacade.CurrentUser.UserGroupId == UserGroups.Administrator)
-                        {
-
-
-                            // finns kryssruta pa anvandaren att den bara far se sina egna arenden
-                            //Note, this is also checked in where clause  in ReturnCaseSearchWhere(SearchQueryBuildContext ctx)
-                            //Check for access Department
-                            //Check for access WorkingGroups
-                            if (SessionFacade.CurrentUser.RestrictedCasePermission == 1 && (availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId) || accessToAllDepartments)
-                                && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId))
-                            {
-                                //Use functionality from VerifyCase
-                                infoAvailableInExtended = _userService.VerifyUserCasePermissions(SessionFacade.CurrentUser, searchRow.Id);
-                            }
-
-                            if (infoAvailableInExtended == true && availableDepIds.Contains(searchRow.ExtendedSearchInfo.DepartmentId)
-                               && availableWgIds.Contains(searchRow.ExtendedSearchInfo.WorkingGroupId)
-                               && availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
-                            {
-                                infoAvailableInExtended = true;
-                            }
-
-
-
-                        }
-                        else
-                        {
-                            if (availableCustomerIds.Contains(searchRow.ExtendedSearchInfo.CustomerId))
-                            {
-                                infoAvailableInExtended = true;
-                            }
-                        }
-
-                    }
-                    jsRow.Add("ExtendedAvailable", infoAvailableInExtended);
-                }
-                else
-                {
-                    jsRow.Add("ExtendedAvailable", true);
-                }
-
-                foreach (var col in gridSettings.columnDefs)
-                {
-                    var searchCol = searchRow.Columns.FirstOrDefault(it => it.Key == col.name);
-                    if (searchCol != null)
-                    {
-                        jsRow.Add(col.name, outputFormatter.FormatField(searchCol));
-                    }
-                    else
-                    {
-                        jsRow.Add(col.name, string.Empty);
-                    }
-                }
-
-                data.Add(jsRow);
-            }
-
-            return new Tuple<List<Dictionary<string, object>>, GridSettingsModel>(data, gridSettings);
-        }
-
         #endregion
 
         #region GetCustomerDepartments
@@ -8221,7 +7326,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public JsonResult GenerateCaseLogFiles(int caseId, int count)
         {
-            var customerId = workContext.Customer.CustomerId;
+            var customerId = _workContext.Customer.CustomerId;
             var basePath = _masterDataService.GetFilePath(customerId);
 
             var dummyContent = GenerateDummyFileContent(1);
@@ -8237,7 +7342,7 @@ namespace DH.Helpdesk.Web.Controllers
                 foreach (var pos in Enumerable.Range(0, count))
                 {
                     var fileName = $"file_{Guid.NewGuid()}";
-                    var logFile = new CaseFileDto(dummyContent, basePath, fileName, DateTime.UtcNow, lastLogNote.Id, this.workContext.User?.UserId);
+                    var logFile = new CaseFileDto(dummyContent, basePath, fileName, DateTime.UtcNow, lastLogNote.Id, this._workContext.User?.UserId);
                     this._logFileService.AddFile(logFile);
                 }
             }
@@ -8252,7 +7357,7 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpGet]
         public JsonResult GenerateCaseFiles(int caseId, int count)
         {
-            var customerId = workContext.Customer.CustomerId;
+            var customerId = _workContext.Customer.CustomerId;
             var basePath = _masterDataService.GetFilePath(customerId);
 
             var dummyContent = GenerateDummyFileContent(1);
@@ -8262,7 +7367,7 @@ namespace DH.Helpdesk.Web.Controllers
                 foreach (var pos in Enumerable.Range(0, count))
                 {
                     var fileName = $"file_{Guid.NewGuid()}";
-                    var caseFile = new CaseFileDto(dummyContent, basePath, fileName, DateTime.UtcNow, caseId, this.workContext.User?.UserId);
+                    var caseFile = new CaseFileDto(dummyContent, basePath, fileName, DateTime.UtcNow, caseId, this._workContext.User?.UserId);
                     _caseFileService.AddFile(caseFile);
                 }
             }
@@ -8284,22 +7389,5 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion
 #endif
-    }
-
-
-    public static class Extensions
-    {
-        private static void ApplyIfNotNull<T>(this T applyTo, T applyValue) where T : class
-        {
-            if (applyValue != null)
-                applyTo = applyValue;
-        }
-
-        private static void ApplyIfNotNullOrEmpty(this string applyTo, string applyValue)
-        {
-            if (!string.IsNullOrEmpty(applyValue))
-                applyTo = applyValue;
-        }
-
     }
 }

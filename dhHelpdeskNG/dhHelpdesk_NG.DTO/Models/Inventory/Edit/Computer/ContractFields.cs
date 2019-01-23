@@ -16,7 +16,8 @@
             string accountingDimension2,
             string accountingDimension3,
             string accountingDimension4,
-            string accountingDimension5)
+            string accountingDimension5,
+            string document)
         {
             this.ContractStatusId = contractStatusId;
             this.ContractNumber = contractNumber;
@@ -28,6 +29,7 @@
             this.AccountingDimension3 = accountingDimension3;
             this.AccountingDimension4 = accountingDimension4;
             this.AccountingDimension5 = accountingDimension5;
+            this.Document = document;
         }
 
         [IsId]
@@ -52,9 +54,11 @@
 
         public string AccountingDimension5 { get; set; }
 
+        public string Document { get; set; }
+
         public static ContractFields CreateDefault()
         {
-            return new ContractFields(null, null, null, null, 0, null, null, null, null, null);
+            return new ContractFields(null, null, null, null, 0, null, null, null, null, null, null);
         }
     }
 }

@@ -688,6 +688,26 @@ Module DH_Helpdesk_Mail
                                         End If
                                     End If
 
+                                    If objCase.WorkingGroup_Id <> 0 Then
+
+                                        If Not objCase.WorkingGroupEMail Is Nothing Then
+                                            objMailTemplate = objMailTemplateData.getMailTemplateById(7, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+
+                                            If Not objMailTemplate Is Nothing Then
+                                                Dim objMail As New Mail
+
+                                                sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                                                sSendTime = Date.Now()
+
+                                                Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+
+                                                sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, objCase.WorkingGroupEMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
+
+                                                objLogData.createEMailLog(iCaseHistory_Id, objCase.WorkingGroupEMail, 7, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                            End If
+                                        End If
+                                    End If
+
                                     If sPriorityEMailList <> "" Then
                                         objMailTemplate = objMailTemplateData.getMailTemplateById(13, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 

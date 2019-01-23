@@ -389,6 +389,7 @@
                 },
 
                 StateChanged: function (uploader) {
+                    
                     if (uploader.state != plupload.STOPPED) {
                         return;
                     }
@@ -402,6 +403,12 @@
                     uploader.refresh();
                 }
             }
+        });
+        
+
+        $('#NewCase_upload_files_popup').on('shown.bs.modal', function () {
+            //refresh required to make file open dlg work correctly 
+            $('#NewCasefile_uploader').pluploadQueue().refresh();
         });
 
         $('#NewCase_upload_files_popup').on('hidden.bs.modal', function () {

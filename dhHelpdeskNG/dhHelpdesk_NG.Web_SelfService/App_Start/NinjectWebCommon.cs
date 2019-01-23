@@ -9,6 +9,7 @@ using DH.Helpdesk.SelfService.Infrastructure.Configuration;
 using DH.Helpdesk.Services.Services.Authentication;
 using DH.Helpdesk.Services.Services.Feedback;
 using DH.Helpdesk.Common.Logger;
+using DH.Helpdesk.Services.BusinessLogic.Settings;
 using Ninject.Web.Common.WebHost;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
@@ -272,6 +273,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IConditionRepository>().To<ConditionRepository>();
 
             kernel.Bind<IInventoryTypeRepository>().To<InventoryTypeRepository>();
+            kernel.Bind<IInventoryTypeStandardSettingsRepository>().To<InventoryTypeStandardSettingsRepository>();
             kernel.Bind<IServerRepository>().To<ServerRepository>();
             kernel.Bind<IPrinterRepository>().To<PrinterRepository>();
             kernel.Bind<IInventoryRepository>().To<InventoryRepository>();
@@ -362,11 +364,13 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IUniversalCaseService>().To<UniversalCaseService>();
             kernel.Bind<IExtendedCaseService>().To<ExtendedCaseService>();
             kernel.Bind<ITextTranslationService>().To<TextTranslationService>();
-            kernel.Bind<IWatchDateCalendarService>().To<WatchDateCalendarService>();            
+            kernel.Bind<IWatchDateCalendarService>().To<WatchDateCalendarService>();
             kernel.Bind<IEmployeeService>().To<EmployeeService>();
-            kernel.Bind<IMetaDataService>().To<MetaDataService>();            
+            kernel.Bind<IMetaDataService>().To<MetaDataService>();
             kernel.Bind<IWebApiService>().To<WebApiService>();
             kernel.Bind<IConditionService>().To<ConditionService>();
+            kernel.Bind<ISettingsLogic>().To<SettingsLogic>();
+            
 
             kernel.Bind<ICaseFollowUpService>().To<CaseFollowUpService>();
             kernel.Bind<ILogProgramService>().To<LogProgramService>();

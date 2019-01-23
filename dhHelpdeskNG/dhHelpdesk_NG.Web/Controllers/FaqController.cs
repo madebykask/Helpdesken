@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿using DH.Helpdesk.Web.Common.Tools.Files;
+
+namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -151,7 +153,7 @@
             var hasFaqs = this.faqRepository.AnyFaqWithCategoryId(id);
             var hasSubcategories = this.faqCategoryRepository.CategoryHasSubcategories(id);
 
-            var languageOverviewsOrginal = _languageService.FindActiveLanguageOverivews();
+            var languageOverviewsOrginal = _languageService.GetOverviews();
             var languageOverviews =
                 languageOverviewsOrginal.Select(
                     o =>
@@ -201,7 +203,7 @@
 
             var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
 
-            var languageOverviewsOrginal = _languageService.FindActiveLanguageOverivews();
+            var languageOverviewsOrginal = _languageService.GetOverviews();
             var languageOverviews =
                 languageOverviewsOrginal.Select(
                     o =>

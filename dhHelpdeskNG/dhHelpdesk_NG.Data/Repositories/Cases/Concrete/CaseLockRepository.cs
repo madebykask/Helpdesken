@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using DH.Helpdesk.Common.Constants;
 
 namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
@@ -28,32 +29,38 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             public CaseLockEntity LockEntity { get; set; }
         }
 
-        private readonly IEntityToBusinessModelMapper<CaseLockEntity, CaseLock> _caseLockToBusinessModelMapper;
-
         private readonly IBusinessModelToEntityMapper<CaseLock, CaseLockEntity> _caseLockToEntityMapper;
 
         #region ctor()
 
         public CaseLockRepository(
                 IDatabaseFactory databaseFactory,
-                IEntityToBusinessModelMapper<CaseLockEntity, CaseLock> caseLockToBusinessModelMapper,
                 IBusinessModelToEntityMapper<CaseLock, CaseLockEntity> caseLockToEntityMapper)
                 : base(databaseFactory)
         {
-            this._caseLockToBusinessModelMapper = caseLockToBusinessModelMapper;
             this._caseLockToEntityMapper = caseLockToEntityMapper;
         }
 
         #endregion
 
-        public CaseLock GetCaseLockByGUID(Guid lockGUID)
+        public CaseLockEntity GetCaseLockByCaseId(int caseId)
         {
-            var entity = Table.Where(l => l.LockGUID == lockGUID).FirstOrDefault();
+            return GetCaseLockByCaseIdQuery(caseId).FirstOrDefault();
+        }
 
-            if (entity == null)
-                return null;
+        public Task<CaseLockEntity> GetCaseLockByCaseIdAsync(int caseId)
+        {
+            return GetCaseLockByCaseIdQuery(caseId).FirstOrDefaultAsync();
+        }
 
-            return this._caseLockToBusinessModelMapper.Map(entity);
+        public CaseLockEntity GetCaseLockByGUID(Guid lockGUID)
+        {
+            return GetCaseByGUIDQuery(lockGUID).FirstOrDefault();
+        }
+
+        public Task<CaseLockEntity> GetCaseLockByGUIDAsync(Guid lockGUID)
+        {
+            return GetCaseByGUIDQuery(lockGUID).FirstOrDefaultAsync();
         }
 
         public void CaseLockCleanUp()
@@ -89,9 +96,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             return resultMap;
         }
 
-     
-
-        public ICaseLockOverview GetCaseLockByCaseId(int caseId)
+        public ICaseLockOverview GetCaseLockOverviewByCaseId(int caseId)
         {
             var item = Table.Where(l => l.Case_Id == caseId)
                             .Select(ProjectToCaseLockOverview())
@@ -132,47 +137,16 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             this.Commit();
         }
 
-        public bool ReExtendLockCase(Guid lockGUID, int extendedTimeInSecond)
+        public bool DeleteCaseLock(CaseLockEntity caseLock)
         {
-            var ret = false;
-            try
+            if (caseLock != null)
             {
-                var existingLock = Table.Where(cl => cl.LockGUID == lockGUID).FirstOrDefault();
-
-                if (existingLock != null)
-                {
-                    existingLock.ExtendedTime = DateTime.Now.AddSeconds(extendedTimeInSecond);
-                    this.Update(existingLock);
-                    this.Commit();
-                    ret = true;
-                }
-
+                Delete(caseLock);
+                Commit();
+                return true;
             }
-            catch (Exception ex)
-            {
-                ret = false;
-            }
-            return ret;
-        }
 
-        public void UnlockCaseByCaseId(int caseId)
-        {
-            var entity = Table.Where(l => l.Case_Id == caseId).FirstOrDefault();
-            if (entity != null)
-            {
-                this.Delete(entity);
-                this.Commit();
-            }
-        }
-
-        public void UnlockCaseByGUID(Guid lockGUID)
-        {
-            var entity = Table.Where(l => l.LockGUID == lockGUID).FirstOrDefault();
-            if (entity != null)
-            {
-                this.Delete(entity);
-                this.Commit();
-            }
+            return false;
         }
 
         public void DeleteCaseLockByCaseId(int caseId)
@@ -272,6 +246,16 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             }
 
             return ret;
+        }
+
+        private IQueryable<CaseLockEntity> GetCaseLockByCaseIdQuery(int caseId)
+        {
+            return Table.Where(l => l.Case_Id == caseId);
+        }
+
+        private IQueryable<CaseLockEntity> GetCaseByGUIDQuery(Guid lockGUID)
+        {
+            return Table.Where(l => l.LockGUID == lockGUID);
         }
     }
 }

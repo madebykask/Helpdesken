@@ -3,6 +3,7 @@
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Api.Orders
+@using DH.Helpdesk.Common.Extensions.Boolean
 @model DH.Helpdesk.Web.Areas.Orders.Models.Order.OrderEdit.FullOrderEditModel
 @{
     Layout = "~/Areas/Orders/Views/Shared/_OrderLayout.cshtml";
@@ -11,16 +12,16 @@
 @section Actions
 {
     <ul class="secnav">
-    @if (Model.UserHasAdminOrderPermission)
-    {
-    <li>
-        @Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), null, null, new { id = "btnSave", @class = "btn" })
-    </li>
-    <li>
-        @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", "Orders", new { id = Model.Id },
-        new { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Are you sure?") })
-    </li>
-    }
+        @if (Model.UserHasAdminOrderPermission)
+        {
+            <li>
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), null, null, new { id = "btnSave", @class = "btn" })
+            </li>
+            <li>
+                @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", "Orders", new { id = Model.Id },
+                new { @class = "btn deleteDialog", deleteDialogText = Translation.GetCoreTextTranslation("Are you sure?") })
+            </li>
+        }
         <li>
             @if (Model.IsReturnToCase && Model.Other.CaseNumber.Value.HasValue && Model.Other.CaseId.Value.HasValue)
             {
@@ -31,42 +32,42 @@
                 @Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", "Orders", null, new { @class = "btn" })
             }
         </li>
-    <li>
-        <i id="actionIndicator" class="gif-loader" style="display: none">&nbsp;</i>
-    </li>
-    @if (Model.UserHasAdminOrderPermission)
-    {
-        <li class="secspace"></li>
         <li>
-            @Html.ActionLink(" ", "ExportOrder", "Orders", new {id = Model.Id}, new { @class = "export-order", title = Translation.GetCoreTextTranslation("Export fil") })
+            <i id="actionIndicator" class="gif-loader" style="display: none">&nbsp;</i>
         </li>
-    <li class="secspace"></li>
-    <li>
-        @Html.CheckBoxFor(m => m.InformOrderer, new { id = "informOrderer_action"})
-    </li>
-    <li>
-        @Html.Label("informOrderer_action", Translation.GetCoreTextTranslation("informera beställare"))
-    </li>
-    <li class="secspace"></li>
-    <li>
-        @Html.CheckBoxFor(m => m.InformReceiver, new { id = "informReceiver_action"})
-    </li>
-    <li>
-        @Html.Label("informReceiver_action", Translation.GetCoreTextTranslation("Informera mottagare"))
-    </li>
-    <li class="secspace"></li>
-    if (Model.Other.CaseNumber.Value == null || Model.Other.CaseNumber.Value == 0)
-    {
-    <li>
-        @Html.CheckBoxFor(m => m.CreateCase, new { id = "createCase_action"})
-    </li>
-    <li>
-        @Html.Label("createCase_action", Translation.GetCoreTextTranslation("Skapa ärende"))
-    </li>
-    }
+        @if (Model.UserHasAdminOrderPermission)
+        {
+            <li class="secspace"></li>
+            <li>
+                @Html.ActionLink(" ", "ExportOrder", "Orders", new { id = Model.Id }, new { @class = "export-order", title = Translation.GetCoreTextTranslation("Export fil") })
+            </li>
+            <li class="secspace"></li>
+            <li>
+                @Html.CheckBoxFor(m => m.InformOrderer, new { id = "informOrderer_action" })
+            </li>
+            <li>
+                @Html.Label("informOrderer_action", Translation.GetCoreTextTranslation("informera beställare"))
+            </li>
+            <li class="secspace"></li>
+            <li>
+                @Html.CheckBoxFor(m => m.InformReceiver, new { id = "informReceiver_action" })
+            </li>
+            <li>
+                @Html.Label("informReceiver_action", Translation.GetCoreTextTranslation("Informera mottagare"))
+            </li>
+            <li class="secspace"></li>
+            if (Model.Other.CaseNumber.Value == null || Model.Other.CaseNumber.Value == 0)
+            {
+                <li>
+                    @Html.CheckBoxFor(m => m.CreateCase, new { id = "createCase_action" })
+                </li>
+                <li>
+                    @Html.Label("createCase_action", Translation.GetCoreTextTranslation("Skapa ärende"))
+                </li>
+            }
 
-    }
-</ul>        
+        }
+    </ul>
 }
 
 @section Content

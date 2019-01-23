@@ -18,7 +18,7 @@ namespace DH.Helpdesk.Web.Models.CaseLock
             string lockGUID,
             string browserSession,
             DateTime createTime,
-            DateTime extendedTime,            
+            DateTime extendedTime,
             int extendValue,
             int timerInterval,
             User user,

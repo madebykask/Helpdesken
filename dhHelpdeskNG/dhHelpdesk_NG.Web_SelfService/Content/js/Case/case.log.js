@@ -60,6 +60,11 @@ $(function () {
             }
         });
 
+        $('#Log_upload_files_popup').on('shown.bs.modal', function () {
+            //refresh required to make file open dlg work correctly 
+            $('#Log_upload_files_popup').pluploadQueue().refresh();
+        });
+
         $('#Log_upload_files_popup').on('hidden.bs.modal', function () {
             if ($('#Log_uploader') != undefined) {
                 if ($('#Log_uploader').pluploadQueue().files.length > 0) {
@@ -87,6 +92,7 @@ $(function () {
             var logMandatoryText = params.logMandatoryText;
             var currentLogMode = params.logNotesMode || 0;
             var isCaseFinished = params.isFinished;
+            var caseEmailGuid = params.caseEmailGuid;
 
             //public
             this.init = function () {
@@ -132,8 +138,13 @@ $(function () {
                     $.get(saveLogMessageUrl, { caseId: caseId, note: note, logFileGuid: logFileKey },
                         function(res) {
                             if (isPopup) {
-                                window.location.href = caseDetailsUrl + "/" + caseId;
-                            } else {
+                                if (caseEmailGuid != null && caseEmailGuid != "") {
+                                    window.location.href = caseDetailsUrl + "/" + caseEmailGuid;
+                                }
+                                else
+                                    window.location.href = caseDetailsUrl + "/" + caseId;
+                           }
+                            else {
                                 self._elements.logNotesDiv.html(res);
                                 self._elements.logNoteInput.val('');
                                 self.reloadLogFiles();

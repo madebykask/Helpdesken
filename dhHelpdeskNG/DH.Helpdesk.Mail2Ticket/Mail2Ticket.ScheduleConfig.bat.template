@@ -1,2 +1,7 @@
 ﻿@echo off
-"#{InstallationRoot}\#{FolderName}\DH.Helpdesk.Mail2Ticket.exe" #{WorkingMode},Data Source=#{DatabaseServer}; Initial Catalog=#{DatabaseName}; User Id=#{DatabaseUsername}; Password=#{DatabasePassword};Network Library=dbmssocn,#{LogFolderPath},#{LogIdentifier},#{ProductAreaSeparator},#{if NewEmailProcessing}1#{else}0#{/if}
+#{if RunInCustomerMode}
+"#{InstallationRoot}\#{FolderName}\DH.Helpdesk.Mail2Ticket.exe" 1,Data Source=#{DatabaseServer}; Initial Catalog=#{DatabaseName}; User Id=#{DatabaseUsername}; Password=#{DatabasePassword};Network Library=dbmssocn,#{LogFolderPath},#{LogIdentifier},#{ProductAreaSeparator},#{if NewEmailProcessing}1#{else}0#{/if}
+#{/if}
+#{if RunInWorkingGroupMode}
+"#{InstallationRoot}\#{FolderName}\DH.Helpdesk.Mail2Ticket.exe" 5,Data Source=#{DatabaseServer}; Initial Catalog=#{DatabaseName}; User Id=#{DatabaseUsername}; Password=#{DatabasePassword};Network Library=dbmssocn,#{LogFolderPath},#{LogIdentifier},#{ProductAreaSeparator},#{if NewEmailProcessing}1#{else}0#{/if}
+#{/if}

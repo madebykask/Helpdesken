@@ -11,9 +11,7 @@
     public interface IGlobalSettingService
     {
         IList<GlobalSetting> GetGlobalSettings();
-
         void SaveGlobalSetting(GlobalSetting globalSetting, out IDictionary<string, string> errors);
-
         void Commit();
     }
 
@@ -22,14 +20,16 @@
         private readonly IGlobalSettingRepository _globalSettingRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public GlobalSettingService(
-            IGlobalSettingRepository globalSettingRepository,
-            IUnitOfWork unitOfWork)
+        #region ctor()
+
+        public GlobalSettingService(IGlobalSettingRepository globalSettingRepository, IUnitOfWork unitOfWork)
         {
             this._globalSettingRepository = globalSettingRepository;
             this._unitOfWork = unitOfWork;
         }
-        
+
+        #endregion
+
         public IList<GlobalSetting> GetGlobalSettings()
         {
             return this._globalSettingRepository.GetAll().ToList();

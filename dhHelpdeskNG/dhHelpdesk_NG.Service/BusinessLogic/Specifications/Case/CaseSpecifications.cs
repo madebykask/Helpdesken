@@ -372,7 +372,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Specifications.Case
 
         public static int GetRelatedInventoriesCount(this IQueryable<Computer> query, string userId, UserOverview user, int customerId)
         {
-            query = query.Where(c => c.User.UserId.Trim().Equals(userId.Trim()));
+            query = query.Where(c => c.User.UserId.Trim().Equals(userId.Trim()) && c.Customer_Id == customerId);
 
             return query.Count();
         }

@@ -422,8 +422,9 @@ namespace DH.Helpdesk.Web.Infrastructure.ModelFactories.Case.Concrete
                 DefaultItem = defaultCaseType != null ? new FieldItem(defaultCaseType.Id.ToString(), defaultCaseType.Name) : FieldItem.CreateEmpty(),
                 Items = caseTypes.Where(c => c.IsActive != 0 || (currentData.CaseType_Id.HasValue && currentData.CaseType_Id.Value == c.Id))
                                  .Select(c => new FieldItem(c.Id.ToString(), Translation.GetCoreTextTranslation(c.Name), c.IsActive != 0, c.Parent_CaseType_Id?.ToString())
-                                 { ForeignKeyValue1 = c.User_Id?.ToString(),
-                                   ForeignKeyValue2 = c.WorkingGroup_Id?.ToString()
+                                 {
+                                     ForeignKeyValue1 = c.User_Id?.ToString(),
+                                     ForeignKeyValue2 = c.WorkingGroup_Id?.ToString()
                                  })
                                  .OrderBy(i => i.ItemText).ToList()
             };

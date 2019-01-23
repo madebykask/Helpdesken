@@ -9,6 +9,7 @@
 
 using System.Data.Entity.Infrastructure;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Dal.Infrastructure
 {
@@ -41,17 +42,17 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// <summary>
         /// The table.
         /// </summary>
-        private readonly IDbSet<T> dbset;
+        private readonly IDbSet<T> _dbset;
 
         /// <summary>
         /// The initialize after commit actions.
         /// </summary>
-        private readonly List<Action> initializeAfterCommitActions;
+        private readonly List<Action> _initializeAfterCommitActions;
 
         /// <summary>
         /// The _data context.
         /// </summary>
-        private HelpdeskDbContext dataContext;
+        private HelpdeskDbContext _dataContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RepositoryBase{T}"/> class.
@@ -67,8 +68,8 @@ namespace DH.Helpdesk.Dal.Infrastructure
             IWorkContext workContext = null)
         {
             this.DatabaseFactory = databaseFactory;
-            this.dbset = this.DataContext.Set<T>();
-            this.initializeAfterCommitActions = new List<Action>();
+            this._dbset = this.DataContext.Set<T>();
+            this._initializeAfterCommitActions = new List<Action>();
             this.WorkContext = workContext;
         }
 
@@ -86,7 +87,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </summary>
         protected HelpdeskDbContext DataContext
         {
-            get { return this.dataContext ?? (this.dataContext = this.DatabaseFactory.Get()); }
+            get { return this._dataContext ?? (this._dataContext = this.DatabaseFactory.Get()); }
         }
 
         /// <summary>
@@ -96,7 +97,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         {
             get
             {
-                return this.dbset;
+                return this._dbset;
             }
         }
 
@@ -136,12 +137,12 @@ namespace DH.Helpdesk.Dal.Infrastructure
                 throw;
             }
 
-            foreach (var initializeAfterCommit in this.initializeAfterCommitActions)
+            foreach (var initializeAfterCommit in this._initializeAfterCommitActions)
             {
                 initializeAfterCommit();
             }
 
-            this.initializeAfterCommitActions.Clear();
+            this._initializeAfterCommitActions.Clear();
         }
 
         /// <summary>
@@ -152,7 +153,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </param>
         public virtual void Add(T entity)
         {
-            this.dbset.Add(entity);
+            this._dbset.Add(entity);
         }
 
         /// <summary>
@@ -163,9 +164,9 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </param>
         public virtual void AddText(T entity)
         {
-            this.dataContext.Entry(entity).State = EntityState.Detached;
-            this.dbset.Add(entity);
-            this.dataContext.Entry(entity).State = EntityState.Added;
+            this._dataContext.Entry(entity).State = EntityState.Detached;
+            this._dbset.Add(entity);
+            this._dataContext.Entry(entity).State = EntityState.Added;
         }
 
         /// <summary>
@@ -176,8 +177,8 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </param>
         public virtual void Update(T entity)
         {
-            this.dbset.Attach(entity);
-            this.dataContext.Entry(entity).State = EntityState.Modified;
+            this._dbset.Attach(entity);
+            this._dataContext.Entry(entity).State = EntityState.Modified;
         }
 
         /// <summary>
@@ -188,8 +189,8 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </param>
         public virtual void Delete(T entity)
         {
-            this.dbset.Attach(entity);
-            this.dbset.Remove(entity);
+            this._dbset.Attach(entity);
+            this._dbset.Remove(entity);
         }
 
         /// <summary>
@@ -200,11 +201,11 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </param>
         public virtual void Delete(Expression<Func<T, bool>> where)
         {
-            IEnumerable<T> objects = this.dbset.Where(where).AsEnumerable();
+            IEnumerable<T> objects = this._dbset.Where(where).AsEnumerable();
             foreach (T obj in objects)
             {
-                this.dbset.Attach(obj);
-                this.dbset.Remove(obj);
+                this._dbset.Attach(obj);
+                this._dbset.Remove(obj);
             }
         }
 
@@ -219,7 +220,12 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </returns>
         public virtual T GetById(int id)
         {
-            return this.dbset.Find(id);
+            return this._dbset.Find(id);
+        }
+
+        public virtual Task<T> GetByIdAsync(int id)
+        {
+            return ((DbSet<T>)_dbset).FindAsync(id);
         }
 
         /// <summary>
@@ -233,7 +239,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </returns>
         public virtual T GetById(string id)
         {
-            return this.dbset.Find(id);
+            return this._dbset.Find(id);
         }
 
         /// <summary>
@@ -244,7 +250,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </returns>
         public virtual IEnumerable<T> GetAll()
         {
-            return this.dbset;
+            return this._dbset;
         }
 
         /// <summary>
@@ -258,7 +264,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </returns>
         public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> where)
         {
-            return this.dbset.Where(where);
+            return this._dbset.Where(where);
         }
 
         /// <summary>
@@ -272,7 +278,12 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </returns>
         public virtual T Get(Expression<Func<T, bool>> where)
         {
-            return this.dbset.Where(where).AsNoTracking<T>().FirstOrDefault<T>();
+            return this._dbset.Where(where).AsNoTracking<T>().FirstOrDefault<T>();
+        }
+
+        public virtual Task<T> GetAsync(Expression<Func<T, bool>> where)
+        {
+            return this._dbset.Where(where).AsNoTracking<T>().FirstOrDefaultAsync<T>();
         }
 
         /// <summary>
@@ -289,7 +300,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
         /// </returns>
         public virtual TResult Get<TResult>(Expression<Func<T, bool>> where, Expression<Func<T, TResult>> selector)
         {
-            return this.dbset.Where(where).AsNoTracking<T>().Select(selector).FirstOrDefault();
+            return this._dbset.Where(where).AsNoTracking<T>().Select(selector).FirstOrDefault();
         }
 
         /// <summary>
@@ -312,7 +323,7 @@ namespace DH.Helpdesk.Dal.Infrastructure
             where T2 : Entity
         {
             var initializeAfterCommit = new Action(() => businessModel.Id = entity.Id);
-            this.initializeAfterCommitActions.Add(initializeAfterCommit);
+            this._initializeAfterCommitActions.Add(initializeAfterCommit);
         }
 
 		/// <summary>

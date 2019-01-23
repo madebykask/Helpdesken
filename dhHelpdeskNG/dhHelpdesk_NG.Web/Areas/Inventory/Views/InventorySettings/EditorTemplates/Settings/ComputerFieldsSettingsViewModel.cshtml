@@ -287,8 +287,32 @@
         <tr>
             @Html.EditorFor(m => m.DateFieldsSettingsModel.ScanDateFieldSettingModel, "Settings/FieldSettingForComputerModel")
         </tr>
-        <tr>
-            @Html.EditorFor(m => m.DateFieldsSettingsModel.PathDirectoryFieldSettingModel, "Settings/FieldSettingForComputerModel")
-        </tr>
+    <tr>
+        @Html.EditorFor(m => m.DateFieldsSettingsModel.PathDirectoryFieldSettingModel, "Settings/FieldSettingForComputerModel")
+    </tr>
+    <tr>
+        <td colspan="6" class="header">@Translation.Get("Tabs")</td>
+    </tr>
+    <tr>
+        @Html.EditorFor(m => m.WorkstationTabsSettingsModel.ComputersTabSettingModel, "Settings/TabSettingForComputerModel")
+    </tr>
+    <tr>
+        @Html.EditorFor(m => m.WorkstationTabsSettingsModel.StorageTabSettingModel, "Settings/TabSettingForComputerModel")
+    </tr>
+    <tr>
+        @Html.EditorFor(m => m.WorkstationTabsSettingsModel.SoftwareTabSettingModel, "Settings/TabSettingForComputerModel")
+    </tr>
+    <tr>
+        @Html.EditorFor(m => m.WorkstationTabsSettingsModel.HotFixesTabSettingModel, "Settings/TabSettingForComputerModel")
+    </tr>
+    <tr>
+        @Html.EditorFor(m => m.WorkstationTabsSettingsModel.ComputerLogsTabSettingModel, "Settings/TabSettingForComputerModel")
+    </tr>
+    <tr>
+        @Html.EditorFor(m => m.WorkstationTabsSettingsModel.AccessoriesTabSettingModel, "Settings/TabSettingForComputerModel")
+    </tr>
+    <tr>
+        @Html.EditorFor(m => m.WorkstationTabsSettingsModel.RelatedCasesTabSettingModel, "Settings/TabSettingForComputerModel")
+    </tr>
     </tbody>
 </table>

@@ -25,7 +25,7 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.BusinessData.Models;
     using Models.CaseRules;
     using Infrastructure.ModelFactories.Case.Concrete;
-    using Common.Enums.Settings;
+    using DH.Helpdesk.Common.Enums.Settings;
     using System;
     using DH.Helpdesk.Domain.Cases;
     using System.Web;
@@ -1338,8 +1338,7 @@ namespace DH.Helpdesk.Web.Controllers
                     caseSolution.OverWritePopUp,
                     caseSolution.SaveAndClose,
                     Verified = caseSolution.Verified.ToBool()
-                },
-                    JsonRequestBehavior.AllowGet);
+                }, JsonRequestBehavior.AllowGet);
         }
 
         public PartialViewResult RemoveCondition(string condition, string casesolutionid)

@@ -9,7 +9,10 @@
 @using DH.Helpdesk.Web
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
-@using DH.Helpdesk.Common.Extensions.Object
+@using DH.Helpdesk.Common.Extensions.Integer
+@using DH.Helpdesk.Common.Extensions.Boolean
+@using DH.Helpdesk.Web.Common.Enums.Case
+@using DH.Helpdesk.Web.Infrastructure
 
 @Html.Partial("~/Views/Cases/_CaseValidation.cshtml", Model)
 @Scripts.Render("~/bundles/cases/_input")
@@ -19,22 +22,22 @@
 }
 
 <script type="text/javascript">
-    /* CHECK: moved to EditPage.js*/ 
+    /* CHECK: moved to EditPage.js*/
     //function GetLanguage()
     //{
     //    var caseid = document.getElementById('case__Id').value;
     //    alert('old');
     //    if (caseid == 0)
-    //    {        
+    //    {
     //        var reported  = document.getElementById('case__UserCode').value;
     //        var reportedId  = document.getElementById('case__ReportedBy').value;
-            
-    //        var region = document.getElementById('case__Region_Id').value;            
-    //        var dep = document.getElementById('case__Department_Id').value;            
+
+    //        var region = document.getElementById('case__Region_Id').value;
+    //        var dep = document.getElementById('case__Department_Id').value;
     //        var customer = document.getElementById('case__Customer_Id').value;
-            
+
     //        $.get("/cases/LookupLanguage/", { customerid: "'" + customer.toString() + "'", notifier: "'" + reported.toString() + "'", region: "'" + region.toString() + "'", department: "'" + dep.toString() + "'", notifierid: "'" + reportedId.toString() + "'" }, function (result) {
-    //            if (parseInt(result) > 0) {            
+    //            if (parseInt(result) > 0) {
     //                $("#case__RegLanguage_Id").val(result);
     //            }
     //        });
@@ -57,11 +60,11 @@
                     else
                     {
                         <a id="case-tab" href="#case" class="case">
-                        @Translation.GetCoreTextTranslation("Ärende")
-                        @if (Model.case_.Id != 0)
-                        {
-                            @Model.case_.CaseNumber
-                        }
+                            @Translation.GetCoreTextTranslation("Ärende")
+                            @if (Model.case_.Id != 0)
+                            {
+                                @Model.case_.CaseNumber
+                            }
                         </a>
                     }
                 </li>
@@ -79,8 +82,8 @@
                     if (Model.DynamicCase.ViewMode == 0)
                     {
                         <li>
-                            <a href="#dh-form-area" id="loadContainer" class="eform" data-state="">@(Translation.Get(Model.DynamicCase.FormName))</a>                                                        
-                        </li>                        
+                            <a href="#dh-form-area" id="loadContainer" class="eform" data-state="">@(Translation.Get(Model.DynamicCase.FormName))</a>
+                        </li>
 
                     }
                     else if (Model.DynamicCase.ViewMode == 1)
@@ -93,14 +96,13 @@
 
                 @if (Model.ContainsExtendedCase)
                 {
-
                     foreach (var extendedCase in Model.ExtendedCases)
                     {
-                        <li data-active-tab="@CaseTabs.ExtendedCaseTab" class="@((Model.ActiveTab.StartsWith(CaseTabs.ExtendedCaseTab)) ? "active" : "")" >
+                        <li data-active-tab="@CaseTabs.ExtendedCaseTab" class="@((Model.ActiveTab.StartsWith(CaseTabs.ExtendedCaseTab)) ? "active" : "")">
                             <a href="#container_@extendedCase.Id" id="extendedcase-tab" class="extendedcase" data-id="@extendedCase.Id" data-state="">
                                 @(Translation.GetMasterDataTranslation(extendedCase.Name))
                                 <i id="exTabIndicator_@extendedCase.Id" class="tab-indicator" style="display:none">&nbsp;</i>
-                            </a>                            
+                            </a>
                         </li>
                     }
                 }
@@ -108,13 +110,12 @@
                 @if (Model.Setting.AttachmentPlacement == 1)
                 {
                     <li>
-                        <a id="attachment-tab" href="#attachment-container">@(Translation.GetCoreTextTranslation("Bilagor")) <span id="nrOfAttachedFiles">(@(Model.CaseFilesModel.SavedFiles != null ? Model.CaseFilesModel.Files.Count():0))</span></a>
-
+                        <a id="attachment-tab" href="#attachment-container">@(Translation.GetCoreTextTranslation("Bilagor")) <span id="nrOfAttachedFiles">(@(Model.CaseFilesModel.SavedFiles != null ? Model.CaseFilesModel.Files.Count() : 0))</span></a>
                     </li>
                 }
 
                 @if (Model.CaseDocuments != null && Model.CaseDocuments.Count() > 0)
-                { 
+                {
                     <li>
                         <a id="casedocument-tab" href="#casedocument-container">@(Translation.GetCoreTextTranslation("Dokument")) <span id="nrOfCaseDocuments">(@(Model.CaseDocuments != null ? Model.CaseDocuments.Count() : 0))</span></a>
                     </li>
@@ -192,7 +193,7 @@
                         @Html.HiddenFor(model => model.CustomerSettings.ModuleCaseInvoice)
                         @Html.HiddenFor(model => model.MovedFromCustomerId)
                         @Html.HiddenFor(model => model.ContainsExtendedCase)
-                        @Html.HiddenFor(model => model.ExtendedCaseGuid)                        
+                        @Html.HiddenFor(model => model.ExtendedCaseGuid)
 
                         @Html.Hidden("WriteTextToExternalNote", Model.caseFieldSettings.displayHtml(GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString()))
                         @Html.Hidden("Today", DateTime.Now.ToShortDateString())
@@ -237,7 +238,7 @@
                                 }
                                 <br />
                                 @*@Translation.Get("Independent child")&nbsp;<input id="IndependentChild" name="IndependentChild" type="checkbox" @(Model.IndependentChild ? "checked" : "") value="true" />
-                                @Html.HiddenFor(model => Model.IndependentChild)*@
+                                    @Html.HiddenFor(model => Model.IndependentChild)*@
                                 @Translation.GetCoreTextTranslation("Fristående underärende")&nbsp;
                                 @Html.CheckBoxFor(model => Model.IndependentChild)
                             </div>
@@ -246,11 +247,11 @@
                         @if (Model.customerUserSetting.UserInfoPermission == 1)
                         {
                             <div style="@Model.displayUserInfoHtml()" class="section-block @Model.getSectionClass(CaseSectionType.Initiator)">
-                            <h4>
-                                <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
-                                <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                                @Model.getSectionHeader(CaseSectionType.Initiator, CaseSections.InitiatorHeader) @Model.getSectionHeaderFields(CaseSectionType.Initiator)
-                            </h4>
+                                <h4>
+                                    <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                    <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                    @Model.getSectionHeader(CaseSectionType.Initiator, CaseSections.InitiatorHeader) @Model.getSectionHeaderFields(CaseSectionType.Initiator)
+                                </h4>
                                 <div class="row">
                                     <div class="span12">
                                         <table class="tableform">
@@ -296,7 +297,11 @@
                                                     {
                                                         <a href="#" data-field="relatedCases" style="display: none;" title="@Translation.GetCoreTextTranslation("Relaterade ärenden")" class="btn"><i class="icon-list"></i></a>
                                                     }
-                                                    <a href="#" data-field="relatedInventory" style="display: none;" title="@Translation.GetCoreTextTranslation("Relaterade") @Translation.GetCoreTextTranslation("Inventarie")" class="btn"><i class="icon-th-large"></i></a>
+                                                    @if (Model.CustomerSettings.ModuleInventory)
+                                                    {
+                                                        <a href="#" data-field="relatedInventory" style="display: none;" title="@Translation.GetCoreTextTranslation("Relaterade") @Translation.GetCoreTextTranslation("Inventarie")" class="btn"><i class="icon-th-large"></i></a>
+                                                    }
+                                                    
                                                 </td>
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName)">
@@ -346,44 +351,44 @@
                                                     }
                                                 </td>
                                                 <td style="@Model.GetFieldStyle(CaseSolutionFields.Email)">
-                                                    <div>                                                        
-                                                            @*<label class="checkbox">*@
-                                                                @if (!Model.IsReadOnly(CaseSolutionFields.Email))
-                                                                {
-                                                                    @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier)
-                                                                }
-                                                                else
-                                                                {
-                                                                    @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" })
-                                                                }
-                                                                @Translation.Get("Skicka mail till anmälaren", SessionFacade.CurrentLanguageId)
-                                                            @*</label>*@
+                                                    <div>
+                                                        @*<label class="checkbox">*@
+                                                        @if (!Model.IsReadOnly(CaseSolutionFields.Email))
+                                                        {
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier)
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { @readonly = true, @disabled = "disabled" })
+                                                        }
+                                                        @Translation.Get("Skicka mail till anmälaren", SessionFacade.CurrentLanguageId)
+                                                        @*</label>*@
 
-                                                            @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)
+                                                        @if (Model.Languages != null && Model.Languages.Count() > 1 && Model.case_.Id == 0)
+                                                        {
+                                                            <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
+                                                                @foreach (var e in Model.Languages)
+                                                                {
+                                                                    <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentLanguageId.ToString())>@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
+                                                                }
+                                                            </select>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (Model.Languages != null && Model.Languages.Count() > 1 && !Model.IsReadOnly(CaseSolutionFields.Email))
                                                             {
                                                                 <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
                                                                     @foreach (var e in Model.Languages)
                                                                     {
-                                                                        <option value="@e.Id" @e.Id.IdIsSelected(SessionFacade.CurrentLanguageId.ToString())>@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
+                                                                        <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString())>@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
                                                                     }
                                                                 </select>
                                                             }
                                                             else
                                                             {
-                                                                if (Model.Languages != null && Model.Languages.Count() > 1 && !Model.IsReadOnly(CaseSolutionFields.Email))
-                                                                {
-                                                                    <select id="case__RegLanguage_Id" name="case_.RegLanguage_Id" class="span2">
-                                                                        @foreach (var e in Model.Languages)
-                                                                        {
-                                                                            <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.RegLanguage_Id.ToString())>@Translation.Get(e.Name, SessionFacade.CurrentLanguageId)</option>
-                                                                        }
-                                                                    </select>
-                                                                }
-                                                                else
-                                                                {
-                                                                    @Html.HiddenFor(m => Model.case_.RegLanguage_Id);
-                                                                }
-                                                            }                                                        
+                                                                @Html.HiddenFor(m => Model.case_.RegLanguage_Id);
+                                                            }
+                                                        }
                                                     </div>
                                                 </td>
                                             </tr>
@@ -437,7 +442,7 @@
                                                                 foreach (var e in Model.regions.Where(e => e.IsActive == 1 || Model.case_.Region_Id == e.Id))
                                                                 {
                                                                     <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Region_Id.ToString())>@e.Name</option>
-}
+                                                                }
                                                             }
                                                         </select>
                                                     }
@@ -461,7 +466,7 @@
                                                             <option value="" @(Model.InitiatorReadOnly ? "disabled=\"disabled\"" : "")>&nbsp;</option>
                                                             @if (Model.departments != null)
                                                             {
-                                                                foreach (var e in Model.departments.Where(e => e.IsActive == 1 || Model.case_.Department_Id == e.Id).Where(e => Model.case_.Region_Id == e.Region_Id || !Model.case_.Region_Id.IntHasValue()))
+                                                                foreach (var e in Model.departments.Where(e => e.IsActive == 1 || Model.case_.Department_Id == e.Id).Where(e => Model.case_.Region_Id == e.Region_Id || !Model.case_.Region_Id.ToBool()))
                                                                 {
                                                                     <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Department_Id.ToString())>@e.DepartmentDescription(Model.DepartmentFilterFormat)</option>
                                                                 }
@@ -555,7 +560,7 @@
                                                     {
                                                         @Html.CheckBoxFor(m => Model.UpdateNotifierInformation, new { @class = "switchcheckbox" })
                                                     }
-                                              
+
 
                                                 </td>
                                             </tr>
@@ -563,10 +568,10 @@
                                                 <td colspan="2">
                                                     <div id="extendedSection-Initiator" style="display:none">
                                                         <!--<h4>
-                    <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
-                    <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                    Vendor details <!-- TODO: Bind on category name and translation
-                </h4>-->
+                                                            <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                                            <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                                            Vendor details <!-- TODO: Bind on category name and translation
+                                                        </h4>-->
 
                                                         <input type="hidden" id="ExtendedInitiatorGUID" name="ExtendedInitiatorGUID" value="@(Model.ExtendedCaseSections.ContainsKey(CaseSectionType.Initiator) ? Model.ExtendedCaseSections[CaseSectionType.Initiator].ExtendedCaseGuid.ToString() : "")" />
                                                         <iframe id="extendedSection-iframe-Initiator" src="" frameborder="0" scrolling="no" style="width:500px; height:180px; margin-top: 10px"></iframe>
@@ -757,7 +762,7 @@
                                                             {
                                                                 selected_Department = Model.case_.IsAbout.Department_Id.ToString();
 
-                                                                foreach (var e in Model.departments.Where(e => e.IsActive == 1 || Model.case_.IsAbout.Department_Id == e.Id).Where(e => Model.case_.IsAbout.Region_Id == e.Region_Id || !Model.case_.IsAbout.Region_Id.IntHasValue()))
+                                                                foreach (var e in Model.departments.Where(e => e.IsActive == 1 || Model.case_.IsAbout.Department_Id == e.Id).Where(e => Model.case_.IsAbout.Region_Id == e.Region_Id || !Model.case_.IsAbout.Region_Id.ToBool()))
                                                                 {
                                                                     <option value="@e.Id" @e.Id.IdIsSelected(selected_Department)>@e.DepartmentDescription(Model.DepartmentFilterFormat)</option>
                                                                 }
@@ -858,10 +863,10 @@
                                             <td colspan="2">
                                                 <div id="extendedSection-Regarding" style="display:none">
                                                     <!--<h4>
-                    <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
-                    <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
-                    Vendor details <!-- TODO: Bind on category name and translation
-                </h4>-->
+                                                        <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
+                                                        <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+                                                        Vendor details <!-- TODO: Bind on category name and translation
+                                                    </h4>-->
 
                                                     <input type="hidden" id="ExtendedRegardingGUID" name="ExtendedRegardingGUID" value="@(Model.ExtendedCaseSections.ContainsKey(CaseSectionType.Regarding) ? Model.ExtendedCaseSections[CaseSectionType.Regarding].ExtendedCaseGuid.ToString() : "")" />
                                                     <iframe id="extendedSection-iframe-Regarding" src="" style="width:500px; height:180px; margin-top:10px" frameborder="0" scrolling="no"></iframe>
@@ -904,7 +909,7 @@
                                                 }
                                             </td>
                                             <td>
-                                                @if (Html.MasterModel().CustomerSetting.ModuleInventory > 0)
+                                                @if (Model.CustomerSettings.ModuleInventory)
                                                 {
                                                     <a id="ShowInventoryBtn" title="@Translation.GetCoreTextTranslation("Visa inventarie")" class="btn show-inventory"
                                                        style='@(!string.IsNullOrEmpty(Model.case_.InventoryNumber) ? string.Empty : "display: none")'>
@@ -1219,7 +1224,7 @@
                                             @if (Model.countries != null)
                                             {
                                                 <td>
-                                                    <select id="CountryId" name="CountryId" @(Model.EditMode == Enums.AccessMode.ReadOnly ? "disabled=true" : string.Empty)>
+                                                    <select id="CountryId" name="CountryId" @(Model.EditMode == AccessMode.ReadOnly ? "disabled=true" : string.Empty)>
                                                         <option value="">&nbsp;</option>
                                                         @foreach (var e in Model.countries.Where(e => e.IsActive == 1 || Model.CountryId == e.Id))
                                                         {
@@ -1239,7 +1244,7 @@
                                                             {
                                                                 if (Model.CountryId > 0)
                                                                 {
-                                                                    foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id).Where(e => Model.CountryId.IntHasValue() && (e.Country_Id == Model.CountryId && e.Country_Id.HasValue)))
+                                                                    foreach (var e in Model.suppliers.Where(e => e.IsActive == 1 || Model.case_.Supplier_Id == e.Id).Where(e => Model.CountryId.ToBool() && (e.Country_Id == Model.CountryId && e.Country_Id.HasValue)))
                                                                     {
                                                                         <option value="@e.Id" @e.Id.IdIsSelected(Model.case_.Supplier_Id.ToString())>@e.Name</option>
                                                                     }
@@ -1369,7 +1374,7 @@
                                                                 <input type="hidden" id="lastMailSelected" value="">
                                                                 @if (boldTO == true)
                                                                 {
-                                                                    
+
                                                                     <td>
                                                                         <b>TO[@countTO]</b>&nbsp;&nbsp;&nbsp;<span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailTO" data-expand-element="mailto"></span>
                                                                     </td>
@@ -1585,7 +1590,7 @@
                                                     @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, "Bifogad fil")
                                                 </td>
                                                 <td colspan="2">
-                                                    @if (Model.EditMode == Enums.AccessMode.FullAccess)
+                                                    @if (Model.EditMode == AccessMode.FullAccess)
                                                     {
                                                         <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                                         <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
@@ -1678,7 +1683,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id, "Ansvarig")
                                             </td>
                                             <td>
-                                                @if (Model.EditMode != Enums.AccessMode.ReadOnly)
+                                                @if (Model.EditMode != AccessMode.ReadOnly)
                                                 {
                                                     @Html.DropDownListFor(m => m.ResponsibleUser_Id, Model.ResponsibleUsersAvailable)
                                                 }
@@ -1717,7 +1722,7 @@
                                                         {
                                                             foreach (var e in Model.priorities.Where(e => e.IsActive == 1 || Model.case_.Priority_Id == e.Id))
                                                             {
-                                                                <option value="@e.Id" data-sla="@e.SolutionTime" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString())>@Translation.Get(e.Name)</option>
+                                                                <option value="@e.Id" data-sla="@e.SolutionTime" @e.Id.IdIsSelected(Model.case_.Priority_Id.ToString())>@Translation.GetMasterDataTranslation(e.Name)</option>
                                                             }
                                                         }
                                                     </select>
@@ -1739,7 +1744,7 @@
                                                     var priority = Model.case_.Priority_Id.HasValue ? Model.priorities.SingleOrDefault(x => x.Id == Model.case_.Priority_Id) : null;
                                                     if (priority == null)
                                                     {
-                                                        <input type="text" value="" readonly="true" id="priority_Name" />
+                                                        <input type="text" value="" readonly="readonly" id="priority_Name" />
                                                         @Html.HiddenFor(m => Model.case_.Priority_Id, new { @class = "sla-value", data_sla = "" })
                                                     }
                                                     else
@@ -1897,7 +1902,7 @@
                                                 </tr>
                                             }
                                         }
-                                        
+
 
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart)">
                                             <td>
@@ -1905,7 +1910,7 @@
                                             </td>
                                             <td class="span1" style="float: left;">
                                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.CausingPart, CaseSolutionFields.CausingPart))
-                                                {                                                   
+                                                {
                                                     <select id="case__CausingPartId" name="case_.CausingPartId" class="chosen-single-select">
                                                         <option value=""> &nbsp; </option>
                                                         @if (Model.causingParts != null)
@@ -2210,17 +2215,17 @@
                                                 {
                                                     <tr>
                                                         <td>
-                                                                @if (Model.EditMode == Enums.AccessMode.ReadOnly)
-                                                                {
-                                                                    <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@editableExternalInvoices[i].Name" disabled="disabled">
-                                                                }
-                                                                else
-                                                                {
-                                                                    <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@editableExternalInvoices[i].Name">
-                                                                }
+                                                            @if (Model.EditMode == AccessMode.ReadOnly)
+                                                            {
+                                                                <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@editableExternalInvoices[i].Name" disabled="disabled">
+                                                            }
+                                                            else
+                                                            {
+                                                                <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" value="@editableExternalInvoices[i].Name">
+                                                            }
                                                         </td>
                                                         <td>
-                                                            @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                            @if (Model.EditMode == AccessMode.ReadOnly)
                                                             {
                                                                 <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@editableExternalInvoices[i].AmountValue" placeholder="0.00" disabled="disabled">
                                                             }
@@ -2228,11 +2233,11 @@
                                                             {
                                                                 <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" value="@editableExternalInvoices[i].AmountValue" placeholder="0.00">
                                                             }
-                                                            
+
                                                             <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="@editableExternalInvoices[i].Id">
                                                         </td>
                                                         <td>
-                                                            @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                            @if (Model.EditMode == AccessMode.ReadOnly)
                                                             {
                                                                 <a id="btnDeleteExternalInvoice0" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount" disabled="disabled"><i class="icon-remove"></i></a>
                                                             }
@@ -2240,14 +2245,14 @@
                                                             {
                                                                 <a id="btnDeleteExternalInvoice0" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount"><i class="icon-remove"></i></a>
                                                             }
-                                                            
+
                                                         </td>
                                                     </tr>
                                                     extInvoicesCount++;
                                                 }
                                                 <tr>
                                                     <td>
-                                                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                        @if (Model.EditMode == AccessMode.ReadOnly)
                                                         {
                                                             <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name" disabled="disabled">
                                                         }
@@ -2255,10 +2260,10 @@
                                                         {
                                                             <input type="text" id="ExternalInvoices[@extInvoicesCount].Name" name="ExternalInvoices[@extInvoicesCount].Name">
                                                         }
-                                                        
+
                                                     </td>
                                                     <td>
-                                                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                        @if (Model.EditMode == AccessMode.ReadOnly)
                                                         {
                                                             <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" placeholder="0.00" disabled="disabled">
                                                         }
@@ -2266,21 +2271,21 @@
                                                         {
                                                             <input type="text" class="inputw100" id="ExternalInvoices[@extInvoicesCount].Amount" name="ExternalInvoices[@extInvoicesCount].Amount" placeholder="0.00">
                                                         }
-                                                        
+
                                                         <input type="hidden" id="ExternalInvoices[@extInvoicesCount].Id" name="ExternalInvoices[@extInvoicesCount].Id" value="0">
                                                     </td>
                                                     <td>
-                                                        @if (Model.EditMode == Enums.AccessMode.ReadOnly)
+                                                        @if (Model.EditMode == AccessMode.ReadOnly)
                                                         {
                                                             <a id="@("btnDeleteExternalInvoice" + extInvoicesCount)" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount" disabled="disabled"><i class="icon-remove"></i></a>
-                                                            
+
                                                         }
                                                         else
                                                         {
                                                             <a id="@("btnDeleteExternalInvoice" + extInvoicesCount)" class="btn bt-small" title="Delete" data-rowid="@extInvoicesCount"><i class="icon-remove"></i></a>
                                                             <a id="btnAddExternalInvoice" class="btn bt-small" title="Add"><i class="icon-plus"></i></a>
                                                         }
-                                                        
+
                                                     </td>
                                                 </tr>
                                             </table>
@@ -2288,8 +2293,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                                        }
-                                                    }
+                            }
+                        }
                     </div>
                 </div>
 
@@ -2309,10 +2314,10 @@
                             <div class="container">
                                 @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", Translation.GetMasterDataTranslation(extendedCase.Name) } })
                                 @*<div>@extendedCase.Version</div>*@
-                                </div>
-                         
                             </div>
-                        
+
+                        </div>
+
                     }
                 }
 
@@ -2331,11 +2336,11 @@
                                     <table class="tableform">
                                         <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Filename, CaseSolutionFields.FileName)">
                                             <td colspan="3" class="span3">
-                                                @if (Model.EditMode == Enums.AccessMode.FullAccess)
-                                            {
-                                            <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
-                                            <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
-                                            }
+                                                @if (Model.EditMode == AccessMode.FullAccess)
+                                                {
+                                                    <a id="btnAddCaseFile" href="#upload_files_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
+                                                    <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
+                                                }
                                                 <div id="divCaseFiles" style="margin-top:10px;">
                                                     @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
                                                 </div>
@@ -2359,7 +2364,7 @@
                 </div>
             </div>
 
-                    </div>
+        </div>
     </div>
     <div id="overwriteDlg" class="modal fade" style="display: none">
         <div class="modal-dialog">
@@ -2381,7 +2386,7 @@
         </div>
     }
     <div class="toast-container toast-position-top-center" style="z-index: 100051;"></div>
-    }
+}
 
 @functions    {
 

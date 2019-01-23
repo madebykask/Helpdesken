@@ -1,3 +1,6 @@
+using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.Dal.Enums.Inventory.Computer;
+
 namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concrete
 {
     using System;
@@ -171,6 +174,23 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
             return businessModel;
         }
 
+        public WorkstationTabsSettings BuildTabsViewModel(
+            WorkstationTabsSettingsModel settings,
+            int customerId)
+        {
+            return new WorkstationTabsSettings(
+                ModelStates.Updated,
+                //settings.TabLanguageId,
+                MapTabSetting(WorkstationTabs.Workstations, settings.ComputersTabSettingModel),
+                MapTabSetting(WorkstationTabs.Storages, settings.StorageTabSettingModel),
+                MapTabSetting(WorkstationTabs.Softwares, settings.SoftwareTabSettingModel),
+                MapTabSetting(WorkstationTabs.HotFixes, settings.HotFixesTabSettingModel),
+                MapTabSetting(WorkstationTabs.ComputerLogs, settings.ComputerLogsTabSettingModel),
+                MapTabSetting(WorkstationTabs.Accessories, settings.AccessoriesTabSettingModel),
+                MapTabSetting(WorkstationTabs.RelatedCases, settings.RelatedCasesTabSettingModel)
+            );
+        }
+
         private static FieldSetting MapFieldSetting(FieldSettingModel setting)
         {
             var settingModel = new FieldSetting(
@@ -179,6 +199,16 @@ namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory.Concre
                 setting.Caption,
                 setting.IsRequired,
                 setting.IsReadOnly);
+
+            return settingModel;
+        }
+
+        private static TabSetting MapTabSetting(string tabField, TabSettingModel setting)
+        {
+            var settingModel = new TabSetting(
+                tabField,
+                setting.Show,
+                setting.Caption);
 
             return settingModel;
         }

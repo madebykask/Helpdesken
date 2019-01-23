@@ -42,6 +42,15 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DhDev|AnyCPU'">
+    <OutputPath>bin\DhDev\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.1.50.2\lib\net451\Dapper.dll</HintPath>
@@ -76,6 +85,9 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Z.EntityFramework.Plus.EF6, Version=1.8.16.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Plus.EF6.1.8.16\lib\net45\Z.EntityFramework.Plus.EF6.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.cs">
@@ -86,6 +98,7 @@
     <Compile Include="Attributes\Inventory\CreateMissingPrinterSettingsAttribute.cs" />
     <Compile Include="Attributes\Inventory\CreateMissingServerSettingsAttribute.cs" />
     <Compile Include="Attributes\Inventory\CreateMissingComputerSettingsAttribute.cs" />
+    <Compile Include="Attributes\Inventory\CreateMissingWorkstationTabSettingsAttribute.cs" />
     <Compile Include="CaseSearch\CaseSearchCriterias.cs" />
     <Compile Include="CaseSearch\CaseSearchQueryBuilder.cs" />
     <Compile Include="CaseSearch\Interfaces\ICaseSearchCriterias.cs" />
@@ -120,6 +133,8 @@
     <Compile Include="EntityConfigurations\Cases\CaseSectionFieldConfiguration.cs" />
     <Compile Include="EntityConfigurations\Cases\CaseSectionsConfiguration.cs" />
     <Compile Include="EntityConfigurations\CaseTypeProductAreaConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Computers\WorkstationTabSettingConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Computers\WorkstationTabSettingLanguageConfiguration.cs" />
     <Compile Include="EntityConfigurations\Condition\ConditionConfiguration.cs" />
     <Compile Include="EntityConfigurations\Computers\ComputerUserCategoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\ContractFileConfiguration.cs" />
@@ -138,6 +153,7 @@
     <Compile Include="EntityConfigurations\GDPR\GDPRDataPrivacyFavoriteConfiguration.cs" />
     <Compile Include="EntityConfigurations\GDPR\GDPROperationsAuditConfiguration.cs" />
     <Compile Include="EntityConfigurations\GDPR\GDPRTaskConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Inventory\InventoryTypeStandardSettingsConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleProductAreaConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceRowConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceHeaderConfiguration.cs" />
@@ -213,6 +229,7 @@
     <Compile Include="Enums\Inventory\Computer\SoundFields.cs" />
     <Compile Include="Enums\Inventory\Computer\StateFields.cs" />
     <Compile Include="Enums\Inventory\Computer\WorkstationFields.cs" />
+    <Compile Include="Enums\Inventory\Computer\WorkstationTabs.cs" />
     <Compile Include="Enums\Inventory\Inventory\InventoryFieldNames.cs" />
     <Compile Include="Enums\Inventory\Inventory\InventoryFields.cs" />
     <Compile Include="Enums\Inventory\Printer\CommunicationFields.cs" />
@@ -466,6 +483,8 @@
     <Compile Include="Repositories\BusinessRules\Concrete\BusinessRuleRepository.cs" />
     <Compile Include="Repositories\BusinessRules\IBusinessRuleRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextConditionIdentifierRepository.cs" />
+    <Compile Include="Repositories\Computers\Concrete\ComputerTabsSettingsRepository.cs" />
+    <Compile Include="Repositories\Computers\IComputerTabsSettingsRepository.cs" />
     <Compile Include="Repositories\Condition\Concrete\ConditionRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextIdentifierRepository.cs" />
     <Compile Include="Repositories\CaseDocument\Concrete\CaseDocumentTextConditionRepository.cs" />
@@ -563,6 +582,8 @@
     <Compile Include="Repositories\Changes\IChangeGroupRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeLogRepository.cs" />
     <Compile Include="Repositories\Changes\IChangeFileRepository.cs" />
+    <Compile Include="Repositories\Inventory\Concrete\InventoryTypeStandardSettingsRepository.cs" />
+    <Compile Include="Repositories\Inventory\IInventoryTypeStandardSettingsRepository.cs" />
     <Compile Include="Repositories\Invoice\InvoiceRepository.cs" />
     <Compile Include="Repositories\IOrderEmailLogRepository.cs" />
     <Compile Include="Repositories\MetaData\Concrete\EntityInfoRepository.cs" />

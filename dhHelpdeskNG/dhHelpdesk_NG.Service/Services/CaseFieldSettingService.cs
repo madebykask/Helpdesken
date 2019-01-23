@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using System.Threading.Tasks;
+using System.Data.Entity;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -13,19 +16,23 @@
         IList<CaseListToCase> ListToShowOnCasePage(int customerId, int languageId);
         IList<CaseFieldSetting> GetAllCaseFieldSettings();
         IList<CaseFieldSetting> GetCaseFieldSettings(int customerId);
+        Task<IList<CaseFieldSetting>> GetCaseFieldSettingsAsync(int customerId);
         IList<CaseFieldSetting> GetCustomerEnabledCaseFieldSettings(int customerId);
         
         IList<CaseFieldSettingLanguage> GetCaseFieldSettingLanguages();
         IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int languageId);
         IList<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettingsWithLanguages(int? customerId, int languageId);
-        IList<ListCases> ListToShowOnCaseSummaryPage(int? customerId, int? languageId, int? UserGroupId);
-        IList<ListCases> ListToShowOnCustomerSettingSummaryPage(int? customerId, int? languageId, int? UserGroupId);
+
+        IList<CaseFieldSettingsForTranslation> GetCustomerCaseTranslations(int customerId);
+        Task<IList<CaseFieldSettingsForTranslation>> GetCustomerCaseTranslationsAsync(int customerId);
+        IList<ListCases> ListToShowOnCaseSummaryPage(int? customerId, int? languageId, int? userGroupId);
+        IList<ListCases> ListToShowOnCustomerSettingSummaryPage(int? customerId, int? languageId, int? userGroupId);
+
 
         IList<CaseFieldSetting> GetCaseFieldSettingsForDefaultCust();
         IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int languageId);
 
         CaseFieldSettingLanguage GetCaseFieldSettingLanguage(int id, int languageId);
-        IList<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettings(int customerId, int languageId);
 
         void SaveFieldSettingsDefaultValue(int fieldId, string defaultValue);
     }
@@ -34,16 +41,13 @@
     {
         private readonly ICaseFieldSettingRepository _caseFieldSettingRepository;
         private readonly ICaseFieldSettingLanguageRepository _caseFieldSettingLanguageRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
         public CaseFieldSettingService(
             ICaseFieldSettingRepository caseFieldSettingRepository,
-            ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository,
-            IUnitOfWork unitOfWork)
+            ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository)
         {
             this._caseFieldSettingRepository = caseFieldSettingRepository;
             this._caseFieldSettingLanguageRepository = caseFieldSettingLanguageRepository;
-            this._unitOfWork = unitOfWork;
         }
 
         public IList<CaseListToCase> ListToShowOnCasePage(int customerId, int languageId)
@@ -66,6 +70,11 @@
             return this._caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId).ToList();
         }
 
+        public async Task<IList<CaseFieldSetting>> GetCaseFieldSettingsAsync(int customerId)
+        {
+            return await _caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId).AsQueryable().ToListAsync();
+        }
+
         public IList<CaseFieldSetting> GetCustomerEnabledCaseFieldSettings(int customerId)
         {
             return this._caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId && x.ShowOnStartPage == 1).ToList();
@@ -73,7 +82,7 @@
         
         public IList<CaseFieldSetting> GetCaseFieldSettingsForDefaultCust()
         {
-            var list = this._caseFieldSettingRepository.GetAll().Where(x => x.Customer_Id == null).ToList();
+            var list = this._caseFieldSettingRepository.GetMany(x => x.Customer_Id == null).ToList();
 
             return list;
         
@@ -86,16 +95,14 @@
 
         public IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguages(int? customerId, int languageId)
         {
-            return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguages(customerId, languageId).Where(c => !c.Name.ToLower().Contains("isabout_") && !c.Name.ToLower().Contains("addfollowersbtn") && !c.Name.ToLower().Contains("adduserbtn")).ToList();
+            return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsWithLanguages(customerId, languageId)
+                .Where(c => !c.Name.ToLower().Contains("isabout_") && !c.Name.ToLower().Contains("addfollowersbtn") && !c.Name.ToLower().Contains("adduserbtn"))
+                .ToList();
         }
+
         public IList<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettingsWithLanguages(int? customerId, int languageId)
         {
             return this._caseFieldSettingLanguageRepository.GetAllCaseFieldSettingsWithLanguages(customerId, languageId).ToList();
-        }
-
-        public IList<CaseFieldSettingsWithLanguage> GetAllCaseFieldSettings(int customerId, int languageId)
-        {
-            return this._caseFieldSettingLanguageRepository.GetAllCaseFieldSettings(customerId, languageId).ToList();
         }
 
         public IList<CaseFieldSettingsWithLanguage> GetCaseFieldSettingsWithLanguagesForDefaultCust(int languageId)
@@ -106,6 +113,16 @@
         public CaseFieldSettingLanguage GetCaseFieldSettingLanguage(int id, int languageId)
         {
             return this._caseFieldSettingLanguageRepository.Get(x => x.CaseFieldSetting.Id == id && x.Language_Id == languageId);
+        }
+
+        public IList<CaseFieldSettingsForTranslation> GetCustomerCaseTranslations(int customerId)
+        {
+            return _caseFieldSettingLanguageRepository.GetCustomerCaseFieldSettingsForTranslation(customerId).ToList();
+        }
+
+        public async Task<IList<CaseFieldSettingsForTranslation>> GetCustomerCaseTranslationsAsync(int customerId)
+        {
+            return await _caseFieldSettingLanguageRepository.GetCustomerCaseFieldSettingsForTranslation(customerId).AsQueryable().ToListAsync();
         }
 
         public IList<ListCases> ListToShowOnCaseSummaryPage(int? customerId, int? languageId, int? userGroupId)

@@ -1,0 +1,16 @@
+﻿:: WorkModes:
+:: 1	planDate
+:: 2	approveCase
+:: 3	getContractInNoticeOfRemoval
+:: 4	getContractForFollowUp
+:: 5	sendCaseInfoMail
+:: 6	watchDate
+:: 7	checklistSchedule
+:: 8	caseSolutionSchedule
+:: 9	clearFileViewLog
+:: 10	caseCleanUp
+:: 11	caseReminder
+:: 12	sendQuestionnaire
+
+:: Test, ingnore, ignore
+DH.Helpdesk.Schedule.exe #{WorkMode}, Data Source=#{DatabaseServer}; Initial Catalog=#{DatabaseName}; User Id=#{DatabaseUser}; Password=#{DatabasePassword};Network Library=dbmssocn

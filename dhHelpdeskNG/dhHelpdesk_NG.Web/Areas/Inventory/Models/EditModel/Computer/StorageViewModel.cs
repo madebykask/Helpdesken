@@ -5,7 +5,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer
     using DH.Helpdesk.BusinessData.Models.Inventory.Output;
     using DH.Helpdesk.Common.ValidationAttributes;
 
-    public class StorageViewModel : BaseEditWorkstationModel
+    public class StorageViewModel : BaseViewEditWorkstationModel
     {
         public StorageViewModel(int id, List<LogicalDriveOverview> overviews)
             : base(id)

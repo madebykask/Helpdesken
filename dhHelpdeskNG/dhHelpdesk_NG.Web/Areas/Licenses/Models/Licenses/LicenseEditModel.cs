@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Licenses.Models.Licenses
+﻿using DH.Helpdesk.Web.Common.Tools.Files;
+
+namespace DH.Helpdesk.Web.Areas.Licenses.Models.Licenses
 {
     using System;
     using System.Collections.Generic;

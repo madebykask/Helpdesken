@@ -1,5 +1,5 @@
 ﻿using System;
-using DH.Helpdesk.Domain.ExtendedCaseEntity;
+using System.Collections.Generic;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -15,5 +15,8 @@ namespace DH.Helpdesk.Services.Services
         ExtendedCaseDataModel GetExtendedCaseFromCase(int id);
 
         int GetCaseIdByExtendedCaseGuid(Guid uniqueId);
+
+        IList<string> GetTemplateCaseBindingKeys(int formId);
+        IDictionary<string, string> GetTemplateCaseBindingValues(int formId, int extendedCaseDataId);
     }
 }

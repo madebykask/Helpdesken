@@ -5,6 +5,19 @@
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.Dal.Repositories;
 
+    public interface IPlaceService
+    {
+        List<ItemOverview> GetBuildings(int customerId);
+
+        List<ItemOverview> GetFloors(int customerId);
+
+        List<ItemOverview> GetFloors(int customerId, int? buildingId);
+
+        List<ItemOverview> GetRooms(int customerId);
+
+        List<ItemOverview> GetRooms(int customerId, int? floorId);
+    }
+
     public class PlaceService : IPlaceService
     {
         private readonly IBuildingRepository buildingRepository;

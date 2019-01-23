@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory
+﻿using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
+
+namespace DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory
 {
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
@@ -8,6 +10,6 @@
     {
         ComputerForUpdate BuildForUpdate(ComputerViewModel model, OperationContext contex);
 
-        ComputerForInsert BuildForAdd(ComputerViewModel model, OperationContext context);
+        ComputerForInsert BuildForAdd(ComputerViewModel model, OperationContext context, ComputerFile computerFile);
     }
 }

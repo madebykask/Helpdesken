@@ -17,9 +17,11 @@ namespace DH.Helpdesk.Services.Services
 
     public interface IInventorySettingsService
     {
-        void UpdateWorkstationFieldsSettings(ComputerFieldsSettings businessModel);
+        void UpdateWorkstationFieldsSettings(ComputerFieldsSettings businessModel,
+            WorkstationTabsSettings tabsSettings);
 
         ComputerFieldsSettings GetWorkstationFieldSettingsForEdit(int customerId, int languageId);
+        WorkstationTabsSettings GetWorkstationTabsSettingsForEdit(int customerId, int languageId);
 
         ComputerFieldsSettingsForModelEdit GetWorkstationFieldSettingsForModelEdit(int customerId, int languageId, bool isReadonly = false);
 

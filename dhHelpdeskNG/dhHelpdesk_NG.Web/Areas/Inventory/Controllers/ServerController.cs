@@ -68,29 +68,28 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public ViewResult Index()
         {
-            List<ItemOverview> inventoryTypes = this.inventoryService.GetInventoryTypes(
-                SessionFacade.CurrentCustomer.Id);
+            var inventoryTypes =
+                this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id, true, CreateInventoryTypeSeparatorItem());
 
             SessionFacade.SavePageFilters(TabName.Inventories, new InventoriesModeFilter((int)CurrentModes.Servers));
-            ServerSearchFilter currentFilter =
-                SessionFacade.FindPageFilters<ServerSearchFilter>(
-                    this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Server.ToString()))
-                ?? ServerSearchFilter.CreateDefault();
+            var currentFilter =
+                SessionFacade.FindPageFilters<ServerSearchFilter>(ServerSearchFilter.CreateFilterId()) ?? 
+                ServerSearchFilter.CreateDefault();
 
             var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
 
-            var viewModel = new ServerSearchViewModel((int)CurrentModes.Servers, inventoryTypes, currentFilter);
-            viewModel.UserHasInventoryAdminPermission = userHasInventoryAdminPermission;
+            var viewModel = new ServerSearchViewModel((int) CurrentModes.Servers, inventoryTypes, currentFilter)
+            {
+                UserHasInventoryAdminPermission = userHasInventoryAdminPermission
+            };
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult ServersGrid(ServerSearchFilter filter)
         {
-            SessionFacade.SavePageFilters(
-                this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Server.ToString()),
-                filter);
+            SessionFacade.SavePageFilters(ServerSearchFilter.CreateFilterId(), filter);
             filter.RecordsCount = SearchFilter.RecordsOnPage;
 
             var viewModel = this.CreateInventoryGridModel(filter);
@@ -171,15 +170,16 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public FileContentResult ExportGridToExcelFile()
         {
-            ServerSearchFilter serverFilter =
-                SessionFacade.FindPageFilters<ServerSearchFilter>(
-                    this.CreateFilterId(TabName.Inventories, InventoryFilterMode.Server.ToString()))
-                ?? ServerSearchFilter.CreateDefault();
-            InventoryGridModel gridModel = this.CreateInventoryGridModel(serverFilter);
-            string workSheetName = CurrentModes.Servers.ToString();
+            var serverFilter = 
+                SessionFacade.FindPageFilters<ServerSearchFilter>(ServerSearchFilter.CreateFilterId()) ?? 
+                ServerSearchFilter.CreateDefault();
+            
+            // do not save - UI need to have a limitation
+            serverFilter.RecordsCount = null;
 
-            FileContentResult file = this.CreateExcelReport(workSheetName, gridModel.Headers, gridModel.Inventories);
+            var gridModel = this.CreateInventoryGridModel(serverFilter);
 
+            var file = CreateExcelReport(CurrentModes.Servers.ToString(), gridModel.Headers, gridModel.Inventories);
             return file;
         }
 
@@ -239,12 +239,12 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         private InventoryGridModel CreateInventoryGridModel(ServerSearchFilter filter)
         {
-            ServerFieldsSettingsOverview settings = this.inventorySettingsService.GetServerFieldSettingsOverview(
-                SessionFacade.CurrentCustomer.Id,
-                SessionFacade.CurrentLanguageId);
+            var settings = 
+                inventorySettingsService.GetServerFieldSettingsOverview(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
+
             var models = this.inventoryService.GetServers(filter.CreateRequest(SessionFacade.CurrentCustomer.Id));
 
-            InventoryGridModel viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
+            var viewModel = InventoryGridModel.BuildModel(models, settings, filter.SortField);
             return viewModel;
         }
     }

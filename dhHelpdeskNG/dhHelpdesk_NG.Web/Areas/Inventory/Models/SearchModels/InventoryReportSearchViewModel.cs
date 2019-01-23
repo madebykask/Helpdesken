@@ -12,8 +12,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
             SelectList departments,
             InventoryReportSearchFilter filter,
             int reportType,
-            List<ItemOverview> overviews)
-            : base(reportType, overviews)
+            List<ItemOverview> inventoryTypes)
+            : base(reportType, inventoryTypes)
         {
             this.Departments = departments;
             this.Filter = filter;
@@ -29,11 +29,10 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
             InventoryReportSearchFilter currentFilter,
             List<ItemOverview> departments,
             int reportType,
-            List<ItemOverview> overviews)
+            List<ItemOverview> inventoryTypes)
         {
             var departmentsSelectList = new SelectList(departments, "Value", "Name");
-
-            return new InventoryReportSearchViewModel(departmentsSelectList, currentFilter, reportType, overviews);
+            return new InventoryReportSearchViewModel(departmentsSelectList, currentFilter, reportType, inventoryTypes);
         }
     }
 }

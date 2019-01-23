@@ -230,6 +230,8 @@ namespace DH.Helpdesk.Dal.DbContext
         public DbSet<ComputerUsersBlackList> ComputerUsersBlackLists { get; set; }
 
         public DbSet<Computer> Computers { get; set; }
+        public DbSet<WorkstationTabSetting> WorkstationTabSettings { get; set; }
+        public DbSet<WorkstationTabSettingLanguage> WorkstationTabSettingLanguages { get; set; }
 
         public DbSet<ContractCategory> ContractCategories { get; set; }
 
@@ -328,6 +330,8 @@ namespace DH.Helpdesk.Dal.DbContext
         public DbSet<InventoryTypePropertyValue> InventoryTypePropertyValues { get; set; }
 
         public DbSet<InventoryType> InventoryTypes { get; set; }
+
+        public DbSet<InventoryTypeStandardSettings> InventoryTypeStandardSettings { get; set; }
 
         public DbSet<InvoiceHeader> InvoiceHeaders { get; set; }
 
@@ -725,6 +729,8 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new ComputerLogConfiguration());
             modelBuilder.Configurations.Add(new ComputerModelConfiguration());
             modelBuilder.Configurations.Add(new ComputerTypeConfiguration());
+            modelBuilder.Configurations.Add(new WorkstationTabSettingConfiguration());
+            modelBuilder.Configurations.Add(new WorkstationTabSettingLanguageConfiguration());
             modelBuilder.Configurations.Add(new ContractCategoryConfiguration());
             modelBuilder.Configurations.Add(new ContractConfiguration());
             modelBuilder.Configurations.Add(new ContractHistoryConfiguration());
@@ -878,6 +884,7 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new InventoryTypeGroupConfiguration());
             modelBuilder.Configurations.Add(new InventoryTypePropertyConfiguration());
             modelBuilder.Configurations.Add(new InventoryTypePropertyValueConfiguration());
+            modelBuilder.Configurations.Add(new InventoryTypeStandardSettingsConfiguration());
             modelBuilder.Configurations.Add(new ModuleConfiguration());
             modelBuilder.Configurations.Add(new UserModuleConfiguration());
             modelBuilder.Configurations.Add(new CausingPartConfiguration());

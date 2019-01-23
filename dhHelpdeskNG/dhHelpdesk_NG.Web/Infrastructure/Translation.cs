@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Web.Infrastructure.Cache;
 
 namespace DH.Helpdesk.Web.Infrastructure
@@ -11,11 +12,11 @@ namespace DH.Helpdesk.Web.Infrastructure
 
     public static class Translation
     {
-        public static IHelpdeskCache Cache
+        public static ITranslateCacheService Cache
         {
             get
             {
-                return DependencyResolver.Current.GetService<IHelpdeskCache>();//hack to support legacy code. TODO: should be injection, otherwise WebApi possible issues
+                return DependencyResolver.Current.GetService<ITranslateCacheService>();//hack to support legacy code. TODO: should be injection, otherwise WebApi possible issues
             } 
         }
 
@@ -39,6 +40,16 @@ namespace DH.Helpdesk.Web.Infrastructure
             translate = translate.Replace("'", "\\'");
             translate = translate.Replace("\"", "\\'");
             return translate;
+        }
+
+        internal static CaseType TranslateCaseType(CaseType caseType)
+        {
+            if (caseType.ParentCaseType != null)
+                caseType.ParentCaseType = TranslateCaseType(caseType.ParentCaseType);
+
+            caseType.Name = GetCoreTextTranslation(caseType.Name);
+
+            return caseType;
         }
 
         /// <summary>
@@ -74,7 +85,7 @@ namespace DH.Helpdesk.Web.Infrastructure
             return GetTextTranslationByTextType(translate, 0);
         }
 
-        private static string GetInstanceWord(string word)
+        public static string GetInstanceWord(string word)
         {
             switch (word.ToLower())
             {
@@ -109,10 +120,10 @@ namespace DH.Helpdesk.Web.Infrastructure
             {
                 try
                 {
-                    var translation = Cache.GetTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower());
+                    var translation = Cache.GetAllTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower());
                     if (DiffTextType)
                     {
-                        translation = Cache.GetTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower() && x.Type == TextTypeId);
+                        translation = Cache.GetAllTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower() && x.Type == TextTypeId);
                     }
                                                 
                     if (translation != null)
@@ -147,7 +158,7 @@ namespace DH.Helpdesk.Web.Infrastructure
                             var instanceWord = GetInstanceWord(translate);
                             if (instanceWord != string.Empty)
                             {
-                                var translationText = Cache.GetTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == instanceWord.ToLower());
+                                var translationText = Cache.GetAllTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == instanceWord.ToLower());
                                 if (translationText != null)
                                 {
                                     var trans = translationText.TextTranslations.FirstOrDefault(x => x.Language_Id == languageId);
@@ -287,16 +298,6 @@ namespace DH.Helpdesk.Web.Infrastructure
                             "Översikt"                                                        
                         };
             return ret;
-        }
-
-        internal static CaseType TranslateCaseType(CaseType caseType)
-        {
-            if (caseType.ParentCaseType != null)
-                caseType.ParentCaseType = TranslateCaseType(caseType.ParentCaseType);
-
-            caseType.Name = GetCoreTextTranslation(caseType.Name);
-
-            return caseType;
         }
     }
 

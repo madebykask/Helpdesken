@@ -4,6 +4,7 @@ using System.Linq;
 using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models.Customer.Input;
 using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+using DH.Helpdesk.Services.BusinessLogic.Settings;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -65,6 +66,8 @@ namespace DH.Helpdesk.Services.Services
         private readonly IEmployeeService _employeeService;
         private readonly ILogProgramService _logProgramService;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
+        private readonly ISettingsLogic _settingsLogic;
+        
 
         private Dictionary<int, Setting> _customersSettingsCache = new Dictionary<int, Setting>();
 
@@ -82,22 +85,24 @@ namespace DH.Helpdesk.Services.Services
             ICustomerUserRepository customerUserRepository,
             IEmployeeService employeeService,
             ILogProgramService logProgramService,
-            IUserPermissionsChecker userPermissionsChecker)
+            IUserPermissionsChecker userPermissionsChecker,
+            ISettingsLogic settingsLogic)
         {
-            this._customerRepository = customerRepository;
-            this._languageRepository = languageRepository;
-            this._settingRepository = settingRepository; 
-            this._textRepository = textRepository;
-            this._userRepository = userRepository;
-            this._caseFieldSettingLanguageRepository = caseFieldSettingLanguageRepository; 
-            this._cache = cache;
-            this._adfsRepository = adfsRepository;
-            this._globalSettingRepository = globalSettingRepository;
+            _customerRepository = customerRepository;
+            _languageRepository = languageRepository;
+            _settingRepository = settingRepository; 
+            _textRepository = textRepository;
+            _userRepository = userRepository;
+            _caseFieldSettingLanguageRepository = caseFieldSettingLanguageRepository; 
+            _cache = cache;
+            _adfsRepository = adfsRepository;
+            _globalSettingRepository = globalSettingRepository;
             _computerUserRepository = computerUserRepository;
             _customerUserRepository = customerUserRepository;
             _employeeService = employeeService;
             _logProgramService = logProgramService;
             _userPermissionsChecker = userPermissionsChecker;
+            _settingsLogic = settingsLogic;
         }
 
         public IList<CustomerOverview> GetCustomers(int userId)
@@ -170,11 +175,13 @@ namespace DH.Helpdesk.Services.Services
             return _computerUserRepository.GetInitiatorByUserId(userId, customerId, activeOnly);
         }
 
+        // TODO: review how it is used. Now it is put for every user in a session - potential memory leak on high load. Use cache instead
         public IList<Text> GetTranslationTexts()
         {
             return _textRepository.GetAllWithTranslation().ToList();
         }
 
+        // TODO: review how it is used. Now it is put for every user in a session - potential memory leak on high load. Use cache instead
         public IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId)
         {
             return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsForTranslation(userId).ToList();   
@@ -185,6 +192,7 @@ namespace DH.Helpdesk.Services.Services
             return this._caseFieldSettingLanguageRepository.GetCustomerCaseFieldSettingsForTranslation(customerId).ToList();
         }
 
+        // TODO: review how it is used. Now it is put for every user in a session - potential memory leak on high load. Use cache instead
         public IList<CaseFieldSettingsForTranslation> GetCaseTranslations()
         {
             return this._caseFieldSettingLanguageRepository.GetCaseFieldSettingsForTranslation().ToList();         
@@ -225,31 +233,13 @@ namespace DH.Helpdesk.Services.Services
         }
 
         public string GetFilePath(int customerId)
-        {            
-            var customerFilePath = this._settingRepository.GetMany(s => s.Customer_Id == customerId)
-                                                          .Select(s => s.PhysicalFilePath)
-                                                          .FirstOrDefault();
-            if (string.IsNullOrEmpty(customerFilePath))
-            {
-                var globalSetting = this._globalSettingRepository.GetAll().FirstOrDefault();
-                if (globalSetting != null)
-                    customerFilePath = globalSetting.AttachedFileFolder;
-            }
-
-            return (string.IsNullOrEmpty(customerFilePath)? string.Empty: customerFilePath);
+        {
+            return _settingsLogic.GetFilePath(customerId);
         }
 
         public string GetVirtualDirectoryPath(int customerId)
         {
-            var virtualDirectoryPath = 
-                _settingRepository.Get(s => s.Customer_Id == customerId, s => s.VirtualFilePath);
-
-            if (string.IsNullOrEmpty(virtualDirectoryPath))
-            {
-                virtualDirectoryPath = this._globalSettingRepository.Get(s => true, s => s.VirtualFileFolder);
-            }
-
-            return virtualDirectoryPath ?? string.Empty;
+            return _settingsLogic.GetVirtualDirectoryPath(customerId);
         }
 
         public EmployeeModel GetEmployee(int customerId, string employeeNumber, bool useApi = false, WebApiCredentialModel credentialModel = null)

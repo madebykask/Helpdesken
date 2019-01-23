@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace DH.Helpdesk.Dal.Infrastructure.Context
 {
     using System.Collections.Generic;
@@ -16,6 +18,8 @@ namespace DH.Helpdesk.Dal.Infrastructure.Context
     /// <summary>
     /// The CacheContext interface.
     /// </summary>
+    //TODO: move it to ICacheService/IHelpdeskCache
+    [Obsolete("Dont add any new methods here. Use ICacheService instead")]
     public interface ICacheContext
     {
         IEnumerable<HolidayOverview> DefaultCalendarHolidays { get; }

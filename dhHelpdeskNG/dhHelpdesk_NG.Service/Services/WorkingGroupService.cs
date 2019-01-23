@@ -1,6 +1,9 @@
-﻿using DH.Helpdesk.BusinessData.Enums.Users;
+﻿using System.Data.Entity;
+using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using Ninject.Infrastructure.Language;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -32,6 +35,9 @@ namespace DH.Helpdesk.Services.Services
 
         IList<WorkingGroupEntity> GetAllWorkingGroupsForCustomer(int customerId, bool isTakeOnlyActive = true);
 
+        Task<List<WorkingGroupEntity>>
+            GetAllWorkingGroupsForCustomerAsync(int customerId, bool isTakeOnlyActive = true);
+
         IList<WorkingGroupEntity> GetWorkingGroupsForIndexPage(int customerId);
 
         int? GetDefaultId(int customerId, int userId);
@@ -41,6 +47,8 @@ namespace DH.Helpdesk.Services.Services
         IList<UserWorkingGroup> GetUsersForWorkingGroup(int workingGroupId);
 
         WorkingGroupEntity GetWorkingGroup(int id);
+
+        Task<WorkingGroupEntity> GetWorkingGroupAsync(int id);
 
         DeleteMessage DeleteWorkingGroup(int id);
 
@@ -56,73 +64,55 @@ namespace DH.Helpdesk.Services.Services
 
     }
 
-    public class WorkingGroupService : IWorkingGroupService
+    public partial class WorkingGroupService : IWorkingGroupService
     {
-        private readonly IUnitOfWork unitOfWork;
-
-        private readonly IWorkingGroupRepository workingGroupRepository;
-
-        private readonly IUserRepository userRepository;
-
-        private readonly IUserWorkingGroupRepository userWorkingGroupRepository;
-
-        private readonly IWorkContext workContext;
-
-        private readonly ISettingService settingService;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IWorkingGroupRepository _workingGroupRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserWorkingGroupRepository _userWorkingGroupRepository;
+        private readonly ISettingService _settingService;
 
         public WorkingGroupService(
             IUnitOfWork unitOfWork,
             IUserRepository userRepository,
             IUserWorkingGroupRepository userWorkingGroupRepository,
             IWorkingGroupRepository workingGroupRepository,
-            ISettingService settingService,
-            IWorkContext workContext)
+            ISettingService settingService)
         {
-            this.unitOfWork = unitOfWork;
-            this.workingGroupRepository = workingGroupRepository;
-            this.userRepository = userRepository;
-            this.userWorkingGroupRepository = userWorkingGroupRepository;
-            this.workContext = workContext;
-            this.settingService = settingService;
+            this._unitOfWork = unitOfWork;
+            this._workingGroupRepository = workingGroupRepository;
+            this._userRepository = userRepository;
+            this._userWorkingGroupRepository = userWorkingGroupRepository;
+            this._settingService = settingService;
         }
 
         public IList<WorkingGroupEntity> GetAllWorkingGroups()
         {
-            return this.workingGroupRepository.GetAll().OrderBy(x => x.WorkingGroupName).ToList();
+            return this._workingGroupRepository.GetAll().OrderBy(x => x.WorkingGroupName).ToList();
         }
 
         public IList<UserWorkingGroup> GetUsersForWorkingGroup(int workingGroupId)
         {
-            return this.workingGroupRepository.ListUserForWorkingGroup(workingGroupId);
+            return this._workingGroupRepository.ListUserForWorkingGroup(workingGroupId);
         }
 
         public IList<int> ListWorkingGroupsForUser(int userId)
         {
-            return this.workingGroupRepository.ListWorkingGroupsForUser(userId);
+            return this._workingGroupRepository.ListWorkingGroupsForUser(userId);
         }
 
         public IList<WorkingGroupEntity> GetAllWorkingGroupsForCustomer(int customerId, bool isTakeOnlyActive = true)
         {
-            return this.workingGroupRepository
-                .GetMany(x => x.Customer_Id == customerId && ((isTakeOnlyActive && x.IsActive == 1) || !isTakeOnlyActive))
-                .OrderBy(x => x.WorkingGroupName).ToList();
+            return GetAllWorkingGroupsForCustomerQuery(customerId, isTakeOnlyActive)
+                .OrderBy(x => x.WorkingGroupName)
+                .ToList();
         }
 
-        /// <summary>
-        /// The get working groups.
-        /// </summary>
-        /// <param name="customerId">
-        /// The customer id.
-        /// </param>
-        /// <param name="isTakeOnlyActive"></param>
-        /// <returns>
-        /// The result.
-        /// </returns>
         public IList<WorkingGroupEntity> GetWorkingGroups(int customerId, bool isTakeOnlyActive = true)
         {
-            return this.workingGroupRepository
-                    .GetMany(x => x.Customer_Id == customerId && (!isTakeOnlyActive || (isTakeOnlyActive && x.IsActive == 1)))
-                    .OrderBy(x => x.WorkingGroupName).ToList();
+            return GetAllWorkingGroupsForCustomer(customerId, isTakeOnlyActive)
+                .OrderBy(x => x.WorkingGroupName)
+                .ToList();
         }
 
         public IList<WorkingGroupEntity> GetWorkingGroups(int customerId, int userId, bool isTakeOnlyActive = true, bool caseOverviewFilter = false)
@@ -130,32 +120,33 @@ namespace DH.Helpdesk.Services.Services
             IEnumerable<int> userWorkingGroups;
             if (caseOverviewFilter)
             {
-                userWorkingGroups = 
-                    userWorkingGroupRepository.GetMany(uw => uw.User_Id == userId && uw.UserRole != 0).Select(uw => uw.WorkingGroup_Id);
+                userWorkingGroups =
+                    _userWorkingGroupRepository.GetMany(uw => uw.User_Id == userId && uw.UserRole != 0)
+                        .AsQueryable()
+                        .Select(uw => uw.WorkingGroup_Id);
             }
             else
             {
                 userWorkingGroups = 
-                    userWorkingGroupRepository.GetMany(uw => uw.User_Id == userId && uw.UserRole != 0).Select(uw => uw.WorkingGroup_Id);
+                    _userWorkingGroupRepository.GetMany(uw => uw.User_Id == userId && uw.UserRole != 0)
+                        .AsQueryable()
+                        .Select(uw => uw.WorkingGroup_Id);
             }
-            return  this.workingGroupRepository
-                    .GetMany(x => x.Customer_Id == customerId && 
-                                  (!isTakeOnlyActive || x.IsActive == 1) &&
-                                  userWorkingGroups.Contains(x.Id))
-                    .OrderBy(x => x.WorkingGroupName).ToList();
-
+            return GetAllWorkingGroupsForCustomer(customerId, isTakeOnlyActive)
+                .Where(x => userWorkingGroups.Contains(x.Id))
+                .OrderBy(x => x.WorkingGroupName)
+                .ToList();
         }
 
         public IList<WorkingGroupInfo> GetWorkingGroupsAdmin(int customerId, int userId, bool isTakeOnlyActive = true, bool caseOverviewFilter = false)
         {
             var userWorkingGroupsIds =
-                userWorkingGroupRepository.GetMany(uw => uw.User_Id == userId && uw.UserRole == WorkingGroupUserPermission.ADMINSTRATOR)
+                _userWorkingGroupRepository.GetMany(uw => uw.User_Id == userId && uw.UserRole == WorkingGroupUserPermission.ADMINSTRATOR)
+                    .AsQueryable()
                     .Select(uw => uw.WorkingGroup_Id);
 
-            return this.workingGroupRepository
-                    .GetMany(x => x.Customer_Id == customerId && 
-                                 (!isTakeOnlyActive || x.IsActive == 1) &&
-                                 userWorkingGroupsIds.Contains(x.Id))
+            return GetAllWorkingGroupsForCustomer(customerId, isTakeOnlyActive)
+                    .Where(x => userWorkingGroupsIds.Contains(x.Id))
                     .Select(x => new WorkingGroupInfo
                     {
                         Id = x.Id,
@@ -166,30 +157,37 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<WorkingGroupForSMS> GetWorkingGroupsForSMS(int customerId, bool isTakeOnlyActive = true)
         {
-            var cs = this.settingService.GetCustomerSetting(customerId);
+            var cs = _settingService.GetCustomerSetting(customerId);
 
             var ret = new List<WorkingGroupForSMS>();
+            
             //todo: check why condition is missing?
-            var userWorkingGroups = this.userWorkingGroupRepository.GetMany(x => true).Select(uw => uw.WorkingGroup_Id);
-            var workingGroups =  
-                this.workingGroupRepository
-                    .GetMany(x => x.Customer_Id == customerId && 
-                                  (!isTakeOnlyActive || x.IsActive == 1) &&
-                                  userWorkingGroups.Contains(x.Id)).ToList();
-                    
+            var userWorkingGroups = 
+                _userWorkingGroupRepository.GetMany(x => true).AsQueryable()
+                .Select(uw => uw.WorkingGroup_Id);
 
-            var selectedWGId = workingGroups.Select(w=> w.Id).ToList();
+            var workingGroups =  
+                GetAllWorkingGroupsForCustomer(customerId, isTakeOnlyActive)
+                    .Where(x => userWorkingGroups.Contains(x.Id))
+                    .ToList();
+
+            var selectedWorkingGroupId = workingGroups.Select(w => w.Id).ToList();
             var userWorkingGroup =
-                this.userWorkingGroupRepository.GetMany(uw => selectedWGId.Contains(uw.WorkingGroup_Id)).ToList();
-                                                                 
+                _userWorkingGroupRepository.GetMany(uw => selectedWorkingGroupId.Contains(uw.WorkingGroup_Id)).ToList();
+
             
             foreach(var wg in workingGroups)
             {
-                var phones = userWorkingGroup.Where(uw=> uw.WorkingGroup_Id == wg.Id &&  !string.IsNullOrEmpty(uw.User.CellPhone))
-                                .Select(uw=> new {phone = string.Format("{0}@{1}",uw.User.CellPhone.Replace(" ",""),cs.SMSEMailDomain)})                                
-                                .ToArray();
+                var phones = 
+                    userWorkingGroup.Where(uw => uw.WorkingGroup_Id == wg.Id && 
+                                                 !string.IsNullOrEmpty(uw.User.CellPhone) && 
+                                                 uw.User.IsActive == 1)
+                    .Select(uw => new
+                    {
+                        phone = $"{uw.User.CellPhone.Replace(" ", "")}@{cs.SMSEMailDomain}"
+                    }).ToArray();
 
-                var phone = string.Join(",", phones.Select(p=> p.phone).ToArray());
+                var phone = string.Join(",", phones.Select(p => p.phone).ToArray());
 
                 ret.Add(new WorkingGroupForSMS(wg.Id, wg.WorkingGroupName, phone));
             }
@@ -199,26 +197,28 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<WorkingGroupEntity> GetWorkingGroupsForIndexPage(int customerId)
         {
-            return this.workingGroupRepository
+            return this._workingGroupRepository
                 .GetMany(x => x.Customer_Id == customerId)
                 .OrderBy(x => x.WorkingGroupName).ToList();
         }
 
         public int? GetDefaultId(int customerId, int userId)
         {
-            return this.workingGroupRepository.GetDefaultWorkingGroupId(customerId, userId);  
+            return this._workingGroupRepository.GetDefaultWorkingGroupId(customerId, userId);  
         }
 
         public List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId, bool includeAdmins = true)
         {
-            var workingGroups = this.workingGroupRepository.GetMany(w => w.Customer_Id == customerId && w.IsActive == 1).OrderBy(w => w.WorkingGroupName).ToList();
+            var workingGroups = GetAllWorkingGroupsForCustomer(customerId, true)
+                .OrderBy(w => w.WorkingGroupName)
+                .ToList();
             var workingGroupIds = workingGroups.Select(g => g.Id).ToList();
 
-            var workingGroupsUserIds = this.userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds, includeAdmins, true, true);
+            var workingGroupsUserIds = this._userWorkingGroupRepository.FindWorkingGroupsUserIds(workingGroupIds, includeAdmins, true, true);
             
             var userIds = workingGroupsUserIds.SelectMany(g => g.UserIds).Distinct().ToList();
 
-            var userIdsWithEmails = this.userRepository.FindUsersEmails(userIds, true);
+            var userIdsWithEmails = this._userRepository.FindUsersEmails(userIds, true);
 
             var workingGroupsWithEmails = new List<GroupWithEmails>(workingGroups.Count);
 
@@ -256,18 +256,18 @@ namespace DH.Helpdesk.Services.Services
 
         public WorkingGroupEntity GetWorkingGroup(int id)
         {
-            return this.workingGroupRepository.GetById(id);
+            return this._workingGroupRepository.GetById(id);
         }
 
         public DeleteMessage DeleteWorkingGroup(int id)
         {
-            var workingGroup = this.workingGroupRepository.GetById(id);
+            var workingGroup = this._workingGroupRepository.GetById(id);
 
             if (workingGroup != null)
             {
                 try
                 {
-                    this.workingGroupRepository.Delete(workingGroup);
+                    this._workingGroupRepository.Delete(workingGroup);
                     this.Commit();
 
                     return DeleteMessage.Success;
@@ -283,7 +283,7 @@ namespace DH.Helpdesk.Services.Services
 
         public bool CaseHasWorkingGroup(int customerId, int workingGroupId)
         {
-            return this.workingGroupRepository.CaseHasWorkingGroup(customerId, workingGroupId);
+            return this._workingGroupRepository.CaseHasWorkingGroup(customerId, workingGroupId);
         }
 
         public void SaveWorkingGroup(WorkingGroupEntity workingGroup, out IDictionary<string, string> errors)
@@ -307,11 +307,11 @@ namespace DH.Helpdesk.Services.Services
             if (workingGroup.Id == 0)
             {
                 workingGroup.WorkingGroupGUID = Guid.NewGuid();
-                this.workingGroupRepository.Add(workingGroup);
+                this._workingGroupRepository.Add(workingGroup);
             }
             else
             {
-                var entityToUpdate = this.workingGroupRepository.GetById(workingGroup.Id);
+                var entityToUpdate = this._workingGroupRepository.GetById(workingGroup.Id);
                 entityToUpdate.WorkingGroupName = workingGroup.WorkingGroupName;
                 entityToUpdate.Code = workingGroup.Code;
                 entityToUpdate.EMail = workingGroup.EMail;
@@ -324,27 +324,27 @@ namespace DH.Helpdesk.Services.Services
                 entityToUpdate.SendExternalEmailToWGUsers = workingGroup.SendExternalEmailToWGUsers;
                 entityToUpdate.StateSecondary_Id = workingGroup.StateSecondary_Id;
                 entityToUpdate.ChangedDate = DateTime.UtcNow;
-                this.workingGroupRepository.Update(entityToUpdate);
+                this._workingGroupRepository.Update(entityToUpdate);
             }
 
             if (workingGroup.IsDefault == 1)
             {
-                this.workingGroupRepository.ResetDefault(workingGroup.Id, workingGroup.Customer_Id);
+                this._workingGroupRepository.ResetDefault(workingGroup.Id, workingGroup.Customer_Id);
             }
 
             if (workingGroup.IsDefaultBulletinBoard == 1)
             {
-                this.workingGroupRepository.ResetBulletinBoardDefault(workingGroup.Id, workingGroup.Customer_Id);
+                this._workingGroupRepository.ResetBulletinBoardDefault(workingGroup.Id, workingGroup.Customer_Id);
             }
 
             if (workingGroup.IsDefaultCalendar == 1)
             {
-                this.workingGroupRepository.ResetCalendarDefault(workingGroup.Id, workingGroup.Customer_Id);
+                this._workingGroupRepository.ResetCalendarDefault(workingGroup.Id, workingGroup.Customer_Id);
             }
 
             if (workingGroup.IsDefaultOperationLog == 1)
             {
-                this.workingGroupRepository.ResetOperationLogDefault(workingGroup.Id, workingGroup.Customer_Id);
+                this._workingGroupRepository.ResetOperationLogDefault(workingGroup.Id, workingGroup.Customer_Id);
             }
 
             if (errors.Count == 0)
@@ -355,17 +355,25 @@ namespace DH.Helpdesk.Services.Services
 
         public void Commit()
         {
-            this.unitOfWork.Commit();
+            this._unitOfWork.Commit();
         }
 
         public IEnumerable<ItemOverview> GetOverviews(int customerId)
         {
-            return this.workingGroupRepository.GetOverviews(customerId);
+            return this._workingGroupRepository.GetOverviews(customerId);
         }
 
         public IEnumerable<ItemOverview> GetOverviews(int customerId, IEnumerable<int> workingGroupsIds)
         {
-            return this.workingGroupRepository.GetOverviews(customerId, workingGroupsIds);
+            return this._workingGroupRepository.GetOverviews(customerId, workingGroupsIds);
+        }
+
+        private IQueryable<WorkingGroupEntity> GetAllWorkingGroupsForCustomerQuery(int customerId, bool isTakeOnlyActive)
+        {
+            return _workingGroupRepository
+                .GetMany(x =>
+                    x.Customer_Id == customerId && ((isTakeOnlyActive && x.IsActive == 1) || !isTakeOnlyActive))
+                .AsQueryable();
         }
     }
 }

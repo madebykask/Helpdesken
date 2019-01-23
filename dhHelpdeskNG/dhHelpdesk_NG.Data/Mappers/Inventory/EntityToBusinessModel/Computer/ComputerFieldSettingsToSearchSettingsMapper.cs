@@ -20,7 +20,8 @@
             var scanDate = CreateFieldSetting(entity.FindByName(DateFields.ScanDate));
             var scrapDate = CreateFieldSetting(entity.FindByName(StateFields.ScrapDate));
 
-            return new ComputerFieldsSettingsOverviewForFilter(department, computerType, contractStatusName, contractStartDate, contractEndDate, scanDate, scrapDate);
+            return new ComputerFieldsSettingsOverviewForFilter(department, computerType, contractStatusName,
+                contractStartDate, contractEndDate, scanDate, scrapDate);
         }
 
         private static FieldSettingOverview CreateFieldSetting(FieldOverviewSettingMapperData data)

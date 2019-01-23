@@ -103,6 +103,7 @@
             this.Property(x => x.ContractStatus_Id).HasColumnName("ComputerContractStatus_Id").IsOptional();
             this.Property(x => x.ContractNumber).IsOptional().HasMaxLength(50);
             this.Property(x => x.Price).IsRequired();
+            this.Property(x => x.ComputerFileName).IsOptional();
             this.Property(x => x.ComputerDocument).IsOptional();
             this.Property(x => x.Info).IsOptional().HasMaxLength(1000);
             this.Property(x => x.LoggedUser).IsRequired().HasMaxLength(255);

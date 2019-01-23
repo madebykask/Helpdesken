@@ -1,0 +1,213 @@
+/* You can add global styles to this file, and also import other style files */
+
+.hide {
+  display: none;
+}
+
+$primary-color: #438eb9;
+$font-header-color: white;
+
+.login {
+    .mbsc-page {
+        background: $primary-color; 
+    }
+}
+
+.mbsc-page {
+    font-family: Helvetica, Arial, sans-serif;
+    h1, h2, h3 {
+        font-family: Helvetica, Arial, sans-serif;
+    }
+}
+
+@keyframes md-rotating {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes md-rotating {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+.md-load-btn {
+    min-height: 0!important;
+}
+
+.md-load-btn .mbsc-ic-loop2 {
+    font-size: 22px;
+}
+
+.md-load-btn .mbsc-ic-loop2:before {
+    display: inline-block;
+    -webkit-animation: md-rotating .6s linear infinite;
+    animation: md-rotating .6s linear infinite;
+}
+
+.md-btn-loading {
+    display: block;
+}
+
+.md-load-btn.md-btn-loading .mbsc-ic-loop2 {
+    display: inline-block;
+}
+
+.stickyTop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #efeff4;
+    z-index: 1000;
+}
+
+mbsc-textarea textarea:disabled {
+    opacity: 0.5;
+}
+
+/* .mbsc-ios.mbsc-page {
+    background: white !important;
+} */
+
+a {
+    &.inactive {
+    color: #ccc;
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+.footer { 
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;   
+    .mbsc-ios {
+        &.mbsc-ms-c {
+            background: $primary-color;
+        }
+        .mbsc-ms {
+            .mbsc-ms-item {
+                color: $font-header-color;
+            }        
+            .mbsc-ms-item-sel {
+                color: $font-header-color;
+            }
+        }
+    }
+}
+
+.case-header {
+    &.mbsc-scv {
+        &.mbsc-comp {
+            background: $primary-color;
+            .mbsc-ms-item {
+                color: $font-header-color;
+            }
+            .mbsc-ms-item-sel {
+                color: $font-header-color;
+                font-weight: bold;
+            }
+        
+        }
+    }
+}
+
+.case-overview-header {
+    .mbsc-form {
+        color: $font-header-color;
+        background: $primary-color;
+        .mbsc-form-group {
+            margin: 5px 0 5px 0;
+        }
+        .mbsc-row {
+            min-height: 2.75em;
+            mbsc-input {
+                label {
+                    &.mbsc-input {
+                        margin: 0;
+                        border: 0;
+                    }
+                }
+            }
+            .center {
+                text-align: center;
+                margin: auto;
+            }
+            .bold {
+                font-weight: bold;
+            }
+            &.md-load-btn {
+                padding-top: 0px;
+            }
+            a {
+                color: $font-header-color;
+            }
+        }
+    }
+}
+
+.header {
+    background: $primary-color;
+    .navbar-brand {
+        background: url(../img/dhhelpdesk.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        min-width: 116px;
+        width: 100%;
+        min-height: 25px;
+    }
+}
+
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mbsc-input-wrap { // hack to remove chrome autofill changes input background
+    input {
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus,
+        &t:-webkit-autofill:active {
+            -webkit-transition-delay: 99999s;
+            transition-delay: 99999s;
+        }
+    }
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
+}
+
+ul.nostyle {
+    margin:0px 0px;
+    list-style-type: none; 
+    li 
+    { 
+        padding:0px 0px;
+        margin:0px;
+    }
+} 
+
+
+
+#case-tabs .mbsc-ms-top.mbsc-ms-c {
+  top: 46px!important;
+}  

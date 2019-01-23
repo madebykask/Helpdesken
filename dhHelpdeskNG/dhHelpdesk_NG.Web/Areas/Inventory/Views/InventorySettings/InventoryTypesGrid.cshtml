@@ -1,34 +1,42 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model List<DH.Helpdesk.BusinessData.Models.Shared.ItemOverview>
+﻿@using DH.Helpdesk.BusinessData.Enums.Inventory
+@using DH.Helpdesk.Web.Infrastructure
+@model IList<DH.Helpdesk.BusinessData.Models.Inventory.Output.InventoryTypeOverview>
 @{    
     var userPermission = false;
     if (ViewData.Keys.Contains("InventoryAdminPermission"))
     {
         userPermission = (bool)ViewData["InventoryAdminPermission"];
     }
+    //
  }
 <table id="tblCases" class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
-            <th>@Translation.Get("Typ")
-            </th>
+            <th>@Translation.Get("Typ")</th>
+            <th>@Translation.Get("Visa")</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            if (userPermission)
-            {
-                <tr style="cursor: pointer" onclick="window.location.href = '@Url.Action("EditSettings", "InventorySettings", new { inventoryTypeId = item.Value })'">
-                    <td>@Html.DisplayFor(x => item.Name)
-                    </td>
-                </tr>
-            }else{
-                <tr>
-                    <td>@Html.DisplayFor(x => item.Name)
-                    </td>
-                </tr>
-            }
+            <tr style="cursor: pointer">
+                @if (userPermission)
+                {
+                    <td onclick="window.location.href = '@Url.Action("EditSettings", "InventorySettings", new {inventoryTypeId = item.Value})'">
+                        @Translation.GetCoreTextTranslation(item.Name)</td>
+                } else {
+                    <td>@Translation.GetCoreTextTranslation(item.Name)</td>    
+                }
+                
+                @if (item.IsStandard)
+                {
+                    <td>@Html.CheckBox("chkActive_" + (CurrentModes) item.Value, item.IsActive, new {@class = "switchcheckbox isActive"})</td>
+                }
+                else
+                {
+                    <td></td>
+                }
+            </tr>
         }
     </tbody>
 </table>

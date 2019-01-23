@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Controllers
+﻿using DH.Helpdesk.Web.Common.Tools.Files;
+
+namespace DH.Helpdesk.Web.Controllers
 {
     using System;
     using System.Linq;

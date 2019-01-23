@@ -1,0 +1,2 @@
+<!-- <mbsc-date #date [(ngModel)]="value" [options]="options" [hidden]="options.disabled">{{ field.label }}</mbsc-date> -->
+<mbsc-input #control [ngModel]="value | dateTz: 'L'" >{{ field.label }}</mbsc-input>

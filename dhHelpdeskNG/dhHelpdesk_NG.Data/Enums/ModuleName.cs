@@ -28,5 +28,7 @@
         public static readonly string Orders = "Orders";
 
         public static readonly string OrderAccounts = "OrderAccounts";
+
+        public static readonly string Inventory = "Inventories";
     }
 }

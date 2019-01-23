@@ -125,6 +125,8 @@
         public List<KeyValuePair<int,string>> CaseTypeRelatedFields { get; set; }
 
         public string Information { get; set; }
+
+        public Customer CurrentCustomer { get; set; }
     }
 
 

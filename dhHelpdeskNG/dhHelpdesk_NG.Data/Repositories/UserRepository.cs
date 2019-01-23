@@ -26,7 +26,6 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
     using System.Threading.Tasks;
-    using System.Data.Entity;
 
     #region USER
 
@@ -57,6 +56,7 @@ namespace DH.Helpdesk.Dal.Repositories
         User GetUserForCopy(int id);
         CustomerUserInfo GetUserInfo(int userId); //basic information - good perf
         UserOverview GetUser(int userid); // full information
+        Task<UserOverview> GetUserAsync(int userId);
 
         IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false);
 
@@ -285,7 +285,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public IQueryable<User> GetUsers(int customerId)
         {
             var query = from u in this.DataContext.Users
-                        where u.CustomerUsers.Any(c => customerId == null || c.Customer_Id == customerId) // u.Customer_Id == customerId &&
+                        where u.CustomerUsers.Any(c => c.Customer_Id == customerId) // u.Customer_Id == customerId &&
                         select u;
 
             return query;
@@ -470,6 +470,11 @@ namespace DH.Helpdesk.Dal.Repositories
             var user = this.GetUser(x => x.Id == userId);
             return user;
         }
+
+        public async Task<UserOverview> GetUserAsync(int userId)
+        {
+            return await GetUserAsync(x => x.Id == userId);
+        }
         
         public IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false)
         {
@@ -514,20 +519,29 @@ namespace DH.Helpdesk.Dal.Repositories
         public async Task<UserOverview> GetByUserIdAsync(string userId, string passw)
         {
             var userIdUpper = (userId ?? string.Empty).ToUpper().Trim();
-            var selector = GetUserOviewerSelector();
+            var selector = GetUserOverviewSelector();
 
-            var res = await DataContext.Users.Where(u => u.UserID.ToUpper() == userIdUpper && u.Password == passw).Select(selector).ToListAsync();
+            var res = await DataContext.Users.Where(u => u.UserID.ToUpper() == userIdUpper && u.Password == passw && u.IsActive == 1).Select(selector).ToListAsync();
             return res.FirstOrDefault();
         }
         
         private UserOverview GetUser(Expression<Func<User, bool>> expression)
         {
-            var selector = GetUserOviewerSelector();
-            var u = Table.Where(expression).Select(selector).SingleOrDefault();
-            return u;
+            return GetUserQuery(expression).SingleOrDefault();
         }
 
-        private Expression<Func<User, UserOverview>> GetUserOviewerSelector()
+        private async Task<UserOverview> GetUserAsync(Expression<Func<User, bool>> expression)
+        {
+            return await GetUserQuery(expression).SingleOrDefaultAsync();
+        }
+
+        private IQueryable<UserOverview> GetUserQuery(Expression<Func<User, bool>> expression)
+        {
+            var selector = GetUserOverviewSelector();
+            return Table.Where(expression).Select(selector);
+        }
+
+        private Expression<Func<User, UserOverview>> GetUserOverviewSelector()
         {
             Expression<Func<User, UserOverview>> exp =
                 x => new UserOverview()

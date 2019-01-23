@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.Domain.Cases;
@@ -15,17 +16,12 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 
         public List<CaseSection> GetCaseSections(int customerId)
         {
-            return DataContext.CaseSections
-                .Include(x => x.CaseSectionFields)
-                .Include(x =>x.CaseSectionLanguages)   
-                .Where(x => x.Customer_Id == customerId).OrderBy(x => x.SectionType).ToList();
+            return GetCaseSectionsQuery(customerId).ToList();
         }
 
-        public List<CaseSection> AddCaseSections(List<CaseSection> caseSections)
+        public Task<List<CaseSection>> GetCaseSectionsAsync(int customerId)
         {
-            DataContext.CaseSections.AddRange(caseSections);
-            DataContext.SaveChanges();
-            return caseSections;
+            return GetCaseSectionsQuery(customerId).ToListAsync();
         }
 
         public CaseSection GetCaseSectionByType(int caseSectionType, int customerId)
@@ -63,27 +59,28 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
             DataContext.SaveChanges();
         }
 
-        public CaseSectionLanguage GetCaseSectionLanguage(int id, int languageId)
-        {
-            return DataContext.CaseSectionLanguages.SingleOrDefault(x => x.CaseSection_Id == id && x.Language_Id == languageId);
-        }
-
         public void ApplyChanges()
         {
             DataContext.SaveChanges();
+        }
+        private IOrderedQueryable<CaseSection> GetCaseSectionsQuery(int customerId)
+        {
+            return DataContext.CaseSections
+                .Include(x => x.CaseSectionFields)
+                .Include(x =>x.CaseSectionLanguages)   
+                .Where(x => x.Customer_Id == customerId).OrderBy(x => x.SectionType);
         }
     }
 
     public interface ICaseSectionsRepository
     {
         List<CaseSection> GetCaseSections(int customerId);
-        List<CaseSection> AddCaseSections(List<CaseSection> caseSections);
+        Task<List<CaseSection>> GetCaseSectionsAsync(int customerId);
         CaseSection GetCaseSection(int sectionId, int customerId);
         CaseSection GetCaseSectionByType(int caseSectionType, int customerId);
         int UpdateCaseSection(CaseSection caseSection);
         int AddCaseSection(CaseSection caseSection);
         void DeleteCaseSectionFields(List<int> ids);
-        CaseSectionLanguage GetCaseSectionLanguage(int id, int languageId);
         void ApplyChanges();
     }
 }

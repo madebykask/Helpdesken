@@ -2,6 +2,8 @@
 <!--
   For more information on how to configure your ASP.NET application, please visit
   http://go.microsoft.com/fwlink/?LinkId=152368
+  
+  ignore
   -->
 <configuration>
   <configSections>
@@ -9,7 +11,7 @@
     <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false"/>
   </configSections>
   <connectionStrings>
-    <!-- Dev --> <!-- testing template generation, ignore, ignore --> 
+    <!-- Dev, ignore, ignore --> 
     <add name="HelpdeskOleDbContext" connectionString="Provider=SQLOLEDB;Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};" providerName="System.Data.OleDb"/>
     <add name="HelpdeskSqlServerDbContext" connectionString="Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword};MultipleActiveResultSets=True;Connection Lifetime=3;Max Pool Size=3;" providerName="System.Data.SqlClient"/>
     <add name="HelpdeskIndexingService" connectionString="Provider=MSIDXS;"/>
@@ -45,6 +47,7 @@
   </system.web.extensions>
   <system.web>
     <compilation debug="true" targetFramework="4.5.2" />
+    #{if ShowRemoteErrors}<customErrors mode="Off"/>#{/if}
     <pages>
       <namespaces>
         <add namespace="System.Web.Helpers"/>
@@ -71,6 +74,12 @@
     <httpHandlers>
       <add path="Reserved.ReportViewerWebControl.axd" verb="*" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" validate="false"/>
     </httpHandlers>
+
+    <machineKey
+      validationKey="121B090935F6E49C2C797F69BBAAD8402ABD2EE0B667A8B44EA7DD4374267A75D7AD972A119482D15A4127461DB1DC347C1A63AE5F1CCFAACFF1B72A7F0A282C"
+      decryptionKey="CBAB74D7EC5BB56D75D217CECBFB9628819BDB8BF91CFCD64568A145BE59718B"
+      validation="SHA1"
+      decryption="AES"/>
   </system.web>
   <system.webServer>
     <modules runAllManagedModulesForAllRequests="false"/>
@@ -156,6 +165,7 @@
         <assemblyIdentity name="System.Web.Http.WebHost" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
       </dependentAssembly>
+      <!-- ADD 2017-08-17 /TAN -->
       <dependentAssembly>
         <assemblyIdentity name="MiniProfiler" publicKeyToken="b44f9351044011a3" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.2.0.157" newVersion="3.2.0.157" />
@@ -164,6 +174,10 @@
         <assemblyIdentity name="System.Net.Http.Formatting" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-5.2.3.0" newVersion="5.2.3.0" />
       </dependentAssembly>
+      <!--<dependentAssembly>
+        <assemblyIdentity name="itextsharp" publicKeyToken="8354ae6d2174ddca" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-5.5.0.0" newVersion="5.5.0.0" />
+      </dependentAssembly>-->
       <dependentAssembly>
         <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" culture="neutral" />
         <bindingRedirect oldVersion="0.0.0.0-3.1.0.0" newVersion="3.1.0.0" />
@@ -173,8 +187,8 @@
         <bindingRedirect oldVersion="0.0.0.0-3.1.0.0" newVersion="3.1.0.0" />
       </dependentAssembly>
       <dependentAssembly>
-        <assemblyIdentity name="itextsharp" publicKeyToken="8354ae6d2174ddca" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-5.5.0.0" newVersion="5.5.0.0" />
+        <assemblyIdentity name="MiniProfiler" publicKeyToken="b44f9351044011a3" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-3.2.0.157" newVersion="3.2.0.157" />
       </dependentAssembly>
       <dependentAssembly>
         <assemblyIdentity name="Ninject" publicKeyToken="c7192dc5380945e7" culture="neutral" />

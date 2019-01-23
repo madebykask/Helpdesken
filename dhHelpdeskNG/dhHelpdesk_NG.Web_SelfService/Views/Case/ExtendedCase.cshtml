@@ -110,6 +110,7 @@
         },
 
         caseInitValues: {
+            AdministratorId: '@Model.CaseDataModel.Performer_User_Id',
             CaseId: '@Model.CaseDataModel.Id',
             CustomerId: '@Model.CaseDataModel.Customer_Id',
             ReportedBy: @Html.Raw(Json.Encode(Model.CaseDataModel.ReportedBy)),
@@ -172,9 +173,15 @@
     */
 </script>
 
-@if (Model.CaseId == 0 || (Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
+@*@section Styles {
+    <link href="@Url.Content("~/Content/css/ex-case-mobile.css")" rel="stylesheet" type="text/css" />
+}*@
+
+
+@if (Model.CurrentCustomer.ShowCaseActionsPanelOnTop && 
+    (Model.CaseId == 0 || Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
 {
-    @Html.Partial("_ExtendedCaseControlPanel", Model)
+    @Html.Partial("_ExtendedCaseControlPanel", Model.CreateExCaseControlsPanelModel(1))
 }
 
 @using (Html.BeginForm("ExtendedCase", "case", null, FormMethod.Post, new { id = "extendedCaseForm" }))
@@ -385,18 +392,18 @@
                         }
                         <table id="NewCasefiles_table" class="table table-striped" style="margin-top: 10px;">
                             <tbody>
-                                @if (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0)
+                            @if (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0)
+                            {
+                                foreach (var item in Model.CaseDataModel.CaseFiles)
                                 {
-                                    foreach (var item in Model.CaseDataModel.CaseFiles)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <i class="glyphicon glyphicon-file">&nbsp;</i>
-                                                <a style="color: blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
-                                            </td>
-                                        </tr>
-                                    }
+                                    <tr>
+                                        <td>
+                                            <i class="glyphicon glyphicon-file">&nbsp;</i>
+                                            <a style="color: blue" href="@downloadCaseFileCompleteUrl.Replace("{name}", item.FileName).Replace("{id}", Model.CaseId.ToString())">@item.FileName</a>
+                                        </td>
+                                    </tr>
                                 }
+                            }
                             </tbody>
                         </table>
                     </div>
@@ -407,8 +414,8 @@
 
     @*/* only on new for now.. */*@
     @if (ViewBag.AttachmentPlacement == 1 &&
-                                 Model.CaseId == 0 &&
-                                 Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+         Model.CaseId == 0 &&
+         Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
     {
         <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -429,6 +436,12 @@
         @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")
     }
 </div>
+
+@if (Model.CurrentCustomer.ShowCaseActionsPanelAtBottom && 
+     (Model.CaseId == 0 || Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
+{
+    @Html.Partial("_ExtendedCaseControlPanel", Model.CreateExCaseControlsPanelModel(2))
+}
 
 @section Scripts
 {

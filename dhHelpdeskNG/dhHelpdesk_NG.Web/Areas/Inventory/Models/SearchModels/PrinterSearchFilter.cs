@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
+﻿using DH.Helpdesk.Web.Enums.Inventory;
+
+namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
 {
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Services.Requests.Inventory;
@@ -28,6 +30,11 @@
         public PrintersFilter CreateRequest(int customerId)
         {
             return new PrintersFilter(customerId, this.DepartmentId, this.SearchFor, this.RecordsCount);
+        }
+
+        public static string CreateFilterId()
+        {
+            return $"{TabName.Inventories}{InventoryFilterMode.Printer}";
         }
     }
 }

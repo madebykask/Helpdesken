@@ -1,96 +1,164 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Web;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Dal.Repositories.Cases;
+using DH.Helpdesk.Services.BusinessLogic.Settings;
 
 namespace DH.Helpdesk.Services.Services
 {
-    using System.Collections.Generic;
-
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Repositories.Cases;
-    using DH.Helpdesk.Domain;
-
     public interface ICaseFileService
     {
-        //IList<CaseFile> GetCaseFiles(int caseid);
-        byte[] GetFileContentByIdAndFileName(int caseId,string basePath, string fileName);
-        List<string> FindFileNamesByCaseId(int caseId);
-        void AddFile(CaseFileDto caseFileDto);
-        void AddFiles(List<CaseFileDto> caseFileDtos);
+        CaseFileContent GetCaseFile(int customerId, int caseId, int fileId, bool embedImmges = false);
+        byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
+        CaseFileModel GetCaseFile(int caseId, int fileId);
+        IList<string> FindFileNamesByCaseId(int caseId);
+        int AddFile(CaseFileDto caseFileDto);
+        IList<int> AddFiles(IList<CaseFileDto> caseFileDtos);
         void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath);
         bool FileExists(int caseId, string fileName);
         void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName);
 
-        List<CaseFileModel> GetCaseFiles(int caseId, bool canDelete);
-        List<CaseFileDate> FindFileNamesAndDatesByCaseId(int caseId);
+        IList<CaseFileModel> GetCaseFiles(int caseId, bool canDelete);
+        IList<CaseFileDate> FindFileNamesAndDatesByCaseId(int caseId);
     }
 
     public class CaseFileService : ICaseFileService
     {
-        #region Variables
-
         private readonly ICaseFileRepository _caseFileRepository;
-        private readonly IFilesStorage _filesStorage;
+        private readonly ISettingsLogic _settingsLogic;
+
+        #region ctor()
+
+        public CaseFileService(ICaseFileRepository caseFileRepository, ISettingsLogic settingsLogic)
+        {
+            _caseFileRepository = caseFileRepository;
+            _settingsLogic = settingsLogic;
+        }
 
         #endregion
 
-        #region Public Methods and Functions
+        #region Public Methods
 
-        public CaseFileService(
-            ICaseFileRepository caseFileRepository, IFilesStorage fileStorage)
+        public CaseFileModel GetCaseFile(int caseId, int fileId)
         {
-            this._caseFileRepository = caseFileRepository;
-            this._filesStorage = fileStorage; 
+            var fileInfo = _caseFileRepository.GetCaseFileInfo(caseId, fileId);
+            return fileInfo;
         }
 
+        public CaseFileContent GetCaseFile(int customerId, int caseId, int fileId, bool embedImmges = false)
+        {
+            var basePath = GetFileAttachFolderPath(customerId);
+            var res = _caseFileRepository.GetCaseFileContent(caseId, fileId, basePath);
+
+            var caseFilePath = _caseFileRepository.GetCaseFilePath(caseId, fileId, basePath);
+            if (embedImmges && Path.GetExtension(res.FileName ?? string.Empty).Equals(".htm", StringComparison.OrdinalIgnoreCase))
+            {
+                res = new CaseFileContent()
+                {
+                    Id = res.Id,
+                    FileName = res.FileName,
+                    Content = EmbedFilesIntoHtml(caseFilePath, res.Content)
+                };
+            }
+            
+            return res;
+        }
+
+        private byte[] EmbedFilesIntoHtml(string filePath, byte[] fileData)
+        {
+            if (fileData == null)
+                return null;
+
+            var hasChanged = false;
+            var res = fileData;
+
+            var content = System.Text.Encoding.Unicode.GetString(fileData, 0, fileData.Length);
+
+            var dirName = Path.GetDirectoryName(filePath);
+            if (Directory.Exists(dirName))
+            {
+                foreach (var file in Directory.GetFiles(dirName))
+                {
+                    var fileName = Path.GetFileName(file);
+                    if (Path.GetExtension(fileName).EndsWith(".htm", StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    var imgData = CreateImageSrcData(file);
+                    content = content.Replace(fileName, imgData);
+                    hasChanged = true;
+                }
+            }
+
+            if (hasChanged)
+                res = System.Text.Encoding.Unicode.GetBytes(content);
+
+            return res;
+        }
+
+        private string CreateImageSrcData(string filename)
+        {
+            var mimeType = MimeMapping.GetMimeMapping(filename);
+            string srcData;
+
+            using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
+            {
+                var filebytes = new byte[fs.Length];
+                fs.Read(filebytes, 0, Convert.ToInt32(fs.Length));
+                srcData = Convert.ToBase64String(filebytes, Base64FormattingOptions.None);
+            }
+            return $"data:{mimeType};base64," + srcData;
+        }
+
+        public CaseFileContent GetCaseFile(int customerId, int caseId, int fileId )
+        {
+            var basePath = GetFileAttachFolderPath(customerId);
+            var res = _caseFileRepository.GetCaseFileContent(caseId, fileId, basePath);
+            return res;
+        }
+        
         public byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName)
         {
-            return this._caseFileRepository.GetFileContentByIdAndFileName(caseId, basePath, fileName);  
+            return _caseFileRepository.GetFileContentByIdAndFileName(caseId, basePath, fileName);
         }
 
-        public void AddFiles(List<CaseFileDto> caseFileDtos)
+        public IList<int> AddFiles(IList<CaseFileDto> caseFileDtos)
         {
-            foreach (var f in caseFileDtos)
+            var fileIds = new List<int>();
+            foreach (var fileDto in caseFileDtos)
             {
-                this.AddFile(f);
+                var id = AddFile(fileDto);
+                fileIds.Add(id);
             }
+            return fileIds;
         }
 
-        public void AddFile(CaseFileDto caseFileDto)
+        public int AddFile(CaseFileDto caseFileDto)
         {
-            var caseFile = new CaseFile
-            {
-                CreatedDate = caseFileDto.CreatedDate,
-                Case_Id = caseFileDto.ReferenceId,
-                FileName = caseFileDto.FileName,
-                UserId = caseFileDto.UserId
-            };
-            this._caseFileRepository.Add(caseFile);
-            this._caseFileRepository.Commit();
-
-            int caseNo = this._caseFileRepository.GetCaseNumberForUploadedFile(caseFileDto.ReferenceId);
-            this._filesStorage.SaveFile(caseFileDto.Content, caseFileDto.BasePath, caseFileDto.FileName, ModuleName.Cases, caseNo);
+            return _caseFileRepository.SaveCaseFile(caseFileDto);
         }
 
         public void MoveCaseFiles(string caseNumber, string fromBasePath, string toBasePath)
         {
-            this._caseFileRepository.MoveCaseFiles(caseNumber, fromBasePath, toBasePath); 
+            _caseFileRepository.MoveCaseFiles(caseNumber, fromBasePath, toBasePath);
         }
 
         public void DeleteByCaseIdAndFileName(int caseId, string basePath, string fileName)
         {
-            this._caseFileRepository.DeleteByCaseIdAndFileName(caseId, basePath, fileName);  
+            _caseFileRepository.DeleteByCaseIdAndFileName(caseId, basePath, fileName);
         }
 
-        public List<CaseFileModel> GetCaseFiles(int caseId, bool canDelete)
+        public IList<CaseFileModel> GetCaseFiles(int caseId, bool canDelete)
         {
-            return this._caseFileRepository.GetCaseFiles(caseId, canDelete);
+            return _caseFileRepository.GetCaseFiles(caseId, canDelete);
         }
 
-        public List<CaseFileDate> FindFileNamesAndDatesByCaseId(int caseId)
+        public IList<CaseFileDate> FindFileNamesAndDatesByCaseId(int caseId)
         {
-            var files = this._caseFileRepository.GetCaseFilesByCaseId(caseId);
+            var files = _caseFileRepository.GetCaseFilesByCaseId(caseId);
+
             return files.Select(x => new CaseFileDate
             {
                 FileDate = x.CreatedDate,
@@ -98,17 +166,25 @@ namespace DH.Helpdesk.Services.Services
             }).ToList();
         }
 
-        public List<string> FindFileNamesByCaseId(int caseId)
+        public IList<string> FindFileNamesByCaseId(int caseId)
         {
-            return this._caseFileRepository.FindFileNamesByCaseId(caseId);  
+            return _caseFileRepository.FindFileNamesByCaseId(caseId);
         }
 
         public bool FileExists(int caseId, string fileName)
         {
-            return this._caseFileRepository.FileExists(caseId, fileName);  
+            return _caseFileRepository.FileExists(caseId, fileName);
         }
 
         #endregion
 
+        #region Private Methods
+
+        private string GetFileAttachFolderPath(int customerId)
+        {
+            return _settingsLogic.GetFilePath(customerId);
+        }
+
+        #endregion
     }
 }

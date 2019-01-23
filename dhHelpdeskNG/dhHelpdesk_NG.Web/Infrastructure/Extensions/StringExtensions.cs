@@ -111,17 +111,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return ret;
         }
 
-        public static string ReturnCustomerUserValue(this string valueToReturn)
-        {
-            var ret = string.Empty;
-
-            if (!string.IsNullOrWhiteSpace(valueToReturn))  
-                if (valueToReturn != "0")   
-                    ret = valueToReturn; 
-
-            return ret;
-        }
-
         public static string IdIsSelected(this int id, string selectedValues)
         {
             var ret = string.Empty; 

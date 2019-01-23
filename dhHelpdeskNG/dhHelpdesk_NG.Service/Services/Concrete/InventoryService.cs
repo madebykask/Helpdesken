@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.User.Input;
+﻿using System.Globalization;
+using DH.Helpdesk.BusinessData.Models.User.Input;
 
 namespace DH.Helpdesk.Services.Services.Concrete
 {
@@ -20,7 +21,6 @@ namespace DH.Helpdesk.Services.Services.Concrete
     using DH.Helpdesk.BusinessData.Models.Inventory.Output.Server;
     using DH.Helpdesk.BusinessData.Models.Operation;
     using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Input;
     using DH.Helpdesk.Common.Types;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
@@ -40,69 +40,75 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
     public class InventoryService : IInventoryService
     {
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        #region Fields
 
-        private readonly IInventoryTypeRepository inventoryTypeRepository;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        private readonly IComputerRepository computerRepository;
+        private readonly IInventoryTypeRepository _inventoryTypeRepository;
 
-        private readonly IServerRepository serverRepository;
+        private readonly IComputerRepository _computerRepository;
 
-        private readonly IPrinterRepository printerRepository;
+        private readonly IServerRepository _serverRepository;
 
-        private readonly IInventoryRepository inventoryRepository;
+        private readonly IPrinterRepository _printerRepository;
 
-        private readonly IInventoryTypePropertyValueRepository inventoryTypePropertyValueRepository;
+        private readonly IInventoryRepository _inventoryRepository;
 
-        private readonly IComputerLogRepository computerLogRepository;
+        private readonly IInventoryTypePropertyValueRepository _inventoryTypePropertyValueRepository;
 
-        private readonly IComputerInventoryRepository computerInventoryRepository;
+        private readonly IComputerLogRepository _computerLogRepository;
 
-        private readonly IOperationLogRepository operationLogRepository;
+        private readonly IComputerInventoryRepository _computerInventoryRepository;
 
-        private readonly InventoryTypeGroupRepository inventoryTypeGroupRepository;
+        private readonly IOperationLogRepository _operationLogRepository;
 
-        private readonly IInventoryFieldSettingsRepository inventoryFieldSettingsRepository;
+        private readonly InventoryTypeGroupRepository _inventoryTypeGroupRepository;
 
-        private readonly IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository;
+        private readonly IInventoryFieldSettingsRepository _inventoryFieldSettingsRepository;
 
-        private readonly IComputerUsersRepository computerUsersRepository;
+        private readonly IInventoryDynamicFieldSettingsRepository _inventoryDynamicFieldSettingsRepository;
 
-        private readonly IComputerRestorer computerRestorer;
+        private readonly IComputerUsersRepository _computerUsersRepository;
 
-        private readonly IComputerValidator computerValidator;
+        private readonly IComputerRestorer _computerRestorer;
 
-        private readonly IComputerFieldSettingsRepository computerFieldSettingsRepository;
+        private readonly IComputerValidator _computerValidator;
 
-        private readonly IComputerHistoryRepository computerHistoryRepository;
+        private readonly IComputerFieldSettingsRepository _computerFieldSettingsRepository;
 
-        private readonly ILogicalDriveRepository logicalDriveRepository;
+        private readonly IComputerHistoryRepository _computerHistoryRepository;
 
-        private readonly ISoftwareRepository softwareRepository;
+        private readonly ILogicalDriveRepository _logicalDriveRepository;
 
-        private readonly IServerFieldSettingsRepository serverFieldSettingsRepository;
+        private readonly ISoftwareRepository _softwareRepository;
 
-        private readonly IServerRestorer serverRestorer;
+        private readonly IServerFieldSettingsRepository _serverFieldSettingsRepository;
 
-        private readonly IServerValidator serverValidator;
+        private readonly IServerRestorer _serverRestorer;
 
-        private readonly IOperationObjectRepository operationObjectRepository;
+        private readonly IServerValidator _serverValidator;
 
-        private readonly IOperationLogEMailLogRepository operationLogEMailLogRepository;
+        private readonly IOperationObjectRepository _operationObjectRepository;
 
-        private readonly IServerLogicalDriveRepository serverLogicalDriveRepository;
+        private readonly IOperationLogEMailLogRepository _operationLogEMailLogRepository;
 
-        private readonly IServerSoftwareRepository serverSoftwareRepository;
+        private readonly IServerLogicalDriveRepository _serverLogicalDriveRepository;
 
-        private readonly IPrinterFieldSettingsRepository printerFieldSettingsRepository;
+        private readonly IServerSoftwareRepository _serverSoftwareRepository;
 
-        private readonly IPrinterRestorer printerRestorer;
+        private readonly IPrinterFieldSettingsRepository _printerFieldSettingsRepository;
 
-        private readonly IPrinterValidator printerValidator;
+        private readonly IPrinterRestorer _printerRestorer;
 
-        private readonly IInventoryValidator inventoryValidator;
+        private readonly IPrinterValidator _printerValidator;
 
-        private readonly IInventoryRestorer inventoryRestorer;
+        private readonly IInventoryValidator _inventoryValidator;
+
+        private readonly IInventoryRestorer _inventoryRestorer;
+
+        private readonly IInventoryTypeStandardSettingsRepository _inventoryTypeStandardSettingsRepository;
+
+        #endregion
 
         public InventoryService(
             IInventoryTypeRepository inventoryTypeRepository,
@@ -116,6 +122,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             IOperationLogRepository operationLogRepository,
             InventoryTypeGroupRepository inventoryTypeGroupRepository,
             IInventoryFieldSettingsRepository inventoryFieldSettingsRepository,
+            IInventoryTypeStandardSettingsRepository inventoryTypeStandardSettingsRepository,
             IInventoryDynamicFieldSettingsRepository inventoryDynamicFieldSettingsRepository,
             IComputerUsersRepository computerUsersRepository,
             IComputerRestorer computerRestorer,
@@ -138,115 +145,260 @@ namespace DH.Helpdesk.Services.Services.Concrete
             IInventoryRestorer inventoryRestorer,
             IUnitOfWorkFactory unitOfWorkFactory)
         {
-            this.inventoryTypeRepository = inventoryTypeRepository;
-            this.computerRepository = computerRepository;
-            this.serverRepository = serverRepository;
-            this.printerRepository = printerRepository;
-            this.inventoryRepository = inventoryRepository;
-            this.inventoryTypePropertyValueRepository = inventoryTypePropertyValueRepository;
-            this.computerLogRepository = computerLogRepository;
-            this.computerInventoryRepository = computerInventoryRepository;
-            this.operationLogRepository = operationLogRepository;
-            this.inventoryTypeGroupRepository = inventoryTypeGroupRepository;
-            this.inventoryFieldSettingsRepository = inventoryFieldSettingsRepository;
-            this.inventoryDynamicFieldSettingsRepository = inventoryDynamicFieldSettingsRepository;
-            this.computerUsersRepository = computerUsersRepository;
-            this.computerRestorer = computerRestorer;
-            this.computerValidator = computerValidator;
-            this.computerFieldSettingsRepository = computerFieldSettingsRepository;
-            this.computerHistoryRepository = computerHistoryRepository;
-            this.logicalDriveRepository = logicalDriveRepository;
-            this.softwareRepository = softwareRepository;
-            this.serverFieldSettingsRepository = serverFieldSettingsRepository;
-            this.serverRestorer = serverRestorer;
-            this.serverValidator = serverValidator;
-            this.operationObjectRepository = operationObjectRepository;
-            this.operationLogEMailLogRepository = operationLogEMailLogRepository;
-            this.serverLogicalDriveRepository = serverLogicalDriveRepository;
-            this.serverSoftwareRepository = serverSoftwareRepository;
-            this.printerFieldSettingsRepository = printerFieldSettingsRepository;
-            this.printerRestorer = printerRestorer;
-            this.printerValidator = printerValidator;
-            this.inventoryValidator = inventoryValidator;
-            this.inventoryRestorer = inventoryRestorer;
-            this.unitOfWorkFactory = unitOfWorkFactory;
+            _inventoryTypeStandardSettingsRepository = inventoryTypeStandardSettingsRepository;
+            _inventoryTypeRepository = inventoryTypeRepository;
+            _computerRepository = computerRepository;
+            _serverRepository = serverRepository;
+            _printerRepository = printerRepository;
+            _inventoryRepository = inventoryRepository;
+            _inventoryTypePropertyValueRepository = inventoryTypePropertyValueRepository;
+            _computerLogRepository = computerLogRepository;
+            _computerInventoryRepository = computerInventoryRepository;
+            _operationLogRepository = operationLogRepository;
+            _inventoryTypeGroupRepository = inventoryTypeGroupRepository;
+            _inventoryFieldSettingsRepository = inventoryFieldSettingsRepository;
+            _inventoryDynamicFieldSettingsRepository = inventoryDynamicFieldSettingsRepository;
+            _computerUsersRepository = computerUsersRepository;
+            _computerRestorer = computerRestorer;
+            _computerValidator = computerValidator;
+            _computerFieldSettingsRepository = computerFieldSettingsRepository;
+            _computerHistoryRepository = computerHistoryRepository;
+            _logicalDriveRepository = logicalDriveRepository;
+            _softwareRepository = softwareRepository;
+            _serverFieldSettingsRepository = serverFieldSettingsRepository;
+            _serverRestorer = serverRestorer;
+            _serverValidator = serverValidator;
+            _operationObjectRepository = operationObjectRepository;
+            _operationLogEMailLogRepository = operationLogEMailLogRepository;
+            _serverLogicalDriveRepository = serverLogicalDriveRepository;
+            _serverSoftwareRepository = serverSoftwareRepository;
+            _printerFieldSettingsRepository = printerFieldSettingsRepository;
+            _printerRestorer = printerRestorer;
+            _printerValidator = printerValidator;
+            _inventoryValidator = inventoryValidator;
+            _inventoryRestorer = inventoryRestorer;
+            _unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public List<ComputerUserOverview> GetComputerUsers(int customerId, string searchFor)
         {
-            return this.computerUsersRepository.GetOverviews(customerId, searchFor);
+            return _computerUsersRepository.GetOverviews(customerId, searchFor);
         }
 
         public List<ComputerUserOverview> GetComputerUserHistory(int computerId)
         {
-            return this.computerUsersRepository.GetConnectedToComputerOverviews(computerId);
+            return _computerUsersRepository.GetConnectedToComputerOverviews(computerId);
         }
 
         public void AddInventoryType(InventoryType businessModel)
         {
-            this.inventoryTypeRepository.Add(businessModel);
-            this.inventoryTypeRepository.Commit();
+            _inventoryTypeRepository.Add(businessModel);
+            _inventoryTypeRepository.Commit();
         }
 
         public void UpdateInventoryType(InventoryType businessModel)
         {
-            this.inventoryTypeRepository.Update(businessModel);
-            this.inventoryTypeRepository.Commit();
+            _inventoryTypeRepository.Update(businessModel);
+            _inventoryTypeRepository.Commit();
+        }
+
+        public void UpdateStandardInventoryTypeSettings(int customerId, CurrentModes modes, bool isActive)
+        {
+            var settings = _inventoryTypeStandardSettingsRepository.GetCustomerSettings(customerId);
+            if (settings != null)
+            {
+                switch (modes)
+                {
+                    case CurrentModes.Workstations:
+                        settings.ShowWorkstations = isActive;
+                    break;
+
+                    case CurrentModes.Printers:
+                        settings.ShowPrinters = isActive;
+                    break;
+
+                    case CurrentModes.Servers:
+                        settings.ShowServers = isActive;
+                    break;
+                }
+            }
+
+            _inventoryTypeStandardSettingsRepository.Commit();
         }
 
         public void DeleteInventoryType(int id)
         {
-            this.computerInventoryRepository.DeleteByInventoryTypeId(id);
-            this.computerInventoryRepository.Commit();
+            _computerInventoryRepository.DeleteByInventoryTypeId(id);
+            _computerInventoryRepository.Commit();
 
-            this.inventoryTypePropertyValueRepository.DeleteByInventoryTypeId(id);
-            this.inventoryTypePropertyValueRepository.Commit();
+            _inventoryTypePropertyValueRepository.DeleteByInventoryTypeId(id);
+            _inventoryTypePropertyValueRepository.Commit();
 
-            this.inventoryFieldSettingsRepository.DeleteByInventoryTypeId(id);
-            this.inventoryFieldSettingsRepository.Commit();
+            _inventoryFieldSettingsRepository.DeleteByInventoryTypeId(id);
+            _inventoryFieldSettingsRepository.Commit();
 
-            this.inventoryDynamicFieldSettingsRepository.DeleteByInventoryTypeId(id);
-            this.inventoryDynamicFieldSettingsRepository.Commit();
+            _inventoryDynamicFieldSettingsRepository.DeleteByInventoryTypeId(id);
+            _inventoryDynamicFieldSettingsRepository.Commit();
 
-            this.inventoryRepository.DeleteByInventoryTypeId(id);
-            this.inventoryRepository.Commit();
+            _inventoryRepository.DeleteByInventoryTypeId(id);
+            _inventoryRepository.Commit();
 
-            this.inventoryTypeGroupRepository.DeleteByInventoryTypeId(id);
-            this.inventoryTypeGroupRepository.Commit();
+            _inventoryTypeGroupRepository.DeleteByInventoryTypeId(id);
+            _inventoryTypeGroupRepository.Commit();
 
-            this.inventoryTypeRepository.Delete(id);
-            this.inventoryTypeRepository.Commit();
+            _inventoryTypeRepository.Delete(id);
+            _inventoryTypeRepository.Commit();
         }
 
         public InventoryType GetInventoryType(int id)
         {
-            return this.inventoryTypeRepository.FindById(id);
+            return _inventoryTypeRepository.FindById(id);
         }
+
+        #region GetInventoryTypes
 
         public List<ItemOverview> GetInventoryTypes(int customerId)
         {
-            return this.inventoryTypeRepository.FindOverviews(customerId);
+            return _inventoryTypeRepository.FindOverviews(customerId);
         }
+
+        public List<ItemOverview> GetInventoryTypes(int customerId, bool includeStandard, ItemOverview separatorItem = null)
+        {
+            var items = new List<ItemOverview>();
+            var customInventoryTpes = _inventoryTypeRepository.FindOverviews(customerId);
+            if (includeStandard)
+            {
+                var standardInventoryTypes = GetStandardInvetoryTypes(customerId);
+                
+                //add separator item only if standard items exist
+                if (standardInventoryTypes.Any() && separatorItem != null)
+                {
+                    standardInventoryTypes.Add(separatorItem);
+                }
+
+                items.AddRange(standardInventoryTypes);
+            }
+
+            items.AddRange(customInventoryTpes);
+            return items;
+        }
+
+        public IList<InventoryTypeOverview> GetInventoryTypesWithSettings(int customerId)
+        {
+            var inventoryTypes = new List<InventoryTypeOverview>();
+
+            var activeInventoryStandardTypeIds =
+                GetActiveInventoryStandardTypes(customerId).Select(x => (int)x).ToList();
+
+            // 1. add fixed/standard inventory types with active settings
+            var standardInventoryTypes = GetStandardInvetoryTypes(customerId, false).Select(t => new InventoryTypeOverview()
+            {
+                Name = t.Name,
+                Value = Int32.Parse(t.Value),
+                IsStandard = true,
+                IsActive = activeInventoryStandardTypeIds.Contains(Int32.Parse(t.Value))
+            });
+
+            inventoryTypes.AddRange(standardInventoryTypes);
+
+            // 2.add user defined inventory types
+            var customInventoryTypes = 
+                _inventoryTypeRepository.FindOverviews(customerId).Select(t => new InventoryTypeOverview()
+                {
+                    Name = t.Name,
+                    Value = Int32.Parse(t.Value),
+                    IsStandard = false,
+                    //IsActive //not used since makes sense only for standard types
+                });
+            
+            inventoryTypes.AddRange(customInventoryTypes);
+
+            return inventoryTypes;
+        }
+
+        private List<ItemOverview> GetStandardInvetoryTypes(int customerId, bool activeOnly = true)
+        {
+            var activeTypes = activeOnly ? GetActiveInventoryStandardTypes(customerId) : new List<CurrentModes>();
+            
+            //select standard types based on settings
+            var inventoryTypes = 
+                Enum.GetValues(typeof(CurrentModes))
+                    .Cast<CurrentModes>()
+                    .Where(d => d < 0 && (!activeOnly || activeTypes.Contains(d)))
+                    .Select(d => new 
+                    {
+                        Value = Convert.ToInt32(d).ToString(CultureInfo.InvariantCulture),
+                        Name = GetInventoryTypeCaption(d)
+                    }).OrderBy(d => d.Name).ToList();
+
+            var inventoryTypeList = 
+                inventoryTypes.Select(x => new ItemOverview(x.Name, x.Value)).ToList();
+            
+            return inventoryTypeList;
+        }
+
+        private List<CurrentModes> GetActiveInventoryStandardTypes(int customerId)
+        {
+            var inventoryTypes = new List<CurrentModes>();
+            
+            //inventoryTypes
+            var settings = _inventoryTypeStandardSettingsRepository.GetCustomerSettings(customerId);
+            if (settings != null)
+            {
+                if (settings.ShowPrinters)
+                    inventoryTypes.Add(CurrentModes.Printers);
+
+                if (settings.ShowServers)
+                    inventoryTypes.Add(CurrentModes.Servers);
+
+                if (settings.ShowWorkstations)
+                    inventoryTypes.Add(CurrentModes.Workstations);
+            }
+
+            return inventoryTypes;
+        }
+
+        private string GetInventoryTypeCaption(CurrentModes mode)
+        {
+            switch (mode)
+            {
+                case CurrentModes.Workstations:
+                    return "Arbetsstationer";
+
+                case CurrentModes.Servers:
+                    return "Server";
+
+                case CurrentModes.Printers:
+                    return "Skrivare";
+
+                default:
+                    return string.Empty;
+            }
+        }
+
+        #endregion
 
         public List<ItemOverview> GetNotConnectedInventory(int inventoryType, int computerId)
         {
-            return this.inventoryRepository.FindNotConnectedOverviews(inventoryType, computerId);
+            return _inventoryRepository.FindNotConnectedOverviews(inventoryType, computerId);
         }
 
         public List<InventoryReportModel> GetInventoryCounts(int customerId, int? departmentId)
         {
-            var workstationCount = new InventoryReportModel(
-                CurrentModes.Workstations.ToString(),
-                this.computerRepository.GetComputerCount(customerId, departmentId));
-            var serverCount = new InventoryReportModel(
-                CurrentModes.Servers.ToString(),
-                this.serverRepository.GetServerCount(customerId));
-            var printerCount = new InventoryReportModel(
-                CurrentModes.Printers.ToString(),
-                this.printerRepository.GetPrinterCount(customerId, departmentId));
+            var workstationCount = 
+                new InventoryReportModel(CurrentModes.Workstations.ToString(), 
+                                         _computerRepository.GetComputerCount(customerId, departmentId));
 
-            var inventoryCounts = this.inventoryTypeRepository.FindInventoriesWithCount(customerId, departmentId);
-            var models = new List<InventoryReportModel> { workstationCount, serverCount, printerCount };
+            var serverCount = 
+                new InventoryReportModel(CurrentModes.Servers.ToString(), 
+                                         _serverRepository.GetServerCount(customerId));
+
+            var printerCount = 
+                new InventoryReportModel(CurrentModes.Printers.ToString(),
+                                         _printerRepository.GetPrinterCount(customerId, departmentId));
+
+            var inventoryCounts = _inventoryTypeRepository.FindInventoriesWithCount(customerId, departmentId);
+            var models = new [] { workstationCount, serverCount, printerCount }.ToList();
             models.AddRange(inventoryCounts);
 
             return models;
@@ -257,31 +409,30 @@ namespace DH.Helpdesk.Services.Services.Concrete
             int? departmentId,
             string searchFor)
         {
-            return this.inventoryRepository.FindAllConnectedInventory(inventoryTypeId, departmentId, searchFor);
+            return _inventoryRepository.FindAllConnectedInventory(inventoryTypeId, departmentId, searchFor);
         }
 
         #region Workstation
 
         public void AddComputerLog(ComputerLog businessModel)
         {
-            this.computerLogRepository.Add(businessModel);
-            this.computerLogRepository.Commit();
+            _computerLogRepository.Add(businessModel);
+            _computerLogRepository.Commit();
         }
 
         public void DeleteComputerLog(int id)
         {
-            this.computerLogRepository.DeleteById(id);
-            this.computerLogRepository.Commit();
+            _computerLogRepository.DeleteById(id);
+            _computerLogRepository.Commit();
         }
 
         public void AddWorkstation(ComputerForInsert businessModel, OperationContext context)
         {
-            var settings = this.computerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
-
-            this.computerValidator.Validate(businessModel, settings);
-            this.computerRepository.Add(businessModel);
-            this.computerRepository.Commit();
-
+            var settings = _computerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
+            _computerValidator.Validate(businessModel, settings);
+            _computerRepository.Add(businessModel);
+            _computerRepository.Commit();
+            
             if (businessModel.ContactInformationFields.UserId.HasValue)
             {
                 this.AddUserHistory(businessModel.Id, businessModel.ContactInformationFields.UserId.Value);
@@ -290,33 +441,33 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public void DeleteWorkstation(int id)
         {
-            this.computerHistoryRepository.DeleteByComputerId(id);
-            this.computerRepository.Commit();
+            _computerHistoryRepository.DeleteByComputerId(id);
+            _computerRepository.Commit();
 
-            this.computerLogRepository.DeleteByComputerId(id);
-            this.computerLogRepository.Commit();
+            _computerLogRepository.DeleteByComputerId(id);
+            _computerLogRepository.Commit();
 
-            this.computerInventoryRepository.DeleteByComputerId(id);
-            this.computerInventoryRepository.Commit();
+            _computerInventoryRepository.DeleteByComputerId(id);
+            _computerInventoryRepository.Commit();
 
-            this.logicalDriveRepository.DeleteByComputerId(id);
-            this.logicalDriveRepository.Commit();
+            _logicalDriveRepository.DeleteByComputerId(id);
+            _logicalDriveRepository.Commit();
 
-            this.softwareRepository.DeleteByComputerId(id);
-            this.softwareRepository.Commit();
+            _softwareRepository.DeleteByComputerId(id);
+            _softwareRepository.Commit();
 
-            this.computerRepository.DeleteById(id);
-            this.computerRepository.Commit();
+            _computerRepository.DeleteById(id);
+            _computerRepository.Commit();
         }
 
         public void UpdateWorkstation(ComputerForUpdate businessModel, OperationContext context)
         {
-            var existingBusinessModel = this.computerRepository.FindById(businessModel.Id);
-            var settings = this.computerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
-            this.computerRestorer.Restore(businessModel, existingBusinessModel, settings);
-            this.computerValidator.Validate(businessModel, existingBusinessModel, settings);
-            this.computerRepository.Update(businessModel);
-            this.computerRepository.Commit();
+            var existingBusinessModel = _computerRepository.FindById(businessModel.Id);
+            var settings = _computerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
+            _computerRestorer.Restore(businessModel, existingBusinessModel, settings);
+            _computerValidator.Validate(businessModel, existingBusinessModel, settings);
+            _computerRepository.Update(businessModel);
+            _computerRepository.Commit();
 
             if (businessModel.ContactInformationFields.UserId.HasValue
                 && (businessModel.ContactInformationFields.UserId.Value
@@ -328,23 +479,38 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public void UpdateWorkstationInfo(int id, string info)
         {
-            this.computerRepository.UpdateInfo(id, info);
-            this.computerRepository.Commit();
+            _computerRepository.UpdateInfo(id, info);
+            _computerRepository.Commit();
         }
 
         public ComputerForRead GetWorkstation(int id)
         {
-            return this.computerRepository.FindById(id);
+            return _computerRepository.FindById(id);
+        }
+
+        public ComputerFile GetWorkstationFile(int id)
+        {
+            return _computerRepository.GetFile(id);
+        }
+
+        public void SaveWorkstationFile(int id, string fileName, byte[] data)
+        {
+            _computerRepository.SaveFile(id, fileName, data);
+        }
+
+        public void DeleteWorkstationFile(int id)
+        {
+            _computerRepository.DeleteFile(id);
         }
 
         public List<ComputerLogOverview> GetWorkstationLogOverviews(int id)
         {
-            return this.computerLogRepository.Find(id);
+            return _computerLogRepository.Find(id);
         }
 
         public List<ComputerOverview> GetWorkstations(ComputersFilter computersFilter)
         {
-            var computerOverviews = this.computerRepository.FindOverviews(
+            var computerOverviews = _computerRepository.FindOverviews(
                 computersFilter.CustomerId,
                 computersFilter.RegionId,
                 computersFilter.DepartmentId,
@@ -369,7 +535,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public int GetWorkstationIdByName(string computerName, int customerId)
         {
-            return computerRepository.GetIdByName(computerName, customerId);
+            return _computerRepository.GetIdByName(computerName, customerId);
         }
 
         #endregion
@@ -378,7 +544,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public void AddServer(ServerForInsert businessModel, OperationContext context)
         {
-            bool isExist = this.operationObjectRepository.IsExist(businessModel.GeneralFields.Name);
+            bool isExist = _operationObjectRepository.IsExist(businessModel.GeneralFields.Name);
             if (isExist)
             {
                 throw new OperationObjectEditExeption(
@@ -387,10 +553,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
                         businessModel.GeneralFields.Name));
             }
 
-            var settings = this.serverFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
-            this.serverValidator.Validate(businessModel, settings);
-            this.serverRepository.Add(businessModel);
-            this.serverRepository.Commit();
+            var settings = _serverFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
+            _serverValidator.Validate(businessModel, settings);
+            _serverRepository.Add(businessModel);
+            _serverRepository.Commit();
 
             var isOperationObject = businessModel.IsOperationObject;
             if (!isOperationObject)
@@ -408,13 +574,13 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public void DeleteServer(int id)
         {
-            this.serverLogicalDriveRepository.DeleteByServerId(id);
-            this.serverLogicalDriveRepository.Commit();
+            _serverLogicalDriveRepository.DeleteByServerId(id);
+            _serverLogicalDriveRepository.Commit();
 
-            this.serverSoftwareRepository.DeleteByServerId(id);
-            this.serverSoftwareRepository.Commit();
+            _serverSoftwareRepository.DeleteByServerId(id);
+            _serverSoftwareRepository.Commit();
 
-            var operationObjectName = this.serverRepository.FindOperationObjectName(id);
+            var operationObjectName = _serverRepository.FindOperationObjectName(id);
             var isOperationObject = !string.IsNullOrWhiteSpace(operationObjectName);
 
             if (isOperationObject)
@@ -422,20 +588,20 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 this.DeleteOperationObject(operationObjectName);
             }
 
-            this.serverRepository.DeleteById(id);
-            this.serverRepository.Commit();
+            _serverRepository.DeleteById(id);
+            _serverRepository.Commit();
         }
 
         public void UpdateServer(ServerForUpdate businessModel, OperationContext context)
         {
-            var existingBusinessModel = this.serverRepository.FindById(businessModel.Id);
+            var existingBusinessModel = _serverRepository.FindById(businessModel.Id);
 
             var newBusinessModelName = businessModel.GeneralFields.Name;
             var oldBusinessModelName = existingBusinessModel.GeneralFields.Name;
 
             if (!oldBusinessModelName.Equals(newBusinessModelName))
             {
-                bool isExist = this.operationObjectRepository.IsExist(businessModel.GeneralFields.Name);
+                bool isExist = _operationObjectRepository.IsExist(businessModel.GeneralFields.Name);
                 if (isExist)
                 {
                     throw new OperationObjectEditExeption(
@@ -448,11 +614,11 @@ namespace DH.Helpdesk.Services.Services.Concrete
             var isOperationObject = businessModel.IsOperationObject;
             var isWasOperationObject = existingBusinessModel.IsOperationObject;
 
-            var settings = this.serverFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
-            this.serverRestorer.Restore(businessModel, existingBusinessModel, settings);
-            this.serverValidator.Validate(businessModel, existingBusinessModel, settings);
-            this.serverRepository.Update(businessModel);
-            this.serverRepository.Commit();
+            var settings = _serverFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
+            _serverRestorer.Restore(businessModel, existingBusinessModel, settings);
+            _serverValidator.Validate(businessModel, existingBusinessModel, settings);
+            _serverRepository.Update(businessModel);
+            _serverRepository.Commit();
 
             if (isOperationObject)
             {
@@ -489,23 +655,26 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public ServerForRead GetServer(int id)
         {
-            return this.serverRepository.FindById(id);
+            return _serverRepository.FindById(id);
         }
 
         public List<OperationServerLogOverview> GetOperationServerLogOverviews(int id, int customerId)
         {
-            return this.operationLogRepository.GetOperationServerLogOverviews(customerId, id);
+            return _operationLogRepository.GetOperationServerLogOverviews(customerId, id);
         }
 
         public ServerOverview[] GetServers(ServersFilter computersFilter)
         {
-            using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
-                var repository = uow.GetRepository<DH.Helpdesk.Domain.Servers.Server>();
-                var servers = repository.GetAll()
-                    .Search(computersFilter.CustomerId, computersFilter.SearchFor, computersFilter.SortField);
+                var repository = uow.GetRepository<Domain.Servers.Server>();
+
+                var servers = 
+                    repository.GetAll().Search(computersFilter.CustomerId, computersFilter.SearchFor, computersFilter.SortField);
+
                 if (computersFilter.RecordsCount.HasValue)
                     servers = servers.Take(computersFilter.RecordsCount.Value);
+
                 var overviews = servers.MapToFullOverviews();
                 return overviews;
             }
@@ -513,7 +682,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public int GetServerIdByName(string serverName, int customerId)
         {
-            return serverRepository.GetIdByName(serverName, customerId);
+            return _serverRepository.GetIdByName(serverName, customerId);
         }
 
         #endregion
@@ -522,36 +691,36 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public void AddPrinter(PrinterForInsert businessModel, OperationContext context)
         {
-            var settings = this.printerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
-            this.printerValidator.Validate(businessModel, settings);
-            this.printerRepository.Add(businessModel);
-            this.printerRepository.Commit();
+            var settings = _printerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
+            _printerValidator.Validate(businessModel, settings);
+            _printerRepository.Add(businessModel);
+            _printerRepository.Commit();
         }
 
         public void DeletePrinter(int id)
         {
-            this.printerRepository.DeleteById(id);
-            this.printerRepository.Commit();
+            _printerRepository.DeleteById(id);
+            _printerRepository.Commit();
         }
 
         public void UpdatePrinter(PrinterForUpdate businessModel, OperationContext context)
         {
-            var existingBusinessModel = this.printerRepository.FindById(businessModel.Id);
-            var settings = this.printerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
-            this.printerRestorer.Restore(businessModel, existingBusinessModel, settings);
-            this.printerValidator.Validate(businessModel, existingBusinessModel, settings);
-            this.printerRepository.Update(businessModel);
-            this.printerRepository.Commit();
+            var existingBusinessModel = _printerRepository.FindById(businessModel.Id);
+            var settings = _printerFieldSettingsRepository.GetFieldSettingsProcessing(context.CustomerId);
+            _printerRestorer.Restore(businessModel, existingBusinessModel, settings);
+            _printerValidator.Validate(businessModel, existingBusinessModel, settings);
+            _printerRepository.Update(businessModel);
+            _printerRepository.Commit();
         }
 
         public PrinterForRead GetPrinter(int id)
         {
-            return this.printerRepository.FindById(id);
+            return _printerRepository.FindById(id);
         }
 
         public List<PrinterOverview> GetPrinters(PrintersFilter printersFilter)
         {
-            var models = this.printerRepository.FindOverviews(
+            var models = _printerRepository.FindOverviews(
                 printersFilter.CustomerId,
                 printersFilter.DepartmentId,
                 printersFilter.SearchFor,
@@ -562,7 +731,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public int GetPrinterIdByName(string printerName, int customerId)
         {
-            return printerRepository.GetIdByName(printerName, customerId);
+            return _printerRepository.GetIdByName(printerName, customerId);
         }
 
         #endregion
@@ -571,48 +740,48 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public void AddInventory(InventoryForInsert businessModel)
         {
-            var settings = this.inventoryFieldSettingsRepository.GetFieldSettingsForProcessing(businessModel.InventoryTypeId);
-            this.inventoryValidator.Validate(businessModel, settings);
+            var settings = _inventoryFieldSettingsRepository.GetFieldSettingsForProcessing(businessModel.InventoryTypeId);
+            _inventoryValidator.Validate(businessModel, settings);
 
-            this.inventoryRepository.Add(businessModel);
-            this.inventoryRepository.Commit();
+            _inventoryRepository.Add(businessModel);
+            _inventoryRepository.Commit();
         }
 
         public void AddDynamicFieldsValuesInventory(List<InventoryValueForWrite> dynamicBusinessModels)
         {
-            this.inventoryTypePropertyValueRepository.Add(dynamicBusinessModels);
-            this.inventoryTypePropertyValueRepository.Commit();
+            _inventoryTypePropertyValueRepository.Add(dynamicBusinessModels);
+            _inventoryTypePropertyValueRepository.Commit();
         }
 
         public void UpdateInventory(InventoryForUpdate businessModel, List<InventoryValueForWrite> dynamicBusinessModels, int inventoryTypeId)
         {
-            var existingBusinessModel = this.inventoryRepository.FindById(businessModel.Id);
-            var settings = this.inventoryFieldSettingsRepository.GetFieldSettingsForProcessing(inventoryTypeId);
-            this.inventoryRestorer.Restore(businessModel, existingBusinessModel, settings);
-            this.inventoryValidator.Validate(businessModel, existingBusinessModel, settings);
+            var existingBusinessModel = _inventoryRepository.FindById(businessModel.Id);
+            var settings = _inventoryFieldSettingsRepository.GetFieldSettingsForProcessing(inventoryTypeId);
+            _inventoryRestorer.Restore(businessModel, existingBusinessModel, settings);
+            _inventoryValidator.Validate(businessModel, existingBusinessModel, settings);
 
-            this.inventoryRepository.Update(businessModel);
-            this.inventoryRepository.Commit();
-            this.inventoryTypePropertyValueRepository.Update(dynamicBusinessModels);
-            this.inventoryTypePropertyValueRepository.Commit();
+            _inventoryRepository.Update(businessModel);
+            _inventoryRepository.Commit();
+            _inventoryTypePropertyValueRepository.Update(dynamicBusinessModels);
+            _inventoryTypePropertyValueRepository.Commit();
         }
 
         public void DeleteInventory(int id)
         {
-            this.computerInventoryRepository.DeleteByInventoryId(id);
-            this.computerInventoryRepository.Commit();
+            _computerInventoryRepository.DeleteByInventoryId(id);
+            _computerInventoryRepository.Commit();
 
-            this.inventoryTypePropertyValueRepository.DeleteByInventoryId(id);
-            this.inventoryTypePropertyValueRepository.Commit();
+            _inventoryTypePropertyValueRepository.DeleteByInventoryId(id);
+            _inventoryTypePropertyValueRepository.Commit();
 
-            this.inventoryRepository.DeleteById(id);
-            this.inventoryRepository.Commit();
+            _inventoryRepository.DeleteById(id);
+            _inventoryRepository.Commit();
         }
 
         public InventoryOverviewResponse GetInventory(int id)
         {
-            var model = this.inventoryRepository.FindById(id);
-            var dynamicData = this.inventoryTypePropertyValueRepository.GetData(id);
+            var model = _inventoryRepository.FindById(id);
+            var dynamicData = _inventoryTypePropertyValueRepository.GetData(id);
 
             var response = new InventoryOverviewResponse(model, dynamicData);
             return response;
@@ -620,13 +789,13 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public ComputerForRead GetWorkstationByNumber(string computerName, int customerId)
         {
-            var pcId = computerRepository.GetIdByName(computerName, customerId);
-            return pcId > 0 ? computerRepository.FindById(pcId) : null;
+            var pcId = _computerRepository.GetIdByName(computerName, customerId);
+            return pcId > 0 ? _computerRepository.FindById(pcId) : null;
         }
 
         public InventoriesOverviewResponse GetInventories(InventoriesFilter filter)
         {
-            var models = this.inventoryRepository.FindOverviews(
+            var models = _inventoryRepository.FindOverviews(
                 filter.InventoryTypeId,
                 filter.DepartmentId,
                 filter.SearchFor,
@@ -634,7 +803,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
             var ids = models.Select(x => x.Id).ToList();
 
-            var dynamicData = this.inventoryTypePropertyValueRepository.GetData(ids);
+            var dynamicData = _inventoryTypePropertyValueRepository.GetData(ids);
 
             var response = new InventoriesOverviewResponse(models, dynamicData);
 
@@ -643,14 +812,14 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public InventoryOverviewResponseWithType GetConnectedToComputerInventories(int computerId)
         {
-            var inventories = this.inventoryRepository.FindConnectedToComputerInventories(computerId);
+            var inventories = _inventoryRepository.FindConnectedToComputerInventories(computerId);
             var inventoryIds = new List<int>();
             foreach (var item in inventories)
             {
                 inventoryIds.AddRange(item.InventoryOverviews.Select(x => x.Id));
             }
 
-            var dynamicData = this.inventoryTypePropertyValueRepository.GetData(inventoryIds);
+            var dynamicData = _inventoryTypePropertyValueRepository.GetData(inventoryIds);
             var inventoryResponse = new InventoryOverviewResponseWithType(inventories, dynamicData);
 
             return inventoryResponse;
@@ -658,39 +827,39 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public List<TypeGroupModel> GetTypeGroupModels(int inventoryTypeId)
         {
-            return this.inventoryTypeGroupRepository.Find(inventoryTypeId);
+            return _inventoryTypeGroupRepository.Find(inventoryTypeId);
         }
 
         public void ConnectInventoryToComputer(int inventoryId, int computerId)
         {
-            this.computerInventoryRepository.Add(new ComputerInventory(computerId, inventoryId));
-            this.computerInventoryRepository.Commit();
+            _computerInventoryRepository.Add(new ComputerInventory(computerId, inventoryId));
+            _computerInventoryRepository.Commit();
         }
 
         public void RemoveInventoryFromComputer(int inventoryId, int computerId)
         {
-            this.computerInventoryRepository.DeleteById(computerId, inventoryId);
-            this.computerInventoryRepository.Commit();
+            _computerInventoryRepository.DeleteById(computerId, inventoryId);
+            _computerInventoryRepository.Commit();
         }
 
         public int GetCustomInventoryIdByName(string inventoryName, int inventoryTypeId)
         {
-            return inventoryRepository.GetIdByName(inventoryName, inventoryTypeId);
+            return _inventoryRepository.GetIdByName(inventoryName, inventoryTypeId);
         }
 
         public List<ComputerOverview> GetRelatedInventory(int customerId, string userId)
         {
-            return this.computerRepository.GetRelatedOverviews(customerId, userId);
+            return _computerRepository.GetRelatedOverviews(customerId, userId);
         }
 
         public List<int> GetRelatedCaseIds(CurrentModes inventoryType, int inventoryId, int customerId)
         {
-            return inventoryRepository.GetRelatedCaseIds(inventoryType, inventoryId, customerId);
+            return _inventoryRepository.GetRelatedCaseIds(inventoryType, inventoryId, customerId);
         }
 
         public ComputerShortOverview GetWorkstationShortInfo(int computerId)
         {
-            return this.computerRepository.FindShortOverview(computerId);
+            return _computerRepository.FindShortOverview(computerId);
         }
 
         #endregion
@@ -699,10 +868,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         private void AddUserHistory(int computerId, int connectingUserId)
         {
-            var userGuid = this.computerUsersRepository.FindUserGuidById(connectingUserId);
+            var userGuid = _computerUsersRepository.FindUserGuidById(connectingUserId);
             var computerHistory = new ComputerHistory(computerId, userGuid, DateTime.Now);
-            this.computerHistoryRepository.Add(computerHistory);
-            this.computerHistoryRepository.Commit();
+            _computerHistoryRepository.Add(computerHistory);
+            _computerHistoryRepository.Commit();
         }
 
         private void AddOperationObject(OperationContext context, string newBusinessModelName, string newDescription)
@@ -712,25 +881,25 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 context.DateAndTime,
                 newBusinessModelName,
                 newDescription);
-            this.operationObjectRepository.Add(insertedOperationObject);
-            this.operationObjectRepository.Commit();
+            _operationObjectRepository.Add(insertedOperationObject);
+            _operationObjectRepository.Commit();
         }
 
         private void DeleteOperationObject(string oldBusinessModelName)
         {
-            OperationObjectForRead operationObject = this.operationObjectRepository.FindByName(oldBusinessModelName);
+            OperationObjectForRead operationObject = _operationObjectRepository.FindByName(oldBusinessModelName);
             int operationObjectId = operationObject.Id;
 
-            List<int> operationLogIds = this.operationLogRepository.FindOperationObjectId(operationObjectId);
+            List<int> operationLogIds = _operationLogRepository.FindOperationObjectId(operationObjectId);
 
-            this.operationLogEMailLogRepository.DeleteByOperationLogIds(operationLogIds);
-            this.operationLogEMailLogRepository.Commit();
+            _operationLogEMailLogRepository.DeleteByOperationLogIds(operationLogIds);
+            _operationLogEMailLogRepository.Commit();
 
-            this.operationLogRepository.DeleteByOperationObjectId(operationObjectId);
-            this.operationLogRepository.Commit();
+            _operationLogRepository.DeleteByOperationObjectId(operationObjectId);
+            _operationLogRepository.Commit();
 
-            this.operationObjectRepository.DeleteById(operationObjectId);
-            this.operationObjectRepository.Commit();
+            _operationObjectRepository.DeleteById(operationObjectId);
+            _operationObjectRepository.Commit();
         }
 
         private void UpdateOperationObject(
@@ -739,7 +908,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             string newBusinessModelDescription,
             string oldBusinessModelName)
         {
-            OperationObjectForRead operationObject = this.operationObjectRepository.FindByName(oldBusinessModelName);
+            OperationObjectForRead operationObject = _operationObjectRepository.FindByName(oldBusinessModelName);
             int operationObjectId = operationObject.Id;
 
             var updatedOperationObject = new OperationObjectForUpdate(
@@ -747,8 +916,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 context.DateAndTime,
                 newBusinessModelName,
                 newBusinessModelDescription);
-            this.operationObjectRepository.Update(updatedOperationObject);
-            this.operationObjectRepository.Commit();
+            _operationObjectRepository.Update(updatedOperationObject);
+            _operationObjectRepository.Commit();
         }
 
         #endregion

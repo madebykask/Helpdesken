@@ -35,14 +35,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return Math.Round(quantity / 1024.0, 0, MidpointRounding.AwayFromZero).ToString() + " kb";
         }
 
-        public static int convertStringToInt(this string value)
-        {
-            int ret;
-            if (!int.TryParse(value, out ret))
-                ret = 0;
-            return ret;
-        }
-
         public static List<int> ToIntList(this string str)
         {
             if (string.IsNullOrEmpty(str))

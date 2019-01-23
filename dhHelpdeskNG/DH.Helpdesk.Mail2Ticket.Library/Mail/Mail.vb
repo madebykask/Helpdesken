@@ -22,7 +22,7 @@ Public Class Mail
             Dim setting As Setting
             Using factory As DatabaseFactory = New DatabaseFactory(connectionString)
 
-                Dim settingsRepository As New SettingRepository(New DatabaseFactory(connectionString), New CustomerSettingsToBusinessModelMapper())
+                Dim settingsRepository As New SettingRepository(New DatabaseFactory(connectionString))
                 setting = settingsRepository.Get(Function(x) x.Customer_Id = objCustomer.Id)
 
             End Using

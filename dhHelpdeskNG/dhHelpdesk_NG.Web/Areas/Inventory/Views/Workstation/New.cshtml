@@ -1,4 +1,6 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer.ComputerViewModel
 @{
     Layout = "~/Areas/Inventory/Views/Shared/_EditLayout.cshtml";
@@ -34,10 +36,38 @@
         @Html.EditorFor(m => m.SoundFieldsModel)
         @Html.EditorFor(m => m.ContractFieldsViewModel)
         @Html.EditorFor(m => m.OtherFieldsModel)
+        @Html.EditorFor(m => m, "Documents")
         @Html.EditorFor(m => m.ContactInformationFieldsModel, new { ComputerId = Model.Id })
         @Html.EditorFor(m => m.OrganizationFieldsViewModel)
         @Html.EditorFor(m => m.PlaceFieldsViewModel)
         @Html.EditorFor(m => m.ContactFieldsModel)
         @Html.EditorFor(m => m.StateFieldsViewModel)
+
+        @Html.HiddenFor(m => m.DocumentFileKey)
+    }
+}
+
+@section Scripts{
+    @if (Model.ContractFieldsViewModel.ContractFieldsModel.Document.Show)
+    {
+        @Html.Partial("_InventoryFiles")
+        @Scripts.Render(BundleConfig.ScriptNames.InventoryFiles)
+        <script type="text/javascript">
+        
+            var inventoryFilesOptions = {
+                id: @Model.Id.ToString(),
+                attachedFileName: '',//new 
+                documentFileKey: '@Model.DocumentFileKey',
+                uploadDocumentFileUrl: '@Url.Action("UploadFile", "Workstation")',
+                fileDownloadUrlMask: '@Url.Action("DownloadFile", "Workstation")',
+                fileDeleteUrl: '@Url.Action("DeleteFile", "Workstation")'
+            };
+
+            $(function(jQuery) {
+                // create instance and init
+                window.inventoryFiles = new InventoryFiles(jQuery);
+                window.inventoryFiles.init(inventoryFilesOptions);
+            });
+        </script>    
     }
 }

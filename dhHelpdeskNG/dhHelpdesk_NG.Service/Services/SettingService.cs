@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using DH.Helpdesk.Dal.Mappers;
+
 namespace DH.Helpdesk.Services.Services
 {
     using System;
@@ -86,12 +88,22 @@ namespace DH.Helpdesk.Services.Services
         /// <summary>
         /// The setting repository.
         /// </summary>
-        private readonly ISettingRepository settingRepository;
+        private readonly ISettingRepository _settingRepository;
 
         /// <summary>
         /// The unit of work.
         /// </summary>
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
+
+        private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> _toBusinessModelMapper;
+
+        public SettingService(ISettingRepository settingRepository, IUnitOfWork unitOfWork,
+            IEntityToBusinessModelMapper<Setting, CustomerSettings> businessModelMapper)
+        {
+            _settingRepository = settingRepository;
+            _unitOfWork = unitOfWork;
+            _toBusinessModelMapper = businessModelMapper;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingService"/> class.
@@ -102,13 +114,7 @@ namespace DH.Helpdesk.Services.Services
         /// <param name="unitOfWork">
         /// The unit of work.
         /// </param>
-        public SettingService(
-            ISettingRepository settingRepository,
-            IUnitOfWork unitOfWork)
-        {
-            this.settingRepository = settingRepository;
-            this.unitOfWork = unitOfWork;
-        }
+
 
         /// <summary>
         /// The get customer setting.
@@ -121,7 +127,7 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public Setting GetCustomerSetting(int id)
         {
-            var res = this.settingRepository.GetCustomerSetting(id);
+            var res = this._settingRepository.GetCustomerSetting(id);
 
 			//TODO default values. move to mapper
 	        if (res != null && res.MinRegWorkingTime == 0)
@@ -179,11 +185,11 @@ namespace DH.Helpdesk.Services.Services
 
             if (setting.Id == 0)
             {
-                this.settingRepository.Add(setting);
+                this._settingRepository.Add(setting);
             }
             else
             {
-                this.settingRepository.Update(setting);
+                this._settingRepository.Update(setting);
             }
 
             if (errors.Count == 0)
@@ -231,11 +237,11 @@ namespace DH.Helpdesk.Services.Services
 
             if (setting.Id == 0)
             {
-                this.settingRepository.Add(setting);
+                this._settingRepository.Add(setting);
             }
             else
             {
-                this.settingRepository.Update(setting);
+                this._settingRepository.Update(setting);
             }
 
             if (errors.Count == 0)
@@ -249,7 +255,7 @@ namespace DH.Helpdesk.Services.Services
         /// </summary>
         public void Commit()
         {
-            this.unitOfWork.Commit();
+            this._unitOfWork.Commit();
         }
 
         /// <summary>
@@ -263,12 +269,13 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public CustomerSettings GetCustomerSettings(int customerId)
         {
-            return this.settingRepository.GetCustomerSettings(customerId);
+            var setting = _settingRepository.GetCustomerSetting(customerId);
+            return _toBusinessModelMapper.Map(setting);
         }
 
         public List<int> GetExtendedSearchIncludedCustomers()
         {
-            return settingRepository.GetExtendedSearchIncludedCustomers();
+            return _settingRepository.GetExtendedSearchIncludedCustomers();
         }
     }
 }

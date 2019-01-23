@@ -1,3 +1,6 @@
+using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Settings.ComputerSettings;
+using DH.Helpdesk.Common.ValidationAttributes;
+
 namespace DH.Helpdesk.Web.Areas.Inventory.Models
 {
     public abstract class BaseEditWorkstationModel
@@ -6,7 +9,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models
 
         protected BaseEditWorkstationModel(int id)
         {
-            this.Id = id;
+            Id = id;
         }
 
         public int Id { get; set; }
@@ -16,5 +19,16 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models
         public string UserId { get; set; }
 
         public abstract WorkstationEditTabs Tab { get; }
+    }
+
+    public abstract class BaseViewEditWorkstationModel : BaseEditWorkstationModel
+    {
+        protected BaseViewEditWorkstationModel(int id) : base(id)
+        {
+        }
+
+        [NotNull]
+        public WorkstationTabsSettings TabSettings { get; set; }
+
     }
 }

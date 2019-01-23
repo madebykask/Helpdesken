@@ -1,5 +1,7 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using DH.Helpdesk.Web
+@using DH.Helpdesk.Web.Common.Enums.Case
+@using DH.Helpdesk.Web.Infrastructure
 
 @{ var t = new ViewDataDictionary { { "isJS", "true" } }; }
 
@@ -209,7 +211,7 @@
             <div class="secnavs fixed">
                 <div class="pull-left">
                     <ul class="secnav">
-                        @if (Model.EditMode == Enums.AccessMode.FullAccess)
+                        @if (Model.EditMode == AccessMode.FullAccess)
                         {
                             <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), null, null, null, new { @class = "btn save", id = "case-action-save" })</li>
                             <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara och stäng"), null, null, new { @class = "btn save-close", id = "case-action-save-and-close" })</li>
@@ -245,7 +247,7 @@
                             <li><a id="case-action-close" class="btn" href="@Model.BackUrl">@Translation.GetCoreTextTranslation("Stäng")</a></li>
                         }
 
-                        @if (Model.EditMode == Enums.AccessMode.FullAccess)
+                        @if (Model.EditMode == AccessMode.FullAccess)
                         {
                             <li>
                                 <div id="divActionMenu" class="btn-group">

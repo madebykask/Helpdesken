@@ -81,9 +81,11 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             return this.File(content, MimeType.ExcelFile, fileName);
         }
 
-        protected string CreateFilterId(string tabName, string id)
+
+
+        protected ItemOverview CreateInventoryTypeSeparatorItem()
         {
-            return string.Format("{0}{1}", tabName, id);
+            return new ItemOverview("-------------", "Separator");
         }
     }
 }

@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory
 
         int GetIdByName(string inventoryName, int inventoryTypeId);
         List<InventorySearchResult> SearchPcNumber(int customerId, string query);
+        InventorySearchResult SearchPcNumberByUserId(int customerId, int userId);
         List<int> GetRelatedCaseIds(CurrentModes inventoryType, int inventoryId, int customerId);
     }
 }

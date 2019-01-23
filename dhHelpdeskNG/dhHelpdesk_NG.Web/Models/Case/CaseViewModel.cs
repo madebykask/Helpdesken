@@ -4,6 +4,8 @@ using DH.Helpdesk.BusinessData.Models.FinishingCause;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+using DH.Helpdesk.Web.Common.Enums.Case;
+using DH.Helpdesk.Web.Infrastructure;
 
 namespace DH.Helpdesk.Web.Models.Case
 {
@@ -74,7 +76,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public bool TimeRequired { get; set; }
         public CaseLockModel CaseLock { get; set; }
         public int MinWorkingTime { get; set; }        
-        public Infrastructure.Enums.AccessMode EditMode { get; set; } //(-1,0,1)
+        public AccessMode EditMode { get; set; } //(-1,0,1)
         public bool Disable_SendMailAboutCaseToNotifier { get; set; }
         public int ProductAreaHasChild { get; set; }
         public int CategoryHasChild { get; set; }

@@ -1,0 +1,25 @@
+
+
+.md-paging {
+    .mbsc-scv, .mbsc-scv-sc, .mbsc-scv-item {
+        width: 100%;
+    }    
+}
+
+mbsc-tab-nav {
+    width: 100%;
+    mbsc-nav-item {
+        &:nth-child(2) {
+            width: 60%;
+            padding-right: 0px;
+            padding-left: 0px;
+        }
+    }
+}
+
+.case-content
+{
+  padding-top: 46px;
+  display: block;
+}
+

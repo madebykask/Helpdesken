@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.Services.Services.Concrete.Changes;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System.Collections.Generic;
 
@@ -17,7 +19,7 @@
     using NewChangeRequest = DH.Helpdesk.Services.Requests.Changes.NewChangeRequest;
     using UpdateChangeRequest = DH.Helpdesk.Services.Requests.Changes.UpdateChangeRequest;
 
-    public interface IChangeService
+    public interface IChangeService : IBaseChangesService
     {
         #region Public Methods and Operators
 
@@ -39,17 +41,11 @@
 
         GetSearchDataResponse GetSearchData(OperationContext context);
 
-        SearchSettings GetSearchSettings(int customerId, int languageId);
-
         ChangeEditOptions GetChangeEditData(int changeId, ChangeEditSettings settings, OperationContext context);
 
         ChangeEditSettings GetChangeEditSettings(int customerId, int languageId);
 
         GetNewChangeEditDataResponse GetNewChangeEditData(OperationContext context);
-
-        ChangeOverviewSettings GetChangeOverviewSettings(int customerId, int languageId, bool onlyListSettings);
-
-        IList<ChangeOverview> GetChanges(int customerId);
 
         byte[] GetFileContent(int changeId, Subtopic subtopic, string fileName);
 
@@ -60,8 +56,6 @@
         void UpdateSettings(ChangeFieldSettings settings);
 
         ChangeOverview GetChangeOverview(int id);
-
-        List<CustomerChange> GetCustomersChanges(int[] customersIds);
 
         CustomerChanges[] GetCustomerChanges(int[] customerIds, int userId);
 

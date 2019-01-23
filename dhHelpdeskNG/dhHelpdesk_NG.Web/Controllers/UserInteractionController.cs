@@ -42,8 +42,7 @@ namespace DH.Helpdesk.Web.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-            if (SessionFacade.CurrentCustomer == null ||
-                        SessionFacade.CurrentUser == null)
+            if (SessionFacade.CurrentCustomer == null || SessionFacade.CurrentUser == null)
             {
                 return;
             }

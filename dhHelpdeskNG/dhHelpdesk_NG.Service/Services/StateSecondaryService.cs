@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using System.Data.Entity;
+using System.Threading.Tasks;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -12,11 +15,13 @@
     public interface IStateSecondaryService
     {
         IList<StateSecondary> GetStateSecondaries(int customerId);
+        Task<List<StateSecondary>> GetStateSecondariesAsync(int customerId);
         IList<StateSecondary> GetActiveStateSecondaries(int customerId);
         //IList<StateSecondary> GetStateSecondariesSelected(int customerId, string[] reg);
         //IList<StateSecondary> GetStateSecondariesAvailable(int customerId, string[] reg);
 
         StateSecondary GetStateSecondary(int id);
+        Task<StateSecondary> GetStateSecondaryAsync(int id);
         
         DeleteMessage DeleteStateSecondary(int id);
 
@@ -51,7 +56,15 @@
         
         public IList<StateSecondary> GetStateSecondaries(int customerId)
         {
-            return this._stateSecondaryRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return _stateSecondaryRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+
+        public Task<List<StateSecondary>> GetStateSecondariesAsync(int customerId)
+        {
+            return _stateSecondaryRepository.GetMany(x => x.Customer_Id == customerId)
+                .AsQueryable()
+                .OrderBy(x => x.Name)
+                .ToListAsync();
         }
 
         public IList<StateSecondary> GetActiveStateSecondaries(int customerId)
@@ -62,6 +75,11 @@
         public StateSecondary GetStateSecondary(int id)
         {
             return this._stateSecondaryRepository.Get(x => x.Id == id);
+        }
+
+        public Task<StateSecondary> GetStateSecondaryAsync(int id)
+        {
+            return _stateSecondaryRepository.GetAsync(x => x.Id == id);
         }
 
         public DeleteMessage DeleteStateSecondary(int id)

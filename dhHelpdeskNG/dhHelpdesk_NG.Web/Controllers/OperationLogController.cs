@@ -326,13 +326,18 @@ namespace DH.Helpdesk.Web.Controllers
             var wgsAvailable = new List<WorkingGroupEntity>();
             var customerId = SessionFacade.CurrentCustomer.Id;
             var cs = this._settingService.GetCustomerSetting(customerId);
+
             const bool isAddEmpty = true;
+
             var wgsAvailableSMS = new List<WorkingGroupForSMS>();
             wgsAvailableSMS = _workingGroupService.GetWorkingGroupsForSMS(customerId).ToList();
+
             var usAvailable = new List<User>();
             usAvailable = _userService.GetAdminstratorsForSMS(customerId).ToList();
+
             var systemRespAvailable = new List<System>();
             systemRespAvailable = _systemService.GetSystemResponsibles(customerId).ToList();
+
             var smsEmailDomain = "";
             var operationObject = this._operationObjectService.GetOperationObject(operationlog.OperationObject_Id);
             var operationObjectShow = 0;

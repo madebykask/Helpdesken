@@ -108,6 +108,9 @@
         [NotNull]
         public WorkstationFieldsSettings WorkstationFieldsSettings { get; private set; }
 
+        [NotNull]
+        public WorkstationTabsSettings WorkstationTabsSettings { get; private set; }
+
         public static ComputerFieldsSettings CreateUpdated(
             int customerId,
             int langaugeId,

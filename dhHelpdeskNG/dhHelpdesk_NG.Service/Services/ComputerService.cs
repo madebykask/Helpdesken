@@ -54,8 +54,11 @@ namespace DH.Helpdesk.Services.Services
         ComputerUserCategoryOverview GetEmptyComputerUserCategory(int customerId);
         Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true);
         List<InventorySearchResult> SearchPcNumber(int customerId, string query);
+        InventorySearchResult SearchPcNumberByUserId(int customerId, int userId);
         ComputerUserCategory GetComputerUserCategoryByID(int computerUserCategoryID);
         int SaveComputerUserCategory(ComputerUserCategoryData data);
+
+
 
 
         void Commit();
@@ -132,7 +135,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<ComputerUser> SearchSortAndGenerateComputerUsers(int customerId, IComputerUserSearch searchComputerUsers)
         {
-            var query = (from cu in this._computerUserRepository.GetAll().Where(x => x.Customer_Id == customerId && x.Updated != 2)
+            var query = (from cu in this._computerUserRepository.GetMany(x => x.Customer_Id == customerId && x.Updated != 2)
                          select cu);
 
             if (searchComputerUsers.DomainId.HasValue)
@@ -193,7 +196,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<ComputerUserFieldSettings> GetComputerUserFieldSettingsForDefaultCust()
         {
-            var list = this._computerUserFieldSettingsRepository.GetAll().Where(x => x.Customer_Id == null).ToList();
+            var list = this._computerUserFieldSettingsRepository.GetMany(x => x.Customer_Id == null).ToList();
 
             return list;
         }
@@ -511,6 +514,11 @@ namespace DH.Helpdesk.Services.Services
         public List<InventorySearchResult> SearchPcNumber(int customerId, string query)
         {
             return _inventoryRepository.SearchPcNumber(customerId, query);
+        }
+
+        public InventorySearchResult SearchPcNumberByUserId(int customerId, int userId)
+        {
+            return _inventoryRepository.SearchPcNumberByUserId(customerId, userId);
         }
 
         public ComputerUserCategoryOverview GetEmptyComputerUserCategory(int customerId)

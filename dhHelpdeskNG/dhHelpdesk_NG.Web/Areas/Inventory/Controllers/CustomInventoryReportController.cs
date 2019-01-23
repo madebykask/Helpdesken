@@ -45,14 +45,13 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public ViewResult Index(int inventoryTypeId)
         {
-            List<ItemOverview> inventoryTypes = this.inventoryService.GetInventoryTypes(
-                SessionFacade.CurrentCustomer.Id);
+            List<ItemOverview> inventoryTypes = 
+                this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id);
 
             SessionFacade.SavePageFilters(TabName.Reports, new ReportFilter(inventoryTypeId));
             var currentFilter =
-                SessionFacade.FindPageFilters<CustomTypeReportsSearchFilter>(
-                    this.CreateFilterId(TabName.Reports, ReportFilterMode.CustomType.ToString()))
-                ?? CustomTypeReportsSearchFilter.CreateDefault();
+                SessionFacade.FindPageFilters<CustomTypeReportsSearchFilter>(CustomTypeReportsSearchFilter.CreateFilterId()) ?? 
+                CustomTypeReportsSearchFilter.CreateDefault();
 
             var departments = this.OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
 
@@ -69,9 +68,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult CustomInventoryReportGrid(CustomTypeReportsSearchFilter filter, int inventoryTypeId)
         {
-            SessionFacade.SavePageFilters(
-                this.CreateFilterId(TabName.Reports, ReportFilterMode.CustomType.ToString()),
-                filter);
+            SessionFacade.SavePageFilters(CustomTypeReportsSearchFilter.CreateFilterId(), filter);
 
             ReportModelWithInventoryType models = this.inventoryService.GetAllConnectedInventory(
                 inventoryTypeId,
@@ -95,12 +92,11 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         private FileContentResult CreateCustomTypeReport(int inventoryTypeId)
         {
-            CustomTypeReportsSearchFilter filter =
-                SessionFacade.FindPageFilters<CustomTypeReportsSearchFilter>(
-                    this.CreateFilterId(TabName.Reports, ReportFilterMode.CustomType.ToString()))
-                ?? CustomTypeReportsSearchFilter.CreateDefault();
+            var filter =
+                SessionFacade.FindPageFilters<CustomTypeReportsSearchFilter>(CustomTypeReportsSearchFilter.CreateFilterId()) ?? 
+                CustomTypeReportsSearchFilter.CreateDefault();
 
-            ReportModelWithInventoryType models = this.inventoryService.GetAllConnectedInventory(
+            var models = this.inventoryService.GetAllConnectedInventory(
                 inventoryTypeId,
                 filter.DepartmentId,
                 filter.SearchFor);

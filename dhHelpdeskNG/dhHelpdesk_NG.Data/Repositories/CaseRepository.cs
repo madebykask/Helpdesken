@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
+using Z.EntityFramework.Plus;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -169,7 +170,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return caseId;
         }
 
-        public Case GetCaseByEmailGUID(Guid GUID)
+        public Case GetCaseByEmailGUID(Guid GUID)// TODO: optimise to 1 query
         {
             Case ret = null;
             var caseHistoryId = DataContext.EmailLogs.Where(e => e.EmailLogGUID == GUID && e.CaseHistory_Id != null)
@@ -178,9 +179,7 @@ namespace DH.Helpdesk.Dal.Repositories
             if (caseHistoryId != null)
             {
                 var caseId = DataContext.CaseHistories.Where(h => h.Id == caseHistoryId).Select(h => h.Case_Id).FirstOrDefault();
-
-                if (caseId != null)
-                    ret = DataContext.Cases.Where(c => c.Id == caseId).FirstOrDefault();
+                ret = DataContext.Cases.Where(c => c.Id == caseId).FirstOrDefault();
             }
 
             return ret;
@@ -385,11 +384,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private void SetCaseUnreadFlag(int id, int unread = 0)
         {
-            //TODO: refactor to use simple update query without fetching data.
-            var cases = this.DataContext.Cases.Single(c => c.Id == id);
-            cases.Unread = unread;
-            this.Update(cases);
-            this.Commit();
+            this.DataContext.Cases.Where(c => c.Id == id)
+                .Update(c => new Case { Unread = unread });
         }
 
         public Case GetCaseIncluding(int id)

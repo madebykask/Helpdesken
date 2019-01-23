@@ -73,7 +73,10 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            ModuleExtendedCase = entity.ModuleExtendedCase.ToBool(),
                            AttachmentPlacement = entity.AttachmentPlacement,
                            M2TNewCaseMailTo = entity.M2TNewCaseMailTo,
-
+                           DontConnectUserToWorkingGroup = entity.DontConnectUserToWorkingGroup,
+                           PhysicalFilePath = entity.PhysicalFilePath,
+                           VirtualFilePath = entity.VirtualFilePath,
+                           IsUserFirstLastNameRepresentation = entity.IsUserFirstLastNameRepresentation
             };
         }
     }

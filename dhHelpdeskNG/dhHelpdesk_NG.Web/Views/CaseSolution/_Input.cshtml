@@ -10,6 +10,7 @@
 @using System.Web.Script.Serialization
 @using DH.Helpdesk.Common.Enums.CaseSolution
 @using DH.Helpdesk.BusinessData.Enums.Case.Fields
+@using DH.Helpdesk.Web.Common.Enums.Case
 
 @{
     var saveDropDownText = Html.Raw(Translation.Get("Spara", Enums.TranslationSource.TextTranslation) + " - " +
@@ -1543,7 +1544,7 @@
                                             @Translation.Get(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, Model.CaseSolution.Customer_Id)
                                         </td>
                                         <td>
-                                            @if (Model.EditMode == Enums.AccessMode.FullAccess)
+                                            @if (Model.EditMode == AccessMode.FullAccess)
                                             {
                                                 <a href="#upload_files_popup" role="button" class="btn acceptRules" data-toggle="modal" standardId='@GlobalEnums.TranslationCaseFields.Filename.ToString()'>@Translation.Get("Lägg till", SessionFacade.CurrentLanguageId)</a>
                                             }

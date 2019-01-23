@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.Concrete
+﻿using DH.Helpdesk.Web.Common.Tools.Files;
+
+namespace DH.Helpdesk.Web.Areas.Reports.Infrastructure.Concrete
 {
     using System;
     using System.Collections.Generic;

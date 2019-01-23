@@ -1,10 +1,9 @@
 ﻿namespace DH.Helpdesk.Dal.EntityConfigurations
 {
-    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.ModelConfiguration;
 
-    using DH.Helpdesk.Domain;
+    using Domain;
 
     public class GlobalSettingConfiguration : EntityTypeConfiguration<GlobalSetting>
     {

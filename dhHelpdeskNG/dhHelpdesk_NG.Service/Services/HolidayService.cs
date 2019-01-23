@@ -112,7 +112,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<Holiday> GetHolidaysByHeaderIdAndYearForList(int year, int id)
         {
-            var query = (from h in this._holidayRepository.GetAll().Where(x => x.HolidayHeader_Id == id && x.HolidayDate.Year == year)
+            var query = (from h in this._holidayRepository.GetMany(x => x.HolidayHeader_Id == id && x.HolidayDate.Year == year)
                          select h);
 
 

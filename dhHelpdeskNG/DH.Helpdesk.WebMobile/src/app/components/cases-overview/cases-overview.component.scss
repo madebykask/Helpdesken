@@ -1,0 +1,19 @@
+div {
+    &.mbsc-col-sm-auto {
+        padding-left: 0;
+        margin: auto;
+    }
+}
+
+mbsc-listview {
+    mbsc-listview-item {
+        padding: 11px 16px 11px 16px;
+        .row {
+            margin-bottom: 5px;
+        }
+        .secondary {
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+    }
+}

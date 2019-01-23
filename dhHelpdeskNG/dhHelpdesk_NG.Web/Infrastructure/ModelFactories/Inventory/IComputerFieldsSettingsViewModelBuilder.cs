@@ -8,6 +8,6 @@
 
     public interface IComputerFieldsSettingsViewModelBuilder
     {
-        ComputerFieldsSettingsViewModel BuildViewModel(ComputerFieldsSettings settings, List<ItemOverview> langauges, int langaugeId);
+        ComputerFieldsSettingsViewModel BuildViewModel(ComputerFieldsSettings settings, WorkstationTabsSettings tabsSettings, List<ItemOverview> langauges, int langaugeId);
     }
 }

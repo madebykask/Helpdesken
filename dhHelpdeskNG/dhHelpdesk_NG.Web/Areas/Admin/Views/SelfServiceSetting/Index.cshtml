@@ -171,10 +171,28 @@
                     </tr>*@
                             </table>
                         </div>
-
-                        <h4>
-                            @Translation.GetCoreTextTranslation("Ärende")
-                        </h4>
+                        <h4>@Translation.GetCoreTextTranslation("Formulär")</h4>
+                        <div class="formContainer">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">@Translation.GetCoreTextTranslation("Visa kommandoknappar")</td>
+                                    <td>
+                                        <input type="checkbox" name="customer.ShowCaseActionsPanelOnTop" @(Model.Customer.ShowCaseActionsPanelOnTop ? "checked=checked" : "") value="true" />
+                                        <input type="hidden" name="customer.ShowCaseActionsPanelOnTop" value="false" />
+                                        &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Visa knappar överst")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <input type="checkbox" name="customer.ShowCaseActionsPanelAtBottom" @(Model.Customer.ShowCaseActionsPanelAtBottom ? "checked=checked" : "") value="true" />
+                                        <input type="hidden" name="customer.ShowCaseActionsPanelAtBottom" value="false" />
+                                        &nbsp; &nbsp; @Translation.GetCoreTextTranslation("Visa knappar underst")
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <h4>@Translation.GetCoreTextTranslation("Ärende")</h4>
                         <div class="formContainer">
                             <table class="tableform">
                                 <tr>

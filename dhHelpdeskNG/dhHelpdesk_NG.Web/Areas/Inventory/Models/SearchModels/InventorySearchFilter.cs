@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
+﻿using DH.Helpdesk.Web.Enums.Inventory;
+
+namespace DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels
 {
     using DataAnnotationsExtensions;
 
@@ -7,7 +9,7 @@
     using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
     using DH.Helpdesk.Web.Models.Shared;
 
-    public class InventorySearchFilter
+    public class InventorySearchFilter 
     {
         public InventorySearchFilter()
         {
@@ -34,12 +36,17 @@
 
         public static InventorySearchFilter CreateDefault(int inventoryTypeId) // todo wtf?
         {
-            return new InventorySearchFilter(Common.Constants.SearchFilter.RecordsOnPage);
+            return new InventorySearchFilter(Helpdesk.Common.Constants.SearchFilter.RecordsOnPage);
         }
 
-        public InventoriesFilter CreateRequest(int inventoryTypeId, int? numberOfRecords = null)
+        public InventoriesFilter CreateRequest(int inventoryTypeId, bool takeAllRecords)
         {
-            return new InventoriesFilter(inventoryTypeId, DepartmentId, SearchFor, numberOfRecords?? RecordsOnPage);
+            return new InventoriesFilter(inventoryTypeId, DepartmentId, SearchFor, takeAllRecords ? -1 : RecordsOnPage); // -1: take all records
+        }
+
+        public static string CreateFilterId()
+        {
+            return $"{TabName.Inventories}{InventoryFilterMode.CustomType}";
         }
     }
 }

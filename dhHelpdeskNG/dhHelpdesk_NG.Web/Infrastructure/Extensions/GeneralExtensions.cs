@@ -1,5 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.Domain.Computers;
+using DH.Helpdesk.Web.Common.Enums.Case;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
@@ -201,7 +202,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
             var fieldTemplateSettings = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
             var isTemplateReadonly = fieldTemplateSettings != null && (fieldTemplateSettings.CaseSolutionMode == CaseSolutionModes.ReadOnly);
-            var isReadOnly = model.EditMode == Enums.AccessMode.ReadOnly || isTemplateReadonly;
+            var isReadOnly = model.EditMode == AccessMode.ReadOnly || isTemplateReadonly;
             return isReadOnly;
         }
 
@@ -216,7 +217,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                 return false;
             }
 
-            var isReadOnly = model.EditMode == Enums.AccessMode.ReadOnly;
+            var isReadOnly = model.EditMode == AccessMode.ReadOnly;
             return isReadOnly;
         }
 
@@ -227,7 +228,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             if (!isLocalVisibility)
                 return false;
 
-            var isReadOnly = model.EditMode == Enums.AccessMode.ReadOnly || fieldSetting.CaseSolutionMode == CaseSolutionModes.ReadOnly;
+            var isReadOnly = model.EditMode == AccessMode.ReadOnly || fieldSetting.CaseSolutionMode == CaseSolutionModes.ReadOnly;
             return isReadOnly;
         }
 

@@ -1,7 +1,11 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
+﻿@using System.Web.Optimization
+@using DH.Helpdesk.Web
+@using DH.Helpdesk.Web.Infrastructure
 @model DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer.ComputerEditViewModel
+
 @{
     Layout = "~/Areas/Inventory/Views/Workstation/_EditWorkstationLayout.cshtml";
+    var documentModel = Model.ComputerViewModel.ContractFieldsViewModel.ContractFieldsModel.Document;
 }
 
 @section Actions
@@ -10,7 +14,7 @@
         @if (Model.UserHasInventoryAdminPermission)
         {
             <li id="menu1">
-                <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); "/>
+                <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn" onclick=" $('#workstation_edit_form').submit(); " />
             </li>
             if (!Model.IsForDialog)
             {
@@ -22,11 +26,11 @@
         }
         @if (Model.IsForDialog && !string.IsNullOrEmpty(Model.UserId))
         {
-            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "RelatedInventoryFull", new {userId = Model.UserId}, new {@class = "btn"})</li>
+            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "RelatedInventoryFull", new { userId = Model.UserId }, new { @class = "btn" })</li>
         }
-        @if(!Model.IsForDialog)
+        @if (!Model.IsForDialog)
         {
-            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", null, new {@class = "btn"})</li>
+            <li id="menu2">@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", null, new { @class = "btn" })</li>
         }
     </ul>
 }
@@ -36,6 +40,9 @@
     @Html.HiddenFor(m => m.ComputerViewModel.IsForDialog)
     @Html.HiddenFor(m => m.ComputerViewModel.UserId)
     @Html.HiddenFor(m => m.ComputerViewModel.Id)
+    @Html.HiddenFor(m => m.Id)
+    @Html.Hidden("DocumentFileKey", Model.ComputerViewModel.DocumentFileKey)
+
     @Html.EditorFor(m => m.ComputerViewModel.WorkstationFieldsViewModel)
     @Html.EditorFor(m => m.ComputerViewModel.ChassisFieldsModel)
     @Html.EditorFor(m => m.ComputerViewModel.InventoryFieldsModel)
@@ -47,16 +54,20 @@
     @Html.EditorFor(m => m.ComputerViewModel.SoundFieldsModel)
     @Html.EditorFor(m => m.ComputerViewModel.ContractFieldsViewModel)
     @Html.EditorFor(m => m.ComputerViewModel.OtherFieldsModel)
+    @Html.EditorFor(m => m.ComputerViewModel, "Documents")
     @Html.EditorFor(m => m.ComputerViewModel.ContactInformationFieldsModel, new { ComputerId = Model.ComputerViewModel.Id })
     @Html.EditorFor(m => m.ComputerViewModel.OrganizationFieldsViewModel)
     @Html.EditorFor(m => m.ComputerViewModel.PlaceFieldsViewModel)
     @Html.EditorFor(m => m.ComputerViewModel.ContactFieldsModel)
     @Html.EditorFor(m => m.ComputerViewModel.StateFieldsViewModel)
+
     
+
+
     if (Model.ComputerViewModel.CreatedDate.Show || Model.ComputerViewModel.ChangedDate.Show || Model.ComputerViewModel.DateFieldsModel.ScanDate.Show ||
             Model.ComputerViewModel.DateFieldsModel.SynchronizeDate.Show || Model.ComputerViewModel.DateFieldsModel.PathDirectory.Show)
     {
-        <h4>@Translation.Get("Status")</h4>
+        <h4>@Translation.GetCoreTextTranslation("Status")</h4>
     }
     <div class="row">
         <div class="span12">
@@ -86,7 +97,7 @@
                     {
                         <tr>
                             <td class="span3">
-                                <label>@Translation.Get("Changed by")</label>
+                                <label>@Translation.GetCoreTextTranslation("Changed by")</label>
                             </td>
                             <td class="span9">
                                 @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.FirstName) @Html.DisplayFor(m => m.ComputerViewModel.ChangedByUserName.LastName)
@@ -100,4 +111,30 @@
     @Html.EditorFor(m => m.ComputerViewModel.DateFieldsModel)
 }
 
+@section Scripts
+{
+@if (documentModel.Show)
+{
+    @Html.Partial("_InventoryFiles")
+    @Scripts.Render(BundleConfig.ScriptNames.InventoryFiles)
+    <script type="text/javascript">
 
+        var inventoryFilesOptions = {
+            id: @Model.Id.ToString(),
+            attachedFileName: '@(documentModel.Value)',
+            currentLanguageId: '@Model.CurrentLanguageId',
+            documentFileKey: '', //uses id instead
+            uploadDocumentFileUrl: '@Url.Action("UploadFile", "Workstation")',
+            fileDownloadUrlMask: '@Url.Action("DownloadFile", "Workstation")',
+            fileDeleteUrl: '@Url.Action("DeleteFile", "Workstation")'
+        };
+
+        $(function(jQuery) {
+            // create instance and init
+            window.inventoryFiles = new InventoryFiles(jQuery);
+            window.inventoryFiles.init(inventoryFilesOptions);
+        });
+
+    </script>
+}
+}

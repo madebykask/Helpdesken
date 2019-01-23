@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer.Input;
 using DH.Helpdesk.BusinessData.Models.User;
@@ -80,6 +81,7 @@ namespace DH.Helpdesk.Services.Services
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
+        IList<int> GetUserCustomersIds(int userId);
 
         //IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId, bool includeWorkingGroups = false);
         IList<CustomerUserInfo> GetUsersForWorkingGroup(int workingGroupId);
@@ -113,6 +115,7 @@ namespace DH.Helpdesk.Services.Services
         void Commit();
 
         UserOverview Login(string name, string password);
+        Task<UserOverview> LoginAsync(string name, string password);
         DateTime GetUserPasswordChangedDate(int id);
 
         /// <summary>
@@ -165,7 +168,8 @@ namespace DH.Helpdesk.Services.Services
         /// <returns>
         /// The <see cref="UserOverview"/>.
         /// </returns>
-        UserOverview GetUserOverview(int user);
+        UserOverview GetUserOverview(int userId);
+        Task<UserOverview> GetUserOverviewAsync(int userId);
 
         List<ItemOverview> FindActiveOverviews(int customerId);
 
@@ -203,23 +207,21 @@ namespace DH.Helpdesk.Services.Services
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IOrderTypeRepository _orderTypeRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public readonly IUserRepository _userRepository;
-        public readonly IUserGroupRepository _userGroupRepository;
-        public readonly IUserRoleRepository _userRoleRepository;
-        public readonly IWorkingGroupRepository _workingGroupRepository;
-        public readonly IUserWorkingGroupRepository _userWorkingGroupRepository;
-        public readonly IDepartmentUserRepository _departmentUserRepository;
-        public readonly ILogProgramRepository _logprogramRepository;
-        public readonly ICaseSettingRepository _casesettingRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserGroupRepository _userGroupRepository;
+        private readonly IUserRoleRepository _userRoleRepository;
+        private readonly IWorkingGroupRepository _workingGroupRepository;
+        private readonly IUserWorkingGroupRepository _userWorkingGroupRepository;
+        private readonly ICaseSettingRepository _casesettingRepository;
         private readonly IModuleRepository _moduleRepository;
         private readonly IUserModuleRepository _userModuleRepository;
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
-        private readonly IUserPermissionsChecker userPermissionsChecker;
-        private readonly ITranslator translator;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
+        private readonly ITranslator _translator;
         private readonly IUsersPasswordHistoryRepository _userPasswordHistoryRepository;
         private readonly ISettingRepository _settingRepository;
 
-        private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper;
+        private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> _customerSettingsToBusinessModelMapper;
         
 
         public UserService(
@@ -234,8 +236,6 @@ namespace DH.Helpdesk.Services.Services
             IUserRoleRepository userRoleRepository,
             IWorkingGroupRepository workingGroupRepository,
             IUserWorkingGroupRepository userWorkingGroupRepository,
-            IDepartmentUserRepository departmentUserRepository,
-            ILogProgramRepository logprogramRepository,
             ICaseSettingRepository casesettingRepository,
             IModuleRepository moduleRepository,
             IUserModuleRepository userModuleRepository, 
@@ -246,28 +246,26 @@ namespace DH.Helpdesk.Services.Services
             IEntityToBusinessModelMapper<Setting, CustomerSettings> customerSettingsToBusinessModelMapper,
             ISettingRepository settingRepository)
         {
-            this._accountActivityRepository = accountActivityRepository;
-            this._customerRepository = customerRepository;
-            this._customerUserRepository = customerUserRepository;
-            this._departmentRepository = departmentRepository;
-            this._orderTypeRepository = orderTypeRepository;
-            this._unitOfWork = unitOfWork;
-            this._userRepository = userRepository;
-            this._userGroupRepository = userGroupRepository;
-            this._userRoleRepository = userRoleRepository;
-            this._workingGroupRepository = workingGroupRepository;
-            this._userWorkingGroupRepository = userWorkingGroupRepository;
-            this._departmentUserRepository = departmentUserRepository;
-            this._logprogramRepository = logprogramRepository;
-            this._casesettingRepository = casesettingRepository;
+            _accountActivityRepository = accountActivityRepository;
+            _customerRepository = customerRepository;
+            _customerUserRepository = customerUserRepository;
+            _departmentRepository = departmentRepository;
+            _orderTypeRepository = orderTypeRepository;
+            _unitOfWork = unitOfWork;
+            _userRepository = userRepository;
+            _userGroupRepository = userGroupRepository;
+            _userRoleRepository = userRoleRepository;
+            _workingGroupRepository = workingGroupRepository;
+            _userWorkingGroupRepository = userWorkingGroupRepository;
+            _casesettingRepository = casesettingRepository;
             _moduleRepository = moduleRepository;
             _userModuleRepository = userModuleRepository;
-            this.unitOfWorkFactory = unitOfWorkFactory;
-            this.userPermissionsChecker = userPermissionsChecker;
-            this.translator = translator;
-            this._userPasswordHistoryRepository = userPasswordHistoryRepository;
-            this.customerSettingsToBusinessModelMapper = customerSettingsToBusinessModelMapper;
-            this._settingRepository = settingRepository;
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _userPermissionsChecker = userPermissionsChecker;
+            _translator = translator;
+            _userPasswordHistoryRepository = userPasswordHistoryRepository;
+            _customerSettingsToBusinessModelMapper = customerSettingsToBusinessModelMapper;
+            _settingRepository = settingRepository;
         }
 
 
@@ -548,7 +546,7 @@ namespace DH.Helpdesk.Services.Services
                     user.UserRoles.Clear();
 
                     //Remove Case Settings
-                    var userCaseSettings = this._casesettingRepository.GetAll().Where(cs => cs.User_Id == id).ToList();
+                    var userCaseSettings = this._casesettingRepository.GetMany(cs => cs.User_Id == id).ToList();
                     if (userCaseSettings.Any())
                     {
                         foreach (var caseSetting in userCaseSettings)
@@ -556,7 +554,7 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     // Remove User Modules 
-                    var userModules = this._userModuleRepository.GetAll().Where(um => um.User_Id == id).ToList();
+                    var userModules = this._userModuleRepository.GetMany(um => um.User_Id == id).ToList();
                     if (userModules.Any())
                     {
                         foreach (var userModule in userModules)
@@ -564,7 +562,7 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                     // Remove User Password History 
-                    var passwordHistories = this._userPasswordHistoryRepository.GetAll().Where(up=> up.User_Id == id).ToList();
+                    var passwordHistories = this._userPasswordHistoryRepository.GetMany(up=> up.User_Id == id).ToList();
                     if (passwordHistories.Any())
                     {
                         foreach (var passHistory in passwordHistories)
@@ -668,9 +666,9 @@ namespace DH.Helpdesk.Services.Services
             user.Password = user.Password ?? string.Empty;            
 
             List<UserPermission> wrongPermissions;
-            if (!this.userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
+            if (!this._userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
             {
-                errors.Add("User permissions", this.translator.Translate("There are wrong permissions for this user group."));
+                errors.Add("User permissions", this._translator.Translate("There are wrong permissions for this user group."));
             }
 
             var hasDublicate = this.GetUsers()
@@ -840,9 +838,9 @@ namespace DH.Helpdesk.Services.Services
             errors = new Dictionary<string, string>();
 
             List<UserPermission> wrongPermissions;
-            if (!this.userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
+            if (!this._userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
             {
-                errors.Add("User permissions", this.translator.Translate("There are wrong permissions for this user group."));
+                errors.Add("User permissions", this._translator.Translate("There are wrong permissions for this user group."));
             }
 
             var hasDublicate = _userRepository.FindUsersByUserId(user.UserID).Count() > 0;
@@ -1031,6 +1029,11 @@ namespace DH.Helpdesk.Services.Services
             return null;
         }
 
+        public async Task<UserOverview> LoginAsync(string name, string password)
+        {
+            return await _userRepository.GetByUserIdAsync(name, password);
+        }
+
         public DateTime GetUserPasswordChangedDate(int id)
         {
             return _userRepository.GetPasswordChangedDate(id);
@@ -1179,15 +1182,20 @@ namespace DH.Helpdesk.Services.Services
         /// <summary>
         /// The get user overview.
         /// </summary>
-        /// <param name="user">
+        /// <param name="userId">
         /// The user.
         /// </param>
         /// <returns>
         /// The <see cref="UserOverview"/>.
         /// </returns>
-        public UserOverview GetUserOverview(int user)
+        public UserOverview GetUserOverview(int userId)
         {
-            return this._userRepository.GetUser(user);
+            return this._userRepository.GetUser(userId);
+        }
+
+        public async Task<UserOverview> GetUserOverviewAsync(int userId)
+        {
+            return await _userRepository.GetUserAsync(userId);
         }
 
         public List<ItemOverview> FindActiveOverviews(int customerId)
@@ -1202,7 +1210,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<User> GetActiveUsers()
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var userRep = uow.GetRepository<User>();
 
@@ -1217,7 +1225,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<User> GetAllUsers()
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var userRep = uow.GetRepository<User>();
 
@@ -1231,7 +1239,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<User> GetCustomerActiveUsers(int customerId)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var customerRep = uow.GetRepository<Customer>();
                 var customerUserRep = uow.GetRepository<CustomerUser>();
@@ -1247,7 +1255,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<CustomerSettings> GetUserCustomersSettings(int userId)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var customerRep = uow.GetRepository<Customer>();
                 var customerUserRep = uow.GetRepository<CustomerUser>();
@@ -1264,13 +1272,22 @@ namespace DH.Helpdesk.Services.Services
                                 users, 
                                 customerUsers, 
                                 customerSettings,
-                                this.customerSettingsToBusinessModelMapper);
+                                this._customerSettingsToBusinessModelMapper);
+            }
+        }
+
+        public IList<int> GetUserCustomersIds(int userId)
+        {
+            using (var uow = this._unitOfWorkFactory.Create())
+            {
+                var customerUserRep = uow.GetRepository<CustomerUser>();
+                return customerUserRep.GetAll().Where(cu => cu.User_Id == userId).Select(cu => cu.Customer_Id).ToList();
             }
         }
 
         public List<ItemOverview> GetWorkingGroupUsers(int customerId, int? workingGroupId)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var userRep = uow.GetRepository<User>();
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
@@ -1296,7 +1313,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<UserProfileCustomerSettings> GetUserProfileCustomersSettings(int userId)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var customerRep = uow.GetRepository<Customer>();
                 var customerUserRep = uow.GetRepository<CustomerUser>();
@@ -1318,7 +1335,7 @@ namespace DH.Helpdesk.Services.Services
 
         public void UpdateUserProfileCustomerSettings(int userId, List<UserProfileCustomerSettings> customersSettings)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var customerUserRep = uow.GetRepository<CustomerUser>();
 
@@ -1341,7 +1358,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<Customer> GetCustomersForUser(int userId)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = this._unitOfWorkFactory.Create())
             {
                 var customersRep = uow.GetRepository<Customer>();
                 var usersRep = uow.GetRepository<User>();

@@ -1,6 +1,7 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using DH.Helpdesk.BusinessData.OldComponents
 @using DH.Helpdesk.Common.Extensions.String
+@using DH.Helpdesk.Web.Common.Enums.Case
 @using DH.Helpdesk.Web.Infrastructure
 
 @section Scripts {
@@ -27,7 +28,7 @@
         <div class="secnavs fixed">
             <div class="pull-left">
                 <ul class="secnav">                
-                    @if (Model.EditMode == Enums.AccessMode.FullAccess && !Model.newLog)
+                    @if (Model.EditMode == AccessMode.FullAccess && !Model.newLog)
                     {
                         <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "deletelog", new { id = @Model.CaseLog.Id, caseId = @Model.case_.Id }, 
                         new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })</li>

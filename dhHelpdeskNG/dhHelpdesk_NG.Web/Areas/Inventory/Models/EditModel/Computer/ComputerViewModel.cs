@@ -55,6 +55,8 @@
         [IsId]
         public int? CustomerId { get; set; }
 
+        public string DocumentFileKey { get; set; }
+
         public ConfigurableFieldModel<DateTime> CreatedDate { get;  set; }
 
         public ConfigurableFieldModel<DateTime> ChangedDate { get;  set; }

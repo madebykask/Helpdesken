@@ -42,6 +42,15 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DhDev|AnyCPU'">
+    <OutputPath>bin\DhDev\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
@@ -153,6 +162,8 @@
     <Compile Include="Computers\ComputerType.cs" />
     <Compile Include="CaseSource.cs" />
     <Compile Include="CaseIsAbout.cs" />
+    <Compile Include="Computers\WorkstationTabSettingLanguage.cs" />
+    <Compile Include="Computers\WorkstationTabSettings.cs" />
     <Compile Include="Condition\ConditionEntity.cs" />
     <Compile Include="Computers\ComputerUserCategory.cs" />
     <Compile Include="EmailLogAttempt.cs" />
@@ -170,6 +181,7 @@
     <Compile Include="GDPR\GDPROperationsAudit.cs" />
     <Compile Include="GDPR\GDPRTask.cs" />
     <Compile Include="GDPR\Enums\GDPRTaskStatus.cs" />
+    <Compile Include="Inventory\InventoryTypeStandardSettings.cs" />
     <Compile Include="Invoice\InvoiceArticleProductAreaEntity.cs" />
     <Compile Include="Invoice\InvoiceChargeType.cs" />
     <Compile Include="Invoice\InvoiceStatus.cs" />

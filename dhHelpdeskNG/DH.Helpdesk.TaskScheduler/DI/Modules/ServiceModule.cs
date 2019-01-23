@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.Services.BusinessLogic.Gdpr;
+using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.TaskScheduler.Services;
 using Ninject.Modules;
@@ -17,6 +18,7 @@ namespace DH.Helpdesk.TaskScheduler.DI.Modules
             Bind<IOUService>().To<OUService>();
             Bind<IGDPRTasksService>().To<GDPRTasksService>();
             Bind<IGDPRDataPrivacyProcessor>().To<GDPRDataPrivacyProcessor>();
+            Bind<ISettingsLogic>().To<SettingsLogic>();
         }
     }
 }

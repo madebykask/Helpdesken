@@ -1,3 +1,5 @@
+using System.Data.Entity;
+
 namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
 {
     using System;
@@ -40,6 +42,14 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
             var entity = new Domain.Computers.Computer();
             Map(entity, businessModel);
+
+            //save file
+            if (businessModel.File != null)
+            {
+                entity.ComputerFileName = businessModel.File.FileName;
+                entity.ComputerDocument = businessModel.File.Content;
+            }
+            
             entity.Customer_Id = businessModel.CustomerId;
             entity.CreatedDate = businessModel.CreatedDate;
             entity.ChangedByUser_Id = businessModel.ChangedByUserId;
@@ -72,6 +82,42 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
             var entity = this.DbSet.Find(id);
             entity.Info = info;
+        }
+
+        public ComputerFile GetFile(int contractId)
+        {
+            var computerFile =
+                DbSet.Where(x => x.Id == contractId).Select(x => new ComputerFile()
+                {
+                    FileName = x.ComputerFileName,
+                    Content = x.ComputerDocument
+                }).FirstOrDefault();
+
+            return computerFile;
+        }
+
+        public void SaveFile(int id, string fileName, byte[] data)
+        {
+            var entity = this.DbSet.Find(id);
+            if (entity != null)
+            {
+                entity.ComputerFileName = fileName;
+                entity.ComputerDocument = data;
+
+                Commit();
+            }
+        }
+
+        public void DeleteFile(int id)
+        {
+            var entity = this.DbSet.Find(id);
+            if (entity != null)
+            {
+                entity.ComputerFileName = null;
+                entity.ComputerDocument = null;
+
+                Commit();
+            }
         }
 
         public ComputerForRead FindById(int id)
@@ -188,7 +234,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                     anonymus.Entity.AccountingDimension2,
                     anonymus.Entity.AccountingDimension3,
                     anonymus.Entity.AccountingDimension4,
-                    anonymus.Entity.AccountingDimension5);
+                    anonymus.Entity.AccountingDimension5,
+                    anonymus.Entity.ComputerFileName);
 
             var contactInfo = new BusinessData.Models.Inventory.Edit.Computer.ContactInformationFields(
                 anonymus.UserId,
@@ -290,8 +337,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         }
 
 
-        public List<ComputerOverview> FindOverviews(
-            int customerId,
+        public List<ComputerOverview> FindOverviews(int customerId,
             int? regionId,
             int? departmentId,
             int? computerTypeId,
@@ -313,69 +359,43 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             var query = this.DbSet.Where(x => x.Customer_Id == customerId);
 
             if (!isShowScrapped)
-            {
                 query = query.Where(x => x.ScrapDate == null);
-            }
 
             if (regionId.HasValue)
-            {
                 query = query.Where(x => x.Department.Region_Id == regionId);
-            }
 
             if (departmentId.HasValue)
-            {
                 query = query.Where(x => x.Department_Id == departmentId);
-            }
 
             if (computerTypeId.HasValue)
-            {
                 query = query.Where(x => x.ComputerType_Id == computerTypeId);
-            }
 
             if (contractStatusId.HasValue)
-            {
                 query = query.Where(x => x.ContractStatus_Id == contractStatusId);
-            }
 
             if (contractStartDateFrom.HasValue)
-            {
                 query = query.Where(x => x.ContractStartDate >= contractStartDateFrom);
-            }
 
             if (contractStartDateTo.HasValue)
-            {
                 query = query.Where(x => x.ContractStartDate <= contractStartDateFrom);
-            }
 
             if (contractEndDateFrom.HasValue)
-            {
                 query = query.Where(x => x.ContractEndDate >= contractEndDateFrom);
-            }
 
             if (contractEndDateTo.HasValue)
-            {
                 query = query.Where(x => x.ContractEndDate <= contractEndDateTo);
-            }
 
             if (scanDateFrom.HasValue)
-            {
                 query = query.Where(x => x.ScanDate >= scanDateFrom);
-            }
 
             if (scanDateTo.HasValue)
-            {
                 query = query.Where(x => x.ScanDate <= scanDateTo);
-            }
 
             if (scrapDateFrom.HasValue)
-            {
                 query = query.Where(x => x.ScrapDate >= scrapDateFrom);
-            }
 
             if (scrapDateTo.HasValue)
-            {
                 query = query.Where(x => x.ScrapDate <= scrapDateTo);
-            }
 
             if (!string.IsNullOrEmpty(searchFor))
             {
@@ -392,7 +412,11 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         || c.TheftMark.ToLower().Contains(pharseInLowerCase)
                         || c.CarePackNumber.ToLower().Contains(pharseInLowerCase)
                         || c.ComputerType.Name.ToLower().Contains(pharseInLowerCase)
-                        || c.Location.ToLower().Contains(pharseInLowerCase));
+                        || c.Location.ToLower().Contains(pharseInLowerCase) 
+                        || c.User.UserId.ToLower().Contains(pharseInLowerCase)
+                        || c.User.FirstName.ToLower().Contains(pharseInLowerCase)
+                        || c.User.SurName.ToLower().Contains(pharseInLowerCase)
+                        || c.NIC.Name.ToLower().Contains(pharseInLowerCase));
             }
 
             if (sortOptions != null && sortOptions.Name != null)
@@ -400,197 +424,107 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 if (sortOptions.SortBy == SortBy.Ascending)
                 {
                     if (sortOptions.Name == ComputerFields.Name)
-                    {
                         query = query.OrderBy(x => x.ComputerName);
-                    }
                     else if (sortOptions.Name == ComputerFields.Manufacturer)
-                    {
                         query = query.OrderBy(x => x.Manufacturer);
-                    }
                     else if (sortOptions.Name == ComputerFields.Model)
-                    {
                         query = query.OrderBy(x => x.ComputerModel.Name);
-                    }
                     else if (sortOptions.Name == ComputerFields.SerialNumber)
-                    {
                         query = query.OrderBy(x => x.SerialNumber);
-                    }
                     else if (sortOptions.Name == ComputerFields.SerialNumber)
-                    {
                         query = query.OrderBy(x => x.SerialNumber);
-                    }
                     else if (sortOptions.Name == ComputerFields.BIOSVersion)
-                    {
                         query = query.OrderBy(x => x.BIOSVersion);
-                    }
                     else if (sortOptions.Name == ComputerFields.BIOSDate)
-                    {
                         query = query.OrderBy(x => x.BIOSDate);
-                    }
                     else if (sortOptions.Name == ComputerFields.Theftmark)
-                    {
                         query = query.OrderBy(x => x.TheftMark);
-                    }
                     else if (sortOptions.Name == ComputerFields.CarePackNumber)
-                    {
                         query = query.OrderBy(x => x.CarePackNumber);
-                    }
                     else if (sortOptions.Name == ComputerFields.ComputerType)
-                    {
                         query = query.OrderBy(x => x.ComputerType.Name);
-                    }
                     else if (sortOptions.Name == DateFields.CreatedDate)
-                    {
                         query = query.OrderBy(x => x.CreatedDate);
-                    }
                     else if (sortOptions.Name == MemoryFields.RAM)
-                    {
                         query = query.OrderBy(x => x.RAM.Name);
-                    }
                     else if (sortOptions.Name == ProcessorFields.ProccesorName)
-                    {
                         query = query.OrderBy(x => x.Processor.Name);
-                    }
                     else if (sortOptions.Name == SoundFields.SoundCard)
-                    {
                         query = query.OrderBy(x => x.SoundCard);
-                    }
                     else if (sortOptions.Name == GraphicsFields.VideoCard)
-                    {
                         query = query.OrderBy(x => x.VideoCard);
-                    }
                     else if (sortOptions.Name == ContractFields.ContractStatusName)
-                    {
                         query = query.OrderBy(x => x.ContractStatus_Id.Value);
-                    }
                     else if (sortOptions.Name == ContractFields.PurchasePrice)
-                    {
                         query = query.OrderBy(x => x.Price);
-                    }
                     else if (sortOptions.Name == OtherFields.Info)
-                    {
                         query = query.OrderBy(x => x.Info);
-                    }
                     else if (sortOptions.Name == ContactInformationFields.UserId)
-                    {
                         query = query.OrderBy(x => x.User_Id);
-                    }
                     else if (sortOptions.Name == StateFields.State)
-                    {
                         query = query.OrderBy(x => x.Status);
-                    }
                     else if (sortOptions.Name == DateFields.ChangedDate)
-                    {
                         query = query.OrderBy(x => x.ChangedDate);
-                    }
                     else if (sortOptions.Name == DateFields.SynchronizeDate)
-                    {
                         query = query.OrderBy(x => x.SyncChangedDate);
-                    }
                     else if (sortOptions.Name == CommunicationFields.NetworkAdapter)
-                    {
                         query = query.OrderBy(x => x.NIC.Name);
-                    }
                 }
                 else
                 {
                     if (sortOptions.Name == ComputerFields.Name)
-                    {
                         query = query.OrderByDescending(x => x.ComputerName);
-                    }
                     else if (sortOptions.Name == ComputerFields.Manufacturer)
-                    {
                         query = query.OrderByDescending(x => x.Manufacturer);
-                    }
                     else if (sortOptions.Name == ComputerFields.Model)
-                    {
                         query = query.OrderByDescending(x => x.ComputerModel.Name);
-                    }
                     else if (sortOptions.Name == ComputerFields.SerialNumber)
-                    {
                         query = query.OrderByDescending(x => x.SerialNumber);
-                    }
                     else if (sortOptions.Name == ComputerFields.SerialNumber)
-                    {
                         query = query.OrderByDescending(x => x.SerialNumber);
-                    }
                     else if (sortOptions.Name == ComputerFields.BIOSVersion)
-                    {
                         query = query.OrderByDescending(x => x.BIOSVersion);
-                    }
                     else if (sortOptions.Name == ComputerFields.BIOSDate)
-                    {
                         query = query.OrderByDescending(x => x.BIOSDate);
-                    }
                     else if (sortOptions.Name == ComputerFields.Theftmark)
-                    {
                         query = query.OrderByDescending(x => x.TheftMark);
-                    }
                     else if (sortOptions.Name == ComputerFields.CarePackNumber)
-                    {
                         query = query.OrderByDescending(x => x.CarePackNumber);
-                    }
                     else if (sortOptions.Name == ComputerFields.ComputerType)
-                    {
                         query = query.OrderByDescending(x => x.ComputerType.Name);
-                    }
                     else if (sortOptions.Name == DateFields.CreatedDate)
-                    {
                         query = query.OrderByDescending(x => x.CreatedDate);
-                    }
                     else if (sortOptions.Name == MemoryFields.RAM)
-                    {
                         query = query.OrderByDescending(x => x.RAM.Name);
-                    }
                     else if (sortOptions.Name == ProcessorFields.ProccesorName)
-                    {
                         query = query.OrderByDescending(x => x.Processor.Name);
-                    }
                     else if (sortOptions.Name == SoundFields.SoundCard)
-                    {
                         query = query.OrderByDescending(x => x.SoundCard);
-                    }
                     else if (sortOptions.Name == GraphicsFields.VideoCard)
-                    {
                         query = query.OrderByDescending(x => x.VideoCard);
-                    }
                     else if (sortOptions.Name == ContractFields.ContractStatusName)
-                    {
                         query = query.OrderByDescending(x => x.ContractStatus_Id.Value);
-                    }
                     else if (sortOptions.Name == ContractFields.PurchasePrice)
-                    {
                         query = query.OrderByDescending(x => x.Price);
-                    }
                     else if (sortOptions.Name == OtherFields.Info)
-                    {
                         query = query.OrderByDescending(x => x.Info);
-                    }
                     else if (sortOptions.Name == ContactInformationFields.UserId)
-                    {
                         query = query.OrderByDescending(x => x.User_Id);
-                    }
                     else if (sortOptions.Name == StateFields.State)
-                    {
                         query = query.OrderByDescending(x => x.Status);
-                    }
                     else if (sortOptions.Name == DateFields.ChangedDate)
-                    {
                         query = query.OrderByDescending(x => x.ChangedDate);
-                    }
                     else if (sortOptions.Name == DateFields.SynchronizeDate)
-                    {
                         query = query.OrderByDescending(x => x.SyncChangedDate);
-                    }
                     else if (sortOptions.Name == CommunicationFields.NetworkAdapter)
-                    {
                         query = query.OrderByDescending(x => x.NIC.Name);
-                    }
                 }
             }
+
             if (recordsCount.HasValue)
                 query = query.Take(recordsCount.Value);
-            var overviews = MapToComputerOverview(query);
+
+            var overviews = MapToComputerOverview(query.AsNoTracking());
             return overviews;
         }
 
@@ -902,7 +836,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             entity.AccountingDimension3 = businessModel.ContractFields.AccountingDimension3;
             entity.AccountingDimension4 = businessModel.ContractFields.AccountingDimension4;
             entity.AccountingDimension5 = businessModel.ContractFields.AccountingDimension5;
-
+            
             entity.User_Id = businessModel.ContactInformationFields.UserId;
 
             entity.ContactName = businessModel.ContactFields.Name;

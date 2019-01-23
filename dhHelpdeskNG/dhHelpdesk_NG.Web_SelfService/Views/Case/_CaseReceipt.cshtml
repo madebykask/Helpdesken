@@ -20,7 +20,8 @@
         caseId: Number('@Model.CasePreview.Id'),
         logFileKey: '@Model.LogFileGuid',
         isFinished : @Html.Raw(Model.IsFinished ? "true" : "false"),
-        logNotesMode: Number('@(ViewBag.IsLineManagerApplication || ViewBag.ShowCommunicationForSelfService ? 1 : 0)') // LogModes: CaseSection: 0, Communication: 1 (declared in case.log.js)
+        logNotesMode: Number('@(ViewBag.IsLineManagerApplication || ViewBag.ShowCommunicationForSelfService ? 1 : 0)'), // LogModes: CaseSection: 0, Communication: 1 (declared in case.log.js)
+        caseEmailGuid : '@ViewBag.caseEmailGuid'
     }
 </script>
 

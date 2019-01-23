@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+
 namespace DH.Helpdesk.Dal.Repositories.Cases
 {
     using System.Collections.Generic;
@@ -16,21 +18,21 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 
         List<LockedCaseOverview> GetLockedCases(int? customerId, string searchText);
         IQueryable<ICaseLockOverview> GetLockedCases(int[] caseIds, int bufferTime);
-        CaseLock GetCaseLockByGUID(Guid lockGUID);
+        CaseLockEntity GetCaseLockByGUID(Guid lockGUID);
+        Task<CaseLockEntity> GetCaseLockByGUIDAsync(Guid lockGUID);
 
-        ICaseLockOverview GetCaseLockByCaseId(int caseId);
+        ICaseLockOverview GetCaseLockOverviewByCaseId(int caseId);
 
         IDictionary<int, ICaseLockOverview> GetCasesLock(int[] caseIds);
+
+        CaseLockEntity GetCaseLockByCaseId(int caseId);
+        Task<CaseLockEntity> GetCaseLockByCaseIdAsync(int caseId);
 
         void CaseLockCleanUp();
         
         void LockCase(CaseLock caseLock);
 
-        bool ReExtendLockCase(Guid lockGUID, int extendedTimeInSecond);
-
-        void UnlockCaseByCaseId(int caseId);
-
-        void UnlockCaseByGUID(Guid lockGUID);
+        bool DeleteCaseLock(CaseLockEntity caseLock);
 
         void DeleteCaseLockByCaseId(int caseId);
     }

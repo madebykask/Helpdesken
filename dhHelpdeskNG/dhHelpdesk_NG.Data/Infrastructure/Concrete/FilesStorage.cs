@@ -13,6 +13,12 @@
             FilteredFiles.Add("thumbs.db");
         }
 
+        public string GetCaseFilePath(string topic, int entityId, string basePath, string fileName)
+        {
+            var filePath = this.ComposeFilePath(topic, entityId, basePath, fileName);
+            return filePath;
+        }
+
         public byte[] GetFileContent(string topic, int entityId, string basePath, string fileName)
         {
             var filePath = this.ComposeFilePath(topic, entityId, basePath,  fileName);  

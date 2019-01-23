@@ -47,18 +47,17 @@
         [HttpGet]
         public ViewResult Index()
         {
-            List<ItemOverview> inventoryTypes = this.inventoryService.GetInventoryTypes(
-                SessionFacade.CurrentCustomer.Id);
+            var inventoryTypes = 
+                this.inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id);
 
             SessionFacade.SavePageFilters(TabName.Reports, new ReportFilter((int)this.ReportType));
-            ReportsSearchFilter currentFilter =
-                SessionFacade.FindPageFilters<ReportsSearchFilter>(
-                    this.CreateFilterId(TabName.Reports, ReportFilterMode.DefaultReport.ToString()))
-                ?? ReportsSearchFilter.CreateDefault();
+            var currentFilter =
+                SessionFacade.FindPageFilters<ReportsSearchFilter>(ReportsSearchFilter.CreateFilterId()) ?? 
+                ReportsSearchFilter.CreateDefault();
 
-            List<ItemOverview> departments = this.OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
+            var departments = this.OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
 
-            ReportsSearchViewModel viewModel = ReportsSearchViewModel.BuildViewModel(
+            var viewModel = ReportsSearchViewModel.BuildViewModel(
                 currentFilter,
                 departments,
                 (int)this.ReportType,
@@ -70,9 +69,7 @@
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
         public PartialViewResult ReportsGrid(ReportsSearchFilter filter)
         {
-            SessionFacade.SavePageFilters(
-                this.CreateFilterId(TabName.Reports, ReportFilterMode.DefaultReport.ToString()),
-                filter);
+            SessionFacade.SavePageFilters(ReportsSearchFilter.CreateFilterId(),filter);
 
             ReportViewModel viewModel = this.BuildViewModel(
                 filter.ReportDataType,
@@ -139,10 +136,9 @@
 
         private FileContentResult CreateModuleReport()
         {
-            ReportsSearchFilter filter =
-                SessionFacade.FindPageFilters<ReportsSearchFilter>(
-                    this.CreateFilterId(TabName.Reports, ReportFilterMode.DefaultReport.ToString()))
-                ?? ReportsSearchFilter.CreateDefault();
+            var filter =
+                SessionFacade.FindPageFilters<ReportsSearchFilter>(ReportsSearchFilter.CreateFilterId()) ?? 
+                ReportsSearchFilter.CreateDefault();
 
             ReportViewModel viewModel = this.BuildViewModel(
                 filter.ReportDataType,
