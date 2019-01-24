@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
-using DH.Helpdesk.BusinessData.Models.Shared;
 
 namespace DH.Helpdesk.Models.Case
 {
     public class CaseBaseEventModel
     {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime CreatedAt { get; set; }
         public CaseEventType Type { get; set; }
         public LogUserOverview CreatedBy { get; set; }
     }

@@ -11,7 +11,6 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Mapper.Profiles
 {
     public class EntitiesToModelMappingProfile : Profile
     {
-
         public EntitiesToModelMappingProfile()
         {
             CreateMap<CaseLockInfo, CaseLockInputModel>();
@@ -22,7 +21,8 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Mapper.Profiles
                 .ForMember(dest => dest.StateSecondaryId, opt => opt.MapFrom(s => s.StateSecondary_Id ?? 0));
 
             CreateMap<Log, CaseLogOutputModel>()
-                .ForMember(dest => dest.Date, opt => opt.MapFrom(s => s.LogDate))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(s => s.LogDate))
+                .ForMember(dest => dest.Text, opt => opt.MapFrom(s => s.Text_External))
                 .ForMember(dest => dest.Type, opt => opt.ResolveUsing(r => 
                     string.IsNullOrEmpty(r.Text_Internal) ? CaseEventType.InternalLogNote : CaseEventType.ExternalLogNote))
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(s => s.User));

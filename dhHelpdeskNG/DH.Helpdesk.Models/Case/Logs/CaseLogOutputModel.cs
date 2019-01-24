@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DH.Helpdesk.Models.Case.Logs
+﻿namespace DH.Helpdesk.Models.Case.Logs
 {
     public class CaseLogOutputModel : CaseBaseEventModel
     {
+        public string Text { get; set; }
+        // IList<LogFile> Files { get; set; }
     }
 }

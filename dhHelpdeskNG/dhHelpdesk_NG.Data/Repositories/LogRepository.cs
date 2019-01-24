@@ -1,11 +1,7 @@
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Validation;
 using System.Linq;
-using DH.Helpdesk.BusinessData.Models.Logs.Output;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.MapperData.Logs;
-using DH.Helpdesk.Dal.Mappers;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -47,14 +43,14 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public Log GetLogById(int id)
         {
-            return (from l in this.DataContext.Logs
+            return (from l in Table
                     where l.Id == id
                     select l).FirstOrDefault();
         }
 
         public IQueryable<Log> GetLogForCase(int caseId, bool includeInternalLogs = false)
         {
-            var q = from l in this.DataContext.Logs
+            var q = from l in Table
                     where l.Case_Id == caseId
                     select l;
             if (!includeInternalLogs)

@@ -10,7 +10,7 @@ export class CaseActionsGroup {
 
 export class CaseAction<TData extends CaseHistoryActionData | CaseLogActionData | GenericActionData> {
     Id: number;
-    Type: CaseActionEvents;
+    Type: CaseEventType;
     CreatedAt: Date;    
     CreatedByUserId: number
     CreatedByUserName: string;    
@@ -43,7 +43,7 @@ export class GenericActionData {
 }
 ///////////////////////////////////////////////////
 
-export enum CaseActionEvents {
+export enum CaseEventType {
   ExternalLogNote = 1,
   InternalLogNote = 2,
   ClosedCase = 3,

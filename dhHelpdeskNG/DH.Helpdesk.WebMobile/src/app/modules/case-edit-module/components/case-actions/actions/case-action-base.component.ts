@@ -1,5 +1,5 @@
 import { Input } from "@angular/core";
-import { CaseAction, CaseActionDataType, CaseLogActionData, CaseHistoryActionData, CaseActionEvents } from "../../../models";
+import { CaseAction, CaseActionDataType, CaseLogActionData, CaseHistoryActionData, CaseEventType } from "../../../models";
 
 export class CaseActionBaseComponent<TActionData extends CaseActionDataType> {
 
@@ -11,37 +11,37 @@ export class CaseActionBaseComponent<TActionData extends CaseActionDataType> {
 
     switch (this.caseAction.Type) {
 
-      case CaseActionEvents.ExternalLogNote:
+      case CaseEventType.ExternalLogNote:
         return iconClass + "fa-comment-o";
 
-      case CaseActionEvents.InternalLogNote:
+      case CaseEventType.InternalLogNote:
         return iconClass + "fa-comment";
 
-      case CaseActionEvents.ClosedCase:
+      case CaseEventType.ClosedCase:
         return iconClass + "fa-check-square-o";
 
-      case CaseActionEvents.AssignedAdministrator:
+      case CaseEventType.AssignedAdministrator:
         return iconClass + "fa-user";
 
-      case CaseActionEvents.AssignedWorkingGroup:
+      case CaseEventType.AssignedWorkingGroup:
         return iconClass + "fa-group";
 
-      case CaseActionEvents.ChangeSubstatus:
+      case CaseEventType.ChangeSubstatus:
         return iconClass + "fa-exchange";
 
-      case CaseActionEvents.ChangePriority:
+      case CaseEventType.ChangePriority:
         return iconClass + "fa-exclamation";
 
-      case CaseActionEvents.ChangeWatchDate:
+      case CaseEventType.ChangeWatchDate:
         return iconClass + "fa-clock-o";
 
-      case CaseActionEvents.UploadLogFile:
+      case CaseEventType.UploadLogFile:
         return iconClass + "fa-paperclip";
 
-      case CaseActionEvents.SentEmails:
+      case CaseEventType.SentEmails:
         return iconClass + "fa-envelope-o";
 
-      case CaseActionEvents.OtherChanges:
+      case CaseEventType.OtherChanges:
         return iconClass + "fa-edit";
 
       default:

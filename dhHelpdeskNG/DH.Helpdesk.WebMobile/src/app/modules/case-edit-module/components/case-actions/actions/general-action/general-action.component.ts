@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CaseActionBaseComponent } from '../case-action-base.component';
-import { GenericActionData, CaseActionEvents } from 'src/app/modules/case-edit-module/models';
+import { GenericActionData, CaseEventType } from 'src/app/modules/case-edit-module/models';
 
 @Component({
   selector: 'app-general-action',

@@ -20,7 +20,7 @@ import { CaseEditDataHelper } from '../../logic/case-edit/case-editdata.helper';
 import { CaseFieldsNames, CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { CaseLockApiService } from '../../services/api/case/case-lock-api.service';
 import { CaseSaveService } from '../../services/case';
-import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel, CaseLockModel, BaseCaseField, CaseAction, GenericActionData, CaseActionEvents, CaseHistoryActionData, CaseLogActionData, CaseActionDataType } from '../../models';
+import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel, CaseLockModel, BaseCaseField, CaseAction, GenericActionData, CaseEventType, CaseHistoryActionData, CaseLogActionData, CaseActionDataType } from '../../models';
 import { OptionItem } from 'src/app/modules/shared-module/models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
@@ -285,7 +285,7 @@ export class CaseEditComponent {
         let action = new CaseAction<CaseHistoryActionData>();
         
         action.Id = 1;
-        action.Type = CaseActionEvents.AssignedAdministrator;
+        action.Type = CaseEventType.AssignedAdministrator;
         action.CreatedAt = new Date(Date.now() - 5000 * 30);
         action.CreatedByUserId = 761;
         action.CreatedByUserName = 'Peter Parker';
@@ -293,7 +293,7 @@ export class CaseEditComponent {
 
         let action1 = new CaseAction<CaseHistoryActionData>();
         action1.Id = 2;
-        action1.Type = CaseActionEvents.ChangePriority;
+        action1.Type = CaseEventType.ChangePriority;
         action1.CreatedAt = new Date(Date.now() - 3000 * 30);
         action1.CreatedByUserId = 1;
         action1.CreatedByUserName = 'Glenn Andersson';
@@ -301,7 +301,7 @@ export class CaseEditComponent {
 
         let action2 = new CaseAction<CaseLogActionData>();
         action2.Id = 3;
-        action2.Type = CaseActionEvents.ExternalLogNote;
+        action2.Type = CaseEventType.ExternalLogNote;
         action2.CreatedAt = new Date(Date.now() - 2600 * 30);
         action2.CreatedByUserId = 1;
         action2.CreatedByUserName = 'Glenn Andersson';
@@ -309,7 +309,7 @@ export class CaseEditComponent {
 
         let action3 = new CaseAction<CaseLogActionData>();
         action3.Id = 4;
-        action3.Type = CaseActionEvents.InternalLogNote;
+        action3.Type = CaseEventType.InternalLogNote;
         action3.CreatedAt = new Date(Date.now() - 2000);
         action3.CreatedByUserId = 2;
         action3.CreatedByUserName = 'Jes Ericsson';
@@ -317,15 +317,15 @@ export class CaseEditComponent {
 
         let action4 = new CaseAction<CaseLogActionData>();
         action4.Id = 5;
-        action4.Type = CaseActionEvents.InternalLogNote;
-        action4.CreatedAt = new Date(Date.now() - 500);
+        action4.Type = CaseEventType.InternalLogNote;
+        action4.CreatedAt = new Date(Date.now());
         action4.CreatedByUserId = 2;
         action4.CreatedByUserName = 'Jes Ericsson';
         action4.Data = new CaseLogActionData('Issue fixed!');
 
         let action5 = new CaseAction<GenericActionData>();
         action5.Id = 6;
-        action5.Type = CaseActionEvents.UploadLogFile;
+        action5.Type = CaseEventType.UploadLogFile;
         action5.CreatedAt = new Date(Date.now() - 200);
         action5.CreatedByUserId = 4;
         action5.CreatedByUserName = 'Mark Andersson';
@@ -333,7 +333,7 @@ export class CaseEditComponent {
 
         let action6 = new CaseAction<GenericActionData>();
         action6.Id = 7;
-        action6.Type = CaseActionEvents.ClosedCase;
+        action6.Type = CaseEventType.ClosedCase;
         action6.CreatedAt = new Date();
         action6.CreatedByUserId = 2;
         action6.CreatedByUserName = 'Jes Ericsson';
