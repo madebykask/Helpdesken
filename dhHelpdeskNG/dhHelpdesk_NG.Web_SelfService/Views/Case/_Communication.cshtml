@@ -1,8 +1,21 @@
 ﻿@using DH.Helpdesk.BusinessData.OldComponents
 @model DH.Helpdesk.SelfService.Models.Case.CaseLogModel
 
+@{
+    var expand = string.Empty;
+    if (Model.CaseLogs != null && Model.CaseLogs.Count > 0)
+    {
+        var lastMsg = Model.GetLastInteral();
+        var user_Id = lastMsg.User_Id;
+
+        if (user_Id != null) { expand = "expand"; }
+    }
+
+}
+
+
 <div id="communicationPanel" class="siteCom">
-    <div class="mapButtonclose mapButton"><span class="glyphicon glyphicon-remove"></span></div>
+    <div id="btnOpenLog" class="mapButtonclose mapButton @expand"><span class="glyphicon glyphicon-remove"></span></div>
     <div class="mapButtonside mapButton">
         @if (Model.CaseLogs != null && Model.CaseLogs.Count > 0)
         {

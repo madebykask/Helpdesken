@@ -179,7 +179,12 @@ $(function () {
                             ? $('#communicationPanel')
                             : $('#logNotesSection');
 
-                //note: _Communication and _CaseReceipt partial views has same ids for controls below. Its safe since both views cannot be used together.
+                //note: _Communication and _CaseReceipt partial views has same ids for controls below. Its safe since both views cannot be used together.              
+                var expand = $("#btnOpenLog").hasClass("expand");
+                if (expand) {                    
+                    $(".mapButtonclose").trigger("click");                    
+                }
+
                 return {
                     logFilesTable: $('#LogFile_table', $parent),    
                     logNoteInput: $('#logNote', $parent),
