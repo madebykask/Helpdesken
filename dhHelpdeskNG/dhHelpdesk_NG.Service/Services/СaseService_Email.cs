@@ -1170,7 +1170,7 @@ namespace DH.Helpdesk.Services.Services
                     if (!cms.DontSendMailToNotifier)
                     {
                         var to = newCase.PersonsEmail.Split(';', ',').Select(x => new Tuple<string, bool>(x, true)).ToList();
-                        var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => new Tuple<string, bool>(x.Follower, true)).ToList();
+                        var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => new Tuple<string, bool>(x.Follower, false)).ToList();
                         to.AddRange(extraFollowers);
                         var adminEmails = newCase.Customer.UsersAvailable.Where(x => x.UserGroup_Id != UserGroups.User).Select(x => x.Email).ToList();
                         foreach (var t in to)
@@ -1181,24 +1181,20 @@ namespace DH.Helpdesk.Services.Services
                             {
                                 var el = new EmailLog(caseHistoryId, mailTemplateId, curMail, _emailService.GetMailMessageId(customEmailSender2));
                                 fields = GetCaseFieldsForEmail(newCase, log, cms, el.EmailLogGUID.ToString(), 9, userTimeZone);
-                                var templateFields = new List<FeedbackField>();
                                 var identifiers = _feedbackTemplateService.FindIdentifiers(mailBody).ToList();
                                 //dont send feedback to followers and admins
                                 var identifiersToDel = new List<string>();
-                                if (t.Item2)
+                                var templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers, newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
+                                foreach (var templateField in templateFields)
                                 {
-                                    templateFields = _feedbackTemplateService.GetCustomerTemplates(identifiers, newCase.Customer_Id, newCase.RegLanguage_Id, newCase.Id, cms.AbsoluterUrl);
-                                    foreach (var templateField in templateFields)
+                                    if (!t.Item2 || (templateField.ExcludeAdministrators && adminEmails.Any(x => x.Equals(curMail))))
                                     {
-                                        if (templateField.ExcludeAdministrators && adminEmails.Any(x => x.Equals(curMail)))
-                                        {
-                                            identifiersToDel.Add(templateField.Key);
-                                        }
-                                        else
-                                        {
-                                            var tf = templateField.MapToFields();
-                                            fields.Add(tf);
-                                        }
+                                        identifiersToDel.Add(templateField.Key);
+                                    }
+                                    else
+                                    {
+                                        var tf = templateField.MapToFields();
+                                        fields.Add(tf);
                                     }
                                 }
                                 foreach (var identifier in identifiersToDel)
@@ -1209,7 +1205,7 @@ namespace DH.Helpdesk.Services.Services
                                     }
                                 }
 
-                                string siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress].ToString() + el.EmailLogGUID.ToString();
+                                var siteSelfService = ConfigurationManager.AppSettings[AppSettingsKey.SelfServiceAddress] + el.EmailLogGUID;
 
                                 var siteHelpdesk = cms.AbsoluterUrl + "Cases/edit/" + caseId.ToString();
                                 var mailResponse = EmailResponse.GetEmptyEmailResponse();
