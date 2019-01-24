@@ -1,4 +1,10 @@
-﻿function InitExtraEmailsSearch(admins, emailGroups, workingGroups) {
+﻿
+function SetFollowers() {
+    var followers = $("#extraEmailsInput").val();
+    $("#fakeExtraEmailsInput").html(getHtmlFromEmails(followers));
+}
+
+function InitExtraEmailsSearch(admins, emailGroups, workingGroups) {
 
     var mainInput = $("#extraEmailsInput");
     var mainFakeInput = $("#fakeExtraEmailsInput");
@@ -57,8 +63,8 @@
     }
 
     mainFakeInput.html(getHtmlFromEmails(mainInput.val()));
-
     mainFakeInput.typeahead(getUserSearchOptions(mainInput, mainFakeInput, popupInput));
+
     mainFakeInput.keydown(function(e) {
         if (e.which === 8 || e.which === 46) {
             onRemoveKeyDown(e, mainFakeInput, mainInput);
@@ -228,6 +234,7 @@ function getEmailsToRemove() {
 }
 
 function getHtmlFromEmails(emails) {
+    debugger;
     if (emails == undefined) {
         return [];
     }
