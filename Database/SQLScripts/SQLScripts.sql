@@ -26,7 +26,7 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
 			where syscolumns.name = N'ShowCaseActionsPanelAtBottom' and sysobjects.name = N'tblCustomer')
 BEGIN
     ALTER TABLE tblCustomer
-    ADD ShowCaseActionsPanelAtBottom bit not null DEFAULT(0)
+    ADD ShowCaseActionsPanelAtBottom bit not null DEFAULT(1)
 END
 GO 
 
