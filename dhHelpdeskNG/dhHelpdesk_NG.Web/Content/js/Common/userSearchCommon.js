@@ -234,7 +234,6 @@ function getEmailsToRemove() {
 }
 
 function getHtmlFromEmails(emails) {
-    debugger;
     if (emails == undefined) {
         return [];
     }
