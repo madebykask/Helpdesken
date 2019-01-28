@@ -350,6 +350,7 @@
     <Compile Include="Infrastructure\TimeZoneResolver\TimeZoneResolver.cs" />
     <Compile Include="Response\Questionnaire\OptionNote.cs" />
     <Compile Include="Services\Authentication\FederatedAuthenticationService.cs" />
+    <Compile Include="Services\CaseServiceAsync.cs" />
     <Compile Include="Services\CaseSolutions\BaseCaseSolutionService.cs" />
     <Compile Include="Services\Cache\TranslateCacheService.cs" />
     <Compile Include="Services\Cache\ICacheService.cs" />

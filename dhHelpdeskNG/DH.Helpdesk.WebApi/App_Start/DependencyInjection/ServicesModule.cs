@@ -85,6 +85,8 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<ProblemLogService>().As<IProblemLogService>();
 
             builder.RegisterType<CaseEditModeCalcStrategy>().As<ICaseEditModeCalcStrategy>();
+            builder.RegisterType<CaseTranslationService>().As<ICaseTranslationService>();
+            
         }
 
         #endregion

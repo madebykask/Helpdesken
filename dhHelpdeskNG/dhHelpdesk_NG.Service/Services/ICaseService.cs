@@ -12,6 +12,7 @@ using DH.Helpdesk.BusinessData.Models.User.Input;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.BusinessRule;
 using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.ExtendedCaseEntity;
 
@@ -153,5 +154,6 @@ namespace DH.Helpdesk.Services.Services
         int GetCaseQuickOpen(UserOverview user, string searchFor);
         void SendProblemLogEmail(Case cs, CaseMailSetting caseMailSetting, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, bool isClosedCaseSending);
         int GetCaseCustomerId(int caseId);
+        Task<List<CaseHistoryMapperData>> GetCaseHistoriesAsync(int caseId);
     }
 }

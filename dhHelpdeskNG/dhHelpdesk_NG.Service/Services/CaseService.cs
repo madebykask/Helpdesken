@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IdentityModel.Tokens;
 using System.Linq;
-using DH.Helpdesk.BusinessData.Enums.Users;
-using DH.Helpdesk.BusinessData.Models.Feedback;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
-using DH.Helpdesk.BusinessData.Models.Customer;
+using DH.Helpdesk.Dal.MapperData.CaseHistory;
+using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Computers;
-using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
-using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -18,19 +14,17 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
     using DH.Helpdesk.BusinessData.Models.Case.Output;
-    using DH.Helpdesk.BusinessData.Models.Email;    
     using DH.Helpdesk.BusinessData.Models.User.Input;
-    using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Constants;
     using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.Enums.BusinessRule;        
+    using DH.Helpdesk.Common.Enums.BusinessRule;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.NewInfrastructure;
     using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Repositories.Cases;    
-    using DH.Helpdesk.Domain;    
+    using DH.Helpdesk.Dal.Repositories.Cases;
+    using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
@@ -42,11 +36,10 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Services.Infrastructure.Email;
     using DH.Helpdesk.Services.Localization;
     using DH.Helpdesk.Services.Services.CaseStatistic;
-    using DH.Helpdesk.Services.utils;    
+    using DH.Helpdesk.Services.utils;
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
     using DH.Helpdesk.Services.Infrastructure;
     using Feedback;
-    using BusinessData.Models.MailTemplates;
     using DH.Helpdesk.Domain.ExtendedCaseEntity;
     using System.Linq.Expressions;
     using Common.Enums.Cases;
@@ -93,6 +86,8 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseSolutionRepository _caseSolutionRepository;
         private readonly IStateSecondaryRepository _stateSecondaryRepository;
         private readonly ICustomerRepository _customerRepository;
+        private readonly IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> _caseHistoryOverviewMapper;
+
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -133,7 +128,8 @@ namespace DH.Helpdesk.Services.Services
             ICaseSectionsRepository caseSectionsRepository,
             ICaseSolutionRepository caseSolutionRepository,
             IStateSecondaryRepository stateSecondaryRepository,
-            ICustomerRepository customerRepository)
+            ICustomerRepository customerRepository,
+            IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -175,6 +171,7 @@ namespace DH.Helpdesk.Services.Services
             this._caseSolutionRepository = caseSolutionRepository;
             this._stateSecondaryRepository = stateSecondaryRepository;
             this._customerRepository = customerRepository;
+            _caseHistoryOverviewMapper = caseHistoryOverviewMapper;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -968,7 +965,8 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseHistoryOverview> GetCaseHistories(int caseId)
         {
-            return this._caseHistoryRepository.GetCaseHistories(caseId).ToList();
+            var items = _caseHistoryRepository.GetCaseHistories(caseId);
+            return items.Select(_caseHistoryOverviewMapper.Map).ToList();
         }
 
         public Dictionary<int, string> GetCaseFiles(List<int> caseIds)

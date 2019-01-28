@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Common.Extensions
+﻿using System.Text.RegularExpressions;
+
+namespace DH.Helpdesk.Web.Common.Extensions
 {
 
     public static class StringExtensions
@@ -13,6 +15,14 @@
                     ret = valueToReturn; 
 
             return ret;
+        }
+
+        public static string RemoveHtmlTags(this string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return "";
+
+            return Regex.Replace(value, @"<[^>]*>", "<HTMLTAG>");
         }
     }
 }

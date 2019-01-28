@@ -39,5 +39,6 @@ namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
         {
             return !IsCaseNew(currentCaseId) && !permission.ToBool();
         }
+
     }
 }
