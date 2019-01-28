@@ -1,4 +1,8 @@
-<div *ngIf="data">
-  <span class="{{ getActionIcon() }}"></span>
-  <span class="logNoteText">{{data.text}}</span>
+<div *ngIf="data">  
+  <div *ngIf="data.text && data.text.length" class="logNoteText">
+      <span><i class="{{ getActionIcon() }}"></i> {{data.text | truncate:20}}</span>
+  </div>
+  <ul class="files">
+      <li *ngFor="let file of data.files"><span><i class="mbsc-ic mbsc-ic-fa-paperclip"></i> {{ file.fileName }}</span></li>
+  </ul>
 </div>

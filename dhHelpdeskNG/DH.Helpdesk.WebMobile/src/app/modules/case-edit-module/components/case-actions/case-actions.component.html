@@ -1,5 +1,5 @@
 <div id="case-actions" *ngIf="grouppedItems && grouppedItems.length">
-  <mbsc-card [class.owner]="isActionOwner(group.CreatedByUserId)" *ngFor="let group of grouppedItems">
+  <mbsc-card *ngFor="let group of grouppedItems" [class.owner]="isActionOwner(group.CreatedByUserId)">
     <mbsc-card-header>      
       <mbsc-card-subtitle class="mbsc-txt-s">
         <div class="mbsc-grid mbsc-margin mbsc-txt-muted mbsc-bold mbsc-txt-s">

@@ -53,6 +53,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var q = from l in Table
                     where l.Case_Id == caseId
                     select l;
+
             if (!includeInternalLogs)
             {
                 q = q.Where(l => string.IsNullOrEmpty(l.Text_Internal));

@@ -1,3 +1,4 @@
+import { LogFile } from "./case-events.model";
 
 export class CaseActionsGroup {
     constructor(public CreatedByUserId: number,
@@ -31,14 +32,13 @@ export class CaseHistoryActionData {
 
 // Case Log Note
 export class CaseLogActionData {
-  constructor(public text:string) {
+  constructor(public text:string, public files?: LogFile[]) {
   } 
 }
 
 // Generic Action data
 export class GenericActionData {
-  constructor(public text?:string, 
-              public action?:string) {
+  constructor(public text:string, public action?:string) {
   }
 }
 ///////////////////////////////////////////////////

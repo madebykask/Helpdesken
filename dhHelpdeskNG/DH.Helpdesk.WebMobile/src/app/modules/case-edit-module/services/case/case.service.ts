@@ -1,27 +1,66 @@
 import { Injectable } from '@angular/core';
-import { defaultIfEmpty, take, switchMap, catchError } from 'rxjs/operators';
+import { defaultIfEmpty, take, switchMap, catchError, map } from 'rxjs/operators';
 import { throwError, forkJoin, empty, Observable, of } from 'rxjs';
 import { CaseApiService } from '../api/case/case-api.service';
 import { BundleCaseOptionsService } from 'src/app/modules/case-edit-module/services/case-organization/bundle-case-options.service';
 import { CaseOptionsFilterModel, BundleOptionsFilter, CaseOptions } from 'src/app/modules/shared-module/models';
-import { CaseEditInputModel, CaseSectionInputModel, CaseSolution, MailToTicketInfo, CaseAccessMode, BaseCaseField, KeyValue } from '../../models';
+import { CaseEditInputModel, CaseSectionInputModel, CaseSolution, MailToTicketInfo, CaseAccessMode, BaseCaseField, KeyValue, CaseLogActionData, CaseHistoryActionData, CaseAction } from '../../models';
 import { CaseOrganizationService } from '../case-organization/case-organization.service';
+import { CaseLogApiService } from '../api/case/case-log-api.service';
+import { CaseLogModel, LogFile, CaseHistoryModel } from '../../models/case/case-events.model';
+import { CaseActionsDataService } from './case-actions-data-service.service';
 
 @Injectable({ providedIn: 'root' })
 export class CaseService {
 
     protected constructor(private caseOrganizationService: CaseOrganizationService,
          private batchCaseOptionsService: BundleCaseOptionsService,
+         private caseActionsDataService: CaseActionsDataService,
+         private caseLogApiService: CaseLogApiService,
          private caseApiService: CaseApiService ) {
     }
 
     getCaseData(caseId: number): Observable<CaseEditInputModel> {
       return this.caseApiService.getCaseData(caseId)
         .pipe(
-          switchMap((caseData: any) => {
+          map((caseData: any) => {
             let model = this.fromJSONCaseEditInputModel(caseData);
-            return of(model);
+            return model;
         }))
+    }
+
+    getCaseActions(caseId: number): Observable<CaseAction<any>[]> {
+      let caseLogs$ = this.getCaseLogsData(caseId);
+      let caseHistory$ = this.getCaseHistoryData(caseId);
+
+      return forkJoin(caseLogs$, caseHistory$).pipe(
+        take(1),
+        map(([caseLogsData, caseHistoryData]) => {
+          return this.caseActionsDataService.process(caseLogsData, caseHistoryData);
+      }));
+    }
+
+    private getCaseLogsData(caseId: number): Observable<CaseLogModel[]> {
+      return this.caseLogApiService.getCaseLogs(caseId)
+            .pipe(
+                map(data => {
+                  let items = data.map(x => this.fromJsonCaseLogModel(x));
+                  return items;
+                })
+            );
+    }
+
+    private getCaseHistoryData(caseId) : Observable<CaseHistoryModel[]> {
+      //todo: implement
+      return of(null);
+    }
+
+    private fromJsonCaseLogModel(data: any)
+    {
+        let model = Object.assign(new CaseLogModel(), data, {
+            files: data.files && data.files.length ? data.files.map(f => Object.assign(new LogFile(), f)) : []
+        });
+        return model;
     }
 
     getOptionsHelper(filter: CaseOptionsFilterModel) {
@@ -66,7 +105,7 @@ export class CaseService {
           productAreas$, categories$, closingReasons$, perfomers$, workingGroups$, stateSecondaries$)
                     .pipe(
                         take(1),
-                        switchMap(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes,
+                        map(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes,
                            productAreas, categories, closingReasons, perfomers, workingGroups, stateSecondaries]) => {
                             let options = new CaseOptions();
 
@@ -122,7 +161,7 @@ export class CaseService {
                               options.stateSecondaries = stateSecondaries;
                           }
 
-                            return of(options);
+                            return options;
                       }),
                       catchError((e) => throwError(e))
                     );
@@ -131,15 +170,18 @@ export class CaseService {
     getCaseSections() {
         return this.caseApiService.getCaseSections()
           .pipe(
-            switchMap((jsCaseSections: any) => {
+            map((jsCaseSections: any) => {
               if (!jsCaseSections) throwError("No data from server.");
 
               let sections = (jsCaseSections as Array<any>).map((jsSection: any) => {
-                  return new CaseSectionInputModel(jsSection.id, jsSection.sectionHeader,
-                       jsSection.sectionType, jsSection.isNewCollapsed,
-                       jsSection.isEditCollapsed);
+                  return new CaseSectionInputModel(
+                            jsSection.id, 
+                            jsSection.sectionHeader,
+                            jsSection.sectionType, 
+                            jsSection.isNewCollapsed,
+                            jsSection.isEditCollapsed);
               });
-              return of(sections);
+              return sections;
             }),
             catchError((e) => throwError(e))
           );

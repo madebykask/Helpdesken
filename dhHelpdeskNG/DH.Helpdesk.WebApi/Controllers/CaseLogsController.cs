@@ -33,11 +33,9 @@ namespace DH.Helpdesk.WebApi.Controllers
         {
             var currentUser = _userService.GetUser(UserId);
             var includeInternalLogs = currentUser.CaseInternalLogPermission.ToBool();
+
             var logEntities = await _caselLogService.GetLogsByCaseIdAsync(caseId, includeInternalLogs).ConfigureAwait(false);
-
-            //todo: check access and get only external if has no permissions
-            //var caseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
-
+            
             //todo: log files
             //var exLogFiles = _logFileService.GetLogFilesByCaseId(caseId).Select(x => new CaseAttachedExFileModel(x.Id, x.Name, LogId = x.ObjId));
             var model = _mapper.Map<List<CaseLogOutputModel>>(logEntities);

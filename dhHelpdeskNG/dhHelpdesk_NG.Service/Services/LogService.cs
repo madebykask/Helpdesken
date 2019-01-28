@@ -1,6 +1,9 @@
 ﻿using System.Data.Entity;
+using System.Linq.Dynamic;
 using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.Common.Extensions.Boolean;
+using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.MapperData.Logs;
 using DH.Helpdesk.Dal.Mappers;
 
@@ -14,7 +17,6 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models.Logs.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.NewInfrastructure;
-    using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
@@ -29,7 +31,7 @@ namespace DH.Helpdesk.Services.Services
         int SaveLog(CaseLog caseLog, int noOfAttachedFiles, out IDictionary<string, string> errors);
         CaseLog InitCaseLog(int userId, string regUser);
         IList<Log> GetLogsByCaseId(int caseId);
-        Task<List<Log>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false);
+        Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false);
         CaseLog GetLogById(int id);
         Guid Delete(int id, string basePath);
 
@@ -38,6 +40,7 @@ namespace DH.Helpdesk.Services.Services
         IEnumerable<LogOverview> GetCaseLogOverviews(int caseId);
 
         IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate);
+
 
         void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors);
 
@@ -221,15 +224,37 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<Log> GetLogsByCaseId(int caseId)
         {
-            return this._logRepository.GetLogForCase(caseId, true).ToList();
+            return _logRepository.GetLogForCase(caseId, true).ToList();
         }
 
-        public Task<List<Log>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false)
+        public Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false)
         {
-            return _logRepository.GetLogForCase(caseId, includeInternalLogs)
-                .Include(l => l.User)
-                .AsNoTracking()
-                .ToListAsync();
+            var queryable = _logRepository.GetLogForCase(caseId, includeInternalLogs);
+
+            var caseLogs =
+            (from log in queryable.AsQueryable()
+                select new CaseLogData()
+                {
+                    Id = log.Id,
+                    UserId = log.User.Id,
+                    UserFirstName = log.User.FirstName,
+                    UserSurName = log.User.SurName,
+                    LogDate = log.LogDate,
+                    RegUserName = log.RegUser,
+                    InternalText = log.Text_Internal,
+                    ExternalText = log.Text_External,
+                    Emails = log.CaseHistory.Emaillogs.DefaultIfEmpty().Where(t => t != null).Select(t => t.EmailAddress).ToList(),
+                    Files = log.LogFiles.DefaultIfEmpty().Where(f => f != null).Select(f => new LogFileData()
+                    {
+                        Id = f.Id,
+                        LogId = f.Log_Id,
+                        FileName = f.FileName,
+                        CaseId = f.IsCaseFile.HasValue && f.IsCaseFile.Value ? f.Log.Case_Id : (int?)null
+                    }).ToList()
+                    
+                }).ToListAsync();
+
+            return caseLogs;
         }
 
         public CaseLog GetLogById(int id)

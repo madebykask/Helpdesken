@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
+import { CaseLogApiService } from '../../services/api/case/case-log-api.service';
 import { forkJoin, Subject, Subscription, of, throwError } from 'rxjs';
 import { switchMap, take, finalize, tap, delay, catchError, map, takeUntil, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
@@ -24,6 +25,7 @@ import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputMo
 import { OptionItem } from 'src/app/modules/shared-module/models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
+import { CaseLogModel } from '../../models/case/case-events.model';
 
 @Component({
   selector: 'app-case-edit',
@@ -166,8 +168,10 @@ export class CaseEditComponent {
       this.isLoaded = false;
       const sessionId = this.authStateService.getUser().authData.sessionId;
 
-      const caseLock$ = this.caseLockApiService.acquireCaseLock(this.caseId, sessionId);
+      const caseLock$ = this.caseLockApiService.acquireCaseLock(this.caseId, sessionId);      
       const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
+      const caseActions$ = this.caseService.getCaseActions(this.caseId);
+
       // todo: apply search type (all, my cases)
       const caseData$ =
           this.caseService.getCaseData(this.caseId)
@@ -175,28 +179,27 @@ export class CaseEditComponent {
                   switchMap(data => { // TODO: Error handle
                     this.ownsLock = false;
                     this.caseData = data;
-                    const filter = this.caseDataHelpder.getCaseOptionsFilter(this.caseData,
-                      (name: string) => this.caseDataHelpder.getValue(this.caseData, name));
+                    const filter = 
+                        this.caseDataHelpder.getCaseOptionsFilter(this.caseData, 
+                            (name: string) => this.caseDataHelpder.getValue(this.caseData, name));
+
                     return this.caseService.getCaseOptions(filter);
                   }),
                   catchError((e) => throwError(e)),
               );
 
-              forkJoin(caseSections$, caseData$, caseLock$)
-              .pipe(
+              forkJoin(caseSections$, caseData$, caseLock$, caseActions$).pipe(
                   take(1),
-                  map(([sectionData, options, caseLock]) => {
-                    this.caseSections = sectionData;
-                    this.dataSource = new CaseDataStore(options);
-                    this.caseLock = caseLock;
-                    this.processCaseData();
-                  }),
                   finalize(() => this.isLoaded = true),
-                  catchError((e) => throwError(e)),
-                  takeUntil(this.destroy$)
-              )
-              .subscribe(() => {
-                this.initLock();
+                  catchError((e) => throwError(e))
+              ).subscribe(([sectionData, options, caseLock, caseActions]) => {
+                  this.caseLock = caseLock;  
+                  this.caseSections = sectionData;
+                  this.caseActions = caseActions;
+                  this.dataSource = new CaseDataStore(options);
+                  this.initLock();
+
+                  this.processCaseData();                  
               });
   }
 
@@ -236,7 +239,9 @@ export class CaseEditComponent {
     }
 
     public get canSave() {
-      return !this.caseLock.isLocked && this.caseAccessMode == CaseAccessMode.FullAccess;
+      return this.caseLock && 
+             !this.caseLock.isLocked && 
+             this.caseAccessMode == CaseAccessMode.FullAccess;
     }
 
     saveCase() {
@@ -274,13 +279,12 @@ export class CaseEditComponent {
       this.navigate('/casesoverview/' + searchType);
     }
 
-    private processCaseData(){
+    private processCaseData() {
       this.caseKey = this.caseData.id > 0 ? this.caseData.id.toString() : this.caseData.caseGuid.toString();
       this.form = this.createFormGroup(this.caseData);
-      this.caseActions = this.mockCaseActions();
     }
 
-    private mockCaseActions(){
+    private getMockCaseActions(){
         
         let action = new CaseAction<CaseHistoryActionData>();
         
