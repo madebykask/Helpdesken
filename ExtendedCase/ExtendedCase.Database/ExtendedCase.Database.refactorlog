@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="75b60c75-9185-465f-b4b5-1e5e1de01f45" ChangeDateTime="03/23/2017 03:46:28">
+    <Property Name="ElementName" Value="[dbo].[ExtendedCaseAssignments].[EFormId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ExtendedCaseAssignments]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ExtendedCaseFormId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="69c15602-8132-427d-96a9-0d6dd45acc9e" ChangeDateTime="03/23/2017 03:46:55">
+    <Property Name="ElementName" Value="[dbo].[ExtendedCaseValues].[EFormId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ExtendedCaseValues]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ExtendedCaseFormId" />
+  </Operation>
+</Operations>

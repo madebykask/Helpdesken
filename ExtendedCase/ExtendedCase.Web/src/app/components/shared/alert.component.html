@@ -1,0 +1,13 @@
+﻿<!-- Errors -->
+<ng-template #alertsTemplate let-items="alerts" let-alertType="type">
+    <div class="{{ getCssClass(alertType) }} alert-dismissable" *ngIf="items && items.length">
+        <a class="close" (click)="removeAlerts(alertType)">&times;</a>
+        <ul class="list-unstyled">
+            <li *ngFor="let alert of items">{{ alert.message }}</li>
+        </ul>
+    </div>
+</ng-template>
+
+<ng-container *ngFor="let alertType of alertTypes">
+    <div *ngTemplateOutlet="alertsTemplate;context:{ alerts: (alerts | alertsFilter:alertType), type: alertType }"></div>
+</ng-container>

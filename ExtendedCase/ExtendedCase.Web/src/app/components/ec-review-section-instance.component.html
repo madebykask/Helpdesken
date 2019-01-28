@@ -1,0 +1,17 @@
+﻿<div *ngIf="!isHidden">
+
+    <div class="sectionHeader">
+        <div class="title">
+            <h3>{{ getSectionTitle(i) }}</h3>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="form-inline form-group"
+         *ngFor="let item of getReviewSectionFields(reviewSectionInstance);trackBy:trackReviewItem">
+        <ec-review-ex [fieldTemplate]="item.controlTemplate"
+                      [reviewFieldModel]="item.reviewFieldModel"
+                      [proxyModel]="proxyModel"></ec-review-ex>
+        <div class="clear"></div>
+    </div>
+</div>

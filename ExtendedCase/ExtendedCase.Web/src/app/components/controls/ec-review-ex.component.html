@@ -1,0 +1,14 @@
+﻿<div [style.display]="isHidden?'none':'inherit'">
+    <div class="col-md-3">
+        <span [innerHtml]="getLabel()"></span>
+    </div>
+    <div class="col-md-3">
+        <span>{{ value1 }}</span>
+    </div>
+    <div class="col-md-5">
+        <span>{{ value2 }}</span>
+    </div>
+    <div class="col-md-1">
+        <button type="button" class="btn" ngxClipboard [cbContent]="value1">Copy</button>
+    </div>
+</div>

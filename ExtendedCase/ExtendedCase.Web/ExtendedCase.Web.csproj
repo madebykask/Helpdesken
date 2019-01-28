@@ -1,0 +1,315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DE0FAA78-DD7D-46AA-AE89-1B0ECF3FDB27}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ExtendedCase.Web</RootNamespace>
+    <AssemblyName>ExtendedCase.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+    <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="config\helpers.js" />
+    <Content Include="config\webpack.common.js" />
+    <Content Include="config\webpack.dev.js" />
+    <Content Include="config\webpack.dev.test.js" />
+    <Content Include="config\webpack.prod.js" />
+    <Content Include="config\webpack.test.js" />
+    <Content Include="gulpfile.js" />
+    <Content Include="package.json" />
+    <Content Include="src\app\app.component.html">
+      <DependentUpon>app.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-html.component.html">
+      <DependentUpon>ec-html.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-unknown.component.html">
+      <DependentUpon>ec-unknown.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\ec-review-section-instance.component.html">
+      <DependentUpon>ec-review-section-instance.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\forms-list.component.html">
+      <DependentUpon>forms-list.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\shared\alert.component.html">
+      <DependentUpon>alert.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-checkbox-list.component.html">
+      <DependentUpon>ec-checkbox-list.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-checkbox.component.html">
+      <DependentUpon>ec-checkbox.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-date.component.css">
+      <DependentUpon>ec-date.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-date.component.html">
+      <DependentUpon>ec-date.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-dropdown.component.html">
+      <DependentUpon>ec-dropdown.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-label.component.html">
+      <DependentUpon>ec-label.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-multiselect.component.html">
+      <DependentUpon>ec-multiselect.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-radio.component.html">
+      <DependentUpon>ec-radio.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-review-ex.component.html">
+      <DependentUpon>ec-review-ex.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-review.component.html">
+      <DependentUpon>ec-review.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-textarea.component.html">
+      <DependentUpon>ec-textarea.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-textbox-search.component.html">
+      <DependentUpon>ec-textbox-search.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\controls\ec-textbox.component.html">
+      <DependentUpon>ec-textbox.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\ec-review-section.component.html">
+      <DependentUpon>ec-review-section.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\ec-section.component.html">
+      <DependentUpon>ec-section.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\ec-tab.component.html">
+      <DependentUpon>ec-tab.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\extended-case.component.html">
+      <DependentUpon>extended-case.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\shared\progress.component.html">
+      <DependentUpon>progress.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\validation\validation-errors.component.html">
+      <DependentUpon>validation-errors.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\app\components\validation\validation-warnings.component.html">
+      <DependentUpon>validation-warnings.component.ts</DependentUpon>
+    </Content>
+    <TypeScriptCompile Include="src\app\components\controls\ec-html.component.ts" />
+    <TypeScriptCompile Include="src\app\components\controls\ec-unknown.component.ts" />
+    <TypeScriptCompile Include="src\app\components\ec-review-section-instance.component.ts" />
+    <TypeScriptCompile Include="src\app\components\forms-list.component.ts" />
+    <TypeScriptCompile Include="src\app\components\shared\progress.component.ts" />
+    <TypeScriptCompile Include="src\app\models\form-public.model.ts" />
+    <TypeScriptCompile Include="src\app\pipes\safeHtml-pipe.ts" />
+    <TypeScriptCompile Include="src\app\pipes\safeStyle-pipe.ts" />
+    <TypeScriptCompile Include="src\app\router.component.ts" />
+    <TypeScriptCompile Include="src\app\services\alerts.service.ts" />
+    <TypeScriptCompile Include="src\app\services\form-state\form-state.service.ts" />
+    <TypeScriptCompile Include="src\app\services\query-params.service.ts" />
+    <TypeScriptCompile Include="src\app\shared\alert-types.ts" />
+    <TypeScriptCompile Include="src\app\shared\validation-types.ts" />
+    <TypeScriptCompile Include="src\app\pipes\alerts-filter.ts" />
+    <TypeScriptCompile Include="src\app\models\form-state.model.ts" />
+    <TypeScriptCompile Include="src\app\services\form-state\section-enable-state-loader.ts" />
+    <TypeScriptCompile Include="src\app\services\form-state\form-state-loader.ts" />
+    <None Include="src\template.ejs" />
+    <Content Include="src\app\router.component.html">
+      <DependentUpon>router.component.ts</DependentUpon>
+    </Content>
+    <Content Include="src\index.html" />
+    <Content Include="src\styles\images\bars.gif" />
+    <Content Include="src\Test.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <TypeScriptCompile Include="src\app\components\controls\base-control.ts" />
+    <TypeScriptCompile Include="src\app\components\controls\ec-review-ex.component.ts" />
+    <TypeScriptCompile Include="src\app\components\controls\ec-review.component.ts" />
+    <TypeScriptCompile Include="src\app\components\ec-review-section.component.ts" />
+    <TypeScriptCompile Include="src\app\components\shared\alert.component.ts" />
+    <TypeScriptCompile Include="src\app\components\validation\validation-errors.component.ts" />
+    <TypeScriptCompile Include="src\app\components\validation\validation-warnings.component.ts" />
+    <TypeScriptCompile Include="src\app\directives\input-trim.directive.ts" />
+    <TypeScriptCompile Include="src\app\models\client-log.model.ts" />
+    <TypeScriptCompile Include="src\app\models\form-field-path.model.ts" />
+    <TypeScriptCompile Include="src\app\models\form-parameters.model.ts" />
+    <TypeScriptCompile Include="src\app\models\form-data.model.ts" />
+    <TypeScriptCompile Include="src\app\services\datasources-loader.service.ts" />
+    <TypeScriptCompile Include="src\app\services\data\client-log-api.service.ts" />
+    <TypeScriptCompile Include="src\app\services\data\form-data.service.ts" />
+    <TypeScriptCompile Include="src\app\services\data\extended-http.service.ts" />
+    <TypeScriptCompile Include="src\app\services\error-handling.service.ts" />
+    <TypeScriptCompile Include="src\app\services\form-controls-manager.service.ts" />
+    <TypeScriptCompile Include="src\app\services\log.service.ts" />
+    <TypeScriptCompile Include="src\app\models\form-fields-iterator.ts" />
+    <TypeScriptCompile Include="src\app\services\proxy-model-builder.ts" />
+    <TypeScriptCompile Include="src\app\services\storage.service.ts" />
+    <TypeScriptCompile Include="src\app\services\validators-service.ts" />
+    <TypeScriptCompile Include="src\app\shared\common-types.ts" />
+    <TypeScriptCompile Include="src\app\shared\global-error-handler.ts" />
+    <TypeScriptCompile Include="src\app\shared\keyed-collection.ts" />
+    <TypeScriptCompile Include="src\app\shared\subscription-manager.ts" />
+    <TypeScriptCompile Include="src\app\shared\window-wrapper.ts" />
+    <TypeScriptCompile Include="src\app\utils\common-methods.ts" />
+    <TypeScriptCompile Include="src\app\utils\uuid-generator.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="tsconfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="tslint.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="typings.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="src\app.module.ts" />
+    <TypeScriptCompile Include="src\app\app.component.ts" />
+    <TypeScriptCompile Include="src\app\components\controls\ec-checkbox-list.component.ts" />
+    <TypeScriptCompile Include="src\app\components\controls\ec-checkbox.component.ts" />
+    <TypeScriptCompile Include="src\app\components\controls\ec-date.component.ts" />
+    <TypeScriptCompile Include="src\app\components\controls\ec-multiselect.component.ts" />
+    <TypeScriptCompile Include="src\app\components\controls\ec-dropdown.component.ts" />
+    <TypeScriptCompile Include="src\app\components\controls\ec-label.component.ts" />
+    <TypeScriptCompile Include="src\app\components\controls\ec-radio.component.ts" />
+    <TypeScriptCompile Include="src\app\components\controls\ec-textarea.component.ts" />
+    <TypeScriptCompile Include="src\app\components\controls\ec-textbox-search.component.ts" />
+    <TypeScriptCompile Include="src\app\components\controls\ec-textbox.component.ts" />
+    <TypeScriptCompile Include="src\app\models\digest.model.ts" />
+    <TypeScriptCompile Include="src\app\models\form.model.ts" />
+    <TypeScriptCompile Include="src\app\models\proxy.model.ts" />
+    <TypeScriptCompile Include="src\app\directives\masks\mask.directive.ts" />
+    <TypeScriptCompile Include="src\app\pipes\ng-select-options.pipe.ts" />
+    <TypeScriptCompile Include="src\app\services\component-comm.service.ts" />
+    <TypeScriptCompile Include="src\app\services\data\data-source.service.ts" />
+    <TypeScriptCompile Include="src\app\services\data\httpInterceptorService.ts" />
+    <TypeScriptCompile Include="src\app\services\data\meta-data.service.ts" />
+    <TypeScriptCompile Include="src\app\components\extended-case.component.ts" />
+    <TypeScriptCompile Include="src\app\components\ec-section.component.ts" />
+    <TypeScriptCompile Include="src\app\components\ec-tab.component.ts" />
+    <TypeScriptCompile Include="src\app\models\template.model.ts" />
+    <TypeScriptCompile Include="src\app\services\digest.service.ts" />
+    <TypeScriptCompile Include="src\app\services\form-model.service.ts" />
+    <TypeScriptCompile Include="src\app\services\load-save-form-data.service.ts" />
+    <TypeScriptCompile Include="src\app\services\proxy-model.service.ts" />
+    <TypeScriptCompile Include="src\app\services\template.service.ts" />
+    <TypeScriptCompile Include="src\app\shared\app-config\app-config.ts" />
+    <TypeScriptCompile Include="src\custom-typings.d.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\main.ts" />
+    <TypeScriptCompile Include="src\modules\ng-select\diacritics.ts" />
+    <TypeScriptCompile Include="src\modules\ng-select\ng-select.ts" />
+    <TypeScriptCompile Include="src\modules\ng-select\option-list.ts" />
+    <TypeScriptCompile Include="src\modules\ng-select\option.interface.ts" />
+    <TypeScriptCompile Include="src\modules\ng-select\option.ts" />
+    <TypeScriptCompile Include="src\modules\ng-select\select-dropdown.component.css.ts">
+      <DependentUpon>select-dropdown.component.ts</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\modules\ng-select\select-dropdown.component.html.ts">
+      <DependentUpon>select-dropdown.component.ts</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\modules\ng-select\select-dropdown.component.ts" />
+    <TypeScriptCompile Include="src\modules\ng-select\select.component.css.ts">
+      <DependentUpon>select.component.ts</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\modules\ng-select\select.component.html.ts">
+      <DependentUpon>select.component.ts</DependentUpon>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\modules\ng-select\select.component.ts" />
+    <TypeScriptCompile Include="src\polyfills.ts" />
+    <TypeScriptCompile Include="src\routes.ts" />
+    <TypeScriptCompile Include="src\vendor.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\app\pipes\datetime\" />
+    <Folder Include="src\lib\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\styles\css\site.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="src\modules\ng-select\tsconfig.json" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>58055</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:58055/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.3\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
