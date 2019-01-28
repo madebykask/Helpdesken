@@ -12,11 +12,11 @@ namespace DH.Helpdesk.Models.Case.Histories
         public CaseHistoryOutputModel()
         {
             EmailLogs = new List<CustomKeyValue<int, CustomKeyValue<int, string>>>();
-            Histories = new List<ICaseHistoryOutputModel>();
+            Changes = new List<ICaseHistoryOutputModel>();
         }
 
         public List<CustomKeyValue<int, CustomKeyValue<int, string>>> EmailLogs { get; set; }
-        public List<ICaseHistoryOutputModel> Histories { get; set; }
+        public List<ICaseHistoryOutputModel> Changes { get; set; }
     }
 
     public class CaseHistoryItemOutputModel<T>: ICaseHistoryOutputModel

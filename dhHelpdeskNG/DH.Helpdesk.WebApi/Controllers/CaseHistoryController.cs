@@ -85,7 +85,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
 
             var model = new CaseHistoryOutputModel();
-            model.Histories = histories;
+            model.Changes = histories;
             
             return Ok(model);
         }
