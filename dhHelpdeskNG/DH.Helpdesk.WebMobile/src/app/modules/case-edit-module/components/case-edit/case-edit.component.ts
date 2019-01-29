@@ -25,7 +25,7 @@ import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputMo
 import { OptionItem } from 'src/app/modules/shared-module/models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
-import { CaseLogModel } from '../../models/case/case-events.model';
+import { CaseLogModel } from '../../models/case/case-actions-api.model';
 
 @Component({
   selector: 'app-case-edit',
@@ -47,7 +47,8 @@ export class CaseEditComponent {
 
     caseTabsSettings = {
       display:"top",
-      layout: "fixed"
+      layout: "fixed",
+      theme:"mobiscroll"
     };
 
     currentTab = 'case_details';
@@ -282,68 +283,6 @@ export class CaseEditComponent {
     private processCaseData() {
       this.caseKey = this.caseData.id > 0 ? this.caseData.id.toString() : this.caseData.caseGuid.toString();
       this.form = this.createFormGroup(this.caseData);
-    }
-
-    private getMockCaseActions(){
-        
-        let action = new CaseAction<CaseHistoryActionData>();
-        
-        action.Id = 1;
-        action.Type = CaseEventType.AssignedAdministrator;
-        action.CreatedAt = new Date(Date.now() - 5000 * 30);
-        action.CreatedByUserId = 761;
-        action.CreatedByUserName = 'Peter Parker';
-        action.Data = new CaseHistoryActionData('Administrator', "", "Jes Erricson");
-
-        let action1 = new CaseAction<CaseHistoryActionData>();
-        action1.Id = 2;
-        action1.Type = CaseEventType.ChangePriority;
-        action1.CreatedAt = new Date(Date.now() - 3000 * 30);
-        action1.CreatedByUserId = 1;
-        action1.CreatedByUserName = 'Glenn Andersson';
-        action1.Data = new CaseHistoryActionData('Priority', "Normal", "High");
-
-        let action2 = new CaseAction<CaseLogActionData>();
-        action2.Id = 3;
-        action2.Type = CaseEventType.ExternalLogNote;
-        action2.CreatedAt = new Date(Date.now() - 2600 * 30);
-        action2.CreatedByUserId = 1;
-        action2.CreatedByUserName = 'Glenn Andersson';
-        action2.Data = new CaseLogActionData('Please check the case! Thanks!');
-
-        let action3 = new CaseAction<CaseLogActionData>();
-        action3.Id = 4;
-        action3.Type = CaseEventType.InternalLogNote;
-        action3.CreatedAt = new Date(Date.now() - 2000);
-        action3.CreatedByUserId = 2;
-        action3.CreatedByUserName = 'Jes Ericsson';
-        action3.Data = new CaseLogActionData('I will check it now!');
-
-        let action4 = new CaseAction<CaseLogActionData>();
-        action4.Id = 5;
-        action4.Type = CaseEventType.InternalLogNote;
-        action4.CreatedAt = new Date(Date.now());
-        action4.CreatedByUserId = 2;
-        action4.CreatedByUserName = 'Jes Ericsson';
-        action4.Data = new CaseLogActionData('Issue fixed!');
-
-        let action5 = new CaseAction<GenericActionData>();
-        action5.Id = 6;
-        action5.Type = CaseEventType.UploadLogFile;
-        action5.CreatedAt = new Date(Date.now() - 200);
-        action5.CreatedByUserId = 4;
-        action5.CreatedByUserName = 'Mark Andersson';
-        action5.Data = new GenericActionData('File.docx', "Attached file");
-
-        let action6 = new CaseAction<GenericActionData>();
-        action6.Id = 7;
-        action6.Type = CaseEventType.ClosedCase;
-        action6.CreatedAt = new Date();
-        action6.CreatedByUserId = 2;
-        action6.CreatedByUserName = 'Jes Ericsson';
-        action6.Data = new GenericActionData('Case dev completed', 'Closing reason');
-
-        return [action, action1, action2, action3, action4, action5, action6];
     }    
 
     private get caseAccessMode(): CaseAccessMode {

@@ -17,6 +17,6 @@ export class FieldChangeActionComponent extends CaseActionBaseComponent<CaseHist
   }
 
   get data(): CaseHistoryActionData {
-    return this.caseAction != null ? this.caseAction.Data : null;
-  }
+    return this.caseAction != null ? this.caseAction.data : null;
+  }  
 }

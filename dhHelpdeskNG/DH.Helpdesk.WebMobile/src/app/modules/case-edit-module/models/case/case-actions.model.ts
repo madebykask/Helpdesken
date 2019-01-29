@@ -1,21 +1,19 @@
-import { LogFile } from "./case-events.model";
+import { LogFile } from "./case-actions-api.model";
 
 export class CaseActionsGroup {
-    constructor(public CreatedByUserId: number,
-                public CreatedByUserName: string,
-                public CreatedAt: Date) {
+    constructor(public createdBy: string,
+                public createdAt: Date) {
     } 
 
-    Actions: Array<CaseAction<any>>;
+    Actions: Array<CaseAction<CaseActionDataType>>;
 }
 
 export class CaseAction<TData extends CaseHistoryActionData | CaseLogActionData | GenericActionData> {
-    Id: number;
-    Type: CaseEventType;
-    CreatedAt: Date;    
-    CreatedByUserId: number
-    CreatedByUserName: string;    
-    Data: TData;
+    //id: number;    
+    type: CaseEventType;
+    createdAt: Date;
+    createdBy: string;    
+    data: TData;
 }
 
 ///////////////////////////////////////////////////
@@ -24,15 +22,18 @@ export type CaseActionDataType = CaseHistoryActionData | CaseLogActionData | Gen
 
 // Case History
 export class CaseHistoryActionData {
-  constructor(public fieldName:string,
-              public prevValue: string, 
-              public newValue: string) {
+  constructor(
+    public fieldName: string, 
+    public fieldLabel: string,
+    public prevValue: string,
+    public currentValue: string) {
   }
 }
 
 // Case Log Note
 export class CaseLogActionData {
-  constructor(public text:string, public files?: LogFile[]) {
+  constructor(public text:string,               
+              public files?: LogFile[]) {
   } 
 }
 

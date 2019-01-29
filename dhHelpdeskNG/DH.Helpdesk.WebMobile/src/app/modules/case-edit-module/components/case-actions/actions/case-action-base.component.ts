@@ -9,7 +9,7 @@ export class CaseActionBaseComponent<TActionData extends CaseActionDataType> {
 
     let iconClass = "action-icon mbsc-ic mbsc-ic-";
 
-    switch (this.caseAction.Type) {
+    switch (this.caseAction.type) {
 
       case CaseEventType.ExternalLogNote:
         return iconClass + "fa-comment-o";
@@ -45,7 +45,7 @@ export class CaseActionBaseComponent<TActionData extends CaseActionDataType> {
         return iconClass + "fa-edit";
 
       default:
-        return iconClass + "fa-edit";      
+        return iconClass + "fa-edit";
     }
   }
 }

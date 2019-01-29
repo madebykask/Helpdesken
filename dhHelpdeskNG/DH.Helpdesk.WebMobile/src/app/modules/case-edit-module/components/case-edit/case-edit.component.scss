@@ -1,12 +1,15 @@
 
 
+
 .md-paging {
     .mbsc-scv, .mbsc-scv-sc, .mbsc-scv-item {
         width: 100%;
     }    
 }
 
-mbsc-tab-nav {
+#case-header
+{
+  mbsc-tab-nav {
     width: 100%;
     mbsc-nav-item {
         &:nth-child(2) {
@@ -15,7 +18,13 @@ mbsc-tab-nav {
             padding-left: 0px;
         }
     }
+  }
 }
+
+.case-sub-header{
+  margin: 0;  
+}
+
 
 .case-content
 {

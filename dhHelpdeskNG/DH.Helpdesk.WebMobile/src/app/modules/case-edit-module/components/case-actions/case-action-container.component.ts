@@ -40,12 +40,12 @@ export class CaseActionContainerComponent {
   }
 
   private resolveComponent() : Type<CaseActionBaseComponent<CaseActionDataType>> {
-    var actionData = this.caseAction.Data;    
+    var actionData = this.caseAction.data;    
     if (actionData instanceof CaseLogActionData) {
         return LogNoteActionComponent;    
     } else if (actionData instanceof CaseHistoryActionData) {
         return FieldChangeActionComponent;
-    } else if (actionData instanceof GenericActionData){
+    } else if (actionData instanceof GenericActionData) {
         return GeneralActionComponent;
     }
     return GeneralActionComponent;

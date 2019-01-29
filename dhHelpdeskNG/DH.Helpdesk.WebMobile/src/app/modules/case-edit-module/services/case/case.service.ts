@@ -7,8 +7,9 @@ import { CaseOptionsFilterModel, BundleOptionsFilter, CaseOptions } from 'src/ap
 import { CaseEditInputModel, CaseSectionInputModel, CaseSolution, MailToTicketInfo, CaseAccessMode, BaseCaseField, KeyValue, CaseLogActionData, CaseHistoryActionData, CaseAction } from '../../models';
 import { CaseOrganizationService } from '../case-organization/case-organization.service';
 import { CaseLogApiService } from '../api/case/case-log-api.service';
-import { CaseLogModel, LogFile, CaseHistoryModel } from '../../models/case/case-events.model';
+import { CaseLogModel, LogFile, CaseHistoryModel, CaseHistoryChangeModel } from '../../models/case/case-actions-api.model';
 import { CaseActionsDataService } from './case-actions-data-service.service';
+import { CaseHistoryApiService } from '../api/case/case-history-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class CaseService {
@@ -17,6 +18,7 @@ export class CaseService {
          private batchCaseOptionsService: BundleCaseOptionsService,
          private caseActionsDataService: CaseActionsDataService,
          private caseLogApiService: CaseLogApiService,
+         private caseHistoryApiService: CaseHistoryApiService,
          private caseApiService: CaseApiService ) {
     }
 
@@ -33,8 +35,7 @@ export class CaseService {
       let caseLogs$ = this.getCaseLogsData(caseId);
       let caseHistory$ = this.getCaseHistoryData(caseId);
 
-      return forkJoin(caseLogs$, caseHistory$).pipe(
-        take(1),
+      return forkJoin(caseLogs$, caseHistory$).pipe(      
         map(([caseLogsData, caseHistoryData]) => {
           return this.caseActionsDataService.process(caseLogsData, caseHistoryData);
       }));
@@ -43,6 +44,7 @@ export class CaseService {
     private getCaseLogsData(caseId: number): Observable<CaseLogModel[]> {
       return this.caseLogApiService.getCaseLogs(caseId)
             .pipe(
+                take(1),
                 map(data => {
                   let items = data.map(x => this.fromJsonCaseLogModel(x));
                   return items;
@@ -50,15 +52,40 @@ export class CaseService {
             );
     }
 
-    private getCaseHistoryData(caseId) : Observable<CaseHistoryModel[]> {
-      //todo: implement
-      return of(null);
+    private getCaseHistoryData(caseId) : Observable<CaseHistoryModel> {
+        return this.caseHistoryApiService.getHistoryEvents(caseId)
+              .pipe(
+                  take(1),
+                  map(jsonData => this.fromJsonCaseHistoryModel(jsonData))
+              );
     }
 
-    private fromJsonCaseLogModel(data: any)
+    private fromJsonCaseHistoryModel(json): CaseHistoryModel {
+      var model = Object.assign(new CaseHistoryModel(),  {
+          emailLogs: json.emailLog || [],
+          changes: json.changes && json.changes.length 
+            ? json.changes.map(x => this.fromJsonCaseHistoryChangeModel(x))
+            : []
+      });
+      return model;
+    }
+
+    private fromJsonCaseHistoryChangeModel(json) {
+        return Object.assign(new CaseHistoryChangeModel(), json, {
+                //todo:review
+                createdAt: new Date(json.createdAt),
+                previousValue: json.previousValue,
+                currentValue:  json.currentValue
+              });
+    }
+
+    private fromJsonCaseLogModel(data: any): CaseLogModel
     {
         let model = Object.assign(new CaseLogModel(), data, {
-            files: data.files && data.files.length ? data.files.map(f => Object.assign(new LogFile(), f)) : []
+            createdAt: new Date(data.createdAt),
+            files: data.files && data.files.length 
+              ? data.files.map(f => Object.assign(new LogFile(), f))
+              : []
         });
         return model;
     }
@@ -78,8 +105,9 @@ export class CaseService {
         getCategories: () => fieldExists(filter.Categories) ? this.caseOrganizationService.getCategories() : empty$(),
         getWorkingGroups: () => fieldExists(filter.WorkingGroups) ? this.caseOrganizationService.getWorkingGroups() : empty$(),
         getClosingReasons: () => fieldExists(filter.ClosingReasons) ? this.caseOrganizationService.getClosingReasons() : empty$(),
-        getPerformers: (includePerfomer: boolean) =>
-         fieldExists(filter.Performers) ? this.caseOrganizationService.getPerformers(includePerfomer ? filter.CasePerformerUserId : null, filter.CaseWorkingGroupId) : empty$(),
+        getPerformers: (includePerfomer: boolean) => fieldExists(filter.Performers) 
+            ? this.caseOrganizationService.getPerformers(includePerfomer ? filter.CasePerformerUserId : null, filter.CaseWorkingGroupId) 
+            : empty$(),
         getStateSecondaries: () => fieldExists(filter.StateSecondaries) ? this.caseOrganizationService.getStateSecondaries() : empty$()
       };
     }
@@ -241,4 +269,11 @@ export class CaseService {
         if (typeof json === 'string') { json = JSON.parse(json); }
         return Object.assign(new KeyValue(), json, {})
     }
+}
+
+export class ResponseDataHelper {
+  fromJSONKeyValue(json: any): KeyValue {
+      if (typeof json === 'string') { json = JSON.parse(json); }
+      return Object.assign(new KeyValue(), json, {})
+  }  
 }

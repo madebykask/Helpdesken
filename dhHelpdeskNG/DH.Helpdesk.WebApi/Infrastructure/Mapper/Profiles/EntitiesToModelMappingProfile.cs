@@ -4,7 +4,6 @@ using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
 using DH.Helpdesk.Domain;
-using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Models.Case.Logs;
 using DH.Helpdesk.WebApi.Models;
 using LogFileModel = DH.Helpdesk.Models.Case.Logs.LogFileModel;
@@ -22,13 +21,11 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Mapper.Profiles
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(s => s.Name))
                 .ForMember(dest => dest.StateSecondaryId, opt => opt.MapFrom(s => s.StateSecondary_Id ?? 0));
 
-
             CreateMap<CaseLogData, CaseLogOutputModel>()
-                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(s => s.LogDate))
                 .ForMember(dest => dest.Text, opt => opt.ResolveUsing(r => !string.IsNullOrEmpty(r.ExternalText) ? r.ExternalText: r.InternalText))
-                .ForMember(dest => dest.IsExternal, opt => opt.ResolveUsing(r => !string.IsNullOrEmpty(r.ExternalText) ? r.ExternalText : r.InternalText))
-
-                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(s => new LogUserOverview(s.Id, s.UserFirstName, s.UserSurName))
+                .ForMember(dest => dest.IsExternal, opt => opt.ResolveUsing(r => !string.IsNullOrEmpty(r.ExternalText)))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(s => s.LogDate))
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(s => s.UserId.HasValue ? $"{s.UserFirstName} {s.UserSurName}" : s.RegUserName)
                 );
 
             CreateMap<LogFileData, LogFileModel>();

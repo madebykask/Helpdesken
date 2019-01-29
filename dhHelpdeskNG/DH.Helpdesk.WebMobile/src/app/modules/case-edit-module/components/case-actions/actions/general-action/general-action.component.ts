@@ -17,8 +17,9 @@ export class GeneralActionComponent extends CaseActionBaseComponent<GenericActio
   }
   
   get data(): GenericActionData {
-     return this.caseAction != null ? this.caseAction.Data : null;
+     return this.caseAction != null ? this.caseAction.data : null;
   }
+  
 }
 
 

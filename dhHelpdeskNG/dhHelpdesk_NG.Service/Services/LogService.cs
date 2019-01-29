@@ -233,26 +233,25 @@ namespace DH.Helpdesk.Services.Services
 
             var caseLogs =
             (from log in queryable.AsQueryable()
-                select new CaseLogData()
-                {
-                    Id = log.Id,
-                    UserId = log.User.Id,
-                    UserFirstName = log.User.FirstName,
-                    UserSurName = log.User.SurName,
-                    LogDate = log.LogDate,
-                    RegUserName = log.RegUser,
-                    InternalText = log.Text_Internal,
-                    ExternalText = log.Text_External,
-                    Emails = log.CaseHistory.Emaillogs.DefaultIfEmpty().Where(t => t != null).Select(t => t.EmailAddress).ToList(),
-                    Files = log.LogFiles.DefaultIfEmpty().Where(f => f != null).Select(f => new LogFileData()
-                    {
-                        Id = f.Id,
-                        LogId = f.Log_Id,
-                        FileName = f.FileName,
-                        CaseId = f.IsCaseFile.HasValue && f.IsCaseFile.Value ? f.Log.Case_Id : (int?)null
-                    }).ToList()
-                    
-                }).ToListAsync();
+             select new CaseLogData()
+             {
+                 Id = log.Id,
+                 UserId = log.User_Id,
+                 UserFirstName = log.User.FirstName,
+                 UserSurName = log.User.SurName,
+                 LogDate = log.LogDate,
+                 RegUserName = log.RegUser,
+                 InternalText = log.Text_Internal,
+                 ExternalText = log.Text_External,
+                 Emails = log.CaseHistory.Emaillogs.DefaultIfEmpty().Where(t => t != null).Select(t => t.EmailAddress).ToList(),
+                 Files = log.LogFiles.DefaultIfEmpty().Where(f => f != null).Select(f => new LogFileData()
+                 {
+                     Id = f.Id,
+                     LogId = f.Log_Id,
+                     FileName = f.FileName,
+                     CaseId = f.IsCaseFile.HasValue && f.IsCaseFile.Value ? f.Log.Case_Id : (int?)null
+                 }).ToList()
+             }).ToListAsync();
 
             return caseLogs;
         }

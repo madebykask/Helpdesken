@@ -3,13 +3,15 @@ using System.Collections.Generic;
 
 namespace DH.Helpdesk.Models.Case.Logs
 {
-    public class CaseLogOutputModel : CaseBaseEventModel
+    public class CaseLogOutputModel
     {
+        public int Id { get; set; }
         public string Text { get; set; }
         public bool IsExternal { get; set; }
-        public string RegUserName { get; set; }
         public IList<string> Emails { get; set; }
         public IList<LogFileModel> Files { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string CreatedBy { get; set; }
     }
 
     public class LogFileModel

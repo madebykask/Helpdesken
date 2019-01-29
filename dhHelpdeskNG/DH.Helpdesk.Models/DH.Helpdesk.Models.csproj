@@ -62,6 +62,7 @@
     <Compile Include="Case\GetCaseInputModel.cs" />
     <Compile Include="Case\Histories\CaseHistoryOutputModel.cs" />
     <Compile Include="Case\Logs\CaseLogOutputModel.cs" />
+    <Compile Include="Case\UserModel.cs" />
     <Compile Include="Case\Options\CaseOptionsOutputModel.cs" />
     <Compile Include="Case\Options\GetCaseOptionsInputModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

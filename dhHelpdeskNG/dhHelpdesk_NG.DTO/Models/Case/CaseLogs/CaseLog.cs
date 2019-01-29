@@ -6,7 +6,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseLogs
     public class CaseLogData
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public string UserFirstName { get; set; }
         public string UserSurName { get; set; }
         public string RegUserName { get; set; }

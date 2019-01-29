@@ -37,7 +37,7 @@ export class CaseActionsComponent implements OnInit {
           let groupIndex = this.findGroupIndex(item, groups);
           if (groupIndex == -1) 
           {
-              let newGroup = new CaseActionsGroup(item.CreatedByUserId,  item.CreatedByUserName, item.CreatedAt);
+              let newGroup = new CaseActionsGroup(item.createdBy, item.createdAt);
               newGroup.Actions = new Array<CaseAction<CaseActionDataType>>();
               groups.push(newGroup);
               groupIndex = groups.length - 1;
@@ -50,14 +50,13 @@ export class CaseActionsComponent implements OnInit {
     return groups;
   }
 
-  private findGroupIndex(item:CaseAction<CaseActionDataType>, groups: CaseActionsGroup[]){
-      let userId = item.CreatedByUserId;
-      let userGroups = groups.filter(gr => gr.CreatedByUserId === userId);
+  private findGroupIndex(item:CaseAction<CaseActionDataType>, groups: CaseActionsGroup[]){            
+      let userGroups = groups.filter(gr => gr.createdBy === item.createdBy);
       //find matching user actions group by time ~1min
       if (userGroups && userGroups.length) {
-          for (const group of groups) {
-            const minDiff = (group.CreatedAt.getTime() - item.CreatedAt.getTime()) / 1000 / 60; //minutes
-            if (minDiff < 1) {
+          for (const group of groups) {            
+            const minDiff = (group.createdAt.getTime() - item.createdAt.getTime()) / 1000; //seconds
+            if (Math.abs(minDiff) < 5) {
               return  groups.indexOf(group);
             }
           }

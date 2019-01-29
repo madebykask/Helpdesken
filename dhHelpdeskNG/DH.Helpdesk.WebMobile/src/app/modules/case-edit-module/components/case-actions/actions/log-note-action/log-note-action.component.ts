@@ -17,6 +17,6 @@ export class LogNoteActionComponent extends CaseActionBaseComponent<CaseLogActio
   }
 
   get data(): CaseLogActionData {
-    return this.caseAction != null ? this.caseAction.Data : null;
-  }
+    return this.caseAction != null ? this.caseAction.data : null;
+  }  
 }
