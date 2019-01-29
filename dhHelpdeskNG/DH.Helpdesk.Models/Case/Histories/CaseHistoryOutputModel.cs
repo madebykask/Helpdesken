@@ -28,8 +28,8 @@ namespace DH.Helpdesk.Models.Case.Histories
         public int Id { get; set; }
         public string FieldName { get; set; } // CaseFieldsNamesApi
         public string FieldLabel { get; set; }
-        public DateTime CreateAt { get; set; }
-        public string CreateBy { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string CreatedBy { get; set; }
 
         public T PreviousValue { get; set; }
         public T CurrentValue { get; set; }
@@ -40,7 +40,7 @@ namespace DH.Helpdesk.Models.Case.Histories
         int Id { get; set; }
         string FieldName { get; set; } // CaseFieldsNamesApi
         string FieldLabel { get; set; }
-        DateTime CreateAt { get; set; }
-        string CreateBy { get; set; }
+        DateTime CreatedAt { get; set; }
+        string CreatedBy { get; set; }
     }
 }

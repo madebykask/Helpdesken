@@ -591,7 +591,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = new BaseCaseField<DateTime>()
                 {
                     Name = CaseFieldsNamesApi.RegTime,
-                    Value = currentCase.RegTime,
+                    Value = DateTime.SpecifyKind(currentCase.RegTime, DateTimeKind.Utc),
                     Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.RegTime,
                         languageId, cid, caseFieldTranslations),
                     Section = CaseSectionType.CaseInfo,
@@ -605,7 +605,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = new BaseCaseField<DateTime>()
                 {
                     Name = CaseFieldsNamesApi.ChangeTime,
-                    Value = currentCase.ChangeTime,
+                    Value = DateTime.SpecifyKind(currentCase.ChangeTime, DateTimeKind.Utc),
                     Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.ChangeTime,
                         languageId, cid, caseFieldTranslations),
                     Section = CaseSectionType.CaseInfo,
@@ -907,7 +907,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = new BaseCaseField<DateTime?>()
                 {
                     Name = CaseFieldsNamesApi.AgreedDate,
-                    Value = currentCase.AgreedDate,
+                    Value = currentCase.AgreedDate.HasValue ? DateTime.SpecifyKind(currentCase.AgreedDate.Value, DateTimeKind.Utc) : currentCase.AgreedDate,
                     Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.AgreedDate,
                         languageId, cid, caseFieldTranslations),
                     Section = CaseSectionType.CaseInfo,
@@ -1132,7 +1132,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = new BaseCaseField<DateTime?>()
                 {
                     Name = CaseFieldsNamesApi.PlanDate,
-                    Value = currentCase.PlanDate,
+                    Value = currentCase.PlanDate.HasValue ? DateTime.SpecifyKind(currentCase.PlanDate.Value, DateTimeKind.Utc) : currentCase.PlanDate,
                     Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.PlanDate, languageId, cid, caseFieldTranslations),
                     Section = CaseSectionType.CaseManagement,
                     Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.PlanDate, caseFieldSettings)
@@ -1145,7 +1145,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = new BaseCaseField<DateTime?>()
                 {
                     Name = CaseFieldsNamesApi.WatchDate,
-                    Value = currentCase.WatchDate,
+                    Value = currentCase.WatchDate.HasValue ? DateTime.SpecifyKind(currentCase.WatchDate.Value, DateTimeKind.Utc) : currentCase.WatchDate,
                     Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.WatchDate,
                         languageId, cid, caseFieldTranslations),
                     Section = CaseSectionType.CaseManagement,

@@ -1,7 +1,7 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
-@if (Model != null && Model.CaseHistories != null)
+@if (Model?.CaseHistories != null)
 {
     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
     <div class="tab-pane tab-pane-border" id="historytab">
@@ -10,10 +10,10 @@
             {            
                 <thead>
                     <tr>
-                        <th>@Translation.Get("Datum", Enums.TranslationSource.TextTranslation)</th>
-                        <th>@Translation.Get("Registrerad av", Enums.TranslationSource.TextTranslation)</th>
-                        <th>@Translation.Get("Historik", Enums.TranslationSource.TextTranslation)</th>
-                        <th>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</th>
+                        <th>@Translation.Get("Datum")</th>
+                        <th>@Translation.Get("Registrerad av")</th>
+                        <th>@Translation.Get("Historik")</th>
+                        <th>@Translation.Get("E-post")</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,8 +22,8 @@
                  }
                     @for(var i = 0; i < histories.Length; i++)
                     {
-                        var current = histories[i];     
-                        var previous = i < histories.Length - 1 ? histories[i + 1] : null;         
+                        var current = histories[i];
+                        var previous = i < histories.Length - 1 ? histories[i + 1] : null;
                         <tr>
                             <td style="width:15%">
                                 @{
