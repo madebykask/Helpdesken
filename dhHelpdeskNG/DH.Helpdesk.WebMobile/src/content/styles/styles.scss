@@ -208,12 +208,13 @@ ul.nostyle {
 
 #case-tabs{
   
-  .mbsc-ms-top.mbsc-ms-c { top: 46px!important; }
+  .mbsc-ms-top.mbsc-ms-c { top: 45px!important; }
   .mbsc-ms-item { padding-left:10px; padding-right:30px; }
   .mbsc-ms-b.mbsc-ms-top, .mbsc-ms-b .mbsc-ms-item-sel { border-bottom-color:$primary-color; }
 }
 
 #case-actions {
+
   .mbsc-ios.mbsc-card.mbsc-form{ margin: 15px 10px; }
   .mbsc-lv-item-ic {  left:5px!important; } 
   .mbsc-lv-ios .mbsc-lv-item-ic-left:before, 
@@ -221,5 +222,23 @@ ul.nostyle {
   .mbsc-ios.mbsc-card.mbsc-form { border-radius: 0;}
   .mbsc-lv-item.mbsc-lv-item-ic-left { padding-left: 35px!important; }
   .mbsc-lv-cont { font-size:14px; } 
+  .mbsc-card-content { padding-bottom:10px}
   .action-icon { margin-right:6px; }
+
+  .actions-other {
+    .mbsc-form-group-title {
+      background-color: #fff;
+      margin: 10px 0 0 0;
+      padding:0;      
+      border-bottom: none;
+    }
+
+    .mbsc-collapsible-icon {
+      margin-top:0;
+      right:0px;
+      top:3px;
+    }
+  }
 }
+
+

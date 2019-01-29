@@ -1,24 +1,39 @@
 import { LogFile } from "./case-actions-api.model";
 
+// Case Action Data classes
+export type CaseActionDataType = CaseHistoryActionData | CaseLogActionData | GenericActionData;
+
+// Case Action Group
 export class CaseActionsGroup {
     constructor(public createdBy: string,
                 public createdAt: Date) {
     } 
 
     Actions: Array<CaseAction<CaseActionDataType>>;
+
+    get hasOther() {
+      if (this.Actions && this.Actions.length) {
+        return this.Actions.some(x => x.type === CaseEventType.OtherChanges);
+      }
+      return false;
+    }
+
+    get hasMain() {
+      if (this.Actions && this.Actions.length) {
+        return this.Actions.some(x => x.type !== CaseEventType.OtherChanges);
+      }
+      return false;
+    }
 }
 
-export class CaseAction<TData extends CaseHistoryActionData | CaseLogActionData | GenericActionData> {
+// Case Action
+export class CaseAction<TData extends CaseActionDataType> {
     //id: number;    
     type: CaseEventType;
     createdAt: Date;
     createdBy: string;    
     data: TData;
 }
-
-///////////////////////////////////////////////////
-// Case Action Data classes
-export type CaseActionDataType = CaseHistoryActionData | CaseLogActionData | GenericActionData;
 
 // Case History
 export class CaseHistoryActionData {
@@ -30,10 +45,9 @@ export class CaseHistoryActionData {
   }
 }
 
-// Case Log Note
+// Case Log Note Data
 export class CaseLogActionData {
-  constructor(public text:string,               
-              public files?: LogFile[]) {
+  constructor(public text:string, public files?: LogFile[]) {
   } 
 }
 
@@ -42,8 +56,8 @@ export class GenericActionData {
   constructor(public text:string, public action?:string) {
   }
 }
-///////////////////////////////////////////////////
 
+// CaseEventType enum
 export enum CaseEventType {
   ExternalLogNote = 1,
   InternalLogNote = 2,

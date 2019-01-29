@@ -9,12 +9,12 @@
   padding: 12px 1em;
 }
 
-:host  {
+:host  {  
   mbsc-card {
     border-radius: 0px; 
 
       &.owner { 
-        border-left:solid 3px #438eb9;
+         border-left:solid 3px #438eb9;
       }
 
       .mbsc-card-subtitle {
@@ -30,7 +30,5 @@
         font-size:13px;
         font-weight: normal;
       }
-
-      
-  }
+    }
 }

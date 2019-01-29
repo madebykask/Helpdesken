@@ -23,13 +23,14 @@ import { FieldChangeActionComponent } from './components/case-actions/actions/fi
 import { LogNoteActionComponent } from './components/case-actions/actions/log-note-action/log-note-action.component';
 import { CaseActionContainerComponent } from './components/case-actions/case-action-container.component';
 import { CaseActionHostDirective } from './components/case-actions/actions/case-action-host.directive';
+import { ActionsFilterPipe } from './pipes/actions-filter.pipe';
 
 @NgModule({
   declarations: [ CaseEditComponent,
     CaseTextboxComponent, CaseDateComponent, CaseDropdownComponent,  CaseMultiDropdownComponent,
     CaseSwitchComponent, CaseTextareaComponent, CaseDateTimeComponent, MailtoticketControlComponent,
     CaseFilesUploadComponent, CaseFilesControlComponent, CaseActionsComponent, CaseActionHostDirective, 
-    CaseActionContainerComponent, GeneralActionComponent, FieldChangeActionComponent, LogNoteActionComponent
+    CaseActionContainerComponent, GeneralActionComponent, FieldChangeActionComponent, LogNoteActionComponent, ActionsFilterPipe
 ],
   imports: [
     CommonModule,

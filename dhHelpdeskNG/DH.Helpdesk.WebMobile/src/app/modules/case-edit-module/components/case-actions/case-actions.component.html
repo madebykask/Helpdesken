@@ -11,12 +11,28 @@
         </div>
       </mbsc-card-subtitle>
     </mbsc-card-header>
-    <mbsc-card-content>
-      <mbsc-listview [swipe]="false" [enhance]="true">
-        <mbsc-listview-item *ngFor="let action of group.Actions">
-            <case-action-container [caseAction]="action"></case-action-container>
-        </mbsc-listview-item>
-      </mbsc-listview>
+    <mbsc-card-content>      
+      <!-- main actions first -->
+      <div class="actions-main">
+        <mbsc-listview *ngIf="group.hasMain" [swipe]="false" [enhance]="true">
+          <mbsc-listview-item *ngFor="let action of group.Actions | actionsFilter:'main'">
+              <case-action-container [caseAction]="action"></case-action-container>
+          </mbsc-listview-item>
+        </mbsc-listview>
+      </div>
+      <!-- other actions last -->
+      <div class="actions-other">
+      <mbsc-form-group collapsible *ngIf="group.hasOther">
+          <mbsc-form-group-title>Other actions</mbsc-form-group-title>
+          <mbsc-form-group-content>
+          <mbsc-listview [swipe]="false" [enhance]="true">
+              <mbsc-listview-item *ngFor="let action of group.Actions | actionsFilter:'other'">
+                  <case-action-container [caseAction]="action"></case-action-container>
+              </mbsc-listview-item>
+          </mbsc-listview>
+        </mbsc-form-group-content>
+      </mbsc-form-group>
+      </div>
     </mbsc-card-content>
   </mbsc-card>
 </div>

@@ -1,12 +1,12 @@
 <div *ngIf="data">  
-  <div *ngIf="data.text && data.text.length"  >
+  <div *ngIf="data.text && data.text.length" class="lognote" >
         <span class="{{ getActionIcon() }}"></span>
         <span #tr="truncate" truncate="10" class="logNoteText">{{data.text}}</span>
         <div [hidden]="!tr.isTruncated">
-            <a class="more" href="javascript:;" (click)="tr.showText()">show more</a>
+            <a class="more" href="javascript:;" (click)="tr.showText()">&gt;&gt;</a>
         </div>        
         <div [hidden]="tr.isTruncated || !tr.canTruncate">
-            <a class="less" href="javascript:;" (click)="tr.truncate()">show less</a>
+            <a class="less" href="javascript:;" (click)="tr.truncate()">&lt;&lt;</a>
         </div> 
   </div>
   <ul *ngIf="data.files && data.files.length" class="files">
