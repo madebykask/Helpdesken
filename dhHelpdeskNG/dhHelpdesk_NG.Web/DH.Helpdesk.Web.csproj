@@ -372,6 +372,7 @@
     <Compile Include="Infrastructure\Binders\DecimalModelBinder.cs" />
     <Compile Include="Infrastructure\Binders\CommaSeparatedListsBinder.cs" />
     <Compile Include="Infrastructure\Case\CaseHistoryBuilder.cs" />
+    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\UserFormatterExtension.cs" />
     <Compile Include="Infrastructure\Extensions\ReflectionExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
     <Compile Include="Infrastructure\UrlBuilder.cs" />
@@ -1414,7 +1415,6 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\Concrete\UpdatedSettingsFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Notifiers\IUpdatedSettingsFactory.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\JavaScriptConvertExtention.cs" />
-    <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\UserFormatterExtension.cs" />
     <Compile Include="Infrastructure\ModelFactories\Case\Concrete\CaseRuleFactory.cs" />
     <Compile Include="Infrastructure\Order\OrderExportHelper.cs" />
     <Compile Include="Infrastructure\RouteValueDictionaryHelper.cs" />
@@ -3410,7 +3410,7 @@
     </Content>
     <Content Include="Areas\Inventory\Views\InventorySettings\EditorTemplates\Settings\ComputerTabFieldsSettingsViewModel.cshtml" />
     <Content Include="Areas\Inventory\Views\InventorySettings\EditorTemplates\Settings\TabSettingForComputerModel.cshtml" />
-    <Content Include="Areas\Inventory\Views\Workstation\_InventoryFiles.cshtml" />    
+    <Content Include="Areas\Inventory\Views\Workstation\_InventoryFiles.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\Documents.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx">

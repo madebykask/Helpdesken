@@ -9,6 +9,7 @@ namespace DH.Helpdesk.Web.Common.Constants.Case
     public struct CaseFieldsNamesApi
     {
         public const string AgreedDate = "AgreedDate";
+        public const string Followers = "Followers";
         public const string Available = "Available";
         public const string Caption = "Caption";
         public const string CaseNumber = "CaseNumber";
