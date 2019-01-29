@@ -1,4 +1,4 @@
-﻿@using DH.Helpdesk.Web.Infrastructure.Extensions
+﻿@using DH.Helpdesk.Web.Common.Extensions
 @using ReportViewerForMvc
 @using DH.Helpdesk.Common.Enums
 @using DH.Helpdesk.Web.Models.Case
@@ -92,7 +92,7 @@
 
                                 @if (row.LineType == ReportLineTypes.File)
                                 {
-                                    var filesStr = val.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags();
+                                    var filesStr = val.Replace(Environment.NewLine, tempNewLine).RemoveHtmlTags();
                                     var files = filesStr.Split(new string[] { tempNewLine }, StringSplitOptions.None);
                                     <td style="width:80%; line-height:10px;" class="@row.LineType">
                                         @foreach (var file in files.Where(f => !string.IsNullOrEmpty(f)).ToList())
@@ -104,7 +104,7 @@
                                 else
                                 {
                                     <td style="width:80%; word-wrap: break-word;line-height:10px;" class="@row.LineType">
-                                        <p> @val.Replace(Environment.NewLine, tempNewLine).RemoveHTMLTags().Replace(tempNewLine, Environment.NewLine).ForHtmlView()</p>
+                                        <p> @val.Replace(Environment.NewLine, tempNewLine).RemoveHtmlTags().Replace(tempNewLine, Environment.NewLine).ForHtmlView()</p>
                                     </td>
                                 }
                             </tr>
@@ -134,12 +134,12 @@
                         @if (invoiceTime != null)
                         {
                             var curVal = invoiceTime.FieldValue;
-                            invoiceTimeData = curVal.RemoveHTMLTags().JsonToHtmlTable<InvoiceTimeModel>("invoice-time-print-table");
+                            invoiceTimeData = curVal.RemoveHtmlTags().JsonToHtmlTable<InvoiceTimeModel>("invoice-time-print-table");
                         }
                         @if (invoiceRow != null)
                         {
                             var curVal = invoiceRow.FieldValue;
-                            invoiceRowData = curVal.RemoveHTMLTags().JsonToHtmlTable<InvoiceRowModel>("invoice-time-print-table");
+                            invoiceRowData = curVal.RemoveHtmlTags().JsonToHtmlTable<InvoiceRowModel>("invoice-time-print-table");
                         }
                             <tr>                                
                                 <td style="word-wrap: break-word;line-height:10px;" class="">
