@@ -43,10 +43,12 @@ export class CaseActionsComponent implements OnInit {
               groupIndex = groups.length - 1;
           }
           
-          const group = groups[groupIndex];
+          const group = groups[groupIndex];          
           group.Actions.push(item);
       }
     }
+    //sort by time desc
+    groups = groups.sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime());
     return groups;
   }
 

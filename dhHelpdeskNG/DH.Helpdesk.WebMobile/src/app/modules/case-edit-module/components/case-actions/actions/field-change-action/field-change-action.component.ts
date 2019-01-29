@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CaseActionBaseComponent } from '../case-action-base.component';
-import { CaseHistoryActionData } from 'src/app/modules/case-edit-module/models';
+import { CaseHistoryActionData, CaseEventType } from 'src/app/modules/case-edit-module/models';
 
 @Component({
   selector: 'app-field-change-action',
@@ -15,6 +15,11 @@ export class FieldChangeActionComponent extends CaseActionBaseComponent<CaseHist
 
   ngOnInit() {
   }
+
+get showField(){
+  //show field label if its not know case field change
+  return this.caseAction.type === CaseEventType.OtherChanges;
+}
 
   get data(): CaseHistoryActionData {
     return this.caseAction != null ? this.caseAction.data : null;
