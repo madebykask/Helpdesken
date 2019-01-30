@@ -133,17 +133,19 @@ $(document).ready(function () {
     //COMMUNICATE SCRIPT
     //todo: move to a separate script!
     $('.mapButton').click(function () {
-        var mapPos = parseInt($('.siteCom').css('left'), 10);
+        var panel$ = $('.siteCom');
+        var mapPos = parseInt(panel$.css('left'), 10);
         if (mapPos < 0) {
-            $('.siteCom').animate({
-                left: '+=600'
+            var absMapPos = Math.abs(mapPos);
+            panel$.animate({
+                left: '+=' + absMapPos
             }, 458, 'swing', function () {
                 // Animation complete.
             });
         }
         else {
-            $('.siteCom').animate({
-                left: '-=600'
+            panel$.animate({
+                left: '-=' + panel$.outerWidth()
             }, 458, 'swing', function () {
                 // Animation complete.
             });
