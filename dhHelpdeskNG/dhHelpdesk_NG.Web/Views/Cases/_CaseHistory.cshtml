@@ -1,7 +1,7 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 
-@if (Model.CaseHistories != null)
+@if (Model != null && Model.CaseHistories != null)
 {
     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
     <div class="tab-pane tab-pane-border" id="historytab">
