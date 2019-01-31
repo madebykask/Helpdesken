@@ -307,7 +307,7 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public string ExtendedSectionsToJS()
         {
-            var sections = this.ExtendedCaseSections;
+            var sections = ExtendedCaseSections;
             if (sections == null || !sections.Any())
                 return "null";
 
@@ -318,23 +318,18 @@ namespace DH.Helpdesk.Web.Models.Case
             {
                 var caseSectionType = section.Key;
                 var model = section.Value;
-                var readOnly = section.Key == CaseSectionType.Initiator && this.InitiatorComputerUserCategory != null ?
-                    this.InitiatorComputerUserCategory.IsReadOnly :
-                    section.Key == CaseSectionType.Regarding && this.RegardingComputerUserCategory != null ?
-                    this.RegardingComputerUserCategory.IsReadOnly :
-                    false;
+                var readOnly = (section.Key == CaseSectionType.Initiator && InitiatorComputerUserCategory != null && InitiatorComputerUserCategory.IsReadOnly) ||
+                               (section.Key == CaseSectionType.Regarding && RegardingComputerUserCategory != null && RegardingComputerUserCategory.IsReadOnly);
 
-
-                var str = $@"
-    {caseSectionType}: {{ 
-        formId: {model.Id}, 
-        guid: '{model.ExtendedCaseGuid}', 
-        languageId: '{model.LanguageId}', 
-        path: '{model.Path}', 
-        iframeId: '#extendedSection-iframe-{caseSectionType}',
-        container:  '#extendedSection-{caseSectionType}',
-        readOnly: {readOnly.ToString().ToLower()}
-    }},";
+                var str = $@"{caseSectionType}: {{ 
+                                formId: {model.Id}, 
+                                guid: '{model.ExtendedCaseGuid}', 
+                                languageId: '{model.LanguageId}', 
+                                path: '{model.Path}', 
+                                iframeId: '#extendedSection-iframe-{caseSectionType}',
+                                container:  '#extendedSection-{caseSectionType}',
+                                readOnly: {readOnly.ToString().ToLower()}
+                            }},";
                 sb.Append(str);
             }
 
@@ -373,6 +368,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public CaseSolution CurrentCaseSolution { get; internal set; }
 
         public int CurrentUserRole { get; set; }
+        
         public Dictionary<string, string> StatusBar { get; internal set; }
         public bool HasExtendedComputerUsers { get; internal set; }
         public IList<ComputerUserCategoryOverview> ComputerUserCategories { get; internal set; }
@@ -393,6 +389,11 @@ namespace DH.Helpdesk.Web.Models.Case
         public int? RegardingCategoryId
         {
             get { return RegardingComputerUserCategory?.ID; }
+        }
+
+        public bool IsUserAdmin
+        {
+            get { return CurrentUserRole > (int)BusinessData.Enums.Admin.Users.UserGroup.User; }
         }
     }
 

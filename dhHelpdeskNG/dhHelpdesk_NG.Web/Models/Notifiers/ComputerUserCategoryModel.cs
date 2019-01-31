@@ -1,7 +1,6 @@
 ﻿using DH.Helpdesk.Domain.Computers;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions.Content;
 
 namespace DH.Helpdesk.Web.Models.Notifiers
 {
@@ -9,7 +8,13 @@ namespace DH.Helpdesk.Web.Models.Notifiers
     {
         #region ctor()
 
-        public ComputerUserCategoryModel(IList<SelectListItem> categories, ComputerUserCategory category = null)
+        public ComputerUserCategoryModel(IList<SelectListItem> categories)
+        {
+            ComputerUserCategories = categories;
+        }
+
+        public ComputerUserCategoryModel(IList<SelectListItem> categories, ComputerUserCategory category, string extendedCaseUrl)
+            : this(categories)
         {
             if (category != null)
             {
@@ -17,10 +22,8 @@ namespace DH.Helpdesk.Web.Models.Notifiers
                 Name = category.Name;
                 IsReadOnly = category.IsReadOnly;
                 ExtendedCaseFormID = category.ExtendedCaseFormID;
-                ExtendedCasePath = $"/ExtendedCase/?formId={ExtendedCaseFormID}&autoLoad=true";
+                ExtendedCasePath = extendedCaseUrl;
             }
-            
-            ComputerUserCategories = categories;
         }
 
         #endregion

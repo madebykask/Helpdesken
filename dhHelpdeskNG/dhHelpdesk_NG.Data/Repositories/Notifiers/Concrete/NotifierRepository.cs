@@ -513,20 +513,26 @@
             this.Update(notifierEntity);
         }
 
+        public Notifier GetInitiatorInfo(string userId, int customerId, bool activeOnly)
+        {
+            var notifier = FindByUserId(userId, customerId, activeOnly);
+            if (notifier != null)
+                return Notifier.CreateForReadonly(
+                        notifier.Id, 
+                        notifier.UserId, 
+                        notifier.LogonName, 
+                        notifier.FirstName,
+                        notifier.SurName, 
+                        notifier.Email, 
+                        notifier.DisplayName, 
+                        notifier.UserCode);
+
+            return null;
+        }
+
         public Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly)
         {
-            var notifier =
-                DataContext.ComputerUsers.FirstOrDefault(cu => cu.Customer_Id == customerId &&
-                                                               cu.LogonName.ToLower() == userId.ToLower() &&
-                                                               (!activeOnly || cu.Status != 0));
-
-            if (notifier == null)
-            {
-                notifier =
-                    DataContext.ComputerUsers.FirstOrDefault(cu => cu.Customer_Id == customerId &&
-                                                                   cu.UserId.ToLower() == userId.ToLower() &&
-                                                                   (!activeOnly || cu.Status != 0));
-            }
+            var notifier = FindByUserId(userId, customerId, activeOnly);
 
             if (notifier != null)
                 return Notifier.CreateNew(
@@ -583,7 +589,25 @@
 
         #endregion
 
-        #region Methods
+        #region Private Methods
+
+        private ComputerUser FindByUserId(string userId, int customerId, bool activeOnly)
+        {
+            var notifier =
+                DataContext.ComputerUsers.FirstOrDefault(cu => cu.Customer_Id == customerId &&
+                                                               cu.LogonName.ToLower() == userId.ToLower() &&
+                                                               (!activeOnly || cu.Status != 0));
+
+            if (notifier == null)
+            {
+                notifier =
+                    DataContext.ComputerUsers.FirstOrDefault(cu => cu.Customer_Id == customerId &&
+                                                                   cu.UserId.ToLower() == userId.ToLower() &&
+                                                                   (!activeOnly || cu.Status != 0));
+            }
+
+            return notifier;
+        }
 
         private IQueryable<ComputerUser> FindByCustomerIdCore(int customerId)
         {

@@ -114,6 +114,23 @@
 
         #region Public Methods and Operators
 
+        public static Notifier CreateForReadonly(int id, string userId, string loginName, string firstName, string lastName, string email, string displayName, string code)
+        {
+            var notifier = new Notifier
+            {
+                Id = id,
+                UserId = userId,
+                LoginName = loginName,
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                DisplayName = displayName,
+                Code = code,
+                //todo: add other fields
+            };
+            return notifier;
+        }
+
         public static Notifier CreateForEdit(
             string userId,
             int? domainId,

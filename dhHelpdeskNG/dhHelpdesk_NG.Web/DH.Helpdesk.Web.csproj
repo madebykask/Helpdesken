@@ -372,6 +372,7 @@
     <Compile Include="Infrastructure\Binders\DecimalModelBinder.cs" />
     <Compile Include="Infrastructure\Binders\CommaSeparatedListsBinder.cs" />
     <Compile Include="Infrastructure\Case\CaseHistoryBuilder.cs" />
+    <Compile Include="Infrastructure\ExtendedCaseUrlBuilder.cs" />
     <Compile Include="Infrastructure\Extensions\HtmlHelperExtensions\UserFormatterExtension.cs" />
     <Compile Include="Infrastructure\Extensions\ReflectionExtensions.cs" />
     <Compile Include="Infrastructure\Extensions\StringExtensions.cs" />
@@ -4077,6 +4078,8 @@
     <Content Include="Web.config.template">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\Notifiers\_Details.cshtml" />
+    <Content Include="Views\Notifiers\NotifierPopup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

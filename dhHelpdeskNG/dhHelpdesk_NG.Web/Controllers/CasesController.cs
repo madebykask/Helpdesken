@@ -188,21 +188,6 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IExtendedCaseService _extendedCaseService;
         private readonly ISendToDialogModelFactory _sendToDialogModelFactory;
 
-
-        #region ExtededCaseUrlParams
-
-        private class ExtededCaseUrlParams
-        {
-            public int formId { get; set; }
-            public int caseStatus { get; set; }
-            public int userRole { get; set; }
-            public string userGuid { get; set; }
-            public int customerId { get; set; }
-            public bool autoLoad { get; set; }
-        }
-
-        #endregion
-
         #endregion
 
         #region ***Constructor***
@@ -1662,7 +1647,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (extendedCaseData != null)
                 {
                     guid = extendedCaseData.ExtendedCaseGuid;
-                    url = BuildExtendedCaseUrl(extendedCasePathMask, new ExtededCaseUrlParams
+                    url = ExtendedCaseUrlBuilder.BuildExtendedCaseUrl(extendedCasePathMask, new ExtededCaseUrlParams
                     {
                         formId = extendedCaseData.ExtendedCaseFormId,
                         caseStatus = extendedCaseData.StateSecondaryId,
@@ -5938,7 +5923,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (extendedCaseFormData == null)
                 return res;
 
-            var extendedCasePath = BuildExtendedCaseUrl(extendedCasePathMask, new ExtededCaseUrlParams
+            var extendedCasePath = ExtendedCaseUrlBuilder.BuildExtendedCaseUrl(extendedCasePathMask, new ExtededCaseUrlParams
             {
                 caseStatus = extendedCaseFormData.StateSecondaryId,
                 userRole = userRole,
@@ -5972,7 +5957,7 @@ namespace DH.Helpdesk.Web.Controllers
             var exCaseFormsList = _caseService.GetExtendedCaseSectionForms(caseId, customerId);
             foreach (var ecCaseForm in exCaseFormsList)
             {
-                var extendedCasePath = BuildExtendedCaseUrl(extendedCasePathMask, new ExtededCaseUrlParams
+                var extendedCasePath = ExtendedCaseUrlBuilder.BuildExtendedCaseUrl(extendedCasePathMask, new ExtededCaseUrlParams
                 {
                     formId = ecCaseForm.ExtendedCaseFormId,
                     caseStatus = ecCaseForm.StateSecondaryId,
@@ -6015,31 +6000,6 @@ namespace DH.Helpdesk.Web.Controllers
         {
             public int CaseSolutionID { get; set; }
             public int ExtendedCaseFormID { get; set; }
-        }
-
-        private string BuildExtendedCaseUrl(string urlMask, ExtededCaseUrlParams @params)
-        {
-            var urlBld =
-                UrlBuilder.Create(urlMask)
-                    .RemoveParam(Constants.ExtendedCaseUrlKeys.LanguageId)       //majid: sent in by js function
-                    .RemoveParam(Constants.ExtendedCaseUrlKeys.ExtendedCaseGuid) //majid: sent in by js function
-                    .SetParam(Constants.ExtendedCaseUrlKeys.CaseStatus, @params.caseStatus.ToString())
-                    .SetParam(Constants.ExtendedCaseUrlKeys.UserRole, @params.userRole.ToString()) //majid: NOTE, this is from now on userWorkingGroupId. 
-                    .SetParam(Constants.ExtendedCaseUrlKeys.UserGuid, @params.userGuid)
-                    .SetParam(Constants.ExtendedCaseUrlKeys.CustomerId, @params.customerId.ToString());
-
-            if (@params.formId > 0)
-            {
-                urlBld.SetParam(Constants.ExtendedCaseUrlKeys.FormId, @params.formId.ToString());
-            }
-
-            if (@params.autoLoad)
-            {
-                urlBld.SetParam(Constants.ExtendedCaseUrlKeys.AutoLoad, "true");
-            }
-
-            var extendedCasePath = urlBld.BuildUrl();
-            return extendedCasePath;
         }
 
         private Dictionary<string, string> GetStatusBar(CaseInputViewModel model)

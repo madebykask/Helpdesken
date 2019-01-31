@@ -2,28 +2,30 @@
 @model DH.Helpdesk.Web.Models.Notifiers.InputModel
 
 @{
-    ViewBag.Title = @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation);
+    ViewBag.Title = Translation.GetCoreTextTranslation("Anmälare");
+    var readOnly = Model.ComputerUserCategoryModel.IsReadOnly;
 }
-@{ var readOnly = Model.ComputerUserCategoryModel.IsReadOnly; }
+
 @using (Html.BeginForm("Notifier", "Notifiers", FormMethod.Post, new { id = "target" }))
 {
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
-@if (readOnly)
-{
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { @class = "btn", disabled = "true", onclick = "return false;" })</li>
-                <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), null, null, new { @class = "btn", @disabled = "true", onclick = "return false;" })</li>
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Notifiers", new { @class = "btn" })</li>
-}
-else
-{
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "Delete", new { id = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post") })</li>
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", "Notifiers", new { @class = "btn" })</li>
-}
+                @if (readOnly)
+                {
+                    <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), null, null, null, new { @class = "btn", disabled = "true", onclick = "return false;" })</li>
+                    <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), null, null, new { @class = "btn", @disabled = "true", onclick = "return false;" })</li>
+                    <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", "Notifiers", new { @class = "btn" })</li>
+                }
+                else
+                {
+                    <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), null, null, null, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                    <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "Delete", new { id = Model.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post") })</li>
+                    <li>@Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "Index", "Notifiers", new { @class = "btn" })</li>
+                }
             </ul>
         </div>
     </div>
+
     @Html.Partial("_Input", Model)
 }

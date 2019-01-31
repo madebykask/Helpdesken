@@ -302,6 +302,12 @@
                                                         <a href="#" data-field="relatedInventory" style="display: none;" title="@Translation.GetCoreTextTranslation("Relaterade") @Translation.GetCoreTextTranslation("Inventarie")" class="btn"><i class="icon-th-large"></i></a>
                                                     }
                                                     
+                                                    @if (Model.CustomerSettings.ModuleComputerUser && Model.IsUserAdmin)
+                                                    {
+                                                        <a href="javascript:;" data-field="inititatorDetails" style="display: none;" 
+                                                           title="@Model.getSectionHeader(CaseSectionType.Initiator, CaseSections.InitiatorHeader) @Translation.GetCoreTextTranslation("Information")" 
+                                                           class="btn"><i class="icon-user"></i></a>
+                                                    }
                                                 </td>
                                             </tr>
                                             <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_Name, CaseSolutionFields.PersonsName)">

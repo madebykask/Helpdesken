@@ -22,6 +22,8 @@
 
         void UpdateNotifier(Notifier notifier);
 
+        Notifier GetInitiatorInfo(string userId, int customerId, bool activeOnly);
+
         List<NotifierDetailedOverview> FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName(int customerId);
 
         List<ItemOverview> FindOverviewsByCustomerId(int customerId);

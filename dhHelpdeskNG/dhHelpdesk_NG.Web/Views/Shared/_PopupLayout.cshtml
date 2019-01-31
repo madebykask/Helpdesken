@@ -4,17 +4,18 @@
     <head>
         <meta content="html/text; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
-        <title>@Translation.Get("dhHelpdesk", Enums.TranslationSource.TextTranslation)</title>
+        <title>@Translation.GetCoreTextTranslation("dhHelpdesk")</title>
         <script type="text/javascript">
-            var trans_yes = '@Translation.GetForJS("Ja", Enums.TranslationSource.TextTranslation)';
-            var trans_no = '@Translation.GetForJS("Nej", Enums.TranslationSource.TextTranslation)';
-            var placeholder_text_multiple = '@Html.Raw(Translation.Get("Välj en eller flera"))';
+            var trans_yes = '@Translation.GetForJS("Ja")';
+            var trans_no = '@Translation.GetForJS("Nej")';
+            var placeholder_text_multiple = '@Html.Raw(Translation.GetCoreTextTranslation("Välj en eller flera"))';
             var placeholder_text_single = '@Html.Raw(Translation.GetForJS("Välj ett av alternativen"))';
             var no_results_text = '@Translation.GetForJS("Inga resultat matchar")';
         </script>
         @Styles.Render("~/Content/css/popup")
         @Styles.Render("~/img-profile/css")
         @Scripts.Render("~/bundles/common/popup")
+        @RenderSection("Styles", false)
     </head>
     <body>
         <div class="popup">
@@ -22,4 +23,5 @@
         </div>
     </body>
     @Scripts.Render("~/bundles/dhhelpdesk")
+    @RenderSection("Scripts", false)
 </html>

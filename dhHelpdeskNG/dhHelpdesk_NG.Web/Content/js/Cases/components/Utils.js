@@ -59,7 +59,7 @@ window.JOINER = EMPTY_STR;
 * @returns { bool }
 */
 function isNullOrEmpty(str) {
-    return str == null || str == EMPTY_STR;
+    return str === null || str === EMPTY_STR;
 }
 
 function strJoin() {
@@ -95,4 +95,22 @@ function CreateInstance(_class, initOptions) {
 */
 function is$ElEmpty($el) {
     return $el == null || $el[0] == null;
+}
+
+function strToBoolean(value) {
+    var ret = false;
+    var strVal = value.toLowerCase();
+
+    switch (strVal) {
+        case "false":
+        case "0":
+            ret = false;
+            break;
+        
+        case 'true':
+        case '1':
+            ret = true;
+            break;
+    }
+    return ret;
 }

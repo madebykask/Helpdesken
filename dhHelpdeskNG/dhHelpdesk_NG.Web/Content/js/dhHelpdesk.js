@@ -68,10 +68,11 @@ function today() {
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1; //January is 0!
-
     var yyyy = today.getFullYear();
-    if (dd < 10) { dd = '0' + dd } if (mm < 10) { mm = '0' + mm } var today = yyyy + '-' + mm + '-' + dd;
-    return today;
+    if (dd < 10) { dd = '0' + dd }
+    if (mm < 10) { mm = '0' + mm }
+    var res = yyyy + '-' + mm + '-' + dd;
+    return res;
 }
 
 function getNow() {
@@ -81,12 +82,14 @@ function getNow() {
     var hh = today.getHours();
     var m = today.getMinutes();
     var s = today.getSeconds();
-
     var yyyy = today.getFullYear();
-    if (dd < 10) { dd = '0' + dd } if (mm < 10) { mm = '0' + mm } if (hh < 10) { hh = '0' + hh }
-    if (m < 10) { m = '0' + m } if (s < 10) { s = '0' + s }
-    var today = yyyy + '-' + mm + '-' + dd + ' ' + hh + '.' + m + '.' + s;
-    return today;
+    if (dd < 10) { dd = '0' + dd }
+    if (mm < 10) { mm = '0' + mm }
+    if (hh < 10) { hh = '0' + hh }
+    if (m < 10) { m = '0' + m }
+    if (s < 10) { s = '0' + s }
+    var res = yyyy + '-' + mm + '-' + dd + ' ' + hh + '.' + m + '.' + s;
+    return res;
 }
 
 // Cose window or tab

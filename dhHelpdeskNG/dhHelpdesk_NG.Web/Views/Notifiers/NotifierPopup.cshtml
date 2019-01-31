@@ -1,0 +1,28 @@
+﻿@model DH.Helpdesk.Web.Models.Notifiers.InputModel
+
+@{
+    Layout = "../Shared/_PopupLayout.cshtml";
+    ViewBag.Title = Translation.GetCoreTextTranslation("Ny anmälare");
+}
+
+
+<div class="container">
+    <div class="tab-content">
+        <div class="tab-pane tab-pane-border active" id="fragment-1">
+
+            @Html.Partial("_Details", Model)
+
+            @if (Model.ComputerUserCategoryModel.ExtendedCaseFormID.HasValue)
+            {
+                <div class="container">
+                    <h4>@Model.ComputerUserCategoryModel.Name details</h4>
+                    <div class="row">
+                        <iframe id="extendedComputerUser" style="width: 500px; height: 280px; margin-left: 20px" frameborder="0"
+                                src="@Model.ComputerUserCategoryModel.ExtendedCasePath"></iframe>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

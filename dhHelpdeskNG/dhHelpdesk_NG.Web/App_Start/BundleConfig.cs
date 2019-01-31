@@ -1,7 +1,4 @@
-﻿using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc;
-using DH.Helpdesk.Web.Infrastructure.UrlHelpers.Mvc.Orders;
-
-namespace DH.Helpdesk.Web
+﻿namespace DH.Helpdesk.Web
 {
     using System.Web.Optimization;
 
@@ -9,7 +6,6 @@ namespace DH.Helpdesk.Web
     {
         public struct StylesNames
         {
-            
         }
 
         public partial struct ScriptNames

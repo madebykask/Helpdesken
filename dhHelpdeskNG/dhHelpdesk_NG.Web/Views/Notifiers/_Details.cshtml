@@ -1,0 +1,29 @@
+﻿@model DH.Helpdesk.Web.Models.Notifiers.InputModel
+    
+@if (Model.UserId.Show || Model.Domain.Show || Model.LoginName.Show
+     || Model.FirstName.Show || Model.Initials.Show || Model.LastName.Show
+     || Model.DisplayName.Show || Model.Place.Show || Model.Phone.Show
+     || Model.CellPhone.Show || Model.Email.Show || Model.Code.Show)
+{
+    @Html.Partial("NotifierEdit/GeneralFields", Model)
+}
+
+@if (Model.PostalAddress.Show || Model.PostalCode.Show || Model.City.Show)
+{
+    @Html.Partial("NotifierEdit/AddressFields", Model)
+}
+
+@if (Model.Title.Show || Model.Department.Show || Model.Unit.Show
+     || Model.OrganizationUnit.Show || Model.Division.Show || Model.Managers.Show
+     || Model.Group.Show || Model.Other.Show)
+{
+    @Html.Partial("NotifierEdit/OrganizationFields", Model)
+}
+
+@if (Model.Ordered.Show)
+{
+    @Html.Partial("NotifierEdit/OrdererFields", Model)
+}
+
+@Html.Partial("NotifierEdit/StateFields", Model)
+

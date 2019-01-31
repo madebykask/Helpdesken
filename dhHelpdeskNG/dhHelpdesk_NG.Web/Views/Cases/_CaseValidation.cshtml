@@ -135,7 +135,7 @@
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")',
             getDepartmentUsersUrl: '@Url.Action("GetDepartmentUsers", "Ajax")',
             relatedCasesUrl: '@Url.Action("RelatedCasesFull", "Cases")',
-            relatedInventoryUrl: '@Url.Action("RelatedInventoryFull", "Inventory/Workstation")',
+            relatedInventoryUrl: '@Url.Action("RelatedInventoryFull", "Workstation", new { area ="Inventory" })',
             relatedCasesCountUrl: '@Url.Action("RelatedCasesCount", "Cases")',
             relatedInventoryCountUrl: '@Url.Action("RelatedInventoryCount", "Cases")',
             getDepartmentOusUrl: '@Url.Action("ChangeDepartment", "Cases")',
@@ -148,7 +148,9 @@
             mandatoryFieldsText: '@Translation.GetForJS("Obligatoriska fält")',
             formatFieldsText: '@Translation.GetForJS("Giltiga Format är")',
             descriptionText: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
-            getInventoryUrl: '@Url.Action("GetInventoryUrlByName", "Inventory/InventoryRouting")'
+            getInventoryUrl: '@Url.Action("GetInventoryUrlByName", "InventoryRouting", new {  area = "Inventory" })',
+            initiatorDetailsUrl: '@Url.Action("NotifierPopup", "Notifiers")',
+            checkInitiatorUrl: '@Url.Action("GetNotifierInfo", "Notifiers")'
         }
     };
 
@@ -251,7 +253,7 @@
             },
             "ResponsibleUser_Id": {
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Model.IsCaseReopened)"); }
-            },
+           },
             "Performer_Id": {
                 required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))
             },

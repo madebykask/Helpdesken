@@ -48,9 +48,7 @@ $(function () {
     hideShowSaveUserInfoBtn($userId.val());
     
     $userId.on('change', function (ev) {
-        
         var userId = $(ev.target).val();
-        
         hideShowSaveUserInfoBtn(userId);
     });
 
@@ -95,7 +93,14 @@ $(function () {
             $("#ShowInventoryBtn").show();
         }
     });
-    
+
+    // TODO
+    /*
+    $("a.btn.showInitiator").on("click", function(e) {
+        var userId = $('#case__ReportedBy').val();
+       //todo: check all cases ?
+    });
+    */
 
     $("a.btn.show-inventory").on("click", function (e) {
         $.ajax({
@@ -335,7 +340,7 @@ $(function () {
         }
 
         var isEmpty = function() {
-            return element.length == 0;
+            return element.length === 0;
         }
 
         that.getElement = getElement;
@@ -407,6 +412,9 @@ $(function () {
         var relatedInventoryUrl = spec.relatedInventoryUrl || '';
         var relatedCasesCountUrl = spec.relatedCasesCountUrl || '';
         var relatedInventoryCountUrl = spec.relatedInventoryCountUrl || '';
+        var initiatorDetailsUrl = spec.initiatorDetailsUrl || '';
+        var checkInitiatorUrl = spec.checkInitiatorUrl || '';
+
         var userId = spec.userId || {};
         var region = spec.region || {};
         var department = spec.department || {};
@@ -415,8 +423,11 @@ $(function () {
         var dontConnectUserToWorkingGroup = spec.dontConnectUserToWorkingGroup || {};
         var relatedCases = spec.relatedCases || {};
         var relatedInventory = spec.relatedInventory || {};
+        var initiatorDetailsEl = spec.initiatorDetailsEl || {};
+
         relatedCases.getElement().hide();
         relatedInventory.getElement().hide();
+        initiatorDetailsEl.getElement().hide();
 
         var getRelatedCasesUrl = function() {
             return relatedCasesUrl;
@@ -432,6 +443,15 @@ $(function () {
 
         var getRelatedInventoryCountUrl = function () {
             return relatedInventoryCountUrl;
+        }
+
+        var getCheckInitiatorUrl = function () {
+            return checkInitiatorUrl;
+        }
+
+        var getInitiatorDetailsUrl = function()
+        {
+            return initiatorDetailsUrl;
         }
 
         var getUserId = function() {
@@ -478,6 +498,7 @@ $(function () {
         that.getRelatedCases = getRelatedCases;
 
         that.init = function (caseEntity) {
+
             var checkRelatedCases = function (uId) {
                 var caseId = that.getCase().getCaseId().getElement();
                 var userIdValue = uId || userId.getElement().val();
@@ -514,13 +535,38 @@ $(function () {
                                 }
                             });
             }
+
             if (!relatedInventory.isEmpty()) {
                 checkRelatedInventory();
             }
+            
+            var checkInitiatorDetails = function (uId) {
+                if (initiatorDetailsEl.isEmpty()) return;
+
+                var userIdValue = uId || userId.getElement().val() || '';
+                if (userIdValue.trim() === '') {
+                    initiatorDetailsEl.getElement().hide();
+                    return;
+                }
+
+                $.getJSON(checkInitiatorUrl +
+                    "?userId=" + encodeURIComponent(userIdValue), function (data) {
+                        if (data.success && data.id && data.isCurrentUser) {
+                            initiatorDetailsEl.getElement().show();
+                            initiatorDetailsEl.getElement().data("id", data.id);
+                        } else {
+                            initiatorDetailsEl.getElement().data("id", '');
+                            initiatorDetailsEl.getElement().hide();
+                        }
+                    });
+            };
+            
+            checkInitiatorDetails();
 
             userId.getElement().keyup(function() {
                 dhHelpdesk.cases.utils.delay(checkRelatedCases, 500);
                 dhHelpdesk.cases.utils.delay(checkRelatedInventory, 500);
+                dhHelpdesk.cases.utils.delay(checkInitiatorDetails, 500);
             });
 
             relatedCases.getElement().click(function () {
@@ -530,9 +576,15 @@ $(function () {
             });
 
             relatedInventory.getElement().click(function () {
-                var caseId = that.getCase().getCaseId().getElement();
                 var userIdValue = encodeURIComponent(userId.getElement().val());
                 window.open(getRelatedInventoryUrl() + "?userId=" + userIdValue, "_blank", "width=1400,height=600,menubar=no,toolbar=no,location=no,status=no,left=100,top=100,scrollbars=yes,resizable=yes");
+            });
+
+            initiatorDetailsEl.getElement().click(function () {
+                var inititatorId = parseInt(initiatorDetailsEl.getElement().data("id") || '0');
+                if (inititatorId > 0) {
+                    window.open(getInitiatorDetailsUrl() + "?id=" + inititatorId, "_blank", "width=1400,height=600,menubar=no,toolbar=no,location=no,status=no,left=100,top=100,scrollbars=yes,resizable=yes");
+                }
             });
 
             region.getElement().change(function () {
@@ -553,6 +605,7 @@ $(function () {
 
             dhHelpdesk.cases.utils.onEvent("OnUserIdChanged", function(e, uId) {
                 checkRelatedCases(uId);
+                checkInitiatorDetails(uId);
             });
         }
 
@@ -828,6 +881,8 @@ $(function () {
         var getDepartmentsUrl = spec.getDepartmentsUrl || '';
         var getDepartmentUsersUrl = spec.getDepartmentUsersUrl || '';
         var relatedCasesUrl = spec.relatedCasesUrl || '';
+        var initiatorDetailsUrl = spec.initiatorDetailsUrl || '';
+        var checkInitiatorUrl = spec.checkInitiatorUrl || '';
         var relatedInventoryUrl = spec.relatedInventoryUrl || '';
         var relatedCasesCountUrl = spec.relatedCasesCountUrl || '';
         var relatedInventoryCountUrl = spec.relatedInventoryCountUrl || '';
@@ -851,10 +906,13 @@ $(function () {
             dontConnectUserToWorkingGroup: dhHelpdesk.cases.object({ element: $('[data-field="dontConnectUserToWorkingGroup"]') }),
             relatedCases: dhHelpdesk.cases.object({ element: $('[data-field="relatedCases"]') }),
             relatedInventory: dhHelpdesk.cases.object({ element: $('[data-field="relatedInventory"]') }),
+            initiatorDetailsEl: dhHelpdesk.cases.object({ element: $('[data-field="inititatorDetails"]') }),
             relatedCasesUrl: relatedCasesUrl,
             relatedInventoryUrl: relatedInventoryUrl,
             relatedCasesCountUrl: relatedCasesCountUrl,
-            relatedInventoryCountUrl: relatedInventoryCountUrl
+            relatedInventoryCountUrl: relatedInventoryCountUrl,
+            initiatorDetailsUrl: initiatorDetailsUrl,
+            checkInitiatorUrl: checkInitiatorUrl
         });
         var computer = dhHelpdesk.cases.computer({});
 
@@ -953,7 +1011,4 @@ $(function () {
     function ClearCostCentre() {
         $('#case__CostCentre').val('');
     }
-
-    
-
 });
