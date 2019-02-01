@@ -541,8 +541,8 @@ Module DH_Helpdesk_Mail
                                         End If
                                     End If
 
-                                    LogToFile("Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count, iPOP3DebugLevel)
-                                    
+                                    LogToFile("Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count, iPop3DebugLevel)
+
                                     'Save 
                                     Dim sHTMLFileName As String = createHtmlFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
 
@@ -688,9 +688,18 @@ Module DH_Helpdesk_Mail
                                         End If
                                     End If
 
-                                    If objCase.WorkingGroup_Id <> 0 Then
+                                    Dim workingGroup_Id As Integer = objCase.WorkingGroup_Id
+                                    Dim workingGroupEMail As String = objCase.WorkingGroupEMail
+                                    Dim workingGroupAllocateCaseMail As Integer = objCase.WorkingGroupAllocateCaseMail
+                                    If objCustomer.CaseWorkingGroupSource = 0 Then
+                                        workingGroup_Id = objCase.PerformerWorkingGroup_Id
+                                        workingGroupEMail = objCase.PerformerWorkingGroupEMail
+                                        workingGroupAllocateCaseMail = objCase.PerformerWorkingGroupAllocateCaseMail
+                                    End If
 
-                                        If Not objCase.WorkingGroupEMail Is Nothing Then
+                                    If workingGroup_Id <> 0 Then
+
+                                        If Not workingGroupEMail Is Nothing And workingGroupAllocateCaseMail = 1 Then
                                             objMailTemplate = objMailTemplateData.getMailTemplateById(7, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                             If Not objMailTemplate Is Nothing Then
@@ -701,9 +710,9 @@ Module DH_Helpdesk_Mail
 
                                                 Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
 
-                                                sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, objCase.WorkingGroupEMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
+                                                sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, workingGroupEMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, objCase.WorkingGroupEMail, 7, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                objLogData.createEMailLog(iCaseHistory_Id, workingGroupEMail, 7, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             End If
                                         End If
                                     End If

@@ -78,8 +78,13 @@ Public Class Mail
             sBody = Replace(sBody, getMailTemplateIdentifier("PriorityName"), objCase.PriorityName)
 
             '[#13]
-            sSubject = Replace(sSubject, getMailTemplateIdentifier("WorkingGroupEMail"), objCase.WorkingGroupEMail)
-            sBody = Replace(sBody, getMailTemplateIdentifier("WorkingGroupEMail"), objCase.WorkingGroupEMail)
+            If objCustomer.CaseWorkingGroupSource = 0 Then
+                sSubject = Replace(sSubject, getMailTemplateIdentifier("WorkingGroupEMail"), objCase.PerformerWorkingGroupEMail)
+                sBody = Replace(sBody, getMailTemplateIdentifier("WorkingGroupEMail"), objCase.PerformerWorkingGroupEMail)
+            Else
+                sSubject = Replace(sSubject, getMailTemplateIdentifier("WorkingGroupEMail"), objCase.WorkingGroupEMail)
+                sBody = Replace(sBody, getMailTemplateIdentifier("WorkingGroupEMail"), objCase.WorkingGroupEMail)
+            End If
 
             '[#15]
             If objCustomer.CaseWorkingGroupSource = 0 Then
@@ -355,7 +360,7 @@ Public Class Mail
             smtp.Send(msg)
         Catch ex As Exception
             sRet = ex.Message.ToString()
-            objLogFile.WriteLine("Smtp error: {0}, Send message. EmailTo: {1}, Message-ID: {2}", sRet, msg.To, sMessageId)            
+            objLogFile.WriteLine("Smtp error: {0}, Send message. EmailTo: {1}, Message-ID: {2}", sRet, msg.To, sMessageId)
         End Try
 
         Return sRet

@@ -41,6 +41,9 @@ Imports System.Data
     Private miRegLanguage_Id As Integer
     Private msCaseWorkingGroup As String
     Private msPerformerWorkingGroup As String
+    Private msPerformerWorkingGroup_Id As Integer
+    Private msPerformerWorkingGroupAllocateCaseMail As Integer
+    Private msPerformerWorkingGroupEMail As String
     Private mdtRegTime As DateTime
     Private mdtChangeTime As DateTime
     Private msInventoryNumber As String
@@ -55,6 +58,7 @@ Imports System.Data
     Private miRegistrationSource As Integer = 3
     Private miForm_Id As Integer
     Private msWorkingGroupEMail As String
+    Private msAllocateCaseMail As Integer = 0
     Private miHolidayHeader_Id As Integer = 1
     Private miRegistrationSourceCustomer_Id As Integer
     Private mcolLog As New List(Of Log)
@@ -230,6 +234,20 @@ Imports System.Data
             msPerformerWorkingGroup = ""
         End If
 
+        If Not IsDBNull(dr("PerformerWorkingGroup_Id")) Then
+            msPerformerWorkingGroup_Id = dr("PerformerWorkingGroup_Id")
+        End If
+
+        If Not IsDBNull(dr("PerformerWorkingGroupAllocateCaseMail")) Then
+            msPerformerWorkingGroupAllocateCaseMail = dr("PerformerWorkingGroupAllocateCaseMail")
+        End If
+
+        If Not IsDBNull(dr("PerformerWorkingGroupEMail")) Then
+            msPerformerWorkingGroupEMail = dr("PerformerWorkingGroupEMail")
+        Else
+            msPerformerWorkingGroupEMail = ""
+        End If
+
         If Not IsDBNull(dr("CaseWorkingGroup")) Then
             msCaseWorkingGroup = dr("CaseWorkingGroup")
         Else
@@ -277,6 +295,10 @@ Imports System.Data
 
         If Not IsDBNull(dr("WorkingGroupEMail")) Then
             msWorkingGroupEMail = dr("WorkingGroupEMail")
+        End If
+
+        If Not IsDBNull(dr("AllocateCaseMail")) Then
+            msAllocateCaseMail = dr("msAllocateCaseMail")
         End If
 
         miHolidayHeader_Id = dr("HolidayHeader_Id")
@@ -614,12 +636,39 @@ Imports System.Data
         End Set
     End Property
 
+    Public Property PerformerWorkingGroup_Id() As String
+        Get
+            Return msPerformerWorkingGroup_Id
+        End Get
+        Set
+            msPerformerWorkingGroup_Id = Value
+        End Set
+    End Property
+
+    Public Property PerformerWorkingGroupAllocateCaseMail() As String
+        Get
+            Return msPerformerWorkingGroupAllocateCaseMail
+        End Get
+        Set
+            msPerformerWorkingGroupAllocateCaseMail = Value
+        End Set
+    End Property
+
     Public Property PerformerWorkingGroup() As String
         Get
             Return msPerformerWorkingGroup
         End Get
         Set(ByVal Value As String)
             msPerformerWorkingGroup = Value
+        End Set
+    End Property
+
+    Public Property PerformerWorkingGroupEMail() As String
+        Get
+            Return msPerformerWorkingGroupEMail
+        End Get
+        Set(ByVal Value As String)
+            msPerformerWorkingGroupEMail = Value
         End Set
     End Property
 
@@ -647,6 +696,15 @@ Imports System.Data
         End Get
         Set(ByVal Value As String)
             msWorkingGroupEMail = Value
+        End Set
+    End Property
+
+    Public Property WorkingGroupAllocateCaseMail() As Integer
+        Get
+            Return msAllocateCaseMail
+        End Get
+        Set
+            msAllocateCaseMail = Value
         End Set
     End Property
 

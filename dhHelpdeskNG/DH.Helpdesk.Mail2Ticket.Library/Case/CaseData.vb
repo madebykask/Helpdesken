@@ -437,26 +437,28 @@ Public Class CaseData
         Dim dt As DataTable
 
         Try
-            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " & _
-                        "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " & _
-                       "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " & _
-                       "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, " & _
-                       "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName, tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, " & _
-                       "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, tblCase.RegTime, tblCase.ChangeTime, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " & _
-                       "tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS WorkingGroupEMail, " & _
-                       "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.WatchDate, tblCase.RegistrationSource, " & _
-                       "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, tblCase.Available, tblCase.ReferenceNumber, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics " & _
-                   "FROM tblCase " & _
-                       "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " & _
-                       "LEFT OUTER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " & _
-                       "LEFT JOIN tblUsers u2 ON tblCase.User_Id = u2.Id " & _
-                       "LEFT OUTER JOIN tblWorkingGroup ON tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id " & _
-                       "LEFT OUTER JOIN tblWorkingGroup tblWorkingGroup_1 ON tblCase.WorkingGroup_Id = tblWorkingGroup_1.Id " & _
-                       "LEFT JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id " & _
-                       "INNER JOIN tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id " & _
-                       "LEFT JOIN tblStateSecondary ON tblCase.StateSecondary_Id=tblStateSecondary.Id " & _
-                       "LEFT JOIN tblCategory ON tblCase.Category_Id=tblCategory.Id " & _
-                       "LEFT JOIN tblProductArea ON tblCase.ProductArea_Id=tblProductArea.Id " & _
+            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
+                        "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
+                       "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " &
+                       "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, " &
+                       "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName, " &
+                       "tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, tblWorkingGroup.Id AS PerformerWorkingGroup_Id, tblWorkingGroup.AllocateCaseMail AS PerformerWorkingGroupAllocateCaseMail, " &
+                       "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, ISNULL(tblWorkingGroup_1.WorkingGroupEMail, '') AS WorkingGroupEMail, tblWorkingGroup_1.AllocateCaseMail AS AllocateCaseMail, " &
+                       "tblCase.RegTime, tblCase.ChangeTime, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
+                       "tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
+                       "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.WatchDate, tblCase.RegistrationSource, " &
+                       "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, tblCase.Available, tblCase.ReferenceNumber, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics " &
+                   "FROM tblCase " &
+                       "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " &
+                       "LEFT OUTER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " &
+                       "LEFT JOIN tblUsers u2 ON tblCase.User_Id = u2.Id " &
+                       "LEFT OUTER JOIN tblWorkingGroup ON tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id " &
+                       "LEFT OUTER JOIN tblWorkingGroup tblWorkingGroup_1 ON tblCase.WorkingGroup_Id = tblWorkingGroup_1.Id " &
+                       "LEFT JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id " &
+                       "INNER JOIN tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id " &
+                       "LEFT JOIN tblStateSecondary ON tblCase.StateSecondary_Id=tblStateSecondary.Id " &
+                       "LEFT JOIN tblCategory ON tblCase.Category_Id=tblCategory.Id " &
+                       "LEFT JOIN tblProductArea ON tblCase.ProductArea_Id=tblProductArea.Id " &
                        "LEFT JOIN tblDepartment ON tblCase.Department_Id=tblDepartment.Id "
 
             If iCaseId > 0 Then
@@ -532,26 +534,27 @@ Public Class CaseData
         Dim dr As DataRow
 
         Try
-            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " & _
-                        "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " & _
-                        "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " & _
-                        "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, " & _
-                        "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName, tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, " & _
-                        "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, tblCase.RegTime, tblCase.ChangeTime, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " & _
-                        "tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS WorkingGroupEMail, " & _
-                        "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.RegistrationSource, tblCase.WatchDate, tblCase.Available, tblCase.ReferenceNumber, " & _
-                        "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics " & _
-                    "FROM tblCase " & _
-                        "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " & _
-                        "INNER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " & _
-                        "LEFT JOIN tblUsers u2 ON tblCase.User_Id = u2.Id " & _
-                        "LEFT OUTER JOIN tblWorkingGroup ON tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id " & _
-                        "LEFT OUTER JOIN tblWorkingGroup tblWorkingGroup_1 ON tblCase.WorkingGroup_Id = tblWorkingGroup_1.Id " & _
-                        "LEFT JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id " & _
-                        "INNER JOIN tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id " & _
-                        "LEFT JOIN tblStateSecondary ON tblCase.StateSecondary_Id=tblStateSecondary.Id " & _
-                        "LEFT JOIN tblCategory ON tblCase.Category_Id=tblCategory.Id " & _
-                        "LEFT JOIN tblProductArea ON tblCase.ProductArea_Id=tblProductArea.Id " & _
+            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
+                        "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
+                        "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " &
+                        "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, " &
+                        "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName, " &
+                        "tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, tblWorkingGroup.Id AS PerformerWorkingGroup_Id, tblWorkingGroup.AllocateCaseMail AS PerformerWorkingGroupAllocateCaseMail, " &
+                        "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, ISNULL(tblWorkingGroup_1.WorkingGroupEMail, '') AS WorkingGroupEMail, tblWorkingGroup_1.AllocateCaseMail AS AllocateCaseMail, " &
+                        "tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
+                        "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.RegistrationSource, tblCase.WatchDate, tblCase.Available, tblCase.ReferenceNumber, " &
+                        "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics " &
+                    "FROM tblCase " &
+                        "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " &
+                        "INNER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " &
+                        "LEFT JOIN tblUsers u2 ON tblCase.User_Id = u2.Id " &
+                        "LEFT OUTER JOIN tblWorkingGroup ON tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id " &
+                        "LEFT OUTER JOIN tblWorkingGroup tblWorkingGroup_1 ON tblCase.WorkingGroup_Id = tblWorkingGroup_1.Id " &
+                        "LEFT JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id " &
+                        "INNER JOIN tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id " &
+                        "LEFT JOIN tblStateSecondary ON tblCase.StateSecondary_Id=tblStateSecondary.Id " &
+                        "LEFT JOIN tblCategory ON tblCase.Category_Id=tblCategory.Id " &
+                        "LEFT JOIN tblProductArea ON tblCase.ProductArea_Id=tblProductArea.Id " &
                         "LEFT JOIN tblDepartment ON tblCase.Department_Id=tblDepartment.Id "
 
             If iPerformerUser_Id <> 0 Then
