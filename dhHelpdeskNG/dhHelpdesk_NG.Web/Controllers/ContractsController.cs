@@ -794,10 +794,7 @@ namespace DH.Helpdesk.Web.Controllers
                 fileContent = _contractService.GetContractFile(int.Parse(id)).Content;
             }
 
-            Response.AddHeader("Content-Disposition", string.Format("attachment; filename=\"{0}\"", fileName));
-
             return new UnicodeFileContentResult(fileContent, fileName);
-
         }
 
         [HttpGet]

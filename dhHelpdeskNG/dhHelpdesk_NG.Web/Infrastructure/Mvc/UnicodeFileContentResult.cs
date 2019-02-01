@@ -32,16 +32,22 @@
             var encoding = Encoding.UTF8;
             var request = context.HttpContext.Request;
             var response = context.HttpContext.Response;
-
+            
             response.Clear();
-
-            if (request.Browser.Browser.ToUpper() == "IE")
+            
+            if (!this.IsInline)
             {
-                if (!this.IsInline)
+                response.Headers.Remove("Content-Disposition");
+
+                if (request.Browser.Browser.ToUpper() == "IE" ||
+                    request.UserAgent.IndexOf("Edge", StringComparison.OrdinalIgnoreCase) > -1)
                 {
-                    response.AddHeader(
-                        "Content-Disposition",
-                        string.Format("attachment; filename=\"{0}\"", request.Browser.Browser.ToUpper() == "IE" ? HttpUtility.UrlEncode(this.FileName, encoding) : this.FileName));
+                    var fileName = HttpUtility.UrlEncode(this.FileName, encoding);
+                    response.AddHeader("Content-Disposition", string.Format("attachment;filename=\"{0}\";filename*=UTF-8''{0}", fileName.Replace("+", "%20")));
+                }
+                else
+                {
+                    response.AddHeader("Content-Disposition", string.Format("attachment;filename=\"{0}\"", FileName));
                 }
             }
 
