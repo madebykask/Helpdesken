@@ -1,12 +1,15 @@
 import { LogFile } from "./case-actions-api.model";
+import { UuidGenerator } from "src/app/helpers";
 
 // Case Action Data classes
 export type CaseActionDataType = CaseHistoryActionData | CaseLogActionData | GenericActionData;
 
 // Case Action Group
 export class CaseActionsGroup {
+    id:string;
     constructor(public createdBy: string,
                 public createdAt: Date) {
+      this.id = UuidGenerator.createUuid();
     } 
 
     Actions: Array<CaseAction<CaseActionDataType>>;
@@ -28,20 +31,23 @@ export class CaseActionsGroup {
 
 // Case Action
 export class CaseAction<TData extends CaseActionDataType> {
-    //id: number;    
+    constructor() {
+      this.id = UuidGenerator.createUuid();
+    }
+    id: string;
     type: CaseEventType;
     createdAt: Date;
-    createdBy: string;    
+    createdBy: string;
     data: TData;
 }
 
 // Case History
 export class CaseHistoryActionData {
   constructor(
-    public fieldName: string, 
+    public fieldName: string,
     public fieldLabel: string,
-    public prevValue: string,
-    public currentValue: string) {
+    public prevValue: any,
+    public currentValue: any) {
   }
 }
 

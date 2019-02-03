@@ -23,14 +23,14 @@
 <mbsc-form *ngIf="isLoaded" class="case-content">
 
     <!-- Case Actions -->
-    <div *ngIf="currentTab == 'case_actions'">
+    <div [hidden]="currentTab != 'case_actions'">
         <div class="md-paging">
           <case-actions *ngIf="caseActions.length > 0" [items]="caseActions"></case-actions>
         </div>
     </div>
 
     <!-- Case edit fields -->
-    <div *ngIf="currentTab == 'case_details'"> 
+    <div [hidden]="currentTab != 'case_details'"> 
       <div class="md-paging">
         <form [formGroup]="form" novalidate>
             <mbsc-form-group collapsible #initiatorSection *ngIf="hasSection(caseSectionTypes.Initiator)">

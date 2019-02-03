@@ -22,7 +22,7 @@ export class TruncateTextDirective {
   }
 
   ngAfterViewInit(): void {
-    this.originalText = this.nativeEl.textContent || '';
+    this.originalText = this.Text;
     setTimeout(() => this.truncateInner(), 50);
   }
 
@@ -31,27 +31,30 @@ export class TruncateTextDirective {
   }
 
   showText(){
-    if (this.isTruncated){
-      this.setText(this.originalText);
+    if (this.isTruncated) {
+      this.Text = this.originalText;
       this.isTruncated = false;
     }
   }
 
   private truncateInner() {
-    if (this.words < 1) return false;
-  
-    let text = this.truncatePipe.transform(this.originalText, this.words, null);
+    if (this.words < 1) return false; 
+    
+    let text = this.truncatePipe.transform(this.originalText, this.words, true, null);
     this.isTruncated = text.length < this.originalText.length;
-    if (this.isTruncated)
-    {
+    if (this.isTruncated) {
         if (this.trail && this.trail.length)  text += this.trail;
-        this.setText(text);
+        this.Text = text;
         this.canTruncate = true;
     }
   }
 
-  private setText(text){
-    this.nativeEl.innerText = text;
+  private get Text(){
+    return this.nativeEl.innerHTML || '';
+  }
+
+  private set Text(text){
+    this.nativeEl.innerHTML = text;
   }
 
   @HostListener('window:resize', ['$event'])

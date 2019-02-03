@@ -65,4 +65,8 @@ export class CaseActionsComponent implements OnInit {
       }       
       return -1;
   }
+  
+  getTrackId(index, item){
+    return item.id;
+  }
 }

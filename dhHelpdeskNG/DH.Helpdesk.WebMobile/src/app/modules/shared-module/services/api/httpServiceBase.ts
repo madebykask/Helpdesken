@@ -135,5 +135,11 @@ export abstract class HttpApiServiceBase {
       const newQsParams = {...qsParamMap, [paramName]: customerId };
       return newQsParams;
   }
+  /*
+  protected handleError(error: Response) {
+    console.error(error);
+    return Observable.throw(error.json().error || 'Server Error');
+  }
+  */
 }
 

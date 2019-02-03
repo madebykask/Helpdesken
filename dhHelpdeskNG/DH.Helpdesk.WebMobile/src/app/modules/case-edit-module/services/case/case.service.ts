@@ -10,6 +10,7 @@ import { CaseLogApiService } from '../api/case/case-log-api.service';
 import { CaseLogModel, LogFile, CaseHistoryModel, CaseHistoryChangeModel } from '../../models/case/case-actions-api.model';
 import { CaseActionsDataService } from './case-actions-data-service.service';
 import { CaseHistoryApiService } from '../api/case/case-history-api.service';
+import { DateUtil } from 'src/app/modules/shared-module/Utils/date-util';
 
 @Injectable({ providedIn: 'root' })
 export class CaseService {
@@ -35,7 +36,7 @@ export class CaseService {
       let caseLogs$ = this.getCaseLogsData(caseId);
       let caseHistory$ = this.getCaseHistoryData(caseId);
 
-      return forkJoin(caseLogs$, caseHistory$).pipe(      
+      return forkJoin(caseLogs$, caseHistory$).pipe(
         map(([caseLogsData, caseHistoryData]) => {
           return this.caseActionsDataService.process(caseLogsData, caseHistoryData);
       }));
@@ -74,9 +75,15 @@ export class CaseService {
         return Object.assign(new CaseHistoryChangeModel(), json, {
                 //todo:review
                 createdAt: new Date(json.createdAt),
-                previousValue: json.previousValue,
-                currentValue:  json.currentValue
+                previousValue: this.getValue(json.previousValue),
+                currentValue:  this.getValue(json.currentValue)
               });
+    }
+
+    private getValue(val) {
+      //try convert field value to date
+      var val = DateUtil.tryConvertToDate(val);
+      return val;
     }
 
     private fromJsonCaseLogModel(data: any): CaseLogModel

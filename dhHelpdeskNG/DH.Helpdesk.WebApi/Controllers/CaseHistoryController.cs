@@ -431,18 +431,20 @@ namespace DH.Helpdesk.WebApi.Controllers
                 (currentValue != null && currentValue.Equals(previousValue)) ||
                 (previousValue != null && currentValue == null)) return null;
 
-            var item = new CaseHistoryItemOutputModel<T>();
-            item.FieldName = CaseFieldsDefaultNames.TranslationCaseFieldsToApiNames.ContainsKey(field) ? 
-                CaseFieldsDefaultNames.TranslationCaseFieldsToApiNames[field] : 
-                "";
-            item.FieldLabel = _caseTranslationService.GetFieldLabel(field, langId, cid,
-                caseFieldTranslations);
-            item.Id = current.CaseHistory.Id;
-            item.CreatedAt = DateTime.SpecifyKind(current.CaseHistory.CreatedDate, DateTimeKind.Utc); // specify that recieved UTC from db
-            item.CreatedBy = current.CaseHistory.CreatedByUser;
+            var item = new CaseHistoryItemOutputModel<T>
+            {
+                Id = current.CaseHistory.Id,
+                FieldName = CaseFieldsDefaultNames.TranslationCaseFieldsToApiNames.ContainsKey(field) 
+                    ? CaseFieldsDefaultNames.TranslationCaseFieldsToApiNames[field]
+                    : "",
+                FieldLabel = _caseTranslationService.GetFieldLabel(field, langId, cid, caseFieldTranslations),
+                CreatedAt = DateTime.SpecifyKind(current.CaseHistory.CreatedDate, DateTimeKind.Utc),
+                CreatedBy = current.CaseHistory.CreatedByUser,
+                PreviousValue = previousValue,
+                CurrentValue = currentValue
+            };
+            // specify that recieved UTC from db
 
-            item.PreviousValue = previousValue;
-            item.CurrentValue = currentValue;
 
             return item;
         }

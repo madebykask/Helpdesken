@@ -213,13 +213,26 @@ ul.nostyle {
   .mbsc-ms-b.mbsc-ms-top, .mbsc-ms-b .mbsc-ms-item-sel { border-bottom-color:$primary-color; }
 }
 
-#case-actions {
+#case-files {
+  .mbsc-lv-item-ic {
+    left:0px;
+    width:auto;
+  } 
+  .mbsc-lv-item { 
+    padding: 12px 0 12px 20px;
+    font-size:14px; 
+  }
+  .mbsc-lv-item-ic-left:before, 
+  .mbsc-lv-item-ic-left:after { left:0px; }
+  .mbsc-ic:before {   margin-right: 8px; }
+}
 
+#case-actions {
   .mbsc-ios.mbsc-card.mbsc-form{ margin: 15px 10px; }
   .mbsc-lv-item-ic {  left:5px!important; } 
-  .mbsc-lv-ios .mbsc-lv-item-ic-left:before, 
-  .mbsc-lv-ios .mbsc-lv-item-ic-left:after { left:14px!important; }
-  .mbsc-ios.mbsc-card.mbsc-form { border-radius: 0;}
+  .mbsc-lv-item-ic-left:before, 
+  .mbsc-lv-item-ic-left:after { left:14px!important; }
+  .mbsc-card.mbsc-form { border-radius: 0;}
   .mbsc-lv-item.mbsc-lv-item-ic-left { padding-left: 35px!important; }
   .mbsc-lv-cont { font-size:14px; } 
   .mbsc-card-content { padding-bottom:10px}
