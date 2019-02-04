@@ -151,6 +151,13 @@ $(document).ready(function () {
             });
         }
     });
+
+    function setComPanelLeft() {
+        var panel$ = $('.siteCom');
+        panel$.css('left', -panel$.outerWidth());
+    }
+
+    setComPanelLeft();
     //END COMMUNICATE SCRIPT
 
     //handle link buttons with disabled state
