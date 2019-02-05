@@ -1,10 +1,10 @@
   <div *ngIf="data" class="change">
       <span class="{{ getActionIcon() }}"></span>
       <ng-container *ngIf="showField;else noAction">
-          <span><b>{{ data.fieldLabel }}</b>: {{ formattedValue }}</span>
-      </ng-container>      
+          <b>{{ data.fieldLabel }}</b>: <span [innerHTML]="formattedValue"></span>
+      </ng-container>
   </div>
 
   <ng-template #noAction>
-    <span>{{ formattedValue }}</span>
+      <span [innerHTML]="formattedValue"></span>
   </ng-template>

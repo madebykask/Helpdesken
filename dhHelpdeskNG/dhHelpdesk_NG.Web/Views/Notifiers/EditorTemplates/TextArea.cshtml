@@ -1,21 +1,16 @@
-﻿
-@model DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields.StringFieldModel
+﻿@model DH.Helpdesk.Web.Models.Notifiers.ConfigurableFields.StringFieldModel
            
 @if (Model.Show)
 {
+    object htmlAttributes = null;
+    if (ViewContext.ViewData.Keys.Contains("htmlAttributes"))
+    {
+        htmlAttributes = ViewContext.ViewData["htmlAttributes"];
+    }
     <tr>
-        <td class="span3">
-            @if (!Model.Required)
-            {
-                @Translation.Get(Model.Caption, Enums.TranslationSource.TextTranslation)
-            }
-            else
-            {
-                @(Translation.Get(Model.Caption, Enums.TranslationSource.TextTranslation) + "*")
-            }
-        </td>
+        <td class="span3">@(Translation.GetCoreTextTranslation(Model.Caption) + (Model.Required ? "*" : ""))</td>
         <td class="span9">
-            @Html.TextAreaFor(m => m.Value)
+            @Html.TextAreaFor(m => m.Value, htmlAttributes)
             @Html.ValidationMessageFor(m => m.Value)
             @Html.HiddenFor(m => m.Required)
             @Html.HiddenFor(m => m.MaxLength)

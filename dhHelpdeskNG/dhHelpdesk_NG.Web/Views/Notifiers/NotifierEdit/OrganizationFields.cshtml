@@ -2,21 +2,35 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Notifiers.InputModel
 
-@{ var attributes = Model.IsReadOnly ? (object)new { htmlAttributes = new { @readonly = "readonly" } } : new { };}
+@{
+    var attributes = Model.IsReadOnly ? (object)new { htmlAttributes = new { @readonly = "readonly" } } : new { };
+}
+
+@functions
+{
+    object createAttributes(string id, bool isReadonly, bool isRequired)
+    {
+        var attr = isReadonly
+            ? (object)new { id = id, @readonly = "readonly" }
+            : new { id = id };
+        return attr;
+    }
+}
 
 <div class="container">
-    <h4>@Translation.Get("Organisation")</h4>
+    <h4>@Translation.GetCoreTextTranslation("Organisation")</h4>
     <div class="row">
         <div class="span12">
             <table class="tableform">
-                @Html.EditorFor(m => m.Title, "TextBox")
+                
+                @Html.EditorFor(m => m.Title, "TextBox", attributes)
 
                 @if (Model.Region.Show)
                 {
                     <tr>
                         <td class="span3">
                             @* Region in Notifier is only for filtering help*@
-                            @(Translation.Get(Model.Region.Caption))
+                            @(Translation.GetCoreTextTranslation(Model.Region.Caption))
                         </td>
                         <td>
                             @Html.DropDown("region_dropdown", "RegionId", !Model.Region.Required, Model.Region.Value, false, Model.IsReadOnly)
@@ -28,11 +42,11 @@
                 {
                     <tr>
                         <td class="span3">
-                            @(Translation.Get(Model.Department.Caption) + (Model.Department.Required ? "*" : string.Empty))
+                            @(Translation.GetCoreTextTranslation(Model.Department.Caption) + (Model.Department.Required ? "*" : string.Empty))
                         </td>
                         <td>
                             <div id="department_dropdown_container">
-                                @Html.Partial("DepartmentDropDown", Model.Department.Value, new ViewDataDictionary { { "Required", Model.Department.Required }, { "ReadOnly", Model.IsReadOnly } })
+                                @Html.Partial("DepartmentDropDown", Model.Department.Value, new ViewDataDictionary {{"Required", Model.Department.Required}, {"ReadOnly", Model.IsReadOnly}})
                             </div>
                         </td>
                     </tr>
@@ -42,11 +56,11 @@
                 {
                     <tr>
                         <td class="span3">
-                            @(Translation.Get(Model.OrganizationUnit.Caption) + (Model.OrganizationUnit.Required ? "*" : string.Empty))
+                            @(Translation.GetCoreTextTranslation(Model.OrganizationUnit.Caption) + (Model.OrganizationUnit.Required ? "*" : string.Empty))
                         </td>
                         <td>
                             <div id="organizationUnit_dropdown_container">
-                                @Html.Partial("OrganizationUnitDropDown", Model.OrganizationUnit.Value, new ViewDataDictionary { { "Required", Model.OrganizationUnit.Required }, { "ReadOnly", Model.IsReadOnly } })
+                                @Html.Partial("OrganizationUnitDropDown", Model.OrganizationUnit.Value, new ViewDataDictionary { {"Required", Model.OrganizationUnit.Required}, {"ReadOnly", Model.IsReadOnly}})
                             </div>
                         </td>
                     </tr>
@@ -59,7 +73,7 @@
                 {
                     <tr>
                         <td class="span3">
-                            @(Translation.Get(Model.Division.Caption) + (Model.Division.Required ? "*" : string.Empty))
+                            @(Translation.GetCoreTextTranslation(Model.Division.Caption) + (Model.Division.Required ? "*" : string.Empty))
                         </td>
                         <td>
                             @Html.DropDown("division_dropdown", "DivisionId", !Model.Division.Required, Model.Division.Value, Model.Division.Required, Model.IsReadOnly)
@@ -71,33 +85,31 @@
                 {
                     <tr>
                         <td class="span3">
-                            @(Translation.Get(Model.Managers.Caption) + (Model.Managers.Required ? "*" : string.Empty))
+                            @(Translation.GetCoreTextTranslation(Model.Managers.Caption) + (Model.Managers.Required ? "*" : string.Empty))
                         </td>
                         <td>
                             @{
                                 int? selectedManagerId = null;
                                 string selectedManagerDisplayName = null;
-
                                 if (!string.IsNullOrEmpty(Model.Managers.Value.SelectedValue))
                                 {
                                     selectedManagerId = int.Parse(Model.Managers.Value.SelectedValue);
                                     selectedManagerDisplayName = Model.Managers.Value.Items.Single(m => m.Value == Model.Managers.Value.SelectedValue).Name;
                                 }
                             }
-                            <input id="manager_textbox" type="text" value="@selectedManagerDisplayName" name="Manager" />
-                            <input id="manager_id_hidden" type="hidden" name="ManagerId" value="@selectedManagerId" />
+                            <input id="manager_textbox" type="text" name="Manager" value="@selectedManagerDisplayName" @(Model.IsReadOnly ? "readonly=readonly":"")  />
+                            <input id="manager_id_hidden" type="hidden" name="ManagerId" value="@selectedManagerId"/>
                         </td>
                     </tr>
-                                }
+                }
 
                 @if (Model.Group.Show)
                 {
                     <tr>
                         <td class="span3">
-                            @(Translation.Get(Model.Group.Caption) + (Model.Group.Required ? "*" : string.Empty))
+                            @(Translation.GetCoreTextTranslation(Model.Group.Caption) + (Model.Group.Required ? "*" : string.Empty))
                         </td>
-                        <td>
-                            @Html.DropDown("group_dropdown", "GroupId", !Model.Group.Required, Model.Group.Value, false, Model.IsReadOnly)
+                        <td>@Html.DropDown("group_dropdown", "GroupId", !Model.Group.Required, Model.Group.Value, false, Model.IsReadOnly)
                         </td>
                     </tr>
                 }
