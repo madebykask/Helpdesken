@@ -24,7 +24,8 @@ export class LogNoteActionComponent extends CaseActionBaseComponent<CaseLogActio
   }  
 
    downloadLogFile(file: LogFile) {
-    this.filesApiService.downloadLogFile(file.id, parseInt(this.caseKey));
+     const caseId = parseInt(this.caseKey);
+      this.filesApiService.downloadLogFile(file.id, caseId);
   }
-
+  
 }

@@ -14,6 +14,7 @@ namespace DH.Helpdesk.Services.Services
 
     public interface ILogFileService
     {
+        LogFile GetFileDetails(int logFileId);
         LogFileContent GetFileContentById(int logFileId, string basePath);
         byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName);
         List<string> FindFileNamesByLogId(int logId);
@@ -41,6 +42,12 @@ namespace DH.Helpdesk.Services.Services
         {
             _logFileRepository = logFileRepository;
             _filesStorage = filesStorage; 
+        }
+
+        public LogFile GetFileDetails(int logFileId)
+        {
+            var logFile = _logFileRepository.GetDetails(logFileId);
+            return logFile;
         }
 
         public LogFileContent GetFileContentById(int logFileId, string basePath)

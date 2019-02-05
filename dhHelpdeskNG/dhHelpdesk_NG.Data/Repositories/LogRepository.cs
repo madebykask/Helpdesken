@@ -179,6 +179,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ILogFileRepository : IRepository<LogFile>
     {
+        LogFile GetDetails(int id);
         LogFileContent GetFileContent(int logFileId, string basePath);
         byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         List<string> FindFileNamesByLogId(int logId);
@@ -207,7 +208,12 @@ namespace DH.Helpdesk.Dal.Repositories
             _filesStorage = fileStorage;
         }
 
-        public LogFileContent GetFileContent(int logFileId, string basePath)
+        public LogFile GetDetails(int id)
+        {
+            return Table.FirstOrDefault(f => f.Id == id);
+        }
+
+    public LogFileContent GetFileContent(int logFileId, string basePath)
         {
             var logFile = Table.FirstOrDefault(f => f.Id == logFileId);
             if (logFile == null)

@@ -21,14 +21,17 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IMapper _mapper;
         private readonly ISettingsLogic _settingsLogic;
         private readonly ILogFileService _logFileService;
+        private ICaseFileService _caseFileService;
 
         public CaseLogsController(
             IUserService userService, 
             ILogService caselLogService, 
             ILogFileService logFileService,
+            ICaseFileService caseFileService,
             IMapper mapper, 
             ISettingsLogic settingsLogic)
         {
+            _caseFileService = caseFileService;
             _logFileService = logFileService;
             _userService = userService;
             _caselLogService = caselLogService;
@@ -58,14 +61,25 @@ namespace DH.Helpdesk.WebApi.Controllers
         [Route("{caseId:int}/logfile/{fileId:int}")] 
         public Task<IHttpActionResult> Get([FromUri]int caseId, [FromUri]int fileId, [FromUri]int cid, bool? inline = false)
         {
+            byte[] content = null;
             var basePath = _settingsLogic.GetFilePath(cid);
-            var logFile = _logFileService.GetFileContentById(fileId, basePath);
-            if (logFile == null)
+            var fileInfo = _logFileService.GetFileDetails(fileId);
+            var isCaseFile = fileInfo.IsCaseFile ?? false;
+
+            if (isCaseFile)
             {
-                SendResponse("The log file was not found", HttpStatusCode.NotFound);
+                content = _caseFileService.GetFileContentByIdAndFileName(caseId, basePath, fileInfo.FileName);
+            }
+            else
+            {
+                var logFile = _logFileService.GetFileContentById(fileId, basePath);
+                content = logFile.Content;
             }
 
-            IHttpActionResult res = new FileResult(logFile.FileName, logFile.Content, Request, inline ?? false);
+            if (content == null)
+                SendResponse($"The case file '{fileInfo.FileName}' was not found", HttpStatusCode.NotFound);
+
+            IHttpActionResult res = new FileResult(fileInfo.FileName, content, Request, inline ?? false);
             return Task.FromResult(res);
         }
     }

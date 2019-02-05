@@ -23,7 +23,7 @@ export class CaseFilesApiService extends HttpApiServiceBase {
       });
     }
 
-    downloadCaseFile(caseId:number, fileId:number,  fileName:string) {
+    downloadCaseFile(caseId:number, fileId:number, fileName:string) {
         let window = this.windowWrapper.nativeWindow;
         let url = this.buildResourseUrl(`/api/case/${caseId}/file/${fileId}`, { inline: true }, true, false);
         this.getFileBody(url, null).pipe(
