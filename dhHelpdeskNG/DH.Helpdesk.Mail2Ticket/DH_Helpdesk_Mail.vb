@@ -16,8 +16,11 @@ Module DH_Helpdesk_Mail
     Dim bEnableNewEmailProcessing = False
 
     Public Sub Main()
-        Dim fileName = Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().Location)
-        ToggleConfigEncryption(fileName)
+        Dim secureConnectionString As String = ConfigurationManager.AppSettings("SecureConnectionString")
+        If (Not String.IsNullOrEmpty(secureConnectionString) AndAlso secureConnectionString.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
+            Dim fileName = Path.GetFileName(Reflection.Assembly.GetExecutingAssembly().Location)
+            ToggleConfigEncryption(fileName)
+        End If
         ' 5: SyncByWorkingGroup
 
         Dim sCommand As String = Command()
