@@ -16,17 +16,26 @@ Module DH_Helpdesk_Mail
     Dim bEnableNewEmailProcessing = False
 
     Public Sub Main()
-
+        Dim fileName = Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().Location)
+        ToggleConfigEncryption(fileName)
         ' 5: SyncByWorkingGroup
 
         Dim sCommand As String = Command()
         Dim aArguments() As String = sCommand.Split(",")
-        Dim sConnectionstring As String = ""
+        If (aArguments.Length = 1 And aArguments(0) = "") Then
+            aArguments = Nothing
+        End If
 
-        Dim appVal as String = ConfigurationManager.AppSettings("enableNewEmailProcessing")
-        If (Not String.IsNullOrEmpty(appVal) AndAlso appVal.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase))
+        Dim appVal As String = ConfigurationManager.AppSettings("enableNewEmailProcessing")
+        If (Not String.IsNullOrEmpty(appVal) AndAlso appVal.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
             bEnableNewEmailProcessing = True
         End If
+        Dim sConnectionstring As String = ConfigurationManager.ConnectionStrings("Helpdesk")?.ConnectionString
+        Dim workingModeArg As String = ConfigurationManager.AppSettings("WorkingMode")
+        Dim logFolderArg As String = ConfigurationManager.AppSettings("LogFolder")
+        Dim logIdentifierArg As String = ConfigurationManager.AppSettings("LogIdentifier")
+        Dim productAreaSepArg As String = ConfigurationManager.AppSettings("ProductAreaSeparator")
+        Dim newModeArg As String = ""
 
         'NOTE: USE Command Line Arguements in Project Properties under Debug tab instead of hardcoding values
         '      Example: 5,Data Source=DHUTVSQL2; Initial Catalog=DH_Support; User Id=sa; Password=;Network Library=dbmssocn;,,,,1
@@ -53,64 +62,90 @@ Module DH_Helpdesk_Mail
         'aArguments(2) = "c:\temp"
         'aArguments(3) = "datahalland"
         'aArguments(4) = ";"
-        
-        If aArguments.Length > 0 Then
-            Dim workingModeArg =  GetCmdArg(aArguments, 0)
-            Dim connStringArg  = GetCmdArg(aArguments, 1)
-            Dim logFolderArg = GetCmdArg(aArguments, 2)
-            Dim logIdentifierArg = GetCmdArg(aArguments, 3)
-            Dim productAreaSepArg = GetCmdArg(aArguments, 4)
-            Dim newModeArg = GetCmdArg(aArguments, 5)
-
-            Dim workingMode = IIf(workingModeArg = "5", SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
-            sConnectionstring = connStringArg
-
-            If Not String.IsNullOrEmpty(logFolderArg) Then
-                gsLogPath = logFolderArg
+        If aArguments IsNot Nothing Then
+            If (aArguments.Length > 0) Then
+                workingModeArg = GetCmdArg(aArguments, 0)
+                sConnectionstring = GetCmdArg(aArguments, 1)
+                logFolderArg = GetCmdArg(aArguments, 2)
+                logIdentifierArg = GetCmdArg(aArguments, 3)
+                productAreaSepArg = GetCmdArg(aArguments, 4)
+                newModeArg = GetCmdArg(aArguments, 5)
+                bEnableNewEmailProcessing = IIf(newModeArg = "1", True, False)
             End If
-
-            If Not String.IsNullOrEmpty(logIdentifierArg) Then
-                gsInternalLogIdentifier = logIdentifierArg.ToString.Trim
-            End If
-
-            If Not String.IsNullOrEmpty(productAreaSepArg) Then
-                gsProductAreaSeperator = productAreaSepArg
-            End If
-
-            bEnableNewEmailProcessing = IIf(newModeArg = "1", True, False)
-            
-            'Log cmd line args
-            Try     
-                openLogFile()
-                
-                'Log input params
-                LogToFile(String.Format(
-                    "Cmd Line Args:"  & vbCrlf & vbTab &
-                    "- WorkingMode: {0}" & vbCrlf & vbTab &
-                    "- ConnectionString: {1}" & vbCrlf & vbTab &
-                    "- Log folder: {2}" & vbCrlf & vbTab &
-                    "- Log identifier: {3}" & vbCrlf & vbTab &
-                    "- ProductArea Separator: {4}" & vbCrlf & vbTab &
-                    "- New email processing: {5}", 
-                    workingModeArg, connStringArg, logFolderArg, logIdentifierArg, productAreaSepArg, newModeArg), 1)
-
-                'start processing
-                readMailBox(sConnectionstring, workingMode)
-
-            Catch ex As Exception
-                LogError(ex.ToString())
-            Finally
-                closeLogFile()
-            End Try
-
         End If
+
+        Dim workingMode = IIf(workingModeArg = "5", SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
+
+        If Not String.IsNullOrEmpty(logFolderArg) Then
+            gsLogPath = logFolderArg
+        End If
+
+        If Not String.IsNullOrEmpty(logIdentifierArg) Then
+            gsInternalLogIdentifier = logIdentifierArg.ToString.Trim
+        End If
+
+        If Not String.IsNullOrEmpty(productAreaSepArg) Then
+            gsProductAreaSeperator = productAreaSepArg
+        End If
+
+        'Log cmd line args
+        Try
+            openLogFile()
+
+            'Log input params
+            LogToFile(String.Format(
+                "Cmd Line Args:" & vbCrLf & vbTab &
+                "- WorkingMode: {0}" & vbCrLf & vbTab &
+                "- ConnectionString: {1}" & vbCrLf & vbTab &
+                "- Log folder: {2}" & vbCrLf & vbTab &
+                "- Log identifier: {3}" & vbCrLf & vbTab &
+                "- ProductArea Separator: {4}" & vbCrLf & vbTab &
+                "- New email processing: {5}",
+                workingModeArg, sConnectionstring, logFolderArg, logIdentifierArg, productAreaSepArg, newModeArg), 1)
+
+            'start processing
+            readMailBox(sConnectionstring, workingMode)
+
+        Catch ex As Exception
+            LogError(ex.ToString())
+        Finally
+            closeLogFile()
+        End Try
     End Sub
     Private Function GetCmdArg(args As String(), index As Int32) As String
-        Dim val as String = ""
+        Dim val As String = ""
         If args.Length > index Then
             val = args(index)
         End If
         Return val
+    End Function
+
+    Private Function ToggleConfigEncryption(exeConfigName As String)
+        ' Takes the executable file name without the
+        ' .config extension.
+        Try
+            ' Open the configuration file And retrieve 
+            ' the connectionStrings section.
+            Dim config = ConfigurationManager.OpenExeConfiguration(exeConfigName)
+
+            Dim section = CType(config.GetSection("connectionStrings"), ConnectionStringsSection)
+
+            If (section.SectionInformation.IsProtected) Then
+                ' Remove encryption.
+                ' section.SectionInformation.UnprotectSection()
+            Else
+                ' Encrypt the section.
+                section.SectionInformation.ProtectSection("DataProtectionConfigurationProvider")
+            End If
+
+            ' Save the current configuration.
+            config.Save()
+
+            LogToFile("app.config connection string is protected={0}", section.SectionInformation.IsProtected)
+
+        Catch ex As Exception
+            LogError(ex.ToString())
+        End Try
     End Function
 
     Public Function readMailBox(ByVal sConnectionstring As String, ByVal iSyncType As SyncType) As Integer
