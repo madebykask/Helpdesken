@@ -500,6 +500,9 @@ $(function () {
         that.init = function (caseEntity) {
 
             var checkRelatedCases = function (uId) {
+
+                if (relatedCases.isEmpty()) return;
+
                 var caseId = that.getCase().getCaseId().getElement();
                 var userIdValue = uId || userId.getElement().val();
                 if (userIdValue == null || userIdValue.trim() == '') {
@@ -516,11 +519,14 @@ $(function () {
                                 }
                             });
             }
-            if (!relatedCases.isEmpty()) {
-                checkRelatedCases();
-            }
+            
+            checkRelatedCases();
+            
 
             var checkRelatedInventory = function (uId) {
+                console.log('checking related inventory');
+                if (relatedInventory.isEmpty()) return;
+
                 var userIdValue = uId || userId.getElement().val();
                 if (userIdValue == null || userIdValue.trim() == '') {
                     relatedInventory.getElement().hide();
@@ -528,6 +534,7 @@ $(function () {
                 }
                 $.getJSON(getRelatedInventoryCountUrl() +
                             "?userId=" + encodeURIComponent(userIdValue), function (data) {
+                                console.log('Related inventory count: ', data);
                                 if (data > 0) {
                                     relatedInventory.getElement().show();
                                 } else {
@@ -536,9 +543,7 @@ $(function () {
                             });
             }
 
-            if (!relatedInventory.isEmpty()) {
-                checkRelatedInventory();
-            }
+            checkRelatedInventory();
             
             var checkInitiatorDetails = function (uId) {
                 if (initiatorDetailsEl.isEmpty()) return;
@@ -551,7 +556,7 @@ $(function () {
 
                 $.getJSON(checkInitiatorUrl +
                     "?userId=" + encodeURIComponent(userIdValue), function (data) {
-                        if (data.success && data.id && data.isCurrentUser) {
+                        if (data.success && data.id) {
                             initiatorDetailsEl.getElement().show();
                             initiatorDetailsEl.getElement().data("id", data.id);
                         } else {
@@ -605,6 +610,7 @@ $(function () {
 
             dhHelpdesk.cases.utils.onEvent("OnUserIdChanged", function(e, uId) {
                 checkRelatedCases(uId);
+                checkRelatedInventory(uId);
                 checkInitiatorDetails(uId);
             });
         }
