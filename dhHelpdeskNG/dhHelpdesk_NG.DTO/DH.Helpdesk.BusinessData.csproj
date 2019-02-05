@@ -195,6 +195,7 @@
     <Compile Include="Models\Case\CaseSolutionInfo.cs" />
     <Compile Include="Models\Case\CaseSolutionOverview.cs" />
     <Compile Include="Models\Case\ExtendedCaseDataOverview.cs" />
+    <Compile Include="Models\Case\LogFileContent.cs" />
     <Compile Include="Models\Case\UserWorkingGroupOverview.cs" />
     <Compile Include="Models\Case\WorkingGroupInfo.cs" />
     <Compile Include="Models\Changes\ChangeListItem.cs" />

@@ -10,6 +10,7 @@
         </div> 
   </div>
   <ul *ngIf="data.files && data.files.length" class="files">
-      <li *ngFor="let file of data.files"><span><i class="mbsc-ic mbsc-ic-fa-paperclip"></i> {{ file.fileName }}</span></li>
+      <li *ngFor="let file of data.files"><span><i class="mbsc-ic mbsc-ic-fa-paperclip"></i> 
+       <a (click)="downloadLogFile(file)">{{ file.fileName }}</a></span></li>
   </ul>
 </div>

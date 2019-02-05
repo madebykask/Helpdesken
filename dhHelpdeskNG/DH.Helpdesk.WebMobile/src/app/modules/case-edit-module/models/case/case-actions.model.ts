@@ -34,7 +34,7 @@ export class CaseAction<TData extends CaseActionDataType> {
     constructor() {
       this.id = UuidGenerator.createUuid();
     }
-    id: string;
+    id: string;    
     type: CaseEventType;
     createdAt: Date;
     createdBy: string;

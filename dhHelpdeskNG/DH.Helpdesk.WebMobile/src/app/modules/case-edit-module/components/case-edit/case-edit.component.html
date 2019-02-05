@@ -25,7 +25,7 @@
     <!-- Case Actions -->
     <div [hidden]="currentTab != 'case_actions'">
         <div class="md-paging">
-          <case-actions *ngIf="caseActions.length > 0" [items]="caseActions"></case-actions>
+          <case-actions *ngIf="caseActions.length > 0" [items]="caseActions" [caseKey]="caseKey"></case-actions>
         </div>
     </div>
 

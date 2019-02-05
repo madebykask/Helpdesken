@@ -8,8 +8,19 @@ import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/h
 
 @Injectable({ providedIn: 'root' })
 export class CaseFilesApiService extends HttpApiServiceBase {
-    constructor(httpClient:HttpClient, localStorageService: LocalStorageService, private windowWrapper: WindowWrapper){
+    constructor(httpClient:HttpClient, localStorageService: LocalStorageService, private windowWrapper: WindowWrapper) {
         super(httpClient, localStorageService);
+    }
+
+    downloadLogFile(fileId:number, caseId:number) {
+      let window = this.windowWrapper.nativeWindow;
+      let url = this.buildResourseUrl(`/api/case/${caseId}/logfile/${fileId}`, { inline: true }, true, false);
+      this.getFileBody(url, null).pipe(
+          take(1),
+      ).subscribe(data => {
+          //saveAs(data, fileName); // uses file-saver.js
+          window.location.href = window.URL.createObjectURL(data);
+      });
     }
 
     downloadCaseFile(caseId:number, fileId:number,  fileName:string) {

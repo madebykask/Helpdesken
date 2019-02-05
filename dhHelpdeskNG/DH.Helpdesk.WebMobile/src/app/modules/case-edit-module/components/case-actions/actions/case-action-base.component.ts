@@ -3,6 +3,7 @@ import { CaseAction, CaseActionDataType, CaseLogActionData, CaseHistoryActionDat
 
 export class CaseActionBaseComponent<TActionData extends CaseActionDataType> {
 
+  @Input() caseKey: string;
   @Input() caseAction: CaseAction<TActionData>;
 
   getActionIcon() {

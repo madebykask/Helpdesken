@@ -82,6 +82,8 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<CausingPartService>().As<ICausingPartService>();
             builder.RegisterType<SettingsLogic>().As<ISettingsLogic>();
             builder.RegisterType<LogService>().As<ILogService>();
+            builder.RegisterType<LogFileService>().As<ILogFileService>();
+            
             builder.RegisterType<ProblemLogService>().As<IProblemLogService>();
 
             builder.RegisterType<CaseEditModeCalcStrategy>().As<ICaseEditModeCalcStrategy>();

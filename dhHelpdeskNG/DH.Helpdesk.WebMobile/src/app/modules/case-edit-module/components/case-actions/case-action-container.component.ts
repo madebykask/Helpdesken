@@ -13,6 +13,8 @@ import { CaseActionBaseComponent } from "./actions/case-action-base.component";
 })
 export class CaseActionContainerComponent {
     
+    @Input("caseKey") caseKey: string;
+
     @Input("caseAction") caseAction: CaseAction<CaseActionDataType>;
 
     private viewContainer: ViewContainerRef;
@@ -35,8 +37,10 @@ export class CaseActionContainerComponent {
       let componentFactory = this.componentFactoryResolver.resolveComponentFactory(cmp);
       let componentRef = vc.createComponent(componentFactory);
 
+      let componentInst = <CaseActionBaseComponent<CaseActionDataType>>componentRef.instance;
       //set component properties
-      (<CaseActionBaseComponent<CaseActionDataType>>componentRef.instance).caseAction = this.caseAction;
+      componentInst.caseKey = this.caseKey;
+      componentInst.caseAction = this.caseAction;      
   }
 
   private resolveComponent() : Type<CaseActionBaseComponent<CaseActionDataType>> {

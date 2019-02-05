@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
 import { CasesOverviewFilter, CaseOverviewItem, CaseOverviewColumn } from '../../models'
 import { LocalStorageService } from '../local-storage';
-import * as moment from 'moment-timezone';
 import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
 
 @Injectable({ providedIn: 'root' })

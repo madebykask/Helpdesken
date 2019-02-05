@@ -17,7 +17,7 @@
       <div class="actions-main">
         <mbsc-listview *ngIf="group.hasMain" [swipe]="false" [enhance]="true">
           <mbsc-listview-item *ngFor="let action of group.Actions | actionsFilter:'main';trackBy:getTrackId">
-              <case-action-container [caseAction]="action"></case-action-container>
+              <case-action-container [caseAction]="action" [caseKey]="caseKey"></case-action-container>
           </mbsc-listview-item>
         </mbsc-listview>
       </div>
@@ -28,7 +28,7 @@
             <mbsc-form-group-content>
             <mbsc-listview [swipe]="false" [enhance]="true">
                 <mbsc-listview-item *ngFor="let action of group.Actions | actionsFilter:'other';trackBy:getTrackId">
-                    <case-action-container [caseAction]="action"></case-action-container>
+                    <case-action-container [caseAction]="action" [caseKey]="caseKey"></case-action-container>
                 </mbsc-listview-item>
             </mbsc-listview>
           </mbsc-form-group-content>

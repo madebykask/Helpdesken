@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.MapperData.Logs;
 
@@ -178,6 +179,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ILogFileRepository : IRepository<LogFile>
     {
+        LogFileContent GetFileContent(int logFileId, string basePath);
         byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         List<string> FindFileNamesByLogId(int logId);
         List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId);
@@ -202,7 +204,26 @@ namespace DH.Helpdesk.Dal.Repositories
         public LogFileRepository(IDatabaseFactory databaseFactory, IFilesStorage fileStorage)
             : base(databaseFactory)
         {
-            this._filesStorage = fileStorage;
+            _filesStorage = fileStorage;
+        }
+
+        public LogFileContent GetFileContent(int logFileId, string basePath)
+        {
+            var logFile = Table.FirstOrDefault(f => f.Id == logFileId);
+            if (logFile == null)
+                return null;
+
+            var content = _filesStorage.GetFileContent(ModuleName.Log, logFile.Log_Id, basePath, logFile.FileName);
+            if (content == null)
+                return null;
+
+            return new LogFileContent()
+            {
+                Id = logFile.Id,
+                LogId = logFile.Log_Id,
+                FileName = logFile.FileName,
+                Content = content
+            };
         }
 
         public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName)

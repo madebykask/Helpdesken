@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 using DH.Helpdesk.WebApi.Infrastructure.ActionResults;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 
 namespace DH.Helpdesk.WebApi.Infrastructure
 {
@@ -35,8 +39,24 @@ namespace DH.Helpdesk.WebApi.Infrastructure
             }
         }
 
-        protected ForbiddenResult Forbidden(string msg) {
-            return new ForbiddenResult(this.Request, msg);
+        protected ForbiddenResult Forbidden(string msg)
+        {
+            return new ForbiddenResult(Request, msg);
+        }
+
+        protected T SendResponse<T>(T response, HttpStatusCode statusCode = HttpStatusCode.OK)
+        {
+            if (statusCode != HttpStatusCode.OK)
+            {
+                var badResponse =
+                    new HttpResponseMessage(statusCode)
+                    {
+                        Content = new StringContent(JsonConvert.SerializeObject(response), Encoding.UTF8, "application/json")
+                    };
+
+                throw new HttpResponseException(badResponse);
+            }
+            return response;
         }
 
     }

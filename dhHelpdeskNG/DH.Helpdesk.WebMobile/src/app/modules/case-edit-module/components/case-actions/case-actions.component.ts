@@ -10,6 +10,9 @@ import { AuthenticationStateService } from 'src/app/services/authentication';
 export class CaseActionsComponent implements OnInit {
 
   @Input() 
+  caseKey:string;
+
+  @Input() 
   items: CaseAction<CaseActionDataType>[] = [];
 
   grouppedItems: CaseActionsGroup[];
@@ -43,7 +46,7 @@ export class CaseActionsComponent implements OnInit {
               groupIndex = groups.length - 1;
           }
           
-          const group = groups[groupIndex];          
+          const group = groups[groupIndex];
           group.Actions.push(item);
       }
     }
