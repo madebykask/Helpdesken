@@ -118,6 +118,7 @@ namespace DH.Helpdesk.Domain
         public CaseRelationType CaseRelationType { get; set; }
 
         public int? SplitToCaseSolution_Id { get; set; }
+        public int ShowOnMobile { get; set; }
 
         public virtual CaseSolutionCategory CaseSolutionCategory { get; set; }
         public virtual CaseSolutionSchedule CaseSolutionSchedule { get; set; }
