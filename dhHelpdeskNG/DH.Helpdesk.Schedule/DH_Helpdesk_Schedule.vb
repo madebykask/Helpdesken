@@ -1,4 +1,5 @@
 ﻿Imports System.Configuration
+Imports System.Data.SqlClient
 Imports DH.Helpdesk.Mail2Ticket.Library
 Imports System.IO
 Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
@@ -6,8 +7,17 @@ Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
 Module DH_Helpdesk_Schedule
     'Private objLogFile As StreamWriter
     
+    Public const ConnectionStringName as String = "Helpdesk"
 
     Public Sub Main()
+        
+        ' encrypt connection string if exists
+        Dim secureConnectionString = ConfigurationManager.AppSettings("SecureConnectionString")
+        If (Not String.IsNullOrEmpty(secureConnectionString) AndAlso Boolean.Parse(secureConnectionString))  Then
+            Dim fileName = Path.GetFileName(Reflection.Assembly.GetExecutingAssembly().Location)
+            SecureConnectionStringSection(fileName)
+        End If
+
         'WorkModes:
         ' 1: planDate
         ' 2: approveCase
@@ -40,7 +50,7 @@ Module DH_Helpdesk_Schedule
                     "- WorkMode: {0}" & vbCrlf & vbTab &
                     "- ConnectionString: {1}" & vbCrlf & vbTab &
                     "- SendMail: {2}" & vbCrlf & vbTab, 
-                    workMode, sConnectionstring, giSendMail), 1)
+                    workMode, FormatConnectionString(sConnectionstring), giSendMail), 1)
             Catch ex As Exception
                 LogError(ex.ToString())
             Finally
@@ -110,6 +120,7 @@ Module DH_Helpdesk_Schedule
                     closeLogFile()
 
             End Select
+           
 
         End If
     End Sub
@@ -139,11 +150,10 @@ Module DH_Helpdesk_Schedule
         End If
         Return defaultValue
     End Function
-
     Private Function GetConnectionString(aArguments As String()) As String
         Dim connectionString = GetCmdArgSafe(aArguments, 1)
         If String.IsNullOrEmpty(connectionString) Then
-            connectionString = ConfigurationManager.ConnectionStrings("Helpdesk")?.ConnectionString
+            connectionString = ConfigurationManager.ConnectionStrings(ConnectionStringName)?.ConnectionString
         End If
         Return connectionString
     End Function
@@ -159,7 +169,37 @@ Module DH_Helpdesk_Schedule
             objLogFile.WriteLine("{0}: {1}", Now(),  msg)
         End If
     End Sub
+    Private Sub SecureConnectionStringSection(exeConfigName As String)
+        openLogFile()
+        Try
+            EncryptSection(Of ConnectionStringsSection)(exeConfigName, "connectionStrings")
+            LogToFile(String.Format("app.config '{0}' section is protected"), giLoglevel)
+        Catch ex As Exception
+            LogError(ex.ToString())
+        Finally
+            closeLogFile()
+        End Try
+        
+    End Sub
+    Private Function FormatConnectionString(connectionString As String) As String
+        Dim builder = New SqlConnectionStringBuilder(connectionString)
+        Return String.Format("Data Source={0}; Initial Catalog={1};Network Library={2}", builder.DataSource, builder.InitialCatalog, builder.NetworkLibrary)
+    End Function
 
+    Private Sub EncryptSection(Of TSection As ConfigurationSection)(exeConfigName As String, sectionName As String)
+        ' Open the configuration file And retrieve 
+        Dim config = ConfigurationManager.OpenExeConfiguration(exeConfigName)
+
+        Dim section = CType(config.GetSection(sectionName), TSection)
+        If section IsNot Nothing Then
+            If (Not section.SectionInformation.IsProtected) Then
+                section.SectionInformation.ProtectSection("DataProtectionConfigurationProvider")
+            End If
+
+            ' Save the current configuration.
+            config.Save()    
+        End If
+    End Sub
 
     Private Sub planDate(ByVal sConnectionString As String)
         Dim objGlobalSettingsData As New GlobalSettingsData
