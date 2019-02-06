@@ -1,4 +1,5 @@
 ﻿Imports System.Configuration
+Imports System.Data.SqlClient
 Imports DH.Helpdesk.Mail2Ticket.Library
 Imports Rebex.Net
 Imports System.IO
@@ -95,6 +96,7 @@ Module DH_Helpdesk_Mail
         Try
             openLogFile()
 
+            Dim logConnectionString As String = FormatConnectionString(sConnectionstring)
             'Log input params
             LogToFile(String.Format(
                 "Cmd Line Args:" & vbCrLf & vbTab &
@@ -104,7 +106,7 @@ Module DH_Helpdesk_Mail
                 "- Log identifier: {3}" & vbCrLf & vbTab &
                 "- ProductArea Separator: {4}" & vbCrLf & vbTab &
                 "- New email processing: {5}",
-                workingModeArg, sConnectionstring, logFolderArg, logIdentifierArg, productAreaSepArg, newModeArg), 1)
+                workingModeArg, logConnectionString, logFolderArg, logIdentifierArg, productAreaSepArg, newModeArg), 1)
 
             'start processing
             readMailBox(sConnectionstring, workingMode)
@@ -115,6 +117,7 @@ Module DH_Helpdesk_Mail
             closeLogFile()
         End Try
     End Sub
+
     Private Function GetCmdArg(args As String(), index As Int32) As String
         Dim val As String = ""
         If args.Length > index Then
@@ -123,7 +126,7 @@ Module DH_Helpdesk_Mail
         Return val
     End Function
 
-    Private Function ToggleConfigEncryption(exeConfigName As String)
+    Private Sub ToggleConfigEncryption(exeConfigName As String)
         ' Takes the executable file name without the
         ' .config extension.
         Try
@@ -149,6 +152,11 @@ Module DH_Helpdesk_Mail
         Catch ex As Exception
             LogError(ex.ToString())
         End Try
+    End Sub
+
+    Private Function FormatConnectionString(connectionString As String) As String
+        Dim builder As SqlConnectionStringBuilder = New SqlConnectionStringBuilder(connectionString)
+        Return String.Format("Data Source={0}; Initial Catalog={1};Network Library={2}", builder.DataSource, builder.InitialCatalog, builder.NetworkLibrary)
     End Function
 
     Public Function readMailBox(ByVal sConnectionstring As String, ByVal iSyncType As SyncType) As Integer
