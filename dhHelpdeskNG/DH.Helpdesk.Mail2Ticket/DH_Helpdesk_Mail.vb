@@ -68,12 +68,12 @@ Module DH_Helpdesk_Mail
         'aArguments(4) = ";"
         If aArguments IsNot Nothing Then
             If (aArguments.Length > 0) Then
-                workingModeArg = GetCmdArg(aArguments, 0)
-                sConnectionstring = GetCmdArg(aArguments, 1)
-                logFolderArg = GetCmdArg(aArguments, 2)
-                logIdentifierArg = GetCmdArg(aArguments, 3)
-                productAreaSepArg = GetCmdArg(aArguments, 4)
-                newModeArg = GetCmdArg(aArguments, 5)
+                workingModeArg = GetCmdArg(aArguments, 0, workingModeArg)
+                sConnectionstring = GetCmdArg(aArguments, 1, sConnectionstring)
+                logFolderArg = GetCmdArg(aArguments, 2, logFolderArg)
+                logIdentifierArg = GetCmdArg(aArguments, 3, logIdentifierArg)
+                productAreaSepArg = GetCmdArg(aArguments, 4, productAreaSepArg)
+                newModeArg = GetCmdArg(aArguments, 5, newModeArg)
                 bEnableNewEmailProcessing = IIf(newModeArg = "1", True, False)
             End If
         End If
@@ -106,7 +106,7 @@ Module DH_Helpdesk_Mail
                 "- Log identifier: {3}" & vbCrLf & vbTab &
                 "- ProductArea Separator: {4}" & vbCrLf & vbTab &
                 "- New email processing: {5}",
-                workingModeArg, logConnectionString, logFolderArg, logIdentifierArg, productAreaSepArg, newModeArg), 1)
+                workingModeArg, logConnectionString, logFolderArg, logIdentifierArg, productAreaSepArg, bEnableNewEmailProcessing), 1)
 
             'start processing
             readMailBox(sConnectionstring, workingMode)
@@ -118,9 +118,9 @@ Module DH_Helpdesk_Mail
         End Try
     End Sub
 
-    Private Function GetCmdArg(args As String(), index As Int32) As String
-        Dim val As String = ""
-        If args.Length > index Then
+    Private Function GetCmdArg(args As String(), index As Int32, defaultValue As String) As String
+        Dim val As String = defaultValue
+        If args.Length > index And Not String.IsNullOrEmpty(args(index)) Then
             val = args(index)
         End If
         Return val
