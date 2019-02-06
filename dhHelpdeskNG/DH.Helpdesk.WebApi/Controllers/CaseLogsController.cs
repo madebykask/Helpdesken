@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
+using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Models.Case.Logs;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
@@ -48,11 +49,41 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             var logEntities = await _caselLogService.GetLogsByCaseIdAsync(caseId, includeInternalLogs).ConfigureAwait(false);
             
-            //todo: log files
-            //var exLogFiles = _logFileService.GetLogFilesByCaseId(caseId).Select(x => new CaseAttachedExFileModel(x.Id, x.Name, LogId = x.ObjId));
-            var model = _mapper.Map<List<CaseLogOutputModel>>(logEntities);
+            var model = MapLogsToModel(logEntities);
 
             return Ok(model);
+        }
+
+        private IList<CaseLogOutputModel> MapLogsToModel(IList<CaseLogData> logs)
+        {
+            var items = new List<CaseLogOutputModel>();
+            foreach (var log in logs)
+            {
+                //create two external and internal items out of one if has both properties
+                if (!string.IsNullOrEmpty(log.ExternalText) && !string.IsNullOrEmpty(log.InternalText))
+                {
+                    var internalText = log.InternalText;
+
+                    //create external log item
+                    log.InternalText = null;
+                    var itemModel = _mapper.Map<CaseLogOutputModel>(log);
+                    items.Add(itemModel);
+
+                    //create internal
+                    log.ExternalText = null;
+                    log.InternalText = internalText;
+                    itemModel = _mapper.Map<CaseLogOutputModel>(log);
+                    items.Add(itemModel);
+                }
+                else
+                {
+                    var itemModel = _mapper.Map<CaseLogOutputModel>(log);
+                    items.Add(itemModel);
+                }
+
+            }
+
+            return items;
         }
 
         //ex: /api/Case/123/LogFile/1203?cid=1
