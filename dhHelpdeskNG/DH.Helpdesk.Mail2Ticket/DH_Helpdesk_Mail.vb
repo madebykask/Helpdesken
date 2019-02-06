@@ -96,6 +96,10 @@ Module DH_Helpdesk_Mail
         Try
             openLogFile()
 
+            If String.IsNullOrEmpty(sConnectionstring) Then
+                Throw New ArgumentNullException("connection string")
+            End If
+
             Dim logConnectionString As String = FormatConnectionString(sConnectionstring)
             'Log input params
             LogToFile(String.Format(
