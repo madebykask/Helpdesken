@@ -134,6 +134,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                 currentCase.StateSecondary_Id = model.StateSecondaryId;
             }
 
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings,
+                GlobalEnums.TranslationCaseFields.Priority_Id))
+            {
+                currentCase.Priority_Id = model.PriorityId;
+            }
+
             //if (isNew)
             //{
             //    var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(currentCase.User_Id.Value, currentCase.Customer_Id);

@@ -169,9 +169,9 @@ export class CaseEditComponent {
       this.isLoaded = false;
       const sessionId = this.authStateService.getUser().authData.sessionId;
 
-      const caseLock$ = this.caseLockApiService.acquireCaseLock(this.caseId, sessionId);      
+      const caseLock$ = this.caseLockApiService.acquireCaseLock(this.caseId, sessionId);
       const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
-      const caseActions$ = this.caseService.getCaseActions(this.caseId);
+      // const caseActions$ = this.caseService.getCaseActions(this.caseId);
 
       // todo: apply search type (all, my cases)
       const caseData$ =
@@ -189,19 +189,25 @@ export class CaseEditComponent {
                   catchError((e) => throwError(e)),
               );
 
-              forkJoin(caseSections$, caseData$, caseLock$, caseActions$).pipe(
+              forkJoin(caseSections$, caseData$, caseLock$).pipe(
                   take(1),
                   finalize(() => this.isLoaded = true),
                   catchError((e) => throwError(e))
-              ).subscribe(([sectionData, options, caseLock, caseActions]) => {
+              ).subscribe(([sectionData, options, caseLock]) => {
                   this.caseLock = caseLock;  
                   this.caseSections = sectionData;
-                  this.caseActions = caseActions;
                   this.dataSource = new CaseDataStore(options);
                   this.initLock();
 
-                  this.processCaseData();                  
+                  this.processCaseData();
               });
+              this.caseService.getCaseActions(this.caseId).pipe(
+                take(1),
+                catchError((e) => throwError(e))
+              )
+              .subscribe(caseActions => {
+                this.caseActions = caseActions;
+              })
   }
 
     getCaseTitle() : string {

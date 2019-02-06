@@ -20,7 +20,7 @@
     </div>
   </mbsc-form>
 
-<mbsc-form *ngIf="isLoaded" class="case-content">
+<mbsc-form  class="case-content">
 
     <!-- Case Actions -->
     <div [hidden]="currentTab != 'case_actions'">
@@ -30,7 +30,7 @@
     </div>
 
     <!-- Case edit fields -->
-    <div [hidden]="currentTab != 'case_details'"> 
+    <div *ngIf="isLoaded" [hidden]="currentTab != 'case_details'">
       <div class="md-paging">
         <form [formGroup]="form" novalidate>
             <mbsc-form-group collapsible #initiatorSection *ngIf="hasSection(caseSectionTypes.Initiator)">
@@ -122,7 +122,7 @@
                     <case-dropdown-control *ngIf="hasField(caseFieldsNames.WorkingGroupId)" [field]="getField(caseFieldsNames.WorkingGroupId)" [form]="form" [dataSource]="dataSource.workingGroupsStore$"></case-dropdown-control>
                     <case-dropdown-control *ngIf="hasField(caseFieldsNames.CaseResponsibleUserId)" [field]="getField(caseFieldsNames.CaseResponsibleUserId)" [form]="form" [dataSource]="dataSource.responsibleUsersStore$"></case-dropdown-control>
                     <case-dropdown-control *ngIf="hasField(caseFieldsNames.PerformerUserId)" [field]="getField(caseFieldsNames.PerformerUserId)" [form]="form" [dataSource]="dataSource.performersStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.PriorityId)" disabled=true [field]="getField(caseFieldsNames.PriorityId)" [form]="form" [dataSource]="dataSource.prioritiesStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="hasField(caseFieldsNames.PriorityId)" [field]="getField(caseFieldsNames.PriorityId)" [form]="form" [dataSource]="dataSource.prioritiesStore$"></case-dropdown-control>
                     <case-dropdown-control *ngIf="hasField(caseFieldsNames.StatusId)" disabled=true [field]="getField(caseFieldsNames.StatusId)" [form]="form" [dataSource]="dataSource.statusesStore$"></case-dropdown-control>
                     <case-dropdown-control *ngIf="hasField(caseFieldsNames.StateSecondaryId)" [field]="getField(caseFieldsNames.StateSecondaryId)" [form]="form" [dataSource]="dataSource.stateSecondariesStore$"></case-dropdown-control>
                     <case-dropdown-control *ngIf="hasField(caseFieldsNames.Project)" disabled=true [field]="getField(caseFieldsNames.Project)" [form]="form" [dataSource]="dataSource.projectsStore$"></case-dropdown-control>

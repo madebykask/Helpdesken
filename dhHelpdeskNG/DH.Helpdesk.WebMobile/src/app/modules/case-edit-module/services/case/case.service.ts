@@ -73,7 +73,7 @@ export class CaseService {
 
     private fromJsonCaseHistoryChangeModel(json) {
         return Object.assign(new CaseHistoryChangeModel(), json, {
-                //todo:review
+                // todo:review
                 createdAt: new Date(json.createdAt),
                 previousValue: this.getValue(json.previousValue),
                 currentValue:  this.getValue(json.currentValue)
@@ -81,7 +81,7 @@ export class CaseService {
     }
 
     private getValue(val) {
-      //try convert field value to date
+      // try convert field value to date
       var val = DateUtil.tryConvertToDate(val);
       return val;
     }

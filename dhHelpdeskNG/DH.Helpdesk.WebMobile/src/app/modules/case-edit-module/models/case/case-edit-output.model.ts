@@ -4,4 +4,5 @@ export class CaseEditOutputModel {
   responsibleUserId?: number;
   workingGroupId?: number;
   stateSecondaryId?: number;
+  priorityId?: number;
 }
