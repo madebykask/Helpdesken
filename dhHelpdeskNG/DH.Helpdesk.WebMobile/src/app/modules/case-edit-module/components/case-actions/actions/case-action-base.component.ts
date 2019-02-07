@@ -34,7 +34,7 @@ export class CaseActionBaseComponent<TActionData extends CaseActionDataType> {
         return iconClass + "fa-exclamation";
 
       case CaseEventType.ChangeWatchDate:
-        return iconClass + "fa-clock-o";
+        return iconClass + "fa-calendar";
 
       case CaseEventType.UploadLogFile:
         return iconClass + "fa-paperclip";
@@ -43,7 +43,7 @@ export class CaseActionBaseComponent<TActionData extends CaseActionDataType> {
         return iconClass + "fa-envelope-o";
 
       case CaseEventType.OtherChanges:
-        return iconClass + "fa-edit";
+        return iconClass + "";
 
       default:
         return iconClass + "fa-edit";

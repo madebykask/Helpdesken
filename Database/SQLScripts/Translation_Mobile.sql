@@ -163,3 +163,10 @@ insert into tbltext (id, TextString, TextType) VALUES (10023, 'Bifogad fil', @Mo
 
 If not exists (select * from tblTextTranslation where text_id = 10023 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10023, 2, 'Attached file')
+
+-- Other actions/Övriga händelser
+If not exists (select * from tbltext where id = 10024)
+insert into tbltext (id, TextString, TextType) VALUES (10024, 'Övriga händelser', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10024 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10024, 2, 'Other actions')

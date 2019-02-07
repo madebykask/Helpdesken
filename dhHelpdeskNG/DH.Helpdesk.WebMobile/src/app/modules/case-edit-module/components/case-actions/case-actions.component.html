@@ -24,7 +24,7 @@
       <!-- other actions last -->
       <div class="actions-other">
         <mbsc-form-group collapsible *ngIf="group.hasOther">
-            <mbsc-form-group-title>Other actions</mbsc-form-group-title>
+            <mbsc-form-group-title translate>Övriga händelser</mbsc-form-group-title>
             <mbsc-form-group-content>
             <mbsc-listview [swipe]="false" [enhance]="true">
                 <mbsc-listview-item *ngFor="let action of group.Actions | actionsFilter:'other';trackBy:getTrackId">

@@ -23,7 +23,7 @@ export class FieldChangeActionComponent extends CaseActionBaseComponent<CaseHist
     let currentValue = (this.data.currentValue || '').toString()
     var dateValue = moment(currentValue);
     if (dateValue.isValid())
-        return dateValue.format("L LTS");
+        return dateValue.format("L");
     
     //process as a text
     currentValue = StringUtil.convertToHtml(currentValue);
