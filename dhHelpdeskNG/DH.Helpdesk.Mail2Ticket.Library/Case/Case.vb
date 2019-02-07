@@ -298,7 +298,7 @@ Imports System.Data
         End If
 
         If Not IsDBNull(dr("AllocateCaseMail")) Then
-            msAllocateCaseMail = dr("msAllocateCaseMail")
+            msAllocateCaseMail = dr("AllocateCaseMail")
         End If
 
         miHolidayHeader_Id = dr("HolidayHeader_Id")
