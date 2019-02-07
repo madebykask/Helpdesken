@@ -4,7 +4,7 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
                where syscolumns.name = N'ShowOnMobile' and sysobjects.name = N'tblCaseSolution')
 BEGIN
     ALTER TABLE tblCaseSolution
-    ADD ShowOnMobile int NOT NULL DEFAULT(1)        
+    ADD ShowOnMobile int NOT NULL DEFAULT(0)        
 END
 GO
 
