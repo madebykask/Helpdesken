@@ -76,7 +76,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                 SessionFacade.FindPageFilters<ServerSearchFilter>(ServerSearchFilter.CreateFilterId()) ?? 
                 ServerSearchFilter.CreateDefault();
 
-            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
 
             var viewModel = new ServerSearchViewModel((int) CurrentModes.Servers, inventoryTypes, currentFilter)
             {
@@ -127,7 +127,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public ViewResult Edit(int id, bool dialog = false)
         {
-            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
             var readOnly = !userHasInventoryAdminPermission && dialog;
 
             ServerForRead model = this.inventoryService.GetServer(id);

@@ -920,7 +920,7 @@
                                             <td>
                                                 @if (Model.CustomerSettings.ModuleInventory)
                                                 {
-                                                    <a id="ShowInventoryBtn" title="@Translation.GetCoreTextTranslation("Visa inventarie")" class="btn show-inventory"
+                                                    <a id="ShowInventoryBtn" title="@Translation.GetCoreTextTranslation("Visa inventarie")" class="btn show-inventory @(Model.UserHasInventoryViewPermission ? "" : "disabled")"
                                                        style='@(!string.IsNullOrEmpty(Model.case_.InventoryNumber) ? string.Empty : "display: none")'>
                                                         <i class="icon-th-large"></i>
                                                     </a>

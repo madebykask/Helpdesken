@@ -103,27 +103,29 @@ $(function () {
     */
 
     $("a.btn.show-inventory").on("click", function (e) {
-        $.ajax({
-            url: window.parameters.casesScopeInitParameters.getInventoryUrl,
-            type: "POST",
-            async: false,
-            data:
-            {
-                inventoryName: $("#case__InventoryNumber").val()
-            },
-            success: function (result) {
-                if (result && result.success) {
-                    var newWindow = window.open("", "_blank", "width=1400,height=600,menubar=no,toolbar=no,location=no,status=no,left=100,top=100,scrollbars=yes,resizable=yes");
-                    var url = result.url;
-                    newWindow.location.href = url;
-                } else {
+        if (window.parameters.user.hasInventoryViewPermission == "True") {
+            $.ajax({
+                url: window.parameters.casesScopeInitParameters.getInventoryUrl,
+                type: "POST",
+                async: false,
+                data:
+                {
+                    inventoryName: $("#case__InventoryNumber").val()
+                },
+                success: function (result) {
+                    if (result && result.success) {
+                        var newWindow = window.open("", "_blank", "width=1400,height=600,menubar=no,toolbar=no,location=no,status=no,left=100,top=100,scrollbars=yes,resizable=yes");
+                        var url = result.url;
+                        newWindow.location.href = url;
+                    } else {
+                        ShowToastMessage(window.parameters.noResultLabel, "warning");
+                    }
+                },
+                error: function () {
                     ShowToastMessage(window.parameters.noResultLabel, "warning");
                 }
-            },
-            error: function () {
-                ShowToastMessage(window.parameters.noResultLabel, "warning");
-            }
-        });
+            });
+        }
     });
 
     if (!window.dhHelpdesk) {

@@ -68,7 +68,8 @@ $(function () {
         bulletinBoardPermission: 'bulletinBoardPermission',
         invoicePermission: 'invoicePermission',
         documentPermission: 'documentPermission',
-        inventoryPermission: 'inventoryPermission',
+        inventoryAdminPermission: 'inventoryAdminPermission',
+        inventoryViewPermission: 'inventoryViewPermission',
         contractPermission: 'contractPermission',
         caseUnlockPermission: 'caseUnlockPermission',
         caseInternalLogPermission: 'caseInternalLogPermission',
@@ -160,7 +161,8 @@ $(function () {
         var bulletinBoardPermissions = spec.bulletinBoardPermissions || [];
         var invoicePermissions = spec.invoicePermissions || [];
         var documentPermissions = spec.documentPermissions || [];
-        var inventoryPermissions = spec.inventoryPermissions || [];
+        var inventoryAdminPermissions = spec.inventoryAdminPermissions || [];
+        var inventoryViewPermissions = spec.inventoryViewPermissions || [];
         var contractPermissions = spec.contractPermissions || [];
         var caseUnlockPermissions = spec.caseUnlockPermissions || [];
         var caseInternalLogPermissions = spec.caseInternalLogPermissions || [];
@@ -180,7 +182,8 @@ $(function () {
                             bulletinBoardPermissions,
                             invoicePermissions,
                             documentPermissions,
-                            inventoryPermissions,
+                            inventoryAdminPermissions,
+                            inventoryViewPermissions,
                             contractPermissions,
                             caseUnlockPermissions,
                             caseInternalLogPermissions,
@@ -332,8 +335,12 @@ $(function () {
             return documentPermissions;
         }
 
-        var getInventoryPermissions = function () {
-            return inventoryPermissions;
+        var getInventoryAdminPermissions = function () {
+            return inventoryAdminPermissions;
+        }
+
+        var getInventoryViewPermissions = function () {
+            return inventoryViewPermissions;
         }
 
         var getContractPermissions = function () {
@@ -362,7 +369,8 @@ $(function () {
         that.getBulletinBoardPermissions = getBulletinBoardPermissions;
         that.getInvoicePermissions = getInvoicePermissions;
         that.getDocumentPermissions = getDocumentPermissions;
-        that.getInventoryPermissions = getInventoryPermissions;
+        that.getInventoryAdminPermissions = getInventoryAdminPermissions;
+        that.getInventoryViewPermissions = getInventoryViewPermissions;
         that.getContractPermissions = getContractPermissions;
         that.getCaseUnlockPermissions = getCaseUnlockPermissions;
         that.getCaseInternalLogPermissions = getCaseInternalLogPermissions;
@@ -560,8 +568,12 @@ $(function () {
         var documentPermissions = [];
         documentPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="documentPermission"]'), type: dhHelpdesk.admin.users.permissionType.documentPermission }));
 
-        var inventoryPermissions = [];
-        inventoryPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="inventoryPermission"]'), type: dhHelpdesk.admin.users.permissionType.inventoryPermission }));
+        var inventoryAdminPermissions = [];
+        inventoryAdminPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="inventoryAdminPermission"]'), type: dhHelpdesk.admin.users.permissionType.inventoryAdminPermission }));
+
+        var inventoryViewPermissions = [];
+        inventoryViewPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="inventoryViewPermission"]'), type: dhHelpdesk.admin.users.permissionType.inventoryViewPermission }));
+
 
         var contractPermissions = [];
         contractPermissions.push(dhHelpdesk.admin.users.permission({ element: $('[data-field="contractPermission"]'), type: dhHelpdesk.admin.users.permissionType.contractPermission }));
@@ -587,7 +599,8 @@ $(function () {
             bulletinBoardPermissions: bulletinBoardPermissions,
             invoicePermissions: invoicePermissions,
             documentPermissions: documentPermissions,
-            inventoryPermissions: inventoryPermissions,
+            inventoryAdminPermissions: inventoryAdminPermissions,
+            inventoryViewPermissions: inventoryViewPermissions,
             contractPermissions: contractPermissions,
             caseUnlockPermissions: caseUnlockPermissions,
             caseInternalLogPermissions: caseInternalLogPermissions,
@@ -621,6 +634,23 @@ $(function () {
         var getUser = function() {
             return user;
         }
+
+        var showInventoryAdminPermission = function(show)
+        {
+            var q = $('.inventoryAdminPermissionRow');
+            if (show) {
+                q.show();
+            }
+            else {
+                q.hide();
+            }
+                
+        }
+
+        $('input[name="User.InventoryViewPermission"]').change(function () {
+            var show = this.checked;
+            showInventoryAdminPermission(show);
+        });
 
         that.getUser = getUser;
 

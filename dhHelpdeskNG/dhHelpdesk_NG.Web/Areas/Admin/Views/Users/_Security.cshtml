@@ -319,13 +319,21 @@
             </td>
         </tr>
         <tr>
+            <td>@Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)</td>
             <td>
-                @Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)
+                <input data-field="inventoryViewPermission" type="checkbox" name="User.InventoryViewPermission" @(Model.User.InventoryViewPermission == 1 ? "checked=checked" : "") value="1" />
+                <input type="hidden" name="User.InventoryViewPermission" value="0" />
+                &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att visa inventarier", Enums.TranslationSource.TextTranslation)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                
             </td>
             <td>
-                <input data-field="inventoryPermission" type="checkbox" name="User.InventoryPermission" @(Model.User.InventoryPermission == 1 ? "checked=checked" : "") value="1"/>
-                <input type="hidden" name="User.InventoryPermission" value="0" />
-                &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera inventarier", Enums.TranslationSource.TextTranslation)
+                <input class="inventoryAdminPermissionRow" "style="@(Model.User.InventoryViewPermission == 1 ? "" : "display: none")" data-field="inventoryAdminPermission" type="checkbox" name="User.InventoryPermission" @(Model.User.InventoryPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input class="inventoryAdminPermissionRow" style="@(Model.User.InventoryViewPermission == 1 ? "" : "display: none")" type="hidden" name="User.InventoryPermission" value="0" />
+                <span class="inventoryAdminPermissionRow">&nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera inventarier", Enums.TranslationSource.TextTranslation)</span>&nbsp;
             </td>
         </tr>
         <tr>

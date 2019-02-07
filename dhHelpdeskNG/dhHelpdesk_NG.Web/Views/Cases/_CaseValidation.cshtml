@@ -151,6 +151,10 @@
             getInventoryUrl: '@Url.Action("GetInventoryUrlByName", "InventoryRouting", new {  area = "Inventory" })',
             initiatorDetailsUrl: '@Url.Action("NotifierPopup", "Notifiers")',
             checkInitiatorUrl: '@Url.Action("GetNotifierInfo", "Notifiers")'
+        },
+
+        user: {
+            hasInventoryViewPermission: '@Model.UserHasInventoryViewPermission'
         }
     };
 

@@ -4651,9 +4651,10 @@ namespace DH.Helpdesk.Web.Controllers
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
 
             var userHasInvoicePermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InvoicePermission);
+			var userHasInventoryViewPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryViewPermission);
 
-            // Establish current solution and set split option if available
-            CaseSolution caseTemplate = null;
+			// Establish current solution and set split option if available
+			CaseSolution caseTemplate = null;
             if (templateId.HasValue)
             {
                 caseTemplate = _caseSolutionService.GetCaseSolution(templateId.Value);
@@ -5851,7 +5852,8 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.InsideTheCase);
             m.CasePrintView = new ReportModel(false);
             m.UserHasInvoicePermission = userHasInvoicePermission;
-            m.IsCaseReopened = m.case_.CaseHistories != null && m.case_.CaseHistories.Where(ch => ch.FinishingDate.HasValue).Any();
+			m.UserHasInventoryViewPermission = userHasInventoryViewPermission;
+			m.IsCaseReopened = m.case_.CaseHistories != null && m.case_.CaseHistories.Where(ch => ch.FinishingDate.HasValue).Any();
 
             m.StatusBar = isCreateNewCase ? new Dictionary<string, string>() : GetStatusBar(m);
 

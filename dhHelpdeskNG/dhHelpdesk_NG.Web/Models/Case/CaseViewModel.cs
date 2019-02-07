@@ -144,10 +144,12 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public bool UserHasInvoicePermission { get; set; }
 
-        /// <summary>
-        /// user id for "Administrator" field
-        /// </summary>
-        public int Performer_Id { get; set; }
+		public bool UserHasInventoryViewPermission { get; set; }
+
+		/// <summary>
+		/// user id for "Administrator" field
+		/// </summary>
+		public int Performer_Id { get; set; }
 
         /// <summary>
         /// Available  "Adminstrators" for the case

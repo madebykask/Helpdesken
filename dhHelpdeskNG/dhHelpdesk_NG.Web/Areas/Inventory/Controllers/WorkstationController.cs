@@ -9,40 +9,41 @@ using DH.Helpdesk.Web.Models.Shared;
 
 namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Web;
-    using System.Web.Mvc;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Net;
+	using System.Web;
+	using System.Web.Mvc;
 
-    using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
-    using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport;
-    using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
-    using DH.Helpdesk.Services.Response.Inventory;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Services.Services.Concrete;
-    using DH.Helpdesk.Web.Areas.Inventory.Models;
-    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel;
-    using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer;
-    using DH.Helpdesk.Web.Areas.Inventory.Models.OptionsAggregates;
-    using DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels;
-    using DH.Helpdesk.Web.Enums.Inventory;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.ActionFilters;
-    using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory;
-    using DH.Helpdesk.Web.Infrastructure.Extensions;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory;
-    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
-    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
-    using Dal.Enums;
+	using DH.Helpdesk.BusinessData.Models.Inventory.Edit.Computer;
+	using DH.Helpdesk.BusinessData.Models.Inventory.Output;
+	using DH.Helpdesk.BusinessData.Models.Inventory.Output.Computer;
+	using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelEdit.ComputerSettings;
+	using DH.Helpdesk.BusinessData.Models.Inventory.Output.Settings.ModelOverview.ComputerFieldSettings;
+	using DH.Helpdesk.BusinessData.Models.Shared;
+	using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport;
+	using DH.Helpdesk.Services.BusinessLogic.BusinessModelExport.ExcelExport;
+	using DH.Helpdesk.Services.Response.Inventory;
+	using DH.Helpdesk.Services.Services;
+	using DH.Helpdesk.Services.Services.Concrete;
+	using DH.Helpdesk.Web.Areas.Inventory.Models;
+	using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel;
+	using DH.Helpdesk.Web.Areas.Inventory.Models.EditModel.Computer;
+	using DH.Helpdesk.Web.Areas.Inventory.Models.OptionsAggregates;
+	using DH.Helpdesk.Web.Areas.Inventory.Models.SearchModels;
+	using DH.Helpdesk.Web.Enums.Inventory;
+	using DH.Helpdesk.Web.Infrastructure;
+	using DH.Helpdesk.Web.Infrastructure.ActionFilters;
+	using DH.Helpdesk.Web.Infrastructure.BusinessModelFactories.Inventory;
+	using DH.Helpdesk.Web.Infrastructure.Extensions;
+	using DH.Helpdesk.Web.Infrastructure.ModelFactories.Inventory;
+	using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+	using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
+	using DH.Helpdesk.BusinessData.Enums.Admin.Users;
+	using Dal.Enums;
+	using Infrastructure.Attributes;
 
-    public class WorkstationController : InventoryBaseController
+	public class WorkstationController : InventoryBaseController
     {
         private readonly IInventoryService _inventoryService;
         private readonly IInventorySettingsService _inventorySettingsService;
@@ -77,7 +78,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpGet]
-        public ViewResult Index()
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public ViewResult Index()
         {
             var inventoryTypes = 
                 _inventoryService.GetInventoryTypes(SessionFacade.CurrentCustomer.Id, true, CreateInventoryTypeSeparatorItem());
@@ -99,7 +101,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                     SessionFacade.CurrentLanguageId);
 
             var userHasInventoryAdminPermission = 
-                _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+                _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
 
             var viewModel = WorkstationSearchViewModel.BuildViewModel(
                 currentFilter,
@@ -116,7 +118,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
-        public PartialViewResult WorkstationsGrid(WorkstationsSearchFilter filter)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public PartialViewResult WorkstationsGrid(WorkstationsSearchFilter filter)
         {
             SessionFacade.SavePageFilters(WorkstationsSearchFilter.CreateFilterId(), filter);
             filter.RecordsCount = SearchFilter.RecordsOnPage;
@@ -126,7 +129,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit(int id, bool dialog = false, string userId = null)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public ActionResult Edit(int id, bool dialog = false, string userId = null)
         {
             var tabSettings = _inventorySettingsService.GetWorkstationTabsSettingsForEdit(
                 SessionFacade.CurrentCustomer.Id,
@@ -135,7 +139,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
            // if (!tabSettings.ComputersTabSetting.Show)
           //      return RedirectToTab(tabSettings.ComputersTabSetting, tabSettings, id, dialog, userId);
 
-            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
             var readOnly = !userHasInventoryAdminPermission && dialog;
             var model = this._inventoryService.GetWorkstation(id);
 
@@ -163,7 +167,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpPost]
-        public JsonResult UploadFile(string id, string name)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public JsonResult UploadFile(string id, string name)
         {
             var fileName = Uri.UnescapeDataString(name);
 
@@ -188,7 +193,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteFile(string id, string name)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public ActionResult DeleteFile(string id, string name)
         {
             var fileName = Uri.UnescapeDataString(name);
             if (GuidHelper.IsGuid(id))
@@ -206,7 +212,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         //Workstantion/DownloadFile?id=<guid>&fileName=dfdf.jpg
         //Workstantion/DownloadFile?id=id
         [HttpGet]
-        public ActionResult DownloadFile(string id, string name)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public ActionResult DownloadFile(string id, string name)
         {
             var fileName = Uri.UnescapeDataString(name);
             
@@ -237,7 +244,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public RedirectToRouteResult Edit(ComputerViewModel computerViewModel)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public RedirectToRouteResult Edit(ComputerViewModel computerViewModel)
         {
             ComputerForUpdate businessModel = this._computerBuilder.BuildForUpdate(computerViewModel, OperationContext);
             this._inventoryService.UpdateWorkstation(businessModel, this.OperationContext);
@@ -253,7 +261,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpGet]
-        public ViewResult New()
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public ViewResult New()
         {
             ComputerEditOptions options = this.GetWorkstationEditOptions(SessionFacade.CurrentCustomer.Id);
             ComputerFieldsSettingsForModelEdit settings =
@@ -271,7 +280,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public RedirectToRouteResult New(ComputerViewModel computerViewModel)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public RedirectToRouteResult New(ComputerViewModel computerViewModel)
         {
             var computerFile = LoadTempFile(computerViewModel.DocumentFileKey); 
             var businessModel = _computerBuilder.BuildForAdd(computerViewModel, this.OperationContext, computerFile);
@@ -301,7 +311,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult Delete(int id)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public RedirectToRouteResult Delete(int id)
         {
             this._inventoryService.DeleteWorkstation(id);
 
@@ -349,7 +360,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpGet]
-        public ActionResult HotFixes(int computerId, bool dialog = false, string userId = null)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public ActionResult HotFixes(int computerId, bool dialog = false, string userId = null)
         {
             var tabSettings = _inventorySettingsService.GetWorkstationTabsSettingsForEdit(
                 SessionFacade.CurrentCustomer.Id,
@@ -369,14 +381,15 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpGet]
-        public ActionResult ComputerLogs(int computerId, bool dialog = false, string userId = null)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public ActionResult ComputerLogs(int computerId, bool dialog = false, string userId = null)
         {
             var tabSettings = _inventorySettingsService.GetWorkstationTabsSettingsForEdit(
                 SessionFacade.CurrentCustomer.Id,
                 SessionFacade.CurrentLanguageId);
             if (!tabSettings.ComputerLogsTabSetting.Show) return RedirectToTab(tabSettings.ComputerLogsTabSetting, tabSettings, computerId, dialog, userId);
 
-            var userHasInventoryAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var userHasInventoryAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
 
             var models = this._inventoryService.GetWorkstationLogOverviews(computerId);
 
@@ -393,14 +406,16 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
 
         [HttpPost]
         [BadRequestOnNotValid]
-        public RedirectToRouteResult NewComputerLog(ComputerLogModel computerLogModel)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public RedirectToRouteResult NewComputerLog(ComputerLogModel computerLogModel)
         {
             this._inventoryService.AddComputerLog(computerLogModel.CreateBusinessModel());
             return this.RedirectToAction("ComputerLogs", new { computerId = computerLogModel.ComputerId, dialog = computerLogModel.IsForDialog, userId = computerLogModel.UserId });
         }
 
         [HttpGet]
-        public RedirectToRouteResult DeleteComputerLog(int logId, int computerId, bool dialog = false, string userId = null)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public RedirectToRouteResult DeleteComputerLog(int logId, int computerId, bool dialog = false, string userId = null)
         {
             this._inventoryService.DeleteComputerLog(logId);
 
@@ -408,7 +423,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpGet]
-        public ActionResult Accessories(int computerId, bool dialog = false, string userId = null)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public ActionResult Accessories(int computerId, bool dialog = false, string userId = null)
         {
             var tabSettings = _inventorySettingsService.GetWorkstationTabsSettingsForEdit(
                 SessionFacade.CurrentCustomer.Id,
@@ -433,7 +449,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
                                                      computerId)
                                                  : new List<ItemOverview>();
 
-            var userHasInventoryAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var userHasInventoryAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
 
             var viewModel = AccesoriesViewModel.BuildViewModel(
                 computerId,
@@ -462,7 +478,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult ConnectInventoryToComputer(int? inventoryId, int computerId, bool dialog = false, string userId = null)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public RedirectToRouteResult ConnectInventoryToComputer(int? inventoryId, int computerId, bool dialog = false, string userId = null)
         {
             if (!inventoryId.HasValue)
             {
@@ -475,7 +492,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpGet]
-        public RedirectToRouteResult DeleteInventoryFromComputer(int computerId, int inventoryId, bool dialog = false, string userId = null)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public RedirectToRouteResult DeleteInventoryFromComputer(int computerId, int inventoryId, bool dialog = false, string userId = null)
         {
             this._inventoryService.RemoveInventoryFromComputer(inventoryId, computerId);
 
@@ -571,7 +589,8 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         }
 
         [HttpGet]
-        public ActionResult RelatedInventoryFull(string userId)
+		[UserPermissions(UserPermission.InventoryViewPermission)]
+		public ActionResult RelatedInventoryFull(string userId)
         {
             var sortField = new SortFieldModel
             {

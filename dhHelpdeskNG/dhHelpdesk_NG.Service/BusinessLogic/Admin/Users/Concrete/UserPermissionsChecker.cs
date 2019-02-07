@@ -134,8 +134,13 @@
 
             if (user.InventoryPermission.ToBool())
             {
-                permissions.Add(UserPermission.InventoryPermission);
+                permissions.Add(UserPermission.InventoryAdminPermission);
             }
+
+			if (user.InventoryViewPermission.ToBool())
+			{
+				permissions.Add(UserPermission.InventoryViewPermission);
+			}
 
             if (user.ContractPermission.ToBool())
             {
