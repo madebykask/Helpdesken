@@ -10,7 +10,8 @@ namespace DH.Helpdesk.Dal.Infrastructure
     public interface IRepository<T> where T : class
     {
         void Add(T entity);
-        void AddText(T entity);
+        void AddRange(IEnumerable<T> entities);
+        void AddText(T entity); //what is that?!
         void Update(T entity);
         void Delete(T entity);
         void Delete(Expression<Func<T, bool>> where);

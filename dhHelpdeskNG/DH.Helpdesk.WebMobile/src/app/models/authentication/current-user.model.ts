@@ -1,4 +1,4 @@
-import { UuidGenerator } from "../../helpers/uuid-generator";
+import { UuidGenerator } from "src/app/modules/shared-module/Utils/uuid-generator";
 
 export class CurrentUser {
     

@@ -1861,34 +1861,49 @@ namespace DH.Helpdesk.SelfService.Controllers
             return result;
         }
 
-        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog, out decimal caseNumber)
+        private int Save(Case newCase, 
+                CaseMailSetting caseMailSetting, 
+                string caseFileKey, 
+                string followerUsers,
+                CaseLog caseLog, 
+                out decimal caseNumber)
         {
             IDictionary<string, string> errors;
-            caseNumber = 0;
+            var utcNow = DateTime.UtcNow;
+
             // save case and case history
             if (newCase.User_Id <= 0)
                 newCase.User_Id = null;
 
-            var mailSenders = new MailSenders();
-            mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
+            var mailSenders = new MailSenders
+            {
+                SystemEmail = caseMailSetting.HelpdeskMailFromAdress
+            };
+
             if (newCase.WorkingGroup_Id.HasValue)
             {
-                var curWG = _workingGroupService.GetWorkingGroup(newCase.WorkingGroup_Id.Value);
-                if (curWG != null)
-                    if (!string.IsNullOrWhiteSpace(curWG.EMail) && _emailService.IsValidEmail(curWG.EMail))
-                        mailSenders.WGEmail = curWG.EMail;
+                var workingGroup = _workingGroupService.GetWorkingGroup(newCase.WorkingGroup_Id.Value);
+                if (!string.IsNullOrWhiteSpace(workingGroup?.EMail) && _emailService.IsValidEmail(workingGroup.EMail))
+                    mailSenders.WGEmail = workingGroup.EMail;
             }
 
             caseMailSetting.CustomeMailFromAddress = mailSenders;
 
             var basePath = _masterDataService.GetFilePath(newCase.Customer_Id);
             newCase.LatestSLACountDate = CalculateLatestSLACountDate(newCase.StateSecondary_Id);
-            var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.SelfService5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0};
+
+            var ei = new CaseExtraInfo()
+            {
+                CreatedByApp = CreatedByApplications.SelfService5,
+                LeadTimeForNow = 0,
+                ActionLeadTime = 0,
+                ActionExternalTime = 0
+            };
 
             if (newCase.Urgency_Id.HasValue && newCase.Impact_Id.HasValue)
             {
-                var prio_Impact_Urgent = _urgencyService.GetPriorityImpactUrgencies(newCase.Customer_Id);
-                var prioInfo = prio_Impact_Urgent.FirstOrDefault(p=> p.Impact_Id == newCase.Impact_Id && p.Urgency_Id == newCase.Urgency_Id);
+                var priorityImpactUrgencies = _urgencyService.GetPriorityImpactUrgencies(newCase.Customer_Id);
+                var prioInfo = priorityImpactUrgencies.FirstOrDefault(p=> p.Impact_Id == newCase.Impact_Id && p.Urgency_Id == newCase.Urgency_Id);
                 if (prioInfo != null)
                 {
                     newCase.Priority_Id = prioInfo.Priority_Id;
@@ -1911,15 +1926,13 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             if (newCase.Department_Id.HasValue && newCase.Priority_Id.HasValue)
             {
-                var dept = this._departmentService.GetDepartment(newCase.Department_Id.Value);
-                var priority = this._priorityService.GetPriorities(newCase.Customer_Id).Where(it => it.Id == newCase.Priority_Id && it.IsActive == 1).FirstOrDefault();
+                var dept = _departmentService.GetDepartment(newCase.Department_Id.Value);
+                var priority = _priorityService.GetPriorities(newCase.Customer_Id).Where(it => it.Id == newCase.Priority_Id && it.IsActive == 1).FirstOrDefault();
 
                 if (dept != null && dept.WatchDateCalendar_Id.HasValue && priority != null && priority.SolutionTime == 0)
                 {
-                    newCase.WatchDate =
-                    this._watchDateCalendarService.GetClosestDateTo(
-                    dept.WatchDateCalendar_Id.Value,
-                    DateTime.UtcNow);
+                    newCase.WatchDate = 
+                        _watchDateCalendarService.GetClosestDateTo(dept.WatchDateCalendar_Id.Value, utcNow);
                 }
             }
 
@@ -1941,11 +1954,13 @@ namespace DH.Helpdesk.SelfService.Controllers
                         newCase.Performer_User_Id = caseType.User_Id;
                     }
                 }
-
             }
 
             var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0; 
-            int caseHistoryId = _caseService.SaveCase(newCase, caseLog, localUserId, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
+
+            // SAVE CASE:
+            var caseHistoryId = 
+                _caseService.SaveCase(newCase, caseLog, localUserId, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
 
             // save log
             caseLog.CaseId = newCase.Id;
@@ -1957,20 +1972,21 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (string.IsNullOrWhiteSpace(caseLog.RegUser))
                 caseLog.RegUser = SessionFacade.CurrentUserIdentity?.UserId ?? string.Empty;
 
-            caseLog.Id = this._logService.SaveLog(caseLog, 0, out errors);
+            caseLog.Id = _logService.SaveLog(caseLog, 0, out errors);
 
             // save case files
             SaveCaseFiles(caseFileKey, newCase.Customer_Id, newCase.Id, localUserId);
 
             var oldCase = new Case();            
+            
             // send emails
             var userTimeZone = TimeZoneInfo.Local;
 
             //save extra followers            
             if (!string.IsNullOrEmpty(followerUsers))
             {
-                var _followerUsers = followerUsers.Split(EMAIL_SEPARATOR, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
-                _caseExtraFollowersService.SaveExtraFollowers(newCase.Id, _followerUsers, null);
+                var extraFollowers = followerUsers.Split(EMAIL_SEPARATOR, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
+                _caseExtraFollowersService.SaveExtraFollowers(newCase.Id, extraFollowers, null);
             }
 
             _caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase);

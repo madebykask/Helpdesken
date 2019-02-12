@@ -1,14 +1,12 @@
-import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
-import { CaseLogApiService } from '../../services/api/case/case-log-api.service';
 import { forkJoin, Subject, Subscription, of, throwError } from 'rxjs';
-import { switchMap, take, finalize, tap, delay, catchError, map, takeUntil, } from 'rxjs/operators';
+import { switchMap, take, finalize, delay, catchError, map, takeUntil, takeWhile, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, Channels, DropdownValueChangedEvent } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/header-event-data';
-import { interval } from 'rxjs';
 import { AuthenticationStateService } from 'src/app/services/authentication';
 import { WorkingGroupsService } from 'src/app/services/case-organization/workingGroups-service';
 import { WorkingGroupInputModel } from 'src/app/models/workinggroups/workingGroup-input.model';
@@ -21,12 +19,13 @@ import { CaseEditDataHelper } from '../../logic/case-edit/case-editdata.helper';
 import { CaseFieldsNames, CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { CaseLockApiService } from '../../services/api/case/case-lock-api.service';
 import { CaseSaveService } from '../../services/case';
-import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel, CaseLockModel, BaseCaseField, CaseAction, GenericActionData, CaseEventType, CaseHistoryActionData, CaseLogActionData, CaseActionDataType } from '../../models';
+import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel, CaseLockModel, BaseCaseField, CaseAction, CaseActionDataType } from '../../models';
 import { OptionItem } from 'src/app/modules/shared-module/models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseLogModel } from '../../models/case/case-actions-api.model';
 import { CaseWatchDateApiService } from '../../services/api/case/case-watchDate-api.service';
+import { CaseFilesApiService } from '../../services/api/case/case-files-api.service';
 
 @Component({
   selector: 'app-case-edit',
@@ -36,11 +35,11 @@ import { CaseWatchDateApiService } from '../../services/api/case/case-watchDate-
 export class CaseEditComponent {
     caseSectionTypes = CaseSectionType;
     caseFieldsNames = CaseFieldsNames;
-    accessModeEnum = CaseAccessMode
+    accessModeEnum = CaseAccessMode;
     dataSource: CaseDataStore;
     isLoaded = false;
     form: FormGroup;
-    caseKey:string = '';
+    caseKey:string;
     
     titleTabsSettings = {
       display:"top"
@@ -56,17 +55,17 @@ export class CaseEditComponent {
     caseActions: CaseAction<CaseActionDataType>[] = [];
 
     private searchType: CasesSearchType = CasesSearchType.AllCases;
-    private caseId: number;
+    private caseId: number = 0;
     private caseData: CaseEditInputModel;
     private caseSections: CaseSectionInputModel[];
     private ownsLock = false;
     private destroy$ = new Subject();
-    private caseLockIntervalSub: Subscription = null;
     private caseLock: CaseLockModel = null;
 
     constructor(private route: ActivatedRoute,
                 private caseService: CaseService,
                 private router: Router,
+                private formBuilder:FormBuilder,
                 private caseLockApiService: CaseLockApiService,
                 private authStateService:AuthenticationStateService,
                 private caseDataHelpder: CaseEditDataHelper,
@@ -78,7 +77,8 @@ export class CaseEditComponent {
                 private stateSecondariesService: StateSecondariesService,
                 private caseWatchDateApiService: CaseWatchDateApiService,
                 private translateService : TranslateService,
-                private localStorage:  LocalStorageService) {
+                private localStorage:  LocalStorageService,
+                private caseFileService: CaseFilesApiService) {
         if (this.route.snapshot.paramMap.has('id')) {
             this.caseId = +this.route.snapshot.paramMap.get('id');
         } else {
@@ -86,10 +86,10 @@ export class CaseEditComponent {
         }
 
         this.commService.listen(Channels.DropdownValueChanged).pipe(
-          switchMap((v: DropdownValueChangedEvent) => {
+          map((v: DropdownValueChangedEvent) => {
             const reducer = this.сaseDataReducersFactory.createCaseDataReducers(this.dataSource);
             this.runUpdates(reducer, v);
-            return of(v);
+            return v;
           }),
           takeUntil(this.destroy$)
         ).subscribe();
@@ -104,9 +104,9 @@ export class CaseEditComponent {
           let perfomers$ = optionsHelper.getPerformers(false);
           perfomers$.pipe(
             take(1),
-            switchMap((o: OptionItem[]) => {
+            map((o: OptionItem[]) => {
                 reducer.caseDataReducer(CaseFieldsNames.PerformerUserId, { items: o});
-                return of(o);
+                return o;
               }),
             takeUntil(this.destroy$)
           ).subscribe();
@@ -114,11 +114,11 @@ export class CaseEditComponent {
           if (!!v.value && this.form.contains(CaseFieldsNames.StateSecondaryId)) {
             this.workingGroupsService.getWorkingGroup(v.value)
             .pipe(
-              switchMap((wg: WorkingGroupInputModel) => {
+              map((wg: WorkingGroupInputModel) => {
                 if (wg.stateSecondaryId != null) {
                   this.form.controls[CaseFieldsNames.StateSecondaryId].setValue(wg.stateSecondaryId);
                 }
-                return of(wg);
+                return wg;
               }),
               takeUntil(this.destroy$)
             ).subscribe();
@@ -159,11 +159,8 @@ export class CaseEditComponent {
     }
 
     ngOnDestroy() {
-        this.commService.publish(Channels.Header, new HeaderEventData(true));
-
-        if (this.caseLockIntervalSub) {
-            this.caseLockIntervalSub.unsubscribe();
-        }
+        this.ownsLock = false;
+        this.commService.publish(Channels.Header, new HeaderEventData(true));        
 
         // unlock the case if required
         if (this.caseId > 0 && this.ownsLock) {
@@ -172,26 +169,25 @@ export class CaseEditComponent {
 
         // shall we do extra checks?
         this.alertService.clearMessages();
-
         this.destroy$.next();
         this.destroy$.complete();
-    }
+    }    
 
     loadCaseData(): any {
       this.isLoaded = false;
       const sessionId = this.authStateService.getUser().authData.sessionId;
 
       const caseLock$ = this.caseLockApiService.acquireCaseLock(this.caseId, sessionId);
-      const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
-      // const caseActions$ = this.caseService.getCaseActions(this.caseId);
+      const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling     
 
       // todo: apply search type (all, my cases)
       const caseData$ =
           this.caseService.getCaseData(this.caseId)
               .pipe(
-                  switchMap(data => { // TODO: Error handle
+                  switchMap(data => {
                     this.ownsLock = false;
                     this.caseData = data;
+                    this.caseKey = this.caseData.id > 0 ? this.caseData.id.toString() : this.caseData.caseGuid.toString();
                     const filter = 
                         this.caseDataHelpder.getCaseOptionsFilter(this.caseData, 
                             (name: string) => this.caseDataHelpder.getValue(this.caseData, name));
@@ -209,17 +205,10 @@ export class CaseEditComponent {
                   this.caseLock = caseLock;  
                   this.caseSections = sectionData;
                   this.dataSource = new CaseDataStore(options);
+                  
                   this.initLock();
-
                   this.processCaseData();
-              });
-              this.caseService.getCaseActions(this.caseId).pipe(
-                take(1),
-                catchError((e) => throwError(e))
-              )
-              .subscribe(caseActions => {
-                this.caseActions = caseActions;
-              })
+              });              
   }
 
     getCaseTitle() : string {
@@ -242,7 +231,7 @@ export class CaseEditComponent {
       if(url == null) return;
       of(true).pipe(
         delay(200),
-        switchMap(() => of(this.router.navigate([url]))),
+        map(() => this.router.navigate([url])),
         take(1)
       ).subscribe();
     }
@@ -268,7 +257,7 @@ export class CaseEditComponent {
         return;
       }
       this.isLoaded = false;
-      this.caseSaveService.saveCase(this.form, this.caseId)
+      this.caseSaveService.saveCase(this.form, this.caseData)
         .pipe(
           //catchError()
         ).subscribe(() => {
@@ -299,9 +288,29 @@ export class CaseEditComponent {
     }
 
     private processCaseData() {
-      this.caseKey = this.caseData.id > 0 ? this.caseData.id.toString() : this.caseData.caseGuid.toString();
-      this.form = this.createFormGroup(this.caseData);
-    }    
+      this.form = this.createFormGroup(this.caseData);      
+      
+      //run only for existing case 
+      if (this.caseId > 0) {
+          this.loadCaseActions();
+          this.cleanTempFiles(this.caseId);
+      }
+    } 
+
+    cleanTempFiles(caseId:number) {
+      this.caseFileService.deleteTemplFiles(caseId).pipe(
+        take(1)
+      ).subscribe();
+    }
+    
+    private loadCaseActions() {
+      this.caseService.getCaseActions(this.caseId).pipe(
+        take(1),
+        catchError((e) => throwError(e))
+      ).subscribe(caseActions => {        
+        this.caseActions = caseActions;
+      });
+    }
 
     private get caseAccessMode(): CaseAccessMode {
       return this.caseData.editMode;
@@ -321,7 +330,6 @@ export class CaseEditComponent {
           disabled: !this.canSave
         }, validators);
     });
-
     return new FormGroup(controls);
   }
 
@@ -341,20 +349,15 @@ export class CaseEditComponent {
           this.alertService.showMessage(notice, AlertType.Warning);
       } else if (this.caseLock.timerInterval > 0) {
           // run extend case lock at specified interval
-          this.caseLockIntervalSub =
-              interval(this.caseLock.timerInterval * 1000).pipe(
-                switchMap(x => {
-                  return this.caseLockApiService.reExtendedCaseLock(this.caseId, this.caseLock.lockGuid, this.caseLock.extendValue);
-                },
-                // catchError(err => {})// TODO:
-                )
+          /*interval(this.caseLock.timerInterval * 1000).pipe(
+                takeWhile(x => this.ownsLock)
+            ).subscribe(_ => {
+              this.caseLockApiService.reExtendedCaseLock(this.caseId, this.caseLock.lockGuid, this.caseLock.extendValue).pipe(
+                take(1)
               ).subscribe(res => {
-                  if (res === false) {
-                      this.ownsLock = false;
-                      this.caseLockIntervalSub.unsubscribe();
-                      this.caseLockIntervalSub = null;
-                  }
+                  if (!res) this.ownsLock = false;
               });
+            });*/
       }
     }
   }

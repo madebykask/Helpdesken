@@ -1,35 +1,34 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CaseAction, CaseActionsGroup, CaseLogActionData, CaseHistoryActionData, CaseActionDataType } from '../../models';
 import { AuthenticationStateService } from 'src/app/services/authentication';
 
 @Component({
   selector: 'case-actions',
   templateUrl: './case-actions.component.html',
-  styleUrls: ['./case-actions.component.scss']
+  styleUrls: ['./case-actions.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CaseActionsComponent implements OnInit {
-
-  @Input() 
+export class CaseActionsComponent {
+  @Input("caseKey")
   caseKey:string;
 
-  @Input() 
-  items: CaseAction<CaseActionDataType>[] = [];
+  @Input("items") 
+  items: Array<CaseAction<CaseActionDataType>>;
 
+  isLoaded = false;
   grouppedItems: CaseActionsGroup[];
   cardSettings = {}
   actionsListViewSettings = {};
 
-  constructor(private authStateService: AuthenticationStateService) {
+  constructor(private authStateService: AuthenticationStateService,
+              private cd: ChangeDetectorRef) {
   }
 
-  isActionOwner(userId: number) {
-    return userId === this.authStateService.getUser().id;
+  ngOnInit() {
+    this.grouppedItems = this.processGroups(this.items);
+    this.isLoaded = true;
+    this.cd.markForCheck();
   }
-
-  ngOnInit() {    
-    //todo: move to onchanges?
-    this.grouppedItems = this.processGroups(this.items);    
-  } 
 
   private processGroups(items: CaseAction<CaseActionDataType>[]): CaseActionsGroup[] {
     let groups = new Array<CaseActionsGroup>();
@@ -69,6 +68,10 @@ export class CaseActionsComponent implements OnInit {
       return -1;
   }
   
+  isActionOwner(userId: number) {
+    return userId === this.authStateService.getUser().id;
+  } 
+
   getTrackId(index, item){
     return item.id;
   }

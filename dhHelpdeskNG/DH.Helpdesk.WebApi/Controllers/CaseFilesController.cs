@@ -22,9 +22,9 @@ namespace DH.Helpdesk.WebApi.Controllers
     public class CaseFilesController : BaseApiController
     {
         private readonly ICaseFileService _caseFileService;
-        private readonly ITemporaryFilesCacheFactory _userTemporaryFilesStorageFactory;
         private readonly ICaseService _caseService;
         private readonly ISettingsLogic _settingsLogic;
+        private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
 
         #region ctor()
 
@@ -36,7 +36,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _settingsLogic = settingsLogic;
             _caseService = caseService;
             _caseFileService = caseFileService;
-            _userTemporaryFilesStorageFactory = userTemporaryFilesStorageFactory;
+            _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
         }
 
         #endregion
@@ -69,13 +69,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
-            
-            var now = DateTime.Now;
-            var topic = ModuleName.Cases;
 
+            var now = DateTime.Now;
             var filesReadToProvider = await Request.Content.ReadAsMultipartAsync();
-            
-            var tempStorage = _userTemporaryFilesStorageFactory.CreateForModule(topic);
 
             var stream = filesReadToProvider.Contents.FirstOrDefault();
             if (stream != null)
@@ -84,12 +80,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var fileName = stream.Headers.ContentDisposition.FileName.Unquote().Trim();
 
                 //fix name
-                if (tempStorage.FileExists(fileName, caseKey.ToString(), topic))
+                if (_userTemporaryFilesStorage.FileExists(fileName, caseKey.ToString()))
                 {
                     fileName = $"{now}-{fileName}"; // handle on the client file name change
                 }
 
-                tempStorage.AddFile(fileBytes, fileName, caseKey.ToString(), topic);
+                _userTemporaryFilesStorage.AddFile(fileBytes, fileName, caseKey.ToString());
                 return Ok(fileName);
             }
 
@@ -145,12 +141,13 @@ namespace DH.Helpdesk.WebApi.Controllers
         [SkipCustomerAuthorization] //skip check for new case
         public IHttpActionResult DeleteNewCaseFile([FromUri]Guid caseKey, [FromUri]string fileName)
         {
+            //todo: make Async
+
             //todo: check if UriDecode is required for fileName
             var fileNameSafe = (fileName ?? string.Empty).Trim();
             if (!string.IsNullOrEmpty(fileNameSafe))
             {
-                var tempStorage = _userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
-                tempStorage.DeleteFile(fileNameSafe, caseKey.ToString(), ModuleName.Cases);
+                _userTemporaryFilesStorage.DeleteFile(fileNameSafe, caseKey.ToString());
             }
             return Ok();
         }
@@ -159,6 +156,8 @@ namespace DH.Helpdesk.WebApi.Controllers
         [Route("{caseKey:int}/file/{fileId:int}")]
         public IHttpActionResult DeleteCaseFile(int caseKey, int fileId)
         {
+            //todo: make Async
+
             var c = _caseService.GetCaseById(caseKey);
             var customerId = c.Customer_Id;
             var basePath = GetBasePath(customerId);
@@ -185,5 +184,15 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         #endregion
+
+        [HttpDelete]
+        [CheckUserCasePermissions(CaseIdParamName = "caseId")]
+        [Route("{caseId:int}/tempfiles")]
+        public IHttpActionResult CleanTempCaseFiles([FromUri]int caseId)
+        {
+            //todo: make async
+            _userTemporaryFilesStorage.ResetCacheForObject(caseId);
+            return Ok();
+        }
     }
 }

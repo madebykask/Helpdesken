@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
-import { OptionsHelper } from "src/app/helpers";
+import { OptionsHelper } from "src/app/helpers/options-helper";
 import { LocalStorageService } from "../../local-storage";
 import { OptionItem } from "src/app/modules/shared-module/models";
 import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";

@@ -75,12 +75,12 @@ export class CaseFilesUploadComponent implements OnInit {
  
   private processFileUploadRequest(fileItem: FileItem, form: FormData) {
     // console.log('processFileUploadRequest called. CaseKey: %s', this.caseKey);
-    let fi = fileItem;
-    let f = form;
+    //let fi = fileItem;
+    //let f = form;
   }
 
   private onBeforeUpload(fileItem: FileItem) {
-      let fi = fileItem;
+      //let fi = fileItem;
   }
 
   private onFileUploadComplete(fileItem: FileItem, response: string, status: number, headers: ParsedResponseHeaders) {
@@ -100,7 +100,7 @@ export class CaseFilesUploadComponent implements OnInit {
       fileItem.cancel();
     }
     fileItem.remove();
-}
+  }
 
   getStatusStyles(item:FileItem) {
     let style = {

@@ -10,7 +10,6 @@ export class BaseControl {
     protected isRequired = false;
 
     constructor() {
-
     }
 
     protected init(field: IBaseCaseField<any>) {
@@ -20,7 +19,6 @@ export class BaseControl {
 
     protected getFormControl(name: string) {
         if (this.form == null) return null;
-
         return this.form.get(name);
     }
 

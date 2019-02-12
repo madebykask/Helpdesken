@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef, ComponentFactoryResolver, Input, Type } from "@angular/core";
+import { Component, ViewContainerRef, ComponentFactoryResolver, Input, Type, ChangeDetectorRef } from "@angular/core";
 import { CaseAction, CaseLogActionData, CaseHistoryActionData, GenericActionData, CaseActionDataType } from "../../models";
 import { FieldChangeActionComponent } from "./actions/field-change-action/field-change-action.component";
 import { LogNoteActionComponent } from "./actions/log-note-action/log-note-action.component";
@@ -7,15 +7,14 @@ import { CaseActionBaseComponent } from "./actions/case-action-base.component";
 
 @Component({
   selector:"case-action-container",
-  template: `
+  template: `    
     <ng-container case-action-host></ng-container>
   `
 })
 export class CaseActionContainerComponent {
     
     @Input("caseKey") caseKey: string;
-
-    @Input("caseAction") caseAction: CaseAction<CaseActionDataType>;
+    @Input("caseAction") caseAction: CaseAction<CaseActionDataType>;   
 
     private viewContainer: ViewContainerRef;
 
@@ -23,12 +22,13 @@ export class CaseActionContainerComponent {
       this.viewContainer = vc;
     }
 
-    constructor(private componentFactoryResolver: ComponentFactoryResolver) {      
+    constructor(private componentFactoryResolver: ComponentFactoryResolver,
+                private cd: ChangeDetectorRef) {
     }
 
     ngOnInit(): void {
       if (this.viewContainer) {
-        this.renderComponent(this.viewContainer);
+        this.renderComponent(this.viewContainer);        
       }
     }
     

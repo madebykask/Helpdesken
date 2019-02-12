@@ -17,8 +17,7 @@ export class TranslationApiService  extends HttpApiServiceBase {
         // console.log(">>>loading languages");
         var methodUrl = this.buildResourseUrl('/api/Translation/Languages');
         return this.getJson<object[]>(methodUrl, null, true)
-                .pipe(
-                    take(1),
+                .pipe(    
                     map((res:any[]) => res.map((lang:any) => new Language(lang.id, lang.languageId, lang.name)))
                 );        
     }

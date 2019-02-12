@@ -25,7 +25,7 @@
     <!-- Case Actions -->
     <div [hidden]="currentTab != 'case_actions'">
         <div class="md-paging">
-          <case-actions *ngIf="caseActions.length > 0" [items]="caseActions" [caseKey]="caseKey"></case-actions>
+          <case-actions *ngIf="caseActions.length > 0" [caseKey]="caseKey" [items]="caseActions"></case-actions>
         </div>
     </div>
 
@@ -155,13 +155,19 @@
                 </mbsc-form-group-content>
             </mbsc-form-group>
 
+            <mbsc-form-group collapsible #communication>
+                <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Communication)}}</mbsc-form-group-title>
+                <mbsc-form-group-content>
+                  <case-log-input [caseKey]="caseKey" [caseData]="caseData" [form]="form"></case-log-input>
+                </mbsc-form-group-content>
+            </mbsc-form-group>
+
             <!-- <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.Invoices)" #invoicesSection>
                 <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Invoices)}}</mbsc-form-group-title>
                 <mbsc-form-group-content>
 
                 </mbsc-form-group-content>
             </mbsc-form-group> -->
-
         </form>
     </div>
 </div>

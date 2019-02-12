@@ -24,17 +24,17 @@
         {
             if (content == null || content.Length == 0)
             {
-                throw new ArgumentNullException("content", "Value cannot be null or empty.");
+                throw new ArgumentNullException(nameof(content), "Value cannot be null or empty.");
             }
 
             if (string.IsNullOrEmpty(filename))
             {
-                throw new ArgumentNullException("filename", "Value cannot be null or empty.");
+                throw new ArgumentNullException(nameof(filename), "Value cannot be null or empty.");
             }
 
             if (referenceId <= 0)
             {
-                throw new ArgumentOutOfRangeException("referenceId", "Must be more than zero.");
+                throw new ArgumentOutOfRangeException(nameof(referenceId), "Must be more than zero.");
             }
 
             this.Content = content;
@@ -53,12 +53,12 @@
         {
             if (string.IsNullOrEmpty(filename))
             {
-                throw new ArgumentNullException("filename", "Value cannot be null or empty.");
+                throw new ArgumentNullException(nameof(filename), "Value cannot be null or empty.");
             }
 
             if (referenceId <= 0)
             {
-                throw new ArgumentOutOfRangeException("referenceId", "Must be more than zero.");
+                throw new ArgumentOutOfRangeException(nameof(referenceId), "Must be more than zero.");
             }
             
             this.BasePath = basePath;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 using DH.Helpdesk.BusinessData.Models;
@@ -29,10 +30,10 @@ namespace DH.Helpdesk.WebApi.Logic.Case
         public string GetFieldLabel(GlobalEnums.TranslationCaseFields field, int languageId, int customerId,
             IList<CaseFieldSettingsForTranslation> caseFieldSettingsForTranslations)
         {
-            var caption = FieldSettingsUiNames.Names[field.ToString()];
             var fieldName = field.ToString();
+            var caption = FieldSettingsUiNames.Names[fieldName];
 
-            var settingEx = caseFieldSettingsForTranslations.FirstOrDefault(x => x.Name.ToLower() == fieldName.Replace("tblLog_", "tblLog.").ToLower() && x.Language_Id == languageId);
+            var settingEx = caseFieldSettingsForTranslations.FirstOrDefault(x => x.Name.Equals(fieldName.Replace("tblLog_", "tblLog."), StringComparison.OrdinalIgnoreCase)  && x.Language_Id == languageId);
             if (!string.IsNullOrWhiteSpace(settingEx?.Label))
             {
                 caption = settingEx.Label;

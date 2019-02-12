@@ -9,7 +9,6 @@ using DH.Helpdesk.Services.Services.Concrete.Changes;
 using DH.Helpdesk.Services.Services.EmployeeService;
 using DH.Helpdesk.Services.Services.EmployeeService.Concrete;
 using DH.Helpdesk.Services.Services.Feedback;
-using DH.Helpdesk.WebApi.Logic;
 using DH.Helpdesk.WebApi.Logic.Case;
 
 namespace DH.Helpdesk.WebApi.DependencyInjection

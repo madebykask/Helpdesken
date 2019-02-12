@@ -19,5 +19,13 @@ export class CaseLogApiService extends HttpApiServiceBase {
             take(1)
         );
   }
+
+  deleteTempLogFile(caseKey:string, fileName:string): Observable<boolean> {
+    //todo: check when new case is ready,
+    //todo: encode fileName
+    let url = this.buildResourseUrl(`/api/case/${caseKey}/templogfile`, { fileName: fileName }, true, false);
+    return this.deleteWithResult<boolean>(url);
+  } 
+
 }
 

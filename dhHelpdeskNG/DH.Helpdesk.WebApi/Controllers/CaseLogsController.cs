@@ -1,15 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Common.Extensions.String;
+using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Models.Case.Logs;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Web.Common.Tools.Files;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.ActionResults;
+using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
 
 namespace DH.Helpdesk.WebApi.Controllers
@@ -22,13 +29,16 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IMapper _mapper;
         private readonly ISettingsLogic _settingsLogic;
         private readonly ILogFileService _logFileService;
-        private ICaseFileService _caseFileService;
+        private readonly ICaseFileService _caseFileService;
+        private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
+
 
         public CaseLogsController(
             IUserService userService, 
             ILogService caselLogService, 
             ILogFileService logFileService,
             ICaseFileService caseFileService,
+            ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
             IMapper mapper, 
             ISettingsLogic settingsLogic)
         {
@@ -38,6 +48,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _caselLogService = caselLogService;
             _mapper = mapper;
             _settingsLogic = settingsLogic;
+            _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
         }
 
         [HttpGet]
@@ -112,6 +123,53 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             IHttpActionResult res = new FileResult(fileInfo.FileName, content, Request, inline ?? false);
             return Task.FromResult(res);
+        }
+
+        [HttpPost]
+        [Route("{caseKey}/logfile/")]
+        [SkipCustomerAuthorization]
+        public async Task<IHttpActionResult> UploadLogFile([FromUri]string caseKey)
+        {
+            // Check if the request contains multipart/form-data.
+            if (!Request.Content.IsMimeMultipartContent())
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+
+            var now = DateTime.Now;
+
+            var filesReadToProvider = await Request.Content.ReadAsMultipartAsync();
+
+            var stream = filesReadToProvider.Contents.FirstOrDefault();
+            if (stream != null)
+            {
+                var fileBytes = await stream.ReadAsByteArrayAsync();
+                var fileName = stream.Headers.ContentDisposition.FileName.Unquote().Trim();
+
+                //fix name
+                if (_userTemporaryFilesStorage.FileExists(fileName, caseKey, ModuleName.Log))
+                {
+                    fileName = $"{now}-{fileName}"; // handle on the client file name change
+                }
+
+                _userTemporaryFilesStorage.AddFile(fileBytes, fileName, caseKey, ModuleName.Log);
+                return Ok(fileName);
+            }
+
+            return BadRequest("Failed to upload a file");
+        }
+
+        [HttpDelete]
+        [Route("{caseKey}/templogfile")]
+        [SkipCustomerAuthorization] //skip check for new case
+        public IHttpActionResult DeleteTempLogFile([FromUri]string caseKey, [FromUri]string fileName)
+        {
+            //todo: make async
+            //todo: check if UriDecode is required for fileName
+            var fileNameSafe = (fileName ?? string.Empty).Trim();
+            if (!string.IsNullOrEmpty(fileNameSafe))
+            {
+                _userTemporaryFilesStorage.DeleteFile(fileName, caseKey, ModuleName.Log);
+            }
+            return Ok(true);
         }
     }
 }

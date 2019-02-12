@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
         #region Constructors and Destructors
 
         public FaqRepository(IDatabaseFactory databaseFactory, IWorkContext workContext)
-            : base(databaseFactory, workContext)
+            : base(databaseFactory)
         {
         }
 

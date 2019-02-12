@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DH.Helpdesk.Web.Common.Constants.Case
+﻿namespace DH.Helpdesk.Web.Common.Constants.Case
 {
     public struct CaseFieldsNamesApi
     {
@@ -83,5 +77,7 @@ namespace DH.Helpdesk.Web.Common.Constants.Case
         public const string IsAbout_RegionId = "IsAbout_RegionId";
         public const string SupplierCountryId = "SupplierCountryId";
         public const string CaseRegistrationSource = "CaseRegistrationSource";
+        public const string Log_InternalText = "Log_InternalText";
+        public const string Log_ExternalText = "Log_ExternalText";
     }
 }

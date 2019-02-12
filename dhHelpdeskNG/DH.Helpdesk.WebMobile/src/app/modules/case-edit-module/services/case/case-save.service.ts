@@ -1,10 +1,9 @@
 import { Injectable } from "@angular/core";
 import { CaseApiService } from "../api/case/case-api.service";
 import { FormGroup } from "@angular/forms";
-import { of, throwError } from "rxjs";
-import { switchMap } from "rxjs/operators";
+import { throwError, Observable } from "rxjs";
 import { isNumeric } from "rxjs/internal/util/isNumeric";
-import { CaseEditOutputModel } from "../../models";
+import { CaseEditOutputModel, CaseEditInputModel } from "../../models";
 import { CaseFieldsNames } from "src/app/modules/shared-module/constants";
 
 @Injectable({ providedIn: 'root' })
@@ -13,9 +12,10 @@ export class CaseSaveService {
   protected constructor(private caseApiService: CaseApiService ) {
   }
 
-  public saveCase(form: FormGroup, caseId?: number) {
+  public saveCase(form: FormGroup, caseInputData: CaseEditInputModel):Observable<any> {
     let model = new CaseEditOutputModel();
-    model.caseId = caseId;
+    model.caseId = caseInputData.id;
+    model.caseGuid = caseInputData.caseGuid;
     model.performerId = this.getNumericValue(form, CaseFieldsNames.PerformerUserId);
     model.responsibleUserId = this.getNumericValue(form, CaseFieldsNames.CaseResponsibleUserId);
     model.workingGroupId = this.getNumericValue(form, CaseFieldsNames.WorkingGroupId);
@@ -23,20 +23,16 @@ export class CaseSaveService {
     model.priorityId = this.getNumericValue(form, CaseFieldsNames.PriorityId);
     model.productAreaId = this.getNumericValue(form, CaseFieldsNames.ProductAreaId);
     model.watchDate = this.getDateValue(form, CaseFieldsNames.WatchDate);
-
-    return this.caseApiService.saveCaseData(model)
-      .pipe(
-          switchMap((r: any) => {
-            return of(r)
-          })
-        )
+    model.logExternalText = form.get(CaseFieldsNames.Log_ExternalText).value;
+    model.logInternalText = form.get(CaseFieldsNames.Log_InternalText).value;
+    return this.caseApiService.saveCaseData(model);
   }
 
   private getNumericValue(form: FormGroup, fieldName: string): number {
-    if(this.hasValue(form, fieldName)) {
+    if (this.hasValue(form, fieldName)) {
       const value = form.controls[fieldName].value;
-      if(!value) return null;
-      if(isNumeric(value)) { 
+      if (!value) return null;
+      if (isNumeric(value)) { 
         return Number(form.controls[fieldName].value);
       }
       throwError(`Not supported value. Expecting number, but recieved ${typeof(value)}.`)

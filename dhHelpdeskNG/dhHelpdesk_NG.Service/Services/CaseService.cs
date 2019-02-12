@@ -861,14 +861,14 @@ namespace DH.Helpdesk.Services.Services
                 CaseExtraInfo caseExtraInfo,
                 out IDictionary<string, string> errors,
                 Case parentCase = null,
-            string caseExtraFollowers = null)
+                string caseExtraFollowers = null)
         {
             var ret = 0;
 
             if (cases == null)
-                throw new ArgumentNullException("cases");
+                throw new ArgumentNullException(nameof(cases));
 
-            var c = this.ValidateCaseRequiredValues(cases, caseLog);
+            var c = ValidateCaseRequiredValues(cases, caseLog);
 
             // unread/status flag update if not case is closed and not changed by adminsitrator 
             //c.Unread = 0;
@@ -894,15 +894,15 @@ namespace DH.Helpdesk.Services.Services
                     c.ChangeByUser_Id = userId;
                 }
 
-                this._caseRepository.Update(c);
+                _caseRepository.Update(c);
             }
             
-            this._caseRepository.Commit();
-            this._caseStatService.UpdateCaseStatistic(c);
+            _caseRepository.Commit();
+            _caseStatService.UpdateCaseStatistic(c);
 
             // save CaseIsAbout
             if (c.IsAbout != null)
-                this.SaveIsAbout(c, out errors);
+                SaveIsAbout(c, out errors);
 
             // save casehistory
             var extraFields = new ExtraFieldCaseHistory();
@@ -922,8 +922,8 @@ namespace DH.Helpdesk.Services.Services
             extraFields.ActionExternalTime = caseExtraInfo.ActionExternalTime;
 
             ret = userId == 0 ?
-                this.SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, adUser, extraFields, caseExtraFollowers) :
-                this.SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, string.Empty, extraFields, caseExtraFollowers);
+                SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, adUser, extraFields, caseExtraFollowers) :
+                SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, string.Empty, extraFields, caseExtraFollowers);
 
             return ret;
         }

@@ -31,6 +31,19 @@ export abstract class HttpApiServiceBase {
         }));
   }
 
+  protected deleteWithResult<TResponse>(url: string, headers: any = null, noAuth = false, withCredentials:boolean = false): Observable<TResponse> {
+
+    return this.http.delete<TResponse>(url, { 
+                headers: this.getHeaders(headers, true, noAuth),
+                withCredentials: withCredentials
+             }).pipe(
+                catchError((error: any) => {
+                  return throwError(error);
+            })
+        );
+  }
+
+  //tod:review files delete 
   protected deleteResource(url: string, headers: any = null, noAuth = false): Observable<any> {
     // fixed issue https://github.com/angular/angular/issues/18680 - remove after fix
     return this.http

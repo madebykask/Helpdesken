@@ -11,6 +11,11 @@ import { BaseControl } from "../base-control";
     @ViewChild('input') control: any;
     @Input() field: BaseCaseField<string>;
 
+    @Input('disabled')
+    set disabled(value:boolean) {
+      this.control.disabled = value;
+    }
+
     ngOnChanges() {
     }
 
@@ -18,7 +23,7 @@ import { BaseControl } from "../base-control";
       this.init(this.field);
       this.control.disabled = true;
     }
-
+    
     ngOnDestroy(): void {
     }
 

@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { take, catchError } from "rxjs/operators";
-import { WindowWrapper } from "src/app/helpers";
+
 import { Observable, throwError } from "rxjs";
 import { LocalStorageService } from "src/app/services/local-storage";
 import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
+import { WindowWrapper } from "src/app/modules/shared-module/helpers/window-wrapper";
 
 @Injectable({ providedIn: 'root' })
 export class CaseFilesApiService extends HttpApiServiceBase {
@@ -43,4 +44,9 @@ export class CaseFilesApiService extends HttpApiServiceBase {
               
         return this.deleteResource(url);
     } 
+
+    deleteTemplFiles(caseId:number): Observable<any> {
+      let url = this.buildResourseUrl(`/api/case/${caseId}/tempfiles`, null, true, false);
+      return this.deleteResource(url);
+  } 
 }

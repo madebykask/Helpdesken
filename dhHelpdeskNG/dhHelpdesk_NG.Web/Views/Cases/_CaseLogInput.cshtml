@@ -102,17 +102,14 @@
             </div>
         </div>
     }
-
     <div class="row">
         <div class="span12">
+            @if (TempData["PreventError"] != null)
+            {
+                var msg = (string)TempData["PreventError"];
+                <div class="alert alert-error">@msg</div>
+            }
             <table class="tableform">
-                @if (TempData["PreventError"] != null)
-                {
-                    var msg = (string)TempData["PreventError"];
-                    <div class="alert alert-error">
-                        @msg
-                    </div>
-                }
                 <thead>
                     <tr>
                         <th class="span3"></th>
@@ -121,9 +118,7 @@
                     </tr>
                 </thead>
                 <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote)">
-                    <td>
-                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_External, "Extern notering")
-                    </td>
+                    <td>@CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Text_External, "Extern notering")</td>
                     <td>
                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote) && !readonlyMode)
                         {
@@ -138,13 +133,13 @@
                         <div class="checkbox commun">
                             @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == AccessMode.ReadOnly)
                             {
-                                @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
-                    new { @disabled = "disabled", InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
+                                @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier, 
+                                    new { @disabled = "disabled", InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
                             }
                             else
                             {
-                                @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
-                    new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
+                                @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier, 
+                                    new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
                             }
                             <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span>
                         </div>
@@ -228,7 +223,6 @@
                             </div>
                         </td>
                     </tr>
-
                 }
                 else
                 {
@@ -240,14 +234,11 @@
                     </tr>
                 }
 
-                @*@if (Model.templateistrue != 1)
-                    {*@
+                @*@if (Model.templateistrue != 1) {*@
                 @if (Model.CaseLog.Id == 0 && !Model.newLog)
                 {
                     <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename, CaseSolutionFields.LogFileName)">
-                        <td>
-                            @CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename, "Bifogad fil")
-                        </td>
+                        <td>@CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename, "Bifogad fil")</td>
                         <td>
                             @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
                             {

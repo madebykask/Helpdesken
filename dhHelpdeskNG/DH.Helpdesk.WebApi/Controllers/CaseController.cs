@@ -1254,6 +1254,31 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External))
+                {
+                    field = new BaseCaseField<string>()
+                    {
+                        Name = CaseFieldsNamesApi.Log_ExternalText,
+                        Value = "",
+                        Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_External, languageId, cid, caseFieldTranslations),
+                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_External, caseFieldSettings),
+                        Section = CaseSectionType.Communication
+                    };
+                    model.Fields.Add(field);
+                }
+
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_Internal))
+                {
+                    field = new BaseCaseField<string>()
+                    {
+                        Name = CaseFieldsNamesApi.Log_InternalText,
+                        Value = "",
+                        Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, languageId, cid, caseFieldTranslations),
+                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, caseFieldSettings),
+                        Section = CaseSectionType.Communication
+                    };
+                    model.Fields.Add(field);
+                }
             }
 
             #endregion

@@ -1,7 +1,7 @@
 <div *ngIf="data">  
   <div *ngIf="data.text && data.text.length" class="lognote" >
         <span class="{{ getActionIcon() }}"></span>
-        <span #tr="truncate" truncate="10" class="logNoteText">{{data.text}}</span>
+        <span #tr="truncate" truncate="10" class="logNoteText">{{ data.text }}</span>
         <div [hidden]="!tr.isTruncated">
             <a class="more" href="javascript:;" (click)="tr.showText()">&gt;&gt;</a>
         </div>        

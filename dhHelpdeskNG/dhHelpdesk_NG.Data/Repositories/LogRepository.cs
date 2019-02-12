@@ -63,16 +63,6 @@ namespace DH.Helpdesk.Dal.Repositories
             return q.OrderByDescending(l => l.LogDate);
         }
 
-
-        /// <summary>
-        /// The get case log overviews.
-        /// </summary>
-        /// <param name="caseId">
-        /// The case id.
-        /// </param>
-        /// <returns>
-        /// The result />.
-        /// </returns>
         public IEnumerable<LogMapperData> GetCaseLogOverviews(int caseId)
         {
             var query = from l in Table

@@ -10,7 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 {
     public class CaseSectionsRepository : RepositoryBase<CaseSection>, ICaseSectionsRepository
     {
-        public CaseSectionsRepository(IDatabaseFactory databaseFactory, IWorkContext workContext = null) : base(databaseFactory, workContext)
+        public CaseSectionsRepository(IDatabaseFactory databaseFactory, IWorkContext workContext = null) : base(databaseFactory)
         {
         }
 

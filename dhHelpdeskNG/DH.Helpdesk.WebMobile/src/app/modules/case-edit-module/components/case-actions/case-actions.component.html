@@ -1,6 +1,10 @@
+<mbsc-form class="mbsc-padding md-load-btn md-btn-isLoading" [hidden]="isLoaded">
+    <mbsc-button flat block icon="loop2" ></mbsc-button>
+</mbsc-form>
+
 <div id="case-actions" *ngIf="grouppedItems && grouppedItems.length">
   <mbsc-card *ngFor="let group of grouppedItems;trackBy:getTrackId" [class.owner]="isActionOwner(group.CreatedByUserId)">
-    <mbsc-card-header>      
+    <mbsc-card-header>
       <mbsc-card-subtitle class="mbsc-txt-s">
         <div class="mbsc-grid mbsc-margin mbsc-txt-muted mbsc-bold mbsc-txt-s">
           <div class="mbsc-row mbsc-no-padding">
@@ -12,12 +16,12 @@
         </div>
       </mbsc-card-subtitle>
     </mbsc-card-header>
-    <mbsc-card-content>      
+    <mbsc-card-content>
       <!-- main actions first -->
       <div class="actions-main">
         <mbsc-listview *ngIf="group.hasMain" [swipe]="false" [enhance]="true">
           <mbsc-listview-item *ngFor="let action of group.Actions | actionsFilter:'main';trackBy:getTrackId">
-              <case-action-container [caseAction]="action" [caseKey]="caseKey"></case-action-container>
+              <case-action-container [caseKey]="caseKey" [caseAction]="action"></case-action-container>
           </mbsc-listview-item>
         </mbsc-listview>
       </div>
@@ -28,7 +32,7 @@
             <mbsc-form-group-content>
             <mbsc-listview [swipe]="false" [enhance]="true">
                 <mbsc-listview-item *ngFor="let action of group.Actions | actionsFilter:'other';trackBy:getTrackId">
-                    <case-action-container [caseAction]="action" [caseKey]="caseKey"></case-action-container>
+                    <case-action-container [caseKey]="caseKey" [caseAction]="action"></case-action-container>
                 </mbsc-listview-item>
             </mbsc-listview>
           </mbsc-form-group-content>

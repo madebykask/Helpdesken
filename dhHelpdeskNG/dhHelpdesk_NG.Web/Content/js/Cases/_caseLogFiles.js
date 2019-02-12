@@ -21,7 +21,6 @@ $(function () {
                             '</form>' +
                         '</div>' +
                     '</div>');
-        Aktiv:
 
             d.on("show", function () {
                 d.find(".btn-cancel").on("click", function (e) {

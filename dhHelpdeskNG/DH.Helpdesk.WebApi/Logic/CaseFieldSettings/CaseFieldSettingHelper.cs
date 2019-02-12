@@ -20,14 +20,15 @@ namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
         public bool IsActive(IList<CaseFieldSetting> caseFieldSettings, GlobalEnums.TranslationCaseFields field)
         {
             var caseSettings = GetCaseFieldSetting(caseFieldSettings, field.ToString());
-            if (caseSettings == null) return false;
+            if (caseSettings == null)
+                return false;
 
             return (caseSettings.IsActive && !caseSettings.Hide) || caseSettings.Required != 0;
         }
 
         public CaseFieldSetting GetCaseFieldSetting(IList<CaseFieldSetting> caseFieldSettings, string fieldName)
         {
-            return caseFieldSettings.FirstOrDefault(s => s.Name.Replace("tblLog_", "tblLog.").Equals(fieldName, StringComparison.CurrentCultureIgnoreCase));
+            return caseFieldSettings.FirstOrDefault(s => s.Name.Equals(fieldName.Replace("tblLog_", "tblLog."), StringComparison.OrdinalIgnoreCase));
         }
 
         public bool IsCaseNew(int currentCaseId)

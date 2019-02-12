@@ -85,8 +85,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             if (fieldSetting != null && fieldSetting.CaseSolutionMode == CaseSolutionModes.Hide)
                 return "display:none";
 
-            if ((model.caseFieldSettings.IsFieldVisible(caseFieldName))
-                || (CaseSolutionSettingModel.IsFieldAlwaysVisible(caseTemplateFieldName) || model.caseFieldSettings.IsFieldRequiredOrVisible(caseFieldName)))
+            if (model.caseFieldSettings.IsFieldVisible(caseFieldName) || 
+                (CaseSolutionSettingModel.IsFieldAlwaysVisible(caseTemplateFieldName) || model.caseFieldSettings.IsFieldRequiredOrVisible(caseFieldName)))
             {
                 return string.Empty;
             }

@@ -1,10 +1,11 @@
 import { Input, Directive, ElementRef, HostListener } from '@angular/core';
 import { TruncatePipe } from '../pipes/truncate.pipe';
+import { SanitizePipe } from '../pipes/sanitize.pipe';
 
 @Directive({
   selector: '[truncate]',
   exportAs: "truncate",
-  providers: [ TruncatePipe ]
+  providers: [ TruncatePipe, SanitizePipe ]
 })
 export class TruncateTextDirective {
 
@@ -17,7 +18,9 @@ export class TruncateTextDirective {
   private originalText:string;
   private nativeEl;
 
-  constructor(private elementRef: ElementRef, private truncatePipe: TruncatePipe) {
+  constructor(private elementRef: ElementRef, 
+              private truncatePipe: TruncatePipe, 
+              private sanitizeHtmlPipe: SanitizePipe) {
       this.nativeEl = elementRef.nativeElement;
   }
 
@@ -30,7 +33,7 @@ export class TruncateTextDirective {
     this.truncateInner();
   }
 
-  showText(){
+  showText() {
     if (this.isTruncated) {
       this.Text = this.originalText;
       this.isTruncated = false;
@@ -49,12 +52,12 @@ export class TruncateTextDirective {
     }
   }
 
-  private get Text(){
+  private get Text() {
     return this.nativeEl.innerHTML || '';
   }
 
-  private set Text(text){
-    this.nativeEl.innerHTML = text;
+  private set Text(text) {
+    this.nativeEl.innerHTML = this.sanitizeHtmlPipe.transform(text);
   }
 
   @HostListener('window:resize', ['$event'])

@@ -213,6 +213,7 @@ ul.nostyle {
   .mbsc-ms-b.mbsc-ms-top, .mbsc-ms-b .mbsc-ms-item-sel { border-bottom-color:$primary-color; }
 }
 
+
 #case-files {
   .mbsc-lv-item-ic {
     left:0px;
@@ -251,6 +252,23 @@ ul.nostyle {
       right:0px;
       top:3px;
     }
+  }
+}
+
+.right {
+  text-align:right;
+}
+.fileListView {
+  .mbsc-lv-item-ic {
+    left:0px;
+    width:auto;
+  } 
+  .mbsc-lv-item { font-size:14px; }
+  .mbsc-lv-item-ic-left:before, 
+  .mbsc-lv-item-ic-left:after { left:0px; }
+  .mbsc-ic:before {   margin-right: 8px; }
+  .mbsc-lv-item.mbsc-lv-item-ic-left {
+    padding: 12px 0 12px 20px!important;    
   }
 }
 

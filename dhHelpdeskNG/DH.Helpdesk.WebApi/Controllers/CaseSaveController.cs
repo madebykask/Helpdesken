@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.BusinessData.OldComponents;
@@ -13,6 +14,8 @@ using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case;
+using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Common.Enums.Case;
@@ -43,8 +46,11 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IEmailService _emailService;
         private readonly ICaseFileService _caseFileService;
-        private readonly ITemporaryFilesCacheFactory _temporaryFilesStorageFactory;
         private readonly ICustomerUserService _customerUserService;
+        private readonly ILogFileService _logFileService;
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
+        private readonly ILogService _logService;
+        private ITemporaryFilesCache _userTempFilesStorage;
 
         #region ctor()
 
@@ -53,9 +59,13 @@ namespace DH.Helpdesk.WebApi.Controllers
             ISettingService customerSettingsService, ICaseEditModeCalcStrategy caseEditModeCalcStrategy,
             IUserService userService, ISettingsLogic settingsLogic, ICaseFieldSettingsHelper caseFieldSettingsHelper, 
             IWorkingGroupService workingGroupService, IEmailService emailService, ICaseFileService caseFileService,
-            ITemporaryFilesCacheFactory temporaryFilesCacheFactory,
-            ICustomerUserService customerUserService)
+            ITemporaryFilesCacheFactory temporaryFilesCacheFactory, ILogFileService logFileService,
+            ICustomerUserService customerUserService, IUserPermissionsChecker userPermissionsChecker,
+            ILogService logService)
         {
+            _logService = logService;
+            _userPermissionsChecker = userPermissionsChecker;
+            _logFileService = logFileService;
             _caseService = caseService;
             _caseFieldSettingService = caseFieldSettingService;
             _caseLockService = caseLockService;
@@ -68,7 +78,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _workingGroupService = workingGroupService;
             _emailService = emailService;
             _caseFileService = caseFileService;
-            _temporaryFilesStorageFactory = temporaryFilesCacheFactory;
+            _userTempFilesStorage = temporaryFilesCacheFactory.CreateForModule(ModuleName.Cases);
             _customerUserService = customerUserService;
         }
 
@@ -87,6 +97,8 @@ namespace DH.Helpdesk.WebApi.Controllers
         [Route("save/{caseId:int}")]
         public async Task<IHttpActionResult> Post([FromUri] int? caseId, [FromUri]int cid, [FromUri] int langId, [FromBody]CaseEditInputModel model)
         {
+            var utcNow = DateTime.UtcNow;
+            var caseKey = caseId.HasValue && caseId > 0 ? caseId.Value.ToString() : model.CaseGuid;
             var isNew = !caseId.HasValue;
             if (isNew)
             {
@@ -112,8 +124,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
 
             //TODO: validate input -- apply ui validation rules
-
-            var utcNow = DateTime.UtcNow;
+            
             var currentCase = _caseService.GetDetachedCaseById(caseId.Value); //TODO: try to Copy/Clone from oldCase instead
 
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(cid);
@@ -158,8 +169,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             //    }
             //}
 
-            CaseLog caseLog = null; // TODO: implement
-
             var leadTime = 0;// TODO: add calculation
             var actionLeadTime = 0;// TODO: add calculation
             var actionExternalTime = 0;// TODO: add calculation
@@ -173,7 +182,26 @@ namespace DH.Helpdesk.WebApi.Controllers
             };
 
             IDictionary<string, string> errors;
-            var caseHistoryId = this._caseService.SaveCase(
+            var currentUser = _userService.GetUser(UserId);
+            var customerSettings = _customerSettingsService.GetCustomerSettings(oldCase.Customer_Id);
+            var basePath = _settingsLogic.GetFilePath(customerSettings);
+            var customer = _customerService.GetCustomer(oldCase.Customer_Id);
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(User.Identity.GetTimezoneId());
+
+            var caseLog = new CaseLog()
+            {
+                LogGuid = Guid.NewGuid(), //todo: check usages
+                TextInternal = model.LogInternalText,
+                TextExternal = model.LogExternalText,
+                RegUser = currentUser?.UserID ?? string.Empty, // valid for webapi?
+                UserId = UserId,
+                //todo:
+                // FinishingDate = model.FinishingDate
+                // FinishingType = model.FinishingType?
+            };
+
+            // -> SAVE CASE 
+            var caseHistoryId = _caseService.SaveCase(
                 currentCase,
                 caseLog,
                 UserId,
@@ -185,37 +213,55 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             // TODO: caseNotifications?
 
-            // TODO: LOG - if support added 
-            
-            var customerSettings = _customerSettingsService.GetCustomerSettings(oldCase.Customer_Id);
-            var basePath = _settingsLogic.GetFilePath(customerSettings);
-            var customer = _customerService.GetCustomer(oldCase.Customer_Id);
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(User.Identity.GetTimezoneId());
-            var currentUser = _userService.GetUser(UserId);
-
             //case files
             // todo: Check if new cases should be handled here. Save case files for new cases only!
             if (!edit)
             {
-                var tempStorage = _temporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
-                var temporaryFiles = tempStorage.FindFiles(currentCase.CaseGUID.ToString(), ModuleName.Cases);
+                var temporaryFiles = _userTempFilesStorage.FindFiles(caseKey); //todo: check
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, currentCase.Id, UserId)).ToList();
                 _caseFileService.AddFiles(newCaseFiles);
             }
 
+            #region Logs Handling
+
+            caseLog.CaseId = currentCase.Id;
+            caseLog.CaseHistoryId = caseHistoryId;
+
+            /* #58573 Check that user have access to write to InternalLogNote */
+            var caseInternalLogAccess = _userPermissionsChecker.UserHasPermission(currentUser, UserPermission.CaseInternalLogPermission);
+            if (!caseInternalLogAccess)
+                caseLog.TextInternal = null;
+
+            var temporaryLogFiles = _userTempFilesStorage.FindFiles(caseKey, ModuleName.Log);
+            var temporaryExLogFiles = _logFileService.GetExistingFileNamesByCaseId(currentCase.Id);
+            var logFileCount = temporaryLogFiles.Count + temporaryExLogFiles.Count;
+
+            // SAVE LOG
+            caseLog.Id = _logService.SaveLog(caseLog, logFileCount, out errors);
+
             // save log files
-            var allLogFiles = new List<CaseFileDto>();// TODO: Temparary no files. implement after files upload if needed.
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, utcNow, caseLog.Id, currentUser.Id)).ToList();
+            _logFileService.AddFiles(newLogFiles, temporaryExLogFiles, caseLog.Id);
+
+            var allLogFiles = temporaryExLogFiles.Select(f => new CaseFileDto(basePath, f.Name, f.IsExistCaseFile ? Convert.ToInt32(currentCase.CaseNumber) : f.LogId.Value, f.IsExistCaseFile)).ToList();
+            allLogFiles.AddRange(newLogFiles);
+
+            #endregion // Logs handling
 
             // send emails
             var caseMailSetting = GetCaseMailSetting(currentCase, customer, customerSettings);
-            _caseService.SendCaseEmail(currentCase.Id, caseMailSetting, caseHistoryId, basePath,
-                userTimeZone, oldCase, caseLog, allLogFiles, currentUser); //TODO: async or move to scheduler
+            _caseService.SendCaseEmail(currentCase.Id, caseMailSetting, caseHistoryId, basePath, 
+                                       userTimeZone, oldCase, caseLog, allLogFiles, currentUser); //TODO: async or move to scheduler
 
             // BRE
             var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, currentCase, oldCase);
             if (actions.Any())
-                _caseService.ExecuteBusinessActions(actions, currentCase, caseLog, userTimeZone, caseHistoryId, basePath, langId,
-                    caseMailSetting, allLogFiles); //TODO: async or move to scheduler
+                _caseService.ExecuteBusinessActions(actions, currentCase, caseLog, userTimeZone, caseHistoryId, 
+                                                    basePath, langId, caseMailSetting, allLogFiles); //TODO: async or move to scheduler
+
+
+            //delete case and logs temp files
+            _userTempFilesStorage.ResetCacheForObject(caseKey);
 
             // TODO: return errors
             return Ok(oldCase.Id);

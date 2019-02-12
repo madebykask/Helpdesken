@@ -30,7 +30,7 @@ export class CaseFilesControlComponent implements OnInit  {
     stages: [{
       percent: -25,
       color: 'red',
-      icon: 'fa-trash',      
+      icon: 'fa-trash',
       confirm: true,
       action: this.onFileDelete.bind(this)
     }]  
@@ -63,7 +63,7 @@ export class CaseFilesControlComponent implements OnInit  {
           let items = fieldValue.value || [];
           this.files = items.map(f => new CaseFileModel(f.id, f.fileName));
         }
-    }    
+    }
   }
 
   private processNewFileUpload(data: { id:number, name:string }) {
@@ -84,8 +84,7 @@ export class CaseFilesControlComponent implements OnInit  {
     if (!isNaN(index) && this.files.length > index) {
         let fileItem = self.files[index];
         if (fileItem) {
-              //todo: move confirm to a separate service!
-              //todo: add translations!
+              //todo: move confirm to a separate service!              
               mobiscroll.confirm({
                 title: "",
                 display: 'bottom',
@@ -100,7 +99,7 @@ export class CaseFilesControlComponent implements OnInit  {
                           //remove fileItem from the list on success only
                           self.files = self.files.filter(el => el !== fileItem);
                       }, 
-                      (err) => {                        
+                      (err) => {
                         self.alertsService.showMessage('Failed to delete a file', AlertType.Error);
                         console.error(err);
                       });
@@ -111,7 +110,7 @@ export class CaseFilesControlComponent implements OnInit  {
   }
 
   identify(item) {
-        return item.fileId;
+    return item.fileId;
   }
 
 }
