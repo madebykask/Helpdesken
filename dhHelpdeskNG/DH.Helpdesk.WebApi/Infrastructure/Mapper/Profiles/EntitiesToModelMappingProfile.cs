@@ -3,8 +3,10 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case.Logs;
+using DH.Helpdesk.Models.StateSecondaries;
 using DH.Helpdesk.WebApi.Models;
 using LogFileModel = DH.Helpdesk.Models.Case.Logs.LogFileModel;
 
@@ -34,6 +36,10 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Mapper.Profiles
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(s => s.Id))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(s => s.FirstName))
                 .ForMember(dest => dest.SurName, opt => opt.MapFrom(s => s.SurName));
+
+            CreateMap<StateSecondary, StateSecondaryOutputModel>()
+                .ForMember(dest => dest.RecalculateWatchDate, opt => opt.ResolveUsing(src => src.RecalculateWatchDate.ToBool()));
+
         }
     }
 }

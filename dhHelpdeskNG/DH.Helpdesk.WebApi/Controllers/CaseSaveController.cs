@@ -144,6 +144,10 @@ namespace DH.Helpdesk.WebApi.Controllers
                 currentCase.ProductArea_Id = model.ProductAreaId;
             }
 
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.WatchDate))
+            {
+                currentCase.WatchDate = model.WatchDate;
+            }
 
             //if (isNew)
             //{

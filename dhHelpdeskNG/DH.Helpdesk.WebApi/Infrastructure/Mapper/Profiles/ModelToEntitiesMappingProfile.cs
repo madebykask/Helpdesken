@@ -14,6 +14,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Mapper.Profiles
             CreateMap<ClientLogItemModel, ClientLogEntry>();
             CreateMap<WorkingGroupOutputModel, WorkingGroupEntity>();
             CreateMap<StateSecondaryOutputModel, StateSecondary>();
+
         }
     }
 }

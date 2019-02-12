@@ -175,7 +175,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly int _defaultMaxRows;
         private readonly int _defaultCaseLockBufferTime;
         private readonly int _defaultExtendCaseLockTime;
-        private readonly IWatchDateCalendarService _watchDateCalendarServcie;
+        private readonly IWatchDateCalendarService _watchDateCalendarService;
         private readonly IReportServiceService _reportServiceService;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
         private readonly IExternalInvoiceService _externalInvoiceService;
@@ -321,7 +321,7 @@ namespace DH.Helpdesk.Web.Controllers
             this._orgJsonService = orgJsonService;
             this._registrationSourceCustomerService = registrationSourceCustomerService;
             this._caseLockService = caseLockService;
-            this._watchDateCalendarServcie = watchDateCalendarServcie;
+            this._watchDateCalendarService = watchDateCalendarServcie;
             this._mailTemplateService = mailTemplateService;
             this._defaultMaxRows = 10;
             this._defaultCaseLockBufferTime = 30; // Second
@@ -1819,7 +1819,7 @@ namespace DH.Helpdesk.Web.Controllers
             DateTime? res = null;
             if (dept != null && dept.WatchDateCalendar_Id.HasValue)
             {
-                res = this._watchDateCalendarServcie.GetClosestDateTo(dept.WatchDateCalendar_Id.Value, DateTime.UtcNow);
+                res = this._watchDateCalendarService.GetClosestDateTo(dept.WatchDateCalendar_Id.Value, DateTime.UtcNow);
             }
 
             return this.Json(new { result = "success", data = res }, JsonRequestBehavior.AllowGet);

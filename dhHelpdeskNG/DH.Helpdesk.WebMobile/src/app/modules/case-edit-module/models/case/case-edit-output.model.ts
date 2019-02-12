@@ -6,4 +6,5 @@ export class CaseEditOutputModel {
   stateSecondaryId?: number;
   priorityId?: number;
   productAreaId?: number;
+  watchDate: string;
 }

@@ -88,6 +88,8 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
 
             builder.RegisterType<CaseEditModeCalcStrategy>().As<ICaseEditModeCalcStrategy>();
             builder.RegisterType<CaseTranslationService>().As<ICaseTranslationService>();
+            builder.RegisterType<WatchDateCalendarService>().As<IWatchDateCalendarService>();
+            
             
         }
 

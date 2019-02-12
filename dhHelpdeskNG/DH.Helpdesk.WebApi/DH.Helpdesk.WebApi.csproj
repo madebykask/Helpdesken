@@ -192,6 +192,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="Controllers\CaseHistoryController.cs" />
     <Compile Include="Controllers\CaseLogsController.cs" />
+    <Compile Include="Controllers\CaseWatchDateController.cs" />
     <Compile Include="Logic\Case\CaseTranslationService.cs" />
     <Compile Include="Controllers\PerfomersController.cs" />
     <Compile Include="Controllers\StateSecondariesController.cs" />

@@ -22,6 +22,7 @@ export class CaseSaveService {
     model.stateSecondaryId = this.getNumericValue(form, CaseFieldsNames.StateSecondaryId);
     model.priorityId = this.getNumericValue(form, CaseFieldsNames.PriorityId);
     model.productAreaId = this.getNumericValue(form, CaseFieldsNames.ProductAreaId);
+    model.watchDate = this.getDateValue(form, CaseFieldsNames.WatchDate);
 
     return this.caseApiService.saveCaseData(model)
       .pipe(
@@ -39,6 +40,16 @@ export class CaseSaveService {
         return Number(form.controls[fieldName].value);
       }
       throwError(`Not supported value. Expecting number, but recieved ${typeof(value)}.`)
+    }
+    return undefined;
+  }
+
+  private getDateValue(form: FormGroup, fieldName: string): string
+  {
+    if(this.hasValue(form, fieldName)) {
+      const value = form.controls[fieldName].value;
+      if(!value) return null;
+      return form.controls[fieldName].value;
     }
     return undefined;
   }

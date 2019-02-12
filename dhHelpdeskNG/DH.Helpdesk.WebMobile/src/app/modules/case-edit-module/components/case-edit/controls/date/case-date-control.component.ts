@@ -4,6 +4,8 @@ import { BaseControl } from "../base-control";
 import { MbscDatetimeOptions, MbscDate } from "@mobiscroll/angular";
 import { FormatWidth, getLocaleDateFormat } from "@angular/common";
 import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
+import { switchMap, takeUntil } from "rxjs/operators";
+import { Subject, of } from "rxjs";
 
 @Component({
     selector: 'case-date-control',
@@ -21,6 +23,7 @@ import { UserSettingsApiService } from "src/app/services/api/user/user-settings-
       returnFormat: 'iso8601',
       // dateFormat: getLocaleDateFormat(this.locale, FormatWidth.Medium)
     }
+    private destroy$ = new Subject();
 
     constructor(@Inject(LOCALE_ID) locale: string,
                 private userSettingsService: UserSettingsApiService) {
@@ -34,9 +37,26 @@ import { UserSettingsApiService } from "src/app/services/api/user/user-settings-
     ngOnInit(): void {
       this.control.disabled = true;
       this.value = this.field.value == null ? null : new Date(this.field.value);
+      this.init(this.field);
+      this.initEvents()
     }
 
     ngOnDestroy(): void {
+      this.destroy$.next();
+      this.destroy$.complete();
     }
 
+    private initEvents() {
+      this.formControl.valueChanges 
+        .pipe(switchMap((v?: any) => {
+            this.value = v == null ? null : new Date(v);
+            return of(v);
+          }),
+          takeUntil(this.destroy$)
+        )
+        .subscribe();
+
+        // this.formControl.valueChanges // TODO: when date field is ready
+
+    }
   }

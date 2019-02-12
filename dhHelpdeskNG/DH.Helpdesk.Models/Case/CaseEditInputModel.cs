@@ -15,5 +15,6 @@ namespace DH.Helpdesk.Models.Case
         public int? StateSecondaryId { get; set; }
         public int? PriorityId { get; set; }
         public int? ProductAreaId { get; set; }
+        public DateTime? WatchDate { get; set; }
     }
 }

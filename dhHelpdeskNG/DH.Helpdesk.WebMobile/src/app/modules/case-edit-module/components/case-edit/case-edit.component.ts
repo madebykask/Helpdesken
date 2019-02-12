@@ -26,6 +26,7 @@ import { OptionItem } from 'src/app/modules/shared-module/models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseLogModel } from '../../models/case/case-actions-api.model';
+import { CaseWatchDateApiService } from '../../services/api/case/case-watchDate-api.service';
 
 @Component({
   selector: 'app-case-edit',
@@ -75,6 +76,7 @@ export class CaseEditComponent {
                 private сaseDataReducersFactory: CaseDataReducersFactory,
                 private workingGroupsService: WorkingGroupsService,
                 private stateSecondariesService: StateSecondariesService,
+                private caseWatchDateApiService: CaseWatchDateApiService,
                 private translateService : TranslateService,
                 private localStorage:  LocalStorageService) {
         if (this.route.snapshot.paramMap.has('id')) {
@@ -130,6 +132,16 @@ export class CaseEditComponent {
               switchMap((wg: StateSecondaryInputModel) => {
                 if (wg.workingGroupId != null && this.form.contains(CaseFieldsNames.WorkingGroupId)) {
                   this.form.controls[CaseFieldsNames.WorkingGroupId].setValue(wg.workingGroupId);
+                }
+                const departmentCtrl = this.form.controls[CaseFieldsNames.DepartmentId];
+                if (wg.recalculateWatchDate && departmentCtrl.value) {
+                  return this.caseWatchDateApiService.getWatchDate(departmentCtrl.value)
+                    .pipe(
+                      map(date => 
+                        this.form.controls[CaseFieldsNames.WatchDate].setValue(date)
+                        ),
+                      takeUntil(this.destroy$)
+                    )
                 }
                 return of(wg);
               }),
