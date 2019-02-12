@@ -14,5 +14,6 @@ namespace DH.Helpdesk.Models.Case
         public int? WorkingGroupId { get; set; }
         public int? StateSecondaryId { get; set; }
         public int? PriorityId { get; set; }
+        public int? ProductAreaId { get; set; }
     }
 }

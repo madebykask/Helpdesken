@@ -134,11 +134,16 @@ namespace DH.Helpdesk.WebApi.Controllers
                 currentCase.StateSecondary_Id = model.StateSecondaryId;
             }
 
-            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings,
-                GlobalEnums.TranslationCaseFields.Priority_Id))
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Priority_Id))
             {
                 currentCase.Priority_Id = model.PriorityId;
             }
+
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ProductArea_Id))
+            {
+                currentCase.ProductArea_Id = model.ProductAreaId;
+            }
+
 
             //if (isNew)
             //{

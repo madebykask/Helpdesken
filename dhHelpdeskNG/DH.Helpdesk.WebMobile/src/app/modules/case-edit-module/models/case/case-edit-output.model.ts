@@ -5,4 +5,5 @@ export class CaseEditOutputModel {
   workingGroupId?: number;
   stateSecondaryId?: number;
   priorityId?: number;
+  productAreaId?: number;
 }

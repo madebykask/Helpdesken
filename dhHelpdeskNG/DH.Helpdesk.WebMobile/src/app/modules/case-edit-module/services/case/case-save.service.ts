@@ -21,6 +21,7 @@ export class CaseSaveService {
     model.workingGroupId = this.getNumericValue(form, CaseFieldsNames.WorkingGroupId);
     model.stateSecondaryId = this.getNumericValue(form, CaseFieldsNames.StateSecondaryId);
     model.priorityId = this.getNumericValue(form, CaseFieldsNames.PriorityId);
+    model.productAreaId = this.getNumericValue(form, CaseFieldsNames.ProductAreaId);
 
     return this.caseApiService.saveCaseData(model)
       .pipe(
