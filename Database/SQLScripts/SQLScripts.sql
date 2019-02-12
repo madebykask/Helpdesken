@@ -12,9 +12,14 @@ if not exists (select * from syscolumns inner join sysobjects on sysobjects.id =
                where syscolumns.name = N'InventoryViewPermission' and sysobjects.name = N'tblUsers')
 BEGIN
     ALTER TABLE tblUsers
-    ADD InventoryViewPermission int NOT NULL DEFAULT(1)        
+    ADD InventoryViewPermission int NOT NULL DEFAULT(0)        
 END
 GO
+
+--Update Users with InventoryViewPermission = 1 where InventoryPermission = 1
+Update tblUsers Set InventoryViewPermission = 1 
+Where InventoryPermission = 1
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.41'

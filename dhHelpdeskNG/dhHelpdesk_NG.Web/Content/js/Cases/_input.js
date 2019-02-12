@@ -583,8 +583,11 @@ $(function () {
             });
 
             relatedInventory.getElement().click(function () {
-                var userIdValue = encodeURIComponent(userId.getElement().val());
-                window.open(getRelatedInventoryUrl() + "?userId=" + userIdValue, "_blank", "width=1400,height=600,menubar=no,toolbar=no,location=no,status=no,left=100,top=100,scrollbars=yes,resizable=yes");
+                if (window.parameters.user.hasInventoryViewPermission == "True") {
+                    var userIdValue = encodeURIComponent(userId.getElement().val());
+                    window.open(getRelatedInventoryUrl() + "?userId=" + userIdValue, "_blank", "width=1400,height=600,menubar=no,toolbar=no,location=no,status=no,left=100,top=100,scrollbars=yes,resizable=yes");
+                }
+                
             });
 
             initiatorDetailsEl.getElement().click(function () {

@@ -299,7 +299,7 @@
                                                     }
                                                     @if (Model.CustomerSettings.ModuleInventory)
                                                     {
-                                                        <a href="#" data-field="relatedInventory" style="display: none;" title="@Translation.GetCoreTextTranslation("Relaterade") @Translation.GetCoreTextTranslation("Inventarie")" class="btn"><i class="icon-th-large"></i></a>
+                                                        <a href="#" data-field="relatedInventory" title="@Translation.GetCoreTextTranslation("Relaterade") @Translation.GetCoreTextTranslation("Inventarie")" class="btn @(Model.UserHasInventoryViewPermission ? "" : "disabled")" style="display: none;"><i class="icon-th-large"></i></a>
                                                     }
                                                     
                                                     @if (Model.CustomerSettings.ModuleComputerUser && Model.IsUserAdmin)
