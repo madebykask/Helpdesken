@@ -5384,7 +5384,7 @@ namespace DH.Helpdesk.Web.Controllers
                             if (dept != null && dept.WatchDateCalendar_Id.HasValue && priority != null && priority.SolutionTime == 0)
                             {
                                 m.case_.WatchDate =
-                                    _watchDateCalendarServcie.GetClosestDateTo(dept.WatchDateCalendar_Id.Value, DateTime.UtcNow);
+                                    _watchDateCalendarService.GetClosestDateTo(dept.WatchDateCalendar_Id.Value, DateTime.UtcNow);
                             }
                         }
                     }
@@ -7010,7 +7010,7 @@ namespace DH.Helpdesk.Web.Controllers
                                         _supplierService, _workingGroupService, _userService,
                                         _priorityService, _statusService, _stateSecondaryService,
                                         _projectService, _problemService, _causingPartService,
-                                        _changeService, _finishingCauseService, _watchDateCalendarServcie, 
+                                        _changeService, _finishingCauseService, _watchDateCalendarService, 
                                         _computerService);
 
             var model = _caseRuleFactory.GetCaseRuleModel(customerId, ruleType, currentData, customerSettings, caseFieldSettings, new List<CaseSolutionSettingModel>());
