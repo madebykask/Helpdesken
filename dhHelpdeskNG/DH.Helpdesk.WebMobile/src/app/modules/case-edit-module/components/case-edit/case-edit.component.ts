@@ -23,7 +23,6 @@ import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputMo
 import { OptionItem } from 'src/app/modules/shared-module/models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
-import { CaseLogModel } from '../../models/case/case-actions-api.model';
 import { CaseWatchDateApiService } from '../../services/api/case/case-watchDate-api.service';
 import { CaseFilesApiService } from '../../services/api/case/case-files-api.service';
 
@@ -86,13 +85,11 @@ export class CaseEditComponent {
         }
 
         this.commService.listen(Channels.DropdownValueChanged).pipe(
-          map((v: DropdownValueChangedEvent) => {
+          takeUntil(this.destroy$)
+        ).subscribe((v: DropdownValueChangedEvent) => {
             const reducer = this.сaseDataReducersFactory.createCaseDataReducers(this.dataSource);
             this.runUpdates(reducer, v);
-            return v;
-          }),
-          takeUntil(this.destroy$)
-        ).subscribe();
+        });
     }
 
     private runUpdates(reducer, v: DropdownValueChangedEvent) { // TODO: move to new class
@@ -101,27 +98,21 @@ export class CaseEditComponent {
 
       switch (v.name) {
         case CaseFieldsNames.WorkingGroupId: {
-          let perfomers$ = optionsHelper.getPerformers(false);
-          perfomers$.pipe(
-            take(1),
-            map((o: OptionItem[]) => {
-                reducer.caseDataReducer(CaseFieldsNames.PerformerUserId, { items: o});
-                return o;
-              }),
-            takeUntil(this.destroy$)
-          ).subscribe();
+          optionsHelper.getPerformers(false).pipe(
+            take(1)
+          ).subscribe((o:OptionItem[]) => {
+              reducer.caseDataReducer(CaseFieldsNames.PerformerUserId, { items: o});
+          });
 
           if (!!v.value && this.form.contains(CaseFieldsNames.StateSecondaryId)) {
             this.workingGroupsService.getWorkingGroup(v.value)
             .pipe(
-              map((wg: WorkingGroupInputModel) => {
-                if (wg.stateSecondaryId != null) {
-                  this.form.controls[CaseFieldsNames.StateSecondaryId].setValue(wg.stateSecondaryId);
-                }
-                return wg;
-              }),
-              takeUntil(this.destroy$)
-            ).subscribe();
+                take(1)
+            ).subscribe(wg => {
+              if (wg && wg.stateSecondaryId != null) {
+                this.form.controls[CaseFieldsNames.StateSecondaryId].setValue(wg.stateSecondaryId);
+              }
+            });
           }
           break;
         }
@@ -129,24 +120,18 @@ export class CaseEditComponent {
           if (v.value != null) {
             this.stateSecondariesService.getStateSecondary(v.value)
             .pipe(
-              switchMap((wg: StateSecondaryInputModel) => {
-                if (wg.workingGroupId != null && this.form.contains(CaseFieldsNames.WorkingGroupId)) {
-                  this.form.controls[CaseFieldsNames.WorkingGroupId].setValue(wg.workingGroupId);
-                }
-                const departmentCtrl = this.form.controls[CaseFieldsNames.DepartmentId];
-                if (wg.recalculateWatchDate && departmentCtrl.value) {
-                  return this.caseWatchDateApiService.getWatchDate(departmentCtrl.value)
-                    .pipe(
-                      map(date => 
-                        this.form.controls[CaseFieldsNames.WatchDate].setValue(date)
-                        ),
-                      takeUntil(this.destroy$)
-                    )
-                }
-                return of(wg);
-              }),
-              takeUntil(this.destroy$)
-            ).subscribe();
+              take(1)
+            ).subscribe(ss => {
+              if (ss && ss.workingGroupId != null && this.form.contains(CaseFieldsNames.WorkingGroupId)) {
+                this.form.controls[CaseFieldsNames.WorkingGroupId].setValue(ss.workingGroupId);
+              }
+              const departmentCtrl = this.form.controls[CaseFieldsNames.DepartmentId];
+              if (ss.recalculateWatchDate && departmentCtrl.value) {
+                  this.caseWatchDateApiService.getWatchDate(departmentCtrl.value).pipe(
+                      take(1)
+                  ).subscribe(date => this.form.controls[CaseFieldsNames.WatchDate].setValue(date));
+              }
+            });
           }
           break;
         }

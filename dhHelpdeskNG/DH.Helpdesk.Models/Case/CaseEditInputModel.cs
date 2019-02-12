@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Models.Case
+﻿using System;
+
+namespace DH.Helpdesk.Models.Case
 {
     public class CaseEditInputModel
     {
