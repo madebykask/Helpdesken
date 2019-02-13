@@ -57,7 +57,7 @@ export class TruncateTextDirective {
   }
 
   private set Text(text) {
-    this.nativeEl.innerHTML = this.sanitizeHtmlPipe.transform(text);
+    this.nativeEl.innerHTML = text;
   }
 
   @HostListener('window:resize', ['$event'])

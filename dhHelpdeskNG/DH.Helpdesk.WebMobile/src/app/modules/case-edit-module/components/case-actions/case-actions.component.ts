@@ -5,8 +5,7 @@ import { AuthenticationStateService } from 'src/app/services/authentication';
 @Component({
   selector: 'case-actions',
   templateUrl: './case-actions.component.html',
-  styleUrls: ['./case-actions.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./case-actions.component.scss'], 
 })
 export class CaseActionsComponent {
   @Input("caseKey")
@@ -20,14 +19,12 @@ export class CaseActionsComponent {
   cardSettings = {}
   actionsListViewSettings = {};
 
-  constructor(private authStateService: AuthenticationStateService,
-              private cd: ChangeDetectorRef) {
+  constructor(private authStateService: AuthenticationStateService) {
   }
 
   ngOnInit() {
     this.grouppedItems = this.processGroups(this.items);
     this.isLoaded = true;
-    this.cd.markForCheck();
   }
 
   private processGroups(items: CaseAction<CaseActionDataType>[]): CaseActionsGroup[] {
