@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { CaseAction, CaseActionsGroup, CaseLogActionData, CaseHistoryActionData, CaseActionDataType } from '../../models';
 import { AuthenticationStateService } from 'src/app/services/authentication';
 
@@ -7,11 +7,11 @@ import { AuthenticationStateService } from 'src/app/services/authentication';
   templateUrl: './case-actions.component.html',
   styleUrls: ['./case-actions.component.scss'], 
 })
-export class CaseActionsComponent {
-  @Input("caseKey")
+export class CaseActionsComponent implements OnChanges{
+  @Input()
   caseKey:string;
 
-  @Input("items") 
+  @Input() 
   items: Array<CaseAction<CaseActionDataType>>;
 
   isLoaded = false;
@@ -23,10 +23,15 @@ export class CaseActionsComponent {
   }
 
   ngOnInit() {
-    this.grouppedItems = this.processGroups(this.items);
-    this.isLoaded = true;
   }
 
+  ngOnChanges(changes: SimpleChanges): void {    
+    if (changes.items && changes.items.currentValue && changes.items.currentValue.length){
+      this.grouppedItems = this.processGroups(this.items);
+      this.isLoaded = true;
+    }
+  }  
+  
   private processGroups(items: CaseAction<CaseActionDataType>[]): CaseActionsGroup[] {
     let groups = new Array<CaseActionsGroup>();
 

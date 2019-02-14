@@ -20,20 +20,20 @@ export class FieldChangeActionComponent extends CaseActionBaseComponent<CaseHist
   }
 
   get formattedValue(): string {
-    
     let currentValue = this.data.currentValue;
-    
-    //check for date type
+            
+    //check date type first
     if (DateUtil.isDate(currentValue)) {
         return DateUtil.formatToLocalDate(currentValue);
     }
     
     //process as a text
-    currentValue = StringUtil.convertToHtml(currentValue);
-    return currentValue;
-  } 
+    let formattedValue = currentValue !== null && currentValue !== undefined ? currentValue.toString() : '';
+    formattedValue = StringUtil.convertToHtml(formattedValue);
+    return formattedValue;
+  }
 
-  get showField(){
+  get showField() {
     //show field label if its not know case field change
     return this.caseAction.type === CaseEventType.OtherChanges;
   }

@@ -1,6 +1,6 @@
-<mbsc-form class="mbsc-padding md-load-btn md-btn-isLoading" [hidden]="isLoaded">
-    <mbsc-button flat block icon="loop2" ></mbsc-button>
-</mbsc-form>
+<div class="mbsc-padding md-load-btn md-btn-isLoading" [hidden]="isLoaded">
+     <mbsc-button flat block data-icon="fa-spinner"></mbsc-button>
+</div>
 
 <div id="case-actions" *ngIf="grouppedItems && grouppedItems.length">
   <mbsc-card *ngFor="let group of grouppedItems;trackBy:getTrackId" [class.owner]="isActionOwner(group.CreatedByUserId)">
