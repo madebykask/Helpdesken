@@ -137,7 +137,7 @@ namespace DH.Helpdesk.Services.Services
                 this._watchDateCalendarValueRepository.GetAll()
                     .AsQueryable()
                     .Where(it => it.WatchDateCalendar_Id == calendarId && it.WatchDate > now && 
-                                 (it.ValidUntilDate.HasValue || DbFunctions.TruncateTime(it.ValidUntilDate.Value) >= now.Date))
+                                 (!it.ValidUntilDate.HasValue || DbFunctions.TruncateTime(it.ValidUntilDate.Value) >= now.Date))
                     .OrderBy(it => it.WatchDate)
                     .FirstOrDefault();
             if (watchDateCalendarValue != null)
