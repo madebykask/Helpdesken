@@ -749,7 +749,7 @@ Module DH_Helpdesk_Mail
 
                                     If workingGroup_Id <> 0 Then
 
-                                        If Not workingGroupEMail Is Nothing And workingGroupAllocateCaseMail = 1 Then
+                                        If Not String.IsNullOrEmpty(workingGroupEMail) And workingGroupAllocateCaseMail = 1 Then
                                             objMailTemplate = objMailTemplateData.getMailTemplateById(7, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                             If Not objMailTemplate Is Nothing Then

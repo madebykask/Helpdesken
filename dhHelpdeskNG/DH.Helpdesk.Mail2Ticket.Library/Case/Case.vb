@@ -248,6 +248,10 @@ Imports System.Data
             msPerformerWorkingGroupEMail = ""
         End If
 
+        If Not IsDBNull(dr("WorkingGroup_Id")) Then
+            miWorkingGroup_Id = dr("WorkingGroup_Id")
+        End If
+
         If Not IsDBNull(dr("CaseWorkingGroup")) Then
             msCaseWorkingGroup = dr("CaseWorkingGroup")
         Else
