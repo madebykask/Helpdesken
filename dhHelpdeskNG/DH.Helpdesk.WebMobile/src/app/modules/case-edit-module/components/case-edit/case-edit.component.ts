@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
-import { forkJoin, Subject, Subscription, of, throwError } from 'rxjs';
+import { forkJoin, Subject, Subscription, of, throwError, interval } from 'rxjs';
 import { switchMap, take, finalize, delay, catchError, map, takeUntil, takeWhile, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, Channels, DropdownValueChangedEvent } from 'src/app/services/communication/communication.service';
@@ -144,19 +144,22 @@ export class CaseEditComponent {
     }
 
     ngOnDestroy() {
-        this.ownsLock = false;
-        this.commService.publish(Channels.Header, new HeaderEventData(true));        
-
         // unlock the case if required
         if (this.caseId > 0 && this.ownsLock) {
-            this.caseLockApiService.unLockCase(this.caseId, this.caseLock.lockGuid).subscribe();
+            this.ownsLock = false;
+            this.caseLockApiService.unLockCase(this.caseId, this.caseLock.lockGuid)
+              .subscribe(res => {
+                //console.log('>>> case has been unlocked. Result: %s', res);
+              });
         }
 
         // shall we do extra checks?
         this.alertService.clearMessages();
         this.destroy$.next();
         this.destroy$.complete();
-    }    
+
+        this.commService.publish(Channels.Header, new HeaderEventData(true));
+    }
 
     loadCaseData(): any {
       this.isLoaded = false;
@@ -326,7 +329,6 @@ export class CaseEditComponent {
       this.ownsLock = !this.caseLock.isLocked;
 
       if (this.caseLock.isLocked) {
-          // TODO: translate messages
           let notice =
               this.caseLock.isLocked && this.caseLock.userId === currentUser.id ?
                   this.translateService.instant('OBS! Du har redan öppnat detta ärende i en annan session.') :
@@ -334,7 +336,7 @@ export class CaseEditComponent {
           this.alertService.showMessage(notice, AlertType.Warning);
       } else if (this.caseLock.timerInterval > 0) {
           // run extend case lock at specified interval
-          /*interval(this.caseLock.timerInterval * 1000).pipe(
+          interval(this.caseLock.timerInterval * 1000).pipe(
                 takeWhile(x => this.ownsLock)
             ).subscribe(_ => {
               this.caseLockApiService.reExtendedCaseLock(this.caseId, this.caseLock.lockGuid, this.caseLock.extendValue).pipe(
@@ -342,7 +344,7 @@ export class CaseEditComponent {
               ).subscribe(res => {
                   if (!res) this.ownsLock = false;
               });
-            });*/
+            });
       }
     }
   }
