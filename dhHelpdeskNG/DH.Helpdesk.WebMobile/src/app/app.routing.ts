@@ -6,6 +6,9 @@ import { NgModule } from '@angular/core';
 import { ErrorComponent } from './shared/components/error/error.component';
 import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 import { TestComponent } from './components/test/test.component';
+import { CaseFileDataResolver } from './modules/case-edit-module/resolvers/case-file-data.resolver';
+import { LogFileDataResolver } from './modules/case-edit-module/resolvers/log-file-data.resolver';
+import { FilePreviewComponent } from './shared/components/file-preview/file-preview.component';
 
 const appRoutes: Routes = [
   { 
@@ -14,11 +17,30 @@ const appRoutes: Routes = [
     children: [
       { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard]},
       { path: 'casesoverview', component: CasesOverviewComponent, canActivate: [AuthGuard] },
-      { path: 'test', component: TestComponent },
+      { path: 'test', component: TestComponent },      
       { path: 'casesoverview/:searchType', component: CasesOverviewComponent, canActivate: [AuthGuard] },
       { path: 'case',
         loadChildren: './modules/case-edit-module/case-edit.module#CaseEditModule',
-        canActivate: [AuthGuard] },
+        canActivate: [AuthGuard] 
+      },
+      
+      //case file
+      { 
+        path: 'case/:caseId/file/:fileId',
+        component: FilePreviewComponent, 
+        resolve: {
+          fileData: CaseFileDataResolver
+        }
+      },
+
+      // log file preview
+      { 
+        path: 'case/:caseId/logfile/:fileId', 
+        component: FilePreviewComponent, 
+        resolve: {
+          fileData: LogFileDataResolver
+        }
+      }
     ]
   },
 

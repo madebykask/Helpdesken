@@ -1,9 +1,8 @@
 import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { CaseLogActionData } from 'src/app/modules/case-edit-module/models';
 import { LogFile } from 'src/app/modules/case-edit-module/models/case/case-actions-api.model';
-import { CaseFilesApiService } from 'src/app/modules/case-edit-module/services/api/case/case-files-api.service';
-
 import { CaseActionBaseComponent } from '../case-action-base.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-log-note-action',
@@ -12,7 +11,7 @@ import { CaseActionBaseComponent } from '../case-action-base.component';
 })
 export class LogNoteActionComponent extends CaseActionBaseComponent<CaseLogActionData> {
 
-  constructor(private filesApiService: CaseFilesApiService) { 
+  constructor(private router: Router) {
     super();
   } 
 
@@ -21,8 +20,7 @@ export class LogNoteActionComponent extends CaseActionBaseComponent<CaseLogActio
   }  
 
    downloadLogFile(file: LogFile) {
-     const caseId = parseInt(this.caseKey);
-     this.filesApiService.downloadLogFile(file.id, caseId);
+     this.router.navigate(['/case', this.caseKey, 'logfile', file.id]);
   }
   
   ngOnChanges(changes: SimpleChanges): void {

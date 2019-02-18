@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { MbscListviewOptions, mobiscroll } from '@mobiscroll/angular';
-import { takeUntil, catchError, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { BaseCaseField, CaseFileModel, CaseAccessMode } from 'src/app/modules/case-edit-module/models';
 
@@ -8,7 +8,8 @@ import { CaseFilesApiService } from 'src/app/modules/case-edit-module/services/a
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseFilesUploadComponent } from '../case-files-upload/case-files-upload.component';
-import {TranslateService as NgxTranslateService} from '@ngx-translate/core';
+import { TranslateService as NgxTranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'case-files-control',
@@ -41,6 +42,7 @@ export class CaseFilesControlComponent implements OnInit  {
 
   constructor(private caseFilesApiService: CaseFilesApiService,
               private translateService: NgxTranslateService,
+              private router: Router,
               private alertsService: AlertsService) {
   }
 
@@ -78,8 +80,7 @@ export class CaseFilesControlComponent implements OnInit  {
 
   downloadFile(item: CaseFileModel) {
     //todo: handle New case files download! 
-    let caseId = +this.caseKey;
-    this.caseFilesApiService.downloadCaseFile(caseId, item.fileId, item.fileName);
+    this.router.navigate(['/case', this.caseKey, 'file', item.fileId]);
   }
   
   onFileDelete(event, inst){
@@ -88,7 +89,7 @@ export class CaseFilesControlComponent implements OnInit  {
     if (!isNaN(index) && this.files.length > index) {
         let fileItem = self.files[index];
         if (fileItem) {
-              //todo: move confirm to a separate service!              
+              //todo: move confirm to a separate service!
               mobiscroll.confirm({
                 title: "",
                 display: 'bottom',

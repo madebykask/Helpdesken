@@ -62,28 +62,6 @@ export class CaseEditComponent {
     private caseLock: CaseLockModel = null;
     private isClosing = false;
 
-    get isLocked() {
-      return this.caseLock && this.caseLock.isLocked;
-    }       
-
-    get accessMode() {
-      let accessMode = CaseAccessMode.NoAccess;
-      if (this.caseData) {
-          if (this.caseData.editMode === CaseAccessMode.NoAccess) {
-            accessMode = CaseAccessMode.NoAccess;
-          }
-          else {
-            if (this.caseLock && this.caseLock.isLocked) {
-              accessMode = CaseAccessMode.ReadOnly;
-            }
-            else {
-              accessMode = this.caseData.editMode;
-            }
-          }
-      }
-      return accessMode;
-    } 
-
     constructor(private route: ActivatedRoute,
                 private caseService: CaseService,
                 private router: Router,
@@ -114,6 +92,28 @@ export class CaseEditComponent {
             this.runUpdates(reducer, v);
         });
     }
+
+    get isLocked() {
+      return this.caseLock && this.caseLock.isLocked;
+    }       
+
+    get accessMode() {
+      let accessMode = CaseAccessMode.NoAccess;
+      if (this.caseData) {
+          if (this.caseData.editMode === CaseAccessMode.NoAccess) {
+            accessMode = CaseAccessMode.NoAccess;
+          }
+          else {
+            if (this.caseLock && this.caseLock.isLocked) {
+              accessMode = CaseAccessMode.ReadOnly;
+            }
+            else {
+              accessMode = this.caseData.editMode;
+            }
+          }
+      }
+      return accessMode;
+    } 
 
     private runUpdates(reducer, v: DropdownValueChangedEvent) { // TODO: move to new class
       const filters = this.caseDataHelpder.getCaseOptionsFilter(this.caseData, (name: string) => this.getFormValue(name));

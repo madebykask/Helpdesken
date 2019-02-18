@@ -1,0 +1,7 @@
+<div class="preview" [style.height.px]="previewHeight"> 
+  <iframe #frame id="filePreview" style="width:100%;height:100%;border: none;"></iframe>
+</div>
+
+<mbsc-bottom-nav [options]="bottomMenuSettings">  
+  <mbsc-nav-item (click)="goBack()" translate>Stäng</mbsc-nav-item>
+</mbsc-bottom-nav>

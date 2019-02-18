@@ -31,7 +31,7 @@ export class LogFilesUploadComponent implements OnInit {
     const cid = userData.currentData.selectedCustomerId;
 
     // init file uploader 
-    this.fileUploader.setOptions(<FileUploaderOptions>{
+    this.fileUploader.setOptions(<FileUploaderOptions> {
       autoUpload: true,
       filters: [],
       isHTML5: true,

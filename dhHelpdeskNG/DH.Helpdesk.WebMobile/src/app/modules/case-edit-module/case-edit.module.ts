@@ -27,7 +27,6 @@ import { ActionsFilterPipe } from './pipes/actions-filter.pipe';
 import { LogFilesUploadComponent } from './components/case-edit/controls/log-files-upload/log-files-upload.component';
 import { CaseLogInputComponent } from './components/case-edit/case-log-input/case-log-input.component';
 
-
 @NgModule({
   declarations: [ CaseEditComponent,
     CaseTextboxComponent, CaseDateComponent, CaseDropdownComponent,  CaseMultiDropdownComponent,
@@ -47,6 +46,6 @@ import { CaseLogInputComponent } from './components/case-edit/case-log-input/cas
     CaseEditRoutingModule
   ],
   entryComponents: [FieldChangeActionComponent, LogNoteActionComponent, GeneralActionComponent],
-  exports: [ ]
+  exports: []
 })
 export class CaseEditModule { }

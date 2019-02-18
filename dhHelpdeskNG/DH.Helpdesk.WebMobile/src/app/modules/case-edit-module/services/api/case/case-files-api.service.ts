@@ -1,38 +1,24 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { take, catchError } from "rxjs/operators";
-
-import { Observable, throwError } from "rxjs";
+import { Observable } from "rxjs";
 import { LocalStorageService } from "src/app/services/local-storage";
 import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
-import { WindowWrapper } from "src/app/modules/shared-module/helpers/window-wrapper";
+
 
 @Injectable({ providedIn: 'root' })
 export class CaseFilesApiService extends HttpApiServiceBase {
-    constructor(httpClient:HttpClient, localStorageService: LocalStorageService, private windowWrapper: WindowWrapper) {
+    constructor(httpClient:HttpClient, localStorageService: LocalStorageService) {
         super(httpClient, localStorageService);
     }
 
-    downloadLogFile(fileId:number, caseId:number) {
-      let window = this.windowWrapper.nativeWindow;
+    downloadLogFile(caseId:number, fileId:number) {
       let url = this.buildResourseUrl(`/api/case/${caseId}/logfile/${fileId}`, { inline: true }, true, false);
-      this.getFileBody(url, null).pipe(
-          take(1),
-      ).subscribe(data => {
-          //saveAs(data, fileName); // uses file-saver.js
-          window.location.href = window.URL.createObjectURL(data);
-      });
+      return this.getFileBody(url, null);
     }
 
-    downloadCaseFile(caseId:number, fileId:number, fileName:string) {
-        let window = this.windowWrapper.nativeWindow;
+    downloadCaseFile(caseId:number, fileId:number): Observable<Blob> {
         let url = this.buildResourseUrl(`/api/case/${caseId}/file/${fileId}`, { inline: true }, true, false);
-        this.getFileBody(url, null).pipe(
-            take(1),
-        ).subscribe(data => {
-            //saveAs(data, fileName); // uses file-saver.js
-            window.location.href = window.URL.createObjectURL(data);
-        });
+        return this.getFileBody(url, null);
     }
 
     deleteCaseFile(caseKey:string, fileId:number, fileName:string): Observable<any> {

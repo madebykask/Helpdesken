@@ -8,6 +8,7 @@ import { AuthenticationService } from 'src/app/services/authentication';
 import { LanguagesApiService } from 'src/app/services/api/language/languages-api.service';
 import { CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
+
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
@@ -26,7 +27,7 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
     display: 'bottom',
     data: [],
     onSet: (event, inst) => this.onLanguageChange(event, inst)
-  }
+  };
 
   bottomMenuSettings: MbscNavOptions = {
     //layout: 'fixed',
@@ -35,7 +36,7 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
     moreIcon: 'fa-ellipsis-h',
     menuIcon: null,
     menuText: null,
-  }
+  };
 
   languageId: number = 0;
   isLoadingLanguage: boolean = true;

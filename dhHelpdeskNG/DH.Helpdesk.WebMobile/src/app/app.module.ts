@@ -28,6 +28,7 @@ import { environment } from '@env/environment';
 import { SharedModule } from './modules/shared-module/shared.module';
 import { GetByKeyPipe } from './helpers/pipes/filter-case-overview.pipe';
 import { TestComponent } from './components/test/test.component';
+import { FilePreviewComponent } from './shared/components/file-preview/file-preview.component';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -39,6 +40,7 @@ import { TestComponent } from './components/test/test.component';
      RequireAuthDirective,
      ErrorComponent,
      AltLayoutComponent,
+     FilePreviewComponent,
      TestComponent,
   ],
   imports: [
