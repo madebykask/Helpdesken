@@ -7,5 +7,7 @@
           (click)="downloadFile(item)">{{ item.fileName }}</mbsc-listview-item>
       </mbsc-listview>
   </div>
-  <case-files-upload [caseKey]='caseKey'></case-files-upload>
+   
+  <case-files-upload *ngIf="hasFullAccess" [caseKey]='caseKey' (NewFileUploadComplete)="processNewFileUpload($event)"></case-files-upload>
+  
 </div>

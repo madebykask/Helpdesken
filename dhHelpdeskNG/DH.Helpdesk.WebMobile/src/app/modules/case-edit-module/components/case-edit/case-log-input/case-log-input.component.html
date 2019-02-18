@@ -11,5 +11,6 @@
           <mbsc-listview-item *ngFor="let file of files;" icon="fa-paperclip">{{ file }}</mbsc-listview-item>
       </mbsc-listview>
   </div>
-  <log-files-upload [caseKey]="caseKey"></log-files-upload>
+
+  <log-files-upload [caseKey]="caseKey" (fileUploaded)="processFileUploaded($event)"></log-files-upload>
 </ng-container>

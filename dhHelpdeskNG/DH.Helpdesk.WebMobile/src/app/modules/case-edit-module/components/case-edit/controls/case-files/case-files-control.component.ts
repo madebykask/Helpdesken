@@ -2,8 +2,8 @@ import { Component, OnInit, Input, SimpleChanges, ViewChild } from '@angular/cor
 import { MbscListviewOptions, mobiscroll } from '@mobiscroll/angular';
 import { takeUntil, catchError, take } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { BaseCaseField, CaseFileModel } from 'src/app/modules/case-edit-module/models';
-import { CaseApiService } from 'src/app/modules/case-edit-module/services/api/case/case-api.service';
+import { BaseCaseField, CaseFileModel, CaseAccessMode } from 'src/app/modules/case-edit-module/models';
+
 import { CaseFilesApiService } from 'src/app/modules/case-edit-module/services/api/case/case-files-api.service';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
@@ -19,6 +19,7 @@ export class CaseFilesControlComponent implements OnInit  {
 
   @Input() field: BaseCaseField<Array<any>>; 
   @Input() caseKey: string; 
+  @Input() accessMode: CaseAccessMode;
 
   @ViewChild(CaseFilesUploadComponent) caseFilesComponent: CaseFilesUploadComponent
 
@@ -36,29 +37,32 @@ export class CaseFilesControlComponent implements OnInit  {
     }]  
   };
 
-  private onDestroy = new Subject();
+  private destroy$ = new Subject();
 
-  constructor(private caseApiService: CaseApiService,
-              private caseFilesApiService: CaseFilesApiService,
+  constructor(private caseFilesApiService: CaseFilesApiService,
               private translateService: NgxTranslateService,
               private alertsService: AlertsService) {
   }
 
-  ngOnInit() {
-    //subscribe on new file upload
-    this.caseFilesComponent.NewFileUploadComplete.pipe(
-      takeUntil(this.onDestroy)
-    ).subscribe(x => this.processNewFileUpload(x));
+  get hasFullAccess() {
+    return this.accessMode === CaseAccessMode.FullAccess;
+  }
+
+  ngOnInit() {  
+  }
+
+  ngAfterViewInit(): void {  
+      //subscribe on new file upload
   }
 
   ngOnDestroy(): void {
-    this.onDestroy.next();
+    this.destroy$.next();
   }
    
   ngOnChanges(changes: SimpleChanges): void {
     // create  files list model to bind
-    if (changes['field'] && changes['field'].currentValue.value !== undefined) {
-        let fieldValue = changes['field'].currentValue as BaseCaseField<Array<any>>;
+    if (changes.field && changes.field.currentValue.value !== undefined) {
+        let fieldValue = changes.field.currentValue as BaseCaseField<Array<any>>;
         if (fieldValue && fieldValue.value) {
           let items = fieldValue.value || [];
           this.files = items.map(f => new CaseFileModel(f.id, f.fileName));
@@ -66,7 +70,7 @@ export class CaseFilesControlComponent implements OnInit  {
     }
   }
 
-  private processNewFileUpload(data: { id:number, name:string }) {
+  processNewFileUpload(data: { id:number, name:string }) {
     if (data) {
         this.files.push(new CaseFileModel(data.id, data.name));
     }

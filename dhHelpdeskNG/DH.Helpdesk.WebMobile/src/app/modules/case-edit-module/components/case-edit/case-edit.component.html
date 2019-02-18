@@ -112,7 +112,10 @@
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.Cost)" [field]="getField(caseFieldsNames.Cost)" [form]="form"></case-textbox-control>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.Cost_OtherCost)" [field]="getField(caseFieldsNames.Cost_OtherCost)" [form]="form"></case-textbox-control>
                         <case-dropdown-control *ngIf="hasField(caseFieldsNames.Cost_Currency)" disabled=true [field]="getField(caseFieldsNames.Cost_Currency)" [form]="form" [dataSource]="dataSource.currenciesStore$"></case-dropdown-control>
-                        <case-files-control *ngIf="hasField(caseFieldsNames.Filename)" [field]="getField(caseFieldsNames.Filename)" [caseKey]="caseKey"></case-files-control>
+                        <case-files-control *ngIf="hasField(caseFieldsNames.Filename)" 
+                            [field]="getField(caseFieldsNames.Filename)" 
+                            [caseKey]="caseKey"
+                            [accessMode]="accessMode"></case-files-control>
                 </mbsc-form-group-content>
             </mbsc-form-group>
 
@@ -155,10 +158,10 @@
                 </mbsc-form-group-content>
             </mbsc-form-group>
 
-            <mbsc-form-group collapsible #communication>
+            <mbsc-form-group collapsible #communication >
                 <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Communication)}}</mbsc-form-group-title>
                 <mbsc-form-group-content>
-                  <case-log-input [caseKey]="caseKey" [caseData]="caseData" [form]="form"></case-log-input>
+                  <case-log-input [caseKey]="caseKey" [accessMode]="accessMode" [caseData]="caseData" [form]="form"></case-log-input>
                 </mbsc-form-group-content>
             </mbsc-form-group>
 

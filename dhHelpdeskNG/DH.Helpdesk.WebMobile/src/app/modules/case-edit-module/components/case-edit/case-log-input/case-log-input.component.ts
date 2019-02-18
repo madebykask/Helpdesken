@@ -1,26 +1,25 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { CaseEditDataHelper } from '../../../logic/case-edit/case-editdata.helper';
-import { CaseEditInputModel, BaseCaseField } from '../../../models';
+import { CaseEditInputModel, BaseCaseField, CaseLockModel, CaseAccessMode } from '../../../models';
 import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
-import { LogFilesUploadComponent } from '../controls/log-files-upload/log-files-upload.component';
 import { MbscListviewOptions } from '@mobiscroll/angular';
-import { takeUntil, take } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { CaseLogApiService } from '../../../services/api/case/case-log-api.service';
+import { take } from 'rxjs/internal/operators';
+
 
 @Component({
   selector: 'case-log-input',
   templateUrl: './case-log-input.component.html',
   styleUrls: ['./case-log-input.component.scss']
 })
-export class CaseLogInputComponent implements OnInit, AfterViewInit {
+export class CaseLogInputComponent implements OnInit {
   
   @Input() caseKey:string;
   @Input() form: FormGroup;
-  @Input() caseData: CaseEditInputModel;   
-
-  @ViewChild(LogFilesUploadComponent) fileUpload: LogFilesUploadComponent;
+  @Input() caseData: CaseEditInputModel;
+  @Input() accessMode: CaseAccessMode;
 
   files:string[] = [];
   caseFieldsNames = CaseFieldsNames;
@@ -29,7 +28,11 @@ export class CaseLogInputComponent implements OnInit, AfterViewInit {
   externalLogField:BaseCaseField<string> = null;
   internalLogField:BaseCaseField<string> = null;
 
-  private destroy$ = new Subject();
+  get hasFullAccess() {
+    return this.accessMode !== null && this.accessMode === CaseAccessMode.FullAccess;
+  }
+
+  private destroy$ = new Subject();  
 
   fileListSettings: MbscListviewOptions = {
     enhance: true,
@@ -51,9 +54,9 @@ export class CaseLogInputComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.externalLogField = this.getField(CaseFieldsNames.Log_ExternalText);
     this.internalLogField = this.getField(CaseFieldsNames.Log_InternalText);
-    
+
     if (this.externalLogField) {
-      this.externalLogLabel = this.externalLogField.label + (this.externalLogField.isRequired ? '*' : '');  
+      this.externalLogLabel = this.externalLogField.label + (this.externalLogField.isRequired ? '*' : '');
     }
 
     if (this.internalLogField) {
@@ -61,17 +64,15 @@ export class CaseLogInputComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
-    //subscribe on new files upload events
-    this.fileUpload.fileUploaded.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(x => this.files.push(x))
+  processFileUploaded(file:string) {
+    //console.log('>>> log file has been uploaded');
+    this.files.push(file);
   }
 
   ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-}
+      this.destroy$.next();
+      this.destroy$.complete();
+  }
 
   hasField(name: string): boolean {
      return this.caseDataHelpder.hasField(this.caseData, name);

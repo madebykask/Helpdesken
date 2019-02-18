@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
@@ -60,6 +60,29 @@ export class CaseEditComponent {
     private ownsLock = false;
     private destroy$ = new Subject();
     private caseLock: CaseLockModel = null;
+    private isClosing = false;
+
+    get isLocked() {
+      return this.caseLock && this.caseLock.isLocked;
+    }       
+
+    get accessMode() {
+      let accessMode = CaseAccessMode.NoAccess;
+      if (this.caseData) {
+          if (this.caseData.editMode === CaseAccessMode.NoAccess) {
+            accessMode = CaseAccessMode.NoAccess;
+          }
+          else {
+            if (this.caseLock && this.caseLock.isLocked) {
+              accessMode = CaseAccessMode.ReadOnly;
+            }
+            else {
+              accessMode = this.caseData.editMode;
+            }
+          }
+      }
+      return accessMode;
+    } 
 
     constructor(private route: ActivatedRoute,
                 private caseService: CaseService,
@@ -140,25 +163,27 @@ export class CaseEditComponent {
 
     ngOnInit() {
       this.commService.publish(Channels.Header, new HeaderEventData(false));
+      //todo: handle new case as well
       this.loadCaseData();
     }
 
     ngOnDestroy() {
-        // unlock the case if required
-        if (this.caseId > 0 && this.ownsLock) {
-            this.ownsLock = false;
-            this.caseLockApiService.unLockCase(this.caseId, this.caseLock.lockGuid)
-              .subscribe(res => {
-                //console.log('>>> case has been unlocked. Result: %s', res);
-              });
+      this.isClosing = true;
+
+      // unlock the case if required
+      if (this.caseId > 0) {
+        if (this.ownsLock) {
+          this.ownsLock = false;
+          this.caseLockApiService.unLockCase(this.caseId, this.caseLock.lockGuid).subscribe();
         }
+      }
 
-        // shall we do extra checks?
-        this.alertService.clearMessages();
-        this.destroy$.next();
-        this.destroy$.complete();
+      // shall we do extra checks?
+      this.alertService.clearMessages();
+      this.destroy$.next();
+      this.destroy$.complete();
 
-        this.commService.publish(Channels.Header, new HeaderEventData(true));
+      this.commService.publish(Channels.Header, new HeaderEventData(true));
     }
 
     loadCaseData(): any {
@@ -166,7 +191,7 @@ export class CaseEditComponent {
       const sessionId = this.authStateService.getUser().authData.sessionId;
 
       const caseLock$ = this.caseLockApiService.acquireCaseLock(this.caseId, sessionId);
-      const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling     
+      const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
 
       // todo: apply search type (all, my cases)
       const caseData$ =
@@ -196,7 +221,7 @@ export class CaseEditComponent {
                   
                   this.initLock();
                   this.processCaseData();
-              });              
+              });
   }
 
     getCaseTitle() : string {
@@ -322,18 +347,12 @@ export class CaseEditComponent {
   }
 
   private initLock() {
-    let currentUser =  this.authStateService.getUser();
-
     if (this.caseId > 0) {
-
+      //set flag if we own the lock
       this.ownsLock = !this.caseLock.isLocked;
 
       if (this.caseLock.isLocked) {
-          let notice =
-              this.caseLock.isLocked && this.caseLock.userId === currentUser.id ?
-                  this.translateService.instant('OBS! Du har redan öppnat detta ärende i en annan session.') :
-                  this.translateService.instant('OBS! Detta ärende är öppnat av') + ' ' + this.caseLock.userFullName;
-          this.alertService.showMessage(notice, AlertType.Warning);
+         this.showLockWarning();
       } else if (this.caseLock.timerInterval > 0) {
           // run extend case lock at specified interval
           interval(this.caseLock.timerInterval * 1000).pipe(
@@ -342,10 +361,25 @@ export class CaseEditComponent {
               this.caseLockApiService.reExtendedCaseLock(this.caseId, this.caseLock.lockGuid, this.caseLock.extendValue).pipe(
                 take(1)
               ).subscribe(res => {
-                  if (!res) this.ownsLock = false;
+                  if (!res) {
+                    this.ownsLock = false;
+                    this.caseLock.isLocked = true;
+                    if (!this.isClosing) {
+                      this.showLockWarning();
+                    }
+                  }
               });
             });
       }
     }
+  }
+  
+  private showLockWarning() {
+    let currentUser =  this.authStateService.getUser();
+    let notice =
+      this.caseLock.isLocked && this.caseLock.userId === currentUser.id ?
+          this.translateService.instant('OBS! Du har redan öppnat detta ärende i en annan session.') :
+          this.translateService.instant('OBS! Detta ärende är öppnat av') + ' ' + this.caseLock.userFullName;
+    this.alertService.showMessage(notice, AlertType.Warning);
   }
 }
