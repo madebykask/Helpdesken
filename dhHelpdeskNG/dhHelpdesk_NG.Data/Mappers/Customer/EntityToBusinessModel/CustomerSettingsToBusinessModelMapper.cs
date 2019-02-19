@@ -77,7 +77,8 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            PhysicalFilePath = entity.PhysicalFilePath,
                            VirtualFilePath = entity.VirtualFilePath,
                            IsUserFirstLastNameRepresentation = entity.IsUserFirstLastNameRepresentation,
-                           DepartmentFilterFormat = entity.DepartmentFilterFormat
+                           DepartmentFilterFormat = entity.DepartmentFilterFormat,
+                           DefaultCaseTemplateId = entity.DefaultCaseTemplateId
             };
         }
     }

@@ -174,6 +174,7 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
         public string VirtualFilePath { get; set; }
         public int IsUserFirstLastNameRepresentation { get; set; }
         public int DepartmentFilterFormat { get; set; }
+        public int DefaultCaseTemplateId { get; set; }
 
         /// <summary>
         /// The is module on.
