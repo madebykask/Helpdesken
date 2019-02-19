@@ -45,23 +45,14 @@ $font-header-color: white;
     min-height: 0!important;
 }
 
-.md-load-btn .mbsc-ic-loop2 {
-    font-size: 22px;
-}
-
-.md-load-btn .mbsc-ic-loop2:before {
+.md-load-btn .mbsc-ic { font-size: 24px; line-height: 1.5em;}
+.md-load-btn.md-btn-loading .mbsc-ic { display: inline-block; }
+.md-load-btn .mbsc-ic:before {
     display: inline-block;
-    -webkit-animation: md-rotating .6s linear infinite;
-    animation: md-rotating .6s linear infinite;
+    -webkit-animation: md-rotating .8s linear infinite;
+    animation: md-rotating .8s linear infinite;
 }
-
-.md-btn-loading {
-    display: block;
-}
-
-.md-load-btn.md-btn-loading .mbsc-ic-loop2 {
-    display: inline-block;
-}
+.md-btn-loading { display: block; }
 
 .stickyTop {
     position: fixed;
