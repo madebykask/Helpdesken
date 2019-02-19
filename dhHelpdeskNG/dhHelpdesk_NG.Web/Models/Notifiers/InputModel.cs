@@ -251,7 +251,7 @@
 
         public bool IsReadOnly
         {
-            get { return Readonly || ComputerUserCategoryModel.IsReadOnly; }
+            get { return Readonly || (ComputerUserCategoryModel?.IsReadOnly ?? false); }
         }
 
         #endregion
