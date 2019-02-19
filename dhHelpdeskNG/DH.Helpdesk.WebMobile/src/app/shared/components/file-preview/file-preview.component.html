@@ -1,7 +1,12 @@
-<div class="preview" [style.height.px]="previewHeight"> 
-  <iframe #frame id="filePreview" style="width:100%;height:100%;border: none;"></iframe>
+<div class="preview" [style.height.px]="previewHeight">
+  <ng-container *ngIf="isPdf;else elseTemplate">
+      <pdf-file-viewer [fileData]="fileData" [fileName]="fileName"></pdf-file-viewer>
+  </ng-container>
 </div>
+<ng-template #elseTemplate>
+    <common-file-viewer [fileData]="fileData" [fileName]="fileName"></common-file-viewer>
+</ng-template>
 
-<mbsc-bottom-nav [options]="bottomMenuSettings">  
+<mbsc-bottom-nav>
   <mbsc-nav-item (click)="goBack()" translate>Stäng</mbsc-nav-item>
 </mbsc-bottom-nav>

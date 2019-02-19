@@ -9,20 +9,26 @@ import { Router } from '@angular/router';
   templateUrl: './log-note-action.component.html',
   styleUrls: ['./log-note-action.component.scss']
 })
-export class LogNoteActionComponent extends CaseActionBaseComponent<CaseLogActionData> {
+export class LogNoteActionComponent extends CaseActionBaseComponent<CaseLogActionData> implements OnInit {
 
+  data: CaseLogActionData;
+  
   constructor(private router: Router) {
     super();
-  } 
-
-  get data(): CaseLogActionData {
-    return this.caseAction != null ? this.caseAction.data : null;
-  }  
-
-   downloadLogFile(file: LogFile) {
-     this.router.navigate(['/case', this.caseKey, 'logfile', file.id]);
   }
-  
+
+  ngOnInit(): void {
+   this.data = this.caseAction != null ? this.caseAction.data : null;
+  }
+
+  downloadLogFile(file: LogFile) {
+    this.router.navigate(['/case', this.caseKey, 'logfile', file.id], {
+      queryParams: {
+        fileName: file.fileName
+      }
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     // note: is not called for dynamic components!
   }

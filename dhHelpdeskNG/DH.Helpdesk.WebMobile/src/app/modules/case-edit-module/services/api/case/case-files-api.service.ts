@@ -4,7 +4,6 @@ import { Observable } from "rxjs";
 import { LocalStorageService } from "src/app/services/local-storage";
 import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
 
-
 @Injectable({ providedIn: 'root' })
 export class CaseFilesApiService extends HttpApiServiceBase {
     constructor(httpClient:HttpClient, localStorageService: LocalStorageService) {

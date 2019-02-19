@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrapper';
-import { MbscNavOptions } from '@mobiscroll/angular';
 import { CommunicationService, HeaderEventData, Channels } from 'src/app/services/communication';
 
 @Component({  
@@ -10,34 +9,23 @@ import { CommunicationService, HeaderEventData, Channels } from 'src/app/service
 })
 export class FilePreviewComponent implements OnInit {
   previewHeight:number = 0;
+  isPdf:boolean = false;
+  
   fileData:any = null;
-
-  @ViewChild('frame') frameElement: ElementRef<HTMLIFrameElement>;
-
-  bottomMenuSettings: MbscNavOptions = <MbscNavOptions>{  
-    type: 'bottom',
-    moreText: null,
-    menuIcon: null,
-    menuText: null
-  };
+  fileName:string = '';
 
   constructor(private activatedRoute:ActivatedRoute,
               private router: Router,
               private commService: CommunicationService,
               private windowWrapper: WindowWrapper) {
+      this.fileName = this.activatedRoute.snapshot.queryParams.fileName || '';
+      this.fileData = this.activatedRoute.snapshot.data['fileData'];
+      this.isPdf = this.fileName && this.fileName.indexOf('.pdf') > 0
    }
-
+ 
   ngOnInit() {
     this.commService.publish(Channels.Header, new HeaderEventData(false));
     this.updatePreviewHeight();
-  }
-
-  ngAfterViewInit(): void {
-    let fileData = this.activatedRoute.snapshot.data['fileData'];
-    if (fileData !== null) {
-      this.frameElement.nativeElement.src = 
-          this.windowWrapper.nativeWindow.URL.createObjectURL(fileData);
-    }
   }
 
   goBack() {

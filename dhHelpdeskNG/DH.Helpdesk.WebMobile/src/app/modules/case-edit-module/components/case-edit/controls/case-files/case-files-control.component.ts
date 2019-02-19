@@ -80,7 +80,11 @@ export class CaseFilesControlComponent implements OnInit  {
 
   downloadFile(item: CaseFileModel) {
     //todo: handle New case files download! 
-    this.router.navigate(['/case', this.caseKey, 'file', item.fileId]);
+    this.router.navigate(['/case', this.caseKey, 'file', item.fileId], {
+       queryParams: {
+          fileName: item.fileName
+       }
+    });
   }
   
   onFileDelete(event, inst){

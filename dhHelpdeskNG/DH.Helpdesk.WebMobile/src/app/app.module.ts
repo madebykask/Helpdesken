@@ -27,8 +27,11 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '@env/environment';
 import { SharedModule } from './modules/shared-module/shared.module';
 import { GetByKeyPipe } from './helpers/pipes/filter-case-overview.pipe';
-import { TestComponent } from './components/test/test.component';
 import { FilePreviewComponent } from './shared/components/file-preview/file-preview.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { TestComponent } from './components/test/test.component';
+import { CommonFileViewer } from './shared/components/file-preview/viewers/common-file-viewer.component';
+import { PdfFileViewer } from './shared/components/file-preview/viewers/pdf-file-viewer.component';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -41,6 +44,8 @@ import { FilePreviewComponent } from './shared/components/file-preview/file-prev
      ErrorComponent,
      AltLayoutComponent,
      FilePreviewComponent,
+     PdfFileViewer,
+     CommonFileViewer,
      TestComponent,
   ],
   imports: [
@@ -58,6 +63,7 @@ import { FilePreviewComponent } from './shared/components/file-preview/file-prev
       },
       useDefaultLang: true
     }),
+    PdfViewerModule,
     SharedModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
