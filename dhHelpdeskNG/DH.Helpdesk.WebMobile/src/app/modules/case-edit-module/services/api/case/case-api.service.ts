@@ -12,7 +12,14 @@ export class CaseApiService extends HttpApiServiceBase {
   constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) {
     super(http, localStorageService);
   }
-  
+
+  getCaseTemplates() : Observable<Array<any>> {
+    return this.getJson<Array<any>>(this.buildResourseUrl('/api/case/templates', { mobileOnly: true }, true, true)) // TODO: error handling
+    .pipe(
+        take(1) 
+    );
+  }
+
   getCaseData(caseId: number): Observable<any> {
     const userData = this.localStorageService.getCurrentUser();
     let params = null;
@@ -38,6 +45,6 @@ export class CaseApiService extends HttpApiServiceBase {
     return this.getJson(this.buildResourseUrl('/api/casesections/get', null, true, true)) // TODO: error handling
         .pipe(
             take(1)
-        )
+        );
   }
 }

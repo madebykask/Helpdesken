@@ -26,6 +26,10 @@ import { CaseActionHostDirective } from './components/case-actions/actions/case-
 import { ActionsFilterPipe } from './pipes/actions-filter.pipe';
 import { LogFilesUploadComponent } from './components/case-edit/controls/log-files-upload/log-files-upload.component';
 import { CaseLogInputComponent } from './components/case-edit/case-log-input/case-log-input.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { FilePreviewComponent } from './components/file-preview/file-preview.component';
+import { CommonFileViewer } from './components/file-preview/viewers/common-file-viewer.component';
+import { PdfFileViewer } from './components/file-preview/viewers/pdf-file-viewer.component';
 
 @NgModule({
   declarations: [ CaseEditComponent,
@@ -33,7 +37,7 @@ import { CaseLogInputComponent } from './components/case-edit/case-log-input/cas
     CaseSwitchComponent, CaseTextareaComponent, CaseDateTimeComponent, MailtoticketControlComponent,
     CaseFilesUploadComponent, CaseFilesControlComponent, CaseActionsComponent, CaseActionHostDirective, 
     CaseActionContainerComponent, GeneralActionComponent, FieldChangeActionComponent, LogNoteActionComponent, ActionsFilterPipe,
-    CaseLogInputComponent, LogFilesUploadComponent
+    CaseLogInputComponent, LogFilesUploadComponent, FilePreviewComponent, PdfFileViewer, CommonFileViewer
 ],
   imports: [
     CommonModule,
@@ -42,7 +46,8 @@ import { CaseLogInputComponent } from './components/case-edit/case-log-input/cas
     ReactiveFormsModule,
     HttpClientModule,
     SharedModule,
-    FileUploadModule,
+    FileUploadModule, // todo: check if required...
+    PdfViewerModule, // todo: replace with different
     CaseEditRoutingModule
   ],
   entryComponents: [FieldChangeActionComponent, LogNoteActionComponent, GeneralActionComponent],

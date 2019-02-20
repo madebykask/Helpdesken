@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -83,6 +84,18 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         #endregion
+        
+        [HttpGet]
+        [Route("templates")]
+        public async Task<IList<CaseSolutionOverview>> GetCaseSolutions([FromUri]int cid, [FromUri] bool mobileOnly = false)
+        {
+            //todo: make async
+            var caseSolutions = mobileOnly
+                ? _caseSolutionService.GetCustomerMobileCaseSolutions(cid) 
+                : _caseSolutionService.GetCustomerCaseSolutions(cid);
+
+            return await Task.FromResult(caseSolutions);
+        }
 
         /// <summary>
         /// Get case data.

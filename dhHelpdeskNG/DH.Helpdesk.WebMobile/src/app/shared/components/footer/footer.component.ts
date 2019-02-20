@@ -2,12 +2,14 @@ import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { MbscPopup, MbscPopupOptions, MbscSelect, MbscSelectOptions, MbscNavOptions, MbscListviewOptions } from '@mobiscroll/angular';
-import { take, finalize } from 'rxjs/operators';
+import { take, finalize, map } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication';
 import { LanguagesApiService } from 'src/app/services/api/language/languages-api.service';
 import { CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
+import { CaseApiService } from 'src/app/modules/case-edit-module/services/api/case/case-api.service';
+import { CaseTemplateModel } from 'src/app/modules/case-edit-module/models/case/case-template.model';
 
 @Component({
   selector: 'app-footer',
@@ -41,27 +43,33 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
   languageId: number = 0;
   isLoadingLanguage: boolean = true;
   isVisible = true;
-  
-  popUpLlistSettings: MbscPopupOptions = {
+    
+  popupMenuSettings: MbscPopupOptions = {
     buttons: [],
     closeOnOverlayTap: true,
     display: 'bottom',
     cssClass: 'mbsc-no-padding'
   };
  
-  popUpLvSettings: MbscListviewOptions = {
+  menuListSettings: MbscListviewOptions = {
     enhance: true,
     swipe: false
-};
+  };
+
+  templates: CaseTemplateModel[] = [];
+
   constructor(private router: Router,
               private userSettingsService : UserSettingsApiService,
               private authenticationService: AuthenticationService,
               private languagesService: LanguagesApiService,
+              private caseApiService: CaseApiService,
               private ngxTranslateService: TranslateService) {
   }
 
   ngOnInit() {
     this.loadLanguages();
+    this.loadTemplates();
+
     //apply translations
     this.languagesCtrl.setText = this.ngxTranslateService.instant("Välj");
     this.languagesCtrl.cancelText  = this.ngxTranslateService.instant("Avbryt");
@@ -99,6 +107,19 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   
+  private loadTemplates() {
+    this.caseApiService.getCaseTemplates().pipe(
+      take(1),
+      map(data => {
+        return data.map(x => Object.assign(new CaseTemplateModel(), x));
+      })
+    ).subscribe((items:CaseTemplateModel[]) => {
+        if (items && items.length) {
+          items.forEach(x => this.templates.push(x));
+        }
+    });
+  } 
+
   logout() {
     this.authenticationService.logout();
     this.goTo('/login');

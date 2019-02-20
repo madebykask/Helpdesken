@@ -170,3 +170,10 @@ insert into tbltext (id, TextString, TextType) VALUES (10024, 'Övriga händelse
 
 If not exists (select * from tblTextTranslation where text_id = 10024 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10024, 2, 'Other actions')
+
+If not exists (select * from tbltext where id = 10025)
+insert into tbltext (id, TextString, TextType) VALUES (10025, 'Stäng', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10025 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10025, 2, 'Close')
+
