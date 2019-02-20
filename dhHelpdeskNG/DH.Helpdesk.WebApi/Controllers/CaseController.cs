@@ -195,7 +195,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("template/{templateId:int}")]
         public async Task<IHttpActionResult> New([FromUri]int langId, [FromUri]int cid, [FromUri]int? templateId)
         {
             var customerUserSetting = _customerUserService.GetCustomerUserSettings(cid, UserId);
