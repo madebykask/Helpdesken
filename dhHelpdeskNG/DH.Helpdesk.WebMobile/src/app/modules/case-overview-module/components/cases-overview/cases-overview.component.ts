@@ -1,15 +1,16 @@
-import { CaseSearchStateModel } from './../../models/cases-overview/case-search-state.model';
-import { LocalStorageService } from './../../services/local-storage/local-storage.service';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { CaseOverviewItem, CasesOverviewFilter, } from '../../models'
-import { CasesOverviewService } from '../../services/cases-overview';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { finalize, take, map } from 'rxjs/operators';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MbscForm, MbscListview } from '@mobiscroll/angular';
 import { Subject } from 'rxjs';
 import { CasesSearchType, PagingConstants } from 'src/app/modules/shared-module/constants';
-import { CaseProgressFilter } from 'src/app/models/cases-overview/enums';
+import { CasesOverviewFilter } from '../../models/cases-overview/cases-overview-filter.model';
+import { CaseOverviewItem } from '../../models/cases-overview/cases-overview-item.model';
+import { CasesOverviewService } from '../../services/cases-overview';
+import { LocalStorageService } from 'src/app/services/local-storage';
+import { CaseSearchStateModel } from '../../../shared-module/models/cases-overview/case-search-state.model';
+import { CaseProgressFilter } from '../../models/cases-overview/enums';
 
 @Component({
   selector: 'app-cases-overview',
@@ -62,7 +63,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
                     this.resetCases();
                     this.saveSearchState();
                     this.search();
-              //console.log(`>>>this.searchType: ${this.searchType}`);      
+              //console.log(`>>>this.searchType: ${this.searchType}`);
                 });
     this._scrollBindFunc = this.checkLoad.bind(this);
     window.addEventListener('scroll', this._scrollBindFunc);

@@ -9,9 +9,7 @@ import { CommunicationService, Channels, DropdownValueChangedEvent } from 'src/a
 import { HeaderEventData } from 'src/app/services/communication/header-event-data';
 import { AuthenticationStateService } from 'src/app/services/authentication';
 import { WorkingGroupsService } from 'src/app/services/case-organization/workingGroups-service';
-import { WorkingGroupInputModel } from 'src/app/models/workinggroups/workingGroup-input.model';
 import { StateSecondariesService } from 'src/app/services/case-organization/stateSecondaries-service';
-import { StateSecondaryInputModel } from 'src/app/models/stateSecondaries/stateSecondaryInputModel';
 import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseDataStore } from '../../logic/case-edit/case-data.store';
 import { CaseDataReducersFactory } from '../../logic/case-edit/case-data.reducers';

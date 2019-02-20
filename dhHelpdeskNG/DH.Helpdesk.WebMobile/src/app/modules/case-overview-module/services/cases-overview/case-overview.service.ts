@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
-import { CasesOverviewFilter, CaseOverviewItem, CaseOverviewColumn } from '../../models'
-import { LocalStorageService } from '../local-storage';
 import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
+import { CasesOverviewFilter } from '../../models/cases-overview/cases-overview-filter.model';
+import { CaseOverviewItem, CaseOverviewColumn } from '../../models/cases-overview/cases-overview-item.model';
+import { LocalStorageService } from 'src/app/services/local-storage';
 
 @Injectable({ providedIn: 'root' })
 export class CasesOverviewService extends HttpApiServiceBase {

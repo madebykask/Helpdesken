@@ -8,34 +8,32 @@ import { PageNotFoundComponent } from './shared/components/page-not-found/page-n
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateModule, TranslateLoader, TranslateService as NgxTranslateService} from '@ngx-translate/core';
 import { AppComponent } from './app.component';
-import { HttpLoaderFactory, initTranslation, TranslationApiService } from './services/translation';
 import { LocalStorageService } from './services/local-storage';
 import { LoggerService } from './services/logging';
 import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors';
-import { HomeComponent, CasesOverviewComponent } from './components';
+import { HomeComponent } from './components';
 import { AppRoutingModule } from './app.routing';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { RequireAuthDirective } from './helpers/directives/require-auth.directive';
 import { GlobalErrorHandler } from './helpers/errors/global-error-handler';
 import { ErrorComponent } from './shared/components/error/error.component';
-import { initUserData } from './services/user';
 import { UserSettingsApiService } from './services/api/user/user-settings-api.service';
-import { AuthenticationService } from './services/authentication';
 import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 import { AltLayoutComponent } from './_layout/alt-layout/alt-layout.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '@env/environment';
 import { SharedModule } from './modules/shared-module/shared.module';
-import { GetByKeyPipe } from './helpers/pipes/filter-case-overview.pipe';
 import { TestComponent } from './components/test/test.component';
+import { initApplication } from './logic/app-configuration/app-configuration';
+import { HttpLoaderFactory } from './logic/translation';
+import { TranslationApiService } from './services/api/translation/translation-api.service';
 
 @NgModule({
   bootstrap: [ AppComponent],
   declarations: [AppComponent, AppLayoutComponent, PageNotFoundComponent,
      HeaderTitleComponent, FooterComponent,
      LoginComponent,
-     HomeComponent, CasesOverviewComponent,
-     GetByKeyPipe,
+     HomeComponent,
      RequireAuthDirective,
      ErrorComponent,
      AltLayoutComponent,
@@ -56,7 +54,6 @@ import { TestComponent } from './components/test/test.component';
       },
       useDefaultLang: true
     }),
-    
     SharedModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
@@ -68,14 +65,8 @@ import { TestComponent } from './components/test/test.component';
     // { provide: LOCALE_ID, deps: [SettingsService], useFactory: (settingsService) => settingsService.getLanguage()},
     {
       provide: APP_INITIALIZER,
-      useFactory: initTranslation,
-      deps: [NgxTranslateService, TranslationApiService, LocalStorageService, LoggerService],
-      multi: true
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initUserData,
-      deps: [UserSettingsApiService, AuthenticationService, LoggerService],
+      useFactory: initApplication,
+      deps: [NgxTranslateService, UserSettingsApiService, TranslationApiService, LocalStorageService, LoggerService],
       multi: true
     }
   ]

@@ -211,10 +211,6 @@ namespace DH.Helpdesk.WebApi.Controllers
         [Route("template/{templateId:int}")]
         public async Task<IHttpActionResult> New([FromUri]int langId, [FromUri]int cid, [FromUri]int? templateId)
         {
-            var customerUserSetting = _customerUserService.GetCustomerUserSettings(cid, UserId);
-            if (customerUserSetting == null)
-                throw new Exception($"No customer settings for this customer '{cid}' and user '{UserId}'");
-
             var userOverview = await _userService.GetUserOverviewAsync(UserId);// TODO: use cached version!
             if (!userOverview.CreateCasePermission.ToBool())
                 SendResponse($"User {UserName} is not allowed to create case.", HttpStatusCode.Forbidden);
@@ -231,6 +227,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(cid);
             var caseFieldTranslations = await _caseFieldSettingService.GetCustomerCaseTranslationsAsync(cid);
+            var customerUserSetting = _customerUserService.GetCustomerUserSettings(cid, UserId);
 
             var model = new CaseEditOutputModel()
             {

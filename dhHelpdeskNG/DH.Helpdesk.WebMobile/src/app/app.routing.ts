@@ -1,5 +1,5 @@
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
-import { HomeComponent, CasesOverviewComponent } from './components';
+import { HomeComponent } from './components';
 import { LoginComponent, PageNotFoundComponent } from './shared/components';
 import { AuthGuard } from './helpers/guards';
 import { NgModule } from '@angular/core';
@@ -13,9 +13,10 @@ const appRoutes: Routes = [
     component: AppLayoutComponent,
     children: [
       { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard]},
-      { path: 'casesoverview', component: CasesOverviewComponent, canActivate: [AuthGuard] },
-      { path: 'test', component: TestComponent },      
-      { path: 'casesoverview/:searchType', component: CasesOverviewComponent, canActivate: [AuthGuard] },
+      { path: 'casesoverview', 
+        loadChildren: './modules/case-overview-module/case-overview.module#CaseOverviewModule',
+        canActivate: [AuthGuard] },
+      { path: 'test', component: TestComponent },
       { path: 'case',
         loadChildren: './modules/case-edit-module/case-edit.module#CaseEditModule',
         canActivate: [AuthGuard] 

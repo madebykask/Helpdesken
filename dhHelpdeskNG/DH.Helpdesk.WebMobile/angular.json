@@ -71,11 +71,11 @@
               "buildOptimizer": true,
               "serviceWorker": true
             },
-            "dhdev": {
+            "dev-prod": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dhdev.ts"
+                  "with": "src/environments/environment.dev-prod.ts"
                 }
               ],
               "optimization": true,

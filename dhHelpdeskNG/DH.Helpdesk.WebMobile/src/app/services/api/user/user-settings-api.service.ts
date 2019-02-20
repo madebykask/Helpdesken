@@ -86,16 +86,16 @@ export class UserSettingsApiService extends HttpApiServiceBase {
     private tryLoadTranslations(): Observable<any> {
         const currentLangId = this.getCurrentLanguage();
         const languages = this.localStorageService.getLanguages();
-        let languageKey = 'en'; //todo: use config for default language?
+        let languageKey = 'en'; // TODO: use config for default language?
         if (currentLangId && languages && languages.length )
         {
             const lang = languages.filter((l:Language) => l.id === currentLangId);
-            languageKey = lang && lang.length ? lang[0].languageId : languageKey;    
+            languageKey = lang && lang.length ? lang[0].languageId : languageKey;
         }
         
-        //change translations        
+        //change translations
         this._logger.log('>>> Settings translation language to: ' + languageKey);
-        return this.ngxTranslationService.use(languageKey.toLowerCase());         
+        return this.ngxTranslationService.use(languageKey.toLowerCase());
     }
 
     private tryApplyDateTimeSettings(): boolean {
