@@ -23,6 +23,15 @@ export class CaseService {
          private caseApiService: CaseApiService ) {
     }
 
+    getTemplateData(templateId: number): Observable<CaseEditInputModel> {
+      return this.caseApiService.getCaseTemplate(templateId)
+        .pipe(
+          map((caseData: any) => {
+            let model = this.fromJSONCaseEditInputModel(caseData);
+            return model;
+        }))
+    }
+
     getCaseData(caseId: number): Observable<CaseEditInputModel> {
       return this.caseApiService.getCaseData(caseId)
         .pipe(

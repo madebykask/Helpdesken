@@ -23,6 +23,11 @@ const routes: Routes = [
       fileData: LogFileDataResolver
     }
   },
+   
+  {
+    path: 'template/:templateId',
+    component: CaseEditComponent
+  },
 
   {
     path: ':id',

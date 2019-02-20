@@ -20,6 +20,13 @@ export class CaseApiService extends HttpApiServiceBase {
     );
   }
 
+  getCaseTemplate(templateId: number) : Observable<Array<any>> {
+    return this.getJson<Array<any>>(this.buildResourseUrl(`/api/case/template/${templateId}`, null, true, true)) // TODO: error handling
+    .pipe(
+        take(1) 
+    );
+  }
+
   getCaseData(caseId: number): Observable<any> {
     const userData = this.localStorageService.getCurrentUser();
     let params = null;

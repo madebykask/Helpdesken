@@ -17,6 +17,7 @@
 
 <mbsc-popup [options]="popupMenuSettings" #newCasePopup="mobiscroll">
     <mbsc-listview [options]="menuListSettings">
-        <mbsc-listview-item *ngFor="let template of templates">{{ template.name }}</mbsc-listview-item>
+        <mbsc-listview-item *ngFor="let template of templates" (click) ="newCasePopup.instance.hide()"
+           [routerLink]="['/case/template', template.caseSolutionId]">{{ template.name }}</mbsc-listview-item>
     </mbsc-listview>
 </mbsc-popup>

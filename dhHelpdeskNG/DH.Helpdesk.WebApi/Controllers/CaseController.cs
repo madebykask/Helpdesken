@@ -210,7 +210,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpGet]
         [Route("template/{templateId:int}")]
         public async Task<IHttpActionResult> New([FromUri]int langId, [FromUri]int cid, [FromUri]int? templateId)
-        {
+        { 
             var userOverview = await _userService.GetUserOverviewAsync(UserId);// TODO: use cached version!
             if (!userOverview.CreateCasePermission.ToBool())
                 SendResponse($"User {UserName} is not allowed to create case.", HttpStatusCode.Forbidden);
@@ -218,6 +218,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var customerSettings = _customerSettingsService.GetCustomerSettings(cid);
             if (!templateId.HasValue && customerSettings.DefaultCaseTemplateId != 0)
                 templateId = customerSettings.DefaultCaseTemplateId;
+
             if(!templateId.HasValue)
                 throw new Exception("No template id found. Template id should be in parameter or set as default for customer.");
 
@@ -231,9 +232,11 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             var model = new CaseEditOutputModel()
             {
-                Fields = new List<IBaseCaseField>()
+                CaseGuid = Guid.NewGuid(),
+                Fields = new List<IBaseCaseField>(),
+                CaseSolution = _mapper.Map<CaseSolutionInfo>(caseTemplate)
+
             };
-            model.CaseSolution = _mapper.Map<CaseSolutionInfo>(caseTemplate);
 
             CreateInitiatorSection(cid, customerUserSetting, caseFieldSettings, null, caseTemplate, langId, caseFieldTranslations, model);
             CreateRegardingSection(cid, caseFieldSettings, null, caseTemplate, langId, caseFieldTranslations, model);
