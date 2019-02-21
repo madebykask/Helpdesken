@@ -6,7 +6,7 @@ Imports DH.Helpdesk.Domain
 Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
 
 Public Class Mail
-    Public Function sendMail(ByVal objCase As CCase, ByVal objLog As Log, ByVal objCustomer As Customer, ByVal sEmailTo As String, ByVal objmailTemplate As MailTemplate, ByVal objGlobalSettings As GlobalSettings, ByVal sMessageId As String, ByVal sEMailLogGUID As String, Optional ByVal connectionString As String = Nothing) As String
+    Public Function sendMail(ByVal objCase As CCase, ByVal objLog As Log, ByVal objCustomer As Customer, ByVal sEmailTo As String, ByVal objmailTemplate As MailTemplate, ByVal objGlobalSettings As GlobalSettings, ByVal sMessageId As String, ByVal sEMailLogGUID As String, ByVal connectionString As String) As String
         ' Skicka mail
         Dim sSubject As String
         Dim sBody As String
