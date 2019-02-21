@@ -24,7 +24,7 @@ export class TranslationApiService  extends HttpApiServiceBase {
 
     getTranslations(lang: string): Observable<any> {
         //console.log(">>>loading translation for language: " + lang);
-        var methodUrl = this.buildResourseUrl(`/api/Translation/mobile/${lang}`);
+        var methodUrl = this.buildResourseUrl(`/api/Translation/mobile/${lang}`, null, false, false);
         return this.getJson<any>(methodUrl, null, true);
     }
 }

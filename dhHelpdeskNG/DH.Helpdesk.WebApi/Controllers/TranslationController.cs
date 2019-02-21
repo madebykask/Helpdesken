@@ -37,6 +37,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="texttype"></param>
         /// <param name="lang"></param>
         /// <returns></returns>
         [HttpGet]

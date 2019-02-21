@@ -1,11 +1,12 @@
 import { OnInit, OnDestroy, Component, Input, ViewChild, Inject, LOCALE_ID } from "@angular/core";
 import { BaseCaseField } from "../../../../models";
 import { BaseControl } from "../base-control";
-import { MbscDatetimeOptions, MbscDate } from "@mobiscroll/angular";
+import { MbscDatetimeOptions } from "@mobiscroll/angular";
 import { FormatWidth, getLocaleDateFormat } from "@angular/common";
 import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
 import { switchMap, takeUntil } from "rxjs/operators";
 import { Subject, of } from "rxjs";
+import { DateTime } from "luxon";
 
 @Component({
     selector: 'case-date-control',
@@ -16,6 +17,7 @@ import { Subject, of } from "rxjs";
     @ViewChild('control') control: any;
     // @ViewChild('date') control: MbscDate;
     @Input() field: BaseCaseField<string>;
+    DateTime: DateTime;
     value?: Date;
     options: MbscDatetimeOptions = {
       readOnly: true,

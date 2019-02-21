@@ -1,51 +1,30 @@
-import * as moment from 'moment'
-import { MomentBuiltinFormat } from 'moment';
+import { DateTime, Zone, Settings } from 'luxon';
 
 export class DateUtil {
   
-  static formatToLocalDate(date:Date):string {
-    return moment(date).format("L");
+  static formatToLocalDate(date: Date): string {
+    return DateTime.fromJSDate(date).toLocaleString(DateTime.DATE_SHORT);
   }
 
-  static formatDate(date:Date, format:string = null){
-    return format == null ? moment(date).format() : moment(date).format(format);
+  static formatDate(date: Date | string, format: Intl.DateTimeFormatOptions = null) {
+    if (DateUtil.isDate(date)){
+      return format == null ? DateTime.fromJSDate(date as Date).toLocaleString(DateTime.DATETIME_SHORT) : DateTime.fromJSDate(date as Date).toLocaleString(format);
+    }
+    return format == null ? DateTime.fromISO(date as string).toLocaleString(DateTime.DATETIME_SHORT) : DateTime.fromISO(date as string).toLocaleString(format);
   }
 
-  static isDate(val:any) {
-     return val && Object.prototype.toString.call(val) === "[object Date]" && !isNaN(val);
+    static isDate(val: any) {
+     return val && Object.prototype.toString.call(val) === '[object Date]' && !isNaN(val);
   }
 
-  static isDateString(value: string, format:string | MomentBuiltinFormat = null):boolean {
-    if (!value) return false;
-
-    //set iso date by default
-    if (format == null) format = moment.ISO_8601;
-
-    let dateValue = moment(value, format);
-    let isValid = dateValue.isValid();
-    return isValid;
-  } 
-
-  static convertToDate(value: any, format:string | MomentBuiltinFormat = null) {
-    //set iso date by default
-    if (format == null) format = moment.ISO_8601;
-
-    let dateValue = moment(value, format);
-    return dateValue.isValid() ? dateValue.toDate() : null;
-  }
-
-  static tryConvertToDate(value: any, format:string | MomentBuiltinFormat = null) {
+  static tryConvertToDate(value: any) {
     if (!value) return value;
     
-    //set iso date by default
-    if (format == null) format = moment.ISO_8601;
-
-    let dateValue = moment(value, format);
-    if (dateValue.isValid()) {
-      return dateValue.toDate();
+    let dateValue = DateTime.fromISO(value);
+    if (dateValue.isValid) {
+      return dateValue.toJSDate();
     }
     
-    //keep original value if its not date
     return value;
   }
 

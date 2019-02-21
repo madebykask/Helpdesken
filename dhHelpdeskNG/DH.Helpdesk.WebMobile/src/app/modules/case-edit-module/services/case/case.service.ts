@@ -10,7 +10,7 @@ import { CaseLogApiService } from '../api/case/case-log-api.service';
 import { CaseLogModel, LogFile, CaseHistoryModel, CaseHistoryChangeModel } from '../../models/case/case-actions-api.model';
 import { CaseActionsDataService } from './case-actions-data-service.service';
 import { CaseHistoryApiService } from '../api/case/case-history-api.service';
-import { DateUtil } from 'src/app/modules/shared-module/Utils/date-util';
+import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
 
 @Injectable({ providedIn: 'root' })
 export class CaseService {
@@ -71,7 +71,7 @@ export class CaseService {
     }
 
     private fromJsonCaseHistoryModel(json): CaseHistoryModel {
-      var model = Object.assign(new CaseHistoryModel(),  {
+      let model = Object.assign(new CaseHistoryModel(),  {
           emailLogs: json.emailLog || [],
           changes: json.changes && json.changes.length 
             ? json.changes.map(x => this.fromJsonCaseHistoryChangeModel(x))
@@ -89,9 +89,9 @@ export class CaseService {
               });
     }
 
-    private getValue(val) {
+    private getValue(value: any) {
       //try convert field value to date
-      var val = DateUtil.tryConvertToDate(val);
+      let val = DateUtil.tryConvertToDate(value);
       return val;
     }
 

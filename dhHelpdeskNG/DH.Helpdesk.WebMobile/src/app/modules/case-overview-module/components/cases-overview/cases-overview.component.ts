@@ -11,6 +11,7 @@ import { CasesOverviewService } from '../../services/cases-overview';
 import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseSearchStateModel } from '../../../shared-module/models/cases-overview/case-search-state.model';
 import { CaseProgressFilter } from '../../models/cases-overview/enums';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-cases-overview',
@@ -28,6 +29,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   private _timer: any;
   private destroy$ = new Subject();
 
+  DateTime: DateTime;
   showSearchPanel = false;
   filtersForm: FormGroup;
   cases: CaseOverviewItem[] = [];

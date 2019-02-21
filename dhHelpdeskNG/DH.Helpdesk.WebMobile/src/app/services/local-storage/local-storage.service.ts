@@ -1,5 +1,4 @@
 import { CurrentUser, UserAuthenticationData, UserData, Language } from '../../models'
-import * as moment from 'moment-timezone';
 import { Injectable } from '@angular/core';
 import { StorageNameConstants } from 'src/app/modules/shared-module/constants';
 import { CaseSearchStateModel } from 'src/app/modules/shared-module/models/cases-overview/case-search-state.model';
@@ -36,7 +35,7 @@ export class LocalStorageService {
         localStorage.setItem(StorageNameConstants.languages, json);
     }
 
-    saveTimezoneInfo(data: any) {
+/*     saveTimezoneInfo(data: any) {
         const zone = <moment.MomentZone>data;
         const packed = (<any>moment.tz).pack(zone);
         localStorage.setItem(StorageNameConstants.timezoneName, packed);
@@ -45,7 +44,7 @@ export class LocalStorageService {
     getTimezoneInfo(): string {
         let data = localStorage.getItem(StorageNameConstants.timezoneName);
         return data;
-    }
+    } */
 
     getCaseSearchState(): CaseSearchStateModel { // TODO: move it to session store 
       let json = localStorage.getItem(StorageNameConstants.caseSearchState);

@@ -8,7 +8,7 @@ import { Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { InfoLoggerService } from './services/logging/info-logger.service';
 
-import '../../node_modules/moment-timezone/moment-timezone-utils'; // keep required hack! 
+//import '../../node_modules/moment-timezone/moment-timezone-utils'; // keep required hack! 
 
 @Component({
   selector: 'app-root',

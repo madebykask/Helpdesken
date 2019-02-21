@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { CaseActionBaseComponent } from '../case-action-base.component';
 import { CaseHistoryActionData, CaseEventType } from 'src/app/modules/case-edit-module/models';
-import { StringUtil } from 'src/app/modules/shared-module/Utils/string-util';
-import { DateUtil } from 'src/app/modules/shared-module/Utils/date-util';
+import { StringUtil } from 'src/app/modules/shared-module/utils/string-util';
+import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
 
 @Component({
   selector: 'app-field-change-action',

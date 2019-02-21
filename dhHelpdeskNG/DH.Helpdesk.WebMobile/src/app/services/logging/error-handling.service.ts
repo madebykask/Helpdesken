@@ -7,7 +7,7 @@ import { ClientLogApiService } from '../api';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrapper';
-import { UuidGenerator } from 'src/app/modules/shared-module/Utils/uuid-generator';
+import { UuidGenerator } from 'src/app/modules/shared-module/utils/uuid-generator';
 
 @Injectable({providedIn: 'root'})
 export class ErrorHandlingService {

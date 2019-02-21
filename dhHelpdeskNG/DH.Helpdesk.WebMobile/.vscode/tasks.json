@@ -18,6 +18,11 @@
         "type": "npm",
         "script": "build_dhdev",
         "problemMatcher": []
+      },
+      {
+        "type": "npm",
+        "script": "build_dev-prod",
+        "problemMatcher": []
       }
     ]
   }

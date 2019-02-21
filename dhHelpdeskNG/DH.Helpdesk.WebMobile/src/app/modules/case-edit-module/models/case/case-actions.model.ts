@@ -1,5 +1,5 @@
 import { LogFile } from "./case-actions-api.model";
-import { UuidGenerator } from "src/app/modules/shared-module/Utils/uuid-generator";
+import { UuidGenerator } from "src/app/modules/shared-module/utils/uuid-generator";
 
 // Case Action Data classes
 export type CaseActionDataType = CaseHistoryActionData | CaseLogActionData | GenericActionData;
