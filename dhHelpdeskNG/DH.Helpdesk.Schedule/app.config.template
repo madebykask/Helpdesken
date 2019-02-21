@@ -11,7 +11,7 @@
   </connectionStrings>
   -->
   <connectionStrings>
-      <add name="Helpdesk" connectionString="Data Source={DatabaseServer}; Initial Catalog={DatabaseName}; User Id={DatabaseUser}; Password={DatabasePassword};Network Library=dbmssocn" />
+      <add name="Helpdesk" connectionString="Data Source=#{DatabaseServer}; Initial Catalog=#{DatabaseName}; User Id=#{DatabaseUser}; Password=#{DatabasePassword};Network Library=dbmssocn" />
   </connectionStrings>
   <system.diagnostics>
     <sources>
