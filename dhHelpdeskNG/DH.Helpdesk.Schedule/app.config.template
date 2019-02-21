@@ -21,6 +21,7 @@
           <add name="FileLog"/>
           <!-- Uncomment the below section to write to the Application Event Log -->
           <!--<add name="EventLog"/>-->
+          <!---->
         </listeners>
       </source>
     </sources>
