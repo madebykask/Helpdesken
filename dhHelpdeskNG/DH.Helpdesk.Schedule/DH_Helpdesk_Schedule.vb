@@ -243,7 +243,7 @@ Module DH_Helpdesk_Schedule
                 Dim sSendTime As DateTime = Date.Now()
                 Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
                 Dim objMail As New Mail
-                Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID)
+                Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
 
                 objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, SharedFunctions.EMailType.EMailPlanDate, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
             End If
@@ -292,7 +292,7 @@ Module DH_Helpdesk_Schedule
                 Dim sSendTime As DateTime = Date.Now()
                 Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
                 Dim objMail As New Mail
-                Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID)
+                Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
 
                 objLogFile.WriteLine(Now() & ", watchDate, Case:" & objCase.Casenumber.ToString & ", to: " & objUser.EMail)
 
@@ -362,7 +362,7 @@ Module DH_Helpdesk_Schedule
                     Dim sSendTime As DateTime = Date.Now()
                     Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
                     Dim objMail As New Mail
-                    Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID)
+                    Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
 
                     objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, SharedFunctions.EMailType.EMailAssignCasePerformer, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                 End If
@@ -414,7 +414,7 @@ Module DH_Helpdesk_Schedule
                     Dim sSendTime As DateTime = Date.Now()
                     Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
                     Dim objMail As New Mail
-                    Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID)
+                    Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
 
                     objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, SharedFunctions.EMailType.EMailReminderNotifier, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                 End If
@@ -564,7 +564,7 @@ Module DH_Helpdesk_Schedule
                         Dim sSendTime As DateTime = Date.Now()
                         Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
                         Dim objMail As New Mail
-                        Dim sRet_SendMail As String = objMail.sendMail(objCase, Nothing, objCustomer, objCase.PerformerEMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID)
+                        Dim sRet_SendMail As String = objMail.sendMail(objCase, Nothing, objCustomer, objCase.PerformerEMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
 
                         objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, SharedFunctions.EMailType.EMailAssignCasePerformer, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                     End If
@@ -650,7 +650,7 @@ Module DH_Helpdesk_Schedule
                         Dim sSendTime As DateTime = Date.Now()
                         Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
                         Dim objMail As New Mail
-                        Dim sRet_SendMail As String = objMail.sendMail(objCase, Nothing, objCustomer, objCase.PerformerEMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID)
+                        Dim sRet_SendMail As String = objMail.sendMail(objCase, Nothing, objCustomer, objCase.PerformerEMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
 
                         objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, SharedFunctions.EMailType.EMailAssignCasePerformer, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                     End If
