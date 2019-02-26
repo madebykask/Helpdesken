@@ -2,6 +2,7 @@
   background: #438eb9;
   overflow:hidden;
 }
+
 .close {
   float:right;
   font-weight:16px;
@@ -9,6 +10,7 @@
 
   i { padding-right: 5px}
 }
+
 .close:after { clear:both; }
 
 .preview {

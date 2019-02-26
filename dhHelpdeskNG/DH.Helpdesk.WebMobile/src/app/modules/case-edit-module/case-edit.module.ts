@@ -30,6 +30,10 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { FilePreviewComponent } from './components/file-preview/file-preview.component';
 import { CommonFileViewer } from './components/file-preview/viewers/common-file-viewer.component';
 import { PdfFileViewer } from './components/file-preview/viewers/pdf-file-viewer.component';
+import { ImageFileViewerComponent } from './components/file-preview/viewers/image-file-viewer.component';
+import { TextFileViewerComponent } from './components/file-preview/viewers/text-file-viewer.component';
+import { Pdf2FileViewerComponent } from './components/file-preview/viewers/pdf2-file-viewer.component';
+import { Pdf3FileViewerComponent } from './components/file-preview/viewers/pdf3-file-viewer.component';
 
 @NgModule({
   declarations: [ CaseEditComponent,
@@ -37,7 +41,8 @@ import { PdfFileViewer } from './components/file-preview/viewers/pdf-file-viewer
     CaseSwitchComponent, CaseTextareaComponent, CaseDateTimeComponent, MailtoticketControlComponent,
     CaseFilesUploadComponent, CaseFilesControlComponent, CaseActionsComponent, CaseActionHostDirective, 
     CaseActionContainerComponent, GeneralActionComponent, FieldChangeActionComponent, LogNoteActionComponent, ActionsFilterPipe,
-    CaseLogInputComponent, LogFilesUploadComponent, FilePreviewComponent, PdfFileViewer, CommonFileViewer
+    CaseLogInputComponent, LogFilesUploadComponent, FilePreviewComponent, PdfFileViewer, CommonFileViewer, ImageFileViewerComponent,
+    TextFileViewerComponent, Pdf2FileViewerComponent, Pdf3FileViewerComponent
 ],
   imports: [
     CommonModule,
@@ -46,9 +51,10 @@ import { PdfFileViewer } from './components/file-preview/viewers/pdf-file-viewer
     ReactiveFormsModule,
     HttpClientModule,
     SharedModule,
-    FileUploadModule, // todo: check if required...
-    PdfViewerModule, // todo: replace with different
+    FileUploadModule, // todo: check if required?
+    PdfViewerModule, // todo: replace with different approach?
     CaseEditRoutingModule
+
   ],
   entryComponents: [FieldChangeActionComponent, LogNoteActionComponent, GeneralActionComponent],
   exports: []

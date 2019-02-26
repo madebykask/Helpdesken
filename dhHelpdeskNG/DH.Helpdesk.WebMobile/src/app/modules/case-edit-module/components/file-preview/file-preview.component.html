@@ -1,11 +1,27 @@
-<div class="preview" [style.height.px]="previewHeight">
-  <ng-container *ngIf="isPdf;else elseTemplate">
+<div class="preview" [style.height.px]="previewHeight" [ngSwitch]="contentType">  
+
+  <!-- Pdf -->
+  <ng-container *ngSwitchCase="contentTypes.Pdf">
       <pdf-file-viewer [fileData]="fileData" [fileName]="fileName"></pdf-file-viewer>
+      <!-- pdf2-file-viewer [fileData]="fileData" [fileName]="fileName"></pdf2-file-viewer-->
   </ng-container>
+ 
+  <!-- Images-->
+  <ng-container *ngSwitchCase="contentTypes.Image">
+      <image-file-viewer [fileData]="fileData" [fileName]="fileName"></image-file-viewer>
+  </ng-container>
+
+  <!-- text, html -->
+  <ng-container *ngSwitchCase="contentTypes.TextHtml">
+      <text-file-viewer [fileData]="fileData" [fileName]="fileName"></text-file-viewer>
+  </ng-container>
+  
+  <!-- Default (?)-->
+  <ng-container *ngSwitchDefault>
+      <common-file-viewer [fileData]="fileData" [fileName]="fileName"></common-file-viewer>
+  </ng-container>
+
 </div>
-<ng-template #elseTemplate>
-    <common-file-viewer [fileData]="fileData" [fileName]="fileName"></common-file-viewer>
-</ng-template>
 
 <mbsc-bottom-nav>
   <mbsc-nav-item (click)="goBack()" translate>Stäng</mbsc-nav-item>

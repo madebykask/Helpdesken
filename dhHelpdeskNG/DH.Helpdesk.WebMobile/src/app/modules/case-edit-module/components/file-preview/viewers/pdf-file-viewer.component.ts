@@ -1,6 +1,5 @@
 import { Component, ViewChild, ElementRef, Input, AfterViewInit, OnInit } from '@angular/core';
 import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrapper';
-import { PdfViewerComponent } from 'ng2-pdf-viewer';
 
 @Component({
   selector: 'pdf-file-viewer',
@@ -17,9 +16,7 @@ export class PdfFileViewer implements OnInit {
   @Input() fileName:string;
   @Input() fileData:Blob;
   
-  blobUrl:any;
-
-  @ViewChild(PdfViewerComponent) private pdfComponent: PdfViewerComponent; 
+  blobUrl:any;  
 
   constructor(private windowWrapper: WindowWrapper) {
   }

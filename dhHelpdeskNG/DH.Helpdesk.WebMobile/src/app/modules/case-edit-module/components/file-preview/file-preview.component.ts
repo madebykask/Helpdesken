@@ -3,15 +3,25 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrapper';
 import { CommunicationService, HeaderEventData, Channels } from 'src/app/services/communication';
 
-@Component({  
+export enum ContentTypes {
+  None = 0,
+  Pdf = 1,
+  Image,
+  TextHtml,
+  Other
+}
+
+@Component({
   templateUrl: './file-preview.component.html',
   styleUrls: ['./file-preview.component.scss']
 })
 export class FilePreviewComponent implements OnInit {
-  previewHeight:number = 0;
-  isPdf:boolean = false;
+  previewHeight:number = 0;  
   
-  fileData:any = null;
+  contentType: ContentTypes;
+  contentTypes = ContentTypes;
+
+  fileData:Blob = null;
   fileName:string = '';
 
   constructor(private activatedRoute:ActivatedRoute,
@@ -19,13 +29,25 @@ export class FilePreviewComponent implements OnInit {
               private commService: CommunicationService,
               private windowWrapper: WindowWrapper) {
       this.fileName = this.activatedRoute.snapshot.queryParams.fileName || '';
-      this.fileData = this.activatedRoute.snapshot.data['fileData'];
-      this.isPdf = this.fileName && this.fileName.indexOf('.pdf') > 0
+      this.fileData = <Blob>this.activatedRoute.snapshot.data['fileData'];      
    }
  
   ngOnInit() {
+    this.contentType = this.getContentType();
     this.commService.publish(Channels.Header, new HeaderEventData(false));
     this.updatePreviewHeight();
+  }
+
+  private getContentType(): ContentTypes {
+    let contentType: string = this.fileData.type;
+    if (contentType === 'application/pdf') {
+      return ContentTypes.Pdf;
+    } else if (contentType.match(/^image\//gi)) {
+      return ContentTypes.Image;
+    } else if (contentType.match(/^text\//gi)) {
+      return ContentTypes.TextHtml;
+    }
+    return ContentTypes.Other;
   }
 
   goBack() {
