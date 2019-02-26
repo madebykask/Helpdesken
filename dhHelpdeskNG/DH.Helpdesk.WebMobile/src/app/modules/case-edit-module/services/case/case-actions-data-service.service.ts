@@ -26,7 +26,7 @@ export class CaseActionsDataService  {
     }
      
     //process case history 
-    if (caseHistory.changes && caseHistory.changes.length) {
+    if (caseHistory && caseHistory.changes && caseHistory.changes.length) {
         let changes = caseHistory.changes.sort((a, b) => b.id - a.id); //sort desc
         
         //create action for each field change

@@ -71,6 +71,7 @@ export class CaseService {
     }
 
     private fromJsonCaseHistoryModel(json): CaseHistoryModel {
+      if (json === null) return null;
       let model = Object.assign(new CaseHistoryModel(),  {
           emailLogs: json.emailLog || [],
           changes: json.changes && json.changes.length 
@@ -95,15 +96,15 @@ export class CaseService {
       return val;
     }
 
-    private fromJsonCaseLogModel(data: any): CaseLogModel
-    {
-        let model = Object.assign(new CaseLogModel(), data, {
-            createdAt: new Date(data.createdAt),
-            files: data.files && data.files.length 
-              ? data.files.map(f => Object.assign(new LogFile(), f))
-              : []
-        });
-        return model;
+    private fromJsonCaseLogModel(data: any): CaseLogModel {
+      if (data === null) return null;
+      let model = Object.assign(new CaseLogModel(), data, {
+          createdAt: new Date(data.createdAt),
+          files: data.files && data.files.length 
+            ? data.files.map(f => Object.assign(new LogFile(), f))
+            : []
+      });
+      return model;
     }
 
     getOptionsHelper(filter: CaseOptionsFilterModel) {

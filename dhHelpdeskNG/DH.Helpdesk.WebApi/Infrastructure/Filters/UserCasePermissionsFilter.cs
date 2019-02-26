@@ -27,7 +27,8 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
 
         protected override void AuthorizeRequest(HttpActionContext actionContext)
         {
-            if (actionContext.RequestContext.Principal is ClaimsPrincipal principal)
+            var principal = actionContext.RequestContext.Principal as ClaimsPrincipal;
+            if (principal != null)
             {
                 var userId = principal.Identity.GetUserId().ToInt();
                 var user = _userService.GetUser(userId);

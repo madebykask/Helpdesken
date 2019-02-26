@@ -21,25 +21,24 @@ export class ErrorInterceptor implements HttpInterceptor {
 
                 const errorMsg = err.error.message || err.error.error_description || err.statusText;//TODO: unify errors messages
 
+                //handle http statuses
                 if (err instanceof HttpErrorResponse) {
-                    
-                    console.log('>>http error. Error: %s, Status: %s', errorMsg, err.status);
-
-                    //handle different http statuses:                    
-                    if (err.status == 400)                    
-                        return throwError(err);
+                    console.log(`>>> Http error. Error: ${errorMsg}, Status: ${err.status}`);
+                    if (err.status == 400 || err.status == 403)
+                      return throwError(err);
                 }
 
                 if (request.url.includes("account/refresh")) {
                     this.authenticationService.logout();
                     location.reload(true);
                 }
+                
                 if (request.url.includes("account/login")) {
                     return throwError(errorMsg);
                 }
 
                 if (err.status !== 401) {
-                    //will be handled by GlobalErrorHandler                    
+                    //will be handled by GlobalErrorHandler
                     return throwError(errorMsg);
                 }
 
