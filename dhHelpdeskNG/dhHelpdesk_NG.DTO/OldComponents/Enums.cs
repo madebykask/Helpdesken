@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Common.Enums.Settings;
+﻿using System;
+using DH.Helpdesk.Common.Enums.Settings;
 using static DH.Helpdesk.BusinessData.OldComponents.GlobalEnums;
 
 namespace DH.Helpdesk.BusinessData.OldComponents
@@ -339,6 +340,218 @@ namespace DH.Helpdesk.BusinessData.OldComponents
             }
 
             return TranslationCaseFields.None;
+        }
+
+        public static CaseSolutionFields MapToCaseSolutionField(this TranslationCaseFields it)
+        {
+            switch (it)
+            {
+                case TranslationCaseFields.AddFollowersBtn:
+                    return CaseSolutionFields.AddFollowersBtn;
+
+                case TranslationCaseFields.AddUserBtn:
+                    return CaseSolutionFields.AddUserBtn;
+
+                case TranslationCaseFields.Performer_User_Id:
+                    return CaseSolutionFields.Administrator;
+
+                case TranslationCaseFields.Available:
+                    return CaseSolutionFields.Available;
+
+                case TranslationCaseFields.AgreedDate:
+                    return CaseSolutionFields.AgreedDate;
+
+                case TranslationCaseFields.Caption:
+                    return CaseSolutionFields.Caption;
+
+                case TranslationCaseFields.CaseType_Id:
+                    return CaseSolutionFields.CaseType;
+
+                case TranslationCaseFields.Category_Id:
+                    return CaseSolutionFields.Category;
+
+                case TranslationCaseFields.CausingPart:
+                    return CaseSolutionFields.CausingPart;
+
+                case TranslationCaseFields.Change:
+                    return CaseSolutionFields.Change;
+
+                case TranslationCaseFields.ContactBeforeAction:
+                    return CaseSolutionFields.ContactBeforeAction;
+
+                case TranslationCaseFields.Cost:
+                    return CaseSolutionFields.Cost;
+
+                case TranslationCaseFields.CostCentre:
+                    return CaseSolutionFields.CostCentre;
+
+                case TranslationCaseFields.Department_Id:
+                    return CaseSolutionFields.Department;
+
+                case TranslationCaseFields.Description:
+                    return CaseSolutionFields.Description;
+
+                case TranslationCaseFields.MailToNotifier:
+                    return CaseSolutionFields.Email;
+
+                case TranslationCaseFields.tblLog_Text_External:
+                    return CaseSolutionFields.ExternalLogNote;
+
+                case TranslationCaseFields.Filename:
+                    return CaseSolutionFields.FileName;
+
+                case TranslationCaseFields.ClosingReason:
+                    return CaseSolutionFields.FinishingCause;
+
+                case TranslationCaseFields.FinishingDate:
+                    return CaseSolutionFields.FinishingDate;
+
+                case TranslationCaseFields.FinishingDescription:
+                    return CaseSolutionFields.FinishingDescription;
+
+                case TranslationCaseFields.Impact_Id:
+                    return CaseSolutionFields.Impact;
+
+                case TranslationCaseFields.tblLog_Text_Internal:
+                    return CaseSolutionFields.InternalLogNote;
+
+                case TranslationCaseFields.InventoryLocation:
+                    return CaseSolutionFields.InventoryLocation;
+
+                case TranslationCaseFields.InventoryNumber:
+                    return CaseSolutionFields.InventoryNumber;
+
+                case TranslationCaseFields.ComputerType_Id:
+                    return CaseSolutionFields.InventoryType;
+
+                case TranslationCaseFields.InvoiceNumber:
+                    return CaseSolutionFields.InvoiceNumber;
+
+                case TranslationCaseFields.IsAbout_CostCentre:
+                    return CaseSolutionFields.IsAbout_CostCentre;
+
+                case TranslationCaseFields.IsAbout_Department_Id:
+                    return CaseSolutionFields.IsAbout_Department_Id;
+
+                case TranslationCaseFields.IsAbout_OU_Id:
+                    return CaseSolutionFields.IsAbout_OU_Id;
+
+                case TranslationCaseFields.IsAbout_Persons_CellPhone:
+                    return CaseSolutionFields.IsAbout_PersonsCellPhone;
+
+                case TranslationCaseFields.IsAbout_Persons_EMail:
+                    return CaseSolutionFields.IsAbout_PersonsEmail;
+
+                case TranslationCaseFields.IsAbout_Persons_Name:
+                    return CaseSolutionFields.IsAbout_PersonsName;
+
+                case TranslationCaseFields.IsAbout_Persons_Phone:
+                    return CaseSolutionFields.IsAbout_PersonsPhone;
+
+                case TranslationCaseFields.IsAbout_Place:
+                    return CaseSolutionFields.IsAbout_Place;
+
+                case TranslationCaseFields.IsAbout_Region_Id:
+                    return CaseSolutionFields.IsAbout_Region_Id;
+
+                case TranslationCaseFields.IsAbout_ReportedBy:
+                    return CaseSolutionFields.IsAbout_ReportedBy;
+
+                case TranslationCaseFields.IsAbout_UserCode:
+                    return CaseSolutionFields.IsAbout_UserCode;
+
+                case TranslationCaseFields.tblLog_Filename:
+                    return CaseSolutionFields.LogFileName;
+
+                case TranslationCaseFields.Miscellaneous:
+                    return CaseSolutionFields.Miscellaneous;
+
+                case TranslationCaseFields.OU_Id:
+                    return CaseSolutionFields.OU;
+
+                case TranslationCaseFields.Persons_CellPhone:
+                    return CaseSolutionFields.PersonsCellPhone;
+
+                case TranslationCaseFields.Persons_EMail:
+                    return CaseSolutionFields.PersonsEmail;
+
+                case TranslationCaseFields.Persons_Name:
+                    return CaseSolutionFields.PersonsName;
+
+                case TranslationCaseFields.Persons_Phone:
+                    return CaseSolutionFields.PersonsPhone;
+
+                case TranslationCaseFields.Place:
+                    return CaseSolutionFields.Place;
+
+                case TranslationCaseFields.PlanDate:
+                    return CaseSolutionFields.PlanDate;
+
+                case TranslationCaseFields.Priority_Id:
+                    return CaseSolutionFields.Priority;
+
+                case TranslationCaseFields.Problem:
+                    return CaseSolutionFields.Problem;
+
+                case TranslationCaseFields.ProductArea_Id:
+                    return CaseSolutionFields.ProductArea;
+
+                case TranslationCaseFields.Project:
+                    return CaseSolutionFields.Project;
+
+                case TranslationCaseFields.ReferenceNumber:
+                    return CaseSolutionFields.ReferenceNumber;
+
+                case TranslationCaseFields.Region_Id:
+                    return CaseSolutionFields.Region;
+
+                case TranslationCaseFields.RegistrationSourceCustomer:
+                    return CaseSolutionFields.RegistrationSourceCustomer;
+
+                case TranslationCaseFields.SMS:
+                    return CaseSolutionFields.SMS;
+
+                case TranslationCaseFields.SolutionRate:
+                    return CaseSolutionFields.SolutionRate;
+
+                case TranslationCaseFields.StateSecondary_Id:
+                    return CaseSolutionFields.StateSecondary;
+
+                case TranslationCaseFields.Status_Id:
+                    return CaseSolutionFields.Status;
+
+                case TranslationCaseFields.Supplier_Id:
+                    return CaseSolutionFields.Supplier;
+
+                case TranslationCaseFields.System_Id:
+                    return CaseSolutionFields.System;
+
+                case TranslationCaseFields.UpdateNotifierInformation:
+                    return CaseSolutionFields.UpdateNotifierInformation;
+
+                case TranslationCaseFields.Urgency_Id:
+                    return CaseSolutionFields.Urgency;
+
+                case TranslationCaseFields.UserCode:
+                    return CaseSolutionFields.Usercode;
+
+                case TranslationCaseFields.ReportedBy:
+                    return CaseSolutionFields.UserNumber;
+
+                case TranslationCaseFields.Verified:
+                    return CaseSolutionFields.Verified;
+
+                case TranslationCaseFields.VerifiedDescription:
+                    return CaseSolutionFields.VerifiedDescription;
+
+                case TranslationCaseFields.WatchDate:
+                    return CaseSolutionFields.WatchDate;
+
+                case TranslationCaseFields.WorkingGroup_Id:
+                    return CaseSolutionFields.WorkingGroup;
+            }
+
+            throw new Exception($"Unknown TranslationCaseFields field: {it.ToString()}");
         }
     }
 }

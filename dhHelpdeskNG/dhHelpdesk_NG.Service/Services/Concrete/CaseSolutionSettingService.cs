@@ -14,26 +14,26 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
     public class CaseSolutionSettingService : ICaseSolutionSettingService
     {
-        private readonly CaseSolutionSettingRepository caseSolutionSettingRepository;
+        private readonly ICaseSolutionSettingRepository _caseSolutionSettingRepository;
 
-        public CaseSolutionSettingService(CaseSolutionSettingRepository caseSolutionSettingRepository)
+        public CaseSolutionSettingService(ICaseSolutionSettingRepository caseSolutionSettingRepository)
         {
-            this.caseSolutionSettingRepository = caseSolutionSettingRepository;
+            this._caseSolutionSettingRepository = caseSolutionSettingRepository;
         }
 
         public ReadOnlyCollection<CaseSolutionSettingOverview> GetCaseSolutionSettingOverviews(int caseSolutionId)
         {
-            ReadOnlyCollection<CaseSolutionSettingOverview> businessModels = this.caseSolutionSettingRepository.Find(caseSolutionId);
+            var businessModels = this._caseSolutionSettingRepository.Find(caseSolutionId);
             return businessModels;
         }
 
         public void AddCaseSolutionSettings(CaseSettingsSolutionAggregate model)
         {
-            List<CaseSolutionSettingForWrite> restoredBusinessModels =
+            var restoredBusinessModels =
                 this.CreateRestoredCaseSolutionSettings(model.BusinessModels).ToList();
             restoredBusinessModels.AddRange(model.BusinessModels);
 
-            IEnumerable<CaseSolutionSettingForInsert> businessModelsForInsert =
+            var businessModelsForInsert =
                 restoredBusinessModels.Select(
                     x =>
                     new CaseSolutionSettingForInsert(
@@ -42,13 +42,13 @@ namespace DH.Helpdesk.Services.Services.Concrete
                         x.CaseSolutionMode,
                         model.Context.DateAndTime));
 
-            this.caseSolutionSettingRepository.Add(businessModelsForInsert);
-            this.caseSolutionSettingRepository.Commit();
+            this._caseSolutionSettingRepository.Add(businessModelsForInsert);
+            this._caseSolutionSettingRepository.Commit();
         }
 
         public void UpdateCaseSolutionSettings(CaseSettingsSolutionAggregate model)
         {
-            IEnumerable<CaseSolutionSettingForInsert> businessModelsForInsert =
+            var businessModelsForInsert =
                 model.BusinessModels.Where(x => x.Id == 0)
                     .Select(
                         x =>
@@ -58,10 +58,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
                             x.CaseSolutionMode,
                             model.Context.DateAndTime));
 
-            this.caseSolutionSettingRepository.Add(businessModelsForInsert);
-            this.caseSolutionSettingRepository.Commit();
+            this._caseSolutionSettingRepository.Add(businessModelsForInsert);
+            this._caseSolutionSettingRepository.Commit();
 
-            IEnumerable<CaseSolutionSettingForUpdate> businessModelsForUpdate =
+            var businessModelsForUpdate =
                 model.BusinessModels.Where(x => x.Id != 0)
                     .Select(
                         x =>
@@ -71,8 +71,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
                             x.CaseSolutionMode,
                             model.Context.DateAndTime));
 
-            this.caseSolutionSettingRepository.Update(businessModelsForUpdate);
-            this.caseSolutionSettingRepository.Commit();
+            this._caseSolutionSettingRepository.Update(businessModelsForUpdate);
+            this._caseSolutionSettingRepository.Commit();
         }
 
         private IEnumerable<CaseSolutionSettingForWrite> CreateRestoredCaseSolutionSettings(

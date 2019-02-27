@@ -234,6 +234,8 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<ChangeRepository>().As<IChangeRepository>();
             builder.RegisterType<ChangeStatusRepository>().As<IChangeStatusRepository>();
             builder.RegisterType<TextTypeRepository>().As<ITextTypeRepository>();
+            builder.RegisterType<CaseSolutionSettingRepository>().As<ICaseSolutionSettingRepository>();
+            
         }
     }
 }

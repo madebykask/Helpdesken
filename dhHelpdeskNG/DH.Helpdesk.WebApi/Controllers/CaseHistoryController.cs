@@ -414,9 +414,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             return Ok(model);
         }
 
-        private bool IsActive(IList<CaseFieldSetting> list, GlobalEnums.TranslationCaseFields fieldName)
+        private bool IsActive(IList<CaseFieldSetting> caseFieldSettings, GlobalEnums.TranslationCaseFields fieldName)
         {
-            return _caseFieldSettingsHelper.IsActive(list, fieldName);
+            return _caseFieldSettingsHelper.IsActive(caseFieldSettings, null, fieldName);
         }
 
         private CaseHistoryItemOutputModel<T> CreateCaseHistoryOutputModel<T>(GlobalEnums.TranslationCaseFields field,

@@ -588,7 +588,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     TimeZoneId = x.TimeZoneId,
                     UserGUID = x.UserGUID,
                     CaseInternalLogPermission = x.CaseInternalLogPermission,
-                    InvoiceTimePermission = x.InvoiceTimePermission
+                    InvoiceTimePermission = x.InvoiceTimePermission,
+                    DefaultWorkingGroupId = x.Default_WorkingGroup_Id
                 };
 
             return exp;

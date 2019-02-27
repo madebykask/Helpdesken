@@ -5287,8 +5287,8 @@ namespace DH.Helpdesk.Web.Controllers
                     if (!string.IsNullOrEmpty(caseTemplate.InventoryNumber))
                         m.case_.InvoiceNumber = caseTemplate.InvoiceNumber;
 
-                        if (!string.IsNullOrEmpty(caseTemplate.ReferenceNumber))
-                            m.case_.ReferenceNumber = caseTemplate.ReferenceNumber;
+                    if (!string.IsNullOrEmpty(caseTemplate.ReferenceNumber))
+                        m.case_.ReferenceNumber = caseTemplate.ReferenceNumber;
 
                     if (caseTemplate.Status_Id.HasValue)
                         m.case_.Status_Id = caseTemplate.Status_Id;
@@ -5891,15 +5891,6 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             return category;
-        }
-
-        public bool CheckIfFieldVisible(IList<CaseFieldSetting> caseFieldSettings, TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
-        {
-            var isVisible =
-                CaseSolutionSettingModel.IsFieldAlwaysVisible(caseTemplateFieldName) ||
-                caseFieldSettings.IsFieldRequiredOrVisible(caseFieldName);
-
-            return isVisible;
         }
 
         private List<ExternalInvoiceModel> GetExternalInvoices(int caseId)

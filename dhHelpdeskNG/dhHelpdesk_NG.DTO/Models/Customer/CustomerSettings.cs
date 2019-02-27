@@ -175,6 +175,8 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
         public int IsUserFirstLastNameRepresentation { get; set; }
         public int DepartmentFilterFormat { get; set; }
         public int DefaultCaseTemplateId { get; set; }
+        public bool SetUserToAdministrator { get; set; }
+        public int? DefaultAdministratorId { get; set; }
 
         /// <summary>
         /// The is module on.

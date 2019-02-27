@@ -78,7 +78,9 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            VirtualFilePath = entity.VirtualFilePath,
                            IsUserFirstLastNameRepresentation = entity.IsUserFirstLastNameRepresentation,
                            DepartmentFilterFormat = entity.DepartmentFilterFormat,
-                           DefaultCaseTemplateId = entity.DefaultCaseTemplateId
+                           DefaultCaseTemplateId = entity.DefaultCaseTemplateId,
+                           SetUserToAdministrator = entity.SetUserToAdministrator.ToBool(),
+                           DefaultAdministratorId = entity.DefaultAdministrator
             };
         }
     }

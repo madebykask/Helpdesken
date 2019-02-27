@@ -203,5 +203,6 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         }
 
         public Guid? UserGUID { get; set; }
-	}
+        public int? DefaultWorkingGroupId { get; set; }
+    }
 }

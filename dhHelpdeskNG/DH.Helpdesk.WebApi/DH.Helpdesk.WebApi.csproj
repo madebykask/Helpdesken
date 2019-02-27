@@ -190,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
+    <Compile Include="Controllers\CaseFieldsCreator.cs" />
     <Compile Include="Controllers\CaseHistoryController.cs" />
     <Compile Include="Controllers\CaseLogsController.cs" />
     <Compile Include="Controllers\CaseWatchDateController.cs" />
