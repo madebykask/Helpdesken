@@ -160,6 +160,30 @@ namespace DH.Helpdesk.WebApi.Controllers
                 currentCase.WatchDate = model.WatchDate;
             }
 
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Caption))
+            {
+                currentCase.Caption = model.Caption;
+            }
+
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.ReferenceNumber))
+            {
+                currentCase.ReferenceNumber = model.ReferenceNumber;
+            }
+
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.InvoiceNumber))
+            {
+                currentCase.InvoiceNumber = model.InvoiceNumber;
+            }
+
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Available))
+            {
+                currentCase.Available = model.Available;
+            }
+
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Cost))
+            {
+                currentCase.Cost = model.Cost;
+            }
             //if (isNew)
             //{
             //    var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(currentCase.User_Id.Value, currentCase.Customer_Id);

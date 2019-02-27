@@ -15,5 +15,10 @@ namespace DH.Helpdesk.Models.Case
         public DateTime? WatchDate { get; set; }
         public string LogInternalText { get; set; }
         public string LogExternalText { get; set; }
+        public string Caption { get; set; }
+        public string ReferenceNumber { get; set; }
+        public string InvoiceNumber { get; set; }
+        public string Available { get; set; }
+        public int Cost { get; set; }
     }
 }

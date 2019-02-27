@@ -10,4 +10,9 @@ export class CaseEditOutputModel {
   watchDate: string;
   logInternalText: string;
   logExternalText:string;
+  caption:string;
+  referencenumber:string;
+  invoicenumber:string;
+  available:string;
+  cost:number;
 }

@@ -25,6 +25,11 @@ export class CaseSaveService {
     model.watchDate = this.getDateValue(form, CaseFieldsNames.WatchDate);
     model.logExternalText = form.get(CaseFieldsNames.Log_ExternalText).value;
     model.logInternalText = form.get(CaseFieldsNames.Log_InternalText).value;
+    model.caption= form.get(CaseFieldsNames.Caption).value;
+    model.referencenumber = form.get(CaseFieldsNames.ReferenceNumber).value;
+    model.invoicenumber = form.get(CaseFieldsNames.InvoiceNumber).value;
+    model.available = form.get(CaseFieldsNames.Available).value;
+    model.cost = this.getNumericValue(form, CaseFieldsNames.Cost);
     return this.caseApiService.saveCaseData(model);
   }
 
