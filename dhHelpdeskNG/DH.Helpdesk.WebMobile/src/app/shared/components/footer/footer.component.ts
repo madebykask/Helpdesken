@@ -1,27 +1,31 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { MbscPopup, MbscPopupOptions, MbscSelect, MbscSelectOptions, MbscNavOptions, MbscListviewOptions } from '@mobiscroll/angular';
-import { take, finalize, map } from 'rxjs/operators';
+import { MbscPopup, MbscPopupOptions, MbscSelect, MbscSelectOptions, MbscNavOptions, MbscListviewOptions, MbscListview } from '@mobiscroll/angular';
+import { take, finalize } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from 'src/app/services/authentication';
 import { LanguagesApiService } from 'src/app/services/api/language/languages-api.service';
 import { CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
-import { CaseApiService } from 'src/app/modules/case-edit-module/services/api/case/case-api.service';
-import { CaseTemplateModel } from 'src/app/modules/case-edit-module/models/case/case-template.model';
+import { CaseTemplateModel, CaseTemplateNode, CaseTemplateCategoryNode } from 'src/app/modules/case-edit-module/models/case/case-template.model';
+import { CaseTemplateService } from 'src/app/modules/case-edit-module/services/case/case-template.service';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
-  private destroy$ = new Subject();
-  SearchType = CasesSearchType; // this allows to use enum values in the view
-
+export class FooterComponent implements OnInit  {  
+  searchType = CasesSearchType;
+  languageId: number = 0;
+  isLoadingLanguage: boolean = true;
+  isVisible = true;
+  templateNodes = [];
+  
+  @ViewChild('newCasePopup') newCasePopup: MbscPopup;
   @ViewChild('caseSearchPopup') caseSearchPopup: MbscPopup;
   @ViewChild('languages') languagesCtrl: MbscSelect;
+  @ViewChild('templatesListView') templatesList: MbscListview;  
   
   languagesSettings: MbscSelectOptions = {
     cssClass: 'languages-list',
@@ -32,7 +36,6 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   bottomMenuSettings: MbscNavOptions = {
-    //layout: 'fixed',
     type: 'bottom',
     moreText: null,
     moreIcon: 'fa-ellipsis-h',
@@ -40,15 +43,24 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
     menuText: null,
   };
 
-  languageId: number = 0;
-  isLoadingLanguage: boolean = true;
-  isVisible = true;
-    
+  newCasePopupSettings: MbscPopupOptions = {
+    buttons: [],
+    closeOnOverlayTap: true,
+    display: 'bottom',
+    cssClass: 'mbsc-no-padding',
+    onClose: (event, inst) => {
+      //make templates menu go to the root level
+      const el = this.templatesList.elem.nativeElement;
+      if (el && el.children.lengh)
+        this.templatesList.instance.navigate(el.children[0]);
+    }
+  }
+  
   popupMenuSettings: MbscPopupOptions = {
     buttons: [],
     closeOnOverlayTap: true,
     display: 'bottom',
-    cssClass: 'mbsc-no-padding'
+    cssClass: 'mbsc-no-padding',
   };
  
   menuListSettings: MbscListviewOptions = {
@@ -56,13 +68,19 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
     swipe: false
   };
 
-  templates: CaseTemplateModel[] = [];
+  templatesListSettings: MbscListviewOptions = {
+    enhance: true,
+    swipe: false,
+    onNavStart: (ev, inst) => this.newCasePopup.instance.position(),
+    onNavEnd: (ev, inst) => this.newCasePopup.instance.position(),
+    onItemTap: (ev, inst) => this.newCasePopup.instance.position()
+  };
 
   constructor(private router: Router,
               private userSettingsService : UserSettingsApiService,
               private authenticationService: AuthenticationService,
               private languagesService: LanguagesApiService,
-              private caseApiService: CaseApiService,
+              private caseTemplateService: CaseTemplateService,
               private ngxTranslateService: TranslateService) {
   }
 
@@ -73,14 +91,7 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
     //apply translations
     this.languagesCtrl.setText = this.ngxTranslateService.instant("Välj");
     this.languagesCtrl.cancelText  = this.ngxTranslateService.instant("Avbryt");
-  }
-
-  ngAfterViewInit() {
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-  }
+  } 
 
   private onLanguageChange(event, inst) {
     let val = inst.getVal();
@@ -105,20 +116,62 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
     ).subscribe((data) => {
         this.languagesCtrl.refreshData(data);
     });
-  }
-  
+  } 
+
   private loadTemplates() {
-    this.caseApiService.getCaseTemplates().pipe(
-      take(1),
-      map(data => {
-        return data.map(x => Object.assign(new CaseTemplateModel(), x));
-      })
+    this.caseTemplateService.loadTemplates().pipe(
+      take(1)
     ).subscribe((items:CaseTemplateModel[]) => {
-        if (items && items.length) {
-          items.forEach(x => this.templates.push(x));
-        }
+        this.templateNodes = this.processTemplates(items);
     });
   } 
+
+  private processTemplates(templates:CaseTemplateModel[]): Array<CaseTemplateNode | CaseTemplateCategoryNode> {
+    const templateNodes:CaseTemplateNode[] = [];
+    const categoryNodes:CaseTemplateCategoryNode[] = [];
+    if (templates && templates.length) {
+      templates.forEach(t => {
+        const categoryId = t.categoryId || 0;
+        const templateNode = new CaseTemplateNode(t.id, t.name);
+        if (categoryId === 0) {
+          templateNodes.push(templateNode);
+        }
+        else {
+          let group = categoryNodes.find(x => x.id === categoryId);
+          if (group === null || group === undefined) {
+            group = new CaseTemplateCategoryNode(categoryId, t.categoryName || '');
+            categoryNodes.push(group);
+          }
+          group.items.push(templateNode)
+          group.items = this.sortByName(group.items);
+        }
+      });
+    }
+    return [...this.sortByName(templateNodes), ...this.sortByName(categoryNodes)];
+  }
+
+  private sortByName(items: (CaseTemplateNode | CaseTemplateCategoryNode)[]) {
+    if (items === null || items === undefined) return;
+    return items.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  isCategory(node) {
+    return node instanceof CaseTemplateCategoryNode;
+  }
+
+  openTemplate(templateId:number) {
+    this.router.navigate(['/case/template', templateId]);
+    this.newCasePopup.instance.hide();
+  }
+
+  setLanguage(languageId: number) {
+    if (languageId) {
+      this.userSettingsService.setCurrentLanguage(languageId);
+
+      // reload will reopen the app
+      window.location.reload(true);
+    }
+  }
 
   logout() {
     this.authenticationService.logout();
@@ -135,12 +188,4 @@ export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate([url]);
   }
 
-  setLanguage(languageId: number) {
-    if (languageId) {
-      this.userSettingsService.setCurrentLanguage(languageId);
-
-      // reload will reopen the app
-      window.location.reload(true);
-    }
-  }
 }

@@ -193,6 +193,7 @@
     <Compile Include="Controllers\CaseFieldsCreator.cs" />
     <Compile Include="Controllers\CaseHistoryController.cs" />
     <Compile Include="Controllers\CaseLogsController.cs" />
+    <Compile Include="Controllers\CaseTemplatesController.cs" />
     <Compile Include="Controllers\CaseWatchDateController.cs" />
     <Compile Include="Infrastructure\Owin\GlobalExceptionMiddleware.cs" />
     <Compile Include="Logic\Case\CaseTranslationService.cs" />

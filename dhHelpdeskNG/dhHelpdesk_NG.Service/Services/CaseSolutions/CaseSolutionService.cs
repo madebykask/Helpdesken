@@ -93,7 +93,7 @@ namespace DH.Helpdesk.Services.Services
             IApplicationRepository applicationRepository,
             IComputerUserCategoryRepository computerUserCategoryRepository,
             IUnitOfWorkFactory unitOfWorkFactory) 
-            : base(caseSolutionRepository, caseSolutionCategoryRepository)
+            : base(caseSolutionRepository, caseSolutionCategoryRepository) 
         {
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
             this._caseSolutionScheduleRepository = caseSolutionScheduleRepository;
@@ -1731,9 +1731,6 @@ namespace DH.Helpdesk.Services.Services
                 this._caseSolutionScheduleRepository.Add(caseSolutionSchedule);
             }
 
-           
-          
-
             if (errors.Count == 0)
             { 
                 this.Commit();
@@ -1882,7 +1879,7 @@ namespace DH.Helpdesk.Services.Services
             var caseSolutions = this._cache.Get(cacheKey) as IList<CaseSolutionOverview>;
             if (caseSolutions == null)
             {
-                caseSolutions = GetCustomerCaseSolutions(customerId).ToList();
+                caseSolutions = GetCustomerCaseSolutionsQuery(customerId).ToList();
 
                 if (caseSolutions.Any())
                     this._cache.Set(cacheKey, caseSolutions, Common.Constants.Cache.Duration);

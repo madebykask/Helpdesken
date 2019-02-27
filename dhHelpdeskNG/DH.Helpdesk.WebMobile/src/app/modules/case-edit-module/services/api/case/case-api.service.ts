@@ -14,7 +14,7 @@ export class CaseApiService extends HttpApiServiceBase {
   }
 
   getCaseTemplates() : Observable<Array<any>> {
-    return this.getJson<Array<any>>(this.buildResourseUrl('/api/case/templates', { mobileOnly: true }, true, true)) // TODO: error handling
+    return this.getJson<Array<any>>(this.buildResourseUrl('/api/templates/', { mobileOnly: true }, true, true)) // TODO: error handling
     .pipe(
         take(1) 
     );
@@ -26,7 +26,7 @@ export class CaseApiService extends HttpApiServiceBase {
         take(1) 
     );
   }
-
+  
   getCaseData(caseId: number): Observable<any> {
     const userData = this.localStorageService.getCurrentUser();
     let params = null;
@@ -39,7 +39,7 @@ export class CaseApiService extends HttpApiServiceBase {
             take(1)
         );
   }
-
+  
   saveCaseData(data: CaseEditOutputModel): Observable<any> {
     const requestUrl = this.buildResourseUrl(`/api/case/save${data.caseId != null ? '/' +data.caseId : '' }`, null, true, true);
     return this.postJson<any>(requestUrl, data)

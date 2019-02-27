@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.Dal.Repositories;
@@ -12,8 +14,8 @@ namespace DH.Helpdesk.Services.Services
     public interface IBaseCaseSolutionService
     {
         CaseSolution GetCaseSolution(int id);
-        IList<CaseSolutionOverview> GetCustomerCaseSolutions(int customerId);
-        IList<CaseSolutionOverview> GetCustomerMobileCaseSolutions(int customerId);
+        Task<List<CaseSolutionOverview>> GetCustomerCaseSolutionsAsync(int customerId);
+        Task<List<CaseSolutionOverview>> GetCustomerMobileCaseSolutionsAsync(int customerId);
         CaseSolutionCategory GetCaseSolutionCategory(int id);
     }
 
@@ -39,16 +41,16 @@ namespace DH.Helpdesk.Services.Services
             return CaseSolutionRepository.GetById(id);
         }
        
-        public IList<CaseSolutionOverview> GetCustomerCaseSolutions(int customerId)
+        public Task<List<CaseSolutionOverview>> GetCustomerCaseSolutionsAsync(int customerId)
         {
-            var caseSolutions = GetCustomerCaseSolutionsInner(customerId);
-            return caseSolutions;
+            var caseSolutions = GetCustomerCaseSolutionsQuery(customerId);
+            return caseSolutions.ToListAsync();
         }
 
-        public IList<CaseSolutionOverview> GetCustomerMobileCaseSolutions(int customerId)
+        public Task<List<CaseSolutionOverview>> GetCustomerMobileCaseSolutionsAsync(int customerId)
         {
-            var caseSolutions = GetCustomerCaseSolutionsInner(customerId, cs => cs.ShowOnMobile == 1);
-            return caseSolutions;
+            var caseSolutions = GetCustomerCaseSolutionsQuery(customerId, cs => cs.ShowOnMobile == 1);
+            return caseSolutions.ToListAsync();
         }
 
         public CaseSolutionCategory GetCaseSolutionCategory(int id)
@@ -56,7 +58,7 @@ namespace DH.Helpdesk.Services.Services
             return CaseSolutionCategoryRepository.GetById(id);
         }
 
-        protected IList<CaseSolutionOverview> GetCustomerCaseSolutionsInner(int customerId, Expression<Func<CaseSolution, bool>> filterExp = null)
+        protected IQueryable<CaseSolutionOverview> GetCustomerCaseSolutionsQuery(int customerId, Expression<Func<CaseSolution, bool>> filterExp = null)
         {
             var queryable = CaseSolutionRepository.GetCustomerCaseSolutions(customerId);
 
@@ -65,12 +67,13 @@ namespace DH.Helpdesk.Services.Services
                 queryable = queryable.Where(filterExp);
             }
 
-            var caseSolutions =
+            return
                 queryable.Select(cs => new CaseSolutionOverview()
                     {
                         CaseSolutionId = cs.Id,
                         Name = cs.Name,
                         CategoryId = cs.CaseSolutionCategory_Id,
+                        CategoryName = cs.CaseSolutionCategory.Name,
                         StateSecondaryId = cs.StateSecondary_Id,
                         NextStepState = cs.NextStepState,
                         Status = cs.Status,
@@ -88,9 +91,8 @@ namespace DH.Helpdesk.Services.Services
                                 StateSecondaryId = cs.StateSecondary.StateSecondaryId,
                             }
                             : null
-                    })
-                    .ToList();
-            return caseSolutions;
+                    }).AsQueryable();
+
         }
 
     }
