@@ -19,6 +19,7 @@ using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Common.Enums.Settings;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case;
@@ -69,18 +70,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             _userService = userService;
             _caseFieldsCreator = caseFieldsCreator;
             _customerService = customerService;
-        }
-
-        [HttpGet]
-        [Route("templates")]
-        public async Task<IList<CaseSolutionOverview>> GetCaseSolutions([FromUri]int cid, [FromUri] bool mobileOnly = false)
-        {
-            //todo: make async
-            var caseSolutions = mobileOnly
-                ? _caseSolutionService.GetCustomerMobileCaseSolutions(cid) 
-                : _caseSolutionService.GetCustomerCaseSolutions(cid);
-
-            return await Task.FromResult(caseSolutions);
         }
 
         /// <summary>
