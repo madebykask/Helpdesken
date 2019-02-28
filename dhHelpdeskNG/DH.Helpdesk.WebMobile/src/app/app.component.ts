@@ -8,8 +8,6 @@ import { Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { InfoLoggerService } from './services/logging/info-logger.service';
 
-//import '../../node_modules/moment-timezone/moment-timezone-utils'; // keep required hack! 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -24,7 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
   };
   
   version = config.version;
-  navStart: Observable<NavigationStart>;
+  //navStart: Observable<NavigationStart>;
 
   constructor(private _authenticationService: AuthenticationStateService, 
     private _logger: LoggerService,
@@ -32,11 +30,12 @@ export class AppComponent implements OnInit, OnDestroy {
     private _router: Router) {
     
     mobiscroll.settings = { theme: 'ios', lang: 'en', labelStyle: 'stacked' };
-    
+
+    /*
     this.navStart = _router.events.pipe(
       filter(evt => evt instanceof NavigationStart),
       takeUntil(this.destroy$)
-    ) as Observable<NavigationStart>;
+    ) as Observable<NavigationStart>;*/
   }
 
   ngOnInit(): void { 

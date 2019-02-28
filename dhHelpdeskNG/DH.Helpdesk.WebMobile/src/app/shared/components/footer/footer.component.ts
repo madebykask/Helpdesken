@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { MbscPopup, MbscPopupOptions, MbscSelect, MbscSelectOptions, MbscNavOptions, MbscListviewOptions, MbscListview } from '@mobiscroll/angular';
 import { take, finalize } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthenticationService } from 'src/app/services/authentication';
 import { LanguagesApiService } from 'src/app/services/api/language/languages-api.service';
 import { CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
@@ -78,7 +77,6 @@ export class FooterComponent implements OnInit  {
 
   constructor(private router: Router,
               private userSettingsService : UserSettingsApiService,
-              private authenticationService: AuthenticationService,
               private languagesService: LanguagesApiService,
               private caseTemplateService: CaseTemplateService,
               private ngxTranslateService: TranslateService) {
@@ -156,12 +154,12 @@ export class FooterComponent implements OnInit  {
   }
 
   isCategory(node) {
-    return node instanceof CaseTemplateCategoryNode;
+    return node && node instanceof CaseTemplateCategoryNode;
   }
 
   openTemplate(templateId:number) {
-    this.router.navigate(['/case/template', templateId]);
-    this.newCasePopup.instance.hide();
+    this.hidePopups();
+    this.router.navigate(['/case/template', templateId]);    
   }
 
   setLanguage(languageId: number) {
@@ -174,18 +172,22 @@ export class FooterComponent implements OnInit  {
   }
 
   logout() {
-    this.authenticationService.logout();
     this.goTo('/login');
   }
 
   goToCases(searchType: CasesSearchType) {
-    this.caseSearchPopup.instance.hide();
-    this.router.navigate(['/casesoverview', CasesSearchType[searchType]]);    
+    this.hidePopups();
+    this.router.navigate(['/casesoverview', CasesSearchType[searchType]]);
   }
 
   goTo(url: string = null) {
-    if (url == null) return;
-    this.router.navigate([url]);
+    this.hidePopups();
+    this.router.navigateByUrl(url);
+  }
+
+  private hidePopups() {
+    this.caseSearchPopup.instance.hide();
+    this.newCasePopup.instance.hide();
   }
 
 }

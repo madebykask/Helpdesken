@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private userSettingsService: UserSettingsApiService,
         private errorHandlingService: ErrorHandlingService) {}
 
-    ngOnInit() {        
+    ngOnInit() {
         this.loginForm = this.formBuilder.group({
             username: ['', Validators.required],
             password: ['', Validators.required]

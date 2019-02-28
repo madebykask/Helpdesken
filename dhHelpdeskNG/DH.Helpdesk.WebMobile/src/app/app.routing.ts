@@ -16,13 +16,14 @@ const appRoutes: Routes = [
       { path: 'casesoverview', 
         loadChildren: './modules/case-overview-module/case-overview.module#CaseOverviewModule',
         canActivate: [AuthGuard] },
-      { path: 'test', component: TestComponent },
       { path: 'case',
         loadChildren: './modules/case-edit-module/case-edit.module#CaseEditModule',
         canActivate: [AuthGuard] 
       }
     ]
   },
+
+  { path: 'test', component: TestComponent },
 
 /*   { 
     path: '', 
