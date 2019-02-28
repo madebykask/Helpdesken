@@ -1215,7 +1215,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 }
 
                 // Log Internal
-                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_Internal))
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_Internal) &&
+                    userOverview.CaseInternalLogPermission.ToBool())
                 {
                     field = new BaseCaseField<string>()
                     {
