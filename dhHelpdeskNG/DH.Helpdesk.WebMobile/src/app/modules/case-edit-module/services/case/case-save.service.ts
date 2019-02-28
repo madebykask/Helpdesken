@@ -17,6 +17,7 @@ export class CaseSaveService {
     let model = new CaseEditOutputModel();
     model.caseId = caseInputData.id;
     model.caseGuid = caseInputData.caseGuid;
+    model.caseSolutionId = caseInputData.caseSolution != null ? caseInputData.caseSolution.caseSolutionId : null;
     model.reportedBy = this.getStringValue(form, CaseFieldsNames.ReportedBy);
     model.personName = this.getStringValue(form, CaseFieldsNames.PersonName);
     model.personEmail = this.getStringValue(form, CaseFieldsNames.PersonEmail);
@@ -31,8 +32,8 @@ export class CaseSaveService {
     
     model.isAbout_ReportedBy = this.getStringValue(form, CaseFieldsNames.IsAbout_ReportedBy);
     model.isAbout_PersonName = this.getStringValue(form, CaseFieldsNames.IsAbout_PersonName);
-    model.isAbout_PersonName = this.getStringValue(form, CaseFieldsNames.IsAbout_PersonEmail);
-    model.isAbout_PersonName = this.getStringValue(form, CaseFieldsNames.IsAbout_PersonPhone);
+    model.isAbout_PersonEmail = this.getStringValue(form, CaseFieldsNames.IsAbout_PersonEmail);
+    model.isAbout_PersonPhone = this.getStringValue(form, CaseFieldsNames.IsAbout_PersonPhone);
     model.isAbout_PersonCellPhone = this.getStringValue(form, CaseFieldsNames.IsAbout_PersonCellPhone);
     model.isAbout_RegionId = this.getNumericValue(form, CaseFieldsNames.IsAbout_RegionId);
     model.isAbout_DepartmentId = this.getNumericValue(form, CaseFieldsNames.IsAbout_DepartmentId);
@@ -92,7 +93,7 @@ export class CaseSaveService {
     model.finishingDescription = this.getStringValue(form, CaseFieldsNames.FinishingDescription);
     model.closingReason = this.getNumericValue(form, CaseFieldsNames.ClosingReason);
     model.finishingDate = this.getDateValue(form, CaseFieldsNames.FinishingDate);
-    
+
     return this.caseApiService.saveCaseData(model);
   }
 

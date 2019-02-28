@@ -551,7 +551,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings,
                 GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer))
             {
-                field = GetField(currentCase != null ? currentCase.RegistrationSourceCustomer_Id : new int?(), cid,
+                field = GetField(currentCase != null ? currentCase.RegistrationSourceCustomer_Id : template?.RegistrationSource, cid,
                     languageId,
                     CaseFieldsNamesApi.RegistrationSourceCustomer,
                     GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer, CaseSectionType.CaseInfo,
@@ -1221,7 +1221,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     field = new BaseCaseField<string>()
                     {
                         Name = CaseFieldsNamesApi.Log_InternalText,
-                        Value = "",
+                        Value = template != null ? template.Text_Internal : "",
                         Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, languageId, cid, caseFieldTranslations),
                         Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, caseFieldSettings),
                         Section = CaseSectionType.Communication

@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Web;
 using System.Web.Http;
 using DH.Helpdesk.WebApi.Infrastructure.ActionResults;
 using Microsoft.AspNet.Identity;
@@ -37,6 +38,23 @@ namespace DH.Helpdesk.WebApi.Infrastructure
 
                 return userNameStr;
             }
+        }
+
+        protected string GetClientIp(HttpRequestMessage request = null)
+        {
+            request = request ?? Request;
+
+            if (request.Properties.ContainsKey("MS_HttpContext"))
+            {
+                return ((HttpContextWrapper)request.Properties["MS_HttpContext"]).Request.UserHostAddress;
+            }
+
+            if (HttpContext.Current != null)
+            {
+                return HttpContext.Current.Request.UserHostAddress;
+            }
+
+            return null;
         }
 
         protected ForbiddenResult Forbidden(string msg)

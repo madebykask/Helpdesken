@@ -44,7 +44,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
                     var caseId = GetCaseIdFromRequest(actionContext);
                     if (caseId <= 0)
                     {
-                        actionContext.Response = CreateBadResponse(actionContext.Request);
+                        // actionContext.Response = CreateBadResponse(actionContext.Request);
                         return;
                     }
 

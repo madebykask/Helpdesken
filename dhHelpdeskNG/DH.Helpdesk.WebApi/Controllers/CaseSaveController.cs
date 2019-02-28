@@ -93,28 +93,27 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [CheckUserCasePermissions(CaseIdParamName = "caseId")]
-        [Route("save/{caseId:int}")]
+        [Route("save/{caseId:int=0}")]
         public async Task<IHttpActionResult> Post([FromUri] int? caseId, [FromUri]int cid, [FromUri] int langId, [FromBody]CaseEditInputModel model)
         {
             var utcNow = DateTime.UtcNow;
-            var caseKey = caseId.HasValue && caseId > 0 ? caseId.Value.ToString() : model.CaseGuid;
-            var isNew = !caseId.HasValue;
-            if (isNew)
-            {
-                return BadRequest("CaseId is required. Creating new case is not supported.");
-            }
-            var isEdit = caseId > 0;
-            var lockData = await _caseLockService.GetCaseLockAsync(caseId.Value);
-            if (lockData != null && lockData.UserId != UserId)
-            {
-                return BadRequest($"Case is locked by {lockData.User.UserID}.");
-            }
+            var caseKey = caseId.HasValue && caseId > 0 ? caseId.Value.ToString() : model.CaseGuid?.ToString();
 
-            var oldCase = _caseService.GetDetachedCaseById(caseId.Value);
-            var editMode = _caseEditModeCalcStrategy.CalcEditMode(oldCase.Customer_Id, UserId, oldCase);
-            if (editMode != AccessMode.FullAccess)
+            var isEdit = caseId.HasValue && caseId.Value > 0;
+            var oldCase = isEdit ? _caseService.GetDetachedCaseById(caseId.Value) : new Case();
+            if (isEdit)
             {
-                return BadRequest($"No permission to edit case {caseId}.");
+                var lockData = await _caseLockService.GetCaseLockAsync(caseId.Value);
+                if (lockData != null && lockData.UserId != UserId)
+                {
+                    return BadRequest($"Case is locked by {lockData.User.UserID}.");
+                }
+                
+                var editMode = _caseEditModeCalcStrategy.CalcEditMode(oldCase.Customer_Id, UserId, oldCase);
+                if (editMode != AccessMode.FullAccess)
+                {
+                    return BadRequest($"No permission to edit case {caseId}.");
+                }
             }
 
             var customerUserSetting = _customerUserService.GetCustomerUserSettings(cid, UserId);
@@ -122,24 +121,27 @@ namespace DH.Helpdesk.WebApi.Controllers
                 throw new Exception($"No customer settings for this customer '{cid}' and user '{UserId}'");
 
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings = null;
-            //if(model.CaseSolution)
-                 // caseTemplateSettings = _caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value); //TODO: templateId from model
+            if(model.CaseSolutionId.HasValue)
+              caseTemplateSettings = _caseSolutionSettingService.GetCaseSolutionSettingOverviews(model.CaseSolutionId.Value);
 
             //TODO: validate input -- check for ui validation rules (max length and etc.)
             
-            var currentCase = _caseService.GetDetachedCaseById(caseId.Value); //TODO: try to Copy/Clone from oldCase instead
+            var currentCase = isEdit ? _caseService.GetDetachedCaseById(caseId.Value) : new Case(); 
 
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(cid);
             
-            //if(new) {
-            // RegUserId = adUser.GetUserFromAdPath(),
-            // RegUserDomain = adUser.GetDomainFromAdPath()
-            // RegLanguage_Id = languageId,
-            // RegistrationSource = (int)source,
-            // IpAddress = ipAddress,
-            // Customer_Id = customerId,
-            // User_Id = userId,
-            //}
+            if(!isEdit)
+            {
+                currentCase.RegUserId = ""; // adUser.GetUserFromAdPath(),
+                currentCase.RegUserDomain = ""; // adUser.GetDomainFromAdPath()
+                currentCase.RegLanguage_Id = langId;
+                currentCase.RegistrationSource = (int)CaseRegistrationSource.Administrator;
+                currentCase.CaseGUID = model.CaseGuid ?? new Guid();
+                currentCase.IpAddress = GetClientIp();
+                currentCase.Customer_Id = cid;
+                currentCase.User_Id = UserId;
+                currentCase.RegTime = DateTime.UtcNow;
+            }
 
             #region Initiator
             if (customerUserSetting.UserInfoPermission.ToBool())
@@ -164,16 +166,22 @@ namespace DH.Helpdesk.WebApi.Controllers
                     currentCase.CostCentre = model.CostCentre;
                 if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.Place))
                     currentCase.Place = model.Place;
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.UserCode))
+                    currentCase.Place = model.UserCode;
             }
             #endregion
 
             #region Regarding
-            if (currentCase.IsAbout == null) currentCase.IsAbout = new CaseIsAboutEntity();
+            if (currentCase.IsAbout == null) currentCase.IsAbout = new CaseIsAboutEntity() { Id = currentCase.Id };
 
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy))
                 currentCase.IsAbout.ReportedBy = model.IsAbout_ReportedBy;
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name))
                 currentCase.IsAbout.Person_Name = model.IsAbout_PersonName;
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail))
+                currentCase.IsAbout.Person_Email = model.IsAbout_PersonEmail;
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone))
+                currentCase.IsAbout.Person_Phone = model.IsAbout_PersonPhone;
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone))
                 currentCase.IsAbout.Person_Cellphone = model.IsAbout_PersonCellPhone;
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.IsAbout_Region_Id))
@@ -200,14 +208,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             #endregion
 
             #region CaseInfo
-            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.CaseNumber))
-                currentCase.CaseNumber = model.CaseNumber;
-            //if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.RegTime))
-                currentCase.RegTime = isEdit ? model.RegTime : DateTime.UtcNow;
-            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.ChangeTime))
-                currentCase.ChangeTime = model.ChangeTime;
-            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.User_Id))
-                currentCase.User_Id = model.UserId;
+
+            currentCase.ChangeTime = DateTime.UtcNow;
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer))
                 currentCase.RegistrationSourceCustomer_Id = model.RegistrationSourceCustomerId;
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.CaseType_Id))
@@ -312,9 +314,9 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             IDictionary<string, string> errors;
             var currentUser = _userService.GetUser(UserId);
-            var customerSettings = _customerSettingsService.GetCustomerSettings(oldCase.Customer_Id);
+            var customerSettings = _customerSettingsService.GetCustomerSettings(cid);
             var basePath = _settingsLogic.GetFilePath(customerSettings);
-            var customer = _customerService.GetCustomer(oldCase.Customer_Id);
+            var customer = _customerService.GetCustomer(cid);
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(User.Identity.GetTimezoneId());
 
             var caseLog = new CaseLog()
@@ -457,7 +459,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _userTempFilesStorage.ResetCacheForObject(caseKey);
 
             // TODO: return errors
-            return Ok(oldCase.Id);
+            return Ok(currentCase.Id);
         }
 
         private CaseMailSetting GetCaseMailSetting(Case currentCase, Customer customer, CustomerSettings customerSettings)

@@ -23,6 +23,8 @@ export class CaseEditOutputModel {
   userCode?: string;
   isAbout_ReportedBy?: string;
   isAbout_PersonName?: string;
+  isAbout_PersonEmail: string;
+  isAbout_PersonPhone: string;
   isAbout_PersonCellPhone?: string;
   isAbout_RegionId?: number;
   isAbout_DepartmentId?: number;
@@ -68,4 +70,6 @@ export class CaseEditOutputModel {
   finishingDescription?: string;
   closingReason?: number;
   finishingDate?: string;
+  caseSolutionId?: number;
+
 }

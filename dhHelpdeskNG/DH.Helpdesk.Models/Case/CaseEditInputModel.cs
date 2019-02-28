@@ -5,7 +5,8 @@ namespace DH.Helpdesk.Models.Case
     public class CaseEditInputModel
     {
         public int? CaseId { get; set; }
-        public string CaseGuid { get; set; }
+        public Guid? CaseGuid { get; set; }
+        public int? CaseSolutionId { get; set; }
 
         public string ReportedBy { get; set; }
         public string PersonName { get; set; }
@@ -21,6 +22,8 @@ namespace DH.Helpdesk.Models.Case
 
         public string IsAbout_ReportedBy { get; set; }
         public string IsAbout_PersonName { get; set; }
+        public string IsAbout_PersonEmail { get; set; }
+        public string IsAbout_PersonPhone { get; set; }
         public string IsAbout_PersonCellPhone { get; set; }
         public int? IsAbout_RegionId { get; set; }
         public int? IsAbout_DepartmentId { get; set; }
