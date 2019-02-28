@@ -1,15 +1,16 @@
 <mbsc-form class="mbsc-padding">
 
-  <mbsc-listview *ngIf="templateNodes.length" #templatesListView="mobiscroll">
-    <mbsc-listview-item *ngFor="let node of templateNodes"><span>{{ node.name }}</span>
-      <mbsc-listview-sublist *ngIf="node.items && node.items.length">
-        <mbsc-listview-item *ngFor="let template of node.items">
-          {{ template.name }}
-        </mbsc-listview-item>
-      </mbsc-listview-sublist>
+
+  <mbsc-listview [options]="listviewSettings">
+    <mbsc-listview-item *ngFor="let conti of data">
+        {{conti.name}}
+        <mbsc-listview-sublist>
+            <mbsc-listview-item *ngFor="let country of conti.children">
+                <img [src]="country.imgsrc" /> {{country.name}}
+            </mbsc-listview-item>
+        </mbsc-listview-sublist>
     </mbsc-listview-item>
   </mbsc-listview>
 
-
-  <mbsc-button color="primary" (click)="onLogout()">Logout</mbsc-button>    
+  <mbsc-button color="primary" (click)="onLogout()">Logout</mbsc-button>
 </mbsc-form>
