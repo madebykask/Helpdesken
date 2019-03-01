@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer;
+using DH.Helpdesk.BusinessData.Models.User.Input;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.BusinessRule;
@@ -54,6 +56,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ILogService _logService;
         private readonly ITemporaryFilesCache _userTempFilesStorage;
         private readonly ICaseSolutionSettingService _caseSolutionSettingService;
+        private readonly IBaseCaseSolutionService _caseSolutionService;
 
         public CaseSaveController(ICaseService caseService, ICaseFieldSettingService caseFieldSettingService,
             ICaseLockService caseLockService, ICustomerService customerService, ISettingService customerSettingsService,
@@ -61,7 +64,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             ICaseFieldSettingsHelper caseFieldSettingsHelper, IWorkingGroupService workingGroupService, IEmailService emailService,
             ICaseFileService caseFileService, ICustomerUserService customerUserService, ILogFileService logFileService,
             IUserPermissionsChecker userPermissionsChecker, ILogService logService, ITemporaryFilesCache userTempFilesStorage,
-            ICaseSolutionSettingService caseSolutionSettingService)
+            ICaseSolutionSettingService caseSolutionSettingService, IBaseCaseSolutionService caseSolutionService)
         {
             _caseService = caseService;
             _caseFieldSettingService = caseFieldSettingService;
@@ -81,6 +84,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _logService = logService;
             _userTempFilesStorage = userTempFilesStorage;
             _caseSolutionSettingService = caseSolutionSettingService;
+            _caseSolutionService = caseSolutionService;
         }
 
         /// <summary>
@@ -116,32 +120,40 @@ namespace DH.Helpdesk.WebApi.Controllers
                 }
             }
 
-            var customerUserSetting = _customerUserService.GetCustomerUserSettings(cid, UserId);
+            var customerUserSetting = await _customerUserService.GetCustomerUserSettingsAsync(cid, UserId);
             if (customerUserSetting == null)
                 throw new Exception($"No customer settings for this customer '{cid}' and user '{UserId}'");
 
-            ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings = null;
-            if(model.CaseSolutionId.HasValue)
-              caseTemplateSettings = _caseSolutionSettingService.GetCaseSolutionSettingOverviews(model.CaseSolutionId.Value);
-
             //TODO: validate input -- check for ui validation rules (max length and etc.)
-            
-            var currentCase = isEdit ? _caseService.GetDetachedCaseById(caseId.Value) : new Case(); 
 
-            var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(cid);
-            
+            ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings = null;
+            Case currentCase;
             if(!isEdit)
             {
-                currentCase.RegUserId = ""; // adUser.GetUserFromAdPath(),
-                currentCase.RegUserDomain = ""; // adUser.GetDomainFromAdPath()
-                currentCase.RegLanguage_Id = langId;
-                currentCase.RegistrationSource = (int)CaseRegistrationSource.Administrator;
-                currentCase.CaseGUID = model.CaseGuid ?? new Guid();
-                currentCase.IpAddress = GetClientIp();
-                currentCase.Customer_Id = cid;
-                currentCase.User_Id = UserId;
-                currentCase.RegTime = DateTime.UtcNow;
+                var userOverview = await _userService.GetUserOverviewAsync(UserId);
+                if (!userOverview.CreateCasePermission.ToBool())
+                    SendResponse($"User {UserName} is not allowed to create case.", HttpStatusCode.Forbidden);
+
+                CaseSolution caseSolution = null; 
+                if (model.CaseSolutionId.HasValue && model.CaseSolutionId > 0)
+                    caseSolution = _caseSolutionService.GetCaseSolution(model.CaseSolutionId.Value);
+                    
+                var customerDefaults = _customerService.GetCustomerDefaults(cid);
+                currentCase = new Case();
+
+                ApplyTemplateOrDefaultValues(cid, langId, currentCase, caseSolution, customerDefaults, userOverview);
+                if (model.CaseGuid.HasValue)
+                    currentCase.CaseGUID = model.CaseGuid.Value;
+
+                if (model.CaseSolutionId.HasValue && model.CaseSolutionId > 0) //caseTemplateSettings are only needed when creating a new case from template
+                    caseTemplateSettings = _caseSolutionSettingService.GetCaseSolutionSettingOverviews(model.CaseSolutionId.Value);
             }
+            else
+            {
+                currentCase = _caseService.GetDetachedCaseById(caseId.Value);
+            }
+
+            var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(cid);
 
             #region Initiator
             if (customerUserSetting.UserInfoPermission.ToBool())
@@ -167,7 +179,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.Place))
                     currentCase.Place = model.Place;
                 if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.UserCode))
-                    currentCase.Place = model.UserCode;
+                    currentCase.UserCode = model.UserCode;
             }
             #endregion
 
@@ -249,6 +261,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 currentCase.Currency = model.CostCurrency;
             }
             #endregion
+
             #region CaseManagement
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.WorkingGroup_Id))
                 currentCase.WorkingGroup_Id = model.WorkingGroupId;
@@ -281,6 +294,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.SolutionRate))
                 currentCase.SolutionRate = model.SolutionRate;
             #endregion
+
             #region Status
             //if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.FinishingDescription))
             //    currentCase.FinishingDescription = model.FinishingDescription;
@@ -460,6 +474,85 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             // TODO: return errors
             return Ok(currentCase.Id);
+        }
+
+        private void ApplyTemplateOrDefaultValues(int cid, int langId, Case currentCase,
+            CaseSolution caseSolution, CaseDefaultsInfo customerDefaults, UserOverview userOverview)
+        {
+            currentCase.RegUserId = ""; // adUser.GetUserFromAdPath(),
+            currentCase.RegUserDomain = ""; // adUser.GetDomainFromAdPath()
+            currentCase.RegLanguage_Id = langId;
+            currentCase.RegistrationSource = caseSolution?.RegistrationSource ?? (int) CaseRegistrationSource.Administrator;
+            currentCase.CaseGUID = new Guid();
+            currentCase.IpAddress = GetClientIp();
+            currentCase.Customer_Id = cid;
+            currentCase.User_Id = UserId;
+            currentCase.RegTime = DateTime.UtcNow;
+            currentCase.CaseResponsibleUser_Id = UserId;
+            currentCase.Region_Id = caseSolution?.Region_Id ?? customerDefaults.RegionId;
+            currentCase.CaseType_Id = caseSolution?.CaseType_Id ?? customerDefaults.CaseTypeId;
+            currentCase.Supplier_Id = caseSolution?.Supplier_Id ?? customerDefaults.SupplierId;
+            currentCase.Priority_Id = caseSolution?.Priority_Id ?? customerDefaults.PriorityId;
+            currentCase.Status_Id = caseSolution?.Status_Id ?? customerDefaults.StatusId;
+            currentCase.WorkingGroup_Id = caseSolution?.WorkingGroup_Id ?? userOverview.DefaultWorkingGroupId;
+
+            currentCase.ReportedBy = caseSolution?.ReportedBy;
+            currentCase.PersonsName = caseSolution?.PersonsName;
+            currentCase.PersonsEmail = caseSolution?.PersonsEmail;
+            currentCase.PersonsPhone = caseSolution?.PersonsPhone;
+            currentCase.PersonsCellphone = caseSolution?.PersonsCellPhone;
+            currentCase.Department_Id = caseSolution?.Department_Id;
+            currentCase.OU_Id = caseSolution?.OU_Id;
+            currentCase.CostCentre = caseSolution?.CostCentre;
+            currentCase.Place = caseSolution?.Place;
+            currentCase.UserCode = caseSolution?.UserCode;
+
+            if (currentCase.IsAbout == null) currentCase.IsAbout = new CaseIsAboutEntity() {Id = currentCase.Id};
+            currentCase.IsAbout.ReportedBy = caseSolution?.IsAbout_ReportedBy;
+            currentCase.IsAbout.Person_Name = caseSolution?.IsAbout_PersonsName;
+            currentCase.IsAbout.Person_Email = caseSolution?.IsAbout_PersonsEmail;
+            currentCase.IsAbout.Person_Phone = caseSolution?.IsAbout_PersonsPhone;
+            currentCase.IsAbout.Person_Cellphone = caseSolution?.IsAbout_PersonsCellPhone;
+            currentCase.IsAbout.Region_Id = caseSolution?.IsAbout_Region_Id;
+            currentCase.IsAbout.Department_Id = caseSolution?.IsAbout_Department_Id;
+            currentCase.IsAbout.OU_Id = caseSolution?.IsAbout_OU_Id;
+            currentCase.IsAbout.CostCentre = caseSolution?.IsAbout_CostCentre;
+            currentCase.IsAbout.Place = caseSolution?.IsAbout_Place;
+            currentCase.IsAbout.UserCode = caseSolution?.IsAbout_UserCode;
+
+            currentCase.InventoryNumber = caseSolution?.InventoryNumber;
+            currentCase.InventoryType = caseSolution?.InventoryType;
+            currentCase.InventoryLocation = caseSolution?.InventoryLocation;
+
+            currentCase.RegistrationSourceCustomer_Id = caseSolution?.RegistrationSource;
+            currentCase.ProductArea_Id = caseSolution?.ProductArea_Id;
+            currentCase.System_Id = caseSolution?.System_Id;
+            currentCase.Urgency_Id = caseSolution?.Urgency_Id;
+            currentCase.Impact_Id = caseSolution?.Impact_Id;
+            currentCase.Category_Id = caseSolution?.Category_Id;
+            currentCase.InvoiceNumber = caseSolution?.InvoiceNumber;
+            currentCase.ReferenceNumber = caseSolution?.ReferenceNumber;
+            currentCase.Miscellaneous = caseSolution?.Miscellaneous;
+            currentCase.Caption = caseSolution?.Caption;
+            currentCase.ContactBeforeAction = caseSolution?.ContactBeforeAction ?? 0;
+            currentCase.SMS = caseSolution?.SMS ?? 0;
+            currentCase.AgreedDate = caseSolution?.AgreedDate;
+            currentCase.Available = caseSolution?.Available;
+            currentCase.Cost = caseSolution?.Cost ?? 0;
+            currentCase.OtherCost = caseSolution?.OtherCost ?? 0;
+            currentCase.Currency = caseSolution?.Currency;
+
+            currentCase.Performer_User_Id = caseSolution?.PerformerUser_Id;
+            currentCase.StateSecondary_Id = caseSolution?.StateSecondary_Id;
+            currentCase.Project_Id = caseSolution?.Project_Id;
+            currentCase.Problem_Id = caseSolution?.Problem_Id;
+            currentCase.CausingPartId = caseSolution?.CausingPartId;
+            currentCase.Change_Id = caseSolution?.Change_Id;
+            currentCase.PlanDate = caseSolution?.PlanDate;
+            currentCase.WatchDate = caseSolution?.WatchDate;
+            currentCase.Verified = caseSolution?.Verified ?? 0;
+            currentCase.VerifiedDescription = caseSolution?.VerifiedDescription;
+            currentCase.SolutionRate = caseSolution?.SolutionRate;
         }
 
         private CaseMailSetting GetCaseMailSetting(Case currentCase, Customer customer, CustomerSettings customerSettings)

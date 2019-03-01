@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -174,7 +175,7 @@ using System;
     public interface ICustomerUserRepository : IRepository<CustomerUser>
     {
         CustomerUser GetCustomerSettings(int customer, int user);
-
+        Task<CustomerUser> GetCustomerSettingsAsync(int customerId, int userId);
         IList<UserCustomer> GetCustomerUsersForStart(int userId);
         IList<CustomerUserList> GetCustomerUsersForStartFinal(int userId);
         IList<CustomerUser> GetCustomerUsersForCustomer(int customeId);
@@ -203,9 +204,12 @@ using System;
 
         public CustomerUser GetCustomerSettings(int customerId, int userId)
         {
-            return Table
-                    .Include(x => x.User)   
-                    .Where(cu => cu.Customer_Id == customerId && cu.User_Id == userId).FirstOrDefault();
+            return GetCustomerSettingsQuery(customerId, userId).FirstOrDefault();
+        }
+
+        public Task<CustomerUser> GetCustomerSettingsAsync(int customerId, int userId)
+        {
+            return GetCustomerSettingsQuery(customerId, userId).FirstOrDefaultAsync();
         }
 
         public IList<UserCustomerOverview> ListCustomersByUserCases(string userId, string employeeNumber, IList<string> employees, Customer customer)
@@ -417,6 +421,13 @@ using System;
             return Table
                     .Include(x => x.User)
                     .Where(cu => cu.Customer_Id == customerId).FirstOrDefault();
+        }
+
+        private IQueryable<CustomerUser> GetCustomerSettingsQuery(int customerId, int userId)
+        {
+            return Table
+                .Include(x => x.User)
+                .Where(cu => cu.Customer_Id == customerId && cu.User_Id == userId);
         }
     }
 

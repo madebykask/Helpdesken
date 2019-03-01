@@ -838,7 +838,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         {
             IBaseCaseField field;
             //CaseManagement
-            //displayCaseManagementInfoHtml //TODO:see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions
+            //displayCaseManagementInfoHtml //TODO: see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions
 
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings,
                 GlobalEnums.TranslationCaseFields.WorkingGroup_Id))

@@ -127,7 +127,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (input.CaseRemainingTimeHoursFilter.HasValue)
                 filter.CaseRemainingTimeHoursFilter = input.CaseRemainingTimeHoursFilter.Value;
 
-            var sm = InitCaseSearchModel(filter.CustomerId, filter.UserId);
+            var sm = await InitCaseSearchModel(filter.CustomerId, filter.UserId);
             sm.CaseSearchFilter = filter;
             if (!string.IsNullOrWhiteSpace(input.OrderBy)) sm.Search.SortBy = input.OrderBy;
             if (input.Ascending.HasValue) sm.Search.Ascending = input.Ascending.Value;
@@ -280,11 +280,11 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         }
 
-        private CaseSearchModel InitCaseSearchModel(int customerId, int userId)
+        private async Task<CaseSearchModel> InitCaseSearchModel(int customerId, int userId)
         {
             var search = new Search();
             var filter = new CaseSearchFilter();
-            var cu = _customerUserService.GetCustomerUserSettings(customerId, userId);
+            var cu = await _customerUserService.GetCustomerUserSettingsAsync(customerId, userId);
             if (cu == null)
             {
                 throw new Exception($"Customers settings is empty or not valid for customer id {customerId}");

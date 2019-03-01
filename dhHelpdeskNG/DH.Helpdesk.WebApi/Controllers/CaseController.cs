@@ -96,7 +96,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (currentCase.Customer_Id != currentCid)
                 throw new Exception($"Case customer({currentCase.Customer_Id}) and current customer({currentCid}) are different"); //TODO: how to react?
 
-            var customerUserSetting = _customerUserService.GetCustomerUserSettings(currentCid, userId);
+            var customerUserSetting = await _customerUserService.GetCustomerUserSettingsAsync(currentCid, userId);
             if (customerUserSetting == null)
                 throw new Exception($"No customer settings for this customer '{currentCid}' and user '{userId}'");
 
@@ -176,7 +176,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(cid);
             var caseTemplateSettings = _caseSolutionSettingService.GetCaseSolutionSettingOverviews(templateId.Value);
             var caseFieldTranslations = await _caseFieldSettingService.GetCustomerCaseTranslationsAsync(cid);
-            var customerUserSetting = _customerUserService.GetCustomerUserSettings(cid, UserId);
+            var customerUserSetting = await _customerUserService.GetCustomerUserSettingsAsync(cid, UserId);
             var customerDefaults = _customerService.GetCustomerDefaults(cid);
 
             var model = new CaseEditOutputModel()
