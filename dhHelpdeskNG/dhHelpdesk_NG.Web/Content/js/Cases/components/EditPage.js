@@ -318,6 +318,7 @@ EditPage.prototype.loadExtendedCase = function () {
                     persons_cellphone: { Value: fieldValues.PersonsCellphone },
                     place: { Value: fieldValues.Place },
                     costcentre: { Value: fieldValues.CostCentre },
+                    caption: { Value: fieldValues.Caption }
                 }
             });
         pr.then(function () { self.onExtendedCaseLoaded() });
@@ -448,6 +449,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     var _persons_cellphone = fieldData.persons_cellphone;
     var _place = fieldData.place;
     var _costcentre = fieldData.costcentre;
+    var _caption = fieldData.caption;
 
     if (_administratorId != undefined)
         $('#' + _caseFields.AdministratorId).val(_administratorId.Value);
@@ -482,6 +484,9 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
         $('#' + _caseFields.DepartmentId).val(_department_id.Value);
         $('#' + _caseFields.DepartmentName).val(_department_id.SecondaryValue);
     }
+
+    if (_caption != undefined)
+        $('#' + _caseFields.Caption).val(_caption.Value);
     
     var selectedOU_Id = '';
     var selectedOU_Name = '';

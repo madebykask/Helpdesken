@@ -62,6 +62,7 @@
         fileExistError: '@Translation.GetForJS("Bifogad fil är borttagen från ärendet")',
         applicationType: '@ApplicationTypes.Helpdesk',
         caseFieldIds: {
+            Caption: "case__Caption",
             CaseId: "case__Id",
             CustomerId: "case__Customer_Id",
             RegionId: "case__Region_Id",
@@ -127,7 +128,8 @@
             PersonsEmail: @Html.Raw(Json.Encode(Model.case_.PersonsEmail)),
             PersonsCellphone: @Html.Raw(Json.Encode(Model.case_.PersonsCellphone)),
             Place: @Html.Raw(Json.Encode(Model.case_.Place)),
-            CostCentre: '@Html.Raw(Json.Encode(Model.case_.CostCentre))'
+            CostCentre: '@Html.Raw(Json.Encode(Model.case_.CostCentre))',
+            Caption: '@Html.Raw(Json.Encode(Model.case_.Caption))'
         },
 
         casesScopeInitParameters: {

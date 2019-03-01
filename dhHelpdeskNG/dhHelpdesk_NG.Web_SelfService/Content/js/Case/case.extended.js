@@ -230,6 +230,7 @@ ExtendedCasePage.prototype.loadExtendedCase = function () {
                     persons_cellphone: { Value: fieldValues.PersonsCellphone},
                     place: { Value: fieldValues.Place },
                     costcentre: { Value: fieldValues.CostCentre },
+                    caption: { Value: fieldValues.Caption },
                 }
             });
         promise.then(function () { self.onExtendedCaseLoaded() });
@@ -340,6 +341,7 @@ ExtendedCasePage.prototype.syncCaseFromExCaseIfExists = function () {
     var _persons_cellphone = fieldData.persons_cellphone;
     var _place = fieldData.place;
     var _costcentre = fieldData.costcentre;
+    var _caption = fieldData.caption;
 
     if (_adminstratorId != undefined) 
         $('#' + _caseFields.AdministratorId).val(_adminstratorId.Value);
@@ -414,6 +416,9 @@ ExtendedCasePage.prototype.syncCaseFromExCaseIfExists = function () {
 
     if (_costcentre != undefined)
         $('#' + _caseFields.CostCentre).val(_costcentre.Value);
+
+    if (_caption != undefined)
+        $('#' + _caseFields.Caption).val(_caption.Value);
 }
 
 ExtendedCasePage.prototype.setCaseStatus = function (status) {

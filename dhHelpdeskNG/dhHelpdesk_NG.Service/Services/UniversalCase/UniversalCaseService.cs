@@ -1250,13 +1250,16 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 case "costcentre":
                     caseModel.CostCentre = value;
                     break;
-                //case "log_textinternal":
-                //    caseModel.log_textinternal = value;
-                //    break;
-                //case "case_relation_type":
-                //    caseModel.case_relation_type = value;
-                //    break;
-            }
+				case "caption":
+					caseModel.Caption = value;
+					break;
+					//case "log_textinternal":
+					//    caseModel.log_textinternal = value;
+					//    break;
+					//case "case_relation_type":
+					//    caseModel.case_relation_type = value;
+					//    break;
+			}
         }
 
         #endregion
