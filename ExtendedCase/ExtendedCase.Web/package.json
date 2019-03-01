@@ -72,6 +72,7 @@
     "updateAngular": " npm install @angular/core@latest @angular/compiler@latest @angular/upgrade@latest @angular/common@latest  @angular/platform-browser@latest @angular/platform-browser-dynamic@latest @angular/forms@latest @angular/common/http@latest @angular/router@latest @angular/animations@latest typescript@latest --save",
     "updateTypescript": "npm update -g typescript",
     "installDependencies": "npm install",
-    "build-test": "gulp build-test"
+    "build-test": "gulp build-test",
+    "build-dev": "gulp build-dev"
   }
 }
