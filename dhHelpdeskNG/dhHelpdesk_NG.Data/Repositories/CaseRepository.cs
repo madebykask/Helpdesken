@@ -384,8 +384,11 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private void SetCaseUnreadFlag(int id, int unread = 0)
         {
-            this.DataContext.Cases.Where(c => c.Id == id)
-                .Update(c => new Case { Unread = unread });
+            DataContext.Cases.Where(c => c.Id == id).Update(c => new Case
+            {
+                Unread = unread
+            });
+            DataContext.Commit();
         }
 
         public Case GetCaseIncluding(int id)

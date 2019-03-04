@@ -880,19 +880,12 @@ namespace DH.Helpdesk.Services.Services
                 c.RegTime = DateTime.UtcNow;
                 c.ChangeTime = DateTime.UtcNow;
 
-                this._caseRepository.Add(c);
+                _caseRepository.Add(c);
             }
             else
             {
                 c.ChangeTime = DateTime.UtcNow;
-                if (userId == 0)
-                {
-                    c.ChangeByUser_Id = null;
-                }
-                else
-                {
-                    c.ChangeByUser_Id = userId;
-                }
+                c.ChangeByUser_Id = userId == 0 ? (int?) null : userId;
 
                 _caseRepository.Update(c);
             }
