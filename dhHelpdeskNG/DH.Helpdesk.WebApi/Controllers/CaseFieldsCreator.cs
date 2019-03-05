@@ -851,13 +851,13 @@ namespace DH.Helpdesk.WebApi.Controllers
                 if (!workingGroupId.HasValue || workingGroupId.Value == 0)
                 {
                     var caseTypeField = model.Fields.FirstOrDefault(f =>
-                        f.Name == GlobalEnums.TranslationCaseFields.CaseType_Id.ToString());
+                        f.Name.Equals(CaseFieldsNamesApi.CaseTypeId.ToString(), StringComparison.InvariantCultureIgnoreCase));
                     if (caseTypeField != null)
                     {
-                        var caseId = ((BaseCaseField<int?>) caseTypeField).Value;
-                        if (caseId.HasValue && caseId.Value > 0)
+                        var caseId = ((BaseCaseField<int>) caseTypeField).Value;
+                        if (caseId > 0)
                         {
-                            var caseType = _caseTypeService.GetCaseType(caseId.Value);
+                            var caseType = _caseTypeService.GetCaseType(caseId);
                             workingGroupId = caseType.WorkingGroup_Id;
                         }
                     }
@@ -867,7 +867,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 if (!workingGroupId.HasValue || workingGroupId.Value == 0)
                 {
                     var productAreaField = model.Fields.FirstOrDefault(f =>
-                        f.Name == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString());
+                        f.Name.Equals(CaseFieldsNamesApi.ProductAreaId.ToString(), StringComparison.InvariantCultureIgnoreCase));
                     if (productAreaField != null)
                     {
                         var productAreaId = ((BaseCaseField<int?>) productAreaField).Value;
@@ -942,7 +942,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 var priorityId = currentCase != null
                     ? currentCase.Priority_Id
-                    : template?.Priority_Id ?? customerDefaults.SupplierId;
+                    : template?.Priority_Id ?? customerDefaults.PriorityId;
                 // Set working group from the product area working group if was not set before for New case only
                 if (!priorityId.HasValue || priorityId.Value == 0)
                 {
@@ -978,7 +978,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 var statusId = currentCase != null
                     ? currentCase.Status_Id
-                    : template?.Status_Id ?? customerDefaults.SupplierId;
+                    : template?.Status_Id ?? customerDefaults.StatusId;
                 field = GetField(statusId, cid, languageId,
                     CaseFieldsNamesApi.StatusId, GlobalEnums.TranslationCaseFields.Status_Id,
                     CaseSectionType.CaseManagement,
