@@ -12,28 +12,6 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
     public class CaseOverviewModel 
     {
-        public CaseOverviewModel()
-        { 
-
-        }
-
-        public CaseOverviewModel(string infoText, Case casePreview, List<string> caseFieldGroups, List<Log> caseLogs, List<CaseListToCase> fieldSettings,
-                                 IList<Region> regions, IList<System> systems, 
-                                 IList<Supplier> suppliers,
-                                 bool showRegistringMessage
-            )
-        {
-            this.InfoText = infoText;            
-            this.CasePreview = casePreview;
-            this.CaseFieldGroups = caseFieldGroups;
-            this.CaseLogs = caseLogs;
-            this.FieldSettings = fieldSettings;
-            this.Regions = regions;
-            this.Systems = systems;
-            this.Suppliers = suppliers;
-            this.ShowRegistringMessage = showRegistringMessage;
-        }
-
         public bool IsFinished
         {
             get { return CasePreview?.FinishingDate.HasValue ?? false; }
@@ -68,21 +46,15 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public List<CaseListToCase> FieldSettings { get; set; }
 
-        public FilesModel LogFilesModel { get; set; }
-
-        public string LogFileGuid { get; set; }  
-
         public Setting CustomerSettings { get; set; }
+
         public string FollowerUsers { get; set; }
 
-        public CaseLogModel GetCaseLogModel()
-        {
-            return new CaseLogModel
-            {
-                CaseId = CasePreview?.Id ?? 0,
-                CaseLogs = CaseLogs
-            };
-        }
+        public FilesModel LogFilesModel { get; set; }
+
+        public string LogFileGuid { get; set; }
+
+        public CaseLogModel CaseLogModel { get; set; }
 
         public ClosedCaseAlertModel GetClosedCaseAlertModel()
         {

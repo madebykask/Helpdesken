@@ -458,7 +458,7 @@
          (ViewBag.IsLineManagerApplication ||
           ViewBag.ApplicationType == ApplicationTypes.SelfService && ViewBag.ShowCommunicationForSelfservice))
     {
-        @Html.Partial("_Communication", Model.GetCaseLogModel())
+        @Html.Partial("_Communication", Model.CaseLogModel)
         @Html.Partial("ModalDialogs/_UploadExistingLogFilePopup")
         @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")
         @Scripts.Render("~/Content/js/Case/log")
@@ -466,7 +466,7 @@
 
     @if (Model.CaseDataModel.IsFinished)
     {
-        @Html.Partial("ModalDialogs/_CaseLogNotePopup", Model.GetCaseLogModel())
+        @Html.Partial("ModalDialogs/_CaseLogNotePopup", Model.CaseLogModel)
         @Scripts.Render("~/Content/js/Case/log")
     }
 }

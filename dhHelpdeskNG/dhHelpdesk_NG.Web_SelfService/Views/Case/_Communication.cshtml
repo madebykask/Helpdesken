@@ -5,21 +5,20 @@
     var expand = string.Empty;
     if (Model.CaseLogs != null && Model.CaseLogs.Count > 0)
     {
-        var lastMsg = Model.GetLastInteral();
-        var user_Id = lastMsg.User_Id;
-
-        if (user_Id != null) { expand = "expand"; }
+        var lastMsg = Model.GetLastLogForExternalPage();
+        if (lastMsg != null && lastMsg.User_Id != null)
+        {
+            expand = "expand";
+        }
     }
-
-}
-
+ }
 
 <div id="communicationPanel" class="siteCom">
     <div id="btnOpenLog" class="mapButtonclose mapButton @expand"><span class="glyphicon glyphicon-remove"></span></div>
     <div class="mapButtonside mapButton">
         @if (Model.CaseLogs != null && Model.CaseLogs.Count > 0)
         {
-            var lastMessage = Model.GetLastInteral();
+            var lastMessage = Model.GetLastLogForExternalPage();
             if (lastMessage != null && string.IsNullOrEmpty(lastMessage.RegUser))
             {
                 <div class="mapText" title="@Translation.Get("Communicate")">

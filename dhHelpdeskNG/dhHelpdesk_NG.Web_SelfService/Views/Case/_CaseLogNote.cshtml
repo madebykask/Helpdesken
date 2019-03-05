@@ -5,27 +5,17 @@
 {
     string GetLogText(Log item)
     {
-        var logText =
-            SessionFacade.CurrentCustomer.UseInternalLogNoteOnExternalPage == (int) Enums.LogNote.UseExternalLogNote
-                ? item.Text_External
-                : item.Text_Internal;
+        var logText = Model.ShowInternalLogNotes ? item.Text_Internal : item.Text_External;
         return (logText ?? string.Empty).Trim();
     }
-
+    
     string GetLogUser(Log logItem)
     {
         var userName = logItem.User_Id == null
-            ? (logItem.RegUser == SessionFacade.CurrentSystemUser ? Translation.Get("Me") : logItem.RegUser)
+            ? (logItem.RegUser == Model.CurrentUser ? Translation.Get("Me") : logItem.RegUser)
             : logItem.User.FirstName + " " + logItem.User.SurName;
         return userName;
     }
-
-    //string FormatLogText(Log logItem)
-    //{
-    //    var logText = GetLogText(logItem).AddCharacterInParts(70, Environment.NewLine, Environment.NewLine);
-    //    var formatted = logText.Replace("\n", "<br />");
-    //    return formatted;
-    //}
 
     MvcHtmlString FormatLogText(Log logItem)
     {
