@@ -23,7 +23,7 @@ export class UserSettingsApiService extends HttpApiServiceBase {
 
     loadUserSettings(): Observable<CurrentUser> {
         this.isLoadingUserSettings = true;
-        return this.getJson(this.buildResourseUrl('/api/currentuser/settings', undefined, false))//TODO: error handling
+        return this.getJson(this.buildResourseUrl('/api/currentuser/settings', undefined, false))
             .pipe(
                 take(1),
                 map((data: any) => {
@@ -36,11 +36,13 @@ export class UserSettingsApiService extends HttpApiServiceBase {
                             user.currentData.selectedCustomerId = data.customerId;
                         }// TODO: if no customer; 
                         if (data.languageId) {
-                            user.currentData.selectedLanguageId = data.languageId;//TODO: if no language
+                            user.currentData.selectedLanguageId = data.languageId;// TODO: if no language
                         }
                         if (data.timeZone) {
-                            user.currentData.userTimeZone = data.timeZone; 
+                            user.currentData.userTimeZone =  data.timeZone; 
                         }
+                        user.currentData.ownCasesOnly = data.ownCasesOnly != undefined ? data.ownCasesOnly : true;
+                        user.currentData.createCasePermission = data.createCasePermission != undefined ? data.createCasePermission : false;
 /*                         if (data.timeZoneMoment) {
                             this.localStorageService.saveTimezoneInfo(data.timeZoneMoment);
                         } */

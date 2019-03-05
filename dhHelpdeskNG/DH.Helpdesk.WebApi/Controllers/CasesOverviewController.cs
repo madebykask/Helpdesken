@@ -180,7 +180,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 customerSettings.WorkingDayStart,
                 customerSettings.WorkingDayEnd,
                 userTimeZone,
-                ApplicationTypes.Helpdesk,//TODO: remove hardcode
+                ApplicationTypes.Helpdesk,
                 userOverview.ShowSolutionTime,
                 out remainingTimeData,
                 out aggregateData);
@@ -193,7 +193,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         /// <summary>
-        /// This isa temporary methhod. Adds required fields to Mobile Case Overview page. Remove after Case Mobile settings mage added
+        /// This is a temporary methhod. Adds required fields to Mobile Case Overview page. Remove after Case Mobile settings mage added
         /// </summary>
         /// <param name="caseSettings"></param>
         private void AddMissingCaseSettingsForMobile(IList<CaseSettings> caseSettings)

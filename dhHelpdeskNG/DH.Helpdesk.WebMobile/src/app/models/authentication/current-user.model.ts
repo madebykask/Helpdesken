@@ -2,7 +2,7 @@ import { UuidGenerator } from "src/app/modules/shared-module/utils/uuid-generato
 
 export class CurrentUser {
     
-    constructor() {          
+    constructor() {
           this.authData = new UserAuthenticationData();
           this.currentData = new UserData();
     }
@@ -41,7 +41,7 @@ export class UserAuthenticationData {
     refresh_token: string;
     expires_in: number; // in seconds - not updated once recieved
     recievedAt: Date;
-    sessionId: string;   
+    sessionId: string;
 }
 
 export class UserData {
@@ -50,4 +50,6 @@ export class UserData {
     selectedCustomerId: number;
     selectedLanguageId: number;
     userTimeZone?: string;
+    ownCasesOnly: boolean;
+    createCasePermission: boolean;
 }

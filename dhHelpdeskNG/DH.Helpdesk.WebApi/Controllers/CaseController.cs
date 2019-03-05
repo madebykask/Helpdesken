@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
+using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer;
@@ -156,12 +157,9 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         [HttpGet]
         [Route("template/{templateId:int}")]
+        [CheckUserPermissions(UserPermission.CreateCasePermission)]
         public async Task<IHttpActionResult> New([FromUri]int langId, [FromUri]int cid, [FromUri]int? templateId)
         { 
-            var userOverview = await _userService.GetUserOverviewAsync(UserId);// TODO: use cached version!
-            if (!userOverview.CreateCasePermission.ToBool())
-                SendResponse($"User {UserName} is not allowed to create case.", HttpStatusCode.Forbidden);
-
             var customerSettings = _customerSettingsService.GetCustomerSettings(cid);
             if (!templateId.HasValue && customerSettings.DefaultCaseTemplateId != 0)
                 templateId = customerSettings.DefaultCaseTemplateId;
@@ -178,6 +176,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var caseFieldTranslations = await _caseFieldSettingService.GetCustomerCaseTranslationsAsync(cid);
             var customerUserSetting = await _customerUserService.GetCustomerUserSettingsAsync(cid, UserId);
             var customerDefaults = _customerService.GetCustomerDefaults(cid);
+            var userOverview = await _userService.GetUserOverviewAsync(UserId);// TODO: use cached version!
 
             var model = new CaseEditOutputModel()
             {

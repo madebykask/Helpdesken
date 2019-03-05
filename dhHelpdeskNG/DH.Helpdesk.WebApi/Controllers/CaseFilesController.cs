@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Dal.Enums;
@@ -154,6 +155,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         [HttpDelete]
         [Route("{caseKey:int}/file/{fileId:int}")]
+        [CheckUserPermissions(UserPermission.DeleteAttachedFilePermission)]
         public IHttpActionResult DeleteCaseFile(int caseKey, int fileId)
         {
             //todo: make Async
@@ -176,15 +178,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             return Ok();
         }
 
-        #region Private Methods
-
-        private string GetBasePath(int customerId)
-        {
-            return _settingsLogic.GetFilePath(customerId);
-        }
-
-        #endregion
-
+        
         [HttpDelete]
         [CheckUserCasePermissions(CaseIdParamName = "caseId")]
         [Route("{caseId:int}/tempfiles")]
@@ -194,5 +188,15 @@ namespace DH.Helpdesk.WebApi.Controllers
             _userTemporaryFilesStorage.ResetCacheForObject(caseId);
             return Ok();
         }
+
+        #region Private Methods
+
+        private string GetBasePath(int customerId)
+        {
+            return _settingsLogic.GetFilePath(customerId);
+        }
+
+        #endregion
+
     }
 }

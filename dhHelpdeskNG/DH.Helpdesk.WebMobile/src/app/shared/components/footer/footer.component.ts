@@ -1,25 +1,27 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MbscPopup, MbscPopupOptions, MbscSelect, MbscSelectOptions, MbscNavOptions, MbscListviewOptions, MbscListview } from '@mobiscroll/angular';
-import { take, finalize } from 'rxjs/operators';
+import { take, finalize, map } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { LanguagesApiService } from 'src/app/services/api/language/languages-api.service';
 import { CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
 import { CaseTemplateModel, CaseTemplateNode, CaseTemplateCategoryNode } from 'src/app/modules/case-edit-module/models/case/case-template.model';
 import { CaseTemplateService } from 'src/app/modules/case-edit-module/services/case/case-template.service';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent implements OnInit  {  
+export class FooterComponent implements OnInit  {
   searchType = CasesSearchType;
   languageId: number = 0;
   isLoadingLanguage: boolean = true;
   isVisible = true;
   templateNodes = [];
+  canCreateCases$ = new BehaviorSubject<boolean>(false);
   
   @ViewChild('newCasePopup') newCasePopup: MbscPopup;
   @ViewChild('caseSearchPopup') caseSearchPopup: MbscPopup;
@@ -84,22 +86,74 @@ export class FooterComponent implements OnInit  {
 
   ngOnInit() {
     this.loadLanguages();
-    this.loadTemplates();
+    if (this.userSettingsService.getUserData().createCasePermission) {
+      this.loadTemplates().subscribe((templateNodes) => {
+        this.templateNodes = templateNodes;
+        this.canCreateCases$.next(this.templateNodes.length > 0);
+      })
+    };
 
-    //apply translations
+    // apply translations
     this.languagesCtrl.setText = this.ngxTranslateService.instant("Välj");
     this.languagesCtrl.cancelText  = this.ngxTranslateService.instant("Avbryt");
-  } 
-
-  private onLanguageChange(event, inst) {
-    let val = inst.getVal();
-    this.setLanguage(val ? +val : null);
   }
 
   openLanguages() {
     if (!this.isLoadingLanguage) {
         this.languagesCtrl.instance.show();
     }
+  }
+
+  isCategory(node) {
+    return node && node instanceof CaseTemplateCategoryNode;
+  }
+
+  openTemplate(templateId:number) {
+    this.hidePopups();
+    this.router.navigate(['/case/template', templateId]);
+  }
+
+  setLanguage(languageId: number) {
+    if (languageId) {
+      this.userSettingsService.setCurrentLanguage(languageId);
+
+      // reload will reopen the app
+      window.location.reload(true);
+    }
+  }
+
+  logout() {
+    this.goTo('/login');
+  }
+
+  goToCases(searchType: CasesSearchType) {
+    this.hidePopups();
+    this.router.navigate(['/casesoverview', CasesSearchType[searchType]]);
+  }
+
+  goToOverview() {
+/*     if (this.userSettingsService.getUserData().ownCasesOnly) {
+      this.hidePopups();
+      this.goToCases(CasesSearchType.MyCases);
+      return;
+    } */
+    this.caseSearchPopup.instance.show();
+  }
+
+  goTo(url: string = null) {
+    this.hidePopups();
+    this.router.navigateByUrl(url);
+  }
+
+  createCase() {
+    if (this.canCreateCases$.value) {
+      this.newCasePopup.instance.show()
+    }
+  }
+
+  private onLanguageChange(event, inst) {
+    let val = inst.getVal();
+    this.setLanguage(val ? +val : null);
   }
 
   private loadLanguages() {
@@ -117,16 +171,16 @@ export class FooterComponent implements OnInit  {
   } 
 
   private loadTemplates() {
-    this.caseTemplateService.loadTemplates().pipe(
-      take(1)
-    ).subscribe((items:CaseTemplateModel[]) => {
-        this.templateNodes = this.processTemplates(items);
-    });
+    return this.caseTemplateService.loadTemplates().pipe(
+      take(1),
+      map((items: CaseTemplateModel[]) => {
+        return this.processTemplates(items);
+    }));
   } 
 
-  private processTemplates(templates:CaseTemplateModel[]): Array<CaseTemplateNode | CaseTemplateCategoryNode> {
-    const templateNodes:CaseTemplateNode[] = [];
-    const categoryNodes:CaseTemplateCategoryNode[] = [];
+  private processTemplates(templates: CaseTemplateModel[]): Array<CaseTemplateNode | CaseTemplateCategoryNode> {
+    const templateNodes: CaseTemplateNode[] = [];
+    const categoryNodes: CaseTemplateCategoryNode[] = [];
     if (templates && templates.length) {
       templates.forEach(t => {
         const categoryId = t.categoryId || 0;
@@ -151,38 +205,6 @@ export class FooterComponent implements OnInit  {
   private sortByName(items: (CaseTemplateNode | CaseTemplateCategoryNode)[]) {
     if (items === null || items === undefined) return;
     return items.sort((a, b) => a.name.localeCompare(b.name));
-  }
-
-  isCategory(node) {
-    return node && node instanceof CaseTemplateCategoryNode;
-  }
-
-  openTemplate(templateId:number) {
-    this.hidePopups();
-    this.router.navigate(['/case/template', templateId]);    
-  }
-
-  setLanguage(languageId: number) {
-    if (languageId) {
-      this.userSettingsService.setCurrentLanguage(languageId);
-
-      // reload will reopen the app
-      window.location.reload(true);
-    }
-  }
-
-  logout() {
-    this.goTo('/login');
-  }
-
-  goToCases(searchType: CasesSearchType) {
-    this.hidePopups();
-    this.router.navigate(['/casesoverview', CasesSearchType[searchType]]);
-  }
-
-  goTo(url: string = null) {
-    this.hidePopups();
-    this.router.navigateByUrl(url);
   }
 
   private hidePopups() {
