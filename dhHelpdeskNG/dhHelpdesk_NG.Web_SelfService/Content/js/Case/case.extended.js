@@ -286,7 +286,7 @@ ExtendedCasePage.prototype.isExtendedCaseValid = function (showToast, isOnNext) 
         }
 
         if (showToast) {
-            ShowToastMessage("Case is not valid!", "error", false);
+            ShowToastMessage(self.extendedCaseInvalidMessage + '!', "error", false);
         }
         return false;
     }
@@ -503,6 +503,7 @@ ExtendedCasePage.prototype.init = function (params) {
     self.CurrentUser = params.currentUser;
     self.Current_EC_Path = params.extendedCasePath;
     self.ApplicationType = params.applicationType;
+    self.extendedCaseInvalidMessage = params.extendedCaseInvalidMessage;
     var lastError = params.lastError;
     var lastClickTimeStamp = null;
     var nextAllowedClickDelay = 5000;
