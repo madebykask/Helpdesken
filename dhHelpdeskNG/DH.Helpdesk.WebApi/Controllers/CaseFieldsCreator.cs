@@ -105,12 +105,12 @@ namespace DH.Helpdesk.WebApi.Controllers
             CaseDefaultsInfo customerDefaults = null)
         {
             // Initiator
-            //displayUserInfoHtml:TODO:see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions.displayUserInfoHtml
+            //displayUserInfoHtml:TODO: see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions.displayUserInfoHtml
             IBaseCaseField field;
             if (customerUserSetting.UserInfoPermission.ToBool())
             {
                 //if (Model.ComputerUserCategories.Any())
-                //GlobalEnums.TranslationCaseFields.UserSearchCategory_Id//TODO:add UserSearchCategory_Id
+                //GlobalEnums.TranslationCaseFields.UserSearchCategory_Id//TODO: add UserSearchCategory_Id
                 if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings,
                     GlobalEnums.TranslationCaseFields.ReportedBy))
                 {
@@ -118,8 +118,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                         languageId,
                         CaseFieldsNamesApi.ReportedBy, GlobalEnums.TranslationCaseFields.ReportedBy,
                         CaseSectionType.Initiator,
-                        caseFieldSettings, caseFieldTranslations);
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "40"));
+                        caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                    AddMaxLengthOption(field.Options, 40);
                     model.Fields.Add(field);
                 }
 
@@ -144,8 +144,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                         languageId,
                         CaseFieldsNamesApi.PersonName, GlobalEnums.TranslationCaseFields.Persons_Name,
                         CaseSectionType.Initiator,
-                        caseFieldSettings, caseFieldTranslations);
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                        caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                    AddMaxLengthOption(field.Options, 50);
                     model.Fields.Add(field);
                 }
 
@@ -156,8 +156,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                         languageId,
                         CaseFieldsNamesApi.PersonEmail, GlobalEnums.TranslationCaseFields.Persons_EMail,
                         CaseSectionType.Initiator,
-                        caseFieldSettings, caseFieldTranslations);
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "100"));
+                        caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                    AddMaxLengthOption(field.Options, 100);
                     model.Fields.Add(field);
                 }
 
@@ -168,8 +168,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                         languageId,
                         CaseFieldsNamesApi.PersonPhone, GlobalEnums.TranslationCaseFields.Persons_Phone,
                         CaseSectionType.Initiator,
-                        caseFieldSettings, caseFieldTranslations);
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                        caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                    AddMaxLengthOption(field.Options, 50);
                     model.Fields.Add(field);
                 }
 
@@ -180,8 +180,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                         cid, languageId,
                         CaseFieldsNamesApi.PersonCellPhone, GlobalEnums.TranslationCaseFields.Persons_CellPhone,
                         CaseSectionType.Initiator,
-                        caseFieldSettings, caseFieldTranslations);
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                        caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                    AddMaxLengthOption(field.Options, 50);
                     model.Fields.Add(field);
                 }
 
@@ -190,11 +190,11 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     var regionId = currentCase != null
                         ? currentCase.Region_Id
-                        : template?.Region_Id ?? customerDefaults.RegionId;
+                        : template?.Region_Id ?? customerDefaults?.RegionId;
                     field = GetField(regionId, cid, languageId,
                         CaseFieldsNamesApi.RegionId, GlobalEnums.TranslationCaseFields.Region_Id,
                         CaseSectionType.Initiator,
-                        caseFieldSettings, caseFieldTranslations);
+                        caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                     model.Fields.Add(field);
                 }
 
@@ -205,7 +205,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         languageId,
                         CaseFieldsNamesApi.DepartmentId, GlobalEnums.TranslationCaseFields.Department_Id,
                         CaseSectionType.Initiator,
-                        caseFieldSettings, caseFieldTranslations);
+                        caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                     model.Fields.Add(field);
                 }
 
@@ -215,7 +215,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     field = GetField(currentCase != null ? currentCase.OU_Id : template?.OU_Id, cid, languageId,
                         CaseFieldsNamesApi.OrganizationUnitId, GlobalEnums.TranslationCaseFields.OU_Id,
                         CaseSectionType.Initiator,
-                        caseFieldSettings, caseFieldTranslations);
+                        caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                     model.Fields.Add(field);
                 }
 
@@ -226,8 +226,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                         languageId,
                         CaseFieldsNamesApi.CostCentre, GlobalEnums.TranslationCaseFields.CostCentre,
                         CaseSectionType.Initiator,
-                        caseFieldSettings, caseFieldTranslations);
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                        caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                    AddMaxLengthOption(field.Options, 50);
                     model.Fields.Add(field);
                 }
 
@@ -236,8 +236,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     field = GetField(currentCase != null ? currentCase.Place : template?.Place, cid, languageId,
                         CaseFieldsNamesApi.Place, GlobalEnums.TranslationCaseFields.Place, CaseSectionType.Initiator,
-                        caseFieldSettings, caseFieldTranslations);
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "100"));
+                        caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                    AddMaxLengthOption(field.Options, 100);
                     model.Fields.Add(field);
                 }
 
@@ -247,8 +247,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     field = GetField(currentCase != null ? currentCase.UserCode : template?.UserCode, cid, languageId,
                         CaseFieldsNamesApi.UserCode, GlobalEnums.TranslationCaseFields.UserCode,
                         CaseSectionType.Initiator,
-                        caseFieldSettings, caseFieldTranslations);
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                        caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                    AddMaxLengthOption(field.Options, 50);
                     model.Fields.Add(field);
                 }
 
@@ -295,8 +295,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     cid, languageId,
                     CaseFieldsNamesApi.IsAbout_ReportedBy, GlobalEnums.TranslationCaseFields.IsAbout_ReportedBy,
                     CaseSectionType.Regarding,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "40"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 40);
                 model.Fields.Add(field);
             }
 
@@ -307,8 +307,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     cid, languageId,
                     CaseFieldsNamesApi.IsAbout_PersonName, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Name,
                     CaseSectionType.Regarding,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 50);
                 model.Fields.Add(field);
             }
 
@@ -320,8 +320,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.IsAbout_PersonEmail, GlobalEnums.TranslationCaseFields.IsAbout_Persons_EMail,
                     CaseSectionType.Regarding,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 50);
                 model.Fields.Add(field);
             }
 
@@ -333,8 +333,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.IsAbout_PersonPhone, GlobalEnums.TranslationCaseFields.IsAbout_Persons_Phone,
                     CaseSectionType.Regarding,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "40"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 40);
                 model.Fields.Add(field);
             }
 
@@ -346,8 +346,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     cid, languageId,
                     CaseFieldsNamesApi.IsAbout_PersonCellPhone,
                     GlobalEnums.TranslationCaseFields.IsAbout_Persons_CellPhone, CaseSectionType.Regarding,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "30"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 30);
                 model.Fields.Add(field);
             }
 
@@ -358,7 +358,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     cid, languageId,
                     CaseFieldsNamesApi.IsAbout_RegionId, GlobalEnums.TranslationCaseFields.IsAbout_Region_Id,
                     CaseSectionType.Regarding,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -370,7 +370,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.IsAbout_DepartmentId, GlobalEnums.TranslationCaseFields.IsAbout_Department_Id,
                     CaseSectionType.Regarding,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -381,7 +381,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.IsAbout_OrganizationUnitId, GlobalEnums.TranslationCaseFields.IsAbout_OU_Id,
                     CaseSectionType.Regarding,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -392,8 +392,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     cid, languageId,
                     CaseFieldsNamesApi.IsAbout_CostCentre, GlobalEnums.TranslationCaseFields.IsAbout_CostCentre,
                     CaseSectionType.Regarding,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 50);
                 model.Fields.Add(field);
             }
 
@@ -404,8 +404,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.IsAbout_Place, GlobalEnums.TranslationCaseFields.IsAbout_Place,
                     CaseSectionType.Regarding,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "100"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 100);
                 model.Fields.Add(field);
             }
 
@@ -416,8 +416,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.IsAbout_UserCode, GlobalEnums.TranslationCaseFields.IsAbout_UserCode,
                     CaseSectionType.Regarding,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 50);
                 model.Fields.Add(field);
             }
         }
@@ -437,8 +437,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.InventoryNumber, GlobalEnums.TranslationCaseFields.InventoryNumber,
                     CaseSectionType.ComputerInfo,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "60"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 60);
                 model.Fields.Add(field);
             }
 
@@ -449,8 +449,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.ComputerTypeId, GlobalEnums.TranslationCaseFields.ComputerType_Id,
                     CaseSectionType.ComputerInfo,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 50);
                 model.Fields.Add(field);
             }
 
@@ -461,8 +461,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.InventoryLocation, GlobalEnums.TranslationCaseFields.InventoryLocation,
                     CaseSectionType.ComputerInfo,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "100"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 100);
                 model.Fields.Add(field);
             }
         }
@@ -485,7 +485,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.CaseNumber, GlobalEnums.TranslationCaseFields.CaseNumber,
                     CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -496,7 +496,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     currentCase != null ? DateTime.SpecifyKind(currentCase.RegTime, DateTimeKind.Utc) : DateTime.UtcNow,
                     cid, languageId,
                     CaseFieldsNamesApi.RegTime, GlobalEnums.TranslationCaseFields.RegTime, CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -509,7 +509,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         : new DateTime?(), cid, languageId,
                     CaseFieldsNamesApi.ChangeTime, GlobalEnums.TranslationCaseFields.ChangeTime,
                     CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -544,7 +544,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
                 field = GetField(userIdValue, cid, languageId,
                     CaseFieldsNamesApi.UserId, GlobalEnums.TranslationCaseFields.User_Id, CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -555,7 +555,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.RegistrationSourceCustomer,
                     GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer, CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -564,11 +564,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 var caseTypeId = currentCase != null
                     ? currentCase.CaseType_Id
-                    : template?.CaseType_Id ?? customerDefaults.CaseTypeId;
+                    : template?.CaseType_Id ?? customerDefaults?.CaseTypeId;
                 field = GetField(caseTypeId, cid, languageId,
                     CaseFieldsNamesApi.CaseTypeId, GlobalEnums.TranslationCaseFields.CaseType_Id,
                     CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -579,7 +579,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.ProductAreaId, GlobalEnums.TranslationCaseFields.ProductArea_Id,
                     CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -588,7 +588,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 field = GetField(currentCase != null ? currentCase.System_Id : template?.System_Id, cid, languageId,
                     CaseFieldsNamesApi.SystemId, GlobalEnums.TranslationCaseFields.System_Id, CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -598,7 +598,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = GetField(currentCase != null ? currentCase.Urgency_Id : template?.Urgency_Id, cid, languageId,
                     CaseFieldsNamesApi.UrgencyId, GlobalEnums.TranslationCaseFields.Urgency_Id,
                     CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -607,7 +607,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 field = GetField(currentCase != null ? currentCase.Impact_Id : template?.Impact_Id, cid, languageId,
                     CaseFieldsNamesApi.ImpactId, GlobalEnums.TranslationCaseFields.Impact_Id, CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -617,7 +617,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = GetField(currentCase != null ? currentCase.Category_Id : template?.Category_Id, cid, languageId,
                     CaseFieldsNamesApi.CategoryId, GlobalEnums.TranslationCaseFields.Category_Id,
                     CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -626,11 +626,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 var supplierId = currentCase != null
                     ? currentCase.Supplier_Id
-                    : template?.Supplier_Id ?? customerDefaults.SupplierId;
+                    : template?.Supplier_Id ?? customerDefaults?.SupplierId;
                 field = GetField(supplierId, cid, languageId,
                     CaseFieldsNamesApi.SupplierId, GlobalEnums.TranslationCaseFields.Supplier_Id,
                     CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
 
                 var supplier = supplierId.HasValue
@@ -639,7 +639,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = GetField(supplier?.Country_Id, cid, languageId,
                     CaseFieldsNamesApi.SupplierCountryId, GlobalEnums.TranslationCaseFields.Supplier_Id,
                     CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -650,8 +650,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.InvoiceNumber, GlobalEnums.TranslationCaseFields.InvoiceNumber,
                     CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 50);
                 model.Fields.Add(field);
             }
 
@@ -662,8 +662,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.ReferenceNumber, GlobalEnums.TranslationCaseFields.ReferenceNumber,
                     CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 50);
                 model.Fields.Add(field);
             }
 
@@ -677,11 +677,13 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.Caption,
                         languageId, cid, caseFieldTranslations),
                     Section = CaseSectionType.CaseInfo,
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Caption, caseFieldSettings,
-                        _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption,
-                            currentCase?.Id ?? 0, customerUserSetting.CaptionPermission))
+                    Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.Caption, caseFieldSettings)
                 };
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "50"));
+                if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption,
+                    currentCase?.Id, caseTemplateSettings,
+                    customerUserSetting.CaptionPermission))
+                    AddReadonlyOption(field.Options);
+                AddMaxLengthOption(field.Options, 50);
                 model.Fields.Add(field);
             }
 
@@ -711,13 +713,19 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Section = CaseSectionType.CaseInfo,
                     Options = registrationSourceOptions
                 };
+                if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Description,
+                    currentCase?.Id, caseTemplateSettings))
+                    AddReadonlyOption(field.Options);
                 model.Fields.Add(field);
 
                 field = GetField(currentCase != null ? currentCase.Description : template?.Description, cid, languageId,
                     CaseFieldsNamesApi.Description, GlobalEnums.TranslationCaseFields.Description,
                     CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "10000"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Description,
+                    currentCase?.Id, caseTemplateSettings))
+                    AddReadonlyOption(field.Options);
+                AddMaxLengthOption(field.Options, 10000);
                 model.Fields.Add(field);
             }
 
@@ -728,8 +736,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.Miscellaneous, GlobalEnums.TranslationCaseFields.Miscellaneous,
                     CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "1000"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 1000);
                 model.Fields.Add(field);
             }
 
@@ -744,10 +752,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.ContactBeforeAction,
                         languageId, cid, caseFieldTranslations),
                     Section = CaseSectionType.CaseInfo,
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.ContactBeforeAction, caseFieldSettings,
-                        _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.ContactBeforeAction,
-                            currentCase?.Id ?? 0, customerUserSetting.ContactBeforeActionPermission))
+                    Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.ContactBeforeAction, caseFieldSettings)
                 };
+                if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.ContactBeforeAction,
+                    currentCase?.Id, caseTemplateSettings,
+                    customerUserSetting.ContactBeforeActionPermission))
+                    AddReadonlyOption(field.Options);
                 model.Fields.Add(field);
             }
 
@@ -756,7 +766,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 field = GetField(currentCase?.SMS.ToBool() ?? template?.SMS.ToBool() ?? false, cid, languageId,
                     CaseFieldsNamesApi.Sms, GlobalEnums.TranslationCaseFields.SMS, CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -766,7 +776,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = GetField(currentCase != null ? currentCase.AgreedDate : template.AgreedDate, cid, languageId,
                     CaseFieldsNamesApi.AgreedDate, GlobalEnums.TranslationCaseFields.AgreedDate,
                     CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -775,8 +785,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 field = GetField(currentCase != null ? currentCase.Available : template?.Available, cid, languageId,
                     CaseFieldsNamesApi.Available, GlobalEnums.TranslationCaseFields.Available, CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "100"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 100);
                 model.Fields.Add(field);
             }
 
@@ -789,9 +799,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Value = currentCase?.Cost ?? template?.Cost ?? 0,
                     Label = _caseTranslationService.TranslateFieldLabel(languageId, "Artikelkostnad"), //Kostnad
                     Section = CaseSectionType.CaseInfo,
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Cost, caseFieldSettings)
+                    Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.Cost, caseFieldSettings)
                 };
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "7"));
+                if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Cost,
+                    currentCase?.Id, caseTemplateSettings))
+                    AddReadonlyOption(field.Options);
+                AddMaxLengthOption(field.Options, 7);
                 model.Fields.Add(field);
 
                 field = new BaseCaseField<int>()
@@ -800,9 +813,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Value = currentCase?.OtherCost ?? template?.OtherCost ?? 0,
                     Label = _caseTranslationService.TranslateFieldLabel(languageId, "Övrig kostnad"),
                     Section = CaseSectionType.CaseInfo,
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Cost, caseFieldSettings)
+                    Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.Cost, caseFieldSettings)
                 };
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "7"));
+                if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Cost,
+                    currentCase?.Id, caseTemplateSettings))
+                    AddReadonlyOption(field.Options);
+                AddMaxLengthOption(field.Options, 7);
                 model.Fields.Add(field);
 
                 field = new BaseCaseField<string>()
@@ -811,8 +827,11 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Value = currentCase != null ? currentCase.Currency : template?.Currency ?? "",
                     Label = _caseTranslationService.TranslateFieldLabel(languageId, "Valuta"),
                     Section = CaseSectionType.CaseInfo,
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Cost, caseFieldSettings)
+                    Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.Cost, caseFieldSettings)
                 };
+                if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Cost,
+                    currentCase?.Id, caseTemplateSettings))
+                    AddReadonlyOption(field.Options);
                 model.Fields.Add(field);
             }
 
@@ -822,7 +841,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 field = GetField(currentCase != null ? GetCaseFilesModel(currentCase.Id) : null, cid, languageId,
                     CaseFieldsNamesApi.Filename, GlobalEnums.TranslationCaseFields.Filename, CaseSectionType.CaseInfo,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
         }
@@ -882,7 +901,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = GetField(workingGroupId, cid, languageId,
                     CaseFieldsNamesApi.WorkingGroupId, GlobalEnums.TranslationCaseFields.WorkingGroup_Id,
                     CaseSectionType.CaseManagement,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -895,7 +914,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = GetField(caseResponsibleUserId, cid, languageId,
                     CaseFieldsNamesApi.CaseResponsibleUserId, GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id,
                     CaseSectionType.CaseManagement,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -932,7 +951,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = GetField(performerId, cid, languageId,
                     CaseFieldsNamesApi.PerformerUserId, GlobalEnums.TranslationCaseFields.Performer_User_Id,
                     CaseSectionType.CaseManagement,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -942,7 +961,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 var priorityId = currentCase != null
                     ? currentCase.Priority_Id
-                    : template?.Priority_Id ?? customerDefaults.PriorityId;
+                    : template?.Priority_Id ?? customerDefaults?.PriorityId;
                 // Set working group from the product area working group if was not set before for New case only
                 if (!priorityId.HasValue || priorityId.Value == 0)
                 {
@@ -966,10 +985,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.Priority_Id,
                         languageId, cid, caseFieldTranslations),
                     Section = CaseSectionType.CaseManagement,
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Priority_Id, caseFieldSettings,
-                        _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Priority_Id,
-                            currentCase?.Id ?? 0, customerUserSetting.PriorityPermission))
+                    Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.Priority_Id, caseFieldSettings)
                 };
+                if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Priority_Id,
+                    currentCase?.Id, caseTemplateSettings,
+                    customerUserSetting.PriorityPermission))
+                    AddReadonlyOption(field.Options);
                 model.Fields.Add(field);
             }
 
@@ -978,11 +999,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 var statusId = currentCase != null
                     ? currentCase.Status_Id
-                    : template?.Status_Id ?? customerDefaults.StatusId;
+                    : template?.Status_Id ?? customerDefaults?.StatusId;
                 field = GetField(statusId, cid, languageId,
                     CaseFieldsNamesApi.StatusId, GlobalEnums.TranslationCaseFields.Status_Id,
                     CaseSectionType.CaseManagement,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -996,11 +1017,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.StateSecondary_Id,
                         languageId, cid, caseFieldTranslations),
                     Section = CaseSectionType.CaseManagement,
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.StateSecondary_Id, caseFieldSettings,
-                        _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.StateSecondary_Id,
-                            currentCase?.Id ?? 0,
-                            customerUserSetting.StateSecondaryPermission))
+                    Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.StateSecondary_Id, caseFieldSettings)
                 };
+                if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.StateSecondary_Id,
+                    currentCase?.Id, caseTemplateSettings,
+                    customerUserSetting.StateSecondaryPermission))
+                    AddReadonlyOption(field.Options);
                 model.Fields.Add(field);
             }
 
@@ -1016,8 +1038,11 @@ namespace DH.Helpdesk.WebApi.Controllers
                         cid,
                         caseFieldTranslations),
                     Section = CaseSectionType.CaseManagement,
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.Project, caseFieldSettings)
+                    Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.Project, caseFieldSettings)
                 };
+                if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Project,
+                    currentCase?.Id, caseTemplateSettings))
+                    AddReadonlyOption(field.Options);
                 model.Fields.Add(field);
             }
 
@@ -1028,7 +1053,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = GetField(currentCase != null ? currentCase.Problem_Id : template?.Problem_Id, cid, languageId,
                     CaseFieldsNamesApi.Problem, GlobalEnums.TranslationCaseFields.Problem,
                     CaseSectionType.CaseManagement,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -1039,7 +1064,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.CausingPart, GlobalEnums.TranslationCaseFields.CausingPart,
                     CaseSectionType.CaseManagement,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -1049,7 +1074,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 field = GetField(currentCase != null ? currentCase.Change_Id : template?.Change_Id, cid, languageId,
                     CaseFieldsNamesApi.Change, GlobalEnums.TranslationCaseFields.Change, CaseSectionType.CaseManagement,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -1067,7 +1092,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     cid, languageId,
                     CaseFieldsNamesApi.PlanDate, GlobalEnums.TranslationCaseFields.PlanDate,
                     CaseSectionType.CaseManagement,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -1102,11 +1127,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                     Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.WatchDate,
                         languageId, cid, caseFieldTranslations),
                     Section = CaseSectionType.CaseManagement,
-                    Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.WatchDate, caseFieldSettings,
-                        _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.WatchDate,
-                            currentCase?.Id ?? 0,
-                            customerUserSetting.WatchDatePermission))
+                    Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.WatchDate, caseFieldSettings)
                 };
+                if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.WatchDate,
+                    currentCase?.Id, caseTemplateSettings,
+                    customerUserSetting.WatchDatePermission))
+                    AddReadonlyOption(field.Options);
                 model.Fields.Add(field);
             }
 
@@ -1116,7 +1142,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 field = GetField(currentCase?.Verified.ToBool() ?? template?.Verified.ToBool(), cid, languageId,
                     CaseFieldsNamesApi.Verified, GlobalEnums.TranslationCaseFields.Verified,
                     CaseSectionType.CaseManagement,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
 
@@ -1127,8 +1153,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     cid, languageId,
                     CaseFieldsNamesApi.VerifiedDescription, GlobalEnums.TranslationCaseFields.VerifiedDescription,
                     CaseSectionType.CaseManagement,
-                    caseFieldSettings, caseFieldTranslations);
-                field.Options.Add(new KeyValuePair<string, string>("maxlength", "200"));
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                AddMaxLengthOption(field.Options, 200);
                 model.Fields.Add(field);
             }
 
@@ -1139,7 +1165,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     languageId,
                     CaseFieldsNamesApi.SolutionRate, GlobalEnums.TranslationCaseFields.SolutionRate,
                     CaseSectionType.CaseManagement,
-                    caseFieldSettings, caseFieldTranslations);
+                    caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 model.Fields.Add(field);
             }
         }
@@ -1160,8 +1186,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                         languageId,
                         CaseFieldsNamesApi.FinishingDescription, GlobalEnums.TranslationCaseFields.FinishingDescription,
                         CaseSectionType.Communication,
-                        caseFieldSettings, caseFieldTranslations);
-                    field.Options.Add(new KeyValuePair<string, string>("maxlength", "200"));
+                        caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+                    AddMaxLengthOption(field.Options, 200);
                     model.Fields.Add(field);
                 }
 
@@ -1181,8 +1207,11 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Value = finishingCause,
                         Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.ClosingReason, languageId, cid, caseFieldTranslations),
                         Section = CaseSectionType.Communication,
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.ClosingReason, caseFieldSettings)
+                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.ClosingReason, caseFieldSettings)
                     };
+                    if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.ClosingReason,
+                        currentCase?.Id, caseTemplateSettings))
+                        AddReadonlyOption(field.Options);
                     model.Fields.Add(field);
                 }
 
@@ -1195,8 +1224,11 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Value = currentCase != null ? currentCase.FinishingDate : template?.FinishingDate,
                         Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.FinishingDate, languageId, cid, caseFieldTranslations),
                         Section = CaseSectionType.Communication,
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.FinishingDate, caseFieldSettings)
+                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.FinishingDate, caseFieldSettings)
                     };
+                    if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate,
+                        currentCase?.Id, caseTemplateSettings))
+                        AddReadonlyOption(field.Options);
                     model.Fields.Add(field);
                 }
 
@@ -1208,9 +1240,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Name = CaseFieldsNamesApi.Log_ExternalText,
                         Value = "",
                         Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_External, languageId, cid, caseFieldTranslations),
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_External, caseFieldSettings),
+                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_External, caseFieldSettings),
                         Section = CaseSectionType.Communication
                     };
+                    if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External,
+                        currentCase?.Id, caseTemplateSettings))
+                        AddReadonlyOption(field.Options);
                     model.Fields.Add(field);
                 }
 
@@ -1223,9 +1258,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Name = CaseFieldsNamesApi.Log_InternalText,
                         Value = template != null ? template.Text_Internal : "",
                         Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, languageId, cid, caseFieldTranslations),
-                        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, caseFieldSettings),
+                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, caseFieldSettings),
                         Section = CaseSectionType.Communication
                     };
+                    if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal,
+                        currentCase?.Id, caseTemplateSettings))
+                        AddReadonlyOption(field.Options);
                     model.Fields.Add(field);
                 }
             }
@@ -1236,17 +1274,24 @@ namespace DH.Helpdesk.WebApi.Controllers
             GlobalEnums.TranslationCaseFields translationCaseFieldName,
             CaseSectionType sectionName,
             IList<CaseFieldSetting> caseFieldSettings,
-            IList<CaseFieldSettingsForTranslation> caseFieldTranslations)
+            IList<CaseFieldSettingsForTranslation> caseFieldTranslations, 
+            int? caseId, ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings)
         {
-            return new BaseCaseField<T>()
+            var field = new BaseCaseField<T>()
             {
                 Name = caseFieldNameApi,
                 Value = value,
                 Label = _caseTranslationService.GetFieldLabel(translationCaseFieldName, languageId,
                     cid, caseFieldTranslations),
                 Section = sectionName,
-                Options = GetFieldOptions(translationCaseFieldName, caseFieldSettings)
+                Options = GetBaseFieldOptions(translationCaseFieldName, caseFieldSettings)
             };
+
+            if ( _caseFieldSettingsHelper.IsReadOnly(translationCaseFieldName,
+                caseId, caseTemplateSettings))
+                AddReadonlyOption(field.Options);
+
+            return field;
         }
 
         private IList<CaseFileModel> GetCaseFilesModel(int caseId)
@@ -1254,31 +1299,43 @@ namespace DH.Helpdesk.WebApi.Controllers
             return _caseFileService.GetCaseFiles(caseId, true);
         }
 
-        private List<KeyValuePair<string, string>> GetFieldOptions(GlobalEnums.TranslationCaseFields field,
-                IList<CaseFieldSetting> caseFieldSettings, bool? readOnly = null)
-            //IList<CaseFieldSettingsWithLanguage> caseFieldSettingsTranslated)
+        private List<KeyValuePair<string, string>> GetBaseFieldOptions(GlobalEnums.TranslationCaseFields field,
+                IList<CaseFieldSetting> caseFieldSettings)
         {
             var options = new List<KeyValuePair<string, string>>();
             var fieldName = field.ToString();
 
-            //TODO: Move Replace("tblLog_", "tblLog.") to extension
             var setting = _caseFieldSettingsHelper.GetCaseFieldSetting(caseFieldSettings, fieldName);
-            //var settingEx = caseFieldSettingsTranslated.FirstOrDefault(s => s.Name.Replace("tblLog_", "tblLog.").Equals(fieldName, StringComparison.CurrentCultureIgnoreCase));
             if (setting != null && setting.Required.ToBool())
-            {
-                options.Add(new KeyValuePair<string, string>("required", ""));
-            }
+                AddRequiredOption(options);
 
-            if (readOnly.HasValue && readOnly.Value)
-            {
-                options.Add(new KeyValuePair<string, string>("readonly", ""));
-            }
             //if (settingEx != null && !string.IsNullOrWhiteSpace(settingEx.FieldHelp))
             //{
             //    options.Add(new KeyValuePair<string, string>("description", settingEx.FieldHelp));
             //}
             //TODO: check is readonly
             return options;
+        }
+
+        private void AddReadonlyOption(List<KeyValuePair<string, string>> options)
+        {
+            const string readonlyStr = "readonly";
+            if (options.All(x => x.Key != readonlyStr))
+                options.Add(new KeyValuePair<string, string>(readonlyStr, ""));
+        }
+
+        private void AddRequiredOption(List<KeyValuePair<string, string>> options)
+        {
+            const string required = "required";
+            if (options.All(x => x.Key != required))
+                options.Add(new KeyValuePair<string, string>(required, ""));
+        }
+
+        private void AddMaxLengthOption(List<KeyValuePair<string, string>> options, int length)
+        {
+            const string maxlength = "maxlength";
+            if (options.All(x => x.Key != maxlength))
+            options.Add(new KeyValuePair<string, string>(maxlength, length.ToString()));
         }
     }
 }

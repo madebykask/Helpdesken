@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { MbscListviewOptions, mobiscroll } from '@mobiscroll/angular';
 import { take } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   templateUrl: './case-files-control.component.html',
   styleUrls: ['./case-files-control.component.scss']
 })
-export class CaseFilesControlComponent implements OnInit  {
+export class CaseFilesControlComponent {
 
   @Input() field: BaseCaseField<Array<any>>; 
   @Input() caseKey: string; 

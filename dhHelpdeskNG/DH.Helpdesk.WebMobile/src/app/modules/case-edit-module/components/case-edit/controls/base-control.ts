@@ -1,6 +1,7 @@
 import { FormGroup, AbstractControl } from "@angular/forms";
 import { Input } from "@angular/core";
 import { IBaseCaseField } from "../../../models";
+import { Subject } from "rxjs";
 
 export class BaseControl {
     @Input() form: FormGroup;
@@ -8,6 +9,7 @@ export class BaseControl {
     
     protected formControl: AbstractControl;
     protected isRequired = false;
+    protected destroy$ = new Subject();
 
     constructor() {
     }
@@ -20,6 +22,11 @@ export class BaseControl {
     protected getFormControl(name: string) {
         if (this.form == null) return null;
         return this.form.get(name);
+    }
+
+    protected onDestroy() {
+      this.destroy$.next();
+      this.destroy$.complete();
     }
 
 /*     protected hasRequiredField(abstractControl: AbstractControl): boolean {

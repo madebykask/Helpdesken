@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FileUploader, FileUploaderOptions, FileItem, ParsedResponseHeaders } from 'ng2-file-upload' 
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { LocalStorageService } from 'src/app/services/local-storage/local-storage.service';
@@ -11,7 +11,7 @@ import { AlertType } from 'src/app/modules/shared-module/alerts';
   templateUrl: './log-files-upload.component.html',
   styleUrls: ['./log-files-upload.component.scss']
 })
-export class LogFilesUploadComponent implements OnInit {
+export class LogFilesUploadComponent {
 
   @Input('caseKey') caseKey: string; 
   @Output() fileUploaded: EventEmitter<string> = new EventEmitter<string>();  

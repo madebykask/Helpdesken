@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FileUploader, FileUploaderOptions, FileItem, ParsedResponseHeaders } from 'ng2-file-upload' 
 import { config } from '@env/environment';
 import { AuthenticationService } from 'src/app/services/authentication';
@@ -10,7 +10,7 @@ import { LocalStorageService } from 'src/app/services/local-storage';
   templateUrl: './case-files-upload.component.html',
   styleUrls: ['./case-files-upload.component.scss']
 })
-export class CaseFilesUploadComponent implements OnInit {
+export class CaseFilesUploadComponent {
   
   @Output() NewFileUploadComplete: EventEmitter<any> = new EventEmitter<any>();
 

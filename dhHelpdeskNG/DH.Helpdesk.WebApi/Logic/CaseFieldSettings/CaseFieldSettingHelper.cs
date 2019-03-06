@@ -16,8 +16,11 @@ namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
             GlobalEnums.TranslationCaseFields field);
         CaseFieldSetting GetCaseFieldSetting(IList<CaseFieldSetting> caseFieldSettings, string fieldName);
-        bool IsCaseNew(int currentCaseId);
-        bool IsReadOnly(GlobalEnums.TranslationCaseFields fieldName, int currentCaseId, int permission = 1);
+        bool IsCaseNew(int? currentCaseId);
+        bool IsReadOnly(GlobalEnums.TranslationCaseFields fieldName, int? currentCaseId,
+            ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, int permission = 1);
+
+        bool IsReadonlyTemplate(GlobalEnums.TranslationCaseFields field, ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings);
     }
 
     public class CaseFieldSettingsHelper: ICaseFieldSettingsHelper
@@ -45,6 +48,12 @@ namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
             return (caseSettings.IsActive && (!caseSettings.Hide || IsFieldAlwaysVisible(field))) || caseSettings.Required != 0;
         }
 
+        public bool IsReadonlyTemplate(GlobalEnums.TranslationCaseFields field, ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings)
+        {
+            var caseSolutionsSettings = CaseSolutionFieldSetting(caseTemplateSettings, field);
+            return caseSolutionsSettings != null &&
+                   caseSolutionsSettings.CaseSolutionMode == CaseSolutionModes.ReadOnly;
+        }
 
         public bool IsFieldAlwaysVisible(GlobalEnums.TranslationCaseFields field)
         {
@@ -56,17 +65,18 @@ namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
             return caseFieldSettings.FirstOrDefault(s => s.Name.Equals(fieldName.Replace("tblLog_", "tblLog."), StringComparison.OrdinalIgnoreCase));
         }
 
-        public bool IsCaseNew(int currentCaseId)
+        public bool IsCaseNew(int? currentCaseId)
         {
-            return currentCaseId < 0;
+            return !currentCaseId.HasValue || currentCaseId.Value <= 0;
         }
 
-        public bool IsReadOnly(GlobalEnums.TranslationCaseFields fieldName, int currentCaseId, int permission = 1)
+        public bool IsReadOnly(GlobalEnums.TranslationCaseFields fieldName, int? currentCaseId,
+            ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, int permission = 1)
         {
-            return !IsCaseNew(currentCaseId) && !permission.ToBool();
+            return (!IsCaseNew(currentCaseId) && !permission.ToBool()) ||
+                   (caseTemplateSettings != null && IsCaseNew(currentCaseId) && IsReadonlyTemplate(fieldName, caseTemplateSettings));
         }
 
-        
         public CaseSolutionSettingOverview CaseSolutionFieldSetting(ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
             GlobalEnums.TranslationCaseFields field)
         {

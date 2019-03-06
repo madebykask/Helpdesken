@@ -39,7 +39,6 @@ import { FormStatuses } from "src/app/modules/shared-module/constants";
       }
     }
     localDataSource: OptionItem[] = [];
-    private destroy$ = new Subject();
 
     constructor(private commService: CommunicationService) {
       super();
@@ -57,8 +56,7 @@ import { FormStatuses } from "src/app/modules/shared-module/constants";
     }
 
     ngOnDestroy(): void {
-      this.destroy$.next();
-      this.destroy$.complete();
+      this.onDestroy();
     }
 
     getText(id: any) {

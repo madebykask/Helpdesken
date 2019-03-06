@@ -363,7 +363,7 @@ export class CaseEditComponent {
 
           controls[field.name] = new FormControl({
             value: field.value === null ? '' : field.value,
-            disabled: !this.canSave
+            disabled: !this.canSave || field.isReadonly,
           }, validators);
       });
       return new FormGroup(controls);

@@ -37,6 +37,7 @@ import { getLocaleDateFormat, FormatWidth, getLocaleTimeFormat } from "@angular/
     }
 
     ngOnDestroy(): void {
+      this.onDestroy();
     }
 
   }

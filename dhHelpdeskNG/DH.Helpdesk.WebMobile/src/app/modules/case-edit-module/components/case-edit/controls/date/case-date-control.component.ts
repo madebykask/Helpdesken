@@ -1,4 +1,4 @@
-import { OnInit, OnDestroy, Component, Input, ViewChild, Inject, LOCALE_ID } from "@angular/core";
+import { Component, Input, ViewChild, Inject, LOCALE_ID } from "@angular/core";
 import { BaseCaseField } from "../../../../models";
 import { BaseControl } from "../base-control";
 import { MbscDatetimeOptions } from "@mobiscroll/angular";
@@ -13,7 +13,7 @@ import { DateTime } from "luxon";
     templateUrl: './case-date-control.component.html',
     styleUrls: ['./case-date-control.component.scss']
   })
-  export class CaseDateComponent extends BaseControl implements OnInit, OnDestroy {
+  export class CaseDateComponent extends BaseControl {
     @ViewChild('control') control: any;
     // @ViewChild('date') control: MbscDate;
     @Input() field: BaseCaseField<string>;
@@ -25,7 +25,6 @@ import { DateTime } from "luxon";
       returnFormat: 'iso8601',
       // dateFormat: getLocaleDateFormat(this.locale, FormatWidth.Medium)
     }
-    private destroy$ = new Subject();
 
     constructor(@Inject(LOCALE_ID) locale: string,
                 private userSettingsService: UserSettingsApiService) {
@@ -44,8 +43,7 @@ import { DateTime } from "luxon";
     }
 
     ngOnDestroy(): void {
-      this.destroy$.next();
-      this.destroy$.complete();
+      this.onDestroy();
     }
 
     private initEvents() {
