@@ -33,7 +33,7 @@
     <div *ngIf="isLoaded" [hidden]="currentTab != 'case_details'">
       <div class="md-paging">
         <form [formGroup]="form" novalidate>
-            <mbsc-form-group collapsible #initiatorSection *ngIf="hasSection(caseSectionTypes.Initiator)">
+            <mbsc-form-group collapsible [open]="isNewCase" #initiatorSection *ngIf="hasSection(caseSectionTypes.Initiator)">
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Initiator) }}</mbsc-form-group-title>
                 <mbsc-form-group-content >
                     <!-- TODO: ComputerUserCategories -->
@@ -51,7 +51,7 @@
                 </mbsc-form-group-content>
             </mbsc-form-group>
 
-            <mbsc-form-group collapsible #regardingSection *ngIf="hasSection(caseSectionTypes.Regarding)">
+            <mbsc-form-group collapsible [open]="isNewCase" #regardingSection *ngIf="hasSection(caseSectionTypes.Regarding)">
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Regarding) }}</mbsc-form-group-title>
                 <mbsc-form-group-content >
                 <!-- TODO: ComputerUserCategories -->
@@ -69,7 +69,7 @@
                 </mbsc-form-group-content>
             </mbsc-form-group>
 
-            <mbsc-form-group collapsible #ComputerInfoSection *ngIf="hasSection(caseSectionTypes.ComputerInfo)">
+            <mbsc-form-group collapsible [open]="isNewCase" #ComputerInfoSection *ngIf="hasSection(caseSectionTypes.ComputerInfo)">
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.ComputerInfo) }}</mbsc-form-group-title>
                 <mbsc-form-group-content>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.InventoryNumber)" [field]="getField(caseFieldsNames.InventoryNumber)" [form]="form"></case-textbox-control>
@@ -78,7 +78,7 @@
                 </mbsc-form-group-content>
             </mbsc-form-group>
 
-            <mbsc-form-group collapsible #caseInfoSection *ngIf="hasSection(caseSectionTypes.CaseInfo)">
+            <mbsc-form-group collapsible [open]="isNewCase" #caseInfoSection *ngIf="hasSection(caseSectionTypes.CaseInfo)">
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.CaseInfo) }}</mbsc-form-group-title>
                 <mbsc-form-group-content>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.CaseNumber)" [field]="getField(caseFieldsNames.CaseNumber)" [form]="form"></case-textbox-control>
@@ -119,7 +119,7 @@
                 </mbsc-form-group-content>
             </mbsc-form-group>
 
-            <mbsc-form-group collapsible #caseManagementSection *ngIf="hasSection(caseSectionTypes.CaseManagement)">
+            <mbsc-form-group collapsible [open]="isNewCase" #caseManagementSection *ngIf="hasSection(caseSectionTypes.CaseManagement)">
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.CaseManagement) }}</mbsc-form-group-title>
                 <mbsc-form-group-content>
                     <case-dropdown-control *ngIf="hasField(caseFieldsNames.WorkingGroupId)" [field]="getField(caseFieldsNames.WorkingGroupId)" [form]="form" [dataSource]="dataSource.workingGroupsStore$"></case-dropdown-control>
@@ -149,7 +149,7 @@
                 </mbsc-form-group-content>
             </mbsc-form-group> -->
 
-              <mbsc-form-group collapsible #statusSection *ngIf="hasField(caseFieldsNames.FinishingDate) && getField(caseFieldsNames.FinishingDate).value != null">
+              <mbsc-form-group collapsible [open]="isNewCase" #statusSection *ngIf="hasField(caseFieldsNames.FinishingDate) && getField(caseFieldsNames.FinishingDate).value != null">
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Status) }}</mbsc-form-group-title>
                 <mbsc-form-group-content>
                     <case-textarea-control *ngIf="hasField(caseFieldsNames.FinishingDescription)" [field]="getField(caseFieldsNames.FinishingDescription)" [form]="form" [readonly]="true"></case-textarea-control>
@@ -158,7 +158,7 @@
                 </mbsc-form-group-content>
             </mbsc-form-group>
 
-            <mbsc-form-group collapsible #communication >
+            <mbsc-form-group collapsible [open]="isNewCase" #communication >
                 <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Communication)}}</mbsc-form-group-title>
                 <mbsc-form-group-content>
                   <case-log-input [caseKey]="caseKey" [accessMode]="accessMode" [caseData]="caseData" [form]="form"></case-log-input>

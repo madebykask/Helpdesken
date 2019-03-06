@@ -173,6 +173,7 @@ export class CaseEditComponent {
           // existing case 
           this.loadCaseData(this.caseId);
       } else if (this.templateId > 0) {
+          this.isNewCase = true;
           this.loadTemplate(this.templateId);
       }
     }
@@ -194,7 +195,6 @@ export class CaseEditComponent {
           }),
           catchError((e) => throwError(e)),
       );
-
       forkJoin(caseSections$, caseData$).pipe(
           take(1),
           finalize(() => this.isLoaded = true),
