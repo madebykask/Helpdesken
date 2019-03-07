@@ -873,10 +873,10 @@ namespace DH.Helpdesk.WebApi.Controllers
                         f.Name.Equals(CaseFieldsNamesApi.CaseTypeId.ToString(), StringComparison.InvariantCultureIgnoreCase));
                     if (caseTypeField != null)
                     {
-                        var caseId = ((BaseCaseField<int>) caseTypeField).Value;
-                        if (caseId > 0)
+                        var caseId = ((BaseCaseField<int?>) caseTypeField).Value;
+                        if (caseId.HasValue && caseId > 0)
                         {
-                            var caseType = _caseTypeService.GetCaseType(caseId);
+                            var caseType = _caseTypeService.GetCaseType(caseId.Value);
                             workingGroupId = caseType.WorkingGroup_Id;
                         }
                     }
