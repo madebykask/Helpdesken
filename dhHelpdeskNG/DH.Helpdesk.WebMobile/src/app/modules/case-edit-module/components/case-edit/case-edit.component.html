@@ -81,7 +81,7 @@
             <mbsc-form-group collapsible [open]="isNewCase" #caseInfoSection *ngIf="hasSection(caseSectionTypes.CaseInfo)">
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.CaseInfo) }}</mbsc-form-group-title>
                 <mbsc-form-group-content>
-                        <case-textbox-control *ngIf="hasField(caseFieldsNames.CaseNumber)" [field]="getField(caseFieldsNames.CaseNumber)" [form]="form"></case-textbox-control>
+                        <case-textbox-control *ngIf="hasField(caseFieldsNames.CaseNumber)" [field]="getField(caseFieldsNames.CaseNumber)" [form]="form" disabled=true></case-textbox-control>
                         <case-datetime-control *ngIf="hasField(caseFieldsNames.RegTime)" [field]="getField(caseFieldsNames.RegTime)" [form]="form"></case-datetime-control>
                         <case-datetime-control *ngIf="hasField(caseFieldsNames.ChangeTime)" [field]="getField(caseFieldsNames.ChangeTime)" [form]="form"></case-datetime-control>
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.UserId)" [field]="getField(caseFieldsNames.UserId)" [form]="form"></case-textbox-control>
