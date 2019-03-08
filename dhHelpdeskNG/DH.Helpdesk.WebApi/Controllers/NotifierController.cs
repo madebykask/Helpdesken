@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models;
-using DH.Helpdesk.BusinessData.Models.Notifiers;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Models.Output;
@@ -28,30 +27,41 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         [HttpGet]
         [Route("Search")]
-        [AllowAnonymous] //TODO: REMOVE!!!!
-        public Task<IList<UserSearchResults>> Search([FromUri]string query, [FromUri]int cid, [FromUri]int? categoryId = null)
+        public Task<List<NotifierSearchItem>> Search([FromUri]string query, [FromUri]int cid, [FromUri]int? categoryId = null)
         {
             //todo: make async
-            IList<UserSearchResults> result = _computerService.SearchComputerUsers(cid, query, categoryId);
-
+            IList<UserSearchResults> searchResults;
             var customerSettings = _settingService.GetCustomerSettings(cid);
             if (customerSettings.ComputerUserSearchRestriction == 1)
             {
-                var departmentIds = _departmentService.GetDepartmentsByUserPermissions(UserId, cid).Select(x => x.Id).ToList();
+                var departmentIds = 
+                    _departmentService.GetDepartmentsByUserPermissions(UserId, cid).Select(x => x.Id).ToList();
+
                 //user has no departments checked == access to all departments. TODO: change getdepartmentsbyuserpermissions to actually reflect the "none selected"
                 if (departmentIds.Count == 0)
-                {
                     departmentIds = _departmentService.GetDepartments(cid).Select(x => x.Id).ToList();
-                }
 
-                result = _computerService.SearchComputerUsersByDepartments(cid, query, departmentIds, categoryId);
+                searchResults =
+                    _computerService.SearchComputerUsersByDepartments(cid, query, departmentIds, categoryId);
             }
+            else
+            {
+                searchResults = _computerService.SearchComputerUsers(cid, query, categoryId);
+            }
+
+            var result = searchResults.Select(x => new NotifierSearchItem()
+            {
+                Id = x.Id,
+                UserId = x.UserId,
+                Name = (x.FirstName + ' ' + x.SurName).Trim(),
+                Email = x.Email
+            }).ToList();
 
             return Task.FromResult(result);
         }
-
-        [Route("{id:int}")]
+        
         [HttpGet]
+        [Route("{id:int}")]
         public async Task<NotifierData> Get(int id)
         {
             var cu = await _computerService.GetComputerUserAsync(id);

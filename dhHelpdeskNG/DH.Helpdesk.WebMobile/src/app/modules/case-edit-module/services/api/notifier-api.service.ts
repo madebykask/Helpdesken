@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpApiServiceBase } from 'src/app/modules/shared-module/services';
-
 import { LocalStorageService } from 'src/app/services/local-storage';
 import { HttpClient } from '@angular/common/http';
 import { take } from 'rxjs/operators';
@@ -11,12 +10,6 @@ export class NotifierApiService extends HttpApiServiceBase {
 
   constructor(http: HttpClient, localStorageService: LocalStorageService) {
     super(http, localStorageService);
-  }
-
-  getSearchApiUrl():string {
-    //const url = this.baseApiUrl + '/api/Notifier/Search';
-    const url = this.buildResourseUrl('/api/Notifier/Search');
-    return url;
   }
   
   search(searchKey: string, categoryId?: number): Observable<Array<any>> {

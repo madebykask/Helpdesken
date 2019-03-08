@@ -2,7 +2,7 @@
 export class NotifierModel {  
   constructor(){    
   }
-  
+
   id:number;
   userId: string;
   name: string; 
@@ -18,4 +18,15 @@ export class NotifierModel {
   ouId?: number; 
   ouName : string; 
   costCentre: string; 
+}
+
+
+export class NotifierSearchItem {
+    constructor() {
+    }
+    
+    id:string;
+    userId:string;
+    name: string;
+    email: string;
 }

@@ -18,7 +18,7 @@ export abstract class HttpApiServiceBase {
         .get<TResponse>(url, { headers: this.getHeaders(headers, false, noAuth)})
         .pipe(
             catchError((error: any) => {
-                return throwError(error);
+              return throwError(error);
         }));
   }
 
@@ -138,9 +138,8 @@ export abstract class HttpApiServiceBase {
       
       if (noAuth) {
           options = options.set(AuthConstants.NoAuthHeader, '');
-      }
+      } 
       // options = options.set('Access-Control-Allow-Origin', '*');
-
       return options;
   }
 

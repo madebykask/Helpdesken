@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NotifierApiService } from './api/notifier-api.service';
-import { NotifierModel } from '../../shared-module/models/notifier/notifier.model';
+import { NotifierModel, NotifierSearchItem } from '../../shared-module/models/notifier/notifier.model';
 import { take, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -9,7 +9,15 @@ import { Observable } from 'rxjs';
 })
 export class NotifierService {
 
-  constructor(private notifierApiService:NotifierApiService) {   
+  constructor(private notifierApiService:NotifierApiService) {
+  }
+
+  searchNotifiers(query:string): Observable<Array<NotifierSearchItem>> {
+    return this.notifierApiService.search(query).pipe(
+      take(1),
+      map((data:Array<any>) =>
+        data.map(x => <NotifierSearchItem>Object.assign(new NotifierSearchItem(), x)))
+    );
   }
 
   getNotifier(id:number): Observable<NotifierModel> {

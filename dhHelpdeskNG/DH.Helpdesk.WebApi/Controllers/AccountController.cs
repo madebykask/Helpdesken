@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +25,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [AllowAnonymous]
         public async Task<HttpResponseMessage> Login([FromBody]LoginUserInputModel model)
         {
+            
             var request = HttpContext.Current.Request;
             var tokenServiceUrl = request.Url.GetLeftPart(UriPartial.Authority) + request.ApplicationPath + ConfigApi.Constants.TokenEndPoint;
             using (var client = new HttpClient())

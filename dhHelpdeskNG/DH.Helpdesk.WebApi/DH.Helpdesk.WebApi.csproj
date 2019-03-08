@@ -286,6 +286,7 @@
     <Compile Include="Models\ExtendCaseLockInput.cs" />
     <Compile Include="Models\LoginUserInputModel.cs" />
     <Compile Include="Models\Output\NotifierData.cs" />
+    <Compile Include="Models\Output\NotifierSearchItem.cs" />
     <Compile Include="Models\RefreshTokenInputModel.cs" />
     <Compile Include="Logic\Case\CaseEditModeCalcStrategy.cs" />
     <Compile Include="Startup.cs" />
