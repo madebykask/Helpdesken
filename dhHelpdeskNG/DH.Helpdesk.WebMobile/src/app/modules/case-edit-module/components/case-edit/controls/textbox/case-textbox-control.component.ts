@@ -27,7 +27,7 @@ import { FormStatuses } from "src/app/modules/shared-module/constants";
     }
 
     private updateDisabledState() {
-      this.control.disabled = this.formControl.disabled || this.disabled;;
+      this.control.disabled = this.formControl.disabled || this.disabled;
     }
 
     private get isFormControlDisabled() {

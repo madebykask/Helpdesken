@@ -97,7 +97,7 @@ export class CaseEditComponent {
 
     get isLocked() {
       return this.caseLock && this.caseLock.isLocked;
-    }       
+    }
 
     get accessMode() {
       let accessMode = CaseAccessMode.NoAccess;
@@ -315,7 +315,7 @@ export class CaseEditComponent {
     }
 
     public get canSave() {
-      if (this.isNewCase) return true; //TODO: check logic for new case
+      if (this.isNewCase) return true; // TODO: check logic for new case
       return this.caseLock && 
              !this.caseLock.isLocked && 
              this.caseAccessMode == CaseAccessMode.FullAccess;
@@ -323,11 +323,15 @@ export class CaseEditComponent {
 
     saveCase() {
       if (!this.canSave) return;
-      
+      if (this.form.invalid) {
+        this.alertService.showMessage('Some fields has errors. Please, resolve them before continue.', AlertType.Error);
+        return
+      };
+
       this.isLoaded = false;
       this.caseSaveService.saveCase(this.form, this.caseData).pipe(
           take(1),
-          catchError((e) => throwError(e)) //TODO: handle here ? show error ?
+          catchError((e) => throwError(e)) // TODO: handle here ? show error ?
       ).subscribe(() => {
           this.goToCases();
       });
@@ -355,6 +359,12 @@ export class CaseEditComponent {
       this.navigate('/casesoverview/' + searchType);
     }
 
+    cleanTempFiles(caseId:number) {
+      this.caseFileService.deleteTemplFiles(caseId).pipe(
+        take(1)
+      ).subscribe();
+    }
+
     private processCaseData() {
       this.form = this.createFormGroup(this.caseData);
       
@@ -363,14 +373,8 @@ export class CaseEditComponent {
           this.loadCaseActions();
           this.cleanTempFiles(this.caseId);
       }
-    } 
-
-    cleanTempFiles(caseId:number) {
-      this.caseFileService.deleteTemplFiles(caseId).pipe(
-        take(1)
-      ).subscribe();
     }
-    
+
     private loadCaseActions() {
       this.caseService.getCaseActions(this.caseId).pipe(
         take(1),
@@ -391,6 +395,10 @@ export class CaseEditComponent {
 
           if (field.isRequired) {
               validators.push(Validators.required);
+          }
+
+          if (field.maxLength != null) {
+            validators.push(Validators.maxLength(field.maxLength))
           }
 
           controls[field.name] = new FormControl({

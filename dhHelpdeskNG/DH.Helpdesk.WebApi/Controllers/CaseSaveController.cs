@@ -246,6 +246,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 currentCase.Miscellaneous = model.Miscellaneous;
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.Caption))
                 currentCase.Caption = model.Caption;
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.Description))
+                currentCase.Description = model.Description;
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.ContactBeforeAction))
                 currentCase.ContactBeforeAction = model.ContactBeforeAction.ToInt();
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.SMS))

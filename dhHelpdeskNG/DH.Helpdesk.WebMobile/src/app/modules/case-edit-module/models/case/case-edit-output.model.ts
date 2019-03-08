@@ -71,5 +71,6 @@ export class CaseEditOutputModel {
   closingReason?: number;
   finishingDate?: string;
   caseSolutionId?: number;
+  description?: string;
 
 }

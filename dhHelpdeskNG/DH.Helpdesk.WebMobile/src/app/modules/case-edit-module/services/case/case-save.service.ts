@@ -62,6 +62,7 @@ export class CaseSaveService {
     model.invoiceNumber = this.getStringValue(form, CaseFieldsNames.InvoiceNumber);
     model.referenceNumber = this.getStringValue(form, CaseFieldsNames.ReferenceNumber);
     model.miscellaneous = this.getStringValue(form, CaseFieldsNames.Miscellaneous);
+    model.description = this.getStringValue(form, CaseFieldsNames.Description);
     model.caption = this.getStringValue(form, CaseFieldsNames.Caption);
     model.contactBeforeAction = this.getBooleanValue(form, CaseFieldsNames.ContactBeforeAction);
     model.sms = this.getBooleanValue(form, CaseFieldsNames.Sms);

@@ -13,7 +13,7 @@ import { FormStatuses } from "src/app/modules/shared-module/constants";
     templateUrl: './case-dropdown-control.component.html',
     styleUrls: ['./case-dropdown-control.component.scss']
   })
-  export class CaseDropdownComponent extends BaseControl {
+export class CaseDropdownComponent extends BaseControl {
     @ViewChild('control') control: any;
     @Input() field: BaseCaseField<number>;
     @Input() dataSource: BehaviorSubject<OptionItem[]>;
@@ -29,12 +29,12 @@ import { FormStatuses } from "src/app/modules/shared-module/constants";
         }
       },
       onItemTap: (event, inst) => {
-          if (event.selected) {
-            inst.select();
-          }
-        },
+        if (event.selected) {
+          inst.select();
+        }
+      },
       onSet: (event, inst) => {
-        const value = this.getValueByText(event.valueText);
+        const value = inst.getVal();
         this.commService.publish(Channels.DropdownValueChanged, new DropdownValueChangedEvent(value, event.valueText, this.field.name));
       }
     }
@@ -127,17 +127,8 @@ import { FormStatuses } from "src/app/modules/shared-module/constants";
     }
   }
 
-    private addEmptyItem(options: OptionItem[]): any {
-      options.unshift(new OptionItem('',''));
-    }
+  private addEmptyItem(options: OptionItem[]): any {
+    options.unshift(new OptionItem('',''));
+  }
 
-    private getValueByText(valueText: string): any {
-      if (!valueText || !this.localDataSource) {
-        return '';
-      }
-      return this.localDataSource.filter((v) => {
-        return v.text == valueText;
-      })[0].value;
-    }
-  
 }

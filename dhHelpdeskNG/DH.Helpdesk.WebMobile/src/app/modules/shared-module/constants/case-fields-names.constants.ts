@@ -79,7 +79,7 @@ export const CaseFieldsNames = {
 };
 
 export const CaseFieldOptions = {
-  reqiured: 'required',
+  required: 'required',
   readonly: 'readonly',
   maxlength: 'maxlength'
 }
