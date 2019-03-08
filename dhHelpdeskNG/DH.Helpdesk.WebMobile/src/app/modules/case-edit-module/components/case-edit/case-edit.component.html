@@ -84,7 +84,7 @@
                         <case-textbox-control *ngIf="hasField(caseFieldsNames.CaseNumber)" [field]="getField(caseFieldsNames.CaseNumber)" [form]="form" disabled=true></case-textbox-control>
                         <case-datetime-control *ngIf="hasField(caseFieldsNames.RegTime)" [field]="getField(caseFieldsNames.RegTime)" [form]="form"></case-datetime-control>
                         <case-datetime-control *ngIf="hasField(caseFieldsNames.ChangeTime)" [field]="getField(caseFieldsNames.ChangeTime)" [form]="form"></case-datetime-control>
-                        <case-textbox-control *ngIf="hasField(caseFieldsNames.UserId)" [field]="getField(caseFieldsNames.UserId)" [form]="form"></case-textbox-control>
+                        <case-textbox-control *ngIf="hasField(caseFieldsNames.UserId)" [field]="getField(caseFieldsNames.UserId)" [form]="form" disabled=true></case-textbox-control>
                         <case-dropdown-control *ngIf="hasField(caseFieldsNames.RegistrationSourceCustomer)" disabled=true [field]="getField(caseFieldsNames.RegistrationSourceCustomer)" [form]="form"  [dataSource]="dataSource.customerRegistrationSourcesStore$"></case-dropdown-control>
                         <case-multi-dropdown-control *ngIf="hasField(caseFieldsNames.CaseTypeId)" [field]="getField(caseFieldsNames.CaseTypeId)" [form]="form" [dataSource]="dataSource.caseTypesStore$ | async"></case-multi-dropdown-control>
                         <case-multi-dropdown-control *ngIf="hasField(caseFieldsNames.ProductAreaId)" [field]="getField(caseFieldsNames.ProductAreaId)" [form]="form" [dataSource]="dataSource.productAreasStore$ | async"></case-multi-dropdown-control>
