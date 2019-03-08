@@ -6,7 +6,7 @@ import { forkJoin, Subject, Subscription, of, throwError, interval } from 'rxjs'
 import { switchMap, take, finalize, delay, catchError, map, takeUntil, takeWhile, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, Channels, DropdownValueChangedEvent } from 'src/app/services/communication/communication.service';
-import { HeaderEventData } from 'src/app/services/communication/header-event-data';
+import { HeaderEventData } from 'src/app/services/communication/data/header-event-data';
 import { AuthenticationStateService } from 'src/app/services/authentication';
 import { WorkingGroupsService } from 'src/app/services/case-organization/workingGroups-service';
 import { StateSecondariesService } from 'src/app/services/case-organization/stateSecondaries-service';
@@ -23,6 +23,7 @@ import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseWatchDateApiService } from '../../services/api/case/case-watchDate-api.service';
 import { CaseFilesApiService } from '../../services/api/case/case-files-api.service';
+import { NotifierModel } from 'src/app/modules/shared-module/models/notifier/notifier.model';
 
 @Component({
   selector: 'app-case-edit',
@@ -89,13 +90,9 @@ export class CaseEditComponent {
       } else {
         throw 'Invalid parameters';
       }
-
-      this.commService.listen(Channels.DropdownValueChanged).pipe(
-        takeUntil(this.destroy$)
-      ).subscribe((v: DropdownValueChangedEvent) => {
-          const reducer = this.сaseDataReducersFactory.createCaseDataReducers(this.dataSource);
-          this.runUpdates(reducer, v);
-      });
+      
+      //subscribe global events
+      this.subscribeEvents();
     }
 
     get isLocked() {
@@ -119,6 +116,41 @@ export class CaseEditComponent {
       }
       return accessMode;
     } 
+
+    private subscribeEvents() {
+
+      // drop down value changed
+      this.commService.listen(Channels.DropdownValueChanged).pipe(
+        takeUntil(this.destroy$)
+      ).subscribe((v: DropdownValueChangedEvent) => {
+          const reducer = this.сaseDataReducersFactory.createCaseDataReducers(this.dataSource);
+          this.runUpdates(reducer, v);
+      });
+
+      //Notifier changed
+      this.commService.listen<NotifierModel>(Channels.NotifierChanged).pipe(
+        takeUntil(this.destroy$)
+      ).subscribe(data => this.processNotifierChanged(data));
+    }
+
+    private processNotifierChanged(data: NotifierModel) {
+      console.log('notifier changed:');
+      console.dir(data);
+      
+      this.form.get(CaseFieldsNames.ReportedBy).setValue(data.userId);
+      this.form.get(CaseFieldsNames.PersonName).setValue(data.name);
+      this.form.get(CaseFieldsNames.PersonEmail).setValue(data.email);
+      this.form.get(CaseFieldsNames.PersonCellPhone).setValue(data.cellphone);
+      this.form.get(CaseFieldsNames.Place).setValue(data.place);
+      //this.form.get(CaseFieldsNames.UserCode).setValue(data.userCode);
+      //this.form.get(CaseFieldsNames.CostCentre).setValue(data.costCentre);
+      
+      //TODO:region and department
+      if (data.regionId && data.departmentId) {
+        this.form.get(CaseFieldsNames.RegionId).setValue(data.regionId);
+        this.form.get(CaseFieldsNames.DepartmentId).setValue(data.departmentId);
+      }
+    }   
 
     private runUpdates(reducer, v: DropdownValueChangedEvent) { // TODO: move to new class
       const filters = this.caseDataHelpder.getCaseOptionsFilter(this.caseData, (name: string) => this.getFormValue(name));
@@ -168,7 +200,7 @@ export class CaseEditComponent {
 
     ngOnInit() {
       this.commService.publish(Channels.Header, new HeaderEventData(false));
-      
+
      if (this.caseId > 0) {
           // existing case 
           this.loadCaseData(this.caseId);
@@ -425,5 +457,6 @@ export class CaseEditComponent {
       this.destroy$.complete();
 
       this.commService.publish(Channels.Header, new HeaderEventData(true));
+      
   }
 }

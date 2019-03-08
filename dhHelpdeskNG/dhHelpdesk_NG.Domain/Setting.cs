@@ -132,7 +132,7 @@ namespace DH.Helpdesk.Domain
         public string SMTPUserName { get; set; }
         public string SMTPPassWord { get; set; }
         public bool IsSMTPSecured { get; set; }
-		public bool BatchEmail { get; set; }
+        public bool BatchEmail { get; set; }
         public int BulletinBoardWGRestriction { get; set; }
         public int CalendarWGRestriction { get; set; }
         public int ModuleExtendedCase { get; set; }

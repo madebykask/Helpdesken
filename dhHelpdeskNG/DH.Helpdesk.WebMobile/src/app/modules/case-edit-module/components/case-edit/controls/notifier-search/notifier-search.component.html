@@ -1,0 +1,9 @@
+<ng-container [formGroup]="form">
+
+  <mbsc-input id="notifierInput" #notifierInput [formControlName]="field.name"
+      placeholder="Search user">{{field.label}}{{ requiredSymbol }}</mbsc-input>
+
+  <mbsc-select [options]="selectOptions" #notifierSelect></mbsc-select>
+
+</ng-container>
+

@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MbscListviewOptions, MbscListview } from '@mobiscroll/angular';
+import { MbscSelectOptions } from '@mobiscroll/angular';
 
 @Component({
   selector: 'app-test',
@@ -9,10 +9,36 @@ import { MbscListviewOptions, MbscListview } from '@mobiscroll/angular';
 })
 export class TestComponent implements OnInit {
  
-  listviewSettings: MbscListviewOptions = {
-    theme: 'ios',
-    swipe: false,
-    enhance: true
+  options: MbscSelectOptions = {    
+    showInput: false,
+    showOnTap: true,
+    showLabel: false,
+    height: 20,
+    minWidth: 100,
+    theme: 'mobiscroll',
+    input:"#notifierInput",
+    filter: true,
+    display:"bottom",
+    headerText: 'Search users'
+  };
+
+  options2: MbscSelectOptions = {   
+    showInput: true,
+    showLabel: false, 
+    showOnTap: true,
+    filter: true,
+    display:"center",    
+    headerText: 'Search users2'
+  };
+
+  options3: MbscSelectOptions = {        
+    showInput: true,
+    showLabel: false, 
+    input:'notifierInput2',
+    showOnTap: true,
+    filter: true,
+    display:"center",
+    headerText: 'Search users2'
   };
 
   constructor(private router: Router) {
@@ -24,82 +50,24 @@ export class TestComponent implements OnInit {
   onLogout() {
     this.router.navigateByUrl('/login');
   }
+  
+  showNotifierSearch(selectCtrl) {
+    selectCtrl.instance.setVal('test', true, false, true);
+    selectCtrl.instance.show();
+  }
 
-  data = [{
-    cl: 'md-continent micons icon-north-america',
-    name: 'North America',
-    children: [{
-      imgsrc: 'https://img.mobiscroll.com/demos/flags/US.png',
-      name: 'USA',
-      children: [{
-        name: 'Washington'
-      }, {
-        name: 'Florida'
-      }, {
-        name: 'Los Angeles'
-      }, {
-        name: 'New York'
-      }, {
-        name: 'Detroit'
-      }, {
-        name: 'Chicago'
-      }]
-    }, {
-      imgsrc: 'https://img.mobiscroll.com/demos/flags/CA.png',
-      name: 'Canada',
-      children: [{
-        name: 'Vancouver'
-      }, {
-        name: 'Winnipeg'
-      }, {
-        name: 'Calgary'
-      }, {
-        name: 'Montreal'
-      }, {
-        name: 'Quebec'
-      }]
-    }]
+  selected: any;
+
+  items = [{
+    value: 1,
+    text: 'Option 1'
   }, {
-    cl: 'md-continent micons icon-south-america',
-    name: 'South America',
-    children: [{
-      imgsrc: 'https://img.mobiscroll.com/demos/flags/ar.png',
-      name: 'Argentina',
-      children: [{
-        name: 'Buenos Aire'
-      }, {
-        name: 'Córdoba'
-      }, {
-        name: 'Rosario'
-      }, {
-        name: 'Mendoza'
-      }]
-    }, {
-      imgsrc: 'https://img.mobiscroll.com/demos/flags/br.png',
-      name: 'Brazil',
-      children: [{
-        name: 'Rio de Janeiro'
-      }, {
-        name: 'Sao Paolo'
-      }, {
-        name: 'Brasília'
-      }, {
-        name: 'Salvador'
-      }, {
-        name: 'Fortaleza'
-      }]
-    }, {
-      imgsrc: 'https://img.mobiscroll.com/demos/flags/cl.png',
-      name: 'Chile',
-      children: [{
-        name: 'Santiago'
-      }, {
-        name: 'Concepción'
-      }, {
-        name: 'Valparaíso'
-      }]
-    }]
-  } // Showing partial data. Download full source.
-  ];
+      value: 2,
+      text: 'Option 2'
+  }, {
+      value: 3,
+      text: 'Option 4'
+  }];
 
+ 
 }

@@ -1,40 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
 using DH.Helpdesk.BusinessData.Enums.Admin.Users;
-using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Case;
-using DH.Helpdesk.BusinessData.Models.Customer;
-using DH.Helpdesk.BusinessData.Models.User.Input;
-using DH.Helpdesk.BusinessData.OldComponents;
-using DH.Helpdesk.Common.Enums;
-using DH.Helpdesk.Common.Enums.Cases;
-using DH.Helpdesk.Common.Enums.Settings;
-using DH.Helpdesk.Common.Extensions.Boolean;
-using DH.Helpdesk.Common.Extensions.Integer;
-using DH.Helpdesk.Common.Extensions.Lists;
-using DH.Helpdesk.Common.Extensions.String;
-using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Models.Case.Field;
 using DH.Helpdesk.Services.Services;
-using DH.Helpdesk.Services.Services.Cache;
-using DH.Helpdesk.Services.utils;
-using DH.Helpdesk.Web.Common.Constants.Case;
 using DH.Helpdesk.WebApi.Infrastructure;
-using DH.Helpdesk.WebApi.Infrastructure.Authentication;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
 using DH.Helpdesk.WebApi.Logic.Case;
-using DH.Helpdesk.WebApi.Logic.CaseFieldSettings;
-using DateTime = System.DateTime;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {

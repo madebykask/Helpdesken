@@ -35,11 +35,11 @@ export class CommEvent {
 export enum Channels {
     Header,
     AuthenticationChange,
-    DropdownValueChanged
+    DropdownValueChanged,
+    NotifierChanged
 }
 
 export class DropdownValueChangedEvent {
   constructor(public value: any, public text: string, public name: string) {
-
   }
 }

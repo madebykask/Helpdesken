@@ -178,6 +178,8 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
         public bool SetUserToAdministrator { get; set; }
         public int? DefaultAdministratorId { get; set; }
 
+        public int ComputerUserSearchRestriction { get; set; }
+
         /// <summary>
         /// The is module on.
         /// </summary>

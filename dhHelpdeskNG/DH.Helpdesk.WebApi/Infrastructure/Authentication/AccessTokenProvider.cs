@@ -28,8 +28,8 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Authentication
 
             if (!context.TryGetBasicCredentials(out clientId, out secret))
                 context.TryGetFormCredentials(out clientId, out secret);
-            if (clientId.Equals(_publicClientId,
-                StringComparison.InvariantCultureIgnoreCase))
+
+            if (clientId.Equals(_publicClientId, StringComparison.InvariantCultureIgnoreCase))
             {
                 context.OwinContext.Set(ConfigApi.Constants.OwinContext.ClientId, clientId);
                 context.Validated(clientId);
@@ -85,8 +85,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Authentication
             }
         }
 
-        public override Task GrantRefreshToken(
-            OAuthGrantRefreshTokenContext context)
+        public override Task GrantRefreshToken(OAuthGrantRefreshTokenContext context)
 
         {
             var originalClient = context.Ticket.Properties.Dictionary[ConfigApi.Constants.OwinContext.ClientId];

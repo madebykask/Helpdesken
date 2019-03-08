@@ -77,6 +77,7 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            PhysicalFilePath = entity.PhysicalFilePath,
                            VirtualFilePath = entity.VirtualFilePath,
                            IsUserFirstLastNameRepresentation = entity.IsUserFirstLastNameRepresentation,
+                           ComputerUserSearchRestriction = entity.ComputerUserSearchRestriction,
                            DepartmentFilterFormat = entity.DepartmentFilterFormat,
                            DefaultCaseTemplateId = entity.DefaultCaseTemplateId,
                            SetUserToAdministrator = entity.SetUserToAdministrator.ToBool(),

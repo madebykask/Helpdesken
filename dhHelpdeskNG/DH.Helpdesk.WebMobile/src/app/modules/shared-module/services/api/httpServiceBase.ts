@@ -7,7 +7,7 @@ import { LocalStorageService } from '../../../../services/local-storage';
 import { AuthConstants } from '../../constants';
 
 export abstract class HttpApiServiceBase {
-  private baseApiUrl: string;
+  protected baseApiUrl: string;
 
   protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) {
     this.baseApiUrl = config.apiUrl;

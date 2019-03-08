@@ -34,6 +34,7 @@ import { ImageFileViewerComponent } from './components/file-preview/viewers/imag
 import { TextFileViewerComponent } from './components/file-preview/viewers/text-file-viewer.component';
 import { Pdf2FileViewerComponent } from './components/file-preview/viewers/pdf2-file-viewer.component';
 import { Pdf3FileViewerComponent } from './components/file-preview/viewers/pdf3-file-viewer.component';
+import { NotifierSearchComponent } from './components/case-edit/controls/notifier-search/notifier-search.component';
 
 @NgModule({
   declarations: [ CaseEditComponent,
@@ -42,7 +43,7 @@ import { Pdf3FileViewerComponent } from './components/file-preview/viewers/pdf3-
     CaseFilesUploadComponent, CaseFilesControlComponent, CaseActionsComponent, CaseActionHostDirective, 
     CaseActionContainerComponent, GeneralActionComponent, FieldChangeActionComponent, LogNoteActionComponent, ActionsFilterPipe,
     CaseLogInputComponent, LogFilesUploadComponent, FilePreviewComponent, PdfFileViewer, CommonFileViewer, ImageFileViewerComponent,
-    TextFileViewerComponent, Pdf2FileViewerComponent, Pdf3FileViewerComponent
+    TextFileViewerComponent, Pdf2FileViewerComponent, Pdf3FileViewerComponent, NotifierSearchComponent
 ],
   imports: [
     CommonModule,

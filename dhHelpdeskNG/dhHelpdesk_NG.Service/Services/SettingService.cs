@@ -97,8 +97,9 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> _toBusinessModelMapper;
 
-        public SettingService(ISettingRepository settingRepository, IUnitOfWork unitOfWork,
-            IEntityToBusinessModelMapper<Setting, CustomerSettings> businessModelMapper)
+        public SettingService(ISettingRepository settingRepository, 
+                              IUnitOfWork unitOfWork,
+                              IEntityToBusinessModelMapper<Setting, CustomerSettings> businessModelMapper)
         {
             _settingRepository = settingRepository;
             _unitOfWork = unitOfWork;
