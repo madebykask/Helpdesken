@@ -2939,7 +2939,7 @@ namespace DH.Helpdesk.Web.Controllers
         #region --Developer Test--
         /****  Case SLA Calculation simulator ***/
         // ** This function is using for developing test **//
-        public JsonResult CalculateSLA(int caseId, int userId, DateTime simulateTime)
+        /*public JsonResult CalculateSLA(int caseId, int userId, DateTime simulateTime)
         {
             var utcNow = simulateTime;
             var case_ = this._caseService.GetCaseById(caseId);
@@ -3033,7 +3033,7 @@ namespace DH.Helpdesk.Web.Controllers
                                     case_.LeadTime, case_.ExternalTime, leadTime, externalTime);
 
             return Json(msg);
-        }
+        }*/
 
         #endregion
 
@@ -3422,12 +3422,13 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, case_.FinishingDate.Value, deptIds);
-                leadTime = workTimeCalc.CalculateWorkTime(
-                    case_.RegTime,
-                    case_.FinishingDate.Value.ToUniversalTime(),
-                    case_.Department_Id) - case_.ExternalTime;
+				var possibleWorkTime = workTimeCalc.CalculateWorkTime(
+					case_.RegTime,
+					case_.FinishingDate.Value.ToUniversalTime(),
+					case_.Department_Id); 
+				leadTime = possibleWorkTime - case_.ExternalTime;
 
-                case_.LeadTime = leadTime;
+				case_.LeadTime = leadTime;
 
                 // ActionLeadTime Calc
                 if (oldCase != null && oldCase.Id > 0)
@@ -3467,11 +3468,11 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, utcNow, deptIds);
-                leadTime = workTimeCalc.CalculateWorkTime(
-                    case_.RegTime,
-                    utcNow.ToUniversalTime(),
-                    case_.Department_Id) - case_.ExternalTime;
-
+				var possibleWorktime = workTimeCalc.CalculateWorkTime(
+					case_.RegTime,
+					utcNow.ToUniversalTime(),
+					case_.Department_Id);
+				leadTime = possibleWorktime - case_.ExternalTime;
 
                 // ActionLeadTime Calc                
                 if (oldCase != null && oldCase.Id > 0)
@@ -3964,13 +3965,13 @@ namespace DH.Helpdesk.Web.Controllers
                     deptIds = new int[] { oldCase.Department_Id.Value };
                 }
 
-                var workTimeCalc = workTimeCalcFactory.Build(oldCase.RegTime, oldCase.FinishingDate.Value, deptIds);
-                leadTime = workTimeCalc.CalculateWorkTime(
-                    oldCase.RegTime,
-                    oldCase.FinishingDate.Value.ToUniversalTime(),
-                    oldCase.Department_Id) - oldCase.ExternalTime;
+				var workTimeCalc = workTimeCalcFactory.Build(oldCase.RegTime, oldCase.FinishingDate.Value, deptIds);
+				leadTime = workTimeCalc.CalculateWorkTime(
+					oldCase.RegTime,
+					oldCase.FinishingDate.Value.ToUniversalTime(),
+					oldCase.Department_Id) - oldCase.ExternalTime;
 
-                oldCase.LeadTime = leadTime;
+				oldCase.LeadTime = leadTime;
 
                 // ActionLeadTime Calc
                 if (oldCase != null && oldCase.Id > 0)

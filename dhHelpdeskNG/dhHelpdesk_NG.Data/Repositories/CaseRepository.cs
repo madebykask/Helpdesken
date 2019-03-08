@@ -33,7 +33,7 @@ namespace DH.Helpdesk.Dal.Repositories
         void SetNullProblemByProblemId(int problemId);
         void UpdateFinishedDate(int problemId, DateTime? time);
         void UpdateFollowUpDate(int caseId, DateTime? time);
-        void Activate(int caseId);
+        void Activate(int caseId, int calculatedLeadTime, int externalTimeToAdd = 0);
         void MarkCaseAsUnread(int id);
         void MarkCaseAsRead(int id);
         IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
@@ -212,7 +212,7 @@ namespace DH.Helpdesk.Dal.Repositories
             }
         }
 
-        public void Activate(int caseId)
+        public void Activate(int caseId, int calculatedLeadTime, int externalTimeToAdd = 0)
         {
             var cases = this.DataContext.Cases.Where(x => x.Id == caseId).FirstOrDefault();
             if (cases != null)
@@ -222,6 +222,8 @@ namespace DH.Helpdesk.Dal.Repositories
                 cases.ApprovedDate = null;
                 cases.LeadTime = 0;
                 cases.ChangeTime = DateTime.UtcNow;
+				cases.LeadTime = calculatedLeadTime;
+				cases.ExternalTime += externalTimeToAdd;
 
                 foreach (var log in cases.Logs)
                 {

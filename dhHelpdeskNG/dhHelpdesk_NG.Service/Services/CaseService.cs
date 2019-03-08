@@ -10,42 +10,43 @@ using DH.Helpdesk.Domain.Computers;
 namespace DH.Helpdesk.Services.Services
 {
 
-    using DH.Helpdesk.BusinessData.Models.BusinessRules;
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
-    using DH.Helpdesk.BusinessData.Models.Case.Output;
-    using DH.Helpdesk.BusinessData.Models.User.Input;
-    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-    using DH.Helpdesk.Common.Constants;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.Enums.BusinessRule;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.NewInfrastructure;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Repositories.Cases;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain.MailTemplates;
-    using DH.Helpdesk.Domain.Problems;
-    using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
-    using DH.Helpdesk.Services.Infrastructure.Email;
-    using DH.Helpdesk.Services.Localization;
-    using DH.Helpdesk.Services.Services.CaseStatistic;
-    using DH.Helpdesk.Services.utils;
-    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
-    using DH.Helpdesk.Services.Infrastructure;
-    using Feedback;
-    using DH.Helpdesk.Domain.ExtendedCaseEntity;
-    using System.Linq.Expressions;
-    using Common.Enums.Cases;
-    using Common.Extensions.String;
+	using DH.Helpdesk.BusinessData.Models.BusinessRules;
+	using DH.Helpdesk.BusinessData.Models.Case;
+	using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
+	using DH.Helpdesk.BusinessData.Models.Case.Output;
+	using DH.Helpdesk.BusinessData.Models.User.Input;
+	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+	using DH.Helpdesk.Common.Constants;
+	using DH.Helpdesk.Common.Enums;
+	using DH.Helpdesk.Common.Enums.BusinessRule;
+	using DH.Helpdesk.Dal.Enums;
+	using DH.Helpdesk.Dal.Infrastructure;
+	using DH.Helpdesk.Dal.NewInfrastructure;
+	using DH.Helpdesk.Dal.Repositories;
+	using DH.Helpdesk.Dal.Repositories.Cases;
+	using DH.Helpdesk.Domain;
+	using DH.Helpdesk.Domain.MailTemplates;
+	using DH.Helpdesk.Domain.Problems;
+	using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
+	using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
+	using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
+	using DH.Helpdesk.Services.BusinessLogic.Specifications;
+	using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
+	using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
+	using DH.Helpdesk.Services.Infrastructure.Email;
+	using DH.Helpdesk.Services.Localization;
+	using DH.Helpdesk.Services.Services.CaseStatistic;
+	using DH.Helpdesk.Services.utils;
+	using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
+	using DH.Helpdesk.Services.Infrastructure;
+	using Feedback;
+	using DH.Helpdesk.Domain.ExtendedCaseEntity;
+	using System.Linq.Expressions;
+	using Common.Enums.Cases;
+	using Common.Extensions.String;
+	using Utils;
 
-    public partial class CaseService : ICaseService
+	public partial class CaseService : ICaseService
     {
         private readonly ICaseRepository _caseRepository;
         private readonly ICaseFileRepository _caseFileRepository;
@@ -86,7 +87,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseSolutionRepository _caseSolutionRepository;
         private readonly IStateSecondaryRepository _stateSecondaryRepository;
         private readonly ICustomerRepository _customerRepository;
-        private readonly IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> _caseHistoryOverviewMapper;
+		private readonly ICustomerService _customerService;
+		private readonly IDepartmentService _departmentService;
+		private readonly IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> _caseHistoryOverviewMapper;
 
 
         public CaseService(
@@ -129,7 +132,9 @@ namespace DH.Helpdesk.Services.Services
             ICaseSolutionRepository caseSolutionRepository,
             IStateSecondaryRepository stateSecondaryRepository,
             ICustomerRepository customerRepository,
-            IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper)
+			ICustomerService customerService,
+			IDepartmentService departmentService,
+			IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper)
         {
             this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
@@ -171,7 +176,10 @@ namespace DH.Helpdesk.Services.Services
             this._caseSolutionRepository = caseSolutionRepository;
             this._stateSecondaryRepository = stateSecondaryRepository;
             this._customerRepository = customerRepository;
-            _caseHistoryOverviewMapper = caseHistoryOverviewMapper;
+			this._customerService = customerService;
+			this._departmentService = departmentService;
+
+			_caseHistoryOverviewMapper = caseHistoryOverviewMapper;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -824,9 +832,38 @@ namespace DH.Helpdesk.Services.Services
             this._caseRepository.UpdateFollowUpDate(caseId, time);
         }
 
+
         public void Activate(int caseId, int userId, string adUser, string createdByApp, out IDictionary<string, string> errors)
         {
-            this._caseRepository.Activate(caseId);
+			var _case = _caseRepository.GetCaseById(caseId);
+			var customer = _customerService.GetCustomer(_case.Customer_Id);
+			var departmentIds = _departmentService.GetDepartments(customer.Id)
+				.Select(o => o.Id)
+				.ToArray();
+
+			var user = _userService.GetUser(userId);
+
+			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+				ManualDependencyResolver.Get<IHolidayService>(),
+				customer.WorkingDayStart,
+				customer.WorkingDayEnd,
+				TimeZoneInfo.FindSystemTimeZoneById(user.TimeZoneId));
+
+			var utcNow = DateTime.UtcNow;
+			var workTimeCalc = workTimeCalcFactory.Build(_case.RegTime, utcNow, departmentIds);
+			var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
+				_case.FinishingDate.Value,
+				utcNow,
+				_case.Department_Id);
+
+			var possibleWorktime = workTimeCalc.CalculateWorkTime(
+				_case.RegTime,
+				utcNow,
+				_case.Department_Id);
+
+			var leadTime = possibleWorktime - _case.ExternalTime - externalTimeToAdd;
+
+			this._caseRepository.Activate(caseId, leadTime, externalTimeToAdd);
             var c = _caseRepository.GetDetachedCaseById(caseId);
             this._caseStatService.UpdateCaseStatistic(c);
             SaveCaseHistory(c, userId, adUser, createdByApp, out errors);

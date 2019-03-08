@@ -8,6 +8,9 @@ using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Models.Shared;
 using Microsoft.Reporting.WebForms;
+using DH.Helpdesk.Services.Utils;
+using DH.Helpdesk.Services.Infrastructure;
+using DH.Helpdesk.Services.Services;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -63,10 +66,12 @@ namespace DH.Helpdesk.Web.Controllers
         {
             IDictionary<string, string> errors;
             string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-            if (SessionFacade.CurrentUser != null)
-                if (SessionFacade.CurrentUser.ActivateCasePermission == 1)
-                    this._caseService.Activate(id, SessionFacade.CurrentUser.Id, adUser,
-                        CreatedByApplications.Helpdesk5, out errors);
+			if (SessionFacade.CurrentUser != null)
+				if (SessionFacade.CurrentUser.ActivateCasePermission == 1)
+				{
+					this._caseService.Activate(id, SessionFacade.CurrentUser.Id, adUser,
+						CreatedByApplications.Helpdesk5, out errors);
+				}
 
             return this.RedirectToAction("edit", "cases", new { id, redirectFrom = "save", backUrl });
         }
