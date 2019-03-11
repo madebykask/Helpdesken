@@ -7,6 +7,7 @@ import { MbscSelectOptions } from "@mobiscroll/angular";
 import { CommunicationService, Channels, DropdownValueChangedEvent } from "src/app/services/communication";
 import { OptionItem } from "src/app/modules/shared-module/models";
 import { FormStatuses } from "src/app/modules/shared-module/constants";
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'case-dropdown-control',
@@ -20,8 +21,8 @@ export class CaseDropdownComponent extends BaseControl {
     @Input() disabled = false;
     // text: string = '';
     settings: MbscSelectOptions = {
-      buttons: ['set'],
-      setText: '',
+      //buttons: ['set'],
+      //setText: '',
       headerText: () => this.getHeader,
       onInit: (event, inst) => {
         if (this.field.isReadonly) {
@@ -40,14 +41,15 @@ export class CaseDropdownComponent extends BaseControl {
     }
     localDataSource: OptionItem[] = [];
 
-    constructor(private commService: CommunicationService) {
+    constructor(private commService: CommunicationService,
+      private ngxTranslateService: TranslateService) {
       super();
     }
 
     ngOnInit(): void {
       // apply translations
-      // this.control.setText = this._ngxTranslateService.instant("Välj");
-      // this.control.cancelText  = this._ngxTranslateService.instant("Avbryt");
+      this.control.setText = this.ngxTranslateService.instant("Välj");
+      this.control.cancelText = this.ngxTranslateService.instant("Avbryt");
 
       this.initDataSource();
       this.init(this.field);
