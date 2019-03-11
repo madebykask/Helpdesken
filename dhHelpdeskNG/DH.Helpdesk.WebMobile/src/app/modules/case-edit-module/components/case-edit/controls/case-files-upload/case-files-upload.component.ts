@@ -42,13 +42,11 @@ export class CaseFilesUploadComponent {
   } 
 
   ngOnInit() {
-    // console.log('>>> file-upload.onInit: called. CaseKey: %s', this.caseKey);
-        
     const accessToken = this.authenticationService.getAuthorizationHeaderValue();
     const userData = this.localStateStorage.getCurrentUser();
     const cid = userData.currentData.selectedCustomerId;
 
-    // init file uploader 
+    // init file uploader     
     this.fileUploader.setOptions(<FileUploaderOptions>{
       autoUpload: true,
       filters: [],

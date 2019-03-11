@@ -9,6 +9,7 @@ import { take, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operat
 import { Subject, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NotifierSearchItem } from 'src/app/modules/shared-module/models/notifier/notifier.model';
+import { FormStatuses } from 'src/app/modules/shared-module/constants';
 
 @Component({
   selector: 'notifier-search',
@@ -17,8 +18,10 @@ import { NotifierSearchItem } from 'src/app/modules/shared-module/models/notifie
 })
 export class NotifierSearchComponent extends BaseControl implements OnInit {
 
+  @ViewChild('notifierInput') notifierInput: any;
   @ViewChild('notifierSelect') notifierSelect: MbscSelect;
   @Input() field: BaseCaseField<string>;
+  @Input() disabled = false;
 
   notifiersData: any[] = [];
 
@@ -44,7 +47,7 @@ export class NotifierSearchComponent extends BaseControl implements OnInit {
 
     onMarkupReady: (event, inst) => {
       const filterInput = event.target.querySelector<HTMLInputElement>(".mbsc-sel-filter-input");
-      filterInput.placeholder  = this.ngxTranslateService.instant('Filtrering startar när minst två tecken har angetts');
+      filterInput.placeholder = this.ngxTranslateService.instant('Filtrering startar när minst två tecken har angetts');
     },
    
     onSet: (event, inst) => {
@@ -55,7 +58,7 @@ export class NotifierSearchComponent extends BaseControl implements OnInit {
     }
 
   };
-
+  
   constructor(private notifierService: NotifierService,
     private commService: CommunicationService,
     private ngxTranslateService: TranslateService) {
@@ -64,8 +67,11 @@ export class NotifierSearchComponent extends BaseControl implements OnInit {
 
   ngOnInit() {
     this.init(this.field);
+    this.updateDisabledState();
 
-    // subbscribe to user search input 
+    this.initEvents();
+    
+    // subscribe to notifier(user) search input 
     this.usersSearchSubject.asObservable().pipe(
       takeUntil(this.destroy$),
       debounceTime(300),
@@ -94,17 +100,31 @@ export class NotifierSearchComponent extends BaseControl implements OnInit {
   }
   
   ngAfterViewInit(): void {
-    //set select translations
-    this.notifierSelect.instance.option({
-      // TODO: translate
-      headerText: this.field.label || 'User Id',
-      cancelText: this.ngxTranslateService.instant("Avbryt"),
-      setText: this.ngxTranslateService.instant("Välj"),
-      // set in markupReady event handler
-      //filterPlaceholderText: 'Search users',
-      //filterEmptyText: 'No results',//	Text for the empty state of the select wheels.
-    });
+    if (this.notifierSelect) {
+      //set select translations
+      this.notifierSelect.instance.option({
+        // TODO: translate
+        headerText: this.field.label || 'User Id',
+        cancelText: this.ngxTranslateService.instant("Avbryt"),
+        setText: this.ngxTranslateService.instant("Välj"),
+        // set in markupReady event handler
+        //filterPlaceholderText: 'Search users',
+        //filterEmptyText: 'No results',//	Text for the empty state of the select wheels.
+      });
+    }
   } 
+
+  ngOnDestroy(): void {
+    this.onDestroy();
+  }
+  
+  public get isFormControlDisabled() {
+    return this.formControl.status == FormStatuses.DISABLED;
+  }
+
+  private updateDisabledState() {
+    this.notifierInput.disabled = this.formControl.disabled || this.disabled;
+  }
 
   private onNotifierSelected(userId:number) {
     this.notifierService.getNotifier(userId).pipe(
@@ -113,6 +133,18 @@ export class NotifierSearchComponent extends BaseControl implements OnInit {
       //raise event to handle notfier change on case edit component
       this.commService.publish(Channels.NotifierChanged, x);
     });
+  }
+
+  private initEvents() {
+    this.formControl.statusChanges // track disabled state in form
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe((e: any) => {
+        if (this.notifierInput.disabled != this.isFormControlDisabled) {
+          this.updateDisabledState();
+        }
+      });
   }
 
 }

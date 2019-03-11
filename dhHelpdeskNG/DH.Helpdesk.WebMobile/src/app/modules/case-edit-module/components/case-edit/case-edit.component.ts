@@ -106,7 +106,7 @@ export class CaseEditComponent {
             accessMode = CaseAccessMode.NoAccess;
           }
           else {
-            if (this.caseLock && this.caseLock.isLocked) {
+            if (this.isLocked) {
               accessMode = CaseAccessMode.ReadOnly;
             }
             else {
@@ -115,7 +115,7 @@ export class CaseEditComponent {
           }
       }
       return accessMode;
-    } 
+    }
 
     private subscribeEvents() {
 
@@ -150,7 +150,7 @@ export class CaseEditComponent {
         this.form.get(CaseFieldsNames.RegionId).setValue(data.regionId);
         this.form.get(CaseFieldsNames.DepartmentId).setValue(data.departmentId);
       }
-    }   
+    }
 
     private runUpdates(reducer, v: DropdownValueChangedEvent) { // TODO: move to new class
       const filters = this.caseDataHelpder.getCaseOptionsFilter(this.caseData, (name: string) => this.getFormValue(name));
@@ -315,10 +315,10 @@ export class CaseEditComponent {
     }
 
     public get canSave() {
-      if (this.isNewCase) return true; // TODO: check logic for new case
-      return this.caseLock && 
-             !this.caseLock.isLocked && 
-             this.caseAccessMode == CaseAccessMode.FullAccess;
+      if (this.isNewCase) 
+        return true; // TODO: check logic for new case
+
+      return this.accessMode == CaseAccessMode.FullAccess;
     }
 
     saveCase() {
@@ -382,10 +382,6 @@ export class CaseEditComponent {
       ).subscribe(caseActions => {
         this.caseActions = caseActions;
       });
-    }
-
-    private get caseAccessMode(): CaseAccessMode {
-      return this.caseData.editMode;
     }
 
     private createFormGroup(data: CaseEditInputModel): FormGroup {

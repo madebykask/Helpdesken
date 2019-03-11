@@ -3,7 +3,9 @@
   <mbsc-input id="notifierInput" #notifierInput 
       [formControlName]="field.name">{{field.label}}{{ requiredSymbol }}</mbsc-input>
 
+<ng-container *ngIf="!isFormControlDisabled">
   <mbsc-select #notifierSelect [options]="selectOptions" [data]="notifiersData"></mbsc-select>
+</ng-container>
 
 </ng-container>
 
