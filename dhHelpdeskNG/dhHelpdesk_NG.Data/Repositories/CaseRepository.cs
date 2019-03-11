@@ -268,7 +268,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public void MarkCaseAsUnread(int id)
         {
-            SetCaseUnreadFlag(id, 1);
+            SetCaseUnreadFlag(id, true);
         }
 
         public IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user)
@@ -384,13 +384,13 @@ namespace DH.Helpdesk.Dal.Repositories
             SetCaseUnreadFlag(id);
         }
 
-        private void SetCaseUnreadFlag(int id, int unread = 0)
+        private void SetCaseUnreadFlag(int id, bool unread = false)
         {
-            DataContext.Cases.Where(c => c.Id == id).Update(c => new Case
-            {
-                Unread = unread
-            });
-            DataContext.Commit();
+            var @case = GetById(id);
+            @case.Unread = unread ? 1 : 0;
+            Update(@case);
+            
+            Commit();
         }
 
         public Case GetCaseIncluding(int id)
