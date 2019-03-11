@@ -177,3 +177,9 @@ insert into tbltext (id, TextString, TextType) VALUES (10025, 'Stäng', @MobileT
 If not exists (select * from tblTextTranslation where text_id = 10025 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10025, 2, 'Close')
 
+If not exists (select * from tbltext where id = 10026)
+insert into tbltext (id, TextString, TextType) VALUES (10026, 'Filtrering startar när minst två tecken har angetts', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10026 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10026, 2, 'Filtering will start after input of two characters')
+

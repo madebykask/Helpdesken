@@ -44,7 +44,7 @@ export class NotifierSearchComponent extends BaseControl implements OnInit {
 
     onMarkupReady: (event, inst) => {
       const filterInput = event.target.querySelector<HTMLInputElement>(".mbsc-sel-filter-input");
-      filterInput.placeholder  = this.ngxTranslateService.instant('Filtering will start after input of two characters');
+      filterInput.placeholder  = this.ngxTranslateService.instant('Filtrering startar när minst två tecken har angetts');
     },
    
     onSet: (event, inst) => {
