@@ -2,6 +2,7 @@
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
+using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
@@ -40,6 +41,11 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Mapper.Profiles
             CreateMap<StateSecondary, StateSecondaryOutputModel>()
                 .ForMember(dest => dest.RecalculateWatchDate, opt => opt.ResolveUsing(src => src.RecalculateWatchDate.ToBool()));
 
+            CreateMap<CaseType, CaseTypeOverview>()
+                .ForMember(dest => dest.ParentId, opt => opt.ResolveUsing(src => src.Parent_CaseType_Id))
+                .ForMember(dest => dest.WorkingGroupId, opt => opt.ResolveUsing(src => src.WorkingGroup_Id))
+                .ForMember(dest => dest.AdministratorId, opt => opt.ResolveUsing(src => src.User_Id))
+                .ForMember(dest => dest.SubCaseTypes, opt => opt.Ignore());
         }
     }
 }

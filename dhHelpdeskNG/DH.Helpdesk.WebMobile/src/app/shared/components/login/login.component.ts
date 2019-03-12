@@ -62,8 +62,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     get f() { return this.loginForm.controls; }
 
     getError(field: string): string {
-        var ctrl = this.loginForm.get(field);
-        var message = '';
+        let ctrl = this.loginForm.get(field);
+        let message = '';
         if (ctrl.errors) {
             for(var err in ctrl.errors) {
                 if (ctrl.errors[err]) {

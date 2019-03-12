@@ -195,6 +195,7 @@ namespace DH.Helpdesk.Services.Services
             var allItems =
                 this.caseTypeRepository.GetMany(
                         x => x.Customer_Id == customerId && (!activeOnly || (x.IsActive == 1 && x.Selectable == 1)))
+                    .AsQueryable()
                     .Select(x => new CaseTypeOverview
                     {
                         Id = x.Id,
@@ -204,7 +205,9 @@ namespace DH.Helpdesk.Services.Services
                         ShowOnExternalPage = x.ShowOnExternalPage,
                         ShowOnExtPageCases = x.ShowOnExtPageCases,
                         IsActive = x.IsActive,
-                        Selectable = x.Selectable
+                        Selectable = x.Selectable,
+                        WorkingGroupId = x.WorkingGroup_Id,
+                        AdministratorId = x.User_Id
                     })
                     .ToList();
 

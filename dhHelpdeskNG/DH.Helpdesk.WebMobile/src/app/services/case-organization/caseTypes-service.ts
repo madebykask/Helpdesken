@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { map, take } from "rxjs/operators";
 import { MultiLevelOptionItem } from "src/app/modules/shared-module/models";
 import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
+import { CaseTypeInputModel } from "src/app/models/caseTypes/caseTypeInput.model";
 
 @Injectable({ providedIn: 'root' })
 export class CaseTypesService extends HttpApiServiceBase {
@@ -32,6 +33,21 @@ export class CaseTypesService extends HttpApiServiceBase {
                 result = jsArr.map(createOption);
 
                 return result;
+            })
+        );// TODO: error handling
+    }
+
+    getCaseType(id: number) {
+      return this.getJson(this.buildResourseUrl(`/api/casetypes/${id}` , null, true, true))
+        .pipe(
+            take(1),
+            map((jsItem: any) => {
+              let model = new CaseTypeInputModel();
+              model.id = jsItem.id;
+              model.parentId = jsItem.parentId;
+              model.workingGroupId = jsItem.workingGroupId;
+              model.performerUserId = jsItem.administratorId;
+              return model;
             })
         );// TODO: error handling
     }

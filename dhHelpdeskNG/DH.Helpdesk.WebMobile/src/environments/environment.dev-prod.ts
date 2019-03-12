@@ -1,4 +1,4 @@
-import { VERSION } from './version'
+import { VERSION } from './version';
 declare const require: any;
 
 export const environment = {
@@ -11,4 +11,5 @@ export const environment = {
     version: VERSION.fullVersion,
     internalVersion: require('../../package.json').version,
     enableLog: true,
-  }
+  };
+  

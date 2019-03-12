@@ -81,5 +81,6 @@ export const CaseFieldsNames = {
 export const CaseFieldOptions = {
   required: 'required',
   readonly: 'readonly',
-  maxlength: 'maxlength'
+  maxlength: 'maxlength',
+  setByTemplate: 'setbytemplate'
 }

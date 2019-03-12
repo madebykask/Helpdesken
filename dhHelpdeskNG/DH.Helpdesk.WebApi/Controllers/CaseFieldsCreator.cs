@@ -682,7 +682,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Caption,
                     currentCase?.Id, caseTemplateSettings,
                     customerUserSetting.CaptionPermission))
-                    AddReadonlyOption(field.Options);
+                    AddReadOnlyOption(field.Options);
                 AddMaxLengthOption(field.Options, 50);
                 model.Fields.Add(field);
             }
@@ -715,7 +715,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 };
                 if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Description,
                     currentCase?.Id, caseTemplateSettings))
-                    AddReadonlyOption(field.Options);
+                    AddReadOnlyOption(field.Options);
                 model.Fields.Add(field);
 
                 field = GetField(currentCase != null ? currentCase.Description : template?.Description, cid, languageId,
@@ -724,7 +724,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
                 if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Description,
                     currentCase?.Id, caseTemplateSettings))
-                    AddReadonlyOption(field.Options);
+                    AddReadOnlyOption(field.Options);
                 AddMaxLengthOption(field.Options, 10000);
                 model.Fields.Add(field);
             }
@@ -757,7 +757,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.ContactBeforeAction,
                     currentCase?.Id, caseTemplateSettings,
                     customerUserSetting.ContactBeforeActionPermission))
-                    AddReadonlyOption(field.Options);
+                    AddReadOnlyOption(field.Options);
                 model.Fields.Add(field);
             }
 
@@ -803,7 +803,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 };
                 if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Cost,
                     currentCase?.Id, caseTemplateSettings))
-                    AddReadonlyOption(field.Options);
+                    AddReadOnlyOption(field.Options);
                 AddMaxLengthOption(field.Options, 7);
                 model.Fields.Add(field);
 
@@ -817,7 +817,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 };
                 if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Cost,
                     currentCase?.Id, caseTemplateSettings))
-                    AddReadonlyOption(field.Options);
+                    AddReadOnlyOption(field.Options);
                 AddMaxLengthOption(field.Options, 7);
                 model.Fields.Add(field);
 
@@ -831,7 +831,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 };
                 if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Cost,
                     currentCase?.Id, caseTemplateSettings))
-                    AddReadonlyOption(field.Options);
+                    AddReadOnlyOption(field.Options);
                 model.Fields.Add(field);
             }
 
@@ -990,7 +990,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Priority_Id,
                     currentCase?.Id, caseTemplateSettings,
                     customerUserSetting.PriorityPermission))
-                    AddReadonlyOption(field.Options);
+                    AddReadOnlyOption(field.Options);
                 model.Fields.Add(field);
             }
 
@@ -1022,7 +1022,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.StateSecondary_Id,
                     currentCase?.Id, caseTemplateSettings,
                     customerUserSetting.StateSecondaryPermission))
-                    AddReadonlyOption(field.Options);
+                    AddReadOnlyOption(field.Options);
                 model.Fields.Add(field);
             }
 
@@ -1042,7 +1042,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 };
                 if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.Project,
                     currentCase?.Id, caseTemplateSettings))
-                    AddReadonlyOption(field.Options);
+                    AddReadOnlyOption(field.Options);
                 model.Fields.Add(field);
             }
 
@@ -1132,7 +1132,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.WatchDate,
                     currentCase?.Id, caseTemplateSettings,
                     customerUserSetting.WatchDatePermission))
-                    AddReadonlyOption(field.Options);
+                    AddReadOnlyOption(field.Options);
                 model.Fields.Add(field);
             }
 
@@ -1211,7 +1211,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     };
                     if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.ClosingReason,
                         currentCase?.Id, caseTemplateSettings))
-                        AddReadonlyOption(field.Options);
+                        AddReadOnlyOption(field.Options);
                     model.Fields.Add(field);
                 }
 
@@ -1228,7 +1228,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     };
                     if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate,
                         currentCase?.Id, caseTemplateSettings))
-                        AddReadonlyOption(field.Options);
+                        AddReadOnlyOption(field.Options);
                     model.Fields.Add(field);
                 }
 
@@ -1245,7 +1245,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     };
                     if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External,
                         currentCase?.Id, caseTemplateSettings))
-                        AddReadonlyOption(field.Options);
+                        AddReadOnlyOption(field.Options);
                     model.Fields.Add(field);
                 }
 
@@ -1263,7 +1263,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     };
                     if ( _caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal,
                         currentCase?.Id, caseTemplateSettings))
-                        AddReadonlyOption(field.Options);
+                        AddReadOnlyOption(field.Options);
                     model.Fields.Add(field);
                 }
             }
@@ -1289,7 +1289,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             if ( _caseFieldSettingsHelper.IsReadOnly(translationCaseFieldName,
                 caseId, caseTemplateSettings))
-                AddReadonlyOption(field.Options);
+                AddReadOnlyOption(field.Options);
 
             return field;
         }
@@ -1313,25 +1313,24 @@ namespace DH.Helpdesk.WebApi.Controllers
             //{
             //    options.Add(new KeyValuePair<string, string>("description", settingEx.FieldHelp));
             //}
-            //TODO: check is readonly
             return options;
         }
 
-        private void AddReadonlyOption(List<KeyValuePair<string, string>> options)
+        private void AddReadOnlyOption(ICollection<KeyValuePair<string, string>> options)
         {
             const string readonlyStr = "readonly";
             if (options.All(x => x.Key != readonlyStr))
                 options.Add(new KeyValuePair<string, string>(readonlyStr, ""));
         }
 
-        private void AddRequiredOption(List<KeyValuePair<string, string>> options)
+        private void AddRequiredOption(ICollection<KeyValuePair<string, string>> options)
         {
             const string required = "required";
             if (options.All(x => x.Key != required))
                 options.Add(new KeyValuePair<string, string>(required, ""));
         }
 
-        private void AddMaxLengthOption(List<KeyValuePair<string, string>> options, int length)
+        private void AddMaxLengthOption(ICollection<KeyValuePair<string, string>> options, int length)
         {
             const string maxlength = "maxlength";
             if (options.All(x => x.Key != maxlength))

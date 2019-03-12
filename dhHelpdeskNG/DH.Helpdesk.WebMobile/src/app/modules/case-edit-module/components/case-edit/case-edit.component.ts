@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
 import { forkJoin, Subject, Subscription, of, throwError, interval } from 'rxjs';
-import { switchMap, take, finalize, delay, catchError, map, takeUntil, takeWhile, } from 'rxjs/operators';
+import { switchMap, take, finalize, delay, catchError, map, takeUntil, takeWhile, filter, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, Channels, DropdownValueChangedEvent } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/data/header-event-data';
@@ -18,12 +18,13 @@ import { CaseFieldsNames, CasesSearchType } from 'src/app/modules/shared-module/
 import { CaseLockApiService } from '../../services/api/case/case-lock-api.service';
 import { CaseSaveService } from '../../services/case';
 import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel, CaseLockModel, BaseCaseField, CaseAction, CaseActionDataType } from '../../models';
-import { OptionItem } from 'src/app/modules/shared-module/models';
+import { OptionItem, MultiLevelOptionItem } from 'src/app/modules/shared-module/models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseWatchDateApiService } from '../../services/api/case/case-watchDate-api.service';
 import { CaseFilesApiService } from '../../services/api/case/case-files-api.service';
 import { NotifierModel } from 'src/app/modules/shared-module/models/notifier/notifier.model';
+import { CaseTypesService } from 'src/app/services/case-organization/caseTypes-service';
 
 @Component({
   selector: 'app-case-edit',
@@ -66,7 +67,6 @@ export class CaseEditComponent {
     constructor(private route: ActivatedRoute,
                 private caseService: CaseService,
                 private router: Router,
-                private formBuilder:FormBuilder,
                 private caseLockApiService: CaseLockApiService,
                 private authStateService:AuthenticationStateService,
                 private caseDataHelpder: CaseEditDataHelper,
@@ -76,6 +76,7 @@ export class CaseEditComponent {
                 private сaseDataReducersFactory: CaseDataReducersFactory,
                 private workingGroupsService: WorkingGroupsService,
                 private stateSecondariesService: StateSecondariesService,
+                private caseTypesService: CaseTypesService,
                 private caseWatchDateApiService: CaseWatchDateApiService,
                 private translateService : TranslateService,
                 private localStorage:  LocalStorageService,
@@ -122,10 +123,7 @@ export class CaseEditComponent {
       // drop down value changed
       this.commService.listen(Channels.DropdownValueChanged).pipe(
         takeUntil(this.destroy$)
-      ).subscribe((v: DropdownValueChangedEvent) => {
-          const reducer = this.сaseDataReducersFactory.createCaseDataReducers(this.dataSource);
-          this.runUpdates(reducer, v);
-      });
+      ).subscribe((v: DropdownValueChangedEvent) => this.runUpdates(v));
 
       //Notifier changed
       this.commService.listen<NotifierModel>(Channels.NotifierChanged).pipe(
@@ -152,16 +150,52 @@ export class CaseEditComponent {
       }
     }
 
-    private runUpdates(reducer, v: DropdownValueChangedEvent) { // TODO: move to new class
+    private runUpdates(v: DropdownValueChangedEvent) { // TODO: move to new class
+      const reducer = this.сaseDataReducersFactory.createCaseDataReducers(this.dataSource);
       const filters = this.caseDataHelpder.getCaseOptionsFilter(this.caseData, (name: string) => this.getFormValue(name));
       const optionsHelper = this.caseService.getOptionsHelper(filters);
 
       switch (v.name) {
+        case CaseFieldsNames.CaseTypeId: {
+          this.caseTypesService.getCaseType(v.value).pipe(
+              take(1),
+              switchMap(ct => {
+                if (ct && ct.performerUserId != null && !this.getField(CaseFieldsNames.PerformerUserId).setByTemplate) {
+                  if (!this.dataSource.performersStore$.value.some((e) => e.value == ct.performerUserId)) { 
+                  // get new list of performers with casetype perfomer included
+                    filters.CasePerformerUserId = ct.performerUserId;
+                    return optionsHelper.getPerformers(true).pipe(
+                        take(1),
+                        switchMap((o: OptionItem[]) => {
+                          reducer.caseDataReducer(CaseFieldsNames.PerformerUserId, { items: o });
+                          return of(ct);
+                        })
+                      );
+                  }
+                }
+                return of(ct);
+              })
+            ).subscribe(ct => {
+              if (ct && ct.workingGroupId != null) {
+                this.form.controls[CaseFieldsNames.WorkingGroupId].setValue(ct.workingGroupId);
+              }
+              if (ct && ct.performerUserId != null) {
+                this.form.controls[CaseFieldsNames.PerformerUserId].setValue(ct.performerUserId);
+              }
+            });
+
+          optionsHelper.getProductAreas(null).pipe(
+            take(1)
+          ).subscribe((o: MultiLevelOptionItem[]) => {
+              reducer.caseDataReducer(CaseFieldsNames.ProductAreaId, { items: o });
+          });
+          break;
+        }
         case CaseFieldsNames.WorkingGroupId: {
           optionsHelper.getPerformers(false).pipe(
             take(1)
-          ).subscribe((o:OptionItem[]) => {
-              reducer.caseDataReducer(CaseFieldsNames.PerformerUserId, { items: o});
+          ).subscribe((o: OptionItem[]) => {
+              reducer.caseDataReducer(CaseFieldsNames.PerformerUserId, { items: o });
           });
 
           if (!!v.value && this.form.contains(CaseFieldsNames.StateSecondaryId)) {

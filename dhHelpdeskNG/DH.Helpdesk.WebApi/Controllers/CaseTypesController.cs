@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using AutoMapper;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.WebApi.Infrastructure;
@@ -15,11 +17,14 @@ namespace DH.Helpdesk.WebApi.Controllers
     {
         private readonly ICaseTypeService _caseTypeService;
         private readonly ITranslateCacheService _translateCacheService;
+        private readonly IMapper _mapper;
 
-        public CaseTypesController(ICaseTypeService caseTypeService, ITranslateCacheService translateCacheService)
+        public CaseTypesController(ICaseTypeService caseTypeService, ITranslateCacheService translateCacheService, 
+            IMapper mapper)
         {
             _caseTypeService = caseTypeService;
             _translateCacheService = translateCacheService;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -37,6 +42,23 @@ namespace DH.Helpdesk.WebApi.Controllers
             Translate(caseTypes.ToList(), langId, 0);
 
             return await Task.FromResult(caseTypes.OrderBy(p => p.Name));
+        }
+
+        /// <summary>
+        /// Case type.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cid"></param>
+        /// <param name="langId"></param>
+        /// <returns></returns>
+        [Route("{id:int}")]
+        public async Task<CaseTypeOverview> GetCaseType(int id, int cid, int langId)
+        {
+            var caseType = _caseTypeService.GetCaseType(id);
+            var caseTypeOverview = _mapper.Map<CaseTypeOverview>(caseType);
+            Translate(new List<CaseTypeOverview> { caseTypeOverview }, langId, 0);
+
+            return await Task.FromResult(caseTypeOverview);
         }
 
         private void Translate(List<CaseTypeOverview> caseTypes, int langId, int depth)

@@ -118,7 +118,7 @@ export class CaseService {
         getIsAboutDepartments: () => fieldExists(filter.IsAboutRegionId) ? this.caseOrganizationService.getDepartments(filter.IsAboutRegionId) : empty$(),
         getIsAboutOUs: () => fieldExists(filter.IsAboutDepartmentId) && filter.IsAboutDepartmentId != null ? this.caseOrganizationService.getOUs(filter.IsAboutDepartmentId) : empty$(),
         getCaseTypes: () => fieldExists(filter.CaseTypes) ? this.caseOrganizationService.getCaseTypes() : empty$(),
-        getProductAreas: () => fieldExists(filter.ProductAreas) ? this.caseOrganizationService.getProductAreas(filter.CaseTypeId, filter.ProductAreaId) : empty$(),
+        getProductAreas: (idToInclude?: number) => fieldExists(filter.ProductAreas) ? this.caseOrganizationService.getProductAreas(filter.CaseTypeId, idToInclude) : empty$(),
         getCategories: () => fieldExists(filter.Categories) ? this.caseOrganizationService.getCategories() : empty$(),
         getWorkingGroups: () => fieldExists(filter.WorkingGroups) ? this.caseOrganizationService.getWorkingGroups() : empty$(),
         getClosingReasons: () => fieldExists(filter.ClosingReasons) ? this.caseOrganizationService.getClosingReasons() : empty$(),
@@ -137,7 +137,7 @@ export class CaseService {
         let isAboutDepartments$ = optionsHelper.getIsAboutDepartments();
         let isAboutOUs$ = optionsHelper.getIsAboutOUs();
         let caseTypes$ = optionsHelper.getCaseTypes();
-        let productAreas$ = optionsHelper.getProductAreas();
+        let productAreas$ = optionsHelper.getProductAreas(filter.ProductAreaId);
         let categories$ = optionsHelper.getCategories();
         let workingGroups$ = optionsHelper.getWorkingGroups();
         let closingReasons$ = optionsHelper.getClosingReasons();

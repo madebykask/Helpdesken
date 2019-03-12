@@ -34,7 +34,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
       maxWidth: [40, 500],
       data: [],
       headerText: () => this.getHeader,
-      input: 'select-input',
+      input: 'select-textarea',
       onInit: (event, inst) => {
         if (this.field.isReadonly) {
           inst.disable();

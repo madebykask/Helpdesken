@@ -62,6 +62,10 @@ export class BaseCaseField<T> implements IBaseCaseField<T> {
       const maxLength = this.options.filter((o) => o.key == CaseFieldOptions.maxlength);
       return maxLength.length > 0 ? +maxLength[0].value : null;
     }
+
+    public get setByTemplate(): boolean {
+      return this.options != null && this.options.filter((o) => o.key == CaseFieldOptions.setByTemplate).length > 0;
+    }
 }
 
 export class KeyValue {
@@ -80,4 +84,5 @@ export interface IBaseCaseField<T> {
     isReadonly: boolean;
     isRequired: boolean;
     maxLength: number | null;
+    setByTemplate: boolean;
 }
