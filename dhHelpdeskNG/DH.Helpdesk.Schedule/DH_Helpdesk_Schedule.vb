@@ -496,7 +496,7 @@ Module DH_Helpdesk_Schedule
 
                 objLogFile.WriteLine(Now() & ", getContractInNoticeOfRemoval, ContractNumber:" & objContract.ContractNumber)
 
-                objCase.Caption = objTextTranslationData.getTextTranslation("Från avtalsmodul", objContract.Language_Id) & " " & objContract.ContractNumber
+                objCase.Caption = objTextTranslationData.getTextTranslation("För uppsägning", objContract.Language_Id) & " " & objContract.ContractNumber
                 objCase.Description = objCase.Caption
                 objCase.Customer_Id = objContract.Customer_Id
                 objCase.CaseType_Id = objContract.CaseType_Id
@@ -526,23 +526,9 @@ Module DH_Helpdesk_Schedule
 
                 objCase.RegLanguage_Id = objContract.Language_Id
 
-                If objContract.CreateCase_UserId <> "" Then
-                    objComputerUser = objComputerUserData.getComputerUserByUserId(objContract.CreateCase_UserId, objContract.Customer_Id)
-
-                    If Not objComputerUser Is Nothing Then
-                        objCase.ReportedBy = objComputerUser.UserId
-                        objCase.Persons_Name = objComputerUser.FirstName & " " & objComputerUser.SurName
-                        objCase.Persons_EMail = objComputerUser.EMail
-                        objCase.Persons_Phone = objComputerUser.Phone
-
-                        If objComputerUser.Department_Id <> 0 Then
-                            objCase.Department_Id = objComputerUser.Department_Id
-                        End If
-
-                        If objComputerUser.Region_Id <> 0 Then
-                            objCase.Region_Id = objComputerUser.Region_Id
-                        End If
-                    End If
+                'Set notifier from contract
+                If Not String.IsNullOrEmpty(objContract.CreateCase_UserId) Then
+                    setInitiator(objContract.CreateCase_UserId, objContract.Customer_Id, objCase)
                 End If
 
                 objCase = objCaseData.createCase(objCase)
@@ -588,6 +574,8 @@ Module DH_Helpdesk_Schedule
         Dim objLogData As New LogData
         Dim objUserData As New UserData
         Dim objUser As User
+        Dim objComputerUser As ComputerUser
+        Dim objComputerUserData As New ComputerUserData
         Dim sMessageId As String
 
         gsConnectionString = sConnectionString
@@ -607,6 +595,7 @@ Module DH_Helpdesk_Schedule
                 objCase.RegistrationSource = 5
 
                 objCase.Caption = objTextTranslationData.getTextTranslation("För uppföljning", objContract.Language_Id) & " " & objContract.ContractNumber
+                objCase.Description = objCase.Caption
                 objCase.Customer_Id = objContract.Customer_Id
                 objCase.CaseType_Id = objContract.CaseType_Id
                 objCase.Form_Id = objContract.Form_Id
@@ -630,6 +619,11 @@ Module DH_Helpdesk_Schedule
                 End If
 
                 objCase.RegLanguage_Id = objContract.Language_Id
+
+                'Set notifier from contract
+                If Not String.IsNullOrEmpty(objContract.CreateCase_UserId) Then
+                    setInitiator(objContract.CreateCase_UserId, objContract.Customer_Id, objCase)
+                End If
 
                 objCase = objCaseData.createCase(objCase)
 
@@ -656,6 +650,27 @@ Module DH_Helpdesk_Schedule
                     End If
                 End If
             Next
+        End If
+    End Sub
+    Private Sub setInitiator(userId As String, customerId As Integer, ByRef objCase As CCase)
+        If Not String.IsNullOrEmpty(userId) Then
+
+            Dim objComputerUser = New ComputerUserData().getComputerUserByUserId(userId, customerId)
+
+            If Not objComputerUser Is Nothing Then
+                objCase.ReportedBy = objComputerUser.UserId
+                objCase.Persons_Name = objComputerUser.FirstName & " " & objComputerUser.SurName
+                objCase.Persons_EMail = objComputerUser.EMail
+                objCase.Persons_Phone = objComputerUser.Phone
+
+                If objComputerUser.Department_Id <> 0 Then
+                    objCase.Department_Id = objComputerUser.Department_Id
+                End If
+
+                If objComputerUser.Region_Id <> 0 Then
+                    objCase.Region_Id = objComputerUser.Region_Id
+                End If
+            End If
         End If
     End Sub
 
