@@ -17,6 +17,8 @@ Module DH_Helpdesk_Mail
     Dim bEnableNewEmailProcessing = False
 
     Public Sub Main()
+
+        Dim testNow As DateTime = DateTime.Now
         Dim secureConnectionString As String = ConfigurationManager.AppSettings("SecureConnectionString")
         If (Not String.IsNullOrEmpty(secureConnectionString) AndAlso secureConnectionString.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
             Dim fileName = Path.GetFileName(Reflection.Assembly.GetExecutingAssembly().Location)
@@ -120,6 +122,8 @@ Module DH_Helpdesk_Mail
         Finally
             closeLogFile()
         End Try
+
+        Dim testEnd As TimeSpan = DateTime.Now - testNow
     End Sub
 
     Private Function GetCmdArg(args As String(), index As Int32, defaultValue As String) As String
@@ -796,6 +800,8 @@ Module DH_Helpdesk_Mail
 
                                     ' Markera ärendet som oläst
                                     objCaseData.markCaseUnread(objCase)
+
+
 
                                     ' Uppdatera ärendet och aktivera om det är avslutat
                                     If objCase.FinishingDate <> Date.MinValue Then

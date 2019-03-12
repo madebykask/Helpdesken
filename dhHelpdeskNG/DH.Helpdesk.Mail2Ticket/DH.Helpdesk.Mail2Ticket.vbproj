@@ -212,6 +212,30 @@
       <Project>{300807ad-e3da-4bf5-93fc-2503d617edc1}</Project>
       <Name>DH.Helpdesk.Mail2Ticket.Library</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DH.Helpdesk.Models\DH.Helpdesk.Models.csproj">
+      <Project>{de589388-2e9b-44c3-bcb7-9d4d051391de}</Project>
+      <Name>DH.Helpdesk.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
+      <Project>{90defcb6-e297-4f99-a532-da1e0522aa49}</Project>
+      <Name>DH.Helpdesk.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Data\DH.Helpdesk.Dal.csproj">
+      <Project>{a8f6b7b8-8055-4bb7-82c4-85004f52e6ef}</Project>
+      <Name>DH.Helpdesk.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Domain\DH.Helpdesk.Domain.csproj">
+      <Project>{5bd5f918-3be4-474d-ac30-9dbd02fc385d}</Project>
+      <Name>DH.Helpdesk.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.DTO\DH.Helpdesk.BusinessData.csproj">
+      <Project>{c4520e52-cb9e-4fd6-bee9-92aa532685a2}</Project>
+      <Name>DH.Helpdesk.BusinessData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Service\DH.Helpdesk.Services.csproj">
+      <Project>{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}</Project>
+      <Name>DH.Helpdesk.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -66,6 +66,9 @@ Imports System.Data
     Private msAvailable As String
     Private msReferenceNumber As String
     Private miIncludeInCaseStatistics As Integer
+    Private miExternalTime As Integer
+    Private miLeadTime As Integer
+
 #End Region
 
 #Region "Constructors"
@@ -330,6 +333,10 @@ Imports System.Data
         End If
 
         miIncludeInCaseStatistics = dr("IncludeInCaseStatistics")
+
+        miExternalTime = dr("ExternalTime")
+        miLeadTime = dr("LeadTime")
+
     End Sub
 
 #End Region
@@ -883,6 +890,25 @@ Imports System.Data
         End Get
         Set(ByVal Value As Integer)
             miIncludeInCaseStatistics = Value
+        End Set
+    End Property
+
+    Public Property ExternalTime() As Integer
+        Get
+            Return miExternalTime
+        End Get
+        Set(ByVal Value As Integer)
+            miExternalTime = Value
+        End Set
+    End Property
+
+
+    Public Property LeadTime() As Integer
+        Get
+            Return miLeadTime
+        End Get
+        Set(ByVal Value As Integer)
+            miLeadTime = Value
         End Set
     End Property
 #End Region
