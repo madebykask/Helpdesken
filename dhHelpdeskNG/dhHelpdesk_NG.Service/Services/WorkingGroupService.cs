@@ -42,6 +42,8 @@ namespace DH.Helpdesk.Services.Services
 
         int? GetDefaultId(int customerId, int userId);
 
+        WorkingGroupEntity GetDefaultCreateCaseWorkingGroup(int customerId);
+
         List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId, bool includeAdmins = true);
 
         IList<UserWorkingGroup> GetUsersForWorkingGroup(int workingGroupId);
@@ -205,6 +207,11 @@ namespace DH.Helpdesk.Services.Services
         public int? GetDefaultId(int customerId, int userId)
         {
             return this._workingGroupRepository.GetDefaultWorkingGroupId(customerId, userId);  
+        }
+
+        public WorkingGroupEntity GetDefaultCreateCaseWorkingGroup(int customerId)
+        {
+            return _workingGroupRepository.GetDefaultCreateCaseWorkingGroup(customerId);
         }
 
         public List<GroupWithEmails> GetWorkingGroupsWithActiveEmails(int customerId, bool includeAdmins = true)

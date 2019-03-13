@@ -496,7 +496,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             currentCase.Supplier_Id = caseSolution?.Supplier_Id ?? customerDefaults.SupplierId;
             currentCase.Priority_Id = caseSolution?.Priority_Id ?? customerDefaults.PriorityId;
             currentCase.Status_Id = caseSolution?.Status_Id ?? customerDefaults.StatusId;
-            currentCase.WorkingGroup_Id = caseSolution?.WorkingGroup_Id ?? userOverview.DefaultWorkingGroupId;
+            currentCase.WorkingGroup_Id = caseSolution?.WorkingGroup_Id; //?? userOverview.DefaultWorkingGroupId;
 
             currentCase.ReportedBy = caseSolution?.ReportedBy;
             currentCase.PersonsName = caseSolution?.PersonsName;

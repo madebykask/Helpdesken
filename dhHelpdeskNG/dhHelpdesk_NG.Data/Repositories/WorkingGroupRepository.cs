@@ -23,6 +23,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<int> ListWorkingGroupsForUser(int userId);
 
         int? GetDefaultWorkingGroupId(int customerId, int userId);
+        WorkingGroupEntity GetDefaultCreateCaseWorkingGroup(int customerId);
 
         string GetWorkingGroupName(int workingGroupId);
 
@@ -106,6 +107,11 @@ namespace DH.Helpdesk.Dal.Repositories
             }
 
             return null;
+        }
+
+        public WorkingGroupEntity GetDefaultCreateCaseWorkingGroup(int customerId)
+        {
+            return Table.AsNoTracking().FirstOrDefault(wg => wg.IsActive == 1 && wg.IsDefault == 1);
         }
 
         public IList<int> ListWorkingGroupsForUser(int userId)

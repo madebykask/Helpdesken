@@ -589,7 +589,6 @@ namespace DH.Helpdesk.Dal.Repositories
                     UserGUID = x.UserGUID,
                     CaseInternalLogPermission = x.CaseInternalLogPermission,
                     InvoiceTimePermission = x.InvoiceTimePermission,
-                    DefaultWorkingGroupId = x.Default_WorkingGroup_Id
                 };
 
             return exp;

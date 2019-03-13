@@ -96,9 +96,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var caseSolution = _caseSolutionService.GetCaseSolution(caseSolutionId);
                 //_caseSolutionSettingService.GetCaseSolutionSettingOverviews(caseSolutionId);//TODO: Case solution settings participate in visibility check
                 if (caseSolution != null)
-                {
                     model.CaseSolution = _mapper.Map<CaseSolutionInfo>(caseSolution);
-                }
             }
 
             //if (!string.IsNullOrWhiteSpace(currentCase.ReportedBy))//TODO:
