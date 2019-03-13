@@ -132,11 +132,6 @@ export class FooterComponent implements OnInit  {
   }
 
   goToOverview() {
-/*     if (this.userSettingsService.getUserData().ownCasesOnly) {
-      this.hidePopups();
-      this.goToCases(CasesSearchType.MyCases);
-      return;
-    } */
     this.caseSearchPopup.instance.show();
   }
 

@@ -136,10 +136,10 @@ export class CaseEditComponent {
       console.dir(data);
       
       this.form.get(CaseFieldsNames.ReportedBy).setValue(data.userId);
-      this.form.get(CaseFieldsNames.PersonName).setValue(data.name);
-      this.form.get(CaseFieldsNames.PersonEmail).setValue(data.email);
-      this.form.get(CaseFieldsNames.PersonCellPhone).setValue(data.cellphone);
-      this.form.get(CaseFieldsNames.Place).setValue(data.place);
+      this.form.get(CaseFieldsNames.PersonName).setValue(data.name || '');
+      this.form.get(CaseFieldsNames.PersonEmail).setValue(data.email || '');
+      this.form.get(CaseFieldsNames.PersonCellPhone).setValue(data.cellphone || '');
+      this.form.get(CaseFieldsNames.Place).setValue(data.place || '');
       //this.form.get(CaseFieldsNames.UserCode).setValue(data.userCode);
       //this.form.get(CaseFieldsNames.CostCentre).setValue(data.costCentre);
       
