@@ -11,5 +11,6 @@ namespace DH.Helpdesk.Web.Common.Models.CurrentUser
         public MomentJsTimeZoneInfo TimeZoneMoment { get; set; }
         public bool OwnCasesOnly { get; set; }
         public bool CreateCasePermission { get; set; }
+        public bool DeleteAttachedFiles { get; set; }
     }
 }

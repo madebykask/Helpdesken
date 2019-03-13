@@ -52,4 +52,5 @@ export class UserData {
     userTimeZone?: string;
     ownCasesOnly: boolean;
     createCasePermission: boolean;
+    canDeleteAttachedFiles: boolean;
 }

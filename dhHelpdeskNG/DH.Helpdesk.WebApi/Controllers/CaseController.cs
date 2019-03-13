@@ -117,15 +117,14 @@ namespace DH.Helpdesk.WebApi.Controllers
             _caseFieldsCreator.CreateRegardingSection(cid, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model);
             _caseFieldsCreator.CreateComputerInfoSection(cid, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model);
             _caseFieldsCreator.CreateCaseInfoSection(cid, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model, customerUserSetting);
-            _caseFieldsCreator.CreateCaseManagementSection(cid, userOverview, caseFieldSettings, null,
-                currentCase, null, languageId, caseFieldTranslations, model,
-                customerUserSetting, customerSettings);
+            _caseFieldsCreator.CreateCaseManagementSection(cid, userOverview, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model, customerUserSetting, customerSettings);
             _caseFieldsCreator.CreateCommunicationSection(cid, userOverview, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model);
 
             //calc case edit mode
             model.EditMode = _caseEditModeCalcStrategy.CalcEditMode(cid, UserId, currentCase); // remember to apply isCaseLocked check on client
 
             _caseService.MarkAsRead(caseId);
+
             return model;
         }
 

@@ -38,8 +38,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 TimeZoneMoment = TimeZoneToMomentConverter.GenerateAddMomentZoneScript(userSettings.TimeZoneId, 2000, DateTime.Now.Year),
                 OwnCasesOnly = userSettings.RestrictedCasePermission.ToBool(),
                 CreateCasePermission = userSettings.CreateCasePermission.ToBool(),
+                DeleteAttachedFiles = userSettings.DeleteAttachedFilePermission.ToBool()
             };
-            
         }
     }
 }

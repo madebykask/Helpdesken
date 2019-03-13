@@ -3422,13 +3422,13 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, case_.FinishingDate.Value, deptIds);
-				var possibleWorkTime = workTimeCalc.CalculateWorkTime(
-					case_.RegTime,
-					case_.FinishingDate.Value.ToUniversalTime(),
-					case_.Department_Id); 
-				leadTime = possibleWorkTime - case_.ExternalTime;
+                var possibleWorkTime = workTimeCalc.CalculateWorkTime(
+                    case_.RegTime,
+                    case_.FinishingDate.Value.ToUniversalTime(),
+                    case_.Department_Id); 
+                leadTime = possibleWorkTime - case_.ExternalTime;
 
-				case_.LeadTime = leadTime;
+                case_.LeadTime = leadTime;
 
                 // ActionLeadTime Calc
                 if (oldCase != null && oldCase.Id > 0)
@@ -3468,11 +3468,11 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, utcNow, deptIds);
-				var possibleWorktime = workTimeCalc.CalculateWorkTime(
-					case_.RegTime,
-					utcNow.ToUniversalTime(),
-					case_.Department_Id);
-				leadTime = possibleWorktime - case_.ExternalTime;
+                var possibleWorktime = workTimeCalc.CalculateWorkTime(
+                    case_.RegTime,
+                    utcNow.ToUniversalTime(),
+                    case_.Department_Id);
+                leadTime = possibleWorktime - case_.ExternalTime;
 
                 // ActionLeadTime Calc                
                 if (oldCase != null && oldCase.Id > 0)
@@ -3965,13 +3965,13 @@ namespace DH.Helpdesk.Web.Controllers
                     deptIds = new int[] { oldCase.Department_Id.Value };
                 }
 
-				var workTimeCalc = workTimeCalcFactory.Build(oldCase.RegTime, oldCase.FinishingDate.Value, deptIds);
-				leadTime = workTimeCalc.CalculateWorkTime(
-					oldCase.RegTime,
-					oldCase.FinishingDate.Value.ToUniversalTime(),
-					oldCase.Department_Id) - oldCase.ExternalTime;
+                var workTimeCalc = workTimeCalcFactory.Build(oldCase.RegTime, oldCase.FinishingDate.Value, deptIds);
+                leadTime = workTimeCalc.CalculateWorkTime(
+                    oldCase.RegTime,
+                    oldCase.FinishingDate.Value.ToUniversalTime(),
+                    oldCase.Department_Id) - oldCase.ExternalTime;
 
-				oldCase.LeadTime = leadTime;
+                oldCase.LeadTime = leadTime;
 
                 // ActionLeadTime Calc
                 if (oldCase != null && oldCase.Id > 0)
@@ -4655,21 +4655,25 @@ namespace DH.Helpdesk.Web.Controllers
             m.CanGetRelatedCases = SessionFacade.CurrentUser.IsAdministrator();
             m.CurrentUserRole = SessionFacade.CurrentUser.UserGroupId;
             SessionFacade.CurrentCaseLanguageId = SessionFacade.CurrentLanguageId;
-            var acccessToGroups = this._userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
-            var deps = this._departmentService.GetDepartmentsByUserPermissions(userId, customerId);
+            var acccessToGroups = _userService.GetWorkinggroupsForUserAndCustomer(SessionFacade.CurrentUser.Id, customerId);
+            var deps = _departmentService.GetDepartmentsByUserPermissions(userId, customerId);
+
+            var currentUser = UsersMapper.MapToUser(SessionFacade.CurrentUser);
 
             var isCreateNewCase = caseId == 0;
             m.CaseLock = caseLocked;
-
+            
             m.CaseUnlockAccess = 
-                _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseUnlockPermission);
+                _userPermissionsChecker.UserHasPermission(currentUser, UserPermission.CaseUnlockPermission);
 
             m.MailTemplates = _mailTemplateService.GetCustomMailTemplatesList(customerId).ToList();
 
+            
+
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
 
-            var userHasInvoicePermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InvoicePermission);
-            var userHasInventoryViewPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryViewPermission);
+            var userHasInvoicePermission = _userPermissionsChecker.UserHasPermission(currentUser, UserPermission.InvoicePermission);
+            var userHasInventoryViewPermission = _userPermissionsChecker.UserHasPermission(currentUser, UserPermission.InventoryViewPermission);
 
             // Establish current solution and set split option if available
             CaseSolution caseTemplate = null;
@@ -4708,7 +4712,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var editMode = this.EditMode(m, ModuleName.Cases, deps, acccessToGroups);
                 if (m.case_.Unread != 0 && updateState && editMode == AccessMode.FullAccess)
-                    this._caseService.MarkAsRead(caseId);
+                    _caseService.MarkAsRead(caseId);
                 
                 //todo: review
                 customerId = customerId == 0 ? m.case_.Customer_Id : customerId;
@@ -4722,7 +4726,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
             
             
-            m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.CaseInternalLogPermission);
+            m.CaseInternalLogAccess = _userPermissionsChecker.UserHasPermission(currentUser, UserPermission.CaseInternalLogPermission);
 
             var customerUserSetting = this._customerUserService.GetCustomerUserSettings(customerId, userId);
             if (customerUserSetting == null)
@@ -5129,7 +5133,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.standardTexts = this._standardTextService.GetStandardTexts(customerId);
             m.Languages = this._languageService.GetActiveLanguages();
 
-            var responsibleUsersList = this._userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
+            var responsibleUsersList = _userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
             m.FollowersModel = m.SendToDialogModel =_sendToDialogModelFactory.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting, _emailGroupService, _workingGroupService, _emailService);
 
             m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
@@ -5680,10 +5684,11 @@ namespace DH.Helpdesk.Web.Controllers
 
             // "Administrator" (Performer)
             m.Performer_Id = m.case_.Performer_User_Id ?? 0;
+
             m.Performers = 
                 performersList.Where(it => it.IsActive == 1 && (it.Performer == 1 || it.Id == m.Performer_Id)).MapToSelectList(m.Setting, isAddEmpty);
 
-            m.DynamicCase = this._caseService.GetDynamicCase(m.case_.Id);
+            m.DynamicCase = _caseService.GetDynamicCase(m.case_.Id);
             if (m.DynamicCase != null)
             {
                 var l = m.Languages.Where(x => x.Id == SessionFacade.CurrentLanguageId).FirstOrDefault();

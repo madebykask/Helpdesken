@@ -177,7 +177,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             //todo: return  errors?
             return Ok();
         }
-
         
         [HttpDelete]
         [CheckUserCasePermissions(CaseIdParamName = "caseId")]

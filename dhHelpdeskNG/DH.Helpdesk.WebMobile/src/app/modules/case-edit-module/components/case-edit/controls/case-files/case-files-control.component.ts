@@ -1,5 +1,5 @@
 import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
-import { MbscListviewOptions, mobiscroll } from '@mobiscroll/angular';
+import { MbscListviewOptions, mobiscroll, MbscListview } from '@mobiscroll/angular';
 import { take } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { BaseCaseField, CaseFileModel, CaseAccessMode } from 'src/app/modules/case-edit-module/models';
@@ -10,6 +10,7 @@ import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseFilesUploadComponent } from '../case-files-upload/case-files-upload.component';
 import { TranslateService as NgxTranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
+import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 
 @Component({
   selector: 'case-files-control',
@@ -22,20 +23,14 @@ export class CaseFilesControlComponent {
   @Input() caseKey: string; 
   @Input() accessMode: CaseAccessMode;
 
+  @ViewChild('fileList') fileList: MbscListview;
   @ViewChild(CaseFilesUploadComponent) caseFilesComponent: CaseFilesUploadComponent
 
-  files: CaseFileModel[] = [];  
+  files: CaseFileModel[] = [];
+
   fileListSettings: MbscListviewOptions = {
     enhance: true,
-    swipe: true,
-    //todo: add swipe effects for delete
-    stages: [{
-      percent: -25,
-      color: 'red',
-      icon: 'fa-trash',
-      confirm: true,
-      action: this.onFileDelete.bind(this)
-    }]  
+    swipe: false
   };
 
   private destroy$ = new Subject();
@@ -43,6 +38,7 @@ export class CaseFilesControlComponent {
   constructor(private caseFilesApiService: CaseFilesApiService,
               private translateService: NgxTranslateService,
               private router: Router,
+              private userSettingsService: UserSettingsApiService,
               private alertsService: AlertsService) {
   }
 
@@ -50,11 +46,27 @@ export class CaseFilesControlComponent {
     return this.accessMode === CaseAccessMode.FullAccess;
   }
 
-  ngOnInit() {  
+  ngOnInit() {
   }
 
-  ngAfterViewInit(): void {  
-      //subscribe on new file upload
+  ngAfterViewInit(): void {
+    this.configureListActions();
+  }
+
+  private configureListActions() {
+    if (this.userSettingsService.getUserData().canDeleteAttachedFiles) {
+      //add swipe actions if has permissions
+      this.fileList.instance.option({
+        swipe: true,
+        stages: [{
+          percent: -25,
+          color: 'red',
+          icon: 'fa-trash',
+          confirm: true,
+          action: this.onFileDelete.bind(this)
+        }]  
+      });
+    }
   }
 
   ngOnDestroy(): void {

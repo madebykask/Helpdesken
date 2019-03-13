@@ -271,17 +271,17 @@ namespace DH.Helpdesk.Services.Services
 
         public bool UserHasActiveCase(int customerId, int userId, List<int> workingGroups)
         {
-            return this._userRepository.UserHasActiveCase(customerId, userId, workingGroups);
+            return _userRepository.UserHasActiveCase(customerId, userId, workingGroups);
         }
 
         public IList<CustomerUser> GetCustomerUserForUser(int userId)
         {
-            return this._customerUserRepository.GetMany(x => x.User_Id == userId).ToList();
+            return _customerUserRepository.GetMany(x => x.User_Id == userId).ToList();
         }
 
         public IList<CustomerWorkingGroupForUser> GetListToUserWorkingGroup(int userId)
         {
-            return this._userRepository.ListForWorkingGroupsInUser(userId).ToList();
+            return _userRepository.ListForWorkingGroupsInUser(userId).ToList();
         }
 
         public UserOverview GetUserByLogin(string userId, int? customerId)
@@ -291,18 +291,18 @@ namespace DH.Helpdesk.Services.Services
 
         public List<CustomerWorkingGroupForUser> GetWorkinggroupsForUserAndCustomer(int userId, int customerId)
         {
-            return this._userRepository.GetWorkinggroupsForUserAndCustomer(userId, customerId).ToList();
+            return _userRepository.GetWorkinggroupsForUserAndCustomer(userId, customerId).ToList();
         }
 
         public IList<LoggedOnUsersOnIndexPage> GetListToUserLoggedOn()
         {
-            return this._userRepository.LoggedOnUsers();
+            return _userRepository.LoggedOnUsers();
         }
 
         public IList<Department> GetDepartmentsForUser(int userId, int customerId)
         {
-            return this._departmentRepository.GetDepartmentsForUser(userId, customerId).OrderBy(x => x.Customer_Id).ThenBy(x => x.DepartmentName).ToList();
-            //return this._departmentRepository.GetDepartmentsForUser(userId, customerId).ToList();
+            return _departmentRepository.GetDepartmentsForUser(userId, customerId).OrderBy(x => x.Customer_Id).ThenBy(x => x.DepartmentName).ToList();
+            //return _departmentRepository.GetDepartmentsForUser(userId, customerId).ToList();
         }
 
         /// <summary>
@@ -312,22 +312,22 @@ namespace DH.Helpdesk.Services.Services
         /// <returns></returns>
         public IList<Customer> GetCustomersConnectedToUser(int userId)
         {
-            return this._customerRepository.CustomersForUser(userId).ToList();
+            return _customerRepository.CustomersForUser(userId).ToList();
         }
 
         public IList<User> GetAdministrators(int customerId, int active = 1)
         {
-            return this._userRepository.GetMany(x => x.UserGroup.Id != 1 && x.IsActive == active).Where(x => x.CustomerUsers.Any(i => i.Customer_Id == customerId)).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
+            return _userRepository.GetMany(x => x.UserGroup.Id != 1 && x.IsActive == active).Where(x => x.CustomerUsers.Any(i => i.Customer_Id == customerId)).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
         }
 
         public IList<User> GetAdminstratorsForSMS(int customerId, int active = 1)
         {
-            return this._userRepository.GetMany(x => x.UserGroup.Id != 1 && x.IsActive == active && x.CellPhone.Length > 5).Where(x => x.CustomerUsers.Any(i => i.Customer_Id == customerId)).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
+            return _userRepository.GetMany(x => x.UserGroup.Id != 1 && x.IsActive == active && x.CellPhone.Length > 5).Where(x => x.CustomerUsers.Any(i => i.Customer_Id == customerId)).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
         }
 
         public IList<User> GetSystemOwners(int customerId)
         {
-            return this._userRepository.GetMany(x => x.IsActive == 1).Where(x => x.CustomerUsers.Any(i => i.Customer_Id == customerId)).OrderBy(x => x.SurName).ToList(); //TODO: den här raden skall kanske fungera senare, men gör det inte just nu
+            return _userRepository.GetMany(x => x.IsActive == 1).Where(x => x.CustomerUsers.Any(i => i.Customer_Id == customerId)).OrderBy(x => x.SurName).ToList(); //TODO: den här raden skall kanske fungera senare, men gör det inte just nu
         }
 
         #region GetUsersForWorkingGroupOverview
@@ -388,18 +388,18 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<UserLists> GetUserOnCases(int customerId, bool isTakeOnlyActive = false)
         {
-            return this._userRepository.GetUserOnCases(customerId, isTakeOnlyActive);
+            return _userRepository.GetUserOnCases(customerId, isTakeOnlyActive);
         }
 
         // NOTE: do not use if you have conditions!!!
         public IList<User> GetUsers()
         {
-            return this._userRepository.GetAll().OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
+            return _userRepository.GetAll().OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
         }
 
         public IList<User> GetUsers(int customerId)
         {
-            return this._userRepository.GetUsers(customerId)
+            return _userRepository.GetUsers(customerId)
                 .Where(x => x.IsActive == 1)
                 .OrderBy(x => x.SurName)
                 .ThenBy(x => x.FirstName).ToList();
@@ -409,7 +409,7 @@ namespace DH.Helpdesk.Services.Services
         public IList<CustomerUserInfo> GetCustomerUsers(int customerId)
         {
             var query = 
-                this._userRepository.GetUsers(customerId)
+                _userRepository.GetUsers(customerId)
                             .Where(x => x.IsActive == 1)
                             .OrderBy(x => x.SurName)
                             .ThenBy(x => x.FirstName)
@@ -427,7 +427,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<User> GetUsersByUserGroup(int customerId)
         {
-            return this._userRepository.GetUsersByUserGroup(customerId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
+            return _userRepository.GetUsersByUserGroup(customerId).OrderBy(x => x.SurName).ThenBy(x => x.FirstName).ToList();
         }
         
         public IList<CustomerUserInfo> GetAvailablePerformersOrUserId(int customerId, int? userId = null, bool includeWorkingGroups = false)
@@ -435,7 +435,8 @@ namespace DH.Helpdesk.Services.Services
             var query =
                 _userRepository.GetUsers(customerId)
                     .Where(e => e.IsActive == 1 && (e.Performer == 1 || (userId.HasValue && e.Id == userId)))
-                    .OrderBy(e => e.SurName).ThenBy(e => e.FirstName);
+                    .OrderBy(e => e.SurName)
+                    .ThenBy(e => e.FirstName);
 
             var items = MapToCustomerUserInfo(query, includeWorkingGroups).ToList();
             return items;
@@ -444,7 +445,7 @@ namespace DH.Helpdesk.Services.Services
         public IList<User> GetPerformersOrUserId(int customerId, int? userId = null)
         {
             return
-                this._userRepository.GetUsers(customerId)
+                _userRepository.GetUsers(customerId)
                     .Where(e => e.Performer == 1 || (userId.HasValue && e.Id == userId)).OrderBy(e => e.SurName)
                     .ToList();
         }
@@ -452,7 +453,7 @@ namespace DH.Helpdesk.Services.Services
         public IList<User> GetAllPerformers(int customerId)
         {
             return
-                this._userRepository.GetUsers(customerId)
+                _userRepository.GetUsers(customerId)
                     .Where(e => e.Performer == 1)
                     .ToList();
         }
@@ -462,7 +463,7 @@ namespace DH.Helpdesk.Services.Services
             if (workingGroup.HasValue)
             {
                 var query = 
-                    this._userRepository.GetUsersForWorkingGroupQuery(workingGroup.Value, customerId, true) 
+                    _userRepository.GetUsersForWorkingGroupQuery(workingGroup.Value, customerId, true) 
                         .Where(it => it.IsActive == 1 && it.Performer == 1); 
 
                 return MapToCustomerUserInfo(query).ToList(); //todo: check working group flag
@@ -472,42 +473,42 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<User> SearchSortAndGenerateUsers(UserSearch searchUsers)
         {
-            return this._userRepository.GetUsersForUserSettingList(searchUsers).OrderBy(x => x.FirstName).ToList();
+            return _userRepository.GetUsersForUserSettingList(searchUsers).OrderBy(x => x.FirstName).ToList();
         }
 
         public IList<User> SearchSortAndGenerateUsersByUserGroup(UserSearch searchUsers)
         {
-            return this._userRepository.GetUsersForUserSettingListByUserGroup(searchUsers).OrderBy(x => x.FirstName).ToList();
+            return _userRepository.GetUsersForUserSettingListByUserGroup(searchUsers).OrderBy(x => x.FirstName).ToList();
         }
 
         public IList<UserGroup> GetUserGroups()
         {
-            return this._userGroupRepository.GetAll().OrderBy(x => x.Id).ToList();
+            return _userGroupRepository.GetAll().OrderBy(x => x.Id).ToList();
         }
 
         public IList<UserRole> GetUserRoles()
         {
-            return this._userRoleRepository.GetAll().ToList();
+            return _userRoleRepository.GetAll().ToList();
         }
 
         public IList<UserWorkingGroup> GetUserWorkingGroups()
         {
-            return this._userWorkingGroupRepository.GetAll().ToList();
+            return _userWorkingGroupRepository.GetAll().ToList();
         }
         
         public CustomerUserInfo GetUserInfo(int id)
         {
-            return this._userRepository.GetUserInfo(id);
+            return _userRepository.GetUserInfo(id);
         }
 
         public User GetUser(int id)
         {
-            return this._userRepository.GetById(id);
+            return _userRepository.GetById(id);
         }
 
         public User GetUserForCopy(int id)
         {
-            return this._userRepository.GetUserForCopy(id);
+            return _userRepository.GetUserForCopy(id);
         }
 
         public string GetUserTimeZoneId(int userId)
@@ -516,12 +517,12 @@ namespace DH.Helpdesk.Services.Services
         }
         public UserRole GetUserRoleById(int id)
         {
-            return this._userRoleRepository.GetById(id);
+            return _userRoleRepository.GetById(id);
         }
 
         public UserWorkingGroup GetUserWorkingGroupById(int userId, int workingGroupId)
         {
-            return this._userWorkingGroupRepository.Get(x => x.User_Id == userId && x.WorkingGroup_Id == workingGroupId);
+            return _userWorkingGroupRepository.Get(x => x.User_Id == userId && x.WorkingGroup_Id == workingGroupId);
         }
 
         //public User GetSystemUserOwnerId(int userId)
@@ -530,7 +531,7 @@ namespace DH.Helpdesk.Services.Services
         //}
         public DeleteMessage DeleteUser(int id)
         {
-            var user = this._userRepository.GetById(id);
+            var user = _userRepository.GetById(id);
 
             if (user != null)
             {
@@ -546,33 +547,33 @@ namespace DH.Helpdesk.Services.Services
                     user.UserRoles.Clear();
 
                     //Remove Case Settings
-                    var userCaseSettings = this._casesettingRepository.GetMany(cs => cs.User_Id == id).ToList();
+                    var userCaseSettings = _casesettingRepository.GetMany(cs => cs.User_Id == id).ToList();
                     if (userCaseSettings.Any())
                     {
                         foreach (var caseSetting in userCaseSettings)
-                            this._casesettingRepository.Delete(caseSetting);
+                            _casesettingRepository.Delete(caseSetting);
                     }
 
                     // Remove User Modules 
-                    var userModules = this._userModuleRepository.GetMany(um => um.User_Id == id).ToList();
+                    var userModules = _userModuleRepository.GetMany(um => um.User_Id == id).ToList();
                     if (userModules.Any())
                     {
                         foreach (var userModule in userModules)
-                            this._userModuleRepository.Delete(userModule);
+                            _userModuleRepository.Delete(userModule);
                     }
 
                     // Remove User Password History 
-                    var passwordHistories = this._userPasswordHistoryRepository.GetMany(up=> up.User_Id == id).ToList();
+                    var passwordHistories = _userPasswordHistoryRepository.GetMany(up=> up.User_Id == id).ToList();
                     if (passwordHistories.Any())
                     {
                         foreach (var passHistory in passwordHistories)
                         {
-                            this._userPasswordHistoryRepository.Delete(passHistory);
+                            _userPasswordHistoryRepository.Delete(passHistory);
                             this.Commit();
                         }
                     }
                     
-                    this._userRepository.Delete(user);
+                    _userRepository.Delete(user);
                     this.Commit();
 
                     return DeleteMessage.Success;
@@ -589,16 +590,16 @@ namespace DH.Helpdesk.Services.Services
 
         public void SavePassword(int id, string password)
         {
-            var user = this._userRepository.GetById(id);
+            var user = _userRepository.GetById(id);
             user.Password = password;
             user.PasswordChangedDate = DateTime.Now;
-            this._userRepository.Update(user);
+            _userRepository.Update(user);
             this.Commit();
         }
 
         public void SaveProfileUser(User user, out IDictionary<string, string> errors)
         {
-            //var user = this._userRepository.GetById(id);
+            //var user = _userRepository.GetById(id);
             var curTime = DateTime.Now;
 
             user.Address = user.Address ?? string.Empty;
@@ -616,7 +617,7 @@ namespace DH.Helpdesk.Services.Services
 
             errors = new Dictionary<string, string>();
 
-            this._userRepository.Update(user);
+            _userRepository.Update(user);
             this.Commit();
         }
 
@@ -666,9 +667,9 @@ namespace DH.Helpdesk.Services.Services
             user.Password = user.Password ?? string.Empty;            
 
             List<UserPermission> wrongPermissions;
-            if (!this._userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
+            if (!_userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
             {
-                errors.Add("User permissions", this._translator.Translate("There are wrong permissions for this user group."));
+                errors.Add("User permissions", _translator.Translate("There are wrong permissions for this user group."));
             }
 
             var hasDublicate = this.GetUsers()
@@ -693,7 +694,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (int id in aas)
                 {
-                    var aa = this._accountActivityRepository.GetById(id);
+                    var aa = _accountActivityRepository.GetById(id);
 
                     if (aa != null)
                         user.AAs.Add(aa);
@@ -720,7 +721,7 @@ namespace DH.Helpdesk.Services.Services
             
             if (user.Id != 0)
             {
-                var allCustomersMap = this._customerRepository.GetAll().ToDictionary(it => it.Id, it => it);
+                var allCustomersMap = _customerRepository.GetAll().ToDictionary(it => it.Id, it => it);
                 if (customersAvailable != null)
                 {
                     customersAvailable.Where(allCustomersMap.ContainsKey)
@@ -760,7 +761,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (int id in ots)
                 {
-                    var ot = this._orderTypeRepository.GetById(id);
+                    var ot = _orderTypeRepository.GetById(id);
 
                     if (ot != null)
                         user.OTs.Add(ot);
@@ -777,7 +778,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (int id in dus)
                 {
-                    var dep = this._departmentRepository.GetById(id);
+                    var dep = _departmentRepository.GetById(id);
 
                     if (dep != null && customersSelected.Contains(dep.Customer_Id))
                         user.Departments.Add(dep);
@@ -798,7 +799,7 @@ namespace DH.Helpdesk.Services.Services
                     {
                         // http://redmine.fastdev.se/issues/10997
                         //Filter 0 because problem in Case
-                        var wg = this._workingGroupRepository.GetById(uwg.WorkingGroup_Id);
+                        var wg = _workingGroupRepository.GetById(uwg.WorkingGroup_Id);
 
                         if (uwg.UserRole != WorkingGroupUserPermission.NO_ACCESS && wg != null && customersSelected.Contains(wg.Customer_Id))
                             user.UserWorkingGroups.Add(uwg);
@@ -820,9 +821,9 @@ namespace DH.Helpdesk.Services.Services
             }
 
             if (user.Id == 0)
-                this._userRepository.Add(user);
+                _userRepository.Add(user);
             else
-                this._userRepository.Update(user);
+                _userRepository.Update(user);
 
             if (errors.Count == 0)
                 this.Commit();
@@ -838,9 +839,9 @@ namespace DH.Helpdesk.Services.Services
             errors = new Dictionary<string, string>();
 
             List<UserPermission> wrongPermissions;
-            if (!this._userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
+            if (!_userPermissionsChecker.CheckPermissions(user, out wrongPermissions))
             {
-                errors.Add("User permissions", this._translator.Translate("There are wrong permissions for this user group."));
+                errors.Add("User permissions", _translator.Translate("There are wrong permissions for this user group."));
             }
 
             var hasDublicate = _userRepository.FindUsersByUserId(user.UserID).Count() > 0;
@@ -907,7 +908,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (int id in aas)
                 {
-                    var aa = this._accountActivityRepository.GetById(id);
+                    var aa = _accountActivityRepository.GetById(id);
 
                     if (aa != null)
                         user.AAs.Add(aa);
@@ -923,7 +924,7 @@ namespace DH.Helpdesk.Services.Services
             if (cs != null)
             {
                 var customerIdsHash = cs.ToDictionary(it => it, it => true);
-                this._customerRepository.GetAll()
+                _customerRepository.GetAll()
                     .Where(it => customerIdsHash.ContainsKey(it.Id))
                     .ForEach(it => user.Cs.Add(it));
             }
@@ -935,7 +936,7 @@ namespace DH.Helpdesk.Services.Services
 
             // Get passwordlength for Customer
             var MinPasswordLength = 0;
-            var customerSetting = this._settingRepository.GetCustomerSetting(user.Customer_Id);
+            var customerSetting = _settingRepository.GetCustomerSetting(user.Customer_Id);
             if (customerSetting != null)
                 MinPasswordLength = customerSetting.MinPasswordLength;
 
@@ -981,7 +982,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (int id in ots)
                 {
-                    var ot = this._orderTypeRepository.GetById(id);
+                    var ot = _orderTypeRepository.GetById(id);
 
                     if (ot != null)
                         user.OTs.Add(ot);
@@ -998,7 +999,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (int id in departments)
                 {
-                    var dep = this._departmentRepository.GetById(id);
+                    var dep = _departmentRepository.GetById(id);
 
                     if (dep != null)
                         user.Departments.Add(dep);
@@ -1006,9 +1007,9 @@ namespace DH.Helpdesk.Services.Services
             }
 
             if (user.Id == 0)
-                this._userRepository.Add(user);
+                _userRepository.Add(user);
             else
-                this._userRepository.Update(user);
+                _userRepository.Update(user);
 
             if (errors.Count == 0)
                 this.Commit();
@@ -1016,7 +1017,7 @@ namespace DH.Helpdesk.Services.Services
 
         public void Commit()
         {
-            this._unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         public UserOverview Login(string name, string password)
@@ -1047,7 +1048,7 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public IEnumerable<ModuleOverview> GetModules()
         {
-            return this._moduleRepository.GetModules();
+            return _moduleRepository.GetModules();
         }
 
         /// <summary>
@@ -1061,14 +1062,14 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public IEnumerable<UserModuleOverview> GetUserModules(int user)
         {
-            var userModules = this._userModuleRepository.GetUserModules(user).ToList();
+            var userModules = _userModuleRepository.GetUserModules(user).ToList();
 
             if (userModules.Any())
             {
                 return userModules;
             }
 
-            var init = this._moduleRepository
+            var init = _moduleRepository
                 .GetModules()
                 .ToList()
                 .Select(m => new UserModuleOverview()
@@ -1086,7 +1087,7 @@ namespace DH.Helpdesk.Services.Services
                     }
                 });
 
-            this._userModuleRepository.UpdateUserModules(init.Select(m => new UserModule()
+            _userModuleRepository.UpdateUserModules(init.Select(m => new UserModule()
                                                                               {
                                                                                   Id = m.Id,
                                                                                   User_Id = m.User_Id,
@@ -1102,7 +1103,7 @@ namespace DH.Helpdesk.Services.Services
 
         public bool IsUserValidAdmin(string userId, string pass)
         {
-            var user = this._userRepository.GetUserLoginInfo(userId);
+            var user = _userRepository.GetUserLoginInfo(userId);
             if (user != null && user.Password == pass && user.UserGroupId == UserGroups.SystemAdministrator)
                 return true;
             
@@ -1158,7 +1159,7 @@ namespace DH.Helpdesk.Services.Services
         /// </param>
         public void UpdateUserModules(IEnumerable<UserModule> modules)
         {
-            this._userModuleRepository.UpdateUserModules(modules);
+            _userModuleRepository.UpdateUserModules(modules);
             this.Commit();
         }
 
@@ -1176,7 +1177,7 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public UserModule GetUserModule(int userId, int moduleId)
         {
-            return this._userModuleRepository.GetUserModule(userId, moduleId);
+            return _userModuleRepository.GetUserModule(userId, moduleId);
         }
 
         /// <summary>
@@ -1190,7 +1191,7 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public UserOverview GetUserOverview(int userId)
         {
-            return this._userRepository.GetUser(userId);
+            return _userRepository.GetUser(userId);
         }
 
         public async Task<UserOverview> GetUserOverviewAsync(int userId)
@@ -1200,17 +1201,17 @@ namespace DH.Helpdesk.Services.Services
 
         public List<ItemOverview> FindActiveOverviews(int customerId)
         {
-            return this._userRepository.FindActiveOverviews(customerId);
+            return _userRepository.FindActiveOverviews(customerId);
         }
 
         public ItemOverview FindActiveOverview(int userId)
         {
-            return this._userRepository.FindActiveOverview(userId);
+            return _userRepository.FindActiveOverview(userId);
         }
 
         public List<User> GetActiveUsers()
         {
-            using (var uow = this._unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var userRep = uow.GetRepository<User>();
 
@@ -1225,7 +1226,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<User> GetAllUsers()
         {
-            using (var uow = this._unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var userRep = uow.GetRepository<User>();
 
@@ -1239,7 +1240,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<User> GetCustomerActiveUsers(int customerId)
         {
-            using (var uow = this._unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var customerRep = uow.GetRepository<Customer>();
                 var customerUserRep = uow.GetRepository<CustomerUser>();
@@ -1255,7 +1256,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<CustomerSettings> GetUserCustomersSettings(int userId)
         {
-            using (var uow = this._unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var customerRep = uow.GetRepository<Customer>();
                 var customerUserRep = uow.GetRepository<CustomerUser>();
@@ -1272,13 +1273,13 @@ namespace DH.Helpdesk.Services.Services
                                 users, 
                                 customerUsers, 
                                 customerSettings,
-                                this._customerSettingsToBusinessModelMapper);
+                                _customerSettingsToBusinessModelMapper);
             }
         }
 
         public IList<int> GetUserCustomersIds(int userId)
         {
-            using (var uow = this._unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var customerUserRep = uow.GetRepository<CustomerUser>();
                 return customerUserRep.GetAll().Where(cu => cu.User_Id == userId).Select(cu => cu.Customer_Id).ToList();
@@ -1287,7 +1288,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<ItemOverview> GetWorkingGroupUsers(int customerId, int? workingGroupId)
         {
-            using (var uow = this._unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var userRep = uow.GetRepository<User>();
                 var workingGroupRep = uow.GetRepository<WorkingGroupEntity>();
@@ -1313,7 +1314,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<UserProfileCustomerSettings> GetUserProfileCustomersSettings(int userId)
         {
-            using (var uow = this._unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var customerRep = uow.GetRepository<Customer>();
                 var customerUserRep = uow.GetRepository<CustomerUser>();
@@ -1335,7 +1336,7 @@ namespace DH.Helpdesk.Services.Services
 
         public void UpdateUserProfileCustomerSettings(int userId, List<UserProfileCustomerSettings> customersSettings)
         {
-            using (var uow = this._unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var customerUserRep = uow.GetRepository<CustomerUser>();
 
@@ -1358,7 +1359,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<Customer> GetCustomersForUser(int userId)
         {
-            using (var uow = this._unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var customersRep = uow.GetRepository<Customer>();
                 var usersRep = uow.GetRepository<User>();
@@ -1374,12 +1375,12 @@ namespace DH.Helpdesk.Services.Services
 
         public int? GetUserDefaultWorkingGroupId(int userId, int customerId)
         {
-            return this._userRepository.GetUserDefaultWorkingGroupId(userId, customerId);
+            return _userRepository.GetUserDefaultWorkingGroupId(userId, customerId);
         }
 
         public WorkingGroupEntity GetUserDefaultWorkingGroup(int userId, int customerId)
         {
-            return this._userRepository.GetUserDefaultWorkingGroup(userId, customerId);
+            return _userRepository.GetUserDefaultWorkingGroup(userId, customerId);
         }
 
         /// <summary>

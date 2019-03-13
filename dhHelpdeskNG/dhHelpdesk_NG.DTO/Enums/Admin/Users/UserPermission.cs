@@ -23,7 +23,7 @@
         DocumentPermission,
         BulletinBoardPermission,
         InventoryAdminPermission,
-		InventoryViewPermission,
+        InventoryViewPermission,
         ContractPermission,
         InvoicePermission,
         CaseUnlockPermission,
