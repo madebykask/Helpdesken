@@ -12,8 +12,8 @@ export class NotifierService {
   constructor(private notifierApiService:NotifierApiService) {
   }
 
-  searchNotifiers(query:string): Observable<Array<NotifierSearchItem>> {
-    return this.notifierApiService.search(query).pipe(
+  searchNotifiers(query:string, categoryId:number = null): Observable<Array<NotifierSearchItem>> {
+    return this.notifierApiService.search(query, categoryId).pipe(
       take(1),
       map((data:Array<any>) =>
         data.map(x => <NotifierSearchItem>Object.assign(new NotifierSearchItem(), x)))

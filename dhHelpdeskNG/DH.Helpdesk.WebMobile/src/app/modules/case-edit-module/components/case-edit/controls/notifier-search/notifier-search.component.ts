@@ -30,6 +30,7 @@ export class NotifierSearchComponent extends BaseControl implements OnInit {
   selectOptions: MbscSelectOptions = {
     //showInput: false,
     //showLabel: true,
+    
     showOnTap: true,
     cssClass: "search-list",
     input: "#notifierInput",
@@ -71,6 +72,9 @@ export class NotifierSearchComponent extends BaseControl implements OnInit {
 
     this.initEvents();
     
+    //TODO: when initiator categoryId is implemented - replace with value from dropdown
+    const categoryId = 0; // 0 - no category, null - all categories
+
     // subscribe to notifier(user) search input 
     this.usersSearchSubject.asObservable().pipe(
       takeUntil(this.destroy$),
@@ -78,7 +82,7 @@ export class NotifierSearchComponent extends BaseControl implements OnInit {
       distinctUntilChanged(),
       switchMap((query:string) => {
         if (query && query.length > 1) {
-          return this.notifierService.searchNotifiers(query)
+          return this.notifierService.searchNotifiers(query, categoryId)
         } else {
           return of(null);
         }

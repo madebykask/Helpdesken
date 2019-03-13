@@ -12,10 +12,10 @@ export class NotifierApiService extends HttpApiServiceBase {
     super(http, localStorageService);
   }
   
-  search(searchKey: string, categoryId?: number): Observable<Array<any>> {
+  search(searchKey: string, categoryId: number = null): Observable<Array<any>> {
     const data = {
       query: searchKey,
-      //categoryId: categoryId
+      categoryId: categoryId
     };
     const url = this.buildResourseUrl('/api/Notifier/Search', data, true, false);
     return this.getJson<Array<any>>(url).pipe(take(1));

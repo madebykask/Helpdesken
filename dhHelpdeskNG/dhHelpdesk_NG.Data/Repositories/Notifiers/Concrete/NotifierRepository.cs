@@ -363,9 +363,10 @@
 
             if (parameters.ComputerUserCategoryID.HasValue)
             {
-                var categoryId = parameters.ComputerUserCategoryID.Value == 0
-                    ? null
-                    : parameters.ComputerUserCategoryID;
+                var categoryId =
+                    parameters.ComputerUserCategoryID.Value == ComputerUserCategory.EmptyCategoryId
+                        ? null
+                        : parameters.ComputerUserCategoryID;
 
                 requestBuilder.FilterByComputerUserCategoryID(categoryId);
             }
