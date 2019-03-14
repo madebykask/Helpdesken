@@ -60,14 +60,16 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseSolutionSettingService _caseSolutionSettingService;
         private readonly IBaseCaseSolutionService _caseSolutionService;
 		private readonly IStateSecondaryService _stateSecondaryService;
+		private readonly IHolidayService _holidayService;
 
-        public CaseSaveController(ICaseService caseService, ICaseFieldSettingService caseFieldSettingService,
+		public CaseSaveController(ICaseService caseService, ICaseFieldSettingService caseFieldSettingService,
             ICaseLockService caseLockService, ICustomerService customerService, ISettingService customerSettingsService,
             ICaseEditModeCalcStrategy caseEditModeCalcStrategy, IUserService userService, ISettingsLogic settingsLogic,
             ICaseFieldSettingsHelper caseFieldSettingsHelper, IWorkingGroupService workingGroupService, IEmailService emailService,
             ICaseFileService caseFileService, ICustomerUserService customerUserService, ILogFileService logFileService,
             IUserPermissionsChecker userPermissionsChecker, ILogService logService, ITemporaryFilesCache userTempFilesStorage,
-            ICaseSolutionSettingService caseSolutionSettingService, IBaseCaseSolutionService caseSolutionService, IStateSecondaryService stateSecondaryService)
+            ICaseSolutionSettingService caseSolutionSettingService, IBaseCaseSolutionService caseSolutionService, IStateSecondaryService stateSecondaryService,
+			IHolidayService holidayService)
         {
             _caseService = caseService;
             _caseFieldSettingService = caseFieldSettingService;
@@ -89,6 +91,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _caseSolutionSettingService = caseSolutionSettingService;
             _caseSolutionService = caseSolutionService;
 			_stateSecondaryService = stateSecondaryService;
+			_holidayService = holidayService;
         }
 
         /// <summary>
@@ -332,16 +335,18 @@ namespace DH.Helpdesk.WebApi.Controllers
 					departmentIds = new int[] { currentCase.Department_Id.Value };
 
 				var workTimeCalcFactory = new WorkTimeCalculatorFactory(
-					ManualDependencyResolver.Get<IHolidayService>(),
+					_holidayService,
 					customer.WorkingDayStart,
 					customer.WorkingDayEnd,
 					TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId));
 
 				var workTimeCalc = workTimeCalcFactory.Build(oldCase.RegTime, utcNow, departmentIds);
 
-				var casestatesecundary = _stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
+				StateSecondary caseStateSecondary = null;
+				if(oldCase.StateSecondary_Id.HasValue)
+					caseStateSecondary = _stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
 
-				if (casestatesecundary.IncludeInCaseStatistics == 0)
+				if (caseStateSecondary != null && caseStateSecondary.IncludeInCaseStatistics == 0)
 				{
 					var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
 						oldCase.ChangeTime,

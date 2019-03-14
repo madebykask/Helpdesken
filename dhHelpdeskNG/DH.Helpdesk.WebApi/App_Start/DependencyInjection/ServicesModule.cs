@@ -85,15 +85,15 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<LogFileService>().As<ILogFileService>();
             builder.RegisterType<CaseSolutionSettingService>().As<ICaseSolutionSettingService>();
             builder.RegisterType<CaseFieldsCreator>().As<ICaseFieldsCreator>();
-            
-            builder.RegisterType<ProblemLogService>().As<IProblemLogService>();
+			
+			builder.RegisterType<ProblemLogService>().As<IProblemLogService>();
 
             builder.RegisterType<CaseEditModeCalcStrategy>().As<ICaseEditModeCalcStrategy>();
             builder.RegisterType<CaseTranslationService>().As<ICaseTranslationService>();
             builder.RegisterType<WatchDateCalendarService>().As<IWatchDateCalendarService>();
-            
-            
-        }
+			builder.RegisterType<HolidayService>().As<IHolidayService>();
+
+		}
 
         #endregion
     }
