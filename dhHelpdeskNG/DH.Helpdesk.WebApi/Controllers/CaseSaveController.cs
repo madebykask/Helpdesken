@@ -29,6 +29,8 @@ using DH.Helpdesk.WebApi.Infrastructure.Authentication;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
 using DH.Helpdesk.WebApi.Logic.Case;
 using DH.Helpdesk.WebApi.Logic.CaseFieldSettings;
+using DH.Helpdesk.Services.Utils;
+using DH.Helpdesk.Services.Infrastructure;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -57,6 +59,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ITemporaryFilesCache _userTempFilesStorage;
         private readonly ICaseSolutionSettingService _caseSolutionSettingService;
         private readonly IBaseCaseSolutionService _caseSolutionService;
+		private readonly IStateSecondaryService _stateSecondaryService;
 
         public CaseSaveController(ICaseService caseService, ICaseFieldSettingService caseFieldSettingService,
             ICaseLockService caseLockService, ICustomerService customerService, ISettingService customerSettingsService,
@@ -64,7 +67,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             ICaseFieldSettingsHelper caseFieldSettingsHelper, IWorkingGroupService workingGroupService, IEmailService emailService,
             ICaseFileService caseFileService, ICustomerUserService customerUserService, ILogFileService logFileService,
             IUserPermissionsChecker userPermissionsChecker, ILogService logService, ITemporaryFilesCache userTempFilesStorage,
-            ICaseSolutionSettingService caseSolutionSettingService, IBaseCaseSolutionService caseSolutionService)
+            ICaseSolutionSettingService caseSolutionSettingService, IBaseCaseSolutionService caseSolutionService, IStateSecondaryService stateSecondaryService)
         {
             _caseService = caseService;
             _caseFieldSettingService = caseFieldSettingService;
@@ -85,6 +88,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _userTempFilesStorage = userTempFilesStorage;
             _caseSolutionSettingService = caseSolutionSettingService;
             _caseSolutionService = caseSolutionService;
+			_stateSecondaryService = stateSecondaryService;
         }
 
         /// <summary>
@@ -295,28 +299,66 @@ namespace DH.Helpdesk.WebApi.Controllers
                 currentCase.VerifiedDescription = model.VerifiedDescription;
             if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.SolutionRate))
                 currentCase.SolutionRate = model.SolutionRate;
-            #endregion
+			#endregion
 
-            #region Status
-            //if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.FinishingDescription))
-            //    currentCase.FinishingDescription = model.FinishingDescription;
-            // if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.ClosingReason))
-            ////    currentCase = model.ClosingReason; // TODO: closing
-            //if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.FinishingDate))
-            //    currentCase.FinishingDate = model.FinishingDate;  // TODO: closing
+			#region Status
+			//if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.FinishingDescription))
+			//    currentCase.FinishingDescription = model.FinishingDescription;
+			// if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.ClosingReason))
+			////    currentCase = model.ClosingReason; // TODO: closing
+			//if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.FinishingDate))
+			//    currentCase.FinishingDate = model.FinishingDate;  // TODO: closing
 
-            //if (isNew)
-            //{
-            //    var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(currentCase.User_Id.Value, currentCase.Customer_Id);
-            //    if (userDefaultWorkingGroupId.HasValue)
-            //    {
-            //        currentCase.DefaultOwnerWG_Id = userDefaultWorkingGroupId;
-            //    }
-            //}
-            #endregion
+			//if (isNew)
+			//{
+			//    var userDefaultWorkingGroupId = this._userService.GetUserDefaultWorkingGroupId(currentCase.User_Id.Value, currentCase.Customer_Id);
+			//    if (userDefaultWorkingGroupId.HasValue)
+			//    {
+			//        currentCase.DefaultOwnerWG_Id = userDefaultWorkingGroupId;
+			//    }
+			//}
+			#endregion
 
+			var currentUser = _userService.GetUser(UserId);
+			var customerSettings = _customerSettingsService.GetCustomerSettings(cid);
+			var basePath = _settingsLogic.GetFilePath(customerSettings);
+			var customer = _customerService.GetCustomer(cid);
+			var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(User.Identity.GetTimezoneId());
 
-            var leadTime = 0;// TODO: add calculation
+			if (isEdit)
+			{
+				int[] departmentIds = null;
+				if (currentCase.Department_Id.HasValue)
+					departmentIds = new int[] { currentCase.Department_Id.Value };
+
+				var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+					ManualDependencyResolver.Get<IHolidayService>(),
+					customer.WorkingDayStart,
+					customer.WorkingDayEnd,
+					TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId));
+
+				var workTimeCalc = workTimeCalcFactory.Build(oldCase.RegTime, utcNow, departmentIds);
+
+				var casestatesecundary = _stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
+
+				if (casestatesecundary.IncludeInCaseStatistics == 0)
+				{
+					var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
+						oldCase.ChangeTime,
+						utcNow,
+						currentCase.Department_Id);
+					currentCase.ExternalTime += externalTimeToAdd;
+				}
+
+				var possibleWorktime = workTimeCalc.CalculateWorkTime(
+					currentCase.RegTime,
+					utcNow,
+					currentCase.Department_Id);
+
+				currentCase.LeadTime = possibleWorktime - currentCase.ExternalTime;
+			}
+
+			var leadTime = 0;// TODO: add calculation
             var actionLeadTime = 0;// TODO: add calculation
             var actionExternalTime = 0;// TODO: add calculation
 
@@ -329,11 +371,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             };
 
             IDictionary<string, string> errors;
-            var currentUser = _userService.GetUser(UserId);
-            var customerSettings = _customerSettingsService.GetCustomerSettings(cid);
-            var basePath = _settingsLogic.GetFilePath(customerSettings);
-            var customer = _customerService.GetCustomer(cid);
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(User.Identity.GetTimezoneId());
 
             var caseLog = new CaseLog()
             {

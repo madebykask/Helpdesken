@@ -3331,19 +3331,20 @@ namespace DH.Helpdesk.Web.Controllers
                             deptIds = new int[] { case_.Department_Id.Value };
                         }
 
-                        var workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, deptIds);
-                        case_.ExternalTime = workTimeCalc.CalculateWorkTime(
-                            oldCase.ChangeTime,
-                            utcNow,
-                            oldCase.Department_Id) + oldCase.ExternalTime;
+                        var workTimeCalc = workTimeCalcFactory.Build(oldCase.RegTime, utcNow, deptIds);
 
+						var externalTime = workTimeCalc.CalculateWorkTime(
+							oldCase.ChangeTime,
+							utcNow,
+							oldCase.Department_Id);
+						var newExternalTime = oldCase.ExternalTime + externalTime;
 
-                        workTimeCalcFactory =
-                        new WorkTimeCalculatorFactory(
-                            ManualDependencyResolver.Get<IHolidayService>(),
-                            curCustomer.WorkingDayStart,
-                            curCustomer.WorkingDayEnd,
-                            TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+						case_.ExternalTime = newExternalTime;
+
+						case_.LeadTime = workTimeCalc.CalculateWorkTime(
+							 oldCase.RegTime,
+							 utcNow,
+							 oldCase.Department_Id) - newExternalTime;
 
                         deptIds = null;
                         if (case_.Department_Id.HasValue)
@@ -3351,7 +3352,6 @@ namespace DH.Helpdesk.Web.Controllers
                             deptIds = new int[] { case_.Department_Id.Value };
                         }
 
-                        workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, deptIds, customerTimeOffset);
                         actionExternalTime = workTimeCalc.CalculateWorkTime(
                             oldCase.ChangeTime,
                             utcNow,
@@ -3379,7 +3379,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             case_.LatestSLACountDate = CalculateLatestSLACountDate(oldCase.StateSecondary_Id, case_.StateSecondary_Id, oldCase.LatestSLACountDate);
 
-            var leadTime = 0;
+            //var leadTimeForHistory = 0;
             var actionLeadTime = 0;
 
             if (caseLog != null && caseLog.FinishingType > 0)
@@ -3424,9 +3424,9 @@ namespace DH.Helpdesk.Web.Controllers
                 var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, case_.FinishingDate.Value, deptIds);
                 var possibleWorkTime = workTimeCalc.CalculateWorkTime(
                     case_.RegTime,
-                    case_.FinishingDate.Value.ToUniversalTime(),
+					utcNow,
                     case_.Department_Id); 
-                leadTime = possibleWorkTime - case_.ExternalTime;
+				var leadTime = possibleWorkTime - case_.ExternalTime;
 
                 case_.LeadTime = leadTime;
 
@@ -3472,7 +3472,8 @@ namespace DH.Helpdesk.Web.Controllers
                     case_.RegTime,
                     utcNow.ToUniversalTime(),
                     case_.Department_Id);
-                leadTime = possibleWorktime - case_.ExternalTime;
+				var leadTime = possibleWorktime - case_.ExternalTime;
+				case_.LeadTime = leadTime;
 
                 // ActionLeadTime Calc                
                 if (oldCase != null && oldCase.Id > 0)
@@ -3503,12 +3504,13 @@ namespace DH.Helpdesk.Web.Controllers
             var ei = new CaseExtraInfo()
             {
                 CreatedByApp = CreatedByApplications.Helpdesk5,
-                LeadTimeForNow = leadTime,
+                LeadTimeForNow = case_.LeadTime,
                 ActionLeadTime = actionLeadTime,
                 ActionExternalTime = actionExternalTime
             };
 
             // save case and case history
+			// TODO: better time calculation (move to a service)
             int caseHistoryId = _caseService.SaveCase(
                         case_,
                         caseLog,
@@ -3893,30 +3895,20 @@ namespace DH.Helpdesk.Web.Controllers
                     }
 
                     var workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, DateTime.UtcNow, deptIds);
-                    @case.ExternalTime = workTimeCalc.CalculateWorkTime(
+					var externalTime  = workTimeCalc.CalculateWorkTime(
                         oldCase.ChangeTime,
                         DateTime.UtcNow,
-                        oldCase.Department_Id) + oldCase.ExternalTime;
+                        oldCase.Department_Id);
 
+					@case.ExternalTime = oldCase.ExternalTime + externalTime;
+					actionExternalTime = externalTime;
 
-                    workTimeCalcFactory =
-                    new WorkTimeCalculatorFactory(
-                        ManualDependencyResolver.Get<IHolidayService>(),
-                        customer.WorkingDayStart,
-                        customer.WorkingDayEnd,
-                        TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-
-                    deptIds = null;
+					deptIds = null;
                     if (@case.Department_Id.HasValue)
                     {
                         deptIds = new int[] { @case.Department_Id.Value };
                     }
-
-                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, DateTime.UtcNow, deptIds, customerTimeOffset);
-                    actionExternalTime = workTimeCalc.CalculateWorkTime(
-                        oldCase.ChangeTime,
-                        DateTime.UtcNow,
-                        oldCase.Department_Id, customerTimeOffset);
+					
 
                 }
             }

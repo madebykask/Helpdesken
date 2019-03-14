@@ -852,7 +852,7 @@ namespace DH.Helpdesk.Services.Services
 			var utcNow = DateTime.UtcNow;
 			var workTimeCalc = workTimeCalcFactory.Build(_case.RegTime, utcNow, departmentIds);
 			var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
-				_case.FinishingDate.Value,
+				_case.ChangeTime,
 				utcNow,
 				_case.Department_Id);
 

@@ -10,46 +10,48 @@ using log4net;
 using log4net.Core;
 using WebGrease.Css.Extensions;
 using DH.Helpdesk.Common.Extensions.Boolean;
+using DH.Helpdesk.Services.Utils;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Linq;
-    using System.Net;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.WebPages;
+	using System;
+	using System.Collections.Generic;
+	using System.Configuration;
+	using System.Linq;
+	using System.Net;
+	using System.Web;
+	using System.Web.Mvc;
+	using System.Web.WebPages;
 
-    using DH.Helpdesk.BusinessData.Enums.Case;
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.SelfService.Infrastructure;
-    using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
-    using DH.Helpdesk.SelfService.Infrastructure.Extensions;
-    using DH.Helpdesk.SelfService.Infrastructure.Tools;
-    using DH.Helpdesk.SelfService.Models;
-    using DH.Helpdesk.SelfService.Models.Case;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Services.Services.Concrete;
-    using Models.Shared;
-    using BusinessData.Models.ExtendedCase;
-    using Services.Services.UniversalCase;
-    using Common.Extensions.Integer;
-    using Common.Extensions.String;
-    using Common.Extensions.DateTime;
-    using Infrastructure.Helpers;
-    using BusinessData.Models.Shared;
-    using Models.Message;
+	using DH.Helpdesk.BusinessData.Enums.Case;
+	using DH.Helpdesk.BusinessData.Models;
+	using DH.Helpdesk.BusinessData.Models.Case;
+	using DH.Helpdesk.BusinessData.OldComponents;
+	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+	using DH.Helpdesk.Common.Enums;
+	using DH.Helpdesk.Common.Tools;
+	using DH.Helpdesk.Dal.Enums;
+	using DH.Helpdesk.Domain;
+	using DH.Helpdesk.SelfService.Infrastructure;
+	using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
+	using DH.Helpdesk.SelfService.Infrastructure.Extensions;
+	using DH.Helpdesk.SelfService.Infrastructure.Tools;
+	using DH.Helpdesk.SelfService.Models;
+	using DH.Helpdesk.SelfService.Models.Case;
+	using DH.Helpdesk.Services.Services;
+	using DH.Helpdesk.Services.Services.Concrete;
+	using Models.Shared;
+	using BusinessData.Models.ExtendedCase;
+	using Services.Services.UniversalCase;
+	using Common.Extensions.Integer;
+	using Common.Extensions.String;
+	using Common.Extensions.DateTime;
+	using Infrastructure.Helpers;
+	using BusinessData.Models.Shared;
+	using Models.Message;
+	using Services.Infrastructure;
 
-    public class CaseController : BaseController
+	public class CaseController : BaseController
     {
         private readonly ILog _logger = LogManager.GetLogger(typeof(CaseController));
 
@@ -1192,30 +1194,60 @@ namespace DH.Helpdesk.SelfService.Controllers
             // save case history
 
             // unread/status flag update if not case is closed
-            if (!currentCase.FinishingDate.HasValue)
-                currentCase.Unread = 1;
+
+			var user = _userService.GetUserByLogin(SessionFacade.CurrentUserIdentity.UserId, null);
 
             if (currentCase.FinishingDate.HasValue)
             {
                 string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-				var userID = SessionFacade.CurrentLocalUser.Id;
-                this._caseService.Activate(currentCase.Id, userID, adUser, CreatedByApplications.SelfService5, out errors);
+                this._caseService.Activate(currentCase.Id, user.Id, adUser, CreatedByApplications.SelfService5, out errors);
                 caseIsActivated = true;
-            }
-                
+				currentCase = _caseService.GetCaseById(caseId);
+			}
 
-            // if statesecondary has ResetOnExternalUpdate
-            if (currentCase.StateSecondary_Id.HasValue)
+			if (!currentCase.FinishingDate.HasValue)
+				currentCase.Unread = 1;
+
+			int[] departmentIds = null;
+			if (currentCase.Department_Id.HasValue)
+				departmentIds = new int[] { currentCase.Department_Id.Value };
+			
+			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+				ManualDependencyResolver.Get<IHolidayService>(),
+				currentCustomer.WorkingDayStart,
+				currentCustomer.WorkingDayEnd,
+				TimeZoneInfo.FindSystemTimeZoneById(user.TimeZoneId));
+
+			var utcNow = DateTime.UtcNow;
+			var workTimeCalc = workTimeCalcFactory.Build(currentCase.RegTime, utcNow, departmentIds);
+
+			var possibleWorktime = workTimeCalc.CalculateWorkTime(
+				currentCase.RegTime,
+				utcNow,
+				currentCase.Department_Id);
+
+			// if statesecondary has ResetOnExternalUpdate
+			if (currentCase.StateSecondary_Id.HasValue)
             {
                 //get substatus
                 var casestatesecundary = _stateSecondaryService.GetStateSecondary(currentCase.StateSecondary_Id.Value);
 
                 if (casestatesecundary.ResetOnExternalUpdate == 1)
                     currentCase.StateSecondary_Id = null;
-            }
 
+				if (casestatesecundary.IncludeInCaseStatistics == 0)
+				{
+					var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
+						currentCase.ChangeTime,
+						utcNow,
+						currentCase.Department_Id);
+					currentCase.ExternalTime += externalTimeToAdd;
+				}
+			}
 
-            currentCase.ChangeTime = DateTime.UtcNow;
+			currentCase.LeadTime = possibleWorktime - currentCase.ExternalTime;
+
+			currentCase.ChangeTime = DateTime.UtcNow;
             int caseHistoryId = _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5,  out errors, SessionFacade.CurrentUserIdentity.UserId);            
             // save log
             var caseLog = new CaseLog
@@ -1247,17 +1279,17 @@ namespace DH.Helpdesk.SelfService.Controllers
                     {
                         if(currentCase.Department_Id.HasValue)
                         {
-                            foreach(var user in usersInWorkingGroup)
+                            foreach(var user_ in usersInWorkingGroup)
                             {
-                                var departments = _departmentService.GetDepartmentsByUserPermissions(user.Id, currentCase.Customer_Id);
+                                var departments = _departmentService.GetDepartmentsByUserPermissions(user_.Id, currentCase.Customer_Id);
 
                                 if(departments != null && departments.FirstOrDefault(x=>x.Id == currentCase.Department_Id.Value) != null)
                                 {
-                                    emailTo.Add(user.Email);
+                                    emailTo.Add(user_.Email);
                                 }
 
                                 if(departments == null)
-                                    emailTo.Add(user.Email);
+                                    emailTo.Add(user_.Email);
                             }
                         }
                         else
