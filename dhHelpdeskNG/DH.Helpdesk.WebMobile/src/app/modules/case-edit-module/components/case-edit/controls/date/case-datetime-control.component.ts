@@ -14,20 +14,20 @@ import { getLocaleDateFormat, FormatWidth, getLocaleTimeFormat } from "@angular/
     //@ViewChild('datetime') control: MbscDatetime
     @Input() field: BaseCaseField<string>;
     value?: Date;
-    options: MbscDatetimeOptions = {
+/*     options: MbscDatetimeOptions = {
       readOnly: true,
       disabled: true,
       returnFormat: 'iso8601',
       //dateFormat: getLocaleDateFormat(this.locale, FormatWidth.Medium),
       //timeFormat: getLocaleTimeFormat(this.locale, FormatWidth.Short)
     }
-
+ */
     constructor(@Inject(LOCALE_ID) locale: string) {
       super();
-      this.options.dateFormat = getLocaleDateFormat(locale, FormatWidth.Short)
+/*       this.options.dateFormat = getLocaleDateFormat(locale, FormatWidth.Short)
         .replace(new RegExp('M', 'g'), 'm');//different format letters
       this.options.timeFormat = getLocaleTimeFormat(locale, FormatWidth.Short)
-        .replace(new RegExp('m', 'g'), 'i');//different format letters
+        .replace(new RegExp('m', 'g'), 'i');//different format letters */
     }
 
     ngOnInit(): void {

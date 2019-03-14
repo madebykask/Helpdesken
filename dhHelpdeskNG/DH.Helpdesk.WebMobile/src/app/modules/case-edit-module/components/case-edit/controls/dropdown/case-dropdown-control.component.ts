@@ -19,10 +19,8 @@ export class CaseDropdownComponent extends BaseControl {
     @Input() field: BaseCaseField<number>;
     @Input() dataSource: BehaviorSubject<OptionItem[]>;
     @Input() disabled = false;
-    // text: string = '';
     settings: MbscSelectOptions = {
-      //buttons: ['set'],
-      //setText: '',
+      display: 'center',
       headerText: () => this.getHeader,
       onInit: (event, inst) => {
         if (this.field.isReadonly) {
@@ -48,8 +46,8 @@ export class CaseDropdownComponent extends BaseControl {
 
     ngOnInit(): void {
       // apply translations
-      this.control.setText = this.ngxTranslateService.instant("Välj");
-      this.control.cancelText = this.ngxTranslateService.instant("Avbryt");
+      this.control.setText = this.ngxTranslateService.instant('Välj');
+      this.control.cancelText = this.ngxTranslateService.instant('Avbryt');
 
       this.initDataSource();
       this.init(this.field);

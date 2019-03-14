@@ -25,7 +25,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         [HttpGet]
         [Route("options")]
-        public Task<List<ItemOverview>> Get(int cid, int? performerUserId = null, int? workingGroupId = null)
+        public async Task<List<ItemOverview>> Get(int cid, int? performerUserId = null, int? workingGroupId = null)
         {
             var customerSettings = _customerSettingsService.GetCustomerSettings(cid);
             IList<CustomerUserInfo> performersList;
@@ -57,7 +57,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     .ThenBy(it => it.FirstName)
                     .Select(u => new ItemOverview($"{u.SurName} {u.FirstName}", u.Id.ToString())).ToList();
 
-            return Task.FromResult(items);
+            return items;
         }
     }
 }
