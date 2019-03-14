@@ -111,7 +111,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public WorkingGroupEntity GetDefaultCreateCaseWorkingGroup(int customerId)
         {
-            return Table.AsNoTracking().FirstOrDefault(wg => wg.IsActive == 1 && wg.IsDefault == 1);
+            return Table.AsNoTracking()
+                .FirstOrDefault(wg => wg.IsActive == 1 && wg.IsDefault == 1 && wg.Customer_Id == customerId);
         }
 
         public IList<int> ListWorkingGroupsForUser(int userId)
