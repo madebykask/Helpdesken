@@ -11,7 +11,7 @@ $primary-color: #438eb9;
 $action-color: #007aff;
 $border-color:#ccc;
 $font-header-color: white;
-$error-color:  #ec2a32;
+$error-color:  #d8332a;
 
 .login {
     .mbsc-page {
@@ -97,7 +97,6 @@ mbsc-textarea textarea:disabled {
       border-radius: .5em;
     }       
     .mbsc-fr-w { background: #f7f7f7;}
-    }
 
     .mbsc-err-msg {
       position: static;
@@ -107,7 +106,7 @@ mbsc-textarea textarea:disabled {
   .dhselect-list {
     
     //header
-    .mbsc-fr-hdr {      
+    .mbsc-fr-hdr {
       color: #000;
       font-size: 16px;
       font-weight: 700;
@@ -124,7 +123,7 @@ mbsc-textarea textarea:disabled {
     .mbsc-sel-filter-cont {
         margin: 0px 10px;
         background: #e2e2e2;
-        padding: 5px 6px;        
+        padding: 5px 6px;
         .mbsc-input{
           padding-left: 10px;
           padding-right: 10px;
@@ -360,8 +359,9 @@ mbsc-textarea {
 .mbsc-ios {
   .mbsc-control-w {
     &.mbsc-err {
+      background-color: #ffeeee;
       .mbsc-label {
-        color:$error-color;
+        color: $error-color;
       }
     }
   }

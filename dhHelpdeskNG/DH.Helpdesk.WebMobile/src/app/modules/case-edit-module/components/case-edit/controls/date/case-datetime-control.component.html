@@ -1,2 +1,4 @@
 <!-- <mbsc-datetime #datetime [(ngModel)]="value" [options]="options" [hidden]="options.disabled">{{ formControl.label }}</mbsc-datetime> -->
-<mbsc-input #control [ngModel]="value | dateTimeFormat">{{ formControl.label }}</mbsc-input>
+<mbsc-input #control [ngModel]="value | dateTimeFormat" 
+[error]="getErrorState()"
+[errorMessage]="getErrorMessage()">{{ formControl.label }}</mbsc-input>
