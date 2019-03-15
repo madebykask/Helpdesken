@@ -10,9 +10,8 @@ import { FormStatuses } from "src/app/modules/shared-module/constants";
     templateUrl: './case-textbox-control.component.html',
     styleUrls: ['./case-textbox-control.component.scss']
   })
-  export class CaseTextboxComponent extends BaseControl {
+  export class CaseTextboxComponent extends BaseControl<string> {
     @ViewChild('input') control: any;
-    @Input() field: BaseCaseField<string>;
     @Input() disabled = false;
     
     ngOnInit(): void {
@@ -33,7 +32,7 @@ import { FormStatuses } from "src/app/modules/shared-module/constants";
     private get isFormControlDisabled() {
       return this.formControl.status == FormStatuses.DISABLED;
     }
-    
+
     private initEvents() {
       this.formControl.statusChanges // track disabled state in form
         .pipe(switchMap((e: any) => {

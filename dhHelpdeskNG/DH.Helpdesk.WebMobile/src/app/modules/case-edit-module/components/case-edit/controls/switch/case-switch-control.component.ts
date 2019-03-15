@@ -10,9 +10,8 @@ import { of } from "rxjs";
     templateUrl: './case-switch-control.component.html',
     styleUrls: ['./case-switch-control.component.scss']
   })
-  export class CaseSwitchComponent extends BaseControl {
+  export class CaseSwitchComponent extends BaseControl<boolean> {
     @ViewChild('control') control: any;
-    @Input() field: BaseCaseField<boolean>;
     @Input() description: string = "";
     @Input() disabled = false;
 

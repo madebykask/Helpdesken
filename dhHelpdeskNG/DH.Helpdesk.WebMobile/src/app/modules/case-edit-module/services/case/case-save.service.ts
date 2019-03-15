@@ -6,6 +6,7 @@ import { isNumeric } from "rxjs/internal/util/isNumeric";
 import { CaseEditOutputModel, CaseEditInputModel } from "../../models";
 import { CaseFieldsNames } from "src/app/modules/shared-module/constants";
 import { isBoolean } from "util";
+import { CaseFormGroup } from "src/app/modules/shared-module/models/forms";
 
 @Injectable({ providedIn: 'root' })
 export class CaseSaveService {
@@ -13,7 +14,7 @@ export class CaseSaveService {
   protected constructor(private caseApiService: CaseApiService ) {
   }
 
-  public saveCase(form: FormGroup, caseInputData: CaseEditInputModel): Observable<any> {
+  public saveCase(form: CaseFormGroup, caseInputData: CaseEditInputModel): Observable<any> {
     let model = new CaseEditOutputModel();
     model.caseId = caseInputData.id;
     model.caseGuid = caseInputData.caseGuid;
@@ -98,7 +99,7 @@ export class CaseSaveService {
     return this.caseApiService.saveCaseData(model);
   }
 
-  private getNumericValue(form: FormGroup, fieldName: string): number {
+  private getNumericValue(form: CaseFormGroup, fieldName: string): number {
     if (this.hasValue(form, fieldName)) {
       const value = form.controls[fieldName].value;
       if (value == null) return null;
@@ -110,7 +111,7 @@ export class CaseSaveService {
     return undefined;
   }
 
-  private getDateValue(form: FormGroup, fieldName: string): string
+  private getDateValue(form: CaseFormGroup, fieldName: string): string
   {
     if(this.hasValue(form, fieldName)) {
       const value = form.controls[fieldName].value;
@@ -120,7 +121,7 @@ export class CaseSaveService {
     return undefined;
   }
 
-  private getStringValue(form: FormGroup, fieldName: string): string
+  private getStringValue(form: CaseFormGroup, fieldName: string): string
   {
     if(this.hasValue(form, fieldName)) {
       return form.controls[fieldName].value;
@@ -128,7 +129,7 @@ export class CaseSaveService {
     return undefined;
   }
 
-  private getBooleanValue(form: FormGroup, fieldName: string): boolean
+  private getBooleanValue(form: CaseFormGroup, fieldName: string): boolean
   {
     if(this.hasValue(form, fieldName)) {
       const value = form.controls[fieldName].value;
@@ -141,7 +142,7 @@ export class CaseSaveService {
     return undefined;
   }
 
-  private hasValue(form: FormGroup, fieldName: string): boolean {
+  private hasValue(form: CaseFormGroup, fieldName: string): boolean {
     return form.controls[fieldName] != null;
   }
 }

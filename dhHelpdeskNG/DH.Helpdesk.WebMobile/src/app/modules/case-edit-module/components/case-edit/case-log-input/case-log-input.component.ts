@@ -1,12 +1,12 @@
-import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, OnInit, Input } from '@angular/core';
 import { CaseEditDataHelper } from '../../../logic/case-edit/case-editdata.helper';
-import { CaseEditInputModel, BaseCaseField, CaseLockModel, CaseAccessMode } from '../../../models';
+import { CaseEditInputModel, BaseCaseField, CaseAccessMode } from '../../../models';
 import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
 import { MbscListviewOptions } from '@mobiscroll/angular';
 import { Subject } from 'rxjs';
 import { CaseLogApiService } from '../../../services/api/case/case-log-api.service';
 import { take } from 'rxjs/internal/operators';
+import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms';
 
 
 @Component({
@@ -17,7 +17,7 @@ import { take } from 'rxjs/internal/operators';
 export class CaseLogInputComponent implements OnInit {
   
   @Input() caseKey:string;
-  @Input() form: FormGroup;
+  @Input() form: CaseFormGroup;
   @Input() caseData: CaseEditInputModel;
   @Input() accessMode: CaseAccessMode;
 
@@ -82,7 +82,7 @@ export class CaseLogInputComponent implements OnInit {
     return this.caseDataHelpder.getField(this.caseData, name);
   }
   
-  onFileDelete(event, inst){
+  onFileDelete(event){
     let index = +event.index ;
     let fileName = this.files[index];
     

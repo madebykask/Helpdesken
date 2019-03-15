@@ -10,9 +10,8 @@ import { of } from "rxjs";
     templateUrl: './case-textarea-control.component.html',
     styleUrls: ['./case-textarea-control.component.scss']
   })
-  export class CaseTextareaComponent extends BaseControl {
+  export class CaseTextareaComponent extends BaseControl<string> {
     @ViewChild('input') control: any;
-    @Input() field: BaseCaseField<string>;
     @Input() disabled = false;
 
     ngOnInit(): void {

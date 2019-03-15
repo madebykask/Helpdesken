@@ -1,4 +1,4 @@
-import { OnInit, OnDestroy, Component, Input, OnChanges, ViewChild, LOCALE_ID, Inject } from "@angular/core";
+import { Component, Input, ViewChild, LOCALE_ID, Inject } from "@angular/core";
 import { BaseCaseField } from "../../../../models";
 import { BaseControl } from "../base-control";
 import { MbscDatetimeOptions, MbscDatetime } from "@mobiscroll/angular";
@@ -9,10 +9,9 @@ import { getLocaleDateFormat, FormatWidth, getLocaleTimeFormat } from "@angular/
     templateUrl: './case-datetime-control.component.html',
     styleUrls: ['./case-datetime-control.component.scss']
   })
-  export class CaseDateTimeComponent extends BaseControl implements OnInit, OnDestroy {
+  export class CaseDateTimeComponent extends BaseControl<string> {
     @ViewChild('control') control: any;
     //@ViewChild('datetime') control: MbscDatetime
-    @Input() field: BaseCaseField<string>;
     value?: Date;
 /*     options: MbscDatetimeOptions = {
       readOnly: true,
@@ -23,7 +22,7 @@ import { getLocaleDateFormat, FormatWidth, getLocaleTimeFormat } from "@angular/
     }
  */
     constructor(@Inject(LOCALE_ID) locale: string) {
-      super();
+      super();      
 /*       this.options.dateFormat = getLocaleDateFormat(locale, FormatWidth.Short)
         .replace(new RegExp('M', 'g'), 'm');//different format letters
       this.options.timeFormat = getLocaleTimeFormat(locale, FormatWidth.Short)
@@ -31,6 +30,7 @@ import { getLocaleDateFormat, FormatWidth, getLocaleTimeFormat } from "@angular/
     }
 
     ngOnInit(): void {
+      this.init(this.field);
       this.control.disabled = true;
       //this.control.instance.setVal(new Date(this.field.value)); 
       this.value = this.field.value == null ? null : new Date(this.field.value);

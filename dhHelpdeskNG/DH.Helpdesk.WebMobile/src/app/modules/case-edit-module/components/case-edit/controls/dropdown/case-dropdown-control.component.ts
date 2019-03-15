@@ -14,9 +14,8 @@ import { TranslateService } from '@ngx-translate/core';
     templateUrl: './case-dropdown-control.component.html',
     styleUrls: ['./case-dropdown-control.component.scss']
   })
-export class CaseDropdownComponent extends BaseControl {
+export class CaseDropdownComponent extends BaseControl<number> {
     @ViewChild('control') control: any;
-    @Input() field: BaseCaseField<number>;
     @Input() dataSource: BehaviorSubject<OptionItem[]>;
     @Input() disabled = false;
     
@@ -81,7 +80,7 @@ export class CaseDropdownComponent extends BaseControl {
       if (!this.field) {
         return defaultValue;
       }
-      return this.field.label || defaultValue;
+      return this.formControl.label || defaultValue;
     }
 
     private initDataSource() {
@@ -113,7 +112,7 @@ export class CaseDropdownComponent extends BaseControl {
         this.dataSource.pipe(
           switchMap((options) => {
             options = options || [];
-            if (!this.formControl.value || (this.formControl.value && !this.field.isRequired)) {
+            if (!this.formControl.value || (this.formControl.value && !this.isRequired)) {
               this.addEmptyItem(options);
             }
             this.localDataSource = options;

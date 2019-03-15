@@ -7,11 +7,7 @@ import { BaseCaseField, KeyValue } from 'src/app/modules/case-edit-module/models
   templateUrl: './mailtoticket-control.component.html',
   styleUrls: ['./mailtoticket-control.component.scss']
 })
-export class MailtoticketControlComponent 
-              extends BaseControl 
-              implements OnInit {
-
-  @Input() field: BaseCaseField<number>; 
+export class MailtoticketControlComponent extends BaseControl<number> {
   
   mailTO: string[];
   mailCC: string[];

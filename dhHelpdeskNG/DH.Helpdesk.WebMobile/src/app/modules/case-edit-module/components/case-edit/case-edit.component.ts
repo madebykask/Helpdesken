@@ -25,6 +25,7 @@ import { CaseWatchDateApiService } from '../../services/api/case/case-watchDate-
 import { CaseFilesApiService } from '../../services/api/case/case-files-api.service';
 import { NotifierModel } from 'src/app/modules/shared-module/models/notifier/notifier.model';
 import { CaseTypesService } from 'src/app/services/case-organization/caseTypes-service';
+import { CaseFormControl, CaseFormGroup } from 'src/app/modules/shared-module/models/forms';
 
 @Component({
   selector: 'app-case-edit',
@@ -37,7 +38,7 @@ export class CaseEditComponent {
     accessModeEnum = CaseAccessMode;
     dataSource: CaseDataStore;
     isLoaded = false;
-    form: FormGroup;
+    form: CaseFormGroup;
     caseKey:string;
     
     titleTabsSettings = {
@@ -357,6 +358,7 @@ export class CaseEditComponent {
 
     saveCase() {
       if (!this.canSave) return;
+      this.form.submit();
       if (this.form.invalid) {
         this.alertService.showMessage('Some fields has errors. Please, resolve them before continue.', AlertType.Error);
         return
@@ -418,8 +420,8 @@ export class CaseEditComponent {
       });
     }
 
-    private createFormGroup(data: CaseEditInputModel): FormGroup {
-      let controls: { [key: string]: FormControl; } = {};
+    private createFormGroup(data: CaseEditInputModel): CaseFormGroup {
+      let controls: { [key: string]: CaseFormControl; } = {};
       data.fields.forEach(field => {
           let validators = [];
 
@@ -431,12 +433,14 @@ export class CaseEditComponent {
             validators.push(Validators.maxLength(field.maxLength))
           }
 
-          controls[field.name] = new FormControl({
+          let control = new CaseFormControl(field.label, {
             value: field.value === null ? '' : field.value,
             disabled: !this.canSave || field.isReadonly,
           }, validators);
+          control.isRequired = field.isRequired;
+          controls[field.name] = control;
       });
-      return new FormGroup(controls);
+      return new CaseFormGroup(controls);
     }
 
     private initLock() {

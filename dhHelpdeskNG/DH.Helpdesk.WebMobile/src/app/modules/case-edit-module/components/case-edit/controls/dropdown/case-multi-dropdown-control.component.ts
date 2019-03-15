@@ -15,10 +15,9 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
     templateUrl: './case-multi-dropdown-control.component.html',
     styleUrls: ['./case-multi-dropdown-control.component.scss']
   })
-  export class CaseMultiDropdownComponent extends BaseControl {
+  export class CaseMultiDropdownComponent extends BaseControl<number> {
     @ViewChild('textbox') textbox: any;
     @ViewChild('select') select: MbscSelect;
-    @Input() field: BaseCaseField<number>;
     @Input() dataSource: MultiLevelOptionItem[] = [];
     @Input() disabled = false;
     text: string = "";
@@ -89,7 +88,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
       if (!this.field) {
         return defaultValue;
       }
-      return this.field.label || defaultValue;
+      return this.formControl.label || defaultValue;
     }
 
     public openSelect() {

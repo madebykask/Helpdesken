@@ -1,11 +1,11 @@
 <div class="mbsc-label case-section-title">Mail To tickets</div>
 <div class="mbsc-grid">
-    <div class="mbsc-row" *ngIf="mailTO.length">        
+    <div class="mbsc-row" *ngIf="mailTO.length">
         <div class="mbsc-col-2">TO</div>
         <div class="mbsc-col">
             <ul class="nostyle">
                 <li *ngFor="let email of mailTO">{{ email }}</li>
-            </ul>      
+            </ul>
         </div>
     </div>
     <div class="mbsc-row" *ngIf="mailCC.length">
@@ -13,7 +13,7 @@
         <div class="mbsc-col">
             <ul class="nostyle">
                 <li *ngFor="let email of mailCC">{{ email }}</li>
-            </ul>      
+            </ul>
         </div>
     </div>
 </div>

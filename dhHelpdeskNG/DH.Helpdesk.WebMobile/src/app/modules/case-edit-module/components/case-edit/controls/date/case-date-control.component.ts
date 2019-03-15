@@ -15,10 +15,9 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
     templateUrl: './case-date-control.component.html',
     styleUrls: ['./case-date-control.component.scss']
   })
-  export class CaseDateComponent extends BaseControl {
+  export class CaseDateComponent extends BaseControl<string> {
     // @ViewChild('control') control: any;
     @ViewChild('date') control: MbscCalendar;
-    @Input() field: BaseCaseField<string>;
     @Input() disabled = false;
     value?: string;
     options: MbscCalendarOptions = {

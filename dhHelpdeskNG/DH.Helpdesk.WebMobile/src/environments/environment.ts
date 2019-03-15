@@ -1,6 +1,6 @@
 
 import 'zone.js/dist/zone-error';
-import { VERSION } from './version'
+import { VERSION } from './version';
 declare const require: any;
 
 // This file can be replaced during build by using the `fileReplacements` array.
@@ -13,12 +13,12 @@ export const environment = {
 
 export const config = {
       // apiUrl: 'http://dhutvas3.datahalland.se:8049',
-      apiUrl: 'http://localhost:8049',      
+      apiUrl: 'http://192.168.1.182:8049',
       clientId: 'hd',
       version: VERSION.fullVersion,
       internalVersion: require('../../package.json').version,
       enableLog: true,
-}
+};
 
 /*
  * In development mode, to ignore zone related error stack frames such as

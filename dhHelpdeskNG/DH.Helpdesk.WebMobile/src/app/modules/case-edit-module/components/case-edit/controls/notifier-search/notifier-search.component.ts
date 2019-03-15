@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { MbscSelectOptions, MbscSelect } from '@mobiscroll/angular';
-import { BaseCaseField } from 'src/app/modules/case-edit-module/models';
 import { BaseControl } from '../base-control';
 import { TranslateService } from '@ngx-translate/core';
 import { Channels, CommunicationService } from 'src/app/services/communication';
@@ -16,11 +15,10 @@ import { FormStatuses } from 'src/app/modules/shared-module/constants';
   templateUrl: './notifier-search.component.html',
   styleUrls: ['./notifier-search.component.scss']
 })
-export class NotifierSearchComponent extends BaseControl implements OnInit {
+export class NotifierSearchComponent extends BaseControl<string> {
 
   @ViewChild('notifierInput') notifierInput: any;
   @ViewChild('notifierSelect') notifierSelect: MbscSelect;
-  @Input() field: BaseCaseField<string>;
   @Input() disabled = false;
 
   notifiersData: any[] = [];

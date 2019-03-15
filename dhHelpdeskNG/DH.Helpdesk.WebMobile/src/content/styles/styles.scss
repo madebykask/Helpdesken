@@ -11,6 +11,7 @@ $primary-color: #438eb9;
 $action-color: #007aff;
 $border-color:#ccc;
 $font-header-color: white;
+$error-color:  #ec2a32;
 
 .login {
     .mbsc-page {
@@ -96,6 +97,11 @@ mbsc-textarea textarea:disabled {
       border-radius: .5em;
     }       
     .mbsc-fr-w { background: #f7f7f7;}
+    }
+
+    .mbsc-err-msg {
+      position: static;
+    }
   }
 
   .dhselect-list {
@@ -350,3 +356,13 @@ mbsc-textarea {
     }
   }
 }
+
+.mbsc-ios {
+  .mbsc-control-w {
+    &.mbsc-err {
+      .mbsc-label {
+        color:$error-color;
+      }
+    }
+  }
+} 
