@@ -71,23 +71,37 @@ mbsc-textarea textarea:disabled {
 
   .dhselect {
     .mbsc-input-wrap { padding-top:0px!important; }
-    &.noinput .mbsc-input { margin:0px!important; }
+    &.noinput .mbsc-input { 
+      margin:0px!important; 
+    }
   }
 
+  //mobiscroll theme overrides
   .mbsc-mobiscroll {
+
     .mbsc-input {
       margin:0px!important;
-      input { border-bottom: none 0!important; }
+      input { border-bottom: 0px!important; }
     }
 
     .mbsc-sc-whl-l {
       border-top: 1px solid $border-color;
       border-bottom: 1px solid $border-color;
-    }
+    }   
+    
+    .mbsc-sc-itm-sel, 
+    .mbsc-sc-itm-sel:before   { color: $action-color!important; }
+
+    &.mbsc-fr-center .mbsc-fr-w {
+      border-radius: .5em;
+    }       
+    .mbsc-fr-w { background: #f7f7f7;}
   }
 
   .dhselect-list {
-    .mbsc-fr-hdr {
+    
+    //header
+    .mbsc-fr-hdr {      
       color: #000;
       font-size: 16px;
       font-weight: 700;
@@ -103,22 +117,26 @@ mbsc-textarea textarea:disabled {
     //filter input
     .mbsc-sel-filter-cont {
         margin: 0px 10px;
+        background: #e2e2e2;
+        padding: 5px 6px;        
+        .mbsc-input{
+          padding-left: 10px;
+          padding-right: 10px;
+        }
         input { 
+          height:2em;
+          background: #fff;
           padding-left:10px;
           font-size:14px; 
+          border-radius: .325em;
         }
         input:focus { border-color:$action-color; }
-    }    
-    
-    .mbsc-sc-itm {
-      font-size:14px!important;
+        input::placeholder { color: #c0c0c0; }
     }
-
+    //item text
+    .mbsc-sc-itm { font-size:14px!important; }
     //buttons
-    .mbsc-fr-btn-cont {
-      text-align: center!important;
-      
-    }
+    .mbsc-fr-btn-cont {  text-align: center!important; }
 
     .mbsc-fr-btn {
       color: $action-color!important;
