@@ -29,15 +29,18 @@ export class NotifierSearchComponent extends BaseControl implements OnInit {
 
   selectOptions: MbscSelectOptions = {
     //showInput: false,
-    //showLabel: true,
-    
+    circular: false,
+    showLabel: false,
+    theme:"mobiscroll",
     showOnTap: true,
-    cssClass: "search-list",
+    cssClass: "search-list dhselect-list",
+    inputClass: "noinput",
     input: "#notifierInput",
     filter: true,
-    display: "bottom",
+    display: "center",
+    maxWidth: 400,
     multiline: 2,
-    height: 40,
+    //height: 40,
 
     onFilter: (event, inst) => {
       const filterText = event.filterText || '';

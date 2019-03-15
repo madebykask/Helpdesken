@@ -8,6 +8,8 @@ html,body, iframe {
 }
 
 $primary-color: #438eb9;
+$action-color: #007aff;
+$border-color:#ccc;
 $font-header-color: white;
 
 .login {
@@ -66,6 +68,62 @@ $font-header-color: white;
 mbsc-textarea textarea:disabled {
     opacity: 0.5;
 }
+
+  .dhselect {
+    .mbsc-input-wrap { padding-top:0px!important; }
+    &.noinput .mbsc-input { margin:0px!important; }
+  }
+
+  .mbsc-mobiscroll {
+    .mbsc-input {
+      margin:0px!important;
+      input { border-bottom: none 0!important; }
+    }
+
+    .mbsc-sc-whl-l {
+      border-top: 1px solid $border-color;
+      border-bottom: 1px solid $border-color;
+    }
+  }
+
+  .dhselect-list {
+    .mbsc-fr-hdr {
+      color: #000;
+      font-size: 16px;
+      font-weight: 700;
+      text-overflow: ellipsis;
+      padding-bottom: 10px;
+      white-space: nowrap;
+      line-height: 1.25em;
+      text-transform: none;
+      min-height: auto;
+      border-bottom: 1px solid $border-color;
+    }
+    
+    //filter input
+    .mbsc-sel-filter-cont {
+        margin: 0px 10px;
+        input { 
+          padding-left:10px;
+          font-size:14px; 
+        }
+        input:focus { border-color:$action-color; }
+    }    
+    
+    .mbsc-sc-itm {
+      font-size:14px!important;
+    }
+
+    //buttons
+    .mbsc-fr-btn-cont {
+      text-align: center!important;
+      
+    }
+
+    .mbsc-fr-btn {
+      color: $action-color!important;
+    }
+  }  
 
 /* .mbsc-ios.mbsc-page {
     background: white !important;

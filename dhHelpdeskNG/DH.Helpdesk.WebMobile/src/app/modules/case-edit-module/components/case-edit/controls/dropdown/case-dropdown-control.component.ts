@@ -19,8 +19,12 @@ export class CaseDropdownComponent extends BaseControl {
     @Input() field: BaseCaseField<number>;
     @Input() dataSource: BehaviorSubject<OptionItem[]>;
     @Input() disabled = false;
+    
+    //select settings
     settings: MbscSelectOptions = {
       display: 'center',
+      theme: "mobiscroll",
+      cssClass:"dhselect-list",
       headerText: () => this.getHeader,
       onInit: (event, inst) => {
         if (this.field.isReadonly) {
@@ -37,9 +41,10 @@ export class CaseDropdownComponent extends BaseControl {
         this.commService.publish(Channels.DropdownValueChanged, new DropdownValueChangedEvent(value, event.valueText, this.field.name));
       }
     }
+
     localDataSource: OptionItem[] = [];
 
-    constructor(private commService: CommunicationService,
+    constructor(private commService: CommunicationService, 
       private ngxTranslateService: TranslateService) {
       super();
     }
