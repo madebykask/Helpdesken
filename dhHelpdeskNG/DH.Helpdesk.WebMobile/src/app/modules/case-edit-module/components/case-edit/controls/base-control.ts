@@ -11,7 +11,7 @@ export class BaseControl<T> {
   @Input('readonly') readOnly: false;
 
   @Input() field: IBaseCaseField<T>;
-  protected formControl: CaseFormControl;
+  public formControl: CaseFormControl;
   protected destroy$ = new Subject();
 
   constructor() {
