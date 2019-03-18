@@ -2,12 +2,12 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { MbscSelectOptions, MbscSelect } from '@mobiscroll/angular';
 import { BaseControl } from '../base-control';
 import { TranslateService } from '@ngx-translate/core';
-import { Channels, CommunicationService } from 'src/app/services/communication';
+import { Channels, CommunicationService, NotifierChangedEvent } from 'src/app/services/communication';
 import { NotifierService } from 'src/app/modules/case-edit-module/services/notifier.service';
 import { take, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Subject, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { NotifierSearchItem } from 'src/app/modules/shared-module/models/notifier/notifier.model';
+import { NotifierSearchItem, NotifierType } from 'src/app/modules/shared-module/models/notifier/notifier.model';
 import { FormStatuses } from 'src/app/modules/shared-module/constants';
 
 @Component({
@@ -20,20 +20,21 @@ export class NotifierSearchComponent extends BaseControl<string> {
   @ViewChild('notifierInput') notifierInput: any;
   @ViewChild('notifierSelect') notifierSelect: MbscSelect;
   @Input() disabled = false;
+  @Input() notifierType: NotifierType;
 
   notifiersData: any[] = [];
 
   private usersSearchSubject = new Subject<string> ();
 
   selectOptions: MbscSelectOptions = {
-    //showInput: false,
+    input: "#notifierInput",
+    //showInput: true,
+    //showLabel: false,
+    showOnTap: false,
     circular: false,
-    showLabel: false,
     theme:"mobiscroll",
-    showOnTap: true,
     cssClass: "search-list dhselect-list",
     inputClass: "noinput",
-    input: "#notifierInput",
     filter: true,
     display: "center",
     maxWidth: 400,
@@ -58,7 +59,6 @@ export class NotifierSearchComponent extends BaseControl<string> {
         this.onNotifierSelected(val);
       }
     }
-
   };
   
   constructor(private notifierService: NotifierService,
@@ -136,7 +136,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
       take(1)
     ).subscribe(x => {
       //raise event to handle notfier change on case edit component
-      this.commService.publish(Channels.NotifierChanged, x);
+      this.commService.publish(Channels.NotifierChanged, new NotifierChangedEvent(x, this.notifierType));
     });
   }
 

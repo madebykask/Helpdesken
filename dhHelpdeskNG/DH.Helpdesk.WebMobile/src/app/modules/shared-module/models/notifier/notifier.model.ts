@@ -1,6 +1,11 @@
 
+export enum NotifierType {
+  Initiator = 1,
+  Regarding
+}
+
 export class NotifierModel {  
-  constructor(){    
+  constructor() {
   }
 
   id:number;

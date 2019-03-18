@@ -4,7 +4,8 @@
                         <div class="mbsc-grid mbsc-grid-sm" >
                                 <div class="mbsc-row" *ngIf="showSearchPanel">
                                         <div class="mbsc-col">
-                                                <mbsc-input #searchInput type="search" formControlName="freeSearch" icon="fa-search" placeholder="{{'Sök' | translate }}" input-style="box"></mbsc-input>
+                                                <mbsc-input #searchInput type="search" formControlName="freeSearch" 
+                                                    icon="fa-search" placeholder="{{'Sök' | translate }}" input-style="box"></mbsc-input>
                                         </div>
                                         <div class="mbsc-col-sm-auto">
                                                 <a [ngClass]="{'inactive':isLoading}" (click)="cancelSearch()" translate>Avbryt</a>

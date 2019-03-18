@@ -37,7 +37,7 @@
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Initiator) }}</mbsc-form-group-title>
                 <mbsc-form-group-content >
                     <!-- TODO: ComputerUserCategories -->
-                    <notifier-search *ngIf="hasField(caseFieldsNames.ReportedBy)" [field]="getField(caseFieldsNames.ReportedBy)" [form]="form"></notifier-search>
+                    <notifier-search *ngIf="hasField(caseFieldsNames.ReportedBy)" [field]="getField(caseFieldsNames.ReportedBy)" [notifierType]="notifierTypes.Initiator" [form]="form"></notifier-search>
                     <case-textbox-control *ngIf="hasField(caseFieldsNames.PersonName)" [field]="getField(caseFieldsNames.PersonName)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="hasField(caseFieldsNames.PersonEmail)" [field]="getField(caseFieldsNames.PersonEmail)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="hasField(caseFieldsNames.PersonPhone)" [field]="getField(caseFieldsNames.PersonPhone)" [form]="form"></case-textbox-control>

@@ -10,6 +10,17 @@ export class CaseFormGroup extends FormGroup {
     super(controls, validatorOrOpts, asyncValidator);
   }
 
+  public get(name: string) {
+    return <CaseFormControl>super.get(name);
+  }
+
+  public setSafe(name:string, val:any, raiseValueChange:boolean = true) {
+    const control = <CaseFormControl>super.get(name);
+    if (control === undefined || control === null)
+      return;
+    control.setValue(val, { emitEvent: raiseValueChange });
+  }
+
   public get isSubmitted() {
     return this.isSubmitted$.value;
   }
@@ -22,10 +33,6 @@ export class CaseFormGroup extends FormGroup {
   public get caseControls(): CaseFormControl[] {
     return Object.keys(this.controls)
     .map(k => this.controls[k] as CaseFormControl);
-  }
-
-  public get(name: string) {
-    return <CaseFormControl>super.get(name);
   }
 
 }

@@ -5,7 +5,7 @@ import { CaseService } from '../../services/case/case.service';
 import { forkJoin, Subject, Subscription, of, throwError, interval } from 'rxjs';
 import { switchMap, take, finalize, delay, catchError, map, takeUntil, takeWhile, filter, } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
-import { CommunicationService, Channels, DropdownValueChangedEvent } from 'src/app/services/communication/communication.service';
+import { CommunicationService, Channels, DropdownValueChangedEvent, NotifierChangedEvent } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/data/header-event-data';
 import { AuthenticationStateService } from 'src/app/services/authentication';
 import { WorkingGroupsService } from 'src/app/services/case-organization/workingGroups-service';
@@ -23,7 +23,7 @@ import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseWatchDateApiService } from '../../services/api/case/case-watchDate-api.service';
 import { CaseFilesApiService } from '../../services/api/case/case-files-api.service';
-import { NotifierModel } from 'src/app/modules/shared-module/models/notifier/notifier.model';
+import { NotifierModel, NotifierType } from 'src/app/modules/shared-module/models/notifier/notifier.model';
 import { CaseTypesService } from 'src/app/services/case-organization/caseTypes-service';
 import { CaseFormControl, CaseFormGroup } from 'src/app/modules/shared-module/models/forms';
 
@@ -53,6 +53,7 @@ export class CaseEditComponent {
 
     currentTab = 'case_details';
     caseActions: CaseAction<CaseActionDataType>[] = [];
+    notifierTypes = NotifierType;
 
     private searchType: CasesSearchType = CasesSearchType.AllCases;
     private isNewCase: boolean = false;
@@ -127,27 +128,32 @@ export class CaseEditComponent {
       ).subscribe((v: DropdownValueChangedEvent) => this.runUpdates(v));
 
       //Notifier changed
-      this.commService.listen<NotifierModel>(Channels.NotifierChanged).pipe(
+      this.commService.listen<NotifierChangedEvent>(Channels.NotifierChanged).pipe(
         takeUntil(this.destroy$)
       ).subscribe(data => this.processNotifierChanged(data));
     }
 
-    private processNotifierChanged(data: NotifierModel) {
-      console.log('notifier changed:');
-      console.dir(data);
-      
-      this.form.get(CaseFieldsNames.ReportedBy).setValue(data.userId);
-      this.form.get(CaseFieldsNames.PersonName).setValue(data.name || '');
-      this.form.get(CaseFieldsNames.PersonEmail).setValue(data.email || '');
-      this.form.get(CaseFieldsNames.PersonCellPhone).setValue(data.cellphone || '');
-      this.form.get(CaseFieldsNames.Place).setValue(data.place || '');
-      //this.form.get(CaseFieldsNames.UserCode).setValue(data.userCode);
-      //this.form.get(CaseFieldsNames.CostCentre).setValue(data.costCentre);
-      
-      //TODO:region and department
-      if (data.regionId && data.departmentId) {
-        this.form.get(CaseFieldsNames.RegionId).setValue(data.regionId);
-        this.form.get(CaseFieldsNames.DepartmentId).setValue(data.departmentId);
+    private processNotifierChanged(eventData: NotifierChangedEvent) {
+      const data = eventData.notifier;
+
+      if (eventData.type === NotifierType.Initiator) {
+        this.form.setSafe(CaseFieldsNames.ReportedBy,  data.userId || '');
+        this.form.setSafe(CaseFieldsNames.PersonName, data.name || '');
+        this.form.setSafe(CaseFieldsNames.PersonEmail, data.email || '');
+        this.form.setSafe(CaseFieldsNames.PersonCellPhone, data.cellphone || '');
+        this.form.setSafe(CaseFieldsNames.Place, data.place || '');
+        this.form.setSafe(CaseFieldsNames.UserCode, data.userCode || '');
+        this.form.setSafe(CaseFieldsNames.CostCentre, data.costCentre || '');
+        //TODO: 
+        //this.form.setSafe(CaseFieldsNames.OrganizationUnitId, data.ouId);
+        //TODO: check region and department
+        if (data.regionId && data.departmentId) {
+          this.form.setSafe(CaseFieldsNames.RegionId, data.regionId);
+          this.form.setSafe(CaseFieldsNames.DepartmentId, data.departmentId);
+        }
+      }
+      else if (eventData.type === NotifierType.Regarding) {
+        //TODO: implement for regarding 
       }
     }
 

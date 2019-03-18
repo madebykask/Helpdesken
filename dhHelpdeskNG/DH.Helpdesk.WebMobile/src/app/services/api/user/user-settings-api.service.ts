@@ -41,9 +41,9 @@ export class UserSettingsApiService extends HttpApiServiceBase {
             if (data.timeZone) {
               user.currentData.userTimeZone = data.timeZone;
             }
-            user.currentData.ownCasesOnly = data.ownCasesOnly != undefined ? data.ownCasesOnly : true;
-            user.currentData.createCasePermission = data.createCasePermission != undefined ? data.createCasePermission : false;
-            user.currentData.canDeleteAttachedFiles = data.deleteAttachedFiles != undefined ? data.deleteAttachedFiles : false;
+            user.currentData.ownCasesOnly = data.ownCasesOnly !== undefined ? data.ownCasesOnly : true;
+            user.currentData.createCasePermission = data.createCasePermission !== undefined ? data.createCasePermission : false;
+            user.currentData.canDeleteAttachedFiles = data.deleteAttachedFiles !== undefined ? data.deleteAttachedFiles : false;
           
             this.localStorageService.setCurrentUser(user);
             return user;
