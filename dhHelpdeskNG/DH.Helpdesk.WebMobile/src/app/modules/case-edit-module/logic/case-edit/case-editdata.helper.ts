@@ -33,7 +33,7 @@ export class CaseEditDataHelper {
     if(caseData === null) {
         throw new Error('No Case Data.');
     }
-    return caseData.fields.filter(f => f.section === type).length > 0;
+    return caseData.fields.filter(f => f.section === type && !f.isHidden).length > 0;
   }
 
   getField(caseData: CaseEditInputModel, name: string): BaseCaseField<any> {

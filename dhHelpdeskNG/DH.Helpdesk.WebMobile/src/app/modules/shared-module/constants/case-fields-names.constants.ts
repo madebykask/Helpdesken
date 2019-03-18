@@ -82,5 +82,6 @@ export const CaseFieldOptions = {
   required: 'required',
   readonly: 'readonly',
   maxlength: 'maxlength',
-  setByTemplate: 'setbytemplate'
+  setByTemplate: 'setbytemplate',
+  isHidden: 'hidden'
 }

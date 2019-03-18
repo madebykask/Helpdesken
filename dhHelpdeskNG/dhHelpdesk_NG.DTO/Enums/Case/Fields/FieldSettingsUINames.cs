@@ -70,6 +70,7 @@ namespace DH.Helpdesk.BusinessData.Enums.Case.Fields
             { GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), "Understatus"},
             { GlobalEnums.TranslationCaseFields.Project.ToString(), "Project"},
             { GlobalEnums.TranslationCaseFields.Problem.ToString(), "Problem"},
+            { GlobalEnums.TranslationCaseFields.Change.ToString(), "Ändring"},
             { GlobalEnums.TranslationCaseFields.PlanDate.ToString(), "Planerad åtgärdsdatum"},
             { GlobalEnums.TranslationCaseFields.WatchDate.ToString(), "Bevakningsdatum"},
             { GlobalEnums.TranslationCaseFields.Verified.ToString(), "Verifierad"},

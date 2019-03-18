@@ -1,6 +1,6 @@
-<mbsc-textarea #textbox [(ngModel)]="text" [readonly]="true" (click)="openSelect()" [ngClass]="'select-textarea'">{{ getHeader }}{{ requiredSymbol }}</mbsc-textarea> 
-<ng-container [formGroup]="form">
-  <mbsc-select #select [formControlName]="field.name" [options]="settings"
+<mbsc-textarea #textbox [(ngModel)]="text" [readonly]="true" (click)="openSelect()" [ngClass]="'select-textarea'"
   [error]="getErrorState()"
-  [errorMessage]="getErrorMessage()"></mbsc-select>
+  [errorMessage]="getErrorMessage()">{{ getHeader }}{{ requiredSymbol }}</mbsc-textarea> 
+<ng-container [formGroup]="form">
+  <mbsc-select #select [formControlName]="field.name" [options]="settings"></mbsc-select>
 </ng-container>

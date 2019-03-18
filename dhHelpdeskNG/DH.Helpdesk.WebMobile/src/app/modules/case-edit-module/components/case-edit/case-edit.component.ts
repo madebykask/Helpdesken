@@ -324,8 +324,8 @@ export class CaseEditComponent {
       return this.caseDataHelpder.getCaseTitle(this.caseData);
     }
 
-    hasField(name: string): boolean {
-      return this.caseDataHelpder.hasField(this.caseData, name);
+    showField(name: string): boolean {
+      return this.caseDataHelpder.hasField(this.caseData, name) && !this.getField(name).isHidden;
     }
 
     hasSection(type: CaseSectionType): boolean {
@@ -444,6 +444,7 @@ export class CaseEditComponent {
             disabled: !this.canSave || field.isReadonly,
           }, validators);
           control.isRequired = field.isRequired;
+          control.isHidden = field.isHidden;
           controls[field.name] = control;
       });
       return new CaseFormGroup(controls);

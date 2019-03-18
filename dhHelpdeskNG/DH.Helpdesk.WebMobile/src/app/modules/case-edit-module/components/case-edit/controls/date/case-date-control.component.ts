@@ -1,8 +1,6 @@
 import { Component, Input, ViewChild, Inject, LOCALE_ID } from "@angular/core";
-import { BaseCaseField } from "../../../../models";
 import { BaseControl } from "../base-control";
 import { MbscCalendarOptions, MbscCalendar } from "@mobiscroll/angular";
-import { FormatWidth, getLocaleDateFormat } from "@angular/common";
 import { switchMap, takeUntil } from "rxjs/operators";
 import { of } from "rxjs";
 import { DateTime } from "luxon";
@@ -21,6 +19,7 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
     @Input() disabled = false;
     value?: string;
     options: MbscCalendarOptions = {
+      theme: 'mobiscroll',
       display: 'center',
       returnFormat: 'iso8601',
       formatValue: (data) => {

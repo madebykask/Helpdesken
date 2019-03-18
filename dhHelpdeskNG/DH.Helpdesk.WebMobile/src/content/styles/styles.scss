@@ -101,6 +101,12 @@ mbsc-textarea textarea:disabled {
     .mbsc-err-msg {
       position: static;
     }
+
+    .mbsc-input  {
+      .mbsc-label~.mbsc-input-wrap {
+        padding-top: 0;
+      }
+    }
   }
 
   .dhselect-list {
