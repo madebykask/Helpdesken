@@ -52,10 +52,10 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpGet]
         [CheckUserCasePermissions(CaseIdParamName = "caseId")]
         [Route("{caseId:int}/File/{fileId:int}")] //ex: /api/Case/123/File/1203?cid=1
-        public Task<IHttpActionResult> Get([FromUri]int caseId, [FromUri]int fileId, [FromUri]int cid, bool? inline = false)
+        public Task<IHttpActionResult> Get([FromUri] int caseId, [FromUri] int fileId, [FromUri] int cid, bool? inline = false)
         {
             var fileContent = _caseFileService.GetCaseFile(cid, caseId, fileId, true); //TODO: async
-        
+
             IHttpActionResult res = new FileResult(fileContent.FileName, fileContent.Content, Request, inline ?? false);
             return Task.FromResult(res);
         }
@@ -93,9 +93,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             return BadRequest("Failed to upload a file");
         }
 
+        
         [HttpPost]
-        [Route("{caseKey:int}/file")] // remember to update WebApiCorsPolicyProvider if url is changed
-        public async Task<IHttpActionResult> UploadCaseFile([FromUri]int caseKey)
+        [Route("{caseId:int}/file")] // remember to update WebApiCorsPolicyProvider if url is changed
+        [CheckUserCasePermissions(CaseIdParamName = "caseId")]
+        public async Task<IHttpActionResult> UploadCaseFile([FromUri]int caseId, [FromUri]int cid)
         {
             var now = DateTime.Now;
             
@@ -107,7 +109,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             var filesReadToProvider = await Request.Content.ReadAsMultipartAsync();
             
-            var customerId = _caseService.GetCaseCustomerId(caseKey);
+            var customerId = _caseService.GetCaseCustomerId(caseId);
             var basePath = GetBasePath(customerId);
 
             var stream = filesReadToProvider.Contents.FirstOrDefault();
@@ -117,7 +119,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var fileBytes = await stream.ReadAsByteArrayAsync();
                 var fileName = stream.Headers.ContentDisposition.FileName.Unquote().Trim();
 
-                if (_caseFileService.FileExists(caseKey, fileName))
+                if (_caseFileService.FileExists(caseId, fileName))
                 {
                     fileName = $"{now}-{fileName}"; // handle on the client filename change
                 }
@@ -127,7 +129,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     basePath,
                     fileName,
                     now,
-                    caseKey,
+                    caseId,
                     UserId);
 
                 var fileId = _caseFileService.AddFile(caseFileDto);
@@ -154,18 +156,18 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpDelete]
-        [Route("{caseKey:int}/file/{fileId:int}")]
+        [Route("{caseId:int}/file/{fileId:int}")]
+        [CheckUserCasePermissions(CaseIdParamName = "caseId")]
         [CheckUserPermissions(UserPermission.DeleteAttachedFilePermission)]
-        public IHttpActionResult DeleteCaseFile(int caseKey, int fileId)
+        public async Task<IHttpActionResult> DeleteCaseFile(int caseId, int fileId)
         {
-            //todo: make Async
-
-            var c = _caseService.GetCaseById(caseKey);
+            var c = await _caseService.GetCaseByIdAsync(caseId);
             var customerId = c.Customer_Id;
             var basePath = GetBasePath(customerId);
 
-            var caseFileInfo = _caseFileService.GetCaseFile(caseKey, fileId);
-            _caseFileService.DeleteByCaseIdAndFileName(caseKey, basePath, caseFileInfo.FileName);
+            //todo: async
+            var caseFileInfo = _caseFileService.GetCaseFile(caseId, fileId);
+            _caseFileService.DeleteByCaseIdAndFileName(caseId, basePath, caseFileInfo.FileName);
 
             //todo: ?
             //_invoiceArticleService.DeleteFileByCaseId(int.Parse(id), fileName.Trim());

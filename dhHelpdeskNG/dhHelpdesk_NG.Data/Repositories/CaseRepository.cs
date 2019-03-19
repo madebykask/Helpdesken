@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
+using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
-using Z.EntityFramework.Plus;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -17,11 +17,11 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Domain;
     using Mappers;
     using System.Linq.Expressions;
-    using System.Data.Linq.SqlClient;
 
     public interface ICaseRepository : IRepository<Case>
     {
         Case GetCaseById(int id, bool markCaseAsRead = false);
+        Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false);
         Case GetCaseByGUID(Guid GUID);
         int GetCaseIdByEmailGUID(Guid GUID);
         Case GetCaseByEmailGUID(Guid GUID);
@@ -85,6 +85,14 @@ namespace DH.Helpdesk.Dal.Repositories
             this.workContext = workContext;
             _caseModelToEntityMapper = caseModelToEntityMapper;
             _caseToBusinessModelMapper = caseToBusinessModelMapper;
+        }
+
+        public Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false)
+        {
+            if (markCaseAsRead)
+                MarkCaseAsRead(id);
+
+            return GetByIdAsync(id);
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -222,8 +230,8 @@ namespace DH.Helpdesk.Dal.Repositories
                 cases.ApprovedDate = null;
                 cases.LeadTime = 0;
                 cases.ChangeTime = DateTime.UtcNow;
-				cases.LeadTime = calculatedLeadTime;
-				cases.ExternalTime += externalTimeToAdd;
+                cases.LeadTime = calculatedLeadTime;
+                cases.ExternalTime += externalTimeToAdd;
 
                 foreach (var log in cases.Logs)
                 {

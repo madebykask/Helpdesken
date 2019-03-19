@@ -2,11 +2,9 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Http.Controllers;
-using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
-using DH.Helpdesk.Services.BusinessLogic.Admin.Users.Concrete;
 using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
 using DH.Helpdesk.Services.Services;
 using Microsoft.AspNet.Identity;
@@ -51,8 +49,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
                     var isAuthorised = _userService.VerifyUserCasePermissions(UsersMapper.MapToOverview(user), caseId);
                     if (!isAuthorised)
                     {
-                        actionContext.Response = CreateForbidddenResponse(actionContext.Request,
-                            "User is not authorized to access the case");
+                        actionContext.Response = CreateForbidddenResponse(actionContext.Request, "User is not authorized to access the case");
                         return;
                     }
                 }
@@ -62,8 +59,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
                 {
                     if (!HasUserPermissions(actionContext, user))
                     {
-                        actionContext.Response = CreateForbidddenResponse(actionContext.Request,
-                            "User has no permissions to access action");
+                        actionContext.Response = CreateForbidddenResponse(actionContext.Request, "User has no permissions to access action");
                         return;
                     }
                 }

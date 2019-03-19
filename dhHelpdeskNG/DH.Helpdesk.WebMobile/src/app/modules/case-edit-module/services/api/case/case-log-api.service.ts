@@ -4,14 +4,18 @@ import { HttpApiServiceBase } from "src/app/modules/shared-module/services";
 import { HttpClient } from "@angular/common/http";
 import { take } from "rxjs/internal/operators";
 import { Observable } from "rxjs";
-
+import { config } from '@env/environment';
 @Injectable({ providedIn: 'root' })
 export class CaseLogApiService extends HttpApiServiceBase {
 
   constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) {
     super(http, localStorageService);
   }
-  
+
+  getUploadLogFileUrl(caseId:string, customerId:number) {
+    return `${config.apiUrl}/api/case/${caseId}/logfile/?cid=${customerId}`;
+  }
+
   getCaseLogs(caseId:number): Observable<Array<any>> {
     let url = this.buildResourseUrl(`/api/case/${caseId}/logs`, null, true, true);
     return this.getJson<Array<any>>(url)

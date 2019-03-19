@@ -1,9 +1,10 @@
+
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FileUploader, FileUploaderOptions, FileItem, ParsedResponseHeaders } from 'ng2-file-upload' 
-import { config } from '@env/environment';
 import { AuthenticationService } from 'src/app/services/authentication';
 import { MbscListviewOptions } from '@mobiscroll/angular';
 import { LocalStorageService } from 'src/app/services/local-storage';
+import { CaseFilesApiService } from 'src/app/modules/case-edit-module/services/api/case/case-files-api.service';
 
 @Component({
   selector: 'case-files-upload',
@@ -38,6 +39,7 @@ export class CaseFilesUploadComponent {
   }; 
 
   constructor(private authenticationService: AuthenticationService,
+              private caseFileApiService: CaseFilesApiService,
               private localStateStorage: LocalStorageService) {
   } 
 
@@ -46,13 +48,13 @@ export class CaseFilesUploadComponent {
     const userData = this.localStateStorage.getCurrentUser();
     const cid = userData.currentData.selectedCustomerId;
 
-    // init file uploader     
+    // init file uploader
     this.fileUploader.setOptions(<FileUploaderOptions>{
       autoUpload: true,
       filters: [],
       isHTML5: true,
       authToken: accessToken,
-      url: `${config.apiUrl}/api/case/${this.caseKey}/file?cid=${cid}` //todo:replace with shared method call
+      url: this.caseFileApiService.getCaseFileUploadUrl(this.caseKey, cid)
     });
 
     // subscribe to events
@@ -86,8 +88,13 @@ export class CaseFilesUploadComponent {
     if (fileItem.isUploaded && fileItem.isSuccess) {
         fileItem.remove();// remove success files only
         var data = JSON.parse(response);
-        if (data && data.hasOwnProperty("id")) {
+        if (data) {
+          if (typeof data === 'string') {
+            this.NewFileUploadComplete.emit({ id: 0, name: data }); //temp file upload returns file name only          
+          }
+          else {
             this.NewFileUploadComplete.emit({id: data.id, name: data.name });
+          }
         }
     }
   }

@@ -126,9 +126,9 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("{caseKey}/logfile/")]
-        [SkipCustomerAuthorization]
-        public async Task<IHttpActionResult> UploadLogFile([FromUri]string caseKey)
+        [Route("{caseId}/logfile/")]
+        [CheckUserCasePermissions(CaseIdParamName = "caseId")]
+        public async Task<IHttpActionResult> UploadLogFile([FromUri]string caseId, [FromUri]int cid)
         {
             // Check if the request contains multipart/form-data.
             if (!Request.Content.IsMimeMultipartContent())
@@ -145,12 +145,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var fileName = stream.Headers.ContentDisposition.FileName.Unquote().Trim();
 
                 //fix name
-                if (_userTemporaryFilesStorage.FileExists(fileName, caseKey, ModuleName.Log))
+                if (_userTemporaryFilesStorage.FileExists(fileName, caseId, ModuleName.Log))
                 {
                     fileName = $"{now}-{fileName}"; // handle on the client file name change
                 }
 
-                _userTemporaryFilesStorage.AddFile(fileBytes, fileName, caseKey, ModuleName.Log);
+                _userTemporaryFilesStorage.AddFile(fileBytes, fileName, caseId, ModuleName.Log);
                 return Ok(fileName);
             }
 

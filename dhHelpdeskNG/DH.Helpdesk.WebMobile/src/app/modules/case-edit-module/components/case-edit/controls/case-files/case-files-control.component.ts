@@ -114,7 +114,7 @@ export class CaseFilesControlComponent {
                 cancelText: this.translateService.instant('Nej'),
               }).then(function (result) {
                   if (result) {
-                      self.caseFilesApiService.deleteCaseFile(self.caseKey,fileItem.fileId, fileItem.fileName).pipe(
+                      self.caseFilesApiService.deleteCaseFile(self.caseKey, fileItem.fileId, fileItem.fileName).pipe(
                           take(1)
                       ).subscribe(() => {
                           //remove fileItem from the list on success only

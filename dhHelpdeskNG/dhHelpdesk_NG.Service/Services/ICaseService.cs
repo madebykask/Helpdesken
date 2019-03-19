@@ -37,6 +37,7 @@ namespace DH.Helpdesk.Services.Services
             string adUser,
             out ParentCaseInfo parentCaseInfo);
 
+        Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false);
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Case GetDetachedCaseById(int id);
         Case GetCaseByGUID(Guid GUID);

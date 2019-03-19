@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
+import { config } from '@env/environment';
 import { LocalStorageService } from "src/app/services/local-storage";
 import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
 
@@ -8,6 +9,10 @@ import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/h
 export class CaseFilesApiService extends HttpApiServiceBase {
     constructor(httpClient:HttpClient, localStorageService: LocalStorageService) {
         super(httpClient, localStorageService);
+    }
+
+    getCaseFileUploadUrl(caseId: string, cid: number) {
+      return `${config.apiUrl}/api/case/${caseId}/file?cid=${cid}`;
     }
 
     downloadLogFile(caseId:number, fileId:number) {

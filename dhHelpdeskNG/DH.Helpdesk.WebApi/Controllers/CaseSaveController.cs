@@ -107,12 +107,16 @@ namespace DH.Helpdesk.WebApi.Controllers
         public async Task<IHttpActionResult> Post([FromUri] int? caseId, [FromUri]int cid, [FromUri] int langId, [FromBody]CaseEditInputModel model)
         {
             var utcNow = DateTime.UtcNow;
+            var customerId = cid;
             var caseKey = caseId.HasValue && caseId > 0 ? caseId.Value.ToString() : model.CaseGuid?.ToString();
 
             var isEdit = caseId.HasValue && caseId.Value > 0;
             var oldCase = isEdit ? _caseService.GetDetachedCaseById(caseId.Value) : new Case();
             if (isEdit)
             {
+                if (oldCase.Customer_Id != customerId)
+                    throw new Exception($"Case customer({oldCase.Customer_Id}) and current customer({customerId}) are different"); 
+
                 var lockData = await _caseLockService.GetCaseLockAsync(caseId.Value);
                 if (lockData != null && lockData.UserId != UserId)
                 {
@@ -126,9 +130,9 @@ namespace DH.Helpdesk.WebApi.Controllers
                 }
             }
 
-            var customerUserSetting = await _customerUserService.GetCustomerUserSettingsAsync(cid, UserId);
+            var customerUserSetting = await _customerUserService.GetCustomerUserSettingsAsync(customerId, UserId);
             if (customerUserSetting == null)
-                throw new Exception($"No customer settings for this customer '{cid}' and user '{UserId}'");
+                throw new Exception($"No customer settings for this customer '{customerId}' and user '{UserId}'");
 
             //TODO: validate input -- check for ui validation rules (max length and etc.)
 
@@ -144,10 +148,10 @@ namespace DH.Helpdesk.WebApi.Controllers
                 if (model.CaseSolutionId.HasValue && model.CaseSolutionId > 0)
                     caseSolution = _caseSolutionService.GetCaseSolution(model.CaseSolutionId.Value);
 
-                var customerDefaults = _customerService.GetCustomerDefaults(cid);
+                var customerDefaults = _customerService.GetCustomerDefaults(customerId);
                 currentCase = new Case();
 
-                CreateCase(cid, langId, currentCase, caseSolution);
+                CreateCase(customerId, langId, currentCase, caseSolution);
                 if (model.CaseGuid.HasValue)
                     currentCase.CaseGUID = model.CaseGuid.Value;
 
@@ -258,9 +262,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             #endregion
 
             var currentUser = _userService.GetUser(UserId);
-            var customerSettings = _customerSettingsService.GetCustomerSettings(cid);
+            var customerSettings = _customerSettingsService.GetCustomerSettings(customerId);
             var basePath = _settingsLogic.GetFilePath(customerSettings);
-            var customer = _customerService.GetCustomer(cid);
+            var customer = _customerService.GetCustomer(customerId);
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(User.Identity.GetTimezoneId());
 
             if (isEdit)
@@ -278,7 +282,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var workTimeCalc = workTimeCalcFactory.Build(oldCase.RegTime, utcNow, departmentIds);
 
                 StateSecondary caseStateSecondary = null;
-                if (oldCase.StateSecondary_Id.HasValue)
+				if(oldCase.StateSecondary_Id.HasValue)
                     caseStateSecondary = _stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
 
                 if (caseStateSecondary != null && caseStateSecondary.IncludeInCaseStatistics == 0)
@@ -340,7 +344,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             // todo: Check if new cases should be handled here. Save case files for new cases only!
             if (!isEdit)
             {
-                var temporaryFiles = _userTempFilesStorage.FindFiles(caseKey); //todo: check
+                var temporaryFiles = _userTempFilesStorage.FindFiles(caseKey, ModuleName.Cases); 
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, currentCase.Id, UserId)).ToList();
                 _caseFileService.AddFiles(newCaseFiles);
             }
