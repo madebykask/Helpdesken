@@ -21,9 +21,9 @@ export class CaseDropdownComponent extends BaseControl<number> {
     
     // select settings
     settings: MbscSelectOptions = {
+      filter: true,
       display: 'center',
       theme: "mobiscroll",
-      // cssClass:"dhselect-list",
       headerText: () => this.getHeader,
       onInit: (event, inst) => {
         if (this.field.isReadonly) {
