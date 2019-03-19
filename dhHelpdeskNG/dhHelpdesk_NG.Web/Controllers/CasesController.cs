@@ -3289,7 +3289,8 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var oldCase = new Case();
-            if (edit)
+			bool oldCaseSubstateCount = true;
+			if (edit)
             {
                 #region Editing existing case
 
@@ -3314,12 +3315,13 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (oldCase.StateSecondary_Id.HasValue)
                 {
-                    var caseSubState = this._stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
+					var subState = this._stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
 
                     // calculating time spent in "inactive" state since last changing every save
-                    if (caseSubState.IncludeInCaseStatistics == 0)
+                    if (subState.IncludeInCaseStatistics == 0)
                     {
-                        var workTimeCalcFactory =
+						oldCaseSubstateCount = false;
+						var workTimeCalcFactory =
                             new WorkTimeCalculatorFactory(
                                 ManualDependencyResolver.Get<IHolidayService>(),
                                 curCustomer.WorkingDayStart,
@@ -3421,7 +3423,14 @@ namespace DH.Helpdesk.Web.Controllers
                     deptIds = new int[] { case_.Department_Id.Value };
                 }
 
-                var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, case_.FinishingDate.Value, deptIds);
+				var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, utcNow, deptIds);
+
+				// If should count time on old status and finish date is earlier than now, add external time for time in "finish" state to now
+				if (oldCaseSubstateCount && case_.FinishingDate.Value < utcNow)
+				{
+					case_.ExternalTime += workTimeCalc.CalculateWorkTime(case_.FinishingDate.Value, utcNow, case_.Department_Id);
+				}
+
                 var possibleWorkTime = workTimeCalc.CalculateWorkTime(
                     case_.RegTime,
                     utcNow,
