@@ -29,7 +29,7 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
       },
       parseValue: (value?: string) => {
         let d = value ? DateTime.fromISO(value) : DateTime.local() // Default value
-        return [d.month, d.day, d.year];
+        return [d.month -1, d.day, d.year];
       },
       onInit: (event, inst) => {
         if (this.formControl.disabled || this.disabled) {
