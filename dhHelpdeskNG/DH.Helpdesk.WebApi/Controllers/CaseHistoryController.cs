@@ -25,7 +25,6 @@ using DH.Helpdesk.Web.Common.Constants.Case;
 using DH.Helpdesk.Web.Common.Extensions;
 using DH.Helpdesk.WebApi.Infrastructure;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
-using DH.Helpdesk.WebApi.Infrastructure.Translate;
 using DH.Helpdesk.WebApi.Logic.Case;
 
 namespace DH.Helpdesk.WebApi.Controllers
@@ -55,6 +54,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpGet]
         [Route("{caseId:int}/histories")]
         [CheckUserPermissions(UserPermission.CaseInternalLogPermission)]
+        [CheckUserCasePermissions(CaseIdParamName = "caseId")]
         public async Task<IHttpActionResult> Get([FromUri] int caseId, [FromUri] int cid, [FromUri] int langId)
         {
             var historiesDb = await _caseService.GetCaseHistoriesAsync(caseId).ConfigureAwait(false);

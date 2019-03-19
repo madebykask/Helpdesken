@@ -1,4 +1,6 @@
-﻿using DH.Helpdesk.BusinessData.Models;
+﻿using System.Data.Entity;
+using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.Common.Extensions.Integer;
 
 namespace DH.Helpdesk.Services.Services
@@ -16,8 +18,10 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<Region> GetAllRegions();
         IList<Region> GetRegions(int customerId);
+        Task<List<Region>> GetRegionsAsync(int customerId);
         IList<RegionOverview> GetRegionsOverview(int customerId);
         IList<Region> GetActiveRegions(int customerId);
+        Task<List<Region>> GetActiveRegionsAsync(int customerId);
         IList<Region> GetRegionsWithDepartments(int customerId);
         int? GetDefaultId(int customerId); 
         Region GetRegion(int id);
@@ -65,9 +69,23 @@ namespace DH.Helpdesk.Services.Services
             return this._regionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
+        public Task<List<Region>> GetRegionsAsync(int customerId)
+        {
+            return _regionRepository.GetMany(x => x.Customer_Id == customerId).AsQueryable()
+                    .OrderBy(x => x.Name)
+                    .ToListAsync();
+        }
+
         public IList<Region> GetActiveRegions(int customerId)
         {
             return this._regionRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.Name).ToList();
+        }
+
+        public Task<List<Region>> GetActiveRegionsAsync(int customerId)
+        {
+            return this._regionRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).AsQueryable()
+                .OrderBy(x => x.Name)
+                .ToListAsync();
         }
 
         public IList<Region> GetRegionsWithDepartments(int customerId)

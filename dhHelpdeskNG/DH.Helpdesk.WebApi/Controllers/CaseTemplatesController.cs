@@ -6,7 +6,6 @@ using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.WebApi.Infrastructure;
-using DH.Helpdesk.WebApi.Infrastructure.Attributes;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -24,7 +23,6 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         [HttpGet]
         [Route("")]
-        [SkipCustomerAuthorization()]
         public async Task<IList<CaseSolutionOverview>> Get([FromUri]int cid, [FromUri]int langId, [FromUri] bool mobileOnly = false)
         {
             var caseSolutions = await (mobileOnly

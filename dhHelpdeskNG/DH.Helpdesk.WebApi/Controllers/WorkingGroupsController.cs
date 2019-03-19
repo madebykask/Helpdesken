@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
 using DH.Helpdesk.BusinessData.Models.Shared;
-using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.WorkingGroup;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.WebApi.Infrastructure;
-using DH.Helpdesk.WebApi.Infrastructure.ActionResults;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {

@@ -132,7 +132,6 @@ namespace DH.Helpdesk.Services.Services
 
         public DateTime? GetClosestDateTo(int calendarId, DateTime now)
         {
-            
             var watchDateCalendarValue =
                 this._watchDateCalendarValueRepository.GetAll()
                     .AsQueryable()

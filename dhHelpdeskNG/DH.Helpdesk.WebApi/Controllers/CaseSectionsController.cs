@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 using DH.Helpdesk.Common.Enums.Cases;
@@ -28,9 +24,8 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// </summary>
         /// <param name="cid"></param>
         /// <param name="langId"></param>
-        /// <returns></returns>
-        public async Task<IEnumerable<CaseSectionModel>>
-            Get(int cid, int langId) //TODO: return not CaseSectionModel, but only required fields
+        /// <returns></returns> 
+        public async Task<IEnumerable<CaseSectionModel>> Get(int cid, int langId) //TODO: return not CaseSectionModel, but only required fields
         {
             var sections = await _caseSectionService.GetCaseSectionsAsync(cid, langId);
             sections.ForEach(section =>

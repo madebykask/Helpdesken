@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.Models.User;
-using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.WebApi.Infrastructure;
 

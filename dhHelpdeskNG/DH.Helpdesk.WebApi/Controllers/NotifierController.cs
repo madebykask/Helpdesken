@@ -27,11 +27,12 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         [HttpGet]
         [Route("Search")]
-        public Task<List<NotifierSearchItem>> Search([FromUri]string query, [FromUri]int cid, [FromUri]int? categoryId = null)
+        public async Task<List<NotifierSearchItem>> Search([FromUri]string query, [FromUri]int cid, [FromUri]int? categoryId = null)
         {
-            //todo: make async
+            //todo: make db methods async
             IList<UserSearchResults> searchResults;
-            var customerSettings = _settingService.GetCustomerSettings(cid);
+            var settings = await _settingService.GetCustomerSettingsAsync(cid);
+            var customerSettings = settings;
             if (customerSettings.ComputerUserSearchRestriction == 1)
             {
                 var departmentIds = 
@@ -57,7 +58,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 Email = x.Email
             }).ToList();
 
-            return Task.FromResult(result);
+            return result;
         }
         
         [HttpGet]

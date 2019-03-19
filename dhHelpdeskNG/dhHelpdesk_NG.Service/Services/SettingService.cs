@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using DH.Helpdesk.Dal.Mappers;
 
 namespace DH.Helpdesk.Services.Services
@@ -34,6 +35,8 @@ namespace DH.Helpdesk.Services.Services
         /// The <see cref="Setting"/>.
         /// </returns>
         Setting GetCustomerSetting(int id);
+        
+        Task<CustomerSettings> GetCustomerSettingsAsync(int customerId);
 
         /// <summary>
         /// The save setting.
@@ -271,6 +274,12 @@ namespace DH.Helpdesk.Services.Services
         public CustomerSettings GetCustomerSettings(int customerId)
         {
             var setting = _settingRepository.GetCustomerSetting(customerId);
+            return _toBusinessModelMapper.Map(setting);
+        }
+
+        public async Task<CustomerSettings> GetCustomerSettingsAsync(int customerId)
+        {
+            var setting = await _settingRepository.GetCustomerSettingAsync(customerId);
             return _toBusinessModelMapper.Map(setting);
         }
 

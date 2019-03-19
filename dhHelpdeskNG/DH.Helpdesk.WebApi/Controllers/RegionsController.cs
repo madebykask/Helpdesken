@@ -25,10 +25,10 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("options")]
-        public async Task<IList<ItemOverview>> Get(int cid)
+        public async Task<List<ItemOverview>> Get(int cid)
         {
-            return await Task.FromResult(_regionService.GetActiveRegions(cid)
-                .Select(r => new ItemOverview(r.Name, r.Id.ToString())).ToList());
+            var items = await _regionService.GetActiveRegionsAsync(cid);
+            return items.Select(r => new ItemOverview(r.Name, r.Id.ToString())).ToList();
         }
     }
 }

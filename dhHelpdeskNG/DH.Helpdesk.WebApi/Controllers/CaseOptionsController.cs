@@ -189,8 +189,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             return model;
         }
 
-
-
         //todo: a copy from Helpdesk.Web\CaseController.cs\GetCausingPartsModel Need to refactor to use one implementation
         private IList<ItemOverview> BuildCausingPartsList(int customerId, int? causingPartId, int languageId)
         {
@@ -231,8 +229,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             return ret.GroupBy(r => r.Value).Select(g => g.First()).ToList();
         }
-
-
+        
         private string Translate(string translate, int languageId, int? tt = null)
         {
             return _translateCacheService.GetTextTranslation(translate, languageId, tt);

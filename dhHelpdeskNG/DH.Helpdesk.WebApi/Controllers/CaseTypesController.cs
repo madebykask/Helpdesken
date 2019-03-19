@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
-using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.WebApi.Infrastructure;

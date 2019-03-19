@@ -89,8 +89,7 @@ export class CaseLogInputComponent implements OnInit {
     //todo:add delete confirmation
     this.caseLogApiService.deleteTempLogFile(this.caseKey, fileName).pipe(
       take(1)
-    )
-    .subscribe(res => {
+    ).subscribe(res => {
       if (res) {
         this.files.splice(index, 1);
       }

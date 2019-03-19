@@ -53,6 +53,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         [HttpGet]
         [Route("{caseId:int}/logs")]
+        [CheckUserCasePermissions(CaseIdParamName = "caseId", CheckBody = true)]
         public async Task<IHttpActionResult> Get([FromUri]int caseId, [FromUri]int cid)
         {
             var currentUser = _userService.GetUser(UserId);
@@ -167,7 +168,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var fileNameSafe = (fileName ?? string.Empty).Trim();
             if (!string.IsNullOrEmpty(fileNameSafe))
             {
-                _userTemporaryFilesStorage.DeleteFile(fileName, caseKey, ModuleName.Log);
+                _userTemporaryFilesStorage.DeleteFile(fileNameSafe, caseKey, ModuleName.Log);
             }
             return Ok(true);
         }

@@ -27,7 +27,6 @@ namespace DH.Helpdesk.WebApi.Controllers
         public async Task<IEnumerable<FinishingCauseOverview>> Get(int cid)
         {
             var closingReasons = await _finishingCauseService.GetFinishingCausesWithChildsAsync(cid);
-
             return closingReasons;
         }
     }
