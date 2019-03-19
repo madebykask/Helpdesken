@@ -1,7 +1,7 @@
 ﻿// IMPORTANT: THIS FILE IS AUTO GENERATED! DO NOT MANUALLY EDIT!
 /* tslint:disable */
 export const VERSION = {
-	"version": "5.3.41.0",
-    "fullVersion": "5.3.41.0-7f1f9878c"
+	"version": "5.3.41.162",
+    "fullVersion": "5.3.41.162-f609274fd"
 }
 /* tslint:enable */

@@ -301,20 +301,19 @@ namespace DH.Helpdesk.WebApi.Controllers
 
                 currentCase.LeadTime = possibleWorktime - currentCase.ExternalTime;
             }
-
-            var leadTime = 0;// TODO: add calculation
+			/*var leadTime = 0;// TODO: add calculation
             var actionLeadTime = 0;// TODO: add calculation
-            var actionExternalTime = 0;// TODO: add calculation
+            var actionExternalTime = 0;// TODO: add calculation*/
 
-            var extraInfo = new CaseExtraInfo()
-            {
-                CreatedByApp = CreatedByApplications.WebApi,
-                LeadTimeForNow = leadTime,
-                ActionLeadTime = actionLeadTime,
-                ActionExternalTime = actionExternalTime
-            };
+			var extraInfo = new CaseExtraInfo()
+			{
+				CreatedByApp = CreatedByApplications.WebApi,
+				LeadTimeForNow = currentCase.LeadTime,
+				ActionLeadTime = currentCase.LeadTime - oldCase.LeadTime,
+				ActionExternalTime = currentCase.ExternalTime - oldCase.ExternalTime
+			};
 
-            IDictionary<string, string> errors;
+			IDictionary<string, string> errors;
 
             var caseLog = new CaseLog()
             {
