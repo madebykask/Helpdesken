@@ -41,14 +41,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         #endregion
-
-        /// <summary>
-        /// Get files content. Used to download files.
-        /// </summary>
-        /// <param name="caseId"></param>
-        /// <param name="fileId"></param>
-        /// <param name="cid"></param>
-        /// <returns>File</returns>
+      
         [HttpGet]
         [CheckUserCasePermissions(CaseIdParamName = "caseId")]
         [Route("{caseId:int}/File/{fileId:int}")] //ex: /api/Case/123/File/1203?cid=1
@@ -62,7 +55,6 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         [HttpPost]
         [Route("{caseKey:guid}/file")] // remember to update WebApiCorsPolicyProvider if url is changed
-        [SkipCustomerAuthorization] // ignore check for new case
         public async Task<IHttpActionResult> UploadNewCaseFile([FromUri] Guid caseKey)
         {
             // Check if the request contains multipart/form-data.
@@ -92,7 +84,6 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             return BadRequest("Failed to upload a file");
         }
-
         
         [HttpPost]
         [Route("{caseId:int}/file")] // remember to update WebApiCorsPolicyProvider if url is changed
@@ -141,7 +132,6 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         [HttpDelete]
         [Route("{caseKey:guid}/file")]
-        [SkipCustomerAuthorization] //skip check for new case
         public IHttpActionResult DeleteNewCaseFile([FromUri]Guid caseKey, [FromUri]string fileName)
         {
             //todo: make Async
@@ -198,6 +188,5 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         #endregion
-
     }
 }

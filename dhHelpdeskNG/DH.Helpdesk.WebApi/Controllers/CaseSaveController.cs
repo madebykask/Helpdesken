@@ -9,7 +9,6 @@ using System.Web.Http;
 using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer;
-using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.BusinessRule;
 using DH.Helpdesk.Common.Extensions.Boolean;
@@ -18,7 +17,6 @@ using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
-using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Common.Enums.Case;
@@ -29,7 +27,6 @@ using DH.Helpdesk.WebApi.Infrastructure.Filters;
 using DH.Helpdesk.WebApi.Logic.Case;
 using DH.Helpdesk.WebApi.Logic.CaseFieldSettings;
 using DH.Helpdesk.Services.Utils;
-using DH.Helpdesk.Services.Infrastructure;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -114,6 +111,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var oldCase = isEdit ? _caseService.GetDetachedCaseById(caseId.Value) : new Case();
             if (isEdit)
             {
+                //todo: to be removed when case switching is implemented on mobile 
                 if (oldCase.Customer_Id != customerId)
                     throw new Exception($"Case customer({oldCase.Customer_Id}) and current customer({customerId}) are different"); 
 
