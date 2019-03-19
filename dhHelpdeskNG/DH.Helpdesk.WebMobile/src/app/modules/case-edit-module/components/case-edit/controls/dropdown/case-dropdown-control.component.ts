@@ -19,11 +19,11 @@ export class CaseDropdownComponent extends BaseControl<number> {
     @Input() dataSource: BehaviorSubject<OptionItem[]>;
     @Input() disabled = false;
     
-    //select settings
+    // select settings
     settings: MbscSelectOptions = {
       display: 'center',
       theme: "mobiscroll",
-      //cssClass:"dhselect-list",
+      // cssClass:"dhselect-list",
       headerText: () => this.getHeader,
       onInit: (event, inst) => {
         if (this.field.isReadonly) {
@@ -61,14 +61,6 @@ export class CaseDropdownComponent extends BaseControl<number> {
 
     ngOnDestroy(): void {
       this.onDestroy();
-    }
-
-    getText(id: any) {
-      if (this.dataSource == null || this.localDataSource.length === 0) {
-         return ''
-        };
-      let items = this.localDataSource.filter((elem: OptionItem) => elem.value == id);
-      return  items.length > 0 ? items[0].text : '';
     }
 
     trackByFn(index, item: OptionItem) {
@@ -112,9 +104,9 @@ export class CaseDropdownComponent extends BaseControl<number> {
         this.dataSource.pipe(
           switchMap((options) => {
             options = options || [];
-            if (!this.formControl.value || (this.formControl.value && !this.isRequired)) {
+            // if (!this.formControl.value || (this.formControl.value && !this.isRequired)) {
               this.addEmptyItem(options);
-            }
+            // }
             this.localDataSource = options;
 
             this.resetValueIfNeeded(options);

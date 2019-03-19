@@ -1,4 +1,4 @@
-import { FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn } from "@angular/forms";
+import { FormGroup, ValidatorFn, AbstractControlOptions, AsyncValidatorFn, AbstractControl, FormArray, FormControl } from "@angular/forms";
 import { CaseFormControl } from "./case-form-control";
 import { BehaviorSubject } from "rxjs";
 
@@ -35,4 +35,32 @@ export class CaseFormGroup extends FormGroup {
     .map(k => this.controls[k] as CaseFormControl);
   }
 
+  public findInvalidControls(input: AbstractControl | null = null, invalidControls: AbstractControl[] | null = null): AbstractControl[] {
+    if (!invalidControls) invalidControls = [];
+
+    input = input || this;
+    if (input instanceof FormControl) {
+        if (input.invalid) invalidControls.push(input);
+        return invalidControls;
+    }
+
+    if (!(input instanceof FormArray) && !(input instanceof FormGroup) ) return invalidControls;
+
+    const controls = input.controls;
+    for (const name in controls) {
+        let control = controls[name];
+        if (control.invalid) invalidControls.push( control );
+        switch( control.constructor.name )
+        {    
+            case 'FormArray':
+                (<FormArray> control ).controls.forEach( _control => invalidControls = this.findInvalidControls( _control, invalidControls ) );
+                break;
+
+            case 'FormGroup':
+                invalidControls = this.findInvalidControls( control, invalidControls );
+                break;
+        }
+    }
+    return invalidControls;
+  }
 }

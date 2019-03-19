@@ -147,19 +147,15 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var customerDefaults = _customerService.GetCustomerDefaults(cid);
                 currentCase = new Case();
 
-                ApplyTemplateOrDefaultValues(cid, langId, currentCase, caseSolution);
+                CreateCase(cid, langId, currentCase, caseSolution);
                 if (model.CaseGuid.HasValue)
                     currentCase.CaseGUID = model.CaseGuid.Value;
 
-                if (model.CaseSolutionId.HasValue && model.CaseSolutionId > 0) //caseTemplateSettings are only needed when creating a new case from template
-                    caseTemplateSettings = _caseSolutionSettingService.GetCaseSolutionSettingOverviews(model.CaseSolutionId.Value);
             }
             else
             {
                 currentCase = _caseService.GetDetachedCaseById(caseId.Value);
             }
-
-            var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(cid);
 
             #region Initiator
             if (customerUserSetting.UserInfoPermission.ToBool())
@@ -458,7 +454,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             return Ok(currentCase.Id);
         }
 
-        private void ApplyTemplateOrDefaultValues(int cid, int langId, Case currentCase, CaseSolution caseSolution)
+        private void CreateCase(int cid, int langId, Case currentCase, CaseSolution caseSolution)
         {
             currentCase.RegUserId = ""; // adUser.GetUserFromAdPath(),
             currentCase.RegUserDomain = ""; // adUser.GetDomainFromAdPath()

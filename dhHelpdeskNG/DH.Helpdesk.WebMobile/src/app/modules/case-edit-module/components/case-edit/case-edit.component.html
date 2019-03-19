@@ -42,9 +42,9 @@
                     <case-textbox-control *ngIf="showField(caseFieldsNames.PersonEmail)" [field]="getField(caseFieldsNames.PersonEmail)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="showField(caseFieldsNames.PersonPhone)" [field]="getField(caseFieldsNames.PersonPhone)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="showField(caseFieldsNames.PersonCellPhone)" [field]="getField(caseFieldsNames.PersonCellPhone)" [form]="form"></case-textbox-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.RegionId)" disabled=true [field]="getField(caseFieldsNames.RegionId)" [form]="form" [dataSource]="dataSource.regionsStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.DepartmentId)" disabled=true [field]="getField(caseFieldsNames.DepartmentId)" [form]="form" [dataSource]="dataSource.departmentsStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.OrganizationUnitId)" disabled=true [field]="getField(caseFieldsNames.OrganizationUnitId)" [form]="form" [dataSource]="dataSource.oUsStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="showField(caseFieldsNames.RegionId)" [field]="getField(caseFieldsNames.RegionId)" [form]="form" [dataSource]="dataSource.regionsStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="showField(caseFieldsNames.DepartmentId)" [field]="getField(caseFieldsNames.DepartmentId)" [form]="form" [dataSource]="dataSource.departmentsStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="showField(caseFieldsNames.OrganizationUnitId)" [field]="getField(caseFieldsNames.OrganizationUnitId)" [form]="form" [dataSource]="dataSource.oUsStore$"></case-dropdown-control>
                     <case-textbox-control *ngIf="showField(caseFieldsNames.CostCentre)" [field]="getField(caseFieldsNames.CostCentre)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="showField(caseFieldsNames.Place)" [field]="getField(caseFieldsNames.Place)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="showField(caseFieldsNames.UserCode)" [field]="getField(caseFieldsNames.UserCode)" [form]="form"></case-textbox-control>

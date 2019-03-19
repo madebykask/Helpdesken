@@ -38,8 +38,6 @@ namespace DH.Helpdesk.Models.Case
 
 
         public decimal CaseNumber { get; set; }
-        public DateTime RegTime { get; set; }
-        public DateTime ChangeTime { get; set; }
         public int? UserId { get; set; }
         public int? RegistrationSourceCustomerId { get; set; }
         public int CaseTypeId { get; set; }

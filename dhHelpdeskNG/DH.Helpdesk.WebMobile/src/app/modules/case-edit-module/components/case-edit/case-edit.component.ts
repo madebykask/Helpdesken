@@ -163,6 +163,22 @@ export class CaseEditComponent {
       const optionsHelper = this.caseService.getOptionsHelper(filters);
 
       switch (v.name) {
+        case CaseFieldsNames.RegionId: {
+          optionsHelper.getDepartments().pipe(
+            take(1),
+          ).subscribe((deps: OptionItem[]) => {
+            reducer.caseDataReducer(CaseFieldsNames.DepartmentId, { items: deps });
+          });
+          break;
+        }
+        case CaseFieldsNames.DepartmentId: {
+          optionsHelper.getOUs().pipe(
+            take(1),
+          ).subscribe((ous: OptionItem[]) => {
+            reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: ous });
+          });
+          break;
+        }
         case CaseFieldsNames.CaseTypeId: {
           this.caseTypesService.getCaseType(v.value).pipe(
               take(1),
@@ -366,7 +382,8 @@ export class CaseEditComponent {
       if (!this.canSave) return;
       this.form.submit();
       if (this.form.invalid) {
-        this.alertService.showMessage('Some fields has errors. Please, resolve them before continue.', AlertType.Error);
+        let invalidControls = this.form.findInvalidControls(); // debug info
+        this.alertService.showMessage('Some fields has errors. Please, resolve them before continue.', AlertType.Error, 3);
         return
       };
 
@@ -430,13 +447,14 @@ export class CaseEditComponent {
       let controls: { [key: string]: CaseFormControl; } = {};
       data.fields.forEach(field => {
           let validators = [];
-
-          if (field.isRequired) {
+          if (!field.isHidden) {
+            if (field.isRequired) {
               validators.push(Validators.required);
-          }
+            }
 
-          if (field.maxLength != null) {
-            validators.push(Validators.maxLength(field.maxLength))
+            if (field.maxLength != null) {
+              validators.push(Validators.maxLength(field.maxLength))
+            }
           }
 
           let control = new CaseFormControl(field.label, {

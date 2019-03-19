@@ -10,6 +10,12 @@ export class CaseDataReducers {
 
   caseDataReducer(action: string, payload: any) {
     switch (action) {
+      case CaseFieldsNames.DepartmentId: {
+        return this._caseDataStore.departmentsStore$.next(payload.items);
+      }
+      case CaseFieldsNames.OrganizationUnitId: {
+        return this._caseDataStore.oUsStore$.next(payload.items);
+      }
       case CaseFieldsNames.ProductAreaId: {
         return this._caseDataStore.productAreasStore$.next(payload.items);
       }

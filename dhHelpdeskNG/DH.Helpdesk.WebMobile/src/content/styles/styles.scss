@@ -352,23 +352,30 @@ ul.nostyle {
   }
 }
 
-mbsc-textarea {
-  &.select-textarea {
-    .mbsc-textarea {
-      textarea {
-        height: 1.5em;
-      }
+.mbsc-ios {
+  .mbsc-textarea {
+    textarea {
+      height: 1.5em;
     }
   }
-}
-
-.mbsc-ios {
   .mbsc-control-w {
     &.mbsc-err {
       background-color: #ffeeee;
       .mbsc-label {
         color: $error-color;
       }
+      &.mbsc-label-stacked {
+        &.mbsc-input {
+          &.mbsc-textarea {
+            &.mbsc-err {
+              .mbsc-label~.mbsc-input-wrap {
+                padding-bottom: 0;
+              }
+            }
+          }
+        }
+      }
     }
   }
-} 
+}
+
