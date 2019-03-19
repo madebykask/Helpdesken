@@ -4,7 +4,7 @@ import { BaseControl } from '../base-control';
 import { TranslateService } from '@ngx-translate/core';
 import { Channels, CommunicationService, NotifierChangedEvent } from 'src/app/services/communication';
 import { NotifierService } from 'src/app/modules/case-edit-module/services/notifier.service';
-import { take, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { take, debounceTime, distinctUntilChanged, switchMap, filter } from 'rxjs/operators';
 import { Subject, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NotifierSearchItem, NotifierType } from 'src/app/modules/shared-module/models/notifier/notifier.model';
@@ -49,8 +49,10 @@ export class NotifierSearchComponent extends BaseControl<string> {
     },
 
     onMarkupReady: (event, inst) => {
-      const filterInput = event.target.querySelector<HTMLInputElement>(".mbsc-sel-filter-input");
+      const filterDiv = event.target.querySelector<HTMLElement>(".mbsc-sel-filter-cont");
+      const filterInput = filterDiv.querySelector<HTMLInputElement>(".mbsc-sel-filter-input");
       filterInput.placeholder = this.ngxTranslateService.instant('Filtrering startar när minst två tecken har angetts');
+      this.createProgressIcon(filterDiv);
     },
    
     onSet: (event, inst) => {
@@ -60,7 +62,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
       }
     }
   };
-  
+
   constructor(private notifierService: NotifierService,
     private commService: CommunicationService,
     private ngxTranslateService: TranslateService) {
@@ -79,16 +81,18 @@ export class NotifierSearchComponent extends BaseControl<string> {
     // subscribe to notifier(user) search input 
     this.usersSearchSubject.asObservable().pipe(
       takeUntil(this.destroy$),
-      debounceTime(300),
+      debounceTime(150),
       distinctUntilChanged(),
       switchMap((query:string) => {
         if (query && query.length > 1) {
+          this.toggleProgress(true);
           return this.notifierService.searchNotifiers(query, categoryId)
         } else {
           return of(null);
         }
       })
     ).subscribe((data:Array<NotifierSearchItem>) => {
+        this.toggleProgress(false);
         if (data && data.length) {
           this.notifiersData = 
             data.map(item => {
@@ -150,6 +154,20 @@ export class NotifierSearchComponent extends BaseControl<string> {
           this.updateDisabledState();
         }
       });
+  }
+
+  private createProgressIcon(parentNode) {
+    const progressSpan = document.createElement("span")
+    progressSpan.id = 'notifierProgress';
+    progressSpan.className = "notifierProgress mbsc-ic";
+    progressSpan.innerHTML = '<img src="content/img/bars.gif" border="0" />'
+    progressSpan.style.display = "none";
+    parentNode.appendChild(progressSpan);
+  }
+
+  private toggleProgress(show) {
+    const progressSpan = document.querySelector<HTMLSpanElement>('#notifierProgress');
+    progressSpan.style.display = show ? '' : 'none';
   }
 
 }

@@ -32,3 +32,11 @@
   display: block;
 }
 
+
+::ng-deep {
+  .mbsc-select.mbsc-input {
+    margin:0px!important;
+    input { border-bottom: 0px!important; }
+  }
+}
+
