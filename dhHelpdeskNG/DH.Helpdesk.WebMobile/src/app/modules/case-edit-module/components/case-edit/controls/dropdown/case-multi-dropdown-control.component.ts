@@ -20,17 +20,41 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
     @ViewChild('select') select: MbscSelect;
     @Input() dataSource: MultiLevelOptionItem[] = [];
     @Input() disabled = false;
-    text: string = "";
+    text: string = '';
     settings: MbscSelectOptions = {
-      display: 'bottom',
+      theme: 'mobiscroll',
+      display: 'center',
+      layout: 'liquid',
+      anchor: 'select-textarea',
       focusOnClose: false,
       filter: false,
-      group: {
-        groupWheel: true,
-        header: false,
-        clustered: true
-      },
-      maxWidth: [40, 500],
+      buttons:
+      [{ // this button is hidden if root element has 'root' class
+          text: this.ngxTranslateService.instant('Tillbaka'),
+          cssClass: 'mbsc-fr-btn',
+          parentClass: 'float-left back-btn',
+          handler: (event, inst) => {
+            if (this.hasParent()) {
+              inst.refresh(this.getPreviousData(this.parentValue));
+              this.markIfRoot(inst);
+            }
+          }
+        },
+        'cancel',
+        {
+          text: this.ngxTranslateService.instant('Välj'),
+          cssClass: 'mbsc-fr-btn',
+          parentClass: 'mbsc-fr-btn-s',
+          handler: (event, inst) => {
+            const value = inst.getVal(true);
+            let chain = this.getOptionsChain(value);
+            if (!this.hasChilds(chain, chain.length - 1)) {
+              this.setText(value);
+              this.commService.publish(Channels.DropdownValueChanged, new DropdownValueChangedEvent(value, event.valueText, this.field.name));
+              inst.select();
+            }
+          }
+        }],
       data: [],
       headerText: () => this.getHeader,
       input: 'select-textarea',
@@ -40,25 +64,36 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
         }
       },
       onBeforeShow: (event, inst) => {
-        inst.refresh(this.getPreviousData(inst.getVal()));
+        let data = this.getPreviousData(inst.getVal());
+        inst.refresh(data);
+      },
+      onMarkupReady: (event, inst) => {
+        this.markIfRoot(inst);
+        this.markIfHasChilds(inst.getVal(), inst);
+      },
+      onChange: (event, inst) => {
+        if (event.valueText) {
+          this.markIfHasChilds(event.valueText, inst);
+        }
       },
       onItemTap: (event, inst) => {
         if (event.value) { 
           let chain = this.getOptionsChain(event.value);
           if (this.hasChilds(chain, chain.length - 1)) {
-            inst.refresh(this.getNextData(event.value));
-          }
-        } else { // if event.value = 0 - "<" back button clicked
-          if (this.hasParent()) {
-            inst.refresh(this.getPreviousData(this.parentValue));
+            let data = this.getNextData(event.value);
+            inst.refresh(data);
+            this.markIfRoot(inst);
+          } else {
+            inst.setVal(event.value, false, false, true);
           }
         }
+        return false;
       },
-      onSet: (event, inst) => {
+/*       onSet: (event, inst) => { // somehow onset is invoked on scrolling options
         const value = inst.getVal();
         this.setText(value);
         this.commService.publish(Channels.DropdownValueChanged, new DropdownValueChangedEvent(value, event.valueText, this.field.name));
-      },
+      }, */
       onClose: () => {
         this.parentValue = undefined;
       }
@@ -131,10 +166,11 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
     private ToSelectDataSource(dataSource) {
       return dataSource.map((elem: MultiLevelOptionItem) => {
         return {
-          group: this.hasParent() ? '<span style="float: left;" class="mbsc-ic mbsc-ic-fa-arrow-left"></span>' : '',
           value: elem.value,
           text: elem.text,
-          html: elem.text + (elem.childs != null && elem.childs.length ? '<span style="float: right;" class="mbsc-ic mbsc-ic-fa-arrow-right"></span>' : '')
+          html: elem.text + (elem.childs != null && elem.childs.length ?
+             '<span class="mbsc-ic mbsc-ic-fa-angle-right calendar-option"></span>' :
+              '')
         };
       });
     }
@@ -155,12 +191,13 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
       return chain.length > 0 ? chain.map((elem) => elem.text).join(' > ') : '';
     }
 
-    private getOptionsChain(id: any) {
+    private getOptionsChain(id: number | string) {
       if (this.dataSource == null || this.dataSource.length === 0) return [];
 
       let elems = new Array<MultiLevelOptionItem>();
       const searchNode = (elem: MultiLevelOptionItem, targetId: any): string => {
-        if (elem.value == targetId) {
+        let isText = typeof targetId === 'string';
+        if ((isText && (elem.text == targetId)) || (elem.value == targetId)) {
           elems.push(elem);
            return elem.text; 
           }
@@ -200,5 +237,26 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
           takeUntil(this.destroy$)
         )
         .subscribe();
+    }
+
+    private markIfRoot(inst) {
+      if (inst.markup == null) return;
+      
+      if (!this.hasParent()) {
+        inst.markup.classList.add('root');
+      } else {
+        inst.markup.classList.remove('root');
+      };
+    }
+
+    private markIfHasChilds(text: string, inst) {
+      if (inst.markup == null) return;
+
+      let chain = this.getOptionsChain(text);
+      if (this.hasChilds(chain, chain.length - 1)) {
+        inst.markup.classList.add('hasChild');
+      } else {
+        inst.markup.classList.remove('hasChild');
+      };
     }
   }

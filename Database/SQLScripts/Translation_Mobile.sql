@@ -183,3 +183,9 @@ insert into tbltext (id, TextString, TextType) VALUES (10026, 'Filtrering starta
 If not exists (select * from tblTextTranslation where text_id = 10026 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10026, 2, 'Filtering will start after input of two characters')
 
+If not exists (select * from tbltext where id = 10027)
+insert into tbltext (id, TextString, TextType) VALUES (10027, 'Tillbaka', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10027 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10027, 2, 'Back')
+

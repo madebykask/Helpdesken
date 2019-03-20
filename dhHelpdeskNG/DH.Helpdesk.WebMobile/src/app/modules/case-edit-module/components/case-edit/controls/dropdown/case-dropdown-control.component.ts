@@ -23,7 +23,7 @@ export class CaseDropdownComponent extends BaseControl<number> {
     settings: MbscSelectOptions = {
       filter: true,
       display: 'center',
-      theme: "mobiscroll",
+      theme: 'mobiscroll',
       headerText: () => this.getHeader,
       onInit: (event, inst) => {
         if (this.field.isReadonly) {
