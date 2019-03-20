@@ -94,6 +94,10 @@ mbsc-textarea textarea:disabled {
   }
 
   .mbsc-input  {
+    margin: 0;
+    input {
+      border-bottom: inherit;
+    }
     .mbsc-label~.mbsc-input-wrap {
       padding-top: 0;
     }
@@ -118,7 +122,7 @@ a {
     left: 0;
     bottom: 0;
     width: 100%;
-    text-align: center;   
+    text-align: center;
     .mbsc-ios {
         &.mbsc-ms-c {
             background: $primary-color;
