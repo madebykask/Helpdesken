@@ -134,28 +134,35 @@ export class CaseEditComponent {
     }
 
     private processNotifierChanged(eventData: NotifierChangedEvent) {
-      const data = eventData.notifier;
 
-      if (eventData.type === NotifierType.Initiator) {
-        this.form.setSafe(CaseFieldsNames.ReportedBy,  data.userId || '');
-        this.form.setSafe(CaseFieldsNames.PersonName, data.name || '');
-        this.form.setSafe(CaseFieldsNames.PersonEmail, data.email || '');
-        this.form.setSafe(CaseFieldsNames.PersonCellPhone, data.cellphone || '');
-        this.form.setSafe(CaseFieldsNames.Place, data.place || '');
-        this.form.setSafe(CaseFieldsNames.UserCode, data.userCode || '');
-        this.form.setSafe(CaseFieldsNames.CostCentre, data.costCentre || '');
-        //TODO: 
-        //this.form.setSafe(CaseFieldsNames.OrganizationUnitId, data.ouId);
-        //TODO: check region and department
-        if (data.regionId && data.departmentId) {
-          this.form.setSafe(CaseFieldsNames.RegionId, data.regionId);
-          this.form.setSafe(CaseFieldsNames.DepartmentId, data.departmentId);
+      if (eventData.notifier != null) {
+        const data = eventData.notifier;
+
+        if (eventData.type === NotifierType.Initiator) {
+          this.form.setSafe(CaseFieldsNames.ReportedBy,  data.userId || '');
+          this.form.setSafe(CaseFieldsNames.PersonName, data.name || '');
+          this.form.setSafe(CaseFieldsNames.PersonEmail, data.email || '');
+          this.form.setSafe(CaseFieldsNames.PersonCellPhone, data.cellphone || '');
+          this.form.setSafe(CaseFieldsNames.Place, data.place || '');
+          this.form.setSafe(CaseFieldsNames.UserCode, data.userCode || '');
+          this.form.setSafe(CaseFieldsNames.CostCentre, data.costCentre || '');
+          //TODO: 
+          //this.form.setSafe(CaseFieldsNames.OrganizationUnitId, data.ouId);
+          //TODO: check region and department
+          if (data.regionId && data.departmentId) {
+            this.form.setSafe(CaseFieldsNames.RegionId, data.regionId);
+            this.form.setSafe(CaseFieldsNames.DepartmentId, data.departmentId);
+          }
         }
-      }
-      else if (eventData.type === NotifierType.Regarding) {
-        //TODO: implement for regarding 
+        else if (eventData.type === NotifierType.Regarding) {
+          //TODO: implement for regarding 
+        }
+      } 
+      else {
+       //TODO: Clear form?
       }
     }
+    
 
     private runUpdates(v: DropdownValueChangedEvent) { // TODO: move to new class
       const reducer = this.сaseDataReducersFactory.createCaseDataReducers(this.dataSource);

@@ -38,6 +38,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
     display: "center",
     maxWidth: 400,
     multiline: 2,
+    buttons: ['cancel'],
     //height: 40,
 
     onFilter: (event, inst) => {
@@ -56,8 +57,17 @@ export class NotifierSearchComponent extends BaseControl<string> {
    
     onSet: (event, inst) => {
       let val = +inst.getVal();
-      if (!isNaN(val)) {
+      if (!isNaN(val) && val != 0) {
         this.onNotifierSelected(val);
+      }
+      else {
+        this.onNotifierSelected(null);
+      }
+    },
+
+    onChange: (event, inst) => {
+      if (inst == null || inst == 0){
+        
       }
     }
   };
@@ -135,12 +145,17 @@ export class NotifierSearchComponent extends BaseControl<string> {
   }
 
   private onNotifierSelected(userId:number) {
-    this.notifierService.getNotifier(userId).pipe(
-      take(1)
-    ).subscribe(x => {
-      //raise event to handle notfier change on case edit component
-      this.commService.publish(Channels.NotifierChanged, new NotifierChangedEvent(x, this.notifierType));
-    });
+    if (userId != null){
+      this.notifierService.getNotifier(userId).pipe(
+        take(1)
+      ).subscribe(x => {
+        //raise event to handle notfier change on case edit component
+        this.commService.publish(Channels.NotifierChanged, new NotifierChangedEvent(x, this.notifierType));
+      });
+    }
+    else{
+      this.commService.publish(Channels.NotifierChanged, new NotifierChangedEvent(null, this.notifierType));
+    }
   }
 
   private initEvents() {
