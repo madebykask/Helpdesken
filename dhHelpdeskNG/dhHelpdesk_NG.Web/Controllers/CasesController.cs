@@ -4922,7 +4922,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Formatter = outputFormatter,
                     ChildCaseList = childCases
                 };
-                m.ClosedChildCasesCount = childCases.Count(it => it.ClosingDate != null && !it.Indepandent);
+                m.ClosedChildCasesCount = childCases.Count(it => it.ClosingDate != null);
                 m.ParentCaseInfo = this._caseService.GetParentInfo(caseId).MapBusinessToWebModel(outputFormatter);
                 if (m.ParentCaseInfo != null)
                 {
