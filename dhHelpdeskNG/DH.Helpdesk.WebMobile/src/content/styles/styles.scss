@@ -85,8 +85,16 @@ mbsc-textarea textarea:disabled {
 //mobiscroll theme overrides
 .mbsc-mobiscroll {
 
-  .mbsc-sel-filter-cont input {
-    font-size: 15px !important;
+  .mbsc-sc-itm {
+    padding-right: 10px!important;
+    font-size:16px!important;   
+  }
+  
+  .mbsc-fr-hdr { font-size:16px!important; } 
+
+  .mbsc-sel-filter-cont {
+    margin-top:10px;
+    input { font-size: 15px !important; }
   }
 
   .mbsc-err-msg {

@@ -25,6 +25,7 @@ export class CaseDropdownComponent extends BaseControl<number> {
       filterEmptyText: this.ngxTranslateService.instant('Inget resultat'),
       display: 'center',
       theme: 'mobiscroll',
+      height:30,
       headerText: () => this.getHeader,
       onInit: (event, inst) => {
         if (this.field.isReadonly) {

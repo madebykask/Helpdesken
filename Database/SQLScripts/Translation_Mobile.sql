@@ -213,3 +213,11 @@ insert into tbltext (id, TextString, TextType) VALUES (10031, 'Fyll i obligatori
 If not exists (select * from tblTextTranslation where text_id = 10031 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10031, 2, 'Please fill in required fields.')
 
+If not exists (select * from tbltext where id = 10032)
+insert into tbltext (id, TextString, TextType) VALUES (10032, 'Användar ID', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10032 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10032, 2, 'User ID')
+
+
+

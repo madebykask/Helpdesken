@@ -508,7 +508,7 @@ export class CaseEditComponent {
         formFieldsSetter.setUserCode(data.userCode);
         formFieldsSetter.setCostCenter(data.costCentre);
   
-        this.updateOrganisationFields(formFieldsSetter, data);        
+        this.updateOrganisationFields(formFieldsSetter, data);
       }
       else {
         this.resetNotifierFields(formFieldsSetter);
@@ -544,13 +544,13 @@ export class CaseEditComponent {
         take(1)
       ).subscribe(deps => {
         reducer.caseDataReducer(CaseFieldsNames.DepartmentId, { items: deps }); 
-        if (!isNaN(departmentId) && departmentId) 
-          this.changeDepartment(notifierFieldsSetter, departmentId, ouId);
+        this.changeDepartment(notifierFieldsSetter, departmentId, ouId);
       });
     }
 
     private changeDepartment(notifierFieldsSetter: NotifierFormFieldsSetter, departmentId: number, ouId?: number) {
-      notifierFieldsSetter.setDepartment(departmentId);
+
+      notifierFieldsSetter.setDepartment(departmentId || '');
 
       const reducer = this.getCaseDataReducers();
       const optionsHelper = this.getFormOptionsHelpers();
@@ -560,8 +560,7 @@ export class CaseEditComponent {
         take(1)
       ).subscribe(ous => {
           reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: ous }); 
-          if (!isNaN(ouId) && ouId)
-            notifierFieldsSetter.setOU(ouId);
+          notifierFieldsSetter.setOU(ouId || '');
       });
     }
 
@@ -574,7 +573,7 @@ export class CaseEditComponent {
       formFieldsSetter.setUserCode('');
       formFieldsSetter.setCostCenter('');
       formFieldsSetter.setRegion('');
-      this.changeRegion(formFieldsSetter, null, null, null)      
+      this.changeRegion(formFieldsSetter, null, null, null);
     }
 
     private showLockWarning() {

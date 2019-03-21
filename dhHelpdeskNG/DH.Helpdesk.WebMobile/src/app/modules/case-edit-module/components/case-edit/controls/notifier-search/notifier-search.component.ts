@@ -26,21 +26,23 @@ export class NotifierSearchComponent extends BaseControl<string> {
 
   private usersSearchSubject = new Subject<string> ();
 
-  selectOptions: MbscSelectOptions = {
+  selectOptions: any /*MbscSelectOptions*/ = {
     input: "#notifierInput",
-    //showInput: true,
-    //showLabel: false,
     showOnTap: false,
     circular: false,
     theme:"mobiscroll",
-    cssClass: "search-list dhselect-list",   
+    cssClass: "search-list",
     filter: true,
     display: "center",
     maxWidth: 400,
     multiline: 2,
-    buttons: ['cancel'],
-    //height: 40,
-
+    buttons: ['cancel', 'set'],
+    headerText: this.ngxTranslateService.instant("Användar ID"),
+    cancelText: this.ngxTranslateService.instant("Avbryt"),
+    setText: this.ngxTranslateService.instant("Välj"),
+    filterPlaceholderText: this.ngxTranslateService.instant('Skriv för att filtrera'),
+    filterEmptyText: this.ngxTranslateService.instant('Inget resultat'),
+    // Methods
     onFilter: (event, inst) => {
       const filterText = event.filterText || '';
       this.usersSearchSubject.next(filterText);
@@ -48,11 +50,8 @@ export class NotifierSearchComponent extends BaseControl<string> {
       return false;
     },
 
-    onMarkupReady: (event, inst) => {
-      const filterDiv = event.target.querySelector<HTMLElement>(".mbsc-sel-filter-cont");
-      const filterInput = filterDiv.querySelector<HTMLInputElement>(".mbsc-sel-filter-input");
-      filterInput.placeholder = this.ngxTranslateService.instant('Filtrering startar när minst två tecken har angetts');
-      this.createProgressIcon(filterDiv);
+    onMarkupReady: (event: { target: HTMLElement }, inst:any) => {      
+      this.createProgressIcon(event.target);
     },
    
     onSet: (event, inst) => {
@@ -77,7 +76,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
     this.updateDisabledState();
 
     this.initEvents();
-    
+
     //TODO: when initiator categoryId is implemented - replace with value from dropdown
     const categoryId = 0; // 0 - no category, null - all categories
 
@@ -102,28 +101,21 @@ export class NotifierSearchComponent extends BaseControl<string> {
               return {
                 value: item.id,
                 text: `${item.userId} - ${item.name || ''} - ${item.email}`,
-                html: '<div style="font-size:12px;line-height:18px;">' + `${item.userId} - ${item.name || ''} - ${item.email}` + '</div>'
+                html: '<div class="select-li">' + `${item.userId} - ${item.name || ''} - ${(item.email || '').toLowerCase()}` + '</div>'
               }
             });
         } else {
           this.notifiersData = [];
         }
-        //add  empty
+        //add empty
         this.notifiersData.unshift({ value: '', text: ''});
     });
   }
   
   ngAfterViewInit(): void {
     if (this.notifierSelect) {
-      //set select translations
-      this.notifierSelect.instance.option({
-        // TODO: translate
-        headerText: this.field.label || 'User Id',
-        cancelText: this.ngxTranslateService.instant("Avbryt"),
-        setText: this.ngxTranslateService.instant("Välj"),
-        // set in markupReady event handler
-        //filterPlaceholderText: 'Search users',
-        //filterEmptyText: 'No results',//	Text for the empty state of the select wheels.
+      this.notifierSelect.instance.option({ 
+        headerText: this.field.label 
       });
     }
   } 
@@ -166,13 +158,14 @@ export class NotifierSearchComponent extends BaseControl<string> {
       });
   }
 
-  private createProgressIcon(parentNode) {
+  private createProgressIcon(selectNode: HTMLElement) {
     const progressSpan = document.createElement("span")
     progressSpan.id = 'notifierProgress';
     progressSpan.className = "notifierProgress mbsc-ic";
     progressSpan.innerHTML = '<img src="content/img/bars.gif" border="0" />'
     progressSpan.style.display = "none";
-    parentNode.appendChild(progressSpan);
+    const filterNode = selectNode.querySelector<HTMLElement>(".mbsc-sel-filter-cont");
+    filterNode.appendChild(progressSpan);
   }
 
   private toggleProgress(show) {
