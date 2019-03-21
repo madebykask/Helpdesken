@@ -19,8 +19,10 @@ export class CaseDropdownComponent extends BaseControl<number> {
     @Input() disabled = false;
     
     // select settings
-    settings: MbscSelectOptions = {
+    settings: any = {
       filter: true,
+      filterPlaceholderText: this.ngxTranslateService.instant('Skriv för att filtrera'),
+      filterEmptyText: this.ngxTranslateService.instant('Inget resultat'),
       display: 'center',
       theme: 'mobiscroll',
       headerText: () => this.getHeader,

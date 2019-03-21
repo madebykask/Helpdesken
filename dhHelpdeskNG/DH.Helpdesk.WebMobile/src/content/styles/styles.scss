@@ -119,6 +119,10 @@ mbsc-textarea textarea:disabled {
       }
     }
   }
+
+  .mbsc-fr-hdr, .mbsc-fr-btn {
+    text-transform: capitalize
+  }
 }
 
 mbsc-calendar {

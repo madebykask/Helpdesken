@@ -21,13 +21,17 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
     @Input() dataSource: MultiLevelOptionItem[] = [];
     @Input() disabled = false;
     text: string = '';
-    settings: MbscSelectOptions = {
+    settings: any = {
       theme: 'mobiscroll',
       display: 'center',
       layout: 'liquid',
       anchor: 'select-textarea',
       focusOnClose: false,
-      filter: false,
+      filter: true,
+      filterPlaceholderText: this.ngxTranslateService.instant('Skriv för att filtrera'),
+      filterEmptyText: this.ngxTranslateService.instant('Inget resultat'),
+      setText: this.ngxTranslateService.instant('Välj'),
+      cancelText: this.ngxTranslateService.instant('Avbryt'),
       buttons:
       [{ // this button is hidden if root element has 'root' class
           text: this.ngxTranslateService.instant('Tillbaka'),
@@ -81,10 +85,10 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
           let chain = this.getOptionsChain(event.value);
           if (this.hasChilds(chain, chain.length - 1)) {
             let data = this.getNextData(event.value);
-            inst.refresh(data);
+            inst.refresh(data, '');
             this.markIfRoot(inst);
           } else {
-            inst.setVal(event.value, false, false, true);
+            inst.setVal(event.value, false, false, true); // set temp value only
           }
         }
         return false;
@@ -106,8 +110,6 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
 
     ngOnInit(): void {
       this.init(this.field);
-      this.select.setText = this.ngxTranslateService.instant('Välj');
-      this.select.cancelText  = this.ngxTranslateService.instant('Avbryt');
       this.updateDisabledState();
 
       this.initEvents()
