@@ -388,7 +388,8 @@ export class CaseEditComponent {
       this.form.submit();
       if (this.form.invalid) {
         let invalidControls = this.form.findInvalidControls(); // debug info
-        this.alertService.showMessage('Some fields has errors. Please, resolve them before continue.', AlertType.Error, 3);
+        let errormessage = this.translateService.instant('Fyll i obligatoriska fält.');
+        this.alertService.showMessage(errormessage, AlertType.Error, 3);
         return
       };
 
