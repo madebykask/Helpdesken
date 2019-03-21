@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { CaseEditDataHelper } from '../../../logic/case-edit/case-editdata.helper';
 import { CaseEditInputModel, BaseCaseField, CaseAccessMode } from '../../../models';
 import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
@@ -15,24 +15,26 @@ import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms';
   styleUrls: ['./case-log-input.component.scss']
 })
 export class CaseLogInputComponent implements OnInit {
+  @ViewChild('external') externalCtrl: any
+  @ViewChild('internal') internalCtrl: any
   
-  @Input() caseKey:string;
+  @Input() caseKey: string;
   @Input() form: CaseFormGroup;
   @Input() caseData: CaseEditInputModel;
   @Input() accessMode: CaseAccessMode;
 
-  files:string[] = [];
+  files: string[] = [];
   caseFieldsNames = CaseFieldsNames;
-  internalLogLabel:string = '';
-  externalLogLabel:string = '';
-  externalLogField:BaseCaseField<string> = null;
-  internalLogField:BaseCaseField<string> = null;
+  internalLogLabel: string = '';
+  externalLogLabel: string = '';
+  externalLogField: BaseCaseField<string> = null;
+  internalLogField: BaseCaseField<string> = null;
 
   get hasFullAccess() {
     return this.accessMode !== null && this.accessMode === CaseAccessMode.FullAccess;
   }
 
-  private destroy$ = new Subject();  
+  private destroy$ = new Subject();
 
   fileListSettings: MbscListviewOptions = {
     enhance: true,
@@ -44,11 +46,12 @@ export class CaseLogInputComponent implements OnInit {
       icon: 'fa-trash',
       confirm: true,
       action: this.onFileDelete.bind(this)
-    }]  
+    }]
   };
 
-  constructor(private caseDataHelpder: CaseEditDataHelper, //TODO: review caseDataHelper usage
-              private caseLogApiService: CaseLogApiService) {
+  constructor(private caseDataHelpder: CaseEditDataHelper, // TODO: review caseDataHelper usage
+              private caseLogApiService: CaseLogApiService,
+              private renderer: Renderer2) {
   }
 
   ngOnInit() {
@@ -64,7 +67,22 @@ export class CaseLogInputComponent implements OnInit {
     }
   }
 
-  processFileUploaded(file:string) {    
+  ngAfterViewInit(): void {
+    const applyMaxLength = (ctrl, maxLength: number) => {
+      const inputControl = ctrl.initialElem.nativeElement.querySelector('textarea');
+      if (inputControl) {
+        this.renderer.setAttribute(inputControl, 'maxlength', maxLength.toString());
+      }
+    };
+    if (this.externalLogField.maxLength) {
+      applyMaxLength(this.externalCtrl, this.externalLogField.maxLength);
+    }
+    if (this.internalLogField.maxLength) {
+      applyMaxLength(this.internalCtrl, this.internalLogField.maxLength);
+    }
+  }
+
+  processFileUploaded(file:string) {
     this.files.push(file);
   }
 
@@ -77,7 +95,7 @@ export class CaseLogInputComponent implements OnInit {
      return this.caseDataHelpder.hasField(this.caseData, name);
   }
 
-  getField(name: string): BaseCaseField<any> {    
+  getField(name: string): BaseCaseField<any> {
     return this.caseDataHelpder.getField(this.caseData, name);
   }
   

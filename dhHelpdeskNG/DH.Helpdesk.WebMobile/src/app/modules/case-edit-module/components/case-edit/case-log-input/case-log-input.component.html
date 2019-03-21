@@ -1,9 +1,9 @@
 
 <ng-container [formGroup]="form" *ngIf="externalLogField || internalLogField">
-  <mbsc-textarea *ngIf="externalLogField" 
+  <mbsc-textarea *ngIf="externalLogField" #external
                 [formControlName]="externalLogField.name">{{ externalLogLabel }}</mbsc-textarea>
 
-  <mbsc-textarea *ngIf="internalLogField" 
+  <mbsc-textarea *ngIf="internalLogField" #internal
                  [formControlName]="internalLogField.name">{{ internalLogLabel }}</mbsc-textarea>
   
   <div id="log-files" *ngIf="files && files.length > 0">

@@ -1,8 +1,7 @@
-import { Component, Input, ViewChild } from "@angular/core";
-import { BaseCaseField } from "../../../../models";
+import { Component, Input, ViewChild, ElementRef, Renderer2 } from "@angular/core";
 import { BaseControl } from "../base-control";
 import { switchMap, takeUntil } from "rxjs/operators";
-import { of, Subject } from "rxjs";
+import { of } from "rxjs";
 import { FormStatuses } from "src/app/modules/shared-module/constants";
 
 @Component({
@@ -13,12 +12,26 @@ import { FormStatuses } from "src/app/modules/shared-module/constants";
   export class CaseTextboxComponent extends BaseControl<string> {
     @ViewChild('input') control: any;
     @Input() disabled = false;
+
+    constructor(private elem: ElementRef, private renderer: Renderer2) {
+      super();
+    }
     
     ngOnInit(): void {
       this.init(this.field);
       this.updateDisabledState();
 
       this.initEvents()
+    }
+
+    ngAfterViewInit(): void {
+      if (this.field.maxLength) {
+        const inputControl = this.elem.nativeElement.querySelector('input');
+        if (inputControl) {
+          this.renderer.setAttribute(inputControl, 'maxlength', this.field.maxLength.toString());
+          //inputControl.maxLength = this.field.maxLength;
+        }
+      }
     }
 
     ngOnDestroy(): void {
