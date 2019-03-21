@@ -37,7 +37,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
     maxWidth: 400,
     multiline: 2,
     buttons: ['cancel', 'set'],
-    headerText: this.ngxTranslateService.instant("Användar ID"),
+    headerText: () => this.getHeaderText(),
     cancelText: this.ngxTranslateService.instant("Avbryt"),
     setText: this.ngxTranslateService.instant("Välj"),
     filterPlaceholderText: this.ngxTranslateService.instant('Skriv för att filtrera'),
@@ -112,14 +112,6 @@ export class NotifierSearchComponent extends BaseControl<string> {
     });
   }
   
-  ngAfterViewInit(): void {
-    if (this.notifierSelect) {
-      this.notifierSelect.instance.option({ 
-        headerText: this.field.label 
-      });
-    }
-  } 
-
   ngOnDestroy(): void {
     this.onDestroy();
   }
@@ -156,6 +148,11 @@ export class NotifierSearchComponent extends BaseControl<string> {
           this.updateDisabledState();
         }
       });
+  }
+
+  private getHeaderText() {
+    const defaultText = this.ngxTranslateService.instant("Användar ID");
+    return this.field ? this.formControl.label || defaultText : defaultText;
   }
 
   private createProgressIcon(selectNode: HTMLElement) {
