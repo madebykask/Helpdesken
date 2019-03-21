@@ -86,18 +86,14 @@ mbsc-textarea textarea:disabled {
 .mbsc-mobiscroll {
 
   .mbsc-sel-filter-cont input {
-    font-size:15px!important;
+    font-size: 15px !important;
   }
 
   .mbsc-err-msg {
     position: static;
   }
 
-  .mbsc-input  {
-    margin: 0;
-    input {
-      border-bottom: inherit;
-    }
+  .mbsc-input {
     .mbsc-label~.mbsc-input-wrap {
       padding-top: 0;
     }
@@ -120,6 +116,17 @@ mbsc-textarea textarea:disabled {
       .mbsc-fr-btn {
         color: black;
         opacity: .5;
+      }
+    }
+  }
+}
+
+mbsc-calendar {
+  &.mbsc-mobiscroll {
+    .mbsc-input {
+      margin: 0;
+      input {
+        border-bottom: inherit;
       }
     }
   }
