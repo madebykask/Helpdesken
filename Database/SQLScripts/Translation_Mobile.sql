@@ -220,4 +220,12 @@ If not exists (select * from tblTextTranslation where text_id = 10032 and Langua
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10032, 2, 'User ID')
 
 
+If not exists (select * from tbltext where id = 10033)
+insert into tbltext (id, TextString, TextType) VALUES (10033, 'Skapa ärende', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10033 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10033, 2, 'Create case')
+
+
+
 
