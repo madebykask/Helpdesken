@@ -9,12 +9,18 @@ export class CaseDataReducers {
   }
 
   caseDataReducer(action: string, payload: any) {
-    switch (action) {
+    switch (action) {      
       case CaseFieldsNames.DepartmentId: {
         return this._caseDataStore.departmentsStore$.next(payload.items);
       }
       case CaseFieldsNames.OrganizationUnitId: {
         return this._caseDataStore.oUsStore$.next(payload.items);
+      }
+      case CaseFieldsNames.IsAbout_DepartmentId: {
+        return this._caseDataStore.isAboutDepartmentsStore$.next(payload.items);
+      }
+      case CaseFieldsNames.IsAbout_OrganizationUnitId: {
+        return this._caseDataStore.isAboutOUsStore$.next(payload.items);
       }
       case CaseFieldsNames.ProductAreaId: {
         return this._caseDataStore.productAreasStore$.next(payload.items);
@@ -25,6 +31,7 @@ export class CaseDataReducers {
       case CaseFieldsNames.WorkingGroupId: {
         return this._caseDataStore.workingGroupsStore$.next(payload.items);
       } 
+      
       default:
         return of(null);
        // throw new Error(`Action for case field ${action} is not implemented.`);

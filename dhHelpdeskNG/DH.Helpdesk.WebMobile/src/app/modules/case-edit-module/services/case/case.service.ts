@@ -114,9 +114,9 @@ export class CaseService {
       return {
         getRegions: () => this.caseOrganizationService.getRegions(),
         getDepartments: () => fieldExists(filter.RegionId) ? this.caseOrganizationService.getDepartments(filter.RegionId) : empty$(),
-        getDepartmentsByRegion: (regionId:number) => fieldExists(regionId) && regionId ? this.caseOrganizationService.getDepartments(regionId) : empty$(),
+        //getDepartmentsByRegion: (regionId:number) => fieldExists(regionId) && regionId ? this.caseOrganizationService.getDepartments(regionId) : empty$(),
         getOUs: () => fieldExists(filter.DepartmentId) && filter.DepartmentId != null ? this.caseOrganizationService.getOUs(filter.DepartmentId): empty$(),
-        getOUsByDepartment: (depId:number) => fieldExists(depId) && depId ? this.caseOrganizationService.getOUs(depId): empty$(),
+        //getOUsByDepartment: (depId:number) => fieldExists(depId) && depId ? this.caseOrganizationService.getOUs(depId): empty$(),
         getIsAboutDepartments: () => fieldExists(filter.IsAboutRegionId) ? this.caseOrganizationService.getDepartments(filter.IsAboutRegionId) : empty$(),
         getIsAboutOUs: () => fieldExists(filter.IsAboutDepartmentId) && filter.IsAboutDepartmentId != null ? this.caseOrganizationService.getOUs(filter.IsAboutDepartmentId) : empty$(),
         getCaseTypes: () => fieldExists(filter.CaseTypes) ? this.caseOrganizationService.getCaseTypes() : empty$(),

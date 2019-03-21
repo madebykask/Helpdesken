@@ -83,15 +83,15 @@ export class NotifierFormFieldsSetter {
   constructor(private isRegarding: boolean, private form: CaseFormGroup) {    
   }
 
-  setRegion(val: number) {
+  setRegion(val) {
     this.setSafe(CaseFieldsNames.RegionId, val);
   }
 
-  setDepartment(val: number) {
+  setDepartment(val) {
     this.setSafe(CaseFieldsNames.DepartmentId, val);
   }
 
-  setOU(val: number) {    
+  setOU(val) {
     this.setSafe(CaseFieldsNames.OrganizationUnitId, val);
   }
 

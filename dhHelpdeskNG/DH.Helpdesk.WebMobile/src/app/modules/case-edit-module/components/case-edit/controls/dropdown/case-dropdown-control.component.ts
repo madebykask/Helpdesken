@@ -83,8 +83,7 @@ export class CaseDropdownComponent extends BaseControl<number> {
             this.updateDisabledState();
           }
         });
-
-        if (this.dataSource)
+        
         this.dataSource.pipe(
           takeUntil(this.destroy$)
         ).subscribe((options) => {

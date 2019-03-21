@@ -131,69 +131,6 @@ export class CaseEditComponent {
       this.commService.listen<NotifierChangedEvent>(Channels.NotifierChanged).pipe(
         takeUntil(this.destroy$)
       ).subscribe(data => this.processNotifierChanged(data));
-    }   
-
-    private processNotifierChanged(eventData: NotifierChangedEvent) {
-      const data = eventData.notifier;
-      const isRegarding = eventData.type === NotifierType.Regarding;
-      const formFieldsSetter = this.form.getNotifierFieldsSetter(isRegarding);
-      
-      formFieldsSetter.setReportedBy(data.userId);
-      formFieldsSetter.setPersonName(data.name);
-      formFieldsSetter.setPersonEmail(data.email);
-      formFieldsSetter.setPersonCellPhone(data.cellphone);
-      formFieldsSetter.setPlace(data.place);
-      formFieldsSetter.setUserCode(data.userCode);
-      formFieldsSetter.setCostCenter(data.costCentre);
-
-      if (data.regionId && data.departmentId) {
-        this.updateOrganisationValues(formFieldsSetter, data);
-      }
-    }
-
-    private updateOrganisationValues(notifierFieldsSetter: NotifierFormFieldsSetter, data: IOrganisationData) {
-      const regionId = data.regionId ? +data.regionId : null;
-      const departmentId = data.departmentId ? +data.departmentId : null;
-      const ouId = data.ouId ? +data.ouId : null;
-      const formRegionId = +this.form.getValue(CaseFieldsNames.RegionId);
-      const reducer = this.сaseDataReducersFactory.createCaseDataReducers(this.dataSource);
-      const optionsHelper = this.getFormOptionsHelpers();      
-
-      if (!isNaN(regionId) && regionId) {
-        if (regionId !== formRegionId) {
-          notifierFieldsSetter.setRegion(regionId/*, false*/);
-          //change to new region and load  departments
-          optionsHelper.getDepartmentsByRegion(regionId).pipe(
-            take(1)
-          ).subscribe(deps => {
-            reducer.caseDataReducer(CaseFieldsNames.DepartmentId, { items: deps }); 
-            if (!isNaN(departmentId) && departmentId) 
-              this.changeDepartment(notifierFieldsSetter,departmentId, ouId);
-          });
-        }
-        else {
-           //just set new department if exists
-           if (!isNaN(departmentId) && departmentId) {
-             this.changeDepartment(notifierFieldsSetter, departmentId, ouId); 
-           }
-        }
-      }
-    }
-
-    private changeDepartment(notifierFieldsSetter: NotifierFormFieldsSetter, departmentId: number, ouId?: number) {
-      const reducer = this.getCaseDataReducers();
-      const optionsHelper = this.getFormOptionsHelpers();
-      
-      notifierFieldsSetter.setDepartment(departmentId);
-
-      // load OUs
-      optionsHelper.getOUsByDepartment(departmentId).pipe(
-        take(1)
-      ).subscribe(ous => {
-          reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: ous }); 
-          if (!isNaN(ouId) && ouId)
-            notifierFieldsSetter.setOU(ouId);
-      });
     }
 
     private getCaseDataReducers(): CaseDataReducers {
@@ -210,6 +147,7 @@ export class CaseEditComponent {
       const filters = this.caseDataHelpder.getFormCaseOptionsFilter(this.caseData, this.form);
       const optionsHelper = this.caseService.getOptionsHelper(filters);
 
+      //NOTE: remember to update case data reducer when adding new fields
       switch (v.name) {
         
         case CaseFieldsNames.RegionId: {
@@ -217,6 +155,8 @@ export class CaseEditComponent {
             take(1),
           ).subscribe((deps: OptionItem[]) => {
             reducer.caseDataReducer(CaseFieldsNames.DepartmentId, { items: deps });
+            //clear org units
+            reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: []});
           });
           break;
         }
@@ -235,6 +175,8 @@ export class CaseEditComponent {
             take(1),
           ).subscribe((deps: OptionItem[]) => {
             reducer.caseDataReducer(CaseFieldsNames.IsAbout_DepartmentId, { items: deps });
+            //clear org units
+            reducer.caseDataReducer(CaseFieldsNames.IsAbout_OrganizationUnitId, { items: []});
           });
           break;
         }
@@ -551,6 +493,89 @@ export class CaseEditComponent {
       }
     }
   
+    private processNotifierChanged(eventData: NotifierChangedEvent) {
+      const data = eventData.notifier;
+      const isRegarding = eventData.type === NotifierType.Regarding;
+      const formFieldsSetter = this.form.getNotifierFieldsSetter(isRegarding);
+
+      if (data) {
+        formFieldsSetter.setReportedBy(data.userId);
+        formFieldsSetter.setPersonName(data.name);
+        formFieldsSetter.setPersonEmail(data.email);
+        formFieldsSetter.setPersonCellPhone(data.cellphone);
+        formFieldsSetter.setPlace(data.place);
+        formFieldsSetter.setUserCode(data.userCode);
+        formFieldsSetter.setCostCenter(data.costCentre);
+  
+        this.updateOrganisationFields(formFieldsSetter, data);        
+      }
+      else {
+        this.resetNotifierFields(formFieldsSetter);
+      }
+    }
+
+    private updateOrganisationFields(notifierFieldsSetter: NotifierFormFieldsSetter, data: IOrganisationData) {
+      const regionId = data.regionId ? +data.regionId : null;
+      const departmentId = data.departmentId ? +data.departmentId : null;
+      const ouId = data.ouId ? +data.ouId : null;
+      const formRegionId = +this.form.getValue(CaseFieldsNames.RegionId);
+
+      if (regionId !== formRegionId) {
+        this.changeRegion(notifierFieldsSetter, regionId, departmentId, ouId);
+      }
+      else {
+          //just set new department if exists
+          if (!isNaN(departmentId) && departmentId) {
+            this.changeDepartment(notifierFieldsSetter, departmentId, ouId); 
+          }
+      }
+    }
+
+    private changeRegion(notifierFieldsSetter: NotifierFormFieldsSetter, regionId?:number, departmentId?: number, ouId?: number) {
+      //change first to update form 
+      notifierFieldsSetter.setRegion(regionId || '');
+      
+      const reducer = this.getCaseDataReducers();
+      const optionsHelper = this.getFormOptionsHelpers();
+
+      //change to new region and load departments
+      optionsHelper.getDepartments().pipe(
+        take(1)
+      ).subscribe(deps => {
+        reducer.caseDataReducer(CaseFieldsNames.DepartmentId, { items: deps }); 
+        if (!isNaN(departmentId) && departmentId) 
+          this.changeDepartment(notifierFieldsSetter, departmentId, ouId);
+      });
+    }
+
+    private changeDepartment(notifierFieldsSetter: NotifierFormFieldsSetter, departmentId: number, ouId?: number) {
+      notifierFieldsSetter.setDepartment(departmentId);
+
+      const reducer = this.getCaseDataReducers();
+      const optionsHelper = this.getFormOptionsHelpers();
+
+      // load OUs
+      optionsHelper.getOUs(departmentId).pipe(
+        take(1)
+      ).subscribe(ous => {
+          reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: ous }); 
+          if (!isNaN(ouId) && ouId)
+            notifierFieldsSetter.setOU(ouId);
+      });
+    }
+
+    private resetNotifierFields(formFieldsSetter: NotifierFormFieldsSetter) {     
+      formFieldsSetter.setReportedBy('');
+      formFieldsSetter.setPersonName('');
+      formFieldsSetter.setPersonEmail('');
+      formFieldsSetter.setPersonCellPhone('');
+      formFieldsSetter.setPlace('');
+      formFieldsSetter.setUserCode('');
+      formFieldsSetter.setCostCenter('');
+      formFieldsSetter.setRegion('');
+      this.changeRegion(formFieldsSetter, null, null, null)      
+    }
+
     private showLockWarning() {
       let currentUser =  this.authStateService.getUser();
       let notice =

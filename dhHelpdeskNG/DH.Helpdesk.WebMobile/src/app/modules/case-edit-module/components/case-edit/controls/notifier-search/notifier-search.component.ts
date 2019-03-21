@@ -63,12 +63,6 @@ export class NotifierSearchComponent extends BaseControl<string> {
       else {
         this.onNotifierSelected(null);
       }
-    },
-
-    onChange: (event, inst) => {
-      if (inst == null || inst == 0){
-        
-      }
     }
   };
 
@@ -114,6 +108,8 @@ export class NotifierSearchComponent extends BaseControl<string> {
         } else {
           this.notifiersData = [];
         }
+        //add  empty
+        this.notifiersData.unshift({ value: '', text: ''});
     });
   }
   
@@ -153,7 +149,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
         this.commService.publish(Channels.NotifierChanged, new NotifierChangedEvent(x, this.notifierType));
       });
     }
-    else{
+    else {
       this.commService.publish(Channels.NotifierChanged, new NotifierChangedEvent(null, this.notifierType));
     }
   }
