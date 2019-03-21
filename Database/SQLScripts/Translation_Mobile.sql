@@ -201,3 +201,15 @@ insert into tbltext (id, TextString, TextType) VALUES (10029, 'Inget resultat', 
 If not exists (select * from tblTextTranslation where text_id = 10029 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10029, 2, 'No result')
 
+If not exists (select * from tbltext where id = 10030)
+insert into tbltext (id, TextString, TextType) VALUES (10030, 'Fältet är obligatoriskt', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10030 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10030, 2, 'Field is required')
+
+If not exists (select * from tbltext where id = 10031)
+insert into tbltext (id, TextString, TextType) VALUES (10031, 'Fyll i obligatoriska fält.', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10031 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10031, 2, 'Please fill in required fields.')
+
