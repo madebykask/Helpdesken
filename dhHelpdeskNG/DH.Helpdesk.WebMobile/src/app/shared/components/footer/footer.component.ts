@@ -90,8 +90,8 @@ export class FooterComponent implements OnInit  {
       this.loadTemplates().subscribe((templateNodes) => {
         this.templateNodes = templateNodes;
         this.canCreateCases$.next(this.templateNodes.length > 0);
-      })
-    };
+      });
+    }
 
     // apply translations
     this.languagesCtrl.setText = this.ngxTranslateService.instant("Välj");
@@ -142,7 +142,7 @@ export class FooterComponent implements OnInit  {
 
   createCase() {
     if (this.canCreateCases$.value) {
-      this.newCasePopup.instance.show()
+      this.router.navigate(['/createcase']);
     }
   }
 

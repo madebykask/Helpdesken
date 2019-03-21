@@ -19,6 +19,11 @@ const appRoutes: Routes = [
       { path: 'case',
         loadChildren: './modules/case-edit-module/case-edit.module#CaseEditModule',
         canActivate: [AuthGuard] 
+      },
+      { 
+        path: 'createcase',
+        loadChildren: './modules/case-template-module/case-template.module#CaseTemplateModule',
+        canActivate: [AuthGuard]
       }
     ]
   },
