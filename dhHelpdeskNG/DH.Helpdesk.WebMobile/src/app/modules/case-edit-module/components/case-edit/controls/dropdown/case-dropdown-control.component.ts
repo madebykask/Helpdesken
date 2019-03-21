@@ -1,9 +1,8 @@
-import { Component, Input, ViewChild } from "@angular/core";
-import { BaseCaseField } from "../../../../models";
+import { Component, Input, ViewChild, OnChanges, SimpleChanges } from "@angular/core";
 import { BaseControl } from "../base-control";
-import { takeUntil, switchMap } from "rxjs/operators";
-import { Subject, of, BehaviorSubject } from "rxjs";
-import { MbscSelectOptions } from "@mobiscroll/angular";
+import { takeUntil } from "rxjs/operators";
+import { BehaviorSubject } from "rxjs";
+import { MbscSelectOptions, MbscSelect } from "@mobiscroll/angular";
 import { CommunicationService, Channels, DropdownValueChangedEvent } from "src/app/services/communication";
 import { OptionItem } from "src/app/modules/shared-module/models";
 import { FormStatuses } from "src/app/modules/shared-module/constants";
@@ -15,7 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
     styleUrls: ['./case-dropdown-control.component.scss']
   })
 export class CaseDropdownComponent extends BaseControl<number> {
-    @ViewChild('control') control: any;
+    @ViewChild('control') selectControl: MbscSelect;
     @Input() dataSource: BehaviorSubject<OptionItem[]>;
     @Input() disabled = false;
     
@@ -48,15 +47,81 @@ export class CaseDropdownComponent extends BaseControl<number> {
       super();
     }
 
+    get getHeader(): string {
+      const defaultValue = '';
+      if (!this.field) {
+        return defaultValue;
+      }
+      return this.formControl.label || defaultValue;
+    }  
+
     ngOnInit(): void {
       // apply translations
-      this.control.setText = this.ngxTranslateService.instant('Välj');
-      this.control.cancelText = this.ngxTranslateService.instant('Avbryt');
+      this.selectControl.setText = this.ngxTranslateService.instant('Välj');
+      this.selectControl.cancelText = this.ngxTranslateService.instant('Avbryt');
 
       this.initDataSource();
       this.init(this.field);
       this.updateDisabledState();
       this.initEvents();
+    }
+
+    private initDataSource() {
+      if (!this.dataSource) {
+        this.localDataSource = [];
+      };
+    }
+
+    private initEvents() {
+      // track disabled state in form
+      this.formControl.statusChanges.pipe(
+          takeUntil(this.destroy$)
+        ).subscribe((e: any) => {
+          if (this.selectControl.disabled != this.isFormControlDisabled) {
+            this.updateDisabledState();
+          }
+        });
+
+        if (this.dataSource)
+        this.dataSource.pipe(
+          takeUntil(this.destroy$)
+        ).subscribe((options) => {
+          
+          //clear prev selected values
+          if (this.selectControl && this.selectControl.instance)
+            this.selectControl.instance.clear(); 
+
+          options = options || [];
+          // if (!this.formControl.value || (this.formControl.value && !this.isRequired)) {
+            this.addEmptyIfNotExists(options);
+          // }
+          this.localDataSource = options;
+          this.resetValueIfNeeded(options);
+        });
+    }
+
+    private updateDisabledState() {
+      this.selectControl.disabled = this.formControl.disabled || this.disabled;
+    }
+
+    private get isFormControlDisabled() {
+      return this.formControl.status == FormStatuses.DISABLED;
+    }
+
+    private addEmptyIfNotExists(options) {
+      if (!options.some((i) => i.value === '')) {
+        this.addEmptyItem(options);
+      }
+    }
+
+    private resetValueIfNeeded(options: OptionItem[]) {
+      if (options.filter((i) => String(i.value) == String(this.formControl.value)).length == 0) {
+        this.formControl.setValue('');
+      }
+    }
+
+    private addEmptyItem(options: OptionItem[]): any {
+      options.unshift(new OptionItem('',''));
     }
 
     ngOnDestroy(): void {
@@ -66,65 +131,4 @@ export class CaseDropdownComponent extends BaseControl<number> {
     trackByFn(index, item: OptionItem) {
       return item.value;
     }
-
-    public get getHeader(): string {
-      const defaultValue = '';
-      if (!this.field) {
-        return defaultValue;
-      }
-      return this.formControl.label || defaultValue;
-    }
-
-    private initDataSource() {
-      if (!this.dataSource) {
-        this.localDataSource = [];
-      };
-    }
-
-    private updateDisabledState() {
-      this.control.disabled = this.formControl.disabled || this.disabled;
-    }
-
-    private get isFormControlDisabled() {
-      return this.formControl.status == FormStatuses.DISABLED;
-    }
-
-    private initEvents() {
-      this.formControl.statusChanges // track disabled state in form
-        .pipe(switchMap((e: any) => {
-            if (this.control.disabled != this.isFormControlDisabled) {
-              this.updateDisabledState();
-            }
-            return of(e);
-          }),
-          takeUntil(this.destroy$)
-        )
-        .subscribe();
-
-        this.dataSource.pipe(
-          switchMap((options) => {
-            options = options || [];
-            // if (!this.formControl.value || (this.formControl.value && !this.isRequired)) {
-              this.addEmptyItem(options);
-            // }
-            this.localDataSource = options;
-
-            this.resetValueIfNeeded(options);
-            return of(options);
-          }),
-          takeUntil(this.destroy$)
-        )
-        .subscribe();
-    }
-
-  private resetValueIfNeeded(options: OptionItem[]) {
-    if (options.filter((i) => String(i.value) == String(this.formControl.value)).length == 0) {
-      this.formControl.setValue('');
-    }
-  }
-
-  private addEmptyItem(options: OptionItem[]): any {
-    options.unshift(new OptionItem('',''));
-  }
-
 }

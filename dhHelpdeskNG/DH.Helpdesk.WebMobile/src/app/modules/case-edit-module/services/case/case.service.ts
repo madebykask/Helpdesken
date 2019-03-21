@@ -107,14 +107,16 @@ export class CaseService {
       return model;
     }
 
-    getOptionsHelper(filter: CaseOptionsFilterModel) {
+    getOptionsHelper(filter: CaseOptionsFilterModel): any {
       const empty$ = () => empty().pipe(defaultIfEmpty(null));
       const fieldExists = (field: any) => field !== undefined;
 
       return {
         getRegions: () => this.caseOrganizationService.getRegions(),
         getDepartments: () => fieldExists(filter.RegionId) ? this.caseOrganizationService.getDepartments(filter.RegionId) : empty$(),
+        getDepartmentsByRegion: (regionId:number) => fieldExists(regionId) && regionId ? this.caseOrganizationService.getDepartments(regionId) : empty$(),
         getOUs: () => fieldExists(filter.DepartmentId) && filter.DepartmentId != null ? this.caseOrganizationService.getOUs(filter.DepartmentId): empty$(),
+        getOUsByDepartment: (depId:number) => fieldExists(depId) && depId ? this.caseOrganizationService.getOUs(depId): empty$(),
         getIsAboutDepartments: () => fieldExists(filter.IsAboutRegionId) ? this.caseOrganizationService.getDepartments(filter.IsAboutRegionId) : empty$(),
         getIsAboutOUs: () => fieldExists(filter.IsAboutDepartmentId) && filter.IsAboutDepartmentId != null ? this.caseOrganizationService.getOUs(filter.IsAboutDepartmentId) : empty$(),
         getCaseTypes: () => fieldExists(filter.CaseTypes) ? this.caseOrganizationService.getCaseTypes() : empty$(),
@@ -131,6 +133,7 @@ export class CaseService {
 
     getCaseOptions(filter: CaseOptionsFilterModel) {
         var optionsHelper = this.getOptionsHelper(filter);
+        
         let regions$ = optionsHelper.getRegions();
         let departments$ = optionsHelper.getDepartments();
         let oUs$ = optionsHelper.getOUs();
@@ -147,69 +150,68 @@ export class CaseService {
         let bundledOptions$ = this.batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
 
         return forkJoin(bundledOptions$, regions$, departments$, oUs$, isAboutDepartments$, isAboutOUs$, caseTypes$, 
-          productAreas$, categories$, closingReasons$, perfomers$, workingGroups$, stateSecondaries$)
-                    .pipe(
-                        take(1),
-                        map(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes,
-                           productAreas, categories, closingReasons, perfomers, workingGroups, stateSecondaries]) => {
-                            let options = new CaseOptions();
+          productAreas$, categories$, closingReasons$, perfomers$, workingGroups$, stateSecondaries$).pipe(
+                take(1),
+                map(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes,
+                    productAreas, categories, closingReasons, perfomers, workingGroups, stateSecondaries]) => {
+                    let options = new CaseOptions();
 
-                            if (regions != null) {
-                                options.regions = regions;
-                            }
+                    if (regions != null) {
+                        options.regions = regions;
+                    }
 
-                            if (departments != null) {
-                                options.departments = departments;
-                            }
+                    if (departments != null) {
+                        options.departments = departments;
+                    }
 
-                            if (oUs != null) {
-                                options.oUs = oUs;
-                            }
+                    if (oUs != null) {
+                        options.oUs = oUs;
+                    }
 
-                            if (isAboutDepartments != null) {
-                                options.isAboutDepartments = isAboutDepartments;
-                            }
+                    if (isAboutDepartments != null) {
+                        options.isAboutDepartments = isAboutDepartments;
+                    }
 
-                            if (isAboutOUs != null) {
-                                options.isAboutOUs = isAboutOUs;
-                            }
+                    if (isAboutOUs != null) {
+                        options.isAboutOUs = isAboutOUs;
+                    }
 
-                            if (bundledOptions != null) {
-                                Object.assign(options, bundledOptions);
-                            }
+                    if (bundledOptions != null) {
+                        Object.assign(options, bundledOptions);
+                    }
 
-                            if (caseTypes != null) {
-                                options.caseTypes = caseTypes;
-                            }
+                    if (caseTypes != null) {
+                        options.caseTypes = caseTypes;
+                    }
 
-                            if (productAreas != null) {
-                                options.productAreas = productAreas;
-                            }
+                    if (productAreas != null) {
+                        options.productAreas = productAreas;
+                    }
 
-                            if (categories != null) {
-                                options.categories = categories;
-                            }
+                    if (categories != null) {
+                        options.categories = categories;
+                    }
 
-                            if (closingReasons != null) {
-                                options.closingReasons = closingReasons;
-                            }
+                    if (closingReasons != null) {
+                        options.closingReasons = closingReasons;
+                    }
 
-                            if (perfomers != null) {
-                              options.performers = perfomers;
-                            }
+                    if (perfomers != null) {
+                      options.performers = perfomers;
+                    }
 
-                            if (workingGroups != null) {
-                              options.workingGroups = workingGroups;
-                            }
+                    if (workingGroups != null) {
+                      options.workingGroups = workingGroups;
+                    }
 
-                            if (stateSecondaries != null) {
-                              options.stateSecondaries = stateSecondaries;
-                          }
+                    if (stateSecondaries != null) {
+                      options.stateSecondaries = stateSecondaries;
+                    }
 
-                            return options;
-                      }),
-                      catchError((e) => throwError(e))
-                    );
+                    return options;
+              }),
+              catchError((e) => throwError(e))
+            );
     }
 
     getCaseSections() {

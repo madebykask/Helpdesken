@@ -3,12 +3,12 @@ import { TranslateService } from "@ngx-translate/core";
 import { CaseEditInputModel, CaseSectionType, BaseCaseField } from "../../models";
 import { CaseOptionsFilterModel } from "src/app/modules/shared-module/models";
 import { CaseFieldsNames } from "src/app/modules/shared-module/constants";
+import { CaseFormGroup } from "src/app/modules/shared-module/models/forms/case-form-group";
 
 @Injectable({ providedIn: 'root' })
 export class CaseEditDataHelper {
   
-  constructor(private translateService: TranslateService){
-    
+  constructor(private translateService: TranslateService) {
   }
   
   getCaseTitle(caseData: CaseEditInputModel) : string {
@@ -50,7 +50,15 @@ export class CaseEditDataHelper {
         return field != null ? field.value || null : undefined; // null - value is null, undefined - no such field
     }
 
-    getCaseOptionsFilter(caseData: CaseEditInputModel, getValue: (name: string) => number) {
+    getCaseOptionsFilter(caseData: CaseEditInputModel) {
+      return this.createCaseOptionsFilter(caseData, (name: string) => this.getValue(caseData, name));
+    }
+
+    getFormCaseOptionsFilter(caseData: CaseEditInputModel, form: CaseFormGroup ) {
+      return this.createCaseOptionsFilter(caseData, (name: string) => form.getValue(name));
+    }
+
+    private createCaseOptionsFilter(caseData: CaseEditInputModel, getValue: (name: string) => number) {
       let filter = new CaseOptionsFilterModel();
       filter.RegionId = getValue(CaseFieldsNames.RegionId);
       filter.DepartmentId = getValue(CaseFieldsNames.DepartmentId);

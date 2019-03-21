@@ -22,6 +22,7 @@ export class CaseOptionsFilterModel extends BundleOptionsFilter {
     CasePerformerUserId?: number;
     CaseWorkingGroupId?: number;
     DepartmentId?: any;
+    OrgUnitId?: any;
     IsAboutRegionId?: any;
     IsAboutDepartmentId?: any;
     WorkingGroups?: boolean;

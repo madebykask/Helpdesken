@@ -35,9 +35,9 @@
         <form [formGroup]="form" novalidate>
             <mbsc-form-group collapsible [open]="isNewCase" #initiatorSection *ngIf="hasSection(caseSectionTypes.Initiator)">
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Initiator) }}</mbsc-form-group-title>
-                <mbsc-form-group-content >
+                <mbsc-form-group-content>
                     <!-- TODO: ComputerUserCategories -->
-                    <notifier-search *ngIf="showField(caseFieldsNames.ReportedBy)" [field]="getField(caseFieldsNames.ReportedBy)" [notifierType]="notifierTypes.Initiator" [form]="form"></notifier-search>
+                    <notifier-search *ngIf="showField(caseFieldsNames.ReportedBy)" id="initiatorNotifier" [field]="getField(caseFieldsNames.ReportedBy)" [notifierType]="notifierTypes.Initiator" [form]="form"></notifier-search>
                     <case-textbox-control *ngIf="showField(caseFieldsNames.PersonName)" [field]="getField(caseFieldsNames.PersonName)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="showField(caseFieldsNames.PersonEmail)" [field]="getField(caseFieldsNames.PersonEmail)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="showField(caseFieldsNames.PersonPhone)" [field]="getField(caseFieldsNames.PersonPhone)" [form]="form"></case-textbox-control>
@@ -54,15 +54,15 @@
             <mbsc-form-group collapsible [open]="isNewCase" #regardingSection *ngIf="hasSection(caseSectionTypes.Regarding)">
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Regarding) }}</mbsc-form-group-title>
                 <mbsc-form-group-content >
-                <!-- TODO: ComputerUserCategories -->
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_ReportedBy)" [field]="getField(caseFieldsNames.IsAbout_ReportedBy)" [form]="form"></case-textbox-control>
+                    <!-- TODO: ComputerUserCategories -->
+                    <notifier-search *ngIf="showField(caseFieldsNames.IsAbout_ReportedBy)" id="regardingNotifier" [field]="getField(caseFieldsNames.IsAbout_ReportedBy)" [notifierType]="notifierTypes.Regarding" [form]="form"></notifier-search>                    
                     <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_PersonName)" [field]="getField(caseFieldsNames.IsAbout_PersonName)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_PersonEmail)" [field]="getField(caseFieldsNames.IsAbout_PersonEmail)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_PersonPhone)" [field]="getField(caseFieldsNames.IsAbout_PersonPhone)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_PersonCellPhone)" [field]="getField(caseFieldsNames.IsAbout_PersonCellPhone)" [form]="form"></case-textbox-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.IsAbout_RegionId)" disabled=true [field]="getField(caseFieldsNames.IsAbout_RegionId)" [form]="form" [dataSource]="dataSource.regionsStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.IsAbout_DepartmentId)" disabled=true [field]="getField(caseFieldsNames.IsAbout_DepartmentId)" [form]="form" [dataSource]="dataSource.isAboutDepartmentsStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.IsAbout_OrganizationUnitId)" disabled=true [field]="getField(caseFieldsNames.IsAbout_OrganizationUnitId)" [form]="form" [dataSource]="dataSource.isAboutOUsStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="showField(caseFieldsNames.IsAbout_RegionId)" [field]="getField(caseFieldsNames.IsAbout_RegionId)" [form]="form" [dataSource]="dataSource.regionsStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="showField(caseFieldsNames.IsAbout_DepartmentId)" [field]="getField(caseFieldsNames.IsAbout_DepartmentId)" [form]="form" [dataSource]="dataSource.isAboutDepartmentsStore$"></case-dropdown-control>
+                    <case-dropdown-control *ngIf="showField(caseFieldsNames.IsAbout_OrganizationUnitId)" [field]="getField(caseFieldsNames.IsAbout_OrganizationUnitId)" [form]="form" [dataSource]="dataSource.isAboutOUsStore$"></case-dropdown-control>
                     <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_CostCentre)" [field]="getField(caseFieldsNames.IsAbout_CostCentre)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_Place)" [field]="getField(caseFieldsNames.IsAbout_Place)" [form]="form"></case-textbox-control>
                     <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_UserCode)" [field]="getField(caseFieldsNames.IsAbout_UserCode)" [form]="form"></case-textbox-control>

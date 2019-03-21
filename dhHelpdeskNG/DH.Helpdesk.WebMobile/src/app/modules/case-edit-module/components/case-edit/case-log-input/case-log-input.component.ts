@@ -47,7 +47,7 @@ export class CaseLogInputComponent implements OnInit {
     }]  
   };
 
-  constructor(private caseDataHelpder: CaseEditDataHelper,
+  constructor(private caseDataHelpder: CaseEditDataHelper, //TODO: review caseDataHelper usage
               private caseLogApiService: CaseLogApiService) {
   }
 
@@ -64,8 +64,7 @@ export class CaseLogInputComponent implements OnInit {
     }
   }
 
-  processFileUploaded(file:string) {
-    //console.log('>>> log file has been uploaded');
+  processFileUploaded(file:string) {    
     this.files.push(file);
   }
 
