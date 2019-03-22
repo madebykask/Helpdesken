@@ -318,7 +318,9 @@ namespace DH.Helpdesk.WebApi.Controllers
                 LogGuid = Guid.NewGuid(), //todo: check usages
                 TextInternal = model.LogInternalText,
                 TextExternal = model.LogExternalText,
-                RegUser = currentUser?.UserID ?? string.Empty, // valid for webapi?
+                // in helpdesk Reguser is always empty, but Selfservice users CurrentSystemUser
+                // RegUser is only filled in selfservice
+                RegUser = string.Empty, 
                 UserId = UserId,
                 //todo:
                 // FinishingDate = model.FinishingDate
