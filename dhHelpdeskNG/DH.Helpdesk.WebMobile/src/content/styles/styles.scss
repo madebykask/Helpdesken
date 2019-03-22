@@ -3,9 +3,8 @@ html,body, iframe {
   height:100%;
 }
 
-.hide {
-  display: none;
-}
+.hide { display: none }
+.nopadding { padding:0 }
 
 $primary-color: #438eb9;
 $action-color: #007aff;
@@ -185,6 +184,7 @@ a {
             .mbsc-ms-item {
                 color: $font-header-color;
             }
+
             .mbsc-ms-item-sel {
                 color: $font-header-color;
                 font-weight: bold;
@@ -194,7 +194,42 @@ a {
     }
 }
 
+.case-search-filter {
+  .mbsc-ms-item {
+    padding-left:20px;
+  }
+
+  .mbsc-ms-item-sel::before {
+    content: "\ea95";
+  }
+}
+
+.mbsc-ms-item-sel:before {  
+  font-family: 'icons_mobiscroll';
+  font-style: normal;
+  font-weight: normal;
+  position: absolute;
+  left:0;
+}
+
 .case-overview-header {
+  
+    .mbsc-ms-item.mbsc-menu-item-ic {
+      font-size:8px;
+      color: #fff;
+    }
+
+    .mbsc-ic-fa-filter {
+      margin-left:15px;
+    }
+    .selected .mbsc-ms-item.mbsc-menu-item-ic {
+      //border: solid 1px #fff;
+      border-radius: 4px 4px;
+      color: #438eb9;
+      background: #a8d0dc;
+      box-shadow: inset 2px 2px 2px rgba(0,0,0,0.2);
+    }
+
     .mbsc-form {
         color: $font-header-color;
         background: $primary-color;

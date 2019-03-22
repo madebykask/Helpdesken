@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { finalize, take, map } from 'rxjs/operators';
+import { finalize, take, map, takeUntil } from 'rxjs/operators';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MbscForm, MbscListview } from '@mobiscroll/angular';
 import { Subject } from 'rxjs';
@@ -12,6 +12,8 @@ import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseSearchStateModel } from '../../../shared-module/models/cases-overview/case-search-state.model';
 import { CaseProgressFilter } from '../../models/cases-overview/enums';
 import { DateTime } from 'luxon';
+import { CasesFilterComponent } from '../cases-filter/cases-filter.component';
+import { TranslateService } from '@ngx-translate/core';;
 
 @Component({
   selector: 'app-cases-overview',
@@ -22,13 +24,16 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   @ViewChild('searchInput') searchInput: any;
   @ViewChild('loading') loadingElem: MbscForm;
   @ViewChild('listview') listView: MbscListview;
+  @ViewChild(CasesFilterComponent) casesFilter: CasesFilterComponent;
 
-  private _filter: CasesOverviewFilter;
+  private filter: CasesOverviewFilter;
   private searchType = CasesSearchType.AllCases;
-  private _scrollBindFunc: any;
-  private _timer: any;
+  private scrollBindFunc: any;
+  private timer: any;
   private destroy$ = new Subject();
+  private defaultHeaderText = this.ngxTranslateService.instant('Ärendeöversikt');
 
+  headerText:string;
   DateTime: DateTime;
   showSearchPanel = false;
   filtersForm: FormGroup;
@@ -37,17 +42,15 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   pageSize: number = 10;
   listviewSettings: any = {
     enhance: false,
-    swipe: false,
-/*     onItemTap: function(event, inst) {
-        if(inst && inst.id) this.goToCase(inst.id);
-    },
- */  }
+    swipe: false
+  }
 
   constructor(private casesOverviewService: CasesOverviewService,
               private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              private localStorage:  LocalStorageService) {
+              private localStorage: LocalStorageService,
+              private ngxTranslateService: TranslateService) {
   }
 
   ngOnInit() {
@@ -59,16 +62,26 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     this.route.paramMap.pipe(
             map((x:ParamMap) => x.get('searchType'))
                 ).subscribe((st:string) => {
-                    console.log('>>> st: ' + st);
+                    //console.log('>>> st: ' + st);
                     this.searchType = this.getSearchType(st);
                     this.initFilter();
                     this.resetCases();
                     this.saveSearchState();
                     this.search();
-              //console.log(`>>>this.searchType: ${this.searchType}`);
                 });
-    this._scrollBindFunc = this.checkLoad.bind(this);
-    window.addEventListener('scroll', this._scrollBindFunc);
+    this.scrollBindFunc = this.checkLoad.bind(this);
+    window.addEventListener('scroll', this.scrollBindFunc);    
+  }
+
+  ngAfterViewInit(): void {
+    //update header on filter change
+    this.casesFilter.filterChanged.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(x =>
+      this.headerText = x ? x : this.defaultHeaderText
+    );
+
+    setTimeout(() => this.headerText = this.casesFilter.filterName || this.defaultHeaderText, 200); 
   }
 
   saveSearchState(): any {
@@ -78,12 +91,12 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   private getSearchType(st: string): CasesSearchType {
-   return CasesSearchType [st];
+   return CasesSearchType[st];
   }
 
   ngOnDestroy() {
     //console.log('>>> cases-overview: destroy is called!!!')
-    window.removeEventListener('scroll', this._scrollBindFunc);
+    window.removeEventListener('scroll', this.scrollBindFunc);
     this.destroy$.next();
   }
 
@@ -119,15 +132,15 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   checkLoad() {
-    clearTimeout(this._timer);
+    clearTimeout(this.timer);
     let timer = setTimeout(() => {
         if (!this.isLoading && this.shouldLoad()) {
             this.isLoading = true;
-            this._filter.Page += 1;
+            this.filter.Page += 1;
             this.search();
         }
     }, 250);
-    this._timer = timer;
+    this.timer = timer;
   }
 
   trackByFn(index, item: CaseOverviewItem) {
@@ -146,7 +159,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
 
   private search() {
     this.isLoading = true;
-    this.casesOverviewService.searchCases(this._filter).pipe(
+    this.casesOverviewService.searchCases(this.filter).pipe(
         take(1),
         finalize(() => this.isLoading = false),
         // catchError(err => {})// TODO:
@@ -158,16 +171,16 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   private initFilter() {
-    this._filter = new CasesOverviewFilter();
-    this._filter.FreeTextSearch = this.filtersForm.controls.freeSearch.value;
-    this._filter.InitiatorSearchScope = 0;// TODO: use enum
-    this._filter.CaseProgress = -1;// TODO: use enum
-    this._filter.PageSize =  this.pageSize || PagingConstants.pageSize;
-    this._filter.Page = PagingConstants.page;
-    this._filter.Ascending = false;
-    this._filter.OrderBy = 'CaseNumber';// TODO - remove use hardcode
-    this._filter.SearchInMyCasesOnly = Boolean(this.searchType);    
-    this._filter.CaseProgress = CaseProgressFilter.CasesInProgress;
+    this.filter = new CasesOverviewFilter();
+    this.filter.FreeTextSearch = this.filtersForm.controls.freeSearch.value;
+    this.filter.InitiatorSearchScope = 0;// TODO: use enum
+    this.filter.CaseProgress = -1;// TODO: use enum
+    this.filter.PageSize =  this.pageSize || PagingConstants.pageSize;
+    this.filter.Page = PagingConstants.page;
+    this.filter.Ascending = false;
+    this.filter.OrderBy = 'CaseNumber';// TODO - remove use hardcode
+    this.filter.SearchInMyCasesOnly = Boolean(this.searchType);    
+    this.filter.CaseProgress = CaseProgressFilter.CasesInProgress;
   }
 
   private caclucatePageSize(): number {
@@ -178,4 +191,5 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     let size = ((windowHeight - headerSize) / caseElemSize) + 1 || defaultPageSize;
     return Math.floor(size > defaultPageSize ? size : defaultPageSize);
   }
+
 }

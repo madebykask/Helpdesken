@@ -7,9 +7,10 @@ import { CommonModule } from '@angular/common';
 import { CaseOverviewRoutingModule } from './case-overview-routing.module';
 import { GetByKeyPipe } from './pipes/filter-case-overview.pipe';
 import { CasesOverviewComponent } from './components/cases-overview/cases-overview.component';
+import { CasesFilterComponent } from './components/cases-filter/cases-filter.component';
 
 @NgModule({
-  declarations: [ CasesOverviewComponent, GetByKeyPipe ],
+  declarations: [ CasesOverviewComponent, GetByKeyPipe, CasesFilterComponent ],
   imports: [
     CommonModule,
     MbscModule,

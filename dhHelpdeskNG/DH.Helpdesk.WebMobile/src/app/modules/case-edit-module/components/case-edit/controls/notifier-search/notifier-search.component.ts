@@ -36,7 +36,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
     display: "center",
     maxWidth: 400,
     multiline: 2,
-    buttons: ['cancel', 'set'],
+    buttons: ['cancel'],
     headerText: () => this.getHeaderText(),
     cancelText: this.ngxTranslateService.instant("Avbryt"),
     setText: this.ngxTranslateService.instant("Välj"),
@@ -111,7 +111,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
         this.notifiersData.unshift({ value: '', text: ''});
     });
   }
-  
+
   ngOnDestroy(): void {
     this.onDestroy();
   }
