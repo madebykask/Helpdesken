@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-
 @Component({
   selector: 'app-header-title',
   templateUrl: './page-header-title.component.html',
@@ -8,5 +7,5 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderTitleComponent implements OnInit {
   ngOnInit(): void {
-  }  
+  }
 }

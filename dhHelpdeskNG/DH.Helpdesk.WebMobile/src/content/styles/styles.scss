@@ -264,6 +264,7 @@ a {
 }
 
 .header {
+    color:$font-header-color;
     background: $primary-color;
     .navbar-brand {
         background: url(../img/dhhelpdesk.png);

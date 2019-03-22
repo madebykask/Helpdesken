@@ -18,10 +18,7 @@ export class CaseLogApiService extends HttpApiServiceBase {
 
   getCaseLogs(caseId:number): Observable<Array<any>> {
     let url = this.buildResourseUrl(`/api/case/${caseId}/logs`, null, true, true);
-    return this.getJson<Array<any>>(url)
-        .pipe(
-            take(1)
-        );
+    return this.getJson<Array<any>>(url);
   }
 
   deleteTempLogFile(caseKey:string, fileName:string): Observable<boolean> {

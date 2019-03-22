@@ -100,4 +100,8 @@ export class CasesFilterComponent implements OnInit {
     return null;
   }
 
+  trackByFn(index, item) {
+    return item.id;
+  }
+
 }

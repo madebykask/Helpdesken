@@ -7,7 +7,7 @@ import { CaseTemplateApiService } from "../api/caseTemplate/case-template-api.se
 @Injectable({ providedIn: 'root' })
 export class CaseTemplateService {
 
-  protected constructor(private caseTemplateApiService: CaseTemplateApiService ) {
+  constructor(private caseTemplateApiService: CaseTemplateApiService ) {
   }
 
   loadTemplates(): Observable<CaseTemplateModel[]> {

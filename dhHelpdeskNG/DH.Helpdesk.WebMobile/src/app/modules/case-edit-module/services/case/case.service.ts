@@ -219,6 +219,7 @@ export class CaseService {
     getCaseSections() {
         return this.caseApiService.getCaseSections()
           .pipe(
+            take(1),
             map((jsCaseSections: any) => {
               if (!jsCaseSections) throwError("No data from server.");
 

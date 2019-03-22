@@ -6,31 +6,32 @@ import { NgModule } from '@angular/core';
 import { ErrorComponent } from './shared/components/error/error.component';
 import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 import { TestComponent } from './components/test/test.component';
+import { CaseTemplateComponent } from './components/case-template/case-template.component';
 
-const appRoutes: Routes = [
-  { 
+const appRoutes: Routes = [{ 
     path: '',
     component: AppLayoutComponent,
-    children: [
-      { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard]},
-      { path: 'casesoverview', 
+    children: [{ 
+        path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard] 
+      }, { 
+        path: 'casesoverview', 
         loadChildren: './modules/case-overview-module/case-overview.module#CaseOverviewModule',
-        canActivate: [AuthGuard] },
-      { path: 'case',
+        canActivate: [AuthGuard] 
+      }, { 
+        path: 'case',
         loadChildren: './modules/case-edit-module/case-edit.module#CaseEditModule',
         canActivate: [AuthGuard] 
-      },
-      { 
-        path: 'createcase',
-        loadChildren: './modules/case-template-module/case-template.module#CaseTemplateModule',
-        canActivate: [AuthGuard]
+      }, {
+        path: 'createcase', 
+        component: CaseTemplateComponent,
+        canActivate: [AuthGuard] 
       }
     ]
   },
 
   { path: 'test', component: TestComponent },
 
-/*   { 
+/*{ 
     path: '', 
     component: AltLayoutComponent,
     children: [

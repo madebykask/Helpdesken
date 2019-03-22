@@ -27,6 +27,7 @@ import { TestComponent } from './components/test/test.component';
 import { initApplication } from './logic/app-configuration/app-configuration';
 import { HttpLoaderFactory } from './logic/translation';
 import { TranslationApiService } from './services/api/translation/translation-api.service';
+import { CaseTemplateComponent } from './components/case-template/case-template.component';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -34,6 +35,7 @@ import { TranslationApiService } from './services/api/translation/translation-ap
      HeaderTitleComponent, FooterComponent,
      LoginComponent,
      HomeComponent,
+     CaseTemplateComponent,
      RequireAuthDirective,
      ErrorComponent,
      AltLayoutComponent,

@@ -1,4 +1,4 @@
-<mbsc-form>
+
   <mbsc-bottom-nav [options]="bottomMenuSettings">
       <mbsc-nav-item data-icon="fa-home" (click)="goTo('/')" translate>Hem</mbsc-nav-item>
       <mbsc-nav-item data-icon="fa-plus" (click)="createCase()" [disabled]="!(canCreateCases$ | async)"  translate>Lägg till</mbsc-nav-item>
@@ -8,26 +8,3 @@
   </mbsc-bottom-nav>
 
   <mbsc-select [(ngModel)]="languageId" [options]="languagesSettings" #languages hidden></mbsc-select>
-
-  <mbsc-popup [options]="popupMenuSettings" #caseSearchPopup="mobiscroll">  
-      <mbsc-listview [options]="menuListSettings">
-          <mbsc-listview-item (click)="goToCases(searchType.AllCases)" translate>Alla ärenden</mbsc-listview-item>
-          <mbsc-listview-item (click)="goToCases(searchType.MyCases)" translate>Mina ärenden</mbsc-listview-item>
-      </mbsc-listview>
-  </mbsc-popup>
-
-  <mbsc-popup [options]="newCasePopupSettings" #newCasePopup="mobiscroll">  
-      <mbsc-listview [options]="templatesListSettings" #templatesListView="mobiscroll">
-        <ng-container *ngFor="let node of templateNodes">
-            <mbsc-listview-item *ngIf="!isCategory(node)" (click) ="openTemplate(node.id)">{{ node.name }}</mbsc-listview-item>
-            <mbsc-listview-item *ngIf="isCategory(node)"><span>{{ node.name }}</span>
-              <mbsc-listview-sublist>
-                <mbsc-listview-item *ngFor="let template of node.items" (click) ="openTemplate(template.id)">
-                  {{ template.name }}
-                </mbsc-listview-item>
-              </mbsc-listview-sublist>
-          </mbsc-listview-item>
-        </ng-container>
-      </mbsc-listview>
-  </mbsc-popup>
-</mbsc-form>
