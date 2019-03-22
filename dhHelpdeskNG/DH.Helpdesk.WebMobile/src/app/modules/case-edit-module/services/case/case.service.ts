@@ -11,6 +11,7 @@ import { CaseLogModel, LogFile, CaseHistoryModel, CaseHistoryChangeModel } from 
 import { CaseActionsDataService } from './case-actions-data-service.service';
 import { CaseHistoryApiService } from '../api/case/case-history-api.service';
 import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
+import { CaseTemplateApiService } from 'src/app/services/api/caseTemplate/case-template-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class CaseService {
@@ -20,11 +21,12 @@ export class CaseService {
          private caseActionsDataService: CaseActionsDataService,
          private caseLogApiService: CaseLogApiService,
          private caseHistoryApiService: CaseHistoryApiService,
-         private caseApiService: CaseApiService ) {
+         private caseApiService: CaseApiService,
+         private caseTemplateApiService: CaseTemplateApiService ) {
     }
 
     getTemplateData(templateId: number): Observable<CaseEditInputModel> {
-      return this.caseApiService.getCaseTemplate(templateId)
+      return this.caseTemplateApiService.getCaseTemplate(templateId)
         .pipe(
           map((caseData: any) => {
             let model = this.fromJSONCaseEditInputModel(caseData);

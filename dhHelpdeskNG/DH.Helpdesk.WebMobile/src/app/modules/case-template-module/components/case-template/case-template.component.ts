@@ -2,8 +2,8 @@ import { MbscListviewOptions, MbscListview } from '@mobiscroll/angular';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { CaseTemplateService } from 'src/app/modules/case-edit-module/services/case/case-template.service';
-import { CaseTemplateModel, CaseTemplateNode, CaseTemplateCategoryNode } from 'src/app/modules/case-edit-module/models/case/case-template.model';
+import { CaseTemplateService } from 'src/app/services/case-organization/case-template.service';
+import { CaseTemplateModel, CaseTemplateNode, CaseTemplateCategoryNode } from 'src/app/models/caseTemplate/case-template.model';
 import { take, finalize, map } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 

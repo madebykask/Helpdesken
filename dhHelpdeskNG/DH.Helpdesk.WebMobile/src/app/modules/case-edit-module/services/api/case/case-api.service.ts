@@ -9,22 +9,9 @@ import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/h
 @Injectable({ providedIn: 'root' })
 export class CaseApiService extends HttpApiServiceBase {
 
-  constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) {
+  constructor(protected http: HttpClient, 
+    protected localStorageService: LocalStorageService) {
     super(http, localStorageService);
-  }
-
-  getCaseTemplates() : Observable<Array<any>> {
-    return this.getJson<Array<any>>(this.buildResourseUrl('/api/templates/', { mobileOnly: true }, true, true)) // TODO: error handling
-    .pipe(
-        take(1) 
-    );
-  }
-
-  getCaseTemplate(templateId: number) : Observable<Array<any>> {
-    return this.getJson<Array<any>>(this.buildResourseUrl(`/api/case/template/${templateId}`, null, true, true)) // TODO: error handling
-    .pipe(
-        take(1) 
-    );
   }
   
   getCaseData(caseId: number): Observable<any> {

@@ -6,8 +6,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguagesApiService } from 'src/app/services/api/language/languages-api.service';
 import { CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
-import { CaseTemplateModel, CaseTemplateNode, CaseTemplateCategoryNode } from 'src/app/modules/case-edit-module/models/case/case-template.model';
-import { CaseTemplateService } from 'src/app/modules/case-edit-module/services/case/case-template.service';
+import { CaseTemplateModel, CaseTemplateNode, CaseTemplateCategoryNode } from 'src/app/models/caseTemplate/case-template.model';
+import { CaseTemplateService } from 'src/app/services/case-organization/case-template.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 
 @Component({
