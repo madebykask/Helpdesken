@@ -78,21 +78,11 @@ export class FooterComponent implements OnInit  {
 
   logout() {
     this.goTo('/login');
-  }
-
-  goToOverview() {
-    this.router.navigate(['/casesoverview', CasesSearchType[CasesSearchType.AllCases]]);
-  }
+  } 
 
   goTo(url: string = null) {  
     this.router.navigateByUrl(url);
-  }
-
-  createCase() {
-    if (this.canCreateCases$.value) {
-      this.router.navigate(['/createcase']);
-    }
-  }
+  } 
 
   private onLanguageChange(event, inst) {
     let val = inst.getVal();

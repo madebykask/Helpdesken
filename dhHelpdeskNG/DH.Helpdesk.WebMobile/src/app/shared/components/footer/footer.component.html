@@ -1,8 +1,8 @@
 
   <mbsc-bottom-nav [options]="bottomMenuSettings">
-      <mbsc-nav-item data-icon="fa-home" (click)="goTo('/')" translate>Hem</mbsc-nav-item>
-      <mbsc-nav-item data-icon="fa-plus" (click)="createCase()" [disabled]="!(canCreateCases$ | async)"  translate>Lägg till</mbsc-nav-item>
-      <mbsc-nav-item data-icon="fa-list" (click)="goToOverview()" translate>Översikt</mbsc-nav-item>
+      <mbsc-nav-item data-icon="fa-home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" routerLink="" translate>Hem</mbsc-nav-item>
+      <mbsc-nav-item data-icon="fa-plus" routerLinkActive="active" routerLink="/createcase" [disabled]="!(canCreateCases$ | async)"  translate>Lägg till</mbsc-nav-item>
+      <mbsc-nav-item data-icon="fa-list" routerLinkActive="active" routerLink="/casesoverview" translate>Översikt</mbsc-nav-item>
       <mbsc-nav-item data-icon="fa-globe" [disabled]="!languageId && !isLoadingLanguage" (click)="openLanguages()" translate>Språk</mbsc-nav-item>
       <mbsc-nav-item data-icon="fa-power-off" (click)="logout()" translate>Logga ut</mbsc-nav-item>
   </mbsc-bottom-nav>

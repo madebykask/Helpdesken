@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalStorageService } from 'src/app/services/local-storage';
+import { CaseSearchStateModel } from 'src/app/modules/shared-module/models/cases-overview/case-search-state.model';
 
 @Component({
   selector: 'cases-filter',
@@ -10,10 +11,14 @@ import { LocalStorageService } from 'src/app/services/local-storage';
   styleUrls: ['./cases-filter.component.scss']
 })
 export class CasesFilterComponent implements OnInit {
-  searchType = CasesSearchType;
+  
   @ViewChild('navMenu') filterMenu;
-
   @Output() filterChanged:EventEmitter<any> = new EventEmitter<any>();
+
+  get filterType() : CasesSearchType {
+    const sel = this.getSelectedItem();
+    return sel ? sel.id : CasesSearchType.AllCases;
+  }
 
   get filterName() {
     const sel = this.getSelectedItem();
@@ -65,23 +70,35 @@ export class CasesFilterComponent implements OnInit {
     this.raiseFilterChanged(selectedItem);
   }
 
-  applyFilter(searchType: string) {
-    const searchTypeId = +searchType;
-    
-    const selectedItem = this.findItem(searchTypeId);    
+  applyFilter(searchTypeId: number) {
+    let searchType = <CasesSearchType>searchTypeId;
+    const selectedItem = this.findItem(searchTypeId);
     selectedItem.selected = !selectedItem.selected;
-
-    if (selectedItem.selected) {
-      this.router.navigate(['/casesoverview', CasesSearchType[selectedItem.id]]);
-    } else {
-      this.router.navigate(['/casesoverview', CasesSearchType[CasesSearchType.AllCases]]);
+   
+    if (selectedItem && selectedItem.selected){
+      searchType = searchTypeId;
+    }
+    else {
+      searchType = CasesSearchType.AllCases;
     }
 
-    this.raiseFilterChanged(selectedItem);    
+    // save to storage
+    this.saveSearchState(searchType);
+
+    this.raiseFilterChanged(selectedItem);
+  }
+
+  private saveSearchState(searchType: CasesSearchType): any {
+    let state = new CaseSearchStateModel();
+    state.SearchType = searchType;
+    this.localStorageService.setCaseSearchState(state);
   }
 
   private raiseFilterChanged(selectedItem) {
-    this.filterChanged.emit(selectedItem && selectedItem.selected ? selectedItem.text : null);
+    if (selectedItem && selectedItem.selected)
+      this.filterChanged.emit({ type: selectedItem.id, name: selectedItem.text });
+    else
+      this.filterChanged.emit(null);
   }
 
   private findItem(searchTypeId: number) {
