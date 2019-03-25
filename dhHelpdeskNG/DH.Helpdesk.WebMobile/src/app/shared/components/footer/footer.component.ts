@@ -8,6 +8,7 @@ import { CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
 import { CaseTemplateService } from 'src/app/services/case-organization/case-template.service';
 import { BehaviorSubject } from 'rxjs';
+import { AppStore, AppStoreKeys } from 'src/app/store/app-store';
 
 @Component({
   selector: 'app-footer',
@@ -41,19 +42,22 @@ export class FooterComponent implements OnInit  {
   };
  
   constructor(private router: Router,
+              private appSore: AppStore,
               private userSettingsService : UserSettingsApiService,
               private languagesService: LanguagesApiService,
               private caseTemplateService: CaseTemplateService,
               private ngxTranslateService: TranslateService) {
   }
 
-  ngOnInit() {    
+  ngOnInit() {
     this.loadLanguages();
     if (this.userSettingsService.getUserData().createCasePermission) {
        this.caseTemplateService.loadTemplates().pipe(
         take(1)
-      ).subscribe(templates => 
-        this.canCreateCases$.next(templates && templates.length > 0));
+      ).subscribe(templates => {
+        this.appSore.set(AppStoreKeys.Templates, templates);
+        this.canCreateCases$.next(templates && templates.length > 0);
+      });
     }
 
     // apply translations

@@ -9,7 +9,7 @@ export class CaseDataReducers {
   }
 
   caseDataReducer(action: string, payload: any) {
-    switch (action) {      
+    switch (action) {
       case CaseFieldsNames.DepartmentId: {
         return this._caseDataStore.departmentsStore$.next(payload.items);
       }
@@ -30,14 +30,14 @@ export class CaseDataReducers {
       }
       case CaseFieldsNames.WorkingGroupId: {
         return this._caseDataStore.workingGroupsStore$.next(payload.items);
-      } 
-      
+      }
+
       default:
         return of(null);
-       // throw new Error(`Action for case field ${action} is not implemented.`);
+      // throw new Error(`Action for case field ${action} is not implemented.`);
     }
   }
-        // var workingGroup$ = this._workingGroupsService.getWorkingGroup(payload.value);
+  // var workingGroup$ = this._workingGroupsService.getWorkingGroup(payload.value);
 }
 
 @Injectable({ providedIn: 'root' })
