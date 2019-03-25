@@ -235,6 +235,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         #region Etc
 
         public int? CaseSolution_Id { get; set; }
+        public int? CurrentCaseSolution_Id { get; set; }
 
         #endregion
 

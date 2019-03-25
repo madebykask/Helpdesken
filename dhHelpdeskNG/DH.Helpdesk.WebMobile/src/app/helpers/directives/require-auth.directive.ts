@@ -6,22 +6,22 @@ import { AuthenticationStateService } from 'src/app/services/authentication';
 
 @Directive({ selector: '[requireAuth]' })
 export class RequireAuthDirective implements OnInit {
-  
+
   private destroy$ = new Subject();
 
   constructor(
-    private templateRef: TemplateRef<any>,    
+    private templateRef: TemplateRef<any>,
     private viewContainer: ViewContainerRef,
-    private _commService: CommunicationService,
-    private _authService: AuthenticationStateService
-  ) {    
+    private commService: CommunicationService,
+    private authService: AuthenticationStateService
+  ) {
   }
-  
+
   ngOnInit() {
     this.updateState();
-    this._commService.listen(Channels.AuthenticationChange).pipe(
-          takeUntil(this.destroy$)
-    ).subscribe((e:any) => this.updateState());
+    this.commService.listen(Channels.AuthenticationChange).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe((e: any) => this.updateState());
   }
 
   ngOnDestroy(): void {
@@ -29,12 +29,12 @@ export class RequireAuthDirective implements OnInit {
     this.destroy$.complete();
   }
 
-  private updateState(){
-    let isAuthenticated = this._authService.isAuthenticated();
+  private updateState() {
+    let isAuthenticated = this.authService.isAuthenticated();
     if (isAuthenticated && this.viewContainer.length === 0) {
-        this.viewContainer.createEmbeddedView(this.templateRef);
+      this.viewContainer.createEmbeddedView(this.templateRef);
     }
-    else if (!isAuthenticated && this.viewContainer.length > 0){
+    else if (!isAuthenticated && this.viewContainer.length > 0) {
       this.viewContainer.clear();
     }
   }

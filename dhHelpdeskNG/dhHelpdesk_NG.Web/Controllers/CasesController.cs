@@ -3208,7 +3208,6 @@ namespace DH.Helpdesk.Web.Controllers
             case_.Department = null;
             case_.Region = null;
             case_.CaseSolution_Id = m.CaseSolution_Id.HasValue && m.CaseSolution_Id == 0 ? null : m.CaseSolution_Id;
-
             case_.CurrentCaseSolution_Id = m.CurrentCaseSolution_Id;
 
             //case_.CurrentCaseSolution_Id = m.

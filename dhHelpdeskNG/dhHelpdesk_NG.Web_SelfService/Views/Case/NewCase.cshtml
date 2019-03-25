@@ -159,12 +159,16 @@
                     @Html.HiddenFor(model => model.NewCase.IsAbout.CostCentre)
                     @Html.HiddenFor(model => model.NewCase.IsAbout.Place)
                     @Html.HiddenFor(model => model.NewCase.IsAbout.UserCode)
+                    @Html.HiddenFor(model => model.NewCase.CaseSolution_Id)
+                    @Html.HiddenFor(model => model.NewCase.CurrentCaseSolution_Id)
+                    
 
                     @Html.HiddenFor(model => model.CaseLog.TextExternal)
                     @Html.HiddenFor(model => model.CaseLog.TextInternal)
                     @Html.HiddenFor(model => model.CaseLog.FinishingType)
 
-                    @*@Html.HiddenFor(model => model.NewCase.AgreedDate)*@
+
+                    @*@Html.HiddenFor(model => model.NewCase.AgreedDate) *@
 
                     @Html.HiddenFor(model => model.DepartmentFilterFormat, new { data_field = "departmentFilterFormat" })
 

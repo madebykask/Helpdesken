@@ -101,7 +101,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpPost]
         [CheckUserCasePermissions(CaseIdParamName = "caseId")]
         [Route("save/{caseId:int=0}")]
-        public async Task<IHttpActionResult> Post([FromUri] int? caseId, [FromUri]int cid, [FromUri] int langId, [FromBody]CaseEditInputModel model)
+        public async Task<IHttpActionResult> Save([FromUri] int? caseId, [FromUri]int cid, [FromUri] int langId, [FromBody]CaseEditInputModel model)
         {
             var utcNow = DateTime.UtcNow;
             var customerId = cid;
@@ -150,9 +150,9 @@ namespace DH.Helpdesk.WebApi.Controllers
                 currentCase = new Case();
 
                 CreateCase(customerId, langId, currentCase, caseSolution);
+
                 if (model.CaseGuid.HasValue)
                     currentCase.CaseGUID = model.CaseGuid.Value;
-
             }
             else
             {
@@ -280,7 +280,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var workTimeCalc = workTimeCalcFactory.Build(oldCase.RegTime, utcNow, departmentIds);
 
                 StateSecondary caseStateSecondary = null;
-				if(oldCase.StateSecondary_Id.HasValue)
+                if(oldCase.StateSecondary_Id.HasValue)
                     caseStateSecondary = _stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
 
                 if (caseStateSecondary != null && caseStateSecondary.IncludeInCaseStatistics == 0)
@@ -299,19 +299,19 @@ namespace DH.Helpdesk.WebApi.Controllers
 
                 currentCase.LeadTime = possibleWorktime - currentCase.ExternalTime;
             }
-			/*var leadTime = 0;// TODO: add calculation
+            /*var leadTime = 0;// TODO: add calculation
             var actionLeadTime = 0;// TODO: add calculation
             var actionExternalTime = 0;// TODO: add calculation*/
 
-			var extraInfo = new CaseExtraInfo()
-			{
-				CreatedByApp = CreatedByApplications.WebApi,
-				LeadTimeForNow = currentCase.LeadTime,
-				ActionLeadTime = currentCase.LeadTime - oldCase.LeadTime,
-				ActionExternalTime = currentCase.ExternalTime - oldCase.ExternalTime
-			};
+            var extraInfo = new CaseExtraInfo()
+            {
+                CreatedByApp = CreatedByApplications.WebApi,
+                LeadTimeForNow = currentCase.LeadTime,
+                ActionLeadTime = currentCase.LeadTime - oldCase.LeadTime,
+                ActionExternalTime = currentCase.ExternalTime - oldCase.ExternalTime
+            };
 
-			IDictionary<string, string> errors;
+            IDictionary<string, string> errors;
 
             var caseLog = new CaseLog()
             {
@@ -470,6 +470,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             currentCase.User_Id = UserId;
             currentCase.RegTime = DateTime.UtcNow;
             currentCase.CaseResponsibleUser_Id = UserId;
+            currentCase.CaseSolution_Id = (caseSolution?.Id ?? 0) == 0 ? null : caseSolution?.Id;
+            currentCase.CurrentCaseSolution_Id = caseSolution?.Id;
         }
 
         private CaseMailSetting GetCaseMailSetting(Case currentCase, Customer customer, CustomerSettings customerSettings)

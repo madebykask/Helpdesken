@@ -579,7 +579,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             if (caseModel.Id != 0)
                 oldCase = _caseService.GetCaseById(caseModel.Id);
 
+            //create case entity
             var caseEntity = ConvertCaseModelToCase(caseModel, oldCase);
+
             var logEntity = GetCaseLog(caseModel, auxModel);
             var extraInfo = new CaseExtraInfo()
             {
@@ -1250,16 +1252,16 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 case "costcentre":
                     caseModel.CostCentre = value;
                     break;
-				case "caption":
-					caseModel.Caption = value;
-					break;
-					//case "log_textinternal":
-					//    caseModel.log_textinternal = value;
-					//    break;
-					//case "case_relation_type":
-					//    caseModel.case_relation_type = value;
-					//    break;
-			}
+                case "caption":
+                    caseModel.Caption = value;
+                    break;
+                    //case "log_textinternal":
+                    //    caseModel.log_textinternal = value;
+                    //    break;
+                    //case "case_relation_type":
+                    //    caseModel.case_relation_type = value;
+                    //    break;
+            }
         }
 
         #endregion

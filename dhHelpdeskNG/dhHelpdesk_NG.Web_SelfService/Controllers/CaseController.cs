@@ -14,44 +14,44 @@ using DH.Helpdesk.Services.Utils;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Configuration;
-	using System.Linq;
-	using System.Net;
-	using System.Web;
-	using System.Web.Mvc;
-	using System.Web.WebPages;
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Linq;
+    using System.Net;
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Web.WebPages;
 
-	using DH.Helpdesk.BusinessData.Enums.Case;
-	using DH.Helpdesk.BusinessData.Models;
-	using DH.Helpdesk.BusinessData.Models.Case;
-	using DH.Helpdesk.BusinessData.OldComponents;
-	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-	using DH.Helpdesk.Common.Enums;
-	using DH.Helpdesk.Common.Tools;
-	using DH.Helpdesk.Dal.Enums;
-	using DH.Helpdesk.Domain;
-	using DH.Helpdesk.SelfService.Infrastructure;
-	using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
-	using DH.Helpdesk.SelfService.Infrastructure.Extensions;
-	using DH.Helpdesk.SelfService.Infrastructure.Tools;
-	using DH.Helpdesk.SelfService.Models;
-	using DH.Helpdesk.SelfService.Models.Case;
-	using DH.Helpdesk.Services.Services;
-	using DH.Helpdesk.Services.Services.Concrete;
-	using Models.Shared;
-	using BusinessData.Models.ExtendedCase;
-	using Services.Services.UniversalCase;
-	using Common.Extensions.Integer;
-	using Common.Extensions.String;
-	using Common.Extensions.DateTime;
-	using Infrastructure.Helpers;
-	using BusinessData.Models.Shared;
-	using Models.Message;
-	using Services.Infrastructure;
+    using DH.Helpdesk.BusinessData.Enums.Case;
+    using DH.Helpdesk.BusinessData.Models;
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.OldComponents;
+    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Tools;
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.SelfService.Infrastructure;
+    using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
+    using DH.Helpdesk.SelfService.Infrastructure.Extensions;
+    using DH.Helpdesk.SelfService.Infrastructure.Tools;
+    using DH.Helpdesk.SelfService.Models;
+    using DH.Helpdesk.SelfService.Models.Case;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Services.Services.Concrete;
+    using Models.Shared;
+    using BusinessData.Models.ExtendedCase;
+    using Services.Services.UniversalCase;
+    using Common.Extensions.Integer;
+    using Common.Extensions.String;
+    using Common.Extensions.DateTime;
+    using Infrastructure.Helpers;
+    using BusinessData.Models.Shared;
+    using Models.Message;
+    using Services.Infrastructure;
 
-	public class CaseController : BaseController
+    public class CaseController : BaseController
     {
         private readonly ILog _logger = LogManager.GetLogger(typeof(CaseController));
 
@@ -350,9 +350,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             var languageId = SessionFacade.CurrentLanguageId;
 
             var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId)
-                                                          .Where(c => c.ShowExternal == 1)
-                                                          .ToList();
-
+                .Where(c => c.ShowExternal == 1)
+                .ToList();
             
             var model = GetNewCaseModel(currentCustomer.Id, languageId, caseFieldSetting);
             model.ExLogFileGuid = Guid.NewGuid().ToString();
@@ -404,7 +403,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
                 
                 //override caseType value from template
-                if(caseTemplate.CaseType_Id != null)
+                if (caseTemplate.CaseType_Id != null)
                 {
                     model.NewCase.CaseType_Id = caseTemplate.CaseType_Id.Value;
                 }
@@ -503,8 +502,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 model.NewCase.Verified = caseTemplate.Verified;
                 model.NewCase.VerifiedDescription = caseTemplate.VerifiedDescription;
                 model.NewCase.SolutionRate = caseTemplate.SolutionRate;
-
-                model.Information = caseTemplate.Information;
+                
+                //case solution
+                model.NewCase.CaseSolution_Id = caseTemplateId;
+                model.NewCase.CurrentCaseSolution_Id = caseTemplate?.Id;
 
                 if (!string.IsNullOrEmpty(caseTemplate.Text_External) ||
                     !string.IsNullOrEmpty(caseTemplate.Text_Internal) || caseTemplate.FinishingCause_Id.HasValue)
@@ -531,7 +532,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                         model.NewCase.RegistrationSourceCustomer_Id = registrationSource.Id;
                 }
 
-                if(model.NewCase.ProductArea_Id.HasValue)
+                if (model.NewCase.ProductArea_Id.HasValue)
                 {
                     var p = _productAreaService.GetProductArea(model.NewCase.ProductArea_Id.GetValueOrDefault());
                     if(p != null)
@@ -676,6 +677,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 RegUserName = $"{SessionFacade.CurrentUserIdentity.FirstName} {SessionFacade.CurrentUserIdentity.LastName}".Trim(),
                 IpAddress = Request.GetIpAddress(),
                 CaseSolution_Id = caseTemplateId,
+                CurrentCaseSolution_Id = caseTemplateId,
                 CaseFileKey = Guid.NewGuid().ToString()
             };
 
@@ -1195,39 +1197,39 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             // unread/status flag update if not case is closed
 
-			var user = _userService.GetUserByLogin(SessionFacade.CurrentUserIdentity.UserId, null);
+            var user = _userService.GetUserByLogin(SessionFacade.CurrentUserIdentity.UserId, null);
 
             if (currentCase.FinishingDate.HasValue)
             {
                 string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                 this._caseService.Activate(currentCase.Id, user.Id, adUser, CreatedByApplications.SelfService5, out errors);
                 caseIsActivated = true;
-				currentCase = _caseService.GetCaseById(caseId);
-			}
+                currentCase = _caseService.GetCaseById(caseId);
+            }
 
-			if (!currentCase.FinishingDate.HasValue)
-				currentCase.Unread = 1;
+            if (!currentCase.FinishingDate.HasValue)
+                currentCase.Unread = 1;
 
-			int[] departmentIds = null;
-			if (currentCase.Department_Id.HasValue)
-				departmentIds = new int[] { currentCase.Department_Id.Value };
-			
-			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
-				ManualDependencyResolver.Get<IHolidayService>(),
-				currentCustomer.WorkingDayStart,
-				currentCustomer.WorkingDayEnd,
-				TimeZoneInfo.FindSystemTimeZoneById(user.TimeZoneId));
+            int[] departmentIds = null;
+            if (currentCase.Department_Id.HasValue)
+                departmentIds = new int[] { currentCase.Department_Id.Value };
+            
+            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                ManualDependencyResolver.Get<IHolidayService>(),
+                currentCustomer.WorkingDayStart,
+                currentCustomer.WorkingDayEnd,
+                TimeZoneInfo.FindSystemTimeZoneById(user.TimeZoneId));
 
-			var utcNow = DateTime.UtcNow;
-			var workTimeCalc = workTimeCalcFactory.Build(currentCase.RegTime, utcNow, departmentIds);
+            var utcNow = DateTime.UtcNow;
+            var workTimeCalc = workTimeCalcFactory.Build(currentCase.RegTime, utcNow, departmentIds);
 
-			var possibleWorktime = workTimeCalc.CalculateWorkTime(
-				currentCase.RegTime,
-				utcNow,
-				currentCase.Department_Id);
+            var possibleWorktime = workTimeCalc.CalculateWorkTime(
+                currentCase.RegTime,
+                utcNow,
+                currentCase.Department_Id);
 
-			// if statesecondary has ResetOnExternalUpdate
-			if (currentCase.StateSecondary_Id.HasValue)
+            // if statesecondary has ResetOnExternalUpdate
+            if (currentCase.StateSecondary_Id.HasValue)
             {
                 //get substatus
                 var casestatesecundary = _stateSecondaryService.GetStateSecondary(currentCase.StateSecondary_Id.Value);
@@ -1235,19 +1237,19 @@ namespace DH.Helpdesk.SelfService.Controllers
                 if (casestatesecundary.ResetOnExternalUpdate == 1)
                     currentCase.StateSecondary_Id = null;
 
-				if (casestatesecundary.IncludeInCaseStatistics == 0)
-				{
-					var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
-						currentCase.ChangeTime,
-						utcNow,
-						currentCase.Department_Id);
-					currentCase.ExternalTime += externalTimeToAdd;
-				}
-			}
+                if (casestatesecundary.IncludeInCaseStatistics == 0)
+                {
+                    var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
+                        currentCase.ChangeTime,
+                        utcNow,
+                        currentCase.Department_Id);
+                    currentCase.ExternalTime += externalTimeToAdd;
+                }
+            }
 
-			currentCase.LeadTime = possibleWorktime - currentCase.ExternalTime;
+            currentCase.LeadTime = possibleWorktime - currentCase.ExternalTime;
 
-			currentCase.ChangeTime = DateTime.UtcNow;
+            currentCase.ChangeTime = DateTime.UtcNow;
             int caseHistoryId = _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5,  out errors, SessionFacade.CurrentUserIdentity.UserId);            
             // save log
             var caseLog = new CaseLog
@@ -1996,6 +1998,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                     }
                 }
             }
+
+            if (newCase.CaseSolution_Id == 0)
+                newCase.CaseSolution_Id = null;
 
             var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0; 
 
