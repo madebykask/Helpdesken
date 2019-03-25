@@ -1,0 +1,7 @@
+<div class="header mbsc-form mbsc-padding">
+  <h2 translate>Välj språk</h2>
+</div>
+
+<mbsc-listview [options]="languageSettings" #languageListView="mobiscroll">
+  <mbsc-listview-item *ngFor="let language of languages" (click)="selectLanguage(language.value)">{{ language.text }}</mbsc-listview-item>
+</mbsc-listview>

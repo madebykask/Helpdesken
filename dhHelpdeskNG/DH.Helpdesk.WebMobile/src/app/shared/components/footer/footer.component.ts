@@ -8,6 +8,7 @@ import { CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
 import { CaseTemplateService } from 'src/app/services/case-organization/case-template.service';
 import { BehaviorSubject } from 'rxjs';
+import { routerNgProbeToken } from '@angular/router/src/router_module';
 
 @Component({
   selector: 'app-footer',
@@ -24,14 +25,6 @@ export class FooterComponent implements OnInit  {
   
   @ViewChild('languages') languagesCtrl: MbscSelect;
   
-  languagesSettings: MbscSelectOptions = {
-    cssClass: 'languages-list',
-    showOnTap: false,
-    display: 'bottom',
-    data: [],
-    onSet: (event, inst) => this.onLanguageChange(event, inst)
-  };
-
   bottomMenuSettings: MbscNavOptions = {
     type: 'bottom',
     moreText: null,
@@ -48,7 +41,6 @@ export class FooterComponent implements OnInit  {
   }
 
   ngOnInit() {    
-    this.loadLanguages();
     if (this.userSettingsService.getUserData().createCasePermission) {
        this.caseTemplateService.loadTemplates().pipe(
         take(1)
@@ -57,24 +49,13 @@ export class FooterComponent implements OnInit  {
     }
 
     // apply translations
-    this.languagesCtrl.setText = this.ngxTranslateService.instant("Välj");
-    this.languagesCtrl.cancelText  = this.ngxTranslateService.instant("Avbryt");    
+    //this.languagesCtrl.setText = this.ngxTranslateService.instant("Välj");
+    //this.languagesCtrl.cancelText  = this.ngxTranslateService.instant("Avbryt");    
   }
 
   openLanguages() {
-    if (!this.isLoadingLanguage) {
-        this.languagesCtrl.instance.show();
-    }
+    this.router.navigate(['language']);
   } 
-
-  setLanguage(languageId: number) {
-    if (languageId) {
-      this.userSettingsService.setCurrentLanguage(languageId);
-
-      // reload will reopen the app
-      window.location.reload(true);
-    }
-  }
 
   logout() {
     this.goTo('/login');
@@ -83,24 +64,5 @@ export class FooterComponent implements OnInit  {
   goTo(url: string = null) {  
     this.router.navigateByUrl(url);
   } 
-
-  private onLanguageChange(event, inst) {
-    let val = inst.getVal();
-    this.setLanguage(val ? +val : null);
-  }
-
-  private loadLanguages() {
-    this.languageId = this.userSettingsService.getCurrentLanguage() || 0;
-    if (this.languageId === 0)
-       return;
-    
-    this.isLoadingLanguage = true;
-    this.languagesService.getLanguages().pipe(
-        take(1),
-        finalize(() => this.isLoadingLanguage = false)
-    ).subscribe((data) => {
-        this.languagesCtrl.refreshData(data);
-    });
-  }
 
 }

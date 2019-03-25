@@ -28,6 +28,7 @@ import { initApplication } from './logic/app-configuration/app-configuration';
 import { HttpLoaderFactory } from './logic/translation';
 import { TranslationApiService } from './services/api/translation/translation-api.service';
 import { CaseTemplateComponent } from './components/case-template/case-template.component';
+import { LanguageComponent } from './components/language/language/language.component';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -39,7 +40,8 @@ import { CaseTemplateComponent } from './components/case-template/case-template.
      RequireAuthDirective,
      ErrorComponent,
      AltLayoutComponent,
-     TestComponent
+     TestComponent,
+     LanguageComponent
   ],
   imports: [
     MbscModule,
@@ -71,7 +73,8 @@ import { CaseTemplateComponent } from './components/case-template/case-template.
       deps: [NgxTranslateService, UserSettingsApiService, TranslationApiService, LocalStorageService, LoggerService],
       multi: true
     }
-  ]
+  ],
+  exports: [LanguageComponent]
 })
 export class AppModule { }
 

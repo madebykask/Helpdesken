@@ -7,6 +7,7 @@ import { ErrorComponent } from './shared/components/error/error.component';
 import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 import { TestComponent } from './components/test/test.component';
 import { CaseTemplateComponent } from './components/case-template/case-template.component';
+import { LanguageComponent } from './components/language/language/language.component';
 
 const appRoutes: Routes = [{ 
     path: '',
@@ -24,6 +25,10 @@ const appRoutes: Routes = [{
       }, {
         path: 'createcase', 
         component: CaseTemplateComponent,
+        canActivate: [AuthGuard] 
+      }, {
+        path: 'language', 
+        component: LanguageComponent,
         canActivate: [AuthGuard] 
       }
     ]
