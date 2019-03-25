@@ -297,9 +297,10 @@
     // Log
     @Html.HiddenFor(model => model.CaseDataModel.Text_External)
     @Html.HiddenFor(model => model.CaseDataModel.Text_Internal)
-
+    
+    // case solution
     @Html.HiddenFor(model => model.CaseDataModel.CaseSolution_Id)
-
+    @Html.HiddenFor(model => model.CaseDataModel.CurrentCaseSolution_Id)
 
     // Etc
     @Html.HiddenFor(model => model.CaseTemplateId)
