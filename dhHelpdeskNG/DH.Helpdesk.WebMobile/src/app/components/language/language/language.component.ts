@@ -4,7 +4,7 @@ import { Language } from 'src/app/models';
 import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 import { Router } from '@angular/router';
 import { LanguagesApiService } from 'src/app/services/api/language/languages-api.service';
-import { take, finalize } from 'rxjs/operators';
+import { take, finalize, map } from 'rxjs/operators';
 import { OptionItem } from 'src/app/modules/shared-module/models';
 import { MbscListviewOptions, MbscListview } from '@mobiscroll/angular';
 
@@ -17,11 +17,11 @@ export class LanguageComponent implements OnInit {
 
   constructor(private router: Router,
     private userSettingsService : UserSettingsApiService,
-    private languagesService: LanguagesApiService ) { }
+    private languagesService: LanguagesApiService) { }
 
   @ViewChild('languageListView') languageListView: MbscListview;
 
-  languages: OptionItem[];
+  languages: any[];
   languageId: number;
   isLoadingLanguage: Boolean;
 
@@ -48,9 +48,9 @@ export class LanguageComponent implements OnInit {
     this.isLoadingLanguage = true;
     this.languagesService.getLanguages().pipe(
         take(1),
+        map((o: OptionItem[]) => o.map(p => ({ id: parseInt(p.value, 10), text: p.text, selected: this.languageId === parseInt(p.value, 10) }))),
         finalize(() => {
           this.isLoadingLanguage = false;
-//          this.languageListView.select(this.languageId);
         })
     ).subscribe((data) => {
         this.languages = data;
@@ -63,6 +63,8 @@ export class LanguageComponent implements OnInit {
 
       // reload will reopen the app
       window.location.reload(true);
+      
+      //window.history.back();
     }
   }
 }

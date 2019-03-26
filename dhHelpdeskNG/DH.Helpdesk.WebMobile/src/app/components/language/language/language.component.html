@@ -3,5 +3,5 @@
 </div>
 
 <mbsc-listview [options]="languageSettings" #languageListView="mobiscroll">
-  <mbsc-listview-item *ngFor="let language of languages" (click)="selectLanguage(language.value)">{{ language.text }}</mbsc-listview-item>
+  <mbsc-listview-item *ngFor="let language of languages" (click)="selectLanguage(language.id)" [(selected)]="language.selected">{{ language.text }}</mbsc-listview-item>
 </mbsc-listview>
