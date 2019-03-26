@@ -79,7 +79,14 @@ $error-color:  #d8332a;
 
 mbsc-textarea textarea:disabled {
     opacity: 0.5;
-}  
+} 
+
+.mbsc-select, .mbsc-input {
+      input:disabled {
+        background-color: #dfdfdf;
+      }
+}
+
 
 //mobiscroll theme overrides
 .mbsc-mobiscroll {
