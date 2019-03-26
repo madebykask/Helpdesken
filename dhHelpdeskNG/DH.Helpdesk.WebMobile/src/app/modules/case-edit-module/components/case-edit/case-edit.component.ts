@@ -356,28 +356,29 @@ export class CaseEditComponent {
         }
 
         case CaseFieldsNames.CaseTypeId: {
-          this.caseTypesService.getCaseType(v.value).pipe(
-              take(1)
-            ).subscribe(ct => {
-              if (ct && ct.performerUserId != null && !this.getField(CaseFieldsNames.PerformerUserId).setByTemplate) {
-                if (!this.dataSource.performersStore$.value.some((e) => e.value == ct.performerUserId)) { 
-                  // get new list of performers with casetype perfomer included
-                  filters.CasePerformerUserId = ct.performerUserId;
-                  optionsHelper.getPerformers(true).pipe(
-                    take(1)
-                  ).subscribe((o: OptionItem[]) => {
-                    reducer.caseDataReducer(CaseFieldsNames.PerformerUserId, { items: o });                        
-                  });
+          if (v.value) {
+            this.caseTypesService.getCaseType(v.value).pipe(
+                take(1)
+              ).subscribe(ct => {
+                if (ct && ct.performerUserId != null && !this.getField(CaseFieldsNames.PerformerUserId).setByTemplate) {
+                  if (!this.dataSource.performersStore$.value.some((e) => e.value == ct.performerUserId)) { 
+                    // get new list of performers with casetype perfomer included
+                    filters.CasePerformerUserId = ct.performerUserId;
+                    optionsHelper.getPerformers(true).pipe(
+                      take(1)
+                    ).subscribe((o: OptionItem[]) => {
+                      reducer.caseDataReducer(CaseFieldsNames.PerformerUserId, { items: o });
+                    });
+                  }
                 }
-              }
-              if (ct && ct.workingGroupId != null) {
-                this.form.controls[CaseFieldsNames.WorkingGroupId].setValue(ct.workingGroupId);
-              }
-              if (ct && ct.performerUserId != null) {
-                this.form.controls[CaseFieldsNames.PerformerUserId].setValue(ct.performerUserId);
-              }
-            });
-
+                if (ct && ct.workingGroupId != null) {
+                  this.form.controls[CaseFieldsNames.WorkingGroupId].setValue(ct.workingGroupId);
+                }
+                if (ct && ct.performerUserId != null) {
+                  this.form.controls[CaseFieldsNames.PerformerUserId].setValue(ct.performerUserId);
+                }
+              });
+          }
           optionsHelper.getProductAreas(null).pipe(
             take(1)
           ).subscribe((o: MultiLevelOptionItem[]) => {

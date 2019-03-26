@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, OnChanges, SimpleChanges } from "@angular/core";
 import { BaseControl } from "../base-control";
-import { takeUntil } from "rxjs/operators";
+import { takeUntil, map } from "rxjs/operators";
 import { BehaviorSubject } from "rxjs";
 import { MbscSelectOptions, MbscSelect } from "@mobiscroll/angular";
 import { CommunicationService, Channels, DropdownValueChangedEvent } from "src/app/services/communication";
@@ -84,18 +84,14 @@ export class CaseDropdownComponent extends BaseControl<number> {
           }
         });
         
-        this.dataSource.pipe(
+      this.dataSource.pipe(
+        map(((options) => {
+          options = options || [];
+          this.addEmptyIfNotExists(options);
+          return options;
+        })),
           takeUntil(this.destroy$)
         ).subscribe((options) => {
-          
-          //clear prev selected values
-          if (this.selectControl && this.selectControl.instance)
-            this.selectControl.instance.clear(); 
-
-          options = options || [];
-          // if (!this.formControl.value || (this.formControl.value && !this.isRequired)) {
-            this.addEmptyIfNotExists(options);
-          // }
           this.localDataSource = options;
           this.resetValueIfNeeded(options);
         });
@@ -122,7 +118,7 @@ export class CaseDropdownComponent extends BaseControl<number> {
     }
 
     private addEmptyItem(options: OptionItem[]): any {
-      options.unshift(new OptionItem('',''));
+      options.unshift(new OptionItem('','--'));
     }
 
     ngOnDestroy(): void {

@@ -1,10 +1,9 @@
 import { Component, Input, ViewChild } from "@angular/core";
-import { BaseCaseField } from "../../../../models";
 import { BaseControl } from "../base-control";
 import { MultiLevelOptionItem } from "src/app/modules/shared-module/models";
 import { FormStatuses } from "src/app/modules/shared-module/constants";
-import { switchMap, takeUntil } from "rxjs/operators";
-import { of } from "rxjs";
+import { switchMap, takeUntil, map } from "rxjs/operators";
+import { of, BehaviorSubject } from "rxjs";
 import { MbscSelectOptions, MbscSelect } from "@mobiscroll/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/app/services/communication";
@@ -18,7 +17,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
   export class CaseMultiDropdownComponent extends BaseControl<number> {
     @ViewChild('textbox') textbox: any;
     @ViewChild('select') select: MbscSelect;
-    @Input() dataSource: MultiLevelOptionItem[] = [];
+    @Input() dataSource: BehaviorSubject<MultiLevelOptionItem[]>;
     @Input() disabled = false;
     text: string = '';
     settings: MbscSelectOptions = {
@@ -68,7 +67,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
         }
       },
       onItemTap: (event, inst) => {
-        if (event.value) { 
+        if (event.value != null) { 
           let chain = this.getOptionsChain(event.value);
           if (this.hasChilds(chain, chain.length - 1)) {
             let data = this.getNextData(event.value);
@@ -125,9 +124,9 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
     }
 
     private getNextData(value?: number) {
-      if (this.dataSource == null || this.dataSource.length === 0) return [];
+      if (this.dataSource == null || this.dataSource.value.length === 0) return [];
 
-      let tempDataSource = this.dataSource;
+      let tempDataSource = this.dataSource.value;
       if (value != null) {
         let chain = this.getOptionsChain(value);
         if (this.hasChilds(chain, chain.length - 1)) {
@@ -140,9 +139,9 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
     }
 
     private getPreviousData(value?: number) {
-      if (this.dataSource == null || this.dataSource.length === 0) return [];
+      if (this.dataSource == null || this.dataSource.value.length === 0) return [];
 
-      let tempDataSource = this.dataSource;
+      let tempDataSource = this.dataSource.value;
       let chain = this.getOptionsChain(value);
       if (this.hasChilds(chain, chain.length - 2)) {
         tempDataSource = chain[chain.length - 2].childs;
@@ -174,7 +173,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
     }
 
     private getTextChain(id: any) {
-      if (this.dataSource == null || this.dataSource.length === 0) return '';
+      if (this.dataSource == null || this.dataSource.value.length === 0) return '';
 
       let chain = this.getOptionsChain(id);
 
@@ -182,7 +181,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
     }
 
     private getOptionsChain(id: number | string) {
-      if (this.dataSource == null || this.dataSource.length === 0) return [];
+      if (this.dataSource == null || this.dataSource.value.length === 0) return [];
 
       let elems = new Array<MultiLevelOptionItem>();
       const searchNode = (elem: MultiLevelOptionItem, targetId: any): string => {
@@ -202,7 +201,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
         }
         return null;
       }
-      this.dataSource.forEach((elem: MultiLevelOptionItem) => searchNode(elem, id));
+      this.dataSource.value.forEach((elem: MultiLevelOptionItem) => searchNode(elem, id));
       elems = elems.reverse();
 
       return  elems || [];
@@ -227,6 +226,33 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
           takeUntil(this.destroy$)
         )
         .subscribe();
+
+      this.dataSource.pipe(
+          map(((options) => {
+            options = options || [];
+            this.addEmptyIfNotExists(options);
+            return options;
+          })),
+          takeUntil(this.destroy$)
+        ).subscribe((options) => {
+          if (this.select.instance) {
+            let data = this.getPreviousData(this.formControl.value);
+            this.select.instance.refresh(data);
+          }
+          this.resetValueIfNeeded(options);
+        });
+    }
+
+    private addEmptyIfNotExists(options) {
+      if (!options.some((i) => i.value === '')) {
+        options.unshift(new MultiLevelOptionItem('','--'));
+      }
+    }
+
+    private resetValueIfNeeded(options: MultiLevelOptionItem[]) {
+      if (options.filter((i) => String(i.value) == String(this.formControl.value)).length == 0) {
+        this.formControl.setValue('');
+      }
     }
 
     private markIfRoot(inst) {
