@@ -26,7 +26,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
 
   private usersSearchSubject = new Subject<string> ();
 
-  selectOptions: any /*MbscSelectOptions*/ = {
+  selectOptions: MbscSelectOptions = {
     input: "#notifierInput",
     showOnTap: false,
     circular: false,
@@ -50,7 +50,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
       return false;
     },
 
-    onMarkupReady: (event: { target: HTMLElement }, inst:any) => {      
+    onMarkupReady: (event: { target: HTMLElement }, inst:any) => {
       this.createProgressIcon(event.target);
     },
    

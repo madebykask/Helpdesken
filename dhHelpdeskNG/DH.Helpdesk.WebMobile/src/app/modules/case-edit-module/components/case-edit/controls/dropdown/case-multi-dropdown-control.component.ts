@@ -21,7 +21,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
     @Input() dataSource: MultiLevelOptionItem[] = [];
     @Input() disabled = false;
     text: string = '';
-    settings: any = {
+    settings: MbscSelectOptions = {
       theme: 'mobiscroll',
       display: 'center',
       layout: 'liquid',
@@ -45,20 +45,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
           }
         },
         'cancel',
-        {
-          text: this.ngxTranslateService.instant('Välj'),
-          cssClass: 'mbsc-fr-btn',
-          parentClass: 'mbsc-fr-btn-s',
-          handler: (event, inst) => {
-            const value = inst.getVal(true);
-            let chain = this.getOptionsChain(value);
-            if (!this.hasChilds(chain, chain.length - 1)) {
-              this.setText(value);
-              this.commService.publish(Channels.DropdownValueChanged, new DropdownValueChangedEvent(value, event.valueText, this.field.name));
-              inst.select();
-            }
-          }
-        }],
+        ],
       data: [],
       headerText: () => this.getHeader,
       input: 'select-textarea',
@@ -88,16 +75,17 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
             inst.refresh(data, '');
             this.markIfRoot(inst);
           } else {
-            inst.setVal(event.value, false, false, true); // set temp value only
+            inst.setVal(event.value);
+            inst.select();
           }
         }
         return false;
       },
-/*       onSet: (event, inst) => { // somehow onset is invoked on scrolling options
+      onSet: (event, inst) => { // somehow onset is invoked on scrolling options
         const value = inst.getVal();
         this.setText(value);
         this.commService.publish(Channels.DropdownValueChanged, new DropdownValueChangedEvent(value, event.valueText, this.field.name));
-      }, */
+      }, 
       onClose: () => {
         this.parentValue = undefined;
       }

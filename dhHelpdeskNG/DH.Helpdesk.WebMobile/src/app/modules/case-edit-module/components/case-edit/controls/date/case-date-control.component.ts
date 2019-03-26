@@ -22,6 +22,10 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
       theme: 'mobiscroll',
       display: 'center',
       returnFormat: 'iso8601',
+      setText: this.ngxTranslateService.instant('Välj'),
+      cancelText: this.ngxTranslateService.instant('Avbryt'),
+      buttons: ['cancel'],
+      setOnDayTap: true,
       formatValue: (data) => {
         // default format is mm/dd/yy so data contains [m,d,y]
         let dateIso = data[2] + '-' + (data[0] < 9 ? '0' : '') + (data[0] + 1) + '-' + (data[1] < 10 ? '0' : '') + data[1];
@@ -46,9 +50,6 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
     }
 
     ngOnInit(): void {
-      this.control.setText = this.ngxTranslateService.instant('Välj');
-      this.control.cancelText = this.ngxTranslateService.instant('Avbryt');
-
       this.value = this.field.value;
       // this.updateDisabledState();
       this.init(this.field);

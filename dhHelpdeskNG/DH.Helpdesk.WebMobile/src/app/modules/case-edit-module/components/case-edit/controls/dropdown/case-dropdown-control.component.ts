@@ -19,13 +19,16 @@ export class CaseDropdownComponent extends BaseControl<number> {
     @Input() disabled = false;
     
     // select settings
-    settings: any = {
+    settings: MbscSelectOptions = {
       filter: true,
       filterPlaceholderText: this.ngxTranslateService.instant('Skriv för att filtrera'),
       filterEmptyText: this.ngxTranslateService.instant('Inget resultat'),
+      setText: this.ngxTranslateService.instant('Välj'),
+      cancelText: this.ngxTranslateService.instant('Avbryt'),
       display: 'center',
       theme: 'mobiscroll',
-      height:30,
+      height: 30,
+      buttons: ['cancel'],
       headerText: () => this.getHeader,
       onInit: (event, inst) => {
         if (this.field.isReadonly) {
@@ -59,10 +62,6 @@ export class CaseDropdownComponent extends BaseControl<number> {
     }  
 
     ngOnInit(): void {
-      // apply translations
-      this.selectControl.setText = this.ngxTranslateService.instant('Välj');
-      this.selectControl.cancelText = this.ngxTranslateService.instant('Avbryt');
-
       this.initDataSource();
       this.init(this.field);
       this.updateDisabledState();

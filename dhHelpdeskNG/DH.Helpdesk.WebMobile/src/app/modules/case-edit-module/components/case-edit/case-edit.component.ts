@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
 import { forkJoin, Subject, of, throwError, interval } from 'rxjs';
@@ -26,6 +26,7 @@ import { CaseFilesApiService } from '../../services/api/case/case-files-api.serv
 import { NotifierType } from 'src/app/modules/shared-module/models/notifier/notifier.model';
 import { CaseTypesService } from 'src/app/services/case-organization/caseTypes-service';
 import { CaseFormControl, CaseFormGroup, NotifierFormFieldsSetter } from 'src/app/modules/shared-module/models/forms';
+import { MbscFormOptions, MbscForm } from '@mobiscroll/angular';
 
 @Component({
   selector: 'app-case-edit',
@@ -33,6 +34,7 @@ import { CaseFormControl, CaseFormGroup, NotifierFormFieldsSetter } from 'src/ap
   styleUrls: ['./case-edit.component.scss']
 })
 export class CaseEditComponent {
+  @ViewChild('mainForm') mainForm: any;// MbscForm
     caseSectionTypes = CaseSectionType;
     caseFieldsNames = CaseFieldsNames;
     accessModeEnum = CaseAccessMode;
@@ -50,6 +52,11 @@ export class CaseEditComponent {
       layout: "fixed",
       theme:"mobiscroll"
     };
+
+    formOptions: MbscFormOptions = {
+      onInit: (event, inst) => {
+      }
+    }
 
     currentTab = 'case_details';
     caseActions: CaseAction<CaseActionDataType>[] = [];
@@ -118,6 +125,164 @@ export class CaseEditComponent {
           }
       }
       return accessMode;
+    }
+
+    ngOnInit() {
+      this.commService.publish(Channels.Header, new HeaderEventData(false));
+
+     if (this.caseId > 0) {
+          // existing case 
+          this.loadCaseData(this.caseId);
+      } else if (this.templateId > 0) {
+          this.isNewCase = true;
+          this.loadTemplate(this.templateId);
+      }
+    }
+
+   loadCaseData(caseId: number): any {
+      this.isLoaded = false;
+      const sessionId = this.authStateService.getUser().authData.sessionId;
+
+      const caseLock$ = this.caseLockApiService.acquireCaseLock(caseId, sessionId);
+      const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
+
+      // todo: apply search type (all, my cases)
+      const caseData$ =
+          this.caseService.getCaseData(caseId)
+              .pipe(
+                  take(1),
+                  switchMap(data => {
+                    this.ownsLock = false;
+                    this.caseData = data;
+                    this.caseKey = this.caseData.id > 0 ? this.caseData.id.toString() : this.caseData.caseGuid.toString();
+                    const filter = this.caseDataHelpder.getCaseOptionsFilter(this.caseData);
+
+                    return this.caseService.getCaseOptions(filter);
+                  }),
+                  catchError((e) => throwError(e)),
+              );
+
+      forkJoin(caseSections$, caseData$, caseLock$).pipe(
+          take(1),
+          finalize(() => this.isLoaded = true),
+          catchError((e) => throwError(e))
+      ).subscribe(([sectionData, options, caseLock]) => {
+          this.caseLock = caseLock;  
+          this.caseSections = sectionData;
+          this.dataSource = new CaseDataStore(options);
+          
+          this.initLock();
+          this.processCaseData();
+      });
+    }
+
+    getCaseTitle() : string {
+      return this.caseDataHelpder.getCaseTitle(this.caseData);
+    }
+
+    showField(name: string): boolean {
+      return this.caseDataHelpder.hasField(this.caseData, name) && !this.getField(name).isHidden;
+    }
+
+    hasSection(type: CaseSectionType): boolean {
+      return this.caseDataHelpder.hasSection(this.caseData, type);
+    }
+
+    getField(name: string): BaseCaseField<any> {
+      return this.caseDataHelpder.getField(this.caseData, name);
+    }
+
+    public navigate(url: string) {
+      if(url == null) return;
+      of(true).pipe(
+        delay(200),
+        map(() => this.router.navigate([url])),
+        take(1)
+      ).subscribe();
+    }
+
+    getSectionHeader(type: CaseSectionType): string {
+        if (this.caseSections == null) return '';
+        return this.caseSections.find(s => s.type == type).header;
+    }
+
+    isSectionOpen(type: CaseSectionType) {
+        if (this.caseSections == null) return null
+        return this.caseSections.find(s => s.type == type).isEditCollapsed ? null : true;
+    }
+
+    public get canSave() {
+      if (this.isNewCase) 
+        return true; // TODO: check logic for new case
+
+      return this.accessMode == CaseAccessMode.FullAccess;
+    }
+
+    saveCase() {
+      if (!this.canSave) return;
+      this.form.submit();
+      if (this.form.invalid) {
+        let invalidControls = this.form.findInvalidControls(); // debug info
+        let errormessage = this.translateService.instant('Fyll i obligatoriska fält.');
+        this.alertService.showMessage(errormessage, AlertType.Error, 3);
+        return
+      };
+
+      this.isLoaded = false;
+      this.caseSaveService.saveCase(this.form, this.caseData).pipe(
+          take(1),
+          catchError((e) => throwError(e)) // TODO: handle here ? show error ?
+      ).subscribe(() => {
+          this.goToCases();
+      });
+    }
+
+    goToCases() {
+      let res = this.localStorage.getCaseSearchState();
+      let searchType: string;
+      if (res) {
+        searchType = CasesSearchType[res.SearchType];
+      }
+      else {
+        searchType = CasesSearchType[CasesSearchType.AllCases];
+      }
+      this.navigate('/casesoverview/' + searchType);
+    }
+
+    cleanTempFiles(caseId:number) {
+      this.caseFileService.deleteTemplFiles(caseId).pipe(
+        take(1)
+      ).subscribe();
+    }
+
+    private loadTemplate(templateId: number) {
+      const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
+
+      const caseData$ = 
+        this.caseService.getTemplateData(templateId).pipe(
+          take(1),
+          switchMap(data => {
+            //this.ownsLock = false; //TODO: check?
+            this.caseData = data;
+            this.caseKey = this.caseData.caseGuid.toString();
+            const filter = this.caseDataHelpder.getCaseOptionsFilter(this.caseData);
+
+            return this.caseService.getCaseOptions(filter);
+          }),
+          catchError((e) => throwError(e)),
+      );
+
+      forkJoin(caseSections$, caseData$).pipe(
+          take(1),
+          finalize(() => this.isLoaded = true),
+          catchError((e) => throwError(e))
+      ).subscribe(([sectionData, options]) => {
+          this.caseSections = sectionData;
+          this.dataSource = new CaseDataStore(options);
+          
+          this.initLock();
+          this.processCaseData();
+      });
     }
 
     private subscribeEvents() {
@@ -260,164 +425,6 @@ export class CaseEditComponent {
           break;
         }
       }
-    }
-
-    ngOnInit() {
-      this.commService.publish(Channels.Header, new HeaderEventData(false));
-
-     if (this.caseId > 0) {
-          // existing case 
-          this.loadCaseData(this.caseId);
-      } else if (this.templateId > 0) {
-          this.isNewCase = true;
-          this.loadTemplate(this.templateId);
-      }
-    }
-
-    private loadTemplate(templateId: number) {
-      const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
-
-      const caseData$ = 
-        this.caseService.getTemplateData(templateId).pipe(
-          take(1),
-          switchMap(data => {
-            //this.ownsLock = false; //TODO: check?
-            this.caseData = data;
-            this.caseKey = this.caseData.caseGuid.toString();
-            const filter = this.caseDataHelpder.getCaseOptionsFilter(this.caseData);
-
-            return this.caseService.getCaseOptions(filter);
-          }),
-          catchError((e) => throwError(e)),
-      );
-
-      forkJoin(caseSections$, caseData$).pipe(
-          take(1),
-          finalize(() => this.isLoaded = true),
-          catchError((e) => throwError(e))
-      ).subscribe(([sectionData, options]) => {
-          this.caseSections = sectionData;
-          this.dataSource = new CaseDataStore(options);
-          
-          this.initLock();
-          this.processCaseData();
-      });
-    }
-
-    loadCaseData(caseId: number): any {
-      this.isLoaded = false;
-      const sessionId = this.authStateService.getUser().authData.sessionId;
-
-      const caseLock$ = this.caseLockApiService.acquireCaseLock(caseId, sessionId);
-      const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
-
-      // todo: apply search type (all, my cases)
-      const caseData$ =
-          this.caseService.getCaseData(caseId)
-              .pipe(
-                  take(1),
-                  switchMap(data => {
-                    this.ownsLock = false;
-                    this.caseData = data;
-                    this.caseKey = this.caseData.id > 0 ? this.caseData.id.toString() : this.caseData.caseGuid.toString();
-                    const filter = this.caseDataHelpder.getCaseOptionsFilter(this.caseData);
-
-                    return this.caseService.getCaseOptions(filter);
-                  }),
-                  catchError((e) => throwError(e)),
-              );
-
-      forkJoin(caseSections$, caseData$, caseLock$).pipe(
-          take(1),
-          finalize(() => this.isLoaded = true),
-          catchError((e) => throwError(e))
-      ).subscribe(([sectionData, options, caseLock]) => {
-          this.caseLock = caseLock;  
-          this.caseSections = sectionData;
-          this.dataSource = new CaseDataStore(options);
-          
-          this.initLock();
-          this.processCaseData();
-      });
-    }
-
-    getCaseTitle() : string {
-      return this.caseDataHelpder.getCaseTitle(this.caseData);
-    }
-
-    showField(name: string): boolean {
-      return this.caseDataHelpder.hasField(this.caseData, name) && !this.getField(name).isHidden;
-    }
-
-    hasSection(type: CaseSectionType): boolean {
-      return this.caseDataHelpder.hasSection(this.caseData, type);
-    }
-
-    getField(name: string): BaseCaseField<any> {
-      return this.caseDataHelpder.getField(this.caseData, name);
-    }
-
-    public navigate(url: string) {
-      if(url == null) return;
-      of(true).pipe(
-        delay(200),
-        map(() => this.router.navigate([url])),
-        take(1)
-      ).subscribe();
-    }
-
-    getSectionHeader(type: CaseSectionType): string {
-        if (this.caseSections == null) return '';
-        return this.caseSections.find(s => s.type == type).header;
-    }
-
-    isSectionOpen(type: CaseSectionType) {
-        if (this.caseSections == null) return null
-        return this.caseSections.find(s => s.type == type).isEditCollapsed ? null : true;
-    }
-
-    public get canSave() {
-      if (this.isNewCase) 
-        return true; // TODO: check logic for new case
-
-      return this.accessMode == CaseAccessMode.FullAccess;
-    }
-
-    saveCase() {
-      if (!this.canSave) return;
-      this.form.submit();
-      if (this.form.invalid) {
-        let invalidControls = this.form.findInvalidControls(); // debug info
-        let errormessage = this.translateService.instant('Fyll i obligatoriska fält.');
-        this.alertService.showMessage(errormessage, AlertType.Error, 3);
-        return
-      };
-
-      this.isLoaded = false;
-      this.caseSaveService.saveCase(this.form, this.caseData).pipe(
-          take(1),
-          catchError((e) => throwError(e)) // TODO: handle here ? show error ?
-      ).subscribe(() => {
-          this.goToCases();
-      });
-    }
-
-    goToCases() {
-      let res = this.localStorage.getCaseSearchState();
-      let searchType: string;
-      if (res) {
-        searchType = CasesSearchType[res.SearchType];
-      }
-      else {
-        searchType = CasesSearchType[CasesSearchType.AllCases];
-      }
-      this.navigate('/casesoverview/' + searchType);
-    }
-
-    cleanTempFiles(caseId:number) {
-      this.caseFileService.deleteTemplFiles(caseId).pipe(
-        take(1)
-      ).subscribe();
     }
 
     private processCaseData() {
