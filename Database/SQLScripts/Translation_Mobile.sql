@@ -226,6 +226,12 @@ insert into tbltext (id, TextString, TextType) VALUES (10033, 'Skapa ärende', @
 If not exists (select * from tblTextTranslation where text_id = 10033 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10033, 2, 'Create case')
 
+If not exists (select * from tbltext where id = 10034)
+insert into tbltext (id, TextString, TextType) VALUES (10034, 'Välj språk', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10034 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10034, 2, 'Select language')
+
 
 
 
