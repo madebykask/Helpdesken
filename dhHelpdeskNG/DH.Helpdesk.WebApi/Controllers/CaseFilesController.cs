@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -62,8 +63,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
-
-            var now = DateTime.Now;
+            
             var filesReadToProvider = await Request.Content.ReadAsMultipartAsync();
 
             var stream = filesReadToProvider.Contents.FirstOrDefault();
@@ -72,11 +72,13 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var fileBytes = await stream.ReadAsByteArrayAsync();
                 var fileName = stream.Headers.ContentDisposition.FileName.Unquote().Trim();
 
-                //fix name
-                if (_userTemporaryFilesStorage.FileExists(fileName, caseKey.ToString()))
+                var counter = 1;
+                var newFileName = fileName;
+                while (_userTemporaryFilesStorage.FileExists(fileName, caseKey.ToString()))
                 {
-                    fileName = $"{now}-{fileName}"; // handle on the client file name change
+                    newFileName = $"{Path.GetFileNameWithoutExtension(fileName)} ({counter++}){Path.GetExtension(fileName)}";
                 }
+                fileName = newFileName;
 
                 _userTemporaryFilesStorage.AddFile(fileBytes, fileName, caseKey.ToString());
                 return Ok(fileName);
@@ -110,10 +112,14 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var fileBytes = await stream.ReadAsByteArrayAsync();
                 var fileName = stream.Headers.ContentDisposition.FileName.Unquote().Trim();
 
-                if (_caseFileService.FileExists(caseId, fileName))
+                //fix file name if exists
+                var counter = 1;
+                var newFileName = fileName;
+                while (_caseFileService.FileExists(caseId, newFileName))
                 {
-                    fileName = $"{now}-{fileName}"; // handle on the client filename change
+                    newFileName = $"{Path.GetFileNameWithoutExtension(fileName)} ({counter++}){Path.GetExtension(fileName)}";
                 }
+                fileName = newFileName;
 
                 var caseFileDto = new CaseFileDto(
                     fileBytes,

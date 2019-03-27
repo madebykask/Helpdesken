@@ -61,10 +61,11 @@ export class LogFilesUploadComponent {
 
   private onFileUploadComplete(fileItem: FileItem, response: string, status: number, headers: ParsedResponseHeaders) {
     //console.log(`File upload complete. File: ${fileItem.file.name}, IsSuccess: ${fileItem.isSuccess}, Response: ${response}`);
-    if (fileItem.isUploaded && fileItem.isSuccess) {        
+    if (fileItem.isUploaded && fileItem.isSuccess) {
         let file = JSON.parse(response);
-        if (file) {            
+        if (file) {
             this.fileUploaded.emit(file);
+            fileItem.file.name = file;
         }
         fileItem.remove();// remove file from upload queue
     } else if (!fileItem.isSuccess) {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -145,11 +146,14 @@ namespace DH.Helpdesk.WebApi.Controllers
                 var fileBytes = await stream.ReadAsByteArrayAsync();
                 var fileName = stream.Headers.ContentDisposition.FileName.Unquote().Trim();
 
-                //fix name
-                if (_userTemporaryFilesStorage.FileExists(fileName, caseId, ModuleName.Log))
+                //fix file name if exists
+                var counter = 1;
+                var newFileName = fileName;
+                while(_userTemporaryFilesStorage.FileExists(newFileName, caseId, ModuleName.Log))
                 {
-                    fileName = $"{now}-{fileName}"; // handle on the client file name change
+                    newFileName = $"{Path.GetFileNameWithoutExtension(fileName)} ({counter++}){Path.GetExtension(fileName)}";
                 }
+                fileName = newFileName;
 
                 _userTemporaryFilesStorage.AddFile(fileBytes, fileName, caseId, ModuleName.Log);
                 return Ok(fileName);
