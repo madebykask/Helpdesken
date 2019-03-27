@@ -11,6 +11,7 @@ $action-color: #007aff;
 $border-color:#ccc;
 $font-header-color: white;
 $error-color:  #d8332a;
+$disabled-color: #dfdfdf;
 
 .login {
     .mbsc-page {
@@ -77,14 +78,22 @@ $error-color:  #d8332a;
     z-index: 1000;
 }
 
-mbsc-textarea textarea:disabled {
-    opacity: 0.5;
-} 
-
-.mbsc-select, .mbsc-input {
-      input:disabled {
-        background-color: #dfdfdf;
+.disabled {
+  .mbsc-select, .mbsc-input {
+    input:disabled {
+      background-color: $disabled-color;
+    }
+    .mbsc-input-wrap {
+      background-color: $disabled-color;
+      opacity: .5;
+      textarea:disabled, .mbsc-err-msg {
+        background-color: $disabled-color;
       }
+      textarea:disabled {
+        opacity: .5;
+      }
+    }
+  }
 }
 
 

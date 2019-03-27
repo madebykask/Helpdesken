@@ -1,4 +1,5 @@
 <mbsc-calendar #date [(ngModel)]="value" [options]="options" 
 [error]="getErrorState()"
-[errorMessage]="getErrorMessage()">{{ formControl.label }}{{ requiredSymbol }}</mbsc-calendar>
+[errorMessage]="getErrorMessage()"
+[ngClass]="{ 'disabled': formControl.disabled }">{{ formControl.label }}{{ requiredSymbol }}</mbsc-calendar>
 <!-- <mbsc-input #control [ngModel]="value | dateFormat" >{{ field.label }}</mbsc-input> -->

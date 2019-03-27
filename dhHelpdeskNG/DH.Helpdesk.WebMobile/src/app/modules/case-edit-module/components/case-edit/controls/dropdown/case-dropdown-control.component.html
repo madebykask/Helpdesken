@@ -3,6 +3,7 @@
               [options]="settings"
               [data]="localDataSource"
               [error]="getErrorState()"
-              [errorMessage]="getErrorMessage()">{{ getHeader }}{{ requiredSymbol }}</mbsc-select>
+              [errorMessage]="getErrorMessage()"
+              [ngClass]="{ 'disabled': formControl.disabled }">{{ getHeader }}{{ requiredSymbol }}</mbsc-select>
 </ng-container>
 <!-- <mbsc-input #control [(ngModel)]="text">{{ field.label }}</mbsc-input> -->

@@ -232,6 +232,12 @@ insert into tbltext (id, TextString, TextType) VALUES (10034, 'Välj språk', @M
 If not exists (select * from tblTextTranslation where text_id = 10034 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10034, 2, 'Select language')
 
+If not exists (select * from tbltext where id = 10035)
+insert into tbltext (id, TextString, TextType) VALUES (10035, 'Klar', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10035 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10035, 2, 'Clear')
+
 
 
 

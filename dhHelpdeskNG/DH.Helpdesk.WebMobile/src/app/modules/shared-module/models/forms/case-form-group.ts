@@ -50,7 +50,7 @@ export class CaseFormGroup extends FormGroup {
 
     input = input || this;
     if (input instanceof FormControl) {
-        if (input.invalid) invalidControls.push(input);
+        if (input.invalid || (input.disabled && input.errors != null)) invalidControls.push(input);
         return invalidControls;
     }
 
@@ -59,7 +59,7 @@ export class CaseFormGroup extends FormGroup {
     const controls = input.controls;
     for (const name in controls) {
         let control = controls[name];
-        if (control.invalid) invalidControls.push( control );
+        if (control.invalid || (input.disabled && input.errors != null)) invalidControls.push( control );
         switch( control.constructor.name )
         {    
             case 'FormArray':

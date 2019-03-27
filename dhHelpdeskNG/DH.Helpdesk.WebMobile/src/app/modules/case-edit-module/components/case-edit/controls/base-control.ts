@@ -36,7 +36,7 @@ export class BaseControl<T> {
   }
 
   public getErrorState() {
-    return this.formControl.invalid && this.formControl.isSubmitted;
+    return ((this.formControl.disabled && this.formControl.errors != null) || this.formControl.invalid) && this.formControl.isSubmitted;
   }
 
   public get requiredSymbol(): string {

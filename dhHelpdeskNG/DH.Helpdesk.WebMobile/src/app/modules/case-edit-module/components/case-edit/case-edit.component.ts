@@ -222,10 +222,10 @@ export class CaseEditComponent {
       if (!this.canSave) return;
       this.form.submit();
       if (this.form.invalid) {
-        let invalidControls = this.form.findInvalidControls(); // debug info
+        // let invalidControls = this.form.findInvalidControls(); // debug info
         let errormessage = this.translateService.instant('Fyll i obligatoriska fält.');
         this.alertService.showMessage(errormessage, AlertType.Error, 3);
-        return
+        return;
       };
 
       this.isLoaded = false;
@@ -469,7 +469,7 @@ export class CaseEditComponent {
           control.isHidden = field.isHidden;
           controls[field.name] = control;
       });
-      return new CaseFormGroup(controls)/* ,
+      return new CaseFormGroup(controls,
           (group: CaseFormGroup): ValidationErrors => {
           let errors = Object.create(null);
           Object.keys(group.controls).forEach((controlName) => {
@@ -485,7 +485,7 @@ export class CaseEditComponent {
             }
           });
           return errors;
-      });  */
+      }); 
     }
 
     private initLock() {

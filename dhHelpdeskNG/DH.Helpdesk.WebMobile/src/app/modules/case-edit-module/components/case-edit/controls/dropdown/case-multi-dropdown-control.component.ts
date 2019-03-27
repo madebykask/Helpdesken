@@ -38,7 +38,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
           parentClass: 'float-left back-btn',
           handler: (event, inst) => {
             if (this.hasParent()) {
-              inst.refresh(this.getPreviousData(this.parentValue));
+              inst.refresh(this.getPreviousData(this.parentValue), '');
               this.markIfRoot(inst);
             }
           }
@@ -55,7 +55,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
       },
       onBeforeShow: (event, inst) => {
         let data = this.getPreviousData(inst.getVal());
-        inst.refresh(data);
+        inst.refresh(data, '');
       },
       onMarkupReady: (event, inst) => {
         this.markIfRoot(inst);
@@ -237,7 +237,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
         ).subscribe((options) => {
           if (this.select.instance) {
             let data = this.getPreviousData(this.formControl.value);
-            this.select.instance.refresh(data);
+            this.select.instance.refresh(data, '');
           }
           this.resetValueIfNeeded(options);
         });

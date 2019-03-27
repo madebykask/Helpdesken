@@ -23,6 +23,7 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
       display: 'center',
       returnFormat: 'iso8601',
       setText: this.ngxTranslateService.instant('Välj'),
+      clearText: this.ngxTranslateService.instant('Klar'),
       cancelText: this.ngxTranslateService.instant('Avbryt'),
       buttons: ['cancel'],
       setOnDayTap: true,
