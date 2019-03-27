@@ -9,6 +9,7 @@ import { Subject, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NotifierSearchItem, NotifierType } from 'src/app/modules/shared-module/models/notifier/notifier.model';
 import { FormStatuses } from 'src/app/modules/shared-module/constants';
+import { IBaseCaseField } from 'src/app/modules/case-edit-module/models/case/case-edit-input.model';
 
 @Component({
   selector: 'notifier-search',
@@ -21,6 +22,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
   @ViewChild('notifierSelect') notifierSelect: MbscSelect;
   @Input() disabled = false;
   @Input() notifierType: NotifierType;
+  @Input() categoryField: IBaseCaseField<string>;
 
   notifiersData: any[] = [];
 
@@ -76,9 +78,9 @@ export class NotifierSearchComponent extends BaseControl<string> {
     this.updateDisabledState();
 
     this.initEvents();
-
-    //TODO: when initiator categoryId is implemented - replace with value from dropdown
-    const categoryId = 0; // 0 - no category, null - all categories
+    
+    let categoryId:number = this.categoryField && this.categoryField.value ? +this.categoryField.value : 0; 
+    if (isNaN(categoryId)) categoryId = 0; // 0 - no category, null - all categories
 
     // subscribe to notifier(user) search input 
     this.usersSearchSubject.asObservable().pipe(

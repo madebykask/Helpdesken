@@ -154,7 +154,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 foreach (CaseFieldSetting c in cfs)
                 {
-                    if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
+                    if (string.Equals(c.Name, valueToFind.getCaseFieldName(), StringComparison.OrdinalIgnoreCase))
                     {
                         ret = c;
                         break;

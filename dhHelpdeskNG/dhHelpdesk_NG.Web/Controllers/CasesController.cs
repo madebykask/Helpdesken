@@ -3288,8 +3288,8 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var oldCase = new Case();
-			bool oldCaseSubstateCount = true;
-			if (edit)
+            bool oldCaseSubstateCount = true;
+            if (edit)
             {
                 #region Editing existing case
 
@@ -3314,13 +3314,13 @@ namespace DH.Helpdesk.Web.Controllers
 
                 if (oldCase.StateSecondary_Id.HasValue)
                 {
-					var subState = this._stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
+                    var subState = this._stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
 
                     // calculating time spent in "inactive" state since last changing every save
                     if (subState.IncludeInCaseStatistics == 0)
                     {
-						oldCaseSubstateCount = false;
-						var workTimeCalcFactory =
+                        oldCaseSubstateCount = false;
+                        var workTimeCalcFactory =
                             new WorkTimeCalculatorFactory(
                                 ManualDependencyResolver.Get<IHolidayService>(),
                                 curCustomer.WorkingDayStart,
@@ -3422,13 +3422,13 @@ namespace DH.Helpdesk.Web.Controllers
                     deptIds = new int[] { case_.Department_Id.Value };
                 }
 
-				var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, utcNow, deptIds);
+                var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, utcNow, deptIds);
 
-				// If should count time on old status and finish date is earlier than now, add external time for time in "finish" state to now
-				if (oldCaseSubstateCount && case_.FinishingDate.Value < utcNow)
-				{
-					case_.ExternalTime += workTimeCalc.CalculateWorkTime(case_.FinishingDate.Value, utcNow, case_.Department_Id);
-				}
+                // If should count time on old status and finish date is earlier than now, add external time for time in "finish" state to now
+                if (oldCaseSubstateCount && case_.FinishingDate.Value < utcNow)
+                {
+                    case_.ExternalTime += workTimeCalc.CalculateWorkTime(case_.FinishingDate.Value, utcNow, case_.Department_Id);
+                }
 
                 var possibleWorkTime = workTimeCalc.CalculateWorkTime(
                     case_.RegTime,
@@ -4667,7 +4667,6 @@ namespace DH.Helpdesk.Web.Controllers
                 _userPermissionsChecker.UserHasPermission(currentUser, UserPermission.CaseUnlockPermission);
 
             m.MailTemplates = _mailTemplateService.GetCustomMailTemplatesList(customerId).ToList();
-
             
 
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
@@ -4793,7 +4792,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (regFieldSettings.IsActive)
             {
-                var defaultCategoryId = 0;
+                var defaultCategoryId = ComputerUserCategory.EmptyCategoryId;
 
                 //set default value only for new case
                 if (Int32.TryParse(regFieldSettings.DefaultValue, out defaultCategoryId))

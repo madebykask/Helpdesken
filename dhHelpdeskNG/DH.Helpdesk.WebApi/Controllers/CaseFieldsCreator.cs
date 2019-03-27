@@ -12,6 +12,7 @@ using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Models.Case.Field;
 using DH.Helpdesk.Services.Services;
@@ -111,6 +112,21 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 //if (Model.ComputerUserCategories.Any())
                 //GlobalEnums.TranslationCaseFields.UserSearchCategory_Id//TODO: add UserSearchCategory_Id
+                //initiator category Id
+                if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id))
+                {
+                    var userSearchCategoryValue = GetUserSearchCategoryValue(template, caseFieldSettings, CaseSectionType.Initiator);
+                    field = GetField(userSearchCategoryValue, customerId, languageId,
+                        CaseFieldsNamesApi.UserSearchCategoryId,
+                        GlobalEnums.TranslationCaseFields.UserSearchCategory_Id,
+                        CaseSectionType.Initiator,
+                        caseFieldSettings,
+                        caseFieldTranslations,
+                        currentCase?.Id,
+                        caseTemplateSettings);
+                    model.Fields.Add(field);
+                }
+
                 field = GetField(currentCase != null ? currentCase.ReportedBy : template?.ReportedBy, customerId,
                     languageId,
                     CaseFieldsNamesApi.ReportedBy, GlobalEnums.TranslationCaseFields.ReportedBy,
@@ -119,19 +135,6 @@ namespace DH.Helpdesk.WebApi.Controllers
                 AddMaxLengthOption(field.Options, 40);
                 model.Fields.Add(field);
 
-                //initiator category Id
-                //if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id))
-                //{
-                //    field = new BaseCaseField<string>()
-                //    {
-                //        Name = CaseFieldsNamesApi.UserSearchCategory_Id.ToString(),
-                //        Value = //todo:  set default value from field settings?
-                //        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, languageId, customerId, caseFieldTranslations),
-                //        Section = CaseSectionType.Initiator,
-                //        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, caseFieldSettings)
-                //    };
-                //    model.Fields.Add(field);
-                //}
                 field = GetField(currentCase != null ? currentCase.PersonsName : template?.PersonsName, customerId,
                     languageId,
                     CaseFieldsNamesApi.PersonName, GlobalEnums.TranslationCaseFields.Persons_Name,
@@ -226,24 +229,26 @@ namespace DH.Helpdesk.WebApi.Controllers
             Case currentCase, CaseSolution template, int languageId,
             IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model)
         {
+
             IBaseCaseField field;
+
             // Regarding
             //displayAboutUserInfoHtml:TODO:see DH.Helpdesk.Web.Infrastructure.Extensions.ObjectExtensions.displayAboutUserInfoHtml
 
             //regarding category Id
-            //if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.UserSearchCategory_Id))
-            //{
-            //    field = new BaseCaseField<string>()
-            //    {
-            //        Name = CaseFieldsNamesApi.IsAbout_UserSearchCategory_Id.ToString(),
-            //        Value = //todo:  set default value from field settings?
-            //        Label = GetFieldLabel(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, languageId, customerId, caseFieldTranslations),
-            //        Section = CaseSectionType.Regarding,
-            //        Options = GetFieldOptions(GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id, caseFieldSettings)
-            //    };
-            //    model.Fields.Add(field);
-            //}
-
+            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id))
+            {
+                var userSearchCategoryValue = GetUserSearchCategoryValue(template, caseFieldSettings, CaseSectionType.Regarding);
+                field = GetField(userSearchCategoryValue, customerId, languageId,
+                    CaseFieldsNamesApi.IsAbout_UserSearchCategoryId,
+                    GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id,
+                    CaseSectionType.Regarding,
+                    caseFieldSettings,
+                    caseFieldTranslations,
+                    currentCase?.Id,
+                    caseTemplateSettings);
+                model.Fields.Add(field);
+            }
 
             field = GetField(currentCase != null ? currentCase.IsAbout?.ReportedBy : template?.IsAbout_ReportedBy,
                 customerId, languageId,
@@ -1119,6 +1124,38 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
         }
 
+        private int? GetUserSearchCategoryValue(CaseSolution template, IList<CaseFieldSetting> fieldSettings, CaseSectionType sectionType)
+        {
+            var fieldName = sectionType == CaseSectionType.Regarding
+                ? GlobalEnums.TranslationCaseFields.IsAbout_UserSearchCategory_Id.ToString() 
+                : GlobalEnums.TranslationCaseFields.UserSearchCategory_Id.ToString();
+
+            //check template first
+            if (template != null)
+            {
+                if (sectionType == CaseSectionType.Initiator && template.UserSearchCategory_Id.HasValue)
+                {
+                    return template.UserSearchCategory_Id;
+                }
+
+                if (sectionType == CaseSectionType.Regarding && template.IsAbout_UserSearchCategory_Id.HasValue)
+                {
+                    return template.IsAbout_UserSearchCategory_Id;
+                }
+            }
+
+            //find default categories if any - default is empy category (0 - users without categories)
+            var categoryFieldSettings = _caseFieldSettingsHelper.GetCaseFieldSetting(fieldSettings, fieldName);
+
+            var defaultCategoryId = ComputerUserCategory.EmptyCategoryId;
+            if (Int32.TryParse(categoryFieldSettings.DefaultValue, out defaultCategoryId))
+            {
+                return defaultCategoryId;
+            }
+
+            return null;
+        }
+
         private BaseCaseField<T> GetField<T>(T value, int customerId, int languageId,
             string caseFieldNameApi,
             GlobalEnums.TranslationCaseFields translationCaseFieldName,
@@ -1131,8 +1168,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 Name = caseFieldNameApi,
                 Value = value,
-                Label = _caseTranslationService.GetFieldLabel(translationCaseFieldName, languageId,
-                    customerId, caseFieldTranslations),
+                Label = _caseTranslationService.GetFieldLabel(translationCaseFieldName, languageId, customerId, caseFieldTranslations),
                 Section = sectionName,
                 Options = GetBaseFieldOptions(translationCaseFieldName, caseFieldSettings)
             };

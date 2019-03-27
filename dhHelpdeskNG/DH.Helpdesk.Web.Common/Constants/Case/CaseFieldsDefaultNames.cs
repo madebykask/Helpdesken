@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using DH.Helpdesk.BusinessData.OldComponents;
 
 namespace DH.Helpdesk.Web.Common.Constants.Case
@@ -9,6 +8,7 @@ namespace DH.Helpdesk.Web.Common.Constants.Case
         public static readonly IReadOnlyDictionary<GlobalEnums.TranslationCaseFields, string> TranslationCaseFieldsToApiNames =
             new Dictionary<GlobalEnums.TranslationCaseFields, string>
         {
+            { GlobalEnums.TranslationCaseFields.UserSearchCategory_Id, CaseFieldsNamesApi.UserSearchCategoryId},
             { GlobalEnums.TranslationCaseFields.ReportedBy, CaseFieldsNamesApi.ReportedBy },
             { GlobalEnums.TranslationCaseFields.Persons_Name, CaseFieldsNamesApi.PersonName },
             { GlobalEnums.TranslationCaseFields.Persons_EMail, CaseFieldsNamesApi.PersonEmail },

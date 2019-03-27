@@ -12,11 +12,13 @@ namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
 {
     public interface ICaseFieldSettingsHelper
     {
-        bool IsActive(IList<CaseFieldSetting> caseFieldSettings,
-            ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
+        bool IsActive(IList<CaseFieldSetting> caseFieldSettings, ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, 
             GlobalEnums.TranslationCaseFields field);
+
         CaseFieldSetting GetCaseFieldSetting(IList<CaseFieldSetting> caseFieldSettings, string fieldName);
+
         bool IsCaseNew(int? currentCaseId);
+
         bool IsReadOnly(GlobalEnums.TranslationCaseFields fieldName, int? currentCaseId,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, int permission = 1);
 
@@ -33,9 +35,7 @@ namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
             GlobalEnums.TranslationCaseFields.tblLog_Text_Internal
         };
 
-        public bool IsActive(IList<CaseFieldSetting> caseFieldSettings,
-            ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
-            GlobalEnums.TranslationCaseFields field)
+        public bool IsActive(IList<CaseFieldSetting> caseFieldSettings, ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, GlobalEnums.TranslationCaseFields field)
         {
             var caseSolutionsSettings = CaseSolutionFieldSetting(caseTemplateSettings, field);
             if (caseSolutionsSettings != null && caseSolutionsSettings.CaseSolutionMode == CaseSolutionModes.Hide)
@@ -51,8 +51,7 @@ namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
         public bool IsReadonlyTemplate(GlobalEnums.TranslationCaseFields field, ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings)
         {
             var caseSolutionsSettings = CaseSolutionFieldSetting(caseTemplateSettings, field);
-            return caseSolutionsSettings != null &&
-                   caseSolutionsSettings.CaseSolutionMode == CaseSolutionModes.ReadOnly;
+            return caseSolutionsSettings != null && caseSolutionsSettings.CaseSolutionMode == CaseSolutionModes.ReadOnly;
         }
 
         public bool IsFieldAlwaysVisible(GlobalEnums.TranslationCaseFields field)
@@ -77,8 +76,7 @@ namespace DH.Helpdesk.WebApi.Logic.CaseFieldSettings
                    (caseTemplateSettings != null && IsCaseNew(currentCaseId) && IsReadonlyTemplate(fieldName, caseTemplateSettings));
         }
 
-        public CaseSolutionSettingOverview CaseSolutionFieldSetting(ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
-            GlobalEnums.TranslationCaseFields field)
+        public CaseSolutionSettingOverview CaseSolutionFieldSetting(ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, GlobalEnums.TranslationCaseFields field)
         {
             return caseTemplateSettings?.FirstOrDefault(c => c.CaseSolutionField.MapToCaseField() == field);
         }

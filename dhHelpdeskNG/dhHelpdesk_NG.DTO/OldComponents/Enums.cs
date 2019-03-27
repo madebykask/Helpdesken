@@ -245,6 +245,9 @@ namespace DH.Helpdesk.BusinessData.OldComponents
                 case CaseSolutionFields.IsAbout_ReportedBy:
                     return TranslationCaseFields.IsAbout_ReportedBy;
 
+                case CaseSolutionFields.IsAbout_UserSearchCategory_Id:
+                    return TranslationCaseFields.IsAbout_UserSearchCategory_Id;
+
                 case CaseSolutionFields.IsAbout_UserCode:
                     return TranslationCaseFields.IsAbout_UserCode;
 
@@ -325,6 +328,9 @@ namespace DH.Helpdesk.BusinessData.OldComponents
 
                 case CaseSolutionFields.UserNumber:
                     return TranslationCaseFields.ReportedBy;
+
+                case CaseSolutionFields.UserSearchCategory_Id:
+                    return TranslationCaseFields.UserSearchCategory_Id;
 
                 case CaseSolutionFields.Verified:
                     return TranslationCaseFields.Verified;
