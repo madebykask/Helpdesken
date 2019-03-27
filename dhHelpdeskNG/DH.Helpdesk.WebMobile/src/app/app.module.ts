@@ -29,6 +29,8 @@ import { HttpLoaderFactory } from './logic/translation';
 import { TranslationApiService } from './services/api/translation/translation-api.service';
 import { CaseTemplateComponent } from './components/case-template/case-template.component';
 import { LanguageComponent } from './components/language/language/language.component';
+import { RouteReuseStrategy } from '@angular/router';
+import { CaseRouteReuseStrategy } from './helpers/case-route-resolver.stategy';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -72,6 +74,10 @@ import { LanguageComponent } from './components/language/language/language.compo
       useFactory: initApplication,
       deps: [NgxTranslateService, UserSettingsApiService, TranslationApiService, LocalStorageService, LoggerService],
       multi: true
+    },
+    {
+      provide: RouteReuseStrategy,
+      useClass: CaseRouteReuseStrategy
     }
   ],
   exports: [LanguageComponent]
