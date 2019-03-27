@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Validators, FormGroup } from '@angular/forms';
+import { Validators, FormGroup, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
 import { forkJoin, Subject, of, throwError, interval } from 'rxjs';
@@ -17,7 +17,7 @@ import { CaseEditDataHelper } from '../../logic/case-edit/case-editdata.helper';
 import { CaseFieldsNames, CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { CaseLockApiService } from '../../services/api/case/case-lock-api.service';
 import { CaseSaveService } from '../../services/case';
-import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel, CaseLockModel, BaseCaseField, CaseAction, CaseActionDataType } from '../../models';
+import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel, CaseLockModel, BaseCaseField, CaseAction, CaseActionDataType, IBaseCaseField } from '../../models';
 import { OptionItem, MultiLevelOptionItem } from 'src/app/modules/shared-module/models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
@@ -407,7 +407,7 @@ export class CaseEditComponent {
         }
 
         case CaseFieldsNames.StateSecondaryId: {
-          if (v.value != null) {
+          if (v.value) {
             this.stateSecondariesService.getStateSecondary(v.value)
             .pipe(
               take(1)
@@ -469,7 +469,23 @@ export class CaseEditComponent {
           control.isHidden = field.isHidden;
           controls[field.name] = control;
       });
-      return new CaseFormGroup(controls);
+      return new CaseFormGroup(controls)/* ,
+          (group: CaseFormGroup): ValidationErrors => {
+          let errors = Object.create(null);
+          Object.keys(group.controls).forEach((controlName) => {
+            const ctrl = group.get(controlName);
+            if (ctrl.validator != null) {
+              let isError = ctrl.validator(ctrl);
+              if (isError) {
+                ctrl.setErrors(isError, { emitEvent: false });
+              }
+            }
+            if (ctrl.errors != null) {
+              errors = {...errors, ...ctrl.errors };
+            }
+          });
+          return errors;
+      });  */
     }
 
     private initLock() {
