@@ -731,7 +731,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 }
 
                 // Set working group from the case type working group if was not set before
-                if (!workingGroupId.HasValue || workingGroupId.Value == 0)
+                if (currentCase == null && (!workingGroupId.HasValue || workingGroupId.Value == 0))
                 {
                     var caseTypeField = model.Fields.FirstOrDefault(f =>
                         f.Name.Equals(CaseFieldsNamesApi.CaseTypeId.ToString(), StringComparison.InvariantCultureIgnoreCase));
@@ -747,7 +747,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 }
 
                 // Set working group from the product area working group if was not set before
-                if (!workingGroupId.HasValue || workingGroupId.Value == 0)
+                if (currentCase == null && (!workingGroupId.HasValue || workingGroupId.Value == 0))
                 {
                     var productAreaField = model.Fields.FirstOrDefault(f =>
                         f.Name.Equals(CaseFieldsNamesApi.ProductAreaId.ToString(), StringComparison.InvariantCultureIgnoreCase));
@@ -794,7 +794,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 }
 
                 // Set perfomer from the case type perfomer if was not set before
-                if (!performerId.HasValue || performerId.Value == 0)
+                if (currentCase == null && (!performerId.HasValue || performerId.Value == 0))
                 {
                     var caseTypeField = model.Fields.FirstOrDefault(f =>
                         f.Name.Equals(CaseFieldsNamesApi.CaseTypeId.ToString(), StringComparison.InvariantCultureIgnoreCase));
