@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef } from '@angular/core';
 import { MbscSelectOptions, MbscSelect } from '@mobiscroll/angular';
 import { BaseControl } from '../base-control';
 import { TranslateService } from '@ngx-translate/core';
@@ -18,7 +18,7 @@ import { IBaseCaseField } from 'src/app/modules/case-edit-module/models/case/cas
 })
 export class NotifierSearchComponent extends BaseControl<string> {
 
-  @ViewChild('notifierInput') notifierInput: any;
+  @ViewChild('notifierInput') notifierInput: any; //MbscInput
   @ViewChild('notifierSelect') notifierSelect: MbscSelect;
   @Input() disabled = false;
   @Input() notifierType: NotifierType;
@@ -44,9 +44,27 @@ export class NotifierSearchComponent extends BaseControl<string> {
     setText: this.ngxTranslateService.instant("Välj"),
     filterPlaceholderText: this.ngxTranslateService.instant('Skriv för att filtrera'),
     filterEmptyText: this.ngxTranslateService.instant('Inget resultat'),
-    // Methods
+    
+    onShow: (event, inst) => {
+      //setting filter text from user input on case page
+      const filter = (this.notifierInput.element.value || '').trim();
+      if (filter && filter.length) {
+        const el = event.target.querySelector<HTMLInputElement>('input.mbsc-sel-filter-input');
+        if (el) {
+          el.value = filter;
+          setTimeout(() => this.usersSearchSubject.next(filter), 200);
+          //const ev = new Event('input', { bubbles: true });
+          //el.dispatchEvent(ev);
+        }
+      }
+    },
+
+    onBeforeClose: (event, inst) => {
+      this.notifiersData = [];
+    },
+
     onFilter: (event, inst) => {
-      const filterText = event.filterText || '';
+      const filterText = (event.filterText || '').trim();
       this.usersSearchSubject.next(filterText);
       // Prevent built-in filtering
       return false;
@@ -86,7 +104,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
     this.usersSearchSubject.asObservable().pipe(
       takeUntil(this.destroy$),
       debounceTime(150),
-      distinctUntilChanged(),
+      //distinctUntilChanged(),
       switchMap((query:string) => {
         if (query && query.length > 1) {
           this.toggleProgress(true);
