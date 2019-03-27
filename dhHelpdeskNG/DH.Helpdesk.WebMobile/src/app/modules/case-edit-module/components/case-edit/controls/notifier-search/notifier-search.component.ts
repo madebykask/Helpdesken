@@ -109,8 +109,6 @@ export class NotifierSearchComponent extends BaseControl<string> {
         } else {
           this.notifiersData = [];
         }
-        //add empty
-        this.notifiersData.unshift({ value: '', text: ''});
     });
   }
 
