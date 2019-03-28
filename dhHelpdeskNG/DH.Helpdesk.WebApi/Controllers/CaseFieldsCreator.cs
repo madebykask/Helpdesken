@@ -815,13 +815,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                 model.Fields.Add(field);
             }
 
-            //customerUserSetting.PriorityPermission - if 0 - readonly, else 
             {
                 var priorityId = currentCase != null
                     ? currentCase.Priority_Id
                     : template?.Priority_Id ?? customerDefaults?.PriorityId;
                 // Set working group from the product area working group if was not set before
-                if (!priorityId.HasValue || priorityId.Value == 0)
+                if (currentCase == null && (!priorityId.HasValue || priorityId.Value == 0))
                 {
                     var productAreaField = model.Fields.FirstOrDefault(f =>
                         f.Name.Equals(CaseFieldsNamesApi.ProductAreaId.ToString(), StringComparison.InvariantCultureIgnoreCase));
