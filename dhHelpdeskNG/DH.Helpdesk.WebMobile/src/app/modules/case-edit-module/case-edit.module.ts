@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CaseEditRoutingModule } from './case-edit-routing.module';
-import { CaseEditComponent } from './components/case-edit/case-edit.component';
+import { CaseEditComponent, MbscFormGroupTitleClickDirective } from './components/case-edit/case-edit.component';
 import { CaseTextboxComponent } from './components/case-edit/controls/textbox/case-textbox-control.component';
 import { CaseDateComponent } from './components/case-edit/controls/date/case-date-control.component';
 import { CaseDropdownComponent } from './components/case-edit/controls/dropdown/case-dropdown-control.component';
@@ -43,7 +43,7 @@ import { NotifierSearchComponent } from './components/case-edit/controls/notifie
     CaseFilesUploadComponent, CaseFilesControlComponent, CaseActionsComponent, CaseActionHostDirective, 
     CaseActionContainerComponent, GeneralActionComponent, FieldChangeActionComponent, LogNoteActionComponent, ActionsFilterPipe,
     CaseLogInputComponent, LogFilesUploadComponent, FilePreviewComponent, PdfFileViewer, CommonFileViewer, ImageFileViewerComponent,
-    TextFileViewerComponent, Pdf2FileViewerComponent, Pdf3FileViewerComponent, NotifierSearchComponent
+    TextFileViewerComponent, Pdf2FileViewerComponent, Pdf3FileViewerComponent, NotifierSearchComponent, MbscFormGroupTitleClickDirective
 ],
   imports: [
     CommonModule,

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, Directive, EventEmitter, ElementRef, Renderer2 } from '@angular/core';
 import { Validators, FormGroup, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
@@ -633,5 +633,22 @@ export class CaseEditComponent {
 interface IOrganisationData {
   regionId?: number;
   departmentId?: number;
-  ouId?:number;     
+  ouId?:number;
+}
+
+@Directive({selector: 'mbsc-form-group-title', outputs: ['onClick']})
+export class MbscFormGroupTitleClickDirective {
+  private isOpened?: boolean;
+  onClick = new EventEmitter<any>();
+
+  constructor(private elem: ElementRef, private renderer: Renderer2) {
+    this.renderer.listen(this.elem.nativeElement, 'click', (ev) => { 
+      if (this.isOpened == null) {
+        this.isOpened = this.elem.nativeElement.getAttribute('aria-expanded') == 'true';
+      }
+      this.elem.nativeElement.focus();
+      this.onClick.emit({ isOpening: !this.isOpened, event: ev});
+      this.isOpened = !this.isOpened;
+    });
+  }
 }
