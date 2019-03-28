@@ -1213,12 +1213,16 @@ namespace DH.Helpdesk.SelfService.Controllers
             int[] departmentIds = null;
             if (currentCase.Department_Id.HasValue)
                 departmentIds = new int[] { currentCase.Department_Id.Value };
-            
-            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+
+
+			var timeZone = TimeZoneInfo.GetSystemTimeZones().First(o => o.BaseUtcOffset.TotalMinutes == cs.TimeZone_offset);
+
+
+			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                 ManualDependencyResolver.Get<IHolidayService>(),
                 currentCustomer.WorkingDayStart,
                 currentCustomer.WorkingDayEnd,
-                TimeZoneInfo.FindSystemTimeZoneById(user.TimeZoneId));
+				timeZone);
 
             var utcNow = DateTime.UtcNow;
             var workTimeCalc = workTimeCalcFactory.Build(currentCase.RegTime, utcNow, departmentIds);
