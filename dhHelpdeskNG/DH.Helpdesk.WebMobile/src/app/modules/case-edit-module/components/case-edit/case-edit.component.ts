@@ -462,7 +462,7 @@ export class CaseEditComponent {
           }
 
           let control = new CaseFormControl(field.label, {
-            value: field.value === null ? '' : field.value,
+            value: field.value == null ? '' : field.value,
             disabled: !this.canSave || field.isReadonly,
           }, validators);
           control.isRequired = field.isRequired;

@@ -38,7 +38,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
           parentClass: 'float-left back-btn',
           handler: (event, inst) => {
             if (this.hasParent()) {
-              inst.refresh(this.getPreviousData(this.parentValue), '');
+              this.refreshData(inst, this.getPreviousData(this.parentValue));
               this.markIfRoot(inst);
             }
           }
@@ -55,7 +55,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
       },
       onBeforeShow: (event, inst) => {
         let data = this.getPreviousData(inst.getVal());
-        inst.refresh(data, '');
+        this.refreshData(inst, data);
       },
       onMarkupReady: (event, inst) => {
         this.markIfRoot(inst);
@@ -71,7 +71,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
           let chain = this.getOptionsChain(event.value);
           if (this.hasChilds(chain, chain.length - 1)) {
             let data = this.getNextData(event.value);
-            inst.refresh(data, '');
+            this.refreshData(inst, data);
             this.markIfRoot(inst);
           } else {
             inst.setVal(event.value);
@@ -100,7 +100,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
       this.updateDisabledState();
 
       this.initEvents()
-      this.setText(this.field.value);
+      this.setText(this.formControl.value);
     }
 
     ngOnDestroy(): void {
@@ -113,6 +113,14 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
         return defaultValue;
       }
       return this.formControl.label || defaultValue;
+    }
+
+    private refreshData(inst, data) {
+      inst.refresh(data, '');
+      if (inst.markup != null) {
+        let elem =  (<HTMLElement>inst.markup).querySelector<HTMLInputElement>('input.mbsc-sel-filter-input');
+        elem.value = '';
+      }
     }
 
     public openSelect() {
@@ -237,7 +245,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
         ).subscribe((options) => {
           if (this.select.instance) {
             let data = this.getPreviousData(this.formControl.value);
-            this.select.instance.refresh(data, '');
+            this.refreshData(this.select.instance, data);
           }
           this.resetValueIfNeeded(options);
         });
@@ -250,7 +258,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
     }
 
     private resetValueIfNeeded(options: MultiLevelOptionItem[]) {
-      if (options.filter((i) => String(i.value) == String(this.formControl.value)).length == 0) {
+      if (this.getOptionsChain(this.formControl.value).length == 0) {
         this.formControl.setValue('');
       }
     }
