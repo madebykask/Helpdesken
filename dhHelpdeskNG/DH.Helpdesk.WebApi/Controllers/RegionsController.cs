@@ -28,7 +28,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         public async Task<List<ItemOverview>> Get(int cid)
         {
             var items = await _regionService.GetActiveRegionsAsync(cid);
-            return items.Select(r => new ItemOverview(r.Name, r.Id.ToString())).ToList();
+            return items.OrderBy(r => r.Name).Select(r => new ItemOverview(r.Name, r.Id.ToString())).ToList();
         }
     }
 }
