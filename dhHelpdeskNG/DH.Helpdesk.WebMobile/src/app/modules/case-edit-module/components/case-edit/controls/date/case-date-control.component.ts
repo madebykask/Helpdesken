@@ -22,6 +22,8 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
       theme: 'mobiscroll',
       display: 'center',
       returnFormat: 'iso8601',
+      firstDay: 1,
+      weekDays: "short",
       setText: this.ngxTranslateService.instant('Välj'),
       clearText: this.ngxTranslateService.instant('Klar'),
       cancelText: this.ngxTranslateService.instant('Avbryt'),
