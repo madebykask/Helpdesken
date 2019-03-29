@@ -1,4 +1,5 @@
-﻿using LinqLib.Operators;
+﻿using System.Threading.Tasks;
+using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -41,6 +42,7 @@ namespace DH.Helpdesk.Services.Services
         IList<ProductAreaEntity> GetWithHierarchy(int customerId);
 
         ProductAreaEntity GetProductArea(int id);
+        Task<ProductAreaEntity> GetProductAreaAsync(int id);
         
         string GetProductAreaWithChildren(int id, string separator, string valueToReturn);
         string GetProductAreaChildren(int id, string separator, string valueToReturn);
@@ -370,6 +372,11 @@ namespace DH.Helpdesk.Services.Services
         public ProductAreaEntity GetProductArea(int id)
         {
             return this.productAreaRepository.GetById(id);
+        }
+
+        public Task<ProductAreaEntity> GetProductAreaAsync(int id)
+        {
+            return productAreaRepository.GetByIdAsync(id);
         }
 
         public IList<ProductAreaOverview> GetProductAreasOverviewWithChildren(int customerId, bool isActiveOnly = false)

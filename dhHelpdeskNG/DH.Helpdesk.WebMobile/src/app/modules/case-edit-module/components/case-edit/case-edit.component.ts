@@ -27,6 +27,7 @@ import { NotifierType } from 'src/app/modules/shared-module/models/notifier/noti
 import { CaseTypesService } from 'src/app/services/case-organization/caseTypes-service';
 import { CaseFormControl, CaseFormGroup, NotifierFormFieldsSetter } from 'src/app/modules/shared-module/models/forms';
 import { MbscFormOptions, MbscForm } from '@mobiscroll/angular';
+import { ProductAreasService } from 'src/app/services/case-organization/productAreas-service';
 
 @Component({
   selector: 'app-case-edit',
@@ -89,7 +90,8 @@ export class CaseEditComponent {
                 private caseWatchDateApiService: CaseWatchDateApiService,
                 private translateService : TranslateService,
                 private localStorage:  LocalStorageService,
-                private caseFileService: CaseFilesApiService) {
+                private caseFileService: CaseFilesApiService, 
+                private productAreasService: ProductAreasService) {
       // read route params
       if (this.route.snapshot.paramMap.has('id')) {
           this.isNewCase = false;
@@ -213,7 +215,7 @@ export class CaseEditComponent {
 
     public get canSave() {
       if (this.isNewCase) 
-        return true; // TODO: check logic for new case
+        return true;
 
       return this.accessMode == CaseAccessMode.FullAccess;
     }
@@ -424,6 +426,21 @@ export class CaseEditComponent {
             });
           }
           break;
+        }
+
+        case CaseFieldsNames.ProductAreaId: {
+          if (v.value) {
+            this.productAreasService.getProductArea(v.value).pipe(
+              take(1)
+            ).subscribe(ct => {
+              if (ct && ct.workingGroupId != null) {
+                this.form.controls[CaseFieldsNames.WorkingGroupId].setValue(ct.workingGroupId);
+              }
+              if (ct && ct.priorityId != null) {
+                this.form.controls[CaseFieldsNames.PriorityId].setValue(ct.priorityId);
+              }
+            })
+          }
         }
       }
     }

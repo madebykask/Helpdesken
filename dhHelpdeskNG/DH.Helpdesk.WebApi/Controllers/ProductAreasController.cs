@@ -45,6 +45,20 @@ namespace DH.Helpdesk.WebApi.Controllers
             return productAreas.OrderBy(p => p.Name);
         }
 
+        [Route("{id:int}")]
+        public async Task<IHttpActionResult> GetProductArea(int id, int cid, int langId)
+        {
+            if (id > 0)
+            {
+                var productArea = await _productAreaService.GetProductAreaAsync(id);
+                return Ok(new { id, workingGroupId = productArea.WorkingGroup_Id, 
+                    priorityId = productArea.Priority_Id, 
+                    parentId = productArea.Parent_ProductArea_Id });
+            }
+
+            return Ok();
+        }
+
         private void Translate(List<ProductAreaOverview> products, int langId, int depth)
         {
             if (depth >= 20)
