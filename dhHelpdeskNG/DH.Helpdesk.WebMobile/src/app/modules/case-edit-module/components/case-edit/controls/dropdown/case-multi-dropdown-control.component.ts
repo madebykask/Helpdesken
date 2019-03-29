@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { Component, Input, ViewChild, Renderer2, ElementRef } from "@angular/core";
 import { BaseControl } from "../base-control";
 import { MultiLevelOptionItem } from "src/app/modules/shared-module/models";
 import { FormStatuses } from "src/app/modules/shared-module/constants";
@@ -91,7 +91,10 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
     }
     private parentValue?: number;
 
-    constructor(private ngxTranslateService: TranslateService, private commService: CommunicationService) {
+    constructor(private ngxTranslateService: TranslateService,
+       private commService: CommunicationService, 
+       private renderer: Renderer2,
+       private elem: ElementRef) {
       super();
     }
 
@@ -101,6 +104,10 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
 
       this.initEvents()
       this.setText(this.formControl.value);
+    }
+
+    ngAfterViewInit(): void {
+      this.addSelectArrow();
     }
 
     ngOnDestroy(): void {
@@ -261,6 +268,16 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
       if (this.getOptionsChain(this.formControl.value).length == 0) {
         this.formControl.setValue('');
       }
+    }
+
+    private addSelectArrow() {
+      const inputWrap = (<HTMLElement>this.elem.nativeElement).querySelector('mbsc-textarea .mbsc-input-wrap')
+      const span = (<HTMLElement>this.elem.nativeElement).querySelector('mbsc-textarea .mbsc-input-fill');
+      let arrowHtml = this.renderer.createElement('span');
+      this.renderer.addClass(arrowHtml, 'mbsc-select-ic');
+      this.renderer.addClass(arrowHtml, 'mbsc-ic');
+      this.renderer.addClass(arrowHtml, 'mbsc-ic-arrow-down5');
+      this.renderer.insertBefore(inputWrap, arrowHtml, span);
     }
 
     private markIfRoot(inst) {

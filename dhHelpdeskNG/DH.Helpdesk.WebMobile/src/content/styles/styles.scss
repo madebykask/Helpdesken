@@ -395,6 +395,14 @@ ul.nostyle {
 }
 
 .mbsc-ios {
+  .select-textarea {
+    textarea {
+      padding-right: 2.25em;
+    }
+    .mbsc-select-ic {
+      top: 1.4375em;
+    }
+  }
   .mbsc-textarea {
     textarea {
       height: 1.5em;
