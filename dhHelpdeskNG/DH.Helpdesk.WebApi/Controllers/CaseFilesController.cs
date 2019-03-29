@@ -45,12 +45,21 @@ namespace DH.Helpdesk.WebApi.Controllers
       
         [HttpGet]
         [CheckUserCasePermissions(CaseIdParamName = "caseId")]
-        [Route("{caseId:int}/File/{fileId:int}")] //ex: /api/Case/123/File/1203?cid=1
-        public Task<IHttpActionResult> Get([FromUri] int caseId, [FromUri] int fileId, [FromUri] int cid, bool? inline = false)
+        [Route("{caseId:int}/file/{fileId:int}")] //ex: /api/Case/123/File/1203?cid=1
+        public Task<IHttpActionResult> DownloadExistingFile([FromUri] int caseId, [FromUri] int fileId, [FromUri] int cid, bool? inline = false)
         {
             var fileContent = _caseFileService.GetCaseFile(cid, caseId, fileId, true); //TODO: async
 
             IHttpActionResult res = new FileResult(fileContent.FileName, fileContent.Content, Request, inline ?? false);
+            return Task.FromResult(res);
+        }
+
+        [HttpGet]
+        [Route("{caseKey:guid}/file")] 
+        public Task<IHttpActionResult> DownloadTempFile([FromUri] Guid caseKey, [FromUri] string fileName, [FromUri] int cid, bool? inline = false)
+        {
+            var fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, caseKey.ToString(), "");
+            IHttpActionResult res = new FileResult(fileName, fileContent, Request, inline ?? false);
             return Task.FromResult(res);
         }
 

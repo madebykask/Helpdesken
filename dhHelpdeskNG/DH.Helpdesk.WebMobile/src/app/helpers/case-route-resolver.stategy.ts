@@ -8,17 +8,20 @@ interface IRouteStorageObject {
 export class CaseRouteReuseStrategy implements RouteReuseStrategy {
   
   storedRouteHandles = new Map<string, DetachedRouteHandle>();
-  
+
+  //supported pages for saving state 
+  caseTemplatePath = 'case/template/:templateId';
   casePagePath = 'case/:id';
-  caseFilePath = 'case/:caseId/logfile/:fileId';
-  caseLogFilePath = 'case/:caseId/file/:fileId';
+  filePageRoutes = ['case/:caseKey/file', 'case/:caseId/file/:fileId', 'case/:caseId/logfile/:fileId'];
 
   allowStoreInCache = {
-    [this.casePagePath]: false
+    [this.casePagePath]: false,
+    [this.caseTemplatePath] : false
   };
 
   allowRetrieveFromCache = {
-    [this.casePagePath]: false    
+    [this.casePagePath]: false,
+    [this.caseTemplatePath] : false
   };
 
   // Method is called when navigation is changed. Allows to check if attach or detach is required by checking from/to urls.
@@ -30,27 +33,24 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
       const prevUrl = this.getUrl(prev);
       const curPath = this.getPath(cur);
       const curUrl = this.getUrl(cur);
-
-      //console.log(`>>> shouldReuseRoute. curUrl: ${curUrl}, curPath: ${curPath}, prevUrl: ${prevUrl}, prevPath: ${prevPath}`);
   
+      console.log(`>>> shouldReuseRoute. curUrl: ${curUrl}, curPath: ${curPath}, prevUrl: ${prevUrl}, prevPath: ${prevPath}`);
+    
       // navigating from case to file
-      if (prevPath === this.casePagePath && 
-          (curPath === this.caseFilePath || curPath === this.caseLogFilePath)) {
-        this.allowStoreInCache[this.casePagePath] = true;
-        this.allowRetrieveFromCache[this.casePagePath] = false;
+      if (prevPath in this.allowRetrieveFromCache && this.isInArray(curPath, this.filePageRoutes)) {
+        this.allowStoreInCache[prevPath] = true;
+        this.allowRetrieveFromCache[prevPath] = false;
+      } 
+      else if (curPath in this.allowRetrieveFromCache && this.isInArray(prevPath, this.filePageRoutes)) {
+        this.allowStoreInCache[curPath] = false;
+        this.allowRetrieveFromCache[curPath] = true;
+      } else {
+          //reset flags in both states storages
+          Object.keys(this.allowRetrieveFromCache).forEach(key => {
+            this.allowStoreInCache[key] = false;
+            this.allowRetrieveFromCache[key] = false;
+          });
       }
-      
-      // navigating from file to case page
-      if (curPath === this.casePagePath && 
-         (prevPath === this.caseFilePath || prevPath === this.caseLogFilePath)) {
-          this.allowStoreInCache[this.casePagePath] = false;
-          this.allowRetrieveFromCache[this.casePagePath] = true;          
-      }
-    }
-    else {
-      //reset flags
-      this.allowStoreInCache[this.casePagePath] = false;
-      this.allowRetrieveFromCache[this.casePagePath] = false;
     }
 
     // If either of our reuseUrl and default Url are true, we want to reuse the route    
@@ -69,8 +69,8 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
     if (route.children && route.children.length === 0) {
       const url = this.getUrl(route);
       const routePath = this.getPath(route);
-      if (this.allowStoreInCache.hasOwnProperty(routePath) && this.allowStoreInCache[routePath]) {
-        //console.log(">>>shoudDetach: detaching page. Url: %s, Path: %s", url, routePath);
+      if (routePath in this.allowStoreInCache && this.allowStoreInCache[routePath]) {
+        console.log(">>>shoudDetach: detaching page. Url: %s, Path: %s", url, routePath);
         return true;
       }
     }
@@ -86,8 +86,8 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
     if (route.children && route.children.length === 0) {
       const  url = this.getUrl(route);
       const routePath = this.getPath(route);
-      if (this.allowStoreInCache.hasOwnProperty(routePath) && this.allowStoreInCache[routePath]) {
-        //console.log(">>>store: store instance. Url: %s, Path: %s", url, routePath);
+      if (routePath in this.allowStoreInCache && this.allowStoreInCache[routePath]) {
+        console.log(">>>store: store instance. Url: %s, Path: %s", url, routePath);
         this.storedRouteHandles.set(routePath, <DetachedRouteHandle>{ url: url, handle: detachedTree });
       }
     }
@@ -101,10 +101,10 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
   shouldAttach(route: ActivatedRouteSnapshot): boolean {
     if (route.children && route.children.length === 0) {
       const url = this.getUrl(route);
-      const routePath = this.getPath(route);      
+      const routePath = this.getPath(route);
       if (this.allowRetrieveFromCache.hasOwnProperty(routePath) && this.allowRetrieveFromCache[routePath] && 
           this.storedRouteHandles.has(routePath)) {
-        //console.log(">>>shouldAttach: attaching existing page. Url: %s, Path: %s", url, routePath);
+        console.log(">>>shouldAttach: attaching existing page. Url: %s, Path: %s", url, routePath);
         return true;
       }
     }    
@@ -121,14 +121,18 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
       const url = this.getUrl(route);
       const routePath = this.getPath(route);
       if (this.allowRetrieveFromCache.hasOwnProperty(routePath) && this.allowRetrieveFromCache[routePath] && 
-          this.storedRouteHandles.has(routePath)) {        
-        //console.log(">>>retrieve: retrieving instance for url: ", url);
+          this.storedRouteHandles.has(routePath)) {
+        console.log(">>>retrieve: retrieving instance for url: ", url);
         const data = this.storedRouteHandles.get(routePath) as IRouteStorageObject;
         if (data && data.handle && data.url === url)
           return data.handle as DetachedRouteHandle;
       }
     }
     return null;
+  }
+
+  isInArray(value, array): boolean {
+    return array.indexOf(value) > -1;
   }
  
   private getPath(route: ActivatedRouteSnapshot): string {

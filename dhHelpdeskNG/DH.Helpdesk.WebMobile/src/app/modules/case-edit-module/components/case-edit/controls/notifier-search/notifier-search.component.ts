@@ -52,6 +52,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
         const el = event.target.querySelector<HTMLInputElement>('input.mbsc-sel-filter-input');
         if (el) {
           el.value = filter;
+          el.nextElementSibling.classList.add("mbsc-sel-filter-show-clear");
           setTimeout(() => this.usersSearchSubject.next(filter), 200);
           //const ev = new Event('input', { bubbles: true });
           //el.dispatchEvent(ev);

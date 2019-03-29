@@ -10,18 +10,23 @@ export class CaseFileDataResolver implements Resolve<Observable<Blob>> {
   }
 
   resolve(activatedRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Blob> {
-    const caseId = +activatedRoute.params['caseId'];
-    const fileId = +activatedRoute.params['fileId'];
-
-    if (isNaN(caseId) || !caseId) {
-      throw Observable.throw(`Invalid or missing caseId param. caseId: ${caseId}`);
+    const caseId = +activatedRoute.paramMap.get('caseId');
+    const caseKey = activatedRoute.paramMap.get('caseKey');
+    
+    if (!isNaN(caseId) && caseId > 0) {
+      const fileId = +activatedRoute.paramMap.get('fileId');
+      return this.caseFileService.downloadCaseFile(caseId, fileId);
     }
+    else if (caseKey && caseKey.length) {
+      const fileName = activatedRoute.queryParamMap.get('fileName') || '';
+      if (fileName.length === 0)
+        throw Observable.throw(`Invalid or missing file name param. fileName: ${fileName}`);
 
-    if (isNaN(fileId) || !fileId) {
-      throw Observable.throw(`Invalid or missing fileId param. fileId: ${fileId}`);
-    } 
-   
-    return this.caseFileService.downloadCaseFile(caseId, fileId);
+      return this.caseFileService.downloadTempCaseFile(caseKey, fileName);
+    }
+    else {
+      throw Observable.throw(`Invalid or missing params. caseId: ${caseId}, caseKey: ${caseKey}`);
+    }
   }
 }
 

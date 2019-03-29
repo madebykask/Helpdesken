@@ -98,7 +98,7 @@ export class CaseEditComponent {
           this.caseId = +this.route.snapshot.paramMap.get('id');
       } else if (this.route.snapshot.paramMap.has('templateId')) {
           this.isNewCase = true;
-          this.templateId = this.route.snapshot.params['templateId'];
+          this.templateId = +this.route.snapshot.paramMap.get('templateId');
       } else {
         throw 'Invalid parameters';
       }

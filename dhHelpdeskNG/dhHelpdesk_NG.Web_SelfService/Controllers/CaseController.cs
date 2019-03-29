@@ -1004,7 +1004,9 @@ namespace DH.Helpdesk.SelfService.Controllers
         {
             byte[] fileContent;
             if (GuidHelper.IsGuid(id))
-               fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, "");
+            {
+                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, "");
+            }
             else
             {
                 var c = _caseService.GetCaseById(int.Parse(id));

@@ -51,8 +51,20 @@ export class FilePreviewComponent implements OnInit {
   }
 
   goBack() {
-    let caseId = this.activatedRoute.snapshot.params['caseId'];
-    this.router.navigate(['/case', caseId]);
+    const paramMap = this.activatedRoute.snapshot.paramMap;
+    const queryParamMap = this.activatedRoute.snapshot.queryParamMap;
+    const caseId = +paramMap.get('caseId');
+    if (!isNaN(caseId) && caseId > 0) {
+      this.router.navigate(['/case', caseId]);
+    } else if (paramMap.has('caseKey')) {
+      // at the moment there's only one way of creating new cases - via new template page
+      if (queryParamMap.has('templateId')) {
+        const templateId = +queryParamMap.get('templateId');
+        this.router.navigate(['/case/template', templateId]);
+      } else {
+        this.router.navigate(['/case', paramMap.get('caseKey')]);
+      }
+    }
   }
 
   @HostListener('window:resize', ['$event'])

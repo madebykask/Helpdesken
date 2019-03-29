@@ -9,8 +9,9 @@ import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseFilesUploadComponent } from '../case-files-upload/case-files-upload.component';
 import { TranslateService as NgxTranslateService } from '@ngx-translate/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
+import { query } from '@angular/core/src/render3';
 
 @Component({
   selector: 'case-files-control',
@@ -38,6 +39,7 @@ export class CaseFilesControlComponent {
   constructor(private caseFilesApiService: CaseFilesApiService,
               private translateService: NgxTranslateService,
               private router: Router,
+              private activatedRoute: ActivatedRoute,
               private userSettingsService: UserSettingsApiService,
               private alertsService: AlertsService) {
   }
@@ -91,12 +93,22 @@ export class CaseFilesControlComponent {
   }
 
   downloadFile(item: CaseFileModel) {
-    //todo: handle New case files download! 
-    this.router.navigate(['/case', this.caseKey, 'file', item.fileId], {
-       queryParams: {
-          fileName: item.fileName
-       }
-    });
+    const caseId = +this.caseKey;
+    if (!isNaN(caseId) && caseId > 0) {
+      this.router.navigate(['/case', caseId, 'file', item.fileId]);
+    }
+    else {
+      const queryParams = {
+        fileName: item.fileName,
+      };
+      const templateId = +this.activatedRoute.snapshot.paramMap.get('templateId');
+      if (!isNaN(templateId) && templateId > 0) {
+        queryParams['templateId'] = templateId;
+      }
+      this.router.navigate(['/case', this.caseKey, 'file'], {
+        queryParams: queryParams
+     });
+    }
   }
   
   onFileDelete(event, inst){

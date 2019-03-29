@@ -68,17 +68,18 @@ export class CaseLogInputComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    const applyMaxLength = (ctrl, maxLength: number) => {
+    const applyMaxLengthFn = (ctrl, maxLength: number) => {
       const inputControl = ctrl.initialElem.nativeElement.querySelector('textarea');
       if (inputControl) {
         this.renderer.setAttribute(inputControl, 'maxlength', maxLength.toString());
       }
     };
+
     if (this.externalLogField.maxLength) {
-      applyMaxLength(this.externalCtrl, this.externalLogField.maxLength);
+      applyMaxLengthFn(this.externalCtrl, this.externalLogField.maxLength);
     }
     if (this.internalLogField.maxLength) {
-      applyMaxLength(this.internalCtrl, this.internalLogField.maxLength);
+      applyMaxLengthFn(this.internalCtrl, this.internalLogField.maxLength);
     }
   }
 
@@ -87,8 +88,8 @@ export class CaseLogInputComponent implements OnInit {
   }
 
   ngOnDestroy() {
-      this.destroy$.next();
-      this.destroy$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   hasField(name: string): boolean {

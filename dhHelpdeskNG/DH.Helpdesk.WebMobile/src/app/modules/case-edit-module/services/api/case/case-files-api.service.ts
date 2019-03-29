@@ -25,6 +25,11 @@ export class CaseFilesApiService extends HttpApiServiceBase {
         return this.getFileBody(url, null);
     }
 
+    downloadTempCaseFile(caseKey:string, fileName:string): Observable<Blob> {
+      let url = this.buildResourseUrl(`/api/case/${caseKey}/file`, { inline: true, fileName : fileName }, true, false);
+      return this.getFileBody(url);
+    }
+
     deleteCaseFile(caseKey:string, fileId:number, fileName:string): Observable<any> {
         //todo: check when new case is ready
         let url = 
