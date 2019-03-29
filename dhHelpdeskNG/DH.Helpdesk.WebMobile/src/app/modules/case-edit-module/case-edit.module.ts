@@ -35,6 +35,7 @@ import { TextFileViewerComponent } from './components/file-preview/viewers/text-
 import { Pdf2FileViewerComponent } from './components/file-preview/viewers/pdf2-file-viewer.component';
 import { Pdf3FileViewerComponent } from './components/file-preview/viewers/pdf3-file-viewer.component';
 import { NotifierSearchComponent } from './components/case-edit/controls/notifier-search/notifier-search.component';
+import { FilterExtDirective } from './directives/filter-ext.directive';
 
 @NgModule({
   declarations: [ CaseEditComponent,
@@ -43,7 +44,7 @@ import { NotifierSearchComponent } from './components/case-edit/controls/notifie
     CaseFilesUploadComponent, CaseFilesControlComponent, CaseActionsComponent, CaseActionHostDirective, 
     CaseActionContainerComponent, GeneralActionComponent, FieldChangeActionComponent, LogNoteActionComponent, ActionsFilterPipe,
     CaseLogInputComponent, LogFilesUploadComponent, FilePreviewComponent, PdfFileViewer, CommonFileViewer, ImageFileViewerComponent,
-    TextFileViewerComponent, Pdf2FileViewerComponent, Pdf3FileViewerComponent, NotifierSearchComponent, MbscFormGroupTitleClickDirective
+    TextFileViewerComponent, Pdf2FileViewerComponent, Pdf3FileViewerComponent, NotifierSearchComponent, MbscFormGroupTitleClickDirective, FilterExtDirective
 ],
   imports: [
     CommonModule,

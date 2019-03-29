@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.Common.Extensions.DateTime;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Computers;
@@ -91,7 +93,6 @@ namespace DH.Helpdesk.Services.Services
 		private readonly ICustomerService _customerService;
 		private readonly IDepartmentService _departmentService;
 		private readonly IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> _caseHistoryOverviewMapper;
-
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -629,6 +630,32 @@ namespace DH.Helpdesk.Services.Services
         public StateSecondary GetCaseSubStatus(int caseId)
         {
             return _caseRepository.GetCaseSubStatus(caseId);
+        }
+
+        public Task<CustomerCasesStatus> GetCustomerCasesStatusAsync(int customerId, int userId)
+        {
+            var today = DateTime.Today;
+            var customer = _customerRepository.GetOverview(customerId);
+            
+            var customerCasesQuery = _caseRepository.GetCustomerCases(customerId).AsQueryable();
+            return customerCasesQuery.Take(1).Select(res => new CustomerCasesStatus()
+            {
+                CustomerId = customerId,
+                CustomerName = customer.Name,
+
+                MyCases =
+                    customerCasesQuery.Where(c => c.FinishingDate == null && c.Deleted == 0 &&
+                                                  (c.Performer_User_Id == userId || c.CaseResponsibleUser_Id == userId)).Count(),
+
+                InProgress =
+                    customerCasesQuery.Where(c => c.FinishingDate == null && c.Deleted == 0).Count(),
+
+                NewToday =
+                    customerCasesQuery.Where(c => c.Deleted == 0 && c.FinishingDate == null && DbFunctions.TruncateTime(c.RegTime) == today).Count(),
+
+                ClosedToday =
+                    customerCasesQuery.Where(c => c.FinishingDate != null && DbFunctions.TruncateTime(c.FinishingDate) == today).Count(),
+            }).SingleOrDefaultAsync();
         }
 
         public CustomerCases[] GetCustomersCases(int[] customerIds, int userId)

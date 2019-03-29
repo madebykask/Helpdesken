@@ -20,6 +20,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ICaseRepository : IRepository<Case>
     {
+        IQueryable<Case> GetCustomerCases(int customerId);
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false);
         Case GetCaseByGUID(Guid GUID);
@@ -85,6 +86,11 @@ namespace DH.Helpdesk.Dal.Repositories
             this.workContext = workContext;
             _caseModelToEntityMapper = caseModelToEntityMapper;
             _caseToBusinessModelMapper = caseToBusinessModelMapper;
+        }
+
+        public IQueryable<Case> GetCustomerCases(int customerId)
+        {
+            return Table.Where(x => x.Customer_Id == customerId);
         }
 
         public Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false)

@@ -239,5 +239,30 @@ If not exists (select * from tblTextTranslation where text_id = 10035 and Langua
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10035, 2, 'Clear')
 
 
+If not exists (select * from tbltext where id = 10036)
+insert into tbltext (id, TextString, TextType) VALUES (10036, 'Mina ärenden', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10036 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10036, 2, 'My cases')
+
+If not exists (select * from tbltext where id = 10037)
+insert into tbltext (id, TextString, TextType) VALUES (10037, 'Pågående ärende', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10037 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10037, 2, 'In progress')
+
+If not exists (select * from tbltext where id = 10038)
+insert into tbltext (id, TextString, TextType) VALUES (10038, 'Nya idag', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10038 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10038, 2, 'New today')
+
+If not exists (select * from tbltext where id = 10039)
+insert into tbltext (id, TextString, TextType) VALUES (10039, 'Avslutade idag', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10039 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10039, 2, 'Closed today')
+
+
 
 

@@ -156,5 +156,6 @@ namespace DH.Helpdesk.Services.Services
         void SendProblemLogEmail(Case cs, CaseMailSetting caseMailSetting, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, bool isClosedCaseSending);
         int GetCaseCustomerId(int caseId);
         Task<List<CaseHistoryMapperData>> GetCaseHistoriesAsync(int caseId);
+        Task<CustomerCasesStatus> GetCustomerCasesStatusAsync(int customerId, int userId);
     }
 }

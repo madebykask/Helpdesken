@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { MbscSelectOptions, MbscSelect } from '@mobiscroll/angular';
 import { BaseControl } from '../base-control';
 import { TranslateService } from '@ngx-translate/core';
@@ -87,7 +87,8 @@ export class NotifierSearchComponent extends BaseControl<string> {
 
   constructor(private notifierService: NotifierService,
     private commService: CommunicationService,
-    private ngxTranslateService: TranslateService) {
+    private ngxTranslateService: TranslateService,
+    private renderer: Renderer2) {
     super();
   }
 
@@ -173,19 +174,22 @@ export class NotifierSearchComponent extends BaseControl<string> {
     return this.field ? this.formControl.label || defaultText : defaultText;
   }
 
+  private progressIconEl:any = null;
   private createProgressIcon(selectNode: HTMLElement) {
-    const progressSpan = document.createElement("span")
+    const progressSpan = this.renderer.createElement("span");
     progressSpan.id = 'notifierProgress';
     progressSpan.className = "notifierProgress mbsc-ic";
     progressSpan.innerHTML = '<img src="content/img/bars.gif" border="0" />'
     progressSpan.style.display = "none";
+
     const filterNode = selectNode.querySelector<HTMLElement>(".mbsc-sel-filter-cont");
-    filterNode.appendChild(progressSpan);
+    this.progressIconEl = filterNode.appendChild(progressSpan);
   }
 
   private toggleProgress(show) {
-    const progressSpan = document.querySelector<HTMLSpanElement>('#notifierProgress');
-    progressSpan.style.display = show ? '' : 'none';
+    if (this.progressIconEl) {
+      this.progressIconEl.style.display = show ? '' : 'none';
+    }
   }
 
 }

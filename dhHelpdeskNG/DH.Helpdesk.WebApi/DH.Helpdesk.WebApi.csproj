@@ -197,6 +197,7 @@
     <Compile Include="Controllers\CaseLogsController.cs" />
     <Compile Include="Controllers\CaseTemplatesController.cs" />
     <Compile Include="Controllers\CaseWatchDateController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NotifierController.cs" />
     <Compile Include="Infrastructure\Owin\GlobalExceptionMiddleware.cs" />
     <Compile Include="Logic\Case\CaseTranslationService.cs" />

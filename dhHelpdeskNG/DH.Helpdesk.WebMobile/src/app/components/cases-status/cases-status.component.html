@@ -1,0 +1,30 @@
+<ng-container *ngIf="casesStatus">
+  <mbsc-card>
+    <mbsc-card-header>
+      <mbsc-card-title>{{ casesStatus.customerName }}</mbsc-card-title>
+    </mbsc-card-header>
+    <mbsc-card-content>
+      <mbsc-listview>
+        <mbsc-listview-item>
+          <span class="status-title" translate>Mina ärenden</span>
+          <span class="val">{{ casesStatus.myCases }}</span>
+        </mbsc-listview-item>
+
+        <mbsc-listview-item>
+          <span class="status-title" translate>Pågående ärende</span>
+          <span class="val">{{ casesStatus.inProgress }}</span>
+        </mbsc-listview-item>
+
+        <mbsc-listview-item>
+          <span class="status-title" translate>Nya idag</span>
+          <span class="val">{{ casesStatus.newToday }}</span>
+        </mbsc-listview-item>
+
+        <mbsc-listview-item>
+          <span class="status-title" translate>Avslutade idag</span>
+          <span class="val">{{ casesStatus.closedToday }}</span>
+        </mbsc-listview-item>
+      </mbsc-listview>
+    </mbsc-card-content>
+  </mbsc-card>
+</ng-container>

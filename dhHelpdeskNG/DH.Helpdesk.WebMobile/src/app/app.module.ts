@@ -1,7 +1,7 @@
 import { MbscModule } from '@mobiscroll/angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler, forwardRef } from '@angular/core';
 import { APP_INITIALIZER } from '@angular/core';
 import { LoginComponent, HeaderTitleComponent } from './shared/components';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
@@ -31,6 +31,8 @@ import { CaseTemplateComponent } from './components/case-template/case-template.
 import { LanguageComponent } from './components/language/language/language.component';
 import { RouteReuseStrategy } from '@angular/router';
 import { CaseRouteReuseStrategy } from './helpers/case-route-resolver.stategy';
+import { CasesStatusComponent } from './components/cases-status/cases-status.component';
+import { VersionComponent } from './components/version.component';
 
 @NgModule({
   bootstrap: [ AppComponent],
@@ -43,7 +45,9 @@ import { CaseRouteReuseStrategy } from './helpers/case-route-resolver.stategy';
      ErrorComponent,
      AltLayoutComponent,
      TestComponent,
-     LanguageComponent
+     LanguageComponent,
+     CasesStatusComponent,
+     VersionComponent
   ],
   imports: [
     MbscModule,
