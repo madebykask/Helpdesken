@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Enums.Case;
+using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Grid;
 using DH.Helpdesk.BusinessData.Models.Shared;
@@ -43,6 +44,8 @@ namespace DH.Helpdesk.Web.Controllers
                 return new RedirectResult("~/Error/Unathorized");
             }
 
+            
+
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var currentUserId = SessionFacade.CurrentUser.Id;
 
@@ -63,7 +66,9 @@ namespace DH.Helpdesk.Web.Controllers
                 || SessionFacade.CurrentAdvancedSearch == null)
             {
                 SessionFacade.CurrentAdvancedSearch = null;
-                advancedSearchModel = this.InitAdvancedSearchModel(currentCustomerId, currentUserId);
+                var userCustomerSettings = _userService.GetUser(currentUserId);
+                advancedSearchModel = this.InitAdvancedSearchModel(currentCustomerId, currentUserId,
+                    userCustomerSettings.StartPage == (int)StartPage.AdvancedSearch);
                 SessionFacade.CurrentAdvancedSearch = advancedSearchModel;
             }
             else
@@ -300,14 +305,14 @@ namespace DH.Helpdesk.Web.Controllers
 
             var customerfieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(customerId);
 
-            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.Department_Id.ToString() &&
-                                                  fs.ShowOnStartPage != 0).Any())
+            if (customerfieldSettings.Any(fs => fs.Name == GlobalEnums.TranslationCaseFields.Department_Id.ToString() &&
+                                                  fs.ShowOnStartPage != 0))
             {
-                const bool IsTakeOnlyActive = false;
+                const bool isTakeOnlyActive = false;
                 specificFilter.DepartmentList = this._departmentService.GetDepartmentsByUserPermissions(
                     userId,
                     customerId,
-                    IsTakeOnlyActive);
+                    isTakeOnlyActive);
                 if (!specificFilter.DepartmentList.Any())
                 {
                     specificFilter.DepartmentList =
@@ -319,33 +324,33 @@ namespace DH.Helpdesk.Web.Controllers
                     specificFilter.DepartmentList = AddOrganizationUnitsToDepartments(specificFilter.DepartmentList);
             }
 
-            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString() &&
-                                                  fs.ShowOnStartPage != 0).Any())
+            if (customerfieldSettings.Any(fs => fs.Name == GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString() &&
+                                                  fs.ShowOnStartPage != 0))
             {
                 specificFilter.StateSecondaryList = this._stateSecondaryService.GetStateSecondaries(customerId);
             }
 
-            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.Priority_Id.ToString() &&
-                                                  fs.ShowOnStartPage != 0).Any())
+            if (customerfieldSettings.Any(fs => fs.Name == GlobalEnums.TranslationCaseFields.Priority_Id.ToString() &&
+                                                  fs.ShowOnStartPage != 0))
             {
                 specificFilter.PriorityList = this._priorityService.GetPriorities(customerId);
             }
 
-            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.ClosingReason.ToString() &&
-                                                  fs.ShowOnStartPage != 0).Any())
+            if (customerfieldSettings.Any(fs => fs.Name == GlobalEnums.TranslationCaseFields.ClosingReason.ToString() &&
+                                                  fs.ShowOnStartPage != 0))
             {
                 specificFilter.ClosingReasonList = this._finishingCauseService.GetFinishingCausesWithChilds(customerId);
             }
 
-            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.CaseType_Id.ToString() &&
-                                                  fs.ShowOnStartPage != 0).Any())
+            if (customerfieldSettings.Any(fs => fs.Name == GlobalEnums.TranslationCaseFields.CaseType_Id.ToString() &&
+                                                  fs.ShowOnStartPage != 0))
             {
 
                 specificFilter.CaseTypeList = this._caseTypeService.GetCaseTypesOverviewWithChildren(customerId);
             }
 
-            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() &&
-                                                  fs.ShowOnStartPage != 0).Any())
+            if (customerfieldSettings.Any(fs => fs.Name == GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString() &&
+                                                  fs.ShowOnStartPage != 0))
             {
                 const bool isTakeOnlyActive = false;
                 specificFilter.ProductAreaList = this._productAreaService.GetTopProductAreasForUser(
@@ -354,8 +359,8 @@ namespace DH.Helpdesk.Web.Controllers
                     isTakeOnlyActive);
             }
 
-            if (customerfieldSettings.Where(fs => fs.Name == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() &&
-                                                  fs.ShowOnStartPage != 0).Any())
+            if (customerfieldSettings.Any(fs => fs.Name == GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString() &&
+                                                  fs.ShowOnStartPage != 0))
             {
                 var gs = _globalSettingService.GetGlobalSettings().FirstOrDefault();
                 const bool IsTakeOnlyActive = false;
@@ -428,21 +433,21 @@ namespace DH.Helpdesk.Web.Controllers
             return specificFilter;
         }
 
-        private CaseSearchModel InitAdvancedSearchModel(int customerId, int userId)
+        private CaseSearchModel InitAdvancedSearchModel(int customerId, int userId, bool isStartPage = false)
         {
             Domain.ISearch s = new Domain.Search();
             var f = new CaseSearchFilter
             {
                 CustomerId = customerId,
                 UserId = userId,
-                UserPerformer = string.Empty,
-                CaseProgress = string.Empty,
+                UserPerformer = isStartPage ? userId.ToString() : string.Empty,
+                CaseProgress = isStartPage ? ((int)CaseProgressFilterEnum.CasesInProgress).ToString() : string.Empty,
                 WorkingGroup = string.Empty,
                 CaseRegistrationDateStartFilter = null,
                 CaseRegistrationDateEndFilter = null,
                 CaseClosingDateStartFilter = null,
                 CaseClosingDateEndFilter = null,
-                Customer = customerId.ToString()
+                Customer = isStartPage ? string.Empty : customerId.ToString()
             };
 
             s.SortBy = "CaseNumber";
