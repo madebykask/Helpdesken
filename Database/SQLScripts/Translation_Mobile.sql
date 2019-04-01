@@ -263,6 +263,49 @@ insert into tbltext (id, TextString, TextType) VALUES (10039, 'Avslutade idag', 
 If not exists (select * from tblTextTranslation where text_id = 10039 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10039, 2, 'Closed today')
 
+If not exists (select * from tbltext where id = 10040)
+insert into tbltext (id, TextString, TextType) VALUES (10040, 'Välommen', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10040 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10040, 2, 'Welcome')
+
+If not exists (select * from tbltext where id = 10041)
+insert into tbltext (id, TextString, TextType) VALUES (10041, 'Med den här applikationen kan du', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10041 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10041, 2, 'With this application you can')
+
+If not exists (select * from tbltext where id = 10042)
+insert into tbltext (id, TextString, TextType) VALUES (10042, 'Skapa ärenden', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10042 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10042, 2, 'Create cases')
+
+If not exists (select * from tbltext where id = 10043)
+insert into tbltext (id, TextString, TextType) VALUES (10043, 'Läsa ärenden', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10043 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10043, 2, 'Read cases')
+
+If not exists (select * from tbltext where id = 10044)
+insert into tbltext (id, TextString, TextType) VALUES (10044, 'Redigera ärenden', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10044 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10044, 2, 'Edit cases')
+
+If not exists (select * from tbltext where id = 10045)
+insert into tbltext (id, TextString, TextType) VALUES (10045, 'Hoppas du gillar den!', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10045 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10045, 2, 'Hope you enjoy!')
+
+If not exists (select * from tbltext where id = 10046)
+insert into tbltext (id, TextString, TextType) VALUES (10046, 'DH Helpdesk utvecklingsteam​', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10046 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10046, 2, 'DH Helpdesk development team')
+
+
 
 
 
