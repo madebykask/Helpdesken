@@ -1636,11 +1636,8 @@ namespace DH.Helpdesk.Services.Services
             {
                 ret.Add(new Field { Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty });
             }
-            if (l != null)
-            {
-                ret.Add(new Field { Key = "[#10]", StringValue = l.TextExternal });
-                ret.Add(new Field { Key = "[#11]", StringValue = l.TextInternal });
-            }
+            ret.Add(new Field { Key = "[#10]", StringValue = l?.TextExternal ?? "" });
+            ret.Add(new Field { Key = "[#11]", StringValue = l?.TextInternal ?? "" });
             // selfservice site
             if (cms != null)
             {
