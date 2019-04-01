@@ -322,6 +322,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 // RegUser is only filled in selfservice
                 RegUser = string.Empty, 
                 UserId = UserId,
+                SendMailAboutCaseToNotifier = true
                 //todo:
                 // FinishingDate = model.FinishingDate
                 // FinishingType = model.FinishingType?
