@@ -78,11 +78,14 @@ $disabled-color: #f2f2f2;
     z-index: 1000;
 }
 
+.mbsc-select, .mbsc-input {
+  input:disabled {
+    background-color: $disabled-color;
+  }
+}
+
 .disabled {
   .mbsc-select, .mbsc-input {
-    input:disabled {
-      background-color: $disabled-color;
-    }
     .mbsc-input-wrap {
       background-color: $disabled-color;
       opacity: .5;
@@ -90,7 +93,7 @@ $disabled-color: #f2f2f2;
         background-color: $disabled-color;
       }
       textarea:disabled {
-        opacity: .5;
+        opacity: 1;
       }
     }
   }
