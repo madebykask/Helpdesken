@@ -1,0 +1,11 @@
+﻿<ng-container [formGroup]="form" *ngIf="!fieldModel.hidden">
+    <div class="col-md-6 control-label" *ngIf="fieldTemplate.isLabelHtml" >
+        <span [innerHtml]="fieldTemplate.label"></span>
+    </div>
+    <label [attr.for]="fieldModel.getUiPath()" class="col-md-6 control-label" *ngIf="!fieldTemplate.isLabelHtml">
+        {{ fieldTemplate.label }}
+    </label>
+    <div class="col-md-6">
+        {{ fieldModel.control.value }}
+    </div>
+</ng-container>

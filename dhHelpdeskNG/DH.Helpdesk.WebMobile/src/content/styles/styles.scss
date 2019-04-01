@@ -1,11 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
-
-.hide {
-  display: none;
+html,body, iframe {
+  height:100%;
 }
 
+.hide { display: none }
+.nopadding { padding:0 }
+
 $primary-color: #438eb9;
+$action-color: #007aff;
+$border-color:#ccc;
 $font-header-color: white;
+$error-color:  #d8332a;
+$disabled-color: #f2f2f2;
 
 .login {
     .mbsc-page {
@@ -38,27 +44,30 @@ $font-header-color: white;
     }
 }
 
+.notifierProgress {
+    display: flex;
+    position: absolute;
+    right: 0;
+    top: 100%;
+}
+
 .md-load-btn {
     min-height: 0!important;
 }
 
-.md-load-btn .mbsc-ic-loop2 {
-    font-size: 22px;
-}
+.md-load-btn .mbsc-ic { font-size: 24px; line-height: 1.5em;}
 
-.md-load-btn .mbsc-ic-loop2:before {
+.md-load-btn.md-btn-loading .mbsc-ic { display: inline-block; }
+
+.md-load-btn .mbsc-ic:before {
     display: inline-block;
-    -webkit-animation: md-rotating .6s linear infinite;
-    animation: md-rotating .6s linear infinite;
+    -webkit-animation: md-rotating .8s linear infinite;
+    animation: md-rotating .8s linear infinite;
 }
 
-.md-btn-loading {
-    display: block;
-}
+.md-btn-loading { display: block; }
 
-.md-load-btn.md-btn-loading .mbsc-ic-loop2 {
-    display: inline-block;
-}
+ 
 
 .stickyTop {
     position: fixed;
@@ -69,10 +78,88 @@ $font-header-color: white;
     z-index: 1000;
 }
 
-mbsc-textarea textarea:disabled {
-    opacity: 0.5;
+.disabled {
+  .mbsc-select, .mbsc-input {
+    input:disabled {
+      background-color: $disabled-color;
+    }
+    .mbsc-input-wrap {
+      background-color: $disabled-color;
+      opacity: .5;
+      textarea:disabled, .mbsc-err-msg {
+        background-color: $disabled-color;
+      }
+      textarea:disabled {
+        opacity: .5;
+      }
+    }
+  }
 }
 
+
+//mobiscroll theme overrides
+.mbsc-mobiscroll {
+
+  .mbsc-sc-itm {
+    padding-right: 10px!important;
+    font-size:16px!important;   
+  }
+  
+  .mbsc-fr-hdr { font-size:16px!important; } 
+
+  .mbsc-sel-filter-cont {
+    margin-top:0px;
+    input { font-size: 15px !important; }
+  }
+
+  .mbsc-err-msg {
+    position: static;
+  }
+
+  .mbsc-input {
+    .mbsc-label~.mbsc-input-wrap {
+      padding-top: 0;
+    }
+  }
+
+  .calendar-option {
+    float: right;
+    color: #4eccc4;
+    //font-size: 1.5em;
+  }
+
+  &.root {
+    .back-btn {
+      display: none;
+    }
+  }
+
+  &.hasChild {
+    .mbsc-fr-btn-s {
+      .mbsc-fr-btn {
+        color: black;
+        opacity: .5;
+      }
+    }
+  }
+
+  .mbsc-fr-hdr, .mbsc-fr-btn {
+    text-transform: capitalize
+  }
+}
+
+mbsc-calendar {
+  &.mbsc-mobiscroll {
+    .mbsc-input {
+      margin: 0;
+      input {
+        border-bottom: inherit;
+      }
+    }
+  }
+}
+
+ 
 /* .mbsc-ios.mbsc-page {
     background: white !important;
 } */
@@ -90,7 +177,7 @@ a {
     left: 0;
     bottom: 0;
     width: 100%;
-    text-align: center;   
+    text-align: center;
     .mbsc-ios {
         &.mbsc-ms-c {
             background: $primary-color;
@@ -113,6 +200,7 @@ a {
             .mbsc-ms-item {
                 color: $font-header-color;
             }
+
             .mbsc-ms-item-sel {
                 color: $font-header-color;
                 font-weight: bold;
@@ -122,7 +210,42 @@ a {
     }
 }
 
+.case-search-filter {
+  .mbsc-ms-item {
+    padding-left:20px;
+  }
+
+  .mbsc-ms-item-sel::before {
+    content: "\ea95";
+  }
+}
+
+.mbsc-ms-item-sel:before {  
+  font-family: 'icons_mobiscroll';
+  font-style: normal;
+  font-weight: normal;
+  position: absolute;
+  left:0;
+}
+
 .case-overview-header {
+  
+    .mbsc-ms-item.mbsc-menu-item-ic {
+      font-size:8px;
+      color: #fff;
+    }
+
+    .mbsc-ic-fa-filter {
+      margin-left:15px;
+    }
+    .selected .mbsc-ms-item.mbsc-menu-item-ic {
+      //border: solid 1px #fff;
+      border-radius: 4px 4px;
+      color: #438eb9;
+      background: #a8d0dc;
+      box-shadow: inset 2px 2px 2px rgba(0,0,0,0.2);
+    }
+
     .mbsc-form {
         color: $font-header-color;
         background: $primary-color;
@@ -157,6 +280,7 @@ a {
 }
 
 .header {
+    color:$font-header-color;
     background: $primary-color;
     .navbar-brand {
         background: url(../img/dhhelpdesk.png);
@@ -206,8 +330,101 @@ ul.nostyle {
     }
 } 
 
+#case-tabs {
+  .mbsc-ms-top.mbsc-ms-c { top: 45px!important; }
+  .mbsc-ms-item { padding-left:10px; padding-right:30px; }
+  .mbsc-ms-b.mbsc-ms-top, .mbsc-ms-b .mbsc-ms-item-sel { border-bottom-color:$primary-color; }
+}
 
+#case-files {
+  .mbsc-lv-item-ic {
+    left:0px;
+    width:auto;
+  } 
+  .mbsc-lv-item { 
+    padding: 12px 0 12px 20px;
+    font-size:14px; 
+  }
+  .mbsc-lv-item-ic-left:before, 
+  .mbsc-lv-item-ic-left:after { left:0px; }
+  .mbsc-ic:before {   margin-right: 8px; }
+}
 
-#case-tabs .mbsc-ms-top.mbsc-ms-c {
-  top: 46px!important;
-}  
+#case-actions {
+  .mbsc-ios.mbsc-card.mbsc-form{ margin: 15px 10px; }
+  .mbsc-lv-item-ic {  left:5px!important; } 
+  .mbsc-lv-item-ic-left:before, 
+  .mbsc-lv-item-ic-left:after { left:14px!important; }
+  .mbsc-card.mbsc-form { border-radius: 0;}
+  .mbsc-lv-item.mbsc-lv-item-ic-left { padding-left: 35px!important; }
+  .mbsc-lv-cont { font-size:14px; } 
+  .mbsc-card-content { padding-bottom:10px}
+  .action-icon { margin-right:6px; }
+
+  .actions-other {
+    .mbsc-form-group-title {
+      background-color: #fff;
+      margin: 10px 0 0 0;
+      padding:0;      
+      border-bottom: none;
+    }
+
+    .mbsc-collapsible-icon {
+      margin-top:0;
+      right:0px;
+      top:3px;
+    }
+  }
+}
+
+.right {
+  text-align:right;
+}
+.fileListView {
+  .mbsc-lv-item-ic {
+    left:0px;
+    width:auto;
+  } 
+  .mbsc-lv-item { font-size:14px; }
+  .mbsc-lv-item-ic-left:before, 
+  .mbsc-lv-item-ic-left:after { left:0px; }
+  .mbsc-ic:before {   margin-right: 8px; }
+  .mbsc-lv-item.mbsc-lv-item-ic-left {
+    padding: 12px 0 12px 20px!important;
+  }
+}
+
+.mbsc-ios {
+  .select-textarea {
+    textarea {
+      padding-right: 2.25em;
+    }
+    .mbsc-select-ic {
+      top: 1.4375em;
+    }
+  }
+  .mbsc-textarea {
+    textarea {
+      height: 1.5em;
+    }
+  }
+  .mbsc-control-w {
+    &.mbsc-err {
+      background-color: #ffeeee;
+      .mbsc-label {
+        color: $error-color;
+      }
+      &.mbsc-label-stacked {
+        &.mbsc-input {
+          &.mbsc-textarea {
+            &.mbsc-err {
+              .mbsc-label~.mbsc-input-wrap {
+                padding-bottom: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

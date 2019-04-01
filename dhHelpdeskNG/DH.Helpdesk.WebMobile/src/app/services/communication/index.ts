@@ -1,2 +1,2 @@
 export * from './communication.service'
-export * from './header-event-data'
+export * from './data/header-event-data'

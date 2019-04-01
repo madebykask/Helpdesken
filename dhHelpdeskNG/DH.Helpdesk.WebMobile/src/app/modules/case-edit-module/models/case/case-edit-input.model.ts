@@ -54,7 +54,21 @@ export class BaseCaseField<T> implements IBaseCaseField<T> {
     }
 
     public get isRequired(): boolean {
-      return this.options != null && this.options.filter((o) => o.key == CaseFieldOptions.reqiured).length > 0;
+      return this.options != null && this.options.filter((o) => o.key == CaseFieldOptions.required).length > 0;
+    }
+
+    public get maxLength(): number | null {
+      if (this.options == null) return null;
+      const maxLength = this.options.filter((o) => o.key == CaseFieldOptions.maxlength);
+      return maxLength.length > 0 ? +maxLength[0].value : null;
+    }
+
+    public get setByTemplate(): boolean {
+      return this.options != null && this.options.filter((o) => o.key == CaseFieldOptions.setByTemplate).length > 0;
+    }
+
+    public get isHidden(): boolean {
+      return this.options != null && this.options.filter((o) => o.key == CaseFieldOptions.isHidden).length > 0;
     }
 }
 
@@ -73,4 +87,7 @@ export interface IBaseCaseField<T> {
 
     isReadonly: boolean;
     isRequired: boolean;
+    maxLength: number | null;
+    setByTemplate: boolean;
+    isHidden: boolean;
 }

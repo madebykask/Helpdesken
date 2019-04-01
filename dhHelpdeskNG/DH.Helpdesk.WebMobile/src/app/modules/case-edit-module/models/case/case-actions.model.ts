@@ -1,71 +1,70 @@
+import { LogFile } from "./case-actions-api.model";
+import { UuidGenerator } from "src/app/modules/shared-module/utils/uuid-generator";
 
-export interface IActionData {
-  getTitle(): string;
-}
+// Case Action Data classes
+export type CaseActionDataType = CaseHistoryActionData | CaseLogActionData | GenericActionData;
 
+// Case Action Group
 export class CaseActionsGroup {
-    constructor(public CreatedByUserId: number,
-                public CreatedByUserName: string,
-                public CreatedAt: Date) {
+    id:string;
+    constructor(public createdBy: string,
+                public createdAt: Date) {
+      this.id = UuidGenerator.createUuid();
     } 
 
-    Actions: Array<CaseAction<any>>;
+    Actions: Array<CaseAction<CaseActionDataType>>;
+
+    get hasOther() {
+      if (this.Actions && this.Actions.length) {
+        return this.Actions.some(x => x.type === CaseEventType.OtherChanges);
+      }
+      return false;
+    }
+
+    get hasMain() {
+      if (this.Actions && this.Actions.length) {
+        return this.Actions.some(x => x.type !== CaseEventType.OtherChanges);
+      }
+      return false;
+    }
 }
 
-export class CaseAction<TData extends CaseHistoryActionData | CaseLogActionData | GenericActionData> {
-    Id: number;
-    CreatedAt: Date;
-    Type: CaseActionEvents; // todo: introduce enum ?
-    CreatedByUserId: number
-    CreatedByUserName: string;
-    Data: TData;    
+// Case Action
+export class CaseAction<TData extends CaseActionDataType> {
+    constructor() {
+      this.id = UuidGenerator.createUuid();
+    }
+    id: string;
+    type: CaseEventType;
+    createdAt: Date;
+    createdBy: string;
+    data: TData;
 }
 
-///////////////////////////////////////////////////
 // Case History
-export class CaseHistoryActionData implements IActionData{
-  constructor(private fieldName:string, 
-              private prevValue: string, 
-              private newValue: string) {
-
+export class CaseHistoryActionData {
+  constructor(
+    public fieldName: string,
+    public fieldLabel: string,
+    public prevValue: any,
+    public currentValue: any) {
   }
-  
-  getTitle(): string {
-      //todo: construct title out of fields
-      return `Field <b>'${this.fieldName}'</b> changed`;
-  }
-  
-  // getText() ?
 }
 
-///////////////////////////////////////////////////
-// Case Log Note
-export class CaseLogActionData implements IActionData {
-
-  constructor(private text:string) {
-  }
-  
-  getTitle(): string {
-      //todo: trim text ?
-      return this.text;
-  }
-
-  // getText() ?
+// Case Log Note Data
+export class CaseLogActionData {
+  constructor(public text:string, public files?: LogFile[]) {
+  } 
 }
 
-///////////////////////////////////////////////////
 // Generic Action data
-export class GenericActionData implements IActionData{
-  
-  constructor(private title: string) {
-  }
-
-  getTitle(): string {
-    return this.title;
+export class GenericActionData {
+  constructor(public text:string, public action?:string) {
   }
 }
 
-export enum CaseActionEvents {
+// CaseEventType enum
+export enum CaseEventType {
   ExternalLogNote = 1,
   InternalLogNote = 2,
   ClosedCase = 3,

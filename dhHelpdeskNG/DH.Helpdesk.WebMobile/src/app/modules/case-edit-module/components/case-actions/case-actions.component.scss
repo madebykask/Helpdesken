@@ -4,6 +4,31 @@
  font-size:12px;
 }
 
-.mbsc-card-header{
+.mbsc-card-header {
   border-bottom:1px solid #ccc;
+  padding: 12px 1em;
+}
+
+:host  {  
+  mbsc-card {
+    border-radius: 0px; 
+
+      &.owner { 
+         border-left:solid 3px #438eb9;
+      }
+
+      .mbsc-card-subtitle {
+        color:#333;
+      }
+
+     .time {
+        font-weight:normal;
+        font-size:12px;
+      }
+
+      .author{
+        font-size:13px;
+        font-weight: normal;
+      }
+    }
 }

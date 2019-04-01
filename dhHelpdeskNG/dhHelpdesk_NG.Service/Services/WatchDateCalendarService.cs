@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using System.Data.Entity;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -130,10 +132,11 @@
 
         public DateTime? GetClosestDateTo(int calendarId, DateTime now)
         {
-            
             var watchDateCalendarValue =
                 this._watchDateCalendarValueRepository.GetAll()
-                    .Where(it => it.WatchDateCalendar_Id == calendarId && it.WatchDate > now && (it.ValidUntilDate == null || it.ValidUntilDate.Value.Date >= now.Date))
+                    .AsQueryable()
+                    .Where(it => it.WatchDateCalendar_Id == calendarId && it.WatchDate > now && 
+                                 (!it.ValidUntilDate.HasValue || DbFunctions.TruncateTime(it.ValidUntilDate.Value) >= now.Date))
                     .OrderBy(it => it.WatchDate)
                     .FirstOrDefault();
             if (watchDateCalendarValue != null)

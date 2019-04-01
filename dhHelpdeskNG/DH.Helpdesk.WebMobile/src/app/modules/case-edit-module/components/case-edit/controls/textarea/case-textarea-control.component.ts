@@ -1,25 +1,60 @@
-import { OnInit, OnDestroy, Component, Input, OnChanges, ViewChild } from "@angular/core";
-import { BaseCaseField } from "../../../../models";
+import { Component, Input, ViewChild, ElementRef, Renderer2 } from "@angular/core";
 import { BaseControl } from "../base-control";
+import { FormStatuses } from "src/app/modules/shared-module/constants";
+import { switchMap, takeUntil } from "rxjs/operators";
+import { of } from "rxjs";
 
 @Component({
     selector: 'case-textarea-control',
     templateUrl: './case-textarea-control.component.html',
     styleUrls: ['./case-textarea-control.component.scss']
   })
-  export class CaseTextareaComponent extends BaseControl implements OnChanges, OnInit, OnDestroy {
+  export class CaseTextareaComponent extends BaseControl<string> {
     @ViewChild('input') control: any;
-    @Input() field: BaseCaseField<string>;
+    @Input() disabled = false;
 
-    ngOnChanges() {
+    constructor(private elem: ElementRef, private renderer: Renderer2) {
+      super();
     }
 
     ngOnInit(): void {
       this.init(this.field);
-      this.control.disabled = true;
+      this.updateDisabledState();
+
+      this.initEvents()
+    }
+
+    ngAfterViewInit(): void {
+      if (this.field.maxLength) {
+        const inputControl = this.elem.nativeElement.querySelector('textarea');
+        if (inputControl) {
+          this.renderer.setAttribute(inputControl, 'maxlength', this.field.maxLength.toString());
+        }
+      }
     }
 
     ngOnDestroy(): void {
+      this.onDestroy();
+    }
+     
+    private updateDisabledState() {
+      this.control.disabled = this.formControl.disabled || this.disabled;
     }
 
+    private get isFormControlDisabled() {
+      return this.formControl.status == FormStatuses.DISABLED;
+    }
+    
+    private initEvents() {
+      this.formControl.statusChanges // track disabled state in form
+        .pipe(switchMap((e: any) => {
+            if (this.control.disabled != this.isFormControlDisabled) {
+              this.updateDisabledState();
+            }
+            return of(e);
+          }),
+          takeUntil(this.destroy$)
+        )
+        .subscribe();
+    }
   }

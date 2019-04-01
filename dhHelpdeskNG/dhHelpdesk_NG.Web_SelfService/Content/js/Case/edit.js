@@ -17,6 +17,7 @@
         var deleteCaseFileUrl = window.appParameters.deleteCaseFileUrl;
         var searchUserUrl = window.appParameters.searchUserUrl;
         var seachComputerUrl = window.appParameters.seachComputerUrl;
+        var changeSystemUrl = window.appParameters.changeSystemUrl;
         var saveNewCaseUrl = window.appParameters.saveNewCaseUrl;
         var departmentsUrl = window.appParameters.fetchDepartmentsUrl;
         var OUsUrl = window.appParameters.fetchOUUrl;
@@ -102,10 +103,10 @@
         }
 
         Application.prototype.getBreadcrumbs = function (el) {
-            self = this;
+            var self = this;
             var path = $(el).text();
             var $parent = $(el).parents("li").eq(1).find("a:first");
-            if ($parent.length == 1) {
+            if ($parent.length === 1) {
                 path = self.getBreadcrumbs($parent) + " - " + path;
             }
             return path;
@@ -161,6 +162,29 @@
             }
         };       
 
+        var getFieldSetting = function (fieldName) {
+            if (fieldSettings == undefined || fieldSettings == null || fieldSettings.length <= 0 || fieldName == undefined || fieldName == null)
+                return null;
+
+            fieldName = fieldName.toLowerCase();
+            for (var fn = 0; fn < fieldSettings.length; fn++) {
+                if (fieldSettings[fn].FieldName.toLowerCase() == fieldName)
+                    return fieldSettings[fn];
+            }
+
+            return null;
+        }
+
+        var hideElement = function ($element) {
+            if ($element && $element.length)
+                $element.hide();
+        }
+
+        var showElement = function ($element) {
+            if ($element && $element.length)
+                $element.show();
+        }
+
         var canApplyCaseTypeRule = function (standardFieldName) {
             var impactSetting = getFieldSetting(standardFieldName);
             if (impactSetting == null || (impactSetting != null && !impactSetting.IsVisible))
@@ -203,19 +227,6 @@
             }
         }
 
-        var getFieldSetting = function (fieldName) {
-            if (fieldSettings == undefined || fieldSettings == null || fieldSettings.length <= 0 || fieldName == undefined || fieldName == null)
-                return null;
-
-            fieldName = fieldName.toLowerCase();
-            for (var fn = 0; fn < fieldSettings.length; fn++) {
-                if (fieldSettings[fn].FieldName.toLowerCase() == fieldName)
-                    return fieldSettings[fn];
-            }
-
-            return null;
-        }
-
         var getCaseTypeRelatedField = function (caseTypeId) {
             if (caseTypeRelatedFields == undefined || caseTypeRelatedFields == null || caseTypeRelatedFields.length <= 0 || caseTypeId == undefined || caseTypeId == null)
                 return "";
@@ -252,15 +263,7 @@
             $element.addClass("disabled");            
         }
 
-        var hideElement = function ($element) {
-            if ($element != undefined && $element != null)
-                $element.hide();            
-        }
-
-        var showElement = function ($element) {
-            if ($element != undefined && $element != null)
-                $element.show();
-        }
+        
 
         /**
         * @public
@@ -1056,6 +1059,13 @@
                 // Remove after implementing http://redmine.fastdev.se/issues/10995        
                 var departmentId = $(this).val();
                 self.refreshOrganizationUnit(departmentId);
+            });
+
+            $('#NewCase_System_Id').on('change', function () {
+                var data = { id: $('#NewCase_System_Id').val() };
+                $.getJSON(changeSystemUrl, $.param(data), function(res) {
+                    $('#NewCase_Urgency_Id').val(res.urgencyId || '').change();
+                });
             });
 
             self.$caseTypeControl.change(function () {

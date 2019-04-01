@@ -10,21 +10,21 @@
 
     public sealed class NotifiersSearchRequestBuilder
     {
-        private IQueryable<ComputerUser> notifiers; 
+        private IQueryable<ComputerUser> _notifiers; 
 
         public NotifiersSearchRequestBuilder(IQueryable<ComputerUser> notifiers)
         {
-            this.notifiers = notifiers;
+            _notifiers = notifiers;
         }
 
         public IQueryable<ComputerUser> Build()
         {
-            return this.notifiers;
+            return _notifiers;
         } 
 
         public void OrderByDefault()
         {
-            this.notifiers = this.notifiers.OrderBy(n => n.UserId).ThenBy(n => n.FirstName).ThenBy(n => n.SurName);
+            _notifiers = _notifiers.OrderBy(n => n.UserId).ThenBy(n => n.FirstName).ThenBy(n => n.SurName);
         }
 
         public void OrderBy(SortField field)
@@ -34,166 +34,166 @@
                 case SortBy.Ascending:
                     if (field.Name == GeneralField.UserId)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.UserId);
+                        _notifiers = _notifiers.OrderBy(u => u.UserId);
                     }
                     else if (field.Name == GeneralField.Domain)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.Domain.Name);
+                        _notifiers = _notifiers.OrderBy(u => u.Domain.Name);
                     }
                     else if (field.Name == GeneralField.LoginName)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.LogonName);
+                        _notifiers = _notifiers.OrderBy(u => u.LogonName);
                     }
                     else if (field.Name == GeneralField.FirstName)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.FirstName);
+                        _notifiers = _notifiers.OrderBy(u => u.FirstName);
                     }
                     else if (field.Name == GeneralField.Initials)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.Initials);
+                        _notifiers = _notifiers.OrderBy(u => u.Initials);
                     }
                     else if (field.Name == GeneralField.LastName)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.SurName);
+                        _notifiers = _notifiers.OrderBy(u => u.SurName);
                     }
                     else if (field.Name == GeneralField.DisplayName)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.DisplayName);
+                        _notifiers = _notifiers.OrderBy(u => u.DisplayName);
                     }
                     else if (field.Name == GeneralField.Place)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.Location);
+                        _notifiers = _notifiers.OrderBy(u => u.Location);
                     }
                     else if (field.Name == GeneralField.Phone)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.Phone);
+                        _notifiers = _notifiers.OrderBy(u => u.Phone);
                     }
                     else if (field.Name == GeneralField.CellPhone)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.Cellphone);
+                        _notifiers = _notifiers.OrderBy(u => u.Cellphone);
                     }
                     else if (field.Name == GeneralField.Email)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.Email);
+                        _notifiers = _notifiers.OrderBy(u => u.Email);
                     }
                     else if (field.Name == GeneralField.Code)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.UserCode);
+                        _notifiers = _notifiers.OrderBy(u => u.UserCode);
                     }
                     else if (field.Name == AddressField.PostalAddress)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.PostalAddress);
+                        _notifiers = _notifiers.OrderBy(u => u.PostalAddress);
                     }
                     else if (field.Name == AddressField.PostalCode)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.Postalcode);
+                        _notifiers = _notifiers.OrderBy(u => u.Postalcode);
                     }
                     else if (field.Name == AddressField.City)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.City);
+                        _notifiers = _notifiers.OrderBy(u => u.City);
                     }
                     else if (field.Name == OrganizationField.Region)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.Department.Region.Name);
+                        _notifiers = _notifiers.OrderBy(u => u.Department.Region.Name);
                     }
                     else if (field.Name == OrganizationField.Department)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.Department.DepartmentName);
+                        _notifiers = _notifiers.OrderBy(u => u.Department.DepartmentName);
                     }
                     else if (field.Name == OrganizationField.OrganizationUnit)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.OU.Name);
+                        _notifiers = _notifiers.OrderBy(u => u.OU.Name);
                     }
                     else if (field.Name == StateField.ChangedDate)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.ChangeTime);
+                        _notifiers = _notifiers.OrderBy(u => u.ChangeTime);
                     }
                     else if (field.Name == StateField.SynchronizationDate)
                     {
-                        this.notifiers = this.notifiers.OrderBy(u => u.SyncChangedDate);
+                        _notifiers = _notifiers.OrderBy(u => u.SyncChangedDate);
                     }                    
                     break;
 
                 case SortBy.Descending:
                     if (field.Name == GeneralField.UserId)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(n => n.UserId);
+                        _notifiers = _notifiers.OrderByDescending(n => n.UserId);
                     }
                     else if (field.Name == GeneralField.Domain)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(n => n.Domain.Name);
+                        _notifiers = _notifiers.OrderByDescending(n => n.Domain.Name);
                     }
                     else if (field.Name == GeneralField.LoginName)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(n => n.LogonName);
+                        _notifiers = _notifiers.OrderByDescending(n => n.LogonName);
                     }
                     else if (field.Name == GeneralField.FirstName)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.FirstName);
+                        _notifiers = _notifiers.OrderByDescending(u => u.FirstName);
                     }
                     else if (field.Name == GeneralField.Initials)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.Initials);
+                        _notifiers = _notifiers.OrderByDescending(u => u.Initials);
                     }
                     else if (field.Name == GeneralField.LastName)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.SurName);
+                        _notifiers = _notifiers.OrderByDescending(u => u.SurName);
                     }
                     else if (field.Name == GeneralField.DisplayName)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.DisplayName);
+                        _notifiers = _notifiers.OrderByDescending(u => u.DisplayName);
                     }
                     else if (field.Name == GeneralField.Place)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.Location);
+                        _notifiers = _notifiers.OrderByDescending(u => u.Location);
                     }
                     else if (field.Name == GeneralField.Phone)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.Phone);
+                        _notifiers = _notifiers.OrderByDescending(u => u.Phone);
                     }
                     else if (field.Name == GeneralField.CellPhone)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.Cellphone);
+                        _notifiers = _notifiers.OrderByDescending(u => u.Cellphone);
                     }
                     else if (field.Name == GeneralField.Email)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.Email);
+                        _notifiers = _notifiers.OrderByDescending(u => u.Email);
                     }
                     else if (field.Name == GeneralField.Code)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.UserCode);
+                        _notifiers = _notifiers.OrderByDescending(u => u.UserCode);
                     }
                     else if (field.Name == AddressField.PostalAddress)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.PostalAddress);
+                        _notifiers = _notifiers.OrderByDescending(u => u.PostalAddress);
                     }
                     else if (field.Name == AddressField.PostalCode)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.Postalcode);
+                        _notifiers = _notifiers.OrderByDescending(u => u.Postalcode);
                     }
                     else if (field.Name == AddressField.City)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.City);
+                        _notifiers = _notifiers.OrderByDescending(u => u.City);
                     }
                     else if (field.Name == OrganizationField.Region)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.Department.Region.Name);
+                        _notifiers = _notifiers.OrderByDescending(u => u.Department.Region.Name);
                     }
                     else if (field.Name == OrganizationField.Department)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.Department.DepartmentName);
+                        _notifiers = _notifiers.OrderByDescending(u => u.Department.DepartmentName);
                     }
                     else if (field.Name == OrganizationField.OrganizationUnit)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.OU.Name);
+                        _notifiers = _notifiers.OrderByDescending(u => u.OU.Name);
                     }
                     else if (field.Name == StateField.ChangedDate)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.ChangeTime);
+                        _notifiers = _notifiers.OrderByDescending(u => u.ChangeTime);
                     }
                     else if (field.Name == StateField.SynchronizationDate)
                     {
-                        this.notifiers = this.notifiers.OrderByDescending(u => u.SyncChangedDate);
+                        _notifiers = _notifiers.OrderByDescending(u => u.SyncChangedDate);
                     }                    
                     break;
                 default:
@@ -205,45 +205,45 @@
         {
             if (status == NotifierStatus.Active)
             {
-                this.notifiers = this.notifiers.Where(n => n.Status != 0);
+                _notifiers = _notifiers.Where(n => n.Status != 0);
             }
             else if (status == NotifierStatus.Inactive)
             {
-                this.notifiers = this.notifiers.Where(n => n.Status == 0);
+                _notifiers = _notifiers.Where(n => n.Status == 0);
             }
         }
 
         public void FilterByDomainId(int domainId)
         {
-            this.notifiers = this.notifiers.Where(n => n.Domain_Id == domainId);
+            _notifiers = _notifiers.Where(n => n.Domain_Id == domainId);
         }
 
         public void FilterByDepartmentId(int departmentId)
         {
-            this.notifiers = this.notifiers.Where(n => n.Department_Id == departmentId);
+            _notifiers = _notifiers.Where(n => n.Department_Id == departmentId);
         }
 
         public void FilterByRegionId(int regionId)
         {
-            this.notifiers = this.notifiers.Where(n => n.Department_Id.HasValue && n.Department.Region_Id == regionId);
+            _notifiers = _notifiers.Where(n => n.Department_Id.HasValue && n.Department.Region_Id == regionId);
         }
 
         public void FilterByDivisionId(int divisionId)
         {
-            this.notifiers = this.notifiers.Where(n => n.Division_Id == divisionId);
+            _notifiers = _notifiers.Where(n => n.Division_Id == divisionId);
         }
 
         public void TakeCount(int takeCount)
         {
-            this.notifiers = this.notifiers.Take(takeCount);
+            _notifiers = _notifiers.Take(takeCount);
         }
 
         public void FilterByPharse(string pharse)
         {
             var pharseInLowerCase = pharse.ToLower();
 
-            this.notifiers =
-                this.notifiers.Where(
+            _notifiers =
+                _notifiers.Where(
                     n =>
                     n.UserId.ToLower().Contains(pharseInLowerCase)
                     || n.Domain.Name.ToLower().Contains(pharseInLowerCase)
@@ -259,7 +259,7 @@
 
 		internal void FilterByComputerUserCategoryID(int? value)
 		{
-			this.notifiers = this.notifiers.Where(o => o.ComputerUsersCategoryID == value);
+			_notifiers = _notifiers.Where(o => o.ComputerUsersCategoryID == value);
 		}
 	}
 }

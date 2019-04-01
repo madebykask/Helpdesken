@@ -1,16 +1,15 @@
 import { Injectable } from "@angular/core";
 import { LocalStorageService } from "../local-storage";
 import { HttpClient } from "@angular/common/http";
-import { OptionsHelper } from "../../helpers/options-helper";
 import { map, take } from "rxjs/operators";
 import { MultiLevelOptionItem } from "src/app/modules/shared-module/models";
 import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
+import { ProductAreaInputModel } from "src/app/models/productAreas/productAreaInput.model";
 
 @Injectable({ providedIn: 'root' })
 export class ProductAreasService extends HttpApiServiceBase {
 
-    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService, 
-        private caseHelper: OptionsHelper) {
+    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) {
             super(http, localStorageService);
     }
 
@@ -39,5 +38,20 @@ export class ProductAreasService extends HttpApiServiceBase {
                     return result;
                 })
             );// TODO: error handling
+    }
+
+    getProductArea(id: number) {
+      return this.getJson(this.buildResourseUrl(`/api/productareas/${id}` , null, true, true))
+      .pipe(
+          take(1),
+          map((jsItem: any) => {
+            let model = new ProductAreaInputModel();
+            model.id = jsItem.id;
+            model.parentId = jsItem.parentId;
+            model.workingGroupId = jsItem.workingGroupId;
+            model.priorityId = jsItem.priorityId;
+            return model;
+          })
+      );
     }
 }

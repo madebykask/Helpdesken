@@ -1,5 +1,7 @@
 ﻿using Autofac;
+using Autofac.Core;
 using DH.Helpdesk.Common.Serializers;
+using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Infrastructure.Concrete;
 using DH.Helpdesk.Dal.Infrastructure.ModelFactories.Email;
@@ -17,6 +19,7 @@ using DH.Helpdesk.Services.Infrastructure.Email.Concrete;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Web.Common.Tools.Files;
+using DH.Helpdesk.WebApi.Controllers;
 using DH.Helpdesk.WebApi.Infrastructure.Cache;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
 using DH.Helpdesk.WebApi.Logic.CaseFieldSettings;
@@ -65,6 +68,13 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<TemporaryFilesCacheFactory>()
                 .As<ITemporaryFilesCacheFactory>()
                 .SingleInstance();
+
+            builder.RegisterType<CaseSaveController>()
+                .WithParameter(
+                    new ResolvedParameter(
+                        (pi, ctx) => pi.ParameterType == typeof(ITemporaryFilesCache),
+                        (pi, ctx) => ctx.Resolve<ITemporaryFilesCacheFactory>().CreateForModule(ModuleName.Cases)))
+                .InstancePerRequest();
 
             builder.RegisterType<CaseMailer>()
                 .As<ICaseMailer>()

@@ -7366,6 +7366,28 @@ If not exists (select * from tblTextTranslation where text_id = 2002 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2002, 2, 'Tabs')
 GO
 
+If not exists (select * from tbltext where id = 2003)
+	insert into tbltext (id, TextString) VALUES (2003, 'Visa på mobil')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2003 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2003, 2, 'Show on mobile')
+GO
+
+If not exists (select * from tbltext where id = 2004)
+	insert into tbltext (id, TextString) VALUES (2004, 'Användaren har rättighet att visa inventarier')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2004 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2004, 2, 'User has permission to show Inventory')
+GO
+
+If not exists (select * from tbltext where id = 2005)
+	insert into tbltext (id, TextString) VALUES (2005, 'Utökat ärende är inte giltigt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2005 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2005, 2, 'Extended Case is not valid')
+GO
+
+
 
 -- *** Run this last when put translation script above this line *** --
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null

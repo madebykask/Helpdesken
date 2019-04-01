@@ -1,10 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Linq;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Security.Cryptography.X509Certificates;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.Dal.Infrastructure;
@@ -17,8 +13,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface ICaseSolutionRepository : IRepository<CaseSolution>
     {
         CaseSolutionInfo GetGetSolutionInfo(int id, int customerId);
-
-        IList<CaseSolutionOverview> GetCustomerCaseSolutions(int customerId);
+        IQueryable<CaseSolution> GetCustomerCaseSolutions(int customerId);
         IList<CaseSolutionOverview> GetCaseSolutionsConditions(IList<int> Ids);
     }
 
@@ -45,37 +40,15 @@ namespace DH.Helpdesk.Dal.Repositories
             return caseSolutionInfo;
         }
 
-        public IList<CaseSolutionOverview> GetCustomerCaseSolutions(int customerId)
+        public IQueryable<CaseSolution> GetCustomerCaseSolutions(int customerId)
         {
             var query =
                 from cs in DataContext.CaseSolutions
-                let ss = cs.StateSecondary
-                where cs.Customer_Id == customerId &&
-                      cs.Status != 0
-                select new CaseSolutionOverview
-                {
-                    CaseSolutionId = cs.Id,
-                    Name = cs.Name,
-                    CategoryId = cs.CaseSolutionCategory_Id,
-                    StateSecondaryId = cs.StateSecondary_Id,
-                    NextStepState = cs.NextStepState,
-                    Status = cs.Status,
-                    WorkingGroupId = cs.WorkingGroup_Id,
-                    WorkingGroupName = cs.WorkingGroup.WorkingGroupName,
-                    SortOrder = cs.SortOrder,
-                    ConnectedButton = cs.ConnectedButton,
-                    ShowInsideCase = cs.ShowInsideCase,
-                    ShowOnCaseOverview = cs.ShowOnCaseOverview,
-                    StateSecondary = cs.StateSecondary != null ? new StateSecondaryOverview
-                    {
-                        Id = ss.Id,
-                        Name = ss.Name,
-                        StateSecondaryId = ss.StateSecondaryId,
-                    } : null
-                };
-
-            var res = query.OrderBy(x => x.SortOrder).AsNoTracking().ToList();
-            return res;
+                where cs.Customer_Id == customerId && cs.Status != 0
+                orderby cs.SortOrder
+                select cs;
+            
+            return query;
         }
 
         public IList<CaseSolutionOverview> GetCaseSolutionsConditions(IList<int> Ids)

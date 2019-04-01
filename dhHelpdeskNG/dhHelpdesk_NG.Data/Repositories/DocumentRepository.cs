@@ -59,7 +59,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public DocumentRepository(
             IDatabaseFactory databaseFactory,
             IWorkContext workContext)
-            : base(databaseFactory, workContext)
+            : base(databaseFactory)
         {
         }
 

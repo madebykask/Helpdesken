@@ -1,0 +1,38 @@
+<mbsc-form class="case-overview-header">
+  <div class="mbsc-form-group">
+      <form [formGroup]="filtersForm" novalidate (ngSubmit)="applyFilterAndSearch()" action=".">
+              <div class="mbsc-grid mbsc-grid-sm" >
+                  <div class="mbsc-row" *ngIf="showSearchPanel">
+                      <div class="mbsc-col">
+                          <mbsc-input #searchInput type="search" formControlName="freeSearch" 
+                              icon="fa-search" placeholder="{{'Sök' | translate }}" input-style="box"></mbsc-input>
+                      </div>
+                      <div class="mbsc-col-sm-auto">
+                          <a [ngClass]="{'inactive':isLoading}" (click)="cancelSearch()" translate>Avbryt</a>
+                      </div>
+                  </div>
+                  <div class="mbsc-row" *ngIf="!showSearchPanel">
+                      <div class="mbsc-col-sm-auto nopadding">
+                          <cases-filter></cases-filter>
+                      </div>
+                      <div class="mbsc-col center bold">{{ headerText }}</div>
+                      <div class="mbsc-col-sm-auto">
+                          <div class="mbsc-ic mbsc-ic-fa-search" (click)="showSearchPanel=true"></div>
+                      </div>
+                  </div>
+              </div>
+      </form>
+  </div>
+</mbsc-form>
+<div class="stickToBottom">
+    <mbsc-listview #listview [options]="listviewSettings" [hidden]="isLoading" (onItemTap)="onItemTap($event)" (touchmove)="checkLoad()">
+            <mbsc-listview-item *ngFor="let case of cases; trackBy: trackByFn" >
+                    <div class="row ellipsis">{{ (case.columns | getByKey: 'Caption') || '&nbsp;' }}</div>
+                    <div class="secondary">{{ (case.columns | getByKey: 'CaseNumber') || '&nbsp;' }} {{ (case.columns | getByKey: 'RegTime' | dateFormat) || '&nbsp;' }}</div>
+            </mbsc-listview-item>
+    </mbsc-listview>
+    <mbsc-form #loading class="md-load-btn md-btn-isLoading">
+            <div style="height:44px;" [hidden]="isLoading"></div>
+            <mbsc-button flat block icon="fa-refresh" [hidden]="!isLoading"></mbsc-button>
+    </mbsc-form>
+</div>

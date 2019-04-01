@@ -1,128 +1,72 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { MbscPopup, MbscPopupOptions, MbscSelect, MbscSelectOptions, MbscNavOptions, MbscListviewOptions } from '@mobiscroll/angular';
-import { take, finalize } from 'rxjs/operators';
-import { UserSettingsService } from 'src/app/services/user';
+import { MbscSelect, MbscSelectOptions, MbscNavOptions } from '@mobiscroll/angular';
+import { take, finalize, map } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthenticationService } from 'src/app/services/authentication';
 import { LanguagesApiService } from 'src/app/services/api/language/languages-api.service';
 import { CasesSearchType } from 'src/app/modules/shared-module/constants';
+import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
+import { CaseTemplateService } from 'src/app/services/case-organization/case-template.service';
+import { BehaviorSubject } from 'rxjs';
+import { AppStore, AppStoreKeys } from 'src/app/store/app-store';
+import { routerNgProbeToken } from '@angular/router/src/router_module';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent implements OnInit, AfterViewInit, OnDestroy {
-  private destroy$ = new Subject();
-  SearchType = CasesSearchType; // this allows to use enum values in the view
+export class FooterComponent implements OnInit  {
+  searchType = CasesSearchType;
+  languageId: number = 0;
+  isLoadingLanguage: boolean = true;
+  isVisible = true;
 
-  @ViewChild('caseSearchPopup') caseSearchPopup: MbscPopup;
+  canCreateCases$ = new BehaviorSubject<boolean>(false);
+  
   @ViewChild('languages') languagesCtrl: MbscSelect;
   
-  languagesSettings: MbscSelectOptions = {
-    cssClass: 'languages-list',
-    showOnTap: false,
-    display: 'bottom',
-    data: [],
-    onSet: (event, inst) => this.onLanguageChange(event, inst)
-  }
-
   bottomMenuSettings: MbscNavOptions = {
-    //layout: 'fixed',
     type: 'bottom',
     moreText: null,
     moreIcon: 'fa-ellipsis-h',
     menuIcon: null,
     menuText: null,
-  }
-
-  languageId: number = 0;
-  isLoadingLanguage: boolean = true;
-  isVisible = true;
-  
-  popUpLlistSettings: MbscPopupOptions = {
-    buttons: [],
-    closeOnOverlayTap: true,
-    display: 'bottom',
-    cssClass: 'mbsc-no-padding'
   };
  
-  popUpLvSettings: MbscListviewOptions = {
-    enhance: true,
-    swipe: false
-};
-  constructor(private _router: Router,
-              private _userSettingsService : UserSettingsService,
-              private _authenticationService: AuthenticationService,
-              private _languagesService: LanguagesApiService,
-              private _ngxTranslateService: TranslateService) {
+  constructor(private router: Router,
+              private appSore: AppStore,
+              private userSettingsService : UserSettingsApiService,
+              private languagesService: LanguagesApiService,
+              private caseTemplateService: CaseTemplateService,
+              private ngxTranslateService: TranslateService) {
   }
 
   ngOnInit() {
-    this.loadLanguages();
-    //apply translations
-    this.languagesCtrl.setText = this._ngxTranslateService.instant("Välj");
-    this.languagesCtrl.cancelText  = this._ngxTranslateService.instant("Avbryt");
-  }
+    if (this.userSettingsService.getUserData().createCasePermission) {
+       this.caseTemplateService.loadTemplates().pipe(
+        take(1)
+      ).subscribe(templates => {
+        this.appSore.set(AppStoreKeys.Templates, templates);
+        this.canCreateCases$.next(templates && templates.length > 0);
+      });
+    }
 
-  ngAfterViewInit() {
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-  }
-
-  private onLanguageChange(event, inst) {
-    let val = inst.getVal();
-    this.setLanguage(val ? +val : null);
+    // apply translations
+    //this.languagesCtrl.setText = this.ngxTranslateService.instant("Välj");
+    //this.languagesCtrl.cancelText  = this.ngxTranslateService.instant("Avbryt");    
   }
 
   openLanguages() {
-    if (!this.isLoadingLanguage) {
-        this.languagesCtrl.instance.show();
-    }
-  }
+    this.router.navigate(['language']);
+  } 
 
-  private loadLanguages() {
-    this.languageId = this._userSettingsService.getCurrentLanguage() || 0;
-    if (this.languageId === 0)
-       return;
-    
-    this.isLoadingLanguage = true;
-    this._languagesService.getLanguages().pipe(
-        take(1),
-        finalize(() => this.isLoadingLanguage = false)
-    ).subscribe((data) => {
-        this.languagesCtrl.refreshData(data);
-    });
-  }
-  
   logout() {
-    this._authenticationService.logout();
     this.goTo('/login');
-  }
+  } 
 
-  goToCases(searchType: CasesSearchType) {
-    this.caseSearchPopup.instance.hide();
-    this._router.navigate(['/casesoverview', CasesSearchType[searchType]]);    
-  }
+  goTo(url: string = null) {  
+    this.router.navigateByUrl(url);
+  } 
 
-  goTo(url: string = null) {
-    if (url == null) return;
-    this._router.navigate([url]);
-  }
-
-  setLanguage(languageId: number) {
-    if (languageId) {
-      this._userSettingsService.setCurrentLanguage(languageId);
-
-      // reload will reopen the app
-      window.location.reload(true);
-    }
-  }
 }
-
-
-

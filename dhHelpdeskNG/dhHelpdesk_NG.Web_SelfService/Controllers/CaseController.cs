@@ -10,6 +10,7 @@ using log4net;
 using log4net.Core;
 using WebGrease.Css.Extensions;
 using DH.Helpdesk.Common.Extensions.Boolean;
+using DH.Helpdesk.Services.Utils;
 
 namespace DH.Helpdesk.SelfService.Controllers
 {
@@ -48,6 +49,7 @@ namespace DH.Helpdesk.SelfService.Controllers
     using Infrastructure.Helpers;
     using BusinessData.Models.Shared;
     using Models.Message;
+    using Services.Infrastructure;
 
     public class CaseController : BaseController
     {
@@ -348,9 +350,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             var languageId = SessionFacade.CurrentLanguageId;
 
             var caseFieldSetting = _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId)
-                                                          .Where(c => c.ShowExternal == 1)
-                                                          .ToList();
-
+                .Where(c => c.ShowExternal == 1)
+                .ToList();
             
             var model = GetNewCaseModel(currentCustomer.Id, languageId, caseFieldSetting);
             model.ExLogFileGuid = Guid.NewGuid().ToString();
@@ -402,7 +403,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
                 
                 //override caseType value from template
-                if(caseTemplate.CaseType_Id != null)
+                if (caseTemplate.CaseType_Id != null)
                 {
                     model.NewCase.CaseType_Id = caseTemplate.CaseType_Id.Value;
                 }
@@ -501,8 +502,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 model.NewCase.Verified = caseTemplate.Verified;
                 model.NewCase.VerifiedDescription = caseTemplate.VerifiedDescription;
                 model.NewCase.SolutionRate = caseTemplate.SolutionRate;
-
-                model.Information = caseTemplate.Information;
+                
+                //case solution
+                model.NewCase.CaseSolution_Id = caseTemplateId;
+                model.NewCase.CurrentCaseSolution_Id = caseTemplate?.Id;
 
                 if (!string.IsNullOrEmpty(caseTemplate.Text_External) ||
                     !string.IsNullOrEmpty(caseTemplate.Text_Internal) || caseTemplate.FinishingCause_Id.HasValue)
@@ -529,7 +532,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                         model.NewCase.RegistrationSourceCustomer_Id = registrationSource.Id;
                 }
 
-                if(model.NewCase.ProductArea_Id.HasValue)
+                if (model.NewCase.ProductArea_Id.HasValue)
                 {
                     var p = _productAreaService.GetProductArea(model.NewCase.ProductArea_Id.GetValueOrDefault());
                     if(p != null)
@@ -674,6 +677,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 RegUserName = $"{SessionFacade.CurrentUserIdentity.FirstName} {SessionFacade.CurrentUserIdentity.LastName}".Trim(),
                 IpAddress = Request.GetIpAddress(),
                 CaseSolution_Id = caseTemplateId,
+                CurrentCaseSolution_Id = caseTemplateId,
                 CaseFileKey = Guid.NewGuid().ToString()
             };
 
@@ -722,9 +726,9 @@ namespace DH.Helpdesk.SelfService.Controllers
             ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
             ViewBag.ShowCommunicationForSelfservice = appSettings.ShowCommunicationForSelfService;
             
-            caseModel.FieldSettings = _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId)
-                .Where(c => c.ShowExternal == 1)
-                .ToList();
+            caseModel.FieldSettings = 
+                _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId)
+                .Where(c => c.ShowExternal == 1).ToList();
 
             if (caseId.IsNew())
             {
@@ -777,7 +781,12 @@ namespace DH.Helpdesk.SelfService.Controllers
             var isRelatedCase = caseId > 0 && _caseService.IsRelated(caseId ?? 0);
             var customerCaseSolutions =
                 _caseSolutionService.GetCustomerCaseSolutionsOverview(customerId, userId: null);
-            
+
+
+            var caseLogs = caseId.HasValue
+                ? _logService.GetLogsByCaseId(caseId.Value).OrderByDescending(l => l.LogDate).ToList()
+                : new List<Log>();
+
             var model = new ExtendedCaseViewModel
             {
                 CaseId = initData.CaseId,
@@ -794,7 +803,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 WorkflowSteps = GetWorkflowStepModel(customerId, caseId ?? 0, caseTemplateId ?? 0, customerCaseSolutions, isRelatedCase),
                 CaseDataModel = caseModel,
                 LogFileGuid = Guid.NewGuid().ToString(),
-                CaseLogs = caseId.HasValue ? _logService.GetLogsByCaseId(caseId.Value).OrderByDescending(l => l.LogDate).ToList() : new List<Log>()
+                CaseLogModel = new CaseLogModel(initData.CaseId, caseLogs, SessionFacade.CurrentSystemUser, SessionFacade.CurrentCustomer.UseInternalLogNoteOnExternalPage == 1)
             };
 
             if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
@@ -995,7 +1004,9 @@ namespace DH.Helpdesk.SelfService.Controllers
         {
             byte[] fileContent;
             if (GuidHelper.IsGuid(id))
-               fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, "");
+            {
+                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, id, "");
+            }
             else
             {
                 var c = _caseService.GetCaseById(int.Parse(id));
@@ -1162,12 +1173,15 @@ namespace DH.Helpdesk.SelfService.Controllers
         [ValidateInput(false)]
         public ActionResult _CaseLogNote(int caseId, string note, string logFileGuid)
         {
-            SaveExternalMessage(caseId, note, logFileGuid);            
-            CaseLogModel model = new CaseLogModel()
-                  {
-                      CaseId = caseId,
-                      CaseLogs = _logService.GetLogsByCaseId(caseId).OrderByDescending(l=> l.RegTime).ToList()                      
-                  };            
+            SaveExternalMessage(caseId, note, logFileGuid);
+
+            var caseLogs = 
+                _logService.GetLogsByCaseId(caseId).OrderByDescending(l => l.RegTime).ToList();
+
+            var model = new CaseLogModel(caseId, 
+                            caseLogs, 
+                            SessionFacade.CurrentSystemUser,
+                            SessionFacade.CurrentCustomer.UseInternalLogNoteOnExternalPage == 1);
             return PartialView(model);
         }
 
@@ -1184,16 +1198,41 @@ namespace DH.Helpdesk.SelfService.Controllers
             // save case history
 
             // unread/status flag update if not case is closed
-            if (!currentCase.FinishingDate.HasValue)
-                currentCase.Unread = 1;
+
+            var user = _userService.GetUserByLogin(SessionFacade.CurrentUserIdentity.UserId, null);
 
             if (currentCase.FinishingDate.HasValue)
             {
                 string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                this._caseService.Activate(currentCase.Id, 0, adUser, CreatedByApplications.SelfService5, out errors);
+                this._caseService.Activate(currentCase.Id, user.Id, adUser, CreatedByApplications.SelfService5, out errors);
                 caseIsActivated = true;
+                currentCase = _caseService.GetCaseById(caseId);
             }
-                
+
+            if (!currentCase.FinishingDate.HasValue)
+                currentCase.Unread = 1;
+
+            int[] departmentIds = null;
+            if (currentCase.Department_Id.HasValue)
+                departmentIds = new int[] { currentCase.Department_Id.Value };
+
+
+			var timeZone = TimeZoneInfo.GetSystemTimeZones().First(o => o.BaseUtcOffset.TotalMinutes == cs.TimeZone_offset);
+
+
+			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                ManualDependencyResolver.Get<IHolidayService>(),
+                currentCustomer.WorkingDayStart,
+                currentCustomer.WorkingDayEnd,
+				timeZone);
+
+            var utcNow = DateTime.UtcNow;
+            var workTimeCalc = workTimeCalcFactory.Build(currentCase.RegTime, utcNow, departmentIds);
+
+            var possibleWorktime = workTimeCalc.CalculateWorkTime(
+                currentCase.RegTime,
+                utcNow,
+                currentCase.Department_Id);
 
             // if statesecondary has ResetOnExternalUpdate
             if (currentCase.StateSecondary_Id.HasValue)
@@ -1203,8 +1242,18 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 if (casestatesecundary.ResetOnExternalUpdate == 1)
                     currentCase.StateSecondary_Id = null;
+
+                if (casestatesecundary.IncludeInCaseStatistics == 0)
+                {
+                    var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
+                        currentCase.ChangeTime,
+                        utcNow,
+                        currentCase.Department_Id);
+                    currentCase.ExternalTime += externalTimeToAdd;
+                }
             }
 
+            currentCase.LeadTime = possibleWorktime - currentCase.ExternalTime;
 
             currentCase.ChangeTime = DateTime.UtcNow;
             int caseHistoryId = _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5,  out errors, SessionFacade.CurrentUserIdentity.UserId);            
@@ -1238,17 +1287,17 @@ namespace DH.Helpdesk.SelfService.Controllers
                     {
                         if(currentCase.Department_Id.HasValue)
                         {
-                            foreach(var user in usersInWorkingGroup)
+                            foreach(var user_ in usersInWorkingGroup)
                             {
-                                var departments = _departmentService.GetDepartmentsByUserPermissions(user.Id, currentCase.Customer_Id);
+                                var departments = _departmentService.GetDepartmentsByUserPermissions(user_.Id, currentCase.Customer_Id);
 
                                 if(departments != null && departments.FirstOrDefault(x=>x.Id == currentCase.Department_Id.Value) != null)
                                 {
-                                    emailTo.Add(user.Email);
+                                    emailTo.Add(user_.Email);
                                 }
 
                                 if(departments == null)
-                                    emailTo.Add(user.Email);
+                                    emailTo.Add(user_.Email);
                             }
                         }
                         else
@@ -1425,11 +1474,11 @@ namespace DH.Helpdesk.SelfService.Controllers
                 caseLogs = _logService.GetLogsByCaseId(caseId.Value).OrderByDescending(l => l.RegTime).ToList();
             }
 
-            var model = new CaseLogModel
-            {
-                CaseId = caseId ?? 0,
-                CaseLogs = caseLogs
-            };
+            var model = new CaseLogModel(
+                            caseId ?? 0, 
+                            caseLogs, 
+                            SessionFacade.CurrentSystemUser,
+                            SessionFacade.CurrentCustomer.UseInternalLogNoteOnExternalPage == 1);
             return model;
         }
 
@@ -1468,6 +1517,23 @@ namespace DH.Helpdesk.SelfService.Controllers
             var dropString = HtmlHelperExtension.ProductAreaDropdownString(pa);
             return Json(new { success = true, data = dropString, praIds });
         }
+
+        [HttpGet]
+        public ActionResult ChangeSystem(int? id)
+        {
+            var emptyResult = Json(new { }, JsonRequestBehavior.AllowGet);
+            if (!id.HasValue) return emptyResult;
+
+            int? ret = null;
+            var e = _systemService.GetSystem(id.Value);
+            if (e != null)
+                ret = (e.Urgency_Id.HasValue && e.Urgency_Id.Value != 0) ? e.Urgency_Id.Value : new int?();
+            return ret.HasValue ?
+                Json(new { urgencyId = ret.Value }, JsonRequestBehavior.AllowGet) :
+                emptyResult;
+        }
+
+        #region private
 
         private void TranslateProductArea(ICollection<ProductArea> pa)
         {
@@ -1844,34 +1910,49 @@ namespace DH.Helpdesk.SelfService.Controllers
             return result;
         }
 
-        private int Save(Case newCase, CaseMailSetting caseMailSetting, string caseFileKey, string followerUsers, CaseLog caseLog, out decimal caseNumber)
+        private int Save(Case newCase, 
+                CaseMailSetting caseMailSetting, 
+                string caseFileKey, 
+                string followerUsers,
+                CaseLog caseLog, 
+                out decimal caseNumber)
         {
             IDictionary<string, string> errors;
-            caseNumber = 0;
+            var utcNow = DateTime.UtcNow;
+
             // save case and case history
             if (newCase.User_Id <= 0)
                 newCase.User_Id = null;
 
-            var mailSenders = new MailSenders();
-            mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
+            var mailSenders = new MailSenders
+            {
+                SystemEmail = caseMailSetting.HelpdeskMailFromAdress
+            };
+
             if (newCase.WorkingGroup_Id.HasValue)
             {
-                var curWG = _workingGroupService.GetWorkingGroup(newCase.WorkingGroup_Id.Value);
-                if (curWG != null)
-                    if (!string.IsNullOrWhiteSpace(curWG.EMail) && _emailService.IsValidEmail(curWG.EMail))
-                        mailSenders.WGEmail = curWG.EMail;
+                var workingGroup = _workingGroupService.GetWorkingGroup(newCase.WorkingGroup_Id.Value);
+                if (!string.IsNullOrWhiteSpace(workingGroup?.EMail) && _emailService.IsValidEmail(workingGroup.EMail))
+                    mailSenders.WGEmail = workingGroup.EMail;
             }
 
             caseMailSetting.CustomeMailFromAddress = mailSenders;
 
             var basePath = _masterDataService.GetFilePath(newCase.Customer_Id);
             newCase.LatestSLACountDate = CalculateLatestSLACountDate(newCase.StateSecondary_Id);
-            var ei = new CaseExtraInfo() { CreatedByApp = CreatedByApplications.SelfService5, LeadTimeForNow = 0, ActionLeadTime = 0, ActionExternalTime = 0};
+
+            var ei = new CaseExtraInfo()
+            {
+                CreatedByApp = CreatedByApplications.SelfService5,
+                LeadTimeForNow = 0,
+                ActionLeadTime = 0,
+                ActionExternalTime = 0
+            };
 
             if (newCase.Urgency_Id.HasValue && newCase.Impact_Id.HasValue)
             {
-                var prio_Impact_Urgent = _urgencyService.GetPriorityImpactUrgencies(newCase.Customer_Id);
-                var prioInfo = prio_Impact_Urgent.FirstOrDefault(p=> p.Impact_Id == newCase.Impact_Id && p.Urgency_Id == newCase.Urgency_Id);
+                var priorityImpactUrgencies = _urgencyService.GetPriorityImpactUrgencies(newCase.Customer_Id);
+                var prioInfo = priorityImpactUrgencies.FirstOrDefault(p=> p.Impact_Id == newCase.Impact_Id && p.Urgency_Id == newCase.Urgency_Id);
                 if (prioInfo != null)
                 {
                     newCase.Priority_Id = prioInfo.Priority_Id;
@@ -1894,15 +1975,13 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             if (newCase.Department_Id.HasValue && newCase.Priority_Id.HasValue)
             {
-                var dept = this._departmentService.GetDepartment(newCase.Department_Id.Value);
-                var priority = this._priorityService.GetPriorities(newCase.Customer_Id).Where(it => it.Id == newCase.Priority_Id && it.IsActive == 1).FirstOrDefault();
+                var dept = _departmentService.GetDepartment(newCase.Department_Id.Value);
+                var priority = _priorityService.GetPriorities(newCase.Customer_Id).Where(it => it.Id == newCase.Priority_Id && it.IsActive == 1).FirstOrDefault();
 
                 if (dept != null && dept.WatchDateCalendar_Id.HasValue && priority != null && priority.SolutionTime == 0)
                 {
-                    newCase.WatchDate =
-                    this._watchDateCalendarService.GetClosestDateTo(
-                    dept.WatchDateCalendar_Id.Value,
-                    DateTime.UtcNow);
+                    newCase.WatchDate = 
+                        _watchDateCalendarService.GetClosestDateTo(dept.WatchDateCalendar_Id.Value, utcNow);
                 }
             }
 
@@ -1924,11 +2003,16 @@ namespace DH.Helpdesk.SelfService.Controllers
                         newCase.Performer_User_Id = caseType.User_Id;
                     }
                 }
-
             }
 
+            if (newCase.CaseSolution_Id == 0)
+                newCase.CaseSolution_Id = null;
+
             var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0; 
-            int caseHistoryId = _caseService.SaveCase(newCase, caseLog, localUserId, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
+
+            // SAVE CASE:
+            var caseHistoryId = 
+                _caseService.SaveCase(newCase, caseLog, localUserId, SessionFacade.CurrentUserIdentity.UserId, ei, out errors);
 
             // save log
             caseLog.CaseId = newCase.Id;
@@ -1940,20 +2024,21 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (string.IsNullOrWhiteSpace(caseLog.RegUser))
                 caseLog.RegUser = SessionFacade.CurrentUserIdentity?.UserId ?? string.Empty;
 
-            caseLog.Id = this._logService.SaveLog(caseLog, 0, out errors);
+            caseLog.Id = _logService.SaveLog(caseLog, 0, out errors);
 
             // save case files
             SaveCaseFiles(caseFileKey, newCase.Customer_Id, newCase.Id, localUserId);
 
             var oldCase = new Case();            
+            
             // send emails
             var userTimeZone = TimeZoneInfo.Local;
 
             //save extra followers            
             if (!string.IsNullOrEmpty(followerUsers))
             {
-                var _followerUsers = followerUsers.Split(EMAIL_SEPARATOR, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
-                _caseExtraFollowersService.SaveExtraFollowers(newCase.Id, _followerUsers, null);
+                var extraFollowers = followerUsers.Split(EMAIL_SEPARATOR, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
+                _caseExtraFollowersService.SaveExtraFollowers(newCase.Id, extraFollowers, null);
             }
 
             _caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase);
@@ -2017,8 +2102,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 if (pathTexts.Any())
                 {
                     translatedText = new List<string>();
-                    foreach (var pathText in pathTexts.ToList())
-                        translatedText.Add(Translation.Get(pathText, Enums.TranslationSource.TextTranslation));
+                    foreach (var pathText in pathTexts)
+                    {
+                        translatedText.Add(Translation.Get(pathText));
+                    }
                 }
                 currentCase.ProductArea.Name = string.Join(" - ", translatedText);                
             }
@@ -2030,37 +2117,39 @@ namespace DH.Helpdesk.SelfService.Controllers
                 if (pathTexts.Any())
                 {
                     translatedText = new List<string>();
-                    foreach (var pathText in pathTexts.ToList())
+                    foreach (var pathText in pathTexts)
+                    {
                         translatedText.Add(Translation.Get(pathText));
+                    }
                 }
                 currentCase.Category.Name = string.Join(" - ", translatedText);
             }
 
-            var newLogFile = new FilesModel();
+            var caseId = currentCase.Id;
+            var caseLogs = _logService.GetLogsByCaseId(currentCase.Id).OrderByDescending(l => l.LogDate).ToList();
+            if (currentCase.Impact_Id.HasValue && currentCase.Impact == null)
+                currentCase.Impact = _impactService.GetImpact(currentCase.Impact_Id.Value);
 
-            CaseOverviewModel model = null;
-
-            if(currentCase != null)
+            var model = new CaseOverviewModel
             {
-                var caselogs = _logService.GetLogsByCaseId(currentCase.Id).OrderByDescending(l => l.LogDate).ToList();
-                if (currentCase.Impact_Id.HasValue && currentCase.Impact == null)
-                    currentCase.Impact = _impactService.GetImpact(currentCase.Impact_Id.Value);
+                InfoText = infoText?.Name,
+                CasePreview = currentCase,
+                CaseFieldGroups = caseFieldGroups,
+                FieldSettings = caseFieldSetting,
+                Regions = regions,
+                Suppliers = suppliers,
+                Systems = systems,
+                CustomerSettings = customersettings,
 
-                model = new CaseOverviewModel
-                {
-                    InfoText = infoText != null ? infoText.Name : null,
-                    CasePreview = currentCase,
-                    CaseFieldGroups = caseFieldGroups,
-                    CaseLogs = caselogs,
-                    FieldSettings = caseFieldSetting,
-                    LogFilesModel = newLogFile,
-                    Regions = regions,
-                    Suppliers = suppliers,
-                    Systems = systems,
-                    LogFileGuid = Guid.NewGuid().ToString(),
-                    CustomerSettings = customersettings
-                };
-            }
+                //logs
+                LogFileGuid = Guid.NewGuid().ToString(),
+                LogFilesModel = new FilesModel(),
+                CaseLogModel = new CaseLogModel(
+                                    caseId, 
+                                    caseLogs, 
+                                    SessionFacade.CurrentSystemUser,
+                                    SessionFacade.CurrentCustomer.UseInternalLogNoteOnExternalPage == 1)
+            };
 
             var caseFolowerUsers = _caseExtraFollowersService.GetCaseExtraFollowers(currentCase.Id).Select(x => x.Follower).ToArray();
             var followerUsers = caseFolowerUsers.Any() ? string.Join(";", caseFolowerUsers) + ";" : string.Empty;
@@ -2137,12 +2226,12 @@ namespace DH.Helpdesk.SelfService.Controllers
                 caseFile, 
                 caseFieldSettings,
                 new JsApplicationOptions()
-                    {
-                        customerId = customerId,
-                        departmentFilterFormat = cs.DepartmentFilterFormat,
-                        departmentsURL = Url.Content("~/Case/GetDepartmentsByRegion"),
-                        orgUnitURL = Url.Content("~/Case/GetOrgUnitsByDepartments")
-                    },
+                {
+                    customerId = customerId,
+                    departmentFilterFormat = cs.DepartmentFilterFormat,
+                    departmentsURL = Url.Action("GetDepartmentsByRegion", "Case"),
+                    orgUnitURL = Url.Action("GetOrgUnitsByDepartments", "Case")
+                },
                 caseFieldSettingsWithLanguages);
 
             model.CurrentCustomer = SessionFacade.CurrentCustomer;
@@ -2537,8 +2626,6 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             return res.ToList();
         }
-
-        #region Helper Methods
 
         private CaseSearchInputParameters PrepareCaseSearchInputParameters(string progressId = "")
         {

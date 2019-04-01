@@ -80,7 +80,7 @@
             var departments = OrganizationService.GetDepartments(SessionFacade.CurrentCustomer.Id);
             var fieldsSettings = inventorySettingsService.GetInventoryFieldSettingsOverviewForFilter(inventoryTypeId);
 
-            var userHasInventoryAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var userHasInventoryAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
 
             var viewModel = InventorySearchViewModel.BuildViewModel(
                 currentFilter,
@@ -173,7 +173,7 @@
         [HttpGet]
         public ViewResult Edit(int id, int inventoryTypeId, bool dialog = false)
         {
-            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
             var readOnly = !userHasInventoryAdminPermission && dialog;
 
             InventoryOverviewResponse model = this.inventoryService.GetInventory(id);

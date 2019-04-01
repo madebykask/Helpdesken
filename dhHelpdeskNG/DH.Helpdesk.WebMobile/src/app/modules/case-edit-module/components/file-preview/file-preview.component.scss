@@ -1,0 +1,21 @@
+.close-pnl {
+  background: #438eb9;
+  overflow:hidden;
+}
+
+.close {
+  float:right;
+  font-weight:16px;
+  padding:10x 20px;
+
+  i { padding-right: 5px}
+}
+
+.close:after { clear:both; }
+
+.preview {
+  display:block;
+  width:100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}

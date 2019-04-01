@@ -312,7 +312,7 @@ img
 
 
 .siteCom {
-  width:600px;
+  max-width:600px;
   position:fixed;
   left:-600px;
   top:0;

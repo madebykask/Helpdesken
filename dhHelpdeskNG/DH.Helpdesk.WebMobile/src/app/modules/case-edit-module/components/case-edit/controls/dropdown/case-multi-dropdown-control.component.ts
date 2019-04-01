@@ -1,7 +1,12 @@
-import { OnInit, OnDestroy, Component, Input, OnChanges, ViewChild } from "@angular/core";
-import { BaseCaseField } from "../../../../models";
+import { Component, Input, ViewChild, Renderer2, ElementRef } from "@angular/core";
 import { BaseControl } from "../base-control";
 import { MultiLevelOptionItem } from "src/app/modules/shared-module/models";
+import { FormStatuses } from "src/app/modules/shared-module/constants";
+import { switchMap, takeUntil, map } from "rxjs/operators";
+import { of, BehaviorSubject } from "rxjs";
+import { MbscSelectOptions, MbscSelect } from "@mobiscroll/angular";
+import { TranslateService } from "@ngx-translate/core";
+import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/app/services/communication";
 
 
 @Component({
@@ -9,47 +14,290 @@ import { MultiLevelOptionItem } from "src/app/modules/shared-module/models";
     templateUrl: './case-multi-dropdown-control.component.html',
     styleUrls: ['./case-multi-dropdown-control.component.scss']
   })
-  export class CaseMultiDropdownComponent extends BaseControl implements OnInit, OnDestroy {
-    @ViewChild('control') control: any;
-    @Input() field: BaseCaseField<number>;
-    @Input() dataSource: MultiLevelOptionItem[] = [];
-    text: string = "";
-    options: any = {
-      readOnly: true,
-      disabled: true
-    } 
+  export class CaseMultiDropdownComponent extends BaseControl<number> {
+    @ViewChild('textbox') textbox: any;
+    @ViewChild('select') select: MbscSelect;
+    @Input() dataSource: BehaviorSubject<MultiLevelOptionItem[]>;
+    @Input() disabled = false;
+    text: string = '';
+    settings: MbscSelectOptions = {
+      theme: 'mobiscroll',
+      display: 'center',
+      layout: 'liquid',
+      anchor: 'select-textarea',
+      focusOnClose: false,
+      filter: true,
+      filterPlaceholderText: this.ngxTranslateService.instant('Skriv för att filtrera'),
+      filterEmptyText: this.ngxTranslateService.instant('Inget resultat'),
+      setText: this.ngxTranslateService.instant('Välj'),
+      cancelText: this.ngxTranslateService.instant('Avbryt'),
+      buttons:
+      [{ // this button is hidden if root element has 'root' class
+          text: this.ngxTranslateService.instant('Tillbaka'),
+          cssClass: 'mbsc-fr-btn',
+          parentClass: 'float-left back-btn',
+          handler: (event, inst) => {
+            if (this.hasParent()) {
+              this.refreshData(inst, this.getPreviousData(this.parentValue));
+              this.markIfRoot(inst);
+            }
+          }
+        },
+        'cancel',
+        ],
+      data: [],
+      headerText: () => this.getHeader,
+      input: 'select-textarea',
+      onInit: (event, inst) => {
+        if (this.field.isReadonly) {
+          inst.disable();
+        }
+      },
+      onBeforeShow: (event, inst) => {
+        let data = this.getPreviousData(inst.getVal());
+        this.refreshData(inst, data);
+      },
+      onMarkupReady: (event, inst) => {
+        this.markIfRoot(inst);
+        this.markIfHasChilds(inst.getVal(), inst);
+      },
+      onChange: (event, inst) => {
+        if (event.valueText) {
+          this.markIfHasChilds(event.valueText, inst);
+        }
+      },
+      onItemTap: (event, inst) => {
+        if (event.value != null) { 
+          let chain = this.getOptionsChain(event.value);
+          if (this.hasChilds(chain, chain.length - 1)) {
+            let data = this.getNextData(event.value);
+            this.refreshData(inst, data);
+            this.markIfRoot(inst);
+          } else {
+            inst.setVal(event.value);
+            inst.select();
+          }
+        }
+        return false;
+      },
+      onSet: (event, inst) => { // somehow onset is invoked on scrolling options
+        const value = inst.getVal();
+        this.setText(value);
+        this.commService.publish(Channels.DropdownValueChanged, new DropdownValueChangedEvent(value, event.valueText, this.field.name));
+      }, 
+      onClose: () => {
+        this.parentValue = undefined;
+      }
+    }
+    private parentValue?: number;
+
+    constructor(private ngxTranslateService: TranslateService,
+       private commService: CommunicationService, 
+       private renderer: Renderer2,
+       private elem: ElementRef) {
+      super();
+    }
 
     ngOnInit(): void {
-      //if(this.readOnly) set disabled/reaonly mode
       this.init(this.field);
-      this.text = this.getText(this.field.value);
-      this.control.disabled = true;
+      this.updateDisabledState();
+
+      this.initEvents()
+      this.setText(this.formControl.value);
+    }
+
+    ngAfterViewInit(): void {
+      this.addSelectArrow();
     }
 
     ngOnDestroy(): void {
+      this.onDestroy();
     }
 
-    getText(id: any) {
-      if (this.dataSource == null || this.dataSource.length === 0) return "";
-      let texts = new Array<string>();
+    public get getHeader(): string {
+      const defaultValue = '';
+      if (!this.field) {
+        return defaultValue;
+      }
+      return this.formControl.label || defaultValue;
+    }
+
+    private refreshData(inst, data) {
+      inst.refresh(data, '');
+      if (inst.markup != null) {
+        let elem =  (<HTMLElement>inst.markup).querySelector<HTMLInputElement>('input.mbsc-sel-filter-input');
+        elem.value = '';
+      }
+    }
+
+    public openSelect() {
+      this.select.instance.show()
+    }
+
+    private setText(value?: number) {
+      this.text = this.getTextChain(value);
+    }
+
+    private getNextData(value?: number) {
+      if (this.dataSource == null || this.dataSource.value.length === 0) return [];
+
+      let tempDataSource = this.dataSource.value;
+      if (value != null) {
+        let chain = this.getOptionsChain(value);
+        if (this.hasChilds(chain, chain.length - 1)) {
+          tempDataSource = chain[chain.length - 1].childs;
+          this.parentValue = value;
+        }
+      }
+
+      return this.ToSelectDataSource(tempDataSource);
+    }
+
+    private getPreviousData(value?: number) {
+      if (this.dataSource == null || this.dataSource.value.length === 0) return [];
+
+      let tempDataSource = this.dataSource.value;
+      let chain = this.getOptionsChain(value);
+      if (this.hasChilds(chain, chain.length - 2)) {
+        tempDataSource = chain[chain.length - 2].childs;
+        this.parentValue = chain[chain.length - 2].value;
+      } else {
+        this.parentValue = undefined;
+      }
+      return this.ToSelectDataSource(tempDataSource);
+    }
+
+    private ToSelectDataSource(dataSource) {
+      return dataSource.map((elem: MultiLevelOptionItem) => {
+        return {
+          value: elem.value,
+          text: elem.text,
+          html: elem.text + (elem.childs != null && elem.childs.length ?
+             '<span class="mbsc-ic mbsc-ic-fa-angle-right calendar-option"></span>' :
+              '')
+        };
+      });
+    }
+
+    private hasParent() {
+      return !!this.parentValue;
+    }
+
+    private hasChilds(chain: MultiLevelOptionItem[], position: number) {
+      return chain.length >= 1 && position >= 0 && chain[position].childs != null && chain[position].childs.length;
+    }
+
+    private getTextChain(id: any) {
+      if (this.dataSource == null || this.dataSource.value.length === 0) return '';
+
+      let chain = this.getOptionsChain(id);
+
+      return chain.length > 0 ? chain.map((elem) => elem.text).join(' > ') : '';
+    }
+
+    private getOptionsChain(id: number | string) {
+      if (this.dataSource == null || this.dataSource.value.length === 0) return [];
+
+      let elems = new Array<MultiLevelOptionItem>();
       const searchNode = (elem: MultiLevelOptionItem, targetId: any): string => {
-        if (elem.value == targetId) {
-           texts.push(elem.text);
+        let isText = typeof targetId === 'string';
+        if ((isText && (elem.text == targetId)) || (elem.value == targetId)) {
+          elems.push(elem);
            return elem.text; 
           }
         if (elem.childs != null) {
           for(let i = 0; i < elem.childs.length; i++) {
             let text = searchNode(elem.childs[i], targetId);
             if (text != null) { 
-              texts.push(elem.text);
+              elems.push(elem);
               return text;
             }
           }
         }
         return null;
       }
-      this.dataSource.forEach((elem: MultiLevelOptionItem) => searchNode(elem, id))
-      texts = texts.reverse();
-      return  texts.length > 0 ? texts.join(" > ") : "";
+      this.dataSource.value.forEach((elem: MultiLevelOptionItem) => searchNode(elem, id));
+      elems = elems.reverse();
+
+      return  elems || [];
+    }
+
+    private updateDisabledState() {
+      this.textbox.disabled = this.formControl.disabled || this.disabled;
+    }
+
+    private get isFormControlDisabled() {
+      return this.formControl.status == FormStatuses.DISABLED;
+    }
+    
+    private initEvents() {
+      this.formControl.statusChanges // track disabled state in form
+        .pipe(switchMap((e: any) => {
+            if (this.textbox.disabled != this.isFormControlDisabled) {
+              this.updateDisabledState();
+            }
+            return of(e);
+          }),
+          takeUntil(this.destroy$)
+        )
+        .subscribe();
+
+      this.dataSource.pipe(
+          map(((options) => {
+            options = options || [];
+            this.addEmptyIfNotExists(options);
+            return options;
+          })),
+          takeUntil(this.destroy$)
+        ).subscribe((options) => {
+          if (this.select.instance) {
+            let data = this.getPreviousData(this.formControl.value);
+            this.refreshData(this.select.instance, data);
+          }
+          this.resetValueIfNeeded(options);
+        });
+    }
+
+    private addEmptyIfNotExists(options) {
+      if (!options.some((i) => i.value === '')) {
+        options.unshift(new MultiLevelOptionItem('','--'));
+      }
+    }
+
+    private resetValueIfNeeded(options: MultiLevelOptionItem[]) {
+      if (this.getOptionsChain(this.formControl.value).length == 0) {
+        this.formControl.setValue('');
+      }
+    }
+
+    private addSelectArrow() {
+      const inputWrap = (<HTMLElement>this.elem.nativeElement).querySelector('mbsc-textarea .mbsc-input-wrap')
+      const span = (<HTMLElement>this.elem.nativeElement).querySelector('mbsc-textarea .mbsc-input-fill');
+      let arrowHtml = this.renderer.createElement('span');
+      this.renderer.addClass(arrowHtml, 'mbsc-select-ic');
+      this.renderer.addClass(arrowHtml, 'mbsc-ic');
+      this.renderer.addClass(arrowHtml, 'mbsc-ic-arrow-down5');
+      this.renderer.insertBefore(inputWrap, arrowHtml, span);
+    }
+
+    private markIfRoot(inst) {
+      if (inst.markup == null) return;
+      
+      if (!this.hasParent()) {
+        inst.markup.classList.add('root');
+      } else {
+        inst.markup.classList.remove('root');
+      };
+    }
+
+    private markIfHasChilds(text: string, inst) {
+      if (inst.markup == null) return;
+
+      let chain = this.getOptionsChain(text);
+      if (this.hasChilds(chain, chain.length - 1)) {
+        inst.markup.classList.add('hasChild');
+      } else {
+        inst.markup.classList.remove('hasChild');
+      };
     }
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { config } from '@env/environment';
 import { CommunicationService, Channels } from 'src/app/services/communication/communication.service';
-import { HeaderEventData } from 'src/app/services/communication/header-event-data';
+import { HeaderEventData } from 'src/app/services/communication/data/header-event-data';
 import { takeUntil, delay } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 

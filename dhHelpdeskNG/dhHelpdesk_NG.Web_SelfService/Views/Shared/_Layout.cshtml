@@ -73,9 +73,7 @@
     </div>
 
     @RenderSection("Dialogs", false)
-    @RenderSection("Scripts", false)
-    @Scripts.Render("~/Content/js/helpdesk")
-
+    
     <script type="text/javascript">
         window.ShowLanguage = '@layoutModel.ShowLanguage';
         window.SaveMessageUrl = '@Url.Action("_CaseLogNote", "Case")'; 
@@ -83,6 +81,10 @@
         window.no_results_text = '@Translation.GetForJS("Inga resultat matchar")';
         window.placeholder_text_multiple = '@Html.Raw(Translation.GetForJS("Välj en eller flera"))';
     </script>
+
+    @Scripts.Render("~/Content/js/helpdesk")
+    @RenderSection("Scripts", false)
+    
 </body>
 
 </html>

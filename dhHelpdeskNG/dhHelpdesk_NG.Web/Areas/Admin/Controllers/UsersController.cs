@@ -451,7 +451,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 userToSave.CaseInfoMail = this.returnCaseInfoMailForEditSave(userModel);
                 userToSave.TimeZoneId = userModel.SelectedTimeZone;
 
+
                 this.TryUpdateModel(userToSave, "user");
+
+				// Remove admin rights if no view right for inventory
+				if(userToSave.InventoryViewPermission == 0)
+				{
+					userToSave.InventoryPermission = 0;
+				}
+
                 var allCustomers = _customerService.GetAllCustomers();
                 string err = "";
                 List<string> customersAlert = new List<string>(); 

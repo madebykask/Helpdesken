@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <base href="<%= htmlWebpackPlugin.options.baseUrl %>">
+    <title>Angular With Webpack</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <% for (var chunk in htmlWebpackPlugin.options.head.css) { %>
+        <link  href="<%= htmlWebpackPlugin.files.chunks[htmlWebpackPlugin.options.head.css[chunk]].css %>" rel="stylesheet"></link>
+    <% } %>
+    <% for (var customCss in htmlWebpackPlugin.options.head.customCss) { %>
+        <link  href="<%= htmlWebpackPlugin.options.head.customCss[customCss] %>" rel="stylesheet"></link>
+    <% } %>
+    <% for (var chunk in htmlWebpackPlugin.options.head.js) { %>
+        <script src="<%= htmlWebpackPlugin.files.chunks[htmlWebpackPlugin.options.head.js[chunk]].entry %>"></script>
+    <% } %>
+</head>
+<body>
+    <div class="container pull-left" style="padding: 0px !important">
+        <app>Loading...</app>
+        <br />
+
+        <% if (htmlWebpackPlugin.options.mode === 'dev') { %>
+            <!-- test validation: validation buttons test -->
+            <div>
+                <button type="button" class="btn btn-success" onclick="validateExtendedCase(false)">Validate onSave</button>&nbsp;
+                <button type="button" class="btn btn-success" onclick="validateExtendedCase(true)">Validate onNext</button>&nbsp;
+                <button type="button" class="btn btn-success" onclick="saveExtendedCase()">Save</button>
+                <!--
+				<button type="button" class="btn btn-success" onclick="test()">Test</button>
+				-->
+            </div>
+            <br />
+        <% } %>
+        <span class="version"><%= htmlWebpackPlugin.options.version %></span>        
+    </div>
+
+    <% for (var chunk in htmlWebpackPlugin.options.body.js) { %>
+        <script src="<%= htmlWebpackPlugin.files.chunks[htmlWebpackPlugin.options.body.js[chunk]].entry %>"></script>
+    <% } %>
+
+    <script type="text/javascript">
+
+        window.getFormParameters = function () {
+            return window.extendedCaseComponentRef.zone.run(function () {
+                return window.extendedCaseComponentRef.component.getFormParameters();
+            });
+        }
+
+        window.loadExtendedCase = function (options) {
+            return window.extendedCaseComponentRef.zone.run(function () {
+                return window.extendedCaseComponentRef.component.loadForm(options);
+            });
+        }
+
+        window.updateCaseFields = function (caseFieldValues) {
+            return window.extendedCaseComponentRef.zone.run(function () {
+                return window.extendedCaseComponentRef.component.updateCaseFieldValues(caseFieldValues);
+            });
+        }
+
+        window.saveExtendedCase = function (isOnNext) {
+            return window.extendedCaseComponentRef.zone.run(function () {
+                return window.extendedCaseComponentRef.component.save(isOnNext);
+            });
+        }
+
+        window.validateExtendedCase = function (isOnNext) {
+            return window.extendedCaseComponentRef.zone.run(function () {
+                return window.extendedCaseComponentRef.component.validate(isOnNext || false);
+            });
+        }
+
+        window.setInitialData = function (data) {
+            return window.extendedCaseComponentRef.zone.run(function () {
+                return window.extendedCaseComponentRef.component.setInitialData(data);
+            });
+        }
+
+        window.setNextStep = function (step, isNextValidation) {
+            return window.extendedCaseComponentRef.zone.run(function () {
+                return window.extendedCaseComponentRef.component.setNextStep(step, isNextValidation);
+            });
+        }
+
+        window.getCaseValues = function () {
+            return window.extendedCaseComponentRef.zone.run(function () {
+                return window.extendedCaseComponentRef.component.getCaseValues();
+            });
+        }
+
+		window.getCaseValues = function () {
+            return window.extendedCaseComponentRef.zone.run(function () {
+                return window.extendedCaseComponentRef.component.getCaseValues();
+            });
+        }
+
+		window.getFormData = function () {
+            return window.extendedCaseComponentRef.zone.run(function () {
+                return window.extendedCaseComponentRef.component.getFormData();
+            });
+        }		
+
+        function test() {
+
+			return window.extendedCaseComponentRef.zone.run(function () {
+                window.extendedCaseComponentRef.component.test();
+            });
+
+            /*setInitialData({ step: 1, isNextValidation: true });
+
+            var promiseRef = window.loadExtendedCase({
+                formParameters: {
+                    formId:2
+                },
+                caseValues: null
+            });
+
+            promiseRef.then(
+                 function (val) {
+                     console.log('Case has been successfully loaded.');
+                 },
+                 function (err) {
+                     console.log('Case has failed to load due to error: ', err.toString());
+                 });
+            */
+            //var values = window.extendedCaseComponentRef.component.getCaseValues();
+            //console.log(values);
+            
+        }
+    </script>
+
+</body>
+
+</html>

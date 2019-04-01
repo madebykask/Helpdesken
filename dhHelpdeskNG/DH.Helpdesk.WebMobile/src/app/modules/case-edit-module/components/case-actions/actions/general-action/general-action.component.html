@@ -1,0 +1,13 @@
+
+<div *ngIf="data">
+  <span class="{{ getActionIcon() }}"></span>
+   <ng-container *ngIf="data.action;else noAction">
+      <span><b>{{ data.action }}</b>: {{ data.text }}</span>
+   </ng-container>
+</div>
+
+<ng-template #noAction>
+  <span>{{ data.text }}</span>
+</ng-template>
+
+

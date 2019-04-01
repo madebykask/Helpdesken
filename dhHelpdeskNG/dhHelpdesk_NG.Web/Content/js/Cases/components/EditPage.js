@@ -158,9 +158,9 @@ EditPage.prototype.loadExtendedCaseIfNeeded = function () {
     if (self.isNullOrEmpty(self.Current_EC_FormId)) {
         return;
     }
-    
-    var extendedCaseDiv = $('#container_' + self.Current_EC_FormId);  
-    if (typeof extendedCaseDiv === "undefined" || extendedCaseDiv.length === 0) {        
+
+    var extendedCaseDiv = $('#container_' + self.Current_EC_FormId);
+    if (typeof extendedCaseDiv === "undefined" || extendedCaseDiv.length === 0) {
         return;
     }
 
@@ -171,9 +171,9 @@ EditPage.prototype.loadExtendedCaseIfNeeded = function () {
     if ($iframe.length !== 0) {
         $iframe.remove();
     }
-        
+
     var targetUrl = self.getECTargetUrl();
-    
+
     var iframeId = self.Ex_Container_Prefix + self.Current_EC_FormId;
     var $placeHolder = self.getECContainerTemplate(iframeId, targetUrl);
     $placeHolder.appendTo(extendedCaseDiv);
@@ -192,7 +192,7 @@ EditPage.prototype.loadExtendedCaseIfNeeded = function () {
             resizedCallback: function (messageData) {
                 if (!self.ieVer.IE)
                     return;
-                
+
                 var newHeight = messageData && messageData.hasOwnProperty('height') ? +messageData.height : 0;
                 var prevHeight = self.exCaseFrameHeight || 0;
                 //console.log('@resizedCallback: prevHeight: ' + prevHeight.toString() + ', newHeight: ' + newHeight.toString());
@@ -204,16 +204,16 @@ EditPage.prototype.loadExtendedCaseIfNeeded = function () {
                     self.exCaseFrameHeight = newHeight;
                 }
             },
-            bodyMargin: '0 0 0 0',           
+            bodyMargin: '0 0 0 0',
             closedCallback: function (id) { },
             heightCalculationMethod: 'grow'
         };
 
-        $placeHolder.load(function () {            
+        $placeHolder.load(function () {
             $placeHolder.addClass("hidden2");
             self.loadExtendedCase(iframeId);
             $placeHolder.removeClass('hidden2');
-            $placeHolder.iFrameResize(iframeOptions);            
+            $placeHolder.iFrameResize(iframeOptions);
         });
     } else {
         $indicator.css("display", "none");
@@ -291,44 +291,47 @@ EditPage.prototype.loadExtendedCase = function () {
 
     var fieldValues = self.Case_Field_Init_Values;
 
-    $_ex_Container.contentWindow.setInitialData({step:0, isNextValidation: false});
+    $_ex_Container.contentWindow.setInitialData({ step: 0, isNextValidation: false });
 
     if (fieldValues != null) {
-        var pr = $_ex_Container.contentWindow.loadExtendedCase(
-            {
-                formParameters: formParameters,
-                caseValues: {
-                    administrator_id: { Value: fieldValues.AdministratorId },
-                    reportedby: { Value: fieldValues.ReportedBy },
-                    persons_name: { Value: fieldValues.PersonsName },
-                    persons_phone: { Value: fieldValues.PersonsPhone },
-                    usercode: { Value: fieldValues.UserCode },
-                    region_id: { Value: fieldValues.RegionId },
-                    department_id: { Value: fieldValues.DepartmentId },
-                    ou_id_1: { Value: fieldValues.ParentOUId },
-                    ou_id_2: { Value: fieldValues.ChildOUId },
-                    productarea_id: { Value: fieldValues.ProductAreaId },
-                    status_id: { Value: fieldValues.StatusId },
-                    plandate: { Value: fieldValues.PlanDate },
-                    watchdate: { Value: fieldValues.WatchDate },
-                    priority_id: { Value: fieldValues.PriorityId },
-                    log_textinternal: { Value: '' },
-                    case_relation_type: { Value: fieldValues.CaseRelationType },
-                    persons_email: { Value: fieldValues.PersonsEmail },
-                    persons_cellphone: { Value: fieldValues.PersonsCellphone },
-                    place: { Value: fieldValues.Place },
-                    costcentre: { Value: fieldValues.CostCentre },
-                }
-            });
-        pr.then(function () { self.onExtendedCaseLoaded() });
+        $_ex_Container.contentWindow.loadExtendedCase(
+        {
+            formParameters: formParameters,
+            caseValues: {
+                administrator_id: { Value: fieldValues.AdministratorId },
+                reportedby: { Value: fieldValues.ReportedBy },
+                persons_name: { Value: fieldValues.PersonsName },
+                persons_phone: { Value: fieldValues.PersonsPhone },
+                usercode: { Value: fieldValues.UserCode },
+                region_id: { Value: fieldValues.RegionId },
+                department_id: { Value: fieldValues.DepartmentId },
+                ou_id_1: { Value: fieldValues.ParentOUId },
+                ou_id_2: { Value: fieldValues.ChildOUId },
+                productarea_id: { Value: fieldValues.ProductAreaId },
+                status_id: { Value: fieldValues.StatusId },
+                plandate: { Value: fieldValues.PlanDate },
+                watchdate: { Value: fieldValues.WatchDate },
+                priority_id: { Value: fieldValues.PriorityId },
+                log_textinternal: { Value: '' },
+                case_relation_type: { Value: fieldValues.CaseRelationType },
+                persons_email: { Value: fieldValues.PersonsEmail },
+                persons_cellphone: { Value: fieldValues.PersonsCellphone },
+                place: { Value: fieldValues.Place },
+                costcentre: { Value: fieldValues.CostCentre },
+                    caption: { Value: fieldValues.Caption }
+            }
+        }).then(function() {
+            self.onExtendedCaseLoaded();
+        });
     } else {
-        var pr = $_ex_Container.contentWindow.loadExtendedCase(
-            {
-                formParameters: formParameters, caseValues: {
-                    log_textinternal: { Value: '' }
-                }
-            });
-        pr.then(function () { self.onExtendedCaseLoaded() });
+        $_ex_Container.contentWindow.loadExtendedCase(
+        {
+            formParameters: formParameters, caseValues: {
+                log_textinternal: { Value: '' }
+            }
+        }).then(function() {
+            self.onExtendedCaseLoaded();
+        });
     }
 }
 
@@ -337,67 +340,65 @@ EditPage.prototype.isExtendedCaseValid = function (showToast, isOnNext) {
     var self = this;
 
     //only if extended case exist
-    if (self.p.containsExtendedCase == "True") {
+    if (self.p.containsExtendedCase === "True") {
 
 
-    //if no input param sent in, set show toast to true
+        //if no input param sent in, set show toast to true
         if (showToast == null) {
-        showToast = true;
-    }
-
-    //if no input param sent in, set isOnNext to false
-    if (isOnNext == null) {
-        isOnNext = false;
-    }
-
-
-    var $exTab = $(self.ExTab_Prefix + self.Current_EC_FormId);
-
-    if ($('#steps').length && $('#ButtonClick').length && $('#ButtonClick').val() == 'btn-go') {
-        //check if value is selected in steps, then isOnNext should be true;
-        var templateId = parseInt($('#steps').val()) || 0;
-        //only load if templateId exist
-        if (templateId > 0) {
-
-            isOnNext = true;
-        }
-    }
-
-    var $_ex_Container = self.getExtendedCaseContainer();
-    var validationResult = $_ex_Container.contentWindow.validateExtendedCase(isOnNext);
-    if (validationResult == null) {
-        //Change color
-        if ($exTab.parent().hasClass('error')) {
-            $exTab.parent().removeClass('error');
+            showToast = true;
         }
 
-        return true;
-    } else {
+        //if no input param sent in, set isOnNext to false
+        if (isOnNext == null) {
+            isOnNext = false;
+        }
 
-        //Change color      
+
+        var $exTab = $(self.ExTab_Prefix + self.Current_EC_FormId);
+
+        if ($('#steps').length && $('#ButtonClick').length && $('#ButtonClick').val() == 'btn-go') {
+            //check if value is selected in steps, then isOnNext should be true;
+            var templateId = parseInt($('#steps').val()) || 0;
+            //only load if templateId exist
+            if (templateId > 0) {
+
+                isOnNext = true;
+            }
+        }
+
+        var $_ex_Container = self.getExtendedCaseContainer();
+        var validationResult = $_ex_Container.contentWindow.validateExtendedCase(isOnNext);
+        if (validationResult == null) {
+            //Change color
+            if ($exTab.parent().hasClass('error')) {
+                $exTab.parent().removeClass('error');
+            }
+
+            return true;
+        } else {
+
+            //Change color      
             if (!$exTab.parent().hasClass('error')) {
                 $exTab.parent().addClass('error');
             }
 
             if (showToast) {
-            ShowToastMessage("Extended case is not valid!", "error", false);
+                var tabName = ($('a#extendedcase-tab').text() || '').trim();
+                ShowToastMessage(self.extendedCaseInvalidMessage + '! (' + tabName + ')', "error", false);
+            }
+            return false;
         }
-        return false;
     }
-
-    }
-    else
-    {
+    else {
         return true;
     }
 };
 
 EditPage.prototype.setNextStep = function () {
-    
+
     var self = this;
 
-    if (self.p.containsExtendedCase == "True")
-    {
+    if (self.p.containsExtendedCase == "True") {
         var nextStep = 0;
         var tempId = $("#steps option:selected");
         nextStep = parseInt($("#steps option:selected").attr('data-next-step')) || 0;
@@ -406,8 +407,7 @@ EditPage.prototype.setNextStep = function () {
 
         var isNextStepValidation = true;
 
-        if (nextStep == 0)
-        {
+        if (nextStep == 0) {
             isNextStepValidation = false;
         }
 
@@ -448,6 +448,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
     var _persons_cellphone = fieldData.persons_cellphone;
     var _place = fieldData.place;
     var _costcentre = fieldData.costcentre;
+    var _caption = fieldData.caption;
 
     if (_administratorId != undefined)
         $('#' + _caseFields.AdministratorId).val(_administratorId.Value);
@@ -477,11 +478,14 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
 
         if (_department_id != "0") {
             $("#CaseTemplate_Department_Id").val(_department_id.Value);
-        } 
+        }
 
         $('#' + _caseFields.DepartmentId).val(_department_id.Value);
         $('#' + _caseFields.DepartmentName).val(_department_id.SecondaryValue);
     }
+
+    if (_caption != undefined)
+        $('#' + _caseFields.Caption).val(_caption.Value);
     
     var selectedOU_Id = '';
     var selectedOU_Name = '';
@@ -507,7 +511,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
         //console.log(">>> OU changed to: " + selectedOU_Id);
 
         var $ouSelect = $('#' + _caseFields.OUId);
-        
+
         if ($ouSelect.length && selectedOU_Id != "" && selectedOU_Name != "") {
             //add option to the list if it doesn't exist yet
             if ($ouSelect.find("option[value=" + selectedOU_Id + "]").length === 0)
@@ -588,7 +592,7 @@ EditPage.prototype.syncCaseFromExCaseIfExists = function () {
 EditPage.prototype.propagateLogNote = function () {
     var data = $(this).val();
     var propagateMessage = { log_textinternal: { Value: data } };
-    
+
     var $_ex_Container = EditPage.prototype.getExtendedCaseContainer();
     if ($_ex_Container != null) {
         $_ex_Container.contentWindow.updateCaseFields(propagateMessage);
@@ -643,7 +647,7 @@ EditPage.prototype.refreshCasePage = function (updatedInfo) {
     $('#' + _caseFields.PersonsCellphone).val(updatedInfo.PersonsCellphone);
     $('#' + _caseFields.Place).val(updatedInfo.Place);
     $('#' + _caseFields.CostCentre).val(updatedInfo.CostCentre);
-    
+
     //state (status)
     $('#' + _caseFields.SubStatusId).val(updatedInfo.StateSecondary_Id);
     var subStateName$ = $('#' + _caseFields.SubStatusName);
@@ -712,7 +716,7 @@ EditPage.prototype.fetchWatchDateByDept = function (deptId) {
 
     $.getJSON(
         '/cases/GetWatchDateByDepartment',
-        { 'departmentId': deptId, 'myTime' : Date.now() },
+        { 'departmentId': deptId, 'myTime': Date.now() },
         function (response) {
             if (response.result === 'success') {
                 if (response.data != null) {
@@ -728,7 +732,7 @@ EditPage.prototype.fetchWatchDateByDept = function (deptId) {
                         var dateText = dt.format('yyyy-MM-dd');
                         me.$watchDateEdit.val(dateText);
                     }
-                }               
+                }
             }
         });
 };
@@ -774,14 +778,14 @@ EditPage.prototype.getValidationErrorMessage = function (extraMessage) {
             errorText = '<br />' + '[' + dhHelpdesk.cases.utils.replaceAll(errorText, validationMessage, '').trim() + ']';
         });
         messages.push(errorText);
-    });    
+    });
 
     messages.push(extraMessage);
 
     return messages.join('');
 };
 
-EditPage.prototype.isFormValid = function() {
+EditPage.prototype.isFormValid = function () {
     var me = this;
     $('#btnAddCaseFile').removeClass('error');
 
@@ -789,28 +793,28 @@ EditPage.prototype.isFormValid = function() {
         me.$productAreaObj.addClass("error");
         dhHelpdesk.cases.utils.showError(me.productAreaErrorMessage);
         return false;
-    }            
-            
+    }
+
     var curFinishDate = $('#' + me.p.caseFieldIds.FinishingDate).val();
     if (curFinishDate != undefined && curFinishDate != '') {
-        var regDate = me.getDate(me.p.caseRegDate);            
+        var regDate = me.getDate(me.p.caseRegDate);
         var finishDate = me.getDate(curFinishDate);
         if (regDate > finishDate) {
             dhHelpdesk.cases.utils.showError(me.p.finishingDateMessage);
             $('#' + me.p.caseFieldIds.FinishingDate).addClass("error");
             return false;
-        };        
+        };
     }
-    
+
     var isCaseFileValid = true;
     var err = '';
-    if (me.isCaseFileMandatory != 0) {        
+    if (me.isCaseFileMandatory != 0) {
         var caseFiles = $('#case_files_table tbody tr');
         if (caseFiles != null && caseFiles != undefined) {
             if (caseFiles.length < 1) {
                 $('#btnAddCaseFile').addClass('error');
                 isCaseFileValid = false;
-                err = '<br />' + '[' + me.p.caseFileCaption + ']';                
+                err = '<br />' + '[' + me.p.caseFileCaption + ']';
             }
         }
     }
@@ -827,7 +831,7 @@ EditPage.prototype.isFormValid = function() {
             return false;
         }
     }
-    
+
     return true;
 };
 
@@ -838,7 +842,7 @@ EditPage.prototype.primaryValidation = function (submitUrl) {
     var finishDate = $('#CaseLog_FinishingDate').val();
 
     /* Check FinishigTime */
-    if (me.CaseWillFinish() && finishDate != null && finishDate != undefined) {        
+    if (me.CaseWillFinish() && finishDate != null && finishDate != undefined) {
         $.get('/Cases/IsFinishingDateValid/', { changedTime: me.p.caseChangedTime, finishingTime: finishDate, myTime: Date.now() }, function (res) {
             if (res != null && res) {
                 me.startSaveProcess(me, submitUrl);
@@ -878,7 +882,7 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
         return false;
     }
 
-    me.setCaseStatus(me.CASE_IN_SAVING);    
+    me.setCaseStatus(me.CASE_IN_SAVING);
     var params = me.p;
     if (params.preventToSaveCaseWithInactiveValue != null && params.preventToSaveCaseWithInactiveValue == 1) {
         if (me.$form == undefined || me.$form.index(0) == -1) {
@@ -886,8 +890,7 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
             return;
         }
 
-        try 
-        {
+        try {
             var form = me.$form[0];
             var fieldIds = params.caseFieldIds;
             var fieldsToCheck = {
@@ -909,12 +912,12 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
                 CausingPartId: (form.elements[fieldIds.CausingPartId] == undefined) ? null : form.elements[fieldIds.CausingPartId].value,
                 ClosingReasonId: (form.elements[fieldIds.ClosingReasonId] == undefined) ? null : form.elements[fieldIds.ClosingReasonId].value
             }
-        }        
+        }
         catch (exception) {
             ShowToastMessage("An error has occurred in field validation: " + exception.message, "error", true);
             me.setCaseStatus(me.CASE_IN_IDLE);
             return;
-        }        
+        }
 
         $.ajax({
             type: "POST",
@@ -922,7 +925,7 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
             url: params.caseActiveDataChecker,
             contentType: "application/json",
             success: function (data) {
-                if (data == 'valid') {                    
+                if (data == 'valid') {
                     return me.doTotalValidationAndSave(submitUrl);
                 } else {
                     //Case has inactive value(s)                    
@@ -930,16 +933,16 @@ EditPage.prototype.checkAndSave = function (submitUrl) {
                     me.setCaseStatus(me.CASE_IN_IDLE);
                 }
             },
-            error: function (xhr, ajaxOptions, thrownError) {                                
+            error: function (xhr, ajaxOptions, thrownError) {
                 ShowToastMessage(params.checkInactiveDataErrorMessage + " <br/> \"" + thrownError + "\"", "error", true);
                 me.setCaseStatus(me.CASE_IN_IDLE);
                 return;
             }
-        });        
+        });
     }
     else
         return me.doTotalValidationAndSave(submitUrl);
-    
+
 }
 
 EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
@@ -952,14 +955,14 @@ EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
     if ($("#ExtendedRegardingGUID").val().length > 0) {
         $('#extendedSection-iframe-Regarding')[0].contentWindow.saveExtendedCase(false);
     }
-    
+
     var $_ex_Container = self.getExtendedCaseContainer();
     if (!self.isNullOrUndefined($_ex_Container)) {
         if (!self.isExtendedCaseValid()) {
-            self.setCaseStatus(self.CASE_IN_IDLE);            
+            self.setCaseStatus(self.CASE_IN_IDLE);
             return false;
         }
-        
+
         if (!self.isFormValid()) {
             self.setCaseStatus(self.CASE_IN_IDLE);
             return false;
@@ -967,10 +970,10 @@ EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
 
         var promise = $_ex_Container.contentWindow.saveExtendedCase(false);
         promise.then(
-            function(res) {
+            function (res) {
                 self.doSaveCase(submitUrl);
-            }, 
-            function (err) { 
+            },
+            function (err) {
                 self.onSaveError(err);
             });
         return false;
@@ -987,7 +990,7 @@ EditPage.prototype.doSaveCase = function (submitUrl) {
     var self = this;
     var action = submitUrl || '/Cases/Edit';
     self.$form.attr("action", action);
-    
+
     if (self.case.isNew()) {
         self.stopCaseLockTimer();
         self.$form.submit();
@@ -1008,7 +1011,7 @@ EditPage.prototype.doSaveCase = function (submitUrl) {
             self.setCaseStatus(self.CASE_IN_IDLE);
         }
     });
-    
+
     return false;
 };
 
@@ -1020,17 +1023,16 @@ EditPage.prototype.stopCaseLockTimer = function () {
 
 EditPage.prototype.setCaseStatus = function (status) {
     var me = this;
-    switch (status)
-    {
+    switch (status) {
         case me.CASE_IN_IDLE:
             me._inSaving = false;
             me.$buttonsToDisable.removeClass('disabled');
             caseButtons.css("pointer-events", "");
             $(templateQuickButtonIndicator).css("display", "none");
             return true;
-    
+
         case me.CASE_IN_SAVING:
-            me._inSaving = true;        
+            me._inSaving = true;
             me.$buttonsToDisable.addClass('disabled');
             caseButtons.css("pointer-events", "none");
             $(templateQuickButtonIndicator).css("display", "block");
@@ -1039,11 +1041,10 @@ EditPage.prototype.setCaseStatus = function (status) {
         default:
             ShowToastMessage("Case status is not defined!", "error", true);
             return false;
-    }    
+    }
 };
 
-EditPage.prototype.confirmDialog = function (d, onOk, onCancel)
-{
+EditPage.prototype.confirmDialog = function (d, onOk, onCancel) {
     var title = dhHelpdesk.CaseArticles.translate("Meddelande");
     var ok = dhHelpdesk.CaseArticles.translate("Ok");
     var decline = dhHelpdesk.CaseArticles.translate("Avbryt");
@@ -1052,7 +1053,7 @@ EditPage.prototype.confirmDialog = function (d, onOk, onCancel)
         buttons: [
             {
                 text: ok,
-                click: function(){
+                click: function () {
                     onOk();
                     d.dialog("close");
                 },
@@ -1060,7 +1061,7 @@ EditPage.prototype.confirmDialog = function (d, onOk, onCancel)
             },
             {
                 text: decline,
-                click: function(){
+                click: function () {
                     onCancel();
                     d.dialog("close");
                 },
@@ -1071,8 +1072,7 @@ EditPage.prototype.confirmDialog = function (d, onOk, onCancel)
     });
 };
 
-EditPage.prototype.CaseWillFinish = function ()
-{
+EditPage.prototype.CaseWillFinish = function () {
     if ($('#CaseLog_FinishingDate').val() != '' || $('#CaseLog_FinishingType').val() != '') {
         return true;
     }
@@ -1158,7 +1158,7 @@ EditPage.prototype.onSaveAndNewClick = function (e) {
     return false;
 };
 
-EditPage.prototype.onSaveError = function (err) {    
+EditPage.prototype.onSaveError = function (err) {
     ShowToastMessage("Extended Case save was not succeed!", "error", false);
     this.setCaseStatus(this.CASE_IN_IDLE);
     return false;
@@ -1199,7 +1199,7 @@ EditPage.prototype.makeDeleteParams = function (c) {
     return res;
 };
 
-EditPage.prototype.doDeleteCase = function(c) {
+EditPage.prototype.doDeleteCase = function (c) {
     var me = this;
     var $form = $(['<form action="', me.DELETE_CASE_URL, '?', $.param(me.makeDeleteParams(c)), '" method="post"></form>'].join(String.EMPTY));
     $('body').append($form);
@@ -1224,7 +1224,7 @@ EditPage.prototype.onDeleteDlgClick = function (res) {
             caseChangedTime: _parameters.caseChangedTime,
             lockGuid: _parameters.caseLockGuid
         })
-        .done(callAsMe(function(data) {
+        .done(callAsMe(function (data) {
             me.showDeleteConfirmationDlg();
             if (data == true) {
                 me.doDeleteCase(me.case);
@@ -1235,7 +1235,7 @@ EditPage.prototype.onDeleteDlgClick = function (res) {
     return true;
 };
 
-EditPage.prototype.initDeleteConfirmationDlg = function() {
+EditPage.prototype.initDeleteConfirmationDlg = function () {
     var me = this;
     // Delete case confirmation dialogue
     var dlgOptions = {
@@ -1259,11 +1259,11 @@ EditPage.prototype.initLeaveConfirmationDlg = function () {
         btnNoText: $("#DeleteDialogNoButtonText").val(),
         dlgText: me.p.lostChangesConfirmation
     };
-    
+
     return CreateInstance(ConfirmationDialog, dlgOptions);
 };
 
-EditPage.prototype.onPageLeave = function(ev) {
+EditPage.prototype.onPageLeave = function (ev) {
     var me = this;
     var gotoUrl = ev.target;
     if (me.formOnBootValues !== me.$form.serialize()) {
@@ -1327,7 +1327,7 @@ EditPage.prototype.onCloseClick = function (e) {
     return false;
 };
 
-EditPage.prototype.changeCaseButtonsState = function(state) {
+EditPage.prototype.changeCaseButtonsState = function (state) {
     if (state) {
         caseButtons.removeClass('disabled');
         caseButtons.css("pointer-events", "");
@@ -1342,10 +1342,10 @@ EditPage.prototype.changeCaseButtonsState = function(state) {
 
 EditPage.prototype.getLanguage = function () {
     var self = this;
-    
+
     var _fieldIds = self.Case_Field_Ids;
     var caseId = document.getElementById(_fieldIds.CaseId).value;
-    if (caseId == 0) {        
+    if (caseId == 0) {
         var reported = document.getElementById(_fieldIds.UserCode).value;
         var reportedId = document.getElementById(_fieldIds.ReportedBy).value;
 
@@ -1390,7 +1390,7 @@ EditPage.prototype.moveCaseToCustomer = function (caseId, customerId, isExternal
     }
 };
 
-EditPage.prototype.enableMoveCaseControls = function(state) {
+EditPage.prototype.enableMoveCaseControls = function (state) {
     this.$moveCaseCustomerSelect.prop('disabled', !state);
     this.$moveCaseButton.prop('disabled', !state);
 };
@@ -1408,7 +1408,7 @@ EditPage.prototype.buildExtendedCasePrintMarkup = function () {
     for (var i = 0; i < formData.tabs.length; i++) {
 
         var tab = formData.tabs[i];
-        
+
         printMarkup +=
             '<tr><td style="width:20%;word-wrap: break-word; margin-left:20px;line-height:10px;" class="textbold H"><p> ' + tab.name + ' </p></td>' +
             '<td style="width:80%; word-wrap: break-word;line-height:10px;" class="H"><p> </p></td></tr>';
@@ -1416,8 +1416,8 @@ EditPage.prototype.buildExtendedCasePrintMarkup = function () {
         // sections 
         for (var j = 0; j < tab.sections.length; j++) {
             var section = tab.sections[j];
-            
-            printMarkup += '<tr><td style="width:20%;word-wrap: break-word; margin-left:20px;line-height:10px;" class="textbold G"><p>'  + section.name + '</p></td>' +
+
+            printMarkup += '<tr><td style="width:20%;word-wrap: break-word; margin-left:20px;line-height:10px;" class="textbold G"><p>' + section.name + '</p></td>' +
                            '<td style="width:80%; word-wrap: break-word;line-height:10px;" class="G"><p>  </p></td></tr>';
 
             //section instances
@@ -1452,21 +1452,22 @@ EditPage.prototype.init = function (p) {
     EditPage.prototype.Current_EC_Guid = p.extendedCaseGuid;
     EditPage.prototype.Current_EC_LanguageId = p.extendedCaseLanguageId;
     EditPage.prototype.Current_EC_Path = p.extendedCasePath;
-    
+
     EditPage.prototype.extendedSections = p.extendedSections;
 
 
-    /*Debug mode*/    
+    /*Debug mode*/
     //EditPage.prototype.Current_EC_Path = "http://dhhelpdesk-ikea-bschr-v5.datahalland.se/ExtendedCase/?formId=[ExtendedCaseFormId]&autoLoad=1";
 
     /// controls binding
+    self.extendedCaseInvalidMessage = p.extendedCaseInvalidMessage;
     self.$form = $('#target');
     self.$watchDateChangers = $('.departments-list, #case__Priority_Id, #case__StateSecondary_Id');
     self.$department = $('.departments-list');
     self.$SLASelect = $('#case__Priority_Id');
-    self.$SLAText = $('#case__Priority_Id');    
+    self.$SLAText = $('#case__Priority_Id');
     self.$watchDateEdit = $('#case__WatchDate');
-    self.$watchDate = $('#divCase__WatchDate');      
+    self.$watchDate = $('#divCase__WatchDate');
     self.$buttonsToDisable = $('.btn.save, .btn.save-close, .btn.save-new, .btn.caseDeleteDialog, ' +
                              '#case-action-close, #divActionMenu, #btnActionMenu, #divCaseTemplate, #btnCaseTemplateTree, .btn.print-case,.btn.new-close-split,.btn.edit-close-split' +
                              '.btn.show-inventory, .btn.previous-case, .btn.next-case, .btn.templateQuickButton');
@@ -1485,8 +1486,8 @@ EditPage.prototype.init = function (p) {
     self.$btnEditCloseAndSplit = $('.btn.edit-close-split');
     self.deleteDlg = self.initDeleteConfirmationDlg();
     self.leaveDlg = self.initLeaveConfirmationDlg();
-    
-    self.$btnPrint = $('.btn.print-case');    
+
+    self.$btnPrint = $('.btn.print-case');
     self.$printArea = $('#CasePrintArea');
     self.$printDialog = $('#PrintCaseDialog');
     self.$descriptionDialog = $('#caseDescriptionPreview');
@@ -1521,16 +1522,16 @@ EditPage.prototype.init = function (p) {
     self.loadExtendedSectionsIfNeeded();
 
 
-    self.$watchDateChangers.on('change', function () {        
+    self.$watchDateChangers.on('change', function () {
         var deptId = parseInt(self.$department.val(), 10);
         var SLA = parseInt(self.$SLASelect.find('option:selected').attr('data-sla'), 10);
-        if (isNaN(SLA)) {            
+        if (isNaN(SLA)) {
             SLA = parseInt(self.$SLAText.attr('data-sla'), 10);
         }
         if (this.id === "case__StateSecondary_Id") {
             $.post('/Cases/ChangeStateSecondary',
                 { 'id': $(this).val() },
-                function(data) {
+                function (data) {
                     if (data.ReCalculateWatchDate == 1) {
                         if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
                             self.fetchWatchDateByDept.call(self, deptId);
@@ -1616,51 +1617,51 @@ EditPage.prototype.init = function (p) {
             }
         }
     });
-    
+
     self.$btnPrint.click(function (e) {
 
-            $.get("/Cases/ShowCasePrintPreview/",
-            {
-                caseId: p.currentCaseId,
-                caseNumber: p.currentCaseNumber,
-                curTime: Date.now()
-            },
-            function (reportPresentation) {
+        $.get("/Cases/ShowCasePrintPreview/",
+        {
+            caseId: p.currentCaseId,
+            caseNumber: p.currentCaseNumber,
+            curTime: Date.now()
+        },
+        function (reportPresentation) {
 
-                var $reportTable = $(reportPresentation);
-                        
-                //EXTENDED CASE handling
-                if (self.Current_EC_FormId) {
+            var $reportTable = $(reportPresentation);
 
-                    var printMarkup = self.buildExtendedCasePrintMarkup();
-               
-                    if (printMarkup && printMarkup.length) {
-                        $reportTable.find('#caseReportContainer table.printcase').append(printMarkup);
-                    }
+            //EXTENDED CASE handling
+            if (self.Current_EC_FormId) {
+
+                var printMarkup = self.buildExtendedCasePrintMarkup();
+
+                if (printMarkup && printMarkup.length) {
+                    $reportTable.find('#caseReportContainer table.printcase').append(printMarkup);
                 }
-
-                self.$printArea.html('');
-                self.$printArea.append($reportTable);
-
-                $('#PrintCaseDialog').draggable({
-                    handle: ".modal-header"
-                });
-                    
-                /* show true if you need to show case print preview*/
-                $('#PrintCaseDialog').modal({
-                    "backdrop": "static",
-                    "keyboard": true,
-                    "show": false
-                });
-                   
-                //var _iframe = $("#caseReportContainer").find("iframe");
-                //if (_iframe != null && _iframe != undefined) {
-                //    update_iFrame(_iframe.attr("id"));                        
-                //}
             }
-            );       
+
+            self.$printArea.html('');
+            self.$printArea.append($reportTable);
+
+            $('#PrintCaseDialog').draggable({
+                handle: ".modal-header"
+            });
+
+            /* show true if you need to show case print preview*/
+            $('#PrintCaseDialog').modal({
+                "backdrop": "static",
+                "keyboard": true,
+                "show": false
+            });
+
+            //var _iframe = $("#caseReportContainer").find("iframe");
+            //if (_iframe != null && _iframe != undefined) {
+            //    update_iFrame(_iframe.attr("id"));                        
+            //}
+        }
+        );
     });
-    
+
     self.$descriptionDialog.click(function () {
         var description = self.$caseDescriptionEl
             .attr("value")
@@ -1686,7 +1687,7 @@ EditPage.prototype.init = function (p) {
             visibility = 'hidden';
         }
         self.$descriptionDialog.css('visibility', visibility);
-    });   
+    });
 
     if ($(".chosen-single-select").length > 0) {
         $(".chosen-single-select").each(function () {
@@ -1708,7 +1709,7 @@ EditPage.prototype.init = function (p) {
     //        }            
     //    }, 3000);
     //}
-    
+
     self.case = new Case({
         id: parseInt(p.currentCaseId, 10),
         customerId: parseInt(p.customerId, 10),
@@ -1730,18 +1731,18 @@ EditPage.prototype.init = function (p) {
         requiredMessage: p.casesScopeInitParameters.mandatoryFieldsText,
         mustBeNumberMessage: p.casesScopeInitParameters.formatFieldsText + ": #.##"
     });
-        
+
     self.$caseTab.click(function (ev) {
         if (self.p.containsExtendedCase == "True") {
             if (ev.target.className == "case") {
-                self.$activeTabHolder.val('case-tab');                
+                self.$activeTabHolder.val('case-tab');
                 self.syncCaseFromExCaseIfExists();
-                
+
                 //validate extended case
                 //TODO: shold we have this here?
                 //self.isExtendedCaseValid(false);
             }
-            
+
             if (ev.target.className == "extendedcase") {
                 self.$activeTabHolder.val('extendedcase-tab');
             }
@@ -1754,7 +1755,7 @@ EditPage.prototype.init = function (p) {
                         $(".secnav").removeClass("hide");
                     });
                 }
-             
+
                 $.ajax({
                     url: "/Cases/GetCaseInfo",
                     type: "GET",
@@ -1781,7 +1782,7 @@ EditPage.prototype.init = function (p) {
             }
         }
     });
-    
+
     self.$btnGo.on("click", function (e) {
         e.preventDefault();
         $('#ButtonClick').val('btn-go');
@@ -1816,8 +1817,8 @@ EditPage.prototype.init = function (p) {
     self.$selectListStep.on('change', function () {
         //only if extended case exist
         if (self.p.containsExtendedCase != "False") {
-            self.setNextStep();           
-        }      
+            self.setNextStep();
+        }
     });
 
     self.$caseTab.on('shown', function (e) {

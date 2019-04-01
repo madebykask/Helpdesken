@@ -38,8 +38,9 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         {
             List<ItemOverview> items = this.Get().OrderBy(x => x.Name).ToList();
 
-            var inventoryPermission = this.UserPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
-            var viewModel = new ComputerModuleGridModel(items, this.ModuleType, inventoryPermission);
+            var inventoryAdminPermission = this.UserPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
+			var inventoryViewPermission = this.UserPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryViewPermission);
+			var viewModel = new ComputerModuleGridModel(items, this.ModuleType, inventoryAdminPermission, inventoryViewPermission);
 
             return this.View(viewModel);
         }
@@ -47,12 +48,14 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public ViewResult Edit(int id, string name)
         {
-            var inventoryPermission = this.UserPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var inventoryAdminPermission = this.UserPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
+			var inventoryViewPermission = this.UserPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryViewPermission);
 
-            var viewModel = CreateModuleEditModel(id, name);
-            viewModel.UserHasInventoryAdminPermission = inventoryPermission;
+			var viewModel = CreateModuleEditModel(id, name);
+            viewModel.UserHasInventoryAdminPermission = inventoryAdminPermission;
+			viewModel.UserHasInventoryViewPermission = inventoryViewPermission;
 
-            return this.View(viewModel);
+			return this.View(viewModel);
         }
 
         [HttpPost]

@@ -1,0 +1,7 @@
+<mbsc-hamburger-nav #navMenu="mobiscroll" [options]="filterMenuOptions"  
+  [class.selected]="isFilterApplied">
+  <mbsc-nav-item *ngFor="let item of menuItems; trackBy:trackByFn" 
+      [id]="item.id"
+      [selected]="item.selected"
+      (click)="applyFilter(item.id)">{{ item.text }}</mbsc-nav-item>
+</mbsc-hamburger-nav>

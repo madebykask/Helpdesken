@@ -1269,52 +1269,55 @@ function CaseInitForm() {
         var templatePriorityId = $('#CaseTemplate_Priority_Id').val() || '';
 
         if ($(this).val() > 0 ) {
-            $.post('/Cases/ChangeProductArea/', { 'id': $(this).val() }, 'json').done(function (data) {
-                if (data) {
-                    //change only if it wasn't set by a template
-                    if (templateWgId === '') {
-                        changeWorkingGroupValue(data.WorkingGroup_Id, data.WorkingGroup_Name, 'changeProductArea');
-                    }
-
-                    var priorityId = Number(data.Priority_Id || '0');
-                    var $casePriorityId = $('#case__Priority_Id');
-
-                    if (priorityId > 0 && templatePriorityId === '') {
-                        var exists = $casePriorityId.find('option[value=' + data.Priority_Id + ']').length > 0;
-                        var $priorityName = $('#priority_Name');
-                        if (exists || $priorityName.length) {
-                            $casePriorityId.val(data.Priority_Id);
-                            $casePriorityId.attr('data-sla', data.SLA);
-                            $casePriorityId.change();
+            $.post('/Cases/ChangeProductArea/', { 'id': $(this).val() }, 'json')
+                .done(function (data) {
+                    if (data) {
+                        //change only if it wasn't set by a template
+                        if (templateWgId === '') {
+                            changeWorkingGroupValue(data.WorkingGroup_Id, data.WorkingGroup_Name, 'changeProductArea');
                         }
-                        
-                        if ($priorityName.length && data.PriorityName) {
-                            $priorityName.val(data.PriorityName);
-                        }
-                    }
-                
-                    if (priorityId > 0)
-                        $('.sla-value').eq(0).val(data.Priority_Id);
 
-                    $('#ProductAreaHasChild').val(data.HasChild);
-                }
-            });
+                        var priorityId = Number(data.Priority_Id || '0');
+                        var $casePriorityId = $('#case__Priority_Id');
+
+                        if (priorityId > 0 && templatePriorityId === '') {
+                            var exists = $casePriorityId.find('option[value=' + data.Priority_Id + ']').length > 0;
+                            var $priorityName = $('#priority_Name');
+                            if (exists || $priorityName.length) {
+                                $casePriorityId.val(data.Priority_Id);
+                                $casePriorityId.attr('data-sla', data.SLA);
+                                $casePriorityId.change();
+                            }
+                            
+                            if ($priorityName.length && data.PriorityName) {
+                                $priorityName.val(data.PriorityName);
+                            }
+                        }
+                    
+                        if (priorityId > 0)
+                            $('.sla-value').eq(0).val(data.Priority_Id);
+
+                        $('#ProductAreaHasChild').val(data.HasChild);
+                    }
+                });
         }        
     });
 
     function changeWorkingGroupValue(newWorkingGroupId, newWorkingGroupName, srcName) {
         console.log('>>> ChangeWorkingGroupValue: wgId %s, wgName: %s, src: %s', newWorkingGroupId, newWorkingGroupName, srcName);
 
-        var $workingGroup = $('#case__WorkingGroup_Id');
-        var $workginGroupName = $('#workingGroup_Name');
-        var exists = $workingGroup.find('option[value=' + newWorkingGroupId + ']').length > 0;
-        if (Number(newWorkingGroupId) > 0 && (exists || $workginGroupName.length)) {
-            $workingGroup.val(newWorkingGroupId);
-            $workingGroup.change();
-        }
+        if (Number(newWorkingGroupId) > 0) {
+            const $workingGroup = $('#case__WorkingGroup_Id');
+            const $workingGroupName = $('#workingGroup_Name');
+            const exists = $workingGroup.find('option[value=' + newWorkingGroupId + ']').length > 0;
 
-        if ($workginGroupName.length) {
-            $workginGroupName.val(newWorkingGroupName || '');
+            if (exists || $workingGroupName.length) {
+                $workingGroup.val(newWorkingGroupId);
+                if ($workingGroupName.length) {
+                    $workingGroupName.val(newWorkingGroupName || '');
+                }
+                $workingGroup.change();
+            }
         }
     }
 

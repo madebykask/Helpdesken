@@ -16,7 +16,7 @@
       },
       {
         "type": "npm",
-        "script": "build_dhdev",
+        "script": "build_dev-prod",
         "problemMatcher": []
       }
     ]

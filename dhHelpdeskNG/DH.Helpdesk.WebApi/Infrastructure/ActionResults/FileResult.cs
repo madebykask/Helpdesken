@@ -41,6 +41,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.ActionResults
             
             var contentDisposition = $"attachment; filename=\"{_fileName}\"";
 
+            //todo: check fix for IE ?
             httpResponseMessage.Content.Headers.ContentDisposition = ContentDispositionHeaderValue.Parse(contentDisposition);
             httpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(_contentType);
 

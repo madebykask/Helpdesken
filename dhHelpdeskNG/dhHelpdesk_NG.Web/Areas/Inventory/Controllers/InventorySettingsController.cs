@@ -82,7 +82,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var inventoryTypes = 
                 _inventoryService.GetInventoryTypesWithSettings(SessionFacade.CurrentCustomer.Id);
 
-            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
 
             var viewModel = new SettingsIndexViewModel(inventoryTypes)
             {
@@ -95,7 +95,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [HttpGet]
         public ViewResult EditSettings(int inventoryTypeId)
         {
-            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryPermission);
+            var userHasInventoryAdminPermission = this._userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.InventoryAdminPermission);
 
             switch ((CurrentModes)inventoryTypeId)
             {

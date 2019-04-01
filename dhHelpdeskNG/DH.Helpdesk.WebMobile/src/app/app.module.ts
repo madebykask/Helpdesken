@@ -1,44 +1,53 @@
 import { MbscModule } from '@mobiscroll/angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler, forwardRef } from '@angular/core';
 import { APP_INITIALIZER } from '@angular/core';
 import { LoginComponent, HeaderTitleComponent } from './shared/components';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateModule, TranslateLoader, TranslateService as NgxTranslateService} from '@ngx-translate/core';
 import { AppComponent } from './app.component';
-import { HttpLoaderFactory, initTranslation, TranslationApiService } from './services/translation';
 import { LocalStorageService } from './services/local-storage';
 import { LoggerService } from './services/logging';
 import { AuthInterceptor, ErrorInterceptor } from './helpers/interceptors';
-import { HomeComponent, CasesOverviewComponent } from './components';
+import { HomeComponent } from './components';
 import { AppRoutingModule } from './app.routing';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { RequireAuthDirective } from './helpers/directives/require-auth.directive';
 import { GlobalErrorHandler } from './helpers/errors/global-error-handler';
 import { ErrorComponent } from './shared/components/error/error.component';
-import { UserSettingsService, initUserData } from './services/user';
-import { AuthenticationService } from './services/authentication';
+import { UserSettingsApiService } from './services/api/user/user-settings-api.service';
 import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 import { AltLayoutComponent } from './_layout/alt-layout/alt-layout.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '@env/environment';
 import { SharedModule } from './modules/shared-module/shared.module';
-import { GetByKeyPipe } from './helpers/pipes/filter-case-overview.pipe';
 import { TestComponent } from './components/test/test.component';
+import { initApplication } from './logic/app-configuration/app-configuration';
+import { HttpLoaderFactory } from './logic/translation';
+import { TranslationApiService } from './services/api/translation/translation-api.service';
+import { CaseTemplateComponent } from './components/case-template/case-template.component';
+import { LanguageComponent } from './components/language/language/language.component';
+import { RouteReuseStrategy } from '@angular/router';
+import { CaseRouteReuseStrategy } from './helpers/case-route-resolver.stategy';
+import { CasesStatusComponent } from './components/cases-status/cases-status.component';
+import { VersionComponent } from './components/version.component';
 
 @NgModule({
   bootstrap: [ AppComponent],
   declarations: [AppComponent, AppLayoutComponent, PageNotFoundComponent,
      HeaderTitleComponent, FooterComponent,
      LoginComponent,
-     HomeComponent, CasesOverviewComponent,
-     GetByKeyPipe,
+     HomeComponent,
+     CaseTemplateComponent,
      RequireAuthDirective,
      ErrorComponent,
      AltLayoutComponent,
      TestComponent,
+     LanguageComponent,
+     CasesStatusComponent,
+     VersionComponent
   ],
   imports: [
     MbscModule,
@@ -66,17 +75,16 @@ import { TestComponent } from './components/test/test.component';
     // { provide: LOCALE_ID, deps: [SettingsService], useFactory: (settingsService) => settingsService.getLanguage()},
     {
       provide: APP_INITIALIZER,
-      useFactory: initTranslation,
-      deps: [NgxTranslateService, TranslationApiService, LocalStorageService, LoggerService],
+      useFactory: initApplication,
+      deps: [NgxTranslateService, UserSettingsApiService, TranslationApiService, LocalStorageService, LoggerService],
       multi: true
     },
     {
-      provide: APP_INITIALIZER,
-      useFactory: initUserData,
-      deps: [UserSettingsService, AuthenticationService, LoggerService],
-      multi: true
+      provide: RouteReuseStrategy,
+      useClass: CaseRouteReuseStrategy
     }
-  ]
+  ],
+  exports: [LanguageComponent]
 })
 export class AppModule { }
 

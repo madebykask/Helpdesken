@@ -1,16 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FileUploader, FileUploaderOptions, FileItem, ParsedResponseHeaders } from 'ng2-file-upload' 
-import { config } from '@env/environment';
 import { AuthenticationService } from 'src/app/services/authentication';
 import { MbscListviewOptions } from '@mobiscroll/angular';
 import { LocalStorageService } from 'src/app/services/local-storage';
+import { CaseFilesApiService } from 'src/app/modules/case-edit-module/services/api/case/case-files-api.service';
 
 @Component({
   selector: 'case-files-upload',
   templateUrl: './case-files-upload.component.html',
   styleUrls: ['./case-files-upload.component.scss']
 })
-export class CaseFilesUploadComponent implements OnInit {
+export class CaseFilesUploadComponent {
   
   @Output() NewFileUploadComplete: EventEmitter<any> = new EventEmitter<any>();
 
@@ -38,23 +39,22 @@ export class CaseFilesUploadComponent implements OnInit {
   }; 
 
   constructor(private authenticationService: AuthenticationService,
+              private caseFileApiService: CaseFilesApiService,
               private localStateStorage: LocalStorageService) {
   } 
 
   ngOnInit() {
-    // console.log('>>> file-upload.onInit: called. CaseKey: %s', this.caseKey);
-        
     const accessToken = this.authenticationService.getAuthorizationHeaderValue();
     const userData = this.localStateStorage.getCurrentUser();
     const cid = userData.currentData.selectedCustomerId;
 
-    // init file uploader 
+    // init file uploader
     this.fileUploader.setOptions(<FileUploaderOptions>{
       autoUpload: true,
       filters: [],
       isHTML5: true,
       authToken: accessToken,
-      url: `${config.apiUrl}/api/case/${this.caseKey}/file?cid=${cid}` //todo:replace with shared method call
+      url: this.caseFileApiService.getCaseFileUploadUrl(this.caseKey, cid)
     });
 
     // subscribe to events
@@ -75,12 +75,12 @@ export class CaseFilesUploadComponent implements OnInit {
  
   private processFileUploadRequest(fileItem: FileItem, form: FormData) {
     // console.log('processFileUploadRequest called. CaseKey: %s', this.caseKey);
-    let fi = fileItem;
-    let f = form;
+    //let fi = fileItem;
+    //let f = form;
   }
 
   private onBeforeUpload(fileItem: FileItem) {
-      let fi = fileItem;
+      //let fi = fileItem;
   }
 
   private onFileUploadComplete(fileItem: FileItem, response: string, status: number, headers: ParsedResponseHeaders) {
@@ -88,8 +88,13 @@ export class CaseFilesUploadComponent implements OnInit {
     if (fileItem.isUploaded && fileItem.isSuccess) {
         fileItem.remove();// remove success files only
         var data = JSON.parse(response);
-        if (data && data.hasOwnProperty("id")) {
+        if (data) {
+          if (typeof data === 'string') {
+            this.NewFileUploadComplete.emit({ id: 0, name: data }); //temp file upload returns file name only          
+          }
+          else {
             this.NewFileUploadComplete.emit({id: data.id, name: data.name });
+          }
         }
     }
   }
@@ -100,7 +105,7 @@ export class CaseFilesUploadComponent implements OnInit {
       fileItem.cancel();
     }
     fileItem.remove();
-}
+  }
 
   getStatusStyles(item:FileItem) {
     let style = {

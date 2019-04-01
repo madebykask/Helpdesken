@@ -191,6 +191,7 @@
             this.Property(x => x.ValidateOnChange).IsOptional().HasMaxLength(100);
             this.Property(x => x.NextStepState).IsOptional();
             this.Property(x => x.CaseRelationType).IsRequired();
+            this.Property(x => x.ShowOnMobile).IsRequired();
 
             this.ToTable("tblcasesolution");
         }

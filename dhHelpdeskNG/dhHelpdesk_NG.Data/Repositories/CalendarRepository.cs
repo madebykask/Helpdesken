@@ -75,7 +75,7 @@ namespace DH.Helpdesk.Dal.Repositories
             IWorkContext workContext, 
             IEntityToBusinessModelMapper<Calendar, CalendarOverview> toBusinessModelMapper, 
             IBusinessModelToEntityMapper<CalendarOverview, Calendar> toEntityMapper)
-            : base(databaseFactory, workContext)
+            : base(databaseFactory)
         {
             this.toBusinessModelMapper = toBusinessModelMapper;
             this.toEntityMapper = toEntityMapper;

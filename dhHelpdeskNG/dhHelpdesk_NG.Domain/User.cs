@@ -26,8 +26,9 @@
         public int DocumentPermission { get; set; }
 
         public int InventoryPermission { get; set; }
+		public int InventoryViewPermission { get; set; }
 
-        public int ContractPermission { get; set; }
+		public int ContractPermission { get; set; }
         /// <summary>
         /// Allows user to manage events in calendar    
         /// </summary>

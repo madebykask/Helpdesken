@@ -50,7 +50,9 @@ namespace DH.Helpdesk.WebApi
             WebApiConfig.InitLogging();
             WebApiConfig.Register(config);
 
+            app.Use<GlobalExceptionMiddleware>();
             app.Use<RequestMiddleware>();
+
             app.UseWebApi(config);
 
             config.AddApiVersioning( o =>

@@ -247,6 +247,13 @@
 
         public ComputerUserCategoryModel ComputerUserCategoryModel { get; set; }
 
+        public bool Readonly { get; set; }
+
+        public bool IsReadOnly
+        {
+            get { return Readonly || (ComputerUserCategoryModel?.IsReadOnly ?? false); }
+        }
+
         #endregion
     }
 }

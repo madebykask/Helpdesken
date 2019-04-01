@@ -1,1 +1,7 @@
-<mbsc-textarea #control [(ngModel)]="text" >{{ field.label }}{{ requiredSymbol }}</mbsc-textarea> 
+<mbsc-textarea #textbox [(ngModel)]="text" [readonly]="true" (click)="openSelect()"
+  [error]="getErrorState()"
+  [errorMessage]="getErrorMessage()"
+  [ngClass]="{ 'select-textarea': true, 'disabled': formControl.disabled }">{{ getHeader }}{{ requiredSymbol }}</mbsc-textarea> 
+<ng-container [formGroup]="form">
+  <mbsc-select #select [formControlName]="field.name" [options]="settings"></mbsc-select>
+</ng-container>

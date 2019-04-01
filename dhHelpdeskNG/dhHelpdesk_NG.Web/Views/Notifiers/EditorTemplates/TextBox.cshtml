@@ -24,11 +24,11 @@
         <td class="span3">
             @if (!Model.Required)
             {
-                @Translation.Get(Model.Caption, Enums.TranslationSource.TextTranslation)
+                @Translation.GetCoreTextTranslation(Model.Caption)
             }
             else
             {
-                @(Translation.Get(Model.Caption, Enums.TranslationSource.TextTranslation) + "*")
+                @(Translation.GetCoreTextTranslation(Model.Caption) + "*")
             }
         </td>
         <td class="span9">

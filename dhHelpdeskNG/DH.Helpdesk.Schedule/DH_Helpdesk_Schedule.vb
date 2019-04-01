@@ -1,11 +1,24 @@
-﻿Imports DH.Helpdesk.Mail2Ticket.Library
+﻿Imports System.Configuration
+Imports System.Data.SqlClient
+Imports DH.Helpdesk.Mail2Ticket.Library
 Imports System.IO
 Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
 
 Module DH_Helpdesk_Schedule
     'Private objLogFile As StreamWriter
+    
+    Public const ConnectionStringName as String = "Helpdesk"
 
     Public Sub Main()
+        
+        ' encrypt connection string if exists
+        Dim secureConnectionString = ConfigurationManager.AppSettings("SecureConnectionString")
+        If (Not String.IsNullOrEmpty(secureConnectionString) AndAlso Boolean.Parse(secureConnectionString))  Then
+            Dim fileName = Path.GetFileName(Reflection.Assembly.GetExecutingAssembly().Location)
+            SecureConnectionStringSection(fileName)
+        End If
+
+        'WorkModes:
         ' 1: planDate
         ' 2: approveCase
         ' 3: getContractInNoticeOfRemoval
@@ -13,113 +26,178 @@ Module DH_Helpdesk_Schedule
         ' 5: sendCaseInfoMail
         ' 6: watchDate
         ' 7: Checklist Schedule
-        ' 8: Case Solution SChedule
+        ' 8: Case Solution Schedule
 
         Dim sCommand As String = Command()
         Dim aArguments() As String = sCommand.Split(",")
-        Dim sConnectionstring As String = ""
-
         'ReDim aArguments(1)
-
         'aArguments(0) = 1
         'aArguments(1) = "Data Source=ITSEELM-NT2014.ikea.com; Initial Catalog=ITSQL0099; User Id=dhsschr; Password=dhsschr321!;Network Library=dbmssocn"
         'aArguments(1) = "Data Source=DHUTVSQL2; Initial Catalog=DH_Support; User Id=sa; Password=;Network Library=dbmssocn"
 
         If aArguments.Length > 0 Then
-            sConnectionstring = aArguments(1).ToString
 
-            If aArguments(0).ToString = "1" Then
-                planDate(sConnectionstring)
-            ElseIf aArguments(0).ToString = "2" Then
-                approveCase(sConnectionstring)
-            ElseIf aArguments(0).ToString = "3" Then
-                giLoglevel = 1
+            ' parse command line args
+            Dim workMode = GetWorkMode(aArguments)
+            Dim sConnectionstring = GetConnectionString(aArguments)
+            giSendMail = GetSendEmail(aArguments, giSendMail) 'used in 12 mode
 
+            'Log cmd line args
+            Try     
                 openLogFile()
-
-                objLogFile.WriteLine(Now() & ", getContractInNoticeOfRemoval")
-
-                getContractInNoticeOfRemoval(sConnectionstring)
-
+                LogToFile(String.Format(
+                    "Cmd Line Args:"  & vbCrlf & vbTab &
+                    "- WorkMode: {0}" & vbCrlf & vbTab &
+                    "- ConnectionString: {1}" & vbCrlf & vbTab &
+                    "- SendMail: {2}" & vbCrlf & vbTab, 
+                    workMode, FormatConnectionString(sConnectionstring), giSendMail), 1)
+            Catch ex As Exception
+                LogError(ex.ToString())
+            Finally
                 closeLogFile()
-            ElseIf aArguments(0).ToString = "4" Then
-                getContractForFollowUp(sConnectionstring)
-            ElseIf aArguments(0).ToString = "5" Then
-                giLoglevel = 1
+            End Try
 
-                openLogFile()
 
-                objLogFile.WriteLine(Now() & ", sendCaseInfoMail")
+            Select Case workMode
+                Case 1
+                    planDate(sConnectionstring)
+                Case 2
+                    approveCase(sConnectionstring)
+                Case 3
+                    giLoglevel = 1
+                    openLogFile()
+                    objLogFile.WriteLine(Now() & ", getContractInNoticeOfRemoval")
+                    getContractInNoticeOfRemoval(sConnectionstring)
+                    closeLogFile()
+                Case 4
+                    getContractForFollowUp(sConnectionstring)
+                Case 5
+                    giLoglevel = 1
+                    openLogFile()
+                    objLogFile.WriteLine(Now() & ", sendCaseInfoMail")
+                    sendCaseInfoMail(sConnectionstring)
+                    closeLogFile()
+                Case 6
+                    giLoglevel = 1
+                    openLogFile()
+                    watchDate(sConnectionstring)
+                    closeLogFile()
+                Case 7
+                    checklistSchedule(sConnectionstring)
+                Case 8
+                    giLoglevel = 1
+                    openLogFile()
+                    objLogFile.WriteLine(Now() & ", CaseSolutionSchedule")
+                    caseSolutionSchedule(sConnectionstring)
+                    closeLogFile()
+                Case 9
+                    giLoglevel = 1
+                    openLogFile()
+                    objLogFile.WriteLine(Now() & ", Clear FileViewLog")
+                    clearFileViewLog(sConnectionstring)
+                    closeLogFile()
+                Case 10
+                    giLoglevel = 1
+                    openLogFile()
+                    objLogFile.WriteLine(Now() & ", CaseCleanUp")
+                    caseCleanUp(sConnectionstring)
+                    closeLogFile()
+                Case 11
+                    giLoglevel = 1
+                    openLogFile()
+                    objLogFile.WriteLine(Now() & ", CaseReminder")
+                    caseReminder(sConnectionstring)
+                    closeLogFile()
+                Case 12
+                    giLoglevel = 1
+                    openLogFile()
+                    objLogFile.WriteLine(Now() & ", Questionnaire")
+                    sendQuestionnaire(sConnectionstring)
+                    closeLogFile()
+                Case Else
+                    openLogFile()
+                    objLogFile.WriteLine(Now() & ", Error: Not supported work mode value!")
+                    closeLogFile()
 
-                sendCaseInfoMail(sConnectionstring)
+            End Select
+           
 
-                closeLogFile()
-            ElseIf aArguments(0).ToString = "6" Then
-                giLoglevel = 1
+        End If
+    End Sub
+    Private Function GetCmdArgSafe(args As String(), index As Int32) As String
+        If index < args.Length Then
+            Dim val = args(index)
+            val = IIf(val Is Nothing, val, val.Trim()) 'trim
+            Return val
+        End If
+        Return Nothing
+    End Function
+    Private Function GetWorkMode(aArguments As String()) As Integer
+        Dim val = GetCmdArgSafe(aArguments, 0)
+        Dim workMode = 0
+        Integer.TryParse(val, workMode)
+        Return workMode
+    End Function
+    Private Function GetSendEmail(aArguments As String(), defaultValue As Integer) As Integer
+        Dim sendEmail = defaultValue
+        If aArguments.Length > 2 Then
+            Dim val = GetCmdArgSafe(aArguments, 2)
+            If Integer.TryParse(val, sendEmail) 
+                Return sendEmail
+            Else 
+                Return defaultValue
+            End If
+        End If
+        Return defaultValue
+    End Function
+    Private Function GetConnectionString(aArguments As String()) As String
+        Dim connectionString = GetCmdArgSafe(aArguments, 1)
+        If String.IsNullOrEmpty(connectionString) Then
+            connectionString = ConfigurationManager.ConnectionStrings(ConnectionStringName)?.ConnectionString
+        End If
+        Return connectionString
+    End Function
+    Private Sub LogToFile(msg As String, level As Integer) 
+        If level > 0 Then
+            If objLogFile IsNot Nothing 
+                objLogFile.WriteLine("{0}: {1}", Now(),  msg)
+            End If
+        End If
+    End Sub
+    Private Sub LogError(msg As String) 
+        If objLogFile IsNot Nothing 
+            objLogFile.WriteLine("{0}: {1}", Now(),  msg)
+        End If
+    End Sub
+    Private Sub SecureConnectionStringSection(exeConfigName As String)
+        openLogFile()
+        Try
+            EncryptSection(Of ConnectionStringsSection)(exeConfigName, "connectionStrings")
+            LogToFile(String.Format("app.config '{0}' section is protected"), giLoglevel)
+        Catch ex As Exception
+            LogError(ex.ToString())
+        Finally
+            closeLogFile()
+        End Try
+        
+    End Sub
+    Private Function FormatConnectionString(connectionString As String) As String
+        Dim builder = New SqlConnectionStringBuilder(connectionString)
+        Return String.Format("Data Source={0}; Initial Catalog={1};Network Library={2}", builder.DataSource, builder.InitialCatalog, builder.NetworkLibrary)
+    End Function
 
-                openLogFile()
+    Private Sub EncryptSection(Of TSection As ConfigurationSection)(exeConfigName As String, sectionName As String)
+        ' Open the configuration file And retrieve 
+        Dim config = ConfigurationManager.OpenExeConfiguration(exeConfigName)
 
-                watchDate(sConnectionstring)
-
-                closeLogFile()
-            ElseIf aArguments(0).ToString = "7" Then
-                checklistSchedule(sConnectionstring)
-            ElseIf aArguments(0).ToString = "8" Then
-                giLoglevel = 1
-
-                openLogFile()
-
-                objLogFile.WriteLine(Now() & ", CaseSolutionSchedule")
-
-                caseSolutionSchedule(sConnectionstring)
-
-                closeLogFile()
-            ElseIf aArguments(0).ToString = "9" Then
-                giLoglevel = 1
-
-                openLogFile()
-
-                objLogFile.WriteLine(Now() & ", Clear FileViewLog")
-
-                clearFileViewLog(sConnectionstring)
-
-                closeLogFile()
-            ElseIf aArguments(0).ToString = "10" Then
-                giLoglevel = 1
-
-                openLogFile()
-
-                objLogFile.WriteLine(Now() & ", CaseCleanUp")
-
-                caseCleanUp(sConnectionstring)
-
-                closeLogFile()
-            ElseIf aArguments(0).ToString = "11" Then
-                giLoglevel = 1
-
-                openLogFile()
-
-                objLogFile.WriteLine(Now() & ", CaseReminder")
-
-                caseReminder(sConnectionstring)
-
-                closeLogFile()
-            ElseIf aArguments(0).ToString = "12" Then
-
-                giLoglevel = 1
-                If aArguments.Length > 2 Then
-                    giSendMail = aArguments(2)
-                End If
-
-                openLogFile()
-
-                objLogFile.WriteLine(Now() & ", Questionnaire")
-
-                sendQuestionnaire(sConnectionstring)
-
-                closeLogFile()
+        Dim section = CType(config.GetSection(sectionName), TSection)
+        If section IsNot Nothing Then
+            If (Not section.SectionInformation.IsProtected) Then
+                section.SectionInformation.ProtectSection("DataProtectionConfigurationProvider")
             End If
 
+            ' Save the current configuration.
+            config.Save()    
         End If
     End Sub
 
@@ -418,7 +496,7 @@ Module DH_Helpdesk_Schedule
 
                 objLogFile.WriteLine(Now() & ", getContractInNoticeOfRemoval, ContractNumber:" & objContract.ContractNumber)
 
-                objCase.Caption = objTextTranslationData.getTextTranslation("Från avtalsmodul", objContract.Language_Id) & " " & objContract.ContractNumber
+                objCase.Caption = objTextTranslationData.getTextTranslation("För uppsägning", objContract.Language_Id) & " " & objContract.ContractNumber
                 objCase.Description = objCase.Caption
                 objCase.Customer_Id = objContract.Customer_Id
                 objCase.CaseType_Id = objContract.CaseType_Id
@@ -448,23 +526,9 @@ Module DH_Helpdesk_Schedule
 
                 objCase.RegLanguage_Id = objContract.Language_Id
 
-                If objContract.CreateCase_UserId <> "" Then
-                    objComputerUser = objComputerUserData.getComputerUserByUserId(objContract.CreateCase_UserId, objContract.Customer_Id)
-
-                    If Not objComputerUser Is Nothing Then
-                        objCase.ReportedBy = objComputerUser.UserId
-                        objCase.Persons_Name = objComputerUser.FirstName & " " & objComputerUser.SurName
-                        objCase.Persons_EMail = objComputerUser.EMail
-                        objCase.Persons_Phone = objComputerUser.Phone
-
-                        If objComputerUser.Department_Id <> 0 Then
-                            objCase.Department_Id = objComputerUser.Department_Id
-                        End If
-
-                        If objComputerUser.Region_Id <> 0 Then
-                            objCase.Region_Id = objComputerUser.Region_Id
-                        End If
-                    End If
+                'Set notifier from contract
+                If Not String.IsNullOrEmpty(objContract.CreateCase_UserId) Then
+                    setInitiator(objContract.CreateCase_UserId, objContract.Customer_Id, objCase)
                 End If
 
                 objCase = objCaseData.createCase(objCase)
@@ -510,6 +574,8 @@ Module DH_Helpdesk_Schedule
         Dim objLogData As New LogData
         Dim objUserData As New UserData
         Dim objUser As User
+        Dim objComputerUser As ComputerUser
+        Dim objComputerUserData As New ComputerUserData
         Dim sMessageId As String
 
         gsConnectionString = sConnectionString
@@ -529,6 +595,7 @@ Module DH_Helpdesk_Schedule
                 objCase.RegistrationSource = 5
 
                 objCase.Caption = objTextTranslationData.getTextTranslation("För uppföljning", objContract.Language_Id) & " " & objContract.ContractNumber
+                objCase.Description = objCase.Caption
                 objCase.Customer_Id = objContract.Customer_Id
                 objCase.CaseType_Id = objContract.CaseType_Id
                 objCase.Form_Id = objContract.Form_Id
@@ -552,6 +619,11 @@ Module DH_Helpdesk_Schedule
                 End If
 
                 objCase.RegLanguage_Id = objContract.Language_Id
+
+                'Set notifier from contract
+                If Not String.IsNullOrEmpty(objContract.CreateCase_UserId) Then
+                    setInitiator(objContract.CreateCase_UserId, objContract.Customer_Id, objCase)
+                End If
 
                 objCase = objCaseData.createCase(objCase)
 
@@ -578,6 +650,27 @@ Module DH_Helpdesk_Schedule
                     End If
                 End If
             Next
+        End If
+    End Sub
+    Private Sub setInitiator(userId As String, customerId As Integer, ByRef objCase As CCase)
+        If Not String.IsNullOrEmpty(userId) Then
+
+            Dim objComputerUser = New ComputerUserData().getComputerUserByUserId(userId, customerId)
+
+            If Not objComputerUser Is Nothing Then
+                objCase.ReportedBy = objComputerUser.UserId
+                objCase.Persons_Name = objComputerUser.FirstName & " " & objComputerUser.SurName
+                objCase.Persons_EMail = objComputerUser.EMail
+                objCase.Persons_Phone = objComputerUser.Phone
+
+                If objComputerUser.Department_Id <> 0 Then
+                    objCase.Department_Id = objComputerUser.Department_Id
+                End If
+
+                If objComputerUser.Region_Id <> 0 Then
+                    objCase.Region_Id = objComputerUser.Region_Id
+                End If
+            End If
         End If
     End Sub
 

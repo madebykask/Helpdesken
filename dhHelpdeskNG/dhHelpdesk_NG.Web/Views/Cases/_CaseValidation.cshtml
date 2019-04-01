@@ -23,28 +23,41 @@
         extendValue: '@Model.CaseLock.ExtendValue',
         timerInterval: '@Model.CaseLock.TimerInterval',
         departmentInvoiceMandatory: @Model.TimeRequired.ToJavaScriptBool(),
-        showInvoiceTime: @((Model.case_.Department != null && Model.case_.Department.ShowInvoiceTime).ToJavaScriptBool()),
-        showInvoiceOvertime: @((Model.case_.Department != null && Model.case_.Department.ShowInvoiceOvertime).ToJavaScriptBool()),
-        invoicePreventsToCloseCaseMessage: '@Translation.GetForJS("Du kan inte avsluta ärendet eftersom det finns öppna order.")',
+        showInvoiceTime:
+            @((Model.case_.Department != null && Model.case_.Department.ShowInvoiceTime).ToJavaScriptBool()),
+        showInvoiceOvertime:
+            @((Model.case_.Department != null && Model.case_.Department.ShowInvoiceOvertime).ToJavaScriptBool()),
+        invoicePreventsToCloseCaseMessage:
+            '@Translation.GetForJS("Du kan inte avsluta ärendet eftersom det finns öppna order.")',
         caseLockChecker: '@Url.Content("~/Cases/IsCaseAvailable/")',
         caseLockExtender: '@Url.Content("~/Cases/ReExtendCaseLock/")',
         caseActiveDataChecker: '@Url.Content("~/Cases/CheckCaseForActiveData/")',
         getTokenUrl: '@Url.Content("~/Cases/GetToken/")',
         preventToSaveCaseWithInactiveValue: '@Model.Setting.PreventToSaveCaseWithInactiveValue',
-        saveLockedCaseMessage: '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
-        deleteLockedCaseMessage: '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
-        moveLockedCaseMessage: '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
+        saveLockedCaseMessage:
+            '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
+        deleteLockedCaseMessage:
+            '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
+        moveLockedCaseMessage:
+            '@Translation.GetForJS("Ärendet har blivit sparat eller upplåst efter att du öppnade det. Stäng ärendet och försök igen.")',
         lostChangesConfirmation: '@Html.Raw(Translation.GetForJS("Dina ändringar har inte sparats. Fortsätt?"))',
-        finishingDateMessage: '@Html.Raw(Translation.GetForJS(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än registreringsdatum."))',
-        finishingDateMessage2: '@Html.Raw(Translation.GetForJS(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än senast sparat datum. (Se historik fliken)"))',
+        finishingDateMessage:
+            '@Html.Raw(Translation.GetForJS(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än registreringsdatum."))',
+        finishingDateMessage2:
+            '@Html.Raw(Translation.GetForJS(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id) + " " + Translation.Get("kan inte vara tidigare än senast sparat datum. (Se historik fliken)"))',
         checkInactiveDataErrorMessage: '@Html.Raw(Translation.GetForJS("Problem med kommunikation med servern."))',
         productAreaChangeMessage: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(),
-            Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' + " " + '@Translation.GetForJS("kan inte ändra eftersom det finns order som inte är skickade.")',
-        caseTemplateChangeMessage: '@Translation.GetForJS("Du kan inte använda ärendemall eftersom det finns order som inte är skickade.")',
+            Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)' +
+            " " +
+            '@Translation.GetForJS("kan inte ändra eftersom det finns order som inte är skickade.")',
+        caseTemplateChangeMessage:
+            '@Translation.GetForJS("Du kan inte använda ärendemall eftersom det finns order som inte är skickade.")',
 
         caseRegDate: '@Model.case_.RegTime',
-        isCaseFileMandatory: '@Model.caseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Filename.ToString())',
-        caseFileCaption: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
+        isCaseFileMandatory:
+            '@Model.caseFieldSettings.getRequired(GlobalEnums.TranslationCaseFields.Filename.ToString())',
+        caseFileCaption:
+            '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Filename.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
         closeBtn: '@Html.Raw(Translation.GetForJS("Stäng"))',
         selectedLabel: '@Translation.GetForJS("vald")',
         noResultLabel: '@Translation.GetForJS("Inga resultat matchar")',
@@ -54,14 +67,18 @@
         hasExtendedComputerUsers: '@Model.HasExtendedComputerUsers',
         containsEForm: '@(Model.DynamicCase != null && Model.DynamicCase.ViewMode == 0)',
         extendedCaseFormId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Id.ToString() : "" )',
-        extendedCaseGuid: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().ExtendedCaseGuid.ToString() : "" )',
-        extendedCaseLanguageId: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().LanguageId.ToString() : "" )',
+        extendedCaseGuid:
+            '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().ExtendedCaseGuid.ToString() : "" )',
+        extendedCaseLanguageId:
+            '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().LanguageId.ToString() : "" )',
         extendedCasePath: '@(Model.ContainsExtendedCase? Model.ExtendedCases.First().Path.ToString() : "" )',
         extendedSections: @Html.Raw(Model.ExtendedSectionsToJS()),
+        extendedCaseInvalidMessage: '@Translation.GetForJS("Utökat ärende är inte giltigt")',
         computerUserCategories: @Html.Raw(Json.Encode(Model.ComputerUserCategories != null ? Model.ComputerUserCategories.Select(o => new { o.Name, o.IsReadOnly, o.Id }).ToDictionary(o => o.Id.ToString(), o => o) : null)),
         fileExistError: '@Translation.GetForJS("Bifogad fil är borttagen från ärendet")',
         applicationType: '@ApplicationTypes.Helpdesk',
         caseFieldIds: {
+            Caption: "case__Caption",
             CaseId: "case__Id",
             CustomerId: "case__Customer_Id",
             RegionId: "case__Region_Id",
@@ -127,7 +144,8 @@
             PersonsEmail: @Html.Raw(Json.Encode(Model.case_.PersonsEmail)),
             PersonsCellphone: @Html.Raw(Json.Encode(Model.case_.PersonsCellphone)),
             Place: @Html.Raw(Json.Encode(Model.case_.Place)),
-            CostCentre: '@Html.Raw(Json.Encode(Model.case_.CostCentre))'
+            CostCentre: '@Html.Raw(Json.Encode(Model.case_.CostCentre))',
+            Caption: '@Html.Raw(Json.Encode(Model.case_.Caption))'
         },
 
         casesScopeInitParameters: {
@@ -135,7 +153,7 @@
             getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax")',
             getDepartmentUsersUrl: '@Url.Action("GetDepartmentUsers", "Ajax")',
             relatedCasesUrl: '@Url.Action("RelatedCasesFull", "Cases")',
-            relatedInventoryUrl: '@Url.Action("RelatedInventoryFull", "Inventory/Workstation")',
+            relatedInventoryUrl: '@Url.Action("RelatedInventoryFull", "Workstation", new { area ="Inventory" })',
             relatedCasesCountUrl: '@Url.Action("RelatedCasesCount", "Cases")',
             relatedInventoryCountUrl: '@Url.Action("RelatedInventoryCount", "Cases")',
             getDepartmentOusUrl: '@Url.Action("ChangeDepartment", "Cases")',
@@ -148,7 +166,13 @@
             mandatoryFieldsText: '@Translation.GetForJS("Obligatoriska fält")',
             formatFieldsText: '@Translation.GetForJS("Giltiga Format är")',
             descriptionText: '@Translation.GetForJS(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, Model.case_.Customer_Id)',
-            getInventoryUrl: '@Url.Action("GetInventoryUrlByName", "Inventory/InventoryRouting")'
+            getInventoryUrl: '@Url.Action("GetInventoryUrlByName", "InventoryRouting", new {  area = "Inventory" })',
+            initiatorDetailsUrl: '@Url.Action("NotifierPopup", "Notifiers")',
+            checkInitiatorUrl: '@Url.Action("GetNotifierInfo", "Notifiers")'
+        },
+
+        user: {
+            hasInventoryViewPermission: '@Model.UserHasInventoryViewPermission'
         }
     };
 
@@ -251,7 +275,7 @@
             },
             "ResponsibleUser_Id": {
                 required: function() { return FieldIsRequired("@Model.caseFieldSettings.CaseFieldSettingRequiredCheck(GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString(), Model.IsCaseReopened)"); }
-            },
+           },
             "Performer_Id": {
                 required: @Json.Encode(@Model.IsRequired(GlobalEnums.TranslationCaseFields.Performer_User_Id, CaseSolutionFields.Administrator))
             },

@@ -107,6 +107,7 @@
             SourceId: "CaseDataModel_RegistrationSourceCustomer_Id",
             log_InternalText: "CaseDataModel_Text_Internal",
             CostCentre: "CaseDataModel_CostCentre",
+            Caption: "CaseDataModel_Caption"
         },
 
         caseInitValues: {
@@ -137,6 +138,7 @@
         extendedCaseFormId: '@(Model.ExtendedCaseDataModel.FormModel.Id)',
         extendedCaseLanguageId: '@(Model.ExtendedCaseDataModel.FormModel.LanguageId)',
         extendedCasePath: '@(Model.ExtendedCaseDataModel.FormModel.Path)',
+        extendedCaseInvalidMessage: '@Translation.GetForJS("Case is not valid")',
         userRole: '@(Model.UserRole)',
         caseStatus: '@(Model.StateSecondaryId)',
         currentUser: '@(Model.CurrentUser)',
@@ -295,9 +297,10 @@
     // Log
     @Html.HiddenFor(model => model.CaseDataModel.Text_External)
     @Html.HiddenFor(model => model.CaseDataModel.Text_Internal)
-
+    
+    // case solution
     @Html.HiddenFor(model => model.CaseDataModel.CaseSolution_Id)
-
+    @Html.HiddenFor(model => model.CaseDataModel.CurrentCaseSolution_Id)
 
     // Etc
     @Html.HiddenFor(model => model.CaseTemplateId)
@@ -457,7 +460,7 @@
          (ViewBag.IsLineManagerApplication ||
           ViewBag.ApplicationType == ApplicationTypes.SelfService && ViewBag.ShowCommunicationForSelfservice))
     {
-        @Html.Partial("_Communication", Model.GetCaseLogModel())
+        @Html.Partial("_Communication", Model.CaseLogModel)
         @Html.Partial("ModalDialogs/_UploadExistingLogFilePopup")
         @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")
         @Scripts.Render("~/Content/js/Case/log")
@@ -465,7 +468,7 @@
 
     @if (Model.CaseDataModel.IsFinished)
     {
-        @Html.Partial("ModalDialogs/_CaseLogNotePopup", Model.GetCaseLogModel())
+        @Html.Partial("ModalDialogs/_CaseLogNotePopup", Model.CaseLogModel)
         @Scripts.Render("~/Content/js/Case/log")
     }
 }

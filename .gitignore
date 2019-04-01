@@ -23,6 +23,7 @@ Thumbs.db
 obj/
 [Rr]elease*/
 _ReSharper*/
+*.DotSettings
 [Tt]est[Rr]esult*
 dhHelpdeskNG/dhHelpdesk_NG.Web/Web.config
 dhHelpdeskNG/dhHelpdesk_NG.Web/App_Data/Uploaded Files/Reports/

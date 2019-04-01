@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Http;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Common.Converters;
 using DH.Helpdesk.Web.Common.Models.CurrentUser;
@@ -29,11 +30,15 @@ namespace DH.Helpdesk.WebApi.Controllers
             var userSettings = await _userSerivice.GetUserOverviewAsync(UserId);//TODO: create new method to get cached/async result.
             return new UserSettingsModelOutput
             {
+                Id = UserId,
                 CustomerId = userSettings.CustomerId,
                 LanguageId = userSettings.LanguageId,
                 //note: windows and iana time zones sometimes changes. if unknown timezone is found, update nodatime lib or use other approach.
                 TimeZone = userSettings.TimeZoneId.WindowsToIana() ,
-                TimeZoneMoment = TimeZoneToMomentConverter.GenerateAddMomentZoneScript(userSettings.TimeZoneId, 2000, DateTime.Now.Year)
+                TimeZoneMoment = TimeZoneToMomentConverter.GenerateAddMomentZoneScript(userSettings.TimeZoneId, 2000, DateTime.Now.Year),
+                OwnCasesOnly = userSettings.RestrictedCasePermission.ToBool(),
+                CreateCasePermission = userSettings.CreateCasePermission.ToBool(),
+                DeleteAttachedFiles = userSettings.DeleteAttachedFilePermission.ToBool()
             };
         }
     }

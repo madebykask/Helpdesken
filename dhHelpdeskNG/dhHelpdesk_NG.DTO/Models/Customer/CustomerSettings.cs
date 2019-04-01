@@ -173,6 +173,13 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
         public string PhysicalFilePath { get; set; }
         public string VirtualFilePath { get; set; }
         public int IsUserFirstLastNameRepresentation { get; set; }
+        public int DepartmentFilterFormat { get; set; }
+        public int DefaultCaseTemplateId { get; set; }
+        public bool SetUserToAdministrator { get; set; }
+        public int? DefaultAdministratorId { get; set; }
+
+        public int ComputerUserSearchRestriction { get; set; }
+
         /// <summary>
         /// The is module on.
         /// </summary>

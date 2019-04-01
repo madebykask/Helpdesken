@@ -3,9 +3,10 @@ import { LocalStorageService } from "../local-storage";
 import { HttpClient } from "@angular/common/http";
 import { OptionsHelper } from "../../helpers/options-helper";
 import { map, take } from "rxjs/operators";
-import { StateSecondaryInputModel } from "src/app/models/stateSecondaries/stateSecondaryInputModel";
+import { StateSecondaryInputModel } from "src/app/models/stateSecondaries/stateSecondaryInput.model";
 import { OptionItem } from "src/app/modules/shared-module/models";
 import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
+import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class StateSecondariesService extends HttpApiServiceBase {
@@ -25,7 +26,7 @@ export class StateSecondariesService extends HttpApiServiceBase {
         );//TODO: error handling
     }
 
-    getStateSecondary(id: number) {
+    getStateSecondary(id: number): Observable<StateSecondaryInputModel> {
       return this.getJson(this.buildResourseUrl(`/api/statesecondaries/${id}`, null, true, true))
       .pipe(
           take(1),

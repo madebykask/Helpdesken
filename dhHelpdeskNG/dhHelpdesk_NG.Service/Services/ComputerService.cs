@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.ComputerUsers;
+﻿using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Models.ComputerUsers;
 using DH.Helpdesk.BusinessData.Models.Inventory;
 using DH.Helpdesk.Dal.Repositories.Inventory;
 
@@ -16,18 +17,18 @@ namespace DH.Helpdesk.Services.Services
     using DHDomain = DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
     using BusinessData.Models.Notifiers;
-	using BusinessData.Models.Case;
+    using BusinessData.Models.Case;
 
 
-	public interface IComputerService
+    public interface IComputerService
     {
         IDictionary<string, string> Validate(ComputerUsersBlackList computerUsersBlackList);
 
         IList<ComputerUser> GetComputerUsers(int customerId);
         IList<ComputerUser> SearchSortAndGenerateComputerUsers(int customerId, IComputerUserSearch searchComputerUsers);
-		IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor, int? categoryID = null);
-		IList<UserSearchResults> SearchComputerUsersByDepartments(int customerId, string query, List<int> departmentIds, int? categoryID);
-		IList<ComputerUserFieldSettings> GetComputerUserFieldSettings(int customerId);
+        IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor, int? categoryID = null);
+        IList<UserSearchResults> SearchComputerUsersByDepartments(int customerId, string query, List<int> departmentIds, int? categoryID);
+        IList<ComputerUserFieldSettings> GetComputerUserFieldSettings(int customerId);
         IList<ComputerUserFieldSettings> GetComputerUserFieldSettingsForDefaultCust();
         IList<ComputerUserGroup> GetComputerUserGroups(int customerId);
         IList<ComputerUsersBlackList> GetComputerUsersBlackLists();
@@ -37,6 +38,7 @@ namespace DH.Helpdesk.Services.Services
 
         IList<ComputerResults> SearchComputer(int customerId, string searchFor);
         ComputerUser GetComputerUser(int id);
+        Task<ComputerUser> GetComputerUserAsync(int id);
         ComputerUserGroup GetComputerUserGroup(int id);
         ComputerUsersBlackList GetComputerUsersBlackList(int id);
 
@@ -63,8 +65,8 @@ namespace DH.Helpdesk.Services.Services
 
         void Commit();
 
-		IList<ComputerUserCategoryOverview> GetComputerUserCategoriesByCustomerID(int customerId, bool includeEmpty = false);
-		ComputerUser GetComputerUserByUserID(string userID);
+        IList<ComputerUserCategoryOverview> GetComputerUserCategoriesByCustomerID(int customerId, bool includeEmpty = false);
+        ComputerUser GetComputerUserByUserID(string userID);
     }
 
     public class ComputerService : IComputerService
@@ -78,11 +80,11 @@ namespace DH.Helpdesk.Services.Services
         private readonly INotifierFieldSettingLanguageRepository _computerUserFieldSettingLanguageRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IInventoryRepository _inventoryRepository;
-		private readonly IComputerUserCategoryRepository _computerUserCategoryRepository;
+        private readonly IComputerUserCategoryRepository _computerUserCategoryRepository;
 
 
 
-		public ComputerService(
+        public ComputerService(
             INotifierFieldSettingRepository computerUserFieldSettingsRepository,
             INotifierGroupRepository computerUserGroupRepository,
             INotifierRepository computerUserRepository,
@@ -92,23 +94,23 @@ namespace DH.Helpdesk.Services.Services
             INotifierFieldSettingLanguageRepository computerUserFieldSettingLanguageRepository,
             IInventoryRepository inventoryRepository,
             IUnitOfWork unitOfWork,
-			IComputerUserCategoryRepository computerUserCategoryRepository)
+            IComputerUserCategoryRepository computerUserCategoryRepository)
 
-		{
-			this._computerUserFieldSettingsRepository = computerUserFieldSettingsRepository;
-            this._computerUserGroupRepository = computerUserGroupRepository;
-            this._computerUserRepository = computerUserRepository;
-            this._computerUsersBlackListRepository = computerUsersBlackListRepository;
-            this._computerRepository = computerRepository;
-            this._ouRespository = ouRespository;
-            this._unitOfWork = unitOfWork;
-            this._computerUserFieldSettingLanguageRepository = computerUserFieldSettingLanguageRepository;
-			this._computerUserCategoryRepository = computerUserCategoryRepository;
-            this._inventoryRepository = inventoryRepository;
+        {
+            _computerUserFieldSettingsRepository = computerUserFieldSettingsRepository;
+            _computerUserGroupRepository = computerUserGroupRepository;
+            _computerUserRepository = computerUserRepository;
+            _computerUsersBlackListRepository = computerUsersBlackListRepository;
+            _computerRepository = computerRepository;
+            _ouRespository = ouRespository;
+            _unitOfWork = unitOfWork;
+            _computerUserFieldSettingLanguageRepository = computerUserFieldSettingLanguageRepository;
+            _computerUserCategoryRepository = computerUserCategoryRepository;
+            _inventoryRepository = inventoryRepository;
 
-		}
+        }
 
-		public IDictionary<string, string> Validate(ComputerUsersBlackList computerUsersBlackListToValidate)
+        public IDictionary<string, string> Validate(ComputerUsersBlackList computerUsersBlackListToValidate)
         {
             if (computerUsersBlackListToValidate == null)
                 throw new ArgumentNullException("computeruersblacklisttovalidate");
@@ -120,22 +122,22 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<ComputerUser> GetComputerUsers(int customerId)
         {
-            return this._computerUserRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.SyncChangedDate).ToList();
+            return _computerUserRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.SyncChangedDate).ToList();
         }
 
         public IList<ComputerUserFieldSettingsLanguage> GetComputerUserFieldSettingsWithLanguages(int customerId, int languageId)
         {
-            return this._computerUserFieldSettingLanguageRepository.GetComputerUserFieldSettingsLanguage(customerId, languageId).ToList();
+            return _computerUserFieldSettingLanguageRepository.GetComputerUserFieldSettingsLanguage(customerId, languageId).ToList();
         }
 
         public IList<ComputerUserFieldSettingsLanguageModel> GetComputerUserFieldSettingsWithLanguagesForDefaultCust(int languageId)
         {
-            return this._computerUserFieldSettingLanguageRepository.GetComputerUserFieldSettingsWithLanguagesForDefaultCust(languageId).ToList();
+            return _computerUserFieldSettingLanguageRepository.GetComputerUserFieldSettingsWithLanguagesForDefaultCust(languageId).ToList();
         }
 
         public IList<ComputerUser> SearchSortAndGenerateComputerUsers(int customerId, IComputerUserSearch searchComputerUsers)
         {
-            var query = (from cu in this._computerUserRepository.GetMany(x => x.Customer_Id == customerId && x.Updated != 2)
+            var query = (from cu in _computerUserRepository.GetMany(x => x.Customer_Id == customerId && x.Updated != 2)
                          select cu);
 
             if (searchComputerUsers.DomainId.HasValue)
@@ -174,67 +176,71 @@ namespace DH.Helpdesk.Services.Services
             return query.OrderBy(x => x.SurName).ToList();
         }
 
-		public IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor, int? categoryID = null)
-		{
-			return this._computerUserRepository.Search(customerId, searchFor, categoryID);
+        public IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor, int? categoryID = null)
+        {
+            return _computerUserRepository.Search(customerId, searchFor, categoryID);
         }
         public IList<UserSearchResults> SearchComputerUsersByDepartments(int customerId, string searchFor, List<int> departmentIds, int? categoryID)
         {
-            var results = this._computerUserRepository.Search(customerId, searchFor, categoryID).Where(x=>departmentIds.Contains(x.Department_Id ?? 0));
+            var results = _computerUserRepository.Search(customerId, searchFor, categoryID).Where(x=>departmentIds.Contains(x.Department_Id ?? 0));
             return results.Where(x => x.Department_Id != 0).ToList();
         }
 
         public IList<ComputerResults> SearchComputer(int customerId, string searchFor)
         {
-            return this._computerRepository.Search(customerId, searchFor);
+            return _computerRepository.Search(customerId, searchFor);
         }
 
         public IList<ComputerUserFieldSettings> GetComputerUserFieldSettings(int customerId)
         {
-            return this._computerUserFieldSettingsRepository.GetMany(x => x.Customer_Id == customerId).ToList();
+            return _computerUserFieldSettingsRepository.GetMany(x => x.Customer_Id == customerId).ToList();
         }
 
         public IList<ComputerUserFieldSettings> GetComputerUserFieldSettingsForDefaultCust()
         {
-            var list = this._computerUserFieldSettingsRepository.GetMany(x => x.Customer_Id == null).ToList();
-
+            var list = _computerUserFieldSettingsRepository.GetMany(x => x.Customer_Id == null).ToList();
             return list;
         }
 
         public IList<ComputerUserGroup> GetComputerUserGroups(int customerId)
         {
-            return this._computerUserGroupRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return _computerUserGroupRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
         public IList<ComputerUsersBlackList> GetComputerUsersBlackLists()
         {
-            return this._computerUsersBlackListRepository.GetAll().OrderBy(x => x.User_Id).ToList();
+            return _computerUsersBlackListRepository.GetAll().OrderBy(x => x.User_Id).ToList();
         }
 
         public ComputerUser GetComputerUser(int id)
         {
-            return this._computerUserRepository.GetById(id);
+            return _computerUserRepository.GetById(id);
+        }
+
+        public Task<ComputerUser> GetComputerUserAsync(int id)
+        {
+            return _computerUserRepository.GetByIdAsync(id);
         }
 
         public ComputerUserGroup GetComputerUserGroup(int id)
         {
-            return this._computerUserGroupRepository.GetById(id);
+            return _computerUserGroupRepository.GetById(id);
         }
 
         public ComputerUsersBlackList GetComputerUsersBlackList(int id)
         {
-            return this._computerUsersBlackListRepository.Get(x => x.Id == id);
+            return _computerUsersBlackListRepository.Get(x => x.Id == id);
         }
 
         public DeleteMessage DeleteComputerUser(int id)
         {
-            var computerUser = this._computerUserRepository.GetById(id);
+            var computerUser = _computerUserRepository.GetById(id);
 
             if (computerUser != null)
             {
                 try
                 {
-                    this._computerUserRepository.Delete(computerUser);
+                    _computerUserRepository.Delete(computerUser);
                     this.Commit();
 
                     return DeleteMessage.Success;
@@ -250,13 +256,13 @@ namespace DH.Helpdesk.Services.Services
 
         public DeleteMessage DeleteComputerUserGroup(int id)
         {
-            var computerUserGroup = this._computerUserGroupRepository.GetById(id);
+            var computerUserGroup = _computerUserGroupRepository.GetById(id);
 
             if (computerUserGroup != null)
             {
                 try
                 {
-                    this._computerUserGroupRepository.Delete(computerUserGroup);
+                    _computerUserGroupRepository.Delete(computerUserGroup);
                     this.Commit();
 
                     return DeleteMessage.Success;
@@ -272,13 +278,13 @@ namespace DH.Helpdesk.Services.Services
 
         public void DeleteComputerUsersBlackList(ComputerUsersBlackList computerUsersBlackList)
         {
-            this._computerUsersBlackListRepository.Delete(computerUsersBlackList);
+            _computerUsersBlackListRepository.Delete(computerUsersBlackList);
         }
 
         public void NewComputerUsersBlackList(ComputerUsersBlackList computerUsersBlackList)
         {
             computerUsersBlackList.ChangedDate = DateTime.UtcNow;
-            this._computerUsersBlackListRepository.Add(computerUsersBlackList);
+            _computerUsersBlackListRepository.Add(computerUsersBlackList);
         }
 
         public void SaveComputerUser(ComputerUser computerUser, int[] cugs, out IDictionary<string, string> errors)
@@ -332,7 +338,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (int id in cugs)
                 {
-                    var cg = this._computerUserGroupRepository.GetById(id);
+                    var cg = _computerUserGroupRepository.GetById(id);
 
                     if (cg != null)
                         computerUser.CUGs.Add(cg);
@@ -340,9 +346,9 @@ namespace DH.Helpdesk.Services.Services
             }
 
             if (computerUser.Id == 0)
-                this._computerUserRepository.Add(computerUser);
+                _computerUserRepository.Add(computerUser);
             else
-                this._computerUserRepository.Update(computerUser);
+                _computerUserRepository.Update(computerUser);
 
             if (errors.Count == 0)
                 this.Commit();
@@ -360,9 +366,9 @@ namespace DH.Helpdesk.Services.Services
                 setting.LDAPAttribute = setting.LDAPAttribute ?? string.Empty;
 
                 if (setting.Id == 0)
-                    this._computerUserFieldSettingsRepository.Add(setting);
+                    _computerUserFieldSettingsRepository.Add(setting);
                 else
-                    this._computerUserFieldSettingsRepository.Update(setting);
+                    _computerUserFieldSettingsRepository.Update(setting);
             }
 
             if (errors.Count == 0)
@@ -442,7 +448,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (int id in ous)
                 {
-                    var ou = this._ouRespository.GetById(id);
+                    var ou = _ouRespository.GetById(id);
 
                     if (ou != null)
                         computerUserGroup.OUs.Add(ou);
@@ -452,9 +458,9 @@ namespace DH.Helpdesk.Services.Services
             computerUserGroup.ChangedDate = DateTime.UtcNow;
 
             if (computerUserGroup.Id == 0)
-                this._computerUserGroupRepository.Add(computerUserGroup);
+                _computerUserGroupRepository.Add(computerUserGroup);
             else
-                this._computerUserGroupRepository.Update(computerUserGroup);
+                _computerUserGroupRepository.Update(computerUserGroup);
 
             if (errors.Count == 0)
                 this.Commit();
@@ -463,7 +469,7 @@ namespace DH.Helpdesk.Services.Services
         public void UpdateComputerUsersBlackList(ComputerUsersBlackList computerUsersBlackList)
         {
             computerUsersBlackList.ChangedDate = DateTime.UtcNow;
-            this._computerUsersBlackListRepository.Update(computerUsersBlackList);
+            _computerUsersBlackListRepository.Update(computerUsersBlackList);
         }
 
         public Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly = true)
@@ -471,11 +477,11 @@ namespace DH.Helpdesk.Services.Services
             return _computerUserRepository.GetInitiatorByUserId(userId, customerId, activeOnly);
         }
 
-		public ComputerUserCategory GetComputerUserCategoryByID(int computerUserCategoryID)
-		{
-			var category = _computerUserCategoryRepository.GetByID(computerUserCategoryID);
-			return category;
-		}
+        public ComputerUserCategory GetComputerUserCategoryByID(int computerUserCategoryID)
+        {
+            var category = _computerUserCategoryRepository.GetByID(computerUserCategoryID);
+            return category;
+        }
 
         public int SaveComputerUserCategory(ComputerUserCategoryData data)
         {
@@ -506,9 +512,9 @@ namespace DH.Helpdesk.Services.Services
             return entity.ID;
         }
 
-		public void Commit()
+        public void Commit()
         {
-            this._unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         public List<InventorySearchResult> SearchPcNumber(int customerId, string query)
@@ -531,29 +537,29 @@ namespace DH.Helpdesk.Services.Services
         }
 
         public IList<ComputerUserCategoryOverview> GetComputerUserCategoriesByCustomerID(int customerId, bool includeEmpty = false)
-		{
-			var categories = _computerUserCategoryRepository.GetAllByCustomerID(customerId);
-		    if (!includeEmpty)
-		    {
-		        categories = categories.Where(o => !o.IsEmpty).ToList();
-		    }
-		    else
-		    {
+        {
+            var categories = _computerUserCategoryRepository.GetAllByCustomerID(customerId);
+            if (!includeEmpty)
+            {
+                categories = categories.Where(o => !o.IsEmpty).ToList();
+            }
+            else
+            {
                 //check if empty category exists and if not create it
-		        var emptyCategory = categories.FirstOrDefault(c => c.IsEmpty);
-		        if (emptyCategory == null)
-		        {
-		            emptyCategory = CreateEmptyCategory();
-		            categories.Insert(0, emptyCategory);
-		        }
-		        
-		        //empty shall always have fixed Id
-		        emptyCategory.Id = ComputerUserCategory.EmptyCategoryId;
-		        
+                var emptyCategory = categories.FirstOrDefault(c => c.IsEmpty);
+                if (emptyCategory == null)
+                {
+                    emptyCategory = CreateEmptyCategory();
+                    categories.Insert(0, emptyCategory);
+                }
+                
+                //empty shall always have fixed Id
+                emptyCategory.Id = ComputerUserCategory.EmptyCategoryId;
+                
             }
 
             return categories;
-		}
+        }
 
         private ComputerUserCategoryOverview CreateEmptyCategory()
         {
@@ -567,10 +573,10 @@ namespace DH.Helpdesk.Services.Services
         }
 
         public ComputerUser GetComputerUserByUserID(string reportedBy)
-		{
-			var computerUser = _computerUserRepository.Get(o => o.UserId == reportedBy);
-			return computerUser;
-		}
-	}
+        {
+            var computerUser = _computerUserRepository.Get(o => o.UserId == reportedBy);
+            return computerUser;
+        }
+    }
 }
 

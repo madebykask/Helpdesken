@@ -76,7 +76,12 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            DontConnectUserToWorkingGroup = entity.DontConnectUserToWorkingGroup,
                            PhysicalFilePath = entity.PhysicalFilePath,
                            VirtualFilePath = entity.VirtualFilePath,
-                           IsUserFirstLastNameRepresentation = entity.IsUserFirstLastNameRepresentation
+                           IsUserFirstLastNameRepresentation = entity.IsUserFirstLastNameRepresentation,
+                           ComputerUserSearchRestriction = entity.ComputerUserSearchRestriction,
+                           DepartmentFilterFormat = entity.DepartmentFilterFormat,
+                           DefaultCaseTemplateId = entity.DefaultCaseTemplateId,
+                           SetUserToAdministrator = entity.SetUserToAdministrator.ToBool(),
+                           DefaultAdministratorId = entity.DefaultAdministrator
             };
         }
     }

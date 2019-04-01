@@ -1,6 +1,6 @@
 
 import 'zone.js/dist/zone-error';
-import { VERSION } from './version'
+import { VERSION } from './version';
 declare const require: any;
 
 // This file can be replaced during build by using the `fileReplacements` array.
@@ -18,7 +18,7 @@ export const config = {
       version: VERSION.fullVersion,
       internalVersion: require('../../package.json').version,
       enableLog: true,
-}
+};
 
 /*
  * In development mode, to ignore zone related error stack frames such as
@@ -26,4 +26,4 @@ export const config = {
  * import the following file, but please comment it out in production mode
  * because it will have performance impact when throw error
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/dist/zone-error';  // Included with Angular CLI. 

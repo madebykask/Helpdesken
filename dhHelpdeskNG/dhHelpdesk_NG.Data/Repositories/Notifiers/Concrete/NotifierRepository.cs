@@ -279,16 +279,16 @@
         }
 
         public IList<UserSearchResults> Search(int customerId, string searchFor, int? categoryID = null)
-		{
+        {
             var s = (searchFor?.ToLower() ?? string.Empty).Trim();
-		    var emptyCategoryId = ComputerUserCategory.EmptyCategoryId;
+            var emptyCategoryId = ComputerUserCategory.EmptyCategoryId;
 
             var query = from cu in this.DataContext.ComputerUsers
                         join d in this.DataContext.Departments on cu.Department_Id equals d.Id into res
                         from k in res.DefaultIfEmpty()
                         where
                             cu.Customer_Id == customerId &&
-							(   categoryID == null ||                                        // find all users
+                            (   categoryID == null ||                                        // find all users
                                 (categoryID == emptyCategoryId && cu.ComputerUsersCategoryID == null) ||   //find user only without category 
                                 (categoryID > 0 && cu.ComputerUsersCategoryID == categoryID) // find users of the specified category
                             ) 
@@ -304,30 +304,28 @@
                         //|| cu.Cellphone.ToLower().Contains(s)
                         //|| cu.Department.DepartmentName.ToLower().Contains(s))
 
-                        select
-                            new UserSearchResults
-                            {
-                                CellPhone = cu.Cellphone,
-                                Email = cu.Email,
-                                FirstName = cu.FirstName,
-                                Id = cu.Id,
-                                Location = cu.Location,
-                                Phone = cu.Phone,
-                                SurName = cu.SurName,
-                                Department_Id = cu.Department_Id,
-                                OU_Id = cu.OU_Id,
-                                CostCentre = cu.CostCentre,
-                                Region_Id = k.Region_Id,
-                                UserCode = cu.UserCode,
-                                UserId = cu.UserId ?? string.Empty,
-                                RegionName = k.Region.Name,
-                                DepartmentName = cu.Department.DepartmentName,
-                                OUName = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name,
-								CategoryID = cu.ComputerUsersCategoryID,
-								CategoryName = cu.ComputerUserCategory == null ? null : cu.ComputerUserCategory.Name,
-								IsReadOnly = cu.ComputerUserCategory != null && cu.ComputerUserCategory.IsReadOnly
-
-							};
+                        select new UserSearchResults
+                        {
+                            Id = cu.Id,
+                            UserId = cu.UserId ?? string.Empty,
+                            FirstName = cu.FirstName,
+                            SurName = cu.SurName,
+                            Email = cu.Email,
+                            CellPhone = cu.Cellphone,
+                            Phone = cu.Phone,
+                            Location = cu.Location,
+                            UserCode = cu.UserCode,
+                            Region_Id = k.Region_Id,
+                            RegionName = k.Region.Name,
+                            Department_Id = cu.Department_Id,
+                            DepartmentName = cu.Department.DepartmentName,
+                            OU_Id = cu.OU_Id,
+                            OUName = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name,
+                            CostCentre = cu.CostCentre,
+                            CategoryID = cu.ComputerUsersCategoryID,
+                            CategoryName = cu.ComputerUserCategory == null ? null : cu.ComputerUserCategory.Name,
+                            IsReadOnly = cu.ComputerUserCategory != null && cu.ComputerUserCategory.IsReadOnly
+                        };
 
             return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ThenBy(x => x.Id).Take(25).ToList();
         }
@@ -365,14 +363,15 @@
 
             if (parameters.ComputerUserCategoryID.HasValue)
             {
-                var categoryId = parameters.ComputerUserCategoryID.Value == 0
-                    ? null
-                    : parameters.ComputerUserCategoryID;
+                var categoryId =
+                    parameters.ComputerUserCategoryID.Value == ComputerUserCategory.EmptyCategoryId
+                        ? null
+                        : parameters.ComputerUserCategoryID;
 
                 requestBuilder.FilterByComputerUserCategoryID(categoryId);
             }
 
-			var countingRequest = requestBuilder.Build();
+            var countingRequest = requestBuilder.Build();
 
             var notifiersFound = countingRequest.Count();
 
@@ -513,20 +512,26 @@
             this.Update(notifierEntity);
         }
 
+        public Notifier GetInitiatorInfo(string userId, int customerId, bool activeOnly)
+        {
+            var notifier = FindByUserId(userId, customerId, activeOnly);
+            if (notifier != null)
+                return Notifier.CreateForReadonly(
+                        notifier.Id, 
+                        notifier.UserId, 
+                        notifier.LogonName, 
+                        notifier.FirstName,
+                        notifier.SurName, 
+                        notifier.Email, 
+                        notifier.DisplayName, 
+                        notifier.UserCode);
+
+            return null;
+        }
+
         public Notifier GetInitiatorByUserId(string userId, int customerId, bool activeOnly)
         {
-            var notifier =
-                DataContext.ComputerUsers.FirstOrDefault(cu => cu.Customer_Id == customerId &&
-                                                               cu.LogonName.ToLower() == userId.ToLower() &&
-                                                               (!activeOnly || cu.Status != 0));
-
-            if (notifier == null)
-            {
-                notifier =
-                    DataContext.ComputerUsers.FirstOrDefault(cu => cu.Customer_Id == customerId &&
-                                                                   cu.UserId.ToLower() == userId.ToLower() &&
-                                                                   (!activeOnly || cu.Status != 0));
-            }
+            var notifier = FindByUserId(userId, customerId, activeOnly);
 
             if (notifier != null)
                 return Notifier.CreateNew(
@@ -583,7 +588,25 @@
 
         #endregion
 
-        #region Methods
+        #region Private Methods
+
+        private ComputerUser FindByUserId(string userId, int customerId, bool activeOnly)
+        {
+            var notifier =
+                DataContext.ComputerUsers.FirstOrDefault(cu => cu.Customer_Id == customerId &&
+                                                               cu.LogonName.ToLower() == userId.ToLower() &&
+                                                               (!activeOnly || cu.Status != 0));
+
+            if (notifier == null)
+            {
+                notifier =
+                    DataContext.ComputerUsers.FirstOrDefault(cu => cu.Customer_Id == customerId &&
+                                                                   cu.UserId.ToLower() == userId.ToLower() &&
+                                                                   (!activeOnly || cu.Status != 0));
+            }
+
+            return notifier;
+        }
 
         private IQueryable<ComputerUser> FindByCustomerIdCore(int customerId)
         {

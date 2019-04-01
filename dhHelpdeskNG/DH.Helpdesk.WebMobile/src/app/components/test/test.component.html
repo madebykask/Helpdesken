@@ -1,5 +1,43 @@
-<mbsc-card *ngFor="let item of items">
-    <mbsc-card-content>
-        {{ item }}
-    </mbsc-card-content>
-</mbsc-card> 
+
+
+<mbsc-form class="mbsc-padding">
+   <mbsc-form-group>
+      <mbsc-form-group-content>
+
+        <mbsc-input id="notifierInput" #notifierInput        
+            input-style="outline"     
+            placeholder="Enter user name">Input</mbsc-input>
+
+        <mbsc-select [options]="options" [data]="items" #notifiersSelect="mobiscroll"></mbsc-select>
+
+      </mbsc-form-group-content>
+  </mbsc-form-group>
+</mbsc-form>  
+<!-- 
+
+
+  <mbsc-form-group>
+      <label>separator</label>
+  </mbsc-form-group>
+  <mbsc-form-group>
+      <mbsc-form-group-content>
+          <input id="notifierInput2" type="text" style="border:solid 1px red" />
+          <input mbsc-select [mbsc-options]="options3" [mbsc-data]="items"  />
+          
+      </mbsc-form-group-content>
+  </mbsc-form-group>
+
+  <mbsc-form-group>
+    <mbsc-button color="primary" (click)="select.instance.show()">Test</mbsc-button> 
+  </mbsc-form-group>
+  <mbsc-listview [options]="listviewSettings">
+    <mbsc-listview-item *ngFor="let conti of data">
+        {{conti.name}}
+        <mbsc-listview-sublist>
+            <mbsc-listview-item *ngFor="let country of conti.children">
+                <img [src]="country.imgsrc" /> {{country.name}}
+            </mbsc-listview-item>
+        </mbsc-listview-sublist>
+    </mbsc-listview-item>
+  </mbsc-listview>
+  -->

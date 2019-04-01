@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer;
-using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.BusinessRule;
+using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case;
+using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Common.Enums.Case;
@@ -22,6 +26,7 @@ using DH.Helpdesk.WebApi.Infrastructure.Authentication;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
 using DH.Helpdesk.WebApi.Logic.Case;
 using DH.Helpdesk.WebApi.Logic.CaseFieldSettings;
+using DH.Helpdesk.Services.Utils;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
@@ -43,18 +48,24 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IEmailService _emailService;
         private readonly ICaseFileService _caseFileService;
-        private readonly ITemporaryFilesCacheFactory _temporaryFilesStorageFactory;
         private readonly ICustomerUserService _customerUserService;
-
-        #region ctor()
+        private readonly ILogFileService _logFileService;
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
+        private readonly ILogService _logService;
+        private readonly ITemporaryFilesCache _userTempFilesStorage;
+        private readonly ICaseSolutionSettingService _caseSolutionSettingService;
+        private readonly IBaseCaseSolutionService _caseSolutionService;
+        private readonly IStateSecondaryService _stateSecondaryService;
+        private readonly IHolidayService _holidayService;
 
         public CaseSaveController(ICaseService caseService, ICaseFieldSettingService caseFieldSettingService,
-            ICaseLockService caseLockService, ICustomerService customerService,
-            ISettingService customerSettingsService, ICaseEditModeCalcStrategy caseEditModeCalcStrategy,
-            IUserService userService, ISettingsLogic settingsLogic, ICaseFieldSettingsHelper caseFieldSettingsHelper, 
-            IWorkingGroupService workingGroupService, IEmailService emailService, ICaseFileService caseFileService,
-            ITemporaryFilesCacheFactory temporaryFilesCacheFactory,
-            ICustomerUserService customerUserService)
+            ICaseLockService caseLockService, ICustomerService customerService, ISettingService customerSettingsService,
+            ICaseEditModeCalcStrategy caseEditModeCalcStrategy, IUserService userService, ISettingsLogic settingsLogic,
+            ICaseFieldSettingsHelper caseFieldSettingsHelper, IWorkingGroupService workingGroupService, IEmailService emailService,
+            ICaseFileService caseFileService, ICustomerUserService customerUserService, ILogFileService logFileService,
+            IUserPermissionsChecker userPermissionsChecker, ILogService logService, ITemporaryFilesCache userTempFilesStorage,
+            ICaseSolutionSettingService caseSolutionSettingService, IBaseCaseSolutionService caseSolutionService, IStateSecondaryService stateSecondaryService,
+            IHolidayService holidayService)
         {
             _caseService = caseService;
             _caseFieldSettingService = caseFieldSettingService;
@@ -68,11 +79,16 @@ namespace DH.Helpdesk.WebApi.Controllers
             _workingGroupService = workingGroupService;
             _emailService = emailService;
             _caseFileService = caseFileService;
-            _temporaryFilesStorageFactory = temporaryFilesCacheFactory;
             _customerUserService = customerUserService;
+            _logFileService = logFileService;
+            _userPermissionsChecker = userPermissionsChecker;
+            _logService = logService;
+            _userTempFilesStorage = userTempFilesStorage;
+            _caseSolutionSettingService = caseSolutionSettingService;
+            _caseSolutionService = caseSolutionService;
+            _stateSecondaryService = stateSecondaryService;
+            _holidayService = holidayService;
         }
-
-        #endregion
 
         /// <summary>
         /// Save Case
@@ -84,55 +100,154 @@ namespace DH.Helpdesk.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [CheckUserCasePermissions(CaseIdParamName = "caseId")]
-        [Route("save/{caseId:int}")]
-        public async Task<IHttpActionResult> Post([FromUri] int? caseId, [FromUri]int cid, [FromUri] int langId, [FromBody]CaseEditInputModel model)
+        [Route("save/{caseId:int=0}")]
+        public async Task<IHttpActionResult> Save([FromUri] int? caseId, [FromUri]int cid, [FromUri] int langId, [FromBody]CaseEditInputModel model)
         {
-            var isNew = !caseId.HasValue;
-            if (isNew)
-            {
-                return BadRequest("CaseId is required. Creating new case is not supported.");
-            }
-            var edit = caseId > 0;
-            var lockData = await _caseLockService.GetCaseLockAsync(caseId.Value);
-            if (lockData != null && lockData.UserId != UserId)
-            {
-                return BadRequest($"Case is locked by {lockData.User.UserID}.");
-            }
-
-            var oldCase = _caseService.GetDetachedCaseById(caseId.Value);
-            var editMode = _caseEditModeCalcStrategy.CalcEditMode(oldCase.Customer_Id, UserId, oldCase);
-            if (editMode != AccessMode.FullAccess)
-            {
-                return BadRequest($"No permission to edit case {caseId}.");
-            }
-
-            var customerUserSetting = _customerUserService.GetCustomerUserSettings(cid, UserId);
-            if (customerUserSetting == null)
-                throw new Exception($"No customer settings for this customer '{cid}' and user '{UserId}'");
-
-
-            //TODO: validate input -- apply ui validation rules
-
             var utcNow = DateTime.UtcNow;
-            var currentCase = _caseService.GetDetachedCaseById(caseId.Value); //TODO: try to Copy/Clone from oldCase instead
+            var customerId = cid;
+            var caseKey = caseId.HasValue && caseId > 0 ? caseId.Value.ToString() : model.CaseGuid?.ToString();
 
-            var caseFieldSettings = await _caseFieldSettingService.GetCaseFieldSettingsAsync(cid);
-
-            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id))
-                currentCase.CaseResponsibleUser_Id = model.ResponsibleUserId;
-
-            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.Performer_User_Id))
-                currentCase.Performer_User_Id = model.PerformerId;
-
-            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.WorkingGroup_Id))
+            var isEdit = caseId.HasValue && caseId.Value > 0;
+            var oldCase = isEdit ? _caseService.GetDetachedCaseById(caseId.Value) : new Case();
+            if (isEdit)
             {
-                currentCase.WorkingGroup_Id = model.WorkingGroupId;
+                //todo: to be removed when case switching is implemented on mobile 
+                if (oldCase.Customer_Id != customerId)
+                    throw new Exception($"Case customer({oldCase.Customer_Id}) and current customer({customerId}) are different"); 
+
+                var lockData = await _caseLockService.GetCaseLockAsync(caseId.Value);
+                if (lockData != null && lockData.UserId != UserId)
+                {
+                    return BadRequest($"Case is locked by {lockData.User.UserID}.");
+                }
+
+                var editMode = _caseEditModeCalcStrategy.CalcEditMode(oldCase.Customer_Id, UserId, oldCase);
+                if (editMode != AccessMode.FullAccess)
+                {
+                    return BadRequest($"No permission to edit case {caseId}.");
+                }
             }
 
-            if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, GlobalEnums.TranslationCaseFields.StateSecondary_Id))
+            var customerUserSetting = await _customerUserService.GetCustomerUserSettingsAsync(customerId, UserId);
+            if (customerUserSetting == null)
+                throw new Exception($"No customer settings for this customer '{customerId}' and user '{UserId}'");
+
+            //TODO: validate input -- check for ui validation rules (max length and etc.)
+
+            ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings = null;
+            Case currentCase;
+            if (!isEdit)
             {
-                currentCase.StateSecondary_Id = model.StateSecondaryId;
+                var userOverview = await _userService.GetUserOverviewAsync(UserId);
+                if (!userOverview.CreateCasePermission.ToBool())
+                    SendResponse($"User {UserName} is not allowed to create case.", HttpStatusCode.Forbidden);
+
+                CaseSolution caseSolution = null;
+                if (model.CaseSolutionId.HasValue && model.CaseSolutionId > 0)
+                    caseSolution = _caseSolutionService.GetCaseSolution(model.CaseSolutionId.Value);
+
+                var customerDefaults = _customerService.GetCustomerDefaults(customerId);
+                currentCase = new Case();
+
+                CreateCase(customerId, langId, currentCase, caseSolution);
+
+                if (model.CaseGuid.HasValue)
+                    currentCase.CaseGUID = model.CaseGuid.Value;
             }
+            else
+            {
+                currentCase = _caseService.GetDetachedCaseById(caseId.Value);
+            }
+
+            #region Initiator
+            if (customerUserSetting.UserInfoPermission.ToBool())
+            {
+                currentCase.ReportedBy = model.ReportedBy;
+                currentCase.PersonsName = model.PersonName;
+                currentCase.PersonsEmail = model.PersonEmail;
+                currentCase.PersonsPhone = model.PersonPhone;
+                currentCase.PersonsCellphone = model.PersonCellPhone;
+                currentCase.Region_Id = model.RegionId;
+                currentCase.Department_Id = model.DepartmentId;
+                currentCase.OU_Id = model.OrganizationUnitId;
+                currentCase.CostCentre = model.CostCentre;
+                currentCase.Place = model.Place;
+                currentCase.UserCode = model.UserCode;
+            }
+            #endregion
+
+            #region Regarding
+            if (currentCase.IsAbout == null) currentCase.IsAbout = new CaseIsAboutEntity() { Id = currentCase.Id };
+
+            currentCase.IsAbout.ReportedBy = model.IsAbout_ReportedBy;
+            currentCase.IsAbout.Person_Name = model.IsAbout_PersonName;
+            currentCase.IsAbout.Person_Email = model.IsAbout_PersonEmail;
+            currentCase.IsAbout.Person_Phone = model.IsAbout_PersonPhone;
+            currentCase.IsAbout.Person_Cellphone = model.IsAbout_PersonCellPhone;
+            currentCase.IsAbout.Region_Id = model.IsAbout_RegionId;
+            currentCase.IsAbout.Department_Id = model.IsAbout_DepartmentId;
+            currentCase.IsAbout.OU_Id = model.IsAbout_OrganizationUnitId;
+            currentCase.IsAbout.CostCentre = model.IsAbout_CostCentre;
+            currentCase.IsAbout.Place = model.IsAbout_Place;
+            currentCase.IsAbout.UserCode = model.IsAbout_UserCode;
+            #endregion
+
+            #region ComputerInfo
+            currentCase.InventoryNumber = model.InventoryNumber;
+            currentCase.InventoryType = model.ComputerTypeId;
+            currentCase.InventoryLocation = model.InventoryLocation;
+            #endregion
+
+            #region CaseInfo
+
+            currentCase.ChangeTime = DateTime.UtcNow;
+            currentCase.RegistrationSourceCustomer_Id = model.RegistrationSourceCustomerId;
+            currentCase.CaseType_Id = model.CaseTypeId;// Reqiured
+            currentCase.ProductArea_Id = model.ProductAreaId;
+            currentCase.System_Id = model.SystemId;
+            currentCase.Urgency_Id = model.UrgencyId;
+            currentCase.Impact_Id = model.ImpactId;
+            currentCase.Category_Id = model.CategoryId;
+            currentCase.Supplier_Id = model.SupplierId;
+            currentCase.InvoiceNumber = model.InvoiceNumber;
+            currentCase.ReferenceNumber = model.ReferenceNumber;
+            currentCase.Miscellaneous = model.Miscellaneous;
+            currentCase.Caption = model.Caption;
+            currentCase.Description = model.Description;
+            currentCase.ContactBeforeAction = model.ContactBeforeAction.ToInt();
+            currentCase.SMS = model.Sms.ToInt();
+            currentCase.AgreedDate = model.AgreedDate;
+            currentCase.Available = model.Available;
+            currentCase.Cost = model.Cost;
+            currentCase.OtherCost = model.OtherCost;
+            currentCase.Currency = model.CostCurrency;
+            #endregion
+
+            #region CaseManagement
+            currentCase.WorkingGroup_Id = model.WorkingGroupId;
+            currentCase.CaseResponsibleUser_Id = model.ResponsibleUserId;
+            currentCase.Performer_User_Id = model.PerformerId;
+            currentCase.Priority_Id = model.PriorityId;
+            currentCase.Status_Id = model.StatusId;
+            currentCase.StateSecondary_Id = model.StateSecondaryId;
+            currentCase.Project_Id = model.ProjectId;
+            currentCase.Problem_Id = model.ProblemId;
+            currentCase.CausingPartId = model.CausingPartId;
+            currentCase.Change_Id = model.ChangeId;
+            currentCase.PlanDate = model.PlanDate;
+            currentCase.WatchDate = model.WatchDate;
+            currentCase.Verified = model.Verified.ToInt();
+            currentCase.VerifiedDescription = model.VerifiedDescription;
+            currentCase.SolutionRate = model.SolutionRate;
+            #endregion
+
+            #region Status
+            //if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.FinishingDescription))
+            //    currentCase.FinishingDescription = model.FinishingDescription;
+            // if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.ClosingReason))
+            ////    currentCase = model.ClosingReason; // TODO: closing
+            //if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.FinishingDate))
+            //    currentCase.FinishingDate = model.FinishingDate;  // TODO: closing
 
             //if (isNew)
             //{
@@ -142,23 +257,79 @@ namespace DH.Helpdesk.WebApi.Controllers
             //        currentCase.DefaultOwnerWG_Id = userDefaultWorkingGroupId;
             //    }
             //}
+            #endregion
 
-            CaseLog caseLog = null; // TODO: implement
+            var currentUser = _userService.GetUser(UserId);
+            var customerSettings = _customerSettingsService.GetCustomerSettings(customerId);
+            var basePath = _settingsLogic.GetFilePath(customerSettings);
+            var customer = _customerService.GetCustomer(customerId);
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(User.Identity.GetTimezoneId());
 
-            var leadTime = 0;// TODO: add calculation
+            if (isEdit)
+            {
+                int[] departmentIds = null;
+                if (currentCase.Department_Id.HasValue)
+                    departmentIds = new int[] { currentCase.Department_Id.Value };
+
+                var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                    _holidayService,
+                    customer.WorkingDayStart,
+                    customer.WorkingDayEnd,
+                    TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId));
+
+                var workTimeCalc = workTimeCalcFactory.Build(oldCase.RegTime, utcNow, departmentIds);
+
+                StateSecondary caseStateSecondary = null;
+                if(oldCase.StateSecondary_Id.HasValue)
+                    caseStateSecondary = _stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
+
+                if (caseStateSecondary != null && caseStateSecondary.IncludeInCaseStatistics == 0)
+                {
+                    var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
+                        oldCase.ChangeTime,
+                        utcNow,
+                        currentCase.Department_Id);
+                    currentCase.ExternalTime += externalTimeToAdd;
+                }
+
+                var possibleWorktime = workTimeCalc.CalculateWorkTime(
+                    currentCase.RegTime,
+                    utcNow,
+                    currentCase.Department_Id);
+
+                currentCase.LeadTime = possibleWorktime - currentCase.ExternalTime;
+            }
+            /*var leadTime = 0;// TODO: add calculation
             var actionLeadTime = 0;// TODO: add calculation
-            var actionExternalTime = 0;// TODO: add calculation
+            var actionExternalTime = 0;// TODO: add calculation*/
 
             var extraInfo = new CaseExtraInfo()
             {
                 CreatedByApp = CreatedByApplications.WebApi,
-                LeadTimeForNow = leadTime,
-                ActionLeadTime = actionLeadTime,
-                ActionExternalTime = actionExternalTime
+                LeadTimeForNow = currentCase.LeadTime,
+                ActionLeadTime = currentCase.LeadTime - oldCase.LeadTime,
+                ActionExternalTime = currentCase.ExternalTime - oldCase.ExternalTime
             };
 
             IDictionary<string, string> errors;
-            var caseHistoryId = this._caseService.SaveCase(
+
+            var caseLog = new CaseLog()
+            {
+                LogGuid = Guid.NewGuid(), //todo: check usages
+                TextInternal = model.LogInternalText,
+                TextExternal = model.LogExternalText,
+                // in helpdesk Reguser is always empty, but Selfservice users CurrentSystemUser
+                // RegUser is only filled in selfservice
+                RegUser = string.Empty, 
+                UserId = UserId,
+                SendMailAboutCaseToNotifier = true
+                //todo:
+                // FinishingDate = model.FinishingDate
+                // FinishingType = model.FinishingType?
+            };
+
+            // -> SAVE CASE 
+            var caseHistoryId = _caseService.SaveCase(
                 currentCase,
                 caseLog,
                 UserId,
@@ -170,40 +341,138 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             // TODO: caseNotifications?
 
-            // TODO: LOG - if support added 
-            
-            var customerSettings = _customerSettingsService.GetCustomerSettings(oldCase.Customer_Id);
-            var basePath = _settingsLogic.GetFilePath(customerSettings);
-            var customer = _customerService.GetCustomer(oldCase.Customer_Id);
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(User.Identity.GetTimezoneId());
-            var currentUser = _userService.GetUser(UserId);
-
             //case files
             // todo: Check if new cases should be handled here. Save case files for new cases only!
-            if (!edit)
+            if (!isEdit)
             {
-                var tempStorage = _temporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
-                var temporaryFiles = tempStorage.FindFiles(currentCase.CaseGUID.ToString(), ModuleName.Cases);
+                var temporaryFiles = _userTempFilesStorage.FindFiles(caseKey, ModuleName.Cases); 
                 var newCaseFiles = temporaryFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, currentCase.Id, UserId)).ToList();
                 _caseFileService.AddFiles(newCaseFiles);
             }
 
+            #region ExtendedCase sections
+            if (isEdit)// TODO: attach Extended case if required
+            {
+                //if (m.ExtendedInitiatorGUID.HasValue)
+                //{
+                //    var exData = _caseService.GetExtendedCaseData(m.ExtendedInitiatorGUID.Value);
+                //    _caseService.CheckAndUpdateExtendedCaseSectionData(exData.Id, m.case_.Id, m.case_.Customer_Id, CaseSectionType.Initiator);
+                //}
+                //else
+                //{
+                //    _caseService.RemoveAllExtendedCaseSectionData(case_.Id, m.case_.Customer_Id, CaseSectionType.Initiator);
+                //}
+
+                //if (m.ExtendedRegardingGUID.HasValue)
+                //{
+                //    var exData = _caseService.GetExtendedCaseData(m.ExtendedRegardingGUID.Value);
+                //    _caseService.CheckAndUpdateExtendedCaseSectionData(exData.Id, m.case_.Id, m.case_.Customer_Id, CaseSectionType.Regarding);
+                //}
+                //else
+                //{
+                //    _caseService.RemoveAllExtendedCaseSectionData(case_.Id, m.case_.Customer_Id, CaseSectionType.Regarding);
+
+                //}
+            }
+            else
+            {
+                //if (model.ExtendedCaseGuid != Guid.Empty)
+                //{
+                //    var exData = _caseService.GetExtendedCaseData(model.ExtendedCaseGuid);
+                //    _caseService.CreateExtendedCaseRelationship(currentCase.Id, exData.Id);
+                //}
+                //if (model.ReportedBy != null && model.ExtendedInitiatorGUID.HasValue)
+                //{
+                //    var exData = _caseService.GetExtendedCaseData(model.ExtendedInitiatorGUID.Value);
+                //    _caseService.CreateExtendedCaseSectionRelationship(Id, exData.Id, CaseSectionType.Initiator, curCustomer.Id);
+                //}
+                //if (model.IsAbout_ReportedBy != null && model.ExtendedRegardingGUID.HasValue)
+                //{
+                //    var exData = _caseService.GetExtendedCaseData(model.ExtendedRegardingGUID.Value);
+                //    _caseService.CreateExtendedCaseSectionRelationship(currentCase.Id, exData.Id, CaseSectionType.Regarding, curCustomer.Id);
+                //}
+            }
+            #endregion
+
+            #region Folowers
+            var followerUsers = new List<string>();
+            //if (isEdit) // TODO: Folowers
+            //{
+            //    if (!string.IsNullOrEmpty(m.FollowerUsers))
+            //    {
+            //        followerUsers = m.FollowerUsers.Split(BRConstItem.Email_Char_Separator).Where(s => !string.IsNullOrWhiteSpace(s)).Select(x => x.Trim()).ToList();
+            //    }
+            //    _caseExtraFollowersService.SaveExtraFollowers(case_.Id, followerUsers, _workContext.User.UserId);
+            //}
+            //else
+            //{
+            //    if (!string.IsNullOrEmpty(m.FollowerUsers))
+            //    {
+            //        followerUsers = m.FollowerUsers.Split(BRConstItem.Email_Char_Separator).Where(s => !string.IsNullOrWhiteSpace(s)).Select(x => x.Trim()).ToList();
+            //        _caseExtraFollowersService.SaveExtraFollowers(case_.Id, followerUsers, _workContext.User.UserId);
+            //    }
+            //}
+            #endregion
+
+            #region Logs Handling
+
+            caseLog.CaseId = currentCase.Id;
+            caseLog.CaseHistoryId = caseHistoryId;
+
+            /* #58573 Check that user have access to write to InternalLogNote */
+            var caseInternalLogAccess = _userPermissionsChecker.UserHasPermission(currentUser, UserPermission.CaseInternalLogPermission);
+            if (!caseInternalLogAccess)
+                caseLog.TextInternal = null;
+
+            var temporaryLogFiles = _userTempFilesStorage.FindFiles(caseKey, ModuleName.Log);
+            var temporaryExLogFiles = _logFileService.GetExistingFileNamesByCaseId(currentCase.Id);
+            var logFileCount = temporaryLogFiles.Count + temporaryExLogFiles.Count;
+
+            // SAVE LOG
+            caseLog.Id = _logService.SaveLog(caseLog, logFileCount, out errors);
+
             // save log files
-            var allLogFiles = new List<CaseFileDto>();// TODO: Temparary no files. implement after files upload if needed.
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, utcNow, caseLog.Id, currentUser.Id)).ToList();
+            _logFileService.AddFiles(newLogFiles, temporaryExLogFiles, caseLog.Id);
+
+            var allLogFiles = temporaryExLogFiles.Select(f => new CaseFileDto(basePath, f.Name, f.IsExistCaseFile ? Convert.ToInt32(currentCase.CaseNumber) : f.LogId.Value, f.IsExistCaseFile)).ToList();
+            allLogFiles.AddRange(newLogFiles);
+
+            #endregion // Logs handling
 
             // send emails
             var caseMailSetting = GetCaseMailSetting(currentCase, customer, customerSettings);
             _caseService.SendCaseEmail(currentCase.Id, caseMailSetting, caseHistoryId, basePath,
-                userTimeZone, oldCase, caseLog, allLogFiles, currentUser); //TODO: async or move to scheduler
+                                       userTimeZone, oldCase, caseLog, allLogFiles, currentUser); //TODO: async or move to scheduler
 
             // BRE
             var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, currentCase, oldCase);
             if (actions.Any())
-                _caseService.ExecuteBusinessActions(actions, currentCase, caseLog, userTimeZone, caseHistoryId, basePath, langId,
-                    caseMailSetting, allLogFiles); //TODO: async or move to scheduler
+                _caseService.ExecuteBusinessActions(actions, currentCase, caseLog, userTimeZone, caseHistoryId,
+                                                    basePath, langId, caseMailSetting, allLogFiles); //TODO: async or move to scheduler
+
+
+            //delete case and logs temp files
+            _userTempFilesStorage.ResetCacheForObject(caseKey);
 
             // TODO: return errors
-            return Ok(oldCase.Id);
+            return Ok(currentCase.Id);
+        }
+
+        private void CreateCase(int cid, int langId, Case currentCase, CaseSolution caseSolution)
+        {
+            currentCase.RegUserId = ""; // adUser.GetUserFromAdPath(),
+            currentCase.RegUserDomain = ""; // adUser.GetDomainFromAdPath()
+            currentCase.RegLanguage_Id = langId;
+            currentCase.RegistrationSource = caseSolution?.RegistrationSource ?? (int)CaseRegistrationSource.Administrator;
+            currentCase.CaseGUID = new Guid();
+            currentCase.IpAddress = GetClientIp();
+            currentCase.Customer_Id = cid;
+            currentCase.User_Id = UserId;
+            currentCase.RegTime = DateTime.UtcNow;
+            currentCase.CaseResponsibleUser_Id = UserId;
+            currentCase.CaseSolution_Id = (caseSolution?.Id ?? 0) == 0 ? null : caseSolution?.Id;
+            currentCase.CurrentCaseSolution_Id = caseSolution?.Id;
         }
 
         private CaseMailSetting GetCaseMailSetting(Case currentCase, Customer customer, CustomerSettings customerSettings)
@@ -211,7 +480,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var mailSenders = new MailSenders();
             if (currentCase.WorkingGroup_Id.HasValue)
             {
-                var curWg = _workingGroupService.GetWorkingGroup(currentCase.WorkingGroup_Id.Value); 
+                var curWg = _workingGroupService.GetWorkingGroup(currentCase.WorkingGroup_Id.Value);
                 if (curWg != null && !string.IsNullOrWhiteSpace(curWg.EMail) && _emailService.IsValidEmail(curWg.EMail))
                     mailSenders.WGEmail = curWg.EMail;
             }

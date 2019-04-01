@@ -97,7 +97,7 @@
         if (ViewBag.IsLineManagerApplication || 
            (ViewBag.ApplicationType == ApplicationTypes.SelfService && ViewBag.ShowCommunicationForSelfservice)) 
         {
-             @Html.Partial("_Communication", Model.GetCaseLogModel())
+             @Html.Partial("_Communication", Model.CaseLogModel)
         }
 
         @Html.Partial("ModalDialogs/_UploadExistingLogFilePopup")

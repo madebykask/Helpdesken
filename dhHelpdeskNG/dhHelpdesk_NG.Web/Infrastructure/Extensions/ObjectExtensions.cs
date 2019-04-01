@@ -110,18 +110,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return ret;
         }
 
-        /// <summary>
-        /// The is field visible.
-        /// </summary>
-        /// <param name="fields">
-        /// The fields.
-        /// </param>
-        /// <param name="field">
-        /// The field.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
+        public static bool IsFieldRequiredOrVisible(this IList<CaseFieldSetting> fields, GlobalEnums.TranslationCaseFields field)
+        {
+            var isVisible = fields.IsFieldVisible(field);
+            var isRequired = fields.IsFieldRequired(field);
+            return isVisible || isRequired;
+        }
+
         public static bool IsFieldVisible(this IList<CaseFieldSetting> fields, GlobalEnums.TranslationCaseFields field)
         {
             var fs = fields.getCaseSettingsValue(field.ToString());
@@ -131,15 +126,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 return fs.IsActive && !fs.Hide;
             }
-
             return fs.IsActive;
-        }
-
-        public static bool IsFieldRequiredOrVisible(this IList<CaseFieldSetting> fields, GlobalEnums.TranslationCaseFields field)
-        {
-            var isVisible = fields.IsFieldVisible(field);
-            var isRequired = fields.IsFieldRequired(field);
-            return isVisible || isRequired;
         }
 
         public static bool IsFieldRequired(this IList<CaseFieldSetting> fields, GlobalEnums.TranslationCaseFields field)
@@ -167,7 +154,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             {
                 foreach (CaseFieldSetting c in cfs)
                 {
-                    if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
+                    if (string.Equals(c.Name, valueToFind.getCaseFieldName(), StringComparison.OrdinalIgnoreCase))
                     {
                         ret = c;
                         break;

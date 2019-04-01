@@ -1,23 +1,43 @@
-<div *ngIf="grouppedItems && grouppedItems.length">
-  <mbsc-card *ngFor="let group of grouppedItems">
-      <mbsc-card-header>          
-          <!-- mbsc-card-title class="mbsc-bold">{{ group.CreatedByUserName }}</mbsc-card-title -->
-          <mbsc-card-subtitle class="mbsc-txt-s">
-              <div class="mbsc-grid mbsc-margin mbsc-txt-muted mbsc-bold mbsc-txt-s">
-                  <div class="mbsc-row mbsc-no-padding">
-                      <div class="mbsc-col-8 time"><span><i class="mbsc-ic mbsc-ic-fa-clock-o"></i> {{ group.CreatedAt | date:'yyyy-MM-dd HH:mm:ss' }}</span></div>
-                      <div class="mbsc-col-4 mbsc-bold author">{{ group.CreatedByUserName }}</div>
-                  </div>
-              </div>
-          </mbsc-card-subtitle>
-      </mbsc-card-header>
-      <mbsc-card-content>
-          <mbsc-listview [swipe]="false" [enhance]="true">
-              <mbsc-listview-item *ngFor="let action of group.Actions" [icon]="getActionIcon(action)">
-                  <div [innerHTML]="action.Data.getTitle()">
-                  </div>                      
-              </mbsc-listview-item>
-          </mbsc-listview>
-      </mbsc-card-content>
-  </mbsc-card> 
+<div class="mbsc-padding md-load-btn md-btn-isLoading" [hidden]="isLoaded">
+    <mbsc-button flat block icon="fa-refresh"></mbsc-button>
+</div>
+
+<div id="case-actions" *ngIf="grouppedItems && grouppedItems.length">
+  <mbsc-card *ngFor="let group of grouppedItems;trackBy:getTrackId" [class.owner]="isActionOwner(group.CreatedByUserId)">
+    <mbsc-card-header>
+      <mbsc-card-subtitle class="mbsc-txt-s">
+        <div class="mbsc-grid mbsc-margin mbsc-txt-muted mbsc-bold mbsc-txt-s">
+          <div class="mbsc-row mbsc-no-padding">
+            <div class="mbsc-col-6 time">
+                <span><i class="mbsc-ic mbsc-ic-fa-clock-o"></i> {{ group.createdAt | dateTimeFormat }}</span>
+            </div>
+            <div class="mbsc-col-6 mbsc-bold author">{{ group.createdBy }}</div>
+          </div>
+        </div>
+      </mbsc-card-subtitle>
+    </mbsc-card-header>
+    <mbsc-card-content>
+      <!-- main actions first -->
+      <div class="actions-main">
+        <mbsc-listview *ngIf="group.hasMain" [swipe]="false" [enhance]="true">
+          <mbsc-listview-item *ngFor="let action of group.Actions | actionsFilter:'main';trackBy:getTrackId">
+              <case-action-container [caseKey]="caseKey" [caseAction]="action"></case-action-container>
+          </mbsc-listview-item>
+        </mbsc-listview>
+      </div>
+      <!-- other actions last -->
+      <div class="actions-other">
+        <mbsc-form-group collapsible *ngIf="group.hasOther">
+            <mbsc-form-group-title translate>Övriga händelser</mbsc-form-group-title>
+            <mbsc-form-group-content>
+            <mbsc-listview [swipe]="false" [enhance]="true">
+                <mbsc-listview-item *ngFor="let action of group.Actions | actionsFilter:'other';trackBy:getTrackId">
+                    <case-action-container [caseKey]="caseKey" [caseAction]="action"></case-action-container>
+                </mbsc-listview-item>
+            </mbsc-listview>
+          </mbsc-form-group-content>
+        </mbsc-form-group>
+      </div>
+    </mbsc-card-content>
+  </mbsc-card>
 </div>

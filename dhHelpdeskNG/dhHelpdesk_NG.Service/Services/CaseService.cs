@@ -1,58 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IdentityModel.Tokens;
+using System.Data.Entity;
 using System.Linq;
-using DH.Helpdesk.BusinessData.Enums.Users;
-using DH.Helpdesk.BusinessData.Models.Feedback;
+using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
-using DH.Helpdesk.BusinessData.Models.Customer;
+using DH.Helpdesk.Common.Extensions.DateTime;
+using DH.Helpdesk.Dal.MapperData.CaseHistory;
+using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Computers;
-using DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback;
-using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services
 {
 
-    using DH.Helpdesk.BusinessData.Models.BusinessRules;
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
-    using DH.Helpdesk.BusinessData.Models.Case.Output;
-    using DH.Helpdesk.BusinessData.Models.Email;    
-    using DH.Helpdesk.BusinessData.Models.User.Input;
-    using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-    using DH.Helpdesk.Common.Constants;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.Enums.BusinessRule;        
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.NewInfrastructure;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Repositories.Cases;    
-    using DH.Helpdesk.Domain;    
-    using DH.Helpdesk.Domain.MailTemplates;
-    using DH.Helpdesk.Domain.Problems;
-    using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
-    using DH.Helpdesk.Services.Infrastructure.Email;
-    using DH.Helpdesk.Services.Localization;
-    using DH.Helpdesk.Services.Services.CaseStatistic;
-    using DH.Helpdesk.Services.utils;    
-    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
-    using DH.Helpdesk.Services.Infrastructure;
-    using Feedback;
-    using BusinessData.Models.MailTemplates;
-    using DH.Helpdesk.Domain.ExtendedCaseEntity;
-    using System.Linq.Expressions;
-    using Common.Enums.Cases;
-    using Common.Extensions.String;
+	using DH.Helpdesk.BusinessData.Models.BusinessRules;
+	using DH.Helpdesk.BusinessData.Models.Case;
+	using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
+	using DH.Helpdesk.BusinessData.Models.Case.Output;
+	using DH.Helpdesk.BusinessData.Models.User.Input;
+	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+	using DH.Helpdesk.Common.Constants;
+	using DH.Helpdesk.Common.Enums;
+	using DH.Helpdesk.Common.Enums.BusinessRule;
+	using DH.Helpdesk.Dal.Enums;
+	using DH.Helpdesk.Dal.Infrastructure;
+	using DH.Helpdesk.Dal.NewInfrastructure;
+	using DH.Helpdesk.Dal.Repositories;
+	using DH.Helpdesk.Dal.Repositories.Cases;
+	using DH.Helpdesk.Domain;
+	using DH.Helpdesk.Domain.MailTemplates;
+	using DH.Helpdesk.Domain.Problems;
+	using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
+	using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
+	using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
+	using DH.Helpdesk.Services.BusinessLogic.Specifications;
+	using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
+	using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
+	using DH.Helpdesk.Services.Infrastructure.Email;
+	using DH.Helpdesk.Services.Localization;
+	using DH.Helpdesk.Services.Services.CaseStatistic;
+	using DH.Helpdesk.Services.utils;
+	using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
+	using DH.Helpdesk.Services.Infrastructure;
+	using Feedback;
+	using DH.Helpdesk.Domain.ExtendedCaseEntity;
+	using System.Linq.Expressions;
+	using Common.Enums.Cases;
+	using Common.Extensions.String;
+	using Utils;
 
-    public partial class CaseService : ICaseService
+	public partial class CaseService : ICaseService
     {
         private readonly ICaseRepository _caseRepository;
         private readonly ICaseFileRepository _caseFileRepository;
@@ -93,6 +90,9 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseSolutionRepository _caseSolutionRepository;
         private readonly IStateSecondaryRepository _stateSecondaryRepository;
         private readonly ICustomerRepository _customerRepository;
+		private readonly ICustomerService _customerService;
+		private readonly IDepartmentService _departmentService;
+		private readonly IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> _caseHistoryOverviewMapper;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -133,79 +133,91 @@ namespace DH.Helpdesk.Services.Services
             ICaseSectionsRepository caseSectionsRepository,
             ICaseSolutionRepository caseSolutionRepository,
             IStateSecondaryRepository stateSecondaryRepository,
-            ICustomerRepository customerRepository)
+            ICustomerRepository customerRepository,
+			ICustomerService customerService,
+			IDepartmentService departmentService,
+			IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper)
         {
-            this._unitOfWork = unitOfWork;
-            this._caseRepository = caseRepository;
-            this._caseRepository = caseRepository;
-            this._priorityService = priorityService;
-            this._workingGroupService = workingGroupService;
-            this._userRepository = userRepository;
-            this._caseMailer = caseMailer;
-            this._invoiceArticleService = invoiceArticleService;
-            this._unitOfWorkFactory = unitOfWorkFactory;
-            this._caseHistoryRepository = caseHistoryRepository;
-            this._mailTemplateService = mailTemplateService;
-            this._emailLogRepository = emailLogRepository;
-            this._emailLogAttemptRepository = emailLogAttemptRepository;
-            this._emailService = emailService;
-            this._settingService = settingService;
-            this._caseFileRepository = caseFileRepository;
-            this._filesStorage = filesStorage;
-            this._logRepository = logRepository;
-            this._logFileRepository = logFileRepository;
-            this._formFieldValueRepository = formFieldValueRepository;
-            this._surveyService = surveyService;
-            this._finishingCauseService = finishingCauseService;
-            this._caseLockService = caseLockService;
-            this._caseStatService = caseStatService;
-            this._caseFilterFavoriteRepository = caseFilterFavoriteRepository;
-            this._mail2TicketRepository = mail2TicketRepository;
-            this._businessRuleService = businessRuleService;
-            this._emailGroupService = emailGroupService;
-            this._userService = userService;
-            this._emailSendingSettingsProvider = emailSendingSettingsProvider;
-            this._caseExtraFollowersService = caseExtraFollowersService;
-            this._feedbackTemplateService = feedbackTemplateService;
-            this._productAreaService = productAreaService;
-            this._extendedCaseFormRepository = extendedCaseFormRepository;
-            this._extendedCaseDataRepository = extendedCaseDataRepository;
-            this._caseFollowUpService = caseFollowUpService;
-            this._caseSectionsRepository = caseSectionsRepository;
-            this._caseSolutionRepository = caseSolutionRepository;
-            this._stateSecondaryRepository = stateSecondaryRepository;
-            this._customerRepository = customerRepository;
+            _unitOfWork = unitOfWork;
+            _caseRepository = caseRepository;
+            _caseRepository = caseRepository;
+            _priorityService = priorityService;
+            _workingGroupService = workingGroupService;
+            _userRepository = userRepository;
+            _caseMailer = caseMailer;
+            _invoiceArticleService = invoiceArticleService;
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _caseHistoryRepository = caseHistoryRepository;
+            _mailTemplateService = mailTemplateService;
+            _emailLogRepository = emailLogRepository;
+            _emailLogAttemptRepository = emailLogAttemptRepository;
+            _emailService = emailService;
+            _settingService = settingService;
+            _caseFileRepository = caseFileRepository;
+            _filesStorage = filesStorage;
+            _logRepository = logRepository;
+            _logFileRepository = logFileRepository;
+            _formFieldValueRepository = formFieldValueRepository;
+            _surveyService = surveyService;
+            _finishingCauseService = finishingCauseService;
+            _caseLockService = caseLockService;
+            _caseStatService = caseStatService;
+            _caseFilterFavoriteRepository = caseFilterFavoriteRepository;
+            _mail2TicketRepository = mail2TicketRepository;
+            _businessRuleService = businessRuleService;
+            _emailGroupService = emailGroupService;
+            _userService = userService;
+            _emailSendingSettingsProvider = emailSendingSettingsProvider;
+            _caseExtraFollowersService = caseExtraFollowersService;
+            _feedbackTemplateService = feedbackTemplateService;
+            _productAreaService = productAreaService;
+            _extendedCaseFormRepository = extendedCaseFormRepository;
+            _extendedCaseDataRepository = extendedCaseDataRepository;
+            _caseFollowUpService = caseFollowUpService;
+            _caseSectionsRepository = caseSectionsRepository;
+            _caseSolutionRepository = caseSolutionRepository;
+            _stateSecondaryRepository = stateSecondaryRepository;
+            _customerRepository = customerRepository;
+			_customerService = customerService;
+			_departmentService = departmentService;
+
+			_caseHistoryOverviewMapper = caseHistoryOverviewMapper;
+        }
+
+        public Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false)
+        {
+            return _caseRepository.GetCaseByIdAsync(id, markCaseAsRead);
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
         {
-            return this._caseRepository.GetCaseById(id, markCaseAsRead);
+            return _caseRepository.GetCaseById(id, markCaseAsRead);
         }
 
         public int GetCaseCustomerId(int caseId)
         {
-            var customerId = this._caseRepository.GetCaseCustomerId(caseId);
+            var customerId = _caseRepository.GetCaseCustomerId(caseId);
             return customerId;
         }
 
         public Case GetDetachedCaseById(int id)
         {
-            return this._caseRepository.GetDetachedCaseById(id);
+            return _caseRepository.GetDetachedCaseById(id);
         }
 
         public Case GetCaseByGUID(Guid GUID)
         {
-            return this._caseRepository.GetCaseByGUID(GUID);
+            return _caseRepository.GetCaseByGUID(GUID);
         }
 
         public int GetCaseIdByEmailGUID(Guid GUID)
         {
-            return this._caseRepository.GetCaseIdByEmailGUID(GUID);
+            return _caseRepository.GetCaseIdByEmailGUID(GUID);
         }
 
         public Case GetCaseByEMailGUID(Guid GUID)
         {
-            return this._caseRepository.GetCaseByEmailGUID(GUID);
+            return _caseRepository.GetCaseByEmailGUID(GUID);
         }
 
         public EmailLog GetEMailLogByGUID(Guid GUID)
@@ -373,7 +385,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (parentCaseId.HasValue)
             {
-                using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
+                using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
                 {
                     var relationsRepo = uow.GetRepository<ParentChildRelation>();
                     var relation = relationsRepo.GetAll().FirstOrDefault(it => it.DescendantId == id);
@@ -396,51 +408,51 @@ namespace DH.Helpdesk.Services.Services
             this.DeleteCaseIsAboutFor(id);
 
             // delete form field values
-            var ffv = this._formFieldValueRepository.GetFormFieldValuesByCaseId(id);
+            var ffv = _formFieldValueRepository.GetFormFieldValuesByCaseId(id);
             if (ffv != null)
             {
                 foreach (var v in ffv)
                 {
-                    this._formFieldValueRepository.Delete(v);
+                    _formFieldValueRepository.Delete(v);
                 }
-                this._formFieldValueRepository.Commit();
+                _formFieldValueRepository.Commit();
             }
 
             // delete log files
-            var logFiles = this._logFileRepository.GetLogFilesByCaseId(id);
+            var logFiles = _logFileRepository.GetLogFilesByCaseId(id);
 
             if (logFiles != null)
             {
                 foreach (var f in logFiles)
                 {
-                    this._filesStorage.DeleteFile(ModuleName.Log, f.Log_Id, basePath, f.FileName);
-                    this._logFileRepository.Delete(f);
+                    _filesStorage.DeleteFile(ModuleName.Log, f.Log_Id, basePath, f.FileName);
+                    _logFileRepository.Delete(f);
                 }
-                this._logFileRepository.Commit();
+                _logFileRepository.Commit();
             }
 
             // delete logs
-            var logs = this._logRepository.GetLogForCase(id, true).ToList();
+            var logs = _logRepository.GetLogForCase(id, true).ToList();
             // delete Mail2tickets with log
             foreach (var l in logs)
             {
-                this._mail2TicketRepository.DeleteByLogId(l.Id);
+                _mail2TicketRepository.DeleteByLogId(l.Id);
             }
-            this._mail2TicketRepository.Commit();
+            _mail2TicketRepository.Commit();
 
 
             foreach (var l in logs)
             {
-                this._logRepository.Delete(l);
+                _logRepository.Delete(l);
             }
-            this._logRepository.Commit();
+            _logRepository.Commit();
 
             //Delete Mail2Tickets by caseId
-            this._mail2TicketRepository.DeleteByCaseId(id);
-            this._mail2TicketRepository.Commit();
+            _mail2TicketRepository.DeleteByCaseId(id);
+            _mail2TicketRepository.Commit();
 
             // delete email logs
-            var elogs = this._emailLogRepository.GetEmailLogsByCaseId(id);
+            var elogs = _emailLogRepository.GetEmailLogsByCaseId(id);
             if (elogs != null)
             {
                 foreach (var l in elogs)
@@ -448,50 +460,50 @@ namespace DH.Helpdesk.Services.Services
                     if (l.EmailLogAttempts != null && l.EmailLogAttempts.Any())
                         _emailLogAttemptRepository.DeleteLogAttempts(l.Id);
 
-                    this._emailLogRepository.Delete(l);
+                    _emailLogRepository.Delete(l);
                 }
-                this._emailLogRepository.Commit();
+                _emailLogRepository.Commit();
             }
 
             // delete caseHistory
-            var caseHistories = this._caseHistoryRepository.GetCaseHistoryByCaseId(id);
+            var caseHistories = _caseHistoryRepository.GetCaseHistoryByCaseId(id);
             if (caseHistories != null)
             {
                 foreach (var h in caseHistories)
                 {
-                    this._caseHistoryRepository.Delete(h);
+                    _caseHistoryRepository.Delete(h);
                 }
             }
 
-            this._caseHistoryRepository.Commit();
+            _caseHistoryRepository.Commit();
 
             //delete case lock
-            this._caseLockService.UnlockCaseByCaseId(id);
+            _caseLockService.UnlockCaseByCaseId(id);
 
             // delete case files
-            var caseFiles = this._caseFileRepository.GetCaseFilesByCaseId(id);
+            var caseFiles = _caseFileRepository.GetCaseFilesByCaseId(id);
             if (caseFiles != null)
             {
                 foreach (var f in caseFiles)
                 {
-                    this._filesStorage.DeleteFile(ModuleName.Cases, f.Case_Id, basePath, f.FileName);
-                    this._caseFileRepository.Delete(f);
+                    _filesStorage.DeleteFile(ModuleName.Cases, f.Case_Id, basePath, f.FileName);
+                    _caseFileRepository.Delete(f);
                 }
-                this._caseFileRepository.Commit();
+                _caseFileRepository.Commit();
             }
 
             // delete File View Log
-            this._caseFileRepository.DeleteFileViewLogs(id);
-            this._caseFileRepository.Commit();
+            _caseFileRepository.DeleteFileViewLogs(id);
+            _caseFileRepository.Commit();
 
             // delete Invoice
-            this._invoiceArticleService.DeleteCaseInvoices(id);
+            _invoiceArticleService.DeleteCaseInvoices(id);
 
 
             //delete FollowUp
-            this._caseFollowUpService.DeleteFollowUp(id);
+            _caseFollowUpService.DeleteFollowUp(id);
 
-            var c = this._caseRepository.GetById(id);
+            var c = _caseRepository.GetById(id);
 
             if (c.CaseSectionExtendedCaseDatas != null && c.CaseSectionExtendedCaseDatas.Any())
             {
@@ -507,25 +519,25 @@ namespace DH.Helpdesk.Services.Services
 
         public int LookupLanguage(int custid, string notid, int regid, int depid, string notifierid)
         {
-            int res = this._caseRepository.LookupLanguage(custid, notid, regid, depid, notifierid);
+            int res = _caseRepository.LookupLanguage(custid, notid, regid, depid, notifierid);
             return res;
         }
 
 
         public List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId)
         {
-            var ret = this._caseFilterFavoriteRepository.GetUserFavoriteFilters(customerId, userId);
+            var ret = _caseFilterFavoriteRepository.GetUserFavoriteFilters(customerId, userId);
             return ret;
         }
 
         public string SaveFavorite(CaseFilterFavorite favorite)
         {
-            var res = this._caseFilterFavoriteRepository.SaveFavorite(favorite);
+            var res = _caseFilterFavoriteRepository.SaveFavorite(favorite);
             if (res == string.Empty)
             {
                 try
                 {
-                    this._caseFilterFavoriteRepository.Commit();
+                    _caseFilterFavoriteRepository.Commit();
                 }
                 catch (Exception ex)
                 {
@@ -537,12 +549,12 @@ namespace DH.Helpdesk.Services.Services
 
         public string DeleteFavorite(int favoriteId)
         {
-            var res = this._caseFilterFavoriteRepository.DeleteFavorite(favoriteId);
+            var res = _caseFilterFavoriteRepository.DeleteFavorite(favoriteId);
             if (res == string.Empty)
             {
                 try
                 {
-                    this._caseFilterFavoriteRepository.Commit();
+                    _caseFilterFavoriteRepository.Commit();
                 }
                 catch (Exception ex)
                 {
@@ -554,7 +566,7 @@ namespace DH.Helpdesk.Services.Services
 
         public void DeleteChildCaseFromParent(int id, int parentCaseId)
         {
-            using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var relationsRepo = uow.GetRepository<ParentChildRelation>();
                 var relation = relationsRepo.GetAll().FirstOrDefault(it => it.DescendantId == id);
@@ -572,7 +584,7 @@ namespace DH.Helpdesk.Services.Services
         {
             if (childCaseId == parentCaseId)
                 return false;
-            using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var parentChildRelationRepo = uow.GetRepository<ParentChildRelation>();
                 var allreadyExists = parentChildRelationRepo.GetAll()
@@ -607,22 +619,48 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public CaseOverview GetCaseOverview(int caseId)
         {
-            return this._caseRepository.GetCaseOverview(caseId);
+            return _caseRepository.GetCaseOverview(caseId);
         }
 
         public MyCase[] GetMyCases(int userId, int? count = null)
         {
-            return this._caseRepository.GetMyCases(userId, count);
+            return _caseRepository.GetMyCases(userId, count);
         }
 
         public StateSecondary GetCaseSubStatus(int caseId)
         {
-            return this._caseRepository.GetCaseSubStatus(caseId);
+            return _caseRepository.GetCaseSubStatus(caseId);
+        }
+
+        public Task<CustomerCasesStatus> GetCustomerCasesStatusAsync(int customerId, int userId)
+        {
+            var today = DateTime.Today;
+            var customer = _customerRepository.GetOverview(customerId);
+            
+            var customerCasesQuery = _caseRepository.GetCustomerCases(customerId).AsQueryable();
+            return customerCasesQuery.Take(1).Select(res => new CustomerCasesStatus()
+            {
+                CustomerId = customerId,
+                CustomerName = customer.Name,
+
+                MyCases =
+                    customerCasesQuery.Where(c => c.FinishingDate == null && c.Deleted == 0 &&
+                                                  (c.Performer_User_Id == userId || c.CaseResponsibleUser_Id == userId)).Count(),
+
+                InProgress =
+                    customerCasesQuery.Where(c => c.FinishingDate == null && c.Deleted == 0).Count(),
+
+                NewToday =
+                    customerCasesQuery.Where(c => c.Deleted == 0 && c.FinishingDate == null && DbFunctions.TruncateTime(c.RegTime) == today).Count(),
+
+                ClosedToday =
+                    customerCasesQuery.Where(c => c.FinishingDate != null && DbFunctions.TruncateTime(c.FinishingDate) == today).Count(),
+            }).SingleOrDefaultAsync();
         }
 
         public CustomerCases[] GetCustomersCases(int[] customerIds, int userId)
         {
-            using (var uow = this._unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var customerRepository = uow.GetRepository<Customer>();
                 var problemsRep = uow.GetRepository<Problem>();
@@ -640,7 +678,7 @@ namespace DH.Helpdesk.Services.Services
 
         public List<RelatedCase> GetCaseRelatedCases(int caseId, int customerId, string userId, UserOverview currentUser)
         {
-            using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var caseRep = uow.GetRepository<Case>();
 
@@ -653,7 +691,7 @@ namespace DH.Helpdesk.Services.Services
 
         public int GetCaseRelatedCasesCount(int caseId, int customerId, string userId, UserOverview currentUser)
         {
-            using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var caseRep = uow.GetRepository<Case>();
 
@@ -710,7 +748,7 @@ namespace DH.Helpdesk.Services.Services
             string adUser,
             out ParentCaseInfo parentCaseInfo)
         {
-            var c = this._caseRepository.GetDetachedCaseById(copyFromCaseid);
+            var c = _caseRepository.GetDetachedCaseById(copyFromCaseid);
             if (c.IsAbout == null)
             {
                 var tt = 1;
@@ -737,24 +775,24 @@ namespace DH.Helpdesk.Services.Services
 
         public Case Copy(int copyFromCaseid, int userId, int languageId, string ipAddress, CaseRegistrationSource source, string adUser)
         {
-            var c = this._caseRepository.GetDetachedCaseIncludesById(copyFromCaseid);
+            var c = _caseRepository.GetDetachedCaseIncludesById(copyFromCaseid);
             c.User_Id = userId;
             return InitNewCaseCopy(c, userId, ipAddress, source, adUser);
         }
 
         public void MarkAsUnread(int caseId)
         {
-            this._caseRepository.MarkCaseAsUnread(caseId);
+            _caseRepository.MarkCaseAsUnread(caseId);
         }
 
         public void MarkAsRead(int caseId)
         {
-            this._caseRepository.MarkCaseAsRead(caseId);
+            _caseRepository.MarkCaseAsRead(caseId);
         }
 
         public IList<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user)
         {
-            return this._caseRepository.GetRelatedCases(id, customerId, reportedBy, user).OrderByDescending(c => c.Id).ToList();
+            return _caseRepository.GetRelatedCases(id, customerId, reportedBy, user).OrderByDescending(c => c.Id).ToList();
         }
 
         public Case InitCase(int customerId, int userId, int languageId, string ipAddress, CaseRegistrationSource source, Setting customerSetting, string adUser)
@@ -777,13 +815,13 @@ namespace DH.Helpdesk.Services.Services
                 Priority_Id = customerDefaults.PriorityId,
                 Status_Id = customerDefaults.StatusId,
                 //State
-                WorkingGroup_Id = this._userRepository.GetUserDefaultWorkingGroupId(userId, customerId),
+                WorkingGroup_Id = _userRepository.GetUserDefaultWorkingGroupId(userId, customerId),
                 RegUserId = adUser.GetUserFromAdPath(),
                 RegUserDomain = adUser.GetDomainFromAdPath()
             };
 
             // http://redmine.fastdev.se/issues/10997
-            //            c.WorkingGroup_Id = this._workingGroupService.GetDefaultId(customerId, userId);
+            //            c.WorkingGroup_Id = _workingGroupService.GetDefaultId(customerId, userId);
 
             if (customerSetting != null)
             {
@@ -801,22 +839,22 @@ namespace DH.Helpdesk.Services.Services
         
         public IList<Case> GetProblemCases(int problemId)
         {
-            return this._caseRepository.GetProblemCases(problemId);
+            return _caseRepository.GetProblemCases(problemId);
         }
 
         public IList<Case> GetProjectCases(int customerId, int projectId)
         {
-            return this._caseRepository.GetProjectCases(customerId, projectId);
+            return _caseRepository.GetProjectCases(customerId, projectId);
         }
 
         public IList<Case> GetProblemCases(int customerId, int problemId)
         {
-            return this._caseRepository.GetProblemCases(customerId, problemId);
+            return _caseRepository.GetProblemCases(customerId, problemId);
         }
 
         public IList<Case> GetCasesByCustomers(IEnumerable<int> customerIds)
         {
-            return this._caseRepository
+            return _caseRepository
                 .GetMany(x => customerIds.Contains(x.Customer_Id) &&
                          x.Deleted == 0)
                  .ToList();
@@ -824,20 +862,49 @@ namespace DH.Helpdesk.Services.Services
 
         public void UpdateFollowUpDate(int caseId, DateTime? time)
         {
-            this._caseRepository.UpdateFollowUpDate(caseId, time);
+            _caseRepository.UpdateFollowUpDate(caseId, time);
         }
+
 
         public void Activate(int caseId, int userId, string adUser, string createdByApp, out IDictionary<string, string> errors)
         {
-            this._caseRepository.Activate(caseId);
+			var _case = _caseRepository.GetCaseById(caseId);
+			var customer = _customerService.GetCustomer(_case.Customer_Id);
+			var departmentIds = _departmentService.GetDepartments(customer.Id)
+				.Select(o => o.Id)
+				.ToArray();
+
+			var user = _userService.GetUser(userId);
+
+			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+				ManualDependencyResolver.Get<IHolidayService>(),
+				customer.WorkingDayStart,
+				customer.WorkingDayEnd,
+				TimeZoneInfo.FindSystemTimeZoneById(user.TimeZoneId));
+
+			var utcNow = DateTime.UtcNow;
+			var workTimeCalc = workTimeCalcFactory.Build(_case.RegTime, utcNow, departmentIds);
+			var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
+				_case.ChangeTime,
+				utcNow,
+				_case.Department_Id);
+
+			var possibleWorktime = workTimeCalc.CalculateWorkTime(
+				_case.RegTime,
+				utcNow,
+				_case.Department_Id);
+
+			var leadTime = possibleWorktime - _case.ExternalTime - externalTimeToAdd;
+
+			_caseRepository.Activate(caseId, leadTime, externalTimeToAdd);
             var c = _caseRepository.GetDetachedCaseById(caseId);
-            this._caseStatService.UpdateCaseStatistic(c);
+            _caseStatService.UpdateCaseStatistic(c);
             SaveCaseHistory(c, userId, adUser, createdByApp, out errors);
         }
         
         public void Commit()
         {
-            this._unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         /// <summary>
@@ -864,14 +931,14 @@ namespace DH.Helpdesk.Services.Services
                 CaseExtraInfo caseExtraInfo,
                 out IDictionary<string, string> errors,
                 Case parentCase = null,
-            string caseExtraFollowers = null)
+                string caseExtraFollowers = null)
         {
             var ret = 0;
 
             if (cases == null)
-                throw new ArgumentNullException("cases");
+                throw new ArgumentNullException(nameof(cases));
 
-            var c = this.ValidateCaseRequiredValues(cases, caseLog);
+            var c = ValidateCaseRequiredValues(cases, caseLog);
 
             // unread/status flag update if not case is closed and not changed by adminsitrator 
             //c.Unread = 0;
@@ -883,29 +950,22 @@ namespace DH.Helpdesk.Services.Services
                 c.RegTime = DateTime.UtcNow;
                 c.ChangeTime = DateTime.UtcNow;
 
-                this._caseRepository.Add(c);
+                _caseRepository.Add(c);
             }
             else
             {
                 c.ChangeTime = DateTime.UtcNow;
-                if (userId == 0)
-                {
-                    c.ChangeByUser_Id = null;
-                }
-                else
-                {
-                    c.ChangeByUser_Id = userId;
-                }
+                c.ChangeByUser_Id = userId == 0 ? (int?) null : userId;
 
-                this._caseRepository.Update(c);
+                _caseRepository.Update(c);
             }
             
-            this._caseRepository.Commit();
-            this._caseStatService.UpdateCaseStatistic(c);
+            _caseRepository.Commit();
+            _caseStatService.UpdateCaseStatistic(c);
 
             // save CaseIsAbout
             if (c.IsAbout != null)
-                this.SaveIsAbout(c, out errors);
+                SaveIsAbout(c, out errors);
 
             // save casehistory
             var extraFields = new ExtraFieldCaseHistory();
@@ -925,8 +985,8 @@ namespace DH.Helpdesk.Services.Services
             extraFields.ActionExternalTime = caseExtraInfo.ActionExternalTime;
 
             ret = userId == 0 ?
-                this.SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, adUser, extraFields, caseExtraFollowers) :
-                this.SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, string.Empty, extraFields, caseExtraFollowers);
+                SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, adUser, extraFields, caseExtraFollowers) :
+                SaveCaseHistory(c, userId, adUser, caseExtraInfo.CreatedByApp, out errors, string.Empty, extraFields, caseExtraFollowers);
 
             return ret;
         }
@@ -963,17 +1023,18 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseHistory> GetCaseHistoryByCaseId(int caseId)
         {
-            return this._caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList();
+            return _caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList();
         }
 
         public IList<CaseHistoryOverview> GetCaseHistories(int caseId)
         {
-            return this._caseHistoryRepository.GetCaseHistories(caseId).ToList();
+            var items = _caseHistoryRepository.GetCaseHistories(caseId);
+            return items.Select(_caseHistoryOverviewMapper.Map).ToList();
         }
 
         public Dictionary<int, string> GetCaseFiles(List<int> caseIds)
         {
-            var preCaseFiles = this._caseFileRepository.GetMany(f => caseIds.Contains(f.Case_Id)).ToList();
+            var preCaseFiles = _caseFileRepository.GetMany(f => caseIds.Contains(f.Case_Id)).ToList();
 
             var groupedCaseFiles = preCaseFiles.GroupBy(f => f.Case_Id)
                                                .Select(g => new
@@ -1121,7 +1182,7 @@ namespace DH.Helpdesk.Services.Services
         private void SaveIsAbout(Case c, out IDictionary<string, string> errors)
         {
             errors = new Dictionary<string, string>();
-            using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var isAboutEntity = uow.GetRepository<CaseIsAboutEntity>();
                 var allreadyExists = isAboutEntity
@@ -1198,7 +1259,7 @@ namespace DH.Helpdesk.Services.Services
         public bool AddChildCase(int childCaseId, int parentCaseId, out IDictionary<string, string> errors)
         {
             errors = new Dictionary<string, string>();
-            using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var parentChildRelationRepo = uow.GetRepository<ParentChildRelation>();
                 var allreadyExists = parentChildRelationRepo
@@ -1389,7 +1450,7 @@ namespace DH.Helpdesk.Services.Services
             string caseExtraFollowers = null)
         {
             var h = new CaseHistory();
-            var user = this._userRepository.GetUser(userId);
+            var user = _userRepository.GetUser(userId);
             h.AgreedDate = c.AgreedDate;
             h.ApprovedDate = c.AgreedDate;
             h.ApprovedBy_User_Id = c.ApprovedBy_User_Id;
@@ -1550,7 +1611,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (c.User_Id.HasValue)
             {
-                var user = this._userService.GetUser(c.User_Id.Value);
+                var user = _userService.GetUser(c.User_Id.Value);
                 ret.Add(new Field { Key = "[#29]", StringValue = user != null ? user.FirstName + " " + user.SurName : string.Empty });
             }
             else
@@ -1602,7 +1663,7 @@ namespace DH.Helpdesk.Services.Services
             if (cms != null)
             {
                 /// if case is closed and was no vote in survey - add HTML inormation about survey
-                if (c.IsClosed() && (this._surveyService.GetByCaseId(c.Id) == null))
+                if (c.IsClosed() && (_surveyService.GetByCaseId(c.Id) == null))
                 {
                     var template = new SurveyTemplate()
                     {
@@ -1788,7 +1849,7 @@ namespace DH.Helpdesk.Services.Services
 
         public void SetIndependentChild(int caseID, bool independentChild)
         {
-            using (var uow = this._unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var parentCaseRelation = uow.GetRepository<ParentChildRelation>()
                     .GetAll()

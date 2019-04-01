@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer;
@@ -18,6 +19,7 @@ namespace DH.Helpdesk.Services.Services
         IList<CustomerUser> GetCustomerUsersForUser(int userId);
 
         CustomerUser GetCustomerUserSettings(int customer, int user);
+        Task<CustomerUser> GetCustomerUserSettingsAsync(int customer, int user);
 
         UserCaseSetting GetUserCaseSettings(int customerId, int userId);
 
@@ -74,6 +76,11 @@ namespace DH.Helpdesk.Services.Services
         public CustomerUser GetCustomerUserSettings(int customer, int user)
         {
             return _customerUserRepository.GetCustomerSettings(customer, user);
+        }
+
+        public Task<CustomerUser> GetCustomerUserSettingsAsync(int customer, int user)
+        {
+            return _customerUserRepository.GetCustomerSettingsAsync(customer, user);
         }
 
         public UserCaseSetting GetUserCaseSettings(int customerId, int userId)

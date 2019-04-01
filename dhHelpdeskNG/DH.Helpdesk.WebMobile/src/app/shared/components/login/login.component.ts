@@ -1,13 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { switchMap, finalize, take } from 'rxjs/operators';
-
+import { switchMap, finalize, take, map } from 'rxjs/operators';
 import { AuthenticationService } from '../../../services/authentication';
-import { UserSettingsService } from '../../../services/user'
+import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
 import { throwError, Subject } from 'rxjs';
 import { ErrorHandlingService } from '../../../services/logging/error-handling.service';
-import { UserData } from 'src/app/models';
 import { config } from '@env/environment';
 
 @Component({
@@ -40,10 +38,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
-        private userSettingsService: UserSettingsService,
+        private userSettingsService: UserSettingsApiService,
         private errorHandlingService: ErrorHandlingService) {}
 
-    ngOnInit() {        
+    ngOnInit() {
         this.loginForm = this.formBuilder.group({
             username: ['', Validators.required],
             password: ['', Validators.required]
@@ -64,8 +62,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     get f() { return this.loginForm.controls; }
 
     getError(field: string): string {
-        var ctrl = this.loginForm.get(field);
-        var message = '';
+        let ctrl = this.loginForm.get(field);
+        let message = '';
         if (ctrl.errors) {
             for(var err in ctrl.errors) {
                 if (ctrl.errors[err]) {
@@ -90,23 +88,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.authenticationService.login(this.f.username.value, this.f.password.value)
             .pipe(
-                take(1),                
-                switchMap(isSuccess => {                    
-                    if (!isSuccess) throwError('Something wrong.');
-                    return this.userSettingsService.loadUserSettings().pipe(
-                        take(1),
-                        switchMap((userData:UserData) =>{
-                            return this.userSettingsService.applyUserSettings();
-                        })
-                    );
-                }),                
-                finalize(() => this.isLoading = false) 
-            ).subscribe(res => {                
+              take(1),
+              map(currentUser => {
+                  return this.userSettingsService.applyUserSettings();
+              }),                
+              finalize(() => this.isLoading = false)
+            ).subscribe(res => {
                     this.showLoginError = false;
-                    this.router.navigateByUrl(this.returnUrl);                                                    
+                    this.router.navigateByUrl(this.returnUrl);
                 },
                 error => {                    
-                    if (error.status && error.status === 400) {                           
+                    if (error.status && error.status === 400) {
                         this.showLoginError = true;
                     } else {
                         this.errorHandlingService.handleError(error);

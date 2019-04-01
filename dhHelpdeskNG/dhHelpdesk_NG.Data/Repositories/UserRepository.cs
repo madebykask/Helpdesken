@@ -569,7 +569,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     FAQPermission = x.FAQPermission,
                     BulletinBoardPermission = x.BulletinBoardPermission,
                     DocumentPermission = x.DocumentPermission,
-                    InventoryPermission = x.InventoryPermission,
+                    InventoryAdminPermission = x.InventoryPermission,
+					InventoryViewPermission = x.InventoryViewPermission,
                     ContractPermission = x.ContractPermission,
                     SetPriorityPermission = x.SetPriorityPermission,
                     InvoicePermission = x.InvoicePermission,
@@ -587,7 +588,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     TimeZoneId = x.TimeZoneId,
                     UserGUID = x.UserGUID,
                     CaseInternalLogPermission = x.CaseInternalLogPermission,
-                    InvoiceTimePermission = x.InvoiceTimePermission
+                    InvoiceTimePermission = x.InvoiceTimePermission,
                 };
 
             return exp;

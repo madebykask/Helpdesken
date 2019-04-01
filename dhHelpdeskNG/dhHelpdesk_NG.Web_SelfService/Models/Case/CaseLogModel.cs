@@ -1,30 +1,44 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.SelfService.Models.Case
 {
-    using Log = DH.Helpdesk.Domain.Log;
-
     public class CaseLogModel 
     {
         public CaseLogModel()
         { 
         }
 
-        public CaseLogModel(int caseId, List<Log> caseLogs)
+        public CaseLogModel(int caseId, List<Log> caseLogs, string currentUser, bool showInteralLog = false) 
         {
-            this.CaseId = caseId;
-            this.CaseLogs = caseLogs;
+            CaseId = caseId;
+            CurrentUser = currentUser;
+            CaseLogs = caseLogs;
+            ShowInternalLogNotes = showInteralLog;
         }
 
-        public int CaseId { get; set; }
-        public List<Log> CaseLogs { get; set; }
+        public int CaseId { get; }
+        public string CurrentUser { get;  }
+        public List<Log> CaseLogs { get; }
+        public bool ShowInternalLogNotes { get; }
 
-        public Log GetLastInteral()
+        public List<Log> GetCaseLogsForExternalPage()
         {
-            return CaseLogs?.Where(l => !string.IsNullOrEmpty(l.Text_Internal.Trim()))
-                .OrderBy(l => l.RegTime)
-                .LastOrDefault();
+            var filter =
+                ShowInternalLogNotes
+                    ? (Func<Log, bool>)(l => !string.IsNullOrEmpty(l.Text_Internal.Trim()))
+                    : (Func<Log, bool>)(l => !string.IsNullOrEmpty(l.Text_External.Trim()));
+
+            var logs = CaseLogs?.Where(filter).OrderByDescending(l => l.RegTime).ToList();
+            return logs;
+        }
+
+        public Log GetLastLogForExternalPage()
+        {
+            var log = GetCaseLogsForExternalPage().FirstOrDefault();
+            return log;
         }
     }
 }

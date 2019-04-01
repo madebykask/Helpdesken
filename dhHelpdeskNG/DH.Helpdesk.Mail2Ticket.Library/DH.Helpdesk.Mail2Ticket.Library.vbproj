@@ -92,6 +92,7 @@
     <Compile Include="CaseType\CaseTypeData.vb" />
     <Compile Include="Case\Case.vb" />
     <Compile Include="Case\CaseData.vb" />
+    <Compile Include="Case\CaseWorkTime.vb" />
     <Compile Include="Checklist\Checklist.vb" />
     <Compile Include="Checklist\ChecklistData.vb" />
     <Compile Include="ComputerUsers\ComputerUser.vb" />
@@ -190,6 +191,10 @@
     <ProjectReference Include="..\dhHelpdesk_NG.DTO\DH.Helpdesk.BusinessData.csproj">
       <Project>{c4520e52-cb9e-4fd6-bee9-92aa532685a2}</Project>
       <Name>DH.Helpdesk.BusinessData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dhHelpdesk_NG.Service\DH.Helpdesk.Services.csproj">
+      <Project>{3A5BFA9B-C033-4C1C-81AF-7B4E1BEDCFA3}</Project>
+      <Name>DH.Helpdesk.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />

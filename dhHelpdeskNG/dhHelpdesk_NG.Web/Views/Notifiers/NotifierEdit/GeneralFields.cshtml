@@ -8,7 +8,7 @@
         <div class="span12">
             <table class="tableform">
 
-                @{ var attributes = Model.ComputerUserCategoryModel.IsReadOnly ? (object)new { htmlAttributes = new { @readonly = "readonly" } } : new { };}
+                @{ var attributes = Model.IsReadOnly ? (object)new { htmlAttributes = new { @readonly = "readonly" } } : new { };}
 
                 @Html.EditorFor(m => m.UserId, "TextBox", attributes)
 
@@ -16,7 +16,7 @@
                 {
                     <tr>
                         <td>@Translation.GetCoreTextTranslation("Kategori")</td>
-                        <td>@Html.DropDown("category_dropdown", "CategoryId", false, Model.ComputerUserCategoryModel.ComputerUserCategories, false, Model.ComputerUserCategoryModel.IsReadOnly)</td>
+                        <td>@Html.DropDown("category_dropdown", "CategoryId", false, Model.ComputerUserCategoryModel.ComputerUserCategories, false, Model.IsReadOnly)</td>
                     </tr>
                 }
 
@@ -24,7 +24,7 @@
                 {
                     <tr>
                         <td>@(Translation.GetCoreTextTranslation(Model.Domain.Caption) + (Model.Domain.Required ? "*" : string.Empty))</td>
-                        <td>@Html.DropDown("domain_dropdown", "DomainId", !Model.Domain.Required, Model.Domain.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)</td>
+                        <td>@Html.DropDown("domain_dropdown", "DomainId", !Model.Domain.Required, Model.Domain.Value, false, Model.IsReadOnly)</td>
                     </tr>
                 }
 
@@ -43,7 +43,7 @@
                 {
                     <tr>
                         <td>@(Translation.GetCoreTextTranslation(Model.Language.Caption) + (Model.Language.Required ? "*" : string.Empty))</td>
-                        <td>@Html.DropDown("language_dropdown", "LanguageId", Model.Language.Required, Model.Language.Value, false, Model.ComputerUserCategoryModel.IsReadOnly)</td>
+                        <td>@Html.DropDown("language_dropdown", "LanguageId", Model.Language.Required, Model.Language.Value, false, Model.IsReadOnly)</td>
                     </tr>
                 }
             </table>

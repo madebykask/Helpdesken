@@ -1,0 +1,1 @@
+Import-Certificate -FilePath "internal.datahalland.se.cer" -CertStoreLocation 'Cert:\CurrentUser\Root' -Verbose

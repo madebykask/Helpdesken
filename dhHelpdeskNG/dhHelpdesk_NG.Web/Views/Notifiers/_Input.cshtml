@@ -1,5 +1,4 @@
-﻿@using System.Web.Optimization
-@model DH.Helpdesk.Web.Models.Notifiers.InputModel
+﻿@model DH.Helpdesk.Web.Models.Notifiers.InputModel
 
 @Scripts.Render("~/bundles/notifiers/notifier")
 
@@ -11,17 +10,17 @@
     @if (Model.Managers.Show)
     {
         @:window.parameters.showManager = true;
-            @:window.parameters.managers = [];
+        @:window.parameters.managers = [];
 
         foreach (var manager in Model.Managers.Value.Items)
         {
             @:window.parameters.managers.push({ displayName: '@manager.Name', id: '@manager.Value' });
-            }
+        }
     }
     else
     {
         @:window.parameters.showManager = false;
-        }
+    }
 </script>
 
 <div class="content">
@@ -29,44 +28,20 @@
         <div class="container">
             <ul class="nav nav-tabs">
                 <li class="active">
-                    <a href="#fragment-1">@Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)</a>
+                    <a href="#fragment-1">@Translation.GetCoreTextTranslation("Anmälare")</a>
                 </li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane tab-pane-border active" id="fragment-1">
-                    @if (Model.UserId.Show || Model.Domain.Show || Model.LoginName.Show
-                        || Model.FirstName.Show || Model.Initials.Show || Model.LastName.Show
-                        || Model.DisplayName.Show || Model.Place.Show || Model.Phone.Show
-                        || Model.CellPhone.Show || Model.Email.Show || Model.Code.Show)
-                    {
-                        @Html.Partial("NotifierEdit/GeneralFields", Model)
-                    }
 
-                    @if (Model.PostalAddress.Show || Model.PostalCode.Show || Model.City.Show)
-                    {
-                        @Html.Partial("NotifierEdit/AddressFields", Model)
-                    }
-
-                    @if (Model.Title.Show || Model.Department.Show || Model.Unit.Show
-                        || Model.OrganizationUnit.Show || Model.Division.Show || Model.Managers.Show
-                        || Model.Group.Show || Model.Other.Show)
-                    {
-                        @Html.Partial("NotifierEdit/OrganizationFields", Model)
-                    }
-
-                    @if (Model.Ordered.Show)
-                    {
-                        @Html.Partial("NotifierEdit/OrdererFields", Model)
-                    }
-
-                    @Html.Partial("NotifierEdit/StateFields", Model)
+                    @Html.Partial("_Details", Model)
 
                     @if (Model.ComputerUserCategoryModel.ExtendedCaseFormID.HasValue)
                     {
                         <div class="container">
                             <h4>@Model.ComputerUserCategoryModel.Name details</h4>
                             <div class="row">
-                                <iframe id="extendedComputerUser" style="width:500px; height:280px; margin-left:20px" frameborder="0" 
+                                <iframe id="extendedComputerUser" style="width: 500px; height: 280px; margin-left: 20px" frameborder="0"
                                         src="@Model.ComputerUserCategoryModel.ExtendedCasePath"></iframe>
                             </div>
                         </div>
@@ -77,7 +52,6 @@
     </div>
 </div>
 
-
 <script type="text/javascript">
 
     var validationTrans = "@Translation.GetForJS("måste anges")";
@@ -86,27 +60,18 @@
     $(function() {
 
         $('#department_dropdown').change(function () {
-
             var selectedVal = $('#department_dropdown option:selected').attr('value');
-
             $.get("/notifiers/GetLanguageFromDepartment/", { departmentid: "'" + selectedVal.toString() + "'" }, function (result) {
-
                 if (parseInt(result) > 0) {
                     $("#language_dropdown").val(result);
                 }
             });
         });
 
-
         $('#region_dropdown').change(function () {
-
             var selectedVal = $('#region_dropdown option:selected').attr('value');
-
-
             $.get("/notifiers/GetLanguageFromRegion/", { regionid: "'" + selectedVal.toString() + "'" }, function (result) {
-
                 if (parseInt(result) > 0) {
-
                     $("#language_dropdown").val(result);
                 }
             });

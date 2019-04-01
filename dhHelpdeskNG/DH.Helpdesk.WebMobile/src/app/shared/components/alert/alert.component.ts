@@ -24,8 +24,7 @@ export class AlertComponent implements OnInit {
   popupSettings: MbscPopupOptions  = {
     display: 'bottom',
     closeOnOverlayTap	: true,
-    animate: 'slidedown',
-    theme: 'auto',
+    animate: 'slidedown',    
     cssClass: 'mbsc-no-padding alertspopup',
     };
   

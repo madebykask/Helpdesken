@@ -1,0 +1,23 @@
+.lognote{}
+
+.logNoteText {
+  font-style: italic;
+  white-space: pre-wrap;
+}
+
+ul.files{
+  list-style: none none;
+  padding:0;
+  margin:0;
+  li {
+    margin: 2px 0 0 0;
+  }
+}
+
+a.more, a.less {
+  display: block;
+  margin: 5px 0 0 0;
+}
+.files .mbsc-ic {
+  margin-right: 4px;
+}

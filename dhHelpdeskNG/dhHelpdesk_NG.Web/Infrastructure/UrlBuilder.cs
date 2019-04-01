@@ -61,6 +61,12 @@ namespace DH.Helpdesk.Web.Infrastructure
             return this;
         }
 
+        public UrlBuilder ClearParams()
+        {
+            _qsParams?.Clear();
+            return this;
+        }
+
         public string BuildUrl()
         {
             var first = true;

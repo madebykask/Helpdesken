@@ -8,14 +8,12 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
     using System.Linq;
-
-    using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Mappers;
     using DH.Helpdesk.Domain;
 
     /// <summary>
@@ -33,6 +31,8 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The <see cref="Setting"/>.
         /// </returns>
         Setting GetCustomerSetting(int id);
+
+        Task<Setting> GetCustomerSettingAsync(int id);
 
         List<int> GetExtendedSearchIncludedCustomers();
     }
@@ -69,9 +69,14 @@ namespace DH.Helpdesk.Dal.Repositories
             return this.Get(x => x.Customer_Id == id);
         }
 
+        public Task<Setting> GetCustomerSettingAsync(int id)
+        {
+            return GetAsync(x => x.Customer_Id == id);
+        }
+
         public List<int> GetExtendedSearchIncludedCustomers()
         {
-            return this.Table.Where(x => x.CustomerInExtendedSearch == 1).Select(x => x.Customer_Id).ToList();
+            return Table.Where(x => x.CustomerInExtendedSearch == 1).Select(x => x.Customer_Id).ToList();
         }
     }
 }

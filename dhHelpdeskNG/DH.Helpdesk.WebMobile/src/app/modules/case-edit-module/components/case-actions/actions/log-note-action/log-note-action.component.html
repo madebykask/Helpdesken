@@ -1,0 +1,16 @@
+<div *ngIf="data">  
+  <div *ngIf="data.text && data.text.length" class="lognote" >
+        <span class="{{ getActionIcon() }}"></span>
+        <span #tr="truncate" truncate="10" class="logNoteText">{{ data.text }}</span>
+        <div [hidden]="!tr.isTruncated">
+            <a class="more" href="javascript:;" (click)="tr.showText()">&gt;&gt;</a>
+        </div>        
+        <div [hidden]="tr.isTruncated || !tr.canTruncate">
+            <a class="less" href="javascript:;" (click)="tr.truncate()">&lt;&lt;</a>
+        </div> 
+  </div>
+  <ul *ngIf="data.files && data.files.length" class="files">
+      <li *ngFor="let file of data.files"><span><i class="mbsc-ic mbsc-ic-fa-paperclip"></i>
+       <a (click)="downloadLogFile(file)">{{ file.fileName }}</a></span></li>
+  </ul>
+</div>

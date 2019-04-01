@@ -1,6 +1,13 @@
 Imports System.Data.SqlClient
+Imports System.Linq
+Imports DH.Helpdesk.BusinessData.Models.WorktimeCalculator
+Imports DH.Helpdesk.Dal.Infrastructure
+Imports DH.Helpdesk.Dal.Repositories
 'Imports System.Data.Odbc
 Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
+Imports DH.Helpdesk.Services.Infrastructure
+Imports DH.Helpdesk.Services.Services
+Imports DH.Helpdesk.Services.Utils
 
 Public Class CaseData
     Public Function getTodayPlanDate() As Collection
@@ -71,9 +78,9 @@ Public Class CaseData
             sSQL = sSQL & ") Values (" & CStr(iCase_Id) & ", "
 
             sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(u.UserId, "'", ""), 40) & "', "
-            sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(u.FirstName & u.SurName, "'", ""), 50) & "', " & _
-                            getDBStringPrefix() & "'" & Left(Replace(u.EMail, "'", "''"), 100) & "', " & _
-                            getDBStringPrefix() & "'" & Replace(Left(u.Phone, 40), "'", "''") & "', " & _
+            sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(u.FirstName & u.SurName, "'", ""), 50) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(u.EMail, "'", "''"), 100) & "', " &
+                            getDBStringPrefix() & "'" & Replace(Left(u.Phone, 40), "'", "''") & "', " &
                             getDBStringPrefix() & "'" & Left(u.CellPhone, 30) & "', "
             If u.Region_Id = 0 Then
                 sSQL = sSQL & "Null, "
@@ -90,8 +97,8 @@ Public Class CaseData
             Else
                 sSQL = sSQL & u.OU_Id & ", "
             End If
-            sSQL = sSQL & getDBStringPrefix() & "'" & Left(u.CostCentre, 50) & "', " & _
-                            getDBStringPrefix() & "'" & Left(u.Location, 100) & "', " & _
+            sSQL = sSQL & getDBStringPrefix() & "'" & Left(u.CostCentre, 50) & "', " &
+                            getDBStringPrefix() & "'" & Left(u.Location, 100) & "', " &
                             getDBStringPrefix() & "'" & Left(u.UserCode, 20) & "'"
             sSQL = sSQL & ")"
 
@@ -117,7 +124,9 @@ Public Class CaseData
         Dim sSQL As String
 
         Try
-            sSQL = "UPDATE tblCase SET ApprovedDate=getutcDate(), ChangeTime=getutcdate() WHERE Id=" & objCase.Id
+
+            Dim workTime As CaseWorkTime = calculateWorkTimeOnChange(objCase)
+            sSQL = $"UPDATE tblCase SET ApprovedDate='{workTime.Now}', ChangeTime='{workTime.Now}', ExternalTime={workTime.ExternalTime}, LeadTime={workTime.LeadTime} WHERE Id={objCase.Id}"
 
             executeSQL(gsConnectionString, sSQL)
         Catch ex As Exception
@@ -126,19 +135,121 @@ Public Class CaseData
         End Try
     End Sub
 
+    Public Function calculateWorkTimeOnChange(ByVal ccase As CCase) As CaseWorkTime
+        Dim databaseFactory = New DatabaseFactory(gsConnectionString)
+        Dim userService = New UserService(Nothing,
+                                              Nothing,
+                                              Nothing,
+                                              Nothing,
+                                              Nothing,
+                                              Nothing,
+                                              New UserRepository(databaseFactory),
+                                              Nothing,
+                                              Nothing,
+                                              Nothing,
+                                              Nothing,
+                                              Nothing,
+                                              Nothing,
+                                              Nothing,
+                                              Nothing,
+                                              Nothing,
+                                              Nothing,
+                                              Nothing,
+                                              Nothing,
+                                              Nothing)
+
+        Dim customerService As CustomerService = New CustomerService(Nothing,
+                                                      Nothing,
+                                                      New CustomerRepository(databaseFactory),
+                                                      Nothing,
+                                                      Nothing,
+                                                      Nothing,
+                                                      Nothing,
+                                                      Nothing,
+                                                      Nothing,
+                                                      Nothing,
+                                                      Nothing)
+
+        Dim settingsService As SettingService = New SettingService(New SettingRepository(databaseFactory), Nothing, Nothing)
+
+        Dim departmentService = New DepartmentService(New DepartmentRepository(databaseFactory), Nothing, Nothing, Nothing)
+        Dim holidayService = New HolidayService(New HolidayRepository(databaseFactory), Nothing, Nothing, departmentService)
+
+        Dim customer As DH.Helpdesk.Domain.Customer = customerService.GetCustomer(ccase.Customer_Id)
+
+        Dim setting As DH.Helpdesk.Domain.Setting = settingsService.GetCustomerSetting(customer.Id)
+
+        Dim timeZone As TimeZoneInfo = TimeZoneInfo.GetSystemTimeZones().First(Function(o) o.BaseUtcOffset.TotalMinutes = setting.TimeZone_offset)
+
+        Dim workTimeCalcFactory As WorkTimeCalculatorFactory = New WorkTimeCalculatorFactory(
+                holidayService,
+                customer.WorkingDayStart,
+                customer.WorkingDayEnd,
+                timeZone)
+
+
+        Dim departmentIds As Integer()
+
+        If ccase.Department_Id > 0 Then
+            departmentIds = New Integer() {ccase.Department_Id}
+        End If
+
+        Dim utcNow = DateTime.UtcNow
+        Dim workTimeCalc = workTimeCalcFactory.Build(ccase.RegTime, utcNow, departmentIds)
+
+        Dim isExternalTime As Boolean = False
+
+        If (ccase.IncludeInCaseStatistics = 0 Or ccase.FinishingDate <> DateTime.MinValue) Then
+            isExternalTime = True
+        End If
+
+        Dim workTime = calculateCaseWorkTime(workTimeCalc, ccase.RegTime, ccase.ChangeTime, ccase.ExternalTime, ccase.Department_Id, isExternalTime, utcNow, setting.TimeZone_offset)
+
+        Return workTime
+    End Function
+
+    Public Function calculateCaseWorkTime(ByVal workTimeCalculator As WorkTimeCalculator, ByVal regTime As DateTime, ByVal from As DateTime, ByVal currentExternalTime As Integer, ByVal departmentId As Integer, ByVal isExternalTime As Boolean, ByVal utcNow As DateTime, ByVal customerTimeoffset As Integer) As CaseWorkTime
+
+        Dim possibleWorktime = workTimeCalculator.CalculateWorkTime(
+                regTime,
+                utcNow,
+                departmentId,
+                customerTimeoffset)
+
+        Dim externalTime = currentExternalTime
+        If (isExternalTime) Then
+            Dim externalTimeToAdd = workTimeCalculator.CalculateWorkTime(
+                from,
+                utcNow,
+                departmentId,
+                customerTimeoffset)
+            externalTime = externalTime + externalTimeToAdd
+        End If
+
+        Dim leadTime = possibleWorktime - externalTime
+
+        Dim workTime = New CaseWorkTime(externalTime, leadTime, utcNow)
+        Return workTime
+
+    End Function
+
     Public Sub activateCase(ByVal objCase As CCase, ByVal iOpenCase_StateSecondary_Id As Integer, ByVal iWorkingDayStart As Integer, ByVal iWorkingDayEnd As Integer, iTimeZone_offset As Integer)
         Dim sSQL As String
 
         Try
-            Dim iExternalTime As Integer = LeadTimeMinutes(getLocalTime(objCase.ChangeTime, iTimeZone_offset), getLocalTime(DateTime.UtcNow, iTimeZone_offset), iWorkingDayStart, iWorkingDayEnd, objCase.HolidayHeader_Id)
 
-            sSQL = "UPDATE tblCase SET " & _
-                            "Finishingdate=Null, " & _
-                            "ApprovedDate=Null, " & _
-                            "ApprovedBy_User_Id=Null, " & _
-                            "Status=1, " & _
-                            "ChangeTime=getutcdate(), " & _
-                            "ExternalTime=Externaltime + " & iExternalTime
+            Dim workTime = calculateWorkTimeOnChange(objCase)
+
+            'Dim iExternalTime As Integer = LeadTimeMinutes(getLocalTime(objCase.ChangeTime, iTimeZone_offset), getLocalTime(DateTime.UtcNow, iTimeZone_offset), iWorkingDayStart, iWorkingDayEnd, objCase.HolidayHeader_Id)
+
+            sSQL = $"UPDATE tblCase SET " &
+                            "Finishingdate=Null, " &
+                            "ApprovedDate=Null, " &
+                            "ApprovedBy_User_Id=Null, " &
+                            "Status=1, " &
+                            $"ChangeTime='{workTime.Now}', " &
+                            $"ExternalTime={workTime.ExternalTime}, " &
+                            $"LeadTime={workTime.LeadTime}"
 
             If iOpenCase_StateSecondary_Id <> 0 Then
                 sSQL = sSQL & ", StateSecondary_Id=" & iOpenCase_StateSecondary_Id
@@ -161,7 +272,8 @@ Public Class CaseData
         Dim sSQL As String
 
         Try
-            sSQL = "UPDATE tblCase SET Status=1, ChangeTime=getutcdate() WHERE Id=" & objCase.Id
+            Dim workTime = calculateWorkTimeOnChange(objCase)
+            sSQL = $"UPDATE tblCase SET Status=1, ChangeTime='{workTime.Now}', ExternalTime={workTime.ExternalTime}, LeadTime={workTime.LeadTime} WHERE Id={objCase.Id}"
 
             'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
@@ -210,15 +322,15 @@ Public Class CaseData
 
         Try
 
-            Dim iExternalTime As Integer = 0
+            'Dim iExternalTime As Integer = 0
 
-            If objCase.IncludeInCaseStatistics = 0 And objCase.FinishingDate = Date.MinValue Then
-                iExternalTime = LeadTimeMinutes(getLocalTime(objCase.ChangeTime, iTimeZone_offset), getLocalTime(DateTime.UtcNow, iTimeZone_offset), iWorkingDayStart, iWorkingDayEnd, objCase.HolidayHeader_Id)
-            End If
+            'If objCase.IncludeInCaseStatistics = 0 And objCase.FinishingDate = Date.MinValue Then
+            'iExternalTime = LeadTimeMinutes(getLocalTime(objCase.ChangeTime, iTimeZone_offset), getLocalTime(DateTime.UtcNow, iTimeZone_offset), iWorkingDayStart, iWorkingDayEnd, objCase.HolidayHeader_Id)
+            'End If
 
-            sSQL = "UPDATE tblCase SET StateSecondary_Id=Null, ChangeTime=getutcdate() " & _
-                        ",ExternalTime=ExternalTime + " & iExternalTime & _
-                    " WHERE tblCase.Id=" & objCase.Id
+            Dim workTime = calculateWorkTimeOnChange(objCase)
+
+            sSQL = $"UPDATE tblCase SET StateSecondary_Id=Null, ChangeTime='{workTime.Now}', ExternalTime={workTime.ExternalTime}, LeadTime={workTime.LeadTime} WHERE tblCase.Id={objCase.Id}"
 
             'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
@@ -237,12 +349,12 @@ Public Class CaseData
         Try
 
             ' Skapa nytt ärende
-            sSQL = "INSERT INTO tblCase(CaseGUID, CaseType_Id, Customer_Id, ProductArea_Id,Category_Id, Region_Id, ReportedBy, Department_Id, OU_Id, Persons_Name, " & _
-                            "Persons_EMail, Persons_Phone, Persons_CellPhone, Place, UserCode, CostCentre, InventoryNumber, InvoiceNumber, Caption, Description, Miscellaneous, Available, ReferenceNumber, Priority_Id, WorkingGroup_Id, Performer_User_Id, Status_Id, StateSecondary_Id, " & _
-                            "WatchDate, RegistrationSource, RegLanguage_Id, RegistrationSourceCustomer_Id, RegUserName, RegTime, ChangeTime) " & _
-                        "VALUES(" & _
-                            getDBStringPrefix() & "'" & objCase.CaseGUID & "', " & _
-                            objCase.CaseType_Id & ", " & _
+            sSQL = "INSERT INTO tblCase(CaseGUID, CaseType_Id, Customer_Id, ProductArea_Id,Category_Id, Region_Id, ReportedBy, Department_Id, OU_Id, Persons_Name, " &
+                            "Persons_EMail, Persons_Phone, Persons_CellPhone, Place, UserCode, CostCentre, InventoryNumber, InvoiceNumber, Caption, Description, Miscellaneous, Available, ReferenceNumber, Priority_Id, WorkingGroup_Id, Performer_User_Id, Status_Id, StateSecondary_Id, " &
+                            "WatchDate, RegistrationSource, RegLanguage_Id, RegistrationSourceCustomer_Id, RegUserName, RegTime, ChangeTime) " &
+                        "VALUES(" &
+                            getDBStringPrefix() & "'" & objCase.CaseGUID & "', " &
+                            objCase.CaseType_Id & ", " &
                             objCase.Customer_Id & ", "
 
             If objCase.ProductArea_Id = 0 Then
@@ -276,19 +388,19 @@ Public Class CaseData
                 sSQL = sSQL & objCase.OU_Id & ", "
             End If
 
-            sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(objCase.Persons_Name, "'", ""), 50) & "', " & _
-                            getDBStringPrefix() & "'" & Replace(objCase.Persons_EMail, "'", "''") & "', " & _
-                            getDBStringPrefix() & "'" & Replace(Left(objCase.Persons_Phone, 40), "'", "''") & "', " & _
-                            getDBStringPrefix() & "'" & Left(objCase.Persons_CellPhone, 30) & "', " & _
-                            getDBStringPrefix() & "'" & Left(objCase.Place, 50) & "', " & _
-                            getDBStringPrefix() & "'" & Left(objCase.UserCode, 20) & "', " & _
-                            getDBStringPrefix() & "'" & Left(objCase.CostCentre, 50) & "', " & _
-                            getDBStringPrefix() & "'" & Replace(objCase.InventoryNumber, "'", "") & "', " & _
-                            getDBStringPrefix() & "'" & Replace(objCase.InvoiceNumber, "'", "") & "', " & _
-                            getDBStringPrefix() & "'" & Replace(objCase.Caption, "'", "") & "', " & _
-                            getDBStringPrefix() & "'" & Replace(objCase.Description, "'", "''") & "', " & _
-                            getDBStringPrefix() & "'" & Replace(objCase.Miscellaneous, "'", "''") & "', " & _
-                            getDBStringPrefix() & "'" & Replace(objCase.Available, "'", "''") & "', " & _
+            sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(objCase.Persons_Name, "'", ""), 50) & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.Persons_EMail, "'", "''") & "', " &
+                            getDBStringPrefix() & "'" & Replace(Left(objCase.Persons_Phone, 40), "'", "''") & "', " &
+                            getDBStringPrefix() & "'" & Left(objCase.Persons_CellPhone, 30) & "', " &
+                            getDBStringPrefix() & "'" & Left(objCase.Place, 50) & "', " &
+                            getDBStringPrefix() & "'" & Left(objCase.UserCode, 20) & "', " &
+                            getDBStringPrefix() & "'" & Left(objCase.CostCentre, 50) & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.InventoryNumber, "'", "") & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.InvoiceNumber, "'", "") & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.Caption, "'", "") & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.Description, "'", "''") & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.Miscellaneous, "'", "''") & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.Available, "'", "''") & "', " &
                             getDBStringPrefix() & "'" & Replace(objCase.ReferenceNumber, "'", "''") & "', "
 
             If objCase.Priority_Id = 0 Then
@@ -362,7 +474,7 @@ Public Class CaseData
             Dim newCase As CCase = getCaseById(sCaseGUID:=objCase.CaseGUID)
 
             If objCase.Form_Id <> 0 Then
-                sSQL = "INSERT INTO tblFormFieldValue(Case_Id, FormField_Id, FormFieldValue) " & _
+                sSQL = "INSERT INTO tblFormFieldValue(Case_Id, FormField_Id, FormFieldValue) " &
                         "SELECT " & newCase.Id & ", Id, ' ' FROM tblFormField WHERE Form_Id=" & objCase.Form_Id
 
                 'If giDBType = 0 Then
@@ -386,7 +498,7 @@ Public Class CaseData
 
     Public Function getCase(ByVal caseId As Integer) As CCase
         Try
-            Return getCaseById(iCaseId := caseId)
+            Return getCaseById(iCaseId:=caseId)
         Catch ex As Exception
             Throw ex
         End Try
@@ -432,35 +544,37 @@ Public Class CaseData
         End Try
     End Function
 
-    Private Function getCaseById(Optional iCaseId as Integer = 0, Optional ByVal sCaseGUID As String = "", Optional ByVal sMessageId As String = "", Optional ByVal iCaseNumber As Integer = 0, Optional ByVal sOrderMessageId As String = "") As CCase
+    Private Function getCaseById(Optional iCaseId As Integer = 0, Optional ByVal sCaseGUID As String = "", Optional ByVal sMessageId As String = "", Optional ByVal iCaseNumber As Integer = 0, Optional ByVal sOrderMessageId As String = "") As CCase
         Dim sSQL As String = ""
         Dim dt As DataTable
 
         Try
-            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " & _
-                        "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " & _
-                       "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " & _
-                       "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, " & _
-                       "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName, tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, " & _
-                       "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, tblCase.RegTime, tblCase.ChangeTime, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " & _
-                       "tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS WorkingGroupEMail, " & _
-                       "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.WatchDate, tblCase.RegistrationSource, " & _
-                       "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, tblCase.Available, tblCase.ReferenceNumber, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics " & _
-                   "FROM tblCase " & _
-                       "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " & _
-                       "LEFT OUTER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " & _
-                       "LEFT JOIN tblUsers u2 ON tblCase.User_Id = u2.Id " & _
-                       "LEFT OUTER JOIN tblWorkingGroup ON tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id " & _
-                       "LEFT OUTER JOIN tblWorkingGroup tblWorkingGroup_1 ON tblCase.WorkingGroup_Id = tblWorkingGroup_1.Id " & _
-                       "LEFT JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id " & _
-                       "INNER JOIN tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id " & _
-                       "LEFT JOIN tblStateSecondary ON tblCase.StateSecondary_Id=tblStateSecondary.Id " & _
-                       "LEFT JOIN tblCategory ON tblCase.Category_Id=tblCategory.Id " & _
-                       "LEFT JOIN tblProductArea ON tblCase.ProductArea_Id=tblProductArea.Id " & _
+            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
+                        "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
+                       "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " &
+                       "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, tblCase.WorkingGroup_Id," &
+                       "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName, " &
+                       "tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, tblWorkingGroup.Id AS PerformerWorkingGroup_Id, tblWorkingGroup.AllocateCaseMail AS PerformerWorkingGroupAllocateCaseMail, " &
+                       "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, ISNULL(tblWorkingGroup_1.WorkingGroupEMail, '') AS WorkingGroupEMail, tblWorkingGroup_1.AllocateCaseMail AS AllocateCaseMail, " &
+                       "tblCase.RegTime, tblCase.ChangeTime, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
+                       "tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
+                       "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.WatchDate, tblCase.RegistrationSource, " &
+                       "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, tblCase.Available, tblCase.ReferenceNumber, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, tblCase.ExternalTime, tblCase.LeadTime " &
+                   "FROM tblCase " &
+                       "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " &
+                       "LEFT OUTER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " &
+                       "LEFT JOIN tblUsers u2 ON tblCase.User_Id = u2.Id " &
+                       "LEFT OUTER JOIN tblWorkingGroup ON tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id " &
+                       "LEFT OUTER JOIN tblWorkingGroup tblWorkingGroup_1 ON tblCase.WorkingGroup_Id = tblWorkingGroup_1.Id " &
+                       "LEFT JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id " &
+                       "INNER JOIN tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id " &
+                       "LEFT JOIN tblStateSecondary ON tblCase.StateSecondary_Id=tblStateSecondary.Id " &
+                       "LEFT JOIN tblCategory ON tblCase.Category_Id=tblCategory.Id " &
+                       "LEFT JOIN tblProductArea ON tblCase.ProductArea_Id=tblProductArea.Id " &
                        "LEFT JOIN tblDepartment ON tblCase.Department_Id=tblDepartment.Id "
 
             If iCaseId > 0 Then
-                sSQL = sSQL & "WHERE tblCase.Id=" & iCaseId.ToString() 
+                sSQL = sSQL & "WHERE tblCase.Id=" & iCaseId.ToString()
             ElseIf sCaseGUID <> "" Then
                 sSQL = sSQL & " WHERE tblCase.CaseGUID='" & sCaseGUID & "'"
             ElseIf sMessageId <> "" Then
@@ -501,8 +615,8 @@ Public Class CaseData
         Dim dt As DataTable
 
         Try
-            sSQL = "SELECT tblEMailLog.MailId " & _
-                   "FROM tblEMailLog " & _
+            sSQL = "SELECT tblEMailLog.MailId " &
+                   "FROM tblEMailLog " &
                    "WHERE MessageId='" & sMessageId & "'"
 
             'If giDBType = 0 Then
@@ -532,33 +646,35 @@ Public Class CaseData
         Dim dr As DataRow
 
         Try
-            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " & _
-                        "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " & _
-                        "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " & _
-                        "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, " & _
-                        "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName, tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, " & _
-                        "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, tblCase.RegTime, tblCase.ChangeTime, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " & _
-                        "tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS WorkingGroupEMail, " & _
-                        "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.RegistrationSource, tblCase.WatchDate, tblCase.Available, tblCase.ReferenceNumber, " & _
-                        "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics " & _
-                    "FROM tblCase " & _
-                        "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " & _
-                        "INNER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " & _
-                        "LEFT JOIN tblUsers u2 ON tblCase.User_Id = u2.Id " & _
-                        "LEFT OUTER JOIN tblWorkingGroup ON tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id " & _
-                        "LEFT OUTER JOIN tblWorkingGroup tblWorkingGroup_1 ON tblCase.WorkingGroup_Id = tblWorkingGroup_1.Id " & _
-                        "LEFT JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id " & _
-                        "INNER JOIN tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id " & _
-                        "LEFT JOIN tblStateSecondary ON tblCase.StateSecondary_Id=tblStateSecondary.Id " & _
-                        "LEFT JOIN tblCategory ON tblCase.Category_Id=tblCategory.Id " & _
-                        "LEFT JOIN tblProductArea ON tblCase.ProductArea_Id=tblProductArea.Id " & _
+            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
+                        "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
+                        "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " &
+                        "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, tblCase.WorkingGroup_Id," &
+                        "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName, " &
+                        "tblCase.RegTime, tblCase.ChangeTime, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
+                        "tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, tblWorkingGroup.Id AS PerformerWorkingGroup_Id, tblWorkingGroup.AllocateCaseMail AS PerformerWorkingGroupAllocateCaseMail, " &
+                        "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, ISNULL(tblWorkingGroup_1.WorkingGroupEMail, '') AS WorkingGroupEMail, tblWorkingGroup_1.AllocateCaseMail AS AllocateCaseMail, " &
+                        "tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
+                        "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.RegistrationSource, tblCase.WatchDate, tblCase.Available, tblCase.ReferenceNumber, " &
+                        "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, tblCase.ExternalTime, tblCase.LeadTime " &
+                    "FROM tblCase " &
+                        "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " &
+                        "INNER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " &
+                        "LEFT JOIN tblUsers u2 ON tblCase.User_Id = u2.Id " &
+                        "LEFT OUTER JOIN tblWorkingGroup ON tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id " &
+                        "LEFT OUTER JOIN tblWorkingGroup tblWorkingGroup_1 ON tblCase.WorkingGroup_Id = tblWorkingGroup_1.Id " &
+                        "LEFT JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id " &
+                        "INNER JOIN tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id " &
+                        "LEFT JOIN tblStateSecondary ON tblCase.StateSecondary_Id=tblStateSecondary.Id " &
+                        "LEFT JOIN tblCategory ON tblCase.Category_Id=tblCategory.Id " &
+                        "LEFT JOIN tblProductArea ON tblCase.ProductArea_Id=tblProductArea.Id " &
                         "LEFT JOIN tblDepartment ON tblCase.Department_Id=tblDepartment.Id "
 
             If iPerformerUser_Id <> 0 Then
                 sSQL = sSQL & "WHERE tblCase.FinishingDate IS NULL AND tblCase.Performer_user_Id=" & iPerformerUser_Id
             ElseIf iPlanDate <> 0 Then
-                sSQL = sSQL & "WHERE " & Call4DateFormat("PlanDate", giDBType) & " = " & convertDateTime(Now.Date, giDBType) & _
-                        " AND tblUsers.PlanDateMail = 1 " & _
+                sSQL = sSQL & "WHERE " & Call4DateFormat("PlanDate", giDBType) & " = " & convertDateTime(Now.Date, giDBType) &
+                        " AND tblUsers.PlanDateMail = 1 " &
                         " AND tblCase.FinishingDate IS NULL"
             ElseIf iWatchdate <> 0 Then
                 sSQL = sSQL & "WHERE " & Call4DateFormat("WatchDate", giDBType) & " = " & convertDateTime(Now.Date, giDBType) & " AND tblCase.FinishingDate IS NULL AND tblUsers.WatchDateMail = 1 "
@@ -607,22 +723,22 @@ Public Class CaseData
             sCaseHistoryGUID = System.Guid.NewGuid.ToString()
 
             ' Lägg in den nya posten i historiken
-            sSQL = "INSERT INTO tblCaseHistory(CaseHistoryGUID, Case_Id ,ReportedBy ,Persons_Name,Persons_EMail,Persons_Phone,Persons_CellPhone," & _
-                                                "Customer_Id,Region_Id,Department_Id,OU_Id,Place,UserCode,CostCentre,InventoryNumber,InventoryType,InventoryLocation, " & _
-                                                "Casenumber,User_Id,IPAddress,CaseType_Id,ProductArea_Id,ProductAreaSetDate,Category_Id,Supplier_Id,InvoiceNumber, " & _
-                                                "ReferenceNumber,Caption,Description,Miscellaneous,ContactBeforeAction,SMS,Available,Cost,OtherCost,Currency," & _
-                                                "Performer_User_Id,CaseResponsibleUser_Id,Priority_Id,Status_Id,StateSecondary_Id,ExternalTime,Project_Id, " & _
-                                                "PlanDate,ApprovedDate,ApprovedBy_User_Id,WatchDate,LockCaseToWorkingGroup_Id,WorkingGroup_Id,FinishingDate, " & _
-                                                "FollowUpDate,RegistrationSource,RelatedCaseNumber,Problem_Id," & _
-                                                "Deleted,Status,RegLanguage_Id,RegUserId,RegUserDomain,RegistrationSourceCustomer_Id, CreatedDate,CreatedByUser) " & _
-                    " SELECT '" & sCaseHistoryGUID & "', " & iCase_Id & " ,ReportedBy ,Persons_Name,Persons_EMail,Persons_Phone,Persons_CellPhone," & _
-                                                "Customer_Id,Region_Id,Department_Id,OU_Id,Place,UserCode,CostCentre,InventoryNumber,InventoryType,InventoryLocation, " & _
-                                                "Casenumber,User_Id,IPAddress,CaseType_Id,ProductArea_Id,ProductAreaSetDate,Category_Id,Supplier_Id,InvoiceNumber, " & _
-                                                "ReferenceNumber,Caption,Description,Miscellaneous,ContactBeforeAction,SMS,Available,Cost,OtherCost,Currency," & _
-                                                "Performer_User_Id,CaseResponsibleUser_Id,Priority_Id,Status_Id,StateSecondary_Id,ExternalTime,Project_Id, " & _
-                                                "PlanDate,ApprovedDate,ApprovedBy_User_Id,WatchDate,LockCaseToWorkingGroup_Id,WorkingGroup_Id,FinishingDate, " & _
-                                                "FollowUpDate,RegistrationSource,RelatedCaseNumber,Problem_Id," & _
-                                                "Deleted,Status,RegLanguage_Id,RegUserId,RegUserDomain, RegistrationSourceCustomer_Id, getutcdate(),'" & Replace(sCreatedByUser, "'", "''") & "' FROM tblCase WHERE Id=" & iCase_Id
+            sSQL = "INSERT INTO tblCaseHistory(CaseHistoryGUID, Case_Id ,ReportedBy ,Persons_Name,Persons_EMail,Persons_Phone,Persons_CellPhone," &
+                                                "Customer_Id,Region_Id,Department_Id,OU_Id,Place,UserCode,CostCentre,InventoryNumber,InventoryType,InventoryLocation, " &
+                                                "Casenumber,User_Id,IPAddress,CaseType_Id,ProductArea_Id,ProductAreaSetDate,Category_Id,Supplier_Id,InvoiceNumber, " &
+                                                "ReferenceNumber,Caption,Description,Miscellaneous,ContactBeforeAction,SMS,Available,Cost,OtherCost,Currency," &
+                                                "Performer_User_Id,CaseResponsibleUser_Id,Priority_Id,Status_Id,StateSecondary_Id,ExternalTime,Project_Id, " &
+                                                "PlanDate,ApprovedDate,ApprovedBy_User_Id,WatchDate,LockCaseToWorkingGroup_Id,WorkingGroup_Id,FinishingDate, " &
+                                                "FollowUpDate,RegistrationSource,RelatedCaseNumber,Problem_Id," &
+                                                "Deleted,Status,RegLanguage_Id,RegUserId,RegUserDomain,RegistrationSourceCustomer_Id, CreatedDate,CreatedByUser, LeadTime ) " &
+                    " SELECT '" & sCaseHistoryGUID & "', " & iCase_Id & " ,ReportedBy ,Persons_Name,Persons_EMail,Persons_Phone,Persons_CellPhone," &
+                                                "Customer_Id,Region_Id,Department_Id,OU_Id,Place,UserCode,CostCentre,InventoryNumber,InventoryType,InventoryLocation, " &
+                                                "Casenumber,User_Id,IPAddress,CaseType_Id,ProductArea_Id,ProductAreaSetDate,Category_Id,Supplier_Id,InvoiceNumber, " &
+                                                "ReferenceNumber,Caption,Description,Miscellaneous,ContactBeforeAction,SMS,Available,Cost,OtherCost,Currency," &
+                                                "Performer_User_Id,CaseResponsibleUser_Id,Priority_Id,Status_Id,StateSecondary_Id,ExternalTime,Project_Id, " &
+                                                "PlanDate,ApprovedDate,ApprovedBy_User_Id,WatchDate,LockCaseToWorkingGroup_Id,WorkingGroup_Id,FinishingDate, " &
+                                                "FollowUpDate,RegistrationSource,RelatedCaseNumber,Problem_Id," &
+                                                "Deleted,Status,RegLanguage_Id,RegUserId,RegUserDomain, RegistrationSourceCustomer_Id, getutcdate(),'" & Replace(sCreatedByUser, "'", "''") & "', tblCase.LeadTime  FROM tblCase WHERE Id=" & iCase_Id
 
             'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
@@ -642,8 +758,8 @@ Public Class CaseData
         Dim dt As DataTable
 
         Try
-            sSQL = "SELECT tblCaseHistory.Id " & _
-                   "FROM tblCaseHistory " & _
+            sSQL = "SELECT tblCaseHistory.Id " &
+                   "FROM tblCaseHistory " &
                 "WHERE tblCaseHistory.CaseHistoryGUID='" & sCaseHistoryGUID & "'"
 
 
@@ -685,12 +801,12 @@ Public Class CaseData
         Dim logAdded As Boolean = False
 
         Try
-            sSQL = "SELECT tblCaseSolution.*, tblCaseSolutionSchedule.ScheduleType, tblCaseSolutionSchedule.ScheduleDay, tblCaseSolutionSchedule.ScheduleWatchDate, " & _
-                        "tblCustomer.Language_Id, tblDepartment.Region_Id " & _
-                      "FROM tblCaseSolution " & _
-                       "INNER JOIN tblCaseSolutionSchedule ON tblCaseSolution.Id = tblCaseSolutionSchedule.CaseSolution_Id " & _
-                       "INNER JOIN tblCustomer ON tblCaseSolution.Customer_Id=tblCustomer.Id " & _
-                        "LEFT JOIN tblDepartment ON tblCaseSolution.Department_Id=tblDepartment.Id " & _
+            sSQL = "SELECT tblCaseSolution.*, tblCaseSolutionSchedule.ScheduleType, tblCaseSolutionSchedule.ScheduleDay, tblCaseSolutionSchedule.ScheduleWatchDate, " &
+                        "tblCustomer.Language_Id, tblDepartment.Region_Id " &
+                      "FROM tblCaseSolution " &
+                       "INNER JOIN tblCaseSolutionSchedule ON tblCaseSolution.Id = tblCaseSolutionSchedule.CaseSolution_Id " &
+                       "INNER JOIN tblCustomer ON tblCaseSolution.Customer_Id=tblCustomer.Id " &
+                        "LEFT JOIN tblDepartment ON tblCaseSolution.Department_Id=tblDepartment.Id " &
                       "WHERE ScheduleTime=" & iTime
 
             If giLoglevel > 0 Then
@@ -900,9 +1016,9 @@ Public Class CaseData
         Dim sFilePath As String = gsAttachedFileFolder
 
         Try
-            sSQL = "SELECT tblCaseCleanUp.*, tblSettings.PhysicalFilePath " & _
-                    "FROM tblCaseCleanUp " & _
-                        "INNER JOIN tblSettings ON tblCaseCleanUp.Customer_Id=tblSettings.Customer_Id " & _
+            sSQL = "SELECT tblCaseCleanUp.*, tblSettings.PhysicalFilePath " &
+                    "FROM tblCaseCleanUp " &
+                        "INNER JOIN tblSettings ON tblCaseCleanUp.Customer_Id=tblSettings.Customer_Id " &
                     "WHERE (" & Call4DateFormat("tblCaseCleanUp.ScheduleDate", giDBType) & " = " & convertDateTime(Today, giDBType) & ")"
 
 
@@ -927,8 +1043,8 @@ Public Class CaseData
                 End If
 
                 ' Hämta ärenden
-                sSQL = "SELECT tblCase.Id, tblCase.CaseNumber  " & _
-                        "FROM tblCase " & _
+                sSQL = "SELECT tblCase.Id, tblCase.CaseNumber  " &
+                        "FROM tblCase " &
                         "WHERE tblCase.Customer_Id=" & dr("Customer_Id")
 
                 sSQL = sSQL & " AND FinishingDate IS NOT NULL "
@@ -987,10 +1103,10 @@ Public Class CaseData
         Dim sSQL As String
 
         Try
-            sSQL = "UPDATE tblLog SET " & _
-                        "Text_Internal='-', " & _
-                        "RegUser='-', " & _
-                        "User_Id=Null " & _
+            sSQL = "UPDATE tblLog SET " &
+                        "Text_Internal='-', " &
+                        "RegUser='-', " &
+                        "User_Id=Null " &
                     "WHERE Case_Id=" & iCase_Id
 
             'If giDBType = 0 Then
@@ -1015,8 +1131,8 @@ Public Class CaseData
                 End Try
             End If
 
-            sSQL = "UPDATE tblEmailLog SET " & _
-                        "EMailAddress='-' " & _
+            sSQL = "UPDATE tblEmailLog SET " &
+                        "EMailAddress='-' " &
                     " WHERE tblEmailLog.CaseHistory_Id IN (SELECT Id FROM tblCaseHistory WHERE Case_Id=" & iCase_Id & ")"
 
             'If giDBType = 0 Then
@@ -1025,15 +1141,15 @@ Public Class CaseData
             '    executeSQLOracle(gsConnectionString, sSQL)
             'End If
 
-            sSQL = "UPDATE tblCaseHistory SET " & _
-                        "ReportedBy='-', " & _
-                        "Persons_name='-', " & _
-                        "Persons_phone='-', " & _
-                        "Persons_EMail='-', " & _
-                        "UserCode='-', " & _
-                        "Caption='-', " & _
-                        "CreatedByUser='-', " & _
-                        "User_Id=Null " & _
+            sSQL = "UPDATE tblCaseHistory SET " &
+                        "ReportedBy='-', " &
+                        "Persons_name='-', " &
+                        "Persons_phone='-', " &
+                        "Persons_EMail='-', " &
+                        "UserCode='-', " &
+                        "Caption='-', " &
+                        "CreatedByUser='-', " &
+                        "User_Id=Null " &
                     " WHERE tblCaseHistory.Case_Id=" & iCase_Id
 
             'If giDBType = 0 Then
@@ -1042,14 +1158,14 @@ Public Class CaseData
             '    executeSQLOracle(gsConnectionString, sSQL)
             'End If
 
-            sSQL = "UPDATE tblCase SET " & _
-                        "ReportedBy='-', " & _
-                        "Persons_name='-', " & _
-                        "Persons_phone='-', " & _
-                        "UserCode='-', " & _
-                        "Caption='-', " & _
-                        "User_Id=Null, " & _
-                        "CaseCleanUp_Id=" & iCaseCleanUp_Id & _
+            sSQL = "UPDATE tblCase SET " &
+                        "ReportedBy='-', " &
+                        "Persons_name='-', " &
+                        "Persons_phone='-', " &
+                        "UserCode='-', " &
+                        "Caption='-', " &
+                        "User_Id=Null, " &
+                        "CaseCleanUp_Id=" & iCaseCleanUp_Id &
                     " WHERE tblCase.Id=" & iCase_Id
 
             'If giDBType = 0 Then
@@ -1066,8 +1182,8 @@ Public Class CaseData
         Dim sSQL As String
 
         Try
-            sSQL = "UPDATE tblCaseCleanUp SET " & _
-                        "RunDate=getutcdate() " & _
+            sSQL = "UPDATE tblCaseCleanUp SET " &
+                        "RunDate=getutcdate() " &
                     " WHERE tblCaseCleanUp.Id=" & iCaseCleanUp_Id
 
             'If giDBType = 0 Then
@@ -1245,6 +1361,6 @@ Public Class CaseData
         Else
             getLocalTime = UTCDate
         End If
-        
+
     End Function
 End Class

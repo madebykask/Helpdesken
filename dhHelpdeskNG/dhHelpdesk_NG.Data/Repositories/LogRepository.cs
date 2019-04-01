@@ -1,11 +1,8 @@
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Validation;
 using System.Linq;
-using DH.Helpdesk.BusinessData.Models.Logs.Output;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.MapperData.Logs;
-using DH.Helpdesk.Dal.Mappers;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -47,16 +44,17 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public Log GetLogById(int id)
         {
-            return (from l in this.DataContext.Logs
+            return (from l in Table
                     where l.Id == id
                     select l).FirstOrDefault();
         }
 
         public IQueryable<Log> GetLogForCase(int caseId, bool includeInternalLogs = false)
         {
-            var q = from l in this.DataContext.Logs
+            var q = from l in Table
                     where l.Case_Id == caseId
                     select l;
+
             if (!includeInternalLogs)
             {
                 q = q.Where(l => string.IsNullOrEmpty(l.Text_Internal));
@@ -65,16 +63,6 @@ namespace DH.Helpdesk.Dal.Repositories
             return q.OrderByDescending(l => l.LogDate);
         }
 
-
-        /// <summary>
-        /// The get case log overviews.
-        /// </summary>
-        /// <param name="caseId">
-        /// The case id.
-        /// </param>
-        /// <returns>
-        /// The result />.
-        /// </returns>
         public IEnumerable<LogMapperData> GetCaseLogOverviews(int caseId)
         {
             var query = from l in Table
@@ -181,6 +169,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ILogFileRepository : IRepository<LogFile>
     {
+        LogFile GetDetails(int id);
+        LogFileContent GetFileContent(int logFileId, string basePath);
         byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
         List<string> FindFileNamesByLogId(int logId);
         List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId);
@@ -205,7 +195,31 @@ namespace DH.Helpdesk.Dal.Repositories
         public LogFileRepository(IDatabaseFactory databaseFactory, IFilesStorage fileStorage)
             : base(databaseFactory)
         {
-            this._filesStorage = fileStorage;
+            _filesStorage = fileStorage;
+        }
+
+        public LogFile GetDetails(int id)
+        {
+            return Table.FirstOrDefault(f => f.Id == id);
+        }
+
+    public LogFileContent GetFileContent(int logFileId, string basePath)
+        {
+            var logFile = Table.FirstOrDefault(f => f.Id == logFileId);
+            if (logFile == null)
+                return null;
+
+            var content = _filesStorage.GetFileContent(ModuleName.Log, logFile.Log_Id, basePath, logFile.FileName);
+            if (content == null)
+                return null;
+
+            return new LogFileContent()
+            {
+                Id = logFile.Id,
+                LogId = logFile.Log_Id,
+                FileName = logFile.FileName,
+                Content = content
+            };
         }
 
         public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName)

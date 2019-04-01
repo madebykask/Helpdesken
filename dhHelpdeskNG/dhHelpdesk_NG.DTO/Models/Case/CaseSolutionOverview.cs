@@ -9,6 +9,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public int CaseSolutionId { get; set; }
         public string Name { get; set; }
         public int? CategoryId { get; set; }
+        public string CategoryName { get; set; }
         public int? StateSecondaryId { get; set; }
         public int? NextStepState { get; set; }
         public int SortOrder { get; set; }

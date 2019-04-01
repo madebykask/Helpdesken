@@ -2,26 +2,26 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Http.Controllers;
-using Autofac.Integration.WebApi;
 using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Domain;
+using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
 using DH.Helpdesk.Services.Services;
 using Microsoft.AspNet.Identity;
 using Newtonsoft.Json.Linq;
 
 namespace DH.Helpdesk.WebApi.Infrastructure.Filters
 {
-    public class UserCasePermissionsFilter: AuthorizationFilterBase, IAutofacAuthorizationFilter
+    public class UserCasePermissionsFilter: AuthorizationFilterBase
     {
         private readonly IUserService _userService;
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
 
-        #region ctor()
-
-        public UserCasePermissionsFilter(IUserService userService)
+        public UserCasePermissionsFilter(IUserService userService, IUserPermissionsChecker userPermissionsChecker)
         {
             _userService = userService;
+            _userPermissionsChecker = userPermissionsChecker;
         }
-
-        #endregion
 
         protected override void AuthorizeRequest(HttpActionContext actionContext)
         {
@@ -29,29 +29,54 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
             if (principal != null)
             {
                 var userId = principal.Identity.GetUserId().ToInt();
-                var user = _userService.GetUserOverview(userId);
+                var user = _userService.GetUser(userId);
                 if (user == null)
                 {
-                    actionContext.Response = CreateForbidddenResponse(actionContext.Request, "User is not authorized to access the case");
-                }
-
-                var caseId = GetCaseIdFromRequest(actionContext);
-                if (caseId <= 0)
-                {
-                    actionContext.Response = CreateBadResponse(actionContext.Request); 
+                    actionContext.Response = CreateForbidddenResponse(actionContext.Request, "User is not authorized to accesss");
                     return;
                 }
 
-                var isAuthorised = _userService.VerifyUserCasePermissions(user, caseId);
-                if (!isAuthorised)
+                var hasCasePermissionAttr = CheckAttribute<CheckUserCasePermissionsAttribute>(actionContext, AttributeCheckScope.Action);
+                if (hasCasePermissionAttr)
                 {
-                    actionContext.Response = CreateForbidddenResponse(actionContext.Request, "User is not authorized to access the case");
+                    var caseId = GetCaseIdFromRequest(actionContext);
+                    if (caseId <= 0)
+                    {
+                        // actionContext.Response = CreateBadResponse(actionContext.Request);
+                        return;
+                    }
+
+                    var isAuthorised = _userService.VerifyUserCasePermissions(UsersMapper.MapToOverview(user), caseId);
+                    if (!isAuthorised)
+                    {
+                        actionContext.Response = CreateForbidddenResponse(actionContext.Request, "User is not authorized to access the case");
+                        return;
+                    }
+                }
+
+                var hasPermissionAttr = CheckAttribute<CheckUserPermissionsAttribute>(actionContext, AttributeCheckScope.Action);
+                if (hasPermissionAttr)
+                {
+                    if (!HasUserPermissions(actionContext, user))
+                    {
+                        actionContext.Response = CreateForbidddenResponse(actionContext.Request, "User has no permissions to access action");
+                        return;
+                    }
                 }
             }
             else
             {
                 actionContext.Response = CreateNotAuthenticatedResponse(actionContext.Request);
             }
+        }
+
+        private bool HasUserPermissions(HttpActionContext actionContext, User user)
+        {
+            var attr = actionContext.ActionDescriptor.GetCustomAttributes<CheckUserPermissionsAttribute>(false).FirstOrDefault();
+            if (attr?.UserPermissions == null || attr?.UserPermissions?.Length == 0)
+                return false;
+
+            return _userPermissionsChecker.UserHasAllPermissions(user, attr.UserPermissions.ToList());
         }
 
         private int GetCaseIdFromRequest(HttpActionContext actionContext)
@@ -74,7 +99,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
                 paramValue = GetQueryStringParam(actionContext.Request, paramName);
             }
 
-            if (Int32.TryParse(paramValue, out caseId))
+            if (int.TryParse(paramValue, out caseId))
                 return caseId;
 
             //extract from body input in case of json object
@@ -91,10 +116,11 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
 
                     if (!string.IsNullOrEmpty(val))
                     {
-                        if (Int32.TryParse(val, out caseId))
+                        if (int.TryParse(val, out caseId))
                             return caseId;
                     }
                 }
+                //TODO: remove empty catch
                 catch (Exception e)
                 {
                 }
@@ -106,8 +132,9 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
         protected override bool IgnoreRequest(HttpActionContext actionContext)
         {
             //ignore if action doesn't have attribute
-            var hasAttr = CheckAttribute<CheckUserCasePermissionsAttribute>(actionContext, AttributeCheckScope.Action);
-            if (!hasAttr)
+            var hasCasePermissionAttr = CheckAttribute<CheckUserCasePermissionsAttribute>(actionContext, AttributeCheckScope.Action);
+            var hasPermissionAttr = CheckAttribute<CheckUserPermissionsAttribute>(actionContext, AttributeCheckScope.Action);
+            if (!hasCasePermissionAttr && !hasPermissionAttr)
                 return true;
             return false;
         }

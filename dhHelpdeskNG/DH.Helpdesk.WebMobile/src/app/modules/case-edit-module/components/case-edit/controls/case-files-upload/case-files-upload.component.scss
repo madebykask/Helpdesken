@@ -1,6 +1,9 @@
 :host {
-  display: block!important;  
+  display: block!important;
+  border-top: solid 1px #e8e8e8;
+  border-bottom: solid 1px #ccc;
 }
+
 input.fileupload {  
     width: 0.1px;
     height: 0.1px;
@@ -11,9 +14,14 @@ input.fileupload {
 }
 
 label {
-   font-size: 16px;     
+   background: #F2F3F3;
+   font-size: 16px;
    display: block;
-   text-align: right;   
+   text-align: right;
+
+   span.mbsc-btn {
+    margin-right:10px;
+  }
 }
 
 .mbsc-ic:before {

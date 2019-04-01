@@ -1,0 +1,16 @@
+
+<ng-container [formGroup]="form" *ngIf="externalLogField || internalLogField">
+  <mbsc-textarea *ngIf="externalLogField" #external
+                [formControlName]="externalLogField.name">{{ externalLogLabel }}</mbsc-textarea>
+
+  <mbsc-textarea *ngIf="internalLogField" #internal
+                 [formControlName]="internalLogField.name">{{ internalLogLabel }}</mbsc-textarea>
+  
+  <div id="log-files" *ngIf="files && files.length > 0">
+      <mbsc-listview [options]="fileListSettings" class="fileListView">
+          <mbsc-listview-item *ngFor="let file of files;" icon="fa-paperclip">{{ file }}</mbsc-listview-item>
+      </mbsc-listview>
+  </div>
+
+  <log-files-upload [caseKey]="caseKey" (fileUploaded)="processFileUploaded($event)"></log-files-upload>
+</ng-container>

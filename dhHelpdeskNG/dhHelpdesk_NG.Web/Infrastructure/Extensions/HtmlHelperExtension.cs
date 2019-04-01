@@ -339,14 +339,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return CausingPartsTreeRow(causingParts, 0, isShowOnlyActive);
         }
 
-        public static string RemoveHTMLTags(this string value)
-        {
-            if (string.IsNullOrEmpty(value))
-                return "";
-
-            return Regex.Replace(value, @"<[^>]*>", "<HTMLTAG>");
-        }
-
         public static MvcHtmlString GetCaseHistoryInfo(
             this CaseHistoryOverview cur, 
             CaseHistoryOverview old, 

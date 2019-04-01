@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases
 
 	public class CaseFollowUpRepository : RepositoryBase<CaseFollowUp>, ICaseFollowUpRepository
 	{
-		public CaseFollowUpRepository(IDatabaseFactory databaseFactory, IWorkContext workContext = null) : base(databaseFactory, workContext)
+		public CaseFollowUpRepository(IDatabaseFactory databaseFactory, IWorkContext workContext = null) : base(databaseFactory)
 		{
 		}
 

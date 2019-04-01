@@ -1,7 +1,7 @@
-import { CurrentUser, UserAuthenticationData, UserData, Language, CaseSearchStateModel } from '../../models'
-import * as moment from 'moment-timezone';
+import { CurrentUser, UserAuthenticationData, UserData, Language } from '../../models'
 import { Injectable } from '@angular/core';
 import { StorageNameConstants } from 'src/app/modules/shared-module/constants';
+import { CaseSearchStateModel } from 'src/app/modules/shared-module/models/cases-overview/case-search-state.model';
 
 @Injectable({providedIn: 'root'})
 export class LocalStorageService {
@@ -24,7 +24,7 @@ export class LocalStorageService {
         localStorage.removeItem(StorageNameConstants.userDataStorageName);
     }
 
-    getLanguages() : Language[] {
+    getLanguages(): Language[] {
         let json = localStorage.getItem(StorageNameConstants.languages);
         let data= JSON.parse(json);
         return data;
@@ -35,7 +35,7 @@ export class LocalStorageService {
         localStorage.setItem(StorageNameConstants.languages, json);
     }
 
-    saveTimezoneInfo(data: any) {
+/*     saveTimezoneInfo(data: any) {
         const zone = <moment.MomentZone>data;
         const packed = (<any>moment.tz).pack(zone);
         localStorage.setItem(StorageNameConstants.timezoneName, packed);
@@ -44,9 +44,9 @@ export class LocalStorageService {
     getTimezoneInfo(): string {
         let data = localStorage.getItem(StorageNameConstants.timezoneName);
         return data;
-    }
+    } */
 
-    getCaseSearchState() : CaseSearchStateModel{
+    getCaseSearchState(): CaseSearchStateModel { // TODO: move it to session store 
       let json = localStorage.getItem(StorageNameConstants.caseSearchState);
       if (json) {
         let data = JSON.parse(json);
@@ -55,12 +55,12 @@ export class LocalStorageService {
       return null;
     }
 
-    setCaseSearchState( data: CaseSearchStateModel ){
+    setCaseSearchState(data: CaseSearchStateModel ) { // TODO: move it to session store
         let json = JSON.stringify(data);
         localStorage.setItem(StorageNameConstants.caseSearchState, json);
     }
 
-    private fromJSONCurrentUser(json: any) : CurrentUser {
+    private fromJSONCurrentUser(json: any): CurrentUser {
         if (typeof json === 'string') { json = JSON.parse(json); }
         return <CurrentUser>Object.assign(new CurrentUser(), json, {
             authData: this.fromJSONUserAuthenticationData(json.authData),
@@ -68,14 +68,14 @@ export class LocalStorageService {
         });
     }
 
-    private fromJSONUserAuthenticationData(json: any) : UserAuthenticationData {
+    private fromJSONUserAuthenticationData(json: any): UserAuthenticationData {
         if (typeof json === 'string') { json = JSON.parse(json); }
         return <UserAuthenticationData>Object.assign(new UserAuthenticationData(), json, {
             recievedAt: new Date(json.recievedAt)
         });
     }
 
-    private fromJSONUserData(json: any) : UserData {
+    private fromJSONUserData(json: any): UserData {
         if (typeof json === 'string') { json = JSON.parse(json); }
         return <UserData>Object.assign(new UserData(), json, {});
     }

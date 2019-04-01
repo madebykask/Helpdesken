@@ -9,7 +9,7 @@ using DH.Helpdesk.Services.Services.Concrete.Changes;
 using DH.Helpdesk.Services.Services.EmployeeService;
 using DH.Helpdesk.Services.Services.EmployeeService.Concrete;
 using DH.Helpdesk.Services.Services.Feedback;
-using DH.Helpdesk.WebApi.Logic;
+using DH.Helpdesk.WebApi.Controllers;
 using DH.Helpdesk.WebApi.Logic.Case;
 
 namespace DH.Helpdesk.WebApi.DependencyInjection
@@ -82,10 +82,18 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<CausingPartService>().As<ICausingPartService>();
             builder.RegisterType<SettingsLogic>().As<ISettingsLogic>();
             builder.RegisterType<LogService>().As<ILogService>();
-            builder.RegisterType<ProblemLogService>().As<IProblemLogService>();
+            builder.RegisterType<LogFileService>().As<ILogFileService>();
+            builder.RegisterType<CaseSolutionSettingService>().As<ICaseSolutionSettingService>();
+            builder.RegisterType<CaseFieldsCreator>().As<ICaseFieldsCreator>();
+			
+			builder.RegisterType<ProblemLogService>().As<IProblemLogService>();
 
             builder.RegisterType<CaseEditModeCalcStrategy>().As<ICaseEditModeCalcStrategy>();
-        }
+            builder.RegisterType<CaseTranslationService>().As<ICaseTranslationService>();
+            builder.RegisterType<WatchDateCalendarService>().As<IWatchDateCalendarService>();
+			builder.RegisterType<HolidayService>().As<IHolidayService>();
+
+		}
 
         #endregion
     }

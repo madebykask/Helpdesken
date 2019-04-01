@@ -1,6 +1,9 @@
 ﻿using System.Data.Entity;
+using System.Linq.Dynamic;
 using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.Common.Extensions.Boolean;
+using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.MapperData.Logs;
 using DH.Helpdesk.Dal.Mappers;
 
@@ -14,7 +17,6 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.BusinessData.Models.Logs.Output;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.NewInfrastructure;
-    using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Enums;
     using DH.Helpdesk.Domain;
@@ -29,7 +31,7 @@ namespace DH.Helpdesk.Services.Services
         int SaveLog(CaseLog caseLog, int noOfAttachedFiles, out IDictionary<string, string> errors);
         CaseLog InitCaseLog(int userId, string regUser);
         IList<Log> GetLogsByCaseId(int caseId);
-        Task<List<Log>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false);
+        Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false);
         CaseLog GetLogById(int id);
         Guid Delete(int id, string basePath);
 
@@ -39,9 +41,10 @@ namespace DH.Helpdesk.Services.Services
 
         IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate);
 
+
         void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors);
 
-	    void UpdateLogInvoices(List<CaseLog> logs);
+        void UpdateLogInvoices(List<CaseLog> logs);
 
     }
 
@@ -51,7 +54,7 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly ILogRepository _logRepository;
         private readonly ILogFileRepository _logFileRepository;
-        private readonly IUnitOfWork _unitOfWork;
+        
         private readonly IFilesStorage _filesStorage;
         private readonly IFinishingCauseService _finishingCauseService;
         private readonly IMail2TicketRepository _mail2TicketRepository;
@@ -64,30 +67,10 @@ namespace DH.Helpdesk.Services.Services
 
         #region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LogService"/> class.
-        /// </summary>
-        /// <param name="logRepository">
-        /// The log repository.
-        /// </param>
-        /// <param name="logFileRepository">
-        /// The log file repository.
-        /// </param>
-        /// <param name="filesStorage">
-        /// The files storage.
-        /// </param>
-        /// <param name="unitOfWork">
-        /// The unit of work.
-        /// </param>
-        /// <param name="caseRepository">
-        /// The case repository.
-        /// </param>
-        /// <param name="problemLogService"></param>
         public LogService(
             ILogRepository logRepository,
             ILogFileRepository logFileRepository,
             IFilesStorage filesStorage,
-            IUnitOfWork unitOfWork, 
             ICaseRepository caseRepository, 
             IProblemLogService problemLogService,
             IFinishingCauseService finishingCauseService, 
@@ -96,7 +79,6 @@ namespace DH.Helpdesk.Services.Services
             IEntityToBusinessModelMapper<LogMapperData, LogOverview> logToLogOverviewMapper)
         {
             _logRepository = logRepository;
-            _unitOfWork = unitOfWork;
             _caseRepository = caseRepository;
             _problemLogService = problemLogService;
             _filesStorage = filesStorage;
@@ -200,36 +182,56 @@ namespace DH.Helpdesk.Services.Services
 
         public void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors)
         {
-            errors = this.Validate(baseCaseLog);
-            if (errors.Count != 0)
-            {
+            errors = Validate(baseCaseLog);
+            if (errors.Any())
                 return;
-            }
 
-            var logs = childCasesIds.Select(
-                id =>
-                    {
-                        baseCaseLog.CaseId = id; 
-                        return this.GetLogFromCaseLog(baseCaseLog);
-                    });
-            logs.ForEach(it => this._logRepository.Add(it));
-            if (errors.Count == 0)
+            if (childCasesIds.Any())
             {
-                this.Commit();
+                var logs = childCasesIds.Select(id => CreateLogFromCaseLog(id, baseCaseLog)).ToList();
+                _logRepository.AddRange(logs);
+                _logRepository.Commit();
             }
+        }
+
+        private Log CreateLogFromCaseLog(int id, CaseLog cl)
+        {
+            cl.Id = id;
+            return GetLogFromCaseLog(cl);
         }
 
         public IList<Log> GetLogsByCaseId(int caseId)
         {
-            return this._logRepository.GetLogForCase(caseId, true).ToList();
+            return _logRepository.GetLogForCase(caseId, true).ToList();
         }
 
-        public Task<List<Log>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false)
+        public Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false)
         {
-            return _logRepository.GetLogForCase(caseId, includeInternalLogs)
-                .Include(l => l.User)
-                .AsNoTracking()
-                .ToListAsync();
+            var queryable = _logRepository.GetLogForCase(caseId, includeInternalLogs);
+
+            var caseLogs =
+            (from log in queryable.AsQueryable()
+             select new CaseLogData()
+             {
+                 Id = log.Id,
+                 UserId = log.User_Id,
+                 UserFirstName = log.User.FirstName,
+                 UserSurName = log.User.SurName,
+                 LogDate = log.LogDate,
+                 RegUserName = log.RegUser,
+                 InternalText = log.Text_Internal,
+                 ExternalText = log.Text_External,
+                 Emails = log.CaseHistory.Emaillogs.DefaultIfEmpty().Where(t => t != null).Select(t => t.EmailAddress).ToList(),
+                 Files = log.LogFiles.DefaultIfEmpty().Where(f => f != null).Select(f => new LogFileData()
+                 {
+                     Id = f.Id,
+                     LogId = f.Log_Id,
+                     FileName = f.FileName,
+                     CaseId = f.IsCaseFile.HasValue && f.IsCaseFile.Value ? f.Log.Case_Id : (int?)null
+                 }).ToList()
+             }).ToListAsync();
+
+            return caseLogs;
         }
 
         public CaseLog GetLogById(int id)
@@ -239,13 +241,13 @@ namespace DH.Helpdesk.Services.Services
 
         public CaseLog InitCaseLog(int userId, string regUser)
         {
-            CaseLog ret = new CaseLog();
-
-            ret.RegUser = regUser; 
-            ret.LogType = 0;
-            ret.UserId = userId;
-            ret.LogGuid = Guid.NewGuid(); 
-
+            var ret = new CaseLog
+            {
+                RegUser = regUser,
+                LogType = 0,
+                UserId = userId,
+                LogGuid = Guid.NewGuid()
+            };
             return ret;
         }
 
@@ -254,7 +256,7 @@ namespace DH.Helpdesk.Services.Services
             if (caseLog == null)
                 throw new ArgumentNullException();
 
-            errors = this.Validate(caseLog);
+            errors = Validate(caseLog);
             if (!string.IsNullOrWhiteSpace(caseLog.TextExternal)
                 || !string.IsNullOrWhiteSpace(caseLog.TextInternal)
                 || caseLog.FinishingType != null
@@ -262,19 +264,19 @@ namespace DH.Helpdesk.Services.Services
                 || caseLog.EquipmentPrice != 0
                 || caseLog.Price != 0
                 || caseLog.WorkingTime != 0
-				|| caseLog.Overtime != 0
-				|| caseLog.Id != 0
+                || caseLog.Overtime != 0
+                || caseLog.Id != 0
                 || noOfAttachedFiles > 0)
             {
-                var log = this.GetLogFromCaseLog(caseLog);
+                var log = GetLogFromCaseLog(caseLog);
 
                 if (caseLog.Id == 0)
-                    this._logRepository.Add(log);
+                    _logRepository.Add(log);
                 else
-                    this._logRepository.Update(log);
+                    _logRepository.Update(log);
 
                 if (errors.Count == 0)
-                    this.Commit();
+                    _logRepository.Commit();
 
                 return log.Id;
             }
@@ -282,10 +284,6 @@ namespace DH.Helpdesk.Services.Services
             return 0;
         }
 
-        public void Commit()
-        {
-            this._unitOfWork.Commit();
-        }
         public void AddChildCaseLogToParentCase(int parentCaseId, CaseLog parentCaseLog)
         {
             if (parentCaseId == null)
@@ -423,11 +421,13 @@ namespace DH.Helpdesk.Services.Services
                         Text_External = string.Empty,
                         ChangeTime = DateTime.UtcNow
                     }).ToArray();
-            caseLogs.ForEach(this._logRepository.Add);
-            this._logRepository.Commit();
+
+            caseLogs.ForEach(_logRepository.Add);
+            _logRepository.Commit();
 
             _caseRepository.MarkCaseAsUnread(parentCaseId);
         }
+
         public void AddParentCaseLogToChildCases(int[] caseIds, CaseLog parentCaseLog)
         {
             if (caseIds == null)
@@ -435,9 +435,8 @@ namespace DH.Helpdesk.Services.Services
                 throw new ArgumentException("caseLog is null");
             }
 
-            IDictionary<string, string> errors;
             IEnumerable<CaseHistory> newCaseHistories;
-            using (var uow = this._unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var caseHistoryRepository = uow.GetRepository<CaseHistory>();
                 var maxCaseHistoryIds =
@@ -446,8 +445,10 @@ namespace DH.Helpdesk.Services.Services
                         .GroupBy(it => it.Case_Id)
                         .ToDictionary(g => g.Key, g => g.Max(it => it.Id))
                         .Values.ToArray();
+
                 var caseHistories =
                     caseHistoryRepository.GetAll().Where(it => maxCaseHistoryIds.Contains(it.Id)).ToArray();
+
                 newCaseHistories =
                     caseHistories.Select(
                         it =>
@@ -571,23 +572,23 @@ namespace DH.Helpdesk.Services.Services
             caseIds.ForEach(id => _caseRepository.MarkCaseAsUnread(id));
         }
 
-	    public void UpdateLogInvoices(List<CaseLog> logs)
-	    {
-		    foreach (var log in logs)
-		    {
-				var oldLog = _logRepository.GetById(log.Id);
-				if (oldLog != null)
-				{
-					oldLog.WorkingTime = log.WorkingTime;
-					oldLog.OverTime = log.Overtime;
-					oldLog.EquipmentPrice = log.EquipmentPrice;
-					oldLog.Price = log.Price;
-					oldLog.Charge = log.Charge.ToInt();
-				}
-			}
+        public void UpdateLogInvoices(List<CaseLog> logs)
+        {
+            foreach (var log in logs)
+            {
+                var oldLog = _logRepository.GetById(log.Id);
+                if (oldLog != null)
+                {
+                    oldLog.WorkingTime = log.WorkingTime;
+                    oldLog.OverTime = log.Overtime;
+                    oldLog.EquipmentPrice = log.EquipmentPrice;
+                    oldLog.Price = log.Price;
+                    oldLog.Charge = log.Charge.ToInt();
+                }
+            }
 
-			_logRepository.Commit();
-	    }
+            _logRepository.Commit();
+        }
 
         #endregion
 
@@ -595,71 +596,74 @@ namespace DH.Helpdesk.Services.Services
 
         private Log GetLogFromCaseLog(CaseLog caseLog)
         {
-            var log = new Log();
+            Log log;
 
             if (caseLog.Id != 0)
-                log = this._logRepository.GetLogById(caseLog.Id);
+            {
+                log = _logRepository.GetLogById(caseLog.Id);
+            }
             else
             {
-                log.RegTime = DateTime.UtcNow;
-                log.LogDate = DateTime.UtcNow;
-                log.RegUser = string.IsNullOrWhiteSpace(caseLog.RegUser) ? string.Empty : caseLog.RegUser;
-                log.Export = 0;
-                log.LogType = caseLog.LogType;
-                log.LogGUID = caseLog.LogGuid;  
+                log = new Log
+                {
+                    RegTime = DateTime.UtcNow,
+                    LogDate = DateTime.UtcNow,
+                    RegUser = string.IsNullOrWhiteSpace(caseLog.RegUser) ? string.Empty : caseLog.RegUser,
+                    Export = 0,
+                    LogType = caseLog.LogType,
+                    LogGUID = caseLog.LogGuid
+                };
+
             }
 
-            log.Id = caseLog.Id;
             log.Case_Id = caseLog.CaseId;
             log.User_Id = caseLog.UserId; 
-            log.Charge = (caseLog.Charge == true ? 1 : 0);
+            log.Charge = caseLog.Charge ? 1 : 0;
             log.EquipmentPrice = caseLog.EquipmentPrice;
             log.Price = caseLog.Price;
             log.FinishingDate = caseLog.FinishingDate;
             log.FinishingType = caseLog.FinishingType;
             log.ChangeTime = DateTime.UtcNow;
-            log.InformCustomer = caseLog.SendMailAboutCaseToNotifier == true ? 1 : 0 ;
+            log.InformCustomer = caseLog.SendMailAboutCaseToNotifier ? 1 : 0 ;
             log.Text_External = string.IsNullOrWhiteSpace(caseLog.TextExternal) ? string.Empty : caseLog.TextExternal;
             log.Text_Internal = string.IsNullOrWhiteSpace(caseLog.TextInternal) ? string.Empty : caseLog.TextInternal;
             log.CaseHistory_Id = caseLog.CaseHistoryId; 
             log.WorkingTime = caseLog.WorkingTime;
-			log.OverTime = caseLog.Overtime;
+            log.OverTime = caseLog.Overtime;
 
-			return log;
+            return log;
         }
 
         private CaseLog GetCaseLogFromLog(Log l)
         {
-            var log = new CaseLog();
+            var finishingTypeName = l.FinishingType != null
+                ? _finishingCauseService.GetFinishingTypeName(l.FinishingType.Value)
+                : "--";
 
-            log.LogDate = l.LogDate; 
-            log.RegUser = l.RegUser;
-            log.LogType = l.LogType;
-            log.LogGuid = l.LogGUID;
-            log.Id = l.Id;
-            log.CaseId = l.Case_Id;
-            log.UserId = l.User_Id;
-            log.Charge = (l.Charge == 1 ? true : false);
-            log.EquipmentPrice = l.EquipmentPrice;
-            log.Price = l.Price;
-            log.FinishingDate = l.FinishingDate;
-            log.FinishingType = l.FinishingType;
-            if (l.FinishingType != null)
-            {                
-                var caption = _finishingCauseService.GetFinishingTypeName(l.FinishingType.Value);                
-                log.FinishingTypeName = caption;
-            }
-            else            
-                log.FinishingTypeName = "--";            
-            
-            log.SendMailAboutCaseToNotifier = l.InformCustomer == 1 ? true : false;
-            log.TextExternal = string.IsNullOrWhiteSpace(l.Text_External) ? string.Empty : l.Text_External;
-            log.TextInternal = string.IsNullOrWhiteSpace(l.Text_Internal) ? string.Empty : l.Text_Internal;
-            log.CaseHistoryId = l.CaseHistory_Id;
-            log.WorkingTime = l.WorkingTime;
-			log.Overtime = l.OverTime;
+            var log = new CaseLog
+            {
+                LogDate = l.LogDate,
+                RegUser = l.RegUser,
+                LogType = l.LogType,
+                LogGuid = l.LogGUID,
+                Id = l.Id,
+                CaseId = l.Case_Id,
+                UserId = l.User_Id,
+                Charge = l.Charge == 1,
+                EquipmentPrice = l.EquipmentPrice,
+                Price = l.Price,
+                FinishingDate = l.FinishingDate,
+                FinishingType = l.FinishingType,
+                FinishingTypeName = finishingTypeName,
+                SendMailAboutCaseToNotifier = l.InformCustomer == 1,
+                TextExternal = string.IsNullOrWhiteSpace(l.Text_External) ? string.Empty : l.Text_External,
+                TextInternal = string.IsNullOrWhiteSpace(l.Text_Internal) ? string.Empty : l.Text_Internal,
+                CaseHistoryId = l.CaseHistory_Id,
+                WorkingTime = l.WorkingTime,
+                Overtime = l.OverTime
+            };
 
-			return log;
+            return log;
         }
 
     #endregion

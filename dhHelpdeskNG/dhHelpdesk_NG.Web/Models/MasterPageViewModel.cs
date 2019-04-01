@@ -110,7 +110,8 @@ namespace DH.Helpdesk.Web.Models
 
         public bool IsInventoryVisible()
         {
-            return this.CustomerSetting.ModuleInventory.ToBool() && this.IsAdministrator();
+            return this.CustomerSetting.ModuleInventory.ToBool() && this.IsAdministrator() 
+				&& this.UserPermissions.Contains(UserPermission.InventoryViewPermission);
         }
              
         public bool IsBulletinBoardVisible()

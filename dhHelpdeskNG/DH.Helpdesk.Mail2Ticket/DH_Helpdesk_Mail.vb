@@ -1,4 +1,5 @@
 ﻿Imports System.Configuration
+Imports System.Data.SqlClient
 Imports DH.Helpdesk.Mail2Ticket.Library
 Imports Rebex.Net
 Imports System.IO
@@ -17,16 +18,30 @@ Module DH_Helpdesk_Mail
 
     Public Sub Main()
 
+        Dim testNow As DateTime = DateTime.Now
+        Dim secureConnectionString As String = ConfigurationManager.AppSettings("SecureConnectionString")
+        If (Not String.IsNullOrEmpty(secureConnectionString) AndAlso secureConnectionString.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
+            Dim fileName = Path.GetFileName(Reflection.Assembly.GetExecutingAssembly().Location)
+            ToggleConfigEncryption(fileName)
+        End If
         ' 5: SyncByWorkingGroup
 
         Dim sCommand As String = Command()
         Dim aArguments() As String = sCommand.Split(",")
-        Dim sConnectionstring As String = ""
+        If (aArguments.Length = 1 And aArguments(0) = "") Then
+            aArguments = Nothing
+        End If
 
-        Dim appVal as String = ConfigurationManager.AppSettings("enableNewEmailProcessing")
-        If (Not String.IsNullOrEmpty(appVal) AndAlso appVal.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase))
+        Dim appVal As String = ConfigurationManager.AppSettings("enableNewEmailProcessing")
+        If (Not String.IsNullOrEmpty(appVal) AndAlso appVal.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
             bEnableNewEmailProcessing = True
         End If
+        Dim sConnectionstring As String = ConfigurationManager.ConnectionStrings("Helpdesk")?.ConnectionString
+        Dim workingModeArg As String = ConfigurationManager.AppSettings("WorkingMode")
+        Dim logFolderArg As String = ConfigurationManager.AppSettings("LogFolder")
+        Dim logIdentifierArg As String = ConfigurationManager.AppSettings("LogIdentifier")
+        Dim productAreaSepArg As String = ConfigurationManager.AppSettings("ProductAreaSeparator")
+        Dim newModeArg As String = ""
 
         'NOTE: USE Command Line Arguements in Project Properties under Debug tab instead of hardcoding values
         '      Example: 5,Data Source=DHUTVSQL2; Initial Catalog=DH_Support; User Id=sa; Password=;Network Library=dbmssocn;,,,,1
@@ -53,64 +68,103 @@ Module DH_Helpdesk_Mail
         'aArguments(2) = "c:\temp"
         'aArguments(3) = "datahalland"
         'aArguments(4) = ";"
-        
-        If aArguments.Length > 0 Then
-            Dim workingModeArg =  GetCmdArg(aArguments, 0)
-            Dim connStringArg  = GetCmdArg(aArguments, 1)
-            Dim logFolderArg = GetCmdArg(aArguments, 2)
-            Dim logIdentifierArg = GetCmdArg(aArguments, 3)
-            Dim productAreaSepArg = GetCmdArg(aArguments, 4)
-            Dim newModeArg = GetCmdArg(aArguments, 5)
-
-            Dim workingMode = IIf(workingModeArg = "5", SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
-            sConnectionstring = connStringArg
-
-            If Not String.IsNullOrEmpty(logFolderArg) Then
-                gsLogPath = logFolderArg
+        If aArguments IsNot Nothing Then
+            If (aArguments.Length > 0) Then
+                workingModeArg = GetCmdArg(aArguments, 0, workingModeArg)
+                sConnectionstring = GetCmdArg(aArguments, 1, sConnectionstring)
+                logFolderArg = GetCmdArg(aArguments, 2, logFolderArg)
+                logIdentifierArg = GetCmdArg(aArguments, 3, logIdentifierArg)
+                productAreaSepArg = GetCmdArg(aArguments, 4, productAreaSepArg)
+                newModeArg = GetCmdArg(aArguments, 5, newModeArg)
+                bEnableNewEmailProcessing = IIf(newModeArg = "1", True, False)
             End If
-
-            If Not String.IsNullOrEmpty(logIdentifierArg) Then
-                gsInternalLogIdentifier = logIdentifierArg.ToString.Trim
-            End If
-
-            If Not String.IsNullOrEmpty(productAreaSepArg) Then
-                gsProductAreaSeperator = productAreaSepArg
-            End If
-
-            bEnableNewEmailProcessing = IIf(newModeArg = "1", True, False)
-            
-            'Log cmd line args
-            Try     
-                openLogFile()
-                
-                'Log input params
-                LogToFile(String.Format(
-                    "Cmd Line Args:"  & vbCrlf & vbTab &
-                    "- WorkingMode: {0}" & vbCrlf & vbTab &
-                    "- ConnectionString: {1}" & vbCrlf & vbTab &
-                    "- Log folder: {2}" & vbCrlf & vbTab &
-                    "- Log identifier: {3}" & vbCrlf & vbTab &
-                    "- ProductArea Separator: {4}" & vbCrlf & vbTab &
-                    "- New email processing: {5}", 
-                    workingModeArg, connStringArg, logFolderArg, logIdentifierArg, productAreaSepArg, newModeArg), 1)
-
-                'start processing
-                readMailBox(sConnectionstring, workingMode)
-
-            Catch ex As Exception
-                LogError(ex.ToString())
-            Finally
-                closeLogFile()
-            End Try
-
         End If
+
+        Dim workingMode = IIf(workingModeArg = "5", SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
+
+        If Not String.IsNullOrEmpty(logFolderArg) Then
+            gsLogPath = logFolderArg
+        End If
+
+        If Not String.IsNullOrEmpty(logIdentifierArg) Then
+            gsInternalLogIdentifier = logIdentifierArg.ToString.Trim
+        End If
+
+        If Not String.IsNullOrEmpty(productAreaSepArg) Then
+            gsProductAreaSeperator = productAreaSepArg
+        End If
+
+        'Log cmd line args
+        Try
+            openLogFile()
+
+            If String.IsNullOrEmpty(sConnectionstring) Then
+                Throw New ArgumentNullException("connection string")
+            End If
+
+            Dim logConnectionString As String = FormatConnectionString(sConnectionstring)
+            'Log input params
+            LogToFile(String.Format(
+                "Cmd Line Args:" & vbCrLf & vbTab &
+                "- WorkingMode: {0}" & vbCrLf & vbTab &
+                "- ConnectionString: {1}" & vbCrLf & vbTab &
+                "- Log folder: {2}" & vbCrLf & vbTab &
+                "- Log identifier: {3}" & vbCrLf & vbTab &
+                "- ProductArea Separator: {4}" & vbCrLf & vbTab &
+                "- New email processing: {5}",
+                workingModeArg, logConnectionString, logFolderArg, logIdentifierArg, productAreaSepArg, bEnableNewEmailProcessing), 1)
+
+            'start processing
+            readMailBox(sConnectionstring, workingMode)
+
+        Catch ex As Exception
+            LogError(ex.ToString())
+        Finally
+            closeLogFile()
+        End Try
+
+        Dim testEnd As TimeSpan = DateTime.Now - testNow
     End Sub
-    Private Function GetCmdArg(args As String(), index As Int32) As String
-        Dim val as String = ""
-        If args.Length > index Then
+
+    Private Function GetCmdArg(args As String(), index As Int32, defaultValue As String) As String
+        Dim val As String = defaultValue
+        If args.Length > index And Not String.IsNullOrEmpty(args(index)) Then
             val = args(index)
         End If
         Return val
+    End Function
+
+    Private Sub ToggleConfigEncryption(exeConfigName As String)
+        ' Takes the executable file name without the
+        ' .config extension.
+        Try
+            ' Open the configuration file And retrieve 
+            ' the connectionStrings section.
+            Dim config = ConfigurationManager.OpenExeConfiguration(exeConfigName)
+
+            Dim section = CType(config.GetSection("connectionStrings"), ConnectionStringsSection)
+
+            If (section.SectionInformation.IsProtected) Then
+                ' Remove encryption.
+                ' section.SectionInformation.UnprotectSection()
+            Else
+                ' Encrypt the section.
+                section.SectionInformation.ProtectSection("DataProtectionConfigurationProvider")
+            End If
+
+            ' Save the current configuration.
+            config.Save()
+
+            LogToFile("app.config connection string is protected={0}", section.SectionInformation.IsProtected)
+
+        Catch ex As Exception
+            LogError(ex.ToString())
+        End Try
+    End Sub
+
+    Private Function FormatConnectionString(connectionString As String) As String
+        Dim builder As SqlConnectionStringBuilder = New SqlConnectionStringBuilder(connectionString)
+        Return String.Format("Data Source={0}; Initial Catalog={1};Network Library={2}", builder.DataSource, builder.InitialCatalog, builder.NetworkLibrary)
     End Function
 
     Public Function readMailBox(ByVal sConnectionstring As String, ByVal iSyncType As SyncType) As Integer
@@ -541,8 +595,8 @@ Module DH_Helpdesk_Mail
                                         End If
                                     End If
 
-                                    LogToFile("Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count, iPOP3DebugLevel)
-                                    
+                                    LogToFile("Create Case:" & objCase.Casenumber & ", Attachments:" & message.Attachments.Count, iPop3DebugLevel)
+
                                     'Save 
                                     Dim sHTMLFileName As String = createHtmlFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
 
@@ -688,9 +742,18 @@ Module DH_Helpdesk_Mail
                                         End If
                                     End If
 
-                                    If objCase.WorkingGroup_Id <> 0 Then
+                                    Dim workingGroup_Id As Integer = objCase.WorkingGroup_Id
+                                    Dim workingGroupEMail As String = objCase.WorkingGroupEMail
+                                    Dim workingGroupAllocateCaseMail As Integer = objCase.WorkingGroupAllocateCaseMail
+                                    If objCustomer.CaseWorkingGroupSource = 0 Then
+                                        workingGroup_Id = objCase.PerformerWorkingGroup_Id
+                                        workingGroupEMail = objCase.PerformerWorkingGroupEMail
+                                        workingGroupAllocateCaseMail = objCase.PerformerWorkingGroupAllocateCaseMail
+                                    End If
 
-                                        If Not objCase.WorkingGroupEMail Is Nothing Then
+                                    If workingGroup_Id <> 0 Then
+
+                                        If Not String.IsNullOrEmpty(workingGroupEMail) And workingGroupAllocateCaseMail = 1 Then
                                             objMailTemplate = objMailTemplateData.getMailTemplateById(7, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                             If Not objMailTemplate Is Nothing Then
@@ -701,9 +764,9 @@ Module DH_Helpdesk_Mail
 
                                                 Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
 
-                                                sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, objCase.WorkingGroupEMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
+                                                sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, workingGroupEMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, objCase.WorkingGroupEMail, 7, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                objLogData.createEMailLog(iCaseHistory_Id, workingGroupEMail, 7, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             End If
                                         End If
                                     End If
@@ -737,6 +800,8 @@ Module DH_Helpdesk_Mail
 
                                     ' Markera ärendet som oläst
                                     objCaseData.markCaseUnread(objCase)
+
+
 
                                     ' Uppdatera ärendet och aktivera om det är avslutat
                                     If objCase.FinishingDate <> Date.MinValue Then

@@ -203,7 +203,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
 
-            var languageOverviewsOrginal = _languageService.GetOverviews();
+            var languageOverviewsOrginal = _languageService.GetOverviews(true);
             var languageOverviews =
                 languageOverviewsOrginal.Select(
                     o =>

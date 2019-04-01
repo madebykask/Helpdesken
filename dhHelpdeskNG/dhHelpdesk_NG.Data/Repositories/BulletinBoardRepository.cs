@@ -35,7 +35,7 @@ namespace DH.Helpdesk.Dal.Repositories
         /// The work context.
         /// </param>
         public BulletinBoardRepository(IDatabaseFactory databaseFactory, IWorkContext workContext)
-            : base(databaseFactory, workContext)
+            : base(databaseFactory)
         {
         }
     }

@@ -74,10 +74,14 @@ export const CaseFieldsNames = {
    IsAbout_RegionId: "IsAbout_RegionId",
    SupplierCountryId: "SupplierCountryId",
    CaseRegistrationSource: "CaseRegistrationSource",
+   Log_InternalText: "Log_InternalText",
+   Log_ExternalText: "Log_ExternalText"
 };
 
 export const CaseFieldOptions = {
-  reqiured: 'required',
+  required: 'required',
   readonly: 'readonly',
-  maxlength: 'maxlength'
+  maxlength: 'maxlength',
+  setByTemplate: 'setbytemplate',
+  isHidden: 'hidden'
 }

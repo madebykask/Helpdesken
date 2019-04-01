@@ -25,5 +25,6 @@
         public string Description { get; set; }
 
         public bool UserHasInventoryAdminPermission { get; set; }
-    }
+		public bool UserHasInventoryViewPermission { get; set; }
+	}
 }

@@ -1,5 +1,6 @@
 <ng-container [formGroup]="form">
-    <mbsc-input #input [formControlName]="field.name">{{ field.label }}{{ requiredSymbol }}</mbsc-input> 
+    <mbsc-input #input [formControlName]="field.name" [error]="getErrorState()"
+     [errorMessage]="getErrorMessage()" [ngClass]="{ 'disabled': formControl.disabled }">{{ formControl.label }}{{ requiredSymbol }}</mbsc-input> 
 <!--
     <label>
         {{field.Label}}

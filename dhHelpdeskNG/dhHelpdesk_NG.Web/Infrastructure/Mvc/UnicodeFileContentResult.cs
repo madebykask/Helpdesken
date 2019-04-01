@@ -32,9 +32,9 @@
 			var encoding = Encoding.UTF8;
 			var request = context.HttpContext.Request;
 			var response = context.HttpContext.Response;
-
+            
 			response.Clear();
-
+            
 			if (!this.IsInline)
 			{
 				response.Headers.Remove("Content-Disposition");

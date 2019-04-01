@@ -1,10 +1,13 @@
 <div class="case-subsection">
-<span class="mbsc-label case-subsection-title">Files</span>
-<br>
-  <mbsc-listview [options]="fileListSettings">
+  <span class="mbsc-label case-subsection-title" translate>Bifogad fil</span>  
+  <div id="case-files" class="fileList">
+    <mbsc-listview [options]="fileListSettings" #fileList>
       <mbsc-listview-item *ngFor="let item of files; trackBy: identify" 
           icon="fa-paperclip"
           (click)="downloadFile(item)">{{ item.fileName }}</mbsc-listview-item>
-  </mbsc-listview>
-  <case-files-upload [caseKey]='caseKey'></case-files-upload>
+      </mbsc-listview>
+  </div>
+   
+  <case-files-upload *ngIf="hasFullAccess" [caseKey]='caseKey' (NewFileUploadComplete)="processNewFileUpload($event)"></case-files-upload>
+  
 </div>

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CaseEditRoutingModule } from './case-edit-routing.module';
-import { CaseEditComponent } from './components/case-edit/case-edit.component';
+import { CaseEditComponent, MbscFormGroupTitleClickDirective } from './components/case-edit/case-edit.component';
 import { CaseTextboxComponent } from './components/case-edit/controls/textbox/case-textbox-control.component';
 import { CaseDateComponent } from './components/case-edit/controls/date/case-date-control.component';
 import { CaseDropdownComponent } from './components/case-edit/controls/dropdown/case-dropdown-control.component';
@@ -18,12 +18,33 @@ import { HttpClientModule } from '@angular/common/http';
 import { CaseFilesControlComponent } from './components/case-edit/controls/case-files/case-files-control.component';
 import { CommonModule } from '@angular/common';
 import { CaseActionsComponent } from './components/case-actions/case-actions.component';
+import { GeneralActionComponent } from './components/case-actions/actions/general-action/general-action.component';
+import { FieldChangeActionComponent } from './components/case-actions/actions/field-change-action/field-change-action.component';
+import { LogNoteActionComponent } from './components/case-actions/actions/log-note-action/log-note-action.component';
+import { CaseActionContainerComponent } from './components/case-actions/case-action-container.component';
+import { CaseActionHostDirective } from './components/case-actions/actions/case-action-host.directive';
+import { ActionsFilterPipe } from './pipes/actions-filter.pipe';
+import { LogFilesUploadComponent } from './components/case-edit/controls/log-files-upload/log-files-upload.component';
+import { CaseLogInputComponent } from './components/case-edit/case-log-input/case-log-input.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { FilePreviewComponent } from './components/file-preview/file-preview.component';
+import { CommonFileViewer } from './components/file-preview/viewers/common-file-viewer.component';
+import { PdfFileViewer } from './components/file-preview/viewers/pdf-file-viewer.component';
+import { ImageFileViewerComponent } from './components/file-preview/viewers/image-file-viewer.component';
+import { TextFileViewerComponent } from './components/file-preview/viewers/text-file-viewer.component';
+import { Pdf2FileViewerComponent } from './components/file-preview/viewers/pdf2-file-viewer.component';
+import { Pdf3FileViewerComponent } from './components/file-preview/viewers/pdf3-file-viewer.component';
+import { NotifierSearchComponent } from './components/case-edit/controls/notifier-search/notifier-search.component';
+import { FilterExtDirective } from './directives/filter-ext.directive';
 
 @NgModule({
   declarations: [ CaseEditComponent,
     CaseTextboxComponent, CaseDateComponent, CaseDropdownComponent,  CaseMultiDropdownComponent,
     CaseSwitchComponent, CaseTextareaComponent, CaseDateTimeComponent, MailtoticketControlComponent,
-    CaseFilesUploadComponent, CaseFilesControlComponent, CaseActionsComponent
+    CaseFilesUploadComponent, CaseFilesControlComponent, CaseActionsComponent, CaseActionHostDirective, 
+    CaseActionContainerComponent, GeneralActionComponent, FieldChangeActionComponent, LogNoteActionComponent, ActionsFilterPipe,
+    CaseLogInputComponent, LogFilesUploadComponent, FilePreviewComponent, PdfFileViewer, CommonFileViewer, ImageFileViewerComponent,
+    TextFileViewerComponent, Pdf2FileViewerComponent, Pdf3FileViewerComponent, NotifierSearchComponent, MbscFormGroupTitleClickDirective, FilterExtDirective
 ],
   imports: [
     CommonModule,
@@ -32,9 +53,12 @@ import { CaseActionsComponent } from './components/case-actions/case-actions.com
     ReactiveFormsModule,
     HttpClientModule,
     SharedModule,
-    FileUploadModule,
+    FileUploadModule, // todo: check if required?
+    PdfViewerModule, // todo: replace with different approach?
     CaseEditRoutingModule
+
   ],
-  exports: [ ]
+  entryComponents: [FieldChangeActionComponent, LogNoteActionComponent, GeneralActionComponent],
+  exports: []
 })
 export class CaseEditModule { }

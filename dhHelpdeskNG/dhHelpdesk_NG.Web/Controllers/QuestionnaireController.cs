@@ -104,7 +104,7 @@ namespace DH.Helpdesk.Web.Controllers
         public ViewResult EditQuestionnaire(int questionnaireId, int languageId)
         {
             var questionnaire = _questionnaireService.GetQuestionnaireById(questionnaireId, languageId);
-            var languageOverviewsOrginal = _languageService.GetOverviews();
+            var languageOverviewsOrginal = _languageService.GetOverviews(true);
             var languageOverviews =
                 languageOverviewsOrginal.Select(
                     o =>

@@ -62,8 +62,10 @@ namespace DH.Helpdesk.WebApi
         {
             var jsonFormatter = config.Formatters.JsonFormatter;
             jsonFormatter.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
-            jsonFormatter.UseDataContractJsonSerializer = false;
             jsonFormatter.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+            jsonFormatter.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+            jsonFormatter.UseDataContractJsonSerializer = false;
+
 #if DEBUG
             // Pretty json for developers.
             jsonFormatter.SerializerSettings.Formatting = Formatting.Indented;

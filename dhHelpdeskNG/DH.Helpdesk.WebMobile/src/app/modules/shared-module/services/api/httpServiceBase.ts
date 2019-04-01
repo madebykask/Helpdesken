@@ -7,7 +7,7 @@ import { LocalStorageService } from '../../../../services/local-storage';
 import { AuthConstants } from '../../constants';
 
 export abstract class HttpApiServiceBase {
-  private baseApiUrl: string;
+  protected baseApiUrl: string;
 
   protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) {
     this.baseApiUrl = config.apiUrl;
@@ -18,7 +18,7 @@ export abstract class HttpApiServiceBase {
         .get<TResponse>(url, { headers: this.getHeaders(headers, false, noAuth)})
         .pipe(
             catchError((error: any) => {
-                return throwError(error);
+              return throwError(error);
         }));
   }
 
@@ -31,6 +31,19 @@ export abstract class HttpApiServiceBase {
         }));
   }
 
+  protected deleteWithResult<TResponse>(url: string, headers: any = null, noAuth = false, withCredentials:boolean = false): Observable<TResponse> {
+
+    return this.http.delete<TResponse>(url, { 
+                headers: this.getHeaders(headers, true, noAuth),
+                withCredentials: withCredentials
+             }).pipe(
+                catchError((error: any) => {
+                  return throwError(error);
+            })
+        );
+  }
+
+  //tod:review files delete 
   protected deleteResource(url: string, headers: any = null, noAuth = false): Observable<any> {
     // fixed issue https://github.com/angular/angular/issues/18680 - remove after fix
     return this.http
@@ -125,9 +138,8 @@ export abstract class HttpApiServiceBase {
       
       if (noAuth) {
           options = options.set(AuthConstants.NoAuthHeader, '');
-      }
+      } 
       // options = options.set('Access-Control-Allow-Origin', '*');
-
       return options;
   }
 
@@ -135,5 +147,11 @@ export abstract class HttpApiServiceBase {
       const newQsParams = {...qsParamMap, [paramName]: customerId };
       return newQsParams;
   }
+  /*
+  protected handleError(error: Response) {
+    console.error(error);
+    return Observable.throw(error.json().error || 'Server Error');
+  }
+  */
 }
 

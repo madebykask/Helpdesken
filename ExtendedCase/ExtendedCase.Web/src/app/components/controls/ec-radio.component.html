@@ -1,0 +1,20 @@
+﻿<ng-container [formGroup]="form" *ngIf="!fieldModel.hidden">
+    <div class="col-md-6 control-label" *ngIf="fieldTemplate.isLabelHtml" >
+        <span [innerHtml]="fieldTemplate.label"></span>
+        <span [class.required-invalid]="fieldModel.control.invalid">{{ isRequiredLabel }}</span>
+    </div>
+    <label class="col-md-6 control-label" *ngIf="!fieldTemplate.isLabelHtml">
+        {{ fieldTemplate.label }}<span [class.required-invalid]="fieldModel.control.invalid">{{ isRequiredLabel }}</span>
+    </label>
+    <div class="col-md-6">
+        <div class="radio" [class.ng-invalid]="fieldModel.control.invalid === true">
+            <ng-container *ngIf="fieldModel.items">
+                <label *ngFor="let item of fieldModel.items; index as i" [attr.for]="fieldModel.getUiPath() + i">
+                    <input type="radio" [formControlName]="fieldTemplate.id" [name]="fieldTemplate.id" [id]="fieldModel.getUiPath() + i" [value]="item.value"/> {{item.text}}
+                </label>
+            </ng-container>
+        </div>
+        <validation-error [control]="fieldModel.control"></validation-error>
+        <validation-warnings [warnings]="fieldModel.warnings"></validation-warnings>
+    </div>
+</ng-container>

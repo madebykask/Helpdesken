@@ -529,8 +529,6 @@ namespace DH.Helpdesk.Web.Controllers
             return this.View(model);
         }
 
-
-
         [ValidateInput(false)]
         [HttpPost]
         public ActionResult NewAndEdit(FormCollection collection)
@@ -2895,18 +2893,22 @@ namespace DH.Helpdesk.Web.Controllers
                 Value = x.Id.ToString()
             }).ToList();
 
-            var currentWG = new List<SelectListItem>();
-            currentWG.Add(new SelectListItem
+            var currentWG = new List<SelectListItem>
             {
-                Text = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_WORKINGGROUP_CAPTION)),
-                Value = "-1"
-            });
+                new SelectListItem
+                {
+                    Text = string.Format("-- {0} --", Translation.GetCoreTextTranslation(CURRENT_USER_WORKINGGROUP_CAPTION)),
+                    Value = "-1"
+                }
+            };
 
             workingGroupList = currentWG.Union(workingGroupList).ToList();
 
-            var usedButtons = _caseSolutionService.GetCaseSolutions(curCustomerId)
-                                                  .Where(c => c.ConnectedButton.HasValue && c.Id != caseSolution.Id)
-                                                  .Select(c => c.ConnectedButton.Value).ToList();
+            var usedButtons = 
+                _caseSolutionService.GetCustomerCaseSolutionsOverview(curCustomerId) //uses cached data
+                                    .Where(c => c.ConnectedButton.HasValue && c.CaseSolutionId != caseSolution.Id)
+                                    .OrderBy(c => c.Name)
+                                    .Select(c => c.ConnectedButton.Value).ToList();
 
             var buttonList = new List<SelectListItem>();
 

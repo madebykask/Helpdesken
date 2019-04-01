@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.Models.CaseSolution;
 using DH.Helpdesk.BusinessData.Models.User.Input;
 using DH.Helpdesk.Common.Enums;
@@ -40,7 +41,7 @@ namespace DH.Helpdesk.Services.Services
         void SaveCaseSolution(CaseSolution caseSolution, CaseSolutionSchedule caseSolutionSchedule, IList<CaseFieldSetting> CaseFieldSetting, out IDictionary<string, string> errors);
         void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors);
         void SaveEmptyForm(Guid formGuid, int caseId);
-        void Commit();
+        
         IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case case_, IList<CaseSolutionOverview> caseSolutions, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId);
 
         IList<CaseSolution> GetCaseSolutions();
@@ -92,7 +93,7 @@ namespace DH.Helpdesk.Services.Services
             IApplicationRepository applicationRepository,
             IComputerUserCategoryRepository computerUserCategoryRepository,
             IUnitOfWorkFactory unitOfWorkFactory) 
-            : base(caseSolutionRepository, caseSolutionCategoryRepository)
+            : base(caseSolutionRepository, caseSolutionCategoryRepository) 
         {
             this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
             this._caseSolutionScheduleRepository = caseSolutionScheduleRepository;
@@ -195,21 +196,22 @@ namespace DH.Helpdesk.Services.Services
         }
 
         //TODO: review. not performance optimised
+        [Obsolete("Use GetCustomerCaseSolutionsOverview instead")]
         public IList<CaseSolution> GetCaseSolutions(int customerId)
         {
-            return this._caseSolutionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return this.CaseSolutionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
         //todo: review. not performance optimised
         public IList<CaseSolution> GetCaseSolutions()
         {
-            return this._caseSolutionRepository.GetMany(x => x.Status >= 0).OrderBy(x => x.Customer.Name).ThenBy(x => x.Name).ToList();
+            return this.CaseSolutionRepository.GetMany(x => x.Status >= 0).OrderBy(x => x.Customer.Name).ThenBy(x => x.Name).ToList();
         }
 
        //todo: review not performance optimised
         public IList<CaseSolution_SplitToCaseSolutionEntity> GetSplitToCaseSolutionDescendants(CaseSolution self, int[] descendantIds)
         {
-            return this._caseSolutionRepository.GetMany(x => descendantIds.Contains(x.Id)).Select(cs => new CaseSolution_SplitToCaseSolutionEntity
+            return this.CaseSolutionRepository.GetMany(x => descendantIds.Contains(x.Id)).Select(cs => new CaseSolution_SplitToCaseSolutionEntity
             {
                 CaseSolution = self,
                 CaseSolution_Id  = self.Id,
@@ -268,7 +270,7 @@ namespace DH.Helpdesk.Services.Services
         public IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case case_, IList<CaseSolutionOverview> caseSolutions, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId)
         {
             var solutionsIds = caseSolutions.Where(x => x.ConnectedButton == 0).Select(x => x.CaseSolutionId).ToList();
-            var caseSolutionsConditions = _caseSolutionRepository.GetCaseSolutionsConditions(solutionsIds);
+            var caseSolutionsConditions = CaseSolutionRepository.GetCaseSolutionsConditions(solutionsIds);
 
             var modelList = new List<WorkflowStepModel>();
             var workflowStepsContext = new WorkflowConditionsContext
@@ -479,7 +481,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch searchCaseSolutions, bool isFirstNamePresentation)
         {
-            var query = (from cs in this._caseSolutionRepository.GetMany(x => x.Customer_Id == customerId)
+            var query = (from cs in this.CaseSolutionRepository.GetMany(x => x.Customer_Id == customerId)
                          select cs);
 
             #region Search
@@ -710,7 +712,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -737,7 +739,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -781,7 +783,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -808,7 +810,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -850,7 +852,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -877,7 +879,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -918,7 +920,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        var cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        var cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -945,7 +947,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -987,7 +989,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -1014,7 +1016,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -1056,7 +1058,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -1083,7 +1085,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -1125,7 +1127,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -1152,7 +1154,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -1194,7 +1196,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -1221,7 +1223,7 @@ namespace DH.Helpdesk.Services.Services
                                     cresList = new List<CaseSolution>();
                                     foreach (var r in results1)
                                     {
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.CaseSolution_Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.CaseSolution_Id);
                                         cresList.Add(cres);
                                     }
                                 }
@@ -1246,7 +1248,7 @@ namespace DH.Helpdesk.Services.Services
                                 foreach (var r in results)
                                 {
 
-                                    CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+                                    CaseSolution cres = CaseSolutionRepository.GetById(r.Id);
 
                                     cresList.Add(cres);
                                 }
@@ -1266,7 +1268,7 @@ namespace DH.Helpdesk.Services.Services
                                     foreach (var r in results)
                                     {
 
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.Id);
 
                                         cresList.Add(cres);
                                     }
@@ -1309,7 +1311,7 @@ namespace DH.Helpdesk.Services.Services
                                 foreach (var r in results)
                                 {
 
-                                    CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+                                    CaseSolution cres = CaseSolutionRepository.GetById(r.Id);
 
                                     cresList.Add(cres);
                                 }
@@ -1329,7 +1331,7 @@ namespace DH.Helpdesk.Services.Services
                                     foreach (var r in results)
                                     {
 
-                                        CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+                                        CaseSolution cres = CaseSolutionRepository.GetById(r.Id);
 
                                         cresList.Add(cres);
                                     }
@@ -1373,7 +1375,7 @@ namespace DH.Helpdesk.Services.Services
                             foreach (var r in results)
                             {
 
-                                CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+                                CaseSolution cres = CaseSolutionRepository.GetById(r.Id);
 
                                 cresList.Add(cres);
                             }
@@ -1393,7 +1395,7 @@ namespace DH.Helpdesk.Services.Services
                                 foreach (var r in results)
                                 {
 
-                                    CaseSolution cres = _caseSolutionRepository.GetById(r.Id);
+                                    CaseSolution cres = CaseSolutionRepository.GetById(r.Id);
 
                                     cresList.Add(cres);
                                 }
@@ -1607,7 +1609,7 @@ namespace DH.Helpdesk.Services.Services
 
         public CaseSolution GetCaseSolution(int id)
         {
-            return this._caseSolutionRepository.GetById(id);
+            return this.CaseSolutionRepository.GetById(id);
         }
 
         public CaseSolutionCategory GetCaseSolutionCategory(int id)
@@ -1622,7 +1624,7 @@ namespace DH.Helpdesk.Services.Services
 
         public DeleteMessage DeleteCaseSolution(int id, int customerId)
         {
-            var caseSolution = this._caseSolutionRepository.GetById(id);
+            var caseSolution = this.CaseSolutionRepository.GetById(id);
 
             if (caseSolution != null)
             {
@@ -1645,7 +1647,7 @@ namespace DH.Helpdesk.Services.Services
                         foreach (var link in caseSolutionLinks)
                             this._linkRepository.Delete(x => x.Id == link.Id);
 
-                    this._caseSolutionRepository.Delete(caseSolution);
+                    this.CaseSolutionRepository.Delete(caseSolution);
 
                     this.Commit();
 
@@ -1717,10 +1719,10 @@ namespace DH.Helpdesk.Services.Services
                 caseSolution.Text_Internal = caseSolution.Text_Internal.Substring(0, 3000);
 
             if (caseSolution.Id == 0)
-                this._caseSolutionRepository.Add(caseSolution);
+                this.CaseSolutionRepository.Add(caseSolution);
             else
             {
-                this._caseSolutionRepository.Update(caseSolution);
+                this.CaseSolutionRepository.Update(caseSolution);
                 this._caseSolutionScheduleRepository.Delete(x => x.CaseSolution_Id == caseSolution.Id);
             }
 
@@ -1728,9 +1730,6 @@ namespace DH.Helpdesk.Services.Services
             {
                 this._caseSolutionScheduleRepository.Add(caseSolutionSchedule);
             }
-
-           
-          
 
             if (errors.Count == 0)
             { 
@@ -1845,7 +1844,7 @@ namespace DH.Helpdesk.Services.Services
             _formRepository.SaveEmptyForm(formGuid, caseId);
         }
 
-        public void Commit()
+        private void Commit()
         {
             this._unitOfWork.Commit();
         }
@@ -1880,7 +1879,7 @@ namespace DH.Helpdesk.Services.Services
             var caseSolutions = this._cache.Get(cacheKey) as IList<CaseSolutionOverview>;
             if (caseSolutions == null)
             {
-                caseSolutions = _caseSolutionRepository.GetCustomerCaseSolutions(customerId).ToList();
+                caseSolutions = GetCustomerCaseSolutionsQuery(customerId).ToList();
 
                 if (caseSolutions.Any())
                     this._cache.Set(cacheKey, caseSolutions, Common.Constants.Cache.Duration);

@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
+using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
-using Z.EntityFramework.Plus;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -17,11 +17,12 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Domain;
     using Mappers;
     using System.Linq.Expressions;
-    using System.Data.Linq.SqlClient;
 
     public interface ICaseRepository : IRepository<Case>
     {
+        IQueryable<Case> GetCustomerCases(int customerId);
         Case GetCaseById(int id, bool markCaseAsRead = false);
+        Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false);
         Case GetCaseByGUID(Guid GUID);
         int GetCaseIdByEmailGUID(Guid GUID);
         Case GetCaseByEmailGUID(Guid GUID);
@@ -33,7 +34,7 @@ namespace DH.Helpdesk.Dal.Repositories
         void SetNullProblemByProblemId(int problemId);
         void UpdateFinishedDate(int problemId, DateTime? time);
         void UpdateFollowUpDate(int caseId, DateTime? time);
-        void Activate(int caseId);
+        void Activate(int caseId, int calculatedLeadTime, int externalTimeToAdd = 0);
         void MarkCaseAsUnread(int id);
         void MarkCaseAsRead(int id);
         IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user);
@@ -85,6 +86,19 @@ namespace DH.Helpdesk.Dal.Repositories
             this.workContext = workContext;
             _caseModelToEntityMapper = caseModelToEntityMapper;
             _caseToBusinessModelMapper = caseToBusinessModelMapper;
+        }
+
+        public IQueryable<Case> GetCustomerCases(int customerId)
+        {
+            return Table.Where(x => x.Customer_Id == customerId);
+        }
+
+        public Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false)
+        {
+            if (markCaseAsRead)
+                MarkCaseAsRead(id);
+
+            return GetByIdAsync(id);
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -212,7 +226,7 @@ namespace DH.Helpdesk.Dal.Repositories
             }
         }
 
-        public void Activate(int caseId)
+        public void Activate(int caseId, int calculatedLeadTime, int externalTimeToAdd = 0)
         {
             var cases = this.DataContext.Cases.Where(x => x.Id == caseId).FirstOrDefault();
             if (cases != null)
@@ -222,6 +236,8 @@ namespace DH.Helpdesk.Dal.Repositories
                 cases.ApprovedDate = null;
                 cases.LeadTime = 0;
                 cases.ChangeTime = DateTime.UtcNow;
+                cases.LeadTime = calculatedLeadTime;
+                cases.ExternalTime += externalTimeToAdd;
 
                 foreach (var log in cases.Logs)
                 {
@@ -266,7 +282,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public void MarkCaseAsUnread(int id)
         {
-            SetCaseUnreadFlag(id, 1);
+            SetCaseUnreadFlag(id, true);
         }
 
         public IEnumerable<CaseRelation> GetRelatedCases(int id, int customerId, string reportedBy, UserOverview user)
@@ -382,10 +398,13 @@ namespace DH.Helpdesk.Dal.Repositories
             SetCaseUnreadFlag(id);
         }
 
-        private void SetCaseUnreadFlag(int id, int unread = 0)
+        private void SetCaseUnreadFlag(int id, bool unread = false)
         {
-            this.DataContext.Cases.Where(c => c.Id == id)
-                .Update(c => new Case { Unread = unread });
+            var @case = GetById(id);
+            @case.Unread = unread ? 1 : 0;
+            Update(@case);
+            
+            Commit();
         }
 
         public Case GetCaseIncluding(int id)

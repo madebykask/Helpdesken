@@ -1,27 +1,38 @@
-import { UuidGenerator } from "../../helpers/uuid-generator";
+import { UuidGenerator } from "src/app/modules/shared-module/utils/uuid-generator";
 
 export class CurrentUser {
+    
     constructor() {
-        this.authData = new UserAuthenticationData();
-        this.currentData = new UserData();
+          this.authData = new UserAuthenticationData();
+          this.currentData = new UserData();
     }
 
-    id: number;    
+    // Properties  
+    get id(): number {
+      return this.currentData.id;
+    };
+
+    get name(): string {
+      return this.currentData.name;
+    }
+
     version: string;
     authData: UserAuthenticationData;
-    currentData: UserData;      
+    currentData: UserData;
 
+    //create method
     static createAuthenticated(data: any) : CurrentUser {
+        let user = new CurrentUser();
+        //set auth data
         let authData = new UserAuthenticationData()
         authData.access_token = data.access_token;
         authData.refresh_token = data.refresh_token;
         authData.expires_in = data.expires_in;
-        authData.recievedAt = new Date();        
+        authData.recievedAt = new Date();
         authData.sessionId = UuidGenerator.createUuid();
-        let user = new CurrentUser();
         user.authData = authData;
 
-        return user;        
+        return user;
     }
 }
 
@@ -30,11 +41,16 @@ export class UserAuthenticationData {
     refresh_token: string;
     expires_in: number; // in seconds - not updated once recieved
     recievedAt: Date;
-    sessionId: string;   
+    sessionId: string;
 }
 
 export class UserData {
+    id: number;
+    name: string;
     selectedCustomerId: number;
     selectedLanguageId: number;
     userTimeZone?: string;
+    ownCasesOnly: boolean;
+    createCasePermission: boolean;
+    canDeleteAttachedFiles: boolean;
 }

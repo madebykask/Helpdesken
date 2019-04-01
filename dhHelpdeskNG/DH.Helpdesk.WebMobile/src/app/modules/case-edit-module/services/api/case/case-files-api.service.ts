@@ -1,26 +1,33 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { take, catchError } from "rxjs/operators";
-import { WindowWrapper } from "src/app/helpers";
-import { Observable, throwError } from "rxjs";
+import { Observable } from "rxjs";
+import { config } from '@env/environment';
 import { LocalStorageService } from "src/app/services/local-storage";
 import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
 
 @Injectable({ providedIn: 'root' })
 export class CaseFilesApiService extends HttpApiServiceBase {
-    constructor(httpClient:HttpClient, localStorageService: LocalStorageService, private windowWrapper: WindowWrapper){
+    constructor(httpClient:HttpClient, localStorageService: LocalStorageService) {
         super(httpClient, localStorageService);
     }
 
-    downloadCaseFile(caseId:number, fileId:number,  fileName:string) {
-        let window = this.windowWrapper.nativeWindow;
+    getCaseFileUploadUrl(caseId: string, cid: number) {
+      return `${config.apiUrl}/api/case/${caseId}/file?cid=${cid}`;
+    }
+
+    downloadLogFile(caseId:number, fileId:number) {
+      let url = this.buildResourseUrl(`/api/case/${caseId}/logfile/${fileId}`, { inline: true }, true, false);
+      return this.getFileBody(url, null);
+    }
+
+    downloadCaseFile(caseId:number, fileId:number): Observable<Blob> {
         let url = this.buildResourseUrl(`/api/case/${caseId}/file/${fileId}`, { inline: true }, true, false);
-        this.getFileBody(url, null).pipe(
-            take(1),
-        ).subscribe(data => {
-            //saveAs(data, fileName); // uses file-saver.js
-            window.location.href = window.URL.createObjectURL(data);
-        });
+        return this.getFileBody(url, null);
+    }
+
+    downloadTempCaseFile(caseKey:string, fileName:string): Observable<Blob> {
+      let url = this.buildResourseUrl(`/api/case/${caseKey}/file`, { inline: true, fileName : fileName }, true, false);
+      return this.getFileBody(url);
     }
 
     deleteCaseFile(caseKey:string, fileId:number, fileName:string): Observable<any> {
@@ -32,4 +39,9 @@ export class CaseFilesApiService extends HttpApiServiceBase {
               
         return this.deleteResource(url);
     } 
+
+    deleteTemplFiles(caseId:number): Observable<any> {
+      let url = this.buildResourseUrl(`/api/case/${caseId}/tempfiles`, null, true, false);
+      return this.deleteResource(url);
+  } 
 }

@@ -587,7 +587,7 @@ a.error, input[type=¨button].error .btn
 /***COMMUNICATE****/
 
 .siteCom {
-  width:600px;
+  max-width:600px;
   position:fixed;
   left:-600px;
   top:0;

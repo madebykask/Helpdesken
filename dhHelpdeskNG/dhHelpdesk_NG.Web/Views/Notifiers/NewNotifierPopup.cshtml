@@ -1,34 +1,32 @@
-﻿@using System.Web.Optimization
-@model DH.Helpdesk.Web.Models.Notifiers.InputModel
+﻿@model DH.Helpdesk.Web.Models.Notifiers.InputModel
 
 @{
     Layout = "../Shared/_PopupLayout.cshtml";
-    ViewBag.Title = Translation.Get("Ny anmälare", Enums.TranslationSource.TextTranslation);
+    ViewBag.Title = Translation.GetCoreTextTranslation("Ny anmälare");
 }
 
 @using (Ajax.BeginForm("NewNotifierPopup", "Notifiers", new AjaxOptions { OnSuccess = "afterSuccessSubmit" }, new { id = "target" }))
 {
     <div class="navbar fixed">
-            <div class="navbar-container">
-                <a href="/">
-                    <div class="navbar-header pull-left navbar-brand">
-                    </div>
-                </a>
-            </div>
+        <div class="navbar-container">
+            <a href="/">
+                <div class="navbar-header pull-left navbar-brand"></div>
+            </a>
+        </div>
     </div>
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
                 <li>
-                    <input type="submit" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" class="btn" />
+                    <input type="submit" value="@Translation.GetCoreTextTranslation("Spara")" class="btn" />
                 </li>
                 <li>
-                    <input type="button" onclick="window.close()" value="@Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation)" class="btn" />
+                    <input type="button" onclick="window.close()" value="@Translation.GetCoreTextTranslation("Avbryt")" class="btn" />
                 </li>
             </ul>
         </div>
     </div>
-    @Html.Partial("_Input", Model)   
+    @Html.Partial("_Input", Model)
 }
 
 @Scripts.Render("~/bundles/notifiers/notifier")

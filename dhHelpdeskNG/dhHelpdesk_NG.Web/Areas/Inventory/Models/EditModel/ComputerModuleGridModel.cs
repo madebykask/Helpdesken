@@ -13,12 +13,13 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel
 
     public class ComputerModuleGridModel : IndexModel
     {
-        public ComputerModuleGridModel(List<ItemOverview> overviews, ModuleTypes moduleType, bool userInventoryPermission)
+        public ComputerModuleGridModel(List<ItemOverview> overviews, ModuleTypes moduleType, bool userInventoryAdminPermission, bool userInventoryViewPermission)
         {
             this.Overviews = overviews;
             this.ModuleType = (int)moduleType;
-            this.UserHasInventoryAdminPermission = userInventoryPermission;
-            this.ModuleTypes = new ModuleTypes().MapToSelectList(moduleType.GetCaption());
+            this.UserHasInventoryAdminPermission = userInventoryAdminPermission;
+			this.UserHasInventoryViewPermission = userInventoryViewPermission;
+			this.ModuleTypes = new ModuleTypes().MapToSelectList(moduleType.GetCaption());
         }
         
         public override Tabs Tab
@@ -37,6 +38,6 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Models.EditModel
         public SelectList ModuleTypes { get; private set; }
 
         public bool UserHasInventoryAdminPermission { get; private set; }
-
-    }
+		public bool UserHasInventoryViewPermission { get; private set; }
+	}
 }

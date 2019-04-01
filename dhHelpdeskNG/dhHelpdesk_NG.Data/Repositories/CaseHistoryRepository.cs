@@ -6,7 +6,8 @@ using DH.Helpdesk.BusinessData.Models.Problem.Output;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 using DH.Helpdesk.BusinessData.Models.Projects.Output;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
-using DH.Helpdesk.Dal.Mappers;
+using System.Data.Linq;
+using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -16,11 +17,13 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Domain;
     using BusinessData.Models;
+    using System;
 
     public interface ICaseHistoryRepository : IRepository<CaseHistory>
     {
         IEnumerable<CaseHistory> GetCaseHistoryByCaseId(int caseId);
-        IEnumerable<CaseHistoryOverview> GetCaseHistories(int caseId);
+        IEnumerable<CaseHistoryMapperData> GetCaseHistories(int caseId);
+        Task<List<CaseHistoryMapperData>> GetCaseHistoriesAsync(int caseId);
 
         void SetNullProblemByProblemId(int problemId);
 
@@ -31,13 +34,10 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public class CaseHistoryRepository : RepositoryBase<CaseHistory>, ICaseHistoryRepository
     {
-        private readonly IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> _caseHistoryOverviewMapper;
 
-        public CaseHistoryRepository(IDatabaseFactory databaseFactory, 
-                                     IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper)
+        public CaseHistoryRepository(IDatabaseFactory databaseFactory)
             : base(databaseFactory)
         {
-            _caseHistoryOverviewMapper = caseHistoryOverviewMapper;
         }
 
         public IEnumerable<CaseHistory> GetCaseHistoryByCaseId(int caseId)
@@ -48,9 +48,61 @@ namespace DH.Helpdesk.Dal.Repositories
             return q.OrderBy(l => l.Id);
         }
 
-        public IEnumerable<CaseHistoryOverview> GetCaseHistories(int caseId)
+        public IEnumerable<CaseHistoryMapperData> GetCaseHistories(int caseId)
         {
-            var query = 
+            var query = GetCaseHistoriesQuery(caseId);
+
+            return query.ToList();
+        }
+
+        public Task<List<CaseHistoryMapperData>> GetCaseHistoriesAsync(int caseId)
+        {
+            var query = GetCaseHistoriesQuery(caseId);
+
+            return query.ToListAsync();
+        }
+
+        public void SetNullProblemByProblemId(int problemId)
+        {
+            var cases = this.DataContext.CaseHistories.Where(x => x.Problem_Id == problemId).ToList();
+
+            foreach (var item in cases)
+            {
+                item.Problem_Id = null;
+            }
+        }
+
+        public CaseHistory GetCloneOfLatest(int caseId)
+        {
+            return this.DataContext.Set<CaseHistory>()
+                .AsNoTracking()
+                .Where(it => it.Case_Id == caseId)
+                .OrderByDescending(it => it.Id)
+                .FirstOrDefault();
+        }
+
+        public CaseHistory GetCloneOfPenultimate(int caseId)
+        {
+            return DataContext.Set<CaseHistory>()
+                .AsNoTracking()
+                .Where(it => it.Case_Id == caseId)
+                .OrderByDescending(it => it.Id)
+                .Skip(1).Take(1)
+                .FirstOrDefault();
+        }
+
+        public CaseHistory GetCaseHistoryByProblemId(int caseId, int problemId)
+        {
+            return this.DataContext.Set<CaseHistory>()
+                .AsNoTracking()
+                .Where(it => it.Case_Id == caseId && it.Problem_Id == problemId)
+                .OrderByDescending(it => it.Id)
+                .FirstOrDefault();
+        }
+
+        private IQueryable<CaseHistoryMapperData> GetCaseHistoriesQuery(int caseId)
+        {
+            return 
                 from caseHistory in Table
                 let emailLogs = caseHistory.Emaillogs.DefaultIfEmpty()
                 where caseHistory.Case_Id == caseId
@@ -206,49 +258,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         EmailAddress = t.EmailAddress
                     }).ToList()
                 };
-
-            var items = query.ToList();
-
-            var result = items.Select(_caseHistoryOverviewMapper.Map).ToList();
-            return result;
         }
 
-        public void SetNullProblemByProblemId(int problemId)
-        {
-            var cases = this.DataContext.CaseHistories.Where(x => x.Problem_Id == problemId).ToList();
-
-            foreach (var item in cases)
-            {
-                item.Problem_Id = null;
-            }
-        }
-
-        public CaseHistory GetCloneOfLatest(int caseId)
-        {
-            return this.DataContext.Set<CaseHistory>()
-                .AsNoTracking()
-                .Where(it => it.Case_Id == caseId)
-                .OrderByDescending(it => it.Id)
-                .FirstOrDefault();
-        }
-
-        public CaseHistory GetCloneOfPenultimate(int caseId)
-        {
-            return DataContext.Set<CaseHistory>()
-                .AsNoTracking()
-                .Where(it => it.Case_Id == caseId)
-                .OrderByDescending(it => it.Id)
-                .Skip(1).Take(1)
-                .FirstOrDefault();
-        }
-
-        public CaseHistory GetCaseHistoryByProblemId(int caseId, int problemId)
-        {
-            return this.DataContext.Set<CaseHistory>()
-                .AsNoTracking()
-                .Where(it => it.Case_Id == caseId && it.Problem_Id == problemId)
-                .OrderByDescending(it => it.Id)
-                .FirstOrDefault();
-        }
     }
 }

@@ -1,2 +1,5 @@
-<!-- <mbsc-date #date [(ngModel)]="value" [options]="options" [hidden]="options.disabled">{{ field.label }}</mbsc-date> -->
-<mbsc-input #control [ngModel]="value | dateTz: 'L'" >{{ field.label }}</mbsc-input>
+<mbsc-calendar #date [(ngModel)]="value" [options]="options" 
+[error]="getErrorState()"
+[errorMessage]="getErrorMessage()"
+[ngClass]="{ 'disabled': formControl.disabled }">{{ formControl.label }}{{ requiredSymbol }}</mbsc-calendar>
+<!-- <mbsc-input #control [ngModel]="value | dateFormat" >{{ field.label }}</mbsc-input> -->
