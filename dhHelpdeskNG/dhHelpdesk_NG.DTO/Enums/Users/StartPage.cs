@@ -3,6 +3,7 @@
     public enum StartPage
     {
         CaseSummary = 0,
-        Start = 1
+        Start = 1,
+        AdvancedSearch = 2
     }
 }

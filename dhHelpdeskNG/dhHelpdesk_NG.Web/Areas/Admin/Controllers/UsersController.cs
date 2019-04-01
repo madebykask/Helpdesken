@@ -933,6 +933,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Value = ((int)StartPage.CaseSummary).ToString(CultureInfo.InvariantCulture),
                 Selected = false
             });
+            lis.Add(new SelectListItem()
+            {
+                Text = Translation.Get("Avancerad sökning"),
+                Value = ((int)StartPage.AdvancedSearch).ToString(CultureInfo.InvariantCulture),
+                Selected = false
+            });
 
             List<SelectListItem> li = new List<SelectListItem>();
             li.Add(new SelectListItem()
