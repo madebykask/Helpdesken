@@ -65,6 +65,9 @@ export class CaseDropdownComponent extends BaseControl<number> {
       this.initDataSource();
       this.init(this.field);
       this.updateDisabledState();
+      if (this.disabled) { // will be removed latter, when all fields are implemented
+        this.formControl.disable({onlySelf: true, emitEvent: false});
+      }
       this.initEvents();
     }
 
