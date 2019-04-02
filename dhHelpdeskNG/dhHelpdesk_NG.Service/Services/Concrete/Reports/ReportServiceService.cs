@@ -170,10 +170,12 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                     /* If allowed wg is empty, means user has no access to see any case. so we make a false condition */
                 }
                 ret.AddItems(allowedWorkingGroups);
+
+                if (user.UserGroup_Id > UserGroups.Administrator || (user.ShowNotAssignedWorkingGroups != 0))
+                    ret.Add(0); //Not assigned wg
             }
 
-            if (user.UserGroup_Id > UserGroups.Administrator || (user.ShowNotAssignedWorkingGroups != 0))
-                ret.Add(0); //Not assigned wg
+            
 
             return new SelectedItems(ret);            
         }
