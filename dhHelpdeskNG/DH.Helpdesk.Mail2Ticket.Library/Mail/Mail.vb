@@ -107,6 +107,22 @@ Public Class Mail
             sSubject = Replace(sSubject, getMailTemplateIdentifier("Persons_CellPhone"), objCase.Persons_CellPhone)
             sBody = Replace(sBody, getMailTemplateIdentifier("Persons_CellPhone"), objCase.Persons_CellPhone)
 
+            '[#19]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("Available"), objCase.Available)
+            sBody = Replace(sBody, getMailTemplateIdentifier("Available"), objCase.Available)
+
+            '[#20]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("Priority_Description"), objCase.PriorityDescription)
+            sBody = Replace(sBody, getMailTemplateIdentifier("Priority_Description"), objCase.PriorityDescription)
+
+            '[#21]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("WatchDate"), objCase.WatchDate.ToString())
+            sBody = Replace(sBody, getMailTemplateIdentifier("WatchDate"), objCase.WatchDate.ToString())
+
+            '[#22]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("LastChangedByUser"), objCase.ChangedName + " " + objCase.ChangedSurName)
+            sBody = Replace(sBody, getMailTemplateIdentifier("LastChangedByUser"), objCase.ChangedName + " " + objCase.ChangedSurName)
+
             '[#23]
             sSubject = Replace(sSubject, getMailTemplateIdentifier("Miscellaneous"), objCase.Miscellaneous)
             sBody = Replace(sBody, getMailTemplateIdentifier("Miscellaneous"), objCase.Miscellaneous)

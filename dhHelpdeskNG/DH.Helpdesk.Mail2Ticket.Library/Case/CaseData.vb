@@ -553,10 +553,10 @@ Public Class CaseData
                         "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
                        "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " &
                        "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, tblCase.WorkingGroup_Id," &
-                       "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName, " &
+                       "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName, tblPriority.PriorityDescription, " &
                        "tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, tblWorkingGroup.Id AS PerformerWorkingGroup_Id, tblWorkingGroup.AllocateCaseMail AS PerformerWorkingGroupAllocateCaseMail, " &
                        "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, ISNULL(tblWorkingGroup_1.WorkingGroupEMail, '') AS WorkingGroupEMail, tblWorkingGroup_1.AllocateCaseMail AS AllocateCaseMail, " &
-                       "tblCase.RegTime, tblCase.ChangeTime, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
+                       "tblCase.RegTime, tblCase.ChangeTime, u3.FirstName AS ChangedName, u3.SurName AS ChangedSurName, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
                        "tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
                        "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.WatchDate, tblCase.RegistrationSource, " &
                        "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, tblCase.Available, tblCase.ReferenceNumber, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, tblCase.ExternalTime, tblCase.LeadTime " &
@@ -567,6 +567,7 @@ Public Class CaseData
                        "LEFT OUTER JOIN tblWorkingGroup ON tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id " &
                        "LEFT OUTER JOIN tblWorkingGroup tblWorkingGroup_1 ON tblCase.WorkingGroup_Id = tblWorkingGroup_1.Id " &
                        "LEFT JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id " &
+                       "LEFT JOIN tblUsers u3 ON tblCase.ChangeByUser_Id = u3.Id " &
                        "INNER JOIN tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id " &
                        "LEFT JOIN tblStateSecondary ON tblCase.StateSecondary_Id=tblStateSecondary.Id " &
                        "LEFT JOIN tblCategory ON tblCase.Category_Id=tblCategory.Id " &
@@ -650,8 +651,8 @@ Public Class CaseData
                         "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
                         "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " &
                         "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, tblCase.WorkingGroup_Id," &
-                        "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName, " &
-                        "tblCase.RegTime, tblCase.ChangeTime, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
+                        "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName,  tblPriority.PriorityDescription, " &
+                        "tblCase.RegTime, tblCase.ChangeTime, u3.FirstName AS ChangedName, u3.SurName AS ChangedSurName, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
                         "tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, tblWorkingGroup.Id AS PerformerWorkingGroup_Id, tblWorkingGroup.AllocateCaseMail AS PerformerWorkingGroupAllocateCaseMail, " &
                         "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, ISNULL(tblWorkingGroup_1.WorkingGroupEMail, '') AS WorkingGroupEMail, tblWorkingGroup_1.AllocateCaseMail AS AllocateCaseMail, " &
                         "tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
@@ -664,6 +665,7 @@ Public Class CaseData
                         "LEFT OUTER JOIN tblWorkingGroup ON tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id " &
                         "LEFT OUTER JOIN tblWorkingGroup tblWorkingGroup_1 ON tblCase.WorkingGroup_Id = tblWorkingGroup_1.Id " &
                         "LEFT JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id " &
+                        "LEFT JOIN tblUsers u3 ON tblCase.ChangeByUser_Id = u3.Id " &
                         "INNER JOIN tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id " &
                         "LEFT JOIN tblStateSecondary ON tblCase.StateSecondary_Id=tblStateSecondary.Id " &
                         "LEFT JOIN tblCategory ON tblCase.Category_Id=tblCategory.Id " &
