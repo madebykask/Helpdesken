@@ -76,5 +76,7 @@ namespace DH.Helpdesk.EmailEngine.WinService
 			var emailProcessor = new EmailProcessor(_logger);
 			emailProcessor.ProcessEmails();
 		}
+
+		
 	}
 }
