@@ -1,4 +1,6 @@
 ﻿
+using DH.Helpdesk.Common.Enums.Cases;
+
 namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 {
     using System.Collections.Generic;
@@ -177,9 +179,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         public string AddRowToCaseSettings(int usergroupId, int customerId, string labellist, int linelist, int minWidthValue, int colOrderValue, string clientOrder)
         {
-            var caseSetting = new CaseSettings();
-            var customer = this._customerService.GetCustomer(customerId);
-
             var existFields = this._caseSettingsService.GetCaseSettingsByUserGroup(customerId, usergroupId)
                                                        .Select(f => f.Name)
                                                        .ToList();
@@ -187,8 +186,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 return "Repeated";
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
-
-            var model = this.CustomerCaseSummaryViewModel(caseSetting, customer, usergroupId);
+            var caseSetting = new CaseSettings();
 
             if (this.ModelState.IsValid)
             {
@@ -198,10 +196,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 caseSetting.MinWidth = minWidthValue;
                 caseSetting.ColOrder = colOrderValue;
                 caseSetting.Name = labellist;
+                caseSetting.Type = CaseSettingTypes.CaseOverview;
             }
-                        
-            model.CSetting = caseSetting;
-            this._caseSettingsService.SaveCaseSetting(model.CSetting, out errors);
+            this._caseSettingsService.SaveCaseSetting(caseSetting, out errors);
 
             return this.UpdateUserGroupList(usergroupId, customerId, clientOrder);
         }
@@ -215,12 +212,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 customer = new Customer() { };
             }
 
-            var ListToReturn = this._caseFieldSettingService.ListToShowOnCasePage(customer.Id, id);
+            var listToReturn = this._caseFieldSettingService.ListToShowOnCasePage(customer.Id, id);
 
             var model = this.CustomerInputViewModel(customer);
-            model.ListCaseForLabel = ListToReturn;
+            model.ListCaseForLabel = listToReturn;
             model.Customer.Language_Id = id;
-            model.Languages.Where(x => x.Value == id.ToString()).FirstOrDefault().Selected = true;
+            model.Languages.First(x => x.Value == id.ToString()).Selected = true;
 
             return this.RenderRazorViewToString("_Case", model);
         }
@@ -243,7 +240,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         }
 
         [CustomAuthorize(Roles = "3,4")]
-        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")] //TODO: Is duration time (10 seconds) too short? well, 60 seconds is too much anyway.. 
+        [OutputCache(Location = OutputCacheLocation.Client, Duration = 10, VaryByParam = "none")]
         public string UpdateUserGroupList(int id, int customerId, string clientOrder)
         {
             var customer = this._customerService.GetCustomer(customerId);

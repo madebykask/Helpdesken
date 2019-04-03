@@ -335,6 +335,7 @@
     <Compile Include="App_Start\NinjectModules\Modules\AuthenticationModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\EFormModule.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\Admin\Controllers\CustomerAdvancedSearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\GDPRProgressController.cs" />
     <Compile Include="Areas\Admin\Controllers\ExtendedCaseController.cs" />
     <Compile Include="Areas\Inventory\Controllers\InventoryController.cs" />
@@ -3413,6 +3414,8 @@
     <Content Include="Areas\Inventory\Views\InventorySettings\EditorTemplates\Settings\TabSettingForComputerModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\_InventoryFiles.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\Documents.cshtml" />
+    <Content Include="Areas\Admin\Views\CustomerAdvancedSearch\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\CustomerAdvancedSearch\_CaseSummaryPartialView.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

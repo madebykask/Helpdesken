@@ -89,6 +89,7 @@
     <Compile Include="Constraints\NotifierConstraint.cs" />
     <Compile Include="Enums\AdditionalDataPrivacyFields.cs" />
     <Compile Include="Enums\AppSettingsKey.cs" />
+    <Compile Include="Enums\Cases\CaseSettingTypes.cs" />
     <Compile Include="Enums\Condition\ConditionType.cs" />
     <Compile Include="Enums\Condition\ConditionOperator.cs" />
     <Compile Include="Enums\FederationServiceKeys.cs" />

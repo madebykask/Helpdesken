@@ -167,6 +167,7 @@
                 newCustomerCaseSettings.RegTime = DateTime.Now;
                 newCustomerCaseSettings.ChangeTime = DateTime.Now;
                 newCustomerCaseSettings.UserGroup = cs.UserGroup;
+                newCustomerCaseSettings.Type = cs.Type;
 
                 this._customerService.SaveCaseSettingsForNewCustomer(customer.Id, customer.Language_Id, newCustomerCaseSettings, out errors);
 

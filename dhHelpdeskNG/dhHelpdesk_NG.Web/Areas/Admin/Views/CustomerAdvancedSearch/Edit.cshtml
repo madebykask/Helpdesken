@@ -1,0 +1,43 @@
+﻿@model DH.Helpdesk.Web.Areas.Admin.Models.CustomerInputViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+@using (Html.BeginForm("edit", "customeradvancedsearch", new {id = Model.Customer.Id, area = "admin"}, FormMethod.Post, new {id = "target"}))
+{
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>@Html.ActionLink(Translation.Get("Spara"), "edit", new 
+                    { id = Model.Customer.Id
+                    }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt"), "edit", new { area = "admin", controller = "Customer", action = "Edit", id = Model.Customer.Id }, new { @class = "btn" })</li>
+
+            </ul>
+        </div>               
+        @Html.Partial("_MasterDataPanel", Model.Customer)
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <input type="hidden" id="customerId" value="@Model.Customer.Id" />
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a href="#subfragment-1">@Translation.Get("Avancerad sökning", Enums.TranslationSource.TextTranslation) - @Model.Customer.Name</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane tab-pane-border active" id="fragment1">
+                    <div class="container">
+                        <div id="caseSummary_container">
+                            <span id="userGroupList">
+                                @if (Model.Customer.Id != null)
+                                {
+                                    @Html.Partial("_CaseSummaryPartialView", Model.CustomerCaseSummaryViewModel)
+                                }
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
