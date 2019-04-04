@@ -4,6 +4,7 @@ import { CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseSearchStateModel } from 'src/app/modules/shared-module/models/cases-overview/case-search-state.model';
+import { CaseRouteReuseStrategy } from 'src/app/helpers/case-route-resolver.stategy';
 
 @Component({
   selector: 'cases-filter',
@@ -56,6 +57,8 @@ export class CasesFilterComponent implements OnInit {
   }
 
   ngOnInit() {
+    //clear case page snapshots in reuse strategy
+    CaseRouteReuseStrategy.deleteSnaphots();
   }
 
   initMenuItems() {
