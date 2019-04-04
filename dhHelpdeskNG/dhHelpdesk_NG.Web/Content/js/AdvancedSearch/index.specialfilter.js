@@ -1,4 +1,4 @@
-﻿"use strsict";
+﻿"use strict";
 
 (function ($) {
     window.Params = window.Params || {};
@@ -22,8 +22,6 @@
         'no_results_text': no_results_text
     });
 
-    setTimeout(function () { $(defaultFocusObj).focus(); }, 100);
-
     $('#' + caseTypeDropDown + ' ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
         var val = $(this).attr('value');
@@ -44,6 +42,4 @@
         $(breadCrumbsPrefix + closingReasonDropDown).text(getBreadcrumbs(this));
         $(hiddenPrefix + closingReasonDropDown).val(val);
     });
-
-    
 })($);

@@ -128,7 +128,7 @@ var GRID_STATE = {
         if (doSearchAtBegining)
             me.onSearchClick();
 
-       
+        $('#btnSearch').focus();
     };
         
     Page.prototype.setGridState = function(gridStateId) {

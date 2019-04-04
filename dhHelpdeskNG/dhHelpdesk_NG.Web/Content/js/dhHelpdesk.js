@@ -13,7 +13,9 @@ $('.nav-tabs li:not(.disabled) a').click(function (e) {
 
 $(".nav-tabs-actions a").unbind("click");
 
-$(".content input:text:not(.chosen-container input:text), .content textarea").eq(0).focus();
+if (typeof (window.Params) === 'undefined' || window.Params.autoFocus !== false) {
+    $(".content input:text:not(.chosen-container input:text), .content textarea").eq(0).focus();
+}
 
 
 $('#case__RegLanguage_Id').change(function () {
@@ -37,12 +39,12 @@ function ChangeCaseLanguageTo(newLanguageId, updateDropDown) {
 }
 
 function ShowToastMessage(message, msgType, isSticky) {
-    var _Sticky = false;
+    var sticky = false;
     if (isSticky)
-        _Sticky = true;
+        sticky = true;
     $().toastmessage('showToast', {
         text: message,
-        sticky: _Sticky,
+        sticky: sticky,
         position: 'top-center',
         type: msgType,
         closeText: '',
