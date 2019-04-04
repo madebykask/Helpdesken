@@ -44,7 +44,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [Route("options")]
         public async Task<IList<ItemOverview>> Get([FromUri]int cid, [FromUri]int langId)
         {
-            var items = await _stateSecondaryService.GetStateSecondariesAsync(cid).ConfigureAwait(false);
+            var items = await _stateSecondaryService.GetActiveStateSecondariesAsync(cid).ConfigureAwait(false);
             return items
                 .Select(d => new ItemOverview(Translate(d.Name, langId, TranslationTextTypes.MasterData), d.Id.ToString()))
                 .ToList();
