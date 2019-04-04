@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services
+﻿using DH.Helpdesk.Common.Extensions.Integer;
+
+namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
@@ -10,7 +12,7 @@
 
     public interface IPriorityService
     {
-        IList<Priority> GetPriorities(int customerId);
+        IList<Priority> GetPriorities(int customerId, bool activeOnly = false);
         Priority GetPriority(int id);
         DeleteMessage DeletePriority(int id);
         Helpdesk.Domain.PriorityLanguage GetPriorityLanguage(int id);
@@ -47,9 +49,14 @@
             this._unitOfWork = unitOfWork;
         }
         
-        public IList<Priority> GetPriorities(int customerId)
+        public IList<Priority> GetPriorities(int customerId, bool activeOnly = false)
         {
-            return this._priorityRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Code).ThenBy(x => x.Name).ToList();
+            var query = _priorityRepository.GetMany(x => x.Customer_Id == customerId);
+            if (activeOnly)
+                query = query.Where(x => x.IsActive.ToBool());
+
+            return query.OrderBy(x => x.Code)
+                .ThenBy(x => x.Name).ToList();
         }
 
         public Priority GetPriority(int id)
