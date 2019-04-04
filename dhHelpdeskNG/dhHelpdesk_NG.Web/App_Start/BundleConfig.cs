@@ -25,6 +25,9 @@
             public const string CaseAttachExistingFiles = "~/bundles/case/attachexfile";
             public const string ConfirmationDialog = "~/bundles/confirmdialog";
 
+            //advanced search 
+            public const string AdvancedSearchPage = "~/bundles/advancedsearch";
+            
             //inventory
             public const string InventoryOverview = "~/bundles/inventory/overview";
             public const string InventoryRelatedCases = "~/bundles/inventory/relatedcases";
@@ -60,10 +63,10 @@
             bundles.Add(new ScriptBundle(ScriptNames.DynamicCase).Include(
                             "~/Content/js/DynamicCase/container.js"));
 
-			bundles.Add(new ScriptBundle("~/Content/js/iframeResizer").Include(
-							"~/Content/js/DynamicCase/iframeResizer.js"));
+            bundles.Add(new ScriptBundle("~/Content/js/iframeResizer").Include(
+                            "~/Content/js/DynamicCase/iframeResizer.js"));
 
-			bundles.Add(new ScriptBundle("~/bundles/common").Include(
+            bundles.Add(new ScriptBundle("~/bundles/common").Include(
                             "~/Content/js/Shared/commonUtils.js",
                             "~/Content/js/Shared/errors.js",
                             "~/Content/js/Shared/jquery.customAjax.js",
@@ -180,15 +183,19 @@
                 "~/Content/js/Cases/index.logic.js",
                 "~/Content/js/Cases/index.settings.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/advancedsearch/index").Include(
-                        "~/Content/js/AdvancedSearch/index.logic.js"));
-
+            //todo: to be deleted after new is complete
             bundles.Add(new ScriptBundle("~/bundles/advancedsearch/specialfilter").Include(
-                        "~/Content/js/AdvancedSearch/index.specialfilter.js"));
+                "~/Content/js/AdvancedSearch/index.specialfilter.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/advancedsearch/index").Include(
+                "~/Content/js/AdvancedSearch/index.logic.js"));
+
+            bundles.Add(new ScriptBundle(ScriptNames.AdvancedSearchPage).Include(
+                "~/Content/js/AdvancedSearch/advancedSearchPage.js"));
+            
             bundles.Add(new ScriptBundle("~/bundles/contract").Include(
-                           "~/Content/js/contract/contractIndex.js",
-                           "~/Content/js/contract/contractCases.js"));
+                "~/Content/js/contract/contractIndex.js",
+                "~/Content/js/contract/contractCases.js"));
 
             #region Case editing
             bundles.Add(new StyleBundle("~/cases/dynamic-cases").Include(

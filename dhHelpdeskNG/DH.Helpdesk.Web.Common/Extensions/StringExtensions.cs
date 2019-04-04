@@ -10,9 +10,8 @@ namespace DH.Helpdesk.Web.Common.Extensions
         {
             var ret = string.Empty;
 
-            if (!string.IsNullOrWhiteSpace(valueToReturn))  
-                if (valueToReturn != "0")   
-                    ret = valueToReturn; 
+            if (!string.IsNullOrWhiteSpace(valueToReturn) && valueToReturn != "0")  
+                ret = valueToReturn;
 
             return ret;
         }

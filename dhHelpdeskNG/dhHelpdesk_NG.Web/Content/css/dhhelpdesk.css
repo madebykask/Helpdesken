@@ -1679,7 +1679,12 @@ table th.thpointer {
 .case-overview.page #search_result {
     min-height: 206px;
     position: relative;
-    margin-left: 0px;
+    margin-left: 0;
+}
+
+.search-result-messages {
+    position: relative;
+    margin-left: 0;
 }
 
 .loading-msg,

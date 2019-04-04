@@ -172,11 +172,11 @@
                             join u in users on cu.User_Id equals u.Id
                             join cs in customerSettings on cu.Customer_Id equals cs.Customer_Id
                             select new
-                                       {
-                                           cu.Customer_Id,
-                                           c.Name,
-                                           cu.ShowOnStartPage
-                                       })
+                            {
+                                cu.Customer_Id,
+                                c.Name,
+                                cu.ShowOnStartPage
+                            })
                             .OrderBy(r => r.Name)
                             .ToList();
 

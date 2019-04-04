@@ -33,11 +33,11 @@
         private const string _USER_CASE_INFO = "USER_CASE_INFO";
         public const string _USER_LOGGED_IN = "USER_LOGGED_IN";
 
-		private const string _PERFORMANCE_LOG_ACTIVE = "PERFORMANCE_LOG_ACTIVE";
-		private const string _PERFORMANCE_LOG_FREQUENCY = "PERFORMANCE_LOG_FREQUENCY";
-		private const string _PERFORMANCE_LOG_SETTINGS_CACHE = "PERFORMANCE_LOG_SETTINGS_CACHE";
+        private const string _PERFORMANCE_LOG_ACTIVE = "PERFORMANCE_LOG_ACTIVE";
+        private const string _PERFORMANCE_LOG_FREQUENCY = "PERFORMANCE_LOG_FREQUENCY";
+        private const string _PERFORMANCE_LOG_SETTINGS_CACHE = "PERFORMANCE_LOG_SETTINGS_CACHE";
 
-		static ApplicationFacade()
+        static ApplicationFacade()
         {
             Version = DH.Helpdesk.Version.FULL_VERSION;
         }
@@ -82,12 +82,12 @@
             }
         }
 
-		internal static void SetPerformanceLogSettingsCache(int performanceLogSettingsCache)
-		{
-			HttpContext.Current.Application[_PERFORMANCE_LOG_SETTINGS_CACHE] = DateTime.UtcNow.AddSeconds(performanceLogSettingsCache);
-		}
+        internal static void SetPerformanceLogSettingsCache(int performanceLogSettingsCache)
+        {
+            HttpContext.Current.Application[_PERFORMANCE_LOG_SETTINGS_CACHE] = DateTime.UtcNow.AddSeconds(performanceLogSettingsCache);
+        }
 
-		public static void RemoveUserFromCase(int userId, int caseId, string sessionId)
+        public static void RemoveUserFromCase(int userId, int caseId, string sessionId)
         {
             if (UserCaseInfo == null) return;
 
@@ -103,9 +103,9 @@
         {
             get
             {
-				if (HttpContext.Current == null)
-					return null;
-				return (ConcurrentDictionary<string, LoggedInUsers>)HttpContext.Current.Application[_USER_LOGGED_IN];
+                if (HttpContext.Current == null)
+                    return null;
+                return (ConcurrentDictionary<string, LoggedInUsers>)HttpContext.Current.Application[_USER_LOGGED_IN];
             }
             private set { }
         }
@@ -188,38 +188,38 @@
 
 
 
-		public static bool IsPerformanceLogActive()
-		{
-			var active = false;
-			if (HttpContext.Current.Application[_PERFORMANCE_LOG_ACTIVE] != null)
-				active = (bool)HttpContext.Current.Application[_PERFORMANCE_LOG_ACTIVE];
-			return active;
-		}
+        public static bool IsPerformanceLogActive()
+        {
+            var active = false;
+            if (HttpContext.Current.Application[_PERFORMANCE_LOG_ACTIVE] != null)
+                active = (bool)HttpContext.Current.Application[_PERFORMANCE_LOG_ACTIVE];
+            return active;
+        }
 
-		public static void SetPerformanceLogActive(bool state)
-		{
-			HttpContext.Current.Application[_PERFORMANCE_LOG_ACTIVE] = state;
-		}
+        public static void SetPerformanceLogActive(bool state)
+        {
+            HttpContext.Current.Application[_PERFORMANCE_LOG_ACTIVE] = state;
+        }
 
-		public static int GetPerformanceLogFrequency()
-		{
-			return (int)HttpContext.Current.Application[_PERFORMANCE_LOG_FREQUENCY];
-		}
+        public static int GetPerformanceLogFrequency()
+        {
+            return (int)HttpContext.Current.Application[_PERFORMANCE_LOG_FREQUENCY];
+        }
 
-		public static void SetPerformanceLogFrequency(int frequency)
-		{
-			HttpContext.Current.Application[_PERFORMANCE_LOG_FREQUENCY] = frequency;
-		}
+        public static void SetPerformanceLogFrequency(int frequency)
+        {
+            HttpContext.Current.Application[_PERFORMANCE_LOG_FREQUENCY] = frequency;
+        }
 
-		internal static bool HasPerformanceLogSettingsCacheExpired()
-		{
-			var expires = (DateTime)HttpContext.Current.Application[_PERFORMANCE_LOG_SETTINGS_CACHE];
+        internal static bool HasPerformanceLogSettingsCacheExpired()
+        {
+            var expires = (DateTime)HttpContext.Current.Application[_PERFORMANCE_LOG_SETTINGS_CACHE];
 
-			var expired = false;
-			if ((expires <= DateTime.UtcNow))
-				expired = true;
+            var expired = false;
+            if ((expires <= DateTime.UtcNow))
+                expired = true;
 
-			return expired;
-		}
-	}
+            return expired;
+        }
+    }
 }

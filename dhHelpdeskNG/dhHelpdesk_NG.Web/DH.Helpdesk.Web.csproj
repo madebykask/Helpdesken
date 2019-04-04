@@ -354,7 +354,10 @@
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
     <Compile Include="Components\Contracts\ContractHistoryFormatter.cs" />
     <Compile Include="Components\Contracts\ContractHistoryMarkupBuilder.cs" />
+    <Compile Include="Models\Case\AdvancedCaseSearchInput.cs" />
+    <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
+    <Compile Include="Controllers\AdvancedSearch.CasesController.cs" />
     <Compile Include="Controllers\CasesController_Actions.cs" />
     <Compile Include="Controllers\CasesController_AdvancedSearch.cs" />
     <Compile Include="Controllers\PasswordController.cs" />
@@ -746,6 +749,7 @@
     <Content Include="Areas\Admin\Content\js\Users\_input.js" />
     <Content Include="Content\js\additional-methods.js" />
     <Content Include="Content\js\additional-methods.min.js" />
+    <Content Include="Content\js\AdvancedSearch\advancedSearchPage.js" />
     <Content Include="Content\js\AdvancedSearch\index.specialfilter.js" />
     <Content Include="Content\js\AdvancedSearch\index.logic.js" />
     <Content Include="Content\js\bootstrap-tagsinput.js" />
@@ -4083,6 +4087,9 @@
     </Content>
     <Content Include="Views\Notifiers\_Details.cshtml" />
     <Content Include="Views\Notifiers\NotifierPopup.cshtml" />
+    <Content Include="Views\Cases\AdvancedSearch.cshtml" />
+    <Content Include="Views\Cases\AdvancedSearch\_SearchError.cshtml" />
+    <Content Include="Views\Cases\AdvancedSearch\_CustomerSearchResults.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

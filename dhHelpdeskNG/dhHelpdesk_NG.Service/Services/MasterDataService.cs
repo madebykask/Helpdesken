@@ -69,7 +69,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ISettingsLogic _settingsLogic;
         
 
-        private Dictionary<int, Setting> _customersSettingsCache = new Dictionary<int, Setting>();
+        private readonly Dictionary<int, Setting> _customersSettingsCache = new Dictionary<int, Setting>();
 
         public MasterDataService(
             ICustomerRepository customerRepository,
@@ -143,7 +143,7 @@ namespace DH.Helpdesk.Services.Services
             // store settings to be used during request processing
             if (!_customersSettingsCache.ContainsKey(customerId))
             {
-                var settings = this._settingRepository.GetCustomerSetting(customerId);
+                var settings = _settingRepository.GetCustomerSetting(customerId);
                 _customersSettingsCache.Add(customerId, settings);
             }
 

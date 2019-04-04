@@ -12,35 +12,36 @@
         /// <summary>
         /// Maps data from GridSettingsEntity and caseOverviewSettings to GridColumnDef
         /// </summary>
-        /// <param name="columnSettions"></param>
+        /// <param name="columnSettings"></param>
         /// <param name="caseOverviewSettings"></param>
         /// <returns></returns>
-        public static List<GridColumnDef> MapToColumnDefinitions(this IQueryable<GridSettingsEntity> columnSettions, CaseOverviewGridColumnSetting[] caseOverviewSettings)
+        public static List<GridColumnDef> MapToColumnDefinitions(this IQueryable<GridSettingsEntity> columnSettings, CaseOverviewGridColumnSetting[] caseOverviewSettings)
         {
             var duplicates = new HashSet<string>();
             return
                 caseOverviewSettings
-                .Where(it => !duplicates.Contains(it.Name.ToLower()))
-                .Select(
-                    it =>
+                    .Where(it => !duplicates.Contains(it.Name.ToLower()))
+                    .Select(it =>
+                    {
+                        duplicates.Add(it.Name.ToLower());
+                        return new GridColumnDef()
                         {
-                            duplicates.Add(it.Name.ToLower());
-                            return new GridColumnDef()
-                                       {
-                                           id = GridColumnsDefinition.GetFieldId(it.Name),
-                                           name = it.Name,
-                                           cls = it.Style
-                                       };
-                        }).ToList();
+                            id = GridColumnsDefinition.GetFieldId(it.Name),
+                            name = it.Name,
+                            cls = it.Style
+                        };
+                    }).ToList();
         }
 
-        public static CaseOverviewGridColumnSetting[] MapToCaseOverviewSettings(
-            this IEnumerable<GridColumnDef> colunDefs)
+        public static CaseOverviewGridColumnSetting[] MapToCaseOverviewSettings(this IEnumerable<GridColumnDef> columnDefs)
         {
             var orderIdx = 0;
-            return colunDefs.Select(
-                    it => new CaseOverviewGridColumnSetting { Name = it.name, Order = orderIdx++, Style = it.cls })
-                    .ToArray();
+            return columnDefs.Select(it => new CaseOverviewGridColumnSetting
+            {
+                Name = it.name,
+                Order = orderIdx++,
+                Style = it.cls
+            }).ToArray();
         }
     }
 }

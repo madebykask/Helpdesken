@@ -48,7 +48,8 @@ namespace DH.Helpdesk.Services.Services
         void SaveCustomerSettings(Customer customerToSave, Setting setting, List<ReportCustomer> ReportCustomers, int LanguageId, out IDictionary<string, string> errors);
         void SaveCaseSettingsForNewCustomer(int customerId, int languageId, CaseSettings caseSettings, out IDictionary<string, string> errors);
 
-        ItemOverview GetOverview(int customerId);
+        CustomerDetails GetCustomerDetails(int id);
+        ItemOverview GetItemOverview(int customerId);
         CaseDefaultsInfo GetCustomerDefaults(int customerId);
     }
 
@@ -632,9 +633,27 @@ namespace DH.Helpdesk.Services.Services
                 this.Commit();
         }
 
-        public ItemOverview GetOverview(int customerId)
+        public ItemOverview GetItemOverview(int customerId)
         {
             return this._customerRepository.GetOverview(customerId);
+        }
+
+        public CustomerDetails GetCustomerDetails(int id)
+        {
+            var customer = 
+                _customerRepository.GetMany(c => c.Id == id).AsQueryable()
+                .Select(c => new CustomerDetails()
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    CustomerID = c.CustomerID, 
+                    CustomerNumber = c.CustomerNumber,
+                    CustomerGUID = c.CustomerGUID,
+                    HelpdeskEmail = c.HelpdeskEmail,
+                    CustomerGroup_Id = c.CustomerGroup_Id,
+                    Language_Id = c.Language_Id
+                }).SingleOrDefault();
+            return customer;
         }
 
         public CaseDefaultsInfo GetCustomerDefaults(int customerId)

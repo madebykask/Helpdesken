@@ -4,7 +4,7 @@
 
     public enum SortingDirection
     {
-        Asc,
+        Asc = 0,
         Desc
     }
 

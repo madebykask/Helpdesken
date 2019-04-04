@@ -1,0 +1,141 @@
+﻿@using DH.Helpdesk.Web
+@model DH.Helpdesk.Web.Models.Case.AdvancedSearchIndexViewModel
+
+@functions {
+
+    IHtmlString BuildErrorMessage()
+    {
+        return new HtmlString(Translation.GetCoreTextTranslation("Ett fel inträffade, klicka") +
+            " <a href=\"#refresh\" class=\"refresh-grid\">" + Translation.GetCoreTextTranslation("här") + "</a> " +
+            Translation.GetCoreTextTranslation("för att ladda om sidan."));
+    }
+}
+
+<div class="secnavs fixed">
+    <div class="pull-left">       
+    </div>
+</div>
+<form id="frmAdvanceSearch" name="frmAdvanceSearch">
+    <div class="AdvancedSearch-overview page">
+        <div class="content">
+            <div class="container">
+                <ul class="nav nav-tabs" id="myTab">
+                    <li id="AdvanceSearchTab" class="active">
+                        <a href="#fragment-1">@Translation.GetCoreTextTranslation("Avancerad sökning")</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane tab-pane-border active" id="fragment-1">
+                        @Html.Partial("AdvancedSearch/_SearchOverview", Model)
+                        <input type="submit" class="submit btn" value="@Translation.GetCoreTextTranslation("Sök")" id="btnSearch" />
+                    </div>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane tab-pane-border active">
+                        <div class="container" id="search_result">
+                            <div class="loading-msg">
+                                <div class="content-wrapper">
+                                    <div class="loader">@Translation.GetCoreTextTranslation("Laddar...")</div>
+                                </div>
+                            </div>
+                            <div>@Translation.GetCoreTextTranslation("Poster i sökresultat"): <span data-field="TotalAdvSearchCount">0</span>
+                            </div>
+                            <div class="customer-cases-area">
+                                @* //todo: Sort customers by name*@
+                                @foreach (var customer in Model.AllCustomers)
+                                {
+                                    <div id="customer_sr_@customer.Value" style="display: none" class="customerSearchResults">
+                                        <div>
+                                            <br/> <h5>@customer.Name</h5>
+                                        </div>
+                                        <div class="search-result-messages">
+                                            <div class="error-msg msg">@BuildErrorMessage()</div>
+                                            <div class="nofields-msg msg">@Translation.GetCoreTextTranslation("Inga standardkolumner har valts för din användare på denna kund, för att visa kolumner, klicka på fliken Inställningar och gå till Filter Ärendeöversikt")</div>
+                                            <div class="noavailablefields-msg msg">@Translation.GetCoreTextTranslation("Inga ärendefält har valts för denna kund, kontakta systemadministratören.")</div>
+                                            <div class="no-data-msg msg">&nbsp;@Translation.GetCoreTextTranslation("Din sökning resulterade inte i några träffar.") </div>
+                                        </div>
+                                        <table id="customerTable@(customer.Value)" class="table table-striped table-bordered table-hover table-cases">
+                                            @* Search results will go here *@
+                                        </table>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        //onReady
+        $(function() {
+
+            $('.input-append.date').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
+
+            var params = {
+                DefaultFocusObject: "#btnSearch",
+                CaseTypeDropDown: "CaseTypeDropDown",
+                ProductAreaDropDown: "ProductAreaDropDown",
+                ClosingReasonDropDown: "ClosingReasonDropDown", 
+                // page params
+                sortOptions: @Html.SerializeObject(Model.SortOptions),
+                doSearchAtBegining: @Model.DoSearchAtBegining.ToJavaScriptObject(),
+                isExtSearch: @Model.IsExtSearch.ToJavaScriptObject(),
+                userCustomers: @Html.SerializeObject(Model.UserCustomers),
+                extendedCustomers: @Html.SerializeObject(Model.ExtendedCustomers),
+                getSpecificFilterDataUrl: '@Url.Action("GetCustomerSpecificFilter", "Cases")',
+                searchActionUrl: '@Url.Action("Search", "AdvancedSearch")'
+            };
+
+            // init page instance
+            window.advancedSearchPage.init(params);
+        });
+
+    </script>
+
+    @Scripts.Render(BundleConfig.ScriptNames.AdvancedSearchPage)
+
+    <script type="text/javascript">
+        // TODO: Review if its required!!??!!
+        $(function() {
+            if (!window.dhHelpdesk) {
+                window.dhHelpdesk = {};
+            }
+
+            if (!window.dhHelpdesk.casesList) {
+                window.dhHelpdesk.casesList = {};
+            }
+
+            dhHelpdesk.casesList.utils = {
+                raiseEvent: function(eventType, extraParameters) {
+                    console.log('>>>> the event has been triggered!!!', eventType);
+                    $(document).trigger(eventType, extraParameters);
+                },
+
+                onEvent: function(event, handler) {
+                    console.log('>>>> the event has has arrived!!!', eventType);
+                    $(document).on(event, handler);
+                }
+            }
+
+            dhHelpdesk.casesList.scope = function(spec, my) {
+                var that = {};
+
+                var searchForm = $('#frmAdvanceSearch');
+                var loader = $('<img src="/Content/icons/ajax-loader.gif" />');
+
+                return that;
+            }
+        });
+    </script>
+
+}

@@ -24,7 +24,7 @@ namespace DH.Helpdesk.Services.Services
         IList<CaseSettings> GetCaseSettingsForDefaultCust();
         IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettings(int customerId, IList<CaseFieldSetting> customerCaseFieldSettings = null);
         IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettingsByUserGroup(int customerId, int userGroupId);
-        IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId, IList<CaseFieldSetting> customerCaseFieldSettings);
+        IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId, CaseSettingTypes type = CaseSettingTypes.CaseOverview, IList<CaseFieldSetting> customerCaseFieldSettings = null);
         CaseSettings GetCaseSetting(int id);
         DeleteMessage DeleteCaseSetting(int id);
         string SetListCaseName(int labelId);
@@ -53,29 +53,29 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseSettings> GetCaseSettings(int customerId, int? userId = null, CaseSettingTypes? type = CaseSettingTypes.CaseOverview)
         {
-            var query = _caseSettingRepository
-                .GetMany(x => x.Customer_Id == customerId && x.User_Id == userId).AsQueryable();
+            var query = 
+                _caseSettingRepository.GetMany(x => x.Customer_Id == customerId && x.User_Id == userId).AsQueryable();
 
-            if(type.HasValue)
+            if (type.HasValue)
                 query = query.Where(x => x.Type == type);
 
-            return query.OrderBy(x => x.ColOrder)
-                .ToList();
+            return query.OrderBy(x => x.ColOrder).ToList();
         }
 
         public IList<CaseSettings> GetCaseSettingsByUserGroup(int customerId, int usergroupId, CaseSettingTypes type = CaseSettingTypes.CaseOverview)
         {
             return _caseSettingRepository
-                .GetMany(x => x.Customer_Id == customerId && x.User_Id == null && x.UserGroup == usergroupId && x.Type == type)
+                .GetMany(x => x.Customer_Id == customerId &&
+                              x.User_Id == null &&
+                              x.UserGroup == usergroupId &&
+                              x.Type == type)
                 .OrderBy(x => x.ColOrder)
                 .ToList();
         }
 
         public IList<CaseSettings> GetCaseSettingsForDefaultCust()
         {
-            return _caseSettingRepository
-                .GetMany(x => x.Customer_Id == null)
-                .ToList();
+            return _caseSettingRepository.GetMany(x => x.Customer_Id == null).ToList();
         }
 
         /// <summary>
@@ -134,40 +134,40 @@ namespace DH.Helpdesk.Services.Services
         /// </summary>
         /// <param name="customerId"></param>
         /// <param name="userId"></param>
+        /// <param name="type"></param>
         /// <param name="customerCaseFieldSettings"></param>
         /// <returns></returns>
-        public IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId, IList<CaseFieldSetting> customerCaseFieldSettings = null)
+        public IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId, CaseSettingTypes type = CaseSettingTypes.CaseOverview, IList<CaseFieldSetting> customerCaseFieldSettings = null)
         {
             var duplicates = new HashSet<string>();
             var res =
                 GetAvailableCaseOverviewGridColumnSettings(customerId, customerCaseFieldSettings)
                     .Join(
-                        GetAvailableCaseSettings(customerId, userId),
+                        GetAvailableCaseSettings(customerId, userId, type),
                         colSetting => colSetting.Name,
                         userSelection => userSelection.Name,
                         (colSetting, userSelection) =>
                         new
-                            {
-                                caseSettingsId = userSelection.Id,
-                                Name = userSelection.Name,
-                                Order = userSelection.ColOrder,
-                                Style = userSelection.ColStyle
-                            })
+                        {
+                            caseSettingsId = userSelection.Id,
+                            Name = userSelection.Name,
+                            Order = userSelection.ColOrder,
+                            Style = userSelection.ColStyle
+                        })
                     .OrderBy(it => it.Order)
                      // data in DB can contain same values in the Order field, so sorting also by fieldId
                     .ThenBy(it => it.caseSettingsId)
                     .Where(it => !duplicates.Contains(it.Name.ToLower()))
-                    .Select(
-                        it =>
-                            {
-                                duplicates.Add(it.Name.ToLower());
-                                return new CaseOverviewGridColumnSetting()
-                                           {
-                                               Name = it.Name,
-                                               Order = it.Order,
-                                               Style = it.Style
-                                           };
-                            });
+                    .Select(it =>
+                    {
+                        duplicates.Add(it.Name.ToLower());
+                        return new CaseOverviewGridColumnSetting()
+                        {
+                            Name = it.Name,
+                            Order = it.Order,
+                            Style = it.Style
+                        };
+                    });
             return res;
         }
 
@@ -215,8 +215,8 @@ namespace DH.Helpdesk.Services.Services
 
             var csl = GetCaseSettings(customerId, userId);
 
-			var hasNewSetting = false;
-			if (csl.Count == 0)
+            var hasNewSetting = false;
+            if (csl.Count == 0)
             {
                 csl = GetCaseSettingsByUserGroup(customerId, userGroupId);
 
@@ -236,16 +236,16 @@ namespace DH.Helpdesk.Services.Services
                     newCaseSetting.ChangeTime = DateTime.UtcNow;
                     SaveCaseSetting(newCaseSetting, out errors);
 
-					hasNewSetting = true;
-				}
+                    hasNewSetting = true;
+                }
             }
 
-			// If new settings have been added retrieve them again (performance check).
-			if (hasNewSetting)
-				csl = GetCaseSettings(customerId, userId);
+            // If new settings have been added retrieve them again (performance check).
+            if (hasNewSetting)
+                csl = GetCaseSettings(customerId, userId);
 
-			// we does not support multiline in cases overview grid
-			return csl.Where(it => it.Line == 1).ToList();
+            // we does not support multiline in cases overview grid
+            return csl.Where(it => it.Line == 1).ToList();
         }
         
         public CaseSettings GetCaseSetting(int id)
@@ -377,11 +377,13 @@ namespace DH.Helpdesk.Services.Services
             _caseSettingRepository.Commit();
         }
 
-        private IEnumerable<CaseSettings> GetAvailableCaseSettings(int customerId, int userId)
+        private IEnumerable<CaseSettings> GetAvailableCaseSettings(int customerId, int userId, CaseSettingTypes settingsType = CaseSettingTypes.CaseOverview)
         {   
-            return
-                _caseSettingRepository
-                    .GetMany(it => it.Customer_Id == customerId && it.User_Id == userId && it.Line == 1 && it.Type == CaseSettingTypes.CaseOverview);
+            return _caseSettingRepository.GetMany(it => 
+                it.Customer_Id == customerId && 
+                it.User_Id == userId && 
+                it.Line == 1 && 
+                it.Type == settingsType);
         }
     }
 }

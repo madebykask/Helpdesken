@@ -1,116 +1,22 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.FinishingCause;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+using DH.Helpdesk.Domain;
+using DH.Helpdesk.Web.Infrastructure;
 
 namespace DH.Helpdesk.Web.Models.Case
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
-
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Infrastructure;
-
     /// <summary>
-    /// Case overview grid settings model
+    ///     Case overview grid settings model
     /// </summary>
     public class CaseColumnsSettingsModel
     {
-        #region Static fields
-
-        public static IEnumerable<SelectListItem> FieldStyles
-        {
-            get
-            {
-                return new[]
-                           {
-                               new SelectListItem
-                                   {
-                                       Value = "colnormal",
-                                       Text =
-                                           @Translation.Get(
-                                               "Normal",
-                                               Enums.TranslationSource.TextTranslation)
-                                   },
-                               new SelectListItem
-                                   {
-                                       Value = "colwide",
-                                       Text =
-                                           @Translation.Get(
-                                               "Bred",
-                                               Enums.TranslationSource.TextTranslation)
-                                   },
-                               new SelectListItem
-                                   {
-                                       Value = "colnarrow",
-                                       Text =
-                                           @Translation.Get(
-                                               "Smal",
-                                               Enums.TranslationSource.TextTranslation)
-                                   }
-                           };
-            }
-        }
-
-        public static IEnumerable<SelectListItem> FontStyles
-        {
-            get
-            {
-                return new[]
-                           {
-                               new SelectListItem
-                                   {
-                                       Value = "normaltext",
-                                       Text =
-                                           @Translation.Get(
-                                               "Normal",
-                                               Enums.TranslationSource.TextTranslation)
-                                   },
-                               new SelectListItem
-                                   {
-                                       Value = "smalltext",
-                                       Text =
-                                           @Translation.Get(
-                                               "Mindre",
-                                               Enums.TranslationSource.TextTranslation)
-                                   },
-                               new SelectListItem
-                                   {
-                                       Value = "smallertext",
-                                       Text =
-                                           @Translation.Get(
-                                               "Minst",
-                                               Enums.TranslationSource.TextTranslation)
-                                   }
-                           };
-            }
-        }
-
-		public static IEnumerable<SelectListItem> PageSizes
-		{
-			get
-			{
-				return new[]
-						   {
-							   new SelectListItem { Value = "50", Text = "50" },
-							   new SelectListItem { Value = "250", Text = "250" },
-							   new SelectListItem { Value = "500", Text = "500" },
-						   };
-			}
-		}
-
-        public static IEnumerable<SelectListItem> PageSizesModal => new[]
-        {
-            new SelectListItem { Value = "5", Text = "5" },
-            new SelectListItem { Value = "10", Text = "10" },
-            new SelectListItem { Value = "15", Text = "15" },
-        };
-
-        #endregion
-
         public int CustomerId { get; set; }
 
         public int UserId { get; set; }
@@ -118,26 +24,96 @@ namespace DH.Helpdesk.Web.Models.Case
         public IEnumerable<CaseOverviewGridColumnSetting> AvailableColumns { get; set; }
 
         public IEnumerable<CaseOverviewGridColumnSetting> SelectedColumns { get; set; }
-        
+
         public IList<SelectListItem> LineList { get; set; }
-   
+
         public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
 
         public string SelectedFontStyle { get; set; }
 
-		public int SelectedPageSize { get; set; }
+        public int SelectedPageSize { get; set; }
 
-		public static IList<SelectListItem> GetColStyles(string selectedStyle)
+        public static IList<SelectListItem> GetColStyles(string selectedStyle)
         {
             var selectedVal = string.IsNullOrEmpty(selectedStyle) ? string.Empty : selectedStyle.ToLower();
-            return FieldStyles.Select(fieldStyle => new SelectListItem() { Value = fieldStyle.Value, Selected = selectedVal == fieldStyle.Value.ToLower(), Text = fieldStyle.Text }).ToList();
+            return FieldStyles.Select(fieldStyle => new SelectListItem
+                {
+                    Value = fieldStyle.Value,
+                    Selected = selectedVal == fieldStyle.Value.ToLower(),
+                    Text = fieldStyle.Text
+                })
+                .ToList();
         }
+
+        #region Static fields
+
+        public static IEnumerable<SelectListItem> FieldStyles => new[]
+        {
+            new SelectListItem
+            {
+                Value = "colnormal",
+                Text =
+                    Translation.GetCoreTextTranslation("Normal")
+            },
+            new SelectListItem
+            {
+                Value = "colwide",
+                Text =
+                    Translation.GetCoreTextTranslation("Bred")
+            },
+            new SelectListItem
+            {
+                Value = "colnarrow",
+                Text =
+                    Translation.GetCoreTextTranslation("Smal")
+            }
+        };
+
+        public static IEnumerable<SelectListItem> FontStyles => new[]
+        {
+            new SelectListItem
+            {
+                Value = "normaltext",
+                Text =
+                    Translation.GetCoreTextTranslation("Normal")
+            },
+            new SelectListItem
+            {
+                Value = "smalltext",
+                Text =
+                    Translation.GetCoreTextTranslation("Mindre")
+            },
+            new SelectListItem
+            {
+                Value = "smallertext",
+                Text =
+                    Translation.GetCoreTextTranslation("Minst")
+            }
+        };
+
+        public static IEnumerable<SelectListItem> PageSizes => new[]
+        {
+            new SelectListItem {Value = "50", Text = "50"},
+            new SelectListItem {Value = "250", Text = "250"},
+            new SelectListItem {Value = "500", Text = "500"}
+        };
+
+        public static IEnumerable<SelectListItem> PageSizesModal => new[]
+        {
+            new SelectListItem {Value = "5", Text = "5"},
+            new SelectListItem {Value = "10", Text = "10"},
+            new SelectListItem {Value = "15", Text = "15"}
+        };
+
+        #endregion
     }
 
     public sealed class CaseSettingModel
     {
         #region HTML Inputs names
+
         public const string DepartmentsControlName = "selectedDepartments";
+
         #endregion
 
         public int CustomerId { get; set; }
@@ -149,17 +125,17 @@ namespace DH.Helpdesk.Web.Models.Case
         public string SelectedRegion { get; set; }
 
         /// <summary>
-        /// Checkbox value for departments
+        ///     Checkbox value for departments
         /// </summary>
         public bool IsDepartmentChecked { get; set; }
 
         /// <summary>
-        /// List of available values for departments
+        ///     List of available values for departments
         /// </summary>
         public IList<Department> Departments { get; set; }
-        
+
         /// <summary>
-        /// Selected values for departments represented as "1,2,44" string
+        ///     Selected values for departments represented as "1,2,44" string
         /// </summary>
         public string SelectedDepartments { get; set; }
 
@@ -181,9 +157,12 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public string CategoryPath { get; set; }
         public int CategoryId { get; set; }
+
         public IList<CategoryOverview> Categories { get; set; }
+
         //public string SelectedCategory { get; set; }
         public bool WorkingGroupCheck { get; set; }
+
         public IList<WorkingGroupEntity> WorkingGroups { get; set; }
         public string SelectedWorkingGroup { get; set; }
 
@@ -199,7 +178,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public IList<Status> States { get; set; }
         public string SelectedState { get; set; }
         public bool SubStateCheck { get; set; }
-        public IList<StateSecondary> SubStates { get; set; }        
+        public IList<StateSecondary> SubStates { get; set; }
         public string SelectedSubState { get; set; }
 
         public DateTime? CaseRegistrationDateStartFilter { get; set; }
@@ -231,31 +210,33 @@ namespace DH.Helpdesk.Web.Models.Case
         public CaseColumnsSettingsModel ColumnSettingModel { get; set; }
 
         public bool CaseRemainingTimeChecked { get; set; }
+
         public IList<SelectListItem> filterCaseRemainingTime { get; set; }
+
         public string SelectedCaseRemainingTime { get; set; }
 
         /// <summary>
-        /// Flag to display "filter by intitator" field on case overview page
+        ///     Flag to display "filter by intitator" field on case overview page
         /// </summary>
         public bool CaseInitiatorFilterShow { get; set; }
 
         /// <summary>
-        /// Available users for "registered by" case field in search settings
+        ///     Available users for "registered by" case field in search settings
         /// </summary>
         public SelectList RegisteredByUserList { get; set; }
 
         /// <summary>
-        /// Selected users in search settings for "Registered by" case field
+        ///     Selected users in search settings for "Registered by" case field
         /// </summary>
-        public int[] lstRegisterBy { get; set; }        
-        
+        public int[] lstRegisterBy { get; set; }
+
         /// <summary>
-        /// Available users for "Administrator" case field in search settings
+        ///     Available users for "Administrator" case field in search settings
         /// </summary>
         public SelectList AvailablePerformersList { get; set; }
 
         /// <summary>
-        /// Selected users in search settings for "Adminsitrator" case field
+        ///     Selected users in search settings for "Adminsitrator" case field
         /// </summary>
         public int[] lstAdministrator { get; set; }
     }

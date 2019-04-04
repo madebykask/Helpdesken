@@ -3,6 +3,7 @@ using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 using DH.Helpdesk.BusinessData.Models.FinishingCause;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
+using DH.Helpdesk.BusinessData.Models.Grid;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
 using DH.Helpdesk.Web.Common.Enums.Case;
 using DH.Helpdesk.Web.Infrastructure;
@@ -460,15 +461,38 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public JsonGridSettingsModel GridSettings { get; set; }
 
+        public GridSortOptions SortOptions { get; set; }
+
         public CaseRemainingTimeViewModel RemainingTime { get; set; }
 
-        public List<ItemOverview> SelectedCustomers { get; set; }
+        public List<ItemOverview> UserCustomers { get; set; }
 
-        public List<ItemOverview> ExtendIncludedCustomers { get; set; }
+        public List<ItemOverview> ExtendedCustomers { get; set; }
+
+        public List<ItemOverview> AllCustomers
+        {
+            get
+            {
+                var allCustomers = new List<ItemOverview>();
+
+                if (UserCustomers.Any())
+                    allCustomers.AddRange(UserCustomers);
+
+                if (ExtendedCustomers.Any())
+                    allCustomers.AddRange(ExtendedCustomers);
+
+                return allCustomers.OrderBy(x => x.Name).ToList();
+            }
+        }
     }
 
     public class CaseSearchResultModel
     {
+        public CaseSearchResultModel()
+        {
+            caseSettings = new List<CaseSettings>();
+        }
+
         public CaseColumnsSettingsModel GridSettings { get; set; }
         
         public IList<CaseSettings> caseSettings { get; set; }

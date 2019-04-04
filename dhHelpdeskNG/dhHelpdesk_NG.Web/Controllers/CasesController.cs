@@ -172,9 +172,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly OrganizationJsonService _orgJsonService;
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
         private readonly ICaseLockService _caseLockService;
-        private readonly int _defaultMaxRows;
-        private readonly int _defaultCaseLockBufferTime;
-        private readonly int _defaultExtendCaseLockTime;
+
         private readonly IWatchDateCalendarService _watchDateCalendarService;
         private readonly IReportServiceService _reportServiceService;
         private readonly IUserPermissionsChecker _userPermissionsChecker;
@@ -189,6 +187,10 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ISendToDialogModelFactory _sendToDialogModelFactory;
 
         #endregion
+
+        private readonly int DefaultMaxRows = 10;
+        private readonly int DefaultCaseLockBufferTime = 30; // Second
+        private readonly int DefaultExtendCaseLockTime = 60; // Second
 
         #region ***Constructor***
 
@@ -323,9 +325,6 @@ namespace DH.Helpdesk.Web.Controllers
             this._caseLockService = caseLockService;
             this._watchDateCalendarService = watchDateCalendarServcie;
             this._mailTemplateService = mailTemplateService;
-            this._defaultMaxRows = 10;
-            this._defaultCaseLockBufferTime = 30; // Second
-            this._defaultExtendCaseLockTime = 60; // Second
             this._causingPartService = causingPartService;
             this._reportServiceService = reportServiceService;
             this._invoiceArticlesModelFactory = invoiceArticlesModelFactory;
@@ -429,7 +428,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (SessionFacade.CaseOverviewGridSettings == null)
             {
                 SessionFacade.CaseOverviewGridSettings =
-                    this._gridSettingsService.GetForCustomerUserGrid(
+                   _gridSettingsService.GetForCustomerUserGrid(
                         customerId,
                         SessionFacade.CurrentUser.UserGroupId,
                         userId,
@@ -441,39 +440,41 @@ namespace DH.Helpdesk.Web.Controllers
 
             var m = new JsonCaseIndexViewModel();
 
-            var customerUser = this._customerUserService.GetCustomerUserSettings(customerId, userId);
-            m.CaseSearchFilterData = this.CreateCaseSearchFilterData(customerId, SessionFacade.CurrentUser, customerUser, SessionFacade.CurrentCaseSearch);
-            m.CaseTemplateTreeButton = this.GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.OnCaseOverview);
-            this._caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
+            var customerUser = _customerUserService.GetCustomerUserSettings(customerId, userId);
+            m.CaseSearchFilterData = CreateCaseSearchFilterData(customerId, SessionFacade.CurrentUser, customerUser, SessionFacade.CurrentCaseSearch);
+            m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.OnCaseOverview);
+            _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
 
-            m.CaseSetting = this.GetCaseSettingModel(customerId, userId);
+            m.CaseSetting = GetCaseSettingModel(customerId, userId);
             m.CaseSearchFilterData.IsAboutEnabled = m.CaseSetting.ColumnSettingModel.CaseFieldSettings.GetIsAboutEnabled();
 
-            var user = this._userService.GetUser(userId);
+            var user = _userService.GetUser(userId);
 
             SessionFacade.CaseOverviewGridSettings.pageOptions.pageIndex =
                 SessionFacade.CurrentCaseSearch.CaseSearchFilter.PageInfo.PageNumber;
 
-
+            //create page settings model
             m.PageSettings = new PageSettingsModel()
             {
                 searchFilter = JsonCaseSearchFilterData.MapFrom(m.CaseSetting),
                 userFilterFavorites = GetMyFavorites(customerId, userId),
+
                 gridSettings =
-                                         JsonGridSettingsMapper.ToJsonGridSettingsModel(
-                                             SessionFacade.CaseOverviewGridSettings,
-                                             SessionFacade.CurrentCustomer.Id,
-                                             m.CaseSetting.ColumnSettingModel.AvailableColumns.Count(),
-                                             CaseColumnsSettingsModel.PageSizes.Select(x => x.Value).ToArray()),
+                    JsonGridSettingsMapper.ToJsonGridSettingsModel(
+                        SessionFacade.CaseOverviewGridSettings,
+                        SessionFacade.CurrentCustomer.Id,
+                        m.CaseSetting.ColumnSettingModel.AvailableColumns.Count(),
+                        CaseColumnsSettingsModel.PageSizes.Select(x => x.Value).ToArray()),
+
                 refreshContent = user.RefreshContent,
                 messages = new Dictionary<string, string>()
-                                                    {
-                                                        { "information", Translation.GetCoreTextTranslation("Information") },
-                                                        { "records_limited_msg", Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500.") },
-                                                    }
+                {
+                    { "information", Translation.GetCoreTextTranslation("Information") },
+                    { "records_limited_msg", Translation.GetCoreTextTranslation("Antal ärende som visas är begränsade till 500.") },
+                }
             };
 
-            return this.View("Index", m);
+            return View("Index", m);
         }
 
         [ValidateInput(false)]
@@ -762,7 +763,7 @@ namespace DH.Helpdesk.Web.Controllers
             var ids = caseSearchResults.Select(o => o.Id).ToArray();
             var globalSettings = this._globalSettingService.GetGlobalSettings().FirstOrDefault();
 
-            var casesLocks = _caseLockService.GetLockedCasesToOverView(ids, globalSettings, this._defaultCaseLockBufferTime).ToList();
+            var casesLocks = _caseLockService.GetLockedCasesToOverView(ids, globalSettings, this.DefaultCaseLockBufferTime).ToList();
         
             foreach (var searchRow in caseSearchResults)
             {
@@ -4172,8 +4173,6 @@ namespace DH.Helpdesk.Web.Controllers
             return string.Join(",", cases.Select(c => c.Id));
         }
 
-
-
         private List<string> GetInactiveFieldsValue(CaseMasterDataFieldsModel fields)
         {
             var ret = new List<string>();
@@ -6566,9 +6565,9 @@ namespace DH.Helpdesk.Web.Controllers
             CaseLockModel caseLockModel = null;
 
             var caseIsLocked = true;
-            var extendedSec = (globalSettings != null && globalSettings.CaseLockExtendTime > 0 ? globalSettings.CaseLockExtendTime : this._defaultExtendCaseLockTime);
+            var extendedSec = (globalSettings != null && globalSettings.CaseLockExtendTime > 0 ? globalSettings.CaseLockExtendTime : this.DefaultExtendCaseLockTime);
             var timerInterval = (globalSettings != null ? globalSettings.CaseLockTimer : 0);
-            var bufferTime = (globalSettings != null && globalSettings.CaseLockBufferTime > 0 ? globalSettings.CaseLockBufferTime : this._defaultCaseLockBufferTime);
+            var bufferTime = (globalSettings != null && globalSettings.CaseLockBufferTime > 0 ? globalSettings.CaseLockBufferTime : this.DefaultCaseLockBufferTime);
             var caseLockGUID = string.Empty;
             var nowTime = DateTime.Now;
 
@@ -6617,9 +6616,9 @@ namespace DH.Helpdesk.Web.Controllers
             CaseLockModel caseLockModel = null;
 
             var caseIsLocked = true;
-            var extendedSec = (globalSettings != null && globalSettings.CaseLockExtendTime > 0 ? globalSettings.CaseLockExtendTime : this._defaultExtendCaseLockTime);
+            var extendedSec = (globalSettings != null && globalSettings.CaseLockExtendTime > 0 ? globalSettings.CaseLockExtendTime : this.DefaultExtendCaseLockTime);
             var timerInterval = (globalSettings != null ? globalSettings.CaseLockTimer : 0);
-            var bufferTime = (globalSettings != null && globalSettings.CaseLockBufferTime > 0 ? globalSettings.CaseLockBufferTime : this._defaultCaseLockBufferTime);
+            var bufferTime = (globalSettings != null && globalSettings.CaseLockBufferTime > 0 ? globalSettings.CaseLockBufferTime : this.DefaultCaseLockBufferTime);
             var caseLockGUID = string.Empty;
             var nowTime = DateTime.Now;
 
@@ -6715,7 +6714,9 @@ namespace DH.Helpdesk.Web.Controllers
             return ret;
         }
 
-        private CaseSettingModel GetCaseSettingModel(int customerId, int userId,
+        private CaseSettingModel GetCaseSettingModel(
+            int customerId, 
+            int userId,
             int gridId = GridSettingsService.CASE_OVERVIEW_GRID_ID,
             IList<CaseFieldSetting> customerCaseFieldSettings = null)
         {
@@ -6726,7 +6727,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var userCaseSettings = _customerUserService.GetUserCaseSettings(customerId, userId);
 
-            var regions = this._regionService.GetRegions(customerId);
+            var regions = _regionService.GetRegions(customerId);
             ret.RegionCheck = userCaseSettings.Region != string.Empty;
             ret.Regions = regions;
             ret.SelectedRegion = userCaseSettings.Region;
@@ -6737,13 +6738,10 @@ namespace DH.Helpdesk.Web.Controllers
             if (!departments.Any())
             {
                 departments =
-                    GetCustomerDepartments(customerId)
-                        .Where(
-                            d =>
-                            d.Region_Id == null
-                            || IsTakeOnlyActive == false
-                            || (IsTakeOnlyActive && d.Region != null && d.Region.IsActive != 0))
-                        .ToList();
+                    GetCustomerDepartments(customerId).Where(d => 
+                        d.Region_Id == null || 
+                        IsTakeOnlyActive == false || 
+                        (IsTakeOnlyActive && d.Region != null && d.Region.IsActive != 0)).ToList();
             }
 
             //var departments = this._departmentService.GetDepartments(customerId, ActivationStatus.All);
@@ -6755,8 +6753,6 @@ namespace DH.Helpdesk.Web.Controllers
                 ret.Departments = departments;
 
             ret.SelectedDepartments = userCaseSettings.Departments;
-
-
 
             ret.RegisteredByCheck = userCaseSettings.RegisteredBy != string.Empty;
             ret.RegisteredByUserList = this._userService.GetUserOnCases(customerId, IsTakeOnlyActive).MapToSelectList(customerSettings);
@@ -6902,9 +6898,10 @@ namespace DH.Helpdesk.Web.Controllers
             ret.ClosingReasons = this._finishingCauseService.GetFinishingCausesWithChilds(customerId);
 
             ret.ColumnSettingModel =
-                this._caseOverviewSettingsService.GetSettings(
+                _caseOverviewSettingsService.GetSettings(
                     customerId,
-                    SessionFacade.CurrentUser.UserGroupId, userId,
+                    SessionFacade.CurrentUser.UserGroupId, 
+                    userId,
                     gridId,
                     customerCaseFieldSettings);
 

@@ -1,67 +1,70 @@
 ﻿@using System.Web.Script.Serialization
-@using System.Web.Optimization
-@using DH.Helpdesk.Web.Infrastructure
-@using DH.Helpdesk.Web.Enums;
 @model DH.Helpdesk.Web.Models.Case.AdvancedSearchIndexViewModel
 @{
     var jsSerializer = new JavaScriptSerializer();            
-}
-<script type="text/javascript">
-    window.gridSettings = @Html.Raw(jsSerializer.Serialize(Model.GridSettings));
-    window.doSearchAtBegining = @Html.Raw(jsSerializer.Serialize(Model.DoSearchAtBegining));
-    window.isExtSearch = @Html.Raw(jsSerializer.Serialize(Model.IsExtSearch));
-    window.getSpecificFilterDataUrl = '@Url.Content("~/Cases/GetCustomerSpecificFilter")';
-    //window.Params = {
-    //    DefaultFocusObject: "#btnSearch"       
-    //};    
-</script>
+ }
+
 <div class="secnavs fixed">
     <div class="pull-left">       
     </div>
 </div>
- <form id="frmAdvanceSearch" name="frmAdvanceSearch">
-<div class="AdvancedSearch-overview page">    
-    <div class="content">
-        <div class="container">
-            <ul class="nav nav-tabs" id="myTab">
-                <li id="AdvanceSearchTab"  class="active">
-                    <a href="#fragment-1">
-                        @Translation.Get("Avancerad sökning", Enums.TranslationSource.TextTranslation)
-                    </a>
-                </li>                        
-            </ul>
-            
-            <div class="tab-content">
-                <div class="tab-pane tab-pane-border active" id="fragment-1" >
-                    @Html.Partial("AdvancedSearch/_SearchOverview", Model)                                        
-                    <input type="submit" class="submit btn" value="@Translation.Get("Sök")" id="btnSearch"/>                      
-                </div>                                   
-            </div>          
-             <div class="tab-content">
-                <div class="tab-pane tab-pane-border active" >
-
-                    <div class="container" id="search_result">
-                        <div>@Translation.GetCoreTextTranslation("Poster i sökresultat"): <span data-field="TotalAdvSearchCount">0</span></div>
-                        <div class="customer-cases-area">
-                            @*Here we will have cases grouped by customer*@
-                        </div>
-                        <div class="nofields-msg">@Translation.Get("Inga standardkolumner har valts för din användare på denna kund, för att visa kolumner, klicka på fliken Inställningar och gå till Filter Ärendeöversikt")</div>
-                        <div class="noavailablefields-msg">@Translation.Get("Inga ärendefält har valts för denna kund, kontakta systemadministratören.")</div>
-                        <div class="loading-msg">
-                            <div class="content-wrapper">
-                                <div class="loader">@Translation.Get("Laddar...")</div>
+<form id="frmAdvanceSearch" name="frmAdvanceSearch">
+    <div class="AdvancedSearch-overview page">    
+        <div class="content">
+            <div class="container">
+                <ul class="nav nav-tabs" id="myTab">
+                    <li id="AdvanceSearchTab"  class="active">
+                        <a href="#fragment-1">@Translation.GetCoreTextTranslation("Avancerad sökning")</a>
+                    </li>                        
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane tab-pane-border active" id="fragment-1" >
+                        @Html.Partial("AdvancedSearch/_SearchOverview", Model)                                        
+                        <input type="submit" class="submit btn" value="@Translation.GetCoreTextTranslation("Sök")" id="btnSearch"/>                      
+                    </div>                                   
+                </div>          
+                <div class="tab-content">
+                    <div class="tab-pane tab-pane-border active">
+                        <div class="container" id="search_result">
+                            <div>@Translation.GetCoreTextTranslation("Poster i sökresultat"): <span data-field="TotalAdvSearchCount">0</span></div>
+                            <div class="customer-cases-area">
+                                @*Here we will have cases grouped by cuwstomer*@
                             </div>
-                        </div>
-                        <div class="no-data-msg">&nbsp;@Translation.Get("Din sökning resulterade inte i några träffar.") </div>
-                        <div class="error-msg">@Html.Raw(string.Format(Translation.Get("Ett fel inträffade, klicka") + " {0}" + Translation.Get("här") + "{1} " + Translation.Get("för att ladda om sidan."), "<a href=\"#refresh\" class=\"refresh-grid\">", "</a>"))</div>
-                    </div>    
+                            <div class="nofields-msg">@Translation.Get("Inga standardkolumner har valts för din användare på denna kund, för att visa kolumner, klicka på fliken Inställningar och gå till Filter Ärendeöversikt")</div>
+                            <div class="noavailablefields-msg">@Translation.Get("Inga ärendefält har valts för denna kund, kontakta systemadministratören.")</div>
+                            <div class="loading-msg">
+                                <div class="content-wrapper">
+                                    <div class="loader">@Translation.Get("Laddar...")</div>
+                                </div>
+                            </div>
+                            <div class="no-data-msg">&nbsp;@Translation.Get("Din sökning resulterade inte i några träffar.") </div>
+                            <div class="error-msg">@Html.Raw(string.Format(Translation.Get("Ett fel inträffade, klicka") + " {0}" + Translation.Get("här") + "{1} " + Translation.Get("för att ladda om sidan."), "<a href=\"#refresh\" class=\"refresh-grid\">", "</a>"))</div>
+                        </div>    
+                    </div>
                 </div>
-                 </div>
-             
+            </div>
         </div>
     </div>
-</div>
 </form>
+
+<script type="text/javascript">
+
+    $(function () {
+        var pageParams = {
+            autoFocus: false, 
+            DefaultFocusObject: "#btnSearch",
+            CaseTypeDropDown: "CaseTypeDropDown",
+            ProductAreaDropDown: "ProductAreaDropDown",
+            ClosingReasonDropDown: "ClosingReasonDropDown",
+            gridSettings: @Html.Raw(jsSerializer.Serialize(Model.GridSettings)),
+            doSearchAtBegining: @Html.Raw(jsSerializer.Serialize(Model.DoSearchAtBegining)),
+            isExtSearch: @Html.Raw(jsSerializer.Serialize(Model.IsExtSearch)),
+            getSpecificFilterDataUrl: '@Url.Action("GetCustomerSpecificFilter", "Cases")'
+        };
+        
+        //init page instance
+        window.app.init(pageParams);
+    });
+</script>
+
 @Scripts.Render("~/bundles/advancedsearch/index")
-
-

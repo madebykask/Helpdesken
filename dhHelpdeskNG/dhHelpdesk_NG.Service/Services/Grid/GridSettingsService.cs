@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Services.Services.Grid
+﻿using DH.Helpdesk.Common.Enums.Cases;
+
+namespace DH.Helpdesk.Services.Services.Grid
 {
     using System;
     using System.Collections.Generic;
@@ -18,6 +20,7 @@
         public const int CASE_OVERVIEW_GRID_ID = 1;
         public const int CASE_CONNECTPARENT_GRID_ID = 2;
         public const int CASE_CONTRACT_CASES_GRID = 3;
+        public const int CASE_ADVANCED_SEARCH_GRID_ID = 4;
 
         #region Constants for default values
 
@@ -42,9 +45,9 @@
 
         #region Fields
 
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         
-        private readonly CaseSettingsService caseSettingsService;
+        private readonly CaseSettingsService _caseSettingsService;
 
         #endregion
 
@@ -52,8 +55,8 @@
 
         public GridSettingsService(IUnitOfWorkFactory unitOfWorkFactory, CaseSettingsService caseSettingsService)
         {
-            this.unitOfWorkFactory = unitOfWorkFactory;
-            this.caseSettingsService = caseSettingsService;
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _caseSettingsService = caseSettingsService;
         }
 
         #endregion
@@ -72,61 +75,88 @@
         public GridSettingsModel GetForCustomerUserGrid(int customerId, int userGroupId, int userId, int gridId)
         {
             var res = new GridSettingsModel();
-            
             switch (gridId)
             {
                 case CASE_OVERVIEW_GRID_ID:
-                    using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
+                case CASE_ADVANCED_SEARCH_GRID_ID:
+                {
+                    using (var uow = _unitOfWorkFactory.Create())
                     {
-                        var repository = uow.GetRepository<GridSettingsEntity>();
+                        // todo: check if separate grid settings are required for advanced search grid ?
                         var allGridParams =
-                            repository.GetAll()
-                                .Where(item => item.CustomerId == customerId && item.UserId == userId && item.GridId == gridId)
+                            uow.GetRepository<GridSettingsEntity>().GetAll()
+                                .Where(item => item.CustomerId == customerId &&
+                                               item.UserId == userId &&
+                                               item.GridId == CASE_OVERVIEW_GRID_ID) 
                                 .AsQueryable();
-                        var gridParams = allGridParams.Where(it => !it.FieldId.HasValue)
-                            .ToDictionary(it => it.Parameter.Trim(), it => it.Value.Trim());
 
-                        res.CustomerId = customerId;
-                        res.cls = gridParams.ContainsKey(GRID_CLS_KEY) ? gridParams[GRID_CLS_KEY] : DEFAULT_GRID_CLS;
-                        res.sortOptions = MapSortOptions(gridParams);
-                        res.pageOptions = MapPageOptions(gridParams);
-                        var columnSettings = this.caseSettingsService.GetSelectedCaseOverviewGridColumnSettings(customerId, userId);
-                        var columns = columnSettings as CaseOverviewGridColumnSetting[] ?? columnSettings.ToArray();
+                        var gridParams =
+                            allGridParams.Where(it => !it.FieldId.HasValue).ToDictionary(it => it.Parameter.Trim(), it => it.Value.Trim());
 
-                        res.columnDefs = allGridParams.Where(it => it.FieldId.HasValue).MapToColumnDefinitions(columns);
+                        var caseSettingsType = gridId == CASE_ADVANCED_SEARCH_GRID_ID
+                            ? CaseSettingTypes.AdvancedSearch
+                            : CaseSettingTypes.CaseOverview;
+
+                        var columnSettings =
+                            _caseSettingsService.GetSelectedCaseOverviewGridColumnSettings(customerId, userId, caseSettingsType);
+
+                        var columns = columnSettings?.ToArray();
+
+                        res = new GridSettingsModel
+                        {
+                            CustomerId = customerId,
+                            cls = gridParams.ContainsKey(GRID_CLS_KEY) ? gridParams[GRID_CLS_KEY] : DEFAULT_GRID_CLS,
+                            sortOptions = MapSortOptions(gridParams),
+                            pageOptions = MapPageOptions(gridParams),
+
+                            //todo: check why grid params is not used in Map methods?
+                            columnDefs = allGridParams.Where(it => it.FieldId.HasValue).MapToColumnDefinitions(columns)
+                        };
                     }
+
                     if (!res.columnDefs.Any())
                     {
-                        res.columnDefs.AddRange(this.GetDefaultColumns(customerId, userGroupId, gridId));
+                        var defaultColumns = GetDefaultColumns(customerId, userGroupId, gridId);
+                        res.columnDefs.AddRange(defaultColumns);
                     }
 
+                    //todo: check why sortBy gets reset?
                     res.sortOptions.sortBy = string.Empty;
-
                     return res;
+                }
+
                 case CASE_CONNECTPARENT_GRID_ID:
                 case CASE_CONTRACT_CASES_GRID:
-                    using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
+                {
+                    using (IUnitOfWork uow = _unitOfWorkFactory.Create())
                     {
                         var repository = uow.GetRepository<GridSettingsEntity>();
                         var allGridParams =
                             repository.GetAll()
                                 .Where(item => item.CustomerId == customerId && item.UserId == userId && item.GridId == CASE_OVERVIEW_GRID_ID)
                                 .AsQueryable();
-                        var gridParams = allGridParams.Where(it => !it.FieldId.HasValue)
-                            .ToDictionary(it => it.Parameter.Trim(), it => it.Value.Trim());
 
-                        res.CustomerId = customerId;
-                        res.cls = gridParams.ContainsKey(GRID_CLS_KEY) ? gridParams[GRID_CLS_KEY] : DEFAULT_GRID_CLS;
-                        res.sortOptions = MapSortOptions(gridParams);
+                        var gridParams = 
+                                allGridParams.Where(it => !it.FieldId.HasValue).ToDictionary(it => it.Parameter.Trim(), it => it.Value.Trim());
+
+                        res = new GridSettingsModel
+                        {
+                            CustomerId = customerId,
+                            cls = gridParams.ContainsKey(GRID_CLS_KEY) ? gridParams[GRID_CLS_KEY] : DEFAULT_GRID_CLS,
+                            sortOptions = MapSortOptions(gridParams)
+                        };
                     }
-                    res.columnDefs = new List<GridColumnDef>();
-                    res.columnDefs.AddRange(this.GetDefaultColumns(customerId, userGroupId, gridId));
+
+                    var defaultColumns = GetDefaultColumns(customerId, userGroupId, gridId);
+                    res.columnDefs = new List<GridColumnDef>(defaultColumns);
+
                     res.pageOptions = new GridPageOptions
                     {
                         pageIndex = 0,
                         recPerPage = DEFAULT_REC_PER_PAGE_FOR_CONNECTPARENT
                     };
                     return res;
+                }
             }
             return res;
         }
@@ -143,33 +173,33 @@
             switch (gridId)
             {
                 case CASE_OVERVIEW_GRID_ID:
+                case CASE_ADVANCED_SEARCH_GRID_ID:
                     var duplicates = new HashSet<string>();
                     return
-                        this.caseSettingsService.GetAvailableCaseOverviewGridColumnSettingsByUserGroup(customerId, userGroupId)
-                        .Where(it => !duplicates.Contains(it.Name.ToLower()))
-                            .Select(
-                                it =>
-                                    {
-                                        duplicates.Add(it.Name.ToLower());
-                                        return new GridColumnDef
-                                                   {
-                                                       id = GridColumnsDefinition.GetFieldId(it.Name),
-                                                       name = it.Name,
-                                                       cls = string.Empty
-                                                   };
-                                    })
-                            .ToList();
+                        _caseSettingsService.GetAvailableCaseOverviewGridColumnSettingsByUserGroup(customerId, userGroupId)
+                            .Where(it => !duplicates.Contains(it.Name.ToLower()))
+                            .Select(it =>
+                            {
+                                duplicates.Add(it.Name.ToLower());
+                                return new GridColumnDef
+                                {
+                                    id = GridColumnsDefinition.GetFieldId(it.Name),
+                                    name = it.Name,
+                                    cls = string.Empty
+                                };
+                            }).ToList();
+
                 case CASE_CONNECTPARENT_GRID_ID:
                 case CASE_CONTRACT_CASES_GRID:
-                    return
-                        this.caseSettingsService.GetConnectToParentGridColumnSettings(customerId, userGroupId)
+                    var columnDefs =
+                        _caseSettingsService.GetConnectToParentGridColumnSettings(customerId, userGroupId)
                             .Select(it => new GridColumnDef
                             {
                                 id = GridColumnsDefinition.GetFieldId(it.Name),
                                 name = it.Name,
                                 cls = string.Empty
-                            })
-                            .ToList();
+                            }).ToList();
+                    return columnDefs;
                 default:
                     throw new NotImplementedException(string.Format("GetAvailableColumnNames() is not implmented for supplyed grid_ID {0}", gridId));
             }
@@ -187,7 +217,7 @@
             var oldModel = this.GetForCustomerUserGrid(customerId, userGroupId, userId, CASE_OVERVIEW_GRID_ID);
 
             //// in case when we have "Case overview" grid we should save settings into different talbes
-            using (IUnitOfWork uow = this.unitOfWorkFactory.Create())
+            using (IUnitOfWork uow = this._unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<GridSettingsEntity>();
                 repository.DeleteWhere(it => it.CustomerId == customerId && it.UserId == userId && it.GridId == CASE_OVERVIEW_GRID_ID && it.Parameter == GRID_CLS_KEY);
@@ -249,7 +279,7 @@
                 uow.Save();
             }
 
-            this.caseSettingsService.SyncSettings(inputModel.columnDefs.MapToCaseOverviewSettings(), customerId, userId, userGroupId);
+            _caseSettingsService.SyncSettings(inputModel.columnDefs.MapToCaseOverviewSettings(), customerId, userId, userGroupId);
         }
 
         private static bool IsSortFieldAvailable(string sortBy, IEnumerable<GridColumnDef> columnDefs)
@@ -260,13 +290,16 @@
         private static GridSortOptions MapSortOptions(Dictionary<string, string> gridParams)
         {
             return new GridSortOptions
-                          {
-                              sortBy =
-                                  gridParams.ContainsKey(SORT_BY_KEY)
-                                      ? gridParams[SORT_BY_KEY]
-                                      : string.Empty,
-                              sortDir = gridParams.ContainsKey(SORT_DIR_KEY) ? GridSortOptions.SortDirectionFromString(gridParams[SORT_DIR_KEY]): SortingDirection.Desc
-                          };
+            {
+                sortBy =
+                    gridParams.ContainsKey(SORT_BY_KEY)
+                        ? gridParams[SORT_BY_KEY]
+                        : string.Empty,
+
+                sortDir = gridParams.ContainsKey(SORT_DIR_KEY)
+                    ? GridSortOptions.SortDirectionFromString(gridParams[SORT_DIR_KEY])
+                    : SortingDirection.Desc
+            };
         }
 
         private static GridPageOptions MapPageOptions(Dictionary<string, string> gridParams)
@@ -280,6 +313,7 @@
                                    : DEFAULT_REC_PER_PAGE
                        };
         }
+
         #endregion
     }
 }
