@@ -17,6 +17,8 @@ namespace DH.Helpdesk.Services.Services
         IList<StateSecondary> GetStateSecondaries(int customerId);
         Task<List<StateSecondary>> GetStateSecondariesAsync(int customerId);
         IList<StateSecondary> GetActiveStateSecondaries(int customerId);
+
+        Task<List<StateSecondary>> GetActiveStateSecondariesAsync(int customerId);
         //IList<StateSecondary> GetStateSecondariesSelected(int customerId, string[] reg);
         //IList<StateSecondary> GetStateSecondariesAvailable(int customerId, string[] reg);
 
@@ -70,6 +72,14 @@ namespace DH.Helpdesk.Services.Services
         public IList<StateSecondary> GetActiveStateSecondaries(int customerId)
         {
             return this._stateSecondaryRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1).OrderBy(x => x.Name).ToList();
+        }
+
+        public Task<List<StateSecondary>> GetActiveStateSecondariesAsync(int customerId)
+        {
+            return _stateSecondaryRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == 1)
+                .AsQueryable()
+                .OrderBy(x => x.Name)
+                .ToListAsync();
         }
 
         public StateSecondary GetStateSecondary(int id)
