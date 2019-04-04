@@ -896,7 +896,7 @@
             };
 
             //Get CaseSettings to copy
-            var caseSettingsToCopy = this._caseSettingsService.GetCaseSettings(customerToCopy.Id);
+            var caseSettingsToCopy = this._caseSettingsService.GetCaseSettings(customerToCopy.Id, null, null);
 
             foreach (var cs in caseSettingsToCopy)
             {
@@ -908,6 +908,7 @@
                 newCustomerCaseSetting.MinWidth = cs.MinWidth;
                 newCustomerCaseSetting.UserGroup = cs.UserGroup;
                 newCustomerCaseSetting.ColOrder = cs.ColOrder;
+                newCustomerCaseSetting.Type = cs.Type;
 
                 this._caseSettingsService.SaveCaseSetting(newCustomerCaseSetting, out errors);
             }

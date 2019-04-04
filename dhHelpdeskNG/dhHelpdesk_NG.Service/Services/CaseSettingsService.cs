@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Services.Services
 
     public interface ICaseSettingsService
     {
-        IList<CaseSettings> GetCaseSettings(int customerId, int? userId = null, CaseSettingTypes type = CaseSettingTypes.CaseOverview);
+        IList<CaseSettings> GetCaseSettings(int customerId, int? userId = null, CaseSettingTypes? type = CaseSettingTypes.CaseOverview);
         IList<CaseSettings> GenerateCSFromUGChoice(int customerId, int? userGroupId, CaseSettingTypes type = CaseSettingTypes.CaseOverview);
         IList<CaseSettings> GetCaseSettingsWithUser(int customerId, int userId, int userGroupId);
         IList<CaseSettings> GetCaseSettingsByUserGroup(int customerId, int userGroupId, CaseSettingTypes type = CaseSettingTypes.CaseOverview);
@@ -51,11 +51,15 @@ namespace DH.Helpdesk.Services.Services
             _caseFieldSettingService = caseFieldSettingService;
         }
 
-        public IList<CaseSettings> GetCaseSettings(int customerId, int? userId = null, CaseSettingTypes type = CaseSettingTypes.CaseOverview)
+        public IList<CaseSettings> GetCaseSettings(int customerId, int? userId = null, CaseSettingTypes? type = CaseSettingTypes.CaseOverview)
         {
-            return _caseSettingRepository
-                .GetMany(x => x.Customer_Id == customerId && x.User_Id == userId && x.Type == type)
-                .OrderBy(x => x.ColOrder)
+            var query = _caseSettingRepository
+                .GetMany(x => x.Customer_Id == customerId && x.User_Id == userId).AsQueryable();
+
+            if(type.HasValue)
+                query = query.Where(x => x.Type == type);
+
+            return query.OrderBy(x => x.ColOrder)
                 .ToList();
         }
 
@@ -70,7 +74,7 @@ namespace DH.Helpdesk.Services.Services
         public IList<CaseSettings> GetCaseSettingsForDefaultCust()
         {
             return _caseSettingRepository
-                .GetMany(x => x.Customer_Id == null && x.Type == CaseSettingTypes.CaseOverview)
+                .GetMany(x => x.Customer_Id == null)
                 .ToList();
         }
 
