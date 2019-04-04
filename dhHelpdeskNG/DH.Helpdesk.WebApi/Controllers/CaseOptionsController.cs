@@ -32,11 +32,10 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ISettingService _customerSettingsService;
         private readonly ICausingPartService _causingPartService;
         private readonly ITranslateCacheService _translateCacheService;
-        private readonly IStateSecondaryService _stateSecondaryService;
 
         public CaseOptionsController(IRegistrationSourceCustomerService registrationSourceCustomerService, ISystemService systemService, IUrgencyService urgencyService,
             IImpactService impactService, ISupplierService supplierService, ICountryService countryService, ICurrencyService currencyService,
-            IUserService userService, IPriorityService priorityService, IStateSecondaryService stateSecondaryService,
+            IUserService userService, IPriorityService priorityService, 
             IStatusService statusService, IProjectService projectService, IProblemService problemService, IBaseChangesService changeService,
             ICausingPartService causingPartService, ISettingService customerSettingsService, ITranslateCacheService translateCacheService)
         {
@@ -56,7 +55,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             _projectService = projectService;
             _problemService = problemService;
             _changeService = changeService;
-            _stateSecondaryService = stateSecondaryService;
         }
 
         /// <summary>
@@ -132,14 +130,14 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             if (input.Priorities)
             {
-                model.Priorities = _priorityService.GetPriorities(customerId)
+                model.Priorities = _priorityService.GetPriorities(customerId, true)
                     .Select(d => new ItemOverview(Translate(d.Name, languageId, TranslationTextTypes.MasterData), d.Id.ToString()))
                     .ToList();
             }
 
             if (input.Statuses)
             {
-                model.Statuses = _statusService.GetStatuses(customerId)
+                model.Statuses = _statusService.GetActiveStatuses(customerId)
                     .Select(d => new ItemOverview(Translate(d.Name, languageId, TranslationTextTypes.MasterData), d.Id.ToString()))
                     .ToList();
             }
