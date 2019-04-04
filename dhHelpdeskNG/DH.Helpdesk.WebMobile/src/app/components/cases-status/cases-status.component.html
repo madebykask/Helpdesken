@@ -4,7 +4,7 @@
       <mbsc-card-title>{{ casesStatus.customerName }}</mbsc-card-title>
     </mbsc-card-header>
     <mbsc-card-content>
-      <mbsc-listview>
+      <mbsc-listview [options]="options">
         <mbsc-listview-item>
           <span class="status-title" translate>Mina ärenden</span>
           <span class="val">{{ casesStatus.myCases }}</span>

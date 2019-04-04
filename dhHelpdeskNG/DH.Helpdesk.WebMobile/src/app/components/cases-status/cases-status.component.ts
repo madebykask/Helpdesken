@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CustomerCasesStatusModel } from 'src/app/modules/shared-module/models/home/customerCasesStatus.model';
 import { HomeService } from 'src/app/services/home/home.service';
 import { take } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { CasesSearchType } from 'src/app/modules/shared-module/constants';
+import { MbscListviewOptions } from '@mobiscroll/angular';
 
 @Component({
   selector: 'cases-status',
@@ -11,8 +14,16 @@ import { take } from 'rxjs/operators';
 export class CasesStatusComponent implements OnInit {
 
   casesStatus: CustomerCasesStatusModel = null;
+  options: MbscListviewOptions = {
+    fillAnimation: false,
+    animateIcons: false,
+    animateAddRemove: false,
+    swipe: false,
+    select: 'off'
+  };
 
-  constructor(private homeService: HomeService) {
+  constructor(private homeService: HomeService,
+    private router: Router) {
   }
 
   ngOnInit() {
@@ -21,4 +32,7 @@ export class CasesStatusComponent implements OnInit {
     ).subscribe(data => this.casesStatus = data);
   }
 
+  goTo(url: string = null) {
+    this.router.navigateByUrl(url);
+  }
 }

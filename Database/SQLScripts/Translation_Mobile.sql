@@ -305,6 +305,24 @@ insert into tbltext (id, TextString, TextType) VALUES (10046, 'DH Helpdesk utvec
 If not exists (select * from tblTextTranslation where text_id = 10046 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10046, 2, 'DH Helpdesk development team')
 
+If not exists (select * from tbltext where id = 10047)
+insert into tbltext (id, TextString, TextType) VALUES (10047, 'Pågående ärende', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10047 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10047, 2, 'In progress')
+
+If not exists (select * from tbltext where id = 10048)
+insert into tbltext (id, TextString, TextType) VALUES (10048, 'Nya idag', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10048 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10048, 2, 'New today')
+
+If not exists (select * from tbltext where id = 10049)
+insert into tbltext (id, TextString, TextType) VALUES (10049, 'Avslutade idag', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10049 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10049, 2, 'Closed today')
+
 
 
 

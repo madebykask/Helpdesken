@@ -1,12 +1,26 @@
-  .status-title {
-    color: #333;
-    font-size:16px;  
-  }
+.status-title {
+  color: #333;
+  font-size: 16px;
+}
 
-  .val {
-    float:right;
-    font-weight: bold;
+.val {
+  float: right;
+  font-weight: bold;
+}
+
+.mbsc-lv {
+  .mbsc-lv-item {
+    &.mbsc-lv-item-active {
+      &:before {
+        background-color: inherit;
+        left: 1em;
+      }
+      &:after {
+        left: 1em;
+      }
+    }
   }
+}
 
 
 
