@@ -593,7 +593,7 @@ $(function () {
             initiatorDetailsEl.getElement().click(function () {
                 var inititatorId = parseInt(initiatorDetailsEl.getElement().data("id") || '0');
                 if (inititatorId > 0) {
-                    window.open(getInitiatorDetailsUrl() + "?id=" + inititatorId, "_blank", "width=1400,height=600,menubar=no,toolbar=no,location=no,status=no,left=100,top=100,scrollbars=yes,resizable=yes");
+                    window.open(getInitiatorDetailsUrl() + "?id=" + inititatorId, "_blank", "width=700,height=600,menubar=no,toolbar=no,location=no,status=no,left=100,top=100,scrollbars=yes,resizable=yes");
                 }
             });
 
