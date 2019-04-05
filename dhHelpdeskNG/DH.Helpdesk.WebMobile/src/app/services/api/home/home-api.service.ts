@@ -12,9 +12,9 @@ export class HomeApiService extends HttpApiServiceBase {
     protected localStorageService: LocalStorageService) {
     super(http, localStorageService);
   }
-  
+
   getCustomerCasesStatus() {
-    const url = this.buildResourseUrl("/api/home/casesstatus", null, true, false);
+    const url = this.buildResourseUrl('/api/casestatistics', null, true, false);
     return this.getJson<any>(url);
   }
 }

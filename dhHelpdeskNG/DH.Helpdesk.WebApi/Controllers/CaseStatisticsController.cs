@@ -6,19 +6,19 @@ using DH.Helpdesk.WebApi.Infrastructure;
 
 namespace DH.Helpdesk.WebApi.Controllers
 {
-    [RoutePrefix("api/home")]
-    public class HomeController : BaseApiController
+    [RoutePrefix("api/casestatistics")]
+    public class CaseStatisticsController : BaseApiController
     {
         private readonly ICaseService _caseService;
 
-        public HomeController(ICaseService caseService)
+        public CaseStatisticsController(ICaseService caseService)
         {
             _caseService = caseService;
         }
 
-        [Route("casesstatus")]
+        [Route("")]
         [HttpGet]
-        public async Task<CustomerCasesStatus> GetCasesStatus(int cid)
+        public async Task<CustomerCasesStatus> Get(int cid)
         {
             var status = await _caseService.GetCustomerCasesStatusAsync(cid, UserId);
             return status;
