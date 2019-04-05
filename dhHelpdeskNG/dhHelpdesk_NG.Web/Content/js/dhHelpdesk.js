@@ -101,23 +101,25 @@ function close_window() {
     //}
 }
 
-function SelectValueInOtherDropdownOnChange(id, postTo, ctl, readonlyElement) {
+function SelectValueInOtherDropdownOnChange(id, postTo, ctl, readonlyElement, raiseEvent = false) {
     return $.post(postTo, { 'id': id }, function (data) {
         if (data != null) {
-            SetSelectValue(ctl, data, readonlyElement);
+            SetSelectValue(ctl, data, readonlyElement, raiseEvent);
         }
     }, 'json');
 }
 
-function SetSelectValue(selId, val, readonlyElementId) {
+function SetSelectValue(selId, val, readonlyElementId, raiseEvent = false) {
     var $sel = $(selId);
     var exists = $sel.find('option[value=' + val + ']').length > 0;
     if (exists) {
         $sel.val(val);
+        if (raiseEvent) $sel.change();
         if (readonlyElementId && readonlyElementId.length) {
             var $readonlyElement = $(readonlyElementId);
-            if ($readonlyElement.length)
+            if ($readonlyElement.length) {
                 $readonlyElement.val(val);
+            }
         }
         return true;
     }

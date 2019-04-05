@@ -1247,8 +1247,7 @@ function CaseInitForm() {
     });
 
     $('#case__System_Id').change(function () {
-        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeSystem/', '#case__Urgency_Id');
-        SetPriority();
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeSystem/', '#case__Urgency_Id', null, true);
     });
 
     $('#case__Impact_Id').change(function () {
