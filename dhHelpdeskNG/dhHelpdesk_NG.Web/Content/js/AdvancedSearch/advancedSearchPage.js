@@ -60,10 +60,6 @@ window.advancedSearchPage =
             self.specificSearchTabBehavior = new SpecificSearchTabBehavior(params);
             self.sortSettings = params.sortOptions;
 
-            //todo:review usages 
-            //this.showableCustomerCount = 0;
-            //this.globalCounter = 0;
-            
             this.isExtendedSearch = false;
             this._gridState = UI_STATE.IDLE;
 
@@ -78,8 +74,6 @@ window.advancedSearchPage =
             this.$tableLoaderMsg = $('div.loading-msg');
             this.txtsToSearchByEnterKey = '#CaseInitiatorFilter, #txtFreeTextSearch, #txtCaseNumberSearch, #txtCaptionSearch';
             this.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');
-            //todo: check
-            //this.$buttonsToDisableWhenNoColumns = $('#btnNewCase a.btn, #btnCaseTemplate a.btn, .submit, #btnClearFilter');
             this.$caseAdvSearchRecordCount = $('[data-field="TotalAdvSearchCount"]');
             
             // populate customers arrays
@@ -87,7 +81,8 @@ window.advancedSearchPage =
             this.extendedCustomers = [];
             this.availableCustomers = [];
             this.totalItemsCount = 0;
-
+            this.customersGridSettings = {};
+            
             if (params.userCustomers.length) {
                 $.each(params.userCustomers, function (idx, el) {
                     var customerItem = mapToCustomerItem(el);
@@ -141,9 +136,7 @@ window.advancedSearchPage =
                 ev.preventDefault();
 
                 if (self._gridState !== UI_STATE.IDLE) return false; 
-
-                var searchStr = self.$txtFreeTextSearch.val();
-                self.onSearchClick(searchStr);
+                self.onSearchClick();
 
                 return false;
             });
@@ -175,7 +168,6 @@ window.advancedSearchPage =
             });
         }
 
-        //todo: implement
         this.onExtSearchLoading = function () {
             $("#extendedSearchEnabled").prop("checked", true);
             this.isExtendedSearch = true;
@@ -184,6 +176,9 @@ window.advancedSearchPage =
 
         this.onSearchClick = function () {
             var self = this;
+
+            //reset prev search state
+            self.resetSearch();
 
             var selectedCustomers = self.getSelectedCustomers() || [];
             if (selectedCustomers.length === 0)
@@ -202,74 +197,159 @@ window.advancedSearchPage =
                     });
                 }
 
-                var searchStr = self.$txtFreeTextSearch.val();
-                this.runSearсh(searchStr, customerIds);
+                this.runSearсh(customerIds);
             }
         }
-        
+
         //SEARCH Function
-        this.runSearсh = function (searchText, customerIds) {
+        this.runSearсh = function(customerIds) {
             var self = this;
 
-            //todo: check/implement
-            var sortCallback = function () {
-                //self.setSortField.call(me, $(this).attr('fieldname'), $(this));
-            };
-
-            //clear search results and prev search state...
-            self.resetSearch();
             self.setUIState(UI_STATE.LOADING);
-            
             self.showProgress();
 
             //prepare search data
-            var searchData = this.getSearchFilterData();
+            
+            var filterData = this.getSearchFilterData();
 
             for (var i = 0; i < customerIds.length; i++) {
-
                 
                 var customerId = customerIds[i];
-                searchData.customerId = customerId;
-                searchData.IsExtendedSearchCustomer = this.isExtendedCustomer(customerId);
 
-                self.hideCustomerMessages(customerId);
-
-                console.log('Fetch data for customer: ' + customerId);
-                var request = this.fetchData(searchData);
-                this.requests.push(request);
-
-                request.done(function (d) {
-                    console.log('>>>Fetch data completed successfully. Customer: ' + d.customerId);
-                    self.processCustomerSearchResults(d.customerId, d.response);
-                }).fail(function (d) {
-                    self.showMsg(ERROR_MSG_TYPE, d.customerId);
-                    var errMsg = d.err || '';
-                    console.error('Fetch data failed. CustomerId: %s. Error: %s', d.customerId, errMsg);
-                });
+                //run search 
+                var request =
+                    self.runCustomerSearch(customerId, filterData).done(function (res) {
+                        self.processCustomerSearchResults(res.customerId, res.response);
+                    }).fail(function (res) {
+                        self.processCustomerSearchError(res.customerId, res.err);
+                    });
+              
+                self.requests.push(request);
             }
 
             //handle all requests complete
             if (this.requests.length > 0) {
                 $.when.apply($, this.requests).always(function () {
-
                     //console.log('>>> All search requests are complete.');
-
-                    //todo: calc and display some search summary information?
-
                     self.hideProgress();
                     self.setUIState(UI_STATE.IDLE);
                     self.tableCleanUp();
                     self.$caseAdvSearchRecordCount.text(self.totalItemsCount);
+                    self.requests = [];
 
                     $("#btnSearch").focus();
                 });
             }
-
-            //todo:review
-            //self.setUIState(UI_STATE.LOADING);
         }
 
-        this.getSearchFilterData = function () {
+        this.runCustomerSearch = function (customerId, filterData) {
+            var self = this;
+            self.hideCustomerMessages(customerId);
+
+            //set customer specific params
+            filterData.customerId = customerId;
+            filterData.IsExtendedSearchCustomer = self.isExtendedCustomer(customerId);
+
+            var sortOptions = self.getSortOptionsOrDefaults(customerId);
+            self.setSortOptionsParams(sortOptions, filterData);
+
+            console.log('Fetching data for customer: ' + customerId);
+            var request = self.fetchData(filterData);
+            return request;
+        }
+        
+        // Run Search By Sort
+        this.sortByField = function (customerId, fieldName, $el) {
+            var self = this;
+            var oldEl;
+
+            var sortOpt = self.customersGridSettings[customerId].sortOptions;
+            var oldCls = getClsForSortDir(sortOpt.sortDir);
+
+            if (self._gridState !== UI_STATE.IDLE) {
+                return;
+            }
+
+            if (sortOpt.sortBy === fieldName) {
+                sortOpt.sortDir = (sortOpt.sortDir === SORT_ASC) ? SORT_DESC : SORT_ASC;
+                oldEl = $el;
+            } else {
+                oldEl = $(self.$table).find('thead [fieldname="' + sortOpt.sortBy + '"]');
+                sortOpt.sortBy = fieldName;
+                sortOpt.sortDir = SORT_DESC;
+            }
+
+            if (oldEl.length > 0) {
+                $(oldEl).find('i').removeClass(oldCls);
+            }
+
+            var curCls = getClsForSortDir(sortOpt.sortDir);
+            $($el).find('i').addClass(curCls);
+
+            //update sort options for customer
+            self.setCustomerSortOptions(customerId, sortOpt);
+
+            //running search only for selected customer
+            var filterData = self.getSearchFilterData();
+            self.runCustomerSearch(customerId, filterData).done(function(res) {
+                self.processCustomerSearchResults(res.customerId, res.response);
+            }).fail(function(res) {
+                self.processCustomerSearchError(res.customerId, res.err);
+            });
+        };
+
+        this.processCustomerSearchError = function (customerId, err) {
+            this.showMsg(ERROR_MSG_TYPE, customerId);
+
+            var errMsg = '';
+            if (err && err.ErrorMessage) {
+                errMsg = err.ErrorMessage;
+            } else if (err.Error) {
+                errMsg = err.Error;
+            } else {
+                errMsg = err || 'Unknown error';
+            }
+            console.error('Fetch data failed. CustomerId: %s. Error: %s', customerId, errMsg);
+        }
+
+        this.getSortOptionsOrDefaults = function (customerId) {
+            var self = this;
+            var sortOptions = self.sortSettings; //default
+            if (self.customersGridSettings.hasOwnProperty(customerId)) {
+                var ss = self.customersGridSettings[customerId].sortOptions;
+                if (ss) {
+                    sortOptions = ss;
+                }
+            }
+            return sortOptions;
+        }
+
+        this.setSortOptionsParams = function(sortOptions, inputData) {
+            inputData.SortBy = sortOptions.sortBy;
+            inputData.SortDir = sortOptions.sortDir;
+            //inputData.PageIndex = sortOptions.pageIndex;
+            //inputData.RecordsPerPage = sortOptions.recPerPage;
+        }
+
+        this.setCustomerSortOptions = function (customerId, sortOptions) {
+            var self = this;
+
+            if (self.customersGridSettings[customerId] === undefined) {
+                self.customersGridSettings[customerId] = {
+                    sortOptions: self.sortSettings
+                }
+            };
+
+            //set customer specific sorting options from response
+            if (sortOptions) {
+                self.customersGridSettings[customerId].sortOptions = {
+                    sortBy: sortOptions.sortBy,
+                    sortDir: +sortOptions.sortDir === 1 ? SORT_DESC : SORT_ASC
+                };
+            }
+        }
+
+        this.getSearchFilterData = function (sortOptions) {
             var self = this;
             var fd = $('#frmAdvanceSearch').serializeObject();
             console.dir('formData: ', fd);
@@ -290,12 +370,7 @@ window.advancedSearchPage =
                 FreeTextSearch: fd.txtFreeTextSearch || '',
                 MaxRows: fd.lstfilterMaxRows,
                 SearchThruFiles: self.$chkSearchThruFiles.bootstrapSwitch('state'),
-                //todo: defaults but need to send for current ?
-                SortBy: self.sortSettings.sortBy,
-                SortDir: self.sortSettings.sortDir,
-                PageIndex: self.sortSettings.pageIndex,
-                RecordsPerPage: self.sortSettings.recPerPage,
-
+                
                 // customer filter fields
                 WorkingGroup: '',
                 Department: '',
@@ -306,7 +381,10 @@ window.advancedSearchPage =
                 CaseClosingReasonFilter: '' 
             };
 
-            //todo: check customers?
+            if (sortOptions) {
+                self.setSortOptionsParams(sortOptions, data);
+            }
+            
             // set only if one customer is selected
             if (data.Customers.length === 1) {
                 data.WorkingGroup = fd.lstfilterWorkingGroup || '';
@@ -346,16 +424,18 @@ window.advancedSearchPage =
 
             return $searchReq;
         }
-        
+
         this.processCustomerSearchResults = function(customerId, response) {
             var self = this;
-
+            
             if (response && response.result === 'success') {
+                console.log('>>>Fetch data completed successfully. Customer: ' + customerId);
                 var responseData = response.data;
                 var customer = self.getCustomer(customerId);
 
-                //todo: save sort settings for each customer separately
-                self.sortSettings = responseData.gridSettings.sortOptions;
+                //save sort settings for each customer separately
+                if (responseData.gridSettings && responseData.gridSettings.sortOptions)
+                    self.setCustomerSortOptions(customerId, responseData.gridSettings.sortOptions);
 
                 //build search results table html 
                 var markup = self.buildCustomerSearchResults(customer, responseData.searchResults, responseData.gridSettings);
@@ -367,9 +447,12 @@ window.advancedSearchPage =
                 if (responseData.searchResults.length === 0) {
                     self.showMsg(NODATA_MSG_TYPE, customerId);
                 } else {
+                    //add sorting callback
+                    $('#customerTable' + customerId).find('th.thpointer.sr' + customerId).click(function(e) {
+                        self.sortByField(customerId, $(this).attr('fieldname'), $(this));
+                    });
                     self.totalItemsCount += responseData.searchResults.length;
                 }
-
             } else {
                 self.showMsg(ERROR_MSG_TYPE, customerId);
             };
@@ -456,7 +539,7 @@ window.advancedSearchPage =
                         sortCls = getClsForSortDir(gridSettings.sortOptions.sortDir);
                     }
                     var headerRow =
-                        strJoin('<th class="thpointer ', customerId, ' ', fieldSetting.field, ' ', fieldSetting.cls,
+                        strJoin('<th class="thpointer sr', customerId, ' ', fieldSetting.field, ' ', fieldSetting.cls,
                         '" fieldname="', fieldSetting.field, '">', fieldSetting.displayName, '<i class="', sortCls,'"></i></th>');
                     out.push(headerRow);
                 }
@@ -659,6 +742,7 @@ window.advancedSearchPage =
         this.resetSearch = function () {
             //reset prev search results state
             this.totalItemsCount = 0;
+            this.requests = [];
             this.$caseAdvSearchRecordCount.text('0');
 
             //hide prev search results
