@@ -69,8 +69,6 @@ BEGIN
 	FETCH NEXT FROM MY_CURSOR INTO @CustomerId
 	WHILE @@FETCH_STATUS = 0
 	BEGIN 	
-		begin tran
-
 		INSERT INTO tblCaseSettings (CustomerId, [User_Id], tblCaseName, Line, 
 		MinWidth, UserGroup, ColOrder, ShowInMobileList, RegTime, ChangeTime, ColStyle, CaseSettingsGUID, [Type]) 
 		SELECT @CustomerId, [User_Id], tblCaseName, Line, 
@@ -78,8 +76,6 @@ BEGIN
 		1 -- Advanced Search Type
 		FROM tblCaseSettings
 		WHERE UserGroup = 0 AND CustomerId IS NULL AND [Type] = 1
-		--commit tran
-		rollback tran
 
 		PRINT @CustomerId
 		FETCH NEXT FROM MY_CURSOR INTO @CustomerId
