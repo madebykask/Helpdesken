@@ -23,7 +23,7 @@ namespace DH.Helpdesk.Services.Services
         IList<CaseSettings> GetCaseSettingsByUserGroup(int customerId, int userGroupId, CaseSettingTypes type = CaseSettingTypes.CaseOverview);
         IList<CaseSettings> GetCaseSettingsForDefaultCust();
         IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettings(int customerId, IList<CaseFieldSetting> customerCaseFieldSettings = null);
-        IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettingsByUserGroup(int customerId, int userGroupId);
+        IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettingsByUserGroup(int customerId, int userGroupId, CaseSettingTypes caseSettingsType = CaseSettingTypes.CaseOverview);
         IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId, CaseSettingTypes type = CaseSettingTypes.CaseOverview, IList<CaseFieldSetting> customerCaseFieldSettings = null);
         CaseSettings GetCaseSetting(int id);
         DeleteMessage DeleteCaseSetting(int id);
@@ -106,13 +106,17 @@ namespace DH.Helpdesk.Services.Services
         /// </summary>
         /// <param name="customerId"></param>
         /// <param name="userGroupId"></param>
+        /// <param name="caseSettingsType"></param>
         /// <returns></returns>
-        public IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettingsByUserGroup(int customerId, int userGroupId)
+        public IEnumerable<CaseOverviewGridColumnSetting> GetAvailableCaseOverviewGridColumnSettingsByUserGroup(int customerId, int userGroupId, CaseSettingTypes caseSettingsType = CaseSettingTypes.CaseOverview)
         {
             var customerEnabledFields =
-                GetCaseSettingsByUserGroup(customerId, userGroupId)
+                GetCaseSettingsByUserGroup(customerId, userGroupId, caseSettingsType)
                     .Where(it => !GridColumnsDefinition.NotAvailableField.Contains(it.Name))
-                    .Select(it => new CaseOverviewGridColumnSetting() { Name = it.Name }).ToList();
+                    .Select(it => new CaseOverviewGridColumnSetting()
+                    {
+                        Name = it.Name
+                    }).ToList();
             return customerEnabledFields;
         }
 
@@ -140,10 +144,13 @@ namespace DH.Helpdesk.Services.Services
         public IEnumerable<CaseOverviewGridColumnSetting> GetSelectedCaseOverviewGridColumnSettings(int customerId, int userId, CaseSettingTypes type = CaseSettingTypes.CaseOverview, IList<CaseFieldSetting> customerCaseFieldSettings = null)
         {
             var duplicates = new HashSet<string>();
+            var availableCaseSettings =
+                type == CaseSettingTypes.CaseOverview
+                    ? GetAvailableCaseSettings(customerId, userId)
+                    : GetAvailableAdvancedSearchCaseSettings(customerId);
             var res =
                 GetAvailableCaseOverviewGridColumnSettings(customerId, customerCaseFieldSettings)
-                    .Join(
-                        GetAvailableCaseSettings(customerId, userId, type),
+                    .Join(availableCaseSettings,
                         colSetting => colSetting.Name,
                         userSelection => userSelection.Name,
                         (colSetting, userSelection) =>
@@ -173,8 +180,12 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseSettings> GenerateCSFromUGChoice(int customerId, int? userGroupId, CaseSettingTypes type = CaseSettingTypes.CaseOverview)
         {
-            var query = _caseSettingRepository
-                .GetMany(x => x.Customer_Id == customerId && x.Name != null && x.User_Id == null && x.Type == type)
+            var query = 
+                _caseSettingRepository.GetMany(x => 
+                    x.Customer_Id == customerId && 
+                    x.Name != null && 
+                    x.User_Id == null && 
+                    x.Type == type)
                 .AsQueryable();
 
             if (userGroupId.HasValue)
@@ -377,13 +388,23 @@ namespace DH.Helpdesk.Services.Services
             _caseSettingRepository.Commit();
         }
 
-        private IEnumerable<CaseSettings> GetAvailableCaseSettings(int customerId, int userId, CaseSettingTypes settingsType = CaseSettingTypes.CaseOverview)
+        private IEnumerable<CaseSettings> GetAvailableAdvancedSearchCaseSettings(int customerId)
+        {
+            return _caseSettingRepository.GetMany(it =>
+                it.Customer_Id == customerId &&
+                it.UserGroup == 0 &&  //NOTE: no groups support for advanced search
+                it.User_Id == null && // only admin users can edit advanced search settings 
+                it.Line == 1 &&
+                it.Type == CaseSettingTypes.AdvancedSearch);
+        }
+
+        private IEnumerable<CaseSettings> GetAvailableCaseSettings(int customerId, int userId)
         {   
             return _caseSettingRepository.GetMany(it => 
                 it.Customer_Id == customerId && 
                 it.User_Id == userId && 
                 it.Line == 1 && 
-                it.Type == settingsType);
+                it.Type == CaseSettingTypes.CaseOverview);
         }
     }
 }

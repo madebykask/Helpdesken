@@ -325,7 +325,7 @@ namespace DH.Helpdesk.Web.Controllers
             var gridSettings =
                 _gridSettingsService.GetForCustomerUserGrid(
                     searchCustomerId,
-                    currentUser.UserGroupId, 
+                    0 /*currentUser.UserGroupId*/,  //NOTE: at the moment there's no support for groups and only 0 is used for new AdvancedSearch
                     currentUser.Id,
                     GridSettingsService.CASE_ADVANCED_SEARCH_GRID_ID);
 

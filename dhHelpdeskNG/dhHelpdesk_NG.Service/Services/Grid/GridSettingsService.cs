@@ -65,7 +65,7 @@ namespace DH.Helpdesk.Services.Services.Grid
 
         /// <summary>
         /// Returns grid settings business model
-        /// @TODO (alexander.semenischev): implemented only for caseoverview talbe, need to implement for "standart"/other grids
+        /// todo: implemented only for caseoverview table, need to implement for "standart"/other grids
         /// </summary>
         /// <param name="customerId"></param>
         /// <param name="userGroupId"></param>
@@ -80,6 +80,15 @@ namespace DH.Helpdesk.Services.Services.Grid
                 case CASE_OVERVIEW_GRID_ID:
                 case CASE_ADVANCED_SEARCH_GRID_ID:
                 {
+                    var caseSettingsType = CaseSettingTypes.CaseOverview;
+
+                    //NOTE: for new advanced search only userGroupId = 0 is supported due to missing groups support. 
+                    if (gridId == CASE_ADVANCED_SEARCH_GRID_ID)
+                    {
+                        userGroupId = 0;
+                        caseSettingsType = CaseSettingTypes.AdvancedSearch;
+                    }
+
                     using (var uow = _unitOfWorkFactory.Create())
                     {
                         // todo: check if separate grid settings are required for advanced search grid ?
@@ -93,11 +102,10 @@ namespace DH.Helpdesk.Services.Services.Grid
                         var gridParams =
                             allGridParams.Where(it => !it.FieldId.HasValue).ToDictionary(it => it.Parameter.Trim(), it => it.Value.Trim());
 
-                        var caseSettingsType = gridId == CASE_ADVANCED_SEARCH_GRID_ID
-                            ? CaseSettingTypes.AdvancedSearch
-                            : CaseSettingTypes.CaseOverview;
 
-                        var columnSettings =
+                            
+
+                        var columnSettings = 
                             _caseSettingsService.GetSelectedCaseOverviewGridColumnSettings(customerId, userId, caseSettingsType);
 
                         var columns = columnSettings?.ToArray();
@@ -116,7 +124,7 @@ namespace DH.Helpdesk.Services.Services.Grid
 
                     if (!res.columnDefs.Any())
                     {
-                        var defaultColumns = GetDefaultColumns(customerId, userGroupId, gridId);
+                        var defaultColumns = GetDefaultColumns(customerId, userGroupId, gridId, caseSettingsType);
                         res.columnDefs.AddRange(defaultColumns);
                     }
 
@@ -168,7 +176,7 @@ namespace DH.Helpdesk.Services.Services.Grid
         /// <param name="userGroupId"></param>
         /// <param name="gridId"></param>
         /// <returns></returns>
-        public List<GridColumnDef> GetDefaultColumns(int customerId, int userGroupId, int gridId)
+        public List<GridColumnDef> GetDefaultColumns(int customerId, int userGroupId, int gridId, CaseSettingTypes caseSettingsType = CaseSettingTypes.CaseOverview)
         {
             switch (gridId)
             {
@@ -176,7 +184,7 @@ namespace DH.Helpdesk.Services.Services.Grid
                 case CASE_ADVANCED_SEARCH_GRID_ID:
                     var duplicates = new HashSet<string>();
                     return
-                        _caseSettingsService.GetAvailableCaseOverviewGridColumnSettingsByUserGroup(customerId, userGroupId)
+                        _caseSettingsService.GetAvailableCaseOverviewGridColumnSettingsByUserGroup(customerId, userGroupId, caseSettingsType)
                             .Where(it => !duplicates.Contains(it.Name.ToLower()))
                             .Select(it =>
                             {

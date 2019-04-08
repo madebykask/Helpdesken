@@ -38,10 +38,8 @@
                                     <div class="loader">@Translation.GetCoreTextTranslation("Laddar...")</div>
                                 </div>
                             </div>
-                            <div>@Translation.GetCoreTextTranslation("Poster i sökresultat"): <span data-field="TotalAdvSearchCount">0</span>
-                            </div>
+                            <div>@Translation.GetCoreTextTranslation("Poster i sökresultat"): <span data-field="TotalAdvSearchCount">0</span></div>
                             <div class="customer-cases-area">
-                                @* //todo: Sort customers by name*@
                                 @foreach (var customer in Model.AllCustomers)
                                 {
                                     <div id="customer_sr_@customer.Value" style="display: none" class="customerSearchResults">

@@ -78,12 +78,15 @@ window.advancedSearchPage =
             this.$tableLoaderMsg = $('div.loading-msg');
             this.txtsToSearchByEnterKey = '#CaseInitiatorFilter, #txtFreeTextSearch, #txtCaseNumberSearch, #txtCaptionSearch';
             this.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');
+            //todo: check
+            //this.$buttonsToDisableWhenNoColumns = $('#btnNewCase a.btn, #btnCaseTemplate a.btn, .submit, #btnClearFilter');
             this.$caseAdvSearchRecordCount = $('[data-field="TotalAdvSearchCount"]');
-
+            
             // populate customers arrays
             this.allCustomers = [];
             this.extendedCustomers = [];
             this.availableCustomers = [];
+            this.totalItemsCount = 0;
 
             if (params.userCustomers.length) {
                 $.each(params.userCustomers, function (idx, el) {
@@ -106,8 +109,7 @@ window.advancedSearchPage =
             self.setUIState(UI_STATE.IDLE);
             self.hideProgress();
             self.resetSearch();
-
-
+            
             self.setSpecificConditionTab(false);
 
             if (params.isExtSearch) {
@@ -257,6 +259,7 @@ window.advancedSearchPage =
                     self.hideProgress();
                     self.setUIState(UI_STATE.IDLE);
                     self.tableCleanUp();
+                    self.$caseAdvSearchRecordCount.text(self.totalItemsCount);
 
                     $("#btnSearch").focus();
                 });
@@ -343,7 +346,7 @@ window.advancedSearchPage =
 
             return $searchReq;
         }
-
+        
         this.processCustomerSearchResults = function(customerId, response) {
             var self = this;
 
@@ -354,7 +357,7 @@ window.advancedSearchPage =
                 //todo: save sort settings for each customer separately
                 self.sortSettings = responseData.gridSettings.sortOptions;
 
-                //load data: builds html and adds formatted data to the output html 
+                //build search results table html 
                 var markup = self.buildCustomerSearchResults(customer, responseData.searchResults, responseData.gridSettings);
                 self.showCustomerSearchResults(customer.customerId, markup);
                 
@@ -363,7 +366,10 @@ window.advancedSearchPage =
 
                 if (responseData.searchResults.length === 0) {
                     self.showMsg(NODATA_MSG_TYPE, customerId);
-                } 
+                } else {
+                    self.totalItemsCount += responseData.searchResults.length;
+                }
+
             } else {
                 self.showMsg(ERROR_MSG_TYPE, customerId);
             };
@@ -374,12 +380,25 @@ window.advancedSearchPage =
             var out = [];
             var customerId = customer.customerId;
 
-            // Add Search results Table Header based on customer grid settings
-            var header = self.buildGridHeader(customer, gridSettings);
-            if (header) {
-                out.push(header);
+
+            if (gridSettings.availableColumns === 0) {
+                self.showMsg(BADCONFIG_MSG_TYPE, customerId);
+                self.setUIState(UI_STATE.BAD_CONFIG);
+                return null;
             }
 
+            if (gridSettings.columnDefs.length === 0) {
+                self.showMsg(NO_COL_SELECTED_MSG_TYPE, customerId);
+                //self.setUIState(UI_STATE.NO_COL_SELECTED);
+                return null;
+            }
+
+            // Add Search results Table Header based on customer grid settings
+            var header = self.buildGridHeader(customer, gridSettings);
+            if (header === null)
+                return out;
+                
+            out.push(header);
             out.push('<tbody>');
 
             if (data && data.length > 0) {
@@ -426,21 +445,6 @@ window.advancedSearchPage =
             var self = this;
             var out = [];
             var customerId = customer.customerId;
-            
-            if (gridSettings.availableColumns === 0) {
-                self.showMsg(BADCONFIG_MSG_TYPE, customerId);
-                self.setUIState(UI_STATE.BAD_CONFIG);
-                return null;
-            }
-            
-            if (gridSettings.columnDefs.length === 0) {
-                self.showMsg(NO_COL_SELECTED_MSG_TYPE, customerId);
-                self.setUIState(UI_STATE.NO_COL_SELECTED);
-                return null;
-            }
-
-            //todo:review usages
-            self.visibleFieldsCount = 1; //// we have at least one column with icon
 
             out.push('<thead>');
             out.push('<tr><th style="min-width: 18px;width:18px;"></th>');
@@ -448,7 +452,6 @@ window.advancedSearchPage =
             $.each(gridSettings.columnDefs, function (idx, fieldSetting) {
                 var sortCls = '';
                 if (!fieldSetting.isHidden) {
-                    self.visibleFieldsCount += 1;
                     if (gridSettings.sortOptions != null && fieldSetting.field === gridSettings.sortOptions.sortBy) {
                         sortCls = getClsForSortDir(gridSettings.sortOptions.sortDir);
                     }
@@ -645,7 +648,7 @@ window.advancedSearchPage =
                 self.$buttonsToDisableWhenGridLoads.removeClass('disabled');
                 break;
             case UI_STATE.NO_COL_SELECTED:
-                self.$buttonsToDisableWhenNoColumns.addClass('disabled');
+                //self.$buttonsToDisableWhenNoColumns.addClass('disabled');
                 break;
             //case UI_STATE.BAD_CONFIG:
             default:
@@ -654,6 +657,9 @@ window.advancedSearchPage =
         };
 
         this.resetSearch = function () {
+            //reset prev search results state
+            this.totalItemsCount = 0;
+            this.$caseAdvSearchRecordCount.text('0');
 
             //hide prev search results
             $('div[id^=customer_sr_]').each(function() {
