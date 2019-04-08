@@ -78,10 +78,7 @@ namespace DH.Helpdesk.Web.Controllers
             var gridSettings =
                 CreateGridSettingsModel(customerId, SessionFacade.CurrentUser, gridSortingOptions);
 
-            //TODO: check if its required
-            //SessionFacade.AdvancedSearchOverviewGridSettings = gridSettings;
-
-            var extendedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
+           var extendedCustomers = _settingService.GetExtendedSearchIncludedCustomers();
             
             var sr = RunAdvancedSearchForCustomer(searchFilter,
                 gridSettings,

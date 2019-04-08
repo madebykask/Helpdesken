@@ -60,15 +60,10 @@ window.advancedSearchPage =
             self.specificSearchTabBehavior = new SpecificSearchTabBehavior(params);
             self.sortSettings = params.sortOptions;
 
-            //todo:review usages and init from params
-            this.showableCustomerCount = 0;
-            //this.customerTableId = '';
-            //this.currentCustomerTable = '';
-            //this.currentCustomerName = '';
-            //this.customerTableRepository = [];
+            //todo:review usages 
+            //this.showableCustomerCount = 0;
             //this.globalCounter = 0;
-            //this.cellUniqueId = 0;
-
+            
             this.isExtendedSearch = false;
             this._gridState = UI_STATE.IDLE;
 
@@ -222,9 +217,7 @@ window.advancedSearchPage =
             //clear search results and prev search state...
             self.resetSearch();
             self.setUIState(UI_STATE.LOADING);
-
-            //self.showableCustomerCount = selectedCustomer.length;
-            //self.cellUniqueId = 0;
+            
             self.showProgress();
 
             //prepare search data
@@ -358,20 +351,19 @@ window.advancedSearchPage =
                 var responseData = response.data;
                 var customer = self.getCustomer(customerId);
 
-                //todo: review, shall we save sort settings for each customer individually?
+                //todo: save sort settings for each customer separately
                 self.sortSettings = responseData.gridSettings.sortOptions;
 
                 //load data: builds html and adds formatted data to the output html 
                 var markup = self.buildCustomerSearchResults(customer, responseData.searchResults, responseData.gridSettings);
                 self.showCustomerSearchResults(customer.customerId, markup);
                 
+                var itemsCount = responseData.searchResults.length || 0;
+                self.showCustomerSearchResultsCount(customerId, itemsCount);
+
                 if (responseData.searchResults.length === 0) {
                     self.showMsg(NODATA_MSG_TYPE, customerId);
-                    //todo: me.$caseAdvSearchRecordCount.text("0");
-                }
-
-                //todo: calc total count. per each customer?
-                //me.$caseAdvSearchRecordCount.text(response.data.TotalCount);
+                } 
             } else {
                 self.showMsg(ERROR_MSG_TYPE, customerId);
             };
@@ -609,16 +601,20 @@ window.advancedSearchPage =
             $('#customerTable' + customerId).html(content);
         }
 
-        //todo: review messages - per each grid or one message
+        this.showCustomerSearchResultsCount = function (customerId, itemsCount) {
+            var $itemsCount = $('#customer_sr_' + customerId).find('.itemsCount');
+            $itemsCount.html('(' + itemsCount.toString() + ')');
+        }
+
         this.showMsg = function(msgType, customerId) {
             var self = this;
-            self.hideMessages();
-
             var msgCls = self.messagesMap[msgType];
             
             if (msgCls && msgCls.length) {
                 var $customerMessages = $('#customer_sr_' + customerId + ' div.search-result-messages');
                 $customerMessages.find('.' + msgCls).show();
+                $customerMessages.show();
+
             } else {
                 console.warn('Message type \'%s\' is not supported', msgType);
             }
@@ -631,11 +627,6 @@ window.advancedSearchPage =
         this.hideProgress = function () {
             this.$tableLoaderMsg.hide();
         }
-
-        this.hideMessages = function () {
-            this.$tableErrorMsg.hide();
-            this.$tableNoDataMsg.hide();
-        };
 
         this.hideCustomerMessages = function(customerId) {
             var $customerMessages = $('#customer_sr_' + customerId + ' div.search-result-messages');
@@ -663,10 +654,6 @@ window.advancedSearchPage =
         };
 
         this.resetSearch = function () {
-            //todo: review which state to reset
-            //allCustomerTable = 0;
-            //this.showableCustomerCount = 0;
-            //this.globalCounter = 0;
 
             //hide prev search results
             $('div[id^=customer_sr_]').each(function() {
@@ -675,6 +662,7 @@ window.advancedSearchPage =
                     $(this).hide();
                 });
                 $(this).find('.table-cases').html('');
+                $(this).find('.itemsCount').html('');
             });
         }
 

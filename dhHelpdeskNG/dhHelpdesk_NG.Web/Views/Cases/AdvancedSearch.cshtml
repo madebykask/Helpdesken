@@ -45,9 +45,7 @@
                                 @foreach (var customer in Model.AllCustomers)
                                 {
                                     <div id="customer_sr_@customer.Value" style="display: none" class="customerSearchResults">
-                                        <div>
-                                            <br/> <h5>@customer.Name</h5>
-                                        </div>
+                                        <div><h5>@customer.Name <span class="itemsCount"></span></h5></div>
                                         <div class="search-result-messages">
                                             <div class="error-msg msg">@BuildErrorMessage()</div>
                                             <div class="nofields-msg msg">@Translation.GetCoreTextTranslation("Inga standardkolumner har valts för din användare på denna kund, för att visa kolumner, klicka på fliken Inställningar och gå till Filter Ärendeöversikt")</div>
@@ -129,10 +127,6 @@
 
             dhHelpdesk.casesList.scope = function(spec, my) {
                 var that = {};
-
-                var searchForm = $('#frmAdvanceSearch');
-                var loader = $('<img src="/Content/icons/ajax-loader.gif" />');
-
                 return that;
             }
         });
