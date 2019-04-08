@@ -545,14 +545,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
                     var cls = cause.IsActive == 1 ? string.Empty : "inactive";
 
                     if (hasChild)
-                        sb.Append("<li class='dropdown-submenu " + cls + "'>");
+                        sb.AppendFormat("<li class='dropdown-submenu {0} DynamicDropDown_Up' id='{1}'>", cls, cause.Id);
                     else
                         sb.Append("<li class='" + cls + "'>");
 
-                    sb.Append("<a href='#' value=" + cause.Id.ToString() + ">" + Translation.GetMasterDataTranslation(cause.Name) + "</a>");
+                    sb.Append("<a href='#' value=" + cause.Id + ">" + Translation.GetMasterDataTranslation(cause.Name) + "</a>");
                     if (hasChild)
                     {
-                        sb.Append("<ul class='dropdown-menu'>");
+                        sb.AppendFormat("<ul class='dropdown-menu subddMenu' id='subDropDownMenu_{0}' >", cause.Id);
                         sb.Append(BuildFinishingCauseDropdownButton(cause.ChildFinishingCauses.OrderBy(p => Translation.GetMasterDataTranslation(p.Name)).ToList(), isTakeOnlyActive));
                         sb.Append("</ul>");
                     }

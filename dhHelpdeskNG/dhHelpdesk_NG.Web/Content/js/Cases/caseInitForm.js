@@ -1500,13 +1500,16 @@ function CaseInitForm() {
     });
 
     $(window).scroll(function () {
-        updateDropdownPosition($('#divProductArea')[0]);
-        var objPos = getObjectPosInView($('#divProductArea')[0]);;
-        if (objPos.ToTop <= objPos.ToDown) {
-                $('#divProductArea').removeClass('dropup');
+        var controls = $('.dropdown-menu-parent');
+        for (var i = 0; i < controls.length; i++) {
+            updateDropdownPosition(controls[i]);
+            var objPos = getObjectPosInView(controls[i]);
+            if (objPos.ToTop <= objPos.ToDown) {
+                $(controls[i]).removeClass('dropup');
             } else {
-                $('#divProductArea').addClass('dropup');
+                $(controls[i]).addClass('dropup');
             }
+        }
     });
 
     bindProductAreasEvents();
