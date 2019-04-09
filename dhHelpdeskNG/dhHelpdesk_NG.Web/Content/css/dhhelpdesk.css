@@ -1723,6 +1723,9 @@ table th.thpointer {
     background-color: #ffeeee !important;
 }
     
+#frmAdvanceSearch .customerSearchResults {
+    margin-bottom: 20px;
+}
 
 #fragment-4 .nofields-msg,
 #fragment-4 .noavailablefields-msg {

@@ -14,24 +14,17 @@ using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Common.Enums.Settings;
 using DH.Helpdesk.Common.Exceptions;
-using DH.Helpdesk.Dal.DbQueryExecutor;
-using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Services.Services.Cases;
-using DH.Helpdesk.Web.Areas.Inventory.Models;
 using DH.Helpdesk.Web.Models.Invoice;
-using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Domain.Interfaces;
 using DH.Helpdesk.Domain.Invoice;
 using DH.Helpdesk.Services.BusinessLogic.Cases;
-using DH.Helpdesk.Services.BusinessLogic.Mappers.Grid;
 using DH.Helpdesk.Web.Common.Enums.Case;
 using DH.Helpdesk.Web.Common.Extensions;
 using DH.Helpdesk.Web.Common.Models.Case;
 using DH.Helpdesk.Web.Common.Models.CaseSearch;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
-using DH.Helpdesk.Web.Models.Case;
-
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -39,7 +32,6 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.BusinessData.Models;
     using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.CaseLock;
-    using DH.Helpdesk.BusinessData.Models.FinishingCause;
     using DH.Helpdesk.BusinessData.Models.Grid;
     using DH.Helpdesk.BusinessData.Models.Shared;
     using DH.Helpdesk.BusinessData.Models.User.Input;
@@ -62,7 +54,6 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Infrastructure.CaseOverview;
     using DH.Helpdesk.Web.Infrastructure.Configuration;
     using DH.Helpdesk.Web.Infrastructure.Extensions;
-    using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions;
     using DH.Helpdesk.Web.Infrastructure.Grid;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.Case;
     using DH.Helpdesk.Web.Infrastructure.ModelFactories.CaseLockMappers;
@@ -78,15 +69,10 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Web.Models.Shared;
     using DH.Helpdesk.Common.Extensions.DateTime;
 
-    using Org.BouncyCastle.Bcpg;
-
     using DHDomain = DH.Helpdesk.Domain;
     using ParentCaseInfo = DH.Helpdesk.BusinessData.Models.Case.ChidCase.ParentCaseInfo;
     using DH.Helpdesk.Web.Enums;
-    using Microsoft.Reporting.WebForms;
-    using DH.Helpdesk.BusinessData.Models.ReportService;
     using DH.Helpdesk.Services.Services.Reports;
-    using DH.Helpdesk.BusinessData.Models.Case.Output;
     using DH.Helpdesk.Common.Enums.CaseSolution;
     using DH.Helpdesk.Common.Enums.BusinessRule;
     using Services.BusinessLogic.Admin.Users;
@@ -106,6 +92,7 @@ namespace DH.Helpdesk.Web.Controllers
     using BusinessData.Models.ProductArea.Output;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using Common.Tools.Files;
+    using Behaviors;
 
     public partial class CasesController : BaseController
     {
@@ -269,75 +256,81 @@ namespace DH.Helpdesk.Web.Controllers
             ISendToDialogModelFactory sendToDialogModelFactory)
             : base(masterDataService)
         {
-            this._caseProcessor = caseProcessor;
-            this._masterDataService = masterDataService;
-            this._caseService = caseService;
-            this._caseSearchService = caseSearchService;
-            this._caseFieldSettingService = caseFieldSettingService;
-            this._caseFileService = caseFileService;
-            this._caseSettingService = caseSettingService;
-            this._caseTypeService = caseTypeService;
-                 _caseFollowUpService = caseFollowUpService;
-            this._categoryService = categoryService;
-            this._computerService = computerService;
-            this._countryService = countryService;
-            this._currencyService = currencyService;
-            this._customerService = customerService;
-            this._customerUserService = customerUserService;
-            this._departmentService = departmentService;
-            this._finishingCauseService = finishingCauseService;
-            this._impactService = impactService;
-            this._ouService = ouService;
-            this._problemService = problemService;
-            this._priorityService = priorityService;
-            this._productAreaService = productAreaService;
-            this._regionService = regionService;
-            this._settingService = settingService;
-            this._stateSecondaryService = stateSecondaryService;
-            this._statusService = statusService;
-            this._standardTextService = standardTextService;
-            this._supplierService = supplierService;
-            this._systemService = systemService;
-            this._urgencyService = urgencyService;
-            this._userService = userService;
-            this._workingGroupService = workingGroupService;
-            this._projectService = projectService;
-            this._changeService = changeService;
-            this._logService = logService;
-            this._logFileService = logFileService;
-            this._userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
-            this._caseSolutionService = caseSolutionService;
-            this._emailGroupService = emailGroupService;
-            this._emailService = emailService;
-            this._languageService = languageService;
-            this._globalSettingService = globalSettingService;
-            this._workContext = workContext;
-            this._caseNotifierModelFactory = caseNotifierModelFactory;
-            this._notifierService = notifierService;
-            this._invoiceArticleService = invoiceArticleService;
-            this._caseSolutionSettingService = caseSolutionSettingService;
-            this._caseModelFactory = caseModelFactory;
-            this._caseOverviewSettingsService = caseOverviewSettingsService;
-            this._gridSettingsService = gridSettingsService;
-            this._organizationService = organizationService;
-            this._orgJsonService = orgJsonService;
-            this._registrationSourceCustomerService = registrationSourceCustomerService;
-            this._caseLockService = caseLockService;
-            this._watchDateCalendarService = watchDateCalendarServcie;
-            this._mailTemplateService = mailTemplateService;
-            this._causingPartService = causingPartService;
-            this._reportServiceService = reportServiceService;
-            this._invoiceArticlesModelFactory = invoiceArticlesModelFactory;
-            this._userPermissionsChecker = userPermissionsChecker;
-            this._externalInvoiceService = externalInvoiceService;
-            this._caseExtraFollowersService = caseExtraFollowersService;
-            this._caseRuleFactory = caseRuleFactory;
-            this._orderService = orderService;
-            this._orderAccountService = orderAccountService;
-            this._caseDocumentService = caseDocumentService;
-            this._caseSectionService = caseSectionService;
-            this._extendedCaseService = extendedCaseService;
-            this._sendToDialogModelFactory = sendToDialogModelFactory;
+            _caseProcessor = caseProcessor;
+            _masterDataService = masterDataService;
+            _caseService = caseService;
+            _caseSearchService = caseSearchService;
+            _caseFieldSettingService = caseFieldSettingService;
+            _caseFileService = caseFileService;
+            _caseSettingService = caseSettingService;
+            _caseTypeService = caseTypeService;
+            _caseFollowUpService = caseFollowUpService;
+            _categoryService = categoryService;
+            _computerService = computerService;
+            _countryService = countryService;
+            _currencyService = currencyService;
+            _customerService = customerService;
+            _customerUserService = customerUserService;
+            _departmentService = departmentService;
+            _finishingCauseService = finishingCauseService;
+            _impactService = impactService;
+            _ouService = ouService;
+            _problemService = problemService;
+            _priorityService = priorityService;
+            _productAreaService = productAreaService;
+            _regionService = regionService;
+            _settingService = settingService;
+            _stateSecondaryService = stateSecondaryService;
+            _statusService = statusService;
+            _standardTextService = standardTextService;
+            _supplierService = supplierService;
+            _systemService = systemService;
+            _urgencyService = urgencyService;
+            _userService = userService;
+            _workingGroupService = workingGroupService;
+            _projectService = projectService;
+            _changeService = changeService;
+            _logService = logService;
+            _logFileService = logFileService;
+            _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
+            _caseSolutionService = caseSolutionService;
+            _emailGroupService = emailGroupService;
+            _emailService = emailService;
+            _languageService = languageService;
+            _globalSettingService = globalSettingService;
+            _workContext = workContext;
+            _caseNotifierModelFactory = caseNotifierModelFactory;
+            _notifierService = notifierService;
+            _invoiceArticleService = invoiceArticleService;
+            _caseSolutionSettingService = caseSolutionSettingService;
+            _caseModelFactory = caseModelFactory;
+            _caseOverviewSettingsService = caseOverviewSettingsService;
+            _gridSettingsService = gridSettingsService;
+            _organizationService = organizationService;
+            _orgJsonService = orgJsonService;
+            _registrationSourceCustomerService = registrationSourceCustomerService;
+            _caseLockService = caseLockService;
+            _watchDateCalendarService = watchDateCalendarServcie;
+            _mailTemplateService = mailTemplateService;
+            _causingPartService = causingPartService;
+            _reportServiceService = reportServiceService;
+            _invoiceArticlesModelFactory = invoiceArticlesModelFactory;
+            _userPermissionsChecker = userPermissionsChecker;
+            _externalInvoiceService = externalInvoiceService;
+            _caseExtraFollowersService = caseExtraFollowersService;
+            _caseRuleFactory = caseRuleFactory;
+            _orderService = orderService;
+            _orderAccountService = orderAccountService;
+            _caseDocumentService = caseDocumentService;
+            _caseSectionService = caseSectionService;
+            _extendedCaseService = extendedCaseService;
+            _sendToDialogModelFactory = sendToDialogModelFactory;
+
+            _advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService,
+                caseSearchService,
+                userService,
+                settingService,
+                productAreaService);
         }
 
         #endregion
@@ -7237,7 +7230,8 @@ namespace DH.Helpdesk.Web.Controllers
         #region GetCustomerDepartments
 
         private readonly IDictionary<int, IList<Department>> _customerDepartments = new Dictionary<int, IList<Department>>();
-        
+        private AdvancedSearchBehavior _advancedSearchBehavior;
+
         private IList<Department> GetCustomerDepartments(int customerId)
         {
             if (!_customerDepartments.ContainsKey(customerId))

@@ -1,10 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.Grid;
 using DH.Helpdesk.BusinessData.Models.Shared;
-using DH.Helpdesk.BusinessData.Models.User.Input;
-using DH.Helpdesk.Services.Services.Grid;
 using DH.Helpdesk.Web.Common.Models.CaseSearch;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
@@ -41,25 +38,18 @@ namespace DH.Helpdesk.Web.Controllers
 
             model.UserCustomers = userCustomers;
 
+            //get extended search customers
             var extendIncludedCustomerIds = _settingService.GetExtendedSearchIncludedCustomers();
-            
-            //todo: refactor to return only required customer data - along with available customer request
-            var extCustomers = 
-                _customerService.GetAllCustomers()
-                    .Where(x => extendIncludedCustomerIds.Contains(x.Id))
-                    .Select(c => new ItemOverview(c.Name, c.Id.ToString()))
-                    .OrderBy(c => c.Name).ToList();
-
-            model.ExtendedCustomers = extCustomers;
+            var extCustomers = _customerService.GetCustomers(extendIncludedCustomerIds);
+            model.ExtendedCustomers = extCustomers.ToList();
             
             CaseSearchModel advancedSearchModel;
             if ((clearFilters != null && clearFilters.Value) || SessionFacade.CurrentAdvancedSearch == null)
             {
                 SessionFacade.CurrentAdvancedSearch = null;
-                var userCustomerSettings = _userService.GetUser(currentUserId);
 
                 advancedSearchModel = 
-                    CreateAdvancedSearchModel(currentCustomerId, currentUserId, null, userCustomerSettings.StartPage == (int)StartPage.AdvancedSearch);
+                    _advancedSearchBehavior.CreateAdvancedSearchModel(currentCustomerId, currentUserId);
 
                 SessionFacade.CurrentAdvancedSearch = advancedSearchModel;
             }
