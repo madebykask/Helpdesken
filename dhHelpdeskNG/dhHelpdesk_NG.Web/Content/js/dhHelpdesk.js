@@ -701,8 +701,8 @@ function updateDropdownPosition(element) {
     }
 }
 
-function dynamicDropDownBehaviorOnMouseMove(event) {
-    var target$ = $(event.target.parentElement);
+function dynamicDropDownBehaviorOnMouseMove(target) {
+    var target$ = $(target);
     if (target$ != undefined && target$.hasClass('DynamicDropDown_Up') && target$.index(0) !== -1) {
         var objPos = getObjectPosInView(target$[0]);
         var subMenu$ = $(target$[0]).children('ul');
@@ -760,7 +760,7 @@ $(function() {
     });
 
     $('.dropdown-submenu.DynamicDropDown_Up').on('mousemove', function (event) {
-        dynamicDropDownBehaviorOnMouseMove(event);
+        dynamicDropDownBehaviorOnMouseMove(event.target.parentElement);
     });
 
     $('ul.dropdown-menu.subddMenu.parentddMenu').prev('button').on('click', function () {

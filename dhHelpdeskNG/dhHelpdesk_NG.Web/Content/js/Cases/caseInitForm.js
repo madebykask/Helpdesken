@@ -1142,13 +1142,12 @@ function CaseInitForm() {
     }
 
     function bindProductAreasEvents() {
-        $('#divProductArea ul.dropdown-menu li a').click(function (e) {
+        $('#divProductArea ul.dropdown-menu li a').on('click', function (e) {
             e.preventDefault();
             onProductAreaChanged(this);
         });
-        $('#divProductArea .dropdown-submenu.DynamicDropDown_Up').off('mousemove');
-        $('#divProductArea .dropdown-submenu.DynamicDropDown_Up').on('mousemove', function (event) {
-            dynamicDropDownBehaviorOnMouseMove(event);
+        $('#divProductArea .dropdown-submenu.DynamicDropDown_Up').off('mousemove').on('mousemove', function (event) {
+            dynamicDropDownBehaviorOnMouseMove(event.target.parentElement);
         });
     }
 
@@ -1416,57 +1415,65 @@ function CaseInitForm() {
         $(this).parent().find("li.dropdown-submenu > ul").css("display", "");
     });
 
-    $("button.dropdown-toggle[data-toggle=dropdown], ul.dropdown-menu").on("keydown", function (e) {
+    $('button.dropdown-toggle[data-toggle=dropdown], ul.dropdown-menu').on('keydown', function (e) {
         if (!/(37|38|39|40|27)/.test(e.keyCode)) return true;
+        console.log(e.keyCode);
 
-        var $this = $(this);
+        var target = $(e.target).closest('ul.dropdown-menu');
+        var $this = target.length > 0 ? $(target[0]) : $(this);
 
         e.preventDefault();
         e.stopPropagation();
 
-        if ($this.is(".disabled, :disabled")) return true;
+        if ($this.is('.disabled, :disabled')) return true;
 
-        var $group = $this.closest(".btn-group");
-        var isActive = $group.hasClass("open");
+        var $group = $this.closest('.btn-group');
+        var isActive = $group.hasClass('open');
         var $parent = $this.parent();
-        var $items = $parent.children("ul.dropdown-menu").children("li:not(.divider):visible").children("a");
+        var $items = $parent.children('ul.dropdown-menu').children('li:not(.divider):visible').children('a');
         var index = 0;
 
         if (isActive && e.keyCode === 27) {
-            if (e.which === 27) $group.find("button.dropdown-toggle[data-toggle=dropdown]").focus();
+            if (e.which === 27) $group.find('button.dropdown-toggle[data-toggle=dropdown]').focus();
             return $this.click();
         }
 
         if (!isActive && e.keyCode === 40) {
-            var open = $this.click();
-            $items = $group.children("ul.dropdown-menu").children("li:not(.divider):visible").children("a");
-            if (!$items.length) return open;
+            if (!$items.length) return $this.click();
             $items.eq(index).focus();
-            return open;
+            return $this.click();
         }
 
         if (!$items.length) return true;
 
-        index = $items.index($items.filter(":focus"));
+        index = $items.index($items.filter(':focus'));
 
         if (e.keyCode === 38 && index > 0) index--; // up
         if (e.keyCode === 40 && index < $items.length - 1) index++; // down
         if (!~index) index = 0;
 
         var currentItem = $items.eq(index);
+        //if (e.keyCode === 39) {
+        //    console.log(index);
+        //    console.log($items);
+        //}
 
         if (e.keyCode === 39) {
             var currentLi = currentItem.parent();
-            if (currentLi.hasClass("dropdown-submenu")) {
-                currentLi.children("ul.dropdown-menu").css("display", "block");
-                currentItem = currentLi.children("ul.dropdown-menu").children("li:not(.divider):visible:first").children("a").first();
+            if (currentLi.hasClass('dropdown-submenu')) {
+                currentLi.children('ul.dropdown-menu').css('display', 'block');
+                currentItem = currentLi.children('ul.dropdown-menu').children('li:not(.divider):visible:first')
+                    .children('a').first();
+                if (currentLi.hasClass('DynamicDropDown_Up')) {
+                    dynamicDropDownBehaviorOnMouseMove(currentLi);
+                }
             }
         }
 
         if (e.keyCode === 37) {
-            if ($parent.hasClass("dropdown-submenu")) {
-                currentItem = $parent.children("a:first");
-                $this.css("display", "");
+            if ($parent.hasClass('dropdown-submenu')) {
+                currentItem = $parent.children('a:first');
+                $this.css('display', '');
             }
         }
 
