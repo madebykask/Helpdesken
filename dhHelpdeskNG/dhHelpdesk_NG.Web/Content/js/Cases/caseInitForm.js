@@ -1417,7 +1417,6 @@ function CaseInitForm() {
 
     $('button.dropdown-toggle[data-toggle=dropdown], ul.dropdown-menu').on('keydown', function (e) {
         if (!/(37|38|39|40|27)/.test(e.keyCode)) return true;
-        console.log(e.keyCode);
 
         var target = $(e.target).closest('ul.dropdown-menu');
         var $this = target.length > 0 ? $(target[0]) : $(this);
@@ -1453,10 +1452,6 @@ function CaseInitForm() {
         if (!~index) index = 0;
 
         var currentItem = $items.eq(index);
-        //if (e.keyCode === 39) {
-        //    console.log(index);
-        //    console.log($items);
-        //}
 
         if (e.keyCode === 39) {
             var currentLi = currentItem.parent();
