@@ -454,15 +454,14 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
                 return s;
 
             var newStr = "";
-            var arryStr = s.Split(new string[] { replaceStr }, StringSplitOptions.RemoveEmptyEntries);
-            for (var i = 0; i < arryStr.Length; i++)
+            var arryStr = s.Split(new string[] { replaceStr }, StringSplitOptions.None);
+            foreach (var t in arryStr)
             {
-                if (arryStr[i].Length > partLength)
+                if (t.Length > partLength)
                 {
-                    var splitedStr = arryStr[i].SplitInParts(partLength).ToList();
+                    var splitedStr = t.SplitInParts(partLength).ToList();
                     var linesStr = "";
                     var lastCarryPart = "";
-                    var extraStr = "";
                     splitedStr.Add(" ");
                     splitedStr.Add(" ");
                     foreach (var part in splitedStr)
@@ -474,7 +473,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
                             var _splitedStr = partProcess.SplitInParts(partLength);
                             var newLongStr = _splitedStr.First();
 
-                            extraStr = "";
+                            var extraStr = "";
                             var replaceIndex = 0;
                             replaceIndex = newLongStr.LastIndexOf(" ") > replaceIndex ? newLongStr.LastIndexOf(" ") : replaceIndex;
                             replaceIndex = newLongStr.LastIndexOf(".") > replaceIndex ? newLongStr.LastIndexOf(".") : replaceIndex;
@@ -511,11 +510,11 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
                         else
                             linesStr += partProcess;
                     }
-                    newStr = newStr + linesStr + lastCarryPart + replaceStr;
+                    newStr = newStr + linesStr + lastCarryPart + replaceStr; // Added 2 replaceStr because split removes them
                 }
                 else
                 {
-                    newStr = newStr + arryStr[i] + replaceStr;
+                    newStr = newStr + t + replaceStr; // Added 2 replaceStr because split removes them
                 }
             }
 
