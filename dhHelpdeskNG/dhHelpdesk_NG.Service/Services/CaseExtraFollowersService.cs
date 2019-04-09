@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Mappers;
@@ -62,11 +61,18 @@ namespace DH.Helpdesk.Services.Services
             }
             _caseExtraFollowersRepository.SaveCaseExtraFollowers(caseId, allFollowers);
         }
+
+        public void DeleteByCase(int caseId)
+        {
+            _caseExtraFollowersRepository.Delete(x => x.Case_Id == caseId);
+            _caseExtraFollowersRepository.Commit();
+        }
     }
 
     public interface ICaseExtraFollowersService
     {
         List<ExtraFollower> GetCaseExtraFollowers(int caseId);
         void SaveExtraFollowers(int caseId, List<string> extraFollowers, int? userId);
+        void DeleteByCase(int caseId);
     }
 }
