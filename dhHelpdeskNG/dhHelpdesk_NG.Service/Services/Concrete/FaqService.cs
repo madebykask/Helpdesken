@@ -171,8 +171,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                     query = query.RestrictByWorkingGroup(this.workContext);
                 }
 
-                return query.GetForStartPageWithOptionalCustomer(customers, count, forStartPage)
-                        .MapToOverviews();
+                return query.GetForStartPageWithOptionalCustomer(customers, count, forStartPage).MapToOverviews();
             }
         }
 
@@ -225,8 +224,6 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }
             return result;
         }
-
-        
 
         public Faq FindById(int faqId)
         {
@@ -318,7 +315,6 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }).ToList();
             return result;
         }
-
 
         public byte[] GetFileContentByFaqIdAndFileName(int faqId, string basePath, string fileName)
         {
@@ -412,9 +408,13 @@ namespace DH.Helpdesk.Services.Services.Concrete
             var result = new List<FaqOverview>();
             if (languageId == LanguageIds.Swedish)
             {
-                result = faqs
-                    .Select(f => new FaqOverview { CreatedDate = f.CreatedDate, Id = f.Id, Text = f.FAQQuery })
-                    .ToList();
+                result = faqs.Select(f => new FaqOverview
+                {
+                    Id = f.Id,
+                    CreatedDate = f.CreatedDate,
+                    ChangedDate = f.ChangedDate,
+                    Text = f.FAQQuery
+                }).ToList();
             }
             else
             {
@@ -425,6 +425,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                     {
                         Id = f.Id,
                         CreatedDate = f.CreatedDate,
+                        ChangedDate = f.ChangedDate,
                         Text = translate != null ? translate.FAQQuery : f.FAQQuery
                     };
                     result.Add(item);
@@ -441,9 +442,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 result = faqs.Select(f =>
                         new FaqDetailedOverview
                         {
+                            Id = f.Id,
                             Answer = f.Answer,
                             CreatedDate = f.CreatedDate,
-                            Id = f.Id,
+                            ChangedDate = f.ChangedDate,
                             InternalAnswer = f.Answer_Internal,
                             Text = f.FAQQuery,
                             UrlOne = f.URL1,
@@ -457,9 +459,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
                     var translate = f.FaqLanguages.FirstOrDefault(x => x.Language_Id == languageId);
                     var item = new FaqDetailedOverview
                     {
-                        Answer = translate != null ? translate.Answer : f.Answer,
                         Id = f.Id,
+                        Answer = translate != null ? translate.Answer : f.Answer,
                         CreatedDate = f.CreatedDate,
+                        ChangedDate = f.ChangedDate,
                         InternalAnswer = translate != null ? translate.Answer_Internal : f.Answer_Internal,
                         Text = translate != null ? translate.FAQQuery : f.FAQQuery,
                         UrlOne = f.URL1,

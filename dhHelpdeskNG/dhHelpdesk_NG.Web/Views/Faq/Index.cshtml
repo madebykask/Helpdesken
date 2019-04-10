@@ -181,6 +181,9 @@
                     '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.CreatedDateText + '</a>' +
                     '</td>' +
                     '<td>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.ChangedDateText + '</a>' +
+                    '</td>' +
+                    '<td>' +
                     '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.Text + '</a>' +
                     '</td>' +
                     '</tr>');
@@ -200,6 +203,9 @@
                 '<tr>' +
                     '<td>' +
                     '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '&showDetails='+ showDetails + '">' + faq.CreatedDateText + '</a>' +
+                    '</td>' +
+                    '<td>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '&showDetails='+ showDetails + '">' + faq.ChangedDateText + '</a>' +
                     '</td>' +
                     '<td>' +
                     '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '&showDetails='+ showDetails + '">' + faq.Text + '</a>' +
@@ -285,6 +291,9 @@
                 '<tr>' +
                     '<td>' +
                     '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.CreatedDateText + '</a>' +
+                    '</td>' +
+                    '<td>' +
+                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.ChangedDateText + '</a>' +
                     '</td>' +
                     '<td>' +
                     '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.Text + '</a>' +
@@ -452,9 +461,12 @@
                                 <thead>
                                     <tr>
                                         <th style="width:10%">
-                                            @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
+                                            @Translation.Get("Skapad", Enums.TranslationSource.TextTranslation)
                                         </th>
-                                        <th style="width:90%">
+                                        <th style="width:10%">
+                                            @Translation.Get("Ändrad", Enums.TranslationSource.TextTranslation)
+                                        </th>
+                                        <th style="width:80%">
                                             @Translation.Get("Fråga/Svar", Enums.TranslationSource.TextTranslation)
                                         </th>
                                     </tr>
