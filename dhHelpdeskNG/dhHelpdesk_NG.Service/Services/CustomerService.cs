@@ -383,6 +383,7 @@ namespace DH.Helpdesk.Services.Services
                     cs.ShowStatusBar = caseFieldSetting.ShowStatusBar;
                     cs.ShowExternalStatusBar = caseFieldSetting.ShowExternalStatusBar;
                     cs.ChangedDate = DateTime.UtcNow;
+                    cs.FieldSize = caseFieldSetting.FieldSize;
 
                     if (cs.Name.Equals(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
