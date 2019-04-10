@@ -1205,11 +1205,8 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             if (currentCase.FinishingDate.HasValue)
             {
-
-				var user = SessionFacade.CurrentLocalUser;
-
 				string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                this._caseService.Activate(currentCase.Id, user.Id, adUser, CreatedByApplications.SelfService5, out errors);
+                this._caseService.Activate(currentCase.Id, 0, adUser, CreatedByApplications.SelfService5, out errors);
                 caseIsActivated = true;
                 currentCase = _caseService.GetCaseById(caseId);
             }

@@ -885,13 +885,14 @@ namespace DH.Helpdesk.Services.Services
 				.Select(o => o.Id)
 				.ToArray();
 
-			var user = _userService.GetUser(userId);
+			var cs = _settingService.GetCustomerSetting(customer.Id);
+			var timeZone = TimeZoneInfo.GetSystemTimeZones().First(o => o.BaseUtcOffset.TotalMinutes == cs.TimeZone_offset);
 
 			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
 				ManualDependencyResolver.Get<IHolidayService>(),
 				customer.WorkingDayStart,
 				customer.WorkingDayEnd,
-				TimeZoneInfo.FindSystemTimeZoneById(user.TimeZoneId));
+				timeZone);
 
 			var utcNow = DateTime.UtcNow;
 			var workTimeCalc = workTimeCalcFactory.Build(_case.RegTime, utcNow, departmentIds);
