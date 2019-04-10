@@ -7,7 +7,16 @@ interface IRouteStorageObject {
 
 export class CaseRouteReuseStrategy implements RouteReuseStrategy {
   
-  storedRouteHandles = new Map<string, DetachedRouteHandle>();
+  private static storedRouteHandles = new Map<string, DetachedRouteHandle>();
+
+  static deleteSnaphots() {
+    if (CaseRouteReuseStrategy.storedRouteHandles.size > 0) {
+      for (let key of Array.from(CaseRouteReuseStrategy.storedRouteHandles.keys())) {
+        console.log('>>> deleting snapshot: ', key);
+        CaseRouteReuseStrategy.storedRouteHandles.delete(key);
+      }
+    }
+  }
 
   //supported pages for saving state 
   caseTemplatePath = 'case/template/:templateId';
@@ -87,8 +96,8 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
       const  url = this.getUrl(route);
       const routePath = this.getPath(route);
       if (routePath in this.allowStoreInCache && this.allowStoreInCache[routePath]) {
-        console.log(">>>store: store instance. Url: %s, Path: %s", url, routePath);
-        this.storedRouteHandles.set(routePath, <DetachedRouteHandle>{ url: url, handle: detachedTree });
+        //console.log(">>>store: store instance. Url: %s, Path: %s", url, routePath);
+        CaseRouteReuseStrategy.storedRouteHandles.set(routePath, <DetachedRouteHandle>{ url: url, handle: detachedTree });
       }
     }
   }
@@ -103,8 +112,8 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
       const url = this.getUrl(route);
       const routePath = this.getPath(route);
       if (this.allowRetrieveFromCache.hasOwnProperty(routePath) && this.allowRetrieveFromCache[routePath] && 
-          this.storedRouteHandles.has(routePath)) {
-        console.log(">>>shouldAttach: attaching existing page. Url: %s, Path: %s", url, routePath);
+      CaseRouteReuseStrategy.storedRouteHandles.has(routePath)) {
+        //console.log(">>>shouldAttach: attaching existing page. Url: %s, Path: %s", url, routePath);
         return true;
       }
     }    
@@ -121,9 +130,9 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
       const url = this.getUrl(route);
       const routePath = this.getPath(route);
       if (this.allowRetrieveFromCache.hasOwnProperty(routePath) && this.allowRetrieveFromCache[routePath] && 
-          this.storedRouteHandles.has(routePath)) {
-        console.log(">>>retrieve: retrieving instance for url: ", url);
-        const data = this.storedRouteHandles.get(routePath) as IRouteStorageObject;
+        CaseRouteReuseStrategy.storedRouteHandles.has(routePath)) {
+        //console.log(">>>retrieve: retrieving instance for url: ", url);
+        const data = CaseRouteReuseStrategy.storedRouteHandles.get(routePath) as IRouteStorageObject;
         if (data && data.handle && data.url === url)
           return data.handle as DetachedRouteHandle;
       }

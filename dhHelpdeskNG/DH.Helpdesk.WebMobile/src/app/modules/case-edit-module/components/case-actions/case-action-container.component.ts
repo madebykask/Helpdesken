@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef, ComponentFactoryResolver, Input, Type, ChangeDetectorRef } from "@angular/core";
+import { Component, ViewContainerRef, ComponentFactoryResolver, Input, Type, ChangeDetectorRef, OnInit, OnDestroy } from "@angular/core";
 import { CaseAction, CaseLogActionData, CaseHistoryActionData, GenericActionData, CaseActionDataType } from "../../models";
 import { FieldChangeActionComponent } from "./actions/field-change-action/field-change-action.component";
 import { LogNoteActionComponent } from "./actions/log-note-action/log-note-action.component";
@@ -7,11 +7,11 @@ import { CaseActionBaseComponent } from "./actions/case-action-base.component";
 
 @Component({
   selector:"case-action-container",
-  template: `    
+  template: `
     <ng-container case-action-host></ng-container>
   `
 })
-export class CaseActionContainerComponent {
+export class CaseActionContainerComponent implements OnInit, OnDestroy {
     
     @Input("caseKey") caseKey: string;
     @Input("caseAction") caseAction: CaseAction<CaseActionDataType>;   
@@ -22,16 +22,20 @@ export class CaseActionContainerComponent {
       this.viewContainer = vc;
     }
 
-    constructor(private componentFactoryResolver: ComponentFactoryResolver,
-                private cd: ChangeDetectorRef) {
+    constructor(private componentFactoryResolver: ComponentFactoryResolver) {
     }
 
     ngOnInit(): void {
       if (this.viewContainer) {
-        this.renderComponent(this.viewContainer);        
+        this.renderComponent(this.viewContainer);
       }
     }
     
+    ngOnDestroy(): void {
+      if (this.viewContainer && this.viewContainer.length)
+        this.viewContainer.detach(0);
+    }
+
     renderComponent(vc:ViewContainerRef) {
       let cmp = this.resolveComponent();
       let componentFactory = this.componentFactoryResolver.resolveComponentFactory(cmp);
@@ -40,13 +44,13 @@ export class CaseActionContainerComponent {
       let componentInst = <CaseActionBaseComponent<CaseActionDataType>>componentRef.instance;
       //set component properties
       componentInst.caseKey = this.caseKey;
-      componentInst.caseAction = this.caseAction;      
+      componentInst.caseAction = this.caseAction;
   }
 
   private resolveComponent() : Type<CaseActionBaseComponent<CaseActionDataType>> {
-    var actionData = this.caseAction.data;    
+    var actionData = this.caseAction.data;
     if (actionData instanceof CaseLogActionData) {
-        return LogNoteActionComponent;    
+        return LogNoteActionComponent;
     } else if (actionData instanceof CaseHistoryActionData) {
         return FieldChangeActionComponent;
     } else if (actionData instanceof GenericActionData) {

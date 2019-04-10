@@ -9,7 +9,6 @@ import { UserSettingsApiService } from "src/app/services/api/user/user-settings-
 import { CaseTemplateService } from 'src/app/services/case-organization/case-template.service';
 import { BehaviorSubject } from 'rxjs';
 import { AppStore, AppStoreKeys } from 'src/app/store/app-store';
-import { routerNgProbeToken } from '@angular/router/src/router_module';
 
 @Component({
   selector: 'app-footer',
@@ -37,9 +36,7 @@ export class FooterComponent implements OnInit  {
   constructor(private router: Router,
               private appSore: AppStore,
               private userSettingsService : UserSettingsApiService,
-              private languagesService: LanguagesApiService,
-              private caseTemplateService: CaseTemplateService,
-              private ngxTranslateService: TranslateService) {
+              private caseTemplateService: CaseTemplateService) {
   }
 
   ngOnInit() {

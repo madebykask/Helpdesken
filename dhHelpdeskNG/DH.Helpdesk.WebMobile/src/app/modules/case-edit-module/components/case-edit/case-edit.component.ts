@@ -621,7 +621,7 @@ export class CaseEditComponent {
       let currentUser =  this.authStateService.getUser();
       let notice =
         this.caseLock.isLocked && this.caseLock.userId === currentUser.id ?
-            this.translateService.instant('OBS! Du har redan öppnat detta ärende i en annan session.') :
+            this.translateService.instant('OBS! Du har redan öppnat detta ärende i en annan session') :
             this.translateService.instant('OBS! Detta ärende är öppnat av') + ' ' + this.caseLock.userFullName;
       this.alertService.showMessage(notice, AlertType.Warning);
     }
