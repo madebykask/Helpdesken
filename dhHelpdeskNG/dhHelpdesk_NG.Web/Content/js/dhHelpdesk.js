@@ -101,7 +101,8 @@ function close_window() {
     //}
 }
 
-function SelectValueInOtherDropdownOnChange(id, postTo, ctl, readonlyElement, raiseEvent = false) {
+function SelectValueInOtherDropdownOnChange(id, postTo, ctl, readonlyElement, raiseEvent) {
+    raiseEvent = raiseEvent || false;
     return $.post(postTo, { 'id': id }, function (data) {
         if (data != null) {
             SetSelectValue(ctl, data, readonlyElement, raiseEvent);
@@ -109,7 +110,8 @@ function SelectValueInOtherDropdownOnChange(id, postTo, ctl, readonlyElement, ra
     }, 'json');
 }
 
-function SetSelectValue(selId, val, readonlyElementId, raiseEvent = false) {
+function SetSelectValue(selId, val, readonlyElementId, raiseEvent) {
+    raiseEvent = raiseEvent || false;
     var $sel = $(selId);
     var exists = $sel.find('option[value=' + val + ']').length > 0;
     if (exists) {
