@@ -4114,3 +4114,8 @@ div.chosen-container.chosen-container-single.error .chosen-single {
 #tooltip-button-wrapper .btn[disabled] {
     pointer-events: none;
 }
+
+#feedback_notes_popup .fb_content {
+    overflow-y: auto;
+    max-height: 60vh;
+}
