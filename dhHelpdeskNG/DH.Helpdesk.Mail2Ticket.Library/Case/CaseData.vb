@@ -809,7 +809,7 @@ Public Class CaseData
                        "INNER JOIN tblCaseSolutionSchedule ON tblCaseSolution.Id = tblCaseSolutionSchedule.CaseSolution_Id " &
                        "INNER JOIN tblCustomer ON tblCaseSolution.Customer_Id=tblCustomer.Id " &
                         "LEFT JOIN tblDepartment ON tblCaseSolution.Department_Id=tblDepartment.Id " &
-                      "WHERE ScheduleTime=" & iTime
+                      "WHERE ScheduleTime=" & iTime & " AND tblCaseSolution.Status = 1"
 
             If giLoglevel > 0 Then
                 objLogFile.WriteLine(Now() & ", getCaseSolutionSchedule " & sSQL)
