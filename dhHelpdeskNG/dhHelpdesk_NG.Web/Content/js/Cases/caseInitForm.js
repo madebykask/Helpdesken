@@ -1227,19 +1227,20 @@ function CaseInitForm() {
 
     $('#case__Priority_Id').change(function () {
         var isInheritingMode = $('#CaseTemplate_ExternalLogNote').val();
-        if (isInheritingMode == "True") {
-            $('#CaseTemplate_ExternalLogNote').val("");
+        if (isInheritingMode === 'True') {
+            $('#CaseTemplate_ExternalLogNote').val('');
             return;
         }
 
         var textExternalLogNote = $('#CaseLog_TextExternal').val();
   
         $.post('/Cases/ChangePriority/', { 'id': $(this).val(), 'textExternalLogNote': textExternalLogNote }, function (data) {
-            if (data.ExternalLogText != null && data.ExternalLogText != "") {
-                $('#CaseLog_TextExternal').val(data.ExternalLogText);
-                $('#CaseLog_TextExternal').trigger("propertychange");
+            const $txtExternal = $('#CaseLog_TextExternal');
+            if (data.ExternalLogText != null && data.ExternalLogText !== '') {
+                $txtExternal.val(data.ExternalLogText);
+                $txtExternal.trigger('propertychange');
             } else {
-                $('#CaseLog_TextExternal').val("");
+                $txtExternal.val('');
                 $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
             }
         }, 'json');

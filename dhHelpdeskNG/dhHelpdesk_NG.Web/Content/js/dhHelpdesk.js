@@ -401,7 +401,9 @@ function SetPriority() {
             if (data != null) {
                 var exists = $('#case__Priority_Id Option[value=' + data + ']').length;
                 if (exists > 0) {
-                    $('#case__Priority_Id').val(data);
+                    const $pririty = $('#case__Priority_Id');
+                    $pririty.val(data);
+                    $pririty.change();
                 }
             }
         }, 'json');
