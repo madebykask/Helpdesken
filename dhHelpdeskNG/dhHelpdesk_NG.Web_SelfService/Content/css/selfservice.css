@@ -909,6 +909,38 @@ a.error, input[type=¨button].error .btn
     color:#333;
 }
 
+.case-popup-div {
+    min-height: 80px;
+    width: 100% !important;
+    margin: 0 auto;
+}
+
+.case-send-emails-div {
+    overflow: auto;
+    padding: 2px;
+    resize: both;
+    text-align: left;
+    display: inline-block;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    word-wrap: break-word;
+}
+
+.case-email-selected {
+    border: 1px solid #cccccc;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin: 2px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background-color: #e6e6e6;
+    display: inline;
+    line-height: 20px;
+}
 
 .case-div-width90em {
     width: 90em;

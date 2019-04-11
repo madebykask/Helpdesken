@@ -207,9 +207,7 @@
                                     @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Persons_Name.ToString()))
                                     {
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Persons_Name.ToString()">
-                                            <label class="col-md-3">
-                                                @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_Name)
-                                            </label>
+                                            <label class="col-md-3">@CaseFieldCaption(GlobalEnums.TranslationCaseFields.Persons_Name)</label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(p => Model.NewCase.PersonsName, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Persons_Name.ToString() })
                                                 @if (Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()))
@@ -218,8 +216,9 @@
                                                         @Html.HiddenFor(model => Model.FollowerUsers, new { @readonly = "true", id = "caseFollowerUsersInput" })
                                                         @Html.Partial("_CaseAddFollowers", Model.SendToDialogModel)
                                                         <a href="#case_add_followers_btn" role="button" class="btn btn-default case-usersearch-btn hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()">@Translation.Get("Add followers")</a>
-                                                        @Html.TextAreaFor(model => model.FollowerUsers, new { id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea hasAttribute", standardName = GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString() })
+                                                        @* @Html.TextAreaFor(model => model.FollowerUsers, new { id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea hasAttribute", standardName = GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString() }) *@
                                                     </span>
+                                                    <div id="fakeCaseFollowerUsersInput" contenteditable="true" class="case-send-emails-div case-usersearch-textarea"></div>
                                                 }
                                             </div>
                                         </div>

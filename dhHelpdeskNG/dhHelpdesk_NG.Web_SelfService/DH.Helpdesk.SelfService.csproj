@@ -31,7 +31,7 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort>44340</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SkipPostSharp>True</SkipPostSharp>
     <TargetFrameworkProfile />
@@ -485,8 +485,7 @@
     <Content Include="Content\img\transp50.png" />
     <Content Include="Content\js\Case\case.extended.js" />
     <Content Include="Content\js\Case\caseSearch.js" />
-    <Content Include="Content\js\Case\_caseAddFollowersSearch.js" />
-    <Content Include="Content\js\Case\_caseUserSearchCommon.js" />
+    <Content Include="Content\js\Case\caseAddFollowersSearch.js" />
     <Content Include="Content\js\chosen.jquery.js" />
     <Content Include="Content\js\chosen.jquery.min.js" />
     <Content Include="Content\js\dataTables.bootstrap.js" />
@@ -499,6 +498,7 @@
     <Content Include="Content\js\jquery.dataTables.min.js" />
     <Content Include="Content\js\Orders\order.edit.js" />
     <Content Include="Content\js\Orders\orders.list.js" />
+    <Content Include="Content\js\Shared\commonUtils.js" />
     <Content Include="Content\js\Shared\app.layout.js" />
     <Content Include="Content\js\typeahead.js" />
     <Content Include="img-profile\profile.css" />

@@ -340,7 +340,6 @@
                                                             @Html.Partial("ModalDialogs/_ExtraEmails", Model.FollowersModel, new ViewDataDictionary { { "isFollowersReadonly", true } })
                                                             <a href="#add_extra_emails_btn" role="button" class="btn case-usersearch-btn disabled" disabled="true" data-toggle="modal">@Translation.GetCoreTextTranslation("Välj följare")</a>
                                                             <div id="fakeExtraEmailsInput" contenteditable="false" class="case-send-emails-div-readonly case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Initiator)"></div>
-
                                                         }
                                                     </td>
                                                 }

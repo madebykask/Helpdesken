@@ -64,7 +64,8 @@ namespace DH.Helpdesk.SelfService
 
             bundles.Add(new ScriptBundle("~/Content/js/Shared/_layout").Include(
                           "~/Content/js/Shared/sortby.js",
-                          "~/Content/js/Shared/app.layout.js"));
+                          "~/Content/js/Shared/app.layout.js",
+                          "~/Content/js/Shared/commonUtils.js"));
 
             bundles.Add(new ScriptBundle("~/Content/js/Case/edit").Include(                          
                           "~/Content/js/Case/edit.js"));
@@ -86,9 +87,8 @@ namespace DH.Helpdesk.SelfService
                "~/Content/js/Case/caseSearch.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/case/caseaddfollowerssearch").Include(
-               "~/Content/js/Case/_caseAddFollowersSearch.js",
-               "~/Content/js/Case/_caseUserSearchCommon.js"));
-
+                "~/Content/js/Case/caseAddFollowersSearch.js"));
+               
             bundles.Add(new ScriptBundle(ScriptNames.Orders).Include(
                 "~/Content/js/Orders/orders.list.js"));
 
