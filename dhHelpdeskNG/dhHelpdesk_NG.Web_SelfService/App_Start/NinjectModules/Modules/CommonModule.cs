@@ -46,7 +46,6 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
     using DH.Helpdesk.Services.BusinessLogic.Admin.Users.Concrete;
     using Ninject.Modules;
     using Dal.DbQueryExecutor;
-    using Services.Services;
     using Domain.ExtendedCaseEntity;
     using BusinessData.Models.Condition;
     using Dal.Mappers.Condition;

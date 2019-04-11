@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.SelfService.Models.Case
+﻿using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+
+namespace DH.Helpdesk.SelfService.Models.Case
 {
     using System.Collections.Generic;
 
@@ -37,6 +39,7 @@
             List<CaseListToCase> fieldSettings, 
             FilesModel caseFiles, 
             IList<CaseFieldSetting> caseFieldSettings,
+            IEnumerable<CaseSectionModel> caseSectionSettings,
             JsApplicationOptions jsApplicationOptions,
             IEnumerable<CaseFieldSettingsWithLanguage> caseFieldSettingWithLangauges)
         {
@@ -56,6 +59,7 @@
             FieldSettings = fieldSettings;
             CaseFilesModel = caseFiles;
             CaseFieldSettings = caseFieldSettings;
+            CaseSectionSettings = caseSectionSettings;
             JsApplicationOptions = jsApplicationOptions;
             CaseTypeRelatedFields = new List<KeyValuePair<int, string>>();
             CaseFieldSettingWithLangauges = caseFieldSettingWithLangauges;
@@ -103,6 +107,7 @@
         public List<string> CaseFieldGroups { get; set; }
 
         public List<CaseListToCase> FieldSettings { get; set; }
+        public IEnumerable<CaseSectionModel> CaseSectionSettings { get; set; }
 
         public FilesModel CaseFilesModel { get; set; }
 

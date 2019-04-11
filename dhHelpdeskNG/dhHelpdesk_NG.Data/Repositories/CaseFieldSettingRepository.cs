@@ -231,7 +231,7 @@ namespace DH.Helpdesk.Dal.Repositories
                                 EMailIdentifier = grouped.Key.EMailIdentifier
                             };
 
-            if (query.Count() == 0 || query == null)
+            if (query.Count() == 0)
             {
                 var q = from cfs in this.DataContext.CaseFieldSettings
                         join cfsl in this.DataContext.CaseFieldSettingLanguages on cfs.Id equals cfsl.CaseFieldSettings_Id

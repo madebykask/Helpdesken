@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 
 namespace DH.Helpdesk.SelfService.Models.Case
 {
@@ -45,6 +46,7 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public IList<Supplier> Suppliers { get; set; }
 
         public List<CaseListToCase> FieldSettings { get; set; }
+        public IEnumerable<CaseSectionModel> CaseSectionSettings { get; set; }
 
         public Setting CustomerSettings { get; set; }
 

@@ -10,6 +10,7 @@ using log4net;
 using log4net.Core;
 using WebGrease.Css.Extensions;
 using DH.Helpdesk.Common.Extensions.Boolean;
+using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Services.Utils;
 
 namespace DH.Helpdesk.SelfService.Controllers
@@ -95,6 +96,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly ICustomerUserService _customerUserService;
         private readonly IGlobalSettingService _globalSettingService;
         private readonly IStatusService _statusService;
+        private readonly ICaseSectionService _caseSectionService;
 
 
         private const string ParentPathDefaultValue = "--";
@@ -148,7 +150,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             IGlobalSettingService globalSettingService,
             IWatchDateCalendarService watchDateCalendarService,
             ISelfServiceConfigurationService configurationService,
-            IStatusService statusService)
+            IStatusService statusService, ICaseSectionService caseSectionService)
             : base(configurationService, masterDataService, caseSolutionService)
         {
             _caseControllerBehavior = new CaseControllerBehavior(masterDataService, caseService, caseSearchService,
@@ -197,6 +199,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             _customerUserService = customerUserService;
             _globalSettingService = globalSettingService;
             _statusService = statusService;
+            _caseSectionService = caseSectionService;
         }
 
         [HttpGet]
@@ -2077,7 +2080,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                                                                        c.Name == GlobalEnums.TranslationCaseFields.CaseNumber.ToString() ||
                                                                        c.Name == GlobalEnums.TranslationCaseFields.RegTime.ToString()) 
                                                            .ToList();
-            
+            var caseSectionModels = _caseSectionService.GetCaseSections(currentCase.Customer_Id, SessionFacade.CurrentLanguageId);
             var caseFieldGroups = GetVisibleFieldGroups(caseFieldSetting);            
             var infoText = _infoService.GetInfoText((int) InfoTextType.SelfServiceInformation, currentCase.Customer_Id, languageId);
 
@@ -2136,6 +2139,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 CasePreview = currentCase,
                 CaseFieldGroups = caseFieldGroups,
                 FieldSettings = caseFieldSetting,
+                CaseSectionSettings =  caseSectionModels,
                 Regions = regions,
                 Suppliers = suppliers,
                 Systems = systems,
@@ -2161,6 +2165,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private NewCaseModel GetNewCaseModel(int customerId, int languageId, List<CaseListToCase> caseFieldSetting)
         {           
             var caseFieldGroups = GetVisibleFieldGroups(caseFieldSetting);
+            var caseSectionSettings = _caseSectionService.GetCaseSections(customerId, SessionFacade.CurrentLanguageId);
 
             var newCase = new Case { Customer_Id = customerId };
             var caseFile = new FilesModel { Id = Guid.NewGuid().ToString() };
@@ -2225,6 +2230,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 caseFieldSetting, 
                 caseFile, 
                 caseFieldSettings,
+                caseSectionSettings,
                 new JsApplicationOptions()
                 {
                     customerId = customerId,

@@ -1,6 +1,8 @@
 ﻿@using System.Web.Script.Serialization
 @using DH.Helpdesk.BusinessData.OldComponents
 @using System.Web.Optimization
+@using DH.Helpdesk.Common.Constants
+@using DH.Helpdesk.Common.Enums.Cases
 
 @model DH.Helpdesk.SelfService.Models.Case.NewCaseModel
 
@@ -32,7 +34,7 @@
         uploadCaseFileUrl: '@Url.Action("NewCaseUploadFile")',
         caseFileKey: '@Model.CaseFileKey',
         newCaseFilesUrl: '@Url.Action("NewCaseFiles")',
-        fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists", Enums.TranslationSource.TextTranslation))',
+        fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists"))',
         downloadCaseFileUrl: '@Url.Action("DownloadNewCaseFile")',
         downloadCaseFileParamUrl: '@(!string.IsNullOrEmpty(Model.CaseFileKey) ? "id=" + Model.CaseFileKey + "&" : string.Empty)',
         deleteCaseFileUrl: '@Url.Action("DeleteNewCaseFile")',
@@ -80,12 +82,12 @@
     }
     <ul class="nav nav-tabs" id="NewCaseTab">
         <li id="NewCaseT" class="active">
-            <a href="#fragment-1"> @Translation.Get("New Case", Enums.TranslationSource.TextTranslation) </a>
+            <a href="#fragment-1"> @Translation.Get("New Case") </a>
         </li>
         @if (ViewBag.AttachmentPlacement == 1 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
         {
             <li>
-                <a href="#attachment-tab">@Translation.Get("Attachments", Enums.TranslationSource.TextTranslation) <span id="nrOfAttachedFiles">@(Model.CaseFilesModel.Files != null && Model.CaseFilesModel.Files.Count > 0 ? "(" + Model.CaseFilesModel.Files.Count.ToString() + ")" : "")</span></a>
+                <a href="#attachment-tab">@Translation.Get("Attachments") <span id="nrOfAttachedFiles">@(Model.CaseFilesModel.Files != null && Model.CaseFilesModel.Files.Count > 0 ? "(" + Model.CaseFilesModel.Files.Count.ToString() + ")" : "")</span></a>
             </li>
         }
     </ul>
@@ -176,7 +178,7 @@
 
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
                     {
-                        <h4 style="@Model.DisplayUserInfo()">@Translation.Get("User Information", Enums.TranslationSource.TextTranslation)</h4>
+                        <h4 style="@Model.DisplayUserInfo()">@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.Initiator, CaseSectionsEnglish.InitiatorHeader)</h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
                                 <div class="container form-horizontal">
@@ -215,7 +217,7 @@
                                                     <span class="case-div-width90em">
                                                         @Html.HiddenFor(model => Model.FollowerUsers, new { @readonly = "true", id = "caseFollowerUsersInput" })
                                                         @Html.Partial("_CaseAddFollowers", Model.SendToDialogModel)
-                                                        <a href="#case_add_followers_btn" role="button" class="btn btn-default case-usersearch-btn hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()">@Translation.Get("Add followers", Enums.TranslationSource.TextTranslation)</a>
+                                                        <a href="#case_add_followers_btn" role="button" class="btn btn-default case-usersearch-btn hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString()">@Translation.Get("Add followers")</a>
                                                         @Html.TextAreaFor(model => model.FollowerUsers, new { id = "fakeCaseFollowerUsersInput", @class = "case-usersearch-textarea hasAttribute", standardName = GlobalEnums.TranslationCaseFields.AddFollowersBtn.ToString() })
                                                     </span>
                                                 }
@@ -360,7 +362,7 @@
 
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.ComputerInformation))
                     {
-                        <h4 style="@Model.DisplayComputerInfo()">@Translation.Get("Computer Information", Enums.TranslationSource.TextTranslation)</h4>
+                        <h4 style="@Model.DisplayComputerInfo()">@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.ComputerInfo, CaseSectionsEnglish.ComputerInfoHeader)</h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
                                 <div class="container form-horizontal">
@@ -405,7 +407,7 @@
                     <!-- Computer Information Fields -->
                     if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseInfo))
                     {
-                        <h4 style="@Model.DisplayCaseInfo()">@Translation.Get("Case Information", Enums.TranslationSource.TextTranslation) </h4>
+                        <h4 style="@Model.DisplayCaseInfo()">@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.CaseInfo, CaseSectionsEnglish.CaseInfoHeader) </h4>
                         <div class="row">
                             <div class="col-md-3 dh-col">
                                 <div class="container form-horizontal">
@@ -420,7 +422,7 @@
                                                         <span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="#" value="">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                        <li><a href="#" value="">@Translation.Get("--")</a></li>
                                                         @Html.CaseTypeDropdownButtonString(Model.CaseTypes)
                                                     </ul>
                                                     <input type="hidden" id="NewCase.CaseType_Id" name="NewCase.CaseType_Id" value="@Model.NewCase.CaseType_Id.supressZero()" />
@@ -440,7 +442,7 @@
                                                         <span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu">
-                                                        <li><a href="#" value="">@Translation.Get("--", Enums.TranslationSource.TextTranslation)</a></li>
+                                                        <li><a href="#" value="">@Translation.Get("--")</a></li>
                                                         @Html.ProductAreaDropdownButtonString(Model.ProductAreas)
                                                     </ul>
                                                     @Html.HiddenFor(model => model.NewCase.ProductArea_Id)
@@ -719,7 +721,7 @@
                                             </label>
                                             <div class="col-md-9">
                                                 <input type="checkbox" name="NewCase.ContactBeforeAction" @(Model.NewCase.ContactBeforeAction == 1 ? "checked=checked" : "") value="1" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.ContactBeforeAction.ToString()" } />
-                                                @Translation.Get("Should the initiator be contacted before action?", Enums.TranslationSource.TextTranslation)
+                                                @Translation.Get("Should the initiator be contacted before action?")
                                                 <input type="hidden" name="NewCase.ContactBeforeAction" value="0" />
                                             </div>
                                         </div>
@@ -733,7 +735,7 @@
                                             </label>
                                             <div class="col-md-9">
                                                 <input type="checkbox" name="NewCase.SMS" @(Model.NewCase.SMS == 1 ? "checked=checked" : "") value="1" class="hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.SMS.ToString()" } />
-                                                @Translation.Get("Send SMS when case is closed", Enums.TranslationSource.TextTranslation)
+                                                @Translation.Get("Send SMS when case is closed")
                                                 <input type="hidden" name="NewCase.SMS" value="0" />
                                             </div>
                                         </div>
@@ -773,7 +775,7 @@
                                             </label>
                                             <div class="col-md-9">
                                                 @Html.TextBoxFor(m => Model.NewCase.Available, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Available.ToString() })
-                                                @*@Translation.Get("Initiator is available during the following times", Enums.TranslationSource.TextTranslation)*@
+                                                @*@Translation.Get("Initiator is available during the following times")*@
                                             </div>
                                         </div>
                                     }
@@ -788,15 +790,15 @@
                                                 <table>
                                                     <tr>
                                                         <td>
-                                                            @Translation.Get("Item Cost", Enums.TranslationSource.TextTranslation)<br />
+                                                            @Translation.Get("Item Cost")<br />
                                                             @Html.TextBoxFor(model => model.NewCase.Cost, new { maxlength = "7", @class = "inputw50 hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Cost.ToString() })
                                                         </td>
                                                         <td>
-                                                            @Translation.Get("Additional Cost", Enums.TranslationSource.TextTranslation)<br />
+                                                            @Translation.Get("Additional Cost")<br />
                                                             @Html.TextBoxFor(model => model.NewCase.OtherCost, new { maxlength = "7", @class = "inputw50 hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Cost.ToString() })
                                                         </td>
                                                         <td>
-                                                            @Translation.Get("Currency", Enums.TranslationSource.TextTranslation)<br />
+                                                            @Translation.Get("Currency")<br />
                                                             <select id="NewCase_Currency" name="NewCase.Currency" class="inputw100 hasAttribute" standardName="@GlobalEnums.TranslationCaseFields.Cost.ToString()">
                                                                 <option value="">&nbsp;</option>
                                                                 @if (Model.Currencies != null)
@@ -820,8 +822,8 @@
                                         <div class="form-group row @GlobalEnums.TranslationCaseFields.Filename.ToString()">
                                             <label class="col-md-3">@CaseFieldCaption(GlobalEnums.TranslationCaseFields.Filename, false)</label>
                                             <div class="col-md-4">
-                                                <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>
-                                                <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default hasAttribute" data-src="case" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard", Enums.TranslationSource.TextTranslation)</a>
+                                                <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add")</a>
+                                                <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default hasAttribute" data-src="case" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard")</a>
                                                 <table id="NewCasefiles_table" class="table table-striped">
                                                     <tbody>
                                                         @if (Model.NewCase.CaseFiles == null)
@@ -854,7 +856,7 @@
 
                     <div class="form-group row @GlobalEnums.TranslationCaseFields.Filename.ToString()">
                         <div class="col-md-12">
-                            <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add", Enums.TranslationSource.TextTranslation)</a>
+                            <a href="#NewCase_upload_files_popup" role="button" class="btn btn-default hasAttribute" data-toggle="modal" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add")</a>
                             <div id="NewCase_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -866,13 +868,13 @@
                                             <div id="NewCasefile_uploader"></div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+                                            <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default hasAttribute" data-src="case" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard", Enums.TranslationSource.TextTranslation)</a>
+                            <a href="#upload_clipboard_file_popup" role="button" class="btn btn-default hasAttribute" data-src="case" standardName="@GlobalEnums.TranslationCaseFields.Filename.ToString()">@Translation.Get("Add from clipboard")</a>
 
 
                             <table id="NewCasefiles_table" class="table table-striped">
@@ -919,7 +921,7 @@
                     <div id="NewCasefile_uploader"></div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close", Enums.TranslationSource.TextTranslation)</button>
+                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>
                 </div>
             </div>
         </div>
@@ -934,20 +936,20 @@
                 <div class="modal-body" style="max-height: 600px; text-align: center;">
                     <form onsubmit="return false;">
                         <div class="form-group">
-                            <label>@Translation.Get("1. Write filename (leave blank for automatic naming)", Enums.TranslationSource.TextTranslation) </label><br />
+                            <label>@Translation.Get("1. Write filename (leave blank for automatic naming)") </label><br />
                             <input class="" type="text" id="imgFilename" autocomplete="Off" />
-                            <span id="imageNameRequired" style="color: red"> @Translation.Get("must be specified", Enums.TranslationSource.TextTranslation) </span>
+                            <span id="imageNameRequired" style="color: red"> @Translation.Get("must be specified") </span>
                         </div>
                         <div class="form-group">
-                            <label>@(Translation.Get("2. Press Ctrl+V for inserting picture", Enums.TranslationSource.TextTranslation) )</label><br />
-                            <label>@(Translation.Get("3. Click on Save for adding to case", Enums.TranslationSource.TextTranslation)) </label>
+                            <label>@(Translation.Get("2. Press Ctrl+V for inserting picture") )</label><br />
+                            <label>@(Translation.Get("3. Click on Save for adding to case")) </label>
                             <div id="previewPnl"></div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save", Enums.TranslationSource.TextTranslation)</button>
-                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</button>
+                    <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save")</button>
+                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel")</button>
                 </div>
             </div>
         </div>
@@ -962,20 +964,20 @@
                 <div class="modal-body" style="max-height: 600px; text-align: center;">
                     <form onsubmit="return false;">
                         <div class="form-group">
-                            <label>@Translation.Get("1. Write filename (leave blank for automatic naming)", Enums.TranslationSource.TextTranslation) </label><br />
+                            <label>@Translation.Get("1. Write filename (leave blank for automatic naming)") </label><br />
                             <input class="" type="text" id="imgFilename" autocomplete="Off" />
-                            <span id="imageNameRequired" style="color: red"> @Translation.Get("must be specified", Enums.TranslationSource.TextTranslation) </span>
+                            <span id="imageNameRequired" style="color: red"> @Translation.Get("must be specified") </span>
                         </div>
                         <div class="form-group">
-                            <label>@(Translation.Get("2. Press Ctrl+V for inserting picture", Enums.TranslationSource.TextTranslation) )</label><br />
-                            <label>@(Translation.Get("3. Click on Save for adding to case", Enums.TranslationSource.TextTranslation)) </label>
+                            <label>@(Translation.Get("2. Press Ctrl+V for inserting picture") )</label><br />
+                            <label>@(Translation.Get("3. Click on Save for adding to case")) </label>
                             <div id="previewPnl"></div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save", Enums.TranslationSource.TextTranslation)</button>
-                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel", Enums.TranslationSource.TextTranslation)</button>
+                    <button type="button" id="btnSave" class="btn btn-ok btn-default" style="display: none">@Translation.Get("Save")</button>
+                    <button type="button" id="btnCancel" class="btn btn-cancel btn-default" data-dismiss="modal">@Translation.Get("Cancel")</button>
                 </div>
             </div>
         </div>
@@ -1012,7 +1014,7 @@
 
     var $mainForm = $("#newCaseForm");
     var $elmProductArea = $("#NewCase_ProductArea_Id");
-    var requiredText = '@Translation.GetForJS("must be specified", Enums.TranslationSource.TextTranslation)';
+    var requiredText = '@Translation.GetForJS("must be specified")';
     var productAreaErrMessage ='@Html.Raw(Translation.GetForJS("The case could not be saved because the lowest possible level on the field") + " [" +
                    Translation.GetForJS(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomerID) + "] " +
                    Translation.Get("has not been selected. Please check the case."))';
@@ -1026,7 +1028,7 @@
                 document.getElementById('divProductArea').classList.add("error");
                 ShowToastMessage(productAreaErrMessage, "error", false);
             } else {
-                ShowToastMessage('@Translation.Get("One or more mandatory fields were not filled in, please check the case.", Enums.TranslationSource.TextTranslation)', "error", false);
+                ShowToastMessage('@Translation.Get("One or more mandatory fields were not filled in, please check the case.")', "error", false);
             }
             return false;
         }

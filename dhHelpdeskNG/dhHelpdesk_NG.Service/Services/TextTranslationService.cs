@@ -245,7 +245,7 @@
                 text.ChangedDate = DateTime.Now;
                 text.CreatedDate = DateTime.Now;
 
-                text.Id = this._textRepository.GetNextId() + 1;
+                text.Id = this._textRepository.GetLastId() + 1;
 
                 if (text.Id < 5000)
                 {
@@ -273,7 +273,7 @@
 
             text.ChangedDate = DateTime.Now;
             text.CreatedDate = DateTime.Now;
-            text.Id = this._textRepository.GetNextId() + 1;
+            text.Id = this._textRepository.GetLastId() + 1;
             
             if (string.IsNullOrEmpty(text.TextToTranslate))
                 errors.Add("text.TextToTranslate", "Du måste ange ett ord att översätta");
