@@ -431,6 +431,10 @@ window.advancedSearchPage =
             if (response && response.result === 'success') {
                 console.log('>>>Fetch data completed successfully. Customer: ' + customerId);
                 var responseData = response.data;
+                if (responseData.searchResults.length === 0) {
+                    $('#customer_sr_' + customerId).hide();
+                    return;
+                }
                 var customer = self.getCustomer(customerId);
 
                 //save sort settings for each customer separately
