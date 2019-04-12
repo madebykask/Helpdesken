@@ -15,13 +15,12 @@ using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Common.Extensions;
 using DH.Helpdesk.Web.Common.Models.CaseSearch;
 using DH.Helpdesk.Web.Enums;
-using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.CaseOverview;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Infrastructure.Helpers;
 using DH.Helpdesk.Web.Models.Case;
 
-namespace DH.Helpdesk.Web.Controllers.Behaviors
+namespace DH.Helpdesk.Web.Infrastructure.Behaviors
 {
     public class AdvancedSearchBehavior
     {
@@ -439,12 +438,13 @@ namespace DH.Helpdesk.Web.Controllers.Behaviors
             {
                 var userCustomerSettings = _userService.GetUser(userId);
                 var isStartPage = userCustomerSettings.StartPage == (int) StartPage.AdvancedSearch;
+                var isAdmin = SessionFacade.CurrentUser.UserGroupId == (int) UserGroups.Administrator;
 
                 filter = new CaseSearchFilter
                 {
                     CustomerId = customerId,
                     UserId = userId,
-                    UserPerformer = isStartPage ? userId.ToString() : string.Empty,
+                    UserPerformer = isStartPage && !isAdmin ? userId.ToString() : string.Empty,
                     CaseProgress = isStartPage
                         ? ((int) CaseProgressFilterEnum.CasesInProgress).ToString()
                         : string.Empty,

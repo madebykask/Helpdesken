@@ -1,6 +1,6 @@
 ﻿namespace DH.Helpdesk.BusinessData.Enums.Admin.Users
 {
-    public enum UserGroup
+    public enum UserGroup // Duplicate of UserGroups in DH.Helpdesk.Common.Enums
     {
         User = 1,
         Administrator = 2,

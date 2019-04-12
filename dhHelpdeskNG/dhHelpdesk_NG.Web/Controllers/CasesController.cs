@@ -23,6 +23,7 @@ using DH.Helpdesk.Web.Common.Enums.Case;
 using DH.Helpdesk.Web.Common.Extensions;
 using DH.Helpdesk.Web.Common.Models.Case;
 using DH.Helpdesk.Web.Common.Models.CaseSearch;
+using DH.Helpdesk.Web.Infrastructure.Behaviors;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.ModelFactories.Common;
 
@@ -92,7 +93,6 @@ namespace DH.Helpdesk.Web.Controllers
     using BusinessData.Models.ProductArea.Output;
     using DH.Helpdesk.Common.Extensions.Boolean;
     using Common.Tools.Files;
-    using Behaviors;
 
     public partial class CasesController : BaseController
     {

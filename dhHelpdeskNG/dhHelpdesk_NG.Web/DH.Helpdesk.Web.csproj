@@ -354,7 +354,7 @@
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
     <Compile Include="Components\Contracts\ContractHistoryFormatter.cs" />
     <Compile Include="Components\Contracts\ContractHistoryMarkupBuilder.cs" />
-    <Compile Include="Controllers\Behaviors\AdvancedSearchBehavior.cs" />
+    <Compile Include="Infrastructure\Behaviors\AdvancedSearchBehavior.cs" />
     <Compile Include="Models\Case\AdvancedCaseSearchInput.cs" />
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
