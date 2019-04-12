@@ -68,21 +68,24 @@ DECLARE MY_CURSOR CURSOR
 FOR 
 SELECT DISTINCT CustomerId 
 FROM tblCaseSettings
-WHERE UserGroup = 1 AND CustomerId IS NOT NULL
+WHERE [Type] = 0 AND CustomerId IS NOT NULL
 
 OPEN MY_CURSOR
 FETCH NEXT FROM MY_CURSOR INTO @CustomerId
 WHILE @@FETCH_STATUS = 0
 BEGIN 	
-	INSERT INTO tblCaseSettings (CustomerId, [User_Id], tblCaseName, Line, 
-	MinWidth, UserGroup, ColOrder, ShowInMobileList, RegTime, ChangeTime, ColStyle, CaseSettingsGUID, [Type]) 
-	SELECT @CustomerId, [User_Id], tblCaseName, Line, 
-	MinWidth, 0, ColOrder, ShowInMobileList, RegTime, ChangeTime, ColStyle, CaseSettingsGUID,
-	1 -- Advanced Search Type
-	FROM tblCaseSettings
-	WHERE UserGroup = 0 AND CustomerId IS NULL AND [Type] = 1
+	IF not exists (SELECT * FROM tblCaseSettings WHERE CustomerId = @CustomerId AND [Type] = 1) 
+	BEGIN
+		INSERT INTO tblCaseSettings (CustomerId, [User_Id], tblCaseName, Line, 
+		MinWidth, UserGroup, ColOrder, ShowInMobileList, RegTime, ChangeTime, ColStyle, CaseSettingsGUID, [Type]) 
+		SELECT @CustomerId, [User_Id], tblCaseName, Line, 
+		MinWidth, 0, ColOrder, ShowInMobileList, RegTime, ChangeTime, ColStyle, CaseSettingsGUID,
+		1 -- Advanced Search Type
+		FROM tblCaseSettings
+		WHERE UserGroup = 0 AND CustomerId IS NULL AND [Type] = 1
 
-	PRINT @CustomerId
+		PRINT @CustomerId
+	END
 	FETCH NEXT FROM MY_CURSOR INTO @CustomerId
 END
 CLOSE MY_CURSOR
