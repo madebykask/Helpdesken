@@ -1154,6 +1154,7 @@
     <Content Include="Content\js\DynamicCase\iframeResizer.contentWindow.js" />
     <Content Include="Content\js\DynamicCase\iframeResizer.contentWindow.min.js" />
     <Content Include="Content\js\DynamicCase\index.js" />
+    <Content Include="Content\js\Faqs\faqsPage.js" />
     <Content Include="Content\js\Feedback\feedback.edit.js" />
     <Content Include="Content\js\Feedback\feedbackStatisticsCases.js" />
     <Content Include="Content\js\Inventory\inventory.search.js" />
@@ -4091,6 +4092,8 @@
     <Content Include="Views\Cases\AdvancedSearch.cshtml" />
     <Content Include="Views\Cases\AdvancedSearch\_SearchError.cshtml" />
     <Content Include="Views\Cases\AdvancedSearch\_CustomerSearchResults.cshtml" />
+    <Content Include="Views\Faq\_FaqList.cshtml" />
+    <Content Include="Views\Faq\_FaqListWithDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

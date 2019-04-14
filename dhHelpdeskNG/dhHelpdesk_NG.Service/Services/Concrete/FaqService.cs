@@ -1,4 +1,10 @@
-﻿using DH.Helpdesk.Common.Enums;
+﻿using System.Linq.Expressions;
+using DH.Helpdesk.BusinessData.Enums;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Linq;
+using DH.Helpdesk.Common.Tools;
+using OfficeOpenXml.FormulaParsing.ExpressionGraph;
+using Expression = System.Linq.Expressions.Expression;
 
 namespace DH.Helpdesk.Services.Services.Concrete
 {
@@ -19,17 +25,12 @@ namespace DH.Helpdesk.Services.Services.Concrete
     {
         #region Fields                
                 
-        private readonly IFaqCategoryRepository faqCategoryRepository;
-
-        private readonly IFaqCategoryLanguageRepository faqCategoryLanguageRepository;
-
-        private readonly IFaqRepository faqRepository;
-
-        private readonly IFaqFileRepository faqFileRepository;
-
-        private readonly IWorkContext workContext;
-
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        private readonly IFaqCategoryRepository _faqCategoryRepository;
+        private readonly IFaqCategoryLanguageRepository _faqCategoryLanguageRepository;
+        private readonly IFaqRepository _faqRepository;
+        private readonly IFaqFileRepository _faqFileRepository;
+        private readonly IWorkContext _workContext;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         #endregion
 
@@ -43,12 +44,12 @@ namespace DH.Helpdesk.Services.Services.Concrete
             IWorkContext workContext, 
             IUnitOfWorkFactory unitOfWorkFactory)
         {
-            this.faqFileRepository = faqFileRepository;
-            this.faqRepository = faqRepository;
-            this.faqCategoryRepository = faqCategoryRepository;
-            this.faqCategoryLanguageRepository = faqCategoryLanguageRepository;
-            this.workContext = workContext;
-            this.unitOfWorkFactory = unitOfWorkFactory;
+            _faqFileRepository = faqFileRepository;
+            _faqRepository = faqRepository;
+            _faqCategoryRepository = faqCategoryRepository;
+            _faqCategoryLanguageRepository = faqCategoryLanguageRepository;
+            _workContext = workContext;
+            _unitOfWorkFactory = unitOfWorkFactory;
         }
 
         #endregion
@@ -70,19 +71,19 @@ namespace DH.Helpdesk.Services.Services.Concrete
                 newFaq.CustomerId,
                 newFaq.CreatedDate);
 
-            this.faqRepository.Add(newFaqDto);
-            this.faqRepository.Commit();
+            _faqRepository.Add(newFaqDto);
+            _faqRepository.Commit();
 
             var newFaqFileDtos =
                 newFaqFiles.Select(f => new NewFaqFile(f.Content, f.BasePath, f.Name, f.CreatedDate, newFaqDto.Id)).ToList();
 
-            this.faqFileRepository.AddFiles(newFaqFileDtos);
-            this.faqFileRepository.Commit();
+            _faqFileRepository.AddFiles(newFaqFileDtos);
+            _faqFileRepository.Commit();
         }
 
         public void DeleteFaq(int faqId)
         {
-           using (var uow = this.unitOfWorkFactory.Create())
+           using (var uow = _unitOfWorkFactory.Create())
             {
                 var faqRep = uow.GetRepository<FaqEntity>();
                 var faqFileRep = uow.GetRepository<FaqFileEntity>();
@@ -113,121 +114,114 @@ namespace DH.Helpdesk.Services.Services.Concrete
             switch (faq.LanguageId)
             {
                 case LanguageIds.Swedish:
-                    faqRepository.UpdateSwedishFaq(faq);
+                    _faqRepository.UpdateSwedishFaq(faq);
                     break;
 
                 default:
-                    faqRepository.UpdateOtherLanguageFaq(faq);
+                    _faqRepository.UpdateOtherLanguageFaq(faq);
                     break;
             }
 
-            this.faqRepository.Commit();
+            _faqRepository.Commit();
         }
 
         public void AddCategory(NewCategory category)
         {
-            this.faqCategoryRepository.Add(category);
-            this.faqCategoryRepository.Commit();
+            _faqCategoryRepository.Add(category);
+            _faqCategoryRepository.Commit();
         }
 
         public void DeleteCategory(int categoryId)
         {
-            this.faqCategoryLanguageRepository.DeleteByCategoryId(categoryId);
-            this.faqCategoryLanguageRepository.Commit();
-            this.faqCategoryRepository.DeleteById(categoryId);
-            this.faqCategoryRepository.Commit();
+            _faqCategoryLanguageRepository.DeleteByCategoryId(categoryId);
+            _faqCategoryLanguageRepository.Commit();
+            _faqCategoryRepository.DeleteById(categoryId);
+            _faqCategoryRepository.Commit();
         }
 
         public void AddFile(NewFaqFile file)
         {
-            this.faqFileRepository.AddFile(file);
-            this.faqFileRepository.Commit();
+            _faqFileRepository.AddFile(file);
+            _faqFileRepository.Commit();
         }
 
-        /// <summary>
-        /// The get by customers.
-        /// </summary>
-        /// <param name="customers">
-        /// The customers.
-        /// </param>
-        /// <param name="count">
-        /// The count.
-        /// </param>
-        /// <param name="forStartPage">
-        /// The for start page.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
         public IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers, int? count, bool forStartPage)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<FaqEntity>();
                 var query = repository.GetAll();
 
                 if (forStartPage)
                 {
-                    query = query.RestrictByWorkingGroup(this.workContext);
+                    query = query.RestrictByWorkingGroup(_workContext);
                 }
 
                 return query.GetForStartPageWithOptionalCustomer(customers, count, forStartPage).MapToOverviews();
             }
         }
 
-        public List<FaqOverview> FindOverviewsByCategoryId(int categoryId, int languageId = LanguageIds.Swedish)
+        public List<FaqOverview> FindOverviewsByCategoryId(int categoryId, int customerId, string sortBy = null, SortOrder sortOrder = SortOrder.Asc, int languageId = LanguageIds.Swedish)
         {
-            List<FaqOverview> result;
-            using (var uow = this.unitOfWorkFactory.Create())
-            {
-                var repository = uow.GetRepository<FaqEntity>();
-                var faqs = repository.GetAll()
-                    .Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery));
-                result = MapToOverview(faqs, languageId);
-            }
+            var result = SearchFaqsInner<FaqOverview>(categoryId, null, customerId, sortBy, sortOrder, languageId);
             return result;
         }
 
-        public List<FaqDetailedOverview> FindDetailedOverviewsByCategoryId(int categoryId, int languageId = LanguageIds.Swedish)
+        public List<FaqDetailedOverview> FindDetailedOverviewsByCategoryId(int categoryId, int customerId, string sortBy = null, SortOrder sortOrder = SortOrder.Asc, int languageId = LanguageIds.Swedish)
         {
-            List<FaqDetailedOverview> result;
-            using (var uow = this.unitOfWorkFactory.Create())
-            {
-                var repository = uow.GetRepository<FaqEntity>();
-                var faqs = repository.GetAll()
-                    .Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery));
-                result = MapToDetailedOverview(faqs, languageId);
-            }
+            var result = SearchFaqsInner<FaqDetailedOverview>(categoryId, null, customerId, sortBy, sortOrder, languageId);
             return result;
         }
 
-        public List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse, int customerId, int languageId = LanguageIds.Swedish)
+        public List<FaqOverview> SearchOverviewsByPharse(string pharse, int customerId, string sortBy = null, SortOrder sortOrder = SortOrder.Asc, int languageId = LanguageIds.Swedish)
         {
-            List<FaqDetailedOverview> result;
-            using (var uow = this.unitOfWorkFactory.Create())
-            {
-                var repository = uow.GetRepository<FaqEntity>();
-                var faqs = this.SearchByPharse(pharse, customerId, repository, languageId);
-                result = MapToDetailedOverview(faqs, languageId);
-            }
+            var result = SearchFaqsInner<FaqOverview>(null, pharse, customerId, sortBy, sortOrder, languageId);
             return result;
         }
 
-        public List<FaqOverview> SearchOverviewsByPharse(string pharse, int customerId, int languageId = LanguageIds.Swedish)
+        public List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse, int customerId, string sortBy = null, SortOrder sortOrder = SortOrder.Asc, int languageId = LanguageIds.Swedish)
         {
-            List<FaqOverview> result;
-            using (var uow = this.unitOfWorkFactory.Create())
+            var result = SearchFaqsInner<FaqDetailedOverview>(null, pharse, customerId, sortBy, sortOrder, languageId);
+            return result;
+        }
+
+        private List<TOverview> SearchFaqsInner<TOverview>(int? categoryId, string phrase, int customerId, string sortBy = null, SortOrder sortOrder = SortOrder.Asc, int languageId = LanguageIds.Swedish)
+            where TOverview: FaqOverview
+        {
+            List<TOverview> result;
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
-                var repository = uow.GetRepository<FaqEntity>();
-                var faqs = SearchByPharse(pharse, customerId, repository, languageId);
-                result = MapToOverview(faqs, languageId);
+                var query = uow.GetRepository<FaqEntity>().GetAll().Where(f => f.Customer_Id == customerId);
+
+                if (categoryId.HasValue)
+                {
+                    query = query.Where(f => f.FAQCategory_Id == categoryId && !string.IsNullOrEmpty(f.FAQQuery));
+                }
+
+                if (!string.IsNullOrEmpty(phrase))
+                {
+                    query = SearchByPharse(query, phrase, languageId);
+                }
+
+                IQueryable<TOverview> overviewQuery;
+                if (typeof(TOverview).IsAssignableFrom(typeof(FaqDetailedOverview)))
+                {
+                    overviewQuery = (IQueryable<TOverview>)SelectFaqDetailedOverviews(query, languageId);
+                }
+                else
+                {
+                    overviewQuery = (IQueryable<TOverview>)SelectFaqOverviews(query, languageId);
+                }
+                
+                sortBy = string.IsNullOrEmpty(sortBy) ? ReflectionHelper.GetPropertyName<FaqEntity>(x => x.ChangedDate) : sortBy;
+                result = overviewQuery.OrderBy(sortBy, sortOrder == SortOrder.Desc).ToList();
             }
             return result;
         }
 
         public Faq FindById(int faqId)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var repository = uow.GetRepository<FaqEntity>();
 
@@ -261,7 +255,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public IList<FaqCategory> GetFaqCategories(int customerId, int languageId)
         {
-            var categs = faqCategoryRepository.GetCategoriesByCustomer(customerId);
+            var categs = _faqCategoryRepository.GetCategoriesByCustomer(customerId);
 
             var result = categs.Select(c =>
             {
@@ -282,8 +276,8 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public IList<Faq> GetFaqs(int customerId, int languageId, bool includePublic = true)
         {
-            var faqFiles = faqFileRepository.GetMany(f => f.FAQ != null && f.FAQ.Customer_Id == customerId).ToList();
-            var faqs = faqRepository.GetFaqsByCustomerId(customerId, includePublic);
+            var faqFiles = _faqFileRepository.GetMany(f => f.FAQ != null && f.FAQ.Customer_Id == customerId).ToList();
+            var faqs = _faqRepository.GetFaqsByCustomerId(customerId, includePublic);
             var result = faqs.Select(f =>
             {
                 var fLng = f.FaqLanguages.FirstOrDefault(x => x.Language_Id == languageId);
@@ -318,7 +312,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public byte[] GetFileContentByFaqIdAndFileName(int faqId, string basePath, string fileName)
         {
-            return faqFileRepository.GetFileContentByFaqIdAndFileName(faqId, basePath, fileName);
+            return _faqFileRepository.GetFileContentByFaqIdAndFileName(faqId, basePath, fileName);
         }
 
         public void UpdateCategory(EditCategory editedCategory)
@@ -326,20 +320,20 @@ namespace DH.Helpdesk.Services.Services.Concrete
             switch (editedCategory.LanguageId)
             {
                 case LanguageIds.Swedish:
-                    faqCategoryRepository.UpdateSwedishCategory(editedCategory);
+                    _faqCategoryRepository.UpdateSwedishCategory(editedCategory);
                     break;
 
                 default:
-                    faqCategoryRepository.UpdateOtherLanguageCategory(editedCategory);
+                    _faqCategoryRepository.UpdateOtherLanguageCategory(editedCategory);
                     break;
             }
 
-            faqCategoryRepository.Commit();
+            _faqCategoryRepository.Commit();
         }
 
         public Faq GetFaqById(int id, int languageId)
         {
-            using (var uow = this.unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 Faq result = null;
                 var repository = uow.GetRepository<FaqEntity>();
@@ -386,7 +380,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         public List<CategoryWithSubcategories> GetCategoriesWithSubcategoriesByCustomerId(int customerId, int languageId = LanguageIds.Swedish)
         {
-            var categoryEntities = faqCategoryRepository.GetCategoriesByCustomer(customerId);
+            var categoryEntities = _faqCategoryRepository.GetCategoriesByCustomer(customerId);
             var parentCategories = categoryEntities.Where(c => c.Parent_FAQCategory_Id == null).ToList();
             var categories = new List<CategoryWithSubcategories>(parentCategories.Count);
 
@@ -403,91 +397,61 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
         #region Private
 
-        private List<FaqOverview> MapToOverview(IEnumerable<FaqEntity> faqs, int languageId)
+        private IQueryable<FaqEntity> SearchByPharse(IQueryable<FaqEntity> query, string pharse, int languageId = LanguageIds.Swedish)
         {
-            var result = new List<FaqOverview>();
-            if (languageId == LanguageIds.Swedish)
-            {
-                result = faqs.Select(f => new FaqOverview
-                {
-                    Id = f.Id,
-                    CreatedDate = f.CreatedDate,
-                    ChangedDate = f.ChangedDate,
-                    Text = f.FAQQuery
-                }).ToList();
-            }
-            else
-            {
-                foreach (var f in faqs)
-                {
-                    var translate = f.FaqLanguages.FirstOrDefault(x => x.Language_Id == languageId);
-                    var item = new FaqOverview
-                    {
-                        Id = f.Id,
-                        CreatedDate = f.CreatedDate,
-                        ChangedDate = f.ChangedDate,
-                        Text = translate != null ? translate.FAQQuery : f.FAQQuery
-                    };
-                    result.Add(item);
-                }
-            }
-            return result;
-        }
+            var pharseInLowerCase = pharse.ToLower().Trim();
 
-        private List<FaqDetailedOverview> MapToDetailedOverview(IEnumerable<FaqEntity> faqs, int languageId)
-        {
-            var result = new List<FaqDetailedOverview>();
-            if (languageId == LanguageIds.Swedish)
-            {
-                result = faqs.Select(f =>
-                        new FaqDetailedOverview
-                        {
-                            Id = f.Id,
-                            Answer = f.Answer,
-                            CreatedDate = f.CreatedDate,
-                            ChangedDate = f.ChangedDate,
-                            InternalAnswer = f.Answer_Internal,
-                            Text = f.FAQQuery,
-                            UrlOne = f.URL1,
-                            UrlTwo = f.URL2
-                        }).ToList();
-            }
-            else
-            {
-                foreach (var f in faqs)
-                {
-                    var translate = f.FaqLanguages.FirstOrDefault(x => x.Language_Id == languageId);
-                    var item = new FaqDetailedOverview
-                    {
-                        Id = f.Id,
-                        Answer = translate != null ? translate.Answer : f.Answer,
-                        CreatedDate = f.CreatedDate,
-                        ChangedDate = f.ChangedDate,
-                        InternalAnswer = translate != null ? translate.Answer_Internal : f.Answer_Internal,
-                        Text = translate != null ? translate.FAQQuery : f.FAQQuery,
-                        UrlOne = f.URL1,
-                        UrlTwo = f.URL2
-                    };
-                    result.Add(item);
-                }
-            }
-            return result;
-        }
-
-        private IEnumerable<FaqEntity> SearchByPharse(string pharse, int customerId, IRepository<FaqEntity> repository, int languageId = LanguageIds.Swedish)
-        {
-            var pharseInLowerCase = pharse.ToLower();
-            var faqs = repository.GetAll().Where(f => f.Customer_Id == customerId);
             if (languageId != LanguageIds.Swedish)
             {
-                return faqs.Where(f => f.FaqLanguages.Any(x => x.Language_Id == languageId && x.FAQQuery.ToLower().Contains(pharseInLowerCase))
-                            || f.FaqLanguages.Any(x => x.Language_Id == languageId && x.Answer.ToLower().Contains(pharseInLowerCase))
-                            || f.FaqLanguages.Any(x => x.Language_Id == languageId && x.Answer_Internal.ToLower().Contains(pharseInLowerCase))).ToList();
+                query = query.Where(f =>
+                    f.FaqLanguages.Any(x => x.Language_Id == languageId && x.FAQQuery.ToLower().Contains(pharseInLowerCase)) ||
+                    f.FaqLanguages.Any(x => x.Language_Id == languageId && x.Answer.ToLower().Contains(pharseInLowerCase)) ||
+                    f.FaqLanguages.Any(x => x.Language_Id == languageId && x.Answer_Internal.ToLower().Contains(pharseInLowerCase)));
             }
-            return faqs.Where(f =>
-                        f.FAQQuery.ToLower().Contains(pharseInLowerCase)
-                        || f.Answer.ToLower().Contains(pharseInLowerCase)
-                        || f.Answer_Internal.ToLower().Contains(pharseInLowerCase)).ToList();
+            else
+            {
+                query = query.Where(f =>
+                    f.FAQQuery.ToLower().Contains(pharseInLowerCase) ||
+                    f.Answer.ToLower().Contains(pharseInLowerCase) ||
+                    f.Answer_Internal.ToLower().Contains(pharseInLowerCase));
+            }
+
+            return query;
+        }
+
+        private IQueryable<FaqOverview> SelectFaqOverviews(IQueryable<FaqEntity> query, int languageId)
+        {
+            var res =  from f in query
+                       from fl in f.FaqLanguages.Where(x => x.Language_Id == languageId).DefaultIfEmpty() 
+                       select new FaqOverview
+                       {
+                           Id = f.Id,
+                           CreatedDate = f.CreatedDate,
+                           ChangedDate = f.ChangedDate,
+                           Text = fl.FAQQuery ?? f.FAQQuery
+                       };
+
+            return res;
+        }
+
+        private IQueryable<FaqDetailedOverview> SelectFaqDetailedOverviews(IQueryable<FaqEntity> query, int languageId)
+        {
+            var res = from f in query
+                from fl in f.FaqLanguages.Where(x => x.Language_Id == languageId).DefaultIfEmpty()
+                select new FaqDetailedOverview()
+                {
+                    Id = f.Id,
+                    Text = fl.FAQQuery ?? f.FAQQuery,
+                    Answer = fl.Answer ?? f.Answer,
+                    InternalAnswer = fl.Answer_Internal ?? f.Answer_Internal,
+                    UrlOne = f.URL1,
+                    UrlTwo = f.URL2,
+                    Files = f.FAQFiles.Select(x => x.FileName).ToList(),
+                    CreatedDate = f.CreatedDate,
+                    ChangedDate = f.ChangedDate,
+                };
+
+            return res;
         }
 
         private CategoryWithSubcategories CreateBrunchForParent(FaqCategoryEntity parentCategory, List<FaqCategoryEntity> allCategories, int languageId)

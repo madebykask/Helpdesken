@@ -159,6 +159,7 @@
     <Compile Include="Enums\Orders\OrderEmailTemplate.cs" />
     <Compile Include="Enums\Orders\Subtopic.cs" />
     <Compile Include="Enums\Projects\ProjectFields.cs" />
+    <Compile Include="Enums\SortOrder.cs" />
     <Compile Include="Enums\Users\StartPage.cs" />
     <Compile Include="Enums\Users\TimeZoneAutodetectResult.cs" />
     <Compile Include="Enums\Users\WorkingGroupUserPermission.cs" />

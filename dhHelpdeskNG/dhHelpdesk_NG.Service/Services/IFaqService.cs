@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Common.Enums;
+﻿using DH.Helpdesk.BusinessData.Enums;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -25,13 +26,13 @@ namespace DH.Helpdesk.Services.Services
 
         IEnumerable<FaqInfoOverview> GetFaqByCustomers(int[] customers, int? count, bool forStartPage);
 
-        List<FaqOverview> FindOverviewsByCategoryId(int categoryId, int languageId = LanguageIds.Swedish);
+        List<FaqOverview> FindOverviewsByCategoryId(int categoryId, int customerId, string sortBy, SortOrder sortOrder, int languageId = LanguageIds.Swedish);
 
-        List<FaqDetailedOverview> FindDetailedOverviewsByCategoryId(int categoryId, int languageId = LanguageIds.Swedish);
+        List<FaqDetailedOverview> FindDetailedOverviewsByCategoryId(int categoryId, int customerId, string sortBy, SortOrder sortOrder, int languageId = LanguageIds.Swedish);
 
-        List<FaqOverview> SearchOverviewsByPharse(string pharse, int customerId, int languageId = LanguageIds.Swedish);
+        List<FaqOverview> SearchOverviewsByPharse(string pharse, int customerId, string sortBy = null, SortOrder sortOrder = SortOrder.Asc, int languageId = LanguageIds.Swedish);
 
-        List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse, int customerId, int languageId = LanguageIds.Swedish);
+        List<FaqDetailedOverview> SearchDetailedOverviewsByPharse(string pharse, int customerId, string sortBy = null, SortOrder sortOrder = SortOrder.Asc, int languageId = LanguageIds.Swedish);
 
         Faq FindById(int faqId);
 

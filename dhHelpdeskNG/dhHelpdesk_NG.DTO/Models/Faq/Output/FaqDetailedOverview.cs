@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Faq.Output
+﻿using System.Collections.Generic;
+
+namespace DH.Helpdesk.BusinessData.Models.Faq.Output
 {
     public sealed class FaqDetailedOverview : FaqOverview
     {
@@ -9,5 +11,7 @@
         public string UrlOne { get; set; }
 
         public string UrlTwo { get; set; }
+
+        public List<string> Files { get; set; }
     }
 }

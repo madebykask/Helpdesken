@@ -197,6 +197,9 @@
                 "~/Content/js/contract/contractIndex.js",
                 "~/Content/js/contract/contractCases.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/faqs").Include(
+                "~/Content/js/faqs/faqsPage.js"));
+
             #region Case editing
             bundles.Add(new StyleBundle("~/cases/dynamic-cases").Include(
                          "~/Content/css/custom/dynamic-cases.css"));

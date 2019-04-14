@@ -1,0 +1,27 @@
+﻿
+@using DH.Helpdesk.Common.Enums
+@model List<DH.Helpdesk.Web.Models.Faq.Output.FaqOverviewModel>
+
+@functions {
+    string buildFaqUrl(int faqId)
+    {
+        var url = Url.Action("EditFaq", "faq", new {id = faqId, languageId = LanguageIds.Swedish});
+        return url;
+    }
+}
+
+@foreach (var faq in Model)
+{
+    <tr>
+        <td style="width:70%">
+            <a href="@buildFaqUrl(faq.Id)">@faq.Text</a>
+        </td>
+        <td style="width:10%">
+            <a href="@buildFaqUrl(faq.Id)">@faq.CreatedDateText</a>
+        </td>
+        <td style="width: 10%">
+            <a href="@buildFaqUrl(faq.Id)">@faq.ChangedDateText</a>
+        </td>
+    </tr>
+}
+

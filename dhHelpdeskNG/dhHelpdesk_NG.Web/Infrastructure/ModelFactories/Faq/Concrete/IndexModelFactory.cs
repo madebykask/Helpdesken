@@ -13,11 +13,12 @@
         public IndexModel Create(List<CategoryWithSubcategories> categories, 
             int? selectedCategoryId, 
             List<FaqOverview> firstCategoryFaqs,
+            int languageId,
             bool userHasFaqAdminPermission)
         {
             if (categories == null)
             {
-                return new IndexModel(new TreeContent(new List<TreeItem>(), null), new List<FaqOverviewModel>(), userHasFaqAdminPermission);
+                return new IndexModel(new TreeContent(new List<TreeItem>(), null), new List<FaqOverviewModel>(), languageId, userHasFaqAdminPermission);
             }
 
             var categoryTreeItems = categories.Select(CategoryToTreeItem).ToList();
@@ -28,7 +29,7 @@
             var firstCategoryFaqModels = 
                 firstCategoryFaqs?.Select(f => new FaqOverviewModel(f.Id, f.CreatedDate, f.ChangedDate, f.Text)).ToList();
 
-            return new IndexModel(categoriesTreeContent, firstCategoryFaqModels, userHasFaqAdminPermission);
+            return new IndexModel(categoriesTreeContent, firstCategoryFaqModels, languageId, userHasFaqAdminPermission);
         }
 
         private TreeItem CategoryToTreeItem(CategoryWithSubcategories categoryWithSubcategories)

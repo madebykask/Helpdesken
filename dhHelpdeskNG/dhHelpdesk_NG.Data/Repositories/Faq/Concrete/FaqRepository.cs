@@ -45,18 +45,9 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
             this.InitializeAfterCommit(newFaq, faqEntity);
         }
 
-        /// <summary>
-        /// The any FAQ with category id.
-        /// </summary>
-        /// <param name="categoryId">
-        /// The category id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
         public bool AnyFaqWithCategoryId(int categoryId)
         {
-            return this.Table.Any(f => f.FAQCategory_Id == categoryId);
+            return Table.Any(f => f.FAQCategory_Id == categoryId);
         }
 
         public void UpdateSwedishFaq(ExistingFaq existingFaq)
@@ -108,5 +99,11 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
         }
 
         #endregion
+
+
+        public void SearchFaqs()
+        {
+            
+        }
     }
 }

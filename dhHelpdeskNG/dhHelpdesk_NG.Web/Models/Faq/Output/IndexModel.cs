@@ -1,4 +1,7 @@
-﻿namespace DH.Helpdesk.Web.Models.Faq.Output
+﻿using System.Linq;
+using DH.Helpdesk.BusinessData.Enums;
+
+namespace DH.Helpdesk.Web.Models.Faq.Output
 {
     using System;
     using System.Collections.Generic;
@@ -7,22 +10,20 @@
 
     public sealed class IndexModel
     {
-        public IndexModel(TreeContent categories, List<FaqOverviewModel> firstCategoryFaqs, bool userHasFaqAdminPermission, bool showDetails = false)
+        public IndexModel(TreeContent categories, List<FaqOverviewModel> firstCategoryFaqs, int languageId, bool userHasFaqAdminPermission, bool showDetails = false)
         {
-            this.UserHasFaqAdminPermission = userHasFaqAdminPermission;
+            UserHasFaqAdminPermission = userHasFaqAdminPermission;
             if (categories == null)
-            {
-                throw new ArgumentNullException("categories", "Value cannot be null.");
-            }
+                throw new ArgumentNullException(nameof(categories), "Value cannot be null.");
+            
 
             if (firstCategoryFaqs == null)
-            {
-                throw new ArgumentNullException("firstCategoryFaqs", "Value cannot be null or empty.");
-            }
-
-            this.Categories = categories;
-            this.FirstCategoryFaqs = firstCategoryFaqs;
-            this.ShowDetails = showDetails;
+                throw new ArgumentNullException(nameof(firstCategoryFaqs), "Value cannot be null or empty.");
+            
+            Categories = categories;
+            FirstCategoryFaqs = firstCategoryFaqs;
+            LanguageId = languageId;
+            ShowDetails = showDetails;
         }
 
         public List<FaqOverviewModel> FirstCategoryFaqs { get; private set; }
@@ -31,6 +32,22 @@
 
         public bool UserHasFaqAdminPermission { get; private set; }
 
-        public bool ShowDetails { get; set; }
+        public bool ShowDetails { get; private set; }
+
+        public int LanguageId { get; private set; }
+
+        public string SortBy { get; set; }
+
+        public SortOrder SortOrder { get; set; }
+
+        #region Methods
+
+        public string GetFirstCategoryId()
+        {
+            var category = Categories?.Items.FirstOrDefault();
+            return category?.Value ?? "";
+        }
+
+        #endregion
     }
 }
