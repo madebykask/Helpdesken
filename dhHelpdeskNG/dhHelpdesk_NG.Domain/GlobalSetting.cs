@@ -34,5 +34,6 @@ namespace DH.Helpdesk.Domain
 		public int PerformanceLogFrequency { get; set; }
 		public int PerformanceLogSettingsCache { get; set; }
 		public virtual Language DefaultLanguage { get; set; }
+        public int NewAdvancedSearch { get; set; }
     }
 }

@@ -83,7 +83,7 @@
                 ProductAreaDropDown: "ProductAreaDropDown",
                 ClosingReasonDropDown: "ClosingReasonDropDown", 
                 // page params
-                sortOptions: @Html.SerializeObject(Model.SortOptions),
+                sortOptions: @Html.SerializeObject(Model.GridSettings.sortOptions),
                 doSearchAtBegining: @Model.DoSearchAtBegining.ToJavaScriptObject(),
                 isExtSearch: @Model.IsExtSearch.ToJavaScriptObject(),
                 userCustomers: @Html.SerializeObject(Model.UserCustomers),

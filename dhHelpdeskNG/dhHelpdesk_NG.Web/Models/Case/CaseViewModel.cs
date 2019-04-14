@@ -461,8 +461,6 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public JsonGridSettingsModel GridSettings { get; set; }
 
-        public GridSortOptions SortOptions { get; set; }
-
         public CaseRemainingTimeViewModel RemainingTime { get; set; }
 
         public List<ItemOverview> UserCustomers { get; set; }

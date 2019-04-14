@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Web.Controllers
 {
     public partial class CasesController
     {
+        [System.Web.Http.HttpGet]
         public ActionResult AdvancedSearch(bool? clearFilters = false, bool doSearchAtBegining = false, bool isExtSearch = false)
         {
             if (SessionFacade.CurrentUser == null)
@@ -37,24 +38,25 @@ namespace DH.Helpdesk.Web.Controllers
 
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
             var currentUserId = SessionFacade.CurrentUser.Id;
-            
-            var m = new AdvancedSearchIndexViewModel();
+
+            var model = new AdvancedSearchIndexViewModel();
+
             var userCustomers =
                 _userService.GetUserProfileCustomersSettings(SessionFacade.CurrentUser.Id)
-                    .Select(c => new ItemOverview(c.CustomerName, c.CustomerId.ToString())).OrderBy(c => c.Name).ToList();
+                    .Select(c => new ItemOverview(c.CustomerName, c.CustomerId.ToString()))
+                    .OrderBy(c => c.Name).ToList();
 
-            m.UserCustomers = userCustomers;
+            model.UserCustomers = userCustomers;
 
+            //get extended search customers
             var extendIncludedCustomerIds = _settingService.GetExtendedSearchIncludedCustomers();
             var extCustomers = _customerService.GetCustomers(extendIncludedCustomerIds);
-            m.ExtendedCustomers = extCustomers.ToList();
+            model.ExtendedCustomers = extCustomers.ToList();
 
             CaseSearchModel advancedSearchModel;
-            
-            if (clearFilters != null && clearFilters.Value || SessionFacade.CurrentAdvancedSearch == null)
+            if ((clearFilters != null && clearFilters.Value) || SessionFacade.CurrentAdvancedSearch == null)
             {
                 SessionFacade.CurrentAdvancedSearch = null;
-                
                 advancedSearchModel = _advancedSearchBehavior.CreateAdvancedSearchModel(currentCustomerId, currentUserId);
                 SessionFacade.CurrentAdvancedSearch = advancedSearchModel;
             }
@@ -63,30 +65,32 @@ namespace DH.Helpdesk.Web.Controllers
                 advancedSearchModel = SessionFacade.CurrentAdvancedSearch;
             }
 
-            m.CaseSearchFilterData = 
+            model.CaseSearchFilterData =
                 CreateAdvancedSearchFilterData(currentCustomerId, currentUserId, advancedSearchModel, userCustomers);
 
-            m.SpecificSearchFilterData = CreateAdvancedSearchSpecificFilterData(currentUserId);
+            model.SpecificSearchFilterData = CreateAdvancedSearchSpecificFilterData(currentUserId);
 
-            m.CaseSetting = GetCaseSettingModel(currentCustomerId, currentUserId);
-            m.GridSettings = JsonGridSettingsMapper.GetAdvancedSearchGridSettingsModel(currentCustomerId);
+            model.CaseSetting = GetCaseSettingModel(currentCustomerId, currentUserId);
+
+            model.GridSettings = JsonGridSettingsMapper.GetAdvancedSearchGridSettingsModel(currentCustomerId);
 
             if (advancedSearchModel.Search != null)
             {
-                m.GridSettings.sortOptions = new GridSortOptions
+                model.GridSettings.sortOptions = new GridSortOptions
                 {
                     sortBy = advancedSearchModel.Search.SortBy,
                     sortDir = advancedSearchModel.Search.Ascending ? SortingDirection.Asc : SortingDirection.Desc
                 };
             }
 
-            m.CaseSearchFilterData.IsAboutEnabled = 
-                m.CaseSetting.ColumnSettingModel.CaseFieldSettings.GetIsAboutEnabled();
+            model.CaseSearchFilterData.IsAboutEnabled =
+                model.CaseSetting.ColumnSettingModel.CaseFieldSettings.GetIsAboutEnabled();
 
-            m.DoSearchAtBegining = doSearchAtBegining;
-            m.IsExtSearch = isExtSearch;
+            model.DoSearchAtBegining = doSearchAtBegining;
+            model.IsExtSearch = isExtSearch;
 
-            return View("AdvancedSearch/Index", m);
+            var gs = _globalSettingService.GetGlobalSettings().Single();
+            return View(gs.NewAdvancedSearch.ToBool() ? "AdvancedSearch" : "AdvancedSearch/Index", model);
         }
 
         [HttpGet]

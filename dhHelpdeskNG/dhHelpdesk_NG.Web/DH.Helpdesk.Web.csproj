@@ -358,7 +358,6 @@
     <Compile Include="Models\Case\AdvancedCaseSearchInput.cs" />
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
-    <Compile Include="Controllers\AdvancedSearch.CasesController.cs" />
     <Compile Include="Controllers\CasesController_Actions.cs" />
     <Compile Include="Controllers\CasesController_AdvancedSearch.cs" />
     <Compile Include="Controllers\PasswordController.cs" />

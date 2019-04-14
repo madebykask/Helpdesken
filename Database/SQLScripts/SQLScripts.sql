@@ -96,6 +96,20 @@ RAISERROR('SET NOEXEC OFF', 10, 1) WITH NOWAIT
 
 GO
 
+IF NOT EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'NewAdvancedSearch' and Object_ID = Object_ID(N'dbo.tblGlobalSettings'))
+BEGIN
+    ALTER TABLE tblGlobalSettings
+    ADD [NewAdvancedSearch] int null
+        
+    DECLARE @SQLQuery AS NVARCHAR(500)
+    SET @SQLQuery = N'UPDATE tblGlobalSettings SET NewAdvancedSearch = 1'
+    EXECUTE sp_executesql @SQLQuery
+
+    ALTER TABLE tblGlobalSettings 
+    ALTER COLUMN NewAdvancedSearch int not null    
+END
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.41'
 --ROLLBACK --TMP
