@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Grid;
 using DH.Helpdesk.Web.Infrastructure.Grid.Output;
 using System.Collections.Generic;
@@ -8,6 +9,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Grid
 {
     public class JsonGridSettingsMapper
     {
+        // expandable fields can be add to this array 
+        private static readonly List<string> GridExpandableFields = new List<string>
+        {
+            GlobalEnums.TranslationCaseFields.Description.ToString()
+        };
+
         public static JsonGridSettingsModel ToJsonGridSettingsModel(GridSettingsModel srcModel, int customerId, int availableColCount, string[] pageSizeList)
         {
             return new JsonGridSettingsModel
@@ -22,7 +29,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Grid
                     id = it.id,
                     cls = it.cls,
                     displayName = Translation.GetForCase(it.name, customerId),
-                    field = it.name
+                    field = it.name,
+                    isExpandable = GridExpandableFields.Contains(it.name, StringComparer.OrdinalIgnoreCase),
+                    width = it.width
                 }).ToList()
             };
         }
@@ -54,19 +63,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Grid
                 { GlobalEnums.TranslationCaseFields.RegTime.ToString(), "5%"}
             };
 
-            // expandable fields can be add to this array 
-            var expandableFields = new [] 
-            {
-                GlobalEnums.TranslationCaseFields.Description.ToString()                    
-            };
-
             var ret = fields.Select(field => new JsonGridColumnDef
             {
                 id = GridColumnsDefinition.GetFieldId(field.Key),
                 field = field.Key,
                 displayName = Translation.GetForCase(field.Key, customerId),
                 cls = "colnormal",
-                isExpandable = expandableFields.Contains(field.Key),
+                isExpandable = GridExpandableFields.Contains(field.Key, StringComparer.OrdinalIgnoreCase),
                 width = field.Value
             }).ToList();
             

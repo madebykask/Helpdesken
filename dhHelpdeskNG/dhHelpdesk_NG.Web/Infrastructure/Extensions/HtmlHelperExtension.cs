@@ -1196,5 +1196,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
             return MvcHtmlString.Create(selectMarkup + Environment.NewLine + hiddenFieldMarkup);
         }
+
+        public static IHtmlString PreserveNewLines(this HtmlHelper htmlHelper, string message)
+        {
+            var encodedContent = 
+                string.IsNullOrEmpty(message) 
+                ? message 
+                : htmlHelper.Encode(message).Replace(Environment.NewLine, "<br/>").Replace("\n", "<br/>");
+            return htmlHelper.Raw(encodedContent);
+        }
     }
 }

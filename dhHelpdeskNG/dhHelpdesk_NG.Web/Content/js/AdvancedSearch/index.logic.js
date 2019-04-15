@@ -457,9 +457,12 @@ var GRID_STATE = {
         var uniqId = cellUniqueId++;
 
         if (isExtendedSearch && !extendedAvailable) {
-            if (colSetting.field !== "CaseNumber" && colSetting.field !== "Persons_Name" && colSetting.field !== "Caption")
-            { cellValue = null }
+            if (colSetting.field !== "CaseNumber" && colSetting.field !== "Persons_Name" && colSetting.field !== "Caption") {
+                cellValue = null;
+            }
         }
+
+        var cellValueFormatted = cellValue == null && cellValue === undefined ? '&nbsp;' : cellValue.toString();
 
         var url = encodeURIComponent(strJoin('/Cases/AdvancedSearch?', 'doSearchAtBegining=true', "&isExtSearch=", isExtendedSearch));
         if (colSetting.isExpandable) {
@@ -468,7 +471,7 @@ var GRID_STATE = {
                     '<td style="width:', colSetting.width, '">',
                     '<div id="divExpand_' + uniqId + '" class="expandable_' + caseId + '" style="height: 15px; overflow: hidden;">', //max-width:500px;
                     '<i class="icon-plus-sign ico-right expandable_', caseId, '" data-uniqId="iIcon_', uniqId, '" id="btnExpander_', caseId, '" onclick="toggleRowExpanation(', caseId, ')"></i> ' +
-                    '<a style="line-height:15px;" data-isbold="', isBold, '" data-uniqId="', uniqId, '" data-rowId="', caseId, '" class="exp" >', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a>',
+                    '<a style="line-height:15px;" data-isbold="', isBold, '" data-uniqId="', uniqId, '" data-rowId="', caseId, '" class="exp" >', cellValueFormatted, '</a>',
                     '</div>', '</td>');
             } else {
                 out = strJoin(
@@ -476,17 +479,17 @@ var GRID_STATE = {
                     '<div id="divExpand_' + uniqId + '" class="expandable_' + caseId + '" style="height: 15px; overflow: hidden;">', //max-width:500px;
                     '<i class="icon-plus-sign ico-right expandable_', caseId, '" data-uniqId="iIcon_', uniqId, '" id="btnExpander_', caseId, '" onclick="toggleRowExpanation(', caseId, ')"></i> ' +
                     '<a style="line-height:15px;" data-isbold="', isBold, '" data-uniqId="', uniqId, '" data-rowId="', caseId, '" class="exp" href="/Cases/Edit/', caseId, '?backUrl=',
-                    url, '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a>',
+                    url, '">', cellValueFormatted, '</a>',
                     '</div>', '</td>');
             }
         } else {
             if (isExtendedSearch && !extendedAvailable) {
                 out = strJoin(
-                    '<td style="width:', colSetting.width, '"><a style="line-height:15px;" >', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a></td>');
+                    '<td style="width:', colSetting.width, '"><a style="line-height:15px;" >', cellValueFormatted, '</a></td>');
             } else {
                 out = strJoin(
                     '<td style="width:', colSetting.width, '">',
-                    '<a style="line-height:15px;" href="/Cases/Edit/', caseId, '?backUrl=', url, '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a></td>');
+                    '<a style="line-height:15px;" href="/Cases/Edit/', caseId, '?backUrl=', url, '">', cellValueFormatted, '</a></td>');
             }
         }
         return out;

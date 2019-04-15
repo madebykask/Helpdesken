@@ -557,7 +557,7 @@ window.advancedSearchPage =
 
         this.formatCell = function (caseId, cellValue, colSetting, isBold, extendedAvailable, uniqId) {
             var self = this;
-            var out = ''
+            var out = '';
             var addExtendedInfo = false;
 
             if (self.isExtendedSearch && !extendedAvailable) {
@@ -568,7 +568,7 @@ window.advancedSearchPage =
             }
 
             var url = encodeURIComponent(strJoin('/Cases/AdvancedSearch?', 'doSearchAtBegining=true', "&isExtSearch=" + self.isExtendedSearch));
-            cellValue = isNullOrUndefined(cellValue) ? '&nbsp;' : cellValue.toString().replace(/<[^>]+>/ig, "");
+            cellValue = isNullOrUndefined(cellValue) ? '&nbsp;' : cellValue.toString(); 
             
             if (colSetting.isExpandable) {
 

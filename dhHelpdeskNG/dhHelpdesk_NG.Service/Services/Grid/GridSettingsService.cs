@@ -102,9 +102,6 @@ namespace DH.Helpdesk.Services.Services.Grid
                         var gridParams =
                             allGridParams.Where(it => !it.FieldId.HasValue).ToDictionary(it => it.Parameter.Trim(), it => it.Value.Trim());
 
-
-                            
-
                         var columnSettings = 
                             _caseSettingsService.GetSelectedCaseOverviewGridColumnSettings(customerId, userId, caseSettingsType);
 

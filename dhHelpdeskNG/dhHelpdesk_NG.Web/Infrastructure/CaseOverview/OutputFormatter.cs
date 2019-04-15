@@ -7,6 +7,7 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Common.Enums.Cases;
 using Field = DH.Helpdesk.Domain.Field;
 using System.Collections.Generic;
+using System.Web;
 
 namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
 {
@@ -43,23 +44,8 @@ namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
                 case FieldTypes.NullableHours:
                     return string.IsNullOrEmpty(field.StringValue) ? " - " : $"{field.StringValue} h";
                 default:
-                    if (field.TranslateThis)
-                    {
-                        if (field.Key.Equals(GlobalEnums.TranslationCaseFields.Status_Id.ToString()) || field.Key.Equals(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()))
-                        {
-                            return Translation.GetMasterDataTranslation(field.StringValue);
-                        }
-                        return Translation.GetCoreTextTranslation(field.StringValue);
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(field.StringValue))
-                        {
-                            return MvcHtmlString.Create(field.StringValue.Replace(Environment.NewLine, "<br />")).ToHtmlString();
-                        }
-                    }
-
-                    break;
+                    var content = FormatText(field);
+                    return content;
             }
 
             return string.Empty;
@@ -103,6 +89,33 @@ namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
             return userNamesStruct == null
                        ? string.Empty
                        : FormatUserName(userNamesStruct.FirstName, userNamesStruct.LastName);
+        }
+
+        public string FormatText(Field field)
+        {
+            var content = field.StringValue;
+            if (string.IsNullOrEmpty(content))
+                return content;
+
+            if (field.TranslateThis)
+            {
+                if (field.Key.Equals(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                    field.Key.Equals(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    content = Translation.GetMasterDataTranslation(content);
+                }
+                else
+                {
+                    content = Translation.GetCoreTextTranslation(content);
+                }
+            }
+            
+            if (!string.IsNullOrEmpty(content))
+            {
+                content = HttpUtility.HtmlEncode(content).Replace(Environment.NewLine, "<br/>").Replace("\n", "<br/>");
+            }
+            
+            return content;
         }
     }
 
