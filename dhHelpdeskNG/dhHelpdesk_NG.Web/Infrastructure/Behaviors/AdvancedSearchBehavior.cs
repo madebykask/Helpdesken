@@ -438,13 +438,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
             {
                 var userCustomerSettings = _userService.GetUser(userId);
                 var isStartPage = userCustomerSettings.StartPage == (int) StartPage.AdvancedSearch;
-                var isAdmin = SessionFacade.CurrentUser.UserGroupId == (int) UserGroups.Administrator;
 
                 filter = new CaseSearchFilter
                 {
                     CustomerId = customerId,
                     UserId = userId,
-                    UserPerformer = isStartPage && !isAdmin ? userId.ToString() : string.Empty,
+                    UserPerformer = isStartPage ? userId.ToString() : string.Empty,
                     CaseProgress = isStartPage
                         ? ((int) CaseProgressFilterEnum.CasesInProgress).ToString()
                         : string.Empty,
