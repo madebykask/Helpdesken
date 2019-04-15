@@ -358,7 +358,7 @@ window.advancedSearchPage =
                 IsExtendedSearch: fd.isExtendedSearch || 'false',
                 Customers: fd.lstfilterCustomers || '', //todo: check usages
                 CaseProgress: fd.lstfilterCaseProgress || '',
-                UserPerformer: fd.lstFilterPerformer || '',
+                UserPerformer: fd.lstfilterPerformer || '',
                 Initiator: fd.CaseInitiatorFilter || '',
                 InitiatorSearchScope: fd["CaseSearchFilterData.InitiatorSearchScope"],
                 CaseRegistrationDateStartFilter: fd.CaseRegistrationDateStartFilter || '', //date
