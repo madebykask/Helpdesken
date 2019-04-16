@@ -1,76 +1,59 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Models.OperationLogInputViewModel
+﻿@model DH.Helpdesk.Web.Models.OperationLogInputViewModel
 
 <div id="fragment-1" class="ui-tabs-panel">
     @if (TempData["Error"] != null)
     {
-        <div class="validation-summary-errors">@Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)
-            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
-        </div>    
-    } </div>
-    
+        <div class="validation-summary-errors">
+            @Translation.GetCoreTextTranslation("Driftlogg")
+        @Translation.GetCoreTextTranslation("som används går inte att ta bort")
+    </div>
+    }
+</div>
+
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Driftlogg", Enums.TranslationSource.TextTranslation)</a></li>        
+            <li class="active"><a href="#fragment-1">@Translation.GetCoreTextTranslation("Driftlogg")</a></li>
         </ul>
         <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
-                    <h4> @Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation) </h4>              
+                    <h4> @Translation.GetCoreTextTranslation("Allmänt") </h4>
                     <div class="row">
-                        <div class="span12">                              
+                        <div class="span12">
                             <table class="tableform" border="0">
                                 <tr>
-                                    <td class="span3">
-                                        @Translation.Get("Driftsobjekt", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>                                           
-                                        @Html.DropDownListFor(model => model.OperationLog.OperationObject_Id, Model.OperationObjects, "")
-                                    </td>
+                                    <td class="span3">@Translation.GetCoreTextTranslation("Driftsobjekt")</td>
+                                    <td>@Html.DropDownListFor(model => model.OperationLog.OperationObject_Id, Model.OperationObjects, "")</td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        @Translation.Get("Kategori", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>                                            
-                                        @Html.DropDownListFor(model => model.OperationLog.OperationLogCategory_Id, Model.OperationLogCategories, "")
-                                    </td>
+                                    <td>@Translation.GetCoreTextTranslation("Kategori")</td>
+                                    <td>@Html.DropDownListFor(model => model.OperationLog.OperationLogCategory_Id, Model.OperationLogCategories, "")</td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        @Translation.Get("Beskrivning", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        @Html.TextAreaFor(model => model.OperationLog.LogText, new { maxlength = "2000", style = "height:100px;", @class = "richtexteditor" })
-                                    </td>
+                                    <td>@Translation.GetCoreTextTranslation("Beskrivning")</td>
+                                    <td>@Html.TextAreaFor(model => model.OperationLog.LogText, new { maxlength = "4000", style = "height:100px;", @class = "richtexteditor" })</td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        @Translation.Get("Åtgärd", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        @Html.TextAreaFor(model => model.OperationLog.LogAction, new { maxlength = "2000", style = "height:100px;", @class = "richtexteditor" })
-                                    </td>
+                                    <td>@Translation.GetCoreTextTranslation("Åtgärd")</td>
+                                    <td>@Html.TextAreaFor(model => model.OperationLog.LogAction, new { maxlength = "4000", style = "height:100px;", @class = "richtexteditor" })</td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        @Translation.Get("Tidsåtgång", Enums.TranslationSource.TextTranslation)
-                                    </td>
+                                    <td>@Translation.GetCoreTextTranslation("Tidsåtgång")</td>
                                     <td>
                                         <table>
                                             <tr>
-                                                <td>                                                        
-                                                    @Translation.Get("tim", Enums.TranslationSource.TextTranslation)                                                         
+                                                <td>
+                                                    @Translation.GetCoreTextTranslation("tim")
                                                     <br />
-                                                    @Html.TextBoxFor(model => model.OperationLogHour,new { style = "width: 50px;"})                                                        
+                                                    @Html.TextBoxFor(model => model.OperationLogHour, new { style = "width: 50px;" })
                                                 </td>
                                                 <td>
                                                     &nbsp;&nbsp;&nbsp;
-                                                    @Translation.Get("min", Enums.TranslationSource.TextTranslation)
+                                                    @Translation.GetCoreTextTranslation("min")
                                                     <br />
                                                     : &nbsp;
-                                                    @Html.TextBoxFor(model => model.OperationLogMinute,new { style = "width: 50px;"})                                                        
+                                                    @Html.TextBoxFor(model => model.OperationLogMinute, new { style = "width: 50px;" })
                                                 </td>
                                             </tr>
                                         </table>
@@ -78,295 +61,309 @@
                                 </tr>
                             </table>
                         </div>
-                    </div>    
-                </div> 
+                    </div>
+                </div>
 
-                <div class="container">  <!-- Security Container -->
-                         <h4>@Translation.Get("Säkerhet", Enums.TranslationSource.TextTranslation)</h4>
-                         <div class="row">
-                         <div class="span12">                               
-                            <table class ="tableform" border="0">
-                               <tr>
-                                  <td class="span3">                                
-                                    @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)                                    
-                                  </td>
-                                  <td>                                    
-                                    <input type="checkbox" id="chkSecurity" name="chkSecurity" @(Model.OperationObjectsSelected.Count > 0 ? "checked=checked" : "") value="1"/>                                    
-                                    <input type="hidden" name="chkSecurity" value="0" />
-                                    @Translation.Get("Begränsa läsrättighet till", Enums.TranslationSource.TextTranslation)                                                                        
-                                  </td>                                   
-                               </tr> 
-                            </table >                                 
-                            <table class ="tableform">
-                               <tr id="securityOptions" style="@(Model.OperationObjectsSelected.Count > 0 ? "display:block" : "display:none")"  >
-                                  <td class="span3">                                      
-                                  </td>
-                                  <td style="width:200px">
-                                     @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
-                                     <br />
-                                     @Html.ListBox("WGsAvailable", Model.OperationObjectsAvailable, new { style = "height: 100px" })
-                                  </td>
-                                  <td style="vertical-align:middle;width:20px">
-                                      <input type="button" value="&gt;" id="addWGs" class="btn"/>
-                                    <input type="button" value="&lt;" id="removeWGs" class="btn"/>                                                                        
-                                  </td>
-                                  <td style="width:200px">
-                                    @Translation.Get("Valda", Enums.TranslationSource.TextTranslation)
-                                    <br />
-                                    @Html.ListBox("WGsSelected", Model.OperationObjectsSelected, new { style = "height: 100px" })
-                                  </td>
-                               </tr>                                                                                                      
-                            </table>                           
-                         </div>                         
-                     </div>
+                <div class="container">
+                    <!-- Security Container -->
+                    <h4>@Translation.GetCoreTextTranslation("Säkerhet")</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform" border="0">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.GetCoreTextTranslation("Driftgrupp")
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" id="chkSecurity" name="chkSecurity" @(Model.OperationObjectsSelected.Count > 0 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="chkSecurity" value="0" />
+                                        @Translation.GetCoreTextTranslation("Begränsa läsrättighet till")
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="tableform">
+                                <tr id="securityOptions" style="@(Model.OperationObjectsSelected.Count > 0 ? "display:block" : "display:none")">
+                                    <td class="span3"></td>
+                                    <td style="width:200px">
+                                        @Translation.GetCoreTextTranslation("Tillgängliga")
+                                        <br />
+                                        @Html.ListBox("WGsAvailable", Model.OperationObjectsAvailable, new { style = "height: 100px" })
+                                    </td>
+                                    <td style="vertical-align:middle;width:20px">
+                                        <input type="button" value="&gt;" id="addWGs" class="btn" />
+                                        <input type="button" value="&lt;" id="removeWGs" class="btn" />
+                                    </td>
+                                    <td style="width:200px">
+                                        @Translation.GetCoreTextTranslation("Valda")
+                                        <br />
+                                        @Html.ListBox("WGsSelected", Model.OperationObjectsSelected, new { style = "height: 100px" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>  <!-- Security Container -->
 
-                <div class="container"> <!-- Show Container -->                    
-                    <h4>@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)</h4>
+                <div class="container">
+                    <!-- Show Container -->
+                    <h4>@Translation.GetCoreTextTranslation("Visa")</h4>
                     <div class="row">
-                        <div class="span12">                            
+                        <div class="span12">
                             <table class="tableform" id="Visa" border="0">
-                               <tr>
-                                  <td class="span3">
-                                     @Translation.Get("Visa fr.o.m", Enums.TranslationSource.TextTranslation)
-                                  </td>
-                                  <td class="span9">
-                                     @Html.EditorFor(model => model.OperationLog.ShowDate, "DatePicker", new { id = "divOperationLog_ShowDate" }) 
-                                  </td>
-                               </tr>
-                               <tr>
-                                  <td>
-                                     @Translation.Get("Visa t.o.m", Enums.TranslationSource.TextTranslation)
-                                  </td>
-                                  <td>
-                                     @Html.EditorFor(model => model.OperationLog.ShowUntilDate, "DatePicker", new { id = "divOperationLog_ShowUntilDate" }) 
-                                  </td>
-                               </tr>
-                               <tr>
-                                   <td>
-                                       @Translation.Get("Visa på startsidan", Enums.TranslationSource.TextTranslation)
-                                   </td>
-                                   <td class="span9">                                        
-                                       <input id="chkShowOnStartPage" type="checkbox" name="OperationLog.ShowOnStartPage" @(Model.OperationLog.ShowOnStartPage == 1 ? "checked=checked" : "") value ="1" @(Model.OperationObjectShow == 0 ? "disabled=disabled" : "")/>                                        
-                                       <input type="hidden" name="OperationLog.ShowOnStartPage" value="0" />                                                                                                             
-                                   </td>                                    
-                               </tr>
-                               @*<tr>
-                                   <td> 
-                                       @Translation.Get("Informera handläggarna", Enums.TranslationSource.TextTranslation)
-                                   </td>
-                                   <td class="span9">
-                                       <input type="checkbox" name="OperationLog.InformUsers" @(Model.OperationLog.InformUsers == 1 ? "checked=checked" : "")  value="1" />                                        
-                                       <input type="hidden" name="OperationLog.InformUsers" value="0" />                                                                               
-                                       @Translation.Get("Popup", Enums.TranslationSource.TextTranslation)
-                                   </td>                                
-                               </tr>*@
-                               <tr>
-                                   <td> 
-                                       @Translation.Get("Visa på självservice", Enums.TranslationSource.TextTranslation)
-                                   </td>
-                                   <td>
-                                       <input type="checkbox" name="OperationLog.PublicInformation" @(Model.OperationLog.PublicInformation == 1 ? "checked=checked" : "")  value="1" />                                        
-                                       <input type="hidden" name="OperationLog.PublicInformation" value="0" /> 
-                                       @*@Translation.Get("Visa", Enums.TranslationSource.TextTranslation)&nbsp;*@
-                                       @*<input type="checkbox" name="OperationLog.Popup" @(Model.OperationLog.Popup == 1 ? "checked=checked" : "")  value="1" />                                                                                                                       
-                                       <input type="hidden" name="OperationLog.Popup" value="0" />                                                                               
-                                       @Translation.Get("Popup", Enums.TranslationSource.TextTranslation)*@
+                                <tr>
+                                    <td class="span3">@Translation.GetCoreTextTranslation("Visa fr.o.m")</td>
+                                    <td class="span9">
+                                        @Html.EditorFor(model => model.OperationLog.ShowDate, "DatePicker", new { id = "divOperationLog_ShowDate" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Translation.GetCoreTextTranslation("Visa t.o.m")</td>
+                                    <td>
+                                        @Html.EditorFor(model => model.OperationLog.ShowUntilDate, "DatePicker", new { id = "divOperationLog_ShowUntilDate" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Translation.GetCoreTextTranslation("Visa på startsidan")</td>
+                                    <td class="span9">
+                                        <input id="chkShowOnStartPage" type="checkbox" name="OperationLog.ShowOnStartPage" @(Model.OperationLog.ShowOnStartPage == 1 ? "checked=checked" : "") value="1" @(Model.OperationObjectShow == 0 ? "disabled=disabled" : "") />
+                                        <input type="hidden" name="OperationLog.ShowOnStartPage" value="0" />
+                                    </td>
+                                </tr>
+                                @*<tr>
+                                        <td>
+                                            @Translation.GetCoreTextTranslation("Informera handläggarna")
+                                        </td>
+                                        <td class="span9">
+                                            <input type="checkbox" name="OperationLog.InformUsers" @(Model.OperationLog.InformUsers == 1 ? "checked=checked" : "")  value="1" />
+                                            <input type="hidden" name="OperationLog.InformUsers" value="0" />
+                                            @Translation.GetCoreTextTranslation("Popup")
+                                        </td>
+                                    </tr>*@
+                                <tr>
+                                    <td>@Translation.GetCoreTextTranslation("Visa på självservice")</td>
+                                    <td>
+                                        <input type="checkbox" name="OperationLog.PublicInformation" @(Model.OperationLog.PublicInformation == 1 ? "checked=checked" : "") value="1" />
+                                        <input type="hidden" name="OperationLog.PublicInformation" value="0" />
+                                        @*@Translation.GetCoreTextTranslation("Visa")&nbsp;*@
+                                        @*<input type="checkbox" name="OperationLog.Popup" @(Model.OperationLog.Popup == 1 ? "checked=checked" : "")  value="1" />
+                                            <input type="hidden" name="OperationLog.Popup" value="0" />
+                                            @Translation.GetCoreTextTranslation("Popup")*@
                                         @*</label>*@
-                                   </td>                                                                   
-                               </tr>
-                               <tr>
-                                   <td>
-                                       @Translation.Get("Extern beskrivning", Enums.TranslationSource.TextTranslation)
-                                   </td>
-                                   <td>
-                                       @Html.TextAreaFor(model => model.OperationLog.LogTextExternal, new { maxlength = "2000", style = "height:100px;", @class = "richtexteditor" })
-                                   </td>
-                               </tr>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Extern beskrivning")
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.OperationLog.LogTextExternal,
+                                                new { maxlength = "4000", style = "height:100px;", @class = "richtexteditor" })
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>
                 </div> <!-- Show Container -->
 
-                <div class="container"> <!-- Email Container -->                    
-                    <h4>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</h4>
+                <div class="container">
+                    <!-- Email Container -->
+                    <h4>@Translation.GetCoreTextTranslation("E-post")</h4>
                     <div class="row">
-                         <div class="span12">                               
-                            <table class ="tableform" border="0">
-                               <tr>
-                                  <td class="span3">                                
-                                    @Translation.Get("Skicka till", Enums.TranslationSource.TextTranslation)                                    
-                                  </td>
-                                  <td>
-                                      <div class="checkbox">
-                                            <input type="checkbox" id="chkOperationLogEmail" name="chkOperationLogEmail" value="1"/>                                    
+                        <div class="span12">
+                            <table class="tableform" border="0">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.GetCoreTextTranslation("Skicka till")
+                                    </td>
+                                    <td>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="chkOperationLogEmail" name="chkOperationLogEmail" value="1" />
                                             <input type="hidden" name="chkOperationLogEmail" value="0" />
                                             @*@Html.CheckBoxFor(model => model.OperationLogList.SendMailAboutLog)*@
-                                            <span class="lbl">@Translation.Get("Skicka driftlogg till", Enums.TranslationSource.TextTranslation)</span>
-                                        </div>                                                       
-                                  </td>                                   
-                               </tr> 
-                            </table >                                 
-                         </div>                         
-                     </div>
+                                            <span class="lbl">@Translation.GetCoreTextTranslation("Skicka driftlogg till")</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                     <div id="divEmailRecepientsOperationLog" style="display: none" class="row">
-                        <div class="span12">                               
+                        <div class="span12">
                             <table border="0">
-                               <tr>
-                                  <td class="span3">                                                            
-                                  </td>
-                                  <td>
-                                      @Html.TextAreaFor(model => model.OperationLogList.EmailRecepientsOperationLog, new { @readonly = "readonly" })                                              
-                                  </td>                                   
-                               </tr> 
-                            </table>                                 
-                         </div>                      
-                        
+                                <tr>
+                                    <td class="span3"></td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.OperationLogList.EmailRecepientsOperationLog, new { @readonly = "readonly" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
                     </div>
                 </div> <!-- Email Container -->
                 @if (Model.CustomerSettings.SMSEMailDomain != "")
                 {
-                    <div class="container"> <!-- SMS Container -->                    
-                        <h4><input type="checkbox" id="chkOperationLogSMS" name="chkOperationLogSMS" value="1"/>&nbsp;@Translation.Get("SMS", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="container">
+                        <!-- SMS Container -->
+                        <h4><input type="checkbox" id="chkOperationLogSMS" name="chkOperationLogSMS" value="1" />&nbsp;@Translation.GetCoreTextTranslation("SMS")</h4>
                         <div class="row" id="divOperationLogSMS" style="display:none">
-                             <div class="span12">                               
-                                <table class ="tableform" border="0">
-                                   <tr>
-                                      <td class="span3">                                
-                                        @Translation.Get("SMS Text", Enums.TranslationSource.TextTranslation)                                    
-                                      </td>
-                                      <td>
-                                        <textarea class="CellText" name="txtSMS" rows="8" maxlength="500"></textarea>                              
-                                      </td>                                   
-                                   </tr> 
-                                   <tr>
-                                      <td class="span3">                                
-                                        @Translation.Get("Mottagare SMS", Enums.TranslationSource.TextTranslation)                                    
-                                      </td>
-                                      <td>
-                                        &nbsp;                         
-                                      </td>                                   
-                                   </tr>
+                            <div class="span12">
+                                <table class="tableform" border="0">
                                     <tr>
-                                      <td class="span3">                                
-                                        @Translation.Get("Handläggare", Enums.TranslationSource.TextTranslation)                                    
-                                      </td>
-                                      <td style="width:200px">
-                                         @Html.ListBox("UsersAvailable", Model.AdministratorsAvailable, new { style = "height: 100px" })
-                                      </td>
-                                      <td style="vertical-align:middle;width:20px">
-                                          <input type="button" value="&gt;" id="addUs" class="btn"/>
-                                        <input type="button" value="&lt;" id="removeUs" class="btn"/>                                                                        
-                                      </td>
-                                      <td style="width:200px">
-                                        @Html.ListBox("UsersSelected", Model.AdministratorsSelected, new { style = "height: 100px" })
-                                      </td>               
-                                   </tr>
-                                   <tr>
-                                      <td class="span3">                                
-                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)                                    
-                                      </td>
-                                      <td style="width:200px">
-                                         @Html.ListBox("WGsSMSAvailable", Model.SMSWorkingGroupAvailable, new { style = "height: 100px" })
-                                      </td>
-                                      <td style="vertical-align:middle;width:20px">
-                                          <input type="button" value="&gt;" id="addWGsSMS" class="btn"/>
-                                        <input type="button" value="&lt;" id="removeWGsSMS" class="btn"/>                                                                        
-                                      </td>
-                                      <td style="width:200px">
-                                        @Html.ListBox("WGsSMSSelected", Model.SMSWorkingGroupSelected, new { style = "height: 100px" })
-                                      </td>                                
-                                   </tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("SMS Text")
+                                        </td>
+                                        <td>
+                                            <textarea class="CellText" name="txtSMS" rows="8" maxlength="500"></textarea>
+                                        </td>
+                                    </tr>
                                     <tr>
-                                      <td class="span3">                                
-                                        @Translation.Get("Systemansvarig", Enums.TranslationSource.TextTranslation)                                    
-                                      </td>
-                                      <td style="width:200px">
-                                         @Html.ListBox("SRsAvailable", Model.SystemResponsiblesAvailable, new { style = "height: 100px" })
-                                      </td>
-                                      <td style="vertical-align:middle;width:20px">
-                                          <input type="button" value="&gt;" id="addSRs" class="btn"/>
-                                        <input type="button" value="&lt;" id="removeSRs" class="btn"/>                                                                        
-                                      </td>
-                                      <td style="width:200px">
-                                        @Html.ListBox("SRsSelected", Model.SystemResponsiblesSelected, new { style = "height: 100px" })
-                                      </td>                                
-                                   </tr>  
-                                </table >                                 
-                             </div>                         
-                         </div>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Mottagare SMS")
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Handläggare")
+                                        </td>
+                                        <td style="width:200px">
+                                            @Html.ListBox("UsersAvailable", Model.AdministratorsAvailable, new { style = "height: 100px" })
+                                        </td>
+                                        <td style="vertical-align:middle;width:20px">
+                                            <input type="button" value="&gt;" id="addUs" class="btn" />
+                                            <input type="button" value="&lt;" id="removeUs" class="btn" />
+                                        </td>
+                                        <td style="width:200px">
+                                            @Html.ListBox("UsersSelected", Model.AdministratorsSelected, new { style = "height: 100px" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Driftgrupp")
+                                        </td>
+                                        <td style="width:200px">
+                                            @Html.ListBox("WGsSMSAvailable", Model.SMSWorkingGroupAvailable, new { style = "height: 100px" })
+                                        </td>
+                                        <td style="vertical-align:middle;width:20px">
+                                            <input type="button" value="&gt;" id="addWGsSMS" class="btn" />
+                                            <input type="button" value="&lt;" id="removeWGsSMS" class="btn" />
+                                        </td>
+                                        <td style="width:200px">
+                                            @Html.ListBox("WGsSMSSelected", Model.SMSWorkingGroupSelected, new { style = "height: 100px" })
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Systemansvarig")
+                                        </td>
+                                        <td style="width:200px">
+                                            @Html.ListBox("SRsAvailable", Model.SystemResponsiblesAvailable, new { style = "height: 100px" })
+                                        </td>
+                                        <td style="vertical-align:middle;width:20px">
+                                            <input type="button" value="&gt;" id="addSRs" class="btn" />
+                                            <input type="button" value="&lt;" id="removeSRs" class="btn" />
+                                        </td>
+                                        <td style="width:200px">
+                                            @Html.ListBox("SRsSelected", Model.SystemResponsiblesSelected, new { style = "height: 100px" })
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                     </div> <!-- SMS Container -->
                 }
                 @if (Model.OperationLogEmailLog.Count > 0)
                 {
-                <div class="container"> <!-- Logg Container -->                    
-                    <h4>@Translation.Get("Logg", Enums.TranslationSource.TextTranslation)</h4>
-                    <div class="row">
-                         <div class="span12">                               
-                            <table class ="tableform" border="0">
-                               <tr>
-                                  <td>                                
-                                        <b>@Translation.Get("Skapad datum", Enums.TranslationSource.TextTranslation)</b>                       
-                                  </td>
-                                  <td>
-                                        <b>@Translation.Get("Mottagare", Enums.TranslationSource.TextTranslation)</b>                                  
-                                  </td>
-                                   <td>
-                                        <b>@Translation.Get("Typ", Enums.TranslationSource.TextTranslation)</b>                                  
-                                  </td>   
-                                  <td>
-                                        <b>@Translation.Get("Meddelande", Enums.TranslationSource.TextTranslation)</b>                                  
-                                  </td>                              
-                               </tr>
-                                @foreach (var email in Model.OperationLogEmailLog)
-                                { 
-                                   <tr>
-                                       <td style="width:150px">
-                                           <label>@email.CreatedDate</label>
-                                       </td>
-                                       <td style="width:200px">
-                                           <label>@email.Recipients</label>
-                                       </td>
-                                       <td style="width:150px">
-                                           @if (email.SMSText != "")
-                                           {
-                                              <label>@Translation.Get("SMS", Enums.TranslationSource.TextTranslation)</label>
-                                           }
-                                           else
-                                           {
-                                              <label>@Translation.Get("E-post", Enums.TranslationSource.TextTranslation)</label> 
-                                           }
-                                       </td>
-                                       <td>
-                                           <label>@email.SMSText</label>
-                                       </td>
-                                   </tr>
+                    <div class="container">
+                        <!-- Logg Container -->
+                        <h4>@Translation.GetCoreTextTranslation("Logg")</h4>
+                        <div class="row">
+                            <div class="span12">
+                                <table class="tableform" border="0">
+                                    <tr>
+                                        <td>
+                                            <b>@Translation.GetCoreTextTranslation("Skapad datum")</b>
+                                        </td>
+                                        <td>
+                                            <b>@Translation.GetCoreTextTranslation("Mottagare")</b>
+                                        </td>
+                                        <td>
+                                            <b>@Translation.GetCoreTextTranslation("Typ")</b>
+                                        </td>
+                                        <td>
+                                            <b>@Translation.GetCoreTextTranslation("Meddelande")</b>
+                                        </td>
+                                    </tr>
+                                    @foreach (var email in Model.OperationLogEmailLog)
+                    {
+                    <tr>
+                        <td style="width:150px">
+                            <label>@email.CreatedDate</label>
+                        </td>
+                        <td style="width:200px">
+                            <label>@email.Recipients</label>
+                        </td>
+                        <td style="width:150px">
+                            @if (email.SMSText != "")
+                                {
+                                <label>@Translation.GetCoreTextTranslation("SMS")</label>
                                 }
-                            </table >                                 
-                         </div>                         
-                     </div>
-                </div> <!-- Logg Container -->
+                                else
+                                {
+                                <label>@Translation.GetCoreTextTranslation("E-post")</label>
+                                }
+                        </td>
+                        <td>
+                            <label>@email.SMSText</label>
+                        </td>
+                    </tr>
+                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div> <!-- Logg Container -->
                 }
                 @Html.HiddenFor(model => model.OperationLog.Customer_Id)
-                @Html.HiddenFor(model => model.OperationLog.Id)                                    
+                @Html.HiddenFor(model => model.OperationLog.Id)
 
-       </div>
-     </div>
-  </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 @Html.Partial("_SendToDialog", Model.SendToDialogModel)
 
 <script type="text/javascript">
 
+    //prevent from loading on page load 
+    window.tinymceDefaultOptions.initOnPageLoad = false;
+    window.tinymceDefaultOptions.maxLength = 4000;
+    window.tinymceDefaultOptions.showMaxLimitErrorMessage = false;
 
     $(function () {
+
         $("#OperationLog_OperationObject_Id").focus();
+
         if ($("#chkSecurity").is(":checked"))
             $("#securityOptions").show();
 
-        $("#chkSecurity").click(function () {        
+        $("#chkSecurity").click(function () {
             $("#securityOptions").toggle();
         });
+
+        var $form = $("#target");
+        setupValidation($form);
+
+        subscribeUIEvents();
+
+        //init tinymce editors
+        tinymce.init(window.tinymceDefaultOptions);
+    });
+
+    function subscribeUIEvents() {
 
         $("#OperationLog_OperationObject_Id").on("change", function () {
             var selectedId = $("#OperationLog_OperationObject_Id option:selected").val();
@@ -374,119 +371,153 @@
                 $.get("/OperationLog/GetOperationObjectAttr/", { id: selectedId },
                     function (data) {
                         if (data != null) {
-                            if (data != "0") {                                
+                            if (data != "0") {
                                 $("#chkShowOnStartPage").removeAttr("disabled");
-                                $("#chkShowOnStartPage").attr("checked","checked");
+                                $("#chkShowOnStartPage").attr("checked", "checked");
                             }
                             else {
                                 $("#chkShowOnStartPage").removeAttr("checked");
                                 $("#chkShowOnStartPage").attr("disabled", "disabled");
                             }
-                        }                        
-                });                
+                        }
+                    });
             }
         });
-    });
 
-    function submitForm() {
-        $("#WGsSelected option").attr("selected", "selected");
-        $("#UsersSelected option").attr("selected", "selected");
-        $("#SRsSelected option").attr("selected", "selected")
-        $("#WGsSMSSelected option").attr("selected", "selected")
-        $("#txtSMS").val();
-        $("#target").submit();
+        $("#addWGs").click(function () {
+            $("#WGsAvailable option:selected").remove().appendTo("#WGsSelected");
+            $("#WGsAvailable").get(0).selectedIndex = -1;
+            $("#WGsSelected").get(0).selectedIndex = -1;
+            return false;
+        });
+
+        $("#removeWGs").click(function () {
+            $("#WGsSelected option:selected").remove().appendTo("#WGsAvailable");
+            $("#WGsAvailable").get(0).selectedIndex = -1;
+            $("#WGsAvailable").get(0).selectedIndex = -1;
+            return false;
+        });
+
+        $("#chkOperationLogEmail").click(function () {
+            if ($("#chkOperationLogEmail").is(":checked")) {
+                $("#divSendToDialogCase").dialog("option", "width", 450);
+                $("#divSendToDialogCase").dialog("option", "height", 550);
+                $("#divSendToDialogCase").dialog("open");
+            }
+        });
+
+        $("#chkOperationLogSMS").click(function () {
+            if ($("#chkOperationLogSMS").is(":checked")) {
+                $("#divOperationLogSMS").show();
+            }
+            $("#chkOperationLogSMS").click(function () {
+                $("#divOperationLogSMS").toggle();
+            });
+        });
+
+        $("#addWGsSMS").click(function () {
+            $("#WGsSMSAvailable option:selected").remove().appendTo("#WGsSMSSelected");
+            $("#WGsSMSAvailable").get(0).selectedIndex = -1;
+            $("#WGsSMSSelected").get(0).selectedIndex = -1;
+            return false;
+        });
+
+        $("#removeWGsSMS").click(function () {
+            $("#WGsSMSSelected option:selected").remove().appendTo("#WGsSMSAvailable");
+            $("#WGsSMSAvailable").get(0).selectedIndex = -1;
+            $("#WGsSMSAvailable").get(0).selectedIndex = -1;
+            return false;
+        });
+
+        $("#addUs").click(function () {
+            $("#UsersAvailable option:selected").remove().appendTo("#UsersSelected");
+            $("#UsersAvailable").get(0).selectedIndex = -1;
+            $("#UsersSelected").get(0).selectedIndex = -1;
+            return false;
+        });
+
+        $("#removeUs").click(function () {
+            $("#UsersSelected option:selected").remove().appendTo("#UsersAvailable");
+            $("#UsersAvailable").get(0).selectedIndex = -1;
+            $("#UsersAvailable").get(0).selectedIndex = -1;
+            return false;
+        });
+
+        $("#addSRs").click(function () {
+            $("#SRsAvailable option:selected").remove().appendTo("#SRsSelected");
+            $("#SRsAvailable").get(0).selectedIndex = -1;
+            $("#SRsSelected").get(0).selectedIndex = -1;
+            return false;
+        });
+
+        $("#removeSRs").click(function () {
+            $("#SRsSelected option:selected").remove().appendTo("#SRsAvailable");
+            $("#SRsAvailable").get(0).selectedIndex = -1;
+            $("#SRsAvailable").get(0).selectedIndex = -1;
+            return false;
+        });
     }
 
-    $("#addWGs").click(function () {
-        $("#WGsAvailable option:selected").remove().appendTo("#WGsSelected");
-        $("#WGsAvailable").get(0).selectedIndex = -1;
-        $("#WGsSelected").get(0).selectedIndex = -1;        
-        return false;
-    });
+    function setupValidation($form) {
+        // remove asp.net mvc validator
+        $form.removeData('validator');
 
-    $("#removeWGs").click(function () {
-        $("#WGsSelected option:selected").remove().appendTo("#WGsAvailable");
-        $("#WGsAvailable").get(0).selectedIndex = -1;
-        $("#WGsAvailable").get(0).selectedIndex = -1;
-        return false;
-    });
-
-    $("#chkOperationLogEmail").click(function () {
-        if ($("#chkOperationLogEmail").is(":checked")) {
-            $("#divSendToDialogCase").dialog("option", "width", 450);
-            $("#divSendToDialogCase").dialog("option", "height", 550);
-            $("#divSendToDialogCase").dialog("open");
-        }
-    });
-
-    $("#chkOperationLogSMS").click(function () {
-        if ($("#chkOperationLogSMS").is(":checked")) {
-            $("#divOperationLogSMS").show();
-        }
-        $("#chkOperationLogSMS").click(function () {
-            $("#divOperationLogSMS").toggle();
-        });
-    });
-
-    $("#addWGsSMS").click(function () {
-        $("#WGsSMSAvailable option:selected").remove().appendTo("#WGsSMSSelected");
-        $("#WGsSMSAvailable").get(0).selectedIndex = -1;
-        $("#WGsSMSSelected").get(0).selectedIndex = -1;
-        return false;
-    });
-
-    $("#removeWGsSMS").click(function () {
-        $("#WGsSMSSelected option:selected").remove().appendTo("#WGsSMSAvailable");
-        $("#WGsSMSAvailable").get(0).selectedIndex = -1;
-        $("#WGsSMSAvailable").get(0).selectedIndex = -1;
-        return false;
-    });
-
-    $("#addUs").click(function () {
-        $("#UsersAvailable option:selected").remove().appendTo("#UsersSelected");
-        $("#UsersAvailable").get(0).selectedIndex = -1;
-        $("#UsersSelected").get(0).selectedIndex = -1;
-        return false;
-    });
-
-    $("#removeUs").click(function () {
-        $("#UsersSelected option:selected").remove().appendTo("#UsersAvailable");
-        $("#UsersAvailable").get(0).selectedIndex = -1;
-        $("#UsersAvailable").get(0).selectedIndex = -1;
-        return false;
-    });
-    
-    $("#addSRs").click(function () {
-        $("#SRsAvailable option:selected").remove().appendTo("#SRsSelected");
-        $("#SRsAvailable").get(0).selectedIndex = -1;
-        $("#SRsSelected").get(0).selectedIndex = -1;
-        return false;
-    });
-
-    $("#removeSRs").click(function () {
-        $("#SRsSelected option:selected").remove().appendTo("#SRsAvailable");
-        $("#SRsAvailable").get(0).selectedIndex = -1;
-        $("#SRsAvailable").get(0).selectedIndex = -1;
-        return false;
-    });
-
-    $(function () {
-        var validator = $("#target").validate({
+        return $form.validate({
+            ignore: '', // validate hidden as well
             rules: {
-                "OperationLog.Text": {
+                "OperationLog.OperationObject_Id": {
                     required: true
+                },
+                "OperationLog.LogText": {
+                    required: true,
+                    maxlength: 4000
+                },
+                "OperationLog.LogAction": {
+                    //required: true,
+                    maxlength: 4000
+                },
+
+                "OperationLog.LogTextExternal": {
+                    //required: true,
+                    maxlength: 4000
                 }
             },
+
             messages: {
-                "OperationLog.Text": {
-                    required: "@Translation.GetForJS("Du måste ange en beskrivning", Enums.TranslationSource.TextTranslation)"
+                "OperationLog.OperationObject_Id": {
+                    required: "@Translation.GetForJS("OperlationLog object Id is required")"
+                },
+                "OperationLog.LogText": {
+                    required: "@Translation.GetForJS("Du måste ange en beskrivning")",
+                    maxlength: "@Translation.GetForJS("Max chars number has been excedeed")"
+                },
+
+                "OperationLog.LogAction": {
+                    required: "@Translation.GetForJS("Du måste ange") @Translation.GetForJS("Åtgärd")",
+                    maxlength: "@Translation.GetForJS("Max chars number has been excedeed")"
+                },
+
+                "OperationLog.LogTextExternal": {
+                    required: "@Translation.GetForJS("Du måste ange") @Translation.GetForJS("Extern beskrivning")",
+                    maxlength: "@Translation.GetForJS("Max chars number has been excedeed")"
                 }
             },
+
+            //callback when the form is valid
             submitHandler: function (form) {
                 form.submit();
             }
         });
-    });
+    }
 
-
+    function submitForm() {
+        $("#WGsSelected option").attr("selected", "selected");
+        $("#UsersSelected option").attr("selected", "selected");
+        $("#SRsSelected option").attr("selected", "selected");
+        $("#WGsSMSSelected option").attr("selected", "selected");
+        $("#txtSMS").val();
+        $("#target").submit();
+    }
 </script>
+
+

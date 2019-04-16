@@ -96,6 +96,7 @@ RAISERROR('SET NOEXEC OFF', 10, 1) WITH NOWAIT
 
 GO
 
+RAISERROR('Adding new NewAdvancedSearch column in tblGlobalSettings table ', 10, 1) WITH NOWAIT
 IF NOT EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'NewAdvancedSearch' and Object_ID = Object_ID(N'dbo.tblGlobalSettings'))
 BEGIN
     ALTER TABLE tblGlobalSettings
@@ -108,6 +109,80 @@ BEGIN
     ALTER TABLE tblGlobalSettings 
     ALTER COLUMN NewAdvancedSearch int not null    
 END
+GO
+
+RAISERROR('Changing tblOperationLog text columns to new size', 10, 1) WITH NOWAIT
+GO
+
+--creating temp procedure to remove default constraints if any 
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'P' AND name = 'tempRemoveDefaultConstaint')
+  DROP PROCEDURE tempRemoveDefaultConstaint
+GO
+CREATE PROCEDURE tempRemoveDefaultConstaint(
+    @tableName as nvarchar(128), 
+    @columnName as nvarchar(128)) as
+BEGIN        
+        
+    DECLARE @name as nvarchar(256)
+    
+    --get column default constraint 
+    select @name = dc.name
+    from sys.default_constraints dc
+    join sys.objects o
+	   on o.object_id = dc.parent_object_id
+    join sys.columns c
+	   on o.object_id = c.object_id
+	   and c.column_id = dc.parent_column_id
+    where o.name = @tableName
+    and c.name = @columnName
+
+    PRINT 'Found:' + ISNULL(@name, 'unknown')
+
+    IF (LEN(@name) > 0) 
+    BEGIN
+	   DECLARE @cmd nvarchar(1024) 
+	   SET @cmd = N'ALTER TABLE dbo.' + @tableName + ' DROP CONSTRAINT ' + @name
+	   PRINT @cmd
+	   EXEC (@cmd)
+    END    
+END
+GO
+    --remove default constraints
+    exec tempRemoveDefaultConstaint @tableName = 'tblOperationLog', @columnName = 'LogText'
+    GO    
+    exec tempRemoveDefaultConstaint @tableName = 'tblOperationLog', @columnName = 'LogAction'
+    GO
+    exec tempRemoveDefaultConstaint @tableName = 'tblOperationLog', @columnName = 'LogTextExternal'
+    GO
+       
+    ALTER TABLE tblOperationLog ALTER COLUMN LogAction NVARCHAR(MAX) NOT NULL    
+    GO
+    
+    ALTER TABLE tblOperationLog ALTER COLUMN LogAction NVARCHAR(MAX) NOT NULL    
+    GO 
+
+    ALTER TABLE tblOperationLog  ALTER COLUMN LogText NVARCHAR(MAX) NOT NULL
+    GO
+
+    ALTER TABLE tblOperationLog
+    ALTER COLUMN LogTextExternal NVARCHAR(MAX) NOT NULL   
+    GO
+
+    --restore default values constraints
+    ALTER TABLE tblOperationLog ADD CONSTRAINT DF_tblOperationLog_LogText
+    DEFAULT('') FOR [LogText]
+    GO
+
+    ALTER TABLE tblOperationLog ADD CONSTRAINT DF_tblOperationLog_LogAction
+    DEFAULT('') FOR [LogAction]
+    GO
+
+    ALTER TABLE tblOperationLog ADD CONSTRAINT DF_tblOperationLog_LogTextExternal
+    DEFAULT('') FOR [LogTextExternal]
+    GO
+
+-- drop temp proc
+DROP PROCEDURE tempRemoveDefaultConstaint
 GO
 
 -- Last Line to update database version

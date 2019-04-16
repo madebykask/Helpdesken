@@ -292,20 +292,17 @@ namespace DH.Helpdesk.Services.Services
 
         public void SendOperationLogEmail(OperationLog operationLog, OperationLogList operationLogList, Customer customer)
         {
-
-
             var helpdeskMailFromAdress = customer.HelpdeskEmail;
 
             // get list of fields to replace [#1] tags in the subjcet and body texts
-            List<Field> fields = GetFieldsForEmail(operationLogList);
+            var fields = GetFieldsForEmail(operationLogList);
 
-            if (operationLog == null || operationLog.Id <= 0 ||
-                string.IsNullOrWhiteSpace(operationLogList.EmailRecepientsOperationLog))
+            if (operationLog == null || operationLog.Id <= 0 || string.IsNullOrWhiteSpace(operationLogList.EmailRecepientsOperationLog))
             {
                 return;
             }
 
-            var template = this._mailTemplateService.GetMailTemplateForCustomerAndLanguage(
+            var template = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(
                                                 operationLog.Customer_Id,
                                                 operationLogList.Language_Id,
                                                 (int)GlobalEnums.MailTemplates.OperationLog);
@@ -322,7 +319,8 @@ namespace DH.Helpdesk.Services.Services
                 var info = _emailSendingSettingsProvider.GetSettings();
                 smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
             }
-            if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
+
+            if (!string.IsNullOrEmpty(template.Body) && !string.IsNullOrEmpty(template.Subject))
             {
                 var to = operationLogList.EmailRecepientsOperationLog
                                     .Replace(" ", "")
@@ -332,26 +330,33 @@ namespace DH.Helpdesk.Services.Services
                 foreach (var t in to)
                 {
                     var curMail = t.Trim();
-                    if (!string.IsNullOrWhiteSpace(t) && this._emailService.IsValidEmail(t))
+                    if (!string.IsNullOrWhiteSpace(t) && _emailService.IsValidEmail(t))
                     {
-
-
                         if (!string.IsNullOrWhiteSpace(curMail) && _emailService.IsValidEmail(curMail))
                         {
                             var el = new OperationLogEMailLog(operationLog.Id, string.Empty, t);
                             fields = GetFieldsForEmail(operationLogList);
                             var mailResponse = EmailResponse.GetEmptyEmailResponse();
                             var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
-                            var e_res = _emailService.SendEmail(helpdeskMailFromAdress, el.Recipients, template.Subject, template.Body, fields, mailSetting, null, false, null);
+
+                            var e_res =_emailService.SendEmail(
+                                helpdeskMailFromAdress, 
+                                el.Recipients, 
+                                template.Subject,
+                                template.Body, 
+                                fields, 
+                                mailSetting, 
+                                null, 
+                                false, 
+                                null);
 
                             //el.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                             var now = DateTime.Now;
                             el.CreatedDate = now;
                             //el.ChangedDate = now;
-                            this._operationLogEmailLogRepository.Add(el);
-                            this._operationLogEmailLogRepository.Commit();
+                            _operationLogEmailLogRepository.Add(el);
+                            _operationLogEmailLogRepository.Commit();
                         }
-
                     }
                 }
             }
@@ -436,14 +441,13 @@ namespace DH.Helpdesk.Services.Services
             ret.Add(new Field { Key = "[#3]", StringValue = loglist.OperationLogDescription });
             ret.Add(new Field { Key = "[#4]", StringValue = loglist.OperationLogAction });
             //ret.Add(new Field { Key = "[#5]", StringValue = loglist. });
-
-
+            
             return ret;
         }
 
         public void Commit()
         {
-            this._unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         public IEnumerable<OperationLogOverview> GetOperationLogOverviews(int[] customers, int? count, bool forStartPage)

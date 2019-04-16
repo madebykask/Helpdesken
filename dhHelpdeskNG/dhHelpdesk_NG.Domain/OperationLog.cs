@@ -18,6 +18,7 @@ namespace DH.Helpdesk.Domain
         public int Customer_Id { get; set; }
         public int InformUsers { get; set; }
         public int? OperationLogCategory_Id { get; set; }
+        public int? OperationObjectCategory_Id { get; set; }
         public int OperationObject_Id { get; set; }
         public int Popup { get; set; }
         public int PublicInformation { get; set; }

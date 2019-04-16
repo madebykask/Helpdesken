@@ -1,5 +1,6 @@
 ﻿using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -140,32 +141,34 @@ namespace DH.Helpdesk.Web.Controllers
 
         public ActionResult New()
         {
-            var model = this.OperationLogInputViewModel(new OperationLog { Customer_Id = SessionFacade.CurrentCustomer.Id }, true);
-
+            var operationLog = new OperationLog { Customer_Id = SessionFacade.CurrentCustomer.Id };
+            var model = GetOperationLogInputViewModel(operationLog, true);
             AddViewDataValues();
 
-            return this.View(model);
+            return View(model);
         }
 
         [ValidateInput(false)]
         [HttpPost]
+        //todo: create single input viewmodel class
         public ActionResult New(OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, string[] SRsSelected, string[] UsersSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity, int? chkOperationLogSMS, string txtSMS)
         {
-            IDictionary<string, string> errors = new Dictionary<string, string>();
+            IDictionary<string, string> errors = null; 
             operationlog.User_Id = SessionFacade.CurrentUser.Id;
             operationlog.WorkingTime = (OperationLogHour * 60) + OperationLogMinute;
             if (chkSecurity == 0)
                 WGsSelected = null;
 
             //var operationLogList = new OperationLogList();
-            var customer = this._customerService.GetCustomer(operationlog.Customer_Id);
+            var customer = _customerService.GetCustomer(operationlog.Customer_Id);
 
-            var operationObject = this._operationObjectService.GetOperationObject(operationlog.OperationObject_Id);
+            var operationObject = _operationObjectService.GetOperationObject(operationlog.OperationObject_Id);
             var operationCategory = new OperationLogCategory();
 
             if (operationlog.OperationLogCategory_Id != null)
             {
-                operationCategory = this._operationLogCategoryService.GetOperationLogCategory(operationlog.OperationLogCategory_Id, customer.Id);
+                operationCategory =
+                    _operationLogCategoryService.GetOperationLogCategory(operationlog.OperationLogCategory_Id, customer.Id);
             }
 
             operationLogList.Language_Id = customer.Language_Id;
@@ -174,73 +177,74 @@ namespace DH.Helpdesk.Web.Controllers
             operationLogList.OperationObjectName = operationObject.Name;
             operationLogList.OperationLogCategoryName = operationCategory.OLCName;
 
-            this._operationLogService.SaveOperationLog(operationlog, WGsSelected, out errors);
+            _operationLogService.SaveOperationLog(operationlog, WGsSelected, out errors);
 
             //get the id for new operationlog
-            var newOperationLogId = this._operationLogService.GetOperationLogId();
-
+            var newOperationLogId = _operationLogService.GetOperationLogId();
             operationlog.Id = newOperationLogId;
 
             // send emails
             if (operationLogList.EmailRecepientsOperationLog != null)
-                this._operationLogService.SendOperationLogEmail(operationlog, operationLogList, customer);
+                _operationLogService.SendOperationLogEmail(operationlog, operationLogList, customer);
 
             // send sms
             if (chkOperationLogSMS == 1)
             {
-                var SystemRepsSelected = string.Empty;
-                var AdministratorsSelected = string.Empty;
-                var SMSRecipients = string.Empty;
+                var systemRepsSelected = string.Empty;
+                var administratorsSelected = string.Empty;
 
                 if (SRsSelected != null)
-                    SystemRepsSelected = ConvertStringArrayToString(SRsSelected);
+                    systemRepsSelected = SRsSelected.JoinToString();
 
                 if (UsersSelected != null)
-                    AdministratorsSelected = ConvertStringArrayToString(UsersSelected);
+                    administratorsSelected = UsersSelected.JoinToString();
 
-                SMSRecipients = SystemRepsSelected + AdministratorsSelected;
+                var smsRecipients = systemRepsSelected + administratorsSelected;
 
-                this._operationLogService.SendOperationLogSMS(operationlog, SMSRecipients, txtSMS, customer);
+                _operationLogService.SendOperationLogSMS(operationlog, smsRecipients, txtSMS, customer);
             }
 
             SaveRssFeed(operationlog.Customer_Id);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "operationlog");
+                return RedirectToAction("index", "operationlog");
 
-            var model = this.OperationLogInputViewModel(operationlog);
+            var model = GetOperationLogInputViewModel(operationlog);
 
-            return this.View(model);
+            return View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var operationlog = this._operationLogService.GetOperationLog(id);
+            var operationlog = _operationLogService.GetOperationLog(id);
             
             if (operationlog == null)
                 return new HttpNotFoundResult("No OperationLog found...");
 
-            var model = this.OperationLogInputViewModel(operationlog);
+            var model = GetOperationLogInputViewModel(operationlog);
 
             AddViewDataValues();
 
-            return this.View(model);
+            return View(model);
         }
 
         [ValidateInput(false)]
         [HttpPost]
+        //todo: create single input viewmodel class
         public ActionResult Edit(int id, OperationLog operationlog, OperationLogList operationLogList, int[] WGsSelected, string[] SRsSelected, string[] WGsSMSSelected, string[] UsersSelected, int OperationLogHour, int OperationLogMinute, int chkSecurity, int? chkOperationLogSMS, string txtSMS)
         {
-            var operationlogToSave = this._operationLogService.GetOperationLog(id);
-            this.UpdateModel(operationlogToSave, "OperationLog");
-            var customer = this._customerService.GetCustomer(operationlog.Customer_Id);
+            IDictionary<string, string> errors;
+            var operationlogToSave = _operationLogService.GetOperationLog(id);
+            UpdateModel(operationlogToSave, "OperationLog");
+            var customer = _customerService.GetCustomer(operationlog.Customer_Id);
 
-            var operationObject = this._operationObjectService.GetOperationObject(operationlog.OperationObject_Id);
+            var operationObject = _operationObjectService.GetOperationObject(operationlog.OperationObject_Id);
             var operationCategory = new OperationLogCategory();
 
             if (operationlog.OperationLogCategory_Id != null)
             {
-                operationCategory = this._operationLogCategoryService.GetOperationLogCategory(operationlog.OperationLogCategory_Id, customer.Id);
+                operationCategory = 
+                    _operationLogCategoryService.GetOperationLogCategory(operationlog.OperationLogCategory_Id, customer.Id);
             }
 
             operationLogList.Language_Id = customer.Language_Id;
@@ -249,51 +253,47 @@ namespace DH.Helpdesk.Web.Controllers
             operationLogList.OperationObjectName = operationObject.Name;
             operationLogList.OperationLogCategoryName = operationCategory.OLCName;
 
-            IDictionary<string, string> errors = new Dictionary<string, string>();
-
             operationlogToSave.User_Id = SessionFacade.CurrentUser.Id;
             operationlogToSave.WorkingTime = (OperationLogHour * 60) + OperationLogMinute;
-            
+
             if (chkSecurity==0) 
                WGsSelected = null;
-            this._operationLogService.SaveOperationLog(operationlogToSave, WGsSelected, out errors);
 
+            _operationLogService.SaveOperationLog(operationlogToSave, WGsSelected, out errors);
 
             // send emails
             if (operationLogList.EmailRecepientsOperationLog != null)
-                 this._operationLogService.SendOperationLogEmail(operationlogToSave, operationLogList, customer);
+                 _operationLogService.SendOperationLogEmail(operationlogToSave, operationLogList, customer);
 
             // send sms
             if (chkOperationLogSMS == 1)
             {
-                var SystemRepsSelected = string.Empty;
-                var AdministratorsSelected = string.Empty;
-                var SMSRecipients = string.Empty;
-                var WGsForSMSSelected = string.Empty;
+                var systemRepsSelected = string.Empty;
+                var administratorsSelected = string.Empty;
+                var wgsForSmsSelected = string.Empty;
 
                 if (SRsSelected != null)
-                    SystemRepsSelected = ConvertStringArrayToString(SRsSelected);
+                    systemRepsSelected = ConvertStringArrayToString(SRsSelected);
 
                 if (UsersSelected != null)
-                    AdministratorsSelected = ConvertStringArrayToString(UsersSelected);
+                    administratorsSelected = ConvertStringArrayToString(UsersSelected);
 
                 if (WGsSMSSelected != null)
-                    WGsForSMSSelected = ConvertStringArrayToString(WGsSMSSelected);
+                    wgsForSmsSelected = ConvertStringArrayToString(WGsSMSSelected);
 
-                SMSRecipients = SystemRepsSelected + AdministratorsSelected + WGsForSMSSelected;
-
-                this._operationLogService.SendOperationLogSMS(operationlogToSave, SMSRecipients, txtSMS, customer);
+                var smsRecipients = systemRepsSelected + administratorsSelected + wgsForSmsSelected;
+                _operationLogService.SendOperationLogSMS(operationlogToSave, smsRecipients, txtSMS, customer);
             }
 
             SaveRssFeed(operationlogToSave.Customer_Id);
 
             if (errors.Count == 0)
-                return this.RedirectToAction("index", "operationlog");
+                return RedirectToAction("index", "operationlog");
 
 
-            var model = this.OperationLogInputViewModel(operationlogToSave);
+            var model = GetOperationLogInputViewModel(operationlogToSave);
             
-            return this.View(model);
+            return View(model);
         }
 
 
@@ -320,12 +320,12 @@ namespace DH.Helpdesk.Web.Controllers
             return Json(res, JsonRequestBehavior.AllowGet);
         }
 
-        private OperationLogInputViewModel OperationLogInputViewModel(OperationLog operationlog, bool isNewModel = false)
+        private OperationLogInputViewModel GetOperationLogInputViewModel(OperationLog operationlog, bool isNewModel = false)
         {
             var wgsSelected = operationlog.WGs ?? new List<WorkingGroupEntity>();
             var wgsAvailable = new List<WorkingGroupEntity>();
             var customerId = SessionFacade.CurrentCustomer.Id;
-            var cs = this._settingService.GetCustomerSetting(customerId);
+            var cs = _settingService.GetCustomerSetting(customerId);
 
             const bool isAddEmpty = true;
 
@@ -364,12 +364,15 @@ namespace DH.Helpdesk.Web.Controllers
                     wgsAvailable.Add(wg);
             }
 
+            var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, operationlog.User_Id);
+            var operationLogHours = operationlog.WorkingTime / 60;
+
             var model = new OperationLogInputViewModel
             {
                 
-                OperationLog = operationlog ,
+                OperationLog = operationlog,
 
-                OperationObjects = this._operationObjectService.GetActiveOperationObjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                OperationObjects = _operationObjectService.GetActiveOperationObjects(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
@@ -387,7 +390,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                OperationLogCategories = this._operationLogCategoryService.GetActiveOperationLogCategories(customerId).Select(x => new SelectListItem
+                OperationLogCategories = _operationLogCategoryService.GetActiveOperationLogCategories(customerId).Select(x => new SelectListItem
                 {
                     Text = x.OLCName,
                     Value = x.Id.ToString()
@@ -417,21 +420,20 @@ namespace DH.Helpdesk.Web.Controllers
 
                 SystemResponsiblesSelected = new List<SelectListItem>(),
 
-                OperationObjectShow = operationObjectShow
-            };
-
+                OperationObjectShow = operationObjectShow,
             
-            model.OperationLogEmailLog = this._operationLogEmailLogService.GetOperationLogEmailLogs(operationlog.Id);
+                OperationLogEmailLog = this._operationLogEmailLogService.GetOperationLogEmailLogs(operationlog.Id),
+            
+                ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(cs, isAddEmpty),
 
-            var customerSettings = this._settingService.GetCustomerSetting(customerId);
-            var responsibleUsersAvailable = this._userService.GetAvailablePerformersOrUserId(customerId, operationlog.User_Id);
-            model.ResponsibleUsersAvailable = responsibleUsersAvailable.MapToSelectList(cs, isAddEmpty);
-            model.SendToDialogModel = this.CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs);
+                SendToDialogModel = CreateNewSendToDialogModel(customerId, responsibleUsersAvailable.ToList(), cs),
 
-            model.OperationLogHour = model.OperationLog.WorkingTime / 60;
-            model.OperationLogMinute = model.OperationLog.WorkingTime - (model.OperationLogHour*60);
+                OperationLogHour = operationLogHours,
 
-            model.CustomerSettings = cs;
+                OperationLogMinute = (operationlog.WorkingTime - operationLogHours),
+
+                CustomerSettings = cs
+            };
             return model;
         }
 
@@ -499,13 +501,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private string ConvertStringArrayToString(string[] array)
         {
-            StringBuilder builder = new StringBuilder();
-            foreach (string value in array)
-            {
-                builder.Append(value);
-                builder.Append(',');
-            }
-            return builder.ToString();
+            return string.Join(",", array);
         }
 
         private void SaveRssFeed(int customerId)
