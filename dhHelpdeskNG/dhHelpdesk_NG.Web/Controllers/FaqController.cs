@@ -47,8 +47,8 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IMasterDataService _masterDataService;
         private readonly ILanguageService _languageService;
 
-        private const string DefaultSortField = "ChangedDate";
-        private const SortOrder DefaultSortOrder = SortOrder.Desc;
+        private const string DefaultSortField = "Text";
+        private const SortOrder DefaultSortOrder = SortOrder.Asc;
 
         #endregion
 
