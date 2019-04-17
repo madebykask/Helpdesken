@@ -1056,11 +1056,13 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Section = CaseSectionType.Communication,
                         Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.ClosingReason, caseFieldSettings)
                     };
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.ClosingReason,
-                        currentCase?.Id, caseTemplateSettings))
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.ClosingReason, currentCase?.Id, caseTemplateSettings))
                         AddReadOnlyOption(field.Options);
+
                     if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.ClosingReason))
                         AddHiddenOption(field.Options);
+
                     model.Fields.Add(field);
                 }
 
@@ -1074,11 +1076,13 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Section = CaseSectionType.Communication,
                         Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.FinishingDate, caseFieldSettings)
                     };
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate,
-                        currentCase?.Id, caseTemplateSettings))
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, currentCase?.Id, caseTemplateSettings))
                         AddReadOnlyOption(field.Options);
+
                     if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.FinishingDate))
                         AddHiddenOption(field.Options);
+
                     model.Fields.Add(field);
                 }
 
@@ -1092,11 +1096,13 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_External, caseFieldSettings),
                         Section = CaseSectionType.Communication
                     };
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External,
-                        currentCase?.Id, caseTemplateSettings))
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, currentCase?.Id, caseTemplateSettings))
                         AddReadOnlyOption(field.Options);
+
                     if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External))
                         AddHiddenOption(field.Options);
+
                     AddMaxLengthOption(field.Options, 3000);
                     model.Fields.Add(field);
                 }
@@ -1112,12 +1118,34 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, caseFieldSettings),
                         Section = CaseSectionType.Communication
                     };
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal,
-                        currentCase?.Id, caseTemplateSettings))
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, currentCase?.Id, caseTemplateSettings))
                         AddReadOnlyOption(field.Options);
+
                     if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_Internal))
                         AddHiddenOption(field.Options);
+
                     AddMaxLengthOption(field.Options, 3000);
+                    model.Fields.Add(field);
+                }
+
+                // Log File
+                {
+                    field = new BaseCaseField<string>()
+                    {
+                        Name = CaseFieldsNamesApi.Log_Filename,
+                        Value = "",
+                        Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Filename, languageId, customerId, caseFieldTranslations),
+                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Filename, caseFieldSettings),
+                        Section = CaseSectionType.Communication
+                    };
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Filename, currentCase?.Id, caseTemplateSettings))
+                        AddReadOnlyOption(field.Options);
+
+                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename))
+                        AddHiddenOption(field.Options);
+                    
                     model.Fields.Add(field);
                 }
             }
@@ -1172,8 +1200,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 Options = GetBaseFieldOptions(translationCaseFieldName, caseFieldSettings)
             };
 
-            if (_caseFieldSettingsHelper.IsReadOnly(translationCaseFieldName,
-                caseId, caseTemplateSettings))
+            if (_caseFieldSettingsHelper.IsReadOnly(translationCaseFieldName, caseId, caseTemplateSettings))
                 AddReadOnlyOption(field.Options);
 
             if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, translationCaseFieldName))

@@ -75,7 +75,8 @@ export const CaseFieldsNames = {
    SupplierCountryId: "SupplierCountryId",
    CaseRegistrationSource: "CaseRegistrationSource",
    Log_InternalText: "Log_InternalText",
-   Log_ExternalText: "Log_ExternalText"
+   Log_ExternalText: "Log_ExternalText",
+   Log_FileName: "LogFileName"
 };
 
 export const CaseFieldOptions = {

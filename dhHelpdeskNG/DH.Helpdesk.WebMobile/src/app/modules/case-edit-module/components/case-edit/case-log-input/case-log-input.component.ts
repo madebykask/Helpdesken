@@ -27,8 +27,13 @@ export class CaseLogInputComponent implements OnInit {
   caseFieldsNames = CaseFieldsNames;
   internalLogLabel: string = '';
   externalLogLabel: string = '';
+  isExternalLogFieldVisible: boolean = false;
+  isInternalLogFieldVisible: boolean = false;
+  isAttachedFilesVisible:boolean = false;  
+
   externalLogField: BaseCaseField<string> = null;
   internalLogField: BaseCaseField<string> = null;
+  logFileField: BaseCaseField<any> = null;
 
   get hasFullAccess() {
     return this.accessMode !== null && this.accessMode === CaseAccessMode.FullAccess;
@@ -57,29 +62,40 @@ export class CaseLogInputComponent implements OnInit {
   ngOnInit() {
     this.externalLogField = this.getField(CaseFieldsNames.Log_ExternalText);
     this.internalLogField = this.getField(CaseFieldsNames.Log_InternalText);
+    this.logFileField = this.getField(CaseFieldsNames.Log_FileName);
 
     if (this.externalLogField) {
       this.externalLogLabel = this.externalLogField.label + (this.externalLogField.isRequired ? '*' : '');
+      this.isExternalLogFieldVisible = !this.externalLogField.isHidden; 
     }
 
     if (this.internalLogField) {
       this.internalLogLabel = this.internalLogField.label + (this.internalLogField.isRequired ? '*' : '');
+      this.isInternalLogFieldVisible = !this.internalLogField.isHidden;
+    }
+
+    if (this.logFileField) {
+      this.isAttachedFilesVisible = !this.logFileField.isHidden;
     }
   }
 
   ngAfterViewInit(): void {
-    const applyMaxLengthFn = (ctrl, maxLength: number) => {
-      const inputControl = ctrl.initialElem.nativeElement.querySelector('textarea');
-      if (inputControl) {
-        this.renderer.setAttribute(inputControl, 'maxlength', maxLength.toString());
-      }
-    };
 
-    if (this.externalLogField.maxLength) {
-      applyMaxLengthFn(this.externalCtrl, this.externalLogField.maxLength);
+    if (this.isExternalLogFieldVisible && this.externalLogField.maxLength) {
+      this.applyMaxLength(this.externalCtrl, this.externalLogField.maxLength);
     }
-    if (this.internalLogField.maxLength) {
-      applyMaxLengthFn(this.internalCtrl, this.internalLogField.maxLength);
+
+    if (this.isInternalLogFieldVisible && this.internalLogField.maxLength) {
+      this.applyMaxLength(this.internalCtrl, this.internalLogField.maxLength);
+    }
+  }
+
+  private applyMaxLength(ctrl, maxLength) {
+    if (ctrl === undefined) return;
+
+    const inputControl = ctrl.initialElem.nativeElement.querySelector('textarea');
+    if (inputControl) {
+      this.renderer.setAttribute(inputControl, 'maxlength', maxLength.toString());
     }
   }
 

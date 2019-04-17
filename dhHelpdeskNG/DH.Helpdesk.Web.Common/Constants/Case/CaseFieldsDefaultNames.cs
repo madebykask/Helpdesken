@@ -78,6 +78,9 @@ namespace DH.Helpdesk.Web.Common.Constants.Case
             { GlobalEnums.TranslationCaseFields.ClosingReason, CaseFieldsNamesApi.ClosingReason },
             { GlobalEnums.TranslationCaseFields.FinishingDate, CaseFieldsNamesApi.FinishingDate },
             { GlobalEnums.TranslationCaseFields.AddFollowersBtn, CaseFieldsNamesApi.Followers },
+            { GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseFieldsNamesApi.Log_ExternalText },
+            { GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseFieldsNamesApi.Log_InternalText},
+            { GlobalEnums.TranslationCaseFields.tblLog_Filename, CaseFieldsNamesApi.Log_Filename},
         };
     }
 }
