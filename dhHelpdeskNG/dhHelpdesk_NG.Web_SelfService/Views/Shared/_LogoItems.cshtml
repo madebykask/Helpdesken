@@ -1,12 +1,19 @@
 ﻿@model DH.Helpdesk.SelfService.Models.Shared.LayoutViewModel
-
+@using DH.Helpdesk.Common.Enums
 @{
     var customerLanguageId = Model.CurrentCustomer != null ? Model.CurrentCustomer.Language_Id : 0;
 }
 <div class="container-fluid">
-    <a href="@Url.Action("Index", "Start", new { customerId = Model.CurrentCustomer.Id, area = "" })">
+    @if (Model.LoginMode != LoginMode.Anonymous)
+    {
+        <a href="@Url.Action("Index", "Start", new { customerId = Model.CurrentCustomer.Id, area = "" })">
+            <div class="pull-left toplogo"></div>
+        </a>
+    }
+    else
+    {
         <div class="pull-left toplogo"></div>
-    </a>
+    }
     <div class="pull-right small toplogout">        
             <div class="dropdown">
                 <a href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">@Translation.Get("Select language")<span class="caret"></span></a>
