@@ -870,11 +870,21 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             if (res.IsSucceed)
             {
+                var customerId = model.CustomerId;
+                var caseEntity = res.Data as Case;
+                if (caseEntity != null)
+                {
+                    customerId = caseEntity.Customer_Id;
+                    caseId = caseEntity.Id;
+                }
+                else if (caseId > 0)
+                {
+                    customerId = _caseService.GetCaseCustomerId(model.CustomerId);
+                }
+
                 if (caseId > 0)
                 {
-                    var case_ = _universalCaseService.GetCase(caseId);
-
-                    SaveCaseFiles(model.CaseDataModel.CaseFileKey, case_.Customer_Id, caseId, localUserId);
+                    SaveCaseFiles(model.CaseDataModel.CaseFileKey, customerId, caseId, localUserId);
 
                     if (ConfigurationService.AppSettings.ShowConfirmAfterCaseRegistration)
                     {
@@ -898,6 +908,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 model.CaseOU = _ouService.GetOU(model.CaseDataModel.OU_Id.Value);
             }
 
+            model.CurrentCustomer = SessionFacade.CurrentCustomer;
             model.Result = res;
             model.StatusBar = isNewCase ? new Dictionary<string, string>() : GetStatusBar(model);
 

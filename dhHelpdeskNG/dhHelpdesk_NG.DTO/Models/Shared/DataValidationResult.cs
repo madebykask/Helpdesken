@@ -40,25 +40,25 @@ namespace DH.Helpdesk.BusinessData.Models.Shared
 
         public ProcessResult(string processName)
         {
-            CreatePrecessResult(processName, ResultTypeEnum.SUCCESS, string.Empty, null);
+            CreateProcessResult(processName, ResultTypeEnum.SUCCESS, string.Empty, null);
         }
 
         public ProcessResult(string processName, object data)
         {
-            CreatePrecessResult(processName, ResultTypeEnum.SUCCESS, string.Empty, data);
+            CreateProcessResult(processName, ResultTypeEnum.SUCCESS, string.Empty, data);
         }
 
         public ProcessResult(string processName, ResultTypeEnum resultType)
         {
-            CreatePrecessResult(processName, resultType, string.Empty, null);
+            CreateProcessResult(processName, resultType, string.Empty, null);
         }
 
         public ProcessResult(string processName, ResultTypeEnum resultType, string message, object data = null)
         {
-            CreatePrecessResult(processName, resultType, message, data);
+            CreateProcessResult(processName, resultType, message, data);
         }
 
-        private void CreatePrecessResult(string processName, ResultTypeEnum resultType, string lastMessage, object data)
+        private void CreateProcessResult(string processName, ResultTypeEnum resultType, string lastMessage, object data)
         {
             ProcessName = processName;
             ResultType = resultType;
