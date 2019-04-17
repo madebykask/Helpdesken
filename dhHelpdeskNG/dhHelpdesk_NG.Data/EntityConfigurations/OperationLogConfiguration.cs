@@ -13,7 +13,6 @@ namespace DH.Helpdesk.Dal.EntityConfigurations
 
             Property(x => x.Customer_Id).IsRequired();
             Property(x => x.OperationObject_Id).IsRequired();
-            Property(x => x.OperationObjectCategory_Id).IsOptional();
             Property(x => x.OperationLogCategory_Id).IsOptional();
             Property(x => x.User_Id).IsRequired();
             
