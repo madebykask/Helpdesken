@@ -1,7 +1,4 @@
-﻿import { FormArray, FormGroup, FormControl } from '@angular/forms';
-
-import { Observable } from 'rxjs/Rx';
-import { IMap } from '../shared/common-types'
+﻿import { IMap } from '../shared/common-types'
 import { ProxyModel } from './proxy.model'
 import { ValidateOn } from '../shared/validation-types';
 
@@ -94,14 +91,14 @@ export class SectionTemplateModel {
     controls: BaseControlTemplateModel[] = [];
     tab: TabTemplateModel;
     column: number;
-    multiSectionAction: MultiSectionAction; 
+    multiSectionAction: MultiSectionAction;
     populateAction: PopulateAction;
     enableAction: EnableAction;
     disabledStateBehavior: DisabledStateBehavior;
-    
+
     type: SectionType = SectionType.forms;
-    reviewSectionId: string = '';
-    reviewControls: string = '';
+    reviewSectionId = '';
+    reviewControls = '';
 
     dataSources: CustomQueryDataSourceTemplateModel[];
 
@@ -111,7 +108,7 @@ export class SectionTemplateModel {
         column?: number,
         hiddenBinding?: (m: any, l?: any) => any,
         disabledBinding?: (m: any, l?: any) => any,
-        multiSectionAction? : MultiSectionAction,
+        multiSectionAction?: MultiSectionAction,
         populateAction?: PopulateAction,
         enableAction?: EnableAction,
         disabledStateBehavior?: DisabledStateBehavior,
@@ -137,7 +134,7 @@ export class SectionTemplateModel {
 export class MultiSectionAction {
     allowMultipleSections : boolean;
     actionName: string;
-    maxCount: number = 0;
+    maxCount = 0;
 }
 
 export class PopulateAction {
@@ -167,6 +164,11 @@ export enum DisabledStateAction {
 export enum DisabledStateActionCondition {
     Any,
     UserOnly
+}
+
+export enum CaseBindingBehaviour {
+  Overwrite = 'overwrite', // case value always overwritten from Extended case - default
+  NewOnly = 'newonly' // case value overwritten from Extended case only if newer
 }
 
 export class TemplateValidator {
@@ -203,13 +205,13 @@ export class TemplateValidators {
         const result = new Array<TemplateValidator>();
         if (this.onSave) {
             this.onSave.forEach((validator: TemplateValidator) => {
-                if (validator.type === type) result.push(validator);
+                if (validator.type === type) { result.push(validator); }
             });
         }
 
         if (this.onNext) {
             this.onNext.forEach((validator: TemplateValidator) => {
-                if (validator.type === type) result.push(validator);
+                if (validator.type === type) { result.push(validator); }
             });
         }
 
@@ -227,6 +229,7 @@ export class BaseControlTemplateModel {
     noDigest: boolean;
     processControlDataSourcesOnly: boolean;
     caseBinding: string;
+    caseBindingBehaviour: CaseBindingBehaviour;
     resetValueOnItemsUpdate: boolean;
     shouldNotSave: boolean;
     dataSource: ControlDataSourceTemplateModelTypes;
@@ -236,7 +239,7 @@ export class BaseControlTemplateModel {
     dataSourceFilterBinding: (m: any, l?: any, d?: any) => any;
     validators?: TemplateValidators;
     warningBinding: (m: any, l?: any) => string;
-    isRequired?: ValidateOn;//Depricated - use fieldModel.isRequired instead;
+    isRequired?: ValidateOn; // Depricated - use fieldModel.isRequired instead;
     section: SectionTemplateModel;
     isEverValidated: boolean;
     mode: string;
@@ -253,6 +256,7 @@ export class BaseControlTemplateModel {
         noDigest?: boolean,
         processControlDataSourcesOnly?: boolean,
         caseBinding?: string,
+        caseBindingBehaviour?: CaseBindingBehaviour,
         resetValueOnItemsUpdate?: boolean,
         shouldNotSave?: boolean,
         section?: SectionTemplateModel,
@@ -265,7 +269,7 @@ export class BaseControlTemplateModel {
         warningBinding?: (m: any, l?: any, d?: any) => string,
         mode?: string,
         reviewControlId?: string,
-        emptyElement?:any;
+        emptyElement?: any;
     } = {}) {
         this.id = options.id || '';
         this.label = options.label || '';
@@ -275,6 +279,7 @@ export class BaseControlTemplateModel {
         this.noDigest = options.noDigest || false;
         this.processControlDataSourcesOnly = options.processControlDataSourcesOnly || false;
         this.caseBinding = options.caseBinding || '';
+        this.caseBindingBehaviour = options.caseBindingBehaviour || CaseBindingBehaviour.Overwrite;
         this.resetValueOnItemsUpdate = options.resetValueOnItemsUpdate || false;
         this.shouldNotSave = options.shouldNotSave || false;
         this.section = options.section;

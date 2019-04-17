@@ -1,2 +1,4 @@
 /PublishDev/
 /packages/
+.vs/
+applicationhost.config

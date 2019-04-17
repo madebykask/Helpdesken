@@ -2,11 +2,11 @@
 import { Observable, Subject } from 'rxjs/Rx';
 import { DigestUpdateLog, DigestResult } from '../models/digest.model';
 import { ControlValueChangedParams } from './component-comm.service';
-import { FormTemplateModel, TabTemplateModel, SectionTemplateModel, BaseControlTemplateModel,
-    CustomQueryDataSourceTemplateModel, DataSourceParameterTemplateModel, OptionsDataSourceTemplateModel, ControlCustomDataSourceTemplateModel,
+import { FormTemplateModel, TabTemplateModel, BaseControlTemplateModel,
+    CustomQueryDataSourceTemplateModel,  OptionsDataSourceTemplateModel, ControlCustomDataSourceTemplateModel,
     ControlSectionDataSourceTemplateModel, SectionType, IDataSourceParameter} from '../models/template.model';
 
-import { TabModel, FormModel, SectionModel, SectionInstanceModel, SingleControlFieldModel, FieldModelBase, FormControlType } from '../models/form.model';
+import { TabModel, FormModel, SectionModel, SectionInstanceModel, SingleControlFieldModel, FieldModelBase } from '../models/form.model';
 import { FormModelService } from './form-model.service';
 import { TemplateService } from './template.service';
 import { FormControlsManagerService } from './form-controls-manager.service';
@@ -18,16 +18,16 @@ import * as commonMethods from '../utils/common-methods';
 import { ErrorHandlingService } from './error-handling.service';
 import { LogService } from './log.service' 
 import { SubscriptionManager } from '../shared/subscription-manager';
-import { IMap, ChangedFieldItem } from '../shared/common-types';
+import { ChangedFieldItem } from '../shared/common-types';
 import { KeyedCollection } from '../shared/keyed-collection';
 
 @Injectable()
 export class DigestService {
 
     private _processes = new KeyedCollection<DigestResult>();
-    
-    private digestStatusChangedSubject : Subject<boolean>;
-    digestStatusChanged : Observable<boolean>;
+
+    private digestStatusChangedSubject: Subject<boolean>;
+    digestStatusChanged: Observable<boolean>;
 
     constructor(
         private formModelService: FormModelService,
@@ -46,7 +46,7 @@ export class DigestService {
         formModel: FormModel,
         params: ControlValueChangedParams,
         forceLoadDataSources?: boolean): Observable<DigestResult> {
-        
+
         let process =
             new DigestProcess(templateModel, formModel, params,
                 this.formModelService, this.templateService, this.dataSourcesLoaderService,
@@ -87,7 +87,7 @@ export class DigestService {
 
     private runProcess(process: DigestProcess): Observable<DigestResult> {
         let runningIds = this.getRunningProcesses();
-        
+
         if (runningIds.length > 0) {
             let val = runningIds.join(',');
             this.logService.warningFormatted('@@@ Digest has running processes: {0}', val);
@@ -104,7 +104,7 @@ export class DigestService {
         result$.subscribe(res => {
             this._processes.setItemSafe(processId, res);
             let status = this.hasRunningProcesses();
-            //this.logService.debugFormatted('@@@ Digest completed. Has processes: {0} @@@', status);
+            // this.logService.debugFormatted('@@@ Digest completed. Has processes: {0} @@@', status);
             this.raiseDigestStatusChanged(status);
         });
 
@@ -121,8 +121,9 @@ export class DigestService {
         let entries = this._processes.getEntries();
 
         for (let key of Object.keys(entries)) {
-            if (!entries[key])
+            if (!entries[key]) {
                 processIds.push(key);
+            }
         }
 
         return processIds;

@@ -1,24 +1,24 @@
 import { Injectable, Inject, forwardRef } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
-import { FormControl, FormGroup } from '@angular/forms';
-import { ProxyModel, ProxyTab, ProxySection, ProxyControl } from '../models/proxy.model';
+import { ProxyModel, ProxyControl } from '../models/proxy.model';
 
 import * as moment from 'moment';
 import { IMap, ChangedFieldItem } from '../shared/common-types';
 import { KeyedCollection } from '../shared/keyed-collection';
 
 import {
-    FormTemplateModel, TabTemplateModel, SectionTemplateModel, BaseControlTemplateModel,
-    CustomQueryDataSourceTemplateModel, ControlDataSourceTemplateModelTypes, CustomStaticDataSourceTemplateModel, OptionsDataSourceTemplateModel,
+    FormTemplateModel, SectionTemplateModel, BaseControlTemplateModel,
+    CustomQueryDataSourceTemplateModel, OptionsDataSourceTemplateModel,
     ControlCustomDataSourceTemplateModel, ControlSectionDataSourceTemplateModel,
-    DataSourceParameterTemplateModel, IWithDataSourceParameters, IDataSourceParameter, DisabledStateAction, DisabledStateActionCondition
+    DisabledStateAction, DisabledStateActionCondition, CaseBindingBehaviour
 } from '../models/template.model';
 
 import { FormDataModel, FieldValueModel } from '../models/form-data.model';
 import { DigestUpdateLog } from '../models/digest.model';
 
 import {
-    FormModel,TabModel, SectionModel, SectionInstanceModel, SingleControlFieldModel, MultiValueSingleControlFieldModel, MultiControlFieldModel, FieldModelBase,
+    FormModel,TabModel, SectionModel, SectionInstanceModel, SingleControlFieldModel,
+     MultiValueSingleControlFieldModel, MultiControlFieldModel, FieldModelBase,
     ItemModel, CustomDataSourceModel, FormControlType
 } from '../models/form.model';
 
@@ -27,16 +27,18 @@ import { DataSourcesLoaderService } from './datasources-loader.service';
 import { FormModelService } from './form-model.service';
 import { TemplateService } from './template.service';
 import * as commonMethods from '../utils/common-methods';
-import { IKeyedCollection } from '../shared/keyed-collection'
 import { LogService } from './log.service';
 import { ComponentCommService, ControlDataSourceChangeParams } from '../services/component-comm.service';
-import { IAppConfig, AppConfig } from '../shared/app-config/app-config';
+import { AppConfig } from '../shared/app-config/app-config';
 import { ErrorHandlingService } from './error-handling.service';
 
 import { Form, Tab, Section, SectionInstance, Field } from '../models/form-public.model'
+import { IAppConfig } from '../shared/app-config/app-config.interface';
 
 @Injectable()
 export class FormControlsManagerService {
+
+    private lastSyncedFields: IMap<FieldValueModel> = {};
     constructor(
         private dataSourcesLoaderService: DataSourcesLoaderService,
         private formModelService: FormModelService,
@@ -47,20 +49,21 @@ export class FormControlsManagerService {
         @Inject(forwardRef(() => AppConfig)) private config: IAppConfig) {
     }
 
-    getFormData(formModel:FormModel) : Form {
+    getFormData(formModel: FormModel): Form {
 
-        var form = new Form();
+        let form = new Form();
 
-        let lastTab:Tab = null;
-        let lastSection:Section = null;
-        let lastSectionInstance:SectionInstance = null;
+        let lastTab: Tab = null;
+        let lastSection: Section = null;
+        let lastSectionInstance: SectionInstance = null;
 
         let fieldsIterator = formModel.createFieldsIterator();
         fieldsIterator.forEach(
             (fieldModel, fieldPathModel) => {
 
-                if (fieldModel.hidden)
+                if (fieldModel.hidden) {
                     return;
+                }
 
                 let proxyModel = formModel.proxyModel;
                 let controlTemplate = fieldModel.template;
@@ -75,15 +78,16 @@ export class FormControlsManagerService {
                 fi.value = fieldValue.Value;
                 fi.secondaryValue = fieldValue.SecondaryValue;
 
-                //add to collection
+                // add to collection
                 lastSectionInstance.fields.push(fi);
 
             },
 
             (sectionInstance: SectionInstanceModel, sectionIndex: number) => {
-                
-                if (sectionInstance.section.hidden)
+
+                if (sectionInstance.section.hidden) {
                     return;
+                }
 
                 if (sectionIndex === 0) {
                     let s = new Section();
@@ -91,7 +95,7 @@ export class FormControlsManagerService {
                     lastSection = s;
                     lastTab.sections.push(s);
                 }
-                
+
                 let si = new SectionInstance();
                 si.index = sectionIndex;
                 lastSection.instances.push(si);
@@ -99,8 +103,9 @@ export class FormControlsManagerService {
             },
 
             (tab: TabModel) => {
-                if (tab.hidden)
+                if (tab.hidden) {
                     return;
+                }
 
                 let t = new Tab();
                 t.name = tab.template.name;
@@ -112,7 +117,8 @@ export class FormControlsManagerService {
         return form;
     }
 
-    getFormFieldValues(formModel: FormModel): { fieldsValues: IMap<FieldValueModel>, caseFieldsValues: IMap<FieldValueModel> } {
+    getFormFieldValues(formModel: FormModel, checkCaseBindingBehaviour = false):
+      { fieldsValues: IMap<FieldValueModel>, caseFieldsValues: IMap<FieldValueModel> } {
         let fieldsValues: IMap<FieldValueModel> = {};
         let caseFieldsValues: IMap<FieldValueModel> = {};
 
@@ -120,12 +126,13 @@ export class FormControlsManagerService {
 
         let fieldsIterator = formModel.createFieldsIterator();
         fieldsIterator.forEach((fieldModel, fieldPathModel) => {
-        
+
             let controlTemplate = fieldModel.template;
 
-            //do not save review values
-            if (controlTemplate.shouldNotSave)
+            // do not save review values
+            if (controlTemplate.shouldNotSave) {
                 return;
+            }
 
             let fieldPath = fieldPathModel.buildFormFieldPath();
             const proxyControl = proxyModel.findProxyControl(fieldPathModel);
@@ -133,14 +140,19 @@ export class FormControlsManagerService {
             let fieldValueModel = this.getControlValueForSave(fieldPath, fieldModel, proxyControl, controlTemplate);
             fieldValueModel.Pristine = proxyControl.pristine;
 
-            if (controlTemplate.caseBinding && controlTemplate.caseBinding.length > 0) {
+            if (controlTemplate.caseBinding && controlTemplate.caseBinding.length > 0 ) {
+              if (!checkCaseBindingBehaviour || (checkCaseBindingBehaviour &&
+                        (controlTemplate.caseBindingBehaviour === CaseBindingBehaviour.Overwrite ||
+                         (controlTemplate.caseBindingBehaviour === CaseBindingBehaviour.NewOnly &&
+                             (this.lastSyncedFields[controlTemplate.caseBinding] &&
+                               this.lastSyncedFields[controlTemplate.caseBinding].Value !== fieldValueModel.Value))))) {
+                  caseFieldsValues[controlTemplate.caseBinding] = fieldValueModel;
+                }
+                this.lastSyncedFields[controlTemplate.caseBinding] = fieldValueModel;
 
-                caseFieldsValues[controlTemplate.caseBinding] = fieldValueModel;
-
-                //do not save values for caseBinding fields - only pristine flag.
+                // do not save values for caseBinding fields - only pristine flag.
                 fieldsValues[fieldPath] = new FieldValueModel('', '', proxyControl.pristine);
-            }
-            else {
+            } else {
                 fieldsValues[fieldPath] = fieldValueModel;
             }
         });
@@ -152,20 +164,21 @@ export class FormControlsManagerService {
         fieldModel: FieldModelBase,
         proxyControl: ProxyControl,
         controlTemplate: BaseControlTemplateModel): FieldValueModel {
-        //add handling for other multi values controls should new added
-        if (fieldModel instanceof MultiControlFieldModel)
+        // add handling for other multi values controls should new added
+        if (fieldModel instanceof MultiControlFieldModel) {
             return this.getMultiControlValueForSave(fieldModel, proxyControl);
+        }
 
-        //serialize array for multiselect controls
-        if (fieldModel instanceof MultiValueSingleControlFieldModel)
+        // serialize array for multiselect controls
+        if (fieldModel instanceof MultiValueSingleControlFieldModel) {
             return this.getMultiSelectValueForSave(fieldModel, proxyControl);
+        }
 
-        
         let value = proxyControl.value || '';
         let secondaryValue = proxyControl.secondaryValue;
 
         // convert date to dbDateFormat format
-        //todo: refactor - move to separate class/method 
+        // todo: refactor - move to separate class/method
         if (controlTemplate.controlType === FormControlType.Date && value.length) {
             let momentDate = moment(value, fieldModel.template.mode === 'year' ? this.config.yearFormat : this.config.dateFormat);
             if (!momentDate.isValid()) {
@@ -177,10 +190,10 @@ export class FormControlsManagerService {
             let regex = new RegExp(`[${this.config.decimalSeparator}]+`, 'g');
             value = value.replace(regex, this.config.dbDecimalSeparator);
         } else if (controlTemplate.controlType === FormControlType.Search) {
-            return new FieldValueModel(value, secondaryValue); 
+            return new FieldValueModel(value, secondaryValue);
         }
 
-        //convert array to coma-separated string
+        // convert array to coma-separated string
         if (commonMethods.isArray(value)) {
             value = value.join(',');
         }
@@ -190,9 +203,9 @@ export class FormControlsManagerService {
     }
 
     getMultiControlValueForSave(controlField: FieldModelBase, proxyControl: ProxyControl): FieldValueModel {
-        //"Value": { "val1": "true", "val2": "true", "val3": true }
+        // "Value": { "val1": "true", "val2": "true", "val3": true }
         let values: string[] = [];
-        
+
         for (let prop of Object.keys(proxyControl.value)) {
             let val = proxyControl.value[prop];
             val = commonMethods.anyToBoolean(val);
@@ -231,7 +244,7 @@ export class FormControlsManagerService {
                     this.setFormControlValue(fieldModel, fieldModel.template, caseFieldValue);
 
                     let item = new ChangedFieldItem(fieldModel.previousValue, fieldModel.lastValue, fieldModel.getFieldPath());
-                    changedItems.push(item);                    
+                    changedItems.push(item);
                 }
             }
         }
@@ -255,14 +268,14 @@ export class FormControlsManagerService {
         let res = this.prepareFormFieldsValues(formData, formModel);
         let exCaseFieldsValuesMap = res.exCaseFieldsMap;
         let caseBindingFieldsMap = res.caseBindingFieldsMap;
-        
-        //let valuesMapping: IExtendedCaseValuesFieldPathMap[] = this.createFieldValuesArrayWithFieldPath(formData.ExtendedCaseFieldsValues);
 
-        //tabs
+        // let valuesMapping: IExtendedCaseValuesFieldPathMap[] = this.createFieldValuesArrayWithFieldPath(formData.ExtendedCaseFieldsValues);
+
+        // tabs
         for (let tabId of Object.keys(formModel.tabs)) {
             let tabModel = formModel.tabs[tabId];
 
-            //sections
+            // sections
             for (let sectionId of Object.keys(tabModel.sections)) {
                 let sectionModel = tabModel.sections[sectionId];
                 let sectionTpl = sectionModel.template;
@@ -272,22 +285,25 @@ export class FormControlsManagerService {
                     .filter((el: IExtendedCaseValuesFieldPathMap) =>
                         el.fieldPath.tabId === tabId && el.fieldPath.sectionId === sectionId);
 
-                //calculate section instances required number based on fields path
+                // calculate section instances required number based on fields path
                 sectionValues.forEach((el: IExtendedCaseValuesFieldPathMap) =>
                     sectionsInstancesMaxIndex =
-                        el.fieldPath.sectionInstanceIndex > sectionsInstancesMaxIndex ? el.fieldPath.sectionInstanceIndex : sectionsInstancesMaxIndex);
-                    
-                if (sectionsInstancesMaxIndex > 0)
+                        el.fieldPath.sectionInstanceIndex > sectionsInstancesMaxIndex ?
+                        el.fieldPath.sectionInstanceIndex :
+                        sectionsInstancesMaxIndex);
+
+                if (sectionsInstancesMaxIndex > 0) {
                     this.createSectionModelInstances(sectionsInstancesMaxIndex + 1, sectionTpl, sectionModel, formModel.proxyModel);
+                }
 
                 let sectionInstanceIndex = -1;
 
-                //section instances
+                // section instances
                 for (let sectionInstance of sectionModel.instances) {
 
                     sectionInstanceIndex++;
 
-                    //controls
+                    // controls
                     for (let fieldIndex of Object.keys(sectionInstance.fields)) {
 
                         let fieldModel = sectionInstance.fields[fieldIndex];
@@ -298,15 +314,15 @@ export class FormControlsManagerService {
 
                         let fieldsValuesSource =
                             (caseBinding && caseBinding.length > 0) ? caseBindingFieldsMap : sectionValues;
-                        
+
                         let fieldValueItem = fieldsValuesSource.find((el: IExtendedCaseValuesFieldPathMap) => el.fieldPath.equals(fieldPath));
                         let fieldValue = !commonMethods.isUndefinedOrNull(fieldValueItem) ? fieldValueItem.fieldValue : undefined;
 
                         if (fieldValue) {
                             this.setFormControlValue(fieldModel, controlTemplate, fieldValue);
-                            fieldModel.acceptChanges(); //set original values
+                            fieldModel.acceptChanges(); // set original values
 
-                            //setting correct pristine value is required for calculated fields that have been changed manually to keep this value.
+                            // setting correct pristine value is required for calculated fields that have been changed manually to keep this value.
                             fieldModel.setPristine(fieldValue.Pristine);
                         }
                     }
@@ -376,17 +392,17 @@ export class FormControlsManagerService {
                 let caseBindingFieldPath = caseBindingFieldsPathMap.getItemSafe(caseBindingKey);
 
                 if (caseBindingFieldPath) {
-                    //override pristine value from db field values
+                    // override pristine value from db field values
                     let path = caseBindingFieldPath.buildFormFieldPath() || '';
                     let fieldValueModel = caseBindingFieldsValues.getItem(caseBindingKey);
                     let pristine = exCaseFieldsValues.containsKey(path)
                         ? exCaseFieldsValues.getItem(path).Pristine
-                        : !commonMethods.isUndefinedNullOrEmpty(fieldValueModel.Value); 
+                        : !commonMethods.isUndefinedNullOrEmpty(fieldValueModel.Value);
 
                     items.push({
                         fieldPath: caseBindingFieldPath,
                         fieldValue: new FieldValueModel(fieldValueModel.Value, fieldValueModel.SecondaryValue, pristine)
-                    });        
+                    });
                 }
             }
         }
@@ -407,7 +423,8 @@ export class FormControlsManagerService {
         return changedItems;
     }
 
-    private createSectionModelInstances(sectionInstancesCount: number, sectionTpl: SectionTemplateModel, sectionModel: SectionModel, proxyModel: ProxyModel) : void {
+    private createSectionModelInstances(sectionInstancesCount: number, sectionTpl: SectionTemplateModel,
+       sectionModel: SectionModel, proxyModel: ProxyModel): void {
         while (sectionModel.instances.length < sectionInstancesCount) {
             try {
                 this.formModelService.addSectionInstance(sectionTpl, sectionModel, proxyModel);
@@ -417,12 +434,12 @@ export class FormControlsManagerService {
         }
     }
 
-    
+
 
     private setFormControlValue(field:FieldModelBase, controlTemplate:BaseControlTemplateModel, fieldValue: FieldValueModel) {
         this.logService.debugFormatted('setFormControlValue: {0}', field.id);
 
-        //todo: handle caseBinding property from the metaData to read values from caseFieldValues collection!
+        // todo: handle caseBinding property from the metaData to read values from caseFieldValues collection!
 
         if (field instanceof SingleControlFieldModel) {
             this.setSingleControlValue(field, fieldValue, controlTemplate);
@@ -433,7 +450,8 @@ export class FormControlsManagerService {
         }
     }
 
-    private setSingleControlValue(fieldModel: SingleControlFieldModel, fieldValue: FieldValueModel, controlTemplate: BaseControlTemplateModel) {
+    private setSingleControlValue(fieldModel: SingleControlFieldModel,
+       fieldValue: FieldValueModel, controlTemplate: BaseControlTemplateModel) {
         let value = fieldValue.Value || '';
         let secondaryValue = fieldValue.SecondaryValue || '';
 
@@ -441,9 +459,10 @@ export class FormControlsManagerService {
             let momentDate = moment(value, this.config.dbDateFormat);
             if (!momentDate.isValid()) {
                 this.errorHandlingService.handleUserError(`Unknown date format recieved from template: ${value}, expecting ${this.config.dbDateFormat}`);
-            } 
+            }
             value = momentDate.format(controlTemplate.mode === 'year' ? this.config.yearFormat : this.config.dateFormat); // convert from dbDateFormat to ui dateFormat
-        } else if ((controlTemplate.controlType === FormControlType.Amount || controlTemplate.controlType === FormControlType.Percentage) && value.length) {
+        } else if ((controlTemplate.controlType === FormControlType.Amount ||
+           controlTemplate.controlType === FormControlType.Percentage) && value.length) {
             value = value.replace(new RegExp(`[${this.config.dbDecimalSeparator}]+`, 'g'), this.config.decimalSeparator);
         }
 
@@ -454,15 +473,16 @@ export class FormControlsManagerService {
             controlValue = value.split(',');
         } else if (controlTemplate.controlType === FormControlType.Search) {
             controlValue = value;
-            additionalData = secondaryValue; //id
+            additionalData = secondaryValue; // id
         } else {
              controlValue = value;
         }
-        
+
         this.formModelService.setFieldValue(fieldModel, controlValue, additionalData);
     }
 
-    private setMultiControlValue(fieldModel: MultiControlFieldModel, fieldValue: FieldValueModel, controlTemplate: BaseControlTemplateModel) {
+    private setMultiControlValue(fieldModel: MultiControlFieldModel,
+       fieldValue: FieldValueModel, controlTemplate: BaseControlTemplateModel) {
         let value = fieldValue.Value || '';
         if (controlTemplate.controlType === FormControlType.CheckboxList) {
             this.setCheckBoxListValues(fieldModel, value);
@@ -494,7 +514,7 @@ export class FormControlsManagerService {
                 let fieldModel = section.fields[fieldId];
                 this.formModelService.setFieldValue(fieldModel, newValue);
 
-                //use fieldModel.previousValue, fieldModel.lastValue since they are set by setFieldValue method call correctly
+                // use fieldModel.previousValue, fieldModel.lastValue since they are set by setFieldValue method call correctly
                 let item = new ChangedFieldItem(fieldModel.previousValue, fieldModel.lastValue, fieldModel.getFieldPath());
                 changedItems.push(item);
             }
@@ -518,13 +538,13 @@ export class FormControlsManagerService {
             }
         }
     }
-    
+
     loadFormCustomDataSources(templateModel:FormTemplateModel, formModel:FormModel): Observable<Array<boolean>> {
         let dsObservation: Observable<boolean>[] = [];
-        
+
         for (let dsTemplate of templateModel.dataSources) {
             if (dsTemplate instanceof CustomQueryDataSourceTemplateModel) {
-              
+
                 this.logService.infoFormatted('processCustomDataSources for dsTemplateId = {0}', dsTemplate.id);
                 let result$ = this.dataSourcesLoaderService.loadCustomQueryDataSourceData(formModel.proxyModel, dsTemplate.id, dsTemplate.parameters)
                     .flatMap((data: any) => {
@@ -536,12 +556,12 @@ export class FormControlsManagerService {
             }
         }
 
-        //return at least one to proceed with other processings... false means there were no changes 
+        // return at least one to proceed with other processings... false means there were no changes
         if (dsObservation.length === 0) {
             return Observable.of([false]);
         }
 
-        //wait for all observables to complete
+        // wait for all observables to complete
         let res = Observable.forkJoin(dsObservation);
         return res;
     }
@@ -551,7 +571,7 @@ export class FormControlsManagerService {
         controlTemplateModel: BaseControlTemplateModel,
         fieldModel: FieldModelBase): Observable<boolean> {
 
-        //t0d0: check if its correct usage
+        // t0d0: check if its correct usage
         let digestUpdateLog = new DigestUpdateLog();
 
         let dataSourceTemplate = controlTemplateModel.dataSource;
@@ -559,22 +579,21 @@ export class FormControlsManagerService {
 
         // process custom data source for this control only if exists
         if (dataSourceTemplate && dataSourceTemplate instanceof OptionsDataSourceTemplateModel) {
-            //this.logService.info(`options::processControlsDataSources: forceLoadDataSources: ${this.forceLoadDataSources}, paramChanged - ${requiresUpdate}, controlTpl- ${control.id}, dataSourceTemplate - ${dataSourceTemplate.id}`);
+            // this.logService.info(`options::processControlsDataSources: forceLoadDataSources:
+            // ${this.forceLoadDataSources}, paramChanged - ${requiresUpdate}, controlTpl- ${control.id}, dataSourceTemplate - ${dataSourceTemplate.id}`);
             refreshComplete$ = this.refreshOptionsDataSource(formModel, dataSourceTemplate, fieldModel, controlTemplateModel, digestUpdateLog);
-        }
-        // process data source for this control only if exists
-        else if (dataSourceTemplate && dataSourceTemplate instanceof ControlCustomDataSourceTemplateModel) {
-            //this.logService.info(`custom:processControlsDataSources:forceLoadDataSources - ${this.forceLoadDataSources}, paramChanged - ${requiresUpdate}, controlTpl- ${control.id}, dataSourceTemplate - ${dataSourceTemplate.id}`);
+        } else if (dataSourceTemplate && dataSourceTemplate instanceof ControlCustomDataSourceTemplateModel) { // process data source for this control only if exists
+            // this.logService.info(`custom:processControlsDataSources:forceLoadDataSources -
+            // ${this.forceLoadDataSources}, paramChanged - ${requiresUpdate}, controlTpl- ${control.id}, dataSourceTemplate - ${dataSourceTemplate.id}`);
             refreshComplete$ = this.refreshControlCustomDataSource(formModel,
                 dataSourceTemplate,
                 fieldModel,
                 controlTemplateModel,
                 digestUpdateLog);
-        }
-        else if (dataSourceTemplate && dataSourceTemplate instanceof ControlSectionDataSourceTemplateModel) {
+        } else if (dataSourceTemplate && dataSourceTemplate instanceof ControlSectionDataSourceTemplateModel) {
 
             let sectionInstance = fieldModel.sectionInstance;
-            
+
             refreshComplete$ = this.refreshControlCustomSectionDataSource(
                 sectionInstance,
                 formModel,
@@ -582,8 +601,7 @@ export class FormControlsManagerService {
                 fieldModel,
                 controlTemplateModel,
                 digestUpdateLog);
-        }
-        else {
+        } else {
             refreshComplete$ = Observable.of(this.setControlDataSourceOptions(formModel.proxyModel,
                 fieldModel,
                 controlTemplateModel,
@@ -638,10 +656,10 @@ export class FormControlsManagerService {
         fieldModel: FieldModelBase,
         controlTemplateModel: BaseControlTemplateModel,
         digestUpdateLog: DigestUpdateLog): Observable<boolean> {
-        
+
         let dsModel: CustomDataSourceModel = customDataSourcesOwner.dataSources[dsTemplate.id];
         if (dsModel) {
-            //map data to ItemModel
+            // map data to ItemModel
             let data = dsModel.getData().slice();
             let options: ItemModel[] = [];
             data.map((el: any) => {
@@ -655,7 +673,7 @@ export class FormControlsManagerService {
                 }
             });
 
-            //set control model data
+            // set control model data
             if (options.length > 0) {
                 fieldModel.preFilteredItems = options;
                 let isChanged = this.setControlDataSourceOptions(proxyModel, fieldModel, controlTemplateModel, digestUpdateLog);
@@ -696,7 +714,8 @@ export class FormControlsManagerService {
             });
     }
 
-    setControlDataSourceOptions(proxyModel: ProxyModel, fieldModel: FieldModelBase, control: BaseControlTemplateModel, digestUpdateLog: DigestUpdateLog): boolean {
+    setControlDataSourceOptions(proxyModel: ProxyModel, fieldModel: FieldModelBase,
+       control: BaseControlTemplateModel, digestUpdateLog: DigestUpdateLog): boolean {
         this.logService.debugFormatted('setControlDataSourceOptions: set new values into control {0}', control.id);
         let filteredItems = this.filterItems(proxyModel, fieldModel, control, digestUpdateLog);
 
@@ -706,11 +725,12 @@ export class FormControlsManagerService {
 
         return this.setFieldItems(control, fieldModel, filteredItems);
     }
-    
-    private filterItems(proxyModel: ProxyModel, fieldModel: FieldModelBase, controlTemplateModel: BaseControlTemplateModel, digestUpdateLog: DigestUpdateLog): ItemModel[] {
+
+    private filterItems(proxyModel: ProxyModel, fieldModel: FieldModelBase,
+       controlTemplateModel: BaseControlTemplateModel, digestUpdateLog: DigestUpdateLog): ItemModel[] {
         if (controlTemplateModel.dataSourceFilterBinding instanceof Function) {
             this.logService.debugFormatted('dataSourceFilterBinding called for {0}', controlTemplateModel.id);
-            
+
             let proxyControl = proxyModel.findProxyControl(fieldModel.getFieldPath());
             let items = fieldModel.preFilteredItems ? fieldModel.preFilteredItems.slice() : [];
             let mappedDataSource =
@@ -726,7 +746,7 @@ export class FormControlsManagerService {
         }
         return fieldModel.preFilteredItems;
     }
-   
+
     private setFieldItems(control: BaseControlTemplateModel, fieldModel: FieldModelBase, items: ItemModel[]): boolean {
 
         if (commonMethods.areItemModelArraysEqual(fieldModel.items, items)) {
@@ -750,9 +770,11 @@ export class FormControlsManagerService {
 
     private tryResetSingleValueOnItemsChange(controlTemplateModel: BaseControlTemplateModel, fieldModel: SingleControlFieldModel): boolean {
 
-        if (commonMethods.isUndefinedNullOrEmpty(fieldModel.control.value) || controlTemplateModel.controlType === FormControlType.Search)
+        if (commonMethods.isUndefinedNullOrEmpty(fieldModel.control.value) ||
+         controlTemplateModel.controlType === FormControlType.Search) {
             return false;
-        
+        }
+
         if (fieldModel instanceof MultiValueSingleControlFieldModel){
             return this.tryResetSingleArrayValueOnItemsChange(fieldModel, controlTemplateModel.resetValueOnItemsUpdate);
         }
@@ -771,8 +793,9 @@ export class FormControlsManagerService {
             }) > -1;
         }
 
-        if (isInItems)
+        if (isInItems) {
             return false;
+        }
 
         // reset control value since new items don't have control value
         this.formModelService.setFieldValue(fieldModel, '');
@@ -797,10 +820,11 @@ export class FormControlsManagerService {
             });
         }
 
-        if (!valueChanged)
+        if (!valueChanged) {
             return false;
+        }
 
-        //keep only those selected values that exist in new items
+        // keep only those selected values that exist in new items
         this.formModelService.setFieldValue(fieldModel, matchingItems);
         return true;
     }
@@ -810,8 +834,9 @@ export class FormControlsManagerService {
         if (disabledStateBehavior) {
 
             // ignore if section was not disabled by user when condition is UserOnly
-            if (disabledStateBehavior.condition === DisabledStateActionCondition.UserOnly && !isDisabledByUser)
+            if (disabledStateBehavior.condition === DisabledStateActionCondition.UserOnly && !isDisabledByUser) {
                 return null;
+            }
 
             let action = disabledStateBehavior.action;
 
@@ -829,12 +854,12 @@ export class FormControlsManagerService {
 
         let changedItems:ChangedFieldItem[] = [];
 
-        //controls
+        // controls
         for (let fieldIndex of Object.keys(sectionInstance.fields)) {
             let fieldModel = sectionInstance.fields[fieldIndex];
 
             this.formModelService.setFieldValue(fieldModel, null, null);
-            
+
             let item = new ChangedFieldItem(fieldModel.previousValue, fieldModel.lastValue, fieldModel.getFieldPath());
             changedItems.push(item);
         }
@@ -845,17 +870,17 @@ export class FormControlsManagerService {
     private resetSectionToPrevState(sectionInstance: SectionInstanceModel): ChangedFieldItem[] {
         let changedItems: ChangedFieldItem[] = [];
 
-        //controls
+        // controls
         for (let fieldIndex of Object.keys(sectionInstance.fields)) {
             let fieldModel = sectionInstance.fields[fieldIndex];
 
-            //restore to prev values
+            // restore to prev values
             let value = fieldModel.originalValue;
             let additionalData = fieldModel.originalAdditionalData;
 
             this.formModelService.setFieldValue(fieldModel, value, additionalData);
 
-            //add changed item to collection
+            // add changed item to collection
             let item = new ChangedFieldItem(fieldModel.previousValue, fieldModel.lastValue, fieldModel.getFieldPath());
             changedItems.push(item);
         }
@@ -880,4 +905,3 @@ interface IExtendedCaseValuesFieldPathMap {
 
 
 
- 

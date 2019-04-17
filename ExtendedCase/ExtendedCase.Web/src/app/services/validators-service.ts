@@ -1,16 +1,16 @@
-﻿import { ValidatorError, MinMax, ValidateOn } from '../shared/validation-types';
-import { AbstractControl, ValidatorFn, Validators, ValidationErrors, FormControl, FormGroup, FormArray } from '@angular/forms';
+﻿import { ValidatorError, MinMax } from '../shared/validation-types';
+import { AbstractControl, ValidatorFn, Validators, ValidationErrors, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { LogService } from '../services/log.service';
 import { Injectable, Inject, forwardRef } from '@angular/core';
 import { ProxyModel, ProxyControl } from '../models/proxy.model';
-import { FormTemplateModel, TabTemplateModel, SectionTemplateModel, BaseControlTemplateModel, TemplateValidator, TemplateValidators } from '../models/template.model';
-import { FormModel, MultiControlFieldModel, SingleControlFieldModel, TabModel, SectionModel, SectionInstanceModel, FieldModelBase, FormControlType } from '../models/form.model';
-import { IAppConfig, AppConfig } from '../shared/app-config/app-config';
+import { BaseControlTemplateModel, TemplateValidator } from '../models/template.model';
+import { FormModel, TabModel, SectionInstanceModel, FieldModelBase, FormControlType } from '../models/form.model';
+import { AppConfig } from '../shared/app-config/app-config';
 import { UuidGenerator } from '../utils/uuid-generator';
 import { ErrorHandlingService } from './error-handling.service';
-import { IMap } from '../shared/common-types';
 import * as moment from 'moment';
 import * as commonMethods from '../utils/common-methods';
+import { IAppConfig } from '../shared/app-config/app-config.interface';
 
 @Injectable()
 export class ValidatorsService {
@@ -194,7 +194,7 @@ export class ValidatorsService {
                     }
 
                     validatorFn = (control: AbstractControl): ValidationErrors => {
-                        if (this.config.isManualValidation) return requiredFn(control); // fire required only on save, not on leave
+                        if (this.config.isManualValidation) { return requiredFn(control); } // fire required only on save, not on leave
                         const errorResult = Object.create(null);
                         errorResult[template.type] = control.value;
                         const existingErrors = Object.keys(control.errors || {}).filter((keyName: string) => {
@@ -229,52 +229,57 @@ export class ValidatorsService {
 
                     break;
                 }
-            case 'minLength':
-                {
-                    if (!template.value) this.logService.warningFormatted('Missing validation min length for control: {0}', controlTemplateModel.id);
+            case 'minLength': {
+                    if (!template.value) { 
+                      this.logService.warningFormatted('Missing validation min length for control: {0}', controlTemplateModel.id); 
+                    }
 
                     validatorFn = Validators.minLength(Number(template.value));
                     break;
                 }
-            case 'maxLength':
-                {
-                    if (!template.value) this.logService.warningFormatted('Missing validation max length for control: {0}', controlTemplateModel.id);
+            case 'maxLength': {
+                    if (!template.value) { 
+                      this.logService.warningFormatted('Missing validation max length for control: {0}', controlTemplateModel.id); 
+                    }
 
                     validatorFn = Validators.maxLength(Number(template.value));
                     break;
                 }
-            case 'min':
-                {
-                    if (!template.value) this.logService.warningFormatted('Missing validation min value for control: {0}', controlTemplateModel.id);
+            case 'min': {
+                    if (!template.value) { 
+                      this.logService.warningFormatted('Missing validation min value for control: {0}', controlTemplateModel.id); 
+                    }
 
                     validatorFn = this.createMinMaxFn(template, controlTemplateModel, MinMax.Min);
                     break;
                 }
-            case 'max':
-                {
-                    if (!template.value) this.logService.warningFormatted('Missing validation max value for control: {0}', controlTemplateModel.id);
+            case 'max': {
+                    if (!template.value) { 
+                      this.logService.warningFormatted('Missing validation max value for control: {0}', controlTemplateModel.id); 
+                    }
 
                     validatorFn = this.createMinMaxFn(template, controlTemplateModel, MinMax.Max);
                     break;
                 }
-            case 'range':
-                {
-                    if (!template.value) this.logService.warningFormatted('Missing validation range value for control: {0}', controlTemplateModel.id);
+            case 'range': {
+                    if (!template.value) { 
+                      this.logService.warningFormatted('Missing validation range value for control: {0}', controlTemplateModel.id); 
+                    }
 
                     validatorFn = this.createMinMaxFn(template, controlTemplateModel, MinMax.Range);
                     break;
                 }
-            case 'pattern':
-                {
-                    if (!template.value) this.logService.warningFormatted('Missing validation regex pattern for control: {0}', controlTemplateModel.id);
+            case 'pattern': {
+                    if (!template.value) { 
+                      this.logService.warningFormatted('Missing validation regex pattern for control: {0}', controlTemplateModel.id); 
+                    }
 
                     validatorFn = Validators.pattern(template.value);
                     break;
                 }
-            case 'dateFormat':
-                {
+            case 'dateFormat': {
                     validatorFn = (control: AbstractControl): ValidationErrors => {
-                        if (control.value.length === 0) return null;
+                        if (control.value.length === 0) { return null; }
                         let dateFormat = controlTemplateModel.mode === 'year' ? this.config.yearFormat : this.config.dateFormat;
 
                         const isError = !moment(control.value, dateFormat, true).isValid();
@@ -284,15 +289,13 @@ export class ValidatorsService {
                     }
                     break;
                 }
-            case 'custom':
-                {
+            case 'custom': {
                     if (typeof template.valid !== 'function') {
                         this.errorHandlingService.handleError(null, `Valid function is missing for custom validator of the field '${fieldModel.getFieldPath().buildFormFieldPath()}'`);
                         break;
                     }
 
                     validatorFn = (control: AbstractControl): ValidationErrors => {
-                        //if (control.value.length === 0) return null;
 
                         const isError = !template.valid.call(proxyControl, proxyModel);
                         const errorResult = Object.create(null);
@@ -315,10 +318,10 @@ export class ValidatorsService {
             const localFieldModel = fieldModel;
             this.logService.debugFormatted('Validation({0}): running validation func. Mode: {1}', localControlTemplate.id, this.config.validationMode);
 
-            if (localFieldModel.hidden) return null;
-            //if (control.pristine && !this.config.isManualValidation) return null;
+            if (localFieldModel.hidden) { return null; }
+            // if (control.pristine && !this.config.isManualValidation) return null;
 
-            if (this.config.validationMode < localValidationTemplate.validationMode) return null;
+            if (this.config.validationMode < localValidationTemplate.validationMode) { return null; }
             localControlTemplate.isEverValidated = true;
 
             // ignore validation if validation disabled 
@@ -352,16 +355,15 @@ export class ValidatorsService {
 
     private createMinMaxFn(template: TemplateValidator, controlTemplateModel: BaseControlTemplateModel, type: MinMax): ValidatorFn {
         return (control: AbstractControl): ValidationErrors => {
-            if (control.value.length <= 0) return null;
+            if (control.value.length <= 0) { return null; }
 
             const errorResult = Object.create(null);
             errorResult[template.type] = control.value;
-            let dateCompareFn = (curDate: moment.Moment, templateDate: moment.Moment, templateDate2?: moment.Moment) => { return false };
-            let numericCompareFn = (curNum: number, templateNum: number, templateNum2?: number) => { return false; }
+            let dateCompareFn = (...args: any[]) => { return false };
+            let numericCompareFn = (...args: any[]) => { return false; }
 
             switch (type) {
-                case MinMax.Min:
-                    {
+                case MinMax.Min: {
                         dateCompareFn = (curDate: moment.Moment, min: moment.Moment) => {
                             return curDate.isSameOrBefore(min);
                         }
@@ -370,8 +372,7 @@ export class ValidatorsService {
                         }
                         break;
                     }
-                case MinMax.Max:
-                    {
+                case MinMax.Max: {
                         dateCompareFn = (curDate: moment.Moment, max: moment.Moment) => {
                             return curDate.isSameOrAfter(max);
                         }
@@ -380,8 +381,7 @@ export class ValidatorsService {
                         }
                         break;
                     }
-                case MinMax.Range:
-                    {
+                case MinMax.Range:{
                         dateCompareFn = (curDate: moment.Moment, min: moment.Moment, max: moment.Moment) => {
                             return !curDate.isBetween(min, max);
                         }

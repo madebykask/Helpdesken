@@ -1,18 +1,19 @@
-import { Injectable, Inject, forwardRef } from '@angular/core';
-import { IAppConfig, AppConfig, ILogSettings } from '../shared/app-config/app-config';
+import { Injectable, Inject } from '@angular/core';
+import { AppConfig } from '../shared/app-config/app-config';
 import { LogLevel } from '../shared/common-types';
 import * as cm from '../utils/common-methods';
+import { ILogSettings, IAppConfig } from '../shared/app-config/app-config.interface';
 
 @Injectable()
 export class LogService {
     private settings: ILogSettings;
-    
-    constructor(@Inject(AppConfig) private config: IAppConfig,) {
+
+    constructor(@Inject(AppConfig) private config: IAppConfig) {
         this.settings = this.config.logSettings
             ? this.config.logSettings
             : <ILogSettings>{ enabled: true, logLevel: LogLevel.Error };
     }
-    
+
     debugFormatted(template: string, ...args: any[]) {
         if (this.isDebug) {
             let s = this.buildFormattedString(template, args);
@@ -41,7 +42,7 @@ export class LogService {
 
     warning(msg: string) {
         if (this.isWarning) {
-            console.warn('[warn]:' + msg);    
+            console.warn('[warn]:' + msg);
         }
     }
 

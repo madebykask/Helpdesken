@@ -1,7 +1,8 @@
-﻿import { NgModule, Component, ElementRef, Input, Directive, Output, EventEmitter, OnInit, Inject } from '@angular/core';
+﻿import { ElementRef, Input, Directive, OnInit, Inject } from '@angular/core';
 import { NgControl } from '@angular/forms';
-import { IAppConfig, AppConfig } from '../../shared/app-config/app-config';
+import { AppConfig } from '../../shared/app-config/app-config';
 import * as cm from '../../utils/common-methods';
+import { IAppConfig } from 'src/app/shared/app-config/app-config.interface';
 
 @Directive({
     selector: '[formControlName][mask]',
@@ -27,7 +28,7 @@ export class Mask implements OnInit {
     private value = '';
 
     constructor(public model: NgControl, inputElement: ElementRef,
-        @Inject(AppConfig) private config: IAppConfig) {
+        @Inject(AppConfig) config: IAppConfig) {
         this.inputElement = inputElement.nativeElement;
         this.separator = config.decimalSeparator;
     }
@@ -36,7 +37,7 @@ export class Mask implements OnInit {
 
     }
 
-    onDelete(event: any, isDelete: boolean) {
+    onDelete(isDelete: boolean) {
         this.useComponentValue = true;
         this.value = this.inputElement.value;
         let caretPosition = this.inputElement.selectionStart;
