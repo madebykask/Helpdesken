@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { MbscSelect, MbscSelectOptions, MbscNavOptions } from '@mobiscroll/angular';
-import { take, finalize, map } from 'rxjs/operators';
-import { TranslateService } from '@ngx-translate/core';
-import { LanguagesApiService } from 'src/app/services/api/language/languages-api.service';
+import { MbscSelect, MbscNavOptions } from '@mobiscroll/angular';
+import { take  } from 'rxjs/operators';
 import { CasesSearchType } from 'src/app/modules/shared-module/constants';
-import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
+import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 import { CaseTemplateService } from 'src/app/services/case-organization/case-template.service';
 import { BehaviorSubject } from 'rxjs';
 import { AppStore, AppStoreKeys } from 'src/app/store/app-store';
@@ -17,14 +15,14 @@ import { AppStore, AppStoreKeys } from 'src/app/store/app-store';
 })
 export class FooterComponent implements OnInit  {
   searchType = CasesSearchType;
-  languageId: number = 0;
-  isLoadingLanguage: boolean = true;
+  languageId = 0;
+  isLoadingLanguage = true;
   isVisible = true;
 
   canCreateCases$ = new BehaviorSubject<boolean>(false);
-  
+
   @ViewChild('languages') languagesCtrl: MbscSelect;
-  
+
   bottomMenuSettings: MbscNavOptions = {
     type: 'bottom',
     moreText: null,
@@ -32,7 +30,7 @@ export class FooterComponent implements OnInit  {
     menuIcon: null,
     menuText: null,
   };
- 
+
   constructor(private router: Router,
               private appSore: AppStore,
               private userSettingsService : UserSettingsApiService,
@@ -50,20 +48,19 @@ export class FooterComponent implements OnInit  {
     }
 
     // apply translations
-    //this.languagesCtrl.setText = this.ngxTranslateService.instant("Välj");
-    //this.languagesCtrl.cancelText  = this.ngxTranslateService.instant("Avbryt");    
+    // this.languagesCtrl.setText = this.ngxTranslateService.instant("Välj");
+    // this.languagesCtrl.cancelText  = this.ngxTranslateService.instant("Avbryt");
   }
 
   openLanguages() {
     this.router.navigate(['language']);
-  } 
+  }
 
   logout() {
     this.goTo('/login');
-  } 
+  }
 
-  goTo(url: string = null) {  
+  goTo(url: string = null) {
     this.router.navigateByUrl(url);
-  } 
-
+  }
 }

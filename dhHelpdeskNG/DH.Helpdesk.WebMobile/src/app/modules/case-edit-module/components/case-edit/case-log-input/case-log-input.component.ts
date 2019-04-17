@@ -66,7 +66,7 @@ export class CaseLogInputComponent implements OnInit {
 
     if (this.externalLogField) {
       this.externalLogLabel = this.externalLogField.label + (this.externalLogField.isRequired ? '*' : '');
-      this.isExternalLogFieldVisible = !this.externalLogField.isHidden; 
+      this.isExternalLogFieldVisible = !this.externalLogField.isHidden;
     }
 
     if (this.internalLogField) {
@@ -91,7 +91,7 @@ export class CaseLogInputComponent implements OnInit {
   }
 
   private applyMaxLength(ctrl, maxLength) {
-    if (ctrl === undefined) return;
+    if (ctrl === undefined) { return; }
 
     const inputControl = ctrl.initialElem.nativeElement.querySelector('textarea');
     if (inputControl) {

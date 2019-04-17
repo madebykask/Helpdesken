@@ -1,11 +1,12 @@
 import { Component, ViewChild, Directive, EventEmitter, ElementRef, Renderer2 } from '@angular/core';
-import { Validators, FormGroup, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Validators, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
 import { forkJoin, Subject, of, throwError, interval } from 'rxjs';
 import { switchMap, take, finalize, delay, catchError, map, takeUntil, takeWhile } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
-import { CommunicationService, Channels, DropdownValueChangedEvent, NotifierChangedEvent } from 'src/app/services/communication/communication.service';
+import { CommunicationService, Channels,
+  DropdownValueChangedEvent, NotifierChangedEvent } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/data/header-event-data';
 import { AuthenticationStateService } from 'src/app/services/authentication';
 import { WorkingGroupsService } from 'src/app/services/case-organization/workingGroups-service';
@@ -17,7 +18,8 @@ import { CaseEditDataHelper } from '../../logic/case-edit/case-editdata.helper';
 import { CaseFieldsNames, CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { CaseLockApiService } from '../../services/api/case/case-lock-api.service';
 import { CaseSaveService } from '../../services/case';
-import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel, CaseLockModel, BaseCaseField, CaseAction, CaseActionDataType, IBaseCaseField } from '../../models';
+import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel,
+   CaseLockModel, BaseCaseField, CaseAction, CaseActionDataType, IBaseCaseField } from '../../models';
 import { OptionItem, MultiLevelOptionItem } from 'src/app/modules/shared-module/models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
@@ -35,23 +37,23 @@ import { ProductAreasService } from 'src/app/services/case-organization/productA
   styleUrls: ['./case-edit.component.scss']
 })
 export class CaseEditComponent {
-  @ViewChild('mainForm') mainForm: any;// MbscForm
+  @ViewChild('mainForm') mainForm: any; // MbscForm
     caseSectionTypes = CaseSectionType;
     caseFieldsNames = CaseFieldsNames;
     accessModeEnum = CaseAccessMode;
     dataSource: CaseDataStore;
     isLoaded = false;
     form: CaseFormGroup;
-    caseKey:string;
-    
+    caseKey: string;
+
     titleTabsSettings = {
-      display:"top"
-    }
+      display: 'top'
+    }ж
 
     caseTabsSettings = {
-      display:"top",
-      layout: "fixed",
-      theme:"mobiscroll"
+      display: 'top',
+      layout: 'fixed',
+      theme: 'mobiscroll'
     };
 
     formOptions: MbscFormOptions = {
@@ -78,7 +80,7 @@ export class CaseEditComponent {
                 private caseService: CaseService,
                 private router: Router,
                 private caseLockApiService: CaseLockApiService,
-                private authStateService:AuthenticationStateService,
+                private authStateService: AuthenticationStateService,
                 private caseDataHelpder: CaseEditDataHelper,
                 private alertService: AlertsService,
                 private caseSaveService: CaseSaveService,
@@ -90,7 +92,7 @@ export class CaseEditComponent {
                 private caseWatchDateApiService: CaseWatchDateApiService,
                 private translateService : TranslateService,
                 private localStorage:  LocalStorageService,
-                private caseFileService: CaseFilesApiService, 
+                private caseFileService: CaseFilesApiService,
                 private productAreasService: ProductAreasService) {
       // read route params
       if (this.route.snapshot.paramMap.has('id')) {
@@ -100,10 +102,10 @@ export class CaseEditComponent {
           this.isNewCase = true;
           this.templateId = +this.route.snapshot.paramMap.get('templateId');
       } else {
-        throw 'Invalid parameters';
+        throw new Error('Invalid parameters');
       }
-      
-      //subscribe global events
+
+      // subscribe global events
       this.subscribeEvents();
     }
 
@@ -116,12 +118,10 @@ export class CaseEditComponent {
       if (this.caseData) {
           if (this.caseData.editMode === CaseAccessMode.NoAccess) {
             accessMode = CaseAccessMode.NoAccess;
-          }
-          else {
+          } else {
             if (this.isLocked) {
               accessMode = CaseAccessMode.ReadOnly;
-            }
-            else {
+            } else {
               accessMode = this.caseData.editMode;
             }
           }
@@ -133,7 +133,7 @@ export class CaseEditComponent {
       this.commService.publish(Channels.Header, new HeaderEventData(false));
 
      if (this.caseId > 0) {
-          // existing case 
+          // existing case
           this.loadCaseData(this.caseId);
       } else if (this.templateId > 0) {
           this.isNewCase = true;
@@ -169,10 +169,10 @@ export class CaseEditComponent {
           finalize(() => this.isLoaded = true),
           catchError((e) => throwError(e))
       ).subscribe(([sectionData, options, caseLock]) => {
-          this.caseLock = caseLock;  
+          this.caseLock = caseLock;
           this.caseSections = sectionData;
           this.dataSource = new CaseDataStore(options);
-          
+
           this.initLock();
           this.processCaseData();
       });
@@ -195,7 +195,7 @@ export class CaseEditComponent {
     }
 
     public navigate(url: string) {
-      if(url == null) return;
+      if (url == null) { return; }
       of(true).pipe(
         delay(200),
         map(() => this.router.navigate([url])),
@@ -204,24 +204,25 @@ export class CaseEditComponent {
     }
 
     getSectionHeader(type: CaseSectionType): string {
-        if (this.caseSections == null) return '';
+        if (this.caseSections == null) { return ''; }
         return this.caseSections.find(s => s.type == type).header;
     }
 
     isSectionOpen(type: CaseSectionType) {
-        if (this.caseSections == null) return null
+        if (this.caseSections == null) { return null }
         return this.caseSections.find(s => s.type == type).isEditCollapsed ? null : true;
     }
 
     public get canSave() {
-      if (this.isNewCase) 
+      if (this.isNewCase) {
         return true;
+      }
 
       return this.accessMode == CaseAccessMode.FullAccess;
     }
 
     saveCase() {
-      if (!this.canSave) return;
+      if (!this.canSave) { return; }
       this.form.submit();
       if (this.form.invalid) {
         // let invalidControls = this.form.findInvalidControls(); // debug info
@@ -240,18 +241,17 @@ export class CaseEditComponent {
     }
 
     goToCases() {
-      let res = this.localStorage.getCaseSearchState();
+      const res = this.localStorage.getCaseSearchState();
       let searchType: string;
       if (res) {
         searchType = CasesSearchType[res.SearchType];
-      }
-      else {
+      } else {
         searchType = CasesSearchType[CasesSearchType.AllCases];
       }
       this.navigate('/casesoverview/' + searchType);
     }
 
-    cleanTempFiles(caseId:number) {
+    cleanTempFiles(caseId: number) {
       this.caseFileService.deleteTemplFiles(caseId).pipe(
         take(1)
       ).subscribe();
@@ -260,11 +260,11 @@ export class CaseEditComponent {
     private loadTemplate(templateId: number) {
       const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
 
-      const caseData$ = 
+      const caseData$ =
         this.caseService.getTemplateData(templateId).pipe(
           take(1),
           switchMap(data => {
-            //this.ownsLock = false; //TODO: check?
+            // this.ownsLock = false; //TODO: check?
             this.caseData = data;
             this.caseKey = this.caseData.caseGuid.toString();
             const filter = this.caseDataHelpder.getCaseOptionsFilter(this.caseData);
@@ -281,7 +281,7 @@ export class CaseEditComponent {
       ).subscribe(([sectionData, options]) => {
           this.caseSections = sectionData;
           this.dataSource = new CaseDataStore(options);
-          
+
           this.initLock();
           this.processCaseData();
       });
@@ -294,7 +294,7 @@ export class CaseEditComponent {
         takeUntil(this.destroy$)
       ).subscribe((v: DropdownValueChangedEvent) => this.runUpdates(v));
 
-      //Notifier changed
+      // Notifier changed
       this.commService.listen<NotifierChangedEvent>(Channels.NotifierChanged).pipe(
         takeUntil(this.destroy$)
       ).subscribe(data => this.processNotifierChanged(data));
@@ -314,15 +314,15 @@ export class CaseEditComponent {
       const filters = this.caseDataHelpder.getFormCaseOptionsFilter(this.caseData, this.form);
       const optionsHelper = this.caseService.getOptionsHelper(filters);
 
-      //NOTE: remember to update case data reducer when adding new fields
+      // NOTE: remember to update case data reducer when adding new fields
       switch (v.name) {
-        
+
         case CaseFieldsNames.RegionId: {
           optionsHelper.getDepartments().pipe(
             take(1),
           ).subscribe((deps: OptionItem[]) => {
             reducer.caseDataReducer(CaseFieldsNames.DepartmentId, { items: deps });
-            //clear org units
+            // clear org units
             reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: []});
           });
           break;
@@ -342,7 +342,7 @@ export class CaseEditComponent {
             take(1),
           ).subscribe((deps: OptionItem[]) => {
             reducer.caseDataReducer(CaseFieldsNames.IsAbout_DepartmentId, { items: deps });
-            //clear org units
+            // clear org units
             reducer.caseDataReducer(CaseFieldsNames.IsAbout_OrganizationUnitId, { items: []});
           });
           break;
@@ -363,7 +363,7 @@ export class CaseEditComponent {
                 take(1)
               ).subscribe(ct => {
                 if (ct && ct.performerUserId != null && !this.getField(CaseFieldsNames.PerformerUserId).setByTemplate) {
-                  if (!this.dataSource.performersStore$.value.some((e) => e.value == ct.performerUserId)) { 
+                  if (!this.dataSource.performersStore$.value.some((e) => e.value == ct.performerUserId)) {
                     // get new list of performers with casetype perfomer included
                     filters.CasePerformerUserId = ct.performerUserId;
                     optionsHelper.getPerformers(true).pipe(
@@ -447,8 +447,8 @@ export class CaseEditComponent {
 
     private processCaseData() {
       this.form = this.createFormGroup(this.caseData);
-      
-      //run only for existing case 
+
+      // run only for existing case
       if (this.caseId > 0) {
           this.loadCaseActions();
           this.cleanTempFiles(this.caseId);
@@ -502,12 +502,12 @@ export class CaseEditComponent {
             }
           });
           return errors;
-      }); 
+      });
     }
 
     private initLock() {
       if (this.caseId > 0) {
-        //set flag if we own the lock
+        // set flag if we own the lock
         this.ownsLock = !this.caseLock.isLocked;
 
         if (this.caseLock.isLocked) {
@@ -534,7 +534,7 @@ export class CaseEditComponent {
         this.caseLock = new CaseLockModel();
       }
     }
-  
+
     private processNotifierChanged(eventData: NotifierChangedEvent) {
       const data = eventData.notifier;
       const isRegarding = eventData.type === NotifierType.Regarding;
@@ -548,10 +548,9 @@ export class CaseEditComponent {
         formFieldsSetter.setPlace(data.place);
         formFieldsSetter.setUserCode(data.userCode);
         formFieldsSetter.setCostCenter(data.costCentre);
-  
+
         this.updateOrganisationFields(formFieldsSetter, data);
-      }
-      else {
+      } else {
         this.resetNotifierFields(formFieldsSetter);
       }
     }
@@ -564,27 +563,26 @@ export class CaseEditComponent {
 
       if (regionId !== formRegionId) {
         this.changeRegion(notifierFieldsSetter, regionId, departmentId, ouId);
-      }
-      else {
-          //just set new department if exists
+      } else {
+          // just set new department if exists
           if (!isNaN(departmentId) && departmentId) {
-            this.changeDepartment(notifierFieldsSetter, departmentId, ouId); 
+            this.changeDepartment(notifierFieldsSetter, departmentId, ouId);
           }
       }
     }
 
-    private changeRegion(notifierFieldsSetter: NotifierFormFieldsSetter, regionId?:number, departmentId?: number, ouId?: number) {
-      //change first to update form 
+    private changeRegion(notifierFieldsSetter: NotifierFormFieldsSetter, regionId?: number, departmentId?: number, ouId?: number) {
+      // change first to update form
       notifierFieldsSetter.setRegion(regionId || '');
-      
+
       const reducer = this.getCaseDataReducers();
       const optionsHelper = this.getFormOptionsHelpers();
 
-      //change to new region and load departments
+      // change to new region and load departments
       optionsHelper.getDepartments().pipe(
         take(1)
       ).subscribe(deps => {
-        reducer.caseDataReducer(CaseFieldsNames.DepartmentId, { items: deps }); 
+        reducer.caseDataReducer(CaseFieldsNames.DepartmentId, { items: deps });
         this.changeDepartment(notifierFieldsSetter, departmentId, ouId);
       });
     }
@@ -600,12 +598,12 @@ export class CaseEditComponent {
       optionsHelper.getOUs(departmentId).pipe(
         take(1)
       ).subscribe(ous => {
-          reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: ous }); 
+          reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: ous });
           notifierFieldsSetter.setOU(ouId || '');
       });
     }
 
-    private resetNotifierFields(formFieldsSetter: NotifierFormFieldsSetter) {     
+    private resetNotifierFields(formFieldsSetter: NotifierFormFieldsSetter) {
       formFieldsSetter.setReportedBy('');
       formFieldsSetter.setPersonName('');
       formFieldsSetter.setPersonEmail('');
@@ -643,14 +641,14 @@ export class CaseEditComponent {
       this.destroy$.complete();
 
       this.commService.publish(Channels.Header, new HeaderEventData(true));
-      
+
   }
 }
 
 interface IOrganisationData {
   regionId?: number;
   departmentId?: number;
-  ouId?:number;
+  ouId?: number;
 }
 
 @Directive({selector: 'mbsc-form-group-title', outputs: ['onClick']})
@@ -659,7 +657,7 @@ export class MbscFormGroupTitleClickDirective {
   onClick = new EventEmitter<any>();
 
   constructor(private elem: ElementRef, private renderer: Renderer2) {
-    this.renderer.listen(this.elem.nativeElement, 'click', (ev) => { 
+    this.renderer.listen(this.elem.nativeElement, 'click', (ev) => {
       if (this.isOpened == null) {
         this.isOpened = this.elem.nativeElement.getAttribute('aria-expanded') == 'true';
       }
