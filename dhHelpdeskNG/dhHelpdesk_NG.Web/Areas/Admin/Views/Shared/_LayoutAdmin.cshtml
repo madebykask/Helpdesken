@@ -63,7 +63,7 @@
 
                                 @if (SessionFacade.CurrentUser != null)
                                 {
-                                    if (SessionFacade.CurrentUser.UserGroupId > 2)
+                                    if (SessionFacade.CurrentUser.UserGroupId == 4)
                                     {
 
                                         <li><a href="@Url.Action("index", "globalsetting", new {area = "admin", texttypeid = 0, textSearch = "", compareMethod = 1})">
