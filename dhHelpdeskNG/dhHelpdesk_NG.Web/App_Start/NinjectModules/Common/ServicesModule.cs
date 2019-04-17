@@ -191,7 +191,10 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             Bind<IWebApiService>().To<WebApiService>();
 
             Bind<ICaseDiagnosticService>().To<CaseDiagnosticService>().InRequestScope();
-        }
+
+			// Feature toggle
+			this.Bind<IFeatureToggleService>().To<FeatureToggleService>();
+		}
 
         #endregion
     }

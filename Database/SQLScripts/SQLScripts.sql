@@ -185,6 +185,37 @@ GO
 DROP PROCEDURE tempRemoveDefaultConstaint
 GO
 
+-- Create feature toogle
+RAISERROR('Adding new Feature toggle table tblFeatureToggle', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblFeatureToggle' AND type='U')
+	BEGIN
+	CREATE TABLE [dbo].[tblFeatureToggle](
+		[StrongName] [nvarchar](100) NOT NULL,
+		[Active] [bit] NOT NULL,
+		[Description] [nvarchar](max) NOT NULL,
+		[ChangeDate] [datetime] NOT NULL,
+	 CONSTRAINT [PK_tblFeatureToggle] PRIMARY KEY CLUSTERED 
+	(
+		[StrongName] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+	ALTER TABLE [dbo].[tblFeatureToggle] ADD  CONSTRAINT [DF_tblFeatureToggle_Active]  DEFAULT ((0)) FOR [Active]
+	ALTER TABLE [dbo].[tblFeatureToggle] ADD  CONSTRAINT [DF_tblFeatureToggle_Description]  DEFAULT ('') FOR [Description]
+	ALTER TABLE [dbo].[tblFeatureToggle] ADD  CONSTRAINT [DF_tblFeatureToggle_ChangeDate]  DEFAULT (getutcdate()) FOR [ChangeDate]
+END
+
+RAISERROR('Adding feature toggle REPORTS_REPORTGENERATOR_USE_PREVIOUS_SEARCH', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT * FROM tblFeatureToggle WHERE StrongName = 'REPORTS_REPORTGENERATOR_USE_PREVIOUS_SEARCH')
+BEGIN
+	INSERT INTO [tblFeatureToggle](StrongName, Active, [Description]) 
+	VALUES (
+		'REPORTS_REPORTGENERATOR_USE_PREVIOUS_SEARCH',
+		0,
+		'Should the report generator use the previous implementation of the search method'
+	)
+END
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.41'
 --ROLLBACK --TMP

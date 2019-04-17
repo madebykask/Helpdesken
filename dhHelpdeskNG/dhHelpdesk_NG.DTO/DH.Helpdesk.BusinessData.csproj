@@ -322,6 +322,7 @@
     <Compile Include="Models\ExternalInvoice\ExternalInvoice.cs" />
     <Compile Include="Models\Faq\Input\EditCategory.cs" />
     <Compile Include="Models\Faq\Input\FaqCategory.cs" />
+    <Compile Include="Models\FeatureToggleModel.cs" />
     <Compile Include="Models\Feedback\FeedbackField.cs" />
     <Compile Include="Models\Feedback\FeedbackFullItem.cs" />
     <Compile Include="Models\Feedback\FeedbackQuestionOption.cs" />

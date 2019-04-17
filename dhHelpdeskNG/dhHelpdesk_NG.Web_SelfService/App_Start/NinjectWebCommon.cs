@@ -297,6 +297,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IPrinterFieldSettingsRepository>().To<PrinterFieldSettingsRepository>();
 			kernel.Bind<ICaseSectionsRepository>().To<CaseSectionsRepository>();
 			kernel.Bind<IComputerUserCategoryRepository>().To<ComputerUserCategoryRepository>();
+			kernel.Bind<IFeatureToggleRepository>().To<FeatureToggleRepository>();
 
 
 			// Service             
@@ -378,9 +379,11 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ILogProgramService>().To<LogProgramService>();
             kernel.Bind<IInventoryService>().To<InventoryService>();
 
+			kernel.Bind<IFeatureToggleService>().To<FeatureToggleService>();
 
-            // Cache
-            kernel.Bind<ICacheProvider>().To<CacheProvider>();
+
+			// Cache
+			kernel.Bind<ICacheProvider>().To<CacheProvider>();
 
             // FormLib
             var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DSN"].ConnectionString;

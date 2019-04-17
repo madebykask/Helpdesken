@@ -621,11 +621,13 @@ namespace DH.Helpdesk.Dal.DbContext
         public DbSet<GDPRDataPrivacyFavorite> GDPRDataPrivacyFavorites { get; set; }
         public DbSet<GDPRTask> GDPRTasks { get; set; }
 
-        #endregion
+		public DbSet<FeatureToggle> FeatureToggles { get; set; }
 
-        #region Public Methods and Operators
+		#endregion
 
-        public virtual void Commit()
+		#region Public Methods and Operators
+
+		public virtual void Commit()
         {
             try
             {
@@ -941,9 +943,11 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new GDPRDataPrivacyFavoriteConfiguration());
             modelBuilder.Configurations.Add(new GDPRTaskConfiguration());
 
-            #endregion
+			modelBuilder.Configurations.Add(new FeatureToggleConfiguration());
 
-            base.OnModelCreating(modelBuilder);
+			#endregion
+
+			base.OnModelCreating(modelBuilder);
         }
 
         #endregion

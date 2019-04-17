@@ -175,6 +175,7 @@
     <Compile Include="ExtendedCaseEntity\ExtendedCaseValue.cs" />
     <Compile Include="ExtendedCaseEntity\ExtendedCaseData.cs" />
     <Compile Include="ExtendedCaseEntity\ExtendedCaseForm.cs" />
+    <Compile Include="FeatureToggle.cs" />
     <Compile Include="FormFieldValueHistory.cs" />
     <Compile Include="GDPR\GDPRDataPrivacyAccess.cs" />
     <Compile Include="GDPR\GDPRDataPrivacyFavorite.cs" />
