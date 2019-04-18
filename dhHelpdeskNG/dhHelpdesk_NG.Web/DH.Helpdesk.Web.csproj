@@ -789,6 +789,7 @@
     <Content Include="Content\js\bootstrap-tagsinput.min.js" />
     <Content Include="Content\js\Cases\case.templates.js" />
     <Content Include="Content\js\Cases\caseByIds.logic.js" />
+    <Content Include="Content\js\Cases\commonHandlers.js" />
     <Content Include="Content\js\Cases\Dialogs\CaseCharge.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseAttachExistFile.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseConnectToParent.js" />

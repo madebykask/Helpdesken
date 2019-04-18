@@ -21,31 +21,6 @@
     @Scripts.Render(BundleConfig.ScriptNames.UserSearchCommon)
 }
 
-<script type="text/javascript">
-    /* CHECK: moved to EditPage.js*/
-    //function GetLanguage()
-    //{
-    //    var caseid = document.getElementById('case__Id').value;
-    //    alert('old');
-    //    if (caseid == 0)
-    //    {
-    //        var reported  = document.getElementById('case__UserCode').value;
-    //        var reportedId  = document.getElementById('case__ReportedBy').value;
-
-    //        var region = document.getElementById('case__Region_Id').value;
-    //        var dep = document.getElementById('case__Department_Id').value;
-    //        var customer = document.getElementById('case__Customer_Id').value;
-
-    //        $.get("/cases/LookupLanguage/", { customerid: "'" + customer.toString() + "'", notifier: "'" + reported.toString() + "'", region: "'" + region.toString() + "'", department: "'" + dep.toString() + "'", notifierid: "'" + reportedId.toString() + "'" }, function (result) {
-    //            if (parseInt(result) > 0) {
-    //                $("#case__RegLanguage_Id").val(result);
-    //            }
-    //        });
-    //    }
-    //}
-
-</script>
-
 @if (Model.case_ != null)
 {
     <div class="content onemenu editcase" id="mm1">

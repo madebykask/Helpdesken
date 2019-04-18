@@ -1528,23 +1528,14 @@ EditPage.prototype.init = function (p) {
     self.loadExtendedSectionsIfNeeded();
 
 
-    self.$watchDateChangers.on('change', function () {
+    self.$watchDateChangers.on('change', function (d, source) {
         var deptId = parseInt(self.$department.val(), 10);
         var SLA = parseInt(self.$SLASelect.find('option:selected').attr('data-sla'), 10);
         if (isNaN(SLA)) {
             SLA = parseInt(self.$SLAText.attr('data-sla'), 10);
         }
         if (this.id === "case__StateSecondary_Id") {
-            $.post('/Cases/ChangeStateSecondary',
-                { 'id': $(this).val() },
-                function (data) {
-                    if (data.ReCalculateWatchDate == 1) {
-                        if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {
-                            self.fetchWatchDateByDept.call(self, deptId);
-                        }
-                    }
-                },
-                'json');
+            // Moved to commonHandlers,js
         } else {
 
             if (!isNaN(deptId) && (!isNaN(SLA) && SLA === 0)) {

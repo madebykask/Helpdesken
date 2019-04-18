@@ -43,34 +43,4 @@ function LogInitForm() {
     $("#btnCaseCharge").on('click', function (ev) {
         window.caseChargeObj.show();
     });
-    
-    $('#case__StateSecondary_Id').change(function (d, source) {
-
-        $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('disabled');
-        var curVal = $('#case__StateSecondary_Id').val();
-        $('#case__StateSecondary_Id option[value=' + curVal + ']').attr('selected', 'selected');
-        $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
-            // disable send mail checkbox
-            if (data.NoMailToNotifier == 1) {
-                $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
-                $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', true);
-            }
-            else {
-                if ($('#CaseLog_TextExternal').val() == '') {
-                    $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
-                    $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', false);
-                } else {
-
-                    $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', true);
-                    $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', false);
-                }
-                
-            }
-            // set workinggroup id
-            var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
-            if (exists > 0 && data.WorkingGroup_Id > 0 && source !== 'case__WorkingGroup_Id') {
-                $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id);
-            }
-        }, 'json');
-    });
 }

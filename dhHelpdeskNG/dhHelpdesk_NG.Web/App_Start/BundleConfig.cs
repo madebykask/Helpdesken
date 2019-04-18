@@ -205,14 +205,19 @@
                          "~/Content/css/custom/dynamic-cases.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/cases/new").Include(
-                "~/Content/js/Cases/caseInitForm.js"));
+                "~/Content/js/Cases/caseInitForm.js",
+                "~/Content/js/Cases/commonHandlers.js"));
             
             bundles.Add(new ScriptBundle("~/bundles/cases/edit").Include(
                 "~/Content/js/Cases/caseInitForm.js",
+                "~/Content/js/Cases/commonHandlers.js",
                 "~/Content/js/snippets/tabSwitchByHashTag.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/Cases/_CaseLogInput").Include(
                 "~/Content/js/Cases/_caseLogInput.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/Cases/common").Include(
+                "~/Content/js/Cases/commonHandlers.js"));
 
             bundles.Add(
                 new ScriptBundle("~/bundles/cases/_input").Include(
