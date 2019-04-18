@@ -1,15 +1,16 @@
 ﻿namespace DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator
 {
-    using System.Collections.Generic;
+	using System.Collections.Generic;
 
-    using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;
-    using DH.Helpdesk.BusinessData.Models.Case.CaseSettingsOverview;
-    using DH.Helpdesk.Common.ValidationAttributes;
-    using System;
-    using DH.Helpdesk.Domain;
-using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+	using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;
+	using DH.Helpdesk.BusinessData.Models.Case.CaseSettingsOverview;
+	using DH.Helpdesk.Common.ValidationAttributes;
+	using System;
+	using DH.Helpdesk.Domain;
+	using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+	using System.Linq;
 
-    public sealed class ReportGeneratorFields
+	public sealed class ReportGeneratorFields
     {
         public ReportGeneratorFields()
         {
@@ -164,8 +165,8 @@ using DH.Helpdesk.BusinessData.Enums.Case.Fields;
         public int TotalOverTime { get; set; }
         public decimal TotalPrice { get; set; }
         public int TotalWork { get; set; }
-
-    }
+		public IList<Log> Logs { get; internal set; }
+	}
 
     public sealed class ReportGeneratorData
     {

@@ -2,44 +2,44 @@
 
 namespace DH.Helpdesk.Services.Services.Concrete.Reports
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Linq;
 
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Grid;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.CasesInProgressDay;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.ClosedCasesDay;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
-    using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
-    using DH.Helpdesk.BusinessData.Models.Reports.Enums;
-    using DH.Helpdesk.BusinessData.Models.Reports.Options;
-    using DH.Helpdesk.BusinessData.Models.Reports.Print;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Input;
-    using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.NewInfrastructure;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain.Cases;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Reports;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
-    using DH.Helpdesk.Services.Services.Reports;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.BusinessData.Enums.Case.Fields;
-    using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;
+	using DH.Helpdesk.BusinessData.Models;
+	using DH.Helpdesk.BusinessData.Models.Grid;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseSatisfaction;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.CasesInProgressDay;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.CaseTypeArticleNo;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.ClosedCasesDay;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCategoryCustomer;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.FinishingCauseCustomer;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeActiveCases;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.LeadtimeFinishedCases;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.RegistratedCasesDay;
+	using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
+	using DH.Helpdesk.BusinessData.Models.Reports.Enums;
+	using DH.Helpdesk.BusinessData.Models.Reports.Options;
+	using DH.Helpdesk.BusinessData.Models.Reports.Print;
+	using DH.Helpdesk.BusinessData.Models.Shared;
+	using DH.Helpdesk.BusinessData.Models.Shared.Input;
+	using DH.Helpdesk.BusinessData.OldComponents;
+	using DH.Helpdesk.Common.Tools;
+	using DH.Helpdesk.Dal.NewInfrastructure;
+	using DH.Helpdesk.Domain;
+	using DH.Helpdesk.Domain.Cases;
+	using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
+	using DH.Helpdesk.Services.BusinessLogic.Mappers.Reports;
+	using DH.Helpdesk.Services.BusinessLogic.Specifications;
+	using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
+	using DH.Helpdesk.Services.Services.Reports;
+	using DH.Helpdesk.Common.Enums;
+	using DH.Helpdesk.Dal.Repositories;
+	using DH.Helpdesk.BusinessData.Enums.Case.Fields;
+	using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;
 
-    public sealed class ReportService : IReportService
+	public sealed class ReportService : IReportService
     {
         private readonly IUnitOfWorkFactory unitOfWorkFactory;        
         private readonly ISurveyService sureyService;
@@ -50,8 +50,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
         private readonly IUserService _userService;
         private readonly IProductAreaRepository _productAreaRepository;
         private readonly ICaseTypeRepository _caseTypeRepository;
+		private readonly IFeatureToggleService _featureToggleService;
 
-        public ReportService(
+		public ReportService(
                 IUnitOfWorkFactory unitOfWorkFactory,
                 ISurveyService sureyService,
                 IReportRepository reportRepository,
@@ -60,7 +61,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 IWorkingGroupService workingGroupService,
                 IUserService userService,
                 IProductAreaRepository productAreaRepository,
-                ICaseTypeRepository caseTypeRepository)
+                ICaseTypeRepository caseTypeRepository,
+				IFeatureToggleService featureToggleService)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.sureyService = sureyService;
@@ -71,7 +73,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             this._userService = userService;
             _productAreaRepository = productAreaRepository;
             _caseTypeRepository = caseTypeRepository;
-        }
+			_featureToggleService = featureToggleService;
+
+		}
 
         #region Reports
 
@@ -416,20 +420,42 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 //Ensure filters
                 departmentIds = EnsureDepartments(departmentIds,ouIds, userId, customerId);
                 workingGroupIds = EnsureWorkingGroups(workingGroupIds, userId, customerId);
-                
-                var caseData = _reportRepository.GetCaseList(
-                                               customerId,
-                                               departmentIds,
-                                               ouIds,
-                                               workingGroupIds,
-                                               productAreaChainIds,
-                                               administratorIds,
-                                               caseStatusIds,
-                                               caseTypeChainIds,
-                                               periodFrom,
-                                               periodUntil,
-                                               closeFrom,
-                                               closeTo);
+
+				var usePreviousSearchToggle = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.REPORTS_REPORTGENERATOR_USE_PREVIOUS_SEARCH);
+
+				List<ReportGeneratorFields> caseData;
+				if (usePreviousSearchToggle.Active)
+				{
+					caseData = _reportRepository.GetCaseList_FeatureTooglePreviousSearch(
+												   customerId,
+												   departmentIds,
+												   ouIds,
+												   workingGroupIds,
+												   productAreaChainIds,
+												   administratorIds,
+												   caseStatusIds,
+												   caseTypeChainIds,
+												   periodFrom,
+												   periodUntil,
+												   closeFrom,
+												   closeTo);
+				}
+				else
+				{
+					caseData = _reportRepository.GetCaseList(
+												   customerId,
+												   departmentIds,
+												   ouIds,
+												   workingGroupIds,
+												   productAreaChainIds,
+												   administratorIds,
+												   caseStatusIds,
+												   caseTypeChainIds,
+												   periodFrom,
+												   periodUntil,
+												   closeFrom,
+												   closeTo);
+				}
                 
                 var overviews = caseData.MapToCaseOverviews(_caseTypeRepository, _productAreaRepository, ous, finishingCauses, categories);
 

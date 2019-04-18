@@ -366,6 +366,7 @@
     <Compile Include="Services\EmployeeService\IEmployeeService.cs" />
     <Compile Include="Services\ExtendedCase\ExtendedCaseService.cs" />
     <Compile Include="Services\Cases\CaseSectionService.cs" />
+    <Compile Include="Services\FeatureToggleService.cs" />
     <Compile Include="Services\GDPRService.cs" />
     <Compile Include="Services\GDPRTasksService.cs" />
     <Compile Include="Services\ICaseService.cs" />

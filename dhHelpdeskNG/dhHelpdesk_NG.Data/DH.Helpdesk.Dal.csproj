@@ -148,6 +148,7 @@
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseValuesConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseDataConfiguration.cs" />
     <Compile Include="EntityConfigurations\ExtendedCaseEntity\ExtendedCaseFormConfiguration.cs" />
+    <Compile Include="EntityConfigurations\FeatureToggleConfiguration.cs" />
     <Compile Include="EntityConfigurations\FormFieldValueHistoryConfiguration.cs" />
     <Compile Include="EntityConfigurations\GDPR\GDPRDataPrivacyAccessConfiguration.cs" />
     <Compile Include="EntityConfigurations\GDPR\GDPRDataPrivacyFavoriteConfiguration.cs" />
@@ -516,6 +517,7 @@
     <Compile Include="Repositories\Cases\ICaseFilterFavoriteRepository.cs" />
     <Compile Include="Repositories\Condition\IConditionRepository.cs" />
     <Compile Include="Repositories\ComputerUserCategoryRepository.cs" />
+    <Compile Include="Repositories\FeatureToggleRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPRDataPrivacyAccessRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPRDataPrivacyFavortieRepository.cs" />
     <Compile Include="Repositories\GDPR\GDPROperationsAuditRespository.cs" />
