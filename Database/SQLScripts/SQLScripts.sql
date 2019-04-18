@@ -186,9 +186,9 @@ DROP PROCEDURE tempRemoveDefaultConstaint
 GO
 
 -- Create feature toogle
-RAISERROR('Adding new Feature toggle table tblFeatureToggle', 10, 1) WITH NOWAIT
+RAISERROR('Adding Feature toggle table tblFeatureToggle', 10, 1) WITH NOWAIT
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblFeatureToggle' AND type='U')
-	BEGIN
+BEGIN
 	CREATE TABLE [dbo].[tblFeatureToggle](
 		[StrongName] [nvarchar](100) NOT NULL,
 		[Active] [bit] NOT NULL,
@@ -203,6 +203,22 @@ IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='tblFeatureToggle' AND type='
 	ALTER TABLE [dbo].[tblFeatureToggle] ADD  CONSTRAINT [DF_tblFeatureToggle_Active]  DEFAULT ((0)) FOR [Active]
 	ALTER TABLE [dbo].[tblFeatureToggle] ADD  CONSTRAINT [DF_tblFeatureToggle_Description]  DEFAULT ('') FOR [Description]
 	ALTER TABLE [dbo].[tblFeatureToggle] ADD  CONSTRAINT [DF_tblFeatureToggle_ChangeDate]  DEFAULT (getutcdate()) FOR [ChangeDate]
+END
+GO
+RAISERROR('Adding Feature toggle trigger trFeatureToggleChange', 10, 1) WITH NOWAIT
+IF EXISTS (SELECT * FROM sysobjects WHERE name='trFeatureToggleChange' AND type='TR')
+BEGIN	
+	DROP TRIGGER [dbo].[trFeatureToggleChange] 
+END
+GO
+CREATE TRIGGER [dbo].[trFeatureToggleChange] 
+	ON  [dbo].[tblFeatureToggle] 
+	AFTER UPDATE
+AS 
+BEGIN
+	DECLARE @strongName NVARCHAR(MAX)
+	UPDATE FT SET ChangeDate = GETUTCDATE() FROM inserted U
+	JOIN tblFeatureToggle FT ON U.StrongName = FT.StrongName
 END
 
 RAISERROR('Adding feature toggle REPORTS_REPORTGENERATOR_USE_PREVIOUS_SEARCH', 10, 1) WITH NOWAIT

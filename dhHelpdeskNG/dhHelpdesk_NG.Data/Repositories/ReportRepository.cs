@@ -290,6 +290,7 @@ namespace DH.Helpdesk.Dal.Repositories
 			List<ReportGeneratorFields> result;
 			using (new OptionHintScope(DataContext))
 			{
+				//DataContext.Database.CommandTimeout = 60;
 				DataContext.Database.Log = s => Trace.WriteLine(s);
 				var query = from c in this.DataContext.Cases
 							join cu in this.DataContext.Customers on c.Customer_Id equals cu.Id
