@@ -292,16 +292,12 @@ ExtendedCasePage.prototype.isExtendedCaseValid = function (showToast, isOnNext) 
     }
 };
 
-ExtendedCasePage.prototype.setNextStep = function () {   
+ExtendedCasePage.prototype.setNextStep = function(nextStepNumber) {
     var self = this;
     var isNextStepValidation = false;
-
-    var $selectedStep = self.$selectListStep.find('option:selected');
-    if ($selectedStep && $selectedStep.length) {
-        var nextStepNumber = +$selectedStep.data('next-step');
-        if (!isNaN(nextStepNumber) && nextStepNumber > 0)
-            isNextStepValidation = true;
-    }
+    
+    if (!isNaN(nextStepNumber) && nextStepNumber > 0)
+        isNextStepValidation = true;
 
     var $exCaseContainer = self.getExtendedCaseContainer();
     $exCaseContainer.contentWindow.setNextStep(nextStepNumber, isNextStepValidation);
@@ -488,10 +484,15 @@ ExtendedCasePage.prototype.onExtendedCaseLoaded = function () {
     $indicator.css("display", "none");
 };
 
+ExtendedCasePage.prototype.onWorkflowStepChanged = function (data) {
+    console.log('>>>onWorkflowStepChanged', data.nextStepNumber);
+    self.setNextStep(data.nextStepNumber);
+};
+
 /***** Initiator *****/
 ExtendedCasePage.prototype.init = function (params) {
-    var self = this;       
-
+    var self = this;
+    
     self.SAVE_CASE_URL = params.saveCaseUrl;
     self.Case_Field_Ids = params.caseFieldIds;
     self.Case_Field_Init_Values = params.caseInitValues;
@@ -569,23 +570,98 @@ ExtendedCasePage.prototype.init = function (params) {
     });
 
     //sync mulitple workflow selects
+    /*
     $("select.workflows-select").on('change', function () {
         var that = this;
         $("select.workflows-select").each(function(item, index) {
             if (that !== this)
                 $(this).val($(that).val());
         });
-        self.setNextStep();       
+        self.setNextStep();
     });
-
+    */
     self.$caseTab.on('shown', function (e) {
         window.scrollTo(0, 0);
     });
 
     if (lastError !== "")
         ShowToastMessage(lastError, "error", false);
+
+    self.workflowStepsBehavior = new WorkflowStepsBehavior(this.onWorkflowStepChanged);
+    self.workflowStepsBehavior.init(params);
 };
 
+function WorkflowStepsBehavior(stepChangedCallback) {
+    this.stepChangedCallback = stepChangedCallback;
+
+    this.init = function(params) {
+        this.caseId = params.caseId;
+        this.templateId = params.templateId;
+        this.customerId = params.customerId;
+        this.selectStepText = params.selectStepText;
+        this.saveText = params.saveText;
+        //this.$selectListStep = $('select[name="steps"]').first(); //should handle first only
+
+        this.subscribeUIEvents();
+
+        this.loadWorkflowSteps();
+    };
+
+    this.loadWorkflowSteps = function () {
+        var self = this;
+        var data = {
+            caseId: self.caseId,
+            templateId: self.templateId,
+            customerId: self.customerId
+        };
+
+        $.getJSON('/Case/GetWorkflowSteps', $.param(data), function(res) {
+            if (res.items && res.items.length) {
+                var options = [];
+                options.push('<option value="0">' + self.selectStepText + '</option>');
+                $.each(res.items, function(index, item) {
+                });
+
+                $("select.workflows-select").each(function() {
+                    $(this).html(options.join(''));
+                });
+
+                $(".workflowStepsPanel").show();
+                $(".save-button").val(self.saveText);
+            }
+        });
+    };
+
+    this.subscribeUIEvents = function () {
+        var self = this;
+
+        $("select.workflows-select").on('change', function () {
+            self.handleWorkFlowStepChanged(this);
+        });
+
+    }
+
+    this.handleWorkFlowStepChanged = function(el) {
+        var that = el;
+        var $el = $(el);
+        var selectedVal = $el.val();
+
+        $("select.workflows-select").each(function (item, index) {
+            if (that !== this)
+                $(this).val(selectedVal);
+        });
+
+        var nextStepNumber = 0;
+        var $selectedStep = $el.find('option:selected'); // todo: same as val() ?
+        if ($selectedStep && $selectedStep.length) {
+            nextStepNumber = +$selectedStep.data('next-step');
+        }
+
+        if (self.stepChangedCallback)
+            self.stepChangedCallback({ selectedVal, nextStepNumber });
+    };
+
+}
 
 $(function () {
     var page = new ExtendedCasePage();

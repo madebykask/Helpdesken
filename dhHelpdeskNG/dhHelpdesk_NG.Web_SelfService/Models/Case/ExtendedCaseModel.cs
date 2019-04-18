@@ -48,21 +48,28 @@ namespace DH.Helpdesk.SelfService.Models.Case
             };
         }
 
-        public ExtendedCaseControlsPanelModel CreateExCaseControlsPanelModel(int position = 1)
+        public CaseControlsPanelModel CreateCaseControlsPanelModel(int position = 1)
         {
-            return new ExtendedCaseControlsPanelModel(position, WorkflowSteps);
+            return new CaseControlsPanelModel(position, WorkflowSteps, false);
+        }
+
+        public CaseControlsPanelModel CreateExtendedCaseControlsPanelModel(int position = 1)
+        {
+            return new CaseControlsPanelModel(position, WorkflowSteps, true);
         }
     }
 
-    public class ExtendedCaseControlsPanelModel
+    public class CaseControlsPanelModel
     {
-        public ExtendedCaseControlsPanelModel(int poisition, List<WorkflowStepModel> workflowSteps)
+        public CaseControlsPanelModel(int position, List<WorkflowStepModel> workflowSteps, bool isExtendedCase)
         {
-            Poisition = poisition;
+            IsExtendedCase = isExtendedCase;
+            Position = position;
             WorkflowSteps = workflowSteps;
         }
 
-        public int Poisition { get; }
+        public int Position { get; }
+        public bool IsExtendedCase { get; }
         public List<WorkflowStepModel> WorkflowSteps { get; }
     }
 }

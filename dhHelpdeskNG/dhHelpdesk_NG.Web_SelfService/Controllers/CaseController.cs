@@ -726,17 +726,18 @@ namespace DH.Helpdesk.SelfService.Controllers
             var globalSettings = _globalSettingService.GetGlobalSettings().First();
             var cs = _settingService.GetCustomerSetting(customerId);
             
+            //todo: move to model
             ViewBag.AttachmentPlacement = cs.AttachmentPlacement;
             ViewBag.ShowCommunicationForSelfservice = appSettings.ShowCommunicationForSelfService;
             
             caseModel.FieldSettings = 
                 _caseFieldSettingService.ListToShowOnCasePage(customerId, languageId)
-                .Where(c => c.ShowExternal == 1).ToList();
+                    .Where(c => c.ShowExternal == 1).ToList();
 
             if (caseId.IsNew())
             {
-                if (caseTemplate == null || caseTemplate.Status == 0 ||
-                    !caseTemplate.ShowInSelfService || caseTemplate.Customer_Id != customerId)
+                if (caseTemplate == null || caseTemplate.Status == 0 || !caseTemplate.ShowInSelfService || 
+                    caseTemplate.Customer_Id != customerId)
                 {
                     ErrorGenerator.MakeError("Selected template is not available anymore!");
                     return null;
@@ -822,7 +823,21 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             return model;
         }
-        
+
+        //
+        public ActionResult GetWorkflowSteps(int caseId, int templateId, int customerId)
+        {
+            //todo:validate params
+            //todo: check user case access ?
+            var isRelatedCase = caseId > 0 && _caseService.IsRelated(caseId);
+
+            var customerCaseSolutions =
+                _caseSolutionService.GetCustomerCaseSolutionsOverview(customerId, userId: null);
+
+            var steps = GetWorkflowStepModel(customerId, caseId, templateId, customerCaseSolutions, isRelatedCase);
+            return Json(new { sucess = true, items = steps }, JsonRequestBehavior.AllowGet);
+        }
+
         private void SaveCaseFiles(string caseFileKey, int customerId, int caseId, int userId)
         {
             //Get from baseCase path
@@ -2422,8 +2437,6 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             return caseTypes.OrderBy(p => p.Name).ToList();
         }
-
-        
 
         private CaseModel LoadTemplateToCase(CaseModel model, CaseSolution caseTemplate)
         {

@@ -74,7 +74,10 @@
 
     window.parameters = {
         saveCaseUrl: '@Url.Action("ExtendedCase", "Case")',
-
+        getWorkFlowStepsUrl: '@Url.Action("GetWorkflowSteps", "Case")',
+        caseId:  @Model.CaseId,
+        templateId: @(Model.CaseTemplateId ?? 0),
+        customerId: @Model.CustomerId,
         caseFieldIds: {
             CaseId: "CaseDataModel_Id",
             CustomerId: "CaseDataModel_Customer_Id",
@@ -143,7 +146,9 @@
         caseStatus: '@(Model.StateSecondaryId)',
         currentUser: '@(Model.CurrentUser)',
         applicationType: '@ViewBag.ApplicationType',
-        lastError: '@Html.Raw(lastErrorMessage)'
+        lastError: '@Html.Raw(lastErrorMessage)',
+        selectStepText: '@Translation.GetForJS(DH.Helpdesk.Common.Constants.Text.SelectStep)',
+        saveText: '@Translation.Get("Save")'
     }
 
     if (window.addEventListener) {
@@ -183,7 +188,7 @@
 @if (Model.CurrentCustomer.ShowCaseActionsPanelOnTop && 
     (Model.CaseId == 0 || Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
 {
-    @Html.Partial("_ExtendedCaseControlPanel", Model.CreateExCaseControlsPanelModel(1))
+    @Html.Partial("_CaseControlPanel", Model.CreateExtendedCaseControlsPanelModel(1))
 }
 
 @using (Html.BeginForm("ExtendedCase", "case", null, FormMethod.Post, new { id = "extendedCaseForm" }))
@@ -303,7 +308,6 @@
     @Html.HiddenFor(model => model.CaseDataModel.CurrentCaseSolution_Id)
 
     // Etc
-    @Html.HiddenFor(model => model.CaseTemplateId)
     @Html.HiddenFor(model => model.CaseId)
     @Html.HiddenFor(model => model.CaseTemplateId)
     @Html.HiddenFor(model => model.CustomerId)
@@ -443,7 +447,7 @@
 @if (Model.CurrentCustomer.ShowCaseActionsPanelAtBottom && 
      (Model.CaseId == 0 || Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
 {
-    @Html.Partial("_ExtendedCaseControlPanel", Model.CreateExCaseControlsPanelModel(2))
+    @Html.Partial("_CaseControlPanel", Model.CreateExtendedCaseControlsPanelModel(2))
 }
 
 @section Scripts

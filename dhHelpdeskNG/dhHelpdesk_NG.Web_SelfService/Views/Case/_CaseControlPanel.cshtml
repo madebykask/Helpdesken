@@ -1,0 +1,42 @@
+﻿@using DH.Helpdesk.Common.Constants
+@model DH.Helpdesk.SelfService.Models.Case.CaseControlsPanelModel
+
+@{
+    var prefix = Model.Position > 1 ? Model.Position.ToString() : string.Empty;
+}
+
+<div class="jumbotron greybar" id="exCaseControlPanel@(prefix)">
+    <div class="container-fluid">
+        <div class="row" style="margin-right: 0px !important;">
+            <div class="col-sm-1 pull-left">
+                <input name="btnSave@(prefix)" type="button"
+                       value="@Translation.Get("Save and Send")"
+                       class="btn btn-default save-button"
+                       style="margin-right: 0px !important;"/>
+            </div>
+
+            <div class="col-sm-1 input-group workflowStepsPanel" style="display: none">
+                <select name="steps@(prefix)" class="dropdown-group workflows-select">
+                    @*
+                    @if (Model.WorkflowSteps.Count > 1)
+                    {
+                        <option value="0">@Translation.Get(Text.SelectStep)</option>
+                    }
+                    @if (Model.WorkflowSteps != null && Model.WorkflowSteps.Any())
+                    {
+                        foreach (var step in Model.WorkflowSteps)
+                        {
+                            <option data-next-step="@step.NextStep" value="@step.CaseTemplateId">@Translation.Get(step.Name)</option>
+                            
+                        }
+                    }
+                *@
+                </select>
+                <span class="input-group-btn">
+                    <input name="btnGo@(prefix)" type="button" class="btn btn-default go-button" value="@Translation.Get("Send")"/>
+                </span>
+            </div>
+
+        </div>
+    </div>
+</div>

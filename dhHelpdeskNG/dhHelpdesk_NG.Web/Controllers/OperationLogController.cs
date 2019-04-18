@@ -273,13 +273,13 @@ namespace DH.Helpdesk.Web.Controllers
                 var wgsForSmsSelected = string.Empty;
 
                 if (SRsSelected != null)
-                    systemRepsSelected = ConvertStringArrayToString(SRsSelected);
+                    systemRepsSelected = SRsSelected.JoinToString();
 
                 if (UsersSelected != null)
-                    administratorsSelected = ConvertStringArrayToString(UsersSelected);
+                    administratorsSelected = UsersSelected.JoinToString();
 
                 if (WGsSMSSelected != null)
-                    wgsForSmsSelected = ConvertStringArrayToString(WGsSMSSelected);
+                    wgsForSmsSelected = WGsSMSSelected.JoinToString();
 
                 var smsRecipients = systemRepsSelected + administratorsSelected + wgsForSmsSelected;
                 _operationLogService.SendOperationLogSMS(operationlogToSave, smsRecipients, txtSMS, customer);
@@ -497,11 +497,6 @@ namespace DH.Helpdesk.Web.Controllers
         {
             ViewData["Callback"] = "SendToDialogOperationLogCallback";
             ViewData["Id"] = "divSendToDialogCase";
-        }
-
-        private string ConvertStringArrayToString(string[] array)
-        {
-            return string.Join(",", array);
         }
 
         private void SaveRssFeed(int customerId)
