@@ -48,7 +48,7 @@ export class CaseEditComponent {
 
     titleTabsSettings = {
       display: 'top'
-    }ж
+    };
 
     caseTabsSettings = {
       display: 'top',
@@ -59,7 +59,7 @@ export class CaseEditComponent {
     formOptions: MbscFormOptions = {
       onInit: (event, inst) => {
       }
-    }
+    };
 
     currentTab = 'case_details';
     caseActions: CaseAction<CaseActionDataType>[] = [];
@@ -666,4 +666,4 @@ export class MbscFormGroupTitleClickDirective {
       this.isOpened = !this.isOpened;
     });
   }
-}
+};
