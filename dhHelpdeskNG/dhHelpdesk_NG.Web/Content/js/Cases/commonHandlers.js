@@ -30,14 +30,18 @@
             }
 
             if (data.ReCalculateWatchDate == 1) {
-                var deptId = parseInt(self.$department.val(), 10);
-                var sla = parseInt(self.$SLASelect.find('option:selected').attr('data-sla'), 10);
-                if (isNaN(sla)) {
-                    sla = parseInt(self.$SLAText.attr('data-sla'), 10);
-                }
+                var $departments = $('.departments-list');
+                if ($departments.length > 0) {
+                    var $priority = $('#case__Priority_Id');
+                    var deptId = parseInt($departments.val(), 10);
+                    var sla = parseInt($priority.find('option:selected').attr('data-sla'), 10);
+                    if (isNaN(sla)) {
+                        sla = parseInt($priority.attr('data-sla'), 10);
+                    }
 
-                if (!isNaN(deptId) && (!isNaN(sla) && sla === 0)) {
-                    self.fetchWatchDateByDept.call(self, deptId);
+                    if (!isNaN(deptId) && (!isNaN(sla) && sla === 0) && window.page) {
+                        window.page.fetchWatchDateByDept.call(window.page, deptId);
+                    }
                 }
             }
         }, 'json');
