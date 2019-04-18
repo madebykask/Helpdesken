@@ -245,6 +245,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         public ProcessResult SaveCaseCheckSplit(CaseModel caseModel, AuxCaseModel auxModel, out int caseId, out decimal caseNumber)
         {
             var isNewCase = caseModel.Id == 0;
+            caseId = -1;
+            caseNumber = -1;
 
             var res = new ProcessResult("Save Case Check Split");
 
@@ -255,24 +257,28 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 ////Split into "parent" and "child(s)"
                 if (caseSolution.CaseRelationType == CaseRelationType.ParentAndChildren)
                 {
-                    return res = SaveParentAndChildren(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
+                    res = SaveParentAndChildren(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
                 }
 
                 //Create indepent cases based on the "parent" case solution template
-                if (caseSolution.CaseRelationType == CaseRelationType.OnlyDescendants)
+                else if (caseSolution.CaseRelationType == CaseRelationType.OnlyDescendants)
                 {
-                    return res = SaveNewDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
+                    res = SaveNewDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
                 }
 
                 //Create cases based on "parent", and "child" but independent
-                if (caseSolution.CaseRelationType == CaseRelationType.SelfAndDescendandts)
+                else if (caseSolution.CaseRelationType == CaseRelationType.SelfAndDescendandts)
                 {
-                    return res = SaveNewSelfAndDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
+                    res = SaveNewSelfAndDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
                 }
             }
+            else
+            {
+                //do regular save
+                res = SaveCase(caseModel, auxModel, out caseId, out caseNumber);
+            }
 
-            //do regular save
-            return res = SaveCase(caseModel, auxModel, out caseId, out caseNumber);
+            return res;
         }
 
         public CaseTimeMetricsModel ClaculateCaseTimeMetrics(CaseModel caseModel, AuxCaseModel auxModel, CaseModel oldCase = null)
@@ -1069,9 +1075,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                             childCaseModel.ExtendedCaseData_Id = null;
                             childCaseModel.ExtendedCaseForm_Id = null;
 
-                            res = SaveCase(childCaseModel, baseAuxModel, out childCaseId, out childCaseNum);
+                            var childRes = SaveCase(childCaseModel, baseAuxModel, out childCaseId, out childCaseNum);
 
-                            if (res.IsSucceed && childCaseId != -1)
+                            if (childRes.IsSucceed && childCaseId != -1)
                             {
                                 if (baseCaseExtendedCaseDataId > 0 && exCaseForm != null)
                                 {
@@ -1146,9 +1152,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                             childCaseModel.ExtendedCaseData_Id = null;
                             childCaseModel.ExtendedCaseForm_Id = null;
                            
-                            res = SaveCase(childCaseModel, baseAuxModel, out childCaseId, out childCaseNum);
+                            var childRes = SaveCase(childCaseModel, baseAuxModel, out childCaseId, out childCaseNum);
 
-                            if (res.IsSucceed && childCaseId != -1)
+                            if (childRes.IsSucceed && childCaseId != -1)
                             {
                                 if (baseCaseExtendedCaseDataId > 0 && exCaseForm != null)
                                 {
