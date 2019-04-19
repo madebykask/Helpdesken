@@ -78,7 +78,7 @@ namespace DH.Helpdesk.Models.Case
 
         public string FinishingDescription { get; set; }
         public int? ClosingReason { get; set; }
-        public string FinishingDate { get; set; }
+        public DateTime? FinishingDate { get; set; }
         public string LogInternalText { get; set; }
         public string LogExternalText { get; set; }
         public string Description { get; set; }

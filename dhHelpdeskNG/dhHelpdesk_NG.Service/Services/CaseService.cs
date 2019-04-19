@@ -10,6 +10,7 @@ using DH.Helpdesk.Common.Extensions.DateTime;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Computers;
+using DH.Helpdesk.Services.Services.Cache;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -94,6 +95,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICustomerService _customerService;
         private readonly IDepartmentService _departmentService;
         private readonly IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> _caseHistoryOverviewMapper;
+        private readonly ITranslateCacheService _translateCacheService;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -137,7 +139,7 @@ namespace DH.Helpdesk.Services.Services
             ICustomerRepository customerRepository,
             ICustomerService customerService,
             IDepartmentService departmentService,
-            IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper)
+            IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper, ITranslateCacheService translateCacheService)
         {
             _unitOfWork = unitOfWork;
             _caseRepository = caseRepository;
@@ -183,11 +185,7 @@ namespace DH.Helpdesk.Services.Services
             _departmentService = departmentService;
 
             _caseHistoryOverviewMapper = caseHistoryOverviewMapper;
-        }
-
-        public Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false)
-        {
-            return _caseRepository.GetCaseByIdAsync(id, markCaseAsRead);
+            _translateCacheService = translateCacheService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -632,42 +630,6 @@ namespace DH.Helpdesk.Services.Services
         public StateSecondary GetCaseSubStatus(int caseId)
         {
             return _caseRepository.GetCaseSubStatus(caseId);
-        }
-
-        public Task<CustomerCasesStatus> GetCustomerCasesStatusAsync(int customerId, int userId)
-        {
-            var today = DateTime.Today;
-            var customer = _customerRepository.GetOverview(customerId);
-            bool caseResponsibleUserIsVisible;
-            using (var uow = _unitOfWorkFactory.Create())
-            {
-                var caseFieldSettingsRep = uow.GetRepository<CaseFieldSetting>();
-                caseResponsibleUserIsVisible = caseFieldSettingsRep.GetAll().Any(cf => cf.Customer_Id == customerId &&
-                                                                            cf.Name == GlobalEnums.TranslationCaseFields
-                                                                                .CaseResponsibleUser_Id.ToString() &&
-                                                                            cf.ShowOnStartPage == 1);
-            }
-
-            var customerCasesQuery = _caseRepository.GetCustomerCases(customerId).AsQueryable();
-            return customerCasesQuery.Take(1).Select(res => new CustomerCasesStatus()
-            {
-                CustomerId = customerId,
-                CustomerName = customer.Name,
-
-                MyCases =
-                    customerCasesQuery.Where(c => c.FinishingDate == null && c.Deleted == 0 &&
-                                                  (c.Performer_User_Id == userId || 
-                                                   (c.CaseResponsibleUser_Id == userId && caseResponsibleUserIsVisible))).Count(),
-
-                InProgress =
-                    customerCasesQuery.Where(c => c.FinishingDate == null && c.Deleted == 0).Count(),
-
-                NewToday =
-                    customerCasesQuery.Where(c => c.Deleted == 0 && c.FinishingDate == null && DbFunctions.TruncateTime(c.RegTime) == today).Count(),
-
-                ClosedToday =
-                    customerCasesQuery.Where(c => c.FinishingDate != null && DbFunctions.TruncateTime(c.FinishingDate) == today).Count(),
-            }).SingleOrDefaultAsync();
         }
 
         public CustomerCases[] GetCustomersCases(int[] customerIds, int userId)
@@ -1671,7 +1633,7 @@ namespace DH.Helpdesk.Services.Services
             // Survey template
             if (cms != null)
             {
-                /// if case is closed and was no vote in survey - add HTML inormation about survey
+                // if case is closed and was no vote in survey - add HTML inormation about survey
                 if (c.IsClosed() && (_surveyService.GetByCaseId(c.Id) == null))
                 {
                     var template = new SurveyTemplate()
@@ -1681,19 +1643,19 @@ namespace DH.Helpdesk.Services.Services
                                 "{0}Survey/vote/{1}?voteId=bad",
                                 cms.AbsoluterUrl,
                                 c.Id),
-                        VoteBadText = Translator.Translate("Inte nöjd"),
+                        VoteBadText = _translateCacheService.GetTextTranslation("Inte nöjd", c.RegLanguage_Id),
                         VoteNormalLink =
                             string.Format(
                                 "{0}Survey/vote/{1}?voteId=normal",
                                 cms.AbsoluterUrl,
                                 c.Id),
-                        VoteNormalText = Translator.Translate("Nöjd"),
+                        VoteNormalText = _translateCacheService.GetTextTranslation("Nöjd", c.RegLanguage_Id),
                         VoteGoodLink =
                             string.Format(
                                 "{0}Survey/vote/{1}?voteId=good",
                                 cms.AbsoluterUrl,
                                 c.Id),
-                        VoteGoodText = Translator.Translate("Mycket nöjd"),
+                        VoteGoodText = _translateCacheService.GetTextTranslation("Mycket nöjd", c.RegLanguage_Id),
                     };
                     ret.Add(new Field { Key = "[#777]", StringValue = template.TransformText() });
                 }

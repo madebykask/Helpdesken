@@ -209,7 +209,7 @@ export class CaseEditComponent {
     }
 
     isSectionOpen(type: CaseSectionType) {
-        if (this.caseSections == null) { return null }
+        if (this.caseSections == null) { return null; }
         return this.caseSections.find(s => s.type == type).isEditCollapsed ? null : true;
     }
 

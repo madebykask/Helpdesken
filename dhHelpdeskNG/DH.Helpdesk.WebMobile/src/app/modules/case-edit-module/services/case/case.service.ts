@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { defaultIfEmpty, take, switchMap, catchError, map } from 'rxjs/operators';
-import { throwError, forkJoin, empty, Observable, of } from 'rxjs';
+import { defaultIfEmpty, take, catchError, map } from 'rxjs/operators';
+import { throwError, forkJoin, empty, Observable } from 'rxjs';
 import { CaseApiService } from '../api/case/case-api.service';
 import { BundleCaseOptionsService } from 'src/app/modules/case-edit-module/services/case-organization/bundle-case-options.service';
 import { CaseOptionsFilterModel, BundleOptionsFilter, CaseOptions } from 'src/app/modules/shared-module/models';
-import { CaseEditInputModel, CaseSectionInputModel, CaseSolution, MailToTicketInfo, CaseAccessMode, BaseCaseField, KeyValue, CaseLogActionData, CaseHistoryActionData, CaseAction } from '../../models';
+import { CaseEditInputModel, CaseSectionInputModel, CaseSolution, MailToTicketInfo,
+   CaseAccessMode, BaseCaseField, KeyValue, CaseAction } from '../../models';
 import { CaseOrganizationService } from '../case-organization/case-organization.service';
 import { CaseLogApiService } from '../api/case/case-log-api.service';
 import { CaseLogModel, LogFile, CaseHistoryModel, CaseHistoryChangeModel } from '../../models/case/case-actions-api.model';
@@ -73,10 +74,10 @@ export class CaseService {
     }
 
     private fromJsonCaseHistoryModel(json): CaseHistoryModel {
-      if (json === null) return null;
+      if (json === null) { return null; }
       let model = Object.assign(new CaseHistoryModel(),  {
           emailLogs: json.emailLog || [],
-          changes: json.changes && json.changes.length 
+          changes: json.changes && json.changes.length
             ? json.changes.map(x => this.fromJsonCaseHistoryChangeModel(x))
             : []
       });
@@ -85,7 +86,7 @@ export class CaseService {
 
     private fromJsonCaseHistoryChangeModel(json) {
         return Object.assign(new CaseHistoryChangeModel(), json, {
-                //todo:review
+                // todo:review
                 createdAt: new Date(json.createdAt),
                 previousValue: this.getValue(json.previousValue),
                 currentValue:  this.getValue(json.currentValue)
@@ -93,16 +94,16 @@ export class CaseService {
     }
 
     private getValue(value: any) {
-      //try convert field value to date
+      // try convert field value to date
       let val = DateUtil.tryConvertToDate(value);
       return val;
     }
 
     private fromJsonCaseLogModel(data: any): CaseLogModel {
-      if (data === null) return null;
+      if (data === null) { return null; }
       let model = Object.assign(new CaseLogModel(), data, {
           createdAt: new Date(data.createdAt),
-          files: data.files && data.files.length 
+          files: data.files && data.files.length
             ? data.files.map(f => Object.assign(new LogFile(), f))
             : []
       });
@@ -116,47 +117,50 @@ export class CaseService {
       return {
         getRegions: () => this.caseOrganizationService.getRegions(),
         getDepartments: () => fieldExists(filter.RegionId) ? this.caseOrganizationService.getDepartments(filter.RegionId) : empty$(),
-        //getDepartmentsByRegion: (regionId:number) => fieldExists(regionId) && regionId ? this.caseOrganizationService.getDepartments(regionId) : empty$(),
-        getOUs: () => fieldExists(filter.DepartmentId) && filter.DepartmentId != null ? this.caseOrganizationService.getOUs(filter.DepartmentId): empty$(),
-        //getOUsByDepartment: (depId:number) => fieldExists(depId) && depId ? this.caseOrganizationService.getOUs(depId): empty$(),
-        getIsAboutDepartments: () => fieldExists(filter.IsAboutRegionId) ? this.caseOrganizationService.getDepartments(filter.IsAboutRegionId) : empty$(),
-        getIsAboutOUs: () => fieldExists(filter.IsAboutDepartmentId) && filter.IsAboutDepartmentId != null ? this.caseOrganizationService.getOUs(filter.IsAboutDepartmentId) : empty$(),
+        getOUs: () => fieldExists(filter.DepartmentId) && filter.DepartmentId != null ?
+          this.caseOrganizationService.getOUs(filter.DepartmentId): empty$(),
+        getIsAboutDepartments: () => fieldExists(filter.IsAboutRegionId) ?
+          this.caseOrganizationService.getDepartments(filter.IsAboutRegionId) : empty$(),
+        getIsAboutOUs: () => fieldExists(filter.IsAboutDepartmentId) && filter.IsAboutDepartmentId != null ?
+          this.caseOrganizationService.getOUs(filter.IsAboutDepartmentId) : empty$(),
         getCaseTypes: () => fieldExists(filter.CaseTypes) ? this.caseOrganizationService.getCaseTypes() : empty$(),
-        getProductAreas: (idToInclude?: number) => fieldExists(filter.ProductAreas) ? this.caseOrganizationService.getProductAreas(filter.CaseTypeId, idToInclude) : empty$(),
+        getProductAreas: (idToInclude?: number) => fieldExists(filter.ProductAreas) ?
+          this.caseOrganizationService.getProductAreas(filter.CaseTypeId, idToInclude) : empty$(),
         getCategories: () => fieldExists(filter.Categories) ? this.caseOrganizationService.getCategories() : empty$(),
         getWorkingGroups: () => fieldExists(filter.WorkingGroups) ? this.caseOrganizationService.getWorkingGroups() : empty$(),
         getClosingReasons: () => fieldExists(filter.ClosingReasons) ? this.caseOrganizationService.getClosingReasons() : empty$(),
-        getPerformers: (includePerfomer: boolean) => fieldExists(filter.Performers) 
-            ? this.caseOrganizationService.getPerformers(includePerfomer ? filter.CasePerformerUserId : null, filter.CaseWorkingGroupId) 
+        getPerformers: (includePerfomer: boolean) => fieldExists(filter.Performers)
+            ? this.caseOrganizationService.getPerformers(includePerfomer ? filter.CasePerformerUserId : null, filter.CaseWorkingGroupId)
             : empty$(),
         getStateSecondaries: () => fieldExists(filter.StateSecondaries) ? this.caseOrganizationService.getStateSecondaries() : empty$()
       };
     }
 
     getCaseOptions(filter: CaseOptionsFilterModel) {
-        var optionsHelper = this.getOptionsHelper(filter);
-        
-        let regions$ = optionsHelper.getRegions();
-        let departments$ = optionsHelper.getDepartments();
-        let oUs$ = optionsHelper.getOUs();
-        let isAboutDepartments$ = optionsHelper.getIsAboutDepartments();
-        let isAboutOUs$ = optionsHelper.getIsAboutOUs();
-        let caseTypes$ = optionsHelper.getCaseTypes();
-        let productAreas$ = optionsHelper.getProductAreas(filter.ProductAreaId);
-        let categories$ = optionsHelper.getCategories();
-        let workingGroups$ = optionsHelper.getWorkingGroups();
-        let closingReasons$ = optionsHelper.getClosingReasons();
-        let perfomers$ = optionsHelper.getPerformers(true);
-        let stateSecondaries$ = optionsHelper.getStateSecondaries();
+        const optionsHelper = this.getOptionsHelper(filter);
 
-        let bundledOptions$ = this.batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
+        const regions$ = optionsHelper.getRegions();
+        const departments$ = optionsHelper.getDepartments();
+        const oUs$ = optionsHelper.getOUs();
+        const isAboutDepartments$ = optionsHelper.getIsAboutDepartments();
+        const isAboutOUs$ = optionsHelper.getIsAboutOUs();
+        const caseTypes$ = optionsHelper.getCaseTypes();
+        const productAreas$ = optionsHelper.getProductAreas(filter.ProductAreaId);
+        const categories$ = optionsHelper.getCategories();
+        const workingGroups$ = optionsHelper.getWorkingGroups();
+        const closingReasons$ = optionsHelper.getClosingReasons();
+        const perfomers$ = optionsHelper.getPerformers(true);
+        const stateSecondaries$ = optionsHelper.getStateSecondaries();
 
-        return forkJoin(bundledOptions$, regions$, departments$, oUs$, isAboutDepartments$, isAboutOUs$, caseTypes$, 
-          productAreas$, categories$, closingReasons$, perfomers$, workingGroups$, stateSecondaries$).pipe(
+        const bundledOptions$ = this.batchCaseOptionsService.getOptions(filter as BundleOptionsFilter);
+
+        const params = [bundledOptions$, regions$, departments$, oUs$, isAboutDepartments$, isAboutOUs$, caseTypes$,
+          productAreas$, categories$, closingReasons$, perfomers$, workingGroups$, stateSecondaries$];
+        return forkJoin(params).pipe(
                 take(1),
                 map(([bundledOptions, regions, departments, oUs, isAboutDepartments, isAboutOUs, caseTypes,
                     productAreas, categories, closingReasons, perfomers, workingGroups, stateSecondaries]) => {
-                    let options = new CaseOptions();
+                      const options = new CaseOptions();
 
                     if (regions != null) {
                         options.regions = regions;
@@ -221,13 +225,13 @@ export class CaseService {
           .pipe(
             take(1),
             map((jsCaseSections: any) => {
-              if (!jsCaseSections) throwError("No data from server.");
+              if (!jsCaseSections) { throwError('No data from server.'); }
 
               let sections = (jsCaseSections as Array<any>).map((jsSection: any) => {
                   return new CaseSectionInputModel(
-                            jsSection.id, 
+                            jsSection.id,
                             jsSection.sectionHeader,
-                            jsSection.sectionType, 
+                            jsSection.sectionType,
                             jsSection.isNewCollapsed,
                             jsSection.isEditCollapsed);
               });
@@ -255,16 +259,16 @@ export class CaseService {
             fields: fields.map(v => {
                 let field = null;
                 switch (v.JsonType) {
-                    case "string":
+                    case 'string':
                         field = this.fromJSONBaseCaseField<string>(v);
                         break;
-                    case "date":
-                        field = this.fromJSONBaseCaseField<string>(v);// TODO: As date
+                    case 'date':
+                        field = this.fromJSONBaseCaseField<string>(v);
                         break;
-                    case "number":
+                    case 'number':
                         field = this.fromJSONBaseCaseField<number>(v);
                         break;
-                    case "array":
+                    case 'array':
                         field = this.fromJSONBaseCaseField<Array<any>>(v);
                         break;
                     default:
@@ -297,5 +301,5 @@ export class ResponseDataHelper {
   fromJSONKeyValue(json: any): KeyValue {
       if (typeof json === 'string') { json = JSON.parse(json); }
       return Object.assign(new KeyValue(), json, {})
-  }  
+  }
 }

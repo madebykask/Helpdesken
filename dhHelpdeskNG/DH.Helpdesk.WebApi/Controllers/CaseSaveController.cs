@@ -13,6 +13,7 @@ using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.BusinessRule;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case;
@@ -108,7 +109,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var caseKey = caseId.HasValue && caseId > 0 ? caseId.Value.ToString() : model.CaseGuid?.ToString();
 
             var isEdit = caseId.HasValue && caseId.Value > 0;
-            var oldCase = isEdit ? _caseService.GetDetachedCaseById(caseId.Value) : new Case();
+            var oldCase = isEdit ? await _caseService.GetDetachedCaseByIdAsync(caseId.Value) : new Case();
             if (isEdit)
             {
                 //todo: to be removed when case switching is implemented on mobile 
@@ -134,7 +135,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             //TODO: validate input -- check for ui validation rules (max length and etc.)
 
-            ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings = null;
+            // ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings = null;
             Case currentCase;
             if (!isEdit)
             {
@@ -241,13 +242,26 @@ namespace DH.Helpdesk.WebApi.Controllers
             currentCase.SolutionRate = model.SolutionRate;
             #endregion
 
-            #region Status
-            //if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.FinishingDescription))
-            //    currentCase.FinishingDescription = model.FinishingDescription;
-            // if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.ClosingReason))
-            ////    currentCase = model.ClosingReason; // TODO: closing
-            //if (_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.FinishingDate))
-            //    currentCase.FinishingDate = model.FinishingDate;  // TODO: closing
+            #region Status / Close case
+            DateTime? caseLogFinishingDate = null;
+            if (model.ClosingReason.HasValue && model.ClosingReason.Value > 0)
+            {
+                if (!model.FinishingDate.HasValue)
+                {
+                    caseLogFinishingDate = utcNow;
+                }
+                else if (oldCase != null && oldCase.ChangeTime.ToShortDateString() == model.FinishingDate.Value.ToShortDateString())
+                {
+                    var lastChangedTime = new DateTime(oldCase.ChangeTime.Year, oldCase.ChangeTime.Month, oldCase.ChangeTime.Day, 22, 59, 59);
+                    caseLogFinishingDate = lastChangedTime;
+                }
+                else
+                {
+                    caseLogFinishingDate = DateTime.SpecifyKind(model.FinishingDate.Value, DateTimeKind.Local).ToUniversalTime();
+                }
+                currentCase.FinishingDate = DatesHelper.Max(currentCase.RegTime, caseLogFinishingDate.Value);
+                currentCase.FinishingDescription = model.FinishingDescription;
+            }
 
             //if (isNew)
             //{
@@ -322,10 +336,9 @@ namespace DH.Helpdesk.WebApi.Controllers
                 // RegUser is only filled in selfservice
                 RegUser = string.Empty, 
                 UserId = UserId,
-                SendMailAboutCaseToNotifier = true
-                //todo:
-                // FinishingDate = model.FinishingDate
-                // FinishingType = model.FinishingType?
+                SendMailAboutCaseToNotifier = true,
+                FinishingDate = caseLogFinishingDate,
+                FinishingType = model.ClosingReason
             };
 
             // -> SAVE CASE 

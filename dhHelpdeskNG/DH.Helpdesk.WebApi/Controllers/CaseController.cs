@@ -67,7 +67,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             var userId = UserId;
             var languageId = langId;
-            var currentCase = _caseService.GetDetachedCaseById(caseId);
+            var currentCase = await _caseService.GetDetachedCaseByIdAsync(caseId);
             var currentCid = cid;
 
             if (currentCase.Customer_Id != currentCid)
@@ -111,7 +111,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             //        }
             //    }
             //}
-            IBaseCaseField field = null;
 
             _caseFieldsCreator.CreateInitiatorSection(cid, customerUserSetting, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model);
             _caseFieldsCreator.CreateRegardingSection(cid, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model);

@@ -1,5 +1,5 @@
-import { BehaviorSubject } from "rxjs";
-import { OptionItem, MultiLevelOptionItem, CaseOptions } from "src/app/modules/shared-module/models";
+import { BehaviorSubject } from 'rxjs';
+import { OptionItem, MultiLevelOptionItem, CaseOptions } from 'src/app/modules/shared-module/models';
 
 export class CaseDataStore {
 

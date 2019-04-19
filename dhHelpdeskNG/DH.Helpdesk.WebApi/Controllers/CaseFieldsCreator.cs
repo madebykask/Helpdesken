@@ -1040,13 +1040,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
+                // Closing Reason
                 {
                     int? finishingCause = null;
-                    var lastLog = currentCase?.Logs?.FirstOrDefault(); //todo: check if its correct - order
+                    var lastLog = currentCase?.Logs?.OrderByDescending(l => l.ChangeTime).FirstOrDefault();
                     if (lastLog != null)
                         finishingCause = lastLog.FinishingType;
-
-                    // Closing Reason
 
                     field = new BaseCaseField<int?>()
                     {
@@ -1071,7 +1070,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                     field = new BaseCaseField<DateTime?>()
                     {
                         Name = CaseFieldsNamesApi.FinishingDate,
-                        Value = currentCase != null ? currentCase.FinishingDate : template?.FinishingDate,
+                        Value = currentCase != null ? currentCase.FinishingDate : template?.FinishingDate ??
+                                                                                  (template?.FinishingCause_Id != null ? DateTime.UtcNow : new DateTime?()),
                         Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.FinishingDate, languageId, customerId, caseFieldTranslations),
                         Section = CaseSectionType.Communication,
                         Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.FinishingDate, caseFieldSettings)

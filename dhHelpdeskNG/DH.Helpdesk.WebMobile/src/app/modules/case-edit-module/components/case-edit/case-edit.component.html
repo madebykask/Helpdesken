@@ -141,21 +141,12 @@
                     <case-dropdown-control *ngIf="showField(caseFieldsNames.SolutionRate)" disabled=true [field]="getField(caseFieldsNames.SolutionRate)" [form]="form" [dataSource]="dataSource.solutionsRatesStore$"></case-dropdown-control>
                 </mbsc-form-group-content>
             </mbsc-form-group>
-    <!--
-            <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.Communication)" #communicationManagementSection>
-                <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Communication)}}</mbsc-form-group-title>
-                <mbsc-form-group-content>
-                    <case-textarea-control *ngIf="showField(caseFieldsNames.FinishingDescription)" [field]="getField(caseFieldsNames.FinishingDescription)" [form]="form"></case-textarea-control>
-                    <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.ClosingReason)" [field]="getField(caseFieldsNames.ClosingReason)" [form]="form" [dataSource]="dataSource.closingReasonsStore$"></case-multi-dropdown-control>
-                    <case-date-control *ngIf="showField(caseFieldsNames.FinishingDate)" [field]="getField(caseFieldsNames.FinishingDate)" [form]="form"></case-date-control>
-                </mbsc-form-group-content>
-            </mbsc-form-group> -->
 
-              <mbsc-form-group collapsible [open]="isNewCase" #statusSection *ngIf="showField(caseFieldsNames.FinishingDate) && getField(caseFieldsNames.FinishingDate).value != null">
+            <mbsc-form-group collapsible [open]="isNewCase" #statusSection *ngIf="showField(caseFieldsNames.FinishingDate) && getField(caseFieldsNames.FinishingDate).value != null">
                 <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Status) }}</mbsc-form-group-title>
                 <mbsc-form-group-content>
                     <case-textarea-control *ngIf="showField(caseFieldsNames.FinishingDescription)" [field]="getField(caseFieldsNames.FinishingDescription)" [form]="form" [readonly]="true"></case-textarea-control>
-                    <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.ClosingReason)" [field]="getField(caseFieldsNames.ClosingReason)" [form]="form" [dataSource]="dataSource.closingReasonsStore$ | async" [readonly]="true"></case-multi-dropdown-control>
+                    <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.ClosingReason)" [field]="getField(caseFieldsNames.ClosingReason)" [form]="form" [dataSource]="dataSource.closingReasonsStore$" [readonly]="true"></case-multi-dropdown-control>
                     <case-date-control *ngIf="showField(caseFieldsNames.FinishingDate)" [field]="getField(caseFieldsNames.FinishingDate)" [form]="form" [readonly]="true"></case-date-control>
                 </mbsc-form-group-content>
             </mbsc-form-group>
@@ -166,6 +157,15 @@
                   <case-log-input [caseKey]="caseKey" [accessMode]="accessMode" [caseData]="caseData" [form]="form"></case-log-input>
                 </mbsc-form-group-content>
             </mbsc-form-group>
+
+            <mbsc-form-group collapsible [open]="isNewCase" #closeSection *ngIf="showField(caseFieldsNames.FinishingDate) && !getField(caseFieldsNames.FinishingDate).value">
+              <mbsc-form-group-title translate>Avsluta ärenden</mbsc-form-group-title>
+              <mbsc-form-group-content>
+                  <case-textarea-control *ngIf="showField(caseFieldsNames.FinishingDescription)" [field]="getField(caseFieldsNames.FinishingDescription)" [form]="form"></case-textarea-control>
+                  <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.ClosingReason)" [field]="getField(caseFieldsNames.ClosingReason)" [form]="form" [dataSource]="dataSource.closingReasonsStore$"></case-multi-dropdown-control>
+                  <case-date-control *ngIf="showField(caseFieldsNames.FinishingDate)" [field]="getField(caseFieldsNames.FinishingDate)" [form]="form"></case-date-control>
+              </mbsc-form-group-content>
+          </mbsc-form-group>
 
             <!-- <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.Invoices)" #invoicesSection>
                 <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Invoices)}}</mbsc-form-group-title>
