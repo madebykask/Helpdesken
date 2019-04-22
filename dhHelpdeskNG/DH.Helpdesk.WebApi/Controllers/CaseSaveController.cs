@@ -136,10 +136,11 @@ namespace DH.Helpdesk.WebApi.Controllers
             //TODO: validate input -- check for ui validation rules (max length and etc.)
 
             // ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings = null;
+            var userOverview = await _userService.GetUserOverviewAsync(UserId);
+
             Case currentCase;
             if (!isEdit)
             {
-                var userOverview = await _userService.GetUserOverviewAsync(UserId);
                 if (!userOverview.CreateCasePermission.ToBool())
                     SendResponse($"User {UserName} is not allowed to create case.", HttpStatusCode.Forbidden);
 
@@ -244,7 +245,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             #region Status / Close case
             DateTime? caseLogFinishingDate = null;
-            if (model.ClosingReason.HasValue && model.ClosingReason.Value > 0)
+            if (model.ClosingReason.HasValue && model.ClosingReason.Value > 0 && userOverview.CloseCasePermission.ToBool())
             {
                 if (!model.FinishingDate.HasValue)
                 {
@@ -337,8 +338,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                 RegUser = string.Empty, 
                 UserId = UserId,
                 SendMailAboutCaseToNotifier = true,
-                FinishingDate = caseLogFinishingDate,
-                FinishingType = model.ClosingReason
+                FinishingDate = userOverview.CloseCasePermission.ToBool() ? caseLogFinishingDate : new DateTime?(),
+                FinishingType = userOverview.CloseCasePermission.ToBool() ? model.ClosingReason : new int?()
             };
 
             // -> SAVE CASE 
