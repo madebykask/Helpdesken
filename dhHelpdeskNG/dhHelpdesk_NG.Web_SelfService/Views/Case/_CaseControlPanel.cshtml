@@ -4,18 +4,17 @@
     var prefix = Model.Position > 1 ? Model.Position.ToString() : string.Empty;
  }
 
-<div class="jumbotron greybar" id="exCaseControlPanel@(prefix)" style="display: none">
-    <div class="container-fluid">
+<div class="jumbotron greybar">
+    <div class="workflowStepsLoader" style="display: none"><i class="gif-loader"></i></div>
+    <div class="container-fluid" id="caseControlPanel@(prefix)" style="display: none">
         <div class="row" style="margin-right: 0px !important;">
-            @if (Model.CanSave)
-            {
-                <div class="col-sm-1 pull-left">
-                    <input name="btnSave@(prefix)" type="button"
-                           value="@Translation.Get("Save and Send")"
-                           class="btn btn-default save-button"
-                           style="margin-right: 0px !important;"/>
-                </div>
-            }
+            @* NOTE: UI is set up from workflowStepsBehavior.js *@
+            <div class="col-sm-1 pull-left save-button-div" style="display: none">
+                <input name="btnSave@(prefix)" type="button"
+                       value="@Translation.Get("Save and Send")"
+                       class="btn btn-default save-button"
+                       style="margin-right: 0px !important;"/>
+            </div>
 
             <div class="col-sm-1 input-group workflowStepsPanel" style="display: none">
                 <select name="steps@(prefix)" class="dropdown-group workflows-select">

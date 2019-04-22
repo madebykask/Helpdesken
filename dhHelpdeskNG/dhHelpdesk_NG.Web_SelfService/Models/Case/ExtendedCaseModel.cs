@@ -3,6 +3,7 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.Domain;
 using System.Collections.Generic;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.SelfService.Models.Case
 {       
@@ -40,7 +41,12 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public CaseLogModel CaseLogModel { get; set; }
 
         public ClosedCaseAlertModel ClosedCaseAlertModel { get; set; }
-        
+        public int AttachmentPlacement { get; set; }
+        public bool ShowCommunicationForSelfservice { get; set; }
+        public bool ShowCaseActionsPanelOnTop { get; set; }
+        public bool ShowCaseActionsPanelAtBottom { get; set; }
+        public ApplicationType ApplicationType { get; set; }
+
         public CaseControlsPanelModel CreateExtendedCaseControlsPanelModel(int position = 1)
         {
             return new CaseControlsPanelModel(position, true);

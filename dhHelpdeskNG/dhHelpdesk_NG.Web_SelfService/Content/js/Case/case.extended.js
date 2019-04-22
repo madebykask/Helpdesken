@@ -262,20 +262,10 @@ window.extendedCasePage =
             }
 
             var $exTab = $(self.ExTab_Prefix + self.Current_EC_FormId);
-
-            if ($('#ButtonClick').val() === 'btn-go') {
-
-                //check if value is selected in steps, then isOnNext should be true;
-                var templateId = +self.$selectListStep.val();
-
-                //only load if templateId exist
-                if (!isNaN(templateId) && templateId > 0) {
-                    isOnNext = true;
-                }
-            }
-
             var $exCaseContainer = self.getExtendedCaseContainer();
+
             var validationResult = $exCaseContainer.contentWindow.validateExtendedCase(isOnNext);
+
             if (validationResult == null) {
                 //Change color
                 if ($exTab.parent().hasClass('error')) {
@@ -449,17 +439,14 @@ window.extendedCasePage =
             self.$Form.submit();
         };
 
-        ExtendedCasePage.prototype.onSaveClick = function (sender) {
-            var self = sender;
+        ExtendedCasePage.prototype.onSaveClick = function () {
+            var self = this;
             var url = self.SAVE_CASE_URL;
-            self.setCaseStatus(self.CASE_IN_SAVING);
             var $exCaseContainer = self.getExtendedCaseContainer();
-            if (!self.isNullOrUndefined($exCaseContainer)) {
-                if (!self.isExtendedCaseValid()) {
-                    self.setCaseStatus(self.CASE_IN_IDLE);
-                    return false;
-                }
 
+            self.setCaseStatus(self.CASE_IN_SAVING);
+
+            if (!self.isNullOrUndefined($exCaseContainer)) {
                 var promise = $exCaseContainer.contentWindow.saveExtendedCase(false);
                 promise.then(function (res) {
                     self.doSaveCase(url);
@@ -508,7 +495,7 @@ window.extendedCasePage =
             var nextAllowedClickDelay = 5000;
 
             /// controls binding
-            self.$caseButtonsToLock = $('input.save-button');
+            self.$caseButtonsToLock = $('input.save-button, input.go-button');
             self.$Form = $('#extendedCaseForm');
             self.$caseTab = $("#tabsArea li a");
             self.$selectedWorkflow = $('#SelectedWorkflowStep');
@@ -526,9 +513,11 @@ window.extendedCasePage =
                     return;
                 }
 
-                $('#ButtonClick').val('btn-save');
-
-                self.onSaveClick(self);
+                // validate before save
+                var isValid = self.isExtendedCaseValid(true, false);
+                if (isValid) {
+                    self.onSaveClick(self);
+                }
             });
 
             // Go - Change Workflow
@@ -541,8 +530,6 @@ window.extendedCasePage =
                     return;
                 }
 
-                $('#ButtonClick').val('btn-go');
-
                 var templateId = parseInt(self.$selectListStep.first().val()) || 0;
 
                 //only load if templateId exist
@@ -551,10 +538,10 @@ window.extendedCasePage =
 
                     var stepId = parseInt(self.$selectListStep.first().val()) || 0;
                     if (stepId > 0) {
-                        isValid = self.isExtendedCaseValid(false, true);
+                        isValid = self.isExtendedCaseValid(true, true);
                     }
                     else {
-                        isValid = self.isExtendedCaseValid(false, false);
+                        isValid = self.isExtendedCaseValid(true, false);
                     }
 
                     if (isValid) {

@@ -91,6 +91,44 @@ h5 {
         display: inline-block;
     }
 
+.loading-msg {
+    display: block;
+    background-color: #f9f9f9;
+    border: 1px solid #dddddd;
+    border-top: none;
+    opacity: 0.75;
+    top: 0px;
+    bottom: 10px;
+    left: 0px;
+    right: 0px;
+    position: absolute;
+    color: gray;
+    padding: 10px;
+}
+
+.loading-msg .content-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.loading-msg .loader {
+    position: absolute;
+    width: 170px;
+    height: 70px;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    background: url('/content/img/ajax-loader.gif') no-repeat 98px;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+    line-height: 3;
+}
+
 @media (min-width: 768px) {
   .navbar {
     border-radius: 0px;

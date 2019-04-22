@@ -69,7 +69,7 @@
         caseId: Number('@Model.CaseId'),
         logFileKey: '@Model.LogFileGuid',
         isFinished : @Html.Raw(Model.CaseDataModel.IsFinished ? "true" : "false"),
-        logNotesMode: Number('@(ViewBag.IsLineManagerApplication || ViewBag.ShowCommunicationForSelfService ? 1 : 0)')
+        logNotesMode: Number('@(Model.ApplicationType == ApplicationType.LineManager || Model.ShowCommunicationForSelfservice ? 1 : 0)')
     };
 
     window.parameters = {
@@ -146,15 +146,14 @@
         userRole: '@(Model.UserRole)',
         caseStatus: '@(Model.StateSecondaryId)',
         currentUser: '@(Model.CurrentUser)',
-        applicationType: '@ViewBag.ApplicationType',
+        applicationType: '@Model.ApplicationType.ToStringValue()',
         lastError: '@Html.Raw(lastErrorMessage)'
     };
 
     var workflowsBehaviorParams = {
-        canSave: true,
         caseId:  @Model.CaseId,
         templateId: @(Model.CaseTemplateId ?? 0),
-        customerId: @Model.CustomerId,
+        isExtendedCase: true,
         getWorkFlowStepsUrl: '@Url.Action("GetWorkflowSteps", "Case")',
         selectStepText: '@Translation.GetForJS(DH.Helpdesk.Common.Constants.Text.SelectStep)',
         saveText: '@Translation.Get("Save")'
@@ -194,7 +193,7 @@
 }*@
 
 
-@if (Model.CurrentCustomer.ShowCaseActionsPanelOnTop)
+@if (Model.ShowCaseActionsPanelOnTop)
 {
     @Html.Partial("_CaseControlPanel", Model.CreateExtendedCaseControlsPanelModel())
 }
@@ -361,13 +360,18 @@
                 <i id="exTabIndicator_@extendedFormId" class="tab-indicator" style="display: none;">&nbsp;</i>
             </a>
         </li>
-        @if (ViewBag.AttachmentPlacement == 1 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()) && (Model.CaseId == 0 || (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null)))
+        @if (Model.AttachmentPlacement == 1 && Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()) && (Model.CaseId == 0 || (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null)))
         {
             <li>
                 <a href="#attachment-tab">@Translation.Get("Attachments", Enums.TranslationSource.TextTranslation) <span id="nrOfAttachedFiles">@(Model.CaseDataModel.CaseFiles != null && Model.CaseDataModel.CaseFiles.Count > 0 ? "(" + Model.CaseDataModel.CaseFiles.Count.ToString() + ")" : "")</span></a>
             </li>
         }
     </ul>
+    <div class="loading-msg" id="progress" style="display: none">
+        <div class="content-wrapper">
+            <div class="loader">@Translation.Get("Laddar...")</div>
+        </div>
+    </div>
     <div class="content tab-content">
         <div id="fragment-1" class="tab-pane active">
             <div class="container-fluid dh-container">
@@ -390,7 +394,7 @@
                 </div>
             </div>
         </div>
-        @if (ViewBag.AttachmentPlacement == 1 &&
+        @if (Model.AttachmentPlacement == 1 &&
              Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()) &&
              (Model.CaseId == 0 || (Model.CaseId > 0 && Model.CaseDataModel.CaseFiles != null)))
         {
@@ -428,7 +432,7 @@
     </div>
 
     @*/* only on new for now.. */*@
-    @if (ViewBag.AttachmentPlacement == 1 &&
+    @if (Model.AttachmentPlacement == 1 &&
          Model.CaseId == 0 &&
          Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
     {
@@ -452,7 +456,7 @@
     }
 </div>
 
-@if (Model.CurrentCustomer.ShowCaseActionsPanelAtBottom)
+@if (Model.ShowCaseActionsPanelAtBottom)
 {
     @Html.Partial("_CaseControlPanel", Model.CreateExtendedCaseControlsPanelModel(2))
 }
@@ -483,8 +487,8 @@
     @if (Model.CaseId > 0 &&
          !Model.CaseDataModel.IsFinished &&
          CheckField(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()) &&
-         (ViewBag.IsLineManagerApplication ||
-          ViewBag.ApplicationType == ApplicationTypes.SelfService && ViewBag.ShowCommunicationForSelfservice))
+         (Model.ApplicationType == ApplicationType.LineManager ||
+          Model.ApplicationType == ApplicationType.SelfService && Model.ShowCommunicationForSelfservice))
     {
         @Html.Partial("_Communication", Model.CaseLogModel)
         @Html.Partial("ModalDialogs/_UploadExistingLogFilePopup")

@@ -14,8 +14,6 @@ using DH.Helpdesk.Common.Enums.BusinessRule;
 using static DH.Helpdesk.BusinessData.Models.Shared.ProcessResult;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Extensions.String;
-using DH.Helpdesk.Common.Extensions.DateTime;
-using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.CaseSolution;
 using DH.Helpdesk.Common.Enums.Condition;
 using DH.Helpdesk.Common.Extensions.Object;
@@ -143,7 +141,6 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return res;
         }
 
-
         private CaseModel ApplyValuesFromCaseSolution(CaseModel model, int caseTemplateId)
         {
             if (model == null)
@@ -153,90 +150,17 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             if (caseTemplate == null)
                 return model;
 
-            if (caseTemplate.CaseType_Id != null)
-            {
-                model.CaseType_Id = caseTemplate.CaseType_Id.Value;
-            }
-
             //Check if we should apply template
             if (caseTemplate.OverWritePopUp == 1)
-            { 
-
-            model.CaseSolution_Id = caseTemplateId;
-            model.Customer_Id = caseTemplate.Customer_Id;
-            model.ReportedBy = caseTemplate.ReportedBy.IfNullThenElse(model.ReportedBy);
-            model.PersonsName = caseTemplate.PersonsName.IfNullThenElse(model.PersonsName);
-            model.PersonsEmail = caseTemplate.PersonsEmail.IfNullThenElse(model.PersonsEmail);
-            model.PersonsPhone = caseTemplate.PersonsPhone.IfNullThenElse(model.PersonsPhone);
-            model.PersonsCellphone = caseTemplate.PersonsCellPhone.IfNullThenElse(model.PersonsCellphone);
-            model.Region_Id = caseTemplate.Region_Id.IfNullThenElse(model.Region_Id);
-            model.Department_Id = caseTemplate.Department_Id.IfNullThenElse(model.Department_Id);
-            model.OU_Id = caseTemplate.OU_Id.IfNullThenElse(model.OU_Id);
-            model.Place = caseTemplate.Place.IfNullThenElse(model.Place);
-            model.UserCode = caseTemplate.UserCode.IfNullThenElse(model.UserCode);
-            model.CostCentre = caseTemplate.CostCentre.IfNullThenElse(model.CostCentre);
-
-            model.InventoryNumber = caseTemplate.InventoryNumber.IfNullThenElse(model.InventoryNumber);
-            model.InventoryType = caseTemplate.InventoryType.IfNullThenElse(model.InventoryType);
-            model.InventoryLocation = caseTemplate.InventoryLocation.IfNullThenElse(model.InventoryLocation);
-
-            model.ProductArea_Id = caseTemplate.ProductArea_Id.IfNullThenElse(model.ProductArea_Id);
-            model.System_Id = caseTemplate.System_Id.IfNullThenElse(model.System_Id);
-            model.Caption = caseTemplate.Caption.IfNullThenElse(model.Caption);
-            model.Description = caseTemplate.Description.IfNullThenElse(model.Description);
-            model.Priority_Id = caseTemplate.Priority_Id.IfNullThenElse(model.Priority_Id);
-            model.Project_Id = caseTemplate.Project_Id.IfNullThenElse(model.Project_Id);
-            model.Urgency_Id = caseTemplate.Urgency_Id.IfNullThenElse(model.Urgency_Id);
-            model.Impact_Id = caseTemplate.Impact_Id.IfNullThenElse(model.Impact_Id);
-            model.Category_Id = caseTemplate.Category_Id.IfNullThenElse(model.Category_Id);
-            model.Supplier_Id = caseTemplate.Supplier_Id.IfNullThenElse(model.Supplier_Id);
-
-            model.InvoiceNumber = caseTemplate.InvoiceNumber.IfNullThenElse(model.InvoiceNumber);
-            model.ReferenceNumber = caseTemplate.ReferenceNumber.IfNullThenElse(model.ReferenceNumber);
-            model.Miscellaneous = caseTemplate.Miscellaneous.IfNullThenElse(model.Miscellaneous);
-            model.ContactBeforeAction = caseTemplate.ContactBeforeAction;
-            model.SMS = caseTemplate.SMS;
-            model.AgreedDate = caseTemplate.AgreedDate.IfNullThenElse(model.AgreedDate);
-            model.Available = caseTemplate.Available.IfNullThenElse(model.Available);
-            model.Cost = caseTemplate.Cost;
-            model.OtherCost = caseTemplate.OtherCost;
-            model.Currency = caseTemplate.Currency.IfNullThenElse(model.Currency);
-
-            model.Performer_User_Id = caseTemplate.PerformerUser_Id.IfNullThenElse(model.Performer_User_Id);
-            model.CausingPartId = caseTemplate.CausingPartId.IfNullThenElse(model.CausingPartId);
-            model.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id.IfNullThenElse(model.WorkingGroup_Id);
-            model.Project_Id = caseTemplate.Project_Id.IfNullThenElse(model.Project_Id);
-            model.Problem_Id = caseTemplate.Problem_Id.IfNullThenElse(model.Problem_Id);
-            model.PlanDate = caseTemplate.PlanDate.IfNullThenElse(model.PlanDate);
-            model.WatchDate = caseTemplate.WatchDate.IfNullThenElse(model.WatchDate);
-
-            model.IsAbout_ReportedBy = caseTemplate.IsAbout_ReportedBy.IfNullThenElse(model.IsAbout_ReportedBy);
-            model.IsAbout_PersonsName = caseTemplate.IsAbout_PersonsName.IfNullThenElse(model.IsAbout_PersonsName);
-            model.IsAbout_PersonsEmail = caseTemplate.IsAbout_PersonsEmail.IfNullThenElse(model.IsAbout_PersonsEmail);
-            model.IsAbout_PersonsPhone = caseTemplate.IsAbout_PersonsPhone.IfNullThenElse(model.IsAbout_PersonsPhone);
-            model.IsAbout_PersonsCellPhone = caseTemplate.IsAbout_PersonsCellPhone.IfNullThenElse(model.IsAbout_PersonsCellPhone);
-            model.IsAbout_Region_Id = caseTemplate.IsAbout_Region_Id.IfNullThenElse(model.IsAbout_Region_Id);
-            model.IsAbout_Department_Id = caseTemplate.IsAbout_Department_Id.IfNullThenElse(model.IsAbout_Department_Id);
-            model.IsAbout_OU_Id = caseTemplate.IsAbout_OU_Id.IfNullThenElse(model.IsAbout_OU_Id);
-            model.IsAbout_CostCentre = caseTemplate.IsAbout_CostCentre.IfNullThenElse(model.IsAbout_CostCentre);
-            model.IsAbout_Place = caseTemplate.IsAbout_Place.IfNullThenElse(model.IsAbout_Place);
-            model.IsAbout_UserCode = caseTemplate.UserCode.IfNullThenElse(model.IsAbout_UserCode);
-
-            model.Status_Id = caseTemplate.Status_Id.IfNullThenElse(model.Status_Id);
-            model.StateSecondary_Id = caseTemplate.StateSecondary_Id.IfNullThenElse(model.StateSecondary_Id);
-            model.Verified = caseTemplate.Verified;
-            model.VerifiedDescription = caseTemplate.VerifiedDescription.IfNullThenElse(model.VerifiedDescription);
-            model.SolutionRate = caseTemplate.SolutionRate.IfNullThenElse(model.SolutionRate);
-
-            model.Text_External = caseTemplate.Text_External.IfNullThenElse(model.Text_External);
-            model.Text_Internal = caseTemplate.Text_Internal.IfNullThenElse(model.Text_Internal);
-            model.FinishingType_Id = caseTemplate.FinishingCause_Id.IfNullThenElse(model.FinishingType_Id);
-
-            if (caseTemplate.RegistrationSource.HasValue && caseTemplate.RegistrationSource.Value > 0)
             {
-                model.RegistrationSourceCustomer_Id = caseTemplate.RegistrationSource.Value;
-            }
+                model.CaseSolution_Id = caseTemplateId;
+                model.Customer_Id = caseTemplate.Customer_Id;
 
+                _caseSolutionService.ApplyCaseSolution(model, caseTemplate);
+
+                model.Text_External = caseTemplate.Text_External.IfNullThenElse(model.Text_External);
+                model.Text_Internal = caseTemplate.Text_Internal.IfNullThenElse(model.Text_Internal);
+                model.FinishingType_Id = caseTemplate.FinishingCause_Id.IfNullThenElse(model.FinishingType_Id);
             }
 
             return model;
@@ -887,8 +811,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             return ret;
         }
-
-
+        
         /// <summary>
         /// If case is split and copied to another customer, departmentId needs to be changed to corresponding Id of the other customer.
         /// </summary>

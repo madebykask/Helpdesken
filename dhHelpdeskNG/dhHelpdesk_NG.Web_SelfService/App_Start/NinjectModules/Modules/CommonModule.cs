@@ -8,6 +8,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.SelfService.Infrastructure.Cache;
+using DH.Helpdesk.Services.Services.Cache;
 
 namespace DH.Helpdesk.SelfService.NinjectModules.Modules
 {
@@ -63,6 +65,11 @@ namespace DH.Helpdesk.SelfService.NinjectModules.Modules
         /// </summary>
         public override void Load()
         {
+            this.Bind<ICacheService>()
+                .To<WebCacheService>();
+
+            this.Bind<ITranslateCacheService>()
+                .To<TranslateCacheService>();
 
             this.Bind<IUserPermissionsChecker>().To<UserPermissionsChecker>();
 

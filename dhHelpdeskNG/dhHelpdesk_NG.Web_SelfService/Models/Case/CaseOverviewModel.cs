@@ -78,10 +78,7 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public CaseControlsPanelModel CreateCaseControlsPanelModel(int position = 1)
         {
-            return new CaseControlsPanelModel(position, false)
-            {
-                CanSave = false
-            };
+            return new CaseControlsPanelModel(position, false);
         }
 
         #endregion

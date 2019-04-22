@@ -6,7 +6,7 @@
         this.caseId = params.caseId;
         this.templateId = params.templateId;
         this.customerId = params.customerId;
-        this.canSave = params.canSave;
+        this.isExtendedCase = params.isExtendedCase;
         this.selectStepText = params.selectStepText;
         this.saveText = params.saveText;
 
@@ -19,13 +19,16 @@
         var self = this;
         var data = {
             caseId: self.caseId,
-            templateId: self.templateId,
-            customerId: self.customerId
+            templateId: self.templateId
         };
 
+        //todo: add some progress indication?
+        $('.workflowStepsLoader').show();
+        var hasWorkflows = false;
+
         $.getJSON('/Case/GetWorkflowSteps', $.param(data), function (res) {
-            var hasWorkflows = false;
-            if (res.items && res.items.length) {
+            hasWorkflows = res.items && res.items.length > 0;
+            if (hasWorkflows) {
                 var options = [];
                 options.push('<option value="0">' + self.selectStepText + '</option>');
                 $.each(res.items, function (index, item) {
@@ -36,21 +39,54 @@
                 $("select.workflows-select").each(function () {
                     $(this).html(optionsHtml);
                 });
-
-                hasWorkflows = true;
-                $(".workflowStepsPanel").show();
-
-                if (self.canSave) {
-                    $(".save-button").val(self.saveText);
-                }
             }
 
-            if (self.canSave || hasWorkflows) {
-                $('div[id^="exCaseControlPanel"]').show();    
+            //set up UI
+            if (self.isExtendedCase) {
+                self.setUIForExtendedCase(hasWorkflows);
+            } else {
+                self.setUIForNormalCase(hasWorkflows);
             }
-
+        }).fail(function (xhr, textStatus, error) {
+            var errMsg = error || 'Unknown error';
+            ShowToastMessage(errMsg, "Error");
+            console.error(errMsg);
+        }).done(function() {
+            $('.workflowStepsLoader').hide();
         });
     };
+
+    this.setUIForNormalCase = function (hasWorkflows) {
+        var self = this;
+        if (self.caseId > 0) {
+            // no save button, show only if hasWorkflows
+            if (hasWorkflows) {
+                $('div[id^="caseControlPanel"]').show();
+                $(".workflowStepsPanel").show();
+            }
+        } else {
+            // new: save is avaialble, workflows visible only if exist
+            $('div[id^="caseControlPanel"]').show();
+            $(".save-button-div").show();
+            if (hasWorkflows) {
+                $(".save-button").val(self.saveText);
+                $(".workflowStepsPanel").show();
+            }
+        }
+    }
+
+    this.setUIForExtendedCase = function (hasWorkflows) {
+        var self = this;
+        //save btn is available
+        $('div[id^="caseControlPanel"]').show();
+        $(".save-button-div").show();
+
+        //show workflows view 
+        if (hasWorkflows) {
+            $(".save-button").val(self.saveText);
+            $(".workflowStepsPanel").show();
+        }
+    }
 
     this.subscribeUIEvents = function () {
         var self = this;

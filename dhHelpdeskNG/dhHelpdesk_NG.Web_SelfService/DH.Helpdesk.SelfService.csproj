@@ -298,6 +298,7 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Orders\IOrderModelFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Orders\IOrdersModelFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Orders\IUpdateOrderModelFactory.cs" />
+    <Compile Include="Infrastructure\Cache\WebCacheService.cs" />
     <Compile Include="Infrastructure\Common\Concrete\CommonFunctions.cs" />
     <Compile Include="Infrastructure\Common\Concrete\ErrorGenerator.cs" />
     <Compile Include="Infrastructure\Common\ICommonFunctions.cs" />

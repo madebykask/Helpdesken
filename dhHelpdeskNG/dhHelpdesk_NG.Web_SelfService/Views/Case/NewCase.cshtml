@@ -48,10 +48,9 @@
     };
 
     var workflowsBehaviorParams = {
-        canSave: true,
+        isExtendedCase: false,
         caseId: @Model.NewCase.Id,
         templateId: @Model.CaseTemplateId,
-        customerId: @Model.NewCase.Customer_Id,
         getWorkFlowStepsUrl: '@Url.Action("GetWorkflowSteps", "Case")',
         selectStepText: '@Translation.GetForJS(Text.SelectStep)',
         saveText: '@Translation.Get("Save")'
@@ -93,7 +92,11 @@
             </li>
         }
     </ul>
-
+    <div class="loading-msg" id="progress" style="display: none">
+        <div class="content-wrapper">
+            <div class="loader">@Translation.Get("Laddar...")</div>
+        </div>
+    </div>
     <div class="content tab-content">
         <div id="fragment-1" class="tab-pane active">
             <div class="container-fluid dh-container">
@@ -178,7 +181,6 @@
 
                     @Html.Hidden("case_languageId", Model.CurrentLanguageId)
 
-                    @Html.Hidden("ButtonClick", "") @*TEMP, used to define if "Send" button is clicked*@
                     @Html.HiddenFor(model => model.SelectedWorkflowStep)
 
                     <!-- User Information-->
@@ -1006,7 +1008,7 @@
 
 @section Scripts {
     @Scripts.Render("~/Content/js/Case/newCase")
-    
+
     <script type="text/javascript">
 
         var requiredText = '@Translation.GetForJS("must be specified")';
@@ -1019,13 +1021,14 @@
         var $elmProductArea = null;
         var $selectedWorkflow = null;
         var $selectListStep = null;
+        var $buttonsToDisable = null;
 
         $(function () {
             $mainForm = $("#newCaseForm");
             $elmProductArea = $("#NewCase_ProductArea_Id");
             $selectedWorkflow = $('#SelectedWorkflowStep');
             $selectListStep = $('select[name="steps"]').first(); //should be first only
-
+            $buttonsToDisable = $('input.save-button, input.go-button');
             $("#case_urgent_popup").on('hidden.bs.modal', function(e) {
                 $('#urgentAcceptChbx').attr('checked', false);
                 $("#btnAccept").attr("disabled", true);
@@ -1038,8 +1041,7 @@
             //Save case
             $('.save-button').on('click', function (e) {
                 e.preventDefault();
-
-                $('#ButtonClick').val('btn-save'); //check if required
+                
                 saveNewCase();
             });
 
@@ -1047,12 +1049,11 @@
             $('.go-button').on('click', function(e) {
                 e.preventDefault();
 
-                $('#ButtonClick').val('btn-go'); //check if required
-
-                var templateId = parseInt(self.$selectListStep.first().val()) || 0;
-                self.$selectedWorkflow.val(templateId);
-
-                saveNewCase();
+                var templateId = parseInt(self.$selectListStep.val());
+                if (!isNaN(templateId) && templateId > 0) {
+                    self.$selectedWorkflow.val(templateId);
+                    saveNewCase();
+                }
             });
 
             $("#btnAccept").on("click", function() {
@@ -1060,7 +1061,7 @@
             });
 
             setupValidation();
-            
+
             self.workflowStepsBehavior = new WorkflowStepsBehavior(null);
             self.workflowStepsBehavior.init(workflowsBehaviorParams);
 
@@ -1114,6 +1115,7 @@
         function doSaveCase() {
             $mainForm.attr("action", '@Url.Action("NewCase", "Case")');
             $('.disabled').removeAttr('disabled');
+            $buttonsToDisable.prop('disabled', true);
             $mainForm.submit();
         }
 

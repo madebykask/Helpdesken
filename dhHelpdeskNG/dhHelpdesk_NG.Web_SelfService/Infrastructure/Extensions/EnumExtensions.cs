@@ -12,6 +12,11 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
 {
     public static class EnumExtensions
     {
+        public static string ToStringValue(this Enum enumVal)
+        {
+            return Enum.GetName(enumVal.GetType(), enumVal);
+        }
+
         public static int ToInt(this Enum enumeration)
         {            
             return Convert.ToInt32(enumeration);

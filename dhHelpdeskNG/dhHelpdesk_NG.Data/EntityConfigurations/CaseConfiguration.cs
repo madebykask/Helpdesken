@@ -201,9 +201,9 @@
 
             this.Property(x => x.LatestSLACountDate).IsOptional();
 
-			this.HasMany(x => x.InvoiceRows)
-				.WithOptional(x => x.Case)
-				.HasForeignKey(x => x.Case_Id);
+            this.HasMany(x => x.InvoiceRows)
+                .WithOptional(x => x.Case)
+                .HasForeignKey(x => x.Case_Id);
 
             this.HasMany(x => x.CaseFollowers)
                 .WithRequired(x => x.Case)
@@ -214,10 +214,10 @@
                .HasForeignKey(x => x.CaseSolution_Id)
                .WillCascadeOnDelete(false);
 
-			this.HasOptional(x => x.CurrentCaseSolution)
-			   .WithMany()
-			   .HasForeignKey(x => x.CurrentCaseSolution_Id)
-			   .WillCascadeOnDelete(false);
+            this.HasOptional(x => x.CurrentCaseSolution)
+               .WithMany()
+               .HasForeignKey(x => x.CurrentCaseSolution_Id)
+               .WillCascadeOnDelete(false);
 
             //this.Property(x => x.ActiveTab).IsOptional().HasMaxLength(100);
 

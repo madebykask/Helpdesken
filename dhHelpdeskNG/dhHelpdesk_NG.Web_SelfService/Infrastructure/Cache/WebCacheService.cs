@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Web;
 using DH.Helpdesk.Services.Services.Cache;
 
-namespace DH.Helpdesk.Web.Infrastructure.Cache
+namespace DH.Helpdesk.SelfService.Infrastructure.Cache
 {
     public class WebCacheService : ICacheService
     {
