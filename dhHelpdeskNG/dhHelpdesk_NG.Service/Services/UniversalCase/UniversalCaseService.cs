@@ -253,31 +253,28 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             if (caseModel.CaseSolution_Id.HasValue && isNewCase)
             {
                 var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
-
-                ////Split into "parent" and "child(s)"
+                
+                // Split into "parent" and "child(s)"
                 if (caseSolution.CaseRelationType == CaseRelationType.ParentAndChildren)
                 {
-                    res = SaveParentAndChildren(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
+                    return res = SaveParentAndChildren(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
                 }
 
-                //Create indepent cases based on the "parent" case solution template
-                else if (caseSolution.CaseRelationType == CaseRelationType.OnlyDescendants)
+                // Create indepent cases based on the "parent" case solution template
+                if (caseSolution.CaseRelationType == CaseRelationType.OnlyDescendants)
                 {
-                    res = SaveNewDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
+                    return res = SaveNewDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
                 }
 
-                //Create cases based on "parent", and "child" but independent
-                else if (caseSolution.CaseRelationType == CaseRelationType.SelfAndDescendandts)
+                // Create cases based on "parent", and "child" but independent
+                if (caseSolution.CaseRelationType == CaseRelationType.SelfAndDescendandts)
                 {
-                    res = SaveNewSelfAndDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
+                    return res = SaveNewSelfAndDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
                 }
             }
-            else
-            {
-                //do regular save
-                res = SaveCase(caseModel, auxModel, out caseId, out caseNumber);
-            }
-
+           
+            //do regular save
+            res = SaveCase(caseModel, auxModel, out caseId, out caseNumber);
             return res;
         }
 
@@ -731,15 +728,14 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return caseMailSetting;
         }
 
-        private Case ConvertCaseModelToCase(CaseModel caseModel, Case oldCase)
+        public Case ConvertCaseModelToCase(CaseModel caseModel, Case oldCase)
         {
-            var caseEntity = new Case();
-            if (oldCase != null && oldCase.Id > 0)
-                caseEntity = oldCase;
+            var caseEntity = oldCase != null && oldCase.Id > 0 ? oldCase : new Case();
 
             #region Update Case properties
 
             var properties = caseModel.GetType().GetProperties();
+
             foreach (var prop in properties)
             {
                 var type = prop.PropertyType;
@@ -801,9 +797,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             #region Update CaseIsAbout properties
 
             var isAboutChanged = false;
-            var isAbout = new CaseIsAboutEntity();
-            if (caseEntity.IsAbout != null)
-                isAbout = caseEntity.IsAbout;
+            var isAbout = caseEntity.IsAbout ?? new CaseIsAboutEntity();
 
             if (caseModel.IsAbout_ReportedBy != oldCase.IsAbout?.ReportedBy)
             {
@@ -865,6 +859,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 isAbout = null;
 
             caseEntity.IsAbout = isAbout;
+
             #endregion
 
             return caseEntity;

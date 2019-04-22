@@ -75,6 +75,7 @@
     window.parameters = {
         saveCaseUrl: '@Url.Action("ExtendedCase", "Case")',
         getWorkFlowStepsUrl: '@Url.Action("GetWorkflowSteps", "Case")',
+        canSave: true,
         caseId:  @Model.CaseId,
         templateId: @(Model.CaseTemplateId ?? 0),
         customerId: @Model.CustomerId,
@@ -146,10 +147,18 @@
         caseStatus: '@(Model.StateSecondaryId)',
         currentUser: '@(Model.CurrentUser)',
         applicationType: '@ViewBag.ApplicationType',
-        lastError: '@Html.Raw(lastErrorMessage)',
+        lastError: '@Html.Raw(lastErrorMessage)'
+    };
+
+    var workflowsBehaviorParams = {
+        canSave: true,
+        caseId:  @Model.CaseId,
+        templateId: @(Model.CaseTemplateId ?? 0),
+        customerId: @Model.CustomerId,
+        getWorkFlowStepsUrl: '@Url.Action("GetWorkflowSteps", "Case")',
         selectStepText: '@Translation.GetForJS(DH.Helpdesk.Common.Constants.Text.SelectStep)',
         saveText: '@Translation.Get("Save")'
-    }
+    };
 
     if (window.addEventListener) {
         window.addEventListener("message", onMessage, false);
@@ -185,10 +194,9 @@
 }*@
 
 
-@if (Model.CurrentCustomer.ShowCaseActionsPanelOnTop && 
-    (Model.CaseId == 0 || Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
+@if (Model.CurrentCustomer.ShowCaseActionsPanelOnTop)
 {
-    @Html.Partial("_CaseControlPanel", Model.CreateExtendedCaseControlsPanelModel(1))
+    @Html.Partial("_CaseControlPanel", Model.CreateExtendedCaseControlsPanelModel())
 }
 
 @using (Html.BeginForm("ExtendedCase", "case", null, FormMethod.Post, new { id = "extendedCaseForm" }))
@@ -366,7 +374,7 @@
 
                 @if (Model.CaseDataModel.FinishingDate != null)
                 {
-                    @Html.Partial("_ClosedCaseAlert", Model.GetClosedCaseAlertModel())
+                    @Html.Partial("_ClosedCaseAlert", Model.ClosedCaseAlertModel)
                 }
                 else
                 {
@@ -444,8 +452,7 @@
     }
 </div>
 
-@if (Model.CurrentCustomer.ShowCaseActionsPanelAtBottom && 
-     (Model.CaseId == 0 || Model.WorkflowSteps != null && Model.WorkflowSteps.Any()))
+@if (Model.CurrentCustomer.ShowCaseActionsPanelAtBottom)
 {
     @Html.Partial("_CaseControlPanel", Model.CreateExtendedCaseControlsPanelModel(2))
 }
@@ -453,7 +460,22 @@
 @section Scripts
 {
     @Scripts.Render("~/Content/js/Case/extendedCase")
-    @Scripts.Render("~/Content/js/Case/edit")
+    <script type="text/javascript">
+        $(function () {
+            //init extended case page js instance 
+            window.extendedCasePage.init(window.parameters);
+
+            var onWorkflowStepChangedCallback = function (data) {
+                window.extendedCasePage.setNextStep(data.nextStepNumber);
+            }
+
+            self.workflowStepsBehavior = new WorkflowStepsBehavior(onWorkflowStepChangedCallback);
+            self.workflowStepsBehavior.init(workflowsBehaviorParams);
+
+            //init case edit.js page instance
+            window.casePage.init();
+        });    
+    </script>
 }
 
 @section Dialogs {

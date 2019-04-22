@@ -99,7 +99,7 @@
             entity.Change_Id = businessModel.Change_Id;
             entity.PlanDate = businessModel.PlanDate;
             entity.WatchDate = businessModel.WatchDate;
-            entity.Verified = businessModel.Verified.Value;
+            entity.Verified = businessModel.Verified;
             entity.VerifiedDescription = businessModel.VerifiedDescription;
             entity.SolutionRate = businessModel.SolutionRate;
             entity.AgreedDate = businessModel.AgreedDate;

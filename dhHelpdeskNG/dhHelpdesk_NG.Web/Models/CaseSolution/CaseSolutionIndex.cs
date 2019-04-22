@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Web.Models.CaseSolution
+﻿using DH.Helpdesk.BusinessData.Models.Shared;
+
+namespace DH.Helpdesk.Web.Models.CaseSolution
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -111,6 +113,6 @@
 
         public IList<ProductArea> CaseSolutionCTemplateProductArea { get; set; }
 
-        public IList<Application> CaseSolutionApplication { get; set; }
+        public IList<ItemOverview> CaseSolutionApplication { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         CaseSolutionInfo GetGetSolutionInfo(int id, int customerId);
         IQueryable<CaseSolution> GetCustomerCaseSolutions(int customerId);
-        IList<CaseSolutionOverview> GetCaseSolutionsConditions(IList<int> Ids);
+        IList<CaseSolutionOverview> GetCaseSolutionsWithConditions(IList<int> Ids);
     }
 
     public class CaseSolutionRepository : RepositoryBase<CaseSolution>, ICaseSolutionRepository
@@ -51,32 +51,47 @@ namespace DH.Helpdesk.Dal.Repositories
             return query;
         }
 
-        public IList<CaseSolutionOverview> GetCaseSolutionsConditions(IList<int> Ids)
+        public IList<CaseSolutionOverview> GetCaseSolutionsWithConditions(IList<int> Ids)
         {
             var conditions =
-                (from cs in DataContext.CaseSolutions
+                (from cs in Table
                  from csc in cs.Conditions
                  where Ids.Contains(cs.Id)
+                 orderby cs.SortOrder
                  select new 
                  {
                      CaseSolutionId = cs.Id,
+                     Name = cs.Name,
+                     NextStepState = cs.NextStepState,
+                     StateSecondaryId = cs.StateSecondary != null ? cs.StateSecondary.StateSecondaryId : 0,
+
                      csc.Id,
                      csc.Property_Name,
                      csc.Values
                  }).AsNoTracking().ToList();
 
             var res =
-                conditions.GroupBy(x => x.CaseSolutionId, x => new CaseSolutionConditionOverview()
-                    {
-                        Id = x.Id,
-                        Property = x.Property_Name,
-                        Values = x.Values
-                    })
+                conditions.GroupBy(x => new
+                {
+                    x.CaseSolutionId,
+                    x.Name,
+                    x.NextStepState,
+                    x.StateSecondaryId
+                }, x => new CaseSolutionConditionOverview()
+                        {
+                            Id = x.Id,
+                            Property = x.Property_Name,
+                            Values = x.Values
+                        })
                     .Select(x => new CaseSolutionOverview
                     {
-                        CaseSolutionId = x.Key,
+                        CaseSolutionId = x.Key.CaseSolutionId,
+                        Name = x.Key.Name,
+                        StateSecondaryId = x.Key.StateSecondaryId,
+                        NextStepState = x.Key.NextStepState,
                         Conditions = x.ToList()
                     }).ToList();
+
             return res;
         }
     }

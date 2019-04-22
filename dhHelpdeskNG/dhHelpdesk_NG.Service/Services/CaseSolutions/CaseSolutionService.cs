@@ -11,6 +11,8 @@ using DH.Helpdesk.BusinessData.Models.CaseSolution;
 using DH.Helpdesk.BusinessData.Models.User.Input;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.CaseSolution;
+using DH.Helpdesk.Common.Extensions.DateTime;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Dal.NewInfrastructure;
 using DH.Helpdesk.Dal.Repositories;
@@ -27,9 +29,11 @@ namespace DH.Helpdesk.Services.Services
         IList<CaseSolution> GetCaseSolutions(int customerId);
         IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, int? userId = null);
 
-        IList<Application> GetAllApplications(int customerId);
+        IList<ApplicationTypeEntity> GetApplicationTypes(int customerId);
         IList<CaseSolutionCategory> GetCaseSolutionCategories(int customerId);
         IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch SearchCaseSolutions, bool isFirstNamePresentation);
+
+        void ApplyCaseSolution(ICaseEntity model, CaseSolution caseSolution);
 
         //int GetAntal(int customerId, int userid);
         CaseSolutionSchedule GetCaseSolutionSchedule(int id);
@@ -42,9 +46,10 @@ namespace DH.Helpdesk.Services.Services
         void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors);
         void SaveEmptyForm(Guid formGuid, int caseId);
         
-        IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case case_, IList<CaseSolutionOverview> caseSolutions, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId);
+        IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case case_, IList<int> workFlowCaseSolutionIds, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId);
 
         IList<CaseSolution> GetCaseSolutions();
+        IList<int> GetWorkflowCaseSolutionIds(int customerId);
 
         IList<CaseSolution_SplitToCaseSolutionEntity> GetSplitToCaseSolutionDescendants(CaseSolution self, int[] descendantIds);
         bool CheckIfExtendedFormExistForSolutionsInCategories(int customerId, List<int> list);
@@ -52,12 +57,10 @@ namespace DH.Helpdesk.Services.Services
 
     public class CaseSolutionService : BaseCaseSolutionService, ICaseSolutionService
     {
-        private readonly IApplicationRepository _applicationRepository;
         private readonly ICaseSolutionCategoryRepository _caseSolutionCategoryRepository;
         private readonly ICaseSolutionScheduleRepository _caseSolutionScheduleRepository;
 
-        private readonly ICaseSolutionSettingRepository caseSolutionSettingRepository;
-        private readonly ICaseSolutionConditionRepository caseSolutionConditionRepository;
+        private readonly ICaseSolutionSettingRepository _caseSolutionSettingRepository;
         private readonly IFormRepository _formRepository;
         private readonly ILinkService _linkService;
         private readonly ILinkRepository _linkRepository;
@@ -68,8 +71,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IWorkingGroupService _workingGroupService;
         private readonly ICaseSolutionConditionService _caseSolutionConditionService;
         private readonly IStateSecondaryService _stateSecondaryService;
-        private readonly ICaseService _caseService;
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         private readonly Dictionary<string, IList<WorkingGroupEntity>> _adminGroups =
             new Dictionary<string, IList<WorkingGroupEntity>>(StringComparer.OrdinalIgnoreCase);
@@ -90,28 +92,24 @@ namespace DH.Helpdesk.Services.Services
             IWorkingGroupService workingGroupService,
             ICaseSolutionConditionService caseSolutionCondtionService,
             IStateSecondaryService stateSecondaryService,
-            IApplicationRepository applicationRepository,
             IComputerUserCategoryRepository computerUserCategoryRepository,
             IUnitOfWorkFactory unitOfWorkFactory) 
             : base(caseSolutionRepository, caseSolutionCategoryRepository) 
         {
-            this._caseSolutionCategoryRepository = caseSolutionCategoryRepository;
-            this._caseSolutionScheduleRepository = caseSolutionScheduleRepository;
-            this.caseSolutionSettingRepository = caseSolutionSettingRepository;
-            this._linkRepository = linkRepository;
-            this._linkService = linkService;
-            this._formRepository = formRepository;
-            this._unitOfWork = unitOfWork;
-            this._caseSolutionConditionRepository = caseSolutionConditionRepository;
-            this._cache = cache;
-            this._workingGroupService = workingGroupService;
-            this._caseSolutionConditionService = caseSolutionCondtionService;
-            this._caseSolutionConditionRepository = caseSolutionConditionRepository;
-            this._stateSecondaryService = stateSecondaryService;
-            this._applicationRepository = applicationRepository;
-            this.caseSolutionConditionRepository = caseSolutionConditionRepository;
-            this.unitOfWorkFactory = unitOfWorkFactory;
-            this._computerUserCategoryRepository = computerUserCategoryRepository;
+            _caseSolutionCategoryRepository = caseSolutionCategoryRepository;
+            _caseSolutionScheduleRepository = caseSolutionScheduleRepository;
+            _caseSolutionSettingRepository = caseSolutionSettingRepository;
+            _linkRepository = linkRepository;
+            _linkService = linkService;
+            _formRepository = formRepository;
+            _unitOfWork = unitOfWork;
+            _cache = cache;
+            _workingGroupService = workingGroupService;
+            _caseSolutionConditionService = caseSolutionCondtionService;
+            _caseSolutionConditionRepository = caseSolutionConditionRepository;
+            _stateSecondaryService = stateSecondaryService;
+            _unitOfWorkFactory = unitOfWorkFactory;
+            _computerUserCategoryRepository = computerUserCategoryRepository;
         }
         
         public IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, int? userId = null)
@@ -208,85 +206,130 @@ namespace DH.Helpdesk.Services.Services
             return this.CaseSolutionRepository.GetMany(x => x.Status >= 0).OrderBy(x => x.Customer.Name).ThenBy(x => x.Name).ToList();
         }
 
-       //todo: review not performance optimised
+        public IList<int> GetWorkflowCaseSolutionIds(int customerId)
+        {
+            return
+                CaseSolutionRepository.GetMany(x => x.Customer_Id == customerId && x.ConnectedButton == 0 && x.Status > 0)
+                    .AsQueryable()
+                    .Select(x => x.Id)
+                    .ToList();
+        }
+
         public IList<CaseSolution_SplitToCaseSolutionEntity> GetSplitToCaseSolutionDescendants(CaseSolution self, int[] descendantIds)
         {
-            return this.CaseSolutionRepository.GetMany(x => descendantIds.Contains(x.Id)).Select(cs => new CaseSolution_SplitToCaseSolutionEntity
-            {
-                CaseSolution = self,
-                CaseSolution_Id  = self.Id,
-                SplitToCaseSolutionDescendant = cs,
-                SplitToCaseSolution_Id = cs.Id,
+            return 
+                CaseSolutionRepository.GetMany(x => descendantIds.Contains(x.Id)).AsQueryable()
+                    .Select(cs => new CaseSolution_SplitToCaseSolutionEntity
+                    {
+                        CaseSolution = self,
+                        CaseSolution_Id  = self.Id,
+                        SplitToCaseSolutionDescendant = cs,
+                        SplitToCaseSolution_Id = cs.Id,
 
-            }).ToList();
+                    }).ToList();
         }
 
-        public IList<Application> GetAllApplications(int customerId)
+        public IList<ApplicationTypeEntity> GetApplicationTypes(int customerId)
         {
-            string sql = string.Empty;
-            sql = "SELECT * FROM tblApplicationType  ";//WHERE Customer_Id= " + customerId + "";
-            string ConnectionStringExt = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
-            DataTable dtExt = null;
-
-            using (var connectionExt = new SqlConnection(ConnectionStringExt))
+            List<ApplicationTypeEntity> items;
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
-                if (connectionExt.State == ConnectionState.Closed)
-                {
-                    connectionExt.Open();
-                }
-                using (var commandExt = new SqlCommand { Connection = connectionExt, CommandType = CommandType.StoredProcedure, CommandTimeout = 0 })
-                {
-                    commandExt.CommandType = CommandType.Text;
-                    commandExt.CommandText = sql;
-                    var reader = commandExt.ExecuteReader();
-                    dtExt = new DataTable();
-                    dtExt.Load(reader);
-
-                }
+                items = uow.GetRepository<ApplicationTypeEntity>().GetAll().OrderBy(x => x.Type).ToList();
             }
-
-            List<Application> lapp = new List<Application>();
-
-            foreach (DataRow rowExt in dtExt.Rows)
-            {
-                Application a = new Application();
-
-                if (rowExt["Id"].ToString() != null)
-                {
-                    a.Id = Convert.ToInt32(rowExt["Id"].ToString());
-                }
-                if (rowExt["ApplicationType"].ToString() != null)
-                {
-                    a.Name = Convert.ToString(rowExt["ApplicationType"].ToString());
-                }
-
-                lapp.Add(a);
-            }
-
-            return lapp;
-            //return this._applicationRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return items;
         }
 
-        public IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case case_, IList<CaseSolutionOverview> caseSolutions, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId)
+        public void ApplyCaseSolution(ICaseEntity model, CaseSolution caseTemplate)
         {
-            var solutionsIds = caseSolutions.Where(x => x.ConnectedButton == 0).Select(x => x.CaseSolutionId).ToList();
-            var caseSolutionsConditions = CaseSolutionRepository.GetCaseSolutionsConditions(solutionsIds);
+            model.ReportedBy = caseTemplate.ReportedBy.IfNullThenElse(model.ReportedBy);
+            model.PersonsName = caseTemplate.PersonsName.IfNullThenElse(model.PersonsName);
+            model.PersonsEmail = caseTemplate.PersonsEmail.IfNullThenElse(model.PersonsEmail);
+            model.PersonsPhone = caseTemplate.PersonsPhone.IfNullThenElse(model.PersonsPhone);
+            model.PersonsCellphone = caseTemplate.PersonsCellPhone.IfNullThenElse(model.PersonsCellphone);
+            model.Region_Id = caseTemplate.Region_Id.IfNullThenElse(model.Region_Id);
+            model.Department_Id = caseTemplate.Department_Id.IfNullThenElse(model.Department_Id);
+            model.OU_Id = caseTemplate.OU_Id.IfNullThenElse(model.OU_Id);
+            model.Place = caseTemplate.Place.IfNullThenElse(model.Place);
+            model.UserCode = caseTemplate.UserCode.IfNullThenElse(model.UserCode);
+            model.CostCentre = caseTemplate.CostCentre.IfNullThenElse(model.CostCentre);
 
+            model.InventoryNumber = caseTemplate.InventoryNumber.IfNullThenElse(model.InventoryNumber);
+            model.InventoryType = caseTemplate.InventoryType.IfNullThenElse(model.InventoryType);
+            model.InventoryLocation = caseTemplate.InventoryLocation.IfNullThenElse(model.InventoryLocation);
+            
+            if (caseTemplate.CaseType_Id != null)
+                model.CaseType_Id = caseTemplate.CaseType_Id.Value;
+
+            model.RegistrationSourceCustomer_Id = caseTemplate.RegistrationSource.IfNullThenElse(model.RegistrationSourceCustomer_Id);
+            model.ProductArea_Id = caseTemplate.ProductArea_Id.IfNullThenElse(model.ProductArea_Id);
+            model.System_Id = caseTemplate.System_Id.IfNullThenElse(model.System_Id);
+            model.Caption = caseTemplate.Caption.IfNullThenElse(model.Caption);
+            model.Description = caseTemplate.Description.IfNullThenElse(model.Description);
+            model.Priority_Id = caseTemplate.Priority_Id.IfNullThenElse(model.Priority_Id);
+            model.Project_Id = caseTemplate.Project_Id.IfNullThenElse(model.Project_Id);
+            model.Urgency_Id = caseTemplate.Urgency_Id.IfNullThenElse(model.Urgency_Id);
+            model.Impact_Id = caseTemplate.Impact_Id.IfNullThenElse(model.Impact_Id);
+            model.Category_Id = caseTemplate.Category_Id.IfNullThenElse(model.Category_Id);
+            model.Supplier_Id = caseTemplate.Supplier_Id.IfNullThenElse(model.Supplier_Id);
+
+            model.InvoiceNumber = caseTemplate.InvoiceNumber.IfNullThenElse(model.InvoiceNumber);
+            model.ReferenceNumber = caseTemplate.ReferenceNumber.IfNullThenElse(model.ReferenceNumber);
+            model.Miscellaneous = caseTemplate.Miscellaneous.IfNullThenElse(model.Miscellaneous);
+            model.ContactBeforeAction = caseTemplate.ContactBeforeAction;
+            model.SMS = caseTemplate.SMS;
+            model.AgreedDate = caseTemplate.AgreedDate.IfNullThenElse(model.AgreedDate);
+            model.Available = caseTemplate.Available.IfNullThenElse(model.Available);
+            model.Cost = caseTemplate.Cost;
+            model.OtherCost = caseTemplate.OtherCost;
+            model.Currency = caseTemplate.Currency.IfNullThenElse(model.Currency);
+
+            model.Performer_User_Id = caseTemplate.PerformerUser_Id.IfNullThenElse(model.Performer_User_Id);
+            model.CausingPartId = caseTemplate.CausingPartId.IfNullThenElse(model.CausingPartId);
+            model.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id.IfNullThenElse(model.WorkingGroup_Id);
+            model.Problem_Id = caseTemplate.Problem_Id.IfNullThenElse(model.Problem_Id);
+            model.Change_Id = caseTemplate.Change_Id.IfNullThenElse(model.Change_Id);
+            model.PlanDate = caseTemplate.PlanDate.IfNullThenElse(model.PlanDate);
+            model.WatchDate = caseTemplate.WatchDate.IfNullThenElse(model.WatchDate);
+
+            model.IsAbout_ReportedBy = caseTemplate.IsAbout_ReportedBy.IfNullThenElse(model.IsAbout_ReportedBy);
+            model.IsAbout_PersonsName = caseTemplate.IsAbout_PersonsName.IfNullThenElse(model.IsAbout_PersonsName);
+            model.IsAbout_PersonsEmail = caseTemplate.IsAbout_PersonsEmail.IfNullThenElse(model.IsAbout_PersonsEmail);
+            model.IsAbout_PersonsPhone = caseTemplate.IsAbout_PersonsPhone.IfNullThenElse(model.IsAbout_PersonsPhone);
+            model.IsAbout_PersonsCellPhone = caseTemplate.IsAbout_PersonsCellPhone.IfNullThenElse(model.IsAbout_PersonsCellPhone);
+            model.IsAbout_Region_Id = caseTemplate.IsAbout_Region_Id.IfNullThenElse(model.IsAbout_Region_Id);
+            model.IsAbout_Department_Id = caseTemplate.IsAbout_Department_Id.IfNullThenElse(model.IsAbout_Department_Id);
+            model.IsAbout_OU_Id = caseTemplate.IsAbout_OU_Id.IfNullThenElse(model.IsAbout_OU_Id);
+            model.IsAbout_CostCentre = caseTemplate.IsAbout_CostCentre.IfNullThenElse(model.IsAbout_CostCentre);
+            model.IsAbout_Place = caseTemplate.IsAbout_Place.IfNullThenElse(model.IsAbout_Place);
+            model.IsAbout_UserCode = caseTemplate.UserCode.IfNullThenElse(model.IsAbout_UserCode);
+
+            model.Status_Id = caseTemplate.Status_Id.IfNullThenElse(model.Status_Id);
+            model.StateSecondary_Id = caseTemplate.StateSecondary_Id.IfNullThenElse(model.StateSecondary_Id);
+            model.Verified = caseTemplate.Verified;
+            model.VerifiedDescription = caseTemplate.VerifiedDescription.IfNullThenElse(model.VerifiedDescription);
+            model.SolutionRate = caseTemplate.SolutionRate.IfNullThenElse(model.SolutionRate);
+            model.FinishingDescription = caseTemplate.FinishingDescription.IfNullThenElse(model.FinishingDescription);
+        }
+
+        public IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case caseEntity, IList<int> caseSolutionsIds, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId)
+        {
             var modelList = new List<WorkflowStepModel>();
             var workflowStepsContext = new WorkflowConditionsContext
             {
                 CustomerId = customerId,
-                Case = case_,
+                Case = caseEntity,
                 User = user,
                 ApplicationType = applicationType,
                 TemplateId = templateId,
                 IsRelatedCase = isRelatedCase
             };
 
-            foreach (var cs in caseSolutions)
+            var caseSolutionsWithConditions = CaseSolutionRepository.GetCaseSolutionsWithConditions(caseSolutionsIds);
+
+            foreach (var cs in caseSolutionsWithConditions)
             {
                 // load conditions for solutions from the loaded list (perf optimisation)
-                var solutionConditions = caseSolutionsConditions.FirstOrDefault(x => x.CaseSolutionId == cs.CaseSolutionId);
+                var solutionConditions = caseSolutionsWithConditions.FirstOrDefault(x => x.CaseSolutionId == cs.CaseSolutionId);
 
                 //set conditions to process
                 workflowStepsContext.Conditions = solutionConditions?.Conditions;
@@ -298,8 +341,6 @@ namespace DH.Helpdesk.Services.Services
                     {
                         CaseTemplateId = cs.CaseSolutionId,
                         Name = cs.Name,
-                        SortOrder = cs.SortOrder,
-
                         //If value exist in NextStepState - use it. Otherwise check if caseSolution.StateSecondary_id have value, otherwise return 0;
                         NextStep = cs.NextStepState ?? (cs.StateSecondary?.StateSecondaryId ?? 0) 
                     };
@@ -308,7 +349,7 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            return modelList.OrderBy(c => c.SortOrder).ToList();
+            return modelList.ToList();
         }
 
         //todo: poor spaghetti-code implementation! Need to refactor to create separate extendable and maintainable class(es) aligned with SOLID and OOP principles
@@ -356,9 +397,9 @@ namespace DH.Helpdesk.Services.Services
                     //GET FROM APPLICATION
                     else if (conditionKey.ToLower() == "application_type")
                     {
-                        int appType = (int)((ApplicationType)Enum.Parse(typeof(ApplicationType), ctx.ApplicationType.ToString()));
-                        value = appType.ToString();
+                        value = ((int)ctx.ApplicationType).ToString();
                     }
+
                     //GET FROM USER
                     else if (conditionKey.ToLower().StartsWith("user_WorkingGroup.WorkingGroupGUID".ToLower()))
                     {
@@ -479,6 +520,7 @@ namespace DH.Helpdesk.Services.Services
             return showWorkflowStep;
         }
 
+        // todo: refactor. code is a total mess!
         public IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch searchCaseSolutions, bool isFirstNamePresentation)
         {
             var query = (from cs in this.CaseSolutionRepository.GetMany(x => x.Customer_Id == customerId)
@@ -610,52 +652,48 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            var t = (from cs in this._caseSolutionConditionRepository.GetAll().OrderBy(z => z.CaseSolution_Id).ThenBy(z => z.Property_Name).ThenBy(z => z.Values)
-                     select cs);
+            var conditions = _caseSolutionConditionRepository.GetAll()
+                        .OrderBy(z => z.CaseSolution_Id)
+                        .ThenBy(z => z.Property_Name)
+                        .ThenBy(z => z.Values)
+                        .ToList();
 
             DataTable tableCond = new DataTable();
-            if (t.Count() > 0)
+            if (conditions.Any())
             {
                 tableCond.Columns.Add("Id_Cond", typeof(int));
                 tableCond.Columns.Add("CaseSolution_Id", typeof(int));
                 tableCond.Columns.Add("Property_Name", typeof(string));
                 tableCond.Columns.Add("Values", typeof(string));
 
-                foreach (var c in t)
+                foreach (var condition in conditions)
                 {
-                    int id = 0;
-                    if (c.Id != null)
-                    {
-                        id = c.Id;
-                    }
+                    int id = condition.Id; 
+                    
                     int casedsolid = 0;
-                    if (c.CaseSolution_Id != null)
+                    if (condition.CaseSolution_Id != null)
                     {
-                        casedsolid = c.CaseSolution_Id;
+                        casedsolid = condition.CaseSolution_Id;
                     }
 
                     string pname = string.Empty;
-                    if (c.Property_Name != null)
+                    if (condition.Property_Name != null)
                     {
-                        pname = c.Property_Name;
+                        pname = condition.Property_Name;
                     }
                     string values = string.Empty;
-                    if (c.Values != null)
+                    if (condition.Values != null)
                     {
-                        values = c.Values;
+                        values = condition.Values;
                     }
                     char[] delimiterChars = { ',' };
                     string[] words = values.Split(delimiterChars);
 
                     foreach (string s in words)
                     {
-
                         tableCond.Rows.Add(id, casedsolid, pname, s);
                     }
-
-
                 }
-
             }
 
             var cresList = new List<CaseSolution>();
@@ -1630,12 +1668,11 @@ namespace DH.Helpdesk.Services.Services
             {
                 try
                 {
-
-                    this.caseSolutionConditionRepository.DeleteByCaseSolutionId(id);
+                    _caseSolutionConditionRepository.DeleteByCaseSolutionId(id);
                     //this.caseSolutionConditionRepository.Commit();
 
-                    this.caseSolutionSettingRepository.DeleteByCaseSolutionId(id);
-                    this.caseSolutionSettingRepository.Commit();
+                    this._caseSolutionSettingRepository.DeleteByCaseSolutionId(id);
+                    this._caseSolutionSettingRepository.Commit();
 
                     var caseSolutionSchedule = this._caseSolutionScheduleRepository.GetById(id);
 
@@ -1749,7 +1786,7 @@ namespace DH.Helpdesk.Services.Services
 
         private void UpdateSplitToCaseSolutionDescendants(int caseSolutionId, int splitToCaseSolutionId)
         {
-            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var rep = uow.GetRepository<CaseSolution_SplitToCaseSolutionEntity>();
                 var relation = rep.Find(it => it.CaseSolution_Id == caseSolutionId && it.SplitToCaseSolution_Id == splitToCaseSolutionId).FirstOrDefault();
@@ -1763,7 +1800,7 @@ namespace DH.Helpdesk.Services.Services
 
         private void DeleteSplitToCaseSolutionDescendants(int caseSolutionId)
         {
-            using (var uow = unitOfWorkFactory.CreateWithDisabledLazyLoading())
+            using (var uow = _unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
                 var rep = uow.GetRepository<CaseSolution_SplitToCaseSolutionEntity>();
 

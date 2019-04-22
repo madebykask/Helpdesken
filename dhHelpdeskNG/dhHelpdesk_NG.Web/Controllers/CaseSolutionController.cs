@@ -1,4 +1,5 @@
 ﻿
+using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.Models.User;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -2688,12 +2689,9 @@ namespace DH.Helpdesk.Web.Controllers
                 k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
             }
 
-            IList<Application> a = this._caseSolutionService.GetAllApplications(customerId);
-            a = a.OrderBy(x => x.Name).ToList();
-            foreach (var k in a)
-            {
-                k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
-            }
+            var apps = 
+                _caseSolutionService.GetApplicationTypes(customerId)
+                    .Select(x => new ItemOverview(x.Id.ToString(), Translation.GetCoreTextTranslation(x.Type))).ToList();
 
             IList<WorkingGroupEntity> w = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false);
             w = w.OrderBy(x => x.WorkingGroupName).ToList();
@@ -2734,7 +2732,7 @@ namespace DH.Helpdesk.Web.Controllers
                 CaseSolutionProductArea = pa,
                 CaseSolutionUserWGroup = w,
                 CaseSolutionCTemplateProductArea = pa,
-                CaseSolutionApplication = a
+                CaseSolutionApplication = apps
             };
 
             return model;

@@ -4941,9 +4941,19 @@ namespace DH.Helpdesk.Web.Controllers
                     .OrderBy(c => c.ButtonNumber)
                     .ToList();
 
+            var workflowCaseSolutionIds =
+                customerCaseSolutions.Where(x => x.ConnectedButton == 0 && x.Status > 0)
+                    .Select(x => x.CaseSolutionId)
+                    .ToList();
+
             m.WorkflowSteps =
-                _caseSolutionService.GetWorkflowSteps(customerId, m.case_, customerCaseSolutions, isRelatedCase,
-                    SessionFacade.CurrentUser, ApplicationType.Helpdesk, templateId);
+                _caseSolutionService.GetWorkflowSteps(customerId, 
+                    m.case_,
+                    workflowCaseSolutionIds,
+                    isRelatedCase,
+                    SessionFacade.CurrentUser,
+                    ApplicationType.Helpdesk,
+                    templateId);
 
             m.CaseMailSetting = new CaseMailSetting(
                 customer.NewCaseEmailList,

@@ -158,6 +158,7 @@
     <Compile Include="EntityConfigurations\Invoice\InvoiceArticleProductAreaConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceRowConfiguration.cs" />
     <Compile Include="EntityConfigurations\Invoice\InvoiceHeaderConfiguration.cs" />
+    <Compile Include="EntityConfigurations\Licenses\ApplicationTypeConfiguration.cs" />
     <Compile Include="EntityConfigurations\LogFileExistingConfiguration.cs" />
     <Compile Include="EntityConfigurations\LogProgramConfiguration.cs" />
     <Compile Include="EntityConfigurations\Mail2TicketConfiguration.cs" />

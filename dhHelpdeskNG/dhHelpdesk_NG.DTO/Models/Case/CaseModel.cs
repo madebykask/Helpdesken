@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DH.Helpdesk.BusinessData.Models.Case
 {
-    public class CaseModel: INewBusinessModel
+    public class CaseModel: INewBusinessModel, ICaseEntity
     {
         #region Base
 
@@ -151,6 +151,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         #region Other Info
 
         public int? WorkingGroup_Id { get; set; }
+
         public string WorkingGroupName { get; set; }
 
         public int? Performer_User_Id { get; set; }
@@ -162,6 +163,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public int? Status_Id { get; set; }
 
         public int? StateSecondary_Id { get; set; }
+
         public string StateSecondaryName { get; set; }
 
         public int? Project_Id { get; set; }
@@ -178,7 +180,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public DateTime? WatchDate { get; set; }
 
-        public int?  Verified { get; set; }
+        public int Verified { get; set; }
 
         public string VerifiedDescription { get; set; }
 
@@ -235,6 +237,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         #region Etc
 
         public int? CaseSolution_Id { get; set; }
+
         public int? CurrentCaseSolution_Id { get; set; }
 
         #endregion

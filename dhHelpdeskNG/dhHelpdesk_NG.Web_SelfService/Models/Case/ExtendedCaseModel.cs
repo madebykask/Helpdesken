@@ -26,50 +26,24 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public CaseModel CaseDataModel { get; set; }
         public Dictionary<string, string> StatusBar { get; internal set; }
         public ExtendedCaseDataModel ExtendedCaseDataModel { get; set; }
-        public List<WorkflowStepModel> WorkflowSteps { get; set; }
         public OU CaseOU { get; set; } 
 
         public ProcessResult Result { get; set; }
 
         public bool ShowRegistrationMessage { get; set; }
+
         public string CaseRegistrationMessage { get; set; }
         
         public string LogFileGuid { get; set; }
-        public Setting CustomerSettings { get; set; }
+        
 
         public CaseLogModel CaseLogModel { get; set; }
 
-        public ClosedCaseAlertModel GetClosedCaseAlertModel()
-        {
-            return new ClosedCaseAlertModel()
-            {
-                FinishingDate = CaseDataModel.FinishingDate,
-                CustomerSettings = CustomerSettings
-            };
-        }
-
-        public CaseControlsPanelModel CreateCaseControlsPanelModel(int position = 1)
-        {
-            return new CaseControlsPanelModel(position, WorkflowSteps, false);
-        }
-
+        public ClosedCaseAlertModel ClosedCaseAlertModel { get; set; }
+        
         public CaseControlsPanelModel CreateExtendedCaseControlsPanelModel(int position = 1)
         {
-            return new CaseControlsPanelModel(position, WorkflowSteps, true);
+            return new CaseControlsPanelModel(position, true);
         }
-    }
-
-    public class CaseControlsPanelModel
-    {
-        public CaseControlsPanelModel(int position, List<WorkflowStepModel> workflowSteps, bool isExtendedCase)
-        {
-            IsExtendedCase = isExtendedCase;
-            Position = position;
-            WorkflowSteps = workflowSteps;
-        }
-
-        public int Position { get; }
-        public bool IsExtendedCase { get; }
-        public List<WorkflowStepModel> WorkflowSteps { get; }
     }
 }

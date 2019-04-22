@@ -344,7 +344,7 @@ namespace DH.Helpdesk.Web.Models.JsonModels.Case
                 Change_Id = Change_Id,
                 PlanDate = PlanDate,
                 WatchDate = WatchDate,
-                Verified = Verified,
+                Verified = Verified ?? 0,
                 VerifiedDescription = VerifiedDescription,
                 SolutionRate = SolutionRate,
                 AgreedDate = AgreedDate,

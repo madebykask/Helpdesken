@@ -635,6 +635,15 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             }
         }
 
+        protected ApplicationType CurrentApplicationType
+        {
+            get
+            {
+                var appType = _configurationService.AppSettings.ApplicationType;
+                return EnumHelper.Parse<ApplicationType>(appType);
+            }
+        }
+
         protected bool IsLineManagerApplication()
         {
             var applicationType = _configurationService.AppSettings.ApplicationType;
@@ -677,7 +686,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             {
                 if(SessionFacade.TextTranslation == null)
                 {
-                    if(ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower() == ApplicationTypes.LineManager)
+                    if(IsLineManagerApplication())
                         SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts()
                                                                                .Where(x => x.Type == TranslationType.SelfService)
                                                                                .ToList();

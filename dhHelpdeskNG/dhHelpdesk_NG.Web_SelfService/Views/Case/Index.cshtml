@@ -6,28 +6,23 @@
 
 @{
     ViewBag.Title = "Index";    
+ }
+
+@section Styles {
+    <link href="@Url.Content("~/Content/css/case-mobile.css")" rel="stylesheet" type="text/css" />
 }
 
-@functions
+@if (Model.ShowCaseActionsPanelOnTop)
 {
-    bool CheckField(string fieldName)
-    {
-        var fieldNameToCheck = 
-            fieldName == GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString() 
-            ? fieldName.Replace('_', '.') 
-            : fieldName;
-
-        return Model.FieldSettings.Select(f => f.Name).Contains(fieldNameToCheck);
-    }
+    @Html.Partial("_CaseControlPanel", Model.CreateCaseControlsPanelModel())
 }
-
 <div class="container-fluid dh-container">    
             
     <ul class="nav nav-tabs" id="NewCaseTab">
         <li id="CasePreviewTab" class="active">                             
             <a href="#fragment-1">@Translation.Get("Case", Enums.TranslationSource.TextTranslation): @Model.CasePreview.CaseNumber</a>                                         
         </li>
-        @if (ViewBag.AttachmentPlacement == 1 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+        @if (Model.AttachmentPlacement == 1 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
         {
             <li>
                 <a href="#attachment-tab">@Translation.Get("Attachments", Enums.TranslationSource.TextTranslation) <span id="nrOfAttachedFiles">@(Model.CasePreview.CaseFiles != null && Model.CasePreview.CaseFiles.Count > 0 ? "(" + Model.CasePreview.CaseFiles.Count.ToString() + ")" : "")</span></a>
@@ -43,7 +38,7 @@
 
                     @if (Model.CasePreview.FinishingDate != null)
                     {
-                        @Html.Partial("_ClosedCaseAlert", Model.GetClosedCaseAlertModel())
+                        @Html.Partial("_ClosedCaseAlert", Model.ClosedCaseAlertModel)
                     }
                     else
                     {
@@ -58,7 +53,7 @@
                 </div>
             </div>
 
-            if (ViewBag.AttachmentPlacement == 1 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+            if (Model.AttachmentPlacement == 1 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
             {
                 <div id="attachment-tab" class="tab-pane" style="overflow:hidden;">
                     <div class="container-fluid dh-container">
@@ -69,7 +64,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            <a style="color:blue" href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
+                                            <a style="color:blue" href="@Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
                                         </td>
                                     </tr>
                                 }
@@ -83,19 +78,78 @@
     </div>
 </div>
 
+@if (Model.ShowCaseActionsPanelAtBottom)
+{
+    @Html.Partial("_CaseControlPanel", Model.CreateCaseControlsPanelModel(2))
+}
+
 @section Scripts {
-    @Scripts.Render("~/Content/js/Case/log")    
+    @Scripts.Render("~/Content/js/Case/casePage")
+    
+    <script type="text/javascript">
+
+        //required for worflow steps
+        var workflowsBehaviorParams = {
+            canSave: false,
+            caseId: @Model.CaseId,
+            templateId: 0,
+            customerId: @Model.CustomerId,
+            getWorkFlowStepsUrl: '@Url.Action("GetWorkflowSteps", "Case")',
+            selectStepText: '@Translation.GetForJS(DH.Helpdesk.Common.Constants.Text.SelectStep)',
+            saveText: '@Translation.Get("Save")'
+        };
+
+        var params = {
+            caseId: @Model.CaseId,
+            applyWorkflow: '@Url.Action("ApplyWorkflow", "Case")',
+        };
+
+        $(function() {
+            var self = this;
+            
+            var $selectListStep = $('select[name="steps"]').first(); 
+
+            //init workflow behavior
+            self.workflowStepsBehavior = new WorkflowStepsBehavior(null);
+            self.workflowStepsBehavior.init(workflowsBehaviorParams);
+
+            //Save with workflow
+            $('.go-button').on('click', function(e) {
+                e.preventDefault();
+                
+                var templateId = parseInt($selectListStep.first().val()) || 0;
+                
+                var data = {
+                    caseId: @Model.CaseId,
+                    templateId: templateId
+                };
+
+                $.post(params.applyWorkflow, $.param(data), function(res) {
+                    if (res.success === true) {
+                        window.location.reload(true);
+                    } else {
+                        var errMsg = err.Error || 'Operation failed.';
+                        ShowToastMessage(errMsg, "Error");
+                    }
+                }).fail(function(err) {
+                    var errMsg = err.Error || 'Operation failed.';
+                    ShowToastMessage(errMsg, "Error");
+                    console.error(err);
+                });
+            });
+
+        });
+    </script>
 }
 
 @section Dialogs {
     
-    @if (Model.CasePreview.Id > 0 && 
-         !Model.IsFinished && 
+    @if (Model.CasePreview.Id > 0 && !Model.IsFinished && 
          CheckField(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())) 
     {
         //Show Communication for Selfservice (only if enabled in config)
-        if (ViewBag.IsLineManagerApplication || 
-           (ViewBag.ApplicationType == ApplicationTypes.SelfService && ViewBag.ShowCommunicationForSelfservice)) 
+        if (Model.ApplicationType == ApplicationType.LineManager || 
+           (Model.ApplicationType == ApplicationType.SelfService && Model.ShowCommunicationForSelfService)) 
         {
              @Html.Partial("_Communication", Model.CaseLogModel)
         }
@@ -105,3 +159,15 @@
     }
 }
 
+@functions
+{
+    bool CheckField(string fieldName)
+    {
+        var fieldNameToCheck = 
+            fieldName == GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString() 
+                ? fieldName.Replace('_', '.') 
+                : fieldName;
+
+        return Model.FieldSettings.Select(f => f.Name).Contains(fieldNameToCheck);
+    }
+}

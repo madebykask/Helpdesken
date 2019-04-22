@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.SelfService.Models.Case
 {
@@ -17,6 +18,10 @@ namespace DH.Helpdesk.SelfService.Models.Case
         {
             get { return CasePreview?.FinishingDate.HasValue ?? false; }
         }
+
+        public int CaseId { get; set; }
+
+        public int CustomerId { get; set; }
 
         public bool ShowRegistringMessage { get; set; }
 
@@ -46,9 +51,8 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public IList<Supplier> Suppliers { get; set; }
 
         public List<CaseListToCase> FieldSettings { get; set; }
-        public IEnumerable<CaseSectionModel> CaseSectionSettings { get; set; }
 
-        public Setting CustomerSettings { get; set; }
+        public IEnumerable<CaseSectionModel> CaseSectionSettings { get; set; }
 
         public string FollowerUsers { get; set; }
 
@@ -58,13 +62,28 @@ namespace DH.Helpdesk.SelfService.Models.Case
 
         public CaseLogModel CaseLogModel { get; set; }
 
-        public ClosedCaseAlertModel GetClosedCaseAlertModel()
+        public ClosedCaseAlertModel ClosedCaseAlertModel { get; set; }
+
+        public ApplicationType ApplicationType { get; set; }
+
+        public bool ShowCaseActionsPanelOnTop { get; set; }
+
+        public bool ShowCaseActionsPanelAtBottom { get; set; }
+
+        public int AttachmentPlacement { get; set; }
+
+        public bool ShowCommunicationForSelfService { get; set; }
+
+        #region Methods
+
+        public CaseControlsPanelModel CreateCaseControlsPanelModel(int position = 1)
         {
-            return new ClosedCaseAlertModel()
+            return new CaseControlsPanelModel(position, false)
             {
-                FinishingDate = CasePreview?.FinishingDate,
-                CustomerSettings = CustomerSettings
+                CanSave = false
             };
         }
+
+        #endregion
     }
 }

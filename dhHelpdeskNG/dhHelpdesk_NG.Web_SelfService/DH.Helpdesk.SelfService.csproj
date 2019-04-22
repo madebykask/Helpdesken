@@ -376,6 +376,7 @@
     <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\WorkContext.cs" />
     <Compile Include="Models\CaseTemplate\CaseTemplateTreeViewModel.cs" />
+    <Compile Include="Models\Case\CaseControlsPanelModel.cs" />
     <Compile Include="Models\Case\CaseFieldSettingJSModel.cs" />
     <Compile Include="Models\Case\CaseOverviewModel.cs" />
     <Compile Include="Models\Case\CaseLogModel.cs" />
@@ -483,6 +484,7 @@
     <Content Include="Content\img\glyphicons-halflings.png" />
     <Content Include="Content\img\throbber.gif" />
     <Content Include="Content\img\transp50.png" />
+    <Content Include="Content\js\Case\workflowStepsBehavior.js" />
     <Content Include="Content\js\Case\case.extended.js" />
     <Content Include="Content\js\Case\caseSearch.js" />
     <Content Include="Content\js\Case\caseAddFollowersSearch.js" />

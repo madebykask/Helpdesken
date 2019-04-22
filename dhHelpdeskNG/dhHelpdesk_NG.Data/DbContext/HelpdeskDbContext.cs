@@ -95,6 +95,8 @@ namespace DH.Helpdesk.Dal.DbContext
 
         public DbSet<Application> Applications { get; set; }
 
+        public DbSet<ApplicationTypeEntity> ApplicationTypes { get; set; }
+
         public DbSet<Building> Buildings { get; set; }
 
         public DbSet<BulletinBoard> BulletinBoards { get; set; }
@@ -905,7 +907,8 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new LicenseConfiguration());
             modelBuilder.Configurations.Add(new VendorConfiguration());
             modelBuilder.Configurations.Add(new ManufacturerConfiguration());
-            modelBuilder.Configurations.Add(new DH.Helpdesk.Dal.EntityConfigurations.Licenses.ApplicationConfiguration());
+            modelBuilder.Configurations.Add(new ApplicationConfiguration());
+            modelBuilder.Configurations.Add(new ApplicationTypeConfiguration());
             modelBuilder.Configurations.Add(new LicenseFileConfiguration());
             modelBuilder.Configurations.Add(new GridSettingsEntityConfiguration());
 

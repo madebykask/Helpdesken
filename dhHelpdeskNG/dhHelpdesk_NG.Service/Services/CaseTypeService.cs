@@ -18,6 +18,7 @@ namespace DH.Helpdesk.Services.Services
 
         IList<CaseType> GetCaseTypesForSetting(int customerId, bool isTakeOnlyActive = false);
         IList<CaseType> GetAllCaseTypes(int customerId, bool isTakeOnlyActive = false);
+        IList<CaseTypeOverview> GetCaseTypesRelatedFields(int customerId, bool isExtnernalSiteOnly = false, bool isTakeOnlyActive = false);
 
         CaseType GetCaseType(int id);
 
@@ -60,10 +61,10 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseType> GetCaseTypes(int customerId, bool isTakeOnlyActive = false)
         {
-			var query = ((IQueryable<CaseType>)caseTypeRepository.GetManyWithSubCaseTypes(o => o.Customer_Id == customerId))
-				.ToList()
-				.Where(o => o.Parent_CaseType_Id == null);
-			if (isTakeOnlyActive)
+            var query = ((IQueryable<CaseType>)caseTypeRepository.GetManyWithSubCaseTypes(o => o.Customer_Id == customerId))
+                .ToList()
+                .Where(o => o.Parent_CaseType_Id == null);
+            if (isTakeOnlyActive)
             {
                 query = query.Where(it => it.IsActive == 1 && it.Selectable == 1);
             }
@@ -81,6 +82,28 @@ namespace DH.Helpdesk.Services.Services
             }
 
             return query.OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<CaseTypeOverview> GetCaseTypesRelatedFields(int customerId, bool isExtnernalSiteOnly = false, bool isTakeOnlyActive = false)
+        {
+            var query = caseTypeRepository.GetMany(x => x.Customer_Id == customerId);
+
+            if (isTakeOnlyActive)
+            {
+                query = query.Where(it => it.IsActive == 1 && it.Selectable == 1);
+            }
+
+            if (isExtnernalSiteOnly)
+            {
+                query = query.Where(it => it.ShowOnExternalPage != 0);
+            }
+
+            return 
+                query.Select(x => new CaseTypeOverview()
+                {
+                    Id = x.Id,
+                    RelatedField = x.RelatedField
+                }).ToList();
         }
 
         public IList<CaseType> GetAllCaseTypes(int customerId, bool isTakeOnlyActive = false)

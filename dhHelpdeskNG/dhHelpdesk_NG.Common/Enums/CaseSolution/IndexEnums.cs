@@ -21,9 +21,9 @@
     }
 
 
-    public enum CaseRelationType
+    public enum CaseRelationType : int
     {
-        None,
+        None = 0,
         ParentAndChildren,
         OnlyDescendants,
         SelfAndDescendandts,
