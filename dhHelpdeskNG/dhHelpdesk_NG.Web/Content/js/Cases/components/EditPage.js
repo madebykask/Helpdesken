@@ -113,7 +113,7 @@ EditPage.prototype.padLeft = function (value, totalLength, padChar) {
 }
 
 EditPage.prototype.getDate = function (val) {
-    if (val == undefined || val == null || val == "")
+    if (val === undefined || val === null || val === "")
         return null;
     else {
         var dateStr = val.split(' ');
@@ -127,7 +127,6 @@ EditPage.prototype.getDate = function (val) {
 EditPage.prototype.ReturnFalse = function () {
     return false;
 };
-
 
 /*** Extended Case Area ***/
 EditPage.prototype.getECContainerTemplate = function (objId, target) {
@@ -745,13 +744,18 @@ EditPage.prototype.fetchWatchDateByDept = function (deptId) {
 
 EditPage.prototype.reExtendCaseLock = function () {
     var self = this;
-    var _parameters = self.p;
-    $.post(_parameters.caseLockExtender, { lockGuid: _parameters.caseLockGuid, extendValue: _parameters.extendValue },
-        function (data) {
-            if (data == false) {
-                clearInterval(self.timerId);
-            }
-        });
+    var p = self.p;
+
+    var data = {
+        lockGuid: p.caseLockGuid,
+        extendValue: p.extendValue
+    };
+
+    $.post(p.caseLockExtender, data, function (data) {
+        if (data === false) {
+            self.stopCaseLockTimer();
+        }
+    });
 };
 
 EditPage.prototype.resetSaving = function () {
@@ -994,7 +998,7 @@ EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
 
 EditPage.prototype.doSaveCase = function (submitUrl) {
     var self = this;
-    var action = submitUrl || '/Cases/Edit';
+    var action = submitUrl || self.p.editCaseUrl;
     self.$form.attr("action", action);
 
     if (self.case.isNew()) {
@@ -1004,12 +1008,9 @@ EditPage.prototype.doSaveCase = function (submitUrl) {
     }
 
     self.stopCaseLockTimer();
-    $.post(window.parameters.caseLockChecker, {
-        caseId: self.p.currentCaseId,
-        caseChangedTime: self.p.caseChangedTime,
-        lockGuid: self.p.caseLockGuid
-    }, function (data) {
-        if (data == true) {
+
+    self.checkCaseIsAvaialble().done(function(data) {
+        if (data) {
             self.$form.submit();
         } else {
             //Case is Locked
@@ -1155,7 +1156,6 @@ EditPage.prototype.onSaveAndCloseClick = function (e) {
     return false;
 };
 
-
 EditPage.prototype.onSaveAndNewClick = function (e) {
     e.preventDefault();
 
@@ -1215,6 +1215,7 @@ EditPage.prototype.doDeleteCase = function (c) {
 
 EditPage.prototype.onDeleteDlgClick = function (res) {
     var me = this;
+
     if (res === ConfirmationDialog.NO) {
         me.deleteDlg.hide();
         return false;
@@ -1224,20 +1225,16 @@ EditPage.prototype.onDeleteDlgClick = function (res) {
         return false;
     }
 
-    $.post(_parameters.caseLockChecker,
-        {
-            caseId: _parameters.currentCaseId,
-            caseChangedTime: _parameters.caseChangedTime,
-            lockGuid: _parameters.caseLockGuid
-        })
-        .done(callAsMe(function (data) {
-            me.showDeleteConfirmationDlg();
-            if (data == true) {
-                me.doDeleteCase(me.case);
-            } else {
-                ShowToastMessage(_parameters.deleteLockedCaseMessage, "error", true);
-            }
-        }));
+    var params = self.p;
+
+    self.checkCaseIsAvaialble().done(callAsMe(function (data) {
+        me.showDeleteConfirmationDlg();
+        if (data) {
+            me.doDeleteCase(me.case);
+        } else {
+            ShowToastMessage(params.deleteLockedCaseMessage, "error", true);
+        }
+    }));
     return true;
 };
 
@@ -1373,13 +1370,19 @@ EditPage.prototype.getLanguage = function () {
     }
 }
 
-EditPage.prototype.moveCaseToCustomer = function (caseId, customerId, isExternal) {
+EditPage.prototype.moveCaseToCustomer = function (caseId, customerId, isExternal, caseLockGuid) {
     var self = this;
+
     if (isExternal) {
-        //move case to external customer
-        var inputData = { caseId: caseId, customerId: customerId };
-        $.post('/Cases/MoveCaseToExternalCustomer', inputData, function (result) {
+        var inputData = {
+            caseId: caseId,
+            customerId: customerId,
+            lockGuid: caseLockGuid
+        };
+        
+        $.post(self.p.moveCaseToExternalCustomerUrl, $.param(inputData), function (result) {
             if (result.Success) {
+                self.stopCaseLockTimer();
                 window.location.href = result.Location || '/Cases/';
             } else {
                 self.enableMoveCaseControls(true);
@@ -1400,7 +1403,6 @@ EditPage.prototype.enableMoveCaseControls = function (state) {
     this.$moveCaseCustomerSelect.prop('disabled', !state);
     this.$moveCaseButton.prop('disabled', !state);
 };
-
 
 EditPage.prototype.buildExtendedCasePrintMarkup = function () {
     var self = this;
@@ -1446,11 +1448,79 @@ EditPage.prototype.buildExtendedCasePrintMarkup = function () {
     return printMarkup;
 };
 
+EditPage.prototype.checkCaseIsAvaialble = function() {
+    var self = this;
+    var p = self.p;
+    var data = {
+        caseId: p.currentCaseId,
+        caseChangedTime: p.caseChangedTime,
+        lockGuid: p.caseLockGuid
+    };
+
+    var jqXhr = $.post(p.caseLockChecker, $.param(data));
+    return jqXhr;
+};
+
+EditPage.prototype.markAsUnread = function () {
+    var self = this;
+    var p = self.p;
+
+    self.checkCaseIsAvaialble().done(function(res) {
+        if (res) {
+            var inputData = {
+                id: p.currentCaseId,
+                customerId: p.customerId
+            };
+            $.post(p.markAsUnreadUrl, $.param(inputData), function (data) {
+                if (data === "Success") {
+                    $('#case__Unread').val(1);
+                    ShowToastMessage(p.caseMarkedAsUnreadMessage, "notice");
+                }
+            });
+        }
+        else {
+            ShowToastMessage(p.caseOpenedByOtherUserMessage, "error", false);
+        }
+    });
+};
+
+EditPage.prototype.unlockCase = function (lockGuid, url) {
+    var self = this;
+    var p = self.p;
+    
+    $.post(p.unlockCaseUrl, $.param({ lockGUID: lockGuid }), function (data) {
+        if (data !== "Success") {
+            ShowToastMessage(p.caseUnlockErrorMessage, "Error");
+        }
+
+        if (url) {
+            self.redirectToUrl(url);
+        }
+    });
+};
+
+EditPage.prototype.unlockCaseById = function(caseId, url) {
+    var self = this;
+    var p = self.p;
+    $.post(p.unlockCaseByCaseIdUrl, $.param({ caseId: caseId }), function (data) {
+        if (data !== "Success") {
+            ShowToastMessage(p.caseUnlockErrorMessage, "Error");
+        }
+        if (url) {
+            self.redirectToUrl(url);
+        }
+    });
+};
+
+EditPage.prototype.redirectToUrl = function(url) {
+    window.location.href = url;
+};
+
 /***** Initiator *****/
 EditPage.prototype.init = function (p) {
     var self = this;
     self._inSaving = false;
-    self.p = p;
+    self.p = p; //window.parameters
 
     EditPage.prototype.Case_Field_Ids = p.caseFieldIds;
     EditPage.prototype.Case_Field_Init_Values = p.caseInitValues;
@@ -1586,21 +1656,15 @@ EditPage.prototype.init = function (p) {
         var customerId = +$('#moveCaseToCustomerId').val() || 0;
         if (customerId > 0) {
             self.enableMoveCaseControls(false);
-            $.post(p.caseLockChecker,
-                {
-                    caseId: p.currentCaseId,
-                    caseChangedTime: p.caseChangedTime,
-                    lockGuid: p.caseLockGuid
-                },
-                function (data) {
-                    if (data) {
-                        var isExternal = +($('#moveCaseToCustomerId').find(':selected').data('external') || 0);
-                        self.moveCaseToCustomer(p.currentCaseId, customerId, isExternal > 0);
-                    } else {
-                        ShowToastMessage(p.moveLockedCaseMessage, "error", true);
-                        self.enableMoveCaseControls(true);
-                    }
-                });
+            self.checkCaseIsAvaialble().done(function (data) {
+                if (data) {
+                    var isExternal = +($('#moveCaseToCustomerId').find(':selected').data('external') || 0);
+                    self.moveCaseToCustomer(p.currentCaseId, customerId, isExternal > 0, p.caseLockGuid);
+                } else {
+                    ShowToastMessage(p.moveLockedCaseMessage, "error", true);
+                    self.enableMoveCaseControls(true);
+                }
+            });
         }
     });
 

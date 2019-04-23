@@ -1,9 +1,10 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel
 @using DH.Helpdesk.Web
 @using DH.Helpdesk.Web.Common.Enums.Case
-@using DH.Helpdesk.Web.Infrastructure
 
-@{ var t = new ViewDataDictionary { { "isJS", "true" } }; }
+@{
+    var t = new ViewDataDictionary { { "isJS", "true" } };
+ }
 
 @section Styles
 {
@@ -13,7 +14,8 @@
     }
 }
 
-@section Scripts {
+@section Scripts 
+{
     @if (Model.DynamicCase != null || Model.ContainsExtendedCase || Model.HasExtendedComputerUsers)
     {
         @Scripts.Render("~/Content/js/iframeResizer")
@@ -27,7 +29,9 @@
     @Scripts.Render("~/bundles/cases/edit")
 
     <script type = "text/javascript">
-        $(document).ready(function() {
+
+        $(function () {
+
             CaseInitForm();
 
             var dc = function(text) {
@@ -100,8 +104,7 @@
                 $('#ButtonClick').val('save');
 
                 var targetUrl = $(this).attr("href");
-                if ('@Model.CaseLock.LockGUID' != '')
-                    UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
+                UnLockCase('@Model.CaseLock.LockGUID', targetUrl);
             });
 
             $("#case-action-save-close-and-split").click(function(e) {
@@ -122,51 +125,16 @@
             })*@
         });
 
-        function redirectToUrl(url) {
-            window.location.href = url;
-        }
-
         function MakeAsUnread() {
-            $.post('@Url.Content("~/Cases/IsCaseAvailable/")',
-                {
-                    caseId: '@Model.CaseLock.CaseId',
-                    caseChangedTime: '@Model.case_.ChangeTime',
-                    lockGuid: '@Model.CaseLock.LockGUID'
-                },
-                function (data) {
-                    if (data == true) {
-                        $.post('/cases/markasunread/', { id: '@Model.case_.Id', customerId: '@Model.case_.Customer_Id' }, function (data) {
-                            if (data == "Success") {
-                                $('#case__Unread').val(1);
-                                ShowToastMessage('@Translation.GetForJS("Ärendet har markerats som oläst")', "notice");
-                            }
-                        });
-                    }
-                    else {
-                        ShowToastMessage('@Translation.GetForJS("Ärendet kan inte ändras då det är öppet hos en annan användare.")', "error", false);
-                    }
-                });
+            window.page.markAsUnread();
         };
 
         function UnLockCase(lockGuid, url) {
-            $.post('@Url.Content("~/Cases/UnLockCase/")', { lockGUID: lockGuid }, function (data) {
-                if (data != "Success") {
-                    ShowToastMessage('@Translation.GetForJS("Ett fel inträffade när ärendet skulle låsas upp automatiskt. Var vänlig kontakta systemadministratören.")', "Error");
-                }
-                if (url) {
-                    redirectToUrl(url);
-                }
-            });
+            window.page.unlockCase(lockGuid, url);
         };
+
         function UnLockCaseById(caseId, url) {
-            $.post('@Url.Content("~/Cases/UnLockCaseByCaseId/")', { caseId: caseId }, function (data) {
-                if (data != "Success") {
-                    ShowToastMessage('@Translation.GetForJS("Ett fel inträffade när ärendet skulle låsas upp automatiskt. Var vänlig kontakta systemadministratören.")', "Error");
-                }
-                if (url) {
-                    redirectToUrl(url);
-                }
-            });
+            window.page.unlockCaseById(caseId, url);
         };
 
         //HIDE SHOW

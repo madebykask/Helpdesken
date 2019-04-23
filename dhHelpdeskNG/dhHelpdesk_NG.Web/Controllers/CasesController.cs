@@ -843,19 +843,19 @@ namespace DH.Helpdesk.Web.Controllers
         public JsonResult UnLockCase(string lockGUID)
         {
             if (!string.IsNullOrEmpty(lockGUID))
-                this._caseLockService.UnlockCaseByGUID(new Guid(lockGUID));
+                _caseLockService.UnlockCaseByGUID(new Guid(lockGUID));
             return Json("Success");
         }
 
         public JsonResult UnLockCaseByCaseId(int caseId)
         {
-            this._caseLockService.UnlockCaseByCaseId(caseId);
+            _caseLockService.UnlockCaseByCaseId(caseId);
             return Json("Success");
         }
 
         public JsonResult IsCaseAvailable(int caseId, DateTime caseChangedTime, string lockGuid)
         {
-            var caseLock = this._caseLockService.GetCaseLockOverviewByCaseId(caseId);
+            var caseLock = _caseLockService.GetCaseLockOverviewByCaseId(caseId);
 
 
             if (caseLock != null && 
@@ -879,12 +879,9 @@ namespace DH.Helpdesk.Web.Controllers
                 return Json(false);
         }
 
-
-   
-
         public JsonResult ReExtendCaseLock(string lockGuid, int extendValue)
         {
-            return Json(this._caseLockService.ReExtendLockCase(new Guid(lockGuid), extendValue));
+            return Json(_caseLockService.ReExtendLockCase(new Guid(lockGuid), extendValue));
         }
 
         #endregion
@@ -895,9 +892,9 @@ namespace DH.Helpdesk.Web.Controllers
         [ValidateInput(false)]
         public RedirectToRouteResult New(CaseEditInput m, int? templateId)
         {
-            int caseId = this.Save(m);
+            int caseId = Save(m);
             CheckTemplateParameters(templateId, caseId);
-            return this.RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = m.updateNotifierInformation, activeTab = m.ActiveTab });
+            return RedirectToAction("edit", "cases", new { id = caseId, redirectFrom = "save", uni = m.updateNotifierInformation, activeTab = m.ActiveTab });
         }
 
         [HttpPost]
@@ -912,7 +909,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.ActiveTab = "";
 
             int caseId = this.Save(m);
-            this.CheckTemplateParameters(templateId, caseId);
+            CheckTemplateParameters(templateId, caseId);
             string url;
 
             if (BackUrl == null)
@@ -3066,12 +3063,15 @@ namespace DH.Helpdesk.Web.Controllers
 
         #endregion
 
-        public JsonResult MoveCaseToExternalCustomer(int caseId, int customerId)
+        public JsonResult MoveCaseToExternalCustomer(int caseId, int customerId, Guid lockGuid)
         {
-            var userId = this._workContext.User.UserId;
+            var userId = _workContext.User.UserId;
             try
             {
                 _caseProcessor.MoveCaseToExternalCustomer(caseId, userId, customerId);
+
+                //Unlock Case
+                _caseLockService.UnlockCaseByGUID(lockGuid);
             }
             catch (HelpdeskException e)
             {
@@ -3083,7 +3083,7 @@ namespace DH.Helpdesk.Web.Controllers
                 return Json(new { Success = false, Error = $"Unknown error. {e.Message}".ToHtmlString() });
             }
  
-            return Json(new { Success = true, Location = "/Cases/" });
+            return Json(new { Success = true, Location = Url.Action("Index","Cases") });
         }
 
         [HttpGet]
