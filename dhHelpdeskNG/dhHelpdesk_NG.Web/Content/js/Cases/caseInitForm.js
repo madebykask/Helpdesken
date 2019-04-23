@@ -421,8 +421,7 @@ function GetComputerUserSearchOptions() {
                         process(resultList);
                     }
                 });
-            },//ajax callback
-            300);
+            }, 300);
         },
 
         matcher: function (obj) {            
@@ -797,12 +796,13 @@ function GetComputerUserSearchOptionsForIsAbout() {
         updater: function (obj) {
             var item = JSON.parse(obj);
             if (!item.isNoResult) {
+                var regardingSectionType = 1;
                 var departmentFilterFormat = $('#DepartmentFilterFormat').val();
 
                 $('#case__IsAbout_ReportedBy').val(item.num);
 
                 // Raise event about UserId changed.
-                $(document).trigger("OnUserIdChanged", [item.num]);
+                $(document).trigger("OnUserIdChanged", [item.num, regardingSectionType]);
 
 
                 // Case Is About
@@ -856,7 +856,7 @@ function GetComputerUserSearchOptionsForIsAbout() {
                 /*if (item.categoryID != null){
                     window.page.loadExtendedInitiator();
                 }*/
-                var regardingSectionType = 1;
+                
                 loadExtendedCaseSectionIfExist(item.categoryID, regardingSectionType);
 
                 return item.num;

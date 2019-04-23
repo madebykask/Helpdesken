@@ -507,7 +507,7 @@ $(function () {
 
                 var caseId = that.getCase().getCaseId().getElement();
                 var userIdValue = uId || userId.getElement().val();
-                if (userIdValue == null || userIdValue.trim() == '') {
+                if (userIdValue == null || userIdValue.trim() === '') {
                     relatedCases.getElement().hide();
                     return;
                 }
@@ -530,7 +530,7 @@ $(function () {
                 if (relatedInventory.isEmpty()) return;
 
                 var userIdValue = uId || userId.getElement().val();
-                if (userIdValue == null || userIdValue.trim() == '') {
+                if (userIdValue == null || userIdValue.trim() === '') {
                     relatedInventory.getElement().hide();
                     return;
                 }
@@ -613,7 +613,10 @@ $(function () {
                 //ClearCostCentre();
             });
 
-            dhHelpdesk.cases.utils.onEvent("OnUserIdChanged", function(e, uId) {
+            dhHelpdesk.cases.utils.onEvent("OnUserIdChanged", function (e, uId, userType) {
+                if (userType !== undefined && userType === 1)
+                    return;
+
                 checkRelatedCases(uId);
                 checkRelatedInventory(uId);
                 checkInitiatorDetails(uId);
