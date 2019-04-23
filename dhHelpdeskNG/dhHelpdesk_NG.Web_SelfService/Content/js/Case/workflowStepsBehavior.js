@@ -7,6 +7,7 @@
         this.templateId = params.templateId;
         this.customerId = params.customerId;
         this.isExtendedCase = params.isExtendedCase;
+        this.getWorkFlowStepsUrl = params.getWorkFlowStepsUrl;
         this.selectStepText = params.selectStepText;
         this.saveText = params.saveText;
 
@@ -22,11 +23,10 @@
             templateId: self.templateId
         };
 
-        //todo: add some progress indication?
         $('.workflowStepsLoader').show();
         var hasWorkflows = false;
 
-        $.getJSON('/Case/GetWorkflowSteps', $.param(data), function (res) {
+        $.getJSON(self.getWorkFlowStepsUrl, $.param(data), function (res) {
             hasWorkflows = res.items && res.items.length > 0;
             if (hasWorkflows) {
                 var options = [];
