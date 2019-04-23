@@ -1811,8 +1811,8 @@
                                             if (Model.projects.Any())
                                             {
                                                 <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Project, CaseSolutionFields.Project)">
-                                                    <td>
-                                                        @Translation.Get("Projekt", SessionFacade.CurrentLanguageId)
+                                                    <td>      
+                                                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Project, "Project")
                                                     </td>
                                                     <td>
                                                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Project, CaseSolutionFields.Project))
@@ -1850,7 +1850,7 @@
                                             {
                                                 <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Problem, CaseSolutionFields.Problem)">
                                                     <td>
-                                                        @Translation.Get("ITIL Problem", SessionFacade.CurrentLanguageId)
+                                                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Problem, "Problem")
                                                     </td>
                                                     <td>
                                                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Problem, CaseSolutionFields.Project))
