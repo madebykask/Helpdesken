@@ -20,6 +20,7 @@ using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Services.Services.CaseStatistic;
 using DH.Helpdesk.Web.Common.Enums.Case;
 using DH.Helpdesk.Web.Common.Tools.Files;
 using DH.Helpdesk.WebApi.Infrastructure;
@@ -38,14 +39,12 @@ namespace DH.Helpdesk.WebApi.Controllers
     public class CaseSaveController : BaseApiController
     {
         private readonly ICaseService _caseService;
-        private readonly ICaseFieldSettingService _caseFieldSettingService;
         private readonly ICaseLockService _caseLockService;
         private readonly ICustomerService _customerService;
         private readonly ISettingService _customerSettingsService;
         private readonly ICaseEditModeCalcStrategy _caseEditModeCalcStrategy;
         private readonly IUserService _userService;
         private readonly ISettingsLogic _settingsLogic;
-        private readonly ICaseFieldSettingsHelper _caseFieldSettingsHelper;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IEmailService _emailService;
         private readonly ICaseFileService _caseFileService;
@@ -54,29 +53,27 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IUserPermissionsChecker _userPermissionsChecker;
         private readonly ILogService _logService;
         private readonly ITemporaryFilesCache _userTempFilesStorage;
-        private readonly ICaseSolutionSettingService _caseSolutionSettingService;
         private readonly IBaseCaseSolutionService _caseSolutionService;
         private readonly IStateSecondaryService _stateSecondaryService;
         private readonly IHolidayService _holidayService;
+        private readonly ICaseStatisticService _caseStatService;
 
-        public CaseSaveController(ICaseService caseService, ICaseFieldSettingService caseFieldSettingService,
+        public CaseSaveController(ICaseService caseService,
             ICaseLockService caseLockService, ICustomerService customerService, ISettingService customerSettingsService,
             ICaseEditModeCalcStrategy caseEditModeCalcStrategy, IUserService userService, ISettingsLogic settingsLogic,
-            ICaseFieldSettingsHelper caseFieldSettingsHelper, IWorkingGroupService workingGroupService, IEmailService emailService,
+            IWorkingGroupService workingGroupService, IEmailService emailService,
             ICaseFileService caseFileService, ICustomerUserService customerUserService, ILogFileService logFileService,
             IUserPermissionsChecker userPermissionsChecker, ILogService logService, ITemporaryFilesCache userTempFilesStorage,
-            ICaseSolutionSettingService caseSolutionSettingService, IBaseCaseSolutionService caseSolutionService, IStateSecondaryService stateSecondaryService,
-            IHolidayService holidayService)
+            IBaseCaseSolutionService caseSolutionService, IStateSecondaryService stateSecondaryService,
+            IHolidayService holidayService, ICaseStatisticService caseStatService)
         {
             _caseService = caseService;
-            _caseFieldSettingService = caseFieldSettingService;
             _caseLockService = caseLockService;
             _customerService = customerService;
             _customerSettingsService = customerSettingsService;
             _caseEditModeCalcStrategy = caseEditModeCalcStrategy;
             _userService = userService;
             _settingsLogic = settingsLogic;
-            _caseFieldSettingsHelper = caseFieldSettingsHelper;
             _workingGroupService = workingGroupService;
             _emailService = emailService;
             _caseFileService = caseFileService;
@@ -85,10 +82,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             _userPermissionsChecker = userPermissionsChecker;
             _logService = logService;
             _userTempFilesStorage = userTempFilesStorage;
-            _caseSolutionSettingService = caseSolutionSettingService;
             _caseSolutionService = caseSolutionService;
             _stateSecondaryService = stateSecondaryService;
             _holidayService = holidayService;
+            _caseStatService = caseStatService;
         }
 
         /// <summary>
@@ -148,7 +145,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 if (model.CaseSolutionId.HasValue && model.CaseSolutionId > 0)
                     caseSolution = _caseSolutionService.GetCaseSolution(model.CaseSolutionId.Value);
 
-                var customerDefaults = _customerService.GetCustomerDefaults(customerId);
+                //var customerDefaults = _customerService.GetCustomerDefaults(customerId);
                 currentCase = new Case();
 
                 CreateCase(customerId, langId, currentCase, caseSolution);
@@ -245,7 +242,9 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             #region Status / Close case
             DateTime? caseLogFinishingDate = null;
-            if (model.ClosingReason.HasValue && model.ClosingReason.Value > 0 && userOverview.CloseCasePermission.ToBool())
+            var isCaseGoingToFinish = model.ClosingReason.HasValue && model.ClosingReason.Value > 0 &&
+                                   userOverview.CloseCasePermission.ToBool();
+            if (isCaseGoingToFinish)
             {
                 if (!model.FinishingDate.HasValue)
                 {
@@ -275,56 +274,89 @@ namespace DH.Helpdesk.WebApi.Controllers
             #endregion
 
             var currentUser = _userService.GetUser(UserId);
-            var customerSettings = _customerSettingsService.GetCustomerSettings(customerId);
+            var customerSettings = await _customerSettingsService.GetCustomerSettingsAsync(customerId);
             var basePath = _settingsLogic.GetFilePath(customerSettings);
-            var customer = _customerService.GetCustomer(customerId);
+            var customer = await _customerService.GetCustomerAsync(customerId);
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(User.Identity.GetTimezoneId());
+
+            #region Working time calculations - TODO: move to service and reuse in helpdesk
+
+            var actionExternalTime = 0;
+            var actionLeadTime = 0;
+
+            int[] departmentIds = null;
+            if (currentCase.Department_Id.HasValue)
+                departmentIds = new int[] { currentCase.Department_Id.Value };
+
+            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                _holidayService,
+                customer.WorkingDayStart,
+                customer.WorkingDayEnd,
+                TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId));
+
+            var workTimeCalc = workTimeCalcFactory.Build(currentCase.RegTime, utcNow, departmentIds);
 
             if (isEdit)
             {
-                int[] departmentIds = null;
-                if (currentCase.Department_Id.HasValue)
-                    departmentIds = new int[] { currentCase.Department_Id.Value };
-
-                var workTimeCalcFactory = new WorkTimeCalculatorFactory(
-                    _holidayService,
-                    customer.WorkingDayStart,
-                    customer.WorkingDayEnd,
-                    TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId));
-
-                var workTimeCalc = workTimeCalcFactory.Build(oldCase.RegTime, utcNow, departmentIds);
+                var oldCaseSubstateCount = true;
+                // offset in Minute
+                var customerTimeOffset = customerSettings.TimeZoneOffset;
 
                 StateSecondary caseStateSecondary = null;
-                if(oldCase.StateSecondary_Id.HasValue)
+                if (oldCase.StateSecondary_Id.HasValue)
                     caseStateSecondary = _stateSecondaryService.GetStateSecondary(oldCase.StateSecondary_Id.Value);
 
                 if (caseStateSecondary != null && caseStateSecondary.IncludeInCaseStatistics == 0)
                 {
+                    oldCaseSubstateCount = false;
                     var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
                         oldCase.ChangeTime,
                         utcNow,
                         currentCase.Department_Id);
                     currentCase.ExternalTime += externalTimeToAdd;
+
+                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, departmentIds, customerTimeOffset);
+                    actionExternalTime = workTimeCalc.CalculateWorkTime(
+                        oldCase.ChangeTime,
+                        utcNow,
+                        oldCase.Department_Id, customerTimeOffset);
                 }
 
-                var possibleWorktime = workTimeCalc.CalculateWorkTime(
-                    currentCase.RegTime,
-                    utcNow,
-                    currentCase.Department_Id);
+                if (isCaseGoingToFinish &&
+                    oldCaseSubstateCount &&
+                    currentCase.FinishingDate.HasValue && currentCase.FinishingDate.Value < utcNow)
+                {
+                    currentCase.ExternalTime += workTimeCalc.CalculateWorkTime(currentCase.FinishingDate.Value, utcNow, currentCase.Department_Id);
+                }
 
-                currentCase.LeadTime = possibleWorktime - currentCase.ExternalTime;
+                var oldDeptIds = oldCase.Department_Id.HasValue ? new[] { oldCase.Department_Id.Value } : null;
+
+                var endTime = isCaseGoingToFinish ? currentCase.FinishingDate.Value.ToUniversalTime() : utcNow;
+                var oldWorkTimeCalc =
+                    workTimeCalcFactory.Build(oldCase.ChangeTime, endTime, oldDeptIds, customerTimeOffset);
+                actionLeadTime = oldWorkTimeCalc.CalculateWorkTime(
+                                     oldCase.ChangeTime, endTime,
+                                     oldCase.Department_Id, customerTimeOffset) - actionExternalTime;
             }
-            /*var leadTime = 0;// TODO: add calculation
-            var actionLeadTime = 0;// TODO: add calculation
-            var actionExternalTime = 0;// TODO: add calculation*/
+
+            var possibleWorktime = workTimeCalc.CalculateWorkTime(
+                currentCase.RegTime,
+                utcNow,
+                currentCase.Department_Id);
+
+            currentCase.LeadTime = possibleWorktime - currentCase.ExternalTime;
+
+            #endregion // End Working time calculations - TODO: move to service
 
             var extraInfo = new CaseExtraInfo()
             {
                 CreatedByApp = CreatedByApplications.WebApi,
                 LeadTimeForNow = currentCase.LeadTime,
-                ActionLeadTime = currentCase.LeadTime - oldCase.LeadTime,
-                ActionExternalTime = currentCase.ExternalTime - oldCase.ExternalTime
+                ActionLeadTime = actionLeadTime,
+                ActionExternalTime = actionExternalTime
             };
+
+            currentCase.LatestSLACountDate = _caseStatService.CalculateLatestSLACountDate(oldCase?.StateSecondary_Id, model.StateSecondaryId, oldCase?.LatestSLACountDate);
 
             IDictionary<string, string> errors;
 

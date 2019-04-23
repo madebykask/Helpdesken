@@ -48,7 +48,7 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<EmailGroupService>().As<IEmailGroupService>();
             builder.RegisterType<CaseExtraFollowersService>().As<ICaseExtraFollowersService>();
             builder.RegisterType<CaseFollowUpService>().As<ICaseFollowUpService>();
-            builder.RegisterType<CaseStatisticService>().As<CaseStatisticService>();//TODO: create interface fo it
+            builder.RegisterType<CaseStatisticService>().As<ICaseStatisticService>();
             builder.RegisterType<CaseInvoiceSettingsService>().As<ICaseInvoiceSettingsService>();
             builder.RegisterType<ProjectService>().As<IProjectService>();
             builder.RegisterType<CaseFileService>().As<ICaseFileService>();

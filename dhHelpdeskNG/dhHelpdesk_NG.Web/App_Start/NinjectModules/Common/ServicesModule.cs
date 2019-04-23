@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services.Cases;
+using DH.Helpdesk.Services.Services.CaseStatistic;
 using DH.Helpdesk.Services.Services.Feedback;
 using DH.Helpdesk.Services.Services.Invoice;
 using DH.Helpdesk.Web.Infrastructure.Authentication;
@@ -191,9 +192,10 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             Bind<IWebApiService>().To<WebApiService>();
 
             Bind<ICaseDiagnosticService>().To<CaseDiagnosticService>().InRequestScope();
-
+            Bind<ICaseStatisticService>().To<CaseStatisticService>().InRequestScope();
 			// Feature toggle
-			this.Bind<IFeatureToggleService>().To<FeatureToggleService>();
+			Bind<IFeatureToggleService>().To<FeatureToggleService>();
+
 		}
 
         #endregion

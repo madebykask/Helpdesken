@@ -81,7 +81,8 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            DepartmentFilterFormat = entity.DepartmentFilterFormat,
                            DefaultCaseTemplateId = entity.DefaultCaseTemplateId,
                            SetUserToAdministrator = entity.SetUserToAdministrator.ToBool(),
-                           DefaultAdministratorId = entity.DefaultAdministrator
+                           DefaultAdministratorId = entity.DefaultAdministrator,
+                           TimeZoneOffset = entity.TimeZone_offset
             };
         }
     }

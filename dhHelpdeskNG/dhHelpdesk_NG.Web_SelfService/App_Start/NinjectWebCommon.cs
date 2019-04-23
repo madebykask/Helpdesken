@@ -11,6 +11,7 @@ using DH.Helpdesk.Services.Services.Feedback;
 using DH.Helpdesk.Common.Logger;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services.Cases;
+using DH.Helpdesk.Services.Services.CaseStatistic;
 using Ninject.Web.Common.WebHost;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
@@ -373,7 +374,7 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IConditionService>().To<ConditionService>();
             kernel.Bind<ISettingsLogic>().To<SettingsLogic>();
             kernel.Bind<ICaseSectionService>().To<CaseSectionService>();
-            
+            kernel.Bind<ICaseStatisticService>().To<CaseStatisticService>();
 
             kernel.Bind<ICaseFollowUpService>().To<CaseFollowUpService>();
             kernel.Bind<ILogProgramService>().To<LogProgramService>();

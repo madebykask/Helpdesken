@@ -77,7 +77,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ISurveyService _surveyService;
         private readonly IFinishingCauseService _finishingCauseService;
         private readonly ICaseLockService _caseLockService;
-        private readonly CaseStatisticService _caseStatService;
+        private readonly ICaseStatisticService _caseStatService;
         private readonly ICaseFilterFavoriteRepository _caseFilterFavoriteRepository;
         private readonly IMail2TicketRepository _mail2TicketRepository;
         private readonly IBusinessRuleService _businessRuleService;
@@ -120,7 +120,7 @@ namespace DH.Helpdesk.Services.Services
             ISurveyService surveyService,
             IFinishingCauseService finishingCauseService,
             ICaseLockService caseLockService,
-            CaseStatisticService caseStatService,
+            ICaseStatisticService caseStatService,
             ICaseFilterFavoriteRepository caseFilterFavoriteRepository,
             IMail2TicketRepository mail2TicketRepository,
             IBusinessRuleService businessRuleService,

@@ -959,8 +959,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     : template?.WatchDate != null
                         ? DateTime.SpecifyKind(template.WatchDate.Value, DateTimeKind.Utc)
                         : new DateTime?();
-                if (!watchDate.HasValue && template != null && template.Department_Id.HasValue &&
-                    template.Priority_Id.HasValue)
+                if (!watchDate.HasValue && template?.Department_Id != null && template.Priority_Id.HasValue)
                 {
                     var dept = _departmentService.GetDepartment(template.Department_Id.Value);
                     var priority = _priorityService.GetPriority(template.Priority_Id.Value);

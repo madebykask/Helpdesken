@@ -19,6 +19,7 @@ using DH.Helpdesk.Web.Models.Invoice;
 using DH.Helpdesk.Domain.Interfaces;
 using DH.Helpdesk.Domain.Invoice;
 using DH.Helpdesk.Services.BusinessLogic.Cases;
+using DH.Helpdesk.Services.Services.CaseStatistic;
 using DH.Helpdesk.Web.Common.Enums.Case;
 using DH.Helpdesk.Web.Common.Extensions;
 using DH.Helpdesk.Web.Common.Models.Case;
@@ -172,6 +173,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly ICaseDocumentService _caseDocumentService;
         private readonly IExtendedCaseService _extendedCaseService;
         private readonly ISendToDialogModelFactory _sendToDialogModelFactory;
+        private readonly ICaseStatisticService _caseStatService;
 
         #endregion
 
@@ -182,7 +184,7 @@ namespace DH.Helpdesk.Web.Controllers
         #region ***Constructor***
 
         public CasesController(
-            DH.Helpdesk.Services.BusinessLogic.Cases.ICaseProcessor caseProcessor,
+            ICaseProcessor caseProcessor,
             ICaseService caseService,
             ICaseSearchService caseSearchService,
             ICaseFieldSettingService caseFieldSettingService,
@@ -240,7 +242,6 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseLockService caseLockService,
             IMailTemplateService mailTemplateService,
             IWatchDateCalendarService watchDateCalendarServcie,
-            ICaseInvoiceSettingsService CaseInvoiceSettingsService,
             ICausingPartService causingPartService,
             IInvoiceArticlesModelFactory invoiceArticlesModelFactory,
             IReportServiceService reportServiceService,
@@ -253,7 +254,7 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseDocumentService caseDocumentService,
             ICaseSectionService caseSectionService,
             IExtendedCaseService extendedCaseService,
-            ISendToDialogModelFactory sendToDialogModelFactory)
+            ISendToDialogModelFactory sendToDialogModelFactory, ICaseStatisticService caseStatService)
             : base(masterDataService)
         {
             _caseProcessor = caseProcessor;
@@ -325,6 +326,7 @@ namespace DH.Helpdesk.Web.Controllers
             _caseSectionService = caseSectionService;
             _extendedCaseService = extendedCaseService;
             _sendToDialogModelFactory = sendToDialogModelFactory;
+            _caseStatService = caseStatService;
 
             _advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService,
                 caseSearchService,
@@ -3227,17 +3229,12 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 case_.RegLanguage_Id = SessionFacade.CurrentLanguageId;
             }
-
-
+            
             if (case_.IsAbout != null)
                 case_.IsAbout.Id = case_.Id;
 
-
             // Positive: Send Mail to...
-            if (caseMailSetting.DontSendMailToNotifier == false)
-                caseMailSetting.DontSendMailToNotifier = true;
-            else
-                caseMailSetting.DontSendMailToNotifier = false;
+            caseMailSetting.DontSendMailToNotifier = caseMailSetting.DontSendMailToNotifier == false;
 
             mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
 
@@ -3268,11 +3265,8 @@ namespace DH.Helpdesk.Web.Controllers
             var customerTimeOffset = customerSetting.TimeZone_offset;
             var actionExternalTime = 0;
 
-
             //If Persons_Email field not show on case, then the field should not be saved on case in db
             var customerfieldSettings = this._caseFieldSettingService.GetCaseFieldSettings(case_.Customer_Id);
-
-
 
             if (customerfieldSettings.Where(fs => 
                     fs.Name == GlobalEnums.TranslationCaseFields.Persons_EMail.ToString() && 
@@ -3282,7 +3276,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             var oldCase = new Case();
-            bool oldCaseSubstateCount = true;
+            var oldCaseSubstateCount = true;
             if (edit)
             {
                 #region Editing existing case
@@ -3341,17 +3335,10 @@ namespace DH.Helpdesk.Web.Controllers
                              utcNow,
                              oldCase.Department_Id) - newExternalTime;
 
-                        deptIds = null;
-                        if (case_.Department_Id.HasValue)
-                        {
-                            deptIds = new int[] { case_.Department_Id.Value };
-                        }
-
                         actionExternalTime = workTimeCalc.CalculateWorkTime(
                             oldCase.ChangeTime,
                             utcNow,
                             oldCase.Department_Id, customerTimeOffset);
-
                     }
                 }
 
@@ -3372,7 +3359,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (movedFromCustomerId.HasValue)
                 oldCase.ProductAreaSetDate = null;
 
-            case_.LatestSLACountDate = CalculateLatestSLACountDate(oldCase.StateSecondary_Id, case_.StateSecondary_Id, oldCase.LatestSLACountDate);
+            case_.LatestSLACountDate = _caseStatService.CalculateLatestSLACountDate(oldCase.StateSecondary_Id, case_.StateSecondary_Id, oldCase.LatestSLACountDate);
 
             //var leadTimeForHistory = 0;
             var actionLeadTime = 0;
@@ -3402,104 +3389,14 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
                 case_.FinishingDate = DatesHelper.Max(case_.RegTime, caseLog.FinishingDate.Value);
-
-                #region WorkingTime calculation
-
-                var workTimeCalcFactory = new WorkTimeCalculatorFactory(
-                    ManualDependencyResolver.Get<IHolidayService>(),
-                    curCustomer.WorkingDayStart,
-                    curCustomer.WorkingDayEnd,
-                    TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-                int[] deptIds = null;
-                if (case_.Department_Id.HasValue)
-                {
-                    deptIds = new int[] { case_.Department_Id.Value };
-                }
-
-                var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, utcNow, deptIds);
-
-                // If should count time on old status and finish date is earlier than now, add external time for time in "finish" state to now
-                if (oldCaseSubstateCount && case_.FinishingDate.Value < utcNow)
-                {
-                    case_.ExternalTime += workTimeCalc.CalculateWorkTime(case_.FinishingDate.Value, utcNow, case_.Department_Id);
-                }
-
-                var possibleWorkTime = workTimeCalc.CalculateWorkTime(
-                    case_.RegTime,
-                    utcNow,
-                    case_.Department_Id); 
-                var leadTime = possibleWorkTime - case_.ExternalTime;
-
-                case_.LeadTime = leadTime;
-
-                // ActionLeadTime Calc
-                if (oldCase != null && oldCase.Id > 0)
-                {
-                    workTimeCalcFactory = new WorkTimeCalculatorFactory(
-                        ManualDependencyResolver.Get<IHolidayService>(),
-                        curCustomer.WorkingDayStart,
-                        curCustomer.WorkingDayEnd,
-                        TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-                    deptIds = null;
-                    if (oldCase.Department_Id.HasValue)
-                    {
-                        deptIds = new int[] { oldCase.Department_Id.Value };
-                    }
-
-                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, case_.FinishingDate.Value, deptIds, customerTimeOffset);
-                    actionLeadTime = workTimeCalc.CalculateWorkTime(
-                        oldCase.ChangeTime,
-                        case_.FinishingDate.Value.ToUniversalTime(),
-                        oldCase.Department_Id, customerTimeOffset) - actionExternalTime;
-                }
-                #endregion
             }
-            else
-            {
-                #region Working Time calculation
 
-                var workTimeCalcFactory = new WorkTimeCalculatorFactory(
-                    ManualDependencyResolver.Get<IHolidayService>(),
-                    curCustomer.WorkingDayStart,
-                    curCustomer.WorkingDayEnd,
-                    TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-                int[] deptIds = null;
-                if (case_.Department_Id.HasValue)
-                {
-                    deptIds = new int[] { case_.Department_Id.Value };
-                }
+            #region WorkingTime calculation
 
-                var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, utcNow, deptIds);
-                var possibleWorktime = workTimeCalc.CalculateWorkTime(
-                    case_.RegTime,
-                    utcNow.ToUniversalTime(),
-                    case_.Department_Id);
-                var leadTime = possibleWorktime - case_.ExternalTime;
-                case_.LeadTime = leadTime;
+            actionLeadTime = CalculateActionLeadTime(curCustomer, case_, utcNow, oldCaseSubstateCount, oldCase,
+                customerTimeOffset, actionExternalTime, caseLog != null && caseLog.FinishingType > 0);
 
-                // ActionLeadTime Calc                
-                if (oldCase != null && oldCase.Id > 0)
-                {
-                    workTimeCalcFactory = new WorkTimeCalculatorFactory(
-                        ManualDependencyResolver.Get<IHolidayService>(),
-                        curCustomer.WorkingDayStart,
-                        curCustomer.WorkingDayEnd,
-                        TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
-                    deptIds = null;
-                    if (oldCase.Department_Id.HasValue)
-                    {
-                        deptIds = new int[] { oldCase.Department_Id.Value };
-                    }
-
-                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, deptIds, customerTimeOffset);
-                    actionLeadTime = workTimeCalc.CalculateWorkTime(
-                        oldCase.ChangeTime,
-                        utcNow.ToUniversalTime(),
-                        oldCase.Department_Id, customerTimeOffset) - actionExternalTime;
-                }
-
-                #endregion
-            }
+            #endregion
 
             var childCasesIds = _caseService.GetChildCasesFor(case_.Id).Where(it => !it.ClosingDate.HasValue).Select(it => it.Id).ToArray();
 
@@ -3761,47 +3658,56 @@ namespace DH.Helpdesk.Web.Controllers
             return case_.Id;
         }
 
-        private DateTime? CalculateLatestSLACountDate(int? oldSubStateId, int? newSubStateId, DateTime? oldSLADate)
+        private static int CalculateActionLeadTime(Customer curCustomer, Case case_, DateTime utcNow,
+            bool oldCaseSubstateCount,
+            Case oldCase, int customerTimeOffset, int actionExternalTime, bool hasFinishingType)
         {
-            DateTime? ret = null;
-            /* -1: Blank | 0: Non-Counting | 1: Counting */
-            var oldSubStateMode = -1;
-            var newSubStateMode = -1;
-
-            if (oldSubStateId.HasValue)
+            var actionLeadTime = 0;
+            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                ManualDependencyResolver.Get<IHolidayService>(),
+                curCustomer.WorkingDayStart,
+                curCustomer.WorkingDayEnd,
+                TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+            int[] deptIds = null;
+            if (case_.Department_Id.HasValue)
             {
-                var oldSubStatus = _stateSecondaryService.GetStateSecondary(oldSubStateId.Value);
-                if (oldSubStatus != null)
-                    oldSubStateMode = oldSubStatus.IncludeInCaseStatistics == 0 ? 0 : 1;
+                deptIds = new int[] {case_.Department_Id.Value};
             }
 
-            if (newSubStateId.HasValue)
+            var workTimeCalc = workTimeCalcFactory.Build(case_.RegTime, utcNow, deptIds);
+
+            // If should count time on old status and finish date is earlier than now, add external time for time in "finish" state to now
+            if (hasFinishingType && oldCaseSubstateCount && case_.FinishingDate.HasValue && case_.FinishingDate.Value < utcNow)
             {
-                var newSubStatus = _stateSecondaryService.GetStateSecondary(newSubStateId.Value);
-                if (newSubStatus != null)
-                    newSubStateMode = newSubStatus.IncludeInCaseStatistics == 0 ? 0 : 1;
+                case_.ExternalTime += workTimeCalc.CalculateWorkTime(case_.FinishingDate.Value, utcNow, case_.Department_Id);
             }
 
-            if (oldSubStateMode == -1 && newSubStateMode == -1)
-                ret = null;
-            else if (oldSubStateMode == -1 && newSubStateMode == 1)
-                ret = null;
-            else if (oldSubStateMode == 0 && newSubStateMode == 1)
-                ret = null;
-            else if (oldSubStateMode == 0 && newSubStateMode == -1)
-                ret = null;
-            else if (oldSubStateMode == -1 && newSubStateMode == 0)
-                ret = DateTime.UtcNow;
-            else if (oldSubStateMode == 1 && newSubStateMode == 0)
-                ret = DateTime.UtcNow;
-            else if (oldSubStateMode == 1 && newSubStateMode == -1)
-                ret = oldSLADate;
-            else if (oldSubStateMode == 1 && newSubStateMode == 1)
-                ret = oldSLADate;
-            else if (oldSubStateMode == 0 && newSubStateMode == 0)
-                ret = oldSLADate;
+            var possibleWorkTime = workTimeCalc.CalculateWorkTime(
+                case_.RegTime,
+                utcNow,
+                case_.Department_Id);
+            var leadTime = possibleWorkTime - case_.ExternalTime;
 
-            return ret;
+            case_.LeadTime = leadTime;
+
+            // ActionLeadTime Calc
+            if (oldCase != null && oldCase.Id > 0)
+            {
+                deptIds = null;
+                if (oldCase.Department_Id.HasValue)
+                {
+                    deptIds = new int[] { oldCase.Department_Id.Value };
+                }
+
+                var endTime = hasFinishingType ? case_.FinishingDate.Value.ToUniversalTime() : utcNow;
+                workTimeCalc =
+                    workTimeCalcFactory.Build(oldCase.ChangeTime, endTime, deptIds, customerTimeOffset);
+                actionLeadTime = workTimeCalc.CalculateWorkTime(
+                                     oldCase.ChangeTime, endTime,
+                                     oldCase.Department_Id, customerTimeOffset) - actionExternalTime;
+            }
+
+            return actionLeadTime;
         }
 
         private void UpdateCaseLogForCase(Case @case, CaseLog caseLog)
@@ -3915,7 +3821,7 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             }
 
-            oldCase.LatestSLACountDate = CalculateLatestSLACountDate(oldCase.StateSecondary_Id, @case.StateSecondary_Id, oldCase.LatestSLACountDate);
+            oldCase.LatestSLACountDate = _caseStatService.CalculateLatestSLACountDate(oldCase.StateSecondary_Id, @case.StateSecondary_Id, oldCase.LatestSLACountDate);
 
             // save case and case history
             oldCase.StateSecondary_Id = @case.StateSecondary_Id;
