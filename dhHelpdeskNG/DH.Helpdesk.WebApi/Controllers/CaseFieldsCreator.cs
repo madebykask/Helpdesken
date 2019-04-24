@@ -11,6 +11,7 @@ using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Models.Case;
@@ -1093,7 +1094,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     field = new BaseCaseField<string>()
                     {
                         Name = CaseFieldsNamesApi.Log_ExternalText,
-                        Value = "",
+                        Value = template?.Text_External ?? "",
                         Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_External, languageId, customerId, caseFieldTranslations),
                         Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_External, caseFieldSettings),
                         Section = CaseSectionType.Communication
@@ -1115,7 +1116,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     field = new BaseCaseField<string>()
                     {
                         Name = CaseFieldsNamesApi.Log_InternalText,
-                        Value = template != null ? template.Text_Internal : "",
+                        Value = template?.Text_Internal ?? "",
                         Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, languageId, customerId, caseFieldTranslations),
                         Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, caseFieldSettings),
                         Section = CaseSectionType.Communication

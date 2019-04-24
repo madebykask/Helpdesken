@@ -182,7 +182,7 @@ export class CaseEditComponent {
       });
     }
 
-    getCaseTitle() : string {
+    getCaseTitle(): string {
       return this.caseDataHelpder.getCaseTitle(this.caseData);
     }
 

@@ -141,14 +141,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                 if (!userOverview.CreateCasePermission.ToBool())
                     SendResponse($"User {UserName} is not allowed to create case.", HttpStatusCode.Forbidden);
 
-                CaseSolution caseSolution = null;
-                if (model.CaseSolutionId.HasValue && model.CaseSolutionId > 0)
-                    caseSolution = _caseSolutionService.GetCaseSolution(model.CaseSolutionId.Value);
+                var caseSolution = model.CaseSolutionId.HasValue && model.CaseSolutionId > 0
+                    ? _caseSolutionService.GetCaseSolution(model.CaseSolutionId.Value)
+                    : null;
 
                 //var customerDefaults = _customerService.GetCustomerDefaults(customerId);
-                currentCase = new Case();
-
-                CreateCase(customerId, langId, currentCase, caseSolution);
+                currentCase = CreateCase(customerId, langId, caseSolution, utcNow);
 
                 if (model.CaseGuid.HasValue)
                     currentCase.CaseGUID = model.CaseGuid.Value;
@@ -505,20 +503,26 @@ namespace DH.Helpdesk.WebApi.Controllers
             return Ok(currentCase.Id);
         }
 
-        private void CreateCase(int cid, int langId, Case currentCase, CaseSolution caseSolution)
+        private Case CreateCase(int cid, int langId, CaseSolution caseSolution, DateTime utcNow)
         {
-            currentCase.RegUserId = ""; // adUser.GetUserFromAdPath(),
-            currentCase.RegUserDomain = ""; // adUser.GetDomainFromAdPath()
-            currentCase.RegLanguage_Id = langId;
-            currentCase.RegistrationSource = caseSolution?.RegistrationSource ?? (int)CaseRegistrationSource.Administrator;
-            currentCase.CaseGUID = new Guid();
-            currentCase.IpAddress = GetClientIp();
-            currentCase.Customer_Id = cid;
-            currentCase.User_Id = UserId;
-            currentCase.RegTime = DateTime.UtcNow;
-            currentCase.CaseResponsibleUser_Id = UserId;
-            currentCase.CaseSolution_Id = (caseSolution?.Id ?? 0) == 0 ? null : caseSolution?.Id;
-            currentCase.CurrentCaseSolution_Id = caseSolution?.Id;
+            var currentCase = new Case
+            {
+                RegUserId = "",
+                RegUserDomain = "",
+                RegLanguage_Id = langId,
+                RegistrationSource = caseSolution?.RegistrationSource ?? (int) CaseRegistrationSource.Administrator,
+                CaseGUID = new Guid(),
+                IpAddress = GetClientIp(),
+                Customer_Id = cid,
+                User_Id = UserId,
+                RegTime = utcNow,
+                CaseResponsibleUser_Id = UserId,
+                CaseSolution_Id = (caseSolution?.Id ?? 0) == 0 ? null : caseSolution?.Id,
+                CurrentCaseSolution_Id = caseSolution?.Id
+            };
+            // adUser.GetUserFromAdPath(),
+            // adUser.GetDomainFromAdPath()
+            return currentCase;
         }
 
         private CaseMailSetting GetCaseMailSetting(Case currentCase, Customer customer, CustomerSettings customerSettings)

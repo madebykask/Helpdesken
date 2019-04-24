@@ -1,16 +1,15 @@
-import { Component, Input, ViewChild, ElementRef, Renderer2 } from "@angular/core";
-import { BaseControl } from "../base-control";
-import { FormStatuses } from "src/app/modules/shared-module/constants";
-import { switchMap, takeUntil } from "rxjs/operators";
-import { of } from "rxjs";
+import { Component, Input, ViewChild, ElementRef, Renderer2, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { BaseControl } from '../base-control';
+import { MbscTextarea } from '@mobiscroll/angular';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'case-textarea-control',
     templateUrl: './case-textarea-control.component.html',
     styleUrls: ['./case-textarea-control.component.scss']
   })
-  export class CaseTextareaComponent extends BaseControl<string> {
-    @ViewChild('input') control: any;
+  export class CaseTextareaComponent extends BaseControl<string> implements OnInit, AfterViewInit, OnDestroy {
+    @ViewChild('input') control: MbscTextarea;
     @Input() disabled = false;
 
     constructor(private elem: ElementRef, private renderer: Renderer2) {
@@ -21,7 +20,7 @@ import { of } from "rxjs";
       this.init(this.field);
       this.updateDisabledState();
 
-      this.initEvents()
+      this.initEvents();
     }
 
     ngAfterViewInit(): void {
@@ -36,25 +35,20 @@ import { of } from "rxjs";
     ngOnDestroy(): void {
       this.onDestroy();
     }
-     
+
     private updateDisabledState() {
       this.control.disabled = this.formControl.disabled || this.disabled;
     }
 
-    private get isFormControlDisabled() {
-      return this.formControl.status == FormStatuses.DISABLED;
-    }
-    
     private initEvents() {
       this.formControl.statusChanges // track disabled state in form
-        .pipe(switchMap((e: any) => {
-            if (this.control.disabled != this.isFormControlDisabled) {
-              this.updateDisabledState();
-            }
-            return of(e);
-          }),
+        .pipe(
           takeUntil(this.destroy$)
         )
-        .subscribe();
+        .subscribe((e) => {
+          if (this.control.disabled !== this.formControl.isDisabled) {
+            this.updateDisabledState();
+          }
+        });
     }
   }

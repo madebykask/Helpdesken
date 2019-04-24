@@ -1,5 +1,6 @@
-import { FormControl, ValidatorFn } from "@angular/forms";
-import { BehaviorSubject } from "rxjs";
+import { FormControl, ValidatorFn } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+import { FormStatuses } from 'src/app/modules/shared-module/constants';
 
 export class CaseFormControl extends FormControl {
   label: string;
@@ -14,6 +15,10 @@ export class CaseFormControl extends FormControl {
 
   public get isSubmitted() {
     return this.isSubmitted$.value;
+  }
+
+  public get isDisabled() {
+    return this.status === FormStatuses.DISABLED;
   }
 
   public submit(value = true) {

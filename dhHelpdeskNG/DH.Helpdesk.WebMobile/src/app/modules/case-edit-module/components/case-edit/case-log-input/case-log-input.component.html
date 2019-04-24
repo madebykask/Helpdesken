@@ -1,11 +1,13 @@
 
 <ng-container [formGroup]="form" *ngIf="isExternalLogFieldVisible || isInternalLogFieldVisible">
   
-  <mbsc-textarea *ngIf="isExternalLogFieldVisible" #external
-                [formControlName]="externalLogField.name">{{ externalLogLabel }}</mbsc-textarea>
+  <case-textarea-control *ngIf="isExternalLogFieldVisible" 
+          [field]="externalLogField" 
+          [form]="form"></case-textarea-control>
 
-  <mbsc-textarea *ngIf="isInternalLogFieldVisible" #internal
-                 [formControlName]="internalLogField.name">{{ internalLogLabel }}</mbsc-textarea>
+  <case-textarea-control *ngIf="isInternalLogFieldVisible" 
+          [field]="internalLogField" 
+          [form]="form"></case-textarea-control>
                    
   <ng-container *ngIf="isAttachedFilesVisible">
     <div id="log-files" *ngIf="files && files.length > 0">

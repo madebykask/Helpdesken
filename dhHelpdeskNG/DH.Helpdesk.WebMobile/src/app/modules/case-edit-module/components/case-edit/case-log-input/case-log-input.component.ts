@@ -15,9 +15,6 @@ import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms';
   styleUrls: ['./case-log-input.component.scss']
 })
 export class CaseLogInputComponent implements OnInit {
-  @ViewChild('external') externalCtrl: any
-  @ViewChild('internal') internalCtrl: any
-  
   @Input() caseKey: string;
   @Input() form: CaseFormGroup;
   @Input() caseData: CaseEditInputModel;
@@ -25,11 +22,11 @@ export class CaseLogInputComponent implements OnInit {
 
   files: string[] = [];
   caseFieldsNames = CaseFieldsNames;
-  internalLogLabel: string = '';
-  externalLogLabel: string = '';
-  isExternalLogFieldVisible: boolean = false;
-  isInternalLogFieldVisible: boolean = false;
-  isAttachedFilesVisible:boolean = false;  
+  internalLogLabel = '';
+  externalLogLabel = '';
+  isExternalLogFieldVisible = false;
+  isInternalLogFieldVisible = false;
+  isAttachedFilesVisible = false;
 
   externalLogField: BaseCaseField<string> = null;
   internalLogField: BaseCaseField<string> = null;
@@ -44,7 +41,6 @@ export class CaseLogInputComponent implements OnInit {
   fileListSettings: MbscListviewOptions = {
     enhance: true,
     swipe: true,
-    //todo: add swipe effects for delete
     stages: [{
       percent: -30,
       color: 'red',
@@ -54,9 +50,8 @@ export class CaseLogInputComponent implements OnInit {
     }]
   };
 
-  constructor(private caseDataHelpder: CaseEditDataHelper, // TODO: review caseDataHelper usage
-              private caseLogApiService: CaseLogApiService,
-              private renderer: Renderer2) {
+  constructor(private caseDataHelpder: CaseEditDataHelper,
+              private caseLogApiService: CaseLogApiService) {
   }
 
   ngOnInit() {
@@ -64,39 +59,12 @@ export class CaseLogInputComponent implements OnInit {
     this.internalLogField = this.getField(CaseFieldsNames.Log_InternalText);
     this.logFileField = this.getField(CaseFieldsNames.Log_FileName);
 
-    if (this.externalLogField) {
-      this.externalLogLabel = this.externalLogField.label + (this.externalLogField.isRequired ? '*' : '');
-      this.isExternalLogFieldVisible = !this.externalLogField.isHidden;
-    }
-
-    if (this.internalLogField) {
-      this.internalLogLabel = this.internalLogField.label + (this.internalLogField.isRequired ? '*' : '');
-      this.isInternalLogFieldVisible = !this.internalLogField.isHidden;
-    }
-
-    if (this.logFileField) {
-      this.isAttachedFilesVisible = !this.logFileField.isHidden;
-    }
+    this.isExternalLogFieldVisible =  !this.internalLogField.isHidden;
+    this.isInternalLogFieldVisible =  !this.externalLogField.isHidden;
+    this.isAttachedFilesVisible = !this.logFileField.isHidden;
   }
 
   ngAfterViewInit(): void {
-
-    if (this.isExternalLogFieldVisible && this.externalLogField.maxLength) {
-      this.applyMaxLength(this.externalCtrl, this.externalLogField.maxLength);
-    }
-
-    if (this.isInternalLogFieldVisible && this.internalLogField.maxLength) {
-      this.applyMaxLength(this.internalCtrl, this.internalLogField.maxLength);
-    }
-  }
-
-  private applyMaxLength(ctrl, maxLength) {
-    if (ctrl === undefined) { return; }
-
-    const inputControl = ctrl.initialElem.nativeElement.querySelector('textarea');
-    if (inputControl) {
-      this.renderer.setAttribute(inputControl, 'maxlength', maxLength.toString());
-    }
   }
 
   processFileUploaded(file:string) {
@@ -115,19 +83,19 @@ export class CaseLogInputComponent implements OnInit {
   getField(name: string): BaseCaseField<any> {
     return this.caseDataHelpder.getField(this.caseData, name);
   }
-  
+
   onFileDelete(event){
-    let index = +event.index ;
-    let fileName = this.files[index];
-    
-    //todo:add delete confirmation
+    const index = +event.index ;
+    const fileName = this.files[index];
+
+    // todo:add delete confirmation
     this.caseLogApiService.deleteTempLogFile(this.caseKey, fileName).pipe(
       take(1)
     ).subscribe(res => {
       if (res) {
         this.files.splice(index, 1);
       }
-    })
+    });
   }
 
 }
