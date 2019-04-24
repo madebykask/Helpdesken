@@ -507,9 +507,9 @@ namespace DH.Helpdesk.SelfService.Controllers
                 model.NewCase.CaseSolution_Id = caseTemplateId;
                 model.NewCase.CurrentCaseSolution_Id = caseTemplate?.Id;
 
-				model.Information = caseTemplate.Information;
+                model.Information = caseTemplate.Information;
 
-				if (!string.IsNullOrEmpty(caseTemplate.Text_External) ||
+                if (!string.IsNullOrEmpty(caseTemplate.Text_External) ||
                     !string.IsNullOrEmpty(caseTemplate.Text_Internal) || caseTemplate.FinishingCause_Id.HasValue)
                 {
                     model.CaseLog = new CaseLog
@@ -1216,7 +1216,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             if (currentCase.FinishingDate.HasValue)
             {
-				string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                 this._caseService.Activate(currentCase.Id, 0, adUser, CreatedByApplications.SelfService5, out errors);
                 caseIsActivated = true;
                 currentCase = _caseService.GetCaseById(caseId);
@@ -1230,14 +1230,14 @@ namespace DH.Helpdesk.SelfService.Controllers
                 departmentIds = new int[] { currentCase.Department_Id.Value };
 
 
-			var timeZone = TimeZoneInfo.GetSystemTimeZones().First(o => o.BaseUtcOffset.TotalMinutes == cs.TimeZone_offset);
+            var timeZone = TimeZoneInfo.GetSystemTimeZones().First(o => o.BaseUtcOffset.TotalMinutes == cs.TimeZone_offset);
 
 
-			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                 ManualDependencyResolver.Get<IHolidayService>(),
                 currentCustomer.WorkingDayStart,
                 currentCustomer.WorkingDayEnd,
-				timeZone);
+                timeZone);
 
             var utcNow = DateTime.UtcNow;
             var workTimeCalc = workTimeCalcFactory.Build(currentCase.RegTime, utcNow, departmentIds);

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DH.Helpdesk.Domain.ExtendedCaseEntity
+﻿namespace DH.Helpdesk.Domain.ExtendedCaseEntity
 {
     public class ExtendedCaseValueEntity : Entity
     {     
