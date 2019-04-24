@@ -2014,7 +2014,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 _caseExtraFollowersService.SaveExtraFollowers(newCase.Id, extraFollowers, null);
             }
 
-            _caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase);
+            _caseService.SendCaseEmail(newCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog);
 
             caseNumber = newCase.CaseNumber;
             return newCase.Id;

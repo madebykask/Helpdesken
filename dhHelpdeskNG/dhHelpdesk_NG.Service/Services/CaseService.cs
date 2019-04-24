@@ -1555,7 +1555,7 @@ namespace DH.Helpdesk.Services.Services
 
         private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid, int stateHelper, TimeZoneInfo userTimeZone)
         {
-            List<Field> ret = new List<Field>();
+           var ret = new List<Field>();
 
             var userLocal_RegTime = TimeZoneInfo.ConvertTimeFromUtc(c.RegTime, userTimeZone);
 

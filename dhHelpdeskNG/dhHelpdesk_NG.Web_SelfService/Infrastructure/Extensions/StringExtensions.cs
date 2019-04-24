@@ -358,7 +358,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             if (lowerStr.IndexOf("[#10]") > 0 && SessionFacade.CurrentUserIdentity != null)
             {
                 res = Regex.Replace(res, @"\[#10\]", 
-                                    SessionFacade.CurrentUserIdentity.Domain == null? string.Empty:SessionFacade.CurrentUserIdentity.Domain, 
+                                    SessionFacade.CurrentUserIdentity.Domain == null? string.Empty : SessionFacade.CurrentUserIdentity.Domain, 
                                     RegexOptions.IgnoreCase);
                 lowerStr = res.ToLower();
             }
@@ -367,7 +367,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             if (lowerStr.IndexOf("[#11]") > 0 && SessionFacade.CurrentUserIdentity != null)
             {
                 res = Regex.Replace(res, @"\[#11\]", 
-                                    SessionFacade.CurrentUserIdentity.EmployeeNumber == null? string.Empty:SessionFacade.CurrentUserIdentity.EmployeeNumber, 
+                                    SessionFacade.CurrentUserIdentity.EmployeeNumber == null? string.Empty : SessionFacade.CurrentUserIdentity.EmployeeNumber, 
                                     RegexOptions.IgnoreCase);
                 lowerStr = res.ToLower();
             }
