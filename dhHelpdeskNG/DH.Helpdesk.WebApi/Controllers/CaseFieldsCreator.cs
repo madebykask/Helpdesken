@@ -61,7 +61,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             IList<CaseFieldSetting> caseFieldSettings,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, Case currentCase,
             CaseSolution template,
-            int languageId, IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model);
+            int languageId, IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model,
+            CustomerSettings customerSettings);
     }
 
     public class CaseFieldsCreator : ICaseFieldsCreator
@@ -1023,7 +1024,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             IList<CaseFieldSetting> caseFieldSettings,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, Case currentCase,
             CaseSolution template,
-            int languageId, IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model)
+            int languageId, IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model,
+            CustomerSettings customerSettings)
         {
             IBaseCaseField field;
             if (userOverview.CloseCasePermission.ToBool())
@@ -1076,7 +1078,8 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.FinishingDate, caseFieldSettings)
                     };
 
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, currentCase?.Id, caseTemplateSettings))
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, currentCase?.Id, caseTemplateSettings) ||
+                        customerSettings.DisableCaseEndDate)
                         AddReadOnlyOption(field.Options);
 
                     if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.FinishingDate))

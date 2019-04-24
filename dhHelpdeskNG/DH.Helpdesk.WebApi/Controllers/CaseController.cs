@@ -117,7 +117,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _caseFieldsCreator.CreateComputerInfoSection(cid, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model);
             _caseFieldsCreator.CreateCaseInfoSection(cid, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model, customerUserSetting);
             _caseFieldsCreator.CreateCaseManagementSection(cid, userOverview, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model, customerUserSetting, customerSettings);
-            _caseFieldsCreator.CreateCommunicationSection(cid, userOverview, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model);
+            _caseFieldsCreator.CreateCommunicationSection(cid, userOverview, caseFieldSettings, null, currentCase, null, languageId, caseFieldTranslations, model, customerSettings);
 
             //calc case edit mode
             model.EditMode = _caseEditModeCalcStrategy.CalcEditMode(cid, UserId, currentCase); // remember to apply isCaseLocked check on client
@@ -166,7 +166,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _caseFieldsCreator.CreateCaseManagementSection(cid, userOverview, caseFieldSettings, caseTemplateSettings, null, caseTemplate, langId,
                 caseFieldTranslations, model, customerUserSetting, customerSettings, customerDefaults);
             _caseFieldsCreator.CreateCommunicationSection(cid, userOverview, caseFieldSettings, caseTemplateSettings, null, caseTemplate, langId,
-                caseFieldTranslations, model);
+                caseFieldTranslations, model, customerSettings);
 
             model.EditMode = Web.Common.Enums.Case.AccessMode.FullAccess;
             return Ok(model);

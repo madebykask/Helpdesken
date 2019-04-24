@@ -1,12 +1,12 @@
-import { Component, Input, ViewChild, Inject, LOCALE_ID } from "@angular/core";
-import { BaseControl } from "../base-control";
-import { MbscCalendarOptions, MbscCalendar } from "@mobiscroll/angular";
-import { switchMap, takeUntil } from "rxjs/operators";
-import { of } from "rxjs";
-import { DateTime } from "luxon";
-import { FormStatuses } from "src/app/modules/shared-module/constants";
-import { TranslateService } from "@ngx-translate/core";
-import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
+import { Component, Input, ViewChild } from '@angular/core';
+import { BaseControl } from '../base-control';
+import { MbscCalendarOptions, MbscCalendar } from '@mobiscroll/angular';
+import { switchMap, takeUntil } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { DateTime } from 'luxon';
+import { FormStatuses } from 'src/app/modules/shared-module/constants';
+import { TranslateService } from '@ngx-translate/core';
+import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
 
 @Component({
     selector: 'case-date-control',
@@ -31,12 +31,12 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
       setOnDayTap: true,
       formatValue: (data) => {
         // default format is mm/dd/yy so data contains [m,d,y]
-        let dateIso = data[2] + '-' + (data[0] < 9 ? '0' : '') + (data[0] + 1) + '-' + (data[1] < 10 ? '0' : '') + data[1];
+        const dateIso = data[2] + '-' + (data[0] < 9 ? '0' : '') + (data[0] + 1) + '-' + (data[1] < 10 ? '0' : '') + data[1];
         return DateUtil.formatDate(dateIso, DateTime.DATE_SHORT);
       },
       parseValue: (value?: string) => {
-        let d = value ? DateTime.fromISO(value) : DateTime.local() // Default value
-        return [d.month -1, d.day, d.year];
+        let d = value ? DateTime.fromISO(value) : DateTime.local(); // Default value
+        return [d.month - 1, d.day, d.year];
       },
       onInit: (event, inst) => {
         if (this.formControl.disabled || this.disabled) {
@@ -48,7 +48,7 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
       }
     }
 
-    constructor(@Inject(LOCALE_ID) locale: string, private ngxTranslateService: TranslateService) {
+    constructor(private ngxTranslateService: TranslateService) {
       super();
     }
 
@@ -56,7 +56,7 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
       this.value = this.field.value;
       // this.updateDisabledState();
       this.init(this.field);
-      this.initEvents()
+      this.initEvents();
     }
 
     ngOnDestroy(): void {
@@ -83,7 +83,7 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
       )
       .subscribe();
 
-      this.formControl.valueChanges 
+      this.formControl.valueChanges
         .pipe(switchMap((v?: any) => {
             this.value = v;
             return of(v);

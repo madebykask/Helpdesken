@@ -28,8 +28,9 @@ import { CaseFilesApiService } from '../../services/api/case/case-files-api.serv
 import { NotifierType } from 'src/app/modules/shared-module/models/notifier/notifier.model';
 import { CaseTypesService } from 'src/app/services/case-organization/caseTypes-service';
 import { CaseFormControl, CaseFormGroup, NotifierFormFieldsSetter } from 'src/app/modules/shared-module/models/forms';
-import { MbscFormOptions, MbscForm } from '@mobiscroll/angular';
+import { MbscFormOptions } from '@mobiscroll/angular';
 import { ProductAreasService } from 'src/app/services/case-organization/productAreas-service';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-case-edit',
@@ -316,7 +317,6 @@ export class CaseEditComponent {
 
       // NOTE: remember to update case data reducer when adding new fields
       switch (v.name) {
-
         case CaseFieldsNames.RegionId: {
           optionsHelper.getDepartments().pipe(
             take(1),
@@ -327,7 +327,6 @@ export class CaseEditComponent {
           });
           break;
         }
-
         case CaseFieldsNames.DepartmentId: {
           optionsHelper.getOUs().pipe(
             take(1),
@@ -336,7 +335,6 @@ export class CaseEditComponent {
           });
           break;
         }
-
         case CaseFieldsNames.IsAbout_RegionId: {
           optionsHelper.getIsAboutDepartments().pipe(
             take(1),
@@ -347,7 +345,6 @@ export class CaseEditComponent {
           });
           break;
         }
-
         case CaseFieldsNames.IsAbout_DepartmentId: {
           optionsHelper.getIsAboutOUs().pipe(
             take(1),
@@ -356,7 +353,6 @@ export class CaseEditComponent {
           });
           break;
         }
-
         case CaseFieldsNames.CaseTypeId: {
           if (v.value) {
             this.caseTypesService.getCaseType(v.value).pipe(
@@ -388,7 +384,6 @@ export class CaseEditComponent {
           });
           break;
         }
-
         case CaseFieldsNames.WorkingGroupId: {
           optionsHelper.getPerformers(false).pipe(
             take(1)
@@ -407,7 +402,6 @@ export class CaseEditComponent {
           }
           break;
         }
-
         case CaseFieldsNames.StateSecondaryId: {
           if (v.value) {
             this.stateSecondariesService.getStateSecondary(v.value)
@@ -427,7 +421,6 @@ export class CaseEditComponent {
           }
           break;
         }
-
         case CaseFieldsNames.ProductAreaId: {
           if (v.value) {
             this.productAreasService.getProductArea(v.value).pipe(
@@ -439,7 +432,17 @@ export class CaseEditComponent {
               if (ct && ct.priorityId != null) {
                 this.form.controls[CaseFieldsNames.PriorityId].setValue(ct.priorityId);
               }
-            })
+            });
+          }
+          break;
+        }
+        case CaseFieldsNames.ClosingReason: {
+          if (v.value) {
+            if (!this.form.controls[CaseFieldsNames.FinishingDate].value) {
+              this.form.controls[CaseFieldsNames.FinishingDate].setValue(DateTime.local().toString());
+            }
+          } else {
+            this.form.controls[CaseFieldsNames.FinishingDate].setValue('');
           }
         }
       }
