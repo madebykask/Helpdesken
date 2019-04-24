@@ -9,7 +9,7 @@ export let CaseFieldsCustomErrorMessages = {
 
 export let CaseFieldsDefaultErrorMessages = {
   required : 'Fältet är obligatoriskt',
-  maxlength: 'The maximum length is {0} character(s).'
+  maxlength: 'Max antal tecken är {0}'
 };
 
 

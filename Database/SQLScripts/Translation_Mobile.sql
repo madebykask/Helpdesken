@@ -329,5 +329,9 @@ insert into tbltext (id, TextString, TextType) VALUES (10050, 'Avsluta ärenden'
 If not exists (select * from tblTextTranslation where text_id = 10050 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10050, 2, 'Close case')
 
+If not exists (select * from tbltext where id = 10051)
+insert into tbltext (id, TextString, TextType) VALUES (10051, 'Max antal tecken är {0}', @MobileType)
 
+If not exists (select * from tblTextTranslation where text_id = 10051 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10051, 2, 'The maximum length is {0} character(s)')
 
