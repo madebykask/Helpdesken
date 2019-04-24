@@ -565,7 +565,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         .Select(gr =>
                             new KeyValuePair<string, string>(gr.Key, string.Join(";", gr.Select(x => x.EMailAddress))))
                         .ToList()
-                    : null;
+                    : new List<KeyValuePair<string, string>>();
 
                 // Registration source: values 
                 field = new BaseCaseField<int>()

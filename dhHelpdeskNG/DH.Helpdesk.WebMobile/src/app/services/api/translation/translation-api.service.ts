@@ -4,7 +4,7 @@ import { Language } from '../../../models';
 import { Observable } from 'rxjs/Observable';
 import { HttpApiServiceBase } from '../../../modules/shared-module/services/api/httpServiceBase';
 import { LocalStorageService } from '../../local-storage';
-import { take, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class TranslationApiService extends HttpApiServiceBase {
@@ -15,7 +15,7 @@ export class TranslationApiService extends HttpApiServiceBase {
 
   getLanguages(): Observable<Language[]> {
     // console.log(">>>loading languages");
-    var methodUrl = this.buildResourseUrl('/api/Translation/Languages');
+    const methodUrl = this.buildResourseUrl('/api/Translation/Languages');
     return this.getJson<object[]>(methodUrl, null, true)
       .pipe(
         map((res: any[]) => res.map((lang: any) => new Language(lang.id, lang.languageId, lang.name)))
@@ -23,8 +23,8 @@ export class TranslationApiService extends HttpApiServiceBase {
   }
 
   getTranslations(lang: string): Observable<any> {
-    //console.log(">>>loading translation for language: " + lang);
-    var methodUrl = this.buildResourseUrl(`/api/Translation/mobile/${lang}`, null, false, false);
+    // console.log(">>>loading translation for language: " + lang);
+    const methodUrl = this.buildResourseUrl(`/api/Translation/mobile/${lang}`, null, false, false);
     return this.getJson<any>(methodUrl, null, true);
   }
 }

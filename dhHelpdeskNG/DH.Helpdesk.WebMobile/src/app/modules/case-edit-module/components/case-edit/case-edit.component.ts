@@ -31,6 +31,7 @@ import { CaseFormControl, CaseFormGroup, NotifierFormFieldsSetter } from 'src/ap
 import { MbscFormOptions } from '@mobiscroll/angular';
 import { ProductAreasService } from 'src/app/services/case-organization/productAreas-service';
 import { DateTime } from 'luxon';
+import { CaseFieldsDefaultErrorMessages } from '../../logic/constants/case-fields-error-messages.constants';
 
 @Component({
   selector: 'app-case-edit',
@@ -91,7 +92,7 @@ export class CaseEditComponent {
                 private stateSecondariesService: StateSecondariesService,
                 private caseTypesService: CaseTypesService,
                 private caseWatchDateApiService: CaseWatchDateApiService,
-                private translateService : TranslateService,
+                private translateService: TranslateService,
                 private localStorage:  LocalStorageService,
                 private caseFileService: CaseFilesApiService,
                 private productAreasService: ProductAreasService) {
@@ -140,6 +141,8 @@ export class CaseEditComponent {
           this.isNewCase = true;
           this.loadTemplate(this.templateId);
       }
+
+      this.translateMessages();
     }
 
    loadCaseData(caseId: number): any {
@@ -256,6 +259,16 @@ export class CaseEditComponent {
       this.caseFileService.deleteTemplFiles(caseId).pipe(
         take(1)
       ).subscribe();
+    }
+
+    private translateMessages() {
+      Object.keys(CaseFieldsDefaultErrorMessages)
+        .forEach(key => {
+          if (CaseFieldsDefaultErrorMessages[key] !==  null) {
+            const translation = this.translateService.instant(CaseFieldsDefaultErrorMessages[key]);
+            CaseFieldsDefaultErrorMessages[key] = translation;
+          }
+        });
     }
 
     private loadTemplate(templateId: number) {
@@ -477,7 +490,7 @@ export class CaseEditComponent {
             }
 
             if (field.maxLength != null) {
-              validators.push(Validators.maxLength(field.maxLength))
+              validators.push(Validators.maxLength(field.maxLength));
             }
           }
 

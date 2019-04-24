@@ -3,10 +3,8 @@ import { mobiscroll } from '@mobiscroll/angular';
 import { config } from '@env/environment';
 import { AuthenticationStateService } from './services/authentication';
 import { LoggerService } from './services/logging';
-import { Router, NavigationStart } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
-import { InfoLoggerService } from './services/logging/info-logger.service';
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,19 +14,18 @@ import { InfoLoggerService } from './services/logging/info-logger.service';
 export class AppComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject();
   pageSettings = {};
-  
+
   bottomMenuSettings = {
     type: 'bottom',
   };
-  
-  version = config.version;
-  //navStart: Observable<NavigationStart>;
 
-  constructor(private _authenticationService: AuthenticationStateService, 
+  version = config.version;
+  // navStart: Observable<NavigationStart>;
+
+  constructor(private _authenticationService: AuthenticationStateService,
     private _logger: LoggerService,
-    private _infoLogger: InfoLoggerService,
     private _router: Router) {
-    
+
     mobiscroll.settings = { theme: 'ios', lang: 'en', labelStyle: 'stacked' };
 
     /*
@@ -38,22 +35,22 @@ export class AppComponent implements OnInit, OnDestroy {
     ) as Observable<NavigationStart>;*/
   }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     // this.navStart.subscribe(evt => this._infoLogger.log(`Navigation started: ${evt.url}`));
 
     const version = this._authenticationService.getVersion();
     const isAuthenticated = this._authenticationService.isAuthenticated();
-    
+
     if (isAuthenticated && config.version !== version) {
       this._logger.log('>>>>>>>>>>>>>>>>Logout: version changed');
       this._router.navigate(['/login']);
-    }   
-    
+    }
+
     // Checks if should display install popup notification:
     /*
     if (this.isIos() && this.isInStandaloneMode()) {
       // logout or refresh token on open.
-    } 
+    }
     */
   }
 

@@ -1,5 +1,5 @@
-import { forkJoin, throwError } from 'rxjs'
-import { TranslateService as NgxTranslateService, TranslateLoader } from '@ngx-translate/core'
+import { forkJoin, throwError } from 'rxjs';
+import { TranslateService as NgxTranslateService } from '@ngx-translate/core';
 import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 import { TranslationApiService } from 'src/app/services/api/translation/translation-api.service';
 import { LocalStorageService } from 'src/app/services/local-storage';
@@ -11,7 +11,7 @@ export function initApplication(
   userSettingsService: UserSettingsApiService,
   translationApiService: TranslationApiService,
   localStorage: LocalStorageService,
-  logger: LoggerService) : Function {
+  logger: LoggerService): Function {
     return () => {
       let userSettings$ = userSettingsService.applyUserSettings();
       let translation$ = translationApiService.getLanguages();
