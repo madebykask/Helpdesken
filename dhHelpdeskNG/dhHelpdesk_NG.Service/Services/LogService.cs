@@ -202,41 +202,48 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<Log> GetLogsByCaseId(int caseId)
         {
-            return _logRepository.GetLogForCase(caseId, true).ToList();
+            return _logRepository.GetLogForCase(caseId).ToList();
         }
 
         public Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false)
         {
-            var queryable = _logRepository.GetLogForCase(caseId, includeInternalLogs);
+            var queryable = _logRepository.GetLogForCase(caseId);
+
+            if (!includeInternalLogs)
+            {
+                //keep only notes that have external, internal text will be trimmed in mapping logic below
+                queryable = queryable.Where(l => !string.IsNullOrEmpty(l.Text_External));
+            }
 
             var caseLogs =
-            (from log in queryable.AsQueryable()
-             select new CaseLogData()
-             {
-                 Id = log.Id,
-                 UserId = log.User_Id,
-                 UserFirstName = log.User.FirstName,
-                 UserSurName = log.User.SurName,
-                 LogDate = log.LogDate,
-                 RegUserName = log.RegUser,
-                 InternalText = log.Text_Internal,
-                 ExternalText = log.Text_External,
-                 Emails = log.CaseHistory.Emaillogs.DefaultIfEmpty().Where(t => t != null).Select(t => t.EmailAddress).ToList(),
-                 Files = log.LogFiles.DefaultIfEmpty().Where(f => f != null).Select(f => new LogFileData()
+                (from log in queryable.AsQueryable()
+                 select new CaseLogData()
                  {
-                     Id = f.Id,
-                     LogId = f.Log_Id,
-                     FileName = f.FileName,
-                     CaseId = f.IsCaseFile.HasValue && f.IsCaseFile.Value ? f.Log.Case_Id : (int?)null
-                 }).ToList()
-             }).ToListAsync();
+                     Id = log.Id,
+                     UserId = log.User_Id,
+                     UserFirstName = log.User.FirstName,
+                     UserSurName = log.User.SurName,
+                     LogDate = log.LogDate,
+                     RegUserName = log.RegUser,
+                     InternalText = includeInternalLogs ? log.Text_Internal : string.Empty, //empty internal if exist
+                     ExternalText = log.Text_External,
+                     Emails = log.CaseHistory.Emaillogs.DefaultIfEmpty().Where(t => t != null).Select(t => t.EmailAddress).ToList(),
+                     Files = log.LogFiles.DefaultIfEmpty().Where(f => f != null).Select(f => new LogFileData()
+                     {
+                         Id = f.Id,
+                         LogId = f.Log_Id,
+                         FileName = f.FileName,
+                         CaseId = f.IsCaseFile.HasValue && f.IsCaseFile.Value ? f.Log.Case_Id : (int?)null
+                     }).ToList()
+                 }).ToListAsync();
 
             return caseLogs;
         }
 
         public CaseLog GetLogById(int id)
         {
-            return this.GetCaseLogFromLog(this._logRepository.GetLogById(id)); 
+            var log = _logRepository.GetById(id);
+            return GetCaseLogFromLog(log); 
         }
 
         public CaseLog InitCaseLog(int userId, string regUser)
@@ -600,7 +607,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (caseLog.Id != 0)
             {
-                log = _logRepository.GetLogById(caseLog.Id);
+                log = _logRepository.GetById(caseLog.Id);
             }
             else
             {

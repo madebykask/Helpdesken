@@ -151,7 +151,7 @@
                 </mbsc-form-group-content>
             </mbsc-form-group>
 
-            <mbsc-form-group collapsible [open]="isNewCase" #communication *ngIf="hasSection(caseSectionTypes.Communication)">
+            <mbsc-form-group collapsible [open]="isNewCase" #communication *ngIf="isCommunicationSectionVisible">
                 <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Communication)}}</mbsc-form-group-title>
                 <mbsc-form-group-content>
                   <case-log-input [caseKey]="caseKey" [accessMode]="accessMode" [caseData]="caseData" [form]="form"></case-log-input>

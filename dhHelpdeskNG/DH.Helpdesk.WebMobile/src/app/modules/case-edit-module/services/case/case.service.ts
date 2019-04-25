@@ -30,7 +30,7 @@ export class CaseService {
       return this.caseTemplateApiService.getCaseTemplate(templateId)
         .pipe(
           map((caseData: any) => {
-            let model = this.fromJSONCaseEditInputModel(caseData);
+            const model = this.fromJSONCaseEditInputModel(caseData);
             return model;
         }))
     }
@@ -39,14 +39,14 @@ export class CaseService {
       return this.caseApiService.getCaseData(caseId)
         .pipe(
           map((caseData: any) => {
-            let model = this.fromJSONCaseEditInputModel(caseData);
+            const model = this.fromJSONCaseEditInputModel(caseData);
             return model;
         }))
     }
 
     getCaseActions(caseId: number): Observable<CaseAction<any>[]> {
-      let caseLogs$ = this.getCaseLogsData(caseId);
-      let caseHistory$ = this.getCaseHistoryData(caseId);
+      const caseLogs$ = this.getCaseLogsData(caseId);
+      const caseHistory$ = this.getCaseHistoryData(caseId);
 
       return forkJoin(caseLogs$, caseHistory$).pipe(
         map(([caseLogsData, caseHistoryData]) => {
@@ -59,7 +59,7 @@ export class CaseService {
             .pipe(
                 take(1),
                 map(data => {
-                  let items = data.map(x => this.fromJsonCaseLogModel(x));
+                  const items = data.map(x => this.fromJsonCaseLogModel(x));
                   return items;
                 })
             );
@@ -75,7 +75,7 @@ export class CaseService {
 
     private fromJsonCaseHistoryModel(json): CaseHistoryModel {
       if (json === null) { return null; }
-      let model = Object.assign(new CaseHistoryModel(),  {
+      const model = Object.assign(new CaseHistoryModel(),  {
           emailLogs: json.emailLog || [],
           changes: json.changes && json.changes.length
             ? json.changes.map(x => this.fromJsonCaseHistoryChangeModel(x))
@@ -86,22 +86,22 @@ export class CaseService {
 
     private fromJsonCaseHistoryChangeModel(json) {
         return Object.assign(new CaseHistoryChangeModel(), json, {
-                // todo:review
-                createdAt: new Date(json.createdAt),
-                previousValue: this.getValue(json.previousValue),
-                currentValue:  this.getValue(json.currentValue)
-              });
+          // todo:review
+          createdAt: new Date(json.createdAt),
+          previousValue: this.getValue(json.previousValue),
+          currentValue:  this.getValue(json.currentValue)
+        });
     }
 
     private getValue(value: any) {
       // try convert field value to date
-      let val = DateUtil.tryConvertToDate(value);
+      const val = DateUtil.tryConvertToDate(value);
       return val;
     }
 
     private fromJsonCaseLogModel(data: any): CaseLogModel {
       if (data === null) { return null; }
-      let model = Object.assign(new CaseLogModel(), data, {
+      const model = Object.assign(new CaseLogModel(), data, {
           createdAt: new Date(data.createdAt),
           files: data.files && data.files.length
             ? data.files.map(f => Object.assign(new LogFile(), f))
@@ -227,7 +227,7 @@ export class CaseService {
             map((jsCaseSections: any) => {
               if (!jsCaseSections) { throwError('No data from server.'); }
 
-              let sections = (jsCaseSections as Array<any>).map((jsSection: any) => {
+              const sections = (jsCaseSections as Array<any>).map((jsSection: any) => {
                   return new CaseSectionInputModel(
                             jsSection.id,
                             jsSection.sectionHeader,
@@ -247,10 +247,10 @@ export class CaseService {
              json = JSON.parse(json);
         }
 
-        let fields = json.fields as any[] || new Array();
-        let caseSolution = json.caseSolution ? <CaseSolution>json.caseSolution : null;
-        let mailToTickets: MailToTicketInfo = json.mailToTickets ? <MailToTicketInfo>json.mailToTickets : null;
-        let editMode = <CaseAccessMode>json.editMode;
+        const fields = json.fields as any[] || new Array();
+        const caseSolution = json.caseSolution ? <CaseSolution>json.caseSolution : null;
+        const mailToTickets: MailToTicketInfo = json.mailToTickets ? <MailToTicketInfo>json.mailToTickets : null;
+        const editMode = <CaseAccessMode>json.editMode;
 
         return Object.assign(new CaseEditInputModel(), json, {
             editMode: editMode,
@@ -284,7 +284,7 @@ export class CaseService {
         if (typeof json === 'string') {
             json = JSON.parse(json);
         }
-        var options = json.options as any[] || new Array();
+        const options = json.options as any[] || new Array();
         return Object.assign(new BaseCaseField<T>(), json, {
             value: json.value,
             options: options.map(v => this.fromJSONKeyValue(v))
@@ -293,13 +293,6 @@ export class CaseService {
 
     private fromJSONKeyValue(json: any): KeyValue {
         if (typeof json === 'string') { json = JSON.parse(json); }
-        return Object.assign(new KeyValue(), json, {})
+        return Object.assign(new KeyValue(), json, {});
     }
-}
-
-export class ResponseDataHelper {
-  fromJSONKeyValue(json: any): KeyValue {
-      if (typeof json === 'string') { json = JSON.parse(json); }
-      return Object.assign(new KeyValue(), json, {})
-  }
 }

@@ -17,18 +17,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface ILogRepository : IRepository<Log>
     {
-        Log GetLogById(int id);
-        IQueryable<Log> GetLogForCase(int caseId, bool includeInternalLogs = false);
-
-        /// <summary>
-        /// The get case log overviews.
-        /// </summary>
-        /// <param name="caseId">
-        /// The case id.
-        /// </param>
-        /// <returns>
-        /// The result />.
-        /// </returns>
+        IQueryable<Log> GetLogForCase(int caseId);
         IEnumerable<LogMapperData> GetCaseLogOverviews(int caseId);
         IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate);
 
@@ -42,25 +31,10 @@ namespace DH.Helpdesk.Dal.Repositories
         {
         }
 
-        public Log GetLogById(int id)
+        public IQueryable<Log> GetLogForCase(int caseId)
         {
-            return (from l in Table
-                    where l.Id == id
-                    select l).FirstOrDefault();
-        }
-
-        public IQueryable<Log> GetLogForCase(int caseId, bool includeInternalLogs = false)
-        {
-            var q = from l in Table
-                    where l.Case_Id == caseId
-                    select l;
-
-            if (!includeInternalLogs)
-            {
-                q = q.Where(l => string.IsNullOrEmpty(l.Text_Internal));
-            }
-
-            return q.OrderByDescending(l => l.LogDate);
+            var query = Table.Where(l => l.Case_Id == caseId).OrderByDescending(l => l.LogDate);
+            return query;
         }
 
         public IEnumerable<LogMapperData> GetCaseLogOverviews(int caseId)
@@ -108,11 +82,11 @@ namespace DH.Helpdesk.Dal.Repositories
             {
                 var fDate = fromDate.Value.AddDays(-1);
                 var tDate = toDate.Value.AddMonths(1);                
-                ret =  this.Table.Where(l => l.LogDate >= fDate && l.LogDate <= tDate).ToList();
+                ret =  Table.Where(l => l.LogDate >= fDate && l.LogDate <= tDate).ToList();
             }
             else
             {
-                ret =  this.Table.ToList();
+                ret =  Table.ToList();
             }            
 
             return ret;

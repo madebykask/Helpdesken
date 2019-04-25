@@ -431,7 +431,8 @@ namespace DH.Helpdesk.Services.Services
             }
 
             // delete logs
-            var logs = _logRepository.GetLogForCase(id, true).ToList();
+            var logs = _logRepository.GetLogForCase(id).ToList();
+
             // delete Mail2tickets with log
             foreach (var l in logs)
             {
@@ -842,36 +843,36 @@ namespace DH.Helpdesk.Services.Services
 
         public void Activate(int caseId, int userId, string adUser, string createdByApp, out IDictionary<string, string> errors)
         {
-			var _case = _caseRepository.GetCaseById(caseId);
-			var customer = _customerService.GetCustomer(_case.Customer_Id);
-			var departmentIds = _departmentService.GetDepartments(customer.Id)
-				.Select(o => o.Id)
-				.ToArray();
+            var _case = _caseRepository.GetCaseById(caseId);
+            var customer = _customerService.GetCustomer(_case.Customer_Id);
+            var departmentIds = _departmentService.GetDepartments(customer.Id)
+                .Select(o => o.Id)
+                .ToArray();
 
-			var cs = _settingService.GetCustomerSetting(customer.Id);
-			var timeZone = TimeZoneInfo.GetSystemTimeZones().First(o => o.BaseUtcOffset.TotalMinutes == cs.TimeZone_offset);
+            var cs = _settingService.GetCustomerSetting(customer.Id);
+            var timeZone = TimeZoneInfo.GetSystemTimeZones().First(o => o.BaseUtcOffset.TotalMinutes == cs.TimeZone_offset);
 
-			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
-				ManualDependencyResolver.Get<IHolidayService>(),
-				customer.WorkingDayStart,
-				customer.WorkingDayEnd,
-				timeZone);
+            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+                ManualDependencyResolver.Get<IHolidayService>(),
+                customer.WorkingDayStart,
+                customer.WorkingDayEnd,
+                timeZone);
 
-			var utcNow = DateTime.UtcNow;
-			var workTimeCalc = workTimeCalcFactory.Build(_case.RegTime, utcNow, departmentIds);
-			var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
-				_case.ChangeTime,
-				utcNow,
-				_case.Department_Id);
+            var utcNow = DateTime.UtcNow;
+            var workTimeCalc = workTimeCalcFactory.Build(_case.RegTime, utcNow, departmentIds);
+            var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
+                _case.ChangeTime,
+                utcNow,
+                _case.Department_Id);
 
-			var possibleWorktime = workTimeCalc.CalculateWorkTime(
-				_case.RegTime,
-				utcNow,
-				_case.Department_Id);
+            var possibleWorktime = workTimeCalc.CalculateWorkTime(
+                _case.RegTime,
+                utcNow,
+                _case.Department_Id);
 
-			var leadTime = possibleWorktime - _case.ExternalTime - externalTimeToAdd;
+            var leadTime = possibleWorktime - _case.ExternalTime - externalTimeToAdd;
 
-			_caseRepository.Activate(caseId, leadTime, externalTimeToAdd);
+            _caseRepository.Activate(caseId, leadTime, externalTimeToAdd);
             var c = _caseRepository.GetDetachedCaseById(caseId);
             _caseStatService.UpdateCaseStatistic(c);
             SaveCaseHistory(c, userId, adUser, createdByApp, out errors);

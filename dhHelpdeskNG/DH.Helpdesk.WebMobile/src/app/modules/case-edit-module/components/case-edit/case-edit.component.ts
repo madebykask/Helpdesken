@@ -66,11 +66,12 @@ export class CaseEditComponent {
     currentTab = 'case_details';
     caseActions: CaseAction<CaseActionDataType>[] = [];
     notifierTypes = NotifierType;
+    isCommunicationSectionVisible = false;
 
     private searchType: CasesSearchType = CasesSearchType.AllCases;
-    private isNewCase: boolean = false;
-    private caseId: number = 0;
-    private templateId: number = 0;
+    private isNewCase = false;
+    private caseId = 0;
+    private templateId = 0;
     private caseData: CaseEditInputModel;
     private caseSections: CaseSectionInputModel[];
     private ownsLock = false;
@@ -222,7 +223,7 @@ export class CaseEditComponent {
         return true;
       }
 
-      return this.accessMode == CaseAccessMode.FullAccess;
+      return this.accessMode === CaseAccessMode.FullAccess;
     }
 
     saveCase() {
@@ -230,7 +231,7 @@ export class CaseEditComponent {
       this.form.submit();
       if (this.form.invalid) {
         // let invalidControls = this.form.findInvalidControls(); // debug info
-        let errormessage = this.translateService.instant('Fyll i obligatoriska fält.');
+        const errormessage = this.translateService.instant('Fyll i obligatoriska fält.');
         this.alertService.showMessage(errormessage, AlertType.Error, 3);
         return;
       };
@@ -468,6 +469,14 @@ export class CaseEditComponent {
       if (this.caseId > 0) {
           this.loadCaseActions();
           this.cleanTempFiles(this.caseId);
+      }
+
+      // set up case visibility settings
+      if (this.caseData) {
+          this.isCommunicationSectionVisible =
+            this.showField(CaseFieldsNames.Log_ExternalText) ||
+            this.showField(CaseFieldsNames.Log_InternalText) ||
+            this.showField(CaseFieldsNames.Log_FileName);
       }
     }
 
