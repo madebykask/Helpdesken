@@ -60,11 +60,11 @@ export class CaseLogInputComponent implements OnInit {
     this.logFileField = this.getField(CaseFieldsNames.Log_FileName);
 
     if (this.externalLogField) {
-      this.isExternalLogFieldVisible =  !this.internalLogField.isHidden;
+      this.isExternalLogFieldVisible =  !this.externalLogField.isHidden;
     }
 
     if (this.internalLogField) {
-      this.isInternalLogFieldVisible =  !this.externalLogField.isHidden;
+      this.isInternalLogFieldVisible =  !this.internalLogField.isHidden;
     }
 
     if (this.logFileField) {
