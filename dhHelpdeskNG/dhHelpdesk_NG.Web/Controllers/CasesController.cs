@@ -174,6 +174,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IExtendedCaseService _extendedCaseService;
         private readonly ISendToDialogModelFactory _sendToDialogModelFactory;
         private readonly ICaseStatisticService _caseStatService;
+        private readonly IFeatureToggleService _featureToggleService;
 
         #endregion
 
@@ -254,7 +255,9 @@ namespace DH.Helpdesk.Web.Controllers
             ICaseDocumentService caseDocumentService,
             ICaseSectionService caseSectionService,
             IExtendedCaseService extendedCaseService,
-            ISendToDialogModelFactory sendToDialogModelFactory, ICaseStatisticService caseStatService)
+            ISendToDialogModelFactory sendToDialogModelFactory, 
+            ICaseStatisticService caseStatService,
+            IFeatureToggleService featureToggleService)
             : base(masterDataService)
         {
             _caseProcessor = caseProcessor;
@@ -327,6 +330,7 @@ namespace DH.Helpdesk.Web.Controllers
             _extendedCaseService = extendedCaseService;
             _sendToDialogModelFactory = sendToDialogModelFactory;
             _caseStatService = caseStatService;
+            _featureToggleService = featureToggleService;
 
             _advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService,
                 caseSearchService,

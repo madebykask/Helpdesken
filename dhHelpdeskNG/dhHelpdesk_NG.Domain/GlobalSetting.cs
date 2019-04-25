@@ -27,13 +27,12 @@ namespace DH.Helpdesk.Domain
         public int CaseLockTimer { get; set; }
         public int CaseLockBufferTime { get; set; }
         public int CaseLockExtendTime { get; set; }
-		public string InvoiceFileFolder { get; set; }
+        public string InvoiceFileFolder { get; set; }
         public string ExtendedCasePath { get; set; }
         public int MultiCustomersSearch { get; set; }
-		public bool PerformanceLogActive { get; set; }
-		public int PerformanceLogFrequency { get; set; }
-		public int PerformanceLogSettingsCache { get; set; }
-		public virtual Language DefaultLanguage { get; set; }
-        public int NewAdvancedSearch { get; set; }
+        public bool PerformanceLogActive { get; set; }
+        public int PerformanceLogFrequency { get; set; }
+        public int PerformanceLogSettingsCache { get; set; }
+        public virtual Language DefaultLanguage { get; set; }
     }
 }

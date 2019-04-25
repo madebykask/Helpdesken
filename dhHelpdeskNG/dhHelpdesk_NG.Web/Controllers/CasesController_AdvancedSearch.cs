@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.Grid;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
@@ -89,8 +89,9 @@ namespace DH.Helpdesk.Web.Controllers
             model.DoSearchAtBegining = doSearchAtBegining;
             model.IsExtSearch = isExtSearch;
 
-            var gs = _globalSettingService.GetGlobalSettings().Single();
-            return View(gs.NewAdvancedSearch.ToBool() ? "AdvancedSearch" : "AdvancedSearch/Index", model);
+            var useNewAdvancedSearch = _featureToggleService.Get(FeatureToggleTypes.NEW_ADVANCED_CASE_SEARCH);
+            
+            return View(useNewAdvancedSearch.Active ? "AdvancedSearch" : "AdvancedSearch/Index", model);
         }
 
         [HttpGet]

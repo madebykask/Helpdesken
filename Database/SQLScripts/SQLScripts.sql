@@ -205,12 +205,14 @@ BEGIN
 	ALTER TABLE [dbo].[tblFeatureToggle] ADD  CONSTRAINT [DF_tblFeatureToggle_ChangeDate]  DEFAULT (getutcdate()) FOR [ChangeDate]
 END
 GO
+
 RAISERROR('Adding Feature toggle trigger trFeatureToggleChange', 10, 1) WITH NOWAIT
 IF EXISTS (SELECT * FROM sysobjects WHERE name='trFeatureToggleChange' AND type='TR')
 BEGIN	
 	DROP TRIGGER [dbo].[trFeatureToggleChange] 
 END
 GO
+
 CREATE TRIGGER [dbo].[trFeatureToggleChange] 
 	ON  [dbo].[tblFeatureToggle] 
 	AFTER UPDATE
@@ -220,24 +222,31 @@ BEGIN
 	UPDATE FT SET ChangeDate = GETUTCDATE() FROM inserted U
 	JOIN tblFeatureToggle FT ON U.StrongName = FT.StrongName
 END
+GO
 
 RAISERROR('Adding feature toggle REPORTS_REPORTGENERATOR_USE_PREVIOUS_SEARCH', 10, 1) WITH NOWAIT
 IF NOT EXISTS(SELECT * FROM tblFeatureToggle WHERE StrongName = 'REPORTS_REPORTGENERATOR_USE_PREVIOUS_SEARCH')
 BEGIN
 	INSERT INTO [tblFeatureToggle](StrongName, Active, [Description]) 
-	VALUES (
-		'REPORTS_REPORTGENERATOR_USE_PREVIOUS_SEARCH',
-		0,
-		'Should the report generator use the previous implementation of the search method'
-	)
+	VALUES ('REPORTS_REPORTGENERATOR_USE_PREVIOUS_SEARCH',	0, 'Should the report generator use the previous implementation of the search method')
 END
+GO
+
+RAISERROR('Adding feature toggle NEW_ADVANCED_CASE_SEARCH', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT * FROM tblFeatureToggle WHERE StrongName = 'NEW_ADVANCED_CASE_SEARCH')
+BEGIN
+	INSERT INTO [tblFeatureToggle](StrongName, Active, [Description]) 
+	VALUES ('NEW_ADVANCED_CASE_SEARCH', 1, 'Use new advanced search feature')
+END
+GO
+
+RAISERROR('Dropping NewAdvancedSearch column in NewAdvancedSearch', 10, 1) WITH NOWAIT
+IF EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'NewAdvancedSearch' and Object_ID = Object_ID(N'dbo.tblGlobalSettings'))
+   ALTER TABLE tblGlobalSettings DROP COLUMN NewAdvancedSearch
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.41'
+GO
+
 --ROLLBACK --TMP
-
-
-
-
-
-
