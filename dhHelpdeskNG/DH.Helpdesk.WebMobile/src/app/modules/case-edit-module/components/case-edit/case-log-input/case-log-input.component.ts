@@ -59,9 +59,17 @@ export class CaseLogInputComponent implements OnInit {
     this.internalLogField = this.getField(CaseFieldsNames.Log_InternalText);
     this.logFileField = this.getField(CaseFieldsNames.Log_FileName);
 
-    this.isExternalLogFieldVisible =  !this.internalLogField.isHidden;
-    this.isInternalLogFieldVisible =  !this.externalLogField.isHidden;
-    this.isAttachedFilesVisible = !this.logFileField.isHidden;
+    if (this.externalLogField) {
+      this.isExternalLogFieldVisible =  !this.internalLogField.isHidden;
+    }
+
+    if (this.internalLogField) {
+      this.isInternalLogFieldVisible =  !this.externalLogField.isHidden;
+    }
+
+    if (this.logFileField) {
+      this.isAttachedFilesVisible = !this.logFileField.isHidden;
+    }
   }
 
   ngAfterViewInit(): void {
