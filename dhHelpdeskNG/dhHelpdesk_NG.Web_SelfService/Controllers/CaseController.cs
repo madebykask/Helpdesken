@@ -388,6 +388,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                 model.NewCase.CaseSolution_Id = caseTemplateId;
                 model.NewCase.CurrentCaseSolution_Id = caseTemplateId;
 
+                model.Information = caseTemplate.Information;
+
                 if (!string.IsNullOrEmpty(caseTemplate.Text_External) ||
                     !string.IsNullOrEmpty(caseTemplate.Text_Internal) || caseTemplate.FinishingCause_Id.HasValue)
                 {
@@ -1161,12 +1163,12 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             // unread/status flag update if not case is closed
 
-            var user = _userService.GetUserByLogin(SessionFacade.CurrentUserIdentity.UserId, null);
+            
 
             if (currentCase.FinishingDate.HasValue)
             {
                 string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                this._caseService.Activate(currentCase.Id, user.Id, adUser, CreatedByApplications.SelfService5, out errors);
+                this._caseService.Activate(currentCase.Id, 0, adUser, CreatedByApplications.SelfService5, out errors);
                 caseIsActivated = true;
                 currentCase = _caseService.GetCaseById(caseId);
             }

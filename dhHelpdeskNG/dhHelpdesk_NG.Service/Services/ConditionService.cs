@@ -1,95 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using DH.Helpdesk.Common.Extensions.String;
+using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Dal.Repositories.Condition;
+using DH.Helpdesk.Domain;
+using DH.Helpdesk.Domain.ExtendedCaseEntity;
+using DH.Helpdesk.Services.BusinessLogic.Condition;
 
 namespace DH.Helpdesk.Services.Services
 {
-    using Common.Extensions.String;
-    using Dal.Repositories.Condition;
-    using Dal.Repositories.Cases;
-    using BusinessData.Models.Condition;
-    using Domain;
-    using System.Reflection;
-    using BusinessLogic.Condition;
-    
-
     public interface IConditionService
     {
-        IEnumerable<ConditionModel> GetConditions(int parent_Id, int conditionType_Id);
-        ConditionResult CheckConditions(int caseId, int parent_Id, int conditionType_Id);
+        ConditionResult CheckConditions(int caseId, int parentId, int conditionTypeId);
     }
 
     public class ConditionService : IConditionService
     {
-        private readonly ICacheProvider _cache;
-        private readonly IExtendedCaseValueRepository _extendedCaseValueRepository;
         private readonly ICaseService _caseService;
         private readonly IConditionRepository _conditionRepository;
+        private readonly IExtendedCaseValueRepository _extendedCaseValueRepository;
 
-        //TODO: Move to DB
-        private const string DateShortFormat = "dd.MM.yyyy";
-        private const string DateLongFormat = "d MMMM yyyy";
-
-
+        private readonly Dictionary<int, List<ExtendedCaseValueEntity>> _extendedCaseDataCache = new Dictionary<int, List<ExtendedCaseValueEntity>>();
+        private IList<PropertyInfo> _caseTypePropertiesState = null;
+        
         public ConditionService(
-            ICacheProvider cache,
             IExtendedCaseValueRepository extendedCaseValueRepository,
             ICaseService caseService,
-            IConditionRepository conditionRepository
-            
-            )
+            IConditionRepository conditionRepository)
         {
-            this._cache = cache;
-            this._extendedCaseValueRepository = extendedCaseValueRepository;
-            this._caseService = caseService;
-            this._conditionRepository = conditionRepository;
+            _extendedCaseValueRepository = extendedCaseValueRepository;
+            _caseService = caseService;
+            _conditionRepository = conditionRepository;
         }
-
-
         
-		public IEnumerable<ConditionModel> GetConditions(int parent_Id, int conditionType_Id)
+        public ConditionResult CheckConditions(int caseId, int parentId, int conditionTypeId)
         {
-            var conditions = _conditionRepository.GetConditions(parent_Id, conditionType_Id);
-
-            return conditions;
-        }
-
-        //TODO: REFACTOR
-        public ConditionResult CheckConditions(int caseId, int parent_Id, int conditionType_Id)
-        {
-            Case _case = _caseService.GetDetachedCaseById(caseId);
-
             //If there are more than one conditions, all conditions must be fulfilled
+            var conditions = _conditionRepository.GetConditions(parentId, conditionTypeId);
 
-            //IF there are no conditions set, it should be visible         
-            var conditions = this.GetConditions(parent_Id, conditionType_Id).ToList();
+            //If there are no conditions set, it should be visible
+            if (!conditions.Any())
+                return ConditionResult.Success();
 
-            bool results = false;
-            //IF there are no conditions set, it should be visible
-            if (conditions == null || conditions.Count() == 0)
+            var results = false;
+            var evaluator = new ConditionEvaluator();
+
+            var _case = _caseService.GetDetachedCaseById(caseId);
+            var caseType = _case.GetType();
+
+            var extendedCaseFormId = 0;
+            var exCaseData = _case.CaseExtendedCaseDatas?.FirstOrDefault();
+            if (exCaseData != null)
             {
-                return new ConditionResult
-                {
-                    Show = true
-                };
+                extendedCaseFormId = exCaseData.ExtendedCaseData.ExtendedCaseFormId;
             }
-
-
-            int extendedCaseFormId = 0;
-            if (_case.CaseExtendedCaseDatas != null && _case.CaseExtendedCaseDatas.Count > 0)
-            {
-                extendedCaseFormId = _case.CaseExtendedCaseDatas.First().ExtendedCaseData.ExtendedCaseFormId;
-            }
-
+            
             foreach (var condition in conditions)
             {
-                var conditionValue = condition.Values.Tidy().ToLower();
                 var conditionKey = condition.Property_Name.Tidy();
+                var conditionValue = condition.Values.Tidy().ToLower();
 
                 try
                 {
                     //var mapper = _caseCaseDocumentTextConditionIdentifierRepository.GetCaseDocumentTextConditionPropertyName(extendedCaseFormId, conditionKey);
-
                     //if (mapper == null)
                     //{
                     //    throw new CaseDocumentConditionKeyException(extendedCaseFormId, conditionKey, condition.CaseDocumentTextConditionGUID,
@@ -102,67 +77,119 @@ namespace DH.Helpdesk.Services.Services
                     var value = "";
 
                     //GET FROM EXTENDEDCASE
-                    if (conditionKey.ToLower().StartsWith("extendedcase_"))
+                    if (conditionKey.StartsWith("extendedcase_", StringComparison.OrdinalIgnoreCase))
                     {
-                        conditionProperty = conditionProperty.Replace("extendedcase_", "");
-                        var ext = _extendedCaseValueRepository.GetExtendedCaseValue(_case.CaseExtendedCaseDatas.FirstOrDefault().ExtendedCaseData_Id, conditionProperty);
+                        conditionProperty = conditionProperty.Replace("extendedcase_", "").Trim();
 
+                        var extendedCaseValues =
+                            exCaseData != null && exCaseData.ExtendedCaseData_Id > 0
+                                ? GetExtendedCaseValuesCached(exCaseData.ExtendedCaseData_Id)
+                                : new List<ExtendedCaseValueEntity>();
+                        
+                        //conditionProperty
+                        var ext = 
+                            extendedCaseValues.FirstOrDefault(x => x.FieldId.Equals(conditionProperty, StringComparison.OrdinalIgnoreCase));
+                            
                         if (ext == null)
-                            throw new ConditionPropertyException(extendedCaseFormId, conditionProperty, condition.GUID, $"Could not find key {conditionProperty} in the extended case setup");
+                        {
+                            var errMsg = $"Could not find key {conditionProperty} in the extended case setup";
+                            throw new ExCaseConditionPropertyException(extendedCaseFormId, conditionProperty, condition.GUID, errMsg);
+                        }
 
                         value = ext.Value;
                     }
 
                     //Get the specific property of Case in "Property_Name"
-                    else if (_case != null && _case.Id != 0 && conditionKey.ToLower().StartsWith("case_"))
+                    else if (conditionKey.StartsWith("case_", StringComparison.OrdinalIgnoreCase))
                     {
+                        conditionProperty = conditionProperty.Replace("case_", "");
                         if (!conditionProperty.Contains("."))
                         {
-                            value = _case.GetType().GetProperty(conditionProperty)?.GetValue(_case, null).ToString();
+                            var caseTypePoperties = GetCaseTypeProperties();
+                            var propInfo = caseTypePoperties.FirstOrDefault(prop => prop.Name.Equals(conditionProperty, StringComparison.OrdinalIgnoreCase));
+                            if (propInfo == null)
+                            {
+                                var errMsg = $"Could not find key {conditionProperty} in the case type";
+                                throw new ConditionPropertyException(conditionProperty, condition.GUID, errMsg);
+                            }
+                            value = propInfo?.GetValue(_case, null).ToString();
                         }
                         else
                         {
-                            var parentClassName = string.Concat(conditionProperty.TakeWhile((c) => c != '.'));
-                            var propertyName = conditionProperty.Substring(conditionProperty.LastIndexOf('.') + 1);
+                            var clasNameLiterals = conditionProperty.Split(".");
+                            if (clasNameLiterals.Length > 1)
+                            {
+                                var parentClassName = clasNameLiterals[clasNameLiterals.Length - 2];
+                                var propertyName = clasNameLiterals[clasNameLiterals.Length - 1];
 
-                            var parentClass = _case.GetType().GetProperty(parentClassName)?.GetValue(_case, null);
-                            value = parentClass?.GetType().GetProperty(propertyName)?.GetValue(parentClass, null).ToString();
+                                var parentClass = caseType.GetProperty(parentClassName);
+                                if (parentClass == null)
+                                {
+                                    var errMsg = $"Could not find property {parentClassName} in the case type";
+                                    throw new ConditionPropertyException(conditionProperty, condition.GUID, errMsg);
+                                }
+
+                                var parentClassInstance = parentClass.GetValue(_case, null);
+                                if (parentClassInstance != null)
+                                {
+                                    var parentClassProperty = parentClassInstance.GetType().GetProperty(propertyName);
+                                    if (parentClassProperty == null)
+                                    {
+                                        var errMsg = $"Could not find property {propertyName} in the {parentClassInstance.GetType().Name} type";
+                                        throw new ConditionPropertyException(conditionProperty, condition.GUID, errMsg);
+                                    }
+
+                                    value = parentClassProperty.GetValue(parentClassInstance, null).ToString();
+                                }
+                            }
                         }
                     }
 
-
-                    var evaluator = new ConditionEvaluator();
                     results = evaluator.EvaluateCondition(value, conditionOperator, conditionValue);
-
                     if (!results)
                         break;
                 }
                 catch (ConditionBaseException parseEx)
                 {
-                    return new ConditionResult
-                    {
-                        Show = false,
-                        FieldException = parseEx
-                    };
+                    return ConditionResult.Error(parseEx);
                 }
                 catch (Exception ex)
                 {
-                    return new ConditionResult
-                    {
-                        Show = false,
-                        FieldException = new ConditionException(conditionKey, $"Unknown exception when running field condition {conditionKey}")
-                    };
+                    var errMsg = $"Unknown exception when checking field condition {conditionKey}";
+                    return ConditionResult.Error(new ConditionException(conditionKey, errMsg, ex));
                 }
             }
 
-
-            //If there are more than one conditions, all conditions must be fulfilled
-            return new ConditionResult
-            {
-                Show = results
-            };
+            return new ConditionResult(results);
         }
 
+        #region Private Methods
 
+        private List<ExtendedCaseValueEntity> GetExtendedCaseValuesCached(int extendedCaseDataId)
+        {
+            if (_extendedCaseDataCache.ContainsKey(extendedCaseDataId))
+                return _extendedCaseDataCache[extendedCaseDataId];
+
+            var extendedCaseValues =
+                _extendedCaseValueRepository.GetMany(x => x.ExtendedCaseDataId == extendedCaseDataId).ToList();
+
+            if (extendedCaseValues.Any())
+            {
+                _extendedCaseDataCache.Add(extendedCaseDataId, extendedCaseValues);
+            }
+
+            return extendedCaseValues;
+        }
+
+        private IList<PropertyInfo> GetCaseTypeProperties()
+        {
+            if (_caseTypePropertiesState == null)
+            {
+                _caseTypePropertiesState = typeof(Case).GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).ToList();
+            }
+            return _caseTypePropertiesState;
+        }
+
+        #endregion
     }
 }

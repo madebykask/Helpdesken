@@ -175,12 +175,13 @@
     <Compile Include="BusinessLogic\Cases\CaseHelper.cs" />
     <Compile Include="BusinessLogic\Cases\CaseProcessor.cs" />
     <Compile Include="BusinessLogic\Cases\ExtendedCaseTemplateParser.cs" />
+    <Compile Include="BusinessLogic\Condition\ConditionException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionPropertyException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionResult.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionParseException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionBaseException.cs" />
-    <Compile Include="BusinessLogic\Condition\ConditionException.cs" />
     <Compile Include="BusinessLogic\Condition\ConditionEvaluator.cs" />
+    <Compile Include="BusinessLogic\Condition\ExCaseConditionPropertyException.cs" />
     <Compile Include="BusinessLogic\Contracts\ContractHistoryFieldsDiffBuilder.cs" />
     <Compile Include="BusinessLogic\Contracts\IContractHistoryFormatter.cs" />
     <Compile Include="BusinessLogic\Gdpr\DataPrivacyTaskProgress.cs" />

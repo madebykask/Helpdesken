@@ -195,7 +195,6 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
             Bind<ICaseStatisticService>().To<CaseStatisticService>().InRequestScope();
 			// Feature toggle
 			Bind<IFeatureToggleService>().To<FeatureToggleService>();
-
 		}
 
         #endregion

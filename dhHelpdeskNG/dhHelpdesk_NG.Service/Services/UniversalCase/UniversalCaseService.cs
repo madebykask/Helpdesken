@@ -860,9 +860,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             baseCaseModel = ApplyValuesFromCaseSolution(baseCaseModel, baseCaseSolution.Id);
             
             //prevent email notifications from sending for base (multiform) case
-            res = SaveCase(baseCaseModel, baseAuxModel, out baseCaseId, out caseNum, false);
+            var baseCaseRes = SaveCase(baseCaseModel, baseAuxModel, out baseCaseId, out caseNum, false);
 
-            if (res.IsSucceed)
+            if (baseCaseRes.IsSucceed)
             {
                 try
                 {
@@ -870,7 +870,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     {
                         var caseSolutions = baseCaseSolution.SplitToCaseSolutionDescendants
                             .Where(x => x.SplitToCaseSolutionDescendant.Status > 0)
-                            .OrderBy(x => x.SplitToCaseSolutionDescendant.SortOrder);
+                            .OrderBy(x => x.SplitToCaseSolutionDescendant.SortOrder)
+                            .ToList();
 
                         var baseCaseExCaseForm = baseCaseSolution.ExtendedCaseForms?.FirstOrDefault();
 
@@ -933,7 +934,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                         _caseService.Delete(baseCaseId, "", null);
                 }
             }
-            
+
             return res;
         }
 
