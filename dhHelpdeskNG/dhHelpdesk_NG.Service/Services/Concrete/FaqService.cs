@@ -119,6 +119,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
                 default:
                     _faqRepository.UpdateOtherLanguageFaq(faq);
+                    _faqRepository.UpdateDate(faq.Id, faq.ChangedDate);
                     break;
             }
 

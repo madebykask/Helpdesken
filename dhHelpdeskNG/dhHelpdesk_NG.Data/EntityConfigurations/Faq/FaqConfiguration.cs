@@ -21,7 +21,7 @@ namespace DH.Helpdesk.Dal.EntityConfigurations.Faq
             Property(f => f.WorkingGroup_Id).IsOptional();
             Property(f => f.ShowOnStartPage).IsRequired();
             Property(f => f.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
-            Property(f => f.ChangedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            Property(f => f.ChangedDate).IsRequired();
 
             HasRequired(f => f.FAQCategory)
                 .WithMany(f => f.FAQs)

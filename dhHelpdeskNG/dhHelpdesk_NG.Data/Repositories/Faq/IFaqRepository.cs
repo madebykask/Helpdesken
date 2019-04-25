@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace DH.Helpdesk.Dal.Repositories.Faq
@@ -17,5 +18,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq
         void UpdateOtherLanguageFaq(ExistingFaq faq);
 
         List<FaqEntity> GetFaqsByCustomerId(int customerId, bool includePublic = true);
+
+        void UpdateDate(int id, DateTime changedDate);
     }
 }
