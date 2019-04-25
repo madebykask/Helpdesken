@@ -11,7 +11,6 @@ import { CaseFilesUploadComponent } from '../case-files-upload/case-files-upload
 import { TranslateService as NgxTranslateService } from '@ngx-translate/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
-import { query } from '@angular/core/src/render3';
 
 @Component({
   selector: 'case-files-control',
@@ -20,12 +19,12 @@ import { query } from '@angular/core/src/render3';
 })
 export class CaseFilesControlComponent {
 
-  @Input() field: BaseCaseField<Array<any>>; 
-  @Input() caseKey: string; 
+  @Input() field: BaseCaseField<Array<any>>;
+  @Input() caseKey: string;
   @Input() accessMode: CaseAccessMode;
 
   @ViewChild('fileList') fileList: MbscListview;
-  @ViewChild(CaseFilesUploadComponent) caseFilesComponent: CaseFilesUploadComponent
+  @ViewChild(CaseFilesUploadComponent) caseFilesComponent: CaseFilesUploadComponent;
 
   files: CaseFileModel[] = [];
 
@@ -57,7 +56,7 @@ export class CaseFilesControlComponent {
 
   private configureListActions() {
     if (this.userSettingsService.getUserData().canDeleteAttachedFiles) {
-      //add swipe actions if has permissions
+      // add swipe actions if has permissions
       this.fileList.instance.option({
         swipe: true,
         stages: [{
@@ -66,7 +65,7 @@ export class CaseFilesControlComponent {
           icon: 'fa-trash',
           confirm: true,
           action: this.onFileDelete.bind(this)
-        }]  
+        }]
       });
     }
   }
@@ -74,7 +73,7 @@ export class CaseFilesControlComponent {
   ngOnDestroy(): void {
     this.destroy$.next();
   }
-   
+
   ngOnChanges(changes: SimpleChanges): void {
     // create  files list model to bind
     if (changes.field && changes.field.currentValue.value !== undefined) {
@@ -86,7 +85,7 @@ export class CaseFilesControlComponent {
     }
   }
 
-  processNewFileUpload(data: { id:number, name:string }) {
+  processNewFileUpload(data: { id: number, name: string }) {
     if (data) {
         this.files.push(new CaseFileModel(data.id, data.name));
     }
@@ -96,8 +95,7 @@ export class CaseFilesControlComponent {
     const caseId = +this.caseKey;
     if (!isNaN(caseId) && caseId > 0) {
       this.router.navigate(['/case', caseId, 'file', item.fileId]);
-    }
-    else {
+    } else {
       const queryParams = {
         fileName: item.fileName,
       };
@@ -110,18 +108,18 @@ export class CaseFilesControlComponent {
      });
     }
   }
-  
-  onFileDelete(event, inst){
+
+  onFileDelete(event, inst) {
     let self = this;
     let index = +event.index;
     if (!isNaN(index) && this.files.length > index) {
         let fileItem = self.files[index];
         if (fileItem) {
-              //todo: move confirm to a separate service!
+              // todo: move confirm to a separate service!
               mobiscroll.confirm({
-                title: "",
+                title: '',
                 display: 'bottom',
-                message: this.translateService.instant('Är du säker på att du vill ta bort bifogad fil') + '?', //do you want to delete attached file?
+                message: this.translateService.instant('Är du säker på att du vill ta bort bifogad fil') + '?', // do you want to delete attached file?
                 okText: this.translateService.instant('Ja'),
                 cancelText: this.translateService.instant('Nej'),
               }).then(function (result) {
@@ -129,9 +127,9 @@ export class CaseFilesControlComponent {
                       self.caseFilesApiService.deleteCaseFile(self.caseKey, fileItem.fileId, fileItem.fileName).pipe(
                           take(1)
                       ).subscribe(() => {
-                          //remove fileItem from the list on success only
+                          // remove fileItem from the list on success only
                           self.files = self.files.filter(el => el !== fileItem);
-                      }, 
+                      },
                       (err) => {
                         self.alertsService.showMessage('Failed to delete a file', AlertType.Error);
                         console.error(err);
@@ -145,5 +143,4 @@ export class CaseFilesControlComponent {
   identify(item) {
     return item.fileId;
   }
-
 }

@@ -32,10 +32,6 @@ export class CaseLogInputComponent implements OnInit {
   internalLogField: BaseCaseField<string> = null;
   logFileField: BaseCaseField<any> = null;
 
-  get hasFullAccess() {
-    return this.accessMode !== null && this.accessMode === CaseAccessMode.FullAccess;
-  }
-
   private destroy$ = new Subject();
 
   fileListSettings: MbscListviewOptions = {
@@ -52,6 +48,10 @@ export class CaseLogInputComponent implements OnInit {
 
   constructor(private caseDataHelpder: CaseEditDataHelper,
               private caseLogApiService: CaseLogApiService) {
+  }
+
+  get hasFullAccess() {
+    return this.accessMode !== null && this.accessMode === CaseAccessMode.FullAccess;
   }
 
   ngOnInit() {
