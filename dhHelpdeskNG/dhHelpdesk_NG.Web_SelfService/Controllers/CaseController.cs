@@ -2471,7 +2471,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 caseEntity = _caseService.GetCaseById(caseId);
             }
 
-            var workflowCaseSolutions = _caseSolutionService.GetWorkflowCaseSolutionIds(customerId, true);
+            var workflowCaseSolutions = _caseSolutionService.GetWorkflowCaseSolutionIds(customerId);
 
             if (caseEntity != null)
             {

@@ -49,7 +49,7 @@ namespace DH.Helpdesk.Services.Services
         IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case case_, IList<int> workFlowCaseSolutionIds, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId);
 
         IList<CaseSolution> GetCaseSolutions();
-        IList<int> GetWorkflowCaseSolutionIds(int customerId, bool selfServiceOnly = false);
+        IList<int> GetWorkflowCaseSolutionIds(int customerId);
 
         IList<CaseSolution_SplitToCaseSolutionEntity> GetSplitToCaseSolutionDescendants(CaseSolution self, int[] descendantIds);
         bool CheckIfExtendedFormExistForSolutionsInCategories(int customerId, List<int> list);
@@ -206,17 +206,12 @@ namespace DH.Helpdesk.Services.Services
             return this.CaseSolutionRepository.GetMany(x => x.Status >= 0).OrderBy(x => x.Customer.Name).ThenBy(x => x.Name).ToList();
         }
 
-        public IList<int> GetWorkflowCaseSolutionIds(int customerId, bool selfServiceOnly = false)
+        public IList<int> GetWorkflowCaseSolutionIds(int customerId)
         {
             //ConnectedButton == 0 - worfklow type
             var query = 
                 CaseSolutionRepository.GetMany(x => x.Customer_Id == customerId && x.ConnectedButton == 0 && x.Status > 0)
                 .AsQueryable();
-
-            if (selfServiceOnly)
-            {
-                query = query.Where(x => x.ShowInSelfService);
-            }
 
             return query.Select(x => x.Id).ToList();
         }
