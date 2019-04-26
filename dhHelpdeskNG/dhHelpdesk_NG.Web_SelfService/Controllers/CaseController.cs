@@ -741,7 +741,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         {
             var caseTemplate = _caseSolutionService.GetCaseSolution(templateId);
 
-            if (caseTemplate.Status == 0 || !caseTemplate.ShowInSelfService)
+            if (caseTemplate.Status == 0)
             {
                 return Json(new { success = false, Error = "Selected template is not available anymore!" });
             }
@@ -808,7 +808,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (templateId > 0)
             {
                 var caseTemplate = _caseSolutionService.GetCaseSolution(templateId);
-                if (caseTemplate == null || caseTemplate.Status == 0 || !caseTemplate.ShowInSelfService)
+                if (caseTemplate == null || caseTemplate.Status == 0)
                 {
                     ErrorGenerator.MakeError("Selected template is not available anymore!");
                     return RedirectToAction("Index", "Error");

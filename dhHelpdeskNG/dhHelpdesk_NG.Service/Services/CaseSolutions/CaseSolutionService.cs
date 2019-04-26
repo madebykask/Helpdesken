@@ -27,6 +27,7 @@ namespace DH.Helpdesk.Services.Services
     public interface ICaseSolutionService : IBaseCaseSolutionService
     {
         IList<CaseSolution> GetCaseSolutions(int customerId);
+        IList<CaseTemplateData> GetSelfServiceCaseTemplates(int customerId);
         IList<CaseSolutionOverview> GetCustomerCaseSolutionsOverview(int customerId, int? userId = null);
 
         IList<ApplicationTypeEntity> GetApplicationTypes(int customerId);
@@ -197,7 +198,32 @@ namespace DH.Helpdesk.Services.Services
         [Obsolete("Use GetCustomerCaseSolutionsOverview instead")]
         public IList<CaseSolution> GetCaseSolutions(int customerId)
         {
-            return this.CaseSolutionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return CaseSolutionRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<CaseTemplateData> GetSelfServiceCaseTemplates(int customerId)
+        {
+            // x.ConnectedButton != 0 - exclude workflow steps templates
+            return
+                CaseSolutionRepository.GetMany(
+                        x => x.Customer_Id == customerId &&
+                             x.ShowInSelfService &&
+                             x.Status > 0 &&
+                             x.ConnectedButton != 0).AsQueryable()
+                    .OrderBy(x => x.Name)
+                    .Select(t => new CaseTemplateData()
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        ShortDescription = t.ShortDescription,
+                        TemplatePath = t.TemplatePath,
+                        CaseSolutionCategory_Id = t.CaseSolutionCategory_Id,
+                        CaseSolutionCategoryName = t.CaseSolutionCategory != null ? t.CaseSolutionCategory.Name : null,
+                        OrderNum = t.OrderNum,
+                        ContainsExtendedForm = t.ExtendedCaseForms.Any()
+                    })
+                    .ToList();
+
         }
 
         //todo: review. not performance optimised
