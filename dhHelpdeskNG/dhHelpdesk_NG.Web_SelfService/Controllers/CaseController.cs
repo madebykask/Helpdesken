@@ -695,6 +695,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 return null;
             }
             
+            //todo: should be refactored to use CaseLogData dto instead of Log ef entity.
             var caseLogs = caseId.HasValue
                 ? _logService.GetLogsByCaseId(caseId.Value).OrderByDescending(l => l.LogDate).ToList()
                 : new List<Log>();
@@ -2464,7 +2465,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 caseEntity = _caseService.GetCaseById(caseId);
             }
 
-            var workflowCaseSolutions = _caseSolutionService.GetWorkflowCaseSolutionIds(customerId);
+            var workflowCaseSolutions = _caseSolutionService.GetWorkflowCaseSolutionIds(customerId, true);
 
             if (caseEntity != null)
             {

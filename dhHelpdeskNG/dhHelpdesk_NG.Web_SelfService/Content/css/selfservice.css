@@ -1005,6 +1005,9 @@ a.error, input[type=¨button].error .btn
    float: right;
 }
 
+.no-left-padding { padding-left:0px!important}
+.caseControlPanel { padding-left: 15px!important; }
+
 .width100 {
     width: 100%!important;
 }

@@ -136,14 +136,14 @@
                             $goBtn.prop('disabled', true);
                             window.location.reload(true);
                         } else {
-                            var errMsg = err.Error || 'Operation failed.';
+                            var errMsg = res.Error || 'Operation failed.';
                             ShowToastMessage(errMsg, "Error");
                         }
                     }).fail(function(xhr, status, err) {
                         var errMsg = err.Error || 'Operation failed.';
                         ShowToastMessage(errMsg, "Error");
                         console.error(errMsg);
-                    }).done(function() {
+                    }).always(function() {
                         $progress.hide();
                     });
                 }
