@@ -522,7 +522,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             var historyId = _caseService.SaveCase(caseEntity, logEntity, auxModel.CurrentUserId, auxModel.UserIdentityName, extraInfo, out errors);
 
             if (errors.Any())
-                return new ProcessResult("Do Save Case", ResultTypeEnum.ERROR, "Save could not be saved!", errors);
+                return new ProcessResult("Do Save Case", ResultTypeEnum.ERROR, "Case could not be saved!", errors);
 
             logEntity.CaseId = caseEntity.Id;
             logEntity.CaseHistoryId = historyId;

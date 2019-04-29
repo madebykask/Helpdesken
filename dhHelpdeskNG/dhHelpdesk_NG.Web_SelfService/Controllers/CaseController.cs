@@ -324,12 +324,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             var appSettings = ConfigurationService.AppSettings;
             ViewBag.ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService;
-            if (id.Is<Guid>())
-            {
-                ViewBag.caseEmailGuid = new Guid(id);
-            }
-            else
-            ViewBag.caseEmailGuid = "";
+            ViewBag.caseEmailGuid = id.Is<Guid>() ? Guid.Parse(id).ToString() : "";
 
             return View(caseReceipt);
         }
@@ -746,17 +741,28 @@ namespace DH.Helpdesk.SelfService.Controllers
         {
             var caseTemplate = _caseSolutionService.GetCaseSolution(templateId);
 
-            if (caseTemplate.Status == 0 || !caseTemplate.ShowInSelfService)
+            if (caseTemplate.Status == 0)
             {
                 return Json(new { success = false, Error = "Selected template is not available anymore!" });
             }
 
-            var caseEntity = _caseService.GetCaseById(caseId);
+            var caseModel = _universalCaseService.GetCase(caseId);
             
             // Apply template values to case:
-            ApplyTemplate(caseTemplate, caseEntity, true);
-            
-            return Json(new { success = true });
+            ApplyTemplate(caseTemplate, caseModel, true);
+
+            var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0;
+            var auxModel = new AuxCaseModel(SessionFacade.CurrentLanguageId,
+                localUserId,
+                SessionFacade.CurrentUserIdentity.UserId,
+                ConfigurationService.AppSettings.HelpdeskPath, 
+                CreatedByApplications.SelfService5,
+                TimeZoneInfo.Local);
+
+            decimal caseNum;
+            var res = _universalCaseService.SaveCaseCheckSplit(caseModel, auxModel, out caseId, out caseNum);
+
+            return Json(new { success = res.IsSucceed, Error = res.LastMessage });
         }
 
         [HttpGet]
@@ -802,7 +808,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             if (templateId > 0)
             {
                 var caseTemplate = _caseSolutionService.GetCaseSolution(templateId);
-                if (caseTemplate == null || caseTemplate.Status == 0 || !caseTemplate.ShowInSelfService)
+                if (caseTemplate == null || caseTemplate.Status == 0)
                 {
                     ErrorGenerator.MakeError("Selected template is not available anymore!");
                     return RedirectToAction("Index", "Error");
