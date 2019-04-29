@@ -1,12 +1,10 @@
-import { Injectable } from "@angular/core";
-import { CaseApiService } from "../api/case/case-api.service";
-import { FormGroup } from "@angular/forms";
-import { throwError, Observable } from "rxjs";
-import { isNumeric } from "rxjs/internal/util/isNumeric";
-import { CaseEditOutputModel, CaseEditInputModel } from "../../models";
-import { CaseFieldsNames } from "src/app/modules/shared-module/constants";
-import { isBoolean } from "util";
-import { CaseFormGroup } from "src/app/modules/shared-module/models/forms";
+import { Injectable } from '@angular/core';
+import { CaseApiService } from '../api/case/case-api.service';
+import { throwError, Observable } from 'rxjs';
+import { isNumeric } from 'rxjs/internal/util/isNumeric';
+import { CaseEditOutputModel, CaseEditInputModel } from '../../models';
+import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
+import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms';
 
 @Injectable({ providedIn: 'root' })
 export class CaseSaveService {
@@ -15,7 +13,7 @@ export class CaseSaveService {
   }
 
   public saveCase(form: CaseFormGroup, caseInputData: CaseEditInputModel): Observable<any> {
-    let model = new CaseEditOutputModel();
+    const model = new CaseEditOutputModel();
     model.caseId = caseInputData.id;
     model.caseGuid = caseInputData.caseGuid;
     model.caseSolutionId = caseInputData.caseSolution != null ? caseInputData.caseSolution.caseSolutionId : null;
@@ -30,7 +28,7 @@ export class CaseSaveService {
     model.costCentre = this.getStringValue(form, CaseFieldsNames.CostCentre);
     model.place = this.getStringValue(form, CaseFieldsNames.Place);
     model.userCode = this.getStringValue(form, CaseFieldsNames.UserCode);
-    
+
     model.isAbout_ReportedBy = this.getStringValue(form, CaseFieldsNames.IsAbout_ReportedBy);
     model.isAbout_PersonName = this.getStringValue(form, CaseFieldsNames.IsAbout_PersonName);
     model.isAbout_PersonEmail = this.getStringValue(form, CaseFieldsNames.IsAbout_PersonEmail);
@@ -70,7 +68,7 @@ export class CaseSaveService {
     model.agreedDate = this.getStringValue(form, CaseFieldsNames.AgreedDate);
     model.available = this.getStringValue(form, CaseFieldsNames.Available);
     model.cost = this.getNumericValue(form, CaseFieldsNames.Cost);
-    model.otherCost = this.getNumericValue(form, CaseFieldsNames.Cost_OtherCost);    
+    model.otherCost = this.getNumericValue(form, CaseFieldsNames.Cost_OtherCost);
     model.costCurrency = this.getStringValue(form, CaseFieldsNames.Cost_Currency);
 
     model.workingGroupId = this.getNumericValue(form, CaseFieldsNames.WorkingGroupId);
@@ -92,6 +90,10 @@ export class CaseSaveService {
 
     model.logExternalText = this.getStringValue(form, CaseFieldsNames.Log_ExternalText);
     model.logInternalText = this.getStringValue(form, CaseFieldsNames.Log_InternalText);
+    model.logSendMailToNotifier = true; // TODO: this.getBooleanValue(form, CaseFieldsNames.Log_SendMailToNotifier);
+    model.logFollowersCc = 'logFollowersCc'; // TODO: this.getBooleanValue(form, CaseFieldsNames.Log_FollowersCC);
+    model.logInternalEmailTo = 'logInternalEmailTo'; // TODO: this.getStringValue(form, CaseFieldsNames.Log_InternalEmailTo);
+    model.logInternalEmailCc = 'logInternalEmailCc'; // TODO: this.getStringValue(form, CaseFieldsNames.Log_InternalEmailCc);
     model.finishingDescription = this.getStringValue(form, CaseFieldsNames.FinishingDescription);
     model.closingReason = this.getNumericValue(form, CaseFieldsNames.ClosingReason);
     model.finishingDate = this.getDateValue(form, CaseFieldsNames.FinishingDate);
@@ -102,38 +104,35 @@ export class CaseSaveService {
   private getNumericValue(form: CaseFormGroup, fieldName: string): number {
     if (this.hasValue(form, fieldName)) {
       const value = form.controls[fieldName].value;
-      if (value == null) return null;
-      if (isNumeric(value)) { 
+      if (value == null) { return null; }
+      if (isNumeric(value)) {
         return Number(value);
       }
-      throwError(`Not supported value. Expecting number, but recieved ${typeof(value)}.`)
+      throwError(`Not supported value. Expecting number, but recieved ${typeof(value)}.`);
     }
     return undefined;
   }
 
-  private getDateValue(form: CaseFormGroup, fieldName: string): string
-  {
-    if(this.hasValue(form, fieldName)) {
+  private getDateValue(form: CaseFormGroup, fieldName: string): string {
+    if (this.hasValue(form, fieldName)) {
       const value = form.controls[fieldName].value;
-      if(!value) return null;
+      if (!value) { return null; }
       return value;
     }
     return undefined;
   }
 
-  private getStringValue(form: CaseFormGroup, fieldName: string): string
-  {
-    if(this.hasValue(form, fieldName)) {
+  private getStringValue(form: CaseFormGroup, fieldName: string): string {
+    if (this.hasValue(form, fieldName)) {
       return form.controls[fieldName].value;
     }
     return undefined;
   }
 
-  private getBooleanValue(form: CaseFormGroup, fieldName: string): boolean
-  {
-    if(this.hasValue(form, fieldName)) {
+  private getBooleanValue(form: CaseFormGroup, fieldName: string): boolean {
+    if (this.hasValue(form, fieldName)) {
       const value = form.controls[fieldName].value;
-      if (isBoolean(value)) {
+      if (typeof value === 'boolean') {
         return Boolean(value);
       } else {
         return null;

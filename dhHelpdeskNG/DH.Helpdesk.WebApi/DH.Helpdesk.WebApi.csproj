@@ -285,6 +285,7 @@
     <Compile Include="Infrastructure\Translate\Translation.cs" />
     <Compile Include="Models\CaseLockInputModel.cs" />
     <Compile Include="Models\CaseUnLockInputModel.cs" />
+    <Compile Include="Models\Case\СaseStatisticsResult.cs" />
     <Compile Include="Models\ClientLogItemModel.cs" />
     <Compile Include="Models\ExtendCaseLockInput.cs" />
     <Compile Include="Models\LoginUserInputModel.cs" />

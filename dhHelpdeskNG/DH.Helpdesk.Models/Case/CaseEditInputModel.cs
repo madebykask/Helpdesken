@@ -80,8 +80,11 @@ namespace DH.Helpdesk.Models.Case
         public int? ClosingReason { get; set; }
         public DateTime? FinishingDate { get; set; }
         public string LogInternalText { get; set; }
+        public string LogInternalEmailTo { get; set; }
+        public string LogInternalEmailCc { get; set; }
         public string LogExternalText { get; set; }
         public string Description { get; set; }
+        public bool LogSendMailToNotifier { get; set; }
     }
 }
 
