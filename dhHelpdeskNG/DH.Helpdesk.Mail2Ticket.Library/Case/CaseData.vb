@@ -126,7 +126,7 @@ Public Class CaseData
         Try
 
             Dim workTime As CaseWorkTime = calculateWorkTimeOnChange(objCase)
-            sSQL = $"UPDATE tblCase SET ApprovedDate='{workTime.Now}', ChangeTime='{workTime.Now}', ExternalTime={workTime.ExternalTime}, LeadTime={workTime.LeadTime} WHERE Id={objCase.Id}"
+            sSQL = $"UPDATE tblCase SET ApprovedDate='{getDateAsSqlString(workTime.Now)}', ChangeTime='{getDateAsSqlString(workTime.Now)}', ExternalTime={workTime.ExternalTime}, LeadTime={workTime.LeadTime} WHERE Id={objCase.Id}"
 
             executeSQL(gsConnectionString, sSQL)
         Catch ex As Exception
@@ -247,7 +247,7 @@ Public Class CaseData
                             "ApprovedDate=Null, " &
                             "ApprovedBy_User_Id=Null, " &
                             "Status=1, " &
-                            $"ChangeTime='{workTime.Now}', " &
+                            $"ChangeTime='{getDateAsSqlString(workTime.Now)}', " &
                             $"ExternalTime={workTime.ExternalTime}, " &
                             $"LeadTime={workTime.LeadTime}"
 
@@ -273,7 +273,7 @@ Public Class CaseData
 
         Try
             Dim workTime = calculateWorkTimeOnChange(objCase)
-            sSQL = $"UPDATE tblCase SET Status=1, ChangeTime='{workTime.Now}', ExternalTime={workTime.ExternalTime}, LeadTime={workTime.LeadTime} WHERE Id={objCase.Id}"
+            sSQL = $"UPDATE tblCase SET Status=1, ChangeTime='{getDateAsSqlString(workTime.Now)}', ExternalTime={workTime.ExternalTime}, LeadTime={workTime.LeadTime} WHERE Id={objCase.Id}"
 
             'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
@@ -330,7 +330,7 @@ Public Class CaseData
 
             Dim workTime = calculateWorkTimeOnChange(objCase)
 
-            sSQL = $"UPDATE tblCase SET StateSecondary_Id=Null, ChangeTime='{workTime.Now}', ExternalTime={workTime.ExternalTime}, LeadTime={workTime.LeadTime} WHERE tblCase.Id={objCase.Id}"
+            sSQL = $"UPDATE tblCase SET StateSecondary_Id=Null, ChangeTime='{getDateAsSqlString(workTime.Now)}', ExternalTime={workTime.ExternalTime}, LeadTime={workTime.LeadTime} WHERE tblCase.Id={objCase.Id}"
 
             'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
@@ -341,6 +341,10 @@ Public Class CaseData
             Throw ex
         End Try
     End Sub
+
+    Public Function getDateAsSqlString(ByVal d As DateTime) As String
+        Return $"{d:yyyy-MM-dd HH:mm:ss}"
+    End Function
 
     Public Function createCase(ByVal objCase As CCase) As CCase
         Dim sSQL As String = ""
