@@ -428,7 +428,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             // send emails
             var caseMailSetting = GetCaseMailSetting(currentCase, customer, customerSettings);
             _caseService.SendCaseEmail(currentCase.Id, caseMailSetting, caseHistoryId, basePath,
-                                       userTimeZone, oldCase, caseLog, allLogFiles, currentUser); //TODO: async or move to scheduler
+                                       userTimeZone, oldCase, caseLog, allLogFiles, currentUser,
+                                       model.LogExternalEmailsCc); //TODO: async or move to scheduler
 
             // BRE
             var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, currentCase, oldCase);

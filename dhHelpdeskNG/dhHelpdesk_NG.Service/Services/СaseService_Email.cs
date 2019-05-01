@@ -29,7 +29,8 @@ namespace DH.Helpdesk.Services.Services
             Case oldCase = null,
             CaseLog log = null,
             List<CaseFileDto> logFiles = null,
-            User currentLoggedInUser = null)
+            User currentLoggedInUser = null,
+            string extraFollowersEmails = null)
         {
             //get sender email adress
             var helpdeskMailFromAdress = string.Empty;
@@ -697,7 +698,10 @@ namespace DH.Helpdesk.Services.Services
                     newCase,
                     helpdeskMailFromAdress,
                     files,
-                    cms.CustomeMailFromAddress, isCreatingCase, cms.DontSendMailToNotifier, cms.AbsoluterUrl);
+                    cms.CustomeMailFromAddress,
+                    isCreatingCase,
+                    cms.DontSendMailToNotifier,
+                    cms.AbsoluterUrl);
             }
 
             this._caseMailer.InformAboutInternalLogIfNeeded(
@@ -721,7 +725,7 @@ namespace DH.Helpdesk.Services.Services
                 smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
             }
             List<string> files = null;
-            List<Field> fields = GetCaseFieldsForEmail(cs, caseLog, cms, string.Empty, 0, userTimeZone);
+            var fields = GetCaseFieldsForEmail(cs, caseLog, cms, string.Empty, 0, userTimeZone);
 
             if (isClosedCaseSending)
             {

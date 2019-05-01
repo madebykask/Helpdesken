@@ -85,6 +85,7 @@ namespace DH.Helpdesk.Models.Case
         public string LogExternalText { get; set; }
         public string Description { get; set; }
         public bool LogSendMailToNotifier { get; set; }
+        public string LogExternalEmailsCc { get; set; }
     }
 }
 

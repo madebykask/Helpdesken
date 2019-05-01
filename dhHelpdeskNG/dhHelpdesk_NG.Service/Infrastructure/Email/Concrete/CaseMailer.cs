@@ -17,41 +17,31 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 
     public sealed class CaseMailer : ICaseMailer
     {
-        private readonly IEmailLogRepository emailLogRepository;
-
-        private readonly IEmailService emailService;
-
-        private readonly IMailTemplateService mailTemplateService;
-
-        private readonly IEmailFactory emailFactory;
-
-        private readonly IUserService userService;
-
-        private readonly IWorkingGroupService workingGroupService;
-
-        private readonly ISettingService settingService;
-
+        private readonly IEmailLogRepository _emailLogRepository;
+        private readonly IEmailService _emailService;
+        private readonly IMailTemplateService _mailTemplateService;
+        private readonly IEmailFactory _emailFactory;
+        private readonly IUserService _userService;
+        private readonly ISettingService _settingService;
         private readonly IEmailSendingSettingsProvider _emailSendingSettingsProvider;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
 
         public CaseMailer(
-            IEmailLogRepository emailLogRepository, 
-            IEmailService emailService, 
-            IMailTemplateService mailTemplateService, 
-            IEmailFactory emailFactory, 
-            IUserService userService, 
-            IWorkingGroupService workingGroupService,
+            IEmailLogRepository emailLogRepository,
+            IEmailService emailService,
+            IMailTemplateService mailTemplateService,
+            IEmailFactory emailFactory,
+            IUserService userService,
             ISettingService settingService,
             IEmailSendingSettingsProvider emailSendingSettingsProvider,
             ICaseExtraFollowersService caseExtraFollowersService)
         {
-            this.emailLogRepository = emailLogRepository;
-            this.emailService = emailService;
-            this.mailTemplateService = mailTemplateService;
-            this.emailFactory = emailFactory;
-            this.userService = userService;
-            this.workingGroupService = workingGroupService;
-            this.settingService = settingService;
+            this._emailLogRepository = emailLogRepository;
+            this._emailService = emailService;
+            this._mailTemplateService = mailTemplateService;
+            this._emailFactory = emailFactory;
+            this._userService = userService;
+            this._settingService = settingService;
             this._emailSendingSettingsProvider = emailSendingSettingsProvider;
             _caseExtraFollowersService = caseExtraFollowersService;
         }
@@ -59,102 +49,107 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
         public void InformNotifierIfNeeded(
             int caseHistoryId,
             List<Field> fields,
-            CaseLog log, 
-            bool dontSendMailToNotfier, 
-            Case newCase, 
-            string helpdeskMailFromAdress, 
+            CaseLog log,
+            bool dontSendMailToNotfier,
+            Case newCase,
+            string helpdeskMailFromAdress,
             List<string> files,
             MailSenders mailSenders,
             bool isCreatingCase,
             bool caseMailSetting_DontSendMail,
-            string AbsoluterUrl)
+            string absoluterUrl,
+            string extraFollowersEmails = null)
         {
 
             //if (!isCreatingCase)
             //{
-                if (log == null || log.Id <= 0 || string.IsNullOrWhiteSpace(log.TextExternal) ||
-                    !log.SendMailAboutCaseToNotifier ||
-                    dontSendMailToNotfier ||
-                    (caseMailSetting_DontSendMail == false && newCase.FinishingDate != null))
-                {
-                    return;
-                }
+            if (log == null || log.Id <= 0 || string.IsNullOrWhiteSpace(log.TextExternal) ||
+                !log.SendMailAboutCaseToNotifier ||
+                dontSendMailToNotfier ||
+                (caseMailSetting_DontSendMail == false && newCase.FinishingDate != null))
+            {
+                return;
+            }
 
-                var template = this.mailTemplateService.GetMailTemplateForCustomerAndLanguage(
-                                                    newCase.Customer_Id,
-                                                    newCase.RegLanguage_Id,
-                                                    (int)GlobalEnums.MailTemplates.InformNotifier);
-                if (template == null)
-                {
-                    return;
-                }
+            var template = this._mailTemplateService.GetMailTemplateForCustomerAndLanguage(
+                                                newCase.Customer_Id,
+                                                newCase.RegLanguage_Id,
+                                                (int)GlobalEnums.MailTemplates.InformNotifier);
+            if (template == null)
+            {
+                return;
+            }
 
-                var customerSetting = settingService.GetCustomerSetting(newCase.Customer_Id);
-                var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
+            var customerSetting = _settingService.GetCustomerSetting(newCase.Customer_Id);
+            var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName,
+                customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
 
-                if (string.IsNullOrEmpty(smtpInfo.Server) || smtpInfo.Port <= 0)
-                {
-                    var info = _emailSendingSettingsProvider.GetSettings();
-                    smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
-                }
+            if (string.IsNullOrEmpty(smtpInfo.Server) || smtpInfo.Port <= 0)
+            {
+                var info = _emailSendingSettingsProvider.GetSettings();
+                smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
+            }
 
             if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
+            {
+                var to = newCase.PersonsEmail.Split(';', ',').ToList();
+                var allEmails = to.Select(x => new
                 {
-                    var to = newCase.PersonsEmail.Split(';', ',').ToList();
-                    var allEmails = to.Select(x => new
-                    {
-                        EmailAddress = x,
-                        EmailType = EmailType.ToMail
-                    }).ToList();
-                    var extraFollowers = _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
-                    var ccEmails = extraFollowers.Select(x => new
-                    {
-                        EmailAddress = x,
-                        EmailType = EmailType.CcMail
-                    }).ToList();
-                    allEmails.AddRange(ccEmails);
-                    foreach (var t in allEmails)
-                    {
-                        var curMail = t.EmailAddress.Trim();
-                        if (!string.IsNullOrWhiteSpace(curMail) && this.emailService.IsValidEmail(curMail))
-                        {
-                            string customEmailSender4 = mailSenders.DefaultOwnerWGEMail;
-                            if (string.IsNullOrWhiteSpace(customEmailSender4))
-                                customEmailSender4 = mailSenders.WGEmail;
-                            if (string.IsNullOrWhiteSpace(customEmailSender4))
-                                customEmailSender4 = mailSenders.SystemEmail;
+                    EmailAddress = x,
+                    EmailType = EmailType.ToMail
+                }).ToList();
+                var extraFollowers = extraFollowersEmails != null ?
+                    extraFollowersEmails.Split(';', ',').ToList() :
+                    _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
+                var ccEmails = extraFollowers.Select(x => new
+                {
+                    EmailAddress = x,
+                    EmailType = EmailType.CcMail
+                }).ToList();
+                allEmails.AddRange(ccEmails);
 
-                            var mailMessageId = this.emailService.GetMailMessageId(customEmailSender4);
-                            var notifierEmailLog = this.emailFactory.CreatEmailLog(
-                                                            caseHistoryId,
-                                                            (int)GlobalEnums.MailTemplates.InformNotifier,
-                                                            curMail,
-                                                            mailMessageId);
+                foreach (var t in allEmails)
+                {
+                    var curMail = t.EmailAddress.Trim();
+                    if (!string.IsNullOrWhiteSpace(curMail) && this._emailService.IsValidEmail(curMail))
+                    {
+                        var customEmailSender4 = mailSenders.DefaultOwnerWGEMail;
+                        if (string.IsNullOrWhiteSpace(customEmailSender4))
+                            customEmailSender4 = mailSenders.WGEmail;
+                        if (string.IsNullOrWhiteSpace(customEmailSender4))
+                            customEmailSender4 = mailSenders.SystemEmail;
 
-                            string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + notifierEmailLog.EmailLogGUID.ToString();
-                            var mailResponse = EmailResponse.GetEmptyEmailResponse();
-                            var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
-                            //var siteHelpdesk = AbsoluterUrl;
-                            var siteHelpdesk = AbsoluterUrl + "Cases/edit/" + newCase.Id.ToString();
-                            var notifierEmailItem = this.emailFactory.CreateEmailItem(
-                                                            customEmailSender4,
-                                                            notifierEmailLog.EmailAddress,
-                                                            template.Subject,
-                                                            template.Body,
-                                                            fields,
-                                                            notifierEmailLog.MessageId,
-                                                            log.HighPriority,
-                                                            files);
-                            var e_res = this.emailService.SendEmail(notifierEmailLog, notifierEmailItem, mailSetting, siteSelfService, siteHelpdesk, t.EmailType);
-                            notifierEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
-                            var now = DateTime.Now;
-                            notifierEmailLog.CreatedDate = now;
-                            notifierEmailLog.ChangedDate = now;
-                            this.emailLogRepository.Add(notifierEmailLog);
-                            this.emailLogRepository.Commit();
-                        }
+                        var mailMessageId = this._emailService.GetMailMessageId(customEmailSender4);
+                        var notifierEmailLog = this._emailFactory.CreatEmailLog(
+                                                        caseHistoryId,
+                                                        (int)GlobalEnums.MailTemplates.InformNotifier,
+                                                        curMail,
+                                                        mailMessageId);
+
+                        var siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + notifierEmailLog.EmailLogGUID.ToString();
+                        var mailResponse = EmailResponse.GetEmptyEmailResponse();
+                        var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
+                        //var siteHelpdesk = AbsoluterUrl;
+                        var siteHelpdesk = absoluterUrl + "Cases/edit/" + newCase.Id.ToString();
+                        var notifierEmailItem = this._emailFactory.CreateEmailItem(
+                                                        customEmailSender4,
+                                                        notifierEmailLog.EmailAddress,
+                                                        template.Subject,
+                                                        template.Body,
+                                                        fields,
+                                                        notifierEmailLog.MessageId,
+                                                        log.HighPriority,
+                                                        files);
+                        var e_res = this._emailService.SendEmail(notifierEmailLog, notifierEmailItem, mailSetting, siteSelfService, siteHelpdesk, t.EmailType);
+                        notifierEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
+                        var now = DateTime.Now;
+                        notifierEmailLog.CreatedDate = now;
+                        notifierEmailLog.ChangedDate = now;
+                        this._emailLogRepository.Add(notifierEmailLog);
+                        this._emailLogRepository.Commit();
                     }
                 }
+            }
             //}
         }
 
@@ -166,7 +161,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             Case newCase,
             string helpdeskMailFromAdress,
             List<string> files,
-            string AbsoluterUrl)
+            string absoluterUrl)
         {
             if (log == null || log.Id <= 0 ||
                 !log.SendMailAboutCaseToNotifier ||
@@ -176,7 +171,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 return;
             }
 
-            var template = this.mailTemplateService.GetMailTemplateForCustomerAndLanguage(
+            var template = this._mailTemplateService.GetMailTemplateForCustomerAndLanguage(
                                                 newCase.Customer_Id,
                                                 newCase.RegLanguage_Id,
                                                 (int)GlobalEnums.MailTemplates.InformNotifier);
@@ -185,7 +180,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 return;
             }
 
-            var customerSetting = settingService.GetCustomerSetting(newCase.Customer_Id);
+            var customerSetting = _settingService.GetCustomerSetting(newCase.Customer_Id);
             var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
 
             if (string.IsNullOrEmpty(smtpInfo.Server) || smtpInfo.Port <= 0)
@@ -196,7 +191,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 
             if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
             {
-                var mailMessageId = this.emailService.GetMailMessageId(helpdeskMailFromAdress);
+                var mailMessageId = this._emailService.GetMailMessageId(helpdeskMailFromAdress);
 
                 // http://redmine.fastdev.se/issues/10997
                 /*var caseOwner = this.userService.GetUser(newCase.User_Id);
@@ -213,14 +208,14 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                     return;
                 }*/
 
-                var defaultWorkingGroup = this.userService.GetUserDefaultWorkingGroup(newCase.User_Id.Value, newCase.Customer_Id);
+                var defaultWorkingGroup = this._userService.GetUserDefaultWorkingGroup(newCase.User_Id.Value, newCase.Customer_Id);
                 if (defaultWorkingGroup == null ||
-                    !this.emailService.IsValidEmail(defaultWorkingGroup.EMail))
+                    !this._emailService.IsValidEmail(defaultWorkingGroup.EMail))
                 {
                     return;
                 }
 
-                var defaultWorkingGroupEmailLog = this.emailFactory.CreatEmailLog(
+                var defaultWorkingGroupEmailLog = this._emailFactory.CreatEmailLog(
                                                 caseHistoryId,
                                                 (int)GlobalEnums.MailTemplates.InformNotifier,
                                                 defaultWorkingGroup.EMail,
@@ -228,10 +223,10 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 
                 string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + defaultWorkingGroupEmailLog.EmailLogGUID.ToString();
                 //var siteHelpdesk = AbsoluterUrl;
-                var siteHelpdesk = AbsoluterUrl + "Cases/edit/" + newCase.Id.ToString();
+                var siteHelpdesk = absoluterUrl + "Cases/edit/" + newCase.Id.ToString();
                 var mailResponse = EmailResponse.GetEmptyEmailResponse();
                 var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
-                var defaultWorkingGroupEmailItem = this.emailFactory.CreateEmailItem(
+                var defaultWorkingGroupEmailItem = this._emailFactory.CreateEmailItem(
                                                 helpdeskMailFromAdress,
                                                 defaultWorkingGroupEmailLog.EmailAddress,
                                                 template.Subject,
@@ -240,13 +235,13 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                                                 defaultWorkingGroupEmailLog.MessageId,
                                                 log.HighPriority,
                                                 files);
-                var e_res = this.emailService.SendEmail(defaultWorkingGroupEmailLog, defaultWorkingGroupEmailItem, mailSetting, site, siteHelpdesk);
+                var e_res = this._emailService.SendEmail(defaultWorkingGroupEmailLog, defaultWorkingGroupEmailItem, mailSetting, site, siteHelpdesk);
                 defaultWorkingGroupEmailLog.SetResponse(e_res.SendTime, e_res.ResponseMessage);
                 var now = DateTime.Now;
                 defaultWorkingGroupEmailLog.CreatedDate = now;
                 defaultWorkingGroupEmailLog.ChangedDate = now;
-                this.emailLogRepository.Add(defaultWorkingGroupEmailLog);
-                this.emailLogRepository.Commit();
+                this._emailLogRepository.Add(defaultWorkingGroupEmailLog);
+                this._emailLogRepository.Commit();
             }
         }
 
@@ -256,7 +251,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
             CaseLog log,
             Case newCase,
             string helpdeskMailFromAdress,
-            List<string> files, string AbsoluterUrl,
+            List<string> files, string absoluterUrl,
             MailSenders mailSenders)
         {
             if (log == null || log.Id <= 0 ||
@@ -266,7 +261,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 return;
             }
 
-            var template = this.mailTemplateService.GetMailTemplateForCustomerAndLanguage(
+            var template = this._mailTemplateService.GetMailTemplateForCustomerAndLanguage(
                                                 newCase.Customer_Id,
                                                 newCase.RegLanguage_Id,
                                                 (int)GlobalEnums.MailTemplates.InternalLogNote);
@@ -275,7 +270,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 return;
             }
 
-            var customerSetting = settingService.GetCustomerSetting(newCase.Customer_Id);
+            var customerSetting = _settingService.GetCustomerSetting(newCase.Customer_Id);
             var smtpInfo = new MailSMTPSetting(customerSetting.SMTPServer, customerSetting.SMTPPort, customerSetting.SMTPUserName, customerSetting.SMTPPassWord, customerSetting.IsSMTPSecured);
 
             if (string.IsNullOrEmpty(smtpInfo.Server) || smtpInfo.Port <= 0)
@@ -297,13 +292,13 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                     ? log.EmailRecepientsInternalLogTo
                         .Replace(" ", "")
                         .Replace(Environment.NewLine, "|")
-                        .Split(new[] {'|', ';', ','}, StringSplitOptions.RemoveEmptyEntries)
+                        .Split(new[] { '|', ';', ',' }, StringSplitOptions.RemoveEmptyEntries)
                     : new string[0];
                 var cc = !string.IsNullOrEmpty(log.EmailRecepientsInternalLogCc)
                     ? log.EmailRecepientsInternalLogCc
                         .Replace(" ", "")
                         .Replace(Environment.NewLine, "|")
-                        .Split(new[] {'|', ';', ','}, StringSplitOptions.RemoveEmptyEntries)
+                        .Split(new[] { '|', ';', ',' }, StringSplitOptions.RemoveEmptyEntries)
                     : new string[0];
 
                 var allEmails = to.Select(x => new
@@ -320,19 +315,19 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
 
                 foreach (var item in allEmails)
                 {
-                    if (!string.IsNullOrWhiteSpace(item.EmailAdress) && this.emailService.IsValidEmail(item.EmailAdress))
+                    if (!string.IsNullOrWhiteSpace(item.EmailAdress) && this._emailService.IsValidEmail(item.EmailAdress))
                     {
-                        var internalEmailLog = this.emailFactory.CreatEmailLog(
+                        var internalEmailLog = this._emailFactory.CreatEmailLog(
                             caseHistoryId,
-                            (int) GlobalEnums.MailTemplates.InternalLogNote,
+                            (int)GlobalEnums.MailTemplates.InternalLogNote,
                             item.EmailAdress,
-                            this.emailService.GetMailMessageId(helpdeskMailFromAdress));
+                            this._emailService.GetMailMessageId(helpdeskMailFromAdress));
                         string siteSelfService = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() +
                                                  internalEmailLog.EmailLogGUID.ToString();
-                        var siteHelpdesk = AbsoluterUrl + "Cases/edit/" + newCase.Id.ToString();
+                        var siteHelpdesk = absoluterUrl + "Cases/edit/" + newCase.Id.ToString();
                         var mailResponse = EmailResponse.GetEmptyEmailResponse();
                         var mailSetting = new EmailSettings(mailResponse, smtpInfo, customerSetting.BatchEmail);
-                        var internalEmail = this.emailFactory.CreateEmailItem(
+                        var internalEmail = this._emailFactory.CreateEmailItem(
                             customEmailSender4,
                             internalEmailLog.EmailAddress,
                             template.Subject,
@@ -341,14 +336,14 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                             internalEmailLog.MessageId,
                             log.HighPriority,
                             files);
-                        mailResponse = this.emailService.SendEmail(internalEmailLog, internalEmail, mailSetting, siteSelfService,
+                        mailResponse = this._emailService.SendEmail(internalEmailLog, internalEmail, mailSetting, siteSelfService,
                             siteHelpdesk, item.EmailType);
                         internalEmailLog.SetResponse(mailResponse.SendTime, mailResponse.ResponseMessage);
                         var now = DateTime.Now;
                         internalEmailLog.CreatedDate = now;
                         internalEmailLog.ChangedDate = now;
-                        this.emailLogRepository.Add(internalEmailLog);
-                        this.emailLogRepository.Commit();
+                        this._emailLogRepository.Add(internalEmailLog);
+                        this._emailLogRepository.Commit();
                     }
                 }
             }
