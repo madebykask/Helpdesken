@@ -4,8 +4,7 @@ import { CaseService } from '../../services/case/case.service';
 import { forkJoin, Subject, of, throwError, interval } from 'rxjs';
 import { switchMap, take, finalize, delay, catchError, map, takeUntil, takeWhile } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
-import { CommunicationService, Channels,
-  FormValueChangedEvent, NotifierChangedEvent } from 'src/app/services/communication/communication.service';
+import { CommunicationService, Channels, CaseFieldValueChangedEvent, } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/data/header-event-data';
 import { AuthenticationStateService } from 'src/app/services/authentication';
 import { WorkingGroupsService } from 'src/app/services/case-organization/workingGroups-service';
@@ -24,7 +23,7 @@ import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseWatchDateApiService } from '../../services/api/case/case-watchDate-api.service';
 import { CaseFilesApiService } from '../../services/api/case/case-files-api.service';
-import { NotifierType } from 'src/app/modules/shared-module/models/notifier/notifier.model';
+import { NotifierType, NotifierModel } from 'src/app/modules/shared-module/models/notifier/notifier.model';
 import { CaseTypesService } from 'src/app/services/case-organization/caseTypes-service';
 import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms';
 import { MbscFormOptions } from '@mobiscroll/angular';
@@ -33,6 +32,7 @@ import { DateTime } from 'luxon';
 import { CaseFieldsDefaultErrorMessages } from '../../logic/constants/case-fields.constants';
 import { CaseFormGroupBuilder } from 'src/app/modules/shared-module/models/forms/case-form-group-builder';
 import { NotifierFormFieldsSetter } from 'src/app/modules/shared-module/models/forms/notifier-form-fields-setter';
+import { NotifierService } from '../../services/notifier.service';
 
 @Component({
   selector: 'app-case-edit',
@@ -58,7 +58,8 @@ export class CaseEditComponent {
                 private translateService: TranslateService,
                 private localStorage:  LocalStorageService,
                 private caseFileService: CaseFilesApiService,
-                private productAreasService: ProductAreasService) {
+                private productAreasService: ProductAreasService,
+                private notifierService: NotifierService) {
       // read route params
       if (this.route.snapshot.paramMap.has('id')) {
           this.isNewCase = false;
@@ -305,16 +306,10 @@ export class CaseEditComponent {
     }
 
     private subscribeEvents() {
-
       // drop down value changed
-      this.commService.listen(Channels.FormValueChanged).pipe(
+      this.commService.listen(Channels.CaseFieldValueChanged).pipe(
         takeUntil(this.destroy$)
-      ).subscribe((v: FormValueChangedEvent) => this.runUpdates(v));
-
-      // Notifier changed
-      this.commService.listen<NotifierChangedEvent>(Channels.NotifierChanged).pipe(
-        takeUntil(this.destroy$)
-      ).subscribe(data => this.processNotifierChanged(data));
+      ).subscribe((v: CaseFieldValueChangedEvent) => this.runUpdates(v));
     }
 
     private getCaseDataReducers(): CaseDataReducers {
@@ -326,7 +321,7 @@ export class CaseEditComponent {
       return this.caseService.getOptionsHelper(filters);
     }
 
-    private runUpdates(v: FormValueChangedEvent) { // TODO: move to new class
+    private runUpdates(v: CaseFieldValueChangedEvent) { // TODO: move to new class
       const reducer = this.getCaseDataReducers();
       const filters = this.caseDataHelpder.getFormCaseOptionsFilter(this.caseData, this.form);
       const optionsHelper = this.caseService.getOptionsHelper(filters);
@@ -462,10 +457,18 @@ export class CaseEditComponent {
           }
           break;
         }
-        case CaseFieldsNames.PersonEmail: {
-          const externalEmailsToControl = this.form.controls[CaseFieldsNames.Log_ExternalEmailsTo];
-          if (externalEmailsToControl) {
-            externalEmailsToControl.setValue(v.value, {self: true, emitEvent: false });
+        case CaseFieldsNames.PerformerUserId: {
+          const userId = v.value !== null ? +v.value : 0;
+          const notifierType = v.text && v.text.length ? <NotifierType>+v.text : NotifierType.Initiator;
+
+          if (!isNaN(userId) && userId > 0) {
+            this.notifierService.getNotifier(v.value).pipe(
+              take(1)
+            ).subscribe(x => {
+               this.processNotifierChanged(x, notifierType === NotifierType.Regarding);
+            });
+          } else {
+            this.processNotifierChanged(null, notifierType === NotifierType.Regarding);
           }
           break;
         }
@@ -551,9 +554,7 @@ export class CaseEditComponent {
       }
     }
 
-    private processNotifierChanged(eventData: NotifierChangedEvent) {
-      const data = eventData.notifier;
-      const isRegarding = eventData.type === NotifierType.Regarding;
+    private processNotifierChanged(data: NotifierModel, isRegarding: boolean) {
       const formFieldsSetter = this.form.getNotifierFieldsSetter(isRegarding);
 
       if (data) {

@@ -3,7 +3,7 @@ import { BaseControl } from '../base-control';
 import { takeUntil, map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { MbscSelectOptions, MbscSelect } from '@mobiscroll/angular';
-import { CommunicationService, Channels, FormValueChangedEvent } from 'src/app/services/communication';
+import { CommunicationService, Channels, CaseFieldValueChangedEvent } from 'src/app/services/communication';
 import { OptionItem } from 'src/app/modules/shared-module/models';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -41,7 +41,7 @@ export class CaseDropdownComponent extends BaseControl<number> {
       },
       onSet: (event, inst) => {
         const value = inst.getVal();
-        this.commService.publish(Channels.FormValueChanged, new FormValueChangedEvent(value, event.valueText, this.fieldName));
+        this.commService.publish(Channels.CaseFieldValueChanged, new CaseFieldValueChangedEvent(value, event.valueText, this.fieldName));
       }
     };
 

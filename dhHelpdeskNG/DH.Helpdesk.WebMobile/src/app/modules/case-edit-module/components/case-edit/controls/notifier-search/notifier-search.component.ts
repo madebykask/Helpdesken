@@ -2,7 +2,7 @@ import { Component, Input, ViewChild, Renderer2 } from '@angular/core';
 import { MbscSelectOptions, MbscSelect } from '@mobiscroll/angular';
 import { BaseControl } from '../base-control';
 import { TranslateService } from '@ngx-translate/core';
-import { Channels, CommunicationService, NotifierChangedEvent, FormValueChangedEvent } from 'src/app/services/communication';
+import { Channels, CommunicationService, CaseFieldValueChangedEvent } from 'src/app/services/communication';
 import { NotifierService } from 'src/app/modules/case-edit-module/services/notifier.service';
 import { take, debounceTime, switchMap } from 'rxjs/operators';
 import { Subject, of } from 'rxjs';
@@ -97,7 +97,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
 
     const categoryFormControl = this.getFormControl(this.categoryFieldName);
     let categoryId = categoryFormControl && categoryFormControl.value ? +categoryFormControl.value : 0;
-    if (isNaN(categoryId)) categoryId = 0; // 0 - no category, null - all categories
+    if (isNaN(categoryId)) { categoryId = 0; } // 0 - no category, null - all categories
 
     // subscribe to notifier(user) search input
     this.usersSearchSubject.asObservable().pipe(
@@ -134,32 +134,8 @@ export class NotifierSearchComponent extends BaseControl<string> {
   }
 
   protected processSelectedItem(val) {
-    const notfierId = +val;
-    if (!isNaN(notfierId) && notfierId > 0) {
-      this.onNotifierSelected(notfierId);
-    } else {
-      this.onNotifierSelected(null);
-    }
-  }
-
-  private onNotifierSelected(userId: number) {
-    if (userId != null) {
-      this.notifierService.getNotifier(userId).pipe(
-        take(1)
-      ).subscribe(x => {
-        //todo: change to be handled in reducers!!!
-        this.commService.publish(Channels.NotifierChanged, new NotifierChangedEvent(x, this.notifierType));
-
-        // raise event to be handled in reducers
-        this.commService.publish(Channels.FormValueChanged, new FormValueChangedEvent(x.email, x.email, CaseFieldsNames.PersonEmail));
-      });
-    } else {
-      //todo: change to be handled in reducers!!!
-      this.commService.publish(Channels.NotifierChanged, new NotifierChangedEvent(null, this.notifierType));
-
-      // raise event to be handled in reducers
-      this.commService.publish(Channels.FormValueChanged, new FormValueChangedEvent('', '', CaseFieldsNames.PersonEmail));
-    }
+    const eventData = new CaseFieldValueChangedEvent((val || '').toString(), this.notifierType.toString(), CaseFieldsNames.PerformerUserId);
+    this.commService.publish(Channels.CaseFieldValueChanged, eventData);
   }
 
   private initEvents() {

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { NotifierModel, NotifierType } from 'src/app/modules/shared-module/models/notifier/notifier.model';
 
 @Injectable({ providedIn: 'root' })
 export class CommunicationService {
@@ -35,16 +34,10 @@ export class CommEvent {
 export enum Channels {
     Header,
     AuthenticationChange,
-    FormValueChanged,
-    NotifierChanged
+    CaseFieldValueChanged
 }
 
-export class NotifierChangedEvent {
-  constructor(public notifier: NotifierModel, public type: NotifierType) {
-  }
-}
-
-export class FormValueChangedEvent {
+export class CaseFieldValueChangedEvent {
   constructor(public value: any,
               public text: string,
               public name: string) {

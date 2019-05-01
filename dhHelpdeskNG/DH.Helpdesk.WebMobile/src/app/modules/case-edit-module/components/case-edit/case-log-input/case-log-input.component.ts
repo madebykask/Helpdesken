@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 import { CaseLogApiService } from '../../../services/api/case/case-log-api.service';
 import { take, takeUntil } from 'rxjs/internal/operators';
 import { CaseFormGroup, CaseFormControl } from 'src/app/modules/shared-module/models/forms';
-import { CommunicationService, Channels, FormValueChangedEvent } from 'src/app/services/communication';
+import { CommunicationService, Channels, CaseFieldValueChangedEvent } from 'src/app/services/communication';
 
 @Component({
   selector: 'case-log-input',
@@ -77,7 +77,7 @@ export class CaseLogInputComponent implements OnInit {
       this.sendExternalEmailsControl.valueChanges.pipe(
         takeUntil(this.destroy$)
         ).subscribe(v => {
-            this.commService.publish(Channels.FormValueChanged, new FormValueChangedEvent(v, '', this.sendExternalEmailsControl.fieldName));
+            this.commService.publish(Channels.CaseFieldValueChanged, new CaseFieldValueChangedEvent(v, '', this.sendExternalEmailsControl.fieldName));
         });
     }
 
