@@ -3,11 +3,11 @@
     <div class="mbsc-row">
       <div class="mbsc-col-10">
         <mbsc-input id="notifierInput" #notifierInput 
-            [formControlName]="field.name">{{ formControl.label }}{{ requiredSymbol }}</mbsc-input>
+            [formControlName]="field">{{ formControl.label }}{{ requiredSymbol }}</mbsc-input>
       </div>
       <div class="mbsc-col-2">
         <mbsc-button *ngIf="!isFormControlDisabled" flat icon="fa-search" class="input-icon"
-            #searchNotifer id="searchNotifer" (click)="notifierSelect.instance.show()"></mbsc-button>
+            #searchButton id="searchButton" (click)="notifierSelect.instance.show()"></mbsc-button>
       </div>
     </div>
   </div>

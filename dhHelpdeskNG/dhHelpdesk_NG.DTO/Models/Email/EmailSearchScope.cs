@@ -16,5 +16,17 @@
         public bool SearchInAdmins { get; set; }
         public bool SearchInUsers { get; set; }
         public bool SearchInEmailGrs { get; set; }
+
+        public static EmailSearchScope All()
+        {
+            return new EmailSearchScope()
+            {
+                SearchInInitiators = true,
+                SearchInAdmins = true,
+                SearchInUsers = true,
+                SearchInEmailGrs = true,
+                SearchInWorkingGrs = true
+            };
+        }
     }
 }

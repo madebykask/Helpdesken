@@ -2,6 +2,7 @@
   [error]="getErrorState()"
   [errorMessage]="getErrorMessage()"
   [ngClass]="{ 'select-textarea': true, 'disabled': formControl.disabled }">{{ getHeader }}{{ requiredSymbol }}</mbsc-textarea> 
+
 <ng-container [formGroup]="form">
-  <mbsc-select #select [formControlName]="field.name" [options]="settings"></mbsc-select>
+    <mbsc-select #select [formControlName]="field" [options]="settings"></mbsc-select>
 </ng-container>

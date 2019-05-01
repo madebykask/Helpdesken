@@ -2,7 +2,7 @@ import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { MbscListviewOptions, mobiscroll, MbscListview } from '@mobiscroll/angular';
 import { take } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { BaseCaseField, CaseFileModel, CaseAccessMode } from 'src/app/modules/case-edit-module/models';
+import { CaseFileModel, CaseAccessMode } from 'src/app/modules/case-edit-module/models';
 
 import { CaseFilesApiService } from 'src/app/modules/case-edit-module/services/api/case/case-files-api.service';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
@@ -19,14 +19,13 @@ import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-
 })
 export class CaseFilesControlComponent {
 
-  @Input() field: BaseCaseField<Array<any>>;
+  @Input() field: string;
+  @Input() files: CaseFileModel[];
   @Input() caseKey: string;
   @Input() accessMode: CaseAccessMode;
 
   @ViewChild('fileList') fileList: MbscListview;
   @ViewChild(CaseFilesUploadComponent) caseFilesComponent: CaseFilesUploadComponent;
-
-  files: CaseFileModel[] = [];
 
   fileListSettings: MbscListviewOptions = {
     enhance: true,
@@ -74,17 +73,17 @@ export class CaseFilesControlComponent {
     this.destroy$.next();
   }
 
+  /*
   ngOnChanges(changes: SimpleChanges): void {
     // create  files list model to bind
-    if (changes.field && changes.field.currentValue.value !== undefined) {
-        let fieldValue = changes.field.currentValue as BaseCaseField<Array<any>>;
-        if (fieldValue && fieldValue.value) {
-          let items = fieldValue.value || [];
-          this.files = items.map(f => new CaseFileModel(f.id, f.fileName));
-        }
+    // todo: check if array diff is required here?
+    if (changes.field && changes.field.currentValue) {
+        const files = changes.field.currentValue as CaseFileModel[];
+        this.files = files || [];
     }
   }
-
+  */
+ 
   processNewFileUpload(data: { id: number, name: string }) {
     if (data) {
         this.files.push(new CaseFileModel(data.id, data.name));
@@ -110,10 +109,10 @@ export class CaseFilesControlComponent {
   }
 
   onFileDelete(event, inst) {
-    let self = this;
-    let index = +event.index;
+    const self = this;
+    const index = +event.index;
     if (!isNaN(index) && this.files.length > index) {
-        let fileItem = self.files[index];
+        const fileItem = self.files[index];
         if (fileItem) {
               // todo: move confirm to a separate service!
               mobiscroll.confirm({

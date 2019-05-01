@@ -174,6 +174,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IExtendedCaseService _extendedCaseService;
         private readonly ISendToDialogModelFactory _sendToDialogModelFactory;
         private readonly ICaseStatisticService _caseStatService;
+        private readonly IUserEmailsSearchService _userEmailsSearchService;
         private readonly IFeatureToggleService _featureToggleService;
 
         #endregion
@@ -257,6 +258,7 @@ namespace DH.Helpdesk.Web.Controllers
             IExtendedCaseService extendedCaseService,
             ISendToDialogModelFactory sendToDialogModelFactory, 
             ICaseStatisticService caseStatService,
+            IUserEmailsSearchService userEmailsSearchService,
             IFeatureToggleService featureToggleService)
             : base(masterDataService)
         {
@@ -330,6 +332,7 @@ namespace DH.Helpdesk.Web.Controllers
             _extendedCaseService = extendedCaseService;
             _sendToDialogModelFactory = sendToDialogModelFactory;
             _caseStatService = caseStatService;
+            _userEmailsSearchService = userEmailsSearchService;
             _featureToggleService = featureToggleService;
 
             _advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService,
@@ -1699,7 +1702,7 @@ namespace DH.Helpdesk.Web.Controllers
                 SearchInWorkingGrs = true
             };
 
-            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, searchScope);
+            var models = _userEmailsSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, searchScope);
             return Json(new { searchKey = searchKey, result = models });
         }
 
@@ -5045,9 +5048,13 @@ namespace DH.Helpdesk.Web.Controllers
             m.Languages = this._languageService.GetActiveLanguages();
 
             var responsibleUsersList = _userService.GetAvailablePerformersOrUserId(customerId, m.case_.CaseResponsibleUser_Id);
-            m.FollowersModel = m.SendToDialogModel =_sendToDialogModelFactory.CreateNewSendToDialogModel(customerId, responsibleUsersList.ToList(), customerSetting, _emailGroupService, _workingGroupService, _emailService);
 
-            m.CaseLog = this._logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
+            m.FollowersModel =
+                m.SendToDialogModel =
+                    _sendToDialogModelFactory.CreateNewSendToDialogModel(
+                        customerId, responsibleUsersList.ToList(), customerSetting, _emailGroupService, _workingGroupService, _emailService);
+
+            m.CaseLog = _logService.InitCaseLog(SessionFacade.CurrentUser.Id, string.Empty);
             m.CaseKey = m.case_.Id == 0 ? m.case_.CaseGUID.ToString() : m.case_.Id.ToString(global::System.Globalization.CultureInfo.InvariantCulture);
             m.LogKey = m.CaseLog.LogGuid.ToString();
 

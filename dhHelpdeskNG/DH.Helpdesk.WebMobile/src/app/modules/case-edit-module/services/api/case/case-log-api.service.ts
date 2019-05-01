@@ -17,16 +17,15 @@ export class CaseLogApiService extends HttpApiServiceBase {
   }
 
   getCaseLogs(caseId:number): Observable<Array<any>> {
-    let url = this.buildResourseUrl(`/api/case/${caseId}/logs`, null, true, true);
+    const url = this.buildResourseUrl(`/api/case/${caseId}/logs`, null, true, true);
     return this.getJson<Array<any>>(url);
   }
 
   deleteTempLogFile(caseKey:string, fileName:string): Observable<boolean> {
     //todo: check when new case is ready,
     //todo: encode fileName
-    let url = this.buildResourseUrl(`/api/case/${caseKey}/templogfile`, { fileName: fileName }, true, false);
+    const url = this.buildResourseUrl(`/api/case/${caseKey}/templogfile`, { fileName: fileName }, true, false);
     return this.deleteWithResult<boolean>(url);
-  } 
-
+  }
 }
 

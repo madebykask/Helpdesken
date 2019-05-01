@@ -296,13 +296,13 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<IServerLogicalDriveRepository>().To<ServerLogicalDriveRepository>();
             kernel.Bind<IServerSoftwareRepository>().To<ServerSoftwareRepository>();
             kernel.Bind<IPrinterFieldSettingsRepository>().To<PrinterFieldSettingsRepository>();
-			kernel.Bind<ICaseSectionsRepository>().To<CaseSectionsRepository>();
-			kernel.Bind<IComputerUserCategoryRepository>().To<ComputerUserCategoryRepository>();
-			kernel.Bind<IFeatureToggleRepository>().To<FeatureToggleRepository>();
+            kernel.Bind<ICaseSectionsRepository>().To<CaseSectionsRepository>();
+            kernel.Bind<IComputerUserCategoryRepository>().To<ComputerUserCategoryRepository>();
+            kernel.Bind<IFeatureToggleRepository>().To<FeatureToggleRepository>();
 
 
-			// Service             
-			kernel.Bind<IMasterDataService>().To<MasterDataService>();            
+            // Service             
+            kernel.Bind<IMasterDataService>().To<MasterDataService>();            
             kernel.Bind<ISettingService>().To<SettingService>();
             kernel.Bind<ICaseService>().To<CaseService>();
             kernel.Bind<ILogService>().To<LogService>();
@@ -375,16 +375,14 @@ namespace DH.Helpdesk.SelfService
             kernel.Bind<ISettingsLogic>().To<SettingsLogic>();
             kernel.Bind<ICaseSectionService>().To<CaseSectionService>();
             kernel.Bind<ICaseStatisticService>().To<CaseStatisticService>();
-
             kernel.Bind<ICaseFollowUpService>().To<CaseFollowUpService>();
             kernel.Bind<ILogProgramService>().To<LogProgramService>();
             kernel.Bind<IInventoryService>().To<InventoryService>();
+            kernel.Bind<IUserEmailsSearchService>().To<UserEmailsSearchService>();
+            kernel.Bind<IFeatureToggleService>().To<FeatureToggleService>();
 
-			kernel.Bind<IFeatureToggleService>().To<FeatureToggleService>();
-
-
-			// Cache
-			kernel.Bind<ICacheProvider>().To<CacheProvider>();
+            // Cache
+            kernel.Bind<ICacheProvider>().To<CacheProvider>();
 
             // FormLib
             var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DSN"].ConnectionString;

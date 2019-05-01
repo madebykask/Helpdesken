@@ -1,13 +1,11 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { CaseEditDataHelper } from '../../../logic/case-edit/case-editdata.helper';
-import { CaseEditInputModel, BaseCaseField, CaseAccessMode } from '../../../models';
+import { Component, OnInit, Input } from '@angular/core';
+import { CaseEditInputModel, CaseAccessMode } from '../../../models';
 import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
 import { MbscListviewOptions } from '@mobiscroll/angular';
 import { Subject } from 'rxjs';
 import { CaseLogApiService } from '../../../services/api/case/case-log-api.service';
 import { take } from 'rxjs/internal/operators';
-import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms';
-
+import { CaseFormGroup, CaseFormControl } from 'src/app/modules/shared-module/models/forms';
 
 @Component({
   selector: 'case-log-input',
@@ -20,19 +18,19 @@ export class CaseLogInputComponent implements OnInit {
   @Input() caseData: CaseEditInputModel;
   @Input() accessMode: CaseAccessMode;
 
+  externalLogEmailsTo = '';
   files: string[] = [];
-  caseFieldsNames = CaseFieldsNames;
   internalLogLabel = '';
   externalLogLabel = '';
   isExternalLogFieldVisible = false;
   isInternalLogFieldVisible = false;
   isAttachedFilesVisible = false;
+  caseFieldsNames = CaseFieldsNames;
 
-  externalLogField: BaseCaseField<string> = null;
-  internalLogField: BaseCaseField<string> = null;
-  logFileField: BaseCaseField<any> = null;
-
-  private destroy$ = new Subject();
+  sendExternalEmailsControl: CaseFormControl = null;
+  externalLogField: CaseFormControl = null;
+  internalLogField: CaseFormControl = null;
+  logFileField: CaseFormControl = null;
 
   fileListSettings: MbscListviewOptions = {
     enhance: true,
@@ -46,8 +44,9 @@ export class CaseLogInputComponent implements OnInit {
     }]
   };
 
-  constructor(private caseDataHelpder: CaseEditDataHelper,
-              private caseLogApiService: CaseLogApiService) {
+  private destroy$ = new Subject();
+
+  constructor(private caseLogApiService: CaseLogApiService) {
   }
 
   get hasFullAccess() {
@@ -55,27 +54,35 @@ export class CaseLogInputComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.externalLogField = this.getField(CaseFieldsNames.Log_ExternalText);
-    this.internalLogField = this.getField(CaseFieldsNames.Log_InternalText);
-    this.logFileField = this.getField(CaseFieldsNames.Log_FileName);
+    // TODO: check how external Log emails TO (Followers) should be initialised?
+    const externalEmailsToControl = this.getFormControl(CaseFieldsNames.Log_ExternalEmailsTo);
+    if (externalEmailsToControl.value && externalEmailsToControl.value.length) {
+      this.externalLogEmailsTo = externalEmailsToControl.value.toString();
+    } else {
+      this.externalLogEmailsTo = 'No email address available'; // todo: translate
+    }
+
+    this.externalLogField = this.getFormControl(CaseFieldsNames.Log_ExternalText);
+    this.internalLogField = this.getFormControl(CaseFieldsNames.Log_InternalText);
+    this.logFileField = this.getFormControl(CaseFieldsNames.Log_FileName);
 
     if (this.externalLogField) {
-      this.isExternalLogFieldVisible =  !this.externalLogField.isHidden;
+      this.isExternalLogFieldVisible =  !this.externalLogField.fieldInfo.isHidden;
     }
 
     if (this.internalLogField) {
-      this.isInternalLogFieldVisible =  !this.internalLogField.isHidden;
+      this.isInternalLogFieldVisible =  !this.internalLogField.fieldInfo.isHidden;
     }
 
     if (this.logFileField) {
-      this.isAttachedFilesVisible = !this.logFileField.isHidden;
+      this.isAttachedFilesVisible = !this.logFileField.fieldInfo.isHidden;
     }
   }
 
   ngAfterViewInit(): void {
   }
 
-  processFileUploaded(file:string) {
+  processFileUploaded(file: string) {
     this.files.push(file);
   }
 
@@ -84,12 +91,9 @@ export class CaseLogInputComponent implements OnInit {
     this.destroy$.complete();
   }
 
-  hasField(name: string): boolean {
-     return this.caseDataHelpder.hasField(this.caseData, name);
-  }
-
-  getField(name: string): BaseCaseField<any> {
-    return this.caseDataHelpder.getField(this.caseData, name);
+  protected getFormControl(name: string): CaseFormControl {
+    if (this.form === null) return null;
+    return this.form.get(name);
   }
 
   onFileDelete(event){
@@ -105,5 +109,4 @@ export class CaseLogInputComponent implements OnInit {
       }
     });
   }
-
 }

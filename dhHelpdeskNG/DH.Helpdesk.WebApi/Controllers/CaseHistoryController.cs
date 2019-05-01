@@ -408,8 +408,10 @@ namespace DH.Helpdesk.WebApi.Controllers
                 if (item != null) histories.Add(item);
             }
 
-            var model = new CaseHistoryOutputModel();
-            model.Changes = histories;
+            var model = new CaseHistoryOutputModel
+            {
+                Changes = histories
+            };
 
             return Ok(model);
         }

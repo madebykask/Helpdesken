@@ -1,16 +1,24 @@
 import { FormControl, ValidatorFn } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { FormStatuses } from 'src/app/modules/shared-module/constants';
+import { IFieldBase } from 'src/app/modules/case-edit-module/models';
 
 export class CaseFormControl extends FormControl {
-  label: string;
-  isRequired = false;
-  isHidden = false;
+
+  fieldInfo: IFieldBase;
   private isSubmitted$ = new BehaviorSubject<boolean>(false);
 
-  constructor(label: string, value: any, validators: ValidatorFn[]) {
+  constructor(fieldInfo: IFieldBase, value: any, validators: ValidatorFn[]) {
     super(value, validators);
-    this.label = label;
+    this.fieldInfo = fieldInfo;
+  }
+
+  get label() {
+    return this.fieldInfo.label;
+  }
+
+  get fieldName() {
+    return this.fieldInfo.name;
   }
 
   public get isSubmitted() {
@@ -24,4 +32,5 @@ export class CaseFormControl extends FormControl {
   public submit(value = true) {
     this.isSubmitted$.next(value);
   }
+
 }

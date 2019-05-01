@@ -1,13 +1,33 @@
-
 <ng-container [formGroup]="form">
   
+  <!-- /Exnterl Log fields --> 
   <case-textarea-control *ngIf="isExternalLogFieldVisible" 
-          [field]="externalLogField" 
-          [form]="form"></case-textarea-control>
+      [field]="caseFieldsNames.Log_ExternalText" 
+      [form]="form"></case-textarea-control>
 
-  <case-textarea-control *ngIf="isInternalLogFieldVisible" 
-          [field]="internalLogField" 
-          [form]="form"></case-textarea-control>
+  <mbsc-switch [formControlName]="caseFieldsNames.Log_SendMailToNotifier">
+    <span class="mbsc-desc">{{ externalLogEmailsTo }}</span>
+  </mbsc-switch>
+
+  <lognote-email-input *ngIf="isExternalLogFieldVisible"
+      [field]="caseFieldsNames.Log_ExternalEmailsCC"
+      [form]="form"></lognote-email-input>
+  
+  <!-- /Exnterl Log fields --> 
+
+  <!-- Internal Log fields -->
+  <case-textarea-control *ngIf="isInternalLogFieldVisible"
+      [field]="caseFieldsNames.Log_InternalText" 
+      [form]="form"></case-textarea-control>
+
+  <lognote-email-input *ngIf="isInternalLogFieldVisible"
+      [field]="caseFieldsNames.Log_InternalEmailsTo"
+      [form]="form"></lognote-email-input>
+
+  <lognote-email-input *ngIf="isInternalLogFieldVisible"
+      [field]="caseFieldsNames.Log_InternalEmailsCC"
+      [form]="form"></lognote-email-input>
+  <!-- /Internal Log fields -->
 
   <ng-container *ngIf="isAttachedFilesVisible">
     <div id="log-files" *ngIf="files && files.length > 0">

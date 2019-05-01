@@ -19,7 +19,7 @@ import { CaseFieldsNames, CasesSearchType } from 'src/app/modules/shared-module/
 import { CaseLockApiService } from '../../services/api/case/case-lock-api.service';
 import { CaseSaveService } from '../../services/case';
 import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel,
-   CaseLockModel, BaseCaseField, CaseAction, CaseActionDataType, IBaseCaseField } from '../../models';
+   CaseLockModel, CaseFieldModel, CaseAction, CaseActionDataType, ICaseField, CaseFileModel } from '../../models';
 import { OptionItem, MultiLevelOptionItem } from 'src/app/modules/shared-module/models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
@@ -27,11 +27,13 @@ import { CaseWatchDateApiService } from '../../services/api/case/case-watchDate-
 import { CaseFilesApiService } from '../../services/api/case/case-files-api.service';
 import { NotifierType } from 'src/app/modules/shared-module/models/notifier/notifier.model';
 import { CaseTypesService } from 'src/app/services/case-organization/caseTypes-service';
-import { CaseFormControl, CaseFormGroup, NotifierFormFieldsSetter } from 'src/app/modules/shared-module/models/forms';
+import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms';
 import { MbscFormOptions } from '@mobiscroll/angular';
 import { ProductAreasService } from 'src/app/services/case-organization/productAreas-service';
 import { DateTime } from 'luxon';
-import { CaseFieldsDefaultErrorMessages } from '../../logic/constants/case-fields-error-messages.constants';
+import { CaseFieldsDefaultErrorMessages } from '../../logic/constants/case-fields.constants';
+import { CaseFormGroupBuilder } from 'src/app/modules/shared-module/models/forms/case-form-group-builder';
+import { NotifierFormFieldsSetter } from 'src/app/modules/shared-module/models/forms/notifier-form-fields-setter';
 
 @Component({
   selector: 'app-case-edit',
@@ -39,45 +41,6 @@ import { CaseFieldsDefaultErrorMessages } from '../../logic/constants/case-field
   styleUrls: ['./case-edit.component.scss']
 })
 export class CaseEditComponent {
-  @ViewChild('mainForm') mainForm: any; // MbscForm
-    caseSectionTypes = CaseSectionType;
-    caseFieldsNames = CaseFieldsNames;
-    accessModeEnum = CaseAccessMode;
-    dataSource: CaseDataStore;
-    isLoaded = false;
-    form: CaseFormGroup;
-    caseKey: string;
-
-    titleTabsSettings = {
-      display: 'top'
-    };
-
-    caseTabsSettings = {
-      display: 'top',
-      layout: 'fixed',
-      theme: 'mobiscroll'
-    };
-
-    formOptions: MbscFormOptions = {
-      onInit: (event, inst) => {
-      }
-    };
-
-    currentTab = 'case_details';
-    caseActions: CaseAction<CaseActionDataType>[] = [];
-    notifierTypes = NotifierType;
-    isCommunicationSectionVisible = false;
-
-    private searchType: CasesSearchType = CasesSearchType.AllCases;
-    private isNewCase = false;
-    private caseId = 0;
-    private templateId = 0;
-    private caseData: CaseEditInputModel;
-    private caseSections: CaseSectionInputModel[];
-    private ownsLock = false;
-    private destroy$ = new Subject();
-    private caseLock: CaseLockModel = null;
-    private isClosing = false;
 
     constructor(private route: ActivatedRoute,
                 private caseService: CaseService,
@@ -131,6 +94,54 @@ export class CaseEditComponent {
       }
       return accessMode;
     }
+
+    public get canSave() {
+      if (this.isNewCase) {
+        return true;
+      }
+
+      return this.accessMode === CaseAccessMode.FullAccess;
+    }
+  @ViewChild('mainForm') mainForm: any; // MbscForm
+    caseSectionTypes = CaseSectionType;
+    caseFieldsNames = CaseFieldsNames;
+    accessModeEnum = CaseAccessMode;
+    dataSource: CaseDataStore;
+    isLoaded = false;
+    form: CaseFormGroup;
+    caseKey: string;
+    caseFiles: CaseFileModel[] = null;
+
+    titleTabsSettings = {
+      display: 'top'
+    };
+
+    caseTabsSettings = {
+      display: 'top',
+      layout: 'fixed',
+      theme: 'mobiscroll'
+    };
+
+    formOptions: MbscFormOptions = {
+      onInit: (event, inst) => {
+      }
+    };
+
+    currentTab = 'case_details';
+    caseActions: CaseAction<CaseActionDataType>[] = [];
+    notifierTypes = NotifierType;
+    isCommunicationSectionVisible = false;
+
+    private searchType: CasesSearchType = CasesSearchType.AllCases;
+    private isNewCase = false;
+    private caseId = 0;
+    private templateId = 0;
+    private caseData: CaseEditInputModel;
+    private caseSections: CaseSectionInputModel[];
+    private ownsLock = false;
+    private destroy$ = new Subject();
+    private caseLock: CaseLockModel = null;
+    private isClosing = false;
 
     ngOnInit() {
       this.commService.publish(Channels.Header, new HeaderEventData(false));
@@ -195,7 +206,7 @@ export class CaseEditComponent {
       return this.caseDataHelpder.hasSection(this.caseData, type);
     }
 
-    getField(name: string): BaseCaseField<any> {
+    private getField(name: string): CaseFieldModel<any> {
       return this.caseDataHelpder.getField(this.caseData, name);
     }
 
@@ -218,14 +229,6 @@ export class CaseEditComponent {
         return this.caseSections.find(s => s.type == type).isEditCollapsed ? null : true;
     }
 
-    public get canSave() {
-      if (this.isNewCase) {
-        return true;
-      }
-
-      return this.accessMode === CaseAccessMode.FullAccess;
-    }
-
     saveCase() {
       if (!this.canSave) { return; }
       this.form.submit();
@@ -234,7 +237,7 @@ export class CaseEditComponent {
         const errormessage = this.translateService.instant('Fyll i obligatoriska fält.');
         this.alertService.showMessage(errormessage, AlertType.Error, 3);
         return;
-      };
+      }
 
       this.isLoaded = false;
       this.caseSaveService.saveCase(this.form, this.caseData).pipe(
@@ -373,7 +376,7 @@ export class CaseEditComponent {
                 take(1)
               ).subscribe(ct => {
                 if (ct && ct.performerUserId != null && !this.getField(CaseFieldsNames.PerformerUserId).setByTemplate) {
-                  if (!this.dataSource.performersStore$.value.some((e) => e.value == ct.performerUserId)) {
+                  if (!this.dataSource.performersStore$.value.some((e) => e.value === ct.performerUserId)) {
                     // get new list of performers with casetype perfomer included
                     filters.CasePerformerUserId = ct.performerUserId;
                     optionsHelper.getPerformers(true).pipe(
@@ -463,7 +466,9 @@ export class CaseEditComponent {
     }
 
     private processCaseData() {
-      this.form = this.createFormGroup(this.caseData);
+      // create form
+      const fb = new CaseFormGroupBuilder();
+      this.form = fb.createFormGroup(this.caseData.fields, this.canSave);
 
       // run only for existing case
       if (this.caseId > 0) {
@@ -478,6 +483,17 @@ export class CaseEditComponent {
             this.showField(CaseFieldsNames.Log_InternalText) ||
             this.showField(CaseFieldsNames.Log_FileName);
       }
+
+      // get existing files
+      const filesField = this.getField(CaseFieldsNames.Filename);
+      if (filesField && filesField.value) {
+        const files = filesField.value as Array<any>;
+        if (files && files.length) {
+          this.caseFiles = files.map(f => new CaseFileModel(f.id, f.fileName));
+        } else {
+          this.caseFiles = [];
+        }
+      }
     }
 
     private loadCaseActions() {
@@ -486,47 +502,6 @@ export class CaseEditComponent {
         catchError((e) => throwError(e))
       ).subscribe(caseActions => {
         this.caseActions = caseActions;
-      });
-    }
-
-    private createFormGroup(data: CaseEditInputModel): CaseFormGroup {
-      let controls: { [key: string]: CaseFormControl; } = {};
-      data.fields.forEach(field => {
-          let validators = [];
-          if (!field.isHidden) {
-            if (field.isRequired) {
-              validators.push(Validators.required);
-            }
-
-            if (field.maxLength != null) {
-              validators.push(Validators.maxLength(field.maxLength));
-            }
-          }
-
-          let control = new CaseFormControl(field.label, {
-            value: field.value == null ? '' : field.value,
-            disabled: !this.canSave || field.isReadonly,
-          }, validators);
-          control.isRequired = field.isRequired;
-          control.isHidden = field.isHidden;
-          controls[field.name] = control;
-      });
-      return new CaseFormGroup(controls,
-          (group: CaseFormGroup): ValidationErrors => {
-          let errors = Object.create(null);
-          Object.keys(group.controls).forEach((controlName) => {
-            const ctrl = group.get(controlName);
-            if (ctrl.validator != null) {
-              let isError = ctrl.validator(ctrl);
-              if (isError) {
-                ctrl.setErrors(isError, { emitEvent: false });
-              }
-            }
-            if (ctrl.errors != null) {
-              errors = {...errors, ...ctrl.errors };
-            }
-          });
-          return errors;
       });
     }
 
@@ -641,8 +616,8 @@ export class CaseEditComponent {
     }
 
     private showLockWarning() {
-      let currentUser =  this.authStateService.getUser();
-      let notice =
+      const currentUser =  this.authStateService.getUser();
+      const notice =
         this.caseLock.isLocked && this.caseLock.userId === currentUser.id ?
             this.translateService.instant('OBS! Du har redan öppnat detta ärende i en annan session') :
             this.translateService.instant('OBS! Detta ärende är öppnat av') + ' ' + this.caseLock.userFullName;
@@ -675,20 +650,3 @@ interface IOrganisationData {
   departmentId?: number;
   ouId?: number;
 }
-
-@Directive({selector: 'mbsc-form-group-title', outputs: ['onClick']})
-export class MbscFormGroupTitleClickDirective {
-  private isOpened?: boolean;
-  onClick = new EventEmitter<any>();
-
-  constructor(private elem: ElementRef, private renderer: Renderer2) {
-    this.renderer.listen(this.elem.nativeElement, 'click', (ev) => {
-      if (this.isOpened == null) {
-        this.isOpened = this.elem.nativeElement.getAttribute('aria-expanded') == 'true';
-      }
-      this.elem.nativeElement.focus();
-      this.onClick.emit({ isOpening: !this.isOpened, event: ev});
-      this.isOpened = !this.isOpened;
-    });
-  }
-};

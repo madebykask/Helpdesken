@@ -1,10 +1,14 @@
-import { KeyValue } from '../models';
+import { IKeyValue } from '../models';
 
 export class ResponseDataHelper {
-  fromJSONKeyValue(json: any): KeyValue {
+
+  fromJSONKeyValue(json: any): IKeyValue {
     if (typeof json === 'string') {
       json = JSON.parse(json);
     }
-    return Object.assign(new KeyValue(), json, {});
+    return <IKeyValue>{ ...json };
   }
+
 }
+
+

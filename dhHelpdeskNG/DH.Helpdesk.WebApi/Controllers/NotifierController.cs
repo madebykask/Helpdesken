@@ -25,8 +25,6 @@ namespace DH.Helpdesk.WebApi.Controllers
             _computerService = computerService;
         }
 
-
-
         [HttpGet]
         [Route("Search")]
         public async Task<List<NotifierSearchItem>> Search([FromUri]string query, [FromUri]int cid, [FromUri]int? categoryId = null)

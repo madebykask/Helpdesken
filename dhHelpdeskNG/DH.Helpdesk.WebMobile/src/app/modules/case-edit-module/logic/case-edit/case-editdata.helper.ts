@@ -1,17 +1,17 @@
-import { Injectable } from "@angular/core";
-import { TranslateService } from "@ngx-translate/core";
-import { CaseEditInputModel, CaseSectionType, BaseCaseField } from "../../models";
-import { CaseOptionsFilterModel } from "src/app/modules/shared-module/models";
-import { CaseFieldsNames } from "src/app/modules/shared-module/constants";
-import { CaseFormGroup } from "src/app/modules/shared-module/models/forms/case-form-group";
+import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { CaseEditInputModel, CaseSectionType, CaseFieldModel } from '../../models';
+import { CaseOptionsFilterModel } from 'src/app/modules/shared-module/models';
+import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
+import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms/case-form-group';
 
 @Injectable({ providedIn: 'root' })
 export class CaseEditDataHelper {
-  
+
   constructor(private translateService: TranslateService) {
   }
-  
-  getCaseTitle(caseData: CaseEditInputModel) : string {
+
+  getCaseTitle(caseData: CaseEditInputModel): string {
     let title = this.translateService.instant('Ärende');
     if (caseData) {
         if (caseData.caseSolution) {
@@ -30,13 +30,13 @@ export class CaseEditDataHelper {
   }
 
   hasSection(caseData: CaseEditInputModel, type: CaseSectionType): boolean {
-    if(caseData === null) {
+    if (caseData === null) {
         throw new Error('No Case Data.');
     }
     return caseData.fields.filter(f => f.section === type && !f.isHidden).length > 0;
   }
 
-  getField(caseData: CaseEditInputModel, name: string): BaseCaseField<any> {
+  getField(caseData: CaseEditInputModel, name: string): CaseFieldModel<any> {
     if (caseData === null) {
         throw new Error('No Case Data.');
     }
@@ -59,7 +59,7 @@ export class CaseEditDataHelper {
     }
 
     private createCaseOptionsFilter(caseData: CaseEditInputModel, getValue: (name: string) => number) {
-      let filter = new CaseOptionsFilterModel();
+      const filter = new CaseOptionsFilterModel();
       filter.RegionId = getValue(CaseFieldsNames.RegionId);
       filter.DepartmentId = getValue(CaseFieldsNames.DepartmentId);
       filter.IsAboutRegionId = getValue(CaseFieldsNames.IsAbout_RegionId);
@@ -83,7 +83,7 @@ export class CaseEditDataHelper {
       filter.SolutionsRates = this.hasField(caseData, CaseFieldsNames.SolutionRate);
       filter.StateSecondaries = this.hasField(caseData, CaseFieldsNames.StateSecondaryId);
       filter.Statuses = this.hasField(caseData, CaseFieldsNames.StatusId);
-      filter.Suppliers = this.hasField(caseData, CaseFieldsNames.SupplierId);// Supplier_Country_Id
+      filter.Suppliers = this.hasField(caseData, CaseFieldsNames.SupplierId); // Supplier_Country_Id
       filter.Systems = this.hasField(caseData, CaseFieldsNames.SystemId);
       filter.Urgencies = this.hasField(caseData, CaseFieldsNames.UrgencyId);
       filter.WorkingGroups = this.hasField(caseData, CaseFieldsNames.WorkingGroupId);

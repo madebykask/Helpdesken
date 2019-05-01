@@ -1,13 +1,11 @@
-import { Component, Input, ViewChild, Renderer2, ElementRef } from "@angular/core";
-import { BaseControl } from "../base-control";
-import { MultiLevelOptionItem } from "src/app/modules/shared-module/models";
-import { FormStatuses } from "src/app/modules/shared-module/constants";
-import { switchMap, takeUntil, map } from "rxjs/operators";
-import { of, BehaviorSubject } from "rxjs";
-import { MbscSelectOptions, MbscSelect } from "@mobiscroll/angular";
-import { TranslateService } from "@ngx-translate/core";
-import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/app/services/communication";
-
+import { Component, Input, ViewChild, Renderer2, ElementRef } from '@angular/core';
+import { BaseControl } from '../base-control';
+import { MultiLevelOptionItem } from 'src/app/modules/shared-module/models';
+import { takeUntil, map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { MbscSelectOptions, MbscSelect } from '@mobiscroll/angular';
+import { TranslateService } from '@ngx-translate/core';
+import { CommunicationService, DropdownValueChangedEvent, Channels } from 'src/app/services/communication';
 
 @Component({
     selector: 'case-multi-dropdown-control',
@@ -19,7 +17,10 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
     @ViewChild('select') select: MbscSelect;
     @Input() dataSource: BehaviorSubject<MultiLevelOptionItem[]>;
     @Input() disabled = false;
-    text: string = '';
+
+    private parentValue?: number;
+
+    text = '';
     settings: MbscSelectOptions = {
       theme: 'mobiscroll',
       display: 'center',
@@ -49,12 +50,12 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
       headerText: () => this.getHeader,
       input: 'select-textarea',
       onInit: (event, inst) => {
-        if (this.field.isReadonly) {
+        if (this.formControl && this.formControl.fieldInfo.isReadonly) {
           inst.disable();
         }
       },
       onBeforeShow: (event, inst) => {
-        let data = this.getPreviousData(inst.getVal());
+        const data = this.getPreviousData(inst.getVal());
         this.refreshData(inst, data);
       },
       onMarkupReady: (event, inst) => {
@@ -67,10 +68,10 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
         }
       },
       onItemTap: (event, inst) => {
-        if (event.value != null) { 
-          let chain = this.getOptionsChain(event.value);
+        if (event.value != null) {
+          const chain = this.getOptionsChain(event.value);
           if (this.hasChilds(chain, chain.length - 1)) {
-            let data = this.getNextData(event.value);
+            const data = this.getNextData(event.value);
             this.refreshData(inst, data);
             this.markIfRoot(inst);
           } else {
@@ -83,26 +84,25 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
       onSet: (event, inst) => { // somehow onset is invoked on scrolling options
         const value = inst.getVal();
         this.setText(value);
-        this.commService.publish(Channels.DropdownValueChanged, new DropdownValueChangedEvent(value, event.valueText, this.field.name));
-      }, 
+        this.commService.publish(Channels.DropdownValueChanged, new DropdownValueChangedEvent(value, event.valueText, this.fieldName));
+      },
       onClose: () => {
         this.parentValue = undefined;
       }
-    }
-    private parentValue?: number;
+    };
 
     constructor(private ngxTranslateService: TranslateService,
-       private commService: CommunicationService, 
+       private commService: CommunicationService,
        private renderer: Renderer2,
        private elem: ElementRef) {
       super();
     }
 
     ngOnInit(): void {
-      this.init(this.field);
+      this.init(this.fieldName);
       this.updateDisabledState();
 
-      this.initEvents()
+      this.initEvents();
       this.setText(this.formControl.value);
     }
 
@@ -116,22 +116,19 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
 
     public get getHeader(): string {
       const defaultValue = '';
-      if (!this.field) {
-        return defaultValue;
-      }
-      return this.formControl.label || defaultValue;
+      return this.formControl ? this.formControl.label || defaultValue : defaultValue;
     }
 
     private refreshData(inst, data) {
       inst.refresh(data, '');
       if (inst.markup != null) {
-        let elem =  (<HTMLElement>inst.markup).querySelector<HTMLInputElement>('input.mbsc-sel-filter-input');
+        const elem =  (<HTMLElement>inst.markup).querySelector<HTMLInputElement>('input.mbsc-sel-filter-input');
         elem.value = '';
       }
     }
 
     public openSelect() {
-      this.select.instance.show()
+      this.select.instance.show();
     }
 
     private setText(value?: number) {
@@ -143,7 +140,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
 
       let tempDataSource = this.dataSource.value;
       if (value != null) {
-        let chain = this.getOptionsChain(value);
+        const chain = this.getOptionsChain(value);
         if (this.hasChilds(chain, chain.length - 1)) {
           tempDataSource = chain[chain.length - 1].childs;
           this.parentValue = value;
@@ -157,7 +154,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
       if (this.dataSource == null || this.dataSource.value.length === 0) return [];
 
       let tempDataSource = this.dataSource.value;
-      let chain = this.getOptionsChain(value);
+      const chain = this.getOptionsChain(value);
       if (this.hasChilds(chain, chain.length - 2)) {
         tempDataSource = chain[chain.length - 2].childs;
         this.parentValue = chain[chain.length - 2].value;
@@ -190,8 +187,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
     private getTextChain(id: any) {
       if (this.dataSource == null || this.dataSource.value.length === 0) return '';
 
-      let chain = this.getOptionsChain(id);
-
+      const chain = this.getOptionsChain(id);
       return chain.length > 0 ? chain.map((elem) => elem.text).join(' > ') : '';
     }
 
@@ -200,22 +196,22 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
 
       let elems = new Array<MultiLevelOptionItem>();
       const searchNode = (elem: MultiLevelOptionItem, targetId: any): string => {
-        let isText = typeof targetId === 'string';
-        if ((isText && (elem.text == targetId)) || (elem.value == targetId)) {
+        const isText = typeof targetId === 'string';
+        if ((isText && (elem.text === targetId)) || (elem.value === targetId)) {
           elems.push(elem);
-           return elem.text; 
+           return elem.text;
           }
         if (elem.childs != null) {
-          for(let i = 0; i < elem.childs.length; i++) {
-            let text = searchNode(elem.childs[i], targetId);
-            if (text != null) { 
+          for (let i = 0; i < elem.childs.length; i++) {
+            const text = searchNode(elem.childs[i], targetId);
+            if (text != null) {
               elems.push(elem);
               return text;
             }
           }
         }
         return null;
-      }
+      };
       this.dataSource.value.forEach((elem: MultiLevelOptionItem) => searchNode(elem, id));
       elems = elems.reverse();
 
@@ -223,24 +219,18 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
     }
 
     private updateDisabledState() {
-      this.textbox.disabled = this.formControl.disabled || this.disabled;
+      this.textbox.disabled = this.isFormControlDisabled || this.disabled;
     }
 
-    private get isFormControlDisabled() {
-      return this.formControl.status == FormStatuses.DISABLED;
-    }
-    
     private initEvents() {
-      this.formControl.statusChanges // track disabled state in form
-        .pipe(switchMap((e: any) => {
-            if (this.textbox.disabled != this.isFormControlDisabled) {
-              this.updateDisabledState();
-            }
-            return of(e);
-          }),
+      // track disabled state in form
+      this.formControl.statusChanges.pipe(
           takeUntil(this.destroy$)
-        )
-        .subscribe();
+        ).subscribe(e => {
+          if (this.textbox.disabled !== this.isFormControlDisabled) {
+            this.updateDisabledState();
+          }
+      });
 
       this.dataSource.pipe(
           map(((options) => {
@@ -251,7 +241,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
           takeUntil(this.destroy$)
         ).subscribe((options) => {
           if (this.select.instance) {
-            let data = this.getPreviousData(this.formControl.value);
+            const data = this.getPreviousData(this.formControl.value);
             this.refreshData(this.select.instance, data);
           }
           this.resetValueIfNeeded(options);
@@ -260,20 +250,20 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
 
     private addEmptyIfNotExists(options) {
       if (!options.some((i) => i.value === '')) {
-        options.unshift(new MultiLevelOptionItem('','--'));
+        options.unshift(new MultiLevelOptionItem('', '--'));
       }
     }
 
     private resetValueIfNeeded(options: MultiLevelOptionItem[]) {
-      if (this.getOptionsChain(this.formControl.value).length == 0) {
+      if (this.getOptionsChain(this.formControl.value).length === 0) {
         this.formControl.setValue('');
       }
     }
 
     private addSelectArrow() {
-      const inputWrap = (<HTMLElement>this.elem.nativeElement).querySelector('mbsc-textarea .mbsc-input-wrap')
+      const inputWrap = (<HTMLElement>this.elem.nativeElement).querySelector('mbsc-textarea .mbsc-input-wrap');
       const span = (<HTMLElement>this.elem.nativeElement).querySelector('mbsc-textarea .mbsc-input-fill');
-      let arrowHtml = this.renderer.createElement('span');
+      const arrowHtml = this.renderer.createElement('span');
       this.renderer.addClass(arrowHtml, 'mbsc-select-ic');
       this.renderer.addClass(arrowHtml, 'mbsc-ic');
       this.renderer.addClass(arrowHtml, 'mbsc-ic-arrow-down5');
@@ -282,22 +272,22 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from "src/a
 
     private markIfRoot(inst) {
       if (inst.markup == null) return;
-      
+
       if (!this.hasParent()) {
         inst.markup.classList.add('root');
       } else {
         inst.markup.classList.remove('root');
-      };
+      }
     }
 
     private markIfHasChilds(text: string, inst) {
       if (inst.markup == null) return;
 
-      let chain = this.getOptionsChain(text);
+      const chain = this.getOptionsChain(text);
       if (this.hasChilds(chain, chain.length - 1)) {
         inst.markup.classList.add('hasChild');
       } else {
         inst.markup.classList.remove('hasChild');
-      };
+      }
     }
   }

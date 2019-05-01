@@ -17,17 +17,17 @@ import { takeUntil } from 'rxjs/operators';
     }
 
     ngOnInit(): void {
-      this.init(this.field);
+      this.init(this.fieldName);
       this.updateDisabledState();
 
       this.initEvents();
     }
 
     ngAfterViewInit(): void {
-      if (this.field.maxLength) {
+      if (this.formControl && this.formControl.fieldInfo.maxLength) {
         const inputControl = this.elem.nativeElement.querySelector('textarea');
         if (inputControl) {
-          this.renderer.setAttribute(inputControl, 'maxlength', this.field.maxLength.toString());
+          this.renderer.setAttribute(inputControl, 'maxlength', this.formControl.fieldInfo.maxLength.toString());
         }
       }
     }

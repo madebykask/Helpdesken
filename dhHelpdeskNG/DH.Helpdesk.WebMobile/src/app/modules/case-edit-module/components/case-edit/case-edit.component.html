@@ -1,180 +1,182 @@
 <mbsc-form class="mbsc-padding md-load-btn md-btn-isLoading" [hidden]="isLoaded">
-    <mbsc-button flat block icon="fa-refresh"></mbsc-button>
+  <mbsc-button flat block icon="fa-refresh"></mbsc-button>
 </mbsc-form>
 
 <mbsc-form *ngIf="isLoaded">  
-    <div id="case-header">
-      <mbsc-tab-nav [options]="titleTabsSettings" class="case-header">
-          <mbsc-nav-item selected="false" (click)="goToCases()" translate>Avbryt</mbsc-nav-item>
-          <mbsc-nav-item selected="true"><div class="ellipsis">{{ getCaseTitle() }}</div></mbsc-nav-item>
-          <mbsc-nav-item selected="false" (click)="saveCase()" [disabled]="!canSave" translate>{{ canSave ? 'Klar' : '' }}</mbsc-nav-item>
-      </mbsc-tab-nav>
-    </div>
-    
-    <div id="case-tabs">
-      <mbsc-tab-nav [options]="caseTabsSettings" class="case-sub-header">
-          <mbsc-nav-item [selected]="currentTab == 'case_details'" (click)="currentTab='case_details'" translate>Ärende</mbsc-nav-item>
-          <mbsc-nav-item [selected]="currentTab == 'case_actions'" (click)="currentTab='case_actions'" translate>Händelser</mbsc-nav-item>
-          <!--<mbsc-nav-item [selected]="currentTab == 'case_workflows'" (click)="currentTab='case_workflows'" translate>Åtgärd</mbsc-nav-item>-->
-      </mbsc-tab-nav>
-    </div>
-  </mbsc-form>
+  <div id="case-header">
+    <mbsc-tab-nav [options]="titleTabsSettings" class="case-header">
+        <mbsc-nav-item selected="false" (click)="goToCases()" translate>Avbryt</mbsc-nav-item>
+        <mbsc-nav-item selected="true"><div class="ellipsis">{{ getCaseTitle() }}</div></mbsc-nav-item>
+        <mbsc-nav-item selected="false" (click)="saveCase()" [disabled]="!canSave" translate>{{ canSave ? 'Klar' : '' }}</mbsc-nav-item>
+    </mbsc-tab-nav>
+  </div>
+  
+  <div id="case-tabs">
+    <mbsc-tab-nav [options]="caseTabsSettings" class="case-sub-header">
+        <mbsc-nav-item [selected]="currentTab == 'case_details'" (click)="currentTab='case_details'" translate>Ärende</mbsc-nav-item>
+        <mbsc-nav-item [selected]="currentTab == 'case_actions'" (click)="currentTab='case_actions'" translate>Händelser</mbsc-nav-item>
+        <!--<mbsc-nav-item [selected]="currentTab == 'case_workflows'" (click)="currentTab='case_workflows'" translate>Åtgärd</mbsc-nav-item>-->
+    </mbsc-tab-nav>
+  </div>
+</mbsc-form>
 
 <mbsc-form [options]="formOptions" #mainForm  class="case-content">
 
-    <!-- Case Actions -->
-    <div [hidden]="currentTab != 'case_actions'">
-        <div class="md-paging">
-          <case-actions *ngIf="caseActions.length > 0" [caseKey]="caseKey" [items]="caseActions"></case-actions>
-        </div>
-    </div>
-
-    <!-- Case edit fields -->
-    <div *ngIf="isLoaded" [hidden]="currentTab != 'case_details'">
+  <!-- Case Actions -->
+  <div [hidden]="currentTab != 'case_actions'">
       <div class="md-paging">
-        <form [formGroup]="form" novalidate>
-            <mbsc-form-group collapsible [open]="isNewCase" *ngIf="hasSection(caseSectionTypes.Initiator)">
-                <mbsc-form-group-title >{{ getSectionHeader(caseSectionTypes.Initiator) }}</mbsc-form-group-title>
-                <mbsc-form-group-content>
-                    <!-- TODO: ComputerUserCategories -->
-                    <notifier-search *ngIf="showField(caseFieldsNames.ReportedBy)" id="initiatorNotifier" [categoryField]="getField(caseFieldsNames.UserSearchCategoryId)" 
-                        [field]="getField(caseFieldsNames.ReportedBy)" [notifierType]="notifierTypes.Initiator" [form]="form"></notifier-search>
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.PersonName)" [field]="getField(caseFieldsNames.PersonName)" [form]="form"></case-textbox-control>
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.PersonEmail)" [field]="getField(caseFieldsNames.PersonEmail)" [form]="form"></case-textbox-control>
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.PersonPhone)" [field]="getField(caseFieldsNames.PersonPhone)" [form]="form"></case-textbox-control>
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.PersonCellPhone)" [field]="getField(caseFieldsNames.PersonCellPhone)" [form]="form"></case-textbox-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.RegionId)" [field]="getField(caseFieldsNames.RegionId)" [form]="form" [dataSource]="dataSource.regionsStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.DepartmentId)" [field]="getField(caseFieldsNames.DepartmentId)" [form]="form" [dataSource]="dataSource.departmentsStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.OrganizationUnitId)" [field]="getField(caseFieldsNames.OrganizationUnitId)" [form]="form" [dataSource]="dataSource.oUsStore$"></case-dropdown-control>
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.CostCentre)" [field]="getField(caseFieldsNames.CostCentre)" [form]="form"></case-textbox-control>
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.Place)" [field]="getField(caseFieldsNames.Place)" [form]="form"></case-textbox-control>
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.UserCode)" [field]="getField(caseFieldsNames.UserCode)" [form]="form"></case-textbox-control>
-                </mbsc-form-group-content>
-            </mbsc-form-group>
+        <case-actions *ngIf="caseActions.length > 0" [caseKey]="caseKey" [items]="caseActions"></case-actions>
+      </div>
+  </div>
 
-            <mbsc-form-group collapsible [open]="isNewCase" #regardingSection *ngIf="hasSection(caseSectionTypes.Regarding)">
-                <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Regarding) }}</mbsc-form-group-title>
-                <mbsc-form-group-content >
-                    <!-- TODO: ComputerUserCategories -->
-                    <notifier-search *ngIf="showField(caseFieldsNames.IsAbout_ReportedBy)" id="regardingNotifier" [categoryField]="getField(caseFieldsNames.IsAbout_UserSearchCategoryId)" 
-                        [field]="getField(caseFieldsNames.IsAbout_ReportedBy)" [notifierType]="notifierTypes.Regarding" [form]="form"></notifier-search>
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_PersonName)" [field]="getField(caseFieldsNames.IsAbout_PersonName)" [form]="form"></case-textbox-control>
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_PersonEmail)" [field]="getField(caseFieldsNames.IsAbout_PersonEmail)" [form]="form"></case-textbox-control>
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_PersonPhone)" [field]="getField(caseFieldsNames.IsAbout_PersonPhone)" [form]="form"></case-textbox-control>
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_PersonCellPhone)" [field]="getField(caseFieldsNames.IsAbout_PersonCellPhone)" [form]="form"></case-textbox-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.IsAbout_RegionId)" [field]="getField(caseFieldsNames.IsAbout_RegionId)" [form]="form" [dataSource]="dataSource.regionsStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.IsAbout_DepartmentId)" [field]="getField(caseFieldsNames.IsAbout_DepartmentId)" [form]="form" [dataSource]="dataSource.isAboutDepartmentsStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.IsAbout_OrganizationUnitId)" [field]="getField(caseFieldsNames.IsAbout_OrganizationUnitId)" [form]="form" [dataSource]="dataSource.isAboutOUsStore$"></case-dropdown-control>
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_CostCentre)" [field]="getField(caseFieldsNames.IsAbout_CostCentre)" [form]="form"></case-textbox-control>
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_Place)" [field]="getField(caseFieldsNames.IsAbout_Place)" [form]="form"></case-textbox-control>
-                    <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_UserCode)" [field]="getField(caseFieldsNames.IsAbout_UserCode)" [form]="form"></case-textbox-control>
-                </mbsc-form-group-content>
-            </mbsc-form-group>
-
-            <mbsc-form-group collapsible [open]="isNewCase" #ComputerInfoSection *ngIf="hasSection(caseSectionTypes.ComputerInfo)">
-                <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.ComputerInfo) }}</mbsc-form-group-title>
-                <mbsc-form-group-content>
-                        <case-textbox-control *ngIf="showField(caseFieldsNames.InventoryNumber)" [field]="getField(caseFieldsNames.InventoryNumber)" [form]="form"></case-textbox-control>
-                        <case-textbox-control *ngIf="showField(caseFieldsNames.ComputerTypeId)" [field]="getField(caseFieldsNames.ComputerTypeId)" [form]="form"></case-textbox-control>
-                        <case-textbox-control *ngIf="showField(caseFieldsNames.InventoryLocation)" [field]="getField(caseFieldsNames.InventoryLocation)" [form]="form"></case-textbox-control>
-                </mbsc-form-group-content>
-            </mbsc-form-group>
-
-            <mbsc-form-group collapsible [open]="isNewCase" #caseInfoSection *ngIf="hasSection(caseSectionTypes.CaseInfo)">
-                <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.CaseInfo) }}</mbsc-form-group-title>
-                <mbsc-form-group-content>
-                        <case-textbox-control *ngIf="showField(caseFieldsNames.CaseNumber)" [field]="getField(caseFieldsNames.CaseNumber)" [form]="form" disabled=true></case-textbox-control>
-                        <case-datetime-control *ngIf="showField(caseFieldsNames.RegTime)" [field]="getField(caseFieldsNames.RegTime)" [form]="form"></case-datetime-control>
-                        <case-datetime-control *ngIf="showField(caseFieldsNames.ChangeTime)" [field]="getField(caseFieldsNames.ChangeTime)" [form]="form"></case-datetime-control>
-                        <case-textbox-control *ngIf="showField(caseFieldsNames.UserId)" [field]="getField(caseFieldsNames.UserId)" [form]="form" disabled=true></case-textbox-control>
-                        <case-dropdown-control *ngIf="showField(caseFieldsNames.RegistrationSourceCustomer)" disabled=true [field]="getField(caseFieldsNames.RegistrationSourceCustomer)" [form]="form"  [dataSource]="dataSource.customerRegistrationSourcesStore$"></case-dropdown-control>
-                        <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.CaseTypeId)" [field]="getField(caseFieldsNames.CaseTypeId)" [form]="form" [dataSource]="dataSource.caseTypesStore$"></case-multi-dropdown-control>
-                        <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.ProductAreaId)" [field]="getField(caseFieldsNames.ProductAreaId)" [form]="form" [dataSource]="dataSource.productAreasStore$"></case-multi-dropdown-control>
-                        <case-dropdown-control *ngIf="showField(caseFieldsNames.SystemId)" disabled=true [field]="getField(caseFieldsNames.SystemId)" [form]="form" [dataSource]="dataSource.systemsStore$"></case-dropdown-control>
-                        <case-dropdown-control *ngIf="showField(caseFieldsNames.UrgencyId)" disabled=true [field]="getField(caseFieldsNames.UrgencyId)" [form]="form" [dataSource]="dataSource.urgenciesStore$"></case-dropdown-control>
-                        <case-dropdown-control *ngIf="showField(caseFieldsNames.ImpactId)" disabled=true [field]="getField(caseFieldsNames.ImpactId)" [form]="form" [dataSource]="dataSource.impactsStore$"></case-dropdown-control>
-                        <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.CategoryId)" [field]="getField(caseFieldsNames.CategoryId)" [form]="form" [dataSource]="dataSource.categoriesStore$"></case-multi-dropdown-control>
-                        <case-dropdown-control *ngIf="showField(caseFieldsNames.SupplierId)" disabled=true [field]="getField(caseFieldsNames.SupplierId)" [form]="form" [dataSource]="dataSource.suppliersStore$"></case-dropdown-control>
-                        <case-dropdown-control *ngIf="showField(caseFieldsNames.SupplierCountryId)" disabled=true [field]="getField(caseFieldsNames.SupplierCountryId)" [form]="form" [dataSource]="dataSource.countriesStore$"></case-dropdown-control>
-                        <case-textbox-control *ngIf="showField(caseFieldsNames.InvoiceNumber)" [field]="getField(caseFieldsNames.InvoiceNumber)" [form]="form"></case-textbox-control>
-                        <case-textbox-control *ngIf="showField(caseFieldsNames.ReferenceNumber)" [field]="getField(caseFieldsNames.ReferenceNumber)" [form]="form"></case-textbox-control>
-                        <case-textbox-control *ngIf="showField(caseFieldsNames.Caption)" [field]="getField(caseFieldsNames.Caption)" [form]="form"></case-textbox-control>
-                        <!-- TODO:
-                        <case-xxx-control *ngIf="showField(caseFieldsNames.Mail2Ticket)" [field]="getField(caseFieldsNames.Mail2Ticket)" [form]="form"></case-xxx-control>
-                        -->
-                        <case-textarea-control *ngIf="showField(caseFieldsNames.Description)" [field]="getField(caseFieldsNames.Description)" [form]="form"></case-textarea-control>
-                        <!-- TODO:
-                        <case-mailtoticket-control *ngIf="showField(caseFieldsNames.CaseRegistrationSource) && getField(caseFieldsNames.CaseRegistrationSource).value === 3" [field]="getField(caseFieldsNames.CaseRegistrationSource)"></case-mailtoticket-control>
-                        -->
-                        <case-textarea-control *ngIf="showField(caseFieldsNames.Miscellaneous)" [field]="getField(caseFieldsNames.Miscellaneous)" [form]="form"></case-textarea-control>
-                        <case-switch-control *ngIf="showField(caseFieldsNames.ContactBeforeAction)" [field]="getField(caseFieldsNames.ContactBeforeAction)" [form]="form"></case-switch-control>
-                        <case-switch-control *ngIf="showField(caseFieldsNames.Sms)" [field]="getField(caseFieldsNames.Sms)" [form]="form" description="Send text message when case is closed"></case-switch-control>
-                        <case-date-control *ngIf="showField(caseFieldsNames.AgreedDate)" [field]="getField(caseFieldsNames.AgreedDate)" [form]="form"></case-date-control>
-                        <case-textbox-control *ngIf="showField(caseFieldsNames.Available)" [field]="getField(caseFieldsNames.Available)" [form]="form"></case-textbox-control>
-                        <case-textbox-control *ngIf="showField(caseFieldsNames.Cost)" [field]="getField(caseFieldsNames.Cost)" [form]="form"></case-textbox-control>
-                        <case-textbox-control *ngIf="showField(caseFieldsNames.Cost_OtherCost)" [field]="getField(caseFieldsNames.Cost_OtherCost)" [form]="form"></case-textbox-control>
-                        <case-dropdown-control *ngIf="showField(caseFieldsNames.Cost_Currency)" disabled=true [field]="getField(caseFieldsNames.Cost_Currency)" [form]="form" [dataSource]="dataSource.currenciesStore$"></case-dropdown-control>
-                        <case-files-control *ngIf="showField(caseFieldsNames.Filename)" 
-                            [field]="getField(caseFieldsNames.Filename)" 
-                            [caseKey]="caseKey"
-                            [accessMode]="accessMode"></case-files-control>
-                </mbsc-form-group-content>
-            </mbsc-form-group>
-
-            <mbsc-form-group collapsible [open]="isNewCase" #caseManagementSection *ngIf="hasSection(caseSectionTypes.CaseManagement)">
-                <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.CaseManagement) }}</mbsc-form-group-title>
-                <mbsc-form-group-content>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.WorkingGroupId)" [field]="getField(caseFieldsNames.WorkingGroupId)" [form]="form" [dataSource]="dataSource.workingGroupsStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.CaseResponsibleUserId)" [field]="getField(caseFieldsNames.CaseResponsibleUserId)" [form]="form" [dataSource]="dataSource.responsibleUsersStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.PerformerUserId)" [field]="getField(caseFieldsNames.PerformerUserId)" [form]="form" [dataSource]="dataSource.performersStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.PriorityId)" [field]="getField(caseFieldsNames.PriorityId)" [form]="form" [dataSource]="dataSource.prioritiesStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.StatusId)" disabled=true [field]="getField(caseFieldsNames.StatusId)" [form]="form" [dataSource]="dataSource.statusesStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.StateSecondaryId)" [field]="getField(caseFieldsNames.StateSecondaryId)" [form]="form" [dataSource]="dataSource.stateSecondariesStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.Project)" disabled=true [field]="getField(caseFieldsNames.Project)" [form]="form" [dataSource]="dataSource.projectsStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.Problem)" disabled=true [field]="getField(caseFieldsNames.Problem)" [form]="form" [dataSource]="dataSource.problemsStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.CausingPart)" disabled=true [field]="getField(caseFieldsNames.CausingPart)" [form]="form" [dataSource]="dataSource.causingPartsStore$"></case-dropdown-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.Change)" disabled=true [field]="getField(caseFieldsNames.Change)" [form]="form" [dataSource]="dataSource.changesStore$"></case-dropdown-control>
-                    <case-date-control *ngIf="showField(caseFieldsNames.PlanDate)" [field]="getField(caseFieldsNames.PlanDate)" [form]="form"></case-date-control>
-                    <case-date-control *ngIf="showField(caseFieldsNames.WatchDate)" [field]="getField(caseFieldsNames.WatchDate)" [form]="form"></case-date-control>
-                    <case-switch-control *ngIf="showField(caseFieldsNames.Verified)" [field]="getField(caseFieldsNames.Verified)" [form]="form"></case-switch-control>
-                    <case-textarea-control *ngIf="showField(caseFieldsNames.VerifiedDescription)" [field]="getField(caseFieldsNames.VerifiedDescription)" [form]="form"></case-textarea-control>
-                    <case-dropdown-control *ngIf="showField(caseFieldsNames.SolutionRate)" disabled=true [field]="getField(caseFieldsNames.SolutionRate)" [form]="form" [dataSource]="dataSource.solutionsRatesStore$"></case-dropdown-control>
-                </mbsc-form-group-content>
-            </mbsc-form-group>
-
-            <mbsc-form-group collapsible [open]="isNewCase" #statusSection *ngIf="showField(caseFieldsNames.FinishingDate) && getField(caseFieldsNames.FinishingDate).value != null">
-                <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Status) }}</mbsc-form-group-title>
-                <mbsc-form-group-content>
-                    <case-textarea-control *ngIf="showField(caseFieldsNames.FinishingDescription)" [field]="getField(caseFieldsNames.FinishingDescription)" [form]="form" [readonly]="true"></case-textarea-control>
-                    <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.ClosingReason)" [field]="getField(caseFieldsNames.ClosingReason)" [form]="form" [dataSource]="dataSource.closingReasonsStore$" [readonly]="true"></case-multi-dropdown-control>
-                    <case-date-control *ngIf="showField(caseFieldsNames.FinishingDate)" [field]="getField(caseFieldsNames.FinishingDate)" [form]="form" [readonly]="true"></case-date-control>
-                </mbsc-form-group-content>
-            </mbsc-form-group>
-
-            <mbsc-form-group collapsible [open]="isNewCase" #communication *ngIf="isCommunicationSectionVisible">
-                <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Communication)}}</mbsc-form-group-title>
-                <mbsc-form-group-content>
-                  <case-log-input [caseKey]="caseKey" [accessMode]="accessMode" [caseData]="caseData" [form]="form"></case-log-input>
-                </mbsc-form-group-content>
-            </mbsc-form-group>
-
-            <mbsc-form-group collapsible [open]="isNewCase" #closeSection *ngIf="showField(caseFieldsNames.FinishingDate) && !getField(caseFieldsNames.FinishingDate).value">
-              <mbsc-form-group-title >{{ 'Avsluta ärenden' | translate }}</mbsc-form-group-title>
+  <!-- Case edit fields -->
+  <div *ngIf="isLoaded" [hidden]="currentTab != 'case_details'">
+    <div class="md-paging">
+      <form [formGroup]="form" novalidate>
+          <mbsc-form-group collapsible [open]="isNewCase" *ngIf="hasSection(caseSectionTypes.Initiator)">
+              <mbsc-form-group-title >{{ getSectionHeader(caseSectionTypes.Initiator) }}</mbsc-form-group-title>
               <mbsc-form-group-content>
-                  <case-textarea-control *ngIf="showField(caseFieldsNames.FinishingDescription)" [field]="getField(caseFieldsNames.FinishingDescription)" [form]="form"></case-textarea-control>
-                  <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.ClosingReason)" [field]="getField(caseFieldsNames.ClosingReason)" [form]="form" [dataSource]="dataSource.closingReasonsStore$"></case-multi-dropdown-control>
-                  <case-date-control *ngIf="showField(caseFieldsNames.FinishingDate)" [field]="getField(caseFieldsNames.FinishingDate)" [form]="form"></case-date-control>
+                  <!-- TODO: ComputerUserCategories -->
+                  <notifier-search *ngIf="showField(caseFieldsNames.ReportedBy)" id="initiatorNotifier" 
+                      [categoryField]="caseFieldsNames.UserSearchCategoryId" 
+                      [field]="caseFieldsNames.ReportedBy" [notifierType]="notifierTypes.Initiator" [form]="form"></notifier-search>
+                  <case-textbox-control *ngIf="showField(caseFieldsNames.PersonName)" [field]="caseFieldsNames.PersonName" [form]="form"></case-textbox-control>
+                  <case-textbox-control *ngIf="showField(caseFieldsNames.PersonEmail)" [field]="caseFieldsNames.PersonEmail" [form]="form"></case-textbox-control>
+                  <case-textbox-control *ngIf="showField(caseFieldsNames.PersonPhone)" [field]="caseFieldsNames.PersonPhone" [form]="form"></case-textbox-control>
+                  <case-textbox-control *ngIf="showField(caseFieldsNames.PersonCellPhone)" [field]="caseFieldsNames.PersonCellPhone" [form]="form"></case-textbox-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.RegionId)" [field]="caseFieldsNames.RegionId" [form]="form" [dataSource]="dataSource.regionsStore$"></case-dropdown-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.DepartmentId)" [field]="caseFieldsNames.DepartmentId" [form]="form" [dataSource]="dataSource.departmentsStore$"></case-dropdown-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.OrganizationUnitId)" [field]="caseFieldsNames.OrganizationUnitId" [form]="form" [dataSource]="dataSource.oUsStore$"></case-dropdown-control>
+                  <case-textbox-control *ngIf="showField(caseFieldsNames.CostCentre)" [field]="caseFieldsNames.CostCentre" [form]="form"></case-textbox-control>
+                  <case-textbox-control *ngIf="showField(caseFieldsNames.Place)" [field]="caseFieldsNames.Place" [form]="form"></case-textbox-control>
+                  <case-textbox-control *ngIf="showField(caseFieldsNames.UserCode)" [field]="caseFieldsNames.UserCode" [form]="form"></case-textbox-control>
               </mbsc-form-group-content>
           </mbsc-form-group>
 
-            <!-- <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.Invoices)" #invoicesSection>
-                <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Invoices)}}</mbsc-form-group-title>
-                <mbsc-form-group-content>
+          <mbsc-form-group collapsible [open]="isNewCase" #regardingSection *ngIf="hasSection(caseSectionTypes.Regarding)">
+              <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Regarding) }}</mbsc-form-group-title>
+              <mbsc-form-group-content >
+                  <!-- TODO: ComputerUserCategories -->
+                  <notifier-search *ngIf="showField(caseFieldsNames.IsAbout_ReportedBy)" id="regardingNotifier" [categoryField]="caseFieldsNames.IsAbout_UserSearchCategoryId" 
+                      [field]="caseFieldsNames.IsAbout_ReportedBy" [notifierType]="notifierTypes.Regarding" [form]="form"></notifier-search>
+                  <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_PersonName)" [field]="caseFieldsNames.IsAbout_PersonName" [form]="form"></case-textbox-control>
+                  <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_PersonEmail)" [field]="caseFieldsNames.IsAbout_PersonEmail" [form]="form"></case-textbox-control>
+                  <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_PersonPhone)" [field]="caseFieldsNames.IsAbout_PersonPhone" [form]="form"></case-textbox-control>
+                  <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_PersonCellPhone)" [field]="caseFieldsNames.IsAbout_PersonCellPhone" [form]="form"></case-textbox-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.IsAbout_RegionId)" [field]="caseFieldsNames.IsAbout_RegionId" [form]="form" [dataSource]="dataSource.regionsStore$"></case-dropdown-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.IsAbout_DepartmentId)" [field]="caseFieldsNames.IsAbout_DepartmentId" [form]="form" [dataSource]="dataSource.isAboutDepartmentsStore$"></case-dropdown-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.IsAbout_OrganizationUnitId)" [field]="caseFieldsNames.IsAbout_OrganizationUnitId" [form]="form" [dataSource]="dataSource.isAboutOUsStore$"></case-dropdown-control>
+                  <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_CostCentre)" [field]="caseFieldsNames.IsAbout_CostCentre" [form]="form"></case-textbox-control>
+                  <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_Place)" [field]="caseFieldsNames.IsAbout_Place" [form]="form"></case-textbox-control>
+                  <case-textbox-control *ngIf="showField(caseFieldsNames.IsAbout_UserCode)" [field]="caseFieldsNames.IsAbout_UserCode" [form]="form"></case-textbox-control>
+              </mbsc-form-group-content>
+          </mbsc-form-group>
 
-                </mbsc-form-group-content>
-            </mbsc-form-group> -->
-        </form>
-    </div>
+          <mbsc-form-group collapsible [open]="isNewCase" #ComputerInfoSection *ngIf="hasSection(caseSectionTypes.ComputerInfo)">
+              <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.ComputerInfo) }}</mbsc-form-group-title>
+              <mbsc-form-group-content>
+                      <case-textbox-control *ngIf="showField(caseFieldsNames.InventoryNumber)" [field]="caseFieldsNames.InventoryNumber" [form]="form"></case-textbox-control>
+                      <case-textbox-control *ngIf="showField(caseFieldsNames.ComputerTypeId)" [field]="caseFieldsNames.ComputerTypeId" [form]="form"></case-textbox-control>
+                      <case-textbox-control *ngIf="showField(caseFieldsNames.InventoryLocation)" [field]="caseFieldsNames.InventoryLocation" [form]="form"></case-textbox-control>
+              </mbsc-form-group-content>
+          </mbsc-form-group>
+
+          <mbsc-form-group collapsible [open]="isNewCase" #caseInfoSection *ngIf="hasSection(caseSectionTypes.CaseInfo)">
+              <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.CaseInfo) }}</mbsc-form-group-title>
+              <mbsc-form-group-content>
+                      <case-textbox-control *ngIf="showField(caseFieldsNames.CaseNumber)" [field]="caseFieldsNames.CaseNumber" [form]="form" disabled=true></case-textbox-control>
+                      <case-datetime-control *ngIf="showField(caseFieldsNames.RegTime)" [field]="caseFieldsNames.RegTime" [form]="form"></case-datetime-control>
+                      <case-datetime-control *ngIf="showField(caseFieldsNames.ChangeTime)" [field]="caseFieldsNames.ChangeTime" [form]="form"></case-datetime-control>
+                      <case-textbox-control *ngIf="showField(caseFieldsNames.UserId)" [field]="caseFieldsNames.UserId" [form]="form" disabled=true></case-textbox-control>
+                      <case-dropdown-control *ngIf="showField(caseFieldsNames.RegistrationSourceCustomer)" disabled=true [field]="caseFieldsNames.RegistrationSourceCustomer" [form]="form"  [dataSource]="dataSource.customerRegistrationSourcesStore$"></case-dropdown-control>
+                      <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.CaseTypeId)" [field]="caseFieldsNames.CaseTypeId" [form]="form" [dataSource]="dataSource.caseTypesStore$"></case-multi-dropdown-control>
+                      <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.ProductAreaId)" [field]="caseFieldsNames.ProductAreaId" [form]="form" [dataSource]="dataSource.productAreasStore$"></case-multi-dropdown-control>
+                      <case-dropdown-control *ngIf="showField(caseFieldsNames.SystemId)" disabled=true [field]="caseFieldsNames.SystemId" [form]="form" [dataSource]="dataSource.systemsStore$"></case-dropdown-control>
+                      <case-dropdown-control *ngIf="showField(caseFieldsNames.UrgencyId)" disabled=true [field]="caseFieldsNames.UrgencyId" [form]="form" [dataSource]="dataSource.urgenciesStore$"></case-dropdown-control>
+                      <case-dropdown-control *ngIf="showField(caseFieldsNames.ImpactId)" disabled=true [field]="caseFieldsNames.ImpactId" [form]="form" [dataSource]="dataSource.impactsStore$"></case-dropdown-control>
+                      <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.CategoryId)" [field]="caseFieldsNames.CategoryId" [form]="form" [dataSource]="dataSource.categoriesStore$"></case-multi-dropdown-control>
+                      <case-dropdown-control *ngIf="showField(caseFieldsNames.SupplierId)" disabled=true [field]="caseFieldsNames.SupplierId" [form]="form" [dataSource]="dataSource.suppliersStore$"></case-dropdown-control>
+                      <case-dropdown-control *ngIf="showField(caseFieldsNames.SupplierCountryId)" disabled=true [field]="caseFieldsNames.SupplierCountryId" [form]="form" [dataSource]="dataSource.countriesStore$"></case-dropdown-control>
+                      <case-textbox-control *ngIf="showField(caseFieldsNames.InvoiceNumber)" [field]="caseFieldsNames.InvoiceNumber" [form]="form"></case-textbox-control>
+                      <case-textbox-control *ngIf="showField(caseFieldsNames.ReferenceNumber)" [field]="caseFieldsNames.ReferenceNumber" [form]="form"></case-textbox-control>
+                      <case-textbox-control *ngIf="showField(caseFieldsNames.Caption)" [field]="caseFieldsNames.Caption" [form]="form"></case-textbox-control>
+                      <!-- TODO:
+                      <case-xxx-control *ngIf="showField(caseFieldsNames.Mail2Ticket)" [field]="caseFieldsNames.Mail2Ticket" [form]="form"></case-xxx-control>
+                      -->
+                      <case-textarea-control *ngIf="showField(caseFieldsNames.Description)" [field]="caseFieldsNames.Description" [form]="form"></case-textarea-control>
+                      <!-- TODO:
+                      <case-mailtoticket-control *ngIf="showField(caseFieldsNames.CaseRegistrationSource) && caseFieldsNames.CaseRegistrationSource.value === 3" [field]="caseFieldsNames.CaseRegistrationSource"></case-mailtoticket-control>
+                      -->
+                      <case-textarea-control *ngIf="showField(caseFieldsNames.Miscellaneous)" [field]="caseFieldsNames.Miscellaneous" [form]="form"></case-textarea-control>
+                      <case-switch-control *ngIf="showField(caseFieldsNames.ContactBeforeAction)" [field]="caseFieldsNames.ContactBeforeAction" [form]="form"></case-switch-control>
+                      <case-switch-control *ngIf="showField(caseFieldsNames.Sms)" [field]="caseFieldsNames.Sms" [form]="form" description="Send text message when case is closed"></case-switch-control>
+                      <case-date-control *ngIf="showField(caseFieldsNames.AgreedDate)" [field]="caseFieldsNames.AgreedDate" [form]="form"></case-date-control>
+                      <case-textbox-control *ngIf="showField(caseFieldsNames.Available)" [field]="caseFieldsNames.Available" [form]="form"></case-textbox-control>
+                      <case-textbox-control *ngIf="showField(caseFieldsNames.Cost)" [field]="caseFieldsNames.Cost" [form]="form"></case-textbox-control>
+                      <case-textbox-control *ngIf="showField(caseFieldsNames.Cost_OtherCost)" [field]="caseFieldsNames.Cost_OtherCost" [form]="form"></case-textbox-control>
+                      <case-dropdown-control *ngIf="showField(caseFieldsNames.Cost_Currency)" disabled=true [field]="caseFieldsNames.Cost_Currency" [form]="form" [dataSource]="dataSource.currenciesStore$"></case-dropdown-control>
+                      <case-files-control *ngIf="showField(caseFieldsNames.Filename)" 
+                          [field]="caseFieldsNames.Filename" 
+                          [files]="caseFiles"
+                          [caseKey]="caseKey"
+                          [accessMode]="accessMode"></case-files-control>
+              </mbsc-form-group-content>
+          </mbsc-form-group>
+
+          <mbsc-form-group collapsible [open]="isNewCase" #caseManagementSection *ngIf="hasSection(caseSectionTypes.CaseManagement)">
+              <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.CaseManagement) }}</mbsc-form-group-title>
+              <mbsc-form-group-content>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.WorkingGroupId)" [field]="caseFieldsNames.WorkingGroupId" [form]="form" [dataSource]="dataSource.workingGroupsStore$"></case-dropdown-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.CaseResponsibleUserId)" [field]="caseFieldsNames.CaseResponsibleUserId" [form]="form" [dataSource]="dataSource.responsibleUsersStore$"></case-dropdown-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.PerformerUserId)" [field]="caseFieldsNames.PerformerUserId" [form]="form" [dataSource]="dataSource.performersStore$"></case-dropdown-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.PriorityId)" [field]="caseFieldsNames.PriorityId" [form]="form" [dataSource]="dataSource.prioritiesStore$"></case-dropdown-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.StatusId)" disabled=true [field]="caseFieldsNames.StatusId" [form]="form" [dataSource]="dataSource.statusesStore$"></case-dropdown-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.StateSecondaryId)" [field]="caseFieldsNames.StateSecondaryId" [form]="form" [dataSource]="dataSource.stateSecondariesStore$"></case-dropdown-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.Project)" disabled=true [field]="caseFieldsNames.Project" [form]="form" [dataSource]="dataSource.projectsStore$"></case-dropdown-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.Problem)" disabled=true [field]="caseFieldsNames.Problem" [form]="form" [dataSource]="dataSource.problemsStore$"></case-dropdown-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.CausingPart)" disabled=true [field]="caseFieldsNames.CausingPart" [form]="form" [dataSource]="dataSource.causingPartsStore$"></case-dropdown-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.Change)" disabled=true [field]="caseFieldsNames.Change" [form]="form" [dataSource]="dataSource.changesStore$"></case-dropdown-control>
+                  <case-date-control *ngIf="showField(caseFieldsNames.PlanDate)" [field]="caseFieldsNames.PlanDate" [form]="form"></case-date-control>
+                  <case-date-control *ngIf="showField(caseFieldsNames.WatchDate)" [field]="caseFieldsNames.WatchDate" [form]="form"></case-date-control>
+                  <case-switch-control *ngIf="showField(caseFieldsNames.Verified)" [field]="caseFieldsNames.Verified" [form]="form"></case-switch-control>
+                  <case-textarea-control *ngIf="showField(caseFieldsNames.VerifiedDescription)" [field]="caseFieldsNames.VerifiedDescription" [form]="form"></case-textarea-control>
+                  <case-dropdown-control *ngIf="showField(caseFieldsNames.SolutionRate)" disabled=true [field]="caseFieldsNames.SolutionRate" [form]="form" [dataSource]="dataSource.solutionsRatesStore$"></case-dropdown-control>
+              </mbsc-form-group-content>
+          </mbsc-form-group>
+
+          <mbsc-form-group collapsible [open]="isNewCase" #statusSection *ngIf="showField(caseFieldsNames.FinishingDate) && caseFieldsNames.FinishingDate.value != null">
+              <mbsc-form-group-title>{{ getSectionHeader(caseSectionTypes.Status) }}</mbsc-form-group-title>
+              <mbsc-form-group-content>
+                  <case-textarea-control *ngIf="showField(caseFieldsNames.FinishingDescription)" [field]="caseFieldsNames.FinishingDescription" [form]="form" [readOnly]="true"></case-textarea-control>
+                  <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.ClosingReason)" [field]="caseFieldsNames.ClosingReason" [form]="form" [dataSource]="dataSource.closingReasonsStore$" [readOnly]="true"></case-multi-dropdown-control>
+                  <case-date-control *ngIf="showField(caseFieldsNames.FinishingDate)" [field]="caseFieldsNames.FinishingDate" [form]="form" [readOnly]="true"></case-date-control>
+              </mbsc-form-group-content>
+          </mbsc-form-group>
+
+          <mbsc-form-group collapsible [open]="isNewCase" #communication *ngIf="isCommunicationSectionVisible">
+              <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Communication)}}</mbsc-form-group-title>
+              <mbsc-form-group-content>
+                <case-log-input [caseKey]="caseKey" [accessMode]="accessMode" [caseData]="caseData" [form]="form"></case-log-input>
+              </mbsc-form-group-content>
+          </mbsc-form-group>
+
+          <mbsc-form-group collapsible [open]="isNewCase" #closeSection *ngIf="showField(caseFieldsNames.FinishingDate) && !caseFieldsNames.FinishingDate.value">
+            <mbsc-form-group-title >{{ 'Avsluta ärenden' | translate }}</mbsc-form-group-title>
+            <mbsc-form-group-content>
+                <case-textarea-control *ngIf="showField(caseFieldsNames.FinishingDescription)" [field]="caseFieldsNames.FinishingDescription" [form]="form"></case-textarea-control>
+                <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.ClosingReason)" [field]="caseFieldsNames.ClosingReason" [form]="form" [dataSource]="dataSource.closingReasonsStore$"></case-multi-dropdown-control>
+                <case-date-control *ngIf="showField(caseFieldsNames.FinishingDate)" [field]="caseFieldsNames.FinishingDate" [form]="form"></case-date-control>
+            </mbsc-form-group-content>
+        </mbsc-form-group>
+
+          <!-- <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.Invoices)" #invoicesSection>
+              <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Invoices)}}</mbsc-form-group-title>
+              <mbsc-form-group-content>
+
+              </mbsc-form-group-content>
+          </mbsc-form-group> -->
+      </form>
+  </div>
 </div>
-    
+  
 </mbsc-form>

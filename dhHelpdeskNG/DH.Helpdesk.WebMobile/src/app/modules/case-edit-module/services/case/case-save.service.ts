@@ -83,17 +83,19 @@ export class CaseSaveService {
     model.changeId = this.getNumericValue(form, CaseFieldsNames.Change);
     model.planDate = this.getDateValue(form, CaseFieldsNames.PlanDate);
     model.watchDate = this.getDateValue(form, CaseFieldsNames.WatchDate);
-
     model.verified = this.getBooleanValue(form, CaseFieldsNames.Verified);
     model.verifiedDescription = this.getStringValue(form, CaseFieldsNames.VerifiedDescription);
     model.solutionRate = this.getStringValue(form, CaseFieldsNames.SolutionRate);
 
     model.logExternalText = this.getStringValue(form, CaseFieldsNames.Log_ExternalText);
     model.logInternalText = this.getStringValue(form, CaseFieldsNames.Log_InternalText);
-    model.logSendMailToNotifier = true; // TODO: this.getBooleanValue(form, CaseFieldsNames.Log_SendMailToNotifier);
-    model.logFollowersCc = 'logFollowersCc'; // TODO: this.getBooleanValue(form, CaseFieldsNames.Log_FollowersCC);
-    model.logInternalEmailTo = 'logInternalEmailTo'; // TODO: this.getStringValue(form, CaseFieldsNames.Log_InternalEmailTo);
-    model.logInternalEmailCc = 'logInternalEmailCc'; // TODO: this.getStringValue(form, CaseFieldsNames.Log_InternalEmailCc);
+
+    model.logSendMailToNotifier =  this.getBooleanValue(form, CaseFieldsNames.Log_SendMailToNotifier);
+    model.logFollowersCc = this.getStringValue(form, CaseFieldsNames.Log_ExternalEmailsCC);
+
+    model.logInternalEmailTo = this.getStringValue(form, CaseFieldsNames.Log_InternalEmailsTo);
+    model.logInternalEmailCc = this.getStringValue(form, CaseFieldsNames.Log_InternalEmailsCC);
+
     model.finishingDescription = this.getStringValue(form, CaseFieldsNames.FinishingDescription);
     model.closingReason = this.getNumericValue(form, CaseFieldsNames.ClosingReason);
     model.finishingDate = this.getDateValue(form, CaseFieldsNames.FinishingDate);

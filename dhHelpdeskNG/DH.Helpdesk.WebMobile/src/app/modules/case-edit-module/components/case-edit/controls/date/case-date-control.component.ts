@@ -1,10 +1,8 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { BaseControl } from '../base-control';
 import { MbscCalendarOptions, MbscCalendar } from '@mobiscroll/angular';
-import { switchMap, takeUntil } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { DateTime } from 'luxon';
-import { FormStatuses } from 'src/app/modules/shared-module/constants';
 import { TranslateService } from '@ngx-translate/core';
 import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
 
@@ -14,10 +12,10 @@ import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
     styleUrls: ['./case-date-control.component.scss']
   })
   export class CaseDateComponent extends BaseControl<string> {
-    // @ViewChild('control') control: any;
     @ViewChild('date') control: MbscCalendar;
     @Input() disabled = false;
     value?: string;
+
     options: MbscCalendarOptions = {
       theme: 'mobiscroll',
       display: 'center',
@@ -35,7 +33,7 @@ import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
         return DateUtil.formatDate(dateIso, DateTime.DATE_SHORT);
       },
       parseValue: (value?: string) => {
-        let d = value ? DateTime.fromISO(value) : DateTime.local(); // Default value
+        const d = value ? DateTime.fromISO(value) : DateTime.local(); // Default value
         return [d.month - 1, d.day, d.year];
       },
       onInit: (event, inst) => {
@@ -46,16 +44,17 @@ import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
       onSet: (event, inst) => {
         this.formControl.setValue(inst.getVal());
       }
-    }
+    };
 
     constructor(private ngxTranslateService: TranslateService) {
       super();
     }
 
     ngOnInit(): void {
-      this.value = this.field.value;
+      this.init(this.fieldName);
+      this.value = this.formControl.value;
       // this.updateDisabledState();
-      this.init(this.field);
+
       this.initEvents();
     }
 
@@ -64,32 +63,23 @@ import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
     }
 
     private updateDisabledState() {
-      this.control.disabled = this.formControl.disabled || this.disabled;
-    }
-
-    private get isFormControlDisabled() {
-      return this.formControl.status == FormStatuses.DISABLED;
+      this.control.disabled = this.isFormControlDisabled || this.disabled;
     }
 
     private initEvents() {
-      this.formControl.statusChanges // track disabled state in form
-      .pipe(switchMap((e: any) => {
-          if (this.control.disabled != this.isFormControlDisabled) {
-            this.updateDisabledState();
-          }
-          return of(e);
-        }),
+      // track disabled state in form
+      this.formControl.statusChanges.pipe(
         takeUntil(this.destroy$)
-      )
-      .subscribe();
+      ).subscribe(e => {
+        if (this.control.disabled !== this.isFormControlDisabled) {
+          this.updateDisabledState();
+        }
+      });
 
-      this.formControl.valueChanges
-        .pipe(switchMap((v?: any) => {
-            this.value = v;
-            return of(v);
-          }),
+      this.formControl.valueChanges.pipe(
           takeUntil(this.destroy$)
-        )
-        .subscribe();
+        ).subscribe((v: any) => {
+          this.value = v;
+        });
     }
   }

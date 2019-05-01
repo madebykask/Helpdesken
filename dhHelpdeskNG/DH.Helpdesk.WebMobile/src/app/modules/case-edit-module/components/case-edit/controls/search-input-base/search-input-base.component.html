@@ -1,0 +1,21 @@
+<ng-container [formGroup]="form">
+<div class="mbsc-grid mbsc-no-padding formcontent bordered">
+  <div class="mbsc-row">
+    <div class="mbsc-col-10">
+      <mbsc-input id="{{ field }}" #searchInput
+           [ngClass]="{ 'searchInput': true, 'disabled': formControl.disabled }"
+           [formControlName]="field">{{ formControl.label }}{{ requiredSymbol }}</mbsc-input>
+    </div>
+    <div class="mbsc-col-2">
+      <mbsc-button *ngIf="!searchInput.disabled" 
+                   flat icon="fa-search" class="input-icon"
+                   (click)="select.instance.show()"></mbsc-button>
+    </div>
+  </div>
+</div>
+</ng-container>
+
+<mbsc-select *ngIf="!searchInput.disabled"
+             #select 
+             [options]="selectOptions"
+             [data]="selectDataItems"></mbsc-select>

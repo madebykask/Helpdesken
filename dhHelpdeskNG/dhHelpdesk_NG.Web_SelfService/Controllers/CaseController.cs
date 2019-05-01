@@ -89,6 +89,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         private readonly IEmailService _emailService;        
         private readonly IMasterDataService _masterDataService;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
+        private readonly IUserEmailsSearchService _userEmailsSearchService;
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
         private readonly IPriorityService _priorityService;
         private readonly IExtendedCaseService _extendedCaseService;
@@ -143,6 +144,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             ICaseSolutionSettingService caseSolutionSettingService,
             IEmailService emailService,
             ICaseExtraFollowersService caseExtraFollowersService,
+            IUserEmailsSearchService userEmailsSearchService,
             IRegistrationSourceCustomerService registrationSourceCustomerService,
             IPriorityService priorityService,
             IExtendedCaseService extendedCaseService,
@@ -192,6 +194,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             _impactService = impactService;
             _caseSolutionSettingService = caseSolutionSettingService;
             _caseExtraFollowersService = caseExtraFollowersService;
+            _userEmailsSearchService = userEmailsSearchService;
             _registrationSourceCustomerService = registrationSourceCustomerService;
             _priorityService = priorityService;
             _extendedCaseService = extendedCaseService;
@@ -1386,7 +1389,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             {
                 SearchInInitiators = true
             };
-            var models = _caseSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, searchScope);
+            var models = _userEmailsSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, searchScope);
             return Json(new { searchKey = searchKey, result = models });
         }
 

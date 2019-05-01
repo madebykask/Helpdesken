@@ -1,8 +1,7 @@
-import { Component, Input, ViewChild, LOCALE_ID, Inject } from "@angular/core";
-import { BaseCaseField } from "../../../../models";
-import { BaseControl } from "../base-control";
-import { MbscDatetimeOptions, MbscDatetime } from "@mobiscroll/angular";
-import { getLocaleDateFormat, FormatWidth, getLocaleTimeFormat } from "@angular/common";
+import { Component, ViewChild, LOCALE_ID, Inject } from '@angular/core';
+import { BaseControl } from '../base-control';
+//import { MbscDatetimeOptions, MbscDatetime } from "@mobiscroll/angular";
+//import { getLocaleDateFormat, FormatWidth, getLocaleTimeFormat } from "@angular/common";
 
 @Component({
     selector: 'case-datetime-control',
@@ -11,33 +10,37 @@ import { getLocaleDateFormat, FormatWidth, getLocaleTimeFormat } from "@angular/
   })
   export class CaseDateTimeComponent extends BaseControl<string> {
     @ViewChild('control') control: any;
-    //@ViewChild('datetime') control: MbscDatetime
     value?: Date;
-/*     options: MbscDatetimeOptions = {
+    /*
+    // @ViewChild('datetime') control: MbscDatetime
+    options: MbscDatetimeOptions = {
       readOnly: true,
       disabled: true,
       returnFormat: 'iso8601',
       //dateFormat: getLocaleDateFormat(this.locale, FormatWidth.Medium),
       //timeFormat: getLocaleTimeFormat(this.locale, FormatWidth.Short)
     }
- */
+    */
+
     constructor(@Inject(LOCALE_ID) locale: string) {
-      super();      
-/*       this.options.dateFormat = getLocaleDateFormat(locale, FormatWidth.Short)
+      super();
+      /*
+      this.options.dateFormat = getLocaleDateFormat(locale, FormatWidth.Short)
         .replace(new RegExp('M', 'g'), 'm');//different format letters
       this.options.timeFormat = getLocaleTimeFormat(locale, FormatWidth.Short)
-        .replace(new RegExp('m', 'g'), 'i');//different format letters */
+        .replace(new RegExp('m', 'g'), 'i');//different format letters 
+      */
     }
 
     ngOnInit(): void {
-      this.init(this.field);
+      this.init(this.fieldName);
       this.control.disabled = true;
-      //this.control.instance.setVal(new Date(this.field.value)); 
-      this.value = this.field.value == null ? null : new Date(this.field.value);
+      //todo: shall we better use dateUtil.isDate and dateUtil.tryConvertToDate for code below?
+      this.value = this.formControl && this.formControl.value ? new Date(this.formControl.value) : null;
+      //this.control.instance.setVal(new Date(this.formControl.value));
     }
 
     ngOnDestroy(): void {
       this.onDestroy();
     }
-
   }

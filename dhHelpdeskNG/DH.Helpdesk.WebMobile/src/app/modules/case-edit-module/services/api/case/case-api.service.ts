@@ -8,21 +8,22 @@ import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/h
 @Injectable({ providedIn: 'root' })
 export class CaseApiService extends HttpApiServiceBase {
 
-  constructor(protected http: HttpClient, 
+  constructor(protected http: HttpClient,
     protected localStorageService: LocalStorageService) {
     super(http, localStorageService);
   }
-  
+
   getCaseData(caseId: number): Observable<any> {
     const userData = this.localStorageService.getCurrentUser();
     let params = null;
     if (userData !== null) {
       params = { sessionId: userData.authData.sessionId };
     }
-    let url = this.buildResourseUrl('/api/case/' + caseId, params, true, true);
+
+    const url = this.buildResourseUrl('/api/case/' + caseId, params, true, true);
     return this.getJson(url); // TODO: error handling
   }
-  
+
   saveCaseData(data: CaseEditOutputModel): Observable<any> {
     const requestUrl = this.buildResourseUrl(`/api/case/save${ !data.caseId ? '' : '/' +data.caseId }`, null, true, true);
     return this.postJson<any>(requestUrl, data);
@@ -31,4 +32,5 @@ export class CaseApiService extends HttpApiServiceBase {
   getCaseSections(): Observable<any> {
     return this.getJson(this.buildResourseUrl('/api/casesections/get', null, true, true)); // TODO: error handling    
   }
+
 }
