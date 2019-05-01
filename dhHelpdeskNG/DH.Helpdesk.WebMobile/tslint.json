@@ -11,7 +11,7 @@
       false,
       "check-space"
     ],
-    "curly": [true, "ignore-same-line"],
+    "curly": true,
     "deprecation": {
       "severity": "warn"
     },
@@ -30,7 +30,7 @@
     "label-position": true,
     "max-line-length": [
       true,
-      140
+      160
     ],
     "member-access": false,
     "member-ordering": [
@@ -94,7 +94,7 @@
       "always"
     ],
     "triple-equals": [
-      true,
+      false,
       "allow-null-check"
     ],
     "typedef-whitespace": [

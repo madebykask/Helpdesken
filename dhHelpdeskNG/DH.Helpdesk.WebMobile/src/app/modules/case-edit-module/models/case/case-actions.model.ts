@@ -1,16 +1,16 @@
-import { LogFile } from "./case-actions-api.model";
-import { UuidGenerator } from "src/app/modules/shared-module/utils/uuid-generator";
+import { LogFile } from './case-actions-api.model';
+import { UuidGenerator } from 'src/app/modules/shared-module/utils/uuid-generator';
 
 // Case Action Data classes
 export type CaseActionDataType = CaseHistoryActionData | CaseLogActionData | GenericActionData;
 
 // Case Action Group
 export class CaseActionsGroup {
-    id:string;
+    id: string;
     constructor(public createdBy: string,
                 public createdAt: Date) {
       this.id = UuidGenerator.createUuid();
-    } 
+    }
 
     Actions: Array<CaseAction<CaseActionDataType>>;
 
@@ -53,13 +53,13 @@ export class CaseHistoryActionData {
 
 // Case Log Note Data
 export class CaseLogActionData {
-  constructor(public text:string, public files?: LogFile[]) {
-  } 
+  constructor(public text: string, public files?: LogFile[]) {
+  }
 }
 
 // Generic Action data
 export class GenericActionData {
-  constructor(public text:string, public action?:string) {
+  constructor(public text: string, public action?: string) {
   }
 }
 
@@ -69,11 +69,11 @@ export enum CaseEventType {
   InternalLogNote = 2,
   ClosedCase = 3,
   AssignedAdministrator = 4,
-  AssignedWorkingGroup = 5, 
+  AssignedWorkingGroup = 5,
   ChangeSubstatus = 6,
   ChangeWatchDate = 7,
   ChangePriority = 8,
   UploadLogFile = 9,
   SentEmails = 10,
-  OtherChanges = 11 
+  OtherChanges = 11
 }
