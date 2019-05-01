@@ -4,11 +4,23 @@
    <mbsc-form-group>
       <mbsc-form-group-content>
 
-        <mbsc-input id="notifierInput" #notifierInput        
-            input-style="outline"     
-            placeholder="Enter user name">Input</mbsc-input>
+        <mbsc-switch #sendEmailsCheck>
+            Send emails to notifiers
+            <span class="mbsc-desc">Set notifiers input state</span>
+        </mbsc-switch>
 
-        <mbsc-select [options]="options" [data]="items" #notifiersSelect="mobiscroll"></mbsc-select>
+        <mbsc-input id="notifierInput" #notifierInput
+            [disabled]="isSendEmailsChecked"
+            [ngClass]="{'disabled': true}"
+            input-style="outline"
+            placeholder="Enter user name">Some value</mbsc-input>
+            
+        <mbsc-select
+                     [data]="items" 
+                     #notifiersSelect="mobiscroll"></mbsc-select>
+
+
+
 
       </mbsc-form-group-content>
   </mbsc-form-group>

@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { CaseEditInputModel, CaseAccessMode } from '../../../models';
 import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
-import { MbscListviewOptions } from '@mobiscroll/angular';
+import { MbscListviewOptions, MbscSwitch } from '@mobiscroll/angular';
 import { Subject } from 'rxjs';
 import { CaseLogApiService } from '../../../services/api/case/case-log-api.service';
 import { take } from 'rxjs/internal/operators';
@@ -18,7 +18,6 @@ export class CaseLogInputComponent implements OnInit {
   @Input() caseData: CaseEditInputModel;
   @Input() accessMode: CaseAccessMode;
 
-  externalLogEmailsTo = '';
   files: string[] = [];
   internalLogLabel = '';
   externalLogLabel = '';
@@ -28,9 +27,12 @@ export class CaseLogInputComponent implements OnInit {
   caseFieldsNames = CaseFieldsNames;
 
   sendExternalEmailsControl: CaseFormControl = null;
+  externalLogEmailsToControl: CaseFormControl = null;
+  externalLogEmailsCcControl: CaseFormControl = null;
   externalLogField: CaseFormControl = null;
   internalLogField: CaseFormControl = null;
   logFileField: CaseFormControl = null;
+  personsEmailFormControl: CaseFormControl = null;
 
   fileListSettings: MbscListviewOptions = {
     enhance: true,
@@ -49,19 +51,28 @@ export class CaseLogInputComponent implements OnInit {
   constructor(private caseLogApiService: CaseLogApiService) {
   }
 
+  get isSendExternalEmailsChecked(): boolean {
+    const checked = this.sendExternalEmailsControl.value;
+    return checked;
+  }
+
   get hasFullAccess() {
     return this.accessMode !== null && this.accessMode === CaseAccessMode.FullAccess;
   }
 
-  ngOnInit() {
-    // TODO: check how external Log emails TO (Followers) should be initialised?
-    const externalEmailsToControl = this.getFormControl(CaseFieldsNames.Log_ExternalEmailsTo);
-    if (externalEmailsToControl.value && externalEmailsToControl.value.length) {
-      this.externalLogEmailsTo = externalEmailsToControl.value.toString();
-    } else {
-      this.externalLogEmailsTo = 'No email address available'; // todo: translate
+  get externalLogEmailsTo(): string {
+    let val = 'No email address available'; // todo: translate!
+    if (this.personsEmailFormControl && this.personsEmailFormControl.value && this.personsEmailFormControl.value.length) {
+      val = this.personsEmailFormControl.value.toString();
     }
+    return val;
+  }
 
+  ngOnInit() {
+    this.personsEmailFormControl = this.getFormControl(CaseFieldsNames.PersonEmail);
+    this.sendExternalEmailsControl  = this.getFormControl(CaseFieldsNames.Log_SendMailToNotifier);
+    this.externalLogEmailsToControl = this.getFormControl(CaseFieldsNames.Log_ExternalEmailsTo);
+    this.externalLogEmailsCcControl = this.getFormControl(CaseFieldsNames.Log_ExternalEmailsCC);
     this.externalLogField = this.getFormControl(CaseFieldsNames.Log_ExternalText);
     this.internalLogField = this.getFormControl(CaseFieldsNames.Log_InternalText);
     this.logFileField = this.getFormControl(CaseFieldsNames.Log_FileName);

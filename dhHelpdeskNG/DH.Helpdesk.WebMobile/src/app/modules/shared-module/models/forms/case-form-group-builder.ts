@@ -15,7 +15,7 @@ export class CaseFormGroupBuilder {
     }
 
     // TODO: review lognotes controls init logic
-
+  
     // extnernal log  EmailsTO:
     controls[CaseFieldsNames.Log_SendMailToNotifier] =
       this.createCaseFormControl(
@@ -25,6 +25,7 @@ export class CaseFormGroupBuilder {
           options: []
       }),
       canSave);
+
 
     // extnernal log  EmailsTO:
     controls[CaseFieldsNames.Log_ExternalEmailsTo] =
@@ -40,7 +41,7 @@ export class CaseFormGroupBuilder {
    // external log EmailsCC:
    controls[CaseFieldsNames.Log_ExternalEmailsCC] =
      this.createCaseFormControl(
-       '', //TODO: init controls below based on info from other fields
+       '', //TODO: init controls from web api
        Object.assign(new FieldModel(), {
           name: CaseFieldsNames.Log_ExternalEmailsCC,
           label: 'CC', //todo: translate
