@@ -3,8 +3,12 @@ import { ICaseField, FieldModel, IFieldBase } from 'src/app/modules/case-edit-mo
 import { CaseFormGroup } from './case-form-group';
 import { CaseFormControl } from '.';
 import { CaseFieldsNames } from '../../constants';
+import { TranslateService } from '@ngx-translate/core';
 
 export class CaseFormGroupBuilder {
+
+  constructor(private ngxTranslateService: TranslateService) {
+  }
 
   createFormGroup(fields: ICaseField<any>[], canSave: boolean): CaseFormGroup {
     const controls: { [key: string]: CaseFormControl; } = {};
@@ -14,8 +18,6 @@ export class CaseFormGroupBuilder {
       controls[field.name] = this.createCaseFormControl(field.value, field, canSave);
     }
 
-    // TODO: review lognotes controls init logic
-  
     // extnernal log  EmailsTO:
     controls[CaseFieldsNames.Log_SendMailToNotifier] =
       this.createCaseFormControl(
@@ -26,33 +28,22 @@ export class CaseFormGroupBuilder {
       }),
       canSave);
 
-
     // extnernal log  EmailsTO:
     controls[CaseFieldsNames.Log_ExternalEmailsTo] =
       this.createCaseFormControl(
         '', //TODO: init controls below based on info from other fields
         Object.assign(new FieldModel(), {
           name: CaseFieldsNames.Log_ExternalEmailsTo,
-          label: 'To', //todo: translate
+          label: this.ngxTranslateService.instant('Till'),
           options: []
       }),
       canSave);
-
-   // external log EmailsCC:
-   controls[CaseFieldsNames.Log_ExternalEmailsCC] =
-     this.createCaseFormControl(
-       '', //TODO: init controls from web api
-       Object.assign(new FieldModel(), {
-          name: CaseFieldsNames.Log_ExternalEmailsCC,
-          label: 'CC', //todo: translate
-          options: []
-     }), canSave);
 
     // internal log TO:
     controls[CaseFieldsNames.Log_InternalEmailsTo] =
       this.createCaseFormControl('', Object.assign(new FieldModel(), {
         name: CaseFieldsNames.Log_InternalEmailsTo,
-        label: 'To', //todo: translate
+        label: this.ngxTranslateService.instant('Till'),
         options: []
       }), canSave);
 
@@ -60,7 +51,7 @@ export class CaseFormGroupBuilder {
     controls[CaseFieldsNames.Log_InternalEmailsCC] =
       this.createCaseFormControl('', Object.assign(new FieldModel(), {
         name: CaseFieldsNames.Log_InternalEmailsCC,
-        label: 'CC', //todo: translate
+        label: this.ngxTranslateService.instant('Kopia'),
         options: []
       }), canSave);
 

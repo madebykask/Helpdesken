@@ -82,7 +82,7 @@ export const CaseFieldsNames = {
    Log_SendMailToNotifier: 'Log_SendMailToNotifier',
    Log_ExternalEmailsTo: 'Log_ExternalEmailsTo', // todo: init from PersonsEmail and update when initiator changes
    Log_ExternalEmailsCC: 'Log_ExternalEmailsCC', // todo: init from webapi
-   Log_InternalEmailsTo: 'Log_InternalEmailsTo', 
+   Log_InternalEmailsTo: 'Log_InternalEmailsTo',
    Log_InternalEmailsCC: 'Log_InternalEmailsCC'
 };
 

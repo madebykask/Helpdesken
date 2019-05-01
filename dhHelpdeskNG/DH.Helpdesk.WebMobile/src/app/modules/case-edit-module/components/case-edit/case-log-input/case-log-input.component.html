@@ -6,12 +6,11 @@
       [form]="form"></case-textarea-control>
 
   <mbsc-switch *ngIf="isExternalLogFieldVisible" [formControlName]="caseFieldsNames.Log_SendMailToNotifier">
-     To:  
+     {{ 'Till' | translate }}:
     <span class="mbsc-desc">{{ externalLogEmailsTo }}</span>
   </mbsc-switch>
 
   <lognote-email-input *ngIf="isExternalLogFieldVisible"
-      [disabled]="!isSendExternalEmailsChecked"
       [field]="caseFieldsNames.Log_ExternalEmailsCC"
       [form]="form"></lognote-email-input>  
   <!-- /Exnterl Log fields --> 

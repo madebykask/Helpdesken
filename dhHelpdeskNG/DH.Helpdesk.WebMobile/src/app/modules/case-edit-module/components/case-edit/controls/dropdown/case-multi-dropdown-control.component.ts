@@ -5,7 +5,7 @@ import { takeUntil, map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { MbscSelectOptions, MbscSelect } from '@mobiscroll/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { CommunicationService, DropdownValueChangedEvent, Channels } from 'src/app/services/communication';
+import { CommunicationService, FormValueChangedEvent, Channels } from 'src/app/services/communication';
 
 @Component({
     selector: 'case-multi-dropdown-control',
@@ -84,7 +84,7 @@ import { CommunicationService, DropdownValueChangedEvent, Channels } from 'src/a
       onSet: (event, inst) => { // somehow onset is invoked on scrolling options
         const value = inst.getVal();
         this.setText(value);
-        this.commService.publish(Channels.DropdownValueChanged, new DropdownValueChangedEvent(value, event.valueText, this.fieldName));
+        this.commService.publish(Channels.FormValueChanged, new FormValueChangedEvent(value, event.valueText, this.fieldName));
       },
       onClose: () => {
         this.parentValue = undefined;

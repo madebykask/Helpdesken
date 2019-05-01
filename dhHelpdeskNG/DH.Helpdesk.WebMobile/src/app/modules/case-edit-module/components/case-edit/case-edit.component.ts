@@ -1,12 +1,11 @@
-import { Component, ViewChild, Directive, EventEmitter, ElementRef, Renderer2 } from '@angular/core';
-import { Validators, ValidationErrors } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
 import { forkJoin, Subject, of, throwError, interval } from 'rxjs';
 import { switchMap, take, finalize, delay, catchError, map, takeUntil, takeWhile } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { CommunicationService, Channels,
-  DropdownValueChangedEvent, NotifierChangedEvent } from 'src/app/services/communication/communication.service';
+  FormValueChangedEvent, NotifierChangedEvent } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/data/header-event-data';
 import { AuthenticationStateService } from 'src/app/services/authentication';
 import { WorkingGroupsService } from 'src/app/services/case-organization/workingGroups-service';
@@ -308,9 +307,9 @@ export class CaseEditComponent {
     private subscribeEvents() {
 
       // drop down value changed
-      this.commService.listen(Channels.DropdownValueChanged).pipe(
+      this.commService.listen(Channels.FormValueChanged).pipe(
         takeUntil(this.destroy$)
-      ).subscribe((v: DropdownValueChangedEvent) => this.runUpdates(v));
+      ).subscribe((v: FormValueChangedEvent) => this.runUpdates(v));
 
       // Notifier changed
       this.commService.listen<NotifierChangedEvent>(Channels.NotifierChanged).pipe(
@@ -327,8 +326,8 @@ export class CaseEditComponent {
       return this.caseService.getOptionsHelper(filters);
     }
 
-    private runUpdates(v: DropdownValueChangedEvent) { // TODO: move to new class
-      const reducer = this.сaseDataReducersFactory.createCaseDataReducers(this.dataSource);
+    private runUpdates(v: FormValueChangedEvent) { // TODO: move to new class
+      const reducer = this.getCaseDataReducers();
       const filters = this.caseDataHelpder.getFormCaseOptionsFilter(this.caseData, this.form);
       const optionsHelper = this.caseService.getOptionsHelper(filters);
 
@@ -461,13 +460,30 @@ export class CaseEditComponent {
           } else {
             this.form.controls[CaseFieldsNames.FinishingDate].setValue('');
           }
+          break;
+        }
+        case CaseFieldsNames.PersonEmail: {
+          const externalEmailsToControl = this.form.controls[CaseFieldsNames.Log_ExternalEmailsTo];
+          if (externalEmailsToControl) {
+            externalEmailsToControl.setValue(v.value, {self: true, emitEvent: false });
+          }
+          break;
+        }
+        case CaseFieldsNames.Log_SendMailToNotifier: {
+          const externalEmailsCcControl = this.form.controls[CaseFieldsNames.Log_ExternalEmailsCC];
+          if (v.value === true) {
+            externalEmailsCcControl.enable({onlySelf: true, emitEvent: true});
+          } else {
+            externalEmailsCcControl.disable({onlySelf: true, emitEvent: true});
+          }
+          break;
         }
       }
     }
 
     private processCaseData() {
       // create form
-      const fb = new CaseFormGroupBuilder();
+      const fb = new CaseFormGroupBuilder(this.translateService);
       this.form = fb.createFormGroup(this.caseData.fields, this.canSave);
 
       // run only for existing case

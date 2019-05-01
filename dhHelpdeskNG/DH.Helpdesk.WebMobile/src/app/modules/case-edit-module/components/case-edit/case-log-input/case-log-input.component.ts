@@ -4,8 +4,9 @@ import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
 import { MbscListviewOptions, MbscSwitch } from '@mobiscroll/angular';
 import { Subject } from 'rxjs';
 import { CaseLogApiService } from '../../../services/api/case/case-log-api.service';
-import { take } from 'rxjs/internal/operators';
+import { take, takeUntil } from 'rxjs/internal/operators';
 import { CaseFormGroup, CaseFormControl } from 'src/app/modules/shared-module/models/forms';
+import { CommunicationService, Channels, FormValueChangedEvent } from 'src/app/services/communication';
 
 @Component({
   selector: 'case-log-input',
@@ -48,12 +49,7 @@ export class CaseLogInputComponent implements OnInit {
 
   private destroy$ = new Subject();
 
-  constructor(private caseLogApiService: CaseLogApiService) {
-  }
-
-  get isSendExternalEmailsChecked(): boolean {
-    const checked = this.sendExternalEmailsControl.value;
-    return checked;
+  constructor(private caseLogApiService: CaseLogApiService, private commService: CommunicationService) {
   }
 
   get hasFullAccess() {
@@ -76,6 +72,14 @@ export class CaseLogInputComponent implements OnInit {
     this.externalLogField = this.getFormControl(CaseFieldsNames.Log_ExternalText);
     this.internalLogField = this.getFormControl(CaseFieldsNames.Log_InternalText);
     this.logFileField = this.getFormControl(CaseFieldsNames.Log_FileName);
+
+    if (this.sendExternalEmailsControl) {
+      this.sendExternalEmailsControl.valueChanges.pipe(
+        takeUntil(this.destroy$)
+        ).subscribe(v => {
+            this.commService.publish(Channels.FormValueChanged, new FormValueChangedEvent(v, '', this.sendExternalEmailsControl.fieldName));
+        });
+    }
 
     if (this.externalLogField) {
       this.isExternalLogFieldVisible =  !this.externalLogField.fieldInfo.isHidden;
@@ -103,11 +107,11 @@ export class CaseLogInputComponent implements OnInit {
   }
 
   protected getFormControl(name: string): CaseFormControl {
-    if (this.form === null) return null;
+    if (this.form === null) { return null; }
     return this.form.get(name);
   }
 
-  onFileDelete(event){
+  onFileDelete(event) {
     const index = +event.index ;
     const fileName = this.files[index];
 

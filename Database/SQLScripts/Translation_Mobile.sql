@@ -335,3 +335,18 @@ insert into tbltext (id, TextString, TextType) VALUES (10051, 'Max antal tecken 
 If not exists (select * from tblTextTranslation where text_id = 10051 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10051, 2, 'The maximum length is {0} character(s)')
 
+
+If not exists (select * from tbltext where id = 10052)
+insert into tbltext (id, TextString, TextType) VALUES (10052, 'Till', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10052 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10052, 2, 'To')
+
+
+If not exists (select * from tbltext where id = 10053)
+insert into tbltext (id, TextString, TextType) VALUES (10053, 'Kopia', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10053 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10053, 2, 'Cc')
+
+GO

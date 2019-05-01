@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { CaseDataStore } from "./case-data.store";
-import { of } from "rxjs";
-import { CaseFieldsNames } from "src/app/modules/shared-module/constants";
+import { Injectable } from '@angular/core';
+import { CaseDataStore } from './case-data.store';
+import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
+import { of } from 'rxjs';
 
 // Updates controls(dropdown & etc.) datasources
 export class CaseDataReducers {
@@ -43,8 +43,8 @@ export class CaseDataReducers {
 @Injectable({ providedIn: 'root' })
 export class CaseDataReducersFactory {
   constructor() {
-
   }
+
   public createCaseDataReducers(caseDataStore: CaseDataStore, ) {
     return new CaseDataReducers(caseDataStore);
   }

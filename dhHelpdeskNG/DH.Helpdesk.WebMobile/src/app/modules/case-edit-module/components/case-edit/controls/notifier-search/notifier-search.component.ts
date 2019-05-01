@@ -2,12 +2,13 @@ import { Component, Input, ViewChild, Renderer2 } from '@angular/core';
 import { MbscSelectOptions, MbscSelect } from '@mobiscroll/angular';
 import { BaseControl } from '../base-control';
 import { TranslateService } from '@ngx-translate/core';
-import { Channels, CommunicationService, NotifierChangedEvent } from 'src/app/services/communication';
+import { Channels, CommunicationService, NotifierChangedEvent, FormValueChangedEvent } from 'src/app/services/communication';
 import { NotifierService } from 'src/app/modules/case-edit-module/services/notifier.service';
 import { take, debounceTime, switchMap } from 'rxjs/operators';
 import { Subject, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NotifierSearchItem, NotifierType } from 'src/app/modules/shared-module/models/notifier/notifier.model';
+import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
 
 @Component({
   selector: 'notifier-search',
@@ -27,7 +28,6 @@ export class NotifierSearchComponent extends BaseControl<string> {
   @ViewChild('notifierSelect') notifierSelect: MbscSelect;
   @ViewChild('searchButton') searchButton: any;
 
-  @Input() disabled = false;
   @Input() notifierType: NotifierType;
   @Input('categoryField') categoryFieldName: string;
 
@@ -85,11 +85,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
 
     onSet: (event, inst) => {
       const val = +inst.getVal();
-      if (!isNaN(val) && val !== 0) {
-        this.onNotifierSelected(val);
-      } else {
-        this.onNotifierSelected(null);
-      }
+      this.processSelectedItem(val);
     }
   };
 
@@ -134,7 +130,16 @@ export class NotifierSearchComponent extends BaseControl<string> {
   }
 
   private updateDisabledState() {
-    this.notifierInput.disabled = this.formControl ? this.isFormControlDisabled || this.disabled : this.disabled;
+    this.notifierInput.disabled = this.formControl ? this.isFormControlDisabled : false;
+  }
+
+  protected processSelectedItem(val) {
+    const notfierId = +val;
+    if (!isNaN(notfierId) && notfierId > 0) {
+      this.onNotifierSelected(notfierId);
+    } else {
+      this.onNotifierSelected(null);
+    }
   }
 
   private onNotifierSelected(userId: number) {
@@ -142,11 +147,18 @@ export class NotifierSearchComponent extends BaseControl<string> {
       this.notifierService.getNotifier(userId).pipe(
         take(1)
       ).subscribe(x => {
-        //raise event to handle notfier change on case edit component
+        //todo: change to be handled in reducers!!!
         this.commService.publish(Channels.NotifierChanged, new NotifierChangedEvent(x, this.notifierType));
+
+        // raise event to be handled in reducers
+        this.commService.publish(Channels.FormValueChanged, new FormValueChangedEvent(x.email, x.email, CaseFieldsNames.PersonEmail));
       });
     } else {
+      //todo: change to be handled in reducers!!!
       this.commService.publish(Channels.NotifierChanged, new NotifierChangedEvent(null, this.notifierType));
+
+      // raise event to be handled in reducers
+      this.commService.publish(Channels.FormValueChanged, new FormValueChangedEvent('', '', CaseFieldsNames.PersonEmail));
     }
   }
 

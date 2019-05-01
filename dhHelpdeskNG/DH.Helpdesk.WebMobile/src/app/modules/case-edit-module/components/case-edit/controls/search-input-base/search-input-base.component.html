@@ -3,8 +3,7 @@
   <div class="mbsc-row">
     <div class="mbsc-col-10">
       <mbsc-input id="{{ field }}" #searchInput
-           [disabled]="disabled"
-           [ngClass]="{ 'searchInput': true, 'disabled': disabled }"
+           [ngClass]="{ 'searchInput': true, 'disabled': isFormControlDisabled }"
            [formControlName]="field">{{ formControl.label }}{{ requiredSymbol }}</mbsc-input>
     </div>
     <div class="mbsc-col-2">

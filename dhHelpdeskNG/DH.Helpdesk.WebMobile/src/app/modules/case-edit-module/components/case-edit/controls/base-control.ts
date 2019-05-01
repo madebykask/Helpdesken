@@ -22,7 +22,7 @@ export class BaseControl<T> {
   }
 
   protected getFormControl(name: string): CaseFormControl {
-    if (this.form === null) return null;
+    if (this.form === null) { return null; }
     return this.form.get(name);
   }
 

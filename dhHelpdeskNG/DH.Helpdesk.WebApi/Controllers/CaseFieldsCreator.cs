@@ -12,6 +12,7 @@ using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Extensions.String;
+using DH.Helpdesk.Dal.Infrastructure.Translate;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Models.Case;
@@ -79,14 +80,23 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IWatchDateCalendarService _watchDateCalendarService;
         private readonly ICaseTypeService _caseTypeService;
         private readonly IProductAreaService _productAreaService;
+        private readonly ICaseExtraFollowersService _caseExtraFollowersService;
 
-        public CaseFieldsCreator(ICaseFileService caseFileService, ICaseFieldSettingsHelper caseFieldSettingsHelper,
-            IUserService userService, IWorkingGroupService workingGroupService, ISupplierService supplierService,
-            ICaseTranslationService caseTranslationService, IDepartmentService departmentService,
+        public CaseFieldsCreator(ICaseFileService caseFileService, 
+            ICaseFieldSettingsHelper caseFieldSettingsHelper,
+            IUserService userService, 
+            IWorkingGroupService workingGroupService, 
+            ISupplierService supplierService,
+            ICaseTranslationService caseTranslationService, 
+            IDepartmentService departmentService,
             IPriorityService priorityService,
-            IWatchDateCalendarService watchDateCalendarService, ICaseTypeService caseTypeService,
-            IProductAreaService productAreaService)
+            IWatchDateCalendarService watchDateCalendarService, 
+            ICaseTypeService caseTypeService,
+            IProductAreaService productAreaService,
+            ICaseExtraFollowersService caseExtraFollowersService,
+            ITranslator translator)
         {
+            _caseExtraFollowersService = caseExtraFollowersService;
             _caseFileService = caseFileService;
             _caseFieldSettingsHelper = caseFieldSettingsHelper;
             _userService = userService;
@@ -1089,6 +1099,18 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
+                // Log External Emails cc (Extra Followers)
+                {
+                    field = new BaseCaseField<string>()
+                    {
+                        Name = CaseFieldsNamesApi.Log_ExternalEmailsCC,
+                        Value = currentCase != null ? GetExtraFollowersEmails(currentCase.Id) : "",
+                        Label = _caseTranslationService.TranslateFieldLabel(languageId, "Kopia"),
+                        Section = CaseSectionType.Communication
+                    };
+                    model.Fields.Add(field);
+                }
+
                 // Log External
                 {
                     field = new BaseCaseField<string>()
@@ -1184,6 +1206,12 @@ namespace DH.Helpdesk.WebApi.Controllers
             }
 
             return null;
+        }
+
+        private string GetExtraFollowersEmails(int caseId)
+        {
+            var emails = _caseExtraFollowersService.GetCaseExtraFollowers(caseId).Select(x => x.Follower).ToList();
+            return emails.JoinToString(";");
         }
 
         private BaseCaseField<T> GetField<T>(T value, int customerId, int languageId,

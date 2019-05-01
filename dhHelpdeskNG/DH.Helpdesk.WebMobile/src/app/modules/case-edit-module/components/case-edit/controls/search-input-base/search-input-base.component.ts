@@ -15,16 +15,7 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
   @ViewChild('searchInput') searchInput: any; // MbscInputBase
   @ViewChild('select') select: MbscSelect;
 
-  @Input() required: boolean;
-
-  @Input( ) set disabled(val) {
-    this._disabled = val;
-    this.updateDisabledState();
-  }
-
-  get disabled() {
-    return this.formControl && this.formControl.disabled || this._disabled;
-  }
+  @Input() disabled = false;
 
   selectDataItems: any = [];
 
@@ -32,7 +23,6 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
     return this.field;
   }
 
-  private _disabled = false;
   private progressIconEl: any = null;
   protected searchSubject = new Subject<string> ();
 
@@ -136,7 +126,7 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
         }
       });
     }
-  } 
+  }
 
   private updateDisabledState() {
     this.searchInput.disabled = this.formControl ? this.isFormControlDisabled || this.disabled : this.disabled;

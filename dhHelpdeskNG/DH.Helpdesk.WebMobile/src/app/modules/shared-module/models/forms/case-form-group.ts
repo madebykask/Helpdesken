@@ -50,7 +50,7 @@ export class CaseFormGroup extends FormGroup {
 
   setSafe(name: string, val: any, raiseValueChange: boolean = true) {
     const control = <CaseFormControl>super.get(name);
-    if (control === undefined || control === null) return;
+    if (control === undefined || control === null) { return; }
 
     control.setValue(val, { emitEvent: raiseValueChange });
   }
