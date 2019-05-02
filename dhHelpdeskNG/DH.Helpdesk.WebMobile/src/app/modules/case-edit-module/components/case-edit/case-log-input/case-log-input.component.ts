@@ -7,6 +7,7 @@ import { CaseLogApiService } from '../../../services/api/case/case-log-api.servi
 import { take, takeUntil } from 'rxjs/internal/operators';
 import { CaseFormGroup, CaseFormControl } from 'src/app/modules/shared-module/models/forms';
 import { CommunicationService, Channels, CaseFieldValueChangedEvent } from 'src/app/services/communication';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'case-log-input',
@@ -49,7 +50,9 @@ export class CaseLogInputComponent implements OnInit {
 
   private destroy$ = new Subject();
 
-  constructor(private caseLogApiService: CaseLogApiService, private commService: CommunicationService) {
+  constructor(private caseLogApiService: CaseLogApiService,
+    private commService: CommunicationService,
+    private translateService: TranslateService) {
   }
 
   get hasFullAccess() {
@@ -57,7 +60,7 @@ export class CaseLogInputComponent implements OnInit {
   }
 
   get externalLogEmailsTo(): string {
-    let val = 'No email address available'; // todo: translate!
+    let val = this.translateService.instant('Ingen tillgänglig mailadress'); //No email address available
     if (this.personsEmailFormControl && this.personsEmailFormControl.value && this.personsEmailFormControl.value.length) {
       val = this.personsEmailFormControl.value.toString();
     }

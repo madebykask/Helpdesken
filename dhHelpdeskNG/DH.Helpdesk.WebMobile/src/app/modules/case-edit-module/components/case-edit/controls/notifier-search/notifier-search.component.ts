@@ -159,7 +159,7 @@ export class NotifierSearchComponent extends BaseControl<string> {
     const progressSpan = this.renderer.createElement('span');
     progressSpan.id = 'notifierProgress';
     progressSpan.className = 'notifierProgress mbsc-ic';
-    progressSpan.innerHTML = '<img src="content/img/bars.gif" border="0" />'
+    progressSpan.innerHTML = '<img src="content/img/bars.gif" border="0" />';
     progressSpan.style.display = 'none';
 
     const filterNode = selectNode.querySelector<HTMLElement>('.mbsc-sel-filter-cont');

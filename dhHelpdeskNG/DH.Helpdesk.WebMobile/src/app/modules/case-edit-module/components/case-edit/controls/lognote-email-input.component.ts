@@ -58,13 +58,6 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
   }
 
   private getSearchGroupName(searchGroupType) {
-    /*
-        adminLabel: '@Translation.GetForJS("Handläggare")',
-        emailLabel: '@Translation.GetForJS("E-postgrupp")',
-        initLabel: '@Translation.GetForJS("Anmälare")',
-        wgLabel: '@Translation.GetForJS("Driftgrupp")',
-        usersLabel: '@Translation.GetForJS("Användare")',
-    */
     let groupName = '';
     switch (+searchGroupType) {
       case CaseUserSearchGroup.Initiator:
@@ -83,6 +76,7 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
           groupName = this.ngxTranslateService.instant('Användare');
           break;
       default:
+          groupName = 'uknown';
         break;
     }
     return groupName;
