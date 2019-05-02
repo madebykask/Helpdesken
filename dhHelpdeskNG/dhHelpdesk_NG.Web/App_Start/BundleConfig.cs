@@ -322,7 +322,9 @@
 
             bundles.Add(new ScriptBundle("~/bundles/report").Include(
                             "~/Areas/Reports/Content/js/reportViewer.logic.js",
-                            "~/Areas/Reports/Content/js/reports.js"));
+                            "~/Areas/Reports/Content/js/reports.js",
+                            "~/Scripts/chart.min.js",
+                            "~/Areas/Reports/Content/js/reports.historical.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admininvoice").Include(
                            "~/Areas/admin/Content/js/invoice/invoicearticleIndex.js",

@@ -351,6 +351,7 @@
     <Compile Include="Areas\Inventory\Models\RelatedCasesModels\WorkstationRelatedCasesModel.cs" />
     <Compile Include="Areas\Inventory\Models\RelatedCasesModel.cs" />
     <Compile Include="Areas\Inventory\Models\RelatedCasesModels\ServerRelatedCasesModel.cs" />
+    <Compile Include="Areas\Reports\Models\ReportService\HistoricalReportFilterModel.cs" />
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
     <Compile Include="Components\Contracts\ContractHistoryFormatter.cs" />
     <Compile Include="Components\Contracts\ContractHistoryMarkupBuilder.cs" />
@@ -663,6 +664,7 @@
     <Content Include="Areas\Orders\Content\js\OrderSettings\orderSettings.edit.js" />
     <Content Include="Areas\Orders\Content\js\Order\order.edit.js" />
     <Content Include="Areas\Invoices\Scripts\Pages\invoicesOverview.js" />
+    <Content Include="Areas\Reports\Content\js\reports.historical.js" />
     <Content Include="Areas\Reports\Content\js\reportViewer.logic.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-datepicker.css" />
@@ -3422,6 +3424,7 @@
     <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\Documents.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerAdvancedSearch\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerAdvancedSearch\_CaseSummaryPartialView.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\ReportViewer\_HistoricalReport.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3474,6 +3477,8 @@
     <Content Include="Content\js\i18n\vi.js" />
     <Content Include="Content\js\i18n\zh-CN.js" />
     <Content Include="Content\js\i18n\zh-TW.js" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />

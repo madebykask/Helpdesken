@@ -1,0 +1,11 @@
+﻿<canvas id="chartjs"></canvas>
+<script>
+    $(function () {
+        window.dhHelpdesk.reports = window.dhHelpdesk.reports || {};
+        window.dhHelpdesk.reports.historicalReport = historicalReport({
+            dataUrl: '@Url.Action("GetHistoricalData", "Services", new { area = "reports" })',
+        });
+
+        window.dhHelpdesk.reports.historicalReport.init();
+    })
+</script>

@@ -240,51 +240,43 @@
             return true;
         }
 
-        dhHelpdesk.reports.onOtherShow = function (e) {
-                        
-            if (!dhHelpdesk.reports.doValidation())
-                return;
-
-            var origReportId = $(reportList).find("option:selected").data("origReportId");
-            var isSavedFilter = typeof origReportId !== "undefined";
-
-            var reportName = isSavedFilter ? origReportId : $(reportList + " option:selected").val();
-            var customer = "";
-            var deps_OUs = "";
-            var workingGroup = "";
-            var administrator = "";
-            var caseType = "";
-            var productArea = "";
-            var status = "";
-            var reportCategory = "";
-            var reportCategoryRt = "";
+        function getFilters() {
+            var customer = '';
+            var deps_OUs = '';
+            var workingGroup = '';
+            var administrator = '';
+            var caseType = '';
+            var productArea = '';
+            var status = '';
+            var reportCategory = '';
+            var reportCategoryRt = '';
 
             customer = currentCustomerId;
 
-            $(departmentDropDown + " option:selected").each(function () {
-                deps_OUs += $(this).val() + ",";
+            $(departmentDropDown + ' option:selected').each(function () {
+                deps_OUs += $(this).val() + ',';
             });
 
-            $(workingGroupDropDown + " option:selected").each(function () {
-                workingGroup += $(this).val() + ",";
+            $(workingGroupDropDown + ' option:selected').each(function () {
+                workingGroup += $(this).val() + ',';
             });
 
-            $(administratorDropDown + " option:selected").each(function () {
-                administrator += $(this).val() + ",";
+            $(administratorDropDown + ' option:selected').each(function () {
+                administrator += $(this).val() + ',';
             });
 
-            $(caseTypeDropDown + " option:selected").each(function () {
-                caseType += $(this).val() + ",";
+            $(caseTypeDropDown + ' option:selected').each(function () {
+                caseType += $(this).val() + ',';
             });
 
-            $(productAreaDropDown + " option:selected").each(function () {
-                productArea += $(this).val() + ",";
+            $(productAreaDropDown + ' option:selected').each(function () {
+                productArea += $(this).val() + ',';
             });
 
-            status = $(statusList + " option:selected").val();
+            status = $(statusList + ' option:selected').val();
 
-            reportCategory = $(reportCategoryDropdown + " option:selected").val();
-            reportCategoryRt = $(reportCategoryDropdownRt + " option:selected").val();
+            reportCategory = $(reportCategoryDropdown + ' option:selected').val();
+            reportCategoryRt = $(reportCategoryDropdownRt + ' option:selected').val();
 
             var regDateFrom = $(caseCreateFrom).val();
             var regDateTo = $(caseCreateTo).val();
@@ -292,22 +284,127 @@
             var closeDateFrom = $(caseCloseFrom).val();
             var closeDateTo = $(caseCloseTo).val();
 
+
+            return {
+                'customer': customer,
+                'deps_OUs': deps_OUs,
+                'workingGroup': workingGroup,
+                'administrator': administrator,
+                'caseType': caseType,
+                'productArea': productArea,
+                'status': status,
+                'regDateFrom': regDateFrom,
+                'regDateTo': regDateTo,
+                'closeDateFrom': closeDateFrom,
+                'closeDateTo': closeDateTo,
+                'reportCategory': reportCategory,
+                'reportCategoryRt': reportCategoryRt,
+            }
+        }
+
+        function getHistoricalFilters() {
+            var departments = [];
+            var workingGroups = [];
+            var administrators = [];
+            var caseTypes = [];
+            var productAreas = [];
+            var historicalWorkingGroups = [];
+            var status = '';
+            var groupBy = '';
+            var stackBy = '';
+
+            $(departmentDropDown + ' option:selected').each(function () {
+                departments.push($(this).val());
+            });
+
+            $(workingGroupDropDown + ' option:selected').each(function () {
+                workingGroups.push($(this).val());
+            });
+
+            $(administratorDropDown + ' option:selected').each(function () {
+                administrators.push($(this).val());
+            });
+
+            $(caseTypeDropDown + ' option:selected').each(function () {
+                caseTypes.push($(this).val());
+            });
+
+            $(productAreaDropDown + ' option:selected').each(function () {
+                productAreas.push($(this).val());
+            });
+
+            status = $(statusList + ' option:selected').val();
+
+            var regDateFrom = $(caseCreateFrom).val();
+            var regDateTo = $(caseCreateTo).val();
+
+            var closeDateFrom = $(caseCloseFrom).val();
+            var closeDateTo = $(caseCloseTo).val();
+
+            var historicalChangeDateFrom = null; //$(changeDateFrom).val();
+            var historicalChangeDateTo = null; //$(changeDateTo).val();
+
+            return {
+                'departments': departments,
+                'workingGroups': workingGroups,
+                'administrators': administrators,
+                'caseTypes': caseTypes,
+                'productAreas': productAreas,
+                'regDateFrom': regDateFrom,
+                'regDateTo': regDateTo,
+                'closeDateFrom': closeDateFrom,
+                'closeDateTo': closeDateTo,
+                'historicalChangeDateFrom': historicalChangeDateFrom,
+                'historicalChangeDateTo': historicalChangeDateTo,
+                'historicalWorkingGroups': historicalWorkingGroups,
+                'status': status,
+                'groupBy': groupBy,
+                'stackBy': stackBy
+            };
+        }
+
+        dhHelpdesk.reports.onShowReport = function(e) {
+            var reportId = $("#lstReports").find("option:selected").data("id");
+            if (reportId === dhHelpdesk.reports.reportType.HistoricalReport) {
+                dhHelpdesk.reports.onHistoricalShow.call(this, e);
+            } else {
+                dhHelpdesk.reports.onOtherShow.call(this, e);
+            }
+        }
+
+        dhHelpdesk.reports.onHistoricalShow = function(e) {
+            dhHelpdesk.reports.historicalReport.show();
+            dhHelpdesk.reports.historicalReport.update(getHistoricalFilters());
+        }
+
+        dhHelpdesk.reports.onOtherShow = function(e) {
+
+            if (!dhHelpdesk.reports.doValidation())
+                return;
+
+            var origReportId = $(reportList).find("option:selected").data("origReportId");
+            var isSavedFilter = typeof origReportId !== "undefined";
+
+            var reportName = isSavedFilter ? origReportId : $(reportList + " option:selected").val();
+
+            var params = getFilters();
+
             $.get(showReportUrl,
                 {
                     reportName: reportName,
-                    'filter.Customers': customer,
-                    'filter.Deps_OUs': deps_OUs,
-                    'filter.WorkingGroups': workingGroup,
-                    'filter.Administrators': administrator,
-                    'filter.CaseTypes': caseType,
-                    'filter.ProductAreas': productArea,
-                    'filter.CaseStatus': status,
-                    'filter.RegisterFrom': regDateFrom,
-                    'filter.RegisterTo': regDateTo,
-                    'filter.CloseFrom': closeDateFrom,
-                    'filter.CloseTo': closeDateTo,
-                    'filter.ReportCategory': reportCategory,
-                    'filter.ReportCategoryRt': reportCategoryRt,
+                    'filter.Customers': params.customer,
+                    'filter.Deps_OUs': params.deps_OUs,
+                    'filter.WorkingGroups': params.workingGroup,
+                    'filter.Administrators': params.administrator,
+                    'filter.CaseTypes': params.caseType,
+                    'filter.ProductAreas': params.productArea,
+                    'filter.CaseStatus': params.status,
+                    'filter.RegisterFrom': params.regDateFrom,
+                    'filter.RegisterTo': params.regDateTo,
+                    'filter.CloseFrom': params.closeDateFrom,
+                    'filter.CloseTo': params.closeDateTo,
+                    'filter.ReportCategory': params.reportCategory,
+                    'filter.ReportCategoryRt': params.reportCategoryRt,
                     curTime: new Date().getTime()
                 },
                 function (reportPresentation) {
@@ -331,6 +428,7 @@
             var $reportGeneratorFields = $("#reportGeneratorFields");
             var $otherReportsContainer = $("#otherReportsContainer");
             var $generateReportContainer = $("#generateReportContainer");
+            var $historicalReportContainer = $("#historicalReportContainer");
             var $fieldsSelect = $("#lstFields");
 
             dhHelpdesk.reports.togglePreviewMode(true);
@@ -344,17 +442,30 @@
                 $fieldsSelect.multiselect("refresh");
                 $reportGeneratorFields.show();
                 $otherReportsContainer.hide();
+                dhHelpdesk.reports.historicalReport.hide();
+                $historicalReportContainer.hide();
                 $generateReportContainer.html("");
                 $generateReportContainer.show();
+            } else if (reportId === dhHelpdesk.reports.reportType.HistoricalReport) {
+                $btnPreview.hide();
+                $btnShow.hide();
+                $btnExcel.hide();
+                $btnShowReport.show();
+                $generateReportContainer.hide();
+                $otherReportsContainer.hide();
+                //$historicalReportContainer.html('');
+                $historicalReportContainer.show();
             } else {
                 $btnPreview.hide();
                 $btnShow.hide();
                 $btnExcel.hide();
                 $btnShowReport.show();
                 $reportGeneratorFields.hide();
-                $("#reportPresentationArea").html("");
+                $("#reportPresentationArea").html('');
                 $otherReportsContainer.show();
                 $generateReportContainer.hide();
+                dhHelpdesk.reports.historicalReport.hide();
+                $historicalReportContainer.hide();
             }
 
             if (isSavedFilter) {
@@ -473,7 +584,7 @@
             $modal.modal();
         };
 
-        dhHelpdesk.reports.togglePreviewMode = function (state) {         
+        dhHelpdesk.reports.togglePreviewMode = function (state) {
             $("#showReport").each(function () { this.disabled = state; });
             $("#excelReport").each(function () { this.disabled = state; });
         }
@@ -509,7 +620,7 @@
 
             $("#lstReports").on("change", dhHelpdesk.reports.onReportChange);
 
-            $(showReportButton).on("click", dhHelpdesk.reports.onOtherShow);
+            $(showReportButton).on("click", dhHelpdesk.reports.onShowReport);
             $("#btnDeleteFavorite").on('click', dhHelpdesk.reports.deleteFavorite);
 
             $("#showReport, #excelReport, #btnPreviewReport").on("click", dhHelpdesk.reports.onGeneratedShow);

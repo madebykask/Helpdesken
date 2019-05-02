@@ -7401,6 +7401,10 @@ If not exists (select * from tblTextTranslation where text_id = 2016 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2016, 2, 'Max number of characters has been exceeded')
 GO
 
+If not exists (select * from tbltext where id = 2017)
+	insert into tbltext (id, TextString, TextType) VALUES (2017, 'HistoricalReport', 1)
+GO
+
 -- *** Run this last when put translation script above this line *** --
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 

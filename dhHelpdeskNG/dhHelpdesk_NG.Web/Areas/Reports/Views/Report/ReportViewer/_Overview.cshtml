@@ -321,8 +321,14 @@
 
     <div id="generateReportContainer" style="display: none">
     </div>
+
+    <div id="historicalReportContainer" style="display: none;" class="container">
+        <div class="row" style="display: none; position: relative; height:60vh; width:99vw">
+                @Html.Partial("ReportViewer/_HistoricalReport", Model.ReportViewerData)
+        </div>
+    </div>
     
-                        //Modal
+    // Modal
     <div id="saveFilterDialog" class="modal fade " style="display: none;">
         <div class="modal-dialog">
             <form method="post" id="saveFilterDialogForm" autocomplete="off" class="">
