@@ -1,25 +1,25 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+
+using DH.Helpdesk.BusinessData.Models.LogProgram;
+using DH.Helpdesk.Dal.Enums;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.MapperData.Logs;
+using Log = DH.Helpdesk.Domain.Log;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
-    using DH.Helpdesk.BusinessData.Models.LogProgram;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain;
-    using System;
-    using Log = DH.Helpdesk.Domain.Log;
-
     #region LOG
 
     public interface ILogRepository : IRepository<Log>
     {
         IQueryable<Log> GetLogForCase(int caseId);
-        IEnumerable<LogMapperData> GetCaseLogOverviews(int caseId);
-        IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate);
+        IList<LogMapperData> GetCaseLogOverviews(int caseId);
+        IList<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate);
 
         Log GetLastLog(int caseId);
     }
@@ -37,7 +37,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return query;
         }
 
-        public IEnumerable<LogMapperData> GetCaseLogOverviews(int caseId)
+        public IList<LogMapperData> GetCaseLogOverviews(int caseId)
         {
             var query = from l in Table
                         where l.Case_Id == caseId
@@ -53,29 +53,26 @@ namespace DH.Helpdesk.Dal.Repositories
                                 SurName = l.User.SurName
                             },
                           
-                            EmailLogs = l.CaseHistory.Emaillogs.DefaultIfEmpty()
-                                            .Select(t => new EmailLogMapperData
-                                            {
-                                                Id = t.Id,
-                                                MailId = t.MailId,
-                                                EmailAddress = t.EmailAddress
-                                            }),
+                            EmailLogs = l.CaseHistory.Emaillogs.DefaultIfEmpty().Select(t => new EmailLogMapperData
+                            {
+                                Id = t.Id,
+                                MailId = t.MailId,
+                                EmailAddress = t.EmailAddress
+                            }),
 
-                            LogFiles = l.LogFiles.DefaultIfEmpty()
-                                        .Select(t => 
-                                            new LogFileMapperData
-                                            {
-                                                Id = t.Id,
-                                                FileName = t.FileName,
-                                                LogId = t.ParentLog_Id,
-                                                CaseId = t.IsCaseFile.HasValue && t.IsCaseFile.Value ? t.Log.Case_Id : (int?)null
-                                            })
+                            LogFiles = l.LogFiles.DefaultIfEmpty().Select(t => new LogFileMapperData
+                            {
+                                Id = t.Id,
+                                FileName = t.FileName,
+                                LogId = t.ParentLog_Id,
+                                CaseId = t.IsCaseFile.HasValue && t.IsCaseFile.Value ? t.Log.Case_Id : (int?)null
+                            })
                         };
 
             return query.ToList();
         }
 
-        public IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate)
+        public IList<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate)
         {
             var ret = new List<Log>();
             if (fromDate.HasValue && toDate.HasValue)

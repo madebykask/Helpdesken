@@ -226,7 +226,7 @@ Public Class Mail
                 'objLogFile.WriteLine(Now() & ", sendMail, Body:" & sBody)
             End If
 
-            If Not String.IsNullOrEmpty(setting.SMTPServer) Then
+            If Not IsNullOrEmpty(setting.SMTPServer) Then
                 sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, setting.SMTPServer, setting.SMTPPort, setting.IsSMTPSecured, setting.SMTPUserName, setting.SMTPPassWord, sMessageId)
             Else
                 sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
@@ -307,7 +307,7 @@ Public Class Mail
         Dim smtpPort As Integer = Nothing
         Dim smtpSecure As Boolean = Nothing
 
-        If Not String.IsNullOrEmpty(sSMTPServer) Then
+        If Not IsNullOrEmpty(sSMTPServer) Then
             Dim aConfiguration() As String = Split(sSMTPServer, ";")
 
             smtpServer = aConfiguration(0)
@@ -358,7 +358,7 @@ Public Class Mail
         Else
             smtp.Host = smtpServer
 
-            If Not String.IsNullOrEmpty(smtpUsername) Then
+            If Not IsNullOrEmpty(smtpUsername) Then
                 Dim credentials = New System.Net.NetworkCredential(smtpUsername, smtpPassword)
 
                 smtp.Credentials = credentials

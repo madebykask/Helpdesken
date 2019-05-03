@@ -24,7 +24,8 @@ $(function () {
 
         var lastSelected = $('#lastMailSelected' + logId).val();
         var displayType = '';
-        if (lastSelected == expandEl) {
+
+        if (lastSelected === expandEl) {
             displayType = 'none';
             $('#lastMailSelected' + logId).val('');
         }
@@ -33,16 +34,13 @@ $(function () {
             $('#lastMailSelected' + logId).val(expandEl);
         }
 
-        switch (expandEl) {
-            case "mailto":                
-                $('#mailto' + logId ).css('display', displayType);
-                $('#mailcc' + logId).css('display', 'none');
-                break;
-            case "mailcc":                
-                $('#mailcc' + logId).css('display', displayType);
-                $('#mailto' + logId).css('display', 'none');
-                break;
-        }
+        //hide all
+        $('#logEmailsSection' + logId).find('.expandEl').each(function(index, el) {
+            $(this).css('display', 'none');
+        });
+
+        // toggle required
+        $('#' + expandEl + logId).css('display', displayType);
     });
 
     hideShowSaveUserInfoBtn($userId.val());

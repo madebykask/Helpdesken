@@ -37,13 +37,11 @@ namespace DH.Helpdesk.Services.Services
 
         void AddParentCaseLogToChildCases(int[] caseIds, CaseLog parentCaseLog);
         void AddChildCaseLogToParentCase(int caseId, CaseLog parentCaseLog);
-        IEnumerable<LogOverview> GetCaseLogOverviews(int caseId);
 
-        IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate);
-
+        IList<LogOverview> GetCaseLogOverviews(int caseId);
+        IList<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate);
 
         void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors);
-
         void UpdateLogInvoices(List<CaseLog> logs);
 
     }
@@ -104,64 +102,54 @@ namespace DH.Helpdesk.Services.Services
 
         public Guid Delete(int id, string basePath)
         {
-            Guid ret = Guid.Empty;
+            var ret = Guid.Empty;
 
             // delete log files
-            var logFiles = this._logFileRepository.GetLogFilesByLogId(id);
+            var logFiles = _logFileRepository.GetLogFilesByLogId(id);
             if (logFiles != null)
             {
                 foreach (var f in logFiles)
                 {
-                    this._filesStorage.DeleteFile(ModuleName.Log, f.Log_Id, basePath, f.FileName);
-                    this._logFileRepository.Delete(f);
+                    _filesStorage.DeleteFile(ModuleName.Log, f.Log_Id, basePath, f.FileName);
+                    _logFileRepository.Delete(f);
                 }
-                this._logFileRepository.Commit();
+                _logFileRepository.Commit();
             }
 
             //remove reference from parent in child records
-            var referencedFiles = this._logFileRepository.GetReferencedFiles(id);
+            var referencedFiles = _logFileRepository.GetReferencedFiles(id);
             referencedFiles?.ForEach(x => x.ParentLog_Id = null);
 
-            this._mail2TicketRepository.DeleteByLogId(id);
-            this._mail2TicketRepository.Commit();
+            _mail2TicketRepository.DeleteByLogId(id);
+            _mail2TicketRepository.Commit();
 
-            var l = this._logRepository.GetById(id);
-            ret = l.LogGUID;
-            this._logRepository.Delete(l);
-            this._logRepository.Commit();
+            var l = _logRepository.GetById(id);
 
-            return ret;
+            _logRepository.Delete(l);
+            _logRepository.Commit();
+
+            return l.LogGUID;
         }
 
-        /// <summary>
-        /// The get case log overviews.
-        /// </summary>
-        /// <param name="caseId">
-        /// The case id.
-        /// </param>
-        /// <returns>
-        /// The result.
-        /// </returns>
-
-        public IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate)
+        public IList<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate)
         {
-            var ret = this._logRepository.GetCaseLogs(fromDate, toDate);
+            var ret = _logRepository.GetCaseLogs(fromDate, toDate);
             return ret; 
         }
 
-        public IEnumerable<LogOverview> GetCaseLogOverviews(int caseId)
+        public IList<LogOverview> GetCaseLogOverviews(int caseId)
         {
             var result = new List<LogOverview>();
-            var caseLogsEntities = this._logRepository.GetCaseLogOverviews(caseId);
+            var caseLogsEntities = _logRepository.GetCaseLogOverviews(caseId);
             var caseLogs = caseLogsEntities.Select(_logToLogOverviewMapper.Map).ToList();
 
             result.AddRange(caseLogs);
 
-            var caseOverview = this._caseRepository.GetCaseOverview(caseId);
+            var caseOverview = _caseRepository.GetCaseOverview(caseId);
 
             if (caseOverview != null && caseOverview.ProblemId.HasValue)
             {
-                var problemLogs = this._problemLogService.GetProblemLogs(caseOverview.ProblemId.Value);
+                var problemLogs = _problemLogService.GetProblemLogs(caseOverview.ProblemId.Value);
                 if (problemLogs != null)
                 {
                     result.AddRange(problemLogs
@@ -177,7 +165,7 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            return result.OrderByDescending(l => l.LogDate);
+            return result.OrderByDescending(l => l.LogDate).ToList();
         }
 
         public void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors)
@@ -300,7 +288,7 @@ namespace DH.Helpdesk.Services.Services
 
             IDictionary<string, string> errors;
             IEnumerable<CaseHistory> newCaseHistories;
-            using (var uow = this._unitOfWorkFactory.Create())
+            using (var uow = _unitOfWorkFactory.Create())
             {
                 var caseHistoryRepository = uow.GetRepository<CaseHistory>();
                 var maxCaseHistoryIds =
@@ -573,8 +561,8 @@ namespace DH.Helpdesk.Services.Services
                             Text_External = string.Empty,
                             ChangeTime = DateTime.UtcNow
                         }).ToArray();
-            caseLogs.ForEach(this._logRepository.Add);
-            this._logRepository.Commit();
+            caseLogs.ForEach(_logRepository.Add);
+            _logRepository.Commit();
 
             caseIds.ForEach(id => _caseRepository.MarkCaseAsUnread(id));
         }

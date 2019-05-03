@@ -358,6 +358,7 @@
     <Compile Include="Models\LogProgram\LogProgram.cs" />
     <Compile Include="Models\Logs\LogExistingFileModel.cs" />
     <Compile Include="Models\Logs\Output\EmailLogsOverview.cs" />
+    <Compile Include="Models\Mail2Tickets\Output\Mail2TicketOverview.cs" />
     <Compile Include="Models\MailTemplates\CustomMailTemplateLanguage.cs" />
     <Compile Include="Models\Modules\Output\ModulesOverview.cs" />
     <Compile Include="Models\OperationLog\Output\OperationLogObjectOverview.cs" />

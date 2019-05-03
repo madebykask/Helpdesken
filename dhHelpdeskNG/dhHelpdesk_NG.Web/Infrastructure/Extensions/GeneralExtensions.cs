@@ -79,18 +79,32 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
         public static string GetFieldStyle(this CaseInputViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
         {
-            var fieldSetting = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
+            return GetFieldStyleInner(model.caseFieldSettings, model.CaseSolutionSettingModels, caseFieldName, caseTemplateFieldName);
+        }
 
-           // if (!model.caseFieldSettings.IsFieldRequired(caseFieldName) && fieldSetting != null && fieldSetting.CaseSolutionMode == CaseSolutionModes.Hide)
+        public static string GetFieldStyle(this CaseLogViewModel model, GlobalEnums.TranslationCaseFields caseFieldName, CaseSolutionFields caseTemplateFieldName)
+        {
+            return GetFieldStyleInner(model.CaseFieldSettings, model.CaseSolutionSettingModels, caseFieldName, caseTemplateFieldName);
+        }
+
+        private static string GetFieldStyleInner(IList<CaseFieldSetting> caseFieldSettings, 
+            IList<CaseSolutionSettingModel> caseSolutionSettingModels, 
+            GlobalEnums.TranslationCaseFields caseFieldName, 
+            CaseSolutionFields caseTemplateFieldName)
+        {
+            var fieldSetting = caseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
+
+            // if (!model.caseFieldSettings.IsFieldRequired(caseFieldName) && fieldSetting != null && fieldSetting.CaseSolutionMode == CaseSolutionModes.Hide)
             if (fieldSetting != null && fieldSetting.CaseSolutionMode == CaseSolutionModes.Hide)
                 return "display:none";
 
-            if (model.caseFieldSettings.IsFieldVisible(caseFieldName) || 
-                (CaseSolutionSettingModel.IsFieldAlwaysVisible(caseTemplateFieldName) || model.caseFieldSettings.IsFieldRequiredOrVisible(caseFieldName)))
+            if (caseFieldSettings.IsFieldVisible(caseFieldName) ||
+                CaseSolutionSettingModel.IsFieldAlwaysVisible(caseTemplateFieldName) || 
+                caseFieldSettings.IsFieldRequiredOrVisible(caseFieldName))
             {
                 return string.Empty;
             }
-            
+
             return "display:none";
         }
 

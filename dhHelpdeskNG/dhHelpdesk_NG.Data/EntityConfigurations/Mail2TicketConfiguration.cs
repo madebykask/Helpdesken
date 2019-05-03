@@ -1,22 +1,22 @@
-﻿namespace DH.Helpdesk.Dal.EntityConfigurations
-{
-    using System.Data.Entity.ModelConfiguration;
-    using DH.Helpdesk.Domain.Cases;
-    using DH.Helpdesk.Domain;
-    using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Data.Entity.ModelConfiguration;
+using DH.Helpdesk.Domain;
+using System.ComponentModel.DataAnnotations.Schema;
 
+namespace DH.Helpdesk.Dal.EntityConfigurations
+{
     internal sealed class Mail2TicketConfiguration : EntityTypeConfiguration<Mail2Ticket>
     {
         internal Mail2TicketConfiguration()
         {                        
-            this.HasKey(f => f.Id);
-            this.Property(f => f.Case_Id).IsOptional();
-            this.Property(f => f.Log_Id).IsOptional();
-            this.Property(f => f.EMailAddress).IsOptional().HasMaxLength(100);            
-            this.Property(f => f.Type).IsOptional().HasMaxLength(10);
-            this.Property(f => f.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);  
+            HasKey(f => f.Id);
+            Property(f => f.Case_Id).IsOptional();
+            Property(f => f.Log_Id).IsOptional();
+            Property(f => f.EMailAddress).IsOptional().HasMaxLength(100);
+            Property(f => f.EMailSubject).IsOptional().HasMaxLength(512);
+            Property(f => f.Type).IsOptional().HasMaxLength(10);
+            Property(f => f.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);  
 
-            this.ToTable("tblMail2Ticket");
+            ToTable("tblMail2Ticket");
         }
     }
 }

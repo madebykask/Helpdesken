@@ -63,6 +63,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
@@ -108,6 +109,7 @@
     <Compile Include="Contract\ContractData.vb" />
     <Compile Include="Customer\Customer.vb" />
     <Compile Include="Customer\CustomerData.vb" />
+    <Compile Include="DbHelper.vb" />
     <Compile Include="Department\Department.vb" />
     <Compile Include="Department\DepartmentData.vb" />
     <Compile Include="GlobalSettings\GlobalSettings.vb" />
@@ -152,6 +154,7 @@
     <Compile Include="Region\Region.vb" />
     <Compile Include="Region\RegionData.vb" />
     <Compile Include="SharedFunctions.vb" />
+    <Compile Include="SqlParamsExtensions.vb" />
     <Compile Include="Text\TextTranslationData.vb" />
     <Compile Include="User\User.vb" />
     <Compile Include="User\UserData.vb" />

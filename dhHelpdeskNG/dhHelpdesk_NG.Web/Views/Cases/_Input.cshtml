@@ -2080,10 +2080,10 @@
                                         }
                                     </ul>
                                     <div class="tab-content">
-                                        @Html.Partial("_CaseLog", Model)
+                                        @Html.Partial("_CaseLog", Model.CreateCaseLogViewModel())
                                         @if (Model.CaseInternalLogAccess)
                                         {
-                                            @Html.Partial("_CaseHistory", Model)
+                                            @Html.Partial("_CaseHistory", Model.CreateHistoryViewModel())
                                         }
                                     </div>
                                 </div>

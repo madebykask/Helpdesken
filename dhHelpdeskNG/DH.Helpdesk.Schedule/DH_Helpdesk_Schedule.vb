@@ -872,7 +872,6 @@ Module DH_Helpdesk_Schedule
         Dim objGlobalSettingsData As New GlobalSettingsData
         Dim objGlobalSettings As GlobalSettings
         Dim objCustomerData As New CustomerData
-        Dim colCustomer As Collection
         Dim objCustomer As Customer
 
         gsConnectionString = sConnectionString
@@ -882,9 +881,9 @@ Module DH_Helpdesk_Schedule
 
         giDBType = objGlobalSettings.DBType
 
-        colCustomer = objCustomerData.getCustomers()
+        Dim colCustomer = objCustomerData.getCustomers()
 
-        For i As Integer = 1 To colCustomer.Count
+        For i = 1 To colCustomer.Count
             objCustomer = colCustomer(i)
 
             If objCustomer.CaseStatisticsEMailList <> "" Then

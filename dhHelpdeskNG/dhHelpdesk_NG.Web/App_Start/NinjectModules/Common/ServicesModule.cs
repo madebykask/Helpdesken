@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Services.BusinessLogic.Settings;
+﻿using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Services.Services.CaseStatistic;
 using DH.Helpdesk.Services.Services.Feedback;
@@ -191,6 +192,8 @@ namespace DH.Helpdesk.Web.NinjectModules.Common
 
             Bind<ICaseDiagnosticService>().To<CaseDiagnosticService>().InRequestScope();
             Bind<ICaseStatisticService>().To<CaseStatisticService>().InRequestScope();
+            Bind<IMail2TicketService>().To<Mail2TicketService>().InRequestScope();
+
             // Feature toggle
             Bind<IFeatureToggleService>().To<FeatureToggleService>();
         }

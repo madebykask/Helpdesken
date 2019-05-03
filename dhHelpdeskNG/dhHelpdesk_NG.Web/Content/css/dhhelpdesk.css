@@ -36,7 +36,7 @@ a, a:hover, a:focus {
 }
 
 /********************TEXT WEIGHT AND COLORS************************************************/
-.textbold {
+.textbold, .bold {
     font-weight: bold;
 }
 
@@ -56,14 +56,9 @@ a, a:hover, a:focus {
     color: #0ca759 !important;
 }
 
-    .textgreen td a {
-        color: #0ca759 !important;
-    }
-
-
-
-
-
+.textgreen td a {
+    color: #0ca759 !important;
+}
 
 /********************CONTENT************************************************************/
 .content {
@@ -2121,7 +2116,10 @@ h4 {
     margin-left: -5px;
 }
 
-
+.wordbreak {
+    overflow-wrap: break-word;
+    word-wrap: break-word;    
+}
 
 /***************DATE PICKER**********************************************/
 /*!
@@ -3978,6 +3976,12 @@ a.export-order {
 td > div.checkbox.commun {
     line-height: 20px;
     padding-left: 40px;
+}
+
+.icon-copy {
+    cursor: pointer;
+    display: inline-block;
+    background:url('../icons/copy.png') no-repeat 0 0;
 }
 
 .attachedFile {

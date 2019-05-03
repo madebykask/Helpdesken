@@ -293,8 +293,8 @@ Public Class CustomerData
         End Try
     End Function
 
-    Public Function getCustomers() As Collection
-        Dim colCustomer As New Collection
+    Public Function getCustomers() As List(Of Customer)
+        Dim colCustomer As New List(Of Customer)
         Dim sSQL As String
         Dim dt As DataTable
         Dim dr As DataRow
@@ -346,12 +346,12 @@ Public Class CustomerData
 
             Return colCustomer
         Catch ex As Exception
-            Throw ex
+            Throw 
         End Try
     End Function
 
-    Public Function getCustomersByWorkingGroup() As Collection
-        Dim colCustomer As New Collection
+    Public Function getCustomersByWorkingGroup() As List(Of Customer)
+        Dim colCustomer As New List(Of Customer)
         Dim sSQL As String
         Dim dt As DataTable
         Dim dr As DataRow
@@ -403,7 +403,7 @@ Public Class CustomerData
 
             Return colCustomer
         Catch ex As Exception
-            Throw ex
+            Throw
         End Try
     End Function
 
