@@ -526,6 +526,8 @@
     <Compile Include="Models\Questionnaire\Write\ParticipantForInsert.cs" />
     <Compile Include="Models\OUOverview .cs" />
     <Compile Include="Models\ImpactOverview.cs" />
+    <Compile Include="Models\ReportService\HistoricalDataFilter.cs" />
+    <Compile Include="Models\ReportService\HistoricalDataResult.cs" />
     <Compile Include="Models\Shared\EntityWithEmail.cs" />
     <Compile Include="Models\UrgencyOverview.cs" />
     <Compile Include="Models\SystemOverview.cs" />

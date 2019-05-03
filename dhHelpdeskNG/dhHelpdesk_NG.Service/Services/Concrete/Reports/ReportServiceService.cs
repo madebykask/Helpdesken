@@ -9,6 +9,7 @@ using DH.Helpdesk.Domain;
 using System.Collections.Generic;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Services.Services.Reports;
+using DH.Helpdesk.BusinessData.Models.Reports;
 
 namespace DH.Helpdesk.Services.Services.Concrete.Reports
 {   
@@ -99,6 +100,11 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             return _reportServiceRepository.GetReportData(reportIdentity, filters);
         }
 
+		public IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter)
+		{
+			var result = _reportServiceRepository.GetHistoricalData(filter);
+			return result;
+		}
         #endregion
 
         #region Private Methods and Operators

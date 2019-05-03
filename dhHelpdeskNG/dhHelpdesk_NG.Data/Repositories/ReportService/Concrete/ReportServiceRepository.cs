@@ -2,22 +2,24 @@
 
 namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Configuration;
-    using System.Data;
-    using System.Data.OleDb;
-    using System.Globalization;
-    using System.Linq;
-    using System.Text;    
-    using DH.Helpdesk.Dal.Repositories.ReportService;
-    using DH.Helpdesk.BusinessData.Models.ReportService;    
-    using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-    using System.Data.SqlClient;
-    using DH.Helpdesk.BusinessData.Enums.Case;
-    
-    public class ReportServiceRepository : IReportServiceRepository
+	using System;
+	using System.Collections.Generic;
+	using System.Configuration;
+	using System.Data;
+	using System.Data.OleDb;
+	using System.Globalization;
+	using System.Linq;
+	using System.Text;
+	using DH.Helpdesk.Dal.Repositories.ReportService;
+	using DH.Helpdesk.BusinessData.Models.ReportService;
+	using DH.Helpdesk.BusinessData.OldComponents;
+	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+	using System.Data.SqlClient;
+	using DH.Helpdesk.BusinessData.Enums.Case;
+	using Infrastructure;
+	using DbContext;
+
+	public class ReportServiceRepository : IReportServiceRepository
     {
         private enum QueryType
         {
@@ -27,12 +29,18 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 
         private readonly string _ConnectionString;
 
-        public ReportServiceRepository()
-        {
-            this._ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
-        }
+		public ReportServiceRepository(IDatabaseFactory factory)
+		{
+			DatabaseFactory = factory;
+			this._ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+		}
 
-        public ReportData GetReportData(string reportIdentity, ReportSelectedFilter filters)
+		protected IDatabaseFactory DatabaseFactory { get; }
+
+		protected HelpdeskDbContext _dataContext = null;
+		protected HelpdeskDbContext DataContext => _dataContext ?? (_dataContext = DatabaseFactory.Get());
+
+		public ReportData GetReportData(string reportIdentity, ReportSelectedFilter filters)
         {
             var reportData = new ReportData(reportIdentity);
             reportData.AddDataSets(GetDataSetsFor(reportIdentity, filters));
@@ -63,6 +71,17 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
             }
             return reportDataSets;
         }
+
+		public IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter)
+		{
+			var result = DataContext.Database.SqlQuery<HistoricalDataResult>("ReportGetHistoricalData @changeFrom, @changeTo, @customerID", 
+				new SqlParameter("@changeFrom", filter.From),
+				new SqlParameter("@changeTo", filter.To),
+				new SqlParameter("@customerID", filter.CustomerID)
+			).ToList();
+
+			return result;
+		}
 
         private List<Tuple<string, string, int>> GetQueriesFor(string reportIdentity, ReportSelectedFilter filters)
         {

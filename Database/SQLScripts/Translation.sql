@@ -7419,6 +7419,17 @@ If not exists (select * from tblTextTranslation where text_id = 2019 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2019, 2, 'Historical values')
 GO
 
+-- Generate id sequence for customer generated IDs
+If not exists (select * from tbltext where id = 20000)
+	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
+GO
+If not exists (select * from tblTextTranslation where text_id = 20000 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(20000, 2, 'Start of customer generated ID:s (ignore)')
+GO
+
+
+GO
+
 -- *** Run this last when put translation script above this line *** --
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 

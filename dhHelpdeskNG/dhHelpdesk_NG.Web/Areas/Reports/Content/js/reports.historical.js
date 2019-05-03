@@ -121,7 +121,7 @@
                     'filter.CloseFrom': filters.closeDateFrom,
                     'filter.CloseTo': filters.closeDateTo,
                     'filter.HistoricalChangeDateTo': filters.historicalChangeDateTo,
-                    'filter.HistoricalDateFrom': filters.historicalChangeDateFrom,
+                    'filter.HistoricalChangeDateFrom': filters.historicalChangeDateFrom,
                     'filter.HistoricalWorkingGroups': filters.historicalWorkingGroups
 
                 }),
@@ -129,25 +129,8 @@
                 contentType: 'application/json'
             })
                 .done(function (data) {
-                    var dataCount = data.CaseTypes.length;
-                    var labels = data.WorkingGroups;
-                    var datasets = [];
 
-                    for (var i = 0; i < dataCount; i++) {
-                        datasets.push({
-                            label: data.CaseTypes[i],
-                            data: Samples.numbers({
-                                count: dataCount,
-                                min: 0,
-                                max: 100
-                            })
-                        });
-                    }
-
-                    self.chartInstance.data = {
-                        labels: labels,
-                        datasets: datasets
-                    }
+                    self.chartInstance.data = data;
 
                     self.chartInstance.update();
                     //self.chartInstance.resize();
