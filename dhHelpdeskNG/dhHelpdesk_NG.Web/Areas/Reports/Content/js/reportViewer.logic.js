@@ -14,6 +14,7 @@
         var caseCreateTo = "#ReportFilter_CaseCreationDate_ToDate";
         var departmentDropDown = "#lstfilterDepartment";
         var workingGroupDropDown = "#lstfilterWorkingGroup";
+        var historicalWorkingGroupDropDown = '#historicalWorkingGroups';
         var caseTypeDropDown = "#lstfilterCaseType";
         var productAreaDropDown = "#lstfilterProductArea";
         var currentCustomerId = window.Params.CurrentCustomerId;
@@ -23,15 +24,13 @@
         var caseCloseTo = "#ReportFilter_CaseClosingDate_ToDate";
         var reportCategoryDropdown = "#lstfilterReportCategory";
         var reportCategoryDropdownRt = "#lstfilterReportCategoryRt";
-
-        /*specify all extra parameters element*/
-        var $extraParameters = $("#reportCategoryParam");
+        var changeDateFrom = "#ReportFilter_CaseChangeDate_FromDate";
+        var changeDateTo = "#ReportFilter_CaseChangeDate_ToDate";
 
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.reports = window.dhHelpdesk.reports || {};
-        
 
-        var getFilters = function () {
+        var getBaseFilters = function () {
             var filters = {
                 departments: [],
                 workingGroups: [],
@@ -120,6 +119,7 @@
 
             applyChosen(departmentDropDown, filters.departments);
             applyChosen(workingGroupDropDown, filters.workingGroups);
+            // applyChosen(historicalWorkingGroupDropDown, filters.historicalWorkingGroups);
             applyChosen(administratorDropDown, filters.administrators);
             applyChosen(caseTypeDropDown, filters.caseTypes);
             applyChosen(productAreaDropDown, filters.productAreas);
@@ -168,7 +168,7 @@
             if (!dhHelpdesk.reports.doValidation())
                 return;
 
-            var filters = getFilters();
+            var filters = getBaseFilters();
             
             var getParams = $.param({
                 DepartmentIds: filters.departments,
@@ -309,9 +309,6 @@
             var caseTypes = [];
             var productAreas = [];
             var historicalWorkingGroups = [];
-            var status = '';
-            var groupBy = '';
-            var stackBy = '';
 
             $(departmentDropDown + ' option:selected').each(function () {
                 departments.push($(this).val());
@@ -333,7 +330,13 @@
                 productAreas.push($(this).val());
             });
 
-            status = $(statusList + ' option:selected').val();
+            $(historicalWorkingGroupDropDown + ' option:selected').each(function () {
+                historicalWorkingGroups.push($(this).val());
+            });
+
+            var status = $(statusList + ' option:selected').val();
+            var groupBy = $('#lstGroupBy').val();;
+            var stackBy = $('#lstStackBy').val();
 
             var regDateFrom = $(caseCreateFrom).val();
             var regDateTo = $(caseCreateTo).val();
@@ -341,8 +344,8 @@
             var closeDateFrom = $(caseCloseFrom).val();
             var closeDateTo = $(caseCloseTo).val();
 
-            var historicalChangeDateFrom = null; //$(changeDateFrom).val();
-            var historicalChangeDateTo = null; //$(changeDateTo).val();
+            var historicalChangeDateFrom = $(changeDateFrom).val();
+            var historicalChangeDateTo = $(changeDateTo).val();
 
             return {
                 'departments': departments,
@@ -419,6 +422,7 @@
             var selectedId = $(this).find("option:selected").data("id");
             var reportId = isSavedFilter ? origReportId : selectedId;
 
+            var $extraParameters = $("#reportCategoryParam");
             var $btnPreview = $("#btnPreviewReport");
             var $btnShow = $("#showReport");
             var $btnSaveFilter = $("#btnSaveFilter");
@@ -430,6 +434,11 @@
             var $generateReportContainer = $("#generateReportContainer");
             var $historicalReportContainer = $("#historicalReportContainer");
             var $fieldsSelect = $("#lstFields");
+            var $stackBy = $('#stackBy');
+            var $groupBy = $('#groupBy');
+            var $historicalFilters = $('#historicalFilters');
+
+            var historicalReportControls = [$btnShowReport, $stackBy, $groupBy, $historicalReportContainer, $historicalFilters];
 
             dhHelpdesk.reports.togglePreviewMode(true);
 
@@ -437,35 +446,43 @@
                 $btnPreview.show();
                 $btnShow.show();
                 $btnExcel.show();
+                $extraParameters.show();
+                $historicalFilters.hide();
                 $btnShowReport.hide();
-                $reportGeneratorFields.find("select option").prop("selected", false);
-                $fieldsSelect.multiselect("refresh");
+                $reportGeneratorFields.find('select option').prop('selected', false);
+                $fieldsSelect.multiselect('refresh');
                 $reportGeneratorFields.show();
                 $otherReportsContainer.hide();
                 dhHelpdesk.reports.historicalReport.hide();
                 $historicalReportContainer.hide();
-                $generateReportContainer.html("");
+                $stackBy.hide();
+                $groupBy.hide();
+                $generateReportContainer.html('');
                 $generateReportContainer.show();
             } else if (reportId === dhHelpdesk.reports.reportType.HistoricalReport) {
                 $btnPreview.hide();
                 $btnShow.hide();
                 $btnExcel.hide();
-                $btnShowReport.show();
+                $reportGeneratorFields.hide();
                 $generateReportContainer.hide();
                 $otherReportsContainer.hide();
-                //$historicalReportContainer.html('');
-                $historicalReportContainer.show();
+                $extraParameters.hide();
+                $.each(historicalReportControls, function(i, v) { v.show(); });
             } else {
                 $btnPreview.hide();
                 $btnShow.hide();
                 $btnExcel.hide();
                 $btnShowReport.show();
+                $extraParameters.show();
                 $reportGeneratorFields.hide();
-                $("#reportPresentationArea").html('');
+                $('#reportPresentationArea').html('');
                 $otherReportsContainer.show();
                 $generateReportContainer.hide();
+                $stackBy.hide();
+                $groupBy.hide();
                 dhHelpdesk.reports.historicalReport.hide();
                 $historicalReportContainer.hide();
+                $historicalFilters.hide();
             }
 
             if (isSavedFilter) {
@@ -534,7 +551,7 @@
             });
 
             $modal.find("#btnSaveFilter").off("click").on("click", function (e) {
-                var filters = getFilters();
+                var filters = getBaseFilters();
                 filters.version = currentVersion;
                 var id = saveAs ? null : selectedReport.data("id"); //if saving new - no id
                 var originalReportId = selectedReport.data("origReportId") ? selectedReport.data("origReportId") : selectedReport.data("id");

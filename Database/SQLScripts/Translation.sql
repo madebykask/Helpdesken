@@ -7405,6 +7405,20 @@ If not exists (select * from tbltext where id = 2017)
 	insert into tbltext (id, TextString, TextType) VALUES (2017, 'HistoricalReport', 1)
 GO
 
+If not exists (select * from tbltext where id = 2018)
+	insert into tbltext (id, TextString) VALUES (2018, 'Stapla av')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2018 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2018, 2, 'Stack by')
+GO
+
+If not exists (select * from tbltext where id = 2019)
+	insert into tbltext (id, TextString) VALUES (2019, 'Historiska värden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2019 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2019, 2, 'Historical values')
+GO
+
 -- *** Run this last when put translation script above this line *** --
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
 

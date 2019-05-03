@@ -20,7 +20,7 @@
                         },
                         plugins: {
                             colorschemes: {
-                                scheme: 'office.Apex6' // see https://nagix.github.io/chartjs-plugin-colorschemes/ for other color schemes
+                                scheme: 'tableau.Tableau20' // see https://nagix.github.io/chartjs-plugin-colorschemes/colorchart.html for other color schemes
                             }
                         },
                         scales: {
@@ -48,10 +48,7 @@
             if (!self.chartInstance) return;
 
             //Temp data - will be removed later
-            var DATA_COUNT = 10;
-
             var Samples = {};
-            var Color = window.Color;
 
             function fallback(/* values ... */) {
                 var ilen = arguments.length;

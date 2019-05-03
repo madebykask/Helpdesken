@@ -18,7 +18,7 @@
 </script>
 
 @if (Model != null)
-{        
+{
     <div class="container">
         <div class="row">
             <div class="span6">
@@ -34,7 +34,7 @@
                                 <select id="lstReports" name="lstReports" data-field="reports" style="width: 300px;">
                                     @foreach (var r in Model.ReportList.Items)
                                     {
-                                        var reportId = int.Parse(r.Id);                
+                                        var reportId = int.Parse(r.Id);
                                         <option value="@r.Id" data-id="@r.Id" @reportId.IdIsSelected(selectedItems) data-identity="@r.Value">
                                             @Translation.GetMasterDataTranslation(r.Value)
                                         </option>
@@ -48,7 +48,35 @@
 
                                 </select>
                             </td>
-                        </tr>                
+                        </tr>
+                    }
+
+                    @if (Model.ReportFilter.GroupByList != null)
+                    {
+                        <tr id="groupBy" style="display: none">
+                            <td>
+                                @Translation.Get("Gruppera")
+                            </td>
+                            <td>
+                                @*@{GetReportFormTranslation}*@
+                                @Html.DropDownListFor(m => m.ReportFilter.Selected.GroupById, Model.ReportFilter.GroupByList, null,
+                                    new { id = "lstGroupBy", style = "width: 300px;" })
+                            </td>
+                        </tr>
+                    }
+
+                    @if (Model.ReportFilter.StackByList != null)
+                    {
+                        <tr id="stackBy" style="display: none">
+                            <td>
+                                @Translation.Get("Stapla av")
+                            </td>
+                            <td>
+                                @*@{GetReportFormTranslation}*@
+                                @Html.DropDownListFor(m => m.ReportFilter.Selected.StackById, Model.ReportFilter.StackByList, null,
+                                    new { id = "lstStackBy", style = "width: 300px;" })
+                            </td>
+                        </tr>
                     }
 
                     @if (Model.ReportFilter.Status != null)
@@ -62,14 +90,14 @@
                                 <select id="lstStatus" name="lstStatus" data-field="status" style="width: 300px;">
                                     @foreach (var s in Model.ReportFilter.Status.Items)
                                     {
-                                        int statusId = int.Parse(s.Id);                
+                                        int statusId = int.Parse(s.Id);
                                         <option value="@s.Id" @statusId.IdIsSelected(selectedItems)>
                                             @s.Value
                                         </option>
                                     }
                                 </select>
                             </td>
-                        </tr>                
+                        </tr>
                     }
 
                     @if (Model.ReportFilter.Administrators != null)
@@ -91,19 +119,19 @@
                                         else
                                         {
                                             userName = a.SurName + " " + a.FirstName;
-                                        }  
-                                                                                                                    
+                                        }
+
                                         <option class="@(a.IsActive == 0 ? "DisabledChosen" : "")" value="@a.Id" @a.Id.IdIsSelected(selectedItems)>
                                             @userName
                                         </option>
                                     }
                                 </select>
                             </td>
-                        </tr>                 
+                        </tr>
                     }
 
                     @if (Model.ReportFilter.CaseCreationDate != null)
-                    {                        
+                    {
                         <tr class="date-block">
                             <td>
                                 @Translation.Get(GlobalEnums.TranslationCaseFields.RegTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
@@ -111,39 +139,39 @@
                             <td>
                                 @Html.EditorFor(m => Model.ReportFilter.CaseCreationDate.FromDate, "DatePicker", new { id = "CaseRegistrationFromDate" })
                                 &nbsp;
-                                 @Html.EditorFor(m => Model.ReportFilter.CaseCreationDate.ToDate, "DatePicker", new { id = "CaseRegistrationToDate" })
-                            </td>
-                        </tr>   
-                    }
-@*                    @if (Model.ReportFilter.CaseClosingDate != null)*@
-@*                    {*@
-                        <tr class="date-block">
-                            <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
-                            </td>
-                            <td>
-                                @Html.EditorFor(m => Model.ReportFilter.CaseClosingDate.FromDate, "DatePicker", new { id = "CaseClosingFromDate" })
-                                &nbsp;
-                                @Html.EditorFor(m => Model.ReportFilter.CaseClosingDate.ToDate, "DatePicker", new { id = "CaseClosingToDate" })
+                                @Html.EditorFor(m => Model.ReportFilter.CaseCreationDate.ToDate, "DatePicker", new { id = "CaseRegistrationToDate" })
                             </td>
                         </tr>
-@*                    }*@
+                    }
+                    @*                    @if (Model.ReportFilter.CaseClosingDate != null)*@
+                    @*                    {*@
+                    <tr class="date-block">
+                        <td>
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
+                        </td>
+                        <td>
+                            @Html.EditorFor(m => Model.ReportFilter.CaseClosingDate.FromDate, "DatePicker", new { id = "CaseClosingFromDate" })
+                            &nbsp;
+                            @Html.EditorFor(m => Model.ReportFilter.CaseClosingDate.ToDate, "DatePicker", new { id = "CaseClosingToDate" })
+                        </td>
+                    </tr>
+                    @*                    }*@
                     @{
-                    var selectedFields = new SelectedItems(Model.ReportGeneratorOptions.FieldIds).GetSelectedStr();
+                        var selectedFields = new SelectedItems(Model.ReportGeneratorOptions.FieldIds).GetSelectedStr();
                         <tr id="reportGeneratorFields" style="display: none">
                             <td>
                                 @Translation.Get("Fält")
                             </td>
                             <td>
                                 @* <select id="lstFields" name="lstFields" data-field="fields" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                    @foreach (var field in Model.ReportGeneratorOptions.Fields)
-                                    {
-                                        int id = int.Parse(field.Value);
-                                        <option value="@field.Value" @id.IdIsSelected(selectedFields)>
-                                            @field.Text
-                                        </option>
-                                    }
-                                </select>*@
+                                        @foreach (var field in Model.ReportGeneratorOptions.Fields)
+                                        {
+                                            int id = int.Parse(field.Value);
+                                            <option value="@field.Value" @id.IdIsSelected(selectedFields)>
+                                                @field.Text
+                                            </option>
+                                        }
+                                    </select>*@
                                 @Html.DropDownListFor(m => m.ReportGeneratorOptions.FieldIds, Model.ReportGeneratorOptions.Fields,
                                         new
                                         {
@@ -161,44 +189,43 @@
                 <div class="span6">
                     <table class="tableform">
 
-                            <tr id="reportCategoryParam" style="display:normal;">
-                                <td>
-                                    @Translation.GetCoreTextTranslation("Gruppera")
-                                </td>
-                                <td>
-                                    <select id="lstfilterReportCategory" name="lstfilterCategory" data-field="reportcategories" style="width: 300px;" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" @(Model.ReportFilter.ReportCategory == null ? " visible: none" : "")>
-                                        @if (Model.ReportFilter.ReportCategory != null)
+                        <tr id="reportCategoryParam">
+                            <td>
+                                @Translation.GetCoreTextTranslation("Gruppera")
+                            </td>
+                            <td>
+                                <select id="lstfilterReportCategory" name="lstfilterCategory" data-field="reportcategories" style="width: 300px;" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" @(Model.ReportFilter.ReportCategory == null ? " visible: none" : "")>
+                                    @if (Model.ReportFilter.ReportCategory != null)
+                                    {
+                                        foreach (var r in Model.ReportFilter.ReportCategory.Items)
                                         {
-                                            foreach (var r in Model.ReportFilter.ReportCategory.Items)
-                                            {
-                                                int curId = 0;
-                                                int.TryParse(r.Id, out curId);
-                                                <option value="@r.Id" @(r.IsActive ? "" : "class='DisabledChosen'")>
-                                                        @GetReportFormTranslation(r.Value)
-                                                </option>
-                                            }
+                                            int curId = 0;
+                                            int.TryParse(r.Id, out curId);
+                                            <option value="@r.Id" @(r.IsActive ? "" : "class='DisabledChosen'")>
+                                                @GetReportFormTranslation(r.Value)
+                                            </option>
                                         }
-                                    </select>
-                                    <select id="lstfilterReportCategoryRt" name="lstfilterCategoryRt" data-field="reportcategoriesrt" style="width: 300px;" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" @(Model.ReportFilter.ReportCategoryRt == null ? " visible: none" : "")>
-                                        @if (Model.ReportFilter.ReportCategoryRt != null)
+                                    }
+                                </select>
+                                <select id="lstfilterReportCategoryRt" name="lstfilterCategoryRt" data-field="reportcategoriesrt" style="width: 300px;" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" @(Model.ReportFilter.ReportCategoryRt == null ? " visible: none" : "")>
+                                    @if (Model.ReportFilter.ReportCategoryRt != null)
+                                    {
+                                        foreach (var r in Model.ReportFilter.ReportCategoryRt.Items)
                                         {
-                                            foreach (var r in Model.ReportFilter.ReportCategoryRt.Items)
-                                            {
-                                                int curId = 0;
-                                                int.TryParse(r.Id, out curId);
-                                                <option value="@r.Id" @(r.IsActive ? "" : "class='DisabledChosen'")>
-                                                        @GetReportFormTranslation(r.Value)
-                                                </option>
-                                            }
+                                            int curId = 0;
+                                            int.TryParse(r.Id, out curId);
+                                            <option value="@r.Id" @(r.IsActive ? "" : "class='DisabledChosen'")>
+                                                @GetReportFormTranslation(r.Value)
+                                            </option>
                                         }
-                                    </select>
+                                    }
+                                </select>
 
-                                    <select id="lstfilterReportCategory_repl" style="width: 300px;" @(Model.ReportFilter.ReportCategory == null ? "" : "visible: none") disabled>
-                                    </select>
+                                <select id="lstfilterReportCategory_repl" style="width: 300px;" @(Model.ReportFilter.ReportCategory == null ? "" : "visible: none") disabled></select>
 
-                                </td>
-                            </tr>
-                        
+                            </td>
+                        </tr>
+
 
                         @if (Model.ReportFilter.Departments != null)
                         {
@@ -213,20 +240,20 @@
                                         {
                                             if (d.IsActive == 1)
                                             {
-                                            <option value="@d.Id" @d.Id.IdIsSelected(selectedItems)>
-                                                @d.DepartmentName
-                                            </option>
+                                                <option value="@d.Id" @d.Id.IdIsSelected(selectedItems)>
+                                                    @d.DepartmentName
+                                                </option>
                                             }
                                             else
                                             {
-                                            <option value="@d.Id" @d.Id.IdIsSelected(selectedItems) class="DisabledChosen" >
-                                                @d.DepartmentName
-                                            </option>
+                                                <option value="@d.Id" @d.Id.IdIsSelected(selectedItems) class="DisabledChosen">
+                                                    @d.DepartmentName
+                                                </option>
                                             }
                                         }
                                     </select>
                                 </td>
-                            </tr>                
+                            </tr>
                         }
 
                         @if (Model.ReportFilter.WorkingGroups != null)
@@ -239,14 +266,14 @@
                                 <td>
                                     <select id="lstfilterWorkingGroup" name="lstfilterWorkingGroup" data-field="workinggroups" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
                                         @foreach (var w in Model.ReportFilter.WorkingGroups)
-                                        {                                            
+                                        {
                                             <option value="@w.Id" @w.Id.IdIsSelected(selectedItems) class="@(w.IsActive == 0 ? "DisabledChosen" : "")">
                                                 @w.WorkingGroupName
-                                            </option>                                         
+                                            </option>
                                         }
                                     </select>
                                 </td>
-                            </tr>                
+                            </tr>
                         }
 
                         @if (Model.ReportFilter.CaseTypes != null)
@@ -262,20 +289,20 @@
                                         {
                                             if (c.IsActive == 1)
                                             {
-                                            <option value="@c.Id" @c.Id.IdIsSelected(selectedItems)>
-                                                @c.Name
-                                            </option>
+                                                <option value="@c.Id" @c.Id.IdIsSelected(selectedItems)>
+                                                    @c.Name
+                                                </option>
                                             }
                                             else
                                             {
-                                            <option value="@c.Id" @c.Id.IdIsSelected(selectedItems) class="DisabledChosen" >
-                                                @c.Name
-                                            </option>
+                                                <option value="@c.Id" @c.Id.IdIsSelected(selectedItems) class="DisabledChosen">
+                                                    @c.Name
+                                                </option>
                                             }
                                         }
                                     </select>
                                 </td>
-                            </tr>                
+                            </tr>
                         }
 
                         @if (Model.ReportFilter.ProductAreas != null)
@@ -291,20 +318,60 @@
                                         {
                                             if (p.IsActive == 1)
                                             {
-                                            <option value="@p.Id" @p.Id.IdIsSelected(selectedItems)>
-                                                @p.Name
-                                            </option>
+                                                <option value="@p.Id" @p.Id.IdIsSelected(selectedItems)>
+                                                    @p.Name
+                                                </option>
                                             }
                                             else
                                             {
-                                            <option value="@p.Id" @p.Id.IdIsSelected(selectedItems) class="DisabledChosen" >
-                                                @p.Name
-                                            </option>
+                                                <option value="@p.Id" @p.Id.IdIsSelected(selectedItems) class="DisabledChosen">
+                                                    @p.Name
+                                                </option>
                                             }
                                         }
                                     </select>
                                 </td>
-                            </tr>                
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+            <div class="span6" id="historicalFilters" style="display: none">
+                <div class="span6">
+                    <table class="tableform">
+                        <tr>
+                            <td colspan="2">
+                                <b>@Translation.Get("Historiska värden"):</b>
+                            </td>
+                        </tr>
+                        <tr class="date-block">
+                            <td>
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.ChangeTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
+                            </td>
+                            <td>
+                                @Html.EditorFor(m => Model.ReportFilter.CaseChangeDate.FromDate, "DatePicker", new {id = "historicalChangeDateFrom"})
+                                &nbsp;
+                                @Html.EditorFor(m => Model.ReportFilter.CaseChangeDate.ToDate, "DatePicker", new {id = "historicalChangeDateTo"})
+                            </td>
+                        </tr>
+                        @if (Model.ReportFilter.WorkingGroups != null)
+                        {
+                            var selectedItems = Model.ReportFilter.Selected.SelectedHistoricalWorkingGroups.GetSelectedStr();
+                            <tr>
+                                <td>
+                                    @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
+                                </td>
+                                <td>
+                                    <select id="historicalWorkingGroups" data-placeholder="@Translation.Get("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                        @foreach (var w in Model.ReportFilter.WorkingGroups)
+                                        {
+                                            <option value="@w.Id" @w.Id.IdIsSelected(selectedItems) class="@(w.IsActive == 0 ? "DisabledChosen" : "")">
+                                                @w.WorkingGroupName
+                                            </option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
                         }
                     </table>
                 </div>
@@ -324,10 +391,10 @@
 
     <div id="historicalReportContainer" style="display: none;" class="container">
         <div class="row" style="display: none; position: relative; height:60vh; width:99vw">
-                @Html.Partial("ReportViewer/_HistoricalReport", Model.ReportViewerData)
+            @Html.Partial("ReportViewer/_HistoricalReport", Model.ReportViewerData)
         </div>
     </div>
-    
+
     // Modal
     <div id="saveFilterDialog" class="modal fade " style="display: none;">
         <div class="modal-dialog">
@@ -346,7 +413,7 @@
                         <p style="margin-top: 20px;">@Translation.Get("Fyll i ett namn på din nya favorit.")</p>
                         <p class="input-prepend" style="margin-top: 20px;">
                             <span class="add-on">@Translation.Get("Namn")</span>
-                            <input type="text" id="txtFilterName" value="" required/>
+                            <input type="text" id="txtFilterName" value="" required />
                         </p>
                         <p>
                             <span id="requiredFilterText" hidden class="error">* @Translation.Get("måste anges")</span>

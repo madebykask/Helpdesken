@@ -140,7 +140,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 			var userId = OperationContext?.UserId ?? SessionFacade.CurrentUser.Id;
 
 			var model = new ReportsOptions();
-            var lastState = SessionFacade.ReportService ?? SessionFacade.ReportService;
+            var lastState = SessionFacade.ReportService;
             model.ReportServiceOverview = GetReportServiceModel(customerId, userId, lastState);
 
             return this.View(model);
@@ -686,7 +686,24 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
             var addOUToDep = (customerSettings != null && customerSettings.ShowOUsOnDepartmentFilter != 0) ? true : false;
             var reportFilter = _reportServiceService.GetReportFilter(customerId, curUserId, addOUToDep);
-
+            var stackByList = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Text = Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(),
+                        SessionFacade.CurrentCustomer.Id),
+                    Value = ((int)GlobalEnums.TranslationCaseFields.CaseType_Id).ToString()
+                }
+            };
+            var groupByList = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Text = Translation.GetForCase(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(),
+                        SessionFacade.CurrentCustomer.Id),
+                    Value = ((int)GlobalEnums.TranslationCaseFields.WorkingGroup_Id).ToString()
+                }
+            };
             var model = new ReportFilterModel()
             {
                 CaseCreationDate = reportFilter.CaseCreationDate,
@@ -699,7 +716,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 Status = GetCaseStateFilter(),
                 UserNameOrientation = customerSettings != null ? customerSettings.IsUserFirstLastNameRepresentation : 1,
                 ReportCategory = _reportCategories,
-                ReportCategoryRt = _reportCategoriesRt
+                ReportCategoryRt = _reportCategoriesRt,
+                StackByList = stackByList,
+                GroupByList = groupByList
             };
 
             if (lastState != null)

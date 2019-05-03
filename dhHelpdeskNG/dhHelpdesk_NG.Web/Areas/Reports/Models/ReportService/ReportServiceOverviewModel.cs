@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator;
+﻿using System.Web.Mvc;
+using DH.Helpdesk.Web.Areas.Reports.Models.Options.ReportGenerator;
 
 namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
 {
@@ -32,9 +33,12 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
 
     public sealed class ReportFilterModel : ReportFilter
     {
-        public ReportSelectedFilter Selected { get; set; }        
+        public ReportSelectedFilter Selected { get; set; }
 
         public int UserNameOrientation { get; set; }
+        public List<SelectListItem> StackByList { get; set; }
+        public List<SelectListItem> GroupByList { get; set; }
+        public DateToDate CaseChangeDate { get; set; }
     }
 
     public sealed class ReportPresentationModel
