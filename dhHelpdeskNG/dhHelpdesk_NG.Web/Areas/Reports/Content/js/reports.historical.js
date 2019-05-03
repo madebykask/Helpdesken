@@ -18,18 +18,11 @@
                         legend: {
                             position: 'right'
                         },
-                        //plugins: {
-                        //    datalabels: {
-                        //        color: 'white',
-                        //        display: function(context) {
-                        //            return context.dataset.data[context.dataIndex] > 15;
-                        //        },
-                        //        font: {
-                        //            weight: 'bold'
-                        //        },
-                        //        formatter: Math.round
-                        //    }
-                        //},
+                        plugins: {
+                            colorschemes: {
+                                scheme: 'office.Apex6' // see https://nagix.github.io/chartjs-plugin-colorschemes/ for other color schemes
+                            }
+                        },
                         scales: {
                             xAxes: [
                                 {
@@ -73,20 +66,6 @@
                 }
             };
 
-            Samples.COLORS = [
-                '#FF3784',
-                '#36A2EB',
-                '#4BC0C0',
-                '#F77825',
-                '#9966FF',
-                '#00A8C6',
-                '#379F7A',
-                '#CC2738',
-                '#8B628A',
-                '#8FBE00',
-                '#606060'
-            ];
-
             Samples.srand = function (seed) {
                 this._seed = seed;
             };
@@ -121,40 +100,6 @@
                 }
 
                 return data;
-            };
-
-            Samples.color = function (offset) {
-                var count = Samples.COLORS.length;
-                var index = offset === undefined ? ~~Samples.rand(0, count) : offset;
-                return Samples.COLORS[index % count];
-            };
-
-            Samples.colors = function (config) {
-                var cfg = config || {};
-                var color = cfg.color || Samples.color(0);
-                var count = cfg.count !== undefined ? cfg.count : 8;
-                var method = cfg.mode ? Color.prototype[cfg.mode] : null;
-                var values = [];
-                var i, f, v;
-
-                for (i = 0; i < count; ++i) {
-                    f = i / count;
-
-                    if (method) {
-                        v = method.call(Color(color), f).rgbString();
-                    } else {
-                        v = Samples.color(i);
-                    }
-
-                    values.push(v);
-                }
-
-                return values;
-            };
-
-            Samples.transparentize = function (color, opacity) {
-                var alpha = opacity === undefined ? 0.5 : 1 - opacity;
-                return Color(color).alpha(alpha).rgbString();
             };
 
             // INITIALIZATION
@@ -193,7 +138,6 @@
 
                     for (var i = 0; i < dataCount; i++) {
                         datasets.push({
-                            backgroundColor: Samples.color(i),
                             label: data.CaseTypes[i],
                             data: Samples.numbers({
                                 count: dataCount,

@@ -324,6 +324,7 @@
                             "~/Areas/Reports/Content/js/reportViewer.logic.js",
                             "~/Areas/Reports/Content/js/reports.js",
                             "~/Scripts/chart.min.js",
+                            "~/Areas/Reports/Content/js/chartjs-plugin-colorschemes.min.js",
                             "~/Areas/Reports/Content/js/reports.historical.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admininvoice").Include(
