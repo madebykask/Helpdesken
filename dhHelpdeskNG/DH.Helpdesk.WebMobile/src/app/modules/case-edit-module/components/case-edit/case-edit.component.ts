@@ -428,6 +428,16 @@ export class CaseEditComponent {
                     take(1)
                   ).subscribe(date => this.form.controls[CaseFieldsNames.WatchDate].setValue(date));
               }
+              const externalEmailsCcControl = this.form.controls[CaseFieldsNames.Log_ExternalEmailsCC];
+              const externalEmailsToControl = this.form.controls[CaseFieldsNames.Log_SendMailToNotifier];
+              if (ss.noMailToNotifier === true) {
+                externalEmailsCcControl.disable({ onlySelf: true, emitEvent: true });
+                externalEmailsToControl.setValue(false);
+                externalEmailsToControl.disable({ onlySelf: true, emitEvent: true });
+              } else {
+                externalEmailsCcControl.enable({ onlySelf: true, emitEvent: true });
+                externalEmailsToControl.enable({ onlySelf: true, emitEvent: true });
+              }
             });
           }
           break;

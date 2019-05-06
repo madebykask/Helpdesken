@@ -18,27 +18,6 @@ export class CaseFormGroupBuilder {
       controls[field.name] = this.createCaseFormControl(field.value, field, canSave);
     }
 
-    // extnernal log  EmailsTO:
-    controls[CaseFieldsNames.Log_SendMailToNotifier] =
-      this.createCaseFormControl(
-        true, // by default
-        Object.assign(new FieldModel(), {
-          name: CaseFieldsNames.Log_SendMailToNotifier,
-          options: []
-      }),
-      canSave);
-
-    // extnernal log  EmailsTO:
-    controls[CaseFieldsNames.Log_ExternalEmailsTo] =
-      this.createCaseFormControl(
-        '', //TODO: init controls below based on info from other fields
-        Object.assign(new FieldModel(), {
-          name: CaseFieldsNames.Log_ExternalEmailsTo,
-          label: this.ngxTranslateService.instant('Till'),
-          options: []
-      }),
-      canSave);
-
     // internal log TO:
     controls[CaseFieldsNames.Log_InternalEmailsTo] =
       this.createCaseFormControl('', Object.assign(new FieldModel(), {

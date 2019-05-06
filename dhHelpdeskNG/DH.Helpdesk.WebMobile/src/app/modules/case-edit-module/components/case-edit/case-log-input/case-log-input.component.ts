@@ -19,6 +19,7 @@ export class CaseLogInputComponent implements OnInit {
   @Input() form: CaseFormGroup;
   @Input() caseData: CaseEditInputModel;
   @Input() accessMode: CaseAccessMode;
+  @ViewChild('sendMailToNotifierControl') sendMailToNotifierControl: any;
 
   files: string[] = [];
   internalLogLabel = '';
@@ -27,9 +28,9 @@ export class CaseLogInputComponent implements OnInit {
   isInternalLogFieldVisible = false;
   isAttachedFilesVisible = false;
   caseFieldsNames = CaseFieldsNames;
+  isSendMailToNotifierDisabled = false; // have to use this variable and [disabled] binding, because control.disabled dont work on switch
 
   sendExternalEmailsControl: CaseFormControl = null;
-  externalLogEmailsToControl: CaseFormControl = null;
   externalLogEmailsCcControl: CaseFormControl = null;
   externalLogField: CaseFormControl = null;
   internalLogField: CaseFormControl = null;
@@ -70,7 +71,6 @@ export class CaseLogInputComponent implements OnInit {
   ngOnInit() {
     this.personsEmailFormControl = this.getFormControl(CaseFieldsNames.PersonEmail);
     this.sendExternalEmailsControl  = this.getFormControl(CaseFieldsNames.Log_SendMailToNotifier);
-    this.externalLogEmailsToControl = this.getFormControl(CaseFieldsNames.Log_ExternalEmailsTo);
     this.externalLogEmailsCcControl = this.getFormControl(CaseFieldsNames.Log_ExternalEmailsCC);
     this.externalLogField = this.getFormControl(CaseFieldsNames.Log_ExternalText);
     this.internalLogField = this.getFormControl(CaseFieldsNames.Log_InternalText);
@@ -86,6 +86,16 @@ export class CaseLogInputComponent implements OnInit {
 
     if (this.externalLogField) {
       this.isExternalLogFieldVisible =  !this.externalLogField.fieldInfo.isHidden;
+      // track disabled state in form
+      this.isSendMailToNotifierDisabled = this.sendExternalEmailsControl.disabled;
+      this.sendExternalEmailsControl.statusChanges.pipe(
+        takeUntil(this.destroy$)
+      ).subscribe(e => {
+        if (this.sendMailToNotifierControl.disabled !== this.sendExternalEmailsControl.isDisabled) {
+          this.isSendMailToNotifierDisabled = this.sendExternalEmailsControl.disabled;
+          //this.sendMailToNotifierControl.instance.refresh();
+        }
+      });
     }
 
     if (this.internalLogField) {

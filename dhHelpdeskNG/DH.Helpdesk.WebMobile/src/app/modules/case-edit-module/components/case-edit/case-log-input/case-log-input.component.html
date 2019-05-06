@@ -8,7 +8,7 @@
   </div>
 
   <div class="bordered">
-    <mbsc-switch *ngIf="isExternalLogFieldVisible" [formControlName]="caseFieldsNames.Log_SendMailToNotifier">
+    <mbsc-switch #sendMailToNotifierControl *ngIf="isExternalLogFieldVisible" [disabled]="isSendMailToNotifierDisabled" [formControlName]="caseFieldsNames.Log_SendMailToNotifier">
       {{ 'Till' | translate }}:
       <span class="mbsc-desc">{{ externalLogEmailsTo }}</span>
     </mbsc-switch>

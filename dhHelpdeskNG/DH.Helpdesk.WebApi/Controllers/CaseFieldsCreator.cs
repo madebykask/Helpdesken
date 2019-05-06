@@ -81,6 +81,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ICaseTypeService _caseTypeService;
         private readonly IProductAreaService _productAreaService;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
+        private readonly IStateSecondaryService _stateSecondaryService;
 
         public CaseFieldsCreator(ICaseFileService caseFileService, 
             ICaseFieldSettingsHelper caseFieldSettingsHelper,
@@ -94,9 +95,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             ICaseTypeService caseTypeService,
             IProductAreaService productAreaService,
             ICaseExtraFollowersService caseExtraFollowersService,
-            ITranslator translator)
+            IStateSecondaryService stateSecondaryService)
         {
             _caseExtraFollowersService = caseExtraFollowersService;
+            _stateSecondaryService = stateSecondaryService;
             _caseFileService = caseFileService;
             _caseFieldSettingsHelper = caseFieldSettingsHelper;
             _userService = userService;
@@ -1099,6 +1101,39 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
+                var stateSecondaryField = model.Fields.FirstOrDefault(f =>
+                    f.Name.Equals(CaseFieldsNamesApi.StateSecondaryId.ToString(), StringComparison.InvariantCultureIgnoreCase));
+                var noMailToNotifier = false;
+                if (stateSecondaryField != null)
+                {
+                    var stateSecondaryId = ((BaseCaseField<int?>)stateSecondaryField).Value;
+                    if (stateSecondaryId.HasValue)
+                    {
+                        var stateSecondary = _stateSecondaryService.GetStateSecondary(stateSecondaryId.Value);
+                        noMailToNotifier = stateSecondary.NoMailToNotifier.ToBool();
+                    }
+                }
+
+                // Log External Emails to (Extra Followers)
+                {
+                    field = new BaseCaseField<bool>()
+                    {
+                        Name = CaseFieldsNamesApi.Log_SendMailToNotifier,
+                        Value = true,
+                        Label = _caseTranslationService.TranslateFieldLabel(languageId, "Till"),
+                        Section = CaseSectionType.Communication
+                    };
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, currentCase?.Id, caseTemplateSettings)
+                    || noMailToNotifier)
+                        AddReadOnlyOption(field.Options);
+
+                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External))
+                        AddHiddenOption(field.Options);
+
+                    model.Fields.Add(field);
+                }
+
                 // Log External Emails cc (Extra Followers)
                 {
                     field = new BaseCaseField<string>()
@@ -1108,6 +1143,13 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Label = _caseTranslationService.TranslateFieldLabel(languageId, "Kopia"),
                         Section = CaseSectionType.Communication
                     };
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, currentCase?.Id, caseTemplateSettings))
+                        AddReadOnlyOption(field.Options);
+
+                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External))
+                        AddHiddenOption(field.Options);
+
                     model.Fields.Add(field);
                 }
 
