@@ -220,24 +220,35 @@
 
         dhHelpdesk.reports.doValidation = function () {
 
-            $('#ReportFilter_CaseCreationDate_FromDate').removeClass("error");
-            $('#ReportFilter_CaseCreationDate_ToDate').removeClass("error");
+            const $createDateFrom = $('#ReportFilter_CaseCreationDate_FromDate');
+            const $createDateTo = $('#ReportFilter_CaseCreationDate_ToDate');
+            const $closeDateFrom = $('#ReportFilter_CaseClosingDate_FromDate');
+            const $closeDateTo = $('#ReportFilter_CaseClosingDate_ToDate');
 
-            if ($('#ReportFilter_CaseCreationDate_FromDate').val() == "") {
-                var msg = window.Params.DateIsEmptyMessage;
-                $('#ReportFilter_CaseCreationDate_FromDate').addClass("error");
-                ShowToastMessage(msg, "warning");
-                return false;
+            $createDateFrom.removeClass('error');
+            $createDateTo.removeClass('error');
+            $closeDateFrom.removeClass('error');
+            $closeDateTo.removeClass('error');
+
+            var isValid = true;
+
+            if ($createDateFrom.val() === '' &&
+                $closeDateFrom.val() === '') {
+                $createDateFrom.addClass('error');
+                isValid = false;
             }
 
-            if ($('#ReportFilter_CaseCreationDate_ToDate').val() == "") {
-                var msg = window.Params.DateIsEmptyMessage;
-                $('#ReportFilter_CaseCreationDate_ToDate').addClass("error");
-                ShowToastMessage(msg, "warning");
-                return false;
+            if ($createDateTo.val() === '' &&
+                $closeDateTo.val() === '') {
+                $createDateTo.addClass('error');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                ShowToastMessage(window.Params.DateIsEmptyMessage, 'warning');
             }
             
-            return true;
+            return isValid;
         }
 
         function getFilters() {
@@ -366,7 +377,7 @@
             };
         }
 
-        dhHelpdesk.reports.onShowReport = function(e) {
+        dhHelpdesk.reports.onShowReport = function (e) {
             var reportId = $("#lstReports").find("option:selected").data("id");
             if (reportId === dhHelpdesk.reports.reportType.HistoricalReport) {
                 dhHelpdesk.reports.onHistoricalShow.call(this, e);
@@ -375,7 +386,10 @@
             }
         }
 
-        dhHelpdesk.reports.onHistoricalShow = function(e) {
+        dhHelpdesk.reports.onHistoricalShow = function (e) {
+            if (!dhHelpdesk.reports.doValidation())
+                return;
+
             dhHelpdesk.reports.historicalReport.show();
             dhHelpdesk.reports.historicalReport.update(getHistoricalFilters());
         }
