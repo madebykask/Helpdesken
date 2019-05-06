@@ -247,7 +247,7 @@ GO
 
 
 RAISERROR('Adding new EMailSubject column to tblMail2Ticket', 10, 1) WITH NOWAIT
-IF EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'EMailSubject' and Object_ID = Object_ID(N'dbo.tblMail2Ticket'))
+IF NOT EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'EMailSubject' and Object_ID = Object_ID(N'dbo.tblMail2Ticket'))
    ALTER TABLE tblMail2Ticket
    ADD EMailSubject nvarchar(512) NULL
 GO
