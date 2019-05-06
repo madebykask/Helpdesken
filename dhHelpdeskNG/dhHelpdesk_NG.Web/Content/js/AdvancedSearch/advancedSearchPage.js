@@ -1,4 +1,4 @@
-﻿"use strsict";
+﻿"use strict";
 
 window.advancedSearchPage =
  (function ($) {
@@ -50,6 +50,7 @@ window.advancedSearchPage =
 
         this.init = function (params) {
             var self = this;
+            
             this.requests = []; // stores ajax pending requests
 
             this.messagesMap = self.createMessagesMap();
@@ -176,7 +177,7 @@ window.advancedSearchPage =
 
         this.onSearchClick = function () {
             var self = this;
-
+            
             //reset prev search state
             self.resetSearch();
 
@@ -204,7 +205,7 @@ window.advancedSearchPage =
         //SEARCH Function
         this.runSearсh = function(customerIds) {
             var self = this;
-
+            
             self.setUIState(UI_STATE.LOADING);
             self.showProgress();
 
@@ -245,7 +246,7 @@ window.advancedSearchPage =
         this.runCustomerSearch = function (customerId, filterData) {
             var self = this;
             self.hideCustomerMessages(customerId);
-
+            
             //set customer specific params
             filterData.customerId = customerId;
             filterData.IsExtendedSearchCustomer = self.isExtendedCustomer(customerId);
@@ -403,26 +404,35 @@ window.advancedSearchPage =
 
         this.fetchData = function (inputData) {
             var self = this; 
-            var $searchReq = $.Deferred();
+            var $searchReq = new $.Deferred();
             var customerId = inputData.customerId;
+            var actionUrl = self.searchActionUrl;
 
-            //console.log('>>> Customer search cases called. Action: ' + self.searchActionUrl + ', Data: ' + JSON.stringify(inputData));
+            //console.log('>>> Customer search cases called. Action: ' + actionUrl + ', Data: ' + JSON.stringify(inputData));
 
             $.ajax({
                 cache: false,
                 type: "POST",
-                url: self.searchActionUrl,
+                url: actionUrl,
                 contentType: "application/json;charset=utf-8",
                 data: JSON.stringify(inputData),
                 success: function (response) {
-                    $searchReq.resolve({ customerId, response });
+                    var data = {
+                        customerId: customerId,
+                        response: response
+                    };
+                    $searchReq.resolve(data);
                 },
                 error: function (err) {
-                    $searchReq.reject({ customerId, err });
+                    var data = {
+                        customerId: customerId,
+                        err: err
+                    };
+                    $searchReq.reject(data);
                 }
             });
 
-            return $searchReq;
+            return $searchReq.promise();
         }
 
         this.processCustomerSearchResults = function(customerId, response) {

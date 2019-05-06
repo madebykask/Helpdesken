@@ -66,10 +66,10 @@
 </form>
 
 @section Scripts {
+    
+    @Scripts.Render(BundleConfig.ScriptNames.AdvancedSearchPage)
 
     <script type="text/javascript">
-
-        //onReady
         $(function() {
 
             $('.input-append.date').datepicker({
@@ -81,7 +81,7 @@
                 DefaultFocusObject: "#btnSearch",
                 CaseTypeDropDown: "CaseTypeDropDown",
                 ProductAreaDropDown: "ProductAreaDropDown",
-                ClosingReasonDropDown: "ClosingReasonDropDown", 
+                ClosingReasonDropDown: "ClosingReasonDropDown",
                 // page params
                 sortOptions: @Html.SerializeObject(Model.GridSettings.sortOptions),
                 doSearchAtBegining: @Model.DoSearchAtBegining.ToJavaScriptObject(),
@@ -95,10 +95,7 @@
             // init page instance
             window.advancedSearchPage.init(params);
         });
-
     </script>
-
-    @Scripts.Render(BundleConfig.ScriptNames.AdvancedSearchPage)
 
     <script type="text/javascript">
         // TODO: Review if its required!!??!!
