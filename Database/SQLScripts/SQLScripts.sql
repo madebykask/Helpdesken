@@ -252,6 +252,129 @@ IF NOT EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'EMailSubject' and Object_
    ADD EMailSubject nvarchar(512) NULL
 GO
 
+RAISERROR('Creating index on tblCaseHistory', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id=OBJECT_ID('dbo.tblCaseHistory') AND name='idx_createddate_case_casetype_workinggroup')
+BEGIN 
+	CREATE NONCLUSTERED INDEX [idx_createddate_case_casetype_workinggroup] ON [dbo].[tblCaseHistory]
+	(
+		[CreatedDate] ASC
+	)
+	INCLUDE ( 	[Case_Id],
+		[CaseType_Id],
+		[WorkingGroup_Id]) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+END
+GO
+
+RAISERROR('Creating type for ID list', 10, 1) WITH NOWAIT
+IF type_id('dbo.IDList') IS NULL
+BEGIN
+   CREATE TYPE dbo.IDList AS TABLE
+	(
+		ID INT
+	)
+END
+GO
+
+RAISERROR('Adding stored procedure for historical case report', 10, 1) WITH NOWAIT
+IF OBJECT_ID('ReportGetHistoricalData', 'P') IS NOT NULL
+BEGIN
+	DROP PROCEDURE ReportGetHistoricalData
+END
+GO
+
+CREATE PROCEDURE ReportGetHistoricalData 
+	-- Add the parameters for the stored procedure here
+	@caseStatus INT,
+	@changeFrom DATETIME, 
+	@changeTo DATETIME,
+	@customerID INT,
+	@changeWorkingGroups AS dbo.IDList READONLY,
+	@registerFrom DATETIME,
+	@registerTo DATETIME, 
+	@closeFrom DATETIME, 
+	@closeTo DATETIME, 
+	@administrators AS dbo.IDList READONLY, 
+	@departments AS dbo.IDList READONLY, 
+	@caseTypes AS dbo.IDList READONLY, 
+	@productAreas AS dbo.IDList READONLY,
+	@workingGroups AS dbo.IDList READONLY
+AS
+BEGIN
+	DECLARE @checkChangeWorkingGroups BIT = 0,
+		@checkAdministrators BIT = 0,
+		@checkDepartments BIT = 0,
+		@checkCaseTypes BIT = 0,
+		@checkProductAreas BIT = 0,
+		@checkWorkingGroups BIT = 0,
+		@checkCaseStatus BIT = CASE WHEN @caseStatus IS NULL THEN 0 ELSE 1 END,
+		@checkChangeFrom BIT = CASE WHEN @changeFrom IS NULL THEN 0 ELSE 1 END,
+		@checkChangeTo BIT = CASE WHEN @changeTo IS NULL THEN 0 ELSE 1 END,
+		@checkRegisterFrom BIT = CASE WHEN @registerFrom IS NULL THEN 0 ELSE 1 END,
+		@checkRegisterTo BIT = CASE WHEN @registerTo IS NULL THEN 0 ELSE 1 END,
+		@checkCloseFrom BIT = CASE WHEN @closeFrom IS NULL THEN 0 ELSE 1 END,
+		@checkCloseTo BIT = CASE WHEN @closeTo IS NULL THEN 0 ELSE 1 END
+
+	SELECT TOP 1 @checkChangeWorkingGroups = 1 FROM @changeWorkingGroups
+	SELECT TOP 1 @checkAdministrators = 1 FROM @administrators
+	SELECT TOP 1 @checkDepartments = 1 FROM @departments
+	SELECT TOP 1 @checkCaseTypes = 1 FROM @caseTypes
+	SELECT TOP 1 @checkProductAreas = 1 FROM @productAreas
+	SELECT TOP 1 @checkWorkingGroups = 1 FROM @workingGroups
+
+	
+	CREATE TABLE #rows 
+	(
+		CaseID INT,
+		CaseTypeID INT,
+		WorkingGroupID INT,
+		Created DATETIME,
+		R_ROW INT, 
+		R_CASE INT,
+		INDEX ixCase NONCLUSTERED(CaseID, CaseTypeID, WorkingGroupID, R_ROW, R_CASE)
+	)
+
+	INSERT INTO #rows(CaseId, CaseTypeID, Created, WorkingGroupID, R_ROW, R_CASE) 
+	SELECT C.Id, CT.ID, CH.CreatedDate, WG.ID WorkginGroupId, 
+		ROW_NUMBER() OVER (PARTITION BY C.Id, WG.ID ORDER BY CH.CreatedDate) R, 
+		ROW_NUMBER() OVER (PARTITION BY C.Id ORDER BY CH.CreatedDate) R_CASE FROM tblCase C 
+	JOIN tblCaseHistory CH ON CH.Case_Id = C.Id
+	JOIN tblCaseType CT ON CH.CaseType_Id = CT.ID
+	LEFT JOIN tblWorkingGroup WG ON CH.WorkingGroup_Id = WG.Id
+	WHERE 1=1
+	AND C.Customer_Id = @customerID
+	AND (@checkChangeWorkingGroups = 0 OR EXISTS(SELECT ID FROM @changeWorkingGroups CWG WHERE CH.WorkingGroup_Id = CWG.ID))
+	AND (@checkAdministrators = 0 OR EXISTS(SELECT ID FROM @administrators A WHERE C.CaseResponsibleUser_Id = A.ID))
+	AND (@checkDepartments = 0 OR EXISTS(SELECT ID FROM @departments D WHERE C.Department_Id = D.ID))
+	AND (@checkCaseTypes = 0 OR EXISTS(SELECT ID FROM @caseTypes CT WHERE C.CaseType_Id = CT.ID))
+	AND (@checkProductAreas = 0 OR EXISTS(SELECT ID FROM @productAreas PA WHERE C.ProductArea_Id = PA.ID))
+	AND (@checkWorkingGroups = 0 OR EXISTS(SELECT ID FROM @workingGroups WG WHERE C.WorkingGroup_Id = WG.ID))
+	AND (@checkCaseStatus = 0 OR (@caseStatus = 1 AND C.FinishingDate IS NULL) OR (@caseStatus = 0 AND C.FinishingDate IS NOT NULL))
+	AND (@checkChangeFrom = 0 OR CH.CreatedDate >= @changeFrom)
+	AND (@checkChangeTo = 0 OR CH.CreatedDate <= @changeTo)
+	AND (@checkRegisterFrom = 0 OR C.RegTime >= @registerFrom)
+	AND (@checkRegisterTo = 0 OR C.RegTime <= @registerTo)
+	AND (@checkCloseFrom = 0 OR C.FinishingDate >= @closeFrom)
+	AND (@checkCloseTo = 0 OR C.FinishingDate <= @closeTo)
+	GROUP BY CT.Id, CT.CaseType, WG.ID, C.ID, CH.CreatedDate
+	ORDER BY C.Id
+
+	SELECT R.*, CT.CaseType, WG.WorkingGroup FROM #rows R
+	JOIN tblCaseType CT ON R.CaseTypeID = CT.ID
+	LEFT JOIN tblWorkingGroup WG ON R.WorkingGroupID = WG.Id
+	LEFT JOIN #rows R2 ON R.CaseID = R2.CaseID
+		AND (R.WorkingGroupID = R2.WorkingGroupID
+			OR (R.WorkingGroupID IS NULL AND R2.WorkingGroupID IS NULL))
+		AND R2.R_ROW = R.R_ROW - 1
+		AND R2.R_CASE = R.R_CASE - 1
+	WHERE R2.CaseID IS NULL
+	ORDER BY CaseID
+
+	DROP TABLE #rows
+END
+GO
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.41'
 GO

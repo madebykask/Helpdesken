@@ -74,13 +74,59 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 
 		public IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter)
 		{
-			var result = DataContext.Database.SqlQuery<HistoricalDataResult>("ReportGetHistoricalData @changeFrom, @changeTo, @customerID", 
-				new SqlParameter("@changeFrom", filter.From),
-				new SqlParameter("@changeTo", filter.To),
-				new SqlParameter("@customerID", filter.CustomerID)
+			var result = DataContext.Database.SqlQuery<HistoricalDataResult>("ReportGetHistoricalData @caseStatus, @changeFrom, @changeTo, @customerID, @changeWorkingGroups, @registerFrom, @registerTo, @closeFrom, @closeTo, @administrators, @departments, @caseTypes, @productAreas, @workingGroups",
+				new SqlParameter("@caseStatus", GetNullableValue(filter.CaseStatus)),
+				new SqlParameter("@changeFrom", GetNullableValue(filter.ChangeFrom)),
+				new SqlParameter("@changeTo", GetNullableValue(filter.ChangeTo)),
+				new SqlParameter("@customerID", GetNullableValue(filter.CustomerID)),
+				GetIDListParameter("@changeWorkingGroups", filter.ChangeWorkingGroups),
+				new SqlParameter("@registerFrom", GetNullableValue(filter.RegisterFrom)),
+				new SqlParameter("@registerTo", GetNullableValue(filter.RegisterTo)),
+				new SqlParameter("@closeFrom", GetNullableValue(filter.CloseFrom)),
+				new SqlParameter("@closeTo", GetNullableValue(filter.CloseTo)),
+				GetIDListParameter("@administrators", filter.Administrators),
+				GetIDListParameter("@departments", filter.Departments),
+				GetIDListParameter("@caseTypes", filter.CaseTypes),
+				GetIDListParameter("@productAreas", filter.ProductAreas),
+				GetIDListParameter("@workingGroups", filter.WorkingGroups)
 			).ToList();
 
 			return result;
+		}
+
+		private object GetNullableValue<T>(T value)
+		{
+			if (value == null)
+			{
+				return DBNull.Value;
+			}
+			else
+			{
+				return value;
+			}
+		}
+
+		private SqlParameter GetIDListParameter(string name, IList<int> idList)
+		{
+			const string idTableName = "dbo.IDList";
+
+			var dt = new DataTable();
+			dt.TableName = idTableName;
+			dt.Columns.Add("ID", typeof(int));
+
+			if (idList != null)
+			{
+				foreach (var id in idList)
+				{
+					dt.Rows.Add(id);
+				}
+			}
+
+			var parameter = new SqlParameter(name, SqlDbType.Structured);
+			parameter.TypeName = idTableName;
+			parameter.Value = dt;
+
+			return parameter;
 		}
 
         private List<Tuple<string, string, int>> GetQueriesFor(string reportIdentity, ReportSelectedFilter filters)

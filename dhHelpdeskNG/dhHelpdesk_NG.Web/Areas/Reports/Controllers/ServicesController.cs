@@ -51,28 +51,35 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         [HttpPost]
         public JsonResult GetHistoricalData(HistoricalReportFilterModel filter)
         {
-			//var customerId = SessionFacade.CurrentCustomer.Id;
-			//var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
-			///*If user has no wg and is a SystemAdmin or customer admin, he/she can see all available wgs */
-			//var workingGroups = user.UserGroup_Id > UserGroups.Administrator ?
-			//    _workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).ToList() :
-			//    _workingGroupService.GetWorkingGroups(customerId, user.Id, false, true).ToList();
+			var customerId = SessionFacade.CurrentCustomer.Id;
+			var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
 
-			//var caseTypes = this._caseTypeService.GetCaseTypes(customerId).ToList();
-			//var caseTypesInRow = this._caseTypeService.GetChildrenInRow(caseTypes).ToList();
+			//*If user has no wg and is a SystemAdmin or customer admin, he/she can see all available wgs */
+			var workingGroups = user.UserGroup_Id > UserGroups.Administrator ?
+				_workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).ToList() :
+				_workingGroupService.GetWorkingGroups(customerId, user.Id, false, true).ToList();
 
-			//var data = new {
-			//    WorkingGroups = workingGroups.Take(10).Select(wg => wg.WorkingGroupName).ToList(),
-			//    CaseTypes = caseTypesInRow.Take(10).Select(ct => ct.Name).ToList()
-			//};
-
-			// TODO: Apply working group rights
+			if (filter.WorkingGroups != null && filter.WorkingGroups.Any())
+			{
+				workingGroups = workingGroups.Where(o => filter.WorkingGroups.Contains(o.Id)).ToList();
+			}
 
 			var result = _reportServiceService.GetHistoricalData(new HistoricalDataFilter
 			{
-				CustomerID = SessionFacade.CurrentCustomer.Id,
-				From = filter.HistoricalChangeDateFrom ?? DateTime.Now.AddDays(-2),
-				To = filter.HistoricalChangeDateTo ?? DateTime.Now.AddYears(20)
+				CustomerID = customerId,
+				CaseStatus = filter.CaseStatus == 2 ? 1 : filter.CaseStatus == 1 ? 0 : (int?)null, // 1 active, 0 closed else null
+				RegisterFrom = filter.RegisterFrom,
+				RegisterTo = filter.RegisterTo,
+				CloseFrom = filter.CloseFrom,
+				CloseTo = filter.CloseTo,
+				Administrators = filter.Administrators,
+				Departments = filter.Departments,
+				CaseTypes = filter.CaseTypes,
+				ProductAreas = filter.ProductAreas,
+				ChangeWorkingGroups = filter.HistoricalWorkingGroups,
+				ChangeFrom = filter.HistoricalChangeDateFrom ?? DateTime.Now.AddYears(-20),
+				ChangeTo = filter.HistoricalChangeDateTo ?? DateTime.Now.AddYears(20),
+				WorkingGroups = workingGroups.Select(o => o.Id).ToList()
 			});
 
 			var wgs = result.Select(o => new { o.WorkingGroup, o.WorkingGroupID }).Distinct().OrderBy(o => o.WorkingGroup).ToArray();
