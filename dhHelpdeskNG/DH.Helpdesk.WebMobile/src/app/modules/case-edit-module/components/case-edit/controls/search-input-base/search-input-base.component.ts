@@ -7,7 +7,8 @@ import { BaseControl } from '../base-control';
 
 export abstract class SearchInputBaseComponent extends BaseControl<string> {
 
-  constructor(protected ngxTranslateService: TranslateService,
+  constructor(
+    protected ngxTranslateService: TranslateService,
     protected renderer: Renderer2) {
     super();
   }
@@ -25,6 +26,7 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
 
   private progressIconEl: any = null;
   protected searchSubject = new Subject<string> ();
+  protected  selectDefaultOptions;
 
   selectOptions: MbscSelectOptions = {
     theme: 'mobiscroll',
@@ -33,16 +35,23 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
     showInput: false,
     showOnTap: false,
     input: '#' + this.field,
-    focusOnClose: false,
+    focusOnClose:  false,
+    select: 'single',
     filter: true,
     maxWidth: 400,
     multiline: 2,
     buttons: ['cancel'],
-    headerText: () => this.getHeaderText(),
+    headerText: this.getHeaderText.bind(this),
     cancelText: this.ngxTranslateService.instant('Avbryt'),
     setText: this.ngxTranslateService.instant('Välj'),
     filterPlaceholderText: this.ngxTranslateService.instant('Skriv för att filtrera'),
     filterEmptyText: this.ngxTranslateService.instant('Inget resultat'),
+
+    onInit: (event, inst) => {
+      if (this.formControl && this.formControl.fieldInfo.isReadonly) {
+        inst.disable();
+      }
+    },
 
     onShow: (event, inst) => {
       //setting filter text from user input on case page
@@ -84,7 +93,8 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
 
     this.init(this.field);
 
-    this.updateDisabledState();
+    setTimeout(() => this.updateDisabledState(), 100);
+
     this.initEvents();
 
     // subscribe to notifier(user) search input

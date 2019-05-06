@@ -1,175 +1,74 @@
-import { Component, Input, ViewChild, Renderer2 } from '@angular/core';
-import { MbscSelectOptions, MbscSelect } from '@mobiscroll/angular';
-import { BaseControl } from '../base-control';
+import { Component, Input, Renderer2, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Channels, CommunicationService, CaseFieldValueChangedEvent } from 'src/app/services/communication';
 import { NotifierService } from 'src/app/modules/case-edit-module/services/notifier.service';
-import { take, debounceTime, switchMap } from 'rxjs/operators';
-import { Subject, of } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { NotifierSearchItem, NotifierType } from 'src/app/modules/shared-module/models/notifier/notifier.model';
 import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
+import { SearchInputBaseComponent } from '../search-input-base/search-input-base.component';
 
 @Component({
   selector: 'notifier-search',
-  templateUrl: './notifier-search.component.html',
-  styleUrls: ['./notifier-search.component.scss']
+  templateUrl: '../search-input-base/search-input-base.component.html',
+  styleUrls: ['../search-input-base/search-input-base.component.scss']
 })
-export class NotifierSearchComponent extends BaseControl<string> {
-
-  constructor(private notifierService: NotifierService,
-    private commService: CommunicationService,
-    private ngxTranslateService: TranslateService,
-    private renderer: Renderer2) {
-    super();
-  }
-
-  @ViewChild('notifierInput') notifierInput: any; //MbscInput
-  @ViewChild('notifierSelect') notifierSelect: MbscSelect;
-  @ViewChild('searchButton') searchButton: any;
+export class NotifierSearchComponent extends SearchInputBaseComponent implements OnInit {
 
   @Input() notifierType: NotifierType;
   @Input('categoryField') categoryFieldName: string;
 
-  notifiersData: any[] = [];
+  private selectedCategoryId = 0;
+  private searchResults: NotifierSearchItem[] = [];
 
-  private progressIconEl: any = null;
-  private usersSearchSubject = new Subject<string> ();
+  constructor(private notifierService: NotifierService,
+    private commService: CommunicationService,
+    ngxTranslateService: TranslateService,
+    renderer: Renderer2) {
+    super(ngxTranslateService, renderer);
 
-  selectOptions: MbscSelectOptions = {
-    input: '#notifierInput',
-    showOnTap: false,
-    circular: false,
-    theme: 'mobiscroll',
-    cssClass: 'search-list',
-    filter: true,
-    display: 'center',
-    maxWidth: 400,
-    multiline: 2,
-    buttons: ['cancel'],
-    headerText: () => this.getHeaderText(),
-    cancelText: this.ngxTranslateService.instant('Avbryt'),
-    setText: this.ngxTranslateService.instant('Välj'),
-    filterPlaceholderText: this.ngxTranslateService.instant('Skriv för att filtrera'),
-    filterEmptyText: this.ngxTranslateService.instant('Inget resultat'),
-
-    onShow: (event, inst) => {
-      //setting filter text from user input on case page
-      const filterText = (this.notifierInput.element.value || '').trim();
-      if (filterText && filterText.length) {
-        const el = event.target.querySelector<HTMLInputElement>('input.mbsc-sel-filter-input');
-        if (el) {
-          el.value = filterText;
-          el.nextElementSibling.classList.add('mbsc-sel-filter-show-clear');
-          setTimeout(() => this.usersSearchSubject.next(filterText), 200);
-          //const ev = new Event('input', { bubbles: true });
-          //el.dispatchEvent(ev);
-        }
-      }
-    },
-
-    onBeforeClose: (event, inst) => {
-      this.notifiersData = [];
-    },
-
-    onFilter: (event, inst) => {
-      const filterText = (event.filterText || '').trim();
-      this.usersSearchSubject.next(filterText);
-      // Prevent built-in filtering
-      return false;
-    },
-
-    onMarkupReady: (event: { target: HTMLElement }, inst: any) => {
-      this.createProgressIcon(event.target);
-    },
-
-    onSet: (event, inst) => {
-      const val = +inst.getVal();
-      this.processSelectedItem(val);
-    }
-  };
+    //override select settings from base component
+    this.selectOptions.select = 'single';
+    this.selectOptions.buttons = ['cancel'];
+    this.selectOptions.headerText = this.getSelectHeaderText.bind(this);
+  }
 
   ngOnInit() {
-    this.init(this.field);
-    this.updateDisabledState();
-
-    this.initEvents();
+    //init base component
+    this.initComponent();
 
     const categoryFormControl = this.getFormControl(this.categoryFieldName);
-    let categoryId = categoryFormControl && categoryFormControl.value ? +categoryFormControl.value : 0;
-    if (isNaN(categoryId)) { categoryId = 0; } // 0 - no category, null - all categories
-
-    // subscribe to notifier(user) search input
-    this.usersSearchSubject.asObservable().pipe(
-      takeUntil(this.destroy$),
-      debounceTime(150),
-      //distinctUntilChanged(),
-      switchMap((query: string) => {
-        if (query && query.length > 1) {
-          this.toggleProgress(true);
-          return this.notifierService.searchNotifiers(query, categoryId);
-        } else {
-          return of(null);
-        }
-      })
-    ).subscribe((data: NotifierSearchItem[]) => {
-        this.toggleProgress(false);
-        if (data && data.length) {
-          this.notifiersData =
-            data.map(item => {
-              return {
-                value: item.id,
-                text: `${item.userId} - ${item.name || ''} - ${item.email}`,
-                html: '<div class="select-li">' + `${item.userId} - ${item.name || ''} - ${(item.email || '').toLowerCase()}` + '</div>'
-              };
-            });
-        } else {
-          this.notifiersData = [];
-        }
-    });
+    this.selectedCategoryId = categoryFormControl && categoryFormControl.value ? +categoryFormControl.value : 0;
+    if (isNaN(this.selectedCategoryId)) { this.selectedCategoryId = 0; } // 0 - no category, null - all categories
   }
 
-  private updateDisabledState() {
-    this.notifierInput.disabled = this.formControl ? this.isFormControlDisabled : false;
+  // virtual method override
+  protected searchData(query: any) {
+    const sr = this.notifierService.searchNotifiers(query, this.selectedCategoryId)
+    return sr;
   }
 
-  protected processSelectedItem(val) {
+  // virtual method override
+  protected processSearchResults(data: NotifierSearchItem[]) {
+    this.searchResults = data;
+    const notifiersData =
+      data.map(item => {
+        return {
+          value: item.id,
+          text: `${item.userId} - ${item.name || ''} - ${item.email}`,
+          html: '<div class="select-li">' + `${item.userId} - ${item.name || ''} - ${(item.email || '').toLowerCase()}` + '</div>'
+        };
+      });
+    return notifiersData;
+  }
+
+  // virtual method override
+  protected processItemSelected(val) {
     const eventData = new CaseFieldValueChangedEvent((val || '').toString(), this.notifierType.toString(), CaseFieldsNames.PerformerUserId);
     this.commService.publish(Channels.CaseFieldValueChanged, eventData);
   }
 
-  private initEvents() {
-    this.formControl.statusChanges // track disabled state in form
-      .pipe(
-        takeUntil(this.destroy$)
-      )
-      .subscribe((e: any) => {
-        if (this.notifierInput.disabled !== this.isFormControlDisabled) {
-          this.updateDisabledState();
-        }
-      });
-  }
-
-  private getHeaderText() {
+  private getSelectHeaderText() {
     const defaultText = this.ngxTranslateService.instant('Användar ID');
     return this.formControl ? this.formControl.label || defaultText : defaultText;
-  }
-
-  private createProgressIcon(selectNode: HTMLElement) {
-    const progressSpan = this.renderer.createElement('span');
-    progressSpan.id = 'notifierProgress';
-    progressSpan.className = 'notifierProgress mbsc-ic';
-    progressSpan.innerHTML = '<img src="content/img/bars.gif" border="0" />';
-    progressSpan.style.display = 'none';
-
-    const filterNode = selectNode.querySelector<HTMLElement>('.mbsc-sel-filter-cont');
-    this.progressIconEl = filterNode.appendChild(progressSpan);
-  }
-
-  private toggleProgress(show) {
-    if (this.progressIconEl) {
-      this.progressIconEl.style.display = show ? '' : 'none';
-    }
   }
 
   ngOnDestroy(): void {

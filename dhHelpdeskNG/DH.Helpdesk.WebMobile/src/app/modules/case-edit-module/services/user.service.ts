@@ -13,12 +13,18 @@ export class UserService {
   searchUsersEmails(query: string): Observable<Array<EmailsSearchItem>> {
     return this.userApiService.searchUsersEmails(query).pipe(
       take(1),
-      map((data: Array<any>) => data.map(x => this.createSearchResultItem(x)))
+      map((data: Array<any>) => {
+        let id = 0;
+        return data.map(x => {
+          id += 1; //psedo identifier
+          return this.createSearchResultItem(x, id);
+        });
+      })
     );
   }
 
-  private createSearchResultItem(data: any): EmailsSearchItem {
-    return Object.assign(new EmailsSearchItem(), data);
+  private createSearchResultItem(data: any, id: number): EmailsSearchItem {
+    return Object.assign(new EmailsSearchItem(id), data);
   }
 }
 

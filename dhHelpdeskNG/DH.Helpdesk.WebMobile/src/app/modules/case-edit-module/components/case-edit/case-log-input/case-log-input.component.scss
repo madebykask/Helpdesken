@@ -15,6 +15,15 @@
     }
   }
 
+  ::ng-deep .searchInput input,
+  ::ng-deep .searchInput textarea {
+    font-size: 0.75em;
+  }
+
+  ::ng-deep .switch  {
+    .mbsc-control-w { font-size:14px!important; }
+    input.mbsc-control { font-size:14px; }
+  }
 
   ::ng-deep .mbsc-label-stacked:before,
   ::ng-deep .mbsc-label-stacked:after

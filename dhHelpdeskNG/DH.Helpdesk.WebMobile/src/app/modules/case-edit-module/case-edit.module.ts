@@ -37,7 +37,7 @@ import { Pdf2FileViewerComponent } from './components/file-preview/viewers/pdf2-
 import { Pdf3FileViewerComponent } from './components/file-preview/viewers/pdf3-file-viewer.component';
 import { NotifierSearchComponent } from './components/case-edit/controls/notifier-search/notifier-search.component';
 import { FilterExtDirective } from './directives/filter-ext.directive';
-import { LognoteEmailInputComponent } from './components/case-edit/controls/lognote-email-input.component';
+import { LognoteEmailInputComponent } from './components/case-edit/controls/lognote-email-input/lognote-email-input.component';
 
 @NgModule({
   declarations: [ CaseEditComponent,

@@ -7,7 +7,7 @@
         [form]="form"></case-textarea-control>
   </div>
 
-  <div class="bordered">
+  <div class="bordered switch">
     <mbsc-switch #sendMailToNotifierControl *ngIf="isExternalLogFieldVisible" [disabled]="isSendMailToNotifierDisabled" [formControlName]="caseFieldsNames.Log_SendMailToNotifier">
       {{ 'Till' | translate }}:
       <span class="mbsc-desc">{{ externalLogEmailsTo }}</span>
