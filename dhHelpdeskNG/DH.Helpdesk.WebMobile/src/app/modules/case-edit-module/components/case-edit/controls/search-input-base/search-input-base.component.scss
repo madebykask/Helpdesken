@@ -1,8 +1,4 @@
-:host 
-{
-  .bordered {
-    border-top:solid 1px #ccc;  
-  }  
+:host {
 
   ::ng-deep .input-icon {
     .mbsc-btn {
@@ -10,20 +6,9 @@
     }
   }
 
-  ::ng-deep .mbsc-label-stacked:before,
-  ::ng-deep .mbsc-label-stacked:after
-  {  
-    left: 0px!important;
-    //border-bottom-width:0px!important;
-    //border-top-width:0px!important;
-  }
-
   ::ng-deep .mbsc-select-ic {
     display:none!important;
     height:0x!important;
-  }
-
-  .formcontent {
-    background:#fff!important;
-  }
+  } 
+  
 }
