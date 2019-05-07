@@ -133,6 +133,17 @@ function getCollapseCaption(cap) {
             }
         }
 
+        function sanitizeColumns(jsonArray) {
+            var dataProp;
+            jsonArray.forEach(function (item) {
+                if (item['data'] !== null) {
+                    dataProp = item['data'].replace(/\s/g, '').replace(/\./g, '');
+                    item['data'] = dataProp;
+                }
+            });
+            return jsonArray;
+        }
+
         self.table = InitDataTable("caseResults", appSettings.perPageText, appSettings.perShowingText,
             {
                 "sDom": "<'row-fluid'<'span6'l><'span6'p>r>t<'row-fluid'<'span6'i><'span6'p>>",
@@ -183,7 +194,7 @@ function getCollapseCaption(cap) {
                         row.cells[row.cells.length-1].innerHTML = html.join("");
                     }
                 },
-                columns: columns,
+                columns: sanitizeColumns(columns),
                 order: sortIndex != null ? [[sortIndex, appSettings.gridSettings.sortOptions.sortDirString]] : [],
                 "bAutoWidth": false,
                 "lengthMenu": [appSettings.gridSettings.pageSizeList, appSettings.gridSettings.pageSizeList],

@@ -15,7 +15,7 @@
     {
         #region "Case overview" grid
 
-        private static readonly string[] caseOverviewColumns = {
+        private static readonly string[] CaseOverviewColumns = {
             CaseInfoFields.AgreedDate,
             CaseInfoFields.Available,
             CaseInfoFields.Caption,
@@ -74,10 +74,11 @@
             OtherFields.Verified,
             OtherFields.VerifiedDescription,
             OtherFields.WorkingGroup,
-            CaseInfoFields.RegistrationSourceCustomer,            
+            CaseInfoFields.RegistrationSourceCustomer,
             
             UserFields.IsAbout_User,
-            UserFields.IsAbout_Persons_Name            
+            UserFields.IsAbout_Persons_Name,
+            OtherFields.Problem
         };
 
         #endregion
@@ -110,7 +111,7 @@
         /// </summary>
         public static readonly HashSet<string> NotAvailableField = new HashSet<string>
                                                                        {
-                                                                           CaseInfoFields.AttachedFile,                                                                           
+                                                                           CaseInfoFields.AttachedFile,
                                                                            LogFields.Debiting, 
                                                                            LogFields.AttachedFile, 
                                                                            UserFields.UserSearchCategory_Id,
