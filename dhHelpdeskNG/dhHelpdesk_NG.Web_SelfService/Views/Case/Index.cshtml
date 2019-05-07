@@ -157,8 +157,7 @@
 
 @section Dialogs {
     
-    @if (Model.CasePreview.Id > 0 && !Model.IsFinished && 
-         CheckField(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())) 
+    @if (Model.CasePreview.Id > 0 && !Model.IsFinished) 
     {
         //Show Communication for Selfservice (only if enabled in config)
         if (Model.ApplicationType == ApplicationType.LineManager || 
@@ -169,18 +168,5 @@
 
         @Html.Partial("ModalDialogs/_UploadExistingLogFilePopup")
         @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")    
-    }
-}
-
-@functions
-{
-    bool CheckField(string fieldName)
-    {
-        var fieldNameToCheck = 
-            fieldName == GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString() 
-                ? fieldName.Replace('_', '.') 
-                : fieldName;
-
-        return Model.FieldSettings.Select(f => f.Name).Contains(fieldNameToCheck);
     }
 }

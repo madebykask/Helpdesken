@@ -328,6 +328,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var appSettings = ConfigurationService.AppSettings;
             ViewBag.ShowCommunicationForSelfService = appSettings.ShowCommunicationForSelfService;
             ViewBag.caseEmailGuid = id.Is<Guid>() ? Guid.Parse(id).ToString() : "";
+            ViewBag.IsAttachementsAllowed = CheckField(caseReceipt.FieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString());
 
             return View(caseReceipt);
         }
@@ -697,6 +698,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var caseLogs = caseId.HasValue
                 ? _logService.GetLogsByCaseId(caseId.Value).OrderByDescending(l => l.LogDate).ToList()
                 : new List<Log>();
+            ViewBag.IsAttachementsAllowed = CheckField(caseModel.FieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString());
 
             var model = new ExtendedCaseViewModel
             {
@@ -722,7 +724,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                     FinishingDate = caseModel.FinishingDate,
                     CaseComplaintDays = cs.CaseComplaintDays
                 },
-                CaseLogModel = new CaseLogModel(initData.CaseId, caseLogs, SessionFacade.CurrentSystemUser, currentCustomer.UseInternalLogNoteOnExternalPage == 1)
+                CaseLogModel = new CaseLogModel(initData.CaseId, caseLogs, SessionFacade.CurrentSystemUser,
+                     currentCustomer.UseInternalLogNoteOnExternalPage == 1)
             };
 
             if (string.IsNullOrEmpty(model.ExtendedCaseDataModel.FormModel.Name))
@@ -880,6 +883,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             model.CaseDataModel.FieldSettings = _caseFieldSettingService.ListToShowOnCasePage(model.CustomerId, model.LanguageId)
                 .Where(c => c.ShowExternal == 1)
                 .ToList();
+            ViewBag.IsAttachementsAllowed = CheckField(model.CaseDataModel.FieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString());
 
             return View("ExtendedCase", model);
         }
@@ -1439,6 +1443,9 @@ namespace DH.Helpdesk.SelfService.Controllers
         public PartialViewResult Communication(int caseId)
         {
             var model = GetCaseLogModel(caseId);
+            var fieldSettings = _caseFieldSettingService.ListToShowOnCasePage(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId)
+                .Where(c => c.ShowExternal == 1).ToList();
+            ViewBag.IsAttachementsAllowed = CheckField(fieldSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString());
             return PartialView("_Communication", model);
         }
 
@@ -2539,6 +2546,16 @@ namespace DH.Helpdesk.SelfService.Controllers
             var localUserPkId = SessionFacade.CurrentLocalUser?.Id;
             var localUserId = SessionFacade.CurrentLocalUser?.UserId;
         }        
+
+        private bool CheckField(List<CaseListToCase> fieldSettings, string fieldName)
+        {
+            var fieldNameToCheck = 
+                fieldName == GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString() 
+                    ? fieldName.Replace('_', '.') 
+                    : fieldName;
+
+            return fieldSettings.Select(f => f.Name).Contains(fieldNameToCheck);
+        }
 
         #endregion
     }

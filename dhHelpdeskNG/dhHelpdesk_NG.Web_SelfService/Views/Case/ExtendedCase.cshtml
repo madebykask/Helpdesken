@@ -24,19 +24,6 @@
     var downloadCaseFileCompleteUrl = downloadCaseFileUrl + "?" + "id=" + "{id}" + "&fileName=" + "{name}";
 }
 
-@functions
-{
-    bool CheckField(string fieldName)
-    {
-        var fieldNameToCheck =
-            fieldName == GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()
-                ? fieldName.Replace('_', '.')
-                : fieldName;
-
-        return Model.CaseDataModel.FieldSettings.Select(f => f.Name).Contains(fieldNameToCheck);
-    }
-}
-
 <script type="text/javascript">
 
     window.appParameters = {
@@ -486,13 +473,15 @@
     @* show log notes only for LineManager or if ShowCommunicationForSelfservice is enabled in web.config*@
     @if (Model.CaseId > 0 &&
          !Model.CaseDataModel.IsFinished &&
-         CheckField(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString()) &&
          (Model.ApplicationType == ApplicationType.LineManager ||
           Model.ApplicationType == ApplicationType.SelfService && Model.ShowCommunicationForSelfservice))
     {
         @Html.Partial("_Communication", Model.CaseLogModel)
-        @Html.Partial("ModalDialogs/_UploadExistingLogFilePopup")
-        @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")
+        if (ViewBag.IsAttachementsAllowed)
+         {
+             @Html.Partial("ModalDialogs/_UploadExistingLogFilePopup")
+             @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")
+         }
         @Scripts.Render("~/Content/js/Case/log")
     }
 
