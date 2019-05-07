@@ -218,7 +218,9 @@
             }
         };
 
-        dhHelpdesk.reports.doValidation = function () {
+        dhHelpdesk.reports.doValidation = function (isAlwaysRequired) {
+
+            isAlwaysRequired = isAlwaysRequired !== false; // default true
 
             const $createDateFrom = $('#ReportFilter_CaseCreationDate_FromDate');
             const $createDateTo = $('#ReportFilter_CaseCreationDate_ToDate');
@@ -232,14 +234,13 @@
 
             var isValid = true;
 
-            if ($createDateFrom.val() === '' &&
-                $closeDateFrom.val() === '') {
+            if ((isAlwaysRequired && $createDateFrom.val() === '') ||
+                (!isAlwaysRequired && $createDateFrom.val() === '' && $closeDateFrom.val() === '')) {
                 $createDateFrom.addClass('error');
                 isValid = false;
             }
-
-            if ($createDateTo.val() === '' &&
-                $closeDateTo.val() === '') {
+            if ((isAlwaysRequired && $createDateTo.val() === '') ||
+                (!isAlwaysRequired && $createDateTo.val() === '' && $closeDateTo.val() === '')) {
                 $createDateTo.addClass('error');
                 isValid = false;
             }
@@ -387,7 +388,7 @@
         }
 
         dhHelpdesk.reports.onHistoricalShow = function (e) {
-            if (!dhHelpdesk.reports.doValidation())
+            if (!dhHelpdesk.reports.doValidation(false))
                 return;
 
             dhHelpdesk.reports.historicalReport.show();
