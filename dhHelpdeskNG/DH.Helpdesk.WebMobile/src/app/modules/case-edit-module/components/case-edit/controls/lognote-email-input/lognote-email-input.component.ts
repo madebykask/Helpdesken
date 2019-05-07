@@ -28,14 +28,13 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
     this.initComponent();
   }
 
-  protected onTextChanged($event) {
+  onTextChanged($event) {
     const e = $event;
     const value = e.target.value;
 
     if (value && value.length) {
       const emails = [];
       const items = value.split(';');
-      //check one item
       if (items.length) {
         for (const item of items) {
           if (isValidEmail(item)) {
