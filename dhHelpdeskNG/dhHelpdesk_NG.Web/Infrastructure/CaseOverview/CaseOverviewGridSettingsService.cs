@@ -64,7 +64,8 @@ namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
                 UserFields.IsAbout_Region.ToLower(),
                 UserFields.IsAbout_UserCode.ToLower(),
                 LogFields.InternalLogNote.ToLower(),
-                LogFields.ExternalLogNote.ToLower()
+                LogFields.ExternalLogNote.ToLower(),
+                "tblProblem.ResponsibleUser_Id".ToLower()
             };
 
             var availableColumns = 

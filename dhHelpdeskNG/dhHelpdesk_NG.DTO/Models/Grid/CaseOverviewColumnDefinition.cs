@@ -101,9 +101,9 @@
 
         #endregion
 
-            /// <summary>
-            /// List of fields that we use in case overview tabel but they does not exists in case
-            /// </summary>
+        /// <summary>
+        /// List of fields that we use in case overview tabel but they does not exists in case
+        /// </summary>
         public static readonly HashSet<string> VirtualColumns = new HashSet<string> { "_temporary_LeadTime", "tblProblem.ResponsibleUser_Id" };
 
         /// <summary>
