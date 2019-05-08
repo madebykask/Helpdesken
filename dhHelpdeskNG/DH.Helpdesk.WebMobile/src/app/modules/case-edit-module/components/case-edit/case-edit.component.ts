@@ -432,10 +432,11 @@ export class CaseEditComponent {
               const externalEmailsToControl = this.form.get(CaseFieldsNames.Log_SendMailToNotifier);
               if (ss.noMailToNotifier === true) {
                 externalEmailsCcControl.disable({ onlySelf: true, emitEvent: true });
-                externalEmailsToControl.setValue(false, { onlySelf: true, emitEvent: true });
+                externalEmailsToControl.setValue(false, { emitEvent: true });
                 externalEmailsToControl.disable({ onlySelf: true, emitEvent: true });
               } else {
                 externalEmailsCcControl.enable({ onlySelf: true, emitEvent: true });
+                externalEmailsToControl.setValue(true, { emitEvent: true });
                 externalEmailsToControl.enable({ onlySelf: true, emitEvent: true });
               }
             });
