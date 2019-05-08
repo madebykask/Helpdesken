@@ -70,16 +70,16 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 				CustomerID = customerId,
 				CaseStatus = filter.CaseStatus == 2 ? 1 : filter.CaseStatus == 1 ? 0 : (int?)null, // 1 active, 0 closed else null
 				RegisterFrom = filter.RegisterFrom,
-				RegisterTo = filter.RegisterTo.GetEndOfDay(),
+				RegisterTo = filter.RegisterTo.HasValue ? filter.RegisterTo.GetEndOfDay() : new DateTime?(),
 				CloseFrom = filter.CloseFrom,
-				CloseTo = filter.CloseTo.GetEndOfDay(),
+				CloseTo = filter.CloseTo.HasValue ? filter.CloseTo.GetEndOfDay() : new DateTime?(),
 				Administrators = filter.Administrators,
 				Departments = filter.Departments,
 				CaseTypes = filter.CaseTypes,
 				ProductAreas = filter.ProductAreas,
 				ChangeWorkingGroups = filter.HistoricalWorkingGroups,
 				ChangeFrom = filter.HistoricalChangeDateFrom ?? DateTime.Now.AddYears(-20),
-				ChangeTo = filter.HistoricalChangeDateTo.GetEndOfDay() ?? DateTime.Now.AddYears(20),
+				ChangeTo = filter.HistoricalChangeDateTo.HasValue ? filter.HistoricalChangeDateTo.GetEndOfDay().Value : DateTime.Now.AddYears(20),
 				WorkingGroups = workingGroups.Select(o => o.Id).ToList()
 			});
 
