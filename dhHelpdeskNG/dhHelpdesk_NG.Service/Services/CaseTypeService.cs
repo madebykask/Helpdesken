@@ -261,7 +261,7 @@ namespace DH.Helpdesk.Services.Services
         public IList<CaseType> GetChildrenInRow(IList<CaseType> caseTypes, bool isTakeOnlyActive = false)
         {
             var childCaseTypes = new List<CaseType>();
-            var parentCaseTypes = caseTypes.Where(ct=> !ct.Parent_CaseType_Id.HasValue && (isTakeOnlyActive? ct.IsActive == 1: true)).ToList();
+            var parentCaseTypes = caseTypes.Where(ct=> !ct.Parent_CaseType_Id.HasValue && (!isTakeOnlyActive || ct.IsActive == 1)).ToList();
             foreach (var p in parentCaseTypes)
             {
                 childCaseTypes.AddRange(GetChilds(p.Name, p.IsActive, p.SubCaseTypes.ToList(), isTakeOnlyActive));

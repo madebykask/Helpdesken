@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Web.Areas.Reports.Models.ReportService;
 
@@ -69,31 +70,47 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 				CustomerID = customerId,
 				CaseStatus = filter.CaseStatus == 2 ? 1 : filter.CaseStatus == 1 ? 0 : (int?)null, // 1 active, 0 closed else null
 				RegisterFrom = filter.RegisterFrom,
-				RegisterTo = filter.RegisterTo,
+				RegisterTo = filter.RegisterTo.GetEndOfDay(),
 				CloseFrom = filter.CloseFrom,
-				CloseTo = filter.CloseTo,
+				CloseTo = filter.CloseTo.GetEndOfDay(),
 				Administrators = filter.Administrators,
 				Departments = filter.Departments,
 				CaseTypes = filter.CaseTypes,
 				ProductAreas = filter.ProductAreas,
 				ChangeWorkingGroups = filter.HistoricalWorkingGroups,
 				ChangeFrom = filter.HistoricalChangeDateFrom ?? DateTime.Now.AddYears(-20),
-				ChangeTo = filter.HistoricalChangeDateTo ?? DateTime.Now.AddYears(20),
+				ChangeTo = filter.HistoricalChangeDateTo.GetEndOfDay() ?? DateTime.Now.AddYears(20),
 				WorkingGroups = workingGroups.Select(o => o.Id).ToList()
 			});
 
 			var wgs = result.Select(o => new { o.WorkingGroup, o.WorkingGroupID }).Distinct().OrderBy(o => o.WorkingGroup).ToArray();
+            var caseTypes = CaseTypeTreeTranslation(_caseTypeService.GetCaseTypes(customerId));
+            var caseTypesFullNames = _caseTypeService.GetChildrenInRow(caseTypes).ToList();
 			var data = new
 			{
 				labels = wgs.Select(o => o.WorkingGroup).ToArray(),
 				datasets = result.GroupBy(o => new { o.CaseTypeID, o.CaseType }).Select(ct => new
 				{
-					label = ct.Key.CaseType,
-					data = wgs.Select(wg => ct.Where(o => o.WorkingGroupID == wg.WorkingGroupID).Count()).ToArray()
+					label = caseTypesFullNames.Single(ctf => ctf.Id == ct.Key.CaseTypeID).Name,
+					data = wgs.Select(wg => ct.Count(o => o.WorkingGroupID == wg.WorkingGroupID)).ToArray()
 				}).ToArray()
 			};
 
             return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        private IList<CaseType> CaseTypeTreeTranslation(IList<CaseType> caseTypes)
+        {
+            foreach (var ct in caseTypes)
+            {
+                ct.Name = Translation.GetCoreTextTranslation(ct.Name);
+                if (ct.SubCaseTypes.Any())
+                {
+                    ct.SubCaseTypes = CaseTypeTreeTranslation(ct.SubCaseTypes.ToList());
+                }
+            }
+
+            return caseTypes.OrderBy(p => p.Name).ToList();
         }
     }
 }
