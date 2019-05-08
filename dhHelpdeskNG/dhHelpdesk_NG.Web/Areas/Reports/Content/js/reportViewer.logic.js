@@ -226,21 +226,25 @@
             const $createDateTo = $('#ReportFilter_CaseCreationDate_ToDate');
             const $closeDateFrom = $('#ReportFilter_CaseClosingDate_FromDate');
             const $closeDateTo = $('#ReportFilter_CaseClosingDate_ToDate');
+            const $changeDateFrom = $('#ReportFilter_CaseChangeDate_FromDate');
+            const $changeDateTo = $('#ReportFilter_CaseChangeDate_ToDate');
 
             $createDateFrom.removeClass('error');
             $createDateTo.removeClass('error');
             $closeDateFrom.removeClass('error');
             $closeDateTo.removeClass('error');
+            $changeDateFrom.removeClass('error');
+            $changeDateTo.removeClass('error');
 
             var isValid = true;
 
             if ((isAlwaysRequired && $createDateFrom.val() === '') ||
-                (!isAlwaysRequired && $createDateFrom.val() === '' && $closeDateFrom.val() === '')) {
+                (!isAlwaysRequired && $createDateFrom.val() === '' && $closeDateFrom.val() === '' && $changeDateFrom.val() === '')) {
                 $createDateFrom.addClass('error');
                 isValid = false;
             }
             if ((isAlwaysRequired && $createDateTo.val() === '') ||
-                (!isAlwaysRequired && $createDateTo.val() === '' && $closeDateTo.val() === '')) {
+                (!isAlwaysRequired && $createDateTo.val() === '' && $closeDateTo.val() === '' && $changeDateTo.val() === '')) {
                 $createDateTo.addClass('error');
                 isValid = false;
             }
