@@ -237,16 +237,36 @@
             $changeDateTo.removeClass('error');
 
             var isValid = true;
-
-            if ((isAlwaysRequired && $createDateFrom.val() === '') ||
-                (!isAlwaysRequired && $createDateFrom.val() === '' && $closeDateFrom.val() === '' && $changeDateFrom.val() === '')) {
-                $createDateFrom.addClass('error');
-                isValid = false;
-            }
-            if ((isAlwaysRequired && $createDateTo.val() === '') ||
-                (!isAlwaysRequired && $createDateTo.val() === '' && $closeDateTo.val() === '' && $changeDateTo.val() === '')) {
-                $createDateTo.addClass('error');
-                isValid = false;
+            if (isAlwaysRequired) {
+                if ($createDateFrom.val() === '') {
+                    $createDateFrom.addClass('error');
+                    isValid = false;
+                }
+                if ($createDateTo.val() === '') {
+                    $createDateTo.addClass('error');
+                    isValid = false;
+                }
+            } else {
+                if ($createDateFrom.val() === '' && $closeDateFrom.val() === '' && $changeDateFrom.val() === '') {
+                    if ($closeDateTo.val() !== '') {
+                        $closeDateFrom.addClass('error');
+                    } else if ($changeDateTo.val() !== '') {
+                        $changeDateFrom.addClass('error');
+                    } else {
+                        $createDateFrom.addClass('error');
+                    }
+                    isValid = false;
+                }
+                if ($createDateTo.val() === '' && $closeDateTo.val() === '' && $changeDateTo.val() === '') {
+                    if ($closeDateFrom.val() !== '') {
+                        $closeDateTo.addClass('error');
+                    } else if ($changeDateFrom.val() !== '') {
+                        $changeDateTo.addClass('error');
+                    } else {
+                        $createDateTo.addClass('error');
+                    }
+                    isValid = false;
+                }
             }
 
             if (!isValid) {
