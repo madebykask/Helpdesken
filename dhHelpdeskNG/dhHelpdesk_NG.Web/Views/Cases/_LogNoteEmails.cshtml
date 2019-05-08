@@ -51,48 +51,43 @@
 
                 <div id="@emailSectionId">
                     @* EmailTo: *@
-                    <div>
-                        <input type="hidden" id="@lastElmSelectedId" value="">
-                        <p>
-                            <span class="@(boldTO ? "bold" : "")">TO[@countTO]</span>&nbsp;&nbsp;&nbsp;
-                            @if (!string.IsNullOrEmpty(mailTO))
-                            {
+                    @if (!string.IsNullOrEmpty(mailTO))
+                    {
+                        <div>
+                            <input type="hidden" id="@lastElmSelectedId" value="">
+                            <p>
+                                <span class="@(boldTO ? "bold" : "")">TO[@countTO]</span>&nbsp;&nbsp;&nbsp;
                                 <span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailTO" data-expand-element="mailto" data-expand-log-id="@log.Id"></span>
-                                <i class="icon-copy" onclick="copyToClipBoard('#@logMailToId')"></i>
-                            }
-
-                        </p>
-                    </div>
-                    <div>
-                        <p id="@logMailToId" class="expandEl" style="display: none">@Html.Raw(mailTO)</p>
-                    </div>
+                            </p>
+                        </div>
+                        <div>
+                            <p id="@logMailToId" class="expandEl" style="display: none">@Html.Raw(mailTO)</p>
+                        </div>
+                    }
                     @* EmailCC: *@
-                    <div>
-                        <p>
-                            <span class="@(boldCC ? "bold" : "")">CC[@countCC]</span>&nbsp;&nbsp;&nbsp;
-                            @if (!string.IsNullOrEmpty(mailCC))
-                            {
+                    @if (!string.IsNullOrEmpty(mailCC))
+                    {
+                        <div>
+                            <p>
+                                <span class="@(boldCC ? "bold" : "")">CC[@countCC]</span>&nbsp;&nbsp;&nbsp;
                                 <span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailCC" data-expand-element="mailcc" data-expand-log-id="@log.Id"></span>
-                                <i class="icon-copy" onclick="copyToClipBoard('#@logMailCcId')"></i>
-                            }
-                        </p>
-                    </div>
-                    <div>
-                        <p id="@logMailCcId" class="expandEl" style="display: none">@Html.Raw(mailCC)</p>
-                    </div>
+                            </p>
+                        </div>
+                        <div>
+                            <p id="@logMailCcId" class="expandEl" style="display: none">@Html.Raw(mailCC)</p>
+                        </div>
+                    }
                     @* Subject*@
-                    <div>
-                        <span>@Translation.GetCoreTextTranslation("Ämne")</span>
-                        @if (!string.IsNullOrEmpty(subject))
-                        {
+                    @if (!string.IsNullOrEmpty(subject))
+                    {
+                        <div>
+                            <span>@Translation.GetCoreTextTranslation("Ämne")</span>
                             <span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@subject" data-expand-element="subj" data-expand-log-id="@log.Id"></span>
-                            <i class="icon-copy" onclick="copyToClipBoard('#@subjectId')"></i>
-                        }
-
-                    </div>
-                    <div>
-                        <p id="@subjectId" class="wordbreak expandEl" style="display: none">@Html.Raw(subject)</p>
-                    </div>
+                        </div>
+                        <div>
+                            <p id="@subjectId" class="wordbreak expandEl" style="display: none">@Html.Raw(subject)</p>
+                        </div>    
+                    }
                 </div>
             }
         }
@@ -107,12 +102,6 @@
         }
     }
 }
-
-<script type="text/javascript">
-    function copyToClipBoard(el) {
-        CommonUtils.copyToClipBoard(el);
-    }
-</script>
 
 
 
