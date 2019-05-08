@@ -21,9 +21,10 @@
   }
 
   ::ng-deep .switch  {
-    .mbsc-control-w { font-size:14px!important; }
-    input.mbsc-control { font-size:14px; }
+    .mbsc-control-w { font-size:12px!important; }
   }
+
+  ::ng-deep .mbsc-switch .mbsc-desc { font-size:12px!important; }
 
   ::ng-deep .mbsc-label-stacked:before,
   ::ng-deep .mbsc-label-stacked:after

@@ -11,7 +11,7 @@
     <mbsc-switch #sendMailToNotifierControl *ngIf="isExternalLogFieldVisible" 
                  [disabled]="isSendMailToNotifierDisabled" 
                  [formControlName]="caseFieldsNames.Log_SendMailToNotifier"
-                 (change)="onSendExternalEmailsCheckChanged($event)"
+                 (change)="onSendExternalEmailsCheckChanged()"
                  [options]="switchOptions">
 
       {{ 'Till' | translate }}:

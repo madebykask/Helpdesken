@@ -20,7 +20,7 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
 
     this.selectOptions.select = 'multiple';
     this.selectOptions.buttons = ['cancel'];
-    this.selectOptions.cancelText = 'Close'; //todo: translate
+    this.selectOptions.cancelText = this.ngxTranslateService.instant('Stäng');
   }
 
   private searchResults: EmailsSearchItem[] = [];

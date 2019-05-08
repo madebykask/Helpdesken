@@ -41,6 +41,8 @@ import { NotifierService } from '../../services/notifier.service';
 })
 export class CaseEditComponent {
 
+    @ViewChild('mainForm') mainForm: any; // MbscForm
+
     constructor(private route: ActivatedRoute,
                 private caseService: CaseService,
                 private router: Router,
@@ -102,7 +104,7 @@ export class CaseEditComponent {
 
       return this.accessMode === CaseAccessMode.FullAccess;
     }
-  @ViewChild('mainForm') mainForm: any; // MbscForm
+
     caseSectionTypes = CaseSectionType;
     caseFieldsNames = CaseFieldsNames;
     accessModeEnum = CaseAccessMode;
@@ -138,7 +140,7 @@ export class CaseEditComponent {
     private templateId = 0;
     private caseData: CaseEditInputModel;
     private caseSections: CaseSectionInputModel[];
-    private ownsLock = false;
+    private ownsLock = true;
     private destroy$ = new Subject();
     private caseLock: CaseLockModel = null;
     private isClosing = false;
@@ -170,7 +172,6 @@ export class CaseEditComponent {
               .pipe(
                   take(1),
                   switchMap(data => {
-                    this.ownsLock = false;
                     this.caseData = data;
                     this.caseKey = this.caseData.id > 0 ? this.caseData.id.toString() : this.caseData.caseGuid.toString();
                     const filter = this.caseDataHelpder.getCaseOptionsFilter(this.caseData);
@@ -282,7 +283,6 @@ export class CaseEditComponent {
         this.caseService.getTemplateData(templateId).pipe(
           take(1),
           switchMap(data => {
-            // this.ownsLock = false; //TODO: check?
             this.caseData = data;
             this.caseKey = this.caseData.caseGuid.toString();
             const filter = this.caseDataHelpder.getCaseOptionsFilter(this.caseData);
@@ -428,16 +428,14 @@ export class CaseEditComponent {
                     take(1)
                   ).subscribe(date => this.form.setSafe(CaseFieldsNames.WatchDate, date));
               }
-              const externalEmailsCcControl = this.form.get(CaseFieldsNames.Log_ExternalEmailsCC);
-              const externalEmailsToControl = this.form.get(CaseFieldsNames.Log_SendMailToNotifier);
+              // update extneral log field state
+              const sendExternalEmailsControl = this.form.get(CaseFieldsNames.Log_SendMailToNotifier);
+              const externalLogTextControl = this.form.get(CaseFieldsNames.Log_ExternalText);
               if (ss.noMailToNotifier === true) {
-                externalEmailsCcControl.disable({ onlySelf: true, emitEvent: true });
-                externalEmailsToControl.setValue(false, { emitEvent: true });
-                externalEmailsToControl.disable({ onlySelf: true, emitEvent: true });
-              } else {
-                externalEmailsCcControl.enable({ onlySelf: true, emitEvent: true });
-                externalEmailsToControl.setValue(true, { emitEvent: true });
-                externalEmailsToControl.enable({ onlySelf: true, emitEvent: true });
+                sendExternalEmailsControl.disable({ onlySelf: true, emitEvent: true });
+              } else if (externalLogTextControl && externalLogTextControl.disabled === false) {
+                //enable only in case extneral log note text is enabled as well
+                sendExternalEmailsControl.enable({ onlySelf: true, emitEvent: true });
               }
             });
           }
@@ -545,6 +543,9 @@ export class CaseEditComponent {
                     if (!res) {
                       this.ownsLock = false;
                       this.caseLock.isLocked = true;
+
+                      // TOOO: raise event
+
                       if (!this.isClosing) {
                         this.showLockWarning();
                       }
