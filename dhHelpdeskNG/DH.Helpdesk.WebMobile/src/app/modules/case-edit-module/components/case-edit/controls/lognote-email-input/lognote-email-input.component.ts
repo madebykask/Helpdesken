@@ -19,7 +19,8 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
     super(ngxTranslateService, renderer);
 
     this.selectOptions.select = 'multiple';
-    this.selectOptions.buttons = ['set', 'cancel'];
+    this.selectOptions.buttons = ['cancel'];
+    this.selectOptions.cancelText = 'Close'; //todo: translate
   }
 
   private searchResults: EmailsSearchItem[] = [];
@@ -63,21 +64,27 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
     });
   }
 
-  processItemSelected(ids: any[]): void {
-    //todo: check array res
-    if (ids && ids.length) {
-      let emails: string = this.formControl.value || '';
-      for (const id of ids) {
-        const item: EmailsSearchItem = this.searchResults.find(x => x.id === id);
-        if (item && item.emails && item.emails.length) {
-          for (const email of item.emails) {
-            if (isValidEmail(email)) {
-              emails += email + ';';
+  processItemSelected(selectedVal, isSelected: boolean): void {
+    const id = +selectedVal;
+    if (!isNaN(id) && id > 0) {
+      let fieldEmails: string[] = (this.formControl.value || '').split(';').filter(x => !!x).map(x => x.toLowerCase());
+      const item = this.searchResults.find(x => x.id === id);
+      if (item && item.emails && item.emails.length) {
+        for (let email of item.emails) {
+          email = email.toLowerCase();
+          if (isSelected) {
+            //add selected item emails
+            if (isValidEmail(email) && fieldEmails.indexOf(email) === -1) {
+              fieldEmails.push(email.toLowerCase());
             }
+          } else {
+            //remove selected item emails
+            fieldEmails = fieldEmails.filter(x => x !== email);
           }
         }
       }
-      this.formControl.setValue(emails.toLowerCase());
+      const emailsValue = fieldEmails.length ? `${fieldEmails.join(';')};` : '';
+      this.formControl.setValue(emailsValue.toLowerCase());
     }
   }
 

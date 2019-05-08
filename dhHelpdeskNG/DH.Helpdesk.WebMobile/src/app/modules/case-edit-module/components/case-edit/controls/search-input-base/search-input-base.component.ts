@@ -28,6 +28,10 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
   protected searchSubject = new Subject<string>();
   protected selectDefaultOptions;
 
+  get isMultiSelectMode() {
+    return this.selectOptions.select === 'multiple';
+  }
+
   selectOptions: MbscSelectOptions = {
     theme: 'mobiscroll',
     display: 'center',
@@ -77,22 +81,23 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
     onSet: (event, inst) => {
       //event.valueText: The selected value as text (if any)
       const val = inst.getVal();
-      // if (!allowMultipleSelections) {
-      this.processItemSelected(val);
-      inst.clear(); //todo: check
-      //}
+      if (!this.isMultiSelectMode) {
+        this.processItemSelected(val, true);
+        inst.clear(); // clear selections if any
+      }
     },
     onItemTap: (event, inst) => {
-      const e = event;
-      //todo: check
-      //this.processItemTap(event);
       //console.log(`>>> emailsSearchSelect: onItemTap: ${event.value}`);
+      if (this.isMultiSelectMode) {
+        this.processItemSelected(event.value, !event.selected);
+      }
     },
     onDestroy: function (event, inst) {
     },
     onClose: function (event, inst) {
     },
     onCancel: function (event, inst) {
+      inst.clear(); // clear selections if any
     },
     onBeforeClose: (event, inst) => {
       this.selectDataItems = [];
@@ -169,7 +174,7 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
 
   protected abstract processSearchResults(data);
 
-  protected abstract processItemSelected(val);
+  protected abstract processItemSelected(val, isSelected);
 
   ///protected abstract processItemTap(event);
 
