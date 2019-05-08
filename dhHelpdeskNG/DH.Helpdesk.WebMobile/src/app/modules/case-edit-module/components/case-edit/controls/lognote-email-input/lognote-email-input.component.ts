@@ -30,7 +30,7 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
 
   onTextChanged($event) {
     const e = $event;
-    const value = e.target.value;
+    const value = this.formControl.value;
 
     if (value && value.length) {
       const emails = [];

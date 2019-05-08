@@ -10,6 +10,8 @@
         "bundle-report": "webpack-bundle-analyzer wwwroot/build/stats.json -m static",
         "test": "ng test",
         "lint": "ng lint",
+        "tslint": "tslint -p tsconfig.json",
+        "tslint-fix": "tslint --fix -p tsconfig.json",
         "e2e": "ng e2e"
     },
     "private": true,

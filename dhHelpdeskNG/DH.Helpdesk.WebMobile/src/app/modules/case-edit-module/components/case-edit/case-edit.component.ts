@@ -381,10 +381,10 @@ export class CaseEditComponent {
                   }
                 }
                 if (ct && ct.workingGroupId != null) {
-                  this.form.controls[CaseFieldsNames.WorkingGroupId].setValue(ct.workingGroupId);
+                  this.form.setSafe(CaseFieldsNames.WorkingGroupId, ct.workingGroupId);
                 }
                 if (ct && ct.performerUserId != null) {
-                  this.form.controls[CaseFieldsNames.PerformerUserId].setValue(ct.performerUserId);
+                  this.form.setSafe(CaseFieldsNames.PerformerUserId, ct.performerUserId);
                 }
               });
           }
@@ -407,7 +407,7 @@ export class CaseEditComponent {
               take(1)
             ).subscribe(wg => {
               if (wg && wg.stateSecondaryId != null) {
-                this.form.controls[CaseFieldsNames.StateSecondaryId].setValue(wg.stateSecondaryId);
+                this.form.setSafe(CaseFieldsNames.StateSecondaryId, wg.stateSecondaryId);
               }
             });
           }
@@ -420,19 +420,19 @@ export class CaseEditComponent {
               take(1)
             ).subscribe(ss => {
               if (ss && ss.workingGroupId != null && this.form.contains(CaseFieldsNames.WorkingGroupId)) {
-                this.form.controls[CaseFieldsNames.WorkingGroupId].setValue(ss.workingGroupId);
+                this.form.setSafe(CaseFieldsNames.WorkingGroupId, ss.workingGroupId);
               }
-              const departmentCtrl = this.form.controls[CaseFieldsNames.DepartmentId];
+              const departmentCtrl = this.form.get(CaseFieldsNames.DepartmentId);
               if (ss.recalculateWatchDate && departmentCtrl.value) {
                   this.caseWatchDateApiService.getWatchDate(departmentCtrl.value).pipe(
                     take(1)
-                  ).subscribe(date => this.form.controls[CaseFieldsNames.WatchDate].setValue(date));
+                  ).subscribe(date => this.form.setSafe(CaseFieldsNames.WatchDate, date));
               }
-              const externalEmailsCcControl = this.form.controls[CaseFieldsNames.Log_ExternalEmailsCC];
-              const externalEmailsToControl = this.form.controls[CaseFieldsNames.Log_SendMailToNotifier];
+              const externalEmailsCcControl = this.form.get(CaseFieldsNames.Log_ExternalEmailsCC);
+              const externalEmailsToControl = this.form.get(CaseFieldsNames.Log_SendMailToNotifier);
               if (ss.noMailToNotifier === true) {
                 externalEmailsCcControl.disable({ onlySelf: true, emitEvent: true });
-                externalEmailsToControl.setValue(false);
+                externalEmailsToControl.setValue(false, { onlySelf: true, emitEvent: true });
                 externalEmailsToControl.disable({ onlySelf: true, emitEvent: true });
               } else {
                 externalEmailsCcControl.enable({ onlySelf: true, emitEvent: true });
@@ -448,10 +448,10 @@ export class CaseEditComponent {
               take(1)
             ).subscribe(ct => {
               if (ct && ct.workingGroupId != null) {
-                this.form.controls[CaseFieldsNames.WorkingGroupId].setValue(ct.workingGroupId);
+                this.form.setSafe(CaseFieldsNames.WorkingGroupId, ct.workingGroupId);
               }
               if (ct && ct.priorityId != null) {
-                this.form.controls[CaseFieldsNames.PriorityId].setValue(ct.priorityId);
+                this.form.setSafe(CaseFieldsNames.PriorityId, ct.priorityId);
               }
             });
           }
@@ -459,11 +459,12 @@ export class CaseEditComponent {
         }
         case CaseFieldsNames.ClosingReason: {
           if (v.value) {
-            if (!this.form.controls[CaseFieldsNames.FinishingDate].value) {
-              this.form.controls[CaseFieldsNames.FinishingDate].setValue(DateTime.local().toString());
+            const finishingDateControl = this.form.get(CaseFieldsNames.FinishingDate);
+            if (finishingDateControl && !finishingDateControl.value) {
+              this.form.setSafe(CaseFieldsNames.FinishingDate, DateTime.local().toString());
             }
           } else {
-            this.form.controls[CaseFieldsNames.FinishingDate].setValue('');
+            this.form.setSafe(CaseFieldsNames.FinishingDate, '');
           }
           break;
         }
@@ -479,15 +480,6 @@ export class CaseEditComponent {
             });
           } else {
             this.processNotifierChanged(null, notifierType === NotifierType.Regarding);
-          }
-          break;
-        }
-        case CaseFieldsNames.Log_SendMailToNotifier: {
-          const externalEmailsCcControl = this.form.controls[CaseFieldsNames.Log_ExternalEmailsCC];
-          if (v.value === true) {
-            externalEmailsCcControl.enable({onlySelf: true, emitEvent: true});
-          } else {
-            externalEmailsCcControl.disable({onlySelf: true, emitEvent: true});
           }
           break;
         }

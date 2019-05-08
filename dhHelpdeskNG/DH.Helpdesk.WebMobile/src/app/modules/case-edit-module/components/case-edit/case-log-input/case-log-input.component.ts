@@ -1,12 +1,11 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { CaseEditInputModel, CaseAccessMode } from '../../../models';
 import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
-import { MbscListviewOptions, MbscSwitch } from '@mobiscroll/angular';
+import { MbscListviewOptions, MbscSwitch, MbscFormOptions } from '@mobiscroll/angular';
 import { Subject } from 'rxjs';
 import { CaseLogApiService } from '../../../services/api/case/case-log-api.service';
 import { take, takeUntil } from 'rxjs/internal/operators';
 import { CaseFormGroup, CaseFormControl } from 'src/app/modules/shared-module/models/forms';
-import { CommunicationService, Channels, CaseFieldValueChangedEvent } from 'src/app/services/communication';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -19,7 +18,8 @@ export class CaseLogInputComponent implements OnInit {
   @Input() form: CaseFormGroup;
   @Input() caseData: CaseEditInputModel;
   @Input() accessMode: CaseAccessMode;
-  @ViewChild('sendMailToNotifierControl') sendMailToNotifierControl: any;
+
+  @ViewChild('sendMailToNotifierControl') sendMailToNotifierControl: MbscSwitch;
 
   files: string[] = [];
   internalLogLabel = '';
@@ -29,13 +29,7 @@ export class CaseLogInputComponent implements OnInit {
   isAttachedFilesVisible = false;
   caseFieldsNames = CaseFieldsNames;
   isSendMailToNotifierDisabled = false; // have to use this variable and [disabled] binding, because control.disabled dont work on switch
-
-  sendExternalEmailsControl: CaseFormControl = null;
-  externalLogEmailsCcControl: CaseFormControl = null;
-  externalLogField: CaseFormControl = null;
-  internalLogField: CaseFormControl = null;
-  logFileField: CaseFormControl = null;
-  personsEmailFormControl: CaseFormControl = null;
+  externalLogEmailsTo = '';
 
   fileListSettings: MbscListviewOptions = {
     enhance: true,
@@ -49,10 +43,23 @@ export class CaseLogInputComponent implements OnInit {
     }]
   };
 
+  switchOptions: MbscFormOptions = {
+    onInit: (event, inst) => {
+      const e = event;
+      const t = inst;
+    }
+  };
+
+  private sendExternalEmailsFormControl: CaseFormControl = null;
+  private externalLogEmailsCcFormControl: CaseFormControl = null;
+  private externalLogFormControl: CaseFormControl = null;
+  private internalLogFormControl: CaseFormControl = null;
+  private logFileFormControl: CaseFormControl = null;
+  private personsEmailFormControl: CaseFormControl = null;
+  private noEmailsText = '';
   private destroy$ = new Subject();
 
   constructor(private caseLogApiService: CaseLogApiService,
-    private commService: CommunicationService,
     private translateService: TranslateService) {
   }
 
@@ -60,63 +67,79 @@ export class CaseLogInputComponent implements OnInit {
     return this.accessMode !== null && this.accessMode === CaseAccessMode.FullAccess;
   }
 
-  get externalLogEmailsTo(): string {
-    let val = this.translateService.instant('Ingen tillgänglig mailadress'); //No email address available
-    if (this.personsEmailFormControl && this.personsEmailFormControl.value && this.personsEmailFormControl.value.length) {
-      val = this.personsEmailFormControl.value.toString();
-    }
-    return val;
-  }
-
   ngOnInit() {
     this.personsEmailFormControl = this.getFormControl(CaseFieldsNames.PersonEmail);
-    this.sendExternalEmailsControl  = this.getFormControl(CaseFieldsNames.Log_SendMailToNotifier);
-    this.externalLogEmailsCcControl = this.getFormControl(CaseFieldsNames.Log_ExternalEmailsCC);
-    this.externalLogField = this.getFormControl(CaseFieldsNames.Log_ExternalText);
-    this.internalLogField = this.getFormControl(CaseFieldsNames.Log_InternalText);
-    this.logFileField = this.getFormControl(CaseFieldsNames.Log_FileName);
+    this.sendExternalEmailsFormControl  = this.getFormControl(CaseFieldsNames.Log_SendMailToNotifier);
+    this.externalLogEmailsCcFormControl = this.getFormControl(CaseFieldsNames.Log_ExternalEmailsCC);
+    this.externalLogFormControl = this.getFormControl(CaseFieldsNames.Log_ExternalText);
+    this.internalLogFormControl = this.getFormControl(CaseFieldsNames.Log_InternalText);
+    this.logFileFormControl = this.getFormControl(CaseFieldsNames.Log_FileName);
 
-    if (this.sendExternalEmailsControl) {
-      this.sendExternalEmailsControl.valueChanges.pipe(
-        takeUntil(this.destroy$)
-        ).subscribe(v => {
-            this.commService.publish(Channels.CaseFieldValueChanged, new CaseFieldValueChangedEvent(v, '', this.sendExternalEmailsControl.fieldName));
-        });
-    }
+    this.noEmailsText = this.translateService.instant('Ingen tillgänglig mailadress'); //No email address available
 
-    if (this.externalLogField) {
-      this.isExternalLogFieldVisible =  !this.externalLogField.fieldInfo.isHidden;
-      // track disabled state in form
-      this.isSendMailToNotifierDisabled = this.sendExternalEmailsControl.disabled;
-      this.sendExternalEmailsControl.statusChanges.pipe(
+    if (this.sendExternalEmailsFormControl) {
+      this.isSendMailToNotifierDisabled = this.sendExternalEmailsFormControl.disabled;    
+
+      // track send extneral control status change (disabled/enabled) for switch
+      this.sendExternalEmailsFormControl.statusChanges.pipe(
         takeUntil(this.destroy$)
       ).subscribe(e => {
-        if (this.sendMailToNotifierControl.disabled !== this.sendExternalEmailsControl.isDisabled) {
-          this.isSendMailToNotifierDisabled = this.sendExternalEmailsControl.disabled;
-          //this.sendMailToNotifierControl.instance.refresh();
+        if (this.sendMailToNotifierControl.disabled !== this.sendExternalEmailsFormControl.isDisabled) {
+          this.isSendMailToNotifierDisabled = this.sendExternalEmailsFormControl.disabled;
         }
       });
     }
 
-    if (this.internalLogField) {
-      this.isInternalLogFieldVisible =  !this.internalLogField.fieldInfo.isHidden;
+    // external emails text logic (depends on personsEmail form control value and on this.sendExternalEmailsFormControl.disabled)    
+    this.updateExternalEmailsText();
+    if (this.personsEmailFormControl) {
+      this.personsEmailFormControl.valueChanges.pipe(
+        takeUntil(this.destroy$)
+        ).subscribe(v => {
+          this.updateExternalEmailsText();
+        });
     }
 
-    if (this.logFileField) {
-      this.isAttachedFilesVisible = !this.logFileField.fieldInfo.isHidden;
+    if (this.externalLogFormControl) {
+      this.isExternalLogFieldVisible =  !this.externalLogFormControl.fieldInfo.isHidden;
+    }
+
+    if (this.internalLogFormControl) {
+      this.isInternalLogFieldVisible =  !this.internalLogFormControl.fieldInfo.isHidden;
+    }
+
+    if (this.logFileFormControl) {
+      this.isAttachedFilesVisible = !this.logFileFormControl.fieldInfo.isHidden;
     }
   }
 
-  ngAfterViewInit(): void {
+  onChange(e) {
+   const t = 'test';
+  }
+
+  onSendExternalEmailsCheckChanged(e) {
+    const val = this.sendExternalEmailsFormControl.value;
+    const val2 = this.sendMailToNotifierControl.value;
+    if (val) {
+      this.externalLogEmailsCcFormControl.enable({onlySelf: true, emitEvent: true});
+      this.externalLogEmailsCcFormControl.restorePrevValue();
+    } else {
+      this.externalLogEmailsCcFormControl.disable({onlySelf: true, emitEvent: true});
+      this.externalLogEmailsCcFormControl.setValue('');
+    }
+    this.updateExternalEmailsText();
+  }
+
+  private updateExternalEmailsText() {
+      if (this.sendExternalEmailsFormControl.value) {
+        this.externalLogEmailsTo = (this.personsEmailFormControl.value || '').toString() || this.noEmailsText;        
+      } else {
+        this.externalLogEmailsTo =  '';
+      }
   }
 
   processFileUploaded(file: string) {
     this.files.push(file);
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   protected getFormControl(name: string): CaseFormControl {
@@ -137,4 +160,10 @@ export class CaseLogInputComponent implements OnInit {
       }
     });
   }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
 }

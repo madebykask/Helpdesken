@@ -13,7 +13,7 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
     super();
   }
 
-  @ViewChild('searchInput') searchInput: any; // MbscInputBase
+  @ViewChild('searchInput') searchInput: any; // MbscInputBase | MbscTextArea | MbscInputBase
   @ViewChild('select') select: MbscSelect;
 
   @Input() disabled = false;
@@ -25,8 +25,8 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
   }
 
   private progressIconEl: any = null;
-  protected searchSubject = new Subject<string> ();
-  protected  selectDefaultOptions;
+  protected searchSubject = new Subject<string>();
+  protected selectDefaultOptions;
 
   selectOptions: MbscSelectOptions = {
     theme: 'mobiscroll',
@@ -35,7 +35,7 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
     showInput: false,
     showOnTap: false,
     input: '#' + this.field,
-    focusOnClose:  false,
+    focusOnClose: false,
     select: 'single',
     filter: true,
     maxWidth: 400,
@@ -47,12 +47,19 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
     filterPlaceholderText: this.ngxTranslateService.instant('Skriv för att filtrera'),
     filterEmptyText: this.ngxTranslateService.instant('Inget resultat'),
 
+    /// Select Events: https://docs.mobiscroll.com/angular/select#events
     onInit: (event, inst) => {
       if (this.formControl && this.formControl.fieldInfo.isReadonly) {
         inst.disable();
       }
     },
-
+    onMarkupReady: (event: { target: HTMLElement }, inst: any) => {
+      this.createProgressIcon(event.target);
+    },
+    onBeforeShow: function (event, inst) {
+    },
+    onPosition: function (event, inst) {
+    },
     onShow: (event, inst) => {
       //setting filter text from user input on case page
       const filterText = (this.searchInput.element.value || '').trim();
@@ -67,26 +74,42 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
         }
       }
     },
-
+    onSet: (event, inst) => {
+      //event.valueText: The selected value as text (if any)
+      const val = inst.getVal();
+      // if (!allowMultipleSelections) {
+      this.processItemSelected(val);
+      inst.clear(); //todo: check
+      //}
+    },
+    onItemTap: (event, inst) => {
+      const e = event;
+      //todo: check
+      //this.processItemTap(event);
+      //console.log(`>>> emailsSearchSelect: onItemTap: ${event.value}`);
+    },
+    onDestroy: function (event, inst) {
+    },
+    onClose: function (event, inst) {
+    },
+    onCancel: function (event, inst) {
+    },
     onBeforeClose: (event, inst) => {
       this.selectDataItems = [];
     },
-
+    onClear: function (event, inst) {
+    },
     onFilter: (event, inst) => {
       const filterText = (event.filterText || '').trim();
       this.searchSubject.next(filterText);
       // Prevent built-in filtering
       return false;
     },
-
-    onMarkupReady: (event: { target: HTMLElement }, inst: any) => {
-      this.createProgressIcon(event.target);
-    },
-
-    onSet: (event, inst) => {
-      const val = inst.getVal();
-      this.processItemSelected(val);
+    onChange: function (event, inst) {
+      // Your custom event handler goes here
+      //console.log(`>>> emailsSearchSelect: ${event.valueText}`);
     }
+    /// End of Select Events 
   };
 
   protected initComponent() {
@@ -111,12 +134,12 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
         }
       })
     ).subscribe((data: any[]) => {
-        this.toggleProgress(false);
-        if (data && data.length) {
-          this.selectDataItems = this.processSearchResults(data);
-        } else {
-          this.selectDataItems = [];
-        }
+      this.toggleProgress(false);
+      if (data && data.length) {
+        this.selectDataItems = this.processSearchResults(data);
+      } else {
+        this.selectDataItems = [];
+      }
     });
   }
 
@@ -130,11 +153,11 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
       this.formControl.statusChanges.pipe(
         takeUntil(this.destroy$)
       )
-      .subscribe((e: any) => {
-        if (this.searchInput.disabled !== this.isFormControlDisabled) {
-          this.updateDisabledState();
-        }
-      });
+        .subscribe((e: any) => {
+          if (this.searchInput.disabled !== this.isFormControlDisabled) {
+            this.updateDisabledState();
+          }
+        });
     }
   }
 
@@ -147,6 +170,8 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
   protected abstract processSearchResults(data);
 
   protected abstract processItemSelected(val);
+
+  ///protected abstract processItemTap(event);
 
   private createProgressIcon(selectNode: HTMLElement) {
     const progressSpan = this.renderer.createElement('span');
