@@ -316,11 +316,37 @@ namespace DH.Helpdesk.TaskScheduler.Services
             var updated = "";
             var uCount = 0;
 
+			var idIdentifier = ldapFields.Where(o => o.ComputerUserField.ToLower() == "userid" && !string.IsNullOrEmpty(o.LDAPAttribute))
+				.Select(o => o.LDAPAttribute)
+				.SingleOrDefault();
+
+			var regionIdentifier = ldapFields.Where(o => o.ComputerUserField.ToLower() == region && !string.IsNullOrEmpty(o.LDAPAttribute))
+				.Select(o => o.LDAPAttribute)
+				.SingleOrDefault();
+				
+			if (regionIdentifier != null)
+			{
+				var regionNames = inputData.InputColumns.Where(o => o.Item2.ContainsKey(regionIdentifier))
+					.Select(o => o.Item2[regionIdentifier])
+					.Distinct()
+					.ToList();
+				if (regionNames.Any())
+				{
+					CreateRegions(regionNames, setting.CustomerId, setting.CreateOrganisation);
+				}
+			}
+
+			var regions = _regionRepository.GetMany(o => o.Customer_Id == setting.CustomerId && o.IsActive == 1)
+				.ToList()
+				.GroupBy(o => o.Name.ToLower())
+				.Select(o => o.OrderByDescending(p => p.Id).First()) // Ensure unique name, if more than 1, take highest ID
+				.ToDictionary(o => o.Name.ToLower(), o => o.Id);	
+
             foreach (var row in inputData.InputColumns)
             {
                 var updateQuery = "";
                 var existingId = 0;
-                existingId = CheckIfExisting(row.Item1, setting.CustomerId);
+                existingId = CheckIfExisting(idIdentifier != null ? row.Item2[idIdentifier] : row.Item1, setting.CustomerId);
 
                 var fieldNames = "";
                 var fieldValues = "";
@@ -328,7 +354,26 @@ namespace DH.Helpdesk.TaskScheduler.Services
                 var delimiter = "";
                 var isNew = existingId <= 0;
 
-                foreach (var fs in ldapFields)
+				int? regionId;
+				if(row.Item2.ContainsKey(regionIdentifier) && !string.IsNullOrEmpty(row.Item2[regionIdentifier]))
+				{
+					var regionName = row.Item2[regionIdentifier].ToLower();
+					if(regions.ContainsKey(regionName))
+					{
+						regionId = regions[regionName];
+					}
+					else
+					{
+						regionId = setting.DefaultRegion;
+					}
+				}
+				else
+				{
+					regionId = setting.DefaultRegion;
+				}
+
+
+				foreach (var fs in ldapFields)
                 {
                     var _dbFieldName = fs.ComputerUserField.ToLower();
                     var _csvFieldValue = "";
@@ -358,10 +403,10 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     {
                         _csvFieldValue = row.Item2[fs.LDAPAttribute];
                         if (relatedFields.Contains(_dbFieldName))
-                            _csvFieldValue = GetRelatedValue(_dbFieldName, _csvFieldValue, setting.CustomerId, setting.DefaultRegion, setting.CreateOrganisation);
+                            _csvFieldValue = GetRelatedValue(_dbFieldName, _csvFieldValue, setting.CustomerId, regionId, setting.CreateOrganisation);
                         if (BlockFields.Contains(_dbFieldName))
                         {
-                            regionsToAdd.Add(_csvFieldValue);
+                           // regionsToAdd.Add(_csvFieldValue);
                             _dbFieldName = string.Empty;
                         }
                     }
@@ -425,8 +470,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
                 }                
             }
 
-            if (regionsToAdd.Any())
-                CreateRegions(regionsToAdd, setting.CustomerId, setting.CreateOrganisation);
+           /* if (regionsToAdd.Any())
+                CreateRegions(regionsToAdd, setting.CustomerId, setting.CreateOrganisation);*/
 
             inserted += string.IsNullOrEmpty(inserted) ?
             $"There was no New Initiator." : inserted;
@@ -593,7 +638,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
             }
             return depId;
         }
-        public int CreateDepartment(string departmentName, int customerId, int? regionId)
+		public int CreateDepartment(string departmentName, int customerId, int? regionId)
         {
             var department = new Domain.Department();
 
