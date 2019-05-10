@@ -9,7 +9,7 @@
       <div class="mbsc-col-1">
         <mbsc-button *ngIf="!searchInput.disabled" 
               flat icon="fa-search" class="input-icon"
-              (click)="select.instance.show()"></mbsc-button>
+              (click)="showSelectPopup(searchInput.element.value)"></mbsc-button>
       </div>
     </div>
   </div>

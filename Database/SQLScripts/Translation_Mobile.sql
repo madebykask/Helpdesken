@@ -357,7 +357,7 @@ If not exists (select * from tbltext where id = 10055)
 insert into tbltext (id, TextString, TextType) VALUES (10055, 'Handläggare', @MobileType)
 
 If not exists (select * from tblTextTranslation where text_id = 10055 and Language_Id = 2)
-insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10055, 2, 'Administaror')
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10055, 2, 'Administrator')
 
 If not exists (select * from tbltext where id = 10056)
 insert into tbltext (id, TextString, TextType) VALUES (10056, 'Driftgrupp', @MobileType)

@@ -67,6 +67,10 @@ export class CaseLogInputComponent implements OnInit {
     return this.accessMode !== null && this.accessMode === CaseAccessMode.FullAccess;
   }
 
+  get isSendMailToNotifierDisabledOrOff() {
+    return this.isSendMailToNotifierDisabled || (this.sendExternalEmailsFormControl && this.sendExternalEmailsFormControl.value === false);
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     //if (changes.accessMode && !changes.accessMode.firstChange) {
     //  console.log(`>>>> caseLogInput: AccessMode has changed!!! Value: ${changes.accessMode.previousValue} -> ${changes.accessMode.previousValue}`);
@@ -154,7 +158,7 @@ export class CaseLogInputComponent implements OnInit {
 
   private updateExternalEmailsText() {
     if (this.sendExternalEmailsFormControl.value === false || this.isSendMailToNotifierDisabled) {
-      this.externalLogEmailsTo =  '';
+      this.externalLogEmailsTo =  '&nbsp;'; // required to keep empty row, otherwise it gets collapsed (bug)
     } else {
       const externalEmailTo = (this.personsEmailFormControl.value || '').toString();
       this.externalLogEmailsTo = externalEmailTo.toLowerCase() || this.noEmailsText;

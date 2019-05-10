@@ -18,13 +18,24 @@
   ::ng-deep .searchInput input,
   ::ng-deep .searchInput textarea {
     font-size: 0.75em;
+    padding-left:1.34em;
   }
 
-  ::ng-deep .switch  {
-    .mbsc-control-w { font-size:12px!important; }
+  ::ng-deep .switch {
+    .mbsc-control-w span { font-size:12px!important; }
+    .mbsc-switch { 
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
   }
-
-  ::ng-deep .mbsc-switch .mbsc-desc { font-size:12px!important; }
+  
+  ::ng-deep .mbsc-switch .mbsc-desc { 
+    color:#000;
+    opacity:1;
+    font-size:12px!important;
+    overflow: hidden; 
+    word-break: break-all;
+  }
 
   ::ng-deep .mbsc-label-stacked:before,
   ::ng-deep .mbsc-label-stacked:after

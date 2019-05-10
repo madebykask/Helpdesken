@@ -10,12 +10,12 @@
   <div class="bordered switch">
     <mbsc-switch #sendMailToNotifierControl *ngIf="isExternalLogFieldVisible" 
                  [disabled]="isSendMailToNotifierDisabled" 
+                 
                  [formControlName]="caseFieldsNames.Log_SendMailToNotifier"
                  (change)="onSendExternalEmailsCheckChanged()"
                  [options]="switchOptions">
-
-      {{ 'Till' | translate }}:
-      <span class="mbsc-desc">{{ externalLogEmailsTo }}</span>
+      <span [ngClass]="{'disabled': isSendMailToNotifierDisabledOrOff }">{{ 'Till' | translate }}</span>
+      <span class="mbsc-desc" [innerHtml]="externalLogEmailsTo | sanitize:'html'"></span>
     </mbsc-switch>
   </div>
   

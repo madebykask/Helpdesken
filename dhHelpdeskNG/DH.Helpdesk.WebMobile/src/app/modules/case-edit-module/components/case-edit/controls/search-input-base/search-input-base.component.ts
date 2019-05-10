@@ -24,6 +24,8 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
     return this.field;
   }
 
+  filterText: string;
+
   private progressIconEl: any = null;
   protected searchSubject = new Subject<string>();
   protected selectDefaultOptions;
@@ -66,7 +68,7 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
     },
     onShow: (event, inst) => {
       //setting filter text from user input on case page
-      const filterText = (this.searchInput.element.value || '').trim();
+      const filterText = (this.filterText  || '').trim();
       if (filterText && filterText.length) {
         const el = event.target.querySelector<HTMLInputElement>('input.mbsc-sel-filter-input');
         if (el) {
@@ -148,6 +150,9 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
     });
   }
 
+  protected setFilterText(val: string) {
+    this.filterText = val;
+  }
   private getHeaderText() {
     const defaultText = this.ngxTranslateService.instant('Användar ID');
     return this.formControl ? this.formControl.label || defaultText : defaultText;
@@ -164,6 +169,11 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
           }
         });
     }
+  }
+
+  showSelectPopup(searchQuery) {
+    this.filterText = searchQuery;
+    this.select.instance.show();
   }
 
   private updateDisabledState() {

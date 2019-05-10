@@ -33,6 +33,9 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
     const e = $event;
     const value = this.formControl.value;
 
+    const searchQuery = (value || '').toString();
+    super.setFilterText(searchQuery);
+
     if (value && value.length) {
       const emails = [];
       const items = value.split(';');
@@ -55,7 +58,7 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
   protected processSearchResults(data: EmailsSearchItem[]) {
     this.searchResults = data;
     return data.map(item => {
-      const itemText = this.formatItemText(item).toLowerCase();
+      const itemText = this.formatItemText(item);
       return {
         value: item.id,
         text: itemText,
@@ -93,8 +96,10 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
     const name = item.firstName + ' ' + item.surName;
     const email = item.emails.length ? item.emails[0] : '';
     const userId = item.userId != null ? item.userId + ' - ' : '';
-    const result = '<b>' + groupName + '</b>' + ': ' + name + ' - ' + userId + email + ' - ' + item.departmentName;
-    return result;
+
+    const result = (name + ' - ' + userId + email + ' - ' + item.departmentName).toLowerCase();
+    const resultWithPrefix = '<b>' + groupName + '</b>' + ': ' + result;
+    return resultWithPrefix;
   }
 
   private getSearchGroupName(searchGroupType) {

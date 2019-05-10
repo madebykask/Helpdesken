@@ -26,6 +26,10 @@ $disabled-color: #f2f2f2;
     }
 }
 
+.mbsc-switch .mbsc-switch-track {
+  font-size: 12px!important;
+}
+
 @keyframes md-rotating {
     from {
         transform: rotate(0deg);
@@ -78,6 +82,9 @@ $disabled-color: #f2f2f2;
     z-index: 1000;
 }
 
+span.disabled {
+  color:#adadad;
+}
 .disabled {
   .mbsc-select, .mbsc-input {
       textarea:disabled, input:disabled, .mbsc-label, .mbsc-err-msg {
