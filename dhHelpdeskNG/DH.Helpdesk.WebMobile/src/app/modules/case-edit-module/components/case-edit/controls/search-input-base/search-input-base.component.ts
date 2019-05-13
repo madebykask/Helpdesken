@@ -24,6 +24,7 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
     return this.field;
   }
 
+  protected query: string;
   filterText: string;
 
   private progressIconEl: any = null;
@@ -37,15 +38,16 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
   selectOptions: MbscSelectOptions = {
     theme: 'mobiscroll',
     display: 'center',
-    cssClass: 'select-hdn',
+    cssClass: 'single-select',
     showInput: false,
     showOnTap: false,
     input: '#' + this.field,
     focusOnClose: false,
     select: 'single',
     filter: true,
-    maxWidth: 400,
-    multiline: 2,
+    //maxWidth: 400,
+    multiline: 3,
+    rows: 9,
     buttons: ['cancel'],
     headerText: this.getHeaderText.bind(this),
     cancelText: this.ngxTranslateService.instant('Avbryt'),
@@ -135,6 +137,7 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
       switchMap((query: string) => {
         if (query && query.length > 1) {
           this.toggleProgress(true);
+          this.query = query;
           return this.searchData(query);
         } else {
           return of(null);
@@ -143,7 +146,7 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
     ).subscribe((data: any[]) => {
       this.toggleProgress(false);
       if (data && data.length) {
-        this.selectDataItems = this.processSearchResults(data);
+        this.selectDataItems = this.processSearchResults(data, this.query);
       } else {
         this.selectDataItems = [];
       }
@@ -153,6 +156,14 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
   protected setFilterText(val: string) {
     this.filterText = val;
   }
+
+  protected highligtQueryText(text: string, query: string) {
+    if (text && text.length) {
+      text = text.replace(RegExp('(' + query + ')', 'ig'), '<b>$1</b>');
+    }
+    return text;
+  }
+
   private getHeaderText() {
     const defaultText = this.ngxTranslateService.instant('Användar ID');
     return this.formControl ? this.formControl.label || defaultText : defaultText;
@@ -182,11 +193,9 @@ export abstract class SearchInputBaseComponent extends BaseControl<string> {
 
   protected abstract searchData(query);
 
-  protected abstract processSearchResults(data);
+  protected abstract processSearchResults(data, query);
 
   protected abstract processItemSelected(val, isSelected);
-
-  ///protected abstract processItemTap(event);
 
   private createProgressIcon(selectNode: HTMLElement) {
     const progressSpan = this.renderer.createElement('span');

@@ -26,8 +26,6 @@ export class NotifierSearchComponent extends SearchInputBaseComponent implements
     super(ngxTranslateService, renderer);
 
     //override select settings from base component
-    this.selectOptions.select = 'single';
-    this.selectOptions.buttons = ['cancel'];
     this.selectOptions.headerText = this.getSelectHeaderText.bind(this);
   }
 
@@ -47,17 +45,39 @@ export class NotifierSearchComponent extends SearchInputBaseComponent implements
   }
 
   // virtual method override
-  protected processSearchResults(data: NotifierSearchItem[]) {
+  protected processSearchResults(data: NotifierSearchItem[], query: string) {
     this.searchResults = data;
     const notifiersData =
       data.map(item => {
+        const itemHeader = this.formatItemHeader(item, query);
+        const itemDesc = this.formatItemDesc(item, query);
         return {
           value: item.id,
           text: `${item.userId} - ${item.name || ''} - ${item.email}`,
-          html: '<div class="select-li">' + `${item.userId} - ${item.name || ''} - ${(item.email || '').toLowerCase()}` + '</div>'
+          html: `<div>
+                  <div class="itemHeader">${itemHeader} </div>
+                  <div class="itemDesc">${itemDesc}</div>
+                </div>`
         };
       });
     return notifiersData;
+  }
+
+  private formatItemHeader(item: NotifierSearchItem, query: string) {
+    const userId = item.userId != null ? item.userId + ' - ' : '';
+    let result = userId  + (item.name || '');
+
+    // highlight searched text with  bold
+    result = this.highligtQueryText(result, query);
+    return result;
+  }
+
+  private formatItemDesc(item: NotifierSearchItem, query) {
+    const email = (item.email || '').toLowerCase();
+    if (email && email.length) {
+      this.highligtQueryText(email, query);
+    }
+    return email;
   }
 
   // virtual method override

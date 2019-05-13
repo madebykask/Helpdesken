@@ -6,12 +6,11 @@
     }
   }
 
+  // hide dropdown arrow
   ::ng-deep .mbsc-select-ic {
     display:none!important;
     height:0x!important;
-  } 
-  
-
+  }  
 
   ::ng-deep .mbsc-btn {
     padding-left:0px!important;
@@ -22,9 +21,9 @@
     //height:60px;
   }
 
-::ng-deep .select-li {
-  font-size:16px!important;
-}
+  ::ng-deep .select-li {
+    font-size:16px!important;
+  }
 
   ::ng-deep .expandBtn {
     margin:0px!important;

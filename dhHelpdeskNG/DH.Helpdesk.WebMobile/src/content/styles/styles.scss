@@ -71,8 +71,6 @@ $disabled-color: #f2f2f2;
 
 .md-btn-loading { display: block; }
 
- 
-
 .stickyTop {
     position: fixed;
     top: 0;
@@ -99,6 +97,16 @@ span.disabled {
 
 //mobiscroll theme overrides
 .mbsc-mobiscroll {
+  
+  &.single-select {
+    .mbsc-sc-itm {
+      padding-left: 5px!important;
+      //word-break: break-all; 
+    }
+    .select-li  { font-size:14px!important;  }
+    .itemHeader { font-size: 14px!important; }
+    .itemDesc   { font-size:10px!important;  }
+  }
 
   .mbsc-sc-itm {
     padding-right: 10px!important;

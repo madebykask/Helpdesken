@@ -4,7 +4,7 @@ import { SearchInputBaseComponent } from '../search-input-base/search-input-base
 import { UserService } from '../../../../services/user.service';
 import { CaseUserSearchGroup } from '../../../../logic/constants/case-user-search-group';
 import { EmailsSearchItem } from '../../../../services/model/emails-search-item';
-import { isValidEmail } from 'src/app/modules/shared-module/Utils/common-methods';
+import * as cm from 'src/app/modules/shared-module/Utils/common-methods';
 
 @Component({
   selector: 'lognote-email-input',
@@ -17,10 +17,6 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
     ngxTranslateService: TranslateService,
     renderer: Renderer2) {
     super(ngxTranslateService, renderer);
-
-    this.selectOptions.select = 'multiple';
-    this.selectOptions.buttons = ['cancel'];
-    this.selectOptions.cancelText = this.ngxTranslateService.instant('Stäng');
   }
 
   private searchResults: EmailsSearchItem[] = [];
@@ -31,9 +27,9 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
 
   onTextChanged($event) {
     const e = $event;
-    const value = this.formControl.value;
+    const value = (this.formControl.value || '').toString();
 
-    const searchQuery = (value || '').toString();
+    const searchQuery = this.getFilterText(value);
     super.setFilterText(searchQuery);
 
     if (value && value.length) {
@@ -41,7 +37,7 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
       const items = value.split(';');
       if (items.length) {
         for (const item of items) {
-          if (isValidEmail(item)) {
+          if (cm.isValidEmail(item)) {
             emails.push(item);
           }
         }
@@ -50,19 +46,38 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
     }
   }
 
+  private getFilterText(val: string) {
+    let res = '';
+    if (val && val.length) {
+      const items = val.split(';');
+      if (items.length > 0) {
+        const text = items.pop();
+        if (text && cm.isValidEmail(text) === false) {
+          // use filter text only if its not a valid email
+          res = text;
+        }
+      }
+    }
+    return res;
+  }
+
   protected searchData(query: any) {
     const sr = this.userService.searchUsersEmails(query);
     return sr;
   }
 
-  protected processSearchResults(data: EmailsSearchItem[]) {
+  protected processSearchResults(data: EmailsSearchItem[], query: string) {
     this.searchResults = data;
     return data.map(item => {
-      const itemText = this.formatItemText(item);
+      const itemHeader = this.formatItemHeader(item, query);
+      const itemDesc = this.formatItemDesc(item, query);
       return {
         value: item.id,
-        text: itemText,
-        html: '<div class="select-li">' + itemText + '</div>'
+        text: item.userId,
+        html: `<div>
+                 <div class="itemHeader">${itemHeader} </div>
+                 <div class="itemDesc">${itemDesc}</div>
+               </div>`
       };
     });
   }
@@ -77,7 +92,7 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
           email = email.toLowerCase();
           if (isSelected) {
             //add selected item emails
-            if (isValidEmail(email) && fieldEmails.indexOf(email) === -1) {
+            if (cm.isValidEmail(email) && fieldEmails.indexOf(email) === -1) {
               fieldEmails.push(email.toLowerCase());
             }
           } else {
@@ -91,15 +106,33 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
     }
   }
 
-  private formatItemText(item: EmailsSearchItem) {
+  private formatItemHeader(item: EmailsSearchItem, query: string) {
     const groupName = this.getSearchGroupName(item.groupType);
     const name = item.firstName + ' ' + item.surName;
-    const email = item.emails.length ? item.emails[0] : '';
     const userId = item.userId != null ? item.userId + ' - ' : '';
 
-    const result = (name + ' - ' + userId + email + ' - ' + item.departmentName).toLowerCase();
-    const resultWithPrefix = '<b>' + groupName + '</b>' + ': ' + result;
+    let result = (name + ' - ' + userId + item.departmentName);
+
+    // highlight searched text with  bold
+    result = this.highligtQueryText(result, query);
+
+    const resultWithPrefix = groupName + ': ' + result;
     return resultWithPrefix;
+  }
+
+  private formatItemDesc(item: EmailsSearchItem, query) {
+    let result = '';
+    if (item.emails && item.emails.length) {
+        const emails = [...item.emails];
+        if (emails.length > 1) {
+          result = `${emails.shift()}...${emails.pop()}`;
+        } else {
+          result = emails.pop();
+        }
+    }
+    // highlight searched text with  bold
+    result = this.highligtQueryText(result, query);
+    return result.toLowerCase();
   }
 
   private getSearchGroupName(searchGroupType) {
