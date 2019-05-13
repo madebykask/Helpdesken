@@ -7,6 +7,7 @@
         var saveFiltersUrl = window.Params.SaveFiltersUrl;
         var getReportFilterOptionsUrl = window.Params.GetReportFilterOptionsUrl;
         var deleteReportFavoriteUrl = window.Params.DeleteReportFavoriteUrl;
+        var stackByDefaultValue = '5';
 
         var reportList = "#lstReports";
         var administratorDropDown = "#lstfilterAdministrator";
@@ -482,11 +483,11 @@
             var $generateReportContainer = $("#generateReportContainer");
             var $historicalReportContainer = $("#historicalReportContainer");
             var $fieldsSelect = $("#lstFields");
-            var $stackBy = $('#stackBy');
+            var $stackBy = $('#lstStackBy');
             var $groupBy = $('#groupBy');
             var $historicalFilters = $('#historicalFilters');
 
-            var historicalReportControls = [$btnShowReport, $stackBy, $groupBy, $historicalReportContainer, $historicalFilters];
+            var historicalReportControls = [$btnShowReport, $groupBy, $historicalReportContainer, $historicalFilters];
 
             dhHelpdesk.reports.togglePreviewMode(true);
 
@@ -503,7 +504,8 @@
                 $otherReportsContainer.hide();
                 dhHelpdesk.reports.historicalReport.hide();
                 $historicalReportContainer.hide();
-                $stackBy.hide();
+                $stackBy.val('');
+                $stackBy.prop('disabled', true);
                 $groupBy.hide();
                 $generateReportContainer.html('');
                 $generateReportContainer.show();
@@ -515,7 +517,9 @@
                 $generateReportContainer.hide();
                 $otherReportsContainer.hide();
                 $extraParameters.hide();
-                $.each(historicalReportControls, function(i, v) { v.show(); });
+                $.each(historicalReportControls, function (i, v) { v.show(); });
+                $stackBy.val(stackByDefaultValue);
+                $stackBy.prop('disabled', false);
             } else {
                 $btnPreview.hide();
                 $btnShow.hide();
@@ -526,7 +530,8 @@
                 $('#reportPresentationArea').html('');
                 $otherReportsContainer.show();
                 $generateReportContainer.hide();
-                $stackBy.hide();
+                $stackBy.val('');
+                $stackBy.prop('disabled', true);
                 $groupBy.hide();
                 dhHelpdesk.reports.historicalReport.hide();
                 $historicalReportContainer.hide();
