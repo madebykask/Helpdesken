@@ -143,8 +143,6 @@
                             </td>
                         </tr>
                     }
-                    @*                    @if (Model.ReportFilter.CaseClosingDate != null)*@
-                    @*                    {*@
                     <tr class="date-block">
                         <td>
                             @Translation.Get(GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
@@ -155,23 +153,12 @@
                             @Html.EditorFor(m => Model.ReportFilter.CaseClosingDate.ToDate, "DatePicker", new { id = "CaseClosingToDate" })
                         </td>
                     </tr>
-                    @*                    }*@
                     @{
-                        var selectedFields = new SelectedItems(Model.ReportGeneratorOptions.FieldIds).GetSelectedStr();
                         <tr id="reportGeneratorFields" style="display: none">
                             <td>
                                 @Translation.Get("Fält")
                             </td>
                             <td>
-                                @* <select id="lstFields" name="lstFields" data-field="fields" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
-                                        @foreach (var field in Model.ReportGeneratorOptions.Fields)
-                                        {
-                                            int id = int.Parse(field.Value);
-                                            <option value="@field.Value" @id.IdIsSelected(selectedFields)>
-                                                @field.Text
-                                            </option>
-                                        }
-                                    </select>*@
                                 @Html.DropDownListFor(m => m.ReportGeneratorOptions.FieldIds, Model.ReportGeneratorOptions.Fields,
                                         new
                                         {

@@ -221,6 +221,7 @@
         dhHelpdesk.reports.doValidation = function (isAlwaysRequired) {
 
             isAlwaysRequired = isAlwaysRequired !== false; // default true
+            const errorClass = 'error';
 
             const $createDateFrom = $('#ReportFilter_CaseCreationDate_FromDate');
             const $createDateTo = $('#ReportFilter_CaseCreationDate_ToDate');
@@ -229,47 +230,55 @@
             const $changeDateFrom = $('#ReportFilter_CaseChangeDate_FromDate');
             const $changeDateTo = $('#ReportFilter_CaseChangeDate_ToDate');
 
-            $createDateFrom.removeClass('error');
-            $createDateTo.removeClass('error');
-            $closeDateFrom.removeClass('error');
-            $closeDateTo.removeClass('error');
-            $changeDateFrom.removeClass('error');
-            $changeDateTo.removeClass('error');
+            $createDateFrom.removeClass(errorClass);
+            $createDateTo.removeClass(errorClass);
+            $closeDateFrom.removeClass(errorClass);
+            $closeDateTo.removeClass(errorClass);
+            $changeDateFrom.removeClass(errorClass);
+            $changeDateTo.removeClass(errorClass);
 
-            var isValid = true;
+            const validatePair = function($from, $to) {
+                const isFromEmpty = $from.val() === '';
+                const isToEmpty = $to.val() === '';
+                var errorControls = [];
+                if (isFromEmpty && isToEmpty) {
+                    errorControls.push($from);
+                    errorControls.push($to);
+                } else if (isFromEmpty && !isToEmpty) {
+                    errorControls.push($from);
+                } else if (!isFromEmpty && isToEmpty) {
+                    errorControls.push($to);
+                }
+                return errorControls;
+            };
+
+            var emptyControls = [];
+            var invalidControls = [];
             if (isAlwaysRequired) {
-                if ($createDateFrom.val() === '') {
-                    $createDateFrom.addClass('error');
-                    isValid = false;
-                }
-                if ($createDateTo.val() === '') {
-                    $createDateTo.addClass('error');
-                    isValid = false;
-                }
+                emptyControls.push(validatePair($createDateFrom, $createDateTo));
             } else {
-                if ($createDateFrom.val() === '' && $closeDateFrom.val() === '' && $changeDateFrom.val() === '') {
-                    if ($closeDateTo.val() !== '') {
-                        $closeDateFrom.addClass('error');
-                    } else if ($changeDateTo.val() !== '') {
-                        $changeDateFrom.addClass('error');
-                    } else {
-                        $createDateFrom.addClass('error');
-                    }
-                    isValid = false;
-                }
-                if ($createDateTo.val() === '' && $closeDateTo.val() === '' && $changeDateTo.val() === '') {
-                    if ($closeDateFrom.val() !== '') {
-                        $closeDateTo.addClass('error');
-                    } else if ($changeDateFrom.val() !== '') {
-                        $changeDateTo.addClass('error');
-                    } else {
-                        $createDateTo.addClass('error');
-                    }
-                    isValid = false;
-                }
+                emptyControls.push(validatePair($createDateFrom, $createDateTo));
+                emptyControls.push(validatePair($closeDateFrom, $closeDateTo));
+                emptyControls.push(validatePair($changeDateFrom, $changeDateTo));
             }
 
+            if (emptyControls.every(function(e) { // all empty
+                return e.length === 2;
+            })) {
+                emptyControls.forEach(function (e) { invalidControls = invalidControls.concat(e); });
+            } else { // only pairs where 1 field is filled
+                emptyControls.filter(function(e) {
+                    return e.length === 1;
+                }).forEach(function(e) {
+                     invalidControls = invalidControls.concat(e);
+                }); 
+            }
+
+            var isValid = invalidControls.length === 0;
             if (!isValid) {
+                invalidControls.forEach(function(e) {
+                    e.addClass(errorClass);
+                });
                 ShowToastMessage(window.Params.DateIsEmptyMessage, 'warning');
             }
             
