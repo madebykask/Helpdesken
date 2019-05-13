@@ -68,7 +68,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 		public IQueryable<CaseType> GetManyWithSubCaseTypes(Expression<Func<CaseType, bool>> where)
 		{
-			return this.DataContext.CaseTypes.Include("SubCaseTypes").Where(where);
+			return this.DataContext.CaseTypes.Include(x => x.SubCaseTypes).Where(where);
 		}
 
 		public void ResetEmailDefault(int exclude, int customerId)

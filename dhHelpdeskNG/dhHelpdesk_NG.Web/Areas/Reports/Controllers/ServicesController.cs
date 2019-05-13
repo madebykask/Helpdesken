@@ -84,7 +84,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 			});
 
 			var wgs = result.Select(o => new { o.WorkingGroup, o.WorkingGroupID }).Distinct().OrderBy(o => o.WorkingGroup).ToArray();
-            var caseTypes = CaseTypeTreeTranslation(_caseTypeService.GetCaseTypes(customerId));
+            var caseTypes = CaseTypeTreeTranslation(_caseTypeService.GetAllCaseTypes(customerId, false, true));
             var caseTypesFullNames = _caseTypeService.GetChildrenInRow(caseTypes).ToList();
 			var data = new
 			{

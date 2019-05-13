@@ -3,6 +3,7 @@
 namespace DH.Helpdesk.Services.Services
 {
     using System;
+    using System.Data.Entity;
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Remoting.Messaging;
@@ -17,7 +18,7 @@ namespace DH.Helpdesk.Services.Services
         IList<CaseType> GetCaseTypes(int customerId, bool isTakeOnlyActive = false);
 
         IList<CaseType> GetCaseTypesForSetting(int customerId, bool isTakeOnlyActive = false);
-        IList<CaseType> GetAllCaseTypes(int customerId, bool isTakeOnlyActive = false);
+        IList<CaseType> GetAllCaseTypes(int customerId, bool isTakeOnlyActive = false, bool includeSubType = false);
         IList<CaseTypeOverview> GetCaseTypesRelatedFields(int customerId, bool isExtnernalSiteOnly = false, bool isTakeOnlyActive = false);
 
         CaseType GetCaseType(int id);
@@ -61,8 +62,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseType> GetCaseTypes(int customerId, bool isTakeOnlyActive = false)
         {
-            var query = ((IQueryable<CaseType>)caseTypeRepository.GetManyWithSubCaseTypes(o => o.Customer_Id == customerId))
-                .ToList()
+            var query = caseTypeRepository.GetManyWithSubCaseTypes(o => o.Customer_Id == customerId)
                 .Where(o => o.Parent_CaseType_Id == null);
             if (isTakeOnlyActive)
             {
@@ -106,9 +106,10 @@ namespace DH.Helpdesk.Services.Services
                 }).ToList();
         }
 
-        public IList<CaseType> GetAllCaseTypes(int customerId, bool isTakeOnlyActive = false)
+        public IList<CaseType> GetAllCaseTypes(int customerId, bool isTakeOnlyActive = false, bool includeSubType = false)
         {
-            var query = this.caseTypeRepository.GetMany(x => x.Customer_Id == customerId);
+            var query = includeSubType ? caseTypeRepository.GetManyWithSubCaseTypes(x => x.Customer_Id == customerId) :
+                                         caseTypeRepository.GetMany(x => x.Customer_Id == customerId).AsQueryable();
             if (isTakeOnlyActive)
             {
                 query = query.Where(it => it.IsActive == 1 && it.Selectable == 1);
