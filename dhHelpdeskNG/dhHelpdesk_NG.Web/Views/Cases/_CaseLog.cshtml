@@ -4,6 +4,7 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @using DH.Helpdesk.Common.Enums.Settings
+@using DH.Helpdesk.Web.Common.Extensions
 
 @if (Model != null && Model.Logs != null)
 {
@@ -50,16 +51,16 @@
                             @{ var isExternalLogVisible = Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote) == string.Empty; }
                             @if (isExternalLogVisible)
                             {
-                                <td class="wordbreak" style="width: 25%; max-width: 300px">
-                                    <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextExternal).ForHtmlView()</a>
-                                </td>
+                            <td class="wordbreak" style="width: 25%; max-width: 300px">
+                                <a href="@GetLogLink(r)"> @Html.Encode(r.TextExternal).ForHtmlView()</a>
+                            </td>
                             }
 
                             @* Internal Log note cell: *@
                             <td class="wordbreak" style="@(isExternalLogVisible ? "width: 25%; max-width: 300px" : "width: 40%; max-width: 300px")">
                                 @if (Model.CaseInternalLogAccess)
                                 {
-                                    <a href="@GetLogLink(r)"> @Html.AttributeEncode(r.TextInternal).ForHtmlView()</a>
+                                    <a href="@GetLogLink(r)"> @Html.Encode(r.TextInternal).ForHtmlView()</a>
                                 }
                             </td>
 
