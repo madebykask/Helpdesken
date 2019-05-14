@@ -414,6 +414,8 @@ export class CaseEditComponent {
           break;
         }
         case CaseFieldsNames.StateSecondaryId: {
+          const sendExternalEmailsControl = this.form.get(CaseFieldsNames.Log_SendMailToNotifier);
+          const externalLogTextControl = this.form.get(CaseFieldsNames.Log_ExternalText);
           if (v.value) {
             this.stateSecondariesService.getStateSecondary(v.value)
             .pipe(
@@ -438,6 +440,9 @@ export class CaseEditComponent {
                 sendExternalEmailsControl.enable({ onlySelf: true, emitEvent: true });
               }
             });
+          } else if (externalLogTextControl && externalLogTextControl.disabled === false) {
+            //enable only in case extneral log note text is enabled as well
+            sendExternalEmailsControl.enable({ onlySelf: true, emitEvent: true });
           }
           break;
         }
