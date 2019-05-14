@@ -328,6 +328,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
 			{
 				var regionNames = inputData.InputColumns.Where(o => o.Item2.ContainsKey(regionIdentifier))
 					.Select(o => o.Item2[regionIdentifier])
+					.Where(o => !string.IsNullOrEmpty(o))
 					.Distinct()
 					.ToList();
 				if (regionNames.Any())
