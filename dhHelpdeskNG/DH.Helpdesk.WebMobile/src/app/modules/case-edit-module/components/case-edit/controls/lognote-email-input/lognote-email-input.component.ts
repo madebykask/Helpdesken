@@ -17,6 +17,10 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
     ngxTranslateService: TranslateService,
     renderer: Renderer2) {
     super(ngxTranslateService, renderer);
+    //override select settings from base component
+    this.selectOptions.height = 48;
+    this.selectOptions.rows = 5;
+    this.selectOptions.multiline = 3;
   }
 
   private searchResults: EmailsSearchItem[] = [];

@@ -27,6 +27,9 @@ export class NotifierSearchComponent extends SearchInputBaseComponent implements
 
     //override select settings from base component
     this.selectOptions.headerText = this.getSelectHeaderText.bind(this);
+    this.selectOptions.height = 40;
+    this.selectOptions.rows = 5;
+    this.selectOptions.multiline = 2;
   }
 
   ngOnInit() {
