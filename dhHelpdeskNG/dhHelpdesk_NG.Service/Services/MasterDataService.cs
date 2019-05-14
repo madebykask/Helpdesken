@@ -30,7 +30,7 @@ namespace DH.Helpdesk.Services.Services
         bool IsCustomerUser(int customerId, int userId);
         User GetUser(int userId);
         IList<Language> GetLanguages();
-        IList<Text> GetTranslationTexts();
+        IList<Text> GetTranslationTexts(int? textType = null);
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations(int userId);
         IList<CaseFieldSettingsForTranslation> GetCustomerCaseTranslations(int customerId);
         IList<CaseFieldSettingsForTranslation> GetCaseTranslations();
@@ -176,9 +176,9 @@ namespace DH.Helpdesk.Services.Services
         }
 
         // TODO: review how it is used. Now it is put for every user in a session - potential memory leak on high load. Use cache instead
-        public IList<Text> GetTranslationTexts()
+        public IList<Text> GetTranslationTexts(int? textType = null)
         {
-            return _textRepository.GetAllWithTranslation().ToList();
+            return _textRepository.GetAllWithTranslation(textType).ToList();
         }
 
         // TODO: review how it is used. Now it is put for every user in a session - potential memory leak on high load. Use cache instead

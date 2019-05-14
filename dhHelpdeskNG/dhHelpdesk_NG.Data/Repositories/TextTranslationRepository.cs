@@ -1,18 +1,19 @@
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain;
-
     #region TEXT
 
     public interface ITextRepository : IRepository<Text>
     {
         int GetLastId();
-        IEnumerable<Text> GetAllWithTranslation();
+        IEnumerable<Text> GetAllWithTranslation(int? textTypeId = null);
         IEnumerable<TextList> GetAllTexts(int texttypeId, int? defaultLanguage);
         List<TextList> GetAllTextsAndTranslations(int texttypeId);
     }
@@ -26,38 +27,39 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public int GetLastId()
         {
-            var query = (from t in this.DataContext.Texts
-                         select t.Id).Max();
-
-            return query;
+            var lastId = DataContext.Texts.Max(x => x.Id);
+            return lastId;
         }
 
-        public IEnumerable<Text> GetAllWithTranslation()
+        [Obsolete("Use GetAllTextsAndTranslations instead")]
+        public IEnumerable<Text> GetAllWithTranslation(int? textTypeId)
         {
-            return this.DataContext.Texts.AsNoTracking().Include("TextTranslations");
+            IQueryable<Text> query = DataContext.Texts.Include(x => x.TextTranslations).AsNoTracking();
+            if (textTypeId.HasValue)
+            {
+                query = query.Where(t => t.Type == textTypeId);
+            }
+            return query;
         }
 
         public List<TextList> GetAllTextsAndTranslations(int texttypeId)
         {
-            var textEntity = this.DataContext.Texts.Where(t => t.Type == texttypeId)
-                        .Select(t => new TextList
-                        {
-                            Id = t.Id,
-                            TextToTranslate = t.TextToTranslate,
-                            Translations = t.TextTranslations.Select(tt=> 
-                                new TextTranlationsTextLanguageList
-                                {
-                                    Text_Id= tt.Text_Id, 
-                                    Language_Id = tt.Language_Id, 
-                                    TranslationName=tt.TextTranslated, 
-                                    TranslationText_Id = tt.TextTranslation_Id
-                                }).ToList()
-                        }
-
-                );            
+            var textEntity = 
+                DataContext.Texts.Where(t => t.Type == texttypeId).Select(t => new TextList
+                {
+                    Id = t.Id,
+                    TextToTranslate = t.TextToTranslate,
+                    Translations = t.TextTranslations.Select(tt => new TextTranlationsTextLanguageList
+                    {
+                        Text_Id= tt.Text_Id, 
+                        Language_Id = tt.Language_Id, 
+                        TranslationName=tt.TextTranslated, 
+                        TranslationText_Id = tt.TextTranslation_Id
+                    }).ToList()
+                });
             return textEntity.ToList();
-
         }
+
         public IEnumerable<TextList> GetAllTexts(int texttypeId, int? defaultLanguage)
         {
             IEnumerable<TextList> txt = null;
