@@ -21,7 +21,7 @@
     MvcHtmlString FormatLogText(Log logItem)
     {
         var logText = GetLogText(logItem).AddCharacterInParts(70, Environment.NewLine, Environment.NewLine);
-        var formatted = MvcHtmlString.Create(Html.Encode(logText).Replace(Environment.NewLine, "<br />"));
+        var formatted = MvcHtmlString.Create(Html.Encode(logText).Replace(Environment.NewLine, "<br />").Replace("\n", "<br />"));
         return formatted;
     }
 }
