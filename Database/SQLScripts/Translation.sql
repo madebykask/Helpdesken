@@ -7406,7 +7406,7 @@ If not exists (select * from tbltext where id = 2017)
 GO
 
 If not exists (select * from tbltext where id = 2018)
-	insert into tbltext (id, TextString) VALUES (2018, 'Stapla av')
+	insert into tbltext (id, TextString) VALUES (2018, 'Stapla')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2018 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2018, 2, 'Stack by')
@@ -7420,10 +7420,10 @@ If not exists (select * from tblTextTranslation where text_id = 2019 and Languag
 GO
 
 If not exists (select * from tbltext where id = 2020)
-	insert into tbltext (id, TextString) VALUES (2020, 'Verkliga värden')
+	insert into tbltext (id, TextString) VALUES (2020, 'Nuvarande värden')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2020 and Language_Id = 2)
-	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2020, 2, 'Actual values')
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2020, 2, 'Current values')
 GO
 
 
