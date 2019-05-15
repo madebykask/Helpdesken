@@ -74,7 +74,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 
 		public IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter)
 		{
-			var result = DataContext.Database.SqlQuery<HistoricalDataResult>("ReportGetHistoricalData @caseStatus, @changeFrom, @changeTo, @customerID, @changeWorkingGroups, @registerFrom, @registerTo, @closeFrom, @closeTo, @administrators, @departments, @caseTypes, @productAreas, @workingGroups",
+			var result = DataContext.Database.SqlQuery<HistoricalDataResult>("ReportGetHistoricalData @caseStatus, @changeFrom, @changeTo, @customerID, @changeWorkingGroups, @registerFrom, @registerTo, @closeFrom, @closeTo, @includeCasesWithNoWorkingGroup, @administrators, @departments, @caseTypes, @productAreas, @workingGroups",
 				new SqlParameter("@caseStatus", GetNullableValue(filter.CaseStatus)),
 				new SqlParameter("@changeFrom", GetNullableValue(filter.ChangeFrom)),
 				new SqlParameter("@changeTo", GetNullableValue(filter.ChangeTo)),
@@ -84,6 +84,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 				new SqlParameter("@registerTo", GetNullableValue(filter.RegisterTo)),
 				new SqlParameter("@closeFrom", GetNullableValue(filter.CloseFrom)),
 				new SqlParameter("@closeTo", GetNullableValue(filter.CloseTo)),
+				new SqlParameter("@includeCasesWithNoWorkingGroup", filter.IncludeCasesWithNoWorkingGroup),
 				GetIDListParameter("@administrators", filter.Administrators),
 				GetIDListParameter("@departments", filter.Departments),
 				GetIDListParameter("@caseTypes", filter.CaseTypes),

@@ -282,7 +282,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE ReportGetHistoricalData 
+ALTER PROCEDURE [dbo].[ReportGetHistoricalData] 
 	-- Add the parameters for the stored procedure here
 	@caseStatus INT,
 	@changeFrom DATETIME, 
@@ -293,6 +293,7 @@ CREATE PROCEDURE ReportGetHistoricalData
 	@registerTo DATETIME, 
 	@closeFrom DATETIME, 
 	@closeTo DATETIME, 
+	@includeCasesWithNoWorkingGroup BIT,
 	@administrators AS dbo.IDList READONLY, 
 	@departments AS dbo.IDList READONLY, 
 	@caseTypes AS dbo.IDList READONLY, 
@@ -300,19 +301,20 @@ CREATE PROCEDURE ReportGetHistoricalData
 	@workingGroups AS dbo.IDList READONLY
 AS
 BEGIN
-	DECLARE @checkChangeWorkingGroups BIT = 0,
-		@checkAdministrators BIT = 0,
-		@checkDepartments BIT = 0,
-		@checkCaseTypes BIT = 0,
-		@checkProductAreas BIT = 0,
-		@checkWorkingGroups BIT = 0,
-		@checkCaseStatus BIT = CASE WHEN @caseStatus IS NULL THEN 0 ELSE 1 END,
-		@checkChangeFrom BIT = CASE WHEN @changeFrom IS NULL THEN 0 ELSE 1 END,
-		@checkChangeTo BIT = CASE WHEN @changeTo IS NULL THEN 0 ELSE 1 END,
-		@checkRegisterFrom BIT = CASE WHEN @registerFrom IS NULL THEN 0 ELSE 1 END,
-		@checkRegisterTo BIT = CASE WHEN @registerTo IS NULL THEN 0 ELSE 1 END,
-		@checkCloseFrom BIT = CASE WHEN @closeFrom IS NULL THEN 0 ELSE 1 END,
-		@checkCloseTo BIT = CASE WHEN @closeTo IS NULL THEN 0 ELSE 1 END
+	DECLARE @checkChangeWorkingGroups INT = 0,
+		@checkAdministrators INT = 0,
+		@checkDepartments INT = 0,
+		@checkCaseTypes INT = 0,
+		@checkProductAreas INT = 0,
+		@checkWorkingGroups INT = 0,
+		@checkCaseStatus INT = CASE WHEN @caseStatus IS NULL THEN 0 ELSE 1 END,
+		@checkChangeFrom INT = CASE WHEN @changeFrom IS NULL THEN 0 ELSE 1 END,
+		@checkChangeTo INT = CASE WHEN @changeTo IS NULL THEN 0 ELSE 1 END,
+		@checkRegisterFrom INT = CASE WHEN @registerFrom IS NULL THEN 0 ELSE 1 END,
+		@checkRegisterTo INT = CASE WHEN @registerTo IS NULL THEN 0 ELSE 1 END,
+		@checkCloseFrom INT = CASE WHEN @closeFrom IS NULL THEN 0 ELSE 1 END,
+		@checkCloseTo INT = CASE WHEN @closeTo IS NULL THEN 0 ELSE 1 END,
+		@checkCurrentCustomerOnly BIT = 0
 
 	SELECT TOP 1 @checkChangeWorkingGroups = 1 FROM @changeWorkingGroups
 	SELECT TOP 1 @checkAdministrators = 1 FROM @administrators
@@ -321,6 +323,9 @@ BEGIN
 	SELECT TOP 1 @checkProductAreas = 1 FROM @productAreas
 	SELECT TOP 1 @checkWorkingGroups = 1 FROM @workingGroups
 
+	SELECT @checkCurrentCustomerOnly = CASE WHEN (@checkAdministrators + @checkDepartments + @checkCaseTypes + @checkProductAreas + 
+		@checkWorkingGroups + @checkCaseStatus + @checkRegisterFrom + @checkRegisterTo + @checkCloseFrom + 
+		@checkCloseTo) > 0 THEN 1 ELSE 0 END	
 	
 	CREATE TABLE #rows 
 	(
@@ -341,8 +346,12 @@ BEGIN
 	JOIN tblCaseType CT ON CH.CaseType_Id = CT.ID
 	LEFT JOIN tblWorkingGroup WG ON CH.WorkingGroup_Id = WG.Id
 	WHERE 1=1
-	AND C.Customer_Id = @customerID
-	AND (@checkChangeWorkingGroups = 0 OR EXISTS(SELECT ID FROM @changeWorkingGroups CWG WHERE CH.WorkingGroup_Id = CWG.ID))
+	AND CH.Customer_Id = @customerID
+	AND CT.Customer_Id = @customerID
+	AND ((@checkCurrentCustomerOnly = 1 AND C.Customer_Id = @customerID) OR @checkCurrentCustomerOnly = 0)
+	AND (@checkChangeWorkingGroups = 0 OR 
+		EXISTS(SELECT ID FROM @changeWorkingGroups CWG WHERE CH.WorkingGroup_Id = CWG.ID) OR 
+		(@includeCasesWithNoWorkingGroup = 1 AND CH.WorkingGroup_Id IS NULL))
 	AND (@checkAdministrators = 0 OR EXISTS(SELECT ID FROM @administrators A WHERE C.CaseResponsibleUser_Id = A.ID))
 	AND (@checkDepartments = 0 OR EXISTS(SELECT ID FROM @departments D WHERE C.Department_Id = D.ID))
 	AND (@checkCaseTypes = 0 OR EXISTS(SELECT ID FROM @caseTypes CT WHERE C.CaseType_Id = CT.ID))
@@ -371,6 +380,7 @@ BEGIN
 
 	DROP TABLE #rows
 END
+
 GO
 
 

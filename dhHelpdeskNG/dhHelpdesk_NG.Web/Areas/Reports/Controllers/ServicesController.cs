@@ -60,12 +60,12 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 				_workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).ToList() :
 				_workingGroupService.GetWorkingGroups(customerId, user.Id, false, true).ToList();
 
-			if (filter.WorkingGroups != null && filter.WorkingGroups.Any())
+			if (filter.HistoricalWorkingGroups != null && filter.HistoricalWorkingGroups.Any())
 			{
-				workingGroups = workingGroups.Where(o => filter.WorkingGroups.Contains(o.Id)).ToList();
+				workingGroups = workingGroups.Where(o => filter.HistoricalWorkingGroups.Contains(o.Id)).ToList();
 			}
 
-			var result = _reportServiceService.GetHistoricalData(new HistoricalDataFilter
+			var dataFilter = new HistoricalDataFilter
 			{
 				CustomerID = customerId,
 				CaseStatus = filter.CaseStatus == 2 ? 1 : filter.CaseStatus == 1 ? 0 : (int?)null, // 1 active, 0 closed else null
@@ -77,11 +77,14 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 				Departments = filter.Departments,
 				CaseTypes = filter.CaseTypes,
 				ProductAreas = filter.ProductAreas,
-				ChangeWorkingGroups = filter.HistoricalWorkingGroups,
-				ChangeFrom = filter.HistoricalChangeDateFrom ?? DateTime.Now.AddYears(-20),
+				ChangeWorkingGroups = workingGroups.Select(o => o.Id).ToList(),
+				ChangeFrom = filter.HistoricalChangeDateFrom ?? DateTime.Now.AddYears(-100),
 				ChangeTo = filter.HistoricalChangeDateTo.HasValue ? filter.HistoricalChangeDateTo.GetEndOfDay().Value : DateTime.Now.AddYears(20),
-				WorkingGroups = workingGroups.Select(o => o.Id).ToList()
-			});
+				WorkingGroups = filter.WorkingGroups,
+				IncludeCasesWithNoWorkingGroup = filter.HistoricalWorkingGroups == null ||
+					!filter.HistoricalWorkingGroups.Any()
+			};
+			var result = _reportServiceService.GetHistoricalData(dataFilter);
 
 			var wgs = result.Select(o => new { o.WorkingGroup, o.WorkingGroupID }).Distinct().OrderBy(o => o.WorkingGroup).ToArray();
             var caseTypes = CaseTypeTreeTranslation(_caseTypeService.GetAllCaseTypes(customerId, false, true));
