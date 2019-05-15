@@ -103,7 +103,11 @@ namespace DH.Helpdesk.Web.Controllers
                 return Redirect(loginUrl);
             }
 
-            TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);            
+            TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
+            if (Request.QueryString["ReturnUrl"] == "/")
+            {
+                return RedirectToAction("Login");
+            }
             return View();
         }
 
