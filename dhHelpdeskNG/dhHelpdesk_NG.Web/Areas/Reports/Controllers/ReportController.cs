@@ -1,4 +1,5 @@
 ﻿using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Web.Areas.Reports.Models.Reports;
@@ -704,17 +705,18 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                     Value = ((int)GlobalEnums.TranslationCaseFields.WorkingGroup_Id).ToString()
                 }
             };
+            var firstUserNameOrientation = customerSettings?.IsUserFirstLastNameRepresentation.ToBool() ?? false;
             var model = new ReportFilterModel()
             {
                 CaseCreationDate = reportFilter.CaseCreationDate,
-                Administrators = reportFilter.Administrators,
+                Administrators = firstUserNameOrientation ? reportFilter.Administrators : reportFilter.Administrators.OrderBy(a => a.SurName).ToList(),
                 Departments = reportFilter.Departments,
                 WorkingGroups = reportFilter.WorkingGroups,
                 Selected = GetNewFilterSelections(),
                 CaseTypes = reportFilter.CaseTypes,
                 ProductAreas = reportFilter.ProductAreas,
                 Status = GetCaseStateFilter(),
-                UserNameOrientation = customerSettings != null ? customerSettings.IsUserFirstLastNameRepresentation : 1,
+                FirstUserNameOrientation = firstUserNameOrientation,
                 ReportCategory = _reportCategories,
                 ReportCategoryRt = _reportCategoriesRt,
                 StackByList = stackByList,

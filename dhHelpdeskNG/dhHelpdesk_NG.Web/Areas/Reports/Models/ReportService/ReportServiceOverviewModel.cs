@@ -35,7 +35,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Models.ReportService
     {
         public ReportSelectedFilter Selected { get; set; }
 
-        public int UserNameOrientation { get; set; }
+        public bool FirstUserNameOrientation { get; set; }
         public List<SelectListItem> StackByList { get; set; }
         public List<SelectListItem> GroupByList { get; set; }
         public DateToDate CaseChangeDate { get; set; }

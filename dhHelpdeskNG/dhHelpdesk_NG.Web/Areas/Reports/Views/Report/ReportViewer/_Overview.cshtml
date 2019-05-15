@@ -199,7 +199,7 @@
                                         @foreach (var a in Model.ReportFilter.Administrators)
                                         {
                                             var userName = "";
-                                            if (Model.ReportFilter.UserNameOrientation == 1)
+                                            if (Model.ReportFilter.FirstUserNameOrientation)
                                             {
                                                 userName = a.FirstName + " " + a.SurName;
                                             }
