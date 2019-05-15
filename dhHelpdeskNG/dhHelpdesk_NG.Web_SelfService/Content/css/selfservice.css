@@ -1183,3 +1183,7 @@ div .multitext i {
     text-decoration: none;
     outline: 0;
 }
+
+.start-page .panel-body, .start-page .panel-heading {
+    overflow-wrap: break-word;
+}
