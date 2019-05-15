@@ -439,7 +439,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
                 return MvcHtmlString.Create(str);
             }
 
-            return MvcHtmlString.Create(str.Replace(Environment.NewLine, "<br />"));
+            return MvcHtmlString.Create(str.Replace(Environment.NewLine, "<br />")
+                .Replace("\n", "<br />"));
         }
     }
 }

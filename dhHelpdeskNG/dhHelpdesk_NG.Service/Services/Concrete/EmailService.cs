@@ -363,7 +363,9 @@ namespace DH.Helpdesk.Services.Services.Concrete
 			msg.From = new MailAddress(from);
 			msg.IsBodyHtml = true;
 			msg.BodyEncoding = System.Text.Encoding.UTF8;
-			msg.Body = AddInformationToMailBodyAndSubject(body, fields).Replace(Environment.NewLine, "<br />");
+			msg.Body = AddInformationToMailBodyAndSubject(body, fields)
+                .Replace(Environment.NewLine, "<br />")
+                .Replace("\n", "<br />");
 
             //body
             _logger.Warn($"Email: {msg.Subject} | {msg.Body}");
