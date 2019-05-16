@@ -1259,10 +1259,8 @@
                     //Get MailTemplateLanguage
                     foreach (var l in language)
                     {
-                        var mailTemplateLanguageToCopy = this._mailTemplateService.GetMailTemplateLanguageForCustomer(mailTemplateToCopy.Id, customerToCopy.Id, l.Id);
-
-
-
+                        var mailTemplateLanguageToCopy = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(customerToCopy.Id, l.Id, mailTemplateToCopy.Id);
+                        
                         if (mailTemplateLanguageToCopy != null)
                         {
                             var newMailTemplateLanguage = new MailTemplateLanguageEntity
