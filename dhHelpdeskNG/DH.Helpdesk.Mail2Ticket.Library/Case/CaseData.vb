@@ -272,11 +272,24 @@ Public Class CaseData
         Dim sSQL As String
 
         Try
-            Dim workTime = calculateWorkTimeOnChange(objCase)
-            sSQL = $"UPDATE tblCase SET Status=1, ChangeTime='{workTime.Now}', ExternalTime={workTime.ExternalTime}, LeadTime={workTime.LeadTime} WHERE Id={objCase.Id}"
+            Dim workTime as CaseWorkTime = calculateWorkTimeOnChange(objCase)
+            
+            sSQL = $"UPDATE tblCase 
+                     SET Status=1, 
+                         ChangeTime = @changeTime, 
+                         ExternalTime = @externalTime, 
+                         LeadTime = @leadTime
+                     WHERE Id = @caseId"
+            
+            Dim parameters As New List(Of SqlParameter) From {
+                DbHelper.createDbParameter("@caseId", objCase.Id),
+                DbHelper.createDbParameter("@changeTime", workTime.Now),
+                DbHelper.createDbParameter("@externalTime",workTime.ExternalTime),
+                DbHelper.createDbParameter("@leadTime", workTime.LeadTime)
+            }
 
             'If giDBType = 0 Then
-            executeSQL(gsConnectionString, sSQL)
+            DbHelper.executeNonQuery(gsConnectionString, sSQL, CommandType.Text, parameters.ToArray())
             'Else
             '    executeSQLOracle(gsConnectionString, sSQL)
             'End If
