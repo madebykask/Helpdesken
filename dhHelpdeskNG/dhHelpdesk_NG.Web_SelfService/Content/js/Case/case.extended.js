@@ -225,6 +225,7 @@ window.extendedCasePage =
                             ou_id_2: { Value: fieldValues.ChildOUId },
                             productarea_id: { Value: fieldValues.ProductAreaId },
                             status_id: { Value: fieldValues.StatusId },
+                            subStatus_id: { Value: fieldValues.SubStatusId },
                             plandate: { Value: fieldValues.PlanDate },
                             watchdate: { Value: fieldValues.WatchDate },
                             priority_id: { Value: fieldValues.PriorityId },
@@ -322,6 +323,7 @@ window.extendedCasePage =
             var _ou_id_2 = fieldData.ou_id_2;
             var _productarea_id = fieldData.productarea_id;
             var _status_id = fieldData.status_id;
+            var _subStatus_id = fieldData.subStatus_id;
             var _plandate = fieldData.plandate;
             var _watchdate = fieldData.watchdate;
             var _log_textinternal = fieldData.log_textinternal;
@@ -378,6 +380,11 @@ window.extendedCasePage =
 
             if (_status_id != undefined) {
                 $('#' + _caseFields.StatusId).val(_status_id.Value).change();
+            }
+
+            if (_subStatus_id !== undefined) {
+                $('#' + _caseFields.SubStatusId).val(_subStatus_id.Value).change();
+                $('#' + _caseFields.SubStatusName).val(_subStatus_id.SecondaryValue);
             }
 
             if (_plandate != undefined) {

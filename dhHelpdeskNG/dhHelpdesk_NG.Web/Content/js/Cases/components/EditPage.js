@@ -308,6 +308,7 @@ EditPage.prototype.loadExtendedCase = function () {
                 ou_id_2: { Value: fieldValues.ChildOUId },
                 productarea_id: { Value: fieldValues.ProductAreaId },
                 status_id: { Value: fieldValues.StatusId },
+                subStatus_id: { Value: fieldValues.SubStatusId },
                 plandate: { Value: fieldValues.PlanDate },
                 watchdate: { Value: fieldValues.WatchDate },
                 priority_id: { Value: fieldValues.PriorityId },
