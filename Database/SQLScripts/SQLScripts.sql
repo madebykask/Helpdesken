@@ -282,7 +282,7 @@ BEGIN
 END
 GO
 
-ALTER PROCEDURE [dbo].[ReportGetHistoricalData] 
+CREATE PROCEDURE [dbo].[ReportGetHistoricalData] 
 	-- Add the parameters for the stored procedure here
 	@caseStatus INT,
 	@changeFrom DATETIME, 
