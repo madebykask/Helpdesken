@@ -69,7 +69,8 @@
                             @Translation.GetCoreTextTranslation("Gruppera")
                         </td>
                         <td>
-                            <select id="lstfilterReportCategory" name="lstfilterCategory" data-field="reportcategories" style="width: 300px;" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" @(Model.ReportFilter.ReportCategory == null ? " visible: none" : "")>
+                            <select id="lstfilterReportCategory" name="lstfilterCategory" data-field="reportcategories" style="width: 300px;" 
+                                    data-placeholder="@Translation.Get("Välj en eller flera")" @(Model.ReportFilter.ReportCategory == null ? " display: none" : "")>
                                 @if (Model.ReportFilter.ReportCategory != null)
                                 {
                                     foreach (var r in Model.ReportFilter.ReportCategory.Items)
@@ -82,7 +83,8 @@
                                     }
                                 }
                             </select>
-                            <select id="lstfilterReportCategoryRt" name="lstfilterCategoryRt" data-field="reportcategoriesrt" style="width: 300px;" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" @(Model.ReportFilter.ReportCategoryRt == null ? " visible: none" : "")>
+                            <select id="lstfilterReportCategoryRt" name="lstfilterCategoryRt" data-field="reportcategoriesrt" style="width: 300px;" 
+                                    data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" @(Model.ReportFilter.ReportCategoryRt == null ? " display: none" : "")>
                                 @if (Model.ReportFilter.ReportCategoryRt != null)
                                 {
                                     foreach (var r in Model.ReportFilter.ReportCategoryRt.Items)
@@ -96,7 +98,7 @@
                                 }
                             </select>
 
-                            <select id="lstfilterReportCategory_repl" style="width: 300px;" @(Model.ReportFilter.ReportCategory == null ? "" : "display: none") disabled></select>
+                            <select id="lstfilterReportCategory_repl" style="width: 300px;" @(Model.ReportFilter.ReportCategory == null ? "" : " display: none") disabled></select>
 
                         </td>
                     </tr>
@@ -105,7 +107,7 @@
                     {
                         <tr id="stackBy">
                             <td>
-                                @Translation.Get("Stapla av")
+                                @Translation.Get("Stapla")
                             </td>
                             <td>
                                 @Html.DropDownListFor(m => m.ReportFilter.Selected.StackById, Model.ReportFilter.StackByList, "",

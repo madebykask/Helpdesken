@@ -7,6 +7,6 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService
     {
         ReportData GetReportData(string reportIdentity, ReportSelectedFilter filters);
 		IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter);
-
-	}
+        IList<ReportedTimeDataResult> GetReportedTimeData(ReportedTimeDataFilter filter);
+    }
 }

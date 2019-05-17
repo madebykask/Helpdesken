@@ -25,7 +25,8 @@
         ResponseTime: 22,
         ReportGenerator: 18,
         CaseSatisfaction: 23,
-        HistoricalReport: 24
+        HistoricalReport: 24,
+        ReportedTime: 25
     }
 
     dhHelpdesk.reports.utils = {

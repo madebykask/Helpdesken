@@ -348,13 +348,12 @@
             }
         }
 
-        function getHistoricalFilters() {
+        function getCommonFilter() {
             var departments = [];
             var workingGroups = [];
             var administrators = [];
             var caseTypes = [];
             var productAreas = [];
-            var historicalWorkingGroups = [];
 
             $(departmentDropDown + ' option:selected').each(function () {
                 departments.push($(this).val());
@@ -376,22 +375,23 @@
                 productAreas.push($(this).val());
             });
 
-            $(historicalWorkingGroupDropDown + ' option:selected').each(function () {
-                historicalWorkingGroups.push($(this).val());
-            });
-
-            var status = $(statusList + ' option:selected').val();
-            var groupBy = $('#lstGroupBy').val();;
-            var stackBy = $('#lstStackBy').val();
-
             var regDateFrom = $(caseCreateFrom).val();
             var regDateTo = $(caseCreateTo).val();
 
             var closeDateFrom = $(caseCloseFrom).val();
             var closeDateTo = $(caseCloseTo).val();
 
-            var historicalChangeDateFrom = $(changeDateFrom).val();
-            var historicalChangeDateTo = $(changeDateTo).val();
+            var groupBy = null;
+            var $reportCategory = $(reportCategoryDropdown);
+            var $reportCategoryRt = $(reportCategoryDropdownRt);
+
+            if ($reportCategory.is(':visible')) {
+                groupBy = $reportCategory.val();
+            } else if ($reportCategoryRt.is(':visible')) {
+                groupBy = $reportCategoryRt.val();
+            }
+
+            var status = $(statusList + ' option:selected').val();
 
             return {
                 'departments': departments,
@@ -403,19 +403,41 @@
                 'regDateTo': regDateTo,
                 'closeDateFrom': closeDateFrom,
                 'closeDateTo': closeDateTo,
+                'status': status,
+                'groupBy': groupBy
+            };
+
+        }
+
+        function getHistoricalFilters() {
+            var historicalWorkingGroups = [];
+
+            $(historicalWorkingGroupDropDown + ' option:selected').each(function () {
+                historicalWorkingGroups.push($(this).val());
+            });
+
+            var groupBy = $('#lstGroupBy').val();
+            var stackBy = $('#lstStackBy').val();
+
+            var historicalChangeDateFrom = $(changeDateFrom).val();
+            var historicalChangeDateTo = $(changeDateTo).val();
+            var commonFilter = getCommonFilter();
+
+            return $.extend(commonFilter, {
                 'historicalChangeDateFrom': historicalChangeDateFrom,
                 'historicalChangeDateTo': historicalChangeDateTo,
                 'historicalWorkingGroups': historicalWorkingGroups,
-                'status': status,
                 'groupBy': groupBy,
                 'stackBy': stackBy
-            };
+            });
         }
 
         dhHelpdesk.reports.onShowReport = function (e) {
             var reportId = $("#lstReports").find("option:selected").data("id");
             if (reportId === dhHelpdesk.reports.reportType.HistoricalReport) {
                 dhHelpdesk.reports.onHistoricalShow.call(this, e);
+            } else if (reportId === dhHelpdesk.reports.reportType.ReportedTime) {
+                dhHelpdesk.reports.onReportedTimeReportShow.call(this, e);
             } else {
                 dhHelpdesk.reports.onOtherShow.call(this, e);
             }
@@ -427,6 +449,14 @@
 
             dhHelpdesk.reports.historicalReport.show();
             dhHelpdesk.reports.historicalReport.update(getHistoricalFilters());
+        }
+
+        dhHelpdesk.reports.onReportedTimeReportShow = function (e) {
+            if (!dhHelpdesk.reports.doValidation(false))
+                return;
+
+            dhHelpdesk.reports.reportedTimeReport.show();
+            dhHelpdesk.reports.reportedTimeReport.update(getCommonFilter());
         }
 
         dhHelpdesk.reports.onOtherShow = function(e) {
@@ -520,6 +550,7 @@
                 $.each(historicalReportControls, function (i, v) { v.show(); });
                 $stackBy.val(stackByDefaultValue);
                 $stackBy.prop('disabled', false);
+                window.dhHelpdesk.reports.historicalReport.init();
             } else {
                 $btnPreview.hide();
                 $btnShow.hide();
@@ -528,14 +559,20 @@
                 $extraParameters.show();
                 $reportGeneratorFields.hide();
                 $('#reportPresentationArea').html('');
-                $otherReportsContainer.show();
                 $generateReportContainer.hide();
                 $stackBy.val('');
                 $stackBy.prop('disabled', true);
                 $groupBy.hide();
                 dhHelpdesk.reports.historicalReport.hide();
-                $historicalReportContainer.hide();
                 $historicalFilters.hide();
+                if (reportId === dhHelpdesk.reports.reportType.ReportedTime) {
+                    $otherReportsContainer.hide();
+                    $historicalReportContainer.show();
+                    window.dhHelpdesk.reports.reportedTimeReport.init();
+                } else {
+                    $historicalReportContainer.hide();
+                    $otherReportsContainer.show();
+                }
             }
 
             if (isSavedFilter) {

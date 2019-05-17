@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DH.Helpdesk.BusinessData.Enums.Reports;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Domain;
@@ -7,16 +8,17 @@ using DH.Helpdesk.Web.Areas.Reports.Models.ReportService;
 
 namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 {
-	using System.Web.Mvc;
+    using System.Web.Mvc;
 
-	using DH.Helpdesk.Dal.Infrastructure.Context;
-	using DH.Helpdesk.Services.Services;
-	using DH.Helpdesk.Web.Infrastructure;
-	using Services.Services.Reports;
-	using BusinessData.Models.ReportService;
-	using System;
+    using DH.Helpdesk.Dal.Infrastructure.Context;
+    using DH.Helpdesk.Services.Services;
+    using DH.Helpdesk.Web.Infrastructure;
+    using Services.Services.Reports;
+    using BusinessData.Models.ReportService;
+    using System;
+    using DH.Helpdesk.BusinessData.OldComponents;
 
-	public class ServicesController : BaseController
+    public class ServicesController : BaseController
     {
         private readonly IUserService _userService;
         private readonly IWorkContext _workContext;
@@ -100,6 +102,48 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 			};
 
             return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetReportedTimeData(ReportedTimeReportFilterModel filter)
+        {
+            var customerId = SessionFacade.CurrentCustomer.Id;
+            var dataFilter = new ReportedTimeDataFilter
+            {
+                CustomerID = customerId,
+                Administrators = filter.Administrators,
+                CaseStatus = filter.CaseStatus,
+                CaseTypes = filter.CaseTypes,
+                RegisterFrom = filter.RegisterFrom,
+                RegisterTo = filter.RegisterTo.HasValue ? filter.RegisterTo.GetEndOfDay() : new DateTime?(),
+                CloseFrom = filter.CloseFrom,
+                CloseTo = filter.CloseTo.HasValue ? filter.CloseTo.GetEndOfDay() : new DateTime?(),
+                Departments = filter.Departments,
+                ProductAreas = filter.ProductAreas,
+                WorkingGroups = filter.WorkingGroups,
+                GroupBy = (ReportedTimeGroup)filter.GroupBy
+            };
+
+            var result = _reportServiceService.GetReportedTimeData(dataFilter);
+            var minutesInHour = 60.0;
+            var totalHours = result.Sum(o => o.TotalTime) / minutesInHour;
+            var responce = new
+            {
+                totalLabel = string.Format("{0}: {1}", Translation.GetCoreTextTranslation("Summa"), totalHours),
+                data = new 
+                {
+                    labels = result.Select(o => o.Label),
+                    datasets = new []
+                    {
+                        new 
+                        {
+                            label = Translation.GetCoreTextTranslation("Antal"),
+                            data = result.Select(o => o.TotalTime / minutesInHour)
+                        }
+                    }
+                }
+            };
+
+            return Json(responce, JsonRequestBehavior.AllowGet);
         }
 
         private IList<CaseType> CaseTypeTreeTranslation(IList<CaseType> caseTypes)

@@ -105,6 +105,12 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 			var result = _reportServiceRepository.GetHistoricalData(filter);
 			return result;
 		}
+
+        public IList<ReportedTimeDataResult> GetReportedTimeData(ReportedTimeDataFilter filter)
+        {
+            var result = _reportServiceRepository.GetReportedTimeData(filter);
+            return result;
+        }
         #endregion
 
         #region Private Methods and Operators

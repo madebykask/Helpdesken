@@ -4,7 +4,7 @@ using static DH.Helpdesk.BusinessData.OldComponents.GlobalEnums;
 
 namespace DH.Helpdesk.BusinessData.OldComponents
 {
-    public class GlobalEnums
+    public partial class GlobalEnums
     {
 
         public enum CaseIcon

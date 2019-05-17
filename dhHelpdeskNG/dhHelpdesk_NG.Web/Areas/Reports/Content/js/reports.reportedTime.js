@@ -1,4 +1,4 @@
-﻿function historicalReport(args) {
+﻿function reportedTimeReport(args) {
     var options = $.extend({}, args);
     var ctx = document.getElementById('chartjs').getContext('2d');
 
@@ -15,6 +15,12 @@
                     data: [],
                     options: {
                         maintainAspectRatio: false,
+                        title: {
+                            display: true,
+                            padding: 20,
+                            fontSize: 16,
+                            text: ''
+                        },
                         legend: {
                             position: 'right'
                         },
@@ -22,16 +28,14 @@
                             colorschemes: {
                                 scheme: 'tableau.Tableau20' // see https://nagix.github.io/chartjs-plugin-colorschemes/colorchart.html for other color schemes
                             },
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end'
+                            }
                         },
                         scales: {
-                            xAxes: [
-                                {
-                                    stacked: true
-                                }
-                            ],
                             yAxes: [
                                 {
-                                    stacked: true,
                                     ticks: {
                                         beginAtZero: true
                                     }
@@ -53,7 +57,6 @@
                 type: 'POST',
                 data: JSON.stringify({
                     'filter.GroupBy': filters.groupBy,
-                    'filter.StackBy': filters.stackBy,
                     'filter.Departments': filters.departments,
                     'filter.WorkingGroups': filters.workingGroups,
                     'filter.Administrators': filters.administrators,
@@ -63,18 +66,15 @@
                     'filter.RegisterFrom': filters.regDateFrom,
                     'filter.RegisterTo': filters.regDateTo,
                     'filter.CloseFrom': filters.closeDateFrom,
-                    'filter.CloseTo': filters.closeDateTo,
-                    'filter.HistoricalChangeDateTo': filters.historicalChangeDateTo,
-                    'filter.HistoricalChangeDateFrom': filters.historicalChangeDateFrom,
-                    'filter.HistoricalWorkingGroups': filters.historicalWorkingGroups
-
+                    'filter.CloseTo': filters.closeDateTo
                 }),
                 url: options.dataUrl,
                 contentType: 'application/json'
             })
-                .done(function (data) {
+                .done(function (responce) {
 
-                    self.chartInstance.data = data;
+                    self.chartInstance.options.title.text = responce.totalLabel;
+                    self.chartInstance.data = responce.data;
 
                     self.chartInstance.update();
                     //self.chartInstance.resize();
@@ -86,24 +86,9 @@
 
         },
 
-        toggle: function () {
-            var $container = $('#historicalReportContainer').find('.row').first();
-            if ($container.is(':hidden')) {
-                $container.show();
-            } else {
-                $container.hide();
-            }
-        },
-
         show: function () {
             var $container = $('#historicalReportContainer').find('.row').first();
             if ($container.is(':hidden')) { $container.show() };
-        },
-
-        hide: function () {
-            var $container = $('#historicalReportContainer').find('.row').first();
-            if (!$container.is(':hidden')) { $container.hide() };
         }
-
     }
 }

@@ -325,7 +325,9 @@
                             "~/Areas/Reports/Content/js/reports.js",
                             "~/Scripts/chart.min.js",
                             "~/Areas/Reports/Content/js/chartjs-plugin-colorschemes.min.js",
-                            "~/Areas/Reports/Content/js/reports.historical.js"));
+                            "~/Areas/Reports/Content/js/chartjs-plugin-datalabels.min.js",
+                            "~/Areas/Reports/Content/js/reports.historical.js",
+                            "~/Areas/Reports/Content/js/reports.reportedTime.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/admininvoice").Include(
                            "~/Areas/admin/Content/js/invoice/invoicearticleIndex.js",

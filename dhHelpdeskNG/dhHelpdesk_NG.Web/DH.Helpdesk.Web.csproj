@@ -351,7 +351,9 @@
     <Compile Include="Areas\Inventory\Models\RelatedCasesModels\WorkstationRelatedCasesModel.cs" />
     <Compile Include="Areas\Inventory\Models\RelatedCasesModel.cs" />
     <Compile Include="Areas\Inventory\Models\RelatedCasesModels\ServerRelatedCasesModel.cs" />
+    <Compile Include="Areas\Reports\Models\ReportService\CommonReportFilterModel.cs" />
     <Compile Include="Areas\Reports\Models\ReportService\HistoricalReportFilterModel.cs" />
+    <Compile Include="Areas\Reports\Models\ReportService\ReportedTimeReportFilterModel.cs" />
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
     <Compile Include="Components\Contracts\ContractHistoryFormatter.cs" />
     <Compile Include="Components\Contracts\ContractHistoryMarkupBuilder.cs" />
@@ -667,6 +669,7 @@
     <Content Include="Areas\Invoices\Scripts\Pages\invoicesOverview.js" />
     <Content Include="Areas\Reports\Content\js\chartjs-plugin-colorschemes.min.js" />
     <Content Include="Areas\Reports\Content\js\reports.historical.js" />
+    <Content Include="Areas\Reports\Content\js\reports.reportedTime.js" />
     <Content Include="Areas\Reports\Content\js\reportViewer.logic.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-datepicker.css" />

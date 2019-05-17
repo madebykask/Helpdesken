@@ -10,5 +10,6 @@ namespace DH.Helpdesk.Services.Services.Reports
         ReportData GetReportData(string reportIdentity, ReportSelectedFilter filters, int userId, int customerId);
 
 		IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter);
-	}
+        IList<ReportedTimeDataResult> GetReportedTimeData(ReportedTimeDataFilter filter);
+    }
 }

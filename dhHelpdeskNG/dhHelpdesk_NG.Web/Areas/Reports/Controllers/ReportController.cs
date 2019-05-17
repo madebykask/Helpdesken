@@ -758,7 +758,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 			{
 				new KeyValuePair<string, string>("-7", "NumberOfCases"),
 				new KeyValuePair<string, string>("-8", "AvgResolutionTime"),
-				new KeyValuePair<string, string>("-9", "ReportedTime"),
+                new KeyValuePair<string, string>("25", "ReportedTime"),
+                //new KeyValuePair<string, string>("-9", "ReportedTime"),
 			    new KeyValuePair<string, string>("24", "HistoricalReport"),
 			};
 

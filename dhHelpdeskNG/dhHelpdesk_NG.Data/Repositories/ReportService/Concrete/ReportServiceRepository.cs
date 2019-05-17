@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Common.Tools;
+﻿using DH.Helpdesk.BusinessData.Enums.Reports;
+using DH.Helpdesk.Common.Tools;
 
 namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 {
@@ -94,6 +95,114 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 
 			return result;
 		}
+
+        public IList<ReportedTimeDataResult> GetReportedTimeData(ReportedTimeDataFilter filter)
+        {
+            var query = DataContext.Logs.AsNoTracking()
+                .Where(l => l.Case.Customer_Id == filter.CustomerID);
+
+            if (filter.RegisterFrom.HasValue)
+                query = query.Where(l => l.Case.RegTime >= filter.RegisterFrom.Value);
+
+            if (filter.RegisterTo.HasValue)
+                query = query.Where(l => l.Case.RegTime <= filter.RegisterTo.Value);
+
+            if(filter.Administrators!= null && filter.Administrators.Any())
+                query = query.Where(l => l.Case.Performer_User_Id.HasValue && filter.Administrators.Contains(l.Case.Performer_User_Id.Value));
+
+            if (filter.CloseFrom.HasValue)
+                query = query.Where(l => l.Case.FinishingDate >= filter.CloseFrom.Value);
+
+            if (filter.CloseTo.HasValue)
+                query = query.Where(l => l.Case.FinishingDate >= filter.CloseTo.Value);
+
+            if (filter.Departments!= null && filter.Departments.Any())
+                query = query.Where(l => l.Case.Department_Id.HasValue && filter.Departments.Contains(l.Case.Department_Id.Value));
+
+            if (filter.WorkingGroups!= null && filter.WorkingGroups.Any())
+                query = query.Where(l => l.Case.WorkingGroup_Id.HasValue && filter.WorkingGroups.Contains(l.Case.WorkingGroup_Id.Value));
+
+            if (filter.CaseTypes!= null && filter.CaseTypes.Any())
+                query = query.Where(l => filter.CaseTypes.Contains(l.Case.CaseType_Id));
+
+            if (filter.ProductAreas!= null && filter.ProductAreas.Any())
+                query = query.Where(l => l.Case.ProductArea_Id.HasValue && filter.ProductAreas.Contains(l.Case.ProductArea_Id.Value));
+
+            if (filter.CaseStatus.HasValue)
+            {
+                var status = (CaseProgressFilterEnum) filter.CaseStatus.Value;
+                switch (status)
+                {
+                    case CaseProgressFilterEnum.None:
+                    {
+                        break;
+                    }
+                    case CaseProgressFilterEnum.ClosedCases:
+                    {
+                        query = query.Where(l => l.Case.FinishingDate.HasValue);
+                        break;
+                    }
+                    case CaseProgressFilterEnum.CasesInProgress:
+                    {
+                        query = query.Where(l => !l.Case.FinishingDate.HasValue);
+                        break;
+                    }
+                    default:
+                    {
+                        throw new Exception(string.Format("Unknown CaseStatus value: {0}", filter.CaseStatus.Value));
+                    }
+                }
+            }
+
+            IQueryable<ReportedTimeDataResult> result = null;
+            switch (filter.GroupBy)
+            {
+                case ReportedTimeGroup.CaseType_Id:
+                    result = query.GroupBy(l => new { l.Case.CaseType_Id, l.Case.CaseType.Name })
+                        .Select(lg => new ReportedTimeDataResult
+                            {Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                    break;
+                case ReportedTimeGroup.CaseNumber:
+                    result = query.GroupBy(l => l.Case.CaseNumber)
+                        .Select(lg => new ReportedTimeDataResult
+                            {Label = lg.Key.ToString(), TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                    break;
+                case ReportedTimeGroup.Department_Id:
+                    result = query.GroupBy(l => new { l.Case.Department_Id, l.Case.Department.DepartmentName })
+                        .Select(lg => new ReportedTimeDataResult
+                            {Label = lg.Key.DepartmentName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                    break;
+                case ReportedTimeGroup.Priority_Id:
+                    result = query.GroupBy(l => new { l.Case.Priority_Id, l.Case.Priority.Name })
+                        .Select(lg => new ReportedTimeDataResult
+                            {Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                    break;
+                case ReportedTimeGroup.ProductArea_Id:
+                    result = query.GroupBy(l => new { l.Case.ProductArea_Id, l.Case.ProductArea.Name })
+                        .Select(lg => new ReportedTimeDataResult
+                            {Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                    break;
+                case ReportedTimeGroup.LogNoteDate:
+                    result = query.GroupBy(l => l.LogDate )
+                        .Select(lg => new ReportedTimeDataResult
+                            {Label = lg.Key.ToString(), TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                    break;
+                case ReportedTimeGroup.Performer_User_Id:
+                    result = query.GroupBy(l => new { l.Case.Performer_User_Id, l.Case.User.FirstName, l.Case.User.SurName })
+                        .Select(lg => new ReportedTimeDataResult
+                            {Label = lg.Key.FirstName + " " + lg.Key.SurName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                    break;
+                case ReportedTimeGroup.WorkingGroup_Id:
+                    result = query.GroupBy(l => new { l.Case.WorkingGroup_Id, l.Case.Workinggroup.WorkingGroupName })
+                        .Select(lg => new ReportedTimeDataResult
+                            {Label = lg.Key.WorkingGroupName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+                    
+            return result.ToList();
+        }
 
 		private object GetNullableValue<T>(T value)
 		{

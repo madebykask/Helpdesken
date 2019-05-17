@@ -527,8 +527,11 @@
     <Compile Include="Models\Questionnaire\Write\ParticipantForInsert.cs" />
     <Compile Include="Models\OUOverview .cs" />
     <Compile Include="Models\ImpactOverview.cs" />
+    <Compile Include="Models\ReportService\CommonReportDataFilter.cs" />
     <Compile Include="Models\ReportService\HistoricalDataFilter.cs" />
     <Compile Include="Models\ReportService\HistoricalDataResult.cs" />
+    <Compile Include="Models\ReportService\ReportedTimeDataFilter.cs" />
+    <Compile Include="Models\ReportService\ReportedTimeDataResult.cs" />
     <Compile Include="Models\Shared\EntityWithEmail.cs" />
     <Compile Include="Models\UrgencyOverview.cs" />
     <Compile Include="Models\SystemOverview.cs" />
@@ -1102,6 +1105,7 @@
     <Compile Include="Models\WorktimeCalculator\WorkTimeCalculator.cs" />
     <Compile Include="Models\WorkingDay\TimeRangesHolder.cs" />
     <Compile Include="OldComponents\DbUtils.cs" />
+    <Compile Include="Enums\Reports\ReportedTimeGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\User\Input\UserOverview.cs" />
     <Compile Include="OldComponents\Enums.cs" />

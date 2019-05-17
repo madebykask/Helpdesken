@@ -5,7 +5,8 @@
         window.dhHelpdesk.reports.historicalReport = historicalReport({
             dataUrl: '@Url.Action("GetHistoricalData", "Services", new { area = "reports" })',
         });
-
-        window.dhHelpdesk.reports.historicalReport.init();
+        window.dhHelpdesk.reports.reportedTimeReport = reportedTimeReport({
+            dataUrl: '@Url.Action("GetReportedTimeData", "Services", new { area = "reports" })',
+        });
     })
 </script>
