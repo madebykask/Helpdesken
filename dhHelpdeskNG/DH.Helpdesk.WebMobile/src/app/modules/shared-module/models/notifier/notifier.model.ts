@@ -28,8 +28,17 @@ export class NotifierModel {
 export class NotifierSearchItem {
     constructor() {
     }
-    id: string;
+    id: number;
     userId: string;
-    name: string;
+    firstName: string;
+    surName: string;
     email: string;
+    phone: string;
+    departmentId: number;
+    departmentName: string;
+    userCode: string;
+
+    get fullName () {
+      return `${this.firstName} ${this.surName}`.trim();
+    }
 }

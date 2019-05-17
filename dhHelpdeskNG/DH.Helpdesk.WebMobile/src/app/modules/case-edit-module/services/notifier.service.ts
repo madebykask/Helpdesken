@@ -26,5 +26,4 @@ export class NotifierService {
       map(data => <NotifierModel>Object.assign(new NotifierModel(), data))
     );
   }
-
 }

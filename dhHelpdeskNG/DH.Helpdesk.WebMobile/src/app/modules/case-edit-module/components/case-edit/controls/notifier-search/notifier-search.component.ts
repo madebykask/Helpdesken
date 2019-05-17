@@ -49,26 +49,53 @@ export class NotifierSearchComponent extends SearchInputBaseComponent implements
 
   // virtual method override
   protected processSearchResults(data: NotifierSearchItem[], query: string) {
-    this.searchResults = data;
+    this.searchResults = this.sortSearchResults(data, query);
     const notifiersData =
-      data.map(item => {
+      this.searchResults.map((item: NotifierSearchItem) => {
         const itemHeader = this.formatItemHeader(item, query);
         const itemDesc = this.formatItemDesc(item, query);
+        console.log(itemHeader);
+        console.log(itemDesc);
         return {
           value: item.id,
-          text: `${item.userId} - ${item.name || ''} - ${item.email}`,
+          text: `${item.userId}|${item.fullName}|${item.email}|${item.phone}|${item.userCode}`,
           html: `<div>
-                  <div class="itemHeader">${itemHeader} </div>
+                  <div class="itemHeader">${itemHeader}</div>
                   <div class="itemDesc">${itemDesc}</div>
                 </div>`
         };
+
       });
     return notifiersData;
   }
 
+  private sortSearchResults(data: NotifierSearchItem[], query: string): NotifierSearchItem[] {
+    const startsWithItems = [],
+          caseSensetiveItems = [],
+          otherItems = [];
+
+    const qs = query.toLowerCase();
+
+    for (const item of data) {
+      const startsAt = (item.userId || '').indexOf(qs);
+      if (startsAt === 0) {
+        startsWithItems.push(item);
+      } else if (startsAt > 0) {
+        caseSensetiveItems.push(item);
+      } else {
+        otherItems.push(item);
+      }
+    }
+    return [...startsWithItems, ...caseSensetiveItems, ...otherItems];
+  }
+
   private formatItemHeader(item: NotifierSearchItem, query: string) {
-    const userId = item.userId != null ? item.userId + ' - ' : '';
-    let result = userId  + (item.name || '');
+    let name = `${item.firstName} ${item.surName}`.trim();
+    if (item.surName && item.surName.indexOf(query) > -1) {
+      name = `${item.surName} ${item.firstName}`.trim();
+    }
+
+    let result =  `${name || ''} - ${item.userId || ''} - ${item.departmentName || ''} - ${item.userCode || ''}`;
 
     // highlight searched text with  bold
     result = this.highligtQueryText(result, query);
@@ -77,10 +104,13 @@ export class NotifierSearchComponent extends SearchInputBaseComponent implements
 
   private formatItemDesc(item: NotifierSearchItem, query) {
     const email = (item.email || '').toLowerCase();
-    if (email && email.length) {
-      this.highligtQueryText(email, query);
-    }
-    return email;
+    const phone = item.phone || '';
+    let result = phone.length ? `${email} - ${phone}` : email;
+
+    // highlight searched text with  bold
+    result = this.highligtQueryText(result, query);
+
+    return result;
   }
 
   // virtual method override

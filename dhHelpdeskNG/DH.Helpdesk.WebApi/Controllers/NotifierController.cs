@@ -54,8 +54,13 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 Id = x.Id,
                 UserId = x.UserId,
-                Name = (x.FirstName + ' ' + x.SurName).Trim(),
-                Email = x.Email
+                FirstName = x.FirstName,
+                SurName = x.SurName,
+                Phone = x.Phone,
+                Email = x.Email,
+                DepartmentId = x.Department_Id ?? 0,
+                DepartmentName = x.DepartmentName,
+                UserCode = x.UserCode
             }).ToList();
 
             return result;

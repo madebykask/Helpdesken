@@ -71,19 +71,46 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
   }
 
   protected processSearchResults(data: EmailsSearchItem[], query: string) {
-    this.searchResults = data;
-    return data.map(item => {
-      const itemHeader = this.formatItemHeader(item, query);
-      const itemDesc = this.formatItemDesc(item, query);
-      return {
-        value: item.id,
-        text: item.userId,
-        html: `<div>
-                 <div class="itemHeader">${itemHeader} </div>
-                 <div class="itemDesc">${itemDesc}</div>
-               </div>`
-      };
+    this.searchResults = this.sortSearchResults(data, query);
+    const followerEmails =
+      this.searchResults.map(item => {
+          const itemHeader = this.formatItemHeader(item, query);
+          const itemDesc = this.formatItemDesc(item, query);
+          return {
+            value: item.id,
+            text: item.userId,
+            html: `<div>
+                    <div class="itemHeader">${itemHeader} </div>
+                    <div class="itemDesc">${itemDesc}</div>
+                  </div>`
+          };
     });
+    return followerEmails;
+  }
+
+  private sortSearchResults(data: EmailsSearchItem[], query: string): EmailsSearchItem[] {
+    const startsWithItems = [],
+          caseSensetiveItems = [],
+          caseInsensetiveItems = [],
+          otherItems = [];
+
+    const qs = query.toLowerCase();
+
+    for (const item of data) {
+      const startsAt = (item.userId || '').indexOf(qs);
+      if (item.groupType === CaseUserSearchGroup.Initiator) {
+        if (startsAt === 0) {
+          startsWithItems.push(item);
+        } else if (startsAt > 0) {
+          caseSensetiveItems.push(item);
+        } else {
+          caseInsensetiveItems.push(item);
+        }
+      } else {
+        otherItems.push(item);
+      }
+    }
+    return [...startsWithItems, ...caseSensetiveItems, ...caseInsensetiveItems, ...otherItems];
   }
 
   processItemSelected(selectedVal, isSelected: boolean): void {
@@ -112,10 +139,12 @@ export class LognoteEmailInputComponent extends SearchInputBaseComponent {
 
   private formatItemHeader(item: EmailsSearchItem, query: string) {
     const groupName = this.getSearchGroupName(item.groupType);
-    const name = item.firstName + ' ' + item.surName;
-    const userId = item.userId != null ? item.userId + ' - ' : '';
+    let name = `${item.firstName} ${item.surName}`.trim();
+    if (item.surName && item.surName.indexOf(query) > -1) {
+      name = `${item.surName} ${item.firstName}`.trim();
+    }
 
-    let result = (name + ' - ' + userId + item.departmentName);
+    let result = `${name || ''} - ${item.userId || ''} - ${item.departmentName || ''}`;
 
     // highlight searched text with  bold
     result = this.highligtQueryText(result, query);

@@ -6,19 +6,10 @@ interface IRouteStorageObject {
 }
 
 export class CaseRouteReuseStrategy implements RouteReuseStrategy {
-  
+
   private static storedRouteHandles = new Map<string, DetachedRouteHandle>();
 
-  static deleteSnaphots() {
-    if (CaseRouteReuseStrategy.storedRouteHandles.size > 0) {
-      for (let key of Array.from(CaseRouteReuseStrategy.storedRouteHandles.keys())) {
-        console.log('>>> deleting snapshot: ', key);
-        CaseRouteReuseStrategy.storedRouteHandles.delete(key);
-      }
-    }
-  }
-
-  //supported pages for saving state 
+  //supported pages for saving state
   caseTemplatePath = 'case/template/:templateId';
   casePagePath = 'case/:id';
   filePageRoutes = ['case/:caseKey/file', 'case/:caseId/file/:fileId', 'case/:caseId/logfile/:fileId'];
@@ -33,24 +24,32 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
     [this.caseTemplatePath] : false
   };
 
+  static deleteSnaphots() {
+    if (CaseRouteReuseStrategy.storedRouteHandles.size > 0) {
+      for (const key of Array.from(CaseRouteReuseStrategy.storedRouteHandles.keys())) {
+        //console.log('>>> deleting snapshot: ', key);
+        CaseRouteReuseStrategy.storedRouteHandles.delete(key);
+      }
+    }
+  }
+
   // Method is called when navigation is changed. Allows to check if attach or detach is required by checking from/to urls.
   shouldReuseRoute(prev: ActivatedRouteSnapshot, cur: ActivatedRouteSnapshot): boolean {
-    
+
     //check only when its last  routes in hierarchy
     if (cur.children && cur.children.length === 0) {
       const prevPath = this.getPath(prev);
       const prevUrl = this.getUrl(prev);
       const curPath = this.getPath(cur);
       const curUrl = this.getUrl(cur);
-  
-      console.log(`>>> shouldReuseRoute. curUrl: ${curUrl}, curPath: ${curPath}, prevUrl: ${prevUrl}, prevPath: ${prevPath}`);
-    
+
+      //console.log(`>>> shouldReuseRoute. curUrl: ${curUrl}, curPath: ${curPath}, prevUrl: ${prevUrl}, prevPath: ${prevPath}`);
+
       // navigating from case to file
       if (prevPath in this.allowRetrieveFromCache && this.isInArray(curPath, this.filePageRoutes)) {
         this.allowStoreInCache[prevPath] = true;
         this.allowRetrieveFromCache[prevPath] = false;
-      } 
-      else if (curPath in this.allowRetrieveFromCache && this.isInArray(prevPath, this.filePageRoutes)) {
+      } else if (curPath in this.allowRetrieveFromCache && this.isInArray(prevPath, this.filePageRoutes)) {
         this.allowStoreInCache[curPath] = false;
         this.allowRetrieveFromCache[curPath] = true;
       } else {
@@ -62,11 +61,11 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
       }
     }
 
-    // If either of our reuseUrl and default Url are true, we want to reuse the route    
+    // If either of our reuseUrl and default Url are true, we want to reuse the route
     return (prev.routeConfig === cur.routeConfig);
   }
 
-  /** 
+  /**
    * Decides when the route should be stored
    * If the route should be stored, I believe the boolean is indicating to a controller whether or not to fire this.store
    * _When_ it is called though does not particularly matter, just know that this determines whether or not we store the route
@@ -79,7 +78,7 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
       const url = this.getUrl(route);
       const routePath = this.getPath(route);
       if (routePath in this.allowStoreInCache && this.allowStoreInCache[routePath]) {
-        console.log(">>>shoudDetach: detaching page. Url: %s, Path: %s", url, routePath);
+        console.log('>>>shoudDetach: detaching page. Url: %s, Path: %s', url, routePath);
         return true;
       }
     }
@@ -111,16 +110,16 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
     if (route.children && route.children.length === 0) {
       const url = this.getUrl(route);
       const routePath = this.getPath(route);
-      if (this.allowRetrieveFromCache.hasOwnProperty(routePath) && this.allowRetrieveFromCache[routePath] && 
+      if (this.allowRetrieveFromCache.hasOwnProperty(routePath) && this.allowRetrieveFromCache[routePath] &&
       CaseRouteReuseStrategy.storedRouteHandles.has(routePath)) {
         //console.log(">>>shouldAttach: attaching existing page. Url: %s, Path: %s", url, routePath);
         return true;
       }
-    }    
+    }
     return false;
   }
 
-  /** 
+  /**
    * Finds the locally stored instance of the requested route, if it exists, and returns it
    * @param route New route the user has requested
    * @returns DetachedRouteHandle object which can be used to render the component
@@ -129,12 +128,13 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
     if (route.children && route.children.length === 0) {
       const url = this.getUrl(route);
       const routePath = this.getPath(route);
-      if (this.allowRetrieveFromCache.hasOwnProperty(routePath) && this.allowRetrieveFromCache[routePath] && 
+      if (this.allowRetrieveFromCache.hasOwnProperty(routePath) && this.allowRetrieveFromCache[routePath] &&
         CaseRouteReuseStrategy.storedRouteHandles.has(routePath)) {
         //console.log(">>>retrieve: retrieving instance for url: ", url);
         const data = CaseRouteReuseStrategy.storedRouteHandles.get(routePath) as IRouteStorageObject;
-        if (data && data.handle && data.url === url)
+        if (data && data.handle && data.url === url) {
           return data.handle as DetachedRouteHandle;
+        }
       }
     }
     return null;
@@ -143,7 +143,7 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
   isInArray(value, array): boolean {
     return array.indexOf(value) > -1;
   }
- 
+
   private getPath(route: ActivatedRouteSnapshot): string {
     if (route.routeConfig !== null && route.routeConfig.path !== null) {
       return route.pathFromRoot
@@ -162,10 +162,10 @@ export class CaseRouteReuseStrategy implements RouteReuseStrategy {
     }
     const segments: string[] = [];
     while (next) {
-      segments.push(next.url.join("/"));
+      segments.push(next.url.join('/'));
       next = next.parent;
     }
-    let url = segments.reverse().join("/");
+    const url = segments.reverse().join('/');
     return url.replace('//', '/');
   }
 }
