@@ -1,28 +1,29 @@
-﻿using DH.Helpdesk.Domain.Invoice;
-using LinqLib.Sort;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Dal.NewInfrastructure;
+using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Domain;
+using DH.Helpdesk.Services.BusinessLogic.Mappers.Department;
+using DH.Helpdesk.Services.BusinessLogic.Specifications;
+using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 
 namespace DH.Helpdesk.Services.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Dal.NewInfrastructure;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Department;
-    using DH.Helpdesk.Services.BusinessLogic.Specifications;
-
-    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
-
     public interface IDepartmentService
     {
         IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool isOnlyActive = true);
         
         IList<Department> GetDepartments(int customerId, ActivationStatus isActive = ActivationStatus.Active);
-        
+
+        List<int> GetDepartmentsIds(int customerId, ActivationStatus activeStatus = ActivationStatus.Active);
+
+        Task<List<int>> GetDepartmentsIdsAsync(int customerId, ActivationStatus activeStatus = ActivationStatus.Active);
+
         Department GetDepartment(int id);
 
         DeleteMessage DeleteDepartment(int id);
@@ -75,14 +76,32 @@ namespace DH.Helpdesk.Services.Services
             _ouRepository = ouRepository;
         }
 
+        public List<int> GetDepartmentsIds(int customerId, ActivationStatus activeStatus = ActivationStatus.Active)
+        {
+            var query = GetDepartmentsQueryable(customerId, activeStatus).Select(dep => dep.Id);
+            return query.ToList();
+        }
+
+        public Task<List<int>> GetDepartmentsIdsAsync(int customerId, ActivationStatus activeStatus = ActivationStatus.Active)
+        {
+            var query = GetDepartmentsQueryable(customerId, activeStatus).Select(dep => dep.Id);
+            return query.ToListAsync();
+        }
+
         public IList<Department> GetDepartments(int customerId, ActivationStatus isActive = ActivationStatus.Active)
         {
-            if (isActive == ActivationStatus.All)
-            {
-                return this._departmentRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.DepartmentName).ToList();
-            }
+            var query = GetDepartmentsQueryable(customerId, isActive);
+            return query.ToList();
+        }
 
-            return this._departmentRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == (int)isActive).OrderBy(x => x.DepartmentName).ToList();
+        private IQueryable<Department> GetDepartmentsQueryable(int customerId, ActivationStatus isActive)
+        {
+            var query =
+                isActive == ActivationStatus.All
+                    ? _departmentRepository.GetMany(x => x.Customer_Id == customerId).AsQueryable()
+                    : _departmentRepository.GetMany(x => x.Customer_Id == customerId && x.IsActive == (int)isActive).AsQueryable();
+
+            return query.OrderBy(x => x.DepartmentName);
         }
 
         public IList<Department> GetDepartmentsWithRegion(int customerId, ActivationStatus isActive = ActivationStatus.Active)
@@ -101,7 +120,8 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool isOnlyActive = true)
         {
-            return _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive, true)
+            return 
+                _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive, true).AsQueryable()
                 .OrderBy(d => d.DepartmentName)
                 .ToList();
         }

@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IDepartmentRepository : IRepository<Department>
     {
         IEnumerable<Department> GetDepartmentsForUser(int userId, int customerId = 0);
-        IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool activeOnly = true, bool excludeInactiveRegion = false);
+        IQueryable<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool activeOnly = true, bool excludeInactiveRegion = false);
 
         void ResetDefault(int exclude);
 
@@ -55,16 +55,15 @@ namespace DH.Helpdesk.Dal.Repositories
 
             return query.OrderBy(x => x.DepartmentName);
         }
-
-        public IEnumerable<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool activeOnly = true, bool excludeInactiveRegion = false)
+        
+        public IQueryable<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool activeOnly = true, bool excludeInactiveRegion = false)
         {
+            var query = GetDepartmentsByUserPermissionsQuery(userId, customerId, activeOnly);
             if (excludeInactiveRegion)
             {
-                return GetDepartmentsByUserPermissionsQuery(userId, customerId, activeOnly)
-                    .Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0))
-                    .ToList();
+                query = query.Where(d => d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0));
             }
-            return GetDepartmentsByUserPermissionsQuery(userId, customerId, activeOnly).ToList();
+            return query;
         }
 
         public void ResetDefault(int exclude)

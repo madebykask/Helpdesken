@@ -1,15 +1,13 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Notifiers
+﻿using System.Linq;
+using System.Collections.Generic;
+using DH.Helpdesk.BusinessData.Models.Case.Input;
+using DH.Helpdesk.BusinessData.Models.Notifiers;
+using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Domain.Computers;
+
+namespace DH.Helpdesk.Dal.Repositories.Notifiers
 {
-    using System.Collections.Generic;
-
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Case.Input;
-    using DH.Helpdesk.BusinessData.Models.Notifiers;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.Shared.Output;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain.Computers;
-
     public interface INotifierRepository : IRepository<ComputerUser>
     {
         void DeleteById(int notifierId);
@@ -28,9 +26,9 @@
 
         List<ItemOverview> FindOverviewsByCustomerId(int customerId);
 
-		IList<UserSearchResults> Search(int customerId, string searchFor, int? categoryID = null);
+        IQueryable<ComputerUser> Search(int customerId, string searchFor, int? categoryID = null, IList<int> departmentIds = null);
 
-		SearchResult Search(SearchParameters parameters);
+        SearchResult Search(SearchParameters parameters);
 
         void UpdateCaseNotifier(CaseNotifier caseNotifier);
 

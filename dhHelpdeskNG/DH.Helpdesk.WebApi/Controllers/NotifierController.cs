@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -29,26 +30,18 @@ namespace DH.Helpdesk.WebApi.Controllers
         [Route("Search")]
         public async Task<List<NotifierSearchItem>> Search([FromUri]string query, [FromUri]int cid, [FromUri]int? categoryId = null)
         {
-            //todo: make db methods async
-            IList<UserSearchResults> searchResults;
-            var settings = await _settingService.GetCustomerSettingsAsync(cid);
-            var customerSettings = settings;
+            var departmentIds = new List<int>();
+            var customerSettings = await _settingService.GetCustomerSettingsAsync(cid);
             if (customerSettings.ComputerUserSearchRestriction == 1)
             {
-                var departmentIds = 
-                    _departmentService.GetDepartmentsByUserPermissions(UserId, cid).Select(x => x.Id).ToList();
+                departmentIds = await _departmentService.GetDepartmentsByUserPermissions(UserId, cid).AsQueryable().Select(x => x.Id).ToListAsync();
 
                 //user has no departments checked == access to all departments. TODO: change getdepartmentsbyuserpermissions to actually reflect the "none selected"
                 if (departmentIds.Count == 0)
-                    departmentIds = _departmentService.GetDepartments(cid).Select(x => x.Id).ToList();
+                    departmentIds = await _departmentService.GetDepartmentsIdsAsync(cid);
+            }
 
-                searchResults =
-                    _computerService.SearchComputerUsersByDepartments(cid, query, departmentIds, categoryId);
-            }
-            else
-            {
-                searchResults = _computerService.SearchComputerUsers(cid, query, categoryId);
-            }
+            var searchResults = await _computerService.SearchComputerUsersAsync(cid, query, categoryId, departmentIds);
 
             var result = searchResults.Select(x => new NotifierSearchItem()
             {

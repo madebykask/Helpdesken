@@ -27,9 +27,9 @@ export class NotifierSearchComponent extends SearchInputBaseComponent implements
 
     //override select settings from base component
     this.selectOptions.headerText = this.getSelectHeaderText.bind(this);
-    this.selectOptions.height = 40;
+    this.selectOptions.height = 48;
     this.selectOptions.rows = 5;
-    this.selectOptions.multiline = 2;
+    this.selectOptions.multiline = 3;
   }
 
   ngOnInit() {
@@ -53,12 +53,14 @@ export class NotifierSearchComponent extends SearchInputBaseComponent implements
     const notifiersData =
       this.searchResults.map((item: NotifierSearchItem) => {
         const itemHeader = this.formatItemHeader(item, query);
+        const itemHeader2 = this.formatItemHeader2(item, query);
         const itemDesc = this.formatItemDesc(item, query);
         return {
           value: item.id,
           text: `${item.userId}|${item.fullName}|${item.email}|${item.phone}|${item.userCode}`,
           html: `<div>
                   <div class="itemHeader">${itemHeader}</div>
+                  <div class="itemHeader">${itemHeader2}</div>
                   <div class="itemDesc">${itemDesc}</div>
                 </div>`
         };
@@ -92,7 +94,15 @@ export class NotifierSearchComponent extends SearchInputBaseComponent implements
       name = `${item.surName} ${item.firstName}`.trim();
     }
 
-    let result =  `${name || ''} - ${item.userId || ''} - ${item.departmentName || ''} - ${item.userCode || ''}`;
+    let result =  `${name || ''} - ${item.userId || ''} - ${item.phone || ''} - ${item.userCode || ''}`;
+
+    // highlight searched text with  bold
+    result = this.highligtQueryText(result, query);
+    return result;
+  }
+
+  private formatItemHeader2(item: NotifierSearchItem, query: string) {
+    let result =  item.departmentName || '';
 
     // highlight searched text with  bold
     result = this.highligtQueryText(result, query);
@@ -101,8 +111,7 @@ export class NotifierSearchComponent extends SearchInputBaseComponent implements
 
   private formatItemDesc(item: NotifierSearchItem, query) {
     const email = (item.email || '').toLowerCase();
-    const phone = item.phone || '';
-    let result = phone.length ? `${email} - ${phone}` : email;
+    let result =  email;
 
     // highlight searched text with  bold
     result = this.highligtQueryText(result, query);

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseIntLog;
@@ -20,21 +19,15 @@ namespace DH.Helpdesk.Services.Services
         private readonly INotifierRepository _notifierRepository;
         private readonly IUserEmailRepository _userEmailRepository;
         private readonly IEmailGroupRepository _emailGroupRepository;
-        private readonly IUserWorkingGroupRepository _userWorkingGroupRepository;
-        private readonly IWorkingGroupRepository _workingGroupRepository;
 
         public UserEmailsSearchService(
             INotifierRepository notifierRepository, 
             IUserEmailRepository userEmailRepository, 
-            IEmailGroupRepository emailGroupRepository,
-            IUserWorkingGroupRepository userWorkingGroupRepository,
-            IWorkingGroupRepository workingGroupRepository)
+            IEmailGroupRepository emailGroupRepository)
         {
             _notifierRepository = notifierRepository;
             _userEmailRepository = userEmailRepository;
             _emailGroupRepository = emailGroupRepository;
-            _userWorkingGroupRepository = userWorkingGroupRepository;
-            _workingGroupRepository = workingGroupRepository;
         }
 
         public IList<CaseEmailSendOverview> GetUserEmailsForCaseSend(int customerId, string searchText, IEmailSearchScope searchScope)
@@ -45,18 +38,28 @@ namespace DH.Helpdesk.Services.Services
 
             if (searchScope.SearchInInitiators)
             {
-                var inits = _notifierRepository.Search(customerId, searchText)
-                    .Where(x => !string.IsNullOrEmpty(x.Email))
-                    .Select(x => new CaseEmailSendOverview
-                    {
-                        UserId = x.UserId,
-                        FirstName = x.FirstName,
-                        SurName = x.SurName,
-                        Emails = new List<string> { x.Email },
-                        GroupType = CaseUserSearchGroup.Initiator,
-                        DepartmentName = string.IsNullOrEmpty(x.DepartmentName) ? string.Empty : x.DepartmentName
-                    })
-                    .ToList();
+                var initiators =
+                    _notifierRepository.Search(customerId, searchText).AsQueryable()
+                        .Where(x => !string.IsNullOrEmpty(x.Email))
+                        .Select(x => new
+                        {
+                            UserId = x.UserId,
+                            FirstName = x.FirstName,
+                            SurName = x.SurName,
+                            Email = x.Email,
+                            DepartmentName = x.Department != null ? x.Department.DepartmentName : null
+                        })
+                        .ToList();
+
+                var inits = initiators.Select(x => new CaseEmailSendOverview
+                {
+                    UserId = x.UserId,
+                    FirstName = x.FirstName,
+                    SurName = x.SurName,
+                    Emails = new List<string> { x.Email },
+                    GroupType = CaseUserSearchGroup.Initiator,
+                    DepartmentName = x.DepartmentName ?? string.Empty
+                }).ToList();
 
                 result.AddRange(inits);
             }
