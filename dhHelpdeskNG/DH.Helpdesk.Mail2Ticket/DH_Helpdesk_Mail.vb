@@ -714,9 +714,9 @@ Module DH_Helpdesk_Mail
                                                 'helpdesk case 58782
                                                 sRet_SendMail = 
                                                     objMail.sendMail(objCase, Nothing, objCustomer, newcaseEmailTo, objMailTemplate, objGlobalSettings, 
-                                                                     sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
+                                                                     sMessageId, sEMailLogGUID, sConnectionstring) 
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, newcaseEmailTo, 1, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                objLogData.createEMailLog(iCaseHistory_Id, newcaseEmailTo, MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             End If
                                             'End If  #65030
                                         End If
@@ -740,9 +740,9 @@ Module DH_Helpdesk_Mail
 
                                                 sRet_SendMail = 
                                                     objMail.sendMail(objCase, Nothing, objCustomer, vNewCaseEmailList(Index), objMailTemplate, objGlobalSettings, 
-                                                                     sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
+                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, vNewCaseEmailList(Index), 1, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                objLogData.createEMailLog(iCaseHistory_Id, vNewCaseEmailList(Index), MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             Next
 
                                         End If
@@ -766,9 +766,9 @@ Module DH_Helpdesk_Mail
 
                                                     sRet_SendMail = 
                                                         objMail.sendMail(objCase, Nothing, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, 
-                                                                         sEMailLogGUID, sConnectionstring, attachedFiles)
+                                                                         sEMailLogGUID, sConnectionstring)
 
-                                                    objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, 2, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                    objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, MailTemplates.AssignedCaseToUser, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                                 End If
                                             End If
                                         End If
@@ -798,10 +798,11 @@ Module DH_Helpdesk_Mail
                                                 Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
                                                 sRet_SendMail = 
-                                                    objMail.sendMail(objCase, Nothing, objCustomer, workingGroupEMail, objMailTemplate, objGlobalSettings, sMessageId, 
-                                                                     sEMailLogGUID, sConnectionstring, attachedFiles)
+                                                    objMail.sendMail(objCase, Nothing, objCustomer, workingGroupEMail, objMailTemplate, objGlobalSettings, 
+                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, workingGroupEMail, 7, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                objLogData.createEMailLog(iCaseHistory_Id, workingGroupEMail, MailTemplates.AssignedCaseToWorkinggroup, 
+                                                                          sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             End If
                                         End If
                                     End If
@@ -822,9 +823,10 @@ Module DH_Helpdesk_Mail
 
                                                 sRet_SendMail = 
                                                     objMail.sendMail(objCase, Nothing, objCustomer, vPriorityEmailList(Index), objMailTemplate, objGlobalSettings, 
-                                                                     sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
+                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, vPriorityEmailList(Index), 13, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                objLogData.createEMailLog(iCaseHistory_Id, vPriorityEmailList(Index), MailTemplates.AssignedCaseToPriority, sMessageId, 
+                                                                          sSendTime, sEMailLogGUID, sRet_SendMail)
                                             Next
 
                                         End If
@@ -876,7 +878,8 @@ Module DH_Helpdesk_Mail
                                             ' Lägg in som intern loggpost
                                             iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
                                         Else
-                                            If iMailID = 2 Or iMailID = 5 Or iMailID = 7 Or iMailID = 10 Then
+                                            If iMailID = MailTemplates.AssignedCaseToUser Or iMailID = MailTemplates.InternalLogNote Or _
+                                               iMailID = MailTemplates.AssignedCaseToWorkinggroup Or iMailID = MailTemplates.CaseIsUpdated Then
                                                 iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
                                             Else
                                                 If objCustomer.DefaultEmailLogDestination = 1 And iMailID = 0 Then
@@ -889,7 +892,8 @@ Module DH_Helpdesk_Mail
 
                                         End If
                                     Else
-                                        If iMailID = 2 Or iMailID = 5 Or iMailID = 7 Or iMailID = 10 Then
+                                        If iMailID = MailTemplates.AssignedCaseToUser Or iMailID = MailTemplates.InternalLogNote Or _
+                                           iMailID = MailTemplates.AssignedCaseToWorkinggroup Or iMailID = MailTemplates.CaseIsUpdated Then
                                             ' Svar på skicka intern loggpost eller om handläggaren svarar
                                             iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
                                         Else
@@ -939,7 +943,7 @@ Module DH_Helpdesk_Mail
                                                 objMail.sendMail(objCase, objLog, objCustomer, objCase.PerformerEMail, objMailTemplate, objGlobalSettings, 
                                                                  sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
 
-                                            objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, 10, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                            objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, MailTemplates.CaseIsUpdated, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                         End If
                                     ElseIf iFinishingCause_Id <> 0 And Len(objCase.Persons_EMail) > 6 Then
                                         objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.ClosedCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
@@ -959,7 +963,7 @@ Module DH_Helpdesk_Mail
                                                 objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, 
                                                                  sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
 
-                                            objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, 3, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                            objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
 
                                         End If
                                     End If
