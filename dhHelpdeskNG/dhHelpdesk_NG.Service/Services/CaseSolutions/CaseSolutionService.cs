@@ -51,8 +51,7 @@ namespace DH.Helpdesk.Services.Services
 
         IList<CaseSolution> GetCaseSolutions();
         IList<int> GetWorkflowCaseSolutionIds(int customerId);
-
-        IList<CaseSolution_SplitToCaseSolutionEntity> GetSplitToCaseSolutionDescendants(CaseSolution self, int[] descendantIds);
+        
         bool CheckIfExtendedFormExistForSolutionsInCategories(int customerId, List<int> list);
     }
 
@@ -240,20 +239,6 @@ namespace DH.Helpdesk.Services.Services
                 .AsQueryable();
 
             return query.Select(x => x.Id).ToList();
-        }
-
-        public IList<CaseSolution_SplitToCaseSolutionEntity> GetSplitToCaseSolutionDescendants(CaseSolution self, int[] descendantIds)
-        {
-            return 
-                CaseSolutionRepository.GetMany(x => descendantIds.Contains(x.Id)).AsQueryable()
-                    .Select(cs => new CaseSolution_SplitToCaseSolutionEntity
-                    {
-                        CaseSolution = self,
-                        CaseSolution_Id  = self.Id,
-                        SplitToCaseSolutionDescendant = cs,
-                        SplitToCaseSolution_Id = cs.Id,
-
-                    }).ToList();
         }
 
         public IList<ApplicationTypeEntity> GetApplicationTypes(int customerId)

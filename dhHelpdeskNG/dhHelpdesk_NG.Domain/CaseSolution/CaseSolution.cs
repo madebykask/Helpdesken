@@ -6,10 +6,10 @@ namespace DH.Helpdesk.Domain
     using DH.Helpdesk.Domain.Projects;
     using global::System;
     using Common.Enums.CaseSolution;
-	using ExtendedCaseEntity;
+    using ExtendedCaseEntity;
 
 
-	public class CaseSolution : Entity
+    public class CaseSolution : Entity
     {
 
         public CaseSolution()
@@ -35,6 +35,7 @@ namespace DH.Helpdesk.Domain
         public string Miscellaneous { get; set; }
         [Required]
         public string Name { get; set; }
+        public string CaseSolutionDescription { get; set; }
         public string ReportedBy { get; set; }
         public string Text_External { get; set; }
         public string Text_Internal { get; set; }
@@ -136,12 +137,11 @@ namespace DH.Helpdesk.Domain
         //public virtual Problem Problem { get; set; }
         public int SortOrder { get; set; }
 
-		public virtual List<ExtendedCaseFormEntity> ExtendedCaseForms { get; set; }
+        public virtual List<ExtendedCaseFormEntity> ExtendedCaseForms { get; set; }
 
-		public virtual List<CaseSolution_CaseSection_ExtendedCaseForm> CaseSectionsExtendedCaseForm { get; set; }
+        public virtual List<CaseSolution_CaseSection_ExtendedCaseForm> CaseSectionsExtendedCaseForm { get; set; }
 
-		public virtual CaseSolution SplitToCaseSolution { get; set; }
-        public string CaseSolutionDescription { get; set; }
+        public virtual CaseSolution SplitToCaseSolution { get; set; }
 
         public virtual ICollection<CaseSolution_SplitToCaseSolutionEntity> SplitToCaseSolutionAnsestors { get; set; }
 

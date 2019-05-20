@@ -414,15 +414,23 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0)
+            {
                 caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
+            }
 
-             if (caseSolutionInputViewModel.SplitToCaseSolutionIds != null)
+             var splitToSolutionIds = caseSolutionInputViewModel.SplitToCaseSolutionIds;
+             if (splitToSolutionIds != null && splitToSolutionIds.Any())
              {
-                 caseSolutionInputViewModel.CaseSolution.SplitToCaseSolutionDescendants = _caseSolutionService.GetSplitToCaseSolutionDescendants(caseSolutionInputViewModel.CaseSolution, caseSolutionInputViewModel.SplitToCaseSolutionIds);
-             }
+                 caseSolutionInputViewModel.CaseSolution.SplitToCaseSolutionDescendants =
+                     splitToSolutionIds.Select(id => new CaseSolution_SplitToCaseSolutionEntity
+                     {
+                         CaseSolution_Id = caseSolution.Id,
+                         SplitToCaseSolution_Id = id
+                     }).ToList();
+            }
          
 
-            this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
+            _caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
 
             //if (t == "0")
             //{
@@ -1422,10 +1430,12 @@ namespace DH.Helpdesk.Web.Controllers
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
             this.TempData["RequiredFields"] = null;
+
             if (CaseSolutionSettingModels == null)
             {
                 CaseSolutionSettingModels = new CaseSolutionSettingModel[0];
             }
+
             var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
 
             // Positive: Send Mail to...
@@ -1457,9 +1467,15 @@ namespace DH.Helpdesk.Web.Controllers
             if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0)
                 caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
 
-            if (caseSolutionInputViewModel.SplitToCaseSolutionIds != null)
+            var splitToSolutionIds = caseSolutionInputViewModel.SplitToCaseSolutionIds;
+            if (splitToSolutionIds != null && splitToSolutionIds.Any())
             {
-                   caseSolutionInputViewModel.CaseSolution.SplitToCaseSolutionDescendants = _caseSolutionService.GetSplitToCaseSolutionDescendants(caseSolutionInputViewModel.CaseSolution, caseSolutionInputViewModel.SplitToCaseSolutionIds);
+                caseSolutionInputViewModel.CaseSolution.SplitToCaseSolutionDescendants =
+                    splitToSolutionIds.Select(id => new CaseSolution_SplitToCaseSolutionEntity
+                    {
+                        CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
+                        SplitToCaseSolution_Id = id
+                    }).ToList();
             }
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);

@@ -102,11 +102,11 @@
     <Compile Include="CaseDocumentEntity\CaseDocumentConditionEntity.cs" />
     <Compile Include="CaseDocumentEntity\CaseDocument_CaseDocumentParagraphEntity.cs" />
     <Compile Include="CaseSettings.cs" />
-    <Compile Include="CaseSolution.cs" />
-    <Compile Include="CaseSolutionCategory.cs" />
-    <Compile Include="CaseSolutionConditionPropertyEntity.cs" />
-    <Compile Include="CaseSolutionSchedule.cs" />
-    <Compile Include="CaseSolutionSearch.cs" />
+    <Compile Include="CaseSolution\CaseSolution.cs" />
+    <Compile Include="CaseSolution\CaseSolutionCategory.cs" />
+    <Compile Include="CaseSolution\CaseSolutionConditionPropertyEntity.cs" />
+    <Compile Include="CaseSolution\CaseSolutionSchedule.cs" />
+    <Compile Include="CaseSolution\CaseSolutionSearch.cs" />
     <Compile Include="CaseSolution\CaseSolution_SplitToCaseSolutionEntity.cs" />
     <Compile Include="Cases\CaseExtraFollower.cs" />
     <Compile Include="Cases\CaseFollowUp.cs" />
@@ -304,7 +304,7 @@
     <Compile Include="ADFS\SSOLogEntity.cs" />
     <Compile Include="Users\ModuleEntity.cs" />
     <Compile Include="Users\UserModuleEntity.cs" />
-    <Compile Include="CaseSolutionConditionEntity.cs" />
+    <Compile Include="CaseSolution\CaseSolutionConditionEntity.cs" />
     <Compile Include="WorkstationModules\LogicalDrive.cs" />
     <Compile Include="LogProgramEntity.cs" />
     <Compile Include="LogSync.cs" />

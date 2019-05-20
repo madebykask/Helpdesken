@@ -1,11 +1,9 @@
-﻿namespace DH.Helpdesk.Dal.EntityConfigurations
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
+using DH.Helpdesk.Domain;
+
+namespace DH.Helpdesk.Dal.EntityConfigurations
 {
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.ModelConfiguration;
-
-    using DH.Helpdesk.Domain;
-
     public class CaseSolutionConfiguration : EntityTypeConfiguration<CaseSolution>
     {
         internal CaseSolutionConfiguration()
@@ -82,9 +80,9 @@
                 .WillCascadeOnDelete(false);
 
             this.HasOptional(x => x.SplitToCaseSolution)
-				.WithMany()
-				.HasForeignKey(x => x.SplitToCaseSolution_Id)
-				.WillCascadeOnDelete(false);
+                .WithMany()
+                .HasForeignKey(x => x.SplitToCaseSolution_Id)
+                .WillCascadeOnDelete(false);
 
             this.HasMany(cs => cs.ExtendedCaseForms).WithMany(ecf => ecf.CaseSolutions).Map(m =>
              {
