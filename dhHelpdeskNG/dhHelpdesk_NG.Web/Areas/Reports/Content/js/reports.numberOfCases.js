@@ -1,4 +1,4 @@
-﻿function reportedTimeReport(args) {
+﻿function numberOfCasesReport(args) {
     var options = $.extend({}, args);
 
     return {

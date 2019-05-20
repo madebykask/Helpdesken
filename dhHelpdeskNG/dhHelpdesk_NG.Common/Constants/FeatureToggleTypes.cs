@@ -3,6 +3,8 @@
     public enum FeatureToggleTypes
     {
         REPORTS_REPORTGENERATOR_USE_PREVIOUS_SEARCH,
-        NEW_ADVANCED_CASE_SEARCH
+        NEW_ADVANCED_CASE_SEARCH,
+        NEW_REPORTED_TIME_REPORT,
+        NEW_NUMBER_OF_CASES_REPORT
     }
 }

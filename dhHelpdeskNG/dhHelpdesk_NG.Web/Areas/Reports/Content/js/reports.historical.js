@@ -1,15 +1,15 @@
 ﻿function historicalReport(args) {
     var options = $.extend({}, args);
-    var ctx = document.getElementById('chartjs').getContext('2d');
 
     return {
         init: function () {
             var self = this;
-            if (self.chartInstance) {
-                self.chartInstance.destroy();
+            if (window.chartInstance) {
+                window.chartInstance.destroy();
             };
+            const ctx = document.getElementById('chartjs').getContext('2d');
 
-            self.chartInstance = new Chart(ctx,
+            window.chartInstance = new Chart(ctx,
                 {
                     type: 'bar',
                     data: [],
@@ -45,7 +45,7 @@
         update: function (filters) {
             var self = this;
 
-            if (!self.chartInstance) return;
+            if (!window.chartInstance) return;
 
             //end of Temp data - will be removed later
             $('#showReportLoader').show();
@@ -74,10 +74,10 @@
             })
                 .done(function (data) {
 
-                    self.chartInstance.data = data;
+                    window.chartInstance.data = data;
 
-                    self.chartInstance.update();
-                    //self.chartInstance.resize();
+                    window.chartInstance.update();
+                    //window.chartInstance.resize();
                 })
                 .always(function () {
                     $('#showReportLoader').hide();
@@ -87,7 +87,7 @@
         },
 
         toggle: function () {
-            var $container = $('#historicalReportContainer').find('.row').first();
+            var $container = $('#jsReportContainer').find('.row').first();
             if ($container.is(':hidden')) {
                 $container.show();
             } else {
@@ -96,12 +96,12 @@
         },
 
         show: function () {
-            var $container = $('#historicalReportContainer').find('.row').first();
+            var $container = $('#jsReportContainer').find('.row').first();
             if ($container.is(':hidden')) { $container.show() };
         },
 
         hide: function () {
-            var $container = $('#historicalReportContainer').find('.row').first();
+            var $container = $('#jsReportContainer').find('.row').first();
             if (!$container.is(':hidden')) { $container.hide() };
         }
 

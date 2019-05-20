@@ -28,6 +28,10 @@
         var changeDateFrom = "#ReportFilter_CaseChangeDate_FromDate";
         var changeDateTo = "#ReportFilter_CaseChangeDate_ToDate";
 
+        var reportObjNames = {};
+        reportObjNames[dhHelpdesk.reports.reportType.ReportedTime] = 'reportedTimeReport';
+        reportObjNames[dhHelpdesk.reports.reportType.NumberOfCases] = 'numberOfCasesReport';
+
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.reports = window.dhHelpdesk.reports || {};
 
@@ -433,13 +437,18 @@
         }
 
         dhHelpdesk.reports.onShowReport = function (e) {
-            var reportId = $("#lstReports").find("option:selected").data("id");
-            if (reportId === dhHelpdesk.reports.reportType.HistoricalReport) {
-                dhHelpdesk.reports.onHistoricalShow.call(this, e);
-            } else if (reportId === dhHelpdesk.reports.reportType.ReportedTime) {
-                dhHelpdesk.reports.onReportedTimeReportShow.call(this, e);
-            } else {
-                dhHelpdesk.reports.onOtherShow.call(this, e);
+            var reportId = $('#lstReports').find('option:selected').data('id');
+            switch (reportId) {
+                case dhHelpdesk.reports.reportType.HistoricalReport: 
+                    dhHelpdesk.reports.onHistoricalShow.call(this, e);
+                    break;
+                case dhHelpdesk.reports.reportType.ReportedTime:
+                case dhHelpdesk.reports.reportType.NumberOfCases:
+                    dhHelpdesk.reports.onJSReportShow.call(this, e, reportObjNames[reportId]);
+                    break;
+                default:
+                    dhHelpdesk.reports.onOtherShow.call(this, e);
+                    break;
             }
         }
 
@@ -451,12 +460,12 @@
             dhHelpdesk.reports.historicalReport.update(getHistoricalFilters());
         }
 
-        dhHelpdesk.reports.onReportedTimeReportShow = function (e) {
+        dhHelpdesk.reports.onJSReportShow = function (e, name) {
             if (!dhHelpdesk.reports.doValidation(false))
                 return;
 
-            dhHelpdesk.reports.reportedTimeReport.show();
-            dhHelpdesk.reports.reportedTimeReport.update(getCommonFilter());
+            dhHelpdesk.reports[name].show();
+            dhHelpdesk.reports[name].update(getCommonFilter());
         }
 
         dhHelpdesk.reports.onOtherShow = function(e) {
@@ -511,13 +520,13 @@
             var $reportGeneratorFields = $("#reportGeneratorFields");
             var $otherReportsContainer = $("#otherReportsContainer");
             var $generateReportContainer = $("#generateReportContainer");
-            var $historicalReportContainer = $("#historicalReportContainer");
+            var $jsReportContainer = $("#jsReportContainer");
             var $fieldsSelect = $("#lstFields");
             var $stackBy = $('#lstStackBy');
             var $groupBy = $('#groupBy');
             var $historicalFilters = $('#historicalFilters');
 
-            var historicalReportControls = [$btnShowReport, $groupBy, $historicalReportContainer, $historicalFilters];
+            var historicalReportControls = [$btnShowReport, $groupBy, $jsReportContainer, $historicalFilters];
 
             dhHelpdesk.reports.togglePreviewMode(true);
 
@@ -533,7 +542,7 @@
                 $reportGeneratorFields.show();
                 $otherReportsContainer.hide();
                 dhHelpdesk.reports.historicalReport.hide();
-                $historicalReportContainer.hide();
+                $jsReportContainer.hide();
                 $stackBy.val('');
                 $stackBy.prop('disabled', true);
                 $groupBy.hide();
@@ -565,12 +574,13 @@
                 $groupBy.hide();
                 dhHelpdesk.reports.historicalReport.hide();
                 $historicalFilters.hide();
-                if (reportId === dhHelpdesk.reports.reportType.ReportedTime) {
+                if (reportId === dhHelpdesk.reports.reportType.ReportedTime || 
+                    reportId === dhHelpdesk.reports.reportType.NumberOfCases) {
                     $otherReportsContainer.hide();
-                    $historicalReportContainer.show();
-                    window.dhHelpdesk.reports.reportedTimeReport.init();
+                    $jsReportContainer.show();
+                    window.dhHelpdesk.reports[reportObjNames[reportId]].init();
                 } else {
-                    $historicalReportContainer.hide();
+                    $jsReportContainer.hide();
                     $otherReportsContainer.show();
                 }
             }

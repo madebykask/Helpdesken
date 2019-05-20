@@ -5,6 +5,7 @@ using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Web.Areas.Reports.Models.ReportService;
+using WebGrease.Css.Extensions;
 
 namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 {
@@ -93,7 +94,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             var caseTypesFullNames = _caseTypeService.GetChildrenInRow(caseTypes).ToList();
 			var data = new
 			{
-				labels = wgs.Select(o => o.WorkingGroup).ToArray(),
+				labels = wgs.Select(o => o.WorkingGroup ?? "").ToArray(),
 				datasets = result.GroupBy(o => new { o.CaseTypeID, o.CaseType }).Select(ct => new
 				{
 					label = caseTypesFullNames.Single(ctf => ctf.Id == ct.Key.CaseTypeID).Name,
@@ -131,7 +132,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 totalLabel = string.Format("{0}: {1}", Translation.GetCoreTextTranslation("Summa"), totalHours),
                 data = new 
                 {
-                    labels = result.Select(o => o.Label),
+                    labels = result.Select(o => o.Label ?? ""),
                     datasets = new []
                     {
                         new 
@@ -144,6 +145,11 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             };
 
             return Json(responce, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetNumberOfCasesData(NumberOfCasesReportFilterModel filter)
+        {
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         private IList<CaseType> CaseTypeTreeTranslation(IList<CaseType> caseTypes)

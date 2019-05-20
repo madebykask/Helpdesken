@@ -54,6 +54,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         private readonly ISettingService _customerSettingService;
         private readonly IReportServiceService _reportServiceService;
         private readonly ICaseSectionService _caseSectionService;
+        private readonly IFeatureToggleService _featureToggleService;
         private const string _reportFolderName = "Reports";
 
         private readonly Dictionary<string, string> _reportTypeNames;
@@ -71,7 +72,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             IExcelBuilder excelBuilder,
             IReportGeneratorModelFactory reportGeneratorModelFactory,
             IReportServiceService reportServiceService,
-            ICaseSectionService caseSectionService)
+            ICaseSectionService caseSectionService,
+            IFeatureToggleService featureToggleService)
             : base(masterDataService)
         {
             this._reportModelFactory = reportModelFactory;
@@ -83,6 +85,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             this._customerSettingService = customerSettingService;
             this._reportServiceService = reportServiceService;
             _caseSectionService = caseSectionService;
+            _featureToggleService = featureToggleService;
 
             _reportTypeNames = new Dictionary<string, string>
             {
@@ -741,8 +744,15 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         private CustomSelectList GetReportList(string defaultReportName, SelectList reports)
         {
             /* TODO: It must change some how find the files from "Reports" path */
-            var newWord = Translation.GetCoreTextTranslation("Ny");
             var ret = new CustomSelectList();
+            var reportedTimeKey =
+                _featureToggleService.Get(Helpdesk.Common.Constants.FeatureToggleTypes.NEW_REPORTED_TIME_REPORT).Active
+                    ? "25"
+                    : "-9";
+            var numberOfCasesKey =
+                _featureToggleService.Get(Helpdesk.Common.Constants.FeatureToggleTypes.NEW_NUMBER_OF_CASES_REPORT).Active
+                    ? "26"
+                    : "-7";
 
 			var oldReports = new List<KeyValuePair<string, string>>()
 			{
@@ -756,10 +766,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
 			var newReports = new List<KeyValuePair<string, string>>()
 			{
-				new KeyValuePair<string, string>("-7", "NumberOfCases"),
+				new KeyValuePair<string, string>(numberOfCasesKey, "NumberOfCases"),
 				new KeyValuePair<string, string>("-8", "AvgResolutionTime"),
-                new KeyValuePair<string, string>("25", "ReportedTime"),
-                //new KeyValuePair<string, string>("-9", "ReportedTime"),
+                new KeyValuePair<string, string>(reportedTimeKey, "ReportedTime"),
 			    new KeyValuePair<string, string>("24", "HistoricalReport"),
 			};
 

@@ -383,6 +383,21 @@ END
 
 GO
 
+RAISERROR('Adding feature toggle NEW_REPORTED_TIME_REPORT', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT * FROM tblFeatureToggle WHERE StrongName = 'NEW_REPORTED_TIME_REPORT')
+BEGIN
+	INSERT INTO [tblFeatureToggle](StrongName, Active, [Description]) 
+	VALUES ('NEW_REPORTED_TIME_REPORT', 1, 'Use new Reported Time report implementation')
+END
+GO
+
+
+RAISERROR('Adding feature toggle NEW_NUMBER_OF_CASES_REPORT', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT * FROM tblFeatureToggle WHERE StrongName = 'NEW_NUMBER_OF_CASES_REPORT')
+BEGIN
+	INSERT INTO [tblFeatureToggle](StrongName, Active, [Description]) 
+	VALUES ('NEW_NUMBER_OF_CASES_REPORT', 1, 'Use new Number of Cases report implementation')
+END
 
 
 -- Last Line to update database version

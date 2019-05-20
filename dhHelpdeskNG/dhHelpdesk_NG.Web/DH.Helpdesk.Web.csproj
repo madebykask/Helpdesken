@@ -353,6 +353,7 @@
     <Compile Include="Areas\Inventory\Models\RelatedCasesModels\ServerRelatedCasesModel.cs" />
     <Compile Include="Areas\Reports\Models\ReportService\CommonReportFilterModel.cs" />
     <Compile Include="Areas\Reports\Models\ReportService\HistoricalReportFilterModel.cs" />
+    <Compile Include="Areas\Reports\Models\ReportService\NumberOfCasesReportFilterModel.cs" />
     <Compile Include="Areas\Reports\Models\ReportService\ReportedTimeReportFilterModel.cs" />
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
     <Compile Include="Components\Contracts\ContractHistoryFormatter.cs" />
@@ -669,6 +670,7 @@
     <Content Include="Areas\Invoices\Scripts\Pages\invoicesOverview.js" />
     <Content Include="Areas\Reports\Content\js\chartjs-plugin-colorschemes.min.js" />
     <Content Include="Areas\Reports\Content\js\reports.historical.js" />
+    <Content Include="Areas\Reports\Content\js\reports.numberOfCases.js" />
     <Content Include="Areas\Reports\Content\js\reports.reportedTime.js" />
     <Content Include="Areas\Reports\Content\js\reportViewer.logic.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
@@ -3430,7 +3432,7 @@
     <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\Documents.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerAdvancedSearch\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerAdvancedSearch\_CaseSummaryPartialView.cshtml" />
-    <Content Include="Areas\Reports\Views\Report\ReportViewer\_HistoricalReport.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\ReportViewer\_JsReport.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

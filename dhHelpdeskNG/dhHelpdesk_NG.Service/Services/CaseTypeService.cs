@@ -296,7 +296,7 @@ namespace DH.Helpdesk.Services.Services
         private IList<CaseType> GetChilds(string parentName, int parentState, IList<CaseType> subCaseTypes, bool isTakeOnlyActive = false)
         {
             var ret = new List<CaseType>();
-            var newSubCaseTypes = subCaseTypes.Where(ct=> (isTakeOnlyActive? ct.IsActive == 1: true)).ToList();
+            var newSubCaseTypes = subCaseTypes.Where(ct=> (!isTakeOnlyActive || ct.IsActive == 1)).ToList();
             foreach (var s in newSubCaseTypes)
             {
                 var newParentName = string.Format("{0} - {1}", parentName, s.Name);
