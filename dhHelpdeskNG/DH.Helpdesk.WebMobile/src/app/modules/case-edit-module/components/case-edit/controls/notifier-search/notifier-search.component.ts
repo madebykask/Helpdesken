@@ -54,8 +54,6 @@ export class NotifierSearchComponent extends SearchInputBaseComponent implements
       this.searchResults.map((item: NotifierSearchItem) => {
         const itemHeader = this.formatItemHeader(item, query);
         const itemDesc = this.formatItemDesc(item, query);
-        console.log(itemHeader);
-        console.log(itemDesc);
         return {
           value: item.id,
           text: `${item.userId}|${item.fullName}|${item.email}|${item.phone}|${item.userCode}`,
@@ -64,7 +62,6 @@ export class NotifierSearchComponent extends SearchInputBaseComponent implements
                   <div class="itemDesc">${itemDesc}</div>
                 </div>`
         };
-
       });
     return notifiersData;
   }
@@ -115,7 +112,7 @@ export class NotifierSearchComponent extends SearchInputBaseComponent implements
 
   // virtual method override
   protected processItemSelected(val) {
-    const eventData = new CaseFieldValueChangedEvent((val || '').toString(), this.notifierType.toString(), CaseFieldsNames.PerformerUserId);
+    const eventData = new CaseFieldValueChangedEvent((val || '').toString(), this.notifierType.toString(), CaseFieldsNames.ReportedBy);
     this.commService.publish(Channels.CaseFieldValueChanged, eventData);
   }
 

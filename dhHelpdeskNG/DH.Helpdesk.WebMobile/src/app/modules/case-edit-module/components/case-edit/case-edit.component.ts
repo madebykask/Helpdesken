@@ -472,7 +472,7 @@ export class CaseEditComponent {
           }
           break;
         }
-        case CaseFieldsNames.PerformerUserId: {
+        case CaseFieldsNames.ReportedBy: {
           const userId = v.value !== null ? +v.value : 0;
           const notifierType = v.text && v.text.length ? <NotifierType>+v.text : NotifierType.Initiator;
 
