@@ -34,7 +34,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             var customerSettings = await _settingService.GetCustomerSettingsAsync(cid);
             if (customerSettings.ComputerUserSearchRestriction == 1)
             {
-                departmentIds = await _departmentService.GetDepartmentsByUserPermissions(UserId, cid).AsQueryable().Select(x => x.Id).ToListAsync();
+                departmentIds = await _departmentService.GetDepartmentsIdsByUserPermissionsAsync(UserId, cid);
 
                 //user has no departments checked == access to all departments. TODO: change getdepartmentsbyuserpermissions to actually reflect the "none selected"
                 if (departmentIds.Count == 0)

@@ -1600,15 +1600,15 @@ namespace DH.Helpdesk.Web.Controllers
         [HttpPost]
         public ActionResult Search_User(string query, int customerId, string searchKey, int? categoryID = null)
         {
-            var departmentIds = new List<int>();
+            IList<int> departmentIds = new List<int>();
             var applyUserSearchRestriction = GetCustomerSettings(customerId).ComputerUserSearchRestriction == 1;
             if (applyUserSearchRestriction)
             {
-                departmentIds = _departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, customerId).Select(x => x.Id).ToList();
+                departmentIds = _departmentService.GetDepartmentsIdsByUserPermissions(SessionFacade.CurrentUser.Id, customerId);
                 //user has no departments checked == access to all departments. TODO: change getdepartmentsbyuserpermissions to actually reflect the "none selected"
                 if (departmentIds.Count == 0)
                 {
-                    departmentIds = _departmentService.GetDepartments(customerId).Select(x => x.Id).ToList();
+                    departmentIds = _departmentService.GetDepartmentsIds(customerId);
                 }
             }
             

@@ -16,6 +16,10 @@ namespace DH.Helpdesk.Services.Services
 {
     public interface IDepartmentService
     {
+        IList<int> GetDepartmentsIdsByUserPermissions(int userId, int customerId, bool isOnlyActive = true);
+
+        Task<List<int>> GetDepartmentsIdsByUserPermissionsAsync(int userId, int customerId, bool isOnlyActive = true);
+
         IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool isOnlyActive = true);
         
         IList<Department> GetDepartments(int customerId, ActivationStatus isActive = ActivationStatus.Active);
@@ -116,6 +120,22 @@ namespace DH.Helpdesk.Services.Services
             return _departmentRepository.GetMany(d => d.Customer_Id == customerId && d.IsActive == (int)isActive && (d.Region_Id == null || (d.Region != null && d.Region.IsActive != 0)))
                 .OrderBy(x => x.DepartmentName)
                 .ToList();
+        }
+        
+        public IList<int> GetDepartmentsIdsByUserPermissions(int userId, int customerId, bool isOnlyActive = true)
+        {
+            return
+                _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive, true).AsQueryable()
+                    .Select(d => d.Id)
+                    .ToList();
+        }
+
+        public Task<List<int>> GetDepartmentsIdsByUserPermissionsAsync(int userId, int customerId, bool isOnlyActive = true)
+        {
+            return
+                _departmentRepository.GetDepartmentsByUserPermissions(userId, customerId, isOnlyActive, true).AsQueryable()
+                    .Select(d => d.Id)
+                    .ToListAsync();
         }
 
         public IList<Department> GetDepartmentsByUserPermissions(int userId, int customerId, bool isOnlyActive = true)
