@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Services.Services
         IList<ProductAreaEntity> GetTopProductAreas(int customerId, bool isOnlyActive = true);
         IList<ProductAreaEntity> GetProductAreasForSetting(int customerId, bool isOnlyActive = true);
 
-        IList<ProductAreaEntity> GetTopProductAreasForUser(int customerId, UserOverview user, bool isOnlyActive = true);
+        IList<ProductAreaEntity> GetTopProductAreasWithChilds(int customerId, bool isOnlyActive = true);
 
         IList<ProductAreaOverview> GetProductAreasFiltered(int customerId, int? productAreaIdToInclude,
             int? caseTypeId, UserOverview user, bool isOnlyActive = true);
@@ -165,16 +165,16 @@ namespace DH.Helpdesk.Services.Services
                     && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive)).OrderBy(x => x.Name).ToList();
         }
 
-        public IList<ProductAreaEntity> GetTopProductAreasForUser(int customerId, UserOverview user, bool isOnlyActive = true)
+        public IList<ProductAreaEntity> GetTopProductAreasWithChilds(int customerId, bool isOnlyActive = true)
         {
 			var res =
 				this.productAreaRepository.GetManyWithSubProductAreas(
 					x => x.Customer_Id == customerId && ((isOnlyActive && x.IsActive != 0) || !isOnlyActive))
-					.OrderBy(x => x.Name)
-					.ToList()
-					.Where(x => x.Parent_ProductArea_Id == null);
+                    .Where(x => x.Parent_ProductArea_Id == null)
+                    .OrderBy(x => x.Name)
+					.ToList();
 
-			return res.ToList();
+            return res;
         }
 
         private ProductAreaOverview GetTopMostAreaForChildNew(int id, IList<ProductAreaOverview> items)
@@ -475,7 +475,7 @@ namespace DH.Helpdesk.Services.Services
         public IList<ProductArea> GetChildrenInRow(IList<ProductArea> productAreas, bool isTakeOnlyActive = false)
         {
             var childProductAreas = new List<ProductArea>();
-            var parentProductAreas = productAreas.Where(pa => !pa.Parent_ProductArea_Id.HasValue && (isTakeOnlyActive ? pa.IsActive == 1 : true)).ToList<ProductArea>();
+            var parentProductAreas = productAreas.Where(pa => !pa.Parent_ProductArea_Id.HasValue && (!isTakeOnlyActive || pa.IsActive == 1)).ToList<ProductArea>();
             foreach (var p in parentProductAreas)
             {               
                 childProductAreas.AddRange(GetChildren(p.Name, p.IsActive, p.SubProductAreas.ToList(), isTakeOnlyActive));
@@ -487,7 +487,7 @@ namespace DH.Helpdesk.Services.Services
         private IList<ProductArea> GetChildren(string parentName, int parentState, IList<ProductArea> subProductAreas, bool isTakeOnlyActive = false)
         {
             var ret = new List<ProductArea>();
-            var newSubProductAreas = subProductAreas.Where(pa => (isTakeOnlyActive ? pa.IsActive == 1 : true)).ToList();
+            var newSubProductAreas = subProductAreas.Where(pa => (!isTakeOnlyActive || pa.IsActive == 1)).ToList();
             foreach (var s in newSubProductAreas)
             {
                 var newParentName = string.Format("{0} - {1}", parentName, s.Name);

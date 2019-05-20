@@ -78,10 +78,10 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             else
                 workingGroups = _workingGroupService.GetWorkingGroups(customerId, userId, false, true).ToList();
             
-            var caseTypes = this._caseTypeService.GetCaseTypes(customerId).ToList();
+            var caseTypes = this._caseTypeService.GetAllCaseTypes(customerId, false, true).ToList();
             var caseTypesInRow = this._caseTypeService.GetChildrenInRow(caseTypes).ToList();
 
-            var productAreas = this._productAreaService.GetAllProductAreas(customerId);
+            var productAreas = this._productAreaService.GetTopProductAreasWithChilds(customerId);
             var productAreasInRow = this._productAreaService.GetChildrenInRow(productAreas).ToList();
     
             reportFilter.Departments = departments.ToList();

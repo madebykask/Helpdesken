@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Enums.Reports;
+﻿using System.Data.Entity;
+using DH.Helpdesk.BusinessData.Enums.Reports;
 using DH.Helpdesk.Common.Tools;
 
 namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
@@ -160,42 +161,48 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                 case ReportedTimeGroup.CaseType_Id:
                     result = query.GroupBy(l => new { l.Case.CaseType_Id, l.Case.CaseType.Name })
                         .Select(lg => new ReportedTimeDataResult
-                            {Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                            { Id = lg.Key.CaseType_Id, Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
                     break;
                 case ReportedTimeGroup.CaseNumber:
-                    result = query.GroupBy(l => l.Case.CaseNumber)
+                    result = query.GroupBy(l =>  new { l.Case.Id, l.Case.CaseNumber })
                         .Select(lg => new ReportedTimeDataResult
-                            {Label = lg.Key.ToString(), TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                            {Id = lg.Key.Id,  Label = lg.Key.CaseNumber.ToString(), TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
                     break;
                 case ReportedTimeGroup.Department_Id:
-                    result = query.GroupBy(l => new { l.Case.Department_Id, l.Case.Department.DepartmentName })
+                    result = query
+                        .Where(l => l.Case.Department_Id.HasValue)
+                        .GroupBy(l => new { l.Case.Department_Id, l.Case.Department.DepartmentName })
                         .Select(lg => new ReportedTimeDataResult
-                            {Label = lg.Key.DepartmentName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                            { Id = lg.Key.Department_Id ?? 0, Label = lg.Key.DepartmentName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
                     break;
                 case ReportedTimeGroup.Priority_Id:
-                    result = query.GroupBy(l => new { l.Case.Priority_Id, l.Case.Priority.Name })
+                    result = query
+                        .GroupBy(l => new { l.Case.Priority_Id, l.Case.Priority.Name })
                         .Select(lg => new ReportedTimeDataResult
-                            {Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                            {Id = lg.Key.Priority_Id ?? 0, Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
                     break;
                 case ReportedTimeGroup.ProductArea_Id:
-                    result = query.GroupBy(l => new { l.Case.ProductArea_Id, l.Case.ProductArea.Name })
+                    result = query
+                        .GroupBy(l => new { l.Case.ProductArea_Id, l.Case.ProductArea.Name })
                         .Select(lg => new ReportedTimeDataResult
-                            {Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                            {Id = lg.Key.ProductArea_Id ?? 0, Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
                     break;
                 case ReportedTimeGroup.LogNoteDate:
-                    result = query.GroupBy(l => l.LogDate )
+                    result = query.GroupBy(l => DbFunctions.TruncateTime(l.LogDate))
                         .Select(lg => new ReportedTimeDataResult
-                            {Label = lg.Key.ToString(), TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                            {Label = lg.Key.ToString(), DateTime = lg.Key, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
                     break;
                 case ReportedTimeGroup.Performer_User_Id:
-                    result = query.GroupBy(l => new { l.Case.Performer_User_Id, l.Case.User.FirstName, l.Case.User.SurName })
+                    result = query
+                        .GroupBy(l => new { l.Case.Performer_User_Id, l.Case.Administrator.FirstName, l.Case.Administrator.SurName })
                         .Select(lg => new ReportedTimeDataResult
-                            {Label = lg.Key.FirstName + " " + lg.Key.SurName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                            {Id = lg.Key.Performer_User_Id ?? 0, Label = lg.Key.FirstName + " " + lg.Key.SurName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
                     break;
                 case ReportedTimeGroup.WorkingGroup_Id:
-                    result = query.GroupBy(l => new { l.Case.WorkingGroup_Id, l.Case.Workinggroup.WorkingGroupName })
+                    result = query
+                        .GroupBy(l => new { l.Case.WorkingGroup_Id, l.Case.Workinggroup.WorkingGroupName })
                         .Select(lg => new ReportedTimeDataResult
-                            {Label = lg.Key.WorkingGroupName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                            {Id = lg.Key.WorkingGroup_Id ?? 0, Label = lg.Key.WorkingGroupName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

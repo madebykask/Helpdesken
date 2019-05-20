@@ -6881,7 +6881,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private List<SelectListItem> GetProductAreasModel(int customerId, int? curProductAreaId)
         {
-            var allProductAreas = this._productAreaService.GetTopProductAreasForUser(customerId, SessionFacade.CurrentUser, false);
+            var allProductAreas = this._productAreaService.GetTopProductAreasWithChilds(customerId, false);
             var ret = new List<SelectListItem>();
 
             var parentRet = new List<SelectListItem>();

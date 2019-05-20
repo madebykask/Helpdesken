@@ -388,7 +388,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 const bool isTakeOnlyActive = false;
                 specificFilter.ProductAreaList = 
-                    _productAreaService.GetTopProductAreasForUser(customerId, SessionFacade.CurrentUser, isTakeOnlyActive);
+                    _productAreaService.GetTopProductAreasWithChilds(customerId, isTakeOnlyActive);
             }
 
             if (HasField(customerfieldSettings, GlobalEnums.TranslationCaseFields.WorkingGroup_Id))

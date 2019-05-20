@@ -2,9 +2,11 @@
 using System.Linq;
 using DH.Helpdesk.BusinessData.Enums.Reports;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Extensions.DateTime;
 using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Web.Areas.Reports.Models.ReportService;
+using DH.Helpdesk.Web.Infrastructure.CaseOverview;
 using WebGrease.Css.Extensions;
 
 namespace DH.Helpdesk.Web.Areas.Reports.Controllers
@@ -25,6 +27,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         private readonly IWorkContext _workContext;
         private readonly IWorkingGroupService _workingGroupService;
         private readonly ICaseTypeService _caseTypeService;
+        private readonly IProductAreaService _productAreaService;
 		private readonly IReportServiceService _reportServiceService;
 
 		public ServicesController(
@@ -33,7 +36,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             IWorkContext workContext,
             IWorkingGroupService workingGroupService,
             ICaseTypeService caseTypeService,
-			IReportServiceService reportServiceService)
+			IReportServiceService reportServiceService,
+            IProductAreaService productAreaService)
             : base(masterDataService)
         {
             _userService = userService;
@@ -41,8 +45,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             _workingGroupService = workingGroupService;
             _caseTypeService = caseTypeService;
 			_reportServiceService = reportServiceService;
-
-		}
+            _productAreaService = productAreaService;
+        }
 
         [HttpGet]
         public JsonResult GetWorkingGroupUsers(int? workingGroupId)
@@ -90,8 +94,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 			var result = _reportServiceService.GetHistoricalData(dataFilter);
 
 			var wgs = result.Select(o => new { o.WorkingGroup, o.WorkingGroupID }).Distinct().OrderBy(o => o.WorkingGroup).ToArray();
-            var caseTypes = CaseTypeTreeTranslation(_caseTypeService.GetAllCaseTypes(customerId, false, true));
-            var caseTypesFullNames = _caseTypeService.GetChildrenInRow(caseTypes).ToList();
+            var caseTypes = _caseTypeService.GetAllCaseTypes(customerId, false, true);
+            TranslateCaseTypes(caseTypes, 0);
+            var caseTypesFullNames = _caseTypeService.GetChildrenInRow(caseTypes.OrderBy(p => p.Name).ToList()).ToList();
 			var data = new
 			{
 				labels = wgs.Select(o => o.WorkingGroup ?? "").ToArray(),
@@ -127,12 +132,47 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             var result = _reportServiceService.GetReportedTimeData(dataFilter);
             var minutesInHour = 60.0;
             var totalHours = result.Sum(o => o.TotalTime) / minutesInHour;
+            switch (dataFilter.GroupBy)
+            {
+                case ReportedTimeGroup.CaseType_Id:
+                {
+                    var caseTypes = _caseTypeService.GetAllCaseTypes(customerId, false, true);
+                    TranslateCaseTypes(caseTypes, 0);
+                    var caseTypesFullNames = _caseTypeService.GetChildrenInRow(caseTypes.OrderBy(p => p.Name).ToList()).ToList();
+                    result.ForEach( p => p.Label = caseTypesFullNames
+                                                       .SingleOrDefault(c => c.Id == p.Id)
+                                                       ?.Name ?? "");
+                    result = result.OrderBy(d => d.Label).ToList();
+                    break;
+                }
+                case ReportedTimeGroup.ProductArea_Id:
+                {
+                    var productAreas = _productAreaService.GetTopProductAreasWithChilds(customerId, false);
+                    TranslateProductAreas(productAreas, 0);
+                    var productAreasFullNames = _productAreaService.GetChildrenInRow(productAreas.OrderBy(p => p.Name).ToList()).ToList();
+                    result.ForEach( p => p.Label = productAreasFullNames
+                        .SingleOrDefault(c => c.Id == p.Id)
+                        ?.Name ?? "");
+                    result = result.OrderBy(d => d.Label).ToList();
+                    break;
+                }
+                case ReportedTimeGroup.LogNoteDate:
+                {
+                    var formatter = new OutputFormatter(true, TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                    result.ForEach(d => d.Label = formatter.FormatNullableDate(d.DateTime));
+                    result = result.OrderBy(d => d.DateTime).ToList();
+                    break;
+                }
+            }
+            if (dataFilter.GroupBy == ReportedTimeGroup.CaseType_Id)
+            {
+            }
             var responce = new
             {
                 totalLabel = string.Format("{0}: {1}", Translation.GetCoreTextTranslation("Summa"), totalHours),
                 data = new 
                 {
-                    labels = result.Select(o => o.Label ?? ""),
+                    labels = result.Select(o => o.Label ?? "").ToList(),
                     datasets = new []
                     {
                         new 
@@ -152,18 +192,39 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             return Json("", JsonRequestBehavior.AllowGet);
         }
 
-        private IList<CaseType> CaseTypeTreeTranslation(IList<CaseType> caseTypes)
+        private void TranslateCaseTypes(IEnumerable<CaseType> caseTypes, int depth)
         {
-            foreach (var ct in caseTypes)
-            {
-                ct.Name = Translation.GetCoreTextTranslation(ct.Name);
-                if (ct.SubCaseTypes.Any())
-                {
-                    ct.SubCaseTypes = CaseTypeTreeTranslation(ct.SubCaseTypes.ToList());
-                }
-            }
+            if (depth >= 20)
+                throw new Exception("Iteration depth exceeded. Suspicion of infinte loop.");
 
-            return caseTypes.OrderBy(p => p.Name).ToList();
+            depth++;
+
+            caseTypes.ForEach(p => 
+            {
+                p.Name = Translation.GetCoreTextTranslation(p.Name);
+
+                if (p.SubCaseTypes != null && p.SubCaseTypes.Any())
+                {
+                    TranslateCaseTypes(p.SubCaseTypes, depth);
+                }
+            });
+        }
+
+        private void TranslateProductAreas(IEnumerable<ProductArea> products, int depth)
+        {
+            if (depth >= 20)
+                throw new Exception("Iteration depth exceeded. Suspicion of infinte loop.");
+
+            depth++;
+
+            products.ForEach(p =>
+            {
+                p.Name = Translation.GetCoreTextTranslation(p.Name);
+                if (p.SubProductAreas != null && p.SubProductAreas.Any())
+                {
+                    TranslateProductAreas(p.SubProductAreas, depth);
+                }
+            });
         }
     }
 }
