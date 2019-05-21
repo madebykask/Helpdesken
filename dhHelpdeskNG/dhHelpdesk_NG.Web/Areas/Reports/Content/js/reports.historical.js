@@ -9,34 +9,52 @@
             };
             const ctx = document.getElementById('chartjs').getContext('2d');
 
-            window.chartInstance = new Chart(ctx,
-                {
+            window.chartInstance =
+                new Chart(ctx, {
                     type: 'bar',
                     data: [],
+                    plugins: [window.ChartDataLabels],
                     options: {
                         maintainAspectRatio: false,
                         legend: {
                             position: 'right'
                         },
+                        layout: {
+                            padding: {
+                                top: 20
+                            }
+                        },
                         plugins: {
                             colorschemes: {
                                 scheme: 'tableau.Tableau20' // see https://nagix.github.io/chartjs-plugin-colorschemes/colorchart.html for other color schemes
                             },
-                        },
-                        scales: {
-                            xAxes: [
-                                {
-                                    stacked: true
-                                }
-                            ],
-                            yAxes: [
-                                {
-                                    stacked: true,
-                                    ticks: {
-                                        beginAtZero: true
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'end',
+                                formatter: function (value, context) {
+                                    let datasets = context.chart.data.datasets;
+                                    // do calculation if this is the last dataset of the bar 
+                                    if (context.datasetIndex === datasets.length - 1) {
+                                        let sum = 0;
+                                        datasets.map(function(dataset) {
+                                            sum += dataset.data[context.dataIndex];
+                                        });
+                                        return sum.toLocaleString();
+                                    }
+                                    else {
+                                        return '';
                                     }
                                 }
-                            ]
+                            }
+                        },
+                        scales: {
+                            xAxes: [{ stacked: true }],
+                            yAxes: [{
+                                stacked: true,
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
                         }
                     }
                 });
@@ -71,23 +89,18 @@
                 }),
                 url: options.dataUrl,
                 contentType: 'application/json'
+            }).done(function (data) {
+                window.chartInstance.data = data;
+                window.chartInstance.update();
+                //window.chartInstance.resize();
             })
-                .done(function (data) {
-
-                    window.chartInstance.data = data;
-
-                    window.chartInstance.update();
-                    //window.chartInstance.resize();
-                })
-                .always(function () {
-                    $('#showReportLoader').hide();
-                });
-
-
+            .always(function () {
+                $('#showReportLoader').hide();
+            });
         },
 
         toggle: function () {
-            var $container = $('#jsReportContainer').find('.row').first();
+            const $container = $('#jsReportContainer').find('.row').first();
             if ($container.is(':hidden')) {
                 $container.show();
             } else {
@@ -96,12 +109,12 @@
         },
 
         show: function () {
-            var $container = $('#jsReportContainer').find('.row').first();
+            const $container = $('#jsReportContainer').find('.row').first();
             if ($container.is(':hidden')) { $container.show() };
         },
 
         hide: function () {
-            var $container = $('#jsReportContainer').find('.row').first();
+            const $container = $('#jsReportContainer').find('.row').first();
             if (!$container.is(':hidden')) { $container.hide() };
         }
 

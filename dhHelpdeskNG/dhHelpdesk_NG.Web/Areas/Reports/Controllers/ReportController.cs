@@ -103,22 +103,22 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             _reportCategories = new CustomSelectList();
             _reportCategoriesRt = new CustomSelectList();
 
-			var reportCategories = new List<ListItem>()
-			{
-				new ListItem("1", GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), false),
-				new ListItem("8", GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), false),
-				new ListItem("9", GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), false),
-				new ListItem("10", GlobalEnums.TranslationCaseFields.Department_Id.ToString(), false),
-				new ListItem("11", GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), false),
-				new ListItem("13", GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), false),
-				new ListItem("12", GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), false),
-				new ListItem("7", GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), false),
-				new ListItem("5", ReportItemNames.RegistrationDate, false),
-				new ListItem("2", ReportItemNames.RegistrationYear, false),
-				new ListItem("4", ReportItemNames.RegistrationMonth, false),
-				new ListItem("3", ReportItemNames.RegistrationWeekday, false),
-				new ListItem("6", ReportItemNames.RegistrationHour, false)
-			};
+            var reportCategories = new List<ListItem>()
+            {
+                new ListItem("1", GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), false),
+                new ListItem("8", GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), false),
+                new ListItem("9", GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), false),
+                new ListItem("10", GlobalEnums.TranslationCaseFields.Department_Id.ToString(), false),
+                new ListItem("11", GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), false),
+                new ListItem("13", GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), false),
+                new ListItem("12", GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), false),
+                new ListItem("7", GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), false),
+                new ListItem("5", ReportItemNames.RegistrationDate, false),
+                new ListItem("2", ReportItemNames.RegistrationYear, false),
+                new ListItem("4", ReportItemNames.RegistrationMonth, false),
+                new ListItem("3", ReportItemNames.RegistrationWeekday, false),
+                new ListItem("6", ReportItemNames.RegistrationHour, false)
+            };
 
             var reprotCategoriesRt = new List<ListItem>
             {
@@ -132,18 +132,18 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 new ListItem("8", GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), false)
             };
 
-			_reportCategories.Items.AddItems(reportCategories.OrderBy(o => o.Value).ToList());
-			_reportCategoriesRt.Items.AddItems(reprotCategoriesRt.OrderBy(o => o.Value).ToList());
+            _reportCategories.Items.AddItems(reportCategories.OrderBy(o => o.Value).ToList());
+            _reportCategoriesRt.Items.AddItems(reprotCategoriesRt.OrderBy(o => o.Value).ToList());
 
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-			var customerId = OperationContext?.CustomerId ?? SessionFacade.CurrentCustomer.Id;
-			var userId = OperationContext?.UserId ?? SessionFacade.CurrentUser.Id;
+            var customerId = OperationContext?.CustomerId ?? SessionFacade.CurrentCustomer.Id;
+            var userId = OperationContext?.UserId ?? SessionFacade.CurrentUser.Id;
 
-			var model = new ReportsOptions();
+            var model = new ReportsOptions();
             var lastState = SessionFacade.ReportService;
             model.ReportServiceOverview = GetReportServiceModel(customerId, userId, lastState);
 
@@ -514,12 +514,12 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         [BadRequestOnNotValid]
         public int SaveReportFilters(SaveReportFavoriteModel options)
         {
-			var customerId = OperationContext?.CustomerId ?? SessionFacade.CurrentCustomer.Id;
-			var userId = OperationContext?.UserId ?? SessionFacade.CurrentUser.Id;
+            var customerId = OperationContext?.CustomerId ?? SessionFacade.CurrentCustomer.Id;
+            var userId = OperationContext?.UserId ?? SessionFacade.CurrentUser.Id;
 
-			var favorite = new ReportFavorite();
+            var favorite = new ReportFavorite();
             favorite.Customer_Id = customerId;
-	        favorite.User_Id = userId;
+            favorite.User_Id = userId;
             favorite.Filters = options.Filters;
             favorite.Name = options.Name;
             favorite.Type = options.OriginalReportId;
@@ -535,17 +535,17 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         public void DeleteReportFavorite(int id)
         {
             var customerId = OperationContext?.CustomerId ?? SessionFacade.CurrentCustomer.Id;
-			var userId = OperationContext?.UserId ?? SessionFacade.CurrentUser.Id;
-			this._reportService.DeleteCustomerReportFavorite(id, customerId, userId);
+            var userId = OperationContext?.UserId ?? SessionFacade.CurrentUser.Id;
+            this._reportService.DeleteCustomerReportFavorite(id, customerId, userId);
         }
 
         [HttpGet]
         public JsonResult GetReportFilterOptions(int id)
         {
             var customerId = OperationContext?.CustomerId ?? SessionFacade.CurrentCustomer.Id;
-			var userId = OperationContext?.UserId ?? SessionFacade.CurrentUser.Id;
+            var userId = OperationContext?.UserId ?? SessionFacade.CurrentUser.Id;
 
-			var favorite = this._reportService.GetCustomerReportFavorite(id, customerId, userId);
+            var favorite = this._reportService.GetCustomerReportFavorite(id, customerId, userId);
             var model = new ReportFavoriteModel();
             model.Id = favorite.Id;
             model.Filters = favorite.Filters;
@@ -655,7 +655,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
         private ReportServiceOverviewModel GetReportServiceModel(int customerId, int userId, ReportServiceSessionModel lastState = null)
         {
-			var reports = this._reportService.GetAvailableCustomerReports(customerId);
+            var reports = this._reportService.GetAvailableCustomerReports(customerId);
             var options = this._reportModelFactory.GetReportsOptions(reports);
 
             var model = new ReportServiceOverviewModel();
@@ -754,32 +754,32 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                     ? "26"
                     : "-7";
 
-			var oldReports = new List<KeyValuePair<string, string>>()
-			{
-				//new KeyValuePair<string, string>("-1", "CasesPerCasetype"),
-				//new KeyValuePair<string, string>("-2", "CasesPerDate"),
-				//new KeyValuePair<string, string>("-3", "CasesPerSource"),
-				//new KeyValuePair<string, string>("-4", "CasesPerWorkingGroup"),
-				new KeyValuePair<string, string>("-5", "CasesPerAdministrator")
+            var oldReports = new List<KeyValuePair<string, string>>()
+            {
+                //new KeyValuePair<string, string>("-1", "CasesPerCasetype"),
+                //new KeyValuePair<string, string>("-2", "CasesPerDate"),
+                //new KeyValuePair<string, string>("-3", "CasesPerSource"),
+                //new KeyValuePair<string, string>("-4", "CasesPerWorkingGroup"),
+                new KeyValuePair<string, string>("-5", "CasesPerAdministrator")
                 //,new KeyValuePair<string, string>("-6", "CasesPerDepartment")
-			};
+            };
 
-			var newReports = new List<KeyValuePair<string, string>>()
-			{
-				new KeyValuePair<string, string>(numberOfCasesKey, "NumberOfCases"),
-				new KeyValuePair<string, string>("-8", "AvgResolutionTime"),
+            var newReports = new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>(numberOfCasesKey, "NumberOfCases"),
+                new KeyValuePair<string, string>("-8", "AvgResolutionTime"),
                 new KeyValuePair<string, string>(reportedTimeKey, "ReportedTime"),
-			    new KeyValuePair<string, string>("24", "HistoricalReport"),
-			};
+                new KeyValuePair<string, string>("24", "HistoricalReport"),
+            };
 
-			// List new report first (order by name) then old reports (order by name)
-			var listItems = newReports
-				.OrderBy(o => o.Value)
-				.Concat(oldReports.OrderBy(o => o.Value))
-				.Select(o => new ListItem(o.Key, o.Value, false))
-				.ToList();
+            // List new report first (order by name) then old reports (order by name)
+            var listItems = newReports
+                .OrderBy(o => o.Value)
+                .Concat(oldReports.OrderBy(o => o.Value))
+                .Select(o => new ListItem(o.Key, o.Value, false))
+                .ToList();
 
-			ret.Items.AddItems(listItems);
+            ret.Items.AddItems(listItems);
 
             foreach (var customReport in reports.OrderBy(o => o.Text))
             {
@@ -795,7 +795,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
     
         private List<SavedReportFavoriteItemModel> GetSavedReportFilters(int custometId, int userId)
         {
-			var favorites = this._reportService.GetCustomerReportFavoriteList(custometId, userId);
+            var favorites = this._reportService.GetCustomerReportFavoriteList(custometId, userId);
             var list = favorites.Select(f => new SavedReportFavoriteItemModel
             {
                 Id = f.Id,
