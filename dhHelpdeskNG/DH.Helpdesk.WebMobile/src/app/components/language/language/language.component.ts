@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { TranslationApiService } from 'src/app/services/api/translation/translation-api.service';
-import { Language } from 'src/app/models';
 import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 import { Router } from '@angular/router';
 import { LanguagesApiService } from 'src/app/services/api/language/languages-api.service';
 import { take, finalize, map } from 'rxjs/operators';
 import { OptionItem } from 'src/app/modules/shared-module/models';
 import { MbscListviewOptions, MbscListview } from '@mobiscroll/angular';
+import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrapper';
 
 @Component({
   selector: 'app-language',
@@ -16,7 +15,8 @@ import { MbscListviewOptions, MbscListview } from '@mobiscroll/angular';
 export class LanguageComponent implements OnInit {
 
   constructor(private router: Router,
-    private userSettingsService : UserSettingsApiService,
+    private windowWrapper: WindowWrapper,
+    private userSettingsService: UserSettingsApiService,
     private languagesService: LanguagesApiService) { }
 
   @ViewChild('languageListView') languageListView: MbscListview;
@@ -25,26 +25,22 @@ export class LanguageComponent implements OnInit {
   languageId: number;
   isLoadingLanguage: Boolean;
 
-
   languageSettings: MbscListviewOptions = {
     enhance: true,
     swipe: false,
     select: 'single'
   };
-  
+
   ngOnInit() {
     this.loadLanguages();
   }
 
-  private selectLanguage(id: number) {
-    this.setLanguage(id);
-  }
-
   private loadLanguages() {
     this.languageId = this.userSettingsService.getCurrentLanguage() || 0;
-    if (this.languageId === 0)
+    if (this.languageId === 0) {
        return;
-    
+    }
+
     this.isLoadingLanguage = true;
     this.languagesService.getLanguages().pipe(
         take(1),
@@ -60,11 +56,8 @@ export class LanguageComponent implements OnInit {
   setLanguage(languageId: number) {
     if (languageId) {
       this.userSettingsService.setCurrentLanguage(languageId);
-
-      // reload will reopen the app
-      window.location.reload(true);
-      
-      //window.history.back();
+      this.router.navigateByUrl('/');
+      setTimeout(() => this.windowWrapper.nativeWindow.location.reload(true), 300);
     }
   }
 }
