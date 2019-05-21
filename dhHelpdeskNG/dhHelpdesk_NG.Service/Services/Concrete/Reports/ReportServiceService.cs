@@ -111,6 +111,13 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             var result = _reportServiceRepository.GetReportedTimeData(filter);
             return result;
         }
+
+        public IList<NumberOfCaseDataResult> GetNumberOfCasesData(NumberOfCasesDataFilter filter)
+        {
+            var result = _reportServiceRepository.GetNumberOfCasesData(filter);
+            return result;
+        }
+
         #endregion
 
         #region Private Methods and Operators

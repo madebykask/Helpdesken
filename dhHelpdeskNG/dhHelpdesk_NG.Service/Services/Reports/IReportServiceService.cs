@@ -11,5 +11,6 @@ namespace DH.Helpdesk.Services.Services.Reports
 
 		IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter);
         IList<ReportedTimeDataResult> GetReportedTimeData(ReportedTimeDataFilter filter);
+        IList<NumberOfCaseDataResult> GetNumberOfCasesData(NumberOfCasesDataFilter filter);
     }
 }

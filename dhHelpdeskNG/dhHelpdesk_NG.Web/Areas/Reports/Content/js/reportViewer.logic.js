@@ -461,7 +461,7 @@
         }
 
         dhHelpdesk.reports.onJSReportShow = function (e, name) {
-            if (!dhHelpdesk.reports.doValidation(false))
+            if (!dhHelpdesk.reports.doValidation(true))
                 return;
 
             dhHelpdesk.reports[name].show();

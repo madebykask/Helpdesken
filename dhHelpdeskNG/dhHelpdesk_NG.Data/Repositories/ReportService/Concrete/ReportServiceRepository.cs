@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.SqlServer;
 using DH.Helpdesk.BusinessData.Enums.Reports;
 using DH.Helpdesk.Common.Tools;
 
@@ -211,7 +212,140 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
             return result.ToList();
         }
 
-		private object GetNullableValue<T>(T value)
+        public IList<NumberOfCaseDataResult> GetNumberOfCasesData(NumberOfCasesDataFilter filter)
+        {
+            var query = DataContext.Cases.AsNoTracking()
+                .Where(c => c.Customer_Id == filter.CustomerID);
+
+            if (filter.RegisterFrom.HasValue)
+                query = query.Where(c => c.RegTime >= filter.RegisterFrom.Value);
+
+            if (filter.RegisterTo.HasValue)
+                query = query.Where(c => c.RegTime <= filter.RegisterTo.Value);
+
+            if(filter.Administrators!= null && filter.Administrators.Any())
+                query = query.Where(c => c.Performer_User_Id.HasValue && filter.Administrators.Contains(c.Performer_User_Id.Value));
+
+            if (filter.CloseFrom.HasValue)
+                query = query.Where(c => c.FinishingDate >= filter.CloseFrom.Value);
+
+            if (filter.CloseTo.HasValue)
+                query = query.Where(c => c.FinishingDate >= filter.CloseTo.Value);
+
+            if (filter.Departments!= null && filter.Departments.Any())
+                query = query.Where(c => c.Department_Id.HasValue && filter.Departments.Contains(c.Department_Id.Value));
+
+            if (filter.WorkingGroups!= null && filter.WorkingGroups.Any())
+                query = query.Where(c => c.WorkingGroup_Id.HasValue && filter.WorkingGroups.Contains(c.WorkingGroup_Id.Value));
+
+            if (filter.CaseTypes!= null && filter.CaseTypes.Any())
+                query = query.Where(c => filter.CaseTypes.Contains(c.CaseType_Id));
+
+            if (filter.ProductAreas!= null && filter.ProductAreas.Any())
+                query = query.Where(c => c.ProductArea_Id.HasValue && filter.ProductAreas.Contains(c.ProductArea_Id.Value));
+
+            if (filter.CaseStatus.HasValue)
+            {
+                var status = (CaseProgressFilterEnum) filter.CaseStatus.Value;
+                switch (status)
+                {
+                    case CaseProgressFilterEnum.None:
+                    {
+                        break;
+                    }
+                    case CaseProgressFilterEnum.ClosedCases:
+                    {
+                        query = query.Where(c => c.FinishingDate.HasValue);
+                        break;
+                    }
+                    case CaseProgressFilterEnum.CasesInProgress:
+                    {
+                        query = query.Where(c => !c.FinishingDate.HasValue);
+                        break;
+                    }
+                    default:
+                    {
+                        throw new Exception(string.Format("Unknown CaseStatus value: {0}", filter.CaseStatus.Value));
+                    }
+                }
+            }
+
+            IQueryable<NumberOfCaseDataResult> result = null;
+            switch (filter.GroupBy)
+            {
+                case NumberOfCasesGroup.CaseType_Id:
+                    result = query.GroupBy(c => new { c.CaseType_Id, c.CaseType.Name })
+                        .Select(cg => new NumberOfCaseDataResult
+                            { Id = cg.Key.CaseType_Id, Label = cg.Key.Name, CasesAmount = cg.Count()});
+                    break;
+                case NumberOfCasesGroup.RegistrationYear:
+                    result = query.GroupBy(c => c.RegTime.Year)
+                        .Select(cg => new NumberOfCaseDataResult
+                            { Id = cg.Key, Label = cg.Key.ToString(), CasesAmount = cg.Count()});
+                    break;
+                case NumberOfCasesGroup.RegistrationWeekday:
+                    result = query.GroupBy(c => SqlFunctions.DatePart("weekday", c.RegTime))
+                        .Select(cg => new NumberOfCaseDataResult
+                            { Id = cg.Key.Value, Label = cg.Key.ToString(), CasesAmount = cg.Count()});
+                    break;
+                case NumberOfCasesGroup.RegistrationMonth:
+                    result = query.GroupBy(c => c.RegTime.Month)
+                        .Select(cg => new NumberOfCaseDataResult
+                            { Id = cg.Key, Label = cg.Key.ToString(), CasesAmount = cg.Count()});
+                    break;
+                case NumberOfCasesGroup.RegistrationDate:
+                    result = query.GroupBy(c => DbFunctions.TruncateTime(c.RegTime))
+                        .Select(cg => new NumberOfCaseDataResult
+                            { Label = cg.Key.ToString(), DateTime = cg.Key, CasesAmount = cg.Count()});
+                    break;
+                case NumberOfCasesGroup.RegistrationHour:
+                    result = query.GroupBy(c => c.RegTime.Hour)
+                        .Select(cg => new NumberOfCaseDataResult
+                            { Id = cg.Key, Label = cg.Key.ToString(), CasesAmount = cg.Count()});
+                    break;
+                case NumberOfCasesGroup.RegistrationSourceCustomer:
+                    result = query.GroupBy(c => new { c.RegistrationSourceCustomer_Id, c.RegistrationSourceCustomer.SourceName })
+                        .Select(cg => new NumberOfCaseDataResult
+                            { Id = cg.Key.RegistrationSourceCustomer_Id ?? 0, Label = cg.Key.SourceName.ToString(), CasesAmount = cg.Count()});
+                    break;
+                case NumberOfCasesGroup.WorkingGroup_Id:
+                    result = query.GroupBy(c => new { c.WorkingGroup_Id, c.Workinggroup.WorkingGroupName })
+                        .Select(cg => new NumberOfCaseDataResult
+                            { Id = cg.Key.WorkingGroup_Id ?? 0, Label = cg.Key.WorkingGroupName.ToString(), CasesAmount = cg.Count()});
+                    break;
+                case NumberOfCasesGroup.StateSecondary_Id:
+                    result = query.GroupBy(c => new { c.StateSecondary_Id, c.StateSecondary.Name })
+                        .Select(cg => new NumberOfCaseDataResult
+                            { Id = cg.Key.StateSecondary_Id ?? 0, Label = cg.Key.Name.ToString(), CasesAmount = cg.Count()});
+                    break;
+                case NumberOfCasesGroup.Department_Id:
+                    result = query.GroupBy(c => new { c.Department_Id, c.Department.DepartmentName })
+                        .Select(cg => new NumberOfCaseDataResult
+                            { Id = cg.Key.Department_Id ?? 0, Label = cg.Key.DepartmentName.ToString(), CasesAmount = cg.Count()});
+                    break;
+                case NumberOfCasesGroup.Priority_Id:
+                    result = query.GroupBy(c => new { c.Priority_Id, c.Priority.Name })
+                        .Select(cg => new NumberOfCaseDataResult
+                            { Id = cg.Key.Priority_Id ?? 0, Label = cg.Key.Name.ToString(), CasesAmount = cg.Count()});
+                    break;
+                case NumberOfCasesGroup.FinishingDate:
+                    result = query.GroupBy(c => DbFunctions.TruncateTime(c.FinishingDate))
+                        .Select(cg => new NumberOfCaseDataResult
+                            { Label = "", DateTime = cg.Key, CasesAmount = cg.Count()});
+                    break;
+                case NumberOfCasesGroup.ProductArea_Id:
+                    result = query.GroupBy(c => new { c.ProductArea_Id, c.ProductArea.Name })
+                        .Select(cg => new NumberOfCaseDataResult
+                            { Id = cg.Key.ProductArea_Id ?? 0, Label = cg.Key.Name.ToString(), CasesAmount = cg.Count()});
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return result.ToList();
+        }
+
+        private object GetNullableValue<T>(T value)
 		{
 			if (value == null)
 			{
