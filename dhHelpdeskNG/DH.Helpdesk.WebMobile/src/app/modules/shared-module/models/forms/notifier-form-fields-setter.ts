@@ -22,6 +22,9 @@ export class NotifierFormFieldsSetter {
   setPersonEmail(val: string) {
     this.setSafe(CaseFieldsNames.PersonEmail, val || '');
   }
+  setPersonPhone(val: string) {
+    this.setSafe(CaseFieldsNames.PersonPhone, val || '');
+  }
   setPersonCellPhone(val: string) {
     this.setSafe(CaseFieldsNames.PersonCellPhone, val || '');
   }

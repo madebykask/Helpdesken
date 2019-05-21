@@ -570,6 +570,7 @@ export class CaseEditComponent {
         formFieldsSetter.setReportedBy(data.userId);
         formFieldsSetter.setPersonName(data.name);
         formFieldsSetter.setPersonEmail(data.email);
+        formFieldsSetter.setPersonPhone(data.phone);
         formFieldsSetter.setPersonCellPhone(data.cellphone);
         formFieldsSetter.setPlace(data.place);
         formFieldsSetter.setUserCode(data.userCode);
