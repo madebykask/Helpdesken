@@ -489,7 +489,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         currentCase.Department_Id);
                     currentCase.ExternalTime += externalTimeToAdd;
 
-                    workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, departmentIds, customerTimeOffset);
+                    //workTimeCalc = workTimeCalcFactory.Build(oldCase.ChangeTime, utcNow, departmentIds, customerTimeOffset);
                     result.ActionExternalTime = workTimeCalc.CalculateWorkTime(
                         oldCase.ChangeTime,
                         utcNow,
