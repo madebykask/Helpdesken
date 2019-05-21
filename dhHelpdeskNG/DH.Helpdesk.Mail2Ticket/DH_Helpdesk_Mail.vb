@@ -306,7 +306,7 @@ Module DH_Helpdesk_Mail
                             ip = host.AddressList(0).ToString()
                         End If
 
-                        LogToFile("Connecting to " & objCustomer.POP3Server & " (" + ip + "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName, iPop3DebugLevel)
+                        LogToFile("Connecting to " & objCustomer.POP3Server & " (" & ip & "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName, iPop3DebugLevel)
 
                         If objCustomer.POP3Port = 993 Then
                             IMAPclient.Connect(objCustomer.POP3Server.ToString(), objCustomer.POP3Port, Nothing, ImapSecurity.Implicit)
@@ -682,7 +682,8 @@ Module DH_Helpdesk_Mail
                                     'Attached files processing for Case
                                     attachedFiles = ProcessMessageAttachments(message, iHTMLFile, objCustomer, objCase.Casenumber.ToString(), Nothing, iPop3DebugLevel)
                                     If (attachedFiles.Any())
-                                        For Each sFileName As String In attachedFiles
+                                        For Each attachedFile As String In attachedFiles
+                                            Dim sFileName = Path.GetFileName(attachedFile)
                                             objCaseData.saveFileInfo(objCase.Id, sFileName)
                                         Next
                                     End If
@@ -919,7 +920,8 @@ Module DH_Helpdesk_Mail
                                     ' Process attached log files 
                                     attachedFiles = ProcessMessageAttachments(message, iHTMLFile, objCustomer, iLog_Id.ToString(), "L", iPop3DebugLevel)
                                     If (attachedFiles.Any())
-                                        For Each sFileName As String In attachedFiles
+                                        For Each attachedFile As String In attachedFiles
+                                            Dim sFileName = Path.GetFileName(attachedFile)
                                             objLogData.saveFileInfo(iLog_Id, sFileName)
                                         Next
                                     End If
@@ -1039,21 +1041,20 @@ Module DH_Helpdesk_Mail
                                                iHtmlFile As Integer,
                                                objCustomer As Customer,
                                                objectId As String,  'Case.Id or Log.Id
-                                               container As String, '"<CaseNumber>" for Case file, "L" for Log file
+                                               prefix As String, '"<CaseNumber>" for Case file, "L<LogId>" for Log file
                                                iPop3DebugLevel As Integer) As List(Of String)
 
         Dim files As List(Of String) = New List(Of String)
 
         Dim tempDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, "Temp", objectId)
-        Dim saveDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, container, objectId)
-
+        Dim saveDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, If(IsNullOrEmpty(prefix), objectId, prefix & objectId))
+        
         If message.Attachments.Count > 6 - iHtmlFile Then
 
             ' Kontrollera om folder existerar
             If Directory.Exists(tempDirPath) = False Then
                 Directory.CreateDirectory(tempDirPath)
             End If
-
 
             If Directory.Exists(saveDirPath) = False Then
                 Directory.CreateDirectory(saveDirPath)
@@ -1064,23 +1065,22 @@ Module DH_Helpdesk_Mail
                 Dim sFileNameTemp As String = msgAttachment.FileName
                 sFileNameTemp = sFileNameTemp.Replace(":", "")
                 sFileNameTemp = URLDecode(sFileNameTemp)
-
-                LogToFile("Filename (temp):" & sFileNameTemp, iPop3DebugLevel)
-                Dim filePath = Path.Combine(tempDirPath, sFileNameTemp)
-                msgAttachment.Save(filePath)
+                ' save temp file
+                Dim sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
+                msgAttachment.Save(sTempFilePath)
             Next
 
             'zip files 
-            Dim sFileName As String = Path.Combine(saveDirPath, objectId & ".zip")
-            sFileName = createZipFile(tempDirPath, sFileName)
+            Dim sFilePath As String = Path.Combine(saveDirPath, objectId & ".zip")
+            createZipFile(tempDirPath, sFilePath)
+            LogToFile("Attached file path: " & sFilePath, iPop3DebugLevel)
 
-            If Not IsNullOrEmpty(sFileName) Then
+            If Not IsNullOrEmpty(sFilePath) Then
                 'Ta bort tempkatalogen / delete temp dir
                 If Directory.Exists(tempDirPath) = True Then
                     Directory.Delete(tempDirPath, True)
                 End If
-
-                files.Add(objectId & ".zip")
+                files.Add(sFilePath)
             End If
         ElseIf message.Attachments.Count > 0 Then
 
@@ -1094,12 +1094,12 @@ Module DH_Helpdesk_Mail
                 Dim sFileName As String = msgAttachment.FileName
                 sFileName = sFileName.Replace(":", "")
                 sFileName = URLDecode(sFileName)
+                
+                Dim sFilePath = Path.Combine(saveDirPath, sFileName)
+                LogToFile("Attached file path: " & sFilePath, iPop3DebugLevel)
+                msgAttachment.Save(sFilePath)
 
-                LogToFile("Filename:" & sFileName, iPop3DebugLevel)
-                Dim filePath = Path.Combine(saveDirPath, sFileName)
-                msgAttachment.Save(filePath)
-
-                files.Add(sFileName)
+                files.Add(sFilePath)
             Next
         End If
 
@@ -1384,16 +1384,11 @@ Module DH_Helpdesk_Mail
         End If
     End Sub
 
-    Private Function createZipFile(ByVal sSourceDir As String, ByVal sFileName As String) As String
+    Private Sub createZipFile(ByVal sSourceDir As String, ByVal sFileName As String) 
         Dim fz As New ICSharpCode.SharpZipLib.Zip.FastZip
-
-
         fz.CreateZip(sFileName, sSourceDir, True, "", "")
-
         fz = Nothing
-
-        Return sFileName
-    End Function
+    End Sub
 
     Private Function extractAnswer(ByVal sBodyText As String, ByVal sEMailAnswerSeparator As String) As String
         Dim aEMailAnswerSeparator() As String

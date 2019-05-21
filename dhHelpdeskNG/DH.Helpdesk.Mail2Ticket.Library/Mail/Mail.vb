@@ -242,15 +242,13 @@ Public Class Mail
             Dim filesToAttach as List(Of String) = Nothing
             If (bAttachFiles AndAlso files IsNot Nothing AndAlso files.Any())
                 filesToAttach = New List(Of String)
-                For Each sFileName as String in files
-                    Dim sFilePath as String = Path.Combine(objCustomer.PhysicalFilePath, objCase.Casenumber.ToString(), sFileName)
-                    filesToAttach.Add(sFilePath)
+                For Each attachedFile as String in files
+                    filesToAttach.Add(attachedFile)
                 Next
             End If
 
             If giLoglevel > 0 Then
-                objLogFile.WriteLine(Now() & ", sendMail, From:" & objCustomer.HelpdeskEMail & ", To: " & sEmailTo)
-
+                objLogFile.WriteLine(Now() & ", sendMail, From:" & objCustomer.HelpdeskEMail & ", To: " & sEmailTo & "Attached files: '" & String.Join(";", filesToAttach) & "'")
                 'objLogFile.WriteLine(Now() & ", sendMail, Body:" & sBody)
             End If
 
