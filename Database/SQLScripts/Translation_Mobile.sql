@@ -382,6 +382,18 @@ insert into tbltext (id, TextString, TextType) VALUES (10059, 'Ingen tillgängli
 
 If not exists (select * from tblTextTranslation where text_id = 10059 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10059, 2, 'No email address available')
+--
+If not exists (select * from tbltext where id = 10060)
+insert into tbltext (id, TextString, TextType) VALUES (10060, 'Kommunicera i ärenden', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10060 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10060, 2, 'Communicate in cases')
+--
+If not exists (select * from tbltext where id = 10061)
+insert into tbltext (id, TextString, TextType) VALUES (10061, 'Avsluta ärenden', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10061 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10061, 2, 'Close cases')
 
 
 GO
