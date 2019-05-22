@@ -161,7 +161,7 @@
           </mbsc-form-group>
 
           <mbsc-form-group collapsible [open]="isNewCase" #closeSection *ngIf="showField(caseFieldsNames.FinishingDate) && !caseFieldsNames.FinishingDate.value">
-            <mbsc-form-group-title >{{ 'Avsluta ärenden' | translate }}</mbsc-form-group-title>
+            <mbsc-form-group-title >{{ 'Avsluta ärende' | translate }}</mbsc-form-group-title>
             <mbsc-form-group-content>
                 <case-textarea-control *ngIf="showField(caseFieldsNames.FinishingDescription)" [field]="caseFieldsNames.FinishingDescription" [form]="form"></case-textarea-control>
                 <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.ClosingReason)" [field]="caseFieldsNames.ClosingReason" [form]="form" [dataSource]="dataSource.closingReasonsStore$"></case-multi-dropdown-control>

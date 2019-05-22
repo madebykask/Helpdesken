@@ -324,7 +324,7 @@ If not exists (select * from tblTextTranslation where text_id = 10049 and Langua
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10049, 2, 'Closed today')
 
 If not exists (select * from tbltext where id = 10050)
-insert into tbltext (id, TextString, TextType) VALUES (10050, 'Avsluta ärenden', @MobileType)
+insert into tbltext (id, TextString, TextType) VALUES (10050, 'Avsluta ärende', @MobileType)
 
 If not exists (select * from tblTextTranslation where text_id = 10050 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10050, 2, 'Close case')
