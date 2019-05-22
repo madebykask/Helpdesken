@@ -51,7 +51,7 @@
                                         </tr>
                                     </thead>
                                     <tr>
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Number).FirstOrDefault();
+                                        @{row = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.Number);
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Number);
@@ -78,7 +78,7 @@
                                         }
                                     </tr>
                                     <tr>
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.CaseNumber).FirstOrDefault();
+                                        @{row = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.CaseNumber);
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.CaseNumber);
@@ -108,7 +108,7 @@
                                         }
                                     </tr>
                                     <tr>
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Category).FirstOrDefault();
+                                        @{row = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.Category);
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Category);
@@ -135,7 +135,7 @@
                                         }
                                     </tr>
                                     <tr>
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Supplier).FirstOrDefault();
+                                        @{row = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.Supplier);
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Supplier);
@@ -162,7 +162,7 @@
                                         }
                                     </tr>
                                     <tr>
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Department).FirstOrDefault();
+                                        @{row = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.Department);
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Department);
@@ -189,7 +189,7 @@
                                         }
                                     </tr>
                                     <tr>
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.ResponsibleUser).FirstOrDefault();
+                                        @{row = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.ResponsibleUser);
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.ResponsibleUser);
@@ -218,7 +218,7 @@
                                         }
                                     </tr>
                                     <tr style="margin-bottom:10px;">
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Filename).FirstOrDefault();
+                                        @{row = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.Filename);
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Filename);
@@ -249,7 +249,7 @@
                                         }
                                     </tr>
                                     <tr>
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Other).FirstOrDefault();
+                                        @{row = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.Other);
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Other);
@@ -280,7 +280,7 @@
                                         }
                                     </tr>
                                     <tr>
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.StartDate).FirstOrDefault();
+                                        @{row = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.StartDate);
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.StartDate);
@@ -309,7 +309,7 @@
                                         }
                                     </tr>
                                     <tr>
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.EndDate).FirstOrDefault();
+                                        @{row = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.EndDate);
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.EndDate);
@@ -338,7 +338,7 @@
                                         }
                                     </tr>
                                     <tr>
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.NoticeDate).FirstOrDefault();
+                                        @{row = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.NoticeDate);
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.NoticeDate);
@@ -369,7 +369,7 @@
                                         }
                                     </tr>
                                     <tr>
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Running).FirstOrDefault();
+                                        @{row = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.Running);
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Running);
@@ -398,7 +398,7 @@
                                         }
                                     </tr>
                                     <tr>
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Finished).FirstOrDefault();
+                                        @{row = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.Finished);
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Finished);
@@ -430,78 +430,86 @@
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <h4>@Translation.Get("Uppföljning", Enums.TranslationSource.TextTranslation)</h4>
-                        <div class="row">
-                            <div class="span12">
-                                <table class="tableResponsible">
-                                    <thead>
+                    @{var followUpFieldRow = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.FollowUpField);
+                        if (followUpFieldRow == null)
+                        {
+                            followUpFieldRow = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.FollowUpField);
+                            followUpFieldRow.ContractFieldLable = Translation.Get("Uppföljningsintervall");
+                            followUpFieldRow.ContractFieldLable_Eng = "Follow Up Interval";
+                        }
+                    }
+                    @{var responsibleFollowUpFieldRow = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField);
+                        if (responsibleFollowUpFieldRow == null)
+                        {
+                            responsibleFollowUpFieldRow = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.ResponsibleFollowUpField);
+                            responsibleFollowUpFieldRow.ContractFieldLable = Translation.Get("Ansvarig uppföljning");
+                            responsibleFollowUpFieldRow.ContractFieldLable_Eng = "Responsible Follow Up";
+                        }
+                    }
+                    @if (followUpFieldRow.Show || responsibleFollowUpFieldRow.Show)
+                    {
+                        <div>
+                            <h4>@Translation.Get("Uppföljning")</h4>
+                            <div class="row">
+                                <div class="span12">
+                                    <table class="tableResponsible">
+                                        <thead>
+                                            <tr>
+                                                <th class="span3"></th>
+                                                <th class="span4"></th>
+                                                <th class="span5"></th>
+                                            </tr>
+                                        </thead>
                                         <tr>
-                                            <th class="span3"></th>
-                                            <th class="span4"></th>
-                                            <th class="span5"></th>
+                                            @if (followUpFieldRow.Show)
+                                            {
+                                                <td>
+                                                    @if (SessionFacade.CurrentLanguageId == 2)
+                                                    {
+                                                        @Html.DisplayFor(m => followUpFieldRow.ContractFieldLable_Eng)
+                                                    }
+                                                    else
+                                                    {
+                                                        @Translation.Get(followUpFieldRow.ContractFieldLable)
+                                                        ;
+                                                    }
+                                                    @if (followUpFieldRow.Required)
+                                                    {
+                                                        <span class="mandatorystar">*</span>
+                                                    }
+                                                </td>
+                                                <td>@Html.DropDownListFor(f => Model.FollowUpIntervalId, Model.FollowUpIntervals)</td>
+                                            }
                                         </tr>
-                                    </thead>
-                                    <tr>
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.FollowUpField).FirstOrDefault();
-                                            if (row == null)
+                                        <tr>
+                                            @if (responsibleFollowUpFieldRow.Show)
                                             {
-                                                row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.FollowUpField);
-                                                row.ContractFieldLable = Translation.Get("Uppföljningsintervall", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "Follow Up Interval";
+                                                <td>
+                                                    @if (SessionFacade.CurrentLanguageId == 2)
+                                                    {
+                                                        @Html.DisplayFor(m => responsibleFollowUpFieldRow.ContractFieldLable_Eng)
+                                                    }
+                                                    else
+                                                    {
+                                                        @Translation.Get(responsibleFollowUpFieldRow.ContractFieldLable)
+                                                        ;
+                                                    }
+                                                    @if (responsibleFollowUpFieldRow.Required)
+                                                    {
+                                                        <span class="mandatorystar">*</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @Html.DropDownListFor(t => Model.FollowUpResponsibleUserId, Model.FollowUpResponsibleUsers)
+                                                </td>
                                             }
-                                        }
-                                        @if (row.Show == true)
-                                         {
-                                            <td>
-                                                @if (SessionFacade.CurrentLanguageId == 2)
-                                                {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
-                                                }
-                                                else
-                                                {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
-                                                }
-                                                @if (row.Required == true)
-                                                {
-                                                    <span class="mandatorystar">*</span>}
-                                            </td>
-                                            <td>@Html.DropDownListFor(f => Model.FollowUpIntervalId, Model.FollowUpIntervals)</td>
-                                        }
-                                    </tr>
-                                    <tr>
-                                        @{row = Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField).FirstOrDefault();
-                                            if (row == null)
-                                            {
-                                                row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.ResponsibleFollowUpField);
-                                                row.ContractFieldLable = Translation.Get("Ansvarig uppföljning", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "Responsible Follow Up";
-                                            }
-                                        }
-                                        @if (row.Show == true)
-                                        {
-                                            <td>
-                                                @if (SessionFacade.CurrentLanguageId == 2)
-                                                {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
-                                                }
-                                                else
-                                                {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
-                                                }
-                                                @if (row.Required == true)
-                                                {
-                                                    <span class="mandatorystar">*</span>}
-                                            </td>
-                                            <td>
-                                                @Html.DropDownListFor(t => Model.FollowUpResponsibleUserId, Model.FollowUpResponsibleUsers)
-                                            </td>
-                                        }
-                                    </tr>
-                                </table>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
+
                     @if (Model.ContractId != 0)
                     {
                         <div>
@@ -515,7 +523,7 @@
                                                 <th class="span4"></th>
                                                 <th class="span5"></th>
                                             </tr>
-                                        </thead>                                       
+                                        </thead>
                                         <tr>
                                             <td>
                                                 @Translation.Get("Skapad datum", Enums.TranslationSource.TextTranslation)
@@ -532,13 +540,13 @@
                                                 @Html.DisplayFor(t => Model.ChangedDate)  @Translation.Get("av", Enums.TranslationSource.TextTranslation)  @Html.DisplayFor(t => Model.ChangedByUser)
                                             </td>
                                         </tr>
-                                    </table>                                    
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                    }                        
-                    </div>
+                    }
                 </div>
+            </div>
             <div class="tab-pane tab-pane-border" id="fragment-2">
                 @* @Html.Partial("_log", Model)    *@
             </div>
@@ -557,25 +565,25 @@
                 </div>
             }
         </div>
-        </div>
     </div>
+</div>
 
 <div id="globalProgress" class="loading-msg" style="display:none">
     <div class="content-wrapper">
         <div class="loader">@Translation.GetCoreTextTranslation("Laddar...")</div>
     </div>
 </div>
-    
+
 @Html.Hidden("contract_languageId", SessionFacade.CurrentLanguageId)
 @Scripts.Render("~/bundles/contracts/edit")
 
 <script type="text/javascript">
 
     $(function () {
-    
-        //handle tabs switching 
+
+        //handle tabs switching
         $('#myTab a').on('shown.bs.tab', function (event) {
-            //var prevTab = $(event.relatedTarget);  
+            //var prevTab = $(event.relatedTarget);
             var activeTab = $(event.target).parent();
 
             if (activeTab[0].id === 'history_tab') {
@@ -595,49 +603,49 @@ function FieldIsRequired(value) {
 var validator = $("#target").validate({
     rules: {
         "ContractNumber": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Number && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.Number && r.Required)")
         },
         "CaseNumber": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.CaseNumber && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.CaseNumber && r.Required)")
         },
         "CategoryId": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Category && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.Category && r.Required)")
         },
         "SupplierId": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Supplier && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.Supplier && r.Required)")
         },
         "DepartmentId": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Department && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.Department && r.Required)")
         },
         "ResponsibleUserId": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.ResponsibleUser && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.ResponsibleUser && r.Required)")
         },
         "btnAddContractFile": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Filename && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.Filename && r.Required)")
         },
         "Other": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Other && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.Other && r.Required)")
         },
         "ContractStartDate": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.StartDate && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.StartDate && r.Required)")
         },
         "ContractEndDate": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.EndDate && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.EndDate && r.Required)")
         },
         "NoticeDate": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.NoticeDate && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.NoticeDate && r.Required)")
         },
         "Running": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Running && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.Running && r.Required)")
         },
         "Finished": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.Finished && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.Finished && r.Required)")
         },
         "FollowUpIntervalId": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.FollowUpField && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.FollowUpField && r.Required)")
         },
         "FollowUpResponsibleUserId": {
-            required: FieldIsRequired("@Model.SettingsModel.Where(r => r.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField && r.Required).Any()")
+            required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField && r.Required)")
         }
 
     },
