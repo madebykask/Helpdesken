@@ -21,7 +21,7 @@
                         },
                         layout: {
                             padding: {
-                                top: 20
+                                top: 25
                             }
                         },
                         plugins: {
@@ -32,11 +32,15 @@
                                 anchor: 'end',
                                 align: 'end',
                                 formatter: function (value, context) {
-                                    let datasets = context.chart.data.datasets;
+                                    const chart = context.chart;
+                                    const datasets = context.chart.data.datasets;
+                                    const visibleDatasets = context.chart.data.datasets.filter(function(ds, index) {
+                                        return chart.isDatasetVisible(index);
+                                    });
                                     // do calculation if this is the last dataset of the bar 
                                     if (context.datasetIndex === datasets.length - 1) {
                                         let sum = 0;
-                                        datasets.map(function(dataset) {
+                                        visibleDatasets.map(function (dataset) {
                                             sum += dataset.data[context.dataIndex];
                                         });
                                         return sum.toLocaleString();
