@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Domain;
 using System.Linq;
@@ -7,7 +6,6 @@ namespace DH.Helpdesk.Dal.Repositories
 {
     public interface IMail2TicketRepository : IRepository<Mail2Ticket>
     {
-        IList<Mail2Ticket> GetCaseMail2Tickets(int caseId);
         void DeleteByCaseId(int id);
         void DeleteByLogId(int id);
     }
@@ -17,12 +15,6 @@ namespace DH.Helpdesk.Dal.Repositories
         public Mail2TicketRepository(IDatabaseFactory databaseFactory) 
             : base(databaseFactory)
         {
-        }
-
-        public IList<Mail2Ticket> GetCaseMail2Tickets(int caseId)
-        {
-            var items = Table.Where(m => m.Case_Id == caseId).ToList();
-            return items;
         }
 
         public void DeleteByCaseId(int id)

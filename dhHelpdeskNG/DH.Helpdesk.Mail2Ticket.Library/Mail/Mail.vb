@@ -248,7 +248,7 @@ Public Class Mail
             End If
 
             If giLoglevel > 0 Then
-                objLogFile.WriteLine(Now() & ", sendMail, From:" & objCustomer.HelpdeskEMail & ", To: " & sEmailTo & "Attached files: '" & String.Join(";", filesToAttach) & "'")
+                objLogFile.WriteLine(Now() & ", sendMail, From:" & objCustomer.HelpdeskEMail & ", To: " & sEmailTo & ". Attached files: " & If(filesToAttach IsNot Nothing, String.Join(";", filesToAttach) & "", "None"))
                 'objLogFile.WriteLine(Now() & ", sendMail, Body:" & sBody)
             End If
 
