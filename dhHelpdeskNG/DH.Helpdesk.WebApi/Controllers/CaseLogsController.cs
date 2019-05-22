@@ -11,6 +11,7 @@ using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Dal.Enums;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case.Logs;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
@@ -26,27 +27,30 @@ namespace DH.Helpdesk.WebApi.Controllers
     public class CaseLogsController : BaseApiController
     {
         private readonly IUserService _userService;
-        private readonly ILogService _caselLogService;
+        private readonly ILogService _caseLogService;
         private readonly IMapper _mapper;
         private readonly ISettingsLogic _settingsLogic;
         private readonly ILogFileService _logFileService;
         private readonly ICaseFileService _caseFileService;
         private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
+        private readonly IMail2TicketService _mail2TicketService;
 
 
         public CaseLogsController(
             IUserService userService, 
-            ILogService caselLogService, 
+            ILogService caseLogService, 
             ILogFileService logFileService,
             ICaseFileService caseFileService,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
+            IMail2TicketService mail2TicketService,
             IMapper mapper, 
             ISettingsLogic settingsLogic)
         {
+            _mail2TicketService = mail2TicketService;
             _caseFileService = caseFileService;
             _logFileService = logFileService;
             _userService = userService;
-            _caselLogService = caselLogService;
+            _caseLogService = caseLogService;
             _mapper = mapper;
             _settingsLogic = settingsLogic;
             _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
@@ -57,17 +61,17 @@ namespace DH.Helpdesk.WebApi.Controllers
         [CheckUserCasePermissions(CaseIdParamName = "caseId", CheckBody = true)]
         public async Task<IHttpActionResult> Get([FromUri]int caseId, [FromUri]int cid)
         {
-            var currentUser = _userService.GetUser(UserId);
+            var currentUser = await _userService.GetUserAsync(UserId);
             var includeInternalLogs = currentUser.CaseInternalLogPermission.ToBool();
 
-            var logEntities = await _caselLogService.GetLogsByCaseIdAsync(caseId, includeInternalLogs).ConfigureAwait(false);
-            
-            var model = MapLogsToModel(logEntities);
+            var logEntities = await _caseLogService.GetLogsByCaseIdAsync(caseId, includeInternalLogs).ConfigureAwait(false);
+            var mail2Tickets = await _mail2TicketService.GetCaseMail2TicketsAsync(caseId);
 
+            var model = MapLogsToModel(logEntities, mail2Tickets);
             return Ok(model);
         }
 
-        private IList<CaseLogOutputModel> MapLogsToModel(IList<CaseLogData> logs)
+        private IList<CaseLogOutputModel> MapLogsToModel(IList<CaseLogData> logs, IList<Mail2Ticket> mail2Tickets)
         {
             var items = new List<CaseLogOutputModel>();
             foreach (var log in logs)
@@ -79,24 +83,31 @@ namespace DH.Helpdesk.WebApi.Controllers
 
                     //create external log item
                     log.InternalText = null;
-                    var itemModel = _mapper.Map<CaseLogOutputModel>(log);
+                    var itemModel = CreateCaseLogOutputModel(log, mail2Tickets);
                     items.Add(itemModel);
 
                     //create internal
                     log.ExternalText = null;
                     log.InternalText = internalText;
-                    itemModel = _mapper.Map<CaseLogOutputModel>(log);
+
+                    itemModel = CreateCaseLogOutputModel(log, mail2Tickets);
                     items.Add(itemModel);
                 }
                 else
                 {
-                    var itemModel = _mapper.Map<CaseLogOutputModel>(log);
+                    var itemModel = CreateCaseLogOutputModel(log, mail2Tickets);
                     items.Add(itemModel);
                 }
-
             }
 
             return items;
+        }
+
+        private CaseLogOutputModel CreateCaseLogOutputModel(CaseLogData log, IList<Mail2Ticket> mail2Tickets)
+        {
+            var itemModel = _mapper.Map<CaseLogOutputModel>(log);
+            itemModel.Mail2TicketEmails = mail2Tickets.Where(m => m.Log_Id == log.Id).Select(m => m.EMailAddress.ToLower()).ToList();
+            return itemModel;
         }
 
         //ex: /api/Case/123/LogFile/1203?cid=1

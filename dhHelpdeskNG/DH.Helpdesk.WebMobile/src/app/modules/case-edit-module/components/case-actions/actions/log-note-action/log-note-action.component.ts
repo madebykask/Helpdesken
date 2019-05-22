@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class LogNoteActionComponent extends CaseActionBaseComponent<CaseLogActionData> implements OnInit {
 
   data: CaseLogActionData;
-  
+
   constructor(private router: Router) {
     super();
   }

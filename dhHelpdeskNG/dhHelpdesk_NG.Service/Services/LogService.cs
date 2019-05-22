@@ -215,7 +215,7 @@ namespace DH.Helpdesk.Services.Services
                      RegUserName = log.RegUser,
                      InternalText = includeInternalLogs ? log.Text_Internal : string.Empty, //empty internal if exist
                      ExternalText = log.Text_External,
-                     Emails = log.CaseHistory.Emaillogs.DefaultIfEmpty().Where(t => t != null).Select(t => t.EmailAddress).ToList(),
+                     Emails = log.CaseHistory.Emaillogs.DefaultIfEmpty().Where(t => t != null).Select(t => t.EmailAddress.ToLower()).OrderBy(s => s).Distinct().ToList(),
                      Files = log.LogFiles.DefaultIfEmpty().Where(f => f != null).Select(f => new LogFileData()
                      {
                          Id = f.Id,

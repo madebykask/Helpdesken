@@ -81,15 +81,15 @@ namespace DH.Helpdesk.BusinessData.Models.Logs.Output
         /// </summary>
         public int WorkingTime { get; set; }
 
-		/// <summary>
-		/// Gets or sets the over time.
-		/// </summary>
-		public int OverTime { get; set; }
+        /// <summary>
+        /// Gets or sets the over time.
+        /// </summary>
+        public int OverTime { get; set; }
 
-		/// <summary>
-		/// Gets or sets the user.
-		/// </summary>
-		public string RegUser { get; set; }
+        /// <summary>
+        /// Gets or sets the user.
+        /// </summary>
+        public string RegUser { get; set; }
 
         /// <summary>
         /// Gets or sets the text external.

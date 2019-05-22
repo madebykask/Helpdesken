@@ -12,6 +12,7 @@ namespace DH.Helpdesk.Models.Case.Logs
         public IList<LogFileModel> Files { get; set; }
         public DateTime CreatedAt { get; set; }
         public string CreatedBy { get; set; }
+        public IList<string> Mail2TicketEmails { get; set; }
     }
 
     public class LogFileModel

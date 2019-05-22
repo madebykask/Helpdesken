@@ -31,10 +31,16 @@ export class CaseActionsGroup {
 
 // Case Action
 export class CaseAction<TData extends CaseActionDataType> {
+    private _id: string;
+
     constructor() {
-      this.id = UuidGenerator.createUuid();
+      this._id = UuidGenerator.createUuid();
     }
-    id: string;
+
+    get id(): string {
+      return this._id;
+    }
+
     type: CaseEventType;
     createdAt: Date;
     createdBy: string;
@@ -53,7 +59,9 @@ export class CaseHistoryActionData {
 
 // Case Log Note Data
 export class CaseLogActionData {
-  constructor(public text: string, public files?: LogFile[]) {
+  constructor(public text: string,
+    public emails: string[],
+    public files?: LogFile[]) {
   }
 }
 

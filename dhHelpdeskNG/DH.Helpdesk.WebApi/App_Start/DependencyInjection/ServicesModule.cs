@@ -93,7 +93,7 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<WatchDateCalendarService>().As<IWatchDateCalendarService>();
             builder.RegisterType<HolidayService>().As<IHolidayService>();
             builder.RegisterType<UserEmailsSearchService>().As<IUserEmailsSearchService>();
-
+            builder.RegisterType<Mail2TicketService>().As<IMail2TicketService>();
         }
 
         #endregion

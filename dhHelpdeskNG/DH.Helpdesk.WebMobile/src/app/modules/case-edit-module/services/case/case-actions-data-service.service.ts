@@ -8,17 +8,16 @@ export class CaseActionsDataService  {
   // processes case logs and history data into actions
   process(logs: CaseLogModel[], caseHistory: CaseHistoryModel): CaseAction<any>[] {
 
-    let actions = new Array<CaseAction<any>>();
+    const actions = new Array<CaseAction<any>>();
 
     // process logs
     if (logs && logs.length) {
-      for (let log of logs) {
+      for (const log of logs) {
         const caseAction  = new CaseAction<CaseLogActionData>();
-        // caseAction.id = log.id;
         caseAction.type = log.isExternal ? CaseEventType.ExternalLogNote : CaseEventType.InternalLogNote;
         caseAction.createdAt = log.createdAt;
-        caseAction.createdBy= log.createdBy;
-        caseAction.data = new CaseLogActionData(log.text, log.files);
+        caseAction.createdBy = log.createdBy;
+        caseAction.data = new CaseLogActionData(log.text, log.emails, log.files);
 
         // add log action
         actions.push(caseAction);
@@ -27,11 +26,11 @@ export class CaseActionsDataService  {
 
     // process case history
     if (caseHistory && caseHistory.changes && caseHistory.changes.length) {
-        let changes = caseHistory.changes.sort((a, b) => b.id - a.id); // sort desc
+        const changes = caseHistory.changes.sort((a, b) => b.id - a.id); // sort desc
 
         // create action for each field change
         for (const change of changes) {
-            let caseAction  = new CaseAction<CaseHistoryActionData>();
+            const caseAction  = new CaseAction<CaseHistoryActionData>();
             caseAction.type = this.resolveCaseEvent(change);
             caseAction.createdAt = change.createdAt;
             caseAction.createdBy = change.createdBy;
@@ -49,7 +48,7 @@ export class CaseActionsDataService  {
       return actions;
   }
 
-  private resolveCaseEvent(change:CaseHistoryChangeModel): CaseEventType {
+  private resolveCaseEvent(change: CaseHistoryChangeModel): CaseEventType {
     const prevValue = change.previousValue;
     const curValue = change.currentValue || '';
     const fieldName = change.fieldName;

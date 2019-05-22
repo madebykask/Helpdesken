@@ -1,5 +1,3 @@
-.lognote{}
-
 .logNoteText {
   font-style: italic;
   white-space: pre-wrap;
@@ -18,6 +16,26 @@ a.more, a.less {
   display: block;
   margin: 5px 0 0 0;
 }
+
 .files .mbsc-ic {
   margin-right: 4px;
+}
+
+.emailsRow {
+  overflow: hidden;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  span {
+    float:left;
+  }
+}
+
+.emails {
+  margin-left: 20px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  font-size:12px;
+}
+.emails::after {
+  clear:both;
 }

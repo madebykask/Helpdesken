@@ -395,5 +395,7 @@ insert into tbltext (id, TextString, TextType) VALUES (10061, 'Avsluta ärenden'
 If not exists (select * from tblTextTranslation where text_id = 10061 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10061, 2, 'Close cases')
 
+-- fix swedish translation for 'Close case'
+UPDATE tblText SET TextString = 'Avsluta ärende' where Id = 10050  AND TextType = 500
 
 GO

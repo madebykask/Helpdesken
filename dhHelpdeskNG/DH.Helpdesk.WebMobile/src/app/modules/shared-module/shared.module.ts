@@ -6,13 +6,16 @@ import { TruncatePipe } from './pipes/truncate.pipe';
 import { TruncateTextDirective } from './directives/truncate-text.directive';
 import { NewlinePipe } from './pipes/newline.pipe';
 import { SanitizePipe } from './pipes/sanitize.pipe';
+import { CollapsibleDirective } from './directives/collapsible.directive';
 
 @NgModule({
-  declarations: [ DateTimeFormatPipe, DateFormatPipe, AlertsFilterPipe, TruncatePipe, TruncateTextDirective, NewlinePipe, SanitizePipe ],
+  declarations: [ DateTimeFormatPipe, DateFormatPipe, AlertsFilterPipe, TruncatePipe, TruncateTextDirective,
+    CollapsibleDirective, NewlinePipe, SanitizePipe ],
   imports: [
     CommonModule,
     TranslateModule.forChild()
   ],
-  exports: [ DateTimeFormatPipe, DateFormatPipe, AlertsFilterPipe, TranslateModule, TruncatePipe, TruncateTextDirective, NewlinePipe, SanitizePipe]
+  exports: [ DateTimeFormatPipe, DateFormatPipe, AlertsFilterPipe, TranslateModule, TruncatePipe,
+    CollapsibleDirective, TruncateTextDirective, NewlinePipe, SanitizePipe]
 })
 export class SharedModule { }
