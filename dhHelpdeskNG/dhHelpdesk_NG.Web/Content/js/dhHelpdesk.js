@@ -614,35 +614,20 @@ function DestroyDataTable(tableUniqId) {
     oTable.destroy();
 };
 
-
-function sanitizeData(jsonArray) {
-    var newKey;
-    jsonArray.forEach(function(item) {
-        for (var key in item) {
-            if (item.hasOwnProperty(key)) {
-                newKey = key.replace(/\s/g, '').replace(/\./g, '');
-                if (key != newKey) {
-                    item[newKey] = item[key];
-                    delete item[key];
-                }
-            }
-        }
-    });
-    return jsonArray;
-} 
-
-function InitDataTable(tableUniqId, perText, showingText, options, onError, emptyTable, infoEmpty) {
+function InitDataTable(tableUniqId, perText, showingText, options, onError, emptyTable, infoEmpty, sanitizeDataFunc) {
     var dataTable = $('#' + tableUniqId);
     $.fn.dataTable.ext.errMode = 'none';
     if (onError && typeof onError === "function")
         dataTable.on('error.dt', function (e, settings, techNote, message) {
             onError(e, settings, techNote, message);
         });
-    dataTable
-        .on('xhr.dt',
-            function(e, settings, json, xhr) {
-                sanitizeData(json.data);
-            });
+    if (typeof sanitizeDataFunc === "function") {
+        dataTable
+            .on('xhr.dt',
+                function(e, settings, json, xhr) {
+                    sanitizeDataFunc(json.data);
+                });
+    }
     return dataTable
         .DataTable($.extend({}, {
         //'sError': (onError && typeof onError === "function") ? 'none' : 'throw',
