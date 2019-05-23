@@ -4,6 +4,7 @@ export class CaseLogModel {
   isExternal: boolean;
   emails: Array<string>;
   files: Array<LogFile>;
+  mail2Tickets: Array<Mail2Ticket>;
   createdBy: string;
   createdAt: Date;
 }
@@ -14,6 +15,12 @@ export class LogFile {
   fileName: string;
   createdDate: Date;
   caseId?: number | null;
+}
+
+export class Mail2Ticket {
+    id: number;
+    email: string;
+    subject: string;
 }
 
 export class CaseHistoryModel {

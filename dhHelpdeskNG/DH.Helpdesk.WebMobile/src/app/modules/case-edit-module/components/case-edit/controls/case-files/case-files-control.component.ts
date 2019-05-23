@@ -56,7 +56,7 @@ export class CaseFilesControlComponent {
   private configureListActions() {
     if (this.userSettingsService.getUserData().canDeleteAttachedFiles) {
       // add swipe actions if has permissions
-      this.fileList.instance.option({
+      this.fileListSettings = {
         swipe: true,
         stages: [{
           percent: -25,
@@ -65,7 +65,7 @@ export class CaseFilesControlComponent {
           confirm: true,
           action: this.onFileDelete.bind(this)
         }]
-      });
+      };
     }
   }
 

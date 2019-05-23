@@ -11,7 +11,6 @@ using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Dal.Enums;
-using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case.Logs;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Services;
@@ -33,7 +32,6 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly ILogFileService _logFileService;
         private readonly ICaseFileService _caseFileService;
         private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
-        private readonly IMail2TicketService _mail2TicketService;
 
 
         public CaseLogsController(
@@ -42,11 +40,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             ILogFileService logFileService,
             ICaseFileService caseFileService,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
-            IMail2TicketService mail2TicketService,
             IMapper mapper, 
             ISettingsLogic settingsLogic)
         {
-            _mail2TicketService = mail2TicketService;
             _caseFileService = caseFileService;
             _logFileService = logFileService;
             _userService = userService;
@@ -65,15 +61,15 @@ namespace DH.Helpdesk.WebApi.Controllers
             var includeInternalLogs = currentUser.CaseInternalLogPermission.ToBool();
 
             var logEntities = await _caseLogService.GetLogsByCaseIdAsync(caseId, includeInternalLogs).ConfigureAwait(false);
-            var mail2Tickets = await _mail2TicketService.GetCaseMail2TicketsAsync(caseId);
 
-            var model = MapLogsToModel(logEntities, mail2Tickets);
+            var model = MapLogsToModel(logEntities);
             return Ok(model);
         }
 
-        private IList<CaseLogOutputModel> MapLogsToModel(IList<CaseLogData> logs, IList<Mail2Ticket> mail2Tickets)
+        private IList<CaseLogOutputModel> MapLogsToModel(IList<CaseLogData> logs)
         {
             var items = new List<CaseLogOutputModel>();
+
             foreach (var log in logs)
             {
                 //create two external and internal items out of one if has both properties
@@ -83,19 +79,19 @@ namespace DH.Helpdesk.WebApi.Controllers
 
                     //create external log item
                     log.InternalText = null;
-                    var itemModel = CreateCaseLogOutputModel(log, mail2Tickets);
+                    var itemModel = CreateCaseLogOutputModel(log);
                     items.Add(itemModel);
 
                     //create internal
                     log.ExternalText = null;
                     log.InternalText = internalText;
 
-                    itemModel = CreateCaseLogOutputModel(log, mail2Tickets);
+                    itemModel = CreateCaseLogOutputModel(log);
                     items.Add(itemModel);
                 }
                 else
                 {
-                    var itemModel = CreateCaseLogOutputModel(log, mail2Tickets);
+                    var itemModel = CreateCaseLogOutputModel(log);
                     items.Add(itemModel);
                 }
             }
@@ -103,10 +99,9 @@ namespace DH.Helpdesk.WebApi.Controllers
             return items;
         }
 
-        private CaseLogOutputModel CreateCaseLogOutputModel(CaseLogData log, IList<Mail2Ticket> mail2Tickets)
+        private CaseLogOutputModel CreateCaseLogOutputModel(CaseLogData log)
         {
             var itemModel = _mapper.Map<CaseLogOutputModel>(log);
-            itemModel.Mail2TicketEmails = mail2Tickets.Where(m => m.Log_Id == log.Id).Select(m => m.EMailAddress.ToLower()).ToList();
             return itemModel;
         }
 

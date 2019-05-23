@@ -4778,7 +4778,6 @@ namespace DH.Helpdesk.Web.Controllers
                 #region Existing case model initialization actions
 
                 m.Logs = _logService.GetCaseLogOverviews(caseId);
-                m.Mail2Tickets = _mail2TicketService.GetCaseMail2Tickets(caseId);
                 
                 var useVd = !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId));
 

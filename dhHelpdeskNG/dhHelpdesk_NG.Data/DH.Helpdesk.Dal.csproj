@@ -279,6 +279,7 @@
     <Compile Include="MapperData\Inventory\InventoryFieldSettingMapperDataForModelEdit.cs" />
     <Compile Include="MapperData\Inventory\InventoryFieldSettingMapperDataForProcessing.cs" />
     <Compile Include="MapperData\Logs\LogMapperData.cs" />
+    <Compile Include="MapperData\Mail2TicketMapperData.cs" />
     <Compile Include="Mappers\Calendars\BusinessModelToEntity\CalendarToEntityMapper.cs" />
     <Compile Include="Mappers\Calendars\EntityToBusinessModel\CalendarToBusinessModelMapper.cs" />
     <Compile Include="Mappers\CaseDocument\BusinessModelToEntity\CaseDocumentTemplateToEntityMapper.cs" />

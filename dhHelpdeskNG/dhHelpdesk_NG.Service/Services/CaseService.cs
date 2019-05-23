@@ -431,7 +431,7 @@ namespace DH.Helpdesk.Services.Services
             }
 
             // delete logs
-            var logs = _logRepository.GetLogForCase(id).ToList();
+            var logs = _logRepository.GetCaseLogs(id).ToList();
 
             // delete Mail2tickets with log
             foreach (var l in logs)

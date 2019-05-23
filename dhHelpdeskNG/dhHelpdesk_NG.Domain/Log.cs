@@ -39,5 +39,7 @@
         public virtual FinishingCause FinishingTypeEntity { get; set; }
         public virtual InvoiceRow InvoiceRow { get; set; }
 
+        public virtual ICollection<Mail2Ticket> Mail2Tickets { get; set; }
+
     }
 }

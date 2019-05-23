@@ -5,6 +5,7 @@ using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
 using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Dal.MapperData;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case.Logs;
 using DH.Helpdesk.Models.StateSecondaries;
@@ -30,6 +31,8 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Mapper.Profiles
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(s => s.LogDate))
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(s => s.UserId.HasValue ? $"{s.UserFirstName} {s.UserSurName}" : s.RegUserName)
                 );
+
+            CreateMap<Mail2TicketData, Mail2TicketModel>();
 
             CreateMap<LogFileData, LogFileModel>();
 

@@ -50,7 +50,10 @@ namespace DH.Helpdesk.Dal.Mappers.Logs
                         .Select(t => new LogFileOverview(t.Id.Value, t.FileName, t.CaseId, t.LogId))
                         .ToList(),
 
-                User = new LogUserOverview( (data.User != null && data.User.Id.HasValue ? data.User.Id.Value : 0) , data.User?.FirstName, data.User?.SurName)
+                Mail2Tickets =
+                    data.Mail2Tickets.Where(m => m.Id.HasValue).Select(m => new Mail2TicketOverview(m.Id.Value, m.Type, m.EMailAddress, m.EMailSubject)).ToList(),
+
+                User = new LogUserOverview(data.User != null && data.User.Id.HasValue ? data.User.Id.Value : 0 , data.User?.FirstName, data.User?.SurName)
             };
         }
     }

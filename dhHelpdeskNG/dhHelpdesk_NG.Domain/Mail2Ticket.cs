@@ -13,5 +13,6 @@ namespace DH.Helpdesk.Domain
 
         // navigation properties
         public virtual Case Case { get; set; }
+        public virtual Log Log { get; set; }
     }
 }

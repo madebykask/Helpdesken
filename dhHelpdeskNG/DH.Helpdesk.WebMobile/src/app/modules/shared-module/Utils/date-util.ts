@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon';
 
-
 export class DateUtil {
 
   static formatToLocalDate(date: Date): string {
@@ -23,11 +22,10 @@ export class DateUtil {
   static tryConvertToDate(value: any) {
     if (!value) { return value; }
 
-    let dateValue = DateTime.fromISO(value);
+    const dateValue = DateTime.fromISO(value);
     if (dateValue.isValid) {
       return dateValue.toJSDate();
     }
-
     return value;
   }
 

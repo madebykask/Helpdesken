@@ -1,4 +1,4 @@
-import { LogFile } from './case-actions-api.model';
+import { LogFile, Mail2Ticket } from './case-actions-api.model';
 import { UuidGenerator } from 'src/app/modules/shared-module/utils/uuid-generator';
 
 // Case Action Data classes
@@ -61,7 +61,8 @@ export class CaseHistoryActionData {
 export class CaseLogActionData {
   constructor(public text: string,
     public emails: string[],
-    public files?: LogFile[]) {
+    public files?: LogFile[],
+    public mail2Tickets?: Mail2Ticket[]) {
   }
 }
 

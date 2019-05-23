@@ -16,7 +16,7 @@ export class AlertsService {
     showMessage(message, alertType: AlertType = AlertType.Info, visibilityTimeoutSec: number = 0) {
 
         let alertColor = '';
-        switch (alertType) {
+        switch (+alertType) {
             case AlertType.Success:
                 alertColor = 'success';
                 break;
@@ -30,7 +30,7 @@ export class AlertsService {
                 alertColor = 'danger';
                 break;
             default:
-                throw 'AlertType value is not supported';
+                throw new Error('AlertType value is not supported');
         }
 
         mobiscroll.snackbar({

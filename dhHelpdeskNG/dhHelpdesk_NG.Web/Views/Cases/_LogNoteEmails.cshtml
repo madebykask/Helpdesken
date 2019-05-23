@@ -1,93 +1,14 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.LogNoteEmailsViewModel
 
 @{
-
-    var log = Model.CurrentLog;
-    var countTO = 0;
-    var countCC = 0;
-    var mailTO = "";
-    var subject = "";
-    var mailCC = "";
-    var boldTO = false;
-    var boldCC = false;
-    var show = false;
-}
+    var log = Model.CurrentLog; 
+ }
 
 @if (log.CaseHistory != null)
 {
-    if (Model.Mail2Tickets.Any())
+    if (log.Mail2Tickets.Any())
     {
-        foreach (var mail in Model.Mail2Tickets)
-        {
-            var isHelpdeskEmail = mail.EMailAddress.Equals(Model.HelpdeskEmail, StringComparison.OrdinalIgnoreCase);
-
-            if (mail.Type.ToLower() == "to")
-            {
-                countTO = countTO + 1;
-                subject = mail.EMailSubject;
-                mailTO += mail.EMailAddress + "; <br />";
-                boldTO = isHelpdeskEmail;
-            }
-
-            if (mail.Type.ToLower() == "cc")
-            {
-                countCC = countCC + 1;
-                mailCC += mail.EMailAddress + "; <br />";
-                boldCC = isHelpdeskEmail;
-            }
-
-            show = true;
-        }
-
-        if (show)
-        {
-            var lastElmSelectedId = "lastMailSelected" + log.Id;
-            var logMailToId = "mailto" + log.Id;
-            var logMailCcId = "mailcc" + log.Id;
-            var subjectId = "subj" + log.Id;
-            var emailSectionId = "logEmailsSection" + log.Id;
-
-            <div id="@emailSectionId">
-                @* EmailTo: *@
-                @if (!string.IsNullOrEmpty(mailTO))
-                {
-                    <div>
-                        <input type="hidden" id="@lastElmSelectedId" value="">
-                        <p>
-                            <span class="@(boldTO ? "bold" : "")">TO[@countTO]</span>&nbsp;&nbsp;&nbsp;
-                            <span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailTO" data-expand-element="mailto" data-expand-log-id="@log.Id"></span>
-                        </p>
-                    </div>
-                    <div>
-                        <p id="@logMailToId" class="expandEl" style="display: none">@Html.Raw(mailTO)</p>
-                    </div>
-                }
-                @* EmailCC: *@
-                @if (!string.IsNullOrEmpty(mailCC))
-                {
-                    <div>
-                        <p>
-                            <span class="@(boldCC ? "bold" : "")">CC[@countCC]</span>&nbsp;&nbsp;&nbsp;
-                            <span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@mailCC" data-expand-element="mailcc" data-expand-log-id="@log.Id"></span>
-                        </p>
-                    </div>
-                    <div>
-                        <p id="@logMailCcId" class="expandEl" style="display: none">@Html.Raw(mailCC)</p>
-                    </div>
-                }
-                @* Subject*@
-                @if (!string.IsNullOrEmpty(subject))
-                {
-                    <div>
-                        <span>@Translation.GetCoreTextTranslation("Ämne")</span>
-                        <span class="icon-info-sign ml15 expander" rel="tooltip" title="" data-original-title="@subject" data-expand-element="subj" data-expand-log-id="@log.Id"></span>
-                    </div>
-                    <div>
-                        <p id="@subjectId" class="wordbreak expandEl" style="display: none">@Html.Raw(subject)</p>
-                    </div>    
-                }
-            </div>
-        }
+        @Html.Partial("_Mail2TicketEmails", Model)
     }
     else if (log.CaseHistory.Emaillogs != null && log.CaseHistory.Emaillogs.Any())
     {
@@ -98,8 +19,4 @@
             </div>
         }
     }
-    
 }
-
-
-

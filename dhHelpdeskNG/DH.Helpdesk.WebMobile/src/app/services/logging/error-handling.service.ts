@@ -8,10 +8,11 @@ import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrapper';
 import { UuidGenerator } from 'src/app/modules/shared-module/utils/uuid-generator';
+import { Alert } from 'selenium-webdriver';
 
 @Injectable({providedIn: 'root'})
 export class ErrorHandlingService {
-    
+
     constructor(
         private clientLogApiService: ClientLogApiService,
         private logService: LoggerService,
@@ -22,22 +23,29 @@ export class ErrorHandlingService {
 
     // handles unknown error (system)
     handleError(err: any, errorMsg: string = '') {
-        
+
         // prepare log text
-        let log = errorMsg || 'Unknown Error.';
-        
-        if (err instanceof Error && err.message) {
-            log +=  ` ${err.message || ''}`;
-            if (err.stack) {
-              log += ` Stack: ${err.stack || ''}`;
+        let log = errorMsg || 'Unknown Error. ';
+
+        if (err instanceof HttpErrorResponse) {
+            // Server Error
+            if (err.message) {
+              log += `Message: ${err.message}. `;
             }
-        }
-        else {
-            log += ' ' + (err || '').toString();
+            if (err.status) {
+              log = log + `Status: ${err.status}.`;
+            }
+        } else if (err instanceof Error) {
+            // Client Error
+            const msg = err.message ? err.message : err.toString();
+            log = log + `Message: ${msg}. `;
+            if (err.stack) {
+              log = log +  `Stack: ${err.stack}`;
+            }
         }
 
         // send error to server
-        let errorGuid = UuidGenerator.createUuid();
+        const errorGuid = UuidGenerator.createUuid();
 
         // log error to console
         this.logService.error(`Error ${errorGuid}: ${log}`);
@@ -50,27 +58,28 @@ export class ErrorHandlingService {
             // Server or connection error happened
             if (!navigator.onLine) {
               // Handle offline error
-              // return this.alertsService.warning('No Internet Connection');
+              this.alertsService.showMessage('No Internet Connection', AlertType.Warning);
+              return;
             } else {
               // Handle Http Errors (error.status === 403, 404...)
-              // let alertMsg = this.buildErrorAlertMessage(errorGuid);
-              // this.alertsService.error(alertMsg); 
+              //let alertMsg = this.buildErrorAlertMessage(errorGuid);
+              //this.alertsService.showMessage(alertMsg, AlertType.Error);
             }
          } else {
              // Handle Client Error (Angular Error, ReferenceError...)
              // this.router.navigate(['/error'], {  queryParams: { errorGuid: errorGuid });
          }
-         
+
          this.router.navigate(['/error'], {  queryParams: { errorGuid: errorGuid } });
     }
 
-    private saveErrorOnServer(errorGuid:string, error:any, errorMsg){
-        let logEntry = new ClientLogEntryModel();
+    private saveErrorOnServer(errorGuid: string, error: any, errorMsg) {
+        const logEntry = new ClientLogEntryModel();
         logEntry.uniqueId = errorGuid;
         logEntry.level = ClientLogLevel.Error;
         logEntry.url = this.window.nativeWindow.location.href;
         logEntry.message = errorMsg;
-        
+
         if (error && error instanceof Error && error.stack) {
             logEntry.stack = error.stack.toString();
         }
@@ -85,11 +94,11 @@ export class ErrorHandlingService {
     // handles user error
     handleUserError(userMsg: string) {
 
-        let errorMsg = userMsg || 'Unknown Error. ';
+        const errorMsg = userMsg || 'Unknown Error. ';
 
         this.logService.error(errorMsg);
 
-        // raise error alert to display user error message on ui 
+        // raise error alert to display user error message on ui
         this.alertsService.showMessage(`${errorMsg}`, AlertType.Error);
     }
 
@@ -98,12 +107,12 @@ export class ErrorHandlingService {
 
         this.logService.warn(userMsg);
 
-        //raise error alert to display user error message on ui 
+        //raise error alert to display user error message on ui
         this.alertsService.showMessage(`${userMsg}`, AlertType.Warning);
     }
 
-    private buildErrorAlertMessage(errorId:string) : string {
-        let str: string =
+    private buildErrorAlertMessage(errorId: string): string {
+        const str =
             `Sorry, an error occurred while processing your request. Please provide Error Id to the support team.
              ErrorId: ${errorId}`;
         return str;

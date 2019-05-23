@@ -81,7 +81,6 @@ namespace DH.Helpdesk.Web.Models.Case
                 HelpdeskEmail = case_?.Customer?.HelpdeskEmail,
                 CaseInternalLogAccess = CaseInternalLogAccess,
                 Logs = Logs,
-                Mail2Tickets = Mail2Tickets,
                 Setting  = Setting,
                 CaseFieldSettings = caseFieldSettings,
                 CustomerSettings = CustomerSettings,
@@ -443,8 +442,6 @@ namespace DH.Helpdesk.Web.Models.Case
         {
             get { return CurrentUserRole > (int)BusinessData.Enums.Admin.Users.UserGroup.User; }
         }
-
-        public IList<Mail2Ticket> Mail2Tickets { get; internal set; }
 
         public TimeZoneInfo UserTimeZone { get; set; } 
 

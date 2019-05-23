@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
 using DH.Helpdesk.Domain;
@@ -25,8 +24,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public CustomerSettings CustomerSettings { get; set; }
         public IList<CaseFieldSetting> CaseFieldSettings { get; set; }
         public IList<CaseSolutionSettingModel> CaseSolutionSettingModels { get; set; }
-        public IList<Mail2Ticket> Mail2Tickets { get; set; }
-
+        
         public int ShowExternalInvoiceFields { get; set; }
         public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
 
@@ -37,11 +35,7 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public LogNoteEmailsViewModel CreateEmailsViewModel(LogOverview log)
         {
-            var logMail2Tickets = Mail2Tickets != null && Mail2Tickets.Any()
-                ? Mail2Tickets.Where(m => m.Log_Id == log.Id).ToList()
-                : new List<Mail2Ticket>();
-
-            return new LogNoteEmailsViewModel(log, HelpdeskEmail, logMail2Tickets);
+            return new LogNoteEmailsViewModel(log, HelpdeskEmail);
         }
     }
 
@@ -67,15 +61,13 @@ namespace DH.Helpdesk.Web.Models.Case
         {
         }
 
-        public LogNoteEmailsViewModel(LogOverview log, string helpdeskEmail, IList<Mail2Ticket> logMail2Tickets)
+        public LogNoteEmailsViewModel(LogOverview log, string helpdeskEmail)
         {
             CurrentLog = log;
             HelpdeskEmail = helpdeskEmail;
-            Mail2Tickets = logMail2Tickets;
         }
         
         public string HelpdeskEmail { get; set; }
         public LogOverview CurrentLog { get; set; }
-        public IList<Mail2Ticket> Mail2Tickets { get; set; }
     }
 }

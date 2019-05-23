@@ -1,6 +1,6 @@
 import { MailToTicketInfo, CaseSolution, CaseAccessMode, CaseEditInputModel, CaseFieldModel, IKeyValue } from '..';
 import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
-import { CaseHistoryChangeModel, CaseLogModel, LogFile, CaseHistoryModel } from './case-actions-api.model';
+import { CaseHistoryChangeModel, CaseLogModel, LogFile, CaseHistoryModel, Mail2Ticket } from './case-actions-api.model';
 
 export class CaseModelBuilder {
 
@@ -60,7 +60,10 @@ export class CaseModelBuilder {
       createdAt: new Date(json.createdAt),
       files: json.files && json.files.length
         ? json.files.map(f => Object.assign(new LogFile(), f))
-        : []
+        : [],
+      mail2Tickets: json.mail2Tickets && json.mail2Tickets.length
+      ? json.mail2Tickets.map(m => Object.assign(new Mail2Ticket(), m))
+      : [],
     });
     return model;
   }

@@ -10,7 +10,7 @@
               <span class="{{ getActionIcon() }}"></span>
               <span class="logNoteText">{{ data.text }}</span>
           </div>
-          <div class="emailsRow">
+          <div class="emailsRow" *ngIf="!hasM2T">
             <span class="action-icon mbsc-ic mbsc-ic-fa-envelope-o"></span>
             <div class="emails">{{ data.emails.join('; ') }}</div>
           </div>

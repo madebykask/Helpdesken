@@ -3,6 +3,7 @@ using System.Linq.Dynamic;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.Common.Extensions.Boolean;
+using DH.Helpdesk.Dal.MapperData;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.MapperData.Logs;
 using DH.Helpdesk.Dal.Mappers;
@@ -28,22 +29,20 @@ namespace DH.Helpdesk.Services.Services
     public interface ILogService
     {
         IDictionary<string, string> Validate(CaseLog logToValidate);
-        int SaveLog(CaseLog caseLog, int noOfAttachedFiles, out IDictionary<string, string> errors);
+
         CaseLog InitCaseLog(int userId, string regUser);
-        IList<Log> GetLogsByCaseId(int caseId);
-        Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false);
         CaseLog GetLogById(int id);
-        Guid Delete(int id, string basePath);
 
-        void AddParentCaseLogToChildCases(int[] caseIds, CaseLog parentCaseLog);
-        void AddChildCaseLogToParentCase(int caseId, CaseLog parentCaseLog);
-
-        IList<LogOverview> GetCaseLogOverviews(int caseId);
-        IList<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate);
-
+        int SaveLog(CaseLog caseLog, int noOfAttachedFiles, out IDictionary<string, string> errors);
         void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors);
         void UpdateLogInvoices(List<CaseLog> logs);
+        void AddParentCaseLogToChildCases(int[] caseIds, CaseLog parentCaseLog);
+        void AddChildCaseLogToParentCase(int caseId, CaseLog parentCaseLog);
+        Guid Delete(int id, string basePath);
 
+        IList<LogOverview> GetCaseLogOverviews(int caseId);
+        IList<Log> GetLogsByCaseId(int caseId);
+        Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false);
     }
 
     public class LogService : ILogService
@@ -130,17 +129,11 @@ namespace DH.Helpdesk.Services.Services
 
             return l.LogGUID;
         }
-
-        public IList<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate)
-        {
-            var ret = _logRepository.GetCaseLogs(fromDate, toDate);
-            return ret; 
-        }
-
+        
         public IList<LogOverview> GetCaseLogOverviews(int caseId)
         {
             var result = new List<LogOverview>();
-            var caseLogsEntities = _logRepository.GetCaseLogOverviews(caseId);
+            var caseLogsEntities = GetCaseLogsQueryable(caseId).ToList();
             var caseLogs = caseLogsEntities.Select(_logToLogOverviewMapper.Map).ToList();
 
             result.AddRange(caseLogs);
@@ -168,6 +161,95 @@ namespace DH.Helpdesk.Services.Services
             return result.OrderByDescending(l => l.LogDate).ToList();
         }
 
+        public async Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false)
+        {
+            var caseLogsEntities = await GetCaseLogsQueryable(caseId, includeInternalLogs).ToListAsync();
+            
+            var caseLogs =
+                (from data in caseLogsEntities
+                 let log = data.Log
+                 orderby log.LogDate descending 
+                 select new CaseLogData
+                 {
+                     Id = log.Id,
+                     UserId = log.User_Id,
+                     UserFirstName = log.User?.FirstName,
+                     UserSurName = log.User?.SurName,
+                     LogDate = log.LogDate,
+                     RegUserName = log.RegUser,
+                     InternalText = includeInternalLogs ? log.Text_Internal : string.Empty, //empty internal if exist
+                     ExternalText = log.Text_External,
+
+                     Emails = 
+                        data.EmailLogs?.Where(t => t != null && t.Id > 0)
+                            .Select(t => t.EmailAddress.ToLower()).OrderBy(s => s).Distinct().ToList() ?? new List<string>(),
+
+                     Files =
+                         data.LogFiles?.Where(f => f != null && f.Id > 0).Select(f => new LogFileData()
+                        {
+                             Id = f.Id.Value,
+                             LogId = f.LogId ?? 0,
+                             FileName = f.FileName,
+                             CaseId = f.CaseId
+                        }).ToList() ?? new List<LogFileData>(),
+
+                     Mail2Tickets =
+                         data.Mail2Tickets?.Where(m => m.Id != null && m.Id > 0).Select(m => new Mail2TicketData(m.Id.Value, m.Type, m.EMailAddress, m.EMailSubject)).ToList() ?? new List<Mail2TicketData>()
+
+                 }).ToList();
+
+            return caseLogs;
+        }
+
+        private IQueryable<LogMapperData> GetCaseLogsQueryable(int caseId, bool includeInternalLogs = true)
+        {
+            var caseLogsQuery = _logRepository.GetCaseLogs(caseId);
+
+            if (!includeInternalLogs)
+            {
+                //keep only notes that have external, internal text will be trimmed in mapping logic in the called method
+                caseLogsQuery = caseLogsQuery.Where(l => !string.IsNullOrEmpty(l.Text_External));
+            }
+
+            IQueryable<LogMapperData> caseLogs = caseLogsQuery.Select(l => new LogMapperData
+            {
+                Log = l,
+
+                User = new UserMapperData
+                {
+                    Id = l.User_Id,
+                    FirstName = l.User != null ? l.User.FirstName : null,
+                    SurName = l.User != null ? l.User.SurName : null
+                },
+
+                EmailLogs = l.CaseHistory.Emaillogs.DefaultIfEmpty().Select(t => new EmailLogMapperData
+                {
+                    Id = t.Id,
+                    MailId = t.MailId,
+                    EmailAddress = t.EmailAddress
+                }).ToList(),
+
+                LogFiles = l.LogFiles.DefaultIfEmpty().Select(t => new LogFileMapperData
+                {
+                    Id = t.Id,
+                    FileName = t.FileName,
+                    LogId = t.ParentLog_Id,
+                    CaseId = t.IsCaseFile.HasValue && t.IsCaseFile.Value ? t.Log.Case_Id : (int?) null
+                }).ToList(),
+               
+                Mail2Tickets = l.Mail2Tickets.DefaultIfEmpty().Select(x => new Mail2TicketMapperData()
+                {
+                    Id = x.Id,
+                    Type = x.Type,
+                    EMailAddress = x.EMailAddress,
+                    EMailSubject = x.EMailSubject
+                }).ToList()
+               
+            });
+
+            return caseLogs;
+        }
+
         public void SaveChildsLogs(CaseLog baseCaseLog, int[] childCasesIds, out IDictionary<string, string> errors)
         {
             errors = Validate(baseCaseLog);
@@ -190,42 +272,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<Log> GetLogsByCaseId(int caseId)
         {
-            return _logRepository.GetLogForCase(caseId).ToList();
-        }
-
-        public Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false)
-        {
-            var queryable = _logRepository.GetLogForCase(caseId);
-
-            if (!includeInternalLogs)
-            {
-                //keep only notes that have external, internal text will be trimmed in mapping logic below
-                queryable = queryable.Where(l => !string.IsNullOrEmpty(l.Text_External));
-            }
-
-            var caseLogs =
-                (from log in queryable.AsQueryable()
-                 select new CaseLogData()
-                 {
-                     Id = log.Id,
-                     UserId = log.User_Id,
-                     UserFirstName = log.User.FirstName,
-                     UserSurName = log.User.SurName,
-                     LogDate = log.LogDate,
-                     RegUserName = log.RegUser,
-                     InternalText = includeInternalLogs ? log.Text_Internal : string.Empty, //empty internal if exist
-                     ExternalText = log.Text_External,
-                     Emails = log.CaseHistory.Emaillogs.DefaultIfEmpty().Where(t => t != null).Select(t => t.EmailAddress.ToLower()).OrderBy(s => s).Distinct().ToList(),
-                     Files = log.LogFiles.DefaultIfEmpty().Where(f => f != null).Select(f => new LogFileData()
-                     {
-                         Id = f.Id,
-                         LogId = f.Log_Id,
-                         FileName = f.FileName,
-                         CaseId = f.IsCaseFile.HasValue && f.IsCaseFile.Value ? f.Log.Case_Id : (int?)null
-                     }).ToList()
-                 }).ToListAsync();
-
-            return caseLogs;
+            return _logRepository.GetCaseLogs(caseId).ToList();
         }
 
         public CaseLog GetLogById(int id)

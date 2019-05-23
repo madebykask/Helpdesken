@@ -8,7 +8,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     }
 
     handleError(error: any): void {
-        let errorHandlingService = this.injector.get(ErrorHandlingService);
+        const errorHandlingService = this.injector.get(ErrorHandlingService);
         if (errorHandlingService) {
             errorHandlingService.handleError(error, 'Unknown error occured.');
             return;
@@ -17,7 +17,3 @@ export class GlobalErrorHandler implements ErrorHandler {
         }
     }
 }
-
-
-
-

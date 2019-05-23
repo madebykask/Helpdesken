@@ -17,7 +17,7 @@ export class CaseActionsDataService  {
         caseAction.type = log.isExternal ? CaseEventType.ExternalLogNote : CaseEventType.InternalLogNote;
         caseAction.createdAt = log.createdAt;
         caseAction.createdBy = log.createdBy;
-        caseAction.data = new CaseLogActionData(log.text, log.emails, log.files);
+        caseAction.data = new CaseLogActionData(log.text, log.emails, log.files, log.mail2Tickets);
 
         // add log action
         actions.push(caseAction);

@@ -2,16 +2,16 @@ import { Input, Directive, ElementRef, Renderer2, SimpleChanges } from '@angular
 
 @Directive({
   selector: '[collapsible]',
-  exportAs: "collapsible"
+  exportAs: 'collapsible'
 })
 export class CollapsibleDirective {
 
   @Input() isCollapsed = true;
 
-  @Input() collapsedEl: HTMLElement;
-  @Input() expandedEl: HTMLElement;
+  @Input() collapsedEl: any;
+  @Input() expandedEl: any;
 
-  constructor(private el: ElementRef, private renderer: Renderer2) {
+  constructor(private renderer: Renderer2) {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -37,11 +37,11 @@ export class CollapsibleDirective {
     this.isCollapsed = false;
   }
 
-  private showElement(el: HTMLElement) {
+  private showElement(el: any) {
     this.renderer.setStyle(el, 'display', '');
   }
 
-  private hideElement(el: HTMLElement) {
+  private hideElement(el: any) {
     this.renderer.setStyle(el, 'display', 'none');
   }
 }

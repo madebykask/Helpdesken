@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
-import { CaseAction, CaseActionsGroup, CaseLogActionData, CaseHistoryActionData, CaseActionDataType } from '../../models';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { CaseAction, CaseActionsGroup, CaseActionDataType } from '../../models';
 import { AuthenticationStateService } from 'src/app/services/authentication';
 
 @Component({
