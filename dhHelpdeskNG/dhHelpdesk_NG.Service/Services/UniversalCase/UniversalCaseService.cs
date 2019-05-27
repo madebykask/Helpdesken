@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Domain;
@@ -17,6 +18,7 @@ using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Common.Enums.CaseSolution;
 using DH.Helpdesk.Common.Enums.Condition;
 using DH.Helpdesk.Common.Extensions.Object;
+using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.ExtendedCaseEntity;
 
 namespace DH.Helpdesk.Services.Services.UniversalCase
@@ -62,6 +64,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         private readonly IRegionService _regionService;
         private readonly IOUService _oUService;
         private readonly IConditionService  _conditionService;
+        private IBusinessModelToEntityMapper<CaseModel, Case> _caseModelToEntityMapper;
 
         public UniversalCaseService(ICaseRepository caseRepository,
                                     ICustomerService customerService,
@@ -80,7 +83,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                                     IDepartmentService departmentService,
                                     IRegionService regionService,
                                     IOUService oUService,
-                                    IConditionService conditionService
+                                    IConditionService conditionService,
+                                    IBusinessModelToEntityMapper<CaseModel, Case> caseModelToEntityMapper
             )
         {
             _caseRepository = caseRepository;
@@ -101,6 +105,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             _regionService = regionService;
             _oUService = oUService;
             _conditionService = conditionService;
+            _caseModelToEntityMapper = caseModelToEntityMapper;
         }
 
         public CaseModel GetCase(int id)
@@ -655,138 +660,15 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         public Case ConvertCaseModelToCase(CaseModel caseModel, Case oldCase)
         {
             var caseEntity = oldCase != null && oldCase.Id > 0 ? oldCase : new Case();
-
-            #region Update Case properties
-
-            var properties = caseModel.GetType().GetProperties();
-
-            foreach (var prop in properties)
+            caseEntity.IsAbout = oldCase?.IsAbout ?? new CaseIsAboutEntity()
             {
-                var type = prop.PropertyType;
-                var typeCode = Type.GetTypeCode(type);
-                var caseProperty = caseEntity.GetType().GetProperty(prop.Name);
-                if (caseProperty != null)
-                {
-                    switch (typeCode)
-                    {
-                        case TypeCode.Int32:
-                        case TypeCode.Int64:
-                            var intVal = (int)prop.GetValue(caseModel, null);
-                            caseProperty.SetValue(caseEntity, intVal);
-                            break;
+                Id = oldCase?.Id ?? 0
+            };
 
-                        case TypeCode.String:
-                            var strVal = (string)prop.GetValue(caseModel, null);
-                            caseProperty.SetValue(caseEntity, strVal);
-                            break;
+            //note: also handles Case.IsAbout properties due to additional Case.IsAbout_<name> setters
+            _caseModelToEntityMapper.Map(caseModel, caseEntity);
 
-                        case TypeCode.DateTime:
-                            var dateVal = (DateTime)prop.GetValue(caseModel, null);
-                            caseProperty.SetValue(caseEntity, dateVal);
-                            break;
-
-                        case TypeCode.Decimal:
-                            var decimalVal = (decimal)prop.GetValue(caseModel, null);
-                            caseProperty.SetValue(caseEntity, decimalVal);
-                            break;
-
-                        case TypeCode.Object:
-                            if (type == typeof(int?))
-                            {
-                                var nullIntVal = (int?)prop.GetValue(caseModel, null);
-                                caseProperty.SetValue(caseEntity, nullIntVal);
-                            }
-                            else
-                            if (type == typeof(DateTime?))
-                            {
-                                var nullDateVal = (DateTime?)prop.GetValue(caseModel, null);
-                                caseProperty.SetValue(caseEntity, nullDateVal);
-                            }
-                            else
-                            if (type == typeof(Guid))
-                            {
-                                var guidVal = (Guid)prop.GetValue(caseModel, null);
-                                caseProperty.SetValue(caseEntity, guidVal);
-                            }
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            }
-
-            #endregion
-
-            #region Update CaseIsAbout properties
-
-            var isAboutChanged = false;
-            var isAbout = caseEntity.IsAbout ?? new CaseIsAboutEntity();
-
-            if (caseModel.IsAbout_ReportedBy != oldCase.IsAbout?.ReportedBy)
-            {
-                isAbout.ReportedBy = caseModel.IsAbout_ReportedBy;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_PersonsName != oldCase.IsAbout?.Person_Name)
-            {
-                isAbout.Person_Name = caseModel.IsAbout_PersonsName;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_PersonsEmail != oldCase.IsAbout?.Person_Email)
-            {
-                isAbout.Person_Email = caseModel.IsAbout_PersonsEmail;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_PersonsPhone != oldCase.IsAbout?.Person_Phone)
-            {
-                isAbout.Person_Phone = caseModel.IsAbout_PersonsPhone;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_PersonsCellPhone != oldCase.IsAbout?.Person_Cellphone)
-            {
-                isAbout.Person_Cellphone = caseModel.IsAbout_PersonsCellPhone;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_Place != oldCase.IsAbout?.Place)
-            {
-                isAbout.Place = caseModel.IsAbout_Place;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_UserCode != oldCase.IsAbout?.UserCode)
-            {
-                isAbout.UserCode = caseModel.IsAbout_UserCode;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_Region_Id != oldCase.IsAbout?.Region_Id)
-            {
-                isAbout.Region_Id = caseModel.IsAbout_Region_Id;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_Department_Id != oldCase.IsAbout?.Department_Id)
-            {
-                isAbout.Department_Id = caseModel.IsAbout_Department_Id;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_OU_Id != oldCase.IsAbout?.OU_Id)
-            {
-                isAbout.OU_Id = caseModel.IsAbout_OU_Id;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_CostCentre != oldCase.IsAbout?.CostCentre)
-            {
-                isAbout.CostCentre = caseModel.IsAbout_CostCentre;
-                isAboutChanged = true;
-            }
-
-            if (!isAboutChanged)
-                isAbout = null;
-
-            caseEntity.IsAbout = isAbout;
-
-            #endregion
-
-            return caseEntity;
+           return caseEntity;
         }
 
         private CaseLog GetCaseLog(CaseModel caseModel, AuxCaseModel auxCaseModel)
