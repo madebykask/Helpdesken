@@ -76,8 +76,6 @@ namespace DH.Helpdesk.Web.Controllers
         [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult New(int customerId)
         {
-            var customer = this._customerService.GetCustomer(customerId);
-            //var accountAcctivity = new AccountActivity { Customer_Id = customer.Id };
             var model = this.CreateInputViewModel(customerId);
 
             return this.View(model);
@@ -226,6 +224,14 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             };
 
+            //var userDepartments = _departmentService
+            //    .GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, customer.Id)
+            //    .Select(d => d.Id)
+            //    .ToList();
+            //selectedFilter.SelectedDepartments = (selectedFilter.SelectedDepartments == null || !selectedFilter.SelectedDepartments.Any()) ?
+            //    userDepartments :
+            //    userDepartments.Intersect(selectedFilter.SelectedDepartments).ToList();
+
             //run search
             var contractsSearchResults = SearchContracts(selectedFilter);
          
@@ -302,7 +308,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         private IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter)
         {
-            var contracts  = _contractService.SearchContracts(filter);
+            var contracts  = _contractService.SearchContracts(filter, SessionFacade.CurrentUser.Id);
             return contracts;
         }
 
@@ -395,7 +401,8 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = $"{u.SurName} {u.FirstName}"
                 }).ToList(),
 
-                Departments = _departmentService.GetDepartments(customer.Id, ActivationStatus.Active).Select(d => new SelectListItem
+                Departments = _departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, customer.Id, true)
+                    .Select(d => new SelectListItem
                 {
                     Value = d.Id.ToString(),
                     Text = d.DepartmentName
@@ -498,7 +505,7 @@ namespace DH.Helpdesk.Web.Controllers
             var contractFields = this.GetSettingsModel(customerId);
             var contractcategories = _contractCategoryService.GetContractCategories(customerId).OrderBy(a => a.Name).ToList();
             var suppliers = _supplierService.GetActiveSuppliers(customerId);
-            var departments = _departmentService.GetDepartments(customerId);
+            var departments = _departmentService.GetDepartmentsByUserPermissions(customerId, SessionFacade.CurrentUser.Id);
             var users = _userService.GetCustomerActiveUsers(customerId);
 
             var emptyChoice = new SelectListItem() { Selected = true, Text = "", Value = string.Empty };
@@ -508,7 +515,7 @@ namespace DH.Helpdesk.Web.Controllers
             //model.NoticeTime.Insert(0, emptyChoice);
             model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = "1 " + Translation.GetCoreTextTranslation("månad"), Value = "1" });
 
-            for (int i = 2; i <= 12; i++)
+            for (var i = 2; i <= 12; i++)
             {
                 model.NoticeTimes.Add(new SelectListItem() { Selected = false, Text = i.ToString() + " " + Translation.GetCoreTextTranslation("månader"), Value = i.ToString() });
             }
@@ -811,11 +818,13 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     var fileId = int.Parse(id);
                     var fileInfo = _contractService.GetContractFile(fileId);
+                    var contract = _contractService.GetContract(fileInfo.Contract_Id, SessionFacade.CurrentUser.Id);
+                    if (contract == null)
+                        throw new Exception("No contract found...");
 
-                    this._contractService.DeleteContractFile(fileId);
+                    _contractService.DeleteContractFile(fileId);
                     
                     //save contract history 
-                    var contract = _contractService.GetContract(fileInfo.Contract_Id);
                     _contractService.SaveContractHistory(contract, new List<string> { StringTags.Delete + fileInfo.FileName });
                 }
 
@@ -898,55 +907,6 @@ namespace DH.Helpdesk.Web.Controllers
             return contractFilesInput;
         }
 
-        private List<string> ContractFilesNames(int contractId)
-        {
-            List<string> contractFilesNames = null;
-            var contractFiles = this._contractService.GetContractFiles(contractId);
-            contractFilesNames = contractFiles.Select(conf => conf.FileName).ToList();
-
-            return contractFilesNames;
-        }
-
-        private ContractFileModel findContractFile(int fileId, string fileName)
-        {
-            var contractFile = this._contractService.GetContractFile(fileId);
-
-            return contractFile;
-        }
-
-        private List<WebTemporaryFile> TransferContractFiles(string contractFilesKey, int contractId)
-        {
-            var filesToAdd = new List<WebTemporaryFile>();
-            var contractFiles = this._contractService.GetContractFiles(contractId);
-            if (contractFiles != null)
-            {
-                foreach (var f in contractFiles)
-                {
-                    filesToAdd.Add(new WebTemporaryFile(f.Content, f.FileName));
-                    this._userTemporaryFilesStorage.AddFile(f.Content, f.FileName, contractFilesKey);
-                }
-            }
-            return filesToAdd;
-        }
-        //
-        // GET: /Contract/Details/5
-
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        //
-        // GET: /Contract/Create
-
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        //
-        // POST: /Contract/Create
-
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
@@ -967,15 +927,12 @@ namespace DH.Helpdesk.Web.Controllers
         [UserPermissions(UserPermission.ContractPermission)]
         public ActionResult Edit(int id)
         {
-            var contractFields = this.GetSettingsModel(SessionFacade.CurrentCustomer.Id);
-            var contract = this._contractService.GetContract(id);
-
+            var contract = _contractService.GetContract(id, SessionFacade.CurrentUser.Id);
 
             if (contract == null)
                 return new HttpNotFoundResult("No contract found...");
             else
             {
-                var contractsExistingFiles = this._contractService.GetContractFiles(id);
                 var changedbyUser = this._userService.GetUser(contract.ChangedByUser_Id);
 
                 var contractEditInput = CreateInputViewModel(SessionFacade.CurrentCustomer.Id);
@@ -1059,11 +1016,10 @@ namespace DH.Helpdesk.Web.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
+                var contract = this._contractService.GetContract(id, SessionFacade.CurrentUser.Id);
 
-                var contract = this._contractService.GetContract(id);
-
-                this._contractService.DeleteContract(contract);
+                if (contract != null)
+                  _contractService.DeleteContract(contract);
 
                 return RedirectToAction("Index");
             }

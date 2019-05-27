@@ -18,12 +18,11 @@ namespace DH.Helpdesk.Services.Services
 
     public interface IContractService
     {
-        IList<Contract> GetContracts(int customerId);
-        IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter);
+        IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter, int userId);
 
-        Contract GetContract(int contractId);
+        Contract GetContract(int contractId, int userId);
         List<ContractsSettingRowModel> GetContractsSettingRows(int customerId);
-        void SaveContractSettings(List<ContractsSettingRowModel> ContractSettings);
+        void SaveContractSettings(List<ContractsSettingRowModel> contractSettings);
         int SaveContract(ContractInputModel contract);
         void SaveContractHistory(Contract contract, List<string> files);
         void SaveContracFile(ContractFileModel contractFile);
@@ -66,12 +65,7 @@ namespace DH.Helpdesk.Services.Services
             this._unitOfwork = unitOfWork;
         }
 
-        public IList<Contract> GetContracts(int customerId)
-        {
-            return _contractRepository.GetContracts(customerId).ToList();
-        }
-
-        public IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter)
+        public IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter, int userId)
         {
             var selectedStatus = filter.State;
             var customerId = filter.CustomerId;
@@ -140,7 +134,7 @@ namespace DH.Helpdesk.Services.Services
             if (!string.IsNullOrEmpty(filter.SearchText)) 
                 exp = PredicateBuilder<Contract>.AndAlso(exp, t => t.ContractNumber.Contains(filter.SearchText) || t.Info.Contains(filter.SearchText));
 
-            var queryable = _contractRepository.GetContracts(exp).OrderBy(c => c.ContractNumber).AsQueryable();
+            var queryable = _contractRepository.GetContracts(exp, userId).OrderBy(c => c.ContractNumber).AsQueryable();
 
             var contracts = 
                 queryable.Select(contract => new ContractSearchItemData()
@@ -204,9 +198,9 @@ namespace DH.Helpdesk.Services.Services
             return contracts;
         }
 
-        public Contract GetContract(int contractId)
+        public Contract GetContract(int contractId, int userId)
         {
-            return this._contractRepository.GetContract(contractId);
+            return this._contractRepository.GetContract(contractId, userId);
         }
 
         public List<ContractsSettingRowModel> GetContractsSettingRows(int customerId)
