@@ -23,18 +23,19 @@
         private readonly TimeZoneInfo _companyTimeZone;
 
         public WorkTimeCalculatorFactory(
-            IHolidayService holidayService,
+			IHolidayService holidayService,
             int workHourBegin,
             int workHourEnd,
             TimeZoneInfo companyTimeZone)
         {
-            _holidayService = holidayService;
-            _workHourBegin = workHourBegin;
-            _workHourEnd = workHourEnd;
-            _companyTimeZone = companyTimeZone;
+			_holidayService = holidayService;
+			_workHourBegin = workHourBegin;
+			_workHourEnd = workHourEnd;
+			_companyTimeZone = companyTimeZone;
         }
 
-        public WorkTimeCalculator.RangesPerDay CreateWorkDaysSchema(
+
+		public WorkTimeCalculator.RangesPerDay CreateWorkDaysSchema(
             DateTime from,
             DateTime to,
             int workHourBegin,

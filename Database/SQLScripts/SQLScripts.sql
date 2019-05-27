@@ -400,6 +400,14 @@ BEGIN
 END
 
 
+RAISERROR('Adding new TimeZoneId to tblCustomer', 10, 1) WITH NOWAIT
+IF NOT EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'TimeZoneId' and Object_ID = Object_ID(N'dbo.tblCustomer'))
+   ALTER TABLE tblCustomer
+   ADD TimeZoneId nvarchar(64) NOT NULL DEFAULT('Central Europe Standard Time')
+GO
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.41'
 GO

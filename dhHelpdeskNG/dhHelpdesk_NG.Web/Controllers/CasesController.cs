@@ -3315,12 +3315,15 @@ namespace DH.Helpdesk.Web.Controllers
                     if (subState.IncludeInCaseStatistics == 0)
                     {
                         oldCaseSubstateCount = false;
-                        var workTimeCalcFactory =
+
+						var timeZone = TimeZoneInfo.FindSystemTimeZoneById(curCustomer.TimeZoneId);
+
+						var workTimeCalcFactory =
                             new WorkTimeCalculatorFactory(
                                 ManualDependencyResolver.Get<IHolidayService>(),
                                 curCustomer.WorkingDayStart,
                                 curCustomer.WorkingDayEnd,
-                                TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+								timeZone);
                         int[] deptIds = null;
                         if (case_.Department_Id.HasValue)
                         {
@@ -3665,16 +3668,19 @@ namespace DH.Helpdesk.Web.Controllers
             return case_.Id;
         }
 
-        private static int CalculateActionLeadTime(Customer curCustomer, Case case_, DateTime utcNow,
+        private int CalculateActionLeadTime(Customer curCustomer, Case case_, DateTime utcNow,
             bool oldCaseSubstateCount,
             Case oldCase, int customerTimeOffset, int actionExternalTime, bool hasFinishingType)
         {
             var actionLeadTime = 0;
-            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(curCustomer.TimeZoneId);
+
+			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                 ManualDependencyResolver.Get<IHolidayService>(),
                 curCustomer.WorkingDayStart,
                 curCustomer.WorkingDayEnd,
-                TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                timeZone);
             int[] deptIds = null;
             if (case_.Department_Id.HasValue)
             {
@@ -3797,12 +3803,14 @@ namespace DH.Helpdesk.Web.Controllers
                 // calculating time spent in "inactive" state since last changing every save
                 if (caseSubState.IncludeInCaseStatistics == 0)
                 {
-                    var workTimeCalcFactory =
+					var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
+
+					var workTimeCalcFactory =
                         new WorkTimeCalculatorFactory(
                             ManualDependencyResolver.Get<IHolidayService>(),
                             customer.WorkingDayStart,
                             customer.WorkingDayEnd,
-                            TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                            timeZone);
                     int[] deptIds = null;
                     if (@case.Department_Id.HasValue)
                     {
@@ -3861,11 +3869,13 @@ namespace DH.Helpdesk.Web.Controllers
 
                 oldCase.FinishingDate = DatesHelper.Max(oldCase.RegTime, caseLog.FinishingDate.Value);
 
-                var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+				var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
+
+				var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                     ManualDependencyResolver.Get<IHolidayService>(),
                     customer.WorkingDayStart,
                     customer.WorkingDayEnd,
-                    TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+					timeZone);
                 int[] deptIds = null;
                 if (oldCase.Department_Id.HasValue)
                 {
@@ -3883,11 +3893,12 @@ namespace DH.Helpdesk.Web.Controllers
                 // ActionLeadTime Calc
                 if (oldCase != null && oldCase.Id > 0)
                 {
-                    workTimeCalcFactory = new WorkTimeCalculatorFactory(
+
+					workTimeCalcFactory = new WorkTimeCalculatorFactory(
                         ManualDependencyResolver.Get<IHolidayService>(),
                         customer.WorkingDayStart,
                         customer.WorkingDayEnd,
-                        TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId));
+                        timeZone);
                     deptIds = null;
                     if (oldCase.Department_Id.HasValue)
                     {

@@ -462,11 +462,14 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (currentCase.Department_Id.HasValue)
                 departmentIds = new int[] {currentCase.Department_Id.Value};
 
-            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+			var cs = _customerSettingsService.GetCustomerSetting(customer.Id);
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
+
+			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                 _holidayService,
                 customer.WorkingDayStart,
                 customer.WorkingDayEnd,
-                TimeZoneInfo.FindSystemTimeZoneById(currentUser.TimeZoneId));
+                timeZone);
 
             var workTimeCalc = workTimeCalcFactory.Build(currentCase.RegTime, utcNow, departmentIds);
 

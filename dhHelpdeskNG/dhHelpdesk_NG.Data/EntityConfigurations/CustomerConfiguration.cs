@@ -102,8 +102,9 @@
             this.Property(x => x.ShowCasesOnExternalPage).IsRequired();
             this.Property(x => x.GroupCaseTemplates).IsRequired();
             this.Property(x => x.FetchPcNumber).IsRequired();
+			this.Property(x => x.TimeZoneId).IsRequired();
 
-            this.ToTable("tblcustomer");
+			this.ToTable("tblcustomer");
         }
     }
 }

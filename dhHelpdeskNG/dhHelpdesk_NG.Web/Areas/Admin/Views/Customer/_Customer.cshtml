@@ -290,6 +290,14 @@
             </td>
         </tr>
         <tr>
+            <td class="span3">
+                @Translation.Get("Tidszon", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.Customer.TimeZoneId, Model.TimeZones, new { style = "width: 600px;" })
+            </td>
+        </tr>
+        <tr>
             <td class="span3" style="vertical-align: middle">                                        
                 @Translation.Get("Löst i tid med Bevakningsdatum", Enums.TranslationSource.TextTranslation) 
             </td>             

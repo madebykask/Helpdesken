@@ -1195,10 +1195,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 departmentIds = new int[] { currentCase.Department_Id.Value };
 
 
-            var timeZone = TimeZoneInfo.GetSystemTimeZones().First(o => o.BaseUtcOffset.TotalMinutes == cs.TimeZone_offset);
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(currentCustomer.TimeZoneId);
 
 
-            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                 ManualDependencyResolver.Get<IHolidayService>(),
                 currentCustomer.WorkingDayStart,
                 currentCustomer.WorkingDayEnd,

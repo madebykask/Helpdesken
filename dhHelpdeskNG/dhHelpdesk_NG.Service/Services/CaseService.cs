@@ -849,10 +849,9 @@ namespace DH.Helpdesk.Services.Services
                 .Select(o => o.Id)
                 .ToArray();
 
-            var cs = _settingService.GetCustomerSetting(customer.Id);
-            var timeZone = TimeZoneInfo.GetSystemTimeZones().First(o => o.BaseUtcOffset.TotalMinutes == cs.TimeZone_offset);
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
 
-            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                 ManualDependencyResolver.Get<IHolidayService>(),
                 customer.WorkingDayStart,
                 customer.WorkingDayEnd,

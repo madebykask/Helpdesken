@@ -82,6 +82,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IGlobalSettingService _globalSettingService;
         private readonly ISettingService _settingService;
         private readonly IHolidayService _holidayService;
+		private readonly ICustomerService _customerService;
 
         #region ctor()
 
@@ -93,7 +94,8 @@ namespace DH.Helpdesk.Services.Services
             IProductAreaService productAreaService, 
             IGlobalSettingService globalSettingService, 
             ISettingService settingService,
-            IHolidayService holidayService)
+            IHolidayService holidayService,
+			ICustomerService customerService)
         {
             _caseSearchRepository = caseSearchRepository;
             _productAreaRepository = productAreaRepository;
@@ -103,6 +105,7 @@ namespace DH.Helpdesk.Services.Services
             _settingService = settingService;
             _holidayService = holidayService;
             _productAreaService = productAreaService;
+			_customerService = customerService;
         }
 
         #endregion
@@ -170,9 +173,12 @@ namespace DH.Helpdesk.Services.Services
         {
             var now = DateTime.UtcNow;
 
-            var csf = DoFilterValidation(f);            
-            
-            var workTimeFactory = new WorkTimeCalculatorFactory(_holidayService, workingDayStart, workingDayEnd, userTimeZone);
+            var csf = DoFilterValidation(f);
+
+			var customer = _customerService.GetCustomer(f.CustomerId);
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
+
+			var workTimeFactory = new WorkTimeCalculatorFactory(_holidayService, workingDayStart, workingDayEnd, timeZone);
             var responisbleFieldSettings = customerCaseFieldsSettings.Where(it => it.Name == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()).FirstOrDefault();
             var isFieldResponsibleVisible = responisbleFieldSettings != null && responisbleFieldSettings.ShowOnStartPage == 1;
 

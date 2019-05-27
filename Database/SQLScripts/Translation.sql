@@ -7426,6 +7426,13 @@ If not exists (select * from tblTextTranslation where text_id = 2020 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2020, 2, 'Current values')
 GO
 
+If not exists (select * from tbltext where id = 2021)
+	insert into tbltext (id, TextString) VALUES (2021, 'Tidszon')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2021 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2021, 2, 'Time zone')
+GO
+
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
@@ -7440,4 +7447,7 @@ GO
 
 -- *** Run this last when put translation script above this line *** --
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
+
+
+
 
