@@ -224,8 +224,14 @@
                                                         @Translation.Get("Ärendemall för underärende", Enums.TranslationSource.TextTranslation)
                                                     </td>
                                                     <td>
-                                                        @Html.DropDownListFor(model => model.CaseSolution.SplitToCaseSolution_Id, Model.SplitToCaseSolutions.Select(o => new SelectListItem() { Text = o.Name + (o.CaseSolutionCategory == null ? "" : " - " + o.CaseSolutionCategory.Name), Value = o.Id.ToString() }).ToList(), "")
+                                                        @Html.DropDownListFor(model => model.CaseSolution.SplitToCaseSolution_Id,
+                                                            Model.SplitToCaseSolutions.Select(o => new SelectListItem()
+                                                            {
+                                                                Text = o.Name + (string.IsNullOrEmpty(o.CategoryName) ? "" : " - " + o.CategoryName),
+                                                                Value = o.CaseSolutionId.ToString()
+                                                            }).ToList(), "")
                                                     </td>
+
                                                 </tr>
                                                 <tr>
                                                     <td>

@@ -14,11 +14,11 @@
         /// <param name="caseSolution_Id">
         /// The id of CaseSolution.
         /// </param>
-        IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid);
+        IList<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid);
 
-        IEnumerable<CaseSolutionSettingsField> GetCaseSolutionFieldSetting(int casesolutionid);
+        IList<CaseSolutionSettingsField> GetCaseSolutionFieldSetting(int casesolutionid);
 
-        IEnumerable<CaseSolutionSettingsField> GetSelectedCaseSolutionFieldSetting(int casesolutionid, int customerid);
+        IList<CaseSolutionSettingsField> GetSelectedCaseSolutionFieldSetting(int casesolutionid, int customerid);
 
         void Save(CaseSolutionConditionEntity model);
 

@@ -1396,12 +1396,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var models = _userEmailsSearchService.GetUserEmailsForCaseSend(SessionFacade.CurrentCustomer.Id, query, searchScope);
             return Json(new { searchKey = searchKey, result = models });
         }
-
-        public List<CaseSolution> GetCaseSolutions(int customerId)
-        {
-            return _caseSolutionService.GetCaseSolutions(customerId).Where(t => t.ShowInSelfService).ToList();
-        }   
-
+        
         [HttpPost]
         public void UploadLogFile(string id, string name)
         {

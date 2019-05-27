@@ -228,7 +228,7 @@ namespace DH.Helpdesk.Services.Services
         //todo: review. not performance optimised
         public IList<CaseSolution> GetCaseSolutions()
         {
-            return this.CaseSolutionRepository.GetMany(x => x.Status >= 0).OrderBy(x => x.Customer.Name).ThenBy(x => x.Name).ToList();
+            return CaseSolutionRepository.GetMany(x => x.Status >= 0).AsQueryable().OrderBy(x => x.Customer.Name).ThenBy(x => x.Name).ToList();
         }
 
         public IList<int> GetWorkflowCaseSolutionIds(int customerId)
@@ -535,7 +535,7 @@ namespace DH.Helpdesk.Services.Services
         // todo: refactor. code is a total mess!
         public IList<CaseSolution> SearchAndGenerateCaseSolutions(int customerId, ICaseSolutionSearch searchCaseSolutions, bool isFirstNamePresentation)
         {
-            var query = (from cs in this.CaseSolutionRepository.GetMany(x => x.Customer_Id == customerId)
+            var query = (from cs in CaseSolutionRepository.GetMany(x => x.Customer_Id == customerId)
                          select cs);
 
             #region Search
@@ -1654,51 +1654,51 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseSolutionCategory> GetCaseSolutionCategories(int customerId)
         {
-            return this._caseSolutionCategoryRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
+            return _caseSolutionCategoryRepository.GetMany(x => x.Customer_Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
         public CaseSolution GetCaseSolution(int id)
         {
-            return this.CaseSolutionRepository.GetById(id);
+            return CaseSolutionRepository.GetById(id);
         }
 
         public CaseSolutionCategory GetCaseSolutionCategory(int id)
         {
-            return this._caseSolutionCategoryRepository.GetById(id);
+            return _caseSolutionCategoryRepository.GetById(id);
         }
 
         public CaseSolutionSchedule GetCaseSolutionSchedule(int id)
         {
-            return this._caseSolutionScheduleRepository.GetById(id);
+            return _caseSolutionScheduleRepository.GetById(id);
         }
 
         public DeleteMessage DeleteCaseSolution(int id, int customerId)
         {
-            var caseSolution = this.CaseSolutionRepository.GetById(id);
+            var caseSolution = CaseSolutionRepository.GetById(id);
 
             if (caseSolution != null)
             {
                 try
                 {
                     _caseSolutionConditionRepository.DeleteByCaseSolutionId(id);
-                    //this.caseSolutionConditionRepository.Commit();
+                    //caseSolutionConditionRepository.Commit();
 
-                    this._caseSolutionSettingRepository.DeleteByCaseSolutionId(id);
-                    this._caseSolutionSettingRepository.Commit();
+                    _caseSolutionSettingRepository.DeleteByCaseSolutionId(id);
+                    _caseSolutionSettingRepository.Commit();
 
-                    var caseSolutionSchedule = this._caseSolutionScheduleRepository.GetById(id);
+                    var caseSolutionSchedule = _caseSolutionScheduleRepository.GetById(id);
 
                     if (caseSolutionSchedule != null)
-                        this._caseSolutionScheduleRepository.Delete(caseSolutionSchedule);
+                        _caseSolutionScheduleRepository.Delete(caseSolutionSchedule);
 
-                    var caseSolutionLinks = this._linkService.GetLinksBySolutionIdAndCustomer(id, customerId);
+                    var caseSolutionLinks = _linkService.GetLinksBySolutionIdAndCustomer(id, customerId);
                     if (caseSolutionLinks.Count > 0)
                         foreach (var link in caseSolutionLinks)
-                            this._linkRepository.Delete(x => x.Id == link.Id);
+                            _linkRepository.Delete(x => x.Id == link.Id);
 
-                    this.CaseSolutionRepository.Delete(caseSolution);
+                    CaseSolutionRepository.Delete(caseSolution);
 
-                    this.Commit();
+                    Commit();
 
                     return DeleteMessage.Success;
                 }
@@ -1713,14 +1713,14 @@ namespace DH.Helpdesk.Services.Services
 
         public DeleteMessage DeleteCaseSolutionCategory(int id)
         {
-            var caseSolutionCategory = this._caseSolutionCategoryRepository.GetById(id);
+            var caseSolutionCategory = _caseSolutionCategoryRepository.GetById(id);
 
             if (caseSolutionCategory != null)
             {
                 try
                 {
-                    this._caseSolutionCategoryRepository.Delete(caseSolutionCategory);
-                    this.Commit();
+                    _caseSolutionCategoryRepository.Delete(caseSolutionCategory);
+                    Commit();
 
                     return DeleteMessage.Success;
                 }
@@ -1768,21 +1768,21 @@ namespace DH.Helpdesk.Services.Services
                 caseSolution.Text_Internal = caseSolution.Text_Internal.Substring(0, 3000);
 
             if (caseSolution.Id == 0)
-                this.CaseSolutionRepository.Add(caseSolution);
+                CaseSolutionRepository.Add(caseSolution);
             else
             {
-                this.CaseSolutionRepository.Update(caseSolution);
-                this._caseSolutionScheduleRepository.Delete(x => x.CaseSolution_Id == caseSolution.Id);
+                CaseSolutionRepository.Update(caseSolution);
+                _caseSolutionScheduleRepository.Delete(x => x.CaseSolution_Id == caseSolution.Id);
             }
 
             if (caseSolutionSchedule != null)
             {
-                this._caseSolutionScheduleRepository.Add(caseSolutionSchedule);
+                _caseSolutionScheduleRepository.Add(caseSolutionSchedule);
             }
 
             if (errors.Count == 0)
             { 
-                this.Commit();
+                Commit();
 
                 DeleteSplitToCaseSolutionDescendants(caseSolution.Id);
 
@@ -1876,16 +1876,16 @@ namespace DH.Helpdesk.Services.Services
                 errors.Add("CaseSolutionCategory.Name", "Du måste ange en ärendemallskategori");
 
             if (caseSolutionCategory.Id == 0)
-                this._caseSolutionCategoryRepository.Add(caseSolutionCategory);
+                _caseSolutionCategoryRepository.Add(caseSolutionCategory);
             else
-                this._caseSolutionCategoryRepository.Update(caseSolutionCategory);
+                _caseSolutionCategoryRepository.Update(caseSolutionCategory);
 
 
             if (caseSolutionCategory.IsDefault == 1)
-                this._caseSolutionCategoryRepository.ResetDefault(caseSolutionCategory.Id);
+                _caseSolutionCategoryRepository.ResetDefault(caseSolutionCategory.Id);
 
             if (errors.Count == 0)
-                this.Commit();
+                Commit();
         }
 
         public void SaveEmptyForm(Guid formGuid, int caseId)
@@ -1895,26 +1895,25 @@ namespace DH.Helpdesk.Services.Services
 
         private void Commit()
         {
-            this._unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
 
         public Dictionary<string, string> GetCaseSolutionConditions(int caseSolutionId)
         {
             // FYI, this item is cleared when the specific CaseSolution is saved (CaseSolutionController - Edit)
             var cacheKey = string.Format(Common.Constants.CacheKey.CaseSolutionConditionWithId, caseSolutionId);
-            var caseSolutionConditions = this._cache.Get(cacheKey) as Dictionary<string, string>;
+            var caseSolutionConditions = _cache.Get(cacheKey) as Dictionary<string, string>;
             if (caseSolutionConditions == null)
             {
                 caseSolutionConditions = 
-                    _caseSolutionConditionRepository.GetCaseSolutionConditions(caseSolutionId)
-                        .Select(x => new
-                        {
-                            x.Property_Name,
-                            x.Values
-                        }).ToDictionary(x => x.Property_Name, x => x.Values);
+                    _caseSolutionConditionRepository.GetCaseSolutionConditions(caseSolutionId).Select(x => new
+                    {
+                        x.Property_Name,
+                        x.Values
+                    }).ToDictionary(x => x.Property_Name, x => x.Values);
 
                 if (caseSolutionConditions.Any())
-                    this._cache.Set(cacheKey, caseSolutionConditions, Common.Constants.Cache.Duration);
+                    _cache.Set(cacheKey, caseSolutionConditions, Common.Constants.Cache.Duration);
             }
 
             return caseSolutionConditions;
@@ -1925,13 +1924,13 @@ namespace DH.Helpdesk.Services.Services
             // FYI, this item is cleared when the specific CaseSolution is saved (CaseSolutionController - Edit)
             var cacheKey = string.Format(Common.Constants.CacheKey.CaseSolutionConditionWithId, customerId);
 
-            var caseSolutions = this._cache.Get(cacheKey) as IList<CaseSolutionOverview>;
+            var caseSolutions = _cache.Get(cacheKey) as IList<CaseSolutionOverview>;
             if (caseSolutions == null)
             {
                 caseSolutions = GetCustomerCaseSolutionsQuery(customerId).ToList();
 
                 if (caseSolutions.Any())
-                    this._cache.Set(cacheKey, caseSolutions, Common.Constants.Cache.Duration);
+                    _cache.Set(cacheKey, caseSolutions, Common.Constants.Cache.Duration);
             }
 
             return caseSolutions;
