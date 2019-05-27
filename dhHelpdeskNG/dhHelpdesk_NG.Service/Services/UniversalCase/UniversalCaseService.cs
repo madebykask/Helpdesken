@@ -1147,6 +1147,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 case "status_id":
                     caseModel.Status_Id = value.ToInt();
                     break;
+                case "subStatus_id":
+                    caseModel.StateSecondary_Id = value.ToInt();
+                    break;
                 case "priority_id":
                     caseModel.Priority_Id = value.ToInt();
                     break;
