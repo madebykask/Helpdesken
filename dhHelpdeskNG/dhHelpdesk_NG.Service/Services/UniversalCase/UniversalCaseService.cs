@@ -1029,7 +1029,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 case "status_id":
                     caseModel.Status_Id = value.ToInt();
                     break;
-                case "subStatus_id":
+                case "substatus_id":
                     caseModel.StateSecondary_Id = value.ToInt();
                     break;
                 case "priority_id":
