@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrapper';
 
 @Component({
-  styles:[`
+  styles: [`
     :host {
       display:block;
       position:relative;
@@ -34,10 +34,10 @@ import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrap
 })
 export class Pdf3FileViewerComponent implements OnInit {
 
-  @Input() fileName:string;
-  @Input() fileData:Blob;
-  
-  content:any;
+  @Input() fileName: string;
+  @Input() fileData: Blob;
+
+  content: any;
 
   constructor(private windowWrapper: WindowWrapper) {
   }

@@ -16,22 +16,22 @@ export enum ContentTypes {
   styleUrls: ['./file-preview.component.scss']
 })
 export class FilePreviewComponent implements OnInit {
-  previewHeight:number = 0;  
-  
+  previewHeight = 0;
+
   contentType: ContentTypes;
   contentTypes = ContentTypes;
 
-  fileData:Blob = null;
-  fileName:string = '';
+  fileData: Blob = null;
+  fileName = '';
 
-  constructor(private activatedRoute:ActivatedRoute,
+  constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private commService: CommunicationService,
               private windowWrapper: WindowWrapper) {
       this.fileName = this.activatedRoute.snapshot.queryParams.fileName || '';
-      this.fileData = <Blob>this.activatedRoute.snapshot.data['fileData'];      
+      this.fileData = <Blob>this.activatedRoute.snapshot.data['fileData'];
    }
- 
+
   ngOnInit() {
     this.contentType = this.getContentType();
     this.commService.publish(Channels.Header, new HeaderEventData(false));
@@ -39,7 +39,7 @@ export class FilePreviewComponent implements OnInit {
   }
 
   private getContentType(): ContentTypes {
-    let contentType: string = this.fileData.type;
+    const contentType: string = this.fileData.type;
     if (contentType === 'application/pdf') {
       return ContentTypes.Pdf;
     } else if (contentType.match(/^image\//gi)) {
@@ -68,7 +68,7 @@ export class FilePreviewComponent implements OnInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event:any): void {
+  onResize(event: any): void {
     this.updatePreviewHeight();
   }
 

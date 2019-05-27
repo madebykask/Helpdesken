@@ -1,16 +1,35 @@
-import { UuidGenerator } from "src/app/modules/shared-module/utils/uuid-generator";
+import { UuidGenerator } from 'src/app/modules/shared-module/utils/uuid-generator';
+
+export class UserAuthenticationData {
+  access_token: string;
+  refresh_token: string;
+  expires_in: number; // in seconds - not updated once recieved
+  recievedAt: Date;
+  sessionId: string;
+}
+
+export class UserData {
+  id: number;
+  name: string;
+  selectedCustomerId: number;
+  selectedLanguageId: number;
+  userTimeZone?: string;
+  ownCasesOnly: boolean;
+  createCasePermission: boolean;
+  canDeleteAttachedFiles: boolean;
+}
 
 export class CurrentUser {
-    
+
     constructor() {
-          this.authData = new UserAuthenticationData();
-          this.currentData = new UserData();
+      this.authData = new UserAuthenticationData();
+      this.currentData = new UserData();
     }
 
-    // Properties  
+    // Properties
     get id(): number {
       return this.currentData.id;
-    };
+    }
 
     get name(): string {
       return this.currentData.name;
@@ -21,36 +40,16 @@ export class CurrentUser {
     currentData: UserData;
 
     //create method
-    static createAuthenticated(data: any) : CurrentUser {
-        let user = new CurrentUser();
+    static createAuthenticated(data: any): CurrentUser {
+        const user = new CurrentUser();
         //set auth data
-        let authData = new UserAuthenticationData()
+        const authData = new UserAuthenticationData();
         authData.access_token = data.access_token;
         authData.refresh_token = data.refresh_token;
         authData.expires_in = data.expires_in;
         authData.recievedAt = new Date();
         authData.sessionId = UuidGenerator.createUuid();
         user.authData = authData;
-
         return user;
     }
-}
-
-export class UserAuthenticationData {
-    access_token: string;
-    refresh_token: string;
-    expires_in: number; // in seconds - not updated once recieved
-    recievedAt: Date;
-    sessionId: string;
-}
-
-export class UserData {
-    id: number;
-    name: string;
-    selectedCustomerId: number;
-    selectedLanguageId: number;
-    userTimeZone?: string;
-    ownCasesOnly: boolean;
-    createCasePermission: boolean;
-    canDeleteAttachedFiles: boolean;
 }

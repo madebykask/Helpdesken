@@ -14,14 +14,13 @@ export class AuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (this.authStateService.hasToken()) {
       if (this.authStateService.isTokenExpired()) {
-        return this.authService.refreshToken()
-          .pipe(
-            switchMap((r: boolean) => {
-              if (!r) {
-                this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-              };
-              return of(r);
-            }))
+        return this.authService.refreshToken().pipe(
+          switchMap((r: boolean) => {
+            if (!r) {
+              this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+            }
+            return of(r);
+          }));
       }
       return of(true);
     }

@@ -5,18 +5,18 @@ import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrap
   selector: 'pdf-file-viewer',
   template: `
       <pdf-viewer [src]="blobUrl"
-                  [original-size]="true" 
+                  [original-size]="true"
                   [autoresize]="false"
                   [render-text]="false"></pdf-viewer>
   `,
   styles: [``]
 })
 export class PdfFileViewer implements OnInit {
-  
-  @Input() fileName:string;
-  @Input() fileData:Blob;
-  
-  blobUrl:any;  
+
+  @Input() fileName: string;
+  @Input() fileData: Blob;
+
+  blobUrl: any;
 
   constructor(private windowWrapper: WindowWrapper) {
   }

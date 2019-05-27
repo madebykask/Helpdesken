@@ -4,9 +4,7 @@ import { NotifierModel, NotifierSearchItem } from '../../shared-module/models/no
 import { take, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class NotifierService {
 
   constructor(private notifierApiService: NotifierApiService) {

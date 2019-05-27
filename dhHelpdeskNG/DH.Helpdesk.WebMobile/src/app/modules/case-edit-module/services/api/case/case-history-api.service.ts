@@ -15,7 +15,7 @@ export class CaseHistoryApiService extends HttpApiServiceBase {
   }
 
   getHistoryEvents(caseId: number): Observable<any> {
-    let url = this.buildResourseUrl(`/api/case/${caseId}/histories`, null, true, true);
+    const url = this.buildResourseUrl(`/api/case/${caseId}/histories`, null, true, true);
     return this.getJson<Array<any>>(url)
         .pipe(
             take(1),

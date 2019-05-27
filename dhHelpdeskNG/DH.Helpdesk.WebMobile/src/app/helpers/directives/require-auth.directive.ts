@@ -30,11 +30,10 @@ export class RequireAuthDirective implements OnInit {
   }
 
   private updateState() {
-    let isAuthenticated = this.authService.isAuthenticated();
+    const isAuthenticated = this.authService.isAuthenticated();
     if (isAuthenticated && this.viewContainer.length === 0) {
       this.viewContainer.createEmbeddedView(this.templateRef);
-    }
-    else if (!isAuthenticated && this.viewContainer.length > 0) {
+    } else if (!isAuthenticated && this.viewContainer.length > 0) {
       this.viewContainer.clear();
     }
   }

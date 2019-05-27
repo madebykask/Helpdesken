@@ -1,9 +1,9 @@
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { HttpClient } from "@angular/common/http";
-import { LocalStorageService } from "src/app/services/local-storage";
-import { CaseEditOutputModel } from "../../../models/case/case-edit-output.model";
-import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { LocalStorageService } from 'src/app/services/local-storage';
+import { CaseEditOutputModel } from '../../../models/case/case-edit-output.model';
+import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
 
 @Injectable({ providedIn: 'root' })
 export class CaseApiService extends HttpApiServiceBase {
@@ -25,12 +25,12 @@ export class CaseApiService extends HttpApiServiceBase {
   }
 
   saveCaseData(data: CaseEditOutputModel): Observable<any> {
-    const requestUrl = this.buildResourseUrl(`/api/case/save${ !data.caseId ? '' : '/' +data.caseId }`, null, true, true);
+    const requestUrl = this.buildResourseUrl(`/api/case/save${ !data.caseId ? '' : '/' + data.caseId }`, null, true, true);
     return this.postJson<any>(requestUrl, data);
   }
 
   getCaseSections(): Observable<any> {
-    return this.getJson(this.buildResourseUrl('/api/casesections/get', null, true, true)); // TODO: error handling    
+    return this.getJson(this.buildResourseUrl('/api/casesections/get', null, true, true)); // TODO: error handling
   }
 
 }
