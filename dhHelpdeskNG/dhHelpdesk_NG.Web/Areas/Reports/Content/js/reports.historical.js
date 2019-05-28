@@ -32,13 +32,15 @@
                                 anchor: 'end',
                                 align: 'end',
                                 formatter: function (value, context) {
+                                    //console.log('Context: { dataIndex: %s, datasetIndex: %s, dataSet:  %s }', context.dataIndex, context.datasetIndex, context.dataset.label);
                                     const chart = context.chart;
-                                    const datasets = context.chart.data.datasets;
-                                    const visibleDatasets = context.chart.data.datasets.filter(function(ds, index) {
+                                    const visibleDatasets = context.chart.data.datasets.filter(function (ds, index) {
                                         return chart.isDatasetVisible(index);
                                     });
+
                                     // do calculation if this is the last dataset of the bar 
-                                    if (context.datasetIndex === datasets.length - 1) {
+                                    const lastVisibleDataset = visibleDatasets[visibleDatasets.length - 1];
+                                    if (context.dataset.label === lastVisibleDataset.label) {
                                         let sum = 0;
                                         visibleDatasets.map(function (dataset) {
                                             sum += dataset.data[context.dataIndex];
