@@ -1226,9 +1226,9 @@ EditPage.prototype.onDeleteDlgClick = function (res) {
         return false;
     }
 
-    var params = self.p;
+    var params = me.p;
 
-    self.checkCaseIsAvaialble().done(callAsMe(function (data) {
+    me.checkCaseIsAvaialble().done(callAsMe(function (data) {
         me.showDeleteConfirmationDlg();
         if (data) {
             me.doDeleteCase(me.case);
