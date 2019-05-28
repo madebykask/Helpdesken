@@ -1591,6 +1591,9 @@ namespace DH.Helpdesk.Web.Controllers
         {
             if (this._caseSolutionService.DeleteCaseSolution(id, SessionFacade.CurrentCustomer.Id) == DeleteMessage.Success)
             {
+                // invalidate cache on delete
+                _cache.InvalidateStartsWith(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition);
+
                 switch (pageId)
                 {
                     case 1:
