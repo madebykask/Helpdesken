@@ -340,7 +340,7 @@ BEGIN
 
 	INSERT INTO #rows(CaseId, CaseTypeID, Created, WorkingGroupID, R_ROW, R_CASE) 
 	SELECT C.Id, CT.ID, CH.CreatedDate, WG.ID WorkginGroupId, 
-		ROW_NUMBER() OVER (PARTITION BY C.Id, WG.ID ORDER BY CH.CreatedDate) R, 
+		ROW_NUMBER() OVER (PARTITION BY C.Id, CT.ID, WG.ID ORDER BY CH.CreatedDate) R, 
 		ROW_NUMBER() OVER (PARTITION BY C.Id ORDER BY CH.CreatedDate) R_CASE FROM tblCase C 
 	JOIN tblCaseHistory CH ON CH.Case_Id = C.Id
 	JOIN tblCaseType CT ON CH.CaseType_Id = CT.ID
@@ -349,9 +349,6 @@ BEGIN
 	AND CH.Customer_Id = @customerID
 	AND CT.Customer_Id = @customerID
 	AND ((@checkCurrentCustomerOnly = 1 AND C.Customer_Id = @customerID) OR @checkCurrentCustomerOnly = 0)
-	AND (@checkChangeWorkingGroups = 0 OR 
-		EXISTS(SELECT ID FROM @changeWorkingGroups CWG WHERE CH.WorkingGroup_Id = CWG.ID) OR 
-		(@includeCasesWithNoWorkingGroup = 1 AND CH.WorkingGroup_Id IS NULL))
 	AND (@checkAdministrators = 0 OR EXISTS(SELECT ID FROM @administrators A WHERE C.CaseResponsibleUser_Id = A.ID))
 	AND (@checkDepartments = 0 OR EXISTS(SELECT ID FROM @departments D WHERE C.Department_Id = D.ID))
 	AND (@checkCaseTypes = 0 OR EXISTS(SELECT ID FROM @caseTypes CT WHERE C.CaseType_Id = CT.ID))
@@ -373,9 +370,13 @@ BEGIN
 	LEFT JOIN #rows R2 ON R.CaseID = R2.CaseID
 		AND (R.WorkingGroupID = R2.WorkingGroupID
 			OR (R.WorkingGroupID IS NULL AND R2.WorkingGroupID IS NULL))
+		AND R2.CaseTypeID = R.CaseTypeID
 		AND R2.R_ROW = R.R_ROW - 1
 		AND R2.R_CASE = R.R_CASE - 1
 	WHERE R2.CaseID IS NULL
+	  		AND (@checkChangeWorkingGroups = 0 OR 
+			EXISTS(SELECT ID FROM @changeWorkingGroups CWG WHERE R.WorkingGroupID = CWG.ID) OR 
+			(@includeCasesWithNoWorkingGroup = 1 AND R.WorkingGroupID IS NULL))
 	ORDER BY CaseID
 
 	DROP TABLE #rows
