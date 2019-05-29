@@ -1,52 +1,98 @@
 ﻿@using DH.Helpdesk.BusinessData.Enums.Contracts
-@model DH.Helpdesk.Web.Models.Contract.ContractsSearchFilterViewModel
+@using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Web.Models.Contract
+@model DH.Helpdesk.Web.Models.Contract.ContractIndexViewModel
+
+@functions {
+    private string getFieldName(ContractsSettingRowViewModel field, string defaultName)
+    {
+        var name = "";
+        if (SessionFacade.CurrentLanguageId == LanguageIds.English)
+            name = field.ContractFieldLabel_Eng;
+        else if (SessionFacade.CurrentLanguageId == LanguageIds.Swedish)
+            name = field.ContractFieldLabel;
+        else
+            name = Translation.GetCoreTextTranslation(defaultName);
+
+        return name;
+    }
+
+}
+
+@{
+    var placeholder = Translation.GetCoreTextTranslation("Välj en eller flera");
+}
 
 <div class="span8">
     <table class="tableform">
-        <tr>
-            <td>@Translation.GetCoreTextTranslation("Kategori")</td>
-            <td>
-                @Html.DropDownListFor(m => m.SelectedContractCategories, Model.ContractCategories,
-                     new { id= "lstContractCategories", @data_placeholder = @Translation.GetCoreTextTranslation("Välj en eller flera"), multiple = "multiple", @class = "chosen-select" })
-            </td>
-        </tr>
-        <tr>
-            <td>@Translation.GetCoreTextTranslation("Leverantör")</td>
-            <td>
-                @Html.DropDownListFor(m => m.SelectedSuppliers,
-                    Model.Suppliers,
-                    new { id= "lstSuppliers", @data_placeholder = @Translation.GetCoreTextTranslation("Välj en eller flera"), multiple = "multiple", @class = "chosen-select" })
-            </td>
-        </tr>
-        <tr>
-            <td>@Translation.GetCoreTextTranslation("Ansvarig uppföljning")</td>
-            <td>
-                @Html.DropDownListFor(m => m.SelectedResponsibleUsers,
-                    Model.ResponsibleUsers,
-                    new { id = "lstResponsible", @data_placeholder = @Translation.GetCoreTextTranslation("Välj en eller flera"), multiple = "multiple", @class = "chosen-select" })
-            </td>
-        </tr>
-        <tr>
-            <td>@Translation.GetCoreTextTranslation("Avdelning")</td>
-            <td>
-                @Html.DropDownListFor(m => m.SelectedDepartments,
-                    Model.Departments,
-                    new { id = "lstDepartment", @data_placeholder = @Translation.GetCoreTextTranslation("Välj en eller flera"), multiple = "multiple", @class = "chosen-select" })
-            </td>
-        </tr>
+        @{
+            var field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.Category);
+        }
+        @if (field.Show)
+        {
+            <tr>
+                <td>@getFieldName(field, "Kategori")</td>
+                <td>
+                    @Html.DropDownListFor(m => m.SearchFilterModel.SelectedContractCategories, Model.SearchFilterModel.ContractCategories,
+                        new {id = "lstContractCategories", @data_placeholder = @placeholder, multiple = "multiple", @class = "chosen-select"})
+                </td>
+            </tr>
+        }
+        @{
+            field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.Supplier);
+        }
+        @if (field.Show)
+        {
+            <tr>
+                <td>@getFieldName(field, "Leverantör")</td>
+                <td>
+                    @Html.DropDownListFor(m => m.SearchFilterModel.SelectedSuppliers,
+                        Model.SearchFilterModel.Suppliers,
+                        new {id = "lstSuppliers", @data_placeholder = @placeholder, multiple = "multiple", @class = "chosen-select"})
+                </td>
+            </tr>
+        }
+        @{
+            field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.ResponsibleUser);
+        }
+        @if (field.Show)
+        {
+            <tr>
+                <td>@getFieldName(field, "Ansvarig")</td>
+                <td>
+                    @Html.DropDownListFor(m => m.SearchFilterModel.SelectedResponsibleUsers,
+                        Model.SearchFilterModel.ResponsibleUsers,
+                        new {id = "lstResponsible", @data_placeholder = @placeholder, multiple = "multiple", @class = "chosen-select"})
+                </td>
+            </tr>
+        }
+        @{
+            field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.Department);
+        }
+        @if (field.Show)
+        {
+            <tr>
+                <td>@getFieldName(field, "Avdelning")</td>
+                <td>
+                    @Html.DropDownListFor(m => m.SearchFilterModel.SelectedDepartments,
+                        Model.SearchFilterModel.Departments,
+                        new {id = "lstDepartment", @data_placeholder = @placeholder, multiple = "multiple", @class = "chosen-select"})
+                </td>
+            </tr>
+        }
         <tr>
             <td>@Translation.GetCoreTextTranslation("Visa")</td>
             <td>
-                @Html.DropDownListFor(m => m.SelectedState,
-                    Model.ShowContracts,
-                    new { id = "lstShow", @data_placeholder = @Translation.GetCoreTextTranslation("Välj"), @class = "inputw300" })
+                @Html.DropDownListFor(m => m.SearchFilterModel.SelectedState,
+                    Model.SearchFilterModel.ShowContracts,
+                    new {id = "lstShow", @data_placeholder = @Translation.GetCoreTextTranslation("Välj"), @class = "inputw300"})
             </td>
         </tr>
         <tr>
             <td class="span3">@Translation.GetCoreTextTranslation("Sök")</td>
             <td>
-                @Html.TextBoxFor(m => m.SearchText, new { style = "width:285px", id = "txtSearch"})
-                <input type="submit" class="btn" id="searchQueryBtn" value="@Translation.GetCoreTextTranslation("Sök")"/>
+                @Html.TextBoxFor(m => m.SearchFilterModel.SearchText, new { style = "width:285px", id = "txtSearch" })
+                <input type="submit" class="btn" id="searchQueryBtn" value="@Translation.GetCoreTextTranslation("Sök")" />
             </td>
         </tr>
         <tr>
@@ -58,43 +104,54 @@
 </div>
 <div class="span6">
     <table class="tableform">
+        @{
+            field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.StartDate);
+        }
+        @if (field.Show)
+        {
         <tr class="date-block">
+            <td>@getFieldName(field, ContractFieldLabels.ContractStartDate)</td>
             <td>
-                @Translation.GetCoreTextTranslation(ContractFieldLabels.ContractStartDate)
-            </td>
-            <td>
-                @Html.EditorFor(m => Model.StartDateFrom, "DatePicker", new {id = "divSearch_StartDateFrom"})
-                @Html.EditorFor(m => Model.StartDateTo, "DatePicker", new {id = "divSearch_StartDateTo"})
+                @Html.EditorFor(m => Model.SearchFilterModel.StartDateFrom, "DatePicker", new { id = "divSearch_StartDateFrom" })
+                @Html.EditorFor(m => Model.SearchFilterModel.StartDateTo, "DatePicker", new { id = "divSearch_StartDateTo" })
             </td>
         </tr>
-        <tr class="date-block">
-            <td>
-                @Translation.GetCoreTextTranslation(ContractFieldLabels.ContractEndDate)
-            </td>
-            <td>
-                @Html.EditorFor(m => Model.EndDateFrom, "DatePicker", new {id = "divSearch_EndDateFrom"})
-                @Html.EditorFor(m => Model.EndDateTo, "DatePicker", new {id = "divSearch_EndDateTo"})
-            </td>
-        </tr>
-        <tr class="date-block">
-            <td>
-                @Translation.GetCoreTextTranslation(ContractFieldLabels.Noticedate)
-            </td>
-            <td>
-                @Html.EditorFor(m => Model.NoticeDateFrom, "DatePicker", new {id = "divSearch_NoticeDateFrom"})
-                @Html.EditorFor(m => Model.NoticeDateTo, "DatePicker", new {id = "divSearch_NoticeDateTo"})
-            </td>
-        </tr>
-
+        }
+        @{
+            field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.EndDate);
+        }
+        @if (field.Show)
+        {
+            <tr class="date-block">
+                <td>@getFieldName(field, ContractFieldLabels.ContractEndDate)</td>
+                <td>
+                    @Html.EditorFor(m => Model.SearchFilterModel.EndDateFrom, "DatePicker", new { id = "divSearch_EndDateFrom" })
+                    @Html.EditorFor(m => Model.SearchFilterModel.EndDateTo, "DatePicker", new { id = "divSearch_EndDateTo" })
+                </td>
+            </tr>
+        }
+        @{
+            field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.NoticeDate);
+        }
+        @if (field.Show)
+        {
+            <tr class="date-block">
+                <td>@getFieldName(field, ContractFieldLabels.Noticedate)</td>
+                <td>
+                    @Html.EditorFor(m => Model.SearchFilterModel.NoticeDateFrom, "DatePicker", new { id = "divSearch_NoticeDateFrom" })
+                    @Html.EditorFor(m => Model.SearchFilterModel.NoticeDateTo, "DatePicker", new { id = "divSearch_NoticeDateTo" })
+                </td>
+            </tr>
+        }
     </table>
 </div>
 
 <script type="text/javascript">
     $(function () {
-        BindChosenSelect('lstContractCategories', @Model.SelectedContractCategories.ToJavaScriptObject());
-        BindChosenSelect('lstSuppliers', @Model.SelectedSuppliers.ToJavaScriptObject());
-        BindChosenSelect('lstResponsible', @Model.SelectedResponsibleUsers.ToJavaScriptObject());
-        BindChosenSelect('lstDepartment', @Model.SelectedDepartments.ToJavaScriptObject());
+        BindChosenSelect('lstContractCategories', @Model.SearchFilterModel.SelectedContractCategories.ToJavaScriptObject());
+        BindChosenSelect('lstSuppliers', @Model.SearchFilterModel.SelectedSuppliers.ToJavaScriptObject());
+        BindChosenSelect('lstResponsible', @Model.SearchFilterModel.SelectedResponsibleUsers.ToJavaScriptObject());
+        BindChosenSelect('lstDepartment', @Model.SearchFilterModel.SelectedDepartments.ToJavaScriptObject());
     });
 
     function BindChosenSelect(controlId, items) {

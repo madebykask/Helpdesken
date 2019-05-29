@@ -36,9 +36,9 @@ namespace DH.Helpdesk.Web.Models.Contract
 
         public bool ShowInList { get; set; }
 
-        public string ContractFieldLable { get; set; }
+        public string ContractFieldLabel { get; set; }
 
-        public string ContractFieldLable_Eng { get; set; }
+        public string ContractFieldLabel_Eng { get; set; }
 
         public bool Required { get; set; }
 
@@ -52,8 +52,8 @@ namespace DH.Helpdesk.Web.Models.Contract
             ret.Show = true;
             ret.ShowInList = true;
             ret.Required = true;
-            ret.ContractFieldLable = "";
-            ret.ContractFieldLable_Eng = "";
+            ret.ContractFieldLabel = "";
+            ret.ContractFieldLabel_Eng = "";
 
             return ret;
         }

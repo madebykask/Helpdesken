@@ -55,8 +55,8 @@
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Number);
-                                                row.ContractFieldLable = Translation.Get("Nummer", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "Number";
+                                                row.ContractFieldLabel = Translation.Get("Nummer", Enums.TranslationSource.TextTranslation);
+                                                row.ContractFieldLabel_Eng = "Number";
                                             }
                                         }
                                         @if (row.Show == true)
@@ -64,11 +64,11 @@
                                             <td>
                                                 @if (SessionFacade.CurrentLanguageId == 2)
                                                 {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                                    @Html.DisplayFor(m => row.ContractFieldLabel_Eng)
                                                 }
                                                 else
                                                 {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                                    @Translation.Get(row.ContractFieldLabel, Enums.TranslationSource.TextTranslation);
                                                 }
                                                 @if (row.Required == true)
                                                 {
@@ -82,8 +82,8 @@
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.CaseNumber);
-                                                row.ContractFieldLable = Translation.Get("Ärendenr", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "Case Number";
+                                                row.ContractFieldLabel = Translation.Get("Ärendenr", Enums.TranslationSource.TextTranslation);
+                                                row.ContractFieldLabel_Eng = "Case Number";
                                                 row.Show = false;
                                                 row.Required = false;
                                                 row.ShowInList = false;
@@ -94,17 +94,17 @@
                                             <td>
                                                 @if (SessionFacade.CurrentLanguageId == 2)
                                                 {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                                    @Html.DisplayFor(m => row.ContractFieldLabel_Eng)
                                                 }
                                                 else
                                                 {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                                    @Translation.Get(row.ContractFieldLabel, Enums.TranslationSource.TextTranslation);
                                                 }
                                                 @if (row.Required == true)
                                                 {
                                                     <span class="mandatorystar">*</span>}
                                             </td>
-                                            <td>@Html.TextBoxFor(m => row.ContractFieldLable, new { @class = EnumContractFieldSettings.CaseNumber, id = "fieldCaption", dataId = @row.Id, englishLable = row.ContractFieldLable_Eng, swedishLable = row.ContractFieldLable })</td>
+                                            <td>@Html.TextBoxFor(m => row.ContractFieldLabel, new { @class = EnumContractFieldSettings.CaseNumber, id = "fieldCaption", dataId = @row.Id, englishLable = row.ContractFieldLabel_Eng, swedishLable = row.ContractFieldLabel })</td>
                                         }
                                     </tr>
                                     <tr>
@@ -112,8 +112,8 @@
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Category);
-                                                row.ContractFieldLable = Translation.Get("Kategori", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "Category";
+                                                row.ContractFieldLabel = Translation.Get("Kategori", Enums.TranslationSource.TextTranslation);
+                                                row.ContractFieldLabel_Eng = "Category";
                                             }
                                         }
                                         @if (row.Show == true)
@@ -121,11 +121,11 @@
                                             <td>
                                                 @if (SessionFacade.CurrentLanguageId == 2)
                                                 {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                                    @Html.DisplayFor(m => row.ContractFieldLabel_Eng)
                                                 }
                                                 else
                                                 {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                                    @Translation.Get(row.ContractFieldLabel, Enums.TranslationSource.TextTranslation);
                                                 }
                                                 @if (row.Required == true)
                                                 {
@@ -139,8 +139,8 @@
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Supplier);
-                                                row.ContractFieldLable = Translation.Get("Leverantör", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "Supplier";
+                                                row.ContractFieldLabel = Translation.Get("Leverantör", Enums.TranslationSource.TextTranslation);
+                                                row.ContractFieldLabel_Eng = "Supplier";
                                             }
                                         }
                                         @if (row.Show == true)
@@ -148,11 +148,11 @@
                                             <td>
                                                 @if (SessionFacade.CurrentLanguageId == 2)
                                                 {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                                    @Html.DisplayFor(m => row.ContractFieldLabel_Eng)
                                                 }
                                                 else
                                                 {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                                    @Translation.Get(row.ContractFieldLabel, Enums.TranslationSource.TextTranslation);
                                                 }
                                                 @if (row.Required == true)
                                                 {
@@ -166,8 +166,8 @@
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Department);
-                                                row.ContractFieldLable = Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "Department";
+                                                row.ContractFieldLabel = Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation);
+                                                row.ContractFieldLabel_Eng = "Department";
                                             }
                                         }
                                         @if (row.Show == true)
@@ -175,11 +175,11 @@
                                             <td>
                                                 @if (SessionFacade.CurrentLanguageId == 2)
                                                 {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                                    @Html.DisplayFor(m => row.ContractFieldLabel_Eng)
                                                 }
                                                 else
                                                 {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                                    @Translation.Get(row.ContractFieldLabel, Enums.TranslationSource.TextTranslation);
                                                 }
                                                 @if (row.Required == true)
                                                 {
@@ -193,8 +193,8 @@
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.ResponsibleUser);
-                                                row.ContractFieldLable = Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "Responsible";
+                                                row.ContractFieldLabel = Translation.Get("Ansvarig", Enums.TranslationSource.TextTranslation);
+                                                row.ContractFieldLabel_Eng = "Responsible";
                                             }
                                         }
                                         @if (row.Show == true)
@@ -202,11 +202,11 @@
                                             <td>
                                                 @if (SessionFacade.CurrentLanguageId == 2)
                                                 {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                                    @Html.DisplayFor(m => row.ContractFieldLabel_Eng)
                                                 }
                                                 else
                                                 {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                                    @Translation.Get(row.ContractFieldLabel, Enums.TranslationSource.TextTranslation);
                                                 }
                                                 @if (row.Required == true)
                                                 {
@@ -222,8 +222,8 @@
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Filename);
-                                                row.ContractFieldLable = Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "Attached File";
+                                                row.ContractFieldLabel = Translation.Get("Bifogad fil", Enums.TranslationSource.TextTranslation);
+                                                row.ContractFieldLabel_Eng = "Attached File";
                                             }
                                         }
                                         @if (row.Show == true)
@@ -231,11 +231,11 @@
                                             <td>
                                                 @if (SessionFacade.CurrentLanguageId == 2)
                                                 {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                                    @Html.DisplayFor(m => row.ContractFieldLabel_Eng)
                                                 }
                                                 else
                                                 {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                                    @Translation.Get(row.ContractFieldLabel, Enums.TranslationSource.TextTranslation);
                                                 }
                                                 @if (row.Required == true)
                                                 {
@@ -253,8 +253,8 @@
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Other);
-                                                row.ContractFieldLable = Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "Other";
+                                                row.ContractFieldLabel = Translation.Get("Övrigt", Enums.TranslationSource.TextTranslation);
+                                                row.ContractFieldLabel_Eng = "Other";
                                                 row.Required = false;
                                                 row.ShowInList = false;
                                             }
@@ -264,11 +264,11 @@
                                             <td>
                                                 @if (SessionFacade.CurrentLanguageId == 2)
                                                 {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                                    @Html.DisplayFor(m => row.ContractFieldLabel_Eng)
                                                 }
                                                 else
                                                 {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                                    @Translation.Get(row.ContractFieldLabel, Enums.TranslationSource.TextTranslation);
                                                 }
                                                 @if (row.Required == true)
                                                 {
@@ -284,8 +284,8 @@
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.StartDate);
-                                                row.ContractFieldLable = Translation.Get("Startdatum", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "Start Date";
+                                                row.ContractFieldLabel = Translation.Get("Startdatum", Enums.TranslationSource.TextTranslation);
+                                                row.ContractFieldLabel_Eng = "Start Date";
                                             }
                                         }
                                         @if (row.Show == true)
@@ -293,11 +293,11 @@
                                             <td>
                                                 @if (SessionFacade.CurrentLanguageId == 2)
                                                 {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                                    @Html.DisplayFor(m => row.ContractFieldLabel_Eng)
                                                 }
                                                 else
                                                 {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                                    @Translation.Get(row.ContractFieldLabel, Enums.TranslationSource.TextTranslation);
                                                 }
                                                 @if (row.Required == true)
                                                 {
@@ -313,8 +313,8 @@
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.EndDate);
-                                                row.ContractFieldLable = Translation.Get("Slutdatum", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "End Date";
+                                                row.ContractFieldLabel = Translation.Get("Slutdatum", Enums.TranslationSource.TextTranslation);
+                                                row.ContractFieldLabel_Eng = "End Date";
                                             }
                                         }
                                         @if (row.Show == true)
@@ -322,11 +322,11 @@
                                             <td>
                                                 @if (SessionFacade.CurrentLanguageId == 2)
                                                 {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                                    @Html.DisplayFor(m => row.ContractFieldLabel_Eng)
                                                 }
                                                 else
                                                 {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                                    @Translation.Get(row.ContractFieldLabel, Enums.TranslationSource.TextTranslation);
                                                 }
                                                 @if (row.Required == true)
                                                 {
@@ -342,8 +342,8 @@
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.NoticeDate);
-                                                row.ContractFieldLable = Translation.Get("Uppsägningsdatum", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "Notice Date";
+                                                row.ContractFieldLabel = Translation.Get("Uppsägningsdatum", Enums.TranslationSource.TextTranslation);
+                                                row.ContractFieldLabel_Eng = "Notice Date";
                                             }
                                         }
                                         @if (row.Show == true)
@@ -351,11 +351,11 @@
                                             <td>
                                                 @if (SessionFacade.CurrentLanguageId == 2)
                                                 {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                                    @Html.DisplayFor(m => row.ContractFieldLabel_Eng)
                                                 }
                                                 else
                                                 {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                                    @Translation.Get(row.ContractFieldLabel, Enums.TranslationSource.TextTranslation);
                                                 }
                                                 @if (row.Required == true)
                                                 {
@@ -373,8 +373,8 @@
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Running);
-                                                row.ContractFieldLable = Translation.Get("Löpande", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "Running";
+                                                row.ContractFieldLabel = Translation.Get("Löpande", Enums.TranslationSource.TextTranslation);
+                                                row.ContractFieldLabel_Eng = "Running";
                                             }
                                         }
                                         @if (row.Show == true)
@@ -382,11 +382,11 @@
                                             <td>
                                                 @if (SessionFacade.CurrentLanguageId == 2)
                                                 {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                                    @Html.DisplayFor(m => row.ContractFieldLabel_Eng)
                                                 }
                                                 else
                                                 {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                                    @Translation.Get(row.ContractFieldLabel, Enums.TranslationSource.TextTranslation);
                                                 }
                                                 @if (row.Required == true)
                                                 {
@@ -402,8 +402,8 @@
                                             if (row == null)
                                             {
                                                 row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.Finished);
-                                                row.ContractFieldLable = Translation.Get("Avslutad", Enums.TranslationSource.TextTranslation);
-                                                row.ContractFieldLable_Eng = "Finished";
+                                                row.ContractFieldLabel = Translation.Get("Avslutad", Enums.TranslationSource.TextTranslation);
+                                                row.ContractFieldLabel_Eng = "Finished";
                                             }
                                         }
                                         @if (row.Show == true)
@@ -411,11 +411,11 @@
                                             <td>
                                                 @if (SessionFacade.CurrentLanguageId == 2)
                                                 {
-                                                    @Html.DisplayFor(m => row.ContractFieldLable_Eng)
+                                                    @Html.DisplayFor(m => row.ContractFieldLabel_Eng)
                                                 }
                                                 else
                                                 {
-                                                    @Translation.Get(row.ContractFieldLable, Enums.TranslationSource.TextTranslation);
+                                                    @Translation.Get(row.ContractFieldLabel, Enums.TranslationSource.TextTranslation);
                                                 }
                                                 @if (row.Required == true)
                                                 {
@@ -434,16 +434,16 @@
                         if (followUpFieldRow == null)
                         {
                             followUpFieldRow = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.FollowUpField);
-                            followUpFieldRow.ContractFieldLable = Translation.Get("Uppföljningsintervall");
-                            followUpFieldRow.ContractFieldLable_Eng = "Follow Up Interval";
+                            followUpFieldRow.ContractFieldLabel = Translation.Get("Uppföljningsintervall");
+                            followUpFieldRow.ContractFieldLabel_Eng = "Follow Up Interval";
                         }
                     }
                     @{var responsibleFollowUpFieldRow = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField);
                         if (responsibleFollowUpFieldRow == null)
                         {
                             responsibleFollowUpFieldRow = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.ResponsibleFollowUpField);
-                            responsibleFollowUpFieldRow.ContractFieldLable = Translation.Get("Ansvarig uppföljning");
-                            responsibleFollowUpFieldRow.ContractFieldLable_Eng = "Responsible Follow Up";
+                            responsibleFollowUpFieldRow.ContractFieldLabel = Translation.Get("Ansvarig uppföljning");
+                            responsibleFollowUpFieldRow.ContractFieldLabel_Eng = "Responsible Follow Up";
                         }
                     }
                     @if (followUpFieldRow.Show || responsibleFollowUpFieldRow.Show)
@@ -466,11 +466,11 @@
                                                 <td>
                                                     @if (SessionFacade.CurrentLanguageId == 2)
                                                     {
-                                                        @Html.DisplayFor(m => followUpFieldRow.ContractFieldLable_Eng)
+                                                        @Html.DisplayFor(m => followUpFieldRow.ContractFieldLabel_Eng)
                                                     }
                                                     else
                                                     {
-                                                        @Translation.Get(followUpFieldRow.ContractFieldLable)
+                                                        @Translation.Get(followUpFieldRow.ContractFieldLabel)
                                                         ;
                                                     }
                                                     @if (followUpFieldRow.Required)
@@ -487,11 +487,11 @@
                                                 <td>
                                                     @if (SessionFacade.CurrentLanguageId == 2)
                                                     {
-                                                        @Html.DisplayFor(m => responsibleFollowUpFieldRow.ContractFieldLable_Eng)
+                                                        @Html.DisplayFor(m => responsibleFollowUpFieldRow.ContractFieldLabel_Eng)
                                                     }
                                                     else
                                                     {
-                                                        @Translation.Get(responsibleFollowUpFieldRow.ContractFieldLable)
+                                                        @Translation.Get(responsibleFollowUpFieldRow.ContractFieldLabel)
                                                         ;
                                                     }
                                                     @if (responsibleFollowUpFieldRow.Required)

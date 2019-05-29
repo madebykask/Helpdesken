@@ -524,8 +524,8 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 Id = conf.Id,
                 ContractField = conf.ContractField.ToLower(),
-                ContractFieldLable = conf.ContractFieldLable,
-                ContractFieldLable_Eng = conf.ContractFieldLable_Eng,
+                ContractFieldLabel = conf.ContractFieldLabel,
+                ContractFieldLabel_Eng = conf.ContractFieldLabel_Eng,
                 Show = conf.Show,
                 ShowInList = conf.ShowInList,
                 Required = conf.Required
@@ -758,8 +758,8 @@ namespace DH.Helpdesk.Web.Controllers
                         {
                             Id = s.Id,
                             ContractField = s.ContractField.ToLower(),
-                            ContractFieldLable = s.ContractFieldLable,
-                            ContractFieldLable_Eng = s.ContractFieldLable_Eng,
+                            ContractFieldLabel = s.ContractFieldLable,
+                            ContractFieldLabel_Eng = s.ContractFieldLable_Eng,
                             Show = s.show,
                             ShowInList = s.showInList,
                             Required = s.reguired
