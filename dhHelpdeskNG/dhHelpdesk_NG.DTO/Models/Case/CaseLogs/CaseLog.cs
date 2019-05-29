@@ -14,7 +14,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseLogs
         public string ExternalText { get; set; }
         public DateTime LogDate { get; set; }
 
-        public IList<string> Emails { get; set; }
+        public IList<EmailLogData> EmailLogs { get; set; }
         public IList<LogFileData> Files { get; set; }
         public IList<Mail2TicketData> Mail2Tickets { get; set; }
     }
@@ -37,6 +37,13 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseLogs
         public string FileName { get; set; }
         public int LogId { get; set; }
         public int? CaseId { get; set; }
+    }
+
+    public class EmailLogData
+    {
+        public int Id { get; set; }
+        public int MailId { get; set; }
+        public string Email { get; set; }
     }
 
     public class Mail2TicketData

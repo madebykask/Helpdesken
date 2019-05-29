@@ -1,5 +1,6 @@
 import { Input } from '@angular/core';
-import { CaseAction, CaseActionDataType, CaseEventType } from '../../../models';
+import { CaseAction, CaseActionDataType } from '../../../models';
+import { CaseEventType } from '../../../constants/case-event-type';
 
 export class CaseActionBaseComponent<TActionData extends CaseActionDataType> {
 
@@ -10,7 +11,7 @@ export class CaseActionBaseComponent<TActionData extends CaseActionDataType> {
 
     const iconClass = 'action-icon mbsc-ic mbsc-ic-';
 
-    switch (this.caseAction.type) {
+    switch (+this.caseAction.type) {
 
       case CaseEventType.ExternalLogNote:
         return iconClass + 'fa-comment-o';

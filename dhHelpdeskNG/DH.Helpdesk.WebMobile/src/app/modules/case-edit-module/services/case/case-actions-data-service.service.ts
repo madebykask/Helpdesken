@@ -1,6 +1,8 @@
 import { CaseLogModel, CaseHistoryModel, CaseHistoryChangeModel } from '../../models/case/case-actions-api.model';
-import { CaseLogActionData, CaseAction, CaseEventType, CaseHistoryActionData } from '../../models';
+import { CaseLogActionData, CaseAction, CaseHistoryActionData } from '../../models';
 import { Injectable } from '@angular/core';
+import { MailTemplates } from '../../constants/mail-templates';
+import { CaseEventType } from '../../constants/case-event-type';
 
 @Injectable({ providedIn: 'root'})
 export class CaseActionsDataService  {
@@ -17,7 +19,9 @@ export class CaseActionsDataService  {
         caseAction.type = log.isExternal ? CaseEventType.ExternalLogNote : CaseEventType.InternalLogNote;
         caseAction.createdAt = log.createdAt;
         caseAction.createdBy = log.createdBy;
-        caseAction.data = new CaseLogActionData(log.text, log.emails, log.files, log.mail2Tickets);
+
+        const logNoteEmails = log.emailLogs.map(t => t.email.toLowerCase());
+        caseAction.data = new CaseLogActionData(log.text, logNoteEmails, log.files, log.mail2Tickets);
 
         // add log action
         actions.push(caseAction);

@@ -1,31 +1,26 @@
-﻿using System.Data.Entity;
-using System.Linq.Dynamic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
+using DH.Helpdesk.BusinessData.Models.Logs.Output;
+using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Extensions.Boolean;
+using DH.Helpdesk.Dal.Enums;
+using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.MapperData;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.MapperData.Logs;
 using DH.Helpdesk.Dal.Mappers;
+using DH.Helpdesk.Dal.NewInfrastructure;
+using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Domain;
+using LinqLib.Operators;
 
 namespace DH.Helpdesk.Services.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.Logs.Output;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.NewInfrastructure;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Domain;
-
-    using LinqLib.Operators;
-
-    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
-
     public interface ILogService
     {
         IDictionary<string, string> Validate(CaseLog logToValidate);
@@ -180,9 +175,16 @@ namespace DH.Helpdesk.Services.Services
                      InternalText = includeInternalLogs ? log.Text_Internal : string.Empty, //empty internal if exist
                      ExternalText = log.Text_External,
 
-                     Emails = 
-                        data.EmailLogs?.Where(t => t != null && t.Id > 0)
-                            .Select(t => t.EmailAddress.ToLower()).OrderBy(s => s).Distinct().ToList() ?? new List<string>(),
+                     EmailLogs = 
+                        data.EmailLogs?.Where(t => t != null && t.Id > 0).Select(t => new EmailLogData()
+                        {
+                            Id = t.Id ?? 0,
+                            MailId = t.MailId ?? 0,
+                            Email = t.EmailAddress.ToLower()
+                        })
+                        .OrderBy(s => s)
+                        .Distinct()
+                        .ToList() ?? new List<EmailLogData>(),
 
                      Files =
                          data.LogFiles?.Where(f => f != null && f.Id > 0).Select(f => new LogFileData()
@@ -222,29 +224,34 @@ namespace DH.Helpdesk.Services.Services
                     SurName = l.User != null ? l.User.SurName : null
                 },
 
-                EmailLogs = l.CaseHistory.Emaillogs.DefaultIfEmpty().Select(t => new EmailLogMapperData
-                {
-                    Id = t.Id,
-                    MailId = t.MailId,
-                    EmailAddress = t.EmailAddress
-                }).ToList(),
+                EmailLogs = 
+                    l.CaseHistory.Emaillogs.DefaultIfEmpty()
+                        .Where(t => t.MailId == (int)GlobalEnums.MailTemplates.InternalLogNote || t.MailId == (int)GlobalEnums.MailTemplates.InformNotifier)
+                        .Select(t => new EmailLogMapperData
+                        {
+                            Id = t.Id,
+                            MailId = t.MailId,
+                            CaseHistoryId = t.CaseHistory_Id,
+                            EmailAddress = t.EmailAddress
+                        }).ToList(),
 
-                LogFiles = l.LogFiles.DefaultIfEmpty().Select(t => new LogFileMapperData
-                {
-                    Id = t.Id,
-                    FileName = t.FileName,
-                    LogId = t.ParentLog_Id,
-                    CaseId = t.IsCaseFile.HasValue && t.IsCaseFile.Value ? t.Log.Case_Id : (int?) null
-                }).ToList(),
+                LogFiles = 
+                    l.LogFiles.DefaultIfEmpty().Select(t => new LogFileMapperData
+                    {
+                        Id = t.Id,
+                        FileName = t.FileName,
+                        LogId = t.ParentLog_Id,
+                        CaseId = t.IsCaseFile.HasValue && t.IsCaseFile.Value ? t.Log.Case_Id : (int?) null
+                    }).ToList(),
                
-                Mail2Tickets = l.Mail2Tickets.DefaultIfEmpty().Select(x => new Mail2TicketMapperData()
-                {
-                    Id = x.Id,
-                    Type = x.Type,
-                    EMailAddress = x.EMailAddress,
-                    EMailSubject = x.EMailSubject
-                }).ToList()
-               
+                Mail2Tickets = 
+                    l.Mail2Tickets.DefaultIfEmpty().Select(x => new Mail2TicketMapperData()
+                    {
+                        Id = x.Id,
+                        Type = x.Type,
+                        EMailAddress = x.EMailAddress,
+                        EMailSubject = x.EMailSubject
+                    }).ToList()
             });
 
             return caseLogs;

@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.BusinessData.Models.User.Interfaces;
 
 namespace DH.Helpdesk.BusinessData.Models.Logs.Output
@@ -60,7 +61,7 @@ namespace DH.Helpdesk.BusinessData.Models.Logs.Output
 
         public Guid LogGuid { get; set; }
 
-        public LogCaseHistoryOverview CaseHistory { get; set; }
+        public IList<EmailLogOverview> EmailLogs { get; set; }
 
         public LogUserOverview User { get; set; }
 
@@ -86,7 +87,7 @@ namespace DH.Helpdesk.BusinessData.Models.Logs.Output
         }
 
         public int Id { get; }
-        public IList<EmailLogsOverview> Emaillogs { get; set; }
+        public IList<EmailLogOverview> Emaillogs { get; set; }
     }
 
     public class LogFileOverview

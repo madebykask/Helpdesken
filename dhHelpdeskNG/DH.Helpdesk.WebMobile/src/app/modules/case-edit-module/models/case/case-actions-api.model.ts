@@ -2,7 +2,7 @@ export class CaseLogModel {
   id: number;
   text: string;
   isExternal: boolean;
-  emails: Array<string>;
+  emailLogs: Array<EmailLog>;
   files: Array<LogFile>;
   mail2Tickets: Array<Mail2Ticket>;
   createdBy: string;
@@ -17,6 +17,12 @@ export class LogFile {
   caseId?: number | null;
 }
 
+export class EmailLog {
+  id: number;
+  mailId: number;
+  email: string;
+}
+
 export class Mail2Ticket {
     id: number;
     email: string;
@@ -26,7 +32,6 @@ export class Mail2Ticket {
 export class CaseHistoryModel {
     //todo:
     emailLogs: any[];
-
     changes: CaseHistoryChangeModel[] = [];
 }
 

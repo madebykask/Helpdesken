@@ -1,22 +1,19 @@
 ﻿@model DH.Helpdesk.Web.Models.Case.LogNoteEmailsViewModel
 
 @{
-    var log = Model.CurrentLog; 
- }
+    var log = Model.CurrentLog;
+}
 
-@if (log.CaseHistory != null)
+@if (log.Mail2Tickets != null && log.Mail2Tickets.Any())
 {
-    if (log.Mail2Tickets.Any())
+    @Html.Partial("_Mail2TicketEmails", Model)
+}
+else if (log.EmailLogs != null && log.EmailLogs.Any())
+{
+    foreach (var l in log.EmailLogs)
     {
-        @Html.Partial("_Mail2TicketEmails", Model)
-    }
-    else if (log.CaseHistory.Emaillogs != null && log.CaseHistory.Emaillogs.Any())
-    {
-        foreach (var l in log.CaseHistory.Emaillogs)
-        {
-            <div>
-                <p>@l.EmailAddress</p>
-            </div>
-        }
+        <div>
+            <p>@l.Email</p>
+        </div>
     }
 }

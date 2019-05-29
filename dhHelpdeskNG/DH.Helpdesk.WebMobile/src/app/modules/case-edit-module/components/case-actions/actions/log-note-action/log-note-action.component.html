@@ -10,17 +10,20 @@
               <span class="{{ getActionIcon() }}"></span>
               <span class="logNoteText">{{ data.text }}</span>
           </div>
-          <div class="emailsRow" *ngIf="!hasM2T">
+          <div class="emailsRow" *ngIf="!hasM2T && data.emails.length > 0">
             <span class="action-icon mbsc-ic mbsc-ic-fa-envelope-o"></span>
             <div class="emails">{{ data.emails.join('; ') }}</div>
           </div>
       </div>
-      <div [hidden]="collapsible.isCollapsed">
-         <a #collapseBtn class="less" href="javascript:;" (click)="collapsible.collapse()">&lt;&lt;</a>
+      <div *ngIf="tr.canTruncate || data.emails.length">
+        <div [hidden]="collapsible.isCollapsed">
+            <a #collapseBtn class="less" href="javascript:;" (click)="collapsible.collapse()">&lt;&lt;</a>
+        </div>
+        <div [hidden]="!collapsible.isCollapsed">
+            <a #expandBtn class="more" href="javascript:;" (click)="collapsible.expand()">&gt;&gt;</a>
+        </div>
       </div>
-      <div [hidden]="!collapsible.isCollapsed">
-         <a #expandBtn class="more" href="javascript:;" (click)="collapsible.expand()">&gt;&gt;</a>
-      </div>
+      
   </div>
   <ul *ngIf="data.files && data.files.length" class="files">
       <li *ngFor="let file of data.files"><span><i class="mbsc-ic mbsc-ic-fa-paperclip"></i>

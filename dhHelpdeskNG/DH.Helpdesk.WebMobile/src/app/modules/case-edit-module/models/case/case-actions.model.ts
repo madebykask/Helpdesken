@@ -1,5 +1,6 @@
 import { LogFile, Mail2Ticket } from './case-actions-api.model';
 import { UuidGenerator } from 'src/app/modules/shared-module/utils/uuid-generator';
+import { CaseEventType } from '../../constants/case-event-type';
 
 // Case Action Data classes
 export type CaseActionDataType = CaseHistoryActionData | CaseLogActionData | GenericActionData;
@@ -72,17 +73,3 @@ export class GenericActionData {
   }
 }
 
-// CaseEventType enum
-export enum CaseEventType {
-  ExternalLogNote = 1,
-  InternalLogNote = 2,
-  ClosedCase = 3,
-  AssignedAdministrator = 4,
-  AssignedWorkingGroup = 5,
-  ChangeSubstatus = 6,
-  ChangeWatchDate = 7,
-  ChangePriority = 8,
-  UploadLogFile = 9,
-  SentEmails = 10,
-  OtherChanges = 11
-}
