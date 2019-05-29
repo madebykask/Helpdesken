@@ -77,10 +77,12 @@ namespace DH.Helpdesk.Services.Services
 
             if (filter.SelectedDepartments.Any())
                 exp = PredicateBuilder<Contract>.AndAlso(exp, c => filter.SelectedDepartments.Contains(c.Department_Id ?? 0));
-            
 
             if (filter.SelectedResponsibles.Any())
                 exp = PredicateBuilder<Contract>.AndAlso(exp, c => filter.SelectedResponsibles.Contains(c.ResponsibleUser_Id ?? 0));
+
+            if (filter.SelectedResponsibleFollowUpUsers.Any())
+                exp = PredicateBuilder<Contract>.AndAlso(exp, c => filter.SelectedResponsibleFollowUpUsers.Contains(c.FollowUpResponsibleUser_Id ?? 0));
 
             if (filter.SelectedSuppliers.Any())
                 exp = PredicateBuilder<Contract>.AndAlso(exp, c => filter.SelectedSuppliers.Contains(c.Supplier_Id ?? 0));

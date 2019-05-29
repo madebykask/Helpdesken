@@ -10,6 +10,7 @@ namespace DH.Helpdesk.Web.Models.Contract
             Categories = new List<int>();
             Suppliers = new List<int>();
             ResponsibleUsers = new List<int>();
+            ResponsibleFollowUpUsers = new List<int>();
             Departments = new List<int>();
         }
 
@@ -20,6 +21,8 @@ namespace DH.Helpdesk.Web.Models.Contract
         public List<int> Suppliers { get; set; }
 
         public List<int> ResponsibleUsers { get; set; }
+        public List<int> ResponsibleFollowUpUsers { get; set; }
+
 
         public List<int> Departments { get; set; }
 

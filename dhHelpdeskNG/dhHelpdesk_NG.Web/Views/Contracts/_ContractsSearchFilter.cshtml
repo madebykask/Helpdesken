@@ -67,6 +67,20 @@
             </tr>
         }
         @{
+            field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField);
+        }
+        @if (field.Show)
+        {
+            <tr>
+                <td>@getFieldName(field, "Ansvarig uppföljning")</td>
+                <td>
+                    @Html.DropDownListFor(m => m.SearchFilterModel.SelectedResponsibleFollowUpUsers,
+                        Model.SearchFilterModel.ResponsibleUsers,
+                        new {id = "lstResponsibleFollowUpUsers", @data_placeholder = @placeholder, multiple = "multiple", @class = "chosen-select"})
+                </td>
+            </tr>
+        }
+        @{
             field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.Department);
         }
         @if (field.Show)
@@ -151,6 +165,7 @@
         BindChosenSelect('lstContractCategories', @Model.SearchFilterModel.SelectedContractCategories.ToJavaScriptObject());
         BindChosenSelect('lstSuppliers', @Model.SearchFilterModel.SelectedSuppliers.ToJavaScriptObject());
         BindChosenSelect('lstResponsible', @Model.SearchFilterModel.SelectedResponsibleUsers.ToJavaScriptObject());
+        BindChosenSelect('lstResponsibleFollowUpUsers', @Model.SearchFilterModel.SelectedResponsibleFollowUpUsers.ToJavaScriptObject());
         BindChosenSelect('lstDepartment', @Model.SearchFilterModel.SelectedDepartments.ToJavaScriptObject());
     });
 

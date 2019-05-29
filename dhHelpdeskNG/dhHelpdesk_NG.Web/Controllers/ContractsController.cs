@@ -124,6 +124,7 @@ namespace DH.Helpdesk.Web.Controllers
                 SelectedContractCategories = data.Categories,
                 SelectedSuppliers = data.Suppliers,
                 SelectedResponsibles = data.ResponsibleUsers,
+                SelectedResponsibleFollowUpUsers = data.ResponsibleFollowUpUsers,
                 SelectedDepartments = data.Departments,
                 State = data.ShowContracts,
 
@@ -413,6 +414,7 @@ namespace DH.Helpdesk.Web.Controllers
                 SelectedContractCategories = filter.SelectedContractCategories,
                 SelectedSuppliers = filter.SelectedSuppliers,
                 SelectedResponsibleUsers = filter.SelectedResponsibles,
+                SelectedResponsibleFollowUpUsers = filter.SelectedResponsibleFollowUpUsers,
                 SelectedDepartments = filter.SelectedDepartments,
                 SelectedState = filter.State,
 
