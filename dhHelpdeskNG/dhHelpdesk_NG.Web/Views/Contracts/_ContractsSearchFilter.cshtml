@@ -26,9 +26,9 @@
 <div class="span8">
     <table class="tableform">
         @{
-            var field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.Category);
+            var field = Model.Setting.SettingRows.FirstOrDefault(sr => sr.ContractField == EnumContractFieldSettings.Category);
         }
-        @if (field.Show)
+        @if (field != null && field.Show)
         {
             <tr>
                 <td>@getFieldName(field, "Kategori")</td>
@@ -39,9 +39,9 @@
             </tr>
         }
         @{
-            field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.Supplier);
+            field = Model.Setting.SettingRows.FirstOrDefault(sr => sr.ContractField == EnumContractFieldSettings.Supplier);
         }
-        @if (field.Show)
+        @if (field != null && field.Show)
         {
             <tr>
                 <td>@getFieldName(field, "Leverantör")</td>
@@ -53,9 +53,9 @@
             </tr>
         }
         @{
-            field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.ResponsibleUser);
+            field = Model.Setting.SettingRows.FirstOrDefault(sr => sr.ContractField == EnumContractFieldSettings.ResponsibleUser);
         }
-        @if (field.Show)
+        @if (field != null && field.Show)
         {
             <tr>
                 <td>@getFieldName(field, "Ansvarig")</td>
@@ -67,9 +67,9 @@
             </tr>
         }
         @{
-            field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField);
+            field = Model.Setting.SettingRows.FirstOrDefault(sr => sr.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField);
         }
-        @if (field.Show)
+        @if (field != null && field.Show)
         {
             <tr>
                 <td>@getFieldName(field, "Ansvarig uppföljning")</td>
@@ -81,9 +81,9 @@
             </tr>
         }
         @{
-            field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.Department);
+            field = Model.Setting.SettingRows.FirstOrDefault(sr => sr.ContractField == EnumContractFieldSettings.Department);
         }
-        @if (field.Show)
+        @if (field != null && field.Show)
         {
             <tr>
                 <td>@getFieldName(field, "Avdelning")</td>
@@ -119,9 +119,9 @@
 <div class="span6">
     <table class="tableform">
         @{
-            field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.StartDate);
+            field = Model.Setting.SettingRows.FirstOrDefault(sr => sr.ContractField == EnumContractFieldSettings.StartDate);
         }
-        @if (field.Show)
+        @if (field != null && field.Show)
         {
         <tr class="date-block">
             <td>@getFieldName(field, ContractFieldLabels.ContractStartDate)</td>
@@ -132,9 +132,9 @@
         </tr>
         }
         @{
-            field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.EndDate);
+            field = Model.Setting.SettingRows.FirstOrDefault(sr => sr.ContractField == EnumContractFieldSettings.EndDate);
         }
-        @if (field.Show)
+        @if (field != null && field.Show)
         {
             <tr class="date-block">
                 <td>@getFieldName(field, ContractFieldLabels.ContractEndDate)</td>
@@ -145,9 +145,9 @@
             </tr>
         }
         @{
-            field = Model.Setting.SettingRows.First(sr => sr.ContractField == EnumContractFieldSettings.NoticeDate);
+            field = Model.Setting.SettingRows.FirstOrDefault(sr => sr.ContractField == EnumContractFieldSettings.NoticeDate);
         }
-        @if (field.Show)
+        @if (field != null && field.Show)
         {
             <tr class="date-block">
                 <td>@getFieldName(field, ContractFieldLabels.Noticedate)</td>
