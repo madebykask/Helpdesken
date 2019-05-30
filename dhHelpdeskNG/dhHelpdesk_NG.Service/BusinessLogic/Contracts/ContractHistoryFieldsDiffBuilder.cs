@@ -41,8 +41,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Contracts
             {EnumContractFieldSettings.ResponsibleUser, ContractFieldLabels.Responsibleuser},
             {EnumContractFieldSettings.Finished, ContractFieldLabels.Finished},
             {EnumContractFieldSettings.Running, ContractFieldLabels.Running},
-            {EnumContractFieldSettings.FollowUpField, ContractFieldLabels.FollowUpInterval},
-            {EnumContractFieldSettings.ResponsibleFollowUpField, ContractFieldLabels.FollowUpResponsibleUser},
+            {EnumContractFieldSettings.FollowUp, ContractFieldLabels.FollowUpInterval},
+            {EnumContractFieldSettings.ResponsibleFollowUp, ContractFieldLabels.FollowUpResponsibleUser},
             {EnumContractFieldSettings.CaseNumber, ContractFieldLabels.CaseNumber},
             {EnumContractFieldSettings.Other, ContractFieldLabels.Info},
             //{EnumContractFieldSettings.Responsible, ContractFieldLabels.Responsible},
@@ -124,14 +124,14 @@ namespace DH.Helpdesk.Services.BusinessLogic.Contracts
                 _formatter.FormatToBoolean(cur.Finished));
 
             CheckAndCreateDiff(list,
-                               FindSettings(EnumContractFieldSettings.FollowUpField), 
+                               FindSettings(EnumContractFieldSettings.FollowUp), 
                                prev?.FollowUpInterval, 
                                cur.FollowUpInterval,
                                _formatter.FormartFollowUpInterval(prev?.FollowUpInterval),
                                _formatter.FormartFollowUpInterval(cur.FollowUpInterval));
 
             CheckAndCreateDiff(list,
-                               FindSettings(EnumContractFieldSettings.ResponsibleFollowUpField),
+                               FindSettings(EnumContractFieldSettings.ResponsibleFollowUp),
                                prev?.FollowUpResponsibleUser?.Id,
                                cur.FollowUpResponsibleUser?.Id,
                                _formatter.FormatUserName(prev?.FollowUpResponsibleUser),

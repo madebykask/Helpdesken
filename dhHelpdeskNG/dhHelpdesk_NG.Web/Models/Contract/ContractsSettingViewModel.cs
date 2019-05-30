@@ -114,11 +114,11 @@ namespace DH.Helpdesk.Web.Models.Contract
                     VirtualOrder = 13;
                     break;
 
-                case EnumContractFieldSettings.FollowUpField:
+                case EnumContractFieldSettings.FollowUp:
                     VirtualOrder = 14;
                     break;
 
-                case EnumContractFieldSettings.ResponsibleFollowUpField:
+                case EnumContractFieldSettings.ResponsibleFollowUp:
                     VirtualOrder = 15;
                     break;
 

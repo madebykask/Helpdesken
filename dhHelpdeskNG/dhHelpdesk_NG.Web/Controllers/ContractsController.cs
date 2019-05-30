@@ -33,7 +33,7 @@ using DH.Helpdesk.Web.Models.Case.Output;
 
 namespace DH.Helpdesk.Web.Controllers
 {
-    public class ContractsController : BaseController
+    public class ContractsController : UserInteractionController 
     {
         private readonly IUserService _userService;
         private readonly IContractCategoryService _contractCategoryService;
@@ -89,6 +89,9 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var customer = _customerService.GetCustomer(SessionFacade.CurrentCustomer.Id);
             var sortModel = new ColSortModel(EnumContractFieldSettings.Number, true);
+
+            //create missing field settings
+            _contractService.CreateMissingFieldSettings(customer.Id);
 
             var filterModel = GetSearchFilter(customer.Id);
             var searchResults = GetSearchResultsModel(filterModel, sortModel);
@@ -363,10 +366,10 @@ namespace DH.Helpdesk.Web.Controllers
                 case EnumContractFieldSettings.Finished:
                     return sort.IsAsc ? data.OrderBy(d => d.Finished).ToList() : data.OrderByDescending(d => d.Finished).ToList();
 
-                case EnumContractFieldSettings.FollowUpField:
+                case EnumContractFieldSettings.FollowUp:
                     return sort.IsAsc ? data.OrderBy(d => d.FollowUpInterval).ToList() : data.OrderByDescending(d => d.FollowUpInterval).ToList();
 
-                case EnumContractFieldSettings.ResponsibleFollowUpField:
+                case EnumContractFieldSettings.ResponsibleFollowUp:
                     //return sort.IsAsc ? data.OrderBy(d => d.FollowUpResponsibleUser).ToList() : data.OrderByDescending(d => d.FollowUpResponsibleUser).ToList();
                     return sort.IsAsc
                         ? data.OrderBy(t => t.FollowUpResponsibleUser?.SurName ?? string.Empty).ToList()

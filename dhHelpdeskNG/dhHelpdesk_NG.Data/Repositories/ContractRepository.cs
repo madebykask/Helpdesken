@@ -148,7 +148,7 @@ namespace DH.Helpdesk.Dal.Repositories
             : base(databaseFactory)
         {
         }
-
+        
         public IList<ContractsSettingRowModel> GetContractsSettingRows(int customerId)
         {
             var query = this.DataContext.ContractFieldSettings.Where(c => c.Customer_Id == customerId);

@@ -210,32 +210,32 @@
         <th colspan="5">@Translation.Get("Uppföljning", Enums.TranslationSource.TextTranslation)</th>
     </tr>               
     <tr>
-        @{row = Model.Where(r => r.ContractField == EnumContractFieldSettings.FollowUpField).FirstOrDefault();
+        @{row = Model.Where(r => r.ContractField == EnumContractFieldSettings.FollowUp).FirstOrDefault();
           if (row == null){
-              row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.FollowUpField);
+              row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.FollowUp);
               row.ContractFieldLabel = Translation.Get("Uppföljningsintervall", Enums.TranslationSource.TextTranslation);
               row.ContractFieldLabel_Eng = "Follow Up Interval";                         
               
           }
               }
         <td>@Translation.Get("Uppföljningsintervall", Enums.TranslationSource.TextTranslation)</td>
-        <td>@Html.CheckBoxFor(m=> row.Show, new { @class= EnumContractFieldSettings.FollowUpField + " switchcheckbox", id="fieldShow" , dataId=@row.Id})</td>
-        <td>@Html.TextBoxFor(m=> row.ContractFieldLabel, new {@class= EnumContractFieldSettings.FollowUpField, id="fieldCaption", dataId=@row.Id, englishLable=row.ContractFieldLabel_Eng, swedishLable=row.ContractFieldLabel})</td>
-        <td>@Html.CheckBoxFor(m=> row.Required, new { @class= EnumContractFieldSettings.FollowUpField + " switchcheckbox", id="fieldMandatory" , dataId=@row.Id})</td>
-        <td>@Html.CheckBoxFor(m=> row.ShowInList, new { @class= EnumContractFieldSettings.FollowUpField + " switchcheckbox", id="fieldShowInList" , dataId=@row.Id})</td>
+        <td>@Html.CheckBoxFor(m=> row.Show, new { @class= EnumContractFieldSettings.FollowUp + " switchcheckbox", id="fieldShow" , dataId=@row.Id})</td>
+        <td>@Html.TextBoxFor(m=> row.ContractFieldLabel, new {@class= EnumContractFieldSettings.FollowUp, id="fieldCaption", dataId=@row.Id, englishLable=row.ContractFieldLabel_Eng, swedishLable=row.ContractFieldLabel})</td>
+        <td>@Html.CheckBoxFor(m=> row.Required, new { @class= EnumContractFieldSettings.FollowUp + " switchcheckbox", id="fieldMandatory" , dataId=@row.Id})</td>
+        <td>@Html.CheckBoxFor(m=> row.ShowInList, new { @class= EnumContractFieldSettings.FollowUp + " switchcheckbox", id="fieldShowInList" , dataId=@row.Id})</td>
     </tr>
     <tr>
-         @{row = Model.Where(r => r.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField).FirstOrDefault();
+         @{row = Model.Where(r => r.ContractField == EnumContractFieldSettings.ResponsibleFollowUp).FirstOrDefault();
           if (row == null){
-              row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.ResponsibleFollowUpField);
+              row = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.ResponsibleFollowUp);
               row.ContractFieldLabel = Translation.Get("Ansvarig uppföljning", Enums.TranslationSource.TextTranslation);
               row.ContractFieldLabel_Eng = "Responsible Follow Up";                          
               
           }
               }
         <td>@Translation.Get("Ansvarig uppföljning", Enums.TranslationSource.TextTranslation)</td>
-        <td>@Html.CheckBoxFor(m=> row.Show, new { @class= EnumContractFieldSettings.ResponsibleFollowUpField + " switchcheckbox", id="fieldShow" , dataId=@row.Id})</td>
-        <td>@Html.TextBoxFor(m=> row.ContractFieldLabel, new {@class= EnumContractFieldSettings.ResponsibleFollowUpField, id="fieldCaption", dataId=@row.Id, englishLable=row.ContractFieldLabel_Eng, swedishLable=row.ContractFieldLabel})</td>
-        <td>@Html.CheckBoxFor(m=> row.Required, new { @class= EnumContractFieldSettings.ResponsibleFollowUpField + " switchcheckbox", id="fieldMandatory" , dataId=@row.Id})</td>
-        <td>@Html.CheckBoxFor(m=> row.ShowInList, new { @class= EnumContractFieldSettings.ResponsibleFollowUpField + " switchcheckbox", id="fieldShowInList" , dataId=@row.Id})</td>
+        <td>@Html.CheckBoxFor(m=> row.Show, new { @class= EnumContractFieldSettings.ResponsibleFollowUp + " switchcheckbox", id="fieldShow" , dataId=@row.Id})</td>
+        <td>@Html.TextBoxFor(m=> row.ContractFieldLabel, new {@class= EnumContractFieldSettings.ResponsibleFollowUp, id="fieldCaption", dataId=@row.Id, englishLable=row.ContractFieldLabel_Eng, swedishLable=row.ContractFieldLabel})</td>
+        <td>@Html.CheckBoxFor(m=> row.Required, new { @class= EnumContractFieldSettings.ResponsibleFollowUp + " switchcheckbox", id="fieldMandatory" , dataId=@row.Id})</td>
+        <td>@Html.CheckBoxFor(m=> row.ShowInList, new { @class= EnumContractFieldSettings.ResponsibleFollowUp + " switchcheckbox", id="fieldShowInList" , dataId=@row.Id})</td>
     </tr>

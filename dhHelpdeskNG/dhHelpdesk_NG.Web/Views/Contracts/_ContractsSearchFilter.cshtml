@@ -67,7 +67,7 @@
             </tr>
         }
         @{
-            field = Model.Setting.SettingRows.FirstOrDefault(sr => sr.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField);
+            field = Model.Setting.SettingRows.FirstOrDefault(sr => sr.ContractField == EnumContractFieldSettings.ResponsibleFollowUp);
         }
         @if (field != null && field.Show)
         {

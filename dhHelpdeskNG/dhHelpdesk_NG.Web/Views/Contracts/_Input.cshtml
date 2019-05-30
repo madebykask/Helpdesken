@@ -434,18 +434,18 @@
                             </div>
                         </div>
                     </div>
-                    @{var followUpFieldRow = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.FollowUpField);
+                    @{var followUpFieldRow = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.FollowUp);
                         if (followUpFieldRow == null)
                         {
-                            followUpFieldRow = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.FollowUpField);
+                            followUpFieldRow = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.FollowUp);
                             followUpFieldRow.ContractFieldLabel = Translation.Get("Uppföljningsintervall");
                             followUpFieldRow.ContractFieldLabel_Eng = "Follow Up Interval";
                         }
                     }
-                    @{var responsibleFollowUpFieldRow = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField);
+                    @{var responsibleFollowUpFieldRow = Model.SettingsModel.FirstOrDefault(r => r.ContractField == EnumContractFieldSettings.ResponsibleFollowUp);
                         if (responsibleFollowUpFieldRow == null)
                         {
-                            responsibleFollowUpFieldRow = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.ResponsibleFollowUpField);
+                            responsibleFollowUpFieldRow = ContractsSettingRowViewModel.CreateEmpty(EnumContractFieldSettings.ResponsibleFollowUp);
                             responsibleFollowUpFieldRow.ContractFieldLabel = Translation.Get("Ansvarig uppföljning");
                             responsibleFollowUpFieldRow.ContractFieldLabel_Eng = "Responsible Follow Up";
                         }
@@ -642,10 +642,10 @@
                 required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.Finished && r.Required)")
             },
             "FollowUpIntervalId": {
-                required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.FollowUpField && r.Required)")
+                required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.FollowUp && r.Required)")
             },
             "FollowUpResponsibleUserId": {
-                required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField && r.Required)")
+                required: FieldIsRequired("@Model.SettingsModel.Any(r => r.ContractField == EnumContractFieldSettings.ResponsibleFollowUp && r.Required)")
             }
 
         },
