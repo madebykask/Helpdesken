@@ -28,7 +28,7 @@
                         var selectedItems = Model.ReportList.SelectedItems.GetSelectedStr();
                         <tr>
                             <td>
-                                @Translation.Get("Rapporter")
+                                @Translation.GetCoreTextTranslation("Rapporter")
                             </td>
                             <td>
                                 <select id="lstReports" name="lstReports" data-field="reports" style="width: 300px;">
@@ -55,7 +55,7 @@
                     {
                         <tr id="groupBy" style="display: none">
                             <td>
-                                @Translation.Get("Gruppera")
+                                @Translation.GetCoreTextTranslation("Gruppera")
                             </td>
                             <td>
                                 @Html.DropDownListFor(m => m.ReportFilter.Selected.GroupById, Model.ReportFilter.GroupByList, null,
@@ -70,15 +70,15 @@
                         </td>
                         <td>
                             <select id="lstfilterReportCategory" name="lstfilterCategory" data-field="reportcategories" style="width: 300px;" 
-                                    data-placeholder="@Translation.Get("Välj en eller flera")" @(Model.ReportFilter.ReportCategory == null ? " display: none" : "")>
+                                    data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" @(Model.ReportFilter.ReportCategory == null ? " display: none" : "")>
                                 @if (Model.ReportFilter.ReportCategory != null)
                                 {
-                                    foreach (var r in Model.ReportFilter.ReportCategory.Items)
+                                    foreach (var r in Model.ReportFilter.ReportCategory)
                                     {
-                                        int curId = 0;
+                                        var curId = 0;
                                         int.TryParse(r.Id, out curId);
                                         <option value="@r.Id" @(r.IsActive ? "" : "class='DisabledChosen'")>
-                                            @GetReportFormTranslation(r.Value)
+                                           @r.Value
                                         </option>
                                     }
                                 }
@@ -87,12 +87,12 @@
                                     data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" @(Model.ReportFilter.ReportCategoryRt == null ? " display: none" : "")>
                                 @if (Model.ReportFilter.ReportCategoryRt != null)
                                 {
-                                    foreach (var r in Model.ReportFilter.ReportCategoryRt.Items)
+                                    foreach (var r in Model.ReportFilter.ReportCategoryRt)
                                     {
-                                        int curId = 0;
+                                        var curId = 0;
                                         int.TryParse(r.Id, out curId);
                                         <option value="@r.Id" @(r.IsActive ? "" : "class='DisabledChosen'")>
-                                            @GetReportFormTranslation(r.Value)
+                                            @r.Value
                                         </option>
                                     }
                                 }
@@ -107,7 +107,7 @@
                     {
                         <tr id="stackBy">
                             <td>
-                                @Translation.Get("Stapla")
+                                @Translation.GetCoreTextTranslation("Stapla")
                             </td>
                             <td>
                                 @Html.DropDownListFor(m => m.ReportFilter.Selected.StackById, Model.ReportFilter.StackByList, "",
@@ -121,7 +121,7 @@
                         var selectedItems = Model.ReportFilter.Selected.SelectedCaseStatus.GetSelectedStr();
                         <tr>
                             <td>
-                                @Translation.Get("Status")
+                                @Translation.GetCoreTextTranslation("Status")
                             </td>
                             <td>
                                 <select id="lstStatus" name="lstStatus" data-field="status" style="width: 300px;">
@@ -163,7 +163,7 @@
                     @{
                         <tr id="reportGeneratorFields" style="display: none">
                             <td>
-                                @Translation.Get("Fält")
+                                @Translation.GetCoreTextTranslation("Fält")
                             </td>
                             <td>
                                 @Html.DropDownListFor(m => m.ReportGeneratorOptions.FieldIds, Model.ReportGeneratorOptions.Fields,
@@ -185,7 +185,7 @@
                         
                         <tr>
                             <td colspan="2">
-                                <b>@Translation.Get("Nuvarande värden")</b>
+                                <b>@Translation.GetCoreTextTranslation("Nuvarande värden")</b>
                             </td>
                         </tr>
 
@@ -228,7 +228,7 @@
                                     @Translation.Get(GlobalEnums.TranslationCaseFields.Department_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
                                 </td>
                                 <td>
-                                    <select id="lstfilterDepartment" name="lstfilterDepartment" data-field="departments" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                    <select id="lstfilterDepartment" name="lstfilterDepartment" data-field="departments" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                         @foreach (var d in Model.ReportFilter.Departments)
                                         {
                                             if (d.IsActive == 1)
@@ -257,7 +257,7 @@
                                     @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
                                 </td>
                                 <td>
-                                    <select id="lstfilterWorkingGroup" name="lstfilterWorkingGroup" data-field="workinggroups" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                    <select id="lstfilterWorkingGroup" name="lstfilterWorkingGroup" data-field="workinggroups" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                         @foreach (var w in Model.ReportFilter.WorkingGroups)
                                         {
                                             <option value="@w.Id" @w.Id.IdIsSelected(selectedItems) class="@(w.IsActive == 0 ? "DisabledChosen" : "")">
@@ -277,7 +277,7 @@
                                     @Translation.Get(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
                                 </td>
                                 <td>
-                                    <select id="lstfilterCaseType" name="lstfilterCaseType" data-field="casetypes" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                    <select id="lstfilterCaseType" name="lstfilterCaseType" data-field="casetypes" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                         @foreach (var c in Model.ReportFilter.CaseTypes)
                                         {
                                             if (c.IsActive == 1)
@@ -306,7 +306,7 @@
                                     @Translation.Get(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
                                 </td>
                                 <td>
-                                    <select id="lstfilterProductArea" name="lstfilterProductArea" data-field="productareas" data-placeholder="@Translation.Get("Välj en eller flera", Enums.TranslationSource.TextTranslation)" multiple="multiple" class="chosen-select">
+                                    <select id="lstfilterProductArea" name="lstfilterProductArea" data-field="productareas" data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" multiple="multiple" class="chosen-select">
                                         @foreach (var p in Model.ReportFilter.ProductAreas)
                                         {
                                             if (p.IsActive == 1)
@@ -334,7 +334,7 @@
                     <table class="tableform">
                         <tr>
                             <td colspan="2">
-                                <b>@Translation.Get("Historiska värden")</b>
+                                <b>@Translation.GetCoreTextTranslation("Historiska värden")</b>
                             </td>
                         </tr>
                         <tr class="date-block">
@@ -396,74 +396,30 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h5>
                         <i class="icon-star"></i>
-                        <span id="saveCaption">@Translation.Get("Spara")</span>
-                        <span id="saveAsCaption">@Translation.Get("Spara som")</span>
+                        <span id="saveCaption">@Translation.GetCoreTextTranslation("Spara")</span>
+                        <span id="saveAsCaption">@Translation.GetCoreTextTranslation("Spara som")</span>
                     </h5>
                 </div>
                 <div class="modal-body">
-                    <p style="margin-top: 20px;" id="saveBody">@Translation.Get("Spara favorit?")</p>
+                    <p style="margin-top: 20px;" id="saveBody">@Translation.GetCoreTextTranslation("Spara favorit?")</p>
                     <div id="saveAsBody">
-                        <p style="margin-top: 20px;">@Translation.Get("Fyll i ett namn på din nya favorit.")</p>
+                        <p style="margin-top: 20px;">@Translation.GetCoreTextTranslation("Fyll i ett namn på din nya favorit.")</p>
                         <p class="input-prepend" style="margin-top: 20px;">
-                            <span class="add-on">@Translation.Get("Namn")</span>
+                            <span class="add-on">@Translation.GetCoreTextTranslation("Namn")</span>
                             <input type="text" id="txtFilterName" value="" required />
                         </p>
                         <p>
-                            <span id="requiredFilterText" hidden class="error">* @Translation.Get("måste anges")</span>
-                            <span id="filterDialogError" hidden class="error">@Translation.Get("Namnet finns redan i dina favoriter. Välj ett annat namn eller uppdatera den befintliga favoriten med samma namn.") </span>
+                            <span id="requiredFilterText" hidden class="error">* @Translation.GetCoreTextTranslation("måste anges")</span>
+                            <span id="filterDialogError" hidden class="error">@Translation.GetCoreTextTranslation("Namnet finns redan i dina favoriter. Välj ett annat namn eller uppdatera den befintliga favoriten med samma namn.") </span>
                         </p>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnSaveFilter" data-selectedfavorite="" class="btn btn-ok">@Translation.Get("Spara")</button>
-                    <button type="button" id="btnCancel" class="btn btn-cancel" data-dismiss="modal">@Translation.Get("Avbryt")</button>
+                    <button type="button" id="btnSaveFilter" data-selectedfavorite="" class="btn btn-ok">@Translation.GetCoreTextTranslation("Spara")</button>
+                    <button type="button" id="btnCancel" class="btn btn-cancel" data-dismiss="modal">@Translation.GetCoreTextTranslation("Avbryt")</button>
                 </div>
             </form>
         </div>
     </div>
 
 }
-
-@functions {
-    private static string GetReportFormTranslation(string value)
-    {
-        if (value.Equals(ReportItemNames.RegistrationDate))
-            return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationDate);
-        if (value.Equals(ReportItemNames.RegistrationYear))
-            return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationYear);
-        if (value.Equals(ReportItemNames.RegistrationMonth))
-            return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationMonth);
-        if (value.Equals(ReportItemNames.RegistrationWeekday))
-            return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationWeekday);
-        if (value.Equals(ReportItemNames.RegistrationHour))
-            return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationHour);
-        if (value.Equals(ReportItemNames.LogNoteDate))
-            return Translation.GetMasterDataTranslation(ReportItemNames.LogNoteDate);
-
-        var defaultValue = string.Empty;
-        if (value.Equals(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()))
-            defaultValue = "Case Type";
-        if (value.Equals(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()))
-            defaultValue = "Working Group";
-        if (value.Equals(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()))
-            defaultValue = "SubStatus";
-        if (value.Equals(GlobalEnums.TranslationCaseFields.Department_Id.ToString()))
-            defaultValue = "Department";
-        if (value.Equals(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()))
-            defaultValue = "Priority";
-        if (value.Equals(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
-            defaultValue = "Product Area";
-        if (value.Equals(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()))
-            defaultValue = "Closing Date";
-        if (value.Equals(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()))
-            defaultValue = "Source";
-        if (value.Equals(GlobalEnums.TranslationCaseFields.CaseNumber.ToString()))
-            defaultValue = "Case Number";
-        if (value.Equals(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()))
-            defaultValue = "Administrator";
-        var translation = Translation.GetForCase(value, SessionFacade.CurrentCustomer.Id);
-        return !string.IsNullOrEmpty(translation) ? translation : defaultValue;
-    }
-}
-
-

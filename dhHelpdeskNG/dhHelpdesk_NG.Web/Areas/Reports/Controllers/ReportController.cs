@@ -55,12 +55,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         private readonly IReportServiceService _reportServiceService;
         private readonly ICaseSectionService _caseSectionService;
         private readonly IFeatureToggleService _featureToggleService;
-        private const string _reportFolderName = "Reports";
+        private const string ReportFolderName = "Reports";
 
         private readonly Dictionary<string, string> _reportTypeNames;
-
-        private readonly CustomSelectList _reportCategories;
-        private readonly CustomSelectList _reportCategoriesRt;
 
         public ReportController(
             IMasterDataService masterDataService,
@@ -76,14 +73,14 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             IFeatureToggleService featureToggleService)
             : base(masterDataService)
         {
-            this._reportModelFactory = reportModelFactory;
-            this._reportService = reportService;
-            this._reportsBuilder = reportsBuilder;
-            this._printBuilder = printBuilder;
-            this._excelBuilder = excelBuilder;
-            this._reportGeneratorModelFactory = reportGeneratorModelFactory;
-            this._customerSettingService = customerSettingService;
-            this._reportServiceService = reportServiceService;
+            _reportModelFactory = reportModelFactory;
+            _reportService = reportService;
+            _reportsBuilder = reportsBuilder;
+            _printBuilder = printBuilder;
+            _excelBuilder = excelBuilder;
+            _reportGeneratorModelFactory = reportGeneratorModelFactory;
+            _customerSettingService = customerSettingService;
+            _reportServiceService = reportServiceService;
             _caseSectionService = caseSectionService;
             _featureToggleService = featureToggleService;
 
@@ -100,41 +97,6 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 {"-9", "ReportedTime"}
             };
 
-            _reportCategories = new CustomSelectList();
-            _reportCategoriesRt = new CustomSelectList();
-
-            var reportCategories = new List<ListItem>()
-            {
-                new ListItem("1", GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), false),
-                new ListItem("8", GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), false),
-                new ListItem("9", GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), false),
-                new ListItem("10", GlobalEnums.TranslationCaseFields.Department_Id.ToString(), false),
-                new ListItem("11", GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), false),
-                new ListItem("13", GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), false),
-                new ListItem("12", GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), false),
-                new ListItem("7", GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString(), false),
-                new ListItem("5", ReportItemNames.RegistrationDate, false),
-                new ListItem("2", ReportItemNames.RegistrationYear, false),
-                new ListItem("4", ReportItemNames.RegistrationMonth, false),
-                new ListItem("3", ReportItemNames.RegistrationWeekday, false),
-                new ListItem("6", ReportItemNames.RegistrationHour, false)
-            };
-
-            var reprotCategoriesRt = new List<ListItem>
-            {
-                new ListItem("1", GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), false),
-                new ListItem("2", GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), false),
-                new ListItem("3", GlobalEnums.TranslationCaseFields.Department_Id.ToString(), false),
-                new ListItem("4", GlobalEnums.TranslationCaseFields.Priority_Id.ToString(), false),
-                new ListItem("5", GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString(), false),
-                new ListItem("6", ReportItemNames.LogNoteDate, false),
-                new ListItem("7", GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), false),
-                new ListItem("8", GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), false)
-            };
-
-            _reportCategories.Items.AddItems(reportCategories.OrderBy(o => o.Value).ToList());
-            _reportCategoriesRt.Items.AddItems(reprotCategoriesRt.OrderBy(o => o.Value).ToList());
-
         }
 
         [HttpGet]
@@ -147,7 +109,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             var lastState = SessionFacade.ReportService;
             model.ReportServiceOverview = GetReportServiceModel(customerId, userId, lastState);
 
-            return this.View(model);
+            return View(model);
         }
 
         [HttpGet]
@@ -170,10 +132,10 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             // Save state in session
             if (model != null)
                 SessionFacade.ReportService = new ReportServiceSessionModel()
-                                                {
-                                                    ReportName = reportName,
-                                                    SelectedFilter = selectedReport
-                                                };
+                {
+                    ReportName = reportName,
+                    SelectedFilter = selectedReport
+                };
 
             return PartialView("ReportViewer/_PresentReport", model);
         }
@@ -369,8 +331,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                     this.OperationContext.UserId,
                     this.OperationContext.LanguageId,
                     filters.FieldIds,
-                    filters.DepartmentIds.Where( d=> d > 0).ToList(),
-                    filters.DepartmentIds.Where(d => d < 0).Select(d=> d * -1).ToList(),
+                    filters.DepartmentIds.Where(d => d > 0).ToList(),
+                    filters.DepartmentIds.Where(d => d < 0).Select(d => d * -1).ToList(),
                     filters.WorkingGroupIds,
                     filters.ProductAreaIds,
                     filters.AdministratorIds,
@@ -393,7 +355,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                                     this.OperationContext.LanguageId,
                                     filters.FieldIds,
                                     filters.DepartmentIds.Where(d => d > 0).ToList(),
-                                    filters.DepartmentIds.Where(d => d < 0).Select(d=> d * -1).ToList(),                                    
+                                    filters.DepartmentIds.Where(d => d < 0).Select(d => d * -1).ToList(),
                                     filters.WorkingGroupIds,
                                     filters.ProductAreaIds,
                                     filters.AdministratorIds,
@@ -601,7 +563,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             foreach (var f in reportOptions.Fields)
             {
                 var sectionInfo = _caseSectionService.GetSectionInfoByField(f.Name);
-                var caseSectionName = sectionInfo != null ?  Translation.GetCoreTextTranslation(sectionInfo.DefaultName) : "";
+                var caseSectionName = sectionInfo != null ? Translation.GetCoreTextTranslation(sectionInfo.DefaultName) : "";
                 var fieldName = string.IsNullOrWhiteSpace(caseSectionName) ? Translation.GetCoreTextTranslation(f.Name) : Translation.GetForCase(f.Name, SessionFacade.CurrentCustomer.Id);
                 translatedFields.Add(new ItemOverview
                 (
@@ -720,8 +682,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 ProductAreas = reportFilter.ProductAreas,
                 Status = GetCaseStateFilter(),
                 FirstUserNameOrientation = firstUserNameOrientation,
-                ReportCategory = _reportCategories,
-                ReportCategoryRt = _reportCategoriesRt,
+                ReportCategory = GetReportGroups(),
+                ReportCategoryRt = GetReportGroupsRt(),
                 StackByList = stackByList,
                 GroupByList = groupByList
             };
@@ -792,7 +754,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
             return ret;
         }
-    
+
         private List<SavedReportFavoriteItemModel> GetSavedReportFilters(int custometId, int userId)
         {
             var favorites = this._reportService.GetCustomerReportFavoriteList(custometId, userId);
@@ -821,7 +783,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             {
                 ReportViewer reportViewer = new ReportViewer();
                 var basePath = Request.MapPath(Request.ApplicationPath);
-                var fileLocation = Path.Combine(_reportFolderName, string.Format("{0}.rdl", reportData.ReportName));
+                var fileLocation = Path.Combine(ReportFolderName, string.Format("{0}.rdl", reportData.ReportName));
                 var reportFile = Path.Combine(basePath, fileLocation);
                 reportViewer.ProcessingMode = ProcessingMode.Local;
                 reportViewer.SizeToReportContent = true;
@@ -836,7 +798,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                         : reportSelectedFilter.SelectedReportCategory.GetFirstOrDefaultSelected();
                     var itemId = selectedReportCategory != null ? selectedReportCategory.Value.ToString() : "1";
                     var categoryParam = new ReportParameter("Category", itemId, false);
-                    var paramList = new List<ReportParameter> {categoryParam};
+                    var paramList = new List<ReportParameter> { categoryParam };
                     reportViewer.LocalReport.SetParameters(paramList);
                 }
 
@@ -849,6 +811,84 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             return model;
         }
 
+        private List<ListItem> GetReportGroups()
+        {
+            //_reportCategoriesRt = new CustomSelectList();
+
+            return new[]
+            {
+                new ListItem("1", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()), false),
+                new ListItem("8", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()), false),
+                new ListItem("9", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()), false),
+                new ListItem("10", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.Department_Id.ToString()), false),
+                new ListItem("11", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()), false),
+                new ListItem("13", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()), false),
+                new ListItem("12", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()), false),
+                new ListItem("7", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()), false),
+                new ListItem("5", GetReportFormTranslation(ReportItemNames.RegistrationDate), false),
+                new ListItem("2", GetReportFormTranslation(ReportItemNames.RegistrationYear), false),
+                new ListItem("4", GetReportFormTranslation(ReportItemNames.RegistrationMonth), false),
+                new ListItem("3", GetReportFormTranslation(ReportItemNames.RegistrationWeekday), false),
+                new ListItem("6", GetReportFormTranslation(ReportItemNames.RegistrationHour), false)
+            }.OrderBy(l => l.Value)
+                .ToList();
+        }
+
+        private List<ListItem> GetReportGroupsRt()
+        {
+            return new[]
+            {
+                new ListItem("1", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()), false),
+                new ListItem("2", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.CaseNumber.ToString()), false),
+                new ListItem("3", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.Department_Id.ToString()), false),
+                new ListItem("4", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()), false),
+                new ListItem("5", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()), false),
+                new ListItem("6", GetReportFormTranslation(ReportItemNames.LogNoteDate), false),
+                new ListItem("7", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()), false),
+                new ListItem("8", GetReportFormTranslation(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()), false)
+            }.OrderBy(l => l.Value)
+                .ToList();
+        }
+
+        private static string GetReportFormTranslation(string value)
+        {
+            if (value.Equals(ReportItemNames.RegistrationDate))
+                return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationDate);
+            if (value.Equals(ReportItemNames.RegistrationYear))
+                return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationYear);
+            if (value.Equals(ReportItemNames.RegistrationMonth))
+                return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationMonth);
+            if (value.Equals(ReportItemNames.RegistrationWeekday))
+                return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationWeekday);
+            if (value.Equals(ReportItemNames.RegistrationHour))
+                return Translation.GetMasterDataTranslation(ReportItemNames.RegistrationHour);
+            if (value.Equals(ReportItemNames.LogNoteDate))
+                return Translation.GetMasterDataTranslation(ReportItemNames.LogNoteDate);
+
+            var defaultValue = string.Empty;
+            if (value.Equals(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString()))
+                defaultValue = "Case Type";
+            if (value.Equals(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString()))
+                defaultValue = "Working Group";
+            if (value.Equals(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()))
+                defaultValue = "SubStatus";
+            if (value.Equals(GlobalEnums.TranslationCaseFields.Department_Id.ToString()))
+                defaultValue = "Department";
+            if (value.Equals(GlobalEnums.TranslationCaseFields.Priority_Id.ToString()))
+                defaultValue = "Priority";
+            if (value.Equals(GlobalEnums.TranslationCaseFields.ProductArea_Id.ToString()))
+                defaultValue = "Product Area";
+            if (value.Equals(GlobalEnums.TranslationCaseFields.FinishingDate.ToString()))
+                defaultValue = "Closing Date";
+            if (value.Equals(GlobalEnums.TranslationCaseFields.RegistrationSourceCustomer.ToString()))
+                defaultValue = "Source";
+            if (value.Equals(GlobalEnums.TranslationCaseFields.CaseNumber.ToString()))
+                defaultValue = "Case Number";
+            if (value.Equals(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString()))
+                defaultValue = "Administrator";
+            var translation = Translation.GetForCase(value, SessionFacade.CurrentCustomer.Id);
+            return !string.IsNullOrEmpty(translation) ? translation : defaultValue;
+        }
 
     }
 }

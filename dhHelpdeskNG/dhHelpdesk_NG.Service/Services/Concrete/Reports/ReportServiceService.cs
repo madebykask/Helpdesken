@@ -58,28 +58,27 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             reportFilter.CaseCreationDate = new DateToDate(DateTime.Now.AddMonths(-1), DateTime.Now);
 
             var userSearch = new UserSearch() { CustomerId = customerId, StatusId = 3 };
-            var administrators = this._userService.SearchSortAndGenerateUsers(userSearch).ToList();            
+            var administrators = _userService.SearchSortAndGenerateUsers(userSearch).ToList();            
             reportFilter.Administrators = administrators;
 
             var departments = _departmentService.GetDepartmentsByUserPermissions(userId, customerId, false);
             if (!departments.Any())
-                departments = this._departmentService.GetDepartments(customerId, ActivationStatus.All);
+                departments = _departmentService.GetDepartments(customerId, ActivationStatus.All);
             if (addOUsToDepartments)
                 departments = AddOrganizationUnitsToDepartments(departments);
 
             var workingGroups = new List<WorkingGroupEntity>();
             var user = _userService.GetUser(userId);
             /*If user has no wg and is a SystemAdmin or customer admin, he/she can see all available wgs */
-            if (user.UserGroup_Id > UserGroups.Administrator)
-                workingGroups = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).ToList();
-            else
-                workingGroups = _workingGroupService.GetWorkingGroups(customerId, userId, false, true).ToList();
+            workingGroups = user.UserGroup_Id > UserGroups.Administrator ? 
+                _workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).ToList() :
+                _workingGroupService.GetWorkingGroups(customerId, userId, false, true).ToList();
             
-            var caseTypes = this._caseTypeService.GetAllCaseTypes(customerId, false, true).ToList();
-            var caseTypesInRow = this._caseTypeService.GetChildrenInRow(caseTypes).ToList();
+            var caseTypes = _caseTypeService.GetAllCaseTypes(customerId, false, true).ToList();
+            var caseTypesInRow = _caseTypeService.GetChildrenInRow(caseTypes).ToList();
 
-            var productAreas = this._productAreaService.GetTopProductAreasWithChilds(customerId);
-            var productAreasInRow = this._productAreaService.GetChildrenInRow(productAreas).ToList();
+            var productAreas = _productAreaService.GetTopProductAreasWithChilds(customerId);
+            var productAreasInRow = _productAreaService.GetChildrenInRow(productAreas).ToList();
     
             reportFilter.Departments = departments.ToList();
             reportFilter.WorkingGroups = workingGroups.ToList();
