@@ -18,7 +18,6 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
     {
         #region Fields
         
-        private readonly ICustomerService _customerService;        
         private readonly IDepartmentService _departmentService;
         private readonly IOUService _ouService;
         private readonly IWorkingGroupService _workingGroupService;
@@ -32,7 +31,6 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
         #region Constructors and Destructors
 
         public ReportServiceService(
-            ICustomerService customerService,            
             IDepartmentService departmentService,
             IOUService ouService,
             IWorkingGroupService workingGroupService,
@@ -41,7 +39,6 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             IProductAreaService productAreaService,
             IReportServiceRepository reportServiceRepository)
         {
-            this._customerService = customerService;            
             this._departmentService = departmentService;
             this._ouService = ouService;
             this._workingGroupService = workingGroupService;
@@ -114,6 +111,20 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 
         public IList<NumberOfCaseDataResult> GetNumberOfCasesData(NumberOfCasesDataFilter filter)
         {
+            if (filter.CaseTypes != null && filter.CaseTypes.Any())
+            {
+                var caseTypeChainIds = new List<int>(filter.CaseTypes);
+                foreach (var caseTypeId in filter.CaseTypes)
+                    caseTypeChainIds.AddRange(_caseTypeService.GetChildrenIds(caseTypeId));
+                filter.CaseTypes = caseTypeChainIds;
+            }
+            if (filter.ProductAreas != null && filter.ProductAreas.Any())
+            {
+                var productAreasChainIds = new List<int>(filter.ProductAreas);
+                foreach (var productAreaId in filter.ProductAreas)
+                    productAreasChainIds.AddRange(_productAreaService.GetChildrenIds(productAreaId));
+                filter.ProductAreas = productAreasChainIds;
+            }
             var result = _reportServiceRepository.GetNumberOfCasesData(filter);
             return result;
         }

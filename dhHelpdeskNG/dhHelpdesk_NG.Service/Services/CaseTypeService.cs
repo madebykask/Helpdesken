@@ -38,16 +38,15 @@ namespace DH.Helpdesk.Services.Services
         IList<CaseTypeOverview> GetCaseTypesOverviewWithChildren(int customerId, bool activeOnly = false);
 
         IList<CaseType> GetChildrenInRow(IList<CaseType> caseTypes, bool isTakeOnlyActive = false);
+        IList<int> GetChildrenIds(int caseTypeId);
 
         string GetCaseTypeFullName(int caseTypeId);
     }
 
     public class CaseTypeService : ICaseTypeService
     {
-        private readonly ICaseTypeRepository caseTypeRepository;
-
-        private readonly IUnitOfWork unitOfWork;
-
+        private readonly ICaseTypeRepository _caseTypeRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ICaseRepository _caseRepository;
         
         public CaseTypeService(
@@ -55,14 +54,14 @@ namespace DH.Helpdesk.Services.Services
             ICaseRepository caseRepository,
             IUnitOfWork unitOfWork)            
         {
-            this.caseTypeRepository = caseTypeRepository;
-            this.unitOfWork = unitOfWork;
+            this._caseTypeRepository = caseTypeRepository;
+            this._unitOfWork = unitOfWork;
             this._caseRepository = caseRepository;
         }
 
         public IList<CaseType> GetCaseTypes(int customerId, bool isTakeOnlyActive = false)
         {
-            var query = caseTypeRepository.GetManyWithSubCaseTypes(o => o.Customer_Id == customerId)
+            var query = _caseTypeRepository.GetManyWithSubCaseTypes(o => o.Customer_Id == customerId)
                 .Where(o => o.Parent_CaseType_Id == null);
             if (isTakeOnlyActive)
             {
@@ -74,7 +73,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseType> GetCaseTypesForSetting(int customerId, bool isTakeOnlyActive = false)
         {
-            var query = this.caseTypeRepository.GetMany(
+            var query = this._caseTypeRepository.GetMany(
                 x => x.Customer_Id == customerId);
             if (isTakeOnlyActive)
             {
@@ -86,7 +85,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseTypeOverview> GetCaseTypesRelatedFields(int customerId, bool isExtnernalSiteOnly = false, bool isTakeOnlyActive = false)
         {
-            var query = caseTypeRepository.GetMany(x => x.Customer_Id == customerId);
+            var query = _caseTypeRepository.GetMany(x => x.Customer_Id == customerId);
 
             if (isTakeOnlyActive)
             {
@@ -108,8 +107,8 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseType> GetAllCaseTypes(int customerId, bool isTakeOnlyActive = false, bool includeSubType = false)
         {
-            var query = includeSubType ? caseTypeRepository.GetManyWithSubCaseTypes(x => x.Customer_Id == customerId) :
-                                         caseTypeRepository.GetMany(x => x.Customer_Id == customerId).AsQueryable();
+            var query = includeSubType ? _caseTypeRepository.GetManyWithSubCaseTypes(x => x.Customer_Id == customerId) :
+                                         _caseTypeRepository.GetMany(x => x.Customer_Id == customerId).AsQueryable();
             if (isTakeOnlyActive)
             {
                 query = query.Where(it => it.IsActive == 1 && it.Selectable == 1);
@@ -120,12 +119,12 @@ namespace DH.Helpdesk.Services.Services
 
         public CaseType GetCaseType(int id)
         {
-            return this.caseTypeRepository.GetCaseTypeFull(id);
+            return this._caseTypeRepository.GetCaseTypeFull(id);
         }
 
         public int GetDefaultId(int customerId)
         {
-            var r = this.caseTypeRepository.GetMany(x => x.Customer_Id == customerId && x.IsDefault == 1).FirstOrDefault();
+            var r = this._caseTypeRepository.GetMany(x => x.Customer_Id == customerId && x.IsDefault == 1).FirstOrDefault();
             if (r == null)
             {
                 return 0;
@@ -136,13 +135,13 @@ namespace DH.Helpdesk.Services.Services
 
         public DeleteMessage DeleteCaseType(int id)
         {
-            var caseType = this.caseTypeRepository.GetById(id);
+            var caseType = this._caseTypeRepository.GetById(id);
             
             if (caseType != null && !this._caseRepository.GetCasesIdsByType(id).Any())
             {
                 try
                 {
-                    this.caseTypeRepository.Delete(caseType);
+                    this._caseTypeRepository.Delete(caseType);
                    
                     this.Commit();
 
@@ -176,21 +175,21 @@ namespace DH.Helpdesk.Services.Services
             if (caseType.Id == 0)
             {
                 caseType.CaseTypeGUID = Guid.NewGuid();
-                this.caseTypeRepository.Add(caseType);
+                this._caseTypeRepository.Add(caseType);
             }
             else
             {
-                this.caseTypeRepository.Update(caseType);
+                this._caseTypeRepository.Update(caseType);
             }
 
             if (caseType.IsDefault == 1)
             {
-                this.caseTypeRepository.ResetDefault(caseType.Id, caseType.Customer_Id);
+                this._caseTypeRepository.ResetDefault(caseType.Id, caseType.Customer_Id);
             }
 
             if (caseType.IsEMailDefault == 1)
             {
-                this.caseTypeRepository.ResetEmailDefault(caseType.Id, caseType.Customer_Id);
+                this._caseTypeRepository.ResetEmailDefault(caseType.Id, caseType.Customer_Id);
             }
 
             if (errors.Count == 0)
@@ -201,23 +200,23 @@ namespace DH.Helpdesk.Services.Services
 
         public void Commit()
         {
-            this.unitOfWork.Commit();
+            this._unitOfWork.Commit();
         }
 
         public IList<ItemOverview> GetOverviews(int customerId)
         {
-            return this.caseTypeRepository.GetOverviews(customerId);
+            return this._caseTypeRepository.GetOverviews(customerId);
         }
 
         public IList<ItemOverview> GetOverviews(int customerId, IEnumerable<int> caseTypesIds)
         {
-            return this.caseTypeRepository.GetOverviews(customerId, caseTypesIds);
+            return this._caseTypeRepository.GetOverviews(customerId, caseTypesIds);
         }
 
         public IList<CaseTypeOverview> GetCaseTypesOverviewWithChildren(int customerId, bool activeOnly = false)
         {
             var allItems =
-                this.caseTypeRepository.GetMany(
+                this._caseTypeRepository.GetMany(
                         x => x.Customer_Id == customerId && (!activeOnly || (x.IsActive == 1 && x.Selectable == 1)))
                     .AsQueryable()
                     .Select(x => new CaseTypeOverview
@@ -271,9 +270,14 @@ namespace DH.Helpdesk.Services.Services
             return parentCaseTypes.Union(childCaseTypes).OrderBy(c => c.Name).ToList();
         }
 
+        public IList<int> GetChildrenIds(int caseTypeId)
+        {
+            return _caseTypeRepository.GetChildren(caseTypeId);
+        }
+
         public string GetCaseTypeFullName(int caseTypeId)
         {
-            var allCaseTypes = this.caseTypeRepository.GetAll().ToList();            
+            var allCaseTypes = this._caseTypeRepository.GetAll().ToList();            
             return GetCaseTypeFullNameById(caseTypeId, allCaseTypes);
         }
 

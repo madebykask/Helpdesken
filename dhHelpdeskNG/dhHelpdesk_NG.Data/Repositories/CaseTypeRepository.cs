@@ -152,9 +152,9 @@ namespace DH.Helpdesk.Dal.Repositories
             return Table.Where(g => g.Customer_Id == customerId && (!activeOnly || g.IsActive == 1));
         }
 
-        private void GetChildrenProcess(int caseTypeId, List<int> children)
+        private void GetChildrenProcess(int caseTypeId, ICollection<int> children)
         {
-            var caseType = this.GetById(caseTypeId);
+            var caseType = Table.Include(ct => ct.SubCaseTypes).SingleOrDefault(ct => ct.Id == caseTypeId);
             if (caseType != null && caseType.SubCaseTypes != null)
             {
                 foreach (var child in caseType.SubCaseTypes)
