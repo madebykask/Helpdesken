@@ -29,13 +29,13 @@
             <div class="modal-body" style="max-height: 600px; text-align:center;">
                 <form onsubmit="return false;">
                     <div class="form-group">
-						<label>@Translation.Get("1. Skriv ett filnamn (kan lämnas blankt)")</label>
+                        <label>@Translation.Get("1. Skriv ett filnamn (kan lämnas blankt)")</label>
                         <input class="" type="text" id="imgFilename" autocomplete="Off" />
                         <span id="imageNameRequired" style="color:red"> @Translation.Get("must be specified", Enums.TranslationSource.TextTranslation) </span>
                     </div>
                     <div class="form-group">
-						<label>@(Translation.Get("2. Tryck Ctrl+V för att klippa in bilden"))</label>
-						<label>@(Translation.Get("3. Spara för att lägga till på ärendet")) </label>
+                        <label>@(Translation.Get("2. Tryck Ctrl+V för att klippa in bilden"))</label>
+                        <label>@(Translation.Get("3. Spara för att lägga till på ärendet")) </label>
                         <div id="previewPnl"></div>
                     </div>
                 </form>
@@ -47,6 +47,8 @@
         </div>
     </div>
 </div>
+
+<input style="display: inline; width:1px;" class="hidden" type="text" name="attachedFilesValidCheck" />
 
 <table id="ContractFile_table" class="table table-striped" style="margin-top: 10px">
     @if (Model != null && Model.Any())
