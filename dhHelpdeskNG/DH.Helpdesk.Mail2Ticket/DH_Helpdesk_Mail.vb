@@ -289,7 +289,7 @@ Module DH_Helpdesk_Mail
 
                 If Not IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not IsNullOrEmpty(objCustomer.POP3UserName) Then
 
-                    LogToFile("M2T for " & objCustomer.Name & ", Nr: " & iCustomerCount & "(" & customers.Count & "), ver " & objGlobalSettings.DBVersion, iPop3DebugLevel)
+                    LogToFile("M2T for " & objCustomer.Name & ", Nr: " & iCustomerCount & "(" & customers.Count & "), appVersion: " & CurrentAssemblyInfo.Version, iPop3DebugLevel)
 
                     Try
                         IMAPclient = New Imap()

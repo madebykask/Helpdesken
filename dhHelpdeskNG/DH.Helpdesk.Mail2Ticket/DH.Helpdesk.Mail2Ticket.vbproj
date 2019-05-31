@@ -129,6 +129,7 @@
     <Compile Include="..\CommonAssembly\SharedAssemblyInfo.vb">
       <Link>SharedAssemblyInfo.vb</Link>
     </Compile>
+    <Compile Include="CurrentAssemblyInfo.vb" />
     <Compile Include="DH_Helpdesk_Mail.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
