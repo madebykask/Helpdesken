@@ -173,7 +173,7 @@ Module DH_Helpdesk_Schedule
         openLogFile()
         Try
             EncryptSection(Of ConnectionStringsSection)(exeConfigName, "connectionStrings")
-            LogToFile(String.Format("app.config '{0}' section is protected"), giLoglevel)
+            LogToFile("app.config section is protected", giLoglevel)
         Catch ex As Exception
             LogError(ex.ToString())
         Finally
@@ -350,6 +350,8 @@ Module DH_Helpdesk_Schedule
             If objCaseSolution.Log.Count > 0 Then
                 If objCaseSolution.Log(0).Text_Internal <> "" Or objCaseSolution.Log(0).Text_External <> "" Then
                     objLogData.createLog(objCase.Id, objCase.Persons_EMail, objCaseSolution.Log(0).Text_Internal, objCaseSolution.Log(0).Text_External, 0, "DH Helpdesk", iCaseHistory_Id, 0)
+                    objLog.Text_External = objCaseSolution.Log(0).Text_External
+                    objLog.Text_Internal = objCaseSolution.Log(0).Text_Internal
                 End If
             End If
 

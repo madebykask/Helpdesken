@@ -33,7 +33,7 @@ Public Class Mail
             Dim setting As Setting
             Using factory As DatabaseFactory = New DatabaseFactory(connectionString)
 
-                Dim settingsRepository As New SettingRepository(New DatabaseFactory(connectionString))
+                Dim settingsRepository As New SettingRepository(factory)
                 setting = settingsRepository.Get(Function(x) x.Customer_Id = objCustomer.Id)
 
             End Using
@@ -74,15 +74,15 @@ Public Class Mail
             sSubject = Replace(sSubject, getMailTemplateIdentifier("Persons_Phone"), objCase.Persons_Phone)
             sBody = Replace(sBody, getMailTemplateIdentifier("Persons_Phone"), objCase.Persons_Phone)
 
-            If Not objLog Is Nothing Then
-                '[#10]
-                sSubject = Replace(sSubject, getMailTemplateIdentifier("Text_External"), objLog.Text_External)
-                sBody = Replace(sBody, getMailTemplateIdentifier("Text_External"), objLog.Text_External)
+            Dim textExternal = If(Not objLog Is Nothing, objLog.Text_External, "")
+            Dim textInternal = If(Not objLog Is Nothing, objLog.Text_Internal, "")
+            '[#10]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("Text_External"), textExternal)
+            sBody = Replace(sBody, getMailTemplateIdentifier("Text_External"), textInternal)
 
-                '[#11]
-                sSubject = Replace(sSubject, getMailTemplateIdentifier("Text_Internal"), objLog.Text_Internal)
-                sBody = Replace(sBody, getMailTemplateIdentifier("Text_Internal"), objLog.Text_Internal)
-            End If
+            '[#11]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("Text_Internal"), textExternal)
+            sBody = Replace(sBody, getMailTemplateIdentifier("Text_Internal"), textInternal)
 
             '[#12]
             sSubject = Replace(sSubject, getMailTemplateIdentifier("PriorityName"), objCase.PriorityName)
