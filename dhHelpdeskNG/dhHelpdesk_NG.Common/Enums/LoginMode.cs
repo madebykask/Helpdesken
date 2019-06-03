@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-
+﻿
 namespace DH.Helpdesk.Common.Enums
 {
     //NOTE: if you need string values that differ from enum values pls use DescriptionAttribute and some handy extension method to get value from attribute (google examples)
@@ -13,7 +12,9 @@ namespace DH.Helpdesk.Common.Enums
         Application,
 
         Windows,
-        
+         
+        Mixed, // Windows + Forms
+
         //[Description("singlesignon")]
         SSO,
 

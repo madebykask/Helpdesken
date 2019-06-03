@@ -6,7 +6,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
 {
     public class ApplicationAuthenticationBehavior : IAuthenticationBehavior
     {
-        #region ctor()
+        #region GetLoginUrl
 
         public string GetLoginUrl()
         {
@@ -19,29 +19,20 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
 
         public UserIdentity CreateUserIdentity(HttpContextBase ctx)
         {
+            var userIdentity = CreateUserIdentityInner(ctx);
+            return userIdentity;
+        }
+
+        protected virtual UserIdentity CreateUserIdentityInner(HttpContextBase ctx)
+        {
             UserIdentity userIdentity = null;
             var identity = ctx.User.Identity as FormsIdentity;
 
             if (identity != null)
             {
-                userIdentity = CreateUserIdentity((FormsIdentity)identity);
+                userIdentity = identity.CreateHelpdeskUserIdentity();
             }
-
             return userIdentity;
-        }
-        
-        private UserIdentity CreateUserIdentity(FormsIdentity formsIdentity)
-        {
-            return new UserIdentity
-            {
-                UserId = formsIdentity.Name,
-                //Domain = userDomain,
-                //FirstName = initiator?.FirstName,
-                //LastName = initiator?.LastName,
-                //EmployeeNumber = string.Empty,
-                //Phone = initiator?.Phone,
-                //Email = initiator?.Email
-            };
         }
 
         #endregion

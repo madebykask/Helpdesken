@@ -100,15 +100,6 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly IEntityToBusinessModelMapper<Setting, CustomerSettings> _toBusinessModelMapper;
 
-        public SettingService(ISettingRepository settingRepository, 
-                              IUnitOfWork unitOfWork,
-                              IEntityToBusinessModelMapper<Setting, CustomerSettings> businessModelMapper)
-        {
-            _settingRepository = settingRepository;
-            _unitOfWork = unitOfWork;
-            _toBusinessModelMapper = businessModelMapper;
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SettingService"/> class.
         /// </summary>
@@ -118,7 +109,14 @@ namespace DH.Helpdesk.Services.Services
         /// <param name="unitOfWork">
         /// The unit of work.
         /// </param>
-
+        public SettingService(ISettingRepository settingRepository, 
+                              IUnitOfWork unitOfWork,
+                              IEntityToBusinessModelMapper<Setting, CustomerSettings> businessModelMapper)
+        {
+            _settingRepository = settingRepository;
+            _unitOfWork = unitOfWork;
+            _toBusinessModelMapper = businessModelMapper;
+        }
 
         /// <summary>
         /// The get customer setting.
@@ -131,12 +129,13 @@ namespace DH.Helpdesk.Services.Services
         /// </returns>
         public Setting GetCustomerSetting(int id)
         {
+            //TODO: add cache
             var res = this._settingRepository.GetCustomerSetting(id);
 
-			//TODO default values. move to mapper
-	        if (res != null && res.MinRegWorkingTime == 0)
-		        res.MinRegWorkingTime = 30;
-			return res;
+            //TODO default values. move to mapper
+            if (res != null && res.MinRegWorkingTime == 0)
+                res.MinRegWorkingTime = 30;
+            return res;
         }
 
         /// <summary>

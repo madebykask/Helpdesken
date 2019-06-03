@@ -571,7 +571,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     BulletinBoardPermission = x.BulletinBoardPermission,
                     DocumentPermission = x.DocumentPermission,
                     InventoryAdminPermission = x.InventoryPermission,
-					InventoryViewPermission = x.InventoryViewPermission,
+                    InventoryViewPermission = x.InventoryViewPermission,
                     ContractPermission = x.ContractPermission,
                     SetPriorityPermission = x.SetPriorityPermission,
                     InvoicePermission = x.InvoicePermission,

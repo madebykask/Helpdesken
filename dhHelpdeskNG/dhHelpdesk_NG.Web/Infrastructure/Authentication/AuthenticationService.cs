@@ -1,29 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
-using System.Web.Configuration;
 using System.Web.Security;
+using DH.Helpdesk.BusinessData.Enums.Users;
 using DH.Helpdesk.BusinessData.Models.LogProgram;
+using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.BusinessData.Models.User.Input;
+using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Logger;
 using DH.Helpdesk.Common.Types;
 using DH.Helpdesk.Dal.Infrastructure.Context;
+using DH.Helpdesk.Services.Infrastructure.TimeZoneResolver;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Concrete;
+using DH.Helpdesk.Services.Services.Users;
 using DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors;
 using DH.Helpdesk.Web.Infrastructure.Configuration;
 using DH.Helpdesk.Web.Infrastructure.Configuration.Concrete;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Infrastructure.Logger;
+using DH.Helpdesk.Web.Infrastructure.Tools;
 using DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete;
 
 namespace DH.Helpdesk.Web.Infrastructure.Authentication
 {
     public interface IAuthenticationService
     {
+        LoginResult Login(HttpContextBase ctx, string userName, string pwd, UserTimeZoneInfo userTimeZoneInfo);
         bool SignIn(HttpContextBase ctx);
         void ClearLoginSession(HttpContextBase ctx);
-
+        HttpCookie CreateFormsAuthCookie(string userName, string userData);
         string GetLoginUrl();
     }
 
@@ -33,13 +40,15 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         private readonly IAdfsConfiguration _adfsConfiguration;
         private readonly IUserService _userService;
         private readonly ILogProgramService _logProgramService;
+        private readonly ISettingService _settingService;
+        private readonly ILanguageService _languageService;
+        private readonly IUsersPasswordHistoryService _usersPasswordHistoryService;
         private readonly IApplicationContext _applicationContext;
         private readonly IUserContext _userContext;
         private readonly ICustomerContext _customerContext;
         private readonly ISessionContext _sessionContext;
-
         private readonly IAuthenticationBehavior _authenticationBehavior;
-        private readonly ILoggerService _logger = LogManager.Session;
+        private readonly ILoggerService _logger = LogManager.Session;        
 
         #region ctor()
 
@@ -48,6 +57,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             IAuthenticationServiceBehaviorFactory behaviorFactory,
             ILogProgramService logProgramService,
             IUserService userService,
+            ILanguageService languageService,
+            ISettingService settingService,
+            IUsersPasswordHistoryService usersPasswordHistoryService,
             IApplicationContext applicationContext,
             ISessionContext sessionContext,
             IUserContext userContext,
@@ -56,10 +68,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             _appConfiguration = appConfiguration;
             _adfsConfiguration = adfsConfiguration;
             _userService = userService;
-            _userContext = userContext;
-            
-            _customerContext = customerContext;
             _logProgramService = logProgramService;
+            _languageService = languageService;
+            _usersPasswordHistoryService = usersPasswordHistoryService;
+            _settingService = settingService;
+
+            _customerContext = customerContext;
+            _userContext = userContext;
             _applicationContext = applicationContext;
             _sessionContext = sessionContext;
 
@@ -68,9 +83,84 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 
         #endregion
 
+        public LoginResult Login(HttpContextBase ctx, string userName, string pwd, UserTimeZoneInfo userTimeZoneInfo)
+        {
+            var user = _userService.Login(userName, pwd);
+
+            if (user == null)
+            {
+                return LoginResult.Failed("The user name or password entered is incorrect.");
+            }
+
+            var loginResult = LoginResult.Success(user);
+
+            //set user preferred language for UI translation
+            _sessionContext.SetCurrentLanguageId(user.LanguageId);
+            
+            #region Password Expire check
+
+            var passwordChangedDate = _userService.GetUserPasswordChangedDate(user.Id);
+            var settings = _settingService.GetCustomerSetting(user.CustomerId);
+
+            if (settings.MaxPasswordAge > 0 && DateTime.Now > passwordChangedDate.AddDays(settings.MaxPasswordAge))
+            {
+                loginResult.PasswordExpired = true;
+                return loginResult;
+            }
+
+            #endregion
+
+            ctx.Session.Clear();
+
+            var userIdentity = new UserIdentity(user.UserId)
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.SurName,
+                Phone = user.Phone,
+                //EmployeeNumber = ?
+                //Domain = ?
+            };
+
+            // override with test values from config if required
+            ApplyUserIdentityOverrides(userIdentity);
+
+            //set app and session state
+            _sessionContext.ClearSession();
+            _sessionContext.SetUserIdentity(userIdentity);
+            _userContext.SetCurrentUser(user);
+            _customerContext.SetCustomer(user.CustomerId);
+            
+            //set user preferred language for UI translation
+            _sessionContext.SetCurrentLanguageId(user.LanguageId);
+
+            var language = _languageService.GetLanguage(user.LanguageId);
+            if (language != null)
+                _sessionContext.SetCurrentLanguageCode(language.LanguageID);
+
+            //try to auto detect user time zone
+            loginResult.TimeZoneAutodetect = 
+                SetUserTimeZone(userTimeZoneInfo.TimeZoneOffsetInJan1, userTimeZoneInfo.TimeZoneOffsetInJul1, user);
+
+            //save logged in user information
+            AddLoggedInUser(user, _customerContext, ctx);
+            UpdateUserLogin(ctx, user);
+
+            _usersPasswordHistoryService.SaveHistory(user.Id, EncryptionHelper.GetMd5Hash(pwd));
+
+            //Create FormsAuth cookie for forms Or mixed authentication modes
+            if (_appConfiguration.LoginMode == LoginMode.Application || _appConfiguration.LoginMode == LoginMode.Mixed)
+            {
+                var cookie = CreateFormsAuthCookie(user.UserId, user.ToString()); //todo: check if userData is correct?
+                ctx.Response.Cookies.Add(cookie);
+            }
+
+            return loginResult;
+        }
+
         public bool SignIn(HttpContextBase ctx)
         {
-            _logger.Debug($"AuthenticationService: authenticating user. LoginMode: {_sessionContext.LoginMode}");
+            _logger.Debug($"AuthenticationService.SignIn: authenticating user. LoginMode: {_sessionContext.LoginMode}");
 
             var userIdentity = _authenticationBehavior.CreateUserIdentity(ctx);
 
@@ -79,10 +169,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 ApplyUserIdentityOverrides(userIdentity);
                 _sessionContext.SetUserIdentity(userIdentity);
 
-                _logger.Debug($"AuthenticationService: user has successfully been authenticated. " +
-                            $"User: {userIdentity.UserId}, Domain: {userIdentity.Domain}, FullName: {userIdentity.FirstName + " " + userIdentity.LastName} ");
+                _logger.Debug("AuthenticationService.SignIn: user has successfully been authenticated. " +
+                             $"User: {userIdentity.UserId}, Domain: {userIdentity.Domain}, FullName: {userIdentity.FirstName + " " + userIdentity.LastName} ");
 
-                //get customer user
+                //get customer user (tblUsers)
                 var customerUser = GetLocalUser(userIdentity);
 
                 //set only if its non-empty
@@ -100,13 +190,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 }
                 else
                 {
-                    _logger.Warn($"AuthenticationService: Customer user doesn't exist for login '{userIdentity.UserId}'.");
+                    _logger.Warn($"AuthenticationService.SignIn: Customer user doesn't exist for login '{userIdentity.UserId}'.");
                     return false;
                 }
             }
             else
             {
-                _logger.Warn($"AuthenticationService: User identity is null or empty.");
+                _logger.Warn($"AuthenticationService.SignIn: User identity is null or empty.");
                 return false;
             }
             
@@ -147,13 +237,21 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 
         public void ClearLoginSession(HttpContextBase ctx)
         {
-            _logger.Debug("AuthenticationService. Clearing logging session.");
+           _logger.Debug("AuthenticationService. Clearing logging session.");
 
             var sessionId = _sessionContext.SessionId;
+
             if (!string.IsNullOrWhiteSpace(sessionId))
             {
                 _applicationContext.RemoveLoggedInUser(ctx.Session.SessionID);
                 _sessionContext.ClearSession();
+            }
+
+            //clear auth cookie for forms/mixed modes
+            if (_appConfiguration.LoginMode == LoginMode.Application ||
+                _appConfiguration.LoginMode == LoginMode.Mixed)
+            {
+                FormsAuthentication.SignOut();
             }
         }
 
@@ -164,17 +262,30 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             return FormsAuthentication.LoginUrl ?? "/Login/Login";
         }
 
+        public HttpCookie CreateFormsAuthCookie(string userName, string userData)
+        {
+            var ticket = new FormsAuthenticationTicket(1, userName, DateTime.Now, DateTime.Now.AddDays(10), false, userData);
+
+            var encryptedTicket = FormsAuthentication.Encrypt(ticket);
+
+            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+            return cookie;
+        }
+
         #region Helper Methods
 
         private void ApplyUserIdentityOverrides(UserIdentity userIdentity)
         {
-            //override userId with value from config
-            if (!string.IsNullOrWhiteSpace(_adfsConfiguration.DefaultUserId))
-                userIdentity.UserId = _adfsConfiguration.DefaultUserId;
+            if (_appConfiguration.LoginMode == LoginMode.SSO)
+            {
+                //override userId with value from config
+                if (!string.IsNullOrWhiteSpace(_adfsConfiguration.DefaultUserId))
+                    userIdentity.UserId = _adfsConfiguration.DefaultUserId;
 
-            //override employeeNumber with value from config
-            if (!string.IsNullOrWhiteSpace(_adfsConfiguration.DefaultEmployeeNumber))
-                userIdentity.EmployeeNumber = _adfsConfiguration.DefaultEmployeeNumber;
+                //override employeeNumber with value from config
+                if (!string.IsNullOrWhiteSpace(_adfsConfiguration.DefaultEmployeeNumber))
+                    userIdentity.EmployeeNumber = _adfsConfiguration.DefaultEmployeeNumber;
+            }
         }
 
         private void AddLoggedInUser(UserOverview user, ICustomerContext customerCtx, HttpContextBase ctx)
@@ -220,6 +331,61 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 // set than local time zone (Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna)... siliently
                 customerUser.TimeZoneId = TimeZoneInfo.Local.Id;
             }
+        }
+
+        private static TimeZoneAutodetectResult SetUserTimeZone(string timeZoneOffsetInJan1Val, string timeZoneOffsetInJul1Val, UserOverview user)
+        {
+            var result = TimeZoneAutodetectResult.None;
+
+            int timeZoneOffsetInJan1, timeZoneOffsetInJul1;
+            if (int.TryParse(timeZoneOffsetInJan1Val, out timeZoneOffsetInJan1) &&
+                int.TryParse(timeZoneOffsetInJul1Val, out timeZoneOffsetInJul1))
+            {
+                TimeZoneInfo[] timeZones;
+                result = TimeZoneResolver.DetectTimeZone(timeZoneOffsetInJan1, timeZoneOffsetInJul1, out timeZones);
+
+                if (string.IsNullOrEmpty(user.TimeZoneId))
+                {
+                    if (result == TimeZoneAutodetectResult.Failure)
+                    {
+                        user.TimeZoneId = TimeZoneInfo.Local.Id;
+                    }
+                    else
+                    {
+                        user.TimeZoneId = timeZones[0].Id;
+
+                        // we dont want to show any messages to user if we successfully detect his timezone
+                        result = TimeZoneAutodetectResult.None;
+                    }
+                }
+                else
+                {
+                    if (result == TimeZoneAutodetectResult.Failure)
+                    {
+                        user.TimeZoneId = TimeZoneInfo.Local.Id;
+                    }
+                    else
+                    {
+                        if (timeZones.All(it => it.Id != user.TimeZoneId))
+                        {
+                            // notice to user about to change his time zone in profile
+                            result = TimeZoneAutodetectResult.Notice;
+                        }
+                        else
+                        {
+                            // no changes in users time zone was made
+                            result = TimeZoneAutodetectResult.None;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                user.TimeZoneId = TimeZoneInfo.Local.Id;
+                result = TimeZoneAutodetectResult.Failure;
+            }
+
+            return result;
         }
 
         private string GetUserNameWithoutDomain(string userId)

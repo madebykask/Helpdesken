@@ -1,50 +1,42 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Configuration;
+using System.Diagnostics;
 using System.IdentityModel.Services;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Web.Http;
+using System.Threading;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
 using System.Web.Security;
+using DH.Helpdesk.BusinessData.Models.LogProgram;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Logger;
+using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Dal.Infrastructure.Context;
+using DH.Helpdesk.Services.Exceptions;
+using DH.Helpdesk.Services.Infrastructure;
+using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Authentication;
+using DH.Helpdesk.Services.Services.Concrete;
+using DH.Helpdesk.Web.Controllers;
+using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Authentication;
+using DH.Helpdesk.Web.Infrastructure.Binders;
+using DH.Helpdesk.Web.Infrastructure.Configuration;
 using DH.Helpdesk.Web.Infrastructure.Configuration.Concrete;
-using DH.Helpdesk.Web.Infrastructure.Utilities;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+using DH.Helpdesk.Web.Infrastructure.Logger;
+using Microsoft.Practices.ServiceLocation;
 
 namespace DH.Helpdesk.Web
 {
-    using System;
-    using System.Threading;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.Optimization;
-    using System.Web.Routing;
-
-    using DH.Helpdesk.Common.Logger;
-    using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Services.Exceptions;
-    using DH.Helpdesk.Services.Infrastructure;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Controllers;
-    using DH.Helpdesk.Web.Infrastructure.Attributes;
-    using DH.Helpdesk.Web.Infrastructure.Binders;
-    using DH.Helpdesk.Web.Infrastructure.Configuration;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
-    using DH.Helpdesk.Web.Infrastructure.Logger;
-
-    using Microsoft.Practices.ServiceLocation;
-    using System.Diagnostics;
-    using Infrastructure;
-    using Services.Services.Concrete;
-    using BusinessData.Models.LogProgram;
-    using System.Collections.Concurrent;
-
     public class MvcApplication : HttpApplication
     {
-        private readonly IConfiguration configuration = ManualDependencyResolver.Get<IConfiguration>();
-        private readonly IGlobalSettingService globalSettingsService = ManualDependencyResolver.Get<IGlobalSettingService>();
+        private readonly IConfiguration _configuration = ManualDependencyResolver.Get<IConfiguration>();
+        private readonly IGlobalSettingService _globalSettingsService = ManualDependencyResolver.Get<IGlobalSettingService>();
 
         protected void Application_Start()
         {
@@ -124,13 +116,8 @@ namespace DH.Helpdesk.Web
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
+            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this._configuration.Application.DefaultCulture;
             LogSession("Application.BeginRequest.", Context);
-        }
-
-        protected void Application_EndRequest(object sender, EventArgs e)
-        {
-            LogSession($"Application.EndRequest. Status: {Response.Status}, StatusCode: {Response.StatusCode}, RedirectLocation: {Response.RedirectLocation}", Context);
         }
 
         #region Authentication Events 
@@ -151,6 +138,10 @@ namespace DH.Helpdesk.Web
         {
             var identity = Context.User?.Identity;
             LogSession($">>>Application.PostAuthenticateRequest event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
+
+            //var configuration = DependencyResolver.Current.GetService<IApplicationConfiguration>();
+            //var authenticationService = DependencyResolver.Current.GetService<IAuthenticationService>();
+            //var loginUrl = (FormsAuthentication.LoginUrl ?? "/Login/Login").Trim('~');
         }
 
         #endregion
@@ -288,6 +279,48 @@ namespace DH.Helpdesk.Web
 
         #endregion
 
+        protected void Application_EndRequest(object sender, EventArgs e)
+        {
+            var configuration = DependencyResolver.Current.GetService<IApplicationConfiguration>();
+            var loginUrl = (FormsAuthentication.LoginUrl ?? "/Login/Login").Trim('~');
+
+            LogSession("Application.EndRequest: \r\n" +
+                       $"\t-LoginMode: {configuration.LoginMode.GetName()}\r\n " +
+                       $"\t-Status: {Response.Status}\r\n" +
+                       $"\t-StatusCode: {Response.StatusCode}\r\n" +
+                       $"\t-RedirectLocation: {Response.RedirectLocation}\r\n", Context);
+
+            // if we are running in a mixed mode (win + forms) - we need to handle Forms auth unauthorised redirect request (Status:302).
+            if (Response.StatusCode == 302 &&
+                configuration.LoginMode == LoginMode.Mixed &&
+                Response.RedirectLocation.IndexOf(loginUrl, StringComparison.CurrentCultureIgnoreCase) != -1)
+            {
+                //allow forms auth redirect if it was triggered by HelpdeskAuthenticationFilter 
+                if (AllowFormsAuthenticationRedirect(Context))
+                {
+                    LogSession("Application.EndRequest: allow authorisation redirect by forms auth filter.", Context);
+                    return;
+                }
+
+                LogSession("Application.EndRequest: Cancelling unauthorised redirect issued by forms authentication.", Context);
+                //if (Request.Browser.Win32)
+                {
+                    // Add script to response to redirect to forms login page in case windows authentication fails
+                    this.Response.ClearContent();
+                    this.Response.Write("<script language=\"javascript\">self.location='" + loginUrl + "?ReturnUrl=" + HttpUtility.UrlEncode(Request.Url.PathAndQuery) + "';</script>");
+
+                    // Required to allow javascript redirection through to browser
+                    this.Response.TrySkipIisCustomErrors = true;
+                    this.Response.Status = "401 Unauthorized";
+                    this.Response.StatusCode = 401;
+
+                    // note that the following line is .NET 4.5 or later only
+                    // otherwise you have to suppress the return URL etc manually!
+                    this.Response.SuppressFormsAuthenticationRedirect = true;
+                }
+            }
+        }
+
         protected void Application_Error(object sender, EventArgs e)
         {
             var httpContext = ((MvcApplication)sender).Context;
@@ -416,7 +449,7 @@ namespace DH.Helpdesk.Web
             var request = ctx.Request;
             var identity = ctx.User?.Identity;
             var isAuthenticated = identity?.IsAuthenticated ?? false;
-            var contextInfo = $"Authenticated: {isAuthenticated}, User: {identity?.Name}, Request: {request.Url}";
+            var contextInfo = $"; Context: [Authenticated: {isAuthenticated}, User: {identity?.Name}, Request: {request.Url}]";
 
             var logger = LogManager.Session;
             logger.Debug($"{msg} {contextInfo}");
@@ -440,6 +473,19 @@ namespace DH.Helpdesk.Web
             #endif
         }
 
+        private bool AllowFormsAuthenticationRedirect(HttpContext ctx)
+        {
+            var key = HelpdeskAuthenticationFilter.AllowFormsAuthKey;
+            if (ctx.Items.Contains(key))
+            {
+                var val = Convert.ToBoolean(ctx.Items[key] ?? false);
+                return val;
+            }
+
+            return false;
+        }
+
+
         //keep for diagnostic purposes
         private void DumpModules()
         {
@@ -459,8 +505,6 @@ namespace DH.Helpdesk.Web
 
         #endregion
 
-
-
         protected void Application_AcquireRequestState(object sender, EventArgs e)
         {
             try
@@ -471,8 +515,6 @@ namespace DH.Helpdesk.Web
                 //DependencyResolver.Current.GetService<ICaseDiagnosticService>().MakeTestSnapShot(contextBase);
                 //LogSession($"Application.AcquireRequestState called. IsCaseDataChanged: {SessionFacade.IsCaseDataChanged}", Context);
 
-
-
                 var session = HttpContext.Current.Session;
 
                 // Check can be null in some request (static)
@@ -482,6 +524,7 @@ namespace DH.Helpdesk.Web
                     {
                         SetPerformanceLogSettings();
                     }
+
                     if (ApplicationFacade.IsPerformanceLogActive())
                     {
                         int freq = ApplicationFacade.GetPerformanceLogFrequency();
@@ -594,7 +637,7 @@ namespace DH.Helpdesk.Web
 
         private void SetPerformanceLogSettings()
         {
-            var settings = globalSettingsService.GetGlobalSettings();
+            var settings = _globalSettingsService.GetGlobalSettings();
             ApplicationFacade.SetPerformanceLogActive(settings[0].PerformanceLogActive);
             ApplicationFacade.SetPerformanceLogFrequency(settings[0].PerformanceLogFrequency);
             ApplicationFacade.SetPerformanceLogSettingsCache(settings[0].PerformanceLogSettingsCache);
