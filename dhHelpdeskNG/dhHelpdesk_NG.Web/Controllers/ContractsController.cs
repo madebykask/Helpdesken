@@ -228,14 +228,6 @@ namespace DH.Helpdesk.Web.Controllers
                 }
             };
 
-            //var userDepartments = _departmentService
-            //    .GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, customer.Id)
-            //    .Select(d => d.Id)
-            //    .ToList();
-            //selectedFilter.SelectedDepartments = (selectedFilter.SelectedDepartments == null || !selectedFilter.SelectedDepartments.Any()) ?
-            //    userDepartments :
-            //    userDepartments.Intersect(selectedFilter.SelectedDepartments).ToList();
-
             //run search
             var contractsSearchResults = SearchContracts(selectedFilter);
          
@@ -405,7 +397,7 @@ namespace DH.Helpdesk.Web.Controllers
                     Text = $"{u.SurName} {u.FirstName}"
                 }).ToList(),
 
-                Departments = _departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, customer.Id, true)
+                Departments = _departmentService.GetDepartmentsForUser(SessionFacade.CurrentUser.Id, customer.Id)
                     .Select(d => new SelectListItem
                 {
                     Value = d.Id.ToString(),
@@ -510,7 +502,7 @@ namespace DH.Helpdesk.Web.Controllers
             var contractFields = this.GetSettingsModel(customerId);
             var contractcategories = _contractCategoryService.GetContractCategories(customerId).OrderBy(a => a.Name).ToList();
             var suppliers = _supplierService.GetActiveSuppliers(customerId);
-            var departments = _departmentService.GetDepartmentsByUserPermissions(customerId, SessionFacade.CurrentUser.Id);
+            var departments = _departmentService.GetDepartmentsForUser(customerId, SessionFacade.CurrentUser.Id);
             var users = _userService.GetCustomerActiveUsers(customerId);
 
             var emptyChoice = new SelectListItem() { Selected = true, Text = "", Value = string.Empty };
