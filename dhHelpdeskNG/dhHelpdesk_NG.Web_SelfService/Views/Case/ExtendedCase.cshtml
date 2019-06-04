@@ -133,7 +133,7 @@
         userRole: '@(Model.UserRole)',
         caseStatus: '@(Model.StateSecondaryId)',
         currentUser: '@(Model.CurrentUser)',
-        applicationType: '@Model.ApplicationType.ToStringValue()',
+        applicationType: '@ViewBag.ApplicationType',
         lastError: '@Html.Raw(lastErrorMessage)'
     };
 
