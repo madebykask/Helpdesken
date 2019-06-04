@@ -1418,11 +1418,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult Edit(
-            CaseSolutionInputViewModel caseSolutionInputViewModel,
-            CaseSolutionSettingModel[] CaseSolutionSettingModels,
-            int PageId, 
-            string selectedValues)
+        public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] CaseSolutionSettingModels, int PageId, string selectedValues)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
@@ -1473,6 +1469,16 @@ namespace DH.Helpdesk.Web.Controllers
                         CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
                         SplitToCaseSolution_Id = id
                     }).ToList();
+            }
+
+            // reset Id if its a copy template request 
+            var isCopy = caseSolutionInputViewModel.CaseSolution.Id == 0;
+            if (isCopy)
+            {
+                foreach (var cs in CaseSolutionSettingModels)
+                {
+                    cs.Id = 0;
+                }
             }
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);

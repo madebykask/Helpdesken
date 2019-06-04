@@ -23,7 +23,7 @@
             this.Map(entity, businessModel);
 
             entity.CaseSolution_Id = businessModel.CaseSolutionId;
-            entity.ChangedDate = DateTime.Now; // todo
+            entity.ChangedDate = DateTime.UtcNow;
             entity.CreatedDate = businessModel.CreatedDate;
 
             this.DbSet.Add(entity);

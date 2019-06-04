@@ -1,19 +1,19 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Web.Mvc;
+using System.Web.Mvc.Html;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Enums.Settings;
+using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Domain;
+using DH.Helpdesk.Web.Models;
+
+namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Web.Mvc;
-    using System.Web.Mvc.Html;
-
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.Common.Enums.Settings;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Models;
-
     public static class CaseSolutionSettingExtension
     {
         public static MvcHtmlString CaseSolutionSettingsFor<TModel>(
@@ -36,84 +36,43 @@
             IList<CaseFieldSetting> caseFieldSettings,
             GlobalEnums.TranslationCaseFields caseField)
         {
-            string prefix = ExpressionHelper.GetExpressionText(expression);
-            ModelMetadata metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            var metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
             var models = (IList<CaseSolutionSettingModel>)metadata.Model;
 
-            for (int i = 0; i < models.Count; i++)
+            var model = models.FirstOrDefault(m => m.CaseSolutionField == caseSolutionField);
+            if (model != null)
             {
-                CaseSolutionSettingModel model = models[i];
+                var index = models.IndexOf(model);
+                
+                var modePropertyName =
+                    ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.CaseSolutionMode);
 
-                if (model.CaseSolutionField == caseSolutionField)
+                var prefix = ExpressionHelper.GetExpressionText(expression);
+                var dropDownName = GetInputName(prefix, index, modePropertyName);
+
+                var selectList =
+                    ToSelectList(model.CaseSolutionMode, ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture), false);
+                
+                var fieldSettings = caseFieldSettings.getCaseSettingsValue(caseField.ToString());
+                
+                var htmlAttributes = new
                 {
-                    var idPropertyName =
-                        DH.Helpdesk.Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.Id);
+                    @class = "fieldStateChanger",
+                    standardId = caseField,
+                    ElementClass = "OptionDropDown",
+                    ElementName = model.CaseSolutionField
+                };
 
-                    var modePropertyName =
-                        DH.Helpdesk.Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.CaseSolutionMode);
-
-                    var fieldNamePropertyName =
-                        DH.Helpdesk.Common.Tools.ReflectionHelper.GetPropertyName<CaseSolutionSettingOverview>(x => x.CaseSolutionField);
-
-                    var hiddenName = GetInputName(prefix, i, idPropertyName);
-                    var dropDownName = GetInputName(prefix, i, modePropertyName);
-                    var hiddenFieldName = GetInputName(prefix, i, fieldNamePropertyName);
-
-                    var hidden = htmlHelper.Hidden(hiddenName, model.Id);
-
-                    var selectList = 
-                        ToSelectList(model.CaseSolutionMode, ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture), false);
-
-                    //if (caseFieldSettings.CaseFieldSettingRequiredCheck(caseFields.ToString()) == 1
-                    //    || caseSolutionField == CaseSolutionFields.Department)
-                    //{
-                    //    if (model.CaseSolutionMode != CaseSolutionModes.ReadOnly)
-                    //    {
-                    //        selectList = ToSelectList(
-                    //            new CaseSolutionModes(),
-                    //            ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture),
-                    //            true);
-                    //    }
-                    //    else
-                    //    {
-                    //        selectList = ToSelectList(new CaseSolutionModes(), true);
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    selectList = ToSelectList(
-                    //        model.CaseSolutionMode,
-                    //        ((int)model.CaseSolutionMode).ToString(CultureInfo.InvariantCulture),
-                    //        false);
-                    //}
-
-                    var fieldSettings = caseFieldSettings.getCaseSettingsValue(caseField.ToString());
-
-                    var hiddenForFieldName = htmlHelper.Hidden(hiddenFieldName, model.CaseSolutionField);
-                    MvcHtmlString dropDown;
-
-                    var htmlAttributes = new
-                    {
-                        @class = "fieldStateChanger",
-                        standardId = caseField,
-                        ElementClass = "OptionDropDown",
-                        ElementName = model.CaseSolutionField
-                    };
-
-                    var isDisabled = fieldSettings?.Hide ?? false;
-                    if (isDisabled)
-                    {
-                        var htmlAttributesAsDict = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
-                        htmlAttributesAsDict.Add("disabled", "disabled");
-                        dropDown = htmlHelper.DropDownList(dropDownName, selectList, htmlAttributesAsDict);
-                    }
-                    else
-                    {
-                        dropDown = htmlHelper.DropDownList(dropDownName, selectList, htmlAttributes);
-                    }
-                    
-                    return MvcHtmlString.Create(dropDown.ToString());
+                var htmlAttributesAsDict = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
+                
+                // check if should be disabled 
+                if (fieldSettings?.Hide ?? false)
+                {
+                    htmlAttributesAsDict.Add("disabled", "disabled");
                 }
+
+                var dropDown = htmlHelper.DropDownList(dropDownName, selectList, htmlAttributesAsDict);
+                return MvcHtmlString.Create(dropDown.ToString());
             }
 
             return new MvcHtmlString(string.Empty);
