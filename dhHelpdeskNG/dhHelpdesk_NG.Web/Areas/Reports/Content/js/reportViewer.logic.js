@@ -223,9 +223,9 @@
             }
         };
 
-        dhHelpdesk.reports.doValidation = function (isAlwaysRequired) {
+        dhHelpdesk.reports.doValidation = function (isRegDateRequiredOnly) {
 
-            isAlwaysRequired = isAlwaysRequired !== false; // default true
+            isRegDateRequiredOnly = isRegDateRequiredOnly !== false; // default true
             const errorClass = 'error';
 
             const $createDateFrom = $('#ReportFilter_CaseCreationDate_FromDate');
@@ -259,12 +259,13 @@
 
             var emptyControls = [];
             var invalidControls = [];
-            if (isAlwaysRequired) {
+            if (isRegDateRequiredOnly) {
                 emptyControls.push(validatePair($createDateFrom, $createDateTo));
             } else {
                 emptyControls.push(validatePair($createDateFrom, $createDateTo));
                 emptyControls.push(validatePair($closeDateFrom, $closeDateTo));
-                emptyControls.push(validatePair($changeDateFrom, $changeDateTo));
+                if (!$changeDateFrom.is(':hidden'))
+                    emptyControls.push(validatePair($changeDateFrom, $changeDateTo));
             }
 
             if (emptyControls.every(function(e) { // all empty
@@ -461,7 +462,7 @@
         }
 
         dhHelpdesk.reports.onJSReportShow = function (e, name) {
-            if (!dhHelpdesk.reports.doValidation(true))
+            if (!dhHelpdesk.reports.doValidation(false))
                 return;
 
             dhHelpdesk.reports[name].show();
