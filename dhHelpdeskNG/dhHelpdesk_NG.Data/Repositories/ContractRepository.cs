@@ -18,7 +18,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface IContractRepository : IRepository<Contract>
     {
         IQueryable<Contract> GetContracts(int customerId, int userId);
-        IQueryable<Contract> GetContracts(Expression<Func<Contract, bool>> filter, int userId, bool loadNavigationProps = false);
+        IQueryable<Contract> GetContracts(Expression<Func<Contract, bool>> filter, int userId, int customerId, bool loadNavigationProps = false);
 
         Contract GetContract(int contractId, int userId);
         int SaveContract(ContractInputModel contractModel);
@@ -35,14 +35,14 @@ namespace DH.Helpdesk.Dal.Repositories
         public IQueryable<Contract> GetContracts(int customerId, int userId)
         {
             var query = Table.Where(c => c.ContractCategory.Customer_Id == customerId);
-            query = AddDepartmentFilter(userId, query);
+            query = AddDepartmentFilter(userId, customerId, query);
             return query;
         }
 
-        public IQueryable<Contract> GetContracts(Expression<Func<Contract, bool>> filter, int userId, bool loadNavigationProps = false)
+        public IQueryable<Contract> GetContracts(Expression<Func<Contract, bool>> filter, int userId, int customerId, bool loadNavigationProps = false)
         {
             var query = Table.Where(filter);
-            query = AddDepartmentFilter(userId, query);
+            query = AddDepartmentFilter(userId, customerId, query);
             if (loadNavigationProps)
             {
                 query.Include(x => x.ContractCategory)
@@ -56,7 +56,6 @@ namespace DH.Helpdesk.Dal.Repositories
         public Contract GetContract(int contractId, int userId)
         {
             var query = Table.Where(c => c.Id == contractId);
-            query = AddDepartmentFilter(userId, query);
             return query.FirstOrDefault();;
         }
 
@@ -106,11 +105,13 @@ namespace DH.Helpdesk.Dal.Repositories
             this.Table.Remove(contract);
         }
 
-        private IQueryable<Contract> AddDepartmentFilter(int userId, IQueryable<Contract> query)
+        private IQueryable<Contract> AddDepartmentFilter(int userId, int customerId, IQueryable<Contract> query)
         {
             return query.Where(c => !c.Department_Id.HasValue ||
                                     DataContext.Departments
-                                        .Where(d => d.Users.Any(du => du.Id == userId))
+                                        .Count(d => d.Customer_Id == customerId && d.Users.Any(du => du.Id == userId)) == 0 ||
+                                    DataContext.Departments
+                                        .Where(d => d.Customer_Id == customerId && d.Users.Any(du => du.Id == userId))
                                         .Select(d => d.Id)
                                         .Contains(c.Department_Id.Value));
         }
