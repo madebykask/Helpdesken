@@ -124,13 +124,13 @@ namespace DH.Helpdesk.Web.Controllers
                     //}
 
                     #endregion
+
+                    RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
                 }
                 else
                 {
                     TempData["LoginFailed"] = $"Login failed! {res.ErrorMessage ?? string.Empty}".Trim();
                 }
-                
-                RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
             }
 
             return View("Login");
