@@ -2134,25 +2134,20 @@ namespace DH.Helpdesk.Web.Controllers
         {
             //var files = this._caseFileService.GetCaseFiles(int.Parse(id));
             var files = GuidHelper.IsGuid(id)
-                                ? this._userTemporaryFilesStorage.FindFileNamesAndDates(id, ModuleName.Cases)
-                                : this._caseFileService.FindFileNamesAndDatesByCaseId(int.Parse(id));
+                                ? _userTemporaryFilesStorage.FindFileNamesAndDates(id, ModuleName.Cases)
+                                : _caseFileService.FindFileNamesAndDatesByCaseId(int.Parse(id));
 
             var cfs = MakeCaseFileModel(files, savedFiles);
             var customerId = 0;
             if (!GuidHelper.IsGuid(id))
             {
-                customerId = this._caseService.GetCaseById(int.Parse(id)).Customer_Id;
+                customerId = _caseService.GetCaseById(int.Parse(id)).Customer_Id;
             }
 
-            //
-            bool UseVD = false;
-            if (customerId != 0 && !string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
-            {
-                UseVD = true;
-            }
+            var useVd = customerId != 0 && !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId));
 
-            var model = new CaseFilesModel(id, cfs.ToArray(), savedFiles, UseVD);
-            return this.PartialView("_CaseFiles", model);
+            var model = new CaseFilesModel(id, cfs.ToArray(), savedFiles, useVd);
+            return PartialView("_CaseFiles", model);
         }
 
 
@@ -2160,8 +2155,8 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult LogFiles(string id, int? caseId = null)
         {
             var files = GuidHelper.IsGuid(id)
-                                ? this._userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
-                                : this._logFileService.FindFileNamesByLogId(int.Parse(id));
+                                ? _userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
+                                : _logFileService.FindFileNamesByLogId(int.Parse(id));
 
             var existingFiles = new List<LogFileModel>();
             if (caseId.HasValue && caseId.Value > 0)
@@ -2169,6 +2164,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var exFiles = _logFileService.GetExistingFileNamesByCaseId(caseId.Value);
                 existingFiles = exFiles.Select(x => new LogFileModel
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     IsExistCaseFile = x.IsExistCaseFile,
                     IsExistLogFile = x.IsExistLogFile,
@@ -2184,17 +2180,13 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (!GuidHelper.IsGuid(id))
             {
-                var logCaseId = this._logService.GetLogById(int.Parse(id)).CaseId;
-                customerId = this._caseService.GetCaseById(logCaseId).Customer_Id;
+                var logCaseId = _logService.GetLogById(int.Parse(id)).CaseId;
+                customerId = _caseService.GetCaseById(logCaseId).Customer_Id;
             }
-            bool UseVD = false;
-            if (customerId != 0 && !string.IsNullOrEmpty(this._masterDataService.GetVirtualDirectoryPath(customerId)))
-            {
-                UseVD = true;
-            }
+            var useVd = customerId != 0 && !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId));
 
-            var model = new FilesModel(id, existingFiles, UseVD);
-            return this.PartialView("_CaseLogFiles", model);
+            var model = new FilesModel(id, existingFiles, useVd);
+            return PartialView("_CaseLogFiles", model);
         }
 
         [HttpPost]
@@ -2276,44 +2268,44 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public void DeleteLogFile(string id, string fileName, int? fileId = null)
+        public void DeleteLogFile(string id, string fileName, bool isExisting = false, int? fileId = null)
         {
-            if ( fileId.HasValue)
+            if (fileId.HasValue)
             {
-                if (fileId == 0)
+                if (fileId == 0 && !isExisting)
                 {
                     if (GuidHelper.IsGuid(id))
-                    {
-                        this._userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);
-                    }
+                        _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);
                 }
+                else if(isExisting)
+                    _logFileService.DeleteExistingById(fileId.Value);
                 else
                     _logFileService.DeleteByFileIdAndFileName(fileId.Value, fileName.Trim());
             }
             else
             {
                 if (GuidHelper.IsGuid(id))
-                    this._userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);
+                    _userTemporaryFilesStorage.DeleteFile(fileName.Trim(), id, ModuleName.Log);
                 else
                 {
-                    var log = this._logService.GetLogById(int.Parse(id));
+                    var log = _logService.GetLogById(int.Parse(id));
                     DHDomain.Case c = null;
                     var basePath = string.Empty;
                     if (log != null)
                     {
-                        c = this._caseService.GetCaseById(log.CaseId);
+                        c = _caseService.GetCaseById(log.CaseId);
                         if (c != null)
                             basePath = _masterDataService.GetFilePath(c.Customer_Id);
                     }
 
-                    this._logFileService.DeleteByLogIdAndFileName(int.Parse(id), basePath, fileName.Trim());
+                    _logFileService.DeleteByLogIdAndFileName(int.Parse(id), basePath, fileName.Trim());
 
                     IDictionary<string, string> errors;
-                    string adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                    var adUser = global::System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                     if (c != null)
                     {
                         var extraField = new ExtraFieldCaseHistory {LogFile = StringTags.Delete + fileName.Trim()};
-                        this._caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser,
+                        _caseService.SaveCaseHistory(c, SessionFacade.CurrentUser.Id, adUser,
                             CreatedByApplications.Helpdesk5, out errors, string.Empty, extraField);
                     }
                 }
@@ -2405,13 +2397,9 @@ namespace DH.Helpdesk.Web.Controllers
             var customerId = 0;
             customerId = _caseService.GetCaseById(caseId).Customer_Id;
 
-            bool UseVD = false;
-            if (customerId != 0 && !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId)))
-            {
-                UseVD = true;
-            }
+            var useVD = customerId != 0 && !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId));
 
-            var model = new CaseFilesModel(caseId.ToString(), cfs.ToArray(), string.Empty, UseVD);
+            var model = new CaseFilesModel(caseId.ToString(), cfs.ToArray(), string.Empty, useVD);
             return PartialView("_CaseFiles", model);
         }
         

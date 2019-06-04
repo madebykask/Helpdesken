@@ -379,7 +379,7 @@ function bindDeleteLogFileBehaviorToDeleteButtons() {
         }
         var pressedDeleteFileButton = this;
 
-        $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName, fileId: logFileId }, function () {
+        $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName, isExisting: isAttached.length > 0, fileId: logFileId }, function () {
                 $(pressedDeleteFileButton).parents('tr:first').remove();
                 var fileNames = $('#LogFileNames').val();
                 fileNames = fileNames.replace("|" + fileName.trim(), "");
