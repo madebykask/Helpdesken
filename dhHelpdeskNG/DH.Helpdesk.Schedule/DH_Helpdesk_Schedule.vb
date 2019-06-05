@@ -533,6 +533,10 @@ Module DH_Helpdesk_Schedule
                     setInitiator(objContract.CreateCase_UserId, objContract.Customer_Id, objCase)
                 End If
 
+                If objContract.Department_Id <> 0 Then
+                    objCase.Department_Id = objContract.Department_Id
+                End If
+
                 objCase = objCaseData.createCase(objCase)
 
                 ' Logga i avtalsloggen

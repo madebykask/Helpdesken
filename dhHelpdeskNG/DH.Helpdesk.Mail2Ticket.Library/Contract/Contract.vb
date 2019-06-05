@@ -5,6 +5,7 @@
     Private miCustomer_Id As Integer
     Private mContractGUID As String
     Private msContractNumber As String
+    Private miDepartment_Id As Integer
     Private miResponsibleUser_Id As Integer
     Private miFollowUpResponsibleUser_Id As Integer
     Private mdtConstractStartDate As Date
@@ -32,6 +33,10 @@
         miCustomer_Id = dr("Customer_Id")
         mContractGUID = dr("ContractGUID").ToString
         msContractNumber = dr("ContractNumber").ToString
+
+        If Not IsDBNull(dr("Department_Id")) Then
+            miDepartment_Id = dr("Department_Id")
+        End If
 
         If Not IsDBNull(dr("ResponsibleUser_Id")) Then
             miResponsibleUser_Id = dr("ResponsibleUser_Id")
@@ -106,6 +111,15 @@
         End Get
         Set(ByVal Value As String)
             msContractNumber = Value
+        End Set
+    End Property
+
+    Public Property Department_Id() As String
+        Get
+            Return miDepartment_Id
+        End Get
+        Set(ByVal Value As String)
+            miDepartment_Id = Value
         End Set
     End Property
 
