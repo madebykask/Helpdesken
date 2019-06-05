@@ -34,6 +34,7 @@
 
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.reports = window.dhHelpdesk.reports || {};
+        window.dhHelpdesk.reports.errorClass = 'error';
 
         var getBaseFilters = function () {
             var filters = {
@@ -223,10 +224,8 @@
             }
         };
 
-        dhHelpdesk.reports.doValidation = function (isRegDateRequiredOnly) {
-
-            isRegDateRequiredOnly = isRegDateRequiredOnly !== false; // default true
-            const errorClass = 'error';
+        dhHelpdesk.reports.resetErrors = function () {
+            const errorClass = window.dhHelpdesk.reports.errorClass;
 
             const $createDateFrom = $('#ReportFilter_CaseCreationDate_FromDate');
             const $createDateTo = $('#ReportFilter_CaseCreationDate_ToDate');
@@ -241,6 +240,20 @@
             $closeDateTo.removeClass(errorClass);
             $changeDateFrom.removeClass(errorClass);
             $changeDateTo.removeClass(errorClass);
+        }
+
+        dhHelpdesk.reports.doValidation = function (isRegDateRequiredOnly) {
+
+            isRegDateRequiredOnly = isRegDateRequiredOnly !== false; // default true
+
+            const $createDateFrom = $('#ReportFilter_CaseCreationDate_FromDate');
+            const $createDateTo = $('#ReportFilter_CaseCreationDate_ToDate');
+            const $closeDateFrom = $('#ReportFilter_CaseClosingDate_FromDate');
+            const $closeDateTo = $('#ReportFilter_CaseClosingDate_ToDate');
+            const $changeDateFrom = $('#ReportFilter_CaseChangeDate_FromDate');
+            const $changeDateTo = $('#ReportFilter_CaseChangeDate_ToDate');
+
+            dhHelpdesk.reports.resetErrors();
 
             const validatePair = function($from, $to) {
                 const isFromEmpty = $from.val() === '';
@@ -283,7 +296,7 @@
             var isValid = invalidControls.length === 0;
             if (!isValid) {
                 invalidControls.forEach(function(e) {
-                    e.addClass(errorClass);
+                    e.addClass(window.dhHelpdesk.reports.errorClass);
                 });
                 ShowToastMessage(window.Params.DateIsEmptyMessage, 'warning');
             }
@@ -530,6 +543,7 @@
             var historicalReportControls = [$btnShowReport, $groupBy, $jsReportContainer, $historicalFilters];
 
             dhHelpdesk.reports.togglePreviewMode(true);
+            dhHelpdesk.reports.resetErrors();
 
             if (reportId === dhHelpdesk.reports.reportType.ReportGenerator) {
                 $btnPreview.show();
