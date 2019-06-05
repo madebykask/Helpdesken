@@ -116,7 +116,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                 query = query.Where(l => l.Case.FinishingDate >= filter.CloseFrom.Value);
 
             if (filter.CloseTo.HasValue)
-                query = query.Where(l => l.Case.FinishingDate >= filter.CloseTo.Value);
+                query = query.Where(l => l.Case.FinishingDate <= filter.CloseTo.Value);
 
             if (filter.Departments!= null && filter.Departments.Any())
                 query = query.Where(l => l.Case.Department_Id.HasValue && filter.Departments.Contains(l.Case.Department_Id.Value));
@@ -230,7 +230,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                 query = query.Where(c => c.FinishingDate >= filter.CloseFrom.Value);
 
             if (filter.CloseTo.HasValue)
-                query = query.Where(c => c.FinishingDate >= filter.CloseTo.Value);
+                query = query.Where(c => c.FinishingDate <= filter.CloseTo.Value);
 
             if (filter.Departments!= null && filter.Departments.Any())
                 query = query.Where(c => c.Department_Id.HasValue && filter.Departments.Contains(c.Department_Id.Value));
