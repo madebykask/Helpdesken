@@ -16,6 +16,12 @@
                     plugins: [window.ChartDataLabels],
                     options: {
                         maintainAspectRatio: false,
+                        title: {
+                            display: true,
+                            padding: 20,
+                            fontSize: 16,
+                            text: ''
+                        },
                         legend: {
                             position: 'right'
                         },
@@ -95,8 +101,9 @@
                 }),
                 url: options.dataUrl,
                 contentType: 'application/json'
-            }).done(function (data) {
-                window.chartInstance.data = data;
+            }).done(function (responce) {
+                window.chartInstance.options.title.text = responce.totalLabel;
+                window.chartInstance.data = responce.data;
                 window.chartInstance.update();
                 //window.chartInstance.resize();
             })

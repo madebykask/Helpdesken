@@ -88,17 +88,22 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             var caseTypes = _caseTypeService.GetAllCaseTypes(customerId, false, true);
             TranslateCaseTypes(caseTypes, 0);
             var caseTypesFullNames = _caseTypeService.GetChildrenInRow(caseTypes.OrderBy(p => p.Name).ToList()).ToList();
-			var data = new
-			{
-				labels = wgs.Select(o => o.WorkingGroup ?? "").ToArray(),
-				datasets = result.GroupBy(o => new { o.CaseTypeID, o.CaseType }).Select(ct => new
-				{
-					label = caseTypesFullNames.Single(ctf => ctf.Id == ct.Key.CaseTypeID).Name,
-					data = wgs.Select(wg => ct.Count(o => o.WorkingGroupID == wg.WorkingGroupID)).ToArray()
-				}).ToArray()
-			};
+            var total = result.Count;
+			var responce = new 
+            {
+                totalLabel = string.Format("{0}: {1}", Translation.GetCoreTextTranslation("Summa"), total),
+                data = new
+			    {
+				    labels = wgs.Select(o => o.WorkingGroup ?? "").ToArray(),
+				    datasets = result.GroupBy(o => new { o.CaseTypeID, o.CaseType }).Select(ct => new
+				    {
+					    label = caseTypesFullNames.Single(ctf => ctf.Id == ct.Key.CaseTypeID).Name,
+					    data = wgs.Select(wg => ct.Count(o => o.WorkingGroupID == wg.WorkingGroupID)).ToArray()
+				    }).ToArray()
+			    }
+            };
 
-            return Json(data, JsonRequestBehavior.AllowGet);
+            return Json(responce, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetReportedTimeData(ReportedTimeReportFilterModel filter)
