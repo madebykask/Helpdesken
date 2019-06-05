@@ -10,12 +10,12 @@ namespace DH.Helpdesk.Tests.Mail2Ticket
         {
             var subjectPatterns = new string[]
             {
-                //"case:#;ärende:#",
+                "case:#;ärende:#",
                 //"case #;ärende #" // TODO: this will fail the test. need to find out if it was implemented for a reason or its a bug!
             };
 
             // 1. case number should not be found
-            var emailSubject = "RE: new case has 4 been created 7853";
+            var emailSubject = "RE: new case has been created 7853";
 
             foreach (var pattern in subjectPatterns)
             {
