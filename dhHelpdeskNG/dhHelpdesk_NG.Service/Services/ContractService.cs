@@ -216,7 +216,7 @@ namespace DH.Helpdesk.Services.Services
 
             var missingFields = new List<ContractFieldSettings>
             {
-                CreateSettingIfMissing(EnumContractFieldSettings.Number, customerId, existingSettings, true),
+                CreateSettingIfMissing(EnumContractFieldSettings.Number, customerId, existingSettings, false),
                 CreateSettingIfMissing(EnumContractFieldSettings.Category, customerId, existingSettings, true),
                 CreateSettingIfMissing(EnumContractFieldSettings.Supplier, customerId, existingSettings, false),
                 CreateSettingIfMissing(EnumContractFieldSettings.StartDate, customerId, existingSettings, true),
