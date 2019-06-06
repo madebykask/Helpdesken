@@ -17,7 +17,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 {
     public class HelpdeskAuthenticationFilter : IAuthenticationFilter
     {
-        public const string SkipAuthResultCheck = "__allowFormsAuth";
+        public const string SkipAuthResultCheck = "__skipAuthResultCheck";
         private const string IssueLoginRedirectKey = "__issueLoginRedirectKey";
 
         private readonly IAuthenticationService _authenticationService;
