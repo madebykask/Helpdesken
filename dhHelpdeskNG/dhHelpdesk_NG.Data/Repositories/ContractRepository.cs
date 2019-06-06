@@ -107,13 +107,13 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private IQueryable<Contract> AddDepartmentFilter(int userId, int customerId, IQueryable<Contract> query)
         {
+            var userDepartments = DataContext.Departments
+                .Where(d => d.Customer_Id == customerId && d.Users.Any(du => du.Id == userId))
+                .Select(d => d.Id);
+            var hasDepartmentRestrictions = userDepartments.Any();
             return query.Where(c => !c.Department_Id.HasValue ||
-                                    DataContext.Departments
-                                        .Count(d => d.Customer_Id == customerId && d.Users.Any(du => du.Id == userId)) == 0 ||
-                                    DataContext.Departments
-                                        .Where(d => d.Customer_Id == customerId && d.Users.Any(du => du.Id == userId))
-                                        .Select(d => d.Id)
-                                        .Contains(c.Department_Id.Value));
+                                    !hasDepartmentRestrictions ||
+                                    hasDepartmentRestrictions && userDepartments.Contains(c.Department_Id.Value));
         }
     }
 

@@ -131,7 +131,7 @@ namespace DH.Helpdesk.Services.Services
             if (!string.IsNullOrEmpty(filter.SearchText)) 
                 exp = PredicateBuilder<Contract>.AndAlso(exp, t => t.ContractNumber.Contains(filter.SearchText) || t.Info.Contains(filter.SearchText));
 
-            var queryable = _contractRepository.GetContracts(exp, customerId, userId).OrderBy(c => c.ContractNumber).AsQueryable();
+            var queryable = _contractRepository.GetContracts(exp, userId, customerId).OrderBy(c => c.ContractNumber).AsQueryable();
 
             var contracts = 
                 queryable.Select(contract => new ContractSearchItemData()
