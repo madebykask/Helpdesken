@@ -14,6 +14,7 @@ namespace DH.Helpdesk.BusinessData.Models.ReportService
         public DateToDate CaseCreationDate { get; set; }
 
         public DateToDate CaseClosingDate { get; set; }
+        public DateToDate LogNoteDate { get; set; }
 
         public List<User> Administrators { get; set; }
 

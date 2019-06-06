@@ -2,6 +2,7 @@
 using System.Data.Entity.SqlServer;
 using DH.Helpdesk.BusinessData.Enums.Reports;
 using DH.Helpdesk.Common.Tools;
+using Z.EntityFramework.Plus;
 
 namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 {
@@ -129,6 +130,12 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 
             if (filter.ProductAreas!= null && filter.ProductAreas.Any())
                 query = query.Where(l => l.Case.ProductArea_Id.HasValue && filter.ProductAreas.Contains(l.Case.ProductArea_Id.Value));
+
+            if (filter.LogNoteFrom.HasValue)
+                query = query.Where(l => l.LogDate >= filter.LogNoteFrom.Value);
+
+            if (filter.LogNoteTo.HasValue)
+                query = query.Where(l => l.LogDate <= filter.LogNoteTo.Value);
 
             if (filter.CaseStatus.HasValue)
             {

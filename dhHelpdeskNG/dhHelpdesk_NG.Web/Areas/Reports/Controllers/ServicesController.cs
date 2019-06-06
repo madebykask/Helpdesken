@@ -111,6 +111,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             var customerId = SessionFacade.CurrentCustomer.Id;
             var dataFilter = GetCommonDataFilter<ReportedTimeDataFilter>(filter);
             dataFilter.GroupBy = (ReportedTimeGroup) filter.GroupBy;
+            dataFilter.LogNoteFrom = filter.LogNoteFrom;
+            dataFilter.LogNoteTo = filter.LogNoteTo.HasValue ? filter.LogNoteTo.GetEndOfDay() : new DateTime?();
 
             var result = _reportServiceService.GetReportedTimeData(dataFilter);
             var minutesInHour = 60.0;

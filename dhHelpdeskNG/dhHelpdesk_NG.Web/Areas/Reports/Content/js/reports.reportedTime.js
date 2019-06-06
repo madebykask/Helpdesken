@@ -67,7 +67,9 @@
                     'filter.RegisterFrom': filters.regDateFrom,
                     'filter.RegisterTo': filters.regDateTo,
                     'filter.CloseFrom': filters.closeDateFrom,
-                    'filter.CloseTo': filters.closeDateTo
+                    'filter.CloseTo': filters.closeDateTo,
+                    'filter.logNoteFrom': filters.logNoteDateFrom,
+                    'filter.logNoteTo': filters.logNoteDateTo
                 }),
                 url: options.dataUrl,
                 contentType: 'application/json'

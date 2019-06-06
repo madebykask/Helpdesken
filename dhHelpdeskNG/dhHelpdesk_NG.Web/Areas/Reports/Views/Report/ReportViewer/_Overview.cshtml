@@ -159,6 +159,16 @@
                             @Html.EditorFor(m => Model.ReportFilter.CaseClosingDate.ToDate, "DatePicker", new { id = "CaseClosingToDate" })
                         </td>
                     </tr>
+                    <tr id="logNoteDateFields" class="date-block" style="display: none">
+                        <td>
+                            @Translation.Get("Noteringsdatum")
+                        </td>
+                        <td>
+                            @Html.EditorFor(m => Model.ReportFilter.LogNoteDate.FromDate, "DatePicker", new { id = "LogNoteFromDate" })
+                            &nbsp;
+                            @Html.EditorFor(m => Model.ReportFilter.LogNoteDate.ToDate, "DatePicker", new { id = "LogNoteToDate" })
+                        </td>
+                    </tr>
                     @{
                         <tr id="reportGeneratorFields" style="display: none">
                             <td>

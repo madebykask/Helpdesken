@@ -23,6 +23,8 @@
         var reportGeneratorFields = "#reportGeneratorFields";
         var caseCloseFrom = "#ReportFilter_CaseClosingDate_FromDate";
         var caseCloseTo = "#ReportFilter_CaseClosingDate_ToDate";
+        var caseLogNoteDateFrom = '#ReportFilter_LogNoteDate_FromDate';
+        var caseLogNoteDateTo = '#ReportFilter_LogNoteDate_ToDate';
         var reportCategoryDropdown = "#lstfilterReportCategory";
         var reportCategoryDropdownRt = "#lstfilterReportCategoryRt";
         var changeDateFrom = "#ReportFilter_CaseChangeDate_FromDate";
@@ -170,7 +172,7 @@
 
         };
 
-        dhHelpdesk.reports.onGeneratedShow = function () {           
+        dhHelpdesk.reports.onGeneratedShow = function () {
             if (!dhHelpdesk.reports.doValidation())
                 return;
 
@@ -227,12 +229,14 @@
         dhHelpdesk.reports.resetErrors = function () {
             const errorClass = window.dhHelpdesk.reports.errorClass;
 
-            const $createDateFrom = $('#ReportFilter_CaseCreationDate_FromDate');
-            const $createDateTo = $('#ReportFilter_CaseCreationDate_ToDate');
-            const $closeDateFrom = $('#ReportFilter_CaseClosingDate_FromDate');
-            const $closeDateTo = $('#ReportFilter_CaseClosingDate_ToDate');
-            const $changeDateFrom = $('#ReportFilter_CaseChangeDate_FromDate');
-            const $changeDateTo = $('#ReportFilter_CaseChangeDate_ToDate');
+            const $createDateFrom = $(caseCreateFrom);
+            const $createDateTo = $(caseCreateTo);
+            const $closeDateFrom = $(caseCloseFrom);
+            const $closeDateTo = $(caseCloseTo);
+            const $changeDateFrom = $(changeDateFrom);
+            const $changeDateTo = $(changeDateTo);
+            const $logNoteDateFrom = $(caseLogNoteDateFrom);
+            const $logNoteDateTo = $(caseLogNoteDateTo);
 
             $createDateFrom.removeClass(errorClass);
             $createDateTo.removeClass(errorClass);
@@ -240,18 +244,22 @@
             $closeDateTo.removeClass(errorClass);
             $changeDateFrom.removeClass(errorClass);
             $changeDateTo.removeClass(errorClass);
+            $logNoteDateFrom.removeClass(errorClass);
+            $logNoteDateTo.removeClass(errorClass);
         }
 
         dhHelpdesk.reports.doValidation = function (isRegDateRequiredOnly) {
 
             isRegDateRequiredOnly = isRegDateRequiredOnly !== false; // default true
 
-            const $createDateFrom = $('#ReportFilter_CaseCreationDate_FromDate');
-            const $createDateTo = $('#ReportFilter_CaseCreationDate_ToDate');
-            const $closeDateFrom = $('#ReportFilter_CaseClosingDate_FromDate');
-            const $closeDateTo = $('#ReportFilter_CaseClosingDate_ToDate');
-            const $changeDateFrom = $('#ReportFilter_CaseChangeDate_FromDate');
-            const $changeDateTo = $('#ReportFilter_CaseChangeDate_ToDate');
+            const $createDateFrom = $(caseCreateFrom);
+            const $createDateTo = $(caseCreateTo);
+            const $closeDateFrom = $(caseCloseFrom);
+            const $closeDateTo = $(caseCloseTo);
+            const $changeDateFrom = $(changeDateFrom);
+            const $changeDateTo = $(changeDateTo);
+            const $logNoteDateFrom = $(caseLogNoteDateFrom);
+            const $logNoteDateTo = $(caseLogNoteDateTo);
 
             dhHelpdesk.reports.resetErrors();
 
@@ -279,6 +287,8 @@
                 emptyControls.push(validatePair($closeDateFrom, $closeDateTo));
                 if (!$changeDateFrom.is(':hidden'))
                     emptyControls.push(validatePair($changeDateFrom, $changeDateTo));
+                if (!$logNoteDateFrom.is(':hidden'))
+                    emptyControls.push(validatePair($logNoteDateFrom, $logNoteDateTo));
             }
 
             if (emptyControls.every(function(e) { // all empty
@@ -399,6 +409,9 @@
             var closeDateFrom = $(caseCloseFrom).val();
             var closeDateTo = $(caseCloseTo).val();
 
+            var logNoteDateFrom = $(caseLogNoteDateFrom).val();
+            var logNoteDateTo = $(caseLogNoteDateTo).val();
+
             var groupBy = null;
             var $reportCategory = $(reportCategoryDropdown);
             var $reportCategoryRt = $(reportCategoryDropdownRt);
@@ -421,6 +434,8 @@
                 'regDateTo': regDateTo,
                 'closeDateFrom': closeDateFrom,
                 'closeDateTo': closeDateTo,
+                'logNoteDateFrom': logNoteDateFrom,
+                'logNoteDateTo': logNoteDateTo,
                 'status': status,
                 'groupBy': groupBy
             };
@@ -538,6 +553,7 @@
             var $fieldsSelect = $("#lstFields");
             var $stackBy = $('#lstStackBy');
             var $groupBy = $('#groupBy');
+            var $logNoteDateFields = $('#logNoteDateFields');
             var $historicalFilters = $('#historicalFilters');
 
             var historicalReportControls = [$btnShowReport, $groupBy, $jsReportContainer, $historicalFilters];
@@ -589,14 +605,19 @@
                 $groupBy.hide();
                 dhHelpdesk.reports.historicalReport.hide();
                 $historicalFilters.hide();
-                if (reportId === dhHelpdesk.reports.reportType.ReportedTime || 
-                    reportId === dhHelpdesk.reports.reportType.NumberOfCases) {
+                $logNoteDateFields.hide();
+                $jsReportContainer.hide();
+                $otherReportsContainer.show();
+                if (reportId === dhHelpdesk.reports.reportType.ReportedTime) {
+                    $logNoteDateFields.show();
                     $otherReportsContainer.hide();
                     $jsReportContainer.show();
                     window.dhHelpdesk.reports[reportObjNames[reportId]].init();
-                } else {
-                    $jsReportContainer.hide();
-                    $otherReportsContainer.show();
+                }
+                if (reportId === dhHelpdesk.reports.reportType.NumberOfCases) {
+                    $otherReportsContainer.hide();
+                    $jsReportContainer.show();
+                    window.dhHelpdesk.reports[reportObjNames[reportId]].init();
                 }
             }
 

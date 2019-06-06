@@ -610,8 +610,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         {
             var ret = new CustomSelectList();
             ret.Items.AddItem(CaseProgressFilter.None, string.Empty);
-            ret.Items.AddItem(CaseProgressFilter.CasesInProgress, Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation));
-            ret.Items.AddItem(CaseProgressFilter.ClosedCases, Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation));
+            ret.Items.AddItem(CaseProgressFilter.CasesInProgress, Translation.GetCoreTextTranslation("Pågående ärenden"));
+            ret.Items.AddItem(CaseProgressFilter.ClosedCases, Translation.GetCoreTextTranslation("Avslutade ärenden"));
             return ret;
         }
 
