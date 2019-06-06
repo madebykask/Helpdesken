@@ -13,7 +13,6 @@ using System.Web.Security;
 using DH.Helpdesk.BusinessData.Models.LogProgram;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Logger;
-using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.Services.Exceptions;
 using DH.Helpdesk.Services.Infrastructure;
@@ -29,6 +28,7 @@ using DH.Helpdesk.Web.Infrastructure.Configuration.Concrete;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 using DH.Helpdesk.Web.Infrastructure.Logger;
+using DH.Helpdesk.Web.Models.Error;
 using Microsoft.Practices.ServiceLocation;
 
 namespace DH.Helpdesk.Web
@@ -99,21 +99,6 @@ namespace DH.Helpdesk.Web
             ViewEngines.Engines.Add(viewEngine);
         }
 
-        protected void Application_PostAuthorizeRequest()
-        {
-            //MARK: Remove old Api
-            //if (IsWebApiRequest())
-            //{
-            //	HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
-            //}
-        }
-
-        //MARK: Remove old Api
-        //private bool IsWebApiRequest()
-        //{
-        //	return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.Contains(@"/" + WebApiConfig.UrlPrefixRelative + @"/");
-        //}        
-
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this._configuration.Application.DefaultCulture;
@@ -138,10 +123,6 @@ namespace DH.Helpdesk.Web
         {
             var identity = Context.User?.Identity;
             LogSession($">>>Application.PostAuthenticateRequest event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
-
-            //var configuration = DependencyResolver.Current.GetService<IApplicationConfiguration>();
-            //var authenticationService = DependencyResolver.Current.GetService<IAuthenticationService>();
-            //var loginUrl = (FormsAuthentication.LoginUrl ?? "/Login/Login").Trim('~');
         }
 
         #endregion
@@ -281,44 +262,12 @@ namespace DH.Helpdesk.Web
 
         protected void Application_EndRequest(object sender, EventArgs e)
         {
-            var configuration = DependencyResolver.Current.GetService<IApplicationConfiguration>();
-            var loginUrl = (FormsAuthentication.LoginUrl ?? "/Login/Login").Trim('~');
-
+            var configuration = new ApplicationConfiguration();
             LogSession("Application.EndRequest: \r\n" +
                        $"\t-LoginMode: {configuration.LoginMode.GetName()}\r\n " +
                        $"\t-Status: {Response.Status}\r\n" +
                        $"\t-StatusCode: {Response.StatusCode}\r\n" +
                        $"\t-RedirectLocation: {Response.RedirectLocation}\r\n", Context);
-
-            // if we are running in a mixed mode (win + forms) - we need to handle Forms auth unauthorised redirect request (Status:302).
-            if (Response.StatusCode == 302 &&
-                configuration.LoginMode == LoginMode.Mixed &&
-                Response.RedirectLocation.IndexOf(loginUrl, StringComparison.CurrentCultureIgnoreCase) != -1)
-            {
-                //allow forms auth redirect if it was triggered by HelpdeskAuthenticationFilter 
-                if (AllowFormsAuthenticationRedirect(Context))
-                {
-                    LogSession("Application.EndRequest: allow authorisation redirect by forms auth filter.", Context);
-                    return;
-                }
-
-                LogSession("Application.EndRequest: Cancelling unauthorised redirect issued by forms authentication.", Context);
-                //if (Request.Browser.Win32)
-                {
-                    // Add script to response to redirect to forms login page in case windows authentication fails
-                    this.Response.ClearContent();
-                    this.Response.Write("<script language=\"javascript\">self.location='" + loginUrl + "?ReturnUrl=" + HttpUtility.UrlEncode(Request.Url.PathAndQuery) + "';</script>");
-
-                    // Required to allow javascript redirection through to browser
-                    this.Response.TrySkipIisCustomErrors = true;
-                    this.Response.Status = "401 Unauthorized";
-                    this.Response.StatusCode = 401;
-
-                    // note that the following line is .NET 4.5 or later only
-                    // otherwise you have to suppress the return URL etc manually!
-                    this.Response.SuppressFormsAuthenticationRedirect = true;
-                }
-            }
         }
 
         protected void Application_Error(object sender, EventArgs e)
@@ -326,21 +275,8 @@ namespace DH.Helpdesk.Web
             var httpContext = ((MvcApplication)sender).Context;
 
             var currentRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
-            var currentController = " ";
-            var currentAction = " ";
-
-            if (currentRouteData != null)
-            {
-                if (currentRouteData.Values["controller"] != null && !string.IsNullOrEmpty(currentRouteData.Values["controller"].ToString()))
-                {
-                    currentController = currentRouteData.Values["controller"].ToString();
-                }
-
-                if (currentRouteData.Values["action"] != null && !string.IsNullOrEmpty(currentRouteData.Values["action"].ToString()))
-                {
-                    currentAction = currentRouteData.Values["action"].ToString();
-                }
-            }
+            var currentController = currentRouteData.GetControllerName();
+            var currentAction = currentRouteData.GetActionName();
 
             var ex = Server.GetLastError();
 
@@ -385,10 +321,11 @@ namespace DH.Helpdesk.Web
             httpContext.Response.Clear();
             httpContext.Response.StatusCode = ex is HttpException ? ((HttpException)ex).GetHttpCode() : 500;
             httpContext.Response.TrySkipIisCustomErrors = true;
-            routeData.Values["controller"] = "Error";
-            routeData.Values["action"] = action;
 
-            controller.ViewData.Model = new DH.Helpdesk.Web.Models.Error.HandleErrorInfoGuid(ex, currentController, currentAction, guid);
+            routeData.SetControllerValue("Error");
+            routeData.SetActionValue(action);
+
+            controller.ViewData.Model = new HandleErrorInfoGuid(ex, currentController, currentAction, guid);
             ((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
         }
 
@@ -473,19 +410,6 @@ namespace DH.Helpdesk.Web
             #endif
         }
 
-        private bool AllowFormsAuthenticationRedirect(HttpContext ctx)
-        {
-            var key = HelpdeskAuthenticationFilter.AllowFormsAuthKey;
-            if (ctx.Items.Contains(key))
-            {
-                var val = Convert.ToBoolean(ctx.Items[key] ?? false);
-                return val;
-            }
-
-            return false;
-        }
-
-
         //keep for diagnostic purposes
         private void DumpModules()
         {
@@ -507,6 +431,7 @@ namespace DH.Helpdesk.Web
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)
         {
+            //TODO: move diagnostics logic to separate Facility class
             try
             {
                 // PREV DEV; POST EACH TIME A REQUEST IS MADE???

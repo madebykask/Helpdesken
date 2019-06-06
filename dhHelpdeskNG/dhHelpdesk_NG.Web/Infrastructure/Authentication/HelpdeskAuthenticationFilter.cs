@@ -1,20 +1,23 @@
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Filters;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Logger;
 using DH.Helpdesk.Dal.Infrastructure.Context;
 using DH.Helpdesk.Web.Infrastructure.Configuration;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Infrastructure.Logger;
 using DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete;
+using IpMatcher;
 
 namespace DH.Helpdesk.Web.Infrastructure.Authentication
 {
     public class HelpdeskAuthenticationFilter : IAuthenticationFilter
     {
-        public const string AllowFormsAuthKey = "__allowFormsAuth";
+        public const string SkipAuthResultCheck = "__allowFormsAuth";
         private const string IssueLoginRedirectKey = "__issueLoginRedirectKey";
 
         private readonly IAuthenticationService _authenticationService;
@@ -22,7 +25,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         private readonly IApplicationConfiguration _applicationConfiguration;
         private readonly IUserContext _userContext;
         private readonly ILoggerService _logger = LogManager.Session;
-
+        private Matcher _ipMatcher;
+        
         #region ctor()
 
         public HelpdeskAuthenticationFilter(IAuthenticationService authenticationService, 
@@ -34,6 +38,32 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             _sessionContext = sessionContext;
             _userContext = userContext;
             _applicationConfiguration = applicationConfiguration;
+
+            var loginMode = GetCurrentLoginMode();
+            if (loginMode == LoginMode.Mixed)
+            {
+                InitWinAuthIPMatcher(_applicationConfiguration.WinAuthIPFilter);
+            }
+        }
+
+        #endregion
+
+        #region Init Methods
+
+        private void InitWinAuthIPMatcher(IList<string> winAuthFilterItems)
+        {
+            _ipMatcher = null;
+
+            foreach (var item in winAuthFilterItems)
+            {
+                var ipMask = item.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                if (ipMask.Length == 2)
+                {
+                    if (_ipMatcher == null) _ipMatcher = new Matcher(); // create only if there any valid items
+                    //ip|netmask
+                    _ipMatcher.Add(ipMask[0], ipMask[1]);
+                }
+            }
         }
 
         #endregion
@@ -47,15 +77,15 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             var isIdentityAuthenticated = identity?.IsAuthenticated ?? false;
 
             // allow anonymous for login controller actions
-            if (this.IgnoreRequest(filterContext))
+            if (IgnoreRequest(filterContext))
             {
+                filterContext.HttpContext.Items[SkipAuthResultCheck] = true;
                 _logger.Debug($"AuthenticationFilter. Skip check for anonymous action. Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}, Url: {ctx.Request.Url}");
                 return;
             }
             
             var customerUserName = _userContext.Login;
-            var loginMode = GetCurrentLoginMode();
-
+            
             _logger.Debug($"AuthenticationFilter called. CustomerUser: {customerUserName}, Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}, Url: {ctx.Request.Url}");
             
             //NOTE: perform signin for helpdesk customer user only if request has been authenticated by native mechanisms (forms, wins, adfs,..)
@@ -74,36 +104,44 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             }
         }
         
-        //OnAuthenticationChallenge is called at the end after other Authorisation filters to be able to process final result
+        //OnAuthenticationChallenge: is called at the end after other Authorisation filters to be able to process final result - redirect to login page or issue auth challenge
         public void OnAuthenticationChallenge(AuthenticationChallengeContext context)
         {
+            // check if we shall skip auth result check for AllowAnonymous controller actions
+            var skipAuthResultCheck = (bool)(context.HttpContext.Items[SkipAuthResultCheck] ?? false);
+            if (skipAuthResultCheck)
+                return;
+
             var isIdentityAuthenticated = context.HttpContext.User?.Identity?.IsAuthenticated ?? false;
             var issueLoginRedirect = Convert.ToBoolean(context.HttpContext.Items[IssueLoginRedirectKey] ?? false);
             
             //do redirect to login page if its authenticated identity but helpdesk user (tblUsers) was not found by identity name so that user could specify his username to login
             if (isIdentityAuthenticated && issueLoginRedirect)
             {
-                //if (context.Result is HttpUnauthorizedResult || (context.Result is HttpStatusCodeResult && ((HttpStatusCodeResult)context.Result).StatusCode == 401))
-                {
-                    var loginUrl = _authenticationService.GetLoginUrl();
-                    _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Redirecting to login page: {loginUrl}");
-                    context.HttpContext.Items[AllowFormsAuthKey] = true;
-                    context.Result = new RedirectResult(loginUrl);
-                }
+                var loginUrl = _authenticationService.GetLoginUrl(); // specific for each auth mode (win, forms, mixed, sso)
+                _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Redirecting to login page: {loginUrl}");
+                context.Result = new RedirectResult(loginUrl);
+                return;
             }
             
-            //todo: check if it can be implemented here
-            //var loginMode = GetCurrentLoginMode();
-            //if (context.Result is HttpUnauthorizedResult && loginMode == LoginMode.Mixed)
-            //{
-            //    var loginUrl = _authenticationService.GetLoginUrl();
-            //    if (!string.IsNullOrEmpty(loginUrl))
-            //    {
-            //        _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Unauthorised. Redirecting to login page: {loginUrl}.");
-            //        context.HttpContext.Items[AllowFormsAuthKey] = true;
-            //        context.Result = new RedirectResult(loginUrl);
-            //    }
-            //}
+            var loginMode = GetCurrentLoginMode();
+            var helpdeskUserIdentity = SessionFacade.CurrentUserIdentity;
+
+            // for mixed mode try to prompt windows login first before redirecting to FormsAuth login 
+            if (loginMode == LoginMode.Mixed && string.IsNullOrEmpty(helpdeskUserIdentity?.UserId))
+            {
+                var clientIP = context.HttpContext.Request.GetIpAddress();
+                if (CheckWinAuthIPFilter(clientIP))
+                {
+                    _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Request ip ({clientIP}) is from WinAuth ip range! Display windows auth.");
+                    var loginUrl = _authenticationService.GetLoginUrl();
+                    context.Result = new MixedModeWinAuth401Result(loginUrl);
+                }
+                else
+                {
+                    _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Request ip ({clientIP}) is not from WinAuth ip range. Do not prompt windows login...");
+                }
+            }
         }
 
         #endregion
@@ -127,6 +165,15 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 .OfType<AllowAnonymousAttribute>()
                 .Any();
         }
+        
+        private bool CheckWinAuthIPFilter(string ipAddress)
+        {
+            if (_ipMatcher == null)
+                return true;
+
+            var res = _ipMatcher.MatchExists(ipAddress);
+            return res;
+        }
 
         private LoginMode GetCurrentLoginMode()
         {
@@ -139,4 +186,38 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
 
         #endregion
     }
+
+    #region MixedModeWinAuth401Result
+
+    public class MixedModeWinAuth401Result : ActionResult
+    {
+        private readonly string _loginPageUrl;
+
+        public MixedModeWinAuth401Result(string loginPageUrl)
+        {
+            _loginPageUrl = loginPageUrl;
+        }
+        public override void ExecuteResult(ControllerContext context)
+        {
+            var response = context.HttpContext.Response;
+            var loginUrl = (_loginPageUrl ?? "/Login/Login").Trim('~');
+
+            // Add script to response to redirect to forms login page in case windows authentication fails
+            response.ClearContent();
+
+            var currentRequestUrl = context.HttpContext.Request.Url.PathAndQuery;
+            response.Write("<script language=\"javascript\">self.location='" + loginUrl + "?ReturnUrl=" + HttpUtility.UrlEncode(currentRequestUrl) + "';</script>");
+
+            // Required to allow javascript redirection through to browser
+            response.TrySkipIisCustomErrors = true;
+            response.Status = "401 Unauthorized";
+            response.StatusCode = 401;
+
+            // note that the following line is .NET 4.5 or later only
+            // otherwise you have to suppress the return URL etc manually!
+            response.SuppressFormsAuthenticationRedirect = true;
+        }
+    }
+
+    #endregion
 }

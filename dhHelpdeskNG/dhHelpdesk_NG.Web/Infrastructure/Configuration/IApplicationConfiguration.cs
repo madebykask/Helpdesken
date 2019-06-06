@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.Common.Enums;
+﻿using System.Collections.Generic;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Web.Infrastructure.Configuration
 {
@@ -9,5 +10,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration
         CultureInfo DefaultCulture { get; }
         string ApplicationId { get; }
         LoginMode LoginMode { get; }
+        IList<string> WinAuthIPFilter { get; }
     }
 }

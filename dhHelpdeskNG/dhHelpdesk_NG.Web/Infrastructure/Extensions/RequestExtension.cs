@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Web.WebPages;
 
 namespace DH.Helpdesk.Web.Infrastructure.Extensions
@@ -10,22 +11,38 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
 
     public static class RequestExtension
     {
-
         public static string GetIpAddress(this HttpRequestBase request)
         {
-            string ret;
+            var res = string.Empty;
 
             try
             {
-                ret = request.ServerVariables["HTTP_X_FORWARDED_FOR"];
-                if (string.IsNullOrWhiteSpace(ret))
+                if (request.ServerVariables["HTTP_X_FORWARDED_FOR"] != null)
                 {
-                    ret = request.UserHostAddress;
+                    var ipAddress = request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+                    if (!string.IsNullOrEmpty(ipAddress))
+                    {
+                        var addresses = ipAddress.Split(',');
+                        if (addresses.Length != 0)
+                        {
+                            res = addresses[0];
+                        }
+                    }
+                }
+                else if (request.ServerVariables["REMOTE_ADDR"] != null)
+                {
+                    return request.ServerVariables["REMOTE_ADDR"];
+                }
+                else
+                {
+                    res = request.UserHostAddress;
                 }
             }
-            catch { ret = string.Empty; }
-
-            return ret;
+            catch
+            {
+                res = string.Empty;
+            }
+            return res;
         }
 
         public static string GetAbsoluteUrl()
@@ -52,26 +69,26 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return appPath;
         }
 
-		public static bool IsAbsoluteUrlLocalToHost(this HttpRequestBase request, string url)
-		{
-			if (url.IsEmpty())
-			{
-				return false;
-			}
+        public static bool IsAbsoluteUrlLocalToHost(this HttpRequestBase request, string url)
+        {
+            if (url.IsEmpty())
+            {
+                return false;
+            }
 
-			Uri absoluteUri;
-			if (Uri.TryCreate(url, UriKind.Absolute, out absoluteUri))
-			{
-				return String.Equals(request.Url.Host, absoluteUri.Host, StringComparison.OrdinalIgnoreCase);
-			}
-			else
-			{
-				bool isLocal = !url.StartsWith("http:", StringComparison.OrdinalIgnoreCase)
-					&& !url.StartsWith("https:", StringComparison.OrdinalIgnoreCase)
-					&& Uri.IsWellFormedUriString(url, UriKind.Relative);
-				return isLocal;
-			}
-		}
+            Uri absoluteUri;
+            if (Uri.TryCreate(url, UriKind.Absolute, out absoluteUri))
+            {
+                return String.Equals(request.Url.Host, absoluteUri.Host, StringComparison.OrdinalIgnoreCase);
+            }
+            else
+            {
+                bool isLocal = !url.StartsWith("http:", StringComparison.OrdinalIgnoreCase)
+                    && !url.StartsWith("https:", StringComparison.OrdinalIgnoreCase)
+                    && Uri.IsWellFormedUriString(url, UriKind.Relative);
+                return isLocal;
+            }
+        }
 
         //public static Tuple<int, string> GetCurrentUser(this HttpRequestContext request)
         public static string[] GetClaims(this HttpRequestContext request, params string[] claimTypes)
@@ -91,6 +108,16 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             }
 
             return ret;
+        }
+
+        public static bool IsGet(this HttpRequestBase request)
+        {
+            return request.HttpMethod == HttpMethod.Get.Method;
+        }
+
+        public static bool IsPost(this HttpRequestBase request)
+        {
+            return request.HttpMethod == HttpMethod.Post.Method;
         }
     }
 }

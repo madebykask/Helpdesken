@@ -109,6 +109,10 @@
       <HintPath>..\packages\EPPlus.4.0.2\lib\net20\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="IpMatcher, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\IpMatcher.1.0.1\lib\net452\IpMatcher.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="itextsharp, Version=5.5.0.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.0\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
@@ -361,6 +365,7 @@
     <Compile Include="Infrastructure\Authentication\Behaviors\MixedModeAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\PrincipalExtensions.cs" />
     <Compile Include="Infrastructure\Behaviors\AdvancedSearchBehavior.cs" />
+    <Compile Include="Infrastructure\Extensions\RouteDataExtensions.cs" />
     <Compile Include="Models\Case\AdvancedCaseSearchInput.cs" />
     <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
