@@ -2,7 +2,6 @@
 @using DH.Helpdesk.Web.Infrastructure
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.BusinessData.OldComponents
-@using DH.Helpdesk.Web.Enums
 @model DH.Helpdesk.Web.Areas.Reports.Models.ReportService.ReportServiceOverviewModel
 <script type="text/javascript">
     window.Params = {
@@ -20,7 +19,7 @@
 @if (Model != null)
 {
     <div class="container">
-        <div class="row">
+        <div class="row report-filters">
             <div class="span6">
                 <table class="tableform">
                     @if (Model.ReportList != null)
@@ -69,7 +68,7 @@
                             @Translation.GetCoreTextTranslation("Gruppera")
                         </td>
                         <td>
-                            <select id="lstfilterReportCategory" name="lstfilterCategory" data-field="reportcategories" style="width: 300px;" 
+                            <select id="lstfilterReportCategory" name="lstfilterCategory" data-field="reportcategories" style="width: 300px;"
                                     data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" @(Model.ReportFilter.ReportCategory == null ? " display: none" : "")>
                                 @if (Model.ReportFilter.ReportCategory != null)
                                 {
@@ -78,12 +77,12 @@
                                         var curId = 0;
                                         int.TryParse(r.Id, out curId);
                                         <option value="@r.Id" @(r.IsActive ? "" : "class='DisabledChosen'")>
-                                           @r.Value
+                                            @r.Value
                                         </option>
                                     }
                                 }
                             </select>
-                            <select id="lstfilterReportCategoryRt" name="lstfilterCategoryRt" data-field="reportcategoriesrt" style="width: 300px;" 
+                            <select id="lstfilterReportCategoryRt" name="lstfilterCategoryRt" data-field="reportcategoriesrt" style="width: 300px;"
                                     data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" @(Model.ReportFilter.ReportCategoryRt == null ? " display: none" : "")>
                                 @if (Model.ReportFilter.ReportCategoryRt != null)
                                 {
@@ -180,12 +179,11 @@
                 </table>
             </div>
             <div class="span6">
-                <div class="span6">
-                    <table class="tableform">
-                        
+                <table class="tableform">
+
                         <tr>
                             <td colspan="2">
-                                <b>@Translation.GetCoreTextTranslation("Nuvarande värden")</b>
+                                <label style="font-weight: bold;">@Translation.GetCoreTextTranslation("Nuvarande värden")</label>
                             </td>
                         </tr>
 
@@ -327,47 +325,44 @@
                             </tr>
                         }
                     </table>
-                </div>
             </div>
             <div class="span6" id="historicalFilters" style="display: none">
-                <div class="span6">
-                    <table class="tableform">
+                <table class="tableform">
+                    <tr>
+                        <td colspan="2">
+                            <label style="font-weight: bold;">@Translation.GetCoreTextTranslation("Historiska värden")</label>
+                        </td>
+                    </tr>
+                    <tr class="date-block">
+                        <td>
+                            @Translation.Get(GlobalEnums.TranslationCaseFields.ChangeTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
+                        </td>
+                        <td>
+                            @Html.EditorFor(m => Model.ReportFilter.CaseChangeDate.FromDate, "DatePicker", new { id = "historicalChangeDateFrom" })
+                            &nbsp;
+                            @Html.EditorFor(m => Model.ReportFilter.CaseChangeDate.ToDate, "DatePicker", new { id = "historicalChangeDateTo" })
+                        </td>
+                    </tr>
+                    @if (Model.ReportFilter.WorkingGroups != null)
+                    {
+                        var selectedItems = Model.ReportFilter.Selected.SelectedHistoricalWorkingGroups.GetSelectedStr();
                         <tr>
-                            <td colspan="2">
-                                <b>@Translation.GetCoreTextTranslation("Historiska värden")</b>
-                            </td>
-                        </tr>
-                        <tr class="date-block">
                             <td>
-                                @Translation.Get(GlobalEnums.TranslationCaseFields.ChangeTime.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
+                                @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
                             </td>
                             <td>
-                                @Html.EditorFor(m => Model.ReportFilter.CaseChangeDate.FromDate, "DatePicker", new {id = "historicalChangeDateFrom"})
-                                &nbsp;
-                                @Html.EditorFor(m => Model.ReportFilter.CaseChangeDate.ToDate, "DatePicker", new {id = "historicalChangeDateTo"})
+                                <select id="historicalWorkingGroups" data-placeholder="@Translation.Get("Välj en eller flera")" multiple="multiple" class="chosen-select">
+                                    @foreach (var w in Model.ReportFilter.WorkingGroups)
+                                    {
+                                        <option value="@w.Id" @w.Id.IdIsSelected(selectedItems) class="@(w.IsActive == 0 ? "DisabledChosen" : "")">
+                                            @w.WorkingGroupName
+                                        </option>
+                                    }
+                                </select>
                             </td>
                         </tr>
-                        @if (Model.ReportFilter.WorkingGroups != null)
-                        {
-                            var selectedItems = Model.ReportFilter.Selected.SelectedHistoricalWorkingGroups.GetSelectedStr();
-                            <tr>
-                                <td>
-                                    @Translation.Get(GlobalEnums.TranslationCaseFields.WorkingGroup_Id.ToString(), Enums.TranslationSource.CaseTranslation, Model.CustomerId)
-                                </td>
-                                <td>
-                                    <select id="historicalWorkingGroups" data-placeholder="@Translation.Get("Välj en eller flera")" multiple="multiple" class="chosen-select">
-                                        @foreach (var w in Model.ReportFilter.WorkingGroups)
-                                        {
-                                            <option value="@w.Id" @w.Id.IdIsSelected(selectedItems) class="@(w.IsActive == 0 ? "DisabledChosen" : "")">
-                                                @w.WorkingGroupName
-                                            </option>
-                                        }
-                                    </select>
-                                </td>
-                            </tr>
-                        }
-                    </table>
-                </div>
+                    }
+                </table>
             </div>
         </div>
     </div>

@@ -102,6 +102,9 @@ a, a:hover, a:focus {
     overflow-y: auto;
 }
 
+.content.report-page .report-filters .tableform td {
+    height: 35px;
+}
 
 /************************  Content Error page *******************************************/
 .content.error-page {
