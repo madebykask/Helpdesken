@@ -90,22 +90,26 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                 smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
             }
 
-            if (!String.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
+            if (!string.IsNullOrEmpty(template.Body) && !String.IsNullOrEmpty(template.Subject))
             {
                 var to = newCase.PersonsEmail.Split(';', ',').ToList();
+
                 var allEmails = to.Select(x => new
                 {
                     EmailAddress = x,
                     EmailType = EmailType.ToMail
                 }).ToList();
-                var extraFollowers = extraFollowersEmails != null ?
-                    extraFollowersEmails.Split(';', ',').ToList() :
-                    _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
+
+                var extraFollowers = extraFollowersEmails != null
+                    ? extraFollowersEmails.Split(';', ',').ToList()
+                    : _caseExtraFollowersService.GetCaseExtraFollowers(newCase.Id).Select(x => x.Follower).ToList();
+
                 var ccEmails = extraFollowers.Select(x => new
                 {
                     EmailAddress = x,
                     EmailType = EmailType.CcMail
                 }).ToList();
+
                 allEmails.AddRange(ccEmails);
 
                 foreach (var t in allEmails)

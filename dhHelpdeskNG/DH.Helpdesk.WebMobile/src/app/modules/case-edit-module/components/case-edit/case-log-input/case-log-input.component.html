@@ -9,8 +9,7 @@
 
   <div class="bordered switch">
     <mbsc-switch #sendMailToNotifierControl *ngIf="isExternalLogFieldVisible" 
-                 [disabled]="isSendMailToNotifierDisabled" 
-                 
+                 [disabled]="isSendMailToNotifierDisabled"
                  [formControlName]="caseFieldsNames.Log_SendMailToNotifier"
                  (change)="onSendExternalEmailsCheckChanged()"
                  [options]="switchOptions">

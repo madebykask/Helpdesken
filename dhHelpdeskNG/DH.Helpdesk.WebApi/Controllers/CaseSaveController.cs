@@ -249,11 +249,11 @@ namespace DH.Helpdesk.WebApi.Controllers
                 {
                     caseLogFinishingDate = utcNow;
                 }
-				else if (model.FinishingDate.Value.ToShortDateString() == DateTime.UtcNow.Date.ToShortDateString())
-				{
-					caseLogFinishingDate = utcNow;
-				}
-				else if (oldCase != null && oldCase.ChangeTime.ToShortDateString() == model.FinishingDate.Value.ToShortDateString())
+                else if (model.FinishingDate.Value.ToShortDateString() == DateTime.UtcNow.Date.ToShortDateString())
+                {
+                    caseLogFinishingDate = utcNow;
+                }
+                else if (oldCase != null && oldCase.ChangeTime.ToShortDateString() == model.FinishingDate.Value.ToShortDateString())
                 {
                     var lastChangedTime = new DateTime(oldCase.ChangeTime.Year, oldCase.ChangeTime.Month, oldCase.ChangeTime.Day, 22, 59, 59);
                     caseLogFinishingDate = lastChangedTime;
@@ -462,10 +462,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             if (currentCase.Department_Id.HasValue)
                 departmentIds = new int[] {currentCase.Department_Id.Value};
 
-			var cs = _customerSettingsService.GetCustomerSetting(customer.Id);
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
+            var cs = _customerSettingsService.GetCustomerSetting(customer.Id);
+            var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
 
-			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                 _holidayService,
                 customer.WorkingDayStart,
                 customer.WorkingDayEnd,

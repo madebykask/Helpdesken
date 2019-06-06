@@ -690,7 +690,7 @@ namespace DH.Helpdesk.Services.Services
             //        }
             if (!containsProductAreaMailOrNewCaseMail)
             {
-                this._caseMailer.InformNotifierIfNeeded(
+                _caseMailer.InformNotifierIfNeeded(
                     caseHistoryId,
                     fields,
                     log,
@@ -701,16 +701,19 @@ namespace DH.Helpdesk.Services.Services
                     cms.CustomeMailFromAddress,
                     isCreatingCase,
                     cms.DontSendMailToNotifier,
-                    cms.AbsoluterUrl);
+                    cms.AbsoluterUrl,
+                    extraFollowersEmails);
             }
 
-            this._caseMailer.InformAboutInternalLogIfNeeded(
+            _caseMailer.InformAboutInternalLogIfNeeded(
                 caseHistoryId,
                 fields,
                 log,
                 newCase,
                 helpdeskMailFromAdress,
-                files, cms.AbsoluterUrl, cms.CustomeMailFromAddress);
+                files, 
+                cms.AbsoluterUrl, 
+                cms.CustomeMailFromAddress);
         }
 
         public void SendProblemLogEmail(Case c, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, bool isClosedCaseSending)

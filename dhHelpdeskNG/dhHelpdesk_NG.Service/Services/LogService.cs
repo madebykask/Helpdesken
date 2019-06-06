@@ -182,7 +182,7 @@ namespace DH.Helpdesk.Services.Services
                             MailId = t.MailId ?? 0,
                             Email = t.EmailAddress.ToLower()
                         })
-                        .OrderBy(s => s)
+                        .OrderBy(s => s.Email)
                         .Distinct()
                         .ToList() ?? new List<EmailLogData>(),
 
