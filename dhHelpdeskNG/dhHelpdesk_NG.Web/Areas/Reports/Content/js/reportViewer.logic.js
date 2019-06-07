@@ -572,6 +572,7 @@
                 $fieldsSelect.multiselect('refresh');
                 $reportGeneratorFields.show();
                 $otherReportsContainer.hide();
+                $logNoteDateFields.hide();
                 dhHelpdesk.reports.historicalReport.hide();
                 $jsReportContainer.hide();
                 $stackBy.val('');
@@ -587,6 +588,7 @@
                 $generateReportContainer.hide();
                 $otherReportsContainer.hide();
                 $extraParameters.hide();
+                $logNoteDateFields.hide();
                 $.each(historicalReportControls, function (i, v) { v.show(); });
                 $stackBy.val(stackByDefaultValue);
                 $stackBy.prop('disabled', false);

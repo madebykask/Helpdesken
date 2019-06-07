@@ -159,23 +159,6 @@
                             @Html.EditorFor(m => Model.ReportFilter.CaseClosingDate.ToDate, "DatePicker", new { id = "CaseClosingToDate" })
                         </td>
                     </tr>
-                    @{
-                        <tr id="reportGeneratorFields" style="display: none">
-                            <td>
-                                @Translation.GetCoreTextTranslation("Fält")
-                            </td>
-                            <td>
-                                @Html.DropDownListFor(m => m.ReportGeneratorOptions.FieldIds, Model.ReportGeneratorOptions.Fields,
-                                        new
-                                        {
-                                            id = "lstFields",
-                                            multiple = "multiple",
-                                            @class = "multiselect multiselect-search"
-                                        })
-
-                            </td>
-                        </tr>
-                    }
                 </table>
             </div>
             <div class="span6">
@@ -377,6 +360,28 @@
                             @Html.EditorFor(m => Model.ReportFilter.LogNoteDate.FromDate, "DatePicker", new { id = "LogNoteFromDate" })
                             &nbsp;
                             @Html.EditorFor(m => Model.ReportFilter.LogNoteDate.ToDate, "DatePicker", new { id = "LogNoteToDate" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="span6" id="reportGeneratorFields" style="display: none">
+                <table class="tableform">
+                    <tr>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Translation.GetCoreTextTranslation("Fält")
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.ReportGeneratorOptions.FieldIds, Model.ReportGeneratorOptions.Fields,
+                                new
+                                {
+                                    id = "lstFields",
+                                    multiple = "multiple",
+                                    @class = "multiselect multiselect-search"
+                                })
+
                         </td>
                     </tr>
                 </table>
