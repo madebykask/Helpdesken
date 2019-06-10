@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using DH.Helpdesk.BusinessData.Models.Contract;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Linq;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Repositories;
@@ -216,21 +217,21 @@ namespace DH.Helpdesk.Services.Services
 
             var missingFields = new List<ContractFieldSettings>
             {
-                CreateSettingIfMissing(EnumContractFieldSettings.Number, customerId, existingSettings, false),
-                CreateSettingIfMissing(EnumContractFieldSettings.Category, customerId, existingSettings, true),
-                CreateSettingIfMissing(EnumContractFieldSettings.Supplier, customerId, existingSettings, false),
-                CreateSettingIfMissing(EnumContractFieldSettings.StartDate, customerId, existingSettings, true),
-                CreateSettingIfMissing(EnumContractFieldSettings.EndDate, customerId, existingSettings, false),
-                CreateSettingIfMissing(EnumContractFieldSettings.NoticeDate, customerId, existingSettings, false),
-                CreateSettingIfMissing(EnumContractFieldSettings.Filename, customerId, existingSettings, false),
-                CreateSettingIfMissing(EnumContractFieldSettings.Department, customerId, existingSettings, false),
-                CreateSettingIfMissing(EnumContractFieldSettings.ResponsibleUser, customerId, existingSettings, false),
-                CreateSettingIfMissing(EnumContractFieldSettings.Finished, customerId, existingSettings, false),
-                CreateSettingIfMissing(EnumContractFieldSettings.Running, customerId, existingSettings, false),
-                CreateSettingIfMissing(EnumContractFieldSettings.Other, customerId, existingSettings, false),
-                CreateSettingIfMissing(EnumContractFieldSettings.FollowUp, customerId, existingSettings, false),
-                CreateSettingIfMissing(EnumContractFieldSettings.ResponsibleFollowUp, customerId, existingSettings, false),
-                CreateSettingIfMissing(EnumContractFieldSettings.CaseNumber, customerId, existingSettings, true)
+                CreateSettingIfMissing(EnumContractFieldSettings.Number, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.Category, customerId, existingSettings, isRequired: true),
+                CreateSettingIfMissing(EnumContractFieldSettings.Supplier, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.StartDate, customerId, existingSettings, isRequired: true),
+                CreateSettingIfMissing(EnumContractFieldSettings.EndDate, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.NoticeDate, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.Filename, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.Department, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.ResponsibleUser, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.Finished, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.Running, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.Other, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.FollowUp, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.ResponsibleFollowUp, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.CaseNumber, customerId, existingSettings, false, false)
             };
 
             missingFields = missingFields.Where(x => x != null).ToList();
@@ -243,23 +244,23 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        private ContractFieldSettings CreateSettingIfMissing(string fieldName, int customerId, IList<ContractsSettingRowModel> existingSettings, bool isRequired)
+        private ContractFieldSettings CreateSettingIfMissing(string fieldName, int customerId, IList<ContractsSettingRowModel> existingSettings, bool isRequired = false, bool isVisisble = true)
         {
             var settingExists = existingSettings.Any(s => fieldName.Equals(s.ContractField,  StringComparison.OrdinalIgnoreCase));
             if (settingExists)
                 return null;
 
-            var fieldSettings = CreateDefaultSetting(fieldName, customerId, isRequired);
+            var fieldSettings = CreateDefaultSetting(fieldName, customerId, isRequired, isVisisble);
             return fieldSettings;
         }
 
-        private ContractFieldSettings CreateDefaultSetting(string fieldName, int customerId, bool isRequired)
+        private ContractFieldSettings CreateDefaultSetting(string fieldName, int customerId, bool isRequired = false, bool isVisisble = true)
         {
             return new ContractFieldSettings()
             {
                 Customer_Id = customerId,
                 Required = isRequired ? 1 : 0,
-                Show = 1,
+                Show = isVisisble.ToInt(),
                 ShowExternal = 0,
                 ShowInList = 1,
                 FieldHelp = "",
