@@ -31,7 +31,8 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
         bool SignIn(HttpContextBase ctx);
         void ClearLoginSession(HttpContextBase ctx);
         HttpCookie CreateFormsAuthCookie(string userName, string userData);
-        string GetLoginUrl();
+        string GetSiteLoginPageUrl();
+        string GetAuthenticationModeLoginUrl();
     }
 
     public class AuthenticationService : IAuthenticationService
@@ -255,11 +256,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             }
         }
 
-        public string GetLoginUrl()
+        public string GetSiteLoginPageUrl()
         {
-            // use helpdesk login page which is specified in the forms authentication section - do not delete forms auth section for other types!
-            //return _authenticationBehavior.GetLoginUrl();
             return FormsAuthentication.LoginUrl ?? "/Login/Login";
+        }
+
+        public string GetAuthenticationModeLoginUrl()
+        {
+            return _authenticationBehavior.GetLoginUrl();
         }
 
         public HttpCookie CreateFormsAuthCookie(string userName, string userData)

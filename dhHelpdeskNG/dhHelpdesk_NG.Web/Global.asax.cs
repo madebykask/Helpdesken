@@ -107,22 +107,10 @@ namespace DH.Helpdesk.Web
 
         #region Authentication Events 
 
-        protected void WindowsAuthentication_OnAuthenticate(object sender, WindowsAuthenticationEventArgs args)
-        {
-            var identity = args.Identity;
-            LogSession($">>>WindowsAuthentication.OnAuthentication event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, IsAnonymous: {identity?.IsAnonymous ?? false}", Context);
-        }
-
-        protected void FormsAuthentication_OnAuthenticate(object sender, FormsAuthenticationEventArgs args)
-        {
-            var identity = args.User?.Identity;
-            LogSession($">>>FormsAuthentication.OnAuthenticate event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
-        }
-
         protected void Application_PostAuthenticateRequest(object sender, EventArgs args)
         {
             var identity = Context.User?.Identity;
-            LogSession($">>>Application.PostAuthenticateRequest event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
+            LogSession($"Application.PostAuthenticateRequest event. Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
         }
 
         #endregion

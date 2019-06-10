@@ -140,8 +140,9 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Logout()
         {
             //TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
-            _authenticationService.ClearLoginSession(ControllerContext.HttpContext);          
-            return View("Login");
+            _authenticationService.ClearLoginSession(ControllerContext.HttpContext);
+            var loginUrl = _authenticationService.GetAuthenticationModeLoginUrl();
+            return Redirect(loginUrl);
         }
 
         [HttpGet]

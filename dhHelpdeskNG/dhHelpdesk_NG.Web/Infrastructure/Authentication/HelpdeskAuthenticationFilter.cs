@@ -88,10 +88,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             
             _logger.Debug($"AuthenticationFilter called. CustomerUser: {customerUserName}, Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}, Url: {ctx.Request.Url}");
             
-            //NOTE: perform signin for helpdesk customer user only if request has been authenticated by native mechanisms (forms, wins, adfs,..)
-            //      but helpdesk user has not been created yet or doesn't exist in session any more
             if (isIdentityAuthenticated)
             {
+                //NOTE: perform sign in only if request is authenticated (forms, wins, adfs,..) but helpdesk user was not created yet (first login request) or doesn't exist in session any more (asp.net session expired)
                 if (string.IsNullOrEmpty(_sessionContext.UserIdentity?.UserId))
                 {
                     _logger.Debug($"AuthenticationFilter. Performing user signIn. Identity: {identity?.Name}");
@@ -100,8 +99,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                     {
                         _logger.Warn($"AuthenticationFilter. Failed to sign in user. Signing out. Identity: {identity?.Name}");
                         _authenticationService.ClearLoginSession(ctx);
-                        filterContext.HttpContext.Items[IssueLoginRedirectKey] = true;
-                        filterContext.Result = new HttpUnauthorizedResult();
+                        
+                        //redirect to forms login page if user cannot be found in the database by identity user name
+                        var loginUrl = _authenticationService.GetSiteLoginPageUrl(); // specific for each auth mode (win, forms, mixed, sso)
+                        _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Redirecting to login page: {loginUrl}");
+                        filterContext.Result = new RedirectResult(loginUrl);
                     }
                 }
             }
@@ -119,38 +121,31 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             var httpUserIdentity = context.HttpContext.User?.Identity?.Name ?? string.Empty;
             var helpdeskUserIdentity = SessionFacade.CurrentUserIdentity?.UserId ?? string.Empty;
 
-
-            _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. IsAuthenticated: {isIdentityAuthenticated}, HttpUserIdentity: {httpUserIdentity}, HelpdeskSessionUser: {helpdeskUserIdentity}");
-
-            var issueLoginRedirect = Convert.ToBoolean(context.HttpContext.Items[IssueLoginRedirectKey] ?? false);
-            
-            //do redirect to login page if its authenticated identity but helpdesk user (tblUsers) was not found by identity name so that user could specify his username to login
-            if (isIdentityAuthenticated && issueLoginRedirect)
-            {
-                var loginUrl = _authenticationService.GetLoginUrl(); // specific for each auth mode (win, forms, mixed, sso)
-                _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Redirecting to login page: {loginUrl}");
-                context.Result = new RedirectResult(loginUrl);
-                return;
-            }
-            
             var loginMode = GetCurrentLoginMode();
-            
+            _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge: {context.HttpContext.Request.Url}. AuthMode: {loginMode}. [IsAuthenticated: {isIdentityAuthenticated}, HttpUserIdentity: {httpUserIdentity}, HelpdeskSessionUser: {helpdeskUserIdentity}]");
 
-            // for mixed mode try to prompt windows login first before redirecting to FormsAuth login 
-            if (loginMode == LoginMode.Mixed && string.IsNullOrEmpty(helpdeskUserIdentity))
+            #region MixedMode handling
+
+            // for mixed mode try to use windows login first before redirecting to helpdesk (FormsAuth) login page
+            if (loginMode == LoginMode.Mixed && !isIdentityAuthenticated)
             {
+                var loginUrl = _authenticationService.GetSiteLoginPageUrl();
                 var clientIP = context.HttpContext.Request.GetIpAddress();
                 if (CheckWinAuthIPFilter(clientIP))
                 {
+                    // return 401 challenge to show windows login page. Passing login url param to redirect if a user cancels windows login.
                     _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Request ip ({clientIP}) is from WinAuth ip range! Display windows auth.");
-                    var loginUrl = _authenticationService.GetLoginUrl();
                     context.Result = new MixedModeWinAuth401Result(loginUrl);
                 }
                 else
                 {
+                    // redirect to forms login page if its external user to login with helpdesk credentials
+                    context.Result = new RedirectResult(loginUrl);
                     _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. Request ip ({clientIP}) is not from WinAuth ip range. Do not prompt windows login...");
                 }
             }
+
+            #endregion
         }
 
         #endregion
@@ -165,9 +160,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             if (requestUrl.IndexOf("_sts") != -1)
                 return true;
 #endif
-
-            //todo: check 
-            //if (_applicationConfiguration.LoginMode == LoginMode.Mixed) return false;
 
             return filterContext.ActionDescriptor
                 .GetCustomAttributes(inherit: true)
