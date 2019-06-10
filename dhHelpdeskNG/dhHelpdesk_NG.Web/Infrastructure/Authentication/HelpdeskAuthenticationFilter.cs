@@ -90,16 +90,19 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             
             //NOTE: perform signin for helpdesk customer user only if request has been authenticated by native mechanisms (forms, wins, adfs,..)
             //      but helpdesk user has not been created yet or doesn't exist in session any more
-            if (isIdentityAuthenticated && string.IsNullOrEmpty(_sessionContext.UserIdentity?.UserId))
+            if (isIdentityAuthenticated)
             {
-                _logger.Debug($"AuthenticationFilter. Performing user signIn. Identity: {identity?.Name}");
-                var isUserAuthenticated = _authenticationService.SignIn(ctx);
-                if (!isUserAuthenticated)
+                if (string.IsNullOrEmpty(_sessionContext.UserIdentity?.UserId))
                 {
-                    _logger.Warn($"AuthenticationFilter. Failed to sign in user. Signing out. Identity: {identity?.Name}");
-                    _authenticationService.ClearLoginSession(ctx);
-                    filterContext.HttpContext.Items[IssueLoginRedirectKey] = true; 
-                    filterContext.Result = new HttpUnauthorizedResult();
+                    _logger.Debug($"AuthenticationFilter. Performing user signIn. Identity: {identity?.Name}");
+                    var isUserAuthenticated = _authenticationService.SignIn(ctx);
+                    if (!isUserAuthenticated)
+                    {
+                        _logger.Warn($"AuthenticationFilter. Failed to sign in user. Signing out. Identity: {identity?.Name}");
+                        _authenticationService.ClearLoginSession(ctx);
+                        filterContext.HttpContext.Items[IssueLoginRedirectKey] = true;
+                        filterContext.Result = new HttpUnauthorizedResult();
+                    }
                 }
             }
         }
@@ -113,6 +116,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                 return;
 
             var isIdentityAuthenticated = context.HttpContext.User?.Identity?.IsAuthenticated ?? false;
+            var httpUserIdentity = context.HttpContext.User?.Identity?.Name ?? string.Empty;
+            var helpdeskUserIdentity = SessionFacade.CurrentUserIdentity?.UserId ?? string.Empty;
+
+
+            _logger.Debug($"AuthenticationFilter.OnAuthenticationChallenge. IsAuthenticated: {isIdentityAuthenticated}, HttpUserIdentity: {httpUserIdentity}, HelpdeskSessionUser: {helpdeskUserIdentity}");
+
             var issueLoginRedirect = Convert.ToBoolean(context.HttpContext.Items[IssueLoginRedirectKey] ?? false);
             
             //do redirect to login page if its authenticated identity but helpdesk user (tblUsers) was not found by identity name so that user could specify his username to login
@@ -125,10 +134,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
             }
             
             var loginMode = GetCurrentLoginMode();
-            var helpdeskUserIdentity = SessionFacade.CurrentUserIdentity;
+            
 
             // for mixed mode try to prompt windows login first before redirecting to FormsAuth login 
-            if (loginMode == LoginMode.Mixed && string.IsNullOrEmpty(helpdeskUserIdentity?.UserId))
+            if (loginMode == LoginMode.Mixed && string.IsNullOrEmpty(helpdeskUserIdentity))
             {
                 var clientIP = context.HttpContext.Request.GetIpAddress();
                 if (CheckWinAuthIPFilter(clientIP))
