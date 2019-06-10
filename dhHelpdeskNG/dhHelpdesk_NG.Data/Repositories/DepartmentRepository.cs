@@ -34,7 +34,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         void UpdateDeparmentDisabledForOrder(int[] toEnables, int[] toDisable);
 
-        int GetDepartmentId(string departmentName, int customerId);
+        int GetDepartmentId(string departmentName, int customerId, int? regionID);
         IQueryable<Department> GetDepartmentsByIds(int[] ids, bool isNoTracking = false);
     }
 
@@ -162,10 +162,14 @@ namespace DH.Helpdesk.Dal.Repositories
             }
         }
 
-        public int GetDepartmentId(string departmentName, int customerId)
+        public int GetDepartmentId(string departmentName, int customerId, int? regionID)
         {           
-            return this.DataContext.Departments.Where(d => d.DepartmentName.ToLower() == departmentName.ToLower() 
-                                                      & d.Customer_Id == customerId).Select(d => d.Id).FirstOrDefault();           
+            var department =  this.DataContext.Departments.Where(d => d.DepartmentName.ToLower() == departmentName.ToLower() 
+                                                      && d.Customer_Id == customerId
+													  && d.Region_Id  == regionID
+													  ).Select(d => d.Id).FirstOrDefault();
+
+			return department;
         }
 
         public IQueryable<Department> GetDepartmentsByIds(int[] ids, bool isNoTracking = false)

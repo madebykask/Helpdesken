@@ -347,7 +347,11 @@ namespace DH.Helpdesk.TaskScheduler.Services
             {
                 var updateQuery = "";
                 var existingId = 0;
-                existingId = CheckIfExisting(idIdentifier != null ? row.Item2[idIdentifier] : row.Item1, setting.CustomerId);
+				var id = idIdentifier != null ?
+					row.Item2[idIdentifier] :
+					row.Item1;
+
+				existingId = CheckIfExisting(id, setting.CustomerId);
 
                 var fieldNames = "";
                 var fieldValues = "";
@@ -402,7 +406,8 @@ namespace DH.Helpdesk.TaskScheduler.Services
                     }
                     else
                     {
-                        _csvFieldValue = row.Item2[fs.LDAPAttribute];
+						if (row.Item2.ContainsKey(fs.LDAPAttribute))
+							_csvFieldValue = row.Item2[fs.LDAPAttribute];
                         if (relatedFields.Contains(_dbFieldName))
                             _csvFieldValue = GetRelatedValue(_dbFieldName, _csvFieldValue, setting.CustomerId, regionId, setting.CreateOrganisation);
                         if (BlockFields.Contains(_dbFieldName))
@@ -632,7 +637,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
         }
         public int GetDepartmentId(string departmentName, int customerId, int? regionId, int createOrganisation)
         {
-            var depId = _departmentRepository.GetDepartmentId(departmentName.Trim().ToLower(), customerId);
+            var depId = _departmentRepository.GetDepartmentId(departmentName.Trim().ToLower(), customerId, regionId);
             if (depId == 0 && createOrganisation != 0 && (departmentName != "" || !string.IsNullOrEmpty(departmentName)))
             {
                 depId = CreateDepartment(departmentName, customerId, regionId);
@@ -665,7 +670,7 @@ namespace DH.Helpdesk.TaskScheduler.Services
             _departmentRepository.Add(department);
             _departmentRepository.Commit();
 
-            var depId = _departmentRepository.GetDepartmentId(departmentName, customerId);
+            var depId = _departmentRepository.GetDepartmentId(departmentName, customerId, regionId);
 
             return depId;
         }
