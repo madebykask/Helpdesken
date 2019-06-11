@@ -17,10 +17,10 @@ namespace DH.Helpdesk.Dal.Repositories
 
     public interface IContractRepository : IRepository<Contract>
     {
-        IQueryable<Contract> GetContracts(int customerId);
-        IQueryable<Contract> GetContracts(Expression<Func<Contract, bool>> filter, bool loadNavigationProps = false);
+        IQueryable<Contract> GetContracts(int customerId, int userId);
+        IQueryable<Contract> GetContracts(Expression<Func<Contract, bool>> filter, int userId, int customerId, bool loadNavigationProps = false);
 
-        Contract GetContract(int contractId);
+        Contract GetContract(int contractId, int userId);
         int SaveContract(ContractInputModel contractModel);
         void DeleteContract(Contract contract);
     }
@@ -32,16 +32,17 @@ namespace DH.Helpdesk.Dal.Repositories
         {
         }
 
-        public IQueryable<Contract> GetContracts(int customerId)
+        public IQueryable<Contract> GetContracts(int customerId, int userId)
         {
-            var query = this.Table.Where(c => c.ContractCategory.Customer_Id == customerId);
+            var query = Table.Where(c => c.ContractCategory.Customer_Id == customerId);
+            query = AddDepartmentFilter(userId, customerId, query);
             return query;
         }
 
-        public IQueryable<Contract> GetContracts(Expression<Func<Contract, bool>> filter, bool loadNavigationProps = false)
+        public IQueryable<Contract> GetContracts(Expression<Func<Contract, bool>> filter, int userId, int customerId, bool loadNavigationProps = false)
         {
-            var query = this.Table.Where(filter);
-
+            var query = Table.Where(filter);
+            query = AddDepartmentFilter(userId, customerId, query);
             if (loadNavigationProps)
             {
                 query.Include(x => x.ContractCategory)
@@ -52,10 +53,10 @@ namespace DH.Helpdesk.Dal.Repositories
             return query.AsNoTracking();
         }
 
-        public Contract GetContract(int contractId)
+        public Contract GetContract(int contractId, int userId)
         {
-            var query = this.Table.Where(c => c.Id == contractId).FirstOrDefault();
-            return query;
+            var query = Table.Where(c => c.Id == contractId);
+            return query.FirstOrDefault();;
         }
 
         public int SaveContract(ContractInputModel contractModel)
@@ -103,6 +104,17 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             this.Table.Remove(contract);
         }
+
+        private IQueryable<Contract> AddDepartmentFilter(int userId, int customerId, IQueryable<Contract> query)
+        {
+            var userDepartments = DataContext.Departments
+                .Where(d => d.Customer_Id == customerId && d.Users.Any(du => du.Id == userId))
+                .Select(d => d.Id);
+            var hasDepartmentRestrictions = userDepartments.Any();
+            return query.Where(c => !c.Department_Id.HasValue ||
+                                    !hasDepartmentRestrictions ||
+                                    hasDepartmentRestrictions && userDepartments.Contains(c.Department_Id.Value));
+        }
     }
 
     #endregion
@@ -137,7 +149,7 @@ namespace DH.Helpdesk.Dal.Repositories
             : base(databaseFactory)
         {
         }
-
+        
         public IList<ContractsSettingRowModel> GetContractsSettingRows(int customerId)
         {
             var query = this.DataContext.ContractFieldSettings.Where(c => c.Customer_Id == customerId);

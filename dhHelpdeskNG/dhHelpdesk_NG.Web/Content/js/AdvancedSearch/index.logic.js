@@ -8,8 +8,7 @@ var GRID_STATE = {
 };
 
 
-(function ($) {    
-        
+(function($) {
     /// message types
     var ERROR_MSG_TYPE = 0;
     var LOADING_MSG_TYPE = 1;
@@ -25,56 +24,74 @@ var GRID_STATE = {
     var showableCustomerCount = 0;
     var customerTableId;
     var currentCustomerTable = '';
-    currentCustomerName = '';
+    var currentCustomerName = '';
     var allCustomers = [];
     var customerTableRepository = [];
     var globalCounter = 0;
-    var chkSearchThruFiles = $('#chkSearchThruFiles');
-    var txtFreeTextSearch = $('#txtFreeTextSearch');
     var cellUniqueId = 0;
     var isExtendedSearch = false;
-
+    
     function strJoin() {
         return Array.prototype.join.call(arguments, JOINER);
     }
 
     function getClsForSortDir(sortDir) {
-        if (sortDir === SORT_ASC) {
+        if (+sortDir === SORT_ASC) {
             return "icon-chevron-up";
         }
-        if (sortDir === SORT_DESC) {
+        if (+sortDir === SORT_DESC) {
             return "icon-chevron-down";
         }
         return '';
     }
-    
+
     function isNullOrEmpty(str) {
         return str == null || str == EMPTY_STR;
     }
-    
-    function Page() { };
 
-    SetSpecificConditionTab(false);
+    $.fn.textWidth = function (isBold) {
+        var html_org = $(this).html();
+        var cls = isBold == 'true' ? "textbold" : "";
+        var html_calc = '<span class="' + cls + '">' + html_org + '</span>';
+        $(this).html(html_calc);
+        var width = $(this).find('span:first').width();
+        $(this).html(html_org);
+        return width;
+    };
+
+    ////////////////////////////////////////////////////////////////////////////
+    function Page() {
+    };
     
-    Page.prototype.init = function(gridInitSettings, doSearchAtBegining, isExtSearch) {
-        var me = this;        
+    Page.prototype.init = function(params) {
+        var me = this;
+
+        //set params
+        me.gridSettings = params.gridSettings;
+        me.doSearchAtBegining = params.doSearchAtBegining;
+        me.isExtSearch = params.isExtSearch;
+        me.getSpecificFilterDataUrl = params.getSpecificFilterDataUrl;
+        me.specificSearchTabBehavior = new SpecificSearchTabBehavior(params);
+
         //// Bind elements
-        customerTableId = 0;
+        me.$chkSearchThruFiles = $('#chkSearchThruFiles');
         me.$customerCaseArea = $('div.customer-cases-area');
-        me.$tableLoaderMsg = ' div.loading-msg';
-        me.$tableNoDataMsg = ' div.no-data-msg';
-        me.$tableErrorMsg = ' div.error-msg';
+        me.$tableLoaderMsg = $('div.loading-msg');
+        me.$tableNoDataMsg = $('div.no-data-msg');
+        me.$tableErrorMsg = $('div.error-msg');
         me.$noFieldsMsg = $('#search_result div.nofields-msg');
         me.$noAvailableFieldsMsg = $('#search_result div.noavailablefields-msg');
         me.$buttonsToDisableWhenGridLoads = $('ul.secnav a.btn, ul.secnav div.btn-group button, ul.secnav input[type=button], .submit, #btnClearFilter');
-        me.$txtsToSearchByEnterKey = '#CaseInitiatorFilter, #txtFreeTextSearch, #txtCaseNumberSearch, #txtCaptionSearch';
-        me.$searchField = '#txtFreeTextSearch';
+        me.txtsToSearchByEnterKey = '#CaseInitiatorFilter, #txtFreeTextSearch, #txtCaseNumberSearch, #txtCaptionSearch';
+        me.$searchField = $('#txtFreeTextSearch');
         me.$filterForm = $('#frmAdvanceSearch');
-        me.$availableCustomer = [];
         me.$caseAdvSearchRecordCount = $('[data-field="TotalAdvSearchCount"]');
 
+        me.availableCustomers = [];
+        customerTableId = 0;
+
         $('#lstfilterCustomers option').each(function () {
-            me.$availableCustomer.push({
+            me.availableCustomers.push({
                 customerId: $(this).val(),
                 customerName: $(this).text()
             });
@@ -92,9 +109,35 @@ var GRID_STATE = {
             });
         });
         
+        $('.input-append.date').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true
+        });
+
         me.$table = [];
-        
-        me.hideMessage();        
+        me.setGridState(window.GRID_STATE.IDLE);
+        me.sortSettings = me.gridSettings.sortOptions;
+
+        me.hideMessage();
+        me.SetSpecificConditionTab(false);
+
+        $('#txtFreeTextSearch').on('input', function (evt, params) {
+            me.SetSearchThruFileState();
+        });
+
+        $('#lstfilterCustomers.chosen-select').on('change', function (evt, params) {
+            me.SetSpecificConditionTab(true);
+        });
+
+        $("#extendedSearchEnabled").on("change", function (evt, params) {
+            me.isExtendedSearch = $(this).prop("checked");
+            if (me.isExtendedSearch) {
+                $("#lstfilterCustomers.chosen-select").val("").trigger("chosen:updated");
+            }
+            me.SetSpecificConditionTab(isExtendedSearch);
+        });
+
+        // search by buttons (search, refresh) click 
         $('.submit, a.refresh-grid').on('click', function (ev) {
             ev.preventDefault();                        
             if (me._gridState !== window.GRID_STATE.IDLE) {
@@ -102,35 +145,30 @@ var GRID_STATE = {
             }
             me.onSearchClick.apply(me);
             return false;
-        });                
+        });
 
-        $(me.$txtsToSearchByEnterKey).keydown(function (e) {
-            if (e.keyCode == 13) {
+        //search by enter
+        $(me.txtsToSearchByEnterKey).keydown(function (e) {
+            if (+e.keyCode === 13) {
                 e.preventDefault();
                 $("#btnSearch").click();
                 return false;
             }
+            return true;
         });
 
-               
-        me.setGridState(window.GRID_STATE.IDLE);
-        me.gridSettings = gridInitSettings;
-        me.sortSettings = gridInitSettings.sortOptions;                
-        $('.input-append.date').datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
-        });
-
-        if (isExtSearch) {
+        // run extended search on page load
+        if (me.isExtSearch) {
             me.onExtSearchLoading();
         }
 
-        if (doSearchAtBegining)
+        //run search on page start if has settings
+        if (me.doSearchAtBegining)
             me.onSearchClick();
 
-       
+        $('#btnSearch').focus();
     };
-        
+
     Page.prototype.setGridState = function(gridStateId) {
         var me = this;
         me._gridState = gridStateId;
@@ -168,11 +206,12 @@ var GRID_STATE = {
 
         currentCustomerTable = '';
         currentCustomerName = me.getCustomerName(gridSettings.CustomerId);
+
         var out = ['<div> <br/> <h5> ' + currentCustomerName + ' </h5> </div>'];
         out.push('<table class="table table-striped table-bordered table-hover table-cases customer' + customerTableId + '">');
-        out.push('<thead>');                                      
-
+        out.push('<thead>');
         out.push('<tr><th style="min-width: 18px;width:18px;" ></th>');
+
         if (me.gridSettings.availableColumns == 0) {
             me.showMsg(BADCONFIG_MSG_TYPE);
             me.setGridState(GRID_STATE.BAD_CONFIG);
@@ -184,7 +223,9 @@ var GRID_STATE = {
             me.setGridState(GRID_STATE.NO_COL_SELECTED);
             return;
         }
+
         me.visibleFieldsCount = 1; //// we have at least one column with icon
+
         $.each(me.gridSettings.columnDefs, function (idx, fieldSetting) {
             var sortCls = '';
             if (!fieldSetting.isHidden) {
@@ -192,44 +233,16 @@ var GRID_STATE = {
                 if (me.gridSettings.sortOptions != null && fieldSetting.field === me.gridSettings.sortOptions.sortBy) {
                     sortCls = getClsForSortDir(me.gridSettings.sortOptions.sortDir);
                 }
-                out.push(strJoin('<th class="thpointer ', customerTableId, ' ', fieldSetting.field, ' ', fieldSetting.cls, '" fieldname="', fieldSetting.field, '" >', fieldSetting.displayName, '<i class="', sortCls, '"></i>'));                
+                out.push(strJoin('<th class="thpointer ', customerTableId, ' ', fieldSetting.field, ' ',
+                     fieldSetting.cls, '" fieldname="', fieldSetting.field, '" >', fieldSetting.displayName, '<i class="', sortCls, '"></i>'));
             }
         });
+
         out.push('</tr>');
         out.push('</thead>');
+
         currentCustomerTable += out.join(JOINER);
     };
-              
-    Page.prototype.formatCell = function (caseId, cellValue, colSetting, isBold, extendedAvailable) {
-        var out = [];
-     
-        // Unique id rest after each search
-        var uniqId = cellUniqueId++;
-        
-        if (isExtendedSearch && !extendedAvailable) {
-            if (colSetting.field !== "CaseNumber" && colSetting.field !== "Persons_Name" && colSetting.field !== "Caption")
-                {cellValue = null}
-        }
-
-        var url = encodeURIComponent(strJoin('/Cases/AdvancedSearch?', 'doSearchAtBegining=true', "&isExtSearch=", isExtendedSearch));
-        if (colSetting.isExpandable) {
-            out = [strJoin('<td style="width:', colSetting.width, '">', '<div id="divExpand_' + uniqId + '" class="expandable_' + caseId + '" style="height: 15px; overflow: hidden;">', //max-width:500px;
-                        '<i class="icon-plus-sign ico-right expandable_', caseId, '" data-uniqId="iIcon_', uniqId, '" id="btnExpander_', caseId, '" onclick="toggleRowExpanation(', caseId, ')"></i> ' +
-                        '<a style="line-height:15px;" data-isbold="', isBold, '" data-uniqId="', uniqId, '" data-rowId="', caseId, '" class="exp" href="/Cases/Edit/', caseId, '?backUrl=',
-                        url, '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a>', '</div>', '</td>')];
-            if (isExtendedSearch && !extendedAvailable) {
-                out = [strJoin('<td style="width:', colSetting.width, '">', '<div id="divExpand_' + uniqId + '" class="expandable_' + caseId + '" style="height: 15px; overflow: hidden;">', //max-width:500px;
-                        '<i class="icon-plus-sign ico-right expandable_', caseId, '" data-uniqId="iIcon_', uniqId, '" id="btnExpander_', caseId, '" onclick="toggleRowExpanation(', caseId, ')"></i> ' +
-                        '<a style="line-height:15px;" data-isbold="', isBold, '" data-uniqId="', uniqId, '" data-rowId="', caseId, '" class="exp" >', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a>', '</div>', '</td>')];
-            }
-        } else {
-            out = [strJoin('<td style="width:', colSetting.width, '"> <a style="line-height:15px;" href="/Cases/Edit/', caseId, '?backUrl=', url, '">', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a></td>')];
-            if (isExtendedSearch && !extendedAvailable) {
-                out = [strJoin('<td style="width:', colSetting.width, '"> <a style="line-height:15px;" >', cellValue == null ? '&nbsp;' : cellValue.replace(/<[^>]+>/ig, ""), '</a></td>')];
-            }
-        }
-        return out.join(JOINER);
-    };        
 
     Page.prototype.tableCleanUp = function () {
         var expandables = $(".exp");
@@ -249,104 +262,6 @@ var GRID_STATE = {
         });     
     };
 
-    $.fn.textWidth = function (isBold) {
-        var html_org = $(this).html();
-        var cls = isBold == 'true' ? "textbold" : "";
-        var html_calc = '<span class="' + cls + '">' + html_org + '</span>';
-        $(this).html(html_calc);
-        var width = $(this).find('span:first').width();
-        $(this).html(html_org);
-        return width;
-    };
-
-    toggleRowExpanation = function (caseId) {
-        var curState = $("#btnExpander_" + caseId).attr('class');
-        var expandablePlusIcon = 'icon-plus-sign ico-right expandable_' + caseId;
-
-        if (curState == expandablePlusIcon) {
-            doExpanation(caseId, true, false, '');
-        } else {                        
-            doExpanation(caseId, false, false, '');
-        }
-    };
-
-    doExpanation = function (caseId, doExpand, removeExpanation, uniqId) {        
-        var expanableDivs = '.expandable_' + caseId;
-        var expandablePlusIcon = 'icon-plus-sign ico-right expandable_' + caseId;
-        var expandableMinusIcon = 'icon-minus-sign ico-right expandable_' + caseId;
-
-        var expandablePlusIcons = '.icon-plus-sign.ico-right.expandable_' + caseId;
-        var expandableMinusIcons = '.icon-minus-sign.ico-right.expandable_' + caseId;
-
-        if (doExpand) {           
-            if (removeExpanation) {
-                var divToExpand = '#divExpand_' + uniqId;
-                $(divToExpand).css("height", "auto");
-                $(divToExpand).css("overflow", "visible");
-                $(document).find("[data-uniqId='iIcon_" + uniqId + "']").remove();
-            } else {
-                $(expanableDivs).css("height", "auto");
-                $(expanableDivs).css("overflow", "visible");
-                $(expandablePlusIcons).attr('class', expandableMinusIcon);
-                $(expandableMinusIcons).attr("style", "");
-            }
-        } else {
-            $(expanableDivs).css("height", "15px");
-            $(expanableDivs).css("overflow", "hidden");
-            $(expandableMinusIcons).attr('class', expandablePlusIcon);
-            $(expandablePlusIcons).attr("style", "");
-        }
-    };   
-
-    Page.prototype.loadData = function (data, gridSettings) {
-        var me = this;
-        var out = [];
-        
-        // Add Table with Header
-        me.setGridSettings(gridSettings);
-
-        out.push('<tbody>');
-            
-        if (data && data.length > 0) {            
-            $.each(data, function (idx, record) {
-                var url = encodeURIComponent(strJoin('/Cases/AdvancedSearch?', 'doSearchAtBegining=true', "&isExtSearch=", isExtendedSearch));
-                var firstCell = strJoin('<td > <a href="/Cases/Edit/', record.case_id, '?backUrl=', url, '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');;
-                if (isExtendedSearch && !record.ExtendedAvailable) {
-                    firstCell = strJoin('<td ><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></td>');
-                }
-                var rowClass = me.getClsRow(record);
-                var rowOut = [strJoin('<tr class="', rowClass, '" caseid="', record.case_id, '">'), firstCell];
-                $.each(me.gridSettings.columnDefs, function (idx, columnSettings) {
-                    if (!columnSettings.isHidden) {
-                        if (record[columnSettings.field] == null) {
-                            rowOut.push(me.formatCell(record.case_id, columnSettings, false, false, record.ExtendedAvailable));
-                            if (Page.isDebug) 
-                                console.warn('could not find field "' + columnSettings.field + '" in record');
-                        } else {
-                            var isBold = jQuery.inArray('textbold', rowClass) >= 0 || rowClass == 'textbold';
-                            rowOut.push(me.formatCell(record.case_id, record[columnSettings.field], columnSettings, isBold, record.ExtendedAvailable));
-                        }
-                    }
-                });
-                rowOut.push('</tr>');
-                out.push(rowOut.join(JOINER));
-            });
-
-            out.push('</tbody>')
-            out.push('</table>');
-            currentCustomerTable += out.join(JOINER);            
-        } else {
-            me.showMsg(NODATA_MSG_TYPE);
-        }
-        me.setGridState(window.GRID_STATE.IDLE);
-
-        //var tbl = {
-        //    CustomerName: currentCustomerName,
-        //    TableData: currentCustomerTable
-        //}
-        //return tbl;
-    };
-
     Page.prototype.onExtSearchLoading = function () {
         $("#extendedSearchEnabled").prop("checked", true);
         isExtendedSearch = true;
@@ -362,10 +277,9 @@ var GRID_STATE = {
         globalCounter = 0;
     }
 
-    // DoSearch By Button
+    // SEARCH 
     Page.prototype.onSearchClick = function () {        
         var me = this;
-        var searchStr = $(me.$searchField).val();        
 
         var curCustomerId = 0;
         var curCustomerName = '';
@@ -380,7 +294,7 @@ var GRID_STATE = {
         });       
 
         if (selectedCustomer.length <= 0)
-            selectedCustomer = me.$availableCustomer;
+            selectedCustomer = me.availableCustomers;
 
         var customers = [];
         
@@ -399,32 +313,7 @@ var GRID_STATE = {
             me.fetchData([{ 'name': 'currentCustomerId', 'value': customers }]);
         }
     };
-
-    Page.prototype.onGetData = function (response) {
-        var me = this;
-
-        if (response && response.result === 'success' && response.data && response.data.Items) {
-            for (var i = 0; i < response.data.Items.length; i++) {
-                if (response.data.Items[i].data.length > 0) {
-                    currentCustomerTable = '';
-                    currentCustomerName = '';
-                    me.loadData(response.data.Items[i].data, response.data.Items[i].gridSettings);
-                    var newTable = {
-                        CustomerName: currentCustomerName,
-                        TableId: i,
-                        TableData: currentCustomerTable
-                    }
-                    customerTableRepository.push(newTable);
-                }
-            }
-            me.$caseAdvSearchRecordCount.text(response.data.TotalCount);
-        } else {
-            me.$caseAdvSearchRecordCount.text("0");
-            me.showMsg(ERROR_MSG_TYPE);
-            me.setGridState(window.GRID_STATE.IDLE);
-        }
-    };
-
+    
     Page.prototype.fetchData = function(addFetchParam) {
         var me = this;
         var fetchParams;
@@ -434,7 +323,7 @@ var GRID_STATE = {
             me.setSortField.call(me, $(this).attr('fieldname'), $(this));
         };
 
-        baseParams.push({ name: 'searchThruFiles', value: chkSearchThruFiles.bootstrapSwitch('state') });
+        baseParams.push({ name: 'searchThruFiles', value: me.$chkSearchThruFiles.bootstrapSwitch('state') });
 
         baseParams.push(
             { name: 'sortBy', value: me.sortSettings.sortBy },
@@ -447,8 +336,6 @@ var GRID_STATE = {
         } else {
             fetchParams = baseParams;
         }
-
-        
 
         me.setGridState(window.GRID_STATE.LOADING);                
 
@@ -482,6 +369,132 @@ var GRID_STATE = {
         });
     };
 
+    //processes search result and builds results table for each customer
+    Page.prototype.onGetData = function (response) {
+        var me = this;
+
+        if (response && response.result === 'success' && response.data && response.data.Items) {
+            for (var i = 0; i < response.data.Items.length; i++) {
+                if (response.data.Items[i].data.length > 0) {
+                    currentCustomerTable = '';
+                    currentCustomerName = '';
+
+                    //load data: builds html and adds formatted data to the output html 
+                    me.loadData(response.data.Items[i].data, response.data.Items[i].gridSettings);
+
+                    var newTable = {
+                        CustomerName: currentCustomerName,
+                        TableId: i,
+                        TableData: currentCustomerTable
+                    }
+                    customerTableRepository.push(newTable);
+                }
+            }
+            me.$caseAdvSearchRecordCount.text(response.data.TotalCount);
+        } else {
+            me.$caseAdvSearchRecordCount.text("0");
+            me.showMsg(ERROR_MSG_TYPE);
+            me.setGridState(window.GRID_STATE.IDLE);
+        }
+    };
+
+    Page.prototype.loadData = function (data, gridSettings) {
+        var me = this;
+        var out = [];
+
+        // Add Table with Header
+        me.setGridSettings(gridSettings);
+
+        out.push('<tbody>');
+
+        if (data && data.length > 0) {
+            $.each(data, function (idx, record) {
+                var url = encodeURIComponent(strJoin('/Cases/AdvancedSearch?', 'doSearchAtBegining=true', "&isExtSearch=", isExtendedSearch));
+                var firstCell = strJoin('<td > <a href="/Cases/Edit/', record.case_id, '?backUrl=', url, '"><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></a></td>');;
+
+                if (isExtendedSearch && !record.ExtendedAvailable) {
+                    firstCell = strJoin('<td ><img title="', record.caseIconTitle, '" alt="', record.caseIconTitle, '" src="', record.caseIconUrl, '" /></td>');
+                }
+
+                var rowClass = me.getClsRow(record);
+                var rowOut = [strJoin('<tr class="', rowClass, '" caseid="', record.case_id, '">'), firstCell];
+
+                $.each(me.gridSettings.columnDefs, function (idx, columnSettings) {
+                    if (!columnSettings.isHidden) {
+                        if (record[columnSettings.field] == null) {
+                            rowOut.push(me.formatCell(record.case_id, columnSettings, false, false, record.ExtendedAvailable));
+                            if (Page.isDebug)
+                                console.warn('could not find field "' + columnSettings.field + '" in record');
+                        } else {
+                            var isBold = jQuery.inArray('textbold', rowClass) >= 0 || rowClass == 'textbold';
+                            rowOut.push(me.formatCell(record.case_id, record[columnSettings.field], columnSettings, isBold, record.ExtendedAvailable));
+                        }
+                    }
+                });
+                rowOut.push('</tr>');
+                out.push(rowOut.join(JOINER));
+            });
+
+            out.push('</tbody>');
+            out.push('</table>');
+            currentCustomerTable += out.join(JOINER);
+        } else {
+            me.showMsg(NODATA_MSG_TYPE);
+        }
+        me.setGridState(window.GRID_STATE.IDLE);
+
+        //var tbl = {
+        //    CustomerName: currentCustomerName,
+        //    TableData: currentCustomerTable
+        //}
+        //return tbl;
+    };
+
+    Page.prototype.formatCell = function (caseId, cellValue, colSetting, isBold, extendedAvailable) {
+        var out = [];
+
+        // Unique id rest after each search
+        var uniqId = cellUniqueId++;
+
+        if (isExtendedSearch && !extendedAvailable) {
+            if (colSetting.field !== "CaseNumber" && colSetting.field !== "Persons_Name" && colSetting.field !== "Caption") {
+                cellValue = null;
+            }
+        }
+
+        var cellValueFormatted = cellValue == null && cellValue === undefined ? '&nbsp;' : cellValue.toString();
+
+        var url = encodeURIComponent(strJoin('/Cases/AdvancedSearch?', 'doSearchAtBegining=true', "&isExtSearch=", isExtendedSearch));
+        if (colSetting.isExpandable) {
+            if (isExtendedSearch && !extendedAvailable) {
+                out = strJoin(
+                    '<td style="width:', colSetting.width, '">',
+                    '<div id="divExpand_' + uniqId + '" class="expandable_' + caseId + '" style="height: 15px; overflow: hidden;">', //max-width:500px;
+                    '<i class="icon-plus-sign ico-right expandable_', caseId, '" data-uniqId="iIcon_', uniqId, '" id="btnExpander_', caseId, '" onclick="toggleRowExpanation(', caseId, ')"></i> ' +
+                    '<a style="line-height:15px;" data-isbold="', isBold, '" data-uniqId="', uniqId, '" data-rowId="', caseId, '" class="exp" >', cellValueFormatted, '</a>',
+                    '</div>', '</td>');
+            } else {
+                out = strJoin(
+                    '<td style="width:', colSetting.width, '">',
+                    '<div id="divExpand_' + uniqId + '" class="expandable_' + caseId + '" style="height: 15px; overflow: hidden;">', //max-width:500px;
+                    '<i class="icon-plus-sign ico-right expandable_', caseId, '" data-uniqId="iIcon_', uniqId, '" id="btnExpander_', caseId, '" onclick="toggleRowExpanation(', caseId, ')"></i> ' +
+                    '<a style="line-height:15px;" data-isbold="', isBold, '" data-uniqId="', uniqId, '" data-rowId="', caseId, '" class="exp" href="/Cases/Edit/', caseId, '?backUrl=',
+                    url, '">', cellValueFormatted, '</a>',
+                    '</div>', '</td>');
+            }
+        } else {
+            if (isExtendedSearch && !extendedAvailable) {
+                out = strJoin(
+                    '<td style="width:', colSetting.width, '"><a style="line-height:15px;" >', cellValueFormatted, '</a></td>');
+            } else {
+                out = strJoin(
+                    '<td style="width:', colSetting.width, '">',
+                    '<a style="line-height:15px;" href="/Cases/Edit/', caseId, '?backUrl=', url, '">', cellValueFormatted, '</a></td>');
+            }
+        }
+        return out;
+    };
+
     Page.prototype.DrawTables = function (callBack) {
         var me = this;
         var hasData = false;
@@ -489,23 +502,24 @@ var GRID_STATE = {
         if (customerTableRepository.length > 0) {
             // Sort customers by name
             var length = customerTableRepository.length - 1;
+            var swapped;
             do {
-                var swapped = false;
-                for (var i = 0; i < length; ++i) {                    
-                    if (customerTableRepository[i].CustomerName.toLowerCase() > customerTableRepository[i + 1].CustomerName.toLowerCase()) {
+                swapped = false;
+                for (var i = 0; i < length; ++i) {
+                    if (customerTableRepository[i].CustomerName.toLowerCase() >
+                        customerTableRepository[i + 1].CustomerName.toLowerCase()) {
                         var temp = customerTableRepository[i];
                         customerTableRepository[i] = customerTableRepository[i + 1];
                         customerTableRepository[i + 1] = temp;
                         swapped = true;
                     }
                 }
-            }
-            while (swapped == true)
+            } while (swapped === true);
 
             $.each(customerTableRepository, function (idx, value) {
                 var tableId = value.TableId;
                 var tableData = value.TableData;
-                if (tableData != '') {
+                if (tableData !== '') {
                     me.$customerCaseArea.append(tableData);
                     me.$customerCaseArea.find('th.thpointer.' + tableId).on('click', callBack);
                     hasData = true;
@@ -518,8 +532,10 @@ var GRID_STATE = {
         globalCounter = 0;
         me.tableCleanUp();
         me.hideMessage();
+
         if (!hasData)
             me.showMsg(NODATA_MSG_TYPE);
+
         me.setGridState(window.GRID_STATE.IDLE);       
     };
     
@@ -564,7 +580,7 @@ var GRID_STATE = {
         });
 
         if (selectedCustomer.length <= 0)
-            selectedCustomer = me.$availableCustomer;
+            selectedCustomer = me.availableCustomers;
 
         // Start Customers Loop
         if (selectedCustomer.length > 0) {
@@ -595,17 +611,17 @@ var GRID_STATE = {
         var me = this;
         me.hideMessage();
         if (msgType === LOADING_MSG_TYPE) {
-            $(me.$tableLoaderMsg).show();
+            me.$tableLoaderMsg.show();
             return;
         }
         if (msgType === ERROR_MSG_TYPE) {
-            $(me.$tableBody).html('');
-            $(me.$tableErrorMsg).show();
+            me.$tableBody.html('');
+            me.$tableErrorMsg.show();
             return;
         }
         if (msgType === NODATA_MSG_TYPE) {
-            $(me.$tableBody).html('');
-            $(me.$tableNoDataMsg).show();
+            me.$tableBody.html('');
+            me.$tableNoDataMsg.show();
             return;
         }
         if (msgType === NO_COL_SELECTED_MSG_TYPE) {
@@ -623,37 +639,22 @@ var GRID_STATE = {
 
     Page.prototype.hideMessage = function () {
         var me = this;
-        $(me.$tableLoaderMsg).hide();
-        $(me.$tableErrorMsg).hide();
-        $(me.$tableNoDataMsg).hide();
+        me.$tableLoaderMsg.hide();
+        me.$tableErrorMsg.hide();
+        me.$tableNoDataMsg.hide();
     };
 
-    window.app = new Page();
-
-    $(document).ready(function() {
-        app.init.call(window.app, window.gridSettings, window.doSearchAtBegining, window.isExtSearch);
-        SetSearchThruFileState();
-    });
-
-    txtFreeTextSearch.on('input', function (evt, params) {
-        SetSearchThruFileState();
-    });
-
-    function SetSearchThruFileState() {
-        if (txtFreeTextSearch.val().trim() == "") {
-            chkSearchThruFiles.bootstrapSwitch('state', false);
-            chkSearchThruFiles.bootstrapSwitch('disabled', true);
+    Page.prototype.SetSearchThruFileState = function () {
+        var me = this;
+        if (me.$txtFreeTextSearch.val().trim() === "") {
+            me.$chkSearchThruFiles.bootstrapSwitch('state', false).bootstrapSwitch('disabled', true);
+        } else {
+            me.$chkSearchThruFiles.bootstrapSwitch('disabled', false);
         }
-        else {
-            chkSearchThruFiles.bootstrapSwitch('disabled', false);
-        }        
     }
 
-    $('#lstfilterCustomers.chosen-select').on('change', function (evt, params) {
-        SetSpecificConditionTab(true);
-    });
-    
-    function SetSpecificConditionTab(resetFilterObjs) {
+    Page.prototype.SetSpecificConditionTab = function (resetFilterObjs) {
+        var me = this;
         var selectedCustomers = $('#lstfilterCustomers.chosen-select option');
         var selectedCount = 0;
         var customerId = 0;
@@ -665,36 +666,78 @@ var GRID_STATE = {
             }
         });
 
-        if (selectedCount == 1 && !isExtendedSearch) {            
-            $.get(window.getSpecificFilterDataUrl,
-                    {
-                        selectedCustomerId: customerId,
-                        resetFilter: resetFilterObjs,
-                        curTime: new Date().getTime()
-                    }, function (_SpecificFilterData) {
-                        $("#SpecificFilterDataPartial").html(_SpecificFilterData);
+        if (selectedCount === 1 && !isExtendedSearch) {
 
-            });
+            $.get(me.getSpecificFilterDataUrl,
+                {
+                    selectedCustomerId: customerId,
+                    resetFilter: resetFilterObjs,
+                    curTime: new Date().getTime()
+                },
+                function (specificFilterDataHtml) {
+                    
+                    $("#SpecificFilterDataPartial").html(specificFilterDataHtml);
+
+                    //apply init logic: event handlers, chosen.... 
+                    me.specificSearchTabBehavior.apply();
+                });
 
             $('#SpecificFilterDataPartial').attr('style', '');
             $('#SpecificFilterDataPartial').attr('data-field', customerId);
-        }
-        else {            
+        } else {
             $('#SpecificFilterDataPartial').attr('style', 'display:none');
             $('#SpecificFilterDataPartial').attr('data-field', '');
         }
     }
+    //////////////////////////////////////////////////////////////////////////////////
 
-    $("#extendedSearchEnabled").on("change", function (evt, params) {
-        isExtendedSearch = $(this).prop("checked");
-        if (isExtendedSearch) {
-            $("#lstfilterCustomers.chosen-select").val("").trigger("chosen:updated");
+    //create Page instance
+    window.app = new Page();
+
+})(jQuery);
+
+
+toggleRowExpanation = function (caseId) {
+
+    console.log('>>>toggle row called: CaseId: caseId');
+
+    var curState = $("#btnExpander_" + caseId).attr('class');
+    var expandablePlusIcon = 'icon-plus-sign ico-right expandable_' + caseId;
+
+    if (curState == expandablePlusIcon) {
+        doExpanation(caseId, true, false, '');
+    } else {
+        doExpanation(caseId, false, false, '');
+    }
+};
+
+doExpanation = function (caseId, doExpand, removeExpanation, uniqId) {
+    var expanableDivs = '.expandable_' + caseId;
+    var expandablePlusIcon = 'icon-plus-sign ico-right expandable_' + caseId;
+    var expandableMinusIcon = 'icon-minus-sign ico-right expandable_' + caseId;
+
+    var expandablePlusIcons = '.icon-plus-sign.ico-right.expandable_' + caseId;
+    var expandableMinusIcons = '.icon-minus-sign.ico-right.expandable_' + caseId;
+
+    if (doExpand) {
+        if (removeExpanation) {
+            var divToExpand = '#divExpand_' + uniqId;
+            $(divToExpand).css("height", "auto");
+            $(divToExpand).css("overflow", "visible");
+            $(document).find("[data-uniqId='iIcon_" + uniqId + "']").remove();
+        } else {
+            $(expanableDivs).css("height", "auto");
+            $(expanableDivs).css("overflow", "visible");
+            $(expandablePlusIcons).attr('class', expandableMinusIcon);
+            $(expandableMinusIcons).attr("style", "");
         }
-        SetSpecificConditionTab(isExtendedSearch);
-    });
-    
-})($);
-
+    } else {
+        $(expanableDivs).css("height", "15px");
+        $(expanableDivs).css("overflow", "hidden");
+        $(expandableMinusIcons).attr('class', expandablePlusIcon);
+        $(expandablePlusIcons).attr("style", "");
+    }
+};
 
 /**
 * @param { blockElementJqueryId } jquery-like element id of the bootstrap dropdown t.ex "#mainblock"
@@ -755,35 +798,53 @@ $(function () {
     }   
 });
 
-
-(function ($) {    
-    var caseTypeDropDown = window.Params.CaseTypeDropDown;
-    var productAreaDropDown = window.Params.ProductAreaDropDown;
-    var closingReasonDropDown = window.Params.ClosingReasonDropDown;
-
+//todo: move to separate file and share with new search
+function SpecificSearchTabBehavior(params) {
     var breadCrumbsPrefix = "#divBreadcrumbs_";
-    var hiddenPrefix = "#hid_";    
+    var hiddenPrefix = "#hid_";
 
-    $('#' + caseTypeDropDown + ' ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $(breadCrumbsPrefix + caseTypeDropDown).text(window.getBreadcrumbs(this));
-        $(hiddenPrefix + caseTypeDropDown).val(val);
-    });
-
-    $('#' + productAreaDropDown + ' ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $(breadCrumbsPrefix + productAreaDropDown).text(window.getBreadcrumbs(this));
-        $(hiddenPrefix + productAreaDropDown).val(val);
-    });
-
-    $('#' + closingReasonDropDown + ' ul.dropdown-menu li a').click(function (e) {
-        e.preventDefault();
-        var val = $(this).attr('value');
-        $(breadCrumbsPrefix + closingReasonDropDown).text(window.getBreadcrumbs(this));
-        $(hiddenPrefix + closingReasonDropDown).val(val);
-    });
+    var defaultFocusObj = params.DefaultFocusObject;
+    var caseTypeDropDown = params.CaseTypeDropDown;
+    var productAreaDropDown = params.ProductAreaDropDown;
+    var closingReasonDropDown = params.ClosingReasonDropDown;
 
 
-})($);
+    this.apply = function () {
+
+        $(".chosen-select").chosen({
+            width: "300px",
+            'placeholder_text_multiple': placeholder_text_multiple,
+            'no_results_text': no_results_text
+        });
+
+        $(".chosen-single-select").chosen({
+            width: "300px",
+            'placeholder_text_multiple': placeholder_text_multiple,
+            'no_results_text': no_results_text
+        });
+
+        $('#' + caseTypeDropDown + ' ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var val = $(this).attr('value');
+            $(breadCrumbsPrefix + caseTypeDropDown).text(getBreadcrumbs(this));
+            $(hiddenPrefix + caseTypeDropDown).val(val);
+        });
+
+        $('#' + productAreaDropDown + ' ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var val = $(this).attr('value');
+            $(breadCrumbsPrefix + productAreaDropDown).text(getBreadcrumbs(this));
+            $(hiddenPrefix + productAreaDropDown).val(val);
+        });
+
+        $('#' + closingReasonDropDown + ' ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var val = $(this).attr('value');
+            $(breadCrumbsPrefix + closingReasonDropDown).text(getBreadcrumbs(this));
+            $(hiddenPrefix + closingReasonDropDown).val(val);
+        });
+
+        //todo: call on page load only?
+        setTimeout(function () { $(defaultFocusObj).focus(); }, 100);
+    }
+};

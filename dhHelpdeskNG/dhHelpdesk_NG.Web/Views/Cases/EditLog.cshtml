@@ -5,40 +5,42 @@
 @using DH.Helpdesk.Web.Infrastructure
 
 @section Scripts {
-<script type="text/javascript">
-    $(document).ready(function () {
-        LogInitForm();
+    <script type="text/javascript">
+        $(document).ready(function () {
+            LogInitForm();
 
-        $("a.isExisted").on("click", function (e) {
-            var exists = $(this).checkUrlFileExists();
-            if (!exists) {
-                e.preventDefault();
-                ShowToastMessage(window.parameters.fileExistError, "error");
-            }
+            $("a.isExisted").on("click", function (e) {
+                var exists = $(this).checkUrlFileExists();
+                if (!exists) {
+                    e.preventDefault();
+                    ShowToastMessage(window.parameters.fileExistError, "error");
+                }
+            });
         });
-    });
-</script>
+    </script>
 }
 
 @if (Model != null)
-{   
+{
     ViewData.Add("readonlyLog", !Model.newLog);
     using (Html.BeginForm("editlog", "cases", null, FormMethod.Post, new { id = "target" }))
     {
         <div class="secnavs fixed">
             <div class="pull-left">
-                <ul class="secnav">                
+                <ul class="secnav">
                     @if (Model.EditMode == AccessMode.FullAccess && !Model.newLog)
                     {
-                        <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "deletelog", new { id = @Model.CaseLog.Id, caseId = @Model.case_.Id }, 
-                        new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })</li>
-                    }                    
+                        <li>
+                            @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "deletelog", new { id = @Model.CaseLog.Id, caseId = @Model.case_.Id },
+                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?" })
+                    </li>
+                }
                     @if (Model.newLog)
                     {
                         @*<li>@Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), null, null, null, new { @class = "btn", id = "log-action-save" })</li>*@
-                        <li><input type="submit" id = "log-action-save" class = "btn" value="@Translation.GetCoreTextTranslation("Spara")"> </li>
+                        <li><input type="submit" id="log-action-save" class="btn" value="@Translation.GetCoreTextTranslation("Spara")"> </li>
                         @*<li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "editlog", "cases", new { Id = Model.CaseLog.Id }, new { @class = "btn save", id = "case-action-save" })</li>*@
-                        
+
                     }
                     else
                     {
@@ -62,3 +64,5 @@
         </div>
     }
 }
+
+@Scripts.Render("~/bundles/Cases/common")

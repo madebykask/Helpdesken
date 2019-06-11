@@ -75,8 +75,9 @@
     }
 
     function catchTime() {
-        var Jan1 = new Date(2015, 0, 1);
-        var Jul1 = new Date(2015, 6, 1);
+        var now = new Date();
+        var Jan1 = new Date(now.getFullYear(), 0, 1);
+        var Jul1 = new Date(now.getFullYear(), 6, 1);
         document.getElementById('timeZoneOffsetInJan1').value = Jan1.getTimezoneOffset();
         document.getElementById('timeZoneOffsetInJul1').value = Jul1.getTimezoneOffset();
         $("input:text:visible:first").focus();

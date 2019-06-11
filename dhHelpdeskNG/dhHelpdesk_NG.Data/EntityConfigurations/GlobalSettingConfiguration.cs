@@ -45,7 +45,7 @@
 			this.Property(x => x.PerformanceLogFrequency).IsRequired();
 			this.Property(x => x.PerformanceLogSettingsCache).IsRequired();
 
-			this.ToTable("tblglobalsettings");
+            this.ToTable("tblglobalsettings");
         }
     }
 }

@@ -7,6 +7,7 @@
         var saveFiltersUrl = window.Params.SaveFiltersUrl;
         var getReportFilterOptionsUrl = window.Params.GetReportFilterOptionsUrl;
         var deleteReportFavoriteUrl = window.Params.DeleteReportFavoriteUrl;
+        var stackByDefaultValue = '5';
 
         var reportList = "#lstReports";
         var administratorDropDown = "#lstfilterAdministrator";
@@ -14,6 +15,7 @@
         var caseCreateTo = "#ReportFilter_CaseCreationDate_ToDate";
         var departmentDropDown = "#lstfilterDepartment";
         var workingGroupDropDown = "#lstfilterWorkingGroup";
+        var historicalWorkingGroupDropDown = '#historicalWorkingGroups';
         var caseTypeDropDown = "#lstfilterCaseType";
         var productAreaDropDown = "#lstfilterProductArea";
         var currentCustomerId = window.Params.CurrentCustomerId;
@@ -21,17 +23,22 @@
         var reportGeneratorFields = "#reportGeneratorFields";
         var caseCloseFrom = "#ReportFilter_CaseClosingDate_FromDate";
         var caseCloseTo = "#ReportFilter_CaseClosingDate_ToDate";
+        var caseLogNoteDateFrom = '#ReportFilter_LogNoteDate_FromDate';
+        var caseLogNoteDateTo = '#ReportFilter_LogNoteDate_ToDate';
         var reportCategoryDropdown = "#lstfilterReportCategory";
         var reportCategoryDropdownRt = "#lstfilterReportCategoryRt";
+        var changeDateFrom = "#ReportFilter_CaseChangeDate_FromDate";
+        var changeDateTo = "#ReportFilter_CaseChangeDate_ToDate";
 
-        /*specify all extra parameters element*/
-        var $extraParameters = $("#reportCategoryParam");
+        var reportObjNames = {};
+        reportObjNames[dhHelpdesk.reports.reportType.ReportedTime] = 'reportedTimeReport';
+        reportObjNames[dhHelpdesk.reports.reportType.NumberOfCases] = 'numberOfCasesReport';
 
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.reports = window.dhHelpdesk.reports || {};
-        
+        window.dhHelpdesk.reports.errorClass = 'error';
 
-        var getFilters = function () {
+        var getBaseFilters = function () {
             var filters = {
                 departments: [],
                 workingGroups: [],
@@ -120,6 +127,7 @@
 
             applyChosen(departmentDropDown, filters.departments);
             applyChosen(workingGroupDropDown, filters.workingGroups);
+            // applyChosen(historicalWorkingGroupDropDown, filters.historicalWorkingGroups);
             applyChosen(administratorDropDown, filters.administrators);
             applyChosen(caseTypeDropDown, filters.caseTypes);
             applyChosen(productAreaDropDown, filters.productAreas);
@@ -164,11 +172,11 @@
 
         };
 
-        dhHelpdesk.reports.onGeneratedShow = function () {           
+        dhHelpdesk.reports.onGeneratedShow = function () {
             if (!dhHelpdesk.reports.doValidation())
                 return;
 
-            var filters = getFilters();
+            var filters = getBaseFilters();
             
             var getParams = $.param({
                 DepartmentIds: filters.departments,
@@ -218,73 +226,131 @@
             }
         };
 
-        dhHelpdesk.reports.doValidation = function () {
+        dhHelpdesk.reports.resetErrors = function () {
+            const errorClass = window.dhHelpdesk.reports.errorClass;
 
-            $('#ReportFilter_CaseCreationDate_FromDate').removeClass("error");
-            $('#ReportFilter_CaseCreationDate_ToDate').removeClass("error");
+            const $createDateFrom = $(caseCreateFrom);
+            const $createDateTo = $(caseCreateTo);
+            const $closeDateFrom = $(caseCloseFrom);
+            const $closeDateTo = $(caseCloseTo);
+            const $changeDateFrom = $(changeDateFrom);
+            const $changeDateTo = $(changeDateTo);
+            const $logNoteDateFrom = $(caseLogNoteDateFrom);
+            const $logNoteDateTo = $(caseLogNoteDateTo);
 
-            if ($('#ReportFilter_CaseCreationDate_FromDate').val() == "") {
-                var msg = window.Params.DateIsEmptyMessage;
-                $('#ReportFilter_CaseCreationDate_FromDate').addClass("error");
-                ShowToastMessage(msg, "warning");
-                return false;
-            }
-
-            if ($('#ReportFilter_CaseCreationDate_ToDate').val() == "") {
-                var msg = window.Params.DateIsEmptyMessage;
-                $('#ReportFilter_CaseCreationDate_ToDate').addClass("error");
-                ShowToastMessage(msg, "warning");
-                return false;
-            }
-            
-            return true;
+            $createDateFrom.removeClass(errorClass);
+            $createDateTo.removeClass(errorClass);
+            $closeDateFrom.removeClass(errorClass);
+            $closeDateTo.removeClass(errorClass);
+            $changeDateFrom.removeClass(errorClass);
+            $changeDateTo.removeClass(errorClass);
+            $logNoteDateFrom.removeClass(errorClass);
+            $logNoteDateTo.removeClass(errorClass);
         }
 
-        dhHelpdesk.reports.onOtherShow = function (e) {
-                        
-            if (!dhHelpdesk.reports.doValidation())
-                return;
+        dhHelpdesk.reports.doValidation = function (isRegDateRequiredOnly) {
 
-            var origReportId = $(reportList).find("option:selected").data("origReportId");
-            var isSavedFilter = typeof origReportId !== "undefined";
+            isRegDateRequiredOnly = isRegDateRequiredOnly !== false; // default true
 
-            var reportName = isSavedFilter ? origReportId : $(reportList + " option:selected").val();
-            var customer = "";
-            var deps_OUs = "";
-            var workingGroup = "";
-            var administrator = "";
-            var caseType = "";
-            var productArea = "";
-            var status = "";
-            var reportCategory = "";
-            var reportCategoryRt = "";
+            const $createDateFrom = $(caseCreateFrom);
+            const $createDateTo = $(caseCreateTo);
+            const $closeDateFrom = $(caseCloseFrom);
+            const $closeDateTo = $(caseCloseTo);
+            const $changeDateFrom = $(changeDateFrom);
+            const $changeDateTo = $(changeDateTo);
+            const $logNoteDateFrom = $(caseLogNoteDateFrom);
+            const $logNoteDateTo = $(caseLogNoteDateTo);
+
+            dhHelpdesk.reports.resetErrors();
+
+            const validatePair = function($from, $to) {
+                const isFromEmpty = $from.val() === '';
+                const isToEmpty = $to.val() === '';
+                var errorControls = [];
+                if (isFromEmpty && isToEmpty) {
+                    errorControls.push($from);
+                    errorControls.push($to);
+                } else if (isFromEmpty && !isToEmpty) {
+                    errorControls.push($from);
+                } else if (!isFromEmpty && isToEmpty) {
+                    errorControls.push($to);
+                }
+                return errorControls;
+            };
+
+            var emptyControls = [];
+            var invalidControls = [];
+            if (isRegDateRequiredOnly) {
+                emptyControls.push(validatePair($createDateFrom, $createDateTo));
+            } else {
+                emptyControls.push(validatePair($createDateFrom, $createDateTo));
+                emptyControls.push(validatePair($closeDateFrom, $closeDateTo));
+                if (!$changeDateFrom.is(':hidden'))
+                    emptyControls.push(validatePair($changeDateFrom, $changeDateTo));
+                if (!$logNoteDateFrom.is(':hidden'))
+                    emptyControls.push(validatePair($logNoteDateFrom, $logNoteDateTo));
+            }
+
+            if (emptyControls.every(function(e) { // all empty
+                return e.length === 2;
+            })) {
+                emptyControls.forEach(function (e) { invalidControls = invalidControls.concat(e); });
+            } else { // only pairs where 1 field is filled
+                emptyControls.filter(function(e) {
+                    return e.length === 1;
+                }).forEach(function(e) {
+                     invalidControls = invalidControls.concat(e);
+                }); 
+            }
+
+            var isValid = invalidControls.length === 0;
+            if (!isValid) {
+                invalidControls.forEach(function(e) {
+                    e.addClass(window.dhHelpdesk.reports.errorClass);
+                });
+                ShowToastMessage(window.Params.DateIsEmptyMessage, 'warning');
+            }
+            
+            return isValid;
+        }
+
+        function getFilters() {
+            var customer = '';
+            var deps_OUs = '';
+            var workingGroup = '';
+            var administrator = '';
+            var caseType = '';
+            var productArea = '';
+            var status = '';
+            var reportCategory = '';
+            var reportCategoryRt = '';
 
             customer = currentCustomerId;
 
-            $(departmentDropDown + " option:selected").each(function () {
-                deps_OUs += $(this).val() + ",";
+            $(departmentDropDown + ' option:selected').each(function () {
+                deps_OUs += $(this).val() + ',';
             });
 
-            $(workingGroupDropDown + " option:selected").each(function () {
-                workingGroup += $(this).val() + ",";
+            $(workingGroupDropDown + ' option:selected').each(function () {
+                workingGroup += $(this).val() + ',';
             });
 
-            $(administratorDropDown + " option:selected").each(function () {
-                administrator += $(this).val() + ",";
+            $(administratorDropDown + ' option:selected').each(function () {
+                administrator += $(this).val() + ',';
             });
 
-            $(caseTypeDropDown + " option:selected").each(function () {
-                caseType += $(this).val() + ",";
+            $(caseTypeDropDown + ' option:selected').each(function () {
+                caseType += $(this).val() + ',';
             });
 
-            $(productAreaDropDown + " option:selected").each(function () {
-                productArea += $(this).val() + ",";
+            $(productAreaDropDown + ' option:selected').each(function () {
+                productArea += $(this).val() + ',';
             });
 
-            status = $(statusList + " option:selected").val();
+            status = $(statusList + ' option:selected').val();
 
-            reportCategory = $(reportCategoryDropdown + " option:selected").val();
-            reportCategoryRt = $(reportCategoryDropdownRt + " option:selected").val();
+            reportCategory = $(reportCategoryDropdown + ' option:selected').val();
+            reportCategoryRt = $(reportCategoryDropdownRt + ' option:selected').val();
 
             var regDateFrom = $(caseCreateFrom).val();
             var regDateTo = $(caseCreateTo).val();
@@ -292,22 +358,173 @@
             var closeDateFrom = $(caseCloseFrom).val();
             var closeDateTo = $(caseCloseTo).val();
 
+
+            return {
+                'customer': customer,
+                'deps_OUs': deps_OUs,
+                'workingGroup': workingGroup,
+                'administrator': administrator,
+                'caseType': caseType,
+                'productArea': productArea,
+                'status': status,
+                'regDateFrom': regDateFrom,
+                'regDateTo': regDateTo,
+                'closeDateFrom': closeDateFrom,
+                'closeDateTo': closeDateTo,
+                'reportCategory': reportCategory,
+                'reportCategoryRt': reportCategoryRt,
+            }
+        }
+
+        function getCommonFilter() {
+            var departments = [];
+            var workingGroups = [];
+            var administrators = [];
+            var caseTypes = [];
+            var productAreas = [];
+
+            $(departmentDropDown + ' option:selected').each(function () {
+                departments.push($(this).val());
+            });
+
+            $(workingGroupDropDown + ' option:selected').each(function () {
+                workingGroups.push($(this).val());
+            });
+
+            $(administratorDropDown + ' option:selected').each(function () {
+                administrators.push($(this).val());
+            });
+
+            $(caseTypeDropDown + ' option:selected').each(function () {
+                caseTypes.push($(this).val());
+            });
+
+            $(productAreaDropDown + ' option:selected').each(function () {
+                productAreas.push($(this).val());
+            });
+
+            var regDateFrom = $(caseCreateFrom).val();
+            var regDateTo = $(caseCreateTo).val();
+
+            var closeDateFrom = $(caseCloseFrom).val();
+            var closeDateTo = $(caseCloseTo).val();
+
+            var logNoteDateFrom = $(caseLogNoteDateFrom).val();
+            var logNoteDateTo = $(caseLogNoteDateTo).val();
+
+            var groupBy = null;
+            var $reportCategory = $(reportCategoryDropdown);
+            var $reportCategoryRt = $(reportCategoryDropdownRt);
+
+            if ($reportCategory.is(':visible')) {
+                groupBy = $reportCategory.val();
+            } else if ($reportCategoryRt.is(':visible')) {
+                groupBy = $reportCategoryRt.val();
+            }
+
+            var status = $(statusList + ' option:selected').val();
+
+            return {
+                'departments': departments,
+                'workingGroups': workingGroups,
+                'administrators': administrators,
+                'caseTypes': caseTypes,
+                'productAreas': productAreas,
+                'regDateFrom': regDateFrom,
+                'regDateTo': regDateTo,
+                'closeDateFrom': closeDateFrom,
+                'closeDateTo': closeDateTo,
+                'logNoteDateFrom': logNoteDateFrom,
+                'logNoteDateTo': logNoteDateTo,
+                'status': status,
+                'groupBy': groupBy
+            };
+
+        }
+
+        function getHistoricalFilters() {
+            var historicalWorkingGroups = [];
+
+            $(historicalWorkingGroupDropDown + ' option:selected').each(function () {
+                historicalWorkingGroups.push($(this).val());
+            });
+
+            var groupBy = $('#lstGroupBy').val();
+            var stackBy = $('#lstStackBy').val();
+
+            var historicalChangeDateFrom = $(changeDateFrom).val();
+            var historicalChangeDateTo = $(changeDateTo).val();
+            var commonFilter = getCommonFilter();
+
+            return $.extend(commonFilter, {
+                'historicalChangeDateFrom': historicalChangeDateFrom,
+                'historicalChangeDateTo': historicalChangeDateTo,
+                'historicalWorkingGroups': historicalWorkingGroups,
+                'groupBy': groupBy,
+                'stackBy': stackBy
+            });
+        }
+
+        dhHelpdesk.reports.onShowReport = function (e) {
+            var reportId = $('#lstReports').find('option:selected').data('id');
+            switch (reportId) {
+                case dhHelpdesk.reports.reportType.HistoricalReport: 
+                    dhHelpdesk.reports.onHistoricalShow.call(this, e);
+                    break;
+                case dhHelpdesk.reports.reportType.ReportedTime:
+                case dhHelpdesk.reports.reportType.NumberOfCases:
+                    dhHelpdesk.reports.onJSReportShow.call(this, e, reportObjNames[reportId]);
+                    break;
+                default:
+                    dhHelpdesk.reports.onOtherShow.call(this, e);
+                    break;
+            }
+        }
+
+        dhHelpdesk.reports.onHistoricalShow = function (e) {
+            if (!dhHelpdesk.reports.doValidation(false))
+                return;
+
+            dhHelpdesk.reports.historicalReport.show();
+            dhHelpdesk.reports.historicalReport.update(getHistoricalFilters());
+        }
+
+        dhHelpdesk.reports.onJSReportShow = function (e, name) {
+            if (!dhHelpdesk.reports.doValidation(false))
+                return;
+
+            dhHelpdesk.reports[name].show();
+            dhHelpdesk.reports[name].update(getCommonFilter());
+        }
+
+        dhHelpdesk.reports.onOtherShow = function(e) {
+
+            if (!dhHelpdesk.reports.doValidation())
+                return;
+
+            var origReportId = $(reportList).find("option:selected").data("origReportId");
+            var isSavedFilter = typeof origReportId !== "undefined";
+
+            var reportName = isSavedFilter ? origReportId : $(reportList + " option:selected").val();
+
+            var params = getFilters();
+
             $.get(showReportUrl,
                 {
                     reportName: reportName,
-                    'filter.Customers': customer,
-                    'filter.Deps_OUs': deps_OUs,
-                    'filter.WorkingGroups': workingGroup,
-                    'filter.Administrators': administrator,
-                    'filter.CaseTypes': caseType,
-                    'filter.ProductAreas': productArea,
-                    'filter.CaseStatus': status,
-                    'filter.RegisterFrom': regDateFrom,
-                    'filter.RegisterTo': regDateTo,
-                    'filter.CloseFrom': closeDateFrom,
-                    'filter.CloseTo': closeDateTo,
-                    'filter.ReportCategory': reportCategory,
-                    'filter.ReportCategoryRt': reportCategoryRt,
+                    'filter.Customers': params.customer,
+                    'filter.Deps_OUs': params.deps_OUs,
+                    'filter.WorkingGroups': params.workingGroup,
+                    'filter.Administrators': params.administrator,
+                    'filter.CaseTypes': params.caseType,
+                    'filter.ProductAreas': params.productArea,
+                    'filter.CaseStatus': params.status,
+                    'filter.RegisterFrom': params.regDateFrom,
+                    'filter.RegisterTo': params.regDateTo,
+                    'filter.CloseFrom': params.closeDateFrom,
+                    'filter.CloseTo': params.closeDateTo,
+                    'filter.ReportCategory': params.reportCategory,
+                    'filter.ReportCategoryRt': params.reportCategoryRt,
                     curTime: new Date().getTime()
                 },
                 function (reportPresentation) {
@@ -322,6 +539,7 @@
             var selectedId = $(this).find("option:selected").data("id");
             var reportId = isSavedFilter ? origReportId : selectedId;
 
+            var $extraParameters = $("#reportCategoryParam");
             var $btnPreview = $("#btnPreviewReport");
             var $btnShow = $("#showReport");
             var $btnSaveFilter = $("#btnSaveFilter");
@@ -331,30 +549,78 @@
             var $reportGeneratorFields = $("#reportGeneratorFields");
             var $otherReportsContainer = $("#otherReportsContainer");
             var $generateReportContainer = $("#generateReportContainer");
+            var $jsReportContainer = $("#jsReportContainer");
             var $fieldsSelect = $("#lstFields");
+            var $stackBy = $('#lstStackBy');
+            var $groupBy = $('#groupBy');
+            var $logNoteDateFields = $('#logNoteDateFields');
+            var $historicalFilters = $('#historicalFilters');
+
+            var historicalReportControls = [$btnShowReport, $groupBy, $jsReportContainer, $historicalFilters];
 
             dhHelpdesk.reports.togglePreviewMode(true);
+            dhHelpdesk.reports.resetErrors();
 
             if (reportId === dhHelpdesk.reports.reportType.ReportGenerator) {
                 $btnPreview.show();
                 $btnShow.show();
                 $btnExcel.show();
+                $extraParameters.show();
+                $historicalFilters.hide();
                 $btnShowReport.hide();
-                $reportGeneratorFields.find("select option").prop("selected", false);
-                $fieldsSelect.multiselect("refresh");
+                $reportGeneratorFields.find('select option').prop('selected', false);
+                $fieldsSelect.multiselect('refresh');
                 $reportGeneratorFields.show();
                 $otherReportsContainer.hide();
-                $generateReportContainer.html("");
+                $logNoteDateFields.hide();
+                dhHelpdesk.reports.historicalReport.hide();
+                $jsReportContainer.hide();
+                $stackBy.val('');
+                $stackBy.prop('disabled', true);
+                $groupBy.hide();
+                $generateReportContainer.html('');
                 $generateReportContainer.show();
+            } else if (reportId === dhHelpdesk.reports.reportType.HistoricalReport) {
+                $btnPreview.hide();
+                $btnShow.hide();
+                $btnExcel.hide();
+                $reportGeneratorFields.hide();
+                $generateReportContainer.hide();
+                $otherReportsContainer.hide();
+                $extraParameters.hide();
+                $logNoteDateFields.hide();
+                $.each(historicalReportControls, function (i, v) { v.show(); });
+                $stackBy.val(stackByDefaultValue);
+                $stackBy.prop('disabled', false);
+                window.dhHelpdesk.reports.historicalReport.init();
             } else {
                 $btnPreview.hide();
                 $btnShow.hide();
                 $btnExcel.hide();
                 $btnShowReport.show();
+                $extraParameters.show();
                 $reportGeneratorFields.hide();
-                $("#reportPresentationArea").html("");
-                $otherReportsContainer.show();
+                $('#reportPresentationArea').html('');
                 $generateReportContainer.hide();
+                $stackBy.val('');
+                $stackBy.prop('disabled', true);
+                $groupBy.hide();
+                dhHelpdesk.reports.historicalReport.hide();
+                $historicalFilters.hide();
+                $logNoteDateFields.hide();
+                $jsReportContainer.hide();
+                $otherReportsContainer.show();
+                if (reportId === dhHelpdesk.reports.reportType.ReportedTime) {
+                    $logNoteDateFields.show();
+                    $otherReportsContainer.hide();
+                    $jsReportContainer.show();
+                    window.dhHelpdesk.reports[reportObjNames[reportId]].init();
+                }
+                if (reportId === dhHelpdesk.reports.reportType.NumberOfCases) {
+                    $otherReportsContainer.hide();
+                    $jsReportContainer.show();
+                    window.dhHelpdesk.reports[reportObjNames[reportId]].init();
+                }
             }
 
             if (isSavedFilter) {
@@ -423,7 +689,7 @@
             });
 
             $modal.find("#btnSaveFilter").off("click").on("click", function (e) {
-                var filters = getFilters();
+                var filters = getBaseFilters();
                 filters.version = currentVersion;
                 var id = saveAs ? null : selectedReport.data("id"); //if saving new - no id
                 var originalReportId = selectedReport.data("origReportId") ? selectedReport.data("origReportId") : selectedReport.data("id");
@@ -473,7 +739,7 @@
             $modal.modal();
         };
 
-        dhHelpdesk.reports.togglePreviewMode = function (state) {         
+        dhHelpdesk.reports.togglePreviewMode = function (state) {
             $("#showReport").each(function () { this.disabled = state; });
             $("#excelReport").each(function () { this.disabled = state; });
         }
@@ -509,7 +775,7 @@
 
             $("#lstReports").on("change", dhHelpdesk.reports.onReportChange);
 
-            $(showReportButton).on("click", dhHelpdesk.reports.onOtherShow);
+            $(showReportButton).on("click", dhHelpdesk.reports.onShowReport);
             $("#btnDeleteFavorite").on('click', dhHelpdesk.reports.deleteFavorite);
 
             $("#showReport, #excelReport, #btnPreviewReport").on("click", dhHelpdesk.reports.onGeneratedShow);

@@ -1,29 +1,27 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Models.Contract.ContractViewInputModel
+﻿@model DH.Helpdesk.Web.Models.Contract.ContractViewInputModel
  
 @{
     ViewBag.Title = "Edit";
 }
+
 @using (Html.BeginForm("edit", "Contracts", FormMethod.Post, new { id = "target" }))
 {
-  <div class="secnavs fixed">
-    <div class="pull-left">
-       <ul class="secnav">
-        <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", null, new { @class = "btn", onclick = "$('#target').submit();return false;", id=Model.ContractId , contractKey = Model.ContractFileKey })</li>
-            @Html.HiddenFor(x => Model.SettingsModel)
-        <li>
-            <input name="actiontype" type="submit" value="@Translation.Get("Spara och stäng")" class="btn" />
-        </li>
-        <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
-         new { id = Model.ContractId }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post?", Enums.TranslationSource.TextTranslation) })</li>
-        <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null, new { @class = "btn"})</li>
-     </ul>                                      
-   </div>   
-  </div>
-    
-        @Html.Partial("_Input", Model)
-        @Html.HiddenFor(i => i.ContractId)     
-        @Html.HiddenFor(i => i.ContractFileKey)
+    <div class="secnavs fixed">
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", null, new { @class = "btn", onclick = "$('#target').submit();return false;", id=Model.ContractId , contractKey = Model.ContractFileKey })</li>
+                @Html.HiddenFor(x => Model.SettingsModel)
+                <li>
+                    <input name="actiontype" type="submit" value="@Translation.Get("Spara och stäng")" class="btn" />
+                </li>
+                <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
+                        new { id = Model.ContractId }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post?", Enums.TranslationSource.TextTranslation) })</li>
+                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", null, new { @class = "btn"})</li>
+            </ul>                                      
+        </div>   
+    </div>
 
-
+    @Html.Partial("_Input", Model)
+    @Html.HiddenFor(i => i.ContractId)     
+    @Html.HiddenFor(i => i.ContractFileKey)
 }

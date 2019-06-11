@@ -1,45 +1,43 @@
 ﻿"use strict";
 
-
-function SetValueIfElVisible(el, val, opt, forceApply) {
-
+function SetValueIfElVisible($el, val, opt, forceApply) {
     opt = opt || { doOverwrite: false, doNotTriggerEvent: false };
-
-    if (el && ($(el).is(':visible') || (forceApply && val != null && val != ''))) {
-        if (el.val() === "" || opt.doOverwrite) {
-            $(el).val(val);
-            if (!opt.doNotTriggerEvent) {                
-                $(el).trigger('change');
+    if ($el.length && (isFieldVisible($el) || (forceApply && val != null && val !== ''))) {
+        if ($el.val() === "" || opt.doOverwrite) {
+            $el.val(val);
+            if (!opt.doNotTriggerEvent) {
+               $el.trigger('change');
             }
         }
     }
 }
 
-function SetSingleSelectValueIfElVisible(el, val, opt) {
-    opt = opt || { doOverwrite: false, doNotTriggerEvent: false };   
-        if (el.val() === "" || opt.doOverwrite) {            
-            $(el).val(val);
-            $(el).trigger("chosen:updated");            
-        }    
+function SetSingleSelectValueIfElVisible($el, val, opt) {
+    opt = opt || { doOverwrite: false, doNotTriggerEvent: false };
+    if ($el.length && isFieldVisible($el)) {
+        if ($el.val() === "" || opt.doOverwrite) {
+            $el.val(val);
+            $el.trigger("chosen:updated");
+        }
+    }
 }
 
-function SetDateValueIfElVisible(el, val, opt, format) {
+function SetDateValueIfElVisible($el, val, opt, format) {
     opt = opt || { doOverwrite: false, doNotTriggerEvent: false };
-    if (el && $(el).is(':visible')) {
-        if (el.val() === "" || opt.doOverwrite) {
-            $(el).datepicker({
-                    format: format.toLowerCase(),
-                    autoclose: true
-                })
-                .datepicker('setDate', val);
+    if ($el.length && isFieldVisible($el)) {
+        if ($el.val() === "" || opt.doOverwrite) {
+            $el.datepicker({
+                format: format.toLowerCase(),
+                autoclose: true
+            }).datepicker('setDate', val);
            
-            var readOnly = $(el).attr("readonly");            
-            if (readOnly!= undefined && readOnly.toLowerCase() === 'readonly') {                
-                $(el).val(val);
+            const readOnly = $el.attr("readonly");            
+            if (readOnly != undefined && readOnly.toLowerCase() === 'readonly') {                
+                $el.val(val);
             }
 
             if (!opt.doNotTriggerEvent) {
-                $(el).trigger('change');                
+                $el.trigger('change');
             }            
         }
     }
@@ -50,7 +48,7 @@ function SetValueToBtnGroup(domContainer, domText, domValue, value, doOverwrite)
     var $domValue = $(domValue);
     var oldValue = $domValue.val();
     var el = $(domContainer).find('a[value="' + newValue + '"]');
-    if (el && (doOverwrite || oldValue === '')) {
+    if (el.length && (doOverwrite || oldValue === '')) {
         $(domText).text(getBreadcrumbs(el));
         $domValue.val(newValue);
         if (oldValue !== newValue) {
@@ -59,26 +57,27 @@ function SetValueToBtnGroup(domContainer, domText, domValue, value, doOverwrite)
     }
 }
 
-function SetCheckboxValueIfElVisible(el, val, doNotTriggerEvent) {
-    if (el && $(el).is(':visible')) {
-        $(el).attr('checked', val);
+function SetCheckboxValueIfElVisible($el, val, doNotTriggerEvent) {
+    if ($el.length && isFieldVisible($el)) {
+        $el.attr('checked', val);
         if (!doNotTriggerEvent) {
-            $(el).trigger('change');
+            $el.trigger('change');
         }
     }
 }
 
-function SetBootstrapSwitchIfElVisible(el, val, doNotTriggerEvent) {
-    if (el && $(el).is(':visible')) {        
-        $(el).bootstrapSwitch('state', val.toLowerCase() === 'true');
+function SetBootstrapSwitchIfElVisible($el, val, doNotTriggerEvent) {
+    if ($el.length && isFieldVisible($el)) {
+        $el.bootstrapSwitch('state', val.toLowerCase() === 'true');
         if (!doNotTriggerEvent) {
-            $(el).trigger('change');
+            $el.trigger('change');
         }
     }
 }
 
-function IsWillBeOverwrittenByValue(domVisible, domValue, val) {
-    return $(domVisible).is(':visible') && $(domValue).val() != '' && $(domValue).val() != val;
+function IsWillBeOverwrittenByValue(domEl, domValue, val) {
+    const $el = $(domEl);
+    return $el.length && isFieldVisible($el) && $(domValue).val() != '' && $(domValue).val() != val;
 }
 
 function IsWillBeOverwritten(fieldId, val) {
@@ -1147,4 +1146,19 @@ function changeCaseButtonsState(state) {
         caseButtons.css("pointer-events", "none");
         $(templateQuickButtonIndicator).css("display", "block");
     }
+}
+
+
+function isFieldVisible($el) {
+    
+    if ($el.length === 0) return false;
+
+    const $row = $el.closest('tr');
+    if ($row.length && $row[0].style.display === 'none') return false;
+
+    const style = getComputedStyle($el[0]);
+    if (style.display === 'none') return false;
+    if (style.visibility !== 'visible') return false;
+    
+    return true;
 }

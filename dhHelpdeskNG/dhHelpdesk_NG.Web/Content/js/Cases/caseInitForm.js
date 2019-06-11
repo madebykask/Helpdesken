@@ -421,8 +421,7 @@ function GetComputerUserSearchOptions() {
                         process(resultList);
                     }
                 });
-            },//ajax callback
-            300);
+            }, 300);
         },
 
         matcher: function (obj) {            
@@ -797,12 +796,13 @@ function GetComputerUserSearchOptionsForIsAbout() {
         updater: function (obj) {
             var item = JSON.parse(obj);
             if (!item.isNoResult) {
+                var regardingSectionType = 1;
                 var departmentFilterFormat = $('#DepartmentFilterFormat').val();
 
                 $('#case__IsAbout_ReportedBy').val(item.num);
 
                 // Raise event about UserId changed.
-                $(document).trigger("OnUserIdChanged", [item.num]);
+                $(document).trigger("OnUserIdChanged", [item.num, regardingSectionType]);
 
 
                 // Case Is About
@@ -856,7 +856,7 @@ function GetComputerUserSearchOptionsForIsAbout() {
                 /*if (item.categoryID != null){
                     window.page.loadExtendedInitiator();
                 }*/
-                var regardingSectionType = 1;
+                
                 loadExtendedCaseSectionIfExist(item.categoryID, regardingSectionType);
 
                 return item.num;
@@ -1142,13 +1142,12 @@ function CaseInitForm() {
     }
 
     function bindProductAreasEvents() {
-        $('#divProductArea ul.dropdown-menu li a').click(function (e) {
+        $('#divProductArea ul.dropdown-menu li a').on('click', function (e) {
             e.preventDefault();
             onProductAreaChanged(this);
         });
-        $('#divProductArea .dropdown-submenu.DynamicDropDown_Up').off('mousemove');
-        $('#divProductArea .dropdown-submenu.DynamicDropDown_Up').on('mousemove', function (event) {
-            dynamicDropDownBehaviorOnMouseMove(event);
+        $('#divProductArea .dropdown-submenu.DynamicDropDown_Up').off('mousemove').on('mousemove', function (event) {
+            dynamicDropDownBehaviorOnMouseMove(event.target.parentElement);
         });
     }
 
@@ -1228,27 +1227,27 @@ function CaseInitForm() {
 
     $('#case__Priority_Id').change(function () {
         var isInheritingMode = $('#CaseTemplate_ExternalLogNote').val();
-        if (isInheritingMode == "True") {
-            $('#CaseTemplate_ExternalLogNote').val("");
+        if (isInheritingMode === 'True') {
+            $('#CaseTemplate_ExternalLogNote').val('');
             return;
         }
 
         var textExternalLogNote = $('#CaseLog_TextExternal').val();
   
         $.post('/Cases/ChangePriority/', { 'id': $(this).val(), 'textExternalLogNote': textExternalLogNote }, function (data) {
-            if (data.ExternalLogText != null && data.ExternalLogText != "") {
-                $('#CaseLog_TextExternal').val(data.ExternalLogText);
-                $('#CaseLog_TextExternal').trigger("propertychange");
+            const $txtExternal = $('#CaseLog_TextExternal');
+            if (data.ExternalLogText != null && data.ExternalLogText !== '') {
+                $txtExternal.val(data.ExternalLogText);
+                $txtExternal.trigger('propertychange');
             } else {
-                $('#CaseLog_TextExternal').val("");
+                $txtExternal.val('');
                 $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
             }
         }, 'json');
     });
 
     $('#case__System_Id').change(function () {
-        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeSystem/', '#case__Urgency_Id');
-        SetPriority();
+        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeSystem/', '#case__Urgency_Id', null, true);
     });
 
     $('#case__Impact_Id').change(function () {
@@ -1321,7 +1320,7 @@ function CaseInitForm() {
         }
     }
 
-    $('#case__WorkingGroup_Id').change(function () {
+    $('#case__WorkingGroup_Id').change(function (d, source) {
         console.log('>>> Working group changed event.');
         // Remove after implementing http://redmine.fastdev.se/issues/10995
         // filter administrators
@@ -1329,40 +1328,18 @@ function CaseInitForm() {
         if (dontConnectUserToWorkingGroup === 0) {
             CaseCascadingSelectlistChange($(this).val(), $('#case__Customer_Id').val(), '/Cases/ChangeWorkingGroupFilterUser/', '#Performer_Id', $('#DepartmentFilterFormat').val());
         }
-        //set state secondery
-        SelectValueInOtherDropdownOnChange($(this).val(), '/Cases/ChangeWorkingGroupSetStateSecondary/', '#case__StateSecondary_Id', '.readonlySubstate')
-            .done(function() {
-                $('#case__StateSecondary_Id').trigger('change', 'case__WorkingGroup_Id');
-            });
-      });
-
-    $('#case__StateSecondary_Id').change(function (d, source) {
-        $('#CaseLog_SendMailAboutCaseToNotifier').removeAttr('disabled');
-        curVal = $('#case__StateSecondary_Id').val();
-        $('#case__StateSecondary_Id option[value=' + curVal + ']').attr('selected', 'selected');
-        $.post('/Cases/ChangeStateSecondary', { 'id': $(this).val() }, function (data) {
-            // disable send mail checkbox
-            if (data.NoMailToNotifier == 1) {
-                $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
-                $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', true);
-            }
-            else {
-                if ($('#CaseLog_TextExternal').val() == '') {
-                    $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', false);
-                    $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', false);
-                } else {
-
-                    $('#CaseLog_SendMailAboutCaseToNotifier').prop('checked', true);
-                    $('#CaseLog_SendMailAboutCaseToNotifier').attr('disabled', false);
-                }
-            }
-            // set workinggroup id
-            var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroup_Id + ']').length;
-            if (exists > 0 && data.WorkingGroup_Id > 0 && source !== 'case__WorkingGroup_Id') {
-                $("#case__WorkingGroup_Id").val(data.WorkingGroup_Id);
-            }
-        }, 'json');
+        if (source !== 'case__StateSecondary_Id') {
+            //set state secondary
+            SelectValueInOtherDropdownOnChange($(this).val(),
+                    '/Cases/ChangeWorkingGroupSetStateSecondary/',
+                    '#case__StateSecondary_Id',
+                    '.readonlySubstate')
+                .done(function() {
+                    $('#case__StateSecondary_Id').trigger('change', 'case__WorkingGroup_Id');
+                });
+        }
     });
+
 
     $("#standardtextDropdownMenu div.case-div-standardtext").click(function () {
         addTextToLog($(this).children("span").html());
@@ -1413,68 +1390,7 @@ function CaseInitForm() {
     });
 
     // TODO: CHECK IF COMPATIBLE WITH ALL DropDown buttons and if should be moved to a separate file
-    $("button.dropdown-toggle[data-toggle=dropdown]").on("click", function (e) {
-        $(this).parent().find("li.dropdown-submenu > ul").css("display", "");
-    });
-
-    $("button.dropdown-toggle[data-toggle=dropdown], ul.dropdown-menu").on("keydown", function (e) {
-        if (!/(37|38|39|40|27)/.test(e.keyCode)) return true;
-
-        var $this = $(this);
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        if ($this.is(".disabled, :disabled")) return true;
-
-        var $group = $this.closest(".btn-group");
-        var isActive = $group.hasClass("open");
-        var $parent = $this.parent();
-        var $items = $parent.children("ul.dropdown-menu").children("li:not(.divider):visible").children("a");
-        var index = 0;
-
-        if (isActive && e.keyCode === 27) {
-            if (e.which === 27) $group.find("button.dropdown-toggle[data-toggle=dropdown]").focus();
-            return $this.click();
-        }
-
-        if (!isActive && e.keyCode === 40) {
-            var open = $this.click();
-            $items = $group.children("ul.dropdown-menu").children("li:not(.divider):visible").children("a");
-            if (!$items.length) return open;
-            $items.eq(index).focus();
-            return open;
-        }
-
-        if (!$items.length) return true;
-
-        index = $items.index($items.filter(":focus"));
-
-        if (e.keyCode === 38 && index > 0) index--; // up
-        if (e.keyCode === 40 && index < $items.length - 1) index++; // down
-        if (!~index) index = 0;
-
-        var currentItem = $items.eq(index);
-
-        if (e.keyCode === 39) {
-            var currentLi = currentItem.parent();
-            if (currentLi.hasClass("dropdown-submenu")) {
-                currentLi.children("ul.dropdown-menu").css("display", "block");
-                currentItem = currentLi.children("ul.dropdown-menu").children("li:not(.divider):visible:first").children("a").first();
-            }
-        }
-
-        if (e.keyCode === 37) {
-            if ($parent.hasClass("dropdown-submenu")) {
-                currentItem = $parent.children("a:first");
-                $this.css("display", "");
-            }
-        }
-
-        currentItem.focus();
-
-        return true;
-    });
+    initDynamicDropDownsKeysBehaviour();
 
     //todo: check CaseTemplae
     $("ul.dropdown-menu li a").click(function(e) {
@@ -1501,13 +1417,16 @@ function CaseInitForm() {
     });
 
     $(window).scroll(function () {
-        updateDropdownPosition($('#divProductArea')[0]);
-        var objPos = getObjectPosInView($('#divProductArea')[0]);;
-        if (objPos.ToTop <= objPos.ToDown) {
-                $('#divProductArea').removeClass('dropup');
+        var controls = $('.dropdown-menu-parent');
+        for (var i = 0; i < controls.length; i++) {
+            updateDropdownPosition(controls[i]);
+            var objPos = getObjectPosInView(controls[i]);
+            if (objPos.ToTop <= objPos.ToDown) {
+                $(controls[i]).removeClass('dropup');
             } else {
-                $('#divProductArea').addClass('dropup');
+                $(controls[i]).addClass('dropup');
             }
+        }
     });
 
     bindProductAreasEvents();

@@ -17,7 +17,7 @@
                             <div class="accordion-group accordion-caret">
                                 <div class="accordion-heading">
                                     <a class="accordion-toggle accordion-caret collapsed" data-toggle="collapse" data-parent="#faqstart" href="#collapse@(faq.Id)">                                        
-                                        @faq.CustomerName | @faq.CreatedDate.ToFormattedDate()<br /><i>@GetCategoryPathString(faq.Category)</i><br />@faq.Text
+                                        @faq.CustomerName | @faq.ChangeDate.ToFormattedDate()<br /><i>@GetCategoryPathString(faq.Category)</i><br />@faq.Text
                                     </a>
                                 </div>
                                 <div id="collapse@(faq.Id)" class="accordion-body collapse">

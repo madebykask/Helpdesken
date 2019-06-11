@@ -39,74 +39,69 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Common.Concrete
             _configurationService = configurationService;
         }
 
-        public List<CaseSolution> GetCaseTemplates(int customerId)
-        {
-            return _caseSolutionService.GetCaseSolutions(customerId)
-                                       .Where(t => t.ShowInSelfService && t.Status != 0)
-                                       .OrderBy(t => (t.OrderNum == null) ? 9999 : t.OrderNum)
-                                       .ThenBy(t => t.Name).ToList();           
-        }
-
         public List<CaseTemplateTreeViewModel> GetCaseTemplateTreeModel(int customerId, bool groupedView)
         {
             var ret = new List<CaseTemplateTreeViewModel>();
             if (groupedView)
             {
-                var allTemplates = _caseSolutionService.GetCaseSolutions(customerId)
-                                       .Where(t => t.ShowInSelfService && t.Status != 0)
-                                       .ToList();
-                var allCategories = allTemplates.Select(a => new { Id = a.CaseSolutionCategory_Id, Name = a.CaseSolutionCategory?.Name }).Distinct();
-                foreach (var cat in allCategories)
+                var allTemplates = _caseSolutionService.GetSelfServiceCaseTemplates(customerId);
+
+                var allCategories = allTemplates.Select(a => new
                 {
-                    var newGroup = new CaseTemplateTreeViewModel
-                    {
-                        CategoryId = cat.Id.HasValue? cat.Id.Value : 0,
-                        CategoryName = cat.Name
-                    };
-                    
-                    newGroup.Templates = 
+                    Id = a.CaseSolutionCategory_Id,
+                    Name = a.CaseSolutionCategoryName ?? string.Empty
+                }).Distinct().ToList();
+
+                ret = allCategories.Select(cat => new CaseTemplateTreeViewModel
+                {
+                    CategoryId = cat.Id ?? 0,
+                    CategoryName = cat.Name,
+                    Templates = 
                         allTemplates.Where(t => t.CaseSolutionCategory_Id == cat.Id)
-                                    .Select(t => new CaseTemplateViewModel
-                                            {
-                                                Id = t.Id,
-                                                Name = t.Name,
-                                                ShortDescription = t.ShortDescription,
-                                                TemplatePath = t.TemplatePath,
-                                                TemplateCategory_Id = t.CaseSolutionCategory_Id,
-                                                OrderNum = t.OrderNum,
-                                                ContainsExtendedForm = t.ExtendedCaseForms.Any()
-                                            })
-                                    .OrderBy(t => (t.OrderNum == null) ? 9999 : t.OrderNum)
-                                    .ThenBy(t => t.Name).ToList();                       
-                    
-                    ret.Add(newGroup);
-                }                
+                            .Select(t => new CaseTemplateViewModel
+                            {
+                                Id = t.Id,
+                                Name = t.Name,
+                                ShortDescription = t.ShortDescription,
+                                TemplatePath = t.TemplatePath,
+                                TemplateCategory_Id = t.CaseSolutionCategory_Id,
+                                OrderNum = t.OrderNum,
+                                ContainsExtendedForm = t.ContainsExtendedForm
+                            })
+                        .OrderBy(t => t.OrderNum ?? 9999)
+                        .ThenBy(t => t.Name)
+                        .ToList()
+                }).ToList();
             }
             else
             {
-                var root = new CaseTemplateTreeViewModel();
-                root.CategoryId = null;
-                var templates = _caseSolutionService.GetCaseSolutions(customerId)
-                                       .Where(t => t.ShowInSelfService && t.Status != 0 )
-                                       .Select(t=> new CaseTemplateViewModel
-                                       {
-                                           Id = t.Id,
-                                           Name = t.Name,
-                                           ShortDescription = t.ShortDescription,
-                                           TemplatePath = t.TemplatePath,
-                                           TemplateCategory_Id = t.CaseSolutionCategory_Id,
-                                           OrderNum = t.OrderNum,
-                                           ContainsExtendedForm = t.ExtendedCaseForms.Any()
-                                       })
-                                       .OrderBy(t => (t.OrderNum == null) ? 9999 : t.OrderNum)
-                                       .ThenBy(t => t.Name).ToList();
-                root.Templates = templates;
+                var root = new CaseTemplateTreeViewModel
+                {
+                    CategoryId = null,
+                    Templates =  
+                        _caseSolutionService.GetSelfServiceCaseTemplates(customerId)
+                            .Select(t => new CaseTemplateViewModel
+                            {
+                                Id = t.Id,
+                                Name = t.Name,
+                                ShortDescription = t.ShortDescription,
+                                TemplatePath = t.TemplatePath,
+                                TemplateCategory_Id = t.CaseSolutionCategory_Id,
+                                OrderNum = t.OrderNum,
+                                ContainsExtendedForm = t.ContainsExtendedForm
+                            })
+                            .OrderBy(t => t.OrderNum ?? 9999)
+                            .ThenBy(t => t.Name)
+                            .ToList()
+                };
+                
                 ret.Add(root);
             }
 
             /*Show Templates without group first then groups sorted by name*/
             var sortedView = ret.Where(r => r.CategoryId == 0).ToList();
             sortedView.AddRange(ret.Where(r => r.CategoryId != 0).OrderBy(r=> r.CategoryName).ToList());
+
             return sortedView;
         }
 

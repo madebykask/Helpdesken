@@ -20,7 +20,7 @@ export class ProxyModel {
         this.localization = localization;
     }
 
-    findProxyControl(fieldPathModel: FormFieldPathModel) : ProxyControl {
+    findProxyControl(fieldPathModel: FormFieldPathModel): ProxyControl {
         let proxyTab = <ProxyTab>this.tabs[fieldPathModel.tabId];
         let proxySection = <ProxySection>proxyTab.sections[fieldPathModel.sectionId];
 
@@ -38,12 +38,12 @@ export class ProxyTab {
     sections: any;
 
     constructor(public id: string, public name: string) {
-        this.sections = {}; 
+        this.sections = {};
     }
 }
 
 export class ProxySection {
-    hidden:boolean;
+    hidden: boolean;
     disabled: boolean;
     pristine: boolean;
     instances: any[];
@@ -55,7 +55,7 @@ export class ProxySection {
 
 
 export class ProxySingleInstanceSection extends ProxySection {
-    controls: any;      
+    controls: any;
     uniqueId: string;
     forceEnable: boolean;
 
@@ -73,9 +73,9 @@ export class ProxySectionInstance {
     uniqueId: string;
     forceEnable: boolean;
 
-    dataSources: {[id:string]: any};
+    dataSources: {[id: string]: any};
 
-    constructor(uniqueId:string) {
+    constructor(uniqueId: string) {
         this.uniqueId = uniqueId;
         this.controls = {};
         this.dataSources = {};
@@ -91,24 +91,24 @@ export class ProxyControl {
     value: any;
     secondaryValue: any;
 
-    constructor(id:string) {
+    constructor(id: string) {
         this.id = id;
     }
 }
 
 export class FormInfo{
-    caseId:number;
+    caseId: number;
     userRole: number;
     caseStatus: number;
     customerId: number;
     languageId: number;
     formId: number;
     userGuid: string;
-    currentUser:string;
+    currentUser: string;
     isCaseLocked: boolean;
     applicationType: string;
 
-    constructor(formParameters: FormParametersModel) {        
+    constructor(formParameters: FormParametersModel) {
         this.userRole = formParameters.assignmentParameters ? cm.parseIntOrDefault(formParameters.assignmentParameters.userRole, 0) : 0;
         this.caseStatus = formParameters.assignmentParameters ? cm.parseIntOrDefault(formParameters.assignmentParameters.caseStatus, 0) : 0;
         this.customerId = formParameters.assignmentParameters ? cm.parseIntOrDefault(formParameters.assignmentParameters.customerId, 0) : 0;

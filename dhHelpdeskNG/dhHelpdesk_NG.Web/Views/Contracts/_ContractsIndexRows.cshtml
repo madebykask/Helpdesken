@@ -13,10 +13,8 @@
 <tr>
 @foreach (var c in Model.Columns)
 {
-    if (SessionFacade.CurrentLanguageId == 2)
-    {
         <th onclick="SortCol('@c.ContractField');" style="cursor: pointer;">
-            @c.ContractFieldLable_Eng
+            @(SessionFacade.CurrentLanguageId == LanguageIds.English ? c.ContractFieldLabel_Eng : c.ContractFieldLabel)
             @if (Model.SortBy != null && c.ContractField == Model.SortBy.ColumnName)
             {
                 switch (Model.SortBy.IsAsc)
@@ -32,27 +30,6 @@
                 }
             }
         </th>
-    }
-    else
-    {
-        <th onclick="SortCol('@c.ContractField');" style="cursor: pointer;">
-            @c.ContractFieldLable
-            @if (Model.SortBy != null && c.ContractField == Model.SortBy.ColumnName)
-            {
-                switch (Model.SortBy.IsAsc)
-                {
-                    case true:
-                        <i class="icon-chevron-down"></i>
-                        break;
-                    case false:
-                        <i class="icon-chevron-up"></i>
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-        </th>
-    }
 }
 
 @{
@@ -195,7 +172,7 @@
                     }
                 }
 
-                if (s.ContractField == EnumContractFieldSettings.FollowUpField)
+                if (s.ContractField == EnumContractFieldSettings.FollowUp)
                 {
                     if (row.FollowUpInterval == 0)
                     {
@@ -223,7 +200,7 @@
                     }
                 }
 
-                if (s.ContractField == EnumContractFieldSettings.ResponsibleFollowUpField)
+                if (s.ContractField == EnumContractFieldSettings.ResponsibleFollowUp)
                 {
                     if (row.FollowUpResponsibleUser != null)
                     {

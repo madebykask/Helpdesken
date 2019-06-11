@@ -1,8 +1,8 @@
-﻿"use strsict";
+﻿"use strict";
 
 (function ($) {
     window.Params = window.Params || {};
-    var defaultFocusObj = window.Params.DefaultFocusObject;
+
     var caseTypeDropDown = window.Params.CaseTypeDropDown;
     var productAreaDropDown = window.Params.ProductAreaDropDown;
     var closingReasonDropDown = window.Params.ClosingReasonDropDown;
@@ -21,8 +21,6 @@
         'placeholder_text_multiple': placeholder_text_multiple,
         'no_results_text': no_results_text
     });
-
-    setTimeout(function () { $(defaultFocusObj).focus(); }, 100);
 
     $('#' + caseTypeDropDown + ' ul.dropdown-menu li a').click(function (e) {
         e.preventDefault();
@@ -44,6 +42,4 @@
         $(breadCrumbsPrefix + closingReasonDropDown).text(getBreadcrumbs(this));
         $(hiddenPrefix + closingReasonDropDown).val(val);
     });
-
-    
 })($);

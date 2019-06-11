@@ -1,10 +1,13 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions
+﻿using System.Text;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Models.Shared;
+
+namespace DH.Helpdesk.Web.Infrastructure.Extensions
 {
-    using BusinessData.Models.Shared;
-    using Newtonsoft.Json;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
+    
 
     public static class ModelExtensions
     {
@@ -22,7 +25,22 @@
             }
 
             return modelErrors;
-        }        
+        }
+
+        public static string GetErrorsText(this ModelStateDictionary modelStateErrors)
+        {
+            //error example: {"Message":"The request is invalid.","ModelState":{"saveData.FormId":["Unexpected character encountered while parsing value: t. Path 'FormId', line 1, position 80."]}}
+            var strBld = new StringBuilder();
+            strBld.AppendLine("Invalid model: ");
+
+            foreach (var kv in modelStateErrors)
+            {
+                var errors = string.Join(",", kv.Value.Errors.SelectMany(x => x.ErrorMessage).ToArray());
+                strBld.AppendFormat("{0}: {1};", kv.Key, errors).AppendLine();
+            }
+
+            return strBld.ToString();
+        }
 
         public static string Serialize(this ProcessResult processRes)
         {

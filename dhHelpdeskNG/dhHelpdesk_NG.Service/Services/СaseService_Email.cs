@@ -29,7 +29,8 @@ namespace DH.Helpdesk.Services.Services
             Case oldCase = null,
             CaseLog log = null,
             List<CaseFileDto> logFiles = null,
-            User currentLoggedInUser = null)
+            User currentLoggedInUser = null,
+            string extraFollowersEmails = null)
         {
             //get sender email adress
             var helpdeskMailFromAdress = string.Empty;
@@ -689,7 +690,7 @@ namespace DH.Helpdesk.Services.Services
             //        }
             if (!containsProductAreaMailOrNewCaseMail)
             {
-                this._caseMailer.InformNotifierIfNeeded(
+                _caseMailer.InformNotifierIfNeeded(
                     caseHistoryId,
                     fields,
                     log,
@@ -697,16 +698,22 @@ namespace DH.Helpdesk.Services.Services
                     newCase,
                     helpdeskMailFromAdress,
                     files,
-                    cms.CustomeMailFromAddress, isCreatingCase, cms.DontSendMailToNotifier, cms.AbsoluterUrl);
+                    cms.CustomeMailFromAddress,
+                    isCreatingCase,
+                    cms.DontSendMailToNotifier,
+                    cms.AbsoluterUrl,
+                    extraFollowersEmails);
             }
 
-            this._caseMailer.InformAboutInternalLogIfNeeded(
+            _caseMailer.InformAboutInternalLogIfNeeded(
                 caseHistoryId,
                 fields,
                 log,
                 newCase,
                 helpdeskMailFromAdress,
-                files, cms.AbsoluterUrl, cms.CustomeMailFromAddress);
+                files, 
+                cms.AbsoluterUrl, 
+                cms.CustomeMailFromAddress);
         }
 
         public void SendProblemLogEmail(Case c, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, bool isClosedCaseSending)
@@ -721,7 +728,7 @@ namespace DH.Helpdesk.Services.Services
                 smtpInfo = new MailSMTPSetting(info.SmtpServer, info.SmtpPort);
             }
             List<string> files = null;
-            List<Field> fields = GetCaseFieldsForEmail(cs, caseLog, cms, string.Empty, 0, userTimeZone);
+            var fields = GetCaseFieldsForEmail(cs, caseLog, cms, string.Empty, 0, userTimeZone);
 
             if (isClosedCaseSending)
             {

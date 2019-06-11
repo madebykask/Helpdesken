@@ -13,6 +13,7 @@ namespace DH.Helpdesk.BusinessData.Models.Contract
             this.SelectedContractCategories = new List<int>();
             this.SelectedSuppliers = new List<int>();
             this.SelectedResponsibles = new List<int>();
+            SelectedResponsibleFollowUpUsers = new List<int>();
             this.SelectedDepartments = new List<int>();
             this.State = 0; 
             this.SearchText = string.Empty;
@@ -25,7 +26,7 @@ namespace DH.Helpdesk.BusinessData.Models.Contract
         public List<int> SelectedSuppliers { get; set; }
 
         public List<int> SelectedResponsibles { get; set; }
-
+        public List<int> SelectedResponsibleFollowUpUsers { get; set; }
         public List<int> SelectedDepartments { get; set; }
 
         public int State { get; set; }

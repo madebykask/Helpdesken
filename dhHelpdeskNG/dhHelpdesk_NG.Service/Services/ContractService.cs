@@ -1,29 +1,24 @@
-﻿using System.Linq.Expressions;
-using DH.Helpdesk.BusinessData.Models.Inventory;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using DH.Helpdesk.BusinessData.Models.Contract;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Linq;
-using DH.Helpdesk.Services.Enums;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Domain;
 using ContractStatuses = DH.Helpdesk.Services.Enums.ContractStatuses;
 
 namespace DH.Helpdesk.Services.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.BusinessData.Models.Contract;
-    using DH.Helpdesk.Dal.DbContext;
-
     public interface IContractService
     {
-        IList<Contract> GetContracts(int customerId);
-        IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter);
-
-        Contract GetContract(int contractId);
+        IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter, int userId);
+        Contract GetContract(int contractId, int userId);
         List<ContractsSettingRowModel> GetContractsSettingRows(int customerId);
-        void SaveContractSettings(List<ContractsSettingRowModel> ContractSettings);
+        void SaveContractSettings(IList<ContractsSettingRowModel> contractSettings);
         int SaveContract(ContractInputModel contract);
         void SaveContractHistory(Contract contract, List<string> files);
         void SaveContracFile(ContractFileModel contractFile);
@@ -31,7 +26,7 @@ namespace DH.Helpdesk.Services.Services
         ContractFileModel GetContractFile(int fileId);
 
         IList<ContractHistoryFull> GetContractractHistoryList(int contractId);
-
+        void CreateMissingFieldSettings(int customerId);
         void DeleteContract(Contract contract);
         void DeleteContractFile(int fileId);
 
@@ -59,19 +54,14 @@ namespace DH.Helpdesk.Services.Services
             IContractFileRepository contractFileRepository,
             IUnitOfWork unitOfWork)
         {
-            this._contractRepository = contractRepository;
-            this._contractHistoryRepository = contractHistoryRepository;
-            this._contractFieldSettingsRepository = contractFieldSettingsRepository;
-            this._contractFileRepository = contractFileRepository;
-            this._unitOfwork = unitOfWork;
+            _contractRepository = contractRepository;
+            _contractHistoryRepository = contractHistoryRepository;
+            _contractFieldSettingsRepository = contractFieldSettingsRepository;
+            _contractFileRepository = contractFileRepository;
+            _unitOfwork = unitOfWork;
         }
 
-        public IList<Contract> GetContracts(int customerId)
-        {
-            return _contractRepository.GetContracts(customerId).ToList();
-        }
-
-        public IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter)
+        public IList<ContractSearchItemData> SearchContracts(ContractsSearchFilter filter, int userId)
         {
             var selectedStatus = filter.State;
             var customerId = filter.CustomerId;
@@ -83,10 +73,12 @@ namespace DH.Helpdesk.Services.Services
 
             if (filter.SelectedDepartments.Any())
                 exp = PredicateBuilder<Contract>.AndAlso(exp, c => filter.SelectedDepartments.Contains(c.Department_Id ?? 0));
-            
 
             if (filter.SelectedResponsibles.Any())
                 exp = PredicateBuilder<Contract>.AndAlso(exp, c => filter.SelectedResponsibles.Contains(c.ResponsibleUser_Id ?? 0));
+
+            if (filter.SelectedResponsibleFollowUpUsers.Any())
+                exp = PredicateBuilder<Contract>.AndAlso(exp, c => filter.SelectedResponsibleFollowUpUsers.Contains(c.FollowUpResponsibleUser_Id ?? 0));
 
             if (filter.SelectedSuppliers.Any())
                 exp = PredicateBuilder<Contract>.AndAlso(exp, c => filter.SelectedSuppliers.Contains(c.Supplier_Id ?? 0));
@@ -140,7 +132,7 @@ namespace DH.Helpdesk.Services.Services
             if (!string.IsNullOrEmpty(filter.SearchText)) 
                 exp = PredicateBuilder<Contract>.AndAlso(exp, t => t.ContractNumber.Contains(filter.SearchText) || t.Info.Contains(filter.SearchText));
 
-            var queryable = _contractRepository.GetContracts(exp).OrderBy(c => c.ContractNumber).AsQueryable();
+            var queryable = _contractRepository.GetContracts(exp, userId, customerId).OrderBy(c => c.ContractNumber).AsQueryable();
 
             var contracts = 
                 queryable.Select(contract => new ContractSearchItemData()
@@ -204,22 +196,83 @@ namespace DH.Helpdesk.Services.Services
             return contracts;
         }
 
-        public Contract GetContract(int contractId)
+        public Contract GetContract(int contractId, int userId)
         {
-            return this._contractRepository.GetContract(contractId);
+            return _contractRepository.GetContract(contractId, userId);
         }
 
         public List<ContractsSettingRowModel> GetContractsSettingRows(int customerId)
         {
-            return this._contractFieldSettingsRepository.GetContractsSettingRows(customerId).ToList();
+            return _contractFieldSettingsRepository.GetContractsSettingRows(customerId).ToList();
         }
 
         public void Commit()        
         {
-            this._unitOfwork.Commit();            
+            _unitOfwork.Commit();            
         }
 
-        public void SaveContractSettings(List<ContractsSettingRowModel> contractsettings)
+        public void CreateMissingFieldSettings(int customerId)
+        {
+            var existingSettings = GetContractsSettingRows(customerId);
+
+            var missingFields = new List<ContractFieldSettings>
+            {
+                CreateSettingIfMissing(EnumContractFieldSettings.Number, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.Category, customerId, existingSettings, isRequired: true),
+                CreateSettingIfMissing(EnumContractFieldSettings.Supplier, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.StartDate, customerId, existingSettings, isRequired: true),
+                CreateSettingIfMissing(EnumContractFieldSettings.EndDate, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.NoticeDate, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.Filename, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.Department, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.ResponsibleUser, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.Finished, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.Running, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.Other, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.FollowUp, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.ResponsibleFollowUp, customerId, existingSettings),
+                CreateSettingIfMissing(EnumContractFieldSettings.CaseNumber, customerId, existingSettings, false, false)
+            };
+
+            missingFields = missingFields.Where(x => x != null).ToList();
+
+            if (missingFields.Any())
+            {
+                //save changes if any
+                _contractFieldSettingsRepository.AddRange(missingFields);
+                Commit();
+            }
+        }
+
+        private ContractFieldSettings CreateSettingIfMissing(string fieldName, int customerId, IList<ContractsSettingRowModel> existingSettings, bool isRequired = false, bool isVisisble = true)
+        {
+            var settingExists = existingSettings.Any(s => fieldName.Equals(s.ContractField,  StringComparison.OrdinalIgnoreCase));
+            if (settingExists)
+                return null;
+
+            var fieldSettings = CreateDefaultSetting(fieldName, customerId, isRequired, isVisisble);
+            return fieldSettings;
+        }
+
+        private ContractFieldSettings CreateDefaultSetting(string fieldName, int customerId, bool isRequired = false, bool isVisisble = true)
+        {
+            return new ContractFieldSettings()
+            {
+                Customer_Id = customerId,
+                Required = isRequired ? 1 : 0,
+                Show = isVisisble.ToInt(),
+                ShowExternal = 0,
+                ShowInList = 1,
+                FieldHelp = "",
+                ContractField = fieldName,
+                Label = fieldName,
+                Label_ENG = fieldName,
+                ChangedDate = DateTime.UtcNow,
+                CreatedDate = DateTime.UtcNow
+            };
+        }
+
+        public void SaveContractSettings(IList<ContractsSettingRowModel> contractsettings)
         {
 
             if (contractsettings == null)
@@ -227,7 +280,7 @@ namespace DH.Helpdesk.Services.Services
 
             foreach (var contractsetting in contractsettings)
             {
-                var ContractFieldsSettingEntity = new ContractFieldSettings()
+                var fieldSettings = new ContractFieldSettings()
                 {
                     Customer_Id = contractsetting.CustomerId,
                     Id = contractsetting.Id,
@@ -244,12 +297,12 @@ namespace DH.Helpdesk.Services.Services
                 };
 
                 if (contractsetting.Id == 0)
-                    this._contractFieldSettingsRepository.Add(ContractFieldsSettingEntity);
+                    _contractFieldSettingsRepository.Add(fieldSettings);
                 else
-                    this._contractFieldSettingsRepository.Update(ContractFieldsSettingEntity);
+                    _contractFieldSettingsRepository.Update(fieldSettings);
             }
 
-            this.Commit();
+            Commit();
         }
 
         public int SaveContract(ContractInputModel contract)
@@ -272,7 +325,7 @@ namespace DH.Helpdesk.Services.Services
             if (contract.FollowUpResponsibleUserId == 0)
                 contract.FollowUpResponsibleUserId = null;
 
-            var contractId = this._contractRepository.SaveContract(contract);
+            var contractId = _contractRepository.SaveContract(contract);
             
             var entity = _contractRepository.GetById(contractId);
 
@@ -307,8 +360,8 @@ namespace DH.Helpdesk.Services.Services
                 CreatedByUser_Id = contract.ChangedByUser_Id
             };
 
-            this._contractHistoryRepository.Add(contractHistory);
-            this._contractHistoryRepository.Commit();
+            _contractHistoryRepository.Add(contractHistory);
+            _contractHistoryRepository.Commit();
         }
 
         public void SaveContracFile(ContractFileModel contractFile)
@@ -316,13 +369,13 @@ namespace DH.Helpdesk.Services.Services
             if (contractFile == null)
                 throw new ArgumentNullException("Contract");
 
-            this._contractFileRepository.SaveContracFile(contractFile);
-            this._contractFileRepository.Commit();
+            _contractFileRepository.SaveContracFile(contractFile);
+            _contractFileRepository.Commit();
         }
 
         public List<ContractFileModel> GetContractFiles(int contractId)
         {
-            var contractFileEntities = this._contractFileRepository.GetContractFiles(contractId);
+            var contractFileEntities = _contractFileRepository.GetContractFiles(contractId);
      
             var contractFileModules = contractFileEntities.Select(conf => new ContractFileModel()
             {
@@ -341,7 +394,7 @@ namespace DH.Helpdesk.Services.Services
 
         public ContractFileModel GetContractFile(int fileId)
         {
-            var contractFileEntity = this._contractFileRepository.GetContractFile(fileId);
+            var contractFileEntity = _contractFileRepository.GetContractFile(fileId);
 
             var contractFileModule = new ContractFileModel()
             {
@@ -365,25 +418,25 @@ namespace DH.Helpdesk.Services.Services
 
         public void DeleteContract(Contract contract)
         {
-            this._contractHistoryRepository.Delete(c => c.Contract_Id == contract.Id);
-            this._contractHistoryRepository.Commit();
+            _contractHistoryRepository.Delete(c => c.Contract_Id == contract.Id);
+            _contractHistoryRepository.Commit();
 
-            this.DeleteAllContractFiles(contract.Id);
+            DeleteAllContractFiles(contract.Id);
 
-            this._contractRepository.DeleteContract(contract);
-            this._contractRepository.Commit();
+            _contractRepository.DeleteContract(contract);
+            _contractRepository.Commit();
         }
 
         public void DeleteAllContractFiles(int contractId)
         {
-            this._contractFileRepository.DeleteAllContractFiles(contractId);
-            this._contractFileRepository.Commit();
+            _contractFileRepository.DeleteAllContractFiles(contractId);
+            _contractFileRepository.Commit();
         }
 
         public void DeleteContractFile(int fileId)
         {
-            this._contractFileRepository.DeleteContractFile(fileId);
-            this._contractFileRepository.Commit();
+            _contractFileRepository.DeleteContractFile(fileId);
+            _contractFileRepository.Commit();
         }
 
     }

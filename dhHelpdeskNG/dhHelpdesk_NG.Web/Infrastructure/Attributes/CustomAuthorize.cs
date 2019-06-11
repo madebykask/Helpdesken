@@ -42,7 +42,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Attributes
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
-            _logger.Debug("AuthorizeCore: request is unauthorised.");
+            _logger.Debug($"CustomAuthorize.HandleUnauthorizedRequest: request is unauthorised. Url: {filterContext.HttpContext.Request.Url}");
 
             if (filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
@@ -57,8 +57,6 @@ namespace DH.Helpdesk.Web.Infrastructure.Attributes
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            _logger.Debug("AuthorizeCore: checking request.");
-
             if (httpContext == null)
             {
                 throw new ArgumentNullException(nameof(httpContext));
@@ -68,7 +66,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Attributes
             {
                 return false;
             }
-            
+
+            _logger.Debug($"CustomAuthorize.AuthorizeCore: Checking request. Url: {httpContext.Request.Url}");
+
             var isAuthenticated = httpContext.User?.Identity?.IsAuthenticated ?? false;
             if (!isAuthenticated)
             {
@@ -101,7 +101,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Attributes
                 return false;
             }
 
-            /// NO any specific ACL politic is set
+            // NO any specific ACL politic is set
             if (this.Roles == string.Empty && this.UserPermsissions == string.Empty)
             {
                 return true;

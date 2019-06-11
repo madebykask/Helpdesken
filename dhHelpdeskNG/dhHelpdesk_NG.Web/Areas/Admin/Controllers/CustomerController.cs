@@ -129,7 +129,8 @@
         [CustomAuthorize(Roles = "3,4")]
         public ActionResult New()
         {
-            var model = this.CustomerInputViewModel(new Customer() { });
+			const string DEFAULT_TIMEZONE_ID = "Central Europe Standard Time";
+            var model = this.CustomerInputViewModel(new Customer() { TimeZoneId = DEFAULT_TIMEZONE_ID });
 
             return this.View(model);
         }
@@ -167,6 +168,7 @@
                 newCustomerCaseSettings.RegTime = DateTime.Now;
                 newCustomerCaseSettings.ChangeTime = DateTime.Now;
                 newCustomerCaseSettings.UserGroup = cs.UserGroup;
+                newCustomerCaseSettings.Type = cs.Type;
 
                 this._customerService.SaveCaseSettingsForNewCustomer(customer.Id, customer.Language_Id, newCustomerCaseSettings, out errors);
 
@@ -589,7 +591,12 @@
                     Value = x.Id.ToString(),
                 }).ToList(),
                 UserFirstLastNameRepresentationList = userFirstLastNameSelectList,
-                UserFirstLastNameRepresentationId = settings.IsUserFirstLastNameRepresentation.AsUserFirstLastNameMode()
+                UserFirstLastNameRepresentationId = settings.IsUserFirstLastNameRepresentation.AsUserFirstLastNameMode(),
+				TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectListItem
+				{
+					Text = x.DisplayName,
+					Value = x.Id
+				}).ToList()
             };
 
             #endregion
@@ -806,7 +813,8 @@
                CustomerID = customerNumber,
                Name = customerName,
                HelpdeskEmail = customerEmail,
-               Language_Id = customerToCopy.Language_Id
+               Language_Id = customerToCopy.Language_Id,
+			   TimeZoneId = customerToCopy.TimeZoneId
             };
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -895,7 +903,7 @@
             };
 
             //Get CaseSettings to copy
-            var caseSettingsToCopy = this._caseSettingsService.GetCaseSettings(customerToCopy.Id);
+            var caseSettingsToCopy = this._caseSettingsService.GetCaseSettings(customerToCopy.Id, null, null);
 
             foreach (var cs in caseSettingsToCopy)
             {
@@ -907,6 +915,7 @@
                 newCustomerCaseSetting.MinWidth = cs.MinWidth;
                 newCustomerCaseSetting.UserGroup = cs.UserGroup;
                 newCustomerCaseSetting.ColOrder = cs.ColOrder;
+                newCustomerCaseSetting.Type = cs.Type;
 
                 this._caseSettingsService.SaveCaseSetting(newCustomerCaseSetting, out errors);
             }

@@ -5,9 +5,8 @@
 
     public partial class GridColumnsDefinition
     {
-        private static Dictionary<int, string> idNameMap;
-
-        private static Dictionary<string, int> nameIdMap;
+        private static Dictionary<int, string> _idNameMap;
+        private static Dictionary<string, int> _nameIdMap;
 
         public static int GetFieldId(string fieldName)
         {
@@ -27,33 +26,33 @@
             return !NotAvailableField.Contains(fieldName);
         }
 
-        private static string[] collectAllField()
+        private static string[] CollectAllField()
         {
-            var res = caseOverviewColumns.ToList();
+            var res = CaseOverviewColumns.ToList();
             res.AddRange(VirtualColumns);
             return res.ToArray();
         }
 
         private static Dictionary<int, string> GetIdNameMap()
         {
-            if (idNameMap == null)
+            if (_idNameMap == null)
             {
                 var id = 1;
-                idNameMap = collectAllField().Select(it => it.ToLower()).ToDictionary(it => id++, it => it);
+                _idNameMap = CollectAllField().Select(it => it.ToLower()).ToDictionary(it => id++, it => it);
             }
 
-            return idNameMap;
+            return _idNameMap;
         }
 
         private static Dictionary<string, int> GetNameIdMap()
         {
-            if (nameIdMap == null)
+            if (_nameIdMap == null)
             {
                 var id = 1;
-                nameIdMap = collectAllField().Select(it => it.ToLower()).ToDictionary(it => it, it => id++);
+                _nameIdMap = CollectAllField().Select(it => it.ToLower()).ToDictionary(it => it, it => id++);
             }
 
-            return nameIdMap;
+            return _nameIdMap;
         }
     }
 }

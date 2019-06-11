@@ -24,7 +24,8 @@ $(function () {
 
         var lastSelected = $('#lastMailSelected' + logId).val();
         var displayType = '';
-        if (lastSelected == expandEl) {
+
+        if (lastSelected === expandEl) {
             displayType = 'none';
             $('#lastMailSelected' + logId).val('');
         }
@@ -33,16 +34,13 @@ $(function () {
             $('#lastMailSelected' + logId).val(expandEl);
         }
 
-        switch (expandEl) {
-            case "mailto":                
-                $('#mailto' + logId ).css('display', displayType);
-                $('#mailcc' + logId).css('display', 'none');
-                break;
-            case "mailcc":                
-                $('#mailcc' + logId).css('display', displayType);
-                $('#mailto' + logId).css('display', 'none');
-                break;
-        }
+        //hide all
+        $('#logEmailsSection' + logId).find('.expandEl').each(function(index, el) {
+            $(this).css('display', 'none');
+        });
+
+        // toggle required
+        $('#' + expandEl + logId).css('display', displayType);
     });
 
     hideShowSaveUserInfoBtn($userId.val());
@@ -427,9 +425,13 @@ $(function () {
         var relatedInventory = spec.relatedInventory || {};
         var initiatorDetailsEl = spec.initiatorDetailsEl || {};
 
-        relatedCases.getElement().hide();
-        relatedInventory.getElement().hide();
-        initiatorDetailsEl.getElement().hide();
+        var hideUserRelatedButtons = function () {
+            relatedCases.getElement().hide();
+            relatedInventory.getElement().hide();
+            initiatorDetailsEl.getElement().hide();
+        }
+
+        hideUserRelatedButtons();
 
         var getRelatedCasesUrl = function() {
             return relatedCasesUrl;
@@ -488,6 +490,83 @@ $(function () {
             return relatedInventory;
         }
 
+        var checkRelatedCases = function (uId) {
+            console.log('checking related cases');
+            if (relatedCases.isEmpty()) return;
+
+            var caseId = that.getCase().getCaseId().getElement();
+            var userIdValue = uId || userId.getElement().val();
+            if (userIdValue == null || userIdValue.trim() === '') {
+                relatedCases.getElement().hide();
+                return;
+            }
+
+            var actionUrl = 
+                relatedCasesCountUrl + '?caseId=' + caseId.val() + '&userId=' + encodeURIComponent(userIdValue);
+
+            $.getJSON(actionUrl, function (data) {
+                if (data > 0) {
+                    relatedCases.getElement().show();
+                } else {
+                    relatedCases.getElement().hide();
+                }
+            });
+        };
+
+        var checkRelatedInventory = function (uId) {
+            console.log('checking related inventory');
+            if (relatedInventory.isEmpty()) return;
+
+            var userIdValue = uId || userId.getElement().val();
+            if (userIdValue == null || userIdValue.trim() === '') {
+                relatedInventory.getElement().hide();
+                return;
+            }
+
+            var actionUrl =
+                relatedInventoryCountUrl + "?userId=" + encodeURIComponent(userIdValue);
+
+            $.getJSON(actionUrl, function (data) {
+                console.log('Related inventory count: ', data);
+                if (data > 0) {
+                    relatedInventory.getElement().show();
+                } else {
+                    relatedInventory.getElement().hide();
+                }
+            });
+        };
+
+        var checkInitiatorDetails = function (uId) {
+            if (initiatorDetailsEl.isEmpty()) return;
+
+            var userIdValue = uId || userId.getElement().val() || '';
+            if (userIdValue.trim() === '') {
+                initiatorDetailsEl.getElement().hide();
+                return;
+            }
+
+            var actionUrl =
+                checkInitiatorUrl + "?userId=" + encodeURIComponent(userIdValue);
+
+            $.getJSON(actionUrl, function (data) {
+                if (data.success && data.id) {
+                    initiatorDetailsEl.getElement().show();
+                    initiatorDetailsEl.getElement().data("id", data.id);
+                } else {
+                    initiatorDetailsEl.getElement().data("id", '');
+                    initiatorDetailsEl.getElement().hide();
+                }
+            });
+        };
+        
+        var checkUserRelatedData = function () {
+            hideUserRelatedButtons();
+            //run requests
+            checkRelatedCases();
+            checkRelatedInventory();
+            checkInitiatorDetails();
+        }
+
         that.getRelatedCasesUrl = getRelatedCasesUrl;
         that.getRelatedCasesCountUrl = getRelatedCasesCountUrl;
         that.getRelatedInventoryCountUrl = getRelatedInventoryCountUrl;
@@ -501,81 +580,13 @@ $(function () {
 
         that.init = function (caseEntity) {
 
-            var checkRelatedCases = function (uId) {
-
-                if (relatedCases.isEmpty()) return;
-
-                var caseId = that.getCase().getCaseId().getElement();
-                var userIdValue = uId || userId.getElement().val();
-                if (userIdValue == null || userIdValue.trim() == '') {
-                    relatedCases.getElement().hide();
-                    return;
-                }
-                $.getJSON(getRelatedCasesCountUrl() + 
-                            '?caseId=' + caseId.val() +
-                            '&userId=' + encodeURIComponent(userIdValue), function (data) {
-                                if (data > 0) {
-                                    relatedCases.getElement().show();
-                                } else {
-                                    relatedCases.getElement().hide();
-                                }
-                            });
-            }
-            
-            checkRelatedCases();
-            
-
-            var checkRelatedInventory = function (uId) {
-                console.log('checking related inventory');
-                if (relatedInventory.isEmpty()) return;
-
-                var userIdValue = uId || userId.getElement().val();
-                if (userIdValue == null || userIdValue.trim() == '') {
-                    relatedInventory.getElement().hide();
-                    return;
-                }
-                $.getJSON(getRelatedInventoryCountUrl() +
-                            "?userId=" + encodeURIComponent(userIdValue), function (data) {
-                                console.log('Related inventory count: ', data);
-                                if (data > 0) {
-                                    relatedInventory.getElement().show();
-                                } else {
-                                    relatedInventory.getElement().hide();
-                                }
-                            });
-            }
-
-            checkRelatedInventory();
-            
-            var checkInitiatorDetails = function (uId) {
-                if (initiatorDetailsEl.isEmpty()) return;
-
-                var userIdValue = uId || userId.getElement().val() || '';
-                if (userIdValue.trim() === '') {
-                    initiatorDetailsEl.getElement().hide();
-                    return;
-                }
-
-                $.getJSON(checkInitiatorUrl +
-                    "?userId=" + encodeURIComponent(userIdValue), function (data) {
-                        if (data.success && data.id) {
-                            initiatorDetailsEl.getElement().show();
-                            initiatorDetailsEl.getElement().data("id", data.id);
-                        } else {
-                            initiatorDetailsEl.getElement().data("id", '');
-                            initiatorDetailsEl.getElement().hide();
-                        }
-                    });
-            };
-            
-            checkInitiatorDetails();
+            checkUserRelatedData();
 
             userId.getElement().keyup(function() {
-                dhHelpdesk.cases.utils.delay(checkRelatedCases, 500);
-                dhHelpdesk.cases.utils.delay(checkRelatedInventory, 500);
-                dhHelpdesk.cases.utils.delay(checkInitiatorDetails, 500);
+                dhHelpdesk.cases.utils.delay(checkUserRelatedData, 500);
             });
 
+            //initiator buttons
             relatedCases.getElement().click(function () {
                 var caseId = that.getCase().getCaseId().getElement();
                 var userIdValue = encodeURIComponent(userId.getElement().val());
@@ -587,7 +598,6 @@ $(function () {
                     var userIdValue = encodeURIComponent(userId.getElement().val());
                     window.open(getRelatedInventoryUrl() + "?userId=" + userIdValue, "_blank", "width=1400,height=600,menubar=no,toolbar=no,location=no,status=no,left=100,top=100,scrollbars=yes,resizable=yes");
                 }
-                
             });
 
             initiatorDetailsEl.getElement().click(function () {
@@ -609,14 +619,17 @@ $(function () {
                 /*dhHelpdesk.cases.utils.refreshOus(caseEntity);
                 dhHelpdesk.cases.utils.refreshAdministrators(caseEntity, true);*/
             });
+
             ou.getElement().change(function () {
                 //ClearCostCentre();
             });
 
-            dhHelpdesk.cases.utils.onEvent("OnUserIdChanged", function(e, uId) {
-                checkRelatedCases(uId);
-                checkRelatedInventory(uId);
-                checkInitiatorDetails(uId);
+            dhHelpdesk.cases.utils.onEvent("OnUserIdChanged", function (e, uId, userType) {
+                //ignore isAbout (userType:1) userId change
+                if (userType !== undefined && userType === 1)
+                    return;
+
+                checkUserRelatedData();
             });
         }
 

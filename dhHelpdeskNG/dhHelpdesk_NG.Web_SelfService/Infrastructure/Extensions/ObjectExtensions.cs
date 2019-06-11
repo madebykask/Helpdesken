@@ -1,4 +1,6 @@
-﻿using DH.Helpdesk.SelfService.Models.Case;
+﻿using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.SelfService.Models.Case;
 
 namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
 {
@@ -110,7 +112,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             {
                 foreach (CaseFieldSetting c in cfs)
                 {
-                    if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
+                    if (string.Compare(c.Name, valueToFind.GetCaseFieldName(), true) == 0)
                     {
                         ret = c;
                         break;
@@ -127,7 +129,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             if (cfs != null)
                 foreach (CaseFieldSetting c in cfs)
                 {
-                    if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
+                    if (string.Compare(c.Name, valueToFind.GetCaseFieldName(), true) == 0)
                     {
                         if (c.Required == 1 && c.ShowOnStartPage == 1)
                             ret = 1;   
@@ -144,7 +146,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             if (cfs != null)
                 foreach (CaseFieldSetting c in cfs)
                 {
-                    if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
+                    if (string.Compare(c.Name, valueToFind.GetCaseFieldName(), true) == 0)
                     {
                         if (c.Name.ToLower() == "casetype_id")
                         {
@@ -172,7 +174,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             {
                 foreach (CaseFieldSettingsWithLanguage c in cfsl)
                 {
-                    if (string.Compare(c.Name, valueToFind.getCaseFieldName(), true) == 0)
+                    if (string.Compare(c.Name, valueToFind.GetCaseFieldName(), true) == 0)
                     {
                         ret = c;
                         break;
@@ -342,8 +344,19 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
 
             if (pa.ParentProductArea == null)
                 return pa;
+
+           return GetParent(pa.ParentProductArea);
+        }
+
+        public static string GetSectionHeader(this IEnumerable<CaseSectionModel> sections, CaseSectionType type, string defaultHeader = "")
+        {
+            var section = sections.SingleOrDefault(x => x.SectionType == (int)type);
+            string result;
+            if (section != null)
+                result = !string.IsNullOrEmpty(section.SectionHeader) ? section.SectionHeader : Translation.Get(defaultHeader);
             else
-                return GetParent(pa.ParentProductArea);
+                result = Translation.Get(defaultHeader);
+            return result;
         }
     }
 }

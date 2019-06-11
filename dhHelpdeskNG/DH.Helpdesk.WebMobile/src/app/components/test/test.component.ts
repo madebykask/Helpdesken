@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { MbscSelectOptions } from '@mobiscroll/angular';
+import { MbscSelectOptions, MbscSwitch } from '@mobiscroll/angular';
 
 @Component({
   selector: 'app-test',
@@ -8,55 +8,45 @@ import { MbscSelectOptions } from '@mobiscroll/angular';
   styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements OnInit {
- 
-  options: MbscSelectOptions = {    
+
+  @ViewChild('sendEmailsCheck') sendEmailsCheck: MbscSwitch;
+
+  get isSendEmailsChecked() {
+    const val = this.sendEmailsCheck.value;
+    return val;
+  }
+
+  options: MbscSelectOptions = {
     showInput: false,
     showOnTap: true,
     showLabel: false,
     height: 20,
     minWidth: 100,
     theme: 'mobiscroll',
-    input:"#notifierInput",
+    input: '#notifierInput',
     filter: true,
-    display:"bottom",
+    display: 'bottom',
     headerText: 'Search users'
   };
 
-  options2: MbscSelectOptions = {   
+  options2: MbscSelectOptions = {
     showInput: true,
-    showLabel: false, 
+    showLabel: false,
     showOnTap: true,
     filter: true,
-    display:"center",    
+    display: 'center',
     headerText: 'Search users2'
   };
 
-  options3: MbscSelectOptions = {        
+  options3: MbscSelectOptions = {
     showInput: true,
-    showLabel: false, 
-    input:'notifierInput2',
+    showLabel: false,
+    input: 'notifierInput2',
     showOnTap: true,
     filter: true,
-    display:"center",
+    display: 'center',
     headerText: 'Search users2'
   };
-
-  constructor(private router: Router) {
-  }
-
-  ngOnInit() {
-  }
-
-  onLogout() {
-    this.router.navigateByUrl('/login');
-  }
-  
-  showNotifierSearch(selectCtrl) {
-    selectCtrl.instance.setVal('test', true, false, true);
-    selectCtrl.instance.show();
-  }
-
-  selected: any;
 
   items = [{
     value: 1,
@@ -69,5 +59,18 @@ export class TestComponent implements OnInit {
       text: 'Option 4'
   }];
 
- 
+  constructor(private router: Router) {
+  }
+
+  ngOnInit() {
+  }
+
+  onLogout() {
+    this.router.navigateByUrl('/login');
+  }
+
+  showNotifierSearch(selectCtrl) {
+    selectCtrl.instance.setVal('test', true, false, true);
+    selectCtrl.instance.show();
+  }
 }

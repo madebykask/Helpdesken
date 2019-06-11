@@ -7,32 +7,32 @@ import { CaseFileDataResolver } from './resolvers/case-file-data.resolver';
 
 const routes: Routes = [
   //existing case file
-  { 
+  {
     path: ':caseId/file/:fileId',
-    component: FilePreviewComponent, 
+    component: FilePreviewComponent,
     resolve: {
       fileData: CaseFileDataResolver
     }
   },
 
   //temp case file with no Id
-  { 
+  {
     path: ':caseKey/file',
-    component: FilePreviewComponent, 
+    component: FilePreviewComponent,
     resolve: {
       fileData: CaseFileDataResolver
     }
   },
 
   // log file preview
-  { 
-    path: ':caseId/logfile/:fileId', 
-    component: FilePreviewComponent, 
+  {
+    path: ':caseId/logfile/:fileId',
+    component: FilePreviewComponent,
     resolve: {
       fileData: LogFileDataResolver
     }
   },
-   
+
   {
     path: 'template/:templateId',
     component: CaseEditComponent

@@ -6,36 +6,35 @@
 
 @{
     ViewBag.Title = "Index";    
+ }
+
+@section Styles {
+    <link href="@Url.Content("~/Content/css/case-mobile.css")" rel="stylesheet" type="text/css" />
 }
 
-@functions
+@if (Model.ShowCaseActionsPanelOnTop)
 {
-    bool CheckField(string fieldName)
-    {
-        var fieldNameToCheck = 
-            fieldName == GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString() 
-            ? fieldName.Replace('_', '.') 
-            : fieldName;
-
-        return Model.FieldSettings.Select(f => f.Name).Contains(fieldNameToCheck);
-    }
+    @Html.Partial("_CaseControlPanel", Model.CreateCaseControlsPanelModel())
 }
-
 <div class="container-fluid dh-container">    
             
     <ul class="nav nav-tabs" id="NewCaseTab">
         <li id="CasePreviewTab" class="active">                             
             <a href="#fragment-1">@Translation.Get("Case", Enums.TranslationSource.TextTranslation): @Model.CasePreview.CaseNumber</a>                                         
         </li>
-        @if (ViewBag.AttachmentPlacement == 1 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+        @if (Model.AttachmentPlacement == 1 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
         {
             <li>
                 <a href="#attachment-tab">@Translation.Get("Attachments", Enums.TranslationSource.TextTranslation) <span id="nrOfAttachedFiles">@(Model.CasePreview.CaseFiles != null && Model.CasePreview.CaseFiles.Count > 0 ? "(" + Model.CasePreview.CaseFiles.Count.ToString() + ")" : "")</span></a>
             </li>
         }
     </ul>
-
     <div class="content tab-content">
+        <div class="loading-msg" id="progress" style="display: none">
+            <div class="content-wrapper">
+                <div class="loader">@Translation.Get("Laddar...")</div>
+            </div>
+        </div>
         @if (Model.CasePreview != null)
         {
             <div id="fragment-1" class="tab-pane active">
@@ -43,7 +42,7 @@
 
                     @if (Model.CasePreview.FinishingDate != null)
                     {
-                        @Html.Partial("_ClosedCaseAlert", Model.GetClosedCaseAlertModel())
+                        @Html.Partial("_ClosedCaseAlert", Model.ClosedCaseAlertModel)
                     }
                     else
                     {
@@ -52,15 +51,15 @@
                             <div class="alert alert-success">@Html.Raw(Model.CaseRegistrationMessage.SetHtmlParameters())</div>
                         }
                     }
-                    
+
                     @Html.Partial("_CaseReceipt", Model)
 
                 </div>
             </div>
 
-            if (ViewBag.AttachmentPlacement == 1 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
+            if (Model.AttachmentPlacement == 1 && Model.FieldSettings.Select(f => f.Name).Contains(GlobalEnums.TranslationCaseFields.Filename.ToString()))
             {
-                <div id="attachment-tab" class="tab-pane" style="overflow:hidden;">
+                <div id="attachment-tab" class="tab-pane" style="overflow: hidden;">
                     <div class="container-fluid dh-container">
                         <table id="case_files_table" class="table table-striped">
                             @if (Model.CasePreview.CaseFiles != null)
@@ -69,7 +68,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            <a style="color:blue" href="@this.Url.Action("DownloadFile", new RouteValueDictionary { { "id", Model.CasePreview.Id }, { "fileName", file.FileName } })"><i class="icon-file"></i>@file.FileName</a>
+                                            <a style="color: blue" href="@Url.Action("DownloadFile", new RouteValueDictionary {{"id", Model.CasePreview.Id}, {"fileName", file.FileName}})"><i class="icon-file"></i>@file.FileName</a>
                                         </td>
                                     </tr>
                                 }
@@ -83,19 +82,86 @@
     </div>
 </div>
 
+@if (Model.ShowCaseActionsPanelAtBottom)
+{
+    @Html.Partial("_CaseControlPanel", Model.CreateCaseControlsPanelModel(2))
+}
+
 @section Scripts {
-    @Scripts.Render("~/Content/js/Case/log")    
+    @Scripts.Render("~/Content/js/Case/casePage")
+    
+    <script type="text/javascript">
+
+        //required for worflow steps
+        var workflowsBehaviorParams = {
+            caseId: @Model.CaseId,
+            templateId: 0,
+            isExtendedCase: false,
+            getWorkFlowStepsUrl: '@Url.Action("GetWorkflowSteps", "Case")',
+            selectStepText: '@Translation.GetForJS(DH.Helpdesk.Common.Constants.Text.SelectStep)',
+            saveText: '@Translation.Get("Save")'
+        };
+
+        var params = {
+            caseId: @Model.CaseId,
+            applyWorkflow: '@Url.Action("ApplyWorkflow", "Case")',
+        };
+
+        $(function() {
+            var self = this;
+
+            var $progress = $('#progress');
+            var $selectListStep = $('select[name="steps"]').first();
+            var $goBtn = $('.go-button');
+            //init workflow behavior
+            self.workflowStepsBehavior = new WorkflowStepsBehavior(null);
+            self.workflowStepsBehavior.init(workflowsBehaviorParams);
+
+            //Save with workflow
+            $goBtn.on('click', function(e) {
+                e.preventDefault();
+                
+                var templateId = parseInt($selectListStep.first().val());
+
+                if (!isNaN(templateId) && templateId > 0) {
+                    var data = {
+                        caseId: @Model.CaseId,
+                        templateId: templateId
+                    };
+                    
+                    $progress.show();
+
+                    $.post(params.applyWorkflow, $.param(data), function(res) {
+                        if (res.success === true) {
+                            $goBtn.prop('disabled', true);
+                            window.location.reload(true);
+                        } else {
+                            var errMsg = res.Error || 'Operation failed.';
+                            ShowToastMessage(errMsg, "Error");
+                        }
+                    }).fail(function(xhr, status, err) {
+                        var errMsg = err.Error || 'Operation failed.';
+                        ShowToastMessage(errMsg, "Error");
+                        console.error(errMsg);
+                    }).always(function() {
+                        $progress.hide();
+                    });
+                }
+
+                return false;
+            });
+
+        });
+    </script>
 }
 
 @section Dialogs {
     
-    @if (Model.CasePreview.Id > 0 && 
-         !Model.IsFinished && 
-         CheckField(GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString())) 
+    @if (Model.CasePreview.Id > 0 && !Model.IsFinished) 
     {
         //Show Communication for Selfservice (only if enabled in config)
-        if (ViewBag.IsLineManagerApplication || 
-           (ViewBag.ApplicationType == ApplicationTypes.SelfService && ViewBag.ShowCommunicationForSelfservice)) 
+        if (Model.ApplicationType == ApplicationType.LineManager || 
+           (Model.ApplicationType == ApplicationType.SelfService && Model.ShowCommunicationForSelfService)) 
         {
              @Html.Partial("_Communication", Model.CaseLogModel)
         }
@@ -104,4 +170,3 @@
         @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")    
     }
 }
-

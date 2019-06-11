@@ -14,6 +14,7 @@ namespace DH.Helpdesk.BusinessData.Models.ReportService
         public DateToDate CaseCreationDate { get; set; }
 
         public DateToDate CaseClosingDate { get; set; }
+        public DateToDate LogNoteDate { get; set; }
 
         public List<User> Administrators { get; set; }
 
@@ -27,8 +28,8 @@ namespace DH.Helpdesk.BusinessData.Models.ReportService
 
         public CustomSelectList Status { get; set; }
 
-        public CustomSelectList ReportCategory { get; set; }
-        public CustomSelectList ReportCategoryRt { get; set; }
+        public List<ListItem> ReportCategory { get; set; }
+        public List<ListItem> ReportCategoryRt { get; set; }
 
     }
        

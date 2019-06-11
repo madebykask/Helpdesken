@@ -1,7 +1,6 @@
-Imports Microsoft.Win32
+Imports System.Configuration
 Imports System.Data.SqlClient
-Imports System.Data.Odbc
-Imports System.Data.OleDb
+Imports Microsoft.Win32
 Imports System.Net
 Imports System.IO
 Imports System.Net.Mail
@@ -105,7 +104,7 @@ Imports System.Net.Mail
 
             gsInvoiceFileFolder = regDH_Helpdesk.GetValue("InvoiceFileFolder")
         Catch ex As Exception
-            Throw ex
+            Throw
         End Try
     End Sub
 
@@ -142,99 +141,13 @@ Imports System.Net.Mail
         End If
     End Function
 
-    Public Shared Function getDataTable(ByVal sConnectionstring As String, ByVal sSQL As String) As DataTable
-        Dim con As SqlConnection = New SqlConnection(sConnectionstring)
-        Dim cmd As SqlCommand = con.CreateCommand()
-        Dim ds As New DataSet
-        Dim sda As New SqlDataAdapter()
-
-        Try
-            con.Open()
-
-            cmd.CommandType = CommandType.Text
-            'dhal 161219, chs sync ims ger timeoutfel
-            cmd.CommandTimeout = 90
-            cmd.CommandText = sSQL
-
-            ' DataReader
-            sda.SelectCommand = cmd
-            sda.Fill(ds)
-
-            Return ds.Tables(0)
-
-        Catch ex As Exception
-            If giLoglevel > 0 Then
-                objLogFile.WriteLine(Now() & ", ERROR getDataTable " & sSQL)
-            End If
-
-            Throw ex
-        Finally
-            con.Close()
-
-        End Try
+    Public Shared Function getDataTable(sConnectionstring As String, sSql As String, ParamArray params As SqlParameter()) As DataTable
+        Return DbHelper.getDataTable(sConnectionstring, sSql, params)
     End Function
 
-    'Public Shared Function getDataTableOracle(ByVal sConnectionstring As String, ByVal sSQL As String) As DataTable
-    '    If sConnectionstring.Contains("ODBC") Then
-    '        Return getDataTableOracleODBC(sConnectionstring, sSQL)
-    '    Else
-    '        Dim con As OleDbConnection = New OleDbConnection(sConnectionstring)
-    '        Dim cmd As OleDbCommand = con.CreateCommand()
-    '        Dim ds As New DataSet
-    '        Dim sda As New OleDbDataAdapter()
-
-    '        Try
-    '            con.Open()
-
-    '            cmd.CommandType = CommandType.Text
-    '            cmd.CommandText = sSQL
-
-    '            ' DataReader
-    '            sda.SelectCommand = cmd
-    '            sda.Fill(ds)
-
-    '            Return ds.Tables(0)
-
-    '        Catch ex As Exception
-    '            If giLoglevel > 0 Then
-    '                objLogFile.WriteLine(Now() & ", ERROR getDataTableOracle " & sSQL)
-    '            End If
-
-    '            Throw ex
-    '        Finally
-    '            con.Close()
-    '        End Try
-    '    End If
-    'End Function
-
-    'Private Shared Function getDataTableOracleODBC(ByVal sConnectionstring As String, ByVal sSQL As String) As DataTable
-    '    Dim con As OdbcConnection = New OdbcConnection(sConnectionstring)
-    '    Dim cmd As OdbcCommand = con.CreateCommand()
-    '    Dim ds As New DataSet
-    '    Dim sda As New OdbcDataAdapter()
-
-    '    Try
-    '        con.Open()
-
-    '        cmd.CommandType = CommandType.Text
-    '        cmd.CommandText = sSQL
-
-    '        ' DataReader
-    '        sda.SelectCommand = cmd
-    '        sda.Fill(ds)
-
-    '        Return ds.Tables(0)
-
-    '    Catch ex As Exception
-    '        If giLoglevel > 0 Then
-    '            objLogFile.WriteLine(Now() & ", ERROR getDataTableOracleODBC " & sSQL & ", " & ex.Message)
-    '        End If
-
-    '        Throw ex
-    '    Finally
-    '        con.Close()
-    '    End Try
-    'End Function
+    Public Shared Sub executeSQL(sConnectionstring As String, sSql As String)
+        DbHelper.executeNonQuery(sConnectionString, sSql, CommandType.Text)
+    End Sub
 
     Public Shared Function getMailTemplateIdentifier(ByVal FieldName As String)
         Select Case UCase(FieldName)
@@ -272,6 +185,14 @@ Imports System.Net.Mail
                 Return "[#17]"
             Case "PERSONS_CELLPHONE"
                 Return "[#18]"
+            Case "AVAILABLE"
+                Return "[#19]"
+            Case "PRIORITY_DESCRIPTION"
+                Return "[#20]"
+            Case "WATCHDATE"
+                Return "[#21]"
+            Case "LASTCHANGEDBYUSER"
+                Return "[#22]"
             Case "MISCELLANEOUS"
                 Return "[#23]"
             Case "PLACE"
@@ -291,78 +212,11 @@ Imports System.Net.Mail
         End Select
     End Function
 
-    'Public Shared Sub executeSQLOracle(ByVal sConnectionstring As String, ByVal sSQL As String)
-    '    If sConnectionstring.Contains("ODBC") Then
-    '        executeSQLOracleODBC(sConnectionstring, sSQL)
-    '    Else
-    '        Dim con As OleDbConnection = New OleDbConnection(sConnectionstring)
-    '        Dim cmd As OleDbCommand = con.CreateCommand()
+    #Region "Database Helper Methods"
 
-    '        Try
-    '            con.Open()
+   
 
-    '            cmd.CommandType = CommandType.Text
-    '            cmd.CommandText = sSQL
-
-    '            cmd.ExecuteNonQuery()
-    '        Catch ex As Exception
-    '            If giLoglevel > 0 Then
-    '                objLogFile.WriteLine(Now() & ", ERROR executeSQLOracle " & sSQL)
-    '            End If
-
-    '            Throw ex
-    '        Finally
-    '            con.Close()
-    '        End Try
-    '    End If
-    'End Sub
-
-    'Private Shared Sub executeSQLOracleODBC(ByVal sConnectionstring As String, ByVal sSQL As String)
-    '    Dim con As OdbcConnection = New OdbcConnection(sConnectionstring)
-    '    Dim cmd As OdbcCommand = con.CreateCommand()
-
-    '    Try
-    '        con.Open()
-
-    '        cmd.CommandType = CommandType.Text
-    '        cmd.CommandText = sSQL
-
-    '        cmd.ExecuteNonQuery()
-
-    '    Catch ex As Exception
-    '        If giLoglevel > 0 Then
-    '            objLogFile.WriteLine(Now() & ", ERROR executeSQLOracleODBC " & sSQL)
-    '        End If
-
-    '        Throw ex
-    '    Finally
-    '        con.Close()
-    '    End Try
-    'End Sub
-
-    Public Shared Sub executeSQL(ByVal sConnectionstring As String, ByVal sSQL As String)
-        Dim con As SqlConnection = New SqlConnection(sConnectionstring)
-        Dim cmd As SqlCommand = con.CreateCommand()
-
-        Try
-            con.Open()
-
-            cmd.CommandType = CommandType.Text
-            cmd.CommandTimeout = 240
-            cmd.CommandText = sSQL
-
-            cmd.ExecuteNonQuery()
-        Catch ex As Exception
-            If giLoglevel > 0 Then
-                objLogFile.WriteLine(Now() & ", ERROR executeSQL " & Err.ToString())
-                objLogFile.WriteLine(Now() & ", ERROR executeSQL " & sSQL)
-            End If
-
-            'Throw ex
-        Finally
-            con.Close()
-        End Try
-    End Sub
+    #End Region
 
     Public Shared Sub executeSQLHTTP(ByVal sSQL As String)
         Dim sURL As String
@@ -544,7 +398,7 @@ Imports System.Net.Mail
         Catch ex As Exception
             Return 0
         End Try
-        
+
     End Function
 
     Public Shared Function isLastWeekDay() As Boolean
@@ -610,4 +464,32 @@ Imports System.Net.Mail
 
         createMessageId = sTemp0 & sTemp1 & "@" & sTemp2
     End Function
+
+    Public Shared Function GetAppSettingValue(key As String) as String
+        Dim val as String = ConfigurationManager.AppSettings(key)
+        Return If (IsNullOrEmpty(val), "", val)
+    End Function
+
+    Public Shared Function IsNullOrEmpty(val as String, Optional checkForWhitespace As Boolean = True)
+        'Extra check for VB.NET
+        If val Is Nothing Then 
+            Return true
+        End If
+        
+        If (checkForWhitespace) Then
+            Return String.IsNullOrWhiteSpace(val)
+         Else 
+             Return String.IsNullOrEmpty(val)
+        End If
+    End Function
+
+    Public Shared Function IfNullTheDefault(Of TValue As Class)(value As TValue, defaultValue As TValue) As Object  
+        If value Is Nothing Then
+            Return defaultValue
+        Else
+            Return value
+        End If
+    End Function
+
+
 End Class

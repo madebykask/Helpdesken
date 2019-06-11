@@ -1,57 +1,40 @@
-﻿using DH.Helpdesk.BusinessData.Models.User.Input;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Enums.Users;
+using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Services.Services.Users;
+using DH.Helpdesk.Web.Infrastructure;
+using DH.Helpdesk.Web.Infrastructure.Authentication;
+using DH.Helpdesk.Web.Infrastructure.Tools;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Services.Services.Concrete;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.BusinessData.Models.User;
+using DH.Helpdesk.BusinessData.Models.User.Input;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Types;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services.Authentication;
 using DH.Helpdesk.Web.Infrastructure.Configuration;
+using DH.Helpdesk.Web.Models.Login;
 using DH.Helpdesk.Web.Models.Shared;
 
 namespace DH.Helpdesk.Web.Controllers
 {
-    using System;
-    using System.Linq;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.Security;
-
-    using DH.Helpdesk.BusinessData.Enums.Users;
-    using DH.Helpdesk.Services.Infrastructure.TimeZoneResolver;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Services.Services.Users;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.Authentication;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Services.Services.Concrete;
-    using DH.Helpdesk.BusinessData.Models.LogProgram;
-    using DH.Helpdesk.Web.Infrastructure.Extensions;
-    using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
-    using Models.Login;
-    using System.Web.Hosting;
-    using Infrastructure.WebApi;
-    using Infrastructure.Helpers;
-    using Models.WebApi;
-    using Infrastructure.Cryptography;
-    using System.Configuration;
-    using System.Collections.Generic;
-
     public class LoginController : Controller
     {
         private const string Root = "/";
-        private const string TokenKey = "Token_Data";
-        private const string Access_Token_Key = "Access_Token";
-        private const string Refresh_Token_Key = "Refresh_Token";
+        //private const string TokenKey = "Token_Data";
+        //private const string Access_Token_Key = "Access_Token";
+        //private const string Refresh_Token_Key = "Refresh_Token";
 
-        private readonly IUserService userService;
-        private readonly ICustomerService customerService;
+        private readonly IUserService _userService;
         private readonly ISettingService _settingService;
-        private readonly ILanguageService languageService;
-        private readonly IUsersPasswordHistoryService usersPasswordHistoryService;
+        private readonly IUsersPasswordHistoryService _usersPasswordHistoryService;
         private readonly ICaseLockService _caseLockService;
+        private readonly IRouteResolver _routeResolver;
 
-        private readonly IRouteResolver routeResolver;
-
-        private readonly ILogProgramService _logProgramService;
         private readonly IApplicationConfiguration _applicationConfiguration;
         private readonly IFederatedAuthenticationService _federatedAuthenticationService;
         private readonly IAuthenticationService _authenticationService;
@@ -69,30 +52,16 @@ namespace DH.Helpdesk.Web.Controllers
                 IFederatedAuthenticationService federatedAuthenticationService,
                 IAuthenticationService authenticationService)
         {
-            this.userService = userService;
-            this.customerService = customerService;
+            _userService = userService;
             _settingService = settingService;
-            this.usersPasswordHistoryService = usersPasswordHistoryService;
-            this._caseLockService = caseLockService;
-            this.languageService = languageService;
-            this.routeResolver = routeResolver;
-            this._logProgramService = logProgramService;
+            _usersPasswordHistoryService = usersPasswordHistoryService;
+            _caseLockService = caseLockService;
+            _routeResolver = routeResolver;
             _applicationConfiguration = applicationConfiguration;
             _federatedAuthenticationService = federatedAuthenticationService;
             _authenticationService = authenticationService;
         }
-
-        [HttpGet]
-        public ActionResult Logout()
-        {
-            _authenticationService.ClearLoginSession(ControllerContext.HttpContext);
-            FormsAuthentication.SignOut();
-
-            TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
-
-            return this.View("Login");
-        }
-
+     
         [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Head)]
         [AllowAnonymous]
         public ActionResult Login()
@@ -103,167 +72,132 @@ namespace DH.Helpdesk.Web.Controllers
                 return Redirect(loginUrl);
             }
 
-            TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);            
+            //TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
+
+            if (Request.QueryString["ReturnUrl"] == "/")
+            {
+                return RedirectToAction("Login");
+            }
             return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult Login(FormCollection coll, string returnUrl)
+        public ActionResult Login(LoginInputModel inputData) 
         {
-           
-            string userName = coll["txtUid"].Trim();
-            string password = coll["txtPwd"].Trim();
+            var userName = inputData.txtUid?.Trim();
+            var password = inputData.txtPwd?.Trim();
+            var returnUrl = inputData.returnUrl;
 
-
-            if (this.IsValidLoginArgument(userName, password))
+            if (IsValidLoginArgument(userName, password))
             {
-                var user = this.userService.Login(userName, password);
+                // try to login user
+                var res = 
+                    _authenticationService.Login(
+                        HttpContext, 
+                        userName, 
+                        password,
+                        new UserTimeZoneInfo(inputData.timeZoneOffsetInJan1, inputData.timeZoneOffsetInJul1));
 
-                if (user != null)
+                if (res.IsSuccess)
                 {
-                    //set user preferred language for UI translation
-                    SessionFacade.CurrentLanguageId = user.LanguageId;
+                    SessionFacade.TimeZoneDetectionResult = res.TimeZoneAutodetect;
 
-                    //check if password has expired 
-                    var passwordChangedDate = userService.GetUserPasswordChangedDate(user.Id);
-                    var settings = _settingService.GetCustomerSetting(user.CustomerId);
-
-                    if (settings.MaxPasswordAge > 0 && DateTime.Now > passwordChangedDate.AddDays(settings.MaxPasswordAge))
+                    if (res.PasswordExpired)
                     {
+                        var settings = _settingService.GetCustomerSetting(res.User.CustomerId);
+
                         ViewBag.UserId = userName;
-                        ViewBag.ChangePasswordModel = GetPasswordChangeModel(user, settings);
-                        return this.View("Login");
+                        ViewBag.ChangePasswordModel = GetPasswordChangeModel(res.User, settings);
+                        return View("Login");
                     }
 
-                    var redirectTo = string.Empty;
-                    if (!string.IsNullOrEmpty(returnUrl) 
-                        && HttpContext.Request.IsAbsoluteUrlLocalToHost(returnUrl)
-                        && this.routeResolver.AbsolutePathToRelative(returnUrl) != Root)
-                    {
-                        redirectTo = Server.UrlDecode(returnUrl);
-                    }
+                    _caseLockService.CaseLockCleanUp();
 
-                    if (!string.IsNullOrEmpty(redirectTo) && redirectTo.ToLower().Contains("login"))
-                    {
-                        redirectTo = Root;
-                    }
-
-                    this.Session.Clear();
-
-                    int timeZoneOffsetInJan1, timeZoneOffsetInJul1;
-                    if (int.TryParse(coll["timeZoneOffsetInJan1"], out timeZoneOffsetInJan1)
-                        && int.TryParse(coll["timeZoneOffsetInJul1"], out timeZoneOffsetInJul1))
-                    {
-                        TimeZoneInfo[] tzones;
-                        SessionFacade.TimeZoneDetectionResult = TimeZoneResolver.DetectTimeZone(timeZoneOffsetInJan1, timeZoneOffsetInJul1, out tzones);
-                        if (string.IsNullOrEmpty(user.TimeZoneId))
-                        {
-                            if (SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.Failure)
-                            {
-                                user.TimeZoneId = TimeZoneInfo.Local.Id;
-                            }
-                            else
-                            {
-                                user.TimeZoneId = tzones[0].Id;
-                                
-                                // we dont want to show any messages to user if we successfully detect his timezone
-                                SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.None;
-                            }
-                        }
-                        else
-                        {
-                            if (SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.Failure)
-                            {
-                                user.TimeZoneId = TimeZoneInfo.Local.Id;
-                            }
-                            else
-                            {
-                                if (tzones.All(it => it.Id != user.TimeZoneId))
-                                {
-                                    /// notice to user about to change his time zone in profile
-                                    SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.Notice;
-                                }
-                                else
-                                {
-                                    /// no changes in users time zone was made
-                                    SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.None;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                       user.TimeZoneId = TimeZoneInfo.Local.Id;
-                       SessionFacade.TimeZoneDetectionResult = TimeZoneAutodetectResult.Failure;
-                    }
-                    
-                    SessionFacade.CurrentUser = user;
-                    SessionFacade.CurrentLanguageId = user.LanguageId;
-                    SessionFacade.CurrentUserIdentity = CreateUserIdentity(user);
-
-                    var language = this.languageService.GetLanguage(user.LanguageId);
-
-                    if (language != null) 
-                    {
-                        SessionFacade.CurrentLanguageCode = language.LanguageID;
-                    }
-
-                    var customer = this.customerService.GetCustomer(user.CustomerId);
-                    ApplicationFacade.AddLoggedInUser(
-                        new LoggedInUsers
-                            {
-                                Customer_Id = user.CustomerId,
-                                User_Id = user.Id,
-                                UserFirstName = user.FirstName,
-                                UserLastName = user.SurName,
-                                CustomerName = customer.Name,
-                                LoggedOnLastTime = DateTime.UtcNow,
-                                SessionId = Session.SessionID
-                            });
-
-                    var logProgramModel = new LogProgram()
-                    {
-                        CaseId = 0,
-                        CustomerId = user.CustomerId,
-                        LogType = 2,  //ToDo: define in Enum
-                        LogText = this.Request.GetIpAddress(),
-                        New_Performer_user_Id = 0,
-                        Old_Performer_User_Id = "0",
-                        RegTime = DateTime.UtcNow,
-                        UserId = user.Id,
-                        ServerNameIP = string.Format("{0} ({1})", Environment.MachineName, Request.ServerVariables["LOCAL_ADDR"]),
-                        NumberOfUsers = GetLiveUserCount()                        
-                    };
-
-                    _logProgramService.UpdateUserLogin(logProgramModel);
-
-                    this.usersPasswordHistoryService.SaveHistory(user.Id, EncryptionHelper.GetMd5Hash(password));
-                    this._caseLockService.CaseLockCleanUp();
-
-                    if (SessionFacade.TimeZoneDetectionResult == TimeZoneAutodetectResult.Failure)
-                    {
-                        this.RedirectFromLoginPage(userName, "~/Profile/Edit/", user.StartPage);
-                        return null;
-                    }
+                    #region Token based authentication
 
                     //var token = GetToken(userName, password);
                     //TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
-                    
                     //if (token != null)
                     //{
                     //    TempData[TokenKey] = GetTokenData(token.access_token, token.refresh_token);                        
                     //}
 
-                    this.RedirectFromLoginPage(userName, redirectTo, user.StartPage);
+                    #endregion
+
+                    RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
                 }
                 else
                 {
-                    this.TempData["LoginFailed"] = "Login failed! The user name or password entered is incorrect.";
+                    TempData["LoginFailed"] = $"Login failed! {res.ErrorMessage ?? string.Empty}".Trim();
                 }
             }
 
-            return this.View("Login");
+            return View("Login");
+        }
+
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            //TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
+            _authenticationService.ClearLoginSession(ControllerContext.HttpContext);
+            return View("Login");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult GetUserCount(string userId, string pass)
+        {
+            var model = new UserStatisticsModel(string.Empty);
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(pass))
+                return View(model);
+
+            if (_userService.IsUserValidAdmin(userId, pass))
+            {
+                var nums = 0;
+                if (ApplicationFacade.LoggedInUsers != null)
+                    nums = ApplicationFacade.LoggedInUsers.Count();
+
+                model = new UserStatisticsModel(nums.ToString());
+                return View(model);
+            }
+            else
+            {                
+                return View(model);
+            }
+        }
+
+        #region Private Methods
+
+        private bool IsValidLoginArgument(string userName, string password)
+        {
+            return !(string.IsNullOrEmpty(userName) && string.IsNullOrEmpty(password));
+        }
+        
+        private void RedirectFromLoginPage(string returnUrl, int startPage, TimeZoneAutodetectResult timeZoneAutodetectResult)
+        {
+            var redirectTo = string.Empty;
+
+            if (timeZoneAutodetectResult == TimeZoneAutodetectResult.Failure)
+            {
+                redirectTo = Url.Action("Edit", "Profile", null, Request.Url?.Scheme ?? "http");
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(returnUrl) &&
+                    HttpContext.Request.IsAbsoluteUrlLocalToHost(returnUrl) &&
+                    _routeResolver.AbsolutePathToRelative(returnUrl) != Root)
+                {
+                    redirectTo = Server.UrlDecode(returnUrl);
+                }
+
+                if (!string.IsNullOrEmpty(redirectTo) && redirectTo.ToLower().Contains("login"))
+                {
+                    redirectTo = Root;
+                }
+            }
+
+            Response.Redirect(!string.IsNullOrEmpty(redirectTo) ? redirectTo : _routeResolver.ResolveStartPage(Url, startPage));
         }
 
         private ChangePasswordModel GetPasswordChangeModel(UserOverview user, Setting settings)
@@ -281,76 +215,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (ApplicationFacade.LoggedInUsers != null)
                 return ApplicationFacade.LoggedInUsers.Count();
             else
-                return 0;                
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public ActionResult GetUserCount(string userId, string pass)
-        {
-            var model = new UserStatisticsModel(string.Empty);
-            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(pass))
-                return View(model);
-
-            if (userService.IsUserValidAdmin(userId, pass))
-            {
-                var nums = 0;
-                if (ApplicationFacade.LoggedInUsers != null)
-                    nums = ApplicationFacade.LoggedInUsers.Count();
-
-                model = new UserStatisticsModel(nums.ToString());
-                return View(model);
-            }
-            else
-            {                
-                return View(model);
-            }
-        }
-
-        [NonAction]
-        private bool IsValidLoginArgument(string userName, string password)
-        {
-            return !(string.IsNullOrEmpty(userName) && string.IsNullOrEmpty(password));
-        }
-
-        [NonAction]
-        private void RedirectFromLoginPage(string userName, string returnUrl, int startPage)
-        {
-            var ticket = new FormsAuthenticationTicket(1, userName, DateTime.Now, DateTime.Now.AddDays(10), false, SessionFacade.CurrentUser.ToString());
-
-            string encryptedTicket = FormsAuthentication.Encrypt(ticket);
-
-            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-
-            this.Response.Cookies.Add(cookie);
-
-            this.Response.Redirect(!string.IsNullOrEmpty(returnUrl) ? returnUrl : this.routeResolver.ResolveStartPage(this.Url, startPage));
-        }
-
-        private SimpleToken GetToken(string userName, string password)
-        {
-            var baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Request.ApplicationPath.TrimEnd('/'));
-            var webApiService = new WebApiService(baseUrl);
-            var token = AsyncHelper.RunSync(() => webApiService.GetAccessToken(userName, password));
-
-            if (token != null)
-            {
-                var encriptionKey = ConfigurationManager.AppSettings.AllKeys.Contains(AppSettingsKey.EncryptionKey) ?
-                                    ConfigurationManager.AppSettings[AppSettingsKey.EncryptionKey].ToString() : string.Empty;
-                            
-                token.access_token = AESCryptoProvider.Encrypt256(token.access_token, encriptionKey);
-                token.refresh_token = AESCryptoProvider.Encrypt256(token.refresh_token, encriptionKey);                
-            }
-
-            return token;
-        }
-
-        private Dictionary<string,string> GetTokenData(string access_token, string refresh_token)
-        {
-            var tempData = new Dictionary<string, string>();
-            tempData.Add(Access_Token_Key, access_token);
-            tempData.Add(Refresh_Token_Key, refresh_token);
-            return tempData;
+                return 0;
         }
 
         private UserIdentity CreateUserIdentity(UserOverview user)
@@ -362,5 +227,37 @@ namespace DH.Helpdesk.Web.Controllers
                 LastName = user.SurName
             };
         }
+
+        #region Token based support
+
+        //private SimpleToken GetToken(string userName, string password)
+        //{
+        //    var baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Request.ApplicationPath.TrimEnd('/'));
+        //    var webApiService = new WebApiService(baseUrl);
+        //    var token = AsyncHelper.RunSync(() => webApiService.GetAccessToken(userName, password));
+        //
+        //    if (token != null)
+        //    {
+        //        var encriptionKey = ConfigurationManager.AppSettings.AllKeys.Contains(AppSettingsKey.EncryptionKey) ?
+        //            ConfigurationManager.AppSettings[AppSettingsKey.EncryptionKey].ToString() : string.Empty;
+        //                    
+        //        token.access_token = AESCryptoProvider.Encrypt256(token.access_token, encriptionKey);
+        //        token.refresh_token = AESCryptoProvider.Encrypt256(token.refresh_token, encriptionKey);                
+        //    }
+        //
+        //    return token;
+        //}
+
+        //private Dictionary<string,string> GetTokenData(string access_token, string refresh_token)
+        //{
+        //    var tempData = new Dictionary<string, string>();
+        //    tempData.Add(Access_Token_Key, access_token);
+        //    tempData.Add(Refresh_Token_Key, refresh_token);
+        //    return tempData;
+        //}
+
+        #endregion
+
+        #endregion
     }
 }

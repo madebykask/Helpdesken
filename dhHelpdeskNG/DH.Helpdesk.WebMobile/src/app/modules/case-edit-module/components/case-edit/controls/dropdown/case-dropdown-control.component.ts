@@ -1,11 +1,10 @@
-import { Component, Input, ViewChild, OnChanges, SimpleChanges } from "@angular/core";
-import { BaseControl } from "../base-control";
-import { takeUntil, map } from "rxjs/operators";
-import { BehaviorSubject } from "rxjs";
-import { MbscSelectOptions, MbscSelect } from "@mobiscroll/angular";
-import { CommunicationService, Channels, DropdownValueChangedEvent } from "src/app/services/communication";
-import { OptionItem } from "src/app/modules/shared-module/models";
-import { FormStatuses } from "src/app/modules/shared-module/constants";
+import { Component, Input, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
+import { BaseControl } from '../base-control';
+import { takeUntil, map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { MbscSelectOptions, MbscSelect } from '@mobiscroll/angular';
+import { CommunicationService, Channels, CaseFieldValueChangedEvent } from 'src/app/services/communication';
+import { OptionItem } from 'src/app/modules/shared-module/models';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -17,7 +16,7 @@ export class CaseDropdownComponent extends BaseControl<number> {
     @ViewChild('control') selectControl: MbscSelect;
     @Input() dataSource: BehaviorSubject<OptionItem[]>;
     @Input() disabled = false;
-    
+
     // select settings
     settings: MbscSelectOptions = {
       filter: true,
@@ -31,7 +30,7 @@ export class CaseDropdownComponent extends BaseControl<number> {
       buttons: ['cancel'],
       headerText: () => this.getHeader,
       onInit: (event, inst) => {
-        if (this.field.isReadonly) {
+        if (this.formControl && this.formControl.fieldInfo.isReadonly) {
           inst.disable();
         }
       },
@@ -42,9 +41,9 @@ export class CaseDropdownComponent extends BaseControl<number> {
       },
       onSet: (event, inst) => {
         const value = inst.getVal();
-        this.commService.publish(Channels.DropdownValueChanged, new DropdownValueChangedEvent(value, event.valueText, this.field.name));
+        this.commService.publish(Channels.CaseFieldValueChanged, new CaseFieldValueChangedEvent(value, event.valueText, this.fieldName));
       }
-    }
+    };
 
     localDataSource: OptionItem[] = [];
 
@@ -55,15 +54,12 @@ export class CaseDropdownComponent extends BaseControl<number> {
 
     get getHeader(): string {
       const defaultValue = '';
-      if (!this.field) {
-        return defaultValue;
-      }
-      return this.formControl.label || defaultValue;
-    }  
+      return this.formControl ? this.formControl.label || defaultValue : defaultValue;
+    }
 
     ngOnInit(): void {
       this.initDataSource();
-      this.init(this.field);
+      this.init(this.fieldName);
       this.updateDisabledState();
       if (this.disabled) { // will be removed latter, when all fields are implemented
         this.formControl.disable({onlySelf: true, emitEvent: false});
@@ -74,7 +70,7 @@ export class CaseDropdownComponent extends BaseControl<number> {
     private initDataSource() {
       if (!this.dataSource) {
         this.localDataSource = [];
-      };
+      }
     }
 
     private initEvents() {
@@ -82,11 +78,11 @@ export class CaseDropdownComponent extends BaseControl<number> {
       this.formControl.statusChanges.pipe(
           takeUntil(this.destroy$)
         ).subscribe((e: any) => {
-          if (this.selectControl.disabled != this.isFormControlDisabled) {
+          if (this.selectControl.disabled !== this.isFormControlDisabled) {
             this.updateDisabledState();
           }
         });
-        
+
       this.dataSource.pipe(
         map(((options) => {
           options = options || [];
@@ -104,10 +100,6 @@ export class CaseDropdownComponent extends BaseControl<number> {
       this.selectControl.disabled = this.formControl.disabled || this.disabled;
     }
 
-    private get isFormControlDisabled() {
-      return this.formControl.status == FormStatuses.DISABLED;
-    }
-
     private addEmptyIfNotExists(options) {
       if (!options.some((i) => i.value === '')) {
         this.addEmptyItem(options);
@@ -115,13 +107,13 @@ export class CaseDropdownComponent extends BaseControl<number> {
     }
 
     private resetValueIfNeeded(options: OptionItem[]) {
-      if (options.filter((i) => String(i.value) == String(this.formControl.value)).length == 0) {
+      if (options.filter((i) => String(i.value) === String(this.formControl.value)).length === 0) {
         this.formControl.setValue('');
       }
     }
 
     private addEmptyItem(options: OptionItem[]): any {
-      options.unshift(new OptionItem('','--'));
+      options.unshift(new OptionItem('', '--'));
     }
 
     ngOnDestroy(): void {

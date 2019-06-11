@@ -1,0 +1,52 @@
+﻿@model DH.Helpdesk.Web.Models.Case.LogNoteFilesViewModel
+
+@{
+    var currentLog = Model.CurrentLog;
+ }
+
+@if (currentLog.LogFiles != null)
+{
+    foreach (var l in currentLog.LogFiles)
+    {
+        <div>
+            <p>
+                @if (Model.CaseFiles.VirtualDirectory)
+                {
+                    if (l.CaseId.HasValue)
+                    {
+                        <a target="_blank" class="isExisted" href="@Html.Action("CaseFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", l.CaseId.Value}, {"fileName", l.FileName}})"><i class="icon- attachedFile"></i>@l.FileName</a>
+                    }
+                    else
+                    {
+                        if (l.LogId.HasValue)
+                        {
+                            <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", l.LogId.Value}, {"fileName", l.FileName}})"><i class="icon- attachedFile"></i> @l.FileName</a>
+                        }
+                        else
+                        {
+                            <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "FileHandler", new {id = currentLog.Id, fileName = l.FileName})"><i class="icon-file"></i> @l.FileName</a>
+                        }
+                    }
+                }
+                else
+                {
+                    if (l.CaseId.HasValue)
+                    {
+                        <a target="_blank" class="isExisted" href="@Html.Action("CaseFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", l.CaseId.Value}, {"fileName", l.FileName}})"><i class="icon- attachedFile"></i>@l.FileName</a>
+                    }
+                    else
+                    {
+                        if (l.LogId.HasValue)
+                        {
+                            <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", l.LogId.Value}, {"fileName", l.FileName}})"><i class="icon- attachedFile"></i> @l.FileName</a>
+                        }
+                        else
+                        {
+                            <a target="_blank" class="isExisted" href="@Url.Action("DownloadLogFile", new {id = currentLog.Id, fileName = l.FileName})"><i class="icon-file"></i> @l.FileName</a>
+                        }
+                    }
+                }
+            </p>
+        </div>
+    }
+}

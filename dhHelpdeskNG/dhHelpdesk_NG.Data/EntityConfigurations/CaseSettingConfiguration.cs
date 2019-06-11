@@ -21,6 +21,7 @@
             this.Property(x => x.Name).IsRequired().HasMaxLength(50).HasColumnName("tblCaseName");
             this.Property(x => x.User_Id).IsOptional();
             this.Property(x => x.UserGroup).IsRequired();
+            this.Property(x => x.Type).IsRequired();
             this.Property(x => x.ChangeTime).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.RegTime).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);

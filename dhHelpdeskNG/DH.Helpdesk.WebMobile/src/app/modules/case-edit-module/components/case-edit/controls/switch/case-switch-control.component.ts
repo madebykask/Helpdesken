@@ -1,9 +1,6 @@
-import { Component, Input, ViewChild } from "@angular/core";
-import { BaseCaseField } from "../../../../models";
-import { BaseControl } from "../base-control";
-import { FormStatuses } from "src/app/modules/shared-module/constants";
-import { switchMap, takeUntil } from "rxjs/operators";
-import { of } from "rxjs";
+import { Component, Input, ViewChild } from '@angular/core';
+import { BaseControl } from '../base-control';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'case-switch-control',
@@ -12,38 +9,32 @@ import { of } from "rxjs";
   })
   export class CaseSwitchComponent extends BaseControl<boolean> {
     @ViewChild('control') control: any;
-    @Input() description: string = "";
+    @Input() description = '';
     @Input() disabled = false;
 
     ngOnInit(): void {
-      this.init(this.field);
+      this.init(this.fieldName);
       this.updateDisabledState();
 
-      this.initEvents()
+      this.initEvents();
     }
 
     ngOnDestroy(): void {
       this.onDestroy();
     }
-     
+
     private updateDisabledState() {
       this.control.disabled = this.formControl.disabled || this.disabled;
     }
 
-    private get isFormControlDisabled() {
-      return this.formControl.status == FormStatuses.DISABLED;
-    }
-    
     private initEvents() {
-      this.formControl.statusChanges // track disabled state in form
-        .pipe(switchMap((e: any) => {
-            if (this.control.disabled != this.isFormControlDisabled) {
-              this.updateDisabledState();
-            }
-            return of(e);
-          }),
+      // track disabled state in form
+      this.formControl.statusChanges.pipe(
           takeUntil(this.destroy$)
-        )
-        .subscribe();
+        ).subscribe(e => {
+          if (this.control.disabled !== this.isFormControlDisabled) {
+            this.updateDisabledState();
+          }
+        });
     }
   }

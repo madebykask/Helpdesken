@@ -25,5 +25,6 @@ export enum CaseSectionType {
     Status = 6,
     Invoices = 7,
     Invoicing = 8,
-    ExtendedCase = 9
+    ExtendedCase = 9,
+    CloseCase = 10
 }

@@ -21,9 +21,9 @@ namespace DH.Helpdesk.Web.Models.Case.Output
         public Customer customer { get; set; }
         public CaseSearchFilter caseSearchFilter { get; set; }
         public int filterCustomerId { get; set; }
+
         public IList<Region> filterRegion { get; set; }
         public IList<Department> filterDepartment { get; set; }
-
         public IList<CaseTypeOverview> filterCaseType { get; set; }
         public IList<ProductAreaOverview> filterProductArea { get; set; }
         public IList<CategoryOverview> filterCategory { get; set; }

@@ -12,6 +12,7 @@
             var entities = query.Select(f => new
                                         {
                                             f.Id,
+                                            f.ChangedDate,
                                             f.CreatedDate,
                                             f.FAQCategory,
                                             f.Answer,
@@ -24,6 +25,7 @@
                                             {
                                                 Id = f.Id,
                                                 CreatedDate = f.CreatedDate,
+                                                ChangeDate = f.ChangedDate,
                                                 Category = f.FAQCategory,
                                                 Answer = f.Answer,
                                                 Text = f.FAQQuery,

@@ -1,53 +1,48 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Security.Claims;
+using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Models.ADFS.Input;
+using DH.Helpdesk.BusinessData.Models.Employee;
+using DH.Helpdesk.BusinessData.Models.Error;
+using DH.Helpdesk.BusinessData.Models.Language.Output;
+using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
 using DH.Helpdesk.Common.Configuration;
+using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Extensions.String;
+using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Common.Types;
+using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
+using DH.Helpdesk.SelfService.Infrastructure.Extensions;
+using DH.Helpdesk.SelfService.Infrastructure.Helpers;
+using DH.Helpdesk.SelfService.Models;
+using DH.Helpdesk.Services.Services;
 using log4net;
 
 namespace DH.Helpdesk.SelfService.Infrastructure
 {
-    using System;
-    using System.IO;
-    using System.Web.Mvc;
-    using System.Linq;
-
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.SelfService.Models;
-    using DH.Helpdesk.Common.Types;
-    using System.Security.Claims;
-    using DH.Helpdesk.BusinessData.Models.ADFS.Input;
-    using System.Configuration;
-    using System.Collections.Generic;
-    using DH.Helpdesk.BusinessData.Models.Language.Output;
-    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.SelfService.Infrastructure.Common.Concrete;
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Common.Extensions.String;
-    using BusinessData.Models.Error;
-    using System.Web;
-    using BusinessData.Models.Employee;
-    using Helpers;
-
     public class BaseController : Controller
     {
         const string DEFAULT_ANONYMOUS_USER_ID = "AnonymousUser";
-        private readonly ILog _log = LogManager.GetLogger(typeof(BaseController));
 
+        private readonly ILog _log = LogManager.GetLogger(typeof(BaseController));
         private readonly ISelfServiceConfigurationService _configurationService;
         private readonly IMasterDataService _masterDataService;
-        private readonly ICaseSolutionService _caseSolutionService;
-        private bool userOrCustomerChanged = false;
-
+        private bool _userOrCustomerChanged;
+        private List<LanguageOverview> _languages;
+        
         protected ISelfServiceConfigurationService ConfigurationService => _configurationService;
 
-        public BaseController(
-            ISelfServiceConfigurationService configurationService,
+
+        public BaseController(ISelfServiceConfigurationService configurationService, 
             IMasterDataService masterDataService,
             ICaseSolutionService caseSolutionService)
         {
             _configurationService = configurationService;
             _masterDataService = masterDataService;
-            _caseSolutionService = caseSolutionService;
         }
 
         //called before a controller action is executed, that is before ~/HomeController/index 
@@ -67,7 +62,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             TempData["ShowLanguageSelect"] = true;
             SessionFacade.LastError = null;
             var lastError = new ErrorModel(string.Empty);
-            userOrCustomerChanged = false;
+            _userOrCustomerChanged = false;
 
             var appSettings = ConfigurationService.AppSettings;
             var loginMode = appSettings.LoginMode;
@@ -89,9 +84,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             }
             customerId = SessionFacade.CurrentCustomerID;
 
-
-
-            SetLanguage(filterContext);
+            SetLanguage();
 
             if (SessionFacade.CurrentUserIdentity == null)
             {                
@@ -145,11 +138,11 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                     SessionFacade.UserHasAccess = true;
                 }
 
-                userOrCustomerChanged = true;
+                _userOrCustomerChanged = true;
             } //User Session was null
 
 
-            if (userOrCustomerChanged)
+            if (_userOrCustomerChanged)
             {
                 SessionFacade.CurrentCoWorkers = null;
 
@@ -198,7 +191,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             if ((SessionFacade.CurrentCustomer != null && SessionFacade.CurrentCustomer.Id != customerId && customerId != -1) ||
                 (SessionFacade.CurrentCustomer == null && customerId != -1))
             {
-                userOrCustomerChanged = true;
+                _userOrCustomerChanged = true;
                 var newCustomer = _masterDataService.GetCustomer(customerId);
                 SessionFacade.CurrentCustomer = newCustomer;
                 // Customer changed then clear sessions
@@ -286,24 +279,24 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             return ret;
         }
 
-        private void SetLanguage(ActionExecutingContext filterContext)
+        private void SetLanguage()
         {
             if (SessionFacade.AllLanguages == null)            
                 SessionFacade.AllLanguages = GetActiveLanguages();
 
-            SessionFacade.CurrentLanguageId = 0;
+            var requestLanguageId = Request.QueryString.Get("language");
 
-            var curUri = filterContext.HttpContext.Request.Url;
-            var passedLanguagetext = HttpUtility.ParseQueryString(curUri.Query).Get("language");
-
-            if (!string.IsNullOrEmpty(passedLanguagetext))
+            if (!string.IsNullOrEmpty(requestLanguageId))
             {
-                int langId = -1;
-                var languages = _masterDataService.GetLanguages();
-                var passedLanguageId = languages.FirstOrDefault(l => l.LanguageID.ToLower() == passedLanguagetext.ToLower());
-                if (passedLanguageId != null)
-                langId = passedLanguageId.Id;
-                SessionFacade.CurrentLanguageId = langId;
+                var langId = -1;
+                var languages = GetActiveLanguages();
+                var lang = languages.FirstOrDefault(l => l.LanguageId.Equals(requestLanguageId, StringComparison.OrdinalIgnoreCase));
+
+                if (lang != null)
+                {
+                    langId = lang.Id;
+                    SessionFacade.CurrentLanguageId = langId;
+                }
             }
             else
             {
@@ -598,17 +591,20 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
         private List<LanguageOverview> GetActiveLanguages()
         {
-            var activeLangs = _masterDataService.GetLanguages()
-                                        .Where(l => l.IsActive == 1)
-                                        .Select(la => new LanguageOverview { Id = la.Id, IsActive = la.IsActive, LanguageId = la.LanguageID, Name = la.Name })
-                                        .OrderBy(l => l.Name)
-                                        .ToList();
-            return activeLangs;
+            if (_languages == null)
+            {
+                _languages = _masterDataService.GetLanguages()
+                    .Where(l => l.IsActive == 1)
+                    .Select(la => new LanguageOverview { Id = la.Id, IsActive = la.IsActive, LanguageId = la.LanguageID, Name = la.Name })
+                    .OrderBy(l => l.Name)
+                    .ToList();
+            }
+            return _languages;
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext) //called after a controller action is executed, that is after ~/UserController/index 
         {
-            this.SetMasterPageModel(filterContext);
+            SetMasterPageModel(filterContext);
             base.OnActionExecuted(filterContext);
 
             // Last correct url used for back from Error page
@@ -616,22 +612,18 @@ namespace DH.Helpdesk.SelfService.Infrastructure
                 SessionFacade.LastCorrectUrl =
                     filterContext.HttpContext.Request.Url.AbsoluteUri;
         }
-       
-        //todo: move to separate class
+
         protected string RenderRazorViewToString(string viewName, object model, bool partial = true)
         {
-            var viewResult = partial ? ViewEngines.Engines.FindPartialView(this.ControllerContext, viewName) : ViewEngines.Engines.FindView(this.ControllerContext, viewName, null);
+            return this.RenderViewToString(viewName, model, partial);
+        }
 
-            if(viewResult == null || (viewResult != null && viewResult.View == null))
-                throw new FileNotFoundException("View could not be found");
-
-            this.ViewData.Model = model;
-            using(var sw = new StringWriter())
+        protected ApplicationType CurrentApplicationType
+        {
+            get
             {
-                var viewContext = new ViewContext(this.ControllerContext, viewResult.View, this.ViewData, this.TempData, sw);
-                viewResult.View.Render(viewContext, sw);
-                viewResult.ViewEngine.ReleaseView(this.ControllerContext, viewResult.View);
-                return sw.GetStringBuilder().ToString();
+                var appType = _configurationService.AppSettings.ApplicationType;
+                return EnumHelper.Parse<ApplicationType>(appType);
             }
         }
 
@@ -650,46 +642,51 @@ namespace DH.Helpdesk.SelfService.Infrastructure
         {
             if(SessionFacade.CurrentUser != null)
             {
-                SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? this._masterDataService.GetCustomer(SessionFacade.CurrentUser.CustomerId);
+                SessionFacade.CurrentCustomer = SessionFacade.CurrentCustomer ?? _masterDataService.GetCustomer(SessionFacade.CurrentUser.CustomerId);
             }
         }
 
         private void SetMasterPageModel(ActionExecutedContext filterContext)
         {
-            var masterViewModel = new MasterPageViewModel();
-            masterViewModel.Languages = this._masterDataService.GetLanguages();
-            masterViewModel.SelectedLanguageId = SessionFacade.CurrentLanguageId;
+            var masterViewModel = new MasterPageViewModel
+            {
+                Languages = _masterDataService.GetLanguages(),
+                SelectedLanguageId = SessionFacade.CurrentLanguageId
+            };
+
             if(SessionFacade.CurrentUser != null)
             {
-                masterViewModel.Customers = this._masterDataService.GetCustomers(SessionFacade.CurrentUser.Id);
+                masterViewModel.Customers = _masterDataService.GetCustomers(SessionFacade.CurrentUser.Id);
             }
+
             if(SessionFacade.CurrentCustomer != null)
             {
                 masterViewModel.SelectedCustomerId = SessionFacade.CurrentCustomer.Id;
-                masterViewModel.CustomerSetting = this._masterDataService.GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
+                masterViewModel.CustomerSetting = _masterDataService.GetCustomerSettings(SessionFacade.CurrentCustomer.Id);
             }
-            this.ViewData[Constants.ViewData.MasterViewData] = masterViewModel;
+
+            ViewData[Constants.ViewData.MasterViewData] = masterViewModel;
         }
 
         private void SetTextTranslation(ActionExecutingContext filterContext)
         {
-            if(this._masterDataService != null)
+            if (_masterDataService != null)
             {
-                if(SessionFacade.TextTranslation == null)
+                if (SessionFacade.TextTranslation == null)
                 {
-                    if(ConfigurationManager.AppSettings[AppSettingsKey.CurrentApplicationType].ToString().ToLower() == ApplicationTypes.LineManager)
-                        SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts()
-                                                                               .Where(x => x.Type == TranslationType.SelfService)
-                                                                               .ToList();
-                    else
-                        SessionFacade.TextTranslation = this._masterDataService.GetTranslationTexts().ToList();
+                    SessionFacade.TextTranslation = IsLineManagerApplication() 
+                        ? _masterDataService.GetTranslationTexts(TranslationType.SelfService).ToList() 
+                        : _masterDataService.GetTranslationTexts().ToList();
                 }
 
-                if(SessionFacade.CurrentUser == null)
-                    SessionFacade.CaseTranslation = this._masterDataService.GetCaseTranslations();
-                else
-                    if(SessionFacade.CaseTranslation == null)
-                        SessionFacade.CaseTranslation = this._masterDataService.GetCaseTranslations(SessionFacade.CurrentUser.Id);
+                if (SessionFacade.CurrentUser == null)
+                {
+                    SessionFacade.CaseTranslation = _masterDataService.GetCaseTranslations();
+                }
+                else if (SessionFacade.CaseTranslation == null)
+                {
+                    SessionFacade.CaseTranslation = _masterDataService.GetCaseTranslations(SessionFacade.CurrentUser.Id);
+                }
 
             }
         }
@@ -721,7 +718,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure
 
         private bool IsStringMatch(string pattern, string compareStr)
         {
-            /*TODO: Use regular experssion */
+            /*TODO: Use regular experssion!!! */
 
             var _pattern = pattern.ToLower();
             var _compareStr = compareStr.ToLower();
@@ -794,10 +791,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure
             }
 
             return _pattern.Equals(_compareStr, StringComparison.CurrentCultureIgnoreCase);
-            
         }
-
-
+        
         //keep for diagnostics purposes
         private void LogWithContext(string msg)
         {

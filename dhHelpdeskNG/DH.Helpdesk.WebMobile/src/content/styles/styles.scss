@@ -26,6 +26,10 @@ $disabled-color: #f2f2f2;
     }
 }
 
+.mbsc-switch .mbsc-switch-track {
+  font-size: 12px!important;
+}
+
 @keyframes md-rotating {
     from {
         transform: rotate(0deg);
@@ -67,8 +71,6 @@ $disabled-color: #f2f2f2;
 
 .md-btn-loading { display: block; }
 
- 
-
 .stickyTop {
     position: fixed;
     top: 0;
@@ -78,6 +80,9 @@ $disabled-color: #f2f2f2;
     z-index: 1000;
 }
 
+span.disabled {
+  color:#adadad;
+}
 .disabled {
   .mbsc-select, .mbsc-input {
       textarea:disabled, input:disabled, .mbsc-label, .mbsc-err-msg {
@@ -86,9 +91,31 @@ $disabled-color: #f2f2f2;
     }  
 }
 
+.formcontent {
+  background:#fff!important;
+}
 
 //mobiscroll theme overrides
 .mbsc-mobiscroll {
+  
+  //override select popup for initiator and notifier search
+  &.single-select {
+
+    .mbsc-fr-hdr { padding-top:4px!important;    }
+    .mbsc-input  { margin-bottom:0px!important; }
+    .mbsc-sc-whl-gr {
+      padding-top:0px!important; 
+      padding-bottom:0px!important;
+    }
+  
+    .mbsc-sc-itm {
+      padding-left: 5px!important;
+      //word-break: break-all; 
+    }
+    .select-li  { font-size:14px!important;  }
+    .itemHeader { font-size: 14px!important; line-height: 16px!important;}
+    .itemDesc   { font-size:10px!important;  line-height: 14px!important;}
+  }
 
   .mbsc-sc-itm {
     padding-right: 10px!important;

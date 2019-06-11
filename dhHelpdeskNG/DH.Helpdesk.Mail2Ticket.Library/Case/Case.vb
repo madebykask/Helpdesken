@@ -33,6 +33,7 @@ Imports System.Data
     Private msDescription As String
     Private msMiscellaneous As String
     Private msPriorityName As String
+    Private msPriorityDescription As String
     Private miWorkingGroup_Id As Integer
     Private miPerformer_User_Id As Integer
     Private msPerformerFirstName As String
@@ -63,6 +64,8 @@ Imports System.Data
     Private miRegistrationSourceCustomer_Id As Integer
     Private mcolLog As New List(Of Log)
     Private msRegUserName As String
+    Private msChangedName As String
+    Private msChangedSurName As String
     Private msAvailable As String
     Private msReferenceNumber As String
     Private miIncludeInCaseStatistics As Integer
@@ -231,6 +234,12 @@ Imports System.Data
             msPriorityName = ""
         End If
 
+        If Not IsDBNull(dr("PriorityDescription")) Then
+            msPriorityDescription = dr("PriorityDescription")
+        Else
+            msPriorityDescription = ""
+        End If
+
         If Not IsDBNull(dr("PerformerWorkingGroup")) Then
             msPerformerWorkingGroup = dr("PerformerWorkingGroup")
         Else
@@ -322,6 +331,18 @@ Imports System.Data
             If Not IsDBNull(dr("RegUserSurName")) Then
                 msRegUserName = msRegUserName & " " & dr("RegUserSurName")
             End If
+        End If
+
+        If Not IsDBNull(dr("ChangedName")) Then
+            msChangedName = dr("ChangedName")
+        Else
+            msChangedName = ""
+        End If
+
+        If Not IsDBNull(dr("ChangedSurName")) Then
+            msChangedSurName = dr("ChangedSurName")
+        Else
+            msChangedSurName = ""
         End If
 
         If Not IsDBNull(dr("Available")) Then
@@ -590,6 +611,15 @@ Imports System.Data
         End Get
         Set(ByVal Value As String)
             msPriorityName = Value
+        End Set
+    End Property
+
+    Public Property PriorityDescription() As String
+        Get
+            Return msPriorityDescription
+        End Get
+        Set
+            msPriorityDescription = Value
         End Set
     End Property
 
@@ -863,6 +893,24 @@ Imports System.Data
         End Get
         Set(ByVal Value As String)
             msRegUserName = Value
+        End Set
+    End Property
+
+    Public Property ChangedName() As String
+        Get
+            Return msChangedName
+        End Get
+        Set
+            msChangedName = Value
+        End Set
+    End Property
+
+    Public Property ChangedSurName() As String
+        Get
+            Return msChangedSurName
+        End Get
+        Set
+            msChangedSurName = Value
         End Set
     End Property
 

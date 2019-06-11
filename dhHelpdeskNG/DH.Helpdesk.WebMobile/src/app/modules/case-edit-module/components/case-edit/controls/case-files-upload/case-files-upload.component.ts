@@ -1,6 +1,5 @@
-
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FileUploader, FileUploaderOptions, FileItem, ParsedResponseHeaders } from 'ng2-file-upload' 
+import { FileUploader, FileUploaderOptions, FileItem, ParsedResponseHeaders } from 'ng2-file-upload';
 import { AuthenticationService } from 'src/app/services/authentication';
 import { MbscListviewOptions } from '@mobiscroll/angular';
 import { LocalStorageService } from 'src/app/services/local-storage';
@@ -12,11 +11,10 @@ import { CaseFilesApiService } from 'src/app/modules/case-edit-module/services/a
   styleUrls: ['./case-files-upload.component.scss']
 })
 export class CaseFilesUploadComponent {
-  
-  @Output() NewFileUploadComplete: EventEmitter<any> = new EventEmitter<any>();
 
+  @Output() NewFileUploadComplete: EventEmitter<any> = new EventEmitter<any>();
   @Input('caseKey') caseKey: string;
-  
+
   fileUploader = new FileUploader({});
 
   fileListSettings: MbscListviewOptions = {
@@ -29,19 +27,19 @@ export class CaseFilesUploadComponent {
       text: 'Delete', // todo: translate
       confirm: true,
       action: (event, inst) => {
-        let itemIndex = +event.index;
+        const itemIndex = +event.index;
         if (this.fileUploader.queue && this.fileUploader.queue.length > itemIndex) {
-          let fileItem = this.fileUploader.queue[event.index] as FileItem;
+          const fileItem = this.fileUploader.queue[event.index] as FileItem;
           this.processFileUploadDelete(fileItem);
         }
       }
-    }]  
-  }; 
+    }]
+  };
 
   constructor(private authenticationService: AuthenticationService,
               private caseFileApiService: CaseFilesApiService,
               private localStateStorage: LocalStorageService) {
-  } 
+  }
 
   ngOnInit() {
     const accessToken = this.authenticationService.getAuthorizationHeaderValue();
@@ -71,8 +69,8 @@ export class CaseFilesUploadComponent {
     // this.uploader.onErrorItem
     // this.uploader.onProgressAll(progress: any): any;
     // this.uploader.onCompleteAll
-  } 
- 
+  }
+
   private processFileUploadRequest(fileItem: FileItem, form: FormData) {
     // console.log('processFileUploadRequest called. CaseKey: %s', this.caseKey);
     //let fi = fileItem;
@@ -86,13 +84,12 @@ export class CaseFilesUploadComponent {
   private onFileUploadComplete(fileItem: FileItem, response: string, status: number, headers: ParsedResponseHeaders) {
     // console.log(`File upload complete. File: ${fileItem.file.name}, IsSuccess: ${fileItem.isSuccess}, Response: ${response}`);
     if (fileItem.isUploaded && fileItem.isSuccess) {
-        fileItem.remove();// remove success files only
-        var data = JSON.parse(response);
+        fileItem.remove(); // remove success files only
+        const data = JSON.parse(response);
         if (data) {
           if (typeof data === 'string') {
-            this.NewFileUploadComplete.emit({ id: 0, name: data }); //temp file upload returns file name only          
-          }
-          else {
+            this.NewFileUploadComplete.emit({ id: 0, name: data }); //temp file upload returns file name only
+          } else {
             this.NewFileUploadComplete.emit({id: data.id, name: data.name });
           }
         }
@@ -107,12 +104,12 @@ export class CaseFilesUploadComponent {
     fileItem.remove();
   }
 
-  getStatusStyles(item:FileItem) {
-    let style = {
+  getStatusStyles(item: FileItem) {
+    const style = {
       'color': '#c0c0c0'
     };
 
-    /* 
+    /*
     // FileItem available status fields:
     this.isReady = true;
     this.isUploading = true;

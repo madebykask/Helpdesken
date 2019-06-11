@@ -1,0 +1,19 @@
+﻿<canvas id="chartjs"></canvas>
+<script>
+    $(function () {
+        window.dhHelpdesk.reports = window.dhHelpdesk.reports || {};
+        Chart.plugins.unregister(window.ChartDataLabels); // disable default registration for all charts
+
+        window.dhHelpdesk.reports.historicalReport = historicalReport({
+            dataUrl: '@Url.Action("GetHistoricalData", "Services", new { area = "reports" })',
+        });
+
+        window.dhHelpdesk.reports.reportedTimeReport = reportedTimeReport({
+            dataUrl: '@Url.Action("GetReportedTimeData", "Services", new { area = "reports" })',
+        });
+
+        window.dhHelpdesk.reports.numberOfCasesReport = numberOfCasesReport({
+            dataUrl: '@Url.Action("GetNumberOfCasesData", "Services", new { area = "reports" })',
+        });
+    })
+</script>

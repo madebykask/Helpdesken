@@ -1,2 +1,2 @@
-export * from './case-form-control'
-export * from './case-form-group'
+export * from './case-form-control';
+export * from './case-form-group';

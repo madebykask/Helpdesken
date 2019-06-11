@@ -8,7 +8,6 @@
  
         public const string Supplier = "supplier_id";
  
- 
         public const string StartDate = "contractstartdate";
  
         public const string EndDate = "contractenddate";
@@ -27,9 +26,9 @@
  
         public const string Other = "info";
  
-        public const string FollowUpField = "followupinterval";
+        public const string FollowUp = "followupinterval";
  
-        public const string ResponsibleFollowUpField = "followupresponsibleuser_id";
+        public const string ResponsibleFollowUp = "followupresponsibleuser_id";
  
         public const string CaseNumber = "casenumber";
     }

@@ -1,9 +1,57 @@
 :host {
   display:block;  
   background: none #fff;
+
+  ::ng-deep .bordered {
+    border-bottom:solid 1px #ccc!important;
+    overflow:hidden;
+
+    .mbsc-label-stacked:before,
+    .mbsc-label-stacked:after
+    {  
+      left: 0px!important;
+      border-bottom-width:0px!important;
+      border-top-width:0px!important;
+    }
+  }
+
+  ::ng-deep .searchInput input,
+  ::ng-deep .searchInput textarea {
+    font-size: 0.75em;
+    padding-left:1.34em;
+  }
+
+  ::ng-deep .switch {
+    .mbsc-control-w span { font-size:12px!important; }
+    .mbsc-switch { 
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+  }
+  
+  ::ng-deep .mbsc-switch .mbsc-desc { 
+    color:#000;
+    opacity:1;
+    font-size:12px!important;
+    overflow: hidden; 
+    word-break: break-all;
+  }
+
+  ::ng-deep .mbsc-label-stacked:before,
+  ::ng-deep .mbsc-label-stacked:after
+  {  
+    left: 0px!important;
+    //border-bottom-width:0px!important;
+    //border-top-width:0px!important;
+  }
+  
+  .formcontent {
+    background:#fff!important;
+  }
+
 }
 
-.fileListView {   
+.fileListView {
   margin-right: 20px;
   margin-left: 20px;
 }

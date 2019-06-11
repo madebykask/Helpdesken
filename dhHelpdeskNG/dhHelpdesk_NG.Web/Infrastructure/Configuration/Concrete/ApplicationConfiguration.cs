@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DH.Helpdesk.Common.Configuration;
 using DH.Helpdesk.Common.Enums;
 
@@ -73,6 +74,15 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
 
                 var loginMode = (LoginMode)Enum.Parse(typeof(LoginMode), val, true);
                 return loginMode;
+            }
+        }
+
+        public IList<string> WinAuthIPFilter
+        {
+            get
+            {
+                var ipList = ConfigurationManager.AppSettings["winAuthIPFilter"] ?? string.Empty;
+                return ipList.Split(new [] {';'}, StringSplitOptions.RemoveEmptyEntries).ToList();
             }
         }
     }

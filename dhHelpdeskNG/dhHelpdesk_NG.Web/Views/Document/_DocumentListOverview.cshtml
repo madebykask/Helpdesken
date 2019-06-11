@@ -7,20 +7,19 @@
     <thead>
         <tr>   
             <th style="width:3%">
-                
             </th>              
             <th onclick="SortCol('Name');" style="cursor: pointer; cursor: hand ; width:35%" >
-                @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                @Translation.GetCoreTextTranslation("Namn")
                 @{CurIcon = "Name";}
                 <i class="@CurIcon.SetDocumentSortIcon()"></i>
             </th>
             <th onclick="SortCol('ChangedDate');" style="cursor: pointer; cursor: hand ; width:15%">
-                @Translation.Get("Ändringsdatum", Enums.TranslationSource.TextTranslation)
+                @Translation.GetCoreTextTranslation("Ändringsdatum")
                 @{CurIcon = "ChangedDate";}
                 <i class="@CurIcon.SetDocumentSortIcon()"></i> 
             </th>
             <th onclick="SortCol('UserName');" style="cursor: pointer; cursor: hand ; width:30%">
-                @Translation.Get("Av", Enums.TranslationSource.TextTranslation)
+                @Translation.GetCoreTextTranslation("Av")
                 @{CurIcon = "UserName";}
                 <i class="@CurIcon.SetDocumentSortIcon()"></i>
             </th>

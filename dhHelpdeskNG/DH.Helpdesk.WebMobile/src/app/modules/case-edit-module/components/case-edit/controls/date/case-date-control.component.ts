@@ -1,12 +1,10 @@
-import { Component, Input, ViewChild, Inject, LOCALE_ID } from "@angular/core";
-import { BaseControl } from "../base-control";
-import { MbscCalendarOptions, MbscCalendar } from "@mobiscroll/angular";
-import { switchMap, takeUntil } from "rxjs/operators";
-import { of } from "rxjs";
-import { DateTime } from "luxon";
-import { FormStatuses } from "src/app/modules/shared-module/constants";
-import { TranslateService } from "@ngx-translate/core";
-import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
+import { Component, Input, ViewChild } from '@angular/core';
+import { BaseControl } from '../base-control';
+import { MbscCalendarOptions, MbscCalendar } from '@mobiscroll/angular';
+import { takeUntil } from 'rxjs/operators';
+import { DateTime } from 'luxon';
+import { TranslateService } from '@ngx-translate/core';
+import { DateUtil } from 'src/app/modules/shared-module/utils/date-util';
 
 @Component({
     selector: 'case-date-control',
@@ -14,10 +12,10 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
     styleUrls: ['./case-date-control.component.scss']
   })
   export class CaseDateComponent extends BaseControl<string> {
-    // @ViewChild('control') control: any;
     @ViewChild('date') control: MbscCalendar;
     @Input() disabled = false;
     value?: string;
+
     options: MbscCalendarOptions = {
       theme: 'mobiscroll',
       display: 'center',
@@ -31,12 +29,12 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
       setOnDayTap: true,
       formatValue: (data) => {
         // default format is mm/dd/yy so data contains [m,d,y]
-        let dateIso = data[2] + '-' + (data[0] < 9 ? '0' : '') + (data[0] + 1) + '-' + (data[1] < 10 ? '0' : '') + data[1];
+        const dateIso = data[2] + '-' + (data[0] < 9 ? '0' : '') + (data[0] + 1) + '-' + (data[1] < 10 ? '0' : '') + data[1];
         return DateUtil.formatDate(dateIso, DateTime.DATE_SHORT);
       },
       parseValue: (value?: string) => {
-        let d = value ? DateTime.fromISO(value) : DateTime.local() // Default value
-        return [d.month -1, d.day, d.year];
+        const d = value ? DateTime.fromISO(value) : DateTime.local(); // Default value
+        return [d.month - 1, d.day, d.year];
       },
       onInit: (event, inst) => {
         if (this.formControl.disabled || this.disabled) {
@@ -46,17 +44,18 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
       onSet: (event, inst) => {
         this.formControl.setValue(inst.getVal());
       }
-    }
+    };
 
-    constructor(@Inject(LOCALE_ID) locale: string, private ngxTranslateService: TranslateService) {
+    constructor(private ngxTranslateService: TranslateService) {
       super();
     }
 
     ngOnInit(): void {
-      this.value = this.field.value;
+      this.init(this.fieldName);
+      this.value = this.formControl.value;
       // this.updateDisabledState();
-      this.init(this.field);
-      this.initEvents()
+
+      this.initEvents();
     }
 
     ngOnDestroy(): void {
@@ -64,32 +63,23 @@ import { DateUtil } from "src/app/modules/shared-module/utils/date-util";
     }
 
     private updateDisabledState() {
-      this.control.disabled = this.formControl.disabled || this.disabled;
-    }
-
-    private get isFormControlDisabled() {
-      return this.formControl.status == FormStatuses.DISABLED;
+      this.control.disabled = this.isFormControlDisabled || this.disabled;
     }
 
     private initEvents() {
-      this.formControl.statusChanges // track disabled state in form
-      .pipe(switchMap((e: any) => {
-          if (this.control.disabled != this.isFormControlDisabled) {
-            this.updateDisabledState();
-          }
-          return of(e);
-        }),
+      // track disabled state in form
+      this.formControl.statusChanges.pipe(
         takeUntil(this.destroy$)
-      )
-      .subscribe();
+      ).subscribe(e => {
+        if (this.control.disabled !== this.isFormControlDisabled) {
+          this.updateDisabledState();
+        }
+      });
 
-      this.formControl.valueChanges 
-        .pipe(switchMap((v?: any) => {
-            this.value = v;
-            return of(v);
-          }),
+      this.formControl.valueChanges.pipe(
           takeUntil(this.destroy$)
-        )
-        .subscribe();
+        ).subscribe((v: any) => {
+          this.value = v;
+        });
     }
   }

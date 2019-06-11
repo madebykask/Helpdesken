@@ -6,14 +6,14 @@ import {
     DisabledStateBehavior, DisabledStateAction, DisabledStateActionCondition, ControlDataSourceTemplateModelTypes, CustomDataSourceTypes, DataSourceParameterTemplateModel, IDataSourceParameter
 } from '../models/template.model';
 
-import { FormFieldPathModel } from '../models/form-field-path.model';
 import { LogService } from '../services/log.service';
 import { ValidateOn } from '../shared/validation-types';
-import { IAppConfig, AppConfig } from '../shared/app-config/app-config';
+import { AppConfig } from '../shared/app-config/app-config';
 import { FormControlType } from '../models/form.model';
 import { ErrorHandlingService } from './error-handling.service';
 
 import * as commonMethods from '../utils/common-methods';
+import { IAppConfig } from '../shared/app-config/app-config.interface';
 
 @Injectable()
 export class TemplateService {
@@ -97,7 +97,7 @@ export class TemplateService {
                 }
 
                 if (secElem.controls && secElem.controls.length) {
-                
+
                     let controls = secElem.controls.map((controlElem: any, index: number) => {
                         let dataSource: ControlDataSourceTemplateModelTypes = null;
                         if (controlElem.hasOwnProperty('dataSource')) {
@@ -112,17 +112,32 @@ export class TemplateService {
                             order: controlElem.order || index,
                             controlType: controlElem.type,
                             caseBinding: controlElem.caseBinding,
+                            caseBindingBehaviour: controlElem.caseBindingBehaviour,
                             resetValueOnItemsUpdate: controlElem.resetValueOnItemsUpdate,
-                            shouldNotSave: controlElem.hasOwnProperty('shouldNotSave') ? controlElem.shouldNotSave : (controlElem.type === FormControlType.Review),
+                            shouldNotSave: controlElem.hasOwnProperty('shouldNotSave') ?
+                                          controlElem.shouldNotSave :
+                                          (controlElem.type === FormControlType.Review),
                             noDigest: controlElem.noDigest,
                             section: section,
-                            valueBinding: controlElem.hasOwnProperty('valueBinding') ? this.getBinding(controlElem.valueBinding, template.globalFunctions) : null,
-                            hiddenBinding: controlElem.hasOwnProperty('hiddenBinding') ? this.getBinding(controlElem.hiddenBinding, template.globalFunctions) : null,
-                            disabledBinding: controlElem.hasOwnProperty('disabledBinding') ? this.getBinding(controlElem.disabledBinding, template.globalFunctions) : null,
-                            dataSourceFilterBinding: controlElem.hasOwnProperty('dataSourceFilterBinding') ? this.getBinding(controlElem.dataSourceFilterBinding, template.globalFunctions) : null,
+                            valueBinding: controlElem.hasOwnProperty('valueBinding') ?
+                                          this.getBinding(controlElem.valueBinding, template.globalFunctions) :
+                                          null,
+                            hiddenBinding: controlElem.hasOwnProperty('hiddenBinding') ?
+                                          this.getBinding(controlElem.hiddenBinding, template.globalFunctions) :
+                                          null,
+                            disabledBinding: controlElem.hasOwnProperty('disabledBinding') ?
+                                             this.getBinding(controlElem.disabledBinding, template.globalFunctions) :
+                                             null,
+                            dataSourceFilterBinding: controlElem.hasOwnProperty('dataSourceFilterBinding') ?
+                                                     this.getBinding(controlElem.dataSourceFilterBinding, template.globalFunctions) :
+                                                     null,
                             dataSource: dataSource,
-                            validators: controlElem.hasOwnProperty('validators') ? this.getValidators(controlElem.validators, template.validatorsMessages, template.globalFunctions) : null,
-                            warningBinding: controlElem.hasOwnProperty('warningBinding') ? this.getBinding(controlElem.warningBinding, template.globalFunctions) : null,
+                            validators: controlElem.hasOwnProperty('validators') ?
+                                        this.getValidators(controlElem.validators, template.validatorsMessages, template.globalFunctions) :
+                                        null,
+                            warningBinding: controlElem.hasOwnProperty('warningBinding') ?
+                                            this.getBinding(controlElem.warningBinding, template.globalFunctions) :
+                                            null,
                             mode: controlElem.hasOwnProperty('mode') ? controlElem.mode : '',
                             reviewControlId: controlElem.hasOwnProperty('reviewControlId') ? controlElem.reviewControlId : '',
                             emptyElement: controlElem.hasOwnProperty('emptyElement') ? controlElem.emptyElement : ''
@@ -148,7 +163,7 @@ export class TemplateService {
                         }
 
                         // register control in the map for fast and easy access
-                        //model.registerControl(tab.id, section.id, control.id, control);
+                        // model.registerControl(tab.id, section.id, control.id, control);
 
                         return control;
                     });
@@ -180,7 +195,7 @@ export class TemplateService {
     }
 
     expandFieldsForSection(sectionIndex: number, fields: string[]) {
-        let expandedFields:string[] = [];
+        let expandedFields: string[] = [];
 
         if (fields && fields.length) {
             expandedFields =
@@ -217,14 +232,14 @@ export class TemplateService {
     private createControlDataSourceTemplateModel(dataSourceMeta: any): ControlDataSourceTemplateModelTypes {
         if (dataSourceMeta instanceof Array) {
             return dataSourceMeta.map((dataSourceItem: any) => new DataSourceItemTemplateModel(dataSourceItem.value, dataSourceItem.text));
-        }
-        else if (dataSourceMeta.hasOwnProperty('type')) {
-            if (dataSourceMeta.type === 'option')
+        } else if (dataSourceMeta.hasOwnProperty('type')) {
+            if (dataSourceMeta.type === 'option') {
                 return new OptionsDataSourceTemplateModel(dataSourceMeta.id, dataSourceMeta.parameters, dataSourceMeta.dependsOn);
-            else if (dataSourceMeta.type === 'custom')
+            } else if (dataSourceMeta.type === 'custom') {
                 return new ControlCustomDataSourceTemplateModel(dataSourceMeta.id, dataSourceMeta.valueField, dataSourceMeta.textField);
-            else if (dataSourceMeta.type === 'section')
+            } else if (dataSourceMeta.type === 'section') {
                 return new ControlSectionDataSourceTemplateModel(dataSourceMeta.id, dataSourceMeta.valueField, dataSourceMeta.textField);
+            }
         }
 
         throw `Not supported control data source template. Id:${dataSourceMeta.id}`;
@@ -236,7 +251,7 @@ export class TemplateService {
 
         const createTemplate = (items: Array<any>, mode: ValidateOn): Array<TemplateValidator> => {
             return items.map((item: any): TemplateValidator => {
-            
+
                 let validatorTpl = new TemplateValidator({
                     type: item.type,
                     message: this.getValidatorMessage(item, messages),
@@ -246,7 +261,7 @@ export class TemplateService {
                     validationMode: mode
                 });
 
-                if (item.hasOwnProperty("emptyValues")) {
+                if (item.hasOwnProperty('emptyValues')) {
                     let emptyValues = item.emptyValues || [];
                     validatorTpl.emptyValues =
                         commonMethods.isArray(emptyValues) ? emptyValues.map((e:any) => e.toString()) : [ emptyValues.toString() ];
@@ -263,22 +278,22 @@ export class TemplateService {
         if (templateValidators.hasOwnProperty('onNext')) {
             controlValidators.onNext = createTemplate(templateValidators.onNext, ValidateOn.OnNext);
         }
-        if (!controlValidators.onSave && !controlValidators.onNext) this.logService.warning('Invalid template validators section.');
+        if (!controlValidators.onSave && !controlValidators.onNext) { this.logService.warning('Invalid template validators section.'); }
 
         return controlValidators;
     }
 
     private getValidatorMessage(item: any, messages: any): string {
-        if (item.hasOwnProperty('message')) return item.message || '';
-        if (item.hasOwnProperty('messageName') && messages.hasOwnProperty(item.messageName)) return messages[item.messageName] || '';
-        if (messages.hasOwnProperty(item.type)) return messages[item.type] || '';
+        if (item.hasOwnProperty('message')) { return item.message || ''; }
+        if (item.hasOwnProperty('messageName') && messages.hasOwnProperty(item.messageName)) { return messages[item.messageName] || ''; }
+        if (messages.hasOwnProperty(item.type)) { return messages[item.type] || ''; }
 
         this.errorHandlingService.handleWarning(`No message found for validation type: ${item.type}`);
         return '';
     }
 
     private resolveValue(value: any, globalFunctions: any): any {
-        
+
         if (typeof value === 'function') {
             return value();
         }
@@ -321,7 +336,7 @@ export class TemplateService {
     }
 
     private getPopulateAction(populateAction: any, globalFunctions: any): any {
-        if (!populateAction) return null;
+        if (!populateAction) { return null; }
 
         if (populateAction.populateBinding) {
             populateAction.populateBinding = this.getBinding(populateAction.populateBinding, globalFunctions);

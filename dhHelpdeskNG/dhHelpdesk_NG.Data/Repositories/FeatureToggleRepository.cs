@@ -1,11 +1,6 @@
-﻿using DH.Helpdesk.Dal.Dal;
-using DH.Helpdesk.Dal.Infrastructure;
+﻿using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Domain;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -14,15 +9,15 @@ namespace DH.Helpdesk.Dal.Repositories
 		FeatureToggle GetByStrongName(string strongName);
 	}
 
-	public class FeatureToggleRepository : Repository<FeatureToggle>, IFeatureToggleRepository
+	public class FeatureToggleRepository : RepositoryBase<FeatureToggle>, IFeatureToggleRepository
 	{
 		public FeatureToggleRepository(IDatabaseFactory databaseFactory) : base(databaseFactory)
 		{
-
 		}
+
 		public FeatureToggle GetByStrongName(string strongName)
 		{
-			var featureToogle = this.DbSet.SingleOrDefault(o => o.StrongName == strongName);
+			var featureToogle = Table.SingleOrDefault(o => o.StrongName == strongName);
 			return featureToogle;
 		}
 	}

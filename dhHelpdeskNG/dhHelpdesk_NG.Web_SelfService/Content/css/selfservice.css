@@ -91,6 +91,44 @@ h5 {
         display: inline-block;
     }
 
+.loading-msg {
+    display: block;
+    background-color: #f9f9f9;
+    border: 1px solid #dddddd;
+    border-top: none;
+    opacity: 0.75;
+    top: 0px;
+    bottom: 10px;
+    left: 0px;
+    right: 0px;
+    position: absolute;
+    color: gray;
+    padding: 10px;
+}
+
+.loading-msg .content-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.loading-msg .loader {
+    position: absolute;
+    width: 170px;
+    height: 70px;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    background: url('/content/img/ajax-loader.gif') no-repeat 98px;
+    -ms-border-radius: 3px;
+    border-radius: 3px;
+    line-height: 3;
+}
+
 @media (min-width: 768px) {
   .navbar {
     border-radius: 0px;
@@ -561,6 +599,7 @@ a.error, input[type=¨button].error .btn
 .jumbotron .container {
   max-width: 100%;
 }
+
 @media screen and (min-width: 768px) {
   .jumbotron {
     padding-top: 48px;
@@ -576,13 +615,51 @@ a.error, input[type=¨button].error .btn
   }
 }
 
+
+
+
+.dropdown-submenu { position: relative; }
+.dropdown-submenu.pull-left { float:none; }
+
 /*****DROP DOWN SUB MENUS*/
-.dropdown-submenu{position:relative;}
-.dropdown-submenu>.dropdown-menu{top:0;left:100%;margin-top:-6px;margin-left:-1px;-webkit-border-radius:0 6px 6px 6px;-moz-border-radius:0 6px 6px 6px;border-radius:0 6px 6px 6px;}
-.dropdown-submenu:hover>.dropdown-menu{display:block;}
-.dropdown-submenu>a:after{display:block;content:" ";float:right;width:0;height:0;border-color:transparent;border-style:solid;border-width:5px 0 5px 5px;border-left-color:#cccccc;margin-top:5px;margin-right:-10px;}
-.dropdown-submenu:hover>a:after{border-left-color:#ffffff;}
-.dropdown-submenu.pull-left{float:none;}.dropdown-submenu.pull-left>.dropdown-menu{left:-100%;margin-left:10px;-webkit-border-radius:6px 0 6px 6px;-moz-border-radius:6px 0 6px 6px;border-radius:6px 0 6px 6px;}
+
+@media screen and (min-width: 768px) {
+    .dropdown-submenu > .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -6px;
+        margin-left: -1px;
+        -webkit-border-radius: 0 6px 6px 6px;
+        -moz-border-radius: 0 6px 6px 6px;
+        border-radius: 0 6px 6px 6px;
+    }
+
+    .dropdown-submenu:hover > .dropdown-menu { display: block; }
+
+    .dropdown-submenu > a:after {
+        display: block;
+        content: " ";
+        float: right;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 5px 0 5px 5px;
+        border-left-color: #cccccc;
+        margin-top: 5px;
+        margin-right: -10px;
+    }
+
+    .dropdown-submenu:hover > a:after { border-left-color: #ffffff; }
+
+    .dropdown-submenu.pull-left > .dropdown-menu {
+        left: -100%;
+        margin-left: 10px;
+        -webkit-border-radius: 6px 0 6px 6px;
+        -moz-border-radius: 6px 0 6px 6px;
+        border-radius: 6px 0 6px 6px;
+    }
+}
 
 /***COMMUNICATE****/
 
@@ -909,6 +986,38 @@ a.error, input[type=¨button].error .btn
     color:#333;
 }
 
+.case-popup-div {
+    min-height: 80px;
+    width: 100% !important;
+    margin: 0 auto;
+}
+
+.case-send-emails-div {
+    overflow: auto;
+    padding: 2px;
+    resize: both;
+    text-align: left;
+    display: inline-block;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    word-wrap: break-word;
+}
+
+.case-email-selected {
+    border: 1px solid #cccccc;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin: 2px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background-color: #e6e6e6;
+    display: inline;
+    line-height: 20px;
+}
 
 .case-div-width90em {
     width: 90em;
@@ -934,6 +1043,9 @@ a.error, input[type=¨button].error .btn
     
    float: right;
 }
+
+.no-left-padding { padding-left:0px!important}
+.caseControlPanel { padding-left: 15px!important; }
 
 .width100 {
     width: 100%!important;
@@ -1109,4 +1221,8 @@ div .multitext i {
     color: #000;   
     text-decoration: none;
     outline: 0;
+}
+
+.start-page .panel-body, .start-page .panel-heading {
+    overflow-wrap: break-word;
 }

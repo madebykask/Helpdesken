@@ -1,0 +1,23 @@
+<ng-container [formGroup]="form">
+    <div class="mbsc-grid mbsc-no-padding formcontent">
+      <div class="mbsc-row">
+        <div class="mbsc-col">
+          <mbsc-textarea id="{{ field }}" #searchInput 
+              (change)='onTextChanged($event)'
+              [ngClass]="{ 'searchInput': true, 'disabled': isFormControlDisabled }"
+              [formControlName]="field">{{ formControl.label }}{{ requiredSymbol }}</mbsc-textarea>
+        </div>
+        <div class="mbsc-col-1">
+          <mbsc-button *ngIf="!searchInput.disabled" 
+                      flat icon="fa-search" class="input-icon"
+                      (click)="select.instance.show()"></mbsc-button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  
+  <mbsc-select *ngIf="!searchInput.disabled"
+               #select
+               [options]="selectOptions"
+               [data]="selectDataItems"></mbsc-select>
+  

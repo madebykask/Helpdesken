@@ -22,8 +22,12 @@ namespace DH.Helpdesk.Services.Services.Cache
 
         #region ctor()
 
-        public TranslateCacheService(ICacheService cacheService, ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository,
-            ITextRepository textRepository, ITextTranslationRepository textTranslationRepository, ITextTypeRepository textTypeRepository)
+        public TranslateCacheService(
+            ICacheService cacheService, 
+            ICaseFieldSettingLanguageRepository caseFieldSettingLanguageRepository,
+            ITextRepository textRepository, 
+            ITextTranslationRepository textTranslationRepository, 
+            ITextTypeRepository textTypeRepository)
         {
             _textTypeRepository = textTypeRepository;
             _cacheService = cacheService;

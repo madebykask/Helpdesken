@@ -70,6 +70,8 @@
         public bool ShowCaseActionsPanelOnTop { get; set; }
         public bool ShowCaseActionsPanelAtBottom { get; set; }
 
+		public string TimeZoneId { get; set; }
+
         public virtual Language Language { get; set; }
         public virtual ICollection<Application> Applications { get; set; }
         public virtual ICollection<Case> Cases { get; set; }

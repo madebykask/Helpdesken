@@ -5,13 +5,13 @@ import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrap
   selector: 'image-file-viewer',
   template: `
       <img #img [src]="blobUrl | sanitize:'url'" style="max-width:100%;max-height:100%" border="0" />
-  `  
+  `
 })
 export class ImageFileViewerComponent implements OnInit {
 
-  @Input() fileName:string;
-  @Input() fileData:Blob;
-  
+  @Input() fileName: string;
+  @Input() fileData: Blob;
+
   blobUrl: Blob;
 
   constructor(private windowWrapper: WindowWrapper) {

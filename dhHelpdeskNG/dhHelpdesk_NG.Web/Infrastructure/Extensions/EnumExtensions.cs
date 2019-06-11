@@ -73,7 +73,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return htmlHelper.DropDownListFor(expression, items, optionLabel);
         }
 
-		public static string GetDisplayName(this Enum e)
+        public static string GetName<TEnum>(this TEnum value) where TEnum: struct
+        {
+            return Enum.GetName(typeof(TEnum), value);
+        }
+
+        public static string GetDisplayName(this Enum e)
 		{
 			var type = e.GetType();
 			return GetDisplayName(type, e);

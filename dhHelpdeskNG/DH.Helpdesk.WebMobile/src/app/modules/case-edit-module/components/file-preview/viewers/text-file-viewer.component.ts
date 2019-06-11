@@ -9,16 +9,16 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class TextFileViewerComponent implements OnInit {
 
-  @Input() fileName:string;
-  @Input() fileData:Blob;
-  
-  content:string;
-  
+  @Input() fileName: string;
+  @Input() fileData: Blob;
+
+  content: string;
+
   constructor() { }
 
   ngOnInit() {
     const fileReader = new FileReader();
-    fileReader.onload = () => { 
+    fileReader.onload = () => {
       this.content = fileReader.result.toString() || '';
     };
 

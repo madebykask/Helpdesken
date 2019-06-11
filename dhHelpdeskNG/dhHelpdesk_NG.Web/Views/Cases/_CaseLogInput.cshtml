@@ -335,7 +335,7 @@
                             @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ClosingReason, "Avslutsorsak")
                         </td>
                         <td>
-                            <div id="divFinishingType" class="btn-group">
+                            <div id="divFinishingType" class="btn-group dropdown-menu-parent">
                                 @{
                                     string disabled = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ClosingReason, CaseSolutionFields.FinishingCause);
                                     if (readonlyMode || (Model.IsItParentCase() && Model.IsAnyNotClosedChild(true)))
@@ -350,7 +350,7 @@
                                 <button class="btn dropdown-toggle" data-toggle="dropdown" @disabled>
                                     <span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu dropup">
+                                <ul class="dropdown-menu subddMenu parentddMenu" style="z-index:99999999999;">
                                     <li><a href="#">@Translation.Get("--")</a></li>
                                     @Html.FinishingCauseDropdownButtonString(Model.finishingCauses)
                                 </ul>

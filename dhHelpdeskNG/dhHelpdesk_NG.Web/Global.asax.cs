@@ -1,50 +1,42 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Configuration;
+using System.Diagnostics;
 using System.IdentityModel.Services;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Web.Http;
+using System.Threading;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
 using System.Web.Security;
+using DH.Helpdesk.BusinessData.Models.LogProgram;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Logger;
+using DH.Helpdesk.Dal.Infrastructure.Context;
+using DH.Helpdesk.Services.Exceptions;
+using DH.Helpdesk.Services.Infrastructure;
+using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Services.Services.Authentication;
+using DH.Helpdesk.Services.Services.Concrete;
+using DH.Helpdesk.Web.Controllers;
+using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Authentication;
+using DH.Helpdesk.Web.Infrastructure.Binders;
+using DH.Helpdesk.Web.Infrastructure.Configuration;
 using DH.Helpdesk.Web.Infrastructure.Configuration.Concrete;
-using DH.Helpdesk.Web.Infrastructure.Utilities;
+using DH.Helpdesk.Web.Infrastructure.Extensions;
+using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+using DH.Helpdesk.Web.Infrastructure.Logger;
+using DH.Helpdesk.Web.Models.Error;
+using Microsoft.Practices.ServiceLocation;
 
 namespace DH.Helpdesk.Web
 {
-    using System;
-    using System.Threading;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.Optimization;
-    using System.Web.Routing;
-
-    using DH.Helpdesk.Common.Logger;
-    using DH.Helpdesk.Dal.Infrastructure.Context;
-    using DH.Helpdesk.Services.Exceptions;
-    using DH.Helpdesk.Services.Infrastructure;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Controllers;
-    using DH.Helpdesk.Web.Infrastructure.Attributes;
-    using DH.Helpdesk.Web.Infrastructure.Binders;
-    using DH.Helpdesk.Web.Infrastructure.Configuration;
-    using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
-    using DH.Helpdesk.Web.Infrastructure.Logger;
-
-    using Microsoft.Practices.ServiceLocation;
-    using System.Diagnostics;
-    using Infrastructure;
-    using Services.Services.Concrete;
-    using BusinessData.Models.LogProgram;
-    using System.Collections.Concurrent;
-
     public class MvcApplication : HttpApplication
     {
-        private readonly IConfiguration configuration = ManualDependencyResolver.Get<IConfiguration>();
-        private readonly IGlobalSettingService globalSettingsService = ManualDependencyResolver.Get<IGlobalSettingService>();
+        private readonly IConfiguration _configuration = ManualDependencyResolver.Get<IConfiguration>();
+        private readonly IGlobalSettingService _globalSettingsService = ManualDependencyResolver.Get<IGlobalSettingService>();
 
         protected void Application_Start()
         {
@@ -107,50 +99,18 @@ namespace DH.Helpdesk.Web
             ViewEngines.Engines.Add(viewEngine);
         }
 
-        protected void Application_PostAuthorizeRequest()
-        {
-            //MARK: Remove old Api
-            //if (IsWebApiRequest())
-            //{
-            //	HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
-            //}
-        }
-
-        //MARK: Remove old Api
-        //private bool IsWebApiRequest()
-        //{
-        //	return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.Contains(@"/" + WebApiConfig.UrlPrefixRelative + @"/");
-        //}        
-
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this.configuration.Application.DefaultCulture;
+            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = this._configuration.Application.DefaultCulture;
             LogSession("Application.BeginRequest.", Context);
-        }
-
-        protected void Application_EndRequest(object sender, EventArgs e)
-        {
-            LogSession($"Application.EndRequest. Status: {Response.Status}, StatusCode: {Response.StatusCode}, RedirectLocation: {Response.RedirectLocation}", Context);
         }
 
         #region Authentication Events 
 
-        protected void WindowsAuthentication_OnAuthenticate(object sender, WindowsAuthenticationEventArgs args)
-        {
-            var identity = args.Identity;
-            LogSession($">>>WindowsAuthentication.OnAuthentication event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, IsAnonymous: {identity?.IsAnonymous ?? false}", Context);
-        }
-
-        protected void FormsAuthentication_OnAuthenticate(object sender, FormsAuthenticationEventArgs args)
-        {
-            var identity = args.User?.Identity;
-            LogSession($">>>FormsAuthentication.OnAuthenticate event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
-        }
-
         protected void Application_PostAuthenticateRequest(object sender, EventArgs args)
         {
             var identity = Context.User?.Identity;
-            LogSession($">>>Application.PostAuthenticateRequest event. Idenitty: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
+            LogSession($"Application.PostAuthenticateRequest event. Identity: {identity?.Name}, Authenticated: {identity?.IsAuthenticated ?? false}, AuthType: {identity?.AuthenticationType}", Context);
         }
 
         #endregion
@@ -288,26 +248,23 @@ namespace DH.Helpdesk.Web
 
         #endregion
 
+        protected void Application_EndRequest(object sender, EventArgs e)
+        {
+            var configuration = new ApplicationConfiguration();
+            LogSession("Application.EndRequest: \r\n" +
+                       $"\t-LoginMode: {configuration.LoginMode.GetName()}\r\n " +
+                       $"\t-Status: {Response.Status}\r\n" +
+                       $"\t-StatusCode: {Response.StatusCode}\r\n" +
+                       $"\t-RedirectLocation: {Response.RedirectLocation}\r\n", Context);
+        }
+
         protected void Application_Error(object sender, EventArgs e)
         {
             var httpContext = ((MvcApplication)sender).Context;
 
             var currentRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
-            var currentController = " ";
-            var currentAction = " ";
-
-            if (currentRouteData != null)
-            {
-                if (currentRouteData.Values["controller"] != null && !string.IsNullOrEmpty(currentRouteData.Values["controller"].ToString()))
-                {
-                    currentController = currentRouteData.Values["controller"].ToString();
-                }
-
-                if (currentRouteData.Values["action"] != null && !string.IsNullOrEmpty(currentRouteData.Values["action"].ToString()))
-                {
-                    currentAction = currentRouteData.Values["action"].ToString();
-                }
-            }
+            var currentController = currentRouteData.GetControllerName();
+            var currentAction = currentRouteData.GetActionName();
 
             var ex = Server.GetLastError();
 
@@ -352,10 +309,11 @@ namespace DH.Helpdesk.Web
             httpContext.Response.Clear();
             httpContext.Response.StatusCode = ex is HttpException ? ((HttpException)ex).GetHttpCode() : 500;
             httpContext.Response.TrySkipIisCustomErrors = true;
-            routeData.Values["controller"] = "Error";
-            routeData.Values["action"] = action;
 
-            controller.ViewData.Model = new DH.Helpdesk.Web.Models.Error.HandleErrorInfoGuid(ex, currentController, currentAction, guid);
+            routeData.SetControllerValue("Error");
+            routeData.SetActionValue(action);
+
+            controller.ViewData.Model = new HandleErrorInfoGuid(ex, currentController, currentAction, guid);
             ((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
         }
 
@@ -416,7 +374,7 @@ namespace DH.Helpdesk.Web
             var request = ctx.Request;
             var identity = ctx.User?.Identity;
             var isAuthenticated = identity?.IsAuthenticated ?? false;
-            var contextInfo = $"Authenticated: {isAuthenticated}, User: {identity?.Name}, Request: {request.Url}";
+            var contextInfo = $"; Context: [Authenticated: {isAuthenticated}, User: {identity?.Name}, Request: {request.Url}]";
 
             var logger = LogManager.Session;
             logger.Debug($"{msg} {contextInfo}");
@@ -459,10 +417,9 @@ namespace DH.Helpdesk.Web
 
         #endregion
 
-
-
         protected void Application_AcquireRequestState(object sender, EventArgs e)
         {
+            //TODO: move diagnostics logic to separate Facility class
             try
             {
                 // PREV DEV; POST EACH TIME A REQUEST IS MADE???
@@ -470,8 +427,6 @@ namespace DH.Helpdesk.Web
                 //var contextBase = new HttpContextWrapper(Context);
                 //DependencyResolver.Current.GetService<ICaseDiagnosticService>().MakeTestSnapShot(contextBase);
                 //LogSession($"Application.AcquireRequestState called. IsCaseDataChanged: {SessionFacade.IsCaseDataChanged}", Context);
-
-
 
                 var session = HttpContext.Current.Session;
 
@@ -482,6 +437,7 @@ namespace DH.Helpdesk.Web
                     {
                         SetPerformanceLogSettings();
                     }
+
                     if (ApplicationFacade.IsPerformanceLogActive())
                     {
                         int freq = ApplicationFacade.GetPerformanceLogFrequency();
@@ -594,7 +550,7 @@ namespace DH.Helpdesk.Web
 
         private void SetPerformanceLogSettings()
         {
-            var settings = globalSettingsService.GetGlobalSettings();
+            var settings = _globalSettingsService.GetGlobalSettings();
             ApplicationFacade.SetPerformanceLogActive(settings[0].PerformanceLogActive);
             ApplicationFacade.SetPerformanceLogFrequency(settings[0].PerformanceLogFrequency);
             ApplicationFacade.SetPerformanceLogSettingsCache(settings[0].PerformanceLogSettingsCache);

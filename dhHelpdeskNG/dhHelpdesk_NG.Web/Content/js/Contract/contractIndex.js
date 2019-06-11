@@ -92,6 +92,7 @@ function createContractsPage(JQuery) {
                 Categories: $('#lstContractCategories').val(),
                 Suppliers: $('#lstSuppliers').val(),
                 ResponsibleUsers: $('#lstResponsible').val(),
+                ResponsibleFollowUpUsers: $('#lstResponsibleFollowUpUsers').val(),
                 Departments: $('#lstDepartment').val(),
                 ShowContracts: $('#lstShow').val(),
 

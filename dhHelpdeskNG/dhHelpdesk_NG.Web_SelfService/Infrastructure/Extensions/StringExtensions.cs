@@ -358,7 +358,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             if (lowerStr.IndexOf("[#10]") > 0 && SessionFacade.CurrentUserIdentity != null)
             {
                 res = Regex.Replace(res, @"\[#10\]", 
-                                    SessionFacade.CurrentUserIdentity.Domain == null? string.Empty:SessionFacade.CurrentUserIdentity.Domain, 
+                                    SessionFacade.CurrentUserIdentity.Domain == null? string.Empty : SessionFacade.CurrentUserIdentity.Domain, 
                                     RegexOptions.IgnoreCase);
                 lowerStr = res.ToLower();
             }
@@ -367,7 +367,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             if (lowerStr.IndexOf("[#11]") > 0 && SessionFacade.CurrentUserIdentity != null)
             {
                 res = Regex.Replace(res, @"\[#11\]", 
-                                    SessionFacade.CurrentUserIdentity.EmployeeNumber == null? string.Empty:SessionFacade.CurrentUserIdentity.EmployeeNumber, 
+                                    SessionFacade.CurrentUserIdentity.EmployeeNumber == null? string.Empty : SessionFacade.CurrentUserIdentity.EmployeeNumber, 
                                     RegexOptions.IgnoreCase);
                 lowerStr = res.ToLower();
             }
@@ -439,99 +439,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
                 return MvcHtmlString.Create(str);
             }
 
-            return MvcHtmlString.Create(str.Replace(Environment.NewLine, "<br />"));
+            return MvcHtmlString.Create(str.Replace(Environment.NewLine, "<br />")
+                .Replace("\n", "<br />"));
         }
-
-        public static string AddCharacterInParts(this string s, int partLength, string charToSearch, string replaceStr)
-        {
-            if (string.IsNullOrEmpty(s))
-                return string.Empty;
-
-            if (partLength <= 0)
-                throw new ArgumentException("Part length has to be positive.", "partLength");
-
-            if (s.Length <= partLength)
-                return s;
-
-            var newStr = "";
-            var arryStr = s.Split(new string[] { replaceStr }, StringSplitOptions.RemoveEmptyEntries);
-            for (var i = 0; i < arryStr.Length; i++)
-            {
-                if (arryStr[i].Length > partLength)
-                {
-                    var splitedStr = arryStr[i].SplitInParts(partLength).ToList();
-                    var linesStr = "";
-                    var lastCarryPart = "";
-                    var extraStr = "";
-                    splitedStr.Add(" ");
-                    splitedStr.Add(" ");
-                    foreach (var part in splitedStr)
-                    {
-                        var partProcess = lastCarryPart + part;
-                        lastCarryPart = "";
-                        if (!partProcess.Contains(charToSearch) && partProcess.Length > partLength - 1)
-                        {
-                            var _splitedStr = partProcess.SplitInParts(partLength);
-                            var newLongStr = _splitedStr.First();
-
-                            extraStr = "";
-                            var replaceIndex = 0;
-                            replaceIndex = newLongStr.LastIndexOf(" ") > replaceIndex ? newLongStr.LastIndexOf(" ") : replaceIndex;
-                            replaceIndex = newLongStr.LastIndexOf(".") > replaceIndex ? newLongStr.LastIndexOf(".") : replaceIndex;
-                            replaceIndex = newLongStr.LastIndexOf(",") > replaceIndex ? newLongStr.LastIndexOf(",") : replaceIndex;
-                            replaceIndex = newLongStr.LastIndexOf(";") > replaceIndex ? newLongStr.LastIndexOf(";") : replaceIndex;
-                            replaceIndex = newLongStr.LastIndexOf("?") > replaceIndex ? newLongStr.LastIndexOf("?") : replaceIndex;
-                            replaceIndex = newLongStr.LastIndexOf("!") > replaceIndex ? newLongStr.LastIndexOf("!") : replaceIndex;
-                            replaceIndex = newLongStr.LastIndexOf("(") > replaceIndex ? newLongStr.LastIndexOf("(") : replaceIndex;
-                            replaceIndex = newLongStr.LastIndexOf(")") > replaceIndex ? newLongStr.LastIndexOf(")") : replaceIndex;
-                            replaceIndex = newLongStr.LastIndexOf("-") > replaceIndex ? newLongStr.LastIndexOf("-") : replaceIndex;
-
-                            var isFirst = true;
-                            foreach (var _part in _splitedStr)
-                                if (isFirst)
-                                    isFirst = false;
-                                else
-                                    lastCarryPart += _part;
-
-                            var _str = string.Empty;
-                            if (replaceIndex == 0)
-                            {
-                                extraStr = "-";
-                                _str = newLongStr + extraStr;
-                                linesStr += _str + replaceStr;
-                            }
-                            else
-                            {
-                                var baseIndex = replaceIndex + 1;
-                                _str = newLongStr.Substring(0, baseIndex);
-                                lastCarryPart = newLongStr.Substring(baseIndex) + lastCarryPart;
-                                linesStr += _str.Insert(baseIndex, replaceStr) + extraStr;
-                            }
-                        }
-                        else
-                            linesStr += partProcess;
-                    }
-                    newStr = newStr + linesStr + lastCarryPart + replaceStr;
-                }
-                else
-                {
-                    newStr = newStr + arryStr[i] + replaceStr;
-                }
-            }
-
-            return newStr;
-        }
-
-        public static IEnumerable<String> SplitInParts(this String s, Int32 partLength)
-        {
-            if (s == null)
-                throw new ArgumentNullException("s");
-            if (partLength <= 0)
-                throw new ArgumentException("Part length has to be positive.", "partLength");
-
-            for (var i = 0; i < s.Length; i += partLength)
-                yield return s.Substring(i, Math.Min(partLength, s.Length - i));
-        }
-
     }
 }

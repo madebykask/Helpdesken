@@ -13,7 +13,12 @@ import { AppStore, AppStoreKeys } from 'src/app/store/app-store';
   styleUrls: ['./case-template.component.scss']
 })
 export class CaseTemplateComponent implements OnInit, OnDestroy {
-  
+
+  constructor(private userSettingsService: UserSettingsApiService,
+    private router: Router,
+    private appStore: AppStore) {
+  }
+
   @ViewChild('templatesListView') templatesList: MbscListview;
 
   templatesListSettings: MbscListviewOptions = {
@@ -22,22 +27,17 @@ export class CaseTemplateComponent implements OnInit, OnDestroy {
   };
 
   canCreateCases$ = new BehaviorSubject<boolean>(false);
-  templateNodes = []; 
-  
+  templateNodes = [];
+
+  private destroy$ = new Subject<any>();
+
   isCategory(node) {
     return node && node instanceof CaseTemplateCategoryNode;
   }
 
-  private destroy$ = new Subject<any>();
-
-  constructor(private userSettingsService: UserSettingsApiService,
-    private router: Router,
-    private appStore: AppStore) {
-  }
-
   ngOnInit() {
    if (this.userSettingsService.getUserData().createCasePermission) {
-     //load templates from app store - templates are loaded in the footer component first
+      //load templates from app store - templates are loaded in the footer component first
       this.appStore.select<CaseTemplateModel[]>(AppStoreKeys.Templates).pipe(
         takeUntil(this.destroy$)
       ).subscribe((items: CaseTemplateModel[]) => {
@@ -57,14 +57,13 @@ export class CaseTemplateComponent implements OnInit, OnDestroy {
         const templateNode = new CaseTemplateNode(t.id, t.name);
         if (categoryId === 0) {
           templateNodes.push(templateNode);
-        }
-        else {
+        } else {
           let group = categoryNodes.find(x => x.id === categoryId);
           if (group === null || group === undefined) {
             group = new CaseTemplateCategoryNode(categoryId, t.categoryName || '');
             categoryNodes.push(group);
           }
-          group.items.push(templateNode)
+          group.items.push(templateNode);
           group.items = this.sortByName(group.items);
         }
       });
@@ -73,11 +72,11 @@ export class CaseTemplateComponent implements OnInit, OnDestroy {
   }
 
   private sortByName(items: (CaseTemplateNode | CaseTemplateCategoryNode)[]) {
-    if (items === null || items === undefined) return;
+    if (items === null || items === undefined) { return; }
     return items.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  openTemplate(templateId:number) {
+  openTemplate(templateId: number) {
     this.router.navigate(['/case/template', templateId]);
   }
 
@@ -89,5 +88,4 @@ export class CaseTemplateComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
 }

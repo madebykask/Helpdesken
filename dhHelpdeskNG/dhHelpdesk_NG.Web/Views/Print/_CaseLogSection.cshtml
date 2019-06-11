@@ -8,11 +8,12 @@
                 <table style="table-layout: fixed; width: 100%;" border="0">
                     <tr>
                         <td style="width: 200px;font-size: 9px;">@Html.DisplayFor(m => log.LogDate, "DateAndTime"), <br/>@(log.User == null ? log.RegUser : log.User.FirstName + " " + log.User.SurName)</td>
-                        <td>@if (log.CaseHistory != null && log.CaseHistory.Emaillogs != null)
+                        <td>
+                            @if (log.EmailLogs != null && log.EmailLogs.Any())
                             {
-                                foreach (var l in log.CaseHistory.Emaillogs)
+                                foreach (var l in log.EmailLogs)
                                 {
-                                    <div style="font-size: 9px;">@l.EmailAddress</div>
+                                    <div style="font-size: 9px;">@l.Email</div>
                                 }
                             }
                         </td>

@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { LocalStorageService } from "src/app/services/local-storage";
-import { HttpApiServiceBase } from "src/app/modules/shared-module/services";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { LocalStorageService } from 'src/app/services/local-storage';
+import { HttpApiServiceBase } from 'src/app/modules/shared-module/services';
 
 @Injectable({ providedIn: 'root' })
 export class CaseWatchDateApiService extends HttpApiServiceBase {

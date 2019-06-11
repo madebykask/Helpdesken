@@ -335,13 +335,14 @@ namespace DH.Helpdesk.Dal.Repositories
                 else
                 {
                     columns.Add("coalesce(tblUsers.SurName, '') + ' ' + coalesce(tblUsers.FirstName, '') as Performer_User_Id");
-                    columns.Add("IsNull(tblCase.RegUserName, coalesce(tblUsers2.Surname, '') + ' ' + coalesce(tblUsers2.Firstname, '')) as User_Id");
-                    columns.Add("coalesce(tblUsers3.Surname, '') + ' ' + coalesce(tblUsers3.Firstname, '') as CaseResponsibleUser_Id");
+                    columns.Add("IsNull(tblCase.RegUserName, coalesce(tblUsers2.SurName, '') + ' ' + coalesce(tblUsers2.FirstName, '')) as User_Id");
+                    columns.Add("coalesce(tblUsers3.SurName, '') + ' ' + coalesce(tblUsers3.FirstName, '') as CaseResponsibleUser_Id");
                 }
 
-                columns.Add("coalesce(tblUsers4.Surname, '') + ' ' + coalesce(tblUsers4.Firstname, '') as tblProblem_ResponsibleUser_Id");
+                columns.Add("coalesce(tblUsers4.SurName, '') + ' ' + coalesce(tblUsers4.FirstName, '') as tblProblem_ResponsibleUser_Id");
             }
 
+            columns.Add("tblProblem.ProblemName as Problem");
             columns.Add("tblStatus.StatusName as Status_Id");
             columns.Add("tblSupplier.Supplier as Supplier_Id");
 

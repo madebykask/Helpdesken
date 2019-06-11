@@ -34,16 +34,7 @@ namespace DH.Helpdesk.WebApi.Logic.Case
             var caption = FieldSettingsUiNames.Names[fieldName];
 
             var settingEx = caseFieldSettingsForTranslations.FirstOrDefault(x => x.Name.Equals(fieldName.Replace("tblLog_", "tblLog."), StringComparison.OrdinalIgnoreCase)  && x.Language_Id == languageId);
-            if (!string.IsNullOrWhiteSpace(settingEx?.Label))
-            {
-                caption = settingEx.Label;
-            }
-            else
-            {
-                //var instanceWord = Translation.GetInstanceWord(translate); // todo: check if required - see Translation.cs\CaseTranslation
-                //if (!string.IsNullOrEmpty(instanceWord))
-                caption = TranslateFieldLabel(languageId, caption);
-            }
+            caption = !string.IsNullOrWhiteSpace(settingEx?.Label) ? settingEx.Label : TranslateFieldLabel(languageId, caption);
 
             return caption;
         }

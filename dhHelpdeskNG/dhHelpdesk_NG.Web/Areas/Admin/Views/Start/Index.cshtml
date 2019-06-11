@@ -42,22 +42,27 @@
                     </div>
                 </div>
             </div>
-            <div class="box-box span4">
-                <div class="box-header light-blue">
-                    <h3>@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</h3>
-                </div>
-                <div class="box-body">
-                    <div class="box-post">
-                        <div style="text-align:center;">
-                            <p><img src="@Url.Content("~/Content/img/img-settings.png")" /></p>
-                            <hr />
-                            <p><a href="@Url.Action("index", "globalsetting", new { area = "admin", texttypeid = 0, textSearch = "", compareMethod = 1 })" class="btn btn-large">
-                                    @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</a></p>
+            @if (SessionFacade.CurrentUser.UserGroupId == 4)
+            {
+                <div class="box-box span4">
+                    <div class="box-header light-blue">
+                        <h3>@Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="box-post">
+                            <div style="text-align:center;">
+                                <p><img src="@Url.Content("~/Content/img/img-settings.png")" /></p>
+                                <hr />
+                                <p>
+                                    <a href="@Url.Action("index", "globalsetting", new { area = "admin", texttypeid = 0, textSearch = "", compareMethod = 1 })" class="btn btn-large">
+                                        @Translation.Get("Inställningar", Enums.TranslationSource.TextTranslation)
+                                    </a>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
+            }
         </div>
     </div>
 </div>

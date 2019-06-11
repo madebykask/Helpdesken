@@ -1,16 +1,17 @@
-import { LogFile } from "./case-actions-api.model";
-import { UuidGenerator } from "src/app/modules/shared-module/utils/uuid-generator";
+import { LogFile, Mail2Ticket } from './case-actions-api.model';
+import { UuidGenerator } from 'src/app/modules/shared-module/utils/uuid-generator';
+import { CaseEventType } from '../../constants/case-event-type';
 
 // Case Action Data classes
 export type CaseActionDataType = CaseHistoryActionData | CaseLogActionData | GenericActionData;
 
 // Case Action Group
 export class CaseActionsGroup {
-    id:string;
+    id: string;
     constructor(public createdBy: string,
                 public createdAt: Date) {
       this.id = UuidGenerator.createUuid();
-    } 
+    }
 
     Actions: Array<CaseAction<CaseActionDataType>>;
 
@@ -31,10 +32,16 @@ export class CaseActionsGroup {
 
 // Case Action
 export class CaseAction<TData extends CaseActionDataType> {
+    private _id: string;
+
     constructor() {
-      this.id = UuidGenerator.createUuid();
+      this._id = UuidGenerator.createUuid();
     }
-    id: string;
+
+    get id(): string {
+      return this._id;
+    }
+
     type: CaseEventType;
     createdAt: Date;
     createdBy: string;
@@ -53,27 +60,16 @@ export class CaseHistoryActionData {
 
 // Case Log Note Data
 export class CaseLogActionData {
-  constructor(public text:string, public files?: LogFile[]) {
-  } 
+  constructor(public text: string,
+    public emails: string[],
+    public files?: LogFile[],
+    public mail2Tickets?: Mail2Ticket[]) {
+  }
 }
 
 // Generic Action data
 export class GenericActionData {
-  constructor(public text:string, public action?:string) {
+  constructor(public text: string, public action?: string) {
   }
 }
 
-// CaseEventType enum
-export enum CaseEventType {
-  ExternalLogNote = 1,
-  InternalLogNote = 2,
-  ClosedCase = 3,
-  AssignedAdministrator = 4,
-  AssignedWorkingGroup = 5, 
-  ChangeSubstatus = 6,
-  ChangeWatchDate = 7,
-  ChangePriority = 8,
-  UploadLogFile = 9,
-  SentEmails = 10,
-  OtherChanges = 11 
-}

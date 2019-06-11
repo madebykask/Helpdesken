@@ -10,6 +10,9 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         IUserIdentity UserIdentity { get; }
         void SetUserIdentity(UserIdentity userIdentity);
 
+        void SetCurrentLanguageId(int languageId);
+        void SetCurrentLanguageCode(string languageCode);
+
         LoginMode LoginMode { get; }
         void SetLoginMode(LoginMode mode);
 
@@ -36,6 +39,16 @@ namespace DH.Helpdesk.Web.Infrastructure.WorkContext.Concrete
         public LoginMode LoginMode
         {
             get { return SessionFacade.CurrentLoginMode; }
+        }
+
+        public void SetCurrentLanguageId(int languageId)
+        {
+            SessionFacade.CurrentLanguageId = languageId;
+        }
+
+        public void SetCurrentLanguageCode(string languageCode)
+        {
+            SessionFacade.CurrentLanguageCode = languageCode;
         }
 
         public void SetLoginMode(LoginMode mode)

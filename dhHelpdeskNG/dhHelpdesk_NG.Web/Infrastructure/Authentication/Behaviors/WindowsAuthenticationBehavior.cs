@@ -1,6 +1,6 @@
 ﻿using System.Security.Principal;
 using System.Web;
-using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+using System.Web.Security;
 using DH.Helpdesk.Common.Types;
 
 namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
@@ -10,26 +10,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
         public UserIdentity CreateUserIdentity(HttpContextBase ctx)
         {
             UserIdentity userIdentity = null;
-            var windowsPrincipal = ctx.User as WindowsPrincipal;
-
-            if (windowsPrincipal != null)
+            var windowsIdentity = ctx.User.Identity as WindowsIdentity;
+            if (windowsIdentity != null)
             {
-                var fullName = windowsPrincipal.Identity.Name;
-                var userId = fullName.GetUserFromAdPath();
-
-                var userDomain = fullName.GetDomainFromAdPath();
-                
-                //var initiator = _notifierRepository.GetInitiatorByUserId(userId, customerId, true);
-
-                userIdentity = new UserIdentity(userId)
-                {
-                    Domain = userDomain,
-                    //FirstName = initiator?.FirstName,
-                    //LastName = initiator?.LastName,
-                    //EmployeeNumber = string.Empty,
-                    //Phone = initiator?.Phone,
-                    //Email = initiator?.Email
-                };
+                userIdentity = windowsIdentity.CreateHelpdeskUserIdentity();
             }
 
             return userIdentity;
@@ -37,11 +21,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication.Behaviors
 
         public void SignOut(HttpContextBase ctx)
         {
+            // in windows mode a user can use login page to login with helpdesk credentials
+            FormsAuthentication.SignOut();
         }
 
         public string GetLoginUrl()
         {
-            return string.Empty;
+            return "/"; // for windows mode - redirect to any secured page so that a windows login would should up. Login page is not secured - anonymous;
         }
     }
 }

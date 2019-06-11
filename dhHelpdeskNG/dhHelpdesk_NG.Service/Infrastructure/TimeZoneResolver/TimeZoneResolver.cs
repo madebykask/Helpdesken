@@ -1,10 +1,9 @@
-﻿namespace DH.Helpdesk.Services.Infrastructure.TimeZoneResolver
+﻿using System;
+using System.Linq;
+using DH.Helpdesk.BusinessData.Enums.Users;
+
+namespace DH.Helpdesk.Services.Infrastructure.TimeZoneResolver
 {
-    using System;
-    using System.Linq;
-
-    using DH.Helpdesk.BusinessData.Enums.Users;
-
     public class TimeZoneResolver
     {
         public static TimeZoneAutodetectResult DetectTimeZone(int Jan1TimeZoneOffset, int Jul1TimeZoneOffset, out TimeZoneInfo[] detectedTimeZones)
@@ -16,7 +15,7 @@
 
             if (Jan1TimeZoneOffset == Jul1TimeZoneOffset)
             {
-                /// no daylightsaving
+                // no daylightsaving
                 detectedTimeZones =
                     TimeZoneInfo.GetSystemTimeZones()
                         .Where(tz => tz.BaseUtcOffset.TotalMinutes == baseCompareOffset)
@@ -26,9 +25,7 @@
             {
                 detectedTimeZones =
                     TimeZoneInfo.GetSystemTimeZones()
-                        .Where(
-                            tz =>
-                            tz.BaseUtcOffset.TotalMinutes == baseCompareOffset && tz.SupportsDaylightSavingTime)
+                        .Where(tz => tz.BaseUtcOffset.TotalMinutes == baseCompareOffset && tz.SupportsDaylightSavingTime)
                         .ToArray();
             }
 

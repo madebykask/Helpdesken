@@ -1,66 +1,58 @@
-﻿using DH.Helpdesk.Web.Common.Tools.Files;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Mvc;
+
+using DH.Helpdesk.BusinessData.Enums;
+using DH.Helpdesk.Web.Common.Tools.Files;
+using DH.Helpdesk.BusinessData.Enums.Admin.Users;
+using DH.Helpdesk.BusinessData.Models.Faq.Input;
+using DH.Helpdesk.BusinessData.Models.Faq.Output;
+using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Dal.Enums;
+using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Dal.Repositories.Faq;
+using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
+using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
+using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.Web.Infrastructure;
+using DH.Helpdesk.Web.Infrastructure.ActionFilters;
+using DH.Helpdesk.Web.Infrastructure.Attributes;
+using DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq;
+using DH.Helpdesk.Web.Models.Faq.Input;
+using DH.Helpdesk.Web.Models.Faq.Output;
+
+using NewFaq = DH.Helpdesk.Services.BusinessModels.Faq.NewFaq;
+using NewFaqFile = DH.Helpdesk.BusinessData.Models.Faq.Input.NewFaqFile;
 
 namespace DH.Helpdesk.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Web;
-    using System.Web.Mvc;
-
-    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
-    using DH.Helpdesk.BusinessData.Models.Faq.Input;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.Common.Tools;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Repositories.Faq;
-    using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
-    using DH.Helpdesk.Services.BusinessLogic.Mappers.Users;
-    using DH.Helpdesk.Services.Services;
-    using DH.Helpdesk.Web.Infrastructure;
-    using DH.Helpdesk.Web.Infrastructure.ActionFilters;
-    using DH.Helpdesk.Web.Infrastructure.Attributes;
-    using DH.Helpdesk.Web.Infrastructure.ModelFactories.Faq;
-    using DH.Helpdesk.Web.Infrastructure.Tools;
-    using DH.Helpdesk.Web.Models.Faq.Input;
-    using DH.Helpdesk.Web.Models.Faq.Output;
-
-    using NewFaq = DH.Helpdesk.Services.BusinessModels.Faq.NewFaq;
-    using NewFaqFile = DH.Helpdesk.BusinessData.Models.Faq.Input.NewFaqFile;
-
     public sealed class FaqController : BaseController
     {
         #region Fields
 
-        private readonly IEditFaqModelFactory editFaqModelFactory;
-
-        private readonly IFaqCategoryRepository faqCategoryRepository;
-
-        private readonly IFaqFileRepository faqFileRepository;
-
-        private readonly IFaqRepository faqRepository;
-
-        private readonly IFaqService faqService;
-
-        private readonly IIndexModelFactory indexModelFactory;
-
-        private readonly INewFaqModelFactory newFaqModelFactory;
-
-        private readonly ITemporaryFilesCache userTemporaryFilesStorage;
-
-        private readonly IWorkingGroupRepository workingGroupRepository;
-
-        private readonly IUserPermissionsChecker userPermissionsChecker;
-
-        private readonly IMasterDataService masterDataService;
-
+        private readonly IEditFaqModelFactory _editFaqModelFactory;
+        private readonly IFaqCategoryRepository _faqCategoryRepository;
+        private readonly IFaqFileRepository _faqFileRepository;
+        private readonly IFaqRepository _faqRepository;
+        private readonly IFaqService _faqService;
+        private readonly IIndexModelFactory _indexModelFactory;
+        private readonly INewFaqModelFactory _newFaqModelFactory;
+        private readonly ITemporaryFilesCache _userTemporaryFilesStorage;
+        private readonly IWorkingGroupRepository _workingGroupRepository;
+        private readonly IUserPermissionsChecker _userPermissionsChecker;
+        private readonly IMasterDataService _masterDataService;
         private readonly ILanguageService _languageService;
+
+        private const string DefaultSortField = "Text";
+        private const SortOrder DefaultSortOrder = SortOrder.Asc;
 
         #endregion
 
-        #region Public Methods and Operators
+        #region ctor
 
         public FaqController(
             IMasterDataService masterDataService,
@@ -77,237 +69,37 @@ namespace DH.Helpdesk.Web.Controllers
             IUserPermissionsChecker userPermissionsChecker)
             : base(masterDataService)
         {
-            this.masterDataService = masterDataService;
-            this.editFaqModelFactory = editFaqModelFactory;
-            this.faqCategoryRepository = faqCategoryRepository;
-            this.faqFileRepository = faqFileRepository;
-            this.faqRepository = faqRepository;
-            this.faqService = faqService;
-            this.indexModelFactory = indexModelFactory;
-            this.newFaqModelFactory = newFaqModelFactory;
-            this.workingGroupRepository = workingGroupRepository;
-            this.userPermissionsChecker = userPermissionsChecker;
-            this._languageService = languageService;
+            _masterDataService = masterDataService;
+            _editFaqModelFactory = editFaqModelFactory;
+            _faqCategoryRepository = faqCategoryRepository;
+            _faqFileRepository = faqFileRepository;
+            _faqRepository = faqRepository;
+            _faqService = faqService;
+            _indexModelFactory = indexModelFactory;
+            _newFaqModelFactory = newFaqModelFactory;
+            _workingGroupRepository = workingGroupRepository;
+            _userPermissionsChecker = userPermissionsChecker;
+            _languageService = languageService;
 
-            this.userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Faq);
+            _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Faq);
         }
 
-        [HttpPost]
-        [UserPermissions(UserPermission.FaqPermission)]
-        public void DeleteCategory(int id)
-        {
-            this.faqService.DeleteCategory(id);
-        }
+        #endregion
 
-        [HttpPost]
-        [UserPermissions(UserPermission.FaqPermission)]
-        public void DeleteFaq(int id)
-        {
-            this.faqService.DeleteFaq(id);
-        }
+        #region Index
 
-        [HttpPost]
-        [UserPermissions(UserPermission.FaqPermission)]
-        public void DeleteFile(string faqId, string fileName)
-        {
-            if (GuidHelper.IsGuid(faqId))
-            {
-                this.userTemporaryFilesStorage.DeleteFile(fileName, faqId);
-            }
-            else
-            {
-                this.faqFileRepository.DeleteByFaqIdAndFileName(int.Parse(faqId), fileName);
-                this.faqFileRepository.Commit();
-            }
-        }
-
-        [HttpGet]
-        public FileContentResult DownloadFile(string faqId, string fileName)
-        {            
-            byte[] fileContent;
-
-            if (GuidHelper.IsGuid(faqId))
-                fileContent = this.userTemporaryFilesStorage.GetFileContent(fileName, faqId);
-            else
-            {
-                var faq = this.faqService.FindById(int.Parse(faqId));
-                var basePath = string.Empty;
-                if (faq != null)
-                    basePath = masterDataService.GetFilePath(faq.CustomerId);
-
-                fileContent = this.faqFileRepository.GetFileContentByFaqIdAndFileName(int.Parse(faqId), basePath, fileName);
-            }
-
-            return this.File(fileContent, "application/octet-stream", fileName);
-        }
-
-        [HttpGet]
-        public ViewResult EditCategory(int id, int languageId)
-        {
-            var category = this.faqCategoryRepository.GetCategoryById(id, languageId);
-            if (category == null)
-            {
-                throw new HttpException((int)HttpStatusCode.NotFound, null);
-            }
-
-            var hasFaqs = this.faqRepository.AnyFaqWithCategoryId(id);
-            var hasSubcategories = this.faqCategoryRepository.CategoryHasSubcategories(id);
-
-            var languageOverviewsOrginal = _languageService.GetOverviews();
-            var languageOverviews =
-                languageOverviewsOrginal.Select(
-                    o =>
-                    new ItemOverview(Translation.GetCoreTextTranslation(o.Name),
-                        o.Value.ToString())).ToList();
-            var languageList = new SelectList(languageOverviews, "Value", "Name");
-
-            var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
-            var model = new EditCategoryModel(category.Id, category.Name, hasFaqs, hasSubcategories, userHasFaqAdminPermission, languageList);
-            return this.View(model);
-        }
-
-        [HttpPost]
-        [BadRequestOnNotValid]
-        [UserPermissions(UserPermission.FaqPermission)]
-        public RedirectToRouteResult EditCategory(EditCategoryInputModel model)
-        {
-            var editCategory = new EditCategory(model.Id, model.Name, model.LanguageId, DateTime.UtcNow);
-            faqService.UpdateCategory(editCategory);
-            return this.RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public ViewResult EditFaq(int id, int languageId, bool showDetails = false)
-        {
-            var faq = this.faqService.GetFaqById(id, languageId);
-            if (faq == null)
-            {
-                throw new HttpException((int)HttpStatusCode.NotFound, null);
-            }
-
-            var categoriesWithSubcategories = faqService.GetCategoriesWithSubcategoriesByCustomerId(SessionFacade.CurrentCustomer.Id, languageId);
-
-            var fileNames = this.faqFileRepository.FindFileNamesByFaqId(id);
-            List<ItemOverview> workingGroups;
-
-            if (faq.WorkingGroupId.HasValue)
-            {
-                workingGroups =
-                    this.workingGroupRepository.FindActiveByCustomerIdIncludingSpecifiedWorkingGroup(
-                        faq.CustomerId, faq.WorkingGroupId.Value).OrderBy(w => w.Name).ToList();
-            }
-            else
-            {
-                workingGroups = this.workingGroupRepository.FindActiveOverviews(faq.CustomerId).OrderBy(w=> w.Name).ToList();
-            }
-
-            var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
-
-            var languageOverviewsOrginal = _languageService.GetOverviews(true);
-            var languageOverviews =
-                languageOverviewsOrginal.Select(
-                    o =>
-                    new ItemOverview(Translation.GetCoreTextTranslation(o.Name),
-                        o.Value.ToString())).ToList();
-            var languageList = new SelectList(languageOverviews, "Value", "Name");
-
-            var model = this.editFaqModelFactory.Create(faq, categoriesWithSubcategories, fileNames, workingGroups, userHasFaqAdminPermission, languageList, languageId, showDetails);
-            ViewData["FN"] = GetFAQFileNames(faq.Id.ToString());
-
-            return this.View(model);
-        }
-
-        [HttpPost, ValidateInput(false)]
-        //[BadRequestOnNotValid]
-        [UserPermissions(UserPermission.FaqPermission)]
-        public RedirectToRouteResult EditFaq(EditFaqInputModel model)
-        {
-            var updatedFaq = new ExistingFaq(
-                model.Id,
-                model.CategoryId,
-                model.Question,
-                model.Answer,
-                model.InternalAnswer,
-                model.UrlOne,
-                model.UrlTwo,
-                model.WorkingGroupId,
-                model.InformationIsAvailableForNotifiers,
-                model.ShowOnStartPage,
-                DateTime.Now,
-                model.LanguageId);
-
-            this.faqService.UpdateFaq(updatedFaq);
-            return this.RedirectToAction("Index", new { showDetails = model.ShowDetails});
-        }
-
-        [HttpGet]
-        public JsonResult Faqs(int categoryId)
-        {
-            var faqOverviews = this.faqService.FindOverviewsByCategoryId(categoryId, SessionFacade.CurrentLanguageId);
-
-            var faqModels =
-                faqOverviews.Select(
-                    f => new FaqOverviewModel(f.Id, f.CreatedDate, f.Text)).ToList();
-
-            return this.Json(faqModels, JsonRequestBehavior.AllowGet);
-        }
-
-        
-        [HttpGet]
-        public JsonResult FaqsDetailed(int categoryId)
-        {
-            var faqDetailedOverviews = this.faqService.FindDetailedOverviewsByCategoryId(categoryId, SessionFacade.CurrentLanguageId);
-            var faqIds = faqDetailedOverviews.Select(f => f.Id).ToList();
-            var faqFiles = this.faqFileRepository.FindFileOverviewsByFaqIds(faqIds);
-            var faqModels = new List<FaqDetailedOverviewModel>(faqFiles.Count);
-
-            foreach (var faqDetailedOverview in faqDetailedOverviews)
-            {
-                var faqModel = new FaqDetailedOverviewModel(
-                    faqDetailedOverview.Id,
-                    faqDetailedOverview.CreatedDate,
-                    faqDetailedOverview.Text,
-                    faqDetailedOverview.Answer,
-                    faqDetailedOverview.InternalAnswer,
-                    faqFiles.Where(f => f.FaqId == faqDetailedOverview.Id).Select(f => f.Name).ToList(),
-                    faqDetailedOverview.UrlOne,
-                    faqDetailedOverview.UrlTwo);
-
-                faqModels.Add(faqModel);
-            }
-
-            return this.Json(faqModels, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        public ActionResult Files(string faqId)
-        {
-            var fileNames = GuidHelper.IsGuid(faqId)
-                                ? this.userTemporaryFilesStorage.FindFileNames(faqId)
-                                : this.faqFileRepository.FindFileNamesByFaqId(int.Parse(faqId));
-            var model = new FAQFileModel(){FAQId=faqId,FAQFiles=fileNames.ToList()};
-            return this.PartialView("_FAQFiles", model);
-        }
-
-
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ViewResult"/>.
-        /// </returns>
         [HttpGet]
         public ViewResult Index(bool showDetails = false)
         {
-            var categoriesWithSubcategories = faqService.GetCategoriesWithSubcategoriesByCustomerId(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
+            var categoriesWithSubcategories = _faqService.GetCategoriesWithSubcategoriesByCustomerId(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
 
-            var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
+            var userHasFaqAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
 
             IndexModel model;
             if (!categoriesWithSubcategories.Any())
             {
-                model = this.indexModelFactory.Create(null, null, null, userHasFaqAdminPermission);
-                return this.View(model);
+                model = _indexModelFactory.Create(null, null, null, SessionFacade.CurrentLanguageId, userHasFaqAdminPermission);
+                return View(model);
             }
 
             var firstCategoryId = 0;
@@ -317,51 +109,101 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.TemporaryValue = firstCategoryId.ToString();
             }
             else
+            {
                 firstCategoryId = int.Parse(SessionFacade.TemporaryValue);
+            }
 
-            var faqs = this.faqService.FindOverviewsByCategoryId(firstCategoryId, SessionFacade.CurrentLanguageId);
-            model = this.indexModelFactory.Create(categoriesWithSubcategories, firstCategoryId, faqs, userHasFaqAdminPermission);            
+            var faqs =
+                _faqService.FindOverviewsByCategoryId(firstCategoryId, SessionFacade.CurrentCustomer.Id, DefaultSortField, DefaultSortOrder, SessionFacade.CurrentLanguageId);
 
-            return this.View(model);
+            model = _indexModelFactory.Create(categoriesWithSubcategories, firstCategoryId, faqs, SessionFacade.CurrentLanguageId, userHasFaqAdminPermission);
+            model.SortBy = DefaultSortField;
+            model.SortOrder = DefaultSortOrder;
+
+            return View(model);
+        }
+
+        #endregion
+
+        #region Faq Search Actions
+
+        [HttpGet]
+        public ActionResult Faqs(int categoryId, string sortBy, SortOrder sortOrder)
+        {
+            var faqs =
+                _faqService.FindOverviewsByCategoryId(categoryId, SessionFacade.CurrentCustomer.Id, sortBy, sortOrder, SessionFacade.CurrentLanguageId)
+                .Select(f => new FaqOverviewModel(f.Id, f.CreatedDate, f.ChangedDate, f.Text))
+                .ToList();
+
+            return PartialView("_FaqList", faqs);
         }
 
         [HttpGet]
-        public ViewResult NewCategory(int? parentCategoryId)
+        public ActionResult FaqsDetailed(int categoryId, string sortBy, SortOrder sortOrder)
         {
-            var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
-            var model = new NewCategoryModel(parentCategoryId, userHasFaqAdminPermission);
-            return this.View(model);
+            var faqs =
+                _faqService.FindDetailedOverviewsByCategoryId(categoryId, SessionFacade.CurrentCustomer.Id, sortBy, sortOrder, SessionFacade.CurrentLanguageId)
+                .Select(MapToDetailedOverviewModel)
+                .ToList();
+
+            return PartialView("_FaqListWithDetails", faqs);
         }
 
-        [HttpPost]
-        [BadRequestOnNotValid]
-        [UserPermissions(UserPermission.FaqPermission)]
-        public RedirectToRouteResult NewCategory(NewCategoryInputModel model)
+        [HttpGet]
+        public ActionResult Search(string pharse, string sortBy, SortOrder sortOrder)
         {
-            var newCategory = new NewCategory(
-                model.Name,
-                DateTime.Now,
-                SessionFacade.CurrentCustomer.Id,
-                model.ParentCategoryId);
+            var faqs =
+                _faqService.SearchOverviewsByPharse(pharse, SessionFacade.CurrentCustomer.Id, sortBy, sortOrder, SessionFacade.CurrentLanguageId)
+                .Select(f => new FaqOverviewModel(f.Id, f.CreatedDate, f.ChangedDate, f.Text))
+                .ToList();
 
-            this.faqService.AddCategory(newCategory);
-            return this.RedirectToAction("Index");
+            return PartialView("_FaqList", faqs);
         }
+
+        [HttpGet]
+        public ActionResult SearchDetailed(string pharse, string sortBy, SortOrder sortOrder)
+        {
+            var faqs =
+                _faqService.SearchDetailedOverviewsByPharse(pharse, SessionFacade.CurrentCustomer.Id, sortBy, sortOrder, SessionFacade.CurrentLanguageId)
+                .Select(MapToDetailedOverviewModel)
+                .ToList();
+            
+            return PartialView("_FaqListWithDetails", faqs);
+        }
+
+        private FaqDetailedOverviewModel MapToDetailedOverviewModel(FaqDetailedOverview item)
+        {
+            var faqModel = new FaqDetailedOverviewModel(
+                item.Id,
+                item.CreatedDate,
+                item.ChangedDate,
+                item.Text,
+                item.Answer,
+                item.InternalAnswer,
+                item.Files,
+                item.UrlOne,
+                item.UrlTwo);
+            return faqModel;
+        }
+
+        #endregion
+
+        #region Faq Edit Actions
 
         [HttpGet]
         public ViewResult NewFaq(int categoryId)
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
-            var categoriesWithSubcategories = faqService.GetCategoriesWithSubcategoriesByCustomerId(currentCustomerId, SessionFacade.CurrentLanguageId);
+            var categoriesWithSubcategories = _faqService.GetCategoriesWithSubcategoriesByCustomerId(currentCustomerId, SessionFacade.CurrentLanguageId);
 
-            var workingGroups = this.workingGroupRepository.FindActiveOverviews(currentCustomerId).OrderBy(w=> w.Name).ToList();
+            var workingGroups = _workingGroupRepository.FindActiveOverviews(currentCustomerId).OrderBy(w => w.Name).ToList();
 
-            var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
-            var model = this.newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoryId, workingGroups, userHasFaqAdminPermission);
+            var userHasFaqAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
+            var model = _newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoryId, workingGroups, userHasFaqAdminPermission);
             ViewData["FN"] = GetFAQFileNames(model.TemporaryId);
 
-            return this.View(model);
+            return View(model);
         }
 
         [HttpPost, ValidateInput(false)]
@@ -384,11 +226,11 @@ namespace DH.Helpdesk.Web.Controllers
                 SessionFacade.CurrentCustomer.Id,
                 currentDateTime);
 
-            var temporaryFiles = this.userTemporaryFilesStorage.FindFiles(model.Id);
-            var basePath = masterDataService.GetFilePath(SessionFacade.CurrentCustomer.Id);
+            var temporaryFiles = _userTemporaryFilesStorage.FindFiles(model.Id);
+            var basePath = _masterDataService.GetFilePath(SessionFacade.CurrentCustomer.Id);
             var newFaqFiles = temporaryFiles.Select(f => new Services.BusinessModels.Faq.NewFaqFile(f.Content, basePath, f.Name, currentDateTime)).ToList();
-            this.faqService.AddFaq(newFaq, newFaqFiles);
-            return this.RedirectToAction("Index");
+            _faqService.AddFaq(newFaq, newFaqFiles);
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -396,64 +238,129 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var currentCustomerId = SessionFacade.CurrentCustomer.Id;
 
-            var categoriesWithSubcategories = faqService.GetCategoriesWithSubcategoriesByCustomerId(currentCustomerId, SessionFacade.CurrentLanguageId);
+            var categoriesWithSubcategories = _faqService.GetCategoriesWithSubcategoriesByCustomerId(currentCustomerId, SessionFacade.CurrentLanguageId);
 
 
-            var workingGroups = this.workingGroupRepository.FindActiveOverviews(currentCustomerId).OrderBy(w=> w.Name).ToList();
+            var workingGroups = _workingGroupRepository.FindActiveOverviews(currentCustomerId).OrderBy(w => w.Name).ToList();
             if (categoriesWithSubcategories == null || categoriesWithSubcategories.Count < 1)
             {
                 ViewData["Err"] = "FAQ Category is empty! First add a category.";
-                return this.View("NewFAQPopup");
+                return View("NewFAQPopup");
             }
             else
             {
-                var userHasFaqAdminPermission = this.userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
-                var model = this.newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoriesWithSubcategories.First().Id, workingGroups, userHasFaqAdminPermission);
+                var userHasFaqAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
+                var model = _newFaqModelFactory.Create(Guid.NewGuid().ToString(), categoriesWithSubcategories, categoriesWithSubcategories.First().Id, workingGroups, userHasFaqAdminPermission);
                 ViewData["FN"] = GetFAQFileNames(model.TemporaryId);
-                return this.View(model);
+                return View(model);
             }
-
-            
-       }
-
-        [HttpGet]
-        public JsonResult Search(string pharse)
-        {
-            var faqOverviews = this.faqService.SearchOverviewsByPharse(pharse, SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
-
-            var faqModels =
-                faqOverviews.Select(
-                    f => new FaqOverviewModel(f.Id, f.CreatedDate, f.Text)).ToList();
-
-            return this.Json(faqModels, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public JsonResult SearchDetailed(string pharse)
+        public ViewResult EditFaq(int id, int languageId, bool showDetails = false)
         {
-            var faqDetailedOverviews = this.faqService.SearchDetailedOverviewsByPharse(
-                pharse, SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentLanguageId);
-
-            var faqIds = faqDetailedOverviews.Select(f => f.Id).ToList();
-            var faqFiles = this.faqFileRepository.FindFileOverviewsByFaqIds(faqIds);
-            var faqModels = new List<FaqDetailedOverviewModel>(faqDetailedOverviews.Count);
-
-            foreach (var faqDetailedOverview in faqDetailedOverviews)
+            var faq = _faqService.GetFaqById(id, languageId);
+            if (faq == null)
             {
-                var faqModel = new FaqDetailedOverviewModel(
-                    faqDetailedOverview.Id,
-                    faqDetailedOverview.CreatedDate,
-                    faqDetailedOverview.Text,
-                    faqDetailedOverview.Answer,
-                    faqDetailedOverview.InternalAnswer,
-                    faqFiles.Where(f => f.FaqId == faqDetailedOverview.Id).Select(f => f.Name).ToList(),
-                    faqDetailedOverview.UrlOne,
-                    faqDetailedOverview.UrlTwo);
-
-                faqModels.Add(faqModel);
+                throw new HttpException((int)HttpStatusCode.NotFound, null);
             }
 
-            return this.Json(faqModels, JsonRequestBehavior.AllowGet);
+            var categoriesWithSubcategories = _faqService.GetCategoriesWithSubcategoriesByCustomerId(SessionFacade.CurrentCustomer.Id, languageId);
+
+            var fileNames = _faqFileRepository.FindFileNamesByFaqId(id);
+            List<ItemOverview> workingGroups;
+
+            if (faq.WorkingGroupId.HasValue)
+            {
+                workingGroups =
+                    _workingGroupRepository.FindActiveByCustomerIdIncludingSpecifiedWorkingGroup(
+                        faq.CustomerId, faq.WorkingGroupId.Value).OrderBy(w => w.Name).ToList();
+            }
+            else
+            {
+                workingGroups = _workingGroupRepository.FindActiveOverviews(faq.CustomerId).OrderBy(w => w.Name).ToList();
+            }
+
+            var userHasFaqAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
+
+            var languageOverviewsOrginal = _languageService.GetOverviews(true);
+            var languageOverviews =
+                languageOverviewsOrginal.Select(
+                    o =>
+                        new ItemOverview(Translation.GetCoreTextTranslation(o.Name),
+                            o.Value.ToString())).ToList();
+            var languageList = new SelectList(languageOverviews, "Value", "Name");
+
+            var model = _editFaqModelFactory.Create(faq, categoriesWithSubcategories, fileNames, workingGroups, userHasFaqAdminPermission, languageList, languageId, showDetails);
+            ViewData["FN"] = GetFAQFileNames(faq.Id.ToString());
+
+            return View(model);
+        }
+        
+        [HttpPost]
+        [UserPermissions(UserPermission.FaqPermission)]
+        public void DeleteFaq(int id)
+        {
+            _faqService.DeleteFaq(id);
+        }
+
+            #endregion
+
+        #region File Actions
+
+        [HttpGet]
+        public FileContentResult DownloadFile(string faqId, string fileName)
+        {            
+            byte[] fileContent;
+
+            if (GuidHelper.IsGuid(faqId))
+            {
+                fileContent = _userTemporaryFilesStorage.GetFileContent(fileName, faqId);
+            }
+            else
+            {
+                var faq = _faqService.FindById(int.Parse(faqId));
+                var basePath = string.Empty;
+                if (faq != null)
+                    basePath = _masterDataService.GetFilePath(faq.CustomerId);
+
+                fileContent = _faqFileRepository.GetFileContentByFaqIdAndFileName(int.Parse(faqId), basePath, fileName);
+            }
+
+            return File(fileContent, "application/octet-stream", fileName);
+        }
+        
+        [HttpPost, ValidateInput(false)]
+        //[BadRequestOnNotValid]
+        [UserPermissions(UserPermission.FaqPermission)]
+        public RedirectToRouteResult EditFaq(EditFaqInputModel model)
+        {
+            var updatedFaq = new ExistingFaq(
+                model.Id,
+                model.CategoryId,
+                model.Question,
+                model.Answer,
+                model.InternalAnswer,
+                model.UrlOne,
+                model.UrlTwo,
+                model.WorkingGroupId,
+                model.InformationIsAvailableForNotifiers,
+                model.ShowOnStartPage,
+                DateTime.Now,
+                model.LanguageId);
+
+            _faqService.UpdateFaq(updatedFaq);
+            return RedirectToAction("Index", new { showDetails = model.ShowDetails});
+        }
+        
+        [HttpGet]
+        public ActionResult Files(string faqId)
+        {
+            var fileNames = GuidHelper.IsGuid(faqId)
+                ? _userTemporaryFilesStorage.FindFileNames(faqId)
+                : _faqFileRepository.FindFileNamesByFaqId(int.Parse(faqId));
+            var model = new FAQFileModel(){FAQId=faqId,FAQFiles=fileNames.ToList()};
+            return PartialView("_FAQFiles", model);
         }
 
         [HttpPost]
@@ -461,55 +368,140 @@ namespace DH.Helpdesk.Web.Controllers
         [UserPermissions(UserPermission.FaqPermission)]
         public void UploadFile(string faqId, string name)
         {
-            var uploadedFile = this.Request.Files[0];
+            var uploadedFile = Request.Files[0];
             var uploadedData = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
 
             if (GuidHelper.IsGuid(faqId))
             {
-                if (this.userTemporaryFilesStorage.FileExists(name, faqId))
+                if (_userTemporaryFilesStorage.FileExists(name, faqId))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
 
-                this.userTemporaryFilesStorage.AddFile(uploadedData, name, faqId);
+                _userTemporaryFilesStorage.AddFile(uploadedData, name, faqId);
             }
             else
             {
-                if (this.faqFileRepository.FileExists(int.Parse(faqId), name))
+                if (_faqFileRepository.FileExists(int.Parse(faqId), name))
                 {
                     throw new HttpException((int)HttpStatusCode.Conflict, null);
                 }
 
-                var faq = this.faqService.FindById(int.Parse(faqId));
+                var faq = _faqService.FindById(int.Parse(faqId));
                 var basePath = string.Empty;
                 if (faq != null)
-                    basePath = masterDataService.GetFilePath(faq.CustomerId);
+                    basePath = _masterDataService.GetFilePath(faq.CustomerId);
 
                 var newFaqFile = new NewFaqFile(uploadedData, basePath, name, DateTime.Now, int.Parse(faqId));
-                this.faqService.AddFile(newFaqFile);
+                _faqService.AddFile(newFaqFile);
             }
         }
 
-        public ActionResult SetSelectedCategory(string value)
+        [HttpPost]
+        [UserPermissions(UserPermission.FaqPermission)]
+        public void DeleteFile(string faqId, string fileName)
         {
-            SessionFacade.TemporaryValue = value;
-
-            return this.Json(new { success = true });
+            if (GuidHelper.IsGuid(faqId))
+            {
+                _userTemporaryFilesStorage.DeleteFile(fileName, faqId);
+            }
+            else
+            {
+                _faqFileRepository.DeleteByFaqIdAndFileName(int.Parse(faqId), fileName);
+                _faqFileRepository.Commit();
+            }
         }
 
         #endregion
 
+        #region Category Actions
+
+        [HttpGet]
+        public ViewResult NewCategory(int? parentCategoryId)
+        {
+            var userHasFaqAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
+            var model = new NewCategoryModel(parentCategoryId, userHasFaqAdminPermission);
+            return View(model);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        [UserPermissions(UserPermission.FaqPermission)]
+        public RedirectToRouteResult NewCategory(NewCategoryInputModel model)
+        {
+            var newCategory = new NewCategory(
+                model.Name,
+                DateTime.Now,
+                SessionFacade.CurrentCustomer.Id,
+                model.ParentCategoryId);
+
+            _faqService.AddCategory(newCategory);
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ViewResult EditCategory(int id, int languageId)
+        {
+            var category = _faqCategoryRepository.GetCategoryById(id, languageId);
+            if (category == null)
+            {
+                throw new HttpException((int)HttpStatusCode.NotFound, null);
+            }
+
+            var hasFaqs = _faqRepository.AnyFaqWithCategoryId(id);
+            var hasSubcategories = _faqCategoryRepository.CategoryHasSubcategories(id);
+
+            var languageOverviewsOrginal = _languageService.GetOverviews();
+            var languageOverviews =
+                languageOverviewsOrginal.Select(
+                    o =>
+                        new ItemOverview(Translation.GetCoreTextTranslation(o.Name),
+                            o.Value.ToString())).ToList();
+            var languageList = new SelectList(languageOverviews, "Value", "Name");
+
+            var userHasFaqAdminPermission = _userPermissionsChecker.UserHasPermission(UsersMapper.MapToUser(SessionFacade.CurrentUser), UserPermission.FaqPermission);
+            var model = new EditCategoryModel(category.Id, category.Name, hasFaqs, hasSubcategories, userHasFaqAdminPermission, languageList);
+            return View(model);
+        }
+
+        [HttpPost]
+        [BadRequestOnNotValid]
+        [UserPermissions(UserPermission.FaqPermission)]
+        public RedirectToRouteResult EditCategory(EditCategoryInputModel model)
+        {
+            var editCategory = new EditCategory(model.Id, model.Name, model.LanguageId, DateTime.UtcNow);
+            _faqService.UpdateCategory(editCategory);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [UserPermissions(UserPermission.FaqPermission)]
+        public void DeleteCategory(int id)
+        {
+            _faqService.DeleteCategory(id);
+        }
+
+        [HttpPost]
+        public ActionResult SetSelectedCategory(string value)
+        {
+            SessionFacade.TemporaryValue = value;
+            return Json(new { success = true });
+        }
+
+        #endregion
+
+        #region Private Methods
+
         private string GetFAQFileNames(string id)
         {
             var fileNames = GuidHelper.IsGuid(id)
-                               ? this.userTemporaryFilesStorage.FindFileNames(id)
-                                : this.faqFileRepository.FindFileNamesByFaqId(int.Parse(id));
+                ? _userTemporaryFilesStorage.FindFileNames(id)
+                : _faqFileRepository.FindFileNamesByFaqId(int.Parse(id));
 
             return String.Join("|", fileNames);
-
         }
 
- 
+        #endregion
     }
 }

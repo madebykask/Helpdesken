@@ -37,14 +37,14 @@
                         @Translation.GetCoreTextTranslation("Avslutsorsak")
                     </td>
                     <td>
-                        <div id="divFinishingType" class="btn-group">
+                        <div id="divFinishingType" class="btn-group dropdown-menu-parent">
                             <div class="btn" id="divBreadcrumbs_FinishingType">
                                 @(string.IsNullOrEmpty(Model.FinishingCause) ? Translation.GetCoreTextTranslation("--") : Model.FinishingCause)
                             </div>
                             <button class="btn dropdown-toggle" data-toggle="dropdown">
                                 <span class="caret"></span>
                             </button>
-                            <ul class="dropdown-menu dropup">
+                            <ul class="dropdown-menu subddMenu parentddMenu" style="z-index:99999999999;">
                                 <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
                                 @Html.FinishingCauseDropdownButtonString(Model.FinishingCauses)
                             </ul>
@@ -84,7 +84,7 @@
     var $finishTypeBreadcrubs = $("#divBreadcrumbs_FinishingType");
     var $finishDate = $('#FinishingDate');
 
-    $finishTypeContainer.find('ul.dropdown-menu li a').click(function (e) {
+    $finishTypeContainer.find('ul.dropdown-menu li a').on('click', function (e) {
         e.preventDefault();
         var value = $(this).attr('value');
         $finishTypeBreadcrubs.text(window.getBreadcrumbs(this));
@@ -101,4 +101,12 @@
             }
         }
     });
+
+    $finishTypeId.find('.dropdown-submenu.DynamicDropDown_Up').off('mousemove').on('mousemove', function (event) {
+        dynamicDropDownBehaviorOnMouseMove(event.target.parentElement);
+    });
+
+    initDynamicDropDowns();
+    initDynamicDropDownsKeysBehaviour();
+
 </script>

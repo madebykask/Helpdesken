@@ -41,93 +41,86 @@
 
     <script type="text/javascript">
 
-        window.getFormParameters = function () {
-            return window.extendedCaseComponentRef.zone.run(function () {
-                return window.extendedCaseComponentRef.component.getFormParameters();
-            });
-        }
+      window.getFormParameters = function () {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.getFormParameters();
+          });
+      }
 
-        window.loadExtendedCase = function (options) {
-            return window.extendedCaseComponentRef.zone.run(function () {
-                return window.extendedCaseComponentRef.component.loadForm(options);
-            });
-        }
+      window.loadExtendedCase = function (options) {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.loadForm(options);
+          });
+      }
 
-        window.updateCaseFields = function (caseFieldValues) {
-            return window.extendedCaseComponentRef.zone.run(function () {
-                return window.extendedCaseComponentRef.component.updateCaseFieldValues(caseFieldValues);
-            });
-        }
+      window.updateCaseFields = function (caseFieldValues) {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.updateCaseFieldValues(caseFieldValues);
+          });
+      }
 
-        window.saveExtendedCase = function (isOnNext) {
-            return window.extendedCaseComponentRef.zone.run(function () {
-                return window.extendedCaseComponentRef.component.save(isOnNext);
-            });
-        }
+      window.saveExtendedCase = function (isOnNext) {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.save(isOnNext);
+          });
+      }
 
-        window.validateExtendedCase = function (isOnNext) {
-            return window.extendedCaseComponentRef.zone.run(function () {
-                return window.extendedCaseComponentRef.component.validate(isOnNext || false);
-            });
-        }
+      window.validateExtendedCase = function (isOnNext) {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.validate(isOnNext || false);
+          });
+      }
 
-        window.setInitialData = function (data) {
-            return window.extendedCaseComponentRef.zone.run(function () {
-                return window.extendedCaseComponentRef.component.setInitialData(data);
-            });
-        }
+      window.setInitialData = function (data) {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.setInitialData(data);
+          });
+      }
 
-        window.setNextStep = function (step, isNextValidation) {
-            return window.extendedCaseComponentRef.zone.run(function () {
-                return window.extendedCaseComponentRef.component.setNextStep(step, isNextValidation);
-            });
-        }
+      window.setNextStep = function (step, isNextValidation) {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.setNextStep(step, isNextValidation);
+          });
+      }
 
-        window.getCaseValues = function () {
-            return window.extendedCaseComponentRef.zone.run(function () {
-                return window.extendedCaseComponentRef.component.getCaseValues();
-            });
-        }
+      window.getCaseValues = function () {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.getCaseValues();
+          });
+      }
 
-		window.getCaseValues = function () {
-            return window.extendedCaseComponentRef.zone.run(function () {
-                return window.extendedCaseComponentRef.component.getCaseValues();
-            });
-        }
+      window.getFormData = function () {
+          return window.extendedCaseComponentRef.zone.run(function () {
+              return window.extendedCaseComponentRef.component.getFormData();
+          });
+      }		
 
-		window.getFormData = function () {
-            return window.extendedCaseComponentRef.zone.run(function () {
-                return window.extendedCaseComponentRef.component.getFormData();
-            });
-        }		
+      function test() {
+        return window.extendedCaseComponentRef.zone.run(function () {
+                  window.extendedCaseComponentRef.component.test();
+      });
 
-        function test() {
+          /*setInitialData({ step: 1, isNextValidation: true });
 
-			return window.extendedCaseComponentRef.zone.run(function () {
-                window.extendedCaseComponentRef.component.test();
-            });
+          var promiseRef = window.loadExtendedCase({
+              formParameters: {
+                  formId:2
+              },
+              caseValues: null
+          });
 
-            /*setInitialData({ step: 1, isNextValidation: true });
-
-            var promiseRef = window.loadExtendedCase({
-                formParameters: {
-                    formId:2
+          promiseRef.then(
+                function (val) {
+                    console.log('Case has been successfully loaded.');
                 },
-                caseValues: null
-            });
-
-            promiseRef.then(
-                 function (val) {
-                     console.log('Case has been successfully loaded.');
-                 },
-                 function (err) {
-                     console.log('Case has failed to load due to error: ', err.toString());
-                 });
-            */
-            //var values = window.extendedCaseComponentRef.component.getCaseValues();
-            //console.log(values);
-            
-        }
+                function (err) {
+                    console.log('Case has failed to load due to error: ', err.toString());
+                });
+          */
+          //var values = window.extendedCaseComponentRef.component.getCaseValues();
+          //console.log(values);
+          
+      }
     </script>
 
 </body>

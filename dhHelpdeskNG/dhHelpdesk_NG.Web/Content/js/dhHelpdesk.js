@@ -13,7 +13,9 @@ $('.nav-tabs li:not(.disabled) a').click(function (e) {
 
 $(".nav-tabs-actions a").unbind("click");
 
-$(".content input:text:not(.chosen-container input:text), .content textarea").eq(0).focus();
+if (typeof (window.Params) === 'undefined' || window.Params.autoFocus !== false) {
+    $(".content input:text:not(.chosen-container input:text), .content textarea").eq(0).focus();
+}
 
 
 $('#case__RegLanguage_Id').change(function () {
@@ -37,12 +39,12 @@ function ChangeCaseLanguageTo(newLanguageId, updateDropDown) {
 }
 
 function ShowToastMessage(message, msgType, isSticky) {
-    var _Sticky = false;
+    var sticky = false;
     if (isSticky)
-        _Sticky = true;
+        sticky = true;
     $().toastmessage('showToast', {
         text: message,
-        sticky: _Sticky,
+        sticky: sticky,
         position: 'top-center',
         type: msgType,
         closeText: '',
@@ -99,23 +101,27 @@ function close_window() {
     //}
 }
 
-function SelectValueInOtherDropdownOnChange(id, postTo, ctl, readonlyElement) {
+function SelectValueInOtherDropdownOnChange(id, postTo, ctl, readonlyElement, raiseEvent) {
+    raiseEvent = raiseEvent || false;
     return $.post(postTo, { 'id': id }, function (data) {
         if (data != null) {
-            SetSelectValue(ctl, data, readonlyElement);
+            SetSelectValue(ctl, data, readonlyElement, raiseEvent);
         }
     }, 'json');
 }
 
-function SetSelectValue(selId, val, readonlyElementId) {
+function SetSelectValue(selId, val, readonlyElementId, raiseEvent) {
+    raiseEvent = raiseEvent || false;
     var $sel = $(selId);
     var exists = $sel.find('option[value=' + val + ']').length > 0;
     if (exists) {
         $sel.val(val);
+        if (raiseEvent) $sel.change();
         if (readonlyElementId && readonlyElementId.length) {
             var $readonlyElement = $(readonlyElementId);
-            if ($readonlyElement.length)
+            if ($readonlyElement.length) {
                 $readonlyElement.val(val);
+            }
         }
         return true;
     }
@@ -373,7 +379,7 @@ function bindDeleteLogFileBehaviorToDeleteButtons() {
         }
         var pressedDeleteFileButton = this;
 
-        $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName, fileId: logFileId }, function () {
+        $.post("/Cases/DeleteLogFile", { id: key, fileName: fileName, isExisting: isAttached.length > 0, fileId: logFileId }, function () {
                 $(pressedDeleteFileButton).parents('tr:first').remove();
                 var fileNames = $('#LogFileNames').val();
                 fileNames = fileNames.replace("|" + fileName.trim(), "");
@@ -395,7 +401,9 @@ function SetPriority() {
             if (data != null) {
                 var exists = $('#case__Priority_Id Option[value=' + data + ']').length;
                 if (exists > 0) {
-                    $('#case__Priority_Id').val(data);
+                    const $pririty = $('#case__Priority_Id');
+                    $pririty.val(data);
+                    $pririty.change();
                 }
             }
         }, 'json');
@@ -606,14 +614,22 @@ function DestroyDataTable(tableUniqId) {
     oTable.destroy();
 };
 
-function InitDataTable(tableUniqId, perText, showingText, options, onError, emptyTable, infoEmpty) {
+function InitDataTable(tableUniqId, perText, showingText, options, onError, emptyTable, infoEmpty, sanitizeDataFunc) {
     var dataTable = $('#' + tableUniqId);
     $.fn.dataTable.ext.errMode = 'none';
     if (onError && typeof onError === "function")
         dataTable.on('error.dt', function (e, settings, techNote, message) {
             onError(e, settings, techNote, message);
         });
-    return dataTable.DataTable($.extend({}, {
+    if (typeof sanitizeDataFunc === "function") {
+        dataTable
+            .on('xhr.dt',
+                function(e, settings, json, xhr) {
+                    sanitizeDataFunc(json.data);
+                });
+    }
+    return dataTable
+        .DataTable($.extend({}, {
         //'sError': (onError && typeof onError === "function") ? 'none' : 'throw',
         "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
         "sPaginationType": "bootstrap",
@@ -697,8 +713,8 @@ function updateDropdownPosition(element) {
     }
 }
 
-function dynamicDropDownBehaviorOnMouseMove(event) {
-    var target$ = $(event.target.parentElement);
+function dynamicDropDownBehaviorOnMouseMove(target) {
+    var target$ = $(target);
     if (target$ != undefined && target$.hasClass('DynamicDropDown_Up') && target$.index(0) !== -1) {
         var objPos = getObjectPosInView(target$[0]);
         var subMenu$ = $(target$[0]).children('ul');
@@ -732,18 +748,8 @@ function dynamicDropDownBehaviorOnMouseMove(event) {
     }
 
 }
-/////////////////////////////////////////////////////////////////////////////////////////
 
-$.fn.checkUrlFileExists = function () {
-    "use strict";
-    var url = $(this)[0].href;
-    var http = new XMLHttpRequest();
-    http.open("HEAD", url, false);
-    http.send();
-    return http.status === 200;
-};
-
-$(function() {
+function initDynamicDropDowns() {
     $('ul.dropdown-menu.subddMenu.parentddMenu').on('mouseenter', function () {
         var $html = $('html');
         $html.data('previous-overflow', $html.css('overflow'));
@@ -756,10 +762,92 @@ $(function() {
     });
 
     $('.dropdown-submenu.DynamicDropDown_Up').on('mousemove', function (event) {
-        dynamicDropDownBehaviorOnMouseMove(event);
+        dynamicDropDownBehaviorOnMouseMove(event.target.parentElement);
     });
 
     $('ul.dropdown-menu.subddMenu.parentddMenu').prev('button').on('click', function () {
         updateDropdownPosition(this);
     });
+}
+
+function initDynamicDropDownsKeysBehaviour() {
+    $("button.dropdown-toggle[data-toggle=dropdown]").on("click", function (e) {
+        $(this).parent().find("li.dropdown-submenu > ul").css("display", "");
+    });
+
+    $('button.dropdown-toggle[data-toggle=dropdown], ul.dropdown-menu').on('keydown', function (e) {
+        if (!/(37|38|39|40|27)/.test(e.keyCode)) return true;
+
+        var target = $(e.target).closest('ul.dropdown-menu');
+        var $this = target.length > 0 ? $(target[0]) : $(this);
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        if ($this.is('.disabled, :disabled')) return true;
+
+        var $group = $this.closest('.btn-group');
+        var isActive = $group.hasClass('open');
+        var $parent = $this.parent();
+        var $items = $parent.children('ul.dropdown-menu').children('li:not(.divider):visible').children('a');
+        var index = 0;
+
+        if (isActive && e.keyCode === 27) {
+            if (e.which === 27) $group.find('button.dropdown-toggle[data-toggle=dropdown]').focus();
+            return $this.click();
+        }
+
+        if (!isActive && e.keyCode === 40) {
+            if (!$items.length) return $this.click();
+            $items.eq(index).focus();
+            return $this.click();
+        }
+
+        if (!$items.length) return true;
+
+        index = $items.index($items.filter(':focus'));
+
+        if (e.keyCode === 38 && index > 0) index--; // up
+        if (e.keyCode === 40 && index < $items.length - 1) index++; // down
+        if (!~index) index = 0;
+
+        var currentItem = $items.eq(index);
+
+        if (e.keyCode === 39) {
+            var currentLi = currentItem.parent();
+            if (currentLi.hasClass('dropdown-submenu')) {
+                currentLi.children('ul.dropdown-menu').css('display', 'block');
+                currentItem = currentLi.children('ul.dropdown-menu').children('li:not(.divider):visible:first')
+                    .children('a').first();
+                if (currentLi.hasClass('DynamicDropDown_Up')) {
+                    dynamicDropDownBehaviorOnMouseMove(currentLi);
+                }
+            }
+        }
+
+        if (e.keyCode === 37) {
+            if ($parent.hasClass('dropdown-submenu')) {
+                currentItem = $parent.children('a:first');
+                $this.css('display', '');
+            }
+        }
+
+        currentItem.focus();
+
+        return true;
+    });
+}
+/////////////////////////////////////////////////////////////////////////////////////////
+
+$.fn.checkUrlFileExists = function () {
+    "use strict";
+    var url = $(this)[0].href;
+    var http = new XMLHttpRequest();
+    http.open("HEAD", url, false);
+    http.send();
+    return http.status === 200;
+};
+
+$(function() {
+    initDynamicDropDowns();
 });

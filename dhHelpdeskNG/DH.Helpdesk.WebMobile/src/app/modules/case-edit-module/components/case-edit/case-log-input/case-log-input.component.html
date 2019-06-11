@@ -1,16 +1,49 @@
-
-<ng-container [formGroup]="form" *ngIf="externalLogField || internalLogField">
-  <mbsc-textarea *ngIf="externalLogField" #external
-                [formControlName]="externalLogField.name">{{ externalLogLabel }}</mbsc-textarea>
-
-  <mbsc-textarea *ngIf="internalLogField" #internal
-                 [formControlName]="internalLogField.name">{{ internalLogLabel }}</mbsc-textarea>
+<ng-container [formGroup]="form">
   
-  <div id="log-files" *ngIf="files && files.length > 0">
-      <mbsc-listview [options]="fileListSettings" class="fileListView">
-          <mbsc-listview-item *ngFor="let file of files;" icon="fa-paperclip">{{ file }}</mbsc-listview-item>
-      </mbsc-listview>
+  <!-- /Exnterl Log fields --> 
+  <div class="bordered" *ngIf="isExternalLogFieldVisible">
+    <case-textarea-control 
+        [field]="caseFieldsNames.Log_ExternalText" 
+        [form]="form"></case-textarea-control>
   </div>
 
-  <log-files-upload [caseKey]="caseKey" (fileUploaded)="processFileUploaded($event)"></log-files-upload>
+  <div class="bordered switch" *ngIf="isExternalLogFieldVisible">
+    <mbsc-switch #sendMailToNotifierControl 
+                 [disabled]="isSendMailToNotifierDisabled"
+                 [formControlName]="caseFieldsNames.Log_SendMailToNotifier"
+                 (change)="onSendExternalEmailsCheckChanged()"
+                 [options]="switchOptions">
+      <span [ngClass]="{'disabled': isSendMailToNotifierDisabledOrOff }">{{ 'Till' | translate }}</span>
+      <span class="mbsc-desc" [innerHtml]="externalLogEmailsTo | sanitize:'html'"></span>
+    </mbsc-switch>
+  </div>
+  
+  <div class="bordered" *ngIf="isExternalLogFieldVisible">
+    <lognote-email-input [field]="caseFieldsNames.Log_ExternalEmailsCC" [form]="form"></lognote-email-input>  
+  </div>
+  <!-- /Exnterl Log fields --> 
+
+  <!-- Internal Log fields -->
+  <div class="bordered" *ngIf="isInternalLogFieldVisible">
+    <case-textarea-control [field]="caseFieldsNames.Log_InternalText" [form]="form"></case-textarea-control>
+  </div>
+
+  <div class="bordered" *ngIf="isInternalLogFieldVisible">
+    <lognote-email-input [field]="caseFieldsNames.Log_InternalEmailsTo" [form]="form"></lognote-email-input>
+  </div>
+
+  <div class="bordered" *ngIf="isInternalLogFieldVisible">
+    <lognote-email-input [field]="caseFieldsNames.Log_InternalEmailsCC" [form]="form"></lognote-email-input>
+  </div>
+  <!-- /Internal Log fields -->
+
+  <ng-container *ngIf="isAttachedFilesVisible">
+    <div id="log-files" class="bordered" *ngIf="files && files.length > 0">
+        <mbsc-listview [options]="fileListSettings" class="fileListView">
+            <mbsc-listview-item *ngFor="let file of files;" icon="fa-paperclip">{{ file }}</mbsc-listview-item>
+        </mbsc-listview>
+    </div>
+    <log-files-upload *ngIf="hasFullAccess" [caseKey]="caseKey" (fileUploaded)="processFileUploaded($event)"></log-files-upload>
+  </ng-container>
+
 </ng-container>

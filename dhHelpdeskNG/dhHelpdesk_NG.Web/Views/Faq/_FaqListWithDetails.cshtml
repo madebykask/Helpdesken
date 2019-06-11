@@ -1,0 +1,68 @@
+﻿@using DH.Helpdesk.Common.Enums
+@model List<DH.Helpdesk.Web.Models.Faq.Output.FaqDetailedOverviewModel>
+
+@functions {
+    string buildFaqUrl(int faqId)
+    {
+        var url = Url.Action("EditFaq", "faq", new {id = faqId, languageId = LanguageIds.Swedish});
+        return url;
+    }
+}
+
+@foreach (var faq in Model)
+{
+    <tr>
+        <td style="width:70%">
+            <a href="@buildFaqUrl(faq.Id)">@faq.Text</a>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>@Translation.GetCoreTextTranslation("Svar")</td>
+                        <td>@faq.Text</td>
+                    </tr>
+                    @if (!string.IsNullOrEmpty(faq.InternalAnswer))
+                    {
+                        <tr>
+                            <td>@Translation.GetCoreTextTranslation("Internt svar")</td>
+                            <td>@faq.InternalAnswer</td>
+                        </tr>
+                    }
+
+                    @if (faq.FileNames != null && faq.FileNames.Any())
+                    {
+                        foreach (var fileName in faq.FileNames)
+                        {
+                        <tr>
+                            <td><i class="icon-file"></i></td>
+                            <td>@Html.ActionLink(fileName, "DownloadFile", new { faqId = faq.Id, fileName = fileName })</td>
+                        </tr>
+                        }
+                    }
+                    
+                    @if (!string.IsNullOrEmpty(faq.UrlOne))
+                    {
+                        <tr>
+                            <td>@Translation.GetCoreTextTranslation("Url 1: ")</td>
+                            <td>@faq.UrlOne</td>
+                        </tr>    
+                    }
+                    
+                    @if (!string.IsNullOrEmpty(faq.UrlOne))
+                    {
+                        <tr>
+                            <td>@Translation.GetCoreTextTranslation("Url 2: ")</td>
+                            <td>@faq.UrlTwo</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </td>
+        <td style="width:10%">
+            <a href="@buildFaqUrl(faq.Id)">@faq.CreatedDateText</a>
+        </td>
+        <td style="width: 10%">
+            <a href="@buildFaqUrl(faq.Id)">@faq.ChangedDateText</a>
+        </td>
+    </tr>
+}

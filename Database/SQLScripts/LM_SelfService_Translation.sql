@@ -711,6 +711,69 @@ If not exists (select * from tblTextTranslation where text_id = 2006 and Languag
     insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2006, 1, 'Utökat ärende är inte giltigt')
 --GO
 
+If not exists (select * from tbltext where id = 2007 AND TextType = @textType)
+	insert into tbltext (id, TextString, TextType) VALUES (2007, 'Initiator', @textType)
+--GO
+If not exists (select * from tblTextTranslation where text_id = 2007 and Language_Id = 1)
+    insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2007, 1, 'Anmälare')
+--GO
+
+If not exists (select * from tbltext where id = 2008 AND TextType = @textType)
+	insert into tbltext (id, TextString, TextType) VALUES (2008, 'Regarding', @textType)
+--GO
+If not exists (select * from tblTextTranslation where text_id = 2008 and Language_Id = 1)
+    insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2008, 1, 'Angående')
+--GO
+
+If not exists (select * from tbltext where id = 2009 AND TextType = @textType)
+	insert into tbltext (id, TextString, TextType) VALUES (2009, 'Computer information', @textType)
+--GO
+If not exists (select * from tblTextTranslation where text_id = 2009 and Language_Id = 1)
+    insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2009, 1, 'Datorinformation')
+--GO
+
+If not exists (select * from tbltext where id = 2010 AND TextType = @textType)
+	insert into tbltext (id, TextString, TextType) VALUES (2010, 'Case information', @textType)
+--GO
+If not exists (select * from tblTextTranslation where text_id = 2010 and Language_Id = 1)
+    insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2010, 1, 'Ärendeinformation')
+--GO
+
+If not exists (select * from tbltext where id = 2011 AND TextType = @textType)
+	insert into tbltext (id, TextString, TextType) VALUES (2011, 'Case management', @textType)
+--GO
+If not exists (select * from tblTextTranslation where text_id = 2011 and Language_Id = 1)
+    insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2011, 1, 'Ärendehantering')
+--GO
+
+If not exists (select * from tbltext where id = 2012 AND TextType = @textType)
+	insert into tbltext (id, TextString, TextType) VALUES (2012, 'Communication', @textType)
+--GO
+If not exists (select * from tblTextTranslation where text_id = 2012 and Language_Id = 1)
+    insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2012, 1, 'Kommunikation')
+--GO
+
+If not exists (select * from tbltext where id = 2013 AND TextType = @textType)
+	insert into tbltext (id, TextString, TextType) VALUES (2013, 'Status', @textType)
+--GO
+If not exists (select * from tblTextTranslation where text_id = 2013 and Language_Id = 1)
+    insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2013, 1, 'Status')
+--GO
+
+If not exists (select * from tbltext where id = 2014 AND TextType = @textType)
+	insert into tbltext (id, TextString, TextType) VALUES (2014, 'Invoice', @textType)
+--GO
+If not exists (select * from tblTextTranslation where text_id = 2014 and Language_Id = 1)
+    insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2014, 1, 'Fakturor')
+--GO
+
+If not exists (select * from tbltext where id = 2015 AND TextType = @textType)
+	insert into tbltext (id, TextString, TextType) VALUES (2015, 'Invoicing', @textType)
+--GO
+If not exists (select * from tblTextTranslation where text_id = 2015 and Language_Id = 1)
+    insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2015, 1, 'Fakturering')
+--GO
+
 
 GO
 -- NOTE: Please check Translations.sql to avoid tblText.Id collision

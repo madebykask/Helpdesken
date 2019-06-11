@@ -31,7 +31,7 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort>44340</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SkipPostSharp>True</SkipPostSharp>
     <TargetFrameworkProfile />
@@ -298,6 +298,7 @@
     <Compile Include="Infrastructure\BusinessModelFactories\Orders\IOrderModelFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Orders\IOrdersModelFactory.cs" />
     <Compile Include="Infrastructure\BusinessModelFactories\Orders\IUpdateOrderModelFactory.cs" />
+    <Compile Include="Infrastructure\Cache\WebCacheService.cs" />
     <Compile Include="Infrastructure\Common\Concrete\CommonFunctions.cs" />
     <Compile Include="Infrastructure\Common\Concrete\ErrorGenerator.cs" />
     <Compile Include="Infrastructure\Common\ICommonFunctions.cs" />
@@ -376,6 +377,7 @@
     <Compile Include="Infrastructure\WorkContext\Concrete\UserContext.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\WorkContext.cs" />
     <Compile Include="Models\CaseTemplate\CaseTemplateTreeViewModel.cs" />
+    <Compile Include="Models\Case\CaseControlsPanelModel.cs" />
     <Compile Include="Models\Case\CaseFieldSettingJSModel.cs" />
     <Compile Include="Models\Case\CaseOverviewModel.cs" />
     <Compile Include="Models\Case\CaseLogModel.cs" />
@@ -483,10 +485,10 @@
     <Content Include="Content\img\glyphicons-halflings.png" />
     <Content Include="Content\img\throbber.gif" />
     <Content Include="Content\img\transp50.png" />
+    <Content Include="Content\js\Case\workflowStepsBehavior.js" />
     <Content Include="Content\js\Case\case.extended.js" />
     <Content Include="Content\js\Case\caseSearch.js" />
-    <Content Include="Content\js\Case\_caseAddFollowersSearch.js" />
-    <Content Include="Content\js\Case\_caseUserSearchCommon.js" />
+    <Content Include="Content\js\Case\caseAddFollowersSearch.js" />
     <Content Include="Content\js\chosen.jquery.js" />
     <Content Include="Content\js\chosen.jquery.min.js" />
     <Content Include="Content\js\dataTables.bootstrap.js" />
@@ -499,6 +501,7 @@
     <Content Include="Content\js\jquery.dataTables.min.js" />
     <Content Include="Content\js\Orders\order.edit.js" />
     <Content Include="Content\js\Orders\orders.list.js" />
+    <Content Include="Content\js\Shared\commonUtils.js" />
     <Content Include="Content\js\Shared\app.layout.js" />
     <Content Include="Content\js\typeahead.js" />
     <Content Include="img-profile\profile.css" />
@@ -822,7 +825,7 @@
     <Content Include="Views\Case\MultiCustomerCaseOverview.cshtml" />
     <Content Include="Views\Case\_SearchError.cshtml" />
     <Content Include="Views\Case\_CaseInformation.cshtml" />
-    <Content Include="Views\Case\_ExtendedCaseControlPanel.cshtml" />
+    <Content Include="Views\Case\_CaseControlPanel.cshtml" />
     <Content Include="Views\Case\ModalDialogs\_UploadExistingLogFilePopup.cshtml" />
     <Content Include="Views\Case\ModalDialogs\_UploadFileFromClipboardPopup.cshtml" />
     <Content Include="Views\Shared\_MainMenu.cshtml" />
@@ -833,6 +836,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DH.Helpdesk.Web.Common\DH.Helpdesk.Web.Common.csproj">
+      <Project>{d268e4e5-cd72-45dc-9dc0-9f0ad89f3f6e}</Project>
+      <Name>DH.Helpdesk.Web.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
       <Project>{90defcb6-e297-4f99-a532-da1e0522aa49}</Project>
       <Name>DH.Helpdesk.Common</Name>

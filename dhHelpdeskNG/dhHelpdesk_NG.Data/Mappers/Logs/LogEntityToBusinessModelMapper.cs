@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
+using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.MapperData.Logs;
 
 namespace DH.Helpdesk.Dal.Mappers.Logs
@@ -37,23 +36,24 @@ namespace DH.Helpdesk.Dal.Mappers.Logs
                 WorkingTime = entity.WorkingTime,
                 OverTime = entity.OverTime,
 
-                CaseHistory =
-                    entity.CaseHistory_Id != null
-                        ? new LogCaseHistoryOverview(entity.CaseHistory_Id.Value)
-                        {
-                            Emaillogs =
-                                data.EmailLogs.Where(el => el.Id.HasValue)
-                                    .Select(e => new EmailLogsOverview(e.Id.Value, e.EmailAddress))
-                                    .ToList(),
-                        }
-                        : null,
+                EmailLogs =
+                    data.EmailLogs.Where(el => el.Id.HasValue).Select(el => new EmailLogOverview
+                    {
+                        Id = el.Id ?? 0,
+                        CaseHistoryId = el.CaseHistoryId ?? 0,
+                        MailTemplate = (GlobalEnums.MailTemplates)el.MailId,
+                        Email =  el.EmailAddress?.ToLower(),
+                    }).ToList(),
 
                 LogFiles =
-                    data.LogFiles.Where(e => e.Id.HasValue)
-                        .Select(t => new LogFileOverview(t.Id.Value, t.FileName, t.CaseId, t.LogId))
+                    data.LogFiles.Where(e => e.Id.HasValue && e.Id > 0)
+                        .Select(t => new LogFileOverview(t.Id ?? 0, t.FileName, t.CaseId, t.LogId))
                         .ToList(),
 
-                User = new LogUserOverview( (data.User != null && data.User.Id.HasValue ? data.User.Id.Value : 0) , data.User?.FirstName, data.User?.SurName)
+                Mail2Tickets =
+                    data.Mail2Tickets.Where(m => m.Id.HasValue).Select(m => new Mail2TicketOverview(m.Id.Value, m.Type, m.EMailAddress, m.EMailSubject)).ToList(),
+
+                User = new LogUserOverview(data.User != null && data.User.Id.HasValue ? data.User.Id.Value : 0 , data.User?.FirstName, data.User?.SurName)
             };
         }
     }

@@ -36,7 +36,7 @@ a, a:hover, a:focus {
 }
 
 /********************TEXT WEIGHT AND COLORS************************************************/
-.textbold {
+.textbold, .bold {
     font-weight: bold;
 }
 
@@ -56,14 +56,9 @@ a, a:hover, a:focus {
     color: #0ca759 !important;
 }
 
-    .textgreen td a {
-        color: #0ca759 !important;
-    }
-
-
-
-
-
+.textgreen td a {
+    color: #0ca759 !important;
+}
 
 /********************CONTENT************************************************************/
 .content {
@@ -107,6 +102,9 @@ a, a:hover, a:focus {
     overflow-y: auto;
 }
 
+.content.report-page .report-filters .tableform td {
+    height: 35px;
+}
 
 /************************  Content Error page *******************************************/
 .content.error-page {
@@ -1425,7 +1423,7 @@ table th.thpointer {
     }
 /*.box-post div.textrow ul
 {
-	margin-top:0;
+    margin-top:0;
     margin-bottom:0;
 }*/
 
@@ -1679,12 +1677,15 @@ table th.thpointer {
 .case-overview.page #search_result {
     min-height: 206px;
     position: relative;
-    margin-left: 0px;
+    margin-left: 0;
 }
 
-.loading-msg,
-.no-data-msg,
-.error-msg {
+.search-result-messages {
+    position: relative;
+    margin-left: 0;
+}
+
+.loading-msg {
     display: none;
     background-color: #f9f9f9;
     border: 1px solid #dddddd;
@@ -1699,15 +1700,29 @@ table th.thpointer {
     padding: 10px;
 }
 
+.error-msg,
+.no-data-msg,
 .noavailablefields-msg,
 .nofields-msg {
+    background-color: #f9f9f9;
     border: 1px solid #dddddd;
     display: none;
-    left: 0px;
-    right: 0px;
-    position: absolute;
+    min-height: 0!important;
+    left: 0;
+    right: 0;
     color: gray;
     padding: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.search-result-messages .error-msg {
+    border: 1px solid #ff0000 !important;
+    background-color: #ffeeee !important;
+}
+    
+#frmAdvanceSearch .customerSearchResults {
+    margin-bottom: 20px;
 }
 
 #fragment-4 .nofields-msg,
@@ -2104,7 +2119,10 @@ h4 {
     margin-left: -5px;
 }
 
-
+.wordbreak {
+    overflow-wrap: break-word;
+    word-wrap: break-word;    
+}
 
 /***************DATE PICKER**********************************************/
 /*!
@@ -2556,7 +2574,7 @@ h4 {
     filter: alpha(opacity=100);
 }
 /* sliding resizer - add 'outside-border' to resizer on-hover 
-		 * this sample illustrates how to target specific panes and states */
+         * this sample illustrates how to target specific panes and states */
 .ui-layout-resizer-north-sliding-hover {
     border-bottom-width: 1px;
 }
@@ -2642,10 +2660,10 @@ h4 {
     /* ta med detta sen... fuckar upp mitt synfält DL
 .ui-layout-west ul li:first-child
 {
-	margin:0 0 0 -40px;
-	padding:5px 0 5px 10px;
-	border-bottom:1px dotted #666;
-	background-image:url(images/bg_menuTop.png);
+    margin:0 0 0 -40px;
+    padding:5px 0 5px 10px;
+    border-bottom:1px dotted #666;
+    background-image:url(images/bg_menuTop.png);
 }*/
 
     .ui-layout-west li:hover {
@@ -2919,30 +2937,30 @@ body.login {
 
 .expand-tree-item {
     /*display: inline-block;
-	width: 14px;
-	height: 14px;
-	margin-top: 1px;
-	*margin-right: .3em;
-	line-height: 14px;
-	vertical-align: text-top;
-	background-image: url("../img/glyphicons-halflings.png");
-	width: 16px;
-	background-position: 0 -96px;
-	background-repeat:no-repeat;*/
+    width: 14px;
+    height: 14px;
+    margin-top: 1px;
+    *margin-right: .3em;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-image: url("../img/glyphicons-halflings.png");
+    width: 16px;
+    background-position: 0 -96px;
+    background-repeat:no-repeat;*/
 }
 
 .collapse-tree-item {
     /*display: inline-block;
-	width: 14px;
-	height: 14px;
-	margin-top: 1px;
-	*margin-right: .3em;
-	line-height: 14px;
-	vertical-align: text-top;
-	background-image: url("../img/glyphicons-halflings.png");
-	width: 16px;
-	background-position: -24px -96px;
-	background-repeat:no-repeat;*/
+    width: 14px;
+    height: 14px;
+    margin-top: 1px;
+    *margin-right: .3em;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-image: url("../img/glyphicons-halflings.png");
+    width: 16px;
+    background-position: -24px -96px;
+    background-repeat:no-repeat;*/
 }
 
 
@@ -3963,6 +3981,12 @@ td > div.checkbox.commun {
     padding-left: 40px;
 }
 
+.icon-copy {
+    cursor: pointer;
+    display: inline-block;
+    background:url('../icons/copy.png') no-repeat 0 0;
+}
+
 .attachedFile {
     background-image: url(../icons/clip.png);
     background-position: 2px 1px;
@@ -4096,4 +4120,9 @@ div.chosen-container.chosen-container-single.error .chosen-single {
 
 #tooltip-button-wrapper .btn[disabled] {
     pointer-events: none;
+}
+
+#feedback_notes_popup .fb_content {
+    overflow-y: auto;
+    max-height: 60vh;
 }

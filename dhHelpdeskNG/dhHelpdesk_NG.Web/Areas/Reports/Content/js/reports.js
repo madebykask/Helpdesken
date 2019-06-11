@@ -24,7 +24,10 @@
         RegistrationSource: 20,
         ResponseTime: 22,
         ReportGenerator: 18,
-        CaseSatisfaction: 23
+        CaseSatisfaction: 23,
+        HistoricalReport: 24,
+        ReportedTime: 25,
+        NumberOfCases: 26
     }
 
     dhHelpdesk.reports.utils = {

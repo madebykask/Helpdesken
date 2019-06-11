@@ -31,7 +31,11 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Mapper.Profiles
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(s => s.UserId.HasValue ? $"{s.UserFirstName} {s.UserSurName}" : s.RegUserName)
                 );
 
+            CreateMap<Mail2TicketData, Mail2TicketModel>();
+
             CreateMap<LogFileData, LogFileModel>();
+
+            CreateMap<EmailLogData, EmailLogModel>();
 
             CreateMap<User, LogUserOverview>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(s => s.Id))

@@ -32,7 +32,7 @@ export class CasesFilterComponent implements OnInit {
     menuIcon: 'fa-filter',
     menuText: '',
     onItemTap: function (event, inst) {
-      console.log('item tap: ' + (inst.id || ''));
+      //console.log('item tap: ' + (inst.id || ''));
     },
     onMenuShow: function (event, inst) {
       if (!event.menu.element.classList.contains('case-search-filter'))

@@ -501,9 +501,10 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public UserName GetUserName(int userId)
         {
-            return this.DataContext.Users.Where(u => u.Id == userId)
-                    .Select(u => new UserName(u.FirstName, u.SurName))
-                    .FirstOrDefault();
+            var user =
+               this.DataContext.Users.Where(u => u.Id == userId).Select(u => new { u.FirstName, u.SurName }).Single();
+
+            return new UserName(user.FirstName, user.SurName);
         }
 
         public ItemOverview FindActiveOverview(int userId)
@@ -570,7 +571,7 @@ namespace DH.Helpdesk.Dal.Repositories
                     BulletinBoardPermission = x.BulletinBoardPermission,
                     DocumentPermission = x.DocumentPermission,
                     InventoryAdminPermission = x.InventoryPermission,
-					InventoryViewPermission = x.InventoryViewPermission,
+                    InventoryViewPermission = x.InventoryViewPermission,
                     ContractPermission = x.ContractPermission,
                     SetPriorityPermission = x.SetPriorityPermission,
                     InvoicePermission = x.InvoicePermission,

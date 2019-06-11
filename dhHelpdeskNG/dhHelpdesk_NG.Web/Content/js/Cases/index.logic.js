@@ -133,6 +133,33 @@ function getCollapseCaption(cap) {
             }
         }
 
+        function sanitizeColumns(jsonArray) {
+            var dataProp;
+            jsonArray.forEach(function (item) {
+                if (item['data'] !== null) {
+                    dataProp = item['data'].replace(/\s/g, '').replace(/\./g, '');
+                    item['data'] = dataProp;
+                }
+            });
+            return jsonArray;
+        }
+
+        function sanitizeData(jsonArray) {
+            var newKey;
+            jsonArray.forEach(function (item) {
+                for (var key in item) {
+                    if (item.hasOwnProperty(key)) {
+                        newKey = key.replace(/\s/g, '').replace(/\./g, '');
+                        if (key != newKey) {
+                            item[newKey] = item[key];
+                            delete item[key];
+                        }
+                    }
+                }
+            });
+            return jsonArray;
+        } 
+
         self.table = InitDataTable("caseResults", appSettings.perPageText, appSettings.perShowingText,
             {
                 "sDom": "<'row-fluid'<'span6'l><'span6'p>r>t<'row-fluid'<'span6'i><'span6'p>>",
@@ -183,7 +210,7 @@ function getCollapseCaption(cap) {
                         row.cells[row.cells.length-1].innerHTML = html.join("");
                     }
                 },
-                columns: columns,
+                columns: sanitizeColumns(columns),
                 order: sortIndex != null ? [[sortIndex, appSettings.gridSettings.sortOptions.sortDirString]] : [],
                 "bAutoWidth": false,
                 "lengthMenu": [appSettings.gridSettings.pageSizeList, appSettings.gridSettings.pageSizeList],
@@ -194,9 +221,9 @@ function getCollapseCaption(cap) {
                 var textStatus = arguments[1];
                 if (textStatus !== "abort") {
                     self.showMsg(ERROR_MSG_TYPE);
-                    self.setGridState(window.GRID_STATE.IDLE);                   
+                    self.setGridState(window.GRID_STATE.IDLE);
                 }
-            });
+            }, undefined, undefined, sanitizeData);
 
         self.table
             //.on("init.dt", function () {

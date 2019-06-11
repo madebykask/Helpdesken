@@ -11,6 +11,7 @@
             List<CategoryWithSubcategories> categories, 
             int? selectedCategoryId, 
             List<FaqOverview> firstCategoryFaqs,
+            int languageId,
             bool userHasFaqAdminPermission);
     }
 }

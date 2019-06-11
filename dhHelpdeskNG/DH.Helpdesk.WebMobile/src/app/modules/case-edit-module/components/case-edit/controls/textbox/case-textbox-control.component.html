@@ -1,10 +1,12 @@
 <ng-container [formGroup]="form">
-    <mbsc-input #input [formControlName]="field.name" [error]="getErrorState()"
-     [errorMessage]="getErrorMessage()" [ngClass]="{ 'disabled': formControl.disabled }">{{ formControl.label }}{{ requiredSymbol }}</mbsc-input> 
+    <mbsc-input #input [formControlName]="field" 
+        [error]="getErrorState()"
+        [errorMessage]="getErrorMessage()" 
+        [ngClass]="{ 'disabled': formControl.disabled }">{{ formControl.label }}{{ requiredSymbol }}</mbsc-input> 
 <!--
     <label>
-        {{field.Label}}
-        <input [formControlName]="field.Name" [readonly]="isReadonly ? '' : null" />
+        {{fieldLabel}}
+        <input [formControlName]="field" [readonly]="isReadonly ? '' : null" />
     </label>     
     <label class="mbsc-err">
         <input type="text" placeholder="Text field with error style and message"  />

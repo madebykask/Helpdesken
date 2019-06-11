@@ -4,23 +4,33 @@ Imports DH.Helpdesk.Mail2Ticket.Library
 Imports Rebex.Net
 Imports System.IO
 Imports System.Linq
+Imports System.Text
 Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
 Imports System.Text.RegularExpressions
-Imports System.Web.UI
 Imports Rebex.Mail
 Imports Rebex.Mime
+Imports DH.Helpdesk.BusinessData.OldComponents.GlobalEnums
 
 Module DH_Helpdesk_Mail
     'Dim msDeniedHtmlBodyString As String
     Dim iSequenceNumber As ImapMessageSet
     Dim msDeniedHtmlBodyString As String
+
+    ' Optional Parameters set from config
     Dim bEnableNewEmailProcessing = False
+    Dim customersFilter As List(Of Integer) = New List(Of Integer)
+    Dim workingGroupsFilter As List(Of Integer) = New List(Of Integer)
+    Dim sEmailForlderOverride As String
+    Dim sEmailForlderArchiveOverride As String
+    Dim iLogLevelOverride As Integer? = Nothing
+    Dim bEnableIMAPIClientLog As Boolean = False
+    Dim sIMAPIClientLogPath As String
+
 
     Public Sub Main()
 
-        Dim testNow As DateTime = DateTime.Now
-        Dim secureConnectionString As String = ConfigurationManager.AppSettings("SecureConnectionString")
-        If (Not String.IsNullOrEmpty(secureConnectionString) AndAlso secureConnectionString.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
+        Dim secureConnectionString As String = GetAppSettingValue("SecureConnectionString")
+        If (Not IsNullOrEmpty(secureConnectionString) AndAlso secureConnectionString.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
             Dim fileName = Path.GetFileName(Reflection.Assembly.GetExecutingAssembly().Location)
             ToggleConfigEncryption(fileName)
         End If
@@ -32,21 +42,48 @@ Module DH_Helpdesk_Mail
             aArguments = Nothing
         End If
 
-        Dim appVal As String = ConfigurationManager.AppSettings("enableNewEmailProcessing")
-        If (Not String.IsNullOrEmpty(appVal) AndAlso appVal.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
+        Dim appVal As String = GetAppSettingValue("enableNewEmailProcessing")
+        If (Not IsNullOrEmpty(appVal) AndAlso appVal.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
             bEnableNewEmailProcessing = True
         End If
         Dim sConnectionstring As String = ConfigurationManager.ConnectionStrings("Helpdesk")?.ConnectionString
-        Dim workingModeArg As String = ConfigurationManager.AppSettings("WorkingMode")
-        Dim logFolderArg As String = ConfigurationManager.AppSettings("LogFolder")
-        Dim logIdentifierArg As String = ConfigurationManager.AppSettings("LogIdentifier")
-        Dim productAreaSepArg As String = ConfigurationManager.AppSettings("ProductAreaSeparator")
+        Dim workingModeArg As String = GetAppSettingValue("WorkingMode")
+        Dim logFolderArg As String = GetAppSettingValue("LogFolder")
+        Dim logIdentifierArg As String = GetAppSettingValue("LogIdentifier")
+        Dim productAreaSepArg As String = GetAppSettingValue("ProductAreaSeparator")
         Dim newModeArg As String = ""
+
+        #Region "Optional params for diagnostic purposes"
+
+        Dim sWorkingGroupsFilter = GetAppSettingValue("workingGroupsFilter")
+        Dim sCustomersFilter = GetAppSettingValue("customersFilter")
+        sEmailForlderOverride = GetAppSettingValue("emailFolderOverride")
+        sEmailForlderArchiveOverride = GetAppSettingValue("emailFolderArchiveOverride")
+
+        Dim sLogLevelOverride As String = GetAppSettingValue("logLevelOverride")
+        iLogLevelOverride = If(IsNullOrEmpty(sLogLevelOverride), 0, Int32.Parse(sLogLevelOverride))
+
+        Dim sEnableIMAPIClientLog = GetAppSettingValue("enableIMAPIClientLog")
+        bEnableIMAPIClientLog = Not IsNullOrEmpty(sEnableIMAPIClientLog) AndAlso Boolean.Parse(sEnableIMAPIClientLog)
+
+        sIMAPIClientLogPath = GetAppSettingValue("IMAPIClientLogPath")
+
+        If Not IsNullOrEmpty(sCustomersFilter) Then
+            Dim elements() As String = sCustomersFilter.Split(New Char() {";"c}, StringSplitOptions.RemoveEmptyEntries)
+            customersFilter = elements.Select(Function(x) Int32.Parse(x)).ToList()
+        End If
+
+        If Not IsNullOrEmpty(sWorkingGroupsFilter) Then
+            Dim elements() As String = sWorkingGroupsFilter.Split(New Char() {";"c}, StringSplitOptions.RemoveEmptyEntries)
+            workingGroupsFilter = elements.Select(Function(x) Int32.Parse(x)).ToList()
+        End If
+
+#End Region
 
         'NOTE: USE Command Line Arguements in Project Properties under Debug tab instead of hardcoding values
         '      Example: 5,Data Source=DHUTVSQL2; Initial Catalog=DH_Support; User Id=sa; Password=;Network Library=dbmssocn;,,,,1
 
-        'msDeniedHtmlBodyString = ConfigurationManager.AppSettings("DeniedHtmlBodyString").ToString()
+        'msDeniedHtmlBodyString = GetConfigVal("DeniedHtmlBodyString").ToString()
 
         'ReDim aArguments(2)
         'aArguments(0) = "5"
@@ -76,21 +113,21 @@ Module DH_Helpdesk_Mail
                 logIdentifierArg = GetCmdArg(aArguments, 3, logIdentifierArg)
                 productAreaSepArg = GetCmdArg(aArguments, 4, productAreaSepArg)
                 newModeArg = GetCmdArg(aArguments, 5, newModeArg)
-                bEnableNewEmailProcessing = IIf(newModeArg = "1", True, False)
+                bEnableNewEmailProcessing = newModeArg = "1"
             End If
         End If
 
-        Dim workingMode = IIf(workingModeArg = "5", SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
+        Dim workingMode = If(workingModeArg = "5", SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
 
-        If Not String.IsNullOrEmpty(logFolderArg) Then
+        If Not IsNullOrEmpty(logFolderArg) Then
             gsLogPath = logFolderArg
         End If
 
-        If Not String.IsNullOrEmpty(logIdentifierArg) Then
+        If Not IsNullOrEmpty(logIdentifierArg) Then
             gsInternalLogIdentifier = logIdentifierArg.ToString.Trim
         End If
 
-        If Not String.IsNullOrEmpty(productAreaSepArg) Then
+        If Not IsNullOrEmpty(productAreaSepArg) Then
             gsProductAreaSeperator = productAreaSepArg
         End If
 
@@ -98,7 +135,7 @@ Module DH_Helpdesk_Mail
         Try
             openLogFile()
 
-            If String.IsNullOrEmpty(sConnectionstring) Then
+            If IsNullOrEmpty(sConnectionstring) Then
                 Throw New ArgumentNullException("connection string")
             End If
 
@@ -123,15 +160,14 @@ Module DH_Helpdesk_Mail
             closeLogFile()
         End Try
 
-        Dim testEnd As TimeSpan = DateTime.Now - testNow
     End Sub
 
     Private Function GetCmdArg(args As String(), index As Int32, defaultValue As String) As String
         Dim val As String = defaultValue
-        If args.Length > index And Not String.IsNullOrEmpty(args(index)) Then
+        If args.Length > index And Not IsNullOrEmpty(args(index)) Then
             val = args(index)
         End If
-        Return val
+        Return If(String.IsNullOrEmpty(val), "", val)
     End Function
 
     Private Sub ToggleConfigEncryption(exeConfigName As String)
@@ -214,48 +250,70 @@ Module DH_Helpdesk_Mail
             giDBType = objGlobalSettings.DBType
             gsDBVersion = objGlobalSettings.DBVersion
 
-            Dim colCustomer As Collection
+            Dim customers As List(Of Customer)
 
             If iSyncType = SyncType.SyncByWorkingGroup Then
-                colCustomer = objCustomerData.getCustomersByWorkingGroup()
+                customers = objCustomerData.getCustomersByWorkingGroup()
             Else
-                colCustomer = objCustomerData.getCustomers()
+                customers = objCustomerData.getCustomers()
             End If
 
-            For i As Integer = 1 To colCustomer.Count
+            Dim iCustomerCount = 0
 
-                objCustomer = colCustomer(i)
+            For Each objCustomer In customers
+
+                iCustomerCount += 1
+
+                ' Filter customers based on diagnostic param
+                If (customersFilter.Any() AndAlso Not customersFilter.Contains(objCustomer.Id)) Then
+                    Continue For
+                End If
+
+                ' Filter workging groups based on diagnostic param
+                If (workingGroupsFilter.Any() AndAlso Not workingGroupsFilter.Contains(objCustomer.DefaultWorkingGroup_Id)) Then
+                    Continue For
+                End If
+
+                Dim iPop3DebugLevel = objCustomer.POP3DebugLevel
+
+                ' Override log level with diagnostic param
+                If iLogLevelOverride IsNot Nothing AndAlso iLogLevelOverride > 0 Then
+                    iPop3DebugLevel = iLogLevelOverride
+                End If
+
+                giLoglevel = iPop3DebugLevel
 
                 If objCustomer.PhysicalFilePath = "" Then
                     objCustomer.PhysicalFilePath = objGlobalSettings.AttachedFileFolder
                 End If
 
-                Dim iPop3DebugLevel = objCustomer.POP3DebugLevel
-                
-                giLoglevel = iPop3DebugLevel
+                If Not IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not IsNullOrEmpty(objCustomer.POP3UserName) Then
 
-                If Not String.IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not String.IsNullOrEmpty(objCustomer.POP3UserName) Then
-
-                    LogToFile("M2T for " & objCustomer.Name & ", Nr: " & i & "(" & colCustomer.Count & "), ver " & objGlobalSettings.DBVersion, iPop3DebugLevel)
+                    LogToFile("M2T for " & objCustomer.Name & ", Nr: " & iCustomerCount & "(" & customers.Count & "), appVersion: " & CurrentAssemblyInfo.Version, iPop3DebugLevel)
 
                     Try
                         IMAPclient = New Imap()
 
-                        Dim host As System.Net.IPHostEntry = System.Net.Dns.GetHostEntry(objCustomer.POP3Server)
+                        ' Enable IMAPI Client Logging
+                        If bEnableIMAPIClientLog AndAlso Not IsNullOrEmpty(sIMAPIClientLogPath)
+                            IMAPclient.LogWriter = New Rebex.FileLogWriter(sIMAPIClientLogPath, Rebex.LogLevel.Debug)
+                        End If
+
                         Dim ip As String = ""
+                        Dim host As System.Net.IPHostEntry = System.Net.Dns.GetHostEntry(objCustomer.POP3Server)
 
                         If Not host Is Nothing Then
                             ip = host.AddressList(0).ToString()
                         End If
 
-                        LogToFile("Connecting to " & objCustomer.POP3Server & " (" + ip + "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName, iPop3DebugLevel)
+                        LogToFile("Connecting to " & objCustomer.POP3Server & " (" & ip & "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName, iPop3DebugLevel)
 
                         If objCustomer.POP3Port = 993 Then
                             IMAPclient.Connect(objCustomer.POP3Server.ToString(), objCustomer.POP3Port, Nothing, ImapSecurity.Implicit)
                         Else
                             IMAPclient.Connect(objCustomer.POP3Server, objCustomer.POP3Port)
                         End If
-                        
+
                         ' hämta inställningar om e-post texten ska översättas till fält på ärendet
                         Dim fieldsToUpdate As Dictionary(Of String, String)
                         fieldsToUpdate = objCustomerData.GetCaseFieldsSettings(objCustomer.Id)
@@ -286,14 +344,14 @@ Module DH_Helpdesk_Mail
 
                         'End If
 
-                        If String.IsNullOrEmpty(objCustomer.POP3UserName) Or String.IsNullOrEmpty(objCustomer.POP3Password) Then
+                        If IsNullOrEmpty(objCustomer.POP3UserName) Or IsNullOrEmpty(objCustomer.POP3Password) Then
                             LogError("Missing UserName Or Password")
                             Exit For
                         ElseIf objCustomer.EMailDefaultCaseType_Id = 0 Then
                             LogError("Missing Default Case Type")
                             Exit For
                         End If
-                        
+
                         If objCustomer.MailServerProtocol = 0 Then
                             ' Inget stöd för POP3 längre
                             LogToFile("Pop3 Is Not supported.", iPop3DebugLevel)
@@ -307,18 +365,30 @@ Module DH_Helpdesk_Mail
                         ElseIf objCustomer.MailServerProtocol = 1 Then
 
                             Dim emailFolder As String = "Inbox" ' Default email folder
-                            
+
+                            'Override with diagnostic values if exist
+                            If Not IsNullOrEmpty(sEmailForlderOverride) Then
+                                objCustomer.EMailFolder = sEmailForlderOverride
+                                LogToFile($"Email Folder has been overrided to {sEmailForlderOverride}", iPop3DebugLevel)
+                            End If
+
+                            If Not IsNullOrEmpty(sEmailForlderArchiveOverride) Then
+                                objCustomer.EMailFolderArchive = sEmailForlderArchiveOverride
+                                LogToFile($"Email Folder Archive has been overrided to {sEmailForlderArchiveOverride}", iPop3DebugLevel)
+                            End If
+
+
                             'Validate email folders
-                            If Not String.IsNullOrEmpty(objCustomer.EMailFolder) Then
+                            If Not IsNullOrEmpty(objCustomer.EMailFolder) Then
                                 If Not CheckEmailFolderExists(IMAPclient, objCustomer.EMailFolder)
                                     LogError($"EmailFolder '{objCustomer.EMailFolder}' doesn't exist.")
                                     Exit For
-                                Else 
+                                Else
                                     emailFolder = objCustomer.EMailFolder
                                 End If
                             End If
 
-                            If Not String.IsNullOrEmpty(objCustomer.EMailFolderArchive) Then
+                            If Not IsNullOrEmpty(objCustomer.EMailFolderArchive) Then
                                 If Not CheckEmailFolderExists(IMAPclient, objCustomer.EMailFolderArchive)
                                     LogError($"EmailFolderArchive '{objCustomer.EMailFolderArchive}' doesn't exist.")
                                     Exit For
@@ -347,13 +417,15 @@ Module DH_Helpdesk_Mail
                                 sUniqueID = IMAPlist(iListIndex).UniqueId
 
                                 Dim objCase As CCase = Nothing
-                                
+
                                 If objCustomer.MailServerProtocol = 0 Then
                                     ' Inget stöd för POP3 längre
                                 Else
                                     message = IMAPclient.GetMailMessage(sUniqueID)
                                     message.Silent = True
                                 End If
+
+                                Dim attachedFiles As List(Of String) = New List(Of String)()
 
                                 Dim uniqueMessageId As String = ""
                                 If message.MessageId IsNot Nothing Then
@@ -387,7 +459,7 @@ Module DH_Helpdesk_Mail
                                     If iPos > 0 Then
                                         sUserId = Trim(Left(sSubject, iPos - 1))
                                     End If
-                                    
+
                                     LogToFile("Beställning från " & sUserId, iPop3DebugLevel)
 
                                     If sUserId <> "" Then
@@ -405,16 +477,16 @@ Module DH_Helpdesk_Mail
                                         'End If
                                     End If
                                 End If
-                                
+
                                 iMailID = 0
 
                                 If bEnableNewEmailProcessing
                                     'New logic to find existing case by email
-                                    Dim messageIds as List(Of String) = ExtractMessageIds(message)
+                                    Dim messageIds As List(Of String) = ExtractMessageIds(message)
                                     LogToFile(String.Format("MessageIds found: {0}", String.Join(",", messageIds)), objCustomer.POP3DebugLevel)
 
                                     ' Iterate over all UniqueMessageIds from the email to find matching case
-                                    For Each messageId as String In messageIds
+                                    For Each messageId As String In messageIds
                                         ' Find objCase
                                         objCase = FindCaseByUniqueMessageId(messageId, objCustomer)
 
@@ -425,12 +497,12 @@ Module DH_Helpdesk_Mail
                                             Exit For
                                         End If
                                     Next
-                                Else 
+                                Else
                                     'old logic 
                                     If message.InReplyTo.Count > 0 Then
                                         Dim replyToId As String = message.InReplyTo(0).ToString
                                         LogToFile(Now() & ", Reply From: " & replyToId, iPop3DebugLevel)
-                                        
+
                                         LogToFile(Now() & ", getCaseByMessageID. InReplyTo: " & replyToId, iPop3DebugLevel)
                                         objCase = objCaseData.getCaseByMessageID(replyToId)
 
@@ -445,11 +517,11 @@ Module DH_Helpdesk_Mail
                                         iMailID = 0
                                     End If
                                 End If
-                                
+
                                 If objCase Is Nothing Then
                                     ' Kontrollera om det är svar på ett befintligt ärende | Check if there is an answer to an existing case
                                     If objCustomer.EMailSubjectPattern <> "" Then
-                                        
+
                                         LogToFile("Subject: " & sSubject, iPop3DebugLevel)
 
                                         iCaseNumber = extractCaseNumberFromSubject(sSubject, objCustomer.EMailSubjectPattern)
@@ -476,7 +548,7 @@ Module DH_Helpdesk_Mail
                                 If fieldsToUpdate.Count > 0 Then
                                     fields = GetParsedMailBody(fieldsToUpdate, sBodyText)
                                     Dim strUserId As String = GetValueFromEmailtext(fields, "reportedby")
-                                    If Not String.IsNullOrWhiteSpace(strUserId) Then
+                                    If Not IsNullOrEmpty(strUserId) Then
                                         objComputerUser = objComputerUserData.getComputerUserByUserId(strUserId, objCustomer.Id)
                                     End If
                                 End If
@@ -600,68 +672,22 @@ Module DH_Helpdesk_Mail
                                     'Save 
                                     Dim sHTMLFileName As String = createHtmlFileFromMail(message, objCustomer.PhysicalFilePath & "\" & objCase.Casenumber, objCase.Casenumber)
 
-                                    If Not String.IsNullOrEmpty(sHTMLFileName) Then
+                                    If Not IsNullOrEmpty(sHTMLFileName) Then
                                         iHTMLFile = 1
 
                                         ' Lägg in i databasen
                                         objCaseData.saveFileInfo(objCase.Id, "html/" & sHTMLFileName)
                                     End If
 
-                                    If message.Attachments.Count > 6 - iHTMLFile Then
-
-                                        ' Kontrollera om folder existerar
-                                        If Directory.Exists(objCustomer.PhysicalFilePath & "\Temp" & objCase.Casenumber) = False Then
-                                            Directory.CreateDirectory(objCustomer.PhysicalFilePath & "\Temp" & objCase.Casenumber)
-                                        End If
-
-                                        If Directory.Exists(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber) = False Then
-                                            Directory.CreateDirectory(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber)
-                                        End If
-
-                                        For j = 0 To message.Attachments.Count - 1
-                                            Dim sFileNameTemp As String = message.Attachments.Item(j).FileName
-
-                                            sFileNameTemp = sFileNameTemp.Replace(":", "")
-                                            sFileNameTemp = URLDecode(sFileNameTemp)
-
-                                            message.Attachments.Item(j).Save(objCustomer.PhysicalFilePath & "\Temp" & objCase.Casenumber & "\" & sFileNameTemp)
-                                        Next
-
-                                        Dim sFileName As String = objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\" & objCase.Casenumber & ".zip"
-
-                                        sFileName = createZipFile(objCustomer.PhysicalFilePath & "\Temp" & objCase.Casenumber, sFileName)
-
-                                        If sFileName <> "" Then
-                                            ' Ta bort tempkatalogen
-                                            If Directory.Exists(objCustomer.PhysicalFilePath & "\Temp" & objCase.Casenumber) = True Then
-                                                Directory.Delete(objCustomer.PhysicalFilePath & "\Temp" & objCase.Casenumber, True)
-                                            End If
-
-                                            ' Lägg in i databasen
-                                            objCaseData.saveFileInfo(objCase.Id, objCase.Casenumber & ".zip")
-                                        End If
-                                    ElseIf message.Attachments.Count > 0 Then
-
-                                        ' Kontrollera om folder existerar
-                                        If Directory.Exists(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber) = False Then
-                                            Directory.CreateDirectory(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber)
-                                        End If
-
-                                        For j = 0 To message.Attachments.Count - 1
-                                            Dim sFileName As String = message.Attachments.Item(j).FileName
-
-                                            sFileName = sFileName.Replace(":", "")
-                                            sFileName = URLDecode(sFileName)
-
-                                            LogToFile("Filename:" & sFileName, iPop3DebugLevel)
-
-                                            message.Attachments.Item(j).Save(objCustomer.PhysicalFilePath & "\" & objCase.Casenumber & "\" & sFileName)
-
-                                            ' Lägg in i databasen
+                                    'Attached files processing for Case
+                                    attachedFiles = ProcessMessageAttachments(message, iHTMLFile, objCustomer, objCase.Casenumber.ToString(), Nothing, iPop3DebugLevel)
+                                    If (attachedFiles.Any())
+                                        For Each attachedFile As String In attachedFiles
+                                            Dim sFileName = Path.GetFileName(attachedFile)
                                             objCaseData.saveFileInfo(objCase.Id, sFileName)
                                         Next
-
                                     End If
+
                                     '#65030
                                     Dim newcaseEmailTo As String = objCase.Persons_EMail
                                     If objCustomer.NewCaseMailTo = 1 Then
@@ -672,7 +698,7 @@ Module DH_Helpdesk_Mail
                                     If isValidRecipient(newcaseEmailTo, objCustomer.AllowedEMailRecipients) = True Then
                                         If objCustomer.EMailRegistrationMailID <> 0 And bOrder = False And (message.From.ToString <> message.To.ToString) Then
                                             'If Len(objCase.Persons_EMail) > 6 Then  (objCase.Persons_EMail can be empty) #65030
-                                            objMailTemplate = objMailTemplateData.getMailTemplateById(1, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                            objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.NewCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                             If Not objMailTemplate Is Nothing Then
                                                 Dim objMail As New Mail
@@ -680,15 +706,18 @@ Module DH_Helpdesk_Mail
                                                 sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                                 sSendTime = Date.Now()
 
-                                                Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString
                                                 'helpdesk case 58782, #65030
                                                 'Dim newcaseEmailTo As String = objCase.Persons_EMail
                                                 'If objCustomer.NewCaseMailTo = 1 Then
                                                 '    newcaseEmailTo = sNewCaseToEmailAddress
                                                 'End If
                                                 'helpdesk case 58782
-                                                sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, newcaseEmailTo, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
-                                                objLogData.createEMailLog(iCaseHistory_Id, newcaseEmailTo, 1, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                sRet_SendMail = 
+                                                    objMail.sendMail(objCase, Nothing, objCustomer, newcaseEmailTo, objMailTemplate, objGlobalSettings, 
+                                                                     sMessageId, sEMailLogGUID, sConnectionstring) 
+
+                                                objLogData.createEMailLog(iCaseHistory_Id, newcaseEmailTo, MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             End If
                                             'End If  #65030
                                         End If
@@ -697,7 +726,7 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     If objCustomer.EMailRegistrationMailID <> 0 And objCustomer.NewCaseEMailList <> "" Then
-                                        objMailTemplate = objMailTemplateData.getMailTemplateById(1, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                        objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.NewCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                         If Not objMailTemplate Is Nothing Then
                                             Dim vNewCaseEmailList() As String = objCustomer.NewCaseEMailList.Split(";")
@@ -708,11 +737,13 @@ Module DH_Helpdesk_Mail
                                                 sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                                 sSendTime = Date.Now()
 
-                                                Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
-                                                sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, vNewCaseEmailList(Index), objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
+                                                sRet_SendMail = 
+                                                    objMail.sendMail(objCase, Nothing, objCustomer, vNewCaseEmailList(Index), objMailTemplate, objGlobalSettings, 
+                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, vNewCaseEmailList(Index), 1, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                objLogData.createEMailLog(iCaseHistory_Id, vNewCaseEmailList(Index), MailTemplates.NewCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             Next
 
                                         End If
@@ -724,7 +755,7 @@ Module DH_Helpdesk_Mail
 
                                         If Not objUser Is Nothing Then
                                             If objUser.AllocateCaseMail = 1 And Len(objUser.EMail) > 6 Then
-                                                objMailTemplate = objMailTemplateData.getMailTemplateById(2, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                                objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.AssignedCaseToUser, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                                 If Not objMailTemplate Is Nothing Then
                                                     Dim objMail As New Mail
@@ -732,29 +763,32 @@ Module DH_Helpdesk_Mail
                                                     sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                                     sSendTime = Date.Now()
 
-                                                    Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+                                                    Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
-                                                    sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
+                                                    sRet_SendMail = 
+                                                        objMail.sendMail(objCase, Nothing, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, 
+                                                                         sEMailLogGUID, sConnectionstring)
 
-                                                    objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, 2, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                    objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, MailTemplates.AssignedCaseToUser, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                                 End If
                                             End If
                                         End If
                                     End If
 
-                                    Dim workingGroup_Id As Integer = objCase.WorkingGroup_Id
+                                    Dim workingGroupId As Integer = objCase.WorkingGroup_Id
                                     Dim workingGroupEMail As String = objCase.WorkingGroupEMail
                                     Dim workingGroupAllocateCaseMail As Integer = objCase.WorkingGroupAllocateCaseMail
+
                                     If objCustomer.CaseWorkingGroupSource = 0 Then
-                                        workingGroup_Id = objCase.PerformerWorkingGroup_Id
+                                        workingGroupId = objCase.PerformerWorkingGroup_Id
                                         workingGroupEMail = objCase.PerformerWorkingGroupEMail
                                         workingGroupAllocateCaseMail = objCase.PerformerWorkingGroupAllocateCaseMail
                                     End If
 
-                                    If workingGroup_Id <> 0 Then
+                                    If workingGroupId <> 0 Then
 
-                                        If Not String.IsNullOrEmpty(workingGroupEMail) And workingGroupAllocateCaseMail = 1 Then
-                                            objMailTemplate = objMailTemplateData.getMailTemplateById(7, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                        If Not IsNullOrEmpty(workingGroupEMail) And workingGroupAllocateCaseMail = 1 Then
+                                            objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.AssignedCaseToWorkinggroup, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                             If Not objMailTemplate Is Nothing Then
                                                 Dim objMail As New Mail
@@ -762,17 +796,20 @@ Module DH_Helpdesk_Mail
                                                 sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                                 sSendTime = Date.Now()
 
-                                                Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
-                                                sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, workingGroupEMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
+                                                sRet_SendMail = 
+                                                    objMail.sendMail(objCase, Nothing, objCustomer, workingGroupEMail, objMailTemplate, objGlobalSettings, 
+                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, workingGroupEMail, 7, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                objLogData.createEMailLog(iCaseHistory_Id, workingGroupEMail, MailTemplates.AssignedCaseToWorkinggroup, 
+                                                                          sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             End If
                                         End If
                                     End If
 
                                     If sPriorityEMailList <> "" Then
-                                        objMailTemplate = objMailTemplateData.getMailTemplateById(13, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                        objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.AssignedCaseToPriority, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                         If Not objMailTemplate Is Nothing Then
                                             Dim vPriorityEmailList() As String = sPriorityEMailList.Split(";")
@@ -783,16 +820,19 @@ Module DH_Helpdesk_Mail
                                                 sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                                 sSendTime = Date.Now()
 
-                                                Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+                                                Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
-                                                sRet_SendMail = objMail.sendMail(objCase, Nothing, objCustomer, vPriorityEmailList(Index), objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
+                                                sRet_SendMail = 
+                                                    objMail.sendMail(objCase, Nothing, objCustomer, vPriorityEmailList(Index), objMailTemplate, objGlobalSettings, 
+                                                                     sMessageId, sEMailLogGUID, sConnectionstring)
 
-                                                objLogData.createEMailLog(iCaseHistory_Id, vPriorityEmailList(Index), 13, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                                objLogData.createEMailLog(iCaseHistory_Id, vPriorityEmailList(Index), MailTemplates.AssignedCaseToPriority, sMessageId, 
+                                                                          sSendTime, sEMailLogGUID, sRet_SendMail)
                                             Next
 
                                         End If
                                     End If
-                                Else
+                                Else ' Existing case 
 
                                     ' Spara svaret som en loggpost på aktuellt ärende
                                     ' Ta endast med svaret
@@ -800,8 +840,6 @@ Module DH_Helpdesk_Mail
 
                                     ' Markera ärendet som oläst
                                     objCaseData.markCaseUnread(objCase)
-
-
 
                                     ' Uppdatera ärendet och aktivera om det är avslutat
                                     If objCase.FinishingDate <> Date.MinValue Then
@@ -841,7 +879,8 @@ Module DH_Helpdesk_Mail
                                             ' Lägg in som intern loggpost
                                             iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
                                         Else
-                                            If iMailID = 2 Or iMailID = 5 Or iMailID = 7 Or iMailID = 10 Then
+                                            If iMailID = MailTemplates.AssignedCaseToUser Or iMailID = MailTemplates.InternalLogNote Or _
+                                               iMailID = MailTemplates.AssignedCaseToWorkinggroup Or iMailID = MailTemplates.CaseIsUpdated Then
                                                 iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
                                             Else
                                                 If objCustomer.DefaultEmailLogDestination = 1 And iMailID = 0 Then
@@ -854,7 +893,8 @@ Module DH_Helpdesk_Mail
 
                                         End If
                                     Else
-                                        If iMailID = 2 Or iMailID = 5 Or iMailID = 7 Or iMailID = 10 Then
+                                        If iMailID = MailTemplates.AssignedCaseToUser Or iMailID = MailTemplates.InternalLogNote Or _
+                                           iMailID = MailTemplates.AssignedCaseToWorkinggroup Or iMailID = MailTemplates.CaseIsUpdated Then
                                             ' Svar på skicka intern loggpost eller om handläggaren svarar
                                             iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
                                         Else
@@ -877,65 +917,18 @@ Module DH_Helpdesk_Mail
                                         objLogData.saveFileInfo(iLog_Id, "html/" & sHTMLFileName)
                                     End If
 
-                                    If message.Attachments.Count > 6 + iHTMLFile Then
-
-                                        ' Kontrollera om folder existerar
-                                        If Directory.Exists(objCustomer.PhysicalFilePath & "\Temp" & iLog_Id) = False Then
-                                            Directory.CreateDirectory(objCustomer.PhysicalFilePath & "\Temp" & iLog_Id)
-                                        End If
-
-                                        If Directory.Exists(objCustomer.PhysicalFilePath & "\L" & iLog_Id) = False Then
-                                            Directory.CreateDirectory(objCustomer.PhysicalFilePath & "\L" & iLog_Id)
-                                        End If
-
-                                        For j = 0 To message.Attachments.Count - 1
-                                            Dim sFileNameTemp As String = message.Attachments.Item(j).FileName
-
-                                            sFileNameTemp = sFileNameTemp.Replace(":", "")
-                                            sFileNameTemp = URLDecode(sFileNameTemp)
-
-                                            message.Attachments.Item(j).Save(objCustomer.PhysicalFilePath & "\Temp" & iLog_Id & "\" & sFileNameTemp)
-                                        Next
-
-                                        Dim sFileName As String = objCustomer.PhysicalFilePath & "\L" & iLog_Id & "\" & iLog_Id & ".zip"
-
-                                        sFileName = createZipFile(objCustomer.PhysicalFilePath & "\Temp" & iLog_Id, sFileName)
-
-                                        If sFileName <> "" Then
-                                            ' Ta bort tempkatalogen
-                                            If Directory.Exists(objCustomer.PhysicalFilePath & "\Temp" & iLog_Id) = True Then
-                                                Directory.Delete(objCustomer.PhysicalFilePath & "\Temp" & iLog_Id, True)
-                                            End If
-
-                                            ' Lägg in i databasen
-                                            objLogData.saveFileInfo(iLog_Id, iLog_Id & ".zip")
-                                        End If
-                                    ElseIf message.Attachments.Count > 0 Then
-
-                                        ' Kontrollera om folder existerar
-                                        If Directory.Exists(objCustomer.PhysicalFilePath & "\L" & iLog_Id) = False Then
-                                            Directory.CreateDirectory(objCustomer.PhysicalFilePath & "\L" & iLog_Id)
-                                        End If
-
-                                        For j = 0 To message.Attachments.Count - 1
-                                            Dim sFileName As String = message.Attachments.Item(j).FileName
-
-                                            sFileName = sFileName.Replace(":", "")
-                                            sFileName = URLDecode(sFileName)
-
-                                            LogToFile("Filename:" & sFileName, iPop3DebugLevel)
-
-                                            message.Attachments.Item(j).Save(objCustomer.PhysicalFilePath & "\L" & iLog_Id & "\" & sFileName)
-
-                                            ' Lägg in i databasen
+                                    ' Process attached log files 
+                                    attachedFiles = ProcessMessageAttachments(message, iHTMLFile, objCustomer, iLog_Id.ToString(), "L", iPop3DebugLevel)
+                                    If (attachedFiles.Any())
+                                        For Each attachedFile As String In attachedFiles
+                                            Dim sFileName = Path.GetFileName(attachedFile)
                                             objLogData.saveFileInfo(iLog_Id, sFileName)
                                         Next
-
                                     End If
 
-                                    ' Meddela handläggaren att ärendet uppdaterat
+                                    ' Meddela handläggaren att ärendet uppdaterat / send case was updated notification 
                                     If objCase.ExternalUpdateMail = 1 And Len(objCase.PerformerEMail) > 6 Then
-                                        objMailTemplate = objMailTemplateData.getMailTemplateById(10, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                        objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.CaseIsUpdated, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                         If Not objMailTemplate Is Nothing Then
                                             Dim objMail As New Mail
@@ -946,14 +939,16 @@ Module DH_Helpdesk_Mail
                                             sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                             sSendTime = Date.Now()
 
-                                            Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+                                            Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
-                                            sRet_SendMail = objMail.sendMail(objCase, objLog, objCustomer, objCase.PerformerEMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
+                                            sRet_SendMail = 
+                                                objMail.sendMail(objCase, objLog, objCustomer, objCase.PerformerEMail, objMailTemplate, objGlobalSettings, 
+                                                                 sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
 
-                                            objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, 10, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                            objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, MailTemplates.CaseIsUpdated, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                         End If
                                     ElseIf iFinishingCause_Id <> 0 And Len(objCase.Persons_EMail) > 6 Then
-                                        objMailTemplate = objMailTemplateData.getMailTemplateById(3, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                                        objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.ClosedCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                         If Not objMailTemplate Is Nothing Then
                                             Dim objMail As New Mail
@@ -964,11 +959,13 @@ Module DH_Helpdesk_Mail
                                             sMessageId = createMessageId(objCustomer.HelpdeskEMail)
                                             sSendTime = Date.Now()
 
-                                            Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+                                            Dim sEMailLogGUID As String = Guid.NewGuid().ToString
 
-                                            sRet_SendMail = objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, sConnectionstring)
+                                            sRet_SendMail = 
+                                                objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, 
+                                                                 sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
 
-                                            objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, 3, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                            objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
 
                                         End If
                                     End If
@@ -978,43 +975,43 @@ Module DH_Helpdesk_Mail
                                 ' spara e-post adresser
                                 If message IsNot Nothing AndAlso objCase IsNot Nothing Then
                                     Dim messageId As String = message.MessageId.ToString()
-                                    objMailTicket.Save(objCase.Id, iLog_Id, "to", message.To.ToString(), messageId)
-                                    objMailTicket.Save(objCase.Id, iLog_Id, "cc", message.CC.ToString(), messageId)
-                                    objMailTicket.Save(objCase.Id, iLog_Id, "bcc", message.Bcc.ToString(), messageId)
+                                    objMailTicket.Save(objCase.Id, iLog_Id, "to", message.To.ToString(), message.Subject, messageId) ' Saving subject only for to address...
+                                    objMailTicket.Save(objCase.Id, iLog_Id, "cc", message.CC.ToString(), Nothing, messageId)
+                                    objMailTicket.Save(objCase.Id, iLog_Id, "bcc", message.Bcc.ToString(), Nothing, messageId)
                                 End If
 
-                                 If objCustomer.MailServerProtocol = 0 Then
+                                If objCustomer.MailServerProtocol = 0 Then
                                     ' Inget stöd för POP3 längre
                                 Else
-                                    If Not String.IsNullOrEmpty(objCustomer.EMailFolderArchive) Then
+                                    If Not IsNullOrEmpty(objCustomer.EMailFolderArchive) Then
                                         LogToFile("Move Message to: " & objCustomer.EMailFolderArchive, iPop3DebugLevel)
                                         IMAPclient.CopyMessage(sUniqueID, objCustomer.EMailFolderArchive)
                                     End If
 
                                     LogToFile("Deleting Message", iPop3DebugLevel)
                                     IMAPclient.DeleteMessage(sUniqueID)
-                                    
+
                                     ' Purge to apply message delete otherwise the message will stay in Inbox
-                                    IMAPclient.Purge() 
+                                    IMAPclient.Purge()
                                 End If
                             Next
                         End If 'Messages.Count
-                        
+
                     Catch ex As Exception
-                         LogError("Error readMailBox. CurstomerId  Error: " & ex.Message)
+                        LogError("Error readMailBox. Error: " & ex.ToString())
                     Finally
                         If objCustomer.MailServerProtocol = 0 Then
                             ' Inget stöd för POP3 längre
                         Else
-                            
+
                             LogToFile("Disconnecting", iPop3DebugLevel)
-                            
+
                             If IMAPclient IsNot Nothing Then
                                 IMAPclient.Disconnect()
                                 IMAPclient.Dispose()
                                 IMAPclient = Nothing
                             End If
-                            
+
                         End If
                     End Try
 
@@ -1029,9 +1026,89 @@ Module DH_Helpdesk_Mail
         End Try
     End Function
 
-    Private Function CheckEmailFolderExists(imapClient As IMAP, emailFolder As String) As Boolean
-        Dim isFolderExists as Boolean =  False
-        Try 
+    Function BuildFilePath(ParamArray args() As String) As String
+        Dim filePath As String = ""
+        For Each token as String In args
+            If Not IsNullOrEmpty(token)
+                filePath = Path.Combine(filePath, token.Trim("\"))
+            End If
+        Next
+        Return filePath
+    End Function
+
+
+    Private Function ProcessMessageAttachments(message As MailMessage,
+                                               iHtmlFile As Integer,
+                                               objCustomer As Customer,
+                                               objectId As String,  'Case.Id or Log.Id
+                                               prefix As String, '"<CaseNumber>" for Case file, "L<LogId>" for Log file
+                                               iPop3DebugLevel As Integer) As List(Of String)
+
+        Dim files As List(Of String) = New List(Of String)
+
+        Dim tempDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, "Temp", objectId)
+        Dim saveDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, If(IsNullOrEmpty(prefix), objectId, prefix & objectId))
+        
+        If message.Attachments.Count > 6 - iHtmlFile Then
+
+            ' Kontrollera om folder existerar
+            If Directory.Exists(tempDirPath) = False Then
+                Directory.CreateDirectory(tempDirPath)
+            End If
+
+            If Directory.Exists(saveDirPath) = False Then
+                Directory.CreateDirectory(saveDirPath)
+            End If
+
+            'Save to temp dir
+            For Each msgAttachment As Attachment In message.Attachments
+                Dim sFileNameTemp As String = msgAttachment.FileName
+                sFileNameTemp = sFileNameTemp.Replace(":", "")
+                sFileNameTemp = URLDecode(sFileNameTemp)
+                ' save temp file
+                Dim sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
+                msgAttachment.Save(sTempFilePath)
+            Next
+
+            'zip files 
+            Dim sFilePath As String = Path.Combine(saveDirPath, objectId & ".zip")
+            createZipFile(tempDirPath, sFilePath)
+            LogToFile("Attached file path: " & sFilePath, iPop3DebugLevel)
+
+            If Not IsNullOrEmpty(sFilePath) Then
+                'Ta bort tempkatalogen / delete temp dir
+                If Directory.Exists(tempDirPath) = True Then
+                    Directory.Delete(tempDirPath, True)
+                End If
+                files.Add(sFilePath)
+            End If
+        ElseIf message.Attachments.Count > 0 Then
+
+            ' Kontrollera om folder existerar
+            If Directory.Exists(saveDirPath) = False Then
+                Directory.CreateDirectory(saveDirPath)
+            End If
+
+            'Save to temp dir
+            For Each msgAttachment As Attachment In message.Attachments
+                Dim sFileName As String = msgAttachment.FileName
+                sFileName = sFileName.Replace(":", "")
+                sFileName = URLDecode(sFileName)
+                
+                Dim sFilePath = Path.Combine(saveDirPath, sFileName)
+                LogToFile("Attached file path: " & sFilePath, iPop3DebugLevel)
+                msgAttachment.Save(sFilePath)
+
+                files.Add(sFilePath)
+            Next
+        End If
+
+        Return files
+    End Function
+
+    Private Function CheckEmailFolderExists(imapClient As Imap, emailFolder As String) As Boolean
+        Dim isFolderExists As Boolean = False
+        Try
             isFolderExists = imapClient.FolderExists(emailFolder)
         Catch ex As Exception
             isFolderExists = False
@@ -1039,25 +1116,25 @@ Module DH_Helpdesk_Mail
         Return isFolderExists
     End Function
 
-    Private Function ExtractMessageIds(message As MailMessage) As IList(of string)
-        Dim items as List(Of string) = New List(Of string)
+    Private Function ExtractMessageIds(message As MailMessage) As IList(Of String)
+        Dim items As List(Of String) = New List(Of String)
 
         '1. message's messageId
         items.Add(message.MessageId.ToString())
-        
+
         '2 replyTo's messageId 
         If message.InReplyTo IsNot Nothing AndAlso message.InReplyTo.Count > 0
             Dim messageId = message.InReplyTo(0).ToString()
-            If Not String.IsNullOrEmpty(messageId)
+            If Not IsNullOrEmpty(messageId)
                 items.Add(messageId)
             End If
-        End If 
+        End If
 
         ' 3. References messageId
-        Dim refHeader as String = GetMessageHeaderValue(message, "References")
-        If Not String.IsNullOrEmpty(refHeader)
+        Dim refHeader As String = GetMessageHeaderValue(message, "References")
+        If Not IsNullOrEmpty(refHeader)
 
-            Dim refMessageIds As String() = refHeader.Split(New Char() { " "c }, StringSplitOptions.RemoveEmptyEntries)
+            Dim refMessageIds As String() = refHeader.Split(New Char() {" "c}, StringSplitOptions.RemoveEmptyEntries)
             If (refMessageIds.Any())
                 items.AddRange(refMessageIds)
             End If
@@ -1068,16 +1145,16 @@ Module DH_Helpdesk_Mail
 
     End Function
 
-    Private Function FindCaseByUniqueMessageId(uniqueMessageId as String, customer As Customer) As CCase
+    Private Function FindCaseByUniqueMessageId(uniqueMessageId As String, customer As Customer) As CCase
 
-        Dim objCase as CCase = Nothing
-        Dim objCaseData as CaseData = new CaseData()
-        Dim objMailTicket = new Mail2TicketData()
+        Dim objCase As CCase = Nothing
+        Dim objCaseData As CaseData = New CaseData()
+        Dim objMailTicket = New Mail2TicketData()
 
         LogToFile("Find case by messageId: " & uniqueMessageId, customer.POP3DebugLevel)
 
         'first check if Mail2Ticket has message record 
-        Dim logData as Mail2TicketEntity  = objMailTicket.GetByMessageId(uniqueMessageId)
+        Dim logData As Mail2TicketEntity = objMailTicket.GetByMessageId(uniqueMessageId)
         If (logData IsNot Nothing AndAlso logData.CaseId > 0)
             objCase = objCaseData.getCase(logData.CaseId)
             If objCase IsNot Nothing
@@ -1108,12 +1185,12 @@ Module DH_Helpdesk_Mail
 
 
 
-    Private Function GetMessageHeaderValue(message As MailMessage, name as String) As String
-        Dim val as String = ""
-        Dim mimeHeader as MimeHeader = message.Headers.FirstOrDefault(Function(x) x.Name = name)
+    Private Function GetMessageHeaderValue(message As MailMessage, name As String) As String
+        Dim val As String = ""
+        Dim mimeHeader As MimeHeader = message.Headers.FirstOrDefault(Function(x) x.Name = name)
         If mimeHeader IsNot Nothing
             val = mimeHeader.Raw
-        End If    
+        End If
         Return val
     End Function
 
@@ -1127,10 +1204,10 @@ Module DH_Helpdesk_Mail
         Dim strEmail As String = GetValueFromEmailtext(fields, "isabout_persons_email")
         Dim NoOfIsAboutFields As Integer = 0
 
-        If Not String.IsNullOrWhiteSpace(strUserId) Then
+        If Not IsNullOrEmpty(strUserId) Then
             ret = objComputerUserData.getComputerUserByUserId(strUserId, iCustomer_Id)
         Else
-            If Not String.IsNullOrWhiteSpace(strEmail) Then
+            If Not IsNullOrEmpty(strEmail) Then
                 ret = objComputerUserData.getComputerUserByEMail(strEmail, iCustomer_Id)
             End If
         End If
@@ -1141,7 +1218,7 @@ Module DH_Helpdesk_Mail
 
         For Each d As KeyValuePair(Of String, String) In fields
 
-            If Not String.IsNullOrWhiteSpace(d.Value) Then
+            If Not IsNullOrEmpty(d.Value) Then
 
                 Select Case d.Key.ToLower
                     Case "isabout_reportedby"
@@ -1262,7 +1339,7 @@ Module DH_Helpdesk_Mail
 
         Catch ex As Exception
             LogError("Error createHtmlFileFromMail MediaType: " & sMediaType & ", " & ex.Message.ToString)
-            
+
             'Rethrow
             Throw
         End Try
@@ -1276,20 +1353,20 @@ Module DH_Helpdesk_Mail
             Return
         End If
 
-        Dim sLogFolderPath as String
+        Dim sLogFolderPath As String
 
-        If Not String.IsNullOrEmpty(gsLogPath) Then
-            sLogFolderPath = gsLogPath 
+        If Not IsNullOrEmpty(gsLogPath) Then
+            sLogFolderPath = gsLogPath
         Else
             sLogFolderPath = Path.Combine(Environment.CurrentDirectory, "log")
         End If
-        
-        If Not Directory.Exists(sLogFolderPath) Then 
+
+        If Not Directory.Exists(sLogFolderPath) Then
             Directory.CreateDirectory(sLogFolderPath)
         End If
 
-        Dim sFileName = "DH_Helpdesk_Mail_" & DatePart(DateInterval.Year, Now()) & 
-                        DatePart(DateInterval.Month, Now()).ToString().PadLeft(2, "0") & 
+        Dim sFileName = "DH_Helpdesk_Mail_" & DatePart(DateInterval.Year, Now()) &
+                        DatePart(DateInterval.Month, Now()).ToString().PadLeft(2, "0") &
                         DatePart(DateInterval.Day, Now()).ToString().PadLeft(2, "0") &
                         ".log"
         Dim sFilePath = Path.Combine(sLogFolderPath, sFileName)
@@ -1303,20 +1380,15 @@ Module DH_Helpdesk_Mail
             Catch ex As Exception
             Finally
                 objLogFile = Nothing
-            End Try 
+            End Try
         End If
     End Sub
 
-    Private Function createZipFile(ByVal sSourceDir As String, ByVal sFileName As String) As String
+    Private Sub createZipFile(ByVal sSourceDir As String, ByVal sFileName As String) 
         Dim fz As New ICSharpCode.SharpZipLib.Zip.FastZip
-
-
         fz.CreateZip(sFileName, sSourceDir, True, "", "")
-
         fz = Nothing
-
-        Return sFileName
-    End Function
+    End Sub
 
     Private Function extractAnswer(ByVal sBodyText As String, ByVal sEMailAnswerSeparator As String) As String
         Dim aEMailAnswerSeparator() As String
@@ -1391,7 +1463,7 @@ Module DH_Helpdesk_Mail
         Dim ret As New Dictionary(Of String, String)
 
         If fields IsNot Nothing Then
-            If Not String.IsNullOrEmpty(mailMessage) Then
+            If Not IsNullOrEmpty(mailMessage) Then
 
                 For Each d As KeyValuePair(Of String, String) In fields
 
@@ -1429,7 +1501,7 @@ Module DH_Helpdesk_Mail
 
         For Each d As KeyValuePair(Of String, String) In fields
 
-            If Not String.IsNullOrWhiteSpace(d.Value) Then
+            If Not IsNullOrEmpty(d.Value) Then
                 Select Case d.Key.ToLower
                     Case "reportedby"
                         c.ReportedBy = Left(d.Value, 40)
@@ -1511,7 +1583,7 @@ Module DH_Helpdesk_Mail
 
         If fields IsNot Nothing Then
             For Each d As KeyValuePair(Of String, String) In fields
-                If Not String.IsNullOrWhiteSpace(d.Value) Then
+                If Not IsNullOrEmpty(d.Value) Then
                     If d.Key.ToLower = key.ToLower() Then
                         ret = d.Value.Trim()
                         Exit For
@@ -1528,17 +1600,17 @@ Module DH_Helpdesk_Mail
         Return value.Replace(" ", "").ToLower
     End Function
 
-    Private Sub LogToFile(msg As String, level As Integer) 
+    Private Sub LogToFile(msg As String, level As Integer)
         If level > 0 Then
-            If objLogFile IsNot Nothing 
-                objLogFile.WriteLine("{0}: {1}", Now(),  msg)
+            If objLogFile IsNot Nothing
+                objLogFile.WriteLine("{0}: {1}", Now(), msg)
             End If
         End If
     End Sub
 
-    Private Sub LogError(msg As String) 
-        If objLogFile IsNot Nothing 
-            objLogFile.WriteLine("{0}: {1}", Now(),  msg)
+    Private Sub LogError(msg As String)
+        If objLogFile IsNot Nothing
+            objLogFile.WriteLine("{0}: {1}", Now(), msg)
         End If
     End Sub
 

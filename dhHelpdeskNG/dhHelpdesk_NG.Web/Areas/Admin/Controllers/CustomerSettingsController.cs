@@ -286,11 +286,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 ListCustomerReports = reportList,
                 MinimumPasswordLength = sl,
                 PasswordHistory = sli,
-                Setting = this._settingService.GetCustomerSetting(customer.Id) ?? new DHDomain.Setting(),
-                CaseSolutionList = this._caseSolutionService.GetCaseSolutions(customer.Id).Where(x => x.Status == 1).Select(x => new SelectListItem
+                Setting = _settingService.GetCustomerSetting(customer.Id) ?? new DHDomain.Setting(),
+                CaseSolutionList = _caseSolutionService.GetCustomerCaseSolutionsOverview(customer.Id).Where(x => x.Status == 1).Select(x => new SelectListItem
                 {
-                    Text = Translation.Get(x.Name),
-                    Value = x.Id.ToString(),
+                    Text = Translation.GetCoreTextTranslation(x.Name),
+                    Value = x.CaseSolutionId.ToString(),
                 }).ToList(),
 
             };

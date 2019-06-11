@@ -1,6 +1,4 @@
-﻿using System.Data.Entity.Infrastructure;
-
-namespace DH.Helpdesk.Dal.NewInfrastructure
+﻿namespace DH.Helpdesk.Dal.NewInfrastructure
 {
     using System;
 

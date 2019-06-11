@@ -10,40 +10,36 @@
 
     public sealed class IndexModelFactory : IIndexModelFactory
     {
-        public IndexModel Create(
-            List<CategoryWithSubcategories> categories, 
+        public IndexModel Create(List<CategoryWithSubcategories> categories, 
             int? selectedCategoryId, 
             List<FaqOverview> firstCategoryFaqs,
+            int languageId,
             bool userHasFaqAdminPermission)
         {
             if (categories == null)
             {
-                return new IndexModel(new TreeContent(new List<TreeItem>(), null), new List<FaqOverviewModel>(), userHasFaqAdminPermission);
+                return new IndexModel(new TreeContent(new List<TreeItem>(), null), new List<FaqOverviewModel>(), languageId, userHasFaqAdminPermission);
             }
 
-            var categoryTreeItems = categories.Select(this.CategoryToTreeItem).ToList();
+            var categoryTreeItems = categories.Select(CategoryToTreeItem).ToList();
 
             var categoriesTreeContent = new TreeContent(
-                categoryTreeItems, selectedCategoryId.HasValue ? selectedCategoryId.Value.ToString(CultureInfo.InvariantCulture) : null);
+                categoryTreeItems, selectedCategoryId?.ToString(CultureInfo.InvariantCulture));
 
-            var firstCategoryFaqModels =
-                firstCategoryFaqs.Select(
-                    f => new FaqOverviewModel(f.Id, f.CreatedDate, f.Text))
-                                 .ToList();
+            var firstCategoryFaqModels = 
+                firstCategoryFaqs?.Select(f => new FaqOverviewModel(f.Id, f.CreatedDate, f.ChangedDate, f.Text)).ToList();
 
-            return new IndexModel(categoriesTreeContent, firstCategoryFaqModels, userHasFaqAdminPermission);
+            return new IndexModel(categoriesTreeContent, firstCategoryFaqModels, languageId, userHasFaqAdminPermission);
         }
 
         private TreeItem CategoryToTreeItem(CategoryWithSubcategories categoryWithSubcategories)
         {
-            var item = new TreeItem(
-                categoryWithSubcategories.Name, categoryWithSubcategories.Id.ToString(CultureInfo.InvariantCulture));
+            var item = new TreeItem(categoryWithSubcategories.Name, categoryWithSubcategories.Id.ToString(CultureInfo.InvariantCulture));
 
             if (categoryWithSubcategories.Subcategories.Any())
             {
                 var subitems =
-                    categoryWithSubcategories.Subcategories.Select(
-                        this.CategoryToTreeItem).ToList();
+                    categoryWithSubcategories.Subcategories.Select(CategoryToTreeItem).ToList();
 
                 item.Children.AddRange(subitems);
             }

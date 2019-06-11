@@ -9,6 +9,8 @@
     /// </summary>
     public class JsonGridColumnDef
     {
+        public int id;
+
         public string field;
 
         public string displayName;

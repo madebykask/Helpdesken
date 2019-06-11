@@ -58,15 +58,14 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             //query.ForEach(x => this.DataContext.Remove(x));
         }
 
-        public IEnumerable<CaseSolutionSettingsField> GetSelectedCaseSolutionFieldSetting(int casesolutionid, int customerid)
+        //TODO: needs refactoring, poor implementation
+        public IList<CaseSolutionSettingsField> GetSelectedCaseSolutionFieldSetting(int casesolutionid, int customerid)
         {
-
             List<CaseSolutionSettingsField> list = new List<CaseSolutionSettingsField>();
 
-
-
+            
             string sqlExt = string.Empty;
-
+            
             sqlExt = "SELECT ";
             sqlExt += "0, ";
             sqlExt += "[CaseSolution_Id] AS[CaseSolution_Id],  ";
@@ -323,7 +322,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
         }
 
-        public IEnumerable<CaseSolutionSettingsField> GetCaseSolutionFieldSetting(int casesolutionid)
+        public IList<CaseSolutionSettingsField> GetCaseSolutionFieldSetting(int casesolutionid)
         {
 
             List<CaseSolutionSettingsField> list = new List<CaseSolutionSettingsField>();
@@ -538,7 +537,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
             return conditions;
         }
 
-        public IEnumerable<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid)
+        public IList<CaseSolutionConditionModel> GetCaseSolutionConditions(int casesolutionid)
         {
             var conditions = 
                 this.Table

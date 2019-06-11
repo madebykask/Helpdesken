@@ -42,3 +42,12 @@ CommonUtils.detectIE = function() {
     // other browser
     return { IE: false, ver: '' };
 }
+
+
+CommonUtils.copyToClipBoard = function copyToClipboard(elSelector) {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($(elSelector).text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+}

@@ -3,9 +3,10 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
-import { IAppConfig, AppConfig } from '../../shared/app-config/app-config';
+import { AppConfig } from '../../shared/app-config/app-config';
 import { FormDataSaveModel, FormDataSaveResult } from '../../models/form-data.model';
 import { ExtendedHttpService} from './extended-http.service'
+import { IAppConfig } from 'src/app/shared/app-config/app-config.interface';
 
 @Injectable()
 export class FormDataService {

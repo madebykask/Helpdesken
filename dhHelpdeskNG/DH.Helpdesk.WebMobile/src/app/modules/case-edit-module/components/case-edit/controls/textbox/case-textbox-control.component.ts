@@ -1,8 +1,6 @@
-import { Component, Input, ViewChild, ElementRef, Renderer2 } from "@angular/core";
-import { BaseControl } from "../base-control";
-import { switchMap, takeUntil } from "rxjs/operators";
-import { of } from "rxjs";
-import { FormStatuses } from "src/app/modules/shared-module/constants";
+import { Component, Input, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { BaseControl } from '../base-control';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'case-textbox-control',
@@ -16,20 +14,20 @@ import { FormStatuses } from "src/app/modules/shared-module/constants";
     constructor(private elem: ElementRef, private renderer: Renderer2) {
       super();
     }
-    
+
     ngOnInit(): void {
-      this.init(this.field);
+      this.init(this.fieldName);
       this.updateDisabledState();
 
-      this.initEvents()
+      this.initEvents();
     }
 
     ngAfterViewInit(): void {
-      if (this.field.maxLength) {
+      if (this.formControl && this.formControl.fieldInfo.maxLength) {
         const inputControl = this.elem.nativeElement.querySelector('input');
         if (inputControl) {
-          this.renderer.setAttribute(inputControl, 'maxlength', this.field.maxLength.toString());
-          //inputControl.maxLength = this.field.maxLength;
+          this.renderer.setAttribute(inputControl, 'maxlength', this.formControl.fieldInfo.maxLength.toString());
+          // inputControl.maxLength = this.field.maxLength;
         }
       }
     }
@@ -42,20 +40,15 @@ import { FormStatuses } from "src/app/modules/shared-module/constants";
       this.control.disabled = this.formControl.disabled || this.disabled;
     }
 
-    private get isFormControlDisabled() {
-      return this.formControl.status == FormStatuses.DISABLED;
-    }
-
     private initEvents() {
       this.formControl.statusChanges // track disabled state in form
-        .pipe(switchMap((e: any) => {
-            if (this.control.disabled != this.isFormControlDisabled) {
-              this.updateDisabledState();
-            }
-            return of(e);
-          }),
+        .pipe(
           takeUntil(this.destroy$)
         )
-        .subscribe();
+        .subscribe(e => {
+          if (this.control.disabled !== this.isFormControlDisabled) {
+            this.updateDisabledState();
+          }
+        });
     }
   }

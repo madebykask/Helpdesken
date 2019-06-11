@@ -1,9 +1,9 @@
 <ng-container [formGroup]="form">
-  <mbsc-select #control [formControlName]="field.name" 
+  <mbsc-select #control [formControlName]="field" 
               [options]="settings"
               [data]="localDataSource"
               [error]="getErrorState()"
               [errorMessage]="getErrorMessage()"
               [ngClass]="{ 'disabled': formControl.disabled }">{{ getHeader }}{{ requiredSymbol }}</mbsc-select>
 </ng-container>
-<!-- <mbsc-input #control [(ngModel)]="text">{{ field.label }}</mbsc-input> -->
+<!-- <mbsc-input #control [(ngModel)]="text">{{ fieldLabel }}</mbsc-input> -->

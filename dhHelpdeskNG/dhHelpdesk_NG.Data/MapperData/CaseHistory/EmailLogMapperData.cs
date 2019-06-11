@@ -2,8 +2,8 @@
 {
     public class EmailLogMapperData
     {
-
         public int? Id { get; set; }
+        public int? CaseHistoryId { get; set; }
         public int? MailId { get; set; }
         public string EmailAddress { get; set; }
     }

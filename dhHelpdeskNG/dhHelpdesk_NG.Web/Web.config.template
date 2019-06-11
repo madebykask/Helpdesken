@@ -33,10 +33,11 @@
     <add key="log4net.Internal.Debug" value="true"/>
     <add key="SmtpServer" value="smtp.datahalland.se"/>
     <add key="SmtpPort" value="25"/>
-  #{if AuthenticationMode == "application"}<add key="LoginMode" value="Application"/>#{/if}
-  #{if AuthenticationMode == "windows"}<add key="LoginMode" value="Windows"/>#{/if}
-  #{if AuthenticationMode == "sso"}<add key="LoginMode" value="SSO"/>#{/if}
-  #{if AuthenticationMode == "anonymous"}<add key="LoginMode" value="Anonymous"/>#{/if}
+    #{if AuthenticationMode == "application"}<add key="LoginMode" value="Application"/>#{/if}
+    #{if AuthenticationMode == "windows"}<add key="LoginMode" value="Windows"/>#{/if}
+    #{if AuthenticationMode == "mixed"}<add key="LoginMode" value="Mixed"/>#{/if}
+    #{if AuthenticationMode == "sso"}<add key="LoginMode" value="SSO"/>#{/if}
+    #{if AuthenticationMode == "anonymous"}<add key="LoginMode" value="Anonymous"/>#{/if}
   </appSettings>
   <system.web.extensions>
     <scripting>
@@ -60,16 +61,23 @@
     </pages>
     <!-- 50 mb in kilobytes -->
     <httpRuntime maxRequestLength="5242880" targetFramework="4.5"/>
-	 #{if AuthenticationMode == "application"}
+    
+    #{if AuthenticationMode == "application"}
     <authentication mode="Forms">
       <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/"/>
     </authentication>
-  #{/if}
-	#{if AuthenticationMode == "windows"}
+    #{/if}
+    #{if AuthenticationMode == "windows"}
     <authentication mode="Windows">
+      <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/"/>
     </authentication>
-	#{/if}
-
+    #{/if}
+    #{if AuthenticationMode == "mixed"}
+    <authentication mode="Forms">
+      <forms loginUrl="~/Login/Login" timeout="2880" defaultUrl="~/"/>
+    </authentication>
+    #{/if}
+    
     <identity impersonate="false"/>
     <httpHandlers>
       <add path="Reserved.ReportViewerWebControl.axd" verb="*" type="Microsoft.Reporting.WebForms.HttpHandler, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" validate="false"/>

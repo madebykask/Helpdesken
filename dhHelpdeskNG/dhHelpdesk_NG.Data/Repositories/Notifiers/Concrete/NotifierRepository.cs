@@ -1,23 +1,22 @@
-﻿namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+
+using DH.Helpdesk.BusinessData.Models.Case.Input;
+using DH.Helpdesk.BusinessData.Models.Notifiers;
+using DH.Helpdesk.BusinessData.Models.Shared;
+
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Dal.Mappers;
+using DH.Helpdesk.Dal.SearchRequestBuilders.Notifiers;
+using DH.Helpdesk.Domain.Computers;
+
+namespace DH.Helpdesk.Dal.Repositories.Notifiers.Concrete
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Case.Input;
-    using DH.Helpdesk.BusinessData.Models.Notifiers;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Mappers;
-    using DH.Helpdesk.Dal.SearchRequestBuilders.Notifiers;
-    using DH.Helpdesk.Domain.Computers;
-
     public sealed class NotifierRepository : RepositoryBase<ComputerUser>, INotifierRepository
     {
-        private readonly IBusinessModelToEntityMapper<CaseNotifier, ComputerUser> caseNotifierToEntityMapper;
+        private readonly IBusinessModelToEntityMapper<CaseNotifier, ComputerUser> _caseNotifierToEntityMapper;
 
         #region Constructors and Destructors
 
@@ -26,7 +25,7 @@
             IBusinessModelToEntityMapper<CaseNotifier, ComputerUser> caseNotifierToEntityMapper)
             : base(databaseFactory)
         {
-            this.caseNotifierToEntityMapper = caseNotifierToEntityMapper;
+            _caseNotifierToEntityMapper = caseNotifierToEntityMapper;
         }
 
         #endregion
@@ -88,8 +87,7 @@
             this.DataContext.ComputerUsers.Remove(notifier);
         }
 
-        public List<NotifierDetailedOverview> FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName
-            (int customerId)
+        public List<NotifierDetailedOverview> FindDetailedOverviewsByCustomerIdOrderedByUserIdAndFirstNameAndLastName(int customerId)
         {
             var notifiers =
                 this.FindByCustomerIdCore(customerId)
@@ -98,47 +96,43 @@
                     .ThenBy(n => n.SurName);
 
             var overviews =
-                notifiers.Select(
-                    n =>
-                    new
-                    {
-                        PostalAddress = n.PostalAddress != string.Empty ? n.PostalAddress : null,
-                        CellPhone = n.Cellphone != string.Empty ? n.Cellphone : null,
-                        ChangedDate = n.ChangeTime,
-                        City = n.City != string.Empty ? n.City : null,
-                        Code = n.UserCode != string.Empty ? n.UserCode : null,
-                        CreatedDate = n.RegTime,
-                        Region = n.Department.Region.Name, // Takes Department's Region instead
-                        Department = n.Department.DepartmentName,
-                        Division = n.Division.Name,
-                        Domain = n.Domain.Name,
-                        Email = n.Email != string.Empty ? n.Email : null,
-                        FirstName = n.FirstName != string.Empty ? n.FirstName : null,
-                        Group = n.ComputerUserGroup.Name != string.Empty ? n.ComputerUserGroup.Name : null,
-                        Id = n.Id,
-                        Initials = n.Initials != string.Empty ? n.Initials : null,
-                        LastName = n.SurName != string.Empty ? n.SurName : null,
-                        LoginName = n.LogonName != string.Empty ? n.LogonName : null,
-                        Manager = n.ManagerComputerUser.UserId,
-                        DisplayName = n.DisplayName != string.Empty ? n.DisplayName : null,
-                        Ordered = n.OrderPermission != 0,
-                        OrganizationUnit = n.OU.Parent_OU_Id == null ? n.OU.Name : n.OU.Parent.Name + " - " + n.OU.Name,
-                        Other = n.Info != string.Empty ? n.Info : null,
-                        Phone = n.Phone != string.Empty ? n.Phone : null,
-                        Place = n.Location != string.Empty ? n.Location : null,
-                        PostalCode = n.Postalcode != string.Empty ? n.Postalcode : null,
-                        SynchronizationDate = n.SyncChangedDate,
-                        Title = n.Title != string.Empty ? n.Title : null,
-                        Unit = n.SOU != string.Empty ? n.SOU : null,
-                        UserId = n.UserId,
-                        LanguageId = n.LanguageId,
-                        Language = n.Language.Name
-                    }).ToList();
+                notifiers.Select(n => new
+                {
+                    PostalAddress = n.PostalAddress != string.Empty ? n.PostalAddress : null,
+                    CellPhone = n.Cellphone != string.Empty ? n.Cellphone : null,
+                    ChangedDate = n.ChangeTime,
+                    City = n.City != string.Empty ? n.City : null,
+                    Code = n.UserCode != string.Empty ? n.UserCode : null,
+                    CreatedDate = n.RegTime,
+                    Region = n.Department.Region.Name, // Takes Department's Region instead
+                    Department = n.Department.DepartmentName,
+                    Division = n.Division.Name,
+                    Domain = n.Domain.Name,
+                    Email = n.Email != string.Empty ? n.Email : null,
+                    FirstName = n.FirstName != string.Empty ? n.FirstName : null,
+                    Group = n.ComputerUserGroup.Name != string.Empty ? n.ComputerUserGroup.Name : null,
+                    Id = n.Id,
+                    Initials = n.Initials != string.Empty ? n.Initials : null,
+                    LastName = n.SurName != string.Empty ? n.SurName : null,
+                    LoginName = n.LogonName != string.Empty ? n.LogonName : null,
+                    Manager = n.ManagerComputerUser.UserId,
+                    DisplayName = n.DisplayName != string.Empty ? n.DisplayName : null,
+                    Ordered = n.OrderPermission != 0,
+                    OrganizationUnit = n.OU.Parent_OU_Id == null ? n.OU.Name : n.OU.Parent.Name + " - " + n.OU.Name,
+                    Other = n.Info != string.Empty ? n.Info : null,
+                    Phone = n.Phone != string.Empty ? n.Phone : null,
+                    Place = n.Location != string.Empty ? n.Location : null,
+                    PostalCode = n.Postalcode != string.Empty ? n.Postalcode : null,
+                    SynchronizationDate = n.SyncChangedDate,
+                    Title = n.Title != string.Empty ? n.Title : null,
+                    Unit = n.SOU != string.Empty ? n.SOU : null,
+                    UserId = n.UserId,
+                    LanguageId = n.LanguageId,
+                    Language = n.Language.Name
+                }).ToList();
 
             return
-                overviews.Select(
-                    o =>
-                    new NotifierDetailedOverview(
+                overviews.Select(o => new NotifierDetailedOverview(
                         o.Id,
                         o.UserId,
                         o.Domain,
@@ -278,61 +272,47 @@
             return notifierWithUserIdOverviews;
         }
 
-        public IList<UserSearchResults> Search(int customerId, string searchFor, int? categoryID = null)
+        public IQueryable<ComputerUser> Search(int customerId, string searchFor, int? categoryId = null, IList<int> depIds = null)
         {
             var s = (searchFor?.ToLower() ?? string.Empty).Trim();
             var emptyCategoryId = ComputerUserCategory.EmptyCategoryId;
 
-            var query = from cu in this.DataContext.ComputerUsers
-                        join d in this.DataContext.Departments on cu.Department_Id equals d.Id into res
-                        from k in res.DefaultIfEmpty()
-                        where
-                            cu.Customer_Id == customerId &&
-                            (   categoryID == null ||                                        // find all users
-                                (categoryID == emptyCategoryId && cu.ComputerUsersCategoryID == null) ||   //find user only without category 
-                                (categoryID > 0 && cu.ComputerUsersCategoryID == categoryID) // find users of the specified category
-                            ) 
-                            && cu.Status != 0
-                            && (cu.UserId.ToLower().Contains(s) || cu.FirstName.ToLower().Contains(s)
-                                || cu.SurName.ToLower().Contains(s) || cu.Phone.ToLower().Contains(s)
-                                || cu.Email.ToLower().Contains(s) || cu.UserCode.ToLower().Contains(s)
-                                || (cu.SurName.ToLower() + " " + cu.FirstName.ToLower()).Contains(s)
-                                || (cu.FirstName.ToLower() + " " + cu.SurName.ToLower()).Contains(s))
+            var query = DataContext.ComputerUsers.AsNoTracking().AsQueryable();
 
-                        /* Disabled because they shouldn't be searchable*/
-                        //|| cu.Location.ToLower().Contains(s) 
-                        //|| cu.Cellphone.ToLower().Contains(s)
-                        //|| cu.Department.DepartmentName.ToLower().Contains(s))
+            if (depIds != null && depIds.Any())
+            {
+                query =
+                    query.Where(x => x.Department_Id > 0 && depIds.Contains(x.Department_Id.Value));
+            }
 
-                        select new UserSearchResults
-                        {
-                            Id = cu.Id,
-                            UserId = cu.UserId ?? string.Empty,
-                            FirstName = cu.FirstName,
-                            SurName = cu.SurName,
-                            Email = cu.Email,
-                            CellPhone = cu.Cellphone,
-                            Phone = cu.Phone,
-                            Location = cu.Location,
-                            UserCode = cu.UserCode,
-                            Region_Id = k.Region_Id,
-                            RegionName = k.Region.Name,
-                            Department_Id = cu.Department_Id,
-                            DepartmentName = cu.Department.DepartmentName,
-                            OU_Id = cu.OU_Id,
-                            OUName = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name,
-                            CostCentre = cu.CostCentre,
-                            CategoryID = cu.ComputerUsersCategoryID,
-                            CategoryName = cu.ComputerUserCategory == null ? null : cu.ComputerUserCategory.Name,
-                            IsReadOnly = cu.ComputerUserCategory != null && cu.ComputerUserCategory.IsReadOnly
-                        };
+            query =
+                query.Where(cu => cu.Customer_Id == customerId && 
+                                  (
+                                      categoryId == null || // find all users
+                                      categoryId == emptyCategoryId &&
+                                      cu.ComputerUsersCategoryID == null || //find user only without category 
+                                      categoryId > 0 &&
+                                      cu.ComputerUsersCategoryID == categoryId // find users of the specified category
+                                  ) &&
+                                  cu.Status != 0 &&
+                                  (cu.UserId.ToLower().Contains(s) || cu.FirstName.ToLower().Contains(s)
+                                   || cu.SurName.ToLower().Contains(s) || cu.Phone.ToLower().Contains(s)
+                                   || cu.Email.ToLower().Contains(s) || cu.UserCode.ToLower().Contains(s)
+                                   || (cu.SurName.ToLower() + " " + cu.FirstName.ToLower()).Contains(s)
+                                   || (cu.FirstName.ToLower() + " " + cu.SurName.ToLower()).Contains(s)));
 
-            return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ThenBy(x => x.Id).Take(25).ToList();
+                                /* Disabled because they shouldn't be searchable*/
+                                //|| cu.Location.ToLower().Contains(s) 
+                                //|| cu.Cellphone.ToLower().Contains(s)
+                                //|| cu.Department.DepartmentName.ToLower().Contains(s));;
+
+            return query.OrderBy(x => x.FirstName).ThenBy(x => x.SurName).ThenBy(x => x.Id);
         }
 
+        //TODO: move to service!!!
         public SearchResult Search(SearchParameters parameters)
         {
-            var notifierEntities = this.FindByCustomerIdCore(parameters.CustomerId);
+            var notifierEntities = FindByCustomerIdCore(parameters.CustomerId);
             var requestBuilder = new NotifiersSearchRequestBuilder(notifierEntities);
 
             requestBuilder.FilterByStatus(parameters.Status);
@@ -472,7 +452,7 @@
                                 .ToList()
                                 .FirstOrDefault();
 
-            this.caseNotifierToEntityMapper.Map(caseNotifier, notifierEntity);
+            this._caseNotifierToEntityMapper.Map(caseNotifier, notifierEntity);
         }
 
         public void UpdateNotifier(Notifier notifier)

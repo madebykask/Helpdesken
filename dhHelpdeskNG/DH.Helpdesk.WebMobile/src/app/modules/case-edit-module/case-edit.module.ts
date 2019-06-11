@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CaseEditRoutingModule } from './case-edit-routing.module';
-import { CaseEditComponent, MbscFormGroupTitleClickDirective } from './components/case-edit/case-edit.component';
+import { CaseEditComponent } from './components/case-edit/case-edit.component';
+import { MbscFormGroupExpandDirective } from './components/case-edit/directives/form-group-expand.directive';
 import { CaseTextboxComponent } from './components/case-edit/controls/textbox/case-textbox-control.component';
 import { CaseDateComponent } from './components/case-edit/controls/date/case-date-control.component';
 import { CaseDropdownComponent } from './components/case-edit/controls/dropdown/case-dropdown-control.component';
@@ -36,15 +37,17 @@ import { Pdf2FileViewerComponent } from './components/file-preview/viewers/pdf2-
 import { Pdf3FileViewerComponent } from './components/file-preview/viewers/pdf3-file-viewer.component';
 import { NotifierSearchComponent } from './components/case-edit/controls/notifier-search/notifier-search.component';
 import { FilterExtDirective } from './directives/filter-ext.directive';
+import { LognoteEmailInputComponent } from './components/case-edit/controls/lognote-email-input/lognote-email-input.component';
 
 @NgModule({
   declarations: [ CaseEditComponent,
     CaseTextboxComponent, CaseDateComponent, CaseDropdownComponent,  CaseMultiDropdownComponent,
     CaseSwitchComponent, CaseTextareaComponent, CaseDateTimeComponent, MailtoticketControlComponent,
-    CaseFilesUploadComponent, CaseFilesControlComponent, CaseActionsComponent, CaseActionHostDirective, 
+    CaseFilesUploadComponent, CaseFilesControlComponent, CaseActionsComponent, CaseActionHostDirective,
     CaseActionContainerComponent, GeneralActionComponent, FieldChangeActionComponent, LogNoteActionComponent, ActionsFilterPipe,
     CaseLogInputComponent, LogFilesUploadComponent, FilePreviewComponent, PdfFileViewer, CommonFileViewer, ImageFileViewerComponent,
-    TextFileViewerComponent, Pdf2FileViewerComponent, Pdf3FileViewerComponent, NotifierSearchComponent, MbscFormGroupTitleClickDirective, FilterExtDirective
+    TextFileViewerComponent, Pdf2FileViewerComponent, Pdf3FileViewerComponent, NotifierSearchComponent, MbscFormGroupExpandDirective,
+    FilterExtDirective, LognoteEmailInputComponent
 ],
   imports: [
     CommonModule,

@@ -1,66 +1,110 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Models;
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
-using DH.Helpdesk.BusinessData.Models.FinishingCause;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.BusinessData.Models.CaseDocument;
 using DH.Helpdesk.BusinessData.Models.Changes.Output.Change;
+using DH.Helpdesk.BusinessData.Models.Customer;
+using DH.Helpdesk.BusinessData.Models.FinishingCause;
+using DH.Helpdesk.BusinessData.Models.Language.Output;
+using DH.Helpdesk.BusinessData.Models.Logs.Output;
+using DH.Helpdesk.BusinessData.Models.MailTemplates;
+using DH.Helpdesk.BusinessData.Models.Problem.Output;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+using DH.Helpdesk.BusinessData.Models.Projects.Output;
+using DH.Helpdesk.BusinessData.Models.Shared;
+using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Domain;
+using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Web.Common.Enums.Case;
-using DH.Helpdesk.Web.Infrastructure;
+using DH.Helpdesk.Web.Infrastructure.CaseOverview;
+using DH.Helpdesk.Web.Infrastructure.Grid.Output;
+using DH.Helpdesk.Web.Models.Case.ChildCase;
+using DH.Helpdesk.Web.Models.Case.Output;
+using DH.Helpdesk.Web.Models.CaseLock;
+using DH.Helpdesk.Web.Models.Invoice;
+using DH.Helpdesk.Web.Models.Shared;
+
+using ParentCaseInfo = DH.Helpdesk.Web.Models.Case.ChildCase.ParentCaseInfo;
 
 namespace DH.Helpdesk.Web.Models.Case
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
+    public class CaseHistoryViewModel
+    {
+        public int? CaseCustomerId { get; set; }
+        public int DepartmentFilterFormat { get; set; }
+        public TimeZoneInfo UserTimeZone { get; set; }
+        public OutputFormatter OutFormatter { get; set; }
+        public IList<CaseFieldSetting> caseFieldSettings { get; set; }
+        public IList<CaseHistoryOverview> CaseHistories { get; set; }
+        public List<CustomMailTemplate> MailTemplates { get; set; }
 
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.BusinessData.Models.CaseSolution;
-    using DH.Helpdesk.BusinessData.Models.Customer;
-    using DH.Helpdesk.BusinessData.Models.Language.Output;
-    using DH.Helpdesk.BusinessData.Models.Logs.Output;
-    using DH.Helpdesk.BusinessData.Models.Problem.Output;
-    using DH.Helpdesk.BusinessData.Models.Projects.Output;
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.CaseDocument;
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain.Changes;
-    using DH.Helpdesk.Web.Infrastructure.CaseOverview;
-    using DH.Helpdesk.Web.Infrastructure.Grid.Output;
-    using DH.Helpdesk.Web.Models.Case.ChildCase;
-    using DH.Helpdesk.Web.Models.Case.Output;
-    using DH.Helpdesk.Web.Models.CaseLock;
-    using DH.Helpdesk.Web.Models.Invoice;
-    using DH.Helpdesk.Web.Models.Shared;
-    using DH.Helpdesk.BusinessData.Models.MailTemplates;
 
-    using ParentCaseInfo = DH.Helpdesk.Web.Models.Case.ChildCase.ParentCaseInfo;
-    using DH.Helpdesk.Domain.Cases;
-    using DH.Helpdesk.BusinessData.Models.Case.Output;
-    using Microsoft.Reporting.WebForms;
-    using Controllers;
-    using Helpdesk.Common.Enums.Cases;
-    using Domain.Computers;
-    using System.Text;
+    }
 
     public class CaseInputViewModel
     {
         public CaseInputViewModel()
         {
-            this.CaseSolutionSettingModels = CaseSolutionSettingModel.CreateDefaultModel();
-            this.CustomerRegistrationSources = new List<SelectListItem>()
-                                                   {
-                                                       new SelectListItem()
-                                                           {
-                                                               Text = string.Empty,
-                                                               Value = string.Empty
-                                                           }
-                                                   };
+            CaseSolutionSettingModels = CaseSolutionSettingModel.CreateDefaultModel();
+            CustomerRegistrationSources = new List<SelectListItem>()
+            {
+                new SelectListItem()
+                {
+                    Text = string.Empty,
+                    Value = string.Empty
+                }
+            };
             ExternalInvoices = new List<ExternalInvoiceModel>();
-                    this.SelectedWorkflowStep = 0;
+            SelectedWorkflowStep = 0;
             CaseAttachedExFiles = new List<CaseAttachedExFileModel>();
             CaseLock = new CaseLockModel();
+        }
+
+        public CaseLogViewModel CreateCaseLogViewModel()
+        {
+            return new CaseLogViewModel
+            {
+                CustomerId = CustomerId,
+                CaseCustomerId = case_?.Customer_Id,
+                UserTimeZone = UserTimeZone,
+                CurrentCaseLanguageId = CurrentCaseLanguageId,
+                IsCaseReopened = IsCaseReopened,
+                Department = case_?.Department,
+                CaseFiles = CaseFilesModel,
+                HelpdeskEmail = case_?.Customer?.HelpdeskEmail,
+                CaseInternalLogAccess = CaseInternalLogAccess,
+                Logs = Logs,
+                Setting  = Setting,
+                CaseFieldSettings = caseFieldSettings,
+                CustomerSettings = CustomerSettings,
+                CaseSolutionSettingModels = CaseSolutionSettingModels,
+                
+                // Invoices fields
+                ShowInvoiceFields = ShowInvoiceFields,
+                ShowExternalInvoiceFields = ShowExternalInvoiceFields,
+                ExternalInvoices = ExternalInvoices,
+            };
+        }
+
+        public CaseHistoryViewModel CreateHistoryViewModel()
+        {
+            return new CaseHistoryViewModel()
+            {
+                CaseCustomerId = case_?.Customer_Id,
+                DepartmentFilterFormat = DepartmentFilterFormat,
+                UserTimeZone = UserTimeZone,
+                OutFormatter = OutFormatter,
+                caseFieldSettings = caseFieldSettings,
+                CaseHistories = CaseHistories?.OrderByDescending(x => x.Id).ToList() ?? new List<CaseHistoryOverview>(),
+                MailTemplates = MailTemplates
+            };
         }
 
         public string CaseKey { get; set; }
@@ -85,9 +129,10 @@ namespace DH.Helpdesk.Web.Models.Case
         public int? AccountActivityId { get; set; }
         public string ActiveTab { get; set; }
         public int? SelectedWorkflowStep { get; set; }
-        
+        public int CurrentCaseLanguageId { get; set; }
+
         [Obsolete("Put all fields that you required into this CaseInputViewModel model")]
-        public Case case_  { get; set; }
+        public Domain.Case case_  { get; set; }
 
         public int CaseId
         {
@@ -167,7 +212,8 @@ namespace DH.Helpdesk.Web.Models.Case
         public SelectList ResponsibleUsersAvailable { get; set; }
 
         public IList<WorkingGroupEntity> workingGroups { get; set; }
-        public IEnumerable<LogOverview> Logs { get; set; }
+
+        public IList<LogOverview> Logs { get; set; }
 
         /// <summary>
         /// Selected case source
@@ -290,7 +336,6 @@ namespace DH.Helpdesk.Web.Models.Case
             return "";
         }
 
-
         public bool IsAnyNotClosedChild(bool containsIndependents = false)
         {
             if (this.ChildCaseViewModel == null)
@@ -367,7 +412,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public bool ContainsExtendedCase { get; set; }
         public Guid ExtendedCaseGuid { get; set; }
         public bool IndependentChild { get; internal set; }
-        public CaseSolution CurrentCaseSolution { get; internal set; }
+        public Domain.CaseSolution CurrentCaseSolution { get; internal set; }
 
         public int CurrentUserRole { get; set; }
         
@@ -397,6 +442,9 @@ namespace DH.Helpdesk.Web.Models.Case
         {
             get { return CurrentUserRole > (int)BusinessData.Enums.Admin.Users.UserGroup.User; }
         }
+
+        public TimeZoneInfo UserTimeZone { get; set; } 
+
     }
 
     public class CaseIndexViewModel
@@ -462,13 +510,34 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public CaseRemainingTimeViewModel RemainingTime { get; set; }
 
-        public List<ItemOverview> SelectedCustomers { get; set; }
+        public List<ItemOverview> UserCustomers { get; set; }
 
-        public List<ItemOverview> ExtendIncludedCustomers { get; set; }
+        public List<ItemOverview> ExtendedCustomers { get; set; }
+
+        public List<ItemOverview> AllCustomers
+        {
+            get
+            {
+                var allCustomers = new List<ItemOverview>();
+
+                if (UserCustomers.Any())
+                    allCustomers.AddRange(UserCustomers);
+
+                if (ExtendedCustomers.Any())
+                    allCustomers.AddRange(ExtendedCustomers);
+
+                return allCustomers.OrderBy(x => x.Name).ToList();
+            }
+        }
     }
 
     public class CaseSearchResultModel
     {
+        public CaseSearchResultModel()
+        {
+            caseSettings = new List<CaseSettings>();
+        }
+
         public CaseColumnsSettingsModel GridSettings { get; set; }
         
         public IList<CaseSettings> caseSettings { get; set; }

@@ -10,47 +10,48 @@ using DH.Helpdesk.Common.Extensions.DateTime;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Computers;
+using DH.Helpdesk.Services.Services.Cache;
 
 namespace DH.Helpdesk.Services.Services
 {
 
-	using DH.Helpdesk.BusinessData.Models.BusinessRules;
-	using DH.Helpdesk.BusinessData.Models.Case;
-	using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
-	using DH.Helpdesk.BusinessData.Models.Case.Output;
-	using DH.Helpdesk.BusinessData.Models.User.Input;
-	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-	using DH.Helpdesk.Common.Constants;
-	using DH.Helpdesk.Common.Enums;
-	using DH.Helpdesk.Common.Enums.BusinessRule;
-	using DH.Helpdesk.Dal.Enums;
-	using DH.Helpdesk.Dal.Infrastructure;
-	using DH.Helpdesk.Dal.NewInfrastructure;
-	using DH.Helpdesk.Dal.Repositories;
-	using DH.Helpdesk.Dal.Repositories.Cases;
-	using DH.Helpdesk.Domain;
-	using DH.Helpdesk.Domain.MailTemplates;
-	using DH.Helpdesk.Domain.Problems;
-	using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
-	using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
-	using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
-	using DH.Helpdesk.Services.BusinessLogic.Specifications;
-	using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
-	using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
-	using DH.Helpdesk.Services.Infrastructure.Email;
-	using DH.Helpdesk.Services.Localization;
-	using DH.Helpdesk.Services.Services.CaseStatistic;
-	using DH.Helpdesk.Services.utils;
-	using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
-	using DH.Helpdesk.Services.Infrastructure;
-	using Feedback;
-	using DH.Helpdesk.Domain.ExtendedCaseEntity;
-	using System.Linq.Expressions;
-	using Common.Enums.Cases;
-	using Common.Extensions.String;
-	using Utils;
+    using DH.Helpdesk.BusinessData.Models.BusinessRules;
+    using DH.Helpdesk.BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
+    using DH.Helpdesk.BusinessData.Models.Case.Output;
+    using DH.Helpdesk.BusinessData.Models.User.Input;
+    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using DH.Helpdesk.Common.Constants;
+    using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Enums.BusinessRule;
+    using DH.Helpdesk.Dal.Enums;
+    using DH.Helpdesk.Dal.Infrastructure;
+    using DH.Helpdesk.Dal.NewInfrastructure;
+    using DH.Helpdesk.Dal.Repositories;
+    using DH.Helpdesk.Dal.Repositories.Cases;
+    using DH.Helpdesk.Domain;
+    using DH.Helpdesk.Domain.MailTemplates;
+    using DH.Helpdesk.Domain.Problems;
+    using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
+    using DH.Helpdesk.Services.BusinessLogic.Mappers.Customers;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
+    using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
+    using DH.Helpdesk.Services.Infrastructure.Email;
+    using DH.Helpdesk.Services.Localization;
+    using DH.Helpdesk.Services.Services.CaseStatistic;
+    using DH.Helpdesk.Services.utils;
+    using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
+    using DH.Helpdesk.Services.Infrastructure;
+    using Feedback;
+    using DH.Helpdesk.Domain.ExtendedCaseEntity;
+    using System.Linq.Expressions;
+    using Common.Enums.Cases;
+    using Common.Extensions.String;
+    using Utils;
 
-	public partial class CaseService : ICaseService
+    public partial class CaseService : ICaseService
     {
         private readonly ICaseRepository _caseRepository;
         private readonly ICaseFileRepository _caseFileRepository;
@@ -76,7 +77,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ISurveyService _surveyService;
         private readonly IFinishingCauseService _finishingCauseService;
         private readonly ICaseLockService _caseLockService;
-        private readonly CaseStatisticService _caseStatService;
+        private readonly ICaseStatisticService _caseStatService;
         private readonly ICaseFilterFavoriteRepository _caseFilterFavoriteRepository;
         private readonly IMail2TicketRepository _mail2TicketRepository;
         private readonly IBusinessRuleService _businessRuleService;
@@ -91,9 +92,10 @@ namespace DH.Helpdesk.Services.Services
         private readonly ICaseSolutionRepository _caseSolutionRepository;
         private readonly IStateSecondaryRepository _stateSecondaryRepository;
         private readonly ICustomerRepository _customerRepository;
-		private readonly ICustomerService _customerService;
-		private readonly IDepartmentService _departmentService;
-		private readonly IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> _caseHistoryOverviewMapper;
+        private readonly ICustomerService _customerService;
+        private readonly IDepartmentService _departmentService;
+        private readonly IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> _caseHistoryOverviewMapper;
+        private readonly ITranslateCacheService _translateCacheService;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -118,7 +120,7 @@ namespace DH.Helpdesk.Services.Services
             ISurveyService surveyService,
             IFinishingCauseService finishingCauseService,
             ICaseLockService caseLockService,
-            CaseStatisticService caseStatService,
+            ICaseStatisticService caseStatService,
             ICaseFilterFavoriteRepository caseFilterFavoriteRepository,
             IMail2TicketRepository mail2TicketRepository,
             IBusinessRuleService businessRuleService,
@@ -135,9 +137,9 @@ namespace DH.Helpdesk.Services.Services
             ICaseSolutionRepository caseSolutionRepository,
             IStateSecondaryRepository stateSecondaryRepository,
             ICustomerRepository customerRepository,
-			ICustomerService customerService,
-			IDepartmentService departmentService,
-			IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper)
+            ICustomerService customerService,
+            IDepartmentService departmentService,
+            IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper, ITranslateCacheService translateCacheService)
         {
             _unitOfWork = unitOfWork;
             _caseRepository = caseRepository;
@@ -179,15 +181,11 @@ namespace DH.Helpdesk.Services.Services
             _caseSolutionRepository = caseSolutionRepository;
             _stateSecondaryRepository = stateSecondaryRepository;
             _customerRepository = customerRepository;
-			_customerService = customerService;
-			_departmentService = departmentService;
+            _customerService = customerService;
+            _departmentService = departmentService;
 
-			_caseHistoryOverviewMapper = caseHistoryOverviewMapper;
-        }
-
-        public Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false)
-        {
-            return _caseRepository.GetCaseByIdAsync(id, markCaseAsRead);
+            _caseHistoryOverviewMapper = caseHistoryOverviewMapper;
+            _translateCacheService = translateCacheService;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -433,7 +431,8 @@ namespace DH.Helpdesk.Services.Services
             }
 
             // delete logs
-            var logs = _logRepository.GetLogForCase(id, true).ToList();
+            var logs = _logRepository.GetCaseLogs(id).ToList();
+
             // delete Mail2tickets with log
             foreach (var l in logs)
             {
@@ -503,6 +502,7 @@ namespace DH.Helpdesk.Services.Services
 
             //delete FollowUp
             _caseFollowUpService.DeleteFollowUp(id);
+            _caseExtraFollowersService.DeleteByCase(id);
 
             var c = _caseRepository.GetById(id);
 
@@ -631,42 +631,6 @@ namespace DH.Helpdesk.Services.Services
         public StateSecondary GetCaseSubStatus(int caseId)
         {
             return _caseRepository.GetCaseSubStatus(caseId);
-        }
-
-        public Task<CustomerCasesStatus> GetCustomerCasesStatusAsync(int customerId, int userId)
-        {
-            var today = DateTime.Today;
-            var customer = _customerRepository.GetOverview(customerId);
-            bool caseResponsibleUserIsVisible;
-            using (var uow = _unitOfWorkFactory.Create())
-            {
-                var caseFieldSettingsRep = uow.GetRepository<CaseFieldSetting>();
-                caseResponsibleUserIsVisible = caseFieldSettingsRep.GetAll().Any(cf => cf.Customer_Id == customerId &&
-                                                                            cf.Name == GlobalEnums.TranslationCaseFields
-                                                                                .CaseResponsibleUser_Id.ToString() &&
-                                                                            cf.ShowOnStartPage == 1);
-            }
-
-            var customerCasesQuery = _caseRepository.GetCustomerCases(customerId).AsQueryable();
-            return customerCasesQuery.Take(1).Select(res => new CustomerCasesStatus()
-            {
-                CustomerId = customerId,
-                CustomerName = customer.Name,
-
-                MyCases =
-                    customerCasesQuery.Where(c => c.FinishingDate == null && c.Deleted == 0 &&
-                                                  (c.Performer_User_Id == userId || 
-                                                   (c.CaseResponsibleUser_Id == userId && caseResponsibleUserIsVisible))).Count(),
-
-                InProgress =
-                    customerCasesQuery.Where(c => c.FinishingDate == null && c.Deleted == 0).Count(),
-
-                NewToday =
-                    customerCasesQuery.Where(c => c.Deleted == 0 && c.FinishingDate == null && DbFunctions.TruncateTime(c.RegTime) == today).Count(),
-
-                ClosedToday =
-                    customerCasesQuery.Where(c => c.FinishingDate != null && DbFunctions.TruncateTime(c.FinishingDate) == today).Count(),
-            }).SingleOrDefaultAsync();
         }
 
         public CustomerCases[] GetCustomersCases(int[] customerIds, int userId)
@@ -879,39 +843,46 @@ namespace DH.Helpdesk.Services.Services
 
         public void Activate(int caseId, int userId, string adUser, string createdByApp, out IDictionary<string, string> errors)
         {
-			var _case = _caseRepository.GetCaseById(caseId);
-			var customer = _customerService.GetCustomer(_case.Customer_Id);
-			var departmentIds = _departmentService.GetDepartments(customer.Id)
-				.Select(o => o.Id)
-				.ToArray();
+            var _case = _caseRepository.GetCaseById(caseId);
+            var customer = _customerService.GetCustomer(_case.Customer_Id);
+            var departmentIds = _departmentService.GetDepartments(customer.Id)
+                .Select(o => o.Id)
+                .ToArray();
 
-			var cs = _settingService.GetCustomerSetting(customer.Id);
-			var timeZone = TimeZoneInfo.GetSystemTimeZones().First(o => o.BaseUtcOffset.TotalMinutes == cs.TimeZone_offset);
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
 
 			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
-				ManualDependencyResolver.Get<IHolidayService>(),
-				customer.WorkingDayStart,
-				customer.WorkingDayEnd,
-				timeZone);
+                ManualDependencyResolver.Get<IHolidayService>(),
+                customer.WorkingDayStart,
+                customer.WorkingDayEnd,
+                timeZone);
 
-			var utcNow = DateTime.UtcNow;
-			var workTimeCalc = workTimeCalcFactory.Build(_case.RegTime, utcNow, departmentIds);
-			var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
-				_case.ChangeTime,
-				utcNow,
-				_case.Department_Id);
+            var utcNow = DateTime.UtcNow;
+            var workTimeCalc = workTimeCalcFactory.Build(_case.RegTime, utcNow, departmentIds);
+            var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
+                _case.ChangeTime,
+                utcNow,
+                _case.Department_Id);
 
-			var possibleWorktime = workTimeCalc.CalculateWorkTime(
-				_case.RegTime,
-				utcNow,
-				_case.Department_Id);
+            var possibleWorktime = workTimeCalc.CalculateWorkTime(
+                _case.RegTime,
+                utcNow,
+                _case.Department_Id);
 
-			var leadTime = possibleWorktime - _case.ExternalTime - externalTimeToAdd;
+            var leadTime = possibleWorktime - _case.ExternalTime - externalTimeToAdd;
 
-			_caseRepository.Activate(caseId, leadTime, externalTimeToAdd);
+            _caseRepository.Activate(caseId, leadTime, externalTimeToAdd);
             var c = _caseRepository.GetDetachedCaseById(caseId);
             _caseStatService.UpdateCaseStatistic(c);
-            SaveCaseHistory(c, userId, adUser, createdByApp, out errors);
+
+			var extraFields = new ExtraFieldCaseHistory
+			{
+				ActionExternalTime = externalTimeToAdd,
+				ActionLeadTime = leadTime - _case.LeadTime,
+				LeadTime = leadTime
+			};
+
+            SaveCaseHistory(c, userId, adUser, createdByApp, out errors, "", extraFields);
         }
         
         public void Commit()
@@ -1593,7 +1564,7 @@ namespace DH.Helpdesk.Services.Services
 
         private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid, int stateHelper, TimeZoneInfo userTimeZone)
         {
-            List<Field> ret = new List<Field>();
+           var ret = new List<Field>();
 
             var userLocal_RegTime = TimeZoneInfo.ConvertTimeFromUtc(c.RegTime, userTimeZone);
 
@@ -1648,11 +1619,8 @@ namespace DH.Helpdesk.Services.Services
             {
                 ret.Add(new Field { Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty });
             }
-            if (l != null)
-            {
-                ret.Add(new Field { Key = "[#10]", StringValue = l.TextExternal });
-                ret.Add(new Field { Key = "[#11]", StringValue = l.TextInternal });
-            }
+            ret.Add(new Field { Key = "[#10]", StringValue = l?.TextExternal ?? "" });
+            ret.Add(new Field { Key = "[#11]", StringValue = l?.TextInternal ?? "" });
             // selfservice site
             if (cms != null)
             {
@@ -1674,7 +1642,7 @@ namespace DH.Helpdesk.Services.Services
             // Survey template
             if (cms != null)
             {
-                /// if case is closed and was no vote in survey - add HTML inormation about survey
+                // if case is closed and was no vote in survey - add HTML inormation about survey
                 if (c.IsClosed() && (_surveyService.GetByCaseId(c.Id) == null))
                 {
                     var template = new SurveyTemplate()
@@ -1684,19 +1652,19 @@ namespace DH.Helpdesk.Services.Services
                                 "{0}Survey/vote/{1}?voteId=bad",
                                 cms.AbsoluterUrl,
                                 c.Id),
-                        VoteBadText = Translator.Translate("Inte nöjd"),
+                        VoteBadText = _translateCacheService.GetTextTranslation("Inte nöjd", c.RegLanguage_Id),
                         VoteNormalLink =
                             string.Format(
                                 "{0}Survey/vote/{1}?voteId=normal",
                                 cms.AbsoluterUrl,
                                 c.Id),
-                        VoteNormalText = Translator.Translate("Nöjd"),
+                        VoteNormalText = _translateCacheService.GetTextTranslation("Nöjd", c.RegLanguage_Id),
                         VoteGoodLink =
                             string.Format(
                                 "{0}Survey/vote/{1}?voteId=good",
                                 cms.AbsoluterUrl,
                                 c.Id),
-                        VoteGoodText = Translator.Translate("Mycket nöjd"),
+                        VoteGoodText = _translateCacheService.GetTextTranslation("Mycket nöjd", c.RegLanguage_Id),
                     };
                     ret.Add(new Field { Key = "[#777]", StringValue = template.TransformText() });
                 }

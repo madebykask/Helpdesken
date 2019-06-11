@@ -9,45 +9,45 @@ import { TestComponent } from './components/test/test.component';
 import { CaseTemplateComponent } from './components/case-template/case-template.component';
 import { LanguageComponent } from './components/language/language/language.component';
 
-const appRoutes: Routes = [{ 
+const appRoutes: Routes = [{
     path: '',
     component: AppLayoutComponent,
-    children: [{ 
-        path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard] 
-      }, { 
-        path: 'casesoverview', 
+    children: [{
+        path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthGuard]
+      }, {
+        path: 'casesoverview',
         loadChildren: './modules/case-overview-module/case-overview.module#CaseOverviewModule',
-        canActivate: [AuthGuard] 
-      }, { 
+        canActivate: [AuthGuard]
+      }, {
         path: 'case',
         loadChildren: './modules/case-edit-module/case-edit.module#CaseEditModule',
-        canActivate: [AuthGuard] 
+        canActivate: [AuthGuard]
       }, {
-        path: 'createcase', 
+        path: 'createcase',
         component: CaseTemplateComponent,
-        canActivate: [AuthGuard] 
+        canActivate: [AuthGuard]
       }, {
-        path: 'language', 
+        path: 'language',
         component: LanguageComponent,
-        canActivate: [AuthGuard] 
+        canActivate: [AuthGuard]
       }
     ]
   },
 
   { path: 'test', component: TestComponent },
 
-/*{ 
-    path: '', 
+/*{
+    path: '',
     component: AltLayoutComponent,
     children: [
     ]
   },
  */
-  //no layout routes  
+  //no layout routes
   { path: 'login', component: LoginComponent},
   { path: 'error', component: ErrorComponent },
   { path: '',   redirectTo: '/', pathMatch: 'full' },
-  
+
   // otherwise redirect to PageNotFoundComponent
   { path: '**', component: PageNotFoundComponent }
 ];

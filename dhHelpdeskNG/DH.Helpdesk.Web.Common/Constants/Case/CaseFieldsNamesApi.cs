@@ -79,5 +79,9 @@
         public const string CaseRegistrationSource = "CaseRegistrationSource";
         public const string Log_InternalText = "Log_InternalText";
         public const string Log_ExternalText = "Log_ExternalText";
+        public const string Log_Filename = "LogFileName";
+        public const string Log_ExternalEmailsCC = "Log_ExternalEmailsCC";
+        public const string Log_SendMailToNotifier = "Log_SendMailToNotifier";
+
     }
 }

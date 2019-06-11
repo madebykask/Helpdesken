@@ -12,6 +12,7 @@
             SeletcedDepartments = new SelectedItems();
             SeletcedOUs = new SelectedItems();
             SelectedWorkingGroups = new SelectedItems();
+            SelectedHistoricalWorkingGroups= new SelectedItems();
             SelectedAdministrator = new SelectedItems();
             SelectedCaseTypes = new SelectedItems();
             SelectedProductAreas = new SelectedItems();
@@ -50,7 +51,9 @@
 
         public SelectedItems SelectedReportCategory { get; set; }
         public SelectedItems SelectedReportCategoryRt { get; set; }
-
+        public int StackById { get; set; }
+        public int GroupById { get; set; }
+        public SelectedItems SelectedHistoricalWorkingGroups { get; set; }
     }
        
     public class GeneralParameter 

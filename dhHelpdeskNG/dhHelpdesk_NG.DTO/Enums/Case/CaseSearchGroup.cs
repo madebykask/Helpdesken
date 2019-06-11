@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DH.Helpdesk.BusinessData.Enums.Case
+﻿namespace DH.Helpdesk.BusinessData.Enums.Case
 {
     public enum CaseUserSearchGroup
     {

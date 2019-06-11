@@ -199,6 +199,7 @@
     <Compile Include="Controllers\CaseWatchDateController.cs" />
     <Compile Include="Controllers\CaseStatisticsController.cs" />
     <Compile Include="Controllers\NotifierController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Infrastructure\Owin\GlobalExceptionMiddleware.cs" />
     <Compile Include="Logic\Case\CaseTranslationService.cs" />
     <Compile Include="Controllers\PerfomersController.cs" />
@@ -285,6 +286,7 @@
     <Compile Include="Infrastructure\Translate\Translation.cs" />
     <Compile Include="Models\CaseLockInputModel.cs" />
     <Compile Include="Models\CaseUnLockInputModel.cs" />
+    <Compile Include="Models\Case\СaseStatisticsResult.cs" />
     <Compile Include="Models\ClientLogItemModel.cs" />
     <Compile Include="Models\ExtendCaseLockInput.cs" />
     <Compile Include="Models\LoginUserInputModel.cs" />

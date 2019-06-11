@@ -17,6 +17,8 @@
         <li class="line"></li>
         <li class="@Html.ActiveTab(new string[] { "customercaseoverview" })"><a href="@Url.Action("edit", "customercaseoverview", new { id = Model.Id, usergroupId = 1 })">@Translation.GetCoreTextTranslation("Ärendeöversikt")</a></li>
         <li class="line"></li>
+        <li class="@Html.ActiveTab(new string[] { "customeradvancedsearch" })"><a href="@Url.Action("edit", "customeradvancedsearch", new { id = Model.Id })">@Translation.GetCoreTextTranslation("Avancerad sökning")</a></li>
+        <li class="line"></li>
     </ul>
 </li>
 <li class="line"></li>

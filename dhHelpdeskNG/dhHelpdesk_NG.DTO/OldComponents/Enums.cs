@@ -4,16 +4,15 @@ using static DH.Helpdesk.BusinessData.OldComponents.GlobalEnums;
 
 namespace DH.Helpdesk.BusinessData.OldComponents
 {
-    public class GlobalEnums
+    public partial class GlobalEnums
     {
-
         public enum CaseIcon
         {
             Normal = 0,
             Urgent = 1,
             Finished = 2,
             FinishedNotApproved = 3,
-			Locked = 4
+            Locked = 4
         }
 
         public enum MailTemplates

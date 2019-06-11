@@ -100,6 +100,7 @@
     <Compile Include="Common\Tools\ReflectionHelperTests.cs" />
     <Compile Include="Dal\Utils\TimeRangesHolderTest.cs" />
     <Compile Include="Dal\Utils\WorkTimeCalculatorTest.cs" />
+    <Compile Include="Mail2Ticket\Mail2TicketLogicTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BusinessLogic\OtherTools\TemporaryIdProviderTests.cs" />
     <Compile Include="Services\Exceptions\MarksNotFoundExceptionTests.cs" />
@@ -113,6 +114,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\DH.Helpdesk.Mail2Ticket.Library\DH.Helpdesk.Mail2Ticket.Library.vbproj">
+      <Project>{300807ad-e3da-4bf5-93fc-2503d617edc1}</Project>
+      <Name>DH.Helpdesk.Mail2Ticket.Library</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DH.Helpdesk.Web.Common\DH.Helpdesk.Web.Common.csproj">
       <Project>{D268E4E5-CD72-45DC-9DC0-9F0AD89F3F6E}</Project>
       <Name>DH.Helpdesk.Web.Common</Name>

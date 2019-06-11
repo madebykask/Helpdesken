@@ -1,33 +1,21 @@
-﻿namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
+﻿using System.Web.Mvc;
+using DH.Helpdesk.Web.Models;
+
+namespace DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 {
-    using System.Text;
-    using System.Web.Mvc;
-
-    using DH.Helpdesk.Web.Models;
-
     public static class FieldCaptionExtension
     {
-        public static MvcHtmlString FieldCaption(
-                        this HtmlHelper html,
-                        IConfigurableFieldModel field)
+        public static MvcHtmlString FieldCaption(this HtmlHelper html, IConfigurableFieldModel field)
         {
-            var result = new StringBuilder();
-            result.Append(Translation.Get(field.Caption));
-            if (field.IsRequired)
-            {
-                result.Append(" *");
-            }
-
-            return MvcHtmlString.Create(result.ToString()); 
+            var fieldCaption = Translation.GetCoreTextTranslation(field.Caption);
+            var s = field.IsRequired ? $"{fieldCaption} *" : fieldCaption;
+            return MvcHtmlString.Create(s); 
         }
 
-        public static MvcHtmlString PureFieldCaption(
-                        this HtmlHelper html,
-                        IConfigurableFieldModel field)
+        public static MvcHtmlString PureFieldCaption(this HtmlHelper html, IConfigurableFieldModel field)
         {
-            var result = new StringBuilder();
-            result.Append(Translation.Get(field.Caption));           
-            return MvcHtmlString.Create(result.ToString());
+            var result = Translation.GetCoreTextTranslation(field.Caption);
+            return MvcHtmlString.Create(result);
         }
     }
 }

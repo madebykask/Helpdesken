@@ -45,6 +45,20 @@
     function updateForm() {
         $("#log_edit_form").each(function () { $.data($(this)[0], 'validator', false); });
         $.validator.unobtrusive.parse("#log_edit_form");
+
     }
+
+    $(window).scroll(function () {
+        var controls = $('.dropdown-menu-parent');
+        for (var i = 0; i < controls.length; i++) {
+            updateDropdownPosition(controls[i]);
+            var objPos = getObjectPosInView(controls[i]);
+            if (objPos.ToTop <= objPos.ToDown) {
+                $(controls[i]).removeClass('dropup');
+            } else {
+                $(controls[i]).addClass('dropup');
+            }
+        }
+    });
 
 </script>

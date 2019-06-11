@@ -12,6 +12,10 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
 {
     public static class EnumExtensions
     {
+        public static string ToStringValue(this Enum enumVal)
+        {
+            return Enum.GetName(enumVal.GetType(), enumVal);
+        }
 
         public static int ToInt(this Enum enumeration)
         {            
@@ -78,7 +82,6 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
 			var type = e.GetType();
 			return GetDisplayName(type, e);
 		}
-
 
 		public static string GetTranslation(this Enum e, bool escapeQuotes = false)
 		{

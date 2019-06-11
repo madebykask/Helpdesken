@@ -3,6 +3,7 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.Domain;
 using System.Collections.Generic;
+using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.SelfService.Models.Case
 {       
@@ -26,43 +27,29 @@ namespace DH.Helpdesk.SelfService.Models.Case
         public CaseModel CaseDataModel { get; set; }
         public Dictionary<string, string> StatusBar { get; internal set; }
         public ExtendedCaseDataModel ExtendedCaseDataModel { get; set; }
-        public List<WorkflowStepModel> WorkflowSteps { get; set; }
         public OU CaseOU { get; set; } 
 
         public ProcessResult Result { get; set; }
 
         public bool ShowRegistrationMessage { get; set; }
+
         public string CaseRegistrationMessage { get; set; }
         
         public string LogFileGuid { get; set; }
-        public Setting CustomerSettings { get; set; }
+        
 
         public CaseLogModel CaseLogModel { get; set; }
 
-        public ClosedCaseAlertModel GetClosedCaseAlertModel()
-        {
-            return new ClosedCaseAlertModel()
-            {
-                FinishingDate = CaseDataModel.FinishingDate,
-                CustomerSettings = CustomerSettings
-            };
-        }
+        public ClosedCaseAlertModel ClosedCaseAlertModel { get; set; }
+        public int AttachmentPlacement { get; set; }
+        public bool ShowCommunicationForSelfservice { get; set; }
+        public bool ShowCaseActionsPanelOnTop { get; set; }
+        public bool ShowCaseActionsPanelAtBottom { get; set; }
+        public ApplicationType ApplicationType { get; set; }
 
-        public ExtendedCaseControlsPanelModel CreateExCaseControlsPanelModel(int position = 1)
+        public CaseControlsPanelModel CreateExtendedCaseControlsPanelModel(int position = 1)
         {
-            return new ExtendedCaseControlsPanelModel(position, WorkflowSteps);
+            return new CaseControlsPanelModel(position, true);
         }
-    }
-
-    public class ExtendedCaseControlsPanelModel
-    {
-        public ExtendedCaseControlsPanelModel(int poisition, List<WorkflowStepModel> workflowSteps)
-        {
-            Poisition = poisition;
-            WorkflowSteps = workflowSteps;
-        }
-
-        public int Poisition { get; }
-        public List<WorkflowStepModel> WorkflowSteps { get; }
     }
 }

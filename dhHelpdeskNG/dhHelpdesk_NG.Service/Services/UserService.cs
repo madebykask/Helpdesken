@@ -91,6 +91,7 @@ namespace DH.Helpdesk.Services.Services
         User GetUserForCopy(int id);
         CustomerUserInfo GetUserInfo(int id);
         User GetUser(int id); //not perf effecient - user info method
+        Task<User> GetUserAsync(int id);
         string GetUserTimeZoneId(int userId);
         UserRole GetUserRoleById(int id);
         UserWorkingGroup GetUserWorkingGroupById(int userId, int workingGroupId);
@@ -504,6 +505,11 @@ namespace DH.Helpdesk.Services.Services
         public User GetUser(int id)
         {
             return _userRepository.GetById(id);
+        }
+
+        public Task<User> GetUserAsync(int id)
+        {
+            return _userRepository.GetByIdAsync(id);
         }
 
         public User GetUserForCopy(int id)

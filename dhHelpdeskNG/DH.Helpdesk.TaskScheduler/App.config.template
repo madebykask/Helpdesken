@@ -12,16 +12,16 @@
     <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5.2" />
   </startup>
   <appSettings>
-    <add key="EnvName" value="Dev" />
-    <add key="LogPath" value="C:\InitiatorsLogs" />
-    <add key="DailyReport" value="0" />
-    <add key="InitiatorImport" value="0" />
-    <add key="GDPRTasks" value="1" />
-    <add key="GDPRBatchSize" value="1000" />
+    <add key="EnvName" value="#{EnvironmentName}" />
+    <add key="LogPath" value="#{LogPath}" />
+    <add key="DailyReport" value="#{if UseDailyReport}1#{else}0#{/if}" />
+    <add key="InitiatorImport" value="#{if UseInitiatorImport}1#{else}0#{/if}" />
+    <add key="GDPRTasks" value="#{if UseGDPRTasks}1#{else}0#{/if}" />
+    <add key="GDPRBatchSize" value="#{GDPRBatchSize}" />
   </appSettings>
   <connectionStrings>
     <!-- Dev -->
-    <add name="HelpdeskSqlServerDbContext" connectionString="Data Source=(local);Initial Catalog=DH_Support;uid=helpdesk;Password=;MultipleActiveResultSets=True;Connection Lifetime=3;" providerName="System.Data.SqlClient" /> 
+    <add name="HelpdeskSqlServerDbContext" connectionString="Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};uid=#{DatabaseUser};Password=#{DatabasePassword};MultipleActiveResultSets=True;Connection Lifetime=3;" providerName="System.Data.SqlClient" /> 
     <!--<add name="HelpdeskSqlServerDbContext" connectionString="Data Source=localhost;Initial Catalog=DH_Support;Password=Asd123!;User ID=devUser;MultipleActiveResultSets=True;Connection Lifetime=3;" providerName="System.Data.SqlClient" />-->
     <!--<add name="HelpdeskSqlServerDbContext" connectionString="Data Source=dhutvsql2;Initial Catalog=DH_Support;User Id=sa;Password=;MultipleActiveResultSets=True;Connection Lifetime=3;Max Pool Size=3;" providerName="System.Data.SqlClient" />-->
   </connectionStrings>

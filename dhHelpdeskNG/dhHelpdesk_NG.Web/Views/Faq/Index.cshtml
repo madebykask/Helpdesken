@@ -1,401 +1,33 @@
-﻿@using System.Web.Optimization
-@using DH.Helpdesk.Common.Enums
-@using DH.Helpdesk.Common.Extensions.DateTime
-@using DH.Helpdesk.Web.Infrastructure
+﻿@using DH.Helpdesk.BusinessData.Enums
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 
 @model DH.Helpdesk.Web.Models.Faq.Output.IndexModel
 
 @{
-    this.ViewBag.Title = Translation.Get("FAQ", Enums.TranslationSource.TextTranslation);    
+    ViewBag.Title = Translation.GetCoreTextTranslation("FAQ");
 }
 
-@Scripts.Render("~/bundles/jquery-typing")
-
-<script type="text/javascript">
-    $(function () {
-        @if (Model.Categories != null && this.Model.Categories.Items.Any())
+@functions
+{
+    string getSortClass(string fieldName)
+    {
+        var sortCls = string.Empty;
+        var sortBy = Model.SortBy ?? string.Empty;
+        if (sortBy.Equals(fieldName, StringComparison.OrdinalIgnoreCase))
         {
-            @:window.selectedCategoryId = @Model.Categories.Items.First().Value
+            sortCls = Model.SortOrder == SortOrder.Asc ? "icon-chevron-up" : "icon-chevron-down";
         }
-
-        $('#tab_1').click(function () {
-            if ($(this).hasClass('disabled'))
-                return false;
-            $('#add_category_button').hide();
-            $('#add_faq_button').show();
-        });
-
-        $('#tab_2').click(function () {
-            if ($(this).hasClass('disabled'))
-                return false;
-            $('#add_category_button').hide();
-            $('#add_faq_button').show();
-        });
-
-        $('#tab_3').click(function () {
-            if ($(this).hasClass('disabled'))
-                return false;
-            $('#add_faq_button').hide();
-            $('#add_category_button').show();
-        });
-
-        $('#show_all_answers_within_category').on('switchChange.bootstrapSwitch', function (event, state) {
-            var selected = $('#categories_tree').find('a.tree-selected-node');
-            window.selectedCategoryId = selected.siblings('input').val();
-            if (!window.selectedCategoryId) {
-                return;
-            }
-            if (state) {
-                $.get('@Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqsWithDescription) {
-                    refreshFaqTableWithDescription(faqsWithDescription);
-                });
-            } else {
-                $.get('@Url.Action("Faqs")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqs) {
-                    refreshFaqTable(faqs);
-                });
-            }
-        });
-
-        $('#categories_tree').find('a.tree-node, a.tree-selected-node').click(function () {
-            var selectedCategoryId = $(this).siblings('input').val();
-            window.selectedCategoryId = selectedCategoryId;
-
-            ChangeCat(selectedCategoryId);
-
-            if ($('#show_all_answers_within_category').is(':checked')) {
-                $.get('@Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqsWithDescription) {
-                    refreshFaqTableWithDescription(faqsWithDescription);
-                });
-            } else {
-                $.get('@Url.Action("Faqs")', { categoryId: selectedCategoryId, now: Date.now() } , function (faqs) {
-                    refreshFaqTable(faqs);
-                });
-            }
-        });
-
-        $( document ).ready(function() {
-            var selected = $('#categories_tree').find('a.tree-selected-node');
-            window.selectedCategoryId = selected.siblings('input').val();
-            if (!window.selectedCategoryId) {
-                return;
-            }
-            if ($('#show_all_answers_within_category').is(':checked')) {
-                $.get('@Url.Action("FaqsDetailed")', { categoryId: window.selectedCategoryId, now: Date.now() }, function (faqsWithDescription) {
-                    refreshFaqTableWithDescription(faqsWithDescription);
-                });
-            } else {
-                $.get('@Url.Action("Faqs")', { categoryId: window.selectedCategoryId, now: Date.now() } , function (faqs) {
-                    refreshFaqTable(faqs);
-                });
-            }
-        });
-
-        $('#add_faq_button').click(function () {
-            if ($(this).find('.btn').hasClass('disabled'))
-                return;
-            window.location.href = '@Url.Action("NewFaq")?categoryId=' + window.selectedCategoryId;
-        });
-
-
-
-        @*$('#search_field').typing({
-            stop: function (event, $elem) {
-                if (!$elem.val()) {
-                    clearSearchResultsTable();
-                    return;
-                }
-
-                if ($('#show_all_answers_within_category_search_checkbox').is(':checked')) {
-                    $.get('@Url.Action("SearchDetailed")', { pharse: $elem.val() }, function (faqsWithDescription) {
-                        refreshSearchTableWithDescription(faqsWithDescription);
-                    });
-                } else {
-                    $.get('@Url.Action("Search")', { pharse: $elem.val() }, function (faqs) {
-                        refreshSearchResultsTable(faqs);
-                    });
-                }
-            },
-            delay: 300
-        });*@
-
-        $('#show_all_answers_within_category_search_checkbox').on('switchChange.bootstrapSwitch', function () {
-            if (!$('#search_field').val()) {
-                return;
-            }
-
-            if ($(this).is(':checked')) {
-                $.get('@Url.Action("SearchDetailed")', { pharse: $('#search_field').val(), now: Date.now() }, function (faqsWithDescription) {
-                    refreshSearchTableWithDescription(faqsWithDescription);
-                });
-            } else {
-                $.get('@Url.Action("Search")', { pharse: $('#search_field').val(), now: Date.now() }, function (faqs) {
-                    refreshSearchResultsTable(faqs);
-                });
-            }
-        });
-
-        ChangeCat(selectedCategoryId);
-
-        $('#categories_editing_tree').find('a.tree-node, a.tree-selected-node').click(function () {
-            var selectedCategoryId = $(this).siblings('input').val();
-            window.location.href = '@Url.Action("EditCategory")?id=' + selectedCategoryId + '&languageId='+@LanguageIds.Swedish;
-        });
-    });
-
-    function ChangeCat(strValue) {
-        $.post('/FAQ/SetSelectedCategory',
-               { value: strValue }, function (data) {
-                   //
-               });
+        return sortCls;
     }
-
-    function SearchFAQs() {
-        var txt = $('#search_field').val();
-        //alert(txt);
-        if (!txt) {
-            return;
-        }
-
-        if ($('#show_all_answers_within_category_search_checkbox').is(':checked')) {
-            $.get('@Url.Action("SearchDetailed")', { pharse: txt }, function (faqsWithDescription) {
-                refreshSearchTableWithDescription(faqsWithDescription);
-            });
-        } else {
-            $.get('@Url.Action("Search")', { pharse: txt }, function (faqs) {
-                refreshSearchResultsTable(faqs);
-            });
-        }
-    }
-
-    function refreshFaqTable(faqs) {
-        var faqsTable = $('#faqs_table');
-        faqsTable.children('tbody').remove();
-
-        for (var i = 0; i < faqs.length; i++) {
-            var faq = faqs[i];
-
-            var faqMarkup = $(
-                '<tr>' +
-                    '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.CreatedDateText + '</a>' +
-                    '</td>' +
-                    '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.Text + '</a>' +
-                    '</td>' +
-                    '</tr>');
-
-            faqsTable.append(faqMarkup);
-        }
-    }
-
-    function refreshFaqTableWithDescription(faqs) {
-        var faqsTable = $('#faqs_table');
-        faqsTable.children('tbody').remove();
-
-        for (var i = 0; i < faqs.length; i++) {
-            var faq = faqs[i];
-            var showDetails = $('#show_all_answers_within_category').is(':checked');
-            var faqMarkup =
-                '<tr>' +
-                    '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '&showDetails='+ showDetails + '">' + faq.CreatedDateText + '</a>' +
-                    '</td>' +
-                    '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '&showDetails='+ showDetails + '">' + faq.Text + '</a>' +
-                    '<table>' +
-                    '<tr>' +
-                    '<td>' +
-                    '@Translation.GetForJS("Svar", Enums.TranslationSource.TextTranslation)' +
-                    '</td>' +
-                    '<td>' +
-                    faq.Answer +
-                    '</td>' +
-                    '</tr>';
-
-            if (faq.InternalAnswer) {
-                faqMarkup +=
-                    '<tr>' +
-                        '<td>' +
-                        '@Translation.GetForJS("Internt svar", Enums.TranslationSource.TextTranslation)' +
-                        '</td>' +
-                        '<td>' +
-                        faq.InternalAnswer +
-                        '</td>' +
-                        '</tr>';
-            }
-
-            if (faq.FileNames) {
-                for (var j = 0; j < faq.FileNames.length; j++) {
-                    var fileName = faq.FileNames[j];
-
-                    faqMarkup +=
-                        '<tr>' +
-                            '<td>' +
-                            '<i class="icon-file"></i>' +
-                            '</td>' +
-                            '<td>' +
-                            '<a href="@Url.Action("DownloadFile")?faqId=' + faq.Id + '&fileName=' + fileName + '">' + fileName + '</a>' +
-                            '</td>' +
-                            '</tr>';
-                }
-            }
-
-            if (faq.UrlOne) {
-                faqMarkup +=
-                    '<tr>' +
-                        '<td>' +
-                        '@Translation.GetForJS("Url 1: ", Enums.TranslationSource.TextTranslation)' +
-                        '</td>' +
-                        '<td>' +
-                        faq.UrlOne +
-                        '</td>' +
-                        '</tr>';
-            }
-
-            if (faq.UrlTwo) {
-                faqMarkup +=
-                    '<tr>' +
-                        '<td>' +
-                        '@Translation.GetForJS("Url 2: ", Enums.TranslationSource.TextTranslation)' +
-                        '</td>' +
-                        '<td>' +
-                        faq.UrlTwo +
-                        '</td>' +
-                        '</tr>';
-            }
-
-            faqMarkup +=
-                '</table>' +
-                    '</td>' +
-                    '</tr>';
-
-            faqsTable.append(faqMarkup);
-        }
-    }
-
-    function refreshSearchResultsTable(faqs) {
-        var searchResultsTable = $('#search_results_table');
-        clearSearchResultsTable(searchResultsTable);
-
-        for (var i = 0; i < faqs.length; i++) {
-            var faq = faqs[i];
-
-            var faqMarkup = $(
-                '<tr>' +
-                    '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.CreatedDateText + '</a>' +
-                    '</td>' +
-                    '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.Text + '</a>' +
-                    '</td>' +
-                    '</tr>');
-
-            searchResultsTable.append(faqMarkup);
-        }
-    }
-
-    function refreshSearchTableWithDescription(faqs) {
-        var faqsTable = $('#search_results_table');
-        faqsTable.children('tbody').remove();
-
-        for (var i = 0; i < faqs.length; i++) {
-            var faq = faqs[i];
-
-            var faqMarkup =
-                '<tr>' +
-                    '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.CreatedDateText + '</a>' +
-                    '</td>' +
-                    '<td>' +
-                    '<a href="@Url.Action("EditFaq")?id=' + faq.Id + '&languageId='+@LanguageIds.Swedish + '">' + faq.Text + '</a>' +
-                    '<table>' +
-                    '<tr>' +
-                    '<td>' +
-                    '@Translation.GetForJS("Svar", Enums.TranslationSource.TextTranslation)' +
-                    '</td>' +
-                    '<td>' +
-                    faq.Answer +
-                    '</td>' +
-                    '</tr>';
-
-            if (faq.InternalAnswer) {
-                faqMarkup +=
-                    '<tr>' +
-                        '<td>' +
-                        '@Translation.GetForJS("Internt svar", Enums.TranslationSource.TextTranslation)' +
-                        '</td>' +
-                        '<td>' +
-                        faq.InternalAnswer +
-                        '</td>' +
-                        '</tr>';
-            }
-
-            if (faq.FileNames) {
-                for (var j = 0; j < faq.FileNames.length; j++) {
-                    var fileName = faq.FileNames[j];
-
-                    faqMarkup +=
-                        '<tr>' +
-                            '<td>' +
-                            '<i class="icon-file"></i>' +
-                            '</td>' +
-                            '<td>' +
-                            '<a href="@Url.Action("DownloadFile")?faqId=' + faq.Id + '&fileName=' + fileName + '">' + fileName + '</a>' +
-                            '</td>' +
-                            '</tr>';
-                }
-            }
-
-            if (faq.UrlOne) {
-                faqMarkup +=
-                    '<tr>' +
-                        '<td>' +
-                        '@Translation.GetForJS("Url 1: ", Enums.TranslationSource.TextTranslation)' +
-                        '</td>' +
-                        '<td>' +
-                        faq.UrlOne +
-                        '</td>' +
-                        '</tr>';
-            }
-
-            if (faq.UrlTwo) {
-                faqMarkup +=
-                    '<tr>' +
-                        '<td>' +
-                        '@Translation.GetForJS("Url 2: ", Enums.TranslationSource.TextTranslation)' +
-                        '</td>' +
-                        '<td>' +
-                        faq.UrlTwo +
-                        '</td>' +
-                        '</tr>';
-            }
-
-            faqMarkup +=
-                '</table>' +
-                    '</td>' +
-                    '</tr>';
-
-            faqsTable.append(faqMarkup);
-        }
-    }
-
-    function clearSearchResultsTable(searchResultsTable) {
-        if (searchResultsTable) {
-            searchResultsTable.children('tbody').remove();
-        } else {
-            $('#search_results_table tbody').remove();
-        }
-    }
-</script>
+}
 
 <div class="secnavs fixed">
     <div class="pull-left">
         <ul class="secnav">
             @if (Model.UserHasFaqAdminPermission)
             {
-                <li id="add_faq_button" style="@(this.Model.Categories.Items.Any() ? "" : "display: none")"><a class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>    
-                <li id="add_category_button" style="@(this.Model.Categories.Items.Any() ? "display: none" : "")"><a class="btn" href="@Url.Action("NewCategory")">@Translation.Get("Ny kategori", Enums.TranslationSource.TextTranslation)</a></li>                
+                <li id="add_faq_button" style="@(this.Model.Categories.Items.Any() ? "" : "display: none")"><a class="btn">@Translation.Get("Ny FAQ", Enums.TranslationSource.TextTranslation)</a></li>
+                <li id="add_category_button" style="@(this.Model.Categories.Items.Any() ? "display: none" : "")"><a class="btn" href="@Url.Action("NewCategory")">@Translation.Get("Ny kategori", Enums.TranslationSource.TextTranslation)</a></li>
             }
         </ul>
     </div>
@@ -403,17 +35,18 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs">
-            <li id="tab_1" class="@(this.Model.Categories.Items.Any() ? "active" : "disabled")" >
-                <a href="#fragment-1">@Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)</a>
+            <li id="tab_1" class="@(this.Model.Categories.Items.Any() ? "active" : "disabled")">
+                <a href="#fragment-1">@Translation.GetCoreTextTranslation("FAQ")</a>
             </li>
             <li id="tab_2" class="@(this.Model.Categories.Items.Any() ? "" : "disabled")">
-                <a href="#fragment-2">@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-2">@Translation.GetCoreTextTranslation("Sök")</a>
             </li>
             <li id="tab_3" class="@(this.Model.Categories.Items.Any() ? "" : "active")">
-                <a href="#fragment-3">@Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)</a>
+                <a href="#fragment-3">@Translation.GetCoreTextTranslation("Kategorier")</a>
             </li>
         </ul>
         <div class="tab-content">
+            <!-- Faqs Tab -->
             <div id="fragment-1" class="tab-pane tab-pane-border @(this.Model.Categories.Items.Any() ? "active" : "")">
                 <div class="container">
                     <div class="row">
@@ -421,8 +54,8 @@
                             <table class="tableform">
                                 <tr>
                                     <td>
-                                        @Translation.Get("Visa alla svar inom kategorin", Enums.TranslationSource.TextTranslation)
-                                        @Html.CheckBoxFor(m => m.ShowDetails, new { id = "show_all_answers_within_category", @class="switchcheckbox"})
+                                        @Translation.GetCoreTextTranslation("Visa alla svar inom kategorin")
+                                        @Html.CheckBoxFor(m => m.ShowDetails, new { id = "show_all_answers_within_category", @class = "switchcheckbox" })
                                     </td>
                                 </tr>
                             </table>
@@ -433,9 +66,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            @Translation.Get("Kategorier", Enums.TranslationSource.TextTranslation)
-                                        </th>
+                                        <th>@Translation.GetCoreTextTranslation("Kategorier")</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -451,47 +82,34 @@
                             <table class="table table-striped table-bordered table-hover" id="faqs_table">
                                 <thead>
                                     <tr>
-                                        <th style="width:10%">
-                                            @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
-                                        </th>
-                                        <th style="width:90%">
-                                            @Translation.Get("Fråga/Svar", Enums.TranslationSource.TextTranslation)
-                                        </th>
+                                        <th class="thpointer" data-field="Text" style="width: 70%">@Translation.GetCoreTextTranslation("Fråga/Svar") <i class="@getSortClass("FAQQuery")"></i></th>
+                                        <th class="thpointer" data-field="CreatedDate" style="width: 10%">@Translation.GetCoreTextTranslation("Skapad") <i class="@getSortClass("CreatedDate")"></i></th>
+                                        <th class="thpointer" data-field="ChangedDate" style="width: 10%">@Translation.GetCoreTextTranslation("Ändrad") <i class="@getSortClass("ChangedDate")"></i></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var faq in this.Model.FirstCategoryFaqs)
-                                    {
-                                        <tr>
-                                            <td style="width:10%">
-                                                <a href="@Url.Action("EditFaq", "faq", new { id = faq.Id, languageId = LanguageIds.Swedish })">@faq.CreatedDate.ToFormattedDate()</a>
-                                            </td>
-                                            <td style="width:90%">
-                                                <a href="@Url.Action("EditFaq", "faq", new { id = faq.Id, languageId = LanguageIds.Swedish })">@faq.Text</a>
-                                            </td>
-                                        </tr>
-                                    }
+                                    @Html.Partial("_FaqList", Model.FirstCategoryFaqs)
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- Search Tab -->
             <div id="fragment-2" class="tab-pane tab-pane-border">
                 <div class="container">
                     <div class="row">
                         <div class="span12">
                             <table class="tableform">
                                 <tr>
+                                    <td>@Translation.GetCoreTextTranslation("Sökord")</td>
                                     <td>
-                                        @Translation.Get("Sökord", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td>
-                                        <input id="search_field" type="text" class="CellText" /> <input type="button" class="btn" onclick="SearchFAQs()" value="@Translation.Get("Sök", Enums.TranslationSource.TextTranslation)"/>
+                                        <input id="search_field" type="text" class="CellText" />
+                                        <input id="searchBtn" type="button" class="btn" value="@Translation.GetCoreTextTranslation("Sök")" />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>@Translation.Get("Visa alla svar inom kategorin", Enums.TranslationSource.TextTranslation)</td>
+                                    <td>@Translation.GetCoreTextTranslation("Visa alla svar inom kategorin")</td>
                                     <td><input type="checkbox" id="show_all_answers_within_category_search_checkbox" class="switchcheckbox" /></td>
                                 </tr>
                             </table>
@@ -500,16 +118,12 @@
                     <table class="table table-striped table-bordered table-hover" id="search_results_table">
                         <thead>
                             <tr>
-                                <th >
-                                    @Translation.Get("Datum", Enums.TranslationSource.TextTranslation)
-                                </th>
-                                <th>
-                                    @Translation.Get("Fråga/Svar", Enums.TranslationSource.TextTranslation)
-                                </th>
+                                <th class="thpointer" data-field="Text" style="width: 70%">@Translation.GetCoreTextTranslation("Fråga/Svar") <i class="@getSortClass("FAQQuery")"></i></th>
+                                <th class="thpointer" data-field="CreatedDate" style="width: 10%">@Translation.GetCoreTextTranslation("Skapad") <i class="@getSortClass("CreatedDate")"></i></th>
+                                <th class="thpointer" data-field="ChangedDate" style="width: 10%">@Translation.GetCoreTextTranslation("Ändrad") <i class="@getSortClass("ChangedDate")"></i></th>
                             </tr>
                         </thead>
-                        <tbody>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
@@ -517,26 +131,86 @@
                 <div class="container">
                     <div class="row">
                         <div class="span12">
-                            <table class="tableform">
-                            </table>
+                            <table class="tableform"></table>
                         </div>
                     </div>
                 </div>
                 <div class="container">
-                    @if (this.Model.Categories.Items.Any())
+                    @if (Model.Categories.Items.Any())
                     {
-                        <table>
-                            <tbody>
-                                @Html.Tree("categories_editing_tree", true, this.Model.Categories)
-                            </tbody>
-                        </table>
+                    <table>
+                        <tbody>
+                            @Html.Tree("categories_editing_tree", true, this.Model.Categories)
+                        </tbody>
+                    </table>
                     }
                     else
                     {
-                        @Translation.Get("You have no categories", Enums.TranslationSource.TextTranslation)
+                    @Translation.GetCoreTextTranslation("You have no categories")
                     }
                 </div>
             </div>
         </div>
+        <div class="loading-msg" style="display:none">
+            <div class="content-wrapper">
+                <div class="loader">@Translation.GetCoreTextTranslation("Laddar...")</div>
+            </div>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/faqs")
+    @* @Scripts.Render("~/bundles/jquery-typing") *@
+
+
+    <script type="text/javascript">
+
+        $(function() {
+            var params = {
+                sortBy: '@Model.SortBy',
+                sortOrder: parseInt(@((int) Model.SortOrder)),
+                selectedCategoryId: '@Model.GetFirstCategoryId()',
+                languageId: @(Model.LanguageId),
+                urls: {
+                    getFaqs: '@Url.Action("Faqs", "Faq")',
+                    getFaqsDetailed: '@Url.Action("FaqsDetailed", "Faq")',
+                    search: '@Url.Action("Search", "Faq")',
+                    searchDetailed: '@Url.Action("SearchDetailed", "Faq")',
+                    setSelectedCategory: '@Url.Action("SetSelectedCategory", "Faq")',
+                    newFaq: '@Url.Action("NewFaq", "Faq")',
+                    editCategory: '@Url.Action("EditCategory", "Faq")',
+                    editFaq: '@Url.Action("EditFaq", "Faq")',
+                    downloadFile: '@Url.Action("DownloadFile", "Faq")'
+                }
+            };
+
+            window.fp.init(params);
+        });
+
+
+        $(function() {
+
+            @*$('#search_field').typing({
+        stop: function (event, $elem) {
+            if (!$elem.val()) {
+                $searchResultsTable.children('tbody').html('');
+                return;
+            }
+
+            if ($('#show_all_answers_within_category_search_checkbox').is(':checked')) {
+                $.get('@Url.Action("SearchDetailed")', { pharse: $elem.val() }, function (faqsWithDescription) {
+                    refreshSearchTableWithDescription(faqsWithDescription);
+                });
+            } else {
+                $.get('@Url.Action("Search")', { pharse: $elem.val() }, function (faqs) {
+                    refreshSearchResultsTable(faqs);
+                });
+            }
+        },
+        delay: 300
+    });*@
+        });
+    </script>
+}

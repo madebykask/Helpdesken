@@ -2,15 +2,19 @@
 {
     public class ItemOverview
     {
-        public ItemOverview(string name, string value)
+        public ItemOverview()
         {
-            this.Name = name;
-            this.Value = value;
         }
 
-        public string Name { get; private set; }
+        public ItemOverview(string name, string value)
+        {
+            Name = name;
+            Value = value;
+        }
 
-        public string Value { get; private set; }
+        public string Name { get; set; }
+
+        public string Value { get; set; }
 
         public static ItemOverview CreateEmpty()
         {

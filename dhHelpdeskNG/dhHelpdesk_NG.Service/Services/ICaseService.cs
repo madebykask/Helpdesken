@@ -87,7 +87,8 @@ namespace DH.Helpdesk.Services.Services
             string caseExtraFollowers = null);
 
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath, TimeZoneInfo userTimeZone,
-                           Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null, User currentLoggedInUser = null);
+                           Case oldCase = null, CaseLog log = null, List<CaseFileDto> logFiles = null, User currentLoggedInUser = null,
+                            string extraFollowersEmails = null);
 
         List<BusinessRuleActionModel> CheckBusinessRules(BREventType occurredEvent, Case currentCase, Case oldCase = null);
 
@@ -157,5 +158,6 @@ namespace DH.Helpdesk.Services.Services
         int GetCaseCustomerId(int caseId);
         Task<List<CaseHistoryMapperData>> GetCaseHistoriesAsync(int caseId);
         Task<CustomerCasesStatus> GetCustomerCasesStatusAsync(int customerId, int userId);
+        Task<Case> GetDetachedCaseByIdAsync(int id);
     }
 }

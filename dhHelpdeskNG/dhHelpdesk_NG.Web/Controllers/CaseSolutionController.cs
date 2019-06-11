@@ -1,4 +1,5 @@
 ﻿
+using DH.Helpdesk.BusinessData.Models.Shared;
 using DH.Helpdesk.BusinessData.Models.User;
 
 namespace DH.Helpdesk.Web.Controllers
@@ -366,8 +367,8 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult New(CaseSolution caseSolution, CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] caseSolutionSettingModels, int PageId, string selectedValues)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            IList<CaseFieldSetting> CheckMandatory = null;//_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
-            this.TempData["RequiredFields"] = null;
+            IList<CaseFieldSetting> checkMandatory = null;//_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id);
+            TempData["RequiredFields"] = null;
 
 
             //string t = this.TempData["NewOrOld"].ToString();
@@ -388,9 +389,13 @@ namespace DH.Helpdesk.Web.Controllers
 
             // Positive: Send Mail to...
             if (caseSolutionInputViewModel.CaseSolution.NoMailToNotifier == 0)
+            {
                 caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 1;
+            }
             else
+            {
                 caseSolutionInputViewModel.CaseSolution.NoMailToNotifier = 0;
+            }
 
             if (caseSolutionInputViewModel.CaseSolution.PerformerUser_Id == -1)
             {
@@ -413,57 +418,64 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0)
+            {
                 caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
+            }
 
-             if (caseSolutionInputViewModel.SplitToCaseSolutionIds != null)
+             var splitToSolutionIds = caseSolutionInputViewModel.SplitToCaseSolutionIds;
+             if (splitToSolutionIds != null && splitToSolutionIds.Any())
              {
-                 caseSolutionInputViewModel.CaseSolution.SplitToCaseSolutionDescendants = _caseSolutionService.GetSplitToCaseSolutionDescendants(caseSolutionInputViewModel.CaseSolution, caseSolutionInputViewModel.SplitToCaseSolutionIds);
-             }
-         
+                 caseSolutionInputViewModel.CaseSolution.SplitToCaseSolutionDescendants =
+                     splitToSolutionIds.Select(id => new CaseSolution_SplitToCaseSolutionEntity
+                     {
+                         CaseSolution_Id = caseSolution.Id,
+                         SplitToCaseSolution_Id = id
+                     }).ToList();
+            }
 
-            this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
+            _caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, checkMandatory, out errors);
+
+            //clear case solutions cache 
+            _cache.InvalidateStartsWith(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition);
 
             //if (t == "0")
             //{
-            CaseSettingsSolutionAggregate settingsSolutionAggregate = this.CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
-            this.caseSolutionSettingService.AddCaseSolutionSettings(settingsSolutionAggregate);
+            var settingsSolutionAggregate = CreateCaseSettingsSolutionAggregate(caseSolutionInputViewModel.CaseSolution.Id, caseSolutionSettingModels);
+            caseSolutionSettingService.AddCaseSolutionSettings(settingsSolutionAggregate);
             //}
-
-
+            
             ////////////////Save conditions//////////////////
-            List<CaseSolitionConditionListEntity> cse = new List<CaseSolitionConditionListEntity>();
+            var caseSolutionConditions = new List<CaseSolitionConditionListEntity>();
 
-            string[] selectedSplit = selectedValues.Split('~');
+            var selectedSplit = selectedValues.Split('~');
             foreach (string s in selectedSplit)
             {
-                string[] cap = s.Split(':');
+                var cap = s.Split(':');
                 var text = cap[0].StartsWith("_") ? cap[0].Substring(1, cap[0].Length - 1) : cap[0];
 
-                string values = string.Empty;
+                var values = string.Empty;
                 if (cap.Length > 1)
                 {
                     values = cap[1];
                 }
-                bool exists = false;
 
-                exists = cse.Any(u => u.CaseSolutionConditionCaption == text);
+                var exists = false;
+
+                exists = caseSolutionConditions.Any(u => u.CaseSolutionConditionCaption == text);
                 if (exists == false)
                 {
-                    CaseSolitionConditionListEntity cSc = new CaseSolitionConditionListEntity
+                    var conditionListEntity = new CaseSolitionConditionListEntity
                     {
                         CaseSolutionConditionCaption = text,
                         CaseSolutionConditionValues = values.Replace('_', ',')
                     };
 
-                    cse.Add(cSc);
+                    caseSolutionConditions.Add(conditionListEntity);
                 }
                 else
                 {
-
-
-
-                    string exvalues = cse.Where(x => x.CaseSolutionConditionCaption == text).FirstOrDefault().CaseSolutionConditionValues;
-                    string exid = cse.Where(x => x.CaseSolutionConditionCaption == text).FirstOrDefault().CaseSolutionConditionCaption;
+                    string exvalues = caseSolutionConditions.Where(x => x.CaseSolutionConditionCaption == text).FirstOrDefault().CaseSolutionConditionValues;
+                    string exid = caseSolutionConditions.Where(x => x.CaseSolutionConditionCaption == text).FirstOrDefault().CaseSolutionConditionCaption;
 
                     string[] existarray = exvalues.Split(',');
                     string[] newarray = values.Split(',');
@@ -481,30 +493,24 @@ namespace DH.Helpdesk.Web.Controllers
                         }
                     }
 
-
-
-                    foreach (var item in cse.Where(w => w.CaseSolutionConditionCaption == text))
+                    foreach (var item in caseSolutionConditions.Where(w => w.CaseSolutionConditionCaption == text))
                     {
                         item.CaseSolutionConditionValues = final;
                     }
-
-
-
                 }
-
-
             }
-            if (cse != null)
+
+            if (caseSolutionConditions != null)
             {
-                foreach (CaseSolitionConditionListEntity lk in cse)
+                foreach (CaseSolitionConditionListEntity lk in caseSolutionConditions)
                 {
-                    CaseSolutionConditionEntity o = new CaseSolutionConditionEntity
+                    var o = new CaseSolutionConditionEntity
                     {
                         CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
                         Property_Name = lk.CaseSolutionConditionCaption,
                         Values = lk.CaseSolutionConditionValues
                     };
-                    this._caseSolutionConditionService.Save(o);
+                    _caseSolutionConditionService.Save(o);
                 }
             }
 
@@ -515,18 +521,18 @@ namespace DH.Helpdesk.Web.Controllers
                 switch (PageId) // back to refrence page
                 {
                     case 0:
-                        return this.RedirectToAction("index", "casesolution");
+                        return RedirectToAction("index", "casesolution");
 
                     case 1:
-                        return this.RedirectToAction("index", "Cases");
+                        return RedirectToAction("index", "Cases");
                 }
             }
 
-            this.TempData["RequiredFields"] = errors;
+            TempData["RequiredFields"] = errors;
 
-            var model = this.CreateInputViewModel(caseSolution);
+            var model = CreateInputViewModel(caseSolution);
 
-            return this.View(model);
+            return View(model);
         }
 
         [ValidateInput(false)]
@@ -1412,19 +1418,17 @@ namespace DH.Helpdesk.Web.Controllers
 
         [ValidateInput(false)]
         [HttpPost]
-        public ActionResult Edit(
-            CaseSolutionInputViewModel caseSolutionInputViewModel,
-            CaseSolutionSettingModel[] CaseSolutionSettingModels,
-            int PageId, 
-            string selectedValues)
+        public ActionResult Edit(CaseSolutionInputViewModel caseSolutionInputViewModel, CaseSolutionSettingModel[] CaseSolutionSettingModels, int PageId, string selectedValues)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             IList<CaseFieldSetting> CheckMandatory = null; //_caseFieldSettingService.GetCaseFieldSettings(SessionFacade.CurrentCustomer.Id); 
             this.TempData["RequiredFields"] = null;
+
             if (CaseSolutionSettingModels == null)
             {
                 CaseSolutionSettingModels = new CaseSolutionSettingModel[0];
             }
+
             var caseSolutionSchedule = this.CreateCaseSolutionSchedule(caseSolutionInputViewModel);
 
             // Positive: Send Mail to...
@@ -1456,9 +1460,25 @@ namespace DH.Helpdesk.Web.Controllers
             if (caseSolutionInputViewModel.CaseSolution.ShowInsideCase != 1 || caseSolutionInputViewModel.CaseSolution.SaveAndClose < 0)
                 caseSolutionInputViewModel.CaseSolution.SaveAndClose = null;
 
-            if (caseSolutionInputViewModel.SplitToCaseSolutionIds != null)
+            var splitToSolutionIds = caseSolutionInputViewModel.SplitToCaseSolutionIds;
+            if (splitToSolutionIds != null && splitToSolutionIds.Any())
             {
-                   caseSolutionInputViewModel.CaseSolution.SplitToCaseSolutionDescendants = _caseSolutionService.GetSplitToCaseSolutionDescendants(caseSolutionInputViewModel.CaseSolution, caseSolutionInputViewModel.SplitToCaseSolutionIds);
+                caseSolutionInputViewModel.CaseSolution.SplitToCaseSolutionDescendants =
+                    splitToSolutionIds.Select(id => new CaseSolution_SplitToCaseSolutionEntity
+                    {
+                        CaseSolution_Id = caseSolutionInputViewModel.CaseSolution.Id,
+                        SplitToCaseSolution_Id = id
+                    }).ToList();
+            }
+
+            // reset Id if its a copy template request 
+            var isCopy = caseSolutionInputViewModel.CaseSolution.Id == 0;
+            if (isCopy)
+            {
+                foreach (var cs in CaseSolutionSettingModels)
+                {
+                    cs.Id = 0;
+                }
             }
 
             this._caseSolutionService.SaveCaseSolution(caseSolutionInputViewModel.CaseSolution, caseSolutionSchedule, CheckMandatory, out errors);
@@ -1471,7 +1491,7 @@ namespace DH.Helpdesk.Web.Controllers
             List<CaseSolitionConditionListEntity> cse = new List<CaseSolitionConditionListEntity>();
 
             //Remove caching of all casesolution conditions
-            this._cache.InvalidateStartsWith(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition);
+            _cache.InvalidateStartsWith(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition);
 
             string[] selectedSplit = selectedValues.Split('~');
             foreach (string s in selectedSplit)
@@ -1577,6 +1597,9 @@ namespace DH.Helpdesk.Web.Controllers
         {
             if (this._caseSolutionService.DeleteCaseSolution(id, SessionFacade.CurrentCustomer.Id) == DeleteMessage.Success)
             {
+                // invalidate cache on delete
+                _cache.InvalidateStartsWith(DH.Helpdesk.Common.Constants.CacheKey.CaseSolutionCondition);
+
                 switch (pageId)
                 {
                     case 1:
@@ -2688,12 +2711,9 @@ namespace DH.Helpdesk.Web.Controllers
                 k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
             }
 
-            IList<Application> a = this._caseSolutionService.GetAllApplications(customerId);
-            a = a.OrderBy(x => x.Name).ToList();
-            foreach (var k in a)
-            {
-                k.Name = Translation.Get(k.Name, Enums.TranslationSource.TextTranslation);
-            }
+            var apps = 
+                _caseSolutionService.GetApplicationTypes(customerId)
+                    .Select(x => new ItemOverview(x.Id.ToString(), Translation.GetCoreTextTranslation(x.Type))).ToList();
 
             IList<WorkingGroupEntity> w = this._workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false);
             w = w.OrderBy(x => x.WorkingGroupName).ToList();
@@ -2734,7 +2754,7 @@ namespace DH.Helpdesk.Web.Controllers
                 CaseSolutionProductArea = pa,
                 CaseSolutionUserWGroup = w,
                 CaseSolutionCTemplateProductArea = pa,
-                CaseSolutionApplication = a
+                CaseSolutionApplication = apps
             };
 
             return model;
@@ -2951,7 +2971,7 @@ namespace DH.Helpdesk.Web.Controllers
                 Selected = caseSolution.SaveAndClose.HasValue && caseSolution.SaveAndClose.Value != 0
             });
 
-            IList<CaseSolution> splitToCaseSolutions = _caseSolutionService.GetCaseSolutions(curCustomerId).Where(z => z.Status == 1).ToList();
+            var splitToCaseSolutions = _caseSolutionService.GetCustomerCaseSolutionsOverview(curCustomerId).Where(z => z.Status == 1).ToList();
 
             //TODO: better naming here
             //TODO: make a setting per customer if they should be able to choose only from customer, or all customers 

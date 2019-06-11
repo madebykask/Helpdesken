@@ -11,6 +11,8 @@ using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Common.Extensions.Integer;
+using DH.Helpdesk.Common.Extensions.String;
+using DH.Helpdesk.Dal.Infrastructure.Translate;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Models.Case;
@@ -61,7 +63,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             IList<CaseFieldSetting> caseFieldSettings,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, Case currentCase,
             CaseSolution template,
-            int languageId, IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model);
+            int languageId, IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model,
+            CustomerSettings customerSettings);
     }
 
     public class CaseFieldsCreator : ICaseFieldsCreator
@@ -77,14 +80,25 @@ namespace DH.Helpdesk.WebApi.Controllers
         private readonly IWatchDateCalendarService _watchDateCalendarService;
         private readonly ICaseTypeService _caseTypeService;
         private readonly IProductAreaService _productAreaService;
+        private readonly ICaseExtraFollowersService _caseExtraFollowersService;
+        private readonly IStateSecondaryService _stateSecondaryService;
 
-        public CaseFieldsCreator(ICaseFileService caseFileService, ICaseFieldSettingsHelper caseFieldSettingsHelper,
-            IUserService userService, IWorkingGroupService workingGroupService, ISupplierService supplierService,
-            ICaseTranslationService caseTranslationService, IDepartmentService departmentService,
+        public CaseFieldsCreator(ICaseFileService caseFileService, 
+            ICaseFieldSettingsHelper caseFieldSettingsHelper,
+            IUserService userService, 
+            IWorkingGroupService workingGroupService, 
+            ISupplierService supplierService,
+            ICaseTranslationService caseTranslationService, 
+            IDepartmentService departmentService,
             IPriorityService priorityService,
-            IWatchDateCalendarService watchDateCalendarService, ICaseTypeService caseTypeService,
-            IProductAreaService productAreaService)
+            IWatchDateCalendarService watchDateCalendarService, 
+            ICaseTypeService caseTypeService,
+            IProductAreaService productAreaService,
+            ICaseExtraFollowersService caseExtraFollowersService,
+            IStateSecondaryService stateSecondaryService)
         {
+            _caseExtraFollowersService = caseExtraFollowersService;
+            _stateSecondaryService = stateSecondaryService;
             _caseFileService = caseFileService;
             _caseFieldSettingsHelper = caseFieldSettingsHelper;
             _userService = userService;
@@ -564,7 +578,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                         .Select(gr =>
                             new KeyValuePair<string, string>(gr.Key, string.Join(";", gr.Select(x => x.EMailAddress))))
                         .ToList()
-                    : null;
+                    : new List<KeyValuePair<string, string>>();
 
                 // Registration source: values 
                 field = new BaseCaseField<int>()
@@ -959,8 +973,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     : template?.WatchDate != null
                         ? DateTime.SpecifyKind(template.WatchDate.Value, DateTimeKind.Utc)
                         : new DateTime?();
-                if (!watchDate.HasValue && template != null && template.Department_Id.HasValue &&
-                    template.Priority_Id.HasValue)
+                if (!watchDate.HasValue && template?.Department_Id != null && template.Priority_Id.HasValue)
                 {
                     var dept = _departmentService.GetDepartment(template.Department_Id.Value);
                     var priority = _priorityService.GetPriority(template.Priority_Id.Value);
@@ -1024,7 +1037,8 @@ namespace DH.Helpdesk.WebApi.Controllers
             IList<CaseFieldSetting> caseFieldSettings,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, Case currentCase,
             CaseSolution template,
-            int languageId, IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model)
+            int languageId, IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model,
+            CustomerSettings customerSettings)
         {
             IBaseCaseField field;
             if (userOverview.CloseCasePermission.ToBool())
@@ -1040,13 +1054,12 @@ namespace DH.Helpdesk.WebApi.Controllers
                     model.Fields.Add(field);
                 }
 
+                // Closing Reason
                 {
                     int? finishingCause = null;
-                    var lastLog = currentCase?.Logs?.FirstOrDefault(); //todo: check if its correct - order
+                    var lastLog = currentCase?.Logs?.OrderByDescending(l => l.ChangeTime).FirstOrDefault();
                     if (lastLog != null)
                         finishingCause = lastLog.FinishingType;
-
-                    // Closing Reason
 
                     field = new BaseCaseField<int?>()
                     {
@@ -1056,11 +1069,13 @@ namespace DH.Helpdesk.WebApi.Controllers
                         Section = CaseSectionType.Communication,
                         Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.ClosingReason, caseFieldSettings)
                     };
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.ClosingReason,
-                        currentCase?.Id, caseTemplateSettings))
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.ClosingReason, currentCase?.Id, caseTemplateSettings))
                         AddReadOnlyOption(field.Options);
+
                     if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.ClosingReason))
                         AddHiddenOption(field.Options);
+
                     model.Fields.Add(field);
                 }
 
@@ -1069,16 +1084,72 @@ namespace DH.Helpdesk.WebApi.Controllers
                     field = new BaseCaseField<DateTime?>()
                     {
                         Name = CaseFieldsNamesApi.FinishingDate,
-                        Value = currentCase != null ? currentCase.FinishingDate : template?.FinishingDate,
+                        Value = currentCase != null ? currentCase.FinishingDate : template?.FinishingDate ??
+                                                                                  (template?.FinishingCause_Id != null ? DateTime.UtcNow : new DateTime?()),
                         Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.FinishingDate, languageId, customerId, caseFieldTranslations),
                         Section = CaseSectionType.Communication,
                         Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.FinishingDate, caseFieldSettings)
                     };
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate,
-                        currentCase?.Id, caseTemplateSettings))
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.FinishingDate, currentCase?.Id, caseTemplateSettings) ||
+                        customerSettings.DisableCaseEndDate)
                         AddReadOnlyOption(field.Options);
+
                     if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.FinishingDate))
                         AddHiddenOption(field.Options);
+
+                    model.Fields.Add(field);
+                }
+
+                var stateSecondaryField = model.Fields.FirstOrDefault(f =>
+                    f.Name.Equals(CaseFieldsNamesApi.StateSecondaryId.ToString(), StringComparison.InvariantCultureIgnoreCase));
+                var noMailToNotifier = false;
+                if (stateSecondaryField != null)
+                {
+                    var stateSecondaryId = ((BaseCaseField<int?>)stateSecondaryField).Value;
+                    if (stateSecondaryId.HasValue)
+                    {
+                        var stateSecondary = _stateSecondaryService.GetStateSecondary(stateSecondaryId.Value);
+                        noMailToNotifier = stateSecondary.NoMailToNotifier.ToBool();
+                    }
+                }
+
+                // Log External Emails to (Extra Followers)
+                {
+                    field = new BaseCaseField<bool>()
+                    {
+                        Name = CaseFieldsNamesApi.Log_SendMailToNotifier,
+                        Value = true,
+                        Label = _caseTranslationService.TranslateFieldLabel(languageId, "Till"),
+                        Section = CaseSectionType.Communication
+                    };
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, currentCase?.Id, caseTemplateSettings)
+                    || noMailToNotifier)
+                        AddReadOnlyOption(field.Options);
+
+                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External))
+                        AddHiddenOption(field.Options);
+
+                    model.Fields.Add(field);
+                }
+
+                // Log External Emails cc (Extra Followers)
+                {
+                    field = new BaseCaseField<string>()
+                    {
+                        Name = CaseFieldsNamesApi.Log_ExternalEmailsCC,
+                        Value = currentCase != null ? GetExtraFollowersEmails(currentCase.Id) : "",
+                        Label = _caseTranslationService.TranslateFieldLabel(languageId, "Kopia"),
+                        Section = CaseSectionType.Communication
+                    };
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, currentCase?.Id, caseTemplateSettings))
+                        AddReadOnlyOption(field.Options);
+
+                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External))
+                        AddHiddenOption(field.Options);
+
                     model.Fields.Add(field);
                 }
 
@@ -1087,16 +1158,18 @@ namespace DH.Helpdesk.WebApi.Controllers
                     field = new BaseCaseField<string>()
                     {
                         Name = CaseFieldsNamesApi.Log_ExternalText,
-                        Value = "",
+                        Value = template?.Text_External ?? "",
                         Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_External, languageId, customerId, caseFieldTranslations),
                         Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_External, caseFieldSettings),
                         Section = CaseSectionType.Communication
                     };
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External,
-                        currentCase?.Id, caseTemplateSettings))
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, currentCase?.Id, caseTemplateSettings))
                         AddReadOnlyOption(field.Options);
+
                     if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_External))
                         AddHiddenOption(field.Options);
+
                     AddMaxLengthOption(field.Options, 3000);
                     model.Fields.Add(field);
                 }
@@ -1107,17 +1180,39 @@ namespace DH.Helpdesk.WebApi.Controllers
                     field = new BaseCaseField<string>()
                     {
                         Name = CaseFieldsNamesApi.Log_InternalText,
-                        Value = template != null ? template.Text_Internal : "",
+                        Value = template?.Text_Internal ?? "",
                         Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, languageId, customerId, caseFieldTranslations),
                         Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, caseFieldSettings),
                         Section = CaseSectionType.Communication
                     };
-                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal,
-                        currentCase?.Id, caseTemplateSettings))
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, currentCase?.Id, caseTemplateSettings))
                         AddReadOnlyOption(field.Options);
+
                     if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Text_Internal))
                         AddHiddenOption(field.Options);
+
                     AddMaxLengthOption(field.Options, 3000);
+                    model.Fields.Add(field);
+                }
+
+                // Log File
+                {
+                    field = new BaseCaseField<string>()
+                    {
+                        Name = CaseFieldsNamesApi.Log_Filename,
+                        Value = "",
+                        Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Filename, languageId, customerId, caseFieldTranslations),
+                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Filename, caseFieldSettings),
+                        Section = CaseSectionType.Communication
+                    };
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Filename, currentCase?.Id, caseTemplateSettings))
+                        AddReadOnlyOption(field.Options);
+
+                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename))
+                        AddHiddenOption(field.Options);
+                    
                     model.Fields.Add(field);
                 }
             }
@@ -1155,6 +1250,12 @@ namespace DH.Helpdesk.WebApi.Controllers
             return null;
         }
 
+        private string GetExtraFollowersEmails(int caseId)
+        {
+            var emails = _caseExtraFollowersService.GetCaseExtraFollowers(caseId).Select(x => x.Follower).ToList();
+            return emails.JoinToString(";");
+        }
+
         private BaseCaseField<T> GetField<T>(T value, int customerId, int languageId,
             string caseFieldNameApi,
             GlobalEnums.TranslationCaseFields translationCaseFieldName,
@@ -1172,8 +1273,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 Options = GetBaseFieldOptions(translationCaseFieldName, caseFieldSettings)
             };
 
-            if (_caseFieldSettingsHelper.IsReadOnly(translationCaseFieldName,
-                caseId, caseTemplateSettings))
+            if (_caseFieldSettingsHelper.IsReadOnly(translationCaseFieldName, caseId, caseTemplateSettings))
                 AddReadOnlyOption(field.Options);
 
             if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, translationCaseFieldName))

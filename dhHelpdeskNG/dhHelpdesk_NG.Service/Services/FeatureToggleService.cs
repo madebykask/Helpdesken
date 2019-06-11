@@ -2,10 +2,6 @@
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Dal.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Services.Services
 {

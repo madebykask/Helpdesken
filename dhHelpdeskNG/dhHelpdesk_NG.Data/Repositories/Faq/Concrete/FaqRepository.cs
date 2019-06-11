@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 
 namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
@@ -9,6 +10,7 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Infrastructure.Context;
     using DH.Helpdesk.Domain.Faq;
+    using Z.EntityFramework.Plus;
 
     public sealed class FaqRepository : RepositoryBase<FaqEntity>, IFaqRepository
     {
@@ -29,7 +31,8 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
                                 {
                                     Answer = newFaq.Answer, 
                                     Answer_Internal = newFaq.InternalAnswer ?? string.Empty, 
-                                    CreatedDate = newFaq.CreatedDate, 
+                                    CreatedDate = newFaq.CreatedDate,
+                                    ChangedDate = newFaq.CreatedDate,
                                     Customer_Id = newFaq.CustomerId, 
                                     FAQCategory_Id = newFaq.CategoryId, 
                                     FAQQuery = newFaq.Question, 
@@ -45,18 +48,9 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
             this.InitializeAfterCommit(newFaq, faqEntity);
         }
 
-        /// <summary>
-        /// The any FAQ with category id.
-        /// </summary>
-        /// <param name="categoryId">
-        /// The category id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
         public bool AnyFaqWithCategoryId(int categoryId)
         {
-            return this.Table.Any(f => f.FAQCategory_Id == categoryId);
+            return Table.Any(f => f.FAQCategory_Id == categoryId);
         }
 
         public void UpdateSwedishFaq(ExistingFaq existingFaq)
@@ -73,6 +67,12 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
             faqEntity.URL1 = existingFaq.UrlOne ?? string.Empty;
             faqEntity.URL2 = existingFaq.UrlTwo ?? string.Empty;
             faqEntity.WorkingGroup_Id = existingFaq.WorkingGroupId;
+        }
+
+        public void UpdateDate(int id, DateTime changedDate)
+        {
+            DataContext.FAQs.Where(f => f.Id == id)
+                .Update(x => new FaqEntity() { ChangedDate = changedDate });
         }
 
         public void UpdateOtherLanguageFaq(ExistingFaq faq)
@@ -108,5 +108,11 @@ namespace DH.Helpdesk.Dal.Repositories.Faq.Concrete
         }
 
         #endregion
+
+
+        public void SearchFaqs()
+        {
+            
+        }
     }
 }

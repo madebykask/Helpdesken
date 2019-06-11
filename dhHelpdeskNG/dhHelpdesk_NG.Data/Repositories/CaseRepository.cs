@@ -17,10 +17,12 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Domain;
     using Mappers;
     using System.Linq.Expressions;
+    using Z.EntityFramework.Plus;
 
     public interface ICaseRepository : IRepository<Case>
     {
         IQueryable<Case> GetCustomerCases(int customerId);
+        IQueryable<Case> GetDetachedCaseQuery(int id, bool includeLogs = false);
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false);
         Case GetCaseByGUID(Guid GUID);
@@ -201,9 +203,15 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public Case GetDetachedCaseById(int id)
         {
-            return (from w in this.DataContext.Set<Case>().AsNoTracking()
-                    where w.Id == id
-                    select w).FirstOrDefault();
+            return GetDetachedCaseQuery(id).FirstOrDefault();
+        }
+
+        public IQueryable<Case> GetDetachedCaseQuery(int id, bool includeLogs = false)
+        {
+            var query = DataContext.Cases.Where(w => w.Id == id);
+            if (includeLogs)
+                query = query.Include(c => c.Logs);
+            return query.AsNoTracking();
         }
 
         public Case GetDetachedCaseIncludesById(int id)

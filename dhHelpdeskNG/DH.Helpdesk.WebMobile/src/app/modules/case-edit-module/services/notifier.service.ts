@@ -4,27 +4,24 @@ import { NotifierModel, NotifierSearchItem } from '../../shared-module/models/no
 import { take, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class NotifierService {
 
-  constructor(private notifierApiService:NotifierApiService) {
+  constructor(private notifierApiService: NotifierApiService) {
   }
 
-  searchNotifiers(query:string, categoryId:number = null): Observable<Array<NotifierSearchItem>> {
+  searchNotifiers(query: string, categoryId: number = null): Observable<Array<NotifierSearchItem>> {
     return this.notifierApiService.search(query, categoryId).pipe(
       take(1),
-      map((data:Array<any>) =>
+      map((data: Array<any>) =>
         data.map(x => <NotifierSearchItem>Object.assign(new NotifierSearchItem(), x)))
     );
   }
 
-  getNotifier(id:number): Observable<NotifierModel> {
+  getNotifier(id: number): Observable<NotifierModel> {
     return this.notifierApiService.get(id).pipe(
       take(1),
       map(data => <NotifierModel>Object.assign(new NotifierModel(), data))
     );
   }
-
 }

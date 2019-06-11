@@ -4,22 +4,22 @@ import { SanitizePipe } from '../pipes/sanitize.pipe';
 
 @Directive({
   selector: '[truncate]',
-  exportAs: "truncate",
+  exportAs: 'truncate',
   providers: [ TruncatePipe, SanitizePipe ]
 })
 export class TruncateTextDirective {
 
-  @Input("truncate") words: number;
-  @Input("truncate-symbol") trail: string = '...';
+  @Input('truncate') words: number;
+  @Input('truncate-symbol') trail = '...';
 
-  canTruncate: boolean = false;
-  isTruncated:boolean = false;
+  canTruncate = false;
+  isTruncated = false;
 
-  private originalText:string;
+  private originalText: string;
   private nativeEl;
 
-  constructor(private elementRef: ElementRef, 
-              private truncatePipe: TruncatePipe, 
+  constructor(private elementRef: ElementRef,
+              private truncatePipe: TruncatePipe,
               private sanitizeHtmlPipe: SanitizePipe) {
       this.nativeEl = elementRef.nativeElement;
   }
@@ -41,12 +41,14 @@ export class TruncateTextDirective {
   }
 
   private truncateInner() {
-    if (this.words < 1) return false; 
-    
+    if (this.words < 1) { return false; }
+
     let text = this.truncatePipe.transform(this.originalText, this.words, true, null);
     this.isTruncated = text.length < this.originalText.length;
     if (this.isTruncated) {
-        if (this.trail && this.trail.length)  text += this.trail;
+        if (this.trail && this.trail.length) {
+          text += this.trail;
+        }
         this.Text = text;
         this.canTruncate = true;
     }

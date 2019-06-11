@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, Input, AfterViewInit } from '@angular/core';
 import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrapper';
 
-@Component({  
+@Component({
   selector: 'common-file-viewer',
   template: `
     <div class="iframe-image">
@@ -10,10 +10,10 @@ import { WindowWrapper } from 'src/app/modules/shared-module/helpers/window-wrap
   `
 })
 export class CommonFileViewer implements AfterViewInit {
-  
-  @Input() fileName:string;
-  @Input() fileData:Blob;
-  
+
+  @Input() fileName: string;
+  @Input() fileData: Blob;
+
   @ViewChild('frame') frameElement: ElementRef<HTMLIFrameElement>;
 
   constructor(private windowWrapper: WindowWrapper) {
@@ -21,9 +21,9 @@ export class CommonFileViewer implements AfterViewInit {
 
   ngAfterViewInit(): void {
     if (this.fileData && this.frameElement) {
-      this.frameElement.nativeElement.src = 
-          this.windowWrapper.nativeWindow.URL.createObjectURL(this.fileData)
-    } 
+      this.frameElement.nativeElement.src =
+          this.windowWrapper.nativeWindow.URL.createObjectURL(this.fileData);
+    }
   }
-  
+
 }

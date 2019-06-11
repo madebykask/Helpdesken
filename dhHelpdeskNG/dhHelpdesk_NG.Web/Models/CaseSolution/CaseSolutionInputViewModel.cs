@@ -1,21 +1,18 @@
-﻿using DH.Helpdesk.BusinessData.Models;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.FinishingCause;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
+using DH.Helpdesk.Domain;
+using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Web.Common.Enums.Case;
-using DH.Helpdesk.Web.Infrastructure;
+using DH.Helpdesk.Web.Models.Case;
+using DH.Helpdesk.Web.Models.CaseRules;
 
 namespace DH.Helpdesk.Web.Models.CaseSolution
 {
-    using System.Collections.Generic;
-    using System.Web.Mvc;
-
-    using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Web.Models.Case;
-    using CaseRules;
-    using DH.Helpdesk.Domain.Cases;
-
     
     public class CaseSolutionInputViewModel
     {
@@ -42,7 +39,7 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
         public string ParantPath_CaseType { get; set; }
         public int? CountryId { get; set; }
 
-        public CaseSolution CaseSolution { get; set; }
+        public Domain.CaseSolution CaseSolution { get; set; }
         public UserSearch Users { get; set; }
 
         public IList<CaseSolutionSettingModel> CaseSolutionSettingModels { get; set; }
@@ -113,7 +110,7 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
         public List<CaseSolutionSettingsField> CSSettingsField { get; set; }
 
         public List<CaseSolutionSettingsFieldModel> CSSelectedSettingsField { get; set; }
-		public IList<CaseSolution> SplitToCaseSolutions { get; internal set; }
+        public IList<CaseSolutionOverview> SplitToCaseSolutions { get; internal set; }
 
 
         public IList<SelectListItem> SplitToAllCaseSolutions { get; internal set; }

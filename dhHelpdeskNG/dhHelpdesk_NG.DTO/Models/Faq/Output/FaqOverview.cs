@@ -7,50 +7,32 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using DH.Helpdesk.Common.Extensions.DateTime;
+using DH.Helpdesk.Common.ValidationAttributes;
+
 namespace DH.Helpdesk.BusinessData.Models.Faq.Output
 {
-    using System;
-
-    using DH.Helpdesk.Common.Extensions.DateTime;
-    using DH.Helpdesk.Common.ValidationAttributes;
-
     /// <summary>
-    /// The overview.
+    ///     The overview.
     /// </summary>
     public class FaqOverview
     {
-        /// <summary>
-        /// Gets or sets the id.
-        /// </summary>
         [IsId]
         public int Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the created date.
-        /// </summary>
+       
         public DateTime CreatedDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets the text.
-        /// </summary>
+        public DateTime ChangedDate { get; set; }
+        
         public string Text { get; set; }
 
         public string CustomerName { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether show on start page.
-        /// </summary>
         public bool ShowOnStartPage { get; set; }
+      
+        public string CreatedDateText => CreatedDate.ToFormattedDate();
 
-        /// <summary>
-        /// Gets the created date text.
-        /// </summary>
-        public string CreatedDateText
-        {
-            get
-            {
-                return this.CreatedDate.ToFormattedDate();
-            }
-        }
+        public string ChangedDateText => ChangedDate.ToFormattedDate();
     }
 }

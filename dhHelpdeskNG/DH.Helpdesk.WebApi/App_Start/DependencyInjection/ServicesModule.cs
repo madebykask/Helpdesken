@@ -48,7 +48,7 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<EmailGroupService>().As<IEmailGroupService>();
             builder.RegisterType<CaseExtraFollowersService>().As<ICaseExtraFollowersService>();
             builder.RegisterType<CaseFollowUpService>().As<ICaseFollowUpService>();
-            builder.RegisterType<CaseStatisticService>().As<CaseStatisticService>();//TODO: create interface fo it
+            builder.RegisterType<CaseStatisticService>().As<ICaseStatisticService>();
             builder.RegisterType<CaseInvoiceSettingsService>().As<ICaseInvoiceSettingsService>();
             builder.RegisterType<ProjectService>().As<IProjectService>();
             builder.RegisterType<CaseFileService>().As<ICaseFileService>();
@@ -85,15 +85,16 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
             builder.RegisterType<LogFileService>().As<ILogFileService>();
             builder.RegisterType<CaseSolutionSettingService>().As<ICaseSolutionSettingService>();
             builder.RegisterType<CaseFieldsCreator>().As<ICaseFieldsCreator>();
-			
-			builder.RegisterType<ProblemLogService>().As<IProblemLogService>();
+            
+            builder.RegisterType<ProblemLogService>().As<IProblemLogService>();
 
             builder.RegisterType<CaseEditModeCalcStrategy>().As<ICaseEditModeCalcStrategy>();
             builder.RegisterType<CaseTranslationService>().As<ICaseTranslationService>();
             builder.RegisterType<WatchDateCalendarService>().As<IWatchDateCalendarService>();
-			builder.RegisterType<HolidayService>().As<IHolidayService>();
-
-		}
+            builder.RegisterType<HolidayService>().As<IHolidayService>();
+            builder.RegisterType<UserEmailsSearchService>().As<IUserEmailsSearchService>();
+            builder.RegisterType<Mail2TicketService>().As<IMail2TicketService>();
+        }
 
         #endregion
     }

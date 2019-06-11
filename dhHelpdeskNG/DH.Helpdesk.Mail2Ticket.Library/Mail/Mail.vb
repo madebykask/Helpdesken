@@ -1,12 +1,23 @@
+Imports System.IO
+Imports System.Linq
 Imports System.Net.Mail
 Imports DH.Helpdesk.Dal.Infrastructure
-Imports DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
 Imports DH.Helpdesk.Dal.Repositories
 Imports DH.Helpdesk.Domain
 Imports DH.Helpdesk.Mail2Ticket.Library.SharedFunctions
 
 Public Class Mail
-    Public Function sendMail(ByVal objCase As CCase, ByVal objLog As Log, ByVal objCustomer As Customer, ByVal sEmailTo As String, ByVal objmailTemplate As MailTemplate, ByVal objGlobalSettings As GlobalSettings, ByVal sMessageId As String, ByVal sEMailLogGUID As String, ByVal connectionString As String) As String
+    Public Function sendMail(objCase As CCase, 
+                             objLog As Log, 
+                             objCustomer As Customer, 
+                             sEmailTo As String, 
+                             objmailTemplate As MailTemplate, 
+                             objGlobalSettings As GlobalSettings, 
+                             sMessageId As String, 
+                             sEMailLogGUID As String, 
+                             connectionString As String,
+                             Optional files As List(Of String) = Nothing
+                             ) As String
         ' Skicka mail
         Dim sSubject As String
         Dim sBody As String
@@ -22,7 +33,7 @@ Public Class Mail
             Dim setting As Setting
             Using factory As DatabaseFactory = New DatabaseFactory(connectionString)
 
-                Dim settingsRepository As New SettingRepository(New DatabaseFactory(connectionString))
+                Dim settingsRepository As New SettingRepository(factory)
                 setting = settingsRepository.Get(Function(x) x.Customer_Id = objCustomer.Id)
 
             End Using
@@ -63,15 +74,15 @@ Public Class Mail
             sSubject = Replace(sSubject, getMailTemplateIdentifier("Persons_Phone"), objCase.Persons_Phone)
             sBody = Replace(sBody, getMailTemplateIdentifier("Persons_Phone"), objCase.Persons_Phone)
 
-            If Not objLog Is Nothing Then
-                '[#10]
-                sSubject = Replace(sSubject, getMailTemplateIdentifier("Text_External"), objLog.Text_External)
-                sBody = Replace(sBody, getMailTemplateIdentifier("Text_External"), objLog.Text_External)
+            Dim textExternal = If(Not objLog Is Nothing, objLog.Text_External, "")
+            Dim textInternal = If(Not objLog Is Nothing, objLog.Text_Internal, "")
+            '[#10]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("Text_External"), textExternal)
+            sBody = Replace(sBody, getMailTemplateIdentifier("Text_External"), textInternal)
 
-                '[#11]
-                sSubject = Replace(sSubject, getMailTemplateIdentifier("Text_Internal"), objLog.Text_Internal)
-                sBody = Replace(sBody, getMailTemplateIdentifier("Text_Internal"), objLog.Text_Internal)
-            End If
+            '[#11]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("Text_Internal"), textExternal)
+            sBody = Replace(sBody, getMailTemplateIdentifier("Text_Internal"), textInternal)
 
             '[#12]
             sSubject = Replace(sSubject, getMailTemplateIdentifier("PriorityName"), objCase.PriorityName)
@@ -84,6 +95,13 @@ Public Class Mail
             Else
                 sSubject = Replace(sSubject, getMailTemplateIdentifier("WorkingGroupEMail"), objCase.WorkingGroupEMail)
                 sBody = Replace(sBody, getMailTemplateIdentifier("WorkingGroupEMail"), objCase.WorkingGroupEMail)
+            End If
+
+            '[#14]
+            Dim bAttachFiles = False
+            If (sBody.Contains("[#14]"))
+                bAttachFiles = True
+                sBody = sBody.Replace("[#14]", string.Empty)
             End If
 
             '[#15]
@@ -106,6 +124,22 @@ Public Class Mail
             '[#18]
             sSubject = Replace(sSubject, getMailTemplateIdentifier("Persons_CellPhone"), objCase.Persons_CellPhone)
             sBody = Replace(sBody, getMailTemplateIdentifier("Persons_CellPhone"), objCase.Persons_CellPhone)
+
+            '[#19]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("Available"), objCase.Available)
+            sBody = Replace(sBody, getMailTemplateIdentifier("Available"), objCase.Available)
+
+            '[#20]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("Priority_Description"), objCase.PriorityDescription)
+            sBody = Replace(sBody, getMailTemplateIdentifier("Priority_Description"), objCase.PriorityDescription)
+
+            '[#21]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("WatchDate"), objCase.WatchDate.ToString())
+            sBody = Replace(sBody, getMailTemplateIdentifier("WatchDate"), objCase.WatchDate.ToString())
+
+            '[#22]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("LastChangedByUser"), objCase.ChangedName + " " + objCase.ChangedSurName)
+            sBody = Replace(sBody, getMailTemplateIdentifier("LastChangedByUser"), objCase.ChangedName + " " + objCase.ChangedSurName)
 
             '[#23]
             sSubject = Replace(sSubject, getMailTemplateIdentifier("Miscellaneous"), objCase.Miscellaneous)
@@ -204,16 +238,24 @@ Public Class Mail
 
             sBody = sBody.Replace(vbCrLf, "<br>")
 
-            If giLoglevel > 0 Then
-                objLogFile.WriteLine(Now() & ", sendMail, From:" & objCustomer.HelpdeskEMail & ", To: " & sEmailTo)
+            'Prepare files to Attach
+            Dim filesToAttach as List(Of String) = Nothing
+            If (bAttachFiles AndAlso files IsNot Nothing AndAlso files.Any())
+                filesToAttach = New List(Of String)
+                For Each attachedFile as String in files
+                    filesToAttach.Add(attachedFile)
+                Next
+            End If
 
+            If giLoglevel > 0 Then
+                objLogFile.WriteLine(Now() & ", sendMail, From:" & objCustomer.HelpdeskEMail & ", To: " & sEmailTo & ". Attached files: " & If(filesToAttach IsNot Nothing, String.Join(";", filesToAttach) & "", "None"))
                 'objLogFile.WriteLine(Now() & ", sendMail, Body:" & sBody)
             End If
 
-            If Not String.IsNullOrEmpty(setting.SMTPServer) Then
-                sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, setting.SMTPServer, setting.SMTPPort, setting.IsSMTPSecured, setting.SMTPUserName, setting.SMTPPassWord, sMessageId)
+            If Not IsNullOrEmpty(setting.SMTPServer) Then
+                sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, setting.SMTPServer, setting.SMTPPort, setting.IsSMTPSecured, setting.SMTPUserName, setting.SMTPPassWord, sMessageId, filesToAttach)
             Else
-                sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
+                sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId, filesToAttach)
             End If
 
             ' Log sRet result!
@@ -283,7 +325,14 @@ Public Class Mail
 
     End Function
 
-    Public Function Send(ByVal sFrom As String, ByVal sTo As String, ByVal sSubject As String, ByVal sBody As String, ByVal sEMailBodyEncoding As String, ByVal sSMTPServer As String, ByVal sMessageId As String) As String
+    Public Function Send(sFrom As String, 
+                         sTo As String, 
+                         sSubject As String, 
+                         sBody As String, 
+                         sEMailBodyEncoding As String, 
+                         sSMTPServer As String, 
+                         sMessageId As String,
+                         Optional filesToAttach As List(Of String) = Nothing) As String
 
         Dim smtpServer As String = Nothing
         Dim smtpUsername As String = Nothing
@@ -291,7 +340,7 @@ Public Class Mail
         Dim smtpPort As Integer = Nothing
         Dim smtpSecure As Boolean = Nothing
 
-        If Not String.IsNullOrEmpty(sSMTPServer) Then
+        If Not IsNullOrEmpty(sSMTPServer) Then
             Dim aConfiguration() As String = Split(sSMTPServer, ";")
 
             smtpServer = aConfiguration(0)
@@ -311,10 +360,21 @@ Public Class Mail
             End If
         End If
 
-        Return Send(sFrom, sTo, sSubject, sBody, sEMailBodyEncoding, smtpServer, smtpPort, smtpSecure, smtpUsername, smtpPassword, sMessageId)
+        Return Send(sFrom, sTo, sSubject, sBody, sEMailBodyEncoding, smtpServer, smtpPort, smtpSecure, smtpUsername, smtpPassword, sMessageId, filesToAttach)
     End Function
 
-    Public Function Send(ByVal sFrom As String, ByVal sTo As String, ByVal sSubject As String, ByVal sBody As String, ByVal sEMailBodyEncoding As String, ByVal smtpServer As String, ByVal smtpPort As Integer, ByVal smtpSecure As Boolean, ByVal smtpUsername As String, ByVal smtpPassword As String, ByVal sMessageId As String) As String
+    Public Function Send(sFrom As String, 
+                         sTo As String, 
+                         sSubject As String, 
+                         sBody As String, 
+                         sEMailBodyEncoding As String, 
+                         smtpServer As String, 
+                         smtpPort As Integer, 
+                         smtpSecure As Boolean, 
+                         smtpUsername As String, 
+                         smtpPassword As String,
+                         sMessageId As String,
+                         Optional filesToAttach As List(Of String) = Nothing) As String
         ' Create Mail
         Dim msg As New MailMessage()
         Dim sRet As String = ""
@@ -342,9 +402,8 @@ Public Class Mail
         Else
             smtp.Host = smtpServer
 
-            If Not String.IsNullOrEmpty(smtpUsername) Then
-                Dim credentials = New System.Net.NetworkCredential(smtpUsername, smtpPassword)
-
+            If Not IsNullOrEmpty(smtpUsername) Then
+                Dim credentials = New Net.NetworkCredential(smtpUsername, smtpPassword)
                 smtp.Credentials = credentials
             End If
 
@@ -353,7 +412,15 @@ Public Class Mail
             End If
 
             smtp.EnableSsl = smtpSecure
+        End If
 
+        'Attach files to message if any
+        If (filesToAttach IsNot Nothing AndAlso filesToAttach.Any())
+            For Each file as String In filesToAttach
+                If (IO.File.Exists(file))
+                    msg.Attachments.Add(new Attachment(file))
+                End If
+            Next
         End If
 
         Try

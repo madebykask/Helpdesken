@@ -107,5 +107,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models
         public IList<int> ShowExternalStatusBarIds { get; set; }
 
         public IList<SelectListItem> SearchCategories { get; set; }
+
+		public IList<SelectListItem> TimeZones { get; set; }
     }
 }

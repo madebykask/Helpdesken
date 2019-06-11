@@ -5,8 +5,8 @@
 
     public sealed class FaqDetailedOverviewModel : FaqOverviewModel
     {
-        public FaqDetailedOverviewModel(int id, DateTime createdDate, string text, string answer, string internalAnswer, List<string> fileNames, string urlOne, string urlTwo)
-            : base(id, createdDate, text)
+        public FaqDetailedOverviewModel(int id, DateTime createdDate, DateTime changedDate, string text, string answer, string internalAnswer, List<string> fileNames, string urlOne, string urlTwo)
+            : base(id, createdDate, changedDate, text)
         {
             if (string.IsNullOrEmpty(answer))
             {

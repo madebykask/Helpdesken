@@ -173,7 +173,7 @@ Module DH_Helpdesk_Schedule
         openLogFile()
         Try
             EncryptSection(Of ConnectionStringsSection)(exeConfigName, "connectionStrings")
-            LogToFile(String.Format("app.config '{0}' section is protected"), giLoglevel)
+            LogToFile("app.config section is protected", giLoglevel)
         Catch ex As Exception
             LogError(ex.ToString())
         Finally
@@ -350,6 +350,8 @@ Module DH_Helpdesk_Schedule
             If objCaseSolution.Log.Count > 0 Then
                 If objCaseSolution.Log(0).Text_Internal <> "" Or objCaseSolution.Log(0).Text_External <> "" Then
                     objLogData.createLog(objCase.Id, objCase.Persons_EMail, objCaseSolution.Log(0).Text_Internal, objCaseSolution.Log(0).Text_External, 0, "DH Helpdesk", iCaseHistory_Id, 0)
+                    objLog.Text_External = objCaseSolution.Log(0).Text_External
+                    objLog.Text_Internal = objCaseSolution.Log(0).Text_Internal
                 End If
             End If
 
@@ -531,6 +533,10 @@ Module DH_Helpdesk_Schedule
                     setInitiator(objContract.CreateCase_UserId, objContract.Customer_Id, objCase)
                 End If
 
+                If objContract.Department_Id <> 0 Then
+                    objCase.Department_Id = objContract.Department_Id
+                End If
+
                 objCase = objCaseData.createCase(objCase)
 
                 ' Logga i avtalsloggen
@@ -623,6 +629,10 @@ Module DH_Helpdesk_Schedule
                 'Set notifier from contract
                 If Not String.IsNullOrEmpty(objContract.CreateCase_UserId) Then
                     setInitiator(objContract.CreateCase_UserId, objContract.Customer_Id, objCase)
+                End If
+
+                If objContract.Department_Id <> 0 Then
+                    objCase.Department_Id = objContract.Department_Id
                 End If
 
                 objCase = objCaseData.createCase(objCase)
@@ -872,7 +882,6 @@ Module DH_Helpdesk_Schedule
         Dim objGlobalSettingsData As New GlobalSettingsData
         Dim objGlobalSettings As GlobalSettings
         Dim objCustomerData As New CustomerData
-        Dim colCustomer As Collection
         Dim objCustomer As Customer
 
         gsConnectionString = sConnectionString
@@ -882,9 +891,9 @@ Module DH_Helpdesk_Schedule
 
         giDBType = objGlobalSettings.DBType
 
-        colCustomer = objCustomerData.getCustomers()
+        Dim colCustomer = objCustomerData.getCustomers()
 
-        For i As Integer = 1 To colCustomer.Count
+        For i = 1 To colCustomer.Count
             objCustomer = colCustomer(i)
 
             If objCustomer.CaseStatisticsEMailList <> "" Then

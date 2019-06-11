@@ -162,10 +162,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Value = x.Id.ToString()
                 }).ToList(),
 
-                CaseSolutions = this._casesolutionService.GetCaseSolutions(customer.Id).Where(x => x.ConnectedButton != 0).Select(x => new SelectListItem
+                CaseSolutions = this._casesolutionService.GetCustomerCaseSolutionsOverview(customer.Id).Where(x => x.ConnectedButton != 0).Select(x => new SelectListItem
                 {
                     Text = x.Name,
-                    Value = x.Id.ToString()
+                    Value = x.CaseSolutionId.ToString()
                 }).ToList(),
 
                 LinkGroups = this._linkService.GetLinkGroups(customer.Id).Select(x => new SelectListItem

@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { LocalStorageService } from "../../../../services/local-storage";
-import { HttpClient } from "@angular/common/http";
-import { OptionsHelper } from "../../../../helpers/options-helper";
-import { map, take } from "rxjs/operators";
-import { throwError } from "rxjs";
-import { BundleOptionsFilter, BundledCaseOptions, OptionItem } from "src/app/modules/shared-module/models";
-import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
+import { Injectable } from '@angular/core';
+import { LocalStorageService } from '../../../../services/local-storage';
+import { HttpClient } from '@angular/common/http';
+import { OptionsHelper } from '../../../../helpers/options-helper';
+import { map, take } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { BundleOptionsFilter, BundledCaseOptions, OptionItem } from 'src/app/modules/shared-module/models';
+import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
 
 @Injectable({ providedIn: 'root' })
 export class BundleCaseOptionsService extends HttpApiServiceBase {
@@ -20,7 +20,7 @@ export class BundleCaseOptionsService extends HttpApiServiceBase {
         .pipe(
             take(1),
             map((jsOptions: any) => {
-                if (jsOptions == null) throwError('No options received.')
+                if (jsOptions == null) { throwError('No options received.') }
                 const mapArray = (arr: any) => this.caseHelper.toOptionItems(arr as Array<any>) || new Array<OptionItem>();
 
                 let options = new BundledCaseOptions();
@@ -70,6 +70,6 @@ export class BundleCaseOptionsService extends HttpApiServiceBase {
                     options.causingParts = mapArray(jsOptions.causingParts);
                 }
                 return options;
-            }));// TODO: error handling
+            })); // TODO: error handling
     }
 }

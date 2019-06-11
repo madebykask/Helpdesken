@@ -3,11 +3,12 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
-import { IAppConfig, AppConfig } from '../../shared/app-config/app-config';
+import { AppConfig } from '../../shared/app-config/app-config';
 import { LogService } from '../../services/log.service'
 import { ExtendedHttpService } from './extended-http.service'
 import { FormMetaDataResponse, FormListItem } from '../../models/form-data.model'
 import { FormAssignmentParameters } from '../../models/form-parameters.model';
+import { IAppConfig } from 'src/app/shared/app-config/app-config.interface';
 
 @Injectable()
 export class FormDataService {

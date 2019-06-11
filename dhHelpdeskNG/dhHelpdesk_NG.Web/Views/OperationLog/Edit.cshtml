@@ -1,21 +1,29 @@
-﻿@using DH.Helpdesk.Web.Infrastructure
-@model DH.Helpdesk.Web.Models.OperationLogInputViewModel
+﻿@model DH.Helpdesk.Web.Models.OperationLogInputViewModel
 @{
     ViewBag.Title = "Edit";
 }
 @using (Html.BeginForm("edit", "operationlog", new { id = Model.OperationLog.Id }, FormMethod.Post, new { id = "target" }))
 {
     <div class="secnavs fixed">
-         <div class="pull-left">
-        <ul class="secnav">
-          <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.OperationLog.Id }, new { onclick = "submitForm();return false;", @class = "btn" })<li>
-          <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",                
-                new { id = @Model.OperationLog.Id}, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) + "?"})</li>
-          <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index",null,new { @class = "btn" })</li>
-        </ul>
-    
+        <div class="pull-left">
+            <ul class="secnav">
+                <li>
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Spara"), "edit",
+                        new { id = Model.OperationLog.Id },
+                        new { onclick = "submitForm();return false;", @class = "btn" })</li>
+                <li>
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Ta bort"), "delete",
+                        new { id = @Model.OperationLog.Id },
+                        new
+                        {
+                            @class = "btn deleteDialog",
+                            deleteDialogText = Translation.GetCoreTextTranslation("Är du säker på att du vill ta bort aktuell post") + "?"
+                        })</li>
+                <li>
+                    @Html.ActionLink(Translation.GetCoreTextTranslation("Avbryt"), "index", null, new { @class = "btn" })</li>
+            </ul>
         </div>
-        </div>
+    </div>
     <div class="contentContent">
         @Html.Partial("_Input", Model)
     </div>

@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { BaseControl } from '../base-control';
-import { BaseCaseField, KeyValue } from 'src/app/modules/case-edit-module/models';
+import { IKeyValue } from 'src/app/modules/case-edit-module/models';
 
 @Component({
   selector: 'case-mailtoticket-control',
@@ -8,23 +8,23 @@ import { BaseCaseField, KeyValue } from 'src/app/modules/case-edit-module/models
   styleUrls: ['./mailtoticket-control.component.scss']
 })
 export class MailtoticketControlComponent extends BaseControl<number> {
-  
   mailTO: string[];
   mailCC: string[];
+  @Input() value;
+  @Input() options;
 
   ngOnInit(): void {
     //Email
-    if (this.field.value == 3) {
-        this.mailTO = this.getEmails('to', this.field.options);
-        this.mailCC = this.getEmails('cc', this.field.options);
+    if (this.value === 3) {
+        this.mailTO = this.getEmails('to', this.options);
+        this.mailCC = this.getEmails('cc', this.options);
     }
   }
 
-  private getEmails(emailType: string, options: KeyValue[]): string[] {
-    let emails:string[] = [];
-    if (options && options.length)
-    {
-      let val = options.find(m => m.key.toLowerCase() === emailType);
+  private getEmails(emailType: string, options: IKeyValue[]): string[] {
+    let emails = [];
+    if (options && options.length) {
+      const val = options.find(m => m.key.toLowerCase() === emailType);
       if (val && val.value.length){
         emails = [...val.value.split(';')];
       }
@@ -33,5 +33,6 @@ export class MailtoticketControlComponent extends BaseControl<number> {
   }
 
   ngOnDestroy(): void {
-  } 
+    this.onDestroy();
+  }
 }

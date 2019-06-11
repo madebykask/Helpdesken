@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Domain;
@@ -14,11 +15,10 @@ using DH.Helpdesk.Common.Enums.BusinessRule;
 using static DH.Helpdesk.BusinessData.Models.Shared.ProcessResult;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Extensions.String;
-using DH.Helpdesk.Common.Extensions.DateTime;
-using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.CaseSolution;
 using DH.Helpdesk.Common.Enums.Condition;
 using DH.Helpdesk.Common.Extensions.Object;
+using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.ExtendedCaseEntity;
 
 namespace DH.Helpdesk.Services.Services.UniversalCase
@@ -64,6 +64,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         private readonly IRegionService _regionService;
         private readonly IOUService _oUService;
         private readonly IConditionService  _conditionService;
+        private IBusinessModelToEntityMapper<CaseModel, Case> _caseModelToEntityMapper;
 
         public UniversalCaseService(ICaseRepository caseRepository,
                                     ICustomerService customerService,
@@ -82,7 +83,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                                     IDepartmentService departmentService,
                                     IRegionService regionService,
                                     IOUService oUService,
-                                    IConditionService conditionService
+                                    IConditionService conditionService,
+                                    IBusinessModelToEntityMapper<CaseModel, Case> caseModelToEntityMapper
             )
         {
             _caseRepository = caseRepository;
@@ -103,6 +105,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             _regionService = regionService;
             _oUService = oUService;
             _conditionService = conditionService;
+            _caseModelToEntityMapper = caseModelToEntityMapper;
         }
 
         public CaseModel GetCase(int id)
@@ -143,7 +146,6 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return res;
         }
 
-
         private CaseModel ApplyValuesFromCaseSolution(CaseModel model, int caseTemplateId)
         {
             if (model == null)
@@ -153,90 +155,17 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             if (caseTemplate == null)
                 return model;
 
-            if (caseTemplate.CaseType_Id != null)
-            {
-                model.CaseType_Id = caseTemplate.CaseType_Id.Value;
-            }
-
             //Check if we should apply template
             if (caseTemplate.OverWritePopUp == 1)
-            { 
-
-            model.CaseSolution_Id = caseTemplateId;
-            model.Customer_Id = caseTemplate.Customer_Id;
-            model.ReportedBy = caseTemplate.ReportedBy.IfNullThenElse(model.ReportedBy);
-            model.PersonsName = caseTemplate.PersonsName.IfNullThenElse(model.PersonsName);
-            model.PersonsEmail = caseTemplate.PersonsEmail.IfNullThenElse(model.PersonsEmail);
-            model.PersonsPhone = caseTemplate.PersonsPhone.IfNullThenElse(model.PersonsPhone);
-            model.PersonsCellphone = caseTemplate.PersonsCellPhone.IfNullThenElse(model.PersonsCellphone);
-            model.Region_Id = caseTemplate.Region_Id.IfNullThenElse(model.Region_Id);
-            model.Department_Id = caseTemplate.Department_Id.IfNullThenElse(model.Department_Id);
-            model.OU_Id = caseTemplate.OU_Id.IfNullThenElse(model.OU_Id);
-            model.Place = caseTemplate.Place.IfNullThenElse(model.Place);
-            model.UserCode = caseTemplate.UserCode.IfNullThenElse(model.UserCode);
-            model.CostCentre = caseTemplate.CostCentre.IfNullThenElse(model.CostCentre);
-
-            model.InventoryNumber = caseTemplate.InventoryNumber.IfNullThenElse(model.InventoryNumber);
-            model.InventoryType = caseTemplate.InventoryType.IfNullThenElse(model.InventoryType);
-            model.InventoryLocation = caseTemplate.InventoryLocation.IfNullThenElse(model.InventoryLocation);
-
-            model.ProductArea_Id = caseTemplate.ProductArea_Id.IfNullThenElse(model.ProductArea_Id);
-            model.System_Id = caseTemplate.System_Id.IfNullThenElse(model.System_Id);
-            model.Caption = caseTemplate.Caption.IfNullThenElse(model.Caption);
-            model.Description = caseTemplate.Description.IfNullThenElse(model.Description);
-            model.Priority_Id = caseTemplate.Priority_Id.IfNullThenElse(model.Priority_Id);
-            model.Project_Id = caseTemplate.Project_Id.IfNullThenElse(model.Project_Id);
-            model.Urgency_Id = caseTemplate.Urgency_Id.IfNullThenElse(model.Urgency_Id);
-            model.Impact_Id = caseTemplate.Impact_Id.IfNullThenElse(model.Impact_Id);
-            model.Category_Id = caseTemplate.Category_Id.IfNullThenElse(model.Category_Id);
-            model.Supplier_Id = caseTemplate.Supplier_Id.IfNullThenElse(model.Supplier_Id);
-
-            model.InvoiceNumber = caseTemplate.InvoiceNumber.IfNullThenElse(model.InvoiceNumber);
-            model.ReferenceNumber = caseTemplate.ReferenceNumber.IfNullThenElse(model.ReferenceNumber);
-            model.Miscellaneous = caseTemplate.Miscellaneous.IfNullThenElse(model.Miscellaneous);
-            model.ContactBeforeAction = caseTemplate.ContactBeforeAction;
-            model.SMS = caseTemplate.SMS;
-            model.AgreedDate = caseTemplate.AgreedDate.IfNullThenElse(model.AgreedDate);
-            model.Available = caseTemplate.Available.IfNullThenElse(model.Available);
-            model.Cost = caseTemplate.Cost;
-            model.OtherCost = caseTemplate.OtherCost;
-            model.Currency = caseTemplate.Currency.IfNullThenElse(model.Currency);
-
-            model.Performer_User_Id = caseTemplate.PerformerUser_Id.IfNullThenElse(model.Performer_User_Id);
-            model.CausingPartId = caseTemplate.CausingPartId.IfNullThenElse(model.CausingPartId);
-            model.WorkingGroup_Id = caseTemplate.CaseWorkingGroup_Id.IfNullThenElse(model.WorkingGroup_Id);
-            model.Project_Id = caseTemplate.Project_Id.IfNullThenElse(model.Project_Id);
-            model.Problem_Id = caseTemplate.Problem_Id.IfNullThenElse(model.Problem_Id);
-            model.PlanDate = caseTemplate.PlanDate.IfNullThenElse(model.PlanDate);
-            model.WatchDate = caseTemplate.WatchDate.IfNullThenElse(model.WatchDate);
-
-            model.IsAbout_ReportedBy = caseTemplate.IsAbout_ReportedBy.IfNullThenElse(model.IsAbout_ReportedBy);
-            model.IsAbout_PersonsName = caseTemplate.IsAbout_PersonsName.IfNullThenElse(model.IsAbout_PersonsName);
-            model.IsAbout_PersonsEmail = caseTemplate.IsAbout_PersonsEmail.IfNullThenElse(model.IsAbout_PersonsEmail);
-            model.IsAbout_PersonsPhone = caseTemplate.IsAbout_PersonsPhone.IfNullThenElse(model.IsAbout_PersonsPhone);
-            model.IsAbout_PersonsCellPhone = caseTemplate.IsAbout_PersonsCellPhone.IfNullThenElse(model.IsAbout_PersonsCellPhone);
-            model.IsAbout_Region_Id = caseTemplate.IsAbout_Region_Id.IfNullThenElse(model.IsAbout_Region_Id);
-            model.IsAbout_Department_Id = caseTemplate.IsAbout_Department_Id.IfNullThenElse(model.IsAbout_Department_Id);
-            model.IsAbout_OU_Id = caseTemplate.IsAbout_OU_Id.IfNullThenElse(model.IsAbout_OU_Id);
-            model.IsAbout_CostCentre = caseTemplate.IsAbout_CostCentre.IfNullThenElse(model.IsAbout_CostCentre);
-            model.IsAbout_Place = caseTemplate.IsAbout_Place.IfNullThenElse(model.IsAbout_Place);
-            model.IsAbout_UserCode = caseTemplate.UserCode.IfNullThenElse(model.IsAbout_UserCode);
-
-            model.Status_Id = caseTemplate.Status_Id.IfNullThenElse(model.Status_Id);
-            model.StateSecondary_Id = caseTemplate.StateSecondary_Id.IfNullThenElse(model.StateSecondary_Id);
-            model.Verified = caseTemplate.Verified;
-            model.VerifiedDescription = caseTemplate.VerifiedDescription.IfNullThenElse(model.VerifiedDescription);
-            model.SolutionRate = caseTemplate.SolutionRate.IfNullThenElse(model.SolutionRate);
-
-            model.Text_External = caseTemplate.Text_External.IfNullThenElse(model.Text_External);
-            model.Text_Internal = caseTemplate.Text_Internal.IfNullThenElse(model.Text_Internal);
-            model.FinishingType_Id = caseTemplate.FinishingCause_Id.IfNullThenElse(model.FinishingType_Id);
-
-            if (caseTemplate.RegistrationSource.HasValue && caseTemplate.RegistrationSource.Value > 0)
             {
-                model.RegistrationSourceCustomer_Id = caseTemplate.RegistrationSource.Value;
-            }
+                model.CaseSolution_Id = caseTemplateId;
+                model.Customer_Id = caseTemplate.Customer_Id;
 
+                _caseSolutionService.ApplyCaseSolution(model, caseTemplate);
+
+                model.Text_External = caseTemplate.Text_External.IfNullThenElse(model.Text_External);
+                model.Text_Internal = caseTemplate.Text_Internal.IfNullThenElse(model.Text_Internal);
+                model.FinishingType_Id = caseTemplate.FinishingCause_Id.IfNullThenElse(model.FinishingType_Id);
             }
 
             return model;
@@ -245,34 +174,37 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
         public ProcessResult SaveCaseCheckSplit(CaseModel caseModel, AuxCaseModel auxModel, out int caseId, out decimal caseNumber)
         {
             var isNewCase = caseModel.Id == 0;
+            caseId = -1;
+            caseNumber = -1;
 
             var res = new ProcessResult("Save Case Check Split");
 
             if (caseModel.CaseSolution_Id.HasValue && isNewCase)
             {
                 var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
-
-                ////Split into "parent" and "child(s)"
+                
+                // Split into "parent" and "child(s)"
                 if (caseSolution.CaseRelationType == CaseRelationType.ParentAndChildren)
                 {
                     return res = SaveParentAndChildren(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
                 }
 
-                //Create indepent cases based on the "parent" case solution template
+                // Create indepent cases based on the "parent" case solution template
                 if (caseSolution.CaseRelationType == CaseRelationType.OnlyDescendants)
                 {
                     return res = SaveNewDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
                 }
 
-                //Create cases based on "parent", and "child" but independent
+                // Create cases based on "parent", and "child" but independent
                 if (caseSolution.CaseRelationType == CaseRelationType.SelfAndDescendandts)
                 {
                     return res = SaveNewSelfAndDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
                 }
             }
-
+           
             //do regular save
-            return res = SaveCase(caseModel, auxModel, out caseId, out caseNumber);
+            res = SaveCase(caseModel, auxModel, out caseId, out caseNumber);
+            return res;
         }
 
         public CaseTimeMetricsModel ClaculateCaseTimeMetrics(CaseModel caseModel, AuxCaseModel auxModel, CaseModel oldCase = null)
@@ -306,12 +238,13 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             {
                 auxModel.UserTimeZone = TimeZoneInfo.Local;
             }
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(curCustomer.TimeZoneId);
 
-            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                                             _holidayService,
                                             curCustomer.WorkingDayStart,
                                             curCustomer.WorkingDayEnd,
-                                            auxModel.UserTimeZone);
+											timeZone);
 
             int[] deptIds = null;
             if (caseModel.Department_Id.HasValue)
@@ -595,7 +528,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             var historyId = _caseService.SaveCase(caseEntity, logEntity, auxModel.CurrentUserId, auxModel.UserIdentityName, extraInfo, out errors);
 
             if (errors.Any())
-                return new ProcessResult("Do Save Case", ResultTypeEnum.ERROR, "Save could not be saved!", errors);
+                return new ProcessResult("Do Save Case", ResultTypeEnum.ERROR, "Case could not be saved!", errors);
 
             logEntity.CaseId = caseEntity.Id;
             logEntity.CaseHistoryId = historyId;
@@ -725,143 +658,18 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return caseMailSetting;
         }
 
-        private Case ConvertCaseModelToCase(CaseModel caseModel, Case oldCase)
+        public Case ConvertCaseModelToCase(CaseModel caseModel, Case oldCase)
         {
-            var caseEntity = new Case();
-            if (oldCase != null && oldCase.Id > 0)
-                caseEntity = oldCase;
-
-            #region Update Case properties
-
-            var properties = caseModel.GetType().GetProperties();
-            foreach (var prop in properties)
+            var caseEntity = oldCase != null && oldCase.Id > 0 ? oldCase : new Case();
+            caseEntity.IsAbout = oldCase?.IsAbout ?? new CaseIsAboutEntity()
             {
-                var type = prop.PropertyType;
-                var typeCode = Type.GetTypeCode(type);
-                var caseProperty = caseEntity.GetType().GetProperty(prop.Name);
-                if (caseProperty != null)
-                {
-                    switch (typeCode)
-                    {
-                        case TypeCode.Int32:
-                        case TypeCode.Int64:
-                            var intVal = (int)prop.GetValue(caseModel, null);
-                            caseProperty.SetValue(caseEntity, intVal);
-                            break;
+                Id = oldCase?.Id ?? 0
+            };
 
-                        case TypeCode.String:
-                            var strVal = (string)prop.GetValue(caseModel, null);
-                            caseProperty.SetValue(caseEntity, strVal);
-                            break;
+            //note: also handles Case.IsAbout properties due to additional Case.IsAbout_<name> setters
+            _caseModelToEntityMapper.Map(caseModel, caseEntity);
 
-                        case TypeCode.DateTime:
-                            var dateVal = (DateTime)prop.GetValue(caseModel, null);
-                            caseProperty.SetValue(caseEntity, dateVal);
-                            break;
-
-                        case TypeCode.Decimal:
-                            var decimalVal = (decimal)prop.GetValue(caseModel, null);
-                            caseProperty.SetValue(caseEntity, decimalVal);
-                            break;
-
-                        case TypeCode.Object:
-                            if (type == typeof(int?))
-                            {
-                                var nullIntVal = (int?)prop.GetValue(caseModel, null);
-                                caseProperty.SetValue(caseEntity, nullIntVal);
-                            }
-                            else
-                            if (type == typeof(DateTime?))
-                            {
-                                var nullDateVal = (DateTime?)prop.GetValue(caseModel, null);
-                                caseProperty.SetValue(caseEntity, nullDateVal);
-                            }
-                            else
-                            if (type == typeof(Guid))
-                            {
-                                var guidVal = (Guid)prop.GetValue(caseModel, null);
-                                caseProperty.SetValue(caseEntity, guidVal);
-                            }
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            }
-
-            #endregion
-
-            #region Update CaseIsAbout properties
-
-            var isAboutChanged = false;
-            var isAbout = new CaseIsAboutEntity();
-            if (caseEntity.IsAbout != null)
-                isAbout = caseEntity.IsAbout;
-
-            if (caseModel.IsAbout_ReportedBy != oldCase.IsAbout?.ReportedBy)
-            {
-                isAbout.ReportedBy = caseModel.IsAbout_ReportedBy;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_PersonsName != oldCase.IsAbout?.Person_Name)
-            {
-                isAbout.Person_Name = caseModel.IsAbout_PersonsName;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_PersonsEmail != oldCase.IsAbout?.Person_Email)
-            {
-                isAbout.Person_Email = caseModel.IsAbout_PersonsEmail;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_PersonsPhone != oldCase.IsAbout?.Person_Phone)
-            {
-                isAbout.Person_Phone = caseModel.IsAbout_PersonsPhone;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_PersonsCellPhone != oldCase.IsAbout?.Person_Cellphone)
-            {
-                isAbout.Person_Cellphone = caseModel.IsAbout_PersonsCellPhone;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_Place != oldCase.IsAbout?.Place)
-            {
-                isAbout.Place = caseModel.IsAbout_Place;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_UserCode != oldCase.IsAbout?.UserCode)
-            {
-                isAbout.UserCode = caseModel.IsAbout_UserCode;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_Region_Id != oldCase.IsAbout?.Region_Id)
-            {
-                isAbout.Region_Id = caseModel.IsAbout_Region_Id;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_Department_Id != oldCase.IsAbout?.Department_Id)
-            {
-                isAbout.Department_Id = caseModel.IsAbout_Department_Id;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_OU_Id != oldCase.IsAbout?.OU_Id)
-            {
-                isAbout.OU_Id = caseModel.IsAbout_OU_Id;
-                isAboutChanged = true;
-            }
-            if (caseModel.IsAbout_CostCentre != oldCase.IsAbout?.CostCentre)
-            {
-                isAbout.CostCentre = caseModel.IsAbout_CostCentre;
-                isAboutChanged = true;
-            }
-
-            if (!isAboutChanged)
-                isAbout = null;
-
-            caseEntity.IsAbout = isAbout;
-            #endregion
-
-            return caseEntity;
+           return caseEntity;
         }
 
         private CaseLog GetCaseLog(CaseModel caseModel, AuxCaseModel auxCaseModel)
@@ -886,8 +694,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
             return ret;
         }
-
-
+        
         /// <summary>
         /// If case is split and copied to another customer, departmentId needs to be changed to corresponding Id of the other customer.
         /// </summary>
@@ -1222,6 +1029,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     break;
                 case "status_id":
                     caseModel.Status_Id = value.ToInt();
+                    break;
+                case "substatus_id":
+                    caseModel.StateSecondary_Id = value.ToInt();
                     break;
                 case "priority_id":
                     caseModel.Priority_Id = value.ToInt();

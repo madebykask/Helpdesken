@@ -157,6 +157,7 @@
   <ItemGroup>
     <None Include="App.config.template">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="App.config">
       <SubType>Designer</SubType>

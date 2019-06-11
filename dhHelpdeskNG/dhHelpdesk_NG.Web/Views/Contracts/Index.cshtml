@@ -52,7 +52,7 @@
                     {
                         <input type="hidden" id="currentCustomerId" name="CustomerId" value="@Model.Customer.Id" />
                         <div class="row">
-                            @Html.Partial("_ContractsSearchFilter", Model.SearchFilterModel)
+                            @Html.Partial("_ContractsSearchFilter", Model)
                             <div class="pull-right">
                                 @Html.Partial("_ContractsSearchSummary", Model.SearchResults.SearchSummary)
                             </div>

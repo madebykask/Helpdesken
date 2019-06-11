@@ -21,31 +21,6 @@
     @Scripts.Render(BundleConfig.ScriptNames.UserSearchCommon)
 }
 
-<script type="text/javascript">
-    /* CHECK: moved to EditPage.js*/
-    //function GetLanguage()
-    //{
-    //    var caseid = document.getElementById('case__Id').value;
-    //    alert('old');
-    //    if (caseid == 0)
-    //    {
-    //        var reported  = document.getElementById('case__UserCode').value;
-    //        var reportedId  = document.getElementById('case__ReportedBy').value;
-
-    //        var region = document.getElementById('case__Region_Id').value;
-    //        var dep = document.getElementById('case__Department_Id').value;
-    //        var customer = document.getElementById('case__Customer_Id').value;
-
-    //        $.get("/cases/LookupLanguage/", { customerid: "'" + customer.toString() + "'", notifier: "'" + reported.toString() + "'", region: "'" + region.toString() + "'", department: "'" + dep.toString() + "'", notifierid: "'" + reportedId.toString() + "'" }, function (result) {
-    //            if (parseInt(result) > 0) {
-    //                $("#case__RegLanguage_Id").val(result);
-    //            }
-    //        });
-    //    }
-    //}
-
-</script>
-
 @if (Model.case_ != null)
 {
     <div class="content onemenu editcase" id="mm1">
@@ -340,7 +315,6 @@
                                                             @Html.Partial("ModalDialogs/_ExtraEmails", Model.FollowersModel, new ViewDataDictionary { { "isFollowersReadonly", true } })
                                                             <a href="#add_extra_emails_btn" role="button" class="btn case-usersearch-btn disabled" disabled="true" data-toggle="modal">@Translation.GetCoreTextTranslation("Välj följare")</a>
                                                             <div id="fakeExtraEmailsInput" contenteditable="false" class="case-send-emails-div-readonly case-send-emails-div case-usersearch-textarea @Model.getSearchEmailClass(CaseSectionType.Initiator)"></div>
-
                                                         }
                                                     </td>
                                                 }
@@ -1079,7 +1053,7 @@
                                                 <span id="ProductAreaFieldCaption"> @CaseFieldCaption(GlobalEnums.TranslationCaseFields.ProductArea_Id, "Produktområde") </span>
                                             </td>
                                             <td colspan="2">
-                                                <div id="divProductArea" class="btn-group">
+                                                <div id="divProductArea" class="btn-group dropdown-menu-parent">
                                                     @{
                                                         string disabledProductArea = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.ProductArea_Id, CaseSolutionFields.ProductArea);
                                                     }
@@ -1837,8 +1811,8 @@
                                             if (Model.projects.Any())
                                             {
                                                 <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Project, CaseSolutionFields.Project)">
-                                                    <td>
-                                                        @Translation.Get("Projekt", SessionFacade.CurrentLanguageId)
+                                                    <td>      
+                                                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Project, "Project")
                                                     </td>
                                                     <td>
                                                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Project, CaseSolutionFields.Project))
@@ -1876,7 +1850,7 @@
                                             {
                                                 <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Problem, CaseSolutionFields.Problem)">
                                                     <td>
-                                                        @Translation.Get("ITIL Problem", SessionFacade.CurrentLanguageId)
+                                                        @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Problem, "Problem")
                                                     </td>
                                                     <td>
                                                         @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.Problem, CaseSolutionFields.Project))
@@ -2106,10 +2080,10 @@
                                         }
                                     </ul>
                                     <div class="tab-content">
-                                        @Html.Partial("_CaseLog", Model)
+                                        @Html.Partial("_CaseLog", Model.CreateCaseLogViewModel())
                                         @if (Model.CaseInternalLogAccess)
                                         {
-                                            @Html.Partial("_CaseHistory", Model)
+                                            @Html.Partial("_CaseHistory", Model.CreateHistoryViewModel())
                                         }
                                     </div>
                                 </div>

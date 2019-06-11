@@ -1,9 +1,4 @@
-﻿$(function () {    
-
-    (function ($) {
-
-        window.Application = window.Application || {};
-        window.Application.prototype = window.Application.prototype || {};
+﻿window.casePage = (function ($) {
 
         var fieldSettings = window.fieldSettings || {};
         var caseTypeRelatedFields = window.caseTypeRelatedFields || {};
@@ -29,8 +24,11 @@
         var attrFieldNameHolder = "standardName";
         var relatedFieldBlockPrefix = "#relatedFieldBlock-";
         var mandatorySignPrefix = "#mandatory_sign_";
-        
-        Application.prototype.applyFieldAttributes = function () {
+
+        function CasePage() {
+        }
+
+        CasePage.prototype.applyFieldAttributes = function () {
             if (fieldSettings == undefined || fieldSettings == null || fieldSettings.length <= 0)
                 return;
 
@@ -44,7 +42,7 @@
             }
         }
 
-        Application.prototype.isElementReadonly = function ($element) {
+        CasePage.prototype.isElementReadonly = function ($element) {
             if ($element == undefined || $element == null)
                 return;
 
@@ -56,7 +54,7 @@
             return false;
         }
 
-        Application.prototype.checkCaseTypeRelationRules = function ($caseType) {
+        CasePage.prototype.checkCaseTypeRelationRules = function ($caseType) {
             if ($caseType == undefined || $caseType == null)
                 return;
 
@@ -77,15 +75,15 @@
             }
         }
 
-        Application.prototype.isNullOrEmpty = function (val) {
+        CasePage.prototype.isNullOrEmpty = function (val) {
             return val == undefined || val == null || val == "";
         }
 
-        Application.prototype.isNullOrUndefined = function (val) {
+        CasePage.prototype.isNullOrUndefined = function (val) {
             return val == undefined || val == null;
         }
 
-        Application.prototype.setValueToBtnGroup = function (domContainer, domText, domValue, value) {
+        CasePage.prototype.setValueToBtnGroup = function (domContainer, domText, domValue, value) {
             var self = this;
             var $domValue = $(domValue);
             var oldValue = $domValue.val();
@@ -102,7 +100,7 @@
             }
         }
 
-        Application.prototype.getBreadcrumbs = function (el) {
+        CasePage.prototype.getBreadcrumbs = function (el) {
             var self = this;
             var path = $(el).text();
             var $parent = $(el).parents("li").eq(1).find("a:first");
@@ -112,7 +110,7 @@
             return path;
         }
 
-        Application.prototype.parseDate = function (dateStr) {
+        CasePage.prototype.parseDate = function (dateStr) {
             if (dateStr == undefined || dateStr == "")
                 return null;
 
@@ -123,7 +121,7 @@
             return new Date(parseInt(dateArray[0]), parseInt(dateArray[1] - 1), parseInt(dateArray[2]));
         }
 
-        Application.prototype.dateToDisplayFormat = function (dateValue) {
+        CasePage.prototype.dateToDisplayFormat = function (dateValue) {
             var self = this;
             if (Object.prototype.toString.call(dateValue) === "[object Date]") {
                 if (isNaN(dateValue.getTime())) {
@@ -140,7 +138,7 @@
             }
         }
 
-        Application.prototype.padLeft = function (value, totalLength, padChar) {
+        CasePage.prototype.padLeft = function (value, totalLength, padChar) {
             var valLen = value.toString().length;
             var diff = totalLength - valLen;
             if (diff > 0) {
@@ -150,7 +148,7 @@
             return value;
         }
 
-        Application.prototype.getDate = function (val) {
+        CasePage.prototype.getDate = function (val) {
             if (val == undefined || val == null || val == "")
                 return null;
             else {
@@ -262,16 +260,14 @@
             };
             $element.addClass("disabled");            
         }
-
         
-
         /**
         * @public
         * @param { number } regionId
         * @param { number } departmentId
         * @param { number } selectedOrgUnitId
         */
-        Application.prototype.setOrganizationData = function (regionId, departmentId, selectedOrgUnitId) {
+        CasePage.prototype.setOrganizationData = function (regionId, departmentId, selectedOrgUnitId) {
             var me = this;
 
             me.$departmentControl.children().remove();
@@ -284,7 +280,7 @@
         * @param { jQueryElement } $select
         * @param { optionId } int
         */
-        Application.prototype.isIdExistsInSelect = function ($select, optionId) {
+        CasePage.prototype.isIdExistsInSelect = function ($select, optionId) {
             var keyToFind = 'option[value=' + optionId + ']';
             var opt = $select.find(keyToFind);
             return opt != null && opt.length > 0;
@@ -297,7 +293,7 @@
         * @param { number } selectedOrgUnitId = null
         */
 
-        Application.prototype.refreshDepartment = function (regionId, selectedId, selectedOrgUnitId) {
+        CasePage.prototype.refreshDepartment = function (regionId, selectedId, selectedOrgUnitId) {
             var me = this;
             me.$departmentControl.val('').find('option').remove();
             me.$departmentControl.append('<option value="">&nbsp;</option>');
@@ -325,7 +321,7 @@
         * @param { number } filterFormat department filter format
         * @param { number } selectedId = null
         */
-        Application.prototype.refreshOrganizationUnit = function (departmentId, selectedId) {
+        CasePage.prototype.refreshOrganizationUnit = function (departmentId, selectedId) {
             var me = this;
             me.$orgUnitControl.val('').find('option').remove();
             me.$orgUnitControl.append('<option value="">&nbsp;</option>');
@@ -351,7 +347,7 @@
         * @param { { number: id, string: name}[] } data
         * @returns string
         */
-        Application.prototype.makeOptionsFromIdName = function (data) {
+        CasePage.prototype.makeOptionsFromIdName = function (data) {
             var content = [];
             for (var i = 0; i < data.length; i++) {
                 var item = data[i];
@@ -372,7 +368,7 @@
                 FileUploaded: function () {
 
                     $.get(newCaseFilesUrl, { id: caseFileKey, curTime: Date.now() }, function (files) {
-                        Application.prototype.refreshNewCaseFilesTable(files);
+                        CasePage.prototype.refreshNewCaseFilesTable(files);
                     });
                 },
 
@@ -407,7 +403,6 @@
                 }
             }
         });
-        
 
         $('#NewCase_upload_files_popup').on('shown.bs.modal', function () {
             //refresh required to make file open dlg work correctly 
@@ -428,7 +423,7 @@
             }
         });
 
-        Application.prototype.refreshNewCaseFilesTable = function (files) {
+        CasePage.prototype.refreshNewCaseFilesTable = function (files) {
             $('#NewCasefiles_table > tbody > tr').remove();
 
             var fileMarkup;
@@ -449,11 +444,11 @@
                 $('#NewCasefiles_table > tbody').append(fileMarkup);
             }
 
-            Application.prototype.bindDeleteNewCaseFileBehaviorToDeleteButtons();
-            Application.prototype.countNrOfAttatchedFiles();
+            CasePage.prototype.bindDeleteNewCaseFileBehaviorToDeleteButtons();
+            CasePage.prototype.countNrOfAttatchedFiles();
         }
 
-        Application.prototype.countNrOfAttatchedFiles = function () {
+        CasePage.prototype.countNrOfAttatchedFiles = function () {
             if ($('#attachment-tab').length) {
                 var nrOfFiles = parseInt($('#NewCasefiles_table tr').length) || 0;
                 if (nrOfFiles > 0 && $('#nrOfAttachedFiles')[0])
@@ -466,7 +461,7 @@
             }
         }
 
-        Application.prototype.bindDeleteNewCaseFileBehaviorToDeleteButtons = function () {
+        CasePage.prototype.bindDeleteNewCaseFileBehaviorToDeleteButtons = function () {
             
             $('#NewCasefiles_table a[id^="delete_file_button_"]').click(function () {
                 var fileName = $(this).parents('tr:first').children('td:first').children('a').text();
@@ -474,12 +469,12 @@
 
                 $.post(deleteCaseFileUrl, { id: caseFileKey, fileName: fileName, curTime: Date.now() }, function () {
                     $(pressedDeleteFileButton).parents('tr:first').remove();
-                    Application.prototype.countNrOfAttatchedFiles();
+                    CasePage.prototype.countNrOfAttatchedFiles();
                 });
             });
         }
 
-        Application.prototype.generateRandomKey = function () {
+        CasePage.prototype.generateRandomKey = function () {
             function s4() {
                 return Math.floor((1 + Math.random()) * 0x10000)
                   .toString(16)
@@ -488,7 +483,7 @@
             return s4() + '-' + s4() + '-' + s4();
         }
 
-        Application.prototype._GetComputerUserSearchOptions = function () {
+        CasePage.prototype._GetComputerUserSearchOptions = function () {
             var me = this;
             var fieldsVisibility = [];
             var options = {
@@ -496,7 +491,7 @@
                 minLength: 2,
 
                 source: function (query, process) {
-                    lastInitiatorSearchKey = Application.prototype.generateRandomKey();
+                    lastInitiatorSearchKey = CasePage.prototype.generateRandomKey();
 
                     return $.ajax({
                         url: searchUserUrl,
@@ -641,7 +636,7 @@
             return options;
         }
 
-        Application.prototype._GetComputerSearchOptions = function () {
+        CasePage.prototype._GetComputerSearchOptions = function () {
 
             var options = {
                 items: 20,
@@ -773,6 +768,7 @@
         var curFileName;
         var globalClipboard;
 
+        //todo: move to common file?
         function ClipboardClass() {
             var self = this;
             var ctrlPressed = false;
@@ -907,6 +903,7 @@
                     ctrlPressed = false;
             };
 
+            //todo: move to common utils
             this.dataURItoBlob = function (dataURI) {
                 var byteString;
 
@@ -953,13 +950,13 @@
                     submitUrl = uploadCaseFileUrl;
                     refredhCallback = function () {
                         $.get(newCaseFilesUrl, { id: caseFileKey, curTime: Date.now() }, function (files) {
-                            Application.prototype.refreshNewCaseFilesTable(files);
+                            CasePage.prototype.refreshNewCaseFilesTable(files);
                         });
                     }
                 }
 
                 if (imgFilename.length === 0) {
-                    imgFilename = 'image_' + Application.prototype.generateRandomKey();
+                    imgFilename = 'image_' + CasePage.prototype.generateRandomKey();
                 }
                 if (imgFilename.indexOf('.') === -1) {
                     imgFilename = imgFilename + '.' + extension;
@@ -1001,7 +998,7 @@
         });
 
         function clearScene() {
-            curFileName = 'image_' + Application.prototype.generateRandomKey();
+            curFileName = 'image_' + CasePage.prototype.generateRandomKey();
             $("#previewPnl").empty();
             var $uploadModal = $('#upload_clipboard_file_popup');
             var $btnSave = $uploadModal.find('#btnSave');
@@ -1039,16 +1036,89 @@
             });
         }
        
-        Application.prototype.init = function () {
+        CasePage.prototype.init = function () {
             var self = this;
             customerId = $('#NewCase_Customer_Id').val();
             self.$regionControl = $('#NewCase_Region_Id');
             self.$departmentControl = $('#NewCase_Department_Id');
             self.$orgUnitControl = $('#NewCase_Ou_Id');
             self.$caseTypeControl = $(document.getElementById("NewCase.CaseType_Id"));
+            
+            //tab arrows
+            $("button.dropdown-toggle[data-toggle=dropdown]").on("click", function (e) {
+                $(this).parent().find("li.dropdown-submenu > ul").css("display", "");
+            });
 
-            $('#NewCase_ReportedBy').typeahead(Application.prototype._GetComputerUserSearchOptions());
-            $('#NewCase_InventoryNumber').typeahead(Application.prototype._GetComputerSearchOptions());
+            $("button.dropdown-toggle[data-toggle=dropdown], ul.dropdown-menu").on("keydown", function (e) {
+                if (!/(37|38|39|40|27)/.test(e.keyCode)) return true;
+
+                var $this = $(this);
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                if ($this.is(".disabled, :disabled")) return true;
+
+                var $group = $this.closest(".btn-group");
+                var isActive = $group.hasClass("open");
+                var $parent = $this.parent();
+                var $items = $parent.children("ul.dropdown-menu").children("li:not(.divider):visible").children("a");
+                var index = 0;
+
+                if (isActive && e.keyCode === 27) {
+                    if (e.which === 27) $group.find("button.dropdown-toggle[data-toggle=dropdown]").focus();
+                    return $this.click();
+                }
+
+                if (!isActive && e.keyCode === 40) {
+                    var open = $this.click();
+                    $items = $group.children("ul.dropdown-menu").children("li:not(.divider):visible").children("a");
+                    if (!$items.length) return open;
+                    $items.eq(index).focus();
+                    return open;
+                }
+
+                if (!$items.length) return true;
+
+                index = $items.index($items.filter(":focus"));
+
+                if (e.keyCode === 38 && index > 0) index--; // up
+                if (e.keyCode === 40 && index < $items.length - 1) index++; // down
+                if (!~index) index = 0;
+
+                var currentItem = $items.eq(index);
+
+                if (e.keyCode === 39) {
+                    var currentLi = currentItem.parent();
+                    if (currentLi.hasClass("dropdown-submenu")) {
+                        currentLi.children("ul.dropdown-menu").css("display", "block");
+                        currentItem = currentLi.children("ul.dropdown-menu").children("li:not(.divider):visible:first").children("a").first();
+                    }
+                }
+
+                if (e.keyCode === 37) {
+                    if ($parent.hasClass("dropdown-submenu")) {
+                        currentItem = $parent.children("a:first");
+                        $this.css("display", "");
+                    }
+                }
+
+                currentItem.focus();
+
+                return true;
+            });
+
+            $("ul.dropdown-menu li a").click(function (e) {
+                //var toggler = $(this).parents("ul.dropdown-menu").prevAll("button.dropdown-toggle[data-toggle=dropdown]");
+                var toggler = $(this).closest(".btn-group.open").find("button.dropdown-toggle[data-toggle=dropdown]");
+                if (toggler.length) {
+                    toggler.focus();
+                }
+                return true;
+            });
+
+            $('#NewCase_ReportedBy').typeahead(CasePage.prototype._GetComputerUserSearchOptions());
+            $('#NewCase_InventoryNumber').typeahead(CasePage.prototype._GetComputerSearchOptions());
 
             // Remove after implementing http://redmine.fastdev.se/issues/10995
             self.$regionControl.on('change', function () {
@@ -1089,80 +1159,6 @@
             self.applyFieldAttributes();
             self.$caseTypeControl.change();
         };
-    })($);
-    
-    //tab arrows
-    $("button.dropdown-toggle[data-toggle=dropdown]").on("click", function (e) {
-        $(this).parent().find("li.dropdown-submenu > ul").css("display", "");
-    });
 
-    $("button.dropdown-toggle[data-toggle=dropdown], ul.dropdown-menu").on("keydown", function (e) {
-        if (!/(37|38|39|40|27)/.test(e.keyCode)) return true;
-
-        var $this = $(this);
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        if ($this.is(".disabled, :disabled")) return true;
-
-        var $group = $this.closest(".btn-group");
-        var isActive = $group.hasClass("open");
-        var $parent = $this.parent();
-        var $items = $parent.children("ul.dropdown-menu").children("li:not(.divider):visible").children("a");
-        var index = 0;
-
-        if (isActive && e.keyCode === 27) {
-            if (e.which === 27) $group.find("button.dropdown-toggle[data-toggle=dropdown]").focus();
-            return $this.click();
-        }
-
-        if (!isActive && e.keyCode === 40) {
-            var open = $this.click();
-            $items = $group.children("ul.dropdown-menu").children("li:not(.divider):visible").children("a");
-            if (!$items.length) return open;
-            $items.eq(index).focus();
-            return open;
-        }
-
-        if (!$items.length) return true;
-
-        index = $items.index($items.filter(":focus"));
-
-        if (e.keyCode === 38 && index > 0) index--; // up
-        if (e.keyCode === 40 && index < $items.length - 1) index++; // down
-        if (!~index) index = 0;
-
-        var currentItem = $items.eq(index);
-
-        if (e.keyCode === 39) {
-            var currentLi = currentItem.parent();
-            if (currentLi.hasClass("dropdown-submenu")) {
-                currentLi.children("ul.dropdown-menu").css("display", "block");
-                currentItem = currentLi.children("ul.dropdown-menu").children("li:not(.divider):visible:first").children("a").first();
-            }
-        }
-
-        if (e.keyCode === 37) {
-            if ($parent.hasClass("dropdown-submenu")) {
-                currentItem = $parent.children("a:first");
-                $this.css("display", "");
-            }
-        }
-
-        currentItem.focus();
-
-        return true;
-    });
-
-    $("ul.dropdown-menu li a").click(function (e) {
-        //var toggler = $(this).parents("ul.dropdown-menu").prevAll("button.dropdown-toggle[data-toggle=dropdown]");
-        var toggler = $(this).closest(".btn-group.open").find("button.dropdown-toggle[data-toggle=dropdown]");
-        if (toggler.length) {
-            toggler.focus();
-        }
-        return true;
-    });
-
-    Application.prototype.init();
-});
+        return new CasePage();
+    })(jQuery);

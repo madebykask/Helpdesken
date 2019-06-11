@@ -1,4 +1,6 @@
-﻿namespace DH.Helpdesk.Domain
+﻿using DH.Helpdesk.Common.Enums.Cases;
+
+namespace DH.Helpdesk.Domain
 {
     using global::System;
 
@@ -18,6 +20,7 @@
         public int? User_Id { get; set; }
         public int UserGroup { get; set; }
         public string Name { get; set; }
+        public CaseSettingTypes Type { get; set; }
         public DateTime RegTime { get; set; }
         public DateTime ChangeTime { get; set; }
     }

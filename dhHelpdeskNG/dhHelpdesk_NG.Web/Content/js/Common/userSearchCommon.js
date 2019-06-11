@@ -53,10 +53,10 @@ function InitExtraEmailsSearch(admins, emailGroups, workingGroups) {
     });
 
     function appendDropdownsEmails(array, selectedId) {
-        var arr = $.grep(array,
-                        function (a) {
-                            return a.Id == selectedId;
-                        });
+        var arr = $.grep(array, function (a) {
+            return a.Id == selectedId;
+        });
+
         for (var j = 0; j < arr[0].Emails.length; j++) {
             checkAndAddEmailsFromDropdown(arr[0].Emails[j]);
         }
@@ -72,19 +72,17 @@ function InitExtraEmailsSearch(admins, emailGroups, workingGroups) {
     });
 
     mainFakeInput.keypress(function (e) {
-        if (e.which === 13 || e.which === 186 ||
-            e.which === 59) {
+        if (e.which === 13 || e.which === 186 || e.which === 59) {
             processEmails(e, mainFakeInput, mainInput);
         }
     });
 
-    mainFakeInput.on('blur',
-        function (e) {
-            var relatedTarget = e.relatedTarget || document.activeElement;
-            if ($(relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
-                processEmails(e, mainFakeInput, mainInput);
-            }
-        });
+    mainFakeInput.on('blur', function(e) {
+        var relatedTarget = e.relatedTarget || document.activeElement;
+        if ($(relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
+            processEmails(e, mainFakeInput, mainInput);
+        }
+    });
 
     popupInput.typeahead(getUserSearchOptions(mainInput, mainFakeInput, popupInput));
 
@@ -101,17 +99,16 @@ function InitExtraEmailsSearch(admins, emailGroups, workingGroups) {
         }
     });
 
-    popupInput.on('blur',
-        function (e) {
-            var relatedTarget = e.relatedTarget || document.activeElement;
-            if ($(relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
-                processEmails(e, popupInput, mainInput);
-            }
-        });
+    popupInput.on('blur', function(e) {
+        var relatedTarget = e.relatedTarget || document.activeElement;
+        if ($(relatedTarget).parents('ul.typeahead.dropdown-menu').length === 0) {
+            processEmails(e, popupInput, mainInput);
+        }
+    });
 
     function checkAndAddEmailsFromDropdown(value) {
         if (isValidEmailAddress(value)) {
-            if (mainInput.val().indexOf(value) < 0) {
+            if (mainInput.val().indexOf(value) === -1) {
                 mainInput.val(mainInput.val() + value + ";");
                 popupInput.html(getHtmlFromEmails(mainInput.val()));
             } else {
@@ -137,10 +134,11 @@ function InitExtraEmailsSearch(admins, emailGroups, workingGroups) {
     function processEmails(e, fakeInput, mainInput) {
         if (e.which === 13 && searchSelected)
             return;
+
         e.preventDefault();
         e.stopImmediatePropagation();
-        if (e.which === 13 || e.which === 186 ||
-            e.type === 'blur' || e.which === 59) {
+
+        if (e.which === 13 || e.which === 186 || e.type === 'blur' || e.which === 59) {
             var emails = $(e.target).html();
             var arr = getEmailsFromHtml(emails);
             for (var i = 0; i < arr.length; i++) {
@@ -153,8 +151,6 @@ function InitExtraEmailsSearch(admins, emailGroups, workingGroups) {
             if (e.type !== 'blur') placeCaretAtEnd(fakeInput);
         }
     }
-
-
 }
 
 var searchSelected = false;
@@ -280,7 +276,7 @@ function initEditableDiv() {
     };
 }
 
-    //this for case extra followers and circular extra emails
+//this for case extra followers and circular extra emails
 function getUserSearchOptions(mainInput, mainFakeInput, popupInput) {
     var lastAddFollowersSearchSearchKey = '';
     var delayFunc = CommonUtils.createDelayFunc();
@@ -414,11 +410,10 @@ function getUserSearchOptions(mainInput, mainFakeInput, popupInput) {
             var item = JSON.parse(obj);
             if (!item.isNoResult) {
                 var emailsToAdd = [];
-                $.each(item.email,
-                    function (index, value) {
-                        if (checkAndAddEmailsTo(value, mainInput) === true)
-                            emailsToAdd.push(value);
-                    });
+                $.each(item.email, function (index, value) {
+                    if (checkAndAddEmailsTo(value, mainInput) === true)
+                        emailsToAdd.push(value);
+                });
                 mainFakeInput.html(getHtmlFromEmails(mainInput.val()));
                 if (popupInput) {
                     popupInput.html(getHtmlFromEmails(mainInput.val()));

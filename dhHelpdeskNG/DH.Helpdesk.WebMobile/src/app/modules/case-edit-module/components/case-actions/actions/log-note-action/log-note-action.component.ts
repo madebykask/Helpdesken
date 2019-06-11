@@ -12,13 +12,17 @@ import { Router } from '@angular/router';
 export class LogNoteActionComponent extends CaseActionBaseComponent<CaseLogActionData> implements OnInit {
 
   data: CaseLogActionData;
-  
+
   constructor(private router: Router) {
     super();
   }
 
+  get hasM2T() {
+    return this.data.mail2Tickets && this.data.mail2Tickets.length > 0;
+  }
+
   ngOnInit(): void {
-   this.data = this.caseAction != null ? this.caseAction.data : null;
+    this.data = this.caseAction != null ? this.caseAction.data : null;
   }
 
   downloadLogFile(file: LogFile) {

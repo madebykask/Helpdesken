@@ -1,6 +1,8 @@
 ﻿@using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils
 @using DH.Helpdesk.BusinessData.OldComponents
+@using DH.Helpdesk.Common.Constants
 @using DH.Helpdesk.Common.Enums
+@using DH.Helpdesk.Common.Enums.Cases
 
 @model DH.Helpdesk.SelfService.Models.Case.CaseOverviewModel
 
@@ -14,7 +16,7 @@
         downloadLogFileUrl: '@Url.Action("DownloadLogFile")',
         downloadLogFileParamUrl: '@(!string.IsNullOrEmpty(Model.LogFileGuid) ? "id=" + Model.LogFileGuid + "&" : string.Empty)',
         saveLogMessageUrl: '@Url.Action("_CaseLogNote", "Case")',
-        fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists", Enums.TranslationSource.TextTranslation))',
+        fileAlreadyExistsMsg: '@Html.Raw(Translation.Get("File already exists"))',
         logMandatoryText: '@Translation.Get("Comment is required!")',
         //model fields
         caseId: Number('@Model.CasePreview.Id'),
@@ -30,7 +32,7 @@
 @if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.UserInformation))
 {
     <input id="CaseId" type="hidden" value="@Model.CasePreview.Id" />
-    <h4>@Translation.Get("User Information", Enums.TranslationSource.TextTranslation)</h4>
+    <h4>@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.Initiator, CaseSectionsEnglish.InitiatorHeader) </h4>
     <div class="row">
         <div class="col-md-3 dh-col">
             <div class="container form-horizontal">
@@ -57,7 +59,7 @@
                         <label class="col-md-1">
                             @if (Model.FollowerUsers != "")
                             {
-                                @Translation.Get("Followers", Enums.TranslationSource.TextTranslation)
+                                @Translation.Get("Followers")
                             }
                         </label>
                         <label class="col-md-5">
@@ -189,7 +191,7 @@
 
 @if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.ComputerInformation))
 {
-    <h4>@Translation.Get("Computer Information", Enums.TranslationSource.TextTranslation)</h4>
+    <h4>@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.ComputerInfo, CaseSectionsEnglish.ComputerInfoHeader) </h4>
     <div class="row">
         <div class="col-md-3 dh-col">
             <div class="container form-horizontal">
@@ -233,7 +235,7 @@
 <!-- Computer Information Fields -->
 @if (Model.CaseFieldGroups.Contains(Enums.CaseFieldGroups.CaseInfo))
 {
-    <h4>@Translation.Get("Case Information") </h4>
+    <h4>@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.CaseInfo, CaseSectionsEnglish.CaseInfoHeader) </h4>
     <div class="row">
         <div class="col-md-3 dh-col">
             <div class="container form-horizontal">
@@ -401,7 +403,7 @@
                             @Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
                         <div class="col-md-9">
-                            @Html.Raw(Model.CasePreview.Description)
+                            @Model.CasePreview.Description
                         </div>
                     </div>
                 }
@@ -485,15 +487,15 @@
                             <table class="table table-striped table-bordered table-hover">
                                 <tr>
                                     <td>
-                                        @Translation.Get("Item Cost", Enums.TranslationSource.TextTranslation)<br />
+                                        @Translation.Get("Item Cost")<br />
                                         @Model.CasePreview.Cost
                                     </td>
                                     <td>
-                                        @Translation.Get("Additional Cost", Enums.TranslationSource.TextTranslation)<br />
+                                        @Translation.Get("Additional Cost")<br />
                                         @Model.CasePreview.OtherCost
                                     </td>
                                     <td>
-                                        @Translation.Get("Currency", Enums.TranslationSource.TextTranslation)<br />
+                                        @Translation.Get("Currency")<br />
                                         @Model.CasePreview.Currency
                                     </td>
                                 </tr>
@@ -535,7 +537,7 @@
     @if (!Model.IsFinished && ViewBag.ApplicationType == ApplicationTypes.SelfService && !ViewBag.ShowCommunicationForSelfService)
     {
         <div id="logNotesSection">
-            <h4>@Translation.Get("Communicate") </h4>
+            <h4>@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.Communication, CaseSectionsEnglish.CommunicationHeader) </h4>
             <div class="row">
                 <div class="col-md-3 dh-col">
                     <div class="container form-horizontal">

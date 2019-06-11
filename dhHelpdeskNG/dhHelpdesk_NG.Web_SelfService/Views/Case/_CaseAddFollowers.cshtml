@@ -1,15 +1,11 @@
-﻿@using DH.Helpdesk.SelfService.Infrastructure
-@model DH.Helpdesk.SelfService.Models.Shared.SendToDialogModel
+﻿@model DH.Helpdesk.SelfService.Models.Shared.SendToDialogModel
 @using System.Web.Optimization
 
 @Scripts.Render("~/bundles/case/caseaddfollowerssearch")
-@*<script src="~/Content/js/Case/_caseAddFollowersSearch.js"></script>
-<script src="~/Content/js/Case/_caseUserSearchCommon.js"></script>*@
-
 
 <script type="text/javascript">
     $(function() {       
-        InitCaseAddFollowersSearch('@Url.Content("~/case/CaseSearchUserEmails")');
+        InitCaseAddFollowersSearch('@Url.Action("CaseSearchUserEmails", "case")');
     });
 </script>
 
@@ -21,7 +17,7 @@
                 <h5> @Translation.Get("Select E-mail")</h5>
             </div>
             <div class="modal-body overflow-visible">
-                <textarea cols="20" id="caseAddFollowersModalInput" class="width100" autofocus></textarea>
+                <div id="caseAddFollowersModalInput" contenteditable="true" class="case-send-emails-div case-popup-div"></div>
             </div>
             <div class="modal-body overflow-visible case-dropdown-area">                
                 <div class="case-followers-button-done">

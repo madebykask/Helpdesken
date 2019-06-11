@@ -1,6 +1,8 @@
 ﻿using System.Configuration;
 using System.Data;
+using System.Data.Entity;
 using System.Globalization;
+using DH.Helpdesk.BusinessData.Enums.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseIntLog;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.Email;
@@ -65,8 +67,6 @@ namespace DH.Helpdesk.Services.Services
             int? relatedCasesCaseId = null,
             string relatedCasesUserId = null,
             int[] caseIds = null);
-
-        IList<CaseEmailSendOverview> GetUserEmailsForCaseSend(int customerId, string query, IEmailSearchScope searchScope);
     }
 
     public class CaseSearchService : ICaseSearchService
@@ -78,11 +78,11 @@ namespace DH.Helpdesk.Services.Services
         private readonly IProductAreaRepository _productAreaRepository;
         private readonly ICaseTypeRepository _caseTypeRepository;
         private readonly ILogRepository _logRepository;
-        private readonly IUserEmailRepository _userEmailRepository;
         private readonly IProductAreaService _productAreaService;
         private readonly IGlobalSettingService _globalSettingService;
         private readonly ISettingService _settingService;
         private readonly IHolidayService _holidayService;
+		private readonly ICustomerService _customerService;
 
         #region ctor()
 
@@ -91,34 +91,25 @@ namespace DH.Helpdesk.Services.Services
             IProductAreaRepository productAreaRepository,
             ICaseTypeRepository caseTypeRepository,
             ILogRepository logRepository,
-            IUserEmailRepository userEmailRepository, 
             IProductAreaService productAreaService, 
             IGlobalSettingService globalSettingService, 
             ISettingService settingService,
-            IHolidayService holidayService)
+            IHolidayService holidayService,
+			ICustomerService customerService)
         {
             _caseSearchRepository = caseSearchRepository;
             _productAreaRepository = productAreaRepository;
             _caseTypeRepository = caseTypeRepository;
             _logRepository = logRepository;
-            _userEmailRepository = userEmailRepository;
             _globalSettingService = globalSettingService;
             _settingService = settingService;
             _holidayService = holidayService;
             _productAreaService = productAreaService;
+			_customerService = customerService;
         }
 
         #endregion
-
-        #region GetUserEmailsForCaseSend
-
-        public IList<CaseEmailSendOverview> GetUserEmailsForCaseSend(int customerId, string query, IEmailSearchScope searchScope)
-        {
-            var res = _userEmailRepository.GetUserEmailsListForCaseSend(customerId, query,  searchScope);
-            return res;
-        }
-
-        #endregion
+      
 
         #region Search Methods
 
@@ -182,9 +173,12 @@ namespace DH.Helpdesk.Services.Services
         {
             var now = DateTime.UtcNow;
 
-            var csf = DoFilterValidation(f);            
-            
-            var workTimeFactory = new WorkTimeCalculatorFactory(_holidayService, workingDayStart, workingDayEnd, userTimeZone);
+            var csf = DoFilterValidation(f);
+
+			var customer = _customerService.GetCustomer(f.CustomerId);
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
+
+			var workTimeFactory = new WorkTimeCalculatorFactory(_holidayService, workingDayStart, workingDayEnd, timeZone);
             var responisbleFieldSettings = customerCaseFieldsSettings.Where(it => it.Name == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()).FirstOrDefault();
             var isFieldResponsibleVisible = responisbleFieldSettings != null && responisbleFieldSettings.ShowOnStartPage == 1;
 

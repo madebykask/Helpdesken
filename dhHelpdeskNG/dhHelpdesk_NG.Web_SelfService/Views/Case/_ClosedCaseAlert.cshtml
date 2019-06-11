@@ -3,10 +3,10 @@
 @if (Model.FinishingDate != null)
 {
     <div class="alert alert-success">
-        @if (Model.CustomerSettings.CaseComplaintDays != 0)
+        @if (Model.CaseComplaintDays != 0)
         {
             var diff = DateTime.Today - Model.FinishingDate.Value;
-            if (diff.Days <= Model.CustomerSettings.CaseComplaintDays || Model.CustomerSettings.CaseComplaintDays == 9999)
+            if (diff.Days <= Model.CaseComplaintDays || Model.CaseComplaintDays == 9999)
             {
                 <a id="btnReOpen" href="#logNotePopup" class="btn btn-success" onclick="">@Translation.Get("Re-open")</a>
             }

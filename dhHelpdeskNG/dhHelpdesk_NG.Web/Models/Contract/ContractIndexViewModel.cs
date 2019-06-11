@@ -34,6 +34,7 @@ namespace DH.Helpdesk.Web.Models.Contract
             SelectedContractCategories = new List<int>();
             SelectedSuppliers = new List<int>();
             SelectedResponsibleUsers = new List<int>();
+            SelectedResponsibleFollowUpUsers = new List<int>();
             SelectedDepartments = new List<int>();
         }
 
@@ -58,6 +59,8 @@ namespace DH.Helpdesk.Web.Models.Contract
         public List<int> SelectedContractCategories { get; set; }
         public List<int> SelectedSuppliers { get; set; }
         public List<int> SelectedResponsibleUsers { get; set; }
+        public List<int> SelectedResponsibleFollowUpUsers { get; set; }
+        
         public List<int> SelectedDepartments { get; set; }
         public int SelectedState { get; set; }
     }

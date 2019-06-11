@@ -615,18 +615,15 @@
                         @log.TextInternal
                     </cell>
                     <cell right="true" bottom="true">
-                        @if (log.CaseHistory != null)
+                        @if (log.EmailLogs != null && log.EmailLogs.Any())
                         {
-                            if (log.CaseHistory.Emaillogs != null)
-                            {                                        
-                                foreach (var l in log.CaseHistory.Emaillogs)      
-                                {   
-                                    <paragraph>                                 
-                                        @l.EmailAddress         
-                                    </paragraph>    
-                                }                                    
-                            }                                        
-                        }                        
+                            foreach (var l in log.EmailLogs)
+                            {   
+                                <paragraph>
+                                    @l.Email         
+                                </paragraph>    
+                            }                                    
+                        }
                     </cell>
                     <cell right="true" bottom="true">
                         @if (log.LogFiles != null)

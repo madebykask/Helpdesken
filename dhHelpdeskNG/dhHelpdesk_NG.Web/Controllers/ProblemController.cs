@@ -391,7 +391,7 @@ namespace DH.Helpdesk.Web.Controllers
             var setting = this._settingService.GetCustomerSetting(SessionFacade.CurrentCustomer.Id);
             var isFirstName = (setting.IsUserFirstLastNameRepresentation == 1);
 
-            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id);
+            var users = this.userService.GetUsers(SessionFacade.CurrentCustomer.Id).Where(x => x.UserGroup_Id > 1);
             var problemOutputModel = MapProblemOverviewToEditOutputModel(problem);
 
             var outputLogs = logs.Select(x=> MapLogs(x, isFirstName)).OrderBy(x => x.Date).ToList();

@@ -1,0 +1,121 @@
+﻿@using DH.Helpdesk.Web.Infrastructure
+@using System.Web.Optimization
+@model DH.Helpdesk.Web.Areas.Admin.Models.CustomerCaseSummaryViewModel
+
+<script type="text/javascript">
+
+    window.parameters = {
+        UserGroupList: '#userGroupList',
+        SortFieldObj : "#SortedFields",
+        Seperator : '@Model.Seperator',
+        SortableRowClass : "SortableRow",
+        CaseFieldsTableId : "customerCaseSum",
+        UserGroupId:'#usergroupId',
+        CustomerId: '#customerId',
+        FieldName:  '#labellist',
+        FieldWidth: '#minWidthValue',
+        FieldOrder: '#colOrderValue',
+        ControllerAddUrl:'/customerAdvancedSearch/AddRowToCaseSettings/',
+        ControllerDeleteUrl:'/customerAdvancedSearch/DeleteRowFromCaseSettings/',
+        RepeatedMessage: '@Translation.GetForJS("Kolumn \"{0}\" har redan valts att visas i ärendeöversikten")'
+    };
+
+</script>
+
+
+@Html.HiddenFor(m => Model.SortedFields)
+
+<div class="row">
+    <div class="span5">
+        <table class="table table-striped table-bordered table-hover" id="customerCaseSum">
+            <thead>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        @Translation.Get("Kolumn")
+                    </th>
+                    <th>
+                        &nbsp;
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="dataTable">
+                @if (Model.CaseSettings != null)
+                {
+                    <tr class="rowAdding">
+                        @if (Model.ListSummaryForLabel != null)
+                        {
+                            var sortedList = new List<KeyValuePair<string, string>>();
+                            foreach (var cfs in Model.CaseFieldSettingLanguages)
+                            {
+                                if (cfs.Name != "Filename" && cfs.Name != "text_internal" && cfs.Name != "tblLog.Text_External" && cfs.Name != "tblLog.Text_Internal" && cfs.Name != "tblLog.Charge" && cfs.Name != "tblLog.Filename")
+                                {
+                                    var itemCaption = (string.IsNullOrEmpty(cfs.Label) ? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) : cfs.Label);
+                                    var _item = new KeyValuePair<String, String>(cfs.Name, itemCaption);
+                                    sortedList.Add(_item);
+                                }
+                            }
+                            <td></td>
+                            <td>
+                                <select id="labellist">
+                                    @foreach (var item in sortedList.OrderBy(f => f.Value))
+                                    {
+                                        <option id="label" value="@item.Key"> @item.Value </option>
+                                    }
+                                </select>
+
+                                <input id="minWidthValue" type="hidden" name="minWidthValue" value="100" />
+                                <input id="colOrderValue" type="hidden" name="colOrderValue" value="99" />
+                            </td>
+                            <td>
+                                <input class="btn btn-success" type="button" value="@Translation.Get("Lägg till")" id="AddRow"
+                                       onclick="addCaseSettingRow()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';" />
+                                <input type="hidden" id="caseSettingId" value="" />
+                            </td>
+                        }
+                    </tr>
+                    for (var i = 0; i < Model.CaseSettings.Count; i++)
+                    {
+                        <tr id="@Model.CaseSettings[i].Id" class="SortableRow">
+                            @if (Model.CaseSettings != null)
+                            {
+                                var findCaption = false;
+                                <td>
+                                    <i class="icon-move"></i>
+                                </td>
+                                <td>
+                                    @foreach (var cfs in Model.CaseFieldSettingLanguages)
+                                    {
+                                        if (cfs.Name.ToUpper() == Model.CaseSettings[i].Name.ToUpper())
+                                        {
+                                            <label id="labels">@(string.IsNullOrEmpty(cfs.Label) ? Translation.Get(cfs.Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) : cfs.Label)</label>
+                                            findCaption = true;
+                                        }
+                                    }
+                                    @if (!findCaption)
+                                    {
+                                        <label for="labels"> @Translation.Get(Model.CaseSettings[i].Name, Enums.TranslationSource.CaseTranslation, SessionFacade.CurrentCustomer.Id) </label>
+                                    }
+                                    @*</select>*@
+                                    @Html.HiddenFor(model => model.CaseSettings[i].MinWidth)
+                                    @Html.HiddenFor(model => model.CaseSettings[i].ColOrder)
+                                    @Html.HiddenFor(model => model.CaseSettings[i].Line)
+                                </td>
+                            }
+                            <td>
+                                <input class="btn btn-danger" type="button" value="@Translation.Get("Ta bort")"
+                                       onclick="deleteCaseSettingRow(@Model.CaseSettings[i].Id)" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';" />
+                                <input type="hidden" id="deleteCaseSettingsId" value="@Model.CaseSettings[i].Id" />
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <input type="hidden" name="usergroupId" id="usergroupId" value="@Model.UserGroupId" />
+    </div>
+</div>
+
+@Scripts.Render("~/bundles/admin/customerOverview")
+

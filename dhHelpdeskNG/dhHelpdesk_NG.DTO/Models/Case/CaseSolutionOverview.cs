@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 
 namespace DH.Helpdesk.BusinessData.Models.Case

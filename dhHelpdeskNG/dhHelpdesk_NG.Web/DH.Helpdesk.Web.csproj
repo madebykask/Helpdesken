@@ -109,6 +109,10 @@
       <HintPath>..\packages\EPPlus.4.0.2\lib\net20\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="IpMatcher, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\IpMatcher.1.0.1\lib\net452\IpMatcher.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="itextsharp, Version=5.5.0.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.0\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
@@ -335,6 +339,7 @@
     <Compile Include="App_Start\NinjectModules\Modules\AuthenticationModule.cs" />
     <Compile Include="App_Start\NinjectModules\Modules\EFormModule.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\Admin\Controllers\CustomerAdvancedSearchController.cs" />
     <Compile Include="Areas\Admin\Controllers\GDPRProgressController.cs" />
     <Compile Include="Areas\Admin\Controllers\ExtendedCaseController.cs" />
     <Compile Include="Areas\Inventory\Controllers\InventoryController.cs" />
@@ -350,9 +355,19 @@
     <Compile Include="Areas\Inventory\Models\RelatedCasesModels\WorkstationRelatedCasesModel.cs" />
     <Compile Include="Areas\Inventory\Models\RelatedCasesModel.cs" />
     <Compile Include="Areas\Inventory\Models\RelatedCasesModels\ServerRelatedCasesModel.cs" />
+    <Compile Include="Areas\Reports\Models\ReportService\CommonReportFilterModel.cs" />
+    <Compile Include="Areas\Reports\Models\ReportService\HistoricalReportFilterModel.cs" />
+    <Compile Include="Areas\Reports\Models\ReportService\NumberOfCasesReportFilterModel.cs" />
+    <Compile Include="Areas\Reports\Models\ReportService\ReportedTimeReportFilterModel.cs" />
     <Compile Include="Areas\WebApi\Controllers\CaseApiController.cs" />
     <Compile Include="Components\Contracts\ContractHistoryFormatter.cs" />
     <Compile Include="Components\Contracts\ContractHistoryMarkupBuilder.cs" />
+    <Compile Include="Infrastructure\Authentication\Behaviors\MixedModeAuthenticationBehavior.cs" />
+    <Compile Include="Infrastructure\Authentication\Behaviors\PrincipalExtensions.cs" />
+    <Compile Include="Infrastructure\Behaviors\AdvancedSearchBehavior.cs" />
+    <Compile Include="Infrastructure\Extensions\RouteDataExtensions.cs" />
+    <Compile Include="Models\Case\AdvancedCaseSearchInput.cs" />
+    <Compile Include="Controllers\AdvancedSearchController.cs" />
     <Compile Include="Controllers\CaseDocumentController.cs" />
     <Compile Include="Controllers\CasesController_Actions.cs" />
     <Compile Include="Controllers\CasesController_AdvancedSearch.cs" />
@@ -389,6 +404,7 @@
     <Compile Include="Infrastructure\WebApi\WebApiService.cs" />
     <Compile Include="Infrastructure\WorkContext\Concrete\ApplicationContext.cs" />
     <Compile Include="Models\CaseSolution\CaseSolutionSettingsFieldModel.cs" />
+    <Compile Include="Models\Case\CaseLogViewModel.cs" />
     <Compile Include="Models\Case\CaseMoveModel.cs" />
     <Compile Include="Models\Case\CaseOperationResult.cs" />
     <Compile Include="Models\Case\CaseSectionInputData.cs" />
@@ -399,6 +415,7 @@
     <Compile Include="Models\Gdpr\GdprOperationsHistoryListItem.cs" />
     <Compile Include="Models\JsonModels\Base\BaseJsonModel.cs" />
     <Compile Include="Models\JsonModels\Case\CaseJsonModel.cs" />
+    <Compile Include="Models\Login\LoginInputModel.cs" />
     <Compile Include="Models\Notifiers\ComputerUserCategoryListItem.cs" />
     <Compile Include="Models\Notifiers\UserCategoryInputData.cs" />
     <Compile Include="Models\Shared\ChangePasswordModel.cs" />
@@ -659,6 +676,11 @@
     <Content Include="Areas\Orders\Content\js\OrderSettings\orderSettings.edit.js" />
     <Content Include="Areas\Orders\Content\js\Order\order.edit.js" />
     <Content Include="Areas\Invoices\Scripts\Pages\invoicesOverview.js" />
+    <Content Include="Areas\Reports\Content\js\chartjs-plugin-colorschemes.min.js" />
+    <Content Include="Areas\Reports\Content\js\chartjs-plugin-datalabels.min.js" />
+    <Content Include="Areas\Reports\Content\js\reports.historical.js" />
+    <Content Include="Areas\Reports\Content\js\reports.numberOfCases.js" />
+    <Content Include="Areas\Reports\Content\js\reports.reportedTime.js" />
     <Content Include="Areas\Reports\Content\js\reportViewer.logic.js" />
     <Content Include="Areas\Reports\Content\js\reports.js" />
     <Content Include="Content\bootstrap-datepicker.css" />
@@ -681,6 +703,7 @@
     <Content Include="Content\icons\advanced_search.png" />
     <Content Include="Content\icons\ajax-loader.gif" />
     <Content Include="Content\icons\clip.png" />
+    <Content Include="Content\icons\copy.png" />
     <Content Include="Content\icons\deal.png" />
     <Content Include="Content\icons\doc-download.png" />
     <Content Include="Content\icons\doc-edit.png" />
@@ -745,6 +768,7 @@
     <Content Include="Areas\Admin\Content\js\Users\_input.js" />
     <Content Include="Content\js\additional-methods.js" />
     <Content Include="Content\js\additional-methods.min.js" />
+    <Content Include="Content\js\AdvancedSearch\advancedSearchPage.js" />
     <Content Include="Content\js\AdvancedSearch\index.specialfilter.js" />
     <Content Include="Content\js\AdvancedSearch\index.logic.js" />
     <Content Include="Content\js\bootstrap-tagsinput.js" />
@@ -784,6 +808,7 @@
     <Content Include="Content\js\bootstrap-tagsinput.min.js" />
     <Content Include="Content\js\Cases\case.templates.js" />
     <Content Include="Content\js\Cases\caseByIds.logic.js" />
+    <Content Include="Content\js\Cases\commonHandlers.js" />
     <Content Include="Content\js\Cases\Dialogs\CaseCharge.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseAttachExistFile.js" />
     <Content Include="Content\js\Cases\Dialogs\_caseConnectToParent.js" />
@@ -1148,6 +1173,7 @@
     <Content Include="Content\js\DynamicCase\iframeResizer.contentWindow.js" />
     <Content Include="Content\js\DynamicCase\iframeResizer.contentWindow.min.js" />
     <Content Include="Content\js\DynamicCase\index.js" />
+    <Content Include="Content\js\Faqs\faqsPage.js" />
     <Content Include="Content\js\Feedback\feedback.edit.js" />
     <Content Include="Content\js\Feedback\feedbackStatisticsCases.js" />
     <Content Include="Content\js\Inventory\inventory.search.js" />
@@ -3413,6 +3439,9 @@
     <Content Include="Areas\Inventory\Views\InventorySettings\EditorTemplates\Settings\TabSettingForComputerModel.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\_InventoryFiles.cshtml" />
     <Content Include="Areas\Inventory\Views\Workstation\EditorTemplates\Documents.cshtml" />
+    <Content Include="Areas\Admin\Views\CustomerAdvancedSearch\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\CustomerAdvancedSearch\_CaseSummaryPartialView.cshtml" />
+    <Content Include="Areas\Reports\Views\Report\ReportViewer\_JsReport.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="ReportViewerWebForm.aspx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -3465,6 +3494,8 @@
     <Content Include="Content\js\i18n\vi.js" />
     <Content Include="Content\js\i18n\zh-CN.js" />
     <Content Include="Content\js\i18n\zh-TW.js" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
@@ -4080,6 +4111,14 @@
     </Content>
     <Content Include="Views\Notifiers\_Details.cshtml" />
     <Content Include="Views\Notifiers\NotifierPopup.cshtml" />
+    <Content Include="Views\Cases\AdvancedSearch.cshtml" />
+    <Content Include="Views\Cases\AdvancedSearch\_SearchError.cshtml" />
+    <Content Include="Views\Cases\AdvancedSearch\_CustomerSearchResults.cshtml" />
+    <Content Include="Views\Faq\_FaqList.cshtml" />
+    <Content Include="Views\Faq\_FaqListWithDetails.cshtml" />
+    <Content Include="Views\Cases\_LogNoteEmails.cshtml" />
+    <Content Include="Views\Cases\_LogNoteFiles.cshtml" />
+    <Content Include="Views\Cases\_Mail2TicketEmails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

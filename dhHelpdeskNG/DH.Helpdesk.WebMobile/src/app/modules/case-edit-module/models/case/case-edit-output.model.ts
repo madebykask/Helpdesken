@@ -9,7 +9,9 @@ export class CaseEditOutputModel {
   productAreaId?: number;
   watchDate?: string;
   logInternalText?: string;
-  logExternalText?:string;
+  logInternalEmailTo?: string;
+  logInternalEmailCc?: string;
+  logExternalText?: string;
   reportedBy?: string;
   personName?: string;
   personEmail?: string;
@@ -72,5 +74,6 @@ export class CaseEditOutputModel {
   finishingDate?: string;
   caseSolutionId?: number;
   description?: string;
-
+  logSendMailToNotifier?: boolean;
+  logExternalEmailsCc?: string;
 }

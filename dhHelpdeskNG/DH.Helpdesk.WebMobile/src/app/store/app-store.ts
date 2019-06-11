@@ -1,30 +1,30 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
-import { State } from "./state";
-import { pluck } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { State } from './state';
+import { pluck } from 'rxjs/operators';
 
 export const AppStoreKeys = {
   Templates: 'templates'
 };
 
 //initial state
-const state:State =  {
+const state: State =  {
   templates: []
 };
 
 @Injectable({ providedIn: 'root' })
-export class AppStore {  
+export class AppStore {
   //subject stores state and subcribers about notifies about changes
   private subject = new BehaviorSubject<State>(state);
-  private store$:Observable<State> = this.subject.asObservable();
+  private store$: Observable<State> = this.subject.asObservable();
 
-  set(name: string, val:any) {
-    let state = this.subject.value;
-    state = {... this.value, [name]: val };
-    this.raiseChanges(state);
+  set(name: string, val: any) {
+    let newState = this.subject.value;
+    newState = {... this.value, [name]: val };
+    this.raiseChanges(newState);
   }
 
-  select<T>(name:string) : Observable<T> {
+  select<T>(name: string): Observable<T> {
     //return specific property as an observable
     return this.store$.pipe(
       pluck(name)
@@ -35,8 +35,8 @@ export class AppStore {
     return this.subject.value;
   }
 
-  private raiseChanges(state:State) {
-    this.subject.next(state);
+  private raiseChanges(newState: State) {
+    this.subject.next(newState);
   }
 
 }

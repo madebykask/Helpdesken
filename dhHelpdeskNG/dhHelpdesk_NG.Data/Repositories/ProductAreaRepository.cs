@@ -18,6 +18,7 @@ namespace DH.Helpdesk.Dal.Repositories
     using System.Data;
     using System;
 	using System.Linq.Expressions;
+    using System.Data.Entity;
 
 	#region PRODUCTAREA
 
@@ -79,6 +80,7 @@ namespace DH.Helpdesk.Dal.Repositories
         IList<ProductAreaOverview> GetProductAreasWithWorkingGroups(int customerId, bool isActiveOnly);
         IList<ProductAreaOverview> GetCaseTypeProductAreas(int caseTypeId);
         IList<int> GetProductAreasWithoutCaseTypes(IList<int> paIds);
+        IList<ProductArea> GetChildren(int parentId);
 
         int SaveProductArea(ProductAreaOverview productArea);
 
@@ -239,6 +241,13 @@ namespace DH.Helpdesk.Dal.Repositories
             return entities.Select(this._productAreaEntityToBusinessModelMapper.Map);
         }
 
+        public IList<ProductArea> GetChildren(int parentId)
+        {
+            var children = new List<ProductArea>();
+            GetChildrenProcess(parentId, children);
+            return children.ToList();
+        }
+
         public IList<ProductAreaOverview> GetProductAreasWithWorkingGroups(int customerId, bool isActiveOnly)
         {
             //note please do not use mapper since more fields will be read from database ... for correct sql projection with required fields 
@@ -362,6 +371,21 @@ namespace DH.Helpdesk.Dal.Repositories
             var productAreas = queryExecutor.QueryList<ProductAreaEntity>(sql);
 
             return productAreas;
+        }
+
+        private void GetChildrenProcess(int id, ICollection<ProductArea> children)
+        {
+            var prodArea = Table.AsNoTracking()
+                .Include(pa => pa.SubProductAreas)
+                .SingleOrDefault(ct => ct.Id == id);
+            if (prodArea != null && prodArea.SubProductAreas != null)
+            {
+                foreach (var child in prodArea.SubProductAreas)
+                {
+                    children.Add(child);
+                    GetChildrenProcess(child.Id, children);
+                }
+            }
         }
     }
 

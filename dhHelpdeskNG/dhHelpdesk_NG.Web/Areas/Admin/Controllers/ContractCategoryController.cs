@@ -111,12 +111,12 @@
             {
                 ContractCategory = contractCategory,
                 Customer = customer,
-                CaseType = this._caseTypeService.GetCaseTypes(customer.Id).Select(x => new SelectListItem
+                CaseType = this._caseTypeService.GetCaseTypes(customer.Id, true).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }).ToList(),
-                StateSecondary = this._stateSecondaryService.GetStateSecondaries(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
+                StateSecondary = this._stateSecondaryService.GetActiveStateSecondaries(SessionFacade.CurrentCustomer.Id).Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()

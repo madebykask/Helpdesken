@@ -1,24 +1,23 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.BusinessData.Models.ComputerUsers;
 using DH.Helpdesk.BusinessData.Models.Inventory;
+using DH.Helpdesk.BusinessData.Models.Notifiers;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Dal.Repositories.Computers;
 using DH.Helpdesk.Dal.Repositories.Inventory;
+using DH.Helpdesk.Dal.Repositories.Notifiers;
+using DH.Helpdesk.Domain.Computers;
+using DHDomain = DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Services.Services
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using DH.Helpdesk.BusinessData.Models;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Dal.Repositories.Computers;
-    using DH.Helpdesk.Dal.Repositories.Notifiers;
-    using DHDomain = DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain.Computers;
-    using BusinessData.Models.Notifiers;
-    using BusinessData.Models.Case;
-
 
     public interface IComputerService
     {
@@ -26,8 +25,10 @@ namespace DH.Helpdesk.Services.Services
 
         IList<ComputerUser> GetComputerUsers(int customerId);
         IList<ComputerUser> SearchSortAndGenerateComputerUsers(int customerId, IComputerUserSearch searchComputerUsers);
-        IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor, int? categoryID = null);
-        IList<UserSearchResults> SearchComputerUsersByDepartments(int customerId, string query, List<int> departmentIds, int? categoryID);
+
+        IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor, int? categoryId = null, IList<int> departmentIds = null);
+        Task<List<UserSearchResults>> SearchComputerUsersAsync(int customerId, string searchFor, int? categoryId = null, IList<int> departmentIds = null);
+
         IList<ComputerUserFieldSettings> GetComputerUserFieldSettings(int customerId);
         IList<ComputerUserFieldSettings> GetComputerUserFieldSettingsForDefaultCust();
         IList<ComputerUserGroup> GetComputerUserGroups(int customerId);
@@ -60,9 +61,6 @@ namespace DH.Helpdesk.Services.Services
         ComputerUserCategory GetComputerUserCategoryByID(int computerUserCategoryID);
         int SaveComputerUserCategory(ComputerUserCategoryData data);
 
-
-
-
         void Commit();
 
         IList<ComputerUserCategoryOverview> GetComputerUserCategoriesByCustomerID(int customerId, bool includeEmpty = false);
@@ -81,9 +79,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IInventoryRepository _inventoryRepository;
         private readonly IComputerUserCategoryRepository _computerUserCategoryRepository;
-
-
-
+        
         public ComputerService(
             INotifierFieldSettingRepository computerUserFieldSettingsRepository,
             INotifierGroupRepository computerUserGroupRepository,
@@ -137,31 +133,38 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<ComputerUser> SearchSortAndGenerateComputerUsers(int customerId, IComputerUserSearch searchComputerUsers)
         {
-            var query = (from cu in _computerUserRepository.GetMany(x => x.Customer_Id == customerId && x.Updated != 2)
-                         select cu);
+            var query = _computerUserRepository.GetMany(x => x.Customer_Id == customerId && x.Updated != 2);
 
             if (searchComputerUsers.DomainId.HasValue)
                 query = query.Where(x => x.Domain_Id == searchComputerUsers.DomainId);
+
             if (searchComputerUsers.RegionId.HasValue)
                 query = query.Where(x => x.Department != null && x.Department.Region_Id == searchComputerUsers.RegionId);
+
             if (searchComputerUsers.DepartmentId.HasValue)
                 query = query.Where(x => x.Department_Id == searchComputerUsers.DepartmentId);
+
             if (searchComputerUsers.OuId.HasValue)
                 query = query.Where(x => x.OU_Id == searchComputerUsers.OuId);
+
             if (searchComputerUsers.DivisionId.HasValue)
                 query = query.Where(x => x.Division_Id == searchComputerUsers.DivisionId);
 
             if (searchComputerUsers.StatusId.HasValue)
             {
                 if (searchComputerUsers.StatusId == 2)
+                {
                     query = query.Where(x => x.Status == 0);
+                }
                 else if (searchComputerUsers.StatusId == 1)
+                {
                     query = query.Where(x => x.Status == 1);
+                }
             }
 
             if (!string.IsNullOrEmpty(searchComputerUsers.SearchCompUs))
             {
-                string s = searchComputerUsers.SearchCompUs.ToLower();
+                var s = searchComputerUsers.SearchCompUs.ToLower();
                 query = query.Where(x => x.UserId.ToLower().Contains(s)
                     || x.LogonName.ToLower().Contains(s)
                     || x.FirstName.ToLower().Contains(s)
@@ -176,14 +179,56 @@ namespace DH.Helpdesk.Services.Services
             return query.OrderBy(x => x.SurName).ToList();
         }
 
-        public IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor, int? categoryID = null)
+        public IList<UserSearchResults> SearchComputerUsers(int customerId, string searchFor, int? categoryId = null, IList<int> departmentIds = null)
         {
-            return _computerUserRepository.Search(customerId, searchFor, categoryID);
+            var selectExp = CreateUsersSearchProjection();
+            var searchResults =
+                _computerUserRepository.Search(customerId, searchFor, categoryId, departmentIds)
+                    .Select(selectExp)
+                    .Take(25)
+                    .ToList();
+
+            return searchResults;
         }
-        public IList<UserSearchResults> SearchComputerUsersByDepartments(int customerId, string searchFor, List<int> departmentIds, int? categoryID)
+
+        public Task<List<UserSearchResults>> SearchComputerUsersAsync(int customerId, string searchFor, int? categoryId = null, IList<int> departmentIds = null)
         {
-            var results = _computerUserRepository.Search(customerId, searchFor, categoryID).Where(x=>departmentIds.Contains(x.Department_Id ?? 0));
-            return results.Where(x => x.Department_Id != 0).ToList();
+            var selectExp = CreateUsersSearchProjection();
+            var searchResults =
+                _computerUserRepository.Search(customerId, searchFor, categoryId, departmentIds)
+                    .Select(selectExp)
+                    .Take(25)
+                    .ToListAsync();
+
+            return searchResults;
+        }
+
+        private Expression<Func<ComputerUser, UserSearchResults>> CreateUsersSearchProjection()
+        {
+            Expression<Func<ComputerUser, UserSearchResults>> exp =
+                cu => new UserSearchResults
+                {
+                    Id = cu.Id,
+                    UserId = cu.UserId ?? string.Empty,
+                    FirstName = cu.FirstName,
+                    SurName = cu.SurName,
+                    Email = cu.Email,
+                    CellPhone = cu.Cellphone,
+                    Phone = cu.Phone,
+                    Location = cu.Location,
+                    UserCode = cu.UserCode,
+                    Region_Id = cu.Department != null ? cu.Department.Region_Id : null,
+                    RegionName = cu.Department != null ? cu.Department.Region.Name : null,
+                    Department_Id = cu.Department_Id,
+                    DepartmentName = cu.Department != null ? cu.Department.DepartmentName : null,
+                    OU_Id = cu.OU_Id,
+                    OUName = (cu.OU.Parent != null ? cu.OU.Parent.Name + " - " : "") + cu.OU.Name,
+                    CostCentre = cu.CostCentre,
+                    CategoryID = cu.ComputerUsersCategoryID,
+                    CategoryName = cu.ComputerUserCategory == null ? null : cu.ComputerUserCategory.Name,
+                    IsReadOnly = cu.ComputerUserCategory != null && cu.ComputerUserCategory.IsReadOnly
+                };
+            return exp;
         }
 
         public IList<ComputerResults> SearchComputer(int customerId, string searchFor)

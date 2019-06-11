@@ -22,6 +22,7 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<Customer> GetAllCustomers();
         IList<Customer> GetCustomers(int customerId);
+        IList<ItemOverview> GetCustomers(IList<int> ids);
         IList<Customer> SearchAndGenerateCustomers(ICustomerSearch searchCustomers);
         IList<Customer> SearchAndGenerateCustomersConnectedToUser(ICustomerSearch searchCustomers, int userId);
         IList<CustomerReportList> GetCustomerReportList(int id);
@@ -48,7 +49,8 @@ namespace DH.Helpdesk.Services.Services
         void SaveCustomerSettings(Customer customerToSave, Setting setting, List<ReportCustomer> ReportCustomers, int LanguageId, out IDictionary<string, string> errors);
         void SaveCaseSettingsForNewCustomer(int customerId, int languageId, CaseSettings caseSettings, out IDictionary<string, string> errors);
 
-        ItemOverview GetOverview(int customerId);
+        CustomerDetails GetCustomerDetails(int id);
+        ItemOverview GetItemOverview(int customerId);
         CaseDefaultsInfo GetCustomerDefaults(int customerId);
     }
 
@@ -82,33 +84,46 @@ namespace DH.Helpdesk.Services.Services
             ISettingService settingService,
             IUserService userService)
         {
-            this._caseFieldSettingRepository = caseFieldSettingRepository;
-            this._caseFieldSettingLanguageRepository = caseFieldSettingLanguageRepository;
-            this._customerRepository = customerRepository;
-            this._reportRepository = reportRepository;
-            this._reportCustomerRepository = reportCustomerRepository;
-            this._userRepository = userRepository;
-            this._unitOfWork = unitOfWork;
-            this._caseSettingRepository = caseSettingRepository;
+            _caseFieldSettingRepository = caseFieldSettingRepository;
+            _caseFieldSettingLanguageRepository = caseFieldSettingLanguageRepository;
+            _customerRepository = customerRepository;
+            _reportRepository = reportRepository;
+            _reportCustomerRepository = reportCustomerRepository;
+            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
+            _caseSettingRepository = caseSettingRepository;
 
-            this._caseFieldSettingService = caseFieldSettingService;
-            this._settingService = settingService;
-            this._userService = userService;
+            _caseFieldSettingService = caseFieldSettingService;
+            _settingService = settingService;
+            _userService = userService;
         }
 
         public IList<Customer> GetAllCustomers()
         {
-            return this._customerRepository.GetAll().OrderBy(x => x.Name).ToList();
+            return _customerRepository.GetAll().OrderBy(x => x.Name).ToList();
+        }
+
+        public IList<ItemOverview> GetCustomers(IList<int> ids)
+        {
+            return
+                _customerRepository.GetMany(x => ids.Contains(x.Id)).AsQueryable()
+                    .Select(c => new ItemOverview()
+                    {
+                        Name = c.Name,
+                        Value = c.Id.ToString()
+                    })
+                    .OrderBy(c => c.Name)
+                    .ToList();
         }
 
         public int  GetCustomerLanguage(int customerid)
         {
-            return this._customerRepository.GetCustomerLanguage(customerid);
+            return _customerRepository.GetCustomerLanguage(customerid);
         }
 
         public IList<Customer> GetCustomers(int customerId)
         {
-            return this._customerRepository.GetMany(x => x.Id == customerId).OrderBy(x => x.Name).ToList();
+            return _customerRepository.GetMany(x => x.Id == customerId).OrderBy(x => x.Name).ToList();
         }
 
         /// <summary>
@@ -123,7 +138,7 @@ namespace DH.Helpdesk.Services.Services
         public IList<Customer> SearchAndGenerateCustomers(ICustomerSearch searchCustomers)
         {
             var filter = !string.IsNullOrEmpty(searchCustomers.SearchCs) ? searchCustomers.SearchCs : string.Empty;
-            var query = from c in this._customerRepository.GetAll() select c;
+            var query = from c in _customerRepository.GetAll() select c;
 
             if (!string.IsNullOrEmpty(filter))
             {
@@ -142,7 +157,7 @@ namespace DH.Helpdesk.Services.Services
         public IList<Customer> SearchAndGenerateCustomersConnectedToUser(ICustomerSearch searchCustomers, int userId)
         {
             var filter = !string.IsNullOrEmpty(searchCustomers.SearchCs) ? searchCustomers.SearchCs : string.Empty;
-            var query = from c in this._userService.GetCustomersConnectedToUser(userId) select c;
+            var query = from c in _userService.GetCustomersConnectedToUser(userId) select c;
             if (!string.IsNullOrEmpty(filter))
             {
                 query = query.Where(x => x.Address.ContainsText(filter)
@@ -159,19 +174,19 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CustomerReportList> GetCustomerReportList(int id)
         {
-            return this._reportCustomerRepository.GetCustomerReportListForCustomer(id).ToList();
+            return _reportCustomerRepository.GetCustomerReportListForCustomer(id).ToList();
         }
 
         
 
         public IList<Report> GetAllReports()
         {
-            return this._reportRepository.GetAll().ToList();
+            return _reportRepository.GetAll().ToList();
         }
 
         public Customer GetCustomer(int id)
         {
-            return this._customerRepository.GetById(id);
+            return _customerRepository.GetById(id);
         }
 
         public async Task<Customer> GetCustomerAsync(int id)
@@ -181,18 +196,18 @@ namespace DH.Helpdesk.Services.Services
 
         public ReportCustomer GetReportCustomerById(int customerId, int reportId)
         {
-            return this._reportCustomerRepository.Get(x => x.Customer_Id == customerId && x.Report_Id == reportId);
+            return _reportCustomerRepository.Get(x => x.Customer_Id == customerId && x.Report_Id == reportId);
         }
 
         public DeleteMessage DeleteCustomer(int id)
         {
-            var customer = this._customerRepository.GetById(id);
+            var customer = _customerRepository.GetById(id);
 
             if (customer != null)
             {
                 try
                 {
-                    this._customerRepository.Delete(customer);
+                    _customerRepository.Delete(customer);
                     this.Commit();
 
                     return DeleteMessage.Success;
@@ -260,7 +275,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (int id in us)
                 {
-                    var u = this._userRepository.GetById(id);
+                    var u = _userRepository.GetById(id);
 
                     if (u != null)
                         customer.Users.Add(u);
@@ -270,15 +285,15 @@ namespace DH.Helpdesk.Services.Services
             #endregion            
 
             if (customer.Id == 0)
-                this._customerRepository.Add(customer);
+                _customerRepository.Add(customer);
             else
-                this._customerRepository.Update(customer);
+                _customerRepository.Update(customer);
 
             if (errors.Count == 0)
                 this.Commit();
 
             if (setting != null)
-                this._settingService.SaveSettingForCustomerEdit(setting, out errors);
+                _settingService.SaveSettingForCustomerEdit(setting, out errors);
 
 
 
@@ -324,7 +339,7 @@ namespace DH.Helpdesk.Services.Services
             #endregion
 
             if (customer.Id != 0)
-                this._customerRepository.Update(customer);
+                _customerRepository.Update(customer);
 
             if (errors.Count == 0)
                 this.Commit();
@@ -337,7 +352,7 @@ namespace DH.Helpdesk.Services.Services
          
             if (caseFieldSettings != null)
             {
-                var caseFieldSettingsOld = this._caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId).ToList();
+                var caseFieldSettingsOld = _caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId).ToList();
 
                 foreach (var caseFieldSetting in caseFieldSettings)
                 {
@@ -368,6 +383,7 @@ namespace DH.Helpdesk.Services.Services
                     cs.ShowStatusBar = caseFieldSetting.ShowStatusBar;
                     cs.ShowExternalStatusBar = caseFieldSetting.ShowExternalStatusBar;
                     cs.ChangedDate = DateTime.UtcNow;
+                    cs.FieldSize = caseFieldSetting.FieldSize;
 
                     if (cs.Name.Equals(GlobalEnums.TranslationCaseFields.CaseType_Id.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
@@ -511,7 +527,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (int id in us)
                 {
-                    var u = this._userRepository.GetById(id);
+                    var u = _userRepository.GetById(id);
 
                     if (u != null)
                         customer.Users.Add(u);
@@ -533,7 +549,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 foreach (var change in CaseFieldSettings)
                 {
-                    var rowCfs = this._caseFieldSettingRepository.Get(x => x.Customer_Id == customer.Id);
+                    var rowCfs = _caseFieldSettingRepository.Get(x => x.Customer_Id == customer.Id);
                     //TODO ALF: kollar först ovan om det finns inställningar på denna kund, men annars skall den skapa nya inställningar
                     if (rowCfs == null)
                     {
@@ -549,7 +565,7 @@ namespace DH.Helpdesk.Services.Services
                     //}
 
                     //TODO: too many unnessary requests to db, refactor
-                    foreach (var label in this._caseFieldSettingRepository.GetMany(x => x.Id == rowCfs.Id))
+                    foreach (var label in _caseFieldSettingRepository.GetMany(x => x.Id == rowCfs.Id))
                     {
                         rowCfs.Customer_Id = customer.Id;
                         rowCfs.DefaultValue = change.DefaultValue;
@@ -578,9 +594,9 @@ namespace DH.Helpdesk.Services.Services
             #endregion
 
             if (customer.Id == 0)
-                this._customerRepository.Add(customer);
+                _customerRepository.Add(customer);
             else
-                this._customerRepository.Update(customer);
+                _customerRepository.Update(customer);
 
 
             // _settingService.SaveSettingForCustomerEdit(setting, out errors);
@@ -600,13 +616,13 @@ namespace DH.Helpdesk.Services.Services
 
             if (customer.ReportCustomers != null && ReportCustomers != null)
             {
-                var currentExistReports = this._reportCustomerRepository.GetMany(rc => rc.Customer_Id == customer.Id).ToList();
+                var currentExistReports = _reportCustomerRepository.GetMany(rc => rc.Customer_Id == customer.Id).ToList();
                 foreach (var change in ReportCustomers)
                 {
                     var existingReport = currentExistReports.Where(r => r.Report_Id == change.Report_Id).FirstOrDefault();
                     if (existingReport == null)
                     {
-                        this._reportCustomerRepository.Add(change);
+                        _reportCustomerRepository.Add(change);
                     }
                     else
                     {
@@ -616,7 +632,7 @@ namespace DH.Helpdesk.Services.Services
                             if (reportForUpdate != null)
                             {
                                 reportForUpdate.ShowOnPage = change.ShowOnPage;
-                                this._reportCustomerRepository.Update(reportForUpdate);
+                                _reportCustomerRepository.Update(reportForUpdate);
                             }
                         }
                     }
@@ -626,15 +642,33 @@ namespace DH.Helpdesk.Services.Services
             #endregion
 
             customer.NDSPath = customer.NDSPath ?? string.Empty;
-            this._settingService.SaveSetting(setting, out errors);
+            _settingService.SaveSetting(setting, out errors);
 
             if (errors.Count == 0)
                 this.Commit();
         }
 
-        public ItemOverview GetOverview(int customerId)
+        public ItemOverview GetItemOverview(int customerId)
         {
-            return this._customerRepository.GetOverview(customerId);
+            return _customerRepository.GetOverview(customerId);
+        }
+
+        public CustomerDetails GetCustomerDetails(int id)
+        {
+            var customer = 
+                _customerRepository.GetMany(c => c.Id == id).AsQueryable()
+                .Select(c => new CustomerDetails()
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    CustomerID = c.CustomerID, 
+                    CustomerNumber = c.CustomerNumber,
+                    CustomerGUID = c.CustomerGUID,
+                    HelpdeskEmail = c.HelpdeskEmail,
+                    CustomerGroup_Id = c.CustomerGroup_Id,
+                    Language_Id = c.Language_Id
+                }).SingleOrDefault();
+            return customer;
         }
 
         public CaseDefaultsInfo GetCustomerDefaults(int customerId)
@@ -679,7 +713,7 @@ namespace DH.Helpdesk.Services.Services
                 errors.Add("Customer.Name", "Du måste ange ett kundnamn");
 
             if (customer.Id == 0)
-                this._customerRepository.Add(customer);
+                _customerRepository.Add(customer);
 
             if (errors.Count == 0)
                 this.Commit();
@@ -720,7 +754,7 @@ namespace DH.Helpdesk.Services.Services
 
         public void Commit()
         {
-            this._unitOfWork.Commit();
+            _unitOfWork.Commit();
         }
     }
 }

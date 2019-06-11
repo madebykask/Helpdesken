@@ -432,5 +432,10 @@ namespace DH.Helpdesk.Common.Extensions.String
 
             return val.Trim().Trim('"');
         }
+
+        public static string JoinToString(this IEnumerable<string> items, string sep = ",")
+        {
+            return string.Join(sep, items);
+        }
     }
 }

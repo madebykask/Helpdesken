@@ -1,61 +1,61 @@
-﻿@model DH.Helpdesk.Web.Models.Case.CaseInputViewModel 
+﻿@model DH.Helpdesk.Web.Models.Case.CaseHistoryViewModel 
 @using DH.Helpdesk.Web.Infrastructure.Extensions
+
+@functions
+{
+    DateTime CreateDateTimeToUserTimeZone(DateTime dt)
+    {
+        return TimeZoneInfo.ConvertTimeFromUtc(dt.ToUniversalTime(), Model.UserTimeZone);           
+    }
+}
 
 @if (Model != null && Model.CaseHistories != null)
 {
-    var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
+    var histories = Model.CaseHistories.ToArray(); 
+
     <div class="tab-pane tab-pane-border" id="historytab">
         <table class="table table-striped table-bordered table-hover">
-            @if (Model.CaseHistories.Any())
-            {            
-                <thead>
+        @if (histories.Any())
+        {            
+            <thead>
+                <tr>
+                    <th>@Translation.GetCoreTextTranslation("Datum")</th>
+                    <th>@Translation.GetCoreTextTranslation("Registrerad av")</th>
+                    <th>@Translation.GetCoreTextTranslation("Historik")</th>
+                    <th>@Translation.GetCoreTextTranslation("E-post")</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(var i = 0; i < histories.Length; i++)
+                {
+                    var current = histories[i];
+                    var previous = i < histories.Length - 1 ? histories[i + 1] : null;
                     <tr>
-                        <th>@Translation.Get("Datum")</th>
-                        <th>@Translation.Get("Registrerad av")</th>
-                        <th>@Translation.Get("Historik")</th>
-                        <th>@Translation.Get("E-post")</th>
+                        <td style="width: 15%">
+                            @{ current.CreatedDate = CreateDateTimeToUserTimeZone(current.CreatedDate); }
+                            @Html.DisplayFor(m => current.CreatedDate, "DateAndTime")
+                        </td>
+                        <td style="width:15%">@current.CreatedByUser</td>
+                        <td style="width:45%">
+                            <table class="tableintable">
+                                @current.GetCaseHistoryInfo(previous, Model.CaseCustomerId ?? 0, Model.DepartmentFilterFormat, Model.caseFieldSettings, Model.OutFormatter)
+                            </table>
+                        </td>
+                        <td style="width:25%">
+                            @if (current.Emaillogs != null) 
+                            {
+                                <div>
+                                    @foreach (var l in current.Emaillogs)
+                                    {    
+                                        <p>@l.EmailAddress (@l.MailId.GetMailTemplateName(Model.MailTemplates))</p>
+                                    }
+                                </div>
+                            }
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                @{
-                    var histories = Model.CaseHistories.OrderByDescending(x => x.Id).ToArray();
-                 }
-                    @for(var i = 0; i < histories.Length; i++)
-                    {
-                        var current = histories[i];
-                        var previous = i < histories.Length - 1 ? histories[i + 1] : null;
-                        <tr>
-                            <td style="width:15%">
-                                @{
-                                    current.CreatedDate = TimeZoneInfo.ConvertTimeFromUtc(current.CreatedDate.ToUniversalTime(), userTimeZone);
-                                }
-                                @Html.DisplayFor(m => current.CreatedDate, "DateAndTime") 
-                            </td>
-                            <td style="width:15%">
-                                @current.CreatedByUser
-                            </td>
-                            <td style="width:45%">
-                                <table class="tableintable">
-                                    @current.GetCaseHistoryInfo(previous, Model.case_.Customer_Id, Model.DepartmentFilterFormat, Model.caseFieldSettings, Model.OutFormatter )
-                                </table>
-                            </td>
-                            <td style="width:25%">
-                                @if (current.Emaillogs != null) 
-                                {
-                                    <div>
-                                        @foreach (var l in current.Emaillogs)
-                                        {    
-                                            <p>
-                                                @l.EmailAddress (@l.MailId.GetMailTemplateName(Model.MailTemplates))
-                                            </p>
-                                        }
-                                    </div>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            }
+                }
+            </tbody>
+        }
         </table>
     </div>
 }

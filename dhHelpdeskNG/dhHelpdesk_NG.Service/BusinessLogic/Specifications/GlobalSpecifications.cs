@@ -113,7 +113,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Specifications
                 query = query.Where(x => x.ShowOnStartPage == 1);
             }
 
-            query = query.SortByCreated();
+            query = query.SortByChangedDate();
 
             if (count.HasValue)
             {

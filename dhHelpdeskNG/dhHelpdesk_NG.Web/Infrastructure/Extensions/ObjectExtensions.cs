@@ -1,4 +1,5 @@
-﻿using DH.Helpdesk.BusinessData.Models.Case;
+﻿using DH.Helpdesk.BusinessData.Enums.Case;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
 using DH.Helpdesk.BusinessData.Models.ProductArea.Output;
@@ -78,9 +79,11 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
         public static IList<Field> GetFilterForAdvancedSearch()
         {
             var ret = new List<Field>();
-            ret.Add(new Field { Id = -1, StringValue = string.Empty });
-            ret.Add(new Field { Id = 2, StringValue = Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation) });
-            ret.Add(new Field { Id = 1, StringValue = Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation) });                        
+            ret.Add(new Field { Id = (int)CaseProgressFilterEnum.None, StringValue = string.Empty });
+            ret.Add(new Field { Id = (int)CaseProgressFilterEnum.CasesInProgress,
+                StringValue = Translation.Get("Pågående ärenden", Enums.TranslationSource.TextTranslation) });
+            ret.Add(new Field { Id = (int)CaseProgressFilterEnum.ClosedCases,
+                StringValue = Translation.Get("Avslutade ärenden", Enums.TranslationSource.TextTranslation) });                        
             return ret;
         }        
 

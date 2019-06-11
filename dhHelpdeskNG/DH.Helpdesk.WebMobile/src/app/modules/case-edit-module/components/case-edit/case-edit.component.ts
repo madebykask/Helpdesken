@@ -1,11 +1,10 @@
-import { Component, ViewChild, Directive, EventEmitter, ElementRef, Renderer2 } from '@angular/core';
-import { Validators, FormGroup, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseService } from '../../services/case/case.service';
 import { forkJoin, Subject, of, throwError, interval } from 'rxjs';
 import { switchMap, take, finalize, delay, catchError, map, takeUntil, takeWhile } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
-import { CommunicationService, Channels, DropdownValueChangedEvent, NotifierChangedEvent } from 'src/app/services/communication/communication.service';
+import { CommunicationService, Channels, CaseFieldValueChangedEvent, } from 'src/app/services/communication/communication.service';
 import { HeaderEventData } from 'src/app/services/communication/data/header-event-data';
 import { AuthenticationStateService } from 'src/app/services/authentication';
 import { WorkingGroupsService } from 'src/app/services/case-organization/workingGroups-service';
@@ -17,17 +16,23 @@ import { CaseEditDataHelper } from '../../logic/case-edit/case-editdata.helper';
 import { CaseFieldsNames, CasesSearchType } from 'src/app/modules/shared-module/constants';
 import { CaseLockApiService } from '../../services/api/case/case-lock-api.service';
 import { CaseSaveService } from '../../services/case';
-import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel, CaseLockModel, BaseCaseField, CaseAction, CaseActionDataType, IBaseCaseField } from '../../models';
+import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel,
+   CaseLockModel, CaseFieldModel, CaseAction, CaseActionDataType, ICaseField, CaseFileModel } from '../../models';
 import { OptionItem, MultiLevelOptionItem } from 'src/app/modules/shared-module/models';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts/alert-types';
 import { CaseWatchDateApiService } from '../../services/api/case/case-watchDate-api.service';
 import { CaseFilesApiService } from '../../services/api/case/case-files-api.service';
-import { NotifierType } from 'src/app/modules/shared-module/models/notifier/notifier.model';
+import { NotifierType, NotifierModel } from 'src/app/modules/shared-module/models/notifier/notifier.model';
 import { CaseTypesService } from 'src/app/services/case-organization/caseTypes-service';
-import { CaseFormControl, CaseFormGroup, NotifierFormFieldsSetter } from 'src/app/modules/shared-module/models/forms';
-import { MbscFormOptions, MbscForm } from '@mobiscroll/angular';
+import { CaseFormGroup } from 'src/app/modules/shared-module/models/forms';
+import { MbscFormOptions } from '@mobiscroll/angular';
 import { ProductAreasService } from 'src/app/services/case-organization/productAreas-service';
+import { DateTime } from 'luxon';
+import { CaseFieldsDefaultErrorMessages } from '../../logic/constants/case-fields.constants';
+import { CaseFormGroupBuilder } from 'src/app/modules/shared-module/models/forms/case-form-group-builder';
+import { NotifierFormFieldsSetter } from 'src/app/modules/shared-module/models/forms/notifier-form-fields-setter';
+import { NotifierService } from '../../services/notifier.service';
 
 @Component({
   selector: 'app-case-edit',
@@ -35,50 +40,14 @@ import { ProductAreasService } from 'src/app/services/case-organization/productA
   styleUrls: ['./case-edit.component.scss']
 })
 export class CaseEditComponent {
-  @ViewChild('mainForm') mainForm: any;// MbscForm
-    caseSectionTypes = CaseSectionType;
-    caseFieldsNames = CaseFieldsNames;
-    accessModeEnum = CaseAccessMode;
-    dataSource: CaseDataStore;
-    isLoaded = false;
-    form: CaseFormGroup;
-    caseKey:string;
-    
-    titleTabsSettings = {
-      display:"top"
-    }
 
-    caseTabsSettings = {
-      display:"top",
-      layout: "fixed",
-      theme:"mobiscroll"
-    };
-
-    formOptions: MbscFormOptions = {
-      onInit: (event, inst) => {
-      }
-    }
-
-    currentTab = 'case_details';
-    caseActions: CaseAction<CaseActionDataType>[] = [];
-    notifierTypes = NotifierType;
-
-    private searchType: CasesSearchType = CasesSearchType.AllCases;
-    private isNewCase: boolean = false;
-    private caseId: number = 0;
-    private templateId: number = 0;
-    private caseData: CaseEditInputModel;
-    private caseSections: CaseSectionInputModel[];
-    private ownsLock = false;
-    private destroy$ = new Subject();
-    private caseLock: CaseLockModel = null;
-    private isClosing = false;
+    @ViewChild('mainForm') mainForm: any; // MbscForm
 
     constructor(private route: ActivatedRoute,
                 private caseService: CaseService,
                 private router: Router,
                 private caseLockApiService: CaseLockApiService,
-                private authStateService:AuthenticationStateService,
+                private authStateService: AuthenticationStateService,
                 private caseDataHelpder: CaseEditDataHelper,
                 private alertService: AlertsService,
                 private caseSaveService: CaseSaveService,
@@ -88,10 +57,11 @@ export class CaseEditComponent {
                 private stateSecondariesService: StateSecondariesService,
                 private caseTypesService: CaseTypesService,
                 private caseWatchDateApiService: CaseWatchDateApiService,
-                private translateService : TranslateService,
+                private translateService: TranslateService,
                 private localStorage:  LocalStorageService,
-                private caseFileService: CaseFilesApiService, 
-                private productAreasService: ProductAreasService) {
+                private caseFileService: CaseFilesApiService,
+                private productAreasService: ProductAreasService,
+                private notifierService: NotifierService) {
       // read route params
       if (this.route.snapshot.paramMap.has('id')) {
           this.isNewCase = false;
@@ -100,10 +70,10 @@ export class CaseEditComponent {
           this.isNewCase = true;
           this.templateId = +this.route.snapshot.paramMap.get('templateId');
       } else {
-        throw 'Invalid parameters';
+        throw new Error('Invalid parameters');
       }
-      
-      //subscribe global events
+
+      // subscribe global events
       this.subscribeEvents();
     }
 
@@ -116,12 +86,10 @@ export class CaseEditComponent {
       if (this.caseData) {
           if (this.caseData.editMode === CaseAccessMode.NoAccess) {
             accessMode = CaseAccessMode.NoAccess;
-          }
-          else {
+          } else {
             if (this.isLocked) {
               accessMode = CaseAccessMode.ReadOnly;
-            }
-            else {
+            } else {
               accessMode = this.caseData.editMode;
             }
           }
@@ -129,16 +97,66 @@ export class CaseEditComponent {
       return accessMode;
     }
 
+    public get canSave() {
+      if (this.isNewCase) {
+        return true;
+      }
+
+      return this.accessMode === CaseAccessMode.FullAccess;
+    }
+
+    caseSectionTypes = CaseSectionType;
+    caseFieldsNames = CaseFieldsNames;
+    accessModeEnum = CaseAccessMode;
+    dataSource: CaseDataStore;
+    isLoaded = false;
+    form: CaseFormGroup;
+    caseKey: string;
+    caseFiles: CaseFileModel[] = null;
+
+    titleTabsSettings = {
+      display: 'top'
+    };
+
+    caseTabsSettings = {
+      display: 'top',
+      layout: 'fixed',
+      theme: 'mobiscroll'
+    };
+
+    formOptions: MbscFormOptions = {
+      onInit: (event, inst) => {
+      }
+    };
+
+    currentTab = 'case_details';
+    caseActions: CaseAction<CaseActionDataType>[] = [];
+    notifierTypes = NotifierType;
+    isCommunicationSectionVisible = false;
+
+    private searchType: CasesSearchType = CasesSearchType.AllCases;
+    private isNewCase = false;
+    private caseId = 0;
+    private templateId = 0;
+    private caseData: CaseEditInputModel;
+    private caseSections: CaseSectionInputModel[];
+    private ownsLock = true;
+    private destroy$ = new Subject();
+    private caseLock: CaseLockModel = null;
+    private isClosing = false;
+
     ngOnInit() {
       this.commService.publish(Channels.Header, new HeaderEventData(false));
 
      if (this.caseId > 0) {
-          // existing case 
+          // existing case
           this.loadCaseData(this.caseId);
       } else if (this.templateId > 0) {
           this.isNewCase = true;
           this.loadTemplate(this.templateId);
       }
+
+      this.translateMessages();
     }
 
    loadCaseData(caseId: number): any {
@@ -154,7 +172,6 @@ export class CaseEditComponent {
               .pipe(
                   take(1),
                   switchMap(data => {
-                    this.ownsLock = false;
                     this.caseData = data;
                     this.caseKey = this.caseData.id > 0 ? this.caseData.id.toString() : this.caseData.caseGuid.toString();
                     const filter = this.caseDataHelpder.getCaseOptionsFilter(this.caseData);
@@ -169,16 +186,16 @@ export class CaseEditComponent {
           finalize(() => this.isLoaded = true),
           catchError((e) => throwError(e))
       ).subscribe(([sectionData, options, caseLock]) => {
-          this.caseLock = caseLock;  
+          this.caseLock = caseLock;
           this.caseSections = sectionData;
           this.dataSource = new CaseDataStore(options);
-          
+
           this.initLock();
           this.processCaseData();
       });
     }
 
-    getCaseTitle() : string {
+    getCaseTitle(): string {
       return this.caseDataHelpder.getCaseTitle(this.caseData);
     }
 
@@ -190,12 +207,12 @@ export class CaseEditComponent {
       return this.caseDataHelpder.hasSection(this.caseData, type);
     }
 
-    getField(name: string): BaseCaseField<any> {
+    private getField(name: string): CaseFieldModel<any> {
       return this.caseDataHelpder.getField(this.caseData, name);
     }
 
     public navigate(url: string) {
-      if(url == null) return;
+      if (url == null) { return; }
       of(true).pipe(
         delay(200),
         map(() => this.router.navigate([url])),
@@ -204,31 +221,24 @@ export class CaseEditComponent {
     }
 
     getSectionHeader(type: CaseSectionType): string {
-        if (this.caseSections == null) return '';
+        if (this.caseSections == null) { return ''; }
         return this.caseSections.find(s => s.type == type).header;
     }
 
     isSectionOpen(type: CaseSectionType) {
-        if (this.caseSections == null) return null
+        if (this.caseSections == null) { return null; }
         return this.caseSections.find(s => s.type == type).isEditCollapsed ? null : true;
     }
 
-    public get canSave() {
-      if (this.isNewCase) 
-        return true;
-
-      return this.accessMode == CaseAccessMode.FullAccess;
-    }
-
     saveCase() {
-      if (!this.canSave) return;
+      if (!this.canSave) { return; }
       this.form.submit();
       if (this.form.invalid) {
         // let invalidControls = this.form.findInvalidControls(); // debug info
-        let errormessage = this.translateService.instant('Fyll i obligatoriska fält.');
+        const errormessage = this.translateService.instant('Fyll i obligatoriska fält.');
         this.alertService.showMessage(errormessage, AlertType.Error, 3);
         return;
-      };
+      }
 
       this.isLoaded = false;
       this.caseSaveService.saveCase(this.form, this.caseData).pipe(
@@ -240,31 +250,39 @@ export class CaseEditComponent {
     }
 
     goToCases() {
-      let res = this.localStorage.getCaseSearchState();
+      const res = this.localStorage.getCaseSearchState();
       let searchType: string;
       if (res) {
         searchType = CasesSearchType[res.SearchType];
-      }
-      else {
+      } else {
         searchType = CasesSearchType[CasesSearchType.AllCases];
       }
       this.navigate('/casesoverview/' + searchType);
     }
 
-    cleanTempFiles(caseId:number) {
+    cleanTempFiles(caseId: number) {
       this.caseFileService.deleteTemplFiles(caseId).pipe(
         take(1)
       ).subscribe();
     }
 
+    private translateMessages() {
+      Object.keys(CaseFieldsDefaultErrorMessages)
+        .forEach(key => {
+          if (CaseFieldsDefaultErrorMessages[key] !==  null) {
+            const translation = this.translateService.instant(CaseFieldsDefaultErrorMessages[key]);
+            CaseFieldsDefaultErrorMessages[key] = translation;
+          }
+        });
+    }
+
     private loadTemplate(templateId: number) {
       const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
 
-      const caseData$ = 
+      const caseData$ =
         this.caseService.getTemplateData(templateId).pipe(
           take(1),
           switchMap(data => {
-            //this.ownsLock = false; //TODO: check?
             this.caseData = data;
             this.caseKey = this.caseData.caseGuid.toString();
             const filter = this.caseDataHelpder.getCaseOptionsFilter(this.caseData);
@@ -281,23 +299,17 @@ export class CaseEditComponent {
       ).subscribe(([sectionData, options]) => {
           this.caseSections = sectionData;
           this.dataSource = new CaseDataStore(options);
-          
+
           this.initLock();
           this.processCaseData();
       });
     }
 
     private subscribeEvents() {
-
       // drop down value changed
-      this.commService.listen(Channels.DropdownValueChanged).pipe(
+      this.commService.listen(Channels.CaseFieldValueChanged).pipe(
         takeUntil(this.destroy$)
-      ).subscribe((v: DropdownValueChangedEvent) => this.runUpdates(v));
-
-      //Notifier changed
-      this.commService.listen<NotifierChangedEvent>(Channels.NotifierChanged).pipe(
-        takeUntil(this.destroy$)
-      ).subscribe(data => this.processNotifierChanged(data));
+      ).subscribe((v: CaseFieldValueChangedEvent) => this.runUpdates(v));
     }
 
     private getCaseDataReducers(): CaseDataReducers {
@@ -309,25 +321,23 @@ export class CaseEditComponent {
       return this.caseService.getOptionsHelper(filters);
     }
 
-    private runUpdates(v: DropdownValueChangedEvent) { // TODO: move to new class
-      const reducer = this.сaseDataReducersFactory.createCaseDataReducers(this.dataSource);
+    private runUpdates(v: CaseFieldValueChangedEvent) { // TODO: move to new class
+      const reducer = this.getCaseDataReducers();
       const filters = this.caseDataHelpder.getFormCaseOptionsFilter(this.caseData, this.form);
       const optionsHelper = this.caseService.getOptionsHelper(filters);
 
-      //NOTE: remember to update case data reducer when adding new fields
+      // NOTE: remember to update case data reducer when adding new fields
       switch (v.name) {
-        
         case CaseFieldsNames.RegionId: {
           optionsHelper.getDepartments().pipe(
             take(1),
           ).subscribe((deps: OptionItem[]) => {
             reducer.caseDataReducer(CaseFieldsNames.DepartmentId, { items: deps });
-            //clear org units
+            // clear org units
             reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: []});
           });
           break;
         }
-
         case CaseFieldsNames.DepartmentId: {
           optionsHelper.getOUs().pipe(
             take(1),
@@ -336,18 +346,16 @@ export class CaseEditComponent {
           });
           break;
         }
-
         case CaseFieldsNames.IsAbout_RegionId: {
           optionsHelper.getIsAboutDepartments().pipe(
             take(1),
           ).subscribe((deps: OptionItem[]) => {
             reducer.caseDataReducer(CaseFieldsNames.IsAbout_DepartmentId, { items: deps });
-            //clear org units
+            // clear org units
             reducer.caseDataReducer(CaseFieldsNames.IsAbout_OrganizationUnitId, { items: []});
           });
           break;
         }
-
         case CaseFieldsNames.IsAbout_DepartmentId: {
           optionsHelper.getIsAboutOUs().pipe(
             take(1),
@@ -356,14 +364,13 @@ export class CaseEditComponent {
           });
           break;
         }
-
         case CaseFieldsNames.CaseTypeId: {
           if (v.value) {
             this.caseTypesService.getCaseType(v.value).pipe(
                 take(1)
               ).subscribe(ct => {
                 if (ct && ct.performerUserId != null && !this.getField(CaseFieldsNames.PerformerUserId).setByTemplate) {
-                  if (!this.dataSource.performersStore$.value.some((e) => e.value == ct.performerUserId)) { 
+                  if (!this.dataSource.performersStore$.value.some((e) => e.value === ct.performerUserId)) {
                     // get new list of performers with casetype perfomer included
                     filters.CasePerformerUserId = ct.performerUserId;
                     optionsHelper.getPerformers(true).pipe(
@@ -374,10 +381,10 @@ export class CaseEditComponent {
                   }
                 }
                 if (ct && ct.workingGroupId != null) {
-                  this.form.controls[CaseFieldsNames.WorkingGroupId].setValue(ct.workingGroupId);
+                  this.form.setSafe(CaseFieldsNames.WorkingGroupId, ct.workingGroupId);
                 }
                 if (ct && ct.performerUserId != null) {
-                  this.form.controls[CaseFieldsNames.PerformerUserId].setValue(ct.performerUserId);
+                  this.form.setSafe(CaseFieldsNames.PerformerUserId, ct.performerUserId);
                 }
               });
           }
@@ -388,7 +395,6 @@ export class CaseEditComponent {
           });
           break;
         }
-
         case CaseFieldsNames.WorkingGroupId: {
           optionsHelper.getPerformers(false).pipe(
             take(1)
@@ -401,57 +407,117 @@ export class CaseEditComponent {
               take(1)
             ).subscribe(wg => {
               if (wg && wg.stateSecondaryId != null) {
-                this.form.controls[CaseFieldsNames.StateSecondaryId].setValue(wg.stateSecondaryId);
+                this.form.setSafe(CaseFieldsNames.StateSecondaryId, wg.stateSecondaryId);
               }
             });
           }
           break;
         }
-
         case CaseFieldsNames.StateSecondaryId: {
+          const sendExternalEmailsControl = this.form.get(CaseFieldsNames.Log_SendMailToNotifier);
+          const externalLogTextControl = this.form.get(CaseFieldsNames.Log_ExternalText);
           if (v.value) {
             this.stateSecondariesService.getStateSecondary(v.value)
             .pipe(
               take(1)
             ).subscribe(ss => {
               if (ss && ss.workingGroupId != null && this.form.contains(CaseFieldsNames.WorkingGroupId)) {
-                this.form.controls[CaseFieldsNames.WorkingGroupId].setValue(ss.workingGroupId);
+                this.form.setSafe(CaseFieldsNames.WorkingGroupId, ss.workingGroupId);
               }
-              const departmentCtrl = this.form.controls[CaseFieldsNames.DepartmentId];
+              const departmentCtrl = this.form.get(CaseFieldsNames.DepartmentId);
               if (ss.recalculateWatchDate && departmentCtrl.value) {
                   this.caseWatchDateApiService.getWatchDate(departmentCtrl.value).pipe(
                     take(1)
-                  ).subscribe(date => this.form.controls[CaseFieldsNames.WatchDate].setValue(date));
+                  ).subscribe(date => this.form.setSafe(CaseFieldsNames.WatchDate, date));
+              }
+              // update extneral log field state
+              const sendExternalEmailsControl = this.form.get(CaseFieldsNames.Log_SendMailToNotifier);
+              const externalLogTextControl = this.form.get(CaseFieldsNames.Log_ExternalText);
+              if (ss.noMailToNotifier === true) {
+                sendExternalEmailsControl.disable({ onlySelf: true, emitEvent: true });
+              } else if (externalLogTextControl && externalLogTextControl.disabled === false) {
+                //enable only in case extneral log note text is enabled as well
+                sendExternalEmailsControl.enable({ onlySelf: true, emitEvent: true });
               }
             });
+          } else if (externalLogTextControl && externalLogTextControl.disabled === false) {
+            //enable only in case extneral log note text is enabled as well
+            sendExternalEmailsControl.enable({ onlySelf: true, emitEvent: true });
           }
           break;
         }
-
         case CaseFieldsNames.ProductAreaId: {
           if (v.value) {
             this.productAreasService.getProductArea(v.value).pipe(
               take(1)
             ).subscribe(ct => {
               if (ct && ct.workingGroupId != null) {
-                this.form.controls[CaseFieldsNames.WorkingGroupId].setValue(ct.workingGroupId);
+                this.form.setSafe(CaseFieldsNames.WorkingGroupId, ct.workingGroupId);
               }
               if (ct && ct.priorityId != null) {
-                this.form.controls[CaseFieldsNames.PriorityId].setValue(ct.priorityId);
+                this.form.setSafe(CaseFieldsNames.PriorityId, ct.priorityId);
               }
-            })
+            });
           }
+          break;
+        }
+        case CaseFieldsNames.ClosingReason: {
+          if (v.value) {
+            const finishingDateControl = this.form.get(CaseFieldsNames.FinishingDate);
+            if (finishingDateControl && !finishingDateControl.value) {
+              this.form.setSafe(CaseFieldsNames.FinishingDate, DateTime.local().toString());
+            }
+          } else {
+            this.form.setSafe(CaseFieldsNames.FinishingDate, '');
+          }
+          break;
+        }
+        case CaseFieldsNames.ReportedBy: {
+          const userId = v.value !== null ? +v.value : 0;
+          const notifierType = v.text && v.text.length ? <NotifierType>+v.text : NotifierType.Initiator;
+
+          if (!isNaN(userId) && userId > 0) {
+            this.notifierService.getNotifier(v.value).pipe(
+              take(1)
+            ).subscribe(x => {
+               this.processNotifierChanged(x, notifierType === NotifierType.Regarding);
+            });
+          } else {
+            this.processNotifierChanged(null, notifierType === NotifierType.Regarding);
+          }
+          break;
         }
       }
     }
 
     private processCaseData() {
-      this.form = this.createFormGroup(this.caseData);
-      
-      //run only for existing case 
+      // create form
+      const fb = new CaseFormGroupBuilder(this.translateService);
+      this.form = fb.createFormGroup(this.caseData.fields, this.canSave);
+
+      // run only for existing case
       if (this.caseId > 0) {
           this.loadCaseActions();
           this.cleanTempFiles(this.caseId);
+      }
+
+      // set up case visibility settings
+      if (this.caseData) {
+          this.isCommunicationSectionVisible =
+            this.showField(CaseFieldsNames.Log_ExternalText) ||
+            this.showField(CaseFieldsNames.Log_InternalText) ||
+            this.showField(CaseFieldsNames.Log_FileName);
+      }
+
+      // get existing files
+      const filesField = this.getField(CaseFieldsNames.Filename);
+      if (filesField && filesField.value) {
+        const files = filesField.value as Array<any>;
+        if (files && files.length) {
+          this.caseFiles = files.map(f => new CaseFileModel(f.id, f.fileName));
+        } else {
+          this.caseFiles = [];
+        }
       }
     }
 
@@ -464,50 +530,9 @@ export class CaseEditComponent {
       });
     }
 
-    private createFormGroup(data: CaseEditInputModel): CaseFormGroup {
-      let controls: { [key: string]: CaseFormControl; } = {};
-      data.fields.forEach(field => {
-          let validators = [];
-          if (!field.isHidden) {
-            if (field.isRequired) {
-              validators.push(Validators.required);
-            }
-
-            if (field.maxLength != null) {
-              validators.push(Validators.maxLength(field.maxLength))
-            }
-          }
-
-          let control = new CaseFormControl(field.label, {
-            value: field.value == null ? '' : field.value,
-            disabled: !this.canSave || field.isReadonly,
-          }, validators);
-          control.isRequired = field.isRequired;
-          control.isHidden = field.isHidden;
-          controls[field.name] = control;
-      });
-      return new CaseFormGroup(controls,
-          (group: CaseFormGroup): ValidationErrors => {
-          let errors = Object.create(null);
-          Object.keys(group.controls).forEach((controlName) => {
-            const ctrl = group.get(controlName);
-            if (ctrl.validator != null) {
-              let isError = ctrl.validator(ctrl);
-              if (isError) {
-                ctrl.setErrors(isError, { emitEvent: false });
-              }
-            }
-            if (ctrl.errors != null) {
-              errors = {...errors, ...ctrl.errors };
-            }
-          });
-          return errors;
-      }); 
-    }
-
     private initLock() {
       if (this.caseId > 0) {
-        //set flag if we own the lock
+        // set flag if we own the lock
         this.ownsLock = !this.caseLock.isLocked;
 
         if (this.caseLock.isLocked) {
@@ -523,6 +548,9 @@ export class CaseEditComponent {
                     if (!res) {
                       this.ownsLock = false;
                       this.caseLock.isLocked = true;
+
+                      // TOOO: raise event
+
                       if (!this.isClosing) {
                         this.showLockWarning();
                       }
@@ -534,24 +562,22 @@ export class CaseEditComponent {
         this.caseLock = new CaseLockModel();
       }
     }
-  
-    private processNotifierChanged(eventData: NotifierChangedEvent) {
-      const data = eventData.notifier;
-      const isRegarding = eventData.type === NotifierType.Regarding;
+
+    private processNotifierChanged(data: NotifierModel, isRegarding: boolean) {
       const formFieldsSetter = this.form.getNotifierFieldsSetter(isRegarding);
 
       if (data) {
         formFieldsSetter.setReportedBy(data.userId);
         formFieldsSetter.setPersonName(data.name);
         formFieldsSetter.setPersonEmail(data.email);
+        formFieldsSetter.setPersonPhone(data.phone);
         formFieldsSetter.setPersonCellPhone(data.cellphone);
         formFieldsSetter.setPlace(data.place);
         formFieldsSetter.setUserCode(data.userCode);
         formFieldsSetter.setCostCenter(data.costCentre);
-  
+
         this.updateOrganisationFields(formFieldsSetter, data);
-      }
-      else {
+      } else {
         this.resetNotifierFields(formFieldsSetter);
       }
     }
@@ -564,27 +590,26 @@ export class CaseEditComponent {
 
       if (regionId !== formRegionId) {
         this.changeRegion(notifierFieldsSetter, regionId, departmentId, ouId);
-      }
-      else {
-          //just set new department if exists
+      } else {
+          // just set new department if exists
           if (!isNaN(departmentId) && departmentId) {
-            this.changeDepartment(notifierFieldsSetter, departmentId, ouId); 
+            this.changeDepartment(notifierFieldsSetter, departmentId, ouId);
           }
       }
     }
 
-    private changeRegion(notifierFieldsSetter: NotifierFormFieldsSetter, regionId?:number, departmentId?: number, ouId?: number) {
-      //change first to update form 
+    private changeRegion(notifierFieldsSetter: NotifierFormFieldsSetter, regionId?: number, departmentId?: number, ouId?: number) {
+      // change first to update form
       notifierFieldsSetter.setRegion(regionId || '');
-      
+
       const reducer = this.getCaseDataReducers();
       const optionsHelper = this.getFormOptionsHelpers();
 
-      //change to new region and load departments
+      // change to new region and load departments
       optionsHelper.getDepartments().pipe(
         take(1)
       ).subscribe(deps => {
-        reducer.caseDataReducer(CaseFieldsNames.DepartmentId, { items: deps }); 
+        reducer.caseDataReducer(CaseFieldsNames.DepartmentId, { items: deps });
         this.changeDepartment(notifierFieldsSetter, departmentId, ouId);
       });
     }
@@ -600,12 +625,12 @@ export class CaseEditComponent {
       optionsHelper.getOUs(departmentId).pipe(
         take(1)
       ).subscribe(ous => {
-          reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: ous }); 
+          reducer.caseDataReducer(CaseFieldsNames.OrganizationUnitId, { items: ous });
           notifierFieldsSetter.setOU(ouId || '');
       });
     }
 
-    private resetNotifierFields(formFieldsSetter: NotifierFormFieldsSetter) {     
+    private resetNotifierFields(formFieldsSetter: NotifierFormFieldsSetter) {
       formFieldsSetter.setReportedBy('');
       formFieldsSetter.setPersonName('');
       formFieldsSetter.setPersonEmail('');
@@ -618,8 +643,8 @@ export class CaseEditComponent {
     }
 
     private showLockWarning() {
-      let currentUser =  this.authStateService.getUser();
-      let notice =
+      const currentUser =  this.authStateService.getUser();
+      const notice =
         this.caseLock.isLocked && this.caseLock.userId === currentUser.id ?
             this.translateService.instant('OBS! Du har redan öppnat detta ärende i en annan session') :
             this.translateService.instant('OBS! Detta ärende är öppnat av') + ' ' + this.caseLock.userFullName;
@@ -643,29 +668,12 @@ export class CaseEditComponent {
       this.destroy$.complete();
 
       this.commService.publish(Channels.Header, new HeaderEventData(true));
-      
+
   }
 }
 
 interface IOrganisationData {
   regionId?: number;
   departmentId?: number;
-  ouId?:number;
-}
-
-@Directive({selector: 'mbsc-form-group-title', outputs: ['onClick']})
-export class MbscFormGroupTitleClickDirective {
-  private isOpened?: boolean;
-  onClick = new EventEmitter<any>();
-
-  constructor(private elem: ElementRef, private renderer: Renderer2) {
-    this.renderer.listen(this.elem.nativeElement, 'click', (ev) => { 
-      if (this.isOpened == null) {
-        this.isOpened = this.elem.nativeElement.getAttribute('aria-expanded') == 'true';
-      }
-      this.elem.nativeElement.focus();
-      this.onClick.emit({ isOpening: !this.isOpened, event: ev});
-      this.isOpened = !this.isOpened;
-    });
-  }
+  ouId?: number;
 }

@@ -323,7 +323,79 @@ insert into tbltext (id, TextString, TextType) VALUES (10049, 'Avslutade idag', 
 If not exists (select * from tblTextTranslation where text_id = 10049 and Language_Id = 2)
 insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10049, 2, 'Closed today')
 
+If not exists (select * from tbltext where id = 10050)
+insert into tbltext (id, TextString, TextType) VALUES (10050, 'Avsluta ärende', @MobileType)
 
+If not exists (select * from tblTextTranslation where text_id = 10050 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10050, 2, 'Close case')
 
+If not exists (select * from tbltext where id = 10051)
+insert into tbltext (id, TextString, TextType) VALUES (10051, 'Max antal tecken är {0}', @MobileType)
 
+If not exists (select * from tblTextTranslation where text_id = 10051 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10051, 2, 'The maximum length is {0} character(s)')
 
+If not exists (select * from tbltext where id = 10052)
+insert into tbltext (id, TextString, TextType) VALUES (10052, 'Till', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10052 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10052, 2, 'To')
+
+If not exists (select * from tbltext where id = 10053)
+insert into tbltext (id, TextString, TextType) VALUES (10053, 'Kopia', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10053 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10053, 2, 'Cc')
+
+  If not exists (select * from tbltext where id = 10054)
+insert into tbltext (id, TextString, TextType) VALUES (10054, 'Anmälare', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10054 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10054, 2, 'Initiator')
+
+If not exists (select * from tbltext where id = 10055)
+insert into tbltext (id, TextString, TextType) VALUES (10055, 'Handläggare', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10055 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10055, 2, 'Administrator')
+
+If not exists (select * from tbltext where id = 10056)
+insert into tbltext (id, TextString, TextType) VALUES (10056, 'Driftgrupp', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10056 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10056, 2, 'WorkingGroup')
+
+If not exists (select * from tbltext where id = 10057)
+insert into tbltext (id, TextString, TextType) VALUES (10057, 'E-postgrupp', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10057 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10057, 2, 'EmailGroup')
+
+If not exists (select * from tbltext where id = 10058)
+insert into tbltext (id, TextString, TextType) VALUES (10058, 'Användare', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10058 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10058, 2, 'Users')
+
+If not exists (select * from tbltext where id = 10059)
+insert into tbltext (id, TextString, TextType) VALUES (10059, 'Ingen tillgänglig mailadress', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10059 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10059, 2, 'No email address available')
+--
+If not exists (select * from tbltext where id = 10060)
+insert into tbltext (id, TextString, TextType) VALUES (10060, 'Kommunicera i ärenden', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10060 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10060, 2, 'Communicate in cases')
+--
+If not exists (select * from tbltext where id = 10061)
+insert into tbltext (id, TextString, TextType) VALUES (10061, 'Avsluta ärenden', @MobileType)
+
+If not exists (select * from tblTextTranslation where text_id = 10061 and Language_Id = 2)
+insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(10061, 2, 'Close cases')
+
+-- fix swedish translation for 'Close case'
+UPDATE tblText SET TextString = 'Avsluta ärende' where Id = 10050  AND TextType = 500
+
+GO

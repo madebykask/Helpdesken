@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FileUploader, FileUploaderOptions, FileItem, ParsedResponseHeaders } from 'ng2-file-upload' 
+import { FileUploader, FileUploaderOptions, FileItem, ParsedResponseHeaders } from 'ng2-file-upload'
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
 import { LocalStorageService } from 'src/app/services/local-storage/local-storage.service';
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
@@ -13,25 +13,25 @@ import { CaseLogApiService } from 'src/app/modules/case-edit-module/services/api
 })
 export class LogFilesUploadComponent {
 
-  @Input('caseKey') caseKey: string; 
-  @Output() fileUploaded: EventEmitter<string> = new EventEmitter<string>();  
+  @Input('caseKey') caseKey: string;
+  @Output() fileUploaded: EventEmitter<string> = new EventEmitter<string>();
 
   fileUploader = new FileUploader({});
-  internalLogNote:string;
-  externalLogNote:string; 
+  internalLogNote: string;
+  externalLogNote: string;
 
   constructor(private authenticationService: AuthenticationService,
               private localStateStorage: LocalStorageService,
               private caseLogApiService: CaseLogApiService,
               private alertsService: AlertsService) {
-  } 
+  }
 
   ngOnInit() {
     const accessToken = this.authenticationService.getAuthorizationHeaderValue();
     const userData = this.localStateStorage.getCurrentUser();
     const cid = userData.currentData.selectedCustomerId;
 
-    // init file uploader 
+    // init file uploader
     this.fileUploader.setOptions(<FileUploaderOptions> {
       autoUpload: true,
       filters: [],
@@ -62,17 +62,16 @@ export class LogFilesUploadComponent {
   private onFileUploadComplete(fileItem: FileItem, response: string, status: number, headers: ParsedResponseHeaders) {
     //console.log(`File upload complete. File: ${fileItem.file.name}, IsSuccess: ${fileItem.isSuccess}, Response: ${response}`);
     if (fileItem.isUploaded && fileItem.isSuccess) {
-        let file = JSON.parse(response);
+        const file = JSON.parse(response);
         if (file) {
             this.fileUploaded.emit(file);
             fileItem.file.name = file;
         }
-        fileItem.remove();// remove file from upload queue
+        fileItem.remove(); // remove file from upload queue
     } else if (!fileItem.isSuccess) {
-        let data = JSON.parse(response);
-        let  msg = data.Message || '';
+        const data = JSON.parse(response);
+        const  msg = data.Message || '';
         this.alertsService.showMessage('Unknown error.' + msg, AlertType.Error);
     }
   }
 }
-

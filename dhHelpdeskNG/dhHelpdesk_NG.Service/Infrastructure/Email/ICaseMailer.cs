@@ -18,7 +18,8 @@ namespace DH.Helpdesk.Services.Infrastructure.Email
                 MailSenders mailSenders,
                 bool isCreatingCase,
                 bool caseMailSetting_DontSendMail,
-                string AbsoluterUrl);
+                string absoluterUrl,
+                string extraFollowersEmails = null);
 
         void InformOwnerDefaultGroupIfNeeded(
                 int caseHistoryId,
@@ -28,7 +29,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email
                 Case newCase,
                 string helpdeskMailFromAdress,
                 List<string> files,
-                string AbsoluterUrl);
+                string absoluterUrl);
 
         void InformAboutInternalLogIfNeeded(
                 int caseHistoryId,
@@ -37,7 +38,7 @@ namespace DH.Helpdesk.Services.Infrastructure.Email
                 Case newCase,
                 string helpdeskMailFromAdress,
                 List<string> files,
-                string AbsoluterUrl,
+                string absoluterUrl,
                 MailSenders mailSenders);
     }
 }

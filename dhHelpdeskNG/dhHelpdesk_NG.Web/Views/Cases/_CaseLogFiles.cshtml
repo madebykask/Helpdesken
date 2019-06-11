@@ -7,7 +7,7 @@
     dhHelpdesk.caseLog =
         {
             deleteLogFileConfirmMessage: '@Translation.GetForJS("Är du säker på att du vill ta bort bifogad fil")' + '?',
-            deleteCaseFileExtraInvoiceMessage: '@Translation.GetForJS("Obs! Den tas även bort från order")',                                                                        
+            deleteCaseFileExtraInvoiceMessage: '@Translation.GetForJS("Obs! Den tas även bort från order")',
             okText: '@Translation.GetForJS("OK")',
             cancelText: '@Translation.GetForJS("Avbryt")',
             yesText: '@Translation.GetForJS("Ja")',
@@ -41,7 +41,7 @@
                                     }
                                     else
                                     {
-                                        <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", Model.Id}, {"fileName", filename.Name}})"><i class="icon-file"></i> @filename.Name</a>
+                                        <a target="_blank" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", Model.Id}, {"fileName", filename.Name}})"><i class="icon-file"></i> @filename.Name</a>
                                     }
                                 }
                             }
@@ -61,7 +61,7 @@
                                     }
                                     else
                                     {
-                                        <a class="isExisted" href="@Url.Action("DownloadLogFile", new RouteValueDictionary {{"id", Model.Id}, {"fileName", filename.Name}})"><i class="icon-file"></i> @filename.Name</a>
+                                        <a href="@Url.Action("DownloadLogFile", new RouteValueDictionary {{"id", Model.Id}, {"fileName", filename.Name}})"><i class="icon-file"></i> @filename.Name</a>
                                     }
                                 }
                             }
@@ -70,14 +70,14 @@
                             @* TODO: fix this, set deleteattachedfilepermission to true if usergroupid is administrator *@
                             @if (!GuidHelper.IsGuid(Model.Id) && (SessionFacade.CurrentUser.DeleteAttachedFilePermission == 1 || SessionFacade.CurrentUser.UserGroupId == 4))
                             {                            
-                                <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)">
+                                <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.GetCoreTextTranslation("Ta bort")">
                                     <i class="icon-remove"></i>
                                 </a>
                             }else
                             {
                                if (GuidHelper.IsGuid(Model.Id))
                                 {
-                                   <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)">
+                                   <a id="@string.Format("delete_logfile_button_{0}", i)" class="btn bt-small" data-field="deleteFile" title="@Translation.GetCoreTextTranslation("Ta bort")">
                                     <i class="icon-remove"></i>
                                 </a>
                                }

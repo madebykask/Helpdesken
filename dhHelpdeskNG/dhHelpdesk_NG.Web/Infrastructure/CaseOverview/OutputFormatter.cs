@@ -1,25 +1,26 @@
 ﻿using DH.Helpdesk.BusinessData.OldComponents;
+using System;
+using System.Threading;
+using System.Web.Mvc;
+
+using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Common.Enums.Cases;
+using Field = DH.Helpdesk.Domain.Field;
+using System.Collections.Generic;
+using System.Web;
 
 namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
 {
-    using System;
-    using System.Threading;
-    using System.Web.Mvc;
-
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.Common.Enums.Cases;
-    using Field = DH.Helpdesk.Domain.Field;
-    using System.Collections.Generic;    
     public class OutputFormatter
     {
         /* fields showing in DateTime format */        
-        private static readonly IList<string> dateTimeFields = new List<string> { "ChangeTime", "RegTime" }.AsReadOnly();
+        private static readonly IList<string> DateTimeFields = new List<string> { "ChangeTime", "RegTime" }.AsReadOnly();
         public TimeZoneInfo CurrentTimeZone { get; private set; }
 
         public OutputFormatter(bool isLastFirstName, TimeZoneInfo timeZone)
         {
-            this.IsLastFirstName = isLastFirstName;
-            this.CurrentTimeZone = timeZone;
+            IsLastFirstName = isLastFirstName;
+            CurrentTimeZone = timeZone;
         }
 
         public bool IsLastFirstName { get; set; }
@@ -32,36 +33,19 @@ namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
                 case FieldTypes.Date:
                     if (field.DateTimeValue.HasValue)
                     {
-                        isDateTime = dateTimeFields.Contains(field.Key);                
-                        return this.FormatDate(field.DateTimeValue.Value, isDateTime);
+                        isDateTime = DateTimeFields.Contains(field.Key);                
+                        return FormatDate(field.DateTimeValue.Value, isDateTime);
                     }
                     break;
                 case FieldTypes.Time:
-                    isDateTime = dateTimeFields.Contains(field.Key);                
-                    return this.FormatNullableDate(field.DateTimeValue, isDateTime);
+                    isDateTime = DateTimeFields.Contains(field.Key);                
+                    return FormatNullableDate(field.DateTimeValue, isDateTime);
 
                 case FieldTypes.NullableHours:
-                    return string.IsNullOrEmpty(field.StringValue) ? " - " : string.Format("{0} h", field.StringValue);
+                    return string.IsNullOrEmpty(field.StringValue) ? " - " : $"{field.StringValue} h";
                 default:
-                    if (field.TranslateThis)
-                    {
-                        if (field.Key.Equals(GlobalEnums.TranslationCaseFields.Status_Id.ToString()) || field.Key.Equals(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString()))
-                        {
-                            return Translation.GetMasterDataTranslation(field.StringValue);
-                        }
-                        return Translation.Get(field.StringValue);
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(field.StringValue))
-                        {
-                            return
-                                MvcHtmlString.Create(field.StringValue.Replace(Environment.NewLine, "<br />"))
-                                    .ToHtmlString();
-                        }
-                    }
-
-                    break;
+                    var content = FormatText(field);
+                    return content;
             }
 
             return string.Empty;
@@ -84,7 +68,7 @@ namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
         {
             if (input.HasValue)
             {
-                return this.FormatDate(input.Value, isDateTime);
+                return FormatDate(input.Value, isDateTime);
             }
 
             return string.Empty;
@@ -92,19 +76,46 @@ namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
 
         public string FormatUserName(string firstName, string lastName)
         {
-            if (this.IsLastFirstName)
+            if (IsLastFirstName)
             {
-                return string.Format("{0} {1}", firstName, lastName);
+                return $"{firstName} {lastName}";
             }
 
-            return string.Format("{0} {1}", lastName, firstName);
+            return $"{lastName} {firstName}";
         }
         
-        internal string FormatUserName(BusinessData.Models.Case.UserNamesStruct userNamesStruct)
+        internal string FormatUserName(UserNamesStruct userNamesStruct)
         {
             return userNamesStruct == null
                        ? string.Empty
-                       : this.FormatUserName(userNamesStruct.FirstName, userNamesStruct.LastName);
+                       : FormatUserName(userNamesStruct.FirstName, userNamesStruct.LastName);
+        }
+
+        public string FormatText(Field field)
+        {
+            var content = field.StringValue;
+            if (string.IsNullOrEmpty(content))
+                return content;
+
+            if (field.TranslateThis)
+            {
+                if (field.Key.Equals(GlobalEnums.TranslationCaseFields.Status_Id.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                    field.Key.Equals(GlobalEnums.TranslationCaseFields.StateSecondary_Id.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    content = Translation.GetMasterDataTranslation(content);
+                }
+                else
+                {
+                    content = Translation.GetCoreTextTranslation(content);
+                }
+            }
+            
+            if (!string.IsNullOrEmpty(content))
+            {
+                content = HttpUtility.HtmlEncode(content).Replace(Environment.NewLine, "<br/>").Replace("\n", "<br/>");
+            }
+            
+            return content;
         }
     }
 

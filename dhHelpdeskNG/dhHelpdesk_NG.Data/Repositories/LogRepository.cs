@@ -1,37 +1,20 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using DH.Helpdesk.BusinessData.Models.LogProgram;
+using DH.Helpdesk.Dal.Enums;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Domain;
 using DH.Helpdesk.BusinessData.Models.Case;
-using DH.Helpdesk.Dal.MapperData.CaseHistory;
-using DH.Helpdesk.Dal.MapperData.Logs;
+
 
 namespace DH.Helpdesk.Dal.Repositories
 {
-    using DH.Helpdesk.BusinessData.Models.LogProgram;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Domain;
-    using System;
-    using Log = DH.Helpdesk.Domain.Log;
-
     #region LOG
 
     public interface ILogRepository : IRepository<Log>
     {
-        Log GetLogById(int id);
-        IQueryable<Log> GetLogForCase(int caseId, bool includeInternalLogs = false);
-
-        /// <summary>
-        /// The get case log overviews.
-        /// </summary>
-        /// <param name="caseId">
-        /// The case id.
-        /// </param>
-        /// <returns>
-        /// The result />.
-        /// </returns>
-        IEnumerable<LogMapperData> GetCaseLogOverviews(int caseId);
-        IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate);
-
+        IQueryable<Log> GetCaseLogs(int caseId);
         Log GetLastLog(int caseId);
     }
 
@@ -42,88 +25,15 @@ namespace DH.Helpdesk.Dal.Repositories
         {
         }
 
-        public Log GetLogById(int id)
+        public IQueryable<Log> GetCaseLogs(int caseId)
         {
-            return (from l in Table
-                    where l.Id == id
-                    select l).FirstOrDefault();
-        }
-
-        public IQueryable<Log> GetLogForCase(int caseId, bool includeInternalLogs = false)
-        {
-            var q = from l in Table
-                    where l.Case_Id == caseId
-                    select l;
-
-            if (!includeInternalLogs)
-            {
-                q = q.Where(l => string.IsNullOrEmpty(l.Text_Internal));
-            }
-
-            return q.OrderByDescending(l => l.LogDate);
-        }
-
-        public IEnumerable<LogMapperData> GetCaseLogOverviews(int caseId)
-        {
-            var query = from l in Table
-                        where l.Case_Id == caseId
-                        orderby l.LogDate descending
-                        select new LogMapperData
-                        {
-                            Log = l,
-
-                            User = new UserMapperData
-                            {
-                                Id = l.User.Id,
-                                FirstName = l.User.FirstName,
-                                SurName = l.User.SurName
-                            },
-                          
-                            EmailLogs = l.CaseHistory.Emaillogs.DefaultIfEmpty()
-                                            .Select(t => new EmailLogMapperData
-                                            {
-                                                Id = t.Id,
-                                                MailId = t.MailId,
-                                                EmailAddress = t.EmailAddress
-                                            }),
-
-                            LogFiles = l.LogFiles.DefaultIfEmpty()
-                                        .Select(t => 
-                                            new LogFileMapperData
-                                            {
-                                                Id = t.Id,
-                                                FileName = t.FileName,
-                                                LogId = t.ParentLog_Id,
-                                                CaseId = t.IsCaseFile.HasValue && t.IsCaseFile.Value ? t.Log.Case_Id : (int?)null
-                                            })
-                        };
-
-            return query.ToList();
-        }
-
-        public IEnumerable<Log> GetCaseLogs(DateTime? fromDate, DateTime? toDate)
-        {
-            var ret = new List<Log>();
-            if (fromDate.HasValue && toDate.HasValue)
-            {
-                var fDate = fromDate.Value.AddDays(-1);
-                var tDate = toDate.Value.AddMonths(1);                
-                ret =  this.Table.Where(l => l.LogDate >= fDate && l.LogDate <= tDate).ToList();
-            }
-            else
-            {
-                ret =  this.Table.ToList();
-            }            
-
-            return ret;
+            var query = Table.Where(l => l.Case_Id == caseId).OrderByDescending(l => l.LogDate);
+            return query;
         }
 
         public Log GetLastLog(int caseId)
         {
-            return this.Table
-                    .Where(l => l.Case_Id == caseId)
-                    .OrderByDescending(l => l.LogDate)
-                    .FirstOrDefault();
+            return Table.Where(l => l.Case_Id == caseId).OrderByDescending(l => l.LogDate).FirstOrDefault();
         }
     }
 
@@ -182,7 +92,7 @@ namespace DH.Helpdesk.Dal.Repositories
         List<LogFileExisting> GetExistingFileNamesByCaseId(int caseId);
         bool SaveAttachedExistingLogFiles(IEnumerable<LogFileExisting> logExistingFiles);
         void DeleteByFileIdAndFileName(int fileId, string filename);
-        void DeleteByFileName(string filename);
+        void DeleteExistingById(int filename);
         void ClearExistingAttachedFiles(int caseId);
         void AddExistLogFiles(IEnumerable<LogFile> logExFiles);
         byte[] GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName);
@@ -309,9 +219,9 @@ namespace DH.Helpdesk.Dal.Repositories
 
         }
 
-        public void DeleteByFileName(string filename)
+        public void DeleteExistingById(int logId)
         {
-            var file = DataContext.LogFilesExisting.FirstOrDefault(x => x.FileName.Equals(filename));
+            var file = DataContext.LogFilesExisting.FirstOrDefault(x => x.Id == logId);
             if (file != null)
             {
                 DataContext.LogFilesExisting.Remove(file);

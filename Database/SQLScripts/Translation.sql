@@ -7387,8 +7387,74 @@ If not exists (select * from tblTextTranslation where text_id = 2005 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2005, 2, 'Extended Case is not valid')
 GO
 
+If not exists (select * from tbltext where id = 2006)
+	insert into tbltext (id, TextString) VALUES (2006, 'Ändrad')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2006 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2006, 2, 'Changed Date')
+GO
 
+If not exists (select * from tbltext where id = 2016)
+	insert into tbltext (id, TextString) VALUES (2016, 'Max antal tecken har överskridits')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2016 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2016, 2, 'Max number of characters has been exceeded')
+GO
+
+If not exists (select * from tbltext where id = 2017)
+	insert into tbltext (id, TextString, TextType) VALUES (2017, 'HistoricalReport', 1)
+GO
+
+If not exists (select * from tbltext where id = 2018)
+	insert into tbltext (id, TextString) VALUES (2018, 'Stapla')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2018 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2018, 2, 'Stack by')
+GO
+
+If not exists (select * from tbltext where id = 2019)
+	insert into tbltext (id, TextString) VALUES (2019, 'Historiska värden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2019 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2019, 2, 'Historical values')
+GO
+
+If not exists (select * from tbltext where id = 2020)
+	insert into tbltext (id, TextString) VALUES (2020, 'Nuvarande värden')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2020 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2020, 2, 'Current values')
+GO
+
+If not exists (select * from tbltext where id = 2021)
+	insert into tbltext (id, TextString) VALUES (2021, 'Tidszon')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2021 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2021, 2, 'Time zone')
+GO
+
+If not exists (select * from tbltext where id = 2022)
+	insert into tbltext (id, TextString) VALUES (2022, 'Noteringsdatum')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2022 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2022, 2, 'Log Note date')
+GO
+
+
+-- Generate id sequence for customer generated IDs
+If not exists (select * from tbltext where id = 20000)
+	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
+GO
+If not exists (select * from tblTextTranslation where text_id = 20000 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(20000, 2, 'Start of customer generated ID:s (ignore)')
+GO
+
+
+GO
 
 -- *** Run this last when put translation script above this line *** --
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
+
+
+
 

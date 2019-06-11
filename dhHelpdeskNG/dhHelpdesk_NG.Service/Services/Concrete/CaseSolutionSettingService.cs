@@ -40,7 +40,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                         model.CaseSolutionId,
                         x.CaseSolutionField,
                         x.CaseSolutionMode,
-                        model.Context.DateAndTime));
+                        model.Context.DateAndTime)).ToList();
 
             this._caseSolutionSettingRepository.Add(businessModelsForInsert);
             this._caseSolutionSettingRepository.Commit();
@@ -56,7 +56,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                             model.CaseSolutionId,
                             x.CaseSolutionField,
                             x.CaseSolutionMode,
-                            model.Context.DateAndTime));
+                            model.Context.DateAndTime)).ToList();
 
             this._caseSolutionSettingRepository.Add(businessModelsForInsert);
             this._caseSolutionSettingRepository.Commit();
@@ -69,7 +69,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
                             x.Id,
                             x.CaseSolutionField,
                             x.CaseSolutionMode,
-                            model.Context.DateAndTime));
+                            model.Context.DateAndTime)).ToList();
 
             this._caseSolutionSettingRepository.Update(businessModelsForUpdate);
             this._caseSolutionSettingRepository.Commit();

@@ -1,4 +1,4 @@
-﻿namespace DH.Helpdesk.Dal.MapperData.CaseHistory
+﻿namespace DH.Helpdesk.Dal.MapperData.Logs
 {
     public class LogFileMapperData
     {

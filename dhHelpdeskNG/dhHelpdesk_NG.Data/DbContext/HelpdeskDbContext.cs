@@ -95,6 +95,8 @@ namespace DH.Helpdesk.Dal.DbContext
 
         public DbSet<Application> Applications { get; set; }
 
+        public DbSet<ApplicationTypeEntity> ApplicationTypes { get; set; }
+
         public DbSet<Building> Buildings { get; set; }
 
         public DbSet<BulletinBoard> BulletinBoards { get; set; }
@@ -275,9 +277,9 @@ namespace DH.Helpdesk.Dal.DbContext
 
         public DbSet<EmailLog> EmailLogs { get; set; }
 
-		public DbSet<EmailLogAttempt> EmailLogAttempts { get; set; }
+        public DbSet<EmailLogAttempt> EmailLogAttempts { get; set; }
 
-		public DbSet<EmploymentType> EmploymentTypes { get; set; }
+        public DbSet<EmploymentType> EmploymentTypes { get; set; }
 
         public DbSet<EntityInfo> EntityInfos { get; set; }
 
@@ -610,7 +612,7 @@ namespace DH.Helpdesk.Dal.DbContext
         public DbSet<CaseDocumentTextConditionIdentifierEntity> CaseDocumentTextConditionIdentifiers { get; set; }
 
         public DbSet<CaseSolution_SplitToCaseSolutionEntity> CaseSolution_SplitToCaseSolutions { get; set; }
-		public DbSet<ComputerUserCategory> ComputerUserCategories { get; set; }
+        public DbSet<ComputerUserCategory> ComputerUserCategories { get; set; }
 
         public DbSet<ConditionEntity> Conditions { get; set; }
 
@@ -621,13 +623,13 @@ namespace DH.Helpdesk.Dal.DbContext
         public DbSet<GDPRDataPrivacyFavorite> GDPRDataPrivacyFavorites { get; set; }
         public DbSet<GDPRTask> GDPRTasks { get; set; }
 
-		public DbSet<FeatureToggle> FeatureToggles { get; set; }
+        public DbSet<FeatureToggle> FeatureToggles { get; set; }
 
-		#endregion
+        #endregion
 
-		#region Public Methods and Operators
+        #region Public Methods and Operators
 
-		public virtual void Commit()
+        public virtual void Commit()
         {
             try
             {
@@ -905,20 +907,21 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new LicenseConfiguration());
             modelBuilder.Configurations.Add(new VendorConfiguration());
             modelBuilder.Configurations.Add(new ManufacturerConfiguration());
-            modelBuilder.Configurations.Add(new DH.Helpdesk.Dal.EntityConfigurations.Licenses.ApplicationConfiguration());
+            modelBuilder.Configurations.Add(new ApplicationConfiguration());
+            modelBuilder.Configurations.Add(new ApplicationTypeConfiguration());
             modelBuilder.Configurations.Add(new LicenseFileConfiguration());
             modelBuilder.Configurations.Add(new GridSettingsEntityConfiguration());
 
             modelBuilder.Configurations.Add(new ParentChildRelationConfiguration());
 
-			modelBuilder.Configurations.Add(new InvoiceRowConfiguration());
-			modelBuilder.Configurations.Add(new InvoiceHeaderConfiguration());
+            modelBuilder.Configurations.Add(new InvoiceRowConfiguration());
+            modelBuilder.Configurations.Add(new InvoiceHeaderConfiguration());
 
             modelBuilder.Configurations.Add(new CaseSolutionConditionConfiguration());
             modelBuilder.Configurations.Add(new ExtendedCaseFormConfiguration());
             modelBuilder.Configurations.Add(new CaseSolutionConditionPropertyConfiguration());
-			modelBuilder.Configurations.Add(new Case_CaseSection_ExtendedCaseConfiguration());
-			modelBuilder.Configurations.Add(new ExtendedCaseDataConfiguration());
+            modelBuilder.Configurations.Add(new Case_CaseSection_ExtendedCaseConfiguration());
+            modelBuilder.Configurations.Add(new ExtendedCaseDataConfiguration());
             modelBuilder.Configurations.Add(new ExtendedCaseValueConfiguration());
             modelBuilder.Configurations.Add(new Case_ExtendedCaseDataConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentConfiguration());
@@ -930,24 +933,24 @@ namespace DH.Helpdesk.Dal.DbContext
             modelBuilder.Configurations.Add(new CaseDocumentParagraphConditionConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentTextConditionConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentTemplateConfiguration());
-			modelBuilder.Configurations.Add(new CaseDocumentTextIdentifierConfiguration());
+            modelBuilder.Configurations.Add(new CaseDocumentTextIdentifierConfiguration());
             modelBuilder.Configurations.Add(new CaseDocumentTextConditionIdentifierConfiguration());
             modelBuilder.Configurations.Add(new CaseSolution_SplitToCaseSolutionConfiguration());
             modelBuilder.Configurations.Add(new ConditionConfiguration());
 
-			modelBuilder.Configurations.Add(new ComputerUserCategoryConfiguration());
-			modelBuilder.Configurations.Add(new CaseSolution_CaseSection_ExtendedCaseFormConfiguration());
+            modelBuilder.Configurations.Add(new ComputerUserCategoryConfiguration());
+            modelBuilder.Configurations.Add(new CaseSolution_CaseSection_ExtendedCaseFormConfiguration());
 
             modelBuilder.Configurations.Add(new GDPRDataPrivacyAccessConfiguration());
             modelBuilder.Configurations.Add(new GDPROperationsAuditConfiguration());
             modelBuilder.Configurations.Add(new GDPRDataPrivacyFavoriteConfiguration());
             modelBuilder.Configurations.Add(new GDPRTaskConfiguration());
 
-			modelBuilder.Configurations.Add(new FeatureToggleConfiguration());
+            modelBuilder.Configurations.Add(new FeatureToggleConfiguration());
 
-			#endregion
+            #endregion
 
-			base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
         }
 
         #endregion

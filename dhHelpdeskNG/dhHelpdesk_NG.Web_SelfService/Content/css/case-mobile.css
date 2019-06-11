@@ -23,29 +23,22 @@
             width: 40px!important;
         }
 
-
-
-
        /***** DROP DOWN SUB MENUS - OVERRIDES */
 
-       .dropdown-menu {
-           margin-top: 32px;
-       }
+       .dropdown-menu { margin-top: 32px; }
 
-       .dropdown-submenu{position:relative;}
-       .dropdown-submenu > .dropdown-menu{
-           position:relative;
-           padding-left:10px;
-           top:0;
-           left:0;
-           margin: 2px 0;
+       .dropdown-submenu > .dropdown-menu {
+           display: block;
+           position: relative;
+           overflow: hidden;
+           margin: 0 0 0 10px ;
+           padding: 0;
            border: none 0;
-           box-shadow:none;
+           box-shadow: none;
            -webkit-border-radius:0;
            -moz-border-radius:0;
            border-radius:0;
        }
-
 
        #divCaseType,
        #divCategory,

@@ -1,13 +1,14 @@
-﻿import { Injectable, Inject, forwardRef, Output, EventEmitter } from '@angular/core';
-import {Subject, Observable} from 'rxjs';
+﻿import { Injectable, forwardRef, Inject } from '@angular/core';
+import {Subject} from 'rxjs';
 import { AbstractControl } from '@angular/forms';
 import { SectionTemplateModel, BaseControlTemplateModel } from '../models/template.model';
-import { SectionModel, SectionInstanceModel, FieldModelBase, FormControlType, ItemModel } from '../models/form.model';
+import { SectionModel, SectionInstanceModel, FieldModelBase, ItemModel } from '../models/form.model';
 import { DigestResult } from '../models/digest.model';
 import * as commonMethods from '../utils/common-methods';
 import { LogService } from './log.service';
 import { ValidateOn } from '../shared/validation-types';
-import { IAppConfig, AppConfig } from '../shared/app-config/app-config';
+import { IAppConfig } from '../shared/app-config/app-config.interface';
+import { AppConfig } from '../shared/app-config/app-config';
 
 @Injectable()
 export class ComponentCommService {
@@ -40,17 +41,19 @@ export class ComponentCommService {
     announceControlValueChanged(params: ControlValueChangedParams) {
         let lastValue = params.formModel.lastValue || '';
         let controlNewValue = params.value || '';
-        this.logService.debugFormatted('[VALUE_CHANGED_EVENT] announceControlValueChanged: check if value has changed. Control: {0}, LastValue: {1}, ControlNewValue: {2}', params.control.id, lastValue, controlNewValue);
+        this.logService.debugFormatted('[VALUE_CHANGED_EVENT] announceControlValueChanged: check if value has changed. Control: {0}, LastValue: {1}, ControlNewValue: {2}',
+         params.control.id, lastValue, controlNewValue);
 
         let areEqual =
             commonMethods.areEqualsDeep(lastValue, controlNewValue) ||
             (commonMethods.isUndefinedNullOrEmpty(lastValue) && commonMethods.isUndefinedNullOrEmpty(controlNewValue));
 
         if (!areEqual) {
-            this.logService.infoFormatted('[VALUE_CHANGED_EVENT] Raising digest valueChanged event! Control: {0}, LastValue:{1}, ControlNewValue: {2}', params.control.id, lastValue, controlNewValue);
+            this.logService.infoFormatted('[VALUE_CHANGED_EVENT] Raising digest valueChanged event! Control: {0}, LastValue:{1}, ControlNewValue: {2}',
+             params.control.id, lastValue, controlNewValue);
             this.controlValueChanged.next(params);
         } else {
-            this.logService.debug('[VALUE_CHANGED_EVENT] value has not changed.');    
+            this.logService.debug('[VALUE_CHANGED_EVENT] value has not changed.');
         }
     }
 
@@ -86,7 +89,8 @@ export class ComponentCommService {
 }
 
 export class ControlValueChangedParams {
-    constructor(public control: BaseControlTemplateModel, public formControl: AbstractControl, public value: any, public formModel: FieldModelBase) {
+    constructor(public control: BaseControlTemplateModel, public formControl: AbstractControl,
+      public value: any, public formModel: FieldModelBase) {
     }
 }
 

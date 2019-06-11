@@ -26,7 +26,7 @@ namespace DH.Helpdesk.WebApi.Controllers
     public class CaseLogsController : BaseApiController
     {
         private readonly IUserService _userService;
-        private readonly ILogService _caselLogService;
+        private readonly ILogService _caseLogService;
         private readonly IMapper _mapper;
         private readonly ISettingsLogic _settingsLogic;
         private readonly ILogFileService _logFileService;
@@ -36,7 +36,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         public CaseLogsController(
             IUserService userService, 
-            ILogService caselLogService, 
+            ILogService caseLogService, 
             ILogFileService logFileService,
             ICaseFileService caseFileService,
             ITemporaryFilesCacheFactory userTemporaryFilesStorageFactory,
@@ -46,7 +46,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             _caseFileService = caseFileService;
             _logFileService = logFileService;
             _userService = userService;
-            _caselLogService = caselLogService;
+            _caseLogService = caseLogService;
             _mapper = mapper;
             _settingsLogic = settingsLogic;
             _userTemporaryFilesStorage = userTemporaryFilesStorageFactory.CreateForModule(ModuleName.Cases);
@@ -57,19 +57,19 @@ namespace DH.Helpdesk.WebApi.Controllers
         [CheckUserCasePermissions(CaseIdParamName = "caseId", CheckBody = true)]
         public async Task<IHttpActionResult> Get([FromUri]int caseId, [FromUri]int cid)
         {
-            var currentUser = _userService.GetUser(UserId);
+            var currentUser = await _userService.GetUserAsync(UserId);
             var includeInternalLogs = currentUser.CaseInternalLogPermission.ToBool();
 
-            var logEntities = await _caselLogService.GetLogsByCaseIdAsync(caseId, includeInternalLogs).ConfigureAwait(false);
-            
-            var model = MapLogsToModel(logEntities);
+            var logEntities = await _caseLogService.GetLogsByCaseIdAsync(caseId, includeInternalLogs).ConfigureAwait(false);
 
+            var model = MapLogsToModel(logEntities);
             return Ok(model);
         }
 
         private IList<CaseLogOutputModel> MapLogsToModel(IList<CaseLogData> logs)
         {
             var items = new List<CaseLogOutputModel>();
+
             foreach (var log in logs)
             {
                 //create two external and internal items out of one if has both properties
@@ -79,24 +79,30 @@ namespace DH.Helpdesk.WebApi.Controllers
 
                     //create external log item
                     log.InternalText = null;
-                    var itemModel = _mapper.Map<CaseLogOutputModel>(log);
+                    var itemModel = CreateCaseLogOutputModel(log);
                     items.Add(itemModel);
 
                     //create internal
                     log.ExternalText = null;
                     log.InternalText = internalText;
-                    itemModel = _mapper.Map<CaseLogOutputModel>(log);
+
+                    itemModel = CreateCaseLogOutputModel(log);
                     items.Add(itemModel);
                 }
                 else
                 {
-                    var itemModel = _mapper.Map<CaseLogOutputModel>(log);
+                    var itemModel = CreateCaseLogOutputModel(log);
                     items.Add(itemModel);
                 }
-
             }
 
             return items;
+        }
+
+        private CaseLogOutputModel CreateCaseLogOutputModel(CaseLogData log)
+        {
+            var itemModel = _mapper.Map<CaseLogOutputModel>(log);
+            return itemModel;
         }
 
         //ex: /api/Case/123/LogFile/1203?cid=1
