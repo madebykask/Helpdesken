@@ -25,7 +25,20 @@
         @Scripts.Render("~/bundles/common")
 
         @Scripts.Render("~/Content/js/Shared/_layout")
-
+        
+        <script type="text/javascript">
+            //prevent go back
+            if (location.hash === '#no-back') {
+                if (typeof history.pushState !== 'undefined') {
+                    history.pushState(null, '', '#stay');
+                    window.addEventListener('popstate', function(event) {
+                        history.pushState(null, '', '#stay');
+                    });
+                } else {
+                    window.history.forward();
+                }
+            }
+        </script>
         <!--[if lt IE 9]>
          <script src="@Url.Content("~/Content/js/html5shiv.js")"></script>
           <script src="@Url.Content("~/Content/js/respond.min.js")"></script>

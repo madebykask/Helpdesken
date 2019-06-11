@@ -12,6 +12,7 @@ using WebGrease.Css.Extensions;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Common.Types;
+using DH.Helpdesk.SelfService.Infrastructure.Attributes;
 using DH.Helpdesk.Services.Services.Cases;
 using DH.Helpdesk.Services.Utils;
 
@@ -547,6 +548,7 @@ namespace DH.Helpdesk.SelfService.Controllers
         }
 
         [HttpGet]
+        [NoCache] // prevent caching when go back after post
         public ActionResult ExtendedCase(int? caseTemplateId = null, int? caseId = null)
         {
             var model = GetExtendedCaseViewModel(caseTemplateId, caseId);
@@ -858,11 +860,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                     {
                         TempData[ShowRegistrationMessageKey] = isNewCase;
 
-                        //return RedirectToAction("UserCases", new { customerId = model.CustomerId });
                         if (string.IsNullOrEmpty(returnUrl))
-                            return RedirectToAction("ExtendedCase", new { caseId = caseId });
+                            return new RedirectResult(Url.Action("ExtendedCase", "Case", new { caseId = caseId }) + "#no-back");
                         else
-                            return Redirect(returnUrl);
+                            return Redirect(returnUrl + "#no-back");
                     }
                 }
             }
@@ -1195,10 +1196,10 @@ namespace DH.Helpdesk.SelfService.Controllers
                 departmentIds = new int[] { currentCase.Department_Id.Value };
 
 
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(currentCustomer.TimeZoneId);
+            var timeZone = TimeZoneInfo.FindSystemTimeZoneById(currentCustomer.TimeZoneId);
 
 
-			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                 ManualDependencyResolver.Get<IHolidayService>(),
                 currentCustomer.WorkingDayStart,
                 currentCustomer.WorkingDayEnd,
@@ -1213,7 +1214,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 currentCase.Department_Id);
 
 
-			int externalTimeToAdd = 0;
+            int externalTimeToAdd = 0;
             // if statesecondary has ResetOnExternalUpdate
             if (currentCase.StateSecondary_Id.HasValue)
             {
@@ -1233,19 +1234,19 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
 
-			var oldLeadTime = currentCase.LeadTime;
+            var oldLeadTime = currentCase.LeadTime;
             currentCase.LeadTime = possibleWorktime - currentCase.ExternalTime;
 
             currentCase.ChangeTime = DateTime.UtcNow;
 
-			var extraFields = new ExtraFieldCaseHistory()
-			{
-				ActionExternalTime = externalTimeToAdd,
-				ActionLeadTime = currentCase.LeadTime - oldLeadTime,
-				LeadTime = currentCase.LeadTime
-			};
+            var extraFields = new ExtraFieldCaseHistory()
+            {
+                ActionExternalTime = externalTimeToAdd,
+                ActionLeadTime = currentCase.LeadTime - oldLeadTime,
+                LeadTime = currentCase.LeadTime
+            };
 
-			var caseHistoryId = _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5, out errors, SessionFacade.CurrentUserIdentity.UserId, extraFields);            
+            var caseHistoryId = _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5, out errors, SessionFacade.CurrentUserIdentity.UserId, extraFields);            
             
             // save log
             var caseLog = new CaseLog
