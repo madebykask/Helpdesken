@@ -560,7 +560,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     currentCase?.Id, caseTemplateSettings,
                     customerUserSetting.CaptionPermission))
                     AddReadOnlyOption(field.Options);
-                AddMaxLengthOption(field.Options, 50);
+                AddMaxLengthOption(field.Options, 100);
                 if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings,
                     GlobalEnums.TranslationCaseFields.Caption))
                     AddHiddenOption(field.Options);
