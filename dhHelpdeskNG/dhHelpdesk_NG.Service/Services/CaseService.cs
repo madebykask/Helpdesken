@@ -874,7 +874,15 @@ namespace DH.Helpdesk.Services.Services
             _caseRepository.Activate(caseId, leadTime, externalTimeToAdd);
             var c = _caseRepository.GetDetachedCaseById(caseId);
             _caseStatService.UpdateCaseStatistic(c);
-            SaveCaseHistory(c, userId, adUser, createdByApp, out errors);
+
+			var extraFields = new ExtraFieldCaseHistory
+			{
+				ActionExternalTime = externalTimeToAdd,
+				ActionLeadTime = leadTime - _case.LeadTime,
+				LeadTime = leadTime
+			};
+
+            SaveCaseHistory(c, userId, adUser, createdByApp, out errors, "", extraFields);
         }
         
         public void Commit()

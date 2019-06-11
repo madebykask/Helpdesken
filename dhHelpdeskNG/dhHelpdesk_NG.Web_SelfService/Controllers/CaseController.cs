@@ -1212,6 +1212,8 @@ namespace DH.Helpdesk.SelfService.Controllers
                 utcNow,
                 currentCase.Department_Id);
 
+
+			int externalTimeToAdd = 0;
             // if statesecondary has ResetOnExternalUpdate
             if (currentCase.StateSecondary_Id.HasValue)
             {
@@ -1223,7 +1225,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 if (casestatesecundary.IncludeInCaseStatistics == 0)
                 {
-                    var externalTimeToAdd = workTimeCalc.CalculateWorkTime(
+                    externalTimeToAdd = workTimeCalc.CalculateWorkTime(
                         currentCase.ChangeTime,
                         utcNow,
                         currentCase.Department_Id);
@@ -1231,10 +1233,19 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
 
+			var oldLeadTime = currentCase.LeadTime;
             currentCase.LeadTime = possibleWorktime - currentCase.ExternalTime;
 
             currentCase.ChangeTime = DateTime.UtcNow;
-            var caseHistoryId = _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5,  out errors, SessionFacade.CurrentUserIdentity.UserId);            
+
+			var extraFields = new ExtraFieldCaseHistory()
+			{
+				ActionExternalTime = externalTimeToAdd,
+				ActionLeadTime = currentCase.LeadTime - oldLeadTime,
+				LeadTime = currentCase.LeadTime
+			};
+
+			var caseHistoryId = _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5, out errors, SessionFacade.CurrentUserIdentity.UserId, extraFields);            
             
             // save log
             var caseLog = new CaseLog
