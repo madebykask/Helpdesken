@@ -408,6 +408,15 @@ IF NOT EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'TimeZoneId' and Object_ID
 GO
 
 
+RAISERROR('Creating index idx_casehistory_casetype', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT name FROM sysindexes WHERE name = 'idx_casehistory_casetype')	
+BEGIN
+	CREATE NONCLUSTERED INDEX [idx_casehistory_casetype]
+		ON [dbo].[tblCaseHistory]([CaseType_Id] ASC, [CreatedDate] ASC)
+		INCLUDE([Case_Id], [WorkingGroup_Id]);
+END
+GO
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.41'
