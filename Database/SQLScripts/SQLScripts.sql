@@ -404,7 +404,7 @@ END
 RAISERROR('Adding new TimeZoneId to tblCustomer', 10, 1) WITH NOWAIT
 IF NOT EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'TimeZoneId' and Object_ID = Object_ID(N'dbo.tblCustomer'))
    ALTER TABLE tblCustomer
-   ADD TimeZoneId nvarchar(64) NOT NULL DEFAULT('Central Europe Standard Time')
+   ADD TimeZoneId nvarchar(64) NOT NULL DEFAULT('W. Europe Standard Time')
 GO
 
 
