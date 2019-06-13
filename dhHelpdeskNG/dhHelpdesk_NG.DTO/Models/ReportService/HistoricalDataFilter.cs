@@ -12,6 +12,6 @@ namespace DH.Helpdesk.BusinessData.Models.ReportService
 		public DateTime ChangeFrom { get; set; }
 		public DateTime ChangeTo { get; set; }
 		public List<int> ChangeWorkingGroups { get; set; }
-		public bool IncludeCasesWithNoWorkingGroup { get; set; }
+		public bool IncludeHistoricalCasesWithNoWorkingGroup { get; set; }
 	}
 }

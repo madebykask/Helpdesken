@@ -66,21 +66,23 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 			var workingGroups = user.UserGroup_Id > UserGroups.Administrator ?
 				_workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).ToList() :
 				_workingGroupService.GetWorkingGroups(customerId, user.Id, false, true).ToList();
+            var includeCasesWithNoWorkingGroup = filter.WorkingGroups == null || !filter.WorkingGroups.Any();
 
 			if (filter.HistoricalWorkingGroups != null && filter.HistoricalWorkingGroups.Any())
-			{
 				workingGroups = workingGroups.Where(o => filter.HistoricalWorkingGroups.Contains(o.Id)).ToList();
-			}
 
-			var dataFilter = GetCommonDataFilter<HistoricalDataFilter>(filter);
+            filter.WorkingGroups = GetWorkingGroups(filter.WorkingGroups, customerId);
+
+            var dataFilter = GetCommonDataFilter<HistoricalDataFilter>(filter);
             dataFilter.CaseStatus = filter.CaseStatus == 2 ? 1 : filter.CaseStatus == 1 ? 0 : (int?) null; // 1 active, 0 closed else null
             dataFilter.ChangeFrom = filter.HistoricalChangeDateFrom ?? DateTime.Now.AddYears(-100);
             dataFilter.ChangeTo = filter.HistoricalChangeDateTo.HasValue
                 ? filter.HistoricalChangeDateTo.GetEndOfDay().Value
                 : DateTime.Now.AddYears(20);
             dataFilter.ChangeWorkingGroups = workingGroups.Select(o => o.Id).ToList();
-            dataFilter.IncludeCasesWithNoWorkingGroup = filter.HistoricalWorkingGroups == null ||
+            dataFilter.IncludeHistoricalCasesWithNoWorkingGroup = filter.HistoricalWorkingGroups == null ||
                                                         !filter.HistoricalWorkingGroups.Any();
+            dataFilter.IncludeCasesWithNoWorkingGroup = includeCasesWithNoWorkingGroup;
 
 			var result = _reportServiceService.GetHistoricalData(dataFilter);
 
@@ -109,10 +111,15 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         public JsonResult GetReportedTimeData(ReportedTimeReportFilterModel filter)
         {
             var customerId = SessionFacade.CurrentCustomer.Id;
+            var includeCasesWithNoWorkingGroup = filter.WorkingGroups == null || !filter.WorkingGroups.Any();
+            filter.WorkingGroups = GetWorkingGroups(filter.WorkingGroups, customerId);
+
             var dataFilter = GetCommonDataFilter<ReportedTimeDataFilter>(filter);
             dataFilter.GroupBy = (ReportedTimeGroup) filter.GroupBy;
             dataFilter.LogNoteFrom = filter.LogNoteFrom;
             dataFilter.LogNoteTo = filter.LogNoteTo.HasValue ? filter.LogNoteTo.GetEndOfDay() : new DateTime?();
+            dataFilter.IncludeCasesWithNoWorkingGroup = includeCasesWithNoWorkingGroup;
+
 
             var result = _reportServiceService.GetReportedTimeData(dataFilter);
             var minutesInHour = 60.0;
@@ -175,8 +182,12 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         public JsonResult GetNumberOfCasesData(NumberOfCasesReportFilterModel filter)
         {
             var customerId = SessionFacade.CurrentCustomer.Id;
+            var includeCasesWithNoWorkingGroup = filter.WorkingGroups == null || !filter.WorkingGroups.Any();
+            filter.WorkingGroups = GetWorkingGroups(filter.WorkingGroups, customerId);
+
             var dataFilter = GetCommonDataFilter<NumberOfCasesDataFilter>(filter);
-            dataFilter.GroupBy = (NumberOfCasesGroup) filter.GroupBy; 
+            dataFilter.GroupBy = (NumberOfCasesGroup) filter.GroupBy;
+            dataFilter.IncludeCasesWithNoWorkingGroup = includeCasesWithNoWorkingGroup;
 
             var result = _reportServiceService.GetNumberOfCasesData(dataFilter);
             var totalCases = result.Sum(c => c.CasesAmount);
@@ -240,6 +251,19 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 }
             };
             return Json(responce, JsonRequestBehavior.AllowGet);
+        }
+
+        private List<int> GetWorkingGroups(List<int> filterWorkingGroups, int customerId)
+        {
+            //*If user has no wg and is a SystemAdmin or customer admin, he/she can see all available wgs */
+            var user = _userService.GetUser(SessionFacade.CurrentUser.Id);
+            var workingGroups = user.UserGroup_Id > UserGroups.Administrator
+                ? _workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).Select(w => w.Id).ToList()
+                : _workingGroupService.GetWorkingGroups(customerId, user.Id, false, true).Select(w => w.Id).ToList();
+            if (filterWorkingGroups == null || !filterWorkingGroups.Any())
+                return workingGroups;
+
+            return filterWorkingGroups.Where(w => workingGroups.Contains(w)).ToList();
         }
 
         private string GetMonthName(int month)
