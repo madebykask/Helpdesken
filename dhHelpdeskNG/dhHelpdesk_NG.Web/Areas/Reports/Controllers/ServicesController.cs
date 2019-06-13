@@ -29,6 +29,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         private readonly ICaseTypeService _caseTypeService;
         private readonly IProductAreaService _productAreaService;
 		private readonly IReportServiceService _reportServiceService;
+        private readonly IDepartmentService _departmentService;
 
 		public ServicesController(
             IMasterDataService masterDataService, 
@@ -37,7 +38,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             IWorkingGroupService workingGroupService,
             ICaseTypeService caseTypeService,
 			IReportServiceService reportServiceService,
-            IProductAreaService productAreaService)
+            IProductAreaService productAreaService,
+            IDepartmentService departmentService)
             : base(masterDataService)
         {
             _userService = userService;
@@ -46,6 +48,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             _caseTypeService = caseTypeService;
 			_reportServiceService = reportServiceService;
             _productAreaService = productAreaService;
+            _departmentService = departmentService;
         }
 
         [HttpGet]
@@ -73,6 +76,9 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 
             filter.WorkingGroups = GetWorkingGroups(filter.WorkingGroups, customerId);
 
+            var includeCasesWithNoDepartments = filter.Departments == null || !filter.Departments.Any();
+            filter.Departments = GetDepartments(filter.Departments, customerId);
+
             var dataFilter = GetCommonDataFilter<HistoricalDataFilter>(filter);
             dataFilter.CaseStatus = filter.CaseStatus == 2 ? 1 : filter.CaseStatus == 1 ? 0 : (int?) null; // 1 active, 0 closed else null
             dataFilter.ChangeFrom = filter.HistoricalChangeDateFrom ?? DateTime.Now.AddYears(-100);
@@ -83,6 +89,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             dataFilter.IncludeHistoricalCasesWithNoWorkingGroup = filter.HistoricalWorkingGroups == null ||
                                                         !filter.HistoricalWorkingGroups.Any();
             dataFilter.IncludeCasesWithNoWorkingGroup = includeCasesWithNoWorkingGroup;
+            dataFilter.IncludeCasesWithNoDepartments = includeCasesWithNoDepartments;
 
 			var result = _reportServiceService.GetHistoricalData(dataFilter);
 
@@ -112,14 +119,16 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         {
             var customerId = SessionFacade.CurrentCustomer.Id;
             var includeCasesWithNoWorkingGroup = filter.WorkingGroups == null || !filter.WorkingGroups.Any();
+            var includeCasesWithNoDepartments = filter.Departments == null || !filter.Departments.Any();
             filter.WorkingGroups = GetWorkingGroups(filter.WorkingGroups, customerId);
+            filter.Departments = GetDepartments(filter.Departments, customerId);
 
             var dataFilter = GetCommonDataFilter<ReportedTimeDataFilter>(filter);
             dataFilter.GroupBy = (ReportedTimeGroup) filter.GroupBy;
             dataFilter.LogNoteFrom = filter.LogNoteFrom;
             dataFilter.LogNoteTo = filter.LogNoteTo.HasValue ? filter.LogNoteTo.GetEndOfDay() : new DateTime?();
             dataFilter.IncludeCasesWithNoWorkingGroup = includeCasesWithNoWorkingGroup;
-
+            dataFilter.IncludeCasesWithNoDepartments = includeCasesWithNoDepartments;
 
             var result = _reportServiceService.GetReportedTimeData(dataFilter);
             var minutesInHour = 60.0;
@@ -183,11 +192,14 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         {
             var customerId = SessionFacade.CurrentCustomer.Id;
             var includeCasesWithNoWorkingGroup = filter.WorkingGroups == null || !filter.WorkingGroups.Any();
+            var includeCasesWithNoDepartments = filter.Departments == null || !filter.Departments.Any();
             filter.WorkingGroups = GetWorkingGroups(filter.WorkingGroups, customerId);
+            filter.Departments = GetDepartments(filter.Departments, customerId);
 
             var dataFilter = GetCommonDataFilter<NumberOfCasesDataFilter>(filter);
             dataFilter.GroupBy = (NumberOfCasesGroup) filter.GroupBy;
             dataFilter.IncludeCasesWithNoWorkingGroup = includeCasesWithNoWorkingGroup;
+            dataFilter.IncludeCasesWithNoDepartments = includeCasesWithNoDepartments;
 
             var result = _reportServiceService.GetNumberOfCasesData(dataFilter);
             var totalCases = result.Sum(c => c.CasesAmount);
@@ -264,6 +276,18 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 return workingGroups;
 
             return filterWorkingGroups.Where(w => workingGroups.Contains(w)).ToList();
+        }
+
+        public List<int> GetDepartments(List<int> filterDepartments, int customerId)
+        {
+            var departments = _departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, customerId, false).Select(w => w.Id).ToList();
+            if (!departments.Any())
+                departments = _departmentService.GetDepartments(customerId, ActivationStatus.All).Select(w => w.Id).ToList();
+
+            if (filterDepartments == null || !filterDepartments.Any())
+                return departments;
+
+            return filterDepartments.Where(w => departments.Contains(w)).ToList();
         }
 
         private string GetMonthName(int month)

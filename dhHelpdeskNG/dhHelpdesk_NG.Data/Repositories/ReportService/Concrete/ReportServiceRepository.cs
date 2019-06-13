@@ -78,7 +78,10 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 
         public IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter)
         {
-            var result = DataContext.Database.SqlQuery<HistoricalDataResult>("ReportGetHistoricalData @caseStatus, @changeFrom, @changeTo, @customerID, @changeWorkingGroups, @registerFrom, @registerTo, @closeFrom, @closeTo, @includeCasesWithHistoricalNoWorkingGroup, @includeCasesWithNoWorkingGroup, @administrators, @departments, @caseTypes, @productAreas, @workingGroups",
+            var result = DataContext.Database.SqlQuery<HistoricalDataResult>("ReportGetHistoricalData @caseStatus, @changeFrom, @changeTo, @customerID, @changeWorkingGroups," +
+                                                                             " @registerFrom, @registerTo, @closeFrom, @closeTo, @includeCasesWithHistoricalNoWorkingGroup," +
+                                                                             " @includeCasesWithNoWorkingGroup, @includeCasesWithNoDepartment, @administrators, @departments," +
+                                                                             " @caseTypes, @productAreas, @workingGroups",
                 new SqlParameter("@caseStatus", GetNullableValue(filter.CaseStatus)),
                 new SqlParameter("@changeFrom", GetNullableValue(filter.ChangeFrom)),
                 new SqlParameter("@changeTo", GetNullableValue(filter.ChangeTo)),
@@ -90,6 +93,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                 new SqlParameter("@closeTo", GetNullableValue(filter.CloseTo)),
                 new SqlParameter("@includeCasesWithHistoricalNoWorkingGroup", filter.IncludeHistoricalCasesWithNoWorkingGroup),
                 new SqlParameter("@includeCasesWithNoWorkingGroup", filter.IncludeCasesWithNoWorkingGroup),
+                new SqlParameter("@includeCasesWithNoDepartment", filter.IncludeCasesWithNoDepartments),
                 GetIDListParameter("@administrators", filter.Administrators),
                 GetIDListParameter("@departments", filter.Departments),
                 GetIDListParameter("@caseTypes", filter.CaseTypes),
@@ -120,8 +124,12 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
             if (filter.CloseTo.HasValue)
                 query = query.Where(l => l.Case.FinishingDate <= filter.CloseTo.Value);
 
-            if (filter.Departments != null && filter.Departments.Any())
-                query = query.Where(l => l.Case.Department_Id.HasValue && filter.Departments.Contains(l.Case.Department_Id.Value));
+            if (filter.IncludeCasesWithNoDepartments)
+                query = query.Where(c => !c.Case.Department_Id.HasValue ||
+                                         (c.Case.Department_Id.HasValue && filter.Departments.Contains(c.Case.Department_Id.Value)));
+            else
+                query = query.Where(c =>
+                    c.Case.Department_Id.HasValue && filter.Departments.Contains(c.Case.Department_Id.Value));
 
             if (filter.IncludeCasesWithNoWorkingGroup)
                 query = query.Where(c => !c.Case.WorkingGroup_Id.HasValue ||
@@ -244,8 +252,12 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
             if (filter.CloseTo.HasValue)
                 query = query.Where(c => c.FinishingDate <= filter.CloseTo.Value);
 
-            if (filter.Departments != null && filter.Departments.Any())
-                query = query.Where(c => c.Department_Id.HasValue && filter.Departments.Contains(c.Department_Id.Value));
+            if (filter.IncludeCasesWithNoDepartments)
+                query = query.Where(c => !c.Department_Id.HasValue ||
+                                         (c.Department_Id.HasValue && filter.Departments.Contains(c.Department_Id.Value)));
+            else
+                query = query.Where(c =>
+                    c.Department_Id.HasValue && filter.Departments.Contains(c.Department_Id.Value));
 
             if (filter.IncludeCasesWithNoWorkingGroup)
                 query = query.Where(c => !c.WorkingGroup_Id.HasValue ||
