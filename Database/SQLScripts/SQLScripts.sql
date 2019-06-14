@@ -307,7 +307,7 @@ BEGIN
 		@checkDepartments INT = 0,
 		@checkCaseTypes INT = 0,
 		@checkProductAreas INT = 0,
-		@checkWorkingGroups INT = 0,
+		@checkWorkingGroups INT = 1,
 		@checkCaseStatus INT = CASE WHEN @caseStatus IS NULL THEN 0 ELSE 1 END,
 		@checkChangeFrom INT = CASE WHEN @changeFrom IS NULL THEN 0 ELSE 1 END,
 		@checkChangeTo INT = CASE WHEN @changeTo IS NULL THEN 0 ELSE 1 END,
@@ -322,7 +322,7 @@ BEGIN
 	SELECT TOP 1 @checkDepartments = 1 FROM @departments
 	SELECT TOP 1 @checkCaseTypes = 1 FROM @caseTypes
 	SELECT TOP 1 @checkProductAreas = 1 FROM @productAreas
-	SELECT TOP 1 @checkWorkingGroups = 1 FROM @workingGroups
+	--SELECT TOP 1 @checkWorkingGroups = 1 FROM @workingGroups
 
 	SELECT @checkCurrentCustomerOnly = CASE WHEN (@checkAdministrators + @checkDepartments + @checkCaseTypes + @checkProductAreas + 
 		@checkWorkingGroups + @checkCaseStatus + @checkRegisterFrom + @checkRegisterTo + @checkCloseFrom + 
