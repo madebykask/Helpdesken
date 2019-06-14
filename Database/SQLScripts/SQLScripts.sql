@@ -295,7 +295,6 @@ CREATE PROCEDURE [dbo].[ReportGetHistoricalData]
 	@closeTo DATETIME, 
 	@includeCasesWithHistoricalNoWorkingGroup BIT,
 	@includeCasesWithNoWorkingGroup BIT,
-	@includeCasesWithNoDepartment BIT,
 	@administrators AS dbo.IDList READONLY, 
 	@departments AS dbo.IDList READONLY, 
 	@caseTypes AS dbo.IDList READONLY, 
@@ -305,10 +304,10 @@ AS
 BEGIN
 	DECLARE @checkChangeWorkingGroups INT = 0,
 		@checkAdministrators INT = 0,
-		@checkDepartments INT = 1,
+		@checkDepartments INT = 0,
 		@checkCaseTypes INT = 0,
 		@checkProductAreas INT = 0,
-		@checkWorkingGroups INT = 1,
+		@checkWorkingGroups INT = 0,
 		@checkCaseStatus INT = CASE WHEN @caseStatus IS NULL THEN 0 ELSE 1 END,
 		@checkChangeFrom INT = CASE WHEN @changeFrom IS NULL THEN 0 ELSE 1 END,
 		@checkChangeTo INT = CASE WHEN @changeTo IS NULL THEN 0 ELSE 1 END,
@@ -320,10 +319,10 @@ BEGIN
 
 	SELECT TOP 1 @checkChangeWorkingGroups = 1 FROM @changeWorkingGroups
 	SELECT TOP 1 @checkAdministrators = 1 FROM @administrators
-	--SELECT TOP 1 @checkDepartments = 1 FROM @departments
+	SELECT TOP 1 @checkDepartments = 1 FROM @departments
 	SELECT TOP 1 @checkCaseTypes = 1 FROM @caseTypes
 	SELECT TOP 1 @checkProductAreas = 1 FROM @productAreas
-	--SELECT TOP 1 @checkWorkingGroups = 1 FROM @workingGroups
+	SELECT TOP 1 @checkWorkingGroups = 1 FROM @workingGroups
 
 	SELECT @checkCurrentCustomerOnly = CASE WHEN (@checkAdministrators + @checkDepartments + @checkCaseTypes + @checkProductAreas + 
 		@checkWorkingGroups + @checkCaseStatus + @checkRegisterFrom + @checkRegisterTo + @checkCloseFrom + 
@@ -352,7 +351,7 @@ BEGIN
 	AND CT.Customer_Id = @customerID
 	AND ((@checkCurrentCustomerOnly = 1 AND C.Customer_Id = @customerID) OR @checkCurrentCustomerOnly = 0)
 	AND (@checkAdministrators = 0 OR EXISTS(SELECT ID FROM @administrators A WHERE C.CaseResponsibleUser_Id = A.ID))
-	AND (@checkDepartments = 0 OR EXISTS(SELECT ID FROM @departments D WHERE C.Department_Id = D.ID) OR (@includeCasesWithNoDepartment = 1 AND C.Department_Id IS NULL))
+	AND (@checkDepartments = 0 OR EXISTS(SELECT ID FROM @departments D WHERE C.Department_Id = D.ID))
 	AND (@checkCaseTypes = 0 OR EXISTS(SELECT ID FROM @caseTypes CT WHERE C.CaseType_Id = CT.ID))
 	AND (@checkProductAreas = 0 OR EXISTS(SELECT ID FROM @productAreas PA WHERE C.ProductArea_Id = PA.ID))
 	AND (@checkWorkingGroups = 0 OR EXISTS(SELECT ID FROM @workingGroups WG WHERE C.WorkingGroup_Id = WG.ID) OR (@includeCasesWithNoWorkingGroup = 1 AND C.WorkingGroup_Id IS NULL))
