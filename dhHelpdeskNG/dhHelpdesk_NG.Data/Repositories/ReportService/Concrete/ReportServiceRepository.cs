@@ -129,7 +129,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                 query = query.Where(c =>
                     c.Case.Department_Id.HasValue && filter.Departments.Contains(c.Case.Department_Id.Value));
 
-            if (filter.WorkingGroups == null || !filter.WorkingGroups.Any())
+            if ((filter.WorkingGroups == null || !filter.WorkingGroups.Any()) && !filter.IncludeCasesWithNoWorkingGroup)
                 // prevent fetch data
                 return new List<ReportedTimeDataResult>();
 
@@ -258,7 +258,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                 query = query.Where(c =>
                     c.Department_Id.HasValue && filter.Departments.Contains(c.Department_Id.Value));
 
-            if (filter.WorkingGroups == null || !filter.WorkingGroups.Any())
+            if ((filter.WorkingGroups == null || !filter.WorkingGroups.Any()) && !filter.IncludeCasesWithNoWorkingGroup)
                 // prevent fetch data
                 return new List<NumberOfCaseDataResult>();
 
