@@ -116,7 +116,7 @@
         }
 
         if (self.stepChangedCallback)
-            self.stepChangedCallback({ selectedVal, nextStepNumber });
+            self.stepChangedCallback({ selectedVal: selectedVal, nextStepNumber: nextStepNumber });
     };
 
 }
