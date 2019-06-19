@@ -414,8 +414,8 @@ export class CaseEditComponent {
           break;
         }
         case CaseFieldsNames.StateSecondaryId: {
-          const sendExternalEmailsControl = this.form.get(CaseFieldsNames.Log_SendMailToNotifier);
-          const externalLogTextControl = this.form.get(CaseFieldsNames.Log_ExternalText);
+          let sendExternalEmailsControl = this.form.get(CaseFieldsNames.Log_SendMailToNotifier);
+          let externalLogTextControl = this.form.get(CaseFieldsNames.Log_ExternalText);
           if (v.value) {
             this.stateSecondariesService.getStateSecondary(v.value)
             .pipe(
@@ -431,8 +431,8 @@ export class CaseEditComponent {
                   ).subscribe(date => this.form.setSafe(CaseFieldsNames.WatchDate, date));
               }
               // update extneral log field state
-              const sendExternalEmailsControl = this.form.get(CaseFieldsNames.Log_SendMailToNotifier);
-              const externalLogTextControl = this.form.get(CaseFieldsNames.Log_ExternalText);
+              sendExternalEmailsControl = this.form.get(CaseFieldsNames.Log_SendMailToNotifier);
+              externalLogTextControl = this.form.get(CaseFieldsNames.Log_ExternalText);
               if (ss.noMailToNotifier === true) {
                 sendExternalEmailsControl.disable({ onlySelf: true, emitEvent: true });
               } else if (externalLogTextControl && externalLogTextControl.disabled === false) {

@@ -28,7 +28,6 @@
         "@angular/pwa": "^0.13.0",
         "@angular/router": "^7.2.4",
         "@angular/service-worker": "^7.2.4",
-        "@mobiscroll/angular": "file:./src/lib/mobiscroll-package/mobiscroll-angular-4.6.3.tgz",
         "@ngx-translate/core": "^11.0.1",
         "@ngx-translate/http-loader": "^4.0.0",
         "core-js": "^2.6.4",
@@ -39,7 +38,8 @@
         "rxjs": "^6.4.0",
         "rxjs-compat": "^6.5.1",
         "uuid": "^3.3.2",
-        "zone.js": "^0.8.29"
+        "zone.js": "^0.8.29",
+        "@mobiscroll/angular": "file:./src/lib/mobiscroll-package/mobiscroll-angular-4.7.2.tgz"
     },
     "devDependencies": {
         "@angular-builders/custom-webpack": "^7.3.1",

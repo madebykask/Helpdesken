@@ -139,9 +139,14 @@ span.disabled {
     }
   }
 
+  .mbsc-input input,
+    .mbsc-input textarea {
+      padding: 0 1em;
+    }
+
   .calendar-option {
     float: right;
-    color: #4eccc4;
+    //color: #4eccc4;
     //font-size: 1.5em;
   }
 
