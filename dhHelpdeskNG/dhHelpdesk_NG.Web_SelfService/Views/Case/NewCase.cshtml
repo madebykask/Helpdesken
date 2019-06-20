@@ -671,7 +671,7 @@
                                                 @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Caption)
                                             </label>
                                             <div class="col-md-9">
-                                                @Html.TextBoxFor(c => Model.NewCase.Caption, new { @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Caption.ToString() })
+                                                @Html.TextBoxFor(c => Model.NewCase.Caption, new { maxlength = "100", @class = "hasAttribute", standardName = GlobalEnums.TranslationCaseFields.Caption.ToString() })
                                             </div>
                                         </div>
                                     }
