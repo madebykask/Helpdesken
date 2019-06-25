@@ -38,6 +38,7 @@ import { Pdf3FileViewerComponent } from './components/file-preview/viewers/pdf3-
 import { NotifierSearchComponent } from './components/case-edit/controls/notifier-search/notifier-search.component';
 import { FilterExtDirective } from './directives/filter-ext.directive';
 import { LognoteEmailInputComponent } from './components/case-edit/controls/lognote-email-input/lognote-email-input.component';
+import { CaseMenuComponent } from './components/case-menu/case-menu.component';
 
 @NgModule({
   declarations: [ CaseEditComponent,
@@ -47,7 +48,7 @@ import { LognoteEmailInputComponent } from './components/case-edit/controls/logn
     CaseActionContainerComponent, GeneralActionComponent, FieldChangeActionComponent, LogNoteActionComponent, ActionsFilterPipe,
     CaseLogInputComponent, LogFilesUploadComponent, FilePreviewComponent, PdfFileViewer, CommonFileViewer, ImageFileViewerComponent,
     TextFileViewerComponent, Pdf2FileViewerComponent, Pdf3FileViewerComponent, NotifierSearchComponent, MbscFormGroupExpandDirective,
-    FilterExtDirective, LognoteEmailInputComponent
+    FilterExtDirective, LognoteEmailInputComponent, CaseMenuComponent
 ],
   imports: [
     CommonModule,

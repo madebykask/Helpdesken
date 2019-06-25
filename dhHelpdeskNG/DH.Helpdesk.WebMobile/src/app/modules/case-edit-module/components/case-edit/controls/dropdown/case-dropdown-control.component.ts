@@ -47,7 +47,7 @@ export class CaseDropdownComponent extends BaseControl<number> {
 
     localDataSource: OptionItem[] = [];
 
-    constructor(private commService: CommunicationService, 
+    constructor(private commService: CommunicationService,
       private ngxTranslateService: TranslateService) {
       super();
     }

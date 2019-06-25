@@ -81,7 +81,7 @@ export class CaseFieldModel<T> implements ICaseField<T> {
     }
 
     public get maxLength(): number | null {
-      if (this.options == null) return null;
+      if (this.options == null) { return null; }
       const maxLength = this.options.filter((o) => o.key === CaseFieldOptions.maxlength);
       return maxLength.length > 0 ? +maxLength[0].value : null;
     }

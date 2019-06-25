@@ -12,11 +12,11 @@ import { CaseRouteReuseStrategy } from 'src/app/helpers/case-route-resolver.stat
   styleUrls: ['./cases-filter.component.scss']
 })
 export class CasesFilterComponent implements OnInit {
-  
-  @ViewChild('navMenu') filterMenu;
-  @Output() filterChanged:EventEmitter<any> = new EventEmitter<any>();
 
-  get filterType() : CasesSearchType {
+  @ViewChild('navMenu') filterMenu;
+  @Output() filterChanged: EventEmitter<any> = new EventEmitter<any>();
+
+  get filterType(): CasesSearchType {
     const sel = this.getSelectedItem();
     return sel ? sel.id : CasesSearchType.AllCases;
   }
@@ -35,8 +35,9 @@ export class CasesFilterComponent implements OnInit {
       //console.log('item tap: ' + (inst.id || ''));
     },
     onMenuShow: function (event, inst) {
-      if (!event.menu.element.classList.contains('case-search-filter'))
-        event.menu.element.classList.add('case-search-filter');    
+      if (!event.menu.element.classList.contains('case-search-filter')) {
+        event.menu.element.classList.add('case-search-filter');
+      }
     }
   }
 
@@ -50,7 +51,7 @@ export class CasesFilterComponent implements OnInit {
               private localStorageService: LocalStorageService,
               private translateService: TranslateService) {
     this.initMenuItems();
-  } 
+  }
 
   get isFilterApplied() {
     return this.menuItems.some(x => x.selected);
@@ -77,11 +78,10 @@ export class CasesFilterComponent implements OnInit {
     let searchType = <CasesSearchType>searchTypeId;
     const selectedItem = this.findItem(searchTypeId);
     selectedItem.selected = !selectedItem.selected;
-   
-    if (selectedItem && selectedItem.selected){
+
+    if (selectedItem && selectedItem.selected) {
       searchType = searchTypeId;
-    }
-    else {
+    } else {
       searchType = CasesSearchType.AllCases;
     }
 
@@ -98,10 +98,11 @@ export class CasesFilterComponent implements OnInit {
   }
 
   private raiseFilterChanged(selectedItem) {
-    if (selectedItem && selectedItem.selected)
+    if (selectedItem && selectedItem.selected) {
       this.filterChanged.emit({ type: selectedItem.id, name: selectedItem.text });
-    else
+    } else {
       this.filterChanged.emit(null);
+    }
   }
 
   private findItem(searchTypeId: number) {

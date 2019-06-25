@@ -8,7 +8,7 @@ import { CaseEditInputModel, CaseSectionInputModel, CaseAction } from '../../mod
 import { CaseOrganizationService } from '../case-organization/case-organization.service';
 import { CaseLogApiService } from '../api/case/case-log-api.service';
 import { CaseLogModel, CaseHistoryModel } from '../../models/case/case-actions-api.model';
-import { CaseActionsDataService } from './case-actions-data-service.service';
+import { CaseActionsDataService } from './case-actions-data.service';
 import { CaseHistoryApiService } from '../api/case/case-history-api.service';
 import { CaseTemplateApiService } from 'src/app/services/api/caseTemplate/case-template-api.service';
 import { CaseModelBuilder } from '../../models/case/case-model-builder';
@@ -27,7 +27,7 @@ export class CaseService {
   }
 
   getTemplateData(templateId: number): Observable<CaseEditInputModel> {
-    return this.caseTemplateApiService.getCaseTemplate(templateId)
+    return this.caseApiService.getNewCase(templateId)
       .pipe(
         map((caseData: any) => {
           const model = this.caseModelBuilder.createCaseEditInputModel(caseData);

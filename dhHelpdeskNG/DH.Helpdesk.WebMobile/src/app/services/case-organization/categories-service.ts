@@ -21,10 +21,10 @@ export class CategoriesService extends HttpApiServiceBase {
             map((jsItems: any) => {
                 let result = new Array<MultiLevelOptionItem>();
                 let jsArr = (jsItems as Array<any>);
-                if (jsArr == null) return result;
+                if (jsArr == null) { return result; }
 
                 const createOption = (jsItem: any): MultiLevelOptionItem => { // TODO: stop condition
-                    let option = new MultiLevelOptionItem(jsItem.id, jsItem.name, jsItem.parentId);
+                    const option = new MultiLevelOptionItem(jsItem.id, jsItem.name, jsItem.parentId);
                     if (jsItem.subCategories != null) {
                         option.childs = (jsItem.subCategories as Array<any>).map(createOption);
                     }
@@ -35,6 +35,6 @@ export class CategoriesService extends HttpApiServiceBase {
 
                 return result;
             })
-        );// TODO: error handling
+        ); // TODO: error handling
     }
 }

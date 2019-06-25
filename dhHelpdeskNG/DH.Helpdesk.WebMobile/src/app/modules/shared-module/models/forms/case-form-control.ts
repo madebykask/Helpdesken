@@ -5,17 +5,21 @@ import { IFieldBase } from 'src/app/modules/case-edit-module/models';
 
 export class CaseFormControl extends FormControl {
 
-  fieldInfo: IFieldBase;
+  private _fieldInfo: IFieldBase;
   private isSubmitted$ = new BehaviorSubject<boolean>(false);
   private prevValue: any = null;
 
   constructor(fieldInfo: IFieldBase, value: any, validators: ValidatorFn[]) {
     super(value, validators);
-    this.fieldInfo = fieldInfo;
+    this._fieldInfo = fieldInfo;
   }
 
   get label() {
     return this.fieldInfo.label;
+  }
+
+  get fieldInfo() {
+    return this._fieldInfo;
   }
 
   get fieldName() {

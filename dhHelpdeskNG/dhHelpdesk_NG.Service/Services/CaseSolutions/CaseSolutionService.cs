@@ -50,7 +50,7 @@ namespace DH.Helpdesk.Services.Services
         IList<WorkflowStepModel> GetWorkflowSteps(int customerId, Case case_, IList<int> workFlowCaseSolutionIds, bool isRelatedCase, UserOverview user, ApplicationType applicationType, int? templateId);
 
         IList<CaseSolution> GetCaseSolutions();
-        IList<int> GetWorkflowCaseSolutionIds(int customerId);
+        IList<int> GetWorkflowCaseSolutionIds(int customerId, int? userId = null);
         
         bool CheckIfExtendedFormExistForSolutionsInCategories(int customerId, List<int> list);
     }
@@ -69,12 +69,7 @@ namespace DH.Helpdesk.Services.Services
 
         private readonly ICaseSolutionConditionRepository _caseSolutionConditionRepository;
         private readonly IWorkingGroupService _workingGroupService;
-        private readonly ICaseSolutionConditionService _caseSolutionConditionService;
-        private readonly IStateSecondaryService _stateSecondaryService;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-        private readonly Dictionary<string, IList<WorkingGroupEntity>> _adminGroups =
-            new Dictionary<string, IList<WorkingGroupEntity>>(StringComparer.OrdinalIgnoreCase);
 
         private readonly IComputerUserCategoryRepository _computerUserCategoryRepository;
 
@@ -90,8 +85,6 @@ namespace DH.Helpdesk.Services.Services
             ICaseSolutionConditionRepository caseSolutionConditionRepository,
             ICacheProvider cache,
             IWorkingGroupService workingGroupService,
-            ICaseSolutionConditionService caseSolutionCondtionService,
-            IStateSecondaryService stateSecondaryService,
             IComputerUserCategoryRepository computerUserCategoryRepository,
             IUnitOfWorkFactory unitOfWorkFactory) 
             : base(caseSolutionRepository, caseSolutionCategoryRepository) 
@@ -105,9 +98,7 @@ namespace DH.Helpdesk.Services.Services
             _unitOfWork = unitOfWork;
             _cache = cache;
             _workingGroupService = workingGroupService;
-            _caseSolutionConditionService = caseSolutionCondtionService;
             _caseSolutionConditionRepository = caseSolutionConditionRepository;
-            _stateSecondaryService = stateSecondaryService;
             _unitOfWorkFactory = unitOfWorkFactory;
             _computerUserCategoryRepository = computerUserCategoryRepository;
         }
@@ -231,12 +222,22 @@ namespace DH.Helpdesk.Services.Services
             return CaseSolutionRepository.GetMany(x => x.Status >= 0).AsQueryable().OrderBy(x => x.Customer.Name).ThenBy(x => x.Name).ToList();
         }
 
-        public IList<int> GetWorkflowCaseSolutionIds(int customerId)
+        public IList<int> GetWorkflowCaseSolutionIds(int customerId, int? userId = null)
         {
             //ConnectedButton == 0 - worfklow type
             var query = 
                 CaseSolutionRepository.GetMany(x => x.Customer_Id == customerId && x.ConnectedButton == 0 && x.Status > 0)
                 .AsQueryable();
+
+            if (userId.HasValue && userId.Value > 0)
+            {
+                // restrict case solutions by user working groups
+                var userWorkingGroups =
+                    _workingGroupService.ListWorkingGroupsForUser(userId.Value);
+                
+                query =
+                    query.Where(cs => cs.WorkingGroup_Id == null || userWorkingGroups.Contains(cs.WorkingGroup_Id.Value));
+            }
 
             return query.Select(x => x.Id).ToList();
         }

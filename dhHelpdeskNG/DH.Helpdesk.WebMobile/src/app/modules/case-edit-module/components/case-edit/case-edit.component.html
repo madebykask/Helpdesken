@@ -167,7 +167,7 @@
                 <case-multi-dropdown-control *ngIf="showField(caseFieldsNames.ClosingReason)" [field]="caseFieldsNames.ClosingReason" [form]="form" [dataSource]="dataSource.closingReasonsStore$"></case-multi-dropdown-control>
                 <case-date-control *ngIf="showField(caseFieldsNames.FinishingDate)" [field]="caseFieldsNames.FinishingDate" [form]="form"></case-date-control>
             </mbsc-form-group-content>
-        </mbsc-form-group>
+          </mbsc-form-group>
 
           <!-- <mbsc-form-group collapsible [attr.open]="isSectionOpen(caseSectionTypes.Invoices)" #invoicesSection>
               <mbsc-form-group-title>{{getSectionHeader(caseSectionTypes.Invoices)}}</mbsc-form-group-title>
@@ -176,7 +176,7 @@
               </mbsc-form-group-content>
           </mbsc-form-group> -->
       </form>
+    </div>
   </div>
-</div>
-  
+  <case-menu *ngIf="isLoaded && !isLocked" [dataSource]="dataSource.workflowsStore$" (clickWorkflow)="onClickWorkflow($event)"></case-menu>
 </mbsc-form>

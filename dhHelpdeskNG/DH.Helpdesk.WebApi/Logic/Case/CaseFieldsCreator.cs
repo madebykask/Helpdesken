@@ -12,40 +12,38 @@ using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Extensions.String;
-using DH.Helpdesk.Dal.Infrastructure.Translate;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Models.Case;
 using DH.Helpdesk.Models.Case.Field;
 using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Common.Constants.Case;
-using DH.Helpdesk.WebApi.Logic.Case;
 using DH.Helpdesk.WebApi.Logic.CaseFieldSettings;
 
-namespace DH.Helpdesk.WebApi.Controllers
+namespace DH.Helpdesk.WebApi.Logic.Case
 {
     public interface ICaseFieldsCreator
     {
         void CreateInitiatorSection(int customerId, CustomerUser customerUserSetting,
             IList<CaseFieldSetting> caseFieldSettings,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
-            Case currentCase, CaseSolution template, int languageId,
+            Domain.Case currentCase, CaseSolution template, int languageId,
             IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model,
             CaseDefaultsInfo customerDefaults = null);
 
         void CreateRegardingSection(int customerId, IList<CaseFieldSetting> caseFieldSettings,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
-            Case currentCase, CaseSolution template, int languageId,
+            Domain.Case currentCase, CaseSolution template, int languageId,
             IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model);
 
         void CreateComputerInfoSection(int customerId, IList<CaseFieldSetting> caseFieldSettings,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
-            Case currentCase, CaseSolution template, int languageId,
+            Domain.Case currentCase, CaseSolution template, int languageId,
             IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model);
 
         void CreateCaseInfoSection(int customerId, IList<CaseFieldSetting> caseFieldSettings,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
-            Case currentCase, CaseSolution template, int languageId,
+            Domain.Case currentCase, CaseSolution template, int languageId,
             IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model,
             CustomerUser customerUserSetting,
             CaseDefaultsInfo customerDefaults = null);
@@ -53,7 +51,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         void CreateCaseManagementSection(int customerId, UserOverview currentUserOverview,
             IList<CaseFieldSetting> caseFieldSettings,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
-            Case currentCase, CaseSolution template, int languageId,
+            Domain.Case currentCase, CaseSolution template, int languageId,
             IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model,
             CustomerUser customerUserSetting,
             CustomerSettings customerSettings,
@@ -61,7 +59,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         void CreateCommunicationSection(int customerId, UserOverview currentUserOverview,
             IList<CaseFieldSetting> caseFieldSettings,
-            ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, Case currentCase,
+            ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, Domain.Case currentCase,
             CaseSolution template,
             int languageId, IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model,
             CustomerSettings customerSettings);
@@ -115,7 +113,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         public void CreateInitiatorSection(int customerId, CustomerUser customerUserSetting,
             IList<CaseFieldSetting> caseFieldSettings,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
-            Case currentCase, CaseSolution template, int languageId,
+            Domain.Case currentCase, CaseSolution template, int languageId,
             IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model,
             CaseDefaultsInfo customerDefaults = null)
         {
@@ -240,7 +238,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         public void CreateRegardingSection(int customerId, IList<CaseFieldSetting> caseFieldSettings,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
-            Case currentCase, CaseSolution template, int languageId,
+            Domain.Case currentCase, CaseSolution template, int languageId,
             IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model)
         {
 
@@ -357,7 +355,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         public void CreateComputerInfoSection(int customerId, IList<CaseFieldSetting> caseFieldSettings,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
-            Case currentCase, CaseSolution template, int languageId,
+            Domain.Case currentCase, CaseSolution template, int languageId,
             IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model)
         {
             IBaseCaseField field;
@@ -391,7 +389,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         public void CreateCaseInfoSection(int customerId, IList<CaseFieldSetting> caseFieldSettings,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
-            Case currentCase, CaseSolution template, int languageId,
+            Domain.Case currentCase, CaseSolution template, int languageId,
             IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model,
             CustomerUser customerUserSetting,
             CaseDefaultsInfo customerDefaults = null)
@@ -715,7 +713,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         public void CreateCaseManagementSection(int customerId, UserOverview currentUserOverview,
             IList<CaseFieldSetting> caseFieldSettings,
             ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings,
-            Case currentCase, CaseSolution template, int languageId,
+            Domain.Case currentCase, CaseSolution template, int languageId,
             IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model,
             CustomerUser customerUserSetting,
             CustomerSettings customerSettings,
@@ -1035,7 +1033,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
         public void CreateCommunicationSection(int customerId, UserOverview userOverview,
             IList<CaseFieldSetting> caseFieldSettings,
-            ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, Case currentCase,
+            ReadOnlyCollection<CaseSolutionSettingOverview> caseTemplateSettings, Domain.Case currentCase,
             CaseSolution template,
             int languageId, IList<CaseFieldSettingsForTranslation> caseFieldTranslations, CaseEditOutputModel model,
             CustomerSettings customerSettings)

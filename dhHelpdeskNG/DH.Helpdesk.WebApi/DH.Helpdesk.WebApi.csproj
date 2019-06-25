@@ -192,12 +192,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
-    <Compile Include="Controllers\CaseFieldsCreator.cs" />
+    <Compile Include="Logic\Case\CaseFieldsCreator.cs" />
     <Compile Include="Controllers\CaseHistoryController.cs" />
     <Compile Include="Controllers\CaseLogsController.cs" />
     <Compile Include="Controllers\CaseTemplatesController.cs" />
     <Compile Include="Controllers\CaseWatchDateController.cs" />
     <Compile Include="Controllers\CaseStatisticsController.cs" />
+    <Compile Include="Controllers\CaseWorkflowsController.cs" />
     <Compile Include="Controllers\NotifierController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Infrastructure\Owin\GlobalExceptionMiddleware.cs" />
@@ -286,6 +287,7 @@
     <Compile Include="Infrastructure\Translate\Translation.cs" />
     <Compile Include="Models\CaseLockInputModel.cs" />
     <Compile Include="Models\CaseUnLockInputModel.cs" />
+    <Compile Include="Models\Case\CaseSolutionModel.cs" />
     <Compile Include="Models\Case\СaseStatisticsResult.cs" />
     <Compile Include="Models\ClientLogItemModel.cs" />
     <Compile Include="Models\ExtendCaseLockInput.cs" />

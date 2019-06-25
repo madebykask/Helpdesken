@@ -27,7 +27,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpGet]
         public async Task<UserSettingsModelOutput> Settings()
         {
-            var userSettings = await _userSerivice.GetUserOverviewAsync(UserId);//TODO: create new method to get cached/async result.
+            var userSettings = await _userSerivice.GetUserOverviewAsync(UserId);
             return new UserSettingsModelOutput
             {
                 Id = UserId,

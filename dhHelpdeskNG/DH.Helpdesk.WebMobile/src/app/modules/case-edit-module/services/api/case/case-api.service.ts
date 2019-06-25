@@ -33,4 +33,8 @@ export class CaseApiService extends HttpApiServiceBase {
     return this.getJson(this.buildResourseUrl('/api/casesections/get', null, true, true)); // TODO: error handling
   }
 
+  getNewCase(templateId: number): Observable<Array<any>> {
+    return this.getJson<Array<any>>(this.buildResourseUrl(`/api/case/new/${templateId}`, null, true, true));
+  }
+
 }

@@ -343,11 +343,11 @@ var ApplyTemplate = function (data, doOverwrite) {
 
     changeCaseButtonsState(false);
 
-    var dateFormat = data["dateFormat"];
-    $('#CaseTemplate_ExternalLogNote').val("True");
+    var dateFormat = data['dateFormat'];
+    $('#CaseTemplate_ExternalLogNote').val('True');
 
     // save template values to hidden fields to make them avaialbe for UI change handlers
-    SaveTemplateValue("#CaseTemplate_Performer_Id", data, 'PerformerUser_Id');
+    SaveTemplateValue('#CaseTemplate_Performer_Id', data, 'PerformerUser_Id');
     SaveTemplateValue('#CaseTemplate_WorkingGroup_Id', data, 'CaseWorkingGroup_Id');
     SaveTemplateValue('#CaseTemplate_Priority_Id', data, 'Priority_Id');
     SaveTemplateValue('#CaseTemplate_StateSecondary_Id', data, 'StateSecondary_Id');

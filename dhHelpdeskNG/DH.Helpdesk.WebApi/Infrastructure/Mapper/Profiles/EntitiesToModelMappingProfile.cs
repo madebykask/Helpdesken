@@ -9,6 +9,7 @@ using DH.Helpdesk.Domain;
 using DH.Helpdesk.Models.Case.Logs;
 using DH.Helpdesk.Models.StateSecondaries;
 using DH.Helpdesk.WebApi.Models;
+using DH.Helpdesk.WebApi.Models.Case;
 using LogFileModel = DH.Helpdesk.Models.Case.Logs.LogFileModel;
 
 namespace DH.Helpdesk.WebApi.Infrastructure.Mapper.Profiles
@@ -50,6 +51,17 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Mapper.Profiles
                 .ForMember(dest => dest.WorkingGroupId, opt => opt.ResolveUsing(src => src.WorkingGroup_Id))
                 .ForMember(dest => dest.AdministratorId, opt => opt.ResolveUsing(src => src.User_Id))
                 .ForMember(dest => dest.SubCaseTypes, opt => opt.Ignore());
+
+            CreateMap<CaseSolution, CaseSolutionModel>()
+                .ForMember(dest => dest.NoMailToNotifier, opt => opt.ResolveUsing(src => src.NoMailToNotifier.ToBool()))
+                .ForMember(dest => dest.UpdateNotifierInformation,
+                    opt => opt.ResolveUsing(src => src.UpdateNotifierInformation.ToBool()))
+                .ForMember(dest => dest.Verified, opt => opt.ResolveUsing(src => src.Verified.ToBool()))
+                .ForMember(dest => dest.SMS, opt => opt.ResolveUsing(src => src.SMS.ToBool()))
+                .ForMember(dest => dest.IsActive, opt => opt.ResolveUsing(src => src.Status.ToBool()))
+                .ForMember(dest => dest.ContactBeforeAction, opt => opt.ResolveUsing(src => src.ContactBeforeAction.ToBool()))
+                .ForMember(dest => dest.FinalAction, opt => opt.MapFrom(src => src.SaveAndClose))
+                .ForMember(dest => dest.WorkingGroup_Id, opt => opt.MapFrom(src => src.CaseWorkingGroup_Id));
         }
     }
 }

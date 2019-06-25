@@ -128,7 +128,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("template/{templateId:int}")]
+        [Route("new/{templateId:int}")]
         [CheckUserPermissions(UserPermission.CreateCasePermission)]
         public async Task<IHttpActionResult> New([FromUri]int langId, [FromUri]int cid, [FromUri]int? templateId)
         { 

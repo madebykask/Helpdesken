@@ -20,7 +20,7 @@ export class CaseTypesService extends HttpApiServiceBase {
             map((jsItems: any) => {
                 let result = new Array<MultiLevelOptionItem>();
                 let jsArr = (jsItems as Array<any>);
-                if (jsArr == null) return result;
+                if (jsArr == null) { return result; }
 
                 const createOption = (jsItem: any): MultiLevelOptionItem => { // TODO: stop condition
                     let option = new MultiLevelOptionItem(jsItem.id, jsItem.name, jsItem.parentId);
@@ -34,7 +34,7 @@ export class CaseTypesService extends HttpApiServiceBase {
 
                 return result;
             })
-        );// TODO: error handling
+        ); // TODO: error handling
     }
 
     getCaseType(id: number) {

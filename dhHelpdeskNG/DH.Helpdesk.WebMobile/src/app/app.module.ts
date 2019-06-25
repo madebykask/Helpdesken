@@ -49,8 +49,8 @@ import { VersionComponent } from './components/version.component';
      CasesStatusComponent,
      VersionComponent
   ],
-  imports: [ 
-    MbscModule, 
+  imports: [
+    MbscModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,

@@ -51,7 +51,7 @@ export class BaseControl<T> {
   }
 
   public getErrorMessage(): string {
-    if (!this.getErrorState()) return;
+    if (!this.getErrorState()) { return; }
 
     const message = '';
     if (this.formControl && this.formControl.errors) {
