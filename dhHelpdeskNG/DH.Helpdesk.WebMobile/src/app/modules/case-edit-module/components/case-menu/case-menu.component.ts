@@ -1,5 +1,5 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
-import { MbscNavOptions } from 'src/lib/mobiscroll/src/js/navigation.angular';
+import { MbscNavOptions } from '@mobiscroll/angular';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { OptionItem } from 'src/app/modules/shared-module/models';
 import { map, takeUntil } from 'rxjs/operators';
