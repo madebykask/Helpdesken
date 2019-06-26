@@ -450,3 +450,26 @@ ul.nostyle {
     }
   }
 }
+case-menu {
+  .md-hamb {
+    .mbsc-ios {
+      &.mbsc-ms-c {
+          background: rgba(0, 0, 0, 0);
+          border-top: none;
+          border-bottom: none;
+      }
+      .mbsc-ms .mbsc-ms-item {
+        border: solid 1px;
+        border-radius: 50%;
+        background: #438eb9;
+        color: white;
+      }
+      .mbsc-scv-liq, .mbsc-scv-liq .mbsc-scv-item {
+        flex: 0 1 auto
+      }
+      .mbsc-scv.mbsc-comp {
+        margin: 0 0.7em 0.5em auto;
+      }
+    }
+  }
+}
