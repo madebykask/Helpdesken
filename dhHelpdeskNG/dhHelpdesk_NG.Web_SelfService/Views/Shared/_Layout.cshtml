@@ -25,9 +25,18 @@
         @Scripts.Render("~/bundles/common")
 
         @Scripts.Render("~/Content/js/Shared/_layout")
-        
-        <script type="text/javascript">
-            //prevent go back
+
+        <script>
+            window.addEventListener('touchstart', function onFirstTouch() {
+                console.log('Has touchscreen');
+                const bodyEl = document.getElementById('body');
+                bodyEl.classList.remove('desktop');
+                bodyEl.classList.add('touchscreen');
+                window.TouchScreen = true;
+                window.removeEventListener('touchstart', onFirstTouch, false);
+            }, false);
+
+			//prevent go back
             if (location.hash === '#no-back') {
                 if (typeof history.pushState !== 'undefined') {
                     history.pushState(null, '', '#stay');
@@ -39,6 +48,7 @@
                 }
             }
         </script>
+
         <!--[if lt IE 9]>
          <script src="@Url.Content("~/Content/js/html5shiv.js")"></script>
           <script src="@Url.Content("~/Content/js/respond.min.js")"></script>
@@ -62,9 +72,9 @@
             @Html.Partial("_MainMenu", layoutModel)
         </div>
     </div>
-
-    @RenderBody()
-
+    <div id="body" class="desktop">
+        @RenderBody()
+    </div>
     <div class="container-fluid dh-container">
         <div class="row">
             @* A workaround to hide footer at Message/Index *@

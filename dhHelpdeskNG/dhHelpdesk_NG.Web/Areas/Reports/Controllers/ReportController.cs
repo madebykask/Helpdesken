@@ -711,7 +711,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
                 _featureToggleService.Get(Helpdesk.Common.Constants.FeatureToggleTypes.NEW_REPORTED_TIME_REPORT).Active
                     ? "25"
                     : "-9";
-            var numberOfCasesKey =
+            var numberOfCasesKey = 
                 _featureToggleService.Get(Helpdesk.Common.Constants.FeatureToggleTypes.NEW_NUMBER_OF_CASES_REPORT).Active
                     ? "26"
                     : "-7";

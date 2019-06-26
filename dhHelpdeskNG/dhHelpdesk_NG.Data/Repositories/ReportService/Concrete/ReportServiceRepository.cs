@@ -1,29 +1,31 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.SqlServer;
+using System.Linq.Expressions;
 using DH.Helpdesk.BusinessData.Enums.Reports;
 using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Domain;
 using Z.EntityFramework.Plus;
 
 namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Configuration;
-	using System.Data;
-	using System.Data.OleDb;
-	using System.Globalization;
-	using System.Linq;
-	using System.Text;
-	using DH.Helpdesk.Dal.Repositories.ReportService;
-	using DH.Helpdesk.BusinessData.Models.ReportService;
-	using DH.Helpdesk.BusinessData.OldComponents;
-	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-	using System.Data.SqlClient;
-	using DH.Helpdesk.BusinessData.Enums.Case;
-	using Infrastructure;
-	using DbContext;
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Data;
+    using System.Data.OleDb;
+    using System.Globalization;
+    using System.Linq;
+    using System.Text;
+    using DH.Helpdesk.Dal.Repositories.ReportService;
+    using DH.Helpdesk.BusinessData.Models.ReportService;
+    using DH.Helpdesk.BusinessData.OldComponents;
+    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
+    using System.Data.SqlClient;
+    using DH.Helpdesk.BusinessData.Enums.Case;
+    using Infrastructure;
+    using DbContext;
 
-	public class ReportServiceRepository : IReportServiceRepository
+    public class ReportServiceRepository : IReportServiceRepository
     {
         private enum QueryType
         {
@@ -33,18 +35,18 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 
         private readonly string _ConnectionString;
 
-		public ReportServiceRepository(IDatabaseFactory factory)
-		{
-			DatabaseFactory = factory;
-			this._ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
-		}
+        public ReportServiceRepository(IDatabaseFactory factory)
+        {
+            DatabaseFactory = factory;
+            this._ConnectionString = ConfigurationManager.ConnectionStrings["HelpdeskSqlServerDbContext"].ConnectionString;
+        }
 
-		protected IDatabaseFactory DatabaseFactory { get; }
+        protected IDatabaseFactory DatabaseFactory { get; }
 
-		protected HelpdeskDbContext _dataContext = null;
-		protected HelpdeskDbContext DataContext => _dataContext ?? (_dataContext = DatabaseFactory.Get());
+        protected HelpdeskDbContext _dataContext = null;
+        protected HelpdeskDbContext DataContext => _dataContext ?? (_dataContext = DatabaseFactory.Get());
 
-		public ReportData GetReportData(string reportIdentity, ReportSelectedFilter filters)
+        public ReportData GetReportData(string reportIdentity, ReportSelectedFilter filters)
         {
             var reportData = new ReportData(reportIdentity);
             reportData.AddDataSets(GetDataSetsFor(reportIdentity, filters));
@@ -60,44 +62,48 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                 if (query.Item3 == (int)QueryType.SQLQUERY)
                 {
                     var curDataTable = GetDataTableByQuery(query.Item2);
-                                    
+
                     reportDataSets.Add(new ReportDataSet(query.Item1, curDataTable));
                 }
                 else
-                    if (query.Item3 == (int)QueryType.STOREPROCEURE )
-                    {
-                        var sp_params = new List<SqlParameter>();
-                        sp_params = filters.GeneralParameter.Select(p=> new SqlParameter(p.ParamName, p.ParamValue)).ToList();                        
-                        var curDataTable = GetDataTableBySP(query.Item2, sp_params);
-                        if (curDataTable != null)
-                            reportDataSets.Add(new ReportDataSet(query.Item1, curDataTable));
-                    }
+                    if (query.Item3 == (int)QueryType.STOREPROCEURE)
+                {
+                    var sp_params = new List<SqlParameter>();
+                    sp_params = filters.GeneralParameter.Select(p => new SqlParameter(p.ParamName, p.ParamValue)).ToList();
+                    var curDataTable = GetDataTableBySP(query.Item2, sp_params);
+                    if (curDataTable != null)
+                        reportDataSets.Add(new ReportDataSet(query.Item1, curDataTable));
+                }
             }
             return reportDataSets;
         }
 
-		public IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter)
-		{
-			var result = DataContext.Database.SqlQuery<HistoricalDataResult>("ReportGetHistoricalData @caseStatus, @changeFrom, @changeTo, @customerID, @changeWorkingGroups, @registerFrom, @registerTo, @closeFrom, @closeTo, @includeCasesWithNoWorkingGroup, @administrators, @departments, @caseTypes, @productAreas, @workingGroups",
-				new SqlParameter("@caseStatus", GetNullableValue(filter.CaseStatus)),
-				new SqlParameter("@changeFrom", GetNullableValue(filter.ChangeFrom)),
-				new SqlParameter("@changeTo", GetNullableValue(filter.ChangeTo)),
-				new SqlParameter("@customerID", GetNullableValue(filter.CustomerID)),
-				GetIDListParameter("@changeWorkingGroups", filter.ChangeWorkingGroups),
-				new SqlParameter("@registerFrom", GetNullableValue(filter.RegisterFrom)),
-				new SqlParameter("@registerTo", GetNullableValue(filter.RegisterTo)),
-				new SqlParameter("@closeFrom", GetNullableValue(filter.CloseFrom)),
-				new SqlParameter("@closeTo", GetNullableValue(filter.CloseTo)),
-				new SqlParameter("@includeCasesWithNoWorkingGroup", filter.IncludeCasesWithNoWorkingGroup),
-				GetIDListParameter("@administrators", filter.Administrators),
-				GetIDListParameter("@departments", filter.Departments),
-				GetIDListParameter("@caseTypes", filter.CaseTypes),
-				GetIDListParameter("@productAreas", filter.ProductAreas),
-				GetIDListParameter("@workingGroups", filter.WorkingGroups)
-			).ToList();
+        public IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter)
+        {
+            var result = DataContext.Database.SqlQuery<HistoricalDataResult>("ReportGetHistoricalData @caseStatus, @changeFrom, @changeTo, @customerID, @changeWorkingGroups," +
+                                                                             " @registerFrom, @registerTo, @closeFrom, @closeTo, @includeCasesWithHistoricalNoWorkingGroup," +
+                                                                             " @includeCasesWithNoWorkingGroup, @administrators, @departments," +
+                                                                             " @caseTypes, @productAreas, @workingGroups",
+                new SqlParameter("@caseStatus", GetNullableValue(filter.CaseStatus)),
+                new SqlParameter("@changeFrom", GetNullableValue(filter.ChangeFrom)),
+                new SqlParameter("@changeTo", GetNullableValue(filter.ChangeTo)),
+                new SqlParameter("@customerID", GetNullableValue(filter.CustomerID)),
+                GetIDListParameter("@changeWorkingGroups", filter.ChangeWorkingGroups),
+                new SqlParameter("@registerFrom", GetNullableValue(filter.RegisterFrom)),
+                new SqlParameter("@registerTo", GetNullableValue(filter.RegisterTo)),
+                new SqlParameter("@closeFrom", GetNullableValue(filter.CloseFrom)),
+                new SqlParameter("@closeTo", GetNullableValue(filter.CloseTo)),
+                new SqlParameter("@includeCasesWithHistoricalNoWorkingGroup", filter.IncludeHistoricalCasesWithNoWorkingGroup),
+                new SqlParameter("@includeCasesWithNoWorkingGroup", filter.IncludeCasesWithNoWorkingGroup),
+                GetIDListParameter("@administrators", filter.Administrators),
+                GetIDListParameter("@departments", filter.Departments),
+                GetIDListParameter("@caseTypes", filter.CaseTypes),
+                GetIDListParameter("@productAreas", filter.ProductAreas),
+                GetIDListParameter("@workingGroups", filter.WorkingGroups)
+            ).ToList();
 
-			return result;
-		}
+            return result;
+        }
 
         public IList<ReportedTimeDataResult> GetReportedTimeData(ReportedTimeDataFilter filter)
         {
@@ -110,7 +116,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
             if (filter.RegisterTo.HasValue)
                 query = query.Where(l => l.Case.RegTime <= filter.RegisterTo.Value);
 
-            if(filter.Administrators!= null && filter.Administrators.Any())
+            if (filter.Administrators != null && filter.Administrators.Any())
                 query = query.Where(l => l.Case.Performer_User_Id.HasValue && filter.Administrators.Contains(l.Case.Performer_User_Id.Value));
 
             if (filter.CloseFrom.HasValue)
@@ -119,16 +125,25 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
             if (filter.CloseTo.HasValue)
                 query = query.Where(l => l.Case.FinishingDate <= filter.CloseTo.Value);
 
-            if (filter.Departments!= null && filter.Departments.Any())
-                query = query.Where(l => l.Case.Department_Id.HasValue && filter.Departments.Contains(l.Case.Department_Id.Value));
+            if (filter.Departments != null && filter.Departments.Any())
+                query = query.Where(c =>
+                    c.Case.Department_Id.HasValue && filter.Departments.Contains(c.Case.Department_Id.Value));
 
-            if (filter.WorkingGroups!= null && filter.WorkingGroups.Any())
-                query = query.Where(l => l.Case.WorkingGroup_Id.HasValue && filter.WorkingGroups.Contains(l.Case.WorkingGroup_Id.Value));
+            if ((filter.WorkingGroups == null || !filter.WorkingGroups.Any()) && !filter.IncludeCasesWithNoWorkingGroup)
+                // prevent fetch data
+                return new List<ReportedTimeDataResult>();
 
-            if (filter.CaseTypes!= null && filter.CaseTypes.Any())
+            if (filter.IncludeCasesWithNoWorkingGroup)
+                query = query.Where(c => !c.Case.WorkingGroup_Id.HasValue ||
+                                         (c.Case.WorkingGroup_Id.HasValue && filter.WorkingGroups.Contains(c.Case.WorkingGroup_Id.Value)));
+            else
+                query = query.Where(c =>
+                    c.Case.WorkingGroup_Id.HasValue && filter.WorkingGroups.Contains(c.Case.WorkingGroup_Id.Value));
+
+            if (filter.CaseTypes != null && filter.CaseTypes.Any())
                 query = query.Where(l => filter.CaseTypes.Contains(l.Case.CaseType_Id));
 
-            if (filter.ProductAreas!= null && filter.ProductAreas.Any())
+            if (filter.ProductAreas != null && filter.ProductAreas.Any())
                 query = query.Where(l => l.Case.ProductArea_Id.HasValue && filter.ProductAreas.Contains(l.Case.ProductArea_Id.Value));
 
             if (filter.LogNoteFrom.HasValue)
@@ -139,27 +154,27 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 
             if (filter.CaseStatus.HasValue)
             {
-                var status = (CaseProgressFilterEnum) filter.CaseStatus.Value;
+                var status = (CaseProgressFilterEnum)filter.CaseStatus.Value;
                 switch (status)
                 {
                     case CaseProgressFilterEnum.None:
-                    {
-                        break;
-                    }
+                        {
+                            break;
+                        }
                     case CaseProgressFilterEnum.ClosedCases:
-                    {
-                        query = query.Where(l => l.Case.FinishingDate.HasValue);
-                        break;
-                    }
+                        {
+                            query = query.Where(l => l.Case.FinishingDate.HasValue);
+                            break;
+                        }
                     case CaseProgressFilterEnum.CasesInProgress:
-                    {
-                        query = query.Where(l => !l.Case.FinishingDate.HasValue);
-                        break;
-                    }
+                        {
+                            query = query.Where(l => !l.Case.FinishingDate.HasValue);
+                            break;
+                        }
                     default:
-                    {
-                        throw new Exception(string.Format("Unknown CaseStatus value: {0}", filter.CaseStatus.Value));
-                    }
+                        {
+                            throw new Exception(string.Format("Unknown CaseStatus value: {0}", filter.CaseStatus.Value));
+                        }
                 }
             }
 
@@ -169,53 +184,53 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                 case ReportedTimeGroup.CaseType_Id:
                     result = query.GroupBy(l => new { l.Case.CaseType_Id, l.Case.CaseType.Name })
                         .Select(lg => new ReportedTimeDataResult
-                            { Id = lg.Key.CaseType_Id, Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                        { Id = lg.Key.CaseType_Id, Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime) });
                     break;
                 case ReportedTimeGroup.CaseNumber:
-                    result = query.GroupBy(l =>  new { l.Case.Id, l.Case.CaseNumber })
+                    result = query.GroupBy(l => new { l.Case.Id, l.Case.CaseNumber })
                         .Select(lg => new ReportedTimeDataResult
-                            {Id = lg.Key.Id,  Label = lg.Key.CaseNumber.ToString(), TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                        { Id = lg.Key.Id, Label = lg.Key.CaseNumber.ToString(), TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime) });
                     break;
                 case ReportedTimeGroup.Department_Id:
                     result = query
                         .Where(l => l.Case.Department_Id.HasValue)
                         .GroupBy(l => new { l.Case.Department_Id, l.Case.Department.DepartmentName })
                         .Select(lg => new ReportedTimeDataResult
-                            { Id = lg.Key.Department_Id ?? 0, Label = lg.Key.DepartmentName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                        { Id = lg.Key.Department_Id ?? 0, Label = lg.Key.DepartmentName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime) });
                     break;
                 case ReportedTimeGroup.Priority_Id:
                     result = query
                         .GroupBy(l => new { l.Case.Priority_Id, l.Case.Priority.Name })
                         .Select(lg => new ReportedTimeDataResult
-                            {Id = lg.Key.Priority_Id ?? 0, Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                        { Id = lg.Key.Priority_Id ?? 0, Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime) });
                     break;
                 case ReportedTimeGroup.ProductArea_Id:
                     result = query
                         .GroupBy(l => new { l.Case.ProductArea_Id, l.Case.ProductArea.Name })
                         .Select(lg => new ReportedTimeDataResult
-                            {Id = lg.Key.ProductArea_Id ?? 0, Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                        { Id = lg.Key.ProductArea_Id ?? 0, Label = lg.Key.Name, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime) });
                     break;
                 case ReportedTimeGroup.LogNoteDate:
                     result = query.GroupBy(l => DbFunctions.TruncateTime(l.LogDate))
                         .Select(lg => new ReportedTimeDataResult
-                            {Label = lg.Key.ToString(), DateTime = lg.Key, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                        { Label = lg.Key.ToString(), DateTime = lg.Key, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime) });
                     break;
                 case ReportedTimeGroup.Performer_User_Id:
                     result = query
                         .GroupBy(l => new { l.Case.Performer_User_Id, l.Case.Administrator.FirstName, l.Case.Administrator.SurName })
                         .Select(lg => new ReportedTimeDataResult
-                            {Id = lg.Key.Performer_User_Id ?? 0, Label = lg.Key.FirstName + " " + lg.Key.SurName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                        { Id = lg.Key.Performer_User_Id ?? 0, Label = lg.Key.FirstName + " " + lg.Key.SurName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime) });
                     break;
                 case ReportedTimeGroup.WorkingGroup_Id:
                     result = query
                         .GroupBy(l => new { l.Case.WorkingGroup_Id, l.Case.Workinggroup.WorkingGroupName })
                         .Select(lg => new ReportedTimeDataResult
-                            {Id = lg.Key.WorkingGroup_Id ?? 0, Label = lg.Key.WorkingGroupName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime)});
+                        { Id = lg.Key.WorkingGroup_Id ?? 0, Label = lg.Key.WorkingGroupName, TotalTime = lg.Sum(k => k.WorkingTime + k.OverTime) });
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-                    
+
             return result.ToList();
         }
 
@@ -230,7 +245,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
             if (filter.RegisterTo.HasValue)
                 query = query.Where(c => c.RegTime <= filter.RegisterTo.Value);
 
-            if(filter.Administrators!= null && filter.Administrators.Any())
+            if (filter.Administrators != null && filter.Administrators.Any())
                 query = query.Where(c => c.Performer_User_Id.HasValue && filter.Administrators.Contains(c.Performer_User_Id.Value));
 
             if (filter.CloseFrom.HasValue)
@@ -239,41 +254,50 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
             if (filter.CloseTo.HasValue)
                 query = query.Where(c => c.FinishingDate <= filter.CloseTo.Value);
 
-            if (filter.Departments!= null && filter.Departments.Any())
-                query = query.Where(c => c.Department_Id.HasValue && filter.Departments.Contains(c.Department_Id.Value));
+            if (filter.Departments != null && filter.Departments.Any())
+                query = query.Where(c =>
+                    c.Department_Id.HasValue && filter.Departments.Contains(c.Department_Id.Value));
 
-            if (filter.WorkingGroups!= null && filter.WorkingGroups.Any())
-                query = query.Where(c => c.WorkingGroup_Id.HasValue && filter.WorkingGroups.Contains(c.WorkingGroup_Id.Value));
+            if ((filter.WorkingGroups == null || !filter.WorkingGroups.Any()) && !filter.IncludeCasesWithNoWorkingGroup)
+                // prevent fetch data
+                return new List<NumberOfCaseDataResult>();
 
-            if (filter.CaseTypes!= null && filter.CaseTypes.Any())
+            if (filter.IncludeCasesWithNoWorkingGroup)
+                query = query.Where(c => !c.WorkingGroup_Id.HasValue ||
+                                         (c.WorkingGroup_Id.HasValue && filter.WorkingGroups.Contains(c.WorkingGroup_Id.Value)));
+            else
+                query = query.Where(c =>
+                    c.WorkingGroup_Id.HasValue && filter.WorkingGroups.Contains(c.WorkingGroup_Id.Value));
+
+            if (filter.CaseTypes != null && filter.CaseTypes.Any())
                 query = query.Where(c => filter.CaseTypes.Contains(c.CaseType_Id));
 
-            if (filter.ProductAreas!= null && filter.ProductAreas.Any())
+            if (filter.ProductAreas != null && filter.ProductAreas.Any())
                 query = query.Where(c => c.ProductArea_Id.HasValue && filter.ProductAreas.Contains(c.ProductArea_Id.Value));
 
             if (filter.CaseStatus.HasValue)
             {
-                var status = (CaseProgressFilterEnum) filter.CaseStatus.Value;
+                var status = (CaseProgressFilterEnum)filter.CaseStatus.Value;
                 switch (status)
                 {
                     case CaseProgressFilterEnum.None:
-                    {
-                        break;
-                    }
+                        {
+                            break;
+                        }
                     case CaseProgressFilterEnum.ClosedCases:
-                    {
-                        query = query.Where(c => c.FinishingDate.HasValue);
-                        break;
-                    }
+                        {
+                            query = query.Where(c => c.FinishingDate.HasValue);
+                            break;
+                        }
                     case CaseProgressFilterEnum.CasesInProgress:
-                    {
-                        query = query.Where(c => !c.FinishingDate.HasValue);
-                        break;
-                    }
+                        {
+                            query = query.Where(c => !c.FinishingDate.HasValue);
+                            break;
+                        }
                     default:
-                    {
-                        throw new Exception(string.Format("Unknown CaseStatus value: {0}", filter.CaseStatus.Value));
-                    }
+                        {
+                            throw new Exception(string.Format("Unknown CaseStatus value: {0}", filter.CaseStatus.Value));
+                        }
                 }
             }
 
@@ -283,67 +307,67 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                 case NumberOfCasesGroup.CaseType_Id:
                     result = query.GroupBy(c => new { c.CaseType_Id, c.CaseType.Name })
                         .Select(cg => new NumberOfCaseDataResult
-                            { Id = cg.Key.CaseType_Id, Label = cg.Key.Name, CasesAmount = cg.Count()});
+                        { Id = cg.Key.CaseType_Id, Label = cg.Key.Name, CasesAmount = cg.Count() });
                     break;
                 case NumberOfCasesGroup.RegistrationYear:
                     result = query.GroupBy(c => c.RegTime.Year)
                         .Select(cg => new NumberOfCaseDataResult
-                            { Id = cg.Key, Label = cg.Key.ToString(), CasesAmount = cg.Count()});
+                        { Id = cg.Key, Label = cg.Key.ToString(), CasesAmount = cg.Count() });
                     break;
                 case NumberOfCasesGroup.RegistrationWeekday:
                     result = query.GroupBy(c => SqlFunctions.DatePart("weekday", c.RegTime))
                         .Select(cg => new NumberOfCaseDataResult
-                            { Id = cg.Key.Value, Label = cg.Key.ToString(), CasesAmount = cg.Count()});
+                        { Id = cg.Key.Value, Label = cg.Key.ToString(), CasesAmount = cg.Count() });
                     break;
                 case NumberOfCasesGroup.RegistrationMonth:
                     result = query.GroupBy(c => c.RegTime.Month)
                         .Select(cg => new NumberOfCaseDataResult
-                            { Id = cg.Key, Label = cg.Key.ToString(), CasesAmount = cg.Count()});
+                        { Id = cg.Key, Label = cg.Key.ToString(), CasesAmount = cg.Count() });
                     break;
                 case NumberOfCasesGroup.RegistrationDate:
                     result = query.GroupBy(c => DbFunctions.TruncateTime(c.RegTime))
                         .Select(cg => new NumberOfCaseDataResult
-                            { Label = cg.Key.ToString(), DateTime = cg.Key, CasesAmount = cg.Count()});
+                        { Label = cg.Key.ToString(), DateTime = cg.Key, CasesAmount = cg.Count() });
                     break;
                 case NumberOfCasesGroup.RegistrationHour:
                     result = query.GroupBy(c => c.RegTime.Hour)
                         .Select(cg => new NumberOfCaseDataResult
-                            { Id = cg.Key, Label = cg.Key.ToString(), CasesAmount = cg.Count()});
+                        { Id = cg.Key, Label = cg.Key.ToString(), CasesAmount = cg.Count() });
                     break;
                 case NumberOfCasesGroup.RegistrationSourceCustomer:
                     result = query.GroupBy(c => new { c.RegistrationSourceCustomer_Id, c.RegistrationSourceCustomer.SourceName })
                         .Select(cg => new NumberOfCaseDataResult
-                            { Id = cg.Key.RegistrationSourceCustomer_Id ?? 0, Label = cg.Key.SourceName.ToString(), CasesAmount = cg.Count()});
+                        { Id = cg.Key.RegistrationSourceCustomer_Id ?? 0, Label = cg.Key.SourceName.ToString(), CasesAmount = cg.Count() });
                     break;
                 case NumberOfCasesGroup.WorkingGroup_Id:
                     result = query.GroupBy(c => new { c.WorkingGroup_Id, c.Workinggroup.WorkingGroupName })
                         .Select(cg => new NumberOfCaseDataResult
-                            { Id = cg.Key.WorkingGroup_Id ?? 0, Label = cg.Key.WorkingGroupName.ToString(), CasesAmount = cg.Count()});
+                        { Id = cg.Key.WorkingGroup_Id ?? 0, Label = cg.Key.WorkingGroupName.ToString(), CasesAmount = cg.Count() });
                     break;
                 case NumberOfCasesGroup.StateSecondary_Id:
                     result = query.GroupBy(c => new { c.StateSecondary_Id, c.StateSecondary.Name })
                         .Select(cg => new NumberOfCaseDataResult
-                            { Id = cg.Key.StateSecondary_Id ?? 0, Label = cg.Key.Name.ToString(), CasesAmount = cg.Count()});
+                        { Id = cg.Key.StateSecondary_Id ?? 0, Label = cg.Key.Name.ToString(), CasesAmount = cg.Count() });
                     break;
                 case NumberOfCasesGroup.Department_Id:
                     result = query.GroupBy(c => new { c.Department_Id, c.Department.DepartmentName })
                         .Select(cg => new NumberOfCaseDataResult
-                            { Id = cg.Key.Department_Id ?? 0, Label = cg.Key.DepartmentName.ToString(), CasesAmount = cg.Count()});
+                        { Id = cg.Key.Department_Id ?? 0, Label = cg.Key.DepartmentName.ToString(), CasesAmount = cg.Count() });
                     break;
                 case NumberOfCasesGroup.Priority_Id:
                     result = query.GroupBy(c => new { c.Priority_Id, c.Priority.Name })
                         .Select(cg => new NumberOfCaseDataResult
-                            { Id = cg.Key.Priority_Id ?? 0, Label = cg.Key.Name.ToString(), CasesAmount = cg.Count()});
+                        { Id = cg.Key.Priority_Id ?? 0, Label = cg.Key.Name.ToString(), CasesAmount = cg.Count() });
                     break;
                 case NumberOfCasesGroup.FinishingDate:
                     result = query.GroupBy(c => DbFunctions.TruncateTime(c.FinishingDate))
                         .Select(cg => new NumberOfCaseDataResult
-                            { Label = "", DateTime = cg.Key, CasesAmount = cg.Count()});
+                        { Label = "", DateTime = cg.Key, CasesAmount = cg.Count() });
                     break;
                 case NumberOfCasesGroup.ProductArea_Id:
                     result = query.GroupBy(c => new { c.ProductArea_Id, c.ProductArea.Name })
                         .Select(cg => new NumberOfCaseDataResult
-                            { Id = cg.Key.ProductArea_Id ?? 0, Label = cg.Key.Name.ToString(), CasesAmount = cg.Count()});
+                        { Id = cg.Key.ProductArea_Id ?? 0, Label = cg.Key.Name.ToString(), CasesAmount = cg.Count() });
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -353,44 +377,44 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
         }
 
         private object GetNullableValue<T>(T value)
-		{
-			if (value == null)
-			{
-				return DBNull.Value;
-			}
-			else
-			{
-				return value;
-			}
-		}
+        {
+            if (value == null)
+            {
+                return DBNull.Value;
+            }
+            else
+            {
+                return value;
+            }
+        }
 
-		private SqlParameter GetIDListParameter(string name, IList<int> idList)
-		{
-			const string idTableName = "dbo.IDList";
+        private SqlParameter GetIDListParameter(string name, IList<int> idList)
+        {
+            const string idTableName = "dbo.IDList";
 
-			var dt = new DataTable();
-			dt.TableName = idTableName;
-			dt.Columns.Add("ID", typeof(int));
+            var dt = new DataTable();
+            dt.TableName = idTableName;
+            dt.Columns.Add("ID", typeof(int));
 
-			if (idList != null)
-			{
-				foreach (var id in idList)
-				{
-					dt.Rows.Add(id);
-				}
-			}
+            if (idList != null)
+            {
+                foreach (var id in idList)
+                {
+                    dt.Rows.Add(id);
+                }
+            }
 
-			var parameter = new SqlParameter(name, SqlDbType.Structured);
-			parameter.TypeName = idTableName;
-			parameter.Value = dt;
+            var parameter = new SqlParameter(name, SqlDbType.Structured);
+            parameter.TypeName = idTableName;
+            parameter.Value = dt;
 
-			return parameter;
-		}
+            return parameter;
+        }
 
         private List<Tuple<string, string, int>> GetQueriesFor(string reportIdentity, ReportSelectedFilter filters)
         {
 
-            /* TODO: It must change some how takes the query dynamicly from file */ 
+            /* TODO: It must change some how takes the query dynamicly from file */
             var ret = new List<Tuple<string, string, int>>();
             var _whereClause = GetWhereClauseBy(filters);
             switch (reportIdentity)
@@ -492,7 +516,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                 //            "GROUP BY tblDepartment.Department", (int)QueryType.SQLQUERY)
                 //            );
                 //    break;
-                    
+
                 case "ReportedTime":
                     ret.Add(new Tuple<string, string, int>("VariabelAxel",
                         "SELECT (dbo.tblLog.WorkingTime + dbo.tblLog.OverTime)/60 AS Quantity, " +
@@ -721,7 +745,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                                                             "          ELSE 'Nej' " +
                                                             "        END AS Expr1 " +
                                                             " FROM   dbo.tblcasehistory " +
-                                                            " WHERE(case_id = dbo.tblcase.id)" + 
+                                                            " WHERE(case_id = dbo.tblcase.id)" +
                                                             "        AND(statesecondary_id IS NOT NULL)) " +
                                                             "      AS OnHold, " +
                                                             "CASE " +
@@ -843,7 +867,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                                           _whereClause +
                                           ") AS TimeData " +
                             "Where [case status] = 'Closed' " +
-                            "GROUP BY casetype " 
+                            "GROUP BY casetype "
                             , (int)QueryType.SQLQUERY)
                             );
                     break;
@@ -854,10 +878,10 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                             new Tuple<string, string, int>(
                               "PrintCase",
                               "sp_GetCaseInfo",
-                              (int) QueryType.STOREPROCEURE                             
+                              (int)QueryType.STOREPROCEURE
                            ));
                     break;
- 
+
                 default:
                     return ret;
             }
@@ -867,7 +891,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
 
         private DataTable GetDataTableByQuery(string sqlQuery)
         {
-            DataTable ret = new DataTable(); 
+            DataTable ret = new DataTable();
             using (SqlConnection connection = new SqlConnection(_ConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand { Connection = connection, CommandType = CommandType.Text })
@@ -875,18 +899,18 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                     cmd.CommandText = sqlQuery;
                     connection.Open();
                     using (SqlDataReader dataReader = cmd.ExecuteReader())
-                    {                        
+                    {
                         ret.Load(dataReader);
-                        connection.Close();                        
+                        connection.Close();
                     }
                 }
             }
-            return ret; 
+            return ret;
         }
 
         private DataTable GetDataTableBySP(string storedProcedureName,
                                                 IEnumerable<SqlParameter> parameters)
-        {        
+        {
             var ds = new DataSet();
 
             using (var conn = new SqlConnection(_ConnectionString))
@@ -927,10 +951,10 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                 if (filters.SeletcedDepartments.Any())
                 {
                     // Dep + OU
-                    if (filters.SeletcedOUs.Any()) 
-                        _whereStr += string.Format("AND (tblCase.Department_Id in ({0}) or tblCase.OU_Id in ({1})) ", 
+                    if (filters.SeletcedOUs.Any())
+                        _whereStr += string.Format("AND (tblCase.Department_Id in ({0}) or tblCase.OU_Id in ({1})) ",
                                                    filters.SeletcedDepartments.GetSelectedStr().SafeForSqlInject(),
-                                                   filters.SeletcedOUs.GetSelectedStr().SafeForSqlInject());                        
+                                                   filters.SeletcedOUs.GetSelectedStr().SafeForSqlInject());
                     else
                         _whereStr += string.Format("AND tblCase.Department_Id in ({0}) ", filters.SeletcedDepartments.GetSelectedStr().SafeForSqlInject());
                 }
@@ -938,7 +962,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                 {
                     // OU only
                     if (filters.SeletcedOUs.Any())
-                        _whereStr += string.Format("AND tblCase.OU_Id in ({0}) ", filters.SeletcedOUs.GetSelectedStr().SafeForSqlInject());                        
+                        _whereStr += string.Format("AND tblCase.OU_Id in ({0}) ", filters.SeletcedOUs.GetSelectedStr().SafeForSqlInject());
                 }
 
 
@@ -960,7 +984,7 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                     _whereStr += string.Format("AND tblCase.WorkingGroup_Id in (0) ");
                 }
 
-                if (filters.SelectedCaseTypes.Any())                
+                if (filters.SelectedCaseTypes.Any())
                     _whereStr += string.Format("AND tblCase.CaseType_Id in ({0}) ", filters.SelectedCaseTypes.GetSelectedStr().SafeForSqlInject());
 
                 if (filters.SelectedProductAreas.Any())
@@ -973,19 +997,19 @@ namespace DH.Helpdesk.Dal.Repositories.ReportService.Concrete
                     {
                         case CaseProgressFilter.None:
                             break;
-                        case CaseProgressFilter.ClosedCases:                            
+                        case CaseProgressFilter.ClosedCases:
                             _whereStr += "AND tblCase.FinishingDate is not null ";
                             break;
                         case CaseProgressFilter.CasesInProgress:
-                            _whereStr += "AND tblCase.FinishingDate is null ";                            
-                            break;                        
-                        default:                            
+                            _whereStr += "AND tblCase.FinishingDate is null ";
                             break;
-                    }                    
+                        default:
+                            break;
+                    }
                 }
             }
 
-            if (filters.CaseCreationDate.FromDate.HasValue) 
+            if (filters.CaseCreationDate.FromDate.HasValue)
                 _whereStr += string.Format("AND tblCase.RegTime >= '{0}' ", filters.CaseCreationDate.FromDate.Value);
 
             if (filters.CaseCreationDate.ToDate.HasValue)

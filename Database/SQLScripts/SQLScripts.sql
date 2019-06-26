@@ -293,6 +293,7 @@ CREATE PROCEDURE [dbo].[ReportGetHistoricalData]
 	@registerTo DATETIME, 
 	@closeFrom DATETIME, 
 	@closeTo DATETIME, 
+	@includeCasesWithHistoricalNoWorkingGroup BIT,
 	@includeCasesWithNoWorkingGroup BIT,
 	@administrators AS dbo.IDList READONLY, 
 	@departments AS dbo.IDList READONLY, 
@@ -306,7 +307,7 @@ BEGIN
 		@checkDepartments INT = 0,
 		@checkCaseTypes INT = 0,
 		@checkProductAreas INT = 0,
-		@checkWorkingGroups INT = 0,
+		@checkWorkingGroups INT = 1,
 		@checkCaseStatus INT = CASE WHEN @caseStatus IS NULL THEN 0 ELSE 1 END,
 		@checkChangeFrom INT = CASE WHEN @changeFrom IS NULL THEN 0 ELSE 1 END,
 		@checkChangeTo INT = CASE WHEN @changeTo IS NULL THEN 0 ELSE 1 END,
@@ -321,7 +322,7 @@ BEGIN
 	SELECT TOP 1 @checkDepartments = 1 FROM @departments
 	SELECT TOP 1 @checkCaseTypes = 1 FROM @caseTypes
 	SELECT TOP 1 @checkProductAreas = 1 FROM @productAreas
-	SELECT TOP 1 @checkWorkingGroups = 1 FROM @workingGroups
+	--SELECT TOP 1 @checkWorkingGroups = 1 FROM @workingGroups
 
 	SELECT @checkCurrentCustomerOnly = CASE WHEN (@checkAdministrators + @checkDepartments + @checkCaseTypes + @checkProductAreas + 
 		@checkWorkingGroups + @checkCaseStatus + @checkRegisterFrom + @checkRegisterTo + @checkCloseFrom + 
@@ -353,7 +354,7 @@ BEGIN
 	AND (@checkDepartments = 0 OR EXISTS(SELECT ID FROM @departments D WHERE C.Department_Id = D.ID))
 	AND (@checkCaseTypes = 0 OR EXISTS(SELECT ID FROM @caseTypes CT WHERE C.CaseType_Id = CT.ID))
 	AND (@checkProductAreas = 0 OR EXISTS(SELECT ID FROM @productAreas PA WHERE C.ProductArea_Id = PA.ID))
-	AND (@checkWorkingGroups = 0 OR EXISTS(SELECT ID FROM @workingGroups WG WHERE C.WorkingGroup_Id = WG.ID))
+	AND (@checkWorkingGroups = 0 OR EXISTS(SELECT ID FROM @workingGroups WG WHERE C.WorkingGroup_Id = WG.ID) OR (@includeCasesWithNoWorkingGroup = 1 AND C.WorkingGroup_Id IS NULL))
 	AND (@checkCaseStatus = 0 OR (@caseStatus = 1 AND C.FinishingDate IS NULL) OR (@caseStatus = 0 AND C.FinishingDate IS NOT NULL))
 	AND (@checkChangeFrom = 0 OR CH.CreatedDate >= @changeFrom)
 	AND (@checkChangeTo = 0 OR CH.CreatedDate <= @changeTo)
@@ -376,7 +377,7 @@ BEGIN
 	WHERE R2.CaseID IS NULL
 	  		AND (@checkChangeWorkingGroups = 0 OR 
 			EXISTS(SELECT ID FROM @changeWorkingGroups CWG WHERE R.WorkingGroupID = CWG.ID) OR 
-			(@includeCasesWithNoWorkingGroup = 1 AND R.WorkingGroupID IS NULL))
+			(@includeCasesWithHistoricalNoWorkingGroup = 1 AND R.WorkingGroupID IS NULL))
 	ORDER BY CaseID
 
 	DROP TABLE #rows
@@ -404,9 +405,18 @@ END
 RAISERROR('Adding new TimeZoneId to tblCustomer', 10, 1) WITH NOWAIT
 IF NOT EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'TimeZoneId' and Object_ID = Object_ID(N'dbo.tblCustomer'))
    ALTER TABLE tblCustomer
-   ADD TimeZoneId nvarchar(64) NOT NULL DEFAULT('Central Europe Standard Time')
+   ADD TimeZoneId nvarchar(64) NOT NULL DEFAULT('W. Europe Standard Time')
 GO
 
+
+RAISERROR('Creating index idx_casehistory_casetype', 10, 1) WITH NOWAIT
+IF NOT EXISTS (SELECT name FROM sysindexes WHERE name = 'idx_casehistory_casetype')	
+BEGIN
+	CREATE NONCLUSTERED INDEX [idx_casehistory_casetype]
+		ON [dbo].[tblCaseHistory]([CaseType_Id] ASC, [CreatedDate] ASC)
+		INCLUDE([Case_Id], [WorkingGroup_Id]);
+END
+GO
 
 
 -- Last Line to update database version

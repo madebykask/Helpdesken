@@ -96,19 +96,33 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             return _reportServiceRepository.GetReportData(reportIdentity, filters);
         }
 
-		public IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter)
+		public IList<HistoricalDataResult> GetHistoricalData(HistoricalDataFilter filter, int userId)
 		{
+            var user = _userService.GetUser(userId);
+
+            filter.IncludeCasesWithNoWorkingGroup = CanSeeCasesWithEmptyWorkingGroups(filter.WorkingGroups, user);
+            filter.IncludeCasesWithNoDepartments = false;
+            filter.WorkingGroups = GetWorkingGroups(filter.WorkingGroups, filter.CustomerID, user);
+            filter.Departments = GetDepartments(filter.Departments, filter.CustomerID, userId);
+
 			var result = _reportServiceRepository.GetHistoricalData(filter);
 			return result;
 		}
 
-        public IList<ReportedTimeDataResult> GetReportedTimeData(ReportedTimeDataFilter filter)
+        public IList<ReportedTimeDataResult> GetReportedTimeData(ReportedTimeDataFilter filter, int userId)
         {
+            var user = _userService.GetUser(userId);
+
+            filter.IncludeCasesWithNoWorkingGroup = CanSeeCasesWithEmptyWorkingGroups(filter.WorkingGroups, user);
+            filter.IncludeCasesWithNoDepartments = false;
+            filter.WorkingGroups = GetWorkingGroups(filter.WorkingGroups, filter.CustomerID, user);
+            filter.Departments = GetDepartments(filter.Departments, filter.CustomerID, userId);
+
             var result = _reportServiceRepository.GetReportedTimeData(filter);
             return result;
         }
 
-        public IList<NumberOfCaseDataResult> GetNumberOfCasesData(NumberOfCasesDataFilter filter)
+        public IList<NumberOfCaseDataResult> GetNumberOfCasesData(NumberOfCasesDataFilter filter, int userId)
         {
             if (filter.CaseTypes != null && filter.CaseTypes.Any())
             {
@@ -124,6 +138,14 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                     productAreasChainIds.AddRange(_productAreaService.GetChildrenIds(productAreaId));
                 filter.ProductAreas = productAreasChainIds;
             }
+
+            var user = _userService.GetUser(userId);
+
+            filter.IncludeCasesWithNoWorkingGroup = CanSeeCasesWithEmptyWorkingGroups(filter.WorkingGroups, user);
+            filter.IncludeCasesWithNoDepartments = false;
+            filter.WorkingGroups = GetWorkingGroups(filter.WorkingGroups, filter.CustomerID, user);
+            filter.Departments = GetDepartments(filter.Departments, filter.CustomerID, userId);
+
             var result = _reportServiceRepository.GetNumberOfCasesData(filter);
             return result;
         }
@@ -131,6 +153,35 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
         #endregion
 
         #region Private Methods and Operators
+
+        private List<int> GetWorkingGroups(List<int> filterWorkingGroups, int customerId, User user)
+        {
+            /*If user has no wg and is a SystemAdmin or customer admin, he/she can see all available wgs */
+            var workingGroups = user.UserGroup_Id > UserGroups.Administrator ?
+                _workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false).Select(w => w.Id).ToList() :
+                _workingGroupService.GetWorkingGroups(customerId, user.Id, false).Select(x => x.Id).ToList();
+
+            if (filterWorkingGroups == null || !filterWorkingGroups.Any())
+                return workingGroups;
+
+            return filterWorkingGroups.Where(w => workingGroups.Contains(w)).ToList();
+        }
+
+        private bool CanSeeCasesWithEmptyWorkingGroups(IList<int> filterWorkingGroups,  User user)
+        {
+            return (filterWorkingGroups == null || !filterWorkingGroups.Any()) &&
+                   (user.UserGroup_Id > UserGroups.Administrator || user.ShowNotAssignedWorkingGroups != 0);
+        }
+
+        private List<int> GetDepartments(List<int> filterDepartments, int customerId, int userId)
+        {
+            var departments = _departmentService.GetDepartmentsByUserPermissions(userId, customerId, false).Select(w => w.Id).ToList();
+
+            if (filterDepartments == null || !filterDepartments.Any())
+                return departments;
+
+            return departments.Any() ? filterDepartments.Where(w => departments.Contains(w)).ToList() : filterDepartments;
+        }
 
         private IList<Department> AddOrganizationUnitsToDepartments(IList<Department> departments)
         {

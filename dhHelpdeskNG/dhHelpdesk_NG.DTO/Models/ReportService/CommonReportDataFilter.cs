@@ -16,5 +16,8 @@ namespace DH.Helpdesk.BusinessData.Models.ReportService
         public List<int> CaseTypes { get; set; }
         public List<int> ProductAreas { get; set; }
         public List<int> WorkingGroups { get; set; }
+        public bool IncludeCasesWithNoWorkingGroup { get; set; }
+        public bool IncludeCasesWithNoDepartments { get; set; }
+        
     }
 }

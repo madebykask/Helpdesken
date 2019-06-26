@@ -78,10 +78,10 @@ Public Class Mail
             Dim textInternal = If(Not objLog Is Nothing, objLog.Text_Internal, "")
             '[#10]
             sSubject = Replace(sSubject, getMailTemplateIdentifier("Text_External"), textExternal)
-            sBody = Replace(sBody, getMailTemplateIdentifier("Text_External"), textInternal)
+            sBody = Replace(sBody, getMailTemplateIdentifier("Text_External"), textExternal)
 
             '[#11]
-            sSubject = Replace(sSubject, getMailTemplateIdentifier("Text_Internal"), textExternal)
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("Text_Internal"), textInternal)
             sBody = Replace(sBody, getMailTemplateIdentifier("Text_Internal"), textInternal)
 
             '[#12]

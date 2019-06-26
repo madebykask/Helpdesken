@@ -36,6 +36,7 @@
     #{if AuthenticationMode == "application"}<add key="LoginMode" value="Application"/>#{/if}
     #{if AuthenticationMode == "windows"}<add key="LoginMode" value="Windows"/>#{/if}
     #{if AuthenticationMode == "mixed"}<add key="LoginMode" value="Mixed"/>#{/if}
+    #{if AuthenticationMode == "mixed"}<add key="winAuthIPFilter" value="#{MixedModeIPRanges}"/>#{/if}
     #{if AuthenticationMode == "sso"}<add key="LoginMode" value="SSO"/>#{/if}
     #{if AuthenticationMode == "anonymous"}<add key="LoginMode" value="Anonymous"/>#{/if}
   </appSettings>

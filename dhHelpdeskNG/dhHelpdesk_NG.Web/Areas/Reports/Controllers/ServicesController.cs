@@ -29,6 +29,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         private readonly ICaseTypeService _caseTypeService;
         private readonly IProductAreaService _productAreaService;
 		private readonly IReportServiceService _reportServiceService;
+        private readonly IDepartmentService _departmentService;
 
 		public ServicesController(
             IMasterDataService masterDataService, 
@@ -37,7 +38,8 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             IWorkingGroupService workingGroupService,
             ICaseTypeService caseTypeService,
 			IReportServiceService reportServiceService,
-            IProductAreaService productAreaService)
+            IProductAreaService productAreaService,
+            IDepartmentService departmentService)
             : base(masterDataService)
         {
             _userService = userService;
@@ -46,6 +48,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
             _caseTypeService = caseTypeService;
 			_reportServiceService = reportServiceService;
             _productAreaService = productAreaService;
+            _departmentService = departmentService;
         }
 
         [HttpGet]
@@ -68,21 +71,19 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 				_workingGroupService.GetWorkingGroups(customerId, user.Id, false, true).ToList();
 
 			if (filter.HistoricalWorkingGroups != null && filter.HistoricalWorkingGroups.Any())
-			{
 				workingGroups = workingGroups.Where(o => filter.HistoricalWorkingGroups.Contains(o.Id)).ToList();
-			}
 
-			var dataFilter = GetCommonDataFilter<HistoricalDataFilter>(filter);
+            var dataFilter = GetCommonDataFilter<HistoricalDataFilter>(filter);
             dataFilter.CaseStatus = filter.CaseStatus == 2 ? 1 : filter.CaseStatus == 1 ? 0 : (int?) null; // 1 active, 0 closed else null
             dataFilter.ChangeFrom = filter.HistoricalChangeDateFrom ?? DateTime.Now.AddYears(-100);
             dataFilter.ChangeTo = filter.HistoricalChangeDateTo.HasValue
                 ? filter.HistoricalChangeDateTo.GetEndOfDay().Value
                 : DateTime.Now.AddYears(20);
             dataFilter.ChangeWorkingGroups = workingGroups.Select(o => o.Id).ToList();
-            dataFilter.IncludeCasesWithNoWorkingGroup = filter.HistoricalWorkingGroups == null ||
+            dataFilter.IncludeHistoricalCasesWithNoWorkingGroup = filter.HistoricalWorkingGroups == null ||
                                                         !filter.HistoricalWorkingGroups.Any();
 
-			var result = _reportServiceService.GetHistoricalData(dataFilter);
+			var result = _reportServiceService.GetHistoricalData(dataFilter, SessionFacade.CurrentUser.Id);
 
 			var wgs = result.Select(o => new { o.WorkingGroup, o.WorkingGroupID }).Distinct().OrderBy(o => o.WorkingGroup).ToArray();
             var caseTypes = _caseTypeService.GetAllCaseTypes(customerId, false, true);
@@ -109,12 +110,13 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         public JsonResult GetReportedTimeData(ReportedTimeReportFilterModel filter)
         {
             var customerId = SessionFacade.CurrentCustomer.Id;
+
             var dataFilter = GetCommonDataFilter<ReportedTimeDataFilter>(filter);
             dataFilter.GroupBy = (ReportedTimeGroup) filter.GroupBy;
             dataFilter.LogNoteFrom = filter.LogNoteFrom;
             dataFilter.LogNoteTo = filter.LogNoteTo.HasValue ? filter.LogNoteTo.GetEndOfDay() : new DateTime?();
 
-            var result = _reportServiceService.GetReportedTimeData(dataFilter);
+            var result = _reportServiceService.GetReportedTimeData(dataFilter, SessionFacade.CurrentUser.Id);
             var minutesInHour = 60.0;
             var totalHours = result.Sum(o => o.TotalTime) / minutesInHour;
             switch (dataFilter.GroupBy)
@@ -175,10 +177,11 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         public JsonResult GetNumberOfCasesData(NumberOfCasesReportFilterModel filter)
         {
             var customerId = SessionFacade.CurrentCustomer.Id;
-            var dataFilter = GetCommonDataFilter<NumberOfCasesDataFilter>(filter);
-            dataFilter.GroupBy = (NumberOfCasesGroup) filter.GroupBy; 
 
-            var result = _reportServiceService.GetNumberOfCasesData(dataFilter);
+            var dataFilter = GetCommonDataFilter<NumberOfCasesDataFilter>(filter);
+            dataFilter.GroupBy = (NumberOfCasesGroup) filter.GroupBy;
+
+            var result = _reportServiceService.GetNumberOfCasesData(dataFilter, SessionFacade.CurrentUser.Id);
             var totalCases = result.Sum(c => c.CasesAmount);
             switch (dataFilter.GroupBy)
             {
