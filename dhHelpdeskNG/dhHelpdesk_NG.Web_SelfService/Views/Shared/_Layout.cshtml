@@ -29,7 +29,7 @@
         <script>
             window.addEventListener('touchstart', function onFirstTouch() {
                 console.log('Has touchscreen');
-                const bodyEl = document.getElementById('body');
+                const bodyEl = document.getElementsByTagName('body');
                 bodyEl.classList.remove('desktop');
                 bodyEl.classList.add('touchscreen');
                 window.TouchScreen = true;
@@ -42,7 +42,7 @@
           <script src="@Url.Content("~/Content/js/respond.min.js")"></script>
         <![endif]-->
     </head>
-<body>
+<body class="desktop">
     <div class="jumbotron">
         @Html.Partial("_LogoItems", layoutModel)
     </div>
@@ -60,7 +60,7 @@
             @Html.Partial("_MainMenu", layoutModel)
         </div>
     </div>
-    <div id="body" class="desktop">
+    <div id="body" >
         @RenderBody()
     </div>
     <div class="container-fluid dh-container">
