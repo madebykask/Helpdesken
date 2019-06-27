@@ -30,8 +30,8 @@
             window.addEventListener('touchstart', function onFirstTouch() {
                 console.log('Has touchscreen');
                 const bodyEl = document.getElementsByTagName('body');
-                bodyEl.classList.remove('desktop');
-                bodyEl.classList.add('touchscreen');
+                bodyEl[0].classList.remove('desktop');
+                bodyEl[0].classList.add('touchscreen');
                 window.TouchScreen = true;
                 window.removeEventListener('touchstart', onFirstTouch, false);
             }, false);
