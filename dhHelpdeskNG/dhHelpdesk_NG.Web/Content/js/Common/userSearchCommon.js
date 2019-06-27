@@ -224,8 +224,8 @@ function getEmailsToRemove() {
     if (parentNode.html() === "&nbsp;") {
         return "&nbsp;";
     } else {
-        return $(parentNode.text().split(";")).last()[0];
-        //            return selection.anchorNode.textContent;
+        // return $(parentNode.text().split(";")).last()[0];
+        return selection.anchorNode.textContent;
     }
 }
 
@@ -303,7 +303,7 @@ function getUserSearchOptions(mainInput, mainFakeInput, popupInput) {
                             var resultList = $.map(result.result,
                                 function (item) {
                                     var aItem = {
-                                        userId: item.UserId,
+                                        userId: item.UserId || '',
                                         name: item.FirstName + " " + item.SurName,
                                         email: item.Emails,
                                         groupType: item.GroupType,
@@ -392,7 +392,7 @@ function getUserSearchOptions(mainInput, mainFakeInput, popupInput) {
             if (item.groupType === 4)
                 grType = document.parameters.usersLabel + ": ";
 
-            var userId = item.userId != null ? item.userId + ' - ' : "";
+            var userId = (item.userId != null && item.userId !== '') ? item.userId + ' - ' : "";
             var query = getSimpleQuery(this.query);
             var result = item.name + " - " + userId + item.email + " - " + item.departmentname;
             var resultNameFamily = item.name_family + " - " + userId + item.email + " - " + item.departmentname;
