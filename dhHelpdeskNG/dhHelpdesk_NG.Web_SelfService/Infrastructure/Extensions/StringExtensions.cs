@@ -137,8 +137,6 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             return ret;
         }
 
-        
-
         public static string SetCalendarSortIcon(this string value)
         {
             var ret = string.Empty;
@@ -199,7 +197,6 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
             var ret = unread == true ? "textbold" : string.Empty;
             return urgent == true ? ret + " textred" : ret;
         }
-
 
         public static string SetCaseSortIcon(this string value)
         {
@@ -386,9 +383,11 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
         public static string GetMailTemplateName(this int value)
         {
             var ret = string.Empty; 
+
+            //todo: reaplce with enum values
             switch (value)
             {
-                case 1:
+                case (int)GlobalEnums.MailTemplates.NewCase:
                     ret = Translation.Get("Nytt ärende", Enums.TranslationSource.TextTranslation); 
                     break;
                 case 2:
@@ -439,8 +438,8 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Extensions
                 return MvcHtmlString.Create(str);
             }
 
-            return MvcHtmlString.Create(str.Replace(Environment.NewLine, "<br />")
-                .Replace("\n", "<br />"));
+            var htmlString = str.Replace(Environment.NewLine, "<br />").Replace("\n", "<br />");
+            return MvcHtmlString.Create(htmlString);
         }
     }
 }
