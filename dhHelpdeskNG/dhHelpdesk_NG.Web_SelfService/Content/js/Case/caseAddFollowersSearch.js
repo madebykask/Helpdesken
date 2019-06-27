@@ -341,8 +341,8 @@ function InitCaseAddFollowersSearch(searchUriPath) {
         if (parentNode.html() === "&nbsp;") {
             return "&nbsp;";
         } else {
-            return $(parentNode.text().split(";")).last()[0];
-            //return selection.anchorNode.textContent;
+            //return $(parentNode.text().split(";")).last()[0];
+            return selection.anchorNode.textContent;
         }
     }
     
