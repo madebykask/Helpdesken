@@ -403,7 +403,7 @@
                             @Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, @SessionFacade.CurrentCustomerID)
                         </label>
                         <div class="col-md-9">
-                            @Model.CasePreview.Description
+                            @Model.CasePreview.Description.ForHtmlView()
                         </div>
                     </div>
                 }

@@ -279,9 +279,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
             if (currentCase.CaseExtendedCaseDatas.Any())
                 return RedirectToAction("ExtendedCase", new { caseId = currentCase.Id });
-
-            currentCase.Description = currentCase.Description.Replace("\n", EnterMarkup);
-            
+           
             Customer currentCustomer;
             if (SessionFacade.CurrentCustomer != null)
             {
@@ -2131,7 +2129,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 CasePreview = currentCase,
                 CaseFieldGroups = caseFieldGroups,
                 FieldSettings = caseFieldSetting,
-                CaseSectionSettings =  caseSectionModels,
+                CaseSectionSettings = caseSectionModels,
                 Regions = regions,
                 Suppliers = suppliers,
                 Systems = systems,
