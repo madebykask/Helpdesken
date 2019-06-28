@@ -269,7 +269,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             var isAnonymousMode = ConfigurationService.AppSettings.LoginMode == LoginMode.Anonymous;
             if (!isAnonymousMode && !allowAnonymousAccess)
             {
-                var hasAccess = true; //UserHasAccessToCase(currentCase);
+                var hasAccess = UserHasAccessToCase(currentCase);
                 if (!hasAccess)
                 {
                     ErrorGenerator.MakeError("Case not found among your cases!");
