@@ -836,7 +836,7 @@ Module DH_Helpdesk_Mail
 
                                     ' Spara svaret som en loggpost på aktuellt ärende
                                     ' Ta endast med svaret
-                                    sBodyText = extractAnswer(sBodyText, objCustomer.EMailAnswerSeparator)
+                                    sBodyText = extractAnswerFromBody(sBodyText, objCustomer.EMailAnswerSeparator)
 
                                     ' Markera ärendet som oläst
                                     objCaseData.markCaseUnread(objCase)
@@ -1389,36 +1389,7 @@ Module DH_Helpdesk_Mail
         fz.CreateZip(sFileName, sSourceDir, True, "", "")
         fz = Nothing
     End Sub
-
-    Private Function extractAnswer(ByVal sBodyText As String, ByVal sEMailAnswerSeparator As String) As String
-        Dim aEMailAnswerSeparator() As String
-        Dim iPos As Integer = 0
-        Dim iPos_new As Integer = 0
-
-        aEMailAnswerSeparator = Split(sEMailAnswerSeparator, ";")
-
-        For i As Integer = 0 To aEMailAnswerSeparator.Length - 1
-            iPos = InStr(2, sBodyText, aEMailAnswerSeparator(i).ToString, CompareMethod.Binary)
-
-            If iPos > 0 Then
-                If iPos_new = 0 Then
-                    iPos_new = iPos
-                Else
-                    If iPos < iPos_new Then
-                        iPos_new = iPos
-                    End If
-                End If
-
-            End If
-        Next
-
-        If iPos_new = 0 Then
-            Return sBodyText
-        Else
-            Return Left(sBodyText, iPos_new - 1)
-        End If
-    End Function
-
+    
     Private Function convertHTMLtoText(ByVal sHTML As String) As String
         Dim startTime As DateTime
         Dim MyWebBrowser As New System.Windows.Forms.WebBrowser

@@ -4,6 +4,7 @@ Imports Microsoft.Win32
 Imports System.Net
 Imports System.IO
 Imports System.Net.Mail
+Imports System.Text.RegularExpressions
 
 <Serializable()> Public Class SharedFunctions
     Public Enum ConnectionType As Integer
@@ -329,6 +330,45 @@ Imports System.Net.Mail
         End If
     End Function
 
+    Public Shared Function extractAnswerFromBody(ByVal sBodyText As String, ByVal sEMailAnswerSeparator As String) As String
+        
+        Dim aEMailAnswerSeparator() As String
+        Dim iPos As Integer = 0
+        Dim iPos_new As Integer = 0
+
+        aEMailAnswerSeparator = Split(sEMailAnswerSeparator, ";")
+
+        For i As Integer = 0 To aEMailAnswerSeparator.Length - 1
+            Dim emailSeparatorPattern = aEMailAnswerSeparator(i)
+
+            Dim match As Match = Regex.Match(sBodyText, emailSeparatorPattern, RegexOptions.IgnoreCase Or RegexOptions.Multiline)
+
+            If match.Success 
+
+                iPos = match.Index
+            
+                ' Compare with prev results which match is the closest one to the beginning
+                If iPos > 0 Then
+                    If iPos_new = 0 Then
+                        iPos_new = iPos
+                    Else
+                        If iPos < iPos_new Then
+                            iPos_new = iPos
+                        End If
+                    End If
+
+                End If
+            End If
+            
+        Next
+
+        If iPos_new = 0 Then
+            Return sBodyText
+        Else
+            Return Left(sBodyText, iPos_new)
+        End If
+    End Function
+    
 
     Public Shared Function extractCaseNumberFromSubject(ByVal sSubject As String, ByVal sEMailSubjectPattern As String) As Integer
         Dim iPosCaseNumber As Integer
