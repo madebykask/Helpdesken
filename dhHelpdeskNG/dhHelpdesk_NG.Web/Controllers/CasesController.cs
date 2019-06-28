@@ -4272,20 +4272,13 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseDepartmentFilter))
             {
-                const bool IsTakeOnlyActive = false;
-
                 fd.filterDepartment =
-                    _departmentService.GetDepartmentsByUserPermissions(userId, cusId, IsTakeOnlyActive);
+                    _departmentService.GetDepartmentsByUserPermissions(userId, cusId, false);
 
                 if (!fd.filterDepartment.Any())
                 {
                     fd.filterDepartment =
                         this._departmentService.GetDepartments(cusId)
-                            .Where(
-                                d =>
-                                d.Region_Id == null
-                                || IsTakeOnlyActive == false
-                                || (IsTakeOnlyActive && d.Region != null && d.Region.IsActive != 0))
                             .ToList();
                 }
 
@@ -4296,8 +4289,7 @@ namespace DH.Helpdesk.Web.Controllers
             //ärendetyp
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseCaseTypeFilter))
             {
-                const bool IsTakeOnlyActive = true;
-                fd.filterCaseType = this._caseTypeService.GetCaseTypesOverviewWithChildren(cusId, IsTakeOnlyActive);
+                fd.filterCaseType = this._caseTypeService.GetCaseTypesOverviewWithChildren(cusId, true);
             }
 
             //working group
@@ -4388,9 +4380,8 @@ namespace DH.Helpdesk.Web.Controllers
             //användare
             if (!string.IsNullOrWhiteSpace(fd.customerUserSetting.CaseUserFilter))
             {
-                const bool IsTakeOnlyActive = true;
                 fd.RegisteredByUserList = 
-                    this._userService.GetUserOnCases(cusId, IsTakeOnlyActive).MapToSelectList(fd.customerSetting);
+                    this._userService.GetUserOnCases(cusId, true).MapToSelectList(fd.customerSetting);
 
                 if (!string.IsNullOrEmpty(fd.caseSearchFilter.User))
                 {

@@ -674,17 +674,16 @@ a.error, input[type=¨button].error .btn
 /***COMMUNICATE****/
 
 .siteCom {
-  max-width:600px;
-  position:fixed;
-  left:-600px;
-  top:0;
-  display:block;
-  color:#FFF;
-  z-index:1000!important;
-  height:100%;
-  border:1px solid #438eb9;
-  /*background-color:#fff;*/
-  background-color:#438eb9;
+    max-width: 600px;
+    position: fixed;
+    top: 0;
+    display: block;
+    color: #FFF;
+    z-index: 1000 !important;
+    height: 100%;
+    border: 1px solid #438eb9;
+    /*background-color:#fff;*/
+    background-color: #438eb9;
 }
 .mapText {
   color:#fff;
