@@ -376,7 +376,7 @@
                 }
 
                 <div id="container_@extendedFormId" class="">
-                    @Html.Partial("_CaseInformation", Model, new ViewDataDictionary { { "Headline", Translation.Get(Model.ExtendedCaseDataModel.FormModel.Name) } })
+                    @Html.Partial("_CaseInformation", Model, new ViewDataDictionary(ViewData) { { "Headline", Translation.Get(Model.ExtendedCaseDataModel.FormModel.Name) } })
                     @*Extended case placement*@
                 </div>
             </div>
@@ -476,17 +476,16 @@
                                      SessionFacade.CurrentUserIdentity.UserId.Equals(Model.CaseDataModel.ReportedBy);
     }
     @if (Model.CaseId > 0 &&
-         (!Model.CaseDataModel.IsFinished ||
-          isFinishedAndInitiator) &&
+         (!Model.CaseDataModel.IsFinished || isFinishedAndInitiator) &&
          (Model.ApplicationType == ApplicationType.LineManager ||
           Model.ApplicationType == ApplicationType.SelfService && Model.ShowCommunicationForSelfservice))
     {
-        @Html.Partial("_Communication", Model.CaseLogModel, new ViewDataDictionary { { "readonly", isFinishedAndInitiator } })
+        @Html.Partial("_Communication", Model.CaseLogModel, new ViewDataDictionary(ViewData) { { "readonly", isFinishedAndInitiator }})
         if (ViewBag.IsAttachementsAllowed)
-         {
+        {
              @Html.Partial("ModalDialogs/_UploadExistingLogFilePopup")
              @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")
-         }
+        }
         @Scripts.Render("~/Content/js/Case/log")
     }
 
