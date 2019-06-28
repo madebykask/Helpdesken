@@ -45,7 +45,7 @@
             this.Property(x => x.DontConnectUserToWorkingGroup).IsRequired();
             this.Property(x => x.DSN_Sync).IsRequired().HasMaxLength(200);
             this.Property(x => x.EMailAnswerDestination).IsRequired();
-            this.Property(x => x.EMailAnswerSeparator).IsRequired().HasMaxLength(20);
+            this.Property(x => x.EMailAnswerSeparator).IsRequired().HasMaxLength(512);
             this.Property(x => x.EMailImportType).IsRequired();
             this.Property(x => x.EMailRegistrationMailID).IsRequired();            
             this.Property(x => x.EMailSubjectPattern).IsRequired().HasMaxLength(100);
