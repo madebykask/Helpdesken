@@ -20,9 +20,7 @@
                         <td>
                             @Translation.Get("Tillgängliga", Enums.TranslationSource.TextTranslation)
                         </td>
-                        <td>
-                
-                        </td>
+                        <td></td>
                         <td>
                             @Translation.Get("Användaren har rättighet till", Enums.TranslationSource.TextTranslation)
                         </td>
@@ -30,7 +28,7 @@
                     <tr>
                         <td>
                             @Html.ListBox("CsAvailable", Model.CsAvailable, new { style = "width: 314px; height: 100px" })
-                            
+
                         </td>
                         <td>
                             <input type="button" value="&gt;" id="addCs" class="btn" /><br />
@@ -45,10 +43,10 @@
         </tr>
         <tr>
             <td>
-                @Translation.Get("Standardkund", Enums.TranslationSource.TextTranslation) * 
+                @Translation.Get("Standardkund", Enums.TranslationSource.TextTranslation) *
             </td>
             <td>
-                @Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new {})
+                @Html.DropDownListFor(model => model.User.Customer_Id, Model.CsSelected, "", new { })
             </td>
         </tr>
         <tr>
@@ -56,7 +54,7 @@
                 @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input data-field="performerPermission" type="checkbox" name="User.Performer" @(Model.User.Performer == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="performerPermission" type="checkbox" name="User.Performer" @(Model.User.Performer == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.Performer" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren kan handlägga ärenden", Enums.TranslationSource.TextTranslation)
             </td>
@@ -64,7 +62,7 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="createCasePermission" type="checkbox" name="User.CreateCasePermission" @(Model.User.CreateCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="createCasePermission" type="checkbox" name="User.CreateCasePermission" @(Model.User.CreateCasePermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.CreateCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får skapa ärenden", Enums.TranslationSource.TextTranslation)
             </td>
@@ -72,7 +70,7 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="createSubCasePermission" type="checkbox" name="User.CreateSubCasePermission" @(Model.User.CreateSubCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="createSubCasePermission" type="checkbox" name="User.CreateSubCasePermission" @(Model.User.CreateSubCasePermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.CreateSubCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får skapa underärenden", Enums.TranslationSource.TextTranslation)
             </td>
@@ -80,7 +78,7 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="copyCasePermission" type="checkbox" name="User.CopyCasePermission" @(Model.User.CopyCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="copyCasePermission" type="checkbox" name="User.CopyCasePermission" @(Model.User.CopyCasePermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.CopyCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får kopiera ärenden", Enums.TranslationSource.TextTranslation)
             </td>
@@ -88,7 +86,7 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="deleteCasePermission" type="checkbox" name="User.DeleteCasePermission" @(Model.User.DeleteCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="deleteCasePermission" type="checkbox" name="User.DeleteCasePermission" @(Model.User.DeleteCasePermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.DeleteCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får ta bort ärenden", Enums.TranslationSource.TextTranslation)
             </td>
@@ -96,7 +94,7 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="deleteAttachedFilePermission" type="checkbox" name="User.DeleteAttachedFilePermission" @(Model.User.DeleteAttachedFilePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="deleteAttachedFilePermission" type="checkbox" name="User.DeleteAttachedFilePermission" @(Model.User.DeleteAttachedFilePermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.DeleteAttachedFilePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får ta bort bifogade filer", Enums.TranslationSource.TextTranslation)
             </td>
@@ -104,7 +102,7 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="moveCasePermission" type="checkbox" name="User.MoveCasePermission" @(Model.User.MoveCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="moveCasePermission" type="checkbox" name="User.MoveCasePermission" @(Model.User.MoveCasePermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.MoveCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får flytta ärenden", Enums.TranslationSource.TextTranslation)
             </td>
@@ -112,7 +110,7 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="activateCasePermission" type="checkbox" name="User.ActivateCasePermission" @(Model.User.ActivateCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="activateCasePermission" type="checkbox" name="User.ActivateCasePermission" @(Model.User.ActivateCasePermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.ActivateCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får aktivera ärenden", Enums.TranslationSource.TextTranslation)
             </td>
@@ -120,7 +118,7 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="closeCasePermission" type="checkbox" name="User.CloseCasePermission" @(Model.User.CloseCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="closeCasePermission" type="checkbox" name="User.CloseCasePermission" @(Model.User.CloseCasePermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.CloseCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får stänga ärenden", Enums.TranslationSource.TextTranslation)
             </td>
@@ -128,7 +126,7 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="restrictedCasePermission" type="checkbox" name="User.RestrictedCasePermission" @(Model.User.RestrictedCasePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="restrictedCasePermission" type="checkbox" name="User.RestrictedCasePermission" @(Model.User.RestrictedCasePermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.RestrictedCasePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren kan endast se sina egna ärenden", Enums.TranslationSource.TextTranslation)
             </td>
@@ -136,7 +134,7 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="followUpPermission" type="checkbox" name="User.FollowUpPermission" @(Model.User.FollowUpPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="followUpPermission" type="checkbox" name="User.FollowUpPermission" @(Model.User.FollowUpPermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.FollowUpPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren får följa upp ärenden", Enums.TranslationSource.TextTranslation)
             </td>
@@ -144,7 +142,7 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="dataSecurityPermission" type="checkbox" name="User.DataSecurityPermission" @(Model.User.DataSecurityPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="dataSecurityPermission" type="checkbox" name="User.DataSecurityPermission" @(Model.User.DataSecurityPermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.DataSecurityPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till datasäkerhetsinformation", Enums.TranslationSource.TextTranslation)
             </td>
@@ -152,8 +150,8 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="caseUnlockPermission" type="checkbox" name="User.CaseUnlockPermission" @(Model.User.CaseUnlockPermission == 1 ? "checked=checked" : "") value="1"/>
-                <input type="hidden" name="User.CaseUnlockPermission" value="0"/>
+                <input data-field="caseUnlockPermission" type="checkbox" name="User.CaseUnlockPermission" @(Model.User.CaseUnlockPermission == 1 ? "checked=checked" : "") value="1" />
+                <input type="hidden" name="User.CaseUnlockPermission" value="0" />
                 &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har rättighet till") @Translation.GetCoreTextTranslation("Lås upp ärende").ToLower()
             </td>
         </tr>
@@ -170,7 +168,7 @@
                 @Translation.Get("Ärendemall", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input data-field="caseSolutionPermission" type="checkbox" name="User.CaseSolutionPermission" @(Model.User.CaseSolutionPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="caseSolutionPermission" type="checkbox" name="User.CaseSolutionPermission" @(Model.User.CaseSolutionPermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.CaseSolutionPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera ärendemallar", Enums.TranslationSource.TextTranslation)
             </td>
@@ -180,7 +178,7 @@
                 @Translation.Get("Rapporter", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input data-field="reportPermission" type="checkbox" name="User.ReportPermission" @(Model.User.ReportPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="reportPermission" type="checkbox" name="User.ReportPermission" @(Model.User.ReportPermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.ReportPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren kan köra rapporter", Enums.TranslationSource.TextTranslation)
             </td>
@@ -190,7 +188,7 @@
                 @Translation.Get("FAQ", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input data-field="faqPermission" type="checkbox" name="User.FAQPermission" @(Model.User.FAQPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="faqPermission" type="checkbox" name="User.FAQPermission" @(Model.User.FAQPermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.FAQPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera FAQ", Enums.TranslationSource.TextTranslation)
             </td>
@@ -200,7 +198,7 @@
                 @Translation.Get("Aktuellt", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input data-field="calendarPermission" type="checkbox" name="User.CalendarPermission" @(Model.User.CalendarPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="calendarPermission" type="checkbox" name="User.CalendarPermission" @(Model.User.CalendarPermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.CalendarPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera aktuellt", Enums.TranslationSource.TextTranslation)
             </td>
@@ -210,7 +208,7 @@
                 @Translation.Get("Beställning", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input data-field="createOrderPermission" type="checkbox" name="OrderP1" id="OrderP1" @(Model.OrderP1 == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="createOrderPermission" type="checkbox" name="OrderP1" id="OrderP1" @(Model.OrderP1 == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="OrderP1" id="hidOrderP1" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren kan skapa beställningar", Enums.TranslationSource.TextTranslation)
             </td>
@@ -218,23 +216,20 @@
         <tr>
             <td></td>
             <td>
-                <input data-field="administerOrderPermission" type="checkbox" name="OrderP2" id="OrderP2" @(Model.OrderP2 == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="administerOrderPermission" type="checkbox" name="OrderP2" id="OrderP2" @(Model.OrderP2 == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="OrderP2" id="hidOrderP2" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera beställningar", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr>
-            <td>
-            </td>
+            <td></td>
             <td>
                 <table>
                     <tr>
                         <td>
                             @Translation.Get("Tillgängliga beställningstyper", Enums.TranslationSource.TextTranslation)
                         </td>
-                        <td>
-                
-                        </td>
+                        <td></td>
                         <td>
                             @Translation.Get("Användaren har rättighet till", Enums.TranslationSource.TextTranslation)
                         </td>
@@ -242,7 +237,7 @@
                     <tr>
                         <td>
                             @Html.ListBox("OTsAvailable", Model.OTsAvailable, new { style = "width: 314px; height: 100px" })
-                            
+
                         </td>
                         <td>
                             <input type="button" value="&gt;" id="addOTs" class="btn" /><br />
@@ -255,45 +250,47 @@
                 </table>
             </td>
         </tr>
-        <tr>
-            <td>
-                @Translation.Get("Beställning konto", Enums.TranslationSource.TextTranslation)
-            </td>
-            <td>
-                <table>
-                    <tr>
-                        <td>
-                            @Translation.Get("Tillgängliga kontobehörigheter", Enums.TranslationSource.TextTranslation)
-                        </td>
-                        <td>
-                
-                        </td>
-                        <td>
-                            @Translation.Get("Användaren har rättighet till", Enums.TranslationSource.TextTranslation)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.ListBox("AAsAvailable", Model.AAsAvailable, new { style = "width: 314px; height: 100px" })
-                            
-                        </td>
-                        <td>
-                            <input type="button" value="&gt;" id="addAAs" class="btn" /><br />
-                            <input type="button" value="&lt;" id="removeAAs" class="btn" />
-                        </td>
-                        <td>
-                            @Html.ListBox("AAsSelected", Model.AAsSelected, new { style = "width: 314px; height: 100px" })
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+        @*<tr>
+                <td>
+                    @Translation.Get("Beställning konto", Enums.TranslationSource.TextTranslation)
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                @Translation.Get("Tillgängliga kontobehörigheter", Enums.TranslationSource.TextTranslation)
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+                                @Translation.Get("Användaren har rättighet till", Enums.TranslationSource.TextTranslation)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.ListBox("AAsAvailable", Model.AAsAvailable, new { style = "width: 314px; height: 100px" })
+
+                            </td>
+                            <td>
+                                <input type="button" value="&gt;" id="addAAs" class="btn" /><br />
+                                <input type="button" value="&lt;" id="removeAAs" class="btn" />
+                            </td>
+                            <td>
+                                @Html.ListBox("AAsSelected", Model.AAsSelected, new { style = "width: 314px; height: 100px" })
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>*@
+        @Html.HiddenFor(m => m.AAsSelected)
+
         <tr>
             <td>
                 @Translation.Get("Dagrapport", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input data-field="dailyReportPermission" type="checkbox" name="User.DailyReportReminder" @(Model.User.DailyReportReminder == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="dailyReportPermission" type="checkbox" name="User.DailyReportReminder" @(Model.User.DailyReportReminder == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.DailyReportReminder" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Påminn användaren att skriva dagrapport när ärenden avslutas", Enums.TranslationSource.TextTranslation)
             </td>
@@ -303,7 +300,7 @@
                 @Translation.Get("Anslagstavla", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input data-field="bulletinBoardPermission" type="checkbox" name="User.BulletinBoardPermission" @(Model.User.BulletinBoardPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="bulletinBoardPermission" type="checkbox" name="User.BulletinBoardPermission" @(Model.User.BulletinBoardPermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.BulletinBoardPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera anslagstavlan", Enums.TranslationSource.TextTranslation)
             </td>
@@ -313,7 +310,7 @@
                 @Translation.Get("Dokumenthantering", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input data-field="documentPermission" type="checkbox" name="User.DocumentPermission" @(Model.User.DocumentPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="documentPermission" type="checkbox" name="User.DocumentPermission" @(Model.User.DocumentPermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.DocumentPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera dokument", Enums.TranslationSource.TextTranslation)
             </td>
@@ -321,17 +318,15 @@
         <tr>
             <td>@Translation.Get("Inventarier", Enums.TranslationSource.TextTranslation)</td>
             <td>
-                <input data-field="inventoryViewPermission" type="checkbox" name="User.InventoryViewPermission"id="InventoryViewPermission" @(Model.User.InventoryViewPermission == 1 ? "checked=checked" : "") value="1" />
+                <input data-field="inventoryViewPermission" type="checkbox" name="User.InventoryViewPermission" id="InventoryViewPermission" @(Model.User.InventoryViewPermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.InventoryViewPermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet att visa inventarier", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
         <tr class="inventoryAdminPermissionRow" style="@(Model.User.InventoryViewPermission == 1 ? "" : "display: none")">
+            <td></td>
             <td>
-                
-            </td>
-            <td>
-                <input class="inventoryAdminPermissionRow" style="@(Model.User.InventoryViewPermission == 1 ? "" : "display: none")" data-field="inventoryAdminPermission" type="checkbox" name="User.InventoryPermission" id="InventoryPermission" @(Model.User.InventoryPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input class="inventoryAdminPermissionRow" style="@(Model.User.InventoryViewPermission == 1 ? "" : "display: none")" data-field="inventoryAdminPermission" type="checkbox" name="User.InventoryPermission" id="InventoryPermission" @(Model.User.InventoryPermission == 1 ? "checked=checked" : "") value="1" />
                 <input class="inventoryAdminPermissionRow" style="@(Model.User.InventoryViewPermission == 1 ? "" : "display: none")" type="hidden" name="User.InventoryPermission" id="hidInventoryPermission" value="0" />
                 <span class="inventoryAdminPermissionRow" style="@(Model.User.InventoryViewPermission == 1 ? "" : "display: none")">&nbsp; &nbsp;@Translation.Get("Användaren har rättighet att administrera inventarier", Enums.TranslationSource.TextTranslation)</span>&nbsp;
             </td>
@@ -341,7 +336,7 @@
                 @Translation.GetCoreTextTranslation("Avtal")
             </td>
             <td>
-                <input data-field="contractPermission" type="checkbox" name="User.ContractPermission" @(Model.User.ContractPermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="contractPermission" type="checkbox" name="User.ContractPermission" @(Model.User.ContractPermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.ContractPermission" value="0" />
                 &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har rättighet till avtal")
             </td>
@@ -351,7 +346,7 @@
                 @Translation.Get("Fakturering artikel", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
-                <input data-field="invoicePermission" type="checkbox" name="User.InvoicePermission" @(Model.User.InvoicePermission == 1 ? "checked=checked" : "") value="1"/>
+                <input data-field="invoicePermission" type="checkbox" name="User.InvoicePermission" @(Model.User.InvoicePermission == 1 ? "checked=checked" : "") value="1" />
                 <input type="hidden" name="User.InvoicePermission" value="0" />
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till fakturering artikel", Enums.TranslationSource.TextTranslation)
             </td>
@@ -366,23 +361,23 @@
                 &nbsp; &nbsp;@Translation.Get("Användaren har rättighet till fakturering tid", Enums.TranslationSource.TextTranslation)
             </td>
         </tr>
-    <tr>
-        <td>
-            @Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)
-        </td>
-        <td>
-            @Html.DropDownListFor(model => model.UserRights, Model.UserRoles, "", new {})
-        </td>
-    </tr>
-    @*<tr>
-        <td>
-            @Translation.GetCoreTextTranslation("Lås upp ärende")
-        </td>
-        <td>
-            @Html.CheckBoxFor(x => x.User.CaseUnlockPermission)
-            &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har rättighet till") @Translation.GetCoreTextTranslation("Lås upp ärende").ToLower()
-        </td>
-    </tr>*@
+        <tr>
+            <td>
+                @Translation.Get("Ändringshantering", Enums.TranslationSource.TextTranslation)
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.UserRights, Model.UserRoles, "", new { })
+            </td>
+        </tr>
+        @*<tr>
+                <td>
+                    @Translation.GetCoreTextTranslation("Lås upp ärende")
+                </td>
+                <td>
+                    @Html.CheckBoxFor(x => x.User.CaseUnlockPermission)
+                    &nbsp; &nbsp;@Translation.GetCoreTextTranslation("Användaren har rättighet till") @Translation.GetCoreTextTranslation("Lås upp ärende").ToLower()
+                </td>
+            </tr>*@
     </table>
 </div>
 <script type="text/javascript">

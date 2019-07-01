@@ -454,11 +454,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 this.TryUpdateModel(userToSave, "user");
 
-				// Remove admin rights if no view right for inventory
-				if(userToSave.InventoryViewPermission == 0)
-				{
-					userToSave.InventoryPermission = 0;
-				}
+                // Remove admin rights if no view right for inventory
+                if(userToSave.InventoryViewPermission == 0)
+                {
+                    userToSave.InventoryPermission = 0;
+                }
 
                 var allCustomers = _customerService.GetAllCustomers();
                 string err = "";
@@ -894,14 +894,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             #region Generals
 
-            var aasSelected = user.AAs ?? new List<AccountActivity>();
-            var aasAvailable = new List<AccountActivity>();
-            foreach (var aa in this._accountActivityService.GetAccountActivities(SessionFacade.CurrentCustomer.Id))
-            {
-                if (!aasSelected.Contains(aa))
-                    aasAvailable.Add(aa);
-            }
-           
+            // not used 
+            //var aasSelected = user.AAs ?? new List<AccountActivity>();
+            //var aasAvailable = new List<AccountActivity>();
+            //foreach (var aa in this._accountActivityService.GetAccountActivities(SessionFacade.CurrentCustomer.Id))
+            //{
+            //    if (!aasSelected.Contains(aa))
+            //        aasAvailable.Add(aa);
+            //}
+
             var customersSelected = user.Cs ?? new List<Customer>();
             var selectedCustomersHash = customersSelected.ToDictionary(it => it.Id, it => true);
             var customersAvailable = this.GetAvaliableCustomersFor(user)
@@ -1041,16 +1042,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Value = x.Id.ToString(),
                 }).ToList(),
 
-                AAsAvailable = aasAvailable.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
-                AAsSelected = aasSelected.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }).ToList(),
+                //AAsAvailable = aasAvailable.Select(x => new SelectListItem
+                //{
+                //    Text = x.Name,
+                //    Value = x.Id.ToString()
+                //}).ToList(),
+
+                //AAsSelected = aasSelected.Select(x => new SelectListItem
+                //{
+                //    Text = x.Name,
+                //    Value = x.Id.ToString()
+                //}).ToList(),
+
                 CsAvailable = customersAvailable.Select(x => new SelectListItem
                 {
                     Text = x.Name,
