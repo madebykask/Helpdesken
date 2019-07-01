@@ -4,6 +4,8 @@ import 'zone.js/dist/zone';
 import 'reflect-metadata';
 declare var ENV: any; // // to avoid compiler error. Using global variable from js.
 
+declare var require: any;
+
 if (ENV === 'production') {
     // Production
  } else {
