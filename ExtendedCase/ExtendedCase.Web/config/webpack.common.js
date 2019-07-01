@@ -3,7 +3,8 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var Helpers = require('./helpers.js');
-const AotPlugin = require('@ngtools/webpack').AotPlugin;
+
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 
 module.exports = {
     entry: {
@@ -92,9 +93,9 @@ module.exports = {
         //new Webpack.LoaderOptionsPlugin({
         //    debug: true
         //}),
-        new AotPlugin({
+        new AngularCompilerPlugin({
             tsConfigPath: './tsconfig.json',
-            entryModule: 'src/app.module#AppModule'
+            entryModule: Helpers.root('src', 'app.module#AppModule')
         }),
       // Workaround for angular/angular#11580
       new Webpack.ContextReplacementPlugin(

@@ -60,15 +60,22 @@ import { routes } from './routes';
 
 import './styles/css/site.scss';
 
-
-
 @NgModule({
     imports: [BrowserModule, HttpClientModule, FormsModule, ReactiveFormsModule,
-        DatepickerModule.forRoot(), TypeaheadModule.forRoot(), TabsModule.forRoot(), ModalModule.forRoot(), RouterModule.forRoot(routes), SelectModule, ClipboardModule, 
-        DynamicModule.withComponents([ExtendedCaseTextBoxComponent, ExtendedUnknowControlComponent, ExtendedCaseLabelComponent, ExtendedCaseTextBoxSearchComponent, ExtendedCaseTextAreaComponent,
-            ExtendedCaseDropdownComponent, ExtendedCaseMultiselectComponent, ExtendedCaseDateComponent, ExtendedCaseCheckboxListComponent, ExtendedCaseCheckboxComponent, ExtendedCaseRadioComponent,
-            ExtendedCaseReviewComponent, ExtendedCaseHtmlComponent])],
-    declarations: [AppComponent, ExtendedCaseComponent, ExtendedCaseFormsListComponent, ExtendedCaseTabComponent, ExtendedCaseSectionComponent, ExtendedCaseReviewSectionComponent,
+        DatepickerModule.forRoot(),
+        TypeaheadModule.forRoot(),
+        TabsModule.forRoot(),
+        ModalModule.forRoot(),
+        RouterModule.forRoot(routes),
+        SelectModule,
+        ClipboardModule,
+        DynamicModule.withComponents([ExtendedCaseTextBoxComponent, ExtendedUnknowControlComponent, ExtendedCaseLabelComponent,
+            ExtendedCaseTextBoxSearchComponent, ExtendedCaseTextAreaComponent, ExtendedCaseDropdownComponent,
+            ExtendedCaseMultiselectComponent, ExtendedCaseDateComponent, ExtendedCaseCheckboxListComponent,
+            ExtendedCaseCheckboxComponent, ExtendedCaseRadioComponent, ExtendedCaseReviewComponent, ExtendedCaseHtmlComponent])
+        ],
+    declarations: [AppComponent, ExtendedCaseComponent, ExtendedCaseFormsListComponent, ExtendedCaseTabComponent, 
+        ExtendedCaseSectionComponent, ExtendedCaseReviewSectionComponent,
         ExtendedCaseTextBoxComponent, ExtendedCaseLabelComponent, ExtendedCaseTextBoxSearchComponent,
         ExtendedCaseTextAreaComponent, ExtendedCaseCheckboxComponent, ExtendedCaseDateComponent,
         ExtendedCaseDropdownComponent, ExtendedCaseRadioComponent, AlertComponent, ProgressComponent,
@@ -87,7 +94,7 @@ import './styles/css/site.scss';
         ExtendedHttpService,
         AlertsService,
         ErrorHandlingService,
-        ClientLogApiService, 
+        ClientLogApiService,
         { provide: ErrorHandler, useClass: GlobalErrorHandler },
         UuidGenerator,
         SubscriptionManager,

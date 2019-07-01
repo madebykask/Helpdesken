@@ -19,7 +19,7 @@ module.exports = WebpackMerge.smart(CommonConfig,
         devtool: 'source-map',
         output: {
             path: Helpers.root('wwwroot-test'),
-            publicPath: '/' +CONSTANTS.BASEURL +'/',
+            publicPath: '/' + CONSTANTS.BASEURL + '/',
             filename: '[name].[hash].js',
             chunkFilename: '[id].[hash].chunk.js'
         },
@@ -49,7 +49,7 @@ module.exports = WebpackMerge.smart(CommonConfig,
             new Webpack.DefinePlugin({
                 ENV: JSON.stringify(CONSTANTS.MODE),
                 AppSettings: JSON.stringify({
-                    'apiHost': '/' +CONSTANTS.BASEAPIURL,
+                    'apiHost': '/' + CONSTANTS.BASEAPIURL,
                     'showDebugProxyModel': false,
                     'debugMode': false
                 })
@@ -68,7 +68,7 @@ module.exports = WebpackMerge.smart(CommonConfig,
                     js: ['vendor', 'app'],
                     css: []
                 },
-                baseUrl: '/' +CONSTANTS.BASEURL,
+                baseUrl: '/' + CONSTANTS.BASEURL,
                 version: CONSTANTS.VERSION,
                 mode: CONSTANTS.MODE
             })

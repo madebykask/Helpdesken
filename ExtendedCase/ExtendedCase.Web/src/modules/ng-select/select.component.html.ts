@@ -2,8 +2,7 @@ export const TEMPLATE = `<label
     *ngIf="label !== ''">
     {{label}}
 </label>
-<div
-    #selection
+<div #selection
     [attr.tabindex]="disabled ? null : 0"
     [ngClass]="{'open': isOpen, 'focus': hasFocus, 'below': isBelow, 'disabled': disabled}"
     (click)="onSelectContainerClick($event)"
@@ -14,7 +13,7 @@ export const TEMPLATE = `<label
          *ngIf="!multiple">
         <div class="value"
              *ngIf="optionList.hasSelected">
-            <ng-template [ngOutletContext]="{option: optionList.selection[0], onDeselectOptionClick: onDeselectOptionClick}" [ngTemplateOutlet]="optionTemplate"></ng-template>
+            <ng-template [ngTemplateOutletContext]="{option: optionList.selection[0], onDeselectOptionClick: onDeselectOptionClick}" [ngTemplateOutlet]="optionTemplate"></ng-template>
             <span *ngIf="!optionTemplate">{{optionList.selection[0].label}}</span>
         </div>
         <div class="placeholder"

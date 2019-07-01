@@ -28,13 +28,13 @@ export class DataSourceService {
             .catch((error: any) => Observable.throw(error));
     }
 
-    private parseParams(id: string, paramsObject: { [name: string]: any; }) : { [name: string]: any; } {
+    private parseParams(id: string, paramsObject: { [name: string]: any; }): { [name: string]: any; } {
         let paramsJson = {
             Id: id,
             Params: new Array()
         };
 
-        for(let paramName in paramsObject) {
+        for (let paramName of Object.keys(paramsObject)) {
             paramsJson.Params.push({
                 Name: paramName,
                 Value: paramsObject[paramName]

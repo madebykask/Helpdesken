@@ -18,6 +18,9 @@
     ],
     "baseUrl": ""
   },
+  "angularCompilerOptions": {
+    "preserveWhitespaces": false
+  },
   "compileOnSave": false,
   "buildOnSave": false,
   "exclude": [
