@@ -803,7 +803,6 @@ function SpecificSearchTabBehavior(params) {
     var breadCrumbsPrefix = "#divBreadcrumbs_";
     var hiddenPrefix = "#hid_";
 
-    var defaultFocusObj = params.DefaultFocusObject;
     var caseTypeDropDown = params.CaseTypeDropDown;
     var productAreaDropDown = params.ProductAreaDropDown;
     var closingReasonDropDown = params.ClosingReasonDropDown;
@@ -843,8 +842,5 @@ function SpecificSearchTabBehavior(params) {
             $(breadCrumbsPrefix + closingReasonDropDown).text(getBreadcrumbs(this));
             $(hiddenPrefix + closingReasonDropDown).val(val);
         });
-
-        //todo: call on page load only?
-        setTimeout(function () { $(defaultFocusObj).focus(); }, 100);
     }
 };
