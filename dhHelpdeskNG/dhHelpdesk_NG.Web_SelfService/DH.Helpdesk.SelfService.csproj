@@ -502,6 +502,7 @@
     <Content Include="Content\js\jquery.dataTables.min.js" />
     <Content Include="Content\js\Orders\order.edit.js" />
     <Content Include="Content\js\Orders\orders.list.js" />
+    <Content Include="Content\js\Shared\clipBoardFileUpload.js" />
     <Content Include="Content\js\Shared\commonUtils.js" />
     <Content Include="Content\js\Shared\app.layout.js" />
     <Content Include="Content\js\typeahead.js" />
@@ -827,7 +828,6 @@
     <Content Include="Views\Case\_SearchError.cshtml" />
     <Content Include="Views\Case\_CaseInformation.cshtml" />
     <Content Include="Views\Case\_CaseControlPanel.cshtml" />
-    <Content Include="Views\Case\ModalDialogs\_UploadExistingLogFilePopup.cshtml" />
     <Content Include="Views\Case\ModalDialogs\_UploadFileFromClipboardPopup.cshtml" />
     <Content Include="Views\Shared\_MainMenu.cshtml" />
     <Content Include="Views\Case\_ClosedCaseAlert.cshtml" />
@@ -835,6 +835,7 @@
     <Content Include="Web.config.template">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Views\Case\ModalDialogs\_UploadFilePopup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DH.Helpdesk.Web.Common\DH.Helpdesk.Web.Common.csproj">

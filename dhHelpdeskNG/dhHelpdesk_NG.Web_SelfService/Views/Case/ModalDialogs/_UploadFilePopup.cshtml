@@ -1,17 +1,18 @@
-﻿
-<div id="Log_upload_files_popup" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
+﻿@model string 
+
+<div id="@Model" role="dialog" class="modal fade" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">?</button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h5 class="modal-title">&nbsp;</h5>
             </div>
             <div class="modal-body">
-                <div id="Log_uploader"></div>
+                <div id="file_uploader"></div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">@Translation.Get("Close")</button>
             </div>
         </div>
     </div>
-</div>       
+</div>
