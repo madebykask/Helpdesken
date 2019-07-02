@@ -46,7 +46,9 @@
                     <form onsubmit="return false">
                         <div class="form-group col-md-10">
                             <label for="logNote">@Translation.Get("Add comment"):</label>
-                            <textarea id="logNote" style="width: 450px; height: 100px;"></textarea>
+                            <div class="form-group">
+                                <textarea id="logNote" style="width: 450px; height: 100px;"></textarea>
+                            </div>
                         </div>
                         <div class="form-group col-md-10">
                             @if (ViewBag.IsAttachementsAllowed)

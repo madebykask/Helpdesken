@@ -471,16 +471,11 @@
 
 @section Dialogs {
     @* show log notes only for LineManager or if ShowCommunicationForSelfservice is enabled in web.config*@
-    @{
-        var isFinishedAndInitiator = Model.CaseDataModel.IsFinished && !string.IsNullOrEmpty(Model.CaseDataModel.ReportedBy) && !string.IsNullOrEmpty(SessionFacade.CurrentUserIdentity.UserId) &&
-                                     SessionFacade.CurrentUserIdentity.UserId.Equals(Model.CaseDataModel.ReportedBy);
-    }
     @if (Model.CaseId > 0 &&
-         (!Model.CaseDataModel.IsFinished || isFinishedAndInitiator) &&
          (Model.ApplicationType == ApplicationType.LineManager ||
           Model.ApplicationType == ApplicationType.SelfService && Model.ShowCommunicationForSelfservice))
     {
-        @Html.Partial("_Communication", Model.CaseLogModel, new ViewDataDictionary(ViewData) { { "readonly", isFinishedAndInitiator }})
+        @Html.Partial("_Communication", Model.CaseLogModel, new ViewDataDictionary(ViewData) { { "readonly", Model.CaseDataModel.IsFinished } })
         if (ViewBag.IsAttachementsAllowed)
         {
              @Html.Partial("ModalDialogs/_UploadExistingLogFilePopup")
