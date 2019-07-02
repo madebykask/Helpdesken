@@ -87,7 +87,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 .AsNoTracking()
                 .Where(it => it.Case_Id == caseId)
                 .OrderByDescending(it => it.Id)
-                .Skip(1).Take(1)
+                .Skip(1)
                 .FirstOrDefault();
         }
 

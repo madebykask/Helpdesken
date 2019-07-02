@@ -868,7 +868,6 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var caseLock = _caseLockService.GetCaseLockOverviewByCaseId(caseId);
 
-
             if (caseLock != null && 
                 caseLock.LockGUID == new Guid(lockGuid) && 
                 caseLock.ExtendedTime >= DateTime.Now)
@@ -880,7 +879,7 @@ namespace DH.Helpdesk.Web.Controllers
                      (caseLock != null && !(caseLock.ExtendedTime >= DateTime.Now)))
             {
                 //case is not locked by me or is not locked at all 
-                var curCase = _caseService.GetCaseById(caseId);
+                var curCase = _caseService.GetDetachedCaseById(caseId);
                 if (curCase != null && curCase.ChangeTime.RoundTick() == caseChangedTime.RoundTick())
                     return Json(true);//case is not updated yet by any other
                 else

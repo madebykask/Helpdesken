@@ -98,7 +98,7 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
 
         public ICaseLockOverview GetCaseLockOverviewByCaseId(int caseId)
         {
-            var item = Table.Where(l => l.Case_Id == caseId)
+            var item = Table.Where(l => l.Case_Id == caseId).AsNoTracking()
                             .Select(ProjectToCaseLockOverview())
                             .FirstOrDefault();
             return item;
