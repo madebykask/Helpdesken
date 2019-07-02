@@ -2,11 +2,12 @@
 @using DH.Helpdesk.Common.Enums
 @{
     var customerLanguageId = Model.CurrentCustomer != null ? Model.CurrentCustomer.Language_Id : 0;
+    var customerId = Model.CurrentCustomer != null ? Model.CurrentCustomer.Id : -1;
 }
 <div class="container-fluid">
     @if (Model.LoginMode != LoginMode.Anonymous)
     {
-        <a href="@Url.Action("Index", "Start", new { customerId = Model.CurrentCustomer.Id, area = "" })">
+        <a href="@Url.Action("Index", "Start", new { customerId, area = "" })">
             <div class="pull-left toplogo"></div>
         </a>
     }
