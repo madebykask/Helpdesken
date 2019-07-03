@@ -534,7 +534,8 @@
 <!-- /Case Info Fields -->
 
 
-    @if (!Model.IsFinished && ViewBag.ApplicationType == ApplicationTypes.SelfService && !ViewBag.ShowCommunicationForSelfService)
+    @if (!Model.IsFinished && 
+        ViewBag.ApplicationType == ApplicationTypes.SelfService && !ViewBag.ShowCommunicationForSelfService)
     {
         <div id="logNotesSection">
             <h4>@Model.CaseSectionSettings.GetSectionHeader(CaseSectionType.Communication, CaseSectionsEnglish.CommunicationHeader) </h4>
@@ -557,7 +558,7 @@
                                         <div class="form-group row">
                                             <div class="col-md-5">
                                                 <a id="btnUploadFile" href="#Log_upload_files_popup" role="button" class="btn btn-default" data-toggle="modal">@Translation.Get("Add")</a>
-                                                <a id="btnLoadFromClipboard" href="#upload_clipboard_file_popup" role="button" class="btn btn-default" data-src="log">@Translation.Get("Add from clipboard")</a>
+                                                <a id="addLogFileFromClipboard" href="#upload_clipboard_file_popup" role="button" class="btn btn-default">@Translation.Get("Add from clipboard")</a>
                                                 <table id="LogFile_table" class="table table-striped table-condensed logFiles" style="margin-top: 10px">
                                                     <tbody>
                                                     @if (Model.LogFilesModel == null)
