@@ -103,7 +103,7 @@ export class CaseEditComponent {
     isLoaded = false;
     form: CaseFormGroup;
     caseKey: string;
-    caseFiles: CaseFileModel[] = null;
+    caseFiles: CaseFileModel[] = [];
 
     titleTabsSettings = {
       display: 'top'
