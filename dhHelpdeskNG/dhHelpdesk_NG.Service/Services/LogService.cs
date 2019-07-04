@@ -226,7 +226,9 @@ namespace DH.Helpdesk.Services.Services
 
                 EmailLogs = 
                     l.CaseHistory.Emaillogs.DefaultIfEmpty()
-                        .Where(t => t.MailId == (int)GlobalEnums.MailTemplates.InternalLogNote || t.MailId == (int)GlobalEnums.MailTemplates.InformNotifier)
+                        .Where(t => t.MailId == (int)GlobalEnums.MailTemplates.InternalLogNote || 
+                                    t.MailId == (int)GlobalEnums.MailTemplates.InformNotifier ||
+                                    t.MailId == (int)GlobalEnums.MailTemplates.CaseIsUpdated) //#71840
                         .Select(t => new EmailLogMapperData
                         {
                             Id = t.Id,
