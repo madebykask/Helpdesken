@@ -164,7 +164,7 @@ Module DH_Helpdesk_Mail
 
     Private Function GetCmdArg(args As String(), index As Int32, defaultValue As String) As String
         Dim val As String = defaultValue
-        If args.Length > index And Not IsNullOrEmpty(args(index)) Then
+        If args.Length > index AndAlso Not IsNullOrEmpty(args(index)) Then
             val = args(index)
         End If
         Return If(String.IsNullOrEmpty(val), "", val)
@@ -1030,7 +1030,7 @@ Module DH_Helpdesk_Mail
         Dim filePath As String = ""
         For Each token as String In args
             If Not IsNullOrEmpty(token)
-                filePath = Path.Combine(filePath, token.Trim("\"))
+                filePath = Path.Combine(filePath, token.TrimEnd("\")) ' token may start with network path - should keep it. ex: \\machine\
             End If
         Next
         Return filePath
