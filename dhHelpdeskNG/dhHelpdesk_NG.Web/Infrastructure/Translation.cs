@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
+using DH.Helpdesk.BusinessData.Models;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services.Cache;
 using DH.Helpdesk.Web.Infrastructure.Cache;
@@ -114,32 +116,44 @@ namespace DH.Helpdesk.Web.Infrastructure
         }
 
         private static string Get(string translate, int languageId, Enums.TranslationSource source = Enums.TranslationSource.TextTranslation, 
-                                  int customerId = 0, bool DiffTextType = false, int TextTypeId = 0)
+                                  int customerId = 0, bool diffTextType = false, int textTypeId = 0)
         {
             if (source == Enums.TranslationSource.TextTranslation)
             {
                 try
                 {
-                    var translation = Cache.GetAllTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower());
-                    if (DiffTextType)
+                    var translations = Cache.GetAllTextTranslationsOptimized();
+                    TextList translation = null;
+                    if (diffTextType)
                     {
-                        translation = Cache.GetAllTextTranslations().FirstOrDefault(x => x.TextToTranslate.ToLower() == translate.ToLower() && x.Type == TextTypeId);
+                        if(translations.ContainsKey(translate.ToLower()+textTypeId))
+                            translation = translations[translate.ToLower()+textTypeId];
                     }
-                                                
+                    else
+                    {
+                        var types = Cache.GetAllTextTypes();
+                        foreach (var textType in types)
+                        {
+                            if (!translations.ContainsKey(translate.ToLower() + textType.Id)) continue;
+                            translation = translations[translate.ToLower() + textType.Id];
+                            break;
+                        }
+                    }
+
                     if (translation != null)
                     {
-                        var trans = translation.TextTranslations.FirstOrDefault(x => x.Language_Id == languageId);
-                        var text = (trans != null ? trans.TextTranslated : string.Empty);
+                        var trans = translation.Translations.FirstOrDefault(x => x.Language_Id == languageId);
+                        var text = (trans != null ? trans.TranslationName : string.Empty);
                         if (string.IsNullOrEmpty(text) && SessionFacade.CurrentLanguageId != LanguageIds.Swedish)
                         {
-                            trans = translation.TextTranslations.FirstOrDefault(x => x.Language_Id == SessionFacade.CurrentLanguageId);
-                            text = (trans != null ? trans.TextTranslated : string.Empty);
+                            trans = translation.Translations.FirstOrDefault(x => x.Language_Id == SessionFacade.CurrentLanguageId);
+                            text = (trans != null ? trans.TranslationName : string.Empty);
                         }
 
                         translate = !string.IsNullOrEmpty(text) ? text : translate;
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
                 }
             }

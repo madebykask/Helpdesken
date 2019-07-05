@@ -104,7 +104,6 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             return 
                 from caseHistory in Table
-                let emailLogs = caseHistory.Emaillogs.DefaultIfEmpty()
                 where caseHistory.Case_Id == caseId
                 select new CaseHistoryMapperData
                 {
@@ -251,7 +250,7 @@ namespace DH.Helpdesk.Dal.Repositories
                         Name = caseHistory.Impact.Name,
                     } : null,
 
-                    EmailLogs = emailLogs.Where(t => t.Id > 0).Select(t => new EmailLogsOverview
+                    EmailLogs = caseHistory.Emaillogs.Select(t => new EmailLogsOverview
                     {
                         Id = t.Id,
                         MailId = t.MailId,

@@ -15,7 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories
         int GetLastId();
         IEnumerable<Text> GetAllWithTranslation(int? textTypeId = null);
         IEnumerable<TextList> GetAllTexts(int texttypeId, int? defaultLanguage);
-        List<TextList> GetAllTextsAndTranslations(int texttypeId);
+        List<TextList> GetAllTextsAndTranslations(int? texttypeId = null);
     }
 
     public class TextRepository : RepositoryBase<Text>, ITextRepository
@@ -42,22 +42,26 @@ namespace DH.Helpdesk.Dal.Repositories
             return query;
         }
 
-        public List<TextList> GetAllTextsAndTranslations(int texttypeId)
+        public List<TextList> GetAllTextsAndTranslations(int? texttypeId = null)
         {
-            var textEntity = 
-                DataContext.Texts.Where(t => t.Type == texttypeId).Select(t => new TextList
+            var textEntity =
+                DataContext.Texts.AsNoTracking().AsQueryable();
+            if (texttypeId.HasValue)
+            {
+                textEntity = textEntity.Where(t => t.Type == texttypeId.Value);
+            }
+            return textEntity.Select(t => new TextList
+            {
+                Id = t.Id,
+                TextToTranslate = t.TextToTranslate,
+                Translations = t.TextTranslations.Select(tt => new TextTranlationsTextLanguageList
                 {
-                    Id = t.Id,
-                    TextToTranslate = t.TextToTranslate,
-                    Translations = t.TextTranslations.Select(tt => new TextTranlationsTextLanguageList
-                    {
-                        Text_Id= tt.Text_Id, 
-                        Language_Id = tt.Language_Id, 
-                        TranslationName=tt.TextTranslated, 
-                        TranslationText_Id = tt.TextTranslation_Id
-                    }).ToList()
-                });
-            return textEntity.ToList();
+                    Text_Id = tt.Text_Id,
+                    Language_Id = tt.Language_Id,
+                    TranslationName = tt.TextTranslated,
+                    TranslationText_Id = tt.TextTranslation_Id
+                }).ToList()
+            }).ToList();
         }
 
         public IEnumerable<TextList> GetAllTexts(int texttypeId, int? defaultLanguage)
@@ -105,8 +109,8 @@ namespace DH.Helpdesk.Dal.Repositories
             {
                 txt =
                        from T in this.DataContext.Texts
-                       join TT in this.DataContext.TextTranslations.Where(x=> x.Language_Id == defaultLanguage) on T.Id equals TT.Text_Id  into Translate
-                       from Trans in Translate.DefaultIfEmpty()                       
+                       join TT in this.DataContext.TextTranslations.Where(x => x.Language_Id == defaultLanguage) on T.Id equals TT.Text_Id into Translate
+                       from Trans in Translate.DefaultIfEmpty()
                        join U1 in this.DataContext.Users on Trans.ChangedByUser_Id equals U1.Id into Users1
                        from User1 in Users1.DefaultIfEmpty()
                        join U2 in this.DataContext.Users on T.ChangedByUser_Id equals U2.Id into Users2
@@ -154,6 +158,7 @@ namespace DH.Helpdesk.Dal.Repositories
         TextType GetTextTypeById(int id);
         string GetTextTypeName(int id);
         TextType GetTextTypeByName(string name);
+        List<TextType> GetAllTextTypes();
     }
 
     public class TextTypeRepository : RepositoryBase<TextType>, ITextTypeRepository
@@ -166,7 +171,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public TextType GetTextTypeById(int id)
         {
 
-            return this.DataContext.TextTypes.Where(x => x.Id == id).FirstOrDefault();
+            return this.DataContext.TextTypes.FirstOrDefault(x => x.Id == id);
 
         }
 
@@ -177,7 +182,12 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public TextType GetTextTypeByName(string name)
         {
-            return Table.Where(x => x.Name.ToLower() == name.ToLower()).FirstOrDefault();
+            return Table.FirstOrDefault(x => x.Name.ToLower() == name.ToLower());
+        }
+
+        public List<TextType> GetAllTextTypes()
+        {
+            return DataContext.TextTypes.OrderBy(t => t.Id).AsNoTracking().ToList();
         }
     }
 
@@ -318,7 +328,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public IEnumerable<TextTranslationList> ReturnTTsListForNew()
         {
             var query = from l in this.DataContext.Languages
-                        //join tt in this.DataContext.TextTranslations on l.Id equals tt.Language_Id
+                            //join tt in this.DataContext.TextTranslations on l.Id equals tt.Language_Id
                         where l.IsActive == 1 //&& tt.Text_Id > 4999
                         group l by new { l.Name, l.Id, } into g
                         select new TextTranslationList
@@ -334,7 +344,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var query = from t in DataContext.Texts
                         join tt in DataContext.TextTranslations on t.Id equals tt.Text_Id
-                        where tt.Text_Id > 4999 && tt.Language_Id == languageId && texts.Contains(t.TextToTranslate)                        
+                        where tt.Text_Id > 4999 && tt.Language_Id == languageId && texts.Contains(t.TextToTranslate)
                         select new CustomKeyValue<string, string>()
                         {
                             Key = t.TextToTranslate,
@@ -347,14 +357,14 @@ namespace DH.Helpdesk.Dal.Repositories
         public IList<CustomKeyValue<string, string>> GetTextTranslationsFor(int languageId, int textTypeId = 0)
         {
             var query = from t in DataContext.Texts
-                         join tt in DataContext.TextTranslations on new { key1 = t.Id, key2 = languageId } equals new { key1 = tt.Text_Id, key2 = tt.Language_Id } into gr
-                         from res in gr.DefaultIfEmpty()
-                         where t.Type == textTypeId
-                         select new CustomKeyValue<string, string>()
-                         {
-                             Key = t.TextToTranslate,
-                             Value = res.TextTranslated ?? t.TextToTranslate
-                         };
+                        join tt in DataContext.TextTranslations on new { key1 = t.Id, key2 = languageId } equals new { key1 = tt.Text_Id, key2 = tt.Language_Id } into gr
+                        from res in gr.DefaultIfEmpty()
+                        where t.Type == textTypeId
+                        select new CustomKeyValue<string, string>()
+                        {
+                            Key = t.TextToTranslate,
+                            Value = res.TextTranslated ?? t.TextToTranslate
+                        };
 
             return query.ToList();
         }
