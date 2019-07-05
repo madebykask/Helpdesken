@@ -46,7 +46,7 @@ namespace DH.Helpdesk.Services.Services
 
         IEnumerable<Department> GetActiveDepartmentsBy(int customerId, int? regionId);
 
-        IEnumerable<Department> GetDepartmentsByIdsWithHolidays(int[] departmentsIds);
+        List<Department> GetDepartmentsByIdsWithHolidays(int[] departmentsIds, int defaultCalendarId);
 
         IList<Department> GetChargedDepartments(int customerId);
         bool CheckIfOUsRequireDebit(int departmentId, int? ouId = null);
@@ -266,10 +266,10 @@ namespace DH.Helpdesk.Services.Services
             return _departmentRepository.GetActiveDepartmentsBy(customerId, regionId);
         }
 
-        public IEnumerable<Department> GetDepartmentsByIdsWithHolidays(int[] departmentsIds)
+        public List<Department> GetDepartmentsByIdsWithHolidays(int[] departmentsIds, int defaultCalendarId)
         {
-            return _departmentRepository.GetDepartmentsByIds(departmentsIds, true)
-                .Where(it => it.HolidayHeader != null);
+            return _departmentRepository.GetDepartmentsByIds(departmentsIds,  true)
+                .Where(it => it.HolidayHeader != null && it.HolidayHeader.Id != defaultCalendarId).ToList();
         }
 
         public void SaveDepartment(Department department,int[] invoiceOus, out IDictionary<string, string> errors)
