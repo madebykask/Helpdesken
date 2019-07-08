@@ -202,6 +202,12 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
                 return 0;
         }
 
+        public int GetMailTemlpateMailId(int templateId)
+        {
+            var mailId = DataContext.MailTemplates.Where(t => t.Id == templateId).Select(x => x.MailID).FirstOrDefault();
+            return mailId;
+        }
+
         public MailTemplateEntity GetMailTemplateForCustomer(int id, int customerId, int languageId)
         {
             return (from m in this.DataContext.MailTemplates

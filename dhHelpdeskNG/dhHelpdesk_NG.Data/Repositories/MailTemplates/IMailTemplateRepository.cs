@@ -20,6 +20,7 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates
         int? GetTemplateId(ChangeTemplate template, int customerId);
 
         int GetNewMailTemplateMailId();
+        int GetMailTemlpateMailId(int templateId);
 
         MailTemplateEntity GetMailTemplateForCustomer(int id, int customerId, int languageId);
     }

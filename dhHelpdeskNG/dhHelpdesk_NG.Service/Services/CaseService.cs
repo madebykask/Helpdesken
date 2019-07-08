@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Extensions.DateTime;
+using DH.Helpdesk.Common.Extensions.Lists;
+using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Computers;
@@ -1277,10 +1279,11 @@ namespace DH.Helpdesk.Services.Services
                                         List<CaseFileDto> logFiles = null)
         {
             var customerId = currentCase.Customer_Id;
-            var mailTemplate = new MailTemplateLanguageEntity();
-            var sep = new char[] { ';' };
-
+            var customerSettings = _settingService.GetCustomerSetting(customerId);
+            var sep = new [] { ';' };
+            var templateId = 0;
             var emailList = new List<string>();
+
             foreach (var param in action.ActionParams)
             {
                 var dataList = !string.IsNullOrEmpty(param.ParamValue) ? param.ParamValue.Split(BRConstItem.Value_Separator, StringSplitOptions.RemoveEmptyEntries) : null;
@@ -1289,9 +1292,8 @@ namespace DH.Helpdesk.Services.Services
                     case BRActionParamType.EMailTemplate:
                         if (!string.IsNullOrEmpty(param.ParamValue))
                         {
-                            int templateId = 0;
+                            templateId = 0;
                             int.TryParse(param.ParamValue, out templateId);
-                            mailTemplate = _mailTemplateService.GetMailTemplateLanguageForCustomer(templateId, customerId, currentCase.RegLanguage_Id);
                         }
                         break;
 
@@ -1321,9 +1323,7 @@ namespace DH.Helpdesk.Services.Services
                                 {
                                     if (wg.IsActive != 0 && wg.UserWorkingGroups != null && wg.UserWorkingGroups.Any())
                                     {
-                                        var usEmails = wg.UserWorkingGroups.Where(w => w.User != null && w.User.IsActive != 0)
-                                                                     .Select(w => w.User.Email)
-                                                                     .ToList();
+                                        var usEmails = wg.UserWorkingGroups.Where(w => w.User != null && w.User.IsActive != 0).Select(w => w.User.Email).ToList();
                                         emailList.AddRange(usEmails);
                                     }
                                 }
@@ -1383,18 +1383,22 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            if (mailTemplate != null && !string.IsNullOrEmpty(mailTemplate.Body) &&
-                !string.IsNullOrEmpty(mailTemplate.Subject) && emailList.Any())
+            if (templateId > 0 && emailList.Any())
             {
-                var distinctedEmails = emailList.Select(x => x.Trim().ToLower()).Distinct().ToList();
-                SendEmail(distinctedEmails, mailTemplate, currentCase, log, userTimeZone, caseHistoryId, basePath,
-                          currentLanguageId, caseMailSetting, logFiles);
+                var files = PrepareAttachedCaseFiles(logFiles, basePath);
+                SendTemplateEmail(templateId,
+                    currentCase,
+                    log,
+                    caseHistoryId,
+                    customerSettings,
+                    caseMailSetting,
+                    caseMailSetting.HelpdeskMailFromAdress?.Trim(),
+                    emailList.ToDistintList(true),
+                    userTimeZone,
+                    files,
+                    1);
             }
-
         }
-
-
-
 
         private Case ValidateCaseRequiredValues(Case c, CaseLog caseLog)
         {
@@ -1621,21 +1625,23 @@ namespace DH.Helpdesk.Services.Services
             }
             ret.Add(new Field { Key = "[#10]", StringValue = l?.TextExternal ?? "" });
             ret.Add(new Field { Key = "[#11]", StringValue = l?.TextInternal ?? "" });
+            
             // selfservice site
             if (cms != null)
             {
                 if (emailLogGuid == string.Empty)
                     emailLogGuid = " >> *" + stateHelper.ToString() + "*";
-                string site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + emailLogGuid;
-                string url = "<br><a href='" + site + "'>" + site + "</a>";
+
+                var site = ConfigurationManager.AppSettings["dh_selfserviceaddress"].ToString() + emailLogGuid;
+                var url = "<br><a href='" + site + "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#98]", StringValue = url });
             }
 
             // heldesk site
             if (cms != null)
             {
-                string site = cms.AbsoluterUrl + "Cases/edit/" + c.Id.ToString();
-                string url = "<br><a href='" + site + "'>" + site + "</a>";
+                var site = cms.AbsoluterUrl + "Cases/edit/" + c.Id.ToString();
+                var url = "<br><a href='" + site + "'>" + site + "</a>";
                 ret.Add(new Field { Key = "[#99]", StringValue = url });
             }
 
