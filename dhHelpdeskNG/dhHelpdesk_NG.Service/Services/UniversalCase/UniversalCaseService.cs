@@ -686,6 +686,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 TextExternal = caseModel.Text_External,
                 TextInternal = caseModel.Text_Internal,
 
+                //SendMailAboutLog = 
+                SendMailAboutCaseToNotifier = caseModel.SendMailAboutCaseToNotifier,
+
                 //// aux model values
                 UserId = auxCaseModel.CurrentUserId > 0 ? (int?)auxCaseModel.CurrentUserId : null,
                 RegUser = auxCaseModel.UserIdentityName ?? String.Empty

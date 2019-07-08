@@ -758,6 +758,8 @@ namespace DH.Helpdesk.SelfService.Controllers
             // Apply template values to case:
             ApplyTemplate(caseTemplate, caseModel, true);
 
+            caseModel.SendMailAboutCaseToNotifier = !string.IsNullOrEmpty(caseModel.Text_External);
+
             var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0;
             var auxModel = new AuxCaseModel(SessionFacade.CurrentLanguageId,
                 localUserId,
@@ -1214,6 +1216,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
 
             int externalTimeToAdd = 0;
+
             // if statesecondary has ResetOnExternalUpdate
             if (currentCase.StateSecondary_Id.HasValue)
             {
@@ -1245,25 +1248,26 @@ namespace DH.Helpdesk.SelfService.Controllers
                 LeadTime = currentCase.LeadTime
             };
 
-            var caseHistoryId = _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5, out errors, SessionFacade.CurrentUserIdentity.UserId, extraFields);            
+            var caseHistoryId = 
+                _caseService.SaveCaseHistory(currentCase, 0, currentCase.PersonsEmail, CreatedByApplications.SelfService5, out errors, SessionFacade.CurrentUserIdentity.UserId, extraFields);            
             
             // save log
             var caseLog = new CaseLog
-                              {
-                                  CaseHistoryId = caseHistoryId,
-                                  CaseId = caseId,
-                                  LogGuid = Guid.NewGuid(),
-                                  TextExternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseExternalLogNote? extraNote.Replace("\n","\r\n") : string.Empty),
-                                  UserId = null,
-                                  TextInternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseInternalLogNote? extraNote.Replace("\n", "\r\n") : string.Empty),
-                                  WorkingTime = 0,
-                                  EquipmentPrice = 0,
-                                  Price = 0,
-                                  Charge = false,
-                                  RegUser = SessionFacade.CurrentSystemUser,
-                                  SendMailAboutCaseToNotifier = true,
-                                  SendMailAboutLog = true                                 
-                              };
+            {
+                CaseHistoryId = caseHistoryId,
+                CaseId = caseId,
+                LogGuid = Guid.NewGuid(),
+                TextExternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseExternalLogNote? extraNote.Replace("\n","\r\n") : string.Empty),
+                UserId = null,
+                TextInternal = (currentCustomer.UseInternalLogNoteOnExternalPage == (int)Enums.LogNote.UseInternalLogNote? extraNote.Replace("\n", "\r\n") : string.Empty),
+                WorkingTime = 0,
+                EquipmentPrice = 0,
+                Price = 0,
+                Charge = false,
+                RegUser = SessionFacade.CurrentSystemUser,
+                SendMailAboutCaseToNotifier = true,
+                SendMailAboutLog = true                                 
+            };
             
             if(currentCase.WorkingGroup_Id != null)
             {

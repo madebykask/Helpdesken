@@ -251,6 +251,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
         public List<CaseListToCase> FieldSettings { get; set; }
 
+        public bool SendMailAboutCaseToNotifier { get; set; }
+
         #region case files
 
         public string CaseFileKey { get; set; }

@@ -32,7 +32,7 @@ namespace DH.Helpdesk.Services.Services
         {
             //get sender email adress
             var helpdeskMailFromAdress = string.Empty;
-            var containsProductAreaMailOrNewCaseMail = false;
+            var informNotifierHasBeenSent = false;
 
             if (!string.IsNullOrEmpty(cms.HelpdeskMailFromAdress))
             {
@@ -98,7 +98,7 @@ namespace DH.Helpdesk.Services.Services
                                 files,
                                 1);
 
-                            containsProductAreaMailOrNewCaseMail = true;
+                            informNotifierHasBeenSent = true;
                         }
 
                         if (!string.IsNullOrWhiteSpace(cms.SendMailAboutNewCaseTo))
@@ -148,7 +148,7 @@ namespace DH.Helpdesk.Services.Services
                                 files,
                                 1);
 
-                            containsProductAreaMailOrNewCaseMail = true;
+                            informNotifierHasBeenSent = true;
                         }
                     }
                 }
@@ -244,7 +244,7 @@ namespace DH.Helpdesk.Services.Services
                                 files,
                                 1);
 
-                            containsProductAreaMailOrNewCaseMail = true;
+                            informNotifierHasBeenSent = true;
                         }
                     }
                 }
@@ -355,7 +355,7 @@ namespace DH.Helpdesk.Services.Services
 
             #region Send email when product area is set
 
-            if (!isClosingCase && !isCreatingCase && !containsProductAreaMailOrNewCaseMail
+            if (!isClosingCase && !isCreatingCase && !informNotifierHasBeenSent
                 && oldCase.ProductAreaSetDate == null && newCase.RegistrationSource == 3
                 && !cms.DontSendMailToNotifier &&
                 newCase.ProductArea.MailTemplate != null &&
@@ -421,7 +421,7 @@ namespace DH.Helpdesk.Services.Services
             //        }
             #endregion
 
-            if (!containsProductAreaMailOrNewCaseMail)
+            if (!informNotifierHasBeenSent)
             {
                 //todo: check fields values - could be that they are get overrided in one of the send methods
                 //todo: move to ProductArea or new case mail ?
@@ -449,6 +449,27 @@ namespace DH.Helpdesk.Services.Services
                 files, 
                 cms.AbsoluterUrl, 
                 cms.CustomeMailFromAddress);
+
+            #region SelfService - Notifier updated a case 
+
+            var isSelfService = IsSelfService();
+            
+            if (isSelfService && log != null && log.Id > 0 && !string.IsNullOrEmpty(log.TextExternal))
+            {
+                var isCaseActivated = oldCase != null && oldCase.FinishingDate.HasValue;
+
+                SendSelfServiceCaseLogEmail(
+                    newCase.Id, 
+                    cms, 
+                    caseHistoryId, 
+                    log,
+                    basePath,
+                    userTimeZone, 
+                    logFiles,
+                    isCaseActivated);
+            }
+
+            #endregion
         }
 
         public void SendProblemLogEmail(Case c, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, bool isClosedCaseSending)
@@ -481,7 +502,14 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        public void SendSelfServiceCaseLogEmail(int caseId, CaseMailSetting cms, int caseHistoryId, CaseLog log, string basePath, TimeZoneInfo userTimeZone, List<CaseFileDto> logFiles = null, bool caseIsActivated = false)
+        public void SendSelfServiceCaseLogEmail(int caseId, 
+                CaseMailSetting cms, 
+                int caseHistoryId, 
+                CaseLog log, 
+                string basePath, 
+                TimeZoneInfo userTimeZone, 
+                List<CaseFileDto> logFiles = null, 
+                bool caseIsActivated = false)
         {
             // get new case information
             var newCase = _caseRepository.GetDetachedCaseById(caseId);
@@ -1006,6 +1034,17 @@ namespace DH.Helpdesk.Services.Services
         private bool IsValidEmail(string email)
         {
             return _emailService.IsValidEmail(email);
+        }
+
+        private bool IsSelfService()
+        {
+            bool isSelfService = false;
+            var curApp = ConfigurationManager.AppSettings["CurrentApplication"];
+            if (!string.IsNullOrEmpty(curApp))
+            {
+                return curApp.Equals("selfservice", StringComparison.OrdinalIgnoreCase) || curApp.Equals("linemanager", StringComparison.OrdinalIgnoreCase);
+            }
+            return isSelfService;
         }
 
         #endregion
