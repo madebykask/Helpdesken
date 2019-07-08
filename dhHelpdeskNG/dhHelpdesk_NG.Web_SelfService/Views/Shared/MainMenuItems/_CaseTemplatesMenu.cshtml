@@ -64,7 +64,7 @@
 
         if (template.ContainsExtendedForm)
         {
-            _href = Url.Action("ExtendedCase", "case", new { caseTemplateId = template.Id, area = "" });
+            _href = Url.Action( "ExtendedCase", "case", new { area = "", caseId = "", caseTemplateId = template.Id });
         }
         else if (!string.IsNullOrEmpty(template.TemplatePath))
         {
@@ -90,7 +90,6 @@
         _span2.SetInnerText(Translation.Get(template.ShortDescription, Enums.TranslationSource.TextTranslation));
 
         aTag.InnerHtml += _span2.ToString();
-
 
         result.Append(aTag);
 

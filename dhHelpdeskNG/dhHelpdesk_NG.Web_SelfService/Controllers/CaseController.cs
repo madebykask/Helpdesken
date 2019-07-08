@@ -563,6 +563,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 }
             }
 
+            RouteData.Values.Remove("caseId"); //hack to prevent ambient params in Url.Action in view
             return View("ExtendedCase", model);
         }
 
