@@ -457,6 +457,7 @@
 }
 
 @section Dialogs {
+
     @* show log notes only for LineManager or if ShowCommunicationForSelfservice is enabled in web.config*@
     @if (Model.CaseId > 0 &&
          (Model.ApplicationType == ApplicationType.LineManager ||
@@ -468,19 +469,19 @@
              @Html.Partial("ModalDialogs/_UploadFilePopup", "Log_upload_files_popup")
              isClipboardPopupRequired = true;
         }
-        @Scripts.Render("~/Content/js/Case/log")
     }
 
     @if (Model.CaseDataModel.IsFinished)
     {
         @Html.Partial("ModalDialogs/_CaseLogNotePopup", Model.CaseLogModel)
-        @Scripts.Render("~/Content/js/Case/log")
     }
     
     @if (isClipboardPopupRequired)
     {
         @Html.Partial("ModalDialogs/_UploadFileFromClipboardPopup")
     }
+    @Scripts.Render("~/Content/js/Case/log")
+
 }
 
 
