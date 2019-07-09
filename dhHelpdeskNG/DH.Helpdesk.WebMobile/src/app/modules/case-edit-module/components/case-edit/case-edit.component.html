@@ -20,7 +20,7 @@
   </div>
 </mbsc-form>
 
-<mbsc-form [options]="formOptions" #mainForm  class="case-content">
+<div class="case-content">
 
   <!-- Case Actions -->
   <div [hidden]="currentTab != 'case_actions'">
@@ -179,4 +179,4 @@
     </div>
   </div>
   <case-menu *ngIf="isLoaded && !isLocked" [dataSource]="dataSource.workflowsStore$" (clickWorkflow)="onClickWorkflow($event)"></case-menu>
-</mbsc-form>
+</div>

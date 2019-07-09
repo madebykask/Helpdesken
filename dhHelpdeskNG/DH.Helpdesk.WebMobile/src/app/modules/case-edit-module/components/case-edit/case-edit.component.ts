@@ -36,8 +36,6 @@ import { FinalActionEnum } from 'src/app/modules/shared-module/constants/finalAc
 })
 export class CaseEditComponent {
 
-    @ViewChild('mainForm') mainForm: any; // MbscForm
-
     constructor(private route: ActivatedRoute,
                 private caseService: CaseService,
                 private router: Router,
