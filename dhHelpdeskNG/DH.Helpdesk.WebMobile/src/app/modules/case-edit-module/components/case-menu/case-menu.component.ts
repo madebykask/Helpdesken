@@ -17,7 +17,7 @@ export class CaseMenuComponent {
 
   bottomMenu: MbscNavOptions = {
     theme: 'ios',
-    menuIcon: 'foundation-foot',
+    menuIcon: 'fa-mail-forward',
     display: 'bottom',
     type: 'hamburger'
   };

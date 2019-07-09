@@ -461,8 +461,11 @@ case-menu {
       .mbsc-ms .mbsc-ms-item {
         border: solid 1px;
         border-radius: 50%;
-        background: #438eb9;
+        background: #d96326;
         color: white;
+        &.mbsc-ms-item {
+          padding: 1.9169em 0.5em;
+        }
       }
       .mbsc-scv-liq, .mbsc-scv-liq .mbsc-scv-item {
         flex: 0 1 auto
