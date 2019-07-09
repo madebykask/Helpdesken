@@ -83,7 +83,7 @@ export class CaseFilesControlComponent {
     }
   }
   */
- 
+
   processNewFileUpload(data: { id: number, name: string }) {
     if (data) {
         this.files.push(new CaseFileModel(data.id, data.name));

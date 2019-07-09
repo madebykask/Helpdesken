@@ -10,7 +10,7 @@ import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/h
 @Injectable({ providedIn: 'root' })
 export class BundleCaseOptionsService extends HttpApiServiceBase {
 
-    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService, 
+    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService,
         private caseHelper: OptionsHelper) {
             super(http, localStorageService);
     }
@@ -20,10 +20,10 @@ export class BundleCaseOptionsService extends HttpApiServiceBase {
         .pipe(
             take(1),
             map((jsOptions: any) => {
-                if (jsOptions == null) { throwError('No options received.') }
+                if (jsOptions == null) { throwError('No options received.'); }
                 const mapArray = (arr: any) => this.caseHelper.toOptionItems(arr as Array<any>) || new Array<OptionItem>();
 
-                let options = new BundledCaseOptions();
+                const options = new BundledCaseOptions();
                 if (jsOptions.customerRegistrationSources != null) {
                     options.customerRegistrationSources = mapArray(jsOptions.customerRegistrationSources);
                 }

@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { LocalStorageService } from "../local-storage";
-import { HttpClient } from "@angular/common/http";
-import { OptionsHelper } from "../../helpers/options-helper";
-import { map, take } from "rxjs/operators";
-import { OptionItem } from "src/app/modules/shared-module/models";
-import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
+import { Injectable } from '@angular/core';
+import { LocalStorageService } from '../local-storage';
+import { HttpClient } from '@angular/common/http';
+import { OptionsHelper } from '../../helpers/options-helper';
+import { map, take } from 'rxjs/operators';
+import { OptionItem } from 'src/app/modules/shared-module/models';
+import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
 
 @Injectable({ providedIn: 'root' })
 export class OUsService extends HttpApiServiceBase {

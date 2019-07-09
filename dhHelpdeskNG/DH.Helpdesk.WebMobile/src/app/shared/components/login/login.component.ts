@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { switchMap, finalize, take, map } from 'rxjs/operators';
 import { AuthenticationService } from '../../../services/authentication';
-import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
+import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 import { throwError, Subject } from 'rxjs';
 import { ErrorHandlingService } from '../../../services/logging/error-handling.service';
 import { config } from '@env/environment';
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     returnUrl: string;
     error = '';
     pageSettings = {};
-    
+
     errorMessages = {
         username: {
             required: 'Username required'
@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         password: {
             required: 'Password required'
         }
-    };   
+    };
 
     showLoginError = false;
 
@@ -62,10 +62,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     get f() { return this.loginForm.controls; }
 
     getError(field: string): string {
-        let ctrl = this.loginForm.get(field);
+        const ctrl = this.loginForm.get(field);
         let message = '';
         if (ctrl.errors) {
-            for(var err in ctrl.errors) {
+            for (const err in ctrl.errors) {
                 if (ctrl.errors[err]) {
                     message = this.errorMessages[field][err];
                 }
@@ -75,34 +75,33 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     onSubmit() {
-        
+
         this.submitted = true;
 
         // stop here if form is invalid
         if (this.loginForm.invalid) {
             return;
         }
-        
+
         this.showLoginError = false;
         this.isLoading = true;
 
-        this.authenticationService.login(this.f.username.value, this.f.password.value)
-            .pipe(
-              take(1),
-              map(currentUser => {
-                  return this.userSettingsService.applyUserSettings();
-              }),                
-              finalize(() => this.isLoading = false)
-            ).subscribe(res => {
-                    this.showLoginError = false;
-                    this.router.navigateByUrl(this.returnUrl);
-                },
-                error => {                    
-                    if (error.status && error.status === 400) {
-                        this.showLoginError = true;
-                    } else {
-                        this.errorHandlingService.handleError(error);
-                    }
-                });
-    }    
+        this.authenticationService.login(this.f.username.value, this.f.password.value).pipe(
+          take(1),
+          map(currentUser => {
+              return this.userSettingsService.applyUserSettings();
+          }),
+          finalize(() => this.isLoading = false)
+        ).subscribe(res => {
+              this.showLoginError = false;
+              this.router.navigateByUrl(this.returnUrl);
+          },
+          error => {
+            if (error.status && error.status === 400) {
+                this.showLoginError = true;
+            } else {
+                this.errorHandlingService.handleError(error);
+            }
+          });
+    }
 }

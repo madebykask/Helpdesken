@@ -6,7 +6,7 @@ import { Directive, EventEmitter, ElementRef, Renderer2, Output } from '@angular
 export class MbscFormGroupExpandDirective {
   private isOpened?: boolean;
 
-  @Output('onClick') onClick = new EventEmitter<any>();
+  @Output() onClick = new EventEmitter<any>();
 
   constructor(private elem: ElementRef, private renderer: Renderer2) {
     // subcribe on html element click

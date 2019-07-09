@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../../local-storage';
 import { HttpApiServiceBase } from '../../../modules/shared-module/services/api/httpServiceBase';
 import { ClientLogEntryModel } from '../../../models/shared/client-log.model';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ClientLogApiService extends HttpApiServiceBase {
@@ -14,10 +14,7 @@ export class ClientLogApiService extends HttpApiServiceBase {
   }
 
   saveLogEntry(logEntry: ClientLogEntryModel): Observable<any> {
-    let url = this.buildResourseUrl('/api/ClientLog', null, false, false);
+    const url = this.buildResourseUrl('/api/ClientLog', null, false, false);
     return this.postJsonNoContent(url, logEntry, null, true);
   }
 }
-
-
-

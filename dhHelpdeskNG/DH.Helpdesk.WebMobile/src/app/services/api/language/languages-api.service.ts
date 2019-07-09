@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { map } from "rxjs/operators";
-import { OptionsHelper } from "src/app/helpers/options-helper";
-import { LocalStorageService } from "../../local-storage";
-import { OptionItem } from "src/app/modules/shared-module/models";
-import { HttpApiServiceBase } from "src/app/modules/shared-module/services/api/httpServiceBase";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import { OptionsHelper } from 'src/app/helpers/options-helper';
+import { LocalStorageService } from '../../local-storage';
+import { OptionItem } from 'src/app/modules/shared-module/models';
+import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
 
 @Injectable({ providedIn: 'root' })
 export class LanguagesApiService extends HttpApiServiceBase {
@@ -20,6 +20,6 @@ export class LanguagesApiService extends HttpApiServiceBase {
             map((jsItems: any) => {
                 return this.optionsHelpder.toOptionItems(jsItems as Array<any>) || new Array<OptionItem>();
             })
-        );//TODO: error handling
+        ); //TODO: error handling
     }
 }

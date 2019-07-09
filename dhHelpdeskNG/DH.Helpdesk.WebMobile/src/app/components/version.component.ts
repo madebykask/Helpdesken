@@ -13,7 +13,7 @@ import { config } from '@env/environment';
 })
 export class VersionComponent implements OnInit {
   version = config.version;
-  
+
   constructor() { }
 
   ngOnInit() {

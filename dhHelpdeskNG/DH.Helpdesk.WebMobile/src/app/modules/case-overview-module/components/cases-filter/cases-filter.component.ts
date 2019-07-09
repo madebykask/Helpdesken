@@ -39,7 +39,7 @@ export class CasesFilterComponent implements OnInit {
         event.menu.element.classList.add('case-search-filter');
       }
     }
-  }
+  };
 
   menuItems = [{
     id: +CasesSearchType.MyCases,

@@ -5,7 +5,7 @@ export class CasesOverviewFilter {
         CaseTypeId: number;
         ProductAreaId: number;
         CategoryId: number;
-        RegionIds: number[]= [];
+        RegionIds: number[] = [];
         RegisteredByIds: number[] = [];
         WorkingGroupIds: number[] = [];
         ResponsibleUserIds: number[] = [];
@@ -36,5 +36,5 @@ export class CasesOverviewFilter {
         PageSize: number;
         Page: number;
         OrderBy: string;
-        Ascending: boolean;    
+        Ascending: boolean;
 }

@@ -65,7 +65,7 @@ import { VersionComponent } from './components/version.component';
       useDefaultLang: true
     }),
     SharedModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    //ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
   ],
   providers: [
     { provide: ErrorHandler, useClass: GlobalErrorHandler },

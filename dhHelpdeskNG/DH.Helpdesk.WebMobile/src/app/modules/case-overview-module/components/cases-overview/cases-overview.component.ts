@@ -9,11 +9,10 @@ import { CasesOverviewFilter } from '../../models/cases-overview/cases-overview-
 import { CaseOverviewItem } from '../../models/cases-overview/cases-overview-item.model';
 import { CasesOverviewService } from '../../services/cases-overview';
 import { LocalStorageService } from 'src/app/services/local-storage';
-import { CaseSearchStateModel } from '../../../shared-module/models/cases-overview/case-search-state.model';
 import { CaseProgressFilter } from '../../models/cases-overview/enums';
 import { DateTime } from 'luxon';
 import { CasesFilterComponent } from '../cases-filter/cases-filter.component';
-import { TranslateService } from '@ngx-translate/core';;
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-cases-overview',
@@ -27,20 +26,20 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   @ViewChild(CasesFilterComponent) casesFilter: CasesFilterComponent;
 
   private searchType: CasesSearchType;
-  private filterName: string = '';
+  private filterName = '';
   private filter: CasesOverviewFilter;
   private scrollBindFunc: any;
   private timer: any;
   private destroy$ = new Subject();
   private defaultHeaderText = this.ngxTranslateService.instant('Ärendeöversikt');
 
-  headerText:string;
+  headerText: string;
   DateTime: DateTime;
   showSearchPanel = false;
   filtersForm: FormGroup;
   cases: CaseOverviewItem[] = [];
-  isLoading: boolean = false;
-  pageSize: number = 10;
+  isLoading = false;
+  pageSize = 10;
   listviewSettings: any = {
     enhance: false,
     swipe: false
@@ -130,14 +129,14 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   }
 
   shouldLoad() {
-    let el = this.loadingElem.element;
+    const el = this.loadingElem.element;
     // return el.getBoundingClientRect().top + el.clientTop + el.offsetHeight - 1 < (window.innerHeight + window.pageYOffset);
     return el.getBoundingClientRect().top + el.clientTop + el.offsetHeight - 1 < window.innerHeight;
   }
 
   checkLoad() {
     clearTimeout(this.timer);
-    let timer = setTimeout(() => {
+    const timer = setTimeout(() => {
         if (!this.isLoading && this.shouldLoad()) {
             this.isLoading = true;
             this.filter.Page += 1;
@@ -193,7 +192,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     const caseElemSize = 60; // TODO: get real height from UI
     const windowHeight = window.innerHeight;
     const defaultPageSize = 2;
-    let size = ((windowHeight - headerSize) / caseElemSize) + 1 || defaultPageSize;
+    const size = ((windowHeight - headerSize) / caseElemSize) + 1 || defaultPageSize;
     return Math.floor(size > defaultPageSize ? size : defaultPageSize);
   }
 

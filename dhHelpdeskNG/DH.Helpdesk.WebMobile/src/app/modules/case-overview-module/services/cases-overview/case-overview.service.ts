@@ -8,27 +8,25 @@ import { LocalStorageService } from 'src/app/services/local-storage';
 
 @Injectable({ providedIn: 'root' })
 export class CasesOverviewService extends HttpApiServiceBase {
-    
-    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService){
+
+    protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) {
         super(http, localStorageService);
-    }   
-   
+    }
+
     searchCases(filter: CasesOverviewFilter) {
-        let requestUrl = this.buildResourseUrl('/api/casesoverview/get')
-        return this.postJson<any>(requestUrl, filter)
-        .pipe(
+        const requestUrl = this.buildResourseUrl('/api/casesoverview/get');
+        return this.postJson<any>(requestUrl, filter).pipe(
             //tap(d => console.log('>>searchCases')),
             map(data => {
-                let cases: CaseOverviewItem[] = [];
-                if(data && data.items)
-                {
-                    for(let item of data.items) {
-                        let _case = new CaseOverviewItem();
+                const cases: CaseOverviewItem[] = [];
+                if (data && data.items) {
+                    for (const item of data.items) {
+                        const _case = new CaseOverviewItem();
                         _case.caseIcon = item.caseIcon;
                         _case.id = item.id;
                         _case.columns = new Array<CaseOverviewColumn>();
-                        for(let itemCol of item.columns) {
-                            let col = new CaseOverviewColumn();
+                        for (const itemCol of item.columns) {
+                            const col = new CaseOverviewColumn();
                             col.id = itemCol.id;
                             col.key = itemCol.key;
                             col.stringValue = itemCol.stringValue;
@@ -42,6 +40,6 @@ export class CasesOverviewService extends HttpApiServiceBase {
                 }
                 return cases;
             })
-        )
+        );
     }
 }

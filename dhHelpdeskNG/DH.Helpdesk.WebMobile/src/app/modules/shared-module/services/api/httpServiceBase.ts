@@ -31,9 +31,9 @@ export abstract class HttpApiServiceBase {
         }));
   }
 
-  protected deleteWithResult<TResponse>(url: string, headers: any = null, noAuth = false, withCredentials:boolean = false): Observable<TResponse> {
+  protected deleteWithResult<TResponse>(url: string, headers: any = null, noAuth = false, withCredentials: boolean = false): Observable<TResponse> {
 
-    return this.http.delete<TResponse>(url, { 
+    return this.http.delete<TResponse>(url, {
                 headers: this.getHeaders(headers, true, noAuth),
                 withCredentials: withCredentials
              }).pipe(
@@ -43,7 +43,7 @@ export abstract class HttpApiServiceBase {
         );
   }
 
-  //tod:review files delete 
+  //tod:review files delete
   protected deleteResource(url: string, headers: any = null, noAuth = false): Observable<any> {
     // fixed issue https://github.com/angular/angular/issues/18680 - remove after fix
     return this.http
@@ -72,7 +72,7 @@ export abstract class HttpApiServiceBase {
         observe: 'body',
         headers: this.getHeaders(headers, false)
     }).pipe(
-        catchError((error:any) => throwError(error))
+        catchError((error: any) => throwError(error))
        );
   }
 
@@ -98,7 +98,7 @@ export abstract class HttpApiServiceBase {
   public buildResourseUrl(resourceName: string, params: object = null, addCustomerId = true, addLanguage = false) {
       let urlParams: string = null;
       const userData = this.localStorageService.getCurrentUser();
-        
+
       if (addCustomerId === true) {
           if (userData !== null) {
               params = Object.assign({}, params || {}, {cid: userData.currentData.selectedCustomerId});
@@ -123,7 +123,7 @@ export abstract class HttpApiServiceBase {
 
   private getHeaders(headers?: any, addContentType = true, noAuth = false): HttpHeaders {
       let options = new HttpHeaders();
-      
+
       if (headers != null) {
           Object.getOwnPropertyNames(headers).forEach((v: string) => {
               options.set(v, headers[v]);
@@ -135,10 +135,10 @@ export abstract class HttpApiServiceBase {
       if (addContentType) {
           options = options.set('Content-Type', 'application/json; charset=utf-8');
       }
-      
+
       if (noAuth) {
           options = options.set(AuthConstants.NoAuthHeader, '');
-      } 
+      }
       // options = options.set('Access-Control-Allow-Origin', '*');
       return options;
   }

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, finalize, take } from 'rxjs/operators';
-import { UserData, Language, CurrentUser } from '../../../models'
-import { LocalStorageService } from '../../local-storage'
-import { TranslateService as NgxTranslateService } from '@ngx-translate/core'
+import { UserData, Language, CurrentUser } from '../../../models';
+import { LocalStorageService } from '../../local-storage';
+import { TranslateService as NgxTranslateService } from '@ngx-translate/core';
 import { LoggerService } from '../../logging';
 import { Observable } from 'rxjs/Observable';
 import { DateTime, Zone, Settings } from 'luxon';
@@ -28,15 +28,15 @@ export class UserSettingsApiService extends HttpApiServiceBase {
         take(1),
         map((data: any) => {
           if (data) {
-            let user = this.localStorageService.getCurrentUser();
+            const user = this.localStorageService.getCurrentUser();
             if (data.id) {
               user.currentData.id = data.id;
             }
             if (data.customerId) {
               user.currentData.selectedCustomerId = data.customerId;
-            }// TODO: if no customer; 
+            }// TODO: if no customer;
             if (data.languageId) {
-              user.currentData.selectedLanguageId = data.languageId;// TODO: if no language
+              user.currentData.selectedLanguageId = data.languageId; // TODO: if no language
             }
             if (data.timeZone) {
               user.currentData.userTimeZone = data.timeZone;
@@ -44,17 +44,16 @@ export class UserSettingsApiService extends HttpApiServiceBase {
             user.currentData.ownCasesOnly = data.ownCasesOnly !== undefined ? data.ownCasesOnly : true;
             user.currentData.createCasePermission = data.createCasePermission !== undefined ? data.createCasePermission : false;
             user.currentData.canDeleteAttachedFiles = data.deleteAttachedFiles !== undefined ? data.deleteAttachedFiles : false;
-          
+
             this.localStorageService.setCurrentUser(user);
             return user;
-          }
-          else {
+          } else {
             return null;
           }
         }),
         finalize(() => this.isLoadingUserSettings = false)
-      )
-  };
+      );
+  }
 
   getUserData(): UserData {
     const user = this.localStorageService.getCurrentUser();
@@ -98,16 +97,18 @@ export class UserSettingsApiService extends HttpApiServiceBase {
 
   private tryApplyDateTimeSettings(): boolean {
     const userTz = this.getUserTimezone();
-    if (userTz == null) { return false };
+    if (userTz == null) { return false; }
 
     this._logger.log('>>>>Setting date timezone: ' + userTz);
-    let testTz = DateTime.local().setZone(userTz);
-    if (!testTz.isValid)
-      this._logger.log('>>>>Error applying timezone: ' + testTz.invalidReason + '. Using browser default');
-    else
-      Settings.defaultZoneName = userTz;
+    const testTz = DateTime.local().setZone(userTz);
 
-    const browserLang = this.ngxTranslationService.getBrowserLang(); //Returns the language code name from the browser, e.g. "de", 'sv' 
+    if (!testTz.isValid) {
+      this._logger.log('>>>>Error applying timezone: ' + testTz.invalidReason + '. Using browser default');
+    } else {
+      Settings.defaultZoneName = userTz;
+    }
+
+    const browserLang = this.ngxTranslationService.getBrowserLang(); //Returns the language code name from the browser, e.g. "de", 'sv'
     if (browserLang) {
       this._logger.log('>>>>Setting locale:  ' + navigator.language);
       Settings.defaultLocale = browserLang.toLowerCase();

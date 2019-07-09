@@ -1,33 +1,53 @@
-
-
 <mbsc-form class="mbsc-padding">
+    <mbsc-form-group>
+      <div class="mbsc-padding">
+        <label>Force logout and clean storage</label>
+        <mbsc-button (click)="clearStorage()" color="success">Logout</mbsc-button>    
+      </div>
+    </mbsc-form-group>
+    <mbsc-form-group>
+      <div class="mbsc-padding">
+        <label>Refresh token</label>
+        <mbsc-button (click)="refreshToken()" color="success">Refresh</mbsc-button>    
+      </div>
+    </mbsc-form-group>
+    <mbsc-form-group>
+        <div class="mbsc-padding">
+          <label>Login</label>
+          <mbsc-button (click)="login()" color="success">Login</mbsc-button>    
+        </div>
+    </mbsc-form-group>
+    <mbsc-form-group>
+        <div class="mbsc-padding">
+          <p>User data:</p>
+          <div> {{ userData }}</div>
+        </div>
+    </mbsc-form-group>
+    <mbsc-form-group>
+      <div class="mbsc-padding">
+          <p><a routerLink="/">Go to Home page</a></p>
+      </div>
+    </mbsc-form-group>
+    <!-- 
    <mbsc-form-group>
       <mbsc-form-group-content>
-
         <mbsc-switch #sendEmailsCheck>
             Send emails to notifiers
             <span class="mbsc-desc">Set notifiers input state</span>
         </mbsc-switch>
-
         <mbsc-input id="notifierInput" #notifierInput
             [disabled]="isSendEmailsChecked"
             [ngClass]="{'disabled': true}"
             input-style="outline"
-            placeholder="Enter user name">Some value</mbsc-input>
-            
+            placeholder="Enter user name">Some value</mbsc-input>            
         <mbsc-select
                      [data]="items" 
                      #notifiersSelect="mobiscroll"></mbsc-select>
-
-
-
-
       </mbsc-form-group-content>
   </mbsc-form-group>
+  -->
 </mbsc-form>  
 <!-- 
-
-
   <mbsc-form-group>
       <label>separator</label>
   </mbsc-form-group>

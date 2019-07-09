@@ -39,8 +39,7 @@ export class CaseActionsComponent implements OnChanges {
 
       for (const item of items) {
           let groupIndex = this.findGroupIndex(item, groups);
-          if (groupIndex == -1)
-          {
+          if (groupIndex == -1) {
               const newGroup = new CaseActionsGroup(item.createdBy, item.createdAt);
               newGroup.Actions = new Array<CaseAction<CaseActionDataType>>();
               groups.push(newGroup);

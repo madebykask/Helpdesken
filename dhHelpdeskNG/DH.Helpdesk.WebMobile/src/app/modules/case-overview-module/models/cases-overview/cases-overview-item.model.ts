@@ -9,7 +9,7 @@ export class CaseOverviewItem {
     tooltip: string;
     isUnread: false;
     isUrgent: boolean;
-    columns: CaseOverviewColumn[]
+    columns: CaseOverviewColumn[];
 }
 
 export class CaseOverviewColumn {

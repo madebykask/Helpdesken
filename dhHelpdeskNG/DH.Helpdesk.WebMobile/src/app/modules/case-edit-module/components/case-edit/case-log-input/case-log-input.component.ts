@@ -104,7 +104,7 @@ export class CaseLogInputComponent implements OnInit {
         }
       });
 
-      // external emails text logic (depends on personsEmail form control value and on this.sendExternalEmailsFormControl.disabled)    
+      // external emails text logic (depends on personsEmail form control value and on this.sendExternalEmailsFormControl.disabled)
       this.updateExternalEmailsText();
     }
 

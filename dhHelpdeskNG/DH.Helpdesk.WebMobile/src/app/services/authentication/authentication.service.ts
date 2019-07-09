@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest } from '@angular/common/http';
-import { finalize, tap, switchMap, take } from 'rxjs/operators';
-import { LocalStorageService } from '../../services/local-storage'
+import { finalize, switchMap, take } from 'rxjs/operators';
+import { LocalStorageService } from '../../services/local-storage';
 import { AuthenticationApiService } from '../api/authentication/authentication-api.service';
-import { UserSettingsApiService } from "src/app/services/api/user/user-settings-api.service";
+import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 import { InfoLoggerService } from '../logging/info-logger.service';
 import { CommunicationService, Channels } from '../communication';
 import { AuthenticationStateService } from './authentication-state.service';
 import { throwError, Observable } from 'rxjs';
-import { UserData, CurrentUser } from 'src/app/models';
-
+import { CurrentUser } from 'src/app/models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    
+
     //ctor()
     constructor(protected localStorageService: LocalStorageService,
       private logger: InfoLoggerService,
@@ -22,14 +21,14 @@ export class AuthenticationService {
       private userSettingsApiService: UserSettingsApiService,
       private commService: CommunicationService) {
      }
-     
+
     login(username: string, password: string): Observable<CurrentUser> {
         return this.authApiService.login(username, password)
           .pipe(
               take(1),
               switchMap(isSuccess => {
-                  if (!isSuccess) throwError('Something wrong.');
-                  return this.userSettingsApiService.loadUserSettings()
+                  if (!isSuccess) { throwError('Something wrong.'); }
+                  return this.userSettingsApiService.loadUserSettings();
               }),
               // tap(() => this._logger.log(`Log in action.`)),
               finalize(() => this.raiseAuthenticationChanged())
@@ -37,7 +36,7 @@ export class AuthenticationService {
     }
 
     refreshToken() {
-        var user = this.authStateService.getUser();
+        const user = this.authStateService.getUser();
         return this.authApiService.refreshToken(user)
           .pipe(
             // tap(() => this._logger.log(`Refresh token action.`)),
@@ -53,7 +52,7 @@ export class AuthenticationService {
     }
 
     setAuthHeader(request: HttpRequest<any>): HttpRequest<any> {
-        // Get access token 
+        // Get access token
         const accessToken = this.authStateService.getAccessToken();
 
         // If access token is null this means that user is not logged in
@@ -70,7 +69,7 @@ export class AuthenticationService {
         });
     }
 
-    getAuthorizationHeaderValue(): string {    
+    getAuthorizationHeaderValue(): string {
       const accessToken = this.authStateService.getAccessToken();
       return `Bearer ${accessToken}`;
     }
