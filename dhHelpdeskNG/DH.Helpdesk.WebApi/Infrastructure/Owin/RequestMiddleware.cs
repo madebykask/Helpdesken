@@ -2,8 +2,6 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
-using Autofac.Integration.Owin;
 using DH.Helpdesk.WebApi.Infrastructure.Config;
 using Microsoft.Owin;
 
@@ -11,9 +9,13 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Owin
 {
     public class RequestMiddleware : OwinMiddleware
     {
-        public RequestMiddleware(OwinMiddleware next) 
+        private readonly IApplicationConfiguration _applicationConfiguration;
+        
+
+        public RequestMiddleware(OwinMiddleware next, IApplicationConfiguration applicationConfiguration) 
             : base(next)
         {
+            _applicationConfiguration = applicationConfiguration;
         }
 
         public override async Task Invoke(IOwinContext context)
@@ -26,16 +28,13 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Owin
         private void BeginInvoke(IOwinContext context)
         {
             // Do custom work before controller execution
-
-            var requestScope = context.GetAutofacLifetimeScope();
-            var configuration = requestScope.Resolve<IApplicationConfiguration>();
-            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = configuration.DefaultCulture;
-            log4net.LogicalThreadContext.Properties["requestId"] = new ActivityIdHelper();//TODO: Move to ILoggerService
+            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture = _applicationConfiguration.DefaultCulture;
+            log4net.LogicalThreadContext.Properties["requestId"] = new ActivityIdHelper(); //TODO: Move to ILoggerService
             //log4net.LogicalThreadContext.Properties["userInfo"] = new RequestUserInfo();
             log4net.LogicalThreadContext.Properties["requestinfo"] = new WebRequestInfo(context.Request);
         }
 
-        private void EndInvoke(IOwinContext context)
+        private async void EndInvoke(IOwinContext context)
         {
             // Do custom work after controller execution
         }

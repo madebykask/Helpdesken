@@ -2,10 +2,13 @@
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
+using DH.Helpdesk.Common.Logger;
 using DH.Helpdesk.WebApi.DependencyInjection;
 using DH.Helpdesk.WebApi.Infrastructure;
-using DH.Helpdesk.WebApi.Infrastructure.Attributes;
+using DH.Helpdesk.WebApi.Infrastructure.Config;
 using DH.Helpdesk.WebApi.Infrastructure.Filters;
+using DH.Helpdesk.WebApi.Infrastructure.Owin;
+using Microsoft.Owin;
 
 namespace DH.Helpdesk.WebApi
 {
@@ -20,6 +23,8 @@ namespace DH.Helpdesk.WebApi
             RegisterServices(builder);
 
             RegisterFilters(builder);
+
+            RegisterMiddleWareComponents(builder);
 
             var container = builder.Build();
             return container;
@@ -46,6 +51,21 @@ namespace DH.Helpdesk.WebApi
             
             builder.RegisterType<UserCasePermissionsFilter>()
                 .AsWebApiAuthorizationFilterFor<BaseApiController>()
+                .InstancePerRequest();
+        }
+
+        public static void RegisterMiddleWareComponents(ContainerBuilder builder)
+        {
+            builder.RegisterType<GlobalExceptionMiddleware>()
+                .AsSelf()
+                .InstancePerRequest();
+
+            builder.RegisterType<LogRequestMiddleware>()
+                .AsSelf()
+                .InstancePerRequest();
+
+            builder.RegisterType<RequestMiddleware>()
+                .AsSelf()
                 .InstancePerRequest();
         }
     }

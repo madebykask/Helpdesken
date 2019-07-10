@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Filters;
-using Autofac.Features.AttributeFilters;
 using Autofac.Integration.WebApi;
 using DH.Helpdesk.Common.Logger;
 
@@ -14,7 +13,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
     {
         private readonly ILoggerService _logger;
 
-        public ApiExceptionFilter([KeyFilter(Log4NetLoggerService.LogType.ERROR)]ILoggerService logger)
+        public ApiExceptionFilter(ILoggerService logger)
         {
             _logger = logger;
         }
@@ -25,7 +24,7 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Filters
             //var logger = requestScope.GetService(typeof(ILoggerService)) as ILoggerService;
             var errorId = Guid.NewGuid();
             var url = $"{context.ActionContext.RequestContext.Url.Request.RequestUri.AbsoluteUri}";
-            var requestId = log4net.LogicalThreadContext.Properties["requestId"].ToString();
+            var requestId = log4net.LogicalThreadContext.Properties["requestId"]?.ToString();
             //var requestInfo = log4net.LogicalThreadContext.Properties["requestinfo"].ToString();
             var userId = context.ActionContext.RequestContext.Principal.Identity.IsAuthenticated ? context.ActionContext.RequestContext.Principal.Identity.Name : "unauthenticated";
             var customerId = "";//TODO: Where to get selected customer

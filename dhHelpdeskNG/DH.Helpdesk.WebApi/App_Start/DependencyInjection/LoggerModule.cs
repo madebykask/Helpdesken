@@ -36,6 +36,12 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
                 .Named<ILoggerService>(Log4NetLoggerService.LogType.Client)
                 .WithParameter(new TypedParameter(typeof(string), Log4NetLoggerService.LogType.Client))
                 .SingleInstance();
+
+            //default logger registration
+            builder.RegisterType<Log4NetLoggerService>()                
+                .As<ILoggerService>()
+                .WithParameter(new TypedParameter(typeof(string), "debug"))
+                .SingleInstance();
         }
 
         private static void RegisterClientLoggerServices(ContainerBuilder builder)
