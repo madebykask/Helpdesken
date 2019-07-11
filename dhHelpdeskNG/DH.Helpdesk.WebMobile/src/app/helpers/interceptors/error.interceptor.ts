@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from '../../services/authentication';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { Observable, throwError, BehaviorSubject, EMPTY } from 'rxjs';
 import { catchError, switchMap, filter, take, retry } from 'rxjs/operators';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (request.url.includes('account/refresh')) {
           this.authenticationService.logout();
           window.location.reload(true);
-          return;
+          return EMPTY;
         }
 
         if (request.url.includes('account/login')) {
