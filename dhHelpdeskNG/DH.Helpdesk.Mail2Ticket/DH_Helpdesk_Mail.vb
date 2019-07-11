@@ -164,7 +164,7 @@ Module DH_Helpdesk_Mail
 
     Private Function GetCmdArg(args As String(), index As Int32, defaultValue As String) As String
         Dim val As String = defaultValue
-        If args.Length > index And Not IsNullOrEmpty(args(index)) Then
+        If args.Length > index AndAlso Not IsNullOrEmpty(args(index)) Then
             val = args(index)
         End If
         Return If(String.IsNullOrEmpty(val), "", val)
@@ -270,7 +270,7 @@ Module DH_Helpdesk_Mail
                 End If
 
                 ' Filter workging groups based on diagnostic param
-                If (workingGroupsFilter.Any() AndAlso Not workingGroupsFilter.Contains(objCustomer.DefaultWorkingGroup_Id)) Then
+                If (iSyncType = SyncType.SyncByWorkingGroup AndAlso workingGroupsFilter.Any() AndAlso Not workingGroupsFilter.Contains(objCustomer.DefaultWorkingGroup_Id)) Then
                     Continue For
                 End If
 
