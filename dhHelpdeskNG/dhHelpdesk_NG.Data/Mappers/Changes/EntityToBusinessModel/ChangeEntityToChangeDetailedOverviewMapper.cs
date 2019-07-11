@@ -75,7 +75,7 @@
 
             if (entity.User_Id.HasValue)
             {
-                administrator = this.userRepository.GetUserNameById(entity.User_Id.Value);
+                administrator = this.userRepository.GetUserName(entity.User_Id.Value);
             }
 
             return new GeneralFields(
@@ -121,7 +121,7 @@
 
             if (entity.ResponsibleUser_Id.HasValue)
             {
-                responsible = this.userRepository.GetUserNameById(entity.ResponsibleUser_Id.Value);
+                responsible = this.userRepository.GetUserName(entity.ResponsibleUser_Id.Value);
             }
 
             return new AnalyzeFields(

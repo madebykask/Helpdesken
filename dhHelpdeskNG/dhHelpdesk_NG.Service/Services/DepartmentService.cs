@@ -363,7 +363,7 @@ namespace DH.Helpdesk.Services.Services
         
         public bool CheckIfOUsRequireDebit(int departmentId, int? ouId = null)
         {
-            var ous = _ouRepository.GetMany(o => o.Department_Id.HasValue && o.Department_Id == departmentId);
+            var ous = _ouRepository.GetMany(o => o.Department_Id.HasValue && o.Department_Id == departmentId).ToList();
             if (!ous.Any(o => o.ShowInvoice))
                 return true;
 

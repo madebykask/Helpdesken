@@ -193,8 +193,7 @@ namespace DH.Helpdesk.Services.Services
                     {
                         if (log != null && (!string.IsNullOrEmpty(log.TextExternal) || !string.IsNullOrEmpty(log.TextInternal)))
                         {
-                            var caseHis = _caseHistoryRepository.GetCloneOfPenultimate(caseId);
-                            var caseHistoryPriorityId = caseHis?.Priority_Id ?? 0;
+                            var caseHistoryPriorityId = GetLastButOneCaseHistoryPriorityId(caseId);
                             if (caseHistoryPriorityId > 0)
                             {
                                 var prevPriority = _priorityService.GetPriority(caseHistoryPriorityId);
@@ -255,12 +254,12 @@ namespace DH.Helpdesk.Services.Services
             #region Send email to tblCase.Performer_User_Id
 
             if ((!isClosingCase && isCreatingCase && newCase.Performer_User_Id.HasValue || 
-                !isCreatingCase && newCase.Performer_User_Id != oldCase.Performer_User_Id) && 
-                newCase.Administrator != null)
+                !isCreatingCase && newCase.Performer_User_Id != oldCase.Performer_User_Id))
             {
-                if (newCase.Administrator.AllocateCaseMail == 1 && IsValidEmail(newCase.Administrator.Email))
+                var admin = _userRepository.GetUserInfo(newCase.Performer_User_Id.Value);
+                if (admin.AllocateCaseMail == 1 && IsValidEmail(admin.Email))
                 {
-                    var emailList = new List<string> { newCase.Administrator.Email };
+                    var emailList = new List<string> { admin.Email };
                     if (currentLoggedInUser != null)
                     {
                         if (currentLoggedInUser.SettingForNoMail == 1 || 
@@ -279,13 +278,13 @@ namespace DH.Helpdesk.Services.Services
                 }
 
                 // send sms to tblCase.Performer_User_Id 
-                if (newCase.Administrator.AllocateCaseSMS == 1 &&
-                    !string.IsNullOrWhiteSpace(newCase.Administrator.CellPhone) && 
+                if (admin.AllocateCaseSMS == 1 &&
+                    !string.IsNullOrWhiteSpace(admin.CellPhone) && 
                     newCase.Customer != null)
                 {
                     var emailList = new List<string>
                     {
-                        GetSmsRecipient(customerSetting, newCase.Administrator.CellPhone)
+                        GetSmsRecipient(customerSetting, admin.CellPhone)
                     };
 
                     SendTemplateEmail((int)GlobalEnums.MailTemplates.SmsAssignedCaseToUser,
@@ -470,6 +469,16 @@ namespace DH.Helpdesk.Services.Services
             }
 
             #endregion
+        }
+
+        private int GetLastButOneCaseHistoryPriorityId(int caseId)
+        {
+            return _caseHistoryRepository.GetCaseHistoryByCaseId(caseId)
+                       .AsQueryable()
+                       .OrderByDescending(h => h.Id)
+                       .Skip(1)
+                       .Select(h => h.Priority_Id)
+                       .FirstOrDefault() ?? 0;
         }
 
         public void SendProblemLogEmail(Case c, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, bool isClosedCaseSending)
@@ -919,9 +928,10 @@ namespace DH.Helpdesk.Services.Services
             }
             else
             {
-                if (newCase.Workinggroup.UserWorkingGroups != null)
+                if (newCase.WorkingGroup_Id.HasValue)
                 {
-                    foreach (var ur in newCase.Workinggroup.UserWorkingGroups)
+                    var usersWorkingGroups = _userService.GetUserWorkingGroupsByWorkgroup(newCase.WorkingGroup_Id.Value);
+                    foreach (var ur in usersWorkingGroups)
                     {
                         if (ur.User != null)
                         {

@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Data.Entity;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer.Input;
@@ -81,6 +82,7 @@ namespace DH.Helpdesk.Services.Services
         IList<UserGroup> GetUserGroups();
         IList<UserRole> GetUserRoles();
         IList<UserWorkingGroup> GetUserWorkingGroups();
+        IList<UserWorkingGroup> GetUserWorkingGroupsByWorkgroup(int workingGroupId);
         IList<int> GetUserCustomersIds(int userId);
 
         //IList<User> GetUsersForWorkingGroup(int customerId, int workingGroupId, bool includeWorkingGroups = false);
@@ -495,6 +497,15 @@ namespace DH.Helpdesk.Services.Services
         public IList<UserWorkingGroup> GetUserWorkingGroups()
         {
             return _userWorkingGroupRepository.GetAll().ToList();
+        }
+
+        public IList<UserWorkingGroup> GetUserWorkingGroupsByWorkgroup(int workingGroupId)
+        {
+            return _userWorkingGroupRepository.GetMany(uw => uw.WorkingGroup_Id == workingGroupId)
+                .AsQueryable()
+                .AsNoTracking()
+                .Include(ur => ur.User.Departments)
+                .ToList();
         }
         
         public CustomerUserInfo GetUserInfo(int id)

@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using Z.EntityFramework.Plus;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -116,6 +117,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return res2;
         }
 
+
         public IEnumerable<CaseFieldSettingsForTranslation> GetCaseFieldSettingsForTranslation(int userId)
         {
             var query = from s in this.DataContext.CaseFieldSettings
@@ -186,6 +188,8 @@ namespace DH.Helpdesk.Dal.Repositories
         IEnumerable<ListCases> GetCaseFieldSettingsListToCustomerCaseSummary(int? customerId, int? languageId, int? userGroupId);
 
         IEnumerable<CaseFieldSetting> GetCaseFieldSettingsForDefaultCust();
+        IEnumerable<CaseFieldSetting> GetCustomerCaseFieldSettings(int customerId, int? languageId = null);
+
     }
 
     public class CaseFieldSettingRepository : RepositoryBase<CaseFieldSetting>, ICaseFieldSettingRepository
@@ -326,6 +330,15 @@ namespace DH.Helpdesk.Dal.Repositories
                             Name = grouped.Key.Name
                         };
 
+            return query;
+        }
+
+        public IEnumerable<CaseFieldSetting> GetCustomerCaseFieldSettings(int customerId, int? languageId = null)
+        {
+            var query = DataContext.CaseFieldSettings.Where(c => c.Customer_Id == customerId);
+            if (languageId.HasValue)
+                query = query.Include(c =>
+                    c.CaseFieldSettingLanguages);
             return query;
         }
     }

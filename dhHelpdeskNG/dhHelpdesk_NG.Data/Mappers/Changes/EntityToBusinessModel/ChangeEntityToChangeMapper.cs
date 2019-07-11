@@ -82,7 +82,7 @@
 
             if (entity.ApprovedByUser_Id.HasValue)
             {
-                approvedByUser = this.userRepository.GetUserNameById(entity.ApprovedByUser_Id.Value);
+                approvedByUser = this.userRepository.GetUserName(entity.ApprovedByUser_Id.Value);
             }
 
             return new RegistrationFields(
@@ -114,7 +114,7 @@
 
             if (entity.AnalysisApprovedByUser_Id.HasValue)
             {
-                approvedByUser = this.userRepository.GetUserNameById(entity.AnalysisApprovedByUser_Id.Value);
+                approvedByUser = this.userRepository.GetUserName(entity.AnalysisApprovedByUser_Id.Value);
             }
 
             return new AnalyzeFields(

@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Dal.NewInfrastructure;
+using Z.EntityFramework.Plus;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
@@ -174,7 +175,9 @@ namespace DH.Helpdesk.Dal.Repositories
 
         public IQueryable<Department> GetDepartmentsByIds(int[] ids, bool isNoTracking = false)
         {
-            var res = Table.Include(d => d.HolidayHeader.Holidays).Where(it => ids.Contains(it.Id));
+            var res = Table
+                .Include(d => d.HolidayHeader.Holidays)
+                .Where(it => ids.Contains(it.Id));
             return isNoTracking ? res.AsNoTracking() : res;
         }
 

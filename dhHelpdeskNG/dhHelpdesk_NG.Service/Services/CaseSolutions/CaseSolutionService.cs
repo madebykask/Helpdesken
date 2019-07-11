@@ -427,10 +427,10 @@ namespace DH.Helpdesk.Services.Services
                         var wgShowWorkflowStep = false;
                         var conditionValues = conditionValue.Split(',').Select(sValue => sValue.Trim()).ToArray();
 
-                        for (int i = 0; i < conditionValues.Length; i++)
+                        foreach (var val in conditionValues)
                         {
-                            var val = conditionValues[i];
-                            if (ctx.WorkingGroups.Where(x => x.WorkingGroupGuid.ToString().ToLower() == val).Count() > 0)
+                            var val1 = val;
+                            if (ctx.WorkingGroups.Any(x => x.WorkingGroupGuid.ToString().ToLower() == val1))
                             {
                                 wgShowWorkflowStep = true;
                                 //it is enough with one hit
@@ -516,10 +516,8 @@ namespace DH.Helpdesk.Services.Services
                         showWorkflowStep = true;
                         continue;
                     }
-                    else
-                    {
-                        return false;
-                    }
+
+                    return false;
                 }
                 catch (Exception ex)
                 {

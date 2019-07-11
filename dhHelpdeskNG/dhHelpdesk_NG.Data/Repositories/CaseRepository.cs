@@ -209,6 +209,11 @@ namespace DH.Helpdesk.Dal.Repositories
         public IQueryable<Case> GetDetachedCaseQuery(int id, bool includeLogs = false)
         {
             var query = DataContext.Cases.Where(w => w.Id == id);
+                //.Include(c => c.CaseType)
+                //.Include(c => c.Priority)
+                //.Include(c => c.Workinggroup)
+                //.Include(c => c.ProductArea)
+                //.Include(c => c.StateSecondary);
             if (includeLogs)
                 query = query.Include(c => c.Logs);
             return query.AsNoTracking();
@@ -344,10 +349,18 @@ namespace DH.Helpdesk.Dal.Repositories
         /// </returns>
         public CaseOverview GetCaseOverview(int caseId)
         {
-            var query = (from _case in DataContext.Cases
-                         from caseHistory in _case.CaseHistories.DefaultIfEmpty() //will load CaseHistories with left join
+            var query = (from _case in DataContext.Cases.AsNoTracking()
+                         //from caseHistory in _case.CaseHistories.DefaultIfEmpty() //will load CaseHistories with left join
                          where _case.Id == caseId
-                         select _case);
+                         select _case)
+                        .Include(c => c.CaseHistories)
+                        .Include(c => c.CaseType)
+                        .Include(c => c.Department)
+                        .Include(c => c.Region)
+                        .Include(c => c.Priority)
+                        .Include(c => c.Workinggroup)
+                        .Include(c => c.ProductArea)
+                        .Include(c => c.StateSecondary);
 
             return query.Select(CaseToCaseOverviewMapper.Map).FirstOrDefault();
         }

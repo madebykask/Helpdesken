@@ -59,29 +59,35 @@ namespace DH.Helpdesk.Dal.Repositories.Concrete
                     u => new ItemOverview(u.Name, u.Id.ToString(CultureInfo.InvariantCulture))).OrderBy(x => x.Name).ToList();
         }
 
+        public IEnumerable<OU> GetRootOUs(int customerId, bool includeSubOu = false)
+        {
+            var query = DataContext.OUs.AsNoTracking()
+                .Where(x => x.Parent_OU_Id == null && x.Department.Customer_Id == customerId);
+            if (includeSubOu)
+                query = query.Include(u => u.SubOUs);
+            return query.OrderBy(x => x.Name);
+        }
+
         public List<OU> GetOUs(int? departmentId)
         {
-            var organizationUnitRoot =
-                this.DataContext.OUs.Where(u => u.IsActive != 0 && 
-                                                u.Parent_OU_Id == null && 
+            var organizationUnitAll =
+                this.DataContext.OUs.AsNoTracking()
+                    .Include(u => u.Parent).Where(u => u.IsActive != 0 && 
+                                                (u.Parent_OU_Id == null ||
+                                                 (u.Parent_OU_Id != null && 
+                                                 u.Parent.Parent_OU_Id == null)) && 
                                                 u.Department_Id == departmentId).ToList();
 
-            var organizationUnitFirstChild =
-                this.DataContext.OUs.Where(u => u.IsActive != 0 && 
-                                                u.Parent_OU_Id != null && 
-                                                u.Parent.Parent_OU_Id == null && 
-                                                u.Department_Id == departmentId).ToList();
+            var organizationUnitFirstChild = organizationUnitAll.Where(u => u.Parent_OU_Id != null && 
+                                                                             u.Parent.Parent_OU_Id == null)
+                                                                .ToList();
 
             foreach (var subOU in organizationUnitFirstChild)
             {
                 subOU.Name = subOU.Parent.Name + " - " + subOU.Name;
             }
 
-            var organizationUnitOverviews =
-                organizationUnitRoot.Union(organizationUnitFirstChild);
-
-            return
-                organizationUnitOverviews.ToList();
+            return organizationUnitAll;
         }
 
         public List<OU> GetCustomerOUs(int customerId)

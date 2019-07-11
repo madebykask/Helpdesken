@@ -150,6 +150,17 @@ namespace DH.Helpdesk.Web.Infrastructure
             });
         }
 
+        protected JsonResult JsonNet(object data, string contentType, System.Text.Encoding contentEncoding, JsonRequestBehavior behavior)
+        {
+            return new JsonNetResult
+            {
+                Data = data,
+                ContentType = contentType,
+                ContentEncoding = contentEncoding,
+                JsonRequestBehavior = behavior
+            };
+        }
+
         protected string RenderRazorViewToString(string viewName, object model, bool partial = true)
         {
             var viewResult = partial

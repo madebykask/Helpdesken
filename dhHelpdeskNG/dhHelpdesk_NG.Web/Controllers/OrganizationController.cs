@@ -61,7 +61,7 @@ namespace DH.Helpdesk.Web.Controllers
 
         public JsonResult GetOUs(int customerId)
         {
-            var allOUs = _ouService.GetOUs(customerId);
+            var allOUs = _ouService.GetRootOUs(customerId, true);
 
             var firstLevel = allOUs.Where(o=> !o.Parent_OU_Id.HasValue)
                                    .Select(o => new 

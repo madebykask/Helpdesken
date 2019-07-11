@@ -5,10 +5,12 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
+using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Extensions.DateTime;
 using DH.Helpdesk.Common.Extensions.Lists;
 using DH.Helpdesk.Common.Tools;
+using DH.Helpdesk.Common.Types;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Computers;
@@ -1008,7 +1010,7 @@ namespace DH.Helpdesk.Services.Services
 
         public IList<CaseHistory> GetCaseHistoryByCaseId(int caseId)
         {
-            return _caseHistoryRepository.GetCaseHistoryByCaseId(caseId).ToList();
+            return _caseHistoryRepository.GetCaseHistoryByCaseId(caseId).AsQueryable().OrderBy(h => h.Id).ToList();
         }
 
         public IList<CaseHistoryOverview> GetCaseHistories(int caseId)
@@ -1568,18 +1570,24 @@ namespace DH.Helpdesk.Services.Services
 
         private List<Field> GetCaseFieldsForEmail(Case c, CaseLog l, CaseMailSetting cms, string emailLogGuid, int stateHelper, TimeZoneInfo userTimeZone)
         {
-           var ret = new List<Field>();
-
+            var ret = new List<Field>();
             var userLocal_RegTime = TimeZoneInfo.ConvertTimeFromUtc(c.RegTime, userTimeZone);
 
             ret.Add(new Field { Key = "[#1]", StringValue = c.CaseNumber.ToString() });
             ret.Add(new Field { Key = "[#16]", StringValue = userLocal_RegTime.ToString() });
-            ret.Add(new Field { Key = "[#22]", StringValue = c.LastChangedByUser != null ? c.LastChangedByUser.FirstName + " " + c.LastChangedByUser.SurName : string.Empty });
+            var lastUserName = string.Empty;
+            if (c.ChangeByUser_Id.HasValue)
+            {
+                var user = _userRepository.GetUserName(c.ChangeByUser_Id.Value);
+                if (user != null)
+                    lastUserName = user.GetFullName();
+            }
+            ret.Add(new Field { Key = "[#22]", StringValue = lastUserName });
             ret.Add(new Field { Key = "[#3]", StringValue = c.PersonsName });
             ret.Add(new Field { Key = "[#8]", StringValue = c.PersonsEmail });
             ret.Add(new Field { Key = "[#9]", StringValue = c.PersonsPhone });
             ret.Add(new Field { Key = "[#18]", StringValue = c.PersonsCellphone });
-            ret.Add(new Field { Key = "[#2]", StringValue = c.Customer != null ? c.Customer.Name : string.Empty });
+            ret.Add(new Field { Key = "[#2]", StringValue = _customerRepository.GetCustomerName(c.Customer_Id) });
             ret.Add(new Field { Key = "[#24]", StringValue = c.Place });
             ret.Add(new Field { Key = "[#17]", StringValue = c.InventoryNumber });
             ret.Add(new Field { Key = "[#25]", StringValue = c.CaseType != null ? c.CaseType.Name : string.Empty });
@@ -1590,16 +1598,19 @@ namespace DH.Helpdesk.Services.Services
             ret.Add(new Field { Key = "[#19]", StringValue = c.Available });
             ret.Add(new Field { Key = "[#15]", StringValue = c.Workinggroup != null ? c.Workinggroup.WorkingGroupName : string.Empty });
             ret.Add(new Field { Key = "[#13]", StringValue = c.Workinggroup != null ? c.Workinggroup.EMail : string.Empty });
-            ret.Add(new Field { Key = "[#6]", StringValue = c.Administrator != null ? c.Administrator.FirstName : string.Empty });
-            ret.Add(new Field { Key = "[#7]", StringValue = c.Administrator != null ? c.Administrator.SurName : string.Empty });
+            UserName admin = null;
+            if(c.Performer_User_Id.HasValue)
+                admin = _userRepository.GetUserName(c.Performer_User_Id.Value);
+            ret.Add(new Field { Key = "[#6]", StringValue = admin != null ? admin.FirstName : string.Empty });
+            ret.Add(new Field { Key = "[#7]", StringValue = admin != null ? admin.LastName : string.Empty });
             ret.Add(new Field { Key = "[#12]", StringValue = c.Priority != null ? c.Priority.Name : string.Empty });
             ret.Add(new Field { Key = "[#20]", StringValue = c.Priority != null ? c.Priority.Description : string.Empty });
             ret.Add(new Field { Key = "[#21]", StringValue = c.WatchDate.ToString() });
 
             if (c.User_Id.HasValue)
             {
-                var user = _userService.GetUser(c.User_Id.Value);
-                ret.Add(new Field { Key = "[#29]", StringValue = user != null ? user.FirstName + " " + user.SurName : string.Empty });
+                var user = _userRepository.GetUserName(c.User_Id.Value);
+                ret.Add(new Field { Key = "[#29]", StringValue = user != null ? user.GetFullName() : string.Empty });
             }
             else
             {

@@ -15,8 +15,8 @@ namespace DH.Helpdesk.Services.Services
     {
         IList<CaseListToCase> ListToShowOnCasePage(int customerId, int languageId);
         IList<CaseFieldSetting> GetAllCaseFieldSettings();
-        IList<CaseFieldSetting> GetCaseFieldSettings(int customerId);
-        Task<IList<CaseFieldSetting>> GetCaseFieldSettingsAsync(int customerId);
+        IList<CaseFieldSetting> GetCaseFieldSettings(int customerId, int? languageId = null);
+        Task<IList<CaseFieldSetting>> GetCaseFieldSettingsAsync(int customerId, int? languageId = null);
         IList<CaseFieldSetting> GetCustomerEnabledCaseFieldSettings(int customerId);
         
         IList<CaseFieldSettingLanguage> GetCaseFieldSettingLanguages();
@@ -65,14 +65,14 @@ namespace DH.Helpdesk.Services.Services
         /// </summary>
         /// <param name="customerId"></param>
         /// <returns></returns>
-        public IList<CaseFieldSetting> GetCaseFieldSettings(int customerId)
+        public IList<CaseFieldSetting> GetCaseFieldSettings(int customerId, int? languageId = null)
         {
-            return this._caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId).ToList();
+            return _caseFieldSettingRepository.GetCustomerCaseFieldSettings(customerId, languageId).ToList();
         }
 
-        public async Task<IList<CaseFieldSetting>> GetCaseFieldSettingsAsync(int customerId)
+        public async Task<IList<CaseFieldSetting>> GetCaseFieldSettingsAsync(int customerId, int? languageId = null)
         {
-            return await _caseFieldSettingRepository.GetMany(x => x.Customer_Id == customerId).AsQueryable().ToListAsync();
+            return await _caseFieldSettingRepository.GetCustomerCaseFieldSettings(customerId, languageId).AsQueryable().ToListAsync();
         }
 
         public IList<CaseFieldSetting> GetCustomerEnabledCaseFieldSettings(int customerId)
