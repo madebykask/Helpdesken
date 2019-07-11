@@ -117,15 +117,15 @@ namespace DH.Helpdesk.Services.Services.Cache
 
         private Dictionary<string, TextList> GetTranslationDictionaryTexts()
         {
+            var dictionary = new Dictionary<string, TextList>(StringComparer.OrdinalIgnoreCase);
             var texts = _textRepository.GetAllTextsAndTranslations();
-            var dictionary = new Dictionary<string, TextList>();
-            texts.ForEach(t =>
-                {
-                    if(dictionary.ContainsKey(t.TextToTranslate.ToLower()+t.Type.ToString()))
-                        dictionary[t.TextToTranslate.ToLower() + t.Type.ToString()] = t;
-                    else 
-                        dictionary.Add(t.TextToTranslate.ToLower() + t.Type.ToString(), t);
-                });
+
+            texts.ForEach(t => {
+                if (dictionary.ContainsKey(t.TextToTranslate.ToLower() + t.Type.ToString()))
+                    dictionary[t.TextToTranslate.ToLower() + t.Type.ToString()] = t;
+                else 
+                    dictionary.Add(t.TextToTranslate.ToLower() + t.Type.ToString(), t);
+            });
             return dictionary;
         }
 

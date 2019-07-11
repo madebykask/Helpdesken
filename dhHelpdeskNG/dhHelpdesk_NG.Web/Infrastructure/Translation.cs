@@ -59,11 +59,11 @@ namespace DH.Helpdesk.Web.Infrastructure
         /// For currentLanguageId in session
         /// </summary>
         /// <param name="translate"></param>
-        /// <param name="TextTypeId"></param>
+        /// <param name="textTypeId"></param>
         /// <returns></returns>
-        public static string GetTextTranslationByTextType(string translate, int TextTypeId)
+        public static string GetTextTranslationByTextType(string translate, int textTypeId)
         {
-            return translate = Get(translate, SessionFacade.CurrentLanguageId, Enums.TranslationSource.TextTranslation,0,true,TextTypeId);
+            return translate = Get(translate, SessionFacade.CurrentLanguageId, Enums.TranslationSource.TextTranslation, 0, true, textTypeId);
         }
 
         /// <summary>
@@ -126,8 +126,8 @@ namespace DH.Helpdesk.Web.Infrastructure
                     TextList translation = null;
                     if (diffTextType)
                     {
-                        if(translations.ContainsKey(translate.ToLower()+textTypeId))
-                            translation = translations[translate.ToLower()+textTypeId];
+                        if (translations.ContainsKey(translate.ToLower() + textTypeId))
+                            translation = translations[translate.ToLower() + textTypeId];
                     }
                     else
                     {

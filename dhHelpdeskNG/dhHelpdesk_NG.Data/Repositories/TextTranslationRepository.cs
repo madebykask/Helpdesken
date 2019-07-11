@@ -46,14 +46,17 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             var textEntity =
                 DataContext.Texts.AsNoTracking().AsQueryable();
+
             if (texttypeId.HasValue)
             {
                 textEntity = textEntity.Where(t => t.Type == texttypeId.Value);
             }
+
             return textEntity.Select(t => new TextList
             {
                 Id = t.Id,
                 TextToTranslate = t.TextToTranslate,
+                Type = t.Type,
                 Translations = t.TextTranslations.Select(tt => new TextTranlationsTextLanguageList
                 {
                     Text_Id = tt.Text_Id,
