@@ -40,8 +40,10 @@ namespace DH.Helpdesk.WebApi.Infrastructure.Owin
             await responseBuffer.CopyToAsync(stream);
 
             //log request and response side by side 
-            if (requestUrl.IndexOf("/Login", StringComparison.OrdinalIgnoreCase) != -1)
-                requestBody = string.Empty;
+            if (requestMethod.Equals("POST",  StringComparison.OrdinalIgnoreCase) &&
+                (requestUrl.IndexOf("/Token", StringComparison.OrdinalIgnoreCase) != -1 || 
+                 requestUrl.IndexOf("/Login", StringComparison.OrdinalIgnoreCase) != -1))
+                requestBody = "<sensetive>";
 
             _loggerService.Debug($"Request/Response. {Environment.NewLine}Request: {requestMethod} {requestUrl} {requestBody}{Environment.NewLine}{responseLog}");
         }

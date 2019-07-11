@@ -31,6 +31,23 @@ export abstract class HttpApiServiceBase {
         }));
   }
 
+  protected sendOptions(url: string, headers: any, noAuth: boolean): Observable<any> {
+    return this.http
+      .options(url, {
+        observe: 'response',
+        headers: this.getHeaders(headers, true, noAuth)
+      }).pipe(
+        map(res => {
+            return {
+                body : res.body,
+                headers: res.headers
+            };
+      }),
+      catchError((error: any) => {
+            return throwError(error);
+      }));
+  }
+
   protected deleteWithResult<TResponse>(url: string, headers: any = null, noAuth = false, withCredentials: boolean = false): Observable<TResponse> {
 
     return this.http.delete<TResponse>(url, {

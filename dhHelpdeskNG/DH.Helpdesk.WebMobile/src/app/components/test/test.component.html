@@ -1,22 +1,11 @@
 <mbsc-form class="mbsc-padding">
     <mbsc-form-group>
-      <div class="mbsc-padding">
-        <label>Force logout and clean storage</label>
-        <mbsc-button (click)="clearStorage()" color="success">Logout</mbsc-button>    
-      </div>
-    </mbsc-form-group>
-    <mbsc-form-group>
-      <div class="mbsc-padding">
-        <label>Refresh token</label>
-        <mbsc-button (click)="refreshToken()" color="success">Refresh</mbsc-button>    
-      </div>
-    </mbsc-form-group>
-    <mbsc-form-group>
-        <div class="mbsc-padding">
-          <label>Login</label>
-          <mbsc-button (click)="login()" color="success">Login</mbsc-button>    
+        <div class="mbsc-btn-group-block">
+            <mbsc-button (click)="clearStorage()" color="success">Logout</mbsc-button>
+            <mbsc-button (click)="refreshToken()" color="success">Refresh</mbsc-button>
+            <mbsc-button (click)="testOptionsRequest()" color="success">Send options</mbsc-button>
         </div>
-    </mbsc-form-group>
+    </mbsc-form-group>         
     <mbsc-form-group>
         <div class="mbsc-padding">
           <p>User data:</p>
