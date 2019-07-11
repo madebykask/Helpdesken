@@ -335,8 +335,7 @@ BEGIN
 		WorkingGroupID INT,
 		Created DATETIME,
 		R_ROW INT, 
-		R_CASE INT,
-		INDEX ixCase NONCLUSTERED(CaseID, CaseTypeID, WorkingGroupID, R_ROW, R_CASE)
+		R_CASE INT
 	)
 
 	INSERT INTO #rows(CaseId, CaseTypeID, Created, WorkingGroupID, R_ROW, R_CASE) 
@@ -364,6 +363,9 @@ BEGIN
 	AND (@checkCloseTo = 0 OR C.FinishingDate <= @closeTo)
 	GROUP BY CT.Id, CT.CaseType, WG.ID, C.ID, CH.CreatedDate
 	ORDER BY C.Id
+	
+	-- creating index on temp #rows table with populated data
+	CREATE NONCLUSTERED INDEX ixCase ON  #rows(CaseID, CaseTypeID, WorkingGroupID, R_ROW, R_CASE)
 
 	SELECT R.*, CT.CaseType, WG.WorkingGroup FROM #rows R
 	JOIN tblCaseType CT ON R.CaseTypeID = CT.ID
