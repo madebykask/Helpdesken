@@ -757,9 +757,7 @@ namespace DH.Helpdesk.SelfService.Controllers
             
             // Apply template values to case:
             ApplyTemplate(caseTemplate, caseModel, true);
-
-            caseModel.SendMailAboutCaseToNotifier = !string.IsNullOrEmpty(caseModel.Text_External);
-
+            
             var localUserId = SessionFacade.CurrentLocalUser?.Id ?? 0;
             var auxModel = new AuxCaseModel(SessionFacade.CurrentLanguageId,
                 localUserId,
@@ -1265,7 +1263,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 Price = 0,
                 Charge = false,
                 RegUser = SessionFacade.CurrentSystemUser,
-                SendMailAboutCaseToNotifier = true,
+                SendMailAboutCaseToNotifier = false,
                 SendMailAboutLog = true                                 
             };
             

@@ -431,6 +431,7 @@ namespace DH.Helpdesk.WebApi.Controllers
 
             // send emails
             var caseMailSetting = GetCaseMailSetting(currentCase, customer, customerSettings);
+
             _caseService.SendCaseEmail(currentCase.Id, caseMailSetting, caseHistoryId, basePath,
                                        userTimeZone, oldCase, caseLog, allLogFiles, currentUser,
                                        model.LogExternalEmailsCc); //TODO: async or move to scheduler
@@ -565,13 +566,17 @@ namespace DH.Helpdesk.WebApi.Controllers
                     mailSenders.DefaultOwnerWGEMail = defaultWgEmail.EMail;
             }
 
-            var caseMailSetting = new CaseMailSetting(
-                customer.NewCaseEmailList,
-                customer.HelpdeskEmail,
-                ConfigurationManager.AppSettings[AppSettingsKey.HelpdeskPath],
-                customerSettings.DontConnectUserToWorkingGroup);
-            caseMailSetting.CustomeMailFromAddress = mailSenders;
-            caseMailSetting.DontSendMailToNotifier = !customer.CommunicateWithNotifier.ToBool();
+            var caseMailSetting = 
+                new CaseMailSetting(
+                    customer.NewCaseEmailList,
+                    customer.HelpdeskEmail,
+                    ConfigurationManager.AppSettings[AppSettingsKey.HelpdeskPath],
+                    customerSettings.DontConnectUserToWorkingGroup)
+            {
+                CustomeMailFromAddress = mailSenders,
+                DontSendMailToNotifier = !customer.CommunicateWithNotifier.ToBool()
+            };
+
             mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
 
             return caseMailSetting;

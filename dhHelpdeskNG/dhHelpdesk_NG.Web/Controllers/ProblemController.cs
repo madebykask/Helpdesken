@@ -437,8 +437,10 @@ namespace DH.Helpdesk.Web.Controllers
                         SendMailAboutCaseToNotifier = true,
                         CaseHistoryId = caseHistoryId
                     };
+
                     if (log.ExternNotering)
                         caseLog.TextExternal = log.LogText;
+
                     if (log.InternNotering)
                         caseLog.TextInternal = log.LogText;
 

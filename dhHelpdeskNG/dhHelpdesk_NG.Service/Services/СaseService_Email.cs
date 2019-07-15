@@ -456,7 +456,7 @@ namespace DH.Helpdesk.Services.Services
             if (isSelfService && log != null && log.Id > 0 && !string.IsNullOrEmpty(log.TextExternal))
             {
                 var isCaseActivated = oldCase != null && oldCase.FinishingDate.HasValue;
-
+                
                 SendSelfServiceCaseLogEmail(
                     newCase.Id, 
                     cms, 
@@ -559,15 +559,15 @@ namespace DH.Helpdesk.Services.Services
                 if (logFiles != null && log != null && logFiles.Count > 0)
                     files = logFiles.Select(f => _filesStorage.ComposeFilePath(ModuleName.Log, log.Id, basePath, f.FileName)).ToList();
 
-                var sendEmailAboutCaseNotifier = log?.SendMailAboutCaseToNotifier ?? false;
-
                 // Inform notifier about external lognote
                 if (!string.IsNullOrEmpty(performerUserEmail) &&
-                    sendEmailAboutCaseNotifier &&
+                    !string.IsNullOrEmpty(log.TextExternal) &&
                     newCase.FinishingDate == null && 
                     externalUpdateMail == 1)
                 {
+                    //admin emails
                     var emailList = performerUserEmail.Split(';', ',').ToDistintList(true);
+
                     SendTemplateEmail(mailTemplateId,
                         newCase,
                         log,
