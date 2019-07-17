@@ -62,9 +62,10 @@ namespace DH.Helpdesk.Services.BusinessLogic.Settings
             {
                 var globalSetting = this._globalSettingRepository.GetAll()
                     .AsQueryable()
+                    .Select(s => s.AttachedFileFolder)
                     .FirstOrDefault();
                 if (globalSetting != null)
-                    customerFilePath = globalSetting.AttachedFileFolder;
+                    customerFilePath = globalSetting;
             }
 
             return (string.IsNullOrEmpty(customerFilePath) ? string.Empty : customerFilePath);

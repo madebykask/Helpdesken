@@ -100,6 +100,8 @@ namespace DH.Helpdesk.Services.Services
         private readonly IDepartmentService _departmentService;
         private readonly IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> _caseHistoryOverviewMapper;
         private readonly ITranslateCacheService _translateCacheService;
+        private readonly ICaseTypeRepository _caseTypeRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -143,7 +145,10 @@ namespace DH.Helpdesk.Services.Services
             ICustomerRepository customerRepository,
             ICustomerService customerService,
             IDepartmentService departmentService,
-            IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper, ITranslateCacheService translateCacheService)
+            IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper,
+            ITranslateCacheService translateCacheService,
+            ICaseTypeRepository caseTypeRepository,
+            ICategoryRepository categoryRepository)
         {
             _unitOfWork = unitOfWork;
             _caseRepository = caseRepository;
@@ -190,6 +195,8 @@ namespace DH.Helpdesk.Services.Services
 
             _caseHistoryOverviewMapper = caseHistoryOverviewMapper;
             _translateCacheService = translateCacheService;
+            _caseTypeRepository = caseTypeRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public Case GetCaseById(int id, bool markCaseAsRead = false)
@@ -1590,21 +1597,25 @@ namespace DH.Helpdesk.Services.Services
             ret.Add(new Field { Key = "[#2]", StringValue = _customerRepository.GetCustomerName(c.Customer_Id) });
             ret.Add(new Field { Key = "[#24]", StringValue = c.Place });
             ret.Add(new Field { Key = "[#17]", StringValue = c.InventoryNumber });
-            ret.Add(new Field { Key = "[#25]", StringValue = c.CaseType != null ? c.CaseType.Name : string.Empty });
-            ret.Add(new Field { Key = "[#26]", StringValue = c.Category != null ? c.Category.Name : string.Empty });
+            var caseTypeName = _caseTypeRepository.GetCaseType(c.CaseType_Id).Select(ct => ct.Name).DefaultIfEmpty(string.Empty).FirstOrDefault();
+            ret.Add(new Field { Key = "[#25]", StringValue = caseTypeName });
+            var catName = c.Category_Id.HasValue ? 
+                _categoryRepository.GetCategory(c.Category_Id.Value).Select(ct => ct.Name).DefaultIfEmpty(string.Empty).FirstOrDefault() :
+                string.Empty;
+            ret.Add(new Field { Key = "[#26]", StringValue = catName });
             ret.Add(new Field { Key = "[#4]", StringValue = c.Caption });
             ret.Add(new Field { Key = "[#5]", StringValue = c.Description });
             ret.Add(new Field { Key = "[#23]", StringValue = c.Miscellaneous });
             ret.Add(new Field { Key = "[#19]", StringValue = c.Available });
-            ret.Add(new Field { Key = "[#15]", StringValue = c.Workinggroup != null ? c.Workinggroup.WorkingGroupName : string.Empty });
-            ret.Add(new Field { Key = "[#13]", StringValue = c.Workinggroup != null ? c.Workinggroup.EMail : string.Empty });
-            UserName admin = null;
-            if(c.Performer_User_Id.HasValue)
-                admin = _userRepository.GetUserName(c.Performer_User_Id.Value);
+            var wg = c.WorkingGroup_Id.HasValue ? _workingGroupService.GetWorkingGroup(c.WorkingGroup_Id.Value) : null;
+            ret.Add(new Field { Key = "[#15]", StringValue = wg != null ? c.Workinggroup.WorkingGroupName : string.Empty });
+            ret.Add(new Field { Key = "[#13]", StringValue = wg != null ? c.Workinggroup.EMail : string.Empty });
+            var admin = c.Performer_User_Id.HasValue ? _userRepository.GetUserName(c.Performer_User_Id.Value) : null;
             ret.Add(new Field { Key = "[#6]", StringValue = admin != null ? admin.FirstName : string.Empty });
             ret.Add(new Field { Key = "[#7]", StringValue = admin != null ? admin.LastName : string.Empty });
-            ret.Add(new Field { Key = "[#12]", StringValue = c.Priority != null ? c.Priority.Name : string.Empty });
-            ret.Add(new Field { Key = "[#20]", StringValue = c.Priority != null ? c.Priority.Description : string.Empty });
+            var priority = c.Priority_Id.HasValue ? _priorityService.GetPriority(c.Priority_Id.Value) : null;
+            ret.Add(new Field { Key = "[#12]", StringValue = priority != null ? c.Priority.Name : string.Empty });
+            ret.Add(new Field { Key = "[#20]", StringValue = priority != null ? c.Priority.Description : string.Empty });
             ret.Add(new Field { Key = "[#21]", StringValue = c.WatchDate.ToString() });
 
             if (c.User_Id.HasValue)
@@ -1625,15 +1636,20 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
 
-            if (c.ProductArea?.Parent_ProductArea_Id != null)
+            if (c.ProductArea_Id.HasValue)
             {
-                var names = _productAreaService.GetParentPath(c.ProductArea.Id, c.Customer_Id).ToList();
-                ret.Add(new Field { Key = "[#28]", StringValue = string.Join(" - ", names) });
+                if (c.ProductArea.Parent_ProductArea_Id.HasValue)
+                {
+                    var names = _productAreaService.GetParentPath(c.ProductArea_Id.Value, c.Customer_Id).ToList();
+                    ret.Add(new Field {Key = "[#28]", StringValue = string.Join(" - ", names)});
+                }
+                else
+                {
+                    ret.Add(new Field
+                        {Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty});
+                }
             }
-            else
-            {
-                ret.Add(new Field { Key = "[#28]", StringValue = c.ProductArea != null ? c.ProductArea.Name : string.Empty });
-            }
+
             ret.Add(new Field { Key = "[#10]", StringValue = l?.TextExternal ?? "" });
             ret.Add(new Field { Key = "[#11]", StringValue = l?.TextInternal ?? "" });
             

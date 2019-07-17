@@ -21,6 +21,7 @@ namespace DH.Helpdesk.Dal.Repositories
         void ResetEmailDefault(int exclude, int customerId);
 
         CaseType GetCaseTypeFull(int caseTypeId);
+        IQueryable<CaseType> GetCaseType(int caseTypeId);
 
         IList<ItemOverview> GetOverviews(int customerId);
 
@@ -70,6 +71,11 @@ namespace DH.Helpdesk.Dal.Repositories
 		{
 			return this.DataContext.CaseTypes.Include(x => x.SubCaseTypes).Where(where);
 		}
+
+        public IQueryable<CaseType> GetCaseType(int caseTypeId)
+        {
+            return DataContext.CaseTypes.Where(c => c.Id == caseTypeId);
+        }
 
 		public void ResetEmailDefault(int exclude, int customerId)
         {
