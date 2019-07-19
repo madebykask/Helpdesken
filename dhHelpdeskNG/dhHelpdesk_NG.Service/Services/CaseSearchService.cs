@@ -66,7 +66,8 @@ namespace DH.Helpdesk.Services.Services
             out CaseAggregateData aggregateData,
             int? relatedCasesCaseId = null,
             string relatedCasesUserId = null,
-            int[] caseIds = null);
+            int[] caseIds = null,
+            bool countOnly = false);
     }
 
     public class CaseSearchService : ICaseSearchService
@@ -82,7 +83,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly IGlobalSettingService _globalSettingService;
         private readonly ISettingService _settingService;
         private readonly IHolidayService _holidayService;
-		private readonly ICustomerService _customerService;
+        private readonly ICustomerService _customerService;
 
         #region ctor()
 
@@ -95,7 +96,7 @@ namespace DH.Helpdesk.Services.Services
             IGlobalSettingService globalSettingService, 
             ISettingService settingService,
             IHolidayService holidayService,
-			ICustomerService customerService)
+            ICustomerService customerService)
         {
             _caseSearchRepository = caseSearchRepository;
             _productAreaRepository = productAreaRepository;
@@ -105,7 +106,7 @@ namespace DH.Helpdesk.Services.Services
             _settingService = settingService;
             _holidayService = holidayService;
             _productAreaService = productAreaService;
-			_customerService = customerService;
+            _customerService = customerService;
         }
 
         #endregion
@@ -169,16 +170,17 @@ namespace DH.Helpdesk.Services.Services
             out CaseAggregateData aggregateData,
             int? relatedCasesCaseId = null,
             string relatedCasesUserId = null,
-            int[] caseIds = null)
+            int[] caseIds = null, 
+            bool countOnly = false)
         {
             var now = DateTime.UtcNow;
 
             var csf = DoFilterValidation(f);
 
-			var customer = _customerService.GetCustomer(f.CustomerId);
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
+            var customer = _customerService.GetCustomer(f.CustomerId);
+            var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
 
-			var workTimeFactory = new WorkTimeCalculatorFactory(_holidayService, workingDayStart, workingDayEnd, timeZone);
+            var workTimeFactory = new WorkTimeCalculatorFactory(_holidayService, workingDayStart, workingDayEnd, timeZone);
             var responisbleFieldSettings = customerCaseFieldsSettings.Where(it => it.Name == GlobalEnums.TranslationCaseFields.CaseResponsibleUser_Id.ToString()).FirstOrDefault();
             var isFieldResponsibleVisible = responisbleFieldSettings != null && responisbleFieldSettings.ShowOnStartPage == 1;
 
@@ -188,8 +190,8 @@ namespace DH.Helpdesk.Services.Services
             {
                 f = csf,
                 userCaseSettings = caseSettings,
-                customerSetting = this._settingService.GetCustomerSetting(f.CustomerId),
-                globalSettings = this._globalSettingService.GetGlobalSettings().FirstOrDefault(),
+                customerSetting = _settingService.GetCustomerSetting(f.CustomerId),
+                globalSettings = _globalSettingService.GetGlobalSettings().FirstOrDefault(),
                 
                 //use customerCaseFieldSettings
                 isFieldResponsibleVisible = isFieldResponsibleVisible,
@@ -212,24 +214,41 @@ namespace DH.Helpdesk.Services.Services
             };
 
             #endregion
-            
-            //run search
-            var searchResults = this._caseSearchRepository.Search(context);
 
-            //calc work time
-            var workTimeCalculator = this.InitCalcFromSQL(searchResults, context.workTimeCalcFactory, now);
-            
-            //process results per customer settings 
-            var result = ProcessSearchResults(context, searchResults, workTimeCalculator, out remainingTime, out aggregateData);
-
-            result = SortSearchResult(result, s);
-
-            //TODO: refactor when true server paging will be implemented
-            result.Count = result.Items.Count;
-            if (f.PageInfo != null && f.PageInfo.PageSize > 0)
+            SearchResult<CaseSearchResult> result;
+            if (countOnly)
             {
-                result.Items = result.Items.Skip(f.PageInfo.PageNumber * f.PageInfo.PageSize).Take(f.PageInfo.PageSize).ToList();
+                remainingTime = null;
+                aggregateData = null;
+                var rowsCount = _caseSearchRepository.SearchCount(context);
+                
+                // set only rows count 
+                result = new SearchResult<CaseSearchResult>
+                {
+                    Count = rowsCount
+                };
             }
+            else
+            {
+                //run search
+                var searchResults = _caseSearchRepository.Search(context);
+
+                //calc work time
+                var workTimeCalculator = InitCalcFromSQL(searchResults, context.workTimeCalcFactory, now);
+
+                //process results per customer settings 
+                result = ProcessSearchResults(context, searchResults, workTimeCalculator, out remainingTime, out aggregateData);
+
+                result = SortSearchResult(result, s);
+
+                //TODO: refactor when true server paging will be implemented
+                result.Count = result.Items.Count;
+                if (f.PageInfo != null && f.PageInfo.PageSize > 0)
+                {
+                    result.Items = result.Items.Skip(f.PageInfo.PageNumber * f.PageInfo.PageSize).Take(f.PageInfo.PageSize).ToList();
+                }
+            }
+            
 
             return result;
         }

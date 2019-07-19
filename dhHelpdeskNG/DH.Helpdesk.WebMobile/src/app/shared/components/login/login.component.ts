@@ -7,6 +7,7 @@ import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-
 import { throwError, Subject } from 'rxjs';
 import { ErrorHandlingService } from '../../../services/logging/error-handling.service';
 import { config } from '@env/environment';
+import { CommunicationService, Channels } from 'src/app/services/communication';
 
 @Component({
     templateUrl: 'login.component.html',
@@ -37,6 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
+        private communicationService: CommunicationService,
         private authenticationService: AuthenticationService,
         private userSettingsService: UserSettingsApiService,
         private errorHandlingService: ErrorHandlingService) {}
@@ -88,8 +90,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         this.authenticationService.login(this.f.username.value, this.f.password.value).pipe(
           take(1),
-          map(currentUser => {
-              return this.userSettingsService.applyUserSettings();
+          switchMap(currentUser => {
+            this.communicationService.publish(Channels.LoginComplete, currentUser);
+            return this.userSettingsService.applyUserSettings();
           }),
           finalize(() => this.isLoading = false)
         ).subscribe(res => {

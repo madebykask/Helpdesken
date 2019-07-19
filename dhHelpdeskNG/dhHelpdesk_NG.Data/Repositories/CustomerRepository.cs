@@ -126,14 +126,12 @@ using System;
 
         public ItemOverview GetOverview(int customerId)
         {
-            var entities = this.Table
+            var customerOverview = Table
                     .Where(c => c.Id == customerId)
-                    .Select(c => new { Value = c.Id, c.Name })
-                    .ToList();
+                    .Select(c => new ItemOverview() { Value = c.Id.ToString(), Name = c.Name })
+                    .FirstOrDefault();
 
-            return entities
-                    .Select(c => new ItemOverview(c.Name, c.Value.ToString(CultureInfo.InvariantCulture)))
-                    .FirstOrDefault();                        
+            return customerOverview;                        
         }
 
         public CaseDefaultsInfo GetCustomerDefaults(int customerId, bool isSelfService = false)

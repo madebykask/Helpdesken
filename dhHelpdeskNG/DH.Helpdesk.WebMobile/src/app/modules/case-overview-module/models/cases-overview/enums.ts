@@ -9,3 +9,29 @@ export enum CaseProgressFilter {
    CasesWithWatchDate = 7,
    FollowUp = 8
 }
+
+
+export enum CaseStandardSearchFilters {
+  AllCases = 0,
+  MyCases = -1
+}
+
+export enum FilterFields {
+  RegionFilter,
+  DepartmentFilter,
+  CaseTypeFilter,
+  ProductAreaFilter,
+  WorkingGroupFilter,
+  ResponsibleFilter,
+  AdministratorFilter,
+  PriorityFilter,
+  StatusFilter,
+  SubStatusFilter,
+  RemainingTimeFilter,
+  ClosingReasonFilter,
+  RegisteredByFilter,
+  RegistrationDateFilter,
+  WatchDateFilter,
+  ClosingDateFilter,
+  ProductArea
+}

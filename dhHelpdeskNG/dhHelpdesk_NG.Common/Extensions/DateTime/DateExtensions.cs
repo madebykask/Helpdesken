@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Globalization;
+
 namespace DH.Helpdesk.Common.Extensions.DateTime
 {
     using Constants;
@@ -68,6 +70,25 @@ namespace DH.Helpdesk.Common.Extensions.DateTime
         {
             return (long)((dt.ToUniversalTime().Ticks - DatetimeMinTimeTicks) / 10000);
         }
+
+
+        public static string ToSqlFormattedDate(this DateTime date)
+        {
+            return date.ToString("s", CultureInfo.InvariantCulture);
+        }
+
+        public static string ToSqlFormattedDate(this DateTime? date)
+        {
+            if (date.HasValue)
+            {
+                var d = date.Value;
+                return date.Value.ToString("s", CultureInfo.InvariantCulture);
+            }
+            else
+                return string.Empty;
+        }
+
+
 
         public static DateTime RoundTick(this DateTime dt)
         {

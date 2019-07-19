@@ -1,35 +1,13 @@
-﻿using System.Diagnostics;
-using DH.Helpdesk.BusinessData.Models.Shared.Output;
-using DH.Helpdesk.Dal.DbQueryExecutor;
+﻿using DH.Helpdesk.Dal.DbQueryExecutor;
 
 namespace DH.Helpdesk.Dal.Repositories
 {
     using System;
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Data;
-    using System.Data.OleDb;
-    using System.Globalization;
     using System.Linq;
-    using System.Text;
-
-    using DH.Helpdesk.BusinessData.Enums.Case;
-    using DH.Helpdesk.BusinessData.Models.Case;
     using DH.Helpdesk.BusinessData.Models.Case.CaseSearch;
-    using DH.Helpdesk.BusinessData.Models.Case.Output;
-    using DH.Helpdesk.BusinessData.Models.Grid;
-    using DH.Helpdesk.BusinessData.Models.ProductArea;
-    using DH.Helpdesk.BusinessData.Models.WorktimeCalculator;
-    using DH.Helpdesk.BusinessData.OldComponents;
-    using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
-    using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.Enums.Cases;
-    using DH.Helpdesk.Common.Tools;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Dal.Repositories;
-
-    using ProductAreaEntity = DH.Helpdesk.Domain.ProductArea;
-    using DH.Helpdesk.Dal.Enums;
 
     /// <summary>
     /// The CaseSearchRepository interface.
@@ -37,6 +15,7 @@ namespace DH.Helpdesk.Dal.Repositories
     public interface ICaseSearchRepository
     {
         DataTable Search(CaseSearchContext context);
+        int SearchCount(CaseSearchContext context);
     }
 
     public class CaseSearchRepository : ICaseSearchRepository
@@ -59,33 +38,48 @@ namespace DH.Helpdesk.Dal.Repositories
         }
 
         public DataTable Search(CaseSearchContext context)
-        {
-
+        { 
             //check if freetext is searchable
             var freetext = context.f.FreeTextSearch;
             if (freetext != null)
             {
                 if (freetext.Contains("#") && freetext.Length == 1)
                 {
-                    context.f.FreeTextSearch = String.Empty;
+                    context.f.FreeTextSearch = string.Empty;
                 }
             }
 
-            var queryBuilderContext = BuildSearchQueryContext(context);
-                       
-            //build search query
-            var searchQueryBuilder = new CaseSearchQueryBuilder();
-            var sql = searchQueryBuilder.BuildCaseSearchSql(queryBuilderContext);
+            var sql = BuildSeachSql(context);
 
             if (string.IsNullOrEmpty(sql))
-            {
                 return null;
-            }
             
             var queryExecutor = _queryExecutorFactory.Create();
             var dataTable = queryExecutor.ExecuteTable(sql, commandType: CommandType.Text, timeout: 300);
 
             return dataTable;
+        }
+
+        public int SearchCount(CaseSearchContext context)
+        {
+            var sql = BuildSeachSql(context, true);
+
+            if (string.IsNullOrEmpty(sql))
+                return 0;
+
+            var queryExecutor = _queryExecutorFactory.Create();
+            var count = queryExecutor.ExecuteScalar<int>(sql, commandType: CommandType.Text, timeout: 300);
+            return count;
+        }
+
+        private string BuildSeachSql(CaseSearchContext context, bool countOnly = false)
+        {
+            var queryBuilderContext = BuildSearchQueryContext(context);
+
+            //build search query
+            var searchQueryBuilder = new CaseSearchQueryBuilder();
+            var sql = searchQueryBuilder.BuildCaseSearchSql(queryBuilderContext, countOnly);
+            return sql;
         }
 
         private SearchQueryBuildContext BuildSearchQueryContext(CaseSearchContext context)

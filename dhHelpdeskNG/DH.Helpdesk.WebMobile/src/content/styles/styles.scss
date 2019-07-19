@@ -71,6 +71,20 @@ $disabled-color: #f2f2f2;
 
 .md-btn-loading { display: block; }
 
+.spinner-sm {
+  display: inline-block;
+  font-size: 16px; 
+  line-height: 1.5em;
+}
+
+.spinner-sm:before {
+  font-family: 'icons_mobiscroll';
+  content: '\ec3b';
+  display: inline-block;
+  -webkit-animation: md-rotating .8s linear infinite;
+  animation: md-rotating .8s linear infinite;
+}
+
 .stickyTop {
     position: fixed;
     top: 0;

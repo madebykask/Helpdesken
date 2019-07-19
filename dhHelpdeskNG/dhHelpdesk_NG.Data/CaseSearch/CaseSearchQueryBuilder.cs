@@ -11,6 +11,7 @@ using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums;
+using DH.Helpdesk.Common.Extensions.DateTime;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Common.Extensions.String;
 
@@ -144,7 +145,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         #endregion
 
-        public string BuildCaseSearchSql(SearchQueryBuildContext ctx)
+        public string BuildCaseSearchSql(SearchQueryBuildContext ctx, bool countOnly = false)
         {
             _useFts = ctx.UseFullTextSearch;
 
@@ -155,28 +156,37 @@ namespace DH.Helpdesk.Dal.Repositories
 
             var freeTextSearchCte = BuildFreeTextSearchCTEQuery(ctx);
 
-            var searchQuery = BuildSearchQueryInner(ctx);
+            
             var orderBy = BuildOrderBy(search);
 
             //TODO: remove top 500 limit when true sql side paging is implemented
             //vid avslutade ärenden visas bara första 500
             var sqlTop500 = (searchFilter.CaseProgress == CaseProgressFilter.ClosedCases || searchFilter.CaseProgress == CaseProgressFilter.None) ? "top 500" : "";
             const string subQueryName = "RowConstrainedResult";
-            var outerFields = ctx.Criterias.FetchInfoAboutParentChild? $",{GetParentChildInfo(subQueryName)}" : "";
-            sql.Add($@"SELECT * {outerFields} 
-                       FROM ( SELECT {sqlTop500} *, ROW_NUMBER() OVER ( ORDER BY {orderBy} ) AS RowNum 
-                              FROM ( {searchQuery} ) as tbl
-                            ) as {subQueryName}");
+            var outerFields = ctx.Criterias.FetchInfoAboutParentChild ? $",{GetParentChildInfo(subQueryName)}" : "";
 
-            //if (f.PageInfo != null)
-            //{
-            //	sql.Add(string.Format(" WHERE RowNum > {0} AND RowNum <= {1}", f.PageInfo.PageNumber * f.PageInfo.PageSize, f.PageInfo.PageNumber * f.PageInfo.PageSize + f.PageInfo.PageSize));
-            //}
+            if (countOnly)
+            {
+                var searchQuery = BuildSearchQueryInner(ctx, true);
+                sql.Add(searchQuery);
+            }
+            else
+            {
+                var searchQuery = BuildSearchQueryInner(ctx, false);
+                sql.Add($@"SELECT * {outerFields} 
+                           FROM ( SELECT {sqlTop500} *, ROW_NUMBER() OVER ( ORDER BY {orderBy} ) AS RowNum 
+                                  FROM ( {searchQuery} ) as tbl
+                           ) as {subQueryName} ");
 
-            sql.Add(" ORDER BY RowNum");
+                //if (f.PageInfo != null)
+                //{
+                //	sql.Add(string.Format(" WHERE RowNum > {0} AND RowNum <= {1}", f.PageInfo.PageNumber * f.PageInfo.PageSize, f.PageInfo.PageNumber * f.PageInfo.PageSize + f.PageInfo.PageSize));
+                //}
 
-            var output = String.Empty;
-            output = string.Join(" ", sql);
+                sql.Add(" ORDER BY RowNum");
+            }
+
+            var output = string.Join(" ", sql);
 
             //add free text search cte query at the top
             if (!string.IsNullOrEmpty(freeTextSearchCte))
@@ -190,7 +200,8 @@ namespace DH.Helpdesk.Dal.Repositories
         #region ReturnCaseSearchSqlCount
 
         //todo: use once proper sql side paging is implemented
-        private string ReturnCaseSearchSqlCount(SearchQueryBuildContext ctx)
+
+        private string BuildCaseSearchSqlCount(SearchQueryBuildContext ctx)
         {
             var criterias = ctx.Criterias;
 
@@ -269,7 +280,7 @@ namespace DH.Helpdesk.Dal.Repositories
             return s;
         }
 
-        private string BuildSearchQueryInner(SearchQueryBuildContext ctx)
+        private string BuildSearchQueryInner(SearchQueryBuildContext ctx, bool countQuery = false)
         {
             var criterias = ctx.Criterias;
             var searchFilter = criterias.SearchFilter;
@@ -278,158 +289,159 @@ namespace DH.Helpdesk.Dal.Repositories
 
             var columns = new List<string>();
 
-            #region adding columns in SUB-SELECT
-
-            columns.Add("tblCase.Id");
-            columns.Add("tblCase.CaseNumber");
-            columns.Add("tblCase.Place");
-            columns.Add("tblCustomer.Name as Customer_Id");
-            columns.Add("tblCase.Customer_Id as CaseCustomerId");
-            columns.Add("tblCase.WorkingGroup_Id as CaseWorkingGroupId");
-            columns.Add("tblRegion.Region as Region_Id");
-            columns.Add("tblOU.OU as OU_Id");
-            columns.Add("tblCase.UserCode");
-            columns.Add("tblCase.Department_Id");
-            columns.Add("tblCase.Persons_Name");
-            columns.Add("tblCase.Persons_EMail");
-            columns.Add("tblCase.Persons_Phone");
-            columns.Add("tblCase.Persons_CellPhone");
-            columns.Add("tblCase.FinishingDate");
-            columns.Add("tblCase.FinishingDescription");
-            columns.Add("tblCase.Caption");
-
-            columns.Add("tblCase.Performer_User_Id as CasePerformerUserId");
-            columns.Add("tblCase.CaseResponsibleUser_Id as CaseResponsibleUserId");
-            columns.Add("tblCase.User_Id as CaseUserId");
-            if (searchFilter.MaxTextCharacters > 0)
-                columns.Add(string.Format("Cast(tblCase.[Description] as Nvarchar({0})) as [Description] ", searchFilter.MaxTextCharacters));
-            else
-                columns.Add("Cast(tblCase.[Description] as Nvarchar(Max)) as [Description] ");
-
-            columns.Add("tblCase.Miscellaneous");
-            columns.Add("tblCase.[Status] ");
-            columns.Add("tblCase.ExternalTime");
-            columns.Add("tblCase.RegTime");
-            columns.Add("tblCase.ReportedBy");
-            columns.Add("tblCase.ProductArea_Id");
-            columns.Add("tblCase.InvoiceNumber");
-            columns.Add("tblCustomer.Name");
-            columns.Add("tblDepartment.Department as DepertmentName");
-            columns.Add("tblDepartment.DepartmentId");
-            columns.Add("tblDepartment.SearchKey");
-            columns.Add("tblCase.ReferenceNumber");
-            columns.Add("tblRegistrationSourceCustomer.SourceName as RegistrationSourceCustomer");
-
-            columns.Add("tblCaseIsAbout.ReportedBy as IsAbout_ReportedBy");
-            columns.Add("tblCaseIsAbout.Person_Name as IsAbout_Persons_Name");
-            columns.Add("tblCase.AgreedDate");
-
-            if (customerSettings != null)
+            // select 
+            if (countQuery)
             {
-                if (customerSettings.IsUserFirstLastNameRepresentation == 1)
+                searchQueryBld.AppendFormat("SELECT COUNT(DISTINCT tblCase.Id)");
+            }
+            else
+            {
+                #region adding columns in SUB-SELECT
+
+                columns.Add("tblCase.Id");
+                columns.Add("tblCase.CaseNumber");
+                columns.Add("tblCase.Place");
+                columns.Add("tblCustomer.Name as Customer_Id");
+                columns.Add("tblCase.Customer_Id as CaseCustomerId");
+                columns.Add("tblCase.WorkingGroup_Id as CaseWorkingGroupId");
+                columns.Add("tblRegion.Region as Region_Id");
+                columns.Add("tblOU.OU as OU_Id");
+                columns.Add("tblCase.UserCode");
+                columns.Add("tblCase.Department_Id");
+                columns.Add("tblCase.Persons_Name");
+                columns.Add("tblCase.Persons_EMail");
+                columns.Add("tblCase.Persons_Phone");
+                columns.Add("tblCase.Persons_CellPhone");
+                columns.Add("tblCase.FinishingDate");
+                columns.Add("tblCase.FinishingDescription");
+                columns.Add("tblCase.Caption");
+
+                columns.Add("tblCase.Performer_User_Id as CasePerformerUserId");
+                columns.Add("tblCase.CaseResponsibleUser_Id as CaseResponsibleUserId");
+                columns.Add("tblCase.User_Id as CaseUserId");
+                if (searchFilter.MaxTextCharacters > 0)
+                    columns.Add(string.Format("Cast(tblCase.[Description] as Nvarchar({0})) as [Description] ", searchFilter.MaxTextCharacters));
+                else
+                    columns.Add("Cast(tblCase.[Description] as Nvarchar(Max)) as [Description] ");
+
+                columns.Add("tblCase.Miscellaneous");
+                columns.Add("tblCase.[Status] ");
+                columns.Add("tblCase.ExternalTime");
+                columns.Add("tblCase.RegTime");
+                columns.Add("tblCase.ReportedBy");
+                columns.Add("tblCase.ProductArea_Id");
+                columns.Add("tblCase.InvoiceNumber");
+                columns.Add("tblCustomer.Name");
+                columns.Add("tblDepartment.Department as DepertmentName");
+                columns.Add("tblDepartment.DepartmentId");
+                columns.Add("tblDepartment.SearchKey");
+                columns.Add("tblCase.ReferenceNumber");
+                columns.Add("tblRegistrationSourceCustomer.SourceName as RegistrationSourceCustomer");
+
+                columns.Add("tblCaseIsAbout.ReportedBy as IsAbout_ReportedBy");
+                columns.Add("tblCaseIsAbout.Person_Name as IsAbout_Persons_Name");
+                columns.Add("tblCase.AgreedDate");
+
+                if (customerSettings != null)
                 {
-                    columns.Add("coalesce(tblUsers.FirstName, '') + ' ' + coalesce(tblUsers.SurName, '') as Performer_User_Id");
-                    columns.Add("IsNull(tblCase.RegUserName, coalesce(tblUsers2.FirstName, '') + ' ' + coalesce(tblUsers2.SurName, '')) as User_Id");
-                    columns.Add("coalesce(tblUsers3.FirstName, '') + ' ' + coalesce(tblUsers3.SurName, '') as CaseResponsibleUser_Id");
+                    if (customerSettings.IsUserFirstLastNameRepresentation == 1)
+                    {
+                        columns.Add("coalesce(tblUsers.FirstName, '') + ' ' + coalesce(tblUsers.SurName, '') as Performer_User_Id");
+                        columns.Add("IsNull(tblCase.RegUserName, coalesce(tblUsers2.FirstName, '') + ' ' + coalesce(tblUsers2.SurName, '')) as User_Id");
+                        columns.Add("coalesce(tblUsers3.FirstName, '') + ' ' + coalesce(tblUsers3.SurName, '') as CaseResponsibleUser_Id");
+                    }
+                    else
+                    {
+                        columns.Add("coalesce(tblUsers.SurName, '') + ' ' + coalesce(tblUsers.FirstName, '') as Performer_User_Id");
+                        columns.Add("IsNull(tblCase.RegUserName, coalesce(tblUsers2.SurName, '') + ' ' + coalesce(tblUsers2.FirstName, '')) as User_Id");
+                        columns.Add("coalesce(tblUsers3.SurName, '') + ' ' + coalesce(tblUsers3.FirstName, '') as CaseResponsibleUser_Id");
+                    }
+
+                    columns.Add("coalesce(tblUsers4.SurName, '') + ' ' + coalesce(tblUsers4.FirstName, '') as tblProblem_ResponsibleUser_Id");
+                }
+
+                columns.Add("tblProblem.ProblemName as Problem");
+                columns.Add("tblStatus.StatusName as Status_Id");
+                columns.Add("tblSupplier.Supplier as Supplier_Id");
+
+                string appId = string.Empty;
+                try
+                {
+                    appId = ConfigurationManager.AppSettings["InitFromSelfService"];
+                }
+                catch (Exception)
+                {
+                }
+
+                if (appId == "true")
+                {
+                    columns.Add("tblStateSecondary.AlternativeStateSecondaryName as StateSecondary_Id");
                 }
                 else
                 {
-                    columns.Add("coalesce(tblUsers.SurName, '') + ' ' + coalesce(tblUsers.FirstName, '') as Performer_User_Id");
-                    columns.Add("IsNull(tblCase.RegUserName, coalesce(tblUsers2.SurName, '') + ' ' + coalesce(tblUsers2.FirstName, '')) as User_Id");
-                    columns.Add("coalesce(tblUsers3.SurName, '') + ' ' + coalesce(tblUsers3.FirstName, '') as CaseResponsibleUser_Id");
+                    columns.Add("tblStateSecondary.StateSecondary as StateSecondary_Id");
                 }
 
-                columns.Add("coalesce(tblUsers4.SurName, '') + ' ' + coalesce(tblUsers4.FirstName, '') as tblProblem_ResponsibleUser_Id");
+                columns.Add("tblCase.Priority_Id");
+                columns.Add("tblPriority.PriorityName");
+                columns.Add("tblPriority.Priority");
+                columns.Add("tblPriority.OrderNum");
+                columns.Add("coalesce(tblPriority.SolutionTime, 0) as SolutionTime");
+                columns.Add("tblCase.WatchDate");
+                columns.Add("tblCaseType.RequireApproving");
+                columns.Add("tblCase.ApprovedDate");
+                columns.Add("tblCase.ContactBeforeAction");
+                columns.Add("tblCase.SMS");
+                columns.Add("tblCase.Available");
+                columns.Add("tblCase.Cost");
+                columns.Add("tblCase.CostCentre");
+                columns.Add("tblCase.PlanDate");
+
+                if (customerSettings != null)
+                {
+                    columns.Add("tblWorkingGroup.WorkingGroup as WorkingGroup_Id");
+                }
+
+                columns.Add("tblCase.ChangeTime");
+                columns.Add("tblCaseType.Id as CaseType_Id");
+                columns.Add("tblCase.RegistrationSource");
+                columns.Add("tblCase.InventoryNumber");
+                columns.Add("tblCase.InventoryType as ComputerType_Id");
+                columns.Add("tblCase.InventoryLocation");
+                columns.Add("tblCategory.Category as Category_Id");
+                columns.Add("tblCase.SolutionRate");
+                columns.Add("tblSystem.SystemName as System_Id");
+                columns.Add("tblUrgency.Urgency as Urgency_Id");
+                columns.Add("tblImpact.Impact as Impact_Id");
+                columns.Add("tblCase.Verified");
+                columns.Add("tblCase.VerifiedDescription");
+                columns.Add("tblCase.LeadTime");
+                columns.Add("tblCase.Status_Id as aggregate_Status");
+                columns.Add("tblCase.StateSecondary_Id as aggregate_SubStatus");
+
+                columns.Add(string.Format("'0' as [{0}]", CaseSearchConstants.TimeLeftColumn.SafeForSqlInject()));
+                columns.Add("tblStateSecondary.IncludeInCaseStatistics");
+
+                if (criterias.CaseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))
+                {
+                    columns.Add("tblCausingPart.Name as CausingPart");
+                }
+
+                #endregion
+
+                var columnsFormatted = string.Join(",", columns);
+                searchQueryBld.AppendFormat("SELECT DISTINCT {0}", columnsFormatted);
+                searchQueryBld.AppendLine();
             }
-
-            columns.Add("tblProblem.ProblemName as Problem");
-            columns.Add("tblStatus.StatusName as Status_Id");
-            columns.Add("tblSupplier.Supplier as Supplier_Id");
-
-            string appId = string.Empty;
-            try
-            {
-                appId = ConfigurationManager.AppSettings["InitFromSelfService"];
-            }
-            catch (Exception)
-            {
-            }
-
-            if (appId == "true")
-            {
-                columns.Add("tblStateSecondary.AlternativeStateSecondaryName as StateSecondary_Id");
-            }
-            else
-            {
-                columns.Add("tblStateSecondary.StateSecondary as StateSecondary_Id");
-            }
-
-            columns.Add("tblCase.Priority_Id");
-            columns.Add("tblPriority.PriorityName");
-            columns.Add("tblPriority.Priority");
-            columns.Add("tblPriority.OrderNum");
-            columns.Add("coalesce(tblPriority.SolutionTime, 0) as SolutionTime");
-            columns.Add("tblCase.WatchDate");
-            columns.Add("tblCaseType.RequireApproving");
-            columns.Add("tblCase.ApprovedDate");
-            columns.Add("tblCase.ContactBeforeAction");
-            columns.Add("tblCase.SMS");
-            columns.Add("tblCase.Available");
-            columns.Add("tblCase.Cost");
-            columns.Add("tblCase.CostCentre");
-            columns.Add("tblCase.PlanDate");
-
-            if (customerSettings != null)
-            {
-                columns.Add("tblWorkingGroup.WorkingGroup as WorkingGroup_Id");
-            }
-
-            columns.Add("tblCase.ChangeTime");
-            columns.Add("tblCaseType.Id as CaseType_Id");
-            columns.Add("tblCase.RegistrationSource");
-            columns.Add("tblCase.InventoryNumber");
-            columns.Add("tblCase.InventoryType as ComputerType_Id");
-            columns.Add("tblCase.InventoryLocation");
-            columns.Add("tblCategory.Category as Category_Id");
-            columns.Add("tblCase.SolutionRate");
-            columns.Add("tblSystem.SystemName as System_Id");
-            columns.Add("tblUrgency.Urgency as Urgency_Id");
-            columns.Add("tblImpact.Impact as Impact_Id");
-            columns.Add("tblCase.Verified");
-            columns.Add("tblCase.VerifiedDescription");
-            columns.Add("tblCase.LeadTime");
-            columns.Add("tblCase.Status_Id as aggregate_Status");
-            columns.Add("tblCase.StateSecondary_Id as aggregate_SubStatus");
-
-            columns.Add(string.Format("'0' as [{0}]", CaseSearchConstants.TimeLeftColumn.SafeForSqlInject()));
-            columns.Add("tblStateSecondary.IncludeInCaseStatistics");
-
-            if (criterias.CaseSettings.ContainsKey(GlobalEnums.TranslationCaseFields.CausingPart.ToString()))
-            {
-                columns.Add("tblCausingPart.Name as CausingPart");
-            }
-
-            #endregion
-
-            var columnsFormatted = string.Join(",", columns);
-            searchQueryBld.AppendFormat("SELECT DISTINCT {0}", columnsFormatted);
-            searchQueryBld.AppendLine();
-
+            
             // tables and joins
             var tablesJoins = GetTablesAndJoins(ctx);
             searchQueryBld.AppendLine(tablesJoins);
 
             // WHERE
-            string whereStatement;
-
-            if (IsHelpdeskApplication(ctx.Criterias))
-            {
-                whereStatement = ReturnCaseSearchWhere(ctx);
-            }
-            else
-            {
-                whereStatement = ReturnCustomCaseSearchWhere(searchFilter, criterias.UserUniqueId, criterias.UserId, criterias.GlobalSetting);
-            }
+            var whereStatement = IsHelpdeskApplication(ctx.Criterias) 
+                ? ReturnCaseSearchWhere(ctx) 
+                : ReturnCustomCaseSearchWhere(searchFilter, criterias.UserUniqueId, criterias.UserId, criterias.GlobalSetting);
 
             searchQueryBld.Append(whereStatement);
 
@@ -1115,32 +1127,32 @@ namespace DH.Helpdesk.Dal.Repositories
 
             if (searchFilter.CaseRegistrationDateStartFilter.HasValue)
             {
-                sb.AppendFormat(" AND ([tblCase].[RegTime] >= '{0}')", searchFilter.CaseRegistrationDateStartFilter);
+                sb.AppendFormat(" AND ([tblCase].[RegTime] >= '{0}')", searchFilter.CaseRegistrationDateStartFilter.ToSqlFormattedDate());
             }
 
             if (searchFilter.CaseRegistrationDateEndFilter.HasValue)
             {
-                sb.AppendFormat(" AND ([tblCase].[RegTime] <= '{0}')", searchFilter.CaseRegistrationDateEndFilter);
+                sb.AppendFormat(" AND ([tblCase].[RegTime] <= '{0}')", searchFilter.CaseRegistrationDateEndFilter.ToSqlFormattedDate());
             }
 
             if (searchFilter.CaseWatchDateStartFilter.HasValue)
             {
-                sb.AppendFormat(" AND ([tblCase].[WatchDate] >= '{0}')", searchFilter.CaseWatchDateStartFilter);
+                sb.AppendFormat(" AND ([tblCase].[WatchDate] >= '{0}')", searchFilter.CaseWatchDateStartFilter.ToSqlFormattedDate());
             }
 
             if (searchFilter.CaseWatchDateEndFilter.HasValue)
             {
-                sb.AppendFormat(" AND ([tblCase].[WatchDate] <= '{0}')", searchFilter.CaseWatchDateEndFilter);
+                sb.AppendFormat(" AND ([tblCase].[WatchDate] <= '{0}')", searchFilter.CaseWatchDateEndFilter.ToSqlFormattedDate());
             }
 
             if (searchFilter.CaseClosingDateStartFilter.HasValue)
             {
-                sb.AppendFormat(" AND ([tblCase].[FinishingDate] >= '{0}')", searchFilter.CaseClosingDateStartFilter);
+                sb.AppendFormat(" AND ([tblCase].[FinishingDate] >= '{0}')", searchFilter.CaseClosingDateStartFilter.ToSqlFormattedDate());
             }
 
             if (searchFilter.CaseClosingDateEndFilter.HasValue)
             {
-                sb.AppendFormat(" AND ([tblCase].[FinishingDate] <= '{0}')", searchFilter.CaseClosingDateEndFilter);
+                sb.AppendFormat(" AND ([tblCase].[FinishingDate] <= '{0}')", searchFilter.CaseClosingDateEndFilter.ToSqlFormattedDate());
             }
 
             #endregion

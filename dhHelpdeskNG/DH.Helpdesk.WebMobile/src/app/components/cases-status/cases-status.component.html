@@ -1,30 +1,16 @@
-<ng-container *ngIf="casesStatus">
-  <mbsc-card>
-    <mbsc-card-header>
-      <mbsc-card-title>{{ casesStatus.customerName }}</mbsc-card-title>
-    </mbsc-card-header>
-    <mbsc-card-content>
-      <mbsc-listview [options]="options">
-        <mbsc-listview-item>
-          <span class="status-title" translate>Mina ärenden</span>
-          <span class="val">{{ casesStatus.myCases }}</span>
-        </mbsc-listview-item>
-
-        <mbsc-listview-item>
-          <span class="status-title" translate>Pågående ärende</span>
-          <span class="val">{{ casesStatus.inProgress }}</span>
-        </mbsc-listview-item>
-
-        <mbsc-listview-item>
-          <span class="status-title" translate>Nya idag</span>
-          <span class="val">{{ casesStatus.newToday }}</span>
-        </mbsc-listview-item>
-
-        <mbsc-listview-item>
-          <span class="status-title" translate>Avslutade idag</span>
-          <span class="val">{{ casesStatus.closedToday }}</span>
-        </mbsc-listview-item>
+<ng-container>
+    <mbsc-card>
+      <mbsc-card-header>
+        <mbsc-card-title>{{ (customer$ | async)?.name }}</mbsc-card-title>
+      </mbsc-card-header>
+      <mbsc-card-content>
+        <mbsc-listview [options]="options" (onItemTap)="onItemTap($event)">
+          <mbsc-listview-item *ngFor="let ff of userFilters; trackBy: trackByFn">
+              <span class="status-title" translate>{{ ff.name }}</span>
+              <span class="val" *ngIf="!(ff.isLoading$ | async); else loading;">{{ ff.count }}</span>
+          </mbsc-listview-item>
       </mbsc-listview>
-    </mbsc-card-content>
-  </mbsc-card>
-</ng-container>
+      </mbsc-card-content>
+    </mbsc-card>
+  </ng-container>
+  <ng-template #loading><span class="val"><i class="mbsc-ic spinner-sm"></i></span></ng-template>

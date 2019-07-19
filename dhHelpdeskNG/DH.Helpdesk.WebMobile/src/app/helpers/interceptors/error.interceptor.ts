@@ -62,6 +62,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
       // Call authenticationService.refreshToken(this is an Observable that will be returned)
       return this.authenticationService.refreshToken().pipe(
+        take(1),
         switchMap((r: boolean) => {
           //When the call to refreshToken completes we reset the refreshTokenInProgress to false
           // for the next time the token needs to be refreshed

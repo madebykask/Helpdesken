@@ -1,16 +1,33 @@
 import { Observable } from 'rxjs/Observable';
 import { catchError, map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { config } from '@env/environment';
 import { LocalStorageService } from '../../../../services/local-storage';
 import { AuthConstants } from '../../constants';
+import { QueryParamsOptions } from './query-params-options';
 
 export abstract class HttpApiServiceBase {
   protected baseApiUrl: string;
 
   protected constructor(protected http: HttpClient, protected localStorageService: LocalStorageService) {
     this.baseApiUrl = config.apiUrl;
+  }
+
+  protected getJsonWithParams<TResponse>(resourcePath: string, paramsObj: {}, headers: any = null, noAuth = false): Observable<TResponse> {
+    // prepare request options
+    const requestOptions = {
+      headers: this.getHeaders(headers, false, noAuth),
+      params: new HttpParams({ fromObject: paramsObj }) // uses HttpUrlEncodingCodec to encode key/values.
+    };
+
+    const requestUrl = this.getRequestUrl(resourcePath);
+    return this.http
+        .get<TResponse>(requestUrl, requestOptions)
+        .pipe(
+            catchError((error: any) => {
+              return throwError(error);
+        }));
   }
 
   protected getJson<TResponse>(url: string, headers: any = null, noAuth = false): Observable<TResponse> {
@@ -111,30 +128,46 @@ export abstract class HttpApiServiceBase {
         }));
   }
 
-  //todo: move to a separate class?
-  public buildResourseUrl(resourceName: string, params: object = null, addCustomerId = true, addLanguage = false) {
+  protected createQueryParams(customParams: {}, opt: QueryParamsOptions): any {
+    opt = opt || new QueryParamsOptions();
+
+    let params = customParams ? Object.assign({}, customParams) : {};
+
+    const userData = this.localStorageService.getCurrentUser();
+
+    if (opt.addCustomerId === true) {
+        if (userData) {
+            params = Object.assign({}, params, {cid: userData.currentData.selectedCustomerId});
+        }
+    }
+
+    if (opt.addLanguage === true) {
+        if (userData) {
+            params = Object.assign({}, params, {langid: userData.currentData.selectedLanguageId});
+        }
+    }
+    return params;
+  }
+
+  //* NOTE: USE createQueryParams and getJsonWithParams instead!
+  buildResourseUrl(resourceName: string, params: {} = null, addCustomerId: boolean = true, addLanguage: boolean = false) {
       let urlParams: string = null;
-      const userData = this.localStorageService.getCurrentUser();
+      const paramsOptions = new QueryParamsOptions();
+      paramsOptions.addCustomerId = addCustomerId;
+      paramsOptions.addLanguage = addLanguage;
 
-      if (addCustomerId === true) {
-          if (userData !== null) {
-              params = Object.assign({}, params || {}, {cid: userData.currentData.selectedCustomerId});
-          }
-      }
+      params = this.createQueryParams(params, paramsOptions);
 
-      if (addLanguage === true) {
-          if (userData !== null) {
-              params = Object.assign({}, params || {}, {langid: userData.currentData.selectedLanguageId});
-          }
-      }
-
+      // build resource url with params
       if (params) {
-          const str = Object.keys(params).map(function(key) {
-              return key + '=' + encodeURIComponent(params[key]);
-            }).join('&');
-
-            urlParams = (str.length > 0 && resourceName.indexOf('?') < 0) ? '?' + str : '&' + str;
+        const str = Object.keys(params).map(key => `${key}=${encodeURIComponent(params[key])}`).join('&');
+        urlParams = (str.length && resourceName.indexOf('?') < 0) ? '?' + str : str;
       }
+
+      if (!resourceName.startsWith('/')) {
+        resourceName = '/' + resourceName;
+      }
+
       return `${this.baseApiUrl}${resourceName}${urlParams || ''}`;
   }
 
@@ -160,6 +193,13 @@ export abstract class HttpApiServiceBase {
       return options;
   }
 
+  private getRequestUrl(resourcePath: string) {
+    if (!resourcePath.startsWith('/')) {
+      resourcePath = '/' + resourcePath;
+    }
+    return `${this.baseApiUrl}${resourcePath}`;
+  }
+
   protected addQsParam(qsParamMap: any, paramName: string, customerId: number): any {
       const newQsParams = {...qsParamMap, [paramName]: customerId };
       return newQsParams;
@@ -171,4 +211,5 @@ export abstract class HttpApiServiceBase {
   }
   */
 }
+
 

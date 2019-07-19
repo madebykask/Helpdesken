@@ -5,14 +5,11 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
-using DH.Helpdesk.BusinessData.Models.User;
-using DH.Helpdesk.BusinessData.OldComponents;
-using DH.Helpdesk.Common.Extensions.DateTime;
 using DH.Helpdesk.Common.Extensions.Lists;
-using DH.Helpdesk.Common.Tools;
 using DH.Helpdesk.Common.Types;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Dal.Mappers;
+using DH.Helpdesk.Domain.Cases;
 using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Services.Services.Cache;
 
@@ -34,7 +31,6 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Dal.Repositories;
     using DH.Helpdesk.Dal.Repositories.Cases;
     using DH.Helpdesk.Domain;
-    using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Problems;
     using DH.Helpdesk.Services.BusinessLogic.MailTools.TemplateFormatters;
     using DH.Helpdesk.Services.BusinessLogic.Mappers.Cases;
@@ -43,7 +39,6 @@ namespace DH.Helpdesk.Services.Services
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Case;
     using DH.Helpdesk.Services.BusinessLogic.Specifications.Customers;
     using DH.Helpdesk.Services.Infrastructure.Email;
-    using DH.Helpdesk.Services.Localization;
     using DH.Helpdesk.Services.Services.CaseStatistic;
     using DH.Helpdesk.Services.utils;
     using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
@@ -102,6 +97,7 @@ namespace DH.Helpdesk.Services.Services
         private readonly ITranslateCacheService _translateCacheService;
         private readonly ICaseTypeRepository _caseTypeRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private IEntityToBusinessModelMapper<CaseFilterFavoriteEntity, CaseFilterFavorite> _caseFilterFavoriteToBusinessModelMapper;
 
         public CaseService(
             ICaseRepository caseRepository,
@@ -145,11 +141,13 @@ namespace DH.Helpdesk.Services.Services
             ICustomerRepository customerRepository,
             ICustomerService customerService,
             IDepartmentService departmentService,
+            IEntityToBusinessModelMapper<CaseFilterFavoriteEntity, CaseFilterFavorite> caseFilterFavoriteToBusinessModelMapper,
             IEntityToBusinessModelMapper<CaseHistoryMapperData, CaseHistoryOverview> caseHistoryOverviewMapper,
             ITranslateCacheService translateCacheService,
             ICaseTypeRepository caseTypeRepository,
             ICategoryRepository categoryRepository)
         {
+            _caseFilterFavoriteToBusinessModelMapper = caseFilterFavoriteToBusinessModelMapper;
             _unitOfWork = unitOfWork;
             _caseRepository = caseRepository;
             _caseRepository = caseRepository;
@@ -536,10 +534,22 @@ namespace DH.Helpdesk.Services.Services
         }
 
 
-        public List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId)
+        public List<CaseFilterFavorite> GetMyFavoritesWithFields(int customerId, int userId)
         {
-            var ret = _caseFilterFavoriteRepository.GetUserFavoriteFilters(customerId, userId);
-            return ret;
+            var favorites = 
+                _caseFilterFavoriteRepository.GetUserFavoriteFilters(customerId, userId).ToList();
+
+            var res = favorites.Select(_caseFilterFavoriteToBusinessModelMapper.Map).ToList();
+            return res;
+        }
+
+        public async Task<List<CaseFilterFavorite>> GetMyFavoritesWithFieldsAsync(int customerId, int userId)
+        {
+            var favorites =
+                await _caseFilterFavoriteRepository.GetUserFavoriteFilters(customerId, userId).ToListAsync();
+
+            var res = favorites.Select(_caseFilterFavoriteToBusinessModelMapper.Map).ToList();
+            return res;
         }
 
         public string SaveFavorite(CaseFilterFavorite favorite)
@@ -860,9 +870,9 @@ namespace DH.Helpdesk.Services.Services
                 .Select(o => o.Id)
                 .ToArray();
 
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
+            var timeZone = TimeZoneInfo.FindSystemTimeZoneById(customer.TimeZoneId);
 
-			var workTimeCalcFactory = new WorkTimeCalculatorFactory(
+            var workTimeCalcFactory = new WorkTimeCalculatorFactory(
                 ManualDependencyResolver.Get<IHolidayService>(),
                 customer.WorkingDayStart,
                 customer.WorkingDayEnd,
@@ -886,12 +896,12 @@ namespace DH.Helpdesk.Services.Services
             var c = _caseRepository.GetDetachedCaseById(caseId);
             _caseStatService.UpdateCaseStatistic(c);
 
-			var extraFields = new ExtraFieldCaseHistory
-			{
-				ActionExternalTime = externalTimeToAdd,
-				ActionLeadTime = leadTime - _case.LeadTime,
-				LeadTime = leadTime
-			};
+            var extraFields = new ExtraFieldCaseHistory
+            {
+                ActionExternalTime = externalTimeToAdd,
+                ActionLeadTime = leadTime - _case.LeadTime,
+                LeadTime = leadTime
+            };
 
             SaveCaseHistory(c, userId, adUser, createdByApp, out errors, "", extraFields);
         }

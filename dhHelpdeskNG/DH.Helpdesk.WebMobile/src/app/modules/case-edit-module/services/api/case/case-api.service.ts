@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseEditOutputModel } from '../../../models/case/case-edit-output.model';
 import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/httpServiceBase';
+import { QueryParamsOptions } from 'src/app/modules/shared-module/services/api/query-params-options';
 
 @Injectable({ providedIn: 'root' })
 export class CaseApiService extends HttpApiServiceBase {
@@ -15,13 +16,9 @@ export class CaseApiService extends HttpApiServiceBase {
 
   getCaseData(caseId: number): Observable<any> {
     const userData = this.localStorageService.getCurrentUser();
-    let params = null;
-    if (userData !== null) {
-      params = { sessionId: userData.authData.sessionId };
-    }
-
-    const url = this.buildResourseUrl('/api/case/' + caseId, params, true, true);
-    return this.getJson(url); // TODO: error handling
+    const p = userData !== null ?  { sessionId: userData.authData.sessionId } : null;
+    const params = this.createQueryParams(p, new QueryParamsOptions(true, true));
+    return this.getJsonWithParams('/api/case/' + caseId, params); // TODO: error handling
   }
 
   saveCaseData(data: CaseEditOutputModel): Observable<any> {

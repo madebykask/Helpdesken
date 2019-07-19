@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Mappers;
 using DH.Helpdesk.Domain.Cases;
-using DH.Helpdesk.Dal.Dal;
-using DH.Helpdesk.Domain;
 
- namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
+namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
  {
     
 
@@ -29,18 +25,10 @@ using DH.Helpdesk.Domain;
          }
  
      
-         public List<CaseFilterFavorite> GetUserFavoriteFilters(int customerId, int userId)
+         public IQueryable<CaseFilterFavoriteEntity> GetUserFavoriteFilters(int customerId, int userId)
          {
-             var ret = new List<CaseFilterFavorite>();
-             var entities = Table.Where(f => f.Customer_Id == customerId && f.User_Id == userId).ToList();
-
-             if (entities.Any())
-             {
-                 foreach (var entity in entities)
-                    ret.Add(this._caseFilterFavoriteToBusinessModelMapper.Map(entity));
-             }
-
-             return ret;
+            var entities = Table.Where(f => f.Customer_Id == customerId && f.User_Id == userId);
+             return entities;
          }
 
          public string SaveFavorite(CaseFilterFavorite favorite)

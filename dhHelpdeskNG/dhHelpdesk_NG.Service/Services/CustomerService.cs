@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Data.Entity;
+using System.Threading.Tasks;
 using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.BusinessData.Models.Customer.Input;
@@ -50,6 +51,8 @@ namespace DH.Helpdesk.Services.Services
         void SaveCaseSettingsForNewCustomer(int customerId, int languageId, CaseSettings caseSettings, out IDictionary<string, string> errors);
 
         CustomerDetails GetCustomerDetails(int id);
+        Task<CustomerDetails> GetCustomerDetailsAsync(int id);
+
         ItemOverview GetItemOverview(int customerId);
         CaseDefaultsInfo GetCustomerDefaults(int customerId);
     }
@@ -79,7 +82,6 @@ namespace DH.Helpdesk.Services.Services
             IUserRepository userRepository,
             IUnitOfWork unitOfWork,
             ICaseSettingRepository caseSettingRepository,
-
             ICaseFieldSettingService caseFieldSettingService,
             ISettingService settingService,
             IUserService userService)
@@ -655,20 +657,30 @@ namespace DH.Helpdesk.Services.Services
 
         public CustomerDetails GetCustomerDetails(int id)
         {
-            var customer = 
-                _customerRepository.GetMany(c => c.Id == id).AsQueryable()
+            var customer = GetCustomerDetailsQueryable(id).SingleOrDefault();
+            return customer;
+        }
+
+        public Task<CustomerDetails> GetCustomerDetailsAsync(int id)
+        {
+            var customer = GetCustomerDetailsQueryable(id).SingleOrDefaultAsync();
+            return customer;
+        }
+
+        private IQueryable<CustomerDetails> GetCustomerDetailsQueryable(int id)
+        {
+            return _customerRepository.GetMany(c => c.Id == id).AsQueryable()
                 .Select(c => new CustomerDetails()
                 {
                     Id = c.Id,
                     Name = c.Name,
-                    CustomerID = c.CustomerID, 
+                    CustomerID = c.CustomerID,
                     CustomerNumber = c.CustomerNumber,
                     CustomerGUID = c.CustomerGUID,
                     HelpdeskEmail = c.HelpdeskEmail,
                     CustomerGroup_Id = c.CustomerGroup_Id,
                     Language_Id = c.Language_Id
-                }).SingleOrDefault();
-            return customer;
+                });
         }
 
         public CaseDefaultsInfo GetCustomerDefaults(int customerId)

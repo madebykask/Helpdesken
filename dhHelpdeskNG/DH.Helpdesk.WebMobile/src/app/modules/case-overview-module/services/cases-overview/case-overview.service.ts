@@ -5,6 +5,7 @@ import { HttpApiServiceBase } from 'src/app/modules/shared-module/services/api/h
 import { CasesOverviewFilter } from '../../models/cases-overview/cases-overview-filter.model';
 import { CaseOverviewItem, CaseOverviewColumn } from '../../models/cases-overview/cases-overview-item.model';
 import { LocalStorageService } from 'src/app/services/local-storage';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CasesOverviewService extends HttpApiServiceBase {
@@ -13,8 +14,15 @@ export class CasesOverviewService extends HttpApiServiceBase {
         super(http, localStorageService);
     }
 
-    searchCases(filter: CasesOverviewFilter) {
-        const requestUrl = this.buildResourseUrl('/api/casesoverview/get');
+    searchCasesCount(filter: CasesOverviewFilter): Observable<number> {
+      const requestUrl = this.buildResourseUrl('/api/casesoverview');
+      return this.postJson<any>(requestUrl, filter).pipe(
+          map(data => data && data.count ? +data.count : 0)
+      );
+    }
+
+    searchCases(filter: CasesOverviewFilter): Observable<CaseOverviewItem[]> {
+        const requestUrl = this.buildResourseUrl('/api/casesoverview');
         return this.postJson<any>(requestUrl, filter).pipe(
             //tap(d => console.log('>>searchCases')),
             map(data => {

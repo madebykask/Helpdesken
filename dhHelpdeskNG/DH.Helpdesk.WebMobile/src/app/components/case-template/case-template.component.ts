@@ -4,7 +4,7 @@ import { MbscListviewOptions, MbscListview } from '@mobiscroll/angular';
 import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 import { CaseTemplateModel, CaseTemplateNode, CaseTemplateCategoryNode } from 'src/app/models/caseTemplate/case-template.model';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, distinctUntilChanged, filter } from 'rxjs/operators';
 import { AppStore, AppStoreKeys } from 'src/app/store/app-store';
 
 @Component({
@@ -39,7 +39,9 @@ export class CaseTemplateComponent implements OnInit, OnDestroy {
    if (this.userSettingsService.getUserData().createCasePermission) {
       //load templates from app store - templates are loaded in the footer component first
       this.appStore.select<CaseTemplateModel[]>(AppStoreKeys.Templates).pipe(
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
+        distinctUntilChanged(),
+        filter(Boolean) // aka new Boolean(val) to filter null values
       ).subscribe((items: CaseTemplateModel[]) => {
         //console.log('>>>got templates from store: ' + items.length);
         this.templateNodes = this.processTemplates(items);

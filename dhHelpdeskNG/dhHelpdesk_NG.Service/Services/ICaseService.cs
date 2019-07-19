@@ -138,7 +138,8 @@ namespace DH.Helpdesk.Services.Services
 
         Dictionary<int, string> GetCaseFiles(List<int> caseIds);
 
-        List<CaseFilterFavorite> GetMyFavorites(int customerId, int userId);
+        List<CaseFilterFavorite> GetMyFavoritesWithFields(int customerId, int userId);
+        Task<List<CaseFilterFavorite>> GetMyFavoritesWithFieldsAsync(int customerId, int userId);
 
         string SaveFavorite(CaseFilterFavorite favorite);
 

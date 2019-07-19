@@ -1,28 +1,30 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Case
-{
-    using DH.Helpdesk.BusinessData.Models.Shared;
-    using System;
+﻿using System;
+using System.Collections.Generic;
+using DH.Helpdesk.BusinessData.Models.Shared;
 
+namespace DH.Helpdesk.BusinessData.Models.Case
+{
     public sealed class CaseFilterFavorite
     {
         public CaseFilterFavorite()
         {
-            this.Fields = new CaseFilterFavoriteFields();
-            this.CreatedDate = DateTime.Now;
+            Fields = new CaseFilterFavoriteFields();
+            CreatedDate = DateTime.Now;
         }
 
-        public CaseFilterFavorite(int id, int customerId, int userId, string name, CaseFilterFavoriteFields fields, DateTime? createdDate = null)
+        public CaseFilterFavorite(int id, int customerId, int userId, string name, CaseFilterFavoriteFields fields,
+            DateTime? createdDate = null)
         {
-            this.Id = id;
-            this.CustomerId = customerId;
-            this.UserId = userId;
-            this.Name = name;
-            this.Fields = fields;
+            Id = id;
+            CustomerId = customerId;
+            UserId = userId;
+            Name = name;
+            Fields = fields;
 
             if (createdDate.HasValue)
-                this.CreatedDate = createdDate.Value;
+                CreatedDate = createdDate.Value;
             else
-                this.CreatedDate = DateTime.Now;
+                CreatedDate = DateTime.Now;
         }
 
         public int Id { get; set; }
@@ -31,11 +33,11 @@
 
         public int UserId { get; set; }
 
-        public string Name { get; set; }       
+        public string Name { get; set; }
 
         public CaseFilterFavoriteFields Fields { get; set; }
 
-        public DateTime CreatedDate { get; set; }                
+        public DateTime CreatedDate { get; set; }
     }
 
     public class CaseFilterFavoriteFields
@@ -44,58 +46,58 @@
 
         public CaseFilterFavoriteFields()
         {
-            this.RegionFilter = new SelectedItems();
-            this.DepartmentFilter = new SelectedItems();            
-            this.CaseTypeFilter = new SelectedItems();
-            this.ProductAreaFilter = new SelectedItems();
-            this.WorkingGroupFilter = new SelectedItems();
-            this.ResponsibleFilter = new SelectedItems();
-            this.AdministratorFilter = new SelectedItems();
-            this.PriorityFilter = new SelectedItems();
-            this.StatusFilter = new SelectedItems();
-            this.SubStatusFilter = new SelectedItems();
-            this.RemainingTimeFilter = new SelectedItems();
-            this.ClosingReasonFilter = new SelectedItems();
-            this.RegisteredByFilter = new SelectedItems();
-            this.RegistrationDateFilter = new DateToDate();
-            this.WatchDateFilter = new DateToDate();
-            this.ClosingDateFilter = new DateToDate();            
+            RegionFilter = new SelectedItems();
+            DepartmentFilter = new SelectedItems();
+            CaseTypeFilter = new SelectedItems();
+            ProductAreaFilter = new SelectedItems();
+            WorkingGroupFilter = new SelectedItems();
+            ResponsibleFilter = new SelectedItems();
+            AdministratorFilter = new SelectedItems();
+            PriorityFilter = new SelectedItems();
+            StatusFilter = new SelectedItems();
+            SubStatusFilter = new SelectedItems();
+            RemainingTimeFilter = new SelectedItems();
+            ClosingReasonFilter = new SelectedItems();
+            RegisteredByFilter = new SelectedItems();
+            RegistrationDateFilter = new DateToDate();
+            WatchDateFilter = new DateToDate();
+            ClosingDateFilter = new DateToDate();
         }
 
         public CaseFilterFavoriteFields(
-                    SelectedItems regionFilter,
-                    SelectedItems departmentFilter,                    
-                    SelectedItems caseTypeFilter,
-                    SelectedItems productAreaFilter,
-                    SelectedItems workingGroupFilter,
-                    SelectedItems responsibleFilter,
-                    SelectedItems administratorFilter,
-                    SelectedItems priorityFilter,
-                    SelectedItems statusFilter,
-                    SelectedItems subStatusFilter,
-                    SelectedItems remainingTimeFilter,
-                    SelectedItems closingReasonFilter,
-                    SelectedItems registeredByFilter,
-                    DateToDate registrationDateFilter,
-                    DateToDate watchDateFilter,
-                    DateToDate closingDateFilter)
+            SelectedItems regionFilter,
+            SelectedItems departmentFilter,
+            SelectedItems caseTypeFilter,
+            SelectedItems productAreaFilter,
+            SelectedItems workingGroupFilter,
+            SelectedItems responsibleFilter,
+            SelectedItems administratorFilter,
+            SelectedItems priorityFilter,
+            SelectedItems statusFilter,
+            SelectedItems subStatusFilter,
+            SelectedItems remainingTimeFilter,
+            SelectedItems closingReasonFilter,
+            SelectedItems registeredByFilter,
+            DateToDate registrationDateFilter,
+            DateToDate watchDateFilter,
+            DateToDate closingDateFilter)
         {
-            this.RegionFilter = regionFilter;
-            this.DepartmentFilter = departmentFilter;            
-            this.CaseTypeFilter = caseTypeFilter;
-            this.ProductAreaFilter = productAreaFilter;
-            this.WorkingGroupFilter = workingGroupFilter;
-            this.ResponsibleFilter = responsibleFilter;
-            this.AdministratorFilter = administratorFilter;
-            this.PriorityFilter = priorityFilter;
-            this.StatusFilter = statusFilter;
-            this.SubStatusFilter = subStatusFilter;
-            this.RemainingTimeFilter = remainingTimeFilter;
-            this.RegisteredByFilter = registeredByFilter;
-            this.ClosingReasonFilter = closingReasonFilter;
-            this.RegistrationDateFilter = registrationDateFilter;
-            this.WatchDateFilter = watchDateFilter;
-            this.ClosingDateFilter = closingDateFilter;            
+            RegionFilter = regionFilter;
+            DepartmentFilter = departmentFilter;
+            CaseTypeFilter = caseTypeFilter;
+            ProductAreaFilter = productAreaFilter;
+            WorkingGroupFilter = workingGroupFilter;
+            ResponsibleFilter = responsibleFilter;
+            AdministratorFilter = administratorFilter;
+            PriorityFilter = priorityFilter;
+            StatusFilter = statusFilter;
+            SubStatusFilter = subStatusFilter;
+            RemainingTimeFilter = remainingTimeFilter;
+            RegisteredByFilter = registeredByFilter;
+            ClosingReasonFilter = closingReasonFilter;
+            RegistrationDateFilter = registrationDateFilter;
+            WatchDateFilter = watchDateFilter;
+            ClosingDateFilter = closingDateFilter;
         }
 
         #endregion
@@ -104,7 +106,7 @@
 
         public SelectedItems RegionFilter { get; set; }
 
-        public SelectedItems DepartmentFilter { get; set; }        
+        public SelectedItems DepartmentFilter { get; set; }
 
         public SelectedItems CaseTypeFilter { get; set; }
 
@@ -133,8 +135,31 @@
         public DateToDate WatchDateFilter { get; set; }
 
         public DateToDate ClosingDateFilter { get; set; }
-        
-        #endregion
-    }
 
+        #endregion
+
+        public IDictionary<string, string> ToDictionary()
+        {
+            return new Dictionary<string, string>
+            {
+                [nameof(RegionFilter)] = RegionFilter.GetSelectedStrOrNull(),
+                [nameof(DepartmentFilter)] = DepartmentFilter.GetSelectedStrOrNull(),
+                [nameof(CaseTypeFilter)] = CaseTypeFilter.GetSelectedStrOrNull(),
+                [nameof(ProductAreaFilter)] = ProductAreaFilter.GetSelectedStrOrNull(),
+                [nameof(WorkingGroupFilter)] = WorkingGroupFilter.GetSelectedStrOrNull(),
+                [nameof(ResponsibleFilter)] = ResponsibleFilter.GetSelectedStrOrNull(),
+                [nameof(AdministratorFilter)] = AdministratorFilter.GetSelectedStrOrNull(),
+                [nameof(PriorityFilter)] = PriorityFilter.GetSelectedStrOrNull(),
+                [nameof(StatusFilter)] = StatusFilter.GetSelectedStrOrNull(),
+                [nameof(SubStatusFilter)] = SubStatusFilter.GetSelectedStrOrNull(),
+                [nameof(RemainingTimeFilter)] = RemainingTimeFilter.GetSelectedStrOrNull(),
+                [nameof(ClosingReasonFilter)] = ClosingReasonFilter.GetSelectedStrOrNull(),
+                [nameof(RegisteredByFilter)] = RegisteredByFilter.GetSelectedStrOrNull(),
+                [nameof(RegistrationDateFilter)] = RegistrationDateFilter.GetDateString(),
+                [nameof(WatchDateFilter)] = WatchDateFilter.GetDateString(),
+                [nameof(ClosingDateFilter)] = ClosingDateFilter.GetDateString()
+            };
+        }
+
+    }
 }

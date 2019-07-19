@@ -10,7 +10,7 @@ import { AuthenticationStateService } from 'src/app/services/authentication';
 import { LocalStorageService } from 'src/app/services/local-storage';
 import { CaseDataStore } from '../../logic/case-edit/case-data.store';
 import { CaseEditDataHelper } from '../../logic/case-edit/case-editdata.helper';
-import { CaseFieldsNames, CasesSearchType } from 'src/app/modules/shared-module/constants';
+import { CaseFieldsNames } from 'src/app/modules/shared-module/constants';
 import { CaseLockApiService } from '../../services/api/case/case-lock-api.service';
 import { CaseSaveService } from '../../services/case';
 import { CaseSectionType, CaseAccessMode, CaseEditInputModel, CaseSectionInputModel,
@@ -154,7 +154,6 @@ export class CaseEditComponent {
       const caseLock$ = this.caseLockApiService.acquireCaseLock(caseId, sessionId);
       const caseSections$ = this.caseService.getCaseSections(); // TODO: error handling
 
-      // todo: apply search type (all, my cases)
       const caseData$ =
           this.caseService.getCaseData(caseId)
               .pipe(
@@ -200,9 +199,8 @@ export class CaseEditComponent {
       if (url == null) { return; }
       of(true).pipe(
         delay(200),
-        map(() => this.router.navigate([url])),
         take(1)
-      ).subscribe();
+      ).subscribe(() => this.router.navigate([url]));
     }
 
     getSectionHeader(type: CaseSectionType): string {
@@ -234,15 +232,8 @@ export class CaseEditComponent {
       });
     }
 
-    goToCases() {
-      const res = this.localStorage.getCaseSearchState();
-      let searchType: string;
-      if (res) {
-        searchType = CasesSearchType[res.SearchType];
-      } else {
-        searchType = CasesSearchType[CasesSearchType.AllCases];
-      }
-      this.navigate('/casesoverview/' + searchType);
+    private goToCases() {
+      this.navigate('/casesoverview/');
     }
 
     cleanTempFiles(caseId: number) {

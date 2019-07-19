@@ -6343,7 +6343,7 @@ namespace DH.Helpdesk.Web.Controllers
         private List<MyFavoriteFilterJSModel> GetMyFavorites(int customerId, int userId)
         {
             var ret = new List<MyFavoriteFilterJSModel>();
-            var favorites = this._caseService.GetMyFavorites(customerId, userId);
+            var favorites = this._caseService.GetMyFavoritesWithFields(customerId, userId);
             if (favorites.Any())
             {
                 foreach (var favorite in favorites)
