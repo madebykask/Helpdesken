@@ -13,7 +13,7 @@ import { DateTime } from 'luxon';
 import { TranslateService } from '@ngx-translate/core';
 import { CaseRouteReuseStrategy } from 'src/app/helpers/case-route-resolver.stategy';
 import { SearchFilterService } from '../../services/cases-overview/search-filter.service';
-import { AppStore } from 'src/app/store';
+import { AppStore, AppStoreKeys } from 'src/app/store';
 
 @Component({
   selector: 'app-cases-overview',
@@ -31,6 +31,7 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
   private defaultHeaderText = this.ngxTranslateService.instant('Ärendeöversikt');
   private pageSize = 10;
 
+  stateFilterId = 0;
   headerText: string;
   DateTime: DateTime;
   showSearchPanel = false;
@@ -79,21 +80,26 @@ export class CasesOverviewComponent implements OnInit, OnDestroy {
     //get filterId from local storage
     const filterId = this.searchFilterService.getFilterIdFromState();
 
-    if (filterId > 0) {
-      //set header text
-      //console.log('>> caseOverview: reading filters from state');
+    if (filterId !== CaseStandardSearchFilters.AllCases) {
+      // verify if state filterId is valid and reset if not. We do this in ctor be onInit to ensure correct filterId for cases-filter presentation component.
+      console.log('>> caseOverview: reading filters from state');
       const favoriteFilter = this.appStore.state.favFilters.filter(f => f.id === filterId);
       if (favoriteFilter && favoriteFilter.length) {
         this.headerText = favoriteFilter[0].name;
+        this.stateFilterId = filterId;
         this.selectedFilterId = filterId;
       }
+      this.searchFilterService.saveFilterIdToState(this.stateFilterId);
     }
+
+    // run cases search
     this.runNewSearch();
   }
 
   processFilterChanged(filterChangeArg) {
     this.selectedFilterId = +filterChangeArg.filterId;
     this.headerText = filterChangeArg.filterName ? filterChangeArg.filterName : this.defaultHeaderText;
+    this.searchFilterService.saveFilterIdToState(this.selectedFilterId);
     this.runNewSearch();
   }
 

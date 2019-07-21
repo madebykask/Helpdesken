@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest } from '@angular/common/http';
-import { finalize, switchMap, take } from 'rxjs/operators';
+import { finalize, switchMap, take, catchError, map } from 'rxjs/operators';
 import { LocalStorageService } from '../../services/local-storage';
 import { AuthenticationApiService } from '../api/authentication/authentication-api.service';
 import { UserSettingsApiService } from 'src/app/services/api/user/user-settings-api.service';
 import { InfoLoggerService } from '../logging/info-logger.service';
 import { CommunicationService, Channels } from '../communication';
 import { AuthenticationStateService } from './authentication-state.service';
-import { throwError, Observable } from 'rxjs';
+import { throwError, Observable, of } from 'rxjs';
 import { CurrentUser } from 'src/app/models';
+import { ErrorHandlingService } from '../logging';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -16,6 +17,7 @@ export class AuthenticationService {
     //ctor()
     constructor(protected localStorageService: LocalStorageService,
       private logger: InfoLoggerService,
+      private errorHandlingService: ErrorHandlingService,
       private authStateService: AuthenticationStateService,
       private authApiService: AuthenticationApiService,
       private userSettingsApiService: UserSettingsApiService,
@@ -35,13 +37,29 @@ export class AuthenticationService {
           );
     }
 
-    refreshToken() {
+    refreshToken(): Observable<boolean> {
         const user = this.authStateService.getUser();
-        return this.authApiService.refreshToken(user)
-          .pipe(
+        if (user && user.authData && user.authData.refresh_token) {
+          return this.authApiService.refreshToken(user.authData.refresh_token).pipe(
+            take(1),
+            map(data => {
+                user.authData.access_token = data.access_token;
+                user.authData.expires_in = Number(data.expires_in);
+                user.authData.recievedAt = new Date();
+                this.localStorageService.setCurrentUser(user);
+                this.commService.publish(Channels.UserLoggedIn, user);
+                return true;
+            }),
+            catchError(err => {
+                this.errorHandlingService.handleError(err, 'Refresh token error.');
+                return of(false);
+            }),
             // tap(() => this._logger.log(`Refresh token action.`)),
             finalize(() => this.raiseAuthenticationChanged())
           );
+        } else {
+          return of(false);
+        }
     }
 
     logout() {

@@ -36,7 +36,7 @@ export enum Channels {
     AuthenticationChange,
     CaseFieldValueChanged,
     CaseSearchFilterChanged,
-    LoginComplete
+    UserLoggedIn
 }
 
 export class CaseSearchFilterChangedEvent {

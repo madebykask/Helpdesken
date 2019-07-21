@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { take, filter, distinctUntilChanged, takeUntil, delay, switchMap, map } from 'rxjs/operators';
+import { take, filter, distinctUntilChanged, takeUntil, delay, switchMap, map, share } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MbscListviewOptions } from '@mobiscroll/angular';
 import { SearchFilterService } from 'src/app/modules/case-overview-module/services/cases-overview/search-filter.service';
@@ -56,7 +56,7 @@ export class CasesStatusComponent implements OnInit {
   ngOnInit() {
     const selectedCustomerId = +this.localStorageService.getCurrentUser().currentData.selectedCustomerId;
     if (selectedCustomerId) {
-      this.customer$ = this.customerApiService.getCustomer(selectedCustomerId);
+      this.customer$ = this.customerApiService.getCustomer(selectedCustomerId).pipe(share());
     }
 
     //load search filters

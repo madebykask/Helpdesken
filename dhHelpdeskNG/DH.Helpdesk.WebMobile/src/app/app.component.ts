@@ -46,7 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     // also subscribe to the login event to reload state on new login
-    this.communicationService.listen<CurrentUser>(Channels.LoginComplete)
+    this.communicationService.listen<CurrentUser>(Channels.UserLoggedIn)
       .pipe(
         takeUntil(this.destroy$)
       )

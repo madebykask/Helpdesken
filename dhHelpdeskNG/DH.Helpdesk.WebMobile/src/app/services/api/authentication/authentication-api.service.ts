@@ -1,11 +1,11 @@
 import { HttpApiServiceBase } from '../../../modules/shared-module/services/api/httpServiceBase';
 import { Injectable } from '@angular/core';
 import { config } from '@env/environment';
-import { take, map, catchError } from 'rxjs/operators';
+import { take, map } from 'rxjs/operators';
 import { CurrentUser } from 'src/app/models';
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from '../../local-storage';
-import { of, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ErrorHandlingService } from '../../logging/error-handling.service';
 
 @Injectable({ providedIn: 'root' })
@@ -39,27 +39,11 @@ export class AuthenticationApiService extends HttpApiServiceBase {
             }));
   }
 
-  refreshToken(user: CurrentUser): Observable<boolean> {
-    if (user && user.authData && user.authData.refresh_token) {
-        const refreshToken = user.authData.refresh_token;
-        const clientId = config.clientId;
-        return this.postJson<any>(this.buildResourseUrl('/api/account/refresh', undefined, false), { refreshToken, clientId })
-            .pipe(
-                take(1),
-                map(data => {
-                    user.authData.access_token = data.access_token;
-                    user.authData.expires_in = Number(data.expires_in);
-                    user.authData.recievedAt = new Date();
-                    this.localStorageService.setCurrentUser(user);
-                    return true;
-                }),
-                catchError(err => {
-                    this.errorHandlingService.handleError(err, 'Refresh token error.');
-                    return of(false);
-                }),
-            );
-    } else {
-      return of(false);
-    }
+  refreshToken(refreshToken: string): Observable<any> {
+      const params = {
+        refreshToken: refreshToken,
+        clientId: config.clientId
+      };
+      return this.postJson<any>(this.buildResourseUrl('/api/account/refresh', null, false), params);
   }
 }

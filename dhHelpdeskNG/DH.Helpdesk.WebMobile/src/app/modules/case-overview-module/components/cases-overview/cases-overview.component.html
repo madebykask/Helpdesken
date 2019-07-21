@@ -13,7 +13,7 @@
                   </div>
                   <div class="mbsc-row" *ngIf="!showSearchPanel">
                       <div class="mbsc-col-sm-auto nopadding">
-                          <cases-filter (filterChanged)="processFilterChanged($event)"></cases-filter>
+                          <cases-filter [initialFilterId]="stateFilterId" (filterChanged)="processFilterChanged($event)"></cases-filter>
                       </div>
                       <div class="mbsc-col center bold">{{ headerText }}</div>
                       <div class="mbsc-col-sm-auto">

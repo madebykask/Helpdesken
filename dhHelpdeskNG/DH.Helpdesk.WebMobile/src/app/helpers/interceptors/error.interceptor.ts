@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from '../../services/authentication';
 import { Observable, throwError, BehaviorSubject, EMPTY } from 'rxjs';
-import { catchError, switchMap, filter, take, retry } from 'rxjs/operators';
+import { catchError, switchMap, filter, take, retry, takeWhile } from 'rxjs/operators';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -49,11 +49,16 @@ export class ErrorInterceptor implements HttpInterceptor {
       // If refreshTokenInProgress is true, we will wait until refreshTokenSubject has a non-null value
       // – which means the new token is ready and we can retry the request again
       return this.refreshTokenSubject.pipe(
+          takeWhile(() => this.refreshTokenInProgress),
           filter(result => result !== null),
-          take(1),
-          switchMap(() => next.handle(this.authenticationService.setAuthHeader(request)))
+          switchMap((res: boolean) => {
+            if (res === true) {
+              return next.handle(this.authenticationService.setAuthHeader(request));
+            } else {
+              return EMPTY;
+            }
+          })
         );
-      //.subscribe(()=> { return next.handle(this.authenticationService.setAuthHeader(request)) });
     } else {
       this.refreshTokenInProgress = true;
 

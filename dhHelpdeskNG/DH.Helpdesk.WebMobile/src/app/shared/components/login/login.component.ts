@@ -91,7 +91,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.authenticationService.login(this.f.username.value, this.f.password.value).pipe(
           take(1),
           switchMap(currentUser => {
-            this.communicationService.publish(Channels.LoginComplete, currentUser);
+            this.communicationService.publish(Channels.UserLoggedIn, currentUser);
             return this.userSettingsService.applyUserSettings();
           }),
           finalize(() => this.isLoading = false)

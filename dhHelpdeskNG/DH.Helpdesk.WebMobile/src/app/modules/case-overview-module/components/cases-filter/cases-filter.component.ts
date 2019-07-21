@@ -1,12 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { LocalStorageService } from 'src/app/services/local-storage';
 import { FilterMenuItemModel } from '../../models/cases-overview/filter-menu-item-model';
 import { FavoriteFilterModel } from '../../models/cases-overview/favorite-filter.model';
 import { takeUntil, distinctUntilChanged, filter } from 'rxjs/operators';
 import { AppStore, AppStoreKeys } from 'src/app/store';
 import { Subject } from 'rxjs';
-import { SearchFilterService } from '../../services/cases-overview/search-filter.service';
 import { CaseStandardSearchFilters } from '../../models/cases-overview/enums';
 
 @Component({
@@ -16,6 +14,7 @@ import { CaseStandardSearchFilters } from '../../models/cases-overview/enums';
 })
 export class CasesFilterComponent implements OnInit {
 
+  @Input() initialFilterId = 0;
   @Output() filterChanged: EventEmitter<any> = new EventEmitter<any>();
 
   filterMenuOptions = {
@@ -32,22 +31,8 @@ export class CasesFilterComponent implements OnInit {
 
   menuItems: FilterMenuItemModel[] = [];
 
-  get filterName() {
-    const sel = this.getSelectedItem();
-    return sel ? sel.text : null;
-  }
-
   get isFilterApplied() {
     return this.menuItems.some(x => x.selected);
-  }
-
-  get selectedFilter(): FavoriteFilterModel {
-    const selectedFilterMenuItem = this.getSelectedItem();
-    if (selectedFilterMenuItem && selectedFilterMenuItem.id) {
-      const res = this.favoriteFilters.filter(f => f.id === selectedFilterMenuItem.id);
-      return res && res.length ? res[0] : null;
-    }
-    return null;
   }
 
   private favoriteFilters: FavoriteFilterModel[] = [];
@@ -55,13 +40,12 @@ export class CasesFilterComponent implements OnInit {
   private destroy$ = new Subject<any>();
 
   constructor(private appStore: AppStore,
-              private searchFilterService: SearchFilterService,
               private translateService: TranslateService) {
   }
 
   ngOnInit() {
-    //get selected filter state from local storage
-    this.filterId = this.searchFilterService.getFilterIdFromState();
+    //console.log('>> casesFilter: ngOnInit');
+    this.filterId = this.initialFilterId;
 
     // loading filters from app store state
     this.appStore.select<FavoriteFilterModel[]>(AppStoreKeys.FavoriteFilters).pipe(
@@ -81,11 +65,6 @@ export class CasesFilterComponent implements OnInit {
         ? this.favoriteFilters.map(f =>
             new FilterMenuItemModel(f.id, this.translateService.instant(f.name), this.filterId && f.id === this.filterId))
         : [];
-
-    // update filter state - prev selected filter could be deleted or incorrect...
-    const selectedFilter = this.getSelectedItem();
-    this.filterId = selectedFilter ? selectedFilter.id : +CaseStandardSearchFilters.AllCases;
-    this.searchFilterService.saveFilterIdToState(this.filterId);
   }
 
   applyFilter(selectedFilterId: number) {
@@ -98,10 +77,6 @@ export class CasesFilterComponent implements OnInit {
     } else {
       this.filterId = +CaseStandardSearchFilters.AllCases;
     }
-
-    // save to storage
-    this.searchFilterService.saveFilterIdToState(this.filterId);
-
     this.raiseFilterChanged(selectedItem);
   }
 
@@ -109,20 +84,12 @@ export class CasesFilterComponent implements OnInit {
     if (selectedItem && selectedItem.selected) {
       this.filterChanged.emit({ filterId: selectedItem.id, filterName: selectedItem.text });
     } else {
-      this.filterChanged.emit({ filterId: +CaseStandardSearchFilters.AllCases, filterName: null }); 
+      this.filterChanged.emit({ filterId: +CaseStandardSearchFilters.AllCases, filterName: null });
     }
   }
 
   private findItem(itemId: number) {
     const res = this.menuItems.filter(x => x.id === itemId);
-    if (res && res.length) {
-      return res[0];
-    }
-    return null;
-  }
-
-  private getSelectedItem(): FilterMenuItemModel {
-    const res = this.menuItems.filter(x => x.selected === true);
     if (res && res.length) {
       return res[0];
     }
