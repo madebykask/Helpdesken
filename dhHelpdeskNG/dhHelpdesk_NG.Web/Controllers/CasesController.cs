@@ -12,6 +12,7 @@ using DH.Helpdesk.BusinessData.Models.ExternalInvoice;
 using DH.Helpdesk.BusinessData.Models.Logs;
 using DH.Helpdesk.Common.Constants;
 using DH.Helpdesk.Common.Enums.Cases;
+using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Enums.Settings;
 using DH.Helpdesk.Common.Exceptions;
 using DH.Helpdesk.Services.Services.Cases;
@@ -2151,11 +2152,14 @@ namespace DH.Helpdesk.Web.Controllers
 
 
         [HttpGet]
-        public ActionResult LogFiles(string id, int? caseId = null)
+        public ActionResult LogFiles(string id, LogFileType logType, int? caseId = null)
         {
+            //todo: add check to ensure that users will not be able to request action without required rights!
+            var subTopic = logType == LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log;
+
             var files = GuidHelper.IsGuid(id)
-                                ? _userTemporaryFilesStorage.FindFileNames(id, ModuleName.Log)
-                                : _logFileService.FindFileNamesByLogId(int.Parse(id));
+                            ? _userTemporaryFilesStorage.FindFileNames(id, subTopic)
+                            : _logFileService.FindFileNamesByLogId(int.Parse(id), logType);
 
             var existingFiles = new List<LogFileModel>();
             if (caseId.HasValue && caseId.Value > 0)
@@ -2170,10 +2174,8 @@ namespace DH.Helpdesk.Web.Controllers
                     ObjId = x.LogId ?? x.CaseId
                 }).ToList();
             }
-            existingFiles.AddRange(files.Select(x => new LogFileModel
-            {
-                Name = x
-            }));
+
+            existingFiles.AddRange(files.Select(x => new LogFileModel { Name = x }));
 
             var customerId = 0;
 
@@ -2182,9 +2184,11 @@ namespace DH.Helpdesk.Web.Controllers
                 var logCaseId = _logService.GetLogById(int.Parse(id)).CaseId;
                 customerId = _caseService.GetCaseById(logCaseId).Customer_Id;
             }
+
             var useVd = customerId != 0 && !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId));
 
             var model = new FilesModel(id, existingFiles, useVd);
+
             return PartialView("_CaseLogFiles", model);
         }
 
@@ -2226,21 +2230,23 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         [HttpPost]
-        public void UploadLogFile(string id, string name)
+        public void UploadLogFile(string id, string name, int logType = 0)
         {
-            var uploadedFile = this.Request.Files[0];
+            var uploadedFile = Request.Files[0];
             var uploadedData = new byte[uploadedFile.InputStream.Length];
             uploadedFile.InputStream.Read(uploadedData, 0, uploadedData.Length);
 
             if (GuidHelper.IsGuid(id))
             {
-                if (this._userTemporaryFilesStorage.FileExists(name, id, ModuleName.Log))
+                var subTopic = logType == (int) LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log;
+
+                if (_userTemporaryFilesStorage.FileExists(name, id, subTopic))
                 {
                     //return;
                     //this.userTemporaryFilesStorage.DeleteFile(name, id, ModuleName.Log); 
                     //throw new HttpException((int)HttpStatusCode.Conflict, null); because it take a long time.
                 }
-                this._userTemporaryFilesStorage.AddFile(uploadedData, name, id, ModuleName.Log);
+                _userTemporaryFilesStorage.AddFile(uploadedData, name, id, subTopic);
             }
         }
 
@@ -3522,8 +3528,10 @@ namespace DH.Helpdesk.Web.Controllers
 
             // save log
             var temporaryLogFiles = _userTemporaryFilesStorage.FindFiles(caseLog.LogGuid.ToString(), ModuleName.Log);
+            var temporaryLogInternalFiles = _userTemporaryFilesStorage.FindFiles(caseLog.LogGuid.ToString(), ModuleName.LogInternal);
+
             var temporaryExLogFiles = _logFileService.GetExistingFileNamesByCaseId(case_.Id);
-            var logFileCount = temporaryLogFiles.Count + temporaryExLogFiles.Count;
+            var logFileCount = temporaryLogFiles.Count + temporaryExLogFiles.Count + temporaryLogInternalFiles.Count;
             caseLog.CaseId = case_.Id;
             caseLog.CaseHistoryId = caseHistoryId;
 
@@ -3580,10 +3588,21 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, this._workContext.User.UserId)).ToList();
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, _workContext.User.UserId, LogFileType.External)).ToList();
+            if (temporaryLogInternalFiles.Any())
+            {
+                var internalLogFiles = temporaryLogInternalFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, _workContext.User.UserId, LogFileType.Internal)).ToList();
+                newLogFiles.AddRange(internalLogFiles);
+            }
+
             _logFileService.AddFiles(newLogFiles, temporaryExLogFiles, caseLog.Id);
 
-            var allLogFiles = temporaryExLogFiles.Select(x => new CaseFileDto(basePath, x.Name, x.IsExistCaseFile ? Convert.ToInt32(case_.CaseNumber) : x.LogId.Value, x.IsExistCaseFile)).ToList();
+            var allLogFiles = 
+                temporaryExLogFiles.Select(x => 
+                    new CaseLogFileDto(basePath, 
+                        x.Name, 
+                        x.IsExistCaseFile ? Convert.ToInt32(case_.CaseNumber) : x.LogId.Value, 
+                        x.IsExistCaseFile)).ToList();
             allLogFiles.AddRange(newLogFiles);
             
             #endregion
@@ -3920,7 +3939,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             byte[] fileContent;
 
-            var newCaseFiles = new List<CaseFileDto>();
+            var newCaseFiles = new List<CaseLogFileDto>();
             var exFiles = new List<LogExistingFileModel>();
             foreach (var file in logFiles)
             {
@@ -3951,8 +3970,8 @@ namespace DH.Helpdesk.Web.Controllers
                     }
                     else
                     {
-                        fileContent = this._logFileService.GetFileContentByIdAndFileName(caseLog.OldLog_Id.Value, basePath, file.Name);
-                        var logNoteFile = new CaseFileDto(fileContent, basePath, file.Name, DateTime.UtcNow, caseLog.Id, this._workContext.User.UserId);
+                        fileContent = _logFileService.GetFileContentByIdAndFileName(caseLog.OldLog_Id.Value, basePath, file.Name);
+                        var logNoteFile = new CaseLogFileDto(fileContent, basePath, file.Name, DateTime.UtcNow, caseLog.Id, this._workContext.User.UserId, LogFileType.External); //TODO: check LogType value
                         newCaseFiles.Add(logNoteFile);
                     }
                 }
@@ -3960,7 +3979,7 @@ namespace DH.Helpdesk.Web.Controllers
             _logFileService.AddFiles(newCaseFiles, exFiles, caseLog.Id);
 
             // send emails
-            this._caseService.SendCaseEmail(oldCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, null, currentLoggedInUser);
+            _caseService.SendCaseEmail(oldCase.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, null, currentLoggedInUser);
         }
         #endregion
 
@@ -4652,6 +4671,7 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseFileNames = GetCaseFileNames(caseId);
             m.LogFileNames = m.CaseFileNames;
 
+            m.EnableTwoAttachments = true; //TODO: replace with settings
             m.ActiveTab = activeTab;
 
             // Computer user categories
@@ -7210,8 +7230,8 @@ namespace DH.Helpdesk.Web.Controllers
                 foreach (var pos in Enumerable.Range(0, count))
                 {
                     var fileName = $"file_{Guid.NewGuid()}";
-                    var logFile = new CaseFileDto(dummyContent, basePath, fileName, DateTime.UtcNow, lastLogNote.Id, this._workContext.User?.UserId);
-                    this._logFileService.AddFile(logFile);
+                    var logFile = new CaseLogFileDto(dummyContent, basePath, fileName, DateTime.UtcNow, lastLogNote.Id, _workContext.User?.UserId, LogFileType.External);
+                    _logFileService.AddFile(logFile);
                 }
             }
             catch (Exception ex)

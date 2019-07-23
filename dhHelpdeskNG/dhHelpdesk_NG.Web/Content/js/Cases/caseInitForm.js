@@ -891,9 +891,11 @@ function setPcNumber(userId)
 /**
 * Initializator for case edit form
 */
-function CaseInitForm() {
+function CaseInitForm(opt) {
 
-    
+    var self = this;
+    var options = opt || { twoAttacmentsMode: false }; // TODO: update ctor usages to pass options obj
+    var twoAttachmentsMode = true; //TODO: init from windows parameters
 
     $('#CaseLog_TextExternal').focus(function () {
         CaseWriteTextToLogNote('');
@@ -1512,14 +1514,28 @@ function CaseInitForm() {
         });
     };
 
-    var getLogFiles = function () {
-        $.get('/Cases/LogFiles', { id: $('#LogKey').val(), now: Date.now(), caseId: $("#case__Id").val() }, function (data) {
-            $('#divCaseLogFiles').html(data);
-            // Raise event about rendering of uploaded file
-            $(document).trigger("OnUploadedCaseLogFileRendered", []);
+    var getLogFiles= function (isInternal) {
+        const params = {
+            id: $('#LogKey').val(),
+            now: Date.now(),
+            caseId: $("#case__Id").val(),
+            logType: twoAttachmentsMode === true? isInternal ? 1 : 0 : -1 //pass -1 if two attachment feature is disabled
+        };
+
+        $.get('/Cases/LogFiles', $.param(params), function (data) {
+            var $divOutput;
+            if (twoAttachmentsMode === true) {
+                $divOutput = isInternal ? $('div.internalLog-files') : $('div.externalLog-files');
+            } else {
+                $divOutput = $('#divCaseLogFiles');
+            }
+            $divOutput.html(data);
+            $(document).trigger("OnUploadedCaseLogFileRendered", []); //TODO: check usages - internal/external log!
+            //todo: fix internal/external log!
             bindDeleteLogFileBehaviorToDeleteButtons();
         });
     };
+
     var getFileName = function (fileName) {
         var strFiles = $('#CaseFileNames').val();
         var allFileNames = strFiles.split('|');
@@ -1547,6 +1563,7 @@ function CaseInitForm() {
         $('#CaseFileNames').val(strFiles + "|" + fileName);
         return fileName;
     }
+
     function ClipboardClass() {
         var self = this;
         var ctrlPressed = false;
@@ -1566,6 +1583,7 @@ function CaseInitForm() {
         }
         
         //constructor - prepare
+        //TODO: pass LogType if used for log files upload
         this.init = function (src) {
             source = src;
 
@@ -1721,7 +1739,9 @@ function CaseInitForm() {
             } else {
                 key = $('#LogKey').val();
                 submitUrl = '/Cases/UploadLogFile';
-                refredhCallback = getLogFiles;
+                refredhCallback = function() {
+                    getLogFiles(true); //TODO: update to use correct log type!
+                }
             }
 
             if (imgFilename.length === 0) {
@@ -1764,6 +1784,36 @@ function CaseInitForm() {
 
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    ////////  Attachments /////////////////////////////////////////////////////
+
+    
+    ////////  Clipboard ///////////////////////////////////////////////////////
+    $('#upload_clipboard_file_popup').on('hide', function () {
+        $("#previewPnl").empty();
+        var $uploadModal = $('#upload_clipboard_file_popup');
+        var $btnSave = $uploadModal.find('#btnSave');
+        $btnSave.hide();
+        $btnSave.off('click');
+        $uploadModal.find("input").val('');
+        var clipboard = new ClipboardClass();
+        clipboard.reset();
+    });
+
+    $("a[href='#upload_clipboard_file_popup']").on('click', function (e) {
+        var $src = $(this);
+        var $target = $('#upload_clipboard_file_popup');
+        $target.attr('data-src', $src.attr('data-src'));
+        $target.modal('show');
+    });
+
+    $('#upload_clipboard_file_popup').on('show', function (e) {
+        var clipboard = new ClipboardClass();
+        clipboard.init.call(clipboard, $(e.target).attr('data-src'));
+    });
+
+    ////////  File Upload (PLUPLOAD) //////////////////////////////////////////
     var _plupload;
 
     $('#upload_files_popup, #upload_logfiles_popup').on('hide', function () {
@@ -1780,31 +1830,12 @@ function CaseInitForm() {
             }
         }
     });
-    $('#upload_clipboard_file_popup').on('hide', function() {
-        $("#previewPnl").empty();
-        var $uploadModal = $('#upload_clipboard_file_popup');
-        var $btnSave = $uploadModal.find('#btnSave');
-        $btnSave.hide();
-        $btnSave.off('click');
-        $uploadModal.find("input").val('');
-        var clipboard = new ClipboardClass();
-        clipboard.reset();
-    });
-    $("a[href='#upload_clipboard_file_popup']").on('click', function (e) {
-        var $src = $(this);
-        var $target = $('#upload_clipboard_file_popup');
-        $target.attr('data-src', $src.attr('data-src'));
-        $target.modal('show');
-    });
-    $('#upload_clipboard_file_popup').on('show', function (e) {
-        var clipboard = new ClipboardClass();
-        clipboard.init.call(clipboard, $(e.target).attr('data-src'));
-    });
    
-
     PluploadTranslation($('#CurLanguageId').val());
 
     var newFileName = "";
+    
+    // case files upload
     $('#upload_files_popup').on('show', function () {
         _plupload = $('#file_uploader').pluploadQueue({
             runtimes: 'html5,html4',
@@ -1855,12 +1886,28 @@ function CaseInitForm() {
 
     PluploadTranslation($('#CurLanguageId').val());
 
-    $('#upload_logfiles_popup').on('show', function () {
+    $("a.logfiles_upload").on('click', function(e) {
+        const logType = $(this).data('logtype');
+        const $target = $('#upload_logfiles_popup');
+        $target.data('src', logType || '');
+        $target.modal('show');
+    });
+
+    
+
+    //log files upload
+    $('#upload_logfiles_popup').on('show', function (e) {
+        const isInternalLog = $(e.target).data('src') === 'internalLog';
+        console.log('internal log was clicked: %s', isInternalLog);
+
         _plupload = $('#logfile_uploader').pluploadQueue({
             runtimes: 'html5,html4',
             url: '/Cases/UploadLogFile',
-
-            multipart_params: { id: $('#LogKey').val() },
+            // pass addition params
+            multipart_params: {
+                id: $('#LogKey').val(),
+                logType: isInternalLog ? 1 : 0
+            },
             filters: {
                 max_file_size: '30mb',
             },
@@ -1872,7 +1919,8 @@ function CaseInitForm() {
 
                 UploadFile: function (up, file) {
                     //log('[UploadFile]', file);
-                    var strFiles = $('#LogFileNames').val();
+                    const $logFileNames = isInternalLog ? $('.internalLog-files').find('#LogFileNames') : $('#LogFileNames');
+                    var strFiles = $logFileNames.val(); 
                     var allFileNames = strFiles.split('|');
 
                     var fn = file.name;
@@ -1895,7 +1943,8 @@ function CaseInitForm() {
                         }
                     } // for i
 
-                    $('#LogFileNames').val(strFiles + "|" + file.name);
+                    //TODO: check if its a internal or external log file upload
+                    $logFileNames.val(strFiles + "|" + file.name);
                 },
 
                 UploadComplete: function (up, file) {
@@ -1909,7 +1958,7 @@ function CaseInitForm() {
             },
             init: {
                 FileUploaded: function () {
-                    getLogFiles();
+                    getLogFiles.call(self, isInternalLog);
                 },
 
                 Error: function (uploader, e) {
@@ -1927,7 +1976,7 @@ function CaseInitForm() {
             }
         });
     });
-
+    ////////  File Upload: END /////////////////////////////////////////////////////
     if (window.LogInitForm != null) {
         LogInitForm();
     }

@@ -6,6 +6,7 @@ using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.Common.Enums.Logs;
 
 
 namespace DH.Helpdesk.Dal.Repositories
@@ -82,7 +83,7 @@ namespace DH.Helpdesk.Dal.Repositories
         LogFile GetDetails(int id);
         LogFileContent GetFileContent(int logFileId, string basePath);
         byte[] GetFileContentByIdAndFileName(int caseId, string basePath, string fileName);
-        List<string> FindFileNamesByLogId(int logId);
+        List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External);
         List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId);
         List<LogFile> GetLogFilesByCaseId(int caseId);
         List<LogFile> GetLogFilesByLogId(int logId);
@@ -143,9 +144,9 @@ namespace DH.Helpdesk.Dal.Repositories
             return this._filesStorage.GetFileContent(ModuleName.Cases, Convert.ToInt32(caseNumber), basePath, fileName);
         }
 
-        public List<string> FindFileNamesByLogId(int logId)
+        public List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External)
         {
-            return this.DataContext.LogFiles.Where(f => f.Log_Id == logId).Select(f => f.FileName).ToList();
+            return DataContext.LogFiles.Where(f => f.Log_Id == logId).Select(f => f.FileName).ToList();
         }
 
         public List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId)

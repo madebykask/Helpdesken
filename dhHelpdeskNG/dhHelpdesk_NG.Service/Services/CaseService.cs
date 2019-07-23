@@ -1071,7 +1071,7 @@ namespace DH.Helpdesk.Services.Services
 
         public void ExecuteBusinessActions(List<BusinessRuleActionModel> actions, Case currentCase, CaseLog log, TimeZoneInfo userTimeZone,
                                            int caseHistoryId, string basePath, int currentLanguageId, CaseMailSetting caseMailSetting,
-                                           List<CaseFileDto> logFiles = null)
+                                           List<CaseLogFileDto> logFiles = null)
         {
             foreach (var action in actions)
             {
@@ -1295,7 +1295,7 @@ namespace DH.Helpdesk.Services.Services
 
         private void DoAction_SendEmail(BusinessRuleActionModel action, Case currentCase, CaseLog log, TimeZoneInfo userTimeZone,
                                         int caseHistoryId, string basePath, int currentLanguageId, CaseMailSetting caseMailSetting,
-                                        List<CaseFileDto> logFiles = null)
+                                        List<CaseLogFileDto> logFiles = null)
         {
             var customerId = currentCase.Customer_Id;
             var customerSettings = _settingService.GetCustomerSetting(customerId);

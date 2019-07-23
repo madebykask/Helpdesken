@@ -1,27 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Logs;
+using DH.Helpdesk.Common.Enums.Logs;
+using DH.Helpdesk.Dal.Enums;
+using DH.Helpdesk.Dal.Infrastructure;
+using DH.Helpdesk.Dal.Repositories;
+using DH.Helpdesk.Domain;
 
 namespace DH.Helpdesk.Services.Services
 {
-    using System.Collections.Generic;
-
-    using DH.Helpdesk.BusinessData.Models.Case;
-    using DH.Helpdesk.Dal.Enums;
-    using DH.Helpdesk.Dal.Infrastructure;
-    using DH.Helpdesk.Dal.Repositories;
-    using DH.Helpdesk.Domain;
-
     public interface ILogFileService
     {
         LogFile GetFileDetails(int logFileId);
         LogFileContent GetFileContentById(int logFileId, string basePath);
         byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName);
-        List<string> FindFileNamesByLogId(int logId);
+        List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External);
         List<KeyValuePair<int,string>> FindFileNamesByCaseId(int caseId);
         void DeleteByLogIdAndFileName(int logId, string basePath, string fileName);
-        void AddFile(CaseFileDto fileDto);
-        void AddFiles(List<CaseFileDto> fileDtos, List<LogExistingFileModel> temporaryExLogFiles = null, int? currentLogId = null);
+        void AddFile(CaseLogFileDto fileDto);
+        void AddFiles(List<CaseLogFileDto> fileDtos, List<LogExistingFileModel> temporaryExLogFiles = null, int? currentLogId = null);
         void MoveLogFiles(int caseId, string fromBasePath, string toBasePath);
         List<LogExistingFileModel> GetExistingFileNamesByCaseId(int caseId);
         bool SaveAttachedExistingLogFiles(IEnumerable<LogExistingFileModel> allFiles, int caseId);
@@ -57,35 +56,36 @@ namespace DH.Helpdesk.Services.Services
 
         public byte[] GetFileContentByIdAndFileName(int logId, string basePath, string fileName)
         {
-            return this._logFileRepository.GetFileContentByIdAndFileName(logId, basePath, fileName);
+            return _logFileRepository.GetFileContentByIdAndFileName(logId, basePath, fileName);
         }
 
         public byte[] GetCaseFileContentByIdAndFileName(int caseId, string basePath, string fileName)
         {
-            return this._logFileRepository.GetCaseFileContentByIdAndFileName(caseId, basePath, fileName);
+            return _logFileRepository.GetCaseFileContentByIdAndFileName(caseId, basePath, fileName);
         }
 
-        public List<string> FindFileNamesByLogId(int logId)
+        public List<string> FindFileNamesByLogId(int logId, LogFileType logType = LogFileType.External)
         {
-            return this._logFileRepository.FindFileNamesByLogId(logId);  
+            return _logFileRepository.FindFileNamesByLogId(logId);
         }
 
         public List<KeyValuePair<int, string>> FindFileNamesByCaseId(int caseId)
         {
-            return this._logFileRepository.FindFileNamesByCaseId(caseId);
+            return _logFileRepository.FindFileNamesByCaseId(caseId);
         }
 
         public void DeleteByLogIdAndFileName(int logId, string basePath, string fileName)
         {
-            this._logFileRepository.DeleteByLogIdAndFileName(logId, basePath, fileName);
+            _logFileRepository.DeleteByLogIdAndFileName(logId, basePath, fileName);
         }
 
-        public void AddFiles(List<CaseFileDto> fileDtos, List<LogExistingFileModel> exFiles = null, int? currentLogId = null)
+        public void AddFiles(List<CaseLogFileDto> fileDtos, List<LogExistingFileModel> exFiles = null, int? currentLogId = null)
         {
             foreach (var f in fileDtos)
             {
-                this.AddFile(f);
+                AddFile(f);
             }
+
             if (exFiles != null && exFiles.Any() && currentLogId.HasValue)
             {
                 var logExFiles = exFiles.Select(x => new LogFile
@@ -108,13 +108,16 @@ namespace DH.Helpdesk.Services.Services
         public List<LogExistingFileModel> GetExistingFileNamesByCaseId(int caseId)
         {
             var files = _logFileRepository.GetExistingFileNamesByCaseId(caseId);
+
             var caseFiles = files.Where(x => !x.Log_Id.HasValue).Select(x => new LogExistingFileModel
             {
                 Id = x.Id,
                 Name = x.FileName,
                 CaseId = x.Case_Id,
                 IsExistCaseFile = true
+
             }).ToList();
+
             var logFiles = files.Where(x => x.Log_Id.HasValue).Select(x => new LogExistingFileModel
             {
                 Id = x.Id,
@@ -123,8 +126,10 @@ namespace DH.Helpdesk.Services.Services
                 IsExistLogFile = true,
                 LogId = x.Log_Id
             }).ToList();
+
             var allFiles = caseFiles;
             allFiles.AddRange(logFiles);
+
             return allFiles;
         }
 
@@ -183,23 +188,24 @@ namespace DH.Helpdesk.Services.Services
             }).ToList();
         }
 
-        public void AddFile(CaseFileDto fileDto)
+        public void AddFile(CaseLogFileDto fileDto)
         {
             var file = new LogFile 
             {
                 CreatedDate = fileDto.CreatedDate,
                 Log_Id = fileDto.ReferenceId,
                 FileName = fileDto.FileName,
-                
+                LogType = fileDto.LogType
             };
 
-            this._logFileRepository.Add(file);
-            this._logFileRepository.Commit();
-            if (fileDto.IsCaseFile)
+            _logFileRepository.Add(file);
+            _logFileRepository.Commit();
+
+            if (fileDto.IsCaseFile) //todo: ?
             {
-                
             }
-            this._filesStorage.SaveFile(fileDto.Content, fileDto.BasePath, fileDto.FileName, ModuleName.Log, fileDto.ReferenceId);
+
+            _filesStorage.SaveFile(fileDto.Content, fileDto.BasePath, fileDto.FileName, fileDto.LogType == LogFileType.Internal ? ModuleName.LogInternal : ModuleName.Log, fileDto.ReferenceId);
         }
 
     }

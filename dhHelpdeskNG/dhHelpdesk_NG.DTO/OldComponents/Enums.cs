@@ -116,7 +116,9 @@ namespace DH.Helpdesk.BusinessData.OldComponents
             MailToNotifier = 75,
             AddFollowersBtn = 76,
             UserSearchCategory_Id = 77,
-            IsAbout_UserSearchCategory_Id = 78
+            IsAbout_UserSearchCategory_Id = 78,
+
+            tblLog_Filename_Internal = 79
         }
 
         public static TranslationCaseFields[] FieldsWithHide = new[]

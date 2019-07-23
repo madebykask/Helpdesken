@@ -3,6 +3,7 @@ using System.Threading;
 using System.Web.SessionState;
 using DH.Helpdesk.BusinessData.Models.Email;
 using DH.Helpdesk.BusinessData.Models.WorktimeCalculator;
+using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.SelfService.Controllers.Behaviors;
 using DH.Helpdesk.SelfService.Entites;
 using DH.Helpdesk.SelfService.Infrastructure.Configuration;
@@ -1316,7 +1317,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 caseLog.Id = _logService.SaveLog(caseLog, temporaryLogFiles.Count, out errors);
                 var basePath = _masterDataService.GetFilePath(currentCase.Customer_Id);
                 // save log files
-                var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
+                var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id)).ToList();
                 _logFileService.AddFiles(newLogFiles);
                 // send emails                
                 _caseService.SendSelfServiceCaseLogEmail(currentCase.Id, caseMailSetting, caseHistoryId, caseLog, basePath, userTimeZone, newLogFiles, caseIsActivated);

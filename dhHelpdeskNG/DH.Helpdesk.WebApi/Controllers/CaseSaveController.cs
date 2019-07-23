@@ -11,6 +11,7 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.Common.Enums;
 using DH.Helpdesk.Common.Enums.BusinessRule;
+using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Tools;
@@ -421,10 +422,17 @@ namespace DH.Helpdesk.WebApi.Controllers
             caseLog.Id = _logService.SaveLog(caseLog, logFileCount, out errors);
 
             // save log files
-            var newLogFiles = temporaryLogFiles.Select(f => new CaseFileDto(f.Content, basePath, f.Name, utcNow, caseLog.Id, currentUser.Id)).ToList();
+            //TODO: update logic to use LogType!
+            var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, utcNow, caseLog.Id, currentUser.Id, LogFileType.External)).ToList();
             _logFileService.AddFiles(newLogFiles, temporaryExLogFiles, caseLog.Id);
 
-            var allLogFiles = temporaryExLogFiles.Select(f => new CaseFileDto(basePath, f.Name, f.IsExistCaseFile ? Convert.ToInt32(currentCase.CaseNumber) : f.LogId.Value, f.IsExistCaseFile)).ToList();
+            var allLogFiles = 
+                temporaryExLogFiles.Select(f => 
+                    new CaseLogFileDto(basePath, 
+                        f.Name, 
+                        f.IsExistCaseFile ? Convert.ToInt32(currentCase.CaseNumber) : f.LogId.Value, 
+                        f.IsExistCaseFile)).ToList();
+
             allLogFiles.AddRange(newLogFiles);
 
             #endregion // Logs handling

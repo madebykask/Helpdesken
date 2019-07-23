@@ -44,12 +44,54 @@ namespace DH.Helpdesk.Web.Models.Case
         public IList<CaseFieldSetting> caseFieldSettings { get; set; }
         public IList<CaseHistoryOverview> CaseHistories { get; set; }
         public List<CustomMailTemplate> MailTemplates { get; set; }
+    }
 
-
+    public class CaseLogInputFilesAttachmentViewModel
+    {
+        public bool IsExternalNote { get; set; }
+        public string FieldStyles { get; set; }
+        public bool AllowFileAttach { get; set; }
+        public bool IsReadonly { get; set; }
+        public string Caption { get; set; }
+        public string LogFileNames { get; set; }
+        public FilesModel LogFilesModel { get; set; }
     }
 
     public class CaseInputViewModel
     {
+        public CaseLogInputFilesAttachmentViewModel CreateLogInputFilesAttachmentViewModel(
+            bool isExternal, 
+            string caption, 
+            string fieldStyles, 
+            bool allowFileAttach,
+            bool isReadonly, 
+            bool restrictFilesByLogNoteType)
+        {
+            var filesNames = LogFileNames;
+
+            var filesModel = LogFilesModel;
+            if (restrictFilesByLogNoteType && LogFilesModel != null)
+            {
+                filesModel = new FilesModel()
+                {
+                    Id = LogFilesModel.Id,
+                    VirtualDirectory = LogFilesModel.VirtualDirectory,
+                    Files = LogFilesModel.Files?.Where(f => f.IsExternal == isExternal).Select(f => f).ToList()
+                };
+            }
+
+            return new CaseLogInputFilesAttachmentViewModel()
+            {
+                IsExternalNote = isExternal,
+                Caption = caption,
+                LogFilesModel = filesModel,
+                FieldStyles = fieldStyles,
+                IsReadonly = isReadonly,
+                AllowFileAttach = allowFileAttach, //todo: conditions shoud be checked for all modes (old, external, internal)
+                LogFileNames = filesNames
+            };
+        }
+
         public CaseInputViewModel()
         {
             CaseSolutionSettingModels = CaseSolutionSettingModel.CreateDefaultModel();
@@ -443,8 +485,8 @@ namespace DH.Helpdesk.Web.Models.Case
             get { return CurrentUserRole > (int)BusinessData.Enums.Admin.Users.UserGroup.User; }
         }
 
-        public TimeZoneInfo UserTimeZone { get; set; } 
-
+        public TimeZoneInfo UserTimeZone { get; set; }
+        public bool EnableTwoAttachments { get; internal set; }
     }
 
     public class CaseIndexViewModel

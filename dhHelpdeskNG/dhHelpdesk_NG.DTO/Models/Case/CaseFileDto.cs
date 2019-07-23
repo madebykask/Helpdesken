@@ -1,7 +1,8 @@
-﻿namespace DH.Helpdesk.BusinessData.Models.Case
-{
-    using System;
+﻿using System;
+using DH.Helpdesk.Common.Enums.Logs;
 
+namespace DH.Helpdesk.BusinessData.Models.Case
+{
     public class CaseFileDto
     {
         public CaseFileDto(
@@ -23,26 +24,22 @@
             int? userId)
         {
             if (content == null || content.Length == 0)
-            {
                 throw new ArgumentNullException(nameof(content), "Value cannot be null or empty.");
-            }
+            
 
             if (string.IsNullOrEmpty(filename))
-            {
                 throw new ArgumentNullException(nameof(filename), "Value cannot be null or empty.");
-            }
+            
 
             if (referenceId <= 0)
-            {
                 throw new ArgumentOutOfRangeException(nameof(referenceId), "Must be more than zero.");
-            }
 
-            this.Content = content;
-            this.BasePath = basePath;
-            this.FileName = filename;
-            this.CreatedDate = createdDate;
-            this.ReferenceId = referenceId;
-            this.UserId = userId;
+            Content = content;
+            BasePath = basePath;
+            FileName = filename;
+            CreatedDate = createdDate;
+            ReferenceId = referenceId;
+            UserId = userId;
         }
 
         public CaseFileDto(
@@ -52,19 +49,16 @@
             bool isCaseFile)
         {
             if (string.IsNullOrEmpty(filename))
-            {
                 throw new ArgumentNullException(nameof(filename), "Value cannot be null or empty.");
-            }
-
-            if (referenceId <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(referenceId), "Must be more than zero.");
-            }
             
-            this.BasePath = basePath;
-            this.FileName = filename;
-            this.ReferenceId = referenceId;
-            this.IsCaseFile = isCaseFile;
+            if (referenceId <= 0)
+                throw new ArgumentOutOfRangeException(nameof(referenceId), "Must be more than zero.");
+            
+            
+            BasePath = basePath;
+            FileName = filename;
+            ReferenceId = referenceId;
+            IsCaseFile = isCaseFile;
         }
 
         public int Id { get; set; }

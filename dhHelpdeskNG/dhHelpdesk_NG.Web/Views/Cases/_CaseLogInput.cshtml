@@ -133,12 +133,12 @@
                         <div class="checkbox commun">
                             @if (Model.Disable_SendMailAboutCaseToNotifier || Model.EditMode == AccessMode.ReadOnly)
                             {
-                                @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier, 
+                                @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
                                     new { @disabled = "disabled", InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
                             }
                             else
                             {
-                                @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier, 
+                                @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
                                     new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool() })
                             }
                             <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span>
@@ -153,6 +153,18 @@
                         @Html.HiddenFor(model => model.CaseLog.OldLog_Id)
                     </td>
                 </tr>
+                <!-- EXTERNAL Log note Attachments: If 2attachments feature is disabled it should be displayed as default  -->
+                @Html.Partial("_CaseLogInputFilesAttachment",
+                    Model.CreateLogInputFilesAttachmentViewModel(
+                        true,// external
+                        CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename, "Bifogad fil").ToString(),
+                        Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename, CaseSolutionFields.LogFileName),
+                        Model.CaseLog.Id == 0 && !Model.newLog,
+                        @* TODO: check why internal log note check was used! *@
+                        Model.EnableTwoAttachments
+                                ? Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_External, CaseSolutionFields.ExternalLogNote)
+                                : Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote),
+                        Model.EnableTwoAttachments))
 
                 @if (Model.CaseInternalLogAccess)
                 {
@@ -225,48 +237,24 @@
                 {
                     <tr style="display:none;" class="hidden">
                         <td></td>
-                        <td>
-                            @Html.HiddenFor(model => model.CaseLog.TextInternal, new { value = "" })
-                        </td>
+                        <td>@Html.HiddenFor(model => model.CaseLog.TextInternal, new { value = "" })</td>
                     </tr>
                 }
 
-                @*@if (Model.templateistrue != 1) {*@
-                @if (Model.CaseLog.Id == 0 && !Model.newLog)
+                <!-- INTERNAL LOG NOTE Attachments: -->
+                @* TODO: check log edit mode - should be hidden. Add field styles!!! *@
+                @if (Model.EnableTwoAttachments && Model.CaseLog.Id == 0 && !Model.newLog)
                 {
-                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename, CaseSolutionFields.LogFileName)">
-                        <td>@CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename, "Bifogad fil")</td>
-                        <td>
-                            @if (Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote))
-                            {
-                                <a href="#upload_logfiles_popup" role="button" class="btn disabled" disabled="true" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
-                            }
-                            else
-                            {
-                                <a href="#upload_logfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.Get("Lägg till", SessionFacade.CurrentCaseLanguageId)</a>
-                                <a href="#upload_clipboard_file_popup" role="button" class="btn" data-src="log">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
-                            }
-                        </td>
-                        <td>
-                            <a href="" id="attachExistingFile" role="button" class="btn" style="margin-left: 20px;">
-                                <img src="@Url.Content("~/Content/img/clip.png")" />
-                            </a>
-                            <div id="attached_files_view">
-                                @Html.Partial("ModalDialogs/_CaseAttachExistFile", Model)
-                            </div>
-                        </td>
-                    </tr>
-                    <tr><td>&nbsp;</td></tr>
+                    @Html.Partial("_CaseLogInputFilesAttachment",
+                        Model.CreateLogInputFilesAttachmentViewModel(
+                            false,// internal
+                            CaseFieldCaption(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, "Bifogad fil").ToHtmlString(),
+                            Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.tblLog_Filename, CaseSolutionFields.LogFileName_Internal),
+                            Model.CaseLog.Id == 0 && !Model.newLog, 
+                            Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote),
+                            Model.EnableTwoAttachments))
                 }
-                <tr>
-                    <td class="span3"></td>
-                    <td>
-                        <div id="divCaseLogFiles">
-                            @Html.HiddenFor(model => Model.LogFileNames)
-                            @Html.Partial("_CaseLogFiles", Model.LogFilesModel)
-                        </div>
-                    </td>
-                </tr>
+               
                 @if (Model.newLog || Model.editLog)
                 {
                     <tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.StateSecondary_Id, CaseSolutionFields.StateSecondary)">
@@ -381,9 +369,15 @@
                             }
                         </td>
                     </tr>
-                }
-                @* }*@
-            </table>
+                                    }
+                                    @* }*@
+                                </table>
+        @* TODO: move to dialogs section ? Should be unique? *@
+        <div id="attached_files_view">
+            @Html.Partial("ModalDialogs/_CaseAttachExistFile", Model)
+        </div>
+
+
         </div>
     </div>
 </div>

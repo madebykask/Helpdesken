@@ -6,12 +6,10 @@ namespace DH.Helpdesk.BusinessData.Models.Case
 
     public class FilesModel
     {
-        public FilesModel(string id,
-                          List<LogFileModel> files,
-                          bool virtualDirectory)
+        public FilesModel(string id, List<LogFileModel> files, bool virtualDirectory)
         {
-            this.Id = id;
-            this.Files = files.Select(x => new LogFileModel
+            Id = id;
+            Files = files.Select(x => new LogFileModel
             {
                 Name = x.Name,
                 Id = x.Id,
@@ -19,7 +17,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case
                 IsExistCaseFile = x.IsExistCaseFile,
                 ObjId = x.ObjId
             }).ToList();
-            this.VirtualDirectory = virtualDirectory;
+
+            VirtualDirectory = virtualDirectory;
         }
 
         public FilesModel() {}
@@ -35,7 +34,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public string Name { get; set; }
         public bool IsExistCaseFile { get; set; }
         public bool IsExistLogFile { get; set; }
-
+        public bool IsExternal { get; set; }
         //CaseId for case files, LogId for log files
         public int? ObjId { get; set; }
     }

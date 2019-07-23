@@ -368,6 +368,8 @@ function bindDeleteCaseFileBehaviorToDeleteButtons() {
         });
     });
 }
+
+//TODO: update to separate between Internl/External logs handling
 function bindDeleteLogFileBehaviorToDeleteButtons() {
     $('#log_files_table a[id^="delete_logfile_button_"]').click(function () {
         var key = $('#LogKey').val();

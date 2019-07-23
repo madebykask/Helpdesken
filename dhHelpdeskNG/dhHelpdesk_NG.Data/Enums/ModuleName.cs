@@ -16,7 +16,8 @@
         
         // ToDo: Not a topic of website. Just a subtopic of cases part.
         public static readonly string Log = "L";
-        
+        public static readonly string LogInternal = "LL";
+
         public static readonly string Project = "Project";
 
         public static readonly string Priority = "Priority";

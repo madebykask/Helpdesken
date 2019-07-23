@@ -26,7 +26,7 @@ namespace DH.Helpdesk.Services.Services
             TimeZoneInfo userTimeZone,
             Case oldCase = null,
             CaseLog log = null,
-            List<CaseFileDto> logFiles = null,
+            List<CaseLogFileDto> logFiles = null,
             User currentLoggedInUser = null,
             string extraFollowersEmails = null)
         {
@@ -517,7 +517,7 @@ namespace DH.Helpdesk.Services.Services
                 CaseLog log, 
                 string basePath, 
                 TimeZoneInfo userTimeZone, 
-                List<CaseFileDto> logFiles = null, 
+                List<CaseLogFileDto> logFiles = null, 
                 bool caseIsActivated = false)
         {
             // get new case information
@@ -1004,7 +1004,7 @@ namespace DH.Helpdesk.Services.Services
             return smtpInfo;
         }
 
-        private List<string> PrepareAttachedCaseFiles(IList<CaseFileDto> logFiles, string basePath)
+        private List<string> PrepareAttachedCaseFiles(IList<CaseLogFileDto> logFiles, string basePath)
         {
             List<string> files = null;
             if (logFiles != null && logFiles.Any())

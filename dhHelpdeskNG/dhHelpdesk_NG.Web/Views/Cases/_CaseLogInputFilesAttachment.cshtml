@@ -1,0 +1,43 @@
+﻿@using System.Web.Mvc.Html
+@model DH.Helpdesk.Web.Models.Case.CaseLogInputFilesAttachmentViewModel
+
+@{
+    var logNoteType = Model.IsExternalNote ? "externalLog" : "internalLog";
+ }
+
+@if (Model.AllowFileAttach)
+{
+    <tr style="@Model.FieldStyles">
+        <td>@Html.Raw(Model.Caption)</td>
+        <td>
+            @if (Model.IsReadonly)
+            {
+                <a href="javascript:void;" role="button" class="btn disabled" disabled="true">@Translation.GetCoreTextTranslation("Lägg till")</a>
+            }
+            else
+            {
+                <a href="#upload_logfiles_popup" class="btn logfiles_upload" role="button" data-logtype="@logNoteType">@Translation.GetCoreTextTranslation("Lägg till")</a>
+                <a href="#upload_clipboard_file_popup" class="btn logfiles_clipboard" role="button" data-logtype="@logNoteType" data-src="log">@Translation.GetCoreTextTranslation("Lägg till från Urklipp")</a>
+            }
+        </td>
+        <td>
+            <a href="" id="attachExistingFile" role="button" class="btn @logNoteType" style="margin-left: 20px;">
+                <img src="@Url.Content("~/Content/img/clip.png")" /></a>
+            <div id="attached_files_view">
+                <!--  modal dialog was moved to Input parent view
+                Html.Partial("ModalDialogs/_CaseAttachExistFile", Model)
+                -->
+            </div>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+}
+<tr>
+    <td class="span3"></td>
+    <td>
+        <div id="divCaseLogFiles" class="@(logNoteType)-files">
+            @Html.Hidden("LogFileNames")
+            @Html.Partial("_CaseLogFiles", Model.LogFilesModel)
+        </div>
+    </td>
+</tr>

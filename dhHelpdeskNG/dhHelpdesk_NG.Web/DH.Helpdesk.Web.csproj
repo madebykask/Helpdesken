@@ -4119,6 +4119,7 @@
     <Content Include="Views\Cases\_LogNoteEmails.cshtml" />
     <Content Include="Views\Cases\_LogNoteFiles.cshtml" />
     <Content Include="Views\Cases\_Mail2TicketEmails.cshtml" />
+    <Content Include="Views\Cases\_CaseLogInputFilesAttachment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Admin\Views\Web.config">

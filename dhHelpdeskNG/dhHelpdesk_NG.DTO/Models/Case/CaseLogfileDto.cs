@@ -1,0 +1,43 @@
+using System;
+using DH.Helpdesk.Common.Enums.Logs;
+
+namespace DH.Helpdesk.BusinessData.Models.Case
+{
+    public class CaseLogFileDto : CaseFileDto
+    {
+        public LogFileType LogType { get; set; }
+
+        public CaseLogFileDto(
+            string basePath,
+            string filename,
+            int referenceId,
+            bool isCaseFile)
+            : this(null, basePath, filename, DateTime.UtcNow, referenceId)
+        {
+            IsCaseFile = isCaseFile;
+        }
+
+        public CaseLogFileDto(
+            byte[] content,
+            string basePath,
+            string filename,
+            DateTime createdDate,
+            int referenceId)
+            : this(content, basePath, filename, createdDate, referenceId, null, LogFileType.External)
+        {
+        }
+
+        public CaseLogFileDto(
+            byte[] content,
+            string basePath,
+            string filename,
+            DateTime createdDate,
+            int referenceId,
+            int? userId,
+            LogFileType logType)
+            : base(content, basePath, filename, createdDate, referenceId, userId)
+        {
+            LogType = logType;
+        }
+    }
+}

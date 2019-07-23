@@ -3,6 +3,7 @@
 /*-- M2T EmailAnswer Separator scripts
 ----------------------------------------------------------------------------------------------*/
 
+RAISERROR ('Update EMailAnswerSeparator column size to 512', 10, 1) WITH NOWAIT
 if exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
 		 where syscolumns.name = N'EMailAnswerSeparator' and sysobjects.name = N'tblSettings')
 BEGIN
@@ -87,8 +88,28 @@ GO
 /*----------------------------------------------------------------------------------------------*/
 
 
+RAISERROR ('Add LogType to tblLogFile', 10, 1) WITH NOWAIT
+GO
+IF NOT exists (select * from syscolumns inner join sysobjects on sysobjects.id = syscolumns.id              
+		 where syscolumns.name = N'LogType' and sysobjects.name = N'tblLogFile')
+BEGIN
+    -- create column nullable 
+    ALTER TABLE tblLogFile
+    ADD LogType int null    
+
+    EXEC(N'UPDATE tblLogFile SET LogType = 0')
+
+    -- make column non nullable
+    ALTER TABLE tblLogFile
+    ALTER COLUMN LogType int NOT null    
+END
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.43'
 GO
 
 --ROLLBACK --TMP
+
+
+
