@@ -7447,6 +7447,13 @@ If not exists (select * from tblTextTranslation where text_id = 2024 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2024, 2, 'Internal attached file')
 GO
 
+If not exists (select * from tbltext where id = 2025)
+	insert into tbltext (id, TextString) VALUES (2025, 'Extern bifogad fil')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2025 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2025, 2, 'External attached file')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')

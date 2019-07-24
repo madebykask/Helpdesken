@@ -1213,6 +1213,25 @@ namespace DH.Helpdesk.WebApi.Logic.Case
                     
                     model.Fields.Add(field);
                 }
+
+                {
+                    field = new BaseCaseField<string>()
+                    {
+                        Name = CaseFieldsNamesApi.Log_Filename_Internal,
+                        Value = "",
+                        Label = _caseTranslationService.GetFieldLabel(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, languageId, customerId, caseFieldTranslations),
+                        Options = GetBaseFieldOptions(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, caseFieldSettings),
+                        Section = CaseSectionType.Communication
+                    };
+
+                    if (_caseFieldSettingsHelper.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal, currentCase?.Id, caseTemplateSettings))
+                        AddReadOnlyOption(field.Options);
+
+                    if (!_caseFieldSettingsHelper.IsActive(caseFieldSettings, caseTemplateSettings, GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal))
+                        AddHiddenOption(field.Options);
+                    
+                    model.Fields.Add(field);
+                }
             }
         }
 

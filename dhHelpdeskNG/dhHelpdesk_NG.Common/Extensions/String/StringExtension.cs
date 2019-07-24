@@ -147,11 +147,13 @@ namespace DH.Helpdesk.Common.Extensions.String
                     case "supplier_id": str = "Leverantör"; break;
                     case "system_id": str = "System"; break;
                     case "tbllog_charge": str = "Debitering"; break;
-                    case "tbllog_filename": str = "Log bifogad fil"; break;
+                    case "tbllog_filename": str = "Bifogad fil"; break;
+                    case "tbllog_filename_internal": str = "Intern bifogad fil"; break;
                     case "tbllog_text_external": str = "Extern notering"; break;
                     case "tbllog_text_internal": str = "Intern notering"; break;
                     case "tbllog.charge": str = "Debitering"; break;
-                    case "tbllog.filename": str = "Log bifogad fil"; break;
+                    case "tbllog.filename": str = "Bifogad fil"; break;
+                    case "tbllog.filename_internal": str = "Intern bifogad fil"; break;
                     case "tbllog.text_external": str = "Extern notering"; break;
                     case "tbllog.text_internal": str = "Intern notering"; break;
                     case "urgency_id": str = "Brådskandegrad"; break;

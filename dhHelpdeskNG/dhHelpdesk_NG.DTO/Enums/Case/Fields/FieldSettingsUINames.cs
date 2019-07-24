@@ -80,11 +80,11 @@ namespace DH.Helpdesk.BusinessData.Enums.Case.Fields
             { GlobalEnums.TranslationCaseFields.tblLog_Text_Internal.ToString(), "Intern notering"},
             { GlobalEnums.TranslationCaseFields.tblLog_Text_External.ToString(), "Extern notering"},
             { GlobalEnums.TranslationCaseFields.tblLog_Charge.ToString(), "Debitering"},
-            { GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), "Bifogad fil"},
+            { GlobalEnums.TranslationCaseFields.tblLog_Filename.ToString(), "Extern bifogad fil"},
             { "tblLog.Text_Internal", "Intern notering"}, //Those names are different from GlobalEnums.TranslationCaseFields
             { "tblLog.Text_External", "Extern notering"},
             { "tblLog.Charge", "Debitering"},
-            { "tblLog.Filename", "Bifogad fil"},
+            { "tblLog.Filename", "Extern bifogad fil"},
             { "tblLog.Filename_Internal", "Intern bifogad fil"},
             { GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal.ToString(), "Intern bifogad fil" },
             { GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), "Avslutsbeskrivning"},
