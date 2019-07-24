@@ -85,6 +85,8 @@ namespace DH.Helpdesk.BusinessData.Enums.Case.Fields
             { "tblLog.Text_External", "Extern notering"},
             { "tblLog.Charge", "Debitering"},
             { "tblLog.Filename", "Bifogad fil"},
+            { "tblLog.Filename_Internal", "Intern bifogad fil"},
+            { GlobalEnums.TranslationCaseFields.tblLog_Filename_Internal.ToString(), "Intern bifogad fil" },
             { GlobalEnums.TranslationCaseFields.FinishingDescription.ToString(), "Avslutsbeskrivning"},
             { GlobalEnums.TranslationCaseFields.FinishingDate.ToString(), "Avslutsdatum"},
             { GlobalEnums.TranslationCaseFields.ClosingReason.ToString(), "Avslutsorsak"},

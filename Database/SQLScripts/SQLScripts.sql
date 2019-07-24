@@ -105,6 +105,23 @@ BEGIN
 END
 GO
 
+RAISERROR ('Adding tblLog.Filename_Internal case field setting to tblCaseFieldSettings', 10, 1) WITH NOWAIT
+;WITH cus as 
+(select fs1.Customer_Id as CustomerId
+ from tblCaseFieldSettings fs1
+ where NOT EXISTS
+	  (
+		  select 1 from tblCaseFieldSettings fs2 
+		  where fs2.Customer_Id = fs1.Customer_Id 
+		  AND fs2.CaseField = 'tblLog.Filename_Internal'
+	  )
+       AND fs1.Customer_Id IS NOT NULL
+GROUP BY fs1.Customer_Id) 
+INSERT INTO tblCaseFieldSettings (Customer_Id, CaseField, Show, [Required], ShowExternal, FieldSize, RelatedField, DefaultValue, ListEdit, Locked)
+select cus.CustomerId, 'tblLog.Filename_Internal', 0, 0, 0, 0, '', null, 0, 0 
+from cus
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.43'
 GO

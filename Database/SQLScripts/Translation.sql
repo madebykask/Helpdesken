@@ -7440,6 +7440,12 @@ If not exists (select * from tblTextTranslation where text_id = 2023 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2023, 2, 'Changed Date')
 GO
 
+If not exists (select * from tbltext where id = 2024)
+	insert into tbltext (id, TextString) VALUES (2024, 'Intern bifogad fil')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2024 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2024, 2, 'Internal attached file')
+GO
 
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
