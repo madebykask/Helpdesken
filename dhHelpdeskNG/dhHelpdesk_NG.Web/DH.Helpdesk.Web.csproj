@@ -1165,6 +1165,7 @@
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\SupplierEditModel.cs" />
     <Compile Include="Areas\Orders\Models\Order\OrderEdit\UserEditModel.cs" />
     <Compile Include="Areas\Orders\OrdersAreaRegistration.cs" />
+    <Content Include="Content\js\ClipboardFileUpload.js" />
     <Content Include="Content\js\Common\userSearchCommon.js" />
     <Content Include="Content\js\Contract\contractCases.js" />
     <Content Include="Content\js\Contract\contractIndex.js" />

@@ -1,18 +1,6 @@
 ﻿@using DH.Helpdesk.Common.Tools
 @model DH.Helpdesk.BusinessData.Models.Case.FilesModel     
 
-<script type="text/javascript">
-    dhHelpdesk.caseLog =
-        {
-            deleteLogFileConfirmMessage: '@Translation.GetForJS("Är du säker på att du vill ta bort bifogad fil")' + '?',
-            deleteCaseFileExtraInvoiceMessage: '@Translation.GetForJS("Obs! Den tas även bort från order")',
-            okText: '@Translation.GetForJS("OK")',
-            cancelText: '@Translation.GetForJS("Avbryt")',
-            yesText: '@Translation.GetForJS("Ja")',
-            noText: '@Translation.GetForJS("Nej")'
-        };
-</script>
-
 @if (Model != null)
 {    
     <table id="log_files_table" class="table table-striped">
