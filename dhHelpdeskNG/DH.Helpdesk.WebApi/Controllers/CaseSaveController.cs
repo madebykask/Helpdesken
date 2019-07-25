@@ -415,15 +415,20 @@ namespace DH.Helpdesk.WebApi.Controllers
                 caseLog.TextInternal = null;
 
             var temporaryLogFiles = _userTempFilesStorage.FindFiles(caseKey, ModuleName.Log);
+            var temporaryLogInternalFiles = _userTempFilesStorage.FindFiles(caseKey, ModuleName.LogInternal);
             var temporaryExLogFiles = _logFileService.GetExistingFileNamesByCaseId(currentCase.Id);
-            var logFileCount = temporaryLogFiles.Count + temporaryExLogFiles.Count;
+            var logFileCount = temporaryLogFiles.Count + temporaryExLogFiles.Count + temporaryLogInternalFiles.Count;
 
             // SAVE LOG
             caseLog.Id = _logService.SaveLog(caseLog, logFileCount, out errors);
 
             // save log files
-            //TODO: update logic to use LogType!
             var newLogFiles = temporaryLogFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, utcNow, caseLog.Id, currentUser.Id, LogFileType.External)).ToList();
+            if (temporaryLogInternalFiles.Any())
+            {
+                var internalLogFiles = temporaryLogInternalFiles.Select(f => new CaseLogFileDto(f.Content, basePath, f.Name, DateTime.UtcNow, caseLog.Id, currentUser.Id, LogFileType.Internal)).ToList();
+                newLogFiles.AddRange(internalLogFiles);
+            }
             _logFileService.AddFiles(newLogFiles, temporaryExLogFiles, caseLog.Id);
 
             var allLogFiles = 

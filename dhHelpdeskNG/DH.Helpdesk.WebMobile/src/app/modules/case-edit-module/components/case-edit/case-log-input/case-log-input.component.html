@@ -1,6 +1,6 @@
 <ng-container [formGroup]="form">
   
-  <!-- /Exnterl Log fields --> 
+  <!-- External Log fields --> 
   <div class="bordered" *ngIf="isExternalLogFieldVisible">
     <case-textarea-control 
         [field]="caseFieldsNames.Log_ExternalText" 
@@ -21,7 +21,16 @@
   <div class="bordered" *ngIf="isExternalLogFieldVisible">
     <lognote-email-input [field]="caseFieldsNames.Log_ExternalEmailsCC" [form]="form"></lognote-email-input>  
   </div>
-  <!-- /Exnterl Log fields --> 
+
+  <ng-container *ngIf="isExternalLogFieldVisible && isAttachedFilesVisible">
+    <div class="bordered" *ngIf="files && files.length > 0">
+        <mbsc-listview [options]="fileListSettings" class="fileListView">
+            <mbsc-listview-item *ngFor="let file of files;" icon="fa-paperclip">{{ file }}</mbsc-listview-item>
+        </mbsc-listview>
+    </div>
+    <log-files-upload *ngIf="hasFullAccess" [caseKey]="caseKey" [type]="logFileType.External" (fileUploaded)="processFileUploaded($event)"></log-files-upload>
+  </ng-container>
+  <!-- External Log fields --> 
 
   <!-- Internal Log fields -->
   <div class="bordered" *ngIf="isInternalLogFieldVisible">
@@ -35,15 +44,15 @@
   <div class="bordered" *ngIf="isInternalLogFieldVisible">
     <lognote-email-input [field]="caseFieldsNames.Log_InternalEmailsCC" [form]="form"></lognote-email-input>
   </div>
-  <!-- /Internal Log fields -->
 
-  <ng-container *ngIf="isAttachedFilesVisible">
-    <div id="log-files" class="bordered" *ngIf="files && files.length > 0">
-        <mbsc-listview [options]="fileListSettings" class="fileListView">
-            <mbsc-listview-item *ngFor="let file of files;" icon="fa-paperclip">{{ file }}</mbsc-listview-item>
+  <ng-container *ngIf="isAttachedInternalFilesVisible">
+    <div class="bordered" *ngIf="files && filesInternal.length > 0">
+        <mbsc-listview [options]="fileInternalListSettings" class="fileListView">
+            <mbsc-listview-item *ngFor="let file of filesInternal;" icon="fa-paperclip">{{ file }}</mbsc-listview-item>
         </mbsc-listview>
     </div>
-    <log-files-upload *ngIf="hasFullAccess" [caseKey]="caseKey" (fileUploaded)="processFileUploaded($event)"></log-files-upload>
+    <log-files-upload *ngIf="hasFullAccess" [caseKey]="caseKey" [type]="logFileType.Internal" (fileUploaded)="processFileUploaded($event)"></log-files-upload>
   </ng-container>
+  <!-- /Internal Log fields -->
 
 </ng-container>

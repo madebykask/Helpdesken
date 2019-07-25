@@ -77,6 +77,7 @@ export const CaseFieldsNames = {
    Log_InternalText: 'Log_InternalText',
    Log_ExternalText: 'Log_ExternalText',
    Log_FileName: 'LogFileName',
+   Log_FileName_Internal: 'LogFileName_Internal',
 
    // todo: review new fields
    Log_SendMailToNotifier: 'Log_SendMailToNotifier',

@@ -5,6 +5,7 @@ import { LocalStorageService } from 'src/app/services/local-storage/local-storag
 import { AlertsService } from 'src/app/services/alerts/alerts.service';
 import { AlertType } from 'src/app/modules/shared-module/alerts';
 import { CaseLogApiService } from 'src/app/modules/case-edit-module/services/api/case/case-log-api.service';
+import { LogFileType } from 'src/app/modules/shared-module/constants/logFileType.enum';
 
 @Component({
   selector: 'log-files-upload',
@@ -14,11 +15,11 @@ import { CaseLogApiService } from 'src/app/modules/case-edit-module/services/api
 export class LogFilesUploadComponent {
 
   @Input('caseKey') caseKey: string;
-  @Output() fileUploaded: EventEmitter<string> = new EventEmitter<string>();
+  @Input('type') type: LogFileType;
+  @Output() fileUploaded: EventEmitter<FileUploadArgs> = new EventEmitter<FileUploadArgs>();
 
   fileUploader = new FileUploader({});
-  internalLogNote: string;
-  externalLogNote: string;
+  id: string;
 
   constructor(private authenticationService: AuthenticationService,
               private localStateStorage: LocalStorageService,
@@ -30,6 +31,7 @@ export class LogFilesUploadComponent {
     const accessToken = this.authenticationService.getAuthorizationHeaderValue();
     const userData = this.localStateStorage.getCurrentUser();
     const cid = userData.currentData.selectedCustomerId;
+    this.id = `logfileupload${this.type}`;
 
     // init file uploader
     this.fileUploader.setOptions(<FileUploaderOptions> {
@@ -37,7 +39,7 @@ export class LogFilesUploadComponent {
       filters: [],
       isHTML5: true,
       authToken: accessToken,
-      url: this.caseLogApiService.getUploadLogFileUrl(this.caseKey, cid)
+      url: this.caseLogApiService.getUploadLogFileUrl(this.caseKey, cid, this.type)
     });
 
     // subscribe to events
@@ -64,7 +66,7 @@ export class LogFilesUploadComponent {
     if (fileItem.isUploaded && fileItem.isSuccess) {
         const file = JSON.parse(response);
         if (file) {
-            this.fileUploaded.emit(file);
+            this.fileUploaded.emit(new FileUploadArgs(file, this.type));
             fileItem.file.name = file;
         }
         fileItem.remove(); // remove file from upload queue
@@ -73,5 +75,11 @@ export class LogFilesUploadComponent {
         const  msg = data.Message || '';
         this.alertsService.showMessage('Unknown error.' + msg, AlertType.Error);
     }
+  }
+}
+
+export class FileUploadArgs {
+  constructor(public file: string, public type: LogFileType) {
+
   }
 }

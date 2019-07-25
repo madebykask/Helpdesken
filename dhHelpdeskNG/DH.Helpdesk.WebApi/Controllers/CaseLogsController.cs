@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
+using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Common.Extensions.String;
 using DH.Helpdesk.Dal.Enums;
@@ -136,13 +137,11 @@ namespace DH.Helpdesk.WebApi.Controllers
         [HttpPost]
         [Route("{caseId}/logfile/")]
         [CheckUserCasePermissions(CaseIdParamName = "caseId")]
-        public async Task<IHttpActionResult> UploadLogFile([FromUri]string caseId, [FromUri]int cid)
+        public async Task<IHttpActionResult> UploadLogFile([FromUri]string caseId, [FromUri]int cid, [FromUri]LogFileType type)
         {
             // Check if the request contains multipart/form-data.
             if (!Request.Content.IsMimeMultipartContent())
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-
-            var now = DateTime.Now;
 
             var filesReadToProvider = await Request.Content.ReadAsMultipartAsync();
 
@@ -155,13 +154,14 @@ namespace DH.Helpdesk.WebApi.Controllers
                 //fix file name if exists
                 var counter = 1;
                 var newFileName = fileName;
-                while(_userTemporaryFilesStorage.FileExists(newFileName, caseId, ModuleName.Log))
+                var moduleName = type == LogFileType.External ? ModuleName.Log : ModuleName.LogInternal;
+                while(_userTemporaryFilesStorage.FileExists(newFileName, caseId, moduleName))
                 {
                     newFileName = $"{Path.GetFileNameWithoutExtension(fileName)} ({counter++}){Path.GetExtension(fileName)}";
                 }
                 fileName = newFileName;
 
-                _userTemporaryFilesStorage.AddFile(fileBytes, fileName, caseId, ModuleName.Log);
+                _userTemporaryFilesStorage.AddFile(fileBytes, fileName, caseId, moduleName);
                 return Ok(fileName);
             }
 

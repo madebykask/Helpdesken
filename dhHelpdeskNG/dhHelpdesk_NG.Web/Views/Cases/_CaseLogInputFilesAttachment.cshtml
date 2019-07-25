@@ -12,7 +12,7 @@
         <td>
             @if (Model.IsReadonly)
             {
-                <a href="javascript:void;" role="button" class="btn disabled" disabled="true">@Translation.GetCoreTextTranslation("Lägg till")</a>
+                <a href="" role="button" class="btn disabled" onclick="return false;" disabled="true">@Translation.GetCoreTextTranslation("Lägg till")</a>
             }
             else
             {
