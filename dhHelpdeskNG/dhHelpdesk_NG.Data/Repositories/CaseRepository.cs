@@ -23,6 +23,7 @@ namespace DH.Helpdesk.Dal.Repositories
     {
         IQueryable<Case> GetCustomerCases(int customerId);
         IQueryable<Case> GetDetachedCaseQuery(int id, bool includeLogs = false);
+        CaseOverview GetCaseBasic(int id);
         Case GetCaseById(int id, bool markCaseAsRead = false);
         Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false);
         Case GetCaseByGUID(Guid GUID);
@@ -93,6 +94,17 @@ namespace DH.Helpdesk.Dal.Repositories
         public IQueryable<Case> GetCustomerCases(int customerId)
         {
             return Table.Where(x => x.Customer_Id == customerId);
+        }
+        
+        public CaseOverview GetCaseBasic(int id)
+        {
+            var caseInfo = DataContext.Cases.Where(c => c.Id == id).Select(c => new CaseOverview()
+            {
+                Id = c.Id,
+                CustomerId = c.Customer_Id, 
+                CaseNumber = c.CaseNumber,
+            }).FirstOrDefault();
+            return caseInfo;
         }
 
         public Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false)
@@ -330,6 +342,7 @@ namespace DH.Helpdesk.Dal.Repositories
                 .Where(c => customers.Contains(c.Customer_Id))
                 .Select(c => new CaseOverview()
                 {
+                    Id = c.Id,
                     CustomerId = c.Customer_Id,
                     Deleted = c.Deleted,
                     FinishingDate = c.FinishingDate,

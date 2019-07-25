@@ -1577,7 +1577,7 @@
                                                         <a href="#upload_clipboard_file_popup" role="button" class="btn uploadCaseFileFromClipboardBtn" data-src="case">@Translation.Get("Lägg till från Urklipp", SessionFacade.CurrentLanguageId)</a>
                                                     }
                                                     <div id="divCaseFiles">
-                                                        @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
+                                                        @Html.Partial("_CaseFiles", Model.CaseFilesModel, new ViewDataDictionary(ViewData) { { "CaseInactive", Model.case_.FinishingDate.HasValue } })
                                                     </div>
                                                 </td>
                                             </tr>

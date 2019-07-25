@@ -80,9 +80,6 @@ BEGIN
 End
 GO 
 
-select Customer_Id, EMailAnswerSeparator from tblSettings 
-GO
-
 COMMIT
 GO
 /*----------------------------------------------------------------------------------------------*/

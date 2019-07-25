@@ -48,6 +48,11 @@ namespace DH.Helpdesk.Services.Services
             }).SingleOrDefaultAsync();
         }
 
+        public CaseOverview GetCaseBasic(int id)
+        {
+            return _caseRepository.GetCaseBasic(id);
+        }
+
         public Task<Case> GetCaseByIdAsync(int id, bool markCaseAsRead = false)
         {
             return _caseRepository.GetCaseByIdAsync(id, markCaseAsRead);

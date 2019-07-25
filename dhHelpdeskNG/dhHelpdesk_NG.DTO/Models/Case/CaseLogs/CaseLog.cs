@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DH.Helpdesk.Common.Enums.Logs;
 
 namespace DH.Helpdesk.BusinessData.Models.Case.CaseLogs
 {
@@ -25,18 +26,20 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseLogs
         {
         }
 
-        public LogFileData(int id, string fileName, int logId, int? caseId)
+        public LogFileData(int id, string fileName, int logId, int? caseId, LogFileType logType)
         {
             Id = id;
             FileName = fileName;
             LogId = logId;
             CaseId = caseId;
+            LogType = logType;
         }
 
         public int Id { get; set; }
         public string FileName { get; set; }
         public int LogId { get; set; }
         public int? CaseId { get; set; }
+        public LogFileType LogType { get; set; }
     }
 
     public class EmailLogData

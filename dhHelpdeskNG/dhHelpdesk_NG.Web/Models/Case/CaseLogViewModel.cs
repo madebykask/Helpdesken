@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DH.Helpdesk.BusinessData.Models.Customer;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
 using DH.Helpdesk.Domain;
+using DH.Helpdesk.Web.Infrastructure.CaseOverview;
 using DH.Helpdesk.Web.Models.Invoice;
 
 namespace DH.Helpdesk.Web.Models.Case
@@ -12,6 +13,7 @@ namespace DH.Helpdesk.Web.Models.Case
         public int ShowInvoiceFields { get; set; }
         public int CustomerId { get; set; }
         public int? CaseCustomerId { get; set; }
+        public int CaseNumber { get; set; }
         public int CurrentCaseLanguageId { get; set; }
         public TimeZoneInfo UserTimeZone { get; set; }
         public bool IsCaseReopened { get; set; }
@@ -28,9 +30,11 @@ namespace DH.Helpdesk.Web.Models.Case
         public int ShowExternalInvoiceFields { get; set; }
         public List<ExternalInvoiceModel> ExternalInvoices { get; set; }
 
+        public CaseFilesUrlBuilder FilesUrlBuilder { get; set; }
+
         public LogNoteFilesViewModel CreateFilesViewModel(LogOverview log)
         {
-            return new LogNoteFilesViewModel(log, CaseFiles);
+            return new LogNoteFilesViewModel(CaseNumber, log, CaseFiles, FilesUrlBuilder);
         }
 
         public LogNoteEmailsViewModel CreateEmailsViewModel(LogOverview log)
@@ -41,17 +45,17 @@ namespace DH.Helpdesk.Web.Models.Case
 
     public class LogNoteFilesViewModel
     {
+        public int CaseNumber { get; set; }
         public LogOverview CurrentLog { get; }
         public CaseFilesModel CaseFiles { get; set; }
+        public CaseFilesUrlBuilder FilesUrlBuilder { get; }
 
-        public LogNoteFilesViewModel()
+        public LogNoteFilesViewModel(int caseNumber, LogOverview log, CaseFilesModel caseFiles, CaseFilesUrlBuilder filesUrlBuilder)
         {
-        }
-
-        public LogNoteFilesViewModel(LogOverview log, CaseFilesModel caseFiles)
-        {
+            CaseNumber = caseNumber;
             CurrentLog = log;
             CaseFiles = caseFiles;
+            FilesUrlBuilder = filesUrlBuilder;
         }
     }
 

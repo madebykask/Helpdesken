@@ -4642,10 +4642,8 @@ namespace DH.Helpdesk.Web.Controllers
 
             var customerUserSetting = _customerUserService.GetCustomerUserSettings(customerId, userId);
             if (customerUserSetting == null)
-            {
                 throw new ArgumentException(string.Format("No customer settings for this customer '{0}' and user '{1}'", customerId, userId));
-            }
-
+            
             var case_ = m.case_;
             var customer = _customerService.GetCustomer(customerId);
             var customerSetting = GetCustomerSettings(customerId);
@@ -4667,12 +4665,15 @@ namespace DH.Helpdesk.Web.Controllers
             m.ParantPath_OU = ParentPathDefaultValue;
             m.MinWorkingTime = customerSetting.MinRegWorkingTime;
             m.CaseFilesModel = new CaseFilesModel();
-            m.LogFilesModel = new FilesModel();
             m.CaseFileNames = GetCaseFileNames(caseId);
+            m.LogFilesModel = new FilesModel();
             m.LogFileNames = m.CaseFileNames;
 
-            m.EnableTwoAttachments = true; //TODO: replace with settings
+            m.EnableTwoAttachments = customerFieldSettings.getCaseSettingsValue(TranslationCaseFields.tblLog_Filename_Internal.ToString())?.IsActive ?? false; 
             m.ActiveTab = activeTab;
+            
+            var virtualDirPath = _masterDataService.GetVirtualDirectoryPath(case_.Customer_Id); 
+            m.CaseFilesUrlBuilder = new CaseFilesUrlBuilder(virtualDirPath, RequestExtension.GetAbsoluteUrl());
 
             // Computer user categories
             var computerUserCategories = _computerService.GetComputerUserCategoriesByCustomerID(customerId, true);
@@ -4786,7 +4787,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 #region Existing case model initialization actions
 
-                m.Logs = _logService.GetCaseLogOverviews(caseId);
+                m.Logs = _logService.GetCaseLogOverviews(caseId, m.CaseInternalLogAccess);
                 
                 var useVd = !string.IsNullOrEmpty(_masterDataService.GetVirtualDirectoryPath(customerId));
 

@@ -894,8 +894,8 @@ function setPcNumber(userId)
 function CaseInitForm(opt) {
 
     var self = this;
-    var options = opt || { twoAttacmentsMode: false }; // TODO: update ctor usages to pass options obj
-    var twoAttachmentsMode = true; //TODO: init from windows parameters
+    var options = opt || { twoAttacmentsMode: false }; 
+    var twoAttachmentsMode = opt.twoAttacmentsMode; 
 
     $('#CaseLog_TextExternal').focus(function () {
         CaseWriteTextToLogNote('');
@@ -1564,11 +1564,10 @@ function CaseInitForm(opt) {
         return fileName;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    ////////  Attachments /////////////////////////////////////////////////////
-
-   
-    ////////  Clipboard File Upload ///////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    //////// Attachments /////////////////////////////////////////////////////
+    
+    ////////  Clipboard File Upload //////////////////////////////////////////
 
     var clipboardFileUpload = null;
 

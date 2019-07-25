@@ -7,6 +7,7 @@ using DH.Helpdesk.BusinessData.Models.Case;
 using DH.Helpdesk.BusinessData.Models.Case.CaseLogs;
 using DH.Helpdesk.BusinessData.Models.Logs.Output;
 using DH.Helpdesk.BusinessData.OldComponents;
+using DH.Helpdesk.Common.Enums.Logs;
 using DH.Helpdesk.Common.Extensions.Boolean;
 using DH.Helpdesk.Dal.Enums;
 using DH.Helpdesk.Dal.Infrastructure;
@@ -35,7 +36,7 @@ namespace DH.Helpdesk.Services.Services
         void AddChildCaseLogToParentCase(int caseId, CaseLog parentCaseLog);
         Guid Delete(int id, string basePath);
 
-        IList<LogOverview> GetCaseLogOverviews(int caseId);
+        IList<LogOverview> GetCaseLogOverviews(int caseId, bool includeInternalLogs = false);
         IList<Log> GetLogsByCaseId(int caseId);
         Task<List<CaseLogData>> GetLogsByCaseIdAsync(int caseId, bool includeInternalLogs = false);
     }
@@ -125,10 +126,10 @@ namespace DH.Helpdesk.Services.Services
             return l.LogGUID;
         }
         
-        public IList<LogOverview> GetCaseLogOverviews(int caseId)
+        public IList<LogOverview> GetCaseLogOverviews(int caseId, bool includeInternalLogs = false)
         {
             var result = new List<LogOverview>();
-            var caseLogsEntities = GetCaseLogsQueryable(caseId).ToList();
+            var caseLogsEntities = GetCaseLogsQueryable(caseId, includeInternalLogs).ToList();
             var caseLogs = caseLogsEntities.Select(_logToLogOverviewMapper.Map).ToList();
 
             result.AddRange(caseLogs);
@@ -188,12 +189,14 @@ namespace DH.Helpdesk.Services.Services
 
                      Files =
                          data.LogFiles?.Where(f => f != null && f.Id > 0).Select(f => new LogFileData()
-                        {
-                             Id = f.Id.Value,
-                             LogId = f.LogId ?? 0,
-                             FileName = f.FileName,
-                             CaseId = f.CaseId
-                        }).ToList() ?? new List<LogFileData>(),
+                         {
+                              Id = f.Id.Value,
+                              LogId = f.LogId ?? 0,
+                              FileName = f.FileName,
+                              CaseId = f.CaseId,
+                              LogType = f.LogType ?? 0
+                              
+                         }).ToList() ?? new List<LogFileData>(),
 
                      Mail2Tickets =
                          data.Mail2Tickets?.Where(m => m.Id != null && m.Id > 0).Select(m => new Mail2TicketData(m.Id.Value, m.Type, m.EMailAddress, m.EMailSubject)).ToList() ?? new List<Mail2TicketData>()
@@ -238,12 +241,13 @@ namespace DH.Helpdesk.Services.Services
                         }).ToList(),
 
                 LogFiles = 
-                    l.LogFiles.DefaultIfEmpty().Select(t => new LogFileMapperData
+                    l.LogFiles.DefaultIfEmpty().Where(f => includeInternalLogs || f.LogType == LogFileType.External).Select(t => new LogFileMapperData
                     {
                         Id = t.Id,
                         FileName = t.FileName,
                         LogId = t.ParentLog_Id,
-                        CaseId = t.IsCaseFile.HasValue && t.IsCaseFile.Value ? t.Log.Case_Id : (int?) null
+                        CaseId = t.IsCaseFile.HasValue && t.IsCaseFile.Value ? t.Log.Case_Id : (int?) null,
+                        LogType = t.LogType
                     }).ToList(),
                
                 Mail2Tickets = 
@@ -288,6 +292,12 @@ namespace DH.Helpdesk.Services.Services
         {
             var log = _logRepository.GetById(id);
             return GetCaseLogFromLog(log); 
+        }
+
+        public CaseLog GetLogInfo(int id)
+        {
+            var log = _logRepository.GetById(id);
+            return GetCaseLogFromLog(log);
         }
 
         public CaseLog InitCaseLog(int userId, string regUser)

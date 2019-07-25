@@ -255,6 +255,9 @@ namespace DH.Helpdesk.BusinessData.OldComponents
                 case CaseSolutionFields.LogFileName:
                     return TranslationCaseFields.tblLog_Filename;
 
+                case CaseSolutionFields.LogFileName_Internal:
+                    return TranslationCaseFields.tblLog_Filename_Internal;
+
                 case CaseSolutionFields.Miscellaneous:
                     return TranslationCaseFields.Miscellaneous;
 

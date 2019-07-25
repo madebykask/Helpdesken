@@ -23,7 +23,7 @@
                         @Html.TextAreaFor(m => m.Log.Value.Text, new { style = "width:380px; height:105px;" })
                     </div>
                     <div>
-                        @Html.Partial("_SendToDialog", Model.Log.Value.SendToDialog, new ViewDataDictionary(new ViewDataDictionary { { "Id", "log_send_to_dialog" }, { "Callback", "fillLogSendLogNoteToEmailsTextArea" } }))
+                        @Html.Partial("_SendToDialog", Model.Log.Value.SendToDialog, new ViewDataDictionary(ViewData) { { "Id", "log_send_to_dialog" }, { "Callback", "fillLogSendLogNoteToEmailsTextArea" } })
                         <a id="log_send_to_button" class="btn btn-default">
                             @Translation.Get("till")
                         </a><br />

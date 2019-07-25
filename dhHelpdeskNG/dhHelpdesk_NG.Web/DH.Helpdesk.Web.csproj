@@ -364,6 +364,7 @@
     <Compile Include="Infrastructure\Authentication\Behaviors\MixedModeAuthenticationBehavior.cs" />
     <Compile Include="Infrastructure\Authentication\Behaviors\PrincipalExtensions.cs" />
     <Compile Include="Infrastructure\Behaviors\AdvancedSearchBehavior.cs" />
+    <Compile Include="Infrastructure\CaseOverview\CaseFilesUrlBuilder.cs" />
     <Compile Include="Infrastructure\Extensions\RouteDataExtensions.cs" />
     <Compile Include="Infrastructure\JsonNetResult.cs" />
     <Compile Include="Models\Case\AdvancedCaseSearchInput.cs" />

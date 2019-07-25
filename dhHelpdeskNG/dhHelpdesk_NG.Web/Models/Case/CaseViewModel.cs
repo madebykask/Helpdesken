@@ -114,6 +114,7 @@ namespace DH.Helpdesk.Web.Models.Case
             return new CaseLogViewModel
             {
                 CustomerId = CustomerId,
+                CaseNumber = Convert.ToInt32(CaseNumber),
                 CaseCustomerId = case_?.Customer_Id,
                 UserTimeZone = UserTimeZone,
                 CurrentCaseLanguageId = CurrentCaseLanguageId,
@@ -127,7 +128,8 @@ namespace DH.Helpdesk.Web.Models.Case
                 CaseFieldSettings = caseFieldSettings,
                 CustomerSettings = CustomerSettings,
                 CaseSolutionSettingModels = CaseSolutionSettingModels,
-                
+                FilesUrlBuilder = CaseFilesUrlBuilder,
+
                 // Invoices fields
                 ShowInvoiceFields = ShowInvoiceFields,
                 ShowExternalInvoiceFields = ShowExternalInvoiceFields,
@@ -185,6 +187,11 @@ namespace DH.Helpdesk.Web.Models.Case
         public int CustomerId
         {
             get { return case_?.Customer_Id ?? 0; }
+        }
+
+        public decimal CaseNumber
+        {
+            get { return case_?.CaseNumber ?? 0; }
         }
 
         public IList<CaseHistoryOverview> CaseHistories { get; set; }
@@ -293,6 +300,7 @@ namespace DH.Helpdesk.Web.Models.Case
 
         public List<CaseAttachedExFileModel> CaseAttachedExFiles { get; set; }
 
+        
         /// <summary>
         /// Gets or sets the case owner default working group.
         /// </summary>
@@ -431,6 +439,8 @@ namespace DH.Helpdesk.Web.Models.Case
         }
 
         public OutputFormatter OutFormatter { get; set; }
+
+        public CaseFilesUrlBuilder CaseFilesUrlBuilder { get; set; }
 
         public List<CaseTemplateButton> CaseTemplateButtons { get; set; }
 

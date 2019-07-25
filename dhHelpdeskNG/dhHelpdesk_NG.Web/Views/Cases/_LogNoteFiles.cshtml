@@ -1,8 +1,26 @@
-﻿@model DH.Helpdesk.Web.Models.Case.LogNoteFilesViewModel
+﻿@using DH.Helpdesk.BusinessData.Models.Logs.Output
+@using DH.Helpdesk.Common.Enums.Logs
+@model DH.Helpdesk.Web.Models.Case.LogNoteFilesViewModel
 
-@{
-    var currentLog = Model.CurrentLog;
- }
+@{ var currentLog = Model.CurrentLog; }
+
+@functions
+{
+    string BuildCaseFileLinkVD(string fileName)
+    {
+        return Model.FilesUrlBuilder.BuildCaseFileLinkVD(Model.CaseNumber, fileName);
+    }
+
+    string BuildLogFileLinkVD(int logId, string fileName, LogFileType logType)
+    {
+        return Model.FilesUrlBuilder.BuildLogFileLinkVD(logId,  fileName, logType);
+    }
+
+    //string GetFileIcon(LogFileOverview logFileOverview)
+    //{
+    //    var icon = "";
+    //}
+}
 
 @if (currentLog.LogFiles != null)
 {
@@ -14,17 +32,17 @@
                 {
                     if (l.CaseId.HasValue)
                     {
-                        <a target="_blank" class="isExisted" href="@Html.Action("CaseFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", l.CaseId.Value}, {"fileName", l.FileName}})"><i class="icon- attachedFile"></i>@l.FileName</a>
+                        <a target="_blank" class="isExisted" href="@BuildCaseFileLinkVD(l.FileName)"><i class="icon- attachedFile"></i>@l.FileName</a>
                     }
                     else
                     {
                         if (l.LogId.HasValue)
                         {
-                            <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", l.LogId.Value}, {"fileName", l.FileName}})"><i class="icon- attachedFile"></i> @l.FileName</a>
+                            <a target="_blank" class="isExisted" href="@BuildLogFileLinkVD(l.LogId.Value, l.FileName, l.LogType)"><i class="icon- attachedFile"></i> @l.FileName</a>
                         }
                         else
                         {
-                            <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "FileHandler", new {id = currentLog.Id, fileName = l.FileName})"><i class="icon-file"></i> @l.FileName</a>
+                            <a target="_blank" class="isExisted" href="@BuildLogFileLinkVD(currentLog.Id, l.FileName, l.LogType)"><i class="icon-file"></i> @l.FileName</a>
                         }
                     }
                 }
@@ -32,17 +50,17 @@
                 {
                     if (l.CaseId.HasValue)
                     {
-                        <a target="_blank" class="isExisted" href="@Html.Action("CaseFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", l.CaseId.Value}, {"fileName", l.FileName}})"><i class="icon- attachedFile"></i>@l.FileName</a>
+                        <a target="_blank" class="isExisted" href="@BuildCaseFileLinkVD(l.FileName)"><i class="icon- attachedFile"></i>@l.FileName</a>
                     }
                     else
                     {
                         if (l.LogId.HasValue)
-                        {
-                            <a target="_blank" class="isExisted" href="@Html.Action("LogFileLinkVD", "FileHandler", new RouteValueDictionary {{"id", l.LogId.Value}, {"fileName", l.FileName}})"><i class="icon- attachedFile"></i> @l.FileName</a>
+                        {                            
+                            <a target="_blank" class="isExisted" href="@BuildLogFileLinkVD(l.LogId.Value, l.FileName, l.LogType)"><i class="icon- attachedFile"></i> @l.FileName</a>
                         }
                         else
                         {
-                            <a target="_blank" class="isExisted" href="@Url.Action("DownloadLogFile", new {id = currentLog.Id, fileName = l.FileName})"><i class="icon-file"></i> @l.FileName</a>
+                            <a target="_blank" class="isExisted" href="@Url.Action("DownloadLogFile", new { id = currentLog.Id, fileName = l.FileName })"><i class="icon-file"></i> @l.FileName</a>
                         }
                     }
                 }

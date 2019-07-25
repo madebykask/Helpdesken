@@ -9,6 +9,7 @@
         {
             return new CaseOverview
             {
+                Id = entity.Id,
                 CustomerId = entity.Customer_Id,
                 Deleted = entity.Deleted,
                 FinishingDate = entity.FinishingDate,
