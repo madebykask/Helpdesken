@@ -26,7 +26,8 @@
       
   </div>
   <ul *ngIf="data.files && data.files.length" class="files">
-      <li *ngFor="let file of data.files"><span><i class="mbsc-ic mbsc-ic-fa-paperclip"></i>
+      <li *ngFor="let file of data.files"><span>
+      <i [ngClass]="{ 'mbsc-ic': true, 'mbsc-ic-fa-file-o': file.logType == logFileType.External, 'mbsc-ic-fa-file': file.logType == logFileType.Internal }"></i>
        <a (click)="downloadLogFile(file)">{{ file.fileName }}</a></span></li>
   </ul>
 </div>

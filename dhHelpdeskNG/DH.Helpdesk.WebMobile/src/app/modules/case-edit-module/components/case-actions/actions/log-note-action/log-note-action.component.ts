@@ -3,6 +3,7 @@ import { CaseLogActionData } from 'src/app/modules/case-edit-module/models';
 import { LogFile } from 'src/app/modules/case-edit-module/models/case/case-actions-api.model';
 import { CaseActionBaseComponent } from '../case-action-base.component';
 import { Router } from '@angular/router';
+import { LogFileType } from 'src/app/modules/shared-module/constants/logFileType.enum';
 
 @Component({
   selector: 'app-log-note-action',
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
 export class LogNoteActionComponent extends CaseActionBaseComponent<CaseLogActionData> implements OnInit {
 
   data: CaseLogActionData;
+  logFileType = LogFileType;
 
   constructor(private router: Router) {
     super();
